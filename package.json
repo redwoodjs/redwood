@@ -11,6 +11,7 @@
     "packages/studio/web"
   ],
   "scripts": {
+    "benchmark": "tsx ./tasks/benchmark/run-benchmarks.mts",
     "build": "lerna run build",
     "build:clean": "yarn clean:prisma && rimraf \"packages/**/dist\" --glob",
     "build:clean:super": "git clean -fdx && yarn && yarn build",
@@ -99,6 +100,7 @@
     "ora": "6.3.1",
     "prompts": "2.4.2",
     "rimraf": "5.0.1",
+    "tsx": "3.12.7",
     "typescript": "5.1.6",
     "yargs": "17.7.2",
     "zx": "7.2.2"

@@ -124,9 +124,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.8.1":
-  version: 3.8.1
-  resolution: "@apollo/client@npm:3.8.1"
+"@apollo/client@npm:3.8.3":
+  version: 3.8.3
+  resolution: "@apollo/client@npm:3.8.3"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.3
@@ -156,7 +156,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 28dd6c1c7ffaea1dc7ded61c79754ef6443031d752507a368dc91145374ca31084a87d1ae243a922ab5dda88d744e0586d63af88b4001d07d3c87b1997b1383a
+  checksum: f622299670fbd895ec6b3960560829b1575fcfc733dffe967afe6ebba17796b6c2d4f8fac5686761a24c394f99270877190914c7161bce9b4ea0e76e12d33de2
   languageName: node
   linkType: hard
 
@@ -7734,7 +7734,7 @@ __metadata:
     core-js: 3.32.2
     fast-glob: 3.3.1
     fast-json-parse: 1.0.3
-    fastify: 4.22.0
+    fastify: 4.22.2
     fastify-raw-body: 4.2.1
     jest: 29.6.4
     lodash: 4.17.21
@@ -8587,7 +8587,7 @@ __metadata:
     ansi-colors: 4.1.3
     esbuild: 0.19.2
     fast-glob: 3.3.1
-    fastify: 4.22.0
+    fastify: 4.22.2
     fastify-raw-body: 4.2.1
     lodash: 4.17.21
     qs: 6.11.2
@@ -8945,7 +8945,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/studio@workspace:packages/studio"
   dependencies:
-    "@apollo/client": 3.8.1
+    "@apollo/client": 3.8.3
     "@babel/cli": 7.22.10
     "@babel/core": 7.22.11
     "@babel/runtime-corejs3": 7.22.11
@@ -8989,7 +8989,7 @@ __metadata:
     crypto-js: 4.1.1
     dotenv: 16.3.1
     fast-json-parse: 1.0.3
-    fastify: 4.22.0
+    fastify: 4.22.2
     fastify-raw-body: 4.2.1
     graphiql: 2.4.7
     graphql: 16.8.0
@@ -9145,7 +9145,7 @@ __metadata:
     dotenv-defaults: 5.0.2
     esbuild: 0.19.2
     fast-glob: 3.3.1
-    fastify: 4.22.0
+    fastify: 4.22.2
     typescript: 5.1.6
     yargs-parser: 21.1.1
   bin:
@@ -9157,7 +9157,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.8.1
+    "@apollo/client": 3.8.3
     "@apollo/experimental-nextjs-app-support": 0.4.2
     "@babel/cli": 7.22.10
     "@babel/core": 7.22.11
@@ -19659,9 +19659,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:4.22.0":
-  version: 4.22.0
-  resolution: "fastify@npm:4.22.0"
+"fastify@npm:4.22.2":
+  version: 4.22.2
+  resolution: "fastify@npm:4.22.2"
   dependencies:
     "@fastify/ajv-compiler": ^3.5.0
     "@fastify/error": ^3.2.0
@@ -19679,7 +19679,7 @@ __metadata:
     secure-json-parse: ^2.5.0
     semver: ^7.5.0
     tiny-lru: ^11.0.1
-  checksum: 3b387bdab4c393ad260f6545afd0ed50b4000e5e157ef605a554cbf4fd441b674f3b7aac6a25b7f6cf5e1758a5c262997ff6602bf0025dc4af84274a96961381
+  checksum: b7bbea401f90d3123125bb686dda04f7f78a1c925b05fbc3cbbba4c93ccd21246d9d606d6bea67fa83fe384618155bbfdd6d4ae7b5343124d31021a4e52ea200
   languageName: node
   linkType: hard
 
@@ -31279,6 +31279,7 @@ __metadata:
     ora: 6.3.1
     prompts: 2.4.2
     rimraf: 5.0.1
+    tsx: 3.12.7
     typescript: 5.1.6
     yargs: 17.7.2
     zx: 7.2.2
