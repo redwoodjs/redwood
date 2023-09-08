@@ -144,15 +144,19 @@ export class RedisLiveQueryStore {
   }
 }
 
+// These are exported to allow access to the store and pubsub outside of graphql execution
+export let liveQueryStore: LiveQueryStorageMechanism | undefined = undefined
+export let pubSub: ReturnType<typeof createPubSub> | undefined = undefined
+
 export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
   let liveQueriesEnabled = false
   let subscriptionsEnabled = false
 
   let liveQueryPlugin = {} as Plugin
-  let liveQueryStorageMechanism = {} as LiveQueryStorageMechanism
   const inMemoryLiveQueryStore = new InMemoryLiveQueryStore()
 
-  let pubSub = {} as ReturnType<typeof createPubSub>
+  liveQueryStore = {} as LiveQueryStorageMechanism
+  pubSub = {} as ReturnType<typeof createPubSub>
 
   /**
    * This symbol is added to the schema extensions for checking whether the live query was added to the schema only once.
@@ -163,21 +167,21 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
     if (options.liveQueries.store === 'in-memory') {
       liveQueriesEnabled = true
 
-      liveQueryStorageMechanism = inMemoryLiveQueryStore
+      liveQueryStore = inMemoryLiveQueryStore
       liveQueryPlugin = useLiveQuery({
-        liveQueryStore: liveQueryStorageMechanism,
+        liveQueryStore,
       })
     } else if (options.liveQueries.store.redis) {
       liveQueriesEnabled = true
 
-      liveQueryStorageMechanism = new RedisLiveQueryStore(
+      liveQueryStore = new RedisLiveQueryStore(
         options.liveQueries.store.redis.publishClient,
         options.liveQueries.store.redis.subscribeClient,
         options.liveQueries.store.redis.channel || 'live-query-invalidations',
         inMemoryLiveQueryStore
       ) as unknown as InMemoryLiveQueryStore
       liveQueryPlugin = useLiveQuery({
-        liveQueryStore: liveQueryStorageMechanism,
+        liveQueryStore,
       })
     } else {
       throw new Error('Invalid live query store configuration.')
@@ -232,7 +236,7 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
     onContextBuilding() {
       return ({ extendContext }) => {
         extendContext({
-          liveQueryStore: liveQueriesEnabled && liveQueryStorageMechanism,
+          liveQueryStore: liveQueriesEnabled && liveQueryStore,
           pubSub: subscriptionsEnabled && pubSub,
         })
       }
