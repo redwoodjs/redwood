@@ -2,8 +2,8 @@ import { useCallback } from 'react'
 
 import type { AuthImplementation } from '../AuthImplementation'
 
-import { AuthProviderState } from './AuthProviderState'
-import { useCurrentUser } from './useCurrentUser'
+import type { AuthProviderState } from './AuthProviderState'
+import type { useCurrentUser } from './useCurrentUser'
 import { useReauthenticate } from './useReauthenticate'
 
 export const useSignUp = <

@@ -1,7 +1,7 @@
 import { AbstractMailHandler } from '../handler'
 import { Mailer } from '../mailer'
 import { AbstractMailRenderer } from '../renderer'
-import {
+import type {
   MailRenderedContent,
   MailSendOptionsComplete,
   MailUtilities,

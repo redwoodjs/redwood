@@ -45,7 +45,8 @@
  *
  * @see {@link https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces}
  */
-import React, { useContext, forwardRef, ForwardedRef } from 'react'
+import type { ForwardedRef } from 'react'
+import React, { useContext, forwardRef } from 'react'
 
 import pascalcase from 'pascalcase'
 import { get, useForm, FormProvider, useFormContext } from 'react-hook-form'

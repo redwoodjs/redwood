@@ -1,7 +1,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import execa, { ExecaError } from 'execa'
+import type { ExecaError } from 'execa'
+import execa from 'execa'
 
 import { getPaths } from '@redwoodjs/project-config'
 // Allow import of untyped package
@@ -10,7 +11,7 @@ import { getPaths } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
-import { StorybookYargsOptions } from '../types'
+import type { StorybookYargsOptions } from '../types'
 
 export async function handler({
   build,

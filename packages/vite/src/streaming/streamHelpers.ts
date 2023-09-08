@@ -7,11 +7,11 @@ import { renderToPipeableStream, renderToString } from 'react-dom/server'
 
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
+import type { RenderCallback } from '@redwoodjs/web/dist/components/ServerInject'
 import {
   ServerHtmlProvider,
   ServerInjectedHtml,
   createInjector,
-  RenderCallback,
 } from '@redwoodjs/web/dist/components/ServerInject'
 
 interface RenderToStreamArgs {

@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda'
+import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 
 import { getAuthenticationContext } from '../index'
 
