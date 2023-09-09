@@ -4,6 +4,7 @@ description: Deploy serverless in an instant with Vercel
 
 # Deploy to Vercel
 
+
 >The following instructions assume you have read the [General Deployment Setup](./introduction.md#general-deployment-setup) section above.
 
 ## Vercel tl;dr Deploy
