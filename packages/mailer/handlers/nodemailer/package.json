@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@redwoodjs/mailer-core": "6.0.7",
-    "nodemailer": "6.9.4"
+    "nodemailer": "6.9.5"
   },
   "devDependencies": {
     "@types/nodemailer": "6",
