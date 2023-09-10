@@ -33,7 +33,7 @@
     "@redwoodjs/api": "6.0.7",
     "@types/jsonwebtoken": "9.0.2",
     "jest": "29.6.4",
-    "typescript": "5.1.6"
+    "typescript": "5.2.2"
   },
   "peerDependencies": {
     "supertokens-node": "15.0.0"
