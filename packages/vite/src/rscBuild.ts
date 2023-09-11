@@ -7,7 +7,7 @@ import { onWarn } from './lib/onWarn'
 import { rscAnalyzePlugin } from './waku-lib/vite-plugin-rsc'
 
 /**
- * RSC build
+ * RSC build. Step 1 of 3.
  * Uses rscAnalyzePlugin to collect client and server entry points
  * Starts building the AST in entries.ts
  * Doesn't output any files, only collects a list of RSCs and RSFs
