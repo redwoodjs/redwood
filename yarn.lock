@@ -9159,6 +9159,7 @@ __metadata:
     jest: 29.6.4
     react: 18.3.0-canary-035a41c4e-20230704
     react-server-dom-webpack: 18.3.0-canary-035a41c4e-20230704
+    rollup: 3.27.2
     typescript: 5.2.2
     vite: 4.4.9
     yargs-parser: 21.1.1
@@ -31237,7 +31238,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.27.1":
+"rollup@npm:3.27.2, rollup@npm:^3.27.1":
   version: 3.27.2
   resolution: "rollup@npm:3.27.2"
   dependencies:

@@ -7,6 +7,7 @@ import type { Manifest as ViteBuildManifest } from 'vite'
 
 import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
 
+import { onWarn } from './lib/onWarn'
 import { rscBuild } from './rscBuild'
 import type { RWRouteManifest } from './types'
 import { serverBuild } from './waku-lib/build-server'
@@ -45,6 +46,7 @@ export const buildRscFeServer = async ({
       // TODO (RSC) Enable this when we switch to a server-first approach
       // emptyOutDir: false, // Already done when building server
       rollupOptions: {
+        onwarn: onWarn,
         input: {
           main: webHtml,
           ...clientEntryFiles,

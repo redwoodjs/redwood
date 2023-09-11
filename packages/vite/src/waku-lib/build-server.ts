@@ -4,6 +4,8 @@ import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import { onWarn } from '../lib/onWarn'
+
 export async function serverBuild(
   entriesFile: string,
   clientEntryFiles: Record<string, string>,
@@ -60,6 +62,7 @@ export async function serverBuild(
       outDir: rwPaths.web.distServer,
       manifest: 'server-build-manifest.json',
       rollupOptions: {
+        onwarn: onWarn,
         input,
         output: {
           banner: (chunk) => {
