@@ -76,8 +76,10 @@ export async function serverBuild(
               code += '"use client";'
             }
 
-            const serverKeys = Object.keys(serverEntryFiles)
-            if (chunk.moduleIds.some((id) => serverKeys.includes(id))) {
+            const serverValues = Object.values(serverEntryFiles)
+            console.log('serverValues', serverValues)
+            if (chunk.moduleIds.some((id) => serverValues.includes(id))) {
+              console.log('adding "use server" to', chunk.fileName)
               code += '"use server";'
             }
             return code
