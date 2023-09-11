@@ -6121,13 +6121,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/api-logs@npm:0.41.0":
-  version: 0.41.0
-  resolution: "@opentelemetry/api-logs@npm:0.41.0"
+"@opentelemetry/api-logs@npm:0.41.2":
+  version: 0.41.2
+  resolution: "@opentelemetry/api-logs@npm:0.41.2"
   dependencies:
     "@opentelemetry/api": ^1.0.0
-    tslib: ^2.3.1
-  checksum: 05cd04e6d58e89f4fdffe680780271de1fcbb62b7d19d9a6f9abfe56f2cbd7ed42ed8f49dd58527c4b88279d3e168742a31b7ce617647e08f75adeb47367a899
+  checksum: 582f9ad3f55f5a8167c70f6388ef857727dea2c4b1b287ab803586832cb2e5717b7ea05d54118a05203de80dc79550710edbebc59bfda4e5b5901dbf8f9daaaf
   languageName: node
   linkType: hard
 
@@ -6138,176 +6137,161 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/context-async-hooks@npm:1.15.0":
-  version: 1.15.0
-  resolution: "@opentelemetry/context-async-hooks@npm:1.15.0"
-  dependencies:
-    tslib: ^2.3.1
+"@opentelemetry/context-async-hooks@npm:1.15.2":
+  version: 1.15.2
+  resolution: "@opentelemetry/context-async-hooks@npm:1.15.2"
   peerDependencies:
     "@opentelemetry/api": ">=1.0.0 <1.5.0"
-  checksum: 98edd0d7dd6c4fc427b41e50c5676f80c5a27ca82992aaa4471425e1f7bc527481d1b6224646e2901fd0d85b280e49e9fdba001b80f3dcd12415d85d74229273
+  checksum: 1ff8895f0fdda9814346c378cc1dc33c79e3d7c2d29ef9f45153d448c5972b661aa7c0c411057bc9832fa4f0ebd58a6292588229927ec65fc0eef589195b63be
   languageName: node
   linkType: hard
 
-"@opentelemetry/core@npm:1.15.0":
-  version: 1.15.0
-  resolution: "@opentelemetry/core@npm:1.15.0"
+"@opentelemetry/core@npm:1.15.2":
+  version: 1.15.2
+  resolution: "@opentelemetry/core@npm:1.15.2"
   dependencies:
-    "@opentelemetry/semantic-conventions": 1.15.0
-    tslib: ^2.3.1
+    "@opentelemetry/semantic-conventions": 1.15.2
   peerDependencies:
     "@opentelemetry/api": ">=1.0.0 <1.5.0"
-  checksum: b24e9a1179b78ff474fbb26b2a658b20142337a787d84c841ba370911b33e1a6f12751a07007f39fd5e3dde5f7d343609937fc1a7d65579cfd6e50644831e6fb
+  checksum: 330f5905edec32f965151f2b314ae73344ac28672ea2c41ac41687413ac91dcd5c7ab99590dac9870ce189bb3d2a73a780c98e7bf1c8826c4c197a5698db96a4
   languageName: node
   linkType: hard
 
-"@opentelemetry/exporter-trace-otlp-http@npm:0.41.0":
-  version: 0.41.0
-  resolution: "@opentelemetry/exporter-trace-otlp-http@npm:0.41.0"
+"@opentelemetry/exporter-trace-otlp-http@npm:0.41.2":
+  version: 0.41.2
+  resolution: "@opentelemetry/exporter-trace-otlp-http@npm:0.41.2"
   dependencies:
-    "@opentelemetry/core": 1.15.0
-    "@opentelemetry/otlp-exporter-base": 0.41.0
-    "@opentelemetry/otlp-transformer": 0.41.0
-    "@opentelemetry/resources": 1.15.0
-    "@opentelemetry/sdk-trace-base": 1.15.0
-    tslib: ^2.3.1
+    "@opentelemetry/core": 1.15.2
+    "@opentelemetry/otlp-exporter-base": 0.41.2
+    "@opentelemetry/otlp-transformer": 0.41.2
+    "@opentelemetry/resources": 1.15.2
+    "@opentelemetry/sdk-trace-base": 1.15.2
   peerDependencies:
     "@opentelemetry/api": ^1.0.0
-  checksum: 3ab07a1a003bf846111177310442837c9fe35cf665d33da805ee8eb485a23cd99fb12610040a1057d1bf151598789161bc97835e9129c274db59e3520c5f34d4
+  checksum: 2f89643b01d1321312fdc68a5ba6fd354994ee39f6623c495579089b67e236f7aa703f702627885b7a8f772bf8639d73a3d04ed550db9e6cae3236e67c7ec6c2
   languageName: node
   linkType: hard
 
-"@opentelemetry/otlp-exporter-base@npm:0.41.0":
-  version: 0.41.0
-  resolution: "@opentelemetry/otlp-exporter-base@npm:0.41.0"
+"@opentelemetry/otlp-exporter-base@npm:0.41.2":
+  version: 0.41.2
+  resolution: "@opentelemetry/otlp-exporter-base@npm:0.41.2"
   dependencies:
-    "@opentelemetry/core": 1.15.0
-    tslib: ^2.3.1
+    "@opentelemetry/core": 1.15.2
   peerDependencies:
     "@opentelemetry/api": ^1.0.0
-  checksum: c73ba182a005a756b2f73cfbdb79317f2d6c74d834e31c39d8a4e85cf55409a1bfde6794d84b4ae67b648d782a744c03eb56e51cadf35e519239718ff0c12f64
+  checksum: dc0d70579e4e0157d5e4f687b7e6a877469cd394f9db2e23550db762eedbbd0b1201913db6858e4402ffd4109d2dcceadb5fed1ee413ca432f0f0cbd3af52ef5
   languageName: node
   linkType: hard
 
-"@opentelemetry/otlp-transformer@npm:0.41.0":
-  version: 0.41.0
-  resolution: "@opentelemetry/otlp-transformer@npm:0.41.0"
+"@opentelemetry/otlp-transformer@npm:0.41.2":
+  version: 0.41.2
+  resolution: "@opentelemetry/otlp-transformer@npm:0.41.2"
   dependencies:
-    "@opentelemetry/api-logs": 0.41.0
-    "@opentelemetry/core": 1.15.0
-    "@opentelemetry/resources": 1.15.0
-    "@opentelemetry/sdk-logs": 0.41.0
-    "@opentelemetry/sdk-metrics": 1.15.0
-    "@opentelemetry/sdk-trace-base": 1.15.0
-    tslib: ^2.3.1
+    "@opentelemetry/api-logs": 0.41.2
+    "@opentelemetry/core": 1.15.2
+    "@opentelemetry/resources": 1.15.2
+    "@opentelemetry/sdk-logs": 0.41.2
+    "@opentelemetry/sdk-metrics": 1.15.2
+    "@opentelemetry/sdk-trace-base": 1.15.2
   peerDependencies:
     "@opentelemetry/api": ">=1.3.0 <1.5.0"
-  checksum: 50c9cceb6863728645f7dc893bd4cd546092b3bdb86e575e0f4d522f2e847fbfce0e8f978a0c68c0a1794b17293e6660ac014741308ea51af7991126b3733d66
+  checksum: 9d06300190020a1988378dea01fee3de8def099fcbbb40141d7986448f48414c2e5f292cc1167239cec7136f8c597da024404805a64ee88f7ad99ceeab0ca60f
   languageName: node
   linkType: hard
 
-"@opentelemetry/propagator-b3@npm:1.15.0":
-  version: 1.15.0
-  resolution: "@opentelemetry/propagator-b3@npm:1.15.0"
+"@opentelemetry/propagator-b3@npm:1.15.2":
+  version: 1.15.2
+  resolution: "@opentelemetry/propagator-b3@npm:1.15.2"
   dependencies:
-    "@opentelemetry/core": 1.15.0
-    tslib: ^2.3.1
+    "@opentelemetry/core": 1.15.2
   peerDependencies:
     "@opentelemetry/api": ">=1.0.0 <1.5.0"
-  checksum: 986289b0bfc726db81ac6982f349805e10d54a5642d3c80b0b917f429270621bad6ec99ff52b1bb481e355a090d4233d575a7064e9a1bed36dca8c5870d3581d
+  checksum: 0e21b4859f58808099a1321b1c0438810aa411d7ce576b80df019ab4b2d4c3a088318f97eea667a690211d38e401ca8b90dd1f0843658a55f1e783da8c5d5869
   languageName: node
   linkType: hard
 
-"@opentelemetry/propagator-jaeger@npm:1.15.0":
-  version: 1.15.0
-  resolution: "@opentelemetry/propagator-jaeger@npm:1.15.0"
+"@opentelemetry/propagator-jaeger@npm:1.15.2":
+  version: 1.15.2
+  resolution: "@opentelemetry/propagator-jaeger@npm:1.15.2"
   dependencies:
-    "@opentelemetry/core": 1.15.0
-    tslib: ^2.3.1
+    "@opentelemetry/core": 1.15.2
   peerDependencies:
     "@opentelemetry/api": ">=1.0.0 <1.5.0"
-  checksum: 43da9a5cef72b78e864c5a747b250805db2ec292a5646ec5c42b1826a20c09dd25fc8f756226a479ed966961f1b66968a2b429cc4e92a067c27914db2b325347
+  checksum: f6aaa97919dd60ed04f42090da6280620829ca892cf190a40ae3b86a2928cff3b1185aa3ddf01e62fcb9e81d74d726f95fa986c0522e8f12485aae9973168447
   languageName: node
   linkType: hard
 
-"@opentelemetry/resources@npm:1.15.0":
-  version: 1.15.0
-  resolution: "@opentelemetry/resources@npm:1.15.0"
+"@opentelemetry/resources@npm:1.15.2":
+  version: 1.15.2
+  resolution: "@opentelemetry/resources@npm:1.15.2"
   dependencies:
-    "@opentelemetry/core": 1.15.0
-    "@opentelemetry/semantic-conventions": 1.15.0
-    tslib: ^2.3.1
+    "@opentelemetry/core": 1.15.2
+    "@opentelemetry/semantic-conventions": 1.15.2
   peerDependencies:
     "@opentelemetry/api": ">=1.0.0 <1.5.0"
-  checksum: fa00fe3d429e3022ae5f5ac59886ac8f84db28aaeb695d74efd2a83818aea471edfa6e0e888e5c8b956df8f0635ab5974b5f5dc6769d3a8a6f9b615624df88d6
+  checksum: 137a20a5cc2a71039919fc8a38b44c424c3fc4d7b413e2c8fd8db503244387f67cc971f4018bfc7b04fb9df6da2dea683ff9fb2775673f15bd63bca62cf92015
   languageName: node
   linkType: hard
 
-"@opentelemetry/sdk-logs@npm:0.41.0":
-  version: 0.41.0
-  resolution: "@opentelemetry/sdk-logs@npm:0.41.0"
+"@opentelemetry/sdk-logs@npm:0.41.2":
+  version: 0.41.2
+  resolution: "@opentelemetry/sdk-logs@npm:0.41.2"
   dependencies:
-    "@opentelemetry/core": 1.15.0
-    "@opentelemetry/resources": 1.15.0
-    tslib: ^2.3.1
+    "@opentelemetry/core": 1.15.2
+    "@opentelemetry/resources": 1.15.2
   peerDependencies:
     "@opentelemetry/api": ">=1.4.0 <1.5.0"
     "@opentelemetry/api-logs": ">=0.39.1"
-  checksum: 62138365c8c4fe84a21133ee7156bccc5a940e55ff6376659d5782c838c3a57d6373d0dd28a7b4bee7aac157659c3df6e8387b5962800e408d2f02c875fc35a7
+  checksum: aeb1aa2b7f848b5ac237cd195be064a281118cfedc995157df833fd1b0f2da94315b5d3a45a3f1fdcb75bbe2f032c42bdf144a52fd340f61b0a8a70ab4a97794
   languageName: node
   linkType: hard
 
-"@opentelemetry/sdk-metrics@npm:1.15.0":
-  version: 1.15.0
-  resolution: "@opentelemetry/sdk-metrics@npm:1.15.0"
+"@opentelemetry/sdk-metrics@npm:1.15.2":
+  version: 1.15.2
+  resolution: "@opentelemetry/sdk-metrics@npm:1.15.2"
   dependencies:
-    "@opentelemetry/core": 1.15.0
-    "@opentelemetry/resources": 1.15.0
+    "@opentelemetry/core": 1.15.2
+    "@opentelemetry/resources": 1.15.2
     lodash.merge: ^4.6.2
-    tslib: ^2.3.1
   peerDependencies:
     "@opentelemetry/api": ">=1.3.0 <1.5.0"
-  checksum: 3ae915f9c4011ea42834c3f9c9e49b28ab40c3d87951184244682dbc9c4fad7cb2cf30ffec16d09095dd23c5254785db2e4fed961ed1504de0fb67cd294920ff
+  checksum: 2000356b0d29673ec7a40fc354e2c2147dd7b90885095e5cbc2c995403e1752e971d24a5241c6485dd4c69026dbd3c23757340c8fe90f2f0ee16c912f3b0d6dd
   languageName: node
   linkType: hard
 
-"@opentelemetry/sdk-trace-base@npm:1.15.0":
-  version: 1.15.0
-  resolution: "@opentelemetry/sdk-trace-base@npm:1.15.0"
+"@opentelemetry/sdk-trace-base@npm:1.15.2":
+  version: 1.15.2
+  resolution: "@opentelemetry/sdk-trace-base@npm:1.15.2"
   dependencies:
-    "@opentelemetry/core": 1.15.0
-    "@opentelemetry/resources": 1.15.0
-    "@opentelemetry/semantic-conventions": 1.15.0
-    tslib: ^2.3.1
+    "@opentelemetry/core": 1.15.2
+    "@opentelemetry/resources": 1.15.2
+    "@opentelemetry/semantic-conventions": 1.15.2
   peerDependencies:
     "@opentelemetry/api": ">=1.0.0 <1.5.0"
-  checksum: 44fdb3d857be62e42838ac8bffd9e171522bd0d76be954d6f2aabf94e059443739d3b8a66ee38762f7ba7e99e2a74f606ba777f6d82d521bc118fe484e8d3374
+  checksum: acfdf1995f7faeeba2656e7272d63fb87af535eddba6ab4457b93d8a4548925beaa5f6335e2580d060a971020c69a9439c8e830130f21c2b1a94200c9d28c2f3
   languageName: node
   linkType: hard
 
-"@opentelemetry/sdk-trace-node@npm:1.15.0":
-  version: 1.15.0
-  resolution: "@opentelemetry/sdk-trace-node@npm:1.15.0"
+"@opentelemetry/sdk-trace-node@npm:1.15.2":
+  version: 1.15.2
+  resolution: "@opentelemetry/sdk-trace-node@npm:1.15.2"
   dependencies:
-    "@opentelemetry/context-async-hooks": 1.15.0
-    "@opentelemetry/core": 1.15.0
-    "@opentelemetry/propagator-b3": 1.15.0
-    "@opentelemetry/propagator-jaeger": 1.15.0
-    "@opentelemetry/sdk-trace-base": 1.15.0
+    "@opentelemetry/context-async-hooks": 1.15.2
+    "@opentelemetry/core": 1.15.2
+    "@opentelemetry/propagator-b3": 1.15.2
+    "@opentelemetry/propagator-jaeger": 1.15.2
+    "@opentelemetry/sdk-trace-base": 1.15.2
     semver: ^7.5.1
-    tslib: ^2.3.1
   peerDependencies:
     "@opentelemetry/api": ">=1.0.0 <1.5.0"
-  checksum: 26852055038d5b539ead1632ce92405785358b7bc07e6c6d493659a0e4e4de4b9b26069b053205ccf4330bc61eaa1d14b204d30cd48a962ab7d7e76b265947c2
+  checksum: 7378d8dbb61ee5a69d4141777d71f00d7d41a3bf7f9a564b07335182309233e83bda0e13459e082d33b1ebb56257f7054925e52d00ee3a2ad36987a5eaa8e669
   languageName: node
   linkType: hard
 
-"@opentelemetry/semantic-conventions@npm:1.15.0":
-  version: 1.15.0
-  resolution: "@opentelemetry/semantic-conventions@npm:1.15.0"
-  dependencies:
-    tslib: ^2.3.1
-  checksum: 80144661d8cff90ccac3b2c27d7c88d520b8905897e66c5f7ad88d93e5fca721b9d790300063cf75de7d2b85e264d0cc33638027fff3cfa1fa358b1e5b455190
+"@opentelemetry/semantic-conventions@npm:1.15.2":
+  version: 1.15.2
+  resolution: "@opentelemetry/semantic-conventions@npm:1.15.2"
+  checksum: 84428c3703e5bd0fb8e3f99cad0a48feb2ac03fec025f3a5691745486a89e446ea8fdf701c334d9dbb70a0c9f7053af777105f4ebc58fb1c602edb9aef918b28
   languageName: node
   linkType: hard
 
@@ -7794,7 +7778,7 @@ __metadata:
     pretty-ms: 7.0.1
     qs: 6.11.2
     split2: 4.2.0
-    typescript: 5.1.6
+    typescript: 5.2.2
     yargs: 17.7.2
   bin:
     rw-api-server-watch: ./dist/watch.js
@@ -7823,12 +7807,12 @@ __metadata:
     jsonwebtoken: 9.0.0
     memjs: 1.3.1
     pascalcase: 1.0.0
-    pino: 8.15.0
+    pino: 8.15.1
     redis: 4.6.7
     split2: 4.2.0
     title-case: 3.0.3
     ts-toolbelt: 9.6.0
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     memjs: 1.3.1
     redis: 4.6.7
@@ -7858,7 +7842,7 @@ __metadata:
     jest: 29.6.4
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -7873,7 +7857,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.32.2
     jest: 29.6.4
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -7890,7 +7874,7 @@ __metadata:
     core-js: 3.32.2
     jest: 29.6.4
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     "@auth0/auth0-spa-js": 2.1.1
   languageName: unknown
@@ -7910,7 +7894,7 @@ __metadata:
     jest: 29.6.4
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -7925,7 +7909,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.32.2
     jest: 29.6.4
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -7943,7 +7927,7 @@ __metadata:
     core-js: 3.32.2
     jest: 29.6.4
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     "@azure/msal-browser": 2.38.1
   languageName: unknown
@@ -7961,7 +7945,7 @@ __metadata:
     "@types/aws-lambda": 8.10.119
     core-js: 3.32.2
     jest: 29.6.4
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -7976,7 +7960,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.32.2
     jest: 29.6.4
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -7994,7 +7978,7 @@ __metadata:
     core-js: 3.32.2
     jest: 29.6.4
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     "@clerk/clerk-react": 4.22.0
   languageName: unknown
@@ -8011,7 +7995,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.32.2
     jest: 29.6.4
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8032,7 +8016,7 @@ __metadata:
     crypto-js: 4.1.1
     jest: 29.6.4
     md5: 2.3.0
-    typescript: 5.1.6
+    typescript: 5.2.2
     uuid: 9.0.0
   languageName: unknown
   linkType: soft
@@ -8054,7 +8038,7 @@ __metadata:
     prompts: 2.4.2
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8072,7 +8056,7 @@ __metadata:
     core-js: 3.32.2
     jest: 29.6.4
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8088,7 +8072,7 @@ __metadata:
     core-js: 3.32.2
     firebase-admin: 11.10.1
     jest: 29.6.4
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8103,7 +8087,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.32.2
     jest: 29.6.4
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8120,7 +8104,7 @@ __metadata:
     firebase: 10.3.0
     jest: 29.6.4
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     firebase: 10.3.0
   languageName: unknown
@@ -8139,7 +8123,7 @@ __metadata:
     core-js: 3.32.2
     jest: 29.6.4
     jsonwebtoken: 9.0.0
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8154,7 +8138,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.32.2
     jest: 29.6.4
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8171,7 +8155,7 @@ __metadata:
     core-js: 3.32.2
     jest: 29.6.4
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     netlify-identity-widget: 1.9.2
   languageName: unknown
@@ -8190,7 +8174,7 @@ __metadata:
     core-js: 3.32.2
     jest: 29.6.4
     jsonwebtoken: 9.0.0
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8205,7 +8189,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.32.2
     jest: 29.6.4
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8221,7 +8205,7 @@ __metadata:
     core-js: 3.32.2
     jest: 29.6.4
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     "@supabase/supabase-js": 2.26.0
   languageName: unknown
@@ -8240,7 +8224,7 @@ __metadata:
     jest: 29.6.4
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     supertokens-node: 15.0.0
   languageName: unknown
@@ -8257,7 +8241,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.32.2
     jest: 29.6.4
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8274,7 +8258,7 @@ __metadata:
     jest: 29.6.4
     react: 18.3.0-canary-035a41c4e-20230704
     supertokens-auth-react: 0.34.0
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     supertokens-auth-react: 0.34.0
   languageName: unknown
@@ -8293,7 +8277,7 @@ __metadata:
     jest: 29.6.4
     msw: 1.2.5
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8326,7 +8310,7 @@ __metadata:
     fast-glob: 3.3.1
     graphql: 16.8.0
     jest: 29.6.4
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8349,7 +8333,7 @@ __metadata:
     listr2: 6.6.1
     memfs: 4.2.1
     terminal-link: 2.1.1
-    typescript: 5.1.6
+    typescript: 5.2.2
     yargs: 17.7.2
   bin:
     up: ./dist/bin.js
@@ -8379,7 +8363,7 @@ __metadata:
     prettier: 2.8.8
     prompts: 2.4.2
     terminal-link: 2.1.1
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8402,7 +8386,7 @@ __metadata:
     jest: 29.6.4
     storybook: 7.4.0
     terminal-link: 2.1.1
-    typescript: 5.1.6
+    typescript: 5.2.2
     yargs: 17.7.2
   languageName: unknown
   linkType: soft
@@ -8416,11 +8400,11 @@ __metadata:
     "@babel/runtime-corejs3": 7.22.11
     "@iarna/toml": 2.2.5
     "@opentelemetry/api": 1.4.1
-    "@opentelemetry/core": 1.15.0
-    "@opentelemetry/exporter-trace-otlp-http": 0.41.0
-    "@opentelemetry/resources": 1.15.0
-    "@opentelemetry/sdk-trace-node": 1.15.0
-    "@opentelemetry/semantic-conventions": 1.15.0
+    "@opentelemetry/core": 1.15.2
+    "@opentelemetry/exporter-trace-otlp-http": 0.41.2
+    "@opentelemetry/resources": 1.15.2
+    "@opentelemetry/sdk-trace-node": 1.15.2
+    "@opentelemetry/semantic-conventions": 1.15.2
     "@prisma/internals": 5.2.0
     "@redwoodjs/api-server": 6.0.7
     "@redwoodjs/cli-helpers": 6.0.7
@@ -8467,7 +8451,7 @@ __metadata:
     systeminformation: 5.18.5
     terminal-link: 2.1.1
     title-case: 3.0.3
-    typescript: 5.1.6
+    typescript: 5.2.2
     uuid: 9.0.0
     yargs: 17.7.2
   bin:
@@ -8512,7 +8496,7 @@ __metadata:
     prettier: 2.8.8
     tasuku: 2.0.1
     tempy: 1.0.1
-    typescript: 5.1.6
+    typescript: 5.2.2
     yargs: 17.7.2
   bin:
     codemods: ./dist/codemods.js
@@ -8551,7 +8535,7 @@ __metadata:
     resolve-url-loader: 5.0.0
     rimraf: 5.0.1
     style-loader: 3.3.3
-    typescript: 5.1.6
+    typescript: 5.2.2
     url-loader: 4.1.1
     webpack: 5.88.2
     webpack-bundle-analyzer: 4.9.0
@@ -8604,7 +8588,7 @@ __metadata:
     eslint-plugin-react-hooks: 4.6.0
     jest: 29.6.4
     prettier: 2.8.8
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8620,7 +8604,7 @@ __metadata:
     eslint: 8.46.0
     fast-glob: 3.3.1
     glob: 10.3.1
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8643,7 +8627,7 @@ __metadata:
     fastify-raw-body: 4.2.2
     lodash: 4.17.21
     qs: 6.11.2
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8670,7 +8654,7 @@ __metadata:
     react: 18.3.0-canary-035a41c4e-20230704
     react-dom: 18.3.0-canary-035a41c4e-20230704
     react-hook-form: 7.45.4
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     graphql: 16.8.0
     react: 18.3.0-canary-035a41c4e-20230704
@@ -8712,7 +8696,7 @@ __metadata:
     jest: 29.6.4
     jsonwebtoken: 9.0.0
     lodash: 4.17.21
-    typescript: 5.1.6
+    typescript: 5.2.2
     uuid: 9.0.0
   languageName: unknown
   linkType: soft
@@ -8759,7 +8743,7 @@ __metadata:
     terminal-link: 2.1.1
     ts-node: 10.9.1
     tsx: 3.12.7
-    typescript: 5.1.6
+    typescript: 5.2.2
   bin:
     rw-gen: ./dist/generate/generate.js
     rw-gen-watch: ./dist/generate/watch.js
@@ -8774,7 +8758,7 @@ __metadata:
     esbuild: 0.19.2
     fast-glob: 3.3.1
     jest: 29.6.4
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8786,7 +8770,7 @@ __metadata:
     "@types/uuid": 9.0.2
     esbuild: 0.19.2
     fast-glob: 3.3.1
-    typescript: 5.1.6
+    typescript: 5.2.2
     uuid: 9.0.0
   languageName: unknown
   linkType: soft
@@ -8799,8 +8783,8 @@ __metadata:
     "@types/nodemailer": 6
     esbuild: 0.19.2
     fast-glob: 3.3.1
-    nodemailer: 6.9.4
-    typescript: 5.1.6
+    nodemailer: 6.9.5
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8813,7 +8797,7 @@ __metadata:
     "@types/nodemailer": ^6
     esbuild: 0.19.2
     fast-glob: 3.3.1
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8827,7 +8811,7 @@ __metadata:
     esbuild: 0.19.2
     fast-glob: 3.3.1
     mjml: 4.14.1
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8839,7 +8823,7 @@ __metadata:
     "@redwoodjs/mailer-core": 6.0.7
     esbuild: 0.19.2
     fast-glob: 3.3.1
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8865,7 +8849,7 @@ __metadata:
     graphql: 16.8.0
     jest: 29.6.4
     mime-types: 2.1.35
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     react: 18.3.0-canary-035a41c4e-20230704
     react-dom: 18.3.0-canary-035a41c4e-20230704
@@ -8883,7 +8867,7 @@ __metadata:
     jest: 29.6.4
     rimraf: 5.0.1
     string-env-interpolation: 1.0.1
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -8907,7 +8891,7 @@ __metadata:
     ioredis: 5.3.2
     jest: 29.6.4
     nodemon: 2.0.22
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     ioredis: ^5.3.2
   peerDependenciesMeta:
@@ -8947,7 +8931,7 @@ __metadata:
     jest: 29.6.4
     react: 18.3.0-canary-035a41c4e-20230704
     react-dom: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     react: 18.3.0-canary-035a41c4e-20230704
     react-dom: 18.3.0-canary-035a41c4e-20230704
@@ -8985,7 +8969,7 @@ __metadata:
     lru-cache: 7.18.3
     proxyquire: 2.1.3
     ts-morph: 15.1.0
-    typescript: 5.1.6
+    typescript: 5.2.2
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.8
     vscode-languageserver-types: 3.17.3
@@ -9068,7 +9052,7 @@ __metadata:
     sqlite: 4.2.1
     sqlite3: 5.1.6
     tailwindcss: 3.3.2
-    typescript: 5.1.6
+    typescript: 5.2.2
     use-url-search-params: 2.5.1
     uuid: 9.0.0
     vite: 4.4.9
@@ -9131,7 +9115,7 @@ __metadata:
     jest-watch-typeahead: 2.2.2
     msw: 1.2.5
     ts-toolbelt: 9.6.0
-    typescript: 5.1.6
+    typescript: 5.2.2
     whatwg-fetch: 3.6.17
   languageName: unknown
   linkType: soft
@@ -9146,7 +9130,7 @@ __metadata:
     esbuild: 0.19.2
     jest: 29.6.4
     stdout-update: 1.6.8
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -9175,7 +9159,7 @@ __metadata:
     jest: 29.6.4
     react: 18.3.0-canary-035a41c4e-20230704
     react-server-dom-webpack: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.6
+    typescript: 5.2.2
     vite: 4.4.9
     yargs-parser: 21.1.1
   bin:
@@ -9198,7 +9182,7 @@ __metadata:
     esbuild: 0.19.2
     fast-glob: 3.3.1
     fastify: 4.22.2
-    typescript: 5.1.6
+    typescript: 5.2.2
     yargs-parser: 21.1.1
   bin:
     rw-web-server: ./dist/server.js
@@ -9235,7 +9219,7 @@ __metadata:
     react-hot-toast: 2.4.1
     stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
-    typescript: 5.1.6
+    typescript: 5.2.2
   peerDependencies:
     prop-types: 15.8.1
     react: 18.3.0-canary-035a41c4e-20230704
@@ -16597,10 +16581,10 @@ __metadata:
     "@babel/core": 7.22.11
     "@babel/plugin-transform-typescript": 7.22.11
     "@opentelemetry/api": 1.4.1
-    "@opentelemetry/exporter-trace-otlp-http": 0.41.0
-    "@opentelemetry/resources": 1.15.0
-    "@opentelemetry/sdk-trace-node": 1.15.0
-    "@opentelemetry/semantic-conventions": 1.15.0
+    "@opentelemetry/exporter-trace-otlp-http": 0.41.2
+    "@opentelemetry/resources": 1.15.2
+    "@opentelemetry/sdk-trace-node": 1.15.2
+    "@opentelemetry/semantic-conventions": 1.15.2
     "@redwoodjs/tui": 6.0.7
     "@types/babel__core": 7.20.1
     chalk: 4.1.2
@@ -27020,10 +27004,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:6.9.4":
-  version: 6.9.4
-  resolution: "nodemailer@npm:6.9.4"
-  checksum: c50778ae499da089b5cceb4bbe6366900b14a76155c5e379e80996b46a2ba7db094b624e04b839f8c992e86bdad218f26b914467b3047fa8223142a42a4252f5
+"nodemailer@npm:6.9.5":
+  version: 6.9.5
+  resolution: "nodemailer@npm:6.9.5"
+  checksum: 690602304f98e2de08db613c29715f3bb0e44236a9bfa8766ab5edb43350060c0269c03d6ac90f700871bbe4832e8158eac6b1e9fbe0d83e49acea7d06b4a1f8
   languageName: node
   linkType: hard
 
@@ -28651,13 +28635,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino-abstract-transport@npm:v1.0.0":
-  version: 1.0.0
-  resolution: "pino-abstract-transport@npm:1.0.0"
+"pino-abstract-transport@npm:v1.1.0":
+  version: 1.1.0
+  resolution: "pino-abstract-transport@npm:1.1.0"
   dependencies:
     readable-stream: ^4.0.0
     split2: ^4.0.0
-  checksum: c7a68e4f77f47565d39fdc33ba23f388ad2594b26a12ccce3060fef833cd7803db73a0c6e4fa7129616f22eb762119ed6107450e0f8ca1e3745d4993017725f7
+  checksum: 6e9b9d5a2c0a37f91ecaf224d335daae1ae682b1c79a05b06ef9e0f0a5d289f8e597992217efc857796dae6f1067e9b4882f95c6228ff433ddc153532cae8aca
   languageName: node
   linkType: hard
 
@@ -28668,14 +28652,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:8.15.0, pino@npm:^8.12.0":
-  version: 8.15.0
-  resolution: "pino@npm:8.15.0"
+"pino@npm:8.15.1, pino@npm:^8.12.0":
+  version: 8.15.1
+  resolution: "pino@npm:8.15.1"
   dependencies:
     atomic-sleep: ^1.0.0
     fast-redact: ^3.1.1
     on-exit-leak-free: ^2.1.0
-    pino-abstract-transport: v1.0.0
+    pino-abstract-transport: v1.1.0
     pino-std-serializers: ^6.0.0
     process-warning: ^2.0.0
     quick-format-unescaped: ^4.0.3
@@ -28685,7 +28669,7 @@ __metadata:
     thread-stream: ^2.0.0
   bin:
     pino: bin.js
-  checksum: 0288488d0426b68d1e3a7e0f11eda6b3e8e4d7cd9f8aa6e090afe03e604fa5039be62397528d78d6f30735e6416a54b4e07881107ef80c125076191399283688
+  checksum: d2a5392da372d279f2ff0465d6a6f2033303d7cf8d2020938ae5e00e750a006388148edb8bad2c3f41227e365c3b179fb692d220566fe79e32ac5ed051bd4183
   languageName: node
   linkType: hard
 
@@ -31332,7 +31316,7 @@ __metadata:
     prompts: 2.4.2
     rimraf: 5.0.1
     tsx: 3.12.7
-    typescript: 5.1.6
+    typescript: 5.2.2
     yargs: 17.7.2
     zx: 7.2.2
   languageName: unknown
@@ -34183,23 +34167,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.1.6, typescript@npm:>=3 < 6":
-  version: 5.1.6
-  resolution: "typescript@npm:5.1.6"
+"typescript@npm:5.2.2, typescript@npm:>=3 < 6":
+  version: 5.2.2
+  resolution: "typescript@npm:5.2.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 45ac28e2df8365fd28dac42f5d62edfe69a7203d5ec646732cadc04065331f34f9078f81f150fde42ed9754eed6fa3b06a8f3523c40b821e557b727f1992e025
+  checksum: 91ae3e6193d0ddb8656d4c418a033f0f75dec5e077ebbc2bd6d76439b93f35683936ee1bdc0e9cf94ec76863aa49f27159b5788219b50e1cd0cd6d110aa34b07
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@5.1.6#~builtin<compat/typescript>, typescript@patch:typescript@>=3 < 6#~builtin<compat/typescript>":
-  version: 5.1.6
-  resolution: "typescript@patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"
+"typescript@patch:typescript@5.2.2#~builtin<compat/typescript>, typescript@patch:typescript@>=3 < 6#~builtin<compat/typescript>":
+  version: 5.2.2
+  resolution: "typescript@patch:typescript@npm%3A5.2.2#~builtin<compat/typescript>::version=5.2.2&hash=f3b441"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: c2bded58ab897a8341fdbb0c1d92ea2362f498cfffebdc8a529d03e15ea2454142dfbf122dabbd9a5cb79b7123790d27def16e11844887d20636226773ed329a
+  checksum: 062c1cee1990e6b9419ce8a55162b8dc917eb87f807e4de0327dbc1c2fa4e5f61bc0dd4e034d38ff541d1ed0479b53bcee8e4de3a4075c51a1724eb6216cb6f5
   languageName: node
   linkType: hard
 

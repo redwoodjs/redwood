@@ -25,13 +25,13 @@
   },
   "dependencies": {
     "@redwoodjs/mailer-core": "6.0.7",
-    "nodemailer": "6.9.4"
+    "nodemailer": "6.9.5"
   },
   "devDependencies": {
     "@types/nodemailer": "6",
     "esbuild": "0.19.2",
     "fast-glob": "3.3.1",
-    "typescript": "5.1.6"
+    "typescript": "5.2.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
