@@ -34,8 +34,10 @@ export const buildRscFeServer = async ({
   webDistEntries,
   webRouteManifest,
 }: Args) => {
+  // Step 1: Analyze all files and generate a list of RSCs and RSFs
   const { clientEntryFiles, serverEntryFiles } = await rscBuild(viteConfigPath)
 
+  // Step 2: Generate the client bundle
   const clientBuildOutput = await viteBuild({
     // configFile: viteConfigPath,
     root: webSrc,
@@ -64,6 +66,7 @@ export const buildRscFeServer = async ({
     throw new Error('Unexpected vite client build output')
   }
 
+  // Step 3: Generate the server output
   const serverBuildOutput = await serverBuild(
     entries,
     clientEntryFiles,
