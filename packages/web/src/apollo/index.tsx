@@ -35,12 +35,16 @@ import {
 } from '../components/FetchConfigProvider'
 import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
 
-import { fragmentRegistry } from './fragmentRegistry'
+import {
+  fragmentRegistry,
+  registerFragment,
+  registerFragments,
+} from './fragmentRegistry'
 import { SSELink } from './sseLink'
 
-export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
+export { fragmentRegistry, registerFragment, registerFragments, SSELink }
 
-export { fragmentRegistry }
+export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
 
 export type RedwoodApolloLinkName =
   | 'withToken'
