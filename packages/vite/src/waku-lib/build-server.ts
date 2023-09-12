@@ -4,6 +4,8 @@ import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import { onWarn } from '../lib/onWarn'
+
 export async function serverBuild(
   entriesFile: string,
   clientEntryFiles: Record<string, string>,
@@ -60,6 +62,7 @@ export async function serverBuild(
       outDir: rwPaths.web.distServer,
       manifest: 'server-build-manifest.json',
       rollupOptions: {
+        onwarn: onWarn,
         input,
         output: {
           banner: (chunk) => {
@@ -73,8 +76,10 @@ export async function serverBuild(
               code += '"use client";'
             }
 
-            const serverKeys = Object.keys(serverEntryFiles)
-            if (chunk.moduleIds.some((id) => serverKeys.includes(id))) {
+            const serverValues = Object.values(serverEntryFiles)
+            console.log('serverValues', serverValues)
+            if (chunk.moduleIds.some((id) => serverValues.includes(id))) {
+              console.log('adding "use server" to', chunk.fileName)
               code += '"use server";'
             }
             return code

@@ -24,11 +24,18 @@ describe('api', () => {
   })
 
   describe('getApiSideBabelPresets', () => {
-    it('just includes `@babel/preset-typescript` by default', () => {
+    it('only includes `@babel/preset-typescript` by default', () => {
       const apiSideBabelPresets = getApiSideBabelPresets()
       expect(apiSideBabelPresets).toMatchInlineSnapshot(`
         [
-          "@babel/preset-typescript",
+          [
+            "@babel/preset-typescript",
+            {
+              "allExtensions": true,
+              "isTSX": true,
+            },
+            "rwjs-babel-preset-typescript",
+          ],
         ]
       `)
     })
@@ -37,7 +44,14 @@ describe('api', () => {
       const apiSideBabelPresets = getApiSideBabelPresets({ presetEnv: true })
       expect(apiSideBabelPresets).toMatchInlineSnapshot(`
         [
-          "@babel/preset-typescript",
+          [
+            "@babel/preset-typescript",
+            {
+              "allExtensions": true,
+              "isTSX": true,
+            },
+            "rwjs-babel-preset-typescript",
+          ],
           [
             "@babel/preset-env",
             {
@@ -103,7 +117,7 @@ describe('api', () => {
       )
 
       const apiSideBabelPlugins = getApiSideBabelPlugins()
-      expect(apiSideBabelPlugins).toHaveLength(9)
+      expect(apiSideBabelPlugins).toHaveLength(10)
 
       const pluginNames = apiSideBabelPlugins.map(([name]) => name)
       expect(pluginNames).toMatchInlineSnapshot(`
@@ -111,6 +125,7 @@ describe('api', () => {
           "@babel/plugin-transform-class-properties",
           "@babel/plugin-transform-private-methods",
           "@babel/plugin-transform-private-property-in-object",
+          "@babel/plugin-transform-react-jsx",
           "@babel/plugin-transform-runtime",
           "babel-plugin-module-resolver",
           [Function],
@@ -160,6 +175,13 @@ describe('api', () => {
             version: 3,
           },
           version: '7.22.11',
+        },
+      ])
+
+      expect(apiSideBabelPlugins).toContainEqual([
+        '@babel/plugin-transform-react-jsx',
+        {
+          runtime: 'automatic',
         },
       ])
 

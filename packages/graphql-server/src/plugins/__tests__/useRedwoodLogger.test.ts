@@ -17,7 +17,8 @@ import {
   testFilteredQuery,
   testValidationErrorQuery,
 } from '../__fixtures__/common'
-import { LoggerConfig, useRedwoodLogger } from '../useRedwoodLogger'
+import type { LoggerConfig } from '../useRedwoodLogger'
+import { useRedwoodLogger } from '../useRedwoodLogger'
 
 const watchFileCreated = (filename) => {
   return new Promise((resolve, reject) => {

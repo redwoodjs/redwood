@@ -1,4 +1,4 @@
-import {
+import type {
   SupabaseClient,
   User,
   AuthResponse,
@@ -11,11 +11,11 @@ import {
   SignInWithPasswordCredentials,
   SignUpWithPasswordCredentials,
   Session,
-  AuthError,
 } from '@supabase/supabase-js'
+import { AuthError } from '@supabase/supabase-js'
 import { renderHook, act } from '@testing-library/react'
 
-import { CurrentUser } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
 
 import { createAuth } from '../supabase'
 

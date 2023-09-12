@@ -29,13 +29,13 @@
     "chalk": "4.1.2",
     "dotenv-defaults": "5.0.2",
     "fast-glob": "3.3.1",
-    "fastify": "4.22.0",
+    "fastify": "4.22.2",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
     "@types/yargs-parser": "21.0.0",
-    "esbuild": "0.18.19",
-    "typescript": "5.1.6"
+    "esbuild": "0.19.2",
+    "typescript": "5.2.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

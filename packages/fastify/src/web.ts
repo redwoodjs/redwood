@@ -12,7 +12,7 @@ import type {
 import { getPaths } from '@redwoodjs/project-config'
 
 import { loadFastifyConfig } from './config'
-import { RedwoodFastifyWebOptions } from './types'
+import type { RedwoodFastifyWebOptions } from './types'
 
 export async function redwoodFastifyWeb(
   fastify: FastifyInstance,

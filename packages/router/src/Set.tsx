@@ -1,4 +1,5 @@
-import React, { ReactElement, ReactNode } from 'react'
+import type { ReactElement, ReactNode } from 'react'
+import React from 'react'
 
 export type WrapperType<WTProps> = (
   props: WTProps & { children: ReactNode }

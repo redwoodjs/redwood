@@ -28,10 +28,10 @@
     "@types/eslint": "8",
     "@types/estree": "1.0.1",
     "@typescript-eslint/parser": "5.61.0",
-    "esbuild": "0.18.19",
+    "esbuild": "0.19.2",
     "fast-glob": "3.3.1",
     "glob": "10.3.1",
-    "typescript": "5.1.6"
+    "typescript": "5.2.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
