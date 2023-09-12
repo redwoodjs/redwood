@@ -81,7 +81,7 @@ export const getNamedExports = (ast: types.Node): NamedExports[] => {
         })
       } else if (declaration.type === 'ClassDeclaration') {
         namedExports.push({
-          name: declaration?.id?.name,
+          name: declaration?.id?.name as string,
           type: 'class',
         })
       }
