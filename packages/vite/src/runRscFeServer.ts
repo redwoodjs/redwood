@@ -181,6 +181,7 @@ export async function runFeServer() {
         }
 
         res.end(String(err))
+        // TODO (RSC): When we have `yarn rw dev` support we should do this:
         // if (options.command === 'dev') {
         //   res.end(String(err))
         // } else {
@@ -190,6 +191,7 @@ export async function runFeServer() {
 
       try {
         const pipeable = await renderRSC({ rscId, props, rsfId, args })
+        // TODO (RSC): See if we can/need to do more error handling here
         // pipeable.on(handleError)
         pipeable.pipe(res)
       } catch (e) {
