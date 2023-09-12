@@ -115,7 +115,7 @@ export const handler = async ({ force, install }) => {
   })
   const rwPaths = getPaths()
 
-  const projectPackages = ['prettier-plugin-tailwindcss']
+  const projectPackages = ['prettier-plugin-tailwindcss@0.4.1']
 
   const webWorkspacePackages = [
     'postcss',

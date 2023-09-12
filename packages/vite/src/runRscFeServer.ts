@@ -6,17 +6,22 @@
 import fs from 'fs/promises'
 import path from 'path'
 
+import busboy from 'busboy'
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import isbot from 'isbot'
+import RSDWServer from 'react-server-dom-webpack/server.node.unbundled'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { hasStatusCode } from './lib/StatusError'
 import { registerFwGlobals } from './streaming/registerGlobals'
 import { renderRSC, setClientEntries } from './waku-lib/rsc-handler-worker'
+
+const { decodeReply, decodeReplyFromBusboy } = RSDWServer
 
 /**
  * TODO (STREAMING)
@@ -120,62 +125,78 @@ export async function runFeServer() {
     console.log('basePath', basePath)
     console.log('req.originalUrl', req.originalUrl, 'req.url', req.url)
     console.log('req.headers.host', req.headers.host)
+
     const url = new URL(req.originalUrl || '', 'http://' + req.headers.host)
     let rscId: string | undefined
     let props = {}
     let rsfId: string | undefined
-    const args: unknown[] = []
+    let args: unknown[] = []
 
     console.log('url.pathname', url.pathname)
+
     if (url.pathname.startsWith(basePath)) {
       const index = url.pathname.lastIndexOf('/')
-      rscId = url.pathname.slice(basePath.length, index)
-      console.log('rscId', rscId)
       const params = new URLSearchParams(url.pathname.slice(index + 1))
+      rscId = url.pathname.slice(basePath.length, index)
+      rsfId = params.get('action_id') || undefined
+
+      console.log('rscId', rscId)
+      console.log('rsfId', rsfId)
+
       if (rscId && rscId !== '_') {
         res.setHeader('Content-Type', 'text/x-component')
         props = JSON.parse(params.get('props') || '{}')
       } else {
         rscId = undefined
       }
-      rsfId = params.get('action_id') || undefined
+
       if (rsfId) {
-        console.warn('RSF is not supported yet')
-        console.warn('RSF is not supported yet')
-        console.warn('RSF is not supported yet')
-        // if (req.headers["content-type"]?.startsWith("multipart/form-data")) {
-        //   const bb = busboy({ headers: req.headers });
-        //   const reply = decodeReplyFromBusboy(bb);
-        //   req.pipe(bb);
-        //   args = await reply;
-        // } else {
-        //   let body = "";
-        //   for await (const chunk of req) {
-        //     body += chunk;
-        //   }
-        //   if (body) {
-        //     args = await decodeReply(body);
-        //   }
-        // }
+        if (req.headers['content-type']?.startsWith('multipart/form-data')) {
+          const bb = busboy({ headers: req.headers })
+          const reply = decodeReplyFromBusboy(bb)
+
+          req.pipe(bb)
+          args = await reply
+        } else {
+          let body = ''
+
+          for await (const chunk of req) {
+            body += chunk
+          }
+
+          if (body) {
+            args = await decodeReply(body)
+          }
+        }
       }
     }
 
     if (rscId || rsfId) {
-      const pipeable = await renderRSC({ rscId, props, rsfId, args })
+      const handleError = (err: unknown) => {
+        if (hasStatusCode(err)) {
+          res.statusCode = err.statusCode
+        } else {
+          console.info('Cannot render RSC', err)
+          res.statusCode = 500
+        }
 
-      // TODO handle errors
+        res.end(String(err))
+        // TODO (RSC): When we have `yarn rw dev` support we should do this:
+        // if (options.command === 'dev') {
+        //   res.end(String(err))
+        // } else {
+        //   res.end()
+        // }
+      }
 
-      // pipeable.on('error', (err) => {
-      //   console.info('Cannot render RSC', err)
-      //   res.statusCode = 500
-      //   if (options.mode === 'development') {
-      //     res.end(String(err))
-      //   } else {
-      //     res.end()
-      //   }
-      // })
-      pipeable.pipe(res)
-      return
+      try {
+        const pipeable = await renderRSC({ rscId, props, rsfId, args })
+        // TODO (RSC): See if we can/need to do more error handling here
+        // pipeable.on(handleError)
+        pipeable.pipe(res)
+      } catch (e) {
+        handleError(e)
+      }
     }
   })
 

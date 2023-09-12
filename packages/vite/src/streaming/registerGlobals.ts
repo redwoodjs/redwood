@@ -34,6 +34,9 @@ export const registerFwGlobals = () => {
         return apiPath
       } else {
         const proxiedApiUrl =
+          // NOTE: rwConfig.web.host defaults to "localhost", which is
+          //       troublesome in regards to IPv6/IPv4. So all the more
+          //       reason to set RWJS_EXP_SSR_GRAPHQL_ENDPOINT
           'http://' + rwConfig.web.host + ':' + rwConfig.web.port + apiPath
 
         if (
@@ -52,7 +55,7 @@ export const registerFwGlobals = () => {
           console.warn()
 
           console.warn(
-            'You can override this for by setting RWJS_EXP_SSR_GRAPHQL_ENDPOINT in your environment vars'
+            'You can override this for SSR by setting RWJS_EXP_SSR_GRAPHQL_ENDPOINT in your environment vars'
           )
           console.warn()
 
@@ -62,7 +65,7 @@ export const registerFwGlobals = () => {
         }
 
         return (
-          proxiedApiUrl || (process.env.RWJS_EXP_SSR_GRAPHQL_ENDPOINT as string)
+          (process.env.RWJS_EXP_SSR_GRAPHQL_ENDPOINT as string) ?? proxiedApiUrl
         )
       }
     })(),

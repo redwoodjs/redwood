@@ -12,7 +12,8 @@ import type {
 } from '@supabase/supabase-js'
 import { AuthError } from '@supabase/supabase-js'
 
-import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
+import { createAuthentication } from '@redwoodjs/auth'
 
 export type SignInWithOAuthOptions = SignInWithOAuthCredentials & {
   authMethod: 'oauth'

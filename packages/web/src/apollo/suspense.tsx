@@ -3,7 +3,8 @@
  * This is a lift and shift of the original ApolloProvider
  * but with suspense specific bits. Look for @MARK to find bits I've changed
  *
- * Done this way, to avoid making changes breaking on main.
+ * Done this way, to avoid making changes breaking on main, due to the experimental-nextjs import
+ * Eventually we will have one ApolloProvider, not multiple.
  */
 
 import type {
@@ -12,9 +13,9 @@ import type {
   HttpOptions,
   InMemoryCacheConfig,
   setLogVerbosity,
+  ApolloLink,
 } from '@apollo/client'
 import {
-  ApolloLink,
   setLogVerbosity as apolloSetLogVerbosity,
   useMutation,
   useSubscription,
@@ -24,9 +25,13 @@ import {
   NextSSRApolloClient,
   NextSSRInMemoryCache,
   useSuspenseQuery,
+  useBackgroundQuery,
+  useReadQuery,
+  useQuery,
 } from '@apollo/experimental-nextjs-app-support/ssr'
 
-import { UseAuth, useNoAuth } from '@redwoodjs/auth'
+import type { UseAuth } from '@redwoodjs/auth'
+import { useNoAuth } from '@redwoodjs/auth'
 import './typeOverride'
 
 import {
@@ -229,10 +234,12 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
         logLevel={logLevel}
       >
         <GraphQLHooksProvider
-          // @MARK 👇 swapped useQuery for useSuspense query here
-          useQuery={useSuspenseQuery}
+          useQuery={useQuery}
           useMutation={useMutation}
           useSubscription={useSubscription}
+          useSuspenseQuery={useSuspenseQuery}
+          useBackgroundQuery={useBackgroundQuery}
+          useReadQuery={useReadQuery}
         >
           {children}
         </GraphQLHooksProvider>

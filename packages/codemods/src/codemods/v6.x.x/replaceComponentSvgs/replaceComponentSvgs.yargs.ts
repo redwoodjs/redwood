@@ -1,7 +1,8 @@
 import path from 'path'
 
 import fg from 'fast-glob'
-import task, { TaskInnerAPI } from 'tasuku'
+import type { TaskInnerAPI } from 'tasuku'
+import task from 'tasuku'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -13,12 +14,14 @@ export const description =
 
 export const handler = () => {
   task('Replace Component Svgs', async ({ setOutput }: TaskInnerAPI) => {
+    const targetPaths = fg.sync('**/*.{js,jsx,tsx}', {
+      cwd: getPaths().web.src,
+      absolute: true,
+    })
+
     await runTransform({
       transformPath: path.join(__dirname, 'replaceComponentSvgs.js'),
-      targetPaths: fg.sync('**/*.{js,jsx,tsx}', {
-        cwd: getPaths().web.src,
-        absolute: true,
-      }),
+      targetPaths,
     })
 
     setOutput('All done! Run `yarn rw lint --fix` to prettify your code')

@@ -7,7 +7,7 @@ import withApiProxy from './plugins/withApiProxy'
 import withFunctions from './plugins/withFunctions'
 import withWebServer from './plugins/withWebServer'
 import { startServer as startFastifyServer } from './server'
-import { BothServerArgs, WebServerArgs, ApiServerArgs } from './types'
+import type { BothServerArgs, WebServerArgs, ApiServerArgs } from './types'
 
 /*
  * This file has defines CLI handlers used by the redwood cli, for `rw serve`

@@ -1,5 +1,5 @@
 import terminalLink from 'terminal-link'
-import yargs from 'yargs'
+import type yargs from 'yargs'
 
 export const command = 'dbAuth'
 export const description = 'Set up auth for for dbAuth'
