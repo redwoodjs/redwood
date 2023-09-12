@@ -4,9 +4,8 @@ import { createFragmentRegistry } from '@apollo/client/cache'
 import { getFragmentDefinitions } from '@apollo/client/utilities'
 import type { DocumentNode } from 'graphql'
 
-const getTypenameFromFragment = (fragment: DocumentNode) => {
+const getTypenameFromFragment = (fragment: DocumentNode): string => {
   const [definition] = getFragmentDefinitions(fragment)
-
   return definition.typeCondition.name.value
 }
 
