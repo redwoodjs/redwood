@@ -95,7 +95,7 @@ Redwood includes [integrations](../../authentication.md) for several of the most
 - [Auth0](https://auth0.com/)
 - [Clerk](https://clerk.dev/)
 - [Netlify Identity](https://docs.netlify.com/visitor-access/identity/)
-- [Firebase's GoogleAuthProvider](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider)
+- [Firebase's GoogleAuthProvider](https://firebase.google.com/docs/reference/js/v8/firebase.auth.GoogleAuthProvider)
 - [Supabase](https://supabase.io/docs/guides/auth)
 - [SuperTokens](https://supertokens.com)
 

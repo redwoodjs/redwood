@@ -1,9 +1,4 @@
-import { memoize } from 'lodash'
-
-import {
-  getPaths as getRedwoodPaths,
-  resolveFile as internalResolveFile,
-} from '@redwoodjs/project-config'
+import { getPaths as _getPaths } from '@redwoodjs/project-config'
 
 import { colors } from './colors'
 
@@ -15,9 +10,9 @@ function isErrorWithMessage(e: any): e is { message: string } {
  * This wraps the core version of getPaths into something that catches the exception
  * and displays a helpful error message.
  */
-const _getPaths = () => {
+export function getPaths() {
   try {
-    return getRedwoodPaths()
+    return _getPaths()
   } catch (e) {
     if (isErrorWithMessage(e)) {
       console.error(colors.error(e.message))
@@ -26,6 +21,3 @@ const _getPaths = () => {
     process.exit(1)
   }
 }
-
-export const getPaths = memoize(_getPaths)
-export const resolveFile = internalResolveFile

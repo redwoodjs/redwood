@@ -1,4 +1,5 @@
-import React, { ReactNode, ReactElement, useMemo, memo } from 'react'
+import type { ReactNode, ReactElement } from 'react'
+import React, { useMemo, memo } from 'react'
 
 import { ActiveRouteLoader } from './active-route-loader'
 import { AuthenticatedRoute } from './AuthenticatedRoute'
@@ -6,17 +7,14 @@ import { Redirect } from './links'
 import { LocationProvider, useLocation } from './location'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { ParamsProvider } from './params'
-import {
-  isValidRoute,
+import type {
   NotFoundRouteProps,
-  PageType,
   RedirectRouteProps,
   RenderMode,
 } from './route-validators'
-import {
-  RouterContextProvider,
-  RouterContextProviderProps,
-} from './router-context'
+import { isValidRoute, PageType } from './route-validators'
+import type { RouterContextProviderProps } from './router-context'
+import { RouterContextProvider } from './router-context'
 import { SplashPage } from './splash-page'
 import {
   analyzeRoutes,
@@ -24,9 +22,9 @@ import {
   normalizePage,
   parseSearch,
   replaceParams,
-  TrailingSlashesTypes,
   validatePath,
 } from './util'
+import type { Wrappers, TrailingSlashesTypes } from './util'
 
 import type { AvailableRoutes } from './index'
 
@@ -203,7 +201,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 }
 
 interface WrappedPageProps {
-  wrappers: ReactNode[]
+  wrappers: Wrappers
   routeLoaderElement: ReactNode
   setProps: Record<any, any>
 }
@@ -220,6 +218,9 @@ interface WrappedPageProps {
  */
 const WrappedPage = memo(
   ({ wrappers, routeLoaderElement, setProps }: WrappedPageProps) => {
+    // @NOTE: don't mutate the wrappers array, it causes full page re-renders
+    // Instead just create a new array with the AuthenticatedRoute wrapper
+    let wrappersWithAuthMaybe = wrappers
     if (setProps.private) {
       if (!setProps.unauthenticated) {
         throw new Error(
@@ -227,12 +228,14 @@ const WrappedPage = memo(
         )
       }
 
-      wrappers.unshift(AuthenticatedRoute as any)
+      wrappersWithAuthMaybe = [AuthenticatedRoute, ...wrappers]
     }
 
-    if (wrappers.length > 0) {
-      // If wrappers exist e.g. [a,b,c] -> <a><b><c><routeLoader></c></b></a>
-      return wrappers.reduceRight((acc, wrapper) => {
+    if (wrappersWithAuthMaybe.length > 0) {
+      // If wrappers exist e.g. [a,b,c] -> <a><b><c><routeLoader></c></b></a> and returns a single ReactNode
+      // Wrap AuthenticatedRoute this way, because if we mutate the wrappers array itself
+      // it causes full rerenders of the page
+      return wrappersWithAuthMaybe.reduceRight((acc, wrapper) => {
         return React.createElement(
           wrapper as any,
           {
@@ -240,7 +243,7 @@ const WrappedPage = memo(
           },
           acc ? acc : routeLoaderElement
         )
-      }, undefined) as any
+      }, undefined as ReactNode)
     }
 
     return routeLoaderElement

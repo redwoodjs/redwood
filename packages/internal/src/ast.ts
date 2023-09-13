@@ -2,7 +2,8 @@ import fs from 'fs'
 import path from 'path'
 
 import { types } from '@babel/core'
-import { parse as babelParse, ParserPlugin } from '@babel/parser'
+import type { ParserPlugin } from '@babel/parser'
+import { parse as babelParse } from '@babel/parser'
 import traverse from '@babel/traverse'
 import chalk from 'chalk'
 
@@ -80,7 +81,7 @@ export const getNamedExports = (ast: types.Node): NamedExports[] => {
         })
       } else if (declaration.type === 'ClassDeclaration') {
         namedExports.push({
-          name: declaration?.id?.name,
+          name: declaration?.id?.name as string,
           type: 'class',
         })
       }

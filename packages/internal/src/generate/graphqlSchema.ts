@@ -4,12 +4,14 @@ import { codegen } from '@graphql-codegen/core'
 import type { Types as CodegenTypes } from '@graphql-codegen/plugin-helpers'
 import * as schemaAstPlugin from '@graphql-codegen/schema-ast'
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
-import { loadSchema, LoadSchemaOptions } from '@graphql-tools/load'
+import type { LoadSchemaOptions } from '@graphql-tools/load'
+import { loadSchema } from '@graphql-tools/load'
 import chalk from 'chalk'
-import { DocumentNode, print } from 'graphql'
+import type { DocumentNode } from 'graphql'
+import { print } from 'graphql'
 import terminalLink from 'terminal-link'
 
-import { rootSchema, liveDirectiveTypeDefs } from '@redwoodjs/graphql-server'
+import { rootSchema } from '@redwoodjs/graphql-server'
 import { getPaths, resolveFile } from '@redwoodjs/project-config'
 
 export const generateGraphQLSchema = async () => {
@@ -22,9 +24,16 @@ export const generateGraphQLSchema = async () => {
     'subscriptions/**/*.{js,ts}': {},
   }
 
-  // If we are serverful, we need to include the live directive for realtime support
+  // If we are serverful and the user is using realtime, we need to include the live directive for realtime support.
   if (resolveFile(`${getPaths().api.src}/server`)) {
-    schemaPointerMap[liveDirectiveTypeDefs] = {}
+    try {
+      const { liveDirectiveTypeDefs } = await import('@redwoodjs/realtime')
+      schemaPointerMap[liveDirectiveTypeDefs] = {}
+    } catch (error) {
+      if ((error as { code: string }).code !== 'MODULE_NOT_FOUND') {
+        throw error
+      }
+    }
   }
 
   const loadSchemaConfig: LoadSchemaOptions = {

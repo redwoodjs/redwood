@@ -1,4 +1,5 @@
-import React, { Children, isValidElement, ReactElement, ReactNode } from 'react'
+import type { ReactElement, ReactNode } from 'react'
+import React, { Children, isValidElement } from 'react'
 
 import {
   isNotFoundRoute,
@@ -6,10 +7,8 @@ import {
   isStandardRoute,
   isValidRoute,
 } from './route-validators'
-import { PageType } from './router'
+import type { PageType } from './router'
 import { isPrivateNode, isSetNode } from './Set'
-
-import { AvailableRoutes } from './'
 
 /** Create a React Context with the given name. */
 export function createNamedContext<T>(name: string, defaultValue?: T) {
@@ -124,7 +123,7 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  *  => { match: true, params: {} }
  */
 export function matchPath(
-  route: string,
+  routeDefinition: string,
   pathname: string,
   {
     userParamTypes,
@@ -140,10 +139,11 @@ export function matchPath(
   // Get the names and the transform types for the given route.
   const allParamTypes = { ...coreParamTypes, ...userParamTypes }
 
-  const { matchRegex, routeParams } = getRouteRegexAndParams(route, {
-    matchSubPaths,
-    allParamTypes,
-  })
+  const { matchRegex, routeParams: routeParamsDefinition } =
+    getRouteRegexAndParams(routeDefinition, {
+      matchSubPaths,
+      allParamTypes,
+    })
 
   // Does the `pathname` match the route?
   const matches = [...pathname.matchAll(matchRegex)]
@@ -153,10 +153,12 @@ export function matchPath(
   }
   // Map extracted values to their param name, casting the value if needed
   const providedParams = matches[0].slice(1)
-  if (routeParams.length > 0) {
+
+  // @NOTE: refers to definiton e.g. '/page/{id}', not the actual params
+  if (routeParamsDefinition.length > 0) {
     const params = providedParams.reduce<Record<string, unknown>>(
       (acc, value, index) => {
-        const [name, transformName] = routeParams[index]
+        const [name, transformName] = routeParamsDefinition[index]
         const typeInfo =
           allParamTypes[transformName as SupportedRouterParamTypes]
 
@@ -445,14 +447,23 @@ interface AnayzeRoutesOptions {
 
 type WhileLoadingPage = () => ReactElement | null
 
+// Not using AvailableRoutes because the type is generated in the user's project
+// We can't index it correctly in the framework
+export type GeneratedRoutesMap = {
+  [key: string]: (
+    args?: Record<string | number, string | number | boolean>
+  ) => string
+}
+
 type RoutePath = string
+export type Wrappers = Array<(props: any) => ReactNode>
 interface AnalyzedRoute {
   path: RoutePath
   name: string | null
   whileLoadingPage?: WhileLoadingPage
   page: PageType | null
   redirect: string | null
-  wrappers: ReactNode[]
+  wrappers: Wrappers
   setProps: Record<any, any>
   setId: number
 }
@@ -462,7 +473,7 @@ export function analyzeRoutes(
   { currentPathName, userParamTypes }: AnayzeRoutesOptions
 ) {
   const pathRouteMap: Record<RoutePath, AnalyzedRoute> = {}
-  const namedRoutesMap: AvailableRoutes = {}
+  const namedRoutesMap: GeneratedRoutesMap = {}
   let hasHomeRoute = false
   let NotFoundPage: PageType | undefined
   let activeRoutePath: string | undefined
@@ -470,7 +481,7 @@ export function analyzeRoutes(
   interface RecurseParams {
     nodes: ReturnType<typeof Children.toArray>
     whileLoadingPageFromSet?: WhileLoadingPage
-    wrappersFromSet?: ReactNode[]
+    wrappersFromSet?: Wrappers
     // we don't know, or care about, what props users are passing down
     propsFromSet?: Record<string, unknown>
     setId?: number
@@ -478,7 +489,7 @@ export function analyzeRoutes(
 
   // Track the number of sets found.
   // Because Sets are virtually rendered we can use this setId as a key to properly manage re-rendering
-  // When a some uses the same wrapper Component for different Sets
+  // When using the same wrapper Component for different Sets
   // Example:
   //   <Router>
   //   <Set wrap={SetContextProvider}>

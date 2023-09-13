@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { FastifyInstance, FastifyPluginCallback } from 'fastify'
+import type { FastifyInstance, FastifyPluginCallback } from 'fastify'
 
 import { loadFastifyConfig } from '../fastify'
 import withWebServer from '../plugins/withWebServer'

@@ -7,4 +7,4 @@ const redwoodAppElement = document.getElementById('redwood-app')
 const App = serve('App')
 
 const root = createRoot(redwoodAppElement)
-root.render(<App name="Redwood RSCc" />)
+root.render(<App name="Redwood RSCs" />)

@@ -7,7 +7,7 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/project-config'
 
 import { getPaths } from '../../lib'
-import { apiServerHandler } from '../serveHandler'
+import { apiServerHandler } from '../serveApiHandler'
 
 export const command = 'render <side>'
 export const description = 'Build, Migrate, and Serve command for Render deploy'

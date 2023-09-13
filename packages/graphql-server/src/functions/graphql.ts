@@ -5,7 +5,8 @@ import type {
 } from 'aws-lambda'
 
 import { createGraphQLYoga } from '../createGraphQLYoga'
-import { GlobalContext, getAsyncStoreInstance } from '../globalContext'
+import type { GlobalContext } from '../globalContext'
+import { getAsyncStoreInstance } from '../globalContextStore'
 import type { GraphQLHandlerOptions } from '../types'
 
 /**
@@ -41,6 +42,29 @@ export const createGraphQLHandler = ({
   schemaOptions,
   openTelemetryOptions,
 }: GraphQLHandlerOptions) => {
+  const { yoga, logger } = createGraphQLYoga({
+    healthCheckId,
+    loggerConfig,
+    context,
+    getCurrentUser,
+    onException,
+    generateGraphiQLHeader,
+    extraPlugins,
+    authDecoder,
+    cors,
+    services,
+    sdls,
+    directives,
+    armorConfig,
+    allowedOperations,
+    allowIntrospection,
+    allowGraphiQL,
+    defaultError,
+    graphiQLEndpoint,
+    schemaOptions,
+    openTelemetryOptions,
+  })
+
   const handlerFn = async (
     event: APIGatewayProxyEvent,
     requestContext: LambdaContext
@@ -49,30 +73,6 @@ export const createGraphQLHandler = ({
     requestContext.callbackWaitsForEmptyEventLoop = false
 
     let lambdaResponse: APIGatewayProxyResult
-
-    const { yoga, logger } = createGraphQLYoga({
-      healthCheckId,
-      loggerConfig,
-      context,
-      getCurrentUser,
-      onException,
-      generateGraphiQLHeader,
-      extraPlugins,
-      authDecoder,
-      cors,
-      services,
-      sdls,
-      directives,
-      armorConfig,
-      allowedOperations,
-      allowIntrospection,
-      allowGraphiQL,
-      defaultError,
-      graphiQLEndpoint,
-      schemaOptions,
-      openTelemetryOptions,
-    })
-
     try {
       // url needs to be normalized
       const [, rest = ''] = event.path.split(graphiQLEndpoint)

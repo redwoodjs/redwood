@@ -1,11 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 
-import { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
+import type { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
-import { ExistingFiles, transformTSToJS, writeFilesTask } from '../lib'
+import { resolveFile } from '@redwoodjs/project-config'
+
+import type { ExistingFiles } from '../lib'
+import { transformTSToJS, writeFilesTask } from '../lib'
 import { colors } from '../lib/colors'
-import { getPaths, resolveFile } from '../lib/paths'
+import { getPaths } from '../lib/paths'
 import {
   getGraphqlPath,
   graphFunctionDoesExist,

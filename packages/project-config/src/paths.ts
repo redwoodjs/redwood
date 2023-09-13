@@ -22,6 +22,7 @@ export interface NodeTargetPaths {
   dist: string
   types: string
   models: string
+  mail: string
 }
 
 export interface WebPaths {
@@ -196,6 +197,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       dist: path.join(BASE_DIR, 'api/dist'),
       types: path.join(BASE_DIR, 'api/types'),
       models: path.join(BASE_DIR, PATH_API_DIR_MODELS),
+      mail: path.join(BASE_DIR, PATH_API_DIR_SRC, 'mail'),
     },
 
     web: {
@@ -262,16 +264,43 @@ export const getRouteHookForPage = (pagePath: string | undefined | null) => {
 
   // We just use fg, so if they make typos in the routeHook file name,
   // it's all good, we'll still find it
-  return fg
-    .sync('*.routeHooks.{js,ts,tsx,jsx}', {
-      absolute: true,
-      cwd: path.dirname(pagePath), // the page's folder
-    })
-    .at(0)
+  return (
+    fg
+      .sync('*.routeHooks.{js,ts,tsx,jsx}', {
+        absolute: true,
+        cwd: path.dirname(pagePath), // the page's folder
+      })
+      .at(0) || null
+  )
 }
 
-export const getAppRouteHook = () => {
-  return resolveFile(path.join(getPaths().web.src, 'App.routeHooks'))
+/**
+ * Use this function to find the app route hook.
+ * If it is present, you get the path to the file - in prod, you get the built version in dist.
+ * In dev, you get the source version.
+ *
+ * @param forProd
+ * @returns string | null
+ */
+export const getAppRouteHook = (forProd = false) => {
+  const rwPaths = getPaths()
+
+  if (forProd) {
+    const distAppRouteHook = path.join(
+      rwPaths.web.distRouteHooks,
+      'App.routeHooks.js'
+    )
+
+    try {
+      // Stat sync throws if file doesn't exist
+      fs.statSync(distAppRouteHook).isFile()
+      return distAppRouteHook
+    } catch (e) {
+      return null
+    }
+  }
+
+  return resolveFile(path.join(rwPaths.web.src, 'App.routeHooks'))
 }
 
 /**

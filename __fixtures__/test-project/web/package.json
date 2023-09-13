@@ -11,22 +11,21 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/auth-dbauth-web": "5.0.0",
-    "@redwoodjs/forms": "5.0.0",
-    "@redwoodjs/router": "5.0.0",
-    "@redwoodjs/web": "5.0.0",
+    "@redwoodjs/auth-dbauth-web": "6.0.7",
+    "@redwoodjs/forms": "6.0.7",
+    "@redwoodjs/router": "6.0.7",
+    "@redwoodjs/web": "6.0.7",
     "humanize-string": "2.1.0",
     "prop-types": "15.8.1",
     "react": "18.3.0-canary-035a41c4e-20230704",
     "react-dom": "18.3.0-canary-035a41c4e-20230704"
   },
   "devDependencies": {
-    "@redwoodjs/vite": "6.0.0-canary.450",
-    "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.25",
+    "@redwoodjs/vite": "6.0.7",
+    "autoprefixer": "^10.4.15",
+    "postcss": "^8.4.29",
     "postcss-loader": "^7.3.3",
-    "prettier-plugin-tailwindcss": "^0.3.0",
-    "storybook": "^7.0.26",
-    "tailwindcss": "^3.3.2"
+    "prettier-plugin-tailwindcss": "0.4.1",
+    "tailwindcss": "^3.3.3"
   }
 }

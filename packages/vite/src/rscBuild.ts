@@ -3,10 +3,11 @@ import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import { onWarn } from './lib/onWarn'
 import { rscAnalyzePlugin } from './waku-lib/vite-plugin-rsc'
 
 /**
- * RSC build
+ * RSC build. Step 1 of 3.
  * Uses rscAnalyzePlugin to collect client and server entry points
  * Starts building the AST in entries.ts
  * Doesn't output any files, only collects a list of RSCs and RSFs
@@ -25,33 +26,40 @@ export async function rscBuild(viteConfigPath: string) {
     root: rwPaths.base,
     plugins: [
       react(),
-      {
-        name: 'rsc-test-plugin',
-        transform(_code, id) {
-          console.log('rsc-test-plugin id', id)
-        },
-      },
+      // {
+      //   name: 'rsc-test-plugin',
+      //   transform(_code, id) {
+      //     console.log('rsc-test-plugin id', id)
+      //   },
+      // },
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
         (id) => serverEntryFileSet.add(id)
       ),
     ],
-    // ssr: {
-    //   // FIXME Without this, waku/router isn't considered to have client
-    //   // entries, and "No client entry" error occurs.
-    //   // Unless we fix this, RSC-capable packages aren't supported.
-    //   // This also seems to cause problems with pnpm.
-    //   // noExternal: ['@redwoodjs/web', '@redwoodjs/router'],
-    // },
+    ssr: {
+      // We can ignore everything that starts with `node:` because it's not going to be RSCs
+      noExternal: /^(?!node:)/,
+      // TODO (RSC): Figure out what the `external` list should be. Right
+      // now it's just copied from waku
+      external: ['react', 'minimatch'],
+    },
+    resolve: {
+      conditions: ['react-server'],
+    },
     build: {
       manifest: 'rsc-build-manifest.json',
       write: false,
       ssr: true,
       rollupOptions: {
+        onwarn: onWarn,
         input: {
           entries: rwPaths.web.entries,
         },
       },
+    },
+    legacy: {
+      buildSsrCjsExternalHeuristics: true,
     },
   })
 

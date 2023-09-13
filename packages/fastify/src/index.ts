@@ -1,4 +1,5 @@
-import Fastify, { FastifyServerOptions } from 'fastify'
+import type { FastifyServerOptions } from 'fastify'
+import Fastify from 'fastify'
 
 import { loadFastifyConfig, DEFAULT_REDWOOD_FASTIFY_CONFIG } from './config.js'
 

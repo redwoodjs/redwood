@@ -337,7 +337,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
       // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
       task: async () => {
         await exec(
-          'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss',
+          'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss@0.4.1',
           [],
           getExecaOptions(outputPath)
         )
@@ -767,6 +767,27 @@ export default DoublePage`
       // here I decided to move all of them here
       title: 'Add Prerender to Routes',
       task: () => addPrerender(),
+    },
+    {
+      title: 'Add context tests',
+      task: () => {
+        const templatePath = path.join(
+          __dirname,
+          'templates',
+          'api',
+          'context.test.ts.template'
+        )
+        const projectPath = path.join(
+          OUTPUT_PATH,
+          'api',
+          'src',
+          '__tests__',
+          'context.test.ts'
+        )
+
+        fs.mkdirSync(path.dirname(projectPath), { recursive: true })
+        fs.writeFileSync(projectPath, fs.readFileSync(templatePath))
+      },
     },
   ]
   // ],
