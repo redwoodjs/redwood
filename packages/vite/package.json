@@ -77,8 +77,8 @@
     "express": "4.18.2",
     "http-proxy-middleware": "2.0.6",
     "isbot": "3.6.8",
-    "react": "18.3.0-canary-bbc8530ed-20230912",
-    "react-server-dom-webpack": "18.3.0-canary-bbc8530ed-20230912",
+    "react": "0.0.0-experimental-e5205658f-20230913",
+    "react-server-dom-webpack": "0.0.0-experimental-e5205658f-20230913",
     "vite": "4.4.9",
     "yargs-parser": "21.1.1"
   },
