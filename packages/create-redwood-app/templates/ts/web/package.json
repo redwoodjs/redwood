@@ -15,8 +15,8 @@
     "@redwoodjs/router": "6.0.7",
     "@redwoodjs/web": "6.0.7",
     "prop-types": "15.8.1",
-    "react": "0.0.0-experimental-e5205658f-20230913",
-    "react-dom": "0.0.0-experimental-e5205658f-20230913"
+    "react": "0.14.10",
+    "react-dom": "0.14.10"
   },
   "devDependencies": {
     "@redwoodjs/vite": "6.0.7"
