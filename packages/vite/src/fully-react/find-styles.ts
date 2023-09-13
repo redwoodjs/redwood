@@ -3,15 +3,15 @@ import path from 'node:path'
 import type { ModuleNode, ViteDevServer } from 'vite'
 
 async function find_deps(
-  vite: import('vite').ViteDevServer,
-  node: import('vite').ModuleNode,
-  deps: Set<import('vite').ModuleNode>
+  vite: ViteDevServer,
+  node: ModuleNode,
+  deps: Set<ModuleNode>
 ) {
   // since `ssrTransformResult.deps` contains URLs instead of `ModuleNode`s, this process is asynchronous.
   // instead of using `await`, we resolve all branches in parallel.
   const branches: Promise<void>[] = []
 
-  async function add(node: import('vite').ModuleNode) {
+  async function add(node: ModuleNode) {
     if (!deps.has(node)) {
       deps.add(node)
       await find_deps(vite, node, deps)

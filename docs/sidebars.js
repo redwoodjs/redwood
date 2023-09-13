@@ -8,6 +8,9 @@ module.exports = {
       items: [
         { type: 'doc', label: 'Foreword', id: 'tutorial/foreword' },
         {
+          'Chapter 0': ['tutorial/chapter0/what-is-redwood'],
+        },
+        {
           'Chapter 1': [
             'tutorial/chapter1/prerequisites',
             'tutorial/chapter1/installation',

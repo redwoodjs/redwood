@@ -1,10 +1,12 @@
-import { Plugin, OnExecuteHookResult, isAsyncIterable } from '@envelop/core'
+import type { Plugin, OnExecuteHookResult } from '@envelop/core'
+import { isAsyncIterable } from '@envelop/core'
 import { useOnResolve } from '@envelop/on-resolve'
-import { Attributes, SpanKind } from '@opentelemetry/api'
+import type { Attributes } from '@opentelemetry/api'
+import { SpanKind } from '@opentelemetry/api'
 import * as opentelemetry from '@opentelemetry/api'
 import { print } from 'graphql'
 
-import { RedwoodOpenTelemetryConfig } from 'src/types'
+import type { RedwoodOpenTelemetryConfig } from 'src/types'
 
 export enum AttributeName {
   EXECUTION_ERROR = 'graphql.execute.error',
