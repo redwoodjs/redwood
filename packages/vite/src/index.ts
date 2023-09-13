@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 import type { ConfigEnv, UserConfig, PluginOption } from 'vite'
 import { normalizePath } from 'vite'
 
-import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
+import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import handleJsAsJsx from './plugins/vite-plugin-jsx-loader'
@@ -189,11 +189,11 @@ export default function redwoodPluginVite(): PluginOption[] {
           server: {
             open: rwConfig.browser.open,
             port: rwConfig.web.port,
-            host: rwConfig.web.host,
+            host: true, // Listen to all hosts
             proxy: {
               [rwConfig.web.apiUrl]: {
                 target: `http://${rwConfig.api.host}:${rwConfig.api.port}`,
-                changeOrigin: true,
+                changeOrigin: false,
                 // Remove the `.redwood/functions` part, but leave the `/graphql`
                 rewrite: (path) => path.replace(rwConfig.web.apiUrl, ''),
                 configure: (proxy) => {

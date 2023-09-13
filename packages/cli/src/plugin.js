@@ -19,6 +19,12 @@ const PLUGIN_CACHE_DEFAULT = {
         'Launch Storybook: a tool for building UI components and pages in isolation',
     },
   },
+  '@redwoodjs/cli-data-migrate': {
+    'data-migrate': {
+      aliases: ['dataMigrate', 'dm'],
+      description: 'Migrate the data in your database',
+    },
+  },
 }
 
 const PLUGIN_CACHE_BUILTIN = [
@@ -27,9 +33,6 @@ const PLUGIN_CACHE_BUILTIN = [
   'diagnostics',
   'console',
   'c',
-  'data-migrate',
-  'dm',
-  'dataMigrate',
   'deploy',
   'destroy',
   'd',

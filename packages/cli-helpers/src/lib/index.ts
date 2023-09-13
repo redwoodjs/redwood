@@ -2,12 +2,12 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import * as babel from '@babel/core'
-import {
-  Listr,
+import type {
   ListrTaskWrapper,
   ListrRenderer,
   ListrGetRendererClassFromValue,
 } from 'listr2'
+import { Listr } from 'listr2'
 import { format } from 'prettier'
 
 import { colors } from './colors'

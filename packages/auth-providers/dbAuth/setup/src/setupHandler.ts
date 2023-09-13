@@ -5,7 +5,7 @@ import prompts from 'prompts'
 
 import { standardAuthHandler } from '@redwoodjs/cli-helpers'
 
-import { Args } from './setup'
+import type { Args } from './setup'
 import { notes, extraTask } from './setupData'
 import {
   notes as webAuthnNotes,

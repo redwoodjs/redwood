@@ -1,7 +1,7 @@
 // TODO (RSC) Take ownership of this file and move it out ouf the waku-lib folder
 // import fs from 'node:fs'
 import path from 'node:path'
-import { Writable } from 'node:stream'
+import type { Writable } from 'node:stream'
 import { parentPort } from 'node:worker_threads'
 
 import { createElement } from 'react'
@@ -11,7 +11,8 @@ import { createServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { defineEntries } from '../entries'
+import type { defineEntries } from '../entries'
+import { StatusError } from '../lib/StatusError'
 // import type { unstable_GetCustomModules } from '../waku-server'
 
 import { configFileConfig, resolveConfig } from './config'
@@ -226,7 +227,8 @@ const getFunctionComponent = async (
   if (typeof mod?.default === 'function') {
     return mod?.default
   }
-  throw new Error('No function component found')
+  // TODO (RSC): Making this a 404 error is marked as "HACK" in waku's source
+  throw new StatusError('No function component found', 404)
 }
 
 let absoluteClientEntries: Record<string, string> = {}
@@ -286,6 +288,8 @@ export async function renderRSC(input: RenderInput): Promise<PipeableStream> {
       },
     }
   )
+
+  console.log('renderRSC input', input)
 
   if (input.rsfId && input.args) {
     const [fileId, name] = input.rsfId.split('#')

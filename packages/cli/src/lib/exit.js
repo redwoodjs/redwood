@@ -47,6 +47,7 @@ export function exitWithError(
     .filter(Boolean)
     .join('\n')
 
+  console.error()
   console.error(
     boxen(content, {
       padding: 1,

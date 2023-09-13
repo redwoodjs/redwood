@@ -6,7 +6,7 @@ import Fastify from 'fastify'
 
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
-import { FastifySideConfigFn } from './types'
+import type { FastifySideConfigFn } from './types'
 
 const DEFAULT_OPTIONS = {
   logger: {

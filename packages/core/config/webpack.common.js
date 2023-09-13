@@ -12,9 +12,7 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 
-const {
-  getWebSideDefaultBabelConfig,
-} = require('@redwoodjs/internal/dist/build/babel/web')
+const { getWebSideDefaultBabelConfig } = require('@redwoodjs/babel-config')
 const {
   ChunkReferencesPlugin,
 } = require('@redwoodjs/internal/dist/webpackPlugins/ChunkReferencesPlugin')

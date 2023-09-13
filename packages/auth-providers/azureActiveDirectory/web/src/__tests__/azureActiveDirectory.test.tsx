@@ -5,7 +5,7 @@ import type {
 } from '@azure/msal-browser'
 import { renderHook, act } from '@testing-library/react'
 
-import { CurrentUser } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
 
 import { createAuth } from '../azureActiveDirectory'
 

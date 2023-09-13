@@ -1,4 +1,4 @@
-import {
+import type {
   Clerk as ClerkClient,
   UserResource,
   EmailAddressResource,
@@ -6,7 +6,7 @@ import {
 } from '@clerk/types'
 import { renderHook, act } from '@testing-library/react'
 
-import { CurrentUser } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
 
 import { createAuth } from '../clerk'
 

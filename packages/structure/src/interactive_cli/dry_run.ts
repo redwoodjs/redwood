@@ -5,7 +5,7 @@ import proxyquire from 'proxyquire'
 
 import { spawnCancellable } from '../x/child_process'
 
-import { RedwoodCommandString } from './RedwoodCommandString'
+import type { RedwoodCommandString } from './RedwoodCommandString'
 
 export type FileSet = { [filePath: string]: string | null }
 

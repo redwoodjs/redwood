@@ -4,7 +4,7 @@ import path from 'node:path'
 import execa from 'execa'
 import { Listr } from 'listr2'
 
-import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
+import { registerApiSideBabelHook } from '@redwoodjs/babel-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {

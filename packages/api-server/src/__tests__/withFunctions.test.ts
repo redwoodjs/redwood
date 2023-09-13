@@ -1,6 +1,6 @@
 import path from 'node:path'
 
-import { FastifyInstance, FastifyPluginCallback } from 'fastify'
+import type { FastifyInstance, FastifyPluginCallback } from 'fastify'
 
 import { loadFastifyConfig } from '../fastify'
 import withFunctions from '../plugins/withFunctions'

@@ -5,7 +5,7 @@ import * as tsm from 'ts-morph'
 import { FileNode } from '../ide'
 import { lazy } from '../x/decorators'
 
-import { RWProject } from './RWProject'
+import type { RWProject } from './RWProject'
 
 export class RWPage extends FileNode {
   constructor(
