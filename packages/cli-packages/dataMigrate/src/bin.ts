@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 // @ts-expect-error not sure; other packages use this and don't provide the types
 import { config } from 'dotenv-defaults'

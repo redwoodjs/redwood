@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 const distPath = path.join(__dirname, 'dist')
 

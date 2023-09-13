@@ -1,4 +1,4 @@
-import { Buffer } from 'buffer'
+import { Buffer } from 'node:buffer'
 
 import React, { useEffect, useMemo, useState } from 'react'
 

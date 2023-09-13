@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 
 import execa from 'execa'
 import { vol } from 'memfs'
