@@ -1,0 +1,253 @@
+diff --git a/build/index.d.ts b/build/index.d.ts
+index 6ec1e443329ffbecdc6e9f4eb96f4c98c1cb74fc..66726d069620c929f98924e2304c47f917decf12 100644
+--- a/build/index.d.ts
++++ b/build/index.d.ts
+@@ -4,7 +4,10 @@
+  * This source code is licensed under the MIT license found in the
+  * LICENSE file in the root directory of this source tree.
+  */
++/// <reference types="node" />
++
+ import type {IModuleMap} from 'jest-haste-map';
++import {URL as URL_2} from 'url';
+ 
+ export declare type AsyncResolver = (
+   path: string,
+@@ -119,22 +122,22 @@ declare class Resolver {
+   static unstable_shouldLoadAsEsm: typeof cachedShouldLoadAsEsm;
+   resolveModuleFromDirIfExists(
+     dirname: string,
+-    moduleName: string,
++    moduleName: string | URL_2,
+     options?: ResolveModuleConfig,
+   ): string | null;
+   resolveModuleFromDirIfExistsAsync(
+     dirname: string,
+-    moduleName: string,
++    moduleName: string | URL_2,
+     options?: ResolveModuleConfig,
+   ): Promise<string | null>;
+   resolveModule(
+     from: string,
+-    moduleName: string,
++    moduleName: string | URL_2,
+     options?: ResolveModuleConfig,
+   ): string;
+   resolveModuleAsync(
+     from: string,
+-    moduleName: string,
++    moduleName: string | URL_2,
+     options?: ResolveModuleConfig,
+   ): Promise<string>;
+   /**
+@@ -149,24 +152,28 @@ declare class Resolver {
+   private _throwModNotFoundError;
+   private _getMapModuleName;
+   private _isAliasModule;
+-  isCoreModule(moduleName: string): boolean;
+-  getModule(name: string): string | null;
+-  getModulePath(from: string, moduleName: string): string;
++  isCoreModule(moduleName: string | URL_2): boolean;
++  normalizeModuleSpecifier(specifier: string | URL_2): string;
++  getModule(name: string | URL_2): string | null;
++  getModulePath(from: string, moduleName: string | URL_2): string;
+   getPackage(name: string): string | null;
+-  getMockModule(from: string, name: string): string | null;
+-  getMockModuleAsync(from: string, name: string): Promise<string | null>;
++  getMockModule(from: string, name: string | URL_2): string | null;
++  getMockModuleAsync(
++    from: string,
++    name: string | URL_2,
++  ): Promise<string | null>;
+   getModulePaths(from: string): Array<string>;
+-  getGlobalPaths(moduleName?: string): Array<string>;
++  getGlobalPaths(moduleName?: string | URL_2): Array<string>;
+   getModuleID(
+     virtualMocks: Map<string, boolean>,
+     from: string,
+-    moduleName?: string,
++    moduleName?: string | URL_2,
+     options?: ResolveModuleConfig,
+   ): string;
+   getModuleIDAsync(
+     virtualMocks: Map<string, boolean>,
+     from: string,
+-    moduleName?: string,
++    moduleName?: string | URL_2,
+     options?: ResolveModuleConfig,
+   ): Promise<string>;
+   private _getModuleType;
+@@ -178,10 +185,13 @@ declare class Resolver {
+   private _getVirtualMockPathAsync;
+   private _isModuleResolved;
+   private _isModuleResolvedAsync;
+-  resolveStubModuleName(from: string, moduleName: string): string | null;
++  resolveStubModuleName(
++    from: string,
++    moduleName: string | URL_2,
++  ): string | null;
+   resolveStubModuleNameAsync(
+     from: string,
+-    moduleName: string,
++    moduleName: string | URL_2,
+   ): Promise<string | null>;
+ }
+ export default Resolver;
+diff --git a/build/resolver.js b/build/resolver.js
+index 4373e54eb324326a06d4c186b7bef3329f5f4ff9..4e7a0b75ab8780b88c8368e0942a8154f952b2b5 100644
+--- a/build/resolver.js
++++ b/build/resolver.js
+@@ -11,6 +11,13 @@ function path() {
+   };
+   return data;
+ }
++function _url() {
++  const data = require('url');
++  _url = function () {
++    return data;
++  };
++  return data;
++}
+ function _chalk() {
+   const data = _interopRequireDefault(require('chalk'));
+   _chalk = function () {
+@@ -212,6 +219,7 @@ class Resolver {
+   // unstable as it should be replaced by https://github.com/nodejs/modules/issues/393, and we don't want people to use it
+   static unstable_shouldLoadAsEsm = _shouldLoadAsEsm.default;
+   resolveModuleFromDirIfExists(dirname, moduleName, options) {
++    moduleName = this.normalizeModuleSpecifier(moduleName);
+     const {extensions, key, moduleDirectory, paths, skipResolution} =
+       this._prepareForResolution(dirname, moduleName, options);
+     let module;
+@@ -277,6 +285,7 @@ class Resolver {
+     return null;
+   }
+   async resolveModuleFromDirIfExistsAsync(dirname, moduleName, options) {
++    moduleName = this.normalizeModuleSpecifier(moduleName);
+     const {extensions, key, moduleDirectory, paths, skipResolution} =
+       this._prepareForResolution(dirname, moduleName, options);
+     let module;
+@@ -346,6 +355,7 @@ class Resolver {
+     return null;
+   }
+   resolveModule(from, moduleName, options) {
++    moduleName = this.normalizeModuleSpecifier(moduleName);
+     const dirname = path().dirname(from);
+     const module =
+       this.resolveStubModuleName(from, moduleName) ||
+@@ -358,6 +368,7 @@ class Resolver {
+     this._throwModNotFoundError(from, moduleName);
+   }
+   async resolveModuleAsync(from, moduleName, options) {
++    moduleName = this.normalizeModuleSpecifier(moduleName);
+     const dirname = path().dirname(from);
+     const module =
+       (await this.resolveStubModuleNameAsync(from, moduleName)) ||
+@@ -446,6 +457,9 @@ class Resolver {
+     return moduleNameMapper.some(({regex}) => regex.test(moduleName));
+   }
+   isCoreModule(moduleName) {
++    if (typeof moduleName !== 'string') {
++      moduleName = moduleName.href;
++    }
+     return (
+       this._options.hasCoreModules &&
+       ((0, _isBuiltinModule.default)(moduleName) ||
+@@ -453,7 +467,20 @@ class Resolver {
+       !this._isAliasModule(moduleName)
+     );
+   }
++  normalizeModuleSpecifier(specifier) {
++    if (typeof specifier !== 'string') {
++      specifier = specifier.href;
++    }
++    if (specifier.startsWith('file:')) {
++      specifier = (0, _url().fileURLToPath)(specifier);
++    }
++    if (specifier.startsWith('node:')) {
++      specifier = specifier.slice('node:'.length);
++    }
++    return specifier;
++  }
+   getModule(name) {
++    name = this.normalizeModuleSpecifier(name);
+     return this._moduleMap.getModule(
+       name,
+       this._options.defaultPlatform,
+@@ -461,6 +488,7 @@ class Resolver {
+     );
+   }
+   getModulePath(from, moduleName) {
++    moduleName = this.normalizeModuleSpecifier(moduleName);
+     if (moduleName[0] !== '.' || path().isAbsolute(moduleName)) {
+       return moduleName;
+     }
+@@ -474,6 +502,7 @@ class Resolver {
+     );
+   }
+   getMockModule(from, name) {
++    name = this.normalizeModuleSpecifier(name);
+     const mock = this._moduleMap.getMockModule(name);
+     if (mock) {
+       return mock;
+@@ -486,6 +515,7 @@ class Resolver {
+     return null;
+   }
+   async getMockModuleAsync(from, name) {
++    name = this.normalizeModuleSpecifier(name);
+     const mock = this._moduleMap.getMockModule(name);
+     if (mock) {
+       return mock;
+@@ -514,12 +544,16 @@ class Resolver {
+     return paths;
+   }
+   getGlobalPaths(moduleName) {
++    if (moduleName) {
++      moduleName = this.normalizeModuleSpecifier(moduleName);
++    }
+     if (!moduleName || moduleName[0] === '.' || this.isCoreModule(moduleName)) {
+       return [];
+     }
+     return _nodeModulesPaths.GlobalPaths;
+   }
+   getModuleID(virtualMocks, from, moduleName = '', options) {
++    moduleName = this.normalizeModuleSpecifier(moduleName);
+     const stringifiedOptions = options ? JSON.stringify(options) : '';
+     const key = from + path().delimiter + moduleName + stringifiedOptions;
+     const cachedModuleID = this._moduleIDCache.get(key);
+@@ -545,6 +579,7 @@ class Resolver {
+     return id;
+   }
+   async getModuleIDAsync(virtualMocks, from, moduleName = '', options) {
++    moduleName = this.normalizeModuleSpecifier(moduleName);
+     const stringifiedOptions = options ? JSON.stringify(options) : '';
+     const key = from + path().delimiter + moduleName + stringifiedOptions;
+     const cachedModuleID = this._moduleIDCache.get(key);
+@@ -639,6 +674,7 @@ class Resolver {
+     );
+   }
+   resolveStubModuleName(from, moduleName) {
++    moduleName = this.normalizeModuleSpecifier(moduleName);
+     const dirname = path().dirname(from);
+     const {extensions, moduleDirectory, paths} = this._prepareForResolution(
+       dirname,
+@@ -689,6 +725,7 @@ class Resolver {
+     return null;
+   }
+   async resolveStubModuleNameAsync(from, moduleName) {
++    moduleName = this.normalizeModuleSpecifier(moduleName);
+     const dirname = path().dirname(from);
+     const {extensions, moduleDirectory, paths} = this._prepareForResolution(
+       dirname,
+diff --git a/package.json b/package.json
+index 198c9befeb13815e9598dc05a4b5ebafaf6800fd..b8e4b0b8b7bb68a4e11ca1d489cdab955cee3160 100644
+--- a/package.json
++++ b/package.json
+@@ -17,6 +17,7 @@
+     "./package.json": "./package.json"
+   },
+   "dependencies": {
++    "@types/node": "*",
+     "chalk": "^4.0.0",
+     "graceful-fs": "^4.2.9",
+     "jest-haste-map": "^29.7.0",

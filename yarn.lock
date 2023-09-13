@@ -4683,7 +4683,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/environment@npm:^29.7.0":
+"@jest/environment@npm:29.7.0":
   version: 29.7.0
   resolution: "@jest/environment@npm:29.7.0"
   dependencies:
@@ -4692,6 +4692,18 @@ __metadata:
     "@types/node": "*"
     jest-mock: ^29.7.0
   checksum: c7b1b40c618f8baf4d00609022d2afa086d9c6acc706f303a70bb4b67275868f620ad2e1a9efc5edd418906157337cce50589a627a6400bbdf117d351b91ef86
+  languageName: node
+  linkType: hard
+
+"@jest/environment@patch:@jest/environment@npm%3A29.7.0#./.yarn/patches/@jest-environment-npm-29.7.0-97705658d0.patch::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 29.7.0
+  resolution: "@jest/environment@patch:@jest/environment@npm%3A29.7.0#./.yarn/patches/@jest-environment-npm-29.7.0-97705658d0.patch::version=29.7.0&hash=0e869c&locator=root-workspace-0b6124%40workspace%3A."
+  dependencies:
+    "@jest/fake-timers": ^29.7.0
+    "@jest/types": ^29.6.3
+    "@types/node": "*"
+    jest-mock: ^29.7.0
+  checksum: 957bf13f93fd3530399471bedc21d8c951cbf83ff747e5ee956184be29be1e6096ede8fa048e3402c6ba9f6c31f5a8e690e44bf67acc0ce30245c56f622862fb
   languageName: node
   linkType: hard
 
@@ -23595,7 +23607,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-resolve@npm:^29.7.0":
+"jest-resolve@npm:29.7.0":
   version: 29.7.0
   resolution: "jest-resolve@npm:29.7.0"
   dependencies:
@@ -23609,6 +23621,23 @@ __metadata:
     resolve.exports: ^2.0.0
     slash: ^3.0.0
   checksum: 59da5c9c5b50563e959a45e09e2eace783d7f9ac0b5dcc6375dea4c0db938d2ebda97124c8161310082760e8ebbeff9f6b177c15ca2f57fb424f637a5d2adb47
+  languageName: node
+  linkType: hard
+
+"jest-resolve@patch:jest-resolve@npm%3A29.7.0#./.yarn/patches/jest-resolve-npm-29.7.0-5c36f0eefb.patch::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 29.7.0
+  resolution: "jest-resolve@patch:jest-resolve@npm%3A29.7.0#./.yarn/patches/jest-resolve-npm-29.7.0-5c36f0eefb.patch::version=29.7.0&hash=8c7656&locator=root-workspace-0b6124%40workspace%3A."
+  dependencies:
+    chalk: ^4.0.0
+    graceful-fs: ^4.2.9
+    jest-haste-map: ^29.7.0
+    jest-pnp-resolver: ^1.2.2
+    jest-util: ^29.7.0
+    jest-validate: ^29.7.0
+    resolve: ^1.20.0
+    resolve.exports: ^2.0.0
+    slash: ^3.0.0
+  checksum: 6c88567ec7139eb75523b788db200a0a67b54289ac41cd40c468472280c2eeb55e71be713b7840f1d3c2d5599c42a79d8eb2d94eb670cb207019678698286779
   languageName: node
   linkType: hard
 
@@ -23655,7 +23684,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-runtime@npm:^29.7.0":
+"jest-runtime@npm:29.7.0":
   version: 29.7.0
   resolution: "jest-runtime@npm:29.7.0"
   dependencies:
@@ -23682,6 +23711,36 @@ __metadata:
     slash: ^3.0.0
     strip-bom: ^4.0.0
   checksum: 7cd89a1deda0bda7d0941835434e44f9d6b7bd50b5c5d9b0fc9a6c990b2d4d2cab59685ab3cb2850ed4cc37059f6de903af5a50565d7f7f1192a77d3fd6dd2a6
+  languageName: node
+  linkType: hard
+
+"jest-runtime@patch:jest-runtime@npm%3A29.7.0#./.yarn/patches/jest-runtime-npm-29.7.0-120fa64128.patch::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 29.7.0
+  resolution: "jest-runtime@patch:jest-runtime@npm%3A29.7.0#./.yarn/patches/jest-runtime-npm-29.7.0-120fa64128.patch::version=29.7.0&hash=e8b476&locator=root-workspace-0b6124%40workspace%3A."
+  dependencies:
+    "@jest/environment": ^29.7.0
+    "@jest/fake-timers": ^29.7.0
+    "@jest/globals": ^29.7.0
+    "@jest/source-map": ^29.6.3
+    "@jest/test-result": ^29.7.0
+    "@jest/transform": ^29.7.0
+    "@jest/types": ^29.6.3
+    "@types/node": "*"
+    chalk: ^4.0.0
+    cjs-module-lexer: ^1.0.0
+    collect-v8-coverage: ^1.0.0
+    glob: ^7.1.3
+    graceful-fs: ^4.2.9
+    jest-haste-map: ^29.7.0
+    jest-message-util: ^29.7.0
+    jest-mock: ^29.7.0
+    jest-regex-util: ^29.6.3
+    jest-resolve: ^29.7.0
+    jest-snapshot: ^29.7.0
+    jest-util: ^29.7.0
+    slash: ^3.0.0
+    strip-bom: ^4.0.0
+  checksum: 1f86b73b4f56749ca953657c539197d92f0a2e134ca42a4dfac386b0b2c85019867cb1adb8c2e0a0b627599d49d504e9bcc2423da5c7ebfd3952bf8ddaf6d109
   languageName: node
   linkType: hard
 
