@@ -22,13 +22,13 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.22.11",
+    "@babel/runtime-corejs3": "7.22.15",
     "core-js": "3.32.2",
     "jsonwebtoken": "9.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.10",
-    "@babel/core": "7.22.11",
+    "@babel/cli": "7.22.15",
+    "@babel/core": "7.22.17",
     "@redwoodjs/api": "6.0.7",
     "@types/aws-lambda": "8.10.119",
     "@types/jsonwebtoken": "9.0.2",
