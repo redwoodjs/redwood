@@ -31,7 +31,6 @@ module.exports = {
     'react-hooks',
     'jest-dom',
     '@redwoodjs',
-    'unicorn',
   ],
   ignorePatterns: ['node_modules', 'dist'],
   settings: {

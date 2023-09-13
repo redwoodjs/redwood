@@ -20,6 +20,7 @@ module.exports = {
       configFile: findBabelConfig(),
     },
   },
+  plugins: ['unicorn'],
   ignorePatterns: [
     'dist',
     'fixtures',
