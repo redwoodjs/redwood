@@ -1,4 +1,6 @@
-import { Buffer } from 'node:buffer'
+// since this code is running on the browser we want to use https://github.com/feross/buffer instead of node's
+// eslint-disable-next-line unicorn/prefer-node-protocol
+import { Buffer } from 'buffer'
 
 import React, { useEffect, useMemo, useState } from 'react'
 
