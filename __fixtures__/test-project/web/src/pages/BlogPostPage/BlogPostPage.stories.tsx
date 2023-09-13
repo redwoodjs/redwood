@@ -10,4 +10,8 @@ export default meta
 
 type Story = StoryObj<typeof BlogPostPage>
 
-export const Primary: Story = {}
+export const Primary: Story = {
+  render: (args) => {
+    return <BlogPostPage id={42} {...args} />
+  }
+}
