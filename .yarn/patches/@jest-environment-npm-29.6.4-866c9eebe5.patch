@@ -1,0 +1,209 @@
+diff --git a/build/index.d.ts b/build/index.d.ts
+index 1837e6ac01f7e6d73f7b82844b20e8c59f14fa77..c5f7a403b910e9f1553ddcadbd8f7548b37abe85 100644
+--- a/build/index.d.ts
++++ b/build/index.d.ts
+@@ -6,14 +6,14 @@
+  */
+ /// <reference types="node" />
+ 
+-import type {Circus} from '@jest/types';
+-import type {Config} from '@jest/types';
+-import type {Context} from 'vm';
+-import type {Global} from '@jest/types';
+-import type {LegacyFakeTimers} from '@jest/fake-timers';
+-import type {Mocked} from 'jest-mock';
+-import type {ModernFakeTimers} from '@jest/fake-timers';
+-import type {ModuleMocker} from 'jest-mock';
++import type { Circus } from "@jest/types";
++import type { Config } from "@jest/types";
++import type { Context } from "vm";
++import type { Global } from "@jest/types";
++import type { LegacyFakeTimers } from "@jest/fake-timers";
++import type { Mocked } from "jest-mock";
++import type { ModernFakeTimers } from "@jest/fake-timers";
++import type { ModuleMocker } from "jest-mock";
+ 
+ export declare type EnvironmentContext = {
+   console: Console;
+@@ -76,12 +76,12 @@ export declare interface Jest {
+    * This is useful when you want to create a manual mock that extends the
+    * automatic mock's behavior.
+    */
+-  createMockFromModule<T = unknown>(moduleName: string): Mocked<T>;
++  createMockFromModule<T = unknown>(moduleName: string | URL): Mocked<T>;
+   /**
+    * Indicates that the module system should never return a mocked version of
+    * the specified module and its dependencies.
+    */
+-  deepUnmock(moduleName: string): Jest;
++  deepUnmock(moduleName: string | URL): Jest;
+   /**
+    * Disables automatic mocking in the module loader.
+    *
+@@ -95,18 +95,18 @@ export declare interface Jest {
+    * avoid this behavior.
+    */
+   doMock<T = unknown>(
+-    moduleName: string,
++    moduleName: string | URL,
+     moduleFactory?: () => T,
+     options?: {
+       virtual?: boolean;
+-    },
++    }
+   ): Jest;
+   /**
+    * When using `babel-jest`, calls to `jest.unmock()` will automatically be hoisted
+    * to the top of the code block. Use this method if you want to explicitly
+    * avoid this behavior.
+    */
+-  dontMock(moduleName: string): Jest;
++  dontMock(moduleName: string | URL): Jest;
+   /**
+    * Enables automatic mocking in the module loader.
+    */
+@@ -114,7 +114,7 @@ export declare interface Jest {
+   /**
+    * Creates a mock function. Optionally takes a mock implementation.
+    */
+-  fn: ModuleMocker['fn'];
++  fn: ModuleMocker["fn"];
+   /**
+    * Given the name of a module, use the automatic mocking system to generate a
+    * mocked version of the module for you.
+@@ -124,7 +124,7 @@ export declare interface Jest {
+    *
+    * @deprecated Use `jest.createMockFromModule()` instead
+    */
+-  genMockFromModule<T = unknown>(moduleName: string): Mocked<T>;
++  genMockFromModule<T = unknown>(moduleName: string | URL): Mocked<T>;
+   /**
+    * When mocking time, `Date.now()` will also be mocked. If you for some reason
+    * need access to the real current time, you can invoke this function.
+@@ -157,7 +157,7 @@ export declare interface Jest {
+   /**
+    * Determines if the given function is a mocked function.
+    */
+-  isMockFunction: ModuleMocker['isMockFunction'];
++  isMockFunction: ModuleMocker["isMockFunction"];
+   /**
+    * `jest.isolateModules()` goes a step further than `jest.resetModules()` and
+    * creates a sandbox registry for the modules that are loaded inside the callback
+@@ -175,28 +175,28 @@ export declare interface Jest {
+    * Mocks a module with an auto-mocked version when it is being required.
+    */
+   mock<T = unknown>(
+-    moduleName: string,
++    moduleName: string | URL,
+     moduleFactory?: () => T,
+     options?: {
+       virtual?: boolean;
+-    },
++    }
+   ): Jest;
+   /**
+    * Mocks a module with the provided module factory when it is being imported.
+    */
+   unstable_mockModule<T = unknown>(
+-    moduleName: string,
++    moduleName: string | URL,
+     moduleFactory: () => T | Promise<T>,
+     options?: {
+       virtual?: boolean;
+-    },
++    }
+   ): Jest;
+   /**
+    * Wraps types of the `source` object and its deep members with type definitions
+    * of Jest mock function. Pass `{shallow: true}` option to disable the deeply
+    * mocked behavior.
+    */
+-  mocked: ModuleMocker['mocked'];
++  mocked: ModuleMocker["mocked"];
+   /**
+    * Returns the current time in ms of the fake timer clock.
+    */
+@@ -207,7 +207,7 @@ export declare interface Jest {
+    * @remarks
+    * For mocking functions or 'get' or 'set' accessors, use `jest.spyOn()` instead.
+    */
+-  replaceProperty: ModuleMocker['replaceProperty'];
++  replaceProperty: ModuleMocker["replaceProperty"];
+   /**
+    * Returns the actual module instead of a mock, bypassing all checks on
+    * whether the module should receive a mock implementation or not.
+@@ -230,12 +230,12 @@ export declare interface Jest {
+    * getRandom(); // Always returns 10
+    * ```
+    */
+-  requireActual<T = unknown>(moduleName: string): T;
++  requireActual<T = unknown>(moduleName: string | URL): T;
+   /**
+    * Returns a mock module instead of the actual module, bypassing all checks
+    * on whether the module should be required normally or not.
+    */
+-  requireMock<T = unknown>(moduleName: string): T;
++  requireMock<T = unknown>(moduleName: string | URL): T;
+   /**
+    * Resets the state of all mocks. Equivalent to calling `.mockReset()` on
+    * every mocked function.
+@@ -270,7 +270,7 @@ export declare interface Jest {
+     numRetries: number,
+     options?: {
+       logErrorsBeforeRetry?: boolean;
+-    },
++    }
+   ): Jest;
+   /**
+    * Exhausts tasks queued by `setImmediate()`.
+@@ -324,7 +324,7 @@ export declare interface Jest {
+    * It is recommended to use `jest.mock()` instead. The `jest.mock()` API's second
+    * argument is a module factory instead of the expected exported module object.
+    */
+-  setMock(moduleName: string, moduleExports: unknown): Jest;
++  setMock(moduleName: string | URL, moduleExports: unknown): Jest;
+   /**
+    * Set the current system time used by fake timers. Simulates a user changing
+    * the system clock while your program is running. It affects the current time,
+@@ -354,13 +354,13 @@ export declare interface Jest {
+    * By default, `jest.spyOn()` also calls the spied method. This is different
+    * behavior from most other test libraries.
+    */
+-  spyOn: ModuleMocker['spyOn'];
++  spyOn: ModuleMocker["spyOn"];
+   /**
+    * Indicates that the module system should never return a mocked version of
+    * the specified module from `require()` (e.g. that it should always return the
+    * real module).
+    */
+-  unmock(moduleName: string): Jest;
++  unmock(moduleName: string | URL): Jest;
+   /**
+    * Instructs Jest to use fake versions of the global date, performance,
+    * time and timer APIs. Fake timers implementation is backed by
+@@ -371,7 +371,7 @@ export declare interface Jest {
+    * fake timers using the provided options.
+    */
+   useFakeTimers(
+-    fakeTimersConfig?: Config.FakeTimersConfig | Config.LegacyFakeTimersConfig,
++    fakeTimersConfig?: Config.FakeTimersConfig | Config.LegacyFakeTimersConfig
+   ): Jest;
+   /**
+    * Instructs Jest to restore the original implementations of the global date,
+@@ -405,12 +405,12 @@ export declare interface JestImportMeta extends ImportMeta {
+ export declare type Module = NodeModule;
+ 
+ export declare type ModuleWrapper = (
+-  this: Module['exports'],
++  this: Module["exports"],
+   module: Module,
+-  exports: Module['exports'],
+-  require: Module['require'],
++  exports: Module["exports"],
++  require: Module["require"],
+   __dirname: string,
+-  __filename: Module['filename'],
++  __filename: Module["filename"],
+   jest?: Jest,
+   ...sandboxInjectedGlobals: Array<Global.Global[keyof Global.Global]>
+ ) => unknown;
