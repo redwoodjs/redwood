@@ -38,7 +38,7 @@
     "@envelop/testing": "6.0.0",
     "@envelop/types": "4.0.0",
     "esbuild": "0.18.19",
-    "jest": "29.6.4",
+    "jest": "29.7.0",
     "nodemon": "2.0.22",
     "typescript": "5.2.2"
   },
