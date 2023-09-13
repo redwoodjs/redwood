@@ -99,7 +99,7 @@ Going back to our testimonals hypothetical, a cell to fetch and display them may
 ```js
 export const QUERY = gql`
   query GetTestimonials {
-    testimonals {
+    testimonials {
       id
       author
       quote

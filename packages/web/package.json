@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.8.3",
-    "@babel/runtime-corejs3": "7.22.11",
+    "@babel/runtime-corejs3": "7.22.15",
     "@redwoodjs/auth": "6.0.7",
     "core-js": "3.32.2",
     "graphql": "16.8.0",
@@ -49,8 +49,8 @@
   },
   "devDependencies": {
     "@apollo/experimental-nextjs-app-support": "0.4.2",
-    "@babel/cli": "7.22.10",
-    "@babel/core": "7.22.11",
+    "@babel/cli": "7.22.15",
+    "@babel/core": "7.22.17",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
     "@types/prop-types": "15.7.5",
@@ -63,7 +63,7 @@
     "prop-types": "15.8.1",
     "react": "18.3.0-canary-035a41c4e-20230704",
     "react-dom": "18.3.0-canary-035a41c4e-20230704",
-    "typescript": "5.1.6"
+    "typescript": "5.2.2"
   },
   "peerDependencies": {
     "prop-types": "15.8.1",

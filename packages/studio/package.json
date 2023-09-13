@@ -21,7 +21,7 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.22.11",
+    "@babel/runtime-corejs3": "7.22.15",
     "@fastify/http-proxy": "9.2.1",
     "@fastify/static": "6.11.0",
     "@fastify/url-data": "5.3.1",
@@ -35,7 +35,7 @@
     "crypto-js": "4.1.1",
     "dotenv": "16.3.1",
     "fast-json-parse": "1.0.3",
-    "fastify": "4.22.2",
+    "fastify": "4.23.0",
     "fastify-raw-body": "4.2.2",
     "graphql": "16.8.0",
     "graphql-scalars": "1.22.2",
@@ -54,8 +54,8 @@
   },
   "devDependencies": {
     "@apollo/client": "3.8.3",
-    "@babel/cli": "7.22.10",
-    "@babel/core": "7.22.11",
+    "@babel/cli": "7.22.15",
+    "@babel/core": "7.22.17",
     "@graphiql/plugin-explorer": "0.1.22",
     "@graphiql/toolkit": "0.8.4",
     "@headlessui/react": "1.7.15",
@@ -99,7 +99,7 @@
     "react-split-pane": "0.1.92",
     "react-toastify": "9.1.3",
     "tailwindcss": "3.3.2",
-    "typescript": "5.1.6",
+    "typescript": "5.2.2",
     "use-url-search-params": "2.5.1",
     "vite": "4.4.9"
   },
