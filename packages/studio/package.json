@@ -21,7 +21,7 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.22.11",
+    "@babel/runtime-corejs3": "7.22.15",
     "@fastify/http-proxy": "9.2.1",
     "@fastify/static": "6.11.0",
     "@fastify/url-data": "5.3.1",
@@ -54,8 +54,8 @@
   },
   "devDependencies": {
     "@apollo/client": "3.8.3",
-    "@babel/cli": "7.22.10",
-    "@babel/core": "7.22.11",
+    "@babel/cli": "7.22.15",
+    "@babel/core": "7.22.17",
     "@graphiql/plugin-explorer": "0.1.22",
     "@graphiql/toolkit": "0.8.4",
     "@headlessui/react": "1.7.15",
