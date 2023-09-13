@@ -4,7 +4,9 @@
 
 // Stacktracey requires buffer, which Vite does not polyfill by default
 if (typeof window !== 'undefined') {
-  window.Buffer = window.Buffer || require('node:buffer').Buffer
+  // since this code is running on the browser we want to use https://github.com/feross/buffer instead of node's
+  // eslint-disable-next-line unicorn/prefer-node-protocol
+  window.Buffer = window.Buffer || require('buffer').Buffer
 }
 
 import { useState } from 'react'
