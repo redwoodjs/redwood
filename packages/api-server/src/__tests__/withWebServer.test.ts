@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { FastifyInstance, FastifyPluginCallback } from 'fastify'
+import type { FastifyInstance, FastifyPluginCallback } from 'fastify'
 
 import { loadFastifyConfig } from '../fastify'
 import withWebServer from '../plugins/withWebServer'
@@ -12,9 +12,8 @@ const FIXTURE_PATH = path.resolve(
 
 // Mock the dist folder from fixtures,
 // because its gitignored
-jest.mock('@redwoodjs/internal/dist/files', () => {
+jest.mock('../plugins/findPrerenderedHtml', () => {
   return {
-    ...jest.requireActual('@redwoodjs/internal/dist/files'),
     findPrerenderedHtml: () => {
       return ['about.html', 'mocked.html', 'posts/new.html', 'index.html']
     },

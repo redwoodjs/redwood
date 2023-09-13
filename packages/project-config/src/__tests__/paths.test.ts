@@ -81,13 +81,27 @@ describe('paths', () => {
           config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
           services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
           directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
+          subscriptions: path.join(
+            FIXTURE_BASEDIR,
+            'api',
+            'src',
+            'subscriptions'
+          ),
           src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
           models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
+          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.tsx'),
+          routeManifest: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'route-manifest.json'
+          ),
           base: path.join(FIXTURE_BASEDIR, 'web'),
           pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
           components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
@@ -104,7 +118,6 @@ describe('paths', () => {
             'config',
             'webpack.config.js'
           ),
-          viteConfig: null, // no vite file in empty-project fixture
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -130,7 +143,34 @@ describe('paths', () => {
             'storybook.manager.js'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
+          distEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entry.server.js'
+          ),
+          distRouteHooks: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'routeHooks'
+          ),
+          distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
+          distServerEntries: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entries.js'
+          ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
+          // Vite paths ~ not configured in empty-project
+          viteConfig: null,
+          entryClient: null,
+          entryServer: null,
+          entries: null,
         },
       }
 
@@ -311,13 +351,27 @@ describe('paths', () => {
           config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
           services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
           directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
+          subscriptions: path.join(
+            FIXTURE_BASEDIR,
+            'api',
+            'src',
+            'subscriptions'
+          ),
           src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
           models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
+          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.js'),
+          routeManifest: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'route-manifest.json'
+          ),
           base: path.join(FIXTURE_BASEDIR, 'web'),
           pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
           components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
@@ -334,7 +388,7 @@ describe('paths', () => {
             'config',
             'webpack.config.js'
           ),
-          viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
+
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -360,7 +414,34 @@ describe('paths', () => {
             'storybook.manager.js'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
+          distEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entry.server.js'
+          ),
+          distRouteHooks: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'routeHooks'
+          ),
+          distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
+          distServerEntries: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entries.js'
+          ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
+          // New Vite paths
+          viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
+          entryClient: null, // doesn't exist in example-todo-main
+          entryServer: null, // doesn't exist in example-todo-main
+          entries: null, // doesn't exist in example-todo-main
         },
       }
 
@@ -587,13 +668,27 @@ describe('paths', () => {
           config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
           services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
           directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
+          subscriptions: path.join(
+            FIXTURE_BASEDIR,
+            'api',
+            'src',
+            'subscriptions'
+          ),
           src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
           models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
+          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.js'),
+          routeManifest: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'route-manifest.json'
+          ),
           base: path.join(FIXTURE_BASEDIR, 'web'),
           pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
           components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
@@ -635,7 +730,32 @@ describe('paths', () => {
             'config',
             'storybook.manager.js'
           ),
+          entryClient: null,
+          entryServer: null,
+          entries: null,
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
+          distEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entry.server.js'
+          ),
+          distRouteHooks: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'routeHooks'
+          ),
+          distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
+          distServerEntries: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entries.js'
+          ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
         },
       }
@@ -823,13 +943,27 @@ describe('paths', () => {
           config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
           services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
           directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
+          subscriptions: path.join(
+            FIXTURE_BASEDIR,
+            'api',
+            'src',
+            'subscriptions'
+          ),
           src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
           models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
+          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.tsx'),
+          routeManifest: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'route-manifest.json'
+          ),
           base: path.join(FIXTURE_BASEDIR, 'web'),
           pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
           components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
@@ -846,7 +980,6 @@ describe('paths', () => {
             'config',
             'webpack.config.js'
           ),
-          viteConfig: null, // no vite configured in test-project fixture
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -872,7 +1005,34 @@ describe('paths', () => {
             'storybook.manager.js'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
+          distEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entry.server.js'
+          ),
+          distRouteHooks: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'routeHooks'
+          ),
+          distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
+          distServerEntries: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entries.js'
+          ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
+          // Vite paths
+          viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
+          entryClient: path.join(FIXTURE_BASEDIR, 'web/src/entry.client.tsx'),
+          entryServer: null,
+          entries: null,
         },
       }
 
@@ -902,7 +1062,7 @@ describe('paths', () => {
 
         const pages = processPagesDir(pagesDir)
 
-        expect(pages.length).toEqual(20)
+        expect(pages.length).toEqual(21)
 
         const pageNames = [
           'AboutPage',

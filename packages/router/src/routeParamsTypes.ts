@@ -1,4 +1,4 @@
-import { A } from 'ts-toolbelt'
+import type { A } from 'ts-toolbelt'
 
 export type GenericParams = Record<string | number, string | number | boolean>
 
@@ -87,7 +87,7 @@ type ParsedParams<PartialRoute> =
     : // last one with no type e.g. {d} - just a param
     PartialRoute extends `${string}{${infer Param}}${string}`
     ? JustParamNoType<Param>
-    : // if theres a non param
+    : // if there's a non param
     PartialRoute extends `${string}/${infer Rest}`
     ? ParsedParams<`${Rest}`>
     : // Fallback when doesn't match any of these

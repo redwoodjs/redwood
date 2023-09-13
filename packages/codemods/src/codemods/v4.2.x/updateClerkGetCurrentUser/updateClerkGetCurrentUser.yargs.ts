@@ -1,8 +1,10 @@
 import path from 'path'
 
-import task, { TaskInnerAPI } from 'tasuku'
+import type { TaskInnerAPI } from 'tasuku'
+import task from 'tasuku'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
+
 import isTSProject from '../../../lib/isTSProject'
 import runTransform from '../../../lib/runTransform'
 
@@ -16,7 +18,7 @@ export const handler = () => {
 
     await runTransform({
       transformPath: path.join(__dirname, 'updateClerkGetCurrentUser.js'),
-      targetPaths: [path.join(getRWPaths().api.base, 'src', 'lib', authFile)],
+      targetPaths: [path.join(getPaths().api.base, 'src', 'lib', authFile)],
     })
 
     setOutput('All done! Run `yarn rw lint --fix` to prettify your code')

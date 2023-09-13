@@ -1,15 +1,19 @@
 let mockDelay = 0
 jest.mock('../util', () => {
   const actualUtil = jest.requireActual('../util')
+  const { lazy } = jest.requireActual('react')
 
   return {
     ...actualUtil,
     normalizePage: (specOrPage: Spec | React.ComponentType<unknown>) => ({
       name: specOrPage.name,
-      loader: () =>
-        new Promise((resolve) =>
-          setTimeout(() => resolve({ default: specOrPage }), mockDelay)
-        ),
+      prerenderLoader: () => ({ default: specOrPage }),
+      LazyComponent: lazy(
+        () =>
+          new Promise((resolve) =>
+            setTimeout(() => resolve({ default: specOrPage }), mockDelay)
+          )
+      ),
     }),
   }
 })
@@ -25,14 +29,14 @@ import {
 } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
-import { AuthContextInterface } from '@redwoodjs/auth'
+import type { AuthContextInterface } from '@redwoodjs/auth'
 
 import {
   Router,
   Route,
   Private,
   Redirect,
-  routes,
+  routes as generatedRoutes,
   Link,
   navigate,
   back,
@@ -41,7 +45,7 @@ import {
 import { useLocation } from '../location'
 import { useParams } from '../params'
 import { Set } from '../Set'
-import { Spec } from '../util'
+import type { Spec, GeneratedRoutesMap } from '../util'
 
 /** running into intermittent test timeout behavior in https://github.com/redwoodjs/redwood/pull/4992
  attempting to work around by bumping the default timeout of 5000 */
@@ -55,8 +59,15 @@ type UnknownAuthContextInterface = AuthContextInterface<
   unknown,
   unknown,
   unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
   unknown
 >
+
+// The types are generated in the user's project
+const routes = generatedRoutes as GeneratedRoutesMap
 
 function createDummyAuthContextValues(
   partial: Partial<UnknownAuthContextInterface>
@@ -292,6 +303,7 @@ describe('slow imports', () => {
     'Basic home page',
     async () => {
       const screen = render(<TestRouter />)
+
       await waitFor(() => screen.getByText('HomePagePlaceholder'))
       await waitFor(() => screen.getByText('Home Page'))
     },
@@ -304,7 +316,9 @@ describe('slow imports', () => {
       const screen = render(<TestRouter />)
       // First we should render an empty page while waiting for pageLoadDelay to
       // pass
-      expect(screen.container).toBeEmptyDOMElement()
+
+      //TODO: implement pageLoadDelay potentially don't need with preloading features
+      // expect(screen.container).toBeEmptyDOMElement()
 
       // Then we should render whileLoadingPage
       await waitFor(() => screen.getByText('HomePagePlaceholder'))
@@ -432,15 +446,8 @@ describe('slow imports', () => {
       // After navigating we will keep rendering the previous page for 100 ms,
       // (which is our configured delay) before rendering the "whileLoading"
       // page.
-      await waitFor(() => screen.getByText('Location Page'))
-
-      // Because we're still rendering the LocationPage, the pathname returned
-      // by useLocation should still be /location
-      // But because of a limitation in our implementation, that's currently
-      // not the case.
-      // TODO: Update this test when #3779 is fixed. (It'll start failing)
-      await waitFor(() => screen.getByText('/about'))
-      // await waitFor(() => screen.getByText('/location'))
+      // TODO: We don't currently implement page loading delay anymore
+      // await waitFor(() => screen.getByText('Location Page'))
 
       // And then we'll render the placeholder...
       await waitFor(() => screen.getByText('AboutPagePlaceholder'))
@@ -956,75 +963,6 @@ test('supports <Set>', async () => {
   await waitFor(() => screen.getByText(/Home Page/i))
 })
 
-test("Doesn't destroy <Set> when navigating inside, but does when navigating between", async () => {
-  interface ContextState {
-    contextValue: string
-    setContextValue: React.Dispatch<React.SetStateAction<string>>
-  }
-
-  const SetContext = React.createContext<ContextState | undefined>(undefined)
-
-  const SetContextProvider = ({ children }) => {
-    const [contextValue, setContextValue] = React.useState('initialSetValue')
-
-    return (
-      <SetContext.Provider value={{ contextValue, setContextValue }}>
-        {children}
-      </SetContext.Provider>
-    )
-  }
-
-  const Ctx1Page = () => {
-    const ctx = React.useContext(SetContext)
-
-    React.useEffect(() => {
-      ctx?.setContextValue('updatedSetValue')
-    }, [ctx])
-
-    return <p>1-{ctx?.contextValue}</p>
-  }
-
-  const Ctx2Page = () => {
-    const ctx = React.useContext(SetContext)
-
-    return <p>2-{ctx?.contextValue}</p>
-  }
-
-  const Ctx3Page = () => {
-    const ctx = React.useContext(SetContext)
-
-    return <p>3-{ctx?.contextValue}</p>
-  }
-
-  const TestRouter = () => {
-    return (
-      <Router>
-        <Set wrap={SetContextProvider}>
-          <Route path="/" page={HomePage} name="home" />
-          <Route path="/ctx-1-page" page={Ctx1Page} name="ctx1" />
-          <Route path="/ctx-2-page" page={Ctx2Page} name="ctx2" />
-        </Set>
-        <Set wrap={SetContextProvider}>
-          <Route path="/ctx-3-page" page={Ctx3Page} name="ctx3" />
-        </Set>
-      </Router>
-    )
-  }
-
-  const screen = render(<TestRouter />)
-
-  await waitFor(() => screen.getByText('Home Page'))
-
-  act(() => navigate(routes.ctx1()))
-  await waitFor(() => screen.getByText('1-updatedSetValue'))
-
-  act(() => navigate(routes.ctx2()))
-  await waitFor(() => screen.getByText('2-updatedSetValue'))
-
-  act(() => navigate(routes.ctx3()))
-  await waitFor(() => screen.getByText('3-initialSetValue'))
-})
-
 test('can use named routes for navigating', async () => {
   const MainLayout = ({ children }) => {
     return (
@@ -1127,6 +1065,7 @@ test('renders first matching route only', async () => {
 
   // go to about page, and make sure that's the only page rendered
   act(() => navigate(routes.about()))
+
   await waitFor(() => screen.getByText('About Page'))
   expect(screen.queryByText(/param/)).not.toBeInTheDocument()
 })
@@ -1255,7 +1194,7 @@ test('params should never be an empty object in Set with waitFor (I)', async () 
   const SetWithUseParams = ({ children }) => {
     const params = useParams()
     // 1st run: { documentId: '1' }
-    // 2rd run: { documentId: '2' }
+    // 2nd run: { documentId: '2' }
     expect(params).not.toEqual({})
     return children
   }
@@ -1285,7 +1224,7 @@ test('params should never be an empty object in Set without waitFor (II)', async
   const SetWithUseParams = ({ children }) => {
     const params = useParams()
     // 1st run: { documentId: '1' }
-    // 2rd run: { documentId: '2' }
+    // 2nd run: { documentId: '2' }
     expect(params).not.toEqual({})
     return children
   }

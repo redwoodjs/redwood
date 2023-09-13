@@ -216,6 +216,12 @@ export class RedwoodTUI {
       throw new Error('TUI has no reactive content')
     }
 
+    // Only draw once if the TUI is not a TTY
+    if (!this.outStream.isTTY) {
+      this.drawReactive(true)
+      return
+    }
+
     if (!this.manager.isHooked) {
       // Take control of the terminal
       this.manager.hook()
@@ -234,6 +240,12 @@ export class RedwoodTUI {
    * @param clear If true, the last drawn content will be cleared
    */
   stopReactive(clear = false) {
+    // If the TUI is not a TTY, draw one last time and return
+    if (!this.outStream.isTTY) {
+      this.drawReactive(true)
+      return
+    }
+
     if (this.manager.isHooked) {
       // Stop the draw loop
       this.isReactive = false
@@ -325,6 +337,23 @@ export class RedwoodTUI {
         padding: 1,
         borderColor: 'red',
         title: `⚠ Error: ${title}`,
+        titleAlignment: 'left',
+      })
+    )
+  }
+
+  /**
+   * Display a warning message in a box
+   *
+   * @param title Error box title
+   * @param message Error message
+   */
+  displayWarning(title: string, message: string) {
+    this.drawText(
+      boxen(message, {
+        padding: 1,
+        borderColor: 'yellow',
+        title: `⚠ Warning: ${title}`,
         titleAlignment: 'left',
       })
     )

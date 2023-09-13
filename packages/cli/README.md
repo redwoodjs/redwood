@@ -111,6 +111,10 @@ cd packages/cli
 yarn dev <command>
 ```
 
+> **Note:** If you are implementing a command and wish to run via `yarn dev <command>` be sure to `yarn build:clean-dist` beforehand to run the latest version.
+
+> **Important:** If your command alters the `example-todo-main` project (adds a package, modifies redwood.toml, etc) be sure not to commit and push those changes as part of your PR.
+
 ### Best Practices
 
 There's a few best practices we follow that you should be aware of:
@@ -560,7 +564,7 @@ We'll use the [Netlify Identity](https://github.com/redwoodjs/redwood/blob/main/
 ```javascript
 // ./src/commands/setup/auth/providers/netlify.js
 
-// the lines that need to be added to App.{js,tsx}
+// the lines that need to be added to App.{jsx,tsx}
 export const config = {
   imports: [
     `import netlifyIdentity from 'netlify-identity-widget'`,

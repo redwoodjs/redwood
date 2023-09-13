@@ -81,6 +81,11 @@ describe('yarn rw dev', () => {
         port: 8911,
         debugPort: 18911,
       },
+      experimental: {
+        streamingSsr: {
+          enabled: false,
+        },
+      },
     })
 
     await handler({
@@ -96,7 +101,46 @@ describe('yarn rw dev', () => {
 
     // Uses absolute path, so not doing a snapshot
     expect(webCommand.command).toContain(
-      'yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES= webpack serve'
+      'yarn cross-env NODE_ENV=development rw-vite-dev'
+    )
+
+    expect(apiCommand.command).toMatchInlineSnapshot(
+      `"yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter""`
+    )
+
+    expect(generateCommand.command).toEqual('yarn rw-gen-watch')
+  })
+
+  it('Should run api and FE dev server, when streaming experimental flag enabled', async () => {
+    getConfig.mockReturnValue({
+      web: {
+        port: 8910,
+      },
+      api: {
+        port: 8911,
+        debugPort: 18911,
+      },
+      experimental: {
+        streamingSsr: {
+          enabled: true, // <-- enable SSR/Streaming
+        },
+      },
+    })
+
+    await handler({
+      side: ['api', 'web'],
+    })
+
+    expect(generatePrismaClient).toHaveBeenCalledTimes(1)
+    const concurrentlyArgs = concurrently.mock.lastCall[0]
+
+    const webCommand = find(concurrentlyArgs, { name: 'web' })
+    const apiCommand = find(concurrentlyArgs, { name: 'api' })
+    const generateCommand = find(concurrentlyArgs, { name: 'gen' })
+
+    // Uses absolute path, so not doing a snapshot
+    expect(webCommand.command).toContain(
+      'yarn cross-env NODE_ENV=development rw-dev-fe'
     )
 
     expect(apiCommand.command).toMatchInlineSnapshot(
@@ -114,6 +158,11 @@ describe('yarn rw dev', () => {
       api: {
         port: 8911,
         debugPort: 505050,
+      },
+      experimental: {
+        streamingSsr: {
+          enabled: false,
+        },
       },
     })
 
@@ -140,6 +189,11 @@ describe('yarn rw dev', () => {
         port: 8911,
         debugPort: false,
       },
+      experimental: {
+        streamingSsr: {
+          enabled: false,
+        },
+      },
     })
 
     await handler({
@@ -161,6 +215,11 @@ describe('yarn rw dev', () => {
       },
       api: {
         port: 8911,
+      },
+      experimental: {
+        streamingSsr: {
+          enabled: false,
+        },
       },
     })
 

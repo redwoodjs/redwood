@@ -1,11 +1,10 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 
+import type { VerifyOptions, SupportedVerifierTypes } from '../auth/verifiers'
 import {
   createVerifier,
-  VerifyOptions,
   WebhookVerificationError,
   DEFAULT_WEBHOOK_SECRET,
-  SupportedVerifierTypes,
   DEFAULT_TOLERANCE,
 } from '../auth/verifiers'
 
@@ -33,7 +32,7 @@ const eventBody = (event: APIGatewayProxyEvent) => {
 /**
  * Extracts signature from Lambda Event.
  *
- * @param {APIGatewayProxyEvent} event - The event that incudes the request details, like headers
+ * @param {APIGatewayProxyEvent} event - The event that includes the request details, like headers
  * @param {string} signatureHeader - The name of header key that contains the signature; defaults to DEFAULT_WEBHOOK_SIGNATURE_HEADER
  * @return {string} - The signature found in the headers specified by signatureHeader
  *

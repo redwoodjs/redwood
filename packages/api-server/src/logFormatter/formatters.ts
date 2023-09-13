@@ -13,6 +13,17 @@ export const emojiLog: Record<string, string> = {
   trace: '🧵',
 }
 
+export const ignoredCustomData: Array<string> = [
+  'time',
+  'pid',
+  'hostname',
+  'msg',
+  'res',
+  'req',
+  'reqId',
+  'responseTime',
+]
+
 export const isObject = (object?: Record<string, unknown>) => {
   return object && Object.prototype.toString.apply(object) === '[object Object]'
 }
@@ -36,6 +47,14 @@ export const formatBundleSize = (bundle: string) => {
 }
 
 export const formatCustom = (query?: Record<string, unknown>) => {
+  if (!query) {
+    return
+  }
+
+  ignoredCustomData.forEach((key) => {
+    delete query[key]
+  })
+
   if (!isEmptyObject(query)) {
     return chalk.white(
       NEWLINE + '🗒 Custom' + NEWLINE + JSON.stringify(query, null, 2)
@@ -121,7 +140,7 @@ export const formatMessage = (logData: any) => {
 }
 
 export const formatMethod = (method: string) => {
-  return chalk.white(method)
+  return method && chalk.white(method)
 }
 
 export const formatRequestId = (requestId: string) => {
@@ -129,14 +148,18 @@ export const formatRequestId = (requestId: string) => {
 }
 
 export const formatNs = (ns: string) => {
-  return chalk.cyan(ns)
+  return ns && chalk.cyan(ns)
 }
 
 export const formatName = (name: string) => {
-  return chalk.blue(name)
+  return name && chalk.blue(name)
 }
 
 export const formatMessageName = (message: string) => {
+  if (message === undefined) {
+    return ''
+  }
+
   if (message === 'request') {
     return '<--'
   }

@@ -3,6 +3,7 @@ import path from 'path'
 
 import execa from 'execa'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { ensurePosixPath } from '@redwoodjs/project-config'
 import { errorTelemetry, timedTelemetry } from '@redwoodjs/telemetry'
 
@@ -61,6 +62,12 @@ export const handler = async ({
   dbPush = true,
   ...others
 }) => {
+  recordTelemetryAttributes({
+    command: 'test',
+    watch,
+    collectCoverage,
+    dbPush,
+  })
   const rwjsPaths = getPaths()
   const forwardJestFlags = Object.keys(others).flatMap((flagName) => {
     if (

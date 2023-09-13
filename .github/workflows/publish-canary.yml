@@ -28,8 +28,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 🧶 Set up job
-        uses: ./.github/actions/set-up-job
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 🐈 Set up yarn cache
+        uses: ./.github/actions/set-up-yarn-cache
+
+      - name: 🐈 Yarn install
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: ✅ Check constraints, dependencies, and package.json's
         uses: ./tasks/check
@@ -44,32 +54,7 @@ jobs:
         run: yarn test
 
       - name: 🚢 Publish
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
-
-          TAG='canary' && [[ "$GITHUB_REF_NAME" = 'next' ]] && TAG='next'
-          echo "Publishing $TAG"
-
-          args=()
-
-          if [[ "$GITHUB_REF_NAME" = 'main' ]]; then
-            args+=(premajor)
-          fi
-
-          args+=(
-            --include-merged-tags
-            --canary
-            --exact
-            --preid "$TAG"
-            --dist-tag "$TAG"
-            --force-publish
-            --loglevel verbose
-            --no-git-reset
-            --yes
-          )
-
-          yarn lerna publish "${args[@]}"
-
+        run: ./.github/scripts/publish_canary.sh
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 

@@ -1,8 +1,8 @@
 import path from 'path'
 
+import { prebuildWebFile } from '@redwoodjs/babel-config'
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
-import { prebuildWebFile } from '../build/babel/web'
 import { prebuildWebFiles, cleanWebBuild } from '../build/web'
 import { findWebFiles } from '../files'
 
@@ -59,18 +59,18 @@ test('web files are prebuilt (no prerender)', async () => {
 test('Check routes are imported with require when staticImports flag is enabled', () => {
   const routesFile = getPaths().web.routes
 
-  const withStaticImports = prebuildWebFile(routesFile, {
-    staticImports: true,
+  const prerendered = prebuildWebFile(routesFile, {
+    prerender: true,
     forJest: true,
-  }).code
+  })?.code
 
   /* Check that imports have the form
    `const HomePage = {
      name: "HomePage",
      loader: () => require("` 👈 Uses a require statement
      */
-  expect(withStaticImports).toContain(`const HomePage = {`)
-  expect(withStaticImports).toContain(`const BarPage = {`)
+  expect(prerendered).toContain(`const HomePage = {`)
+  expect(prerendered).toContain(`const BarPage = {`)
 
   /*
     👇 Foo page is an explicitly imported page in the source
@@ -78,8 +78,8 @@ test('Check routes are imported with require when staticImports flag is enabled'
       name: "FooPage",
       loader: () => require(
     */
-  expect(withStaticImports).toContain(`const FooPage = {`)
-  expect(withStaticImports).not.toContain(
+  expect(prerendered).toContain(`const FooPage = {`)
+  expect(prerendered).not.toContain(
     `var _FooPage = _interopRequireDefault(require(`
   )
 })
@@ -89,7 +89,7 @@ test('Check routes are imported with "import" when staticImports flag is NOT pas
 
   const withoutStaticImports = prebuildWebFile(routesFile, {
     forJest: true,
-  }).code
+  })?.code
 
   /* Check that imports have the form
    `const HomePage = {

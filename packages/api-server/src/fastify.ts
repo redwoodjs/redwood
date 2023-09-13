@@ -6,7 +6,7 @@ import Fastify from 'fastify'
 
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
-import { FastifySideConfigFn } from './types'
+import type { FastifySideConfigFn } from './types'
 
 const DEFAULT_OPTIONS = {
   logger: {
@@ -21,7 +21,7 @@ let serverConfigFile: {
 } = {
   config: DEFAULT_OPTIONS,
   configureFastify: async (fastify, options) => {
-    fastify.log.info(
+    fastify.log.trace(
       options,
       `In configureFastify hook for side: ${options?.side}`
     )

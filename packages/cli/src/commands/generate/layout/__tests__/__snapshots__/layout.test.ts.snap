@@ -57,14 +57,13 @@ describe('SinglePageLayout', () => {
 exports[`Multi word default files creates a multi word layout test 2`] = `
 "import SinglePageLayout from './SinglePageLayout'
 
-export const generated = (args) => {
-  return <SinglePageLayout {...args} />
-}
-
-export default {
-  title: 'Layouts/SinglePageLayout',
+const meta = {
   component: SinglePageLayout,
 }
+
+export default meta
+
+export const Primary = {}
 "
 `;
 
@@ -80,14 +79,13 @@ export default AppLayout
 exports[`Single Word default files creates a single word layout stories 1`] = `
 "import AppLayout from './AppLayout'
 
-export const generated = (args) => {
-  return <AppLayout {...args} />
-}
-
-export default {
-  title: 'Layouts/AppLayout',
+const meta = {
   component: AppLayout,
 }
+
+export default meta
+
+export const Primary = {}
 "
 `;
 

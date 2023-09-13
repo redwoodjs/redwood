@@ -2,9 +2,10 @@ import path from 'path'
 
 import execa from 'execa'
 import fs from 'fs-extra'
-import omit from 'lodash/omit'
+import { omit } from 'lodash'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getPaths } from '@redwoodjs/project-config'
 
 import c from '../../lib/colors'
@@ -45,6 +46,14 @@ const execaOptions = {
 }
 
 export const handler = async (args) => {
+  recordTelemetryAttributes({
+    command: 'deploy edgio',
+    skipInit: args.skipInit,
+    build: args.build,
+    prisma: args.prisma,
+    dataMigrate: args.dataMigrate,
+  })
+
   const { builder: edgioBuilder } = require('@edgio/cli/commands/deploy')
   const cwd = path.join(getPaths().base)
 

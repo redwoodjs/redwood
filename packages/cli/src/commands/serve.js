@@ -3,43 +3,147 @@ import path from 'path'
 
 import terminalLink from 'terminal-link'
 
-import { getPaths } from '../lib'
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
+import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
+
+import { webServerHandler, webSsrServerHandler } from './serveWebHandler'
 
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
 
-export const builder = async (yargs) => {
-  const {
-    apiCliOptions,
-    webCliOptions,
-    commonOptions,
-    apiServerHandler,
-    webServerHandler,
-    bothServerHandler,
-  } = await import('@redwoodjs/api-server')
+function hasExperimentalServerFile() {
+  const serverFilePath = path.join(getPaths().api.dist, 'server.js')
+  return fs.existsSync(serverFilePath)
+}
 
+export const builder = async (yargs) => {
   yargs
     .usage('usage: $0 <side>')
     .command({
       command: '$0',
-      descriptions: 'Run both api and web servers',
-      handler: bothServerHandler,
-      builder: (yargs) => yargs.options(commonOptions),
+      description: 'Run both api and web servers',
+      builder: (yargs) =>
+        yargs.options({
+          port: {
+            default: getConfig().web?.port || 8910,
+            type: 'number',
+            alias: 'p',
+          },
+          socket: { type: 'string' },
+        }),
+      handler: async (argv) => {
+        recordTelemetryAttributes({
+          command: 'serve',
+          port: argv.port,
+          host: argv.host,
+          socket: argv.socket,
+        })
+
+        // Run the experimental server file, if it exists, with web side also
+        if (hasExperimentalServerFile()) {
+          const { bothExperimentalServerFileHandler } = await import(
+            './serveBothHandler.js'
+          )
+          await bothExperimentalServerFileHandler()
+        } else if (getConfig().experimental?.rsc?.enabled) {
+          const { bothRscServerHandler } = await import('./serveBothHandler.js')
+          await bothRscServerHandler(argv)
+        } else if (getConfig().experimental?.streamingSsr?.enabled) {
+          const { bothSsrServerHandler } = await import('./serveBothHandler.js')
+          await bothSsrServerHandler(argv)
+        } else {
+          // Wanted to use the new web-server package here, but can't because
+          // of backwards compatibility reasons. With `bothServerHandler` both
+          // the web side and the api side run on the same server with the same
+          // port. If we use a separate fe server and api server we can't run
+          // them on the same port, and so we lose backwards compatibility.
+          // TODO: Use @redwoodjs/web-server when we're ok with breaking
+          // backwards compatibility.
+          const { bothServerHandler } = await import('./serveBothHandler.js')
+          await bothServerHandler(argv)
+        }
+      },
     })
     .command({
       command: 'api',
-      description: 'start server for serving only the api',
-      handler: apiServerHandler,
-      builder: (yargs) => yargs.options(apiCliOptions),
+      description: 'Start server for serving only the api',
+      builder: (yargs) =>
+        yargs.options({
+          port: {
+            default: getConfig().api?.port || 8911,
+            type: 'number',
+            alias: 'p',
+          },
+          socket: { type: 'string' },
+          apiRootPath: {
+            alias: ['api-root-path', 'rootPath', 'root-path'],
+            default: '/',
+            type: 'string',
+            desc: 'Root path where your api functions are served',
+            coerce: coerceRootPath,
+          },
+        }),
+      handler: async (argv) => {
+        recordTelemetryAttributes({
+          command: 'serve',
+          port: argv.port,
+          host: argv.host,
+          socket: argv.socket,
+          apiRootPath: argv.apiRootPath,
+        })
+
+        // Run the experimental server file, if it exists, api side only
+        if (hasExperimentalServerFile()) {
+          const { apiExperimentalServerFileHandler } = await import(
+            './serveApiHandler.js'
+          )
+          await apiExperimentalServerFileHandler()
+        } else {
+          const { apiServerHandler } = await import('./serveApiHandler.js')
+          await apiServerHandler(argv)
+        }
+      },
     })
     .command({
       command: 'web',
-      description: 'start server for serving only the web side',
-      handler: webServerHandler,
-      builder: (yargs) => yargs.options(webCliOptions),
+      description: 'Start server for serving only the web side',
+      builder: (yargs) =>
+        yargs.options({
+          port: {
+            default: getConfig().web?.port || 8910,
+            type: 'number',
+            alias: 'p',
+          },
+          socket: { type: 'string' },
+          apiHost: {
+            alias: 'api-host',
+            type: 'string',
+            desc: 'Forward requests from the apiUrl, defined in redwood.toml to this host',
+          },
+        }),
+      handler: async (argv) => {
+        recordTelemetryAttributes({
+          command: 'serve',
+          port: argv.port,
+          host: argv.host,
+          socket: argv.socket,
+          apiHost: argv.apiHost,
+        })
+
+        if (getConfig().experimental?.streamingSsr?.enabled) {
+          await webSsrServerHandler()
+        } else {
+          await webServerHandler(argv)
+        }
+      },
     })
     .middleware((argv) => {
+      recordTelemetryAttributes({
+        command: 'serve',
+      })
+
       // Make sure the relevant side has been built, before serving
       const positionalArgs = argv._
 
@@ -92,4 +196,15 @@ export const builder = async (yargs) => {
         'https://redwoodjs.com/docs/cli-commands#serve'
       )}`
     )
+}
+
+// We'll clean this up later, but for now note that this function is
+// duplicated between this package and @redwoodjs/fastify
+// to avoid importing @redwoodjs/fastify when the CLI starts.
+export function coerceRootPath(path) {
+  // Make sure that we create a root path that starts and ends with a slash (/)
+  const prefix = path.charAt(0) !== '/' ? '/' : ''
+  const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
+
+  return `${prefix}${path}${suffix}`
 }

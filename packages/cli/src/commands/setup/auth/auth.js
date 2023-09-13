@@ -4,7 +4,10 @@ import execa from 'execa'
 import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
-import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
+import {
+  recordTelemetryAttributes,
+  standardAuthBuilder,
+} from '@redwoodjs/cli-helpers'
 
 import { getPaths } from '../../../lib/'
 
@@ -33,6 +36,11 @@ export async function builder(yargs) {
       'Set up auth for Auth0',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth auth0',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler('@redwoodjs/auth-auth0-setup')
         console.log()
         handler(args)
@@ -43,6 +51,11 @@ export async function builder(yargs) {
       'Set up auth for Azure Active Directory',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth azure-active-directory',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler(
           '@redwoodjs/auth-azure-active-directory-setup'
         )
@@ -55,6 +68,11 @@ export async function builder(yargs) {
       'Set up auth for Clerk',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth clerk',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler('@redwoodjs/auth-clerk-setup')
         console.log()
         handler(args)
@@ -65,6 +83,11 @@ export async function builder(yargs) {
       'Set up a custom auth provider',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth custom',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler('@redwoodjs/auth-custom-setup')
         console.log()
         handler(args)
@@ -82,6 +105,12 @@ export async function builder(yargs) {
         })
       },
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth dbAuth',
+          force: args.force,
+          verbose: args.verbose,
+          webauthn: args.webauthn,
+        })
         const handler = await getAuthHandler('@redwoodjs/auth-dbauth-setup')
         console.log()
         handler(args)
@@ -92,6 +121,11 @@ export async function builder(yargs) {
       'Set up auth for Firebase',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth firebase',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler('@redwoodjs/auth-firebase-setup')
         console.log()
         handler(args)
@@ -102,6 +136,11 @@ export async function builder(yargs) {
       'Set up auth for Netlify',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth netlify',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler('@redwoodjs/auth-netlify-setup')
         console.log()
         handler(args)
@@ -112,6 +151,11 @@ export async function builder(yargs) {
       'Set up auth for Supabase',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth supabase',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler('@redwoodjs/auth-supabase-setup')
         console.log()
         handler(args)
@@ -122,6 +166,11 @@ export async function builder(yargs) {
       'Set up auth for SuperTokens',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth supertokens',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler(
           '@redwoodjs/auth-supertokens-setup'
         )
@@ -141,6 +190,9 @@ function redirectCommand(provider) {
     false,
     () => {},
     () => {
+      recordTelemetryAttributes({
+        command: `setup auth ${provider}`,
+      })
       console.log(getRedirectMessage(provider))
     },
   ]
@@ -192,9 +244,9 @@ async function getAuthHandler(module) {
     })
   }
 
-  const { handler } = await import(module)
+  const setupModule = await import(module)
 
-  return handler
+  return setupModule.default.handler
 }
 
 /**
@@ -220,7 +272,7 @@ function isInstalled(module) {
   // Check any of the places require would look for this module.
   // This enables testing auth setup packages with `yarn rwfw project:copy`.
   //
-  // We can't use require.resolve here because it cahces the exception
+  // We can't use require.resolve here because it caches the exception
   // Making it impossible to require when we actually do install it...
   return require.resolve
     .paths(`${module}/package.json`)

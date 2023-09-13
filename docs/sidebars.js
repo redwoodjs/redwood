@@ -8,6 +8,9 @@ module.exports = {
       items: [
         { type: 'doc', label: 'Foreword', id: 'tutorial/foreword' },
         {
+          'Chapter 0': ['tutorial/chapter0/what-is-redwood'],
+        },
+        {
           'Chapter 1': [
             'tutorial/chapter1/prerequisites',
             'tutorial/chapter1/installation',
@@ -101,6 +104,7 @@ module.exports = {
         'contributing-overview',
         'contributing-walkthrough',
         'cors',
+        'create-redwood-app',
         'custom-web-index',
         'data-migrations',
         {
@@ -114,6 +118,11 @@ module.exports = {
           items: [
             { type: 'doc', label: 'Introduction', id: 'deploy/introduction' },
             { type: 'doc', label: 'Baremetal', id: 'deploy/baremetal' },
+            {
+              type: 'doc',
+              label: 'GCP or AWS via Coherence',
+              id: 'deploy/coherence',
+            },
             {
               type: 'doc',
               label: 'AWS via Flightcontrol',
@@ -180,7 +189,7 @@ module.exports = {
           ],
         },
         'webhooks',
-        'webpack-configuration',
+        'vite-configuration',
       ],
     },
     {

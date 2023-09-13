@@ -2,22 +2,22 @@ import fs from 'fs'
 import path from 'path'
 
 import { types } from '@babel/core'
-import { parse as babelParse, ParserPlugin } from '@babel/parser'
+import type { ParserPlugin } from '@babel/parser'
+import { parse as babelParse } from '@babel/parser'
 import traverse from '@babel/traverse'
 import fg from 'fast-glob'
-import {
+import type {
   DocumentNode,
   FieldNode,
   InlineFragmentNode,
   OperationDefinitionNode,
   OperationTypeNode,
-  parse,
-  visit,
 } from 'graphql'
+import { parse, visit } from 'graphql'
 
-import getRWPaths from './getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 
-export const findCells = (cwd: string = getRWPaths().web.src) => {
+export const findCells = (cwd: string = getPaths().web.src) => {
   const modules = fg.sync('**/*Cell.{js,jsx,ts,tsx}', {
     cwd,
     absolute: true,
@@ -30,7 +30,7 @@ export const isCellFile = (p: string) => {
   const { dir, name } = path.parse(p)
 
   // If the path isn't on the web side it cannot be a cell
-  if (!isFileInsideFolder(p, getRWPaths().web.src)) {
+  if (!isFileInsideFolder(p, getPaths().web.src)) {
     return false
   }
 
@@ -139,7 +139,7 @@ export const fileToAst = (filePath: string): types.Node => {
   // use jsx plugin for web files, because in JS, the .jsx extension is not used
   const isJsxFile =
     path.extname(filePath).match(/[jt]sx$/) ||
-    isFileInsideFolder(filePath, getRWPaths().web.base)
+    isFileInsideFolder(filePath, getPaths().web.base)
 
   const plugins = [
     'typescript',

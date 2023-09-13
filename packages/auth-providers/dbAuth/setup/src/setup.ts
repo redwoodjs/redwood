@@ -1,5 +1,5 @@
 import terminalLink from 'terminal-link'
-import yargs from 'yargs'
+import type yargs from 'yargs'
 
 export const command = 'dbAuth'
 export const description = 'Set up auth for for dbAuth'
@@ -32,6 +32,6 @@ export interface Args {
 }
 
 export const handler = async (options: Args) => {
-  const { handler } = await import('./setupHandler')
+  const { handler } = await import('./setupHandler.js')
   return handler(options)
 }

@@ -4,7 +4,7 @@ import path from 'path'
 import execa from 'execa'
 import { Listr } from 'listr2'
 
-import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
+import { registerApiSideBabelHook } from '@redwoodjs/babel-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {
@@ -57,7 +57,7 @@ const printHeaders = async () => {
     )
   }
 
-  const script = await import(srcPath)
+  const script = require(srcPath)
   await script.default()
 }
 
@@ -124,7 +124,7 @@ export const handler = async ({ provider, id, token, expiry, view }) => {
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {

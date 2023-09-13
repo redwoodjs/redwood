@@ -1,4 +1,4 @@
-import { A } from 'ts-toolbelt'
+import type { A } from 'ts-toolbelt'
 
 /**
  * Use this function to define your scenario.
@@ -94,10 +94,10 @@ export interface DefineScenario {
  * })
  *
  * // Export the StandardScenario type as
- * export StandardScenario = ScenarioSeed<Product, 'product'>
+ * export StandardScenario = ScenarioData<Product, 'product'>
  *
  * // You can also define each of the keys in your scenario, so you get stricter type checking
- * export StandardScenario = ScenarioSeed<Product, 'product', 'shirt'>
+ * export StandardScenario = ScenarioData<Product, 'product', 'shirt'>
  *
  */
 export declare type ScenarioData<

@@ -7,7 +7,7 @@ Having the admin screens at `/admin` is a reasonable thing to do. Let's update t
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 import { Router, Route, Set } from '@redwoodjs/router'
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -95,7 +95,7 @@ Redwood includes [integrations](../../authentication.md) for several of the most
 - [Auth0](https://auth0.com/)
 - [Clerk](https://clerk.dev/)
 - [Netlify Identity](https://docs.netlify.com/visitor-access/identity/)
-- [Firebase's GoogleAuthProvider](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider)
+- [Firebase's GoogleAuthProvider](https://firebase.google.com/docs/reference/js/v8/firebase.auth.GoogleAuthProvider)
 - [Supabase](https://supabase.io/docs/guides/auth)
 - [SuperTokens](https://supertokens.com)
 
@@ -200,7 +200,7 @@ Going to the admin section now prevents a non-logged in user from seeing posts, 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 // highlight-next-line
 import { Private, Router, Route, Set } from '@redwoodjs/router'
 
@@ -490,7 +490,7 @@ And after clicking "Signup" you should end up back on the homepage, where everyt
 
 ![Posts admin](https://user-images.githubusercontent.com/300/146465485-c169a4b8-f398-47ec-8412-4fc15a666976.png)
 
-Awesome! Signing up will automatically log you in (although this behavior [can be changed](../../authentication.md#signuphandler)) and if you look in the code for the `SignupPage` you'll see where the redirect to the homepage takes place (hint: check out line 21).
+Awesome! Signing up will automatically log you in (although this behavior [can be changed](../../auth/dbauth.md#signuphandler)) and if you look in the code for the `SignupPage` you'll see where the redirect to the homepage takes place (hint: check out line 21).
 
 ## Add a Logout Link
 
@@ -501,7 +501,7 @@ Redwood provides a [hook](../../authentication.md#destructuring-the-useauth-hook
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.jsx"
 import { Link, routes } from '@redwoodjs/router'
 
 // highlight-next-line
@@ -598,7 +598,7 @@ At the top right of the page, let's show the email address of the user (if they'
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.jsx"
 import { Link, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'

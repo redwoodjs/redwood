@@ -27,7 +27,7 @@ async function main() {
         '',
         '     STATUS: Options only work if you pass ALL or NONE',
         '',
-        '     This script uses "npm unpublish" and passes "--dry-run" by defaul because safety.',
+        '     This script uses "npm unpublish" and passes "--dry-run" by default because safety.',
         '     Read on if you want to run it for realz...',
         '',
         `packageName [string]`,

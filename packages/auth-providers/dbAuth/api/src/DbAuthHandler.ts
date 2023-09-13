@@ -1,11 +1,11 @@
 import type { PrismaClient } from '@prisma/client'
 import type {
-  GenerateRegistrationOptionsOpts,
   GenerateAuthenticationOptionsOpts,
-  VerifyRegistrationResponseOpts,
-  VerifyAuthenticationResponseOpts,
-  VerifiedRegistrationResponse,
+  GenerateRegistrationOptionsOpts,
   VerifiedAuthenticationResponse,
+  VerifiedRegistrationResponse,
+  VerifyAuthenticationResponseOpts,
+  VerifyRegistrationResponseOpts,
 } from '@simplewebauthn/server'
 import type {
   AuthenticationResponseJSON,
@@ -17,13 +17,8 @@ import CryptoJS from 'crypto-js'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 
-import {
-  CorsConfig,
-  CorsContext,
-  CorsHeaders,
-  createCorsContext,
-  normalizeRequest,
-} from '@redwoodjs/api'
+import type { CorsConfig, CorsContext, CorsHeaders } from '@redwoodjs/api'
+import { createCorsContext, normalizeRequest } from '@redwoodjs/api'
 
 import * as DbAuthError from './errors'
 import {
@@ -31,6 +26,7 @@ import {
   extractCookie,
   getSession,
   hashPassword,
+  hashToken,
   webAuthnSession,
 } from './shared'
 
@@ -116,6 +112,11 @@ interface LoginFlowOptions<TUser = Record<string | number, any>> {
    * How long a user will remain logged in, in seconds
    */
   expires: number
+
+  /**
+   * Allows the user to define if the UserCheck for their selected db provider should use case insensitive
+   */
+  usernameMatch?: string
 }
 
 interface ResetPasswordFlowOptions<TUser = Record<string | number, any>> {
@@ -491,6 +492,9 @@ export class DbAuthHandler<
       const buffer = Buffer.from(token)
       token = buffer.toString('base64').replace('=', '').substring(0, 16)
 
+      // Store the token hash in the database so we can verify it later
+      const tokenHash = hashToken(token)
+
       try {
         // set token and expires time
         user = await this.dbAccessor.update({
@@ -498,7 +502,7 @@ export class DbAuthHandler<
             [this.options.authFields.id]: user[this.options.authFields.id],
           },
           data: {
-            [this.options.authFields.resetToken]: token,
+            [this.options.authFields.resetToken]: tokenHash,
             [this.options.authFields.resetTokenExpiresAt]: tokenExpires,
           },
         })
@@ -506,6 +510,9 @@ export class DbAuthHandler<
         throw new DbAuthError.GenericError()
       }
 
+      // Temporarily set the token on the user back to the raw token so it's
+      // available to the handler.
+      user.resetToken = token
       // call user-defined handler in their functions/auth.js
       const response = await (
         this.options.forgotPassword as ForgotPasswordFlowOptions
@@ -1150,9 +1157,11 @@ export class DbAuthHandler<
         (this.options.forgotPassword as ForgotPasswordFlowOptions).expires
     )
 
+    const tokenHash = hashToken(token)
+
     const user = await this.dbAccessor.findFirst({
       where: {
-        [this.options.authFields.resetToken]: token,
+        [this.options.authFields.resetToken]: tokenHash,
       },
     })
 
@@ -1214,11 +1223,16 @@ export class DbAuthHandler<
       )
     }
 
+    const usernameMatchFlowOption = (this.options.login as LoginFlowOptions)
+      ?.usernameMatch
+    const findUniqueUserMatchCriteriaOptions =
+      this._getUserMatchCriteriaOptions(username, usernameMatchFlowOption)
     let user
+
     try {
       // does user exist?
-      user = await this.dbAccessor.findUnique({
-        where: { [this.options.authFields.username]: username },
+      user = await this.dbAccessor.findFirst({
+        where: findUniqueUserMatchCriteriaOptions,
       })
     } catch (e) {
       throw new DbAuthError.GenericError()
@@ -1287,19 +1301,10 @@ export class DbAuthHandler<
       this._validateField('username', username) &&
       this._validateField('password', password)
     ) {
-      // Each db provider has it owns rules for case insensitive comparison.
-      // We are checking if you have defined one for your db choice here
-      // https://www.prisma.io/docs/concepts/components/prisma-client/case-sensitivity
       const usernameMatchFlowOption = (this.options.signup as SignupFlowOptions)
         ?.usernameMatch
-      const findUniqueUserMatchCriteriaOptions = !usernameMatchFlowOption
-        ? { [this.options.authFields.username]: username }
-        : {
-            [this.options.authFields.username]: {
-              equals: username,
-              mode: usernameMatchFlowOption,
-            },
-          }
+      const findUniqueUserMatchCriteriaOptions =
+        this._getUserMatchCriteriaOptions(username, usernameMatchFlowOption)
 
       const user = await this.dbAccessor.findFirst({
         where: findUniqueUserMatchCriteriaOptions,
@@ -1343,9 +1348,9 @@ export class DbAuthHandler<
   }
 
   // checks that a single field meets validation requirements and
-  // currently checks for presense only
+  // currently checks for presence only
   _validateField(name: string, value: string | undefined): value is string {
-    // check for presense
+    // check for presence
     if (!value || value.trim() === '') {
       throw new DbAuthError.FieldRequiredError(
         name,
@@ -1429,5 +1434,24 @@ export class DbAuthHandler<
         ...corsHeaders,
       },
     }
+  }
+
+  _getUserMatchCriteriaOptions(
+    username: string,
+    usernameMatchFlowOption: string | undefined
+  ) {
+    // Each db provider has it owns rules for case insensitive comparison.
+    // We are checking if you have defined one for your db choice here
+    // https://www.prisma.io/docs/concepts/components/prisma-client/case-sensitivity
+    const findUniqueUserMatchCriteriaOptions = !usernameMatchFlowOption
+      ? { [this.options.authFields.username]: username }
+      : {
+          [this.options.authFields.username]: {
+            equals: username,
+            mode: usernameMatchFlowOption,
+          },
+        }
+
+    return findUniqueUserMatchCriteriaOptions
   }
 }

@@ -5,8 +5,6 @@
  * @see prisma/codemods {@link https://github.com/prisma/codemods/blob/main/utils/runner.ts}
  * @see react-codemod {@link https://github.com/reactjs/react-codemod/blob/master/bin/cli.js}
  */
-
-// @ts-expect-error We don't have this in types but need for workaround https://github.com/facebook/jscodeshift/issues/398
 import * as jscodeshift from 'jscodeshift/src/Runner'
 
 const defaultJscodeshiftOpts = {
@@ -48,6 +46,12 @@ export const runTransform = async ({
   options = {},
 }: RunTransform) => {
   try {
+    // We have to do this here for the tests, because jscodeshift.run actually spawns
+    // a different process. If we use getPaths() in the transform, it would not find redwood.toml
+    if (process.env.NODE_ENV === 'test' && process.env.RWJS_CWD) {
+      process.chdir(process.env.RWJS_CWD)
+    }
+
     await jscodeshift.run(transformPath, targetPaths, {
       ...defaultJscodeshiftOpts,
       parser,

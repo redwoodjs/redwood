@@ -2,14 +2,13 @@
 /* eslint-env node, es6*/
 //@ts-check
 const fs = require('fs')
-const os = require('os')
 const path = require('path')
 
 const chalk = require('chalk')
 const execa = require('execa')
 const fse = require('fs-extra')
 const Listr = require('listr2').Listr
-const rimraf = require('rimraf')
+const { rimraf } = require('rimraf')
 const { hideBin } = require('yargs/helpers')
 const yargs = require('yargs/yargs')
 
@@ -26,12 +25,6 @@ const {
 
 const args = yargs(hideBin(process.argv))
   .usage('Usage: $0 <project directory> [option]')
-  .option('typescript', {
-    alias: 'ts',
-    default: false,
-    type: 'boolean',
-    describe: 'Generate a TypeScript project. JavaScript by default.',
-  })
   .option('link', {
     default: false,
     type: 'boolean',
@@ -50,6 +43,7 @@ const args = yargs(hideBin(process.argv))
   })
   .option('rebuildFixture', {
     default: false,
+    hidden: true,
     type: 'boolean',
     describe: 'Rebuild __fixtures__/test-project',
   })
@@ -64,28 +58,37 @@ const args = yargs(hideBin(process.argv))
     describe:
       'Upgrade project to latest canary version. NOT compatible with --link.',
   })
-  .option('yarn1', {
+  .option('javascript', {
     default: false,
     type: 'boolean',
-    describe: 'Use yarn 1 instead of yarn 3',
+    describe: 'Build a Javascript project.',
   })
   .help()
   .parseSync()
 
 const {
-  typescript,
   canary,
   link,
   verbose,
   clean,
   copyFromFixture,
   rebuildFixture,
-  yarn1,
+  javascript,
 } = args
+
+if (rebuildFixture) {
+  console.log(
+    chalk.red.bold(
+      `
+      --rebuildFixture is deprecated. Please run \`yarn rebuild-test-project-fixture\` instead.
+      `
+    )
+  )
+}
 
 // Do not use demandCommand because rebuildFixture doesn't require <project directory>
 // Require 1 and only 1 arg if not rebuildFixture
-if (!rebuildFixture && args._.length > 1) {
+if (args._.length > 1) {
   console.log(
     chalk.red.bold(
       `
@@ -96,7 +99,7 @@ if (!rebuildFixture && args._.length > 1) {
     )
   )
   process.exit(1)
-} else if (!rebuildFixture && args._.length < 1) {
+} else if (args._.length < 1) {
   console.log(
     chalk.red.bold(
       `
@@ -109,14 +112,7 @@ if (!rebuildFixture && args._.length > 1) {
   process.exit(1)
 }
 
-const OUTPUT_PROJECT_PATH = rebuildFixture
-  ? path.join(
-      os.tmpdir(),
-      'redwood-test-project',
-      // ":" is problematic with paths
-      new Date().toISOString().split(':').join('-')
-    )
-  : path.resolve(String(args._))
+const OUTPUT_PROJECT_PATH = path.resolve(String(args._))
 
 const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
 
@@ -144,7 +140,7 @@ const createProject = async () => {
     await rimraf(OUTPUT_PROJECT_PATH)
   }
 
-  let cmd = `yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
+  let cmd = `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
 
   // We create a ts project and convert using ts-to-js at the end if typescript flag is false
   return execa(
@@ -155,7 +151,7 @@ const createProject = async () => {
 }
 
 const copyProject = async () => {
-  if (clean && !rebuildFixture) {
+  if (clean) {
     await rimraf(OUTPUT_PROJECT_PATH)
   }
 
@@ -164,19 +160,10 @@ const copyProject = async () => {
     '__fixtures__/test-project'
   )
 
-  if (rebuildFixture) {
-    // remove existing Fixture
-    await rimraf(FIXTURE_TESTPROJ_PATH)
-    // copy from tempDir to Fixture dir
-    await fse.copy(OUTPUT_PROJECT_PATH, FIXTURE_TESTPROJ_PATH)
-    // cleanup after ourselves
-    await rimraf(OUTPUT_PROJECT_PATH)
-  } else {
-    // copying existing Fixture to new Project
-    await fse.copy(FIXTURE_TESTPROJ_PATH, OUTPUT_PROJECT_PATH)
-    // Make sure no lockfiles are accidentally copied
-    fse.remove(path.join(OUTPUT_PROJECT_PATH, 'yarn.lock'))
-  }
+  // copying existing Fixture to new Project
+  await fse.copy(FIXTURE_TESTPROJ_PATH, OUTPUT_PROJECT_PATH)
+  // Make sure no lockfiles are accidentally copied
+  fse.remove(path.join(OUTPUT_PROJECT_PATH, 'yarn.lock'))
 }
 
 const globalTasks = () =>
@@ -185,7 +172,7 @@ const globalTasks = () =>
       {
         title: 'Creating project',
         task: (_ctx, task) => {
-          if (copyFromFixture && !rebuildFixture) {
+          if (copyFromFixture) {
             task.output =
               'Copying test-project from __fixtures__/test-project...'
             return copyProject()
@@ -213,69 +200,36 @@ const globalTasks = () =>
             throw new Error('Failed to build framework')
           }
         },
-        enabled: () => link || rebuildFixture,
+        enabled: () => link,
       },
       {
         title: '[link] Adding framework dependencies to project',
         task: () =>
           addFrameworkDepsToProject(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
-        enabled: () => link || rebuildFixture,
-      },
-      {
-        title: 'Setting yarn version to 1',
-        task: async () => {
-          await execa(
-            'yarn set version classic',
-            [],
-            getExecaOptions(OUTPUT_PROJECT_PATH)
-          )
-        },
-        enabled: () => yarn1,
+        enabled: () => link,
       },
       {
         title: 'Installing node_modules',
         task: async () => {
-          return execa(
-            'yarn install',
-            yarn1 &&
-              ['--non-interactive', !verbose && '--silent'].filter(Boolean), // pass flags if using Yarn v1
-            getExecaOptions(OUTPUT_PROJECT_PATH)
-          )
+          return execa('yarn install', getExecaOptions(OUTPUT_PROJECT_PATH))
         },
-      },
-      {
-        title: 'Updating ports in redwood.toml...',
-        task: () => {
-          // We do this, to make it easier to run multiple test projects in parallel
-          // But on different ports. If API_DEV_PORT or WEB_DEV_PORT aren't supplied,
-          // It just defaults to 8910 and 8911
-          // This is helpful in playwright smoke tests to allow us to parallelize
-          const REDWOOD_TOML_PATH = path.join(
-            OUTPUT_PROJECT_PATH,
-            'redwood.toml'
-          )
-          const redwoodToml = fs.readFileSync(REDWOOD_TOML_PATH).toString()
-          let newRedwoodToml = redwoodToml
-
-          newRedwoodToml = newRedwoodToml.replace(
-            /\port = 8910/,
-            'port = "${WEB_DEV_PORT:8910}"'
-          )
-
-          newRedwoodToml = newRedwoodToml.replace(
-            /\port = 8911/,
-            'port = "${API_DEV_PORT:8911}"'
-          )
-
-          fs.writeFileSync(REDWOOD_TOML_PATH, newRedwoodToml)
-        },
-        enabled: () => rebuildFixture,
       },
       {
         title: '[link] Copying framework packages to project',
         task: () =>
           copyFrameworkPackages(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
-        enabled: () => link || rebuildFixture,
+        enabled: () => link,
+      },
+      {
+        title: 'Converting to Javascript',
+        task: () => {
+          return execa(
+            'yarn rw ts-to-js',
+            [],
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
+        },
+        enabled: () => javascript,
       },
       {
         title: '[link] Add rwfw project:copy postinstall',
@@ -287,7 +241,7 @@ const globalTasks = () =>
             },
           })
         },
-        enabled: () => link || rebuildFixture, // Note that we undo this when we rebuildFixture at the end
+        enabled: () => link,
       },
       {
         title: 'Upgrading to latest canary version',
@@ -298,32 +252,32 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-        enabled: () => canary && !link && !rebuildFixture,
+        enabled: () => canary && !link,
       },
       {
         title: 'Apply web codemods',
         task: () =>
           webTasks(OUTPUT_PROJECT_PATH, {
             verbose,
-            linkWithLatestFwBuild: link || rebuildFixture,
+            linkWithLatestFwBuild: link,
           }),
-        enabled: () => !copyFromFixture || rebuildFixture,
+        enabled: () => !copyFromFixture,
       },
       {
         title: 'Apply api codemods',
         task: () =>
           apiTasks(OUTPUT_PROJECT_PATH, {
             verbose,
-            linkWithLatestFwBuild: link || rebuildFixture,
+            linkWithLatestFwBuild: link,
           }),
-        enabled: () => !copyFromFixture || rebuildFixture,
+        enabled: () => !copyFromFixture,
       },
       {
         title: 'Generate dbAuth Secret',
         task: async () => {
           const { stdout: dbAuthSecret } = await execa(
             'yarn',
-            [yarn1 && '--silent', 'rw', 'g', 'secret', '--raw'].filter(Boolean),
+            ['rw', 'g', 'secret', '--raw'],
             {
               ...getExecaOptions(OUTPUT_PROJECT_PATH),
               stdio: 'pipe',
@@ -335,7 +289,6 @@ const globalTasks = () =>
             `SESSION_SECRET=${dbAuthSecret}`
           )
         },
-        enabled: () => !rebuildFixture,
       },
       {
         title: 'Running prisma migrate reset',
@@ -346,21 +299,6 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-      },
-      {
-        title: 'Convert to JS',
-        task: async (_ctx, task) => {
-          if (!rebuildFixture) {
-            return execa(
-              'yarn rw ts-to-js',
-              [],
-              getExecaOptions(OUTPUT_PROJECT_PATH)
-            )
-          } else {
-            task.output = 'Rebuilding Fixture: skip ts-to-js'
-          }
-        },
-        enabled: () => !typescript,
       },
       {
         title: 'Lint --fix all the things',
@@ -379,38 +317,7 @@ const globalTasks = () =>
             // nothing to see here
           }
         },
-        enabled: () => rebuildFixture || !copyFromFixture,
-      },
-      {
-        title: '[Rebuild Fixture] Replace and Cleanup Fixture',
-        task: async () => {
-          // @TODO: This only works on UNIX, we should use path.join everywhere
-          // remove all .gitignore
-          await rimraf(`${OUTPUT_PROJECT_PATH}/.redwood`)
-          await rimraf(`${OUTPUT_PROJECT_PATH}/api/db/dev.db`)
-          await rimraf(`${OUTPUT_PROJECT_PATH}/api/db/dev.db-journal`)
-          await rimraf(`${OUTPUT_PROJECT_PATH}/api/dist`)
-          await rimraf(`${OUTPUT_PROJECT_PATH}/node_modules`)
-          await rimraf(`${OUTPUT_PROJECT_PATH}/web/node_modules`)
-          await rimraf(`${OUTPUT_PROJECT_PATH}/.env`)
-          await rimraf(`${OUTPUT_PROJECT_PATH}/yarn.lock`)
-
-          // Copy over package.json from template, so we remove the extra dev dependencies, and rwfw postinstall script
-          // that we added in "Adding framework dependencies to project"
-          await rimraf(`${OUTPUT_PROJECT_PATH}/package.json`)
-          fs.copyFileSync(
-            path.join(
-              __dirname,
-              '../../packages/create-redwood-app/template/package.json'
-            ),
-            path.join(OUTPUT_PROJECT_PATH, 'package.json')
-          )
-
-          // removes existing Fixture and replaces with newly built project,
-          // then removes new Project temp directory
-          copyProject()
-        },
-        enabled: () => rebuildFixture,
+        enabled: () => !copyFromFixture,
       },
       {
         title: 'All done!',
@@ -433,7 +340,7 @@ const globalTasks = () =>
     {
       exitOnError: true,
       renderer: verbose && 'verbose',
-      renderOptions: { collapse: false },
+      renderOptions: { collapseSubtasks: false },
     }
   )
 

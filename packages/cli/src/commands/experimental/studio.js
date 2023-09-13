@@ -1,36 +1,26 @@
-import terminalLink from 'terminal-link'
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { isModuleInstalled, installRedwoodModule } from '../../lib/packages'
+import { getEpilogue } from './util'
 
 export const command = 'studio'
 export const description = 'Run the Redwood development studio'
 
-export const builder = (yargs) => {
-  yargs.epilogue(
-    `Also see the ${terminalLink(
-      'Redwood CLI Reference',
-      'https://redwoodjs.com/docs/cli-commands#studio'
-    )}`
-  )
+export const EXPERIMENTAL_TOPIC_ID = 4771
+
+export function builder(yargs) {
+  yargs
+    .option('open', {
+      default: true,
+      description: 'Open the studio in your browser',
+    })
+    .epilogue(getEpilogue(command, description, EXPERIMENTAL_TOPIC_ID, true))
 }
 
-export const handler = async () => {
-  try {
-    // Check the module is installed
-    if (!isModuleInstalled('@redwoodjs/studio')) {
-      console.log(
-        'The studio package is not installed, installing it for you, this may take a moment...'
-      )
-      await installRedwoodModule('@redwoodjs/studio')
-      console.log('Studio package installed successfully.')
-    }
-
-    // Import studio and start it
-    const { start } = await import('@redwoodjs/studio')
-    await start()
-  } catch (e) {
-    console.log('Cannot start the development studio')
-    console.log(e)
-    process.exit(1)
-  }
+export async function handler(options) {
+  recordTelemetryAttributes({
+    command: 'experimental studio',
+    open: options.open,
+  })
+  const { handler } = await import('./studioHandler.js')
+  return handler(options)
 }

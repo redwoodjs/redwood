@@ -6,8 +6,8 @@ import latestVersion from 'latest-version'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/project-config'
-import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
@@ -48,27 +48,29 @@ export const builder = (yargs) => {
     })
     .epilogue(
       `Also see the ${terminalLink(
-        'Redwood CLI Reference',
+        'Redwood CLI Reference for the upgrade command',
         'https://redwoodjs.com/docs/cli-commands#upgrade'
-      )}`
-    )
-    // Just to make an empty line
-    .epilogue('')
-    .epilogue(
-      `We are < v1.0.0, so breaking changes occur frequently. For more information on the current release, see the ${terminalLink(
-        'release page',
+      )}.\nAnd the ${terminalLink(
+        'GitHub releases page',
         'https://github.com/redwoodjs/redwood/releases'
-      )}`
+      )} for more information on the current release.`
     )
 }
 
 // Used in yargs builder to coerce tag AND to parse yarn version
 const SEMVER_REGEX =
   /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i
+
+const isValidSemver = (string) => {
+  return SEMVER_REGEX.test(string)
+}
+
+const isValidRedwoodJSTag = (tag) => {
+  return ['rc', 'canary', 'latest', 'next', 'experimental'].includes(tag)
+}
+
 export const validateTag = (tag) => {
-  const isTagValid =
-    ['rc', 'canary', 'latest', 'next', 'experimental'].includes(tag) ||
-    SEMVER_REGEX.test(tag)
+  const isTagValid = isValidSemver(tag) || isValidRedwoodJSTag(tag)
 
   if (!isTagValid) {
     // Stop execution
@@ -83,6 +85,14 @@ export const validateTag = (tag) => {
 }
 
 export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
+  recordTelemetryAttributes({
+    command: 'upgrade',
+    dryRun,
+    tag,
+    verbose,
+    dedupe,
+  })
+
   // structuring as nested tasks to avoid bug with task.title causing duplicates
   const tasks = new Listr(
     [
@@ -91,9 +101,15 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         task: async (ctx) => setLatestVersionToContext(ctx, tag),
       },
       {
-        title: 'Updating your project package.json(s)',
+        title: 'Updating your Redwood version',
         task: (ctx) => updateRedwoodDepsForAllSides(ctx, { dryRun, verbose }),
         enabled: (ctx) => !!ctx.versionToUpgradeTo,
+      },
+      {
+        title: 'Updating other packages in your package.json(s)',
+        task: (ctx) =>
+          updatePackageVersionsFromTemplate(ctx, { dryRun, verbose }),
+        enabled: (ctx) => ctx.versionToUpgradeTo?.includes('canary'),
       },
       {
         title: 'Running yarn install',
@@ -136,17 +152,12 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
           if (tag) {
             const additionalMessages = []
             // Reminder to update the `notifications.versionUpdates` TOML option
-            if (!getConfig().notifications.versionUpdates.includes(tag)) {
+            if (
+              !getConfig().notifications.versionUpdates.includes(tag) &&
+              isValidRedwoodJSTag(tag)
+            ) {
               additionalMessages.push(
                 `   ❖ You may want to update your redwood.toml config so that \`notifications.versionUpdates\` includes "${tag}"\n`
-              )
-            }
-            // Notify about React17/18 issue on the current canary
-            if (tag === 'canary') {
-              additionalMessages.push(
-                `   ❖ If you just upgraded a new project then it may be broken.\n    ${c.info(
-                  `->`
-                )} To fix this you have to manually update your web/package.json to use React 18 and then run \`yarn install\`\n`
               )
             }
             // Append additional messages with a header
@@ -161,16 +172,13 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         },
       },
     ],
-    { renderer: verbose && 'verbose', rendererOptions: { collapse: false } }
+    {
+      renderer: verbose && 'verbose',
+      rendererOptions: { collapseSubtasks: false },
+    }
   )
 
-  try {
-    await tasks.run()
-  } catch (e) {
-    errorTelemetry(process.argv, e.message)
-    console.error(c.error(e.message))
-    process.exit(e?.exitCode || 1)
-  }
+  await tasks.run()
 }
 async function yarnInstall({ verbose }) {
   const yarnVersion = await getCmdMajorVersion('yarn')
@@ -264,6 +272,83 @@ function updateRedwoodDepsForAllSides(ctx, options) {
         title: `Updating ${pkgJsonPath}`,
         task: () =>
           updatePackageJsonVersion(basePath, ctx.versionToUpgradeTo, options),
+        skip: () => !fs.existsSync(pkgJsonPath),
+      }
+    })
+  )
+}
+
+async function updatePackageVersionsFromTemplate(ctx, { dryRun, verbose }) {
+  if (!ctx.versionToUpgradeTo) {
+    throw new Error('Failed to upgrade')
+  }
+
+  const packageJsons = [
+    {
+      basePath: getPaths().base,
+      url: 'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/templates/ts/package.json',
+    },
+    {
+      basePath: getPaths().api.base,
+      url: 'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/templates/ts/api/package.json',
+    },
+    {
+      basePath: getPaths().web.base,
+      url: 'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/templates/ts/web/package.json',
+    },
+  ]
+
+  return new Listr(
+    packageJsons.map(({ basePath, url }) => {
+      const pkgJsonPath = path.join(basePath, 'package.json')
+
+      return {
+        title: `Updating ${pkgJsonPath}`,
+        task: async () => {
+          const res = await fetch(url)
+          const text = await res.text()
+          const templatePackageJson = JSON.parse(text)
+
+          const localPackageJsonText = fs.readFileSync(pkgJsonPath, 'utf-8')
+          const localPackageJson = JSON.parse(localPackageJsonText)
+
+          Object.entries(templatePackageJson.dependencies || {}).forEach(
+            ([depName, depVersion]) => {
+              // Redwood packages are handled in another task
+              if (!depName.startsWith('@redwoodjs/')) {
+                if (verbose || dryRun) {
+                  console.log(
+                    ` - ${depName}: ${localPackageJson.dependencies[depName]} => ${depVersion}`
+                  )
+                }
+
+                localPackageJson.dependencies[depName] = depVersion
+              }
+            }
+          )
+
+          Object.entries(templatePackageJson.devDependencies || {}).forEach(
+            ([depName, depVersion]) => {
+              // Redwood packages are handled in another task
+              if (!depName.startsWith('@redwoodjs/')) {
+                if (verbose || dryRun) {
+                  console.log(
+                    ` - ${depName}: ${localPackageJson.devDependencies[depName]} => ${depVersion}`
+                  )
+                }
+
+                localPackageJson.devDependencies[depName] = depVersion
+              }
+            }
+          )
+
+          if (!dryRun) {
+            fs.writeFileSync(
+              pkgJsonPath,
+              JSON.stringify(localPackageJson, null, 2)
+            )
+          }
+        },
         skip: () => !fs.existsSync(pkgJsonPath),
       }
     })

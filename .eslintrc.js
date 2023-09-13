@@ -1,11 +1,11 @@
 const path = require('path')
 
-const findUp = require('findup-sync')
+const { findUp } = require('@redwoodjs/project-config')
 
 // Framework Babel config is monorepo root ./babel.config.js
-// `yarn lint` runs for each workspace, which needs findup for path to root
+// `yarn lint` runs for each workspace, which needs findUp for path to root
 const findBabelConfig = (cwd = process.cwd()) => {
-  const configPath = findUp('babel.config.js', { cwd })
+  const configPath = findUp('babel.config.js', cwd)
   if (!configPath) {
     throw new Error(`Eslint-parser could not find a "babel.config.js" file`)
   }
@@ -23,7 +23,8 @@ module.exports = {
   ignorePatterns: [
     'dist',
     'fixtures',
-    'packages/internal/src/build/babelPlugins/__tests__/__fixtures__/**/*',
+    'packages/babel-config/src/plugins/__tests__/__fixtures__/**/*',
+    'packages/babel-config/src/__tests__/__fixtures__/**/*',
     'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
     'packages/core/config/storybook/**/*',
@@ -32,6 +33,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
     curly: 'error',
+    '@typescript-eslint/consistent-type-imports': 'error',
   },
   env: {
     // We use the most modern environment available. Then we rely on Babel to
@@ -169,6 +171,17 @@ module.exports = {
               'To prevent bloat in CLI, do not require "@redwoodjs/internal" directly. Instead require like @redwoodjs/internal/dist/<file>',
           },
         ],
+      },
+    },
+    // Allow computed member access on process.env in NodeJS contexts and tests
+    {
+      files: [
+        'packages/core/config/webpack.common.js',
+        'packages/testing/**',
+        'packages/vite/src/index.ts',
+      ],
+      rules: {
+        '@redwoodjs/process-env-computed': 'off',
       },
     },
   ],

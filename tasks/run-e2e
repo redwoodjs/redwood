@@ -49,17 +49,16 @@ const buildRedwoodFramework = () => {
   }
 }
 
-const createRedwoodJSApp = ({ yarn1 }) => {
+const createRedwoodJSApp = ({ typescript, bundler }) => {
   try {
     execa.sync(
-      'yarn babel-node src/create-redwood-app.js',
+      'yarn node dist/create-redwood-app.js',
       [
         REDWOOD_PROJECT_DIRECTORY,
         '--no-yarn-install',
-        '--typescript',
+        `--typescript ${typescript}`,
         '--no-telemetry',
         '--no-git',
-        yarn1 && '--yarn1',
       ].filter(Boolean),
       {
         cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),
@@ -84,9 +83,22 @@ const createRedwoodJSApp = ({ yarn1 }) => {
       '@prisma/client': getVersionFrmRwPkg('@prisma/client', 'api'),
       '@prisma/internals': getVersionFrmRwPkg('@prisma/internals', 'cli'),
       'graphql-yoga': getVersionFrmRwPkg('graphql-yoga', 'graphql-server'),
+      graphql: getVersionFrmRwPkg('graphql', 'graphql-server'),
     }
 
     fs.writeFileSync(packageJSONPath, JSON.stringify(packageJSON, null, 2))
+
+    if (bundler === 'webpack') {
+      const redwoodTOMLPath = path.join(
+        REDWOOD_PROJECT_DIRECTORY,
+        'redwood.toml'
+      )
+      const redwoodTOML = fs.readFileSync(redwoodTOMLPath, 'utf-8')
+      fs.writeFileSync(
+        redwoodTOMLPath,
+        redwoodTOML.replace('[web]\n', '[web]\n  bundler = "webpack"\n')
+      )
+    }
   } catch (e) {
     if (e.signal !== 'SIGINT') {
       console.error('Error: Could not create Redwood Project')
@@ -148,23 +160,6 @@ const runYarnInstall = () => {
   } catch (e) {
     if (e.signal !== 'SIGINT') {
       console.error('Error: Could not run `yarn install`')
-      console.error(e)
-    }
-    process.exit(1)
-  }
-}
-
-const convertProjectToJavaScript = () => {
-  try {
-    execa.sync('yarn rw ts-to-js', {
-      cwd: REDWOOD_PROJECT_DIRECTORY,
-      shell: true,
-      env: { REDWOOD_CI: '1' },
-      stdio: 'inherit',
-    })
-  } catch (e) {
-    if (e.signal !== 'SIGINT') {
-      console.error('Could not convert the TypeScript app to JavaScript')
       console.error(e)
     }
     process.exit(1)
@@ -249,8 +244,12 @@ const args = yargs(hideBin(process.argv))
   .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
   .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
-  .option('yarn1', { default: false, type: 'boolean' })
   .option('clean-files', { default: true, type: 'boolean' })
+  .option('bundler', {
+    default: 'vite',
+    type: 'string',
+    choices: ['vite', 'webpack'],
+  })
   .scriptName('run-e2e')
   .example('run-e2e')
   .example('run-e2e /tmp/redwood-app --ts')
@@ -279,17 +278,16 @@ let {
   copyFramework,
   createProject,
   typescript,
+  bundler,
   autoStart,
-  yarn1,
   cleanFiles,
 } = args
 const tasks = [
   buildFramework && buildRedwoodFramework,
-  createProject && (() => createRedwoodJSApp({ yarn1 })),
+  createProject && (() => createRedwoodJSApp({ typescript, bundler })),
   copyFramework && addFrameworkDepsToProject,
   copyFramework && runYarnInstall,
   copyFramework && copyFrameworkPackages,
-  !typescript && convertProjectToJavaScript,
   autoStart && runDevServerInBackground,
   autoStart && initGit,
   autoStart && runCypress,

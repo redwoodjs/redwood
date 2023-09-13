@@ -6,6 +6,7 @@ import fs from 'fs'
 import path from 'path'
 
 import c from 'ansi-colors'
+import chalk from 'chalk'
 import chokidar from 'chokidar'
 import dotenv from 'dotenv'
 import { debounce } from 'lodash'
@@ -14,7 +15,12 @@ import yargs from 'yargs/yargs'
 
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
-import { getPaths, ensurePosixPath, getConfig } from '@redwoodjs/project-config'
+import {
+  getPaths,
+  ensurePosixPath,
+  getConfig,
+  resolveFile,
+} from '@redwoodjs/project-config'
 
 const argv = yargs(hideBin(process.argv))
   .option('debug-port', {
@@ -104,11 +110,30 @@ const rebuildApiServer = () => {
     const port = argv.port ?? getConfig().api.port
 
     // Start API server
-    httpServerProcess = fork(
-      path.join(__dirname, 'index.js'),
-      ['api', '--port', port.toString()],
-      forkOpts
-    )
+
+    // Check if experimental server file exists
+    const serverFile = resolveFile(`${rwjsPaths.api.dist}/server`)
+    if (serverFile) {
+      const separator = chalk.hex('#ff845e')(
+        '------------------------------------------------------------------'
+      )
+      console.log(
+        [
+          separator,
+          `🧪 ${chalk.green('Experimental Feature')} 🧪`,
+          separator,
+          'Using the experimental API server file at api/dist/server.js',
+          separator,
+        ].join('\n')
+      )
+      httpServerProcess = fork(serverFile, [], forkOpts)
+    } else {
+      httpServerProcess = fork(
+        path.join(__dirname, 'index.js'),
+        ['api', '--port', port.toString()],
+        forkOpts
+      )
+    }
   } catch (e) {
     console.error(e)
   }

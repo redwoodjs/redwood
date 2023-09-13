@@ -1,6 +1,7 @@
 import type SuperTokens from 'supertokens-auth-react'
 
-import { createAuthentication, CurrentUser } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
+import { createAuthentication } from '@redwoodjs/auth'
 
 export interface SuperTokensUser {
   userId: string
@@ -11,6 +12,7 @@ export type SessionRecipe = {
   signOut: () => Promise<void>
   doesSessionExist: () => Promise<boolean>
   getAccessTokenPayloadSecurely: () => Promise<any>
+  getAccessToken: () => Promise<any>
   getUserId: () => Promise<string>
 }
 
@@ -47,10 +49,7 @@ function createAuthImplementation(superTokens: SuperTokensAuth) {
     },
     getToken: async (): Promise<string | null> => {
       if (await superTokens.sessionRecipe.doesSessionExist()) {
-        const accessTokenPayload =
-          await superTokens.sessionRecipe.getAccessTokenPayloadSecurely()
-        const jwtPropertyName = accessTokenPayload['_jwtPName']
-        return accessTokenPayload[jwtPropertyName]
+        return superTokens.sessionRecipe.getAccessToken()
       } else {
         return null
       }

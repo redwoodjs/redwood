@@ -9,7 +9,13 @@ export type { Decoded }
 const AUTH_PROVIDER_HEADER = 'auth-provider'
 
 export const getAuthProviderHeader = (event: APIGatewayProxyEvent) => {
-  return event?.headers[AUTH_PROVIDER_HEADER]
+  const authProviderKey = Object.keys(event?.headers ?? {}).find(
+    (key) => key.toLowerCase() === AUTH_PROVIDER_HEADER
+  )
+  if (authProviderKey) {
+    return event?.headers[authProviderKey]
+  }
+  return undefined
 }
 
 export interface AuthorizationHeader {

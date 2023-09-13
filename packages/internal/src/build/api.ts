@@ -4,11 +4,13 @@ import path from 'path'
 import * as esbuild from 'esbuild'
 import { removeSync } from 'fs-extra'
 
+import {
+  getApiSideBabelPlugins,
+  prebuildApiFile,
+} from '@redwoodjs/babel-config'
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import { findApiFiles } from '../files'
-
-import { getApiSideBabelPlugins, prebuildApiFile } from './babel/api'
 
 export const buildApi = () => {
   // TODO: Be smarter about caching and invalidating files,
@@ -36,7 +38,6 @@ export const cleanApiBuild = () => {
 export const prebuildApiFiles = (srcFiles: string[]) => {
   const rwjsPaths = getPaths()
   const plugins = getApiSideBabelPlugins({
-    forJest: false,
     openTelemetry: getConfig().experimental.opentelemetry.enabled,
   })
 
@@ -68,7 +69,7 @@ export const transpileApi = (files: string[], options = {}) => {
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',
-    target: 'node16',
+    target: 'node18',
     format: 'cjs',
     bundle: false,
     outdir: rwjsPaths.api.dist,

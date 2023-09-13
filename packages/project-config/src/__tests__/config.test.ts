@@ -1,6 +1,26 @@
 import path from 'path'
 
-import { getConfig } from '../config'
+import { getConfig, getRawConfig } from '../config'
+
+describe('getRawConfig', () => {
+  it('returns nothing for an empty config', () => {
+    const config = getRawConfig(
+      path.join(__dirname, './fixtures/redwood.empty.toml')
+    )
+    expect(config).toMatchInlineSnapshot(`{}`)
+  })
+
+  it('returns only the defined values', () => {
+    const config = getRawConfig(path.join(__dirname, './fixtures/redwood.toml'))
+    expect(config).toMatchInlineSnapshot(`
+      {
+        "web": {
+          "port": 8888,
+        },
+      }
+    `)
+  })
+})
 
 describe('getConfig', () => {
   it('returns a default config', () => {
@@ -23,8 +43,25 @@ describe('getConfig', () => {
           "open": false,
         },
         "experimental": {
+          "cli": {
+            "autoInstall": true,
+            "plugins": [
+              {
+                "package": "@redwoodjs/cli-storybook",
+              },
+              {
+                "package": "@redwoodjs/cli-data-migrate",
+              },
+            ],
+          },
           "opentelemetry": {
             "apiSdk": undefined,
+            "enabled": false,
+          },
+          "rsc": {
+            "enabled": false,
+          },
+          "streamingSsr": {
             "enabled": false,
           },
           "studio": {
@@ -40,6 +77,7 @@ describe('getConfig', () => {
             },
             "inMemory": false,
           },
+          "useSDLCodeGenForGraphQLTypes": false,
         },
         "generate": {
           "nestScaffoldByModel": true,
@@ -52,7 +90,7 @@ describe('getConfig', () => {
         "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
-          "bundler": "webpack",
+          "bundler": "vite",
           "fastRefresh": true,
           "host": "localhost",
           "includeEnvironmentVariables": [],
@@ -142,14 +180,14 @@ describe('getConfig', () => {
       path.join(__dirname, './fixtures/redwood.withEnv.toml')
     )
 
-    // Fallsback to the defualt if env var not supplied
+    // Fallsback to the default if env var not supplied
     expect(config.web.port).toBe('8910') // remember env vars have to be strings
 
     // Uses the env var if supplied
     expect(config.web.apiUrl).toBe('/bazinga')
     expect(config.web.title).toBe('App running on staging')
 
-    delete process.env['API_URL']
-    delete process.env['APP_ENV']
+    delete process.env.API_URL
+    delete process.env.APP_ENV
   })
 })
