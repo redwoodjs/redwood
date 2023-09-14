@@ -37,7 +37,7 @@ describe('command information caching', () => {
   beforeEach(() => {
     getPaths.mockReturnValue({
       generated: {
-        base: '/mocked/project/generated',
+        base: '',
       },
     })
   })
@@ -70,7 +70,7 @@ describe('command information caching', () => {
       },
     }
     fs.__setMockFiles({
-      ['/mocked/project/generated/commandCache.json']: JSON.stringify({
+      ['commandCache.json']: JSON.stringify({
         ...exampleCacheEntry,
         ...anExistingDefaultCacheEntry,
       }),
@@ -93,7 +93,7 @@ describe('plugin loading', () => {
   beforeEach(() => {
     getPaths.mockReturnValue({
       generated: {
-        base: '/mocked/project/generated',
+        base: '',
       },
     })
 
@@ -196,7 +196,7 @@ describe('plugin loading', () => {
         { virtual: true }
       )
       fs.__setMockFiles({
-        ['/mocked/project/generated/commandCache.json']: JSON.stringify({
+        ['commandCache.json']: JSON.stringify({
           '@redwoodjs/cli-some-package': {
             'some-command': {
               aliases: ['sc', 'someCommand'],
@@ -296,7 +296,7 @@ describe('plugin loading', () => {
         { virtual: true }
       )
       fs.__setMockFiles({
-        ['/mocked/project/generated/commandCache.json']: JSON.stringify({
+        ['commandCache.json']: JSON.stringify({
           '@redwoodjs/cli-some-package': {
             'some-command': {
               aliases: ['sc', 'someCommand'],
@@ -396,7 +396,7 @@ describe('plugin loading', () => {
         { virtual: true }
       )
       fs.__setMockFiles({
-        ['/mocked/project/generated/commandCache.json']: JSON.stringify({
+        ['commandCache.json']: JSON.stringify({
           '@redwoodjs/cli-some-package': {
             'some-command': {
               aliases: ['sc', 'someCommand'],
@@ -484,7 +484,7 @@ describe('plugin loading', () => {
       { virtual: true }
     )
     fs.__setMockFiles({
-      ['/mocked/project/generated/commandCache.json']: JSON.stringify({
+      ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
             aliases: ['sc', 'someCommand'],
@@ -580,7 +580,7 @@ describe('plugin loading', () => {
       { virtual: true }
     )
     fs.__setMockFiles({
-      ['/mocked/project/generated/commandCache.json']: JSON.stringify({
+      ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
             aliases: ['sc', 'someCommand'],
@@ -677,7 +677,7 @@ describe('plugin loading', () => {
       { virtual: true }
     )
     fs.__setMockFiles({
-      ['/mocked/project/generated/commandCache.json']: JSON.stringify({
+      ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
             aliases: ['sc', 'someCommand'],
@@ -797,7 +797,7 @@ describe('plugin loading', () => {
       { virtual: true }
     )
     fs.__setMockFiles({
-      ['/mocked/project/generated/commandCache.json']: JSON.stringify({}),
+      ['commandCache.json']: JSON.stringify({}),
     })
 
     pluginLib.loadPluginPackage.mockImplementation((packageName) => {
@@ -910,7 +910,7 @@ describe('plugin loading', () => {
       { virtual: true }
     )
     fs.__setMockFiles({
-      ['/mocked/project/generated/commandCache.json']: JSON.stringify({
+      ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
             aliases: ['sc', 'someCommand'],
@@ -1046,7 +1046,7 @@ describe('plugin loading', () => {
       { virtual: true }
     )
     fs.__setMockFiles({
-      ['/mocked/project/generated/commandCache.json']: JSON.stringify({
+      ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
             aliases: ['sc', 'someCommand'],
@@ -1139,7 +1139,7 @@ describe('plugin loading', () => {
       },
     })
     fs.__setMockFiles({
-      ['/mocked/project/generated/commandCache.json']: JSON.stringify({}),
+      ['commandCache.json']: JSON.stringify({}),
     })
 
     pluginLib.loadPluginPackage.mockImplementation((packageName) => {
@@ -1237,7 +1237,7 @@ describe('plugin loading', () => {
       },
     })
     fs.__setMockFiles({
-      ['/mocked/project/generated/commandCache.json']: JSON.stringify({
+      ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
             aliases: ['sc', 'someCommand'],
