@@ -14,6 +14,7 @@ export async function handler({ npmPackage, force, options }) {
     (isScoped ? '@' : '') + npmPackage.split('@')[isScoped ? 1 : 0]
   const packageVersion = npmPackage.split('@')[isScoped ? 2 : 1] ?? 'latest'
 
+  // If we're using force don't attempt anything fancy, just run the package after some messaging
   if (force) {
     console.log(
       'No compatibility check will be performed because you used the --force flag.'
@@ -31,19 +32,30 @@ export async function handler({ npmPackage, force, options }) {
   }
 
   console.log('Checking compatibility...')
-  const compatibilityData = await getCompatibilityData(
-    packageName,
-    packageVersion
-  )
-
-  if (compatibilityData == null) {
-    throw new Error(`No compatible version of '${packageName}' was found.`)
+  let compatibilityData
+  try {
+    compatibilityData = await getCompatibilityData(packageName, packageVersion)
+  } catch (error) {
+    console.log('The following error occurred while checking compatibility:')
+    console.log(error.message ?? error)
+    const decision = await promptWithChoices('What would you like to do?', [
+      {
+        name: 'cancel',
+        message: 'Cancel',
+      },
+      {
+        name: 'continue',
+        message: 'Continue regardless of potential incompatibility',
+      },
+    ])
+    if (decision === 'continue') {
+      await runPackage(packageName, packageVersion, options)
+    }
+    return
   }
 
-  const { preferred, latestCompatible } = compatibilityData
-
-  const preferredVersionIsCompatible =
-    preferred.version === latestCompatible.version
+  const { preferred, compatible } = compatibilityData
+  const preferredVersionIsCompatible = preferred.version === compatible.version
 
   if (preferredVersionIsCompatible) {
     await showExperimentalWarning(preferred.version)
@@ -54,51 +66,36 @@ export async function handler({ npmPackage, force, options }) {
   const preferredVersionText = `${preferred.version}${
     preferred.tag ? ` (${preferred.tag})` : ''
   }`
-  const latestCompatibleVersionText = `${latestCompatible.version}${
-    latestCompatible.tag ? ` (${latestCompatible.tag})` : ''
+  const latestCompatibleVersionText = `${compatible.version}${
+    compatible.tag ? ` (${compatible.tag})` : ''
   }`
   console.log(
     `The version ${preferredVersionText} of '${packageName}' is not compatible with your RedwoodJS project version.\nThe latest version compatible with your project is ${latestCompatibleVersionText}.`
   )
 
-  let versionToUse
-  try {
-    const prompt = new Select({
-      name: 'versionDecision',
-      message: 'What would you like to do?',
-      choices: [
-        {
-          name: 'useLatestCompatibleVersion',
-          message: `Use the latest compatible version: ${latestCompatibleVersionText}`,
-        },
-        {
-          name: 'usePreferredVersion',
-          message: `Continue anyway with version: ${preferredVersionText}`,
-        },
-        {
-          name: 'cancel',
-          message: 'Cancel',
-        },
-      ],
-    })
-    const promptResult = await prompt.run()
-    if (promptResult === 'cancel') {
-      // TODO: Confirm that this is the right exit code in this case?
-      process.exitCode = 1
-      return
-    }
-    versionToUse =
-      promptResult === 'useLatestCompatibleVersion'
-        ? latestCompatible.version
-        : preferred.version
-  } catch (error) {
-    // SIGINT seems to throw a "" error so we'll attempt to ignore that
-    if (error) {
-      throw error
-    }
-    // TODO: Confirm that this is the right exit code in this case?
-    process.exit(1)
+  const decision = await promptWithChoices('What would you like to do?', [
+    {
+      name: 'useLatestCompatibleVersion',
+      message: `Use the latest compatible version: ${latestCompatibleVersionText}`,
+    },
+    {
+      name: 'usePreferredVersion',
+      message: `Continue anyway with version: ${preferredVersionText}`,
+    },
+    {
+      name: 'cancel',
+      message: 'Cancel',
+    },
+  ])
+  if (decision === 'cancel') {
+    process.exitCode = 1
+    return
   }
+
+  const versionToUse =
+    decision === 'useLatestCompatibleVersion'
+      ? compatible.version
+      : preferred.version
   await showExperimentalWarning(versionToUse)
   await runPackage(packageName, versionToUse, options)
 }
@@ -112,34 +109,21 @@ async function showExperimentalWarning(version) {
     return
   }
 
-  try {
-    const prompt = new Select({
-      name: 'continue',
-      message:
-        'This package is under version 1.0.0 and so should be considered experimental. Would you like to continue?',
-      choices: [
-        // TODO: Happy with this default ordering?
-        {
-          name: 'no',
-          message: 'No',
-        },
-        {
-          name: 'yes',
-          message: 'Yes',
-        },
-      ],
-    })
-    const promptResult = await prompt.run()
-    if (promptResult === 'no') {
-      process.exit()
-    }
-  } catch (error) {
-    // SIGINT seems to throw a "" error so we'll attempt to ignore that
-    if (error) {
-      throw error
-    }
-    // TODO: Confirm that this is the right exit code in this case?
-    process.exit(1)
+  const decision = await promptWithChoices(
+    'This package is under version 1.0.0 and so should be considered experimental. Would you like to continue?',
+    [
+      {
+        name: 'yes',
+        message: 'Yes',
+      },
+      {
+        name: 'no',
+        message: 'No',
+      },
+    ]
+  )
+  if (decision === 'no') {
+    process.exit()
   }
 }
 
@@ -152,6 +136,24 @@ async function runPackage(packageName, version, options = []) {
       cwd: getPaths().base,
     })
   } catch (error) {
+    // The execa process should have already printed any errors
     process.exitCode = error.exitCode ?? 1
   }
+}
+
+async function promptWithChoices(message, choices) {
+  try {
+    const prompt = new Select({
+      name: message.substring(0, 8).toLowerCase(),
+      message,
+      choices,
+    })
+    return await prompt.run()
+  } catch (error) {
+    // SIGINT seems to throw a "" error so we'll attempt to ignore that
+    if (error) {
+      throw error
+    }
+  }
+  return null
 }

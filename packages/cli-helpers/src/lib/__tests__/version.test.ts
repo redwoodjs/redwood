@@ -249,7 +249,7 @@ describe('version compatibility detection', () => {
     await expect(
       getCompatibilityData('@scope/package-name', '0.0.4')
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"The package '@scope/package-name' does not have a version 0.0.4"`
+      `"The package '@scope/package-name' does not have a version '0.0.4'"`
     )
   })
 
@@ -257,7 +257,7 @@ describe('version compatibility detection', () => {
     await expect(
       getCompatibilityData('@scope/package-name', 'next')
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"The package '@scope/package-name' does not have a tag next"`
+      `"The package '@scope/package-name' does not have a tag 'next'"`
     )
   })
 
@@ -284,7 +284,7 @@ describe('version compatibility detection', () => {
     await expect(
       getCompatibilityData('@scope/package-name', 'latest')
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"The package '@scope/package-name' does not have a tag latest"`
+      `"The package '@scope/package-name' does not have a tag 'latest'"`
     )
   })
 
@@ -294,7 +294,7 @@ describe('version compatibility detection', () => {
         tag: 'latest',
         version: '0.0.3',
       },
-      latestCompatible: {
+      compatible: {
         tag: 'latest',
         version: '0.0.3',
       },
@@ -307,7 +307,7 @@ describe('version compatibility detection', () => {
         tag: undefined,
         version: '0.0.2',
       },
-      latestCompatible: {
+      compatible: {
         tag: 'latest',
         version: '0.0.3',
       },
@@ -321,7 +321,7 @@ describe('version compatibility detection', () => {
           tag: 'latest',
           version: '0.0.3',
         },
-        latestCompatible: {
+        compatible: {
           tag: 'latest',
           version: '0.0.3',
         },
@@ -342,7 +342,7 @@ describe('version compatibility detection', () => {
           tag: 'latest',
           version: '0.0.3',
         },
-        latestCompatible: {
+        compatible: {
           tag: undefined,
           version: '0.0.2',
         },
@@ -350,7 +350,7 @@ describe('version compatibility detection', () => {
     )
   })
 
-  test('returns null if no compatible version could be found', async () => {
+  test('throws if no compatible version could be found', async () => {
     jest.spyOn(fs, 'readFileSync').mockImplementation(() => {
       return JSON.stringify({
         devDependencies: {
@@ -359,8 +359,10 @@ describe('version compatibility detection', () => {
       })
     })
 
-    expect(await getCompatibilityData('@scope/package-name', 'latest')).toEqual(
-      null
+    expect(
+      getCompatibilityData('@scope/package-name', 'latest')
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"No compatible version of '@scope/package-name' was found"`
     )
   })
 })

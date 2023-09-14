@@ -45,7 +45,7 @@ import { handler } from '../packageHandler'
 
 const { Select } = require('enquirer')
 
-describe('', () => {
+describe('packageHandler', () => {
   beforeEach(() => {
     jest.spyOn(console, 'log').mockImplementation(() => {})
     jest.spyOn(console, 'error').mockImplementation(() => {})
@@ -98,16 +98,31 @@ describe('', () => {
     )
   })
 
-  test('no compatible version throws an error', async () => {
+  test('compatiblity check error prompts to continue', async () => {
     getCompatibilityData.mockImplementation(() => {
-      return null
+      throw new Error('No compatible version found')
     })
 
-    await expect(
-      handler({ npmPackage: 'some-package', force: false, options: [] })
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"No compatible version of 'some-package' was found."`
-    )
+    Select.mockImplementation(() => {
+      return {
+        run: jest.fn(() => 'cancel'),
+      }
+    })
+    await handler({ npmPackage: 'some-package', force: false, options: [] })
+    expect(Select).toHaveBeenCalledTimes(1)
+    expect(execa).not.toHaveBeenCalled()
+
+    Select.mockImplementation(() => {
+      return {
+        run: jest.fn(() => 'continue'),
+      }
+    })
+    await handler({ npmPackage: 'some-package', force: false, options: [] })
+    expect(Select).toHaveBeenCalledTimes(2)
+    expect(execa).toHaveBeenCalledWith('yarn', ['dlx', 'some-package@latest'], {
+      stdio: 'inherit',
+      cwd: path.join('mocked', 'project'),
+    })
   })
 
   test('default of latest is compatible', async () => {
@@ -117,7 +132,7 @@ describe('', () => {
           version: '1.0.0',
           tag: 'latest',
         },
-        latestCompatible: {
+        compatible: {
           version: '1.0.0',
           tag: 'latest',
         },
@@ -139,7 +154,7 @@ describe('', () => {
           version: '2.0.0',
           tag: 'latest',
         },
-        latestCompatible: {
+        compatible: {
           version: '1.0.0',
           tag: undefined,
         },
@@ -212,7 +227,7 @@ describe('', () => {
           version: '1.0.0',
           tag: 'stable',
         },
-        latestCompatible: {
+        compatible: {
           version: '1.0.0',
           tag: 'stable',
         },
@@ -239,7 +254,7 @@ describe('', () => {
           version: '2.0.0',
           tag: 'stable',
         },
-        latestCompatible: {
+        compatible: {
           version: '1.0.0',
           tag: undefined,
         },
@@ -324,7 +339,7 @@ describe('', () => {
           version: '1.0.0',
           tag: 'latest',
         },
-        latestCompatible: {
+        compatible: {
           version: '1.0.0',
           tag: 'latest',
         },
@@ -350,7 +365,7 @@ describe('', () => {
           version: '2.0.0',
           tag: 'latest',
         },
-        latestCompatible: {
+        compatible: {
           version: '1.0.0',
           tag: undefined,
         },
@@ -435,7 +450,7 @@ describe('', () => {
           version: '0.0.1',
           tag: 'latest',
         },
-        latestCompatible: {
+        compatible: {
           version: '0.0.1',
           tag: 'latest',
         },
