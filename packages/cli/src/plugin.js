@@ -97,40 +97,13 @@ export async function loadPlugins(yargs) {
       if (namespace === '@redwoodjs') {
         for (const redwoodPluginPackage of redwoodPackages) {
           // We'll load the plugin information from the cache if there is a cache entry
-          const cacheEntry = pluginCommandCache[redwoodPluginPackage]
-          if (cacheEntry !== undefined) {
-            const commands = Object.keys(cacheEntry)
-            for (const command of commands) {
-              yargs.command({
-                command,
-                describe: cacheEntry[command].description,
-                aliases: cacheEntry[command].aliases,
-                builder: () => {},
-                handler: () => {},
-              })
-            }
-          } else {
-            // We'll have to load the plugin package to get the command information
-            const plugin = await loadPluginPackage(
-              redwoodPluginPackage,
-              undefined,
-              autoInstall
-            )
-            if (plugin) {
-              for (const command of plugin.commands) {
-                yargs.command(command)
-                // Update the cache with the new information
-                pluginCommandCache[redwoodPluginPackage] = {
-                  ...pluginCommandCache[redwoodPluginPackage],
-                  [command.command]: {
-                    aliases: command.aliases,
-                    description: command.description,
-                  },
-                }
-              }
-            }
-            // If the plugin failed to load there should have been a warning printed
-          }
+          const commands = await loadCommandsFromCacheOrPackage(
+            redwoodPluginPackage,
+            pluginCommandCache,
+            autoInstall,
+            true
+          )
+          yargs.command(commands)
         }
       } else {
         // We only need to show that the namespace exists, users can then run
@@ -160,40 +133,13 @@ export async function loadPlugins(yargs) {
     if (namespaceInUse === '@redwoodjs') {
       for (const redwoodPluginPackage of redwoodPackages) {
         // We'll load the plugin information from the cache if there is a cache entry
-        const cacheEntry = pluginCommandCache[redwoodPluginPackage]
-        if (cacheEntry !== undefined) {
-          const commands = Object.keys(cacheEntry)
-          for (const command of commands) {
-            yargs.command({
-              command,
-              describe: cacheEntry[command].description,
-              aliases: cacheEntry[command].aliases,
-              builder: () => {},
-              handler: () => {},
-            })
-          }
-        } else {
-          // We'll have to load the plugin package to get the command information
-          const plugin = await loadPluginPackage(
-            redwoodPluginPackage,
-            undefined,
-            autoInstall
-          )
-          if (plugin) {
-            for (const command of plugin.commands) {
-              yargs.command(command)
-              // Update the cache with the new information
-              pluginCommandCache[redwoodPluginPackage] = {
-                ...pluginCommandCache[redwoodPluginPackage],
-                [command.command]: {
-                  aliases: command.aliases,
-                  description: command.description,
-                },
-              }
-            }
-          }
-          // If the plugin failed to load there should have been a warning printed
-        }
+        const commands = await loadCommandsFromCacheOrPackage(
+          redwoodPluginPackage,
+          pluginCommandCache,
+          autoInstall,
+          true
+        )
+        yargs.command(commands)
       }
     } else {
       const packagesForNamespace = Array.from(thirdPartyPackages).filter((p) =>
@@ -201,52 +147,20 @@ export async function loadPlugins(yargs) {
       )
       for (const packageForNamespace of packagesForNamespace) {
         // We'll load the plugin information from the cache if there is a cache entry
-        const cacheEntry = pluginCommandCache[packageForNamespace]
-        if (cacheEntry !== undefined) {
-          const commands = Object.entries(cacheEntry).map(([command, info]) => {
-            return {
-              command,
-              describe: info.description,
-              aliases: info.aliases,
-            }
-          })
-          yargs.command({
-            command: `${namespaceInUse} <command>`,
-            describe: `Commands from ${namespaceInUse}`,
-            builder: (yargs) => {
-              yargs.command(commands).demandCommand()
-            },
-            handler: () => {},
-          })
-        } else {
-          // We'll have to load the plugin package to get the command information
-          const plugin = await loadPluginPackage(
-            packageForNamespace,
-            undefined,
-            autoInstall
-          )
-          if (plugin) {
-            for (const command of plugin.commands) {
-              // Update the cache with the new information
-              pluginCommandCache[packageForNamespace] = {
-                ...pluginCommandCache[packageForNamespace],
-                [command.command]: {
-                  aliases: command.aliases,
-                  description: command.description,
-                },
-              }
-            }
-            yargs.command({
-              command: `${namespaceInUse} <command>`,
-              describe: `Commands from ${namespaceInUse}`,
-              builder: (yargs) => {
-                yargs.command(plugin.commands).demandCommand()
-              },
-              handler: () => {},
-            })
-          }
-          // If the plugin failed to load there should have been a warning printed
-        }
+        const commands = await loadCommandsFromCacheOrPackage(
+          packageForNamespace,
+          pluginCommandCache,
+          autoInstall,
+          true
+        )
+        yargs.command({
+          command: `${namespaceInUse} <command>`,
+          describe: `Commands from ${namespaceInUse}`,
+          builder: (yargs) => {
+            yargs.command(commands).demandCommand()
+          },
+          handler: () => {},
+        })
       }
     }
 
@@ -302,61 +216,25 @@ export async function loadPlugins(yargs) {
     // We'll have to load the plugin package since we may need to actually execute
     // the command builder/handler functions
     const packageToLoad = packagesToLoad.values().next().value
-    const plugin = await loadPluginPackage(
+    const commands = await loadCommandsFromCacheOrPackage(
       packageToLoad,
-      undefined,
-      autoInstall
+      pluginCommandCache,
+      autoInstall,
+      false
     )
-    if (plugin) {
-      for (const command of plugin.commands) {
-        // Update the cache with the new information
-        pluginCommandCache[packageToLoad] = {
-          ...pluginCommandCache[packageToLoad],
-          [command.command]: {
-            aliases: command.aliases,
-            description: command.description,
-          },
-        }
-      }
-      commandsToRegister.push(plugin.commands)
-    }
+    commandsToRegister.push(...commands)
   } else {
     // It's safe to try and load the plugin information from the cache since any
     // that are present in the cache didn't match the command we're trying to run
     // so they'll never be executed and will only be used for help output
     for (const packageToLoad of packagesToLoad) {
-      const cacheEntry = pluginCommandCache[packageToLoad]
-      if (cacheEntry !== undefined) {
-        const commands = Object.entries(cacheEntry).map(([command, info]) => {
-          return {
-            command,
-            describe: info.description,
-            aliases: info.aliases,
-          }
-        })
-        commandsToRegister.push(commands)
-      } else {
-        // We'll have to load the plugin package to get the command information
-        const plugin = await loadPluginPackage(
-          packageToLoad,
-          undefined,
-          autoInstall
-        )
-        if (plugin) {
-          for (const command of plugin.commands) {
-            // Update the cache with the new information
-            pluginCommandCache[packageToLoad] = {
-              ...pluginCommandCache[packageToLoad],
-              [command.command]: {
-                aliases: command.aliases,
-                description: command.description,
-              },
-            }
-          }
-          commandsToRegister.push(plugin.commands)
-        }
-        // If the plugin failed to load there should have been a warning printed
-      }
+      const commands = await loadCommandsFromCacheOrPackage(
+        packageToLoad,
+        pluginCommandCache,
+        autoInstall,
+        true
+      )
+      commandsToRegister.push(...commands)
     }
   }
 
@@ -395,4 +273,44 @@ export async function loadPlugins(yargs) {
   saveCommandCache(pluginCommandCache)
 
   return yargs
+}
+
+async function loadCommandsFromCacheOrPackage(
+  packageName,
+  cache,
+  autoInstall,
+  readFromCache
+) {
+  let cacheEntry = undefined
+  if (readFromCache) {
+    cacheEntry = cache !== undefined ? cache[packageName] : undefined
+  }
+  if (cacheEntry !== undefined) {
+    const commands = Object.entries(cacheEntry).map(([command, info]) => {
+      return {
+        command,
+        describe: info.description,
+        aliases: info.aliases,
+      }
+    })
+    return commands
+  }
+
+  // We'll have to load the plugin package to get the command information
+  const plugin = await loadPluginPackage(packageName, undefined, autoInstall)
+  if (plugin) {
+    const commands = plugin.commands ?? []
+    const cacheUpdate = {}
+    for (const command of commands) {
+      cacheUpdate[command.command] = {
+        aliases: command.aliases,
+        description: command.description,
+      }
+    }
+    cache[packageName] = cacheUpdate
+    return commands
+  }
+
+  // NOTE: If the plugin failed to load there should have been a warning printed
+  return []
 }
