@@ -37,7 +37,17 @@ export async function handler({ npmPackage, force, options }) {
     compatibilityData = await getCompatibilityData(packageName, packageVersion)
   } catch (error) {
     console.log('The following error occurred while checking compatibility:')
-    console.log(error.message ?? error)
+    const errorMessage = error.message ?? error
+    console.log(errorMessage)
+
+    // Exit without a chance to continue if it makes sense to do so
+    if (
+      errorMessage.includes('does not have a tag') ||
+      errorMessage.includes('does not have a version')
+    ) {
+      process.exit(1)
+    }
+
     const decision = await promptWithChoices('What would you like to do?', [
       {
         name: 'cancel',
