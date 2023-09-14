@@ -42,6 +42,12 @@ import {
 } from './fragmentRegistry'
 import { SSELink } from './sseLink'
 
+export type {
+  CacheKey,
+  FragmentId,
+  RegisterFragmentResult,
+} from './fragmentRegistry'
+
 export { fragmentRegistry, registerFragment, registerFragments, SSELink }
 
 export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig

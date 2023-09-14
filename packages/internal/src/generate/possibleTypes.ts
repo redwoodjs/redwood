@@ -14,9 +14,10 @@ type PossibleTypesResult = {
   possibleTypesFiles: string[]
   errors: { message: string; error: unknown }[]
 }
-
+/**
+ * Generate possible types from fragments and union types
+ **/
 export const generatePossibleTypes = async (): Promise<PossibleTypesResult> => {
-  // generate possible types from fragments and union types
   const filename = path.join(getPaths().web.graphql, 'possibleTypes.ts')
   const options = getLoadDocumentsOptions(filename)
   const documentsGlob = './web/src/**/!(*.d).{ts,tsx,js,jsx}'
