@@ -204,8 +204,29 @@ export async function loadPluginPackage(
  * @returns True if the plugin was installed successfully, false otherwise
  */
 async function installPluginPackage(packageName, packageVersion) {
+  // We use a simple heuristic here to try and be a little more convienient for the user
+  // when no version is specified. It follows this flow:
+  //   1. Respect a version if it is specified
+  //   2. If the package is from @redwoodjs, install the same version as the cli
+  //   3. if the package is from a third party:
+  //     a. Try to find and install the most recent compatible version from the npm registry
+  //     b. if no compatible version is found, install the 'latest' version
+
+  let versionToInstall = packageVersion
+  const isRedwoodPackage = packageName.startsWith('@redwoodjs/')
+  if (!isRedwoodPackage && versionToInstall === undefined) {
+    versionToInstall = 'latest'
+    try {
+      // TODO: Try to find the latest compatible version from the npm registry
+    } catch (_error) {
+      // TODO: Consider letting the user know that we couldn't find a compatible version
+      // and that we are installing the latest version as a fallback
+    }
+  }
+
   try {
-    await installModule(packageName, packageVersion)
+    // Note that installModule does the cli version matching for us
+    await installModule(packageName, versionToInstall)
     return true
   } catch (error) {
     console.error(error)
