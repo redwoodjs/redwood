@@ -237,6 +237,48 @@ For example, if you have a query named `search` that supports [Apollo's offset p
 }}>
 ```
 
+#### Generate possible types from fragments and union types
+
+In order to use fragments with unions and interfaces in Apollo Client, you need to tell the client how to discriminate between the different types that implement or belong to a supertype.
+
+You pass a possibleTypes option to the InMemoryCache constructor to specify these relationships in your schema.
+
+This object maps the name of an interface or union type (the supertype) to the types that implement or belong to it (the subtypes).
+
+For example:
+
+```ts
+/// web/src/App.tsx
+
+<RedwoodApolloProvider graphQLClientConfig={{
+  cacheConfig: {
+    possibleTypes: {
+      Character: ["Jedi", "Droid"],
+      Test: ["PassingTest", "FailingTest", "SkippedTest"],
+      Snake: ["Viper", "Python"],
+      Groceries: ['Fruit', 'Vegetable'],
+    },
+  },
+}}>
+```
+
+To make this easier to maintain, RedwoodJS GraphQL CodeGen automatically generates `possibleTypes` so you can simply assign it to the `graphQLClientConfig`:
+
+
+```ts
+import possibleTypes from 'src/graphql/possibleTypes'
+
+...
+/// web/src/App.tsx
+<RedwoodApolloProvider
+  graphQLClientConfig={{
+    cacheConfig: {
+      ...possibleTypes,
+    },
+  }}
+>
+```
+
 ### Swapping out the RedwoodApolloProvider
 
 As long as you're willing to do a bit of configuring yourself, you can swap out `RedwoodApolloProvider` with your GraphQL Client of choice. You'll just have to get to know a bit of the make up of the [RedwoodApolloProvider](https://github.com/redwoodjs/redwood/blob/main/packages/web/src/apollo/index.tsx#L71-L84); it's actually composed of a few more Providers and hooks:

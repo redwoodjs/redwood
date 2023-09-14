@@ -8,7 +8,6 @@ import { setContext } from '@apollo/client/link/context'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
-
 // Note: Importing directly from `apollo/client` doesn't work properly in Storybook.
 const {
   ApolloProvider,
