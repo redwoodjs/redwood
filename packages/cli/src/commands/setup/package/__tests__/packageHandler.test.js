@@ -65,7 +65,11 @@ describe('packageHandler', () => {
   })
 
   test('using force does not check compatibility', async () => {
-    await handler({ npmPackage: 'some-package', force: true, options: [] })
+    await handler({
+      npmPackage: 'some-package',
+      force: true,
+      _: ['setup', 'package'],
+    })
 
     expect(console.log).toHaveBeenCalledWith(
       'No compatibility check will be performed because you used the --force flag.'
@@ -77,12 +81,12 @@ describe('packageHandler', () => {
     await handler({
       npmPackage: 'some-package',
       force: true,
-      options: [],
+      _: ['setup', 'package'],
     })
     await handler({
       npmPackage: 'some-package@latest',
       force: true,
-      options: [],
+      _: ['setup', 'package'],
     })
     expect(console.log).not.toHaveBeenCalledWith(
       'Be aware that this package is under version 1.0.0 and so should be considered experimental.'
@@ -91,7 +95,7 @@ describe('packageHandler', () => {
     await handler({
       npmPackage: 'some-package@0.0.1',
       force: true,
-      options: [],
+      _: ['setup', 'package'],
     })
     expect(console.log).toHaveBeenCalledWith(
       'Be aware that this package is under version 1.0.0 and so should be considered experimental.'
@@ -108,7 +112,11 @@ describe('packageHandler', () => {
         run: jest.fn(() => 'cancel'),
       }
     })
-    await handler({ npmPackage: 'some-package', force: false, options: [] })
+    await handler({
+      npmPackage: 'some-package',
+      force: false,
+      _: ['setup', 'package'],
+    })
     expect(Select).toHaveBeenCalledTimes(1)
     expect(execa).not.toHaveBeenCalled()
 
@@ -117,7 +125,11 @@ describe('packageHandler', () => {
         run: jest.fn(() => 'continue'),
       }
     })
-    await handler({ npmPackage: 'some-package', force: false, options: [] })
+    await handler({
+      npmPackage: 'some-package',
+      force: false,
+      _: ['setup', 'package'],
+    })
     expect(Select).toHaveBeenCalledTimes(2)
     expect(execa).toHaveBeenCalledWith('yarn', ['dlx', 'some-package@latest'], {
       stdio: 'inherit',
@@ -139,7 +151,11 @@ describe('packageHandler', () => {
       }
     })
 
-    await handler({ npmPackage: 'some-package', force: false, options: [] })
+    await handler({
+      npmPackage: 'some-package',
+      force: false,
+      _: ['setup', 'package'],
+    })
     expect(getCompatibilityData).toHaveBeenCalledWith('some-package', 'latest')
     expect(execa).toHaveBeenCalledWith('yarn', ['dlx', 'some-package@1.0.0'], {
       stdio: 'inherit',
@@ -166,7 +182,11 @@ describe('packageHandler', () => {
         run: jest.fn(() => 'useLatestCompatibleVersion'),
       }
     })
-    await handler({ npmPackage: 'some-package', force: false, options: [] })
+    await handler({
+      npmPackage: 'some-package',
+      force: false,
+      _: ['setup', 'package'],
+    })
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       1,
       'some-package',
@@ -188,7 +208,11 @@ describe('packageHandler', () => {
         run: jest.fn(() => 'usePreferredVersion'),
       }
     })
-    await handler({ npmPackage: 'some-package', force: false, options: [] })
+    await handler({
+      npmPackage: 'some-package',
+      force: false,
+      _: ['setup', 'package'],
+    })
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       2,
       'some-package',
@@ -210,7 +234,11 @@ describe('packageHandler', () => {
         run: jest.fn(() => 'cancel'),
       }
     })
-    await handler({ npmPackage: 'some-package', force: false, options: [] })
+    await handler({
+      npmPackage: 'some-package',
+      force: false,
+      _: ['setup', 'package'],
+    })
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       3,
       'some-package',
@@ -237,7 +265,7 @@ describe('packageHandler', () => {
     await handler({
       npmPackage: 'some-package@stable',
       force: false,
-      options: [],
+      _: ['setup', 'package'],
     })
 
     expect(getCompatibilityData).toHaveBeenCalledWith('some-package', 'stable')
@@ -269,7 +297,7 @@ describe('packageHandler', () => {
     await handler({
       npmPackage: 'some-package@stable',
       force: false,
-      options: [],
+      _: ['setup', 'package'],
     })
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       1,
@@ -295,7 +323,7 @@ describe('packageHandler', () => {
     await handler({
       npmPackage: 'some-package@stable',
       force: false,
-      options: [],
+      _: ['setup', 'package'],
     })
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       2,
@@ -321,7 +349,7 @@ describe('packageHandler', () => {
     await handler({
       npmPackage: 'some-package@stable',
       force: false,
-      options: [],
+      _: ['setup', 'package'],
     })
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       3,
@@ -349,7 +377,7 @@ describe('packageHandler', () => {
     await handler({
       npmPackage: 'some-package@1.0.0',
       force: false,
-      options: [],
+      _: ['setup', 'package'],
     })
     expect(getCompatibilityData).toHaveBeenCalledWith('some-package', '1.0.0')
     expect(execa).toHaveBeenCalledWith('yarn', ['dlx', 'some-package@1.0.0'], {
@@ -380,7 +408,7 @@ describe('packageHandler', () => {
     await handler({
       npmPackage: 'some-package@1.0.0',
       force: false,
-      options: [],
+      _: ['setup', 'package'],
     })
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       1,
@@ -406,7 +434,7 @@ describe('packageHandler', () => {
     await handler({
       npmPackage: 'some-package@1.0.0',
       force: false,
-      options: [],
+      _: ['setup', 'package'],
     })
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       2,
@@ -432,7 +460,7 @@ describe('packageHandler', () => {
     await handler({
       npmPackage: 'some-package@1.0.0',
       force: false,
-      options: [],
+      _: ['setup', 'package'],
     })
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       3,
@@ -461,7 +489,7 @@ describe('packageHandler', () => {
     await handler({
       npmPackage: 'some-package@0.0.1',
       force: true,
-      options: [],
+      _: ['setup', 'package'],
     })
     expect(console.log).toHaveBeenCalledWith(
       'Be aware that this package is under version 1.0.0 and so should be considered experimental.'
@@ -476,7 +504,7 @@ describe('packageHandler', () => {
     await handler({
       npmPackage: 'some-package@0.0.1',
       force: false,
-      options: [],
+      _: ['setup', 'package'],
     })
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       1,
