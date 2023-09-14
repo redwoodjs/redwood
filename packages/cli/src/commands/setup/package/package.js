@@ -3,20 +3,20 @@ import terminalLink from 'terminal-link'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 export const command = 'package <npm-package>'
-export const description = 'Execute functionality from an NPM package'
+export const description =
+  'Run a bin from an NPM package with version compatibility checks'
 
 export const builder = (yargs) => {
   yargs
     .positional('npm-package', {
       description:
-        'The NPM package to install and run. This can be a package name or a package name with a version or tag.',
+        'The NPM package to run. This can be a package name or a package name with a version or tag.',
       type: 'string',
-      alias: 'npmPackage',
     })
     .option('force', {
       default: false,
       description:
-        'Force the use of a potentially incompatible version of the package',
+        'Proceed with a potentially incompatible version of the package',
       type: 'boolean',
       alias: 'f',
     })
