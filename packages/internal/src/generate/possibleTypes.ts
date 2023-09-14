@@ -63,6 +63,7 @@ export const generatePossibleTypes = async (): Promise<PossibleTypesResult> => {
       semi: false,
       singleQuote: true,
       arrowParens: 'always',
+      parser: 'typescript',
     })
 
     fs.mkdirSync(path.dirname(filename), { recursive: true })
