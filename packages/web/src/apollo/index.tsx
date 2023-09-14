@@ -44,7 +44,7 @@ import { SSELink } from './sseLink'
 
 export type {
   CacheKey,
-  FragmentId,
+  FragmentIdentifier,
   RegisterFragmentResult,
 } from './fragmentRegistry'
 

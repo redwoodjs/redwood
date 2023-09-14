@@ -5,19 +5,19 @@ import { createFragmentRegistry } from '@apollo/client/cache'
 import { getFragmentDefinitions } from '@apollo/client/utilities'
 import type { DocumentNode } from 'graphql'
 
-export type FragmentId = string | number
+export type FragmentIdentifier = string | number
 
 export type CacheKey = {
   __typename: string
-  id: FragmentId
+  id: FragmentIdentifier
 }
 
 export type RegisterFragmentResult = {
   fragment: DocumentNode
   typename: string
-  getCacheKey: (id: FragmentId) => CacheKey
+  getCacheKey: (id: FragmentIdentifier) => CacheKey
   useRegisteredFragment: <TData = any>(
-    id: FragmentId
+    id: FragmentIdentifier
   ) => UseFragmentResult<TData>
 }
 
@@ -51,12 +51,12 @@ export const registerFragment = (
 
   const typename = getTypenameFromFragment(fragment)
 
-  const getCacheKey = (id: FragmentId): CacheKey => {
+  const getCacheKey = (id: FragmentIdentifier): CacheKey => {
     return { __typename: typename, id }
   }
 
   const useRegisteredFragment = <TData = any>(
-    id: FragmentId
+    id: FragmentIdentifier
   ): UseFragmentResult<TData> => {
     return useRegisteredFragmentHook<TData>(fragment, id)
   }
