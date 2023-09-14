@@ -59,6 +59,8 @@ const useRegisteredFragmentHook = <TData = any>(
  * can be referred to by name in any query or InMemoryCache operation
  * (such as cache.readFragment, cache.readQuery and cache.watch)
  * without needing to interpolate their declaration.
+ *
+ * @see https://www.apollographql.com/docs/react/data/fragments/#registering-named-fragments-using-createfragmentregistry
  **/
 export const fragmentRegistry: FragmentRegistryAPI = createFragmentRegistry()
 
@@ -80,6 +82,8 @@ export const registerFragments = (fragments: DocumentNode[]) => {
  * that returns cached data for the fragment
  *
  * Note: one does not need to use the hook, cacheKey to use the fragment in queries.
+ *
+ * @see https://www.apollographql.com/docs/react/data/fragments/#registering-named-fragments-using-createfragmentregistry
  */
 export const registerFragment = (
   fragment: DocumentNode
