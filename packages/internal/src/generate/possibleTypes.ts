@@ -4,6 +4,7 @@ import path from 'path'
 import * as fragmentMatcher from '@graphql-codegen/fragment-matcher'
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadDocuments, loadSchemaSync } from '@graphql-tools/load'
+import { format } from 'prettier'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -54,8 +55,17 @@ export const generatePossibleTypes = async (): Promise<PossibleTypesResult> => {
 
     files.push(filename)
 
+    const output = format(possibleTypes.toString(), {
+      trailingComma: 'es5',
+      bracketSpacing: true,
+      tabWidth: 2,
+      semi: false,
+      singleQuote: true,
+      arrowParens: 'always',
+    })
+
     fs.mkdirSync(path.dirname(filename), { recursive: true })
-    fs.writeFileSync(filename, possibleTypes.toString())
+    fs.writeFileSync(filename, output)
 
     return { possibleTypesFiles: [filename], errors }
   } catch (e) {
