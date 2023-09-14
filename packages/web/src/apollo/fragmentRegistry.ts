@@ -1,5 +1,5 @@
 import type { UseFragmentResult } from '@apollo/client'
-import { useFragment as apolloUseFragment } from '@apollo/client'
+import * as apolloClient from '@apollo/client'
 import { createFragmentRegistry } from '@apollo/client/cache'
 import { getFragmentDefinitions } from '@apollo/client/utilities'
 import type { DocumentNode } from 'graphql'
@@ -15,7 +15,10 @@ const useRegisteredFragmentHook = <TData = any>(
 ) => {
   const from = { __typename: getTypenameFromFragment(fragment), id }
 
-  return apolloUseFragment({ fragment, from }) as UseFragmentResult<TData>
+  return apolloClient.useFragment({
+    fragment,
+    from,
+  }) as UseFragmentResult<TData>
 }
 
 export const fragmentRegistry = createFragmentRegistry()
