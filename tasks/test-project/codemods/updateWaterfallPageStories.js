@@ -30,7 +30,9 @@ export default (file, api) => {
   )
 
   // export const Primary: Story = {
-  //   render: (args) => return <WaterfallPage id={42} {...args} />
+  //   render: (args) => {
+  //     return <WaterfallPage id={42} {...args} />
+  //   }
   // }
   const primaryWithRender = j.exportNamedDeclaration(
     j.variableDeclaration('const', [
