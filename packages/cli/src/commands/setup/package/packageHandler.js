@@ -7,12 +7,19 @@ import { getPaths } from '@redwoodjs/project-config'
 const { Select } = require('enquirer')
 
 // TODO: Yarn3 requirement? What do we do, just not run? I'm not sure about this one.
-export async function handler({ npmPackage, force, options }) {
+export async function handler({ npmPackage, force, _: _args }) {
   // Extract package name and version which the user provided
   const isScoped = npmPackage.startsWith('@')
   const packageName =
     (isScoped ? '@' : '') + npmPackage.split('@')[isScoped ? 1 : 0]
   const packageVersion = npmPackage.split('@')[isScoped ? 2 : 1] ?? 'latest'
+
+  // Extract any additional arguments that came after a '--'
+  // See: https://github.com/yargs/yargs/blob/main/docs/tricks.md#stop-parsing
+  const additionalOptionsToForward = _args.slice(2) ?? []
+  console.log({
+    additionalOptionsToForward,
+  })
 
   // If we're using force don't attempt anything fancy, just run the package after some messaging
   if (force) {
@@ -27,7 +34,7 @@ export async function handler({ npmPackage, force, options }) {
         'Be aware that this package is under version 1.0.0 and so should be considered experimental.'
       )
     }
-    await runPackage(packageName, packageVersion, options)
+    await runPackage(packageName, packageVersion, additionalOptionsToForward)
     return
   }
 
@@ -59,7 +66,7 @@ export async function handler({ npmPackage, force, options }) {
       },
     ])
     if (decision === 'continue') {
-      await runPackage(packageName, packageVersion, options)
+      await runPackage(packageName, packageVersion, additionalOptionsToForward)
     }
     return
   }
@@ -69,7 +76,7 @@ export async function handler({ npmPackage, force, options }) {
 
   if (preferredVersionIsCompatible) {
     await showExperimentalWarning(preferred.version)
-    await runPackage(packageName, preferred.version, options)
+    await runPackage(packageName, preferred.version, additionalOptionsToForward)
     return
   }
 
@@ -107,7 +114,7 @@ export async function handler({ npmPackage, force, options }) {
       ? compatible.version
       : preferred.version
   await showExperimentalWarning(versionToUse)
-  await runPackage(packageName, versionToUse, options)
+  await runPackage(packageName, versionToUse, additionalOptionsToForward)
 }
 
 async function showExperimentalWarning(version) {

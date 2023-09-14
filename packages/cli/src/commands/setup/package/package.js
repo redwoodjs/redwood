@@ -20,11 +20,6 @@ export const builder = (yargs) => {
       type: 'boolean',
       alias: 'f',
     })
-    .option('options', {
-      default: [],
-      description: 'Options to forward on when running the package.',
-      type: 'array',
-    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
