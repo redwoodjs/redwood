@@ -94,7 +94,10 @@ export async function loadPlugins(yargs) {
       valid &&= !Array.isArray(value)
     }
     if (valid) {
-      pluginCommandCache = localCommandCache
+      pluginCommandCache = {
+        ...localCommandCache,
+        ...PLUGIN_CACHE_DEFAULT,
+      }
     }
   } catch (error) {
     // If the cache file doesn't exist we can just ignore it and continue

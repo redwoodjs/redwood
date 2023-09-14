@@ -222,7 +222,7 @@ export const getCellMetadata = (p: string) => {
         })
       } else if (declaration.type === 'ClassDeclaration') {
         namedExports.push({
-          name: declaration?.id?.name,
+          name: declaration?.id?.name as string,
           type: 'class',
         })
       }

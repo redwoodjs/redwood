@@ -19,7 +19,7 @@ services:
   staticPublishPath: ./web/dist
   envVars:
   - key: NODE_VERSION
-    value: 16
+    value: 18
   - key: SKIP_INSTALL_DEPS
     value: true
   routes:
@@ -44,7 +44,7 @@ services:
   startCommand: yarn rw deploy render api
   envVars:
   - key: NODE_VERSION
-    value: 16
+    value: 18
 ${database}
 `
 }
