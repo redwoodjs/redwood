@@ -24,11 +24,9 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/mailer-core": "6.0.7",
-    "uuid": "9.0.0"
+    "@redwoodjs/mailer-core": "6.0.7"
   },
   "devDependencies": {
-    "@types/uuid": "9.0.2",
     "esbuild": "0.19.2",
     "fast-glob": "3.3.1",
     "typescript": "5.2.2"
