@@ -22,34 +22,18 @@ export default (file, api) => {
     },
   })
 
-  // const author = {
-  //   email: 'story.user@email.com',
-  //   fullName: 'Story User',
-  // }
-  const authorDeclaration = j.variableDeclaration('const', [
-    j.variableDeclarator(
-      j.identifier('author'),
-      j.objectExpression([
-        j.property(
-          'init',
-          j.identifier('email'),
-          j.literal('story.user@email.com')
-        ),
-        j.property('init', j.identifier('fullName'), j.literal('Story User')),
-      ])
-    ),
-  ])
-
-  // export const Primary: Story = {
-  //   render: () => {
-  //     return <Author author={author} />
-  //   }
-  // }
+  // Create the `Primary` identifier
   const primaryIdentifier = j.identifier('Primary')
+  // Add the `Story` type annotation
   primaryIdentifier.typeAnnotation = j.tsTypeAnnotation(
     j.tsTypeReference(j.identifier('Story'), null)
   )
 
+  // export const Primary: Story = {
+  //   render: (args) => {
+  //     return <WaterfallPage id={42} {...args} />
+  //   }
+  // }
   const primaryWithRender = j.exportNamedDeclaration(
     j.variableDeclaration('const', [
       j.variableDeclarator(
@@ -59,17 +43,18 @@ export default (file, api) => {
             'init',
             j.identifier('render'),
             j.arrowFunctionExpression(
-              [],
+              [j.identifier('args')],
               j.blockStatement([
                 j.returnStatement(
                   j.jsxElement(
                     j.jsxOpeningElement(
-                      j.jsxIdentifier('Author'),
+                      j.jsxIdentifier('WaterfallPage'),
                       [
                         j.jsxAttribute(
-                          j.jsxIdentifier('author'),
-                          j.jsxExpressionContainer(j.identifier('author'))
+                          j.jsxIdentifier('id'),
+                          j.jsxExpressionContainer(j.numericLiteral(42))
                         ),
+                        j.jsxSpreadAttribute(j.identifier('args')),
                       ],
                       true
                     ),
@@ -87,7 +72,8 @@ export default (file, api) => {
   )
 
   if (exportStatement.length > 0) {
-    exportStatement.insertBefore(authorDeclaration)
+    // Replace the empty object export with the object with the `render`
+    // property
     exportStatement.replaceWith(primaryWithRender)
   } else {
     throw new Error('Could not find export statement in author story')
