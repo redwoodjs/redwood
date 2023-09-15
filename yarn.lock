@@ -4957,22 +4957,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna/child-process@npm:7.2.0":
-  version: 7.2.0
-  resolution: "@lerna/child-process@npm:7.2.0"
+"@lerna/child-process@npm:7.3.0":
+  version: 7.3.0
+  resolution: "@lerna/child-process@npm:7.3.0"
   dependencies:
     chalk: ^4.1.0
     execa: ^5.0.0
     strong-log-transformer: ^2.1.0
-  checksum: a02e217cdc2254aa44d7eec90b2b8ea03a218f86f8d59f8c4216365a52729612dbb2a4430b273904a4796d6f549a16e64da2c23111750a892a0a3b4dd1026c5c
+  checksum: fb5e8b1076b467303f4040e31484bdeb952fc478fedb62a880754c8014cde79f86b9978caa1ea625146004fb87a9e0d52028d2cb7b911b4650babd1a68e920a6
   languageName: node
   linkType: hard
 
-"@lerna/create@npm:7.2.0":
-  version: 7.2.0
-  resolution: "@lerna/create@npm:7.2.0"
+"@lerna/create@npm:7.3.0":
+  version: 7.3.0
+  resolution: "@lerna/create@npm:7.3.0"
   dependencies:
-    "@lerna/child-process": 7.2.0
+    "@lerna/child-process": 7.3.0
     "@npmcli/run-script": 6.0.2
     "@nx/devkit": ">=16.5.1 < 17"
     "@octokit/plugin-enterprise-rest": 6.0.1
@@ -5003,7 +5003,7 @@ __metadata:
     libnpmpublish: 7.3.0
     load-json-file: 6.2.0
     lodash: ^4.17.21
-    make-dir: 3.1.0
+    make-dir: 4.0.0
     minimatch: 3.0.5
     multimatch: 5.0.0
     node-fetch: 2.6.7
@@ -5037,7 +5037,7 @@ __metadata:
     write-pkg: 4.0.0
     yargs: 16.2.0
     yargs-parser: 20.2.4
-  checksum: 7a69d29050c1ab434c97e4702d7fd806da99404277b42dbf2f25787a7d09be1cab4c0ab5c3aef711eb04d784d3685e30cae52d6d48f60cbc61d4ada32bfe472b
+  checksum: 76ef1bcb5ec59fcedced4e6f78002ea82335b7eb99797626f00abf3a7646572b09dc3b7f1e0e0aa4c7a84b89c0807b3590c48158c1c14ba47b61754e877628c9
   languageName: node
   linkType: hard
 
@@ -24532,12 +24532,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lerna@npm:7.2.0":
-  version: 7.2.0
-  resolution: "lerna@npm:7.2.0"
+"lerna@npm:7.3.0":
+  version: 7.3.0
+  resolution: "lerna@npm:7.3.0"
   dependencies:
-    "@lerna/child-process": 7.2.0
-    "@lerna/create": 7.2.0
+    "@lerna/child-process": 7.3.0
+    "@lerna/create": 7.3.0
     "@npmcli/run-script": 6.0.2
     "@nx/devkit": ">=16.5.1 < 17"
     "@octokit/plugin-enterprise-rest": 6.0.1
@@ -24574,7 +24574,7 @@ __metadata:
     libnpmpublish: 7.3.0
     load-json-file: 6.2.0
     lodash: ^4.17.21
-    make-dir: 3.1.0
+    make-dir: 4.0.0
     minimatch: 3.0.5
     multimatch: 5.0.0
     node-fetch: 2.6.7
@@ -24613,7 +24613,7 @@ __metadata:
     yargs-parser: 20.2.4
   bin:
     lerna: dist/cli.js
-  checksum: 72d2df221bd71085ee24abed6a62fb05a076cc75bef5fd886ab0076699c206fa807a996cea7f7d903fa7a20c82c7dddaabdf19d61376a49a552729074eb893e9
+  checksum: d68fe0efc1ce3bc0a342c2f4ddc110139a9f1a28385a4b17d1082e6f2d0749461d7aa4a934373041e938d4c20fa6581073927462a3fa811c8888138dfc9338bd
   languageName: node
   linkType: hard
 
@@ -25314,15 +25314,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-dir@npm:3.1.0, make-dir@npm:^3.0.0, make-dir@npm:^3.0.2, make-dir@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "make-dir@npm:3.1.0"
-  dependencies:
-    semver: ^6.0.0
-  checksum: 56aaafefc49c2dfef02c5c95f9b196c4eb6988040cf2c712185c7fe5c99b4091591a7fc4d4eafaaefa70ff763a26f6ab8c3ff60b9e75ea19876f49b18667ecaa
-  languageName: node
-  linkType: hard
-
 "make-dir@npm:4.0.0":
   version: 4.0.0
   resolution: "make-dir@npm:4.0.0"
@@ -25348,6 +25339,15 @@ __metadata:
     pify: ^4.0.1
     semver: ^5.6.0
   checksum: ada869944d866229819735bee5548944caef560d7a8536ecbc6536edca28c72add47cc4f6fc39c54fb25d06b58da1f8994cf7d9df7dadea047064749efc085d8
+  languageName: node
+  linkType: hard
+
+"make-dir@npm:^3.0.0, make-dir@npm:^3.0.2, make-dir@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "make-dir@npm:3.1.0"
+  dependencies:
+    semver: ^6.0.0
+  checksum: 56aaafefc49c2dfef02c5c95f9b196c4eb6988040cf2c712185c7fe5c99b4091591a7fc4d4eafaaefa70ff763a26f6ab8c3ff60b9e75ea19876f49b18667ecaa
   languageName: node
   linkType: hard
 
@@ -31365,7 +31365,7 @@ __metadata:
     jest: 29.7.0
     jest-runner-tsd: 5.0.0
     jscodeshift: 0.15.0
-    lerna: 7.2.0
+    lerna: 7.3.0
     listr2: 6.6.1
     make-dir-cli: 3.0.0
     msw: 1.3.1
