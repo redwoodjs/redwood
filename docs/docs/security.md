@@ -1,3 +1,18 @@
+<!--@@joggrdoc@@-->
+<!-- @joggr:version(v1):end -->
+<!-- @joggr:warning:start -->
+<!-- 
+  _   _   _    __        __     _      ____    _   _   ___   _   _    ____     _   _   _ 
+ | | | | | |   \ \      / /    / \    |  _ \  | \ | | |_ _| | \ | |  / ___|   | | | | | |
+ | | | | | |    \ \ /\ / /    / _ \   | |_) | |  \| |  | |  |  \| | | |  _    | | | | | |
+ |_| |_| |_|     \ V  V /    / ___ \  |  _ <  | |\  |  | |  | |\  | | |_| |   |_| |_| |_|
+ (_) (_) (_)      \_/\_/    /_/   \_\ |_| \_\ |_| \_| |___| |_| \_|  \____|   (_) (_) (_)
+                                                              
+This document is managed by Joggr. Editing this document could break Joggr's core features, i.e. our 
+ability to auto-maintain this document. Please use the Joggr editor to edit this document 
+(link at bottom of the page).
+-->
+<!-- @joggr:warning:end -->
 ---
 description: Build and deploy secure applications
 ---
@@ -75,3 +90,10 @@ Since each of these webhooks will call a function endpoint in your RedwoodJS api
 * Ensure that the hook isn't reprocessed or replayed
 
 For details on how to keep your incoming webhooks secure and how to sign your outgoing webhooks, please see [Webhooks](webhooks.md).
+
+<!-- @joggr:editLink(bb0a18b9-a891-4576-bb21-51429d60ab9c):start -->
+---
+<a href="https://app.joggr.io/app/documents/bb0a18b9-a891-4576-bb21-51429d60ab9c/edit" alt="Edit doc on Joggr">
+  <img src="https://storage.googleapis.com/joggr-public-assets/github/badges/edit-document-badge.svg" />
+</a>
+<!-- @joggr:editLink(bb0a18b9-a891-4576-bb21-51429d60ab9c):end -->

@@ -1,3 +1,18 @@
+<!--@@joggrdoc@@-->
+<!-- @joggr:version(v1):end -->
+<!-- @joggr:warning:start -->
+<!-- 
+  _   _   _    __        __     _      ____    _   _   ___   _   _    ____     _   _   _ 
+ | | | | | |   \ \      / /    / \    |  _ \  | \ | | |_ _| | \ | |  / ___|   | | | | | |
+ | | | | | |    \ \ /\ / /    / _ \   | |_) | |  \| |  | |  |  \| | | |  _    | | | | | |
+ |_| |_| |_|     \ V  V /    / ___ \  |  _ <  | |\  |  | |  | |\  | | |_| |   |_| |_| |_|
+ (_) (_) (_)      \_/\_/    /_/   \_\ |_| \_\ |_| \_| |___| |_| \_|  \____|   (_) (_) (_)
+                                                              
+This document is managed by Joggr. Editing this document could break Joggr's core features, i.e. our 
+ability to auto-maintain this document. Please use the Joggr editor to edit this document 
+(link at bottom of the page).
+-->
+<!-- @joggr:warning:end -->
 ---
 description: How to get started connecting to and deploying to a real server
 ---
@@ -472,3 +487,10 @@ It doesn't get much easier than that!
 ## What's Next?
 
 You should now be ready to get to the next step(s) using the [Baremetal](/docs/deploy/baremetal) deploy! Baremetal does the same thing you're doing manually (SSHing into the remote server and running commands), so if you can connect to your server manually then Baremetal should be able to as well.
+
+<!-- @joggr:editLink(520bfd8f-84df-4cd5-8254-4cd4939fb812):start -->
+---
+<a href="https://app.joggr.io/app/documents/520bfd8f-84df-4cd5-8254-4cd4939fb812/edit" alt="Edit doc on Joggr">
+  <img src="https://storage.googleapis.com/joggr-public-assets/github/badges/edit-document-badge.svg" />
+</a>
+<!-- @joggr:editLink(520bfd8f-84df-4cd5-8254-4cd4939fb812):end -->

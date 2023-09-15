@@ -1,3 +1,18 @@
+<!--@@joggrdoc@@-->
+<!-- @joggr:version(v1):end -->
+<!-- @joggr:warning:start -->
+<!-- 
+  _   _   _    __        __     _      ____    _   _   ___   _   _    ____     _   _   _ 
+ | | | | | |   \ \      / /    / \    |  _ \  | \ | | |_ _| | \ | |  / ___|   | | | | | |
+ | | | | | |    \ \ /\ / /    / _ \   | |_) | |  \| |  | |  |  \| | | |  _    | | | | | |
+ |_| |_| |_|     \ V  V /    / ___ \  |  _ <  | |\  |  | |  | |\  | | |_| |   |_| |_| |_|
+ (_) (_) (_)      \_/\_/    /_/   \_\ |_| \_\ |_| \_| |___| |_| \_|  \____|   (_) (_) (_)
+                                                              
+This document is managed by Joggr. Editing this document could break Joggr's core features, i.e. our 
+ability to auto-maintain this document. Please use the Joggr editor to edit this document 
+(link at bottom of the page).
+-->
+<!-- @joggr:warning:end -->
 <p align="center">
   <img src="https://avatars2.githubusercontent.com/u/45050444?v=4" width="200" />
   <h1 align="center">Redwood</h1>
@@ -876,3 +891,10 @@ And there you have it.
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 Redwood projects *(mostly)* follow the [all-contributions](https://allcontributors.org/) specification. Contributions of any kind are welcome.
+
+<!-- @joggr:editLink(32d7bbdd-1f27-440d-9b27-f248ca9a35d2):start -->
+---
+<a href="https://app.joggr.io/app/documents/32d7bbdd-1f27-440d-9b27-f248ca9a35d2/edit" alt="Edit doc on Joggr">
+  <img src="https://storage.googleapis.com/joggr-public-assets/github/badges/edit-document-badge.svg" />
+</a>
+<!-- @joggr:editLink(32d7bbdd-1f27-440d-9b27-f248ca9a35d2):end -->

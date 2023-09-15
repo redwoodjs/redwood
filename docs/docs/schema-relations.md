@@ -1,3 +1,18 @@
+<!--@@joggrdoc@@-->
+<!-- @joggr:version(v1):end -->
+<!-- @joggr:warning:start -->
+<!-- 
+  _   _   _    __        __     _      ____    _   _   ___   _   _    ____     _   _   _ 
+ | | | | | |   \ \      / /    / \    |  _ \  | \ | | |_ _| | \ | |  / ___|   | | | | | |
+ | | | | | |    \ \ /\ / /    / _ \   | |_) | |  \| |  | |  |  \| | | |  _    | | | | | |
+ |_| |_| |_|     \ V  V /    / ___ \  |  _ <  | |\  |  | |  | |\  | | |_| |   |_| |_| |_|
+ (_) (_) (_)      \_/\_/    /_/   \_\ |_| \_\ |_| \_| |___| |_| \_|  \____|   (_) (_) (_)
+                                                              
+This document is managed by Joggr. Editing this document could break Joggr's core features, i.e. our 
+ability to auto-maintain this document. Please use the Joggr editor to edit this document 
+(link at bottom of the page).
+-->
+<!-- @joggr:warning:end -->
 ---
 description: How Prisma relations work with scaffolds
 ---
@@ -238,3 +253,10 @@ For the generators, what's important here is that the related models are optiona
 The Redwood generators may complain or fail if you try to force a requirement here.
 
 It's important because if you're at the top—say you're the President—then you don't have a `reportsTo`, and if you're just an Employee, then you don't have anyone that directly reports to you.
+
+<!-- @joggr:editLink(7aded50b-bd48-436f-8714-29d16ee38fc8):start -->
+---
+<a href="https://app.joggr.io/app/documents/7aded50b-bd48-436f-8714-29d16ee38fc8/edit" alt="Edit doc on Joggr">
+  <img src="https://storage.googleapis.com/joggr-public-assets/github/badges/edit-document-badge.svg" />
+</a>
+<!-- @joggr:editLink(7aded50b-bd48-436f-8714-29d16ee38fc8):end -->

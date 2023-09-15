@@ -1,3 +1,18 @@
+<!--@@joggrdoc@@-->
+<!-- @joggr:version(v1):end -->
+<!-- @joggr:warning:start -->
+<!-- 
+  _   _   _    __        __     _      ____    _   _   ___   _   _    ____     _   _   _ 
+ | | | | | |   \ \      / /    / \    |  _ \  | \ | | |_ _| | \ | |  / ___|   | | | | | |
+ | | | | | |    \ \ /\ / /    / _ \   | |_) | |  \| |  | |  |  \| | | |  _    | | | | | |
+ |_| |_| |_|     \ V  V /    / ___ \  |  _ <  | |\  |  | |  | |\  | | |_| |   |_| |_| |_|
+ (_) (_) (_)      \_/\_/    /_/   \_\ |_| \_\ |_| \_| |___| |_| \_|  \____|   (_) (_) (_)
+                                                              
+This document is managed by Joggr. Editing this document could break Joggr's core features, i.e. our 
+ability to auto-maintain this document. Please use the Joggr editor to edit this document 
+(link at bottom of the page).
+-->
+<!-- @joggr:warning:end -->
 ---
 description: Redwood is the full-stack web framework designed to help you grow from side project to startup
 ---
@@ -57,3 +72,10 @@ And if you're not writing [tests](testing.md) and [stories](storybook.md), you'r
 > For example, half the [Testing](testing.md) reference reads like a tutorial, and half the [Logger](logger.md) reference read like a how to.
 > Till now, we've focused on coverage, making sure we had content on all of Redwood's feature somewhere at least.
 > We'll shift our focus to organization and pay more attention to how we can curate the experience.
+
+<!-- @joggr:editLink(29262633-e620-43ab-9de8-4d9d2dc80d03):start -->
+---
+<a href="https://app.joggr.io/app/documents/29262633-e620-43ab-9de8-4d9d2dc80d03/edit" alt="Edit doc on Joggr">
+  <img src="https://storage.googleapis.com/joggr-public-assets/github/badges/edit-document-badge.svg" />
+</a>
+<!-- @joggr:editLink(29262633-e620-43ab-9de8-4d9d2dc80d03):end -->

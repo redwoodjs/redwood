@@ -1,3 +1,18 @@
+<!--@@joggrdoc@@-->
+<!-- @joggr:version(v1):end -->
+<!-- @joggr:warning:start -->
+<!-- 
+  _   _   _    __        __     _      ____    _   _   ___   _   _    ____     _   _   _ 
+ | | | | | |   \ \      / /    / \    |  _ \  | \ | | |_ _| | \ | |  / ___|   | | | | | |
+ | | | | | |    \ \ /\ / /    / _ \   | |_) | |  \| |  | |  |  \| | | |  _    | | | | | |
+ |_| |_| |_|     \ V  V /    / ___ \  |  _ <  | |\  |  | |  | |\  | | |_| |   |_| |_| |_|
+ (_) (_) (_)      \_/\_/    /_/   \_\ |_| \_\ |_| \_| |___| |_| \_|  \____|   (_) (_) (_)
+                                                              
+This document is managed by Joggr. Editing this document could break Joggr's core features, i.e. our 
+ability to auto-maintain this document. Please use the Joggr editor to edit this document 
+(link at bottom of the page).
+-->
+<!-- @joggr:warning:end -->
 ---
 description: GraphQL is a fundamental part of Redwood
 ---
@@ -2361,3 +2376,10 @@ Eager to learn more about GraphQL? Check out some of the resources below:
 - [GraphQL.wtf](https://graphql.wtf) covers most aspects of GraphQL and publishes one short video a week
 - The official GraphQL Yoga (the GraphQL server powering Redwood) [tutorial](https://www.graphql-yoga.com/tutorial/basic/00-introduction) is the best place to get your hands on GraphQL basics
 - And of course, [the official GraphQL docs](https://graphql.org/learn/) are great place to do a deep dive into exactly how GraphQL works
+
+<!-- @joggr:editLink(2dfd6257-b9b0-4359-8170-daea1cb5f432):start -->
+---
+<a href="https://app.joggr.io/app/documents/2dfd6257-b9b0-4359-8170-daea1cb5f432/edit" alt="Edit doc on Joggr">
+  <img src="https://storage.googleapis.com/joggr-public-assets/github/badges/edit-document-badge.svg" />
+</a>
+<!-- @joggr:editLink(2dfd6257-b9b0-4359-8170-daea1cb5f432):end -->

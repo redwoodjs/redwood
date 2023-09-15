@@ -1,3 +1,18 @@
+<!--@@joggrdoc@@-->
+<!-- @joggr:version(v1):end -->
+<!-- @joggr:warning:start -->
+<!-- 
+  _   _   _    __        __     _      ____    _   _   ___   _   _    ____     _   _   _ 
+ | | | | | |   \ \      / /    / \    |  _ \  | \ | | |_ _| | \ | |  / ___|   | | | | | |
+ | | | | | |    \ \ /\ / /    / _ \   | |_) | |  \| |  | |  |  \| | | |  _    | | | | | |
+ |_| |_| |_|     \ V  V /    / ___ \  |  _ <  | |\  |  | |  | |\  | | |_| |   |_| |_| |_|
+ (_) (_) (_)      \_/\_/    /_/   \_\ |_| \_\ |_| \_| |___| |_| \_|  \____|   (_) (_) (_)
+                                                              
+This document is managed by Joggr. Editing this document could break Joggr's core features, i.e. our 
+ability to auto-maintain this document. Please use the Joggr editor to edit this document 
+(link at bottom of the page).
+-->
+<!-- @joggr:warning:end -->
 ---
 description: A comprehensive reference of Redwood's CLI
 ---
@@ -2096,3 +2111,10 @@ If you'd like it to do so, set `notifications.versionUpdates` in the `redwood.to
 By default, the CLI won't check for upgrades—you have to opt into it.
 
 You'll see this notification once a day at most. And the CLI will check for it once a day at most. So, nothing heavy-handed going on here.
+
+<!-- @joggr:editLink(5ea765e4-92ad-40a9-bc2a-82abb97de34f):start -->
+---
+<a href="https://app.joggr.io/app/documents/5ea765e4-92ad-40a9-bc2a-82abb97de34f/edit" alt="Edit doc on Joggr">
+  <img src="https://storage.googleapis.com/joggr-public-assets/github/badges/edit-document-badge.svg" />
+</a>
+<!-- @joggr:editLink(5ea765e4-92ad-40a9-bc2a-82abb97de34f):end -->

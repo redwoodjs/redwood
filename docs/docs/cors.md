@@ -1,3 +1,18 @@
+<!--@@joggrdoc@@-->
+<!-- @joggr:version(v1):end -->
+<!-- @joggr:warning:start -->
+<!-- 
+  _   _   _    __        __     _      ____    _   _   ___   _   _    ____     _   _   _ 
+ | | | | | |   \ \      / /    / \    |  _ \  | \ | | |_ _| | \ | |  / ___|   | | | | | |
+ | | | | | |    \ \ /\ / /    / _ \   | |_) | |  \| |  | |  |  \| | | |  _    | | | | | |
+ |_| |_| |_|     \ V  V /    / ___ \  |  _ <  | |\  |  | |  | |\  | | |_| |   |_| |_| |_|
+ (_) (_) (_)      \_/\_/    /_/   \_\ |_| \_\ |_| \_| |___| |_| \_|  \____|   (_) (_) (_)
+                                                              
+This document is managed by Joggr. Editing this document could break Joggr's core features, i.e. our 
+ability to auto-maintain this document. Please use the Joggr editor to edit this document 
+(link at bottom of the page).
+-->
+<!-- @joggr:warning:end -->
 ---
 title: Cross-Origin Resource Sharing
 description: For when you need to worry about CORS
@@ -261,3 +276,10 @@ You'll need to apply an option when starting the dev server to tell it to accept
 ### Wrapping Up
 
 Now you should be able to open the web side's domain in a browser and use your site as usual. Test that GraphQL requests work, as well as authentication if you are using dbAuth.
+
+<!-- @joggr:editLink(a5b67c63-2888-43bc-8d6a-4a469b4c92b3):start -->
+---
+<a href="https://app.joggr.io/app/documents/a5b67c63-2888-43bc-8d6a-4a469b4c92b3/edit" alt="Edit doc on Joggr">
+  <img src="https://storage.googleapis.com/joggr-public-assets/github/badges/edit-document-badge.svg" />
+</a>
+<!-- @joggr:editLink(a5b67c63-2888-43bc-8d6a-4a469b4c92b3):end -->

@@ -1,3 +1,18 @@
+<!--@@joggrdoc@@-->
+<!-- @joggr:version(v1):end -->
+<!-- @joggr:warning:start -->
+<!-- 
+  _   _   _    __        __     _      ____    _   _   ___   _   _    ____     _   _   _ 
+ | | | | | |   \ \      / /    / \    |  _ \  | \ | | |_ _| | \ | |  / ___|   | | | | | |
+ | | | | | |    \ \ /\ / /    / _ \   | |_) | |  \| |  | |  |  \| | | |  _    | | | | | |
+ |_| |_| |_|     \ V  V /    / ___ \  |  _ <  | |\  |  | |  | |\  | | |_| |   |_| |_| |_|
+ (_) (_) (_)      \_/\_/    /_/   \_\ |_| \_\ |_| \_| |___| |_| \_|  \____|   (_) (_) (_)
+                                                              
+This document is managed by Joggr. Editing this document could break Joggr's core features, i.e. our 
+ability to auto-maintain this document. Please use the Joggr editor to edit this document 
+(link at bottom of the page).
+-->
+<!-- @joggr:warning:end -->
 ---
 description: A comprehensive reference for testing your app
 ---
@@ -1965,3 +1980,10 @@ This is mainly helpful when you are testing for a very specific value, or have e
 So that's the world of testing according to Redwood. Did we miss anything? Can we make it even more awesome? Stop by [the community](https://community.redwoodjs.com) and ask questions, or if you've thought of a way to make this doc even better then [open a PR](https://github.com/redwoodjs/redwoodjs.com/pulls).
 
 Now go out and create (and test!) something amazing!
+
+<!-- @joggr:editLink(242cc25e-0d0a-41d4-9837-98670f8f2bdb):start -->
+---
+<a href="https://app.joggr.io/app/documents/242cc25e-0d0a-41d4-9837-98670f8f2bdb/edit" alt="Edit doc on Joggr">
+  <img src="https://storage.googleapis.com/joggr-public-assets/github/badges/edit-document-badge.svg" />
+</a>
+<!-- @joggr:editLink(242cc25e-0d0a-41d4-9837-98670f8f2bdb):end -->

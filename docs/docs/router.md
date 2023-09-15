@@ -1,3 +1,18 @@
+<!--@@joggrdoc@@-->
+<!-- @joggr:version(v1):end -->
+<!-- @joggr:warning:start -->
+<!-- 
+  _   _   _    __        __     _      ____    _   _   ___   _   _    ____     _   _   _ 
+ | | | | | |   \ \      / /    / \    |  _ \  | \ | | |_ _| | \ | |  / ___|   | | | | | |
+ | | | | | |    \ \ /\ / /    / _ \   | |_) | |  \| |  | |  |  \| | | |  _    | | | | | |
+ |_| |_| |_|     \ V  V /    / ___ \  |  _ <  | |\  |  | |  | |\  | | |_| |   |_| |_| |_|
+ (_) (_) (_)      \_/\_/    /_/   \_\ |_| \_\ |_| \_| |___| |_| \_|  \____|   (_) (_) (_)
+                                                              
+This document is managed by Joggr. Editing this document could break Joggr's core features, i.e. our 
+ability to auto-maintain this document. Please use the Joggr editor to edit this document 
+(link at bottom of the page).
+-->
+<!-- @joggr:warning:end -->
 ---
 description: About the built-in router for Redwood apps
 ---
@@ -783,3 +798,10 @@ export default () => (
 ```
 
 This means that the `NotFoundPage` can use Redwood features like Cells or auth to construct navigation options or detailed header and footer content to help your users find their way back to the main application.
+
+<!-- @joggr:editLink(7b9dd355-35a9-460b-beaa-4d380e7c07a8):start -->
+---
+<a href="https://app.joggr.io/app/documents/7b9dd355-35a9-460b-beaa-4d380e7c07a8/edit" alt="Edit doc on Joggr">
+  <img src="https://storage.googleapis.com/joggr-public-assets/github/badges/edit-document-badge.svg" />
+</a>
+<!-- @joggr:editLink(7b9dd355-35a9-460b-beaa-4d380e7c07a8):end -->

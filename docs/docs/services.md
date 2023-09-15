@@ -1,3 +1,18 @@
+<!--@@joggrdoc@@-->
+<!-- @joggr:version(v1):end -->
+<!-- @joggr:warning:start -->
+<!-- 
+  _   _   _    __        __     _      ____    _   _   ___   _   _    ____     _   _   _ 
+ | | | | | |   \ \      / /    / \    |  _ \  | \ | | |_ _| | \ | |  / ___|   | | | | | |
+ | | | | | |    \ \ /\ / /    / _ \   | |_) | |  \| |  | |  |  \| | | |  _    | | | | | |
+ |_| |_| |_|     \ V  V /    / ___ \  |  _ <  | |\  |  | |  | |\  | | |_| |   |_| |_| |_|
+ (_) (_) (_)      \_/\_/    /_/   \_\ |_| \_\ |_| \_| |___| |_| \_|  \____|   (_) (_) (_)
+                                                              
+This document is managed by Joggr. Editing this document could break Joggr's core features, i.e. our 
+ability to auto-maintain this document. Please use the Joggr editor to edit this document 
+(link at bottom of the page).
+-->
+<!-- @joggr:warning:end -->
 ---
 description: Put all your business logic in one place
 ---
@@ -1134,3 +1149,10 @@ If Memcached or Redis don't serve your needs, you can create your own client ada
 * A constructor that takes whatever arguments you want, passing them through to the client's initialization code.
 * A `get()` function that accepts a `key` argument and returns the data from the cache if found, otherwise `null`. Note that in the Memcached and Redis clients the value returned is first run through `JSON.parse()` but if your cache client supports native JS objects then you wouldn't need to do this.
 * A `set()` function that accepts a string `key`, the `value` to be cached, and an optional `options` object containing at least an `expires` key. Note that `value` can be a real JavaScript objects at this point, but in Memcached and Redis the value is run through `JSON.stringify()` before being sent to the client library. You may or may not need to do the same thing, depending on what your cache client supports.
+
+<!-- @joggr:editLink(fd094420-bdec-4154-964f-e99d3f1240b9):start -->
+---
+<a href="https://app.joggr.io/app/documents/fd094420-bdec-4154-964f-e99d3f1240b9/edit" alt="Edit doc on Joggr">
+  <img src="https://storage.googleapis.com/joggr-public-assets/github/badges/edit-document-badge.svg" />
+</a>
+<!-- @joggr:editLink(fd094420-bdec-4154-964f-e99d3f1240b9):end -->
