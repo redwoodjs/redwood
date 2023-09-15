@@ -3,6 +3,8 @@ import path from 'path'
 
 import chalk from 'chalk'
 
+import { getCompatibilityData } from '@redwoodjs/cli-helpers'
+
 import { installModule, isModuleInstalled } from './packages'
 
 import { getPaths } from './index'
@@ -217,15 +219,18 @@ async function installPluginPackage(packageName, packageVersion) {
   if (!isRedwoodPackage && versionToInstall === undefined) {
     versionToInstall = 'latest'
     try {
-      // TODO: Try to find the latest compatible version from the npm registry
+      const compatibilityData = await getCompatibilityData(
+        packageName,
+        versionToInstall
+      )
+      versionToInstall = compatibilityData.compatible.version
     } catch (_error) {
-      // TODO: Consider letting the user know that we couldn't find a compatible version
-      // and that we are installing the latest version as a fallback
+      // We couldn't find an explicitly compatible version, so we'll just fallback to latest
     }
   }
 
   try {
-    // Note that installModule does the cli version matching for us
+    // Note that installModule does the cli version matching for us if versionToInstall is undefined
     await installModule(packageName, versionToInstall)
     return true
   } catch (error) {
