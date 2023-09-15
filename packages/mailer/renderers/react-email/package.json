@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/mailer-renderer-react-email",
-  "version": "6.2.1",
+  "version": "6.2.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@react-email/render": "0.0.7",
-    "@redwoodjs/mailer-core": "6.2.1"
+    "@redwoodjs/mailer-core": "6.2.2"
   },
   "devDependencies": {
     "esbuild": "0.18.19",

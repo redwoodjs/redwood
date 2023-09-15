@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/babel-config",
-  "version": "6.2.1",
+  "version": "6.2.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -34,7 +34,7 @@
     "@babel/register": "^7.22.15",
     "@babel/runtime-corejs3": "7.22.15",
     "@babel/traverse": "^7.22.17",
-    "@redwoodjs/project-config": "6.2.1",
+    "@redwoodjs/project-config": "6.2.2",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-module-resolver": "5.0.0",
