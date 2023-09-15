@@ -9,6 +9,8 @@ import { installModule, isModuleInstalled } from './packages'
 
 import { getPaths } from './index'
 
+const { Select } = require('enquirer')
+
 /**
  * The file inside .redwood which will contain cached plugin command mappings
  */
@@ -213,12 +215,7 @@ export async function loadPluginPackage(
  */
 async function installPluginPackage(packageName, packageVersion) {
   // We use a simple heuristic here to try and be a little more convienient for the user
-  // when no version is specified. It follows this flow:
-  //   1. Respect a version if it is specified
-  //   2. If the package is from @redwoodjs, install the same version as the cli
-  //   3. if the package is from a third party:
-  //     a. Try to find and install the most recent compatible version from the npm registry
-  //     b. if no compatible version is found, install the 'latest' version
+  // when no version is specified.
 
   let versionToInstall = packageVersion
   const isRedwoodPackage = packageName.startsWith('@redwoodjs/')
@@ -235,13 +232,39 @@ async function installPluginPackage(packageName, packageVersion) {
           `Installing the latest compatible version: ${versionToInstall}`
         )
       )
-    } catch (_error) {
-      // We couldn't find an explicitly compatible version, so we'll just fallback to latest
+    } catch (error) {
       console.log(
-        chalk.yellow(
-          "We could not automatically find a compatible version of this plugin, the 'latest' version will be installed. Please confirm the version is compatible with your project."
-        )
+        'The following error occurred while checking plugin compatibility for automatic installation:'
       )
+      const errorMessage = error.message ?? error
+      console.log(errorMessage)
+
+      // Exit without a chance to continue if it makes sense to do so
+      if (
+        errorMessage.includes('does not have a tag') ||
+        errorMessage.includes('does not have a version')
+      ) {
+        process.exit(1)
+      }
+
+      const prompt = new Select({
+        name: 'versionDecision',
+        message: 'What would you like to do?',
+        choices: [
+          {
+            name: 'cancel',
+            message: 'Cancel',
+          },
+          {
+            name: 'continue',
+            message: "Continue and install the 'latest' version",
+          },
+        ],
+      })
+      const decision = await prompt.run()
+      if (decision === 'cancel') {
+        process.exit(1)
+      }
     }
   }
 
