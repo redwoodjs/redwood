@@ -74,12 +74,12 @@ export const PLUGIN_CACHE_BUILTIN = [
 export function loadCommadCache() {
   // Always default to the default cache
   let pluginCommandCache = PLUGIN_CACHE_DEFAULT
+  const commandCachePath = path.join(
+    getPaths().generated.base,
+    PLUGIN_CACHE_FILENAME
+  )
   try {
-    const localCommandCache = JSON.parse(
-      fs.readFileSync(
-        path.join(getPaths().generated.base, PLUGIN_CACHE_FILENAME)
-      )
-    )
+    const localCommandCache = JSON.parse(fs.readFileSync(commandCachePath))
     // This validity check is rather naive but it exists to invalidate a
     // previous format of the cache file
     let valid = true
@@ -101,6 +101,7 @@ export function loadCommadCache() {
   } catch (error) {
     // If the cache file doesn't exist we can just ignore it and continue
     if (error.code !== 'ENOENT') {
+      console.error(`Error loading plugin command cache at ${commandCachePath}`)
       console.error(error)
     }
   }
@@ -110,12 +111,17 @@ export function loadCommadCache() {
 }
 
 export function saveCommandCache(pluginCommandCache) {
+  const commandCachePath = path.join(
+    getPaths().generated.base,
+    PLUGIN_CACHE_FILENAME
+  )
   try {
     fs.writeFileSync(
-      path.join(getPaths().generated.base, PLUGIN_CACHE_FILENAME),
+      commandCachePath,
       JSON.stringify(pluginCommandCache, undefined, 2)
     )
   } catch (error) {
+    console.error(`Error saving plugin command cache at ${commandCachePath}`)
     console.error(error)
   }
 }
