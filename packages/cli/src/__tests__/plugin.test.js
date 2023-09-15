@@ -874,7 +874,7 @@ describe('plugin loading', () => {
   })
   test('correct loading for unknown redwood command', async () => {
     const originalArgv = process.argv
-    process.argv = ['node', 'rw', 'uknownCommand']
+    process.argv = ['node', 'rw', 'unknownCommand']
 
     getConfig.mockReturnValue({
       experimental: {
@@ -1216,7 +1216,7 @@ describe('plugin loading', () => {
   })
   test('correct loading for unknown third party command', async () => {
     const originalArgv = process.argv
-    process.argv = ['node', 'rw', '@bluewoodjs', 'uknownCommand']
+    process.argv = ['node', 'rw', '@bluewoodjs', 'unknownCommand']
 
     getConfig.mockReturnValue({
       experimental: {
