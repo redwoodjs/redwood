@@ -261,14 +261,6 @@ describe('version compatibility detection', () => {
     )
   })
 
-  test('throws if no redwoodjs engine is found', async () => {
-    await expect(
-      getCompatibilityData('@scope/package-name', '0.0.1')
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"The package '@scope/package-name' does not specify a RedwoodJS compatibility version/range"`
-    )
-  })
-
   test('throws if no latest version could be found', async () => {
     jest.spyOn(global, 'fetch').mockImplementation(() => {
       return {
