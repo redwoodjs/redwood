@@ -47,7 +47,7 @@
     "@babel/cli": "7.22.15",
     "@babel/core": "^7.22.17",
     "@babel/generator": "7.22.15",
-    "@babel/node": "7.22.15",
+    "@babel/node": "7.22.19",
     "@babel/plugin-proposal-decorators": "7.22.15",
     "@babel/plugin-transform-class-properties": "^7.22.5",
     "@babel/plugin-transform-nullish-coalescing-operator": "7.22.11",
