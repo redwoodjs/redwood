@@ -224,8 +224,18 @@ async function installPluginPackage(packageName, packageVersion) {
         versionToInstall
       )
       versionToInstall = compatibilityData.compatible.version
+      console.log(
+        chalk.green(
+          `Installing the latest compatible version: ${versionToInstall}`
+        )
+      )
     } catch (_error) {
       // We couldn't find an explicitly compatible version, so we'll just fallback to latest
+      console.log(
+        chalk.yellow(
+          "We could not automatically find a compatible version of this plugin, the 'latest' version will be installed. Please confirm the version is compatible with your project."
+        )
+      )
     }
   }
 
