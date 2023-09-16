@@ -47,6 +47,7 @@ export const createGraphQLYoga = ({
   allowIntrospection,
   allowGraphiQL,
   defaultError = 'Something went wrong.',
+  customFormatError,
   graphiQLEndpoint = '/graphql',
   schemaOptions,
   realtime,
@@ -188,6 +189,7 @@ export const createGraphQLYoga = ({
       maskedErrors: {
         errorMessage: defaultError,
         isDev: isDevEnv,
+        maskError: customFormatError,
       },
       logging: logger,
       healthCheckEndpoint: graphiQLEndpoint + '/health',

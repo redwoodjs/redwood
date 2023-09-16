@@ -7,7 +7,7 @@ import type {
   GraphQLInterfaceType,
   DocumentNode,
 } from 'graphql'
-import type { Plugin } from 'graphql-yoga'
+import type { Plugin, MaskError } from 'graphql-yoga'
 
 import type { AuthContextPayload, Decoder } from '@redwoodjs/api'
 import type { CorsConfig } from '@redwoodjs/api'
@@ -178,6 +178,14 @@ export type GraphQLYogaOptions = {
    * @see https://github.com/dotansimha/envelop/blob/main/packages/core/docs/use-masked-errors.md
    */
   defaultError?: string
+
+
+  /**
+   * @description Customize the default mask error function used to mask errors.
+   *
+   * @see https://github.com/dotansimha/envelop/blob/main/packages/core/docs/use-masked-errors.md
+   */
+  customFormatError?: MaskError
 
   /**
    * @description Only allows the specified operation types (e.g. subscription, query or mutation).
