@@ -49,6 +49,7 @@ export async function build() {
       ),
     ],
     ssr: {
+      // TODO (RSC): Is this still relevant?
       // FIXME Without this, waku/router isn't considered to have client
       // entries, and "No client entry" error occurs.
       // Unless we fix this, RSC-capable packages aren't supported.
