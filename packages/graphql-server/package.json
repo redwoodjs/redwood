@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.22.15",
-    "@babel/core": "7.22.17",
+    "@babel/core": "^7.22.17",
     "@envelop/testing": "6.0.0",
     "@envelop/types": "4.0.0",
     "@redwoodjs/project-config": "6.0.7",
