@@ -17,9 +17,6 @@ export async function handler({ npmPackage, force, _: _args }) {
   // Extract any additional arguments that came after a '--'
   // See: https://github.com/yargs/yargs/blob/main/docs/tricks.md#stop-parsing
   const additionalOptionsToForward = _args.slice(2) ?? []
-  console.log({
-    additionalOptionsToForward,
-  })
 
   // If we're using force don't attempt anything fancy, just run the package after some messaging
   if (force) {
