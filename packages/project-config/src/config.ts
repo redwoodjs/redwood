@@ -115,7 +115,6 @@ export interface Config {
 
 export interface CLIPlugin {
   package: string
-  version?: string
   enabled?: boolean
 }
 
