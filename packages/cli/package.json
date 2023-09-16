@@ -50,7 +50,7 @@
     "camelcase": "6.3.0",
     "chalk": "4.1.2",
     "ci-info": "3.8.0",
-    "concurrently": "8.2.0",
+    "concurrently": "8.2.1",
     "configstore": "3.1.5",
     "core-js": "3.32.2",
     "cross-env": "7.0.3",
