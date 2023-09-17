@@ -3,7 +3,8 @@ import * as path from 'node:path'
 
 import { test, expect } from '@playwright/test'
 import type { PlaywrightTestArgs, Page } from '@playwright/test'
-import * as execa from 'execa'
+// @ts-expect-error - With `* as` you have to use .default() when calling execa
+import execa from 'execa'
 
 import { loginAsTestUser, signUpTestUser } from '../../common'
 

@@ -7,7 +7,8 @@ import type {
   PlaywrightTestArgs,
   PlaywrightWorkerArgs,
 } from '@playwright/test'
-import * as execa from 'execa'
+// @ts-expect-error - With `* as` you have to use .default() when calling execa
+import execa from 'execa'
 
 let noJsBrowser: BrowserContext
 
