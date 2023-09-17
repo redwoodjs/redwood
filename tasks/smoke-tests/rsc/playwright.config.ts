@@ -6,6 +6,14 @@ import { basePlaywrightConfig } from '../basePlaywright.config'
 export default defineConfig({
   ...basePlaywrightConfig,
 
+  projects: [
+    ...basePlaywrightConfig.projects,
+    {
+      name: 'setup',
+      testMatch: /global\.setup\.ts/,
+    },
+  ],
+
   use: {
     baseURL: 'http://localhost:8910',
   },
@@ -19,6 +27,4 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
   },
-
-  timeout: 5 * 60 * 1000,
 })

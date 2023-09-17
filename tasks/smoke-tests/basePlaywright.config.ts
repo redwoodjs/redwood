@@ -1,5 +1,11 @@
+import * as fs from 'node:fs'
+
 import type { PlaywrightTestConfig } from '@playwright/test'
 import { devices } from '@playwright/test'
+
+if (fs.existsSync('./tests/global.setup.ts')) {
+  console.log('adding setup step')
+}
 
 // See https://playwright.dev/docs/test-configuration#global-configuration
 export const basePlaywrightConfig: PlaywrightTestConfig = {
@@ -18,6 +24,9 @@ export const basePlaywrightConfig: PlaywrightTestConfig = {
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      dependencies: fs.existsSync('./tests/global.setup.ts')
+        ? ['setup']
+        : undefined,
     },
 
     // {
