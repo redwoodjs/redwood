@@ -1,9 +1,9 @@
-import fs from 'node:fs'
-import path from 'node:path'
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 
 import { test, expect } from '@playwright/test'
 import type { PlaywrightTestArgs, Page } from '@playwright/test'
-import execa from 'execa'
+import * as execa from 'execa'
 
 import { loginAsTestUser, signUpTestUser } from '../../common'
 
