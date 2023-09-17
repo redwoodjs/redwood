@@ -5,6 +5,8 @@ import { test as setup } from '@playwright/test'
 // @ts-expect-error - With `* as` you have to use .default() when calling execa
 import execa from 'execa'
 
+import { projectData } from '../playwright.config'
+
 class ExecaError extends Error {
   stdout: string
   stderr: string
@@ -70,19 +72,16 @@ async function createTestProject() {
   // const cmd = `node ./packages/create-redwood-app/dist/create-redwood-app.js --yes ${projectOutputPath}`
   const cmd = `npx -y create-redwood-app@canary -y ${projectOutputPath}`
 
-  await exec(cmd, getExecaOptions(rwPath))
+  await exec(cmd, getExecaOptions('/'))
 
   return projectOutputPath
 }
 
 async function setupRsc(projectOutputPath: string) {
-  const rwPath = path.resolve(__dirname, '../../..')
-  console.log('rwPath', rwPath)
+  const rwPath = path.resolve(__dirname, '../../../..')
   const rwBinPath = path.join(rwPath, 'packages/cli/dist/index.js')
-  console.log('rwBinPath', rwBinPath)
 
   const cmdSetupStreamingSSR = `node ${rwBinPath} experimental setup-streaming-ssr -f`
-  console.log('cmdSetupStreamingSSR', cmdSetupStreamingSSR)
   await exec(cmdSetupStreamingSSR, getExecaOptions(projectOutputPath))
 
   const cmdSetupRSC = `node ${rwBinPath} experimental setup-rsc`
@@ -97,12 +96,21 @@ async function build(projectOutputPath: string) {
   await exec(cmdBuild, getExecaOptions(projectOutputPath))
 }
 
+async function serve(projectOutputPath: string) {
+  const rwPath = path.resolve(__dirname, '../../../..')
+  const rwBinPath = path.join(rwPath, 'packages/cli/dist/index.js')
+
+  const cmdBuild = `node ${rwBinPath} serve`
+  return exec(cmdBuild, getExecaOptions(projectOutputPath))
+}
+
 setup('Setup and build test project', async () => {
   // Allow ample time for yarn to install everything
   setup.setTimeout(5 * 60 * 1000)
 
-  console.log('setup and build test project')
   const projectOutputPath = await createTestProject()
   await setupRsc(projectOutputPath)
   await build(projectOutputPath)
+  const serveProcess = serve(projectOutputPath)
+  projectData.serveProcess = serveProcess
 })
