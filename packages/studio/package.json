@@ -55,7 +55,7 @@
   "devDependencies": {
     "@apollo/client": "3.8.3",
     "@babel/cli": "7.22.15",
-    "@babel/core": "^7.22.17",
+    "@babel/core": "^7.22.20",
     "@graphiql/plugin-explorer": "0.1.22",
     "@graphiql/toolkit": "0.8.4",
     "@headlessui/react": "1.7.15",
