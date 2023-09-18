@@ -626,12 +626,6 @@ validateWithSync(() => {
     throw "You'll have to be more creative than that"
   }
 })
-
-validateWithSync(() => {
-  if (input.name === 'Name') {
-    throw new Error("You'll have to be more creative than that")
-  }
-})
 ```
 
 Either of these errors will be caught and re-thrown as a `ServiceValidationError` with your text as the `message` of the error (although technically you should always throw errors with `new Error()` like in the second example).
