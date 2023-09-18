@@ -4,6 +4,7 @@ import path from 'path'
 import execa from 'execa'
 import { Listr } from 'listr2'
 
+import { prettify } from '@redwoodjs/cli-helpers'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -157,6 +158,16 @@ export const handler = async ({ force, verbose }) => {
         title: 'Updating index.html...',
         task: async () => {
           let indexHtml = fs.readFileSync(rwPaths.web.html, 'utf-8')
+
+          if (
+            /\n\s*<script type="module" src="entry.client.tsx"><\/script>/.test(
+              indexHtml
+            )
+          ) {
+            // index.html is already updated
+            return
+          }
+
           indexHtml = indexHtml.replace(
             'href="/favicon.png" />',
             'href="/favicon.png" />\n  <script type="module" src="entry.client.tsx"></script>'
@@ -183,6 +194,27 @@ export const handler = async ({ force, verbose }) => {
           writeFile(rwPaths.web.entryClient, entryClientTemplate, {
             overwriteExisting: true,
           })
+        },
+      },
+      {
+        title: 'Add React experimental types',
+        task: async () => {
+          const tsconfigPath = path.join(rwPaths.web.base, 'tsconfig.json')
+          const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf-8'))
+
+          if (tsconfig.compilerOptions.types.includes('react/experimental')) {
+            return
+          }
+
+          tsconfig.compilerOptions.types.push('react/experimental')
+
+          writeFile(
+            tsconfigPath,
+            prettify('tsconfig.json', JSON.stringify(tsconfig, null, 2)),
+            {
+              overwriteExisting: true,
+            }
+          )
         },
       },
       {
