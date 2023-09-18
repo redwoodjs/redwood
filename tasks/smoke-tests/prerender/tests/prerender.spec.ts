@@ -1,13 +1,13 @@
-import fs from 'fs'
-import path from 'path'
+import * as fs from 'fs'
+import * as path from 'path'
 
-import {
-  test,
+import { test, expect } from '@playwright/test'
+import type {
   BrowserContext,
-  expect,
   PlaywrightTestArgs,
   PlaywrightWorkerArgs,
 } from '@playwright/test'
+// @ts-expect-error - With `* as` you have to use .default() when calling execa
 import execa from 'execa'
 
 let noJsBrowser: BrowserContext

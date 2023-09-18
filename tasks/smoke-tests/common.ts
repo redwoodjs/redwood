@@ -1,4 +1,5 @@
-import { expect, PlaywrightTestArgs } from '@playwright/test'
+import { expect } from '@playwright/test'
+import type { PlaywrightTestArgs } from '@playwright/test'
 
 export async function smokeTest({ page }: PlaywrightTestArgs) {
   await page.goto('/')

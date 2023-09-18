@@ -1,8 +1,9 @@
-import fs from 'node:fs'
-import path from 'node:path'
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 
 import { test, expect } from '@playwright/test'
 import type { PlaywrightTestArgs, Page } from '@playwright/test'
+// @ts-expect-error - With `* as` you have to use .default() when calling execa
 import execa from 'execa'
 
 import { loginAsTestUser, signUpTestUser } from '../../common'
