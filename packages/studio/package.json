@@ -23,7 +23,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.22.15",
     "@fastify/http-proxy": "9.2.1",
-    "@fastify/static": "6.11.0",
+    "@fastify/static": "6.11.1",
     "@fastify/url-data": "5.3.1",
     "@redwoodjs/internal": "6.0.7",
     "@redwoodjs/project-config": "6.0.7",
@@ -35,7 +35,7 @@
     "crypto-js": "4.1.1",
     "dotenv": "16.3.1",
     "fast-json-parse": "1.0.3",
-    "fastify": "4.23.1",
+    "fastify": "4.23.2",
     "fastify-raw-body": "4.2.2",
     "graphql": "16.8.0",
     "graphql-scalars": "1.22.2",
@@ -55,7 +55,7 @@
   "devDependencies": {
     "@apollo/client": "3.8.3",
     "@babel/cli": "7.22.15",
-    "@babel/core": "7.22.17",
+    "@babel/core": "^7.22.17",
     "@graphiql/plugin-explorer": "0.1.22",
     "@graphiql/toolkit": "0.8.4",
     "@headlessui/react": "1.7.15",

@@ -52,7 +52,6 @@ export function Assets() {
   // Do we also need special code for SSR?
   // if (isClient) return <ClientAssets />
 
-  // @ts-expect-error Need experimental types here for this to work
   return <ServerAssets />
 }
 

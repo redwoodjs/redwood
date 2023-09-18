@@ -50,7 +50,7 @@
   "devDependencies": {
     "@apollo/experimental-nextjs-app-support": "0.4.2",
     "@babel/cli": "7.22.15",
-    "@babel/core": "7.22.17",
+    "@babel/core": "^7.22.17",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
     "@types/prop-types": "15.7.5",
