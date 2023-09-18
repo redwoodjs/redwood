@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.22.15",
-    "@babel/core": "^7.22.17",
+    "@babel/core": "^7.22.20",
     "@redwoodjs/api": "6.0.7",
     "@types/aws-lambda": "8.10.119",
     "@types/jsonwebtoken": "9.0.2",
