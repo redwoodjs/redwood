@@ -66,6 +66,10 @@ export async function installRedwoodModule(module) {
       stdio: 'inherit',
       cwd: getPaths().base,
     })
+    await execa.command(`yarn dedupe`, {
+      stdio: 'inherit',
+      cwd: getPaths().base,
+    })
     return true
   }
   return false
