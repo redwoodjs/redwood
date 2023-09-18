@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import execa from 'execa'
 import { Listr } from 'listr2'
 
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
@@ -181,6 +182,46 @@ export const handler = async ({ force, verbose }) => {
 
           writeFile(rwPaths.web.entryClient, entryClientTemplate, {
             overwriteExisting: true,
+          })
+        },
+      },
+      {
+        title: 'Patch vite',
+        task: async () => {
+          const vitePatchTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'vite-npm-4.4.9-e845c1bbf8.patch.template'
+            ),
+            'utf-8'
+          )
+
+          const yarnPatchDir = path.join(rwPaths.base, '.yarn', 'patches')
+          const vitePatchPath = path.join(
+            yarnPatchDir,
+            'vite-npm-4.4.9-e845c1bbf8.patch'
+          )
+          writeFile(vitePatchPath, vitePatchTemplate, {
+            overwriteExisting: force,
+          })
+
+          const packageJsonPath = path.join(rwPaths.base, 'package.json')
+          const packageJson = JSON.parse(
+            fs.readFileSync(packageJsonPath, 'utf-8')
+          )
+          packageJson.resolutions = packageJson.resolutions || {}
+          packageJson.resolutions['vite@4.4.9'] =
+            'patch:vite@npm%3A4.4.9#./.yarn/patches/vite-npm-4.4.9-e845c1bbf8.patch'
+          writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2), {
+            overwriteExisting: true,
+          })
+
+          await execa('yarn install', {
+            stdio: 'ignore',
+            shell: true,
+            cwd: rwPaths.base,
           })
         },
       },
