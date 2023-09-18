@@ -38,7 +38,7 @@
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
     "@types/aws-lambda": "8.10.119",
-    "@types/babel-core": "6.25.7",
+    "@types/babel-core": "6.25.8",
     "@types/jest": "29.5.4",
     "@types/node": "18.16.18",
     "@types/react": "18.2.14",
@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.22.15",
-    "@babel/core": "^7.22.17",
+    "@babel/core": "^7.22.20",
     "typescript": "5.1.6"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

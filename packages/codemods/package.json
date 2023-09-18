@@ -23,11 +23,11 @@
   },
   "dependencies": {
     "@babel/cli": "7.22.15",
-    "@babel/core": "^7.22.17",
+    "@babel/core": "^7.22.20",
     "@babel/parser": "^7.22.16",
     "@babel/plugin-transform-typescript": "^7.22.15",
     "@babel/runtime-corejs3": "7.22.15",
-    "@babel/traverse": "^7.22.17",
+    "@babel/traverse": "^7.22.20",
     "@iarna/toml": "2.2.5",
     "@redwoodjs/project-config": "6.2.2",
     "@svgr/core": "8.0.0",
@@ -49,7 +49,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@types/babel__core": "7.20.1",
+    "@types/babel__core": "7.20.2",
     "@types/fs-extra": "11.0.1",
     "@types/jest": "29.5.4",
     "@types/jscodeshift": "0.11.6",

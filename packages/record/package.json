@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.22.15",
-    "@babel/core": "^7.22.17",
+    "@babel/core": "^7.22.20",
     "@prisma/internals": "5.2.0",
     "esbuild": "0.18.19",
     "jest": "29.6.4"

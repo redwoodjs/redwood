@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.22.15",
-    "@babel/core": "^7.22.17",
+    "@babel/core": "^7.22.20",
     "@redwoodjs/api": "6.2.2",
     "@simplewebauthn/server": "7.3.1",
     "@types/crypto-js": "4.1.1",
