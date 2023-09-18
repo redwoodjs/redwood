@@ -756,9 +756,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/node@npm:7.22.15":
-  version: 7.22.15
-  resolution: "@babel/node@npm:7.22.15"
+"@babel/node@npm:7.22.19":
+  version: 7.22.19
+  resolution: "@babel/node@npm:7.22.19"
   dependencies:
     "@babel/register": ^7.22.15
     commander: ^4.0.1
@@ -770,7 +770,7 @@ __metadata:
     "@babel/core": ^7.0.0-0
   bin:
     babel-node: ./bin/babel-node.js
-  checksum: 4b98d4a73315bd446236fadd854eaa4b45678777657fd4ff52e46e466ea693490045bd23fb77248ccc4eb8b78243689c9e8e483e1bdaea38354d51cb9e1a70f9
+  checksum: df3d5195cc9c070508fa964a1ae073e20c3bf60a8d996be0e3ac8c1d9dd6c69a5abe54452e74a123fb4ea67fa92b66a77f34acc5f45178c27395a57706ad7a45
   languageName: node
   linkType: hard
 
@@ -31328,7 +31328,7 @@ __metadata:
     "@babel/cli": 7.22.15
     "@babel/core": ^7.22.17
     "@babel/generator": 7.22.15
-    "@babel/node": 7.22.15
+    "@babel/node": 7.22.19
     "@babel/plugin-proposal-decorators": 7.22.15
     "@babel/plugin-transform-class-properties": ^7.22.5
     "@babel/plugin-transform-nullish-coalescing-operator": 7.22.11
