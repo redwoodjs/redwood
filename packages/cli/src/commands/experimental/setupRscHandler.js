@@ -158,6 +158,16 @@ export const handler = async ({ force, verbose }) => {
         title: 'Updating index.html...',
         task: async () => {
           let indexHtml = fs.readFileSync(rwPaths.web.html, 'utf-8')
+
+          if (
+            /\n\s*<script type="module" src="entry.client.tsx"><\/script>/.test(
+              indexHtml
+            )
+          ) {
+            // index.html is already updated
+            return
+          }
+
           indexHtml = indexHtml.replace(
             'href="/favicon.png" />',
             'href="/favicon.png" />\n  <script type="module" src="entry.client.tsx"></script>'
