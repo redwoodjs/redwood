@@ -3,8 +3,8 @@
 exports[`Generate gql possible types web from the GraphQL Schema when there are *no* union types 1`] = `
 "export interface PossibleTypesResultData {
   possibleTypes: {
-    [key: string]: string[],
-  };
+    [key: string]: string[]
+  }
 }
 const result: PossibleTypesResultData = {
   possibleTypes: {},
@@ -16,8 +16,8 @@ export default result
 exports[`Generate gql possible types web from the GraphQL Schema when there are union types  1`] = `
 "export interface PossibleTypesResultData {
   possibleTypes: {
-    [key: string]: string[],
-  };
+    [key: string]: string[]
+  }
 }
 const result: PossibleTypesResultData = {
   possibleTypes: {
