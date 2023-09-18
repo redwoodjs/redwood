@@ -1,10 +1,10 @@
 {
-  "name": "@redwoodjs/mailer-handler-in-memory",
+  "name": "@redwoodjs/mailer-handler-resend",
   "version": "6.2.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/mailer/handlers/in-memory"
+    "directory": "packages/mailer/handlers/resend"
   },
   "license": "MIT",
   "main": "./dist/index.js",
@@ -24,7 +24,8 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/mailer-core": "6.2.3"
+    "@redwoodjs/mailer-core": "6.2.3",
+    "resend": "1.0.0"
   },
   "devDependencies": {
     "esbuild": "0.18.19",
