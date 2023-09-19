@@ -464,7 +464,7 @@ interface AnalyzedRoute {
   page: PageType | null
   redirect: string | null
   wrappers: Wrappers
-  setProps: Record<any, any>
+  setProps: Record<any, any>[]
   setId: number
 }
 
@@ -483,7 +483,7 @@ export function analyzeRoutes(
     whileLoadingPageFromSet?: WhileLoadingPage
     wrappersFromSet?: Wrappers
     // we don't know, or care about, what props users are passing down
-    propsFromSet?: Record<string, unknown>
+    propsFromSet?: Record<string, unknown>[]
     setId?: number
   }
 
@@ -507,7 +507,7 @@ export function analyzeRoutes(
     nodes,
     whileLoadingPageFromSet,
     wrappersFromSet = [],
-    propsFromSet: previousSetProps = {},
+    propsFromSet: previousSetProps = [],
   }: RecurseParams) => {
     nodes.forEach((node) => {
       if (isValidRoute(node)) {
@@ -612,8 +612,10 @@ export function analyzeRoutes(
         // @MARK note unintuitive, but intentional
         // You cannot make a nested set public if the parent is private
         // i.e. the private prop cannot be overriden by a child Set
+
+        // @TODO: Double check this logic is correct for privatge logic in previous set props
         const privateProps =
-          isPrivateNode(node) || previousSetProps.private
+          isPrivateNode(node) || previousSetProps.some((props) => props.private)
             ? { private: true }
             : {}
 
@@ -627,13 +629,15 @@ export function analyzeRoutes(
               whileLoadingPageFromCurrentSet || whileLoadingPageFromSet,
             setId,
             wrappersFromSet: [...wrappersFromSet, ...wrapperComponentsArray],
-            propsFromSet: {
+            propsFromSet: [
               ...previousSetProps,
-              // Current one takes precedence
-              ...otherPropsFromCurrentSet,
-              // See comment at definiion, intenionally at the end
-              ...privateProps,
-            },
+              {
+                // Current one takes precedence
+                ...otherPropsFromCurrentSet,
+                // See comment at definiion, intenionally at the end
+                ...privateProps,
+              },
+            ],
           })
         }
       }
