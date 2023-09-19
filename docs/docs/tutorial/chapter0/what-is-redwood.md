@@ -122,7 +122,7 @@ export const Success = ({ testimonials }) => {
 }
 ```
 
-(In this case we don't export `Empty` so that if there aren't any, that section of the final page won't render anything, not even indicating to the user that something is missing.)
+(In this case we don't export `Empty` so that if there aren't any testimonials, that section of the final page won't render anything, not even indicating to the user that something is missing.)
 
 If you ever create additional clients for your server (a mobile app, perhaps) you'll be giving yourself a huge advantage by using GraphQL from the start.
 
