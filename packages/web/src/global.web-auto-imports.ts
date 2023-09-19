@@ -1,13 +1,11 @@
 import type _React from 'react'
 
 import type _gql from 'graphql-tag'
-import type _PropTypes from 'prop-types'
 
 // These are the global types exposed to a user's project
 // For "internal" global types see ambient.d.ts
 
 declare global {
-  const PropTypes: typeof _PropTypes
   const gql: typeof _gql
 
   // Having this as a type instead of a const allows us to augment/override it
