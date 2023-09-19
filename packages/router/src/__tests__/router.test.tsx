@@ -18,35 +18,34 @@ jest.mock('../util', () => {
   }
 })
 
-import React, { Children, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
+import '@testing-library/jest-dom/extend-expect'
 import {
+  act,
+  configure,
+  fireEvent,
   render,
   waitFor,
-  act,
-  fireEvent,
-  configure,
-  cleanup,
 } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
 
 import {
-  Router,
-  Route,
-  Private,
-  Redirect,
+  back,
   routes as generatedRoutes,
   Link,
   navigate,
-  back,
+  Private,
+  Redirect,
+  Route,
+  Router,
   usePageLoadingContext,
 } from '../'
 import { useLocation } from '../location'
 import { useParams } from '../params'
 import { Set } from '../Set'
-import type { Spec, GeneratedRoutesMap } from '../util'
+import type { GeneratedRoutesMap, Spec } from '../util'
 
 /** running into intermittent test timeout behavior in https://github.com/redwoodjs/redwood/pull/4992
  attempting to work around by bumping the default timeout of 5000 */
