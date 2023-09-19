@@ -124,9 +124,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.8.3":
-  version: 3.8.3
-  resolution: "@apollo/client@npm:3.8.3"
+"@apollo/client@npm:3.8.4":
+  version: 3.8.4
+  resolution: "@apollo/client@npm:3.8.4"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.3
@@ -156,7 +156,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: f622299670fbd895ec6b3960560829b1575fcfc733dffe967afe6ebba17796b6c2d4f8fac5686761a24c394f99270877190914c7161bce9b4ea0e76e12d33de2
+  checksum: 36b8cb05da30fffb795d8bb970cdbc32f5f3b421ebe5874d7681a907bd4aa6ca7b01144b480299e309e207754f77d1f72b55b05e15bd488248242fafdd76dcd3
   languageName: node
   linkType: hard
 
@@ -8990,7 +8990,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/studio@workspace:packages/studio"
   dependencies:
-    "@apollo/client": 3.8.3
+    "@apollo/client": 3.8.4
     "@babel/cli": 7.22.15
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.22.15
@@ -9205,7 +9205,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.8.3
+    "@apollo/client": 3.8.4
     "@apollo/experimental-nextjs-app-support": 0.4.2
     "@babel/cli": 7.22.15
     "@babel/core": ^7.22.20
