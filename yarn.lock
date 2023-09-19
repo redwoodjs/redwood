@@ -8795,11 +8795,9 @@ __metadata:
   resolution: "@redwoodjs/mailer-handler-in-memory@workspace:packages/mailer/handlers/in-memory"
   dependencies:
     "@redwoodjs/mailer-core": 6.0.7
-    "@types/uuid": 9.0.2
     esbuild: 0.19.3
     fast-glob: 3.3.1
     typescript: 5.2.2
-    uuid: 9.0.0
   languageName: unknown
   linkType: soft
 
@@ -8812,6 +8810,18 @@ __metadata:
     esbuild: 0.19.3
     fast-glob: 3.3.1
     nodemailer: 6.9.5
+    typescript: 5.2.2
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/mailer-handler-resend@workspace:packages/mailer/handlers/resend":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/mailer-handler-resend@workspace:packages/mailer/handlers/resend"
+  dependencies:
+    "@redwoodjs/mailer-core": 6.0.7
+    esbuild: 0.19.3
+    fast-glob: 3.3.1
+    resend: 1.0.0
     typescript: 5.2.2
   languageName: unknown
   linkType: soft
@@ -9070,7 +9080,7 @@ __metadata:
     qs: 6.11.2
     react: 0.0.0-experimental-e5205658f-20230913
     react-dom: 0.0.0-experimental-e5205658f-20230913
-    react-error-boundary: 4.0.10
+    react-error-boundary: 4.0.11
     react-grid-layout: 1.3.4
     react-router-dom: 6.8.1
     react-split-pane: 0.1.92
@@ -30062,14 +30072,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-error-boundary@npm:4.0.10":
-  version: 4.0.10
-  resolution: "react-error-boundary@npm:4.0.10"
+"react-error-boundary@npm:4.0.11":
+  version: 4.0.11
+  resolution: "react-error-boundary@npm:4.0.11"
   dependencies:
     "@babel/runtime": ^7.12.5
   peerDependencies:
     react: ">=16.13.1"
-  checksum: d61cc2f4770459e03b8d58c971ee626b6ec95fd6fdf168a001ea028fd7b429013007d5084a99367b0d0effc823862eea3c49a3b22c64f6376aaba2da51c8773a
+  checksum: 33dad3df7687971e65c7182d97f44bd618cb5d77d1c338e0a7c17c5cf7706a07b9055fffb771ff19bad750d40dd3cfd18d661a60b0518e73197e294dc185f18c
   languageName: node
   linkType: hard
 
@@ -31061,6 +31071,17 @@ __metadata:
   version: 4.1.8
   resolution: "reselect@npm:4.1.8"
   checksum: 06a305a504affcbb67dd0561ddc8306b35796199c7e15b38934c80606938a021eadcf68cfd58e7bb5e17786601c37602a3362a4665c7bf0a96c1041ceee9d0b7
+  languageName: node
+  linkType: hard
+
+"resend@npm:1.0.0":
+  version: 1.0.0
+  resolution: "resend@npm:1.0.0"
+  dependencies:
+    "@react-email/render": 0.0.7
+    node-fetch: 2.6.12
+    type-fest: 3.13.0
+  checksum: 245abec89ea32c0989d042942c77f11cccd3996439c0d5337a6f8e25796a94d926c5b1a081ef5a399c60132932865cb847f3f7377af6f9da2efbd18523f6d622
   languageName: node
   linkType: hard
 
@@ -34155,6 +34176,13 @@ __metadata:
   version: 4.0.8
   resolution: "type-detect@npm:4.0.8"
   checksum: 8fb9a51d3f365a7de84ab7f73b653534b61b622aa6800aecdb0f1095a4a646d3f5eb295322127b6573db7982afcd40ab492d038cf825a42093a58b1e1353e0bd
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:3.13.0":
+  version: 3.13.0
+  resolution: "type-fest@npm:3.13.0"
+  checksum: 8d3f7ab432685a661b22484d64b4b1083a85c3db3eb01fee25cf4aa558b07bf2d6a42bbd072a4941da43072688f982ebb8b10b9f4444b3cb260d960f4ccf5c5c
   languageName: node
   linkType: hard
 
