@@ -1649,11 +1649,6 @@ describe('Multiple nested private sets', () => {
     </Router>
   )
 
-  // We need to test if the user is unauthenticated they should be sent to`/home`
-  // if the specified roles are not assigned to the user they are
-  // sent to noRolesAssigned Page if the user is authenticated and has role
-  // EMPLOYEE they should be sent to `/employee` if the user is authenticated
-  // and has role ADMIN they should be sent to `/admin`
   test('is authenticated but does not have matching roles', async () => {
     const screen = render(
       <TestRouter
@@ -1760,11 +1755,6 @@ describe('Multiple nested private sets', () => {
     </Router>
   )
 
-  // We need to test if the user is unauthenticated they should be sent to`/home`
-  // if the specified roles are not assigned to the user they are
-  // sent to noRolesAssigned Page if the user is authenticated and has role
-  // EMPLOYEE they should be sent to `/employee` if the user is authenticated
-  // and has role ADMIN they should be sent to `/admin`
   test('level 1, matches expected props', async () => {
     const screen = render(<TestRouter />)
 
