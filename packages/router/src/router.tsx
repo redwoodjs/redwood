@@ -255,13 +255,14 @@ const WrappedPage = memo(
       // Wrap AuthenticatedRoute this way, because if we mutate the wrappers array itself
       // it causes full rerenders of the page
       return wrappersWithAuthMaybe.reduceRight((acc, wrapper) => {
-        const outputProps = setProps.reduce((acc, props, i) => {
+        // Merge props from set, the lowest set props will override the higher ones
+        const mergedSetProps = setProps.reduce((acc, props) => {
           return { ...acc, ...props }
         }, {})
 
         return React.createElement(
           wrapper as any,
-          outputProps,
+          mergedSetProps,
           acc ? acc : routeLoaderElement
         )
       }, undefined as ReactNode)
