@@ -1722,7 +1722,7 @@ yarn redwood setup <category>
 | `deploy`           | Set up a deployment configuration for a provider                                           |
 | `generator`        | Copy default Redwood generator templates locally for customization                         |
 | `i18n`             | Set up i18n                                                                                |
-| `package`          | Peform setup actions by running a third party npm package                                  |
+| `package`          | Peform setup actions by running a third-party npm package                                  |
 | `tsconfig`         | Add relevant tsconfig so you can start using TypeScript                                    |
 | `ui`               | Set up a UI design or style library                                                        |
 | `webpack`          | Set up a webpack config file in your project so you can add custom config                  |
@@ -1916,25 +1916,25 @@ yarn redwood setup package <npm-package>
 
 | Arguments & Options | Description              |
 | :------------------ | :----------------------- |
-| `--force, -f`       | Overwrite existing files |
+| `--force, -f`       | Forgo compatibility checks |
 
 **Usage**
 
-Run the made up `@bluewoodjs/rw-setup` package:
+Run the made up `@redwoodjs/setup-example` package:
 ```bash
-~/redwood-app$ yarn rw setup package @bluewoodjs/rw-setup
+~/redwood-app$ yarn rw setup package @redwoodjs/setup-example
 ```
 
 Run the same package but using a particular npm tag and avoiding any compatibility checks:
 ```bash
-~/redwood-app$ yarn rw setup package @bluewoodjs/rw-setup@beta --force
+~/redwood-app$ yarn rw setup package @redwoodjs/setup-example@beta --force
 ```
 
 **Compatibility Checks**
 
-We perform a simple compatibility check in an attempt to make you aware of potential compatibility issues with setup packages you might wish to run. This works by examining the version of `@redwoodjs/core` you are using within your root `package.json`. We compare this value with a compatibility range the npm package specifies in the `engines.redwoodjs` field of its own `package.json`. If the version of `@redwoodjs/core` you are using falls outside of the compatibility range specified by the package you are attempting to run, we will warn you and ask you to confirm you wish to continue.
+We perform a simple compatibility check in an attempt to make you aware of potential compatibility issues with setup packages you might wish to run. This works by examining the version of `@redwoodjs/core` you are using within your root `package.json`. We compare this value with a compatibility range the npm package specifies in the `engines.redwoodjs` field of its own `package.json`. If the version of `@redwoodjs/core` you are using falls outside of the compatibility range specified by the package you are attempting to run, we will warn you and ask you to confirm that you wish to continue.
 
-It's the responsibility of the authors of those npm packages to specify the correct range of compatibility so you should always research the packages you use with this command. Especially since they will be executing code on your machine!
+It's the author of the npm package's responsibility to specify the correct compatibility range, so **you should always research the packages you use with this command**. Especially since they will be executing code on your machine!
 
 ### setup tsconfig
 
