@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-auth0-setup",
-  "version": "6.2.3",
+  "version": "6.3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.22.15",
-    "@redwoodjs/cli-helpers": "6.2.3",
+    "@redwoodjs/cli-helpers": "6.3.0",
     "core-js": "3.32.2"
   },
   "devDependencies": {
