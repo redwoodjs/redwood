@@ -40,12 +40,15 @@ import {
   registerFragments,
 } from './fragmentRegistry'
 import { SSELink } from './sseLink'
+import { useCache } from './useCache'
 
 export type {
   CacheKey,
   FragmentIdentifier,
   RegisterFragmentResult,
 } from './fragmentRegistry'
+
+export { useCache }
 
 export { fragmentRegistry, registerFragment, registerFragments, SSELink }
 

@@ -102,5 +102,10 @@ export const registerFragment = (
     return useRegisteredFragmentHook<TData>(fragment, id)
   }
 
-  return { fragment, typename, getCacheKey, useRegisteredFragment }
+  return {
+    fragment,
+    typename,
+    getCacheKey,
+    useRegisteredFragment,
+  }
 }
