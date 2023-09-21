@@ -10,9 +10,9 @@ Now that the elevator pitch is out of the way, what does that actually *mean*? A
 * Prisma
 * Jest
 * Storybook
-* vite
+* Vite
 * Babel
-* Typescript
+* TypeScript
 
 What do we mean when we say a "full-stack web application?" We're talking about your classic web app: a UI that's visible in the browser (the frontend), backed by a server and database (the backend). Until React Server Components came along (more on those later) React had no idea a server and/or database existed: it was up to you to somehow get data into your app. Maybe this was done with a `fetch()` or in a build step which would pre-bake some of the data needed right into your components. However the data got there, it wasn't an ideal solution.
 
@@ -28,7 +28,7 @@ You can start them both with a single command: `yarn redwood dev`
 
 ### The Router
 
-When you open your web app in a browser, React does its thing initializing your app and monitoring the history for changes so that new content can be shown. Redwood features a custom, declaritive Router that lets you specify URLs and the requisite pages (just a React component) will be shown. A simple routes file may look something like:
+When you open your web app in a browser, React does its thing initializing your app and monitoring the history for changes so that new content can be shown. Redwood features a custom, declarative Router that lets you specify URLs and the requisite pages (just React components) will be shown. A simple routes file may look something like:
 
 ```jsx
 import { Set, Router, Route } from '@redwoodjs/router'
@@ -60,7 +60,7 @@ You can probably get a sense of how all of this works without ever having seen a
 
 If you have content on your page that can be purely static (like public facing marketing-focused pages) you can simply add the `prerender` attribute to your route and that page will be completely rendered (no matter how deeply nested the internal components go) into an HTML page. This page loads instantly, but still contains the JS needed to include React. Once React loads, the page is rehydrated and becomes interactive.
 
-You can also prerender pages that contain variables pulled from the URL, like the `/products/{sku}` route above. Redwood will [iterate](../../prerender.md#dynamic-routes--route-hooks) through all available skus and generate a page for each.
+You can also prerender pages that contain variables pulled from the URL, like the `/products/{sku}` route above. Redwood will [iterate](../../prerender.md#dynamic-routes--route-hooks) through skus you specify and generate a page for each.
 
 This is Redwood's version of static site generation, aka SSG.
 
@@ -82,7 +82,7 @@ What if you could have a component that was not only responsible for its own dis
 
 A cell is still just a React component (also called a [single file component](https://www.swyx.io/react-sfcs-here)), it just happens to follow a couple of conventions that make it work as described above:
 
-1. The name of the file ends in `Cell"
+1. The name of the file ends in "Cell"
 2. The file exports several named components, at the very least one named `QUERY` and another named `Success`
 3. The file can optionally export several other components, like `Loading`, `Failure` and `Empty`. You can probably guess what those are for!
 
@@ -94,7 +94,7 @@ So, any time React is about to render a cell, the following lifecycle occurs:
 
 As an alternative to step 3, if something went wrong then `Failure` is rendered. If the query returned `null` or an empty array, the `Empty` component is rendered. If you don't export either of those then `Success` will be rendered and it would be up to you to show the error or empty state through conditional code.
 
-Going back to our testimonals hypothetical, a cell to fetch and display them may look something like:
+Going back to our testimonials hypothetical, a cell to fetch and display them may look something like:
 
 ```js
 export const QUERY = gql`
@@ -228,13 +228,13 @@ export const schema = gql`
   }
 
   type Mutation {
-    createTestimonal($input: CreateTestimonialInput!): Testimonial! @requireAuth
-    deleteTestimonal($id: Int!): Testimonial! @requireAuth
+    createTestimonial($input: CreateTestimonialInput!): Testimonial! @requireAuth
+    deleteTestimonial($id: Int!): Testimonial! @requireAuth
   }
 `
 ```
 
-The `testimonials` query is marked with the [GraphQL directive](../../directives.md) `@skipAuth` meaning that requests here should *not* be limited to authenticated users. However, the critical `createTestimonail` and `deleteTestimonial` mutations are marked `@requireAuth`, and so can only be called by a logged in user.
+The `testimonials` query is marked with the [GraphQL directive](../../directives.md) `@skipAuth` meaning that requests here should *not* be limited to authenticated users. However, the critical `createTestimonial` and `deleteTestimonial` mutations are marked `@requireAuth`, and so can only be called by a logged in user.
 
 Redwood's backend GraphQL server is powered by [GraphQL Yoga](https://the-guild.dev/graphql/yoga-server) and so you have access to everything that makes Yoga secure and performant: rate and depth limiting, logging, directives, and a ton more.
 
@@ -261,9 +261,9 @@ So `@requireAuth` and `@skipAuth` provide a gate around entire GraphQL queries f
 
 Let's take a look at an often overlooked tool in many frameworks' kit: the command line tools. Redwood has focused extensively on these, and one of the most powerful are the "generators." These are used to create files, setup integrations, execute scripts, start the dev server, and more.
 
-A huge timesaver is generating layouts, pages and cells. There isn't much boilerplate in Redwood's files, but it's still nice to have them built out for, even going so far as creating tests for the bare functionality (more on tests in a minute).
+A huge timesaver is generating layouts, pages and cells. There isn't much boilerplate in Redwood's files, but it's still nice to have them built out, even going so far as creating tests for the bare functionality (more on tests in a minute).
 
-They also provide easy access to dev tools like Graphiql (for executing GraphQL functions against your server) and Prisma Studio (providing a full GUI for your database).
+They also provide easy access to dev tools like GraphiQL (for executing GraphQL functions against your server) and Prisma Studio (providing a full GUI for your database).
 
 ![image](https://github.com/redwoodjs/redwood/assets/300/18c928ff-aa34-4f06-941b-69c8035cee61)
 
@@ -297,11 +297,11 @@ Redwood adds data mocking for Storybook so that you can display components that 
 
 Storybook is strictly a frontend codebase concern.
 
-## vite, Babel and Typescript
+## Vite, Babel and Typescript
 
 Notice at no point above did we say "and then we need to write configuration for this package..." Redwood has done all of that for you and will continue to do that with every release of a new version. We're sure you won't miss spending hours or days trying to add and configure a package in your application. You can eject from our default configs, and add custom code if needed, but most apps will never need to do this: everything Just Works.
 
-We use vite as our bundler, packaging up the frontend code and automatically code splitting on pages. It also serves the frontend (the `web` directory). The backend (the `api` directory) is compiled by Babel and served with [Fastify](https://fastify.dev/).
+We use Vite as our bundler, packaging up the frontend code and automatically code splitting on pages. It also serves the frontend (the `web` directory). The backend (the `api` directory) is compiled by Babel and served with [Fastify](https://fastify.dev/).
 
 The entire framework is ([strictly](https://redwoodjs.com/docs/typescript/strict-mode)) typed so you can autocomplete all the things in your IDE.
 
