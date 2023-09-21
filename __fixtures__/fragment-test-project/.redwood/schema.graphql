@@ -1,0 +1,102 @@
+"""
+Use to check whether or not a user is authenticated and is associated
+with an optional set of roles.
+"""
+directive @requireAuth(roles: [String]) on FIELD_DEFINITION
+
+"""Use to skip authentication checks and allow public access."""
+directive @skipAuth on FIELD_DEFINITION
+
+scalar BigInt
+
+scalar Date
+
+scalar DateTime
+
+type Fruit implements Grocery {
+  id: ID!
+
+  """Seedless is only for fruits"""
+  isSeedless: Boolean
+  name: String!
+  nutrients: String
+  price: Int!
+  quantity: Int!
+  region: String!
+
+  """Ripeness is only for fruits"""
+  ripenessIndicators: String
+  stall: Stall!
+}
+
+union Groceries = Fruit | Vegetable
+
+interface Grocery {
+  id: ID!
+  name: String!
+  nutrients: String
+  price: Int!
+  quantity: Int!
+  region: String!
+  stall: Stall!
+}
+
+scalar JSON
+
+scalar JSONObject
+
+"""About the Redwood queries."""
+type Query {
+  fruitById(id: ID!): Fruit
+  fruits: [Fruit!]!
+  groceries: [Groceries!]!
+
+  """Fetches the Redwood root schema."""
+  redwood: Redwood
+  stallById(id: ID!): Stall
+  stalls: [Stall!]!
+  vegetableById(id: ID!): Vegetable
+  vegetables: [Vegetable!]!
+}
+
+"""
+The RedwoodJS Root Schema
+
+Defines details about RedwoodJS such as the current user and version information.
+"""
+type Redwood {
+  """The current user."""
+  currentUser: JSON
+
+  """The version of Prisma."""
+  prismaVersion: String
+
+  """The version of Redwood."""
+  version: String
+}
+
+type Stall {
+  fruits: [Fruit]
+  id: ID!
+  name: String!
+  stallNumber: String!
+  vegetables: [Vegetable]
+}
+
+scalar Time
+
+type Vegetable implements Grocery {
+  id: ID!
+
+  """Pickled is only for vegetables"""
+  isPickled: Boolean
+  name: String!
+  nutrients: String
+  price: Int!
+  quantity: Int!
+  region: String!
+  stall: Stall!
+
+  """Veggie Family is only for vegetables"""
+  vegetableFamily: String
+}

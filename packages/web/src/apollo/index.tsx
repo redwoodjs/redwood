@@ -7,7 +7,6 @@ import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { print } from 'graphql/language/printer'
-
 // Note: Importing directly from `apollo/client` doesn't work properly in Storybook.
 const {
   ApolloProvider,
@@ -31,7 +30,23 @@ import {
 } from '../components/FetchConfigProvider'
 import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
 
+import {
+  fragmentRegistry,
+  registerFragment,
+  registerFragments,
+} from './fragmentRegistry'
 import { SSELink } from './sseLink'
+import { useCache } from './useCache'
+
+export type {
+  CacheKey,
+  FragmentIdentifier,
+  RegisterFragmentResult,
+} from './fragmentRegistry'
+
+export { useCache }
+
+export { fragmentRegistry, registerFragment, registerFragments, SSELink }
 
 export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
 
@@ -282,11 +297,13 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
   graphQLClientConfig?: GraphQLClientConfigProp
+  fragments?: apolloClient.DocumentNode[]
   useAuth?: UseAuth
   logLevel?: ReturnType<typeof setLogVerbosity>
   children: React.ReactNode
 }> = ({
   graphQLClientConfig,
+  fragments,
   useAuth = useNoAuth,
   logLevel = 'debug',
   children,
@@ -295,9 +312,15 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   // we have to instantiate `InMemoryCache` here, so that it doesn't get wiped.
   const { cacheConfig, ...config } = graphQLClientConfig ?? {}
 
-  const cache = new InMemoryCache(cacheConfig).restore(
-    globalThis?.__REDWOOD__APOLLO_STATE ?? {}
-  )
+  // Auto register fragments
+  if (fragments) {
+    fragmentRegistry.register(...fragments)
+  }
+
+  const cache = new InMemoryCache({
+    fragments: fragmentRegistry,
+    ...cacheConfig,
+  }).restore(globalThis?.__REDWOOD__APOLLO_STATE ?? {})
 
   return (
     <FetchConfigProvider useAuth={useAuth}>

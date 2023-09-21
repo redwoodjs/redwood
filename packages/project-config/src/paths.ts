@@ -46,6 +46,7 @@ export interface WebPaths {
   storybookManagerConfig: string
   dist: string
   types: string
+  graphql: string
 }
 
 export interface Paths {
@@ -102,6 +103,7 @@ const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_VITE = 'web/vite.config' // .js,.ts
 const PATH_WEB_DIR_ENTRY_CLIENT = 'web/src/entry.client' // .jsx,.tsx
+const PATH_WEB_DIR_GRAPHQL = 'web/src/graphql' // .js,.ts
 
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
@@ -216,6 +218,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
       types: path.join(BASE_DIR, 'web/types'),
       entryClient: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_CLIENT)), // new vite/stream entry point for client
+      graphql: path.join(BASE_DIR, PATH_WEB_DIR_GRAPHQL),
     },
   }
 
