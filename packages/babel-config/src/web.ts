@@ -62,11 +62,6 @@ export const getWebSideBabelPlugins = (
             path: 'react',
           },
           {
-            // import PropTypes from 'prop-types'
-            default: 'PropTypes',
-            path: 'prop-types',
-          },
-          {
             // import gql from 'graphql-tag'
             default: 'gql',
             path: 'graphql-tag',
