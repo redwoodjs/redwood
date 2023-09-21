@@ -2128,18 +2128,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend@npm:^0.24.0":
-  version: 0.24.0
-  resolution: "@clerk/backend@npm:0.24.0"
+"@clerk/backend@npm:^0.29.1":
+  version: 0.29.1
+  resolution: "@clerk/backend@npm:0.29.1"
   dependencies:
-    "@clerk/types": ^3.46.1
+    "@clerk/types": ^3.52.0
     "@peculiar/webcrypto": 1.4.1
     "@types/node": 16.18.6
+    cookie: 0.5.0
     deepmerge: 4.2.2
     node-fetch-native: 1.0.1
     snakecase-keys: 5.4.4
     tslib: 2.4.1
-  checksum: 58b60c3f6feabdb0b19604fada5b02f93461875ae57403ae70663c9b52f0b1c1cd24c0f0b0b1a292dc43f51e6dc438d2e4048a39874bf6344d012ae5a8b6d71c
+  checksum: 221794fafc957ada3400198c54a12ae50b0a9dda3e4a938f7eb55533748b46197f46da8fcd70a479c8e43946e35e4b595c305101b14a351d2fd3e1c61b796392
   languageName: node
   linkType: hard
 
@@ -2157,20 +2158,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:4.10.15":
-  version: 4.10.15
-  resolution: "@clerk/clerk-sdk-node@npm:4.10.15"
+"@clerk/clerk-sdk-node@npm:4.12.6":
+  version: 4.12.6
+  resolution: "@clerk/clerk-sdk-node@npm:4.12.6"
   dependencies:
-    "@clerk/backend": ^0.24.0
-    "@clerk/types": ^3.46.1
+    "@clerk/backend": ^0.29.1
+    "@clerk/types": ^3.52.0
     "@types/cookies": 0.7.7
     "@types/express": 4.17.14
     "@types/node-fetch": 2.6.2
     camelcase-keys: 6.2.2
-    cookie: 0.5.0
     snakecase-keys: 3.2.1
     tslib: 2.4.1
-  checksum: 4ffe8e23e8961bab0195581c34fa4627744409371589ab04ebb7fb3267360a26b16687770c040d886daec94dba942e65d42ee2fe8078da52f1f13bf9aa21da30
+  checksum: dfaa24cd51aba1a9c42c14668283c87d3245d833ee87b30002b23cbae3c3c948bb2ee87d0ed5f8506c3f8e024498a2bbbe38183283804286e9198686e527ec50
   languageName: node
   linkType: hard
 
@@ -2187,7 +2187,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.52.0, @clerk/types@npm:^3.46.1":
+"@clerk/types@npm:3.52.0, @clerk/types@npm:^3.46.1, @clerk/types@npm:^3.52.0":
   version: 3.52.0
   resolution: "@clerk/types@npm:3.52.0"
   dependencies:
@@ -7967,7 +7967,7 @@ __metadata:
     "@babel/cli": 7.22.15
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.22.15
-    "@clerk/clerk-sdk-node": 4.10.15
+    "@clerk/clerk-sdk-node": 4.12.6
     "@redwoodjs/api": 6.0.7
     "@types/aws-lambda": 8.10.119
     core-js: 3.32.2
