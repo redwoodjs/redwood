@@ -41,6 +41,8 @@ const getTypenameFromFragment = (fragment: DocumentNode): string => {
  * cache currently contains for a given fragment.
  *
  * useFragment never triggers network requests of its own.
+ *
+ * @see https://www.apollographql.com/docs/react/api/react/hooks#usefragment
  */
 const useRegisteredFragmentHook = <TData = any>(
   fragment: DocumentNode,

@@ -1023,6 +1023,7 @@ fragment BookInfo on Book {
 the `typename` is `Book`.
 
 
+### useCache!!!
 
 ### getCacheKey
 
@@ -1049,7 +1050,11 @@ the `getCacheKey` is a function where `getCacheKey(42)` would return `Book:42`.
 ### useRegisteredFragment
 
 ```ts
-import { useRegisteredFragment } from '@redwoodjs/web/apollo'
+import { registerFragment } from '@redwoodjs/web/apollo'
+
+const { useRegisteredFragment } = registerFragment(
+...
+)
 ```
 
 A helper function relies on Apollo's [`useFragment` hook](https://www.apollographql.com/docs/react/data/fragments/#usefragment) in Apollo cache.
@@ -1144,6 +1149,133 @@ Redwood will automatically detect your union types in your `sdl` files and resol
 In order to use Union types web-side with your Apollo GraphQL client, you will need to [generate possible types from fragments and union types](#generate-possible-types).
 
 :::
+
+### useCache
+
+Apollo Client stores the results of your GraphQL queries in a local, normalized, in-memory cache. This enables the client to respond almost immediately to queries for already-cached data, without even sending a network request.
+
+useCache is a custom hook that returns the cache object and some useful methods to interact with the cache:
+
+* [evict](#evict)
+* [extract](#extract)
+* [identify](#identify)
+* [modify](#modify)
+* [resetStore](#resetStore)
+* [clearStore](#clearStore)
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+```
+
+#### cache
+
+Returns the normalized, in-memory cache.
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+
+const { cache } = useCache()
+```
+
+#### evict
+
+Either removes a normalized object from the cache or removes a specific field from a normalized object in the cache.
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+
+
+const Fruit = ({ id }: { id: FragmentIdentifier }) => {
+  const { evict } = useCache()
+  const { data: fruit, complete } = useRegisteredFragment<Fruit>(id)
+
+  evict(fruit)
+}
+```
+
+#### extract
+
+Returns a serialized representation of the cache's current contents
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+
+const Fruit = ({ id }: { id: FragmentIdentifier }) => {
+  const { extract } = useCache()
+
+  // Logs the cache's current contents
+  console.log(extract())
+
+```
+
+#### identify
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+
+const Fruit = ({ id }: { id: FragmentIdentifier }) => {
+  const { identify } = useCache()
+  const { data: fruit, complete } = useRegisteredFragment<Fruit>(id)
+
+  // Returns "Fruit:ownpc6co8a1w5bhfmavecko9"
+  console.log(identify(fruit))
+}
+```
+
+#### modify
+
+Modifies one or more field values of a cached object. Must provide a modifier function for each field to modify. A modifier function takes a cached field's current value and returns the value that should replace it.
+
+Returns true if the cache was modified successfully and false otherwise.
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+
+const Fruit = ({ id }: { id: FragmentIdentifier }) => {
+  const { modify } = useCache()
+  const { data: fruit, complete } = useRegisteredFragment<Fruit>(id)
+
+  // Modify the name of a given fruit entity to be uppercase
+
+  <button onClick={() => modify(fruit,  {
+    name(cachedName) {
+      return cachedName.toUpperCase()
+  }})}>
+    Uppercase {fruit.name}
+  </button>
+
+  // ...
+}
+```
+
+#### clearStore
+
+To reset the cache without refetching active queries, use the clearStore method.
+
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+
+const Fruit = ({ id }: { id: FragmentIdentifier }) => {
+  const { clearStore } = useCache()
+
+  clearStore()
+}
+```
+
+#### resetStore
+
+Reset the cache entirely, such as when a user logs out.
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+
+const Fruit = ({ id }: { id: FragmentIdentifier }) => {
+  const { resetStore } = useCache()
+
+  resetStore()
+}
+```
 
 ## GraphQL Handler Setup
 
