@@ -771,7 +771,7 @@ $ /redwood-app/node_modules/.bin/redwood g layout user
 Done in 1.00s.
 ```
 
-A layout will just export it's children:
+A layout will just export its children:
 
 ```jsx title="./web/src/layouts/UserLayout/UserLayout.test.js"
 const UserLayout = ({ children }) => {
@@ -1906,7 +1906,7 @@ In order to use [Netlify Dev](https://www.netlify.com/products/dev/) you need to
 
 ### setup package
 
-This command takes a published npm package that you specify, performs some compatibility checks, and then executes it's bin script. This allows you to use third-party packages that can provide you with an easy-to-use setup command for the particular functionality they provide.
+This command takes a published npm package that you specify, performs some compatibility checks, and then executes its bin script. This allows you to use third-party packages that can provide you with an easy-to-use setup command for the particular functionality they provide.
 
 This command behaves similarly to `yarn dlx` but will attempt to confirm compatibility between the package you are attempting to run and the current version of Redwood you are running. You can bypass this check by passing the `--force` flag if you feel you understand any potential compatibility issues.
 
