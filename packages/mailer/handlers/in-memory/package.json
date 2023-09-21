@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/mailer-handler-in-memory",
-  "version": "6.3.0",
+  "version": "6.3.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -24,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/mailer-core": "6.3.0"
+    "@redwoodjs/mailer-core": "6.3.1"
   },
   "devDependencies": {
     "esbuild": "0.18.19",
