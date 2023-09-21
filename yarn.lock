@@ -8335,7 +8335,7 @@ __metadata:
     core-js: 3.32.2
     esbuild: 0.19.3
     fast-glob: 3.3.1
-    graphql: 16.8.0
+    graphql: 16.8.1
     jest: 29.7.0
     typescript: 5.2.2
   languageName: unknown
@@ -8516,7 +8516,7 @@ __metadata:
     execa: 5.1.1
     fast-glob: 3.3.1
     fs-extra: 11.1.1
-    graphql: 16.8.0
+    graphql: 16.8.1
     jest: 29.7.0
     jscodeshift: 0.15.0
     pascalcase: 1.0.0
@@ -8674,7 +8674,7 @@ __metadata:
     "@types/react-dom": 18.2.6
     "@types/testing-library__jest-dom": 5.14.8
     core-js: 3.32.2
-    graphql: 16.8.0
+    graphql: 16.8.1
     jest: 29.7.0
     nodemon: 2.0.22
     pascalcase: 1.0.0
@@ -8683,7 +8683,7 @@ __metadata:
     react-hook-form: 7.46.1
     typescript: 5.2.2
   peerDependencies:
-    graphql: 16.8.0
+    graphql: 16.8.1
     react: 0.0.0-experimental-e5205658f-20230913
   languageName: unknown
   linkType: soft
@@ -8716,7 +8716,7 @@ __metadata:
     "@whatwg-node/fetch": 0.9.9
     aws-lambda: 1.0.7
     core-js: 3.32.2
-    graphql: 16.8.0
+    graphql: 16.8.1
     graphql-scalars: 1.22.2
     graphql-tag: 2.12.6
     graphql-yoga: 4.0.4
@@ -8760,7 +8760,7 @@ __metadata:
     esbuild: 0.19.3
     fast-glob: 3.3.1
     fs-extra: 11.1.1
-    graphql: 16.8.0
+    graphql: 16.8.1
     graphql-tag: 2.12.6
     jest: 29.7.0
     kill-port: 1.6.1
@@ -8884,7 +8884,7 @@ __metadata:
     babel-plugin-tester: 11.0.4
     cheerio: 1.0.0-rc.12
     core-js: 3.32.2
-    graphql: 16.8.0
+    graphql: 16.8.1
     jest: 29.7.0
     mime-types: 2.1.35
     typescript: 5.2.2
@@ -8925,7 +8925,7 @@ __metadata:
     "@n1ru4l/graphql-live-query": 0.10.0
     "@n1ru4l/in-memory-live-query-store": 0.10.0
     esbuild: 0.19.3
-    graphql: 16.8.0
+    graphql: 16.8.1
     ioredis: 5.3.2
     jest: 29.7.0
     nodemon: 2.0.22
@@ -8998,7 +8998,7 @@ __metadata:
     dotenv-defaults: 5.0.2
     enquirer: 2.4.1
     fast-glob: 3.3.1
-    graphql: 16.8.0
+    graphql: 16.8.1
     jest: 29.7.0
     lazy-get-decorator: 2.2.1
     line-column: 1.0.2
@@ -9066,7 +9066,7 @@ __metadata:
     fastify: 4.23.2
     fastify-raw-body: 4.2.2
     graphiql: 2.4.7
-    graphql: 16.8.0
+    graphql: 16.8.1
     graphql-scalars: 1.22.2
     graphql-yoga: 4.0.4
     jest: 29.7.0
@@ -9246,7 +9246,7 @@ __metadata:
     "@types/react-dom": 18.2.6
     "@types/testing-library__jest-dom": 5.14.8
     core-js: 3.32.2
-    graphql: 16.8.0
+    graphql: 16.8.1
     graphql-sse: 2.2.1
     graphql-tag: 2.12.6
     jest: 29.7.0
@@ -21446,7 +21446,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.8.0, graphql@npm:^15.0.0 || ^16.0.0, graphql@npm:^16.0.0":
+"graphql@npm:16.8.1":
+  version: 16.8.1
+  resolution: "graphql@npm:16.8.1"
+  checksum: 129c318156b466f440914de80dbf7bc67d17f776f2a088a40cb0da611d19a97c224b1c6d2b13cbcbc6e5776e45ed7468b8432f9c3536724e079b44f1a3d57a8a
+  languageName: node
+  linkType: hard
+
+"graphql@npm:^15.0.0 || ^16.0.0, graphql@npm:^16.0.0":
   version: 16.8.0
   resolution: "graphql@npm:16.8.0"
   checksum: f7ca0302e8d658012db90b428ec66c1453afe53fbffa21404a28b5bdec5b0e88641d38416ef3d582acad7ddde2effe729e2b050a1483a2e9d4a6111e892e4903
