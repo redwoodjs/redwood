@@ -849,11 +849,11 @@ type Mutation {
 }
 ```
 
-See the [Directives](/docs/docs/directives.md) section for complete information on RedwoodJS Directives.
+See the [Directives](directives) section for complete information on RedwoodJS Directives.
 
 ## Fragments
 
-[GraphQL fragments]((https://graphql.org/learn/queries/#fragments)) are reusable units of GraphQL queries that allow developers to define a set of fields that can be included in multiple queries. Fragments help improve code organization, reduce duplication, and make GraphQL queries more maintainable. They are particularly useful when you want to request the same set of fields on different parts of your data model or when you want to share query structures across multiple components or pages in your application.
+[GraphQL fragments](https://graphql.org/learn/queries/#fragments) are reusable units of GraphQL queries that allow developers to define a set of fields that can be included in multiple queries. Fragments help improve code organization, reduce duplication, and make GraphQL queries more maintainable. They are particularly useful when you want to request the same set of fields on different parts of your data model or when you want to share query structures across multiple components or pages in your application.
 
 ### What are Fragments?
 
@@ -1430,7 +1430,7 @@ export const handler = createGraphQLHandler({
 })
 ```
 
-> Note: Check-out the [in-depth look at Redwood Directives](directives.md) that explains how to generate directives so you may use them to validate access and transform the response.
+> Note: Check-out the [in-depth look at Redwood Directives](directives) that explains how to generate directives so you may use them to validate access and transform the response.
 
 
 ### Logging Setup
@@ -1445,9 +1445,9 @@ Logging is essential in production apps to be alerted about critical errors and 
 
 We want to make logging simple when using RedwoodJS and therefore have configured the api-side GraphQL handler to log common information about your queries and mutations. Log statements also be optionally enriched with [operation names](https://graphql.org/learn/queries/#operation-name), user agents, request ids, and performance timings to give you more visibility into your GraphQL api.
 
-By configuring the GraphQL handler to use your api side [RedwoodJS logger](logger.md), any errors and other log statements about the [GraphQL execution](https://graphql.org/learn/execution/) will be logged to the [destination](logger.md#destination-aka-where-to-log) you've set up: to standard output, file, or transport stream.
+By configuring the GraphQL handler to use your api side [RedwoodJS logger](logger), any errors and other log statements about the [GraphQL execution](https://graphql.org/learn/execution/) will be logged to the [destination](logger#destination-aka-where-to-log) you've set up: to standard output, file, or transport stream.
 
-You configure the logger using the `loggerConfig` that accepts a [`logger`](logger.md) and a set of [GraphQL Logger Options](#graphql-logger-options).
+You configure the logger using the `loggerConfig` that accepts a [`logger`](logger) and a set of [GraphQL Logger Options](#graphql-logger-options).
 
 ### Configure the GraphQL Logger
 
@@ -1578,9 +1578,9 @@ export const post = async ({ id }) => {
 //...
 ```
 
-The GraphQL handler will then take care of logging your query and data -- as long as your logger is setup to log at the `info` [level](logger.md#log-level) and above.
+The GraphQL handler will then take care of logging your query and data -- as long as your logger is setup to log at the `info` [level](logger#log-level) and above.
 
-> You can also disable the statements in production by just logging at the `warn` [level](logger.md#log-level) or above
+> You can also disable the statements in production by just logging at the `warn` [level](logger#log-level) or above
 
 This means that you can keep your services free of logger statements, but still see what's happening!
 
@@ -1615,7 +1615,7 @@ Stream to third-party log and application monitoring services vital to productio
 
 Everyone has heard of reports that Company X logged emails, or passwords to files or systems that may not have been secured. While RedwoodJS logging won't necessarily prevent that, it does provide you with the mechanism to ensure that won't happen.
 
-To redact sensitive information, you can supply paths to keys that hold sensitive data using the RedwoodJS logger [redact option](logger.md#redaction).
+To redact sensitive information, you can supply paths to keys that hold sensitive data using the RedwoodJS logger [redact option](logger#redaction).
 
 Because this logger is used with the GraphQL handler, it will respect any redaction paths setup.
 
@@ -1722,7 +1722,7 @@ By default, your GraphQL endpoint is open to the world.
 That means anyone can request any query and invoke any Mutation.
 Whatever types and fields are defined in your SDL is data that anyone can access.
 
-Redwood [encourages being secure by default](http://localhost:3000/docs/canary/directives#secure-by-default-with-built-in-directives) by defaulting all queries and mutations to have the `@requireAuth` directive when generating SDL or a service.
+Redwood [encourages being secure by default](directives) by defaulting all queries and mutations to have the `@requireAuth` directive when generating SDL or a service.
 
 When your app builds and your server starts up, Redwood checks that **all** queries and mutations have `@requireAuth`, `@skipAuth` or a custom directive applied.
 
@@ -2478,7 +2478,7 @@ enum Color {
 
 ### SDL Comments
 
-When used with `--docs` option, [SDL generator](./cli-commands.md#generate-sdl) adds comments for:
+When used with `--docs` option, [SDL generator](cli-commands#generate-sdl) adds comments for:
 
 * Directives
 * Queries
