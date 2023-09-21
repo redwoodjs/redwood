@@ -144,10 +144,12 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         whileLoadingPage: undefined,
         wrappers: [WrapperX],
         // Props passed through from set
-        setProps: {
-          id: 'set-one',
-          passThruProp: 'bazinga',
-        },
+        setProps: [
+          {
+            id: 'set-one',
+            passThruProp: 'bazinga',
+          },
+        ],
       })
     )
 
@@ -158,11 +160,16 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         path: '/b',
         whileLoadingPage: undefined,
         wrappers: [WrapperX, WrapperY], // both wrappers
-        setProps: {
-          id: 'set-two', // the id gets overwritten by the second Set
-          theme: 'blue',
-          passThruProp: 'bazinga', // from the first set
-        },
+        setProps: [
+          {
+            id: 'set-one',
+            passThruProp: 'bazinga',
+          },
+          {
+            id: 'set-two',
+            theme: 'blue',
+          },
+        ],
       })
     )
 
@@ -173,11 +180,16 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         path: '/c',
         whileLoadingPage: undefined,
         wrappers: [WrapperX, WrapperY], // both wrappers
-        setProps: {
-          id: 'set-two',
-          theme: 'blue',
-          passThruProp: 'bazinga', // from the first set
-        },
+        setProps: [
+          {
+            id: 'set-one',
+            passThruProp: 'bazinga',
+          },
+          {
+            id: 'set-two',
+            theme: 'blue',
+          },
+        ],
       })
     )
   })
@@ -276,10 +288,12 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       page: FakePage,
       wrappers: [],
       setId: 1,
-      setProps: {
-        private: true,
-        unauthenticated: 'home',
-      },
+      setProps: [
+        {
+          private: true,
+          unauthenticated: 'home',
+        },
+      ],
     })
   })
 
@@ -309,5 +323,64 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     expect(Object.keys(namedRoutesMap).length).toBe(2)
     expect(namedRoutesMap.simple()).toBe('/simple')
     expect(namedRoutesMap.rdSimple()).toBe('/rdSimple')
+  })
+
+  test('Redirect routes analysis', () => {
+    const HomePage = () => <h1>Home Page</h1>
+    const PrivateAdminPage = () => <h1>Private Admin Page</h1>
+    const PrivateEmployeePage = () => <h1>Private Employee Page</h1>
+    const PrivateNoRolesAssigned = () => <h1>Private Employee Page</h1>
+
+    const RedirectedRoutes = (
+      <Router>
+        <Route path="/" page={HomePage} name="home" />
+        <Private unauthenticated="home">
+          <Route
+            path="/no-roles-assigned"
+            page={PrivateNoRolesAssigned}
+            name="noRolesAssigned"
+          />
+          <Set
+            private
+            unauthenticated="noRolesAssigned"
+            roles={['ADMIN', 'EMPLOYEE']}
+            someProp="propFromNoRolesSet"
+          >
+            <Private unauthenticated="admin" roles={'EMPLOYEE'}>
+              <Route
+                path="/employee"
+                page={PrivateEmployeePage}
+                name="privateEmployee"
+              />
+            </Private>
+
+            <Private unauthenticated="employee" roles={'ADMIN'}>
+              <Route
+                path="/admin"
+                page={PrivateAdminPage}
+                name="privateAdmin"
+              />
+            </Private>
+          </Set>
+        </Private>
+      </Router>
+    )
+
+    const { pathRouteMap, namedRoutesMap } = analyzeRoutes(
+      RedirectedRoutes.props.children,
+      {
+        currentPathName: '/simple',
+      }
+    )
+
+    console.log(JSON.stringify({ pathRouteMap, namedRoutesMap }, null, 3))
+
+    // expect(pathRouteMap['/simple'].redirect).toBe('/rdSimple')
+    // expect(pathRouteMap['/rdSimple'].redirect).toBeFalsy()
+
+    // // @TODO true for now, but we may not allow names on a redirect route
+    // expect(Object.keys(namedRoutesMap).length).toBe(2)
+    // expect(namedRoutesMap.simple()).toBe('/simple')
+    // expect(namedRoutesMap.rdSimple()).toBe('/rdSimple')
   })
 })

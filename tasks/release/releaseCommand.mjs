@@ -731,6 +731,7 @@ async function updateCreateRedwoodAppTemplates() {
   console.log()
 
   cd('./packages/create-redwood-app/templates/ts')
+  await $`rm -f yarn.lock`
   await $`touch yarn.lock`
   await $`yarn install`
 
