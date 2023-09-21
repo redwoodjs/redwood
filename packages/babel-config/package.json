@@ -40,7 +40,7 @@
     "babel-plugin-module-resolver": "5.0.0",
     "core-js": "3.32.2",
     "fast-glob": "3.3.1",
-    "graphql": "16.8.0",
+    "graphql": "16.8.1",
     "typescript": "5.2.2"
   },
   "devDependencies": {
