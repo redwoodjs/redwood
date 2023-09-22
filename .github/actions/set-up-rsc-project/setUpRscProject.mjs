@@ -80,7 +80,7 @@ async function setUpRscProject(
 
   console.log(`Creating project at ${rscProjectPath}`)
   console.log()
-  await exec('npx', ['-y', 'create-redwood-app@canary', '-y', rscProjectPath])
+  await exec('npx', ['-y', 'create-redwood-app@canary', '-y', '--no-git', rscProjectPath])
 
   console.log(`Setting up Streaming/SSR in ${rscProjectPath}`)
   const cmdSetupStreamingSSR = `node ${rwBinPath} experimental setup-streaming-ssr -f`
