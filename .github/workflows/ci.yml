@@ -476,7 +476,7 @@ jobs:
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
@@ -505,5 +505,5 @@ jobs:
         working-directory: tasks/smoke-tests/rsc
         run: npx playwright test
         env:
-          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-project.outputs.rsc-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
