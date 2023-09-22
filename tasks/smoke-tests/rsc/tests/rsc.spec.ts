@@ -12,7 +12,7 @@ test('Setting up RSC should give you a test project with a client side counter c
   await page.locator('button').filter({ hasText: 'Increment' }).click()
 
   const count = await page.locator('p').first().innerText()
-  expect(count).toMatch(/Count: 1/)
+  expect(count).toMatch('Count: 1')
 
   page.close()
 })
