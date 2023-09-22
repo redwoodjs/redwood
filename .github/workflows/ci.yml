@@ -476,7 +476,7 @@ jobs:
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: 18
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
