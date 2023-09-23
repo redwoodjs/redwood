@@ -104,10 +104,13 @@ export const buildRscFeServer = async ({
       )?.fileName
 
     if (entryFile) {
+      console.log('entryFile', entryFile)
       if (process.platform === 'win32') {
+        const entryFileSlash = entryFile.replaceAll('\\', '/')
+        console.log('entryFileSlash', entryFileSlash)
         // Prevent errors on Windows like
         // Error: No client entry found for D:/a/redwood/rsc-project/web/dist/server/assets/rsc0.js
-        clientEntries[entryFile.replaceAll('\\', '/')] = fileName
+        clientEntries[entryFileSlash] = fileName
       } else {
         clientEntries[entryFile] = fileName
       }
