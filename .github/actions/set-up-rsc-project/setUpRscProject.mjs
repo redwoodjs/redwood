@@ -31,33 +31,43 @@ export async function main(
   console.log('rwPath', REDWOOD_FRAMEWORK_PATH)
   console.log('rscProjectPath', rscProjectPath)
 
-  const distCacheKey = await cache.restoreCache([rscProjectPath], distKey)
+  if (Math.random() > 5) {
+    const distCacheKey = await cache.restoreCache([rscProjectPath], distKey)
 
-  if (distCacheKey) {
-    console.log(`Cache restored from key: ${distKey}`)
-    return
-  }
+    if (distCacheKey) {
+      console.log(`Cache restored from key: ${distKey}`)
+      return
+    }
 
-  const dependenciesCacheKey = await cache.restoreCache(
-    [rscProjectPath],
-    dependenciesKey
-  )
-
-  if (dependenciesCacheKey) {
-    console.log('Cache restored from key:', dependenciesKey)
-  } else {
-    console.log('Cache not found for input keys:', distKey, dependenciesKey)
-    await setUpRscProject(
-      rscProjectPath,
-      cache,
-      exec,
-      execInProject,
+    const dependenciesCacheKey = await cache.restoreCache(
+      [rscProjectPath],
       dependenciesKey
     )
+
+    if (dependenciesCacheKey) {
+      console.log('Cache restored from key:', dependenciesKey)
+    } else {
+      console.log('Cache not found for input keys:', distKey, dependenciesKey)
+      await setUpRscProject(
+        rscProjectPath,
+        cache,
+        exec,
+        execInProject,
+        dependenciesKey
+      )
+    }
+
+    await cache.saveCache([rscProjectPath], distKey)
+    console.log(`Cache saved with key: ${distKey}`)
   }
 
-  await cache.saveCache([rscProjectPath], distKey)
-  console.log(`Cache saved with key: ${distKey}`)
+  await setUpRscProject(
+    rscProjectPath,
+    cache,
+    exec,
+    execInProject,
+    dependenciesKey
+  )
 }
 
 /**
@@ -76,11 +86,20 @@ async function setUpRscProject(
   execInProject,
   dependenciesKey
 ) {
-  const rwBinPath = path.join(REDWOOD_FRAMEWORK_PATH, 'packages/cli/dist/index.js')
+  const rwBinPath = path.join(
+    REDWOOD_FRAMEWORK_PATH,
+    'packages/cli/dist/index.js'
+  )
 
   console.log(`Creating project at ${rscProjectPath}`)
   console.log()
-  await exec('npx', ['-y', 'create-redwood-app@canary', '-y', '--no-git', rscProjectPath])
+  await exec('npx', [
+    '-y',
+    'create-redwood-app@canary',
+    '-y',
+    '--no-git',
+    rscProjectPath,
+  ])
 
   console.log(`Setting up Streaming/SSR in ${rscProjectPath}`)
   const cmdSetupStreamingSSR = `node ${rwBinPath} experimental setup-streaming-ssr -f`
