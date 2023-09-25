@@ -91,6 +91,10 @@ async function setUpRscProject(
     REDWOOD_FRAMEWORK_PATH,
     'packages/cli/dist/index.js'
   )
+  const rwfwBinPath = path.join(
+    REDWOOD_FRAMEWORK_PATH,
+    'packages/cli/dist/rwfw.js'
+  )
 
   console.log(`Creating project at ${rscProjectPath}`)
   console.log()
@@ -113,6 +117,10 @@ async function setUpRscProject(
 
   console.log(`Building project in ${rscProjectPath}`)
   await execInProject(`node ${rwBinPath} build -v`)
+  console.log()
+
+  console.log(`Building project in ${rscProjectPath}`)
+  await execInProject(`node ${rwfwBinPath} project:copy`)
   console.log()
 
   await cache.saveCache([rscProjectPath], dependenciesKey)
