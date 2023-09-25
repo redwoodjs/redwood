@@ -261,6 +261,7 @@ export async function setClientEntries(
   const entriesFile = await getEntriesFile(config, false)
   console.log('entriesFile', entriesFile)
   const { clientEntries } = await loadServerFile(entriesFile)
+  console.log('setClientEntries :: clientEntries', clientEntries)
   if (!clientEntries) {
     throw new Error('Failed to load clientEntries')
   }
