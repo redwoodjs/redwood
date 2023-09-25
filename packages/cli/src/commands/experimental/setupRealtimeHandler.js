@@ -259,7 +259,7 @@ export async function handler({ force, includeExamples, verbose }) {
               'templates',
               'defer',
               'fastAndSlowFields',
-              `fastAndSlowFields.sdl.ts.template`
+              `fastAndSlowFields.sdl.template`
             ),
             'utf-8'
           )
@@ -319,7 +319,7 @@ export async function handler({ force, includeExamples, verbose }) {
               'templates',
               'stream',
               'alphabet',
-              `alphabet.sdl.ts.template`
+              `alphabet.sdl.template`
             ),
             'utf-8'
           )

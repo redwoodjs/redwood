@@ -4,16 +4,17 @@ import { logger } from 'src/lib/logger'
 
 export const alphabet = async () => {
   return new Repeater<string>(async (push, stop) => {
-    const values = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
-    const publish = () => {
-      const value = values.shift()
+    const letters = 'abcdefghijklmnopqrstuvwxyz'.split('')
 
-      if (value) {
-        logger.debug({ value }, 'publishing')
-        push(value)
+    const publish = () => {
+      const letter = letters.shift()
+
+      if (letter) {
+        logger.debug({ letter }, 'publishing letter...')
+        push(letter)
       }
 
-      if (values.length === 0) {
+      if (letters.length === 0) {
         stop()
       }
     }
