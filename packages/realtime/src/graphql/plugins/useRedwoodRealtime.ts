@@ -63,7 +63,7 @@ export type SubscribeClientType = CreateRedisEventTargetArgs['subscribeClient']
  *
  */
 export type RedwoodRealtimeOptions = {
-  deferStream?: boolean
+  enableDeferStream?: boolean
   liveQueries?: {
     /**
      * @description Redwood Realtime supports in-memory and Redis stores.
@@ -236,7 +236,7 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
       if (subscriptionsEnabled) {
         addPlugin(useGraphQLSSE() as Plugin<object>)
       }
-      if (options.deferStream) {
+      if (options.enableDeferStream) {
         addPlugin(useDeferStream() as Plugin<object>)
       }
     },
