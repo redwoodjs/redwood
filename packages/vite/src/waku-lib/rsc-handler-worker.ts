@@ -259,7 +259,7 @@ export async function setClientEntries(
   }
   const config = await configPromise
   const entriesFile = await getEntriesFile(config, false)
-  console.log('entriesFile', entriesFile)
+  console.log('setClientEntries :: entriesFile', entriesFile)
   const { clientEntries } = await loadServerFile(entriesFile)
   console.log('setClientEntries :: clientEntries', clientEntries)
   if (!clientEntries) {
@@ -273,7 +273,10 @@ export async function setClientEntries(
     ])
   )
 
-  console.log('absoluteClientEntries', absoluteClientEntries)
+  console.log(
+    'setClientEntries :: absoluteClientEntries',
+    absoluteClientEntries
+  )
 }
 
 export async function renderRSC(input: RenderInput): Promise<PipeableStream> {
