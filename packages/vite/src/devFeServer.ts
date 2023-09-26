@@ -1,6 +1,11 @@
 // TODO (STREAMING) Merge with runFeServer so we only have one file
 
+import { createElement } from 'react'
+
+import type { Request, Response } from 'express'
 import express from 'express'
+import { chromium } from 'playwright'
+import { renderToString } from 'react-dom/server'
 import { createServer as createViteServer } from 'vite'
 
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
@@ -82,6 +87,29 @@ async function createServer() {
       : route.pathDefinition
 
     app.get(expressPathDef, routeHandler)
+
+    app.get(`/ogImg/${expressPathDef}`, async (req: Request, res: Response) => {
+      const browser = await chromium.launch()
+      const context = await browser.newContext()
+      const page = await context.newPage()
+
+      const ogImgThing = route.relativeFilePath!.replace('.jsx', '.ogImg.jsx')
+
+      const { DATA, output } = await vite.ssrLoadModule(ogImgThing)
+
+      const dataOut = await DATA(req.params)
+
+      const htmlOutput = renderToString(createElement(output, dataOut))
+
+      page.setContent(htmlOutput)
+
+      const png = await page.screenshot({ type: 'png' })
+
+      await browser.close()
+
+      res.setHeader('Content-Type', 'image/png')
+      res.send(png)
+    })
   }
 
   const port = getConfig().web.port

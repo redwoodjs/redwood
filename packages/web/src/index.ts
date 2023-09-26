@@ -12,6 +12,9 @@ export {
   useQuery,
   useMutation,
   useSubscription,
+  useBackgroundQuery,
+  useReadQuery,
+  useSuspenseQuery,
 } from './components/GraphQLHooksProvider'
 
 export * from './components/cell/CellCacheContext'

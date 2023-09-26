@@ -9196,7 +9196,9 @@ __metadata:
     http-proxy-middleware: 2.0.6
     isbot: 3.6.8
     jest: 29.7.0
+    playwright: ^1.38.1
     react: 0.0.0-experimental-e5205658f-20230913
+    react-dom: 0.0.0-experimental-e5205658f-20230913
     react-server-dom-webpack: 0.0.0-experimental-e5205658f-20230913
     rollup: 3.27.2
     typescript: 5.2.2
@@ -28842,6 +28844,30 @@ __metadata:
   bin:
     playwright-core: cli.js
   checksum: 3eddeb05569a2aa54375bcc4955fe2e497865481cd523cdaa095d7695b1ea48f3f34438cc652e4a9096e1d7b2c47e29776713a4730c171f6186805866a0aa53b
+  languageName: node
+  linkType: hard
+
+"playwright-core@npm:1.38.1":
+  version: 1.38.1
+  resolution: "playwright-core@npm:1.38.1"
+  bin:
+    playwright-core: cli.js
+  checksum: 23958aa6f30e2de85e3cd256b7b105ab75108ac1c437a405cb78a3579ae8bbc5d79a5d6136dce4914f9dff8a0af1be549d02d3e857aaec5c30b90d3d1ed72083
+  languageName: node
+  linkType: hard
+
+"playwright@npm:^1.38.1":
+  version: 1.38.1
+  resolution: "playwright@npm:1.38.1"
+  dependencies:
+    fsevents: 2.3.2
+    playwright-core: 1.38.1
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    playwright: cli.js
+  checksum: c4d94e38f2bc37e547bdfd96ae09e317d7b5fb039710837ab477d3b12be2430091b93122da2658d096c7afc7838cad0b864c1957441b517bb8ededef3b16d446
   languageName: node
   linkType: hard
 
