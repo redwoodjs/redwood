@@ -6,6 +6,29 @@ import path from 'node:path'
 import { REDWOOD_FRAMEWORK_PATH } from '../actionsLib.mjs'
 
 /**
+ * @typedef {import('@actions/exec').ExecOptions} ExecOptions
+ */
+
+/**
+ * Exec a command.
+ * Output will be streamed to the live console.
+ * Returns promise with return code
+ *
+ * @callback Exec
+ * @param {string} commandLine command to execute (can include additional args). Must be correctly escaped.
+ * @param {string[]=} args arguments for tool. Escaping is handled by the lib.
+ * @param {ExecOptions=} options exec options.  See ExecOptions
+ * @returns {Promise<unknown>} exit code
+ */
+
+/**
+ * @callback ExecInProject
+ * @param {string} commandLine command to execute (can include additional args). Must be correctly escaped.
+ * @param {Omit<ExecOptions, "cwd">=} options exec options.  See ExecOptions
+ * @returns {Promise<unknown>} exit code
+ */
+
+/**
  * @param {string} rscProjectPath
  * @param {Object} core
  * @param {(key: string, value: string) => void} core.setOutput
@@ -14,8 +37,8 @@ import { REDWOOD_FRAMEWORK_PATH } from '../actionsLib.mjs'
  * @param {Object} cache
  * @param {(paths: Array<string>, distKey: string) => Promise<number>} cache.saveCache
  * @param {(paths: Array<string>, distKey: string) => Promise<string | undefined>} cache.restoreCache
- * @param {Object} exec
- * @param {(command: string) => Promise<unknown>} execInProject
+ * @param {Exec} exec
+ * @param {ExecInProject} execInProject
  * @returns {Promise<void>}
  */
 export async function main(
@@ -75,8 +98,8 @@ export async function main(
  * @param {string} rscProjectPath
  * @param {Object} cache
  * @param {(paths: Array<string>, distKey: string) => Promise<number>} cache.saveCache
- * @param {(file: string, args: Array<string>) => Promise<unknown>} exec
- * @param {(command: string) => Promise<unknown>} execInProject
+ * @param {Exec} exec
+ * @param {ExecInProject} execInProject
  * @param {string} dependenciesKey
  * @returns {Promise<void>}
  */
@@ -120,7 +143,9 @@ async function setUpRscProject(
   console.log()
 
   console.log(`Building project in ${rscProjectPath}`)
-  await execInProject(`node ${rwfwBinPath} project:copy`)
+  await execInProject(`node ${rwfwBinPath} project:copy`, {
+    env: { RWFW_PATH: REDWOOD_FRAMEWORK_PATH },
+  })
   console.log()
 
   await cache.saveCache([rscProjectPath], dependenciesKey)

@@ -27,11 +27,18 @@ class ExecaError extends Error {
  */
 
 /**
- * @param  {...any} cmd
+ * @typedef {{
+ *   env?: Record<string, string>
+ * }} ExecOptions
  */
-async function exec(...cmd) {
-  // @ts-expect-error - The types needs fixing
-  return execa(...cmd)
+
+/**
+ * @param {string} commandLine command to execute (can include additional args). Must be correctly escaped.
+ * @param {string[]=} args arguments for tool. Escaping is handled by the lib.
+ * @param {ExecOptions=} options exec options.  See ExecOptions
+ */
+async function exec(commandLine, args, options) {
+  return execa(commandLine, args, options)
     .then(({ stdout, stderr, exitCode }) => {
       if (exitCode !== 0) {
         throw new ExecaError({ stdout, stderr, exitCode })
@@ -51,14 +58,16 @@ async function exec(...cmd) {
 
 /**
  * @param {string} cwd
+ * @param {Record<string, string>=} env
  * @returns {ExecaOptions<string>}
  */
-function getExecaOptions(cwd) {
+function getExecaOptions(cwd, env = {}) {
   return {
     shell: true,
     stdio: 'inherit',
     cleanup: true,
     cwd,
+    env,
   }
 }
 
@@ -84,17 +93,34 @@ const dependenciesKey = 'rsc-project-dependency-key'
 const distKey = 'rsc-dist-key'
 
 /**
- * @param  {...any} cmd
+ * Exec a command.
+ * Output will be streamed to the live console.
+ * Returns promise with return code
+ *
+ * @param {string} commandLine command to execute (can include additional args). Must be correctly escaped.
+ * @param {ExecOptions=} options exec options.  See ExecOptions
+ * @returns {Promise<unknown>} exit code
  */
-const execInProject = (...cmd) => {
-  return exec(...cmd, getExecaOptions(rscProjectPath))
+function execInProject(commandLine, options) {
+  return exec(
+    commandLine,
+    undefined,
+    getExecaOptions(rscProjectPath, options?.env)
+  )
 }
 
 /**
- * @param  {...any} cmd
+ * Exec a command.
+ * Output will be streamed to the live console.
+ * Returns promise with return code
+ *
+ * @param {string} commandLine command to execute (can include additional args). Must be correctly escaped.
+ * @param {string[]=} args arguments for tool. Escaping is handled by the lib.
+ * @param {ExecOptions=} options exec options.  See ExecOptions
+ * @returns {Promise<unknown>} exit code
  */
-const execInRoot = (...cmd) => {
-  return exec(...cmd, getExecaOptions('/'))
+function execInRoot(commandLine, args, options) {
+  return exec(commandLine, args, getExecaOptions('/', options?.env))
 }
 
 main(
