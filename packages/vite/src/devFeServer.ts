@@ -87,29 +87,36 @@ async function createServer() {
       : route.pathDefinition
 
     app.get(expressPathDef, routeHandler)
+    console.log(
+      `👉 \n ~ file: devFeServer.ts:90 ~ expressPathDef:`,
+      expressPathDef
+    )
 
-    app.get(`/ogImg/${expressPathDef}`, async (req: Request, res: Response) => {
-      const browser = await chromium.launch()
-      const context = await browser.newContext()
-      const page = await context.newPage()
+    app.get(
+      `/ogImg${expressPathDef.replace('^', '')}`,
+      async (req: Request, res: Response) => {
+        const browser = await chromium.launch()
+        const context = await browser.newContext()
+        const page = await context.newPage()
 
-      const ogImgThing = route.relativeFilePath!.replace('.jsx', '.ogImg.jsx')
+        const ogImgThing = route.relativeFilePath!.replace('.jsx', '.ogImg.jsx')
 
-      const { DATA, output } = await vite.ssrLoadModule(ogImgThing)
+        const { DATA, output } = await vite.ssrLoadModule(ogImgThing)
 
-      const dataOut = await DATA(req.params)
+        const dataOut = await DATA(req.params)
 
-      const htmlOutput = renderToString(createElement(output, dataOut))
+        const htmlOutput = renderToString(createElement(output, dataOut))
 
-      page.setContent(htmlOutput)
+        await page.setContent(htmlOutput)
 
-      const png = await page.screenshot({ type: 'png' })
+        const png = await page.screenshot({ type: 'png' })
 
-      await browser.close()
+        await browser.close()
 
-      res.setHeader('Content-Type', 'image/png')
-      res.send(png)
-    })
+        res.setHeader('Content-Type', 'image/png')
+        res.end(png)
+      }
+    )
   }
 
   const port = getConfig().web.port
