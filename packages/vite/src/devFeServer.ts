@@ -87,15 +87,32 @@ async function createServer() {
       : route.pathDefinition
 
     app.get(expressPathDef, routeHandler)
+
     app.get(
       createPngRouteDef(expressPathDef),
       async (req: Request, res: Response) => {
         // @TODO: Params should take height and width here.
-        // const { params } = req
+        const { params } = req
+
+        // paramNames: [
+        //   [ 'organizationSlug', 'String', '{organizationSlug}' ],
+        //   [ 'slug', 'String', '{slug}' ]
+        // ]
+        const routeParams: Record<string, any> = {
+          ...req.query,
+          ...parsedParamsToNamedParams({
+            paramNames: route.paramNames,
+            params,
+          }),
+        }
 
         const browser = await chromium.launch()
-        const context = await browser.newContext()
-        const page = await context.newPage()
+        const page = await browser.newPage({
+          viewport: {
+            width: parseInt(routeParams.width || 1200),
+            height: parseInt(routeParams.height || 630),
+          },
+        })
 
         const ogImgThing = route.relativeFilePath!.replace(
           /\.([jt]sx)/,
@@ -114,7 +131,7 @@ async function createServer() {
           rwPaths.web.document
         )
 
-        const dataOut = await DATA(req.params)
+        const dataOut = await DATA(routeParams)
 
         if (typeof process.env.RWJS_WEB_HOST !== 'string') {
           throw new Error(
@@ -135,6 +152,7 @@ async function createServer() {
               {},
               createElement(OgComponent, {
                 data: dataOut,
+                ...routeParams,
               })
             )
           )
@@ -171,8 +189,24 @@ process.stdin.on('data', async (data) => {
 
 function createPngRouteDef(expressPathDef: string): any {
   if (expressPathDef.endsWith('$')) {
-    return expressPathDef.replace('$', '.png$')
+    return new RegExp(expressPathDef.replace('$', '.png$'))
   } else {
     return expressPathDef + '.png'
   }
+}
+
+function parsedParamsToNamedParams({
+  paramNames,
+  params,
+}: {
+  paramNames: Array<string[]>
+  params: Record<string, string>
+}) {
+  const routeParams = {}
+
+  Object.entries(params).forEach(([key, value]) => {
+    routeParams[paramNames[parseInt(key)][0]] = value
+  })
+
+  return routeParams
 }
