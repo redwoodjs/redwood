@@ -76,6 +76,7 @@ export interface RWRouteManifestItem {
   hasParams: boolean
   redirect: { to: string; permanent: boolean } | null
   renderMode: 'html' | 'stream'
+  paramNames: Array<string[]>
   // Probably want isNotFound here, so we can attach a separate 404 handler
 }
 

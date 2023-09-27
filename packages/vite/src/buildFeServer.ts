@@ -158,6 +158,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
       pathDefinition: route.pathDefinition,
       hasParams: route.hasParams,
       routeHooks: FIXME_constructRouteHookPath(route.routeHooks),
+      paramNames: route.paramNames,
       redirect: route.redirect
         ? {
             to: route.redirect?.to,

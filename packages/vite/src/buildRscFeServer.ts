@@ -240,6 +240,7 @@ export const buildRscFeServer = async ({
       // E.g. /blog/post/{id:Int}
       pathDefinition: route.pathDefinition,
       hasParams: route.hasParams,
+      paramNames: route.paramNames,
       routeHooks: null,
       redirect: route.redirect
         ? {
