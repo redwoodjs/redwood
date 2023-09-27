@@ -91,13 +91,8 @@ async function createServer() {
     app.get(
       createPngRouteDef(expressPathDef),
       async (req: Request, res: Response) => {
-        // @TODO: Params should take height and width here.
         const { params } = req
 
-        // paramNames: [
-        //   [ 'organizationSlug', 'String', '{organizationSlug}' ],
-        //   [ 'slug', 'String', '{slug}' ]
-        // ]
         const routeParams: Record<string, any> = {
           ...req.query,
           ...parsedParamsToNamedParams({
@@ -202,7 +197,7 @@ function parsedParamsToNamedParams({
   paramNames: Array<string[]>
   params: Record<string, string>
 }) {
-  const routeParams = {}
+  const routeParams: Record<string, any> = {}
 
   Object.entries(params).forEach(([key, value]) => {
     routeParams[paramNames[parseInt(key)][0]] = value
