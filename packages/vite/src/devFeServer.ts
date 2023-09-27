@@ -87,25 +87,58 @@ async function createServer() {
       : route.pathDefinition
 
     app.get(expressPathDef, routeHandler)
-    console.log(
-      `👉 \n ~ file: devFeServer.ts:90 ~ expressPathDef:`,
-      expressPathDef
-    )
-
     app.get(
-      `/ogImg${expressPathDef.replace('^', '')}`,
+      createPngRouteDef(expressPathDef),
       async (req: Request, res: Response) => {
+        // @TODO: Params should take height and width here.
+        // const { params } = req
+
         const browser = await chromium.launch()
         const context = await browser.newContext()
         const page = await context.newPage()
 
-        const ogImgThing = route.relativeFilePath!.replace('.jsx', '.ogImg.jsx')
+        const ogImgThing = route.relativeFilePath!.replace(
+          /\.([jt]sx)/,
+          '.ogImg.$1'
+        )
 
-        const { DATA, output } = await vite.ssrLoadModule(ogImgThing)
+        const { DATA, output: OgComponent } = await vite.ssrLoadModule(
+          ogImgThing
+        )
+
+        const { default: AppComponent } = await vite.ssrLoadModule(
+          rwPaths.web.app
+        )
+
+        const { Document: DocumentComponent } = await vite.ssrLoadModule(
+          rwPaths.web.document
+        )
 
         const dataOut = await DATA(req.params)
 
-        const htmlOutput = renderToString(createElement(output, dataOut))
+        if (typeof process.env.RWJS_WEB_HOST !== 'string') {
+          throw new Error(
+            'Set the RWJS_WEB_HOST env, Rob. Has to be an absolute url!!'
+          )
+        }
+
+        const htmlOutput = renderToString(
+          createElement(
+            DocumentComponent,
+            {
+              // @TODO hardcoded index.css
+              css: [`${process.env.RWJS_WEB_HOST}/index.css`],
+              meta: [],
+            },
+            createElement(
+              AppComponent,
+              {},
+              createElement(OgComponent, {
+                data: dataOut,
+              })
+            )
+          )
+        )
 
         await page.setContent(htmlOutput)
 
@@ -135,3 +168,11 @@ process.stdin.on('data', async (data) => {
     })
   }
 })
+
+function createPngRouteDef(expressPathDef: string): any {
+  if (expressPathDef.endsWith('$')) {
+    return expressPathDef.replace('$', '.png$')
+  } else {
+    return expressPathDef + '.png'
+  }
+}

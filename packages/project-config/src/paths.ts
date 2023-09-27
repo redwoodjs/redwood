@@ -29,6 +29,7 @@ export interface WebPaths {
   base: string
   src: string
   app: string
+  document: string
   generators: string
   index: string | null
   html: string
@@ -103,6 +104,7 @@ const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
 const PATH_WEB_DIR_SRC_APP = 'web/src/App'
+const PATH_WEB_DIR_SRC_DOCUMENT = 'web/src/Document' //.jsx, .tsk
 const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .jsx|.tsx
 const PATH_WEB_INDEX_HTML = 'web/src/index.html'
 const PATH_WEB_DIR_GENERATORS = 'web/generators'
@@ -211,6 +213,9 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
       generators: path.join(BASE_DIR, PATH_WEB_DIR_GENERATORS),
       app: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_APP)) as string,
+      document: resolveFile(
+        path.join(BASE_DIR, PATH_WEB_DIR_SRC_DOCUMENT)
+      ) as string,
       index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)), // old webpack entry point
       html: path.join(BASE_DIR, PATH_WEB_INDEX_HTML),
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),

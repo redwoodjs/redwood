@@ -1,4 +1,13 @@
 import { Fragment } from 'react'
+
+function addSlashIfNeeded(path: string): string {
+  if (path.startsWith('http')) {
+    return path
+  } else {
+    return '/' + path
+  }
+}
+
 /** CSS is a specialised metatag */
 export const Css = ({ css }: { css: string[] }) => {
   const cssLinks = css || window?.__REDWOOD__ASSET_MAP?.css || []
@@ -7,7 +16,11 @@ export const Css = ({ css }: { css: string[] }) => {
     <>
       {cssLinks.map((cssLink, index) => {
         return (
-          <link rel="stylesheet" key={`css-${index}`} href={`/${cssLink}`} />
+          <link
+            rel="stylesheet"
+            key={`css-${index}`}
+            href={`${addSlashIfNeeded(cssLink)}`}
+          />
         )
       })}
     </>
