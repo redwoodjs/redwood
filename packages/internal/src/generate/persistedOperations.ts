@@ -95,6 +95,8 @@ const generatePersistedOperationsForSide = async (
     const info = {
       outputFile: filename,
     }
+
+    // note: the persisted ops plugin uses an older version of graphql and hence the types need some coercion
     const schema = loadSchemaSync(getPaths().generated.schema, {
       loaders: [new GraphQLFileLoader()],
       sort: true,
