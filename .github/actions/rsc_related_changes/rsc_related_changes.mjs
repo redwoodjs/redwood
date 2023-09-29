@@ -21,6 +21,10 @@ async function main() {
   for (const changedFile of changedFiles) {
     console.log('changedFile', changedFile)
 
+    // As the RSC implementation changes, this list will need to be updated.
+    // Also, I could be much more specific here, but then I'd also have to
+    // update this list much more often. So this'll serve as a good enough
+    // starting point.
     if (
       changedFile.startsWith('tasks/smoke-tests/rsc/') ||
       changedFile.startsWith('tasks/smoke-tests/basePlaywright.config.ts') ||
