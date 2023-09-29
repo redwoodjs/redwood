@@ -20,9 +20,7 @@ describe('Generate gql possible types web from the GraphQL Schema', () => {
 
     process.env.RWJS_CWD = FIXTURE_PATH
 
-    const s = await generateGraphQLSchema()
-
-    console.debug(s)
+    await generateGraphQLSchema()
 
     jest
       .spyOn(fs, 'writeFileSync')
