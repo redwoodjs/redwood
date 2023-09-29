@@ -3,6 +3,7 @@
 import { getPaths } from '@redwoodjs/project-config'
 
 import { generateGraphQLSchema } from './graphqlSchema'
+import { generatePersistedOperations } from './persistedOperations'
 import { generatePossibleTypes } from './possibleTypes'
 import { generateTypeDefs } from './typeDefinitions'
 
@@ -14,15 +15,23 @@ export const generate = async () => {
   const { possibleTypesFiles, errors: generatePossibleTypesErrors } =
     await generatePossibleTypes()
 
+  const {
+    persistedOperationsFiles,
+    errors: generatePersistedOperationsErrors,
+  } = await generatePersistedOperations()
+
   let files = []
 
   if (schemaPath !== '') {
     files.push(schemaPath)
   }
 
-  files = [...files, ...typeDefFiles, ...possibleTypesFiles].filter(
-    (x) => typeof x === 'string'
-  )
+  files = [
+    ...files,
+    ...typeDefFiles,
+    ...possibleTypesFiles,
+    ...persistedOperationsFiles,
+  ].filter((x) => typeof x === 'string')
 
   return {
     files,
@@ -30,6 +39,7 @@ export const generate = async () => {
       ...generateGraphQLSchemaErrors,
       ...generateTypeDefsErrors,
       ...generatePossibleTypesErrors,
+      ...generatePersistedOperationsErrors,
     ],
   }
 }
