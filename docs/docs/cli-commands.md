@@ -771,7 +771,7 @@ $ /redwood-app/node_modules/.bin/redwood g layout user
 Done in 1.00s.
 ```
 
-A layout will just export it's children:
+A layout will just export its children:
 
 ```jsx title="./web/src/layouts/UserLayout/UserLayout.test.js"
 const UserLayout = ({ children }) => {
@@ -1722,6 +1722,7 @@ yarn redwood setup <category>
 | `deploy`           | Set up a deployment configuration for a provider                                           |
 | `generator`        | Copy default Redwood generator templates locally for customization                         |
 | `i18n`             | Set up i18n                                                                                |
+| `package`          | Peform setup actions by running a third-party npm package                                  |
 | `tsconfig`         | Add relevant tsconfig so you can start using TypeScript                                    |
 | `ui`               | Set up a UI design or style library                                                        |
 | `webpack`          | Set up a webpack config file in your project so you can add custom config                  |
@@ -1902,6 +1903,38 @@ In order to use [Netlify Dev](https://www.netlify.com/products/dev/) you need to
 - if you wish to share your local server with others, you can run `netlify dev --live`
 
 > Note: To detect the RedwoodJS framework, please use netlify-cli v3.34.0 or greater.
+
+### setup package
+
+This command takes a published npm package that you specify, performs some compatibility checks, and then executes its bin script. This allows you to use third-party packages that can provide you with an easy-to-use setup command for the particular functionality they provide.
+
+This command behaves similarly to `yarn dlx` but will attempt to confirm compatibility between the package you are attempting to run and the current version of Redwood you are running. You can bypass this check by passing the `--force` flag if you feel you understand any potential compatibility issues.
+
+```
+yarn redwood setup package <npm-package>
+```
+
+| Arguments & Options | Description              |
+| :------------------ | :----------------------- |
+| `--force, -f`       | Forgo compatibility checks |
+
+**Usage**
+
+Run the made up `@redwoodjs/setup-example` package:
+```bash
+~/redwood-app$ yarn rw setup package @redwoodjs/setup-example
+```
+
+Run the same package but using a particular npm tag and avoiding any compatibility checks:
+```bash
+~/redwood-app$ yarn rw setup package @redwoodjs/setup-example@beta --force
+```
+
+**Compatibility Checks**
+
+We perform a simple compatibility check in an attempt to make you aware of potential compatibility issues with setup packages you might wish to run. This works by examining the version of `@redwoodjs/core` you are using within your root `package.json`. We compare this value with a compatibility range the npm package specifies in the `engines.redwoodjs` field of its own `package.json`. If the version of `@redwoodjs/core` you are using falls outside of the compatibility range specified by the package you are attempting to run, we will warn you and ask you to confirm that you wish to continue.
+
+It's the author of the npm package's responsibility to specify the correct compatibility range, so **you should always research the packages you use with this command**. Especially since they will be executing code on your machine!
 
 ### setup tsconfig
 

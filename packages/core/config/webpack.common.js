@@ -171,7 +171,6 @@ const getSharedPlugins = (isEnvProduction) => {
       new ReactRefreshWebpackPlugin({ overlay: false }),
     new webpack.ProvidePlugin({
       React: 'react',
-      PropTypes: 'prop-types',
       gql: 'graphql-tag',
       ...devTimeAutoImports,
     }),

@@ -1,0 +1,9 @@
+name: RSC Related Changes
+description: Determines if the PR makes any changes related to RSCs
+outputs:
+  rsc-related-changes:
+    description: If the PR makes any RSC related changes
+runs:
+  # `node18` isn't supported yet
+  using: node16
+  main: rsc_related_changes.mjs

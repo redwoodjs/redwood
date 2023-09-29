@@ -1,0 +1,36 @@
+datasource db {
+  provider  = "sqlite"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = "native"
+}
+
+model Stall {
+  id          String    @id @default(cuid())
+  name        String
+  stallNumber String    @unique
+  produce     Produce[]
+}
+
+model Produce {
+  id                 String   @id @default(cuid())
+  name               String   @unique
+  quantity           Int
+  price              Int
+  nutrients          String?
+  region             String
+  /// Available only for fruits
+  isSeedless         Boolean?
+  /// Available only for fruits
+  ripenessIndicators String?
+  /// Available only for vegetables
+  vegetableFamily    String?
+  /// Available only for vegetables
+  isPickled          Boolean?
+  stall              Stall    @relation(fields: [stallId], references: [id], onDelete: Cascade)
+  stallId            String
+}
