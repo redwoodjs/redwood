@@ -1,0 +1,18 @@
+{
+   "FindAuthorQuery": "3097c675d0287e9ce725ab69caed0b48e3c050f197e7e2fd30f73e7356f4fe6c",
+   "FindBlogPostQuery": "0329c11a4ac6e851992c80eeca8434bf411b3e3e726810dfe60c2ae5ed686492",
+   "BlogPostsQuery": "632e453fd54f203d103882e3648eceb88da013f5cea1dbbf7df89fbe2ca01817",
+   "DeleteContactMutation": "c11cd94485be5dd68d2baeb0171988a1444a7c0a98ba39c20cb4e5e3bfa2aaf1",
+   "FindContactById": "cc6619897d2148559efdbea6f152a7f9b49eb1c57b91b367b6bcacbdeb48bf1b",
+   "FindContacts": "22d4e8b4eec721ebf8c3995cb1d23486af085316e0ecaf994b011d1a27b0ecd0",
+   "EditContactById": "79beaf1d97e25f1d34e3ba40a0bd5fb3ee7001e55064924cb05d6234e71774d3",
+   "UpdateContactMutation": "6250b68caee4fcfc138ee0214194f3788e52d2aa91c38214989dd4ce715a9017",
+   "CreateContactMutation": "41eb931636fe1897ccc156f1dc67b4fa042a3b122b0e3d5e9fb90302a70c24a7",
+   "EditPostById": "639796f62a837af5721c8a230f22a66324ad5dcf14d54a28382b8aeabb0eee81",
+   "UpdatePostMutation": "f82c55ae23049767fbbafbbd0f2d5808508cbe9a78d35b4573c386a461106d27",
+   "CreatePostMutation": "6585ad12a321d59fdc82f3c406241c43e9602779f3c914ebd66635d25922480e",
+   "DeletePostMutation": "b64d0c6fb696c8e752bf6591b95be0a6fb73a05f422094eeb49e76ced794c79f",
+   "FindPostById": "4e0150924dca6ccfbafd4c8e380fe7a4ae08727b9667ccc31108f402ba1e4810",
+   "FindPosts": "5d260926cb5f41b54ff958ffa3c24da0bdfbdf031022428ad1713865bba6ae7a",
+   "FindWaterfallBlogPostQuery": "cbb3f6fbfb05e3c21dffe4d1ee2795541a44cfa13e6e3ca65cdaf63a13648b05"
+}
