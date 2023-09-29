@@ -531,3 +531,17 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-project.outputs.rsc-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
+
+  rsc-smoke-tests-mock:
+    needs: rsc-related-changes
+    if: needs.rsc-related-changes.outputs.rsc-related-changes != 'true'
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    name: 🔄🐘 RSC Smoke tests / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - run: echo "RSC smoke tests mock"

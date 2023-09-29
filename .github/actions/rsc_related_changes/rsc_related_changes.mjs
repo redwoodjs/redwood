@@ -22,10 +22,14 @@ async function main() {
     console.log('changedFile', changedFile)
 
     if (
-      changedFile.startsWith('packages/internal') ||
-      changedFile.startsWith('packages/project-config') ||
-      changedFile.startsWith('packages/web') ||
-      changedFile.startsWith('packages/vite')
+      changedFile.startsWith('tasks/smoke-tests/rsc/') ||
+      changedFile.startsWith('tasks/smoke-tests/basePlaywright.config.ts') ||
+      changedFile.startsWith('.github/actions/set-up-rsc-project/') ||
+      changedFile.startsWith('github/actions/rsc_related_changes/') ||
+      changedFile.startsWith('packages/internal/') ||
+      changedFile.startsWith('packages/project-config/') ||
+      changedFile.startsWith('packages/web/') ||
+      changedFile.startsWith('packages/vite/')
     ) {
       core.setOutput('rsc-related-changes', true)
       return
