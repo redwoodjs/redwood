@@ -39,6 +39,31 @@ jobs:
         id: only-doc-changes
         uses: ./.github/actions/only_doc_changes
 
+  rsc-related-changes:
+    needs: check
+    if: github.repository == 'redwoodjs/redwood'
+    name: 🐘 RSC related changes?
+    runs-on: ubuntu-latest
+    outputs:
+      rsc-related-changes: ${{ steps.rsc-related-changes.outputs.rsc-related-changes }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 🐈 Yarn install
+        working-directory: ./.github/actions/rsc_related_changes
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: 🐘 RSC related changes?
+        id: rsc-related-changes
+        uses: ./.github/actions/rsc_related_changes
+
   check:
     needs: only-doc-changes
     if: needs.only-doc-changes.outputs.only-doc-changes == 'false'
@@ -457,7 +482,8 @@ jobs:
       - run: echo "Only doc changes"
 
   rsc-smoke-tests:
-    needs: check
+    needs: rsc-related-changes
+    if: needs.rsc-related-changes.outputs.rsc-related-changes == 'true'
 
     strategy:
       matrix:

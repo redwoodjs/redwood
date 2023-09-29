@@ -83,15 +83,6 @@ const core = {
   setOutput: () => {},
 }
 
-// Mock for @actions/cache
-const cache = {
-  saveCache: async () => 1,
-  restoreCache: async () => undefined,
-}
-
-const dependenciesKey = 'rsc-project-dependency-key'
-const distKey = 'rsc-dist-key'
-
 /**
  * Exec a command.
  * Output will be streamed to the live console.
@@ -123,12 +114,4 @@ function execInRoot(commandLine, args, options) {
   return exec(commandLine, args, getExecaOptions('/', options?.env))
 }
 
-main(
-  rscProjectPath,
-  core,
-  dependenciesKey,
-  distKey,
-  cache,
-  execInRoot,
-  execInProject
-)
+main(rscProjectPath, core, execInRoot, execInProject)

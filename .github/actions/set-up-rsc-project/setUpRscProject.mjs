@@ -32,11 +32,6 @@ import { REDWOOD_FRAMEWORK_PATH } from '../actionsLib.mjs'
  * @param {string} rscProjectPath
  * @param {Object} core
  * @param {(key: string, value: string) => void} core.setOutput
- * @param {string} dependenciesKey
- * @param {string} distKey
- * @param {Object} cache
- * @param {(paths: Array<string>, distKey: string) => Promise<number>} cache.saveCache
- * @param {(paths: Array<string>, distKey: string) => Promise<string | undefined>} cache.restoreCache
  * @param {Exec} exec
  * @param {ExecInProject} execInProject
  * @returns {Promise<void>}
@@ -44,9 +39,6 @@ import { REDWOOD_FRAMEWORK_PATH } from '../actionsLib.mjs'
 export async function main(
   rscProjectPath,
   core,
-  dependenciesKey,
-  distKey,
-  cache,
   exec,
   execInProject
 ) {
@@ -55,60 +47,23 @@ export async function main(
   console.log('rwPath', REDWOOD_FRAMEWORK_PATH)
   console.log('rscProjectPath', rscProjectPath)
 
-  if (Math.random() > 5) {
-    const distCacheKey = await cache.restoreCache([rscProjectPath], distKey)
-
-    if (distCacheKey) {
-      console.log(`Cache restored from key: ${distKey}`)
-      return
-    }
-
-    const dependenciesCacheKey = await cache.restoreCache(
-      [rscProjectPath],
-      dependenciesKey
-    )
-
-    if (dependenciesCacheKey) {
-      console.log('Cache restored from key:', dependenciesKey)
-    } else {
-      console.log('Cache not found for input keys:', distKey, dependenciesKey)
-      await setUpRscProject(
-        rscProjectPath,
-        cache,
-        exec,
-        execInProject,
-        dependenciesKey
-      )
-    }
-
-    await cache.saveCache([rscProjectPath], distKey)
-    console.log(`Cache saved with key: ${distKey}`)
-  }
-
   await setUpRscProject(
     rscProjectPath,
-    cache,
     exec,
     execInProject,
-    dependenciesKey
   )
 }
 
 /**
  * @param {string} rscProjectPath
- * @param {Object} cache
- * @param {(paths: Array<string>, distKey: string) => Promise<number>} cache.saveCache
  * @param {Exec} exec
  * @param {ExecInProject} execInProject
- * @param {string} dependenciesKey
  * @returns {Promise<void>}
  */
 async function setUpRscProject(
   rscProjectPath,
-  cache,
   exec,
   execInProject,
-  dependenciesKey
 ) {
   const rwBinPath = path.join(
     REDWOOD_FRAMEWORK_PATH,
@@ -147,7 +102,4 @@ async function setUpRscProject(
     env: { RWFW_PATH: REDWOOD_FRAMEWORK_PATH },
   })
   console.log()
-
-  await cache.saveCache([rscProjectPath], dependenciesKey)
-  console.log(`Cache saved with key: ${dependenciesKey}`)
 }
