@@ -267,10 +267,14 @@ export async function setClientEntries(
   }
   const baseDir = path.dirname(entriesFile)
   absoluteClientEntries = Object.fromEntries(
-    Object.entries(clientEntries).map(([key, val]) => [
-      path.join(baseDir, key),
-      config.base + val,
-    ])
+    Object.entries(clientEntries).map(([key, val]) => {
+      let fullKey = path.join(baseDir, key)
+      if (process.platform === 'win32') {
+        fullKey = fullKey.replaceAll('\\', '/')
+      }
+      console.log('fullKey', fullKey, 'value', config.base + val)
+      return [fullKey, config.base + val]
+    })
   )
 
   console.log(
