@@ -202,12 +202,12 @@ describe('common', () => {
 
         const apiPaths = getPathsFromTypeScriptConfig(typeScriptConfig.api)
         expect(ensurePosixPath(apiPaths['@services'])).toMatchInlineSnapshot(
-          `"src/services"`
+          `"./src/services"`
         )
 
         const webPaths = getPathsFromTypeScriptConfig(typeScriptConfig.web)
         expect(ensurePosixPath(webPaths['@ui'])).toMatchInlineSnapshot(
-          `"src/ui"`
+          `"./src/ui"`
         )
       })
     })

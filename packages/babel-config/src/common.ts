@@ -139,7 +139,7 @@ export const getPathsFromTypeScriptConfig = (config: {
     return {}
   }
 
-  const { baseUrl, paths } = config.compilerOptions
+  const {  paths } = config.compilerOptions
   const pathsObj: Record<string, string> = {}
   for (const [key, value] of Object.entries(paths)) {
     // exclude the default paths that are included in the tsconfig.json file
@@ -151,10 +151,7 @@ export const getPathsFromTypeScriptConfig = (config: {
       continue
     }
     const aliasKey = key.replace('/*', '')
-    const aliasValue = path.join(
-      baseUrl,
-      (value as string)[0].replace('/*', '')
-    )
+   const aliasValue = (value as string)[0].replace('/*', '')
     pathsObj[aliasKey] = aliasValue
   }
   return pathsObj
