@@ -638,12 +638,12 @@ Either of these errors will be caught and re-thrown as a `ServiceValidationError
 
 You could just write your own function and throw whatever you like, without using `validateWith()`. But, when accessing your Service function through GraphQL, that error would be swallowed and the user would simply see "Something went wrong" for security reasons: error messages could reveal source code or other sensitive information so most are hidden. Errors thrown by Service Validations are considered "safe" and allowed to be shown to the client.
 
-### validateWithSync()
+### validateWith()
 
-The same behavior as `validateWithSync()` but works with Promises.
+The same behavior as `validateWith()` but works with Promises. Remember to `await` the validation.
 
 ```jsx
-validateWithSync(async () => {
+await validateWith(async () => {
   if (await db.products.count() >= 100) {
     throw "There can only be a maximum of 100 products in your store"
   }
