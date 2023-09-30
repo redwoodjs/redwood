@@ -151,7 +151,8 @@ export const getPathsFromTypeScriptConfig = (config: {
       continue
     }
     const aliasKey = key.replace('/*', '')
-   const aliasValue = (value as string)[0].replace('/*', '')
+    // path.join is used to normalize the path, but it removes the leading ./ which is needed in vite
+    const aliasValue = (value as string)[0].replace('/*', '')
     pathsObj[aliasKey] = aliasValue
   }
   return pathsObj
