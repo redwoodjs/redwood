@@ -54,7 +54,7 @@ interface SignupFlowOptions {
    * Validate the user-supplied password with whatever logic you want. Return
    * `true` if valid, throw `PasswordValidationError` if not.
    */
-  passwordValidation?: (password: string) => boolean
+  passwordValidation?: (password: string | undefined) => boolean
 
   /**
    * Object containing error strings
@@ -661,7 +661,9 @@ export class DbAuthHandler<
   }
 
   async signup() {
+    console.log('async signup()')
     const { enabled = true } = this.options.signup
+    console.log('async signup() enabled', enabled)
     if (!enabled) {
       throw new DbAuthError.FlowNotEnabledError(
         (this.options.signup as SignupFlowOptions)?.errors?.flowNotEnabled ||
@@ -670,10 +672,11 @@ export class DbAuthHandler<
     }
 
     // check if password is valid
-    const { password } = this.params
     ;(this.options.signup as SignupFlowOptions).passwordValidation?.(
-      password as string
+      this.params.password
     )
+
+    console.log('call _createUser()')
 
     const userOrMessage = await this._createUser()
 
@@ -1232,13 +1235,22 @@ export class DbAuthHandler<
       ?.usernameMatch
     const findUniqueUserMatchCriteriaOptions =
       this._getUserMatchCriteriaOptions(username, usernameMatchFlowOption)
+    console.log(
+      '_verifyUser findUniqueUserMatchCriteriaOptions',
+      findUniqueUserMatchCriteriaOptions
+    )
     let user
 
     try {
       // does user exist?
+      console.log(
+        'await this.dbAccessor.findFirst',
+        findUniqueUserMatchCriteriaOptions
+      )
       user = await this.dbAccessor.findFirst({
         where: findUniqueUserMatchCriteriaOptions,
       })
+      console.log('user', user)
     } catch (e) {
       throw new DbAuthError.GenericError()
     }
@@ -1308,12 +1320,25 @@ export class DbAuthHandler<
     ) {
       const usernameMatchFlowOption = (this.options.signup as SignupFlowOptions)
         ?.usernameMatch
-      const findUniqueUserMatchCriteriaOptions =
-        this._getUserMatchCriteriaOptions(username, usernameMatchFlowOption)
+      console.log('usernameMatchFlowOption', usernameMatchFlowOption)
+      // const findUniqueUserMatchCriteriaOptions =
+      //   this._getUserMatchCriteriaOptions(username, usernameMatchFlowOption)
 
+      console.log('_createUser this.dbAccessor', this.dbAccessor)
+
+      const findUniqueUserMatchCriteriaOptions = {
+        email: username,
+      }
+
+      console.log(
+        '_createUser await findFirst',
+        findUniqueUserMatchCriteriaOptions
+      )
       const user = await this.dbAccessor.findFirst({
         where: findUniqueUserMatchCriteriaOptions,
       })
+      console.log('_createUser user', user)
+
       if (user) {
         throw new DbAuthError.DuplicateUsernameError(
           username,
@@ -1352,9 +1377,10 @@ export class DbAuthHandler<
     return methodName
   }
 
-  // checks that a single field meets validation requirements and
+  // checks that a single field meets validation requirements
   // currently checks for presence only
   _validateField(name: string, value: string | undefined): value is string {
+    console.log('_validateField', name, value)
     // check for presence
     if (!value || value.trim() === '') {
       throw new DbAuthError.FieldRequiredError(
@@ -1448,6 +1474,11 @@ export class DbAuthHandler<
     // Each db provider has it owns rules for case insensitive comparison.
     // We are checking if you have defined one for your db choice here
     // https://www.prisma.io/docs/concepts/components/prisma-client/case-sensitivity
+    console.log('_getUserMatchCriteriaOptions username', username)
+    console.log(
+      '_getUserMatchCriteriaOptions usernameMatchFlowOptions',
+      usernameMatchFlowOption
+    )
     const findUniqueUserMatchCriteriaOptions = !usernameMatchFlowOption
       ? { [this.options.authFields.username]: username }
       : {
@@ -1457,6 +1488,10 @@ export class DbAuthHandler<
           },
         }
 
+    console.log(
+      '_getUserMatchCriteriaOptions findUniqueUserMatchCriteriaOptions',
+      findUniqueUserMatchCriteriaOptions
+    )
     return findUniqueUserMatchCriteriaOptions
   }
 }
