@@ -22,6 +22,7 @@ import { createCorsContext, normalizeRequest } from '@redwoodjs/api'
 
 import * as DbAuthError from './errors'
 import {
+  cookieName,
   decryptSession,
   extractCookie,
   getSession,
@@ -320,8 +321,9 @@ export class DbAuthHandler<
     return ['usb', 'ble', 'nfc', 'internal']
   }
 
-  // returns the set-cookie header to mark the cookie as expired ("deletes" the session)
   /**
+   * Returns the set-cookie header to mark the cookie as expired ("deletes" the session)
+   *
    * The header keys are case insensitive, but Fastify prefers these to be lowercase.
    * Therefore, we want to ensure that the headers are always lowercase and unique
    * for compliance with HTTP/2.
@@ -329,9 +331,12 @@ export class DbAuthHandler<
    * @see: https://www.rfc-editor.org/rfc/rfc7540#section-8.1.2
    */
   get _deleteSessionHeader() {
+    console.log('_deleteSessionHeader context', this.context)
+    console.log('_deleteSessionHeader event', this.event)
+
     return {
       'set-cookie': [
-        'session=',
+        `${cookieName()}=`,
         ...this._cookieAttributes({ expires: 'now' }),
       ].join(';'),
     }
@@ -1134,7 +1139,7 @@ export class DbAuthHandler<
     const session = JSON.stringify(data) + ';' + csrfToken
     const encrypted = this._encrypt(session)
     const cookie = [
-      `session=${encrypted.toString()}`,
+      `${cookieName()}=${encrypted.toString()}`,
       ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
     ].join(';')
 

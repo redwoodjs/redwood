@@ -60,11 +60,11 @@ export const getSession = (text?: string) => {
   }
 
   const cookies = text.split(';')
-  const sessionCookie = cookies.find((cook) => {
-    return cook.split('=')[0].trim() === 'session'
+  const sessionCookie = cookies.find((cookie) => {
+    return cookie.split('=')[0].trim() === cookieName()
   })
 
-  if (!sessionCookie || sessionCookie === 'session=') {
+  if (!sessionCookie || sessionCookie === `${cookieName()}=`) {
     return null
   }
 
@@ -113,4 +113,8 @@ export const hashPassword = (text: string, salt?: string) => {
     CryptoJS.PBKDF2(text, useSalt, { keySize: 256 / 32 }).toString(),
     useSalt,
   ]
+}
+
+export const cookieName = () => {
+  return 'session'
 }
