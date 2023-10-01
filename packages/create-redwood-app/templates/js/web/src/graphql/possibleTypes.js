@@ -1,6 +1,5 @@
-
 const result = {
-  "possibleTypes": {}
+  possibleTypes: {},
 }
 
 export default result
