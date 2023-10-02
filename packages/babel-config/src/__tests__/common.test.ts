@@ -179,7 +179,7 @@ describe('common', () => {
         expect(webPaths).toMatchInlineSnapshot(`{}`)
       })
 
-      it('gets and formats paths', () => {
+      it('gets and formats paths (legacy:webpack)', () => {
         const apiTSConfig =
           '{"compilerOptions":{"baseUrl":"./","paths":{"@services/*":["./src/services/*"]}}}'
         const webTSConfig =
@@ -202,10 +202,43 @@ describe('common', () => {
 
         const apiPaths = getPathsFromTypeScriptConfig(typeScriptConfig.api)
         expect(ensurePosixPath(apiPaths['@services'])).toMatchInlineSnapshot(
-          `"./src/services"`
+          `"src/services"`
         )
 
         const webPaths = getPathsFromTypeScriptConfig(typeScriptConfig.web)
+        expect(ensurePosixPath(webPaths['@ui'])).toMatchInlineSnapshot(
+          `"src/ui"`
+        )
+      })
+
+
+      it('gets and formats paths for vite', () => {
+        const apiTSConfig =
+          '{"compilerOptions":{"baseUrl":"./","paths":{"@services/*":["./src/services/*"]}}}'
+        const webTSConfig =
+          '{"compilerOptions":{"baseUrl":"./","paths":{"@ui/*":["./src/ui/*"]}}}'
+
+        vol.fromNestedJSON(
+          {
+            'redwood.toml': '',
+            api: {
+              'tsconfig.json': apiTSConfig,
+            },
+            web: {
+              'tsconfig.json': webTSConfig,
+            },
+          },
+          redwoodProjectPath
+        )
+
+        const typeScriptConfig = parseTypeScriptConfigFiles()
+
+        const apiPaths = getPathsFromTypeScriptConfig(typeScriptConfig.api)
+        expect(ensurePosixPath(apiPaths['@services'])).toMatchInlineSnapshot(
+          `"src/services"`
+        )
+
+        const webPaths = getPathsFromTypeScriptConfig(typeScriptConfig.web, true)
         expect(ensurePosixPath(webPaths['@ui'])).toMatchInlineSnapshot(
           `"./src/ui"`
         )

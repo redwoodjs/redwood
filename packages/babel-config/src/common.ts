@@ -129,8 +129,10 @@ export const parseTypeScriptConfigFiles = () => {
  * @returns {Record<string, string>} The paths object
  */
 export const getPathsFromTypeScriptConfig = (config: {
-  compilerOptions: { baseUrl: string; paths: string }
-}): Record<string, string> => {
+    compilerOptions: { baseUrl: string; paths: string }
+  },
+  forVite = false
+): Record<string, string> => {
   if (!config) {
     return {}
   }
@@ -139,7 +141,7 @@ export const getPathsFromTypeScriptConfig = (config: {
     return {}
   }
 
-  const {  paths } = config.compilerOptions
+  const { baseUrl, paths } = config.compilerOptions
   const pathsObj: Record<string, string> = {}
   for (const [key, value] of Object.entries(paths)) {
     // exclude the default paths that are included in the tsconfig.json file
@@ -150,9 +152,19 @@ export const getPathsFromTypeScriptConfig = (config: {
     if (key.match(/src\/|\$api\/\*|types\/\*|\@redwoodjs\/.*/g)) {
       continue
     }
+    let aliasValue = ''
     const aliasKey = key.replace('/*', '')
-    // path.join is used to normalize the path, but it removes the leading ./ which is needed in vite
-    const aliasValue = (value as string)[0].replace('/*', '')
+
+    // keeping legacy (webpack) compatibility
+    if (forVite) {
+      aliasValue = (value as string)[0].replace('/*', '')
+    }
+    else {
+      aliasValue = path.join(
+        baseUrl,
+        (value as string)[0].replace('/*', '')
+      )
+    }
     pathsObj[aliasKey] = aliasValue
   }
   return pathsObj
