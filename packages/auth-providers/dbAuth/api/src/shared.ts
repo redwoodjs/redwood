@@ -1,6 +1,8 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
 
+import { getConfig } from '@redwoodjs/project-config'
+
 import * as DbAuthError from './errors'
 
 // Extracts the cookie from an event, handling lower and upper case header names.
@@ -116,5 +118,8 @@ export const hashPassword = (text: string, salt?: string) => {
 }
 
 export const cookieName = () => {
-  return 'session'
+  const port = getConfig().api?.port || 8911
+  const cookieName = 'dbauth_session_' + port
+
+  return cookieName
 }
