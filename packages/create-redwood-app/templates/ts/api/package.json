@@ -3,7 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "@react-email/components": "0.0.7",
     "@redwoodjs/api": "6.0.7",
-    "@redwoodjs/graphql-server": "6.0.7"
+    "@redwoodjs/graphql-server": "6.0.7",
+    "@redwoodjs/mailer-core": "6.0.7",
+    "@redwoodjs/mailer-handler-in-memory": "6.0.7",
+    "@redwoodjs/mailer-handler-nodemailer": "6.0.7",
+    "@redwoodjs/mailer-handler-studio": "6.0.7",
+    "@redwoodjs/mailer-renderer-react-email": "6.0.7"
   }
 }
