@@ -1,4 +1,5 @@
 # Testing Redwood in GitHub actions
+> ✅ Checked on  2023-10-03 with RedwoodJS v6.3.1
 
 A good testing strategy is important for any project. Redwood offers a few different types of tests that you can write to make your app more robust—to ship with confidence. In this guide we'll focus on how to run your Redwood tests in GitHub Actions, so you can test your app on every push or pull request.
 
