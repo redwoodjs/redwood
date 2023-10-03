@@ -211,7 +211,6 @@ describe('common', () => {
         )
       })
 
-
       it('gets and formats paths for vite', () => {
         const apiTSConfig =
           '{"compilerOptions":{"baseUrl":"./","paths":{"@services/*":["./src/services/*"]}}}'
@@ -238,7 +237,10 @@ describe('common', () => {
           `"src/services"`
         )
 
-        const webPaths = getPathsFromTypeScriptConfig(typeScriptConfig.web, true)
+        const webPaths = getPathsFromTypeScriptConfig(
+          typeScriptConfig.web,
+          true
+        )
         expect(ensurePosixPath(webPaths['@ui'])).toMatchInlineSnapshot(
           `"./src/ui"`
         )

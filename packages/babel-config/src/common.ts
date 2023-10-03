@@ -128,7 +128,8 @@ export const parseTypeScriptConfigFiles = () => {
  * @param config The config object
  * @returns {Record<string, string>} The paths object
  */
-export const getPathsFromTypeScriptConfig = (config: {
+export const getPathsFromTypeScriptConfig = (
+  config: {
     compilerOptions: { baseUrl: string; paths: string }
   },
   forVite = false
@@ -158,12 +159,8 @@ export const getPathsFromTypeScriptConfig = (config: {
     // keeping legacy (webpack) compatibility
     if (forVite) {
       aliasValue = (value as string)[0].replace('/*', '')
-    }
-    else {
-      aliasValue = path.join(
-        baseUrl,
-        (value as string)[0].replace('/*', '')
-      )
+    } else {
+      aliasValue = path.join(baseUrl, (value as string)[0].replace('/*', ''))
     }
     pathsObj[aliasKey] = aliasValue
   }
