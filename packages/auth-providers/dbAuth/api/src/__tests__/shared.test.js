@@ -1,3 +1,5 @@
+import path from 'node:path'
+
 import CryptoJS from 'crypto-js'
 
 import * as error from '../errors'
@@ -10,11 +12,23 @@ import {
   webAuthnSession,
 } from '../shared'
 
+const FIXTURE_PATH = path.resolve(
+  __dirname,
+  '../../../../../../__fixtures__/example-todo-main'
+)
 process.env.SESSION_SECRET = 'nREjs1HPS7cFia6tQHK70EWGtfhOgbqJQKsHQz3S'
 
 const encrypt = (data) => {
   return CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET).toString()
 }
+
+beforeAll(() => {
+  process.env.RWJS_CWD = FIXTURE_PATH
+})
+
+afterAll(() => {
+  delete process.env.RWJS_CWD
+})
 
 describe('getSession()', () => {
   it('returns null if no text', () => {
@@ -26,17 +40,17 @@ describe('getSession()', () => {
   })
 
   it('returns the value of the session cookie', () => {
-    expect(getSession('session=qwerty')).toEqual('qwerty')
+    expect(getSession('dbauth_session_8911=qwerty')).toEqual('qwerty')
   })
 
   it('returns the value of the session cookie when there are multiple cookies', () => {
-    expect(getSession('foo=bar;session=qwerty')).toEqual('qwerty')
-    expect(getSession('session=qwerty;foo=bar')).toEqual('qwerty')
+    expect(getSession('foo=bar;dbauth_session_8911=qwerty')).toEqual('qwerty')
+    expect(getSession('dbauth_session_8911=qwerty;foo=bar')).toEqual('qwerty')
   })
 
   it('returns the value of the session cookie when there are multiple cookies separated by spaces (iOS Safari)', () => {
-    expect(getSession('foo=bar; session=qwerty')).toEqual('qwerty')
-    expect(getSession('session=qwerty; foo=bar')).toEqual('qwerty')
+    expect(getSession('foo=bar; dbauth_session_8911=qwerty')).toEqual('qwerty')
+    expect(getSession('dbauth_session_8911=qwerty; foo=bar')).toEqual('qwerty')
   })
 })
 
@@ -78,7 +92,7 @@ describe('dbAuthSession()', () => {
     const text = encrypt(JSON.stringify(first) + ';' + second)
     const event = {
       headers: {
-        cookie: `session=${text}`,
+        cookie: `dbauth_session_8911=${text}`,
       },
     }
 
