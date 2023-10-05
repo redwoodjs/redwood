@@ -129,7 +129,7 @@ export async function handler({ force, install, packages }) {
               __dirname,
               '..',
               'templates',
-              'mantine.storybook.preview.js.template'
+              'mantine.storybook.preview.tsx.template'
             )
           ),
       },
