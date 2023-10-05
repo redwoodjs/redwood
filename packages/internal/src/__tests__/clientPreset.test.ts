@@ -11,8 +11,8 @@ afterEach(() => {
   jest.restoreAllMocks()
 })
 
-describe('Generate client preset from the GraphQL Schema', () => {
-  test('when there are *no* union types', async () => {
+describe('Generate client preset', () => {
+  test('for web and api sides', async () => {
     const FIXTURE_PATH = path.resolve(
       __dirname,
       '../../../../__fixtures__/example-todo-main'
@@ -22,7 +22,6 @@ describe('Generate client preset from the GraphQL Schema', () => {
 
     await generateGraphQLSchema()
 
-    // note that the data for api and web side are the same
     jest
       .spyOn(fs, 'writeFileSync')
       .mockImplementation(
@@ -31,48 +30,9 @@ describe('Generate client preset from the GraphQL Schema', () => {
         }
       )
 
-    const files = await generateClientPreset() // ?
+    const { clientPresetFiles } = await generateClientPreset()
 
-    expect(files).toHaveLength(2)
-
-    console.debug('clietn present files', files)
-
-    expect(files).toHaveLength(1)
-
-    // expect(typedDocumentsFiles[0]).toMatch(
-    //   path.join(getPaths().web.graphql, 'persistedOperations.json')
-    // )
-    // expect(typedDocumentsFiles[1]).toMatch(
-    //   path.join(getPaths().api.lib, 'persistedOperations.json')
-    // )
+    expect(clientPresetFiles).toHaveLength(6)
+    expect(clientPresetFiles).toMatchSnapshot()
   })
-
-  // test('when there are union types ', async () => {
-  //   const FIXTURE_PATH = path.resolve(
-  //     __dirname,
-  //     '../../../../__fixtures__/fragment-test-project'
-  //   )
-
-  //   process.env.RWJS_CWD = FIXTURE_PATH
-  //   await generateGraphQLSchema()
-
-  //   // note that the data for api and web side are the same
-  //   jest
-  //     .spyOn(fs, 'writeFileSync')
-  //     .mockImplementation(
-  //       (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
-  //         expect(data).toMatchSnapshot()
-  //       }
-  //     )
-
-  //   const { typedDocumentsFiles } = await generateTypedDocuments()
-
-  //   expect(typedDocumentsFiles).toHaveLength(2)
-  //   expect(typedDocumentsFiles[0]).toMatch(
-  //     path.join(getPaths().web.graphql, 'persistedOperations.json')
-  //   )
-  //   expect(typedDocumentsFiles[1]).toMatch(
-  //     path.join(getPaths().api.lib, 'persistedOperations.json')
-  //   )
-  // })
 })
