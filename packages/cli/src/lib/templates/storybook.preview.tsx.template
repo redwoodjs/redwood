@@ -1,0 +1,15 @@
+import * as React from 'react'
+
+import type { GlobalTypes } from '@storybook/csf'
+import type { StoryFn, StoryContext } from '@storybook/react'
+
+export const globalTypes: GlobalTypes = {}
+
+/**
+ * An example, no-op storybook decorator. Use a function like this to create decorators.
+*/
+const _exampleDecorator = (StoryFn: StoryFn, _context: StoryContext) => {
+  return <StoryFn />
+}
+
+export const decorators = []
