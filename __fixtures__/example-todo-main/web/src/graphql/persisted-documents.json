@@ -1,0 +1,6 @@
+{
+  "0a10617d10611e708e56d2b72925c82e7415a08a": "mutation AddTodo_CreateTodo($body: String!) { createTodo(body: $body) { __typename body id status } }",
+  "2297bb1d97b9eef1c20733e737683349445c045f": "query NumTodosCell_GetCount { todosCount }",
+  "0e056c245e5b02c609c42dd4c3512699c3d0956e": "query TodoListCell_GetTodos { todos { body id status } }",
+  "74dd5ed40cf06802023b2d536007072ac7d14b14": "mutation TodoListCell_CheckTodo($id: Int!, $status: String!) { updateTodoStatus(id: $id, status: $status) { __typename id status } }"
+}

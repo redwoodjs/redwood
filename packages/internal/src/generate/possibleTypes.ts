@@ -42,7 +42,7 @@ type PossibleTypesResult = {
  * @see https://www.apollographql.com/docs/react/data/fragments/#using-fragments-with-unions-and-interfaces
  **/
 export const generatePossibleTypes = async (): Promise<PossibleTypesResult> => {
-  const filename = path.join(getPaths().web.graphql, 'possibleTypes.ts')
+  const filename = path.join(getPaths().web.graphql, 'possible-types.ts')
   const options = getLoadDocumentsOptions(filename)
   const documentsGlob = './web/src/**/!(*.d).{ts,tsx,js,jsx}'
 

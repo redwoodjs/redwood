@@ -27,7 +27,7 @@ describe('Generate gql possible types web from the GraphQL Schema', () => {
       .mockImplementation(
         (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
           expect(file).toMatch(
-            path.join(getPaths().web.graphql, 'possibleTypes.ts')
+            path.join(getPaths().web.graphql, 'possible-types.ts')
           )
           expect(data).toMatchSnapshot()
         }
@@ -37,7 +37,7 @@ describe('Generate gql possible types web from the GraphQL Schema', () => {
 
     expect(possibleTypesFiles).toHaveLength(1)
     expect(possibleTypesFiles[0]).toMatch(
-      path.join(getPaths().web.graphql, 'possibleTypes.ts')
+      path.join(getPaths().web.graphql, 'possible-types.ts')
     )
   })
 
@@ -55,7 +55,7 @@ describe('Generate gql possible types web from the GraphQL Schema', () => {
       .mockImplementation(
         (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
           expect(file).toMatch(
-            path.join(getPaths().web.graphql, 'possibleTypes.ts')
+            path.join(getPaths().web.graphql, 'possible-types.ts')
           )
           expect(data).toMatchSnapshot()
         }
@@ -65,7 +65,7 @@ describe('Generate gql possible types web from the GraphQL Schema', () => {
 
     expect(possibleTypesFiles).toHaveLength(1)
     expect(possibleTypesFiles[0]).toMatch(
-      path.join(getPaths().web.graphql, 'possibleTypes.ts')
+      path.join(getPaths().web.graphql, 'possible-types.ts')
     )
   })
 })

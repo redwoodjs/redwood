@@ -2,8 +2,8 @@
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import { generateClientPreset } from './clientPreset'
 import { generateGraphQLSchema } from './graphqlSchema'
-import { generatePersistedOperations } from './persistedOperations'
 import { generatePossibleTypes } from './possibleTypes'
 import { generateTypeDefs } from './typeDefinitions'
 
@@ -15,10 +15,7 @@ export const generate = async () => {
   const { possibleTypesFiles, errors: generatePossibleTypesErrors } =
     await generatePossibleTypes()
 
-  const {
-    persistedOperationsFiles,
-    errors: generatePersistedOperationsErrors,
-  } = await generatePersistedOperations()
+  const { clientPresetFiles } = await generateClientPreset()
 
   let files = []
 
@@ -29,8 +26,8 @@ export const generate = async () => {
   files = [
     ...files,
     ...typeDefFiles,
+    ...clientPresetFiles,
     ...possibleTypesFiles,
-    ...persistedOperationsFiles,
   ].filter((x) => typeof x === 'string')
 
   return {
@@ -39,7 +36,6 @@ export const generate = async () => {
       ...generateGraphQLSchemaErrors,
       ...generateTypeDefsErrors,
       ...generatePossibleTypesErrors,
-      ...generatePersistedOperationsErrors,
     ],
   }
 }

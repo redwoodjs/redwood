@@ -5,9 +5,11 @@ import type {
 } from '@apollo/client'
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+// import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
+
 // Note: Importing directly from `apollo/client` doesn't work properly in Storybook.
 const {
   ApolloProvider,
@@ -212,6 +214,10 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   if (globalThis.RWJS_EXP_STREAMING_SSR) {
     httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
   }
+
+  // const link = createPersistedQueryLink({
+  //   generateHash: (document) => document['__meta__']['hash'],
+  // }).concat(httpLink)
 
   // Our terminating link needs to be smart enough to handle subscriptions, and if the GraphQL query
   // is subscription it needs to use the SSELink (server sent events link).
