@@ -230,7 +230,7 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
   })
   map.addMapping({
     generated: {
-      line: 10,
+      line: 12,
       column: 0,
     },
     source: path.relative(path.dirname(typeDefPath), p),
