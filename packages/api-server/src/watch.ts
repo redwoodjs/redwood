@@ -187,9 +187,9 @@ chokidar
     await validate()
   })
   .on('all', async (eventName, filePath) => {
-    // On sufficiently large projects (500+ files, or >= 2000 ms build times) on older machines, esbuild opening the api directory
-    // makes chokidar emit an `addDir` event. This starts an infinite loop where the api starts building itself as soon as its finished building.
-    // This could probably be fixed with build caching, or by digging into chokidar/esbuild.
+    // On sufficiently large projects (500+ files, or >= 2000 ms build times) on older machines, esbuild writing to the api directory
+    // makes chokidar emit an `addDir` event. This starts an infinite loop where the api starts building itself as soon as it's finished.
+    // This could probably be fixed with some sort of build caching.
     if (eventName === 'addDir' && filePath === rwjsPaths.api.base) {
       return
     }
