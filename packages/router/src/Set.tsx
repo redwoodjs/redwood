@@ -12,10 +12,12 @@ type SetProps<P> = P & {
   //   <Set<{theme: string}> wrap={ThemeableLayout} theme="dark">
   wrap?: WrapperType<P> | WrapperType<P>[]
   /**
-   * `Routes` nested in a `<Set>` with `private` specified require
+   * `Routes` nested in a `<Set>` with `isPrivate` specified require
    * authentication. When a user is not authenticated and attempts to visit
    * the wrapped route they will be redirected to `unauthenticated` route.
    */
+  isPrivate?: boolean
+  /** @deprecated use `isPrivate` instead */
   private?: boolean
   /** The page name where a user will be redirected when not authenticated */
   unauthenticated?: string
@@ -47,7 +49,7 @@ export function Set<WrapperProps>(_props: SetProps<WrapperProps>) {
 
 type PrivateProps<P> = Omit<
   SetProps<P>,
-  'private' | 'unauthenticated' | 'wrap'
+  'private' | 'isPrivate' | 'unauthenticated' | 'wrap'
 > & {
   /** The page name where a user will be redirected when not authenticated */
   unauthenticated: string
@@ -68,7 +70,7 @@ export const isSetNode = (
   )
 }
 
-// Only identifies <Private> nodes, not <Set private> nodes
+/** Only identifies <Private> nodes, not <Set isPrivate> nodes */
 export const isPrivateNode = (
   node: ReactNode
 ): node is ReactElement<SetProps<any>> => {

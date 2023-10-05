@@ -1259,7 +1259,7 @@ test('Set is not rendered for unauthenticated user.', async () => {
 
   const TestRouter = () => (
     <Router>
-      <Set private wrap={SetWithUseParams} unauthenticated="login">
+      <Set isPrivate wrap={SetWithUseParams} unauthenticated="login">
         <Route path="/test/{documentId}" page={ParamPage} name="param" />
       </Set>
       <Route path="/" page={HomePage} name="home" />
@@ -1292,7 +1292,7 @@ test('Set is not rendered for unauthenticated user on direct navigation', async 
 
   const TestRouter = () => (
     <Router>
-      <Set private wrap={SetWithUseParams} unauthenticated="login">
+      <Set isPrivate wrap={SetWithUseParams} unauthenticated="login">
         <Route path="/test/{documentId}" page={ParamPage} name="param" />
       </Set>
       <Route path="/" page={HomePage} name="home" />

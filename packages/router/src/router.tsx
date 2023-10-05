@@ -227,7 +227,7 @@ const WrappedPage = memo(
     reveresedSetProps
       // @MARK note the reverse() here, because we spread wrappersWithAuthMaybe
       .forEach((propsFromSet) => {
-        if (propsFromSet.private) {
+        if (propsFromSet.private || propsFromSet.isPrivate) {
           if (!propsFromSet.unauthenticated) {
             throw new Error(
               'You must specify an `unauthenticated` route when marking a Route as private'

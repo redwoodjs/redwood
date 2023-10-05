@@ -609,14 +609,14 @@ export function analyzeRoutes(
             : [wrapFromCurrentSet]
         }
 
-        // @MARK note unintuitive, but intentional
         // You cannot make a nested set public if the parent is private
-        // i.e. the private prop cannot be overriden by a child Set
+        // i.e. the isPrivate prop cannot be overridden by a child Set
 
         // @TODO: Double check this logic is correct for privatge logic in previous set props
-        const privateProps =
-          isPrivateNode(node) || previousSetProps.some((props) => props.private)
-            ? { private: true }
+        const isPrivateProps =
+          isPrivateNode(node) ||
+          previousSetProps.some((props) => props.private || props.isPrivate)
+            ? { isPrivate: true }
             : {}
 
         if (children) {
@@ -634,8 +634,8 @@ export function analyzeRoutes(
               {
                 // Current one takes precedence
                 ...otherPropsFromCurrentSet,
-                // See comment at definiion, intenionally at the end
-                ...privateProps,
+                // See comment at definition, intentionally at the end
+                ...isPrivateProps,
               },
             ],
           })

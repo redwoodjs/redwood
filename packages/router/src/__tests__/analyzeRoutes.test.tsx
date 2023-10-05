@@ -290,7 +290,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       setId: 1,
       setProps: [
         {
-          private: true,
+          isPrivate: true,
           unauthenticated: 'home',
         },
       ],

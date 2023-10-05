@@ -11,12 +11,14 @@ interface AuthenticatedRouteProps {
   unauthenticated?: keyof GeneratedRoutesMap
   whileLoadingAuth?: () => React.ReactElement | null
   private?: boolean
+  isPrivate?: boolean
 }
 export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = (
   props
 ) => {
   const {
-    private: isPrivate,
+    private: privateProp,
+    isPrivate,
     unauthenticated,
     roles,
     whileLoadingAuth,
@@ -34,7 +36,7 @@ export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = (
   }, [isAuthenticated, roles, hasRole])
 
   // Make sure `wrappers` is always an array with at least one wrapper component
-  if (isPrivate && unauthorized()) {
+  if ((privateProp || isPrivate) && unauthorized()) {
     if (!unauthenticated) {
       throw new Error(
         'Private Sets need to specify what route to redirect unauthorized ' +
