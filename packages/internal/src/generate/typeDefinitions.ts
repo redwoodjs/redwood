@@ -107,7 +107,7 @@ export const generateMirrorDirectoryNamedModule = (
   if (p.startsWith(rwjsPaths.web.src)) {
     // Get the line and column where the default export is defined
     let originalLine = 1
-    let originalColumn = 1
+    let originalColumn = 0
 
     const fileContents = fileToAst(p)
 
@@ -146,10 +146,10 @@ export const generateMirrorDirectoryNamedModule = (
         }
       )
       originalLine = declaration?.loc?.start.line ?? 1
-      originalColumn = declaration?.loc?.start.column ?? 1
+      originalColumn = declaration?.loc?.start.column ?? 0
     } else {
       originalLine = defaultExport.loc?.start.line ?? 1
-      originalColumn = defaultExport.loc?.start.column ?? 1
+      originalColumn = defaultExport.loc?.start.column ?? 0
     }
 
     // Generate a source map that points to the definition of the default export
@@ -159,7 +159,7 @@ export const generateMirrorDirectoryNamedModule = (
     map.addMapping({
       generated: {
         line: 4,
-        column: 1,
+        column: 0,
       },
       source: path.relative(path.dirname(typeDefPath), p),
       original: {
@@ -169,7 +169,6 @@ export const generateMirrorDirectoryNamedModule = (
     })
 
     // Write the source map directly beside the .d.ts file
-    // This appears to allow us to avoid adding a source map reference comment like //# sourceMappingURL=index.d.ts.map
     fs.writeFileSync(
       `${typeDefPath}.map`,
       JSON.stringify(map.toJSON(), undefined, 2)
@@ -220,6 +219,32 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
       queryVariablesType: 'any',
     })
   }
+
+  // We add a source map to allow "go to definition" to avoid ending in the .d.ts file
+  // Unlike pages, layouts, components etc. there is no clear definition location so we link
+  // to the head of the file
+
+  // Generate a source map that points to the definition
+  const map = new SourceMapGenerator({
+    file: 'index.d.ts',
+  })
+  map.addMapping({
+    generated: {
+      line: 10,
+      column: 0,
+    },
+    source: path.relative(path.dirname(typeDefPath), p),
+    original: {
+      line: 1,
+      column: 0,
+    },
+  })
+
+  // Write the source map directly beside the .d.ts file
+  fs.writeFileSync(
+    `${typeDefPath}.map`,
+    JSON.stringify(map.toJSON(), undefined, 2)
+  )
 
   return typeDefPath
 }
