@@ -1,6 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 
+import { types } from '@babel/core'
+import traverse from '@babel/traverse'
+import { SourceMapGenerator } from 'source-map'
+
 import { getPaths, processPagesDir } from '@redwoodjs/project-config'
 
 import { getCellGqlQuery, fileToAst } from '../ast'
@@ -97,6 +101,81 @@ export const generateMirrorDirectoryNamedModule = (
     typeDefPath,
     { name }
   )
+
+  // We add a source map to allow "go to definition" to avoid ending in the .d.ts file
+  // We do this for the web side only
+  if (p.startsWith(rwjsPaths.web.src)) {
+    // Get the line and column where the default export is defined
+    let originalLine = 1
+    let originalColumn = 1
+
+    const fileContents = fileToAst(p)
+
+    // Get the default export
+    let defaultExport: types.ExportDefaultDeclaration | undefined
+    traverse(fileContents, {
+      ExportDefaultDeclaration(path) {
+        defaultExport = path.node
+      },
+    })
+
+    // We should have found a default export, but if not let's just return without
+    // generating a source map
+    if (!defaultExport) {
+      return typeDefPath
+    }
+
+    // Handle the case were we're exporting a variable declared elsewhere
+    // as we will want to find the location of that declaration instead
+    if (types.isIdentifier(defaultExport.declaration)) {
+      // Directly search the program body for the declaration of the identifier
+      // to avoid picking up other identifiers with the same name in the file
+      const exportedName = defaultExport.declaration.name
+      const declaration = (fileContents as types.File).program.body.find(
+        (node) => {
+          return (
+            types.isVariableDeclaration(node) &&
+            node.declarations.find((d) => {
+              return (
+                types.isVariableDeclarator(d) &&
+                types.isIdentifier(d.id) &&
+                d.id.name === exportedName
+              )
+            })
+          )
+        }
+      )
+      originalLine = declaration?.loc?.start.line ?? 1
+      originalColumn = declaration?.loc?.start.column ?? 1
+    } else {
+      originalLine = defaultExport.loc?.start.line ?? 1
+      originalColumn = defaultExport.loc?.start.column ?? 1
+    }
+
+    // Generate a source map that points to the definition of the default export
+    const map = new SourceMapGenerator({
+      file: 'index.d.ts',
+    })
+    map.addMapping({
+      generated: {
+        line: 4,
+        column: 1,
+      },
+      source: path.relative(path.dirname(typeDefPath), p),
+      original: {
+        line: originalLine,
+        column: originalColumn,
+      },
+    })
+
+    // Write the source map directly beside the .d.ts file
+    // This appears to allow us to avoid adding a source map reference comment like //# sourceMappingURL=index.d.ts.map
+    fs.writeFileSync(
+      `${typeDefPath}.map`,
+      JSON.stringify(map.toJSON(), undefined, 2)
+    )
+  }
+
   return typeDefPath
 }
 
