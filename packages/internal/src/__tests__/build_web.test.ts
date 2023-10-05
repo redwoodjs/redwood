@@ -35,6 +35,11 @@ test('web files are prebuilt (no prerender)', async () => {
     [
       ".redwood/prebuild/web/src/App.js",
       ".redwood/prebuild/web/src/Routes.js",
+      ".redwood/prebuild/web/src/graphql/fragment-masking.js",
+      ".redwood/prebuild/web/src/graphql/gql.js",
+      ".redwood/prebuild/web/src/graphql/graphql.js",
+      ".redwood/prebuild/web/src/graphql/index.js",
+      ".redwood/prebuild/web/src/graphql/possible-types.js",
       ".redwood/prebuild/web/src/components/AddTodo/AddTodo.js",
       ".redwood/prebuild/web/src/components/AddTodoControl/AddTodoControl.js",
       ".redwood/prebuild/web/src/components/Check/Check.js",
