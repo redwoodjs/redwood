@@ -119,7 +119,8 @@ export const hashPassword = (text: string, salt?: string) => {
 
 export const cookieName = () => {
   const port = getConfig().api?.port || 8911
-  const cookieName = 'dbauth_session_' + port
+  const cookieName =
+    process.env.RWJS_DBAUTH_COOKIE_NAME ?? 'dbauth_session_' + port
 
   return cookieName
 }

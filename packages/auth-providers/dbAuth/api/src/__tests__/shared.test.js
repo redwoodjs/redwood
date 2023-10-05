@@ -6,6 +6,7 @@ import * as error from '../errors'
 import {
   extractCookie,
   getSession,
+  cookieName,
   hashPassword,
   decryptSession,
   dbAuthSession,
@@ -51,6 +52,26 @@ describe('getSession()', () => {
   it('returns the value of the session cookie when there are multiple cookies separated by spaces (iOS Safari)', () => {
     expect(getSession('foo=bar; dbauth_session_8911=qwerty')).toEqual('qwerty')
     expect(getSession('dbauth_session_8911=qwerty; foo=bar')).toEqual('qwerty')
+  })
+})
+
+describe('cookieName()', () => {
+  it('returns the default cookie name', () => {
+    expect(cookieName()).toEqual('dbauth_session_8911')
+  })
+
+  describe('cookie name env var', () => {
+    beforeEach(() => {
+      process.env.RWJS_DBAUTH_COOKIE_NAME = 'my_cookie_name'
+    })
+
+    afterEach(() => {
+      delete process.env.RWJS_DBAUTH_COOKIE_NAME
+    })
+
+    it('allows you to specify the cookie name using the RWJS_DBAUTH_COOKIE_NAME env var', () => {
+      expect(cookieName()).toEqual('my_cookie_name')
+    })
   })
 })
 
