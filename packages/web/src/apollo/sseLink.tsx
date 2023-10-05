@@ -1,12 +1,9 @@
 import type { HttpOptions } from '@apollo/client'
-import {
-  ApolloLink,
-  Operation,
-  FetchResult,
-  Observable,
-} from '@apollo/client/core'
+import type { Operation, FetchResult } from '@apollo/client/core'
+import { ApolloLink, Observable } from '@apollo/client/core'
 import { print } from 'graphql'
-import { createClient, ClientOptions, Client } from 'graphql-sse'
+import type { ClientOptions, Client } from 'graphql-sse'
+import { createClient } from 'graphql-sse'
 interface SSELinkOptions extends Partial<ClientOptions> {
   url: string
   auth: { authProviderType: string; tokenFn: () => Promise<null | string> }

@@ -20,32 +20,32 @@ jest.mock('../util', () => {
 
 import React, { useEffect, useState } from 'react'
 
+import '@testing-library/jest-dom/extend-expect'
 import {
+  act,
+  configure,
+  fireEvent,
   render,
   waitFor,
-  act,
-  fireEvent,
-  configure,
 } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
 
-import { AuthContextInterface } from '@redwoodjs/auth'
+import type { AuthContextInterface } from '@redwoodjs/auth'
 
 import {
-  Router,
-  Route,
-  Private,
-  Redirect,
+  back,
   routes as generatedRoutes,
   Link,
   navigate,
-  back,
+  Private,
+  Redirect,
+  Route,
+  Router,
   usePageLoadingContext,
 } from '../'
 import { useLocation } from '../location'
 import { useParams } from '../params'
 import { Set } from '../Set'
-import type { Spec, GeneratedRoutesMap } from '../util'
+import type { GeneratedRoutesMap, Spec } from '../util'
 
 /** running into intermittent test timeout behavior in https://github.com/redwoodjs/redwood/pull/4992
  attempting to work around by bumping the default timeout of 5000 */
@@ -98,7 +98,7 @@ function createDummyAuthContextValues(
 interface MockAuth {
   isAuthenticated?: boolean
   loading?: boolean
-  hasRole?: boolean
+  hasRole?: boolean | ((role: string[]) => boolean)
   loadingTimeMs?: number
 }
 
@@ -138,7 +138,7 @@ const mockUseAuth =
     return createDummyAuthContextValues({
       loading: authLoading,
       isAuthenticated: authIsAuthenticated,
-      hasRole: () => hasRole,
+      hasRole: typeof hasRole === 'boolean' ? () => hasRole : hasRole,
     })
   }
 
@@ -1591,5 +1591,201 @@ describe('Unauthorized redirect error messages', () => {
       'Redirecting to route "params" would require route parameters, which ' +
         'currently is not supported. Please choose a different route'
     )
+  })
+})
+
+describe('Multiple nested private sets', () => {
+  const HomePage = () => <h1>Home Page</h1>
+  const PrivateNoRolesAssigned = () => <h1>Private No Roles Page</h1>
+  const PrivateEmployeePage = () => <h1>Private Employee Page</h1>
+  const PrivateAdminPage = () => <h1>Private Admin Page</h1>
+
+  const LevelLayout = ({ children, level }) => (
+    <div>
+      Level: {level}
+      {children}
+    </div>
+  )
+
+  const TestRouter = ({ useAuthMock }) => (
+    <Router useAuth={useAuthMock}>
+      <Route path="/" page={HomePage} name="home" />
+      <Set unauthenticated="home" level="1" wrap={LevelLayout} private>
+        <Route
+          path="/no-roles-assigned"
+          page={PrivateNoRolesAssigned}
+          name="noRolesAssigned"
+        />
+        <Set
+          private
+          unauthenticated="noRolesAssigned"
+          roles={['ADMIN', 'EMPLOYEE']}
+          level="2"
+        >
+          <Set
+            unauthenticated="privateAdmin"
+            roles={['EMPLOYEE']}
+            level="3"
+            private
+          >
+            <Route
+              path="/employee"
+              page={PrivateEmployeePage}
+              name="privateEmployee"
+            />
+          </Set>
+
+          <Set
+            unauthenticated="privateEmployee"
+            roles={['ADMIN']}
+            level="3"
+            private
+          >
+            <Route path="/admin" page={PrivateAdminPage} name="privateAdmin" />
+          </Set>
+        </Set>
+      </Set>
+    </Router>
+  )
+
+  test('is authenticated but does not have matching roles', async () => {
+    const screen = render(
+      <TestRouter
+        useAuthMock={mockUseAuth({
+          isAuthenticated: true,
+          hasRole: false,
+        })}
+      />
+    )
+
+    act(() => navigate('/employee'))
+
+    await waitFor(() => {
+      expect(screen.queryByText(`Private No Roles Page`)).toBeInTheDocument()
+      expect(screen.queryByText(`Level: 1`)).toBeInTheDocument()
+    })
+  })
+
+  test('is not authenticated', async () => {
+    const screen = render(
+      <TestRouter
+        useAuthMock={mockUseAuth({
+          isAuthenticated: false,
+          hasRole: false,
+        })}
+      />
+    )
+
+    act(() => navigate('/employee'))
+
+    await waitFor(() => {
+      expect(screen.queryByText(`Home Page`)).toBeInTheDocument()
+      expect(screen.queryByText(`Level`)).not.toBeInTheDocument()
+    })
+  })
+
+  test('is authenticated and has a matching role', async () => {
+    const screen = render(
+      <TestRouter
+        useAuthMock={mockUseAuth({
+          isAuthenticated: true,
+          hasRole: (role) => {
+            return role.includes('ADMIN')
+          },
+        })}
+      />
+    )
+
+    act(() => navigate('/admin'))
+    await waitFor(() => {
+      expect(screen.queryByText(`Private Admin Page`)).toBeInTheDocument()
+      expect(screen.queryByText(`Level: 3`)).toBeInTheDocument()
+    })
+  })
+
+  test('returns the correct page if has a matching role', async () => {
+    const screen = render(
+      <TestRouter
+        useAuthMock={mockUseAuth({
+          isAuthenticated: true,
+          hasRole: (role) => {
+            return role.includes('ADMIN')
+          },
+        })}
+      />
+    )
+
+    act(() => navigate('/admin'))
+
+    await waitFor(() => {
+      expect(screen.queryByText(`Private Admin Page`)).toBeInTheDocument()
+      expect(screen.queryByText(`Level: 3`)).toBeInTheDocument()
+    })
+  })
+})
+
+describe('Multiple nested private sets', () => {
+  const HomePage = () => <h1>Home Page</h1>
+  const Page = () => <h1>Page</h1>
+
+  const DebugLayout = (props) => {
+    return (
+      <div>
+        <p>Theme: {props.theme}</p>
+        <p>Other Prop: {props.otherProp}</p>
+        <p>Page Level: {props.level}</p>
+        {props.children}
+      </div>
+    )
+  }
+
+  const TestRouter = () => (
+    <Router>
+      <Route path="/" page={HomePage} name="home" />
+      <Set level="1" theme="blue" wrap={DebugLayout}>
+        <Route path="/level1" page={Page} name="level1" />
+        <Set level="2" theme="red" otherProp="bazinga">
+          <Route path="/level2" page={Page} name="level2" />
+          <Set level="3" theme="green">
+            <Route path="/level3" page={Page} name="level3" />
+          </Set>
+        </Set>
+      </Set>
+    </Router>
+  )
+
+  test('level 1, matches expected props', async () => {
+    const screen = render(<TestRouter />)
+
+    act(() => navigate('/level1'))
+
+    await waitFor(() => {
+      expect(screen.queryByText(`Theme: blue`)).toBeInTheDocument()
+      expect(screen.queryByText(`Page Level: 1`)).toBeInTheDocument()
+    })
+  })
+
+  test('level 2, should override level 1', async () => {
+    const screen = render(<TestRouter />)
+
+    act(() => navigate('/level2'))
+
+    await waitFor(() => {
+      expect(screen.queryByText(`Theme: red`)).toBeInTheDocument()
+      expect(screen.queryByText(`Other Prop: bazinga`)).toBeInTheDocument()
+      expect(screen.queryByText(`Page Level: 2`)).toBeInTheDocument()
+    })
+  })
+
+  test('level 3, should override level 1 & 2 and pass through other props', async () => {
+    const screen = render(<TestRouter />)
+
+    act(() => navigate('/level3'))
+
+    await waitFor(() => {
+      expect(screen.queryByText(`Theme: green`)).toBeInTheDocument()
+      expect(screen.queryByText(`Other Prop: bazinga`)).toBeInTheDocument()
+      expect(screen.queryByText(`Page Level: 3`)).toBeInTheDocument()
+    })
   })
 })

@@ -3,6 +3,20 @@ import type { ReactElement } from 'react'
 
 import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
 
+import { StatusError } from './lib/StatusError'
+
+const checkStatus = async (
+  responsePromise: Promise<Response>
+): Promise<Response> => {
+  const response = await responsePromise
+
+  if (!response.ok) {
+    throw new StatusError(response.statusText, response.status)
+  }
+
+  return response
+}
+
 export function serve<Props>(rscId: string, basePath = '/RSC/') {
   type SetRerender = (
     rerender: (next: [ReactElement, string]) => void
@@ -24,24 +38,30 @@ export function serve<Props>(rscId: string, basePath = '/RSC/') {
 
       const options = {
         async callServer(rsfId: string, args: unknown[]) {
+          console.log('client.ts :: callServer rsfId', rsfId, 'args', args)
           const isMutating = !!mutationMode
           const searchParams = new URLSearchParams()
           searchParams.set('action_id', rsfId)
           let id: string
+
           if (isMutating) {
             id = rscId
             searchParams.set('props', serializedProps)
           } else {
             id = '_'
           }
+
           const response = fetch(basePath + id + '/' + searchParams, {
             method: 'POST',
             body: await encodeReply(args),
           })
+
           const data = createFromFetch(response, options)
+
           if (isMutating) {
             rerender?.([data, serializedProps])
           }
+
           return data
         },
       }
@@ -54,11 +74,12 @@ export function serve<Props>(rscId: string, basePath = '/RSC/') {
         'fetchRSC before createFromFetch',
         basePath + rscId + '/' + searchParams
       )
-      const data = createFromFetch(
-        prefetched || fetch(basePath + rscId + '/' + searchParams),
-        options
-      )
+
+      const response =
+        prefetched || fetch(basePath + rscId + '/' + searchParams)
+      const data = createFromFetch(checkStatus(response), options)
       console.log('fetchRSC after createFromFetch. data:', data)
+
       return [data, setRerender]
     }
   )

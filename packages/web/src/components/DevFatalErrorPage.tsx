@@ -11,8 +11,11 @@ import { useState } from 'react'
 
 import StackTracey from 'stacktracey'
 
-// RWJS_SRC_ROOT is defined and defaulted in webpack to the base path
-const srcRoot = globalThis.RWJS_DEBUG_ENV?.RWJS_SRC_ROOT || ''
+// RWJS_SRC_ROOT is defined and defaulted in webpack+vite to the base path
+let srcRoot = ''
+if (typeof RWJS_DEBUG_ENV !== 'undefined') {
+  srcRoot = RWJS_DEBUG_ENV?.RWJS_SRC_ROOT
+}
 
 let appRoot: string
 

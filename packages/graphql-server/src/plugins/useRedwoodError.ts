@@ -1,5 +1,5 @@
+import type { Plugin } from 'graphql-yoga'
 import {
-  Plugin,
   handleStreamOrSingleExecutionResult,
   createGraphQLError,
 } from 'graphql-yoga'
@@ -7,7 +7,7 @@ import {
 import { RedwoodError } from '@redwoodjs/api'
 import type { Logger } from '@redwoodjs/api/logger'
 
-import { RedwoodGraphQLContext } from '../types'
+import type { RedwoodGraphQLContext } from '../types'
 
 /**
  * Converts RedwoodErrors to GraphQLErrors

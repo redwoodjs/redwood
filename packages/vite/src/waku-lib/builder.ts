@@ -6,6 +6,8 @@ import path from 'node:path'
 import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
+import { onWarn } from '../lib/onWarn'
+
 import { configFileConfig, resolveConfig } from './config'
 import {
   shutdown,
@@ -47,6 +49,7 @@ export async function build() {
       ),
     ],
     ssr: {
+      // TODO (RSC): Is this still relevant?
       // FIXME Without this, waku/router isn't considered to have client
       // entries, and "No client entry" error occurs.
       // Unless we fix this, RSC-capable packages aren't supported.
@@ -57,6 +60,7 @@ export async function build() {
       write: false,
       ssr: true,
       rollupOptions: {
+        onwarn: onWarn,
         input: {
           entries: entriesFile,
           ...customModules,
@@ -85,6 +89,7 @@ export async function build() {
     build: {
       ssr: true,
       rollupOptions: {
+        onwarn: onWarn,
         input: {
           entries: entriesFile,
           ...clientEntryFiles,
@@ -123,6 +128,7 @@ export async function build() {
     build: {
       outDir: path.join(config.build.outDir, config.framework.outPublic),
       rollupOptions: {
+        onwarn: onWarn,
         input: {
           main: indexHtmlFile,
           ...clientEntryFiles,

@@ -1,6 +1,6 @@
 import enquirer from 'enquirer'
 
-import { VSCodeWindowMethods } from '../x/vscode'
+import type { VSCodeWindowMethods } from '../x/vscode'
 
 export type UIPickItem = {
   label: string

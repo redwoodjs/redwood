@@ -9,6 +9,7 @@ import type { ResolveFunction } from '../react-server-dom-webpack/node-loader'
 
 import { codeToInject } from './rsc-utils.js'
 
+// Used in Step 2 of the build process, for the client bundle
 export function rscIndexPlugin(): Plugin {
   return {
     name: 'rsc-index-plugin',
@@ -118,6 +119,7 @@ export function rscReloadPlugin(fn: (type: 'full-reload') => void): Plugin {
     }
     return false
   }
+
   return {
     name: 'reload-plugin',
     configResolved(config) {
@@ -144,7 +146,7 @@ export function rscAnalyzePlugin(
   serverEntryCallback: (id: string) => void
 ): Plugin {
   return {
-    name: 'rsc-bundle-plugin',
+    name: 'rsc-analyze-plugin',
     transform(code, id) {
       const ext = path.extname(id)
       if (['.ts', '.tsx', '.js', '.jsx'].includes(ext)) {

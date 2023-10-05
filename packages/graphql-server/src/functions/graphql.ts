@@ -5,7 +5,7 @@ import type {
 } from 'aws-lambda'
 
 import { createGraphQLYoga } from '../createGraphQLYoga'
-import { GlobalContext } from '../globalContext'
+import type { GlobalContext } from '../globalContext'
 import { getAsyncStoreInstance } from '../globalContextStore'
 import type { GraphQLHandlerOptions } from '../types'
 

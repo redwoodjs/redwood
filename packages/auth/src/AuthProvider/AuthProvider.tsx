@@ -1,12 +1,11 @@
-import React, { ReactNode, useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { AuthContextInterface, CurrentUser } from '../AuthContext'
+import type { AuthContextInterface, CurrentUser } from '../AuthContext'
 import type { AuthImplementation } from '../AuthImplementation'
 
-import {
-  AuthProviderState,
-  defaultAuthProviderState,
-} from './AuthProviderState'
+import type { AuthProviderState } from './AuthProviderState'
+import { defaultAuthProviderState } from './AuthProviderState'
 import { useCurrentUser } from './useCurrentUser'
 import { useForgotPassword } from './useForgotPassword'
 import { useHasRole } from './useHasRole'

@@ -37,8 +37,8 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/cli": "7.22.10",
-    "@babel/runtime-corejs3": "7.22.11",
+    "@babel/cli": "7.22.15",
+    "@babel/runtime-corejs3": "7.22.15",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
     "@redwoodjs/cli": "6.0.7",
     "@redwoodjs/eslint-config": "6.0.7",
@@ -46,10 +46,10 @@
     "@redwoodjs/project-config": "6.0.7",
     "@redwoodjs/testing": "6.0.7",
     "@redwoodjs/web-server": "6.0.7",
-    "babel-loader": "9.1.3",
+    "babel-loader": "^9.1.3",
     "babel-timing": "0.9.1",
     "copy-webpack-plugin": "11.0.0",
-    "core-js": "3.32.0",
+    "core-js": "3.32.2",
     "css-loader": "6.8.1",
     "css-minimizer-webpack-plugin": "5.0.1",
     "dotenv-webpack": "8.0.1",
@@ -63,7 +63,7 @@
     "resolve-url-loader": "5.0.0",
     "rimraf": "5.0.1",
     "style-loader": "3.3.3",
-    "typescript": "5.1.6",
+    "typescript": "5.2.2",
     "url-loader": "4.1.1",
     "webpack": "5.88.2",
     "webpack-bundle-analyzer": "4.9.0",
@@ -75,7 +75,7 @@
   },
   "devDependencies": {
     "@types/lodash": "4.14.195",
-    "jest": "29.6.4"
+    "jest": "29.7.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

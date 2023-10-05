@@ -1,7 +1,7 @@
 // TODO (RSC) Take ownership of this file and move it out ouf the waku-lib folder
 // import fs from 'node:fs'
 import path from 'node:path'
-import { Writable } from 'node:stream'
+import type { Writable } from 'node:stream'
 import { parentPort } from 'node:worker_threads'
 
 import { createElement } from 'react'
@@ -11,7 +11,8 @@ import { createServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { defineEntries } from '../entries'
+import type { defineEntries } from '../entries'
+import { StatusError } from '../lib/StatusError'
 // import type { unstable_GetCustomModules } from '../waku-server'
 
 import { configFileConfig, resolveConfig } from './config'
@@ -226,7 +227,8 @@ const getFunctionComponent = async (
   if (typeof mod?.default === 'function') {
     return mod?.default
   }
-  throw new Error('No function component found')
+  // TODO (RSC): Making this a 404 error is marked as "HACK" in waku's source
+  throw new StatusError('No function component found', 404)
 }
 
 let absoluteClientEntries: Record<string, string> = {}
@@ -236,12 +238,15 @@ const resolveClientEntry = (
   filePath: string
 ) => {
   const clientEntry = absoluteClientEntries[filePath]
+
   if (!clientEntry) {
     if (absoluteClientEntries['*'] === '*') {
       return config.base + path.relative(config.root, filePath)
     }
+
     throw new Error('No client entry found for ' + filePath)
   }
+
   return clientEntry
 }
 
@@ -254,20 +259,28 @@ export async function setClientEntries(
   }
   const config = await configPromise
   const entriesFile = await getEntriesFile(config, false)
-  console.log('entriesFile', entriesFile)
+  console.log('setClientEntries :: entriesFile', entriesFile)
   const { clientEntries } = await loadServerFile(entriesFile)
+  console.log('setClientEntries :: clientEntries', clientEntries)
   if (!clientEntries) {
     throw new Error('Failed to load clientEntries')
   }
   const baseDir = path.dirname(entriesFile)
   absoluteClientEntries = Object.fromEntries(
-    Object.entries(clientEntries).map(([key, val]) => [
-      path.join(baseDir, key),
-      config.base + val,
-    ])
+    Object.entries(clientEntries).map(([key, val]) => {
+      let fullKey = path.join(baseDir, key)
+      if (process.platform === 'win32') {
+        fullKey = fullKey.replaceAll('\\', '/')
+      }
+      console.log('fullKey', fullKey, 'value', config.base + val)
+      return [fullKey, config.base + val]
+    })
   )
 
-  console.log('absoluteClientEntries', absoluteClientEntries)
+  console.log(
+    'setClientEntries :: absoluteClientEntries',
+    absoluteClientEntries
+  )
 }
 
 export async function renderRSC(input: RenderInput): Promise<PipeableStream> {
@@ -286,6 +299,8 @@ export async function renderRSC(input: RenderInput): Promise<PipeableStream> {
       },
     }
   )
+
+  console.log('renderRSC input', input)
 
   if (input.rsfId && input.args) {
     const [fileId, name] = input.rsfId.split('#')

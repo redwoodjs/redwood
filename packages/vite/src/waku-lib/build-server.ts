@@ -1,8 +1,12 @@
 // TODO (RSC) Take ownership of this file and move it out ouf the waku-lib folder
+import path from 'node:path'
+
 import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
+
+import { onWarn } from '../lib/onWarn'
 
 export async function serverBuild(
   entriesFile: string,
@@ -10,14 +14,6 @@ export async function serverBuild(
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>
 ) {
-  // const noExternal = Array.from(clientEntryFileSet).map(
-  //   // FIXME this might not work with pnpm
-  //   (fname) =>
-  //     path
-  //       .relative(path.join(config.root, "node_modules"), fname)
-  //       .split("/")[0]!
-  // );
-  //
   const input = {
     entries: entriesFile,
     ...clientEntryFiles,
@@ -33,19 +29,30 @@ export async function serverBuild(
     // ...configFileConfig,
     root: rwPaths.web.base,
     ssr: {
-      // Externalize everything except files that have 'use client' in them
-      // (this includes packages in node_modules that you use that have
-      // 'use client' in them)
+      // Externalize everything except packages with files that have
+      // 'use client' in them
       // Files included in `noExternal` are files we want Vite to analyze
-      noExternal: Object.values(clientEntryFiles),
-      // TODO (RSC) This is the original code from waku. I think we can simplify it as above
-      // The code below will for most basic cases just be `[ '..' ]`, which we
-      // believe to be overly broad
-      // noExternal: Object.values(clientEntryFiles).map((fname) => {
-      //   return path
-      //     .relative(path.join(rwPaths.base, 'node_modules'), fname)
-      //     .split('/')[0]
-      // }),
+      // The values in the array here are compared to npm package names, like
+      // 'react', 'core-js', @anthropic-ai/sdk', @redwoodjs/vite', etc
+      // The map function below will return '..' for local files. That's not
+      // very pretty, but it works. It just won't match anything.
+      noExternal: Object.values(clientEntryFiles).map((fname) => {
+        const relativePath = path.relative(
+          path.join(rwPaths.base, 'node_modules'),
+          fname
+        )
+        const splitPath = relativePath.split('/')
+
+        // TODO (RSC): Verify this is correct. Need to find a scoped packages
+        // that uses 'use client'
+        // Handle scoped packages
+        if (relativePath.startsWith('@')) {
+          return splitPath[0] + '/' + splitPath[1]
+        }
+
+        // Packages without scope
+        return splitPath[0]
+      }),
     },
     plugins: [react()],
     resolve: {
@@ -60,6 +67,7 @@ export async function serverBuild(
       outDir: rwPaths.web.distServer,
       manifest: 'server-build-manifest.json',
       rollupOptions: {
+        onwarn: onWarn,
         input,
         output: {
           banner: (chunk) => {
@@ -73,8 +81,10 @@ export async function serverBuild(
               code += '"use client";'
             }
 
-            const serverKeys = Object.keys(serverEntryFiles)
-            if (chunk.moduleIds.some((id) => serverKeys.includes(id))) {
+            const serverValues = Object.values(serverEntryFiles)
+            console.log('serverValues', serverValues)
+            if (chunk.moduleIds.some((id) => serverValues.includes(id))) {
+              console.log('adding "use server" to', chunk.fileName)
               code += '"use server";'
             }
             return code

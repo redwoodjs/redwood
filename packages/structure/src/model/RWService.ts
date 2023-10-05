@@ -5,8 +5,8 @@ import { iter } from '../x/Array'
 import { lazy } from '../x/decorators'
 import { basenameNoExt } from '../x/path'
 
-import { RWProject } from './RWProject'
-import { RWSDL } from './RWSDL'
+import type { RWProject } from './RWProject'
+import type { RWSDL } from './RWSDL'
 import { RWServiceFunction } from './RWServiceFunction'
 
 export class RWService extends FileNode {

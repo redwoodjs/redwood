@@ -15,7 +15,7 @@ import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadDocuments, loadSchemaSync } from '@graphql-tools/load'
 import type { LoadTypedefsOptions } from '@graphql-tools/load'
 import execa from 'execa'
-import { DocumentNode } from 'graphql'
+import type { DocumentNode } from 'graphql'
 
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
@@ -203,7 +203,7 @@ async function runCodegenGraphQL(
   return [filename]
 }
 
-function getLoadDocumentsOptions(filename: string) {
+export function getLoadDocumentsOptions(filename: string) {
   const loadTypedefsConfig: LoadTypedefsOptions<{ cwd: string }> = {
     cwd: getPaths().base,
     ignore: [path.join(process.cwd(), filename)],

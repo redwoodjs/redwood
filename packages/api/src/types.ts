@@ -2,7 +2,7 @@
  * Houses utility types commonly used on the api side
  */
 
-import { O, A } from 'ts-toolbelt'
+import type { O, A } from 'ts-toolbelt'
 
 /**
  * ---- Prisma SDL Type Merge ----

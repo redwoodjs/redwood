@@ -1,4 +1,4 @@
-import { DocumentNode } from 'graphql'
+import type { DocumentNode } from 'graphql'
 /**
  * We want SubscriptionsGlobs type to be an object with this shape:
  *

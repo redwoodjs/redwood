@@ -17,13 +17,8 @@ import CryptoJS from 'crypto-js'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 
-import {
-  CorsConfig,
-  CorsContext,
-  CorsHeaders,
-  createCorsContext,
-  normalizeRequest,
-} from '@redwoodjs/api'
+import type { CorsConfig, CorsContext, CorsHeaders } from '@redwoodjs/api'
+import { createCorsContext, normalizeRequest } from '@redwoodjs/api'
 
 import * as DbAuthError from './errors'
 import {

@@ -6,11 +6,11 @@ import type { TransformOptions } from '@babel/core'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import type { RegisterHookOptions } from './common'
 import {
   CORE_JS_VERSION,
   getCommonPlugins,
   registerBabel,
-  RegisterHookOptions,
   parseTypeScriptConfigFiles,
   getPathsFromTypeScriptConfig,
 } from './common'
@@ -60,11 +60,6 @@ export const getWebSideBabelPlugins = (
             // import { React } from 'react'
             default: 'React',
             path: 'react',
-          },
-          {
-            // import PropTypes from 'prop-types'
-            default: 'PropTypes',
-            path: 'prop-types',
           },
           {
             // import gql from 'graphql-tag'

@@ -1,4 +1,4 @@
-import yargs from 'yargs'
+import type yargs from 'yargs'
 
 import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
 

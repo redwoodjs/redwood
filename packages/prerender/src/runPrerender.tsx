@@ -4,7 +4,8 @@ import path from 'path'
 import React from 'react'
 
 import { ApolloClient, InMemoryCache } from '@apollo/client'
-import { CheerioAPI, load as loadHtml } from 'cheerio'
+import type { CheerioAPI } from 'cheerio'
+import { load as loadHtml } from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
 import {
