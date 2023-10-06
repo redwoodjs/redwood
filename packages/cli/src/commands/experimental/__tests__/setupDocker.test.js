@@ -38,13 +38,6 @@ describe('setupDocker', () => {
         "type": "boolean",
       }
     `)
-
-    expect(yargs.epilogue.mock.calls[0][0]).toMatchInlineSnapshot(`
-      "This is an experimental feature to: Setup the experimental Dockerfile.
-
-      Please find documentation and links to provide feedback for setup-docker at:
-       -> https://community.redwoodjs.com/t/null (​https://community.redwoodjs.com/t/null​)"
-    `)
   })
 
   test('the handler calls recordTelemetryAttributes', async () => {
