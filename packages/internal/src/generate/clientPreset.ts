@@ -74,20 +74,23 @@ export const generateClientPreset = async () => {
     f.filename.endsWith('persisted-documents.json')
   )
 
-  const content = format(`export const store = ${output[0].content}`, {
-    trailingComma: 'es5',
-    bracketSpacing: true,
-    tabWidth: 2,
-    semi: false,
-    singleQuote: true,
-    arrowParens: 'always',
-    parser: 'typescript',
-  })
+  const storeFile = output[0]
 
-  const filename = path.join(getPaths().api.lib, 'persistedOperationStore.ts')
-  fs.mkdirSync(path.dirname(filename), { recursive: true })
-  fs.writeFileSync(filename, content)
+  if (storeFile && storeFile.conten) {
+    const content = format(`export const store = ${storeFile.content}`, {
+      trailingComma: 'es5',
+      bracketSpacing: true,
+      tabWidth: 2,
+      semi: false,
+      singleQuote: true,
+      arrowParens: 'always',
+      parser: 'typescript',
+    })
 
+    const filename = path.join(getPaths().api.lib, 'persistedOperationStore.ts')
+    fs.mkdirSync(path.dirname(filename), { recursive: true })
+    fs.writeFileSync(filename, content)
+  }
   return {
     clientPresetFiles,
     errors,
