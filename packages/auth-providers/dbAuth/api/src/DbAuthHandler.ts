@@ -22,7 +22,7 @@ import { createCorsContext, normalizeRequest } from '@redwoodjs/api'
 
 import * as DbAuthError from './errors'
 import {
-  getCookieName,
+  cookieName,
   decryptSession,
   extractCookie,
   getSession,
@@ -353,7 +353,7 @@ export class DbAuthHandler<
   get _deleteSessionHeader() {
     return {
       'set-cookie': [
-        `${getCookieName(this.options.cookie?.name)}=`,
+        `${cookieName(this.options.cookie?.name)}=`,
         ...this._cookieAttributes({ expires: 'now' }),
       ].join(';'),
     }
@@ -1168,7 +1168,7 @@ export class DbAuthHandler<
     const session = JSON.stringify(data) + ';' + csrfToken
     const encrypted = this._encrypt(session)
     const cookie = [
-      `${getCookieName(this.options.cookie?.name)}=${encrypted.toString()}`,
+      `${cookieName(this.options.cookie?.name)}=${encrypted.toString()}`,
       ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
     ].join(';')
 

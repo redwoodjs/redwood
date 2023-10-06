@@ -7,7 +7,7 @@ import * as error from '../errors'
 import {
   extractCookie,
   getSession,
-  getCookieName,
+  cookieName,
   hashPassword,
   decryptSession,
   dbAuthSession,
@@ -66,19 +66,17 @@ describe('getSession()', () => {
   })
 })
 
-describe('getCookieName()', () => {
+describe('cookieName()', () => {
   it('returns the default cookie name', () => {
-    expect(getCookieName(undefined)).toEqual('session')
+    expect(cookieName(undefined)).toEqual('session')
   })
 
   it('allows you to pass a cookie name to use', () => {
-    expect(getCookieName('my_cookie_name')).toEqual('my_cookie_name')
+    expect(cookieName('my_cookie_name')).toEqual('my_cookie_name')
   })
 
   it('replaces %port% with a port number', () => {
-    expect(getCookieName('session_%port%_my_app')).toEqual(
-      'session_8911_my_app'
-    )
+    expect(cookieName('session_%port%_my_app')).toEqual('session_8911_my_app')
   })
 })
 

@@ -58,7 +58,7 @@ export const decryptSession = (text: string | null) => {
 // returns the actual value of the session cookie
 export const getSession = (
   text: string | undefined,
-  cookieName: string | undefined
+  cookieNameOption: string | undefined
 ) => {
   if (typeof text === 'undefined' || text === null) {
     return null
@@ -66,10 +66,10 @@ export const getSession = (
 
   const cookies = text.split(';')
   const sessionCookie = cookies.find((cookie) => {
-    return cookie.split('=')[0].trim() === getCookieName(cookieName)
+    return cookie.split('=')[0].trim() === cookieName(cookieNameOption)
   })
 
-  if (!sessionCookie || sessionCookie === `${getCookieName(cookieName)}=`) {
+  if (!sessionCookie || sessionCookie === `${cookieName(cookieNameOption)}=`) {
     return null
   }
 
@@ -80,11 +80,11 @@ export const getSession = (
 // at once. Accepts the `event` argument from a Lambda function call.
 export const dbAuthSession = (
   event: APIGatewayProxyEvent,
-  cookieName: string | undefined
+  cookieNameOption: string | undefined
 ) => {
   if (extractCookie(event)) {
     const [session, _csrfToken] = decryptSession(
-      getSession(extractCookie(event), cookieName)
+      getSession(extractCookie(event), cookieNameOption)
     )
     return session
   } else {
@@ -123,7 +123,7 @@ export const hashPassword = (text: string, salt?: string) => {
   ]
 }
 
-export const getCookieName = (name: string | undefined) => {
+export const cookieName = (name: string | undefined) => {
   const port = getConfig().api?.port || 8911
   const cookieName = name?.replace('%port%', '' + port) ?? 'session'
 
