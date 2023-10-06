@@ -2,6 +2,7 @@ import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 
 import { DbAuthHandler, DbAuthHandlerOptions } from '@redwoodjs/auth-dbauth-api'
 
+import { cookieName } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 
 export const handler = async (
@@ -170,7 +171,7 @@ export const handler = async (
         // the dbAuth session cookie:
         // Domain: 'example.com',
       }
-      name: 'session_%port%',
+      name: cookieName,
     },
 
     forgotPassword: forgotPasswordOptions,
