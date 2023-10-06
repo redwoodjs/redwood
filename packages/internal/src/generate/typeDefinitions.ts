@@ -1,13 +1,11 @@
 import fs from 'fs'
 import path from 'path'
 
-import { types } from '@babel/core'
-import traverse from '@babel/traverse'
 import { SourceMapGenerator } from 'source-map'
 
 import { getPaths, processPagesDir } from '@redwoodjs/project-config'
 
-import { getCellGqlQuery, fileToAst } from '../ast'
+import { getCellGqlQuery, fileToAst, getDefaultExportLocation } from '../ast'
 import { findCells, findDirectoryNamedModules } from '../files'
 import { parseGqlQueryToAst } from '../gql'
 import { getJsxElements } from '../jsx'
@@ -105,74 +103,38 @@ export const generateMirrorDirectoryNamedModule = (
   // We add a source map to allow "go to definition" to avoid ending in the .d.ts file
   // We do this for the web side only
   if (p.startsWith(rwjsPaths.web.src)) {
-    // Get the line and column where the default export is defined
-    let originalLine = 1
-    let originalColumn = 0
-
-    const fileContents = fileToAst(p)
-
-    // Get the default export
-    let defaultExport: types.ExportDefaultDeclaration | undefined
-    traverse(fileContents, {
-      ExportDefaultDeclaration(path) {
-        defaultExport = path.node
-      },
-    })
-
-    // We should have found a default export, but if not let's just return without
-    // generating a source map
-    if (!defaultExport) {
-      return typeDefPath
-    }
-
-    // Handle the case were we're exporting a variable declared elsewhere
-    // as we will want to find the location of that declaration instead
-    if (types.isIdentifier(defaultExport.declaration)) {
-      // Directly search the program body for the declaration of the identifier
-      // to avoid picking up other identifiers with the same name in the file
-      const exportedName = defaultExport.declaration.name
-      const declaration = (fileContents as types.File).program.body.find(
-        (node) => {
-          return (
-            types.isVariableDeclaration(node) &&
-            node.declarations.find((d) => {
-              return (
-                types.isVariableDeclarator(d) &&
-                types.isIdentifier(d.id) &&
-                d.id.name === exportedName
-              )
-            })
-          )
-        }
-      )
-      originalLine = declaration?.loc?.start.line ?? 1
-      originalColumn = declaration?.loc?.start.column ?? 0
-    } else {
-      originalLine = defaultExport.loc?.start.line ?? 1
-      originalColumn = defaultExport.loc?.start.column ?? 0
-    }
-
-    // Generate a source map that points to the definition of the default export
-    const map = new SourceMapGenerator({
-      file: 'index.d.ts',
-    })
-    map.addMapping({
-      generated: {
-        line: 4,
+    try {
+      // Get the line and column where the default export is defined
+      const fileContents = fileToAst(p)
+      const defaultExportLocation = getDefaultExportLocation(fileContents) ?? {
+        line: 1,
         column: 0,
-      },
-      source: path.relative(path.dirname(typeDefPath), p),
-      original: {
-        line: originalLine,
-        column: originalColumn,
-      },
-    })
+      }
 
-    // Write the source map directly beside the .d.ts file
-    fs.writeFileSync(
-      `${typeDefPath}.map`,
-      JSON.stringify(map.toJSON(), undefined, 2)
-    )
+      // Generate a source map that points to the definition of the default export
+      const map = new SourceMapGenerator({
+        file: 'index.d.ts',
+      })
+      map.addMapping({
+        generated: {
+          line: 4,
+          column: 0,
+        },
+        source: path.relative(path.dirname(typeDefPath), p),
+        original: defaultExportLocation,
+      })
+
+      fs.writeFileSync(
+        `${typeDefPath}.map`,
+        JSON.stringify(map.toJSON(), undefined, 2)
+      )
+    } catch (error) {
+      console.error(
+        "Couldn't generate a definition map for directory named module at path:",
+        p
+      )
+      console.error(error)
+    }
   }
 
   return typeDefPath
@@ -223,28 +185,29 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
   // We add a source map to allow "go to definition" to avoid ending in the .d.ts file
   // Unlike pages, layouts, components etc. there is no clear definition location so we link
   // to the head of the file
-
-  // Generate a source map that points to the definition
-  const map = new SourceMapGenerator({
-    file: 'index.d.ts',
-  })
-  map.addMapping({
-    generated: {
-      line: 12,
-      column: 0,
-    },
-    source: path.relative(path.dirname(typeDefPath), p),
-    original: {
-      line: 1,
-      column: 0,
-    },
-  })
-
-  // Write the source map directly beside the .d.ts file
-  fs.writeFileSync(
-    `${typeDefPath}.map`,
-    JSON.stringify(map.toJSON(), undefined, 2)
-  )
+  try {
+    const map = new SourceMapGenerator({
+      file: 'index.d.ts',
+    })
+    map.addMapping({
+      generated: {
+        line: 12,
+        column: 0,
+      },
+      source: path.relative(path.dirname(typeDefPath), p),
+      original: {
+        line: 1,
+        column: 0,
+      },
+    })
+    fs.writeFileSync(
+      `${typeDefPath}.map`,
+      JSON.stringify(map.toJSON(), undefined, 2)
+    )
+  } catch (error) {
+    console.error("Couldn't generate a definition map for cell at path:", p)
+    console.error(error)
+  }
 
   return typeDefPath
 }
@@ -274,11 +237,98 @@ export const generateTypeDefRouterRoutes = () => {
     )
   })
 
+  // Generate declaration mapping for improved go-to-definition behaviour
+  try {
+    const typeDefPath = path.join(
+      getPaths().generated.types.includes,
+      'web-routerRoutes.d.ts'
+    )
+
+    const map = new SourceMapGenerator({
+      file: 'web-routerRoutes.d.ts',
+    })
+
+    // Start line is based on where in the template the `    ${name}: (params?: RouteParams<"${path}"> & QueryParams) => "${path}"` are defined
+    const startLine = 9
+
+    // Map the location of the default export for each page
+    for (let i = 0; i < routes.length; i++) {
+      console.log(
+        'route:',
+        routes[i].name,
+        startLine + i,
+        routes[i].location.line
+      )
+
+      map.addMapping({
+        generated: {
+          line: startLine + i,
+          column: 4,
+        },
+        source: path.relative(path.dirname(typeDefPath), getPaths().web.routes),
+        original: routes[i].location,
+      })
+    }
+
+    fs.writeFileSync(
+      `${typeDefPath}.map`,
+      JSON.stringify(map.toJSON(), undefined, 2)
+    )
+  } catch (error) {
+    console.error(
+      "Couldn't generate a definition map for web-routerRoutes.d.ts:"
+    )
+    console.error(error)
+  }
+
   return writeTypeDefIncludeFile('web-routerRoutes.d.ts.template', { routes })
 }
 
 export const generateTypeDefRouterPages = () => {
   const pages = processPagesDir()
+
+  // Generate declaration map for better go-to-definition behaviour
+  try {
+    const typeDefPath = path.join(
+      getPaths().generated.types.includes,
+      'web-routesPages.d.ts'
+    )
+
+    const map = new SourceMapGenerator({
+      file: 'web-routesPages.d.ts',
+    })
+
+    // Start line is based on where in the template the `  const ${importName}: typeof ${importName}Type` are defined
+    const startLine = pages.length + 5
+
+    // Map the location of the default export for each page
+    for (let i = 0; i < pages.length; i++) {
+      const fileContents = fileToAst(pages[i].path)
+      const defaultExportLocation = getDefaultExportLocation(fileContents) ?? {
+        line: 1,
+        column: 0,
+      }
+      map.addMapping({
+        generated: {
+          line: startLine + i,
+          column: 0,
+        },
+        source: path.relative(path.dirname(typeDefPath), pages[i].path),
+        original: defaultExportLocation,
+      })
+    }
+
+    fs.writeFileSync(
+      `${typeDefPath}.map`,
+      JSON.stringify(map.toJSON(), undefined, 2)
+    )
+  } catch (error) {
+    console.error(
+      "Couldn't generate a definition map for web-routesPages.d.ts:"
+    )
+    console.error(error)
+  }
+
   return writeTypeDefIncludeFile('web-routesPages.d.ts.template', { pages })
 }
 

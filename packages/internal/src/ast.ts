@@ -148,3 +148,49 @@ export const hasDefaultExport = (ast: types.Node): boolean => {
   })
   return exported
 }
+
+export const getDefaultExportLocation = (
+  ast: types.Node
+): { line: number; column: number } | null => {
+  // Get the default export
+  let defaultExport: types.ExportDefaultDeclaration | undefined
+  traverse(ast, {
+    ExportDefaultDeclaration(path) {
+      defaultExport = path.node
+    },
+  })
+
+  if (!defaultExport) {
+    return null
+  }
+
+  // Handle the case were we're exporting a variable declared elsewhere
+  // as we will want to find the location of that declaration instead
+  if (types.isIdentifier(defaultExport.declaration) && types.isFile(ast)) {
+    // Directly search the program body for the declaration of the identifier
+    // to avoid picking up other identifiers with the same name in the file
+    const exportedName = defaultExport.declaration.name
+    const declaration = ast.program.body.find((node) => {
+      return (
+        types.isVariableDeclaration(node) &&
+        node.declarations.find((d) => {
+          return (
+            types.isVariableDeclarator(d) &&
+            types.isIdentifier(d.id) &&
+            d.id.name === exportedName
+          )
+        })
+      )
+    })
+
+    return {
+      line: declaration?.loc?.start.line ?? 1,
+      column: declaration?.loc?.start.column ?? 0,
+    }
+  }
+
+  return {
+    line: defaultExport.loc?.start.line ?? 1,
+    column: defaultExport.loc?.start.column ?? 0,
+  }
+}
