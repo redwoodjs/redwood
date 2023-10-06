@@ -17,6 +17,7 @@ import {
 } from '../files'
 import { warningForDuplicateRoutes } from '../routes'
 
+import { generateClientPreset } from './clientPreset'
 import { generate } from './generate'
 import {
   generateTypeDefGraphQLApi,
@@ -100,6 +101,7 @@ watcher
 
     if (absPath.indexOf('Cell') !== -1 && isCellFile(absPath)) {
       await generateTypeDefGraphQLWeb()
+      await generateClientPreset()
       if (eventName === 'unlink') {
         fs.unlinkSync(mirrorPathForCell(absPath, rwjsPaths)[0])
       } else {
