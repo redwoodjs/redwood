@@ -25,6 +25,8 @@
     "test:watch": "echo \"No tests yet\""
   },
   "dependencies": {
+    "@fastify/http-proxy": "9.2.1",
+    "@fastify/static": "6.11.1",
     "@redwoodjs/project-config": "6.0.7",
     "chalk": "4.1.2",
     "dotenv-defaults": "5.0.2",
