@@ -8058,6 +8058,7 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.22.15
     "@redwoodjs/api": 6.3.1
+    "@redwoodjs/project-config": 6.3.1
     "@simplewebauthn/server": 7.3.1
     "@types/crypto-js": 4.1.1
     "@types/md5": 2.3.2
