@@ -77,7 +77,8 @@ export const getSession = (
 }
 
 // Convenience function to get session, decrypt, and return session data all
-// at once. Accepts the `event` argument from a Lambda function call.
+// at once. Accepts the `event` argument from a Lambda function call and the
+// name of the dbAuth session cookie
 export const dbAuthSession = (
   event: APIGatewayProxyEvent,
   cookieNameOption: string | undefined

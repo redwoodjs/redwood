@@ -25,7 +25,7 @@ export async function handler({ force: forceArg }: Args) {
       'supertokens-auth-react@~0.34.0',
       'supertokens-web-js@~0.7.0',
     ],
-    extraTask,
+    extraTasks: [extraTask],
     notes: [
       "We've implemented SuperToken's EmailPassword with Social / Enterprise (OAuth 2.0, SAML) login recipe,",
       'but feel free to switch to something that better fits your needs. See https://supertokens.com/docs/guides.',
