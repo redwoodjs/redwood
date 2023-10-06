@@ -253,13 +253,6 @@ export const generateTypeDefRouterRoutes = () => {
 
     // Map the location of the default export for each page
     for (let i = 0; i < routes.length; i++) {
-      console.log(
-        'route:',
-        routes[i].name,
-        startLine + i,
-        routes[i].location.line
-      )
-
       map.addMapping({
         generated: {
           line: startLine + i,
