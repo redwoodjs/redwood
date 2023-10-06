@@ -43,7 +43,7 @@ describe('setupDocker', () => {
       "This is an experimental feature to: Setup the experimental Dockerfile.
 
       Please find documentation and links to provide feedback for setup-docker at:
-       -> https://community.redwoodjs.com/t/null (https://community.redwoodjs.com/t/null)"
+       -> https://community.redwoodjs.com/t/null (​https://community.redwoodjs.com/t/null​)"
     `)
   })
 
