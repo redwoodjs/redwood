@@ -10,7 +10,7 @@ import { db } from './db'
  * If you have multiple RW apps running on the same host, you'll need to
  * make sure they all use unique cookie names
  */
-export cookieName = 'session_%port%'
+export const cookieName = 'session_%port%'
 
 /**
  * The session object sent in as the first argument to getCurrentUser() will
