@@ -1,12 +1,13 @@
 import path from 'node:path'
 
+import type { APIGatewayProxyEvent } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
 
 import * as error from '../errors'
 import {
   extractCookie,
   getSession,
-  cookieName,
+  getCookieName,
   hashPassword,
   decryptSession,
   dbAuthSession,
@@ -23,6 +24,14 @@ const encrypt = (data) => {
   return CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET).toString()
 }
 
+function dummyEvent(cookie?: string) {
+  return {
+    headers: {
+      cookie,
+    },
+  } as unknown as APIGatewayProxyEvent
+}
+
 beforeAll(() => {
   process.env.RWJS_CWD = FIXTURE_PATH
 })
@@ -33,51 +42,49 @@ afterAll(() => {
 
 describe('getSession()', () => {
   it('returns null if no text', () => {
-    expect(getSession()).toEqual(null)
+    expect(getSession(undefined, 'session')).toEqual(null)
   })
 
   it('returns null if no session cookie', () => {
-    expect(getSession('foo=bar')).toEqual(null)
+    expect(getSession('foo=bar', 'session')).toEqual(null)
   })
 
   it('returns the value of the session cookie', () => {
-    expect(getSession('dbauth_session_8911=qwerty')).toEqual('qwerty')
+    expect(getSession('session_8911=qwerty', 'session_%port%')).toEqual(
+      'qwerty'
+    )
   })
 
   it('returns the value of the session cookie when there are multiple cookies', () => {
-    expect(getSession('foo=bar;dbauth_session_8911=qwerty')).toEqual('qwerty')
-    expect(getSession('dbauth_session_8911=qwerty;foo=bar')).toEqual('qwerty')
+    expect(getSession('foo=bar;session=qwerty', 'session')).toEqual('qwerty')
+    expect(getSession('session=qwerty;foo=bar', 'session')).toEqual('qwerty')
   })
 
   it('returns the value of the session cookie when there are multiple cookies separated by spaces (iOS Safari)', () => {
-    expect(getSession('foo=bar; dbauth_session_8911=qwerty')).toEqual('qwerty')
-    expect(getSession('dbauth_session_8911=qwerty; foo=bar')).toEqual('qwerty')
+    expect(getSession('foo=bar; session=qwerty', 'session')).toEqual('qwerty')
+    expect(getSession('session=qwerty; foo=bar', 'session')).toEqual('qwerty')
   })
 })
 
-describe('cookieName()', () => {
+describe('getCookieName()', () => {
   it('returns the default cookie name', () => {
-    expect(cookieName()).toEqual('dbauth_session_8911')
+    expect(getCookieName(undefined)).toEqual('session')
   })
 
-  describe('cookie name env var', () => {
-    beforeEach(() => {
-      process.env.RWJS_DBAUTH_COOKIE_NAME = 'my_cookie_name'
-    })
+  it('allows you to pass a cookie name to use', () => {
+    expect(getCookieName('my_cookie_name')).toEqual('my_cookie_name')
+  })
 
-    afterEach(() => {
-      delete process.env.RWJS_DBAUTH_COOKIE_NAME
-    })
-
-    it('allows you to specify the cookie name using the RWJS_DBAUTH_COOKIE_NAME env var', () => {
-      expect(cookieName()).toEqual('my_cookie_name')
-    })
+  it('replaces %port% with a port number', () => {
+    expect(getCookieName('session_%port%_my_app')).toEqual(
+      'session_8911_my_app'
+    )
   })
 })
 
 describe('decryptSession()', () => {
   it('returns an empty array if no session', () => {
-    expect(decryptSession()).toEqual([])
+    expect(decryptSession(null)).toEqual([])
   })
 
   it('returns an empty array if session is empty', () => {
@@ -102,34 +109,28 @@ describe('decryptSession()', () => {
 
 describe('dbAuthSession()', () => {
   it('returns null if no cookies', () => {
-    const event = { headers: {} }
-
-    expect(dbAuthSession(event)).toEqual(null)
+    expect(dbAuthSession(dummyEvent(), 'session_%port%')).toEqual(null)
   })
 
   it('return session given event', () => {
     const first = { foo: 'bar' }
     const second = 'abcd'
     const text = encrypt(JSON.stringify(first) + ';' + second)
-    const event = {
-      headers: {
-        cookie: `dbauth_session_8911=${text}`,
-      },
-    }
+    const event = dummyEvent(`session_8911=${text}`)
 
-    expect(dbAuthSession(event)).toEqual(first)
+    expect(dbAuthSession(event, 'session_%port%')).toEqual(first)
   })
 })
 
 describe('webAuthnSession', () => {
   it('returns null if no cookies', () => {
-    expect(webAuthnSession({ headers: {} })).toEqual(null)
+    expect(webAuthnSession(dummyEvent())).toEqual(null)
   })
 
   it('returns the webAuthn cookie data', () => {
-    const output = webAuthnSession({
-      headers: { cookie: 'session=abcd1234;webAuthn=zyxw9876' },
-    })
+    const output = webAuthnSession(
+      dummyEvent('session=abcd1234;webAuthn=zyxw9876')
+    )
 
     expect(output).toEqual('zyxw9876')
   })

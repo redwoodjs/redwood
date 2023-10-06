@@ -81,10 +81,9 @@ const db = new DbMock(['user', 'userCredential'])
 
 const UUID_REGEX =
   /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
-const SET_SESSION_REGEX = /^dbauth_session_8911=[a-zA-Z0-9+=/]+;/
+const SET_SESSION_REGEX = /^session=[a-zA-Z0-9+=/]+;/
 const UTC_DATE_REGEX = /\w{3}, \d{2} \w{3} \d{4} [\d:]{8} GMT/
-const LOGOUT_COOKIE =
-  'dbauth_session_8911=;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
+const LOGOUT_COOKIE = 'session=;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
@@ -120,10 +119,7 @@ const expectLoggedInResponse = (response) => {
 }
 
 const encryptToCookie = (data) => {
-  return `dbauth_session_8911=${CryptoJS.AES.encrypt(
-    data,
-    process.env.SESSION_SECRET
-  )}`
+  return `session=${CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET)}`
 }
 
 let event, context, options
@@ -208,6 +204,9 @@ describe('dbAuth', () => {
           transports: 'transports',
           counter: 'counter',
         },
+      },
+      cookie: {
+        name: 'session',
       },
     }
   })
@@ -582,7 +581,7 @@ describe('dbAuth', () => {
       event = {
         headers: {
           cookie:
-            'dbauth_session_8911=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx',
+            'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx',
         },
       }
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -604,7 +603,7 @@ describe('dbAuth', () => {
     it('returns a logout response if session is not valid', async () => {
       event.body = JSON.stringify({ method: 'logout' })
       event.httpMethod = 'GET'
-      event.headers.cookie = 'dbauth_session_8911=invalid'
+      event.headers.cookie = 'session=invalid'
       const dbAuth = new DbAuthHandler(event, context, options)
       const response = await dbAuth.invoke()
 
@@ -615,7 +614,7 @@ describe('dbAuth', () => {
       event.body = JSON.stringify({ method: 'logout' })
       event.httpMethod = 'GET'
       event.headers.cookie =
-        'dbauth_session_8911=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
+        'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
       const dbAuth = new DbAuthHandler(event, context, options)
       const response = await dbAuth.invoke()
 
@@ -626,7 +625,7 @@ describe('dbAuth', () => {
       event.body = JSON.stringify({ method: 'foobar' })
       event.httpMethod = 'POST'
       event.headers.cookie =
-        'dbauth_session_8911=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
+        'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
       const dbAuth = new DbAuthHandler(event, context, options)
       const response = await dbAuth.invoke()
 
@@ -637,7 +636,7 @@ describe('dbAuth', () => {
       event.body = JSON.stringify({ method: 'logout' })
       event.httpMethod = 'POST'
       event.headers.cookie =
-        'dbauth_session_8911=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
+        'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
       const dbAuth = new DbAuthHandler(event, context, options)
       dbAuth.logout = jest.fn(() => {
         throw Error('Logout error')
@@ -675,7 +674,7 @@ describe('dbAuth', () => {
       event.body = JSON.stringify({ method: 'logout' })
       event.httpMethod = 'POST'
       event.headers.cookie =
-        'dbauth_session_8911=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
+        'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
       const dbAuth = new DbAuthHandler(event, context, options)
       dbAuth.logout = jest.fn(() => ['body', { foo: 'bar' }])
       const response = await dbAuth.invoke()
@@ -2087,11 +2086,13 @@ describe('dbAuth', () => {
         {
           ...options,
           cookie: {
-            Path: '/',
-            HttpOnly: true,
-            SameSite: 'Strict',
-            Secure: true,
-            Domain: 'example.com',
+            attributes: {
+              Path: '/',
+              HttpOnly: true,
+              SameSite: 'Strict',
+              Secure: true,
+              Domain: 'example.com',
+            },
           },
         }
       )
@@ -2171,7 +2172,7 @@ describe('dbAuth', () => {
       // characters that would be returned by the hash function
       expect(headers['set-cookie']).toMatch(SET_SESSION_REGEX)
       // and we can check that it's a certain number of characters
-      expect(headers['set-cookie'].split(';')[0].length).toEqual(84)
+      expect(headers['set-cookie'].split(';')[0].length).toEqual(72)
     })
   })
 
@@ -2628,7 +2629,7 @@ describe('dbAuth', () => {
       const [body, headers] = dbAuth._logoutResponse()
 
       expect(body).toEqual('')
-      expect(headers['set-cookie']).toMatch(/^dbauth_session_8911=;/)
+      expect(headers['set-cookie']).toMatch(/^session=;/)
     })
 
     it('can accept an object to return in the body', () => {

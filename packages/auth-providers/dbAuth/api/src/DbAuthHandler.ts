@@ -22,7 +22,7 @@ import { createCorsContext, normalizeRequest } from '@redwoodjs/api'
 
 import * as DbAuthError from './errors'
 import {
-  cookieName,
+  getCookieName,
   decryptSession,
   extractCookie,
   getSession,
@@ -187,11 +187,31 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
    * Object containing cookie config options
    */
   cookie?: {
+    /** @deprecated set this option in `cookie.attributes` */
     Path?: string
+    /** @deprecated set this option in `cookie.attributes` */
     HttpOnly?: boolean
+    /** @deprecated set this option in `cookie.attributes` */
     Secure?: boolean
+    /** @deprecated set this option in `cookie.attributes` */
     SameSite?: string
+    /** @deprecated set this option in `cookie.attributes` */
     Domain?: string
+    attributes?: {
+      Path?: string
+      HttpOnly?: boolean
+      Secure?: boolean
+      SameSite?: string
+      Domain?: string
+    }
+    /**
+     * The name of the cookie that dbAuth sets
+     *
+     * %port% will be replaced with the port the api server is running on.
+     * If you have multiple RW apps running on the same host, you'll need to
+     * make sure they all use unique cookie names
+     */
+    name?: string
   }
   /**
    * Object containing forgot password options
@@ -333,7 +353,7 @@ export class DbAuthHandler<
   get _deleteSessionHeader() {
     return {
       'set-cookie': [
-        `${cookieName()}=`,
+        `${getCookieName(this.options.cookie?.name)}=`,
         ...this._cookieAttributes({ expires: 'now' }),
       ].join(';'),
     }
@@ -382,7 +402,9 @@ export class DbAuthHandler<
     }
 
     try {
-      const [session, csrfToken] = decryptSession(getSession(this.cookie))
+      const [session, csrfToken] = decryptSession(
+        getSession(this.cookie, this.options.cookie?.name)
+      )
       this.session = session
       this.sessionCsrfToken = csrfToken
     } catch (e) {
@@ -1096,7 +1118,17 @@ export class DbAuthHandler<
     expires?: 'now' | string
     options?: DbAuthHandlerOptions['cookie']
   }) {
-    const cookieOptions = { ...this.options.cookie, ...options } || {
+    // TODO: When we drop support for specifying cookie attributes directly on
+    // `options.cookie` we can get rid of all of this and just spread
+    // `this.options.cookie?.attributes` directly into `cookieOptions` below
+    const userCookieAttributes = this.options.cookie?.attributes
+      ? { ...this.options.cookie?.attributes }
+      : { ...this.options.cookie }
+    if (!this.options.cookie?.attributes) {
+      delete userCookieAttributes.name
+    }
+
+    const cookieOptions = { ...userCookieAttributes, ...options } || {
       ...options,
     }
     const meta = Object.keys(cookieOptions)
@@ -1136,7 +1168,7 @@ export class DbAuthHandler<
     const session = JSON.stringify(data) + ';' + csrfToken
     const encrypted = this._encrypt(session)
     const cookie = [
-      `${cookieName()}=${encrypted.toString()}`,
+      `${getCookieName(this.options.cookie?.name)}=${encrypted.toString()}`,
       ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
     ].join(';')
 

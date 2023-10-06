@@ -56,17 +56,20 @@ export const decryptSession = (text: string | null) => {
 }
 
 // returns the actual value of the session cookie
-export const getSession = (text?: string) => {
+export const getSession = (
+  text: string | undefined,
+  cookieName: string | undefined
+) => {
   if (typeof text === 'undefined' || text === null) {
     return null
   }
 
   const cookies = text.split(';')
   const sessionCookie = cookies.find((cookie) => {
-    return cookie.split('=')[0].trim() === cookieName()
+    return cookie.split('=')[0].trim() === getCookieName(cookieName)
   })
 
-  if (!sessionCookie || sessionCookie === `${cookieName()}=`) {
+  if (!sessionCookie || sessionCookie === `${getCookieName(cookieName)}=`) {
     return null
   }
 
@@ -75,10 +78,13 @@ export const getSession = (text?: string) => {
 
 // Convenience function to get session, decrypt, and return session data all
 // at once. Accepts the `event` argument from a Lambda function call.
-export const dbAuthSession = (event: APIGatewayProxyEvent) => {
+export const dbAuthSession = (
+  event: APIGatewayProxyEvent,
+  cookieName: string | undefined
+) => {
   if (extractCookie(event)) {
     const [session, _csrfToken] = decryptSession(
-      getSession(extractCookie(event))
+      getSession(extractCookie(event), cookieName)
     )
     return session
   } else {
@@ -117,10 +123,9 @@ export const hashPassword = (text: string, salt?: string) => {
   ]
 }
 
-export const cookieName = () => {
+export const getCookieName = (name: string | undefined) => {
   const port = getConfig().api?.port || 8911
-  const cookieName =
-    process.env.RWJS_DBAUTH_COOKIE_NAME ?? 'dbauth_session_' + port
+  const cookieName = name?.replace('%port%', '' + port) ?? 'session'
 
   return cookieName
 }
