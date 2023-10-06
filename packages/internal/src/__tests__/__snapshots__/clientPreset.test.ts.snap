@@ -21,3 +21,14 @@ exports[`Generate client preset for web and api sides 2`] = `
   "/Users/dthyresson/Dropbox/Code/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/graphql/persisted-documents.json",
 ]
 `;
+
+exports[`Generate client preset for web and api sides 3`] = `
+[
+  "/Users/dthyresson/Dropbox/Code/redwoodjs/redwood/__fixtures__/example-todo-main/web/types/types.d.ts",
+  "/Users/dthyresson/Dropbox/Code/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/graphql/fragment-masking.ts",
+  "/Users/dthyresson/Dropbox/Code/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/graphql/index.ts",
+  "/Users/dthyresson/Dropbox/Code/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/graphql/gql.ts",
+  "/Users/dthyresson/Dropbox/Code/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/graphql/graphql.ts",
+  "/Users/dthyresson/Dropbox/Code/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/graphql/persisted-documents.json",
+]
+`;

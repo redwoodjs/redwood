@@ -1,6 +1,10 @@
+import fs from 'fs'
+import path from 'path'
+
 import { generate } from '@graphql-codegen/cli'
 import type { CodegenConfig } from '@graphql-codegen/cli'
 import { addTypenameSelectionDocumentTransform } from '@graphql-codegen/client-preset'
+import { format } from 'prettier'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -40,21 +44,17 @@ export const generateClientPreset = async () => {
           persistedDocuments: true,
         },
         documentTransforms: [addTypenameSelectionDocumentTransform],
-
         config: {
           // DO NOT USE documentMode: 'string',
-          // documentMode: 'string',
         },
       },
     },
-    // watch: true,
-    // ignoreNoDocuments: true,
-    // watchConfig: {}
   }
 
   let generatedFiles = []
+
   try {
-    generatedFiles = await generate(config, true) // ?
+    generatedFiles = await generate(config, true)
   } catch (e) {
     errors.push({
       message: 'Error: Could not generate GraphQL client preset',
@@ -62,11 +62,31 @@ export const generateClientPreset = async () => {
     })
   }
 
-  const clientPresetFiles = generatedFiles.map(
-    (f: { filename: string; content: string; hooks: string }) => f.filename
+  interface GeneratedFile {
+    filename: string
+    content: string
+    hooks: string
+  }
+  const clientPresetFiles = generatedFiles.map((f: GeneratedFile) => f.filename)
+
+  // Copy the persisted-documents.json to api side
+  const output = generatedFiles.filter((f: GeneratedFile) =>
+    f.filename.endsWith('persisted-documents.json')
   )
 
-  // TODO: Need to copy the persisted-documents.json to api side
+  const content = format(`export const store = ${output[0].content}`, {
+    trailingComma: 'es5',
+    bracketSpacing: true,
+    tabWidth: 2,
+    semi: false,
+    singleQuote: true,
+    arrowParens: 'always',
+    parser: 'typescript',
+  })
+
+  const filename = path.join(getPaths().api.lib, 'persistedOperationStore.ts')
+  fs.mkdirSync(path.dirname(filename), { recursive: true })
+  fs.writeFileSync(filename, content)
 
   return {
     clientPresetFiles,
