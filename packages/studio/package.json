@@ -89,7 +89,7 @@
     "graphql-scalars": "1.22.2",
     "jest": "29.7.0",
     "json-bigint-patch": "0.0.8",
-    "postcss": "8.4.29",
+    "postcss": "8.4.31",
     "pretty-ms": "7.0.1",
     "react": "0.0.0-experimental-e5205658f-20230913",
     "react-dom": "0.0.0-experimental-e5205658f-20230913",
@@ -101,7 +101,7 @@
     "tailwindcss": "3.3.2",
     "typescript": "5.2.2",
     "use-url-search-params": "2.5.1",
-    "vite": "4.4.9"
+    "vite": "4.4.11"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
