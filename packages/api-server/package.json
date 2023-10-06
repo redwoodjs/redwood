@@ -37,6 +37,7 @@
     "chalk": "4.1.2",
     "chokidar": "3.5.3",
     "core-js": "3.32.2",
+    "dotenv-defaults": "5.0.2",
     "fast-glob": "3.3.1",
     "fast-json-parse": "1.0.3",
     "fastify": "4.23.2",
