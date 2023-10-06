@@ -7794,6 +7794,7 @@ __metadata:
     chalk: 4.1.2
     chokidar: 3.5.3
     core-js: 3.32.2
+    dotenv-defaults: 5.0.2
     fast-glob: 3.3.1
     fast-json-parse: 1.0.3
     fastify: 4.23.2
@@ -9215,6 +9216,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web-server@workspace:packages/web-server"
   dependencies:
+    "@fastify/http-proxy": 9.2.1
+    "@fastify/static": 6.11.1
     "@redwoodjs/project-config": 6.0.7
     "@types/yargs-parser": 21.0.0
     chalk: 4.1.2
