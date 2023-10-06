@@ -1,6 +1,6 @@
-// import * as addPlugin from '@graphql-codegen/add'
 import { generate } from '@graphql-codegen/cli'
 import type { CodegenConfig } from '@graphql-codegen/cli'
+import { addTypenameSelectionDocumentTransform } from '@graphql-codegen/client-preset'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -39,8 +39,11 @@ export const generateClientPreset = async () => {
         presetConfig: {
           persistedDocuments: true,
         },
+        documentTransforms: [addTypenameSelectionDocumentTransform],
+
         config: {
-          documentMode: 'string',
+          // DO NOT USE documentMode: 'string',
+          // documentMode: 'string',
         },
       },
     },

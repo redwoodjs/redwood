@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -83,17 +83,17 @@ export type AddTodo_CreateTodoMutationVariables = Exact<{
 }>;
 
 
-export type AddTodo_CreateTodoMutation = { __typename?: 'Mutation', createTodo?: { __typename: 'Todo', id: number, body: string, status: string } | null };
+export type AddTodo_CreateTodoMutation = { __typename: 'Mutation', createTodo?: { __typename: 'Todo', id: number, body: string, status: string } | null };
 
 export type NumTodosCell_GetCountQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NumTodosCell_GetCountQuery = { __typename?: 'Query', todosCount: number };
+export type NumTodosCell_GetCountQuery = { __typename: 'Query', todosCount: number };
 
 export type TodoListCell_GetTodosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TodoListCell_GetTodosQuery = { __typename?: 'Query', todos?: Array<{ __typename?: 'Todo', id: number, body: string, status: string } | null> | null };
+export type TodoListCell_GetTodosQuery = { __typename: 'Query', todos?: Array<{ __typename: 'Todo', id: number, body: string, status: string } | null> | null };
 
 export type TodoListCell_CheckTodoMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -101,53 +101,10 @@ export type TodoListCell_CheckTodoMutationVariables = Exact<{
 }>;
 
 
-export type TodoListCell_CheckTodoMutation = { __typename?: 'Mutation', updateTodoStatus?: { __typename: 'Todo', id: number, status: string } | null };
+export type TodoListCell_CheckTodoMutation = { __typename: 'Mutation', updateTodoStatus?: { __typename: 'Todo', id: number, status: string } | null };
 
-export class TypedDocumentString<TResult, TVariables>
-  extends String
-  implements DocumentTypeDecoration<TResult, TVariables>
-{
-  __apiType?: DocumentTypeDecoration<TResult, TVariables>['__apiType'];
 
-  constructor(private value: string, public __meta__?: Record<string, any>) {
-    super(value);
-  }
-
-  toString(): string & DocumentTypeDecoration<TResult, TVariables> {
-    return this.value;
-  }
-}
-
-export const AddTodo_CreateTodoDocument = new TypedDocumentString(`
-    mutation AddTodo_CreateTodo($body: String!) {
-  createTodo(body: $body) {
-    id
-    __typename
-    body
-    status
-  }
-}
-    `, {"hash":"0a10617d10611e708e56d2b72925c82e7415a08a"}) as unknown as TypedDocumentString<AddTodo_CreateTodoMutation, AddTodo_CreateTodoMutationVariables>;
-export const NumTodosCell_GetCountDocument = new TypedDocumentString(`
-    query NumTodosCell_GetCount {
-  todosCount
-}
-    `, {"hash":"2297bb1d97b9eef1c20733e737683349445c045f"}) as unknown as TypedDocumentString<NumTodosCell_GetCountQuery, NumTodosCell_GetCountQueryVariables>;
-export const TodoListCell_GetTodosDocument = new TypedDocumentString(`
-    query TodoListCell_GetTodos {
-  todos {
-    id
-    body
-    status
-  }
-}
-    `, {"hash":"0e056c245e5b02c609c42dd4c3512699c3d0956e"}) as unknown as TypedDocumentString<TodoListCell_GetTodosQuery, TodoListCell_GetTodosQueryVariables>;
-export const TodoListCell_CheckTodoDocument = new TypedDocumentString(`
-    mutation TodoListCell_CheckTodo($id: Int!, $status: String!) {
-  updateTodoStatus(id: $id, status: $status) {
-    id
-    __typename
-    status
-  }
-}
-    `, {"hash":"74dd5ed40cf06802023b2d536007072ac7d14b14"}) as unknown as TypedDocumentString<TodoListCell_CheckTodoMutation, TodoListCell_CheckTodoMutationVariables>;
+export const AddTodo_CreateTodoDocument = {"__meta__":{"hash":"d67f5d54ba7d2a94e34809f20a0380f9921a5586"},"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddTodo_CreateTodo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"body"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"createTodo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"body"},"value":{"kind":"Variable","name":{"kind":"Name","value":"body"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]} as unknown as DocumentNode<AddTodo_CreateTodoMutation, AddTodo_CreateTodoMutationVariables>;
+export const NumTodosCell_GetCountDocument = {"__meta__":{"hash":"81a7e7b720f992f8cfcaab15f42cf5a6802ed338"},"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"NumTodosCell_GetCount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"todosCount"}}]}}]} as unknown as DocumentNode<NumTodosCell_GetCountQuery, NumTodosCell_GetCountQueryVariables>;
+export const TodoListCell_GetTodosDocument = {"__meta__":{"hash":"a9d0f2c090ac4320919f631ab0003fcdd2c30652"},"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"TodoListCell_GetTodos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"todos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]} as unknown as DocumentNode<TodoListCell_GetTodosQuery, TodoListCell_GetTodosQueryVariables>;
+export const TodoListCell_CheckTodoDocument = {"__meta__":{"hash":"69a8d2c6640912a8323a729adae2cc2f2f1bdb59"},"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"TodoListCell_CheckTodo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"status"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"updateTodoStatus"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"status"},"value":{"kind":"Variable","name":{"kind":"Name","value":"status"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]} as unknown as DocumentNode<TodoListCell_CheckTodoMutation, TodoListCell_CheckTodoMutationVariables>;

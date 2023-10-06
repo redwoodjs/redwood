@@ -1,5 +1,6 @@
-import { ResultOf, DocumentTypeDecoration } from '@graphql-typed-document-node/core';
-import { Incremental, TypedDocumentString } from './graphql';
+import { ResultOf, DocumentTypeDecoration, TypedDocumentNode } from '@graphql-typed-document-node/core';
+import { FragmentDefinitionNode } from 'graphql';
+import { Incremental } from './graphql';
 
 
 export type FragmentType<TDocumentType extends DocumentTypeDecoration<any, any>> = TDocumentType extends DocumentTypeDecoration<
@@ -48,15 +49,18 @@ export function makeFragmentData<
   return data as FragmentType<F>;
 }
 export function isFragmentReady<TQuery, TFrag>(
-  queryNode: TypedDocumentString<TQuery, any>,
-  fragmentNode: TypedDocumentString<TFrag, any>,
-  data: FragmentType<TypedDocumentString<Incremental<TFrag>, any>> | null | undefined
+  queryNode: DocumentTypeDecoration<TQuery, any>,
+  fragmentNode: TypedDocumentNode<TFrag>,
+  data: FragmentType<TypedDocumentNode<Incremental<TFrag>, any>> | null | undefined
 ): data is FragmentType<typeof fragmentNode> {
-  const deferredFields = queryNode.__meta__?.deferredFields as Record<string, (keyof TFrag)[]>;
-  const fragName = fragmentNode.__meta__?.fragmentName as string | undefined;
+  const deferredFields = (queryNode as { __meta__?: { deferredFields: Record<string, (keyof TFrag)[]> } }).__meta__
+    ?.deferredFields;
 
-  if (!deferredFields || !fragName) return true;
+  if (!deferredFields) return true;
 
-  const fields = deferredFields[fragName] ?? [];
+  const fragDef = fragmentNode.definitions[0] as FragmentDefinitionNode | undefined;
+  const fragName = fragDef?.name?.value;
+
+  const fields = (fragName && deferredFields[fragName]) || [];
   return fields.length > 0 && fields.every(field => data && field in data);
 }

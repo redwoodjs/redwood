@@ -5,7 +5,7 @@ import type {
 } from '@apollo/client'
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
-// import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
@@ -215,10 +215,6 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
   }
 
-  // const link = createPersistedQueryLink({
-  //   generateHash: (document) => document['__meta__']['hash'],
-  // }).concat(httpLink)
-
   // Our terminating link needs to be smart enough to handle subscriptions, and if the GraphQL query
   // is subscription it needs to use the SSELink (server sent events link).
   const terminatingLink = apolloClient.split(
@@ -239,12 +235,19 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     httpLink
   )
 
+  const persistedQueryLink = createPersistedQueryLink({
+    generateHash: (document: any) => document['__meta__']['hash'],
+  })
+
   // The order here is important. The last link *must* be a terminating link like HttpLink or SSELink.
   const redwoodApolloLinks: RedwoodApolloLinks = [
     { name: 'withToken', link: withToken },
     { name: 'authMiddleware', link: authMiddleware },
     { name: 'updateDataApolloLink', link: updateDataApolloLink },
-    { name: 'terminatingLink', link: terminatingLink },
+    {
+      name: 'terminatingLink',
+      link: persistedQueryLink.concat(terminatingLink),
+    },
   ]
 
   let link = redwoodApolloLink

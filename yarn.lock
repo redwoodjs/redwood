@@ -9450,6 +9450,7 @@ __metadata:
     "@types/react-dom": 18.2.6
     "@types/testing-library__jest-dom": 5.14.8
     core-js: 3.32.2
+    crypto-hash: 2.0.1
     graphql: 16.8.1
     graphql-sse: 2.2.1
     graphql-tag: 2.12.6
@@ -16990,6 +16991,13 @@ __metadata:
     randombytes: ^2.0.0
     randomfill: ^1.0.3
   checksum: 0c20198886576050a6aa5ba6ae42f2b82778bfba1753d80c5e7a090836890dc372bdc780986b2568b4fb8ed2a91c958e61db1f0b6b1cc96af4bd03ffc298ba92
+  languageName: node
+  linkType: hard
+
+"crypto-hash@npm:2.0.1":
+  version: 2.0.1
+  resolution: "crypto-hash@npm:2.0.1"
+  checksum: 8a1079e7ff83d823feb0941b1aae26ceebd17d5b4565791786442c79d6521433e11f3021c8c416485034d5ebb582ef58ff33823dbe474458d8eaf8f13d590cfc
   languageName: node
   linkType: hard
 
