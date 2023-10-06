@@ -36,7 +36,7 @@ export async function handler({ webauthn, force: forceArg }: Args) {
       `@redwoodjs/auth-dbauth-api@${version}`,
       ...(webAuthn ? webAuthnApiPackages : []),
     ],
-    extraTask: webAuthn ? webAuthnExtraTask : extraTask,
+    extraTasks: [webAuthn ? webAuthnExtraTask : extraTask],
     notes: webAuthn ? webAuthnNotes : notes,
   })
 }
