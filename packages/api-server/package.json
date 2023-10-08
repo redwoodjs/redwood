@@ -25,6 +25,7 @@
     "fix:permissions": "chmod +x dist/index.js; chmod +x dist/watch.js",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "jest src",
+    "test:dist": "jest dist.test.ts",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {

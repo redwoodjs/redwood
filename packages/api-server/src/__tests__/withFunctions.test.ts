@@ -1,141 +1,149 @@
 import path from 'path'
 
-import type { FastifyInstance, FastifyPluginCallback } from 'fastify'
-
-import { loadFastifyConfig } from '../fastify'
+import createFastifyInstance from '../fastify'
 import withFunctions from '../plugins/withFunctions'
 
-const FIXTURE_PATH = path.resolve(
-  __dirname,
-  '../../../../__fixtures__/example-todo-main'
-)
+// Suppress terminal logging.
+console.log = jest.fn()
+console.warn = jest.fn()
 
-// Mock the dist folder from fixtures,
-// because its gitignored
-jest.mock('@redwoodjs/internal', () => {
-  return {
-    ...jest.requireActual('@redwoodjs/internal'),
-  }
+// Set up RWJS_CWD.
+let original_RWJS_CWD
+
+beforeAll(() => {
+  original_RWJS_CWD = process.env.RWJS_CWD
+
+  process.env.RWJS_CWD = path.resolve(__dirname, 'fixtures/redwood-app')
 })
 
-jest.mock('../fastify', () => {
-  return {
-    ...jest.requireActual('../fastify'),
-    loadFastifyConfig: jest.fn(),
-  }
+afterAll(() => {
+  process.env.RWJS_CWD = original_RWJS_CWD
 })
 
-jest.mock('../plugins/lambdaLoader', () => {
-  return {
-    loadFunctionsFromDist: jest.fn(),
-    lambdaRequestHandler: jest.fn(),
-  }
+// Set up and teardown the Fastify instance for each test.
+let fastifyInstance
+let returnedFastifyInstance
+
+beforeAll(async () => {
+  fastifyInstance = createFastifyInstance()
+
+  returnedFastifyInstance = await withFunctions(fastifyInstance, {
+    port: 8911,
+    apiRootPath: '/',
+  })
+
+  await fastifyInstance.ready()
 })
 
-describe('Checks that configureFastify is called for the api side', () => {
-  beforeAll(() => {
-    process.env.RWJS_CWD = FIXTURE_PATH
-  })
-  afterAll(() => {
-    delete process.env.RWJS_CWD
-  })
+afterAll(async () => {
+  await fastifyInstance.close()
+})
 
-  beforeEach(() => {
-    jest.clearAllMocks()
+describe('withFunctions', () => {
+  it('returns the same fastify instance', async () => {
+    expect(returnedFastifyInstance).toBe(fastifyInstance)
   })
 
-  const mockedFastifyInstance = {
-    register: jest.fn(),
-    get: jest.fn((routeName) => routeName),
-    all: jest.fn(),
-    addContentTypeParser: jest.fn(),
-    setNotFoundHandler: jest.fn(),
-    log: jest.fn(),
-  } as unknown as FastifyInstance
+  it('configures the `@fastify/url-data` and `fastify-raw-body` plugins', async () => {
+    const plugins = fastifyInstance.printPlugins()
 
-  // We're mocking a fake plugin, so don't worry about the type
-  const registerCustomPlugin =
-    'I was registered by the custom configureFastify function' as unknown as FastifyPluginCallback
-
-  // Mock the load fastify config function
-  ;(loadFastifyConfig as jest.Mock).mockReturnValue({
-    config: {},
-    configureFastify: jest.fn((fastify) => {
-      fastify.register(registerCustomPlugin)
-
-      fastify.get(
-        `/rest/v1/users/get/:userId`,
-        async function (request, reply) {
-          const { userId } = request.params as any
-
-          return reply.send(`Get User ${userId}!`)
-        }
-      )
-      fastify.version = 'bazinga'
-      return fastify
-    }),
+    expect(plugins.includes('@fastify/url-data')).toEqual(true)
+    expect(plugins.includes('fastify-raw-body')).toEqual(true)
   })
 
-  it('Verify that configureFastify is called with the expected side and options', async () => {
-    const { configureFastify } = loadFastifyConfig()
-    await withFunctions(mockedFastifyInstance, {
-      apiRootPath: '/kittens',
-      port: 5555,
-    })
-
-    expect(configureFastify).toHaveBeenCalledTimes(1)
-
-    expect(configureFastify).toHaveBeenCalledWith(expect.anything(), {
-      side: 'api',
-      apiRootPath: '/kittens',
-      port: 5555,
-    })
-  })
-
-  it('Check that configureFastify registers a plugin', async () => {
-    await withFunctions(mockedFastifyInstance, {
-      apiRootPath: '/kittens',
-      port: 5555,
-    })
-
-    expect(mockedFastifyInstance.register).toHaveBeenCalledWith(
-      'I was registered by the custom configureFastify function'
-    )
-  })
-
-  // Note: This tests an undocumented use of configureFastify to register a route
-  it('Check that configureFastify registers a route', async () => {
-    await withFunctions(mockedFastifyInstance, {
-      apiRootPath: '/boots',
-      port: 5554,
-    })
-
-    expect(mockedFastifyInstance.get).toHaveBeenCalledWith(
-      `/rest/v1/users/get/:userId`,
-      expect.any(Function)
-    )
-  })
-
-  it('Check that withFunctions returns the same Fastify instance, and not a new one', async () => {
-    await withFunctions(mockedFastifyInstance, {
-      apiRootPath: '/bazinga',
-      port: 5556,
-    })
-
-    expect(mockedFastifyInstance.version).toBe('bazinga')
-  })
-
-  it('Does not throw when configureFastify is missing from server config', () => {
-    ;(loadFastifyConfig as jest.Mock).mockReturnValue({
-      config: {},
-      configureFastify: null,
-    })
-
+  it('configures two additional content type parsers, `application/x-www-form-urlencoded` and `multipart/form-data`', async () => {
     expect(
-      withFunctions(mockedFastifyInstance, {
-        apiRootPath: '/bazinga',
-        port: 5556,
+      fastifyInstance.hasContentTypeParser('application/x-www-form-urlencoded')
+    ).toEqual(true)
+    expect(fastifyInstance.hasContentTypeParser('multipart/form-data')).toEqual(
+      true
+    )
+  })
+
+  it('can be configured by the user', async () => {
+    const res = await fastifyInstance.inject({
+      method: 'GET',
+      url: '/rest/v1/users/get/1',
+    })
+
+    expect(res.body).toEqual(JSON.stringify({ id: 1 }))
+  })
+
+  // We use `fastify.all` to register functions, which means they're invoked for all HTTP verbs.
+  it('builds a tree of routes for GET and POST', async () => {
+    // We can use printRoutes with a method for debugging.
+    // See https://fastify.dev/docs/latest/Reference/Server#printroutes
+    expect(fastifyInstance.printRoutes({ method: 'GET' }))
+      .toMatchInlineSnapshot(`
+      "└── /
+          ├── rest/v1/users/get/
+          │   └── :userId (GET)
+          └── :routeName (GET)
+              └── /
+                  └── * (GET)
+      "
+    `)
+
+    expect(fastifyInstance.printRoutes({ method: 'POST' }))
+      .toMatchInlineSnapshot(`
+      "└── /
+          └── :routeName (POST)
+              └── /
+                  └── * (POST)
+      "
+    `)
+  })
+
+  describe('serves functions', () => {
+    it('serves hello.js', async () => {
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: '/hello',
       })
-    ).resolves.not.toThrowError()
+
+      expect(res.statusCode).toEqual(200)
+      expect(res.json()).toEqual({ data: 'hello function' })
+    })
+
+    it('it serves graphql.js', async () => {
+      const res = await fastifyInstance.inject({
+        method: 'POST',
+        url: '/graphql?query={redwood{version}}',
+      })
+
+      expect(res.statusCode).toEqual(200)
+      expect(res.json()).toEqual({ data: { version: 42 } })
+    })
+
+    it('serves health.js', async () => {
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: '/health',
+      })
+
+      expect(res.statusCode).toEqual(200)
+    })
+
+    it('serves a nested function, nested.js', async () => {
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: '/nested/nested',
+      })
+
+      expect(res.statusCode).toEqual(200)
+      expect(res.json()).toEqual({ data: 'nested function' })
+    })
+
+    it("doesn't serve deeply-nested functions", async () => {
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: '/deeplyNested/nestedDir/deeplyNested',
+      })
+
+      expect(res.statusCode).toEqual(404)
+      expect(res.body).toEqual(
+        'Function &quot;deeplyNested&quot; was not found.'
+      )
+    })
   })
 })
