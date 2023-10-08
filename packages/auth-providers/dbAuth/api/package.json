@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.1",
+    "@redwoodjs/project-config": "6.0.7",
     "base64url": "3.0.1",
     "core-js": "3.32.2",
     "crypto-js": "4.1.1",
@@ -33,7 +34,6 @@
     "@babel/cli": "7.23.0",
     "@babel/core": "^7.22.20",
     "@redwoodjs/api": "6.0.7",
-    "@redwoodjs/project-config": "6.0.7",
     "@simplewebauthn/server": "7.3.1",
     "@types/crypto-js": "4.1.1",
     "@types/md5": "2.3.2",
