@@ -55,6 +55,12 @@ const config = {
             className: 'github-logo',
             'aria-label': 'GitHub repository',
           },
+          {
+            href: 'https://redwoodjs.com/sidekick',
+            label: 'AI Sidekick',
+            position: 'right',
+            'aria-label': 'AI Sidekick',
+          },
         ],
       },
       prism: {
