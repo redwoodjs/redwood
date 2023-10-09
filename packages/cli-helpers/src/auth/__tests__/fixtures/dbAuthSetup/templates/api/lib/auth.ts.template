@@ -4,6 +4,15 @@ import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from './db'
 
 /**
+ * The name of the cookie that dbAuth sets
+ *
+ * %port% will be replaced with the port the api server is running on.
+ * If you have multiple RW apps running on the same host, you'll need to
+ * make sure they all use unique cookie names
+ */
+export const cookieName = 'session_%port%'
+
+/**
  * The session object sent in as the first argument to getCurrentUser() will
  * have a single key `id` containing the unique ID of the logged in user
  * (whatever field you set as `authFields.id` in your auth function config).
