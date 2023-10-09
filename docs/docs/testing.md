@@ -1133,7 +1133,7 @@ Now, we can extend the `test` file which Redwood generated. We're going to want 
 
 1. Import `waitFor` from the `@redwoodjs/testing/web` library.
 2. Add an import to `@testing-library/user-event` for its `default`.
-3.Provide an `onSubmit` prop to our "renders successfully" test.
+3. Provide an `onSubmit` prop to our "renders successfully" test.
 
 ```jsx title="NameForm.test.js"
 import { render, screen, waitFor } from '@redwoodjs/testing/web'
