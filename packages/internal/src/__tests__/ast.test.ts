@@ -37,26 +37,50 @@ test('extracts named exports', () => {
   expect(n).toMatchInlineSnapshot(`
     [
       {
+        "location": {
+          "column": 9,
+          "line": 1,
+        },
         "name": "exportA",
         "type": "re-export",
       },
       {
+        "location": {
+          "column": 18,
+          "line": 1,
+        },
         "name": "exportB",
         "type": "re-export",
       },
       {
+        "location": {
+          "column": 13,
+          "line": 3,
+        },
         "name": "myVariableExport",
         "type": "variable",
       },
       {
+        "location": {
+          "column": 13,
+          "line": 5,
+        },
         "name": "myArrowFunctionExport",
         "type": "variable",
       },
       {
+        "location": {
+          "column": 16,
+          "line": 9,
+        },
         "name": "myFunctionExport",
         "type": "function",
       },
       {
+        "location": {
+          "column": 13,
+          "line": 11,
+        },
         "name": "MyClassExport",
         "type": "class",
       },
