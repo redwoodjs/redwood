@@ -4,5 +4,7 @@ export { useRedwoodDirective } from './useRedwoodDirective'
 export { useRedwoodError } from './useRedwoodError'
 export { useRedwoodGlobalContextSetter } from './useRedwoodGlobalContextSetter'
 export { useRedwoodLogger } from './useRedwoodLogger'
+export { useRedwoodPersistedOperations } from './useRedwoodPersistedOperations'
+
 export { useRedwoodPopulateContext } from './useRedwoodPopulateContext'
 export { useRedwoodOpenTelemetry } from './useRedwoodOpenTelemetry'

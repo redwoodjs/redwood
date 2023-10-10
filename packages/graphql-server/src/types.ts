@@ -20,6 +20,7 @@ import type {
   DirectivePluginOptions,
 } from './plugins/useRedwoodDirective'
 import type { LoggerConfig } from './plugins/useRedwoodLogger'
+import type { RedwoodPersistedOperationsOptions } from './plugins/useRedwoodPersistedOperations'
 
 export type Resolver = (...args: unknown[]) => unknown
 export type Services = {
@@ -235,6 +236,11 @@ export type GraphQLYogaOptions = {
    * Only supported in a server deploy and not allowed with GraphQLHandler config
    */
   realtime?: RedwoodRealtimeOptions
+
+  /**
+   * @description Configure GraphQLHandler with options
+   */
+  persistedOperations?: RedwoodPersistedOperationsOptions
 
   /**
    * @description Configure OpenTelemetry plugin behaviour
