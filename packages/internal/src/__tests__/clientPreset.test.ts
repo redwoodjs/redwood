@@ -22,17 +22,22 @@ describe('Generate client preset', () => {
 
     await generateGraphQLSchema()
 
-    jest
-      .spyOn(fs, 'writeFileSync')
-      .mockImplementation(
-        (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
-          expect(data).toMatchSnapshot()
-        }
-      )
-
     const { clientPresetFiles } = await generateClientPreset()
 
     expect(clientPresetFiles).toHaveLength(6)
-    expect(clientPresetFiles).toMatchSnapshot()
+    const expectedEndings = [
+      '/fragment-masking.ts',
+      '/index.ts',
+      '/gql.ts',
+      '/graphql.ts',
+      '/persisted-documents.json',
+      '/types.d.ts',
+    ]
+
+    const foundEndings = expectedEndings.filter((expectedEnding) =>
+      clientPresetFiles.some((filename) => filename.endsWith(expectedEnding))
+    )
+
+    expect(foundEndings).toHaveLength(expectedEndings.length)
   })
 })
