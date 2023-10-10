@@ -124,9 +124,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.8.4":
-  version: 3.8.4
-  resolution: "@apollo/client@npm:3.8.4"
+"@apollo/client@npm:3.8.5":
+  version: 3.8.5
+  resolution: "@apollo/client@npm:3.8.5"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.3
@@ -156,13 +156,13 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 36b8cb05da30fffb795d8bb970cdbc32f5f3b421ebe5874d7681a907bd4aa6ca7b01144b480299e309e207754f77d1f72b55b05e15bd488248242fafdd76dcd3
+  checksum: 70a054ffc4518dd2b88b2d76018c1c3a68474c7d4edb96cc85f4a879d8345afa992b2a041157b36f01c32a2221d8ae79f395e5a41969755291eb8accd719b9d1
   languageName: node
   linkType: hard
 
-"@apollo/experimental-nextjs-app-support@npm:0.4.2":
-  version: 0.4.2
-  resolution: "@apollo/experimental-nextjs-app-support@npm:0.4.2"
+"@apollo/experimental-nextjs-app-support@npm:0.4.3":
+  version: 0.4.3
+  resolution: "@apollo/experimental-nextjs-app-support@npm:0.4.3"
   dependencies:
     server-only: ^0.0.1
     superjson: ^1.12.2
@@ -171,7 +171,7 @@ __metadata:
     "@apollo/client": ">=3.8.0-rc || ^3.8.0"
     next: ^13.4.1
     react: ^18
-  checksum: 854d2cc2db9a60d8f7072bf2f476b3524875e8674f7f3acb581f00ae1319508fb0d2b52d1e151d9ea37946ae46595e924bd568b9e1aa628c99473ae6a1978cf4
+  checksum: ab4b6c316a2a37b1afc80391640c3273964e57e84987331ef3a3e0e4b2a20b89d7eccb266fcaf9a4f9e926f990d63c7e5f0155494cc8478c205dcd0c37ca8499
   languageName: node
   linkType: hard
 
@@ -9031,7 +9031,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/studio@workspace:packages/studio"
   dependencies:
-    "@apollo/client": 3.8.4
+    "@apollo/client": 3.8.5
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.1
@@ -9248,8 +9248,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.8.4
-    "@apollo/experimental-nextjs-app-support": 0.4.2
+    "@apollo/client": 3.8.5
+    "@apollo/experimental-nextjs-app-support": 0.4.3
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.1

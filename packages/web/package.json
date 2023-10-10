@@ -35,7 +35,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@apollo/client": "3.8.4",
+    "@apollo/client": "3.8.5",
     "@babel/runtime-corejs3": "7.23.1",
     "@redwoodjs/auth": "6.0.7",
     "core-js": "3.32.2",
@@ -48,7 +48,7 @@
     "ts-toolbelt": "9.6.0"
   },
   "devDependencies": {
-    "@apollo/experimental-nextjs-app-support": "0.4.2",
+    "@apollo/experimental-nextjs-app-support": "0.4.3",
     "@babel/cli": "7.23.0",
     "@babel/core": "^7.22.20",
     "@testing-library/jest-dom": "5.16.5",
