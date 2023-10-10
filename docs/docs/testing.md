@@ -274,6 +274,7 @@ render(<Article article={ title: 'Foobar' } />, {
 })
 ```
 :::
+
 ### Mocking useLocation
 
 To mock `useLocation` in your component tests, wrap the component with `LocationProvider`:
@@ -287,6 +288,22 @@ render(
   </LocationProvider>
 )
 ```
+
+### Mocking useParams
+
+To mock `useParams` in your component tests, wrap the component with `ParamsProvider`:
+
+```jsx
+import { ParamsProvider } from '@redwoodjs/router';
+
+render(
+  <ParamsProvider allParams={{ param1: 'val1', param2: 'val2' }}>
+    <Component />
+  </ParamsProvider>
+)
+```
+
+The `allParams` argument accepts an object that will provide parameters as you expect them from the query parameters of a URL string. In the above example, we are assuming the URL looks like `/?param1=val1&param2=val2`.
 
 ### Queries
 
