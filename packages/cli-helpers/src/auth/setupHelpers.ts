@@ -52,7 +52,7 @@ interface Args {
   webAuthn?: boolean
   webPackages?: string[]
   apiPackages?: string[]
-  extraTask?: ListrTask<AuthGeneratorCtx>
+  extraTasks?: ListrTask<AuthGeneratorCtx>[]
   notes?: string[]
   verbose?: boolean
 }
@@ -65,8 +65,8 @@ function truthy<T>(value: T): value is Truthy<T> {
 }
 
 /**
- *  basedir assumes that you must have a templates folder in that directory.
- *  See folder structure of auth providers in packages/auth-providers/<provider>/setup/src
+ * basedir assumes that you must have a templates folder in that directory.
+ * See folder structure of auth providers in packages/auth-providers/<provider>/setup/src
  */
 export const standardAuthHandler = async ({
   basedir,
@@ -76,7 +76,7 @@ export const standardAuthHandler = async ({
   webAuthn = false,
   webPackages = [],
   apiPackages = [],
-  extraTask,
+  extraTasks,
   notes,
   verbose,
 }: Args) => {
@@ -98,7 +98,7 @@ export const standardAuthHandler = async ({
       webPackages.length && addWebPackages(webPackages),
       apiPackages.length && addApiPackages(apiPackages),
       (webPackages.length || apiPackages.length) && installPackages,
-      extraTask,
+      ...(extraTasks || []),
       notes && {
         title: 'One more thing...',
         task: (ctx: AuthGeneratorCtx) => {

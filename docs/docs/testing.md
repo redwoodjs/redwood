@@ -1131,9 +1131,9 @@ export default NameForm
 
 Now, we can extend the `test` file which Redwood generated. We're going to want to:
 
-1) Import `waitFor` from the `@redwoodjs/testing/web` library.
-2) Add an import to `@testing-library/user-event` for its `default`.
-3) Provide an `onSubmit` prop to our "renders successfully" test.
+1. Import `waitFor` from the `@redwoodjs/testing/web` library.
+2. Add an import to `@testing-library/user-event` for its `default`.
+3. Provide an `onSubmit` prop to our "renders successfully" test.
 
 ```jsx title="NameForm.test.js"
 import { render, screen, waitFor } from '@redwoodjs/testing/web'
@@ -1154,9 +1154,9 @@ describe('NameForm', () => {
 
 Finally, we'll create three simple tests which ensure our form works as expected.
 
-1) Does our component NOT submit when required fields are empty?
-2) Does our component submit when required fields are populated?
-3) Does our component submit, passing our (submit) handler the data we entered?
+1. Does our component NOT submit when required fields are empty?
+2. Does our component submit when required fields are populated?
+3. Does our component submit, passing our (submit) handler the data we entered?
 
 The important takeaways are:
 
