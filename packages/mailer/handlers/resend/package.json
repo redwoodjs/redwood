@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/mailer-handler-resend",
-  "version": "6.3.1",
+  "version": "6.3.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -24,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/mailer-core": "6.3.1",
+    "@redwoodjs/mailer-core": "6.3.2",
     "resend": "1.0.0"
   },
   "devDependencies": {
