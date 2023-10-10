@@ -131,6 +131,10 @@ export type GraphQLClientConfigProp = Omit<
    * - the `HttpLink` should come last (https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link)
    */
   link?: apolloClient.ApolloLink | RedwoodApolloLinkFactory
+  /**
+   * Use persisted operations aka queries (https://www.apollographql.com/docs/apollo-server/performance/apq/#client-configuration).
+   */
+  persistedOperations?: boolean
 }
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
@@ -246,7 +250,9 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     { name: 'updateDataApolloLink', link: updateDataApolloLink },
     {
       name: 'terminatingLink',
-      link: persistedQueryLink.concat(terminatingLink),
+      link: config.persistedOperations
+        ? persistedQueryLink.concat(terminatingLink)
+        : terminatingLink,
     },
   ]
 
