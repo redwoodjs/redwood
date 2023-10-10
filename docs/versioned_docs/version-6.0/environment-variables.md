@@ -33,6 +33,10 @@ In production, you can get environment variables to the Web Side either by
 
 Just like for the API Side, you'll also have to set them up with your provider.
 
+> **Build and runtime environments**
+>
+> For security, hosting providers distinguish between build and runtime environments for configuring environment variables. Remember to define variables for the web side as build-time and those for the API side as runtime.
+
 #### Option 1: includeEnvironmentVariables in redwood.toml
 
 For Example:
