@@ -171,6 +171,7 @@ describe('paths', () => {
           entryClient: null,
           entryServer: null,
           entries: null,
+          graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
         },
       }
 
@@ -437,6 +438,7 @@ describe('paths', () => {
             'entries.js'
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
+          graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
           // New Vite paths
           viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
           entryClient: null, // doesn't exist in example-todo-main
@@ -757,6 +759,7 @@ describe('paths', () => {
             'entries.js'
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
+          graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
         },
       }
 
@@ -1028,6 +1031,7 @@ describe('paths', () => {
             'entries.js'
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
+          graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
           // Vite paths
           viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
           entryClient: path.join(FIXTURE_BASEDIR, 'web/src/entry.client.tsx'),

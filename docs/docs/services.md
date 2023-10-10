@@ -60,7 +60,7 @@ export const createUser = async ({ input }) => {
       throw 'Only Admins can create new Managers'
     }
   })
-  validateWith(async () => {
+  await validateWith(async () => {
     const inviteCount = await db.invites.count({ where: { userId: currentUser.id  } })
     if (inviteCount >= 10) {
       throw 'You have already invited your max of 10 users'
@@ -624,6 +624,12 @@ validate(input.value, 'Value', {
 validateWithSync(() => {
   if (input.name === 'Name') {
     throw "You'll have to be more creative than that"
+  }
+})
+
+validateWithSync(() => {
+  if (input.name === 'Name') {
+    throw new Error("You'll have to be more creative than that")
   }
 })
 ```

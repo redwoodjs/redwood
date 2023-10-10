@@ -1,3 +1,5 @@
+import path from 'node:path'
+
 import CryptoJS from 'crypto-js'
 
 import { DbAuthHandler } from '../DbAuthHandler'
@@ -82,6 +84,19 @@ const UUID_REGEX =
 const SET_SESSION_REGEX = /^session=[a-zA-Z0-9+=/]+;/
 const UTC_DATE_REGEX = /\w{3}, \d{2} \w{3} \d{4} [\d:]{8} GMT/
 const LOGOUT_COOKIE = 'session=;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
+
+const FIXTURE_PATH = path.resolve(
+  __dirname,
+  '../../../../../../__fixtures__/example-todo-main'
+)
+
+beforeAll(() => {
+  process.env.RWJS_CWD = FIXTURE_PATH
+})
+
+afterAll(() => {
+  delete process.env.RWJS_CWD
+})
 
 const createDbUser = async (attributes = {}) => {
   return await db.user.create({
@@ -189,6 +204,9 @@ describe('dbAuth', () => {
           transports: 'transports',
           counter: 'counter',
         },
+      },
+      cookie: {
+        name: 'session',
       },
     }
   })
@@ -2068,11 +2086,13 @@ describe('dbAuth', () => {
         {
           ...options,
           cookie: {
-            Path: '/',
-            HttpOnly: true,
-            SameSite: 'Strict',
-            Secure: true,
-            Domain: 'example.com',
+            attributes: {
+              Path: '/',
+              HttpOnly: true,
+              SameSite: 'Strict',
+              Secure: true,
+              Domain: 'example.com',
+            },
           },
         }
       )
