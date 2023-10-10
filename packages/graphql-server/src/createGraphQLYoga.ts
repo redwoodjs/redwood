@@ -144,7 +144,7 @@ export const createGraphQLYoga = ({
       useFilterAllowedOperations(allowedOperations || defaultAllowedOperations)
     )
 
-    if (persistedOperations && !persistedOperations.isDev) {
+    if (persistedOperations && !persistedOperations.disabled) {
       plugins.push(useRedwoodPersistedOperations(persistedOperations))
     }
 

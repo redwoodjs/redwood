@@ -5,7 +5,7 @@ import type { RedwoodGraphQLContext } from '../types'
 
 export type RedwoodPersistedOperationsOptions = {
   store: Record<string, string>
-  isDev?: boolean
+  disabled?: boolean
 }
 
 export const useRedwoodPersistedOperations = (
