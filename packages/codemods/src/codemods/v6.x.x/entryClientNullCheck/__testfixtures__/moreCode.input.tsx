@@ -9,10 +9,11 @@ import App from './App'
  */
 const redwoodAppElement = document.getElementById('redwood-app')
 
-if (!redwoodAppElement) {
-  throw new Error(
-    "Could not find an element with ID 'redwood-app'. Please ensure it exists in your 'web/src/index.html' file."
-  )
+// Some random additional user code
+if(Math.random() > 0.5){
+  console.log("Some random code execution...")
+}else{
+  console.log("There are", redwoodAppElement.children?.length, "div children in the redwood-app element.")
 }
 
 if (redwoodAppElement.children?.length > 0) {
