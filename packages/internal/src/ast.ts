@@ -41,6 +41,10 @@ export const fileToAst = (filePath: string): types.Node => {
 interface NamedExports {
   name: string
   type: 're-export' | 'variable' | 'function' | 'class'
+  location: {
+    line: number
+    column: number
+  }
 }
 /**
  * get all the named exports in a given piece of code.
@@ -58,6 +62,10 @@ export const getNamedExports = (ast: types.Node): NamedExports[] => {
           namedExports.push({
             name: id.name,
             type: 're-export',
+            location: {
+              line: id.loc?.start.line ?? 1,
+              column: id.loc?.start.column ?? 0,
+            },
           })
         }
         return
@@ -73,16 +81,28 @@ export const getNamedExports = (ast: types.Node): NamedExports[] => {
         namedExports.push({
           name: id.name as string,
           type: 'variable',
+          location: {
+            line: id.loc?.start.line ?? 1,
+            column: id.loc?.start.column ?? 0,
+          },
         })
       } else if (declaration.type === 'FunctionDeclaration') {
         namedExports.push({
           name: declaration?.id?.name as string,
           type: 'function',
+          location: {
+            line: declaration?.id?.loc?.start.line ?? 1,
+            column: declaration?.id?.loc?.start.column ?? 0,
+          },
         })
       } else if (declaration.type === 'ClassDeclaration') {
         namedExports.push({
           name: declaration?.id?.name as string,
           type: 'class',
+          location: {
+            line: declaration?.id?.loc?.start.line ?? 1,
+            column: declaration?.id?.loc?.start.column ?? 0,
+          },
         })
       }
     },

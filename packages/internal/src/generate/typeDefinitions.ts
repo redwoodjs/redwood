@@ -5,7 +5,12 @@ import { SourceMapGenerator } from 'source-map'
 
 import { getPaths, processPagesDir } from '@redwoodjs/project-config'
 
-import { getCellGqlQuery, fileToAst, getDefaultExportLocation } from '../ast'
+import {
+  getCellGqlQuery,
+  fileToAst,
+  getDefaultExportLocation,
+  getNamedExports,
+} from '../ast'
 import { findCells, findDirectoryNamedModules } from '../files'
 import { parseGqlQueryToAst } from '../gql'
 import { getJsxElements } from '../jsx'
@@ -184,8 +189,18 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
 
   // We add a source map to allow "go to definition" to avoid ending in the .d.ts file
   // Unlike pages, layouts, components etc. there is no clear definition location so we link
-  // to the head of the file
+  // to the Success component
   try {
+    // Get the location of the Success component
+    const exportedComponents = getNamedExports(fileContents)
+    const successComponent = exportedComponents.find(
+      (x) => x.name === 'Success'
+    )
+    if (successComponent === undefined) {
+      throw new Error('No Success component found')
+    }
+
+    // Generate the map
     const map = new SourceMapGenerator({
       file: 'index.d.ts',
     })
@@ -195,10 +210,7 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
         column: 0,
       },
       source: path.relative(path.dirname(typeDefPath), p),
-      original: {
-        line: 1,
-        column: 0,
-      },
+      original: successComponent.location,
     })
     fs.writeFileSync(
       `${typeDefPath}.map`,
