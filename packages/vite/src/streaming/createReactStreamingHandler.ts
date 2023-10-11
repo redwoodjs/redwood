@@ -1,16 +1,16 @@
 import path from 'path'
 
-import type { Request, Response } from 'express'
 import isbot from 'isbot'
 import type { ViteDevServer } from 'vite'
 
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
+import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
 // import { stripQueryStringAndHashFromPath } from '../utils'
 
-import { reactRenderToStream } from './streamHelpers'
+import { reactRenderToStreamResponse } from './streamHelpers'
 import { loadAndRunRouteHooks } from './triggerRouteHooks'
 
 interface CreateReactStreamingHandlerOptions {
@@ -37,9 +37,15 @@ export const createReactStreamingHandler = async (
     entryServerImport = await import(rwPaths.web.distEntryServer)
   }
 
-  return async (req: Request, res: Response) => {
+  // @NOTE: we are returning a FetchAPI handler
+  return async (req: Request) => {
     if (redirect) {
-      res.redirect(redirect.to)
+      return new Response(null, {
+        status: 302,
+        headers: {
+          Location: redirect.to,
+        },
+      })
     }
 
     // Do this inside the handler for **dev-only**.
@@ -53,7 +59,10 @@ export const createReactStreamingHandler = async (
     const ServerEntry =
       entryServerImport.ServerEntry || entryServerImport.default
 
-    const currentPathName = req.path
+    const { pathname: currentPathName } = new URL(req.url)
+
+    // @TODO validate this is correct
+    const parsedParams = matchPath(route.pathDefinition, currentPathName)
 
     let metaTags: TagDescriptor[] = []
 
@@ -70,7 +79,7 @@ export const createReactStreamingHandler = async (
       paths: [getAppRouteHook(isProd), routeHookPath],
       reqMeta: {
         req,
-        parsedParams: req.params,
+        parsedParams,
       },
       viteDevServer,
     })
@@ -82,9 +91,11 @@ export const createReactStreamingHandler = async (
       bundle && '/' + bundle,
     ].filter(Boolean) as string[]
 
-    const isSeoCrawler = checkUaForSeoCrawler(req.headers['user-agent'] || '')
+    const isSeoCrawler = checkUaForSeoCrawler(
+      req.headers.get('user-agent') || ''
+    )
 
-    reactRenderToStream(
+    const reactResponse = await reactRenderToStreamResponse(
       {
         ServerEntry,
         currentPathName,
@@ -92,11 +103,12 @@ export const createReactStreamingHandler = async (
         cssLinks,
         isProd,
         jsBundles,
-        res,
       },
       {
         waitForAllReady: isSeoCrawler,
       }
     )
+
+    return reactResponse
   }
 }

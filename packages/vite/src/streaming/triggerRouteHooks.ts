@@ -1,6 +1,6 @@
-import type { Request } from 'express'
 import type { ViteDevServer } from 'vite'
 
+import { parseSearch } from '@redwoodjs/router'
 import type {
   MetaHook,
   RouteHookEvent,
@@ -28,7 +28,7 @@ export const triggerRouteHooks = async ({
   const event: RouteHookEvent = {
     params: parsedParams,
     headers: req.headers || {},
-    query: req.query as any, // TODO (STREAMING) we should parse query parameters the same way as RW router
+    query: parseSearch(req.url),
     // cookies: req.cookies || {}, // TODO (STREAMING) we probably need some sort of cookie parser
     // TODO (STREAMING) called app routeHook, but its just the previous output
     appRouteHook: previousOutput,

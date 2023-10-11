@@ -1,5 +1,4 @@
-// TODO (STREAMING) Merge with runFeServer so we only have one file
-
+import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
 import { createServer as createViteServer } from 'vite'
 
@@ -81,7 +80,7 @@ async function createServer() {
       ? route.matchRegexString
       : route.pathDefinition
 
-    app.get(expressPathDef, routeHandler)
+    app.get(expressPathDef, createServerAdapter(routeHandler))
   }
 
   const port = getConfig().web.port

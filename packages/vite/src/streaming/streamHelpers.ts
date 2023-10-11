@@ -1,18 +1,16 @@
 import path from 'node:path'
-import { Writable } from 'node:stream'
 
 import React from 'react'
 
-import { renderToPipeableStream, renderToString } from 'react-dom/server'
-
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
-import type { RenderCallback } from '@redwoodjs/web/dist/components/ServerInject'
 import {
   ServerHtmlProvider,
-  ServerInjectedHtml,
   createInjector,
 } from '@redwoodjs/web/dist/components/ServerInject'
+
+import { createBufferedTransformStream } from './transforms/bufferedTransform'
+import { createServerInjectionTransform } from './transforms/serverInjectionTransform'
 
 interface RenderToStreamArgs {
   ServerEntry: any
@@ -21,14 +19,13 @@ interface RenderToStreamArgs {
   cssLinks: string[]
   isProd: boolean
   jsBundles?: string[]
-  res: Writable
 }
 
 interface StreamOptions {
   waitForAllReady?: boolean
 }
 
-export function reactRenderToStream(
+export async function reactRenderToStreamResponse(
   renderOptions: RenderToStreamArgs,
   streamOptions: StreamOptions
 ) {
@@ -40,7 +37,6 @@ export function reactRenderToStream(
     cssLinks,
     isProd,
     jsBundles = [],
-    res,
   } = renderOptions
 
   if (!isProd) {
@@ -56,116 +52,67 @@ export function reactRenderToStream(
   // This ensures an isolated state for each request
   const { injectionState, injectToPage } = createInjector()
 
-  // This is effectively a transformer stream
-  const intermediateStream = createServerInjectionStream({
-    outputStream: res,
+  // This makes it safe for us to inject at any point in the stream
+  const bufferedTransformStream = createBufferedTransformStream()
+  console.log(bufferedTransformStream !== undefined)
+
+  // This is a transformer stream, that will inject all things called with useServerInsertedHtml
+  const serverInjectionTransformer = createServerInjectionTransform({
     injectionState,
   })
+  console.log(serverInjectionTransformer !== undefined)
 
-  const { pipe } = renderToPipeableStream(
-    React.createElement(
-      ServerHtmlProvider,
-      {
-        value: injectToPage,
-      },
-      ServerEntry({
-        url: currentPathName,
-        css: cssLinks,
-        meta: metaTags,
-      })
-    ),
+  // @ts-expect-error Something in React's packages mean types dont come through
+  // Possible that we need to upgrade the @types/* packages
+  const { renderToReadableStream } = await import('react-dom/server.edge')
+
+  const root = React.createElement(
+    ServerHtmlProvider,
     {
+      value: injectToPage,
+    },
+    ServerEntry({
+      url: currentPathName,
+      css: cssLinks,
+      meta: metaTags,
+    })
+  )
+
+  try {
+    const reactStream = await renderToReadableStream(root, {
       bootstrapScriptContent:
         // Only insert assetMap if clientside JS will be loaded
         jsBundles.length > 0
           ? `window.__REDWOOD__ASSET_MAP = ${assetMap}`
           : undefined,
       bootstrapModules: jsBundles,
-      onShellReady() {
-        // Pass the react "input" stream to the injection stream
-        // This intermediate stream will interweave the injected html into the react stream's <head>
+      onError: (err: any) => {
+        // @TODO status code
+        // @TODO error handling
+        console.error('🔻 Failed to render in onErr block')
+        console.error(err)
+      },
+    })
 
-        if (!waitForAllReady) {
-          pipe(intermediateStream)
-        }
-      },
-      onAllReady() {
-        if (waitForAllReady) {
-          pipe(intermediateStream)
-        }
-      },
+    const output = reactStream
+      .pipeThrough(bufferedTransformStream)
+      .pipeThrough(serverInjectionTransformer)
+
+    if (waitForAllReady) {
+      await reactStream.allReady
     }
-  )
-}
 
-function createServerInjectionStream({
-  outputStream,
-  injectionState,
-}: {
-  outputStream: Writable
-  injectionState: Set<RenderCallback>
-}) {
-  return new Writable({
-    write(chunk, encoding, next) {
-      const chunkAsString = chunk.toString()
-      const split = chunkAsString.split('</head>')
+    // @TODO status code
+    // @TODO error handling
+    return new Response(output, {
+      headers: { 'content-type': 'text/html' },
+    })
+  } catch (e) {
+    console.error('🔻 Failed to render')
+    console.error(e)
 
-      // If the closing tag exists
-      if (split.length > 1) {
-        const [beforeClosingHead, afterClosingHead] = split
-
-        const elementsInjectedToHead = renderToString(
-          React.createElement(ServerInjectedHtml, {
-            injectionState,
-          })
-        )
-
-        const outputBuffer = Buffer.from(
-          [
-            beforeClosingHead,
-            elementsInjectedToHead,
-            '</head>',
-            afterClosingHead,
-          ].join('')
-        )
-
-        outputStream.write(outputBuffer, encoding)
-      } else {
-        outputStream.write(chunk, encoding)
-      }
-
-      next()
-    },
-    final() {
-      // Before finishing, make sure we flush anything else that has been added to the queue
-      // Because of the implementation in ServerRenderHtml, its safe to call this multiple times (I think!)
-      // This is really for the data fetching usecase, where the promise is resolved after <head> is closed
-      const elementsAtTheEnd = renderToString(
-        React.createElement(ServerInjectedHtml, {
-          injectionState,
-        })
-      )
-
-      outputStream.write(elementsAtTheEnd)
-
-      // This will find all the elements added by PortalHead during a server render, and move them into <head>
-      // @TODO remove the whitespace to save them bytes later
-      outputStream.write(`<script>document.querySelectorAll('body [data-rwjs-head]').forEach((el) => {
-        document.querySelectorAll('head ' + el.tagName).forEach((e) => {
-          if (
-            el.tagName === 'TITLE' ||
-            (el.tagName === 'META' &&
-              el.getAttribute('name') === e.getAttribute('name') &&
-              el.getAttribute('property') === e.getAttribute('property'))
-          ) {
-            e.remove();
-          }
-          document.head.appendChild(el);
-        });
-      });
-        </script>`)
-
-      outputStream.end()
-    },
-  })
+    return new Response('Failed to render', {
+      status: 500,
+    })
+  }
 }
