@@ -8,6 +8,10 @@ interface JsxElement {
   name: string
   props: Record<string, any>
   children?: JsxElement[]
+  location: {
+    line: number
+    column: number
+  }
 }
 /**
  * Extract JSX elements, children and props from static code.
@@ -62,6 +66,10 @@ const reduceJsxElement = (oldNode: JsxElement[], currentNode: types.Node) => {
     name: '',
     props: {},
     children: [],
+    location: {
+      line: 1,
+      column: 0,
+    },
   }
 
   if (currentNode.type === 'JSXElement') {
@@ -72,6 +80,10 @@ const reduceJsxElement = (oldNode: JsxElement[], currentNode: types.Node) => {
         name: currentNode.openingElement.name.name,
         props,
         children: [],
+        location: {
+          line: currentNode.openingElement.loc?.start.line ?? 1,
+          column: currentNode.openingElement.loc?.start.column ?? 0,
+        },
       }
       oldNode.push(element)
     }

@@ -18,7 +18,9 @@ interface Opts {
   apiHost?: string
 }
 
-export async function serve() {
+// no help option...
+
+async function serve() {
   // Parse server file args
   const args = yargsParser(process.argv.slice(2), {
     string: ['port', 'socket', 'apiHost'],
