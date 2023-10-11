@@ -15,6 +15,13 @@ if (!redwoodAppElement) {
   )
 }
 
+// Some user is already checking for null
+if(redwoodAppElement === null){
+  throw new Error(
+    "Opps I must have changed the div name or deleted the div completely!"
+  )
+}
+
 if (redwoodAppElement.children?.length > 0) {
   hydrateRoot(redwoodAppElement, <App />)
 } else {
