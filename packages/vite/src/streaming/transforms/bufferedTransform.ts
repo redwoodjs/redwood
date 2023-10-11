@@ -1,6 +1,4 @@
-import { decodeText } from './encode-decode'
-
-// @TODO: we may need to swithc it out for running on edge like next.js
+// @TODO: we may need to switch it out for running on edge like next.js
 const queueTask = setImmediate
 
 export function createBufferedTransformStream() {
@@ -13,7 +11,6 @@ export function createBufferedTransformStream() {
     if (!pendingFlush) {
       pendingFlush = new Promise<void>((resolve) => {
         queueTask(() => {
-          console.log('In queue task', decodeText(bufferedBytes))
           controller.enqueue(bufferedBytes)
           bufferedBytes = new Uint8Array()
           pendingFlush = null
@@ -25,11 +22,12 @@ export function createBufferedTransformStream() {
 
   return new TransformStream({
     transform(chunk, controller) {
-      console.log('🟢🟢🟢')
       const newBufferedBytes = new Uint8Array(
-        bufferedBytes.length + chunk.byteLength
+        bufferedBytes.length + chunk.length
       )
+
       newBufferedBytes.set(bufferedBytes)
+      // @NOTE: offset here is the second param
       newBufferedBytes.set(chunk, bufferedBytes.length)
       bufferedBytes = newBufferedBytes
       flushBuffer(controller)
