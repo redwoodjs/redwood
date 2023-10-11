@@ -54,13 +54,11 @@ export async function reactRenderToStreamResponse(
 
   // This makes it safe for us to inject at any point in the stream
   const bufferedTransformStream = createBufferedTransformStream()
-  console.log(bufferedTransformStream !== undefined)
 
   // This is a transformer stream, that will inject all things called with useServerInsertedHtml
   const serverInjectionTransformer = createServerInjectionTransform({
     injectionState,
   })
-  console.log(serverInjectionTransformer !== undefined)
 
   // @ts-expect-error Something in React's packages mean types dont come through
   // Possible that we need to upgrade the @types/* packages

@@ -76,6 +76,7 @@ async function createServer() {
       continue
     }
 
+    // @TODO we no longer need to use the regex
     const expressPathDef = route.hasParams
       ? route.matchRegexString
       : route.pathDefinition
