@@ -727,7 +727,7 @@ handlePrismaLogging({
 
 ### Prisma Client Extensions
 
-Because [$on and $use are not available in extended clients](https://www.prisma.io/docs/concepts/components/prisma-client/client-extensions#usage-of-on-and-use-with-extended-clients), if you would like to continue using these client-level methods with an extended client, you will need to hook them up before [extending the client](https://www.prisma.io/docs/concepts/components/prisma-client/client-extensions#extended-clients.
+Because [$on and $use are not available in extended clients](https://www.prisma.io/docs/concepts/components/prisma-client/client-extensions#usage-of-on-and-use-with-extended-clients), if you would like to continue using these client-level methods with an extended client, you will need to hook them up before [extending the client](https://www.prisma.io/docs/concepts/components/prisma-client/client-extensions#extended-clients).
 
 This requires a slight change to how your Prisma client is created, logging added, and then the `db` is exported.
 
