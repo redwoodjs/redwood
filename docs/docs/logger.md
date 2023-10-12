@@ -775,7 +775,7 @@ export const db = client.$extends({
 })
 ```
 
-Now the Prisma client will log the designated emited log levels as well as invoke the client extension:
+Now the Prisma client will log the specified emitted log levels as well as invoke the client extension:
 
 ```bash
 api | 17:19:07 🐛 graphql-server GraphQL execution started: FindUserExamples2
