@@ -124,9 +124,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.8.4":
-  version: 3.8.4
-  resolution: "@apollo/client@npm:3.8.4"
+"@apollo/client@npm:3.8.5":
+  version: 3.8.5
+  resolution: "@apollo/client@npm:3.8.5"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.3
@@ -156,13 +156,13 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 36b8cb05da30fffb795d8bb970cdbc32f5f3b421ebe5874d7681a907bd4aa6ca7b01144b480299e309e207754f77d1f72b55b05e15bd488248242fafdd76dcd3
+  checksum: 70a054ffc4518dd2b88b2d76018c1c3a68474c7d4edb96cc85f4a879d8345afa992b2a041157b36f01c32a2221d8ae79f395e5a41969755291eb8accd719b9d1
   languageName: node
   linkType: hard
 
-"@apollo/experimental-nextjs-app-support@npm:0.4.2":
-  version: 0.4.2
-  resolution: "@apollo/experimental-nextjs-app-support@npm:0.4.2"
+"@apollo/experimental-nextjs-app-support@npm:0.4.3":
+  version: 0.4.3
+  resolution: "@apollo/experimental-nextjs-app-support@npm:0.4.3"
   dependencies:
     server-only: ^0.0.1
     superjson: ^1.12.2
@@ -171,7 +171,7 @@ __metadata:
     "@apollo/client": ">=3.8.0-rc || ^3.8.0"
     next: ^13.4.1
     react: ^18
-  checksum: 854d2cc2db9a60d8f7072bf2f476b3524875e8674f7f3acb581f00ae1319508fb0d2b52d1e151d9ea37946ae46595e924bd568b9e1aa628c99473ae6a1978cf4
+  checksum: ab4b6c316a2a37b1afc80391640c3273964e57e84987331ef3a3e0e4b2a20b89d7eccb266fcaf9a4f9e926f990d63c7e5f0155494cc8478c205dcd0c37ca8499
   languageName: node
   linkType: hard
 
@@ -2983,9 +2983,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/static@npm:6.11.1":
-  version: 6.11.1
-  resolution: "@fastify/static@npm:6.11.1"
+"@fastify/static@npm:6.11.2":
+  version: 6.11.2
+  resolution: "@fastify/static@npm:6.11.2"
   dependencies:
     "@fastify/accept-negotiator": ^1.0.0
     "@fastify/send": ^2.0.0
@@ -2993,7 +2993,7 @@ __metadata:
     fastify-plugin: ^4.0.0
     glob: ^8.0.1
     p-limit: ^3.1.0
-  checksum: 0068660160c3584039c121b606e691bcf4eac76d142f53440fdc78a0ddbb4359b0da7db1cc8b64b81aad099ce860766643f7d31dd00c53c137ce3fcf748ea0fa
+  checksum: dac6d0d611656770c276d594e26e1df0da3a2f81e54593317d4aedd8ac23fb0e7f43b08360d606bf3b9a0f9ba1ab0be55d63eac4322d0429721e822f8e1c2ef6
   languageName: node
   linkType: hard
 
@@ -3088,16 +3088,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/app-compat@npm:0.2.17":
-  version: 0.2.17
-  resolution: "@firebase/app-compat@npm:0.2.17"
+"@firebase/app-compat@npm:0.2.19":
+  version: 0.2.19
+  resolution: "@firebase/app-compat@npm:0.2.19"
   dependencies:
-    "@firebase/app": 0.9.17
+    "@firebase/app": 0.9.19
     "@firebase/component": 0.6.4
     "@firebase/logger": 0.4.0
     "@firebase/util": 1.9.3
     tslib: ^2.1.0
-  checksum: 5a5e6574f3847873900c2e863b139b58a88534960082d7228d9701dd0711081484381d09d7d14fb0060c9df2b4ebc4f62f2b0f43c3c876ec7fc45ab6b137cd7c
+  checksum: 6be45bfe3ae9ccaa41bbf0faac778171fe816412fd3939d879ff1cdafafa2107491e4979d3b5f338d1561e11bf145fc5bb4b1841a48480b3024ef988991f648e
   languageName: node
   linkType: hard
 
@@ -3108,16 +3108,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/app@npm:0.9.17":
-  version: 0.9.17
-  resolution: "@firebase/app@npm:0.9.17"
+"@firebase/app@npm:0.9.19":
+  version: 0.9.19
+  resolution: "@firebase/app@npm:0.9.19"
   dependencies:
     "@firebase/component": 0.6.4
     "@firebase/logger": 0.4.0
     "@firebase/util": 1.9.3
     idb: 7.1.1
     tslib: ^2.1.0
-  checksum: cc5b86c673d90d053ef8f2179ef0d7dde5f2a23e3ec80b74cb419cf5a552080e62648032e4f4c0a1e1addfa4da395cce721c7383a2fb948c744611f64170dca6
+  checksum: 1d459261d11c6868d8a584bdfc763792f603cea8459790e1c17edcb88aa64cfe8db5a7743c934d70a05e9a9537214eeb36f8310ef091c47aacf7daf506f7e699
   languageName: node
   linkType: hard
 
@@ -3259,18 +3259,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/firestore-compat@npm:0.3.16":
-  version: 0.3.16
-  resolution: "@firebase/firestore-compat@npm:0.3.16"
+"@firebase/firestore-compat@npm:0.3.18":
+  version: 0.3.18
+  resolution: "@firebase/firestore-compat@npm:0.3.18"
   dependencies:
     "@firebase/component": 0.6.4
-    "@firebase/firestore": 4.1.2
+    "@firebase/firestore": 4.2.0
     "@firebase/firestore-types": 3.0.0
     "@firebase/util": 1.9.3
     tslib: ^2.1.0
   peerDependencies:
     "@firebase/app-compat": 0.x
-  checksum: 143d033364c1ba3ee5ddc6c3493bf9edc0ad09a41a5b92593efec06462bfce8648de18d0ca01c7b9e39f198fb03ad82f4b31d95df9e6b038985f57cdf11b4034
+  checksum: 433738e3e97ff0b8b394bb8e2c8d8f1a22332b3f78886e888331ed6b845080582ebb20b18b2817c4fc26009033a425efd0f9522743a7a503ddd231d4f9d74920
   languageName: node
   linkType: hard
 
@@ -3284,21 +3284,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/firestore@npm:4.1.2":
-  version: 4.1.2
-  resolution: "@firebase/firestore@npm:4.1.2"
+"@firebase/firestore@npm:4.2.0":
+  version: 4.2.0
+  resolution: "@firebase/firestore@npm:4.2.0"
   dependencies:
     "@firebase/component": 0.6.4
     "@firebase/logger": 0.4.0
     "@firebase/util": 1.9.3
-    "@firebase/webchannel-wrapper": 0.10.2
-    "@grpc/grpc-js": ~1.8.17
+    "@firebase/webchannel-wrapper": 0.10.3
+    "@grpc/grpc-js": ~1.9.0
     "@grpc/proto-loader": ^0.7.8
     node-fetch: 2.6.7
     tslib: ^2.1.0
   peerDependencies:
     "@firebase/app": 0.x
-  checksum: ce6eb50eb89a601bd1fb3de89ca44c1b6520f2832293bc0988916f67e4e40ac580206233428611b93df1d9a2292226877f3c9ce01f9eaa81ee76aa826d9abbe3
+  checksum: 27a8a5f08930a961b6b9e0565fc83b0cc3e85a7f6c64e96740b84aff84f4b5607ab6b0c95f11a1e74ea558dc5ef0446c79653c855091bff938c95544c20e6dcd
   languageName: node
   linkType: hard
 
@@ -3549,10 +3549,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/webchannel-wrapper@npm:0.10.2":
-  version: 0.10.2
-  resolution: "@firebase/webchannel-wrapper@npm:0.10.2"
-  checksum: f39e13282be6ea598bacd251b01cba908d2014db2025a4803f687608705ca99eea9974c0db6c59f9f41543bca08c70953576aad0e2f30fcab8cbad75aab04535
+"@firebase/webchannel-wrapper@npm:0.10.3":
+  version: 0.10.3
+  resolution: "@firebase/webchannel-wrapper@npm:0.10.3"
+  checksum: c4ff8be44b8760eb2d8b8842f39b970534706721e479a3ee69455613f0b1a6a7aaea77862512f275ed7219216229539c36d3276f9c2e79d5fcdb8b1a99f4f966
   languageName: node
   linkType: hard
 
@@ -4494,13 +4494,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grpc/grpc-js@npm:~1.8.0, @grpc/grpc-js@npm:~1.8.17":
+"@grpc/grpc-js@npm:~1.8.0":
   version: 1.8.20
   resolution: "@grpc/grpc-js@npm:1.8.20"
   dependencies:
     "@grpc/proto-loader": ^0.7.0
     "@types/node": ">=12.12.47"
   checksum: 296c415afedc2ae27e3741472df8520223e97d10c63a2a9fc482357e3f735430b4fc6e493ccf7efcc440ec7f752ce9f041b195d3b35a741f356a9e594113d175
+  languageName: node
+  linkType: hard
+
+"@grpc/grpc-js@npm:~1.9.0":
+  version: 1.9.3
+  resolution: "@grpc/grpc-js@npm:1.9.3"
+  dependencies:
+    "@grpc/proto-loader": ^0.7.8
+    "@types/node": ">=12.12.47"
+  checksum: 107fb38da26e68ba05f54a694cac2d9541bec2bbeacbbc981f766541587ab7ba06ae623fea7b732403c7c4500d157608fe9caad4c28b685640fe13332a77240a
   languageName: node
   linkType: hard
 
@@ -6156,10 +6166,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/api@npm:1.4.1, @opentelemetry/api@npm:^1.0.0, @opentelemetry/api@npm:^1.0.1":
+"@opentelemetry/api@npm:1.4.1":
   version: 1.4.1
   resolution: "@opentelemetry/api@npm:1.4.1"
   checksum: 5ee641d3d64c91e87ee328fc22251fc70c809a3c744e51e595ca77c0bd3cad933b77a79beb4dac66b811e5068941cef9da58c1ec217c0748a01f598e08a7ae66
+  languageName: node
+  linkType: hard
+
+"@opentelemetry/api@npm:1.6.0, @opentelemetry/api@npm:^1.0.0, @opentelemetry/api@npm:^1.0.1":
+  version: 1.6.0
+  resolution: "@opentelemetry/api@npm:1.6.0"
+  checksum: f419853358fdd7d9bad51dfeea5a676d7894e7983633448d1022b867e979bc28083181e000e477ee53efda97895dd6a357e15392ac39ac8dfdc42dd194e0f17e
   languageName: node
   linkType: hard
 
@@ -6609,51 +6626,51 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:5.3.1":
-  version: 5.3.1
-  resolution: "@prisma/client@npm:5.3.1"
+"@prisma/client@npm:5.4.2":
+  version: 5.4.2
+  resolution: "@prisma/client@npm:5.4.2"
   dependencies:
-    "@prisma/engines-version": 5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59
+    "@prisma/engines-version": 5.4.1-2.ac9d7041ed77bcc8a8dbd2ab6616b39013829574
   peerDependencies:
     prisma: "*"
   peerDependenciesMeta:
     prisma:
       optional: true
-  checksum: e75c2fb0d6fc972a0dfa4d45696c25f8d3561e85281d6d9ed7a98bf83f3d23ed3658afe0596c543b8dccbc8ede7888a989334993c1f5c3d2fe4fc3e713d54a8f
+  checksum: b681e95a323797461ebbf8e94a5058f814b915d637e7d49f19f6700e0748306357dc3c1f9d6ca8d3b8acb92ab4bef73a172aa36d047f7909aef8aa2d98dbc1c5
   languageName: node
   linkType: hard
 
-"@prisma/debug@npm:5.3.1":
-  version: 5.3.1
-  resolution: "@prisma/debug@npm:5.3.1"
+"@prisma/debug@npm:5.4.2":
+  version: 5.4.2
+  resolution: "@prisma/debug@npm:5.4.2"
   dependencies:
-    "@types/debug": 4.1.8
+    "@types/debug": 4.1.9
     debug: 4.3.4
     strip-ansi: 6.0.1
-  checksum: 8724c06cb47b21fea2c61d51cb85b1de05f87dd77cfc4e4d500de46f67200cc56694366fc249ad05c553e26c9e557d2508936df8a6670108e24af090c8022328
+  checksum: 80c4c86848f001875d950e06eb240eb3ff64e0c653dcd66afd0badbd9b9da78b35f3de9357ec45591c27897371060bd8410d7a703b8813de4885c4bc01d2dc54
   languageName: node
   linkType: hard
 
-"@prisma/engines-version@npm:5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59":
-  version: 5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59
-  resolution: "@prisma/engines-version@npm:5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59"
-  checksum: e0c363e68c2ce28c8e112ad1dac8074b2d186e1dc88dcbda1280b4dd07ae8efded3e4a46d7bed4615c8f189c4ae1bfc4360e3966ea63b7c3d3720d37075cf7cc
+"@prisma/engines-version@npm:5.4.1-2.ac9d7041ed77bcc8a8dbd2ab6616b39013829574":
+  version: 5.4.1-2.ac9d7041ed77bcc8a8dbd2ab6616b39013829574
+  resolution: "@prisma/engines-version@npm:5.4.1-2.ac9d7041ed77bcc8a8dbd2ab6616b39013829574"
+  checksum: 21bc6113c5d0322f18b6390ba0682fa4fd60f19cc9063dbe805274779e3442ff0af2a3d780b83b89a23714d5f7f3710c1ae3224382ab09627725005cb43705c6
   languageName: node
   linkType: hard
 
-"@prisma/engines@npm:5.3.1":
-  version: 5.3.1
-  resolution: "@prisma/engines@npm:5.3.1"
-  checksum: 17e5a80077a8ec58dd95cdf4204a6491329f98eba14b406abad24ceaab689277c82aab9a839745b077fda118f4e9b85a7f1c7787d308d0a09df990a03af823df
+"@prisma/engines@npm:5.4.2":
+  version: 5.4.2
+  resolution: "@prisma/engines@npm:5.4.2"
+  checksum: fa11b28ba53091b03c24d7353c293eff50e71b1e60494880701c5b259d9f874a5543e00a2172adf0cd618e9559b0eb6a38fe4a39aeda2740ae23a9545ab1ad9f
   languageName: node
   linkType: hard
 
-"@prisma/fetch-engine@npm:5.3.1":
-  version: 5.3.1
-  resolution: "@prisma/fetch-engine@npm:5.3.1"
+"@prisma/fetch-engine@npm:5.4.2":
+  version: 5.4.2
+  resolution: "@prisma/fetch-engine@npm:5.4.2"
   dependencies:
-    "@prisma/debug": 5.3.1
-    "@prisma/get-platform": 5.3.1
+    "@prisma/debug": 5.4.2
+    "@prisma/get-platform": 5.4.2
     execa: 5.1.1
     find-cache-dir: 3.3.2
     fs-extra: 11.1.1
@@ -6669,27 +6686,27 @@ __metadata:
     rimraf: 3.0.2
     temp-dir: 2.0.0
     tempy: 1.0.1
-  checksum: aff7f8a8869d848d3e7f4e035d690634942f4acb8144af5082eaa43537acfc50cb4a3dfc57fd9379885866ab6b278c24f3929755f512e1b8f2153194359a1cf2
+  checksum: 8c4fbde2e73c4d3e2d9d22a95d7190e362362bfddc241fdd7fd06de2a2c59ccf1203f5737f496901445d75448967fd9bcf0f91a6782feafddc1caf3dd891fff9
   languageName: node
   linkType: hard
 
-"@prisma/generator-helper@npm:5.3.1":
-  version: 5.3.1
-  resolution: "@prisma/generator-helper@npm:5.3.1"
+"@prisma/generator-helper@npm:5.4.2":
+  version: 5.4.2
+  resolution: "@prisma/generator-helper@npm:5.4.2"
   dependencies:
-    "@prisma/debug": 5.3.1
-    "@types/cross-spawn": 6.0.2
+    "@prisma/debug": 5.4.2
+    "@types/cross-spawn": 6.0.3
     cross-spawn: 7.0.3
     kleur: 4.1.5
-  checksum: 8b5969b2f8ba4366f3bd079f74920430c7a37b0f144d24f2fe1d6fc4016fdabbbb699ead895abececb15e3f58ec2f109d35c17a3a970f374f504c7aca1d2839c
+  checksum: 27d4d03ce8e38a9213d75bef9cd40b45777a40f20b72faaf7e580e5c0dc7979f114eafad2b8fcace24b70ff888219a575baa5bba995084ec4e1ddc2b0ab2b481
   languageName: node
   linkType: hard
 
-"@prisma/get-platform@npm:5.3.1":
-  version: 5.3.1
-  resolution: "@prisma/get-platform@npm:5.3.1"
+"@prisma/get-platform@npm:5.4.2":
+  version: 5.4.2
+  resolution: "@prisma/get-platform@npm:5.4.2"
   dependencies:
-    "@prisma/debug": 5.3.1
+    "@prisma/debug": 5.4.2
     escape-string-regexp: 4.0.0
     execa: 5.1.1
     fs-jetpack: 5.1.0
@@ -6699,22 +6716,22 @@ __metadata:
     tempy: 1.0.1
     terminal-link: 2.1.1
     ts-pattern: 4.3.0
-  checksum: 298749f3e3538f04168f680e61d7c57b046a268a583134955a479c9fa240c9baf6b35c450cd571fceb2bd7955dc14c468e01301b26c480bc0dcd70231b8c1144
+  checksum: e8cd04c684b08135428e2714263c8e094abc18bcd307de5aa612e1b8b37fb0651f610e56b7094c69024c1dc679e636d1522d8dd30e03cf5d86a489e1e199aa41
   languageName: node
   linkType: hard
 
-"@prisma/internals@npm:5.3.1":
-  version: 5.3.1
-  resolution: "@prisma/internals@npm:5.3.1"
+"@prisma/internals@npm:5.4.2":
+  version: 5.4.2
+  resolution: "@prisma/internals@npm:5.4.2"
   dependencies:
     "@antfu/ni": 0.21.8
-    "@opentelemetry/api": 1.4.1
-    "@prisma/debug": 5.3.1
-    "@prisma/engines": 5.3.1
-    "@prisma/fetch-engine": 5.3.1
-    "@prisma/generator-helper": 5.3.1
-    "@prisma/get-platform": 5.3.1
-    "@prisma/prisma-schema-wasm": 5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59
+    "@opentelemetry/api": 1.6.0
+    "@prisma/debug": 5.4.2
+    "@prisma/engines": 5.4.2
+    "@prisma/fetch-engine": 5.4.2
+    "@prisma/generator-helper": 5.4.2
+    "@prisma/get-platform": 5.4.2
+    "@prisma/prisma-schema-wasm": 5.4.1-2.ac9d7041ed77bcc8a8dbd2ab6616b39013829574
     archiver: 5.3.2
     arg: 5.0.2
     checkpoint-client: 1.1.27
@@ -6749,14 +6766,14 @@ __metadata:
     terminal-link: 2.1.1
     tmp: 0.2.1
     ts-pattern: 4.3.0
-  checksum: d2731e23f96c7236c69cf366c509dd41f32f2468fb2b7df5d3b0af71cb14eb5f7589a55bcee557a75b8ec0fa76f61613c3e39e05d10f39b2f5e017f2e9034a6e
+  checksum: 53597de1baa0c406d4aa8f74e07aa7ea388d374e4a391e21020d03f1c4a1985ce812d6ca38010ec2bdf8c21585fc2ece60ea7ee48136f86bc35515764ca421cb
   languageName: node
   linkType: hard
 
-"@prisma/prisma-schema-wasm@npm:5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59":
-  version: 5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59
-  resolution: "@prisma/prisma-schema-wasm@npm:5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59"
-  checksum: 3a2311acab6abae4ebd846d88f318af3c90343778077f67a2d55be3d50913781fa1ca589457a4d8b55e9e7ab4c888a33c25144fc623547880d74327c38e835d5
+"@prisma/prisma-schema-wasm@npm:5.4.1-2.ac9d7041ed77bcc8a8dbd2ab6616b39013829574":
+  version: 5.4.1-2.ac9d7041ed77bcc8a8dbd2ab6616b39013829574
+  resolution: "@prisma/prisma-schema-wasm@npm:5.4.1-2.ac9d7041ed77bcc8a8dbd2ab6616b39013829574"
+  checksum: 6d1bdee8dbfa3cdc2aba72d4c023931e109f89b853b57ddaffc1528c5f61760e4a350e8649c9af3ffad680044dd471d973f28cecbd57e3222c6e1d04afb95b06
   languageName: node
   linkType: hard
 
@@ -7781,7 +7798,7 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.1
     "@fastify/http-proxy": 9.2.1
-    "@fastify/static": 6.11.1
+    "@fastify/static": 6.11.2
     "@fastify/url-data": 5.3.1
     "@redwoodjs/project-config": 6.0.7
     "@types/aws-lambda": 8.10.119
@@ -7821,7 +7838,7 @@ __metadata:
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.1
-    "@prisma/client": 5.3.1
+    "@prisma/client": 5.4.2
     "@types/aws-lambda": 8.10.119
     "@types/jsonwebtoken": 9.0.2
     "@types/memjs": 1
@@ -8129,12 +8146,12 @@ __metadata:
     "@redwoodjs/auth": 6.0.7
     "@types/react": 18.2.14
     core-js: 3.32.2
-    firebase: 10.3.0
+    firebase: 10.4.0
     jest: 29.7.0
     react: 0.0.0-experimental-e5205658f-20230913
     typescript: 5.2.2
   peerDependencies:
-    firebase: 10.3.0
+    firebase: 10.4.0
   languageName: unknown
   linkType: soft
 
@@ -8346,7 +8363,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli-data-migrate@workspace:packages/cli-packages/dataMigrate"
   dependencies:
-    "@prisma/client": 5.3.1
+    "@prisma/client": 5.4.2
     "@redwoodjs/babel-config": 6.0.7
     "@redwoodjs/project-config": 6.0.7
     "@types/fs-extra": 11.0.1
@@ -8433,7 +8450,7 @@ __metadata:
     "@opentelemetry/resources": 1.15.2
     "@opentelemetry/sdk-trace-node": 1.15.2
     "@opentelemetry/semantic-conventions": 1.15.2
-    "@prisma/internals": 5.3.1
+    "@prisma/internals": 5.4.2
     "@redwoodjs/api-server": 6.0.7
     "@redwoodjs/cli-helpers": 6.0.7
     "@redwoodjs/fastify": 6.0.7
@@ -8470,7 +8487,7 @@ __metadata:
     pluralize: 8.0.0
     portfinder: 1.0.32
     prettier: 2.8.8
-    prisma: 5.3.1
+    prisma: 5.4.2
     prompts: 2.4.2
     rimraf: 5.0.1
     secure-random-password: 0.2.3
@@ -8641,7 +8658,7 @@ __metadata:
   resolution: "@redwoodjs/fastify@workspace:packages/fastify"
   dependencies:
     "@fastify/http-proxy": 9.2.1
-    "@fastify/static": 6.11.1
+    "@fastify/static": 6.11.2
     "@fastify/url-data": 5.3.1
     "@redwoodjs/graphql-server": 6.0.7
     "@redwoodjs/project-config": 6.0.7
@@ -8767,6 +8784,7 @@ __metadata:
     kill-port: 1.6.1
     prettier: 2.8.8
     rimraf: 5.0.1
+    source-map: 0.7.4
     string-env-interpolation: 1.0.1
     systeminformation: 5.21.7
     terminal-link: 2.1.1
@@ -8946,8 +8964,8 @@ __metadata:
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.1
-    "@prisma/client": 5.3.1
-    "@prisma/internals": 5.3.1
+    "@prisma/client": 5.4.2
+    "@prisma/internals": 5.4.2
     "@redwoodjs/project-config": 6.0.7
     core-js: 3.32.2
     esbuild: 0.19.3
@@ -8985,7 +9003,7 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.1
     "@iarna/toml": 2.2.5
-    "@prisma/internals": 5.3.1
+    "@prisma/internals": 5.4.2
     "@redwoodjs/project-config": 6.0.7
     "@types/fs-extra": 11.0.1
     "@types/line-column": 1.0.0
@@ -9020,12 +9038,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/studio@workspace:packages/studio"
   dependencies:
-    "@apollo/client": 3.8.4
+    "@apollo/client": 3.8.5
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.1
     "@fastify/http-proxy": 9.2.1
-    "@fastify/static": 6.11.1
+    "@fastify/static": 6.11.2
     "@fastify/url-data": 5.3.1
     "@graphiql/plugin-explorer": 0.1.22
     "@graphiql/toolkit": 0.8.4
@@ -9219,7 +9237,7 @@ __metadata:
   resolution: "@redwoodjs/web-server@workspace:packages/web-server"
   dependencies:
     "@fastify/http-proxy": 9.2.1
-    "@fastify/static": 6.11.1
+    "@fastify/static": 6.11.2
     "@redwoodjs/project-config": 6.0.7
     "@types/yargs-parser": 21.0.0
     chalk: 4.1.2
@@ -9238,8 +9256,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.8.4
-    "@apollo/experimental-nextjs-app-support": 0.4.2
+    "@apollo/client": 3.8.5
+    "@apollo/experimental-nextjs-app-support": 0.4.3
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.1
@@ -11281,12 +11299,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cross-spawn@npm:6.0.2, @types/cross-spawn@npm:^6.0.2":
-  version: 6.0.2
-  resolution: "@types/cross-spawn@npm:6.0.2"
+"@types/cross-spawn@npm:6.0.3, @types/cross-spawn@npm:^6.0.2":
+  version: 6.0.3
+  resolution: "@types/cross-spawn@npm:6.0.3"
   dependencies:
     "@types/node": "*"
-  checksum: 658bd49267a7200e87e67c48ef1e58ee7418bbd4417fb191393b7051d47f590023090cad7b69eb3821d1907b82392b764e1114b1ec6000b01e98126926c8b06f
+  checksum: a8de3fed3e9cacf8ee50e49139ef40b3fd03ee3c135140bdfc1536c00c38bd26c435be885c5facc97404be2e17b7c088fa588b43d6e974bab20cdb0e53ec6c9c
   languageName: node
   linkType: hard
 
@@ -11447,12 +11465,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/debug@npm:4.1.8, @types/debug@npm:^4.1.7":
-  version: 4.1.8
-  resolution: "@types/debug@npm:4.1.8"
+"@types/debug@npm:4.1.9, @types/debug@npm:^4.1.7":
+  version: 4.1.9
+  resolution: "@types/debug@npm:4.1.9"
   dependencies:
     "@types/ms": "*"
-  checksum: 913aea60b8c94cd0009bbdd531d8a3594ec3275ca0e8d1cbcf783417884252b3c53113f6665fd2fb0076b8ce628ee12cd083d2af107ed26c0f2e75852d8bc074
+  checksum: 8b550c47c70cc1af9a58e5c572f2418f30bface5bf5d5afa0d938923978f40be4c55646f1ab260f6f1492ca6ab065d447de23cb3b30d7b38597c2cbf89f4cb21
   languageName: node
   linkType: hard
 
@@ -20185,23 +20203,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase@npm:10.3.0":
-  version: 10.3.0
-  resolution: "firebase@npm:10.3.0"
+"firebase@npm:10.4.0":
+  version: 10.4.0
+  resolution: "firebase@npm:10.4.0"
   dependencies:
     "@firebase/analytics": 0.10.0
     "@firebase/analytics-compat": 0.2.6
-    "@firebase/app": 0.9.17
+    "@firebase/app": 0.9.19
     "@firebase/app-check": 0.8.0
     "@firebase/app-check-compat": 0.3.7
-    "@firebase/app-compat": 0.2.17
+    "@firebase/app-compat": 0.2.19
     "@firebase/app-types": 0.9.0
     "@firebase/auth": 1.3.0
     "@firebase/auth-compat": 0.4.6
     "@firebase/database": 1.0.1
     "@firebase/database-compat": 1.0.1
-    "@firebase/firestore": 4.1.2
-    "@firebase/firestore-compat": 0.3.16
+    "@firebase/firestore": 4.2.0
+    "@firebase/firestore-compat": 0.3.18
     "@firebase/functions": 0.10.0
     "@firebase/functions-compat": 0.3.5
     "@firebase/installations": 0.6.4
@@ -20215,7 +20233,7 @@ __metadata:
     "@firebase/storage": 0.11.2
     "@firebase/storage-compat": 0.3.2
     "@firebase/util": 1.9.3
-  checksum: 0492bd48649a6d0e716d0806c35f6671162ca9a703f19a533035030e43f02e7bae409fac80a446ba0d5b9829b80b5ea339bb0c41d05aed81ee7200f09a7e3522
+  checksum: 208a009031343f116119c042a5f75508a40a973fac3aea7c8f29116be47149d0570a8a060c156c8faee80bf5c773cbd33f06ff4159194376d3c738391b72bc0b
   languageName: node
   linkType: hard
 
@@ -29434,14 +29452,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prisma@npm:5.3.1":
-  version: 5.3.1
-  resolution: "prisma@npm:5.3.1"
+"prisma@npm:5.4.2":
+  version: 5.4.2
+  resolution: "prisma@npm:5.4.2"
   dependencies:
-    "@prisma/engines": 5.3.1
+    "@prisma/engines": 5.4.2
   bin:
     prisma: build/index.js
-  checksum: c3058af3e3e2f9771fe40602a33ccb29055c45f9cbdea6e81df584720f23cfb75c829042cdf57e7fa0fc226ba1a69ba524c8b10d54de2304201e3ea4e6f69564
+  checksum: 5b115f1a9dcc44d6584be29a156e31355443a8b25c529097073adf68cf46cdf294ec69d1cbbefacf7523e5047429952745bf7d845c47e3df5571cde9c19ff170
   languageName: node
   linkType: hard
 
@@ -32384,17 +32402,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"source-map@npm:0.7.4, source-map@npm:^0.7.3":
+  version: 0.7.4
+  resolution: "source-map@npm:0.7.4"
+  checksum: dc0cf3768fe23c345ea8760487f8c97ef6fca8a73c83cd7c9bf2fde8bc2c34adb9c0824d6feb14bc4f9e37fb522e18af621543f1289038a66ac7586da29aa7dc
+  languageName: node
+  linkType: hard
+
 "source-map@npm:^0.5.6":
   version: 0.5.7
   resolution: "source-map@npm:0.5.7"
   checksum: 904e767bb9c494929be013017380cbba013637da1b28e5943b566031e29df04fba57edf3f093e0914be094648b577372bd8ad247fa98cfba9c600794cd16b599
-  languageName: node
-  linkType: hard
-
-"source-map@npm:^0.7.3":
-  version: 0.7.4
-  resolution: "source-map@npm:0.7.4"
-  checksum: dc0cf3768fe23c345ea8760487f8c97ef6fca8a73c83cd7c9bf2fde8bc2c34adb9c0824d6feb14bc4f9e37fb522e18af621543f1289038a66ac7586da29aa7dc
   languageName: node
   linkType: hard
 

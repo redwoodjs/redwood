@@ -325,7 +325,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     expect(namedRoutesMap.rdSimple()).toBe('/rdSimple')
   })
 
-  test('Redirect routes analysis', () => {
+  test('Nested sets, and authentication logic', () => {
     const HomePage = () => <h1>Home Page</h1>
     const PrivateAdminPage = () => <h1>Private Admin Page</h1>
     const PrivateEmployeePage = () => <h1>Private Employee Page</h1>
@@ -373,14 +373,66 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       }
     )
 
-    console.log(JSON.stringify({ pathRouteMap, namedRoutesMap }, null, 3))
+    // Level 1: wrapped with private
+    expect(pathRouteMap).toMatchObject({
+      '/no-roles-assigned': {
+        redirect: null,
+        setProps: expect.arrayContaining([
+          expect.objectContaining({
+            unauthenticated: 'home',
+            private: true,
+          }),
+        ]),
+      },
+    })
 
-    // expect(pathRouteMap['/simple'].redirect).toBe('/rdSimple')
-    // expect(pathRouteMap['/rdSimple'].redirect).toBeFalsy()
+    expect(Object.keys(namedRoutesMap).length).toBe(4)
 
-    // // @TODO true for now, but we may not allow names on a redirect route
-    // expect(Object.keys(namedRoutesMap).length).toBe(2)
-    // expect(namedRoutesMap.simple()).toBe('/simple')
-    // expect(namedRoutesMap.rdSimple()).toBe('/rdSimple')
+    // Level 2: wrapped in 2 private sets
+    expect(pathRouteMap).toMatchObject({
+      '/employee': {
+        redirect: null,
+        setProps: expect.arrayContaining([
+          // Should have the first one, but also..
+          expect.objectContaining({
+            unauthenticated: 'home',
+            private: true,
+          }),
+          // ...the second private set's props
+          expect.objectContaining({
+            private: true,
+            unauthenticated: 'noRolesAssigned',
+            roles: ['ADMIN', 'EMPLOYEE'],
+          }),
+        ]),
+      },
+    })
+
+    // Level 3: wrapped in 3 private sets
+    expect(pathRouteMap).toMatchObject({
+      '/admin': {
+        redirect: null,
+        setProps: expect.arrayContaining([
+          // Should have the first one, but also..
+          expect.objectContaining({
+            unauthenticated: 'home',
+            private: true,
+          }),
+          // ...the second private set's props
+          expect.objectContaining({
+            private: true,
+            unauthenticated: 'noRolesAssigned',
+            roles: ['ADMIN', 'EMPLOYEE'],
+          }),
+
+          // ...and the third private set's props
+          expect.objectContaining({
+            unauthenticated: 'employee',
+            roles: 'ADMIN',
+            private: true,
+          }),
+        ]),
+      },
+    })
   })
 })

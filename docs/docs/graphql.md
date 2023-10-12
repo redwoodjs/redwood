@@ -1848,7 +1848,7 @@ The `@requireAuth` directive lets you define roles that are permitted to perform
 ```ts
 type Mutation {
   createPost(input: CreatePostInput!): Post! @requireAuth(roles: ['AUTHOR', 'EDITOR'])
-  updatePost(id: Int!, input: UpdatePostInput!): Post! @@requireAuth(roles: ['EDITOR']
+  updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth(roles: ['EDITOR']
   deletePost(id: Int!): Post! @requireAuth(roles: ['ADMIN']
 }
 ```
