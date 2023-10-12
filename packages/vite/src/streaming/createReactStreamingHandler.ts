@@ -36,7 +36,7 @@ export const createReactStreamingHandler = async (
 
   if (isProd) {
     entryServerImport = await import(rwPaths.web.distEntryServer)
-    fallbackDocumentImport = await import(rwPaths.web.distDocument)
+    fallbackDocumentImport = await import(rwPaths.web.distDocumentServer)
   }
 
   // @NOTE: we are returning a FetchAPI handler
