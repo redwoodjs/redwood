@@ -32,9 +32,11 @@ export const createReactStreamingHandler = async (
   const isProd = !viteDevServer
 
   let entryServerImport: any
+  let fallbackDocumentImport: any
 
   if (isProd) {
     entryServerImport = await import(rwPaths.web.distEntryServer)
+    fallbackDocumentImport = await import(rwPaths.web.distDocument)
   }
 
   // @NOTE: we are returning a FetchAPI handler
@@ -54,10 +56,16 @@ export const createReactStreamingHandler = async (
       entryServerImport = await viteDevServer.ssrLoadModule(
         rwPaths.web.entryServer as string // already validated in dev server
       )
+      fallbackDocumentImport = await viteDevServer.ssrLoadModule(
+        rwPaths.web.document
+      )
     }
 
     const ServerEntry =
       entryServerImport.ServerEntry || entryServerImport.default
+
+    const FallbackDocument =
+      fallbackDocumentImport.Document || fallbackDocumentImport.default
 
     const { pathname: currentPathName } = new URL(req.url)
 
@@ -98,6 +106,7 @@ export const createReactStreamingHandler = async (
     const reactResponse = await reactRenderToStreamResponse(
       {
         ServerEntry,
+        FallbackDocument,
         currentPathName,
         metaTags,
         cssLinks,

@@ -14,6 +14,7 @@ import { createServerInjectionTransform } from './transforms/serverInjectionTran
 
 interface RenderToStreamArgs {
   ServerEntry: any
+  FallbackDocument: any
   currentPathName: string
   metaTags: TagDescriptor[]
   cssLinks: string[]
@@ -32,6 +33,7 @@ export async function reactRenderToStreamResponse(
   const { waitForAllReady = false } = streamOptions
   const {
     ServerEntry,
+    FallbackDocument,
     currentPathName,
     metaTags,
     cssLinks,
@@ -64,33 +66,55 @@ export async function reactRenderToStreamResponse(
   // Possible that we need to upgrade the @types/* packages
   const { renderToReadableStream } = await import('react-dom/server.edge')
 
-  const root = React.createElement(
-    ServerHtmlProvider,
-    {
-      value: injectToPage,
-    },
-    ServerEntry({
-      url: currentPathName,
-      css: cssLinks,
-      meta: metaTags,
-    })
-  )
+  const renderRoot = (path: string) => {
+    return React.createElement(
+      ServerHtmlProvider,
+      {
+        value: injectToPage,
+      },
+      ServerEntry({
+        url: path,
+        css: cssLinks,
+        meta: metaTags,
+      })
+    )
+  }
+
+  /**
+   * These are the opts that inject the bundles, and Assets into html
+   */
+  const bootstrapOptions = {
+    bootstrapScriptContent:
+      // Only insert assetMap if clientside JS will be loaded
+      jsBundles.length > 0
+        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}`
+        : undefined,
+    bootstrapModules: jsBundles,
+  }
 
   try {
-    const reactStream = await renderToReadableStream(root, {
-      bootstrapScriptContent:
-        // Only insert assetMap if clientside JS will be loaded
-        jsBundles.length > 0
-          ? `window.__REDWOOD__ASSET_MAP = ${assetMap}`
-          : undefined,
-      bootstrapModules: jsBundles,
-      onError: (err: any) => {
-        // @TODO status code
-        // @TODO error handling
-        console.error('🔻 Failed to render in onErr block')
-        console.error(err)
-      },
-    })
+    // This gets set if there are errors inside Suspense boundaries
+    let didErrorOutsideShell = false
+
+    // Timeout after 10 seconds
+    // @TODO make this configurable
+    const controller = new AbortController()
+    setTimeout(() => {
+      controller.abort()
+    }, 10000)
+
+    const reactStream = await renderToReadableStream(
+      renderRoot(currentPathName),
+      {
+        ...bootstrapOptions,
+        signal: controller.signal,
+        onError: (err: any) => {
+          didErrorOutsideShell = true
+          console.error('🔻 Caught error outside shell')
+          console.error(err)
+        },
+      }
+    )
 
     const output = reactStream
       .pipeThrough(bufferedTransformStream)
@@ -100,17 +124,29 @@ export async function reactRenderToStreamResponse(
       await reactStream.allReady
     }
 
-    // @TODO status code
-    // @TODO error handling
     return new Response(output, {
+      status: didErrorOutsideShell ? 500 : 200, // I think better right? Prevents caching a bad page
       headers: { 'content-type': 'text/html' },
     })
   } catch (e) {
-    console.error('🔻 Failed to render')
+    console.error('🔻 Failed to render shell')
     console.error(e)
 
-    return new Response('Failed to render', {
+    // @TODO Asking for clarification from React team. Their documentation on this is incomplete I think.
+    // Having the Document (and bootstrap scripts) here allows client to recover from errors in the shell
+    // To test this, throw an error in the App on the server only
+    const fallbackShell = await renderToReadableStream(
+      FallbackDocument({
+        children: null,
+        css: cssLinks,
+        meta: metaTags,
+      }),
+      bootstrapOptions
+    )
+
+    return new Response(fallbackShell, {
       status: 500,
+      headers: { 'content-type': 'text/html' },
     })
   }
 }
