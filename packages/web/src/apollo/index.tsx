@@ -132,9 +132,15 @@ export type GraphQLClientConfigProp = Omit<
    */
   link?: apolloClient.ApolloLink | RedwoodApolloLinkFactory
   /**
-   * Use persisted operations aka queries (https://www.apollographql.com/docs/apollo-server/performance/apq/#client-configuration).
+   * Use Trusted Documents aka Persisted Operations aka Queries
+   *
+   * When setting to true, Apollo Client will generate a hash of the query and send that to the server instead of the query itself.
+   *
+   * You must configure your GraphQL server to support this feature with the useTrustedDocumentation option.
+   *
+   * See https://www.apollographql.com/docs/react/api/link/persisted-queries/
    */
-  persistedOperations?: boolean
+  trustedDocuments?: boolean
 }
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
@@ -221,7 +227,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   // Our terminating link needs to be smart enough to handle subscriptions, and if the GraphQL query
   // is subscription it needs to use the SSELink (server sent events link).
-  const terminatingLink = apolloClient.split(
+  let terminatingLink = apolloClient.split(
     ({ query }) => {
       const definition = getMainDefinition(query)
 
@@ -239,11 +245,12 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     httpLink
   )
 
-  const persistedQueryLink = createPersistedQueryLink({
-    generateHash: (document: any) => document['__meta__']['hash'],
-  })
-
-  console.debug('>>>>> config.persistedOperations', config.persistedOperations)
+  if (config.trustedDocuments) {
+    const trustedDocumentsLink = createPersistedQueryLink({
+      generateHash: (document: any) => document['__meta__']['hash'],
+    })
+    terminatingLink = trustedDocumentsLink.concat(terminatingLink)
+  }
 
   // The order here is important. The last link *must* be a terminating link like HttpLink or SSELink.
   const redwoodApolloLinks: RedwoodApolloLinks = [
@@ -252,9 +259,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     { name: 'updateDataApolloLink', link: updateDataApolloLink },
     {
       name: 'terminatingLink',
-      link: config.persistedOperations
-        ? persistedQueryLink.concat(terminatingLink)
-        : terminatingLink,
+      link: terminatingLink,
     },
   ]
 
