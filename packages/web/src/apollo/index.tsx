@@ -243,6 +243,8 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     generateHash: (document: any) => document['__meta__']['hash'],
   })
 
+  console.debug('>>>>> config.persistedOperations', config.persistedOperations)
+
   // The order here is important. The last link *must* be a terminating link like HttpLink or SSELink.
   const redwoodApolloLinks: RedwoodApolloLinks = [
     { name: 'withToken', link: withToken },

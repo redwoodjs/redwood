@@ -69,14 +69,14 @@ export const generateClientPreset = async () => {
   }
   const clientPresetFiles = generatedFiles.map((f: GeneratedFile) => f.filename)
 
-  // Copy the persisted-documents.json to api side
+  // Copy the persisted-documents.json to api side as a trustedDocumentsStore
   const output = generatedFiles.filter((f: GeneratedFile) =>
     f.filename.endsWith('persisted-documents.json')
   )
 
   const storeFile = output[0]
 
-  if (storeFile && storeFile.conten) {
+  if (storeFile && storeFile.content) {
     const content = format(`export const store = ${storeFile.content}`, {
       trailingComma: 'es5',
       bracketSpacing: true,
@@ -87,7 +87,7 @@ export const generateClientPreset = async () => {
       parser: 'typescript',
     })
 
-    const filename = path.join(getPaths().api.lib, 'persistedOperationStore.ts')
+    const filename = path.join(getPaths().api.lib, 'trustedDocumentsStore.ts')
     fs.mkdirSync(path.dirname(filename), { recursive: true })
     fs.writeFileSync(filename, content)
   }

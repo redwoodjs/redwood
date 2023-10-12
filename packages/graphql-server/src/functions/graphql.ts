@@ -41,7 +41,7 @@ export const createGraphQLHandler = ({
   graphiQLEndpoint = '/graphql',
   schemaOptions,
   openTelemetryOptions,
-  persistedOperations,
+  trustedDocuments,
 }: GraphQLHandlerOptions) => {
   const { yoga, logger } = createGraphQLYoga({
     healthCheckId,
@@ -64,7 +64,7 @@ export const createGraphQLHandler = ({
     graphiQLEndpoint,
     schemaOptions,
     openTelemetryOptions,
-    persistedOperations,
+    trustedDocuments,
   })
 
   const handlerFn = async (

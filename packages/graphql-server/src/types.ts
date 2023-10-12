@@ -20,7 +20,7 @@ import type {
   DirectivePluginOptions,
 } from './plugins/useRedwoodDirective'
 import type { LoggerConfig } from './plugins/useRedwoodLogger'
-import type { RedwoodPersistedOperationsOptions } from './plugins/useRedwoodPersistedOperations'
+import type { RedwoodTrustedDocumentOptions } from './plugins/useRedwoodTrustedDocuments'
 
 export type Resolver = (...args: unknown[]) => unknown
 export type Services = {
@@ -238,9 +238,12 @@ export type GraphQLYogaOptions = {
   realtime?: RedwoodRealtimeOptions
 
   /**
-   * @description Configure GraphQLHandler with options
+   * @description Configure Trusted Documents options
+   *
+   * @see https://benjie.dev/graphql/trusted-documents
+   * @see https://the-guild.dev/graphql/yoga-server/docs/features/persisted-operations
    */
-  persistedOperations?: RedwoodPersistedOperationsOptions
+  trustedDocuments?: RedwoodTrustedDocumentOptions
 
   /**
    * @description Configure OpenTelemetry plugin behaviour
