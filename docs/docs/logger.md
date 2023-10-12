@@ -725,6 +725,91 @@ handlePrismaLogging({
 })
 ```
 
+### Prisma Client Extensions
+
+Because [$on and $use are not available in extended clients](https://www.prisma.io/docs/concepts/components/prisma-client/client-extensions#usage-of-on-and-use-with-extended-clients), if you would like to continue using these client-level methods with an extended client, you will need to hook them up before [extending the client](https://www.prisma.io/docs/concepts/components/prisma-client/client-extensions#extended-clients).
+
+This requires a slight change to how your Prisma client is created, configured for logging, and exported as `db`:
+
+```ts
+import { PrismaClient } from '@prisma/client'
+
+import {
+  LogLevel,
+  emitLogLevels,
+  handlePrismaLogging,
+} from '@redwoodjs/api/logger'
+
+import { logger } from './logger'
+
+const logLevels = process.env.DB_LOGGING
+  ? (['info', 'warn', 'error', 'query'] as LogLevel[])
+  : (['info', 'warn', 'error'] as LogLevel[])
+
+/*
+ * Instance of the Prisma Client
+ */
+const client = new PrismaClient({
+  log: emitLogLevels(logLevels),
+})
+
+handlePrismaLogging({
+  db: client,
+  logger,
+  logLevels,
+})
+
+export const db = client.$extends({
+  query: {
+    $allModels: {
+      async $allOperations({ operation, model, args, query }) {
+        const start = performance.now()
+        const result = await query(args)
+        const end = performance.now()
+        const time = end - start
+        console.log(JSON.stringify({ operation, model, args, time }, null, 2))
+        return result
+      },
+    },
+  },
+})
+```
+
+Now the Prisma client will log the specified emitted log levels as well as invoke the client extension:
+
+```bash
+api | 17:19:07 🐛 graphql-server GraphQL execution started: FindUserExamples2
+api | 17:19:07 🌲 Starting a sqlite pool with 17 connections. 
+api | 🗒 Custom
+api | {
+api |   "prisma": {
+api |     "clientVersion": "5.3.1"
+api |   },
+api |   "timestamp": "2023-10-09T21:19:07.887Z",
+api |   "target": "quaint::pooled"
+api | }
+api | 17:19:07 🐛 Query performed in 0 msec 
+api | 🔭 Query
+api | "SELECT `main`.`UserExample`.`id`, `main`.`UserExample`.`email`, `main`.`UserExample`.`name` FROM `main`.`UserExample` WHERE 1=1 LIMIT ? OFFSET ?" 
+api | 🗒 Custom
+api | {
+api |   "prisma": {
+api |     "clientVersion": "5.3.1"
+api |   },
+api |   "timestamp": "2023-10-09T21:19:07.888Z",
+api |   "params": "[Redacted]",
+api |   "duration": 0,
+api |   "target": "quaint::connector::metrics"
+api | }
+api | {
+api |   "operation": "findMany",
+api |   "model": "UserExample",
+api |   "args": {},
+api |   "time": 1.9364579916000366
+api | }
+api | 17:19:07 🌲 request completed 27ms
+```
+
 ### Advanced Use
 
 There are situations when you may wish to add information to every log statement.
