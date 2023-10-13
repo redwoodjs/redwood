@@ -1999,6 +1999,7 @@ yarn redwood test [side..]
 | `--collectCoverage` | Show test coverage summary and output info to `coverage` directory in project root. See this directory for an .html coverage report                                                                                                                        |
 | `--clearCache`      | Delete the Jest cache directory and exit without running tests                                                                                                                                                                                             |
 | `--db-push`         | Syncs the test database with your Prisma schema without requiring a migration. It creates a test database if it doesn't already exist [default: true]. This flag is ignored if your project doesn't have an `api` side. [👉 More details](#prisma-db-push). |
+| `--no-db-push`      | On the `api` side, runs tests without syncing the test database.     |
 
 > **Note** all other flags are passed onto the jest cli. So for example if you wanted to update your snapshots you can pass the `-u` flag
 
