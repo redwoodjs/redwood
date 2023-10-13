@@ -87,7 +87,7 @@ test("Doesn't destroy <Set> when navigating inside, but does when navigating bet
   act(() => navigate(routes.ctx3()))
   await waitFor(() => screen.getByText('3-initialSetValue'))
   act(() => navigate(routes.ctx4()))
-  await waitFor(() => screen.getByText('4-initialSetValue'))
+  await waitFor(() => screen.getByText('4-initialSetValue')) // Because its wrapping the same context provider, it should retain the value
 })
 
 test('Pages are correctly given a setId if they are nested in', () => {
