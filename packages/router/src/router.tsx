@@ -155,7 +155,6 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     whileLoadingPage,
     wrappers = [],
     setProps,
-    setId,
   } = pathRouteMap[activeRoutePath]
 
   if (!path) {
@@ -180,7 +179,6 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
           {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
           {!redirect && page && (
             <WrappedPage
-              key={setId}
               wrappers={wrappers}
               routeLoaderElement={
                 <ActiveRouteLoader
@@ -254,11 +252,17 @@ const WrappedPage = memo(
       // If wrappers exist e.g. [a,b,c] -> <a><b><c><routeLoader></c></b></a> and returns a single ReactNode
       // Wrap AuthenticatedRoute this way, because if we mutate the wrappers array itself
       // it causes full rerenders of the page
-      return wrappersWithAuthMaybe.reduceRight((acc, wrapper) => {
+      return wrappersWithAuthMaybe.reduceRight((acc, wrapper, wrapperIndex) => {
         // Merge props from set, the lowest set props will override the higher ones
-        const mergedSetProps = setProps.reduce((acc, props) => {
-          return { ...acc, ...props }
-        }, {})
+        const mergedSetProps = setProps.reduce(
+          (acc, props) => {
+            return { ...acc, ...props }
+          },
+          {
+            // The key here prevents remounting of wrap components
+            key: wrapperIndex,
+          }
+        )
 
         return React.createElement(
           wrapper as any,

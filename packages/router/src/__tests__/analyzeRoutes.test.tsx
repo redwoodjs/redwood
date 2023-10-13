@@ -436,3 +436,34 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     })
   })
 })
+
+test('Handles Private', () => {
+  const Routes = (
+    <Router>
+      <Route path="/" name="home" page={FakePage} />
+      <Private unauthenticated="home">
+        <Route path="/private" name="privateRoute" page={FakePage} />
+      </Private>
+    </Router>
+  )
+
+  const { pathRouteMap } = analyzeRoutes(Routes.props.children, {
+    currentPathName: '/',
+  })
+
+  expect(pathRouteMap['/private']).toStrictEqual({
+    redirect: null,
+    name: 'privateRoute',
+    path: '/private',
+    whileLoadingPage: undefined,
+    page: FakePage,
+    wrappers: [],
+    setId: 1,
+    setProps: [
+      {
+        private: true,
+        unauthenticated: 'home',
+      },
+    ],
+  })
+})
