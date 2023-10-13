@@ -22,6 +22,26 @@ export function createServerInjectionTransform({
       // Before you finish, flush injected HTML again
       const mergedBytes = insertHtml()
       controller.enqueue(mergedBytes)
+
+      // @TODO code for moving meta/links to head. This is called "Float"
+      // and should be handled by React, but unsure which version its in
+      const moveTagsScript =
+        encodeText(`<script>document.querySelectorAll('body [data-rwjs-head]').forEach((el) => {
+        document.querySelectorAll('head ' + el.tagName).forEach((e) => {
+          if (
+            el.tagName === 'TITLE' ||
+            (el.tagName === 'META' &&
+              el.getAttribute('name') === e.getAttribute('name') &&
+              el.getAttribute('property') === e.getAttribute('property'))
+          ) {
+            e.remove();
+          }
+          document.head.appendChild(el);
+        });
+      });
+        </script>`)
+
+      controller.enqueue(moveTagsScript)
     },
   })
 
