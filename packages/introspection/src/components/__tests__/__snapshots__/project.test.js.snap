@@ -1,0 +1,1612 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`From within the 'empty-project' fixture returns the correct project: cells 1`] = `[]`;
+
+exports[`From within the 'empty-project' fixture returns the correct project: complexity metric 1`] = `"1.0.0.0.2"`;
+
+exports[`From within the 'empty-project' fixture returns the correct project: errors 1`] = `[]`;
+
+exports[`From within the 'empty-project' fixture returns the correct project: pages 1`] = `
+[
+  RedwoodPage {
+    "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.tsx",
+    "hasDefaultExport": true,
+    "name": "FatalErrorPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.tsx",
+    "hasDefaultExport": true,
+    "name": "NotFoundPage",
+    "type": "page",
+  },
+]
+`;
+
+exports[`From within the 'empty-project' fixture returns the correct project: project 1`] = `
+RedwoodProject {
+  "cells": undefined,
+  "filepath": "",
+  "language": "typescript",
+  "name": "empty-project",
+  "pages": undefined,
+  "router": undefined,
+  "services": undefined,
+  "sides": undefined,
+  "type": "project",
+}
+`;
+
+exports[`From within the 'empty-project' fixture returns the correct project: router 1`] = `
+RedwoodRouter {
+  "filepath": "/web/src/Routes.tsx",
+  "name": "Routes",
+  "routes": [
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": true,
+      "isPrivate": false,
+      "name": "notfound",
+      "pageIdentifier": "NotFoundPage",
+      "path": undefined,
+      "prerender": false,
+      "type": "route",
+    },
+  ],
+  "type": "router",
+}
+`;
+
+exports[`From within the 'empty-project' fixture returns the correct project: services 1`] = `[]`;
+
+exports[`From within the 'empty-project' fixture returns the correct project: sides 1`] = `
+[
+  RedwoodSide {
+    "filepath": "/web",
+    "name": "web",
+    "sideType": "web",
+    "type": "side",
+  },
+  RedwoodSide {
+    "filepath": "/api",
+    "name": "api",
+    "sideType": "api",
+    "type": "side",
+  },
+]
+`;
+
+exports[`From within the 'empty-project' fixture returns the correct project: warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct project: cells 1`] = `
+[
+  RedwoodCell {
+    "filepath": "/web/src/components/NumTodosCell/NumTodosCell.js",
+    "gqlQuery": "
+  query NumTodosCell_GetCount {
+    todosCount
+  }
+",
+    "gqlQueryName": "NumTodosCell_GetCount",
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "NumTodosCell",
+    "type": "cell",
+  },
+  RedwoodCell {
+    "filepath": "/web/src/components/NumTodosTwoCell/NumTodosTwoCell.js",
+    "gqlQuery": "
+  query NumTodosCell_GetCount {
+    todosCount
+  }
+",
+    "gqlQueryName": "NumTodosCell_GetCount",
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "NumTodosTwoCell",
+    "type": "cell",
+  },
+  RedwoodCell {
+    "filepath": "/web/src/components/TableCell/TableCell.js",
+    "gqlQuery": undefined,
+    "gqlQueryName": undefined,
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": false,
+    "hasQueryExport": false,
+    "hasSuccessExport": false,
+    "isValid": false,
+    "name": "TableCell",
+    "type": "cell",
+  },
+  RedwoodCell {
+    "filepath": "/web/src/components/TodoListCell/TodoListCell.tsx",
+    "gqlQuery": "
+  query TodoListCell_GetTodos {
+    todos {
+      id
+      body
+      status
+    }
+  }
+",
+    "gqlQueryName": "TodoListCell_GetTodos",
+    "hasAfterQueryExport": true,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "TodoListCell",
+    "type": "cell",
+  },
+]
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct project: complexity metric 1`] = `"7.3.1.4.8"`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct project: errors 1`] = `
+[
+  {
+    "component": {
+      "filepath": "/web/src/components/TableCell/TableCell.js",
+      "name": "TableCell",
+      "type": "cell",
+    },
+    "message": "No "Success" export found but one is required",
+  },
+  {
+    "component": {
+      "filepath": "/web/src/components/TableCell/TableCell.js",
+      "name": "TableCell",
+      "type": "cell",
+    },
+    "message": "No "QUERY" export found but one is required",
+  },
+]
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct project: pages 1`] = `
+[
+  RedwoodPage {
+    "filepath": "/web/src/pages/BarPage/BarPage.tsx",
+    "hasDefaultExport": true,
+    "name": "BarPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
+    "hasDefaultExport": true,
+    "name": "FatalErrorPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/FooPage/FooPage.tsx",
+    "hasDefaultExport": true,
+    "name": "FooPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/HomePage/HomePage.tsx",
+    "hasDefaultExport": true,
+    "name": "HomePage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.js",
+    "hasDefaultExport": true,
+    "name": "NotFoundPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/PrivatePage/PrivatePage.tsx",
+    "hasDefaultExport": true,
+    "name": "PrivatePage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/TypeScriptPage/TypeScriptPage.tsx",
+    "hasDefaultExport": true,
+    "name": "TypeScriptPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/admin/EditUserPage/EditUserPage.jsx",
+    "hasDefaultExport": true,
+    "name": "EditUserPage",
+    "type": "page",
+  },
+]
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct project: project 1`] = `
+RedwoodProject {
+  "cells": undefined,
+  "filepath": "",
+  "language": "typescript",
+  "name": "example-todo-main",
+  "pages": undefined,
+  "router": undefined,
+  "services": undefined,
+  "sides": undefined,
+  "type": "project",
+}
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct project: router 1`] = `
+RedwoodRouter {
+  "filepath": "/web/src/Routes.js",
+  "name": "Routes",
+  "routes": [
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.js",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "home",
+      "pageIdentifier": "HomePage",
+      "path": "/",
+      "prerender": true,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.js",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "typescriptPage",
+      "pageIdentifier": "TypeScriptPage",
+      "path": "/typescript",
+      "prerender": true,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.js",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "someOtherPage",
+      "pageIdentifier": "EditUserPage",
+      "path": "/somewhereElse",
+      "prerender": true,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.js",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "fooPage",
+      "pageIdentifier": "FooPage",
+      "path": "/foo",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.js",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "barPage",
+      "pageIdentifier": "BarPage",
+      "path": "/bar",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.js",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": true,
+      "name": "privatePage",
+      "pageIdentifier": "PrivatePage",
+      "path": "/private-page",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.js",
+      "hasParameters": false,
+      "isNotFound": true,
+      "isPrivate": false,
+      "name": "notfound",
+      "pageIdentifier": "NotFoundPage",
+      "path": undefined,
+      "prerender": false,
+      "type": "route",
+    },
+  ],
+  "type": "router",
+}
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct project: services 1`] = `
+[
+  RedwoodService {
+    "filepath": "/api/src/services/todos/todos.js",
+    "functions": [
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "todos",
+        "parameters": [],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "createTodo",
+        "parameters": [
+          "body",
+        ],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "numTodos",
+        "parameters": [],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "updateTodoStatus",
+        "parameters": [
+          "id",
+          "status",
+        ],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "renameTodo",
+        "parameters": [
+          "id",
+          "body",
+        ],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+    ],
+    "name": "todos",
+    "type": "service",
+  },
+]
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct project: sides 1`] = `
+[
+  RedwoodSide {
+    "filepath": "/web",
+    "name": "web",
+    "sideType": "web",
+    "type": "side",
+  },
+  RedwoodSide {
+    "filepath": "/api",
+    "name": "api",
+    "sideType": "api",
+    "type": "side",
+  },
+]
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct project: warnings 1`] = `
+[
+  {
+    "component": {
+      "filepath": "/web/src/components/TableCell/TableCell.js",
+      "name": "TableCell",
+      "type": "cell",
+    },
+    "message": "Unable to extract your cell query",
+  },
+  {
+    "component": {
+      "filepath": "/web/src/components/TableCell/TableCell.js",
+      "name": "TableCell",
+      "type": "cell",
+    },
+    "message": "We recommend that you name your query operation",
+  },
+]
+`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct project: cells 1`] = `
+[
+  RedwoodCell {
+    "filepath": "/web/src/components/TableCell/TableCell.js",
+    "gqlQuery": undefined,
+    "gqlQueryName": undefined,
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": false,
+    "hasQueryExport": false,
+    "hasSuccessExport": false,
+    "isValid": false,
+    "name": "TableCell",
+    "type": "cell",
+  },
+  RedwoodCell {
+    "filepath": "/web/src/components/TodoListCell/TodoListCell.js",
+    "gqlQuery": "
+  {
+    todos {
+      id
+      body
+      status
+    }
+  }
+",
+    "gqlQueryName": undefined,
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "TodoListCell",
+    "type": "cell",
+  },
+]
+`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct project: complexity metric 1`] = `"4.0.1.2.3"`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct project: errors 1`] = `
+[
+  {
+    "component": {
+      "filepath": "/web/src/components/TableCell/TableCell.js",
+      "name": "TableCell",
+      "type": "cell",
+    },
+    "message": "No "Success" export found but one is required",
+  },
+  {
+    "component": {
+      "filepath": "/web/src/components/TableCell/TableCell.js",
+      "name": "TableCell",
+      "type": "cell",
+    },
+    "message": "No "QUERY" export found but one is required",
+  },
+]
+`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct project: pages 1`] = `
+[
+  RedwoodPage {
+    "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
+    "hasDefaultExport": true,
+    "name": "FatalErrorPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/HomePage/HomePage.js",
+    "hasDefaultExport": true,
+    "name": "HomePage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.js",
+    "hasDefaultExport": true,
+    "name": "NotFoundPage",
+    "type": "page",
+  },
+]
+`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct project: project 1`] = `
+RedwoodProject {
+  "cells": undefined,
+  "filepath": "",
+  "language": "javascript",
+  "name": "example-todo-main-with-errors",
+  "pages": undefined,
+  "router": undefined,
+  "services": undefined,
+  "sides": undefined,
+  "type": "project",
+}
+`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct project: router 1`] = `
+RedwoodRouter {
+  "filepath": "/web/src/Routes.js",
+  "name": "Routes",
+  "routes": [
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.js",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "home",
+      "pageIdentifier": "HomePage",
+      "path": "/",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.js",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "home",
+      "pageIdentifier": "HomePage",
+      "path": "/",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.js",
+      "hasParameters": true,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "something-else",
+      "pageIdentifier": "DoesNotExist",
+      "path": "/{foo}/{foo}",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.js",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "Routes",
+      "pageIdentifier": "NotFoundPage",
+      "path": undefined,
+      "prerender": false,
+      "type": "route",
+    },
+  ],
+  "type": "router",
+}
+`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct project: services 1`] = `
+[
+  RedwoodService {
+    "filepath": "/api/src/services/todos/todos.js",
+    "functions": [
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "todos",
+        "parameters": [],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "todosWithStringRole",
+        "parameters": [],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "todosWithMultipleRoles",
+        "parameters": [],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "todosWithInvalidRole",
+        "parameters": [],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "todosWithInvalidRoles",
+        "parameters": [],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "todosWithMissingRoles",
+        "parameters": [],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "todosWithBuiltInDeprecatedDirective",
+        "parameters": [],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "todosWithMissingRolesAttribute",
+        "parameters": [],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "todosWithMissingRolesAttributeNumeric",
+        "parameters": [],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "createTodo",
+        "parameters": [
+          "body",
+        ],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "updateTodoStatus",
+        "parameters": [
+          "id",
+          "status",
+        ],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "renameTodo",
+        "parameters": [
+          "id",
+          "body",
+        ],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/todos/todos.js",
+        "name": "deleteTodo",
+        "parameters": [
+          "id",
+        ],
+        "serviceName": "todos",
+        "type": "service-function",
+      },
+    ],
+    "name": "todos",
+    "type": "service",
+  },
+]
+`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct project: sides 1`] = `
+[
+  RedwoodSide {
+    "filepath": "/web",
+    "name": "web",
+    "sideType": "web",
+    "type": "side",
+  },
+  RedwoodSide {
+    "filepath": "/api",
+    "name": "api",
+    "sideType": "api",
+    "type": "side",
+  },
+]
+`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct project: warnings 1`] = `
+[
+  {
+    "component": {
+      "filepath": "/web/src/components/TableCell/TableCell.js",
+      "name": "TableCell",
+      "type": "cell",
+    },
+    "message": "Unable to extract your cell query",
+  },
+  {
+    "component": {
+      "filepath": "/web/src/components/TableCell/TableCell.js",
+      "name": "TableCell",
+      "type": "cell",
+    },
+    "message": "We recommend that you name your query operation",
+  },
+  {
+    "component": {
+      "filepath": "/web/src/components/TodoListCell/TodoListCell.js",
+      "name": "TodoListCell",
+      "type": "cell",
+    },
+    "message": "We recommend that you name your query operation",
+  },
+]
+`;
+
+exports[`From within the 'test-project' fixture returns the correct project: cells 1`] = `
+[
+  RedwoodCell {
+    "filepath": "/web/src/components/AuthorCell/AuthorCell.tsx",
+    "gqlQuery": "
+  query FindAuthorQuery($id: Int!) {
+    author: user(id: $id) {
+      email
+      fullName
+    }
+  }
+",
+    "gqlQueryName": "FindAuthorQuery",
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "AuthorCell",
+    "type": "cell",
+  },
+  RedwoodCell {
+    "filepath": "/web/src/components/BlogPostCell/BlogPostCell.tsx",
+    "gqlQuery": "
+  query FindBlogPostQuery($id: Int!) {
+    blogPost: post(id: $id) {
+      id
+      title
+      body
+      author {
+        email
+        fullName
+      }
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindBlogPostQuery",
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "BlogPostCell",
+    "type": "cell",
+  },
+  RedwoodCell {
+    "filepath": "/web/src/components/BlogPostsCell/BlogPostsCell.tsx",
+    "gqlQuery": "
+  query BlogPostsQuery {
+    blogPosts: posts {
+      id
+      title
+      body
+      author {
+        email
+        fullName
+      }
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "BlogPostsQuery",
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "BlogPostsCell",
+    "type": "cell",
+  },
+  RedwoodCell {
+    "filepath": "/web/src/components/Contact/ContactCell/ContactCell.tsx",
+    "gqlQuery": "
+  query FindContactById($id: Int!) {
+    contact: contact(id: $id) {
+      id
+      name
+      email
+      message
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindContactById",
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "ContactCell",
+    "type": "cell",
+  },
+  RedwoodCell {
+    "filepath": "/web/src/components/Contact/ContactsCell/ContactsCell.tsx",
+    "gqlQuery": "
+  query FindContacts {
+    contacts {
+      id
+      name
+      email
+      message
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindContacts",
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "ContactsCell",
+    "type": "cell",
+  },
+  RedwoodCell {
+    "filepath": "/web/src/components/Contact/EditContactCell/EditContactCell.tsx",
+    "gqlQuery": "
+  query EditContactById($id: Int!) {
+    contact: contact(id: $id) {
+      id
+      name
+      email
+      message
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "EditContactById",
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": false,
+    "hasFailureExport": true,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "EditContactCell",
+    "type": "cell",
+  },
+  RedwoodCell {
+    "filepath": "/web/src/components/Post/EditPostCell/EditPostCell.tsx",
+    "gqlQuery": "
+  query EditPostById($id: Int!) {
+    post: post(id: $id) {
+      id
+      title
+      body
+      authorId
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "EditPostById",
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": false,
+    "hasFailureExport": true,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "EditPostCell",
+    "type": "cell",
+  },
+  RedwoodCell {
+    "filepath": "/web/src/components/Post/PostCell/PostCell.tsx",
+    "gqlQuery": "
+  query FindPostById($id: Int!) {
+    post: post(id: $id) {
+      id
+      title
+      body
+      authorId
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindPostById",
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "PostCell",
+    "type": "cell",
+  },
+  RedwoodCell {
+    "filepath": "/web/src/components/Post/PostsCell/PostsCell.tsx",
+    "gqlQuery": "
+  query FindPosts {
+    posts {
+      id
+      title
+      body
+      authorId
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindPosts",
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "PostsCell",
+    "type": "cell",
+  },
+  RedwoodCell {
+    "filepath": "/web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx",
+    "gqlQuery": "
+  query FindWaterfallBlogPostQuery($id: Int!) {
+    waterfallBlogPost: post(id: $id) {
+      id
+      title
+      body
+      authorId
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindWaterfallBlogPostQuery",
+    "hasAfterQueryExport": false,
+    "hasBeforeQueryExport": false,
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasIsEmptyExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "WaterfallBlogPostCell",
+    "type": "cell",
+  },
+]
+`;
+
+exports[`From within the 'test-project' fixture returns the correct project: complexity metric 1`] = `"20.7.3.10.21"`;
+
+exports[`From within the 'test-project' fixture returns the correct project: errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct project: pages 1`] = `
+[
+  RedwoodPage {
+    "filepath": "/web/src/pages/AboutPage/AboutPage.tsx",
+    "hasDefaultExport": true,
+    "name": "AboutPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/BlogPostPage/BlogPostPage.tsx",
+    "hasDefaultExport": true,
+    "name": "BlogPostPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/Contact/ContactPage/ContactPage.tsx",
+    "hasDefaultExport": true,
+    "name": "ContactPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/Contact/ContactsPage/ContactsPage.tsx",
+    "hasDefaultExport": true,
+    "name": "ContactsPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/Contact/EditContactPage/EditContactPage.tsx",
+    "hasDefaultExport": true,
+    "name": "EditContactPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/Contact/NewContactPage/NewContactPage.tsx",
+    "hasDefaultExport": true,
+    "name": "NewContactPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/ContactUsPage/ContactUsPage.tsx",
+    "hasDefaultExport": true,
+    "name": "ContactUsPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/DoublePage/DoublePage.tsx",
+    "hasDefaultExport": true,
+    "name": "DoublePage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.tsx",
+    "hasDefaultExport": true,
+    "name": "FatalErrorPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.tsx",
+    "hasDefaultExport": true,
+    "name": "ForgotPasswordPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/HomePage/HomePage.tsx",
+    "hasDefaultExport": true,
+    "name": "HomePage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/LoginPage/LoginPage.tsx",
+    "hasDefaultExport": true,
+    "name": "LoginPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.tsx",
+    "hasDefaultExport": true,
+    "name": "NotFoundPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/Post/EditPostPage/EditPostPage.tsx",
+    "hasDefaultExport": true,
+    "name": "EditPostPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/Post/NewPostPage/NewPostPage.tsx",
+    "hasDefaultExport": true,
+    "name": "NewPostPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/Post/PostPage/PostPage.tsx",
+    "hasDefaultExport": true,
+    "name": "PostPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/Post/PostsPage/PostsPage.tsx",
+    "hasDefaultExport": true,
+    "name": "PostsPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/ProfilePage/ProfilePage.tsx",
+    "hasDefaultExport": true,
+    "name": "ProfilePage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/ResetPasswordPage/ResetPasswordPage.tsx",
+    "hasDefaultExport": true,
+    "name": "ResetPasswordPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/SignupPage/SignupPage.tsx",
+    "hasDefaultExport": true,
+    "name": "SignupPage",
+    "type": "page",
+  },
+  RedwoodPage {
+    "filepath": "/web/src/pages/WaterfallPage/WaterfallPage.tsx",
+    "hasDefaultExport": true,
+    "name": "WaterfallPage",
+    "type": "page",
+  },
+]
+`;
+
+exports[`From within the 'test-project' fixture returns the correct project: project 1`] = `
+RedwoodProject {
+  "cells": undefined,
+  "filepath": "",
+  "language": "typescript",
+  "name": "test-project",
+  "pages": undefined,
+  "router": undefined,
+  "services": undefined,
+  "sides": undefined,
+  "type": "project",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct project: router 1`] = `
+RedwoodRouter {
+  "filepath": "/web/src/Routes.tsx",
+  "name": "Routes",
+  "routes": [
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "double",
+      "pageIdentifier": "DoublePage",
+      "path": "/double",
+      "prerender": true,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "login",
+      "pageIdentifier": "LoginPage",
+      "path": "/login",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "signup",
+      "pageIdentifier": "SignupPage",
+      "path": "/signup",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "forgotPassword",
+      "pageIdentifier": "ForgotPasswordPage",
+      "path": "/forgot-password",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "resetPassword",
+      "pageIdentifier": "ResetPasswordPage",
+      "path": "/reset-password",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "newContact",
+      "pageIdentifier": "ContactNewContactPage",
+      "path": "/contacts/new",
+      "prerender": true,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": true,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "editContact",
+      "pageIdentifier": "ContactEditContactPage",
+      "path": "/contacts/{id:Int}/edit",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": true,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "contact",
+      "pageIdentifier": "ContactContactPage",
+      "path": "/contacts/{id:Int}",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "contacts",
+      "pageIdentifier": "ContactContactsPage",
+      "path": "/contacts",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "newPost",
+      "pageIdentifier": "PostNewPostPage",
+      "path": "/posts/new",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": true,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "editPost",
+      "pageIdentifier": "PostEditPostPage",
+      "path": "/posts/{id:Int}/edit",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": true,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "post",
+      "pageIdentifier": "PostPostPage",
+      "path": "/posts/{id:Int}",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "posts",
+      "pageIdentifier": "PostPostsPage",
+      "path": "/posts",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": true,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "waterfall",
+      "pageIdentifier": "WaterfallPage",
+      "path": "/waterfall/{id:Int}",
+      "prerender": true,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": true,
+      "name": "profile",
+      "pageIdentifier": "ProfilePage",
+      "path": "/profile",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": true,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "blogPost",
+      "pageIdentifier": "BlogPostPage",
+      "path": "/blog-post/{id:Int}",
+      "prerender": true,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "contactUs",
+      "pageIdentifier": "ContactUsPage",
+      "path": "/contact",
+      "prerender": false,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "about",
+      "pageIdentifier": "AboutPage",
+      "path": "/about",
+      "prerender": true,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": false,
+      "isPrivate": false,
+      "name": "home",
+      "pageIdentifier": "HomePage",
+      "path": "/",
+      "prerender": true,
+      "type": "route",
+    },
+    RedwoodRoute {
+      "filepath": "/web/src/Routes.tsx",
+      "hasParameters": false,
+      "isNotFound": true,
+      "isPrivate": false,
+      "name": "notfound",
+      "pageIdentifier": "NotFoundPage",
+      "path": undefined,
+      "prerender": true,
+      "type": "route",
+    },
+  ],
+  "type": "router",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct project: services 1`] = `
+[
+  RedwoodService {
+    "filepath": "/api/src/services/contacts/contacts.ts",
+    "functions": [
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/contacts/contacts.ts",
+        "name": "contacts",
+        "parameters": [],
+        "serviceName": "contacts",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/contacts/contacts.ts",
+        "name": "contact",
+        "parameters": [
+          "id",
+        ],
+        "serviceName": "contacts",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/contacts/contacts.ts",
+        "name": "createContact",
+        "parameters": [
+          "input",
+        ],
+        "serviceName": "contacts",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/contacts/contacts.ts",
+        "name": "updateContact",
+        "parameters": [
+          "id",
+          "input",
+        ],
+        "serviceName": "contacts",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/contacts/contacts.ts",
+        "name": "deleteContact",
+        "parameters": [
+          "id",
+        ],
+        "serviceName": "contacts",
+        "type": "service-function",
+      },
+    ],
+    "name": "contacts",
+    "type": "service",
+  },
+  RedwoodService {
+    "filepath": "/api/src/services/posts/posts.ts",
+    "functions": [
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/posts/posts.ts",
+        "name": "posts",
+        "parameters": [],
+        "serviceName": "posts",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/posts/posts.ts",
+        "name": "post",
+        "parameters": [
+          "id",
+        ],
+        "serviceName": "posts",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/posts/posts.ts",
+        "name": "createPost",
+        "parameters": [
+          "input",
+        ],
+        "serviceName": "posts",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/posts/posts.ts",
+        "name": "updatePost",
+        "parameters": [
+          "id",
+          "input",
+        ],
+        "serviceName": "posts",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/posts/posts.ts",
+        "name": "deletePost",
+        "parameters": [
+          "id",
+        ],
+        "serviceName": "posts",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/posts/posts.ts",
+        "name": "Post",
+        "parameters": [],
+        "serviceName": "posts",
+        "type": "service-function",
+      },
+    ],
+    "name": "posts",
+    "type": "service",
+  },
+  RedwoodService {
+    "filepath": "/api/src/services/users/users.ts",
+    "functions": [
+      RedwoodServiceFunction {
+        "constructorErrors": [
+          {
+            "component": {
+              "filepath": "/Users/jgmw/Development/redwood/redwood/__fixtures__/test-project/api/src/services/users/users.ts",
+              "name": "users",
+              "type": "service-function",
+            },
+            "message": "Unable to extract the name of the service function",
+          },
+          {
+            "component": {
+              "filepath": "/Users/jgmw/Development/redwood/redwood/__fixtures__/test-project/api/src/services/users/users.ts",
+              "name": "users",
+              "type": "service-function",
+            },
+            "message": "Unable to extract the parameters of the service function",
+          },
+        ],
+        "filepath": "/api/src/services/users/users.ts",
+        "name": "users",
+        "parameters": [],
+        "serviceName": "users",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/users/users.ts",
+        "name": "user",
+        "parameters": [
+          "id",
+        ],
+        "serviceName": "users",
+        "type": "service-function",
+      },
+      RedwoodServiceFunction {
+        "constructorErrors": [],
+        "filepath": "/api/src/services/users/users.ts",
+        "name": "User",
+        "parameters": [],
+        "serviceName": "users",
+        "type": "service-function",
+      },
+    ],
+    "name": "users",
+    "type": "service",
+  },
+]
+`;
+
+exports[`From within the 'test-project' fixture returns the correct project: sides 1`] = `
+[
+  RedwoodSide {
+    "filepath": "/web",
+    "name": "web",
+    "sideType": "web",
+    "type": "side",
+  },
+  RedwoodSide {
+    "filepath": "/api",
+    "name": "api",
+    "sideType": "api",
+    "type": "side",
+  },
+]
+`;
+
+exports[`From within the 'test-project' fixture returns the correct project: warnings 1`] = `[]`;

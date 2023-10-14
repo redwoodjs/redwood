@@ -1,0 +1,451 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`From within the 'empty-project' fixture returns the correct pages: /web/src/pages/FatalErrorPage/FatalErrorPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.tsx",
+  "hasDefaultExport": true,
+  "name": "FatalErrorPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'empty-project' fixture returns the correct pages: /web/src/pages/FatalErrorPage/FatalErrorPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'empty-project' fixture returns the correct pages: /web/src/pages/FatalErrorPage/FatalErrorPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'empty-project' fixture returns the correct pages: /web/src/pages/NotFoundPage/NotFoundPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.tsx",
+  "hasDefaultExport": true,
+  "name": "NotFoundPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'empty-project' fixture returns the correct pages: /web/src/pages/NotFoundPage/NotFoundPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'empty-project' fixture returns the correct pages: /web/src/pages/NotFoundPage/NotFoundPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'empty-project' fixture returns the correct pages: pages count 1`] = `2`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/BarPage/BarPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/BarPage/BarPage.tsx",
+  "hasDefaultExport": true,
+  "name": "BarPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/BarPage/BarPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/BarPage/BarPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/FatalErrorPage/FatalErrorPage.js content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
+  "hasDefaultExport": true,
+  "name": "FatalErrorPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/FatalErrorPage/FatalErrorPage.js errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/FatalErrorPage/FatalErrorPage.js warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/FooPage/FooPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/FooPage/FooPage.tsx",
+  "hasDefaultExport": true,
+  "name": "FooPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/FooPage/FooPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/FooPage/FooPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/HomePage/HomePage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/HomePage/HomePage.tsx",
+  "hasDefaultExport": true,
+  "name": "HomePage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/HomePage/HomePage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/HomePage/HomePage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/NotFoundPage/NotFoundPage.js content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.js",
+  "hasDefaultExport": true,
+  "name": "NotFoundPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/NotFoundPage/NotFoundPage.js errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/NotFoundPage/NotFoundPage.js warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/PrivatePage/PrivatePage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/PrivatePage/PrivatePage.tsx",
+  "hasDefaultExport": true,
+  "name": "PrivatePage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/PrivatePage/PrivatePage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/PrivatePage/PrivatePage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/TypeScriptPage/TypeScriptPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/TypeScriptPage/TypeScriptPage.tsx",
+  "hasDefaultExport": true,
+  "name": "TypeScriptPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/TypeScriptPage/TypeScriptPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/TypeScriptPage/TypeScriptPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/admin/EditUserPage/EditUserPage.jsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/admin/EditUserPage/EditUserPage.jsx",
+  "hasDefaultExport": true,
+  "name": "EditUserPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/admin/EditUserPage/EditUserPage.jsx errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: /web/src/pages/admin/EditUserPage/EditUserPage.jsx warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct pages: pages count 1`] = `8`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct pages: /web/src/pages/FatalErrorPage/FatalErrorPage.js content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
+  "hasDefaultExport": true,
+  "name": "FatalErrorPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct pages: /web/src/pages/FatalErrorPage/FatalErrorPage.js errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct pages: /web/src/pages/FatalErrorPage/FatalErrorPage.js warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct pages: /web/src/pages/HomePage/HomePage.js content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/HomePage/HomePage.js",
+  "hasDefaultExport": true,
+  "name": "HomePage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct pages: /web/src/pages/HomePage/HomePage.js errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct pages: /web/src/pages/HomePage/HomePage.js warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct pages: /web/src/pages/NotFoundPage/NotFoundPage.js content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.js",
+  "hasDefaultExport": true,
+  "name": "NotFoundPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct pages: /web/src/pages/NotFoundPage/NotFoundPage.js errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct pages: /web/src/pages/NotFoundPage/NotFoundPage.js warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct pages: pages count 1`] = `3`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/AboutPage/AboutPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/AboutPage/AboutPage.tsx",
+  "hasDefaultExport": true,
+  "name": "AboutPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/AboutPage/AboutPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/AboutPage/AboutPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/BlogPostPage/BlogPostPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/BlogPostPage/BlogPostPage.tsx",
+  "hasDefaultExport": true,
+  "name": "BlogPostPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/BlogPostPage/BlogPostPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/BlogPostPage/BlogPostPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Contact/ContactPage/ContactPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/Contact/ContactPage/ContactPage.tsx",
+  "hasDefaultExport": true,
+  "name": "ContactPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Contact/ContactPage/ContactPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Contact/ContactPage/ContactPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Contact/ContactsPage/ContactsPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/Contact/ContactsPage/ContactsPage.tsx",
+  "hasDefaultExport": true,
+  "name": "ContactsPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Contact/ContactsPage/ContactsPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Contact/ContactsPage/ContactsPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Contact/EditContactPage/EditContactPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/Contact/EditContactPage/EditContactPage.tsx",
+  "hasDefaultExport": true,
+  "name": "EditContactPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Contact/EditContactPage/EditContactPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Contact/EditContactPage/EditContactPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Contact/NewContactPage/NewContactPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/Contact/NewContactPage/NewContactPage.tsx",
+  "hasDefaultExport": true,
+  "name": "NewContactPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Contact/NewContactPage/NewContactPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Contact/NewContactPage/NewContactPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/ContactUsPage/ContactUsPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/ContactUsPage/ContactUsPage.tsx",
+  "hasDefaultExport": true,
+  "name": "ContactUsPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/ContactUsPage/ContactUsPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/ContactUsPage/ContactUsPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/DoublePage/DoublePage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/DoublePage/DoublePage.tsx",
+  "hasDefaultExport": true,
+  "name": "DoublePage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/DoublePage/DoublePage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/DoublePage/DoublePage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/FatalErrorPage/FatalErrorPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.tsx",
+  "hasDefaultExport": true,
+  "name": "FatalErrorPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/FatalErrorPage/FatalErrorPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/FatalErrorPage/FatalErrorPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/ForgotPasswordPage/ForgotPasswordPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.tsx",
+  "hasDefaultExport": true,
+  "name": "ForgotPasswordPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/ForgotPasswordPage/ForgotPasswordPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/ForgotPasswordPage/ForgotPasswordPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/HomePage/HomePage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/HomePage/HomePage.tsx",
+  "hasDefaultExport": true,
+  "name": "HomePage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/HomePage/HomePage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/HomePage/HomePage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/LoginPage/LoginPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/LoginPage/LoginPage.tsx",
+  "hasDefaultExport": true,
+  "name": "LoginPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/LoginPage/LoginPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/LoginPage/LoginPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/NotFoundPage/NotFoundPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.tsx",
+  "hasDefaultExport": true,
+  "name": "NotFoundPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/NotFoundPage/NotFoundPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/NotFoundPage/NotFoundPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Post/EditPostPage/EditPostPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/Post/EditPostPage/EditPostPage.tsx",
+  "hasDefaultExport": true,
+  "name": "EditPostPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Post/EditPostPage/EditPostPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Post/EditPostPage/EditPostPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Post/NewPostPage/NewPostPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/Post/NewPostPage/NewPostPage.tsx",
+  "hasDefaultExport": true,
+  "name": "NewPostPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Post/NewPostPage/NewPostPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Post/NewPostPage/NewPostPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Post/PostPage/PostPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/Post/PostPage/PostPage.tsx",
+  "hasDefaultExport": true,
+  "name": "PostPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Post/PostPage/PostPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Post/PostPage/PostPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Post/PostsPage/PostsPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/Post/PostsPage/PostsPage.tsx",
+  "hasDefaultExport": true,
+  "name": "PostsPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Post/PostsPage/PostsPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/Post/PostsPage/PostsPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/ProfilePage/ProfilePage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/ProfilePage/ProfilePage.tsx",
+  "hasDefaultExport": true,
+  "name": "ProfilePage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/ProfilePage/ProfilePage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/ProfilePage/ProfilePage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/ResetPasswordPage/ResetPasswordPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/ResetPasswordPage/ResetPasswordPage.tsx",
+  "hasDefaultExport": true,
+  "name": "ResetPasswordPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/ResetPasswordPage/ResetPasswordPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/ResetPasswordPage/ResetPasswordPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/SignupPage/SignupPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/SignupPage/SignupPage.tsx",
+  "hasDefaultExport": true,
+  "name": "SignupPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/SignupPage/SignupPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/SignupPage/SignupPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/WaterfallPage/WaterfallPage.tsx content 1`] = `
+RedwoodPage {
+  "filepath": "/web/src/pages/WaterfallPage/WaterfallPage.tsx",
+  "hasDefaultExport": true,
+  "name": "WaterfallPage",
+  "type": "page",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/WaterfallPage/WaterfallPage.tsx errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: /web/src/pages/WaterfallPage/WaterfallPage.tsx warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct pages: pages count 1`] = `21`;

@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`From within the 'empty-project' fixture returns the correct sides: /api content 1`] = `
+RedwoodSide {
+  "filepath": "/api",
+  "name": "api",
+  "sideType": "api",
+  "type": "side",
+}
+`;
+
+exports[`From within the 'empty-project' fixture returns the correct sides: /api errors 1`] = `[]`;
+
+exports[`From within the 'empty-project' fixture returns the correct sides: /api warnings 1`] = `[]`;
+
+exports[`From within the 'empty-project' fixture returns the correct sides: /web content 1`] = `
+RedwoodSide {
+  "filepath": "/web",
+  "name": "web",
+  "sideType": "web",
+  "type": "side",
+}
+`;
+
+exports[`From within the 'empty-project' fixture returns the correct sides: /web errors 1`] = `[]`;
+
+exports[`From within the 'empty-project' fixture returns the correct sides: /web warnings 1`] = `[]`;
+
+exports[`From within the 'empty-project' fixture returns the correct sides: sides count 1`] = `2`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct sides: /api content 1`] = `
+RedwoodSide {
+  "filepath": "/api",
+  "name": "api",
+  "sideType": "api",
+  "type": "side",
+}
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct sides: /api errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct sides: /api warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct sides: /web content 1`] = `
+RedwoodSide {
+  "filepath": "/web",
+  "name": "web",
+  "sideType": "web",
+  "type": "side",
+}
+`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct sides: /web errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct sides: /web warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main' fixture returns the correct sides: sides count 1`] = `2`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct sides: /api content 1`] = `
+RedwoodSide {
+  "filepath": "/api",
+  "name": "api",
+  "sideType": "api",
+  "type": "side",
+}
+`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct sides: /api errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct sides: /api warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct sides: /web content 1`] = `
+RedwoodSide {
+  "filepath": "/web",
+  "name": "web",
+  "sideType": "web",
+  "type": "side",
+}
+`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct sides: /web errors 1`] = `[]`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct sides: /web warnings 1`] = `[]`;
+
+exports[`From within the 'example-todo-main-with-errors' fixture returns the correct sides: sides count 1`] = `2`;
+
+exports[`From within the 'test-project' fixture returns the correct sides: /api content 1`] = `
+RedwoodSide {
+  "filepath": "/api",
+  "name": "api",
+  "sideType": "api",
+  "type": "side",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct sides: /api errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct sides: /api warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct sides: /web content 1`] = `
+RedwoodSide {
+  "filepath": "/web",
+  "name": "web",
+  "sideType": "web",
+  "type": "side",
+}
+`;
+
+exports[`From within the 'test-project' fixture returns the correct sides: /web errors 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct sides: /web warnings 1`] = `[]`;
+
+exports[`From within the 'test-project' fixture returns the correct sides: sides count 1`] = `2`;
