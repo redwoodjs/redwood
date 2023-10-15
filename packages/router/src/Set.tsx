@@ -1,5 +1,5 @@
 import type { ReactElement, ReactNode } from 'react'
-import React from 'react'
+import * as React from 'react'
 
 export type WrapperType<WTProps> = (
   props: WTProps & { children: ReactNode }
@@ -12,9 +12,11 @@ type SetProps<P> = P & {
   //   <Set<{theme: string}> wrap={ThemeableLayout} theme="dark">
   wrap?: WrapperType<P> | WrapperType<P>[]
   /**
-   * `Routes` nested in a `<Set>` with `private` specified require
+   *`Routes` nested in a `<Set>` with `private` specified require
    * authentication. When a user is not authenticated and attempts to visit
    * the wrapped route they will be redirected to `unauthenticated` route.
+   *
+   * @deprecated Please use `<PrivateSet>` instead
    */
   private?: boolean
   /** The page name where a user will be redirected when not authenticated */
@@ -45,7 +47,7 @@ export function Set<WrapperProps>(_props: SetProps<WrapperProps>) {
   return null
 }
 
-type PrivateProps<P> = Omit<
+type PrivateSetProps<P> = Omit<
   SetProps<P>,
   'private' | 'unauthenticated' | 'wrap'
 > & {
@@ -54,7 +56,16 @@ type PrivateProps<P> = Omit<
   wrap?: WrapperType<P> | WrapperType<P>[]
 }
 
-export function Private<WrapperProps>(_props: PrivateProps<WrapperProps>) {
+/** @deprecated Please use `<PrivateSet>` instead */
+export function Private<WrapperProps>(_props: PrivateSetProps<WrapperProps>) {
+  // @MARK Virtual Component, this is actually never rendered
+  // See analyzeRoutes in utils.tsx, inside the isSetNode block
+  return null
+}
+
+export function PrivateSet<WrapperProps>(
+  _props: PrivateSetProps<WrapperProps>
+) {
   // @MARK Virtual Component, this is actually never rendered
   // See analyzeRoutes in utils.tsx, inside the isSetNode block
   return null
@@ -64,8 +75,15 @@ export const isSetNode = (
   node: ReactNode
 ): node is ReactElement<SetProps<any>> => {
   return (
-    React.isValidElement(node) && (node.type === Set || node.type === Private)
+    React.isValidElement(node) &&
+    (node.type === Set || node.type === PrivateSet || node.type === Private)
   )
+}
+
+export const isPrivateSetNode = (
+  node: ReactNode
+): node is ReactElement<PrivateSetProps<unknown>> => {
+  return React.isValidElement(node) && node.type === PrivateSet
 }
 
 // Only identifies <Private> nodes, not <Set private> nodes

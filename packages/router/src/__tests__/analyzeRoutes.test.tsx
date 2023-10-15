@@ -1,7 +1,7 @@
 import React, { isValidElement } from 'react'
 
 import { Route, Router } from '../router'
-import { Private, Set } from '../Set'
+import { Private, PrivateSet, Set } from '../Set'
 import { analyzeRoutes } from '../util'
 
 const FakePage = () => <h1>Fake Page</h1>
@@ -106,14 +106,26 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
   })
 
   test('Creates setWrapper map', () => {
-    const WrapperX = ({ children }) => (
+    interface WrapperXProps {
+      children: React.ReactNode
+      id: string
+      passThruProp: string
+    }
+
+    const WrapperX = ({ children }: WrapperXProps) => (
       <>
         <h1>WrapperA</h1>
         {children}
       </>
     )
 
-    const WrapperY = ({ children }) => (
+    interface WrapperYProps {
+      children: React.ReactNode
+      id: string
+      theme: string
+    }
+
+    const WrapperY = ({ children }: WrapperYProps) => (
       <>
         <h1>WrapperY</h1>
         {children}
@@ -196,7 +208,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
 
   test('Creates setWrapper map with nested sets', () => {
     const KrismasTree = (
-      <Private unauthenticated="signIn">
+      <PrivateSet unauthenticated="signIn">
         <Route path="/dashboard" page={FakePage} name="dashboard" />
         <Set wrap={[FakeLayout1, FakeLayout2]}>
           <Route
@@ -254,7 +266,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             />
           </Set>
         </Set>
-      </Private>
+      </PrivateSet>
     )
 
     const { pathRouteMap } = analyzeRoutes(KrismasTree.props.children, {
@@ -273,6 +285,37 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         <Private unauthenticated="home">
           <Route path="/private" name="privateRoute" page={FakePage} />
         </Private>
+      </Router>
+    )
+
+    const { pathRouteMap } = analyzeRoutes(Routes.props.children, {
+      currentPathName: '/',
+    })
+
+    expect(pathRouteMap['/private']).toStrictEqual({
+      redirect: null,
+      name: 'privateRoute',
+      path: '/private',
+      whileLoadingPage: undefined,
+      page: FakePage,
+      wrappers: [],
+      setId: 1,
+      setProps: [
+        {
+          private: true,
+          unauthenticated: 'home',
+        },
+      ],
+    })
+  })
+
+  test('Handles PrivateSet', () => {
+    const Routes = (
+      <Router>
+        <Route path="/" name="home" page={FakePage} />
+        <PrivateSet unauthenticated="home">
+          <Route path="/private" name="privateRoute" page={FakePage} />
+        </PrivateSet>
       </Router>
     )
 
@@ -334,7 +377,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     const RedirectedRoutes = (
       <Router>
         <Route path="/" page={HomePage} name="home" />
-        <Private unauthenticated="home">
+        <PrivateSet unauthenticated="home">
           <Route
             path="/no-roles-assigned"
             page={PrivateNoRolesAssigned}
@@ -346,23 +389,23 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             roles={['ADMIN', 'EMPLOYEE']}
             someProp="propFromNoRolesSet"
           >
-            <Private unauthenticated="admin" roles={'EMPLOYEE'}>
+            <PrivateSet unauthenticated="admin" roles={'EMPLOYEE'}>
               <Route
                 path="/employee"
                 page={PrivateEmployeePage}
                 name="privateEmployee"
               />
-            </Private>
+            </PrivateSet>
 
-            <Private unauthenticated="employee" roles={'ADMIN'}>
+            <PrivateSet unauthenticated="employee" roles={'ADMIN'}>
               <Route
                 path="/admin"
                 page={PrivateAdminPage}
                 name="privateAdmin"
               />
-            </Private>
+            </PrivateSet>
           </Set>
-        </Private>
+        </PrivateSet>
       </Router>
     )
 

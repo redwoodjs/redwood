@@ -8,7 +8,7 @@ import {
   isValidRoute,
 } from './route-validators'
 import type { PageType } from './router'
-import { isPrivateNode, isSetNode } from './Set'
+import { isPrivateNode, isPrivateSetNode, isSetNode } from './Set'
 
 /** Create a React Context with the given name. */
 export function createNamedContext<T>(name: string, defaultValue?: T) {
@@ -594,7 +594,7 @@ export function analyzeRoutes(
         }
       }
 
-      // @NOTE: A <Private> is also a Set
+      // @NOTE: A <PrivateSet> is also a Set
       if (isSetNode(node)) {
         setId = setId + 1 // increase the Set id for each Set found
         const {
@@ -614,7 +614,9 @@ export function analyzeRoutes(
         // You cannot make a nested set public if the parent is private
         // i.e. the private prop cannot be overridden by a child Set
         const privateProps =
-          isPrivateNode(node) || previousSetProps.some((props) => props.private)
+          isPrivateNode(node) ||
+          isPrivateSetNode(node) ||
+          previousSetProps.some((props) => props.private)
             ? { private: true }
             : {}
 

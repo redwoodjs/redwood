@@ -37,6 +37,7 @@ import {
   Link,
   navigate,
   Private,
+  PrivateSet,
   Redirect,
   Route,
   Router,
@@ -248,22 +249,24 @@ describe('slow imports', () => {
         name="login"
         whileLoadingPage={LoginPagePlaceholder}
       />
-      <Private unauthenticated="login">
+      <PrivateSet unauthenticated="login">
         <Route
           path="/private"
           page={PrivatePage}
           name="private"
           whileLoadingPage={PrivatePagePlaceholder}
         />
-      </Private>
-      <Private unauthenticated="login" roles="admin">
+      </PrivateSet>
+      <PrivateSet unauthenticated="login" roles="admin">
         <Route
           path="/private_with_role"
           page={PrivatePage}
           name="private_with_role"
           whileLoadingPage={PrivatePagePlaceholder}
         />
-      </Private>
+      </PrivateSet>
+      {/* Keeping this one around for now, so we don't accidentally break
+      Private until we're ready to remove it */}
       <Private unauthenticated="login" roles={['admin', 'moderator']}>
         <Route
           path="/private_with_several_roles"
@@ -551,9 +554,9 @@ describe('inits routes and navigates as expected', () => {
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/redirect" page={RedirectPage} name="redirect" />
       <Route path="/redirect2/{value}" redirect="/param-test/{value}" />
-      <Private unauthenticated="home">
+      <PrivateSet unauthenticated="home">
         <Route path="/private" page={PrivatePage} name="private" />
-      </Private>
+      </PrivateSet>
       <Route path="/param-test/{value}" page={ParamPage} name="params" />
       <Route notfound page={NotFoundPage} />
     </Router>
@@ -762,9 +765,9 @@ test('unauthenticated user is redirected away from private page', async () => {
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/about" page={AboutPage} name="about" />
-      <Private unauthenticated="login">
+      <PrivateSet unauthenticated="login">
         <Route path="/private" page={PrivatePage} name="private" />
-      </Private>
+      </PrivateSet>
     </Router>
   )
   const screen = render(<TestRouter />)
@@ -789,9 +792,9 @@ test('unauthenticated user is redirected including search params', async () => {
     <Router>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
-      <Private unauthenticated="login">
+      <PrivateSet unauthenticated="login">
         <Route path="/private" page={PrivatePage} name="private" />
-      </Private>
+      </PrivateSet>
     </Router>
   )
   const screen = render(<TestRouter />)
@@ -817,9 +820,9 @@ test('authenticated user can access private page', async () => {
   const TestRouter = () => (
     <Router useAuth={mockUseAuth({ isAuthenticated: true })}>
       <Route path="/" page={HomePage} name="home" />
-      <Private unauthenticated="home">
+      <PrivateSet unauthenticated="home">
         <Route path="/private" page={PrivatePage} name="private" />
-      </Private>
+      </PrivateSet>
     </Router>
   )
   const screen = render(<TestRouter />)
@@ -840,12 +843,12 @@ test('can display a loading screen whilst waiting for auth', async () => {
   const TestRouter = () => (
     <Router useAuth={mockUseAuth({ isAuthenticated: false, loading: true })}>
       <Route path="/" page={HomePage} name="home" />
-      <Private
+      <PrivateSet
         unauthenticated="home"
         whileLoadingAuth={() => <>Authenticating...</>}
       >
         <Route path="/private" page={PrivatePage} name="private" />
-      </Private>
+      </PrivateSet>
     </Router>
   )
   const screen = render(<TestRouter />)
@@ -883,9 +886,9 @@ test('can display a loading screen with a hook', async () => {
       })}
     >
       <Route path="/" page={HomePage} name="home" />
-      <Private unauthenticated="home" whileLoadingAuth={HookLoader}>
+      <PrivateSet unauthenticated="home" whileLoadingAuth={HookLoader}>
         <Route path="/private" page={PrivatePage} name="private" />
-      </Private>
+      </PrivateSet>
     </Router>
   )
   const screen = render(<TestRouter />)
@@ -914,10 +917,10 @@ test('inits routes two private routes with a space in between and loads as expec
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/redirect" page={RedirectPage} name="redirect" />
-      <Private unauthenticated="home">
+      <PrivateSet unauthenticated="home">
         <Route path="/private" page={PrivatePage} name="private" />{' '}
         <Route path="/another-private" page={PrivatePage} name="private" />
-      </Private>
+      </PrivateSet>
 
       <Route
         path="/param-test/:value"
@@ -946,14 +949,14 @@ test('supports <Set>', async () => {
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />
         <Route path="/redirect" page={RedirectPage} name="redirect" />
-        <Private unauthenticated="home">
+        <PrivateSet unauthenticated="home">
           <Route path="/private" page={PrivatePage} name="private" />
           <Route
             path="/another-private"
             page={PrivatePage}
             name="anotherPrivate"
           />
-        </Private>
+        </PrivateSet>
       </Set>
     </Router>
   )
@@ -1097,7 +1100,7 @@ test('renders first matching route only, even if multiple routes have the same n
   expect(screen.queryByText('About Two Page')).not.toBeInTheDocument()
 })
 
-test('renders first matching route only, also with Private', async () => {
+test('renders first matching route only, also with PrivateSet', async () => {
   const ParamPage = ({ param }: { param: string }) => <div>param {param}</div>
 
   const TestRouter = () => (
@@ -1105,9 +1108,9 @@ test('renders first matching route only, also with Private', async () => {
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/about" page={AboutPage} name="about" />
-      <Private unauthenticated="login">
+      <PrivateSet unauthenticated="login">
         <Route path="/{param}" page={ParamPage} name="param" />
-      </Private>
+      </PrivateSet>
     </Router>
   )
 
@@ -1121,15 +1124,15 @@ test('renders first matching route only, also with Private', async () => {
   expect(screen.queryByText(/param/)).not.toBeInTheDocument()
 })
 
-test('renders first matching route only, also with param path outside Private', async () => {
+test('renders first matching route only, also with param path outside PrivateSet', async () => {
   const ParamPage = ({ param }: { param: string }) => <div>param {param}</div>
 
   const TestRouter = () => (
     <Router useAuth={mockUseAuth({ isAuthenticated: true })}>
       <Route path="/" page={HomePage} name="home" />
-      <Private unauthenticated="login">
+      <PrivateSet unauthenticated="login">
         <Route path="/private" page={PrivatePage} name="private" />
-      </Private>
+      </PrivateSet>
       <Route path="/{param}" page={ParamPage} name="param" />
     </Router>
   )
@@ -1259,9 +1262,9 @@ test('Set is not rendered for unauthenticated user.', async () => {
 
   const TestRouter = () => (
     <Router>
-      <Set private wrap={SetWithUseParams} unauthenticated="login">
+      <PrivateSet wrap={SetWithUseParams} unauthenticated="login">
         <Route path="/test/{documentId}" page={ParamPage} name="param" />
-      </Set>
+      </PrivateSet>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={() => <div>auth thyself</div>} name="login" />
     </Router>
@@ -1292,6 +1295,8 @@ test('Set is not rendered for unauthenticated user on direct navigation', async 
 
   const TestRouter = () => (
     <Router>
+      {/* Keeping this around so we don't accidentally break the `private` prop
+      on Set until we're ready to remove it */}
       <Set private wrap={SetWithUseParams} unauthenticated="login">
         <Route path="/test/{documentId}" page={ParamPage} name="param" />
       </Set>
@@ -1305,6 +1310,7 @@ test('Set is not rendered for unauthenticated user on direct navigation', async 
   await waitFor(() => screen.getByText(/auth thyself/))
 })
 
+// TODO: Remove this entire test once we remove the `<Private>` component
 test('Private is an alias for Set private', async () => {
   const PrivateLayout = ({ children, theme }) => (
     <div>
@@ -1335,9 +1341,9 @@ test('redirect to last page', async () => {
     <Router>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
-      <Private unauthenticated="login">
+      <PrivateSet unauthenticated="login">
         <Route path="/private" page={PrivatePage} name="private" />
-      </Private>
+      </PrivateSet>
       <Route path="/login" page={LoginPage} name="login" />
     </Router>
   )
@@ -1559,13 +1565,13 @@ describe('Unauthorized redirect error messages', () => {
     console.error = err
   })
 
-  test('Private set with unauthenticated prop with nonexisting page', async () => {
+  test('PrivateSet with unauthenticated prop with nonexisting page', async () => {
     const TestRouter = ({ authenticated }: { authenticated?: boolean }) => (
       <Router useAuth={mockUseAuth({ isAuthenticated: authenticated })}>
         <Route path="/" page={HomePage} name="home" />
-        <Set private unauthenticated="does-not-exist">
+        <PrivateSet unauthenticated="does-not-exist">
           <Route path="/private" page={PrivatePage} name="private" />
-        </Set>
+        </PrivateSet>
       </Router>
     )
 
@@ -1575,14 +1581,14 @@ describe('Unauthorized redirect error messages', () => {
     )
   })
 
-  test('Private set redirecting to page that needs parameters', async () => {
+  test('PrivateSet redirecting to page that needs parameters', async () => {
     const TestRouter = ({ authenticated }: { authenticated?: boolean }) => (
       <Router useAuth={mockUseAuth({ isAuthenticated: authenticated })}>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/param-test/{value}" page={ParamPage} name="params" />
-        <Set private unauthenticated="params">
+        <PrivateSet unauthenticated="params">
           <Route path="/private" page={PrivatePage} name="private" />
-        </Set>
+        </PrivateSet>
       </Router>
     )
 
@@ -1610,41 +1616,38 @@ describe('Multiple nested private sets', () => {
   const TestRouter = ({ useAuthMock }) => (
     <Router useAuth={useAuthMock}>
       <Route path="/" page={HomePage} name="home" />
-      <Set unauthenticated="home" level="1" wrap={LevelLayout} private>
+      <PrivateSet unauthenticated="home" level="1" wrap={LevelLayout}>
         <Route
           path="/no-roles-assigned"
           page={PrivateNoRolesAssigned}
           name="noRolesAssigned"
         />
-        <Set
-          private
+        <PrivateSet
           unauthenticated="noRolesAssigned"
           roles={['ADMIN', 'EMPLOYEE']}
           level="2"
         >
-          <Set
+          <PrivateSet
             unauthenticated="privateAdmin"
             roles={['EMPLOYEE']}
             level="3"
-            private
           >
             <Route
               path="/employee"
               page={PrivateEmployeePage}
               name="privateEmployee"
             />
-          </Set>
+          </PrivateSet>
 
-          <Set
+          <PrivateSet
             unauthenticated="privateEmployee"
             roles={['ADMIN']}
             level="3"
-            private
           >
             <Route path="/admin" page={PrivateAdminPage} name="privateAdmin" />
-          </Set>
-        </Set>
-      </Set>
+          </PrivateSet>
+        </PrivateSet>
+      </PrivateSet>
     </Router>
   )
 
