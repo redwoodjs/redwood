@@ -1,6 +1,8 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
 
+import { getConfig } from '@redwoodjs/project-config'
+
 import * as DbAuthError from './errors'
 
 // Extracts the cookie from an event, handling lower and upper case header names.
@@ -54,17 +56,20 @@ export const decryptSession = (text: string | null) => {
 }
 
 // returns the actual value of the session cookie
-export const getSession = (text?: string) => {
+export const getSession = (
+  text: string | undefined,
+  cookieNameOption: string | undefined
+) => {
   if (typeof text === 'undefined' || text === null) {
     return null
   }
 
   const cookies = text.split(';')
-  const sessionCookie = cookies.find((cook) => {
-    return cook.split('=')[0].trim() === 'session'
+  const sessionCookie = cookies.find((cookie) => {
+    return cookie.split('=')[0].trim() === cookieName(cookieNameOption)
   })
 
-  if (!sessionCookie || sessionCookie === 'session=') {
+  if (!sessionCookie || sessionCookie === `${cookieName(cookieNameOption)}=`) {
     return null
   }
 
@@ -72,11 +77,15 @@ export const getSession = (text?: string) => {
 }
 
 // Convenience function to get session, decrypt, and return session data all
-// at once. Accepts the `event` argument from a Lambda function call.
-export const dbAuthSession = (event: APIGatewayProxyEvent) => {
+// at once. Accepts the `event` argument from a Lambda function call and the
+// name of the dbAuth session cookie
+export const dbAuthSession = (
+  event: APIGatewayProxyEvent,
+  cookieNameOption: string | undefined
+) => {
   if (extractCookie(event)) {
     const [session, _csrfToken] = decryptSession(
-      getSession(extractCookie(event))
+      getSession(extractCookie(event), cookieNameOption)
     )
     return session
   } else {
@@ -113,4 +122,11 @@ export const hashPassword = (text: string, salt?: string) => {
     CryptoJS.PBKDF2(text, useSalt, { keySize: 256 / 32 }).toString(),
     useSalt,
   ]
+}
+
+export const cookieName = (name: string | undefined) => {
+  const port = getConfig().api?.port || 8911
+  const cookieName = name?.replace('%port%', '' + port) ?? 'session'
+
+  return cookieName
 }
