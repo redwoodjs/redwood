@@ -436,7 +436,7 @@ export function inIframe() {
     return true
   }
 }
-interface AnayzeRoutesOptions {
+interface AnalyzeRoutesOptions {
   currentPathName: string
   userParamTypes?: Record<string, ParamType>
 }
@@ -470,7 +470,7 @@ interface AnalyzedRoute {
 
 export function analyzeRoutes(
   children: ReactNode,
-  { currentPathName, userParamTypes }: AnayzeRoutesOptions
+  { currentPathName, userParamTypes }: AnalyzeRoutesOptions
 ) {
   const pathRouteMap: Record<RoutePath, AnalyzedRoute> = {}
   const namedRoutesMap: GeneratedRoutesMap = {}
@@ -488,10 +488,12 @@ export function analyzeRoutes(
   }
 
   // Track the number of sets found.
-  // Because Sets are virtually rendered we can use this setId as a key to properly manage re-rendering
-  // When using the same wrapper Component for different Sets
+  // Because Sets are virtually rendered we can use this setId as a key to
+  // properly manage re-rendering when using the same wrapper Component for
+  // different Sets
+  //
   // Example:
-  //   <Router>
+  // <Router>
   //   <Set wrap={SetContextProvider}>
   //     <Route path="/" page={HomePage} name="home" />
   //     <Route path="/ctx-1-page" page={Ctx1Page} name="ctx1" />
@@ -511,13 +513,13 @@ export function analyzeRoutes(
   }: RecurseParams) => {
     nodes.forEach((node) => {
       if (isValidRoute(node)) {
-        // Just for readability
+        // Rename for readability
         const route = node
 
         // We don't add not found pages to our list of named routes
         if (isNotFoundRoute(route)) {
           NotFoundPage = route.props.page
-          // Dont add notFound routes to the maps, and exit early
+          // Don't add notFound routes to the maps, and exit early
           // @TODO: We may need to add it to the map, because you can in
           // theory wrap a notfound page in a Set wrapper
           return
@@ -609,9 +611,8 @@ export function analyzeRoutes(
             : [wrapFromCurrentSet]
         }
 
-        // @MARK note unintuitive, but intentional
         // You cannot make a nested set public if the parent is private
-        // i.e. the private prop cannot be overriden by a child Set
+        // i.e. the private prop cannot be overridden by a child Set
         const privateProps =
           isPrivateNode(node) || previousSetProps.some((props) => props.private)
             ? { private: true }
@@ -632,7 +633,7 @@ export function analyzeRoutes(
               {
                 // Current one takes precedence
                 ...otherPropsFromCurrentSet,
-                // See comment at definiion, intenionally at the end
+                // See comment at definition, intentionally at the end
                 ...privateProps,
               },
             ],
