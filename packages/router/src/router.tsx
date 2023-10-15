@@ -47,7 +47,7 @@ export interface RouteProps {
  *
  * Route is now a "virtual" component
  * it is actually never rendered. All the page loading logic happens in active-route-loader
- * and all the validation happens within utlity functions called from the Router
+ * and all the validation happens within utility functions called from the Router
  */
 function Route(props: RouteProps): JSX.Element
 function Route(props: RedirectRouteProps): JSX.Element
@@ -155,6 +155,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     whileLoadingPage,
     wrappers = [],
     setProps,
+    isPrivate,
     setId,
   } = pathRouteMap[activeRoutePath]
 
@@ -191,6 +192,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
                 />
               }
               setProps={setProps}
+              isPrivate={isPrivate}
             />
           )}
         </PageLoadingContextProvider>
@@ -202,13 +204,14 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 interface WrappedPageProps {
   wrappers: Wrappers
   routeLoaderElement: ReactNode
-  setProps: Record<any, any>[]
+  setProps: Record<string, any>[]
+  isPrivate?: boolean
 }
 
 /**
  * This is effectively a Set (without auth-related code)
  *
- * This means that the <Set> and <Private> components become "virtual"
+ * This means that the <Set> and <PrivateSet> components become "virtual"
  * i.e. they are never actually Rendered, but their props are extracted by the
  * analyze routes function.
  *
@@ -216,56 +219,60 @@ interface WrappedPageProps {
  * for SSR, but also so that we only do one loop of all the Routes.
  */
 const WrappedPage = memo(
-  ({ wrappers, routeLoaderElement, setProps }: WrappedPageProps) => {
+  ({ wrappers, routeLoaderElement, setProps, isPrivate }: WrappedPageProps) => {
     // @NOTE: don't mutate the wrappers array, it causes full page re-renders
     // Instead just create a new array with the AuthenticatedRoute wrapper
 
     // we need to pass the setProps from each set to each wrapper
     let wrappersWithAuthMaybe = wrappers
-    const reveresedSetProps = [...setProps].reverse()
 
-    reveresedSetProps
-      // @MARK note the reverse() here, because we spread wrappersWithAuthMaybe
-      .forEach((propsFromSet) => {
-        if (propsFromSet.private) {
-          if (!propsFromSet.unauthenticated) {
-            throw new Error(
-              'You must specify an `unauthenticated` route when marking a Route as private'
-            )
-          }
-
-          // @MARK: this component intentionally removes all props except children
-          // because the .reduce below will apply props inside out
-          const AuthComponent: React.FC<{ children: ReactNode }> = ({
-            children,
-          }) => {
-            return (
-              <AuthenticatedRoute {...propsFromSet}>
-                {children}
-              </AuthenticatedRoute>
-            )
-          }
-
-          wrappersWithAuthMaybe = [AuthComponent, ...wrappersWithAuthMaybe]
+    // @MARK note the reverse() here, because we spread wrappersWithAuthMaybe
+    ;[...setProps].reverse().forEach((propsFromSet) => {
+      if (isPrivate) {
+        if (!propsFromSet.unauthenticated) {
+          throw new Error(
+            'You must specify an `unauthenticated` route when using PrivateSet'
+          )
         }
-      })
+
+        // @MARK: this component intentionally removes all props except children
+        // because the .reduce below will apply props inside out
+        const AuthComponent: React.FC<{ children: ReactNode }> = ({
+          children,
+        }) => {
+          return (
+            <AuthenticatedRoute
+              {...propsFromSet}
+              unauthenticated={propsFromSet.unauthenticated}
+            >
+              {children}
+            </AuthenticatedRoute>
+          )
+        }
+
+        wrappersWithAuthMaybe = [AuthComponent, ...wrappersWithAuthMaybe]
+      }
+    })
 
     if (wrappersWithAuthMaybe.length > 0) {
       // If wrappers exist e.g. [a,b,c] -> <a><b><c><routeLoader></c></b></a> and returns a single ReactNode
       // Wrap AuthenticatedRoute this way, because if we mutate the wrappers array itself
       // it causes full rerenders of the page
-      return wrappersWithAuthMaybe.reduceRight((acc, wrapper) => {
-        // Merge props from set, the lowest set props will override the higher ones
-        const mergedSetProps = setProps.reduce((acc, props) => {
-          return { ...acc, ...props }
-        }, {})
+      return wrappersWithAuthMaybe.reduceRight<ReactNode | undefined>(
+        (acc, wrapper) => {
+          // Merge props from set, the lowest set props will override the higher ones
+          const mergedSetProps = setProps.reduce((acc, props) => {
+            return { ...acc, ...props }
+          }, {})
 
-        return React.createElement(
-          wrapper as any,
-          mergedSetProps,
-          acc ? acc : routeLoaderElement
-        )
-      }, undefined as ReactNode)
+          return React.createElement(
+            wrapper,
+            mergedSetProps,
+            acc ? acc : routeLoaderElement
+          )
+        },
+        undefined
+      )
     }
 
     return routeLoaderElement

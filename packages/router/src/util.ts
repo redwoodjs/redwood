@@ -466,6 +466,7 @@ interface AnalyzedRoute {
   wrappers: Wrappers
   setProps: Record<any, any>[]
   setId: number
+  isPrivate: boolean
 }
 
 export function analyzeRoutes(
@@ -485,6 +486,7 @@ export function analyzeRoutes(
     // we don't know, or care about, what props users are passing down
     propsFromSet?: Record<string, unknown>[]
     setId?: number
+    isPrivate?: boolean
   }
 
   // Track the number of sets found.
@@ -510,6 +512,7 @@ export function analyzeRoutes(
     whileLoadingPageFromSet,
     wrappersFromSet = [],
     propsFromSet: previousSetProps = [],
+    isPrivate = false,
   }: RecurseParams) => {
     nodes.forEach((node) => {
       if (isValidRoute(node)) {
@@ -554,6 +557,7 @@ export function analyzeRoutes(
             wrappers: wrappersFromSet,
             setProps: previousSetProps,
             setId,
+            isPrivate,
           }
 
           if (name) {
@@ -587,6 +591,7 @@ export function analyzeRoutes(
             wrappers: wrappersFromSet,
             setProps: previousSetProps,
             setId,
+            isPrivate,
           }
 
           // e.g. namedRoutesMap.homePage = () => '/home'
@@ -611,15 +616,6 @@ export function analyzeRoutes(
             : [wrapFromCurrentSet]
         }
 
-        // You cannot make a nested set public if the parent is private
-        // i.e. the private prop cannot be overridden by a child Set
-        const privateProps =
-          isPrivateNode(node) ||
-          isPrivateSetNode(node) ||
-          previousSetProps.some((props) => props.private)
-            ? { private: true }
-            : {}
-
         if (children) {
           recurseThroughRouter({
             nodes: Children.toArray(children),
@@ -629,14 +625,20 @@ export function analyzeRoutes(
             whileLoadingPageFromSet:
               whileLoadingPageFromCurrentSet || whileLoadingPageFromSet,
             setId,
+            isPrivate:
+              isPrivateNode(node) ||
+              isPrivateSetNode(node) ||
+              isPrivate ||
+              // The following two conditions can be removed when we remove
+              // the deprecated private prop
+              previousSetProps.some((props) => props.private) ||
+              otherPropsFromCurrentSet.private,
             wrappersFromSet: [...wrappersFromSet, ...wrapperComponentsArray],
             propsFromSet: [
               ...previousSetProps,
               {
                 // Current one takes precedence
                 ...otherPropsFromCurrentSet,
-                // See comment at definition, intentionally at the end
-                ...privateProps,
               },
             ],
           })

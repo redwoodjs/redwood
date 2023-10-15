@@ -300,12 +300,8 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       page: FakePage,
       wrappers: [],
       setId: 1,
-      setProps: [
-        {
-          private: true,
-          unauthenticated: 'home',
-        },
-      ],
+      isPrivate: true,
+      setProps: [{ unauthenticated: 'home' }],
     })
   })
 
@@ -331,12 +327,8 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       page: FakePage,
       wrappers: [],
       setId: 1,
-      setProps: [
-        {
-          private: true,
-          unauthenticated: 'home',
-        },
-      ],
+      isPrivate: true,
+      setProps: [{ unauthenticated: 'home' }],
     })
   })
 
@@ -420,11 +412,9 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     expect(pathRouteMap).toMatchObject({
       '/no-roles-assigned': {
         redirect: null,
+        isPrivate: true,
         setProps: expect.arrayContaining([
-          expect.objectContaining({
-            unauthenticated: 'home',
-            private: true,
-          }),
+          expect.objectContaining({ unauthenticated: 'home' }),
         ]),
       },
     })
@@ -435,15 +425,12 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     expect(pathRouteMap).toMatchObject({
       '/employee': {
         redirect: null,
+        isPrivate: true,
         setProps: expect.arrayContaining([
           // Should have the first one, but also..
-          expect.objectContaining({
-            unauthenticated: 'home',
-            private: true,
-          }),
+          expect.objectContaining({ unauthenticated: 'home' }),
           // ...the second private set's props
           expect.objectContaining({
-            private: true,
             unauthenticated: 'noRolesAssigned',
             roles: ['ADMIN', 'EMPLOYEE'],
           }),
@@ -455,24 +442,19 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     expect(pathRouteMap).toMatchObject({
       '/admin': {
         redirect: null,
+        isPrivate: true,
         setProps: expect.arrayContaining([
           // Should have the first one, but also..
-          expect.objectContaining({
-            unauthenticated: 'home',
-            private: true,
-          }),
+          expect.objectContaining({ unauthenticated: 'home' }),
           // ...the second private set's props
           expect.objectContaining({
-            private: true,
             unauthenticated: 'noRolesAssigned',
             roles: ['ADMIN', 'EMPLOYEE'],
           }),
-
           // ...and the third private set's props
           expect.objectContaining({
             unauthenticated: 'employee',
             roles: 'ADMIN',
-            private: true,
           }),
         ]),
       },
