@@ -81,13 +81,13 @@ describe('Multiple nested private sets', () => {
 })
 
 test('Nested sets should not cause a re-mount of wrap components', async () => {
-  const remountSpy = jest.fn()
-  const remountSpy2 = jest.fn()
+  const layoutOneMount = jest.fn()
+  const layoutTwoMount = jest.fn()
 
   const Layout1 = ({ children }) => {
     useEffect(() => {
       // Called on mount and re-mount of this layout
-      remountSpy()
+      layoutOneMount()
     }, [])
 
     return (
@@ -101,7 +101,7 @@ test('Nested sets should not cause a re-mount of wrap components', async () => {
   const Layout2 = ({ children }) => {
     useEffect(() => {
       // Called on mount and re-mount of this layout
-      remountSpy2()
+      layoutTwoMount()
     }, [])
 
     return (
@@ -116,13 +116,7 @@ test('Nested sets should not cause a re-mount of wrap components', async () => {
     <Router>
       <Set wrap={Layout1}>
         <Route path="/" page={HomePage} name="home" />
-        <Set
-          wrap={Layout2}
-          title="Posts"
-          titleTo="posts"
-          buttonLabel="New Post"
-          buttonTo="newPost"
-        >
+        <Set wrap={Layout2}>
           <Route path="/posts/new" page={Page} name="newPost" />
           <Route path="/posts/{id:Int}/edit" page={Page} name="editPost" />
           <Route path="/posts/{id:Int}" page={Page} name="post" />
@@ -141,8 +135,65 @@ test('Nested sets should not cause a re-mount of wrap components', async () => {
   act(() => navigate('/'))
 
   // Layout 1 Should only be mounted once, because it's shared between the two sets
-  expect(remountSpy).toHaveBeenCalledTimes(1)
+  expect(layoutOneMount).toHaveBeenCalledTimes(1)
 
   // Layout 2 should be mounted twice, because its used only in the posts routes
-  expect(remountSpy2).toHaveBeenCalledTimes(2)
+  expect(layoutTwoMount).toHaveBeenCalledTimes(2)
+})
+
+test('Changing the order of wrap components will cause a remount', async () => {
+  // This test is making a point, if you use wraps this way, it'll cause remounts.
+  // If you want e.g. Layout1 to not rerender, you should move it to a parent set
+  const layoutOneMount = jest.fn()
+  const layoutTwoMount = jest.fn()
+
+  const Layout1 = () => {
+    useEffect(() => {
+      // Called on mount and re-mount of this layout
+      layoutOneMount()
+    }, [])
+
+    return (
+      <>
+        <p>ONE</p>
+      </>
+    )
+  }
+
+  const Layout2 = () => {
+    useEffect(() => {
+      // Called on mount and re-mount of this layout
+      layoutTwoMount()
+    }, [])
+
+    return (
+      <>
+        <p>TWO</p>
+      </>
+    )
+  }
+
+  const SameWrapsInDifferentOrder = () => (
+    <Router>
+      <Set wrap={[Layout1, Layout2]}>
+        <Route path="/one" page={HomePage} name="home" />
+      </Set>
+      <Set wrap={[Layout2, Layout1]}>
+        <Route path="/two" page={Page} name="posts" />
+      </Set>
+    </Router>
+  )
+
+  render(<SameWrapsInDifferentOrder />)
+
+  act(() => navigate('/one'))
+  act(() => navigate('/two'))
+  act(() => navigate('/one'))
+  act(() => navigate('/two'))
+
+  // Layout 1 Should only be mounted once, because it's shared between the two sets
+  expect(layoutOneMount).toHaveBeenCalledTimes(2)
+
+  // Layout 2 should be mounted twice, because its used only in the posts routes
+  expect(layoutTwoMount).toHaveBeenCalledTimes(2)
 })
