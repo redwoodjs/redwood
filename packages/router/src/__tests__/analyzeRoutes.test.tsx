@@ -292,6 +292,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         {
           private: true,
           unauthenticated: 'home',
+          roles: undefined,
         },
       ],
     })
@@ -462,6 +463,7 @@ test('Handles Private', () => {
     setProps: [
       {
         private: true,
+        roles: undefined,
         unauthenticated: 'home',
       },
     ],
