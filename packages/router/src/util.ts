@@ -614,8 +614,8 @@ export function analyzeRoutes(
         const allInheritProps = previousSetProps.find((props) => props.private)
 
         // We have to do this, to make sure we don't overwrite other props from parent Sets
-        // auth props from parents take precendence
-        // non-auth props from children take precedence
+        // The "private" prop from any parent implies that all children are private.
+        // So we also grab other private props from the parent, incase it's not specified on the child
         const inheritedPrivateProps = allInheritProps
           ? {
               private: allInheritProps.private,
