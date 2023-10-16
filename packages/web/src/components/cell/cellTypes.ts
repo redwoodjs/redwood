@@ -8,7 +8,7 @@ import type {
   UseBackgroundQueryResult,
 } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
-import type { A } from 'ts-toolbelt'
+import type { A, L, O, U } from 'ts-toolbelt'
 
 /**
  *
@@ -65,27 +65,37 @@ export type CellFailureProps<TVariables extends OperationVariables = any> = {
   errorCode?: string
   updating?: boolean
 }
+
 // aka guarantee that all properties in T exist
-// This is necessary for Cells, because if it doesn't exist it'll go to Empty or Failure
 type Guaranteed<T> = {
   [K in keyof T]-?: NonNullable<T[K]>
 }
+
+type KeyCount<T extends object> = L.Length<U.ListOf<O.SelectKeys<T, any>>>
+
+// This is used for the Success component in Cells. If there is only one thing
+// being returned by the Cell we can guarantee that the data is not null or
+// undefined. If there are are multiple roots we can't guarantee that because
+// the default isEmpty check only makes sure there is _some_ data – not that
+// all properties have data
+// NOTE: This only holds true for Cells as Redwood generates them. If the user
+// removes the <Empty> component, or provides their own isEmpty implementation
+// there's no way for us to know what the data will look like.
+type ConditionallyGuaranteed<T extends object> = KeyCount<T> extends 1
+  ? Guaranteed<T>
+  : T
+
 /**
- * Use this type, if you are forwarding on the data from your Cell's Success component
- * Because Cells automatically checks for "empty", or "errors" - if you receive the data type in your
- * Success component, it means the data is guaranteed (and non-optional)
- *
  * @params TData = Type of data based on your graphql query. This can be imported from 'types/graphql'
  * @example
- * import type {FindPosts} from 'types/graphql'
+ * import type { FindPosts } from 'types/graphql'
  *
- * const { post } = CellSuccessData<FindPosts>
- *
- * post.id // post is non optional, so no need to do post?.id
- *
+ * const { post }: CellSuccessData<FindPosts> = props
  */
+export type CellSuccessData<TData = any> = ConditionallyGuaranteed<
+  Omit<TData, '__typename'>
+>
 
-export type CellSuccessData<TData = any> = Omit<Guaranteed<TData>, '__typename'>
 /**
  * @MARK not sure about this partial, but we need to do this for tests and storybook.
  *
