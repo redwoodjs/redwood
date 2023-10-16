@@ -463,19 +463,16 @@ interface AnalyzedRoute {
   whileLoadingPage?: WhileLoadingPage
   page: PageType | null
   redirect: string | null
-  wrappers: Wrappers
   sets: Array<{
     id: number
+    wrappers: Wrappers
     isPrivate: boolean
     props: {
       private?: boolean
       [key: string]: unknown
     }
   }>
-  // TODO: Figure out if we can remove setId and isPrivate below now that it's
-  // included in the per-set info
   setId: number
-  isPrivate: boolean
 }
 
 export function analyzeRoutes(
@@ -491,9 +488,9 @@ export function analyzeRoutes(
   interface RecurseParams {
     nodes: ReturnType<typeof Children.toArray>
     whileLoadingPageFromSet?: WhileLoadingPage
-    wrappersFromSet?: Wrappers
     sets?: Array<{
       id: number
+      wrappers: Wrappers
       isPrivate: boolean
       props: {
         private?: boolean
@@ -501,7 +498,6 @@ export function analyzeRoutes(
       }
     }>
     setId?: number
-    isPrivate?: boolean
   }
 
   // Track the number of sets found.
@@ -525,9 +521,7 @@ export function analyzeRoutes(
   const recurseThroughRouter = ({
     nodes,
     whileLoadingPageFromSet,
-    wrappersFromSet = [],
     sets: previousSets = [],
-    isPrivate = false,
   }: RecurseParams) => {
     nodes.forEach((node) => {
       if (isValidRoute(node)) {
@@ -569,10 +563,8 @@ export function analyzeRoutes(
             name: name || null,
             path,
             page: null, // Redirects don't need pages. We set this to null for consistency
-            wrappers: wrappersFromSet,
             sets: previousSets,
             setId,
-            isPrivate,
           }
 
           if (name) {
@@ -603,10 +595,8 @@ export function analyzeRoutes(
             whileLoadingPage:
               route.props.whileLoadingPage || whileLoadingPageFromSet,
             page,
-            wrappers: wrappersFromSet,
             sets: previousSets,
             setId,
-            isPrivate,
           }
 
           // e.g. namedRoutesMap.homePage = () => '/home'
@@ -640,22 +630,15 @@ export function analyzeRoutes(
             whileLoadingPageFromSet:
               whileLoadingPageFromCurrentSet || whileLoadingPageFromSet,
             setId,
-            isPrivate:
-              isPrivateSetNode(node) ||
-              isPrivate ||
-              // The following three conditions can be removed when we remove
-              // the deprecated private prop
-              isPrivateNode(node) ||
-              previousSets.some((set) => set.props.private) ||
-              !!otherPropsFromCurrentSet.private,
-            wrappersFromSet: [...wrappersFromSet, ...wrapperComponentsArray],
             sets: [
               ...previousSets,
               {
                 id: setId,
+                wrappers: wrapperComponentsArray,
                 isPrivate:
                   isPrivateSetNode(node) ||
-                  isPrivate ||
+                  // TODO: Is this needed?
+                  previousSets.some((set) => set.isPrivate) ||
                   // The following three conditions can be removed when we remove
                   // the deprecated private prop
                   isPrivateNode(node) ||

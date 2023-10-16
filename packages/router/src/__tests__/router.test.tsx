@@ -1625,13 +1625,8 @@ describe('Multiple nested private sets', () => {
         <PrivateSet
           unauthenticated="noRolesAssigned"
           roles={['ADMIN', 'EMPLOYEE']}
-          level="2"
         >
-          <PrivateSet
-            unauthenticated="privateAdmin"
-            roles={['EMPLOYEE']}
-            level="3"
-          >
+          <PrivateSet unauthenticated="privateAdmin" roles={['EMPLOYEE']}>
             <Route
               path="/employee"
               page={PrivateEmployeePage}
@@ -1639,11 +1634,7 @@ describe('Multiple nested private sets', () => {
             />
           </PrivateSet>
 
-          <PrivateSet
-            unauthenticated="privateEmployee"
-            roles={['ADMIN']}
-            level="3"
-          >
+          <PrivateSet unauthenticated="privateEmployee" roles={['ADMIN']}>
             <Route path="/admin" page={PrivateAdminPage} name="privateAdmin" />
           </PrivateSet>
         </PrivateSet>
@@ -1702,7 +1693,6 @@ describe('Multiple nested private sets', () => {
     act(() => navigate('/admin'))
     await waitFor(() => {
       expect(screen.queryByText(`Private Admin Page`)).toBeInTheDocument()
-      expect(screen.queryByText(`Level: 3`)).toBeInTheDocument()
     })
   })
 
@@ -1722,7 +1712,6 @@ describe('Multiple nested private sets', () => {
 
     await waitFor(() => {
       expect(screen.queryByText(`Private Admin Page`)).toBeInTheDocument()
-      expect(screen.queryByText(`Level: 3`)).toBeInTheDocument()
     })
   })
 })
@@ -1758,25 +1747,27 @@ describe('Multiple nested sets', () => {
   )
 
   test('level 1, matches expected props', async () => {
-    const screen = render(<TestRouter />)
-
     act(() => navigate('/level1'))
 
+    const screen = render(<TestRouter />)
+
     await waitFor(() => {
-      expect(screen.queryByText(`Theme: blue`)).toBeInTheDocument()
-      expect(screen.queryByText(`Page Level: 1`)).toBeInTheDocument()
+      expect(screen.queryByText('Theme: blue')).toBeInTheDocument()
+      expect(screen.queryByText('Other Prop:')).toBeInTheDocument()
+      expect(screen.queryByText('Page Level: 1')).toBeInTheDocument()
     })
   })
 
-  test('level 2, should override level 1', async () => {
-    const screen = render(<TestRouter />)
-
+  test('level 2, should not affect level 1 set props', async () => {
     act(() => navigate('/level2'))
 
+    const screen = render(<TestRouter />)
+
     await waitFor(() => {
-      expect(screen.queryByText(`Theme: red`)).toBeInTheDocument()
-      expect(screen.queryByText(`Other Prop: bazinga`)).toBeInTheDocument()
-      expect(screen.queryByText(`Page Level: 2`)).toBeInTheDocument()
+      expect(screen.queryByText('Page')).toBeInTheDocument()
+      expect(screen.queryByText('Theme: blue')).toBeInTheDocument()
+      expect(screen.queryByText('Other Prop:')).toBeInTheDocument()
+      expect(screen.queryByText('Page Level: 1')).toBeInTheDocument()
     })
   })
 
@@ -1786,9 +1777,9 @@ describe('Multiple nested sets', () => {
     act(() => navigate('/level3'))
 
     await waitFor(() => {
-      expect(screen.queryByText(`Theme: green`)).toBeInTheDocument()
-      expect(screen.queryByText(`Other Prop: bazinga`)).toBeInTheDocument()
-      expect(screen.queryByText(`Page Level: 3`)).toBeInTheDocument()
+      expect(screen.queryByText('Theme: blue')).toBeInTheDocument()
+      expect(screen.queryByText('Other Prop:')).toBeInTheDocument()
+      expect(screen.queryByText('Page Level: 1')).toBeInTheDocument()
     })
   })
 })

@@ -154,10 +154,10 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         name: 'routeA',
         path: '/a',
         whileLoadingPage: undefined,
-        wrappers: [WrapperX],
         sets: [
           {
             id: 1,
+            wrappers: [WrapperX],
             isPrivate: false,
             props: {
               id: 'set-one',
@@ -174,10 +174,10 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         name: 'routeB',
         path: '/b',
         whileLoadingPage: undefined,
-        wrappers: [WrapperX, WrapperY], // both wrappers
         sets: [
           {
             id: 1,
+            wrappers: [WrapperX],
             isPrivate: false,
             props: {
               id: 'set-one',
@@ -187,6 +187,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
           {
             id: 2,
             isPrivate: false,
+            wrappers: [WrapperY],
             props: {
               id: 'set-two',
               theme: 'blue',
@@ -202,10 +203,10 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         name: 'routeC',
         path: '/c',
         whileLoadingPage: undefined,
-        wrappers: [WrapperX, WrapperY], // both wrappers
         sets: [
           {
             id: 1,
+            wrappers: [WrapperX],
             isPrivate: false,
             props: {
               id: 'set-one',
@@ -214,6 +215,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
           },
           {
             id: 2,
+            wrappers: [WrapperY],
             isPrivate: false,
             props: {
               id: 'set-two',
@@ -274,11 +276,10 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         name: 'routeA',
         path: '/a',
         whileLoadingPage: undefined,
-        wrappers: [WrapperX],
-        // Props passed through from set
         sets: [
           {
             id: 1,
+            wrappers: [WrapperX],
             isPrivate: false,
             props: {
               id: 'set-one',
@@ -295,10 +296,10 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         name: 'routeB',
         path: '/b',
         whileLoadingPage: undefined,
-        wrappers: [WrapperX, WrapperY], // both wrappers
         sets: [
           {
             id: 1,
+            wrappers: [WrapperX],
             isPrivate: false,
             props: {
               id: 'set-one',
@@ -307,6 +308,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
           },
           {
             id: 2,
+            wrappers: [WrapperY],
             isPrivate: false,
             props: {
               id: 'set-two',
@@ -323,10 +325,11 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         name: 'routeC',
         path: '/c',
         whileLoadingPage: undefined,
-        wrappers: [WrapperX, WrapperY], // both wrappers
+        setId: 2,
         sets: [
           {
             id: 1,
+            wrappers: [WrapperX],
             isPrivate: false,
             props: {
               id: 'set-one',
@@ -335,6 +338,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
           },
           {
             id: 2,
+            wrappers: [WrapperY],
             isPrivate: false,
             props: {
               id: 'set-two',
@@ -438,10 +442,15 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       path: '/private',
       whileLoadingPage: undefined,
       page: FakePage,
-      wrappers: [],
       setId: 1,
-      isPrivate: true,
-      sets: [{ id: 1, isPrivate: true, props: { unauthenticated: 'home' } }],
+      sets: [
+        {
+          id: 1,
+          wrappers: [],
+          isPrivate: true,
+          props: { unauthenticated: 'home' },
+        },
+      ],
     })
   })
 
@@ -465,10 +474,15 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       path: '/private',
       whileLoadingPage: undefined,
       page: FakePage,
-      wrappers: [],
       setId: 1,
-      isPrivate: true,
-      sets: [{ id: 1, isPrivate: true, props: { unauthenticated: 'home' } }],
+      sets: [
+        {
+          id: 1,
+          wrappers: [],
+          isPrivate: true,
+          props: { unauthenticated: 'home' },
+        },
+      ],
     })
   })
 
@@ -552,12 +566,11 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     expect(pathRouteMap).toMatchObject({
       '/no-roles-assigned': {
         redirect: null,
-        isPrivate: true,
         sets: [
           {
             id: 1,
             isPrivate: true,
-            props: expect.objectContaining({ unauthenticated: 'home' }),
+            props: { unauthenticated: 'home' },
           },
         ],
       },
@@ -569,24 +582,32 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     expect(pathRouteMap).toMatchObject({
       '/employee': {
         redirect: null,
-        isPrivate: true,
-        sets: expect.arrayContaining([
-          // Should have the first one, but also..
+        sets: [
           {
             id: 1,
+            wrappers: [],
             isPrivate: true,
-            props: expect.objectContaining({ unauthenticated: 'home' }),
+            props: { unauthenticated: 'home' },
           },
-          // ...the second private set's props
           {
             id: 2,
+            wrappers: [],
             isPrivate: true,
             props: expect.objectContaining({
               unauthenticated: 'noRolesAssigned',
               roles: ['ADMIN', 'EMPLOYEE'],
             }),
           },
-        ]),
+          {
+            id: 3,
+            wrappers: [],
+            isPrivate: true,
+            props: {
+              unauthenticated: 'admin',
+              roles: 'EMPLOYEE',
+            },
+          },
+        ],
       },
     })
 
@@ -594,31 +615,33 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     expect(pathRouteMap).toMatchObject({
       '/admin': {
         redirect: null,
-        isPrivate: true,
         sets: [
           // Should have the first one, but also..
           {
             id: 1,
+            wrappers: [],
             isPrivate: true,
-            props: expect.objectContaining({ unauthenticated: 'home' }),
+            props: { unauthenticated: 'home' },
           },
           // ...the second private set's props
           {
             id: 2,
+            wrappers: [],
             isPrivate: true,
-            props: expect.objectContaining({
+            props: {
               unauthenticated: 'noRolesAssigned',
               roles: ['ADMIN', 'EMPLOYEE'],
-            }),
+            },
           },
           // ...and the third private set's props
           {
             id: 4,
+            wrappers: [],
             isPrivate: true,
-            props: expect.objectContaining({
+            props: {
               unauthenticated: 'employee',
               roles: 'ADMIN',
-            }),
+            },
           },
         ],
       },
