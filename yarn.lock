@@ -2921,6 +2921,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/busboy@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@fastify/busboy@npm:2.0.0"
+  checksum: fdaedca865721769a3a8d788c9efd6af90e73b5f2ff0160dbf46a6160631bbe56e6e5770fafb9a6395111372c73fb2bfa8d4698edc98c6b1f7d97cc9b74e37ea
+  languageName: node
+  linkType: hard
+
 "@fastify/deepmerge@npm:^1.0.0":
   version: 1.3.0
   resolution: "@fastify/deepmerge@npm:1.3.0"
@@ -34387,11 +34394,11 @@ __metadata:
   linkType: hard
 
 "undici@npm:^5.19.1":
-  version: 5.22.1
-  resolution: "undici@npm:5.22.1"
+  version: 5.26.3
+  resolution: "undici@npm:5.26.3"
   dependencies:
-    busboy: ^1.6.0
-  checksum: 50479d28a9a5de4faae410cc73523823d339a7d016b77bfe89d3cdf78fe5441950f30958c9cfb6e2acd8fb4f914308597c75bd0c15e74143212f67e2ef020477
+    "@fastify/busboy": ^2.0.0
+  checksum: af418c4ea429fdd63640b780a21c4f790685f60aa3766663bbff1081c3d20a70da70cbb4d4955d5c0c78f06cd13527d171edf3a65db8476a6c02539f495e9f48
   languageName: node
   linkType: hard
 
