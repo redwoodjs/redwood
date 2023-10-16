@@ -24,7 +24,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.22.15",
+    "@babel/runtime-corejs3": "7.23.1",
     "@redwoodjs/auth": "6.0.7",
     "@redwoodjs/internal": "6.0.7",
     "@redwoodjs/project-config": "6.0.7",
@@ -35,11 +35,11 @@
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.32.2",
-    "graphql": "16.8.0",
+    "graphql": "16.8.1",
     "mime-types": "2.1.35"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.15",
+    "@babel/cli": "7.23.0",
     "@babel/core": "^7.22.20",
     "@types/mime-types": "2.1.1",
     "babel-plugin-tester": "11.0.4",

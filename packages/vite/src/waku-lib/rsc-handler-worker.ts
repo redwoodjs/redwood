@@ -259,20 +259,28 @@ export async function setClientEntries(
   }
   const config = await configPromise
   const entriesFile = await getEntriesFile(config, false)
-  console.log('entriesFile', entriesFile)
+  console.log('setClientEntries :: entriesFile', entriesFile)
   const { clientEntries } = await loadServerFile(entriesFile)
+  console.log('setClientEntries :: clientEntries', clientEntries)
   if (!clientEntries) {
     throw new Error('Failed to load clientEntries')
   }
   const baseDir = path.dirname(entriesFile)
   absoluteClientEntries = Object.fromEntries(
-    Object.entries(clientEntries).map(([key, val]) => [
-      path.join(baseDir, key),
-      config.base + val,
-    ])
+    Object.entries(clientEntries).map(([key, val]) => {
+      let fullKey = path.join(baseDir, key)
+      if (process.platform === 'win32') {
+        fullKey = fullKey.replaceAll('\\', '/')
+      }
+      console.log('fullKey', fullKey, 'value', config.base + val)
+      return [fullKey, config.base + val]
+    })
   )
 
-  console.log('absoluteClientEntries', absoluteClientEntries)
+  console.log(
+    'setClientEntries :: absoluteClientEntries',
+    absoluteClientEntries
+  )
 }
 
 export async function renderRSC(input: RenderInput): Promise<PipeableStream> {
