@@ -472,6 +472,8 @@ interface AnalyzedRoute {
       [key: string]: unknown
     }
   }>
+  // TODO: Figure out if we can remove setId and isPrivate below now that it's
+  // included in the per-set info
   setId: number
   isPrivate: boolean
 }

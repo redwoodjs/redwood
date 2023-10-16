@@ -44,7 +44,6 @@ export interface RouteProps {
 }
 
 /**
- *
  * Route is now a "virtual" component
  * it is actually never rendered. All the page loading logic happens in active-route-loader
  * and all the validation happens within utility functions called from the Router
@@ -154,8 +153,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     redirect,
     whileLoadingPage,
     wrappers = [],
-    setProps,
-    isPrivate,
+    sets,
     setId,
   } = pathRouteMap[activeRoutePath]
 
@@ -191,8 +189,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
                   whileLoadingPage={whileLoadingPage as any}
                 />
               }
-              setProps={setProps}
-              isPrivate={isPrivate}
+              sets={sets}
             />
           )}
         </PageLoadingContextProvider>
@@ -204,8 +201,14 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 interface WrappedPageProps {
   wrappers: Wrappers
   routeLoaderElement: ReactNode
-  setProps: Record<string, any>[]
-  isPrivate?: boolean
+  sets: Array<{
+    id: number
+    isPrivate: boolean
+    props: {
+      private?: boolean
+      [key: string]: unknown
+    }
+  }>
 }
 
 /**
@@ -219,7 +222,7 @@ interface WrappedPageProps {
  * for SSR, but also so that we only do one loop of all the Routes.
  */
 const WrappedPage = memo(
-  ({ wrappers, routeLoaderElement, setProps, isPrivate }: WrappedPageProps) => {
+  ({ wrappers, routeLoaderElement, sets }: WrappedPageProps) => {
     // @NOTE: don't mutate the wrappers array, it causes full page re-renders
     // Instead just create a new array with the AuthenticatedRoute wrapper
 
@@ -227,9 +230,10 @@ const WrappedPage = memo(
     let wrappersWithAuthMaybe = wrappers
 
     // @MARK note the reverse() here, because we spread wrappersWithAuthMaybe
-    ;[...setProps].reverse().forEach((propsFromSet) => {
-      if (isPrivate) {
-        if (!propsFromSet.unauthenticated) {
+    ;[...sets].reverse().forEach((set) => {
+      if (set.isPrivate) {
+        const unauthenticated = set.props.unauthenticated
+        if (!unauthenticated || typeof unauthenticated !== 'string') {
           throw new Error(
             'You must specify an `unauthenticated` route when using PrivateSet'
           )
@@ -242,8 +246,8 @@ const WrappedPage = memo(
         }) => {
           return (
             <AuthenticatedRoute
-              {...propsFromSet}
-              unauthenticated={propsFromSet.unauthenticated}
+              {...set.props}
+              unauthenticated={unauthenticated}
             >
               {children}
             </AuthenticatedRoute>
@@ -261,8 +265,8 @@ const WrappedPage = memo(
       return wrappersWithAuthMaybe.reduceRight<ReactNode | undefined>(
         (acc, wrapper) => {
           // Merge props from set, the lowest set props will override the higher ones
-          const mergedSetProps = setProps.reduce((acc, props) => {
-            return { ...acc, ...props }
+          const mergedSetProps = sets.reduce((acc, set) => {
+            return { ...acc, ...set.props }
           }, {})
 
           return React.createElement(
