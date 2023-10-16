@@ -1601,7 +1601,6 @@ describe('Multiple nested private sets', () => {
   const PrivateAdminPage = () => <h1>Private Admin Page</h1>
 
   const LevelLayout = ({ children, level }) => {
-    children //?
     return (
       <section>
         Level: {level}

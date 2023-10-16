@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import '@testing-library/jest-dom/extend-expect'
-import { act, render, waitFor } from '@testing-library/react'
+import { act, render } from '@testing-library/react'
 
 import { navigate, Route, Router } from '../'
 import { Private, Set } from '../Set'
