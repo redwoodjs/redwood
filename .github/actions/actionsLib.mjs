@@ -22,7 +22,6 @@ function execWithEnv(command, { env = {}, ...rest } = {}) {
     command,
     undefined,
     {
-      // @ts-expect-error TS doesn't like spreading process.env here but it's fine for our purposes.
       env: {
         ...process.env,
         ...env
@@ -68,7 +67,6 @@ export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix }) {
   const baseKey = [
     baseKeyPrefix,
     process.env.RUNNER_OS,
-    // @ts-expect-error not sure how to change the lib compiler option to es2021+ here.
     process.env.GITHUB_REF.replaceAll('/', '-'),
     await hashFiles(path.join('__fixtures__', 'test-project'))
   ].join('-')

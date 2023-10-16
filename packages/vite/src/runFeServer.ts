@@ -6,6 +6,7 @@
 import fs from 'fs/promises'
 import path from 'path'
 
+import { createServerAdapter } from '@whatwg-node/server'
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
@@ -112,11 +113,14 @@ export async function runFeServer() {
       continue
     }
 
+    // @TODO: we don't need regexes here
+    // Param matching, etc. all handled within the route handler now
     const expressPathDef = route.hasParams
       ? route.matchRegexString
       : route.pathDefinition
 
-    app.get(expressPathDef, routeHandler)
+    // Wrap with whatg/server adapter. Express handler -> Fetch API handler
+    app.get(expressPathDef, createServerAdapter(routeHandler))
   }
 
   const server = app.listen(
