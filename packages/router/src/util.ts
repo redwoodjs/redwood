@@ -611,11 +611,38 @@ export function analyzeRoutes(
             : [wrapFromCurrentSet]
         }
 
+        const allInheritProps = previousSetProps.find((props) => props.private)
+
+        // We have to do this, to make sure we don't overwrite other props from parent Sets
+        // auth props from parents take precendence
+        // non-auth props from children take precedence
+        const inheritedPrivateProps = allInheritProps
+          ? {
+              private: allInheritProps.private,
+              roles: allInheritProps.roles,
+              unauthenticated: allInheritProps.unauthenticated,
+            }
+          : null
+
+        const currentPrivateProps =
+          node.props.private || isPrivateNode(node)
+            ? {
+                private: true, // Private component doesn't have "private" prop
+                unauthenticated: node.props.unauthenticated,
+                roles: node.props.roles,
+              }
+            : null
+
+        // @MARK note unintuitive, but intentional
         // You cannot make a nested set public if the parent is private
         // i.e. the private prop cannot be overridden by a child Set
         const privateProps =
-          isPrivateNode(node) || previousSetProps.some((props) => props.private)
-            ? { private: true }
+          currentPrivateProps || inheritedPrivateProps
+            ? {
+                ...(inheritedPrivateProps || {}),
+                ...currentPrivateProps,
+                private: true,
+              }
             : {}
 
         if (children) {
