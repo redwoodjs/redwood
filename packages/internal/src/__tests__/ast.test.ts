@@ -103,7 +103,7 @@ test('tests default exports', () => {
 })
 
 test('Returns the exported query from a cell (ignoring others)', () => {
-  const cellFileAst = fileToAst(getFixturePath('web/src/cell.ts'))
+  const cellFileAst = fileToAst(getFixturePath('web/src/cell.tsx'))
 
   const cellQuery = getCellGqlQuery(cellFileAst)
   expect(cellQuery).toMatchInlineSnapshot(`
@@ -117,8 +117,8 @@ test('Returns the exported query from a cell (ignoring others)', () => {
   `)
 })
 
-test('Returns the all quries from a file using getGqlQueries', () => {
-  const cellFileAst = fileToAst(getFixturePath('web/src/cell.ts'))
+test('Returns the all queries from a file using getGqlQueries', () => {
+  const cellFileAst = fileToAst(getFixturePath('web/src/cell.tsx'))
 
   const cellQuery = getGqlQueries(cellFileAst)
   expect(cellQuery).toMatchInlineSnapshot(`
