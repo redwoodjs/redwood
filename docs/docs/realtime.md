@@ -7,7 +7,21 @@ The answer is: **now**.
 
 ## What is Realtime?
 
-The real-time solution for RedwoodJS is initially for GraphQL.
+RedwoodJS's initial real-time solution leverages on GraphQL and relies on a serverful deployment to maintain a long-running connection between the client and server.
+
+:::note
+This means that your cannot currently use RedwoodJS when deployed to Netlify or Vercel.
+
+**More information about deploying a serverful RedwoodJS is forthcoming.**
+:::
+
+RedwoodJS's GraphQL Server uses [GraphQL over Server-Sent Events](https://github.com/enisdenjo/graphql-sse/blob/master/PROTOCOL.md#distinct-connections-mode) spec "distinct connections mode" for subscriptions.
+
+Advantages of SSE over WebSockets include:
+
+* Transported over simple HTTP instead of a custom protocol
+* Built in support for re-connection and event-id Simpler protocol
+* No trouble with corporate firewalls doing packet inspection
 
 ### Subscriptions and Live Queries
 
@@ -31,7 +45,7 @@ The `@defer`` directive allows you to post-pone the delivery of one or more (slo
 
 The '@stream' directive allows you to stream the individual items of a field of the list type as the items are available.
 
-:::important
+:::info
 The `@stream` directive is currently **not** supported by Apollo GraphQL client.
 :::
 
@@ -228,8 +242,8 @@ export const schema = gql`
 
 The service uses `Repeater` to write a safe stream resolver.
 
-:::important
-AsyncGenerators as declared via the async * keywords are prone to memory leaks and leaking timers. For real-world usage, use Repeater.
+:::info
+[AsyncGenerators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncGenerator) as declared via the `async *` keywords are prone to memory leaks and leaking timers. For real-world usage, use Repeater.
 :::
 
 ```ts
@@ -268,7 +282,7 @@ export const alphabet = async () => {
 
 ## What does the incremental stream look like?
 
-Since Apollo Client does not yet support the `@stream` directive, you can use them in the PhrphiQL Playground or see them in action via CURL.
+Since Apollo Client does not yet support the `@stream` directive, you can use them in the GraphiQL Playground or see them in action via CURL.
 
 When making the request with the @stream directive:
 
@@ -280,11 +294,11 @@ curl -g -X POST \
   http://localhost:8911/graphql
 ```
 
-Here you see the initial response has [] for alphabet data.
+Here you see the initial response has `[]`` for alphabet data.
 
 Then on each push to the Repeater, an incremental update the the list of letters is sent.
 
-The stream ends when hasNext is false:
+The stream ends when `hasNext`` is false:
 
 ```bash
 * Connected to localhost (127.0.0.1) port 8911 (#0)
