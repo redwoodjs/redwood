@@ -155,11 +155,14 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         path: '/a',
         whileLoadingPage: undefined,
         wrappers: [WrapperX],
-        // Props passed through from set
-        setProps: [
+        sets: [
           {
-            id: 'set-one',
-            passThruProp: 'bazinga',
+            id: 1,
+            isPrivate: false,
+            props: {
+              id: 'set-one',
+              passThruProp: 'bazinga',
+            },
           },
         ],
       })
@@ -172,14 +175,22 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         path: '/b',
         whileLoadingPage: undefined,
         wrappers: [WrapperX, WrapperY], // both wrappers
-        setProps: [
+        sets: [
           {
-            id: 'set-one',
-            passThruProp: 'bazinga',
+            id: 1,
+            isPrivate: false,
+            props: {
+              id: 'set-one',
+              passThruProp: 'bazinga',
+            },
           },
           {
-            id: 'set-two',
-            theme: 'blue',
+            id: 2,
+            isPrivate: false,
+            props: {
+              id: 'set-two',
+              theme: 'blue',
+            },
           },
         ],
       })
@@ -192,14 +203,143 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         path: '/c',
         whileLoadingPage: undefined,
         wrappers: [WrapperX, WrapperY], // both wrappers
-        setProps: [
+        sets: [
           {
-            id: 'set-one',
-            passThruProp: 'bazinga',
+            id: 1,
+            isPrivate: false,
+            props: {
+              id: 'set-one',
+              passThruProp: 'bazinga',
+            },
           },
           {
-            id: 'set-two',
-            theme: 'blue',
+            id: 2,
+            isPrivate: false,
+            props: {
+              id: 'set-two',
+              theme: 'blue',
+            },
+          },
+        ],
+      })
+    )
+  })
+
+  test('Connects Set wrapper props with correct Set', () => {
+    interface WrapperXProps {
+      children: React.ReactNode
+      id: string
+      passThruProp: string
+    }
+
+    const WrapperX = ({ children }: WrapperXProps) => (
+      <>
+        <h1>WrapperA</h1>
+        {children}
+      </>
+    )
+
+    interface WrapperYProps {
+      children: React.ReactNode
+      id: string
+      theme: string
+    }
+
+    const WrapperY = ({ children }: WrapperYProps) => (
+      <>
+        <h1>WrapperY</h1>
+        {children}
+      </>
+    )
+
+    const Simple = (
+      <Router>
+        <Set wrap={[WrapperX]} id="set-one" passThruProp="bazinga">
+          <Route path="/a" name="routeA" page={FakePage} />
+          <Set wrap={[WrapperY]} id="set-two" theme="blue">
+            <Route name="routeB" path="/b" page={FakePage} />
+            <Route name="routeC" path="/c" page={FakePage} />
+          </Set>
+        </Set>
+      </Router>
+    )
+
+    const { pathRouteMap } = analyzeRoutes(Simple.props.children, {
+      currentPathName: '/',
+    })
+
+    expect(pathRouteMap['/a']).toEqual(
+      expect.objectContaining({
+        redirect: null,
+        name: 'routeA',
+        path: '/a',
+        whileLoadingPage: undefined,
+        wrappers: [WrapperX],
+        // Props passed through from set
+        sets: [
+          {
+            id: 1,
+            isPrivate: false,
+            props: {
+              id: 'set-one',
+              passThruProp: 'bazinga',
+            },
+          },
+        ],
+      })
+    )
+
+    expect(pathRouteMap['/b']).toEqual(
+      expect.objectContaining({
+        redirect: null,
+        name: 'routeB',
+        path: '/b',
+        whileLoadingPage: undefined,
+        wrappers: [WrapperX, WrapperY], // both wrappers
+        sets: [
+          {
+            id: 1,
+            isPrivate: false,
+            props: {
+              id: 'set-one',
+              passThruProp: 'bazinga',
+            },
+          },
+          {
+            id: 2,
+            isPrivate: false,
+            props: {
+              id: 'set-two',
+              theme: 'blue',
+            },
+          },
+        ],
+      })
+    )
+
+    expect(pathRouteMap['/c']).toEqual(
+      expect.objectContaining({
+        redirect: null,
+        name: 'routeC',
+        path: '/c',
+        whileLoadingPage: undefined,
+        wrappers: [WrapperX, WrapperY], // both wrappers
+        sets: [
+          {
+            id: 1,
+            isPrivate: false,
+            props: {
+              id: 'set-one',
+              passThruProp: 'bazinga',
+            },
+          },
+          {
+            id: 2,
+            isPrivate: false,
+            props: {
+              id: 'set-two',
+              theme: 'blue',
+            },
           },
         ],
       })
@@ -301,7 +441,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       wrappers: [],
       setId: 1,
       isPrivate: true,
-      setProps: [{ unauthenticated: 'home' }],
+      sets: [{ id: 1, isPrivate: true, props: { unauthenticated: 'home' } }],
     })
   })
 
@@ -328,7 +468,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       wrappers: [],
       setId: 1,
       isPrivate: true,
-      setProps: [{ unauthenticated: 'home' }],
+      sets: [{ id: 1, isPrivate: true, props: { unauthenticated: 'home' } }],
     })
   })
 
@@ -413,9 +553,13 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       '/no-roles-assigned': {
         redirect: null,
         isPrivate: true,
-        setProps: expect.arrayContaining([
-          expect.objectContaining({ unauthenticated: 'home' }),
-        ]),
+        sets: [
+          {
+            id: 1,
+            isPrivate: true,
+            props: expect.objectContaining({ unauthenticated: 'home' }),
+          },
+        ],
       },
     })
 
@@ -426,14 +570,22 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       '/employee': {
         redirect: null,
         isPrivate: true,
-        setProps: expect.arrayContaining([
+        sets: expect.arrayContaining([
           // Should have the first one, but also..
-          expect.objectContaining({ unauthenticated: 'home' }),
+          {
+            id: 1,
+            isPrivate: true,
+            props: expect.objectContaining({ unauthenticated: 'home' }),
+          },
           // ...the second private set's props
-          expect.objectContaining({
-            unauthenticated: 'noRolesAssigned',
-            roles: ['ADMIN', 'EMPLOYEE'],
-          }),
+          {
+            id: 2,
+            isPrivate: true,
+            props: expect.objectContaining({
+              unauthenticated: 'noRolesAssigned',
+              roles: ['ADMIN', 'EMPLOYEE'],
+            }),
+          },
         ]),
       },
     })
@@ -443,20 +595,32 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       '/admin': {
         redirect: null,
         isPrivate: true,
-        setProps: expect.arrayContaining([
+        sets: [
           // Should have the first one, but also..
-          expect.objectContaining({ unauthenticated: 'home' }),
+          {
+            id: 1,
+            isPrivate: true,
+            props: expect.objectContaining({ unauthenticated: 'home' }),
+          },
           // ...the second private set's props
-          expect.objectContaining({
-            unauthenticated: 'noRolesAssigned',
-            roles: ['ADMIN', 'EMPLOYEE'],
-          }),
+          {
+            id: 2,
+            isPrivate: true,
+            props: expect.objectContaining({
+              unauthenticated: 'noRolesAssigned',
+              roles: ['ADMIN', 'EMPLOYEE'],
+            }),
+          },
           // ...and the third private set's props
-          expect.objectContaining({
-            unauthenticated: 'employee',
-            roles: 'ADMIN',
-          }),
-        ]),
+          {
+            id: 4,
+            isPrivate: true,
+            props: expect.objectContaining({
+              unauthenticated: 'employee',
+              roles: 'ADMIN',
+            }),
+          },
+        ],
       },
     })
   })

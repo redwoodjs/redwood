@@ -464,7 +464,14 @@ interface AnalyzedRoute {
   page: PageType | null
   redirect: string | null
   wrappers: Wrappers
-  setProps: Record<any, any>[]
+  sets: Array<{
+    id: number
+    isPrivate: boolean
+    props: {
+      private?: boolean
+      [key: string]: unknown
+    }
+  }>
   setId: number
   isPrivate: boolean
 }
@@ -483,8 +490,14 @@ export function analyzeRoutes(
     nodes: ReturnType<typeof Children.toArray>
     whileLoadingPageFromSet?: WhileLoadingPage
     wrappersFromSet?: Wrappers
-    // we don't know, or care about, what props users are passing down
-    propsFromSet?: Record<string, unknown>[]
+    sets?: Array<{
+      id: number
+      isPrivate: boolean
+      props: {
+        private?: boolean
+        [key: string]: unknown
+      }
+    }>
     setId?: number
     isPrivate?: boolean
   }
@@ -511,7 +524,7 @@ export function analyzeRoutes(
     nodes,
     whileLoadingPageFromSet,
     wrappersFromSet = [],
-    propsFromSet: previousSetProps = [],
+    sets: previousSets = [],
     isPrivate = false,
   }: RecurseParams) => {
     nodes.forEach((node) => {
@@ -555,7 +568,7 @@ export function analyzeRoutes(
             path,
             page: null, // Redirects don't need pages. We set this to null for consistency
             wrappers: wrappersFromSet,
-            setProps: previousSetProps,
+            sets: previousSets,
             setId,
             isPrivate,
           }
@@ -587,9 +600,9 @@ export function analyzeRoutes(
             path,
             whileLoadingPage:
               route.props.whileLoadingPage || whileLoadingPageFromSet,
-            page: page,
+            page,
             wrappers: wrappersFromSet,
-            setProps: previousSetProps,
+            sets: previousSets,
             setId,
             isPrivate,
           }
@@ -626,19 +639,27 @@ export function analyzeRoutes(
               whileLoadingPageFromCurrentSet || whileLoadingPageFromSet,
             setId,
             isPrivate:
-              isPrivateNode(node) ||
               isPrivateSetNode(node) ||
               isPrivate ||
-              // The following two conditions can be removed when we remove
+              // The following three conditions can be removed when we remove
               // the deprecated private prop
-              previousSetProps.some((props) => props.private) ||
-              otherPropsFromCurrentSet.private,
+              isPrivateNode(node) ||
+              previousSets.some((set) => set.props.private) ||
+              !!otherPropsFromCurrentSet.private,
             wrappersFromSet: [...wrappersFromSet, ...wrapperComponentsArray],
-            propsFromSet: [
-              ...previousSetProps,
+            sets: [
+              ...previousSets,
               {
-                // Current one takes precedence
-                ...otherPropsFromCurrentSet,
+                id: setId,
+                isPrivate:
+                  isPrivateSetNode(node) ||
+                  isPrivate ||
+                  // The following three conditions can be removed when we remove
+                  // the deprecated private prop
+                  isPrivateNode(node) ||
+                  previousSets.some((set) => set.props.private) ||
+                  !!otherPropsFromCurrentSet.private,
+                props: otherPropsFromCurrentSet,
               },
             ],
           })
