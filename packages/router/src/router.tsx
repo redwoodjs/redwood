@@ -105,7 +105,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
       // May need a babel plugin to extract userParamTypes from Routes.tsx
       userParamTypes: paramTypes,
     })
-  }, [location.pathname, children, paramTypes])
+  }, [location.pathname, children, paramTypes]) //?
 
   // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
   // Note that the value changes at runtime

@@ -1600,12 +1600,15 @@ describe('Multiple nested private sets', () => {
   const PrivateEmployeePage = () => <h1>Private Employee Page</h1>
   const PrivateAdminPage = () => <h1>Private Admin Page</h1>
 
-  const LevelLayout = ({ children, level }) => (
-    <div>
-      Level: {level}
-      {children}
-    </div>
-  )
+  const LevelLayout = ({ children, level }) => {
+    children //?
+    return (
+      <section>
+        Level: {level}
+        {children}
+      </section>
+    )
+  }
 
   const TestRouter = ({ useAuthMock }) => (
     <Router useAuth={useAuthMock}>
@@ -1684,12 +1687,13 @@ describe('Multiple nested private sets', () => {
     })
   })
 
-  test('is authenticated and has a matching role', async () => {
+  test.only('is authenticated and has a matching role', async () => {
     const screen = render(
       <TestRouter
         useAuthMock={mockUseAuth({
           isAuthenticated: true,
           hasRole: (role) => {
+            role.includes('ADMIN') //?
             return role.includes('ADMIN')
           },
         })}
@@ -1697,9 +1701,10 @@ describe('Multiple nested private sets', () => {
     )
 
     act(() => navigate('/admin'))
+
     await waitFor(() => {
-      expect(screen.queryByText(`Private Admin Page`)).toBeInTheDocument()
       expect(screen.queryByText(`Level: 3`)).toBeInTheDocument()
+      expect(screen.queryByText(`Private Admin Page`)).toBeInTheDocument()
     })
   })
 

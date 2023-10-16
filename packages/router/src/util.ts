@@ -609,14 +609,23 @@ export function analyzeRoutes(
             : [wrapFromCurrentSet]
         }
 
-        const inheritedPrivateProps = previousSetProps.find(
-          (props) => props.private
-        )
+        const allInheritProps = previousSetProps.find((props) => props.private)
+
+        // We have to do this, to make sure we don't overwrite other props from parent Sets
+        // auth props from parents take precendence
+        // non-auth props from children take precedence
+        const inheritedPrivateProps = allInheritProps
+          ? {
+              private: allInheritProps.private,
+              roles: allInheritProps.roles,
+              unauthenticated: allInheritProps.unauthenticated,
+            }
+          : null
 
         const currentPrivateProps =
           node.props.private || isPrivateNode(node)
             ? {
-                private: node.props.private,
+                private: true, // Private component doesn't have "private" prop
                 unauthenticated: node.props.unauthenticated,
                 roles: node.props.roles,
               }
