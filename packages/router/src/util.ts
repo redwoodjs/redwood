@@ -637,8 +637,6 @@ export function analyzeRoutes(
                 wrappers: wrapperComponentsArray,
                 isPrivate:
                   isPrivateSetNode(node) ||
-                  // TODO: Is this needed?
-                  previousSets.some((set) => set.isPrivate) ||
                   // The following three conditions can be removed when we remove
                   // the deprecated private prop
                   isPrivateNode(node) ||
