@@ -1727,7 +1727,7 @@ describe('Multiple nested private sets', () => {
   })
 })
 
-describe('Multiple nested private sets', () => {
+describe('Multiple nested sets', () => {
   const HomePage = () => <h1>Home Page</h1>
   const Page = () => <h1>Page</h1>
 
