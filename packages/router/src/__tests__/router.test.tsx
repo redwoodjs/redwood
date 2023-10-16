@@ -1687,7 +1687,7 @@ describe('Multiple nested private sets', () => {
     })
   })
 
-  test.only('is authenticated and has a matching role', async () => {
+  test('is authenticated and has a matching role', async () => {
     const screen = render(
       <TestRouter
         useAuthMock={mockUseAuth({
