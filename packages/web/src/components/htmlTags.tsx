@@ -1,7 +1,16 @@
 import { Fragment } from 'react'
+
+const extractFromAssetMap = (key: 'css' | 'meta') => {
+  if (typeof window !== 'undefined') {
+    return window?.__REDWOOD__ASSET_MAP?.[key]
+  }
+
+  return null
+}
+
 /** CSS is a specialised metatag */
 export const Css = ({ css }: { css: string[] }) => {
-  const cssLinks = css || window?.__REDWOOD__ASSET_MAP?.css || []
+  const cssLinks = css || extractFromAssetMap('css') || []
 
   return (
     <>
@@ -80,7 +89,7 @@ interface MetaProps {
 }
 
 export const Meta = ({ tags }: MetaProps) => {
-  const metaTags = tags || window?.__REDWOOD__ASSET_MAP?.meta || []
+  const metaTags = tags || extractFromAssetMap('meta') || []
 
   return (
     <>

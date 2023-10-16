@@ -3,7 +3,7 @@ import path from 'path'
 
 import prompts from 'prompts'
 
-import { standardAuthHandler } from '@redwoodjs/cli-helpers'
+import { getGraphqlPath, standardAuthHandler } from '@redwoodjs/cli-helpers'
 
 import type { Args } from './setup'
 import { notes, extraTask } from './setupData'
@@ -26,7 +26,7 @@ export async function handler({ webauthn, force: forceArg }: Args) {
     forceArg,
     provider: 'dbAuth',
     authDecoderImport:
-      "import { authDecoder } from '@redwoodjs/auth-dbauth-api'",
+      "import { createAuthDecoder } from '@redwoodjs/auth-dbauth-api'",
     webAuthn,
     webPackages: [
       `@redwoodjs/auth-dbauth-web@${version}`,
@@ -36,7 +36,10 @@ export async function handler({ webauthn, force: forceArg }: Args) {
       `@redwoodjs/auth-dbauth-api@${version}`,
       ...(webAuthn ? webAuthnApiPackages : []),
     ],
-    extraTask: webAuthn ? webAuthnExtraTask : extraTask,
+    extraTasks: [
+      webAuthn ? webAuthnExtraTask : extraTask,
+      createAuthDecoderFunction,
+    ],
     notes: webAuthn ? webAuthnNotes : notes,
   })
 }
@@ -58,4 +61,34 @@ async function shouldIncludeWebAuthn(webauthn: boolean) {
   }
 
   return webauthn
+}
+
+export const createAuthDecoderFunction = {
+  title: 'Create auth decoder function',
+  task: () => {
+    const graphqlPath = getGraphqlPath()
+
+    if (!graphqlPath) {
+      throw new Error('Could not find your graphql file path')
+    }
+
+    const content = fs.readFileSync(graphqlPath, 'utf-8')
+
+    const newContent = content
+      .replace(
+        'import { getCurrentUser } from',
+        'import { cookieName, getCurrentUser } from'
+      )
+      .replace(
+        'export const handler = createGraphQLHandler({',
+        'const authDecoder = createAuthDecoder(cookieName)\n\n' +
+          'export const handler = createGraphQLHandler({'
+      )
+
+    if (!newContent.includes('import { cookieName')) {
+      throw new Error('Failed to import cookieName')
+    }
+
+    fs.writeFileSync(graphqlPath, newContent)
+  },
 }

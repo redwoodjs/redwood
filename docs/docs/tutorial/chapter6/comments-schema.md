@@ -685,7 +685,7 @@ export const standard = defineScenario({
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```javascript title="api/src/services/comments/comments.scenarios.ts"
+```ts title="api/src/services/comments/comments.scenarios.ts"
 import type { Prisma } from '@prisma/client'
 
 export const standard = defineScenario<Prisma.CommentCreateArgs>({
