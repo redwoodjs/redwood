@@ -8,6 +8,7 @@ import {
   isValidRoute,
 } from './route-validators'
 import type { PageType } from './router'
+import type { PrivateProps } from './Set'
 import { isPrivateNode, isSetNode } from './Set'
 
 /** Create a React Context with the given name. */
@@ -617,33 +618,32 @@ export function analyzeRoutes(
         // The "private" prop from any parent implies that all children are private.
         // So we also grab other private props from the parent, incase it's not specified on the child
         const inheritedPrivateProps = allInheritProps
-          ? {
+          ? ({
               private: allInheritProps.private,
               roles: allInheritProps.roles,
               unauthenticated: allInheritProps.unauthenticated,
-            }
+            } as PrivateProps)
           : null
 
         const currentPrivateProps =
           node.props.private || isPrivateNode(node)
-            ? {
+            ? ({
                 private: true, // Private component doesn't have "private" prop
                 unauthenticated: node.props.unauthenticated,
                 roles: node.props.roles,
-              }
+              } as PrivateProps)
             : null
 
-        // @MARK note unintuitive, but intentional
         // You cannot make a nested set public if the parent is private
         // i.e. the private prop cannot be overridden by a child Set
         const privateProps =
           currentPrivateProps || inheritedPrivateProps
             ? {
                 ...(inheritedPrivateProps || {}),
-                ...currentPrivateProps,
+                ...(currentPrivateProps || {}),
                 private: true,
               }
-            : {}
+            : null
 
         if (children) {
           recurseThroughRouter({
@@ -661,7 +661,7 @@ export function analyzeRoutes(
                 // Current one takes precedence
                 ...otherPropsFromCurrentSet,
                 // See comment at definition, intentionally at the end
-                ...privateProps,
+                ...(privateProps || {}),
               },
             ],
           })

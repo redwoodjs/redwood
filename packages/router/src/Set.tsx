@@ -45,7 +45,7 @@ export function Set<WrapperProps>(_props: SetProps<WrapperProps>) {
   return null
 }
 
-type PrivateProps<P> = Omit<
+export type PrivateProps<P = any> = Omit<
   SetProps<P>,
   'private' | 'unauthenticated' | 'wrap'
 > & {
