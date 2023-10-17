@@ -13,6 +13,10 @@ const {
 const redwoodProjectConfig = getConfig()
 const redwoodProjectPaths = getPaths()
 
+const isTypeScriptProject =
+  fs.existsSync(path.join(redwoodProjectPaths.web.base, 'tsconfig.json')) ||
+  fs.existsSync(path.join(redwoodProjectPaths.api.base, 'tsconfig.json'))
+
 /** @type { import('@storybook/react-webpack5').StorybookConfig } */
 const baseConfig = {
   framework: {
@@ -74,10 +78,12 @@ const baseConfig = {
       }
     }
 
-    const userPreviewPath = fs.existsSync(
-      redwoodProjectPaths.web.storybookPreviewConfig
-    )
-      ? redwoodProjectPaths.web.storybookPreviewConfig
+    const sbPreviewConfigPath = `${getPaths().web.storybookPreviewConfig}.${
+      isTypeScriptProject ? 'tsx' : 'js'
+    }`
+
+    const userPreviewPath = fs.existsSync(sbPreviewConfigPath)
+      ? sbPreviewConfigPath
       : './preview.example.js'
     sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_PREVIEW_CONFIG'] =
       userPreviewPath
