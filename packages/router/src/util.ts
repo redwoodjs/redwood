@@ -640,7 +640,7 @@ export function analyzeRoutes(
                   // The following three conditions can be removed when we remove
                   // the deprecated private prop
                   isPrivateNode(node) ||
-                  previousSets.some((set) => set.props.private) ||
+                  // previousSets.some((set) => set.props.private) ||
                   !!otherPropsFromCurrentSet.private,
                 props: otherPropsFromCurrentSet,
               },
