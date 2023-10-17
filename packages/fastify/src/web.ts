@@ -51,8 +51,10 @@ export async function redwoodFastifyWeb(
   fastify.setNotFoundHandler(
     {},
     function (req: FastifyRequest, reply: FastifyReply) {
+      const requestedExtension = path.extname(req.url)
       // If it's requesting some sort of asset, e.g. .js or .jpg files
-      if (path.extname(req.url) !== '') {
+      // Html files should fallback to the index.html
+      if (requestedExtension !== '' && requestedExtension !== '.html') {
         reply.code(404)
         return reply.send('Not Found')
       }
