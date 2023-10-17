@@ -16,6 +16,16 @@ export const addApiPackages = (apiPackages: string[]) => ({
   },
 })
 
+export const addRootPackages = (packages: string[], devDependency = false) => {
+  const addMode = devDependency ? ['add', '-D'] : ['add']
+  return {
+    title: 'Installing packages...',
+    task: async () => {
+      await execa('yarn', [...addMode, ...packages], { cwd: getPaths().base })
+    },
+  }
+}
+
 export const installPackages = {
   title: 'Installing packages...',
   task: async () => {

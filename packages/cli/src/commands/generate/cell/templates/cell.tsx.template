@@ -1,4 +1,5 @@
 import type { ${operationName}, ${operationName}Variables } from 'types/graphql'
+
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
