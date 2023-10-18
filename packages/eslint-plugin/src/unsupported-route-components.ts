@@ -3,7 +3,7 @@ import { ESLintUtils } from '@typescript-eslint/utils'
 const createRule = ESLintUtils.RuleCreator.withoutDocs
 
 function isAllowedElement(name: string) {
-  const allowedElements = ['Router', 'Route', 'Set', 'Private']
+  const allowedElements = ['Router', 'Route', 'Set', 'PrivateSet', 'Private']
   return allowedElements.includes(name)
 }
 
@@ -16,7 +16,7 @@ export const unsupportedRouteComponents = createRule({
     },
     messages: {
       unexpected:
-        'Unexpected JSX element <{{name}}>. Only <Router>, <Route>, <Set> and <Private> are allowed in the Routes file.',
+        'Unexpected JSX element <{{name}}>. Only <Router>, <Route>, <Set>, <PrivateSet> and <Private> are allowed in the Routes file.',
     },
     schema: [], // No additional configuration needed
   },
