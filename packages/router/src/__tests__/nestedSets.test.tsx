@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 
 import '@testing-library/jest-dom/extend-expect'
 import { act, render } from '@testing-library/react'
@@ -110,4 +110,77 @@ test('Sets nested in `<Set private>` should not error out if no authenticated pr
   expect(() => act(() => navigate('/four'))).toThrowError(
     'You must specify an `unauthenticated` route'
   )
+})
+
+test('Nested sets should not cause a re-mount of parent wrap components', async () => {
+  const layoutOneMount = jest.fn()
+  const layoutOneUnmount = jest.fn()
+  const layoutTwoMount = jest.fn()
+  const layoutTwoUnmount = jest.fn()
+
+  const Layout1 = ({ children }) => {
+    React.useEffect(() => {
+      // Called on mount and re-mount of this layout
+      layoutOneMount()
+
+      return () => {
+        layoutOneUnmount()
+      }
+    }, [])
+
+    return (
+      <>
+        <p>ONE</p>
+        {children}
+      </>
+    )
+  }
+
+  const Layout2 = ({ children }) => {
+    React.useEffect(() => {
+      // Called on mount and re-mount of this layout
+      layoutTwoMount()
+
+      return () => {
+        layoutTwoUnmount()
+      }
+    }, [])
+
+    return (
+      <>
+        <p>TWO</p>
+        {children}
+      </>
+    )
+  }
+
+  const NestedSetsWithWrap = () => (
+    <Router>
+      <Set wrap={Layout1}>
+        <Route path="/" page={HomePage} name="home" />
+        <Set wrap={Layout2}>
+          <Route path="/posts/new" page={Page} name="newPost" />
+          <Route path="/posts/{id:Int}/edit" page={Page} name="editPost" />
+          <Route path="/posts/{id:Int}" page={Page} name="post" />
+          <Route path="/posts" page={Page} name="posts" />
+        </Set>
+      </Set>
+    </Router>
+  )
+
+  render(<NestedSetsWithWrap />)
+
+  act(() => navigate('/'))
+  act(() => navigate('/posts'))
+  act(() => navigate('/'))
+  act(() => navigate('/posts'))
+  act(() => navigate('/'))
+
+  // Layout 1 Should only be mounted once, because it's shared between the two sets
+  expect(layoutOneMount).toHaveBeenCalledTimes(1)
+  expect(layoutOneUnmount).toHaveBeenCalledTimes(1)
+
+  // Layout 2 should be mounted twice, because its used only in the posts routes
+  expect(layoutTwoMount).toHaveBeenCalledTimes(2)
+  expect(layoutTwoUnmount).toHaveBeenCalledTimes(2)
 })
