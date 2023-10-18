@@ -19,7 +19,7 @@ interface ContextState {
 
 const SetContext = React.createContext<ContextState | undefined>(undefined)
 
-const SetContextProvider = ({ children }) => {
+const SetContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [contextValue, setContextValue] = React.useState('initialSetValue')
 
   return (
@@ -80,12 +80,16 @@ test("Doesn't destroy <Set> when navigating inside, but does when navigating bet
 
   await waitFor(() => screen.getByText('Home Page'))
 
+  // @ts-expect-error - No type gen here for routes like there is in a real app
   act(() => navigate(routes.ctx1()))
   await waitFor(() => screen.getByText('1-updatedSetValue'))
+  // @ts-expect-error - No type gen here for routes like there is in a real app
   act(() => navigate(routes.ctx2()))
   await waitFor(() => screen.getByText('2-updatedSetValue'))
+  // @ts-expect-error - No type gen here for routes like there is in a real app
   act(() => navigate(routes.ctx3()))
   await waitFor(() => screen.getByText('3-initialSetValue'))
+  // @ts-expect-error - No type gen here for routes like there is in a real app
   act(() => navigate(routes.ctx4()))
   await waitFor(() => screen.getByText('4-initialSetValue'))
 })
