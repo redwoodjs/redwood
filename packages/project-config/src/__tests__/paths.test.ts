@@ -129,19 +129,19 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.config.js'
+            'storybook.config'
           ),
           storybookPreviewConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.preview.js'
+            'storybook.preview'
           ),
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.manager.js'
+            'storybook.manager'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           distEntryServer: path.join(
@@ -409,19 +409,19 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.config.js'
+            'storybook.config'
           ),
           storybookPreviewConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.preview.js'
+            'storybook.preview'
           ),
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.manager.js'
+            'storybook.manager'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           distEntryServer: path.join(
@@ -735,19 +735,19 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.config.js'
+            'storybook.config'
           ),
           storybookPreviewConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.preview.js'
+            'storybook.preview'
           ),
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.manager.js'
+            'storybook.manager'
           ),
           entryClient: null,
           entryServer: null,
@@ -1018,19 +1018,19 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.config.js'
+            'storybook.config'
           ),
           storybookPreviewConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.preview.js'
+            'storybook.preview'
           ),
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.manager.js'
+            'storybook.manager'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           distEntryServer: path.join(
