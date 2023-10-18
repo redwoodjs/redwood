@@ -221,6 +221,14 @@ const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
   }
 
   return sets.reduceRight<ReactNode | undefined>((acc, set) => {
+    // For each set in `sets`, if you have `<Set wrap={[a,b,c]} p="p" />` then
+    // this will return
+    // <a p="p"><b p="p"><c p="p"><routeLoaderElement /></c></b></a>
+    // If you have `<PrivateSet wrap={[a,b,c]} p="p" />` instead it will return
+    // <AuthenticatedRoute>
+    //   <a p="p"><b p="p"><c p="p"><routeLoaderElement /></c></b></a>
+    // </AuthenticatedRoute>
+
     // Bundle up all the wrappers into a single element with each wrapper as a
     // child of the previous (that's why we do reduceRight)
     let wrapped = set.wrappers.reduceRight((acc, Wrapper) => {

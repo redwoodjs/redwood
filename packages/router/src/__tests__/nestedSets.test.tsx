@@ -6,13 +6,12 @@ import { act, render } from '@testing-library/react'
 import { navigate, Route, Router } from '../'
 import { Private, Set } from '../Set'
 
-/**
- * 🎩 Heads-up, in this test we're not mocking LazyComponent
- * because all the tests explicitly define the pages in the router.
- *
- * If you add tests with dynamic imports i.e. all the pages aren't explicitly supplied to the route
- * then you'll need to mock LazyComponent (see router.test.tsx)
- */
+// Heads-up, in this test we're not mocking LazyComponent because all the tests
+// explicitly define the pages in the router.
+//
+// If you add tests with dynamic imports, i.e. all the pages aren't explicitly
+// supplied to the router, then you'll need to mock LazyComponent (see
+// router.test.tsx)
 
 const HomePage = () => <h1>Home Page</h1>
 const Page = () => <h1>Page</h1>
