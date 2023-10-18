@@ -24,7 +24,7 @@ const CustomWrapper = ({ children }: { children: ReactNode }) => (
     <p>Custom Wrapper End</p>
   </div>
 )
-const BLayout = ({ children }) => (
+const BLayout = ({ children }: { children: ReactNode }) => (
   <div>
     <h1>Layout for B</h1>
     {children}
