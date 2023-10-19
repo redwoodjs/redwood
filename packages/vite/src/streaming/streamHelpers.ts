@@ -119,7 +119,7 @@ export async function reactRenderToStreamResponse(
       onError: (err: any) => {
         didErrorOutsideShell = true
         console.error('🔻 Caught error outside shell')
-        console.error(err)
+        streamOptions.onError?.(err)
       },
     }
 
@@ -144,7 +144,6 @@ export async function reactRenderToStreamResponse(
     })
   } catch (e) {
     console.error('🔻 Failed to render shell')
-    console.error(e)
     streamOptions.onError?.(e as Error)
 
     // @TODO Asking for clarification from React team. Their documentation on this is incomplete I think.
