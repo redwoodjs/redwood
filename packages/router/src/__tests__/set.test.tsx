@@ -12,21 +12,21 @@ import { Set } from '../Set'
 const ChildA = () => <h1>ChildA</h1>
 const ChildB = () => <h1>ChildB</h1>
 const ChildC = () => <h1>ChildC</h1>
-const GlobalLayout: React.FC<{ children?: ReactNode }> = ({ children }) => (
+const GlobalLayout = ({ children }: { children: ReactNode }) => (
   <div>
     <h1>Global Layout</h1>
     {children}
     <footer>This is a footer</footer>
   </div>
 )
-const CustomWrapper: React.FC<{ children?: ReactNode }> = ({ children }) => (
+const CustomWrapper = ({ children }: { children: ReactNode }) => (
   <div>
     <h1>Custom Wrapper</h1>
     {children}
     <p>Custom Wrapper End</p>
   </div>
 )
-const BLayout = ({ children }) => (
+const BLayout = ({ children }: { children: ReactNode }) => (
   <div>
     <h1>Layout for B</h1>
     {children}
@@ -95,10 +95,10 @@ test('passes props to wrappers', async () => {
   interface Props {
     propOne: string
     propTwo: string
-    children?: ReactNode
+    children: ReactNode
   }
 
-  const PropWrapper: React.FC<Props> = ({ children, propOne, propTwo }) => (
+  const PropWrapper = ({ children, propOne, propTwo }: Props) => (
     <div>
       <h1>Prop Wrapper</h1>
       <p>1:{propOne}</p>
@@ -106,9 +106,18 @@ test('passes props to wrappers', async () => {
       {children}
     </div>
   )
+
+  const PropWrapperTwo = ({ children }: Props) => (
+    <div>
+      <h1>Prop Wrapper Two</h1>
+      {children}
+      <footer>This is a footer</footer>
+    </div>
+  )
+
   const TestSet = () => (
     <Router>
-      <Set wrap={[PropWrapper, GlobalLayout]} propOne="une" propTwo="deux">
+      <Set wrap={[PropWrapper, PropWrapperTwo]} propOne="une" propTwo="deux">
         <Route path="/" page={ChildA} name="childA" />
       </Set>
     </Router>
@@ -134,7 +143,7 @@ test('passes props to wrappers', async () => {
         </p>
         <div>
           <h1>
-            Global Layout
+            Prop Wrapper Two
           </h1>
           <h1>
             ChildA
