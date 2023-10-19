@@ -101,7 +101,13 @@ test('passes props to wrappers', async () => {
     </div>
   )
 
-  const PropWrapperTwo = ({ children }: Props) => <div>{children}</div>
+  const PropWrapperTwo = ({ children }: Props) => (
+    <div>
+      <h1>Prop Wrapper Two</h1>
+      {children}
+      <footer>This is a footer</footer>
+    </div>
+  )
 
   const TestSet = () => (
     <Router>
@@ -131,7 +137,7 @@ test('passes props to wrappers', async () => {
         </p>
         <div>
           <h1>
-            Global Layout
+            Prop Wrapper Two
           </h1>
           <h1>
             ChildA
