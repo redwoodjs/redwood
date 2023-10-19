@@ -9,24 +9,28 @@ import { Route, Router } from '../router'
 import { Set } from '../Set'
 
 // SETUP
+interface LayoutProps {
+  children: ReactNode
+}
+
 const ChildA = () => <h1>ChildA</h1>
 const ChildB = () => <h1>ChildB</h1>
 const ChildC = () => <h1>ChildC</h1>
-const GlobalLayout = ({ children }: { children: ReactNode }) => (
+const GlobalLayout = ({ children }: LayoutProps) => (
   <div>
     <h1>Global Layout</h1>
     {children}
     <footer>This is a footer</footer>
   </div>
 )
-const CustomWrapper = ({ children }: { children: ReactNode }) => (
+const CustomWrapper = ({ children }: LayoutProps) => (
   <div>
     <h1>Custom Wrapper</h1>
     {children}
     <p>Custom Wrapper End</p>
   </div>
 )
-const BLayout = ({ children }: { children: ReactNode }) => (
+const BLayout = ({ children }: LayoutProps) => (
   <div>
     <h1>Layout for B</h1>
     {children}
@@ -172,7 +176,7 @@ describe('Navigating Sets', () => {
     const layoutOneMount = jest.fn()
     const layoutOneUnmount = jest.fn()
 
-    const Layout1 = ({ children }) => {
+    const Layout1 = ({ children }: LayoutProps) => {
       React.useEffect(() => {
         // Called on mount and re-mount of this layout
         layoutOneMount()
@@ -221,7 +225,7 @@ describe('Navigating Sets', () => {
     const layoutOneMount = jest.fn()
     const layoutOneUnmount = jest.fn()
 
-    const Layout1 = ({ children }) => {
+    const Layout1 = ({ children }: LayoutProps) => {
       React.useEffect(() => {
         // Called on mount and re-mount of this layout
         layoutOneMount()
