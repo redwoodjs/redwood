@@ -74,9 +74,11 @@ const propToMetaTag = (
     })
   } else if (typeof parentValue === 'object') {
     // namespaced attributes, <meta> name attribute changes to 'property'
-    return Object.entries(parentValue).map(([key, value]) => {
-      return propToMetaTag(`${parentKey}:${key}`, value, { attr: 'property' })
-    })
+    return Object.entries(parentValue)
+      .filter(([_, v]) => v !== null)
+      .map(([key, value]) => {
+        return propToMetaTag(`${parentKey}:${key}`, value, { attr: 'property' })
+      })
   } else {
     // plain text
     const attributes = { [options['attr']]: parentKey, content: parentValue }
@@ -100,10 +102,35 @@ export const MetaTags = (props: Record<string, any>) => {
   }
 
   const tags = Object.entries(metaProps)
+    .filter(([_, v]) => v !== null)
     .map(([key, value]) => {
       return propToMetaTag(key, value, { attr: 'name' })
     })
     .flat()
+
+  // custom overrides
+  if (metaProps.og) {
+    // add og:title
+    if (metaProps.title && !metaProps.og.title && metaProps.og.title !== null) {
+      tags.push(<meta property="og:title" content={metaProps.title} />)
+    }
+
+    // add og:description
+    if (
+      metaProps.description &&
+      !metaProps.og.description &&
+      metaProps.og.description !== null
+    ) {
+      tags.push(
+        <meta property="og:description" content={metaProps.description} />
+      )
+    }
+
+    // add og:type
+    if (!metaProps.og.type && metaProps.og.type !== null) {
+      tags.push(<meta property="og:type" content="website" />)
+    }
+  }
 
   return (
     <Head>
@@ -114,81 +141,19 @@ export const MetaTags = (props: Record<string, any>) => {
     </Head>
   )
 
-  // return (
-  //   <>
-  //     {title && (
-  //       <Head>
-  //         <title>{title}</title>
-  //         <meta property="og:title" content={title} key="title" />
-  //         <meta property="twitter:title" content={title} />
-  //       </Head>
-  //     )}
+  // {locale && (
+  //   <Head>
+  //     <html lang={locale} />
+  //     <meta property="og:locale" content={locale} />
+  //   </Head>
+  // )}
 
-  //     {description && (
-  //       <Head>
-  //         <meta name="description" content={description} />
-  //         <meta name="twitter:description" content={description} />
-  //         <meta property="og:description" content={description} />
-  //       </Head>
-  //     )}
-
-  //     {author && (
-  //       <Head>
-  //         <meta name="author" content={author} />
-  //         <meta name="twitter:site" content={author} />
-  //         <meta name="twitter:creator" content={author} />
-  //       </Head>
-  //     )}
-
-  //     {ogUrl && (
-  //       <Head>
-  //         <meta property="og:url" content={ogUrl} />
-  //       </Head>
-  //     )}
-
-  //     {/* en_US by default */}
-  //     {locale && (
-  //       <Head>
-  //         <html lang={locale} />
-  //         <meta property="og:locale" content={locale} />
-  //       </Head>
-  //     )}
-
-  //     <Head>
-  //       <meta property="og:type" content={ogType} />
-  //     </Head>
-
-  //     {ogContentUrl && (
-  //       <Head>
-  //         <meta property={tag} content={ogContentUrl} />
-  //       </Head>
-  //     )}
-
-  //     {contentType && (
-  //       <Head>
-  //         <meta property={`${tag}:type`} content={contentType} />
-  //       </Head>
-  //     )}
-
-  //     {tag === 'og:image' && (
-  //       <Head>
-  //         {ogWidth && <meta property="image:width" content={ogWidth} />}
-  //         {ogHeight && <meta property="image:height" content={ogHeight} />}
-  //         <meta property="twitter:card" content="summary_large_image" />
-  //         <meta property="twitter:image" content={ogContentUrl} />
-  //       </Head>
-  //     )}
-
-  //     {robots && (
-  //       <Head>
-  //         <meta
-  //           name="robots"
-  //           content={Array.isArray(robots) ? robots.join(', ') : robots}
-  //         />
-  //       </Head>
-  //     )}
-
-  //     {children}
-  //   </>
-  // )
+  // {robots && (
+  //   <Head>
+  //     <meta
+  //       name="robots"
+  //       content={Array.isArray(robots) ? robots.join(', ') : robots}
+  //     />
+  //   </Head>
+  // )}
 }
