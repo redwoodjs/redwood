@@ -15,7 +15,7 @@ import {
 } from '@redwoodjs/web/dist/components/ServerInject'
 
 import { createBufferedTransformStream } from './transforms/bufferedTransform'
-import { createTimeoutTransform } from './transforms/cancelTimoutTransform'
+import { createTimeoutTransform } from './transforms/cancelTimeoutTransform'
 import { createServerInjectionTransform } from './transforms/serverInjectionTransform'
 
 interface RenderToStreamArgs {
