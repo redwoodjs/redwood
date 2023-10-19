@@ -17,6 +17,10 @@ import { Private, Set } from '../Set'
 const HomePage = () => <h1>Home Page</h1>
 const Page = () => <h1>Page</h1>
 
+interface LayoutProps {
+  children: ReactNode
+}
+
 beforeEach(() => {
   window.history.pushState({}, '', '/')
 })
@@ -34,7 +38,7 @@ afterAll(() => {
 })
 
 test('Sets nested in Private should not error out if no authenticated prop provided', () => {
-  const Layout1 = ({ children }: { children: ReactNode }) => (
+  const Layout1 = ({ children }: LayoutProps) => (
     <div>
       <p>Layout1</p>
       {children}
@@ -119,7 +123,7 @@ test('Nested sets should not cause a re-mount of parent wrap components', async 
   const layoutTwoMount = jest.fn()
   const layoutTwoUnmount = jest.fn()
 
-  const Layout1 = ({ children }) => {
+  const Layout1 = ({ children }: LayoutProps) => {
     React.useEffect(() => {
       // Called on mount and re-mount of this layout
       layoutOneMount()
@@ -137,7 +141,7 @@ test('Nested sets should not cause a re-mount of parent wrap components', async 
     )
   }
 
-  const Layout2 = ({ children }) => {
+  const Layout2 = ({ children }: LayoutProps) => {
     React.useEffect(() => {
       // Called on mount and re-mount of this layout
       layoutTwoMount()
