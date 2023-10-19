@@ -1,4 +1,5 @@
 import React from 'react'
+import type { ReactNode } from 'react'
 
 import '@testing-library/jest-dom/extend-expect'
 import { act, render } from '@testing-library/react'
@@ -33,7 +34,7 @@ afterAll(() => {
 })
 
 test('Sets nested in Private should not error out if no authenticated prop provided', () => {
-  const Layout1 = ({ children }) => (
+  const Layout1 = ({ children }: { children: ReactNode }) => (
     <div>
       <p>Layout1</p>
       {children}
@@ -74,7 +75,7 @@ test('Sets nested in Private should not error out if no authenticated prop provi
 })
 
 test('Sets nested in `<Set private>` should not error out if no authenticated prop provided', () => {
-  const Layout1 = ({ children }) => (
+  const Layout1 = ({ children }: { children: ReactNode }) => (
     <div>
       <p>Layout1</p>
       {children}

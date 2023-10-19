@@ -6,9 +6,19 @@ import { analyzeRoutes } from '../util'
 
 const FakePage = () => <h1>Fake Page</h1>
 
-const FakeLayout1 = ({ children }) => <div className="layout1">{children}</div>
-const FakeLayout2 = ({ children }) => <div className="layout2">{children}</div>
-const FakeLayout3 = ({ children }) => <div className="layout2">{children}</div>
+interface LayoutProps {
+  children: React.ReactNode
+}
+
+const FakeLayout1 = ({ children }: LayoutProps) => (
+  <div className="layout1">{children}</div>
+)
+const FakeLayout2 = ({ children }: LayoutProps) => (
+  <div className="layout2">{children}</div>
+)
+const FakeLayout3 = ({ children }: LayoutProps) => (
+  <div className="layout2">{children}</div>
+)
 
 describe('AnalyzeRoutes: with homePage and Children', () => {
   const CheckRoutes = (
