@@ -88,21 +88,61 @@ export const updateTomlConfigTask = (packageName: string) => {
   }
 }
 
-export const addEnvVarTask = (name: string, value: string, comment: string) => {
+export const addEnvVarTask = (
+  name: string,
+  value: string,
+  comment: string,
+  overwrite = false
+) => {
   return {
     title: `Adding ${name} var to .env...`,
     task: () => {
-      const envPath = path.join(getPaths().base, '.env')
-      const content = [comment && `# ${comment}`, `${name}=${value}`, ''].flat()
-      let envFile = ''
-
-      if (fs.existsSync(envPath)) {
-        envFile = fs.readFileSync(envPath).toString() + '\n'
-      }
-
-      fs.writeFileSync(envPath, envFile + content.join('\n'))
+      addEnvVar(name, value, comment, overwrite)
     },
   }
+}
+
+export const addEnvVar = (
+  name: string,
+  value: string,
+  comment: string,
+  overwrite = false
+) => {
+  const envPath = path.join(getPaths().base, '.env')
+  const content = [comment && `# ${comment}`, `${name}=${value}`, ''].flat()
+  let envFile = ''
+
+  if (fs.existsSync(envPath)) {
+    envFile = fs.readFileSync(envPath).toString()
+    const lines = envFile.split('\n')
+
+    // Check if the variable already exists
+    const existingIndex = lines.findIndex((line) => {
+      const trimmedLine = line.trim()
+      return (
+        trimmedLine.startsWith(`${name}=`) ||
+        trimmedLine.startsWith(`#${name}=`)
+      )
+    })
+
+    if (existingIndex !== -1) {
+      // Variable already exists, check if overwrite is true
+      if (overwrite) {
+        // Update the existing line with the new value
+        const existingComment = [content[0]]
+        lines[existingIndex] = `${existingComment}\n${name}=${value}`
+        envFile = lines.join('\n')
+      }
+      // If overwrite is false, do nothing (leave the file unchanged)
+    } else {
+      // Variable doesn't exist, add it
+      envFile += '\n' + content.join('\n')
+    }
+  } else {
+    envFile = content.join('\n')
+  }
+
+  return fs.writeFileSync(envPath, envFile)
 }
 
 /**

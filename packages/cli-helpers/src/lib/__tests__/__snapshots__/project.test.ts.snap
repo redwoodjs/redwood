@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`addEnvVar adds environment variables as part of a setup task addEnvVar adds environment variables as part of a setup task should add a new environment variable when it does not exist (overwrite: false) 1`] = `
+"EXISTING_VAR=value
+# CommentedVar=123
+
+# New Variable Comment
+NEW_VAR=new_value
+"
+`;
+
+exports[`addEnvVar adds environment variables as part of a setup task addEnvVar adds environment variables as part of a setup task should not update existing environment variable if exists and overwrite is default 1`] = `
+"EXISTING_VAR=value
+# CommentedVar=123
+"
+`;
+
+exports[`addEnvVar adds environment variables as part of a setup task addEnvVar adds environment variables as part of a setup task should not update existing environment variable if exists and overwrite is false 1`] = `
+"EXISTING_VAR=value
+# CommentedVar=123
+"
+`;
+
+exports[`addEnvVar adds environment variables as part of a setup task addEnvVar adds environment variables as part of a setup task should updates an existing environment variable when it exists and overwrite chosen 1`] = `
+"# Updated existing variable Comment
+EXISTING_VAR=new_value
+# CommentedVar=123
+"
+`;
