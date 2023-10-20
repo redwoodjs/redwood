@@ -7,7 +7,7 @@ describe('MetaTags', () => {
   it('renders nothing if no props or children', () => {
     const meta = <MetaTags />
 
-    const { container } = render(meta)
+    const { container } = render(meta, { container: document.head })
     const metaTags = container.querySelectorAll('meta')
 
     expect(metaTags.length).toEqual(0)
