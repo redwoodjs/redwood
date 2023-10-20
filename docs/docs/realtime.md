@@ -77,7 +77,7 @@ Lastly, the Redwood CLI has commands to
 
 Regardless of the implementation chosen, **a stateful server and store are needed** to track changes, invalidation, or who wants to be informed about the change.
 
-## What can I build with Realtime?
+### What can I build with Realtime?
 
 - Application Alerts and Messages
 - User Notifications
@@ -86,6 +86,136 @@ Regardless of the implementation chosen, **a stateful server and store are neede
 - Auction bid updates
 - Messaging
 - OpenAI streaming responses
+
+## RedwoodJS Realtime Setup
+
+To setup Realtime in an existing RedwoodJS project, run the following commands:
+
+* `yarn rw exp setup-server-file`
+* `yarn rw exp setup-realtime`
+
+You will get:
+
+* `api/server.ts` where you configure your Fastify server and GraphQL
+* `api/lib/realtime.ts` where you consume your subscriptions and configure realtime with an in-memory or Redis store
+* The auction, countdown, and chat examples. You'll find sdl, services and subscriptions for each. There is no UI setup for these examples. You can find information on how to try them out using the GraphiQL playground.
+
+### GraphQL Configuration
+
+Now that how have a serverful project, you will configure your GraphQL server in the `api/server.ts` file.
+
+:::important
+That means you **must** manually configure your GraphQL server accordingly
+:::
+
+For example, you will have to setup any authentication and the realtime config:
+
+```ts
+  await fastify.register(redwoodFastifyGraphQLServer, {
+    // If authenticating, be sure to import and add in
+    // authDecoder,
+    // getCurrentUser,
+    loggerConfig: {
+      logger: logger,
+      options: {
+        query: true,
+        data: true,
+        operationName: true,
+        requestId: true,
+      },
+    },
+    graphiQLEndpoint: enableWeb ? '/.redwood/functions/graphql' : '/graphql',
+    sdls,
+    services,
+    directives,
+    allowIntrospection: true,
+    allowGraphiQL: true,
+    // Configure if using RedwoodJS Realtime
+    realtime,
+  })
+```
+
+You can now remove the GraphQL handler function that resides in `api/functions/graphql.ts`.
+
+### Realtime Configuration
+
+By default, RedwoodJS realtime configures an in-memory store for the Pub Sub client used with subscriptions and live query invalidation.
+
+Realtime supports in-memory and Redis stores:
+- In-memory stores are useful for development and testing.
+- Redis stores are useful for production.
+
+Configure a Redis store in:
+
+```ts
+// api/lib/realtime.ts
+import { RedwoodRealtimeOptions } from '@redwoodjs/realtime'
+
+import subscriptions from 'src/subscriptions/**/*.{js,ts}'
+
+// if using a Redis store
+// import { Redis } from 'ioredis'
+// const publishClient = new Redis()
+// const subscribeClient = new Redis()
+
+/**
+ * Configure RedwoodJS Realtime
+ *
+ * See https://redwoodjs.com/docs/realtime
+ *
+ * Realtime supports Live Queries and Subscriptions over GraphQL SSE.
+ *
+ * Live Queries are GraphQL queries that are automatically re-run when the data they depend on changes.
+ *
+ * Subscriptions are GraphQL queries that are run when a client subscribes to a channel.
+ *
+ * Redwood Realtime
+ *  - uses a publish/subscribe model to broadcast data to clients.
+ *  - uses a store to persist Live Query and Subscription data.
+ *
+ * Redwood Realtime supports in-memory and Redis stores:
+ * - In-memory stores are useful for development and testing.
+ * - Redis stores are useful for production.
+ *
+ */
+export const realtime: RedwoodRealtimeOptions = {
+  subscriptions: {
+    subscriptions,
+    store: 'in-memory',
+    // if using a Redis store
+    // store: { redis: { publishClient, subscribeClient } },
+  },
+  liveQueries: {
+    store: 'in-memory',
+    // if using a Redis store
+    // store: { redis: { publishClient, subscribeClient } },
+  },
+}
+```
+
+#### PubSub and LiveQueryStore
+
+By setting up RedwoodJS Realtime, the GraphQL server adds two helpers on the context:
+
+* pubSub
+* liveQueryStory
+
+With `context.pubSub` you can subscribe to and publish messages via `context.pubSub.publish('the-topic', id, id2)`.
+
+With `context.liveQueryStore.` you can `context.liveQueryStore.invalidate(key)` where your key may be a reference or schema coordinate:
+
+##### Reference
+Where the query is: `auction(id: ID!): Auction @requireAuth`:
+
+* `"Auction:123"`
+
+##### Schema Coordinate
+When the query is: `auctions: [Auction!]! @requireAuth`:
+
+* `"Query.auctions"`
+
+
+
 
 ## Subscriptions
 
@@ -153,7 +283,9 @@ mutation MakeBid {
 
 ## Defer Directive
 
-he @defer directive allows you to post-pone the delivery of one or more (slow) fields grouped in an inlined or spread fragment.
+The `@defer`` directive allows you to post-pone the delivery of one or more (slow) fields grouped in an inlined or spread fragment.
+
+### Example
 
 Here, the GraphQL schema defines two queries for a "fast" and a "slow" (ie, delayed) information.
 
@@ -229,7 +361,9 @@ and will await the deferred field to then present:
 
 ## Stream Directive
 
-The `@stream`` directive allows you to stream the individual items of a field of the list type as the items are available.
+The `@stream` directive allows you to stream the individual items of a field of the list type as the items are available.
+
+### Example
 
 Here, the GraphQL schema defines a query to return the letters of the alphabet:
 
@@ -280,7 +414,7 @@ export const alphabet = async () => {
 }
 ```
 
-## What does the incremental stream look like?
+### What does the incremental stream look like?
 
 Since Apollo Client does not yet support the `@stream` directive, you can use them in the GraphiQL Playground or see them in action via CURL.
 
@@ -381,17 +515,7 @@ When deciding on how to offer realtime data updates in your RedwoodJS app, youâ€
     - If you are using a serverless architecture, your application cannot maintain a stateful connection to your users' applications. Therefore, it's not easy to "push," "publish," or "stream" data updates to the web client.
         - In this case, you may need to look for third-party solutions that manage the infrastructure to maintain such stateful connections to your web client, such as [Supabase Realtime](https://supabase.com/realtime), [SendBird](https://sendbird.com/), [Pusher](https://pusher.com/), or consider creating your own [AWS SNS-based](https://docs.aws.amazon.com/sns/latest/dg/welcome.html) functionality.
 
-### PubSub and LiveQueryStore
 
-By setting up RedwoodJS Realtime, the GraphQL server adds two helpers on the context:
-
-* pubSub
-* liveQueryStory
-
-With `context.pubSub` you can subscribe to and publish messages via `context.pubSub.publish('the-topic', id, id2)`.
-
-With `context.liveQueryStore.` you can `context.liveQueryStore.invalidate(key)`
-`
 
 ## Showcase Demos
 
@@ -561,17 +685,3 @@ Powered by OpenAI, this movie tagline and treatment updates on each stream conte
 context.liveQueryStore.invalidate(`MovieMashup:${id}`)
 ```
 
-## RedwoodJS Realtime Setup
-
-This project is already setup for Realtime.
-
-To setup a new project:
-
-* `yarn rw exp setup-server-file`
-* `yarn rw exp setup-realtime`
-
-You will get:
-
-* `api/server.ts` where you configure your Fastify server and GraphQL
-* `api/lib/realtime.ts` where you consume your subscriptions and configure realtime with an in-memory or Redis store
-* The auction, countdown, and chat examples. You'll find sdl, services and subscriptions for each. Note there is no UI setup.
