@@ -53,4 +53,32 @@ export const addMailer = async () => {
     const text = await res.text()
     fs.writeFileSync(path.join(dir, content.filename), text)
   }
+
+  // Add the mailer dependencies
+  const newDependencies = [
+    '@redwoodjs/mailer-core',
+    '@redwoodjs/mailer-handler-nodemailer',
+    '@redwoodjs/mailer-renderer-react-email',
+  ]
+  const newDevDependencies = [
+    '@redwoodjs/mailer-handler-in-memory',
+    '@redwoodjs/mailer-handler-studio',
+  ]
+
+  const currentRedwoodVersion = JSON.parse(
+    fs.readFileSync(path.join(rwPaths.base, 'package.json'), 'utf8')
+  ).devDependencies['@redwoodjs/core']
+  const apiPackageJSON = JSON.parse(
+    fs.readFileSync(path.join(rwPaths.api.base, 'package.json'), 'utf8')
+  )
+  for (const dep of newDependencies) {
+    if (!apiPackageJSON.dependencies[dep]) {
+      apiPackageJSON.dependencies[dep] = currentRedwoodVersion
+    }
+  }
+  for (const dep of newDevDependencies) {
+    if (!apiPackageJSON.devDependencies[dep]) {
+      apiPackageJSON.devDependencies[dep] = currentRedwoodVersion
+    }
+  }
 }
