@@ -1,46 +1,51 @@
 import path from 'node:path'
-import { Writable } from 'node:stream'
 
 import React from 'react'
 
-import { renderToPipeableStream, renderToString } from 'react-dom/server'
+import type {
+  RenderToReadableStreamOptions,
+  ReactDOMServerReadableStream,
+} from 'react-dom/server'
 
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
-import type { RenderCallback } from '@redwoodjs/web/dist/components/ServerInject'
 import {
   ServerHtmlProvider,
-  ServerInjectedHtml,
   createInjector,
 } from '@redwoodjs/web/dist/components/ServerInject'
 
+import { createBufferedTransformStream } from './transforms/bufferedTransform'
+import { createTimeoutTransform } from './transforms/cancelTimeoutTransform'
+import { createServerInjectionTransform } from './transforms/serverInjectionTransform'
+
 interface RenderToStreamArgs {
   ServerEntry: any
+  FallbackDocument: any
   currentPathName: string
   metaTags: TagDescriptor[]
   cssLinks: string[]
   isProd: boolean
   jsBundles?: string[]
-  res: Writable
 }
 
 interface StreamOptions {
   waitForAllReady?: boolean
+  onError?: (err: Error) => void
 }
 
-export function reactRenderToStream(
+export async function reactRenderToStreamResponse(
   renderOptions: RenderToStreamArgs,
   streamOptions: StreamOptions
 ) {
   const { waitForAllReady = false } = streamOptions
   const {
     ServerEntry,
+    FallbackDocument,
     currentPathName,
     metaTags,
     cssLinks,
     isProd,
     jsBundles = [],
-    res,
   } = renderOptions
 
   if (!isProd) {
@@ -56,116 +61,106 @@ export function reactRenderToStream(
   // This ensures an isolated state for each request
   const { injectionState, injectToPage } = createInjector()
 
-  // This is effectively a transformer stream
-  const intermediateStream = createServerInjectionStream({
-    outputStream: res,
+  // This makes it safe for us to inject at any point in the stream
+  const bufferTransform = createBufferedTransformStream()
+
+  // This is a transformer stream, that will inject all things called with useServerInsertedHtml
+  const serverInjectionTransform = createServerInjectionTransform({
     injectionState,
   })
 
-  const { pipe } = renderToPipeableStream(
-    React.createElement(
+  // Timeout after 10 seconds
+  // @TODO make this configurable
+  const controller = new AbortController()
+  const timeoutHandle = setTimeout(() => {
+    controller.abort()
+  }, 10000)
+
+  const timeoutTransform = createTimeoutTransform(timeoutHandle)
+
+  // @ts-expect-error Something in React's packages mean types dont come through
+  // Possible that we need to upgrade the @types/* packages
+  const { renderToReadableStream } = await import('react-dom/server.edge')
+
+  const renderRoot = (path: string) => {
+    return React.createElement(
       ServerHtmlProvider,
       {
         value: injectToPage,
       },
       ServerEntry({
-        url: currentPathName,
+        url: path,
         css: cssLinks,
         meta: metaTags,
       })
-    ),
-    {
-      bootstrapScriptContent:
-        // Only insert assetMap if clientside JS will be loaded
-        jsBundles.length > 0
-          ? `window.__REDWOOD__ASSET_MAP = ${assetMap}`
-          : undefined,
-      bootstrapModules: jsBundles,
-      onShellReady() {
-        // Pass the react "input" stream to the injection stream
-        // This intermediate stream will interweave the injected html into the react stream's <head>
+    )
+  }
 
-        if (!waitForAllReady) {
-          pipe(intermediateStream)
-        }
-      },
-      onAllReady() {
-        if (waitForAllReady) {
-          pipe(intermediateStream)
-        }
+  /**
+   * These are the opts that inject the bundles, and Assets into html
+   */
+  const bootstrapOptions = {
+    bootstrapScriptContent:
+      // Only insert assetMap if clientside JS will be loaded
+      jsBundles.length > 0
+        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}`
+        : undefined,
+    bootstrapModules: jsBundles,
+  }
+
+  try {
+    // This gets set if there are errors inside Suspense boundaries
+    let didErrorOutsideShell = false
+
+    // Assign here so we get types, the dynamic import messes types
+    const renderToStreamOptions: RenderToReadableStreamOptions = {
+      ...bootstrapOptions,
+      signal: controller.signal,
+      onError: (err: any) => {
+        didErrorOutsideShell = true
+        console.error('🔻 Caught error outside shell')
+        streamOptions.onError?.(err)
       },
     }
-  )
-}
 
-function createServerInjectionStream({
-  outputStream,
-  injectionState,
-}: {
-  outputStream: Writable
-  injectionState: Set<RenderCallback>
-}) {
-  return new Writable({
-    write(chunk, encoding, next) {
-      const chunkAsString = chunk.toString()
-      const split = chunkAsString.split('</head>')
-
-      // If the closing tag exists
-      if (split.length > 1) {
-        const [beforeClosingHead, afterClosingHead] = split
-
-        const elementsInjectedToHead = renderToString(
-          React.createElement(ServerInjectedHtml, {
-            injectionState,
-          })
-        )
-
-        const outputBuffer = Buffer.from(
-          [
-            beforeClosingHead,
-            elementsInjectedToHead,
-            '</head>',
-            afterClosingHead,
-          ].join('')
-        )
-
-        outputStream.write(outputBuffer, encoding)
-      } else {
-        outputStream.write(chunk, encoding)
-      }
-
-      next()
-    },
-    final() {
-      // Before finishing, make sure we flush anything else that has been added to the queue
-      // Because of the implementation in ServerRenderHtml, its safe to call this multiple times (I think!)
-      // This is really for the data fetching usecase, where the promise is resolved after <head> is closed
-      const elementsAtTheEnd = renderToString(
-        React.createElement(ServerInjectedHtml, {
-          injectionState,
-        })
+    const reactStream: ReactDOMServerReadableStream =
+      await renderToReadableStream(
+        renderRoot(currentPathName),
+        renderToStreamOptions
       )
 
-      outputStream.write(elementsAtTheEnd)
+    const output = reactStream
+      .pipeThrough(bufferTransform)
+      .pipeThrough(serverInjectionTransform)
+      .pipeThrough(timeoutTransform)
 
-      // This will find all the elements added by PortalHead during a server render, and move them into <head>
-      // @TODO remove the whitespace to save them bytes later
-      outputStream.write(`<script>document.querySelectorAll('body [data-rwjs-head]').forEach((el) => {
-        document.querySelectorAll('head ' + el.tagName).forEach((e) => {
-          if (
-            el.tagName === 'TITLE' ||
-            (el.tagName === 'META' &&
-              el.getAttribute('name') === e.getAttribute('name') &&
-              el.getAttribute('property') === e.getAttribute('property'))
-          ) {
-            e.remove();
-          }
-          document.head.appendChild(el);
-        });
-      });
-        </script>`)
+    if (waitForAllReady) {
+      await reactStream.allReady
+    }
 
-      outputStream.end()
-    },
-  })
+    return new Response(output, {
+      status: didErrorOutsideShell ? 500 : 200, // I think better right? Prevents caching a bad page
+      headers: { 'content-type': 'text/html' },
+    })
+  } catch (e) {
+    console.error('🔻 Failed to render shell')
+    streamOptions.onError?.(e as Error)
+
+    // @TODO Asking for clarification from React team. Their documentation on this is incomplete I think.
+    // Having the Document (and bootstrap scripts) here allows client to recover from errors in the shell
+    // To test this, throw an error in the App on the server only
+    const fallbackShell = await renderToReadableStream(
+      FallbackDocument({
+        children: null,
+        css: cssLinks,
+        meta: metaTags,
+      }),
+      bootstrapOptions
+    )
+
+    return new Response(fallbackShell, {
+      status: 500,
+      headers: { 'content-type': 'text/html' },
+    })
+  }
 }
