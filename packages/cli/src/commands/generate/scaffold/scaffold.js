@@ -181,7 +181,7 @@ export const files = async ({
       tests,
       typescript,
     })),
-    ...assetFiles(name, tailwind, force),
+    ...assetFiles(name, tailwind),
     ...(await formatters(name, typescript)),
     ...layoutFiles(name, force, typescript, templateStrings),
     ...(await pageFiles(
@@ -194,7 +194,7 @@ export const files = async ({
   }
 }
 
-const assetFiles = (name, tailwind, force) => {
+const assetFiles = (name, tailwind) => {
   let fileList = {}
   const assets = fs.readdirSync(
     customOrDefaultTemplatePath({
@@ -206,8 +206,10 @@ const assetFiles = (name, tailwind, force) => {
 
   assets.forEach((asset) => {
     // check if the asset name matches the Tailwind preference
-    const assetIsTailwind = asset.match(/tailwind/)?.length > 0
-    if ((tailwind && assetIsTailwind) || (!tailwind && !assetIsTailwind)) {
+    if (
+      (tailwind && asset.match(/tailwind/)) ||
+      (!tailwind && !asset.match(/tailwind/))
+    ) {
       const outputAssetName = asset
         .replace(/\.template/, '')
         .replace(/\.tailwind/, '')
@@ -216,8 +218,7 @@ const assetFiles = (name, tailwind, force) => {
       // skip assets that already exist on disk, never worry about overwriting
       if (
         !SKIPPABLE_ASSETS.includes(path.basename(outputPath)) ||
-        !fs.existsSync(outputPath) ||
-        force
+        !fs.existsSync(outputPath)
       ) {
         const template = generateTemplate(
           customOrDefaultTemplatePath({
