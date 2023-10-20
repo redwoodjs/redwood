@@ -175,17 +175,60 @@ test('Nested sets should not cause a re-mount of parent wrap components', async 
 
   render(<NestedSetsWithWrap />)
 
-  act(() => navigate('/'))
-  act(() => navigate('/posts'))
-  act(() => navigate('/'))
-  act(() => navigate('/posts'))
-  act(() => navigate('/'))
-
-  // Layout 1 Should only be mounted once, because it's shared between the two sets
+  // Layout 1 is mounted on initial render because we start out on /
+  // Layout 2 is not mounted at all
   expect(layoutOneMount).toHaveBeenCalledTimes(1)
-  expect(layoutOneUnmount).toHaveBeenCalledTimes(1)
+  expect(layoutOneUnmount).toHaveBeenCalledTimes(0)
+  expect(layoutTwoMount).toHaveBeenCalledTimes(0)
+  expect(layoutTwoUnmount).toHaveBeenCalledTimes(0)
 
-  // Layout 2 should be mounted twice, because its used only in the posts routes
+  act(() => navigate('/'))
+
+  // Haven't navigated anywhere, so nothing should have changed
+  expect(layoutOneMount).toHaveBeenCalledTimes(1)
+  expect(layoutOneUnmount).toHaveBeenCalledTimes(0)
+  expect(layoutTwoMount).toHaveBeenCalledTimes(0)
+  expect(layoutTwoUnmount).toHaveBeenCalledTimes(0)
+
+  act(() => navigate('/posts'))
+
+  // Layout 2 should now have been mounted
+  // We're still within Layout 1, so it should not have been unmounted
+  expect(layoutOneMount).toHaveBeenCalledTimes(1)
+  expect(layoutOneUnmount).toHaveBeenCalledTimes(0)
+  expect(layoutTwoMount).toHaveBeenCalledTimes(1)
+  expect(layoutTwoUnmount).toHaveBeenCalledTimes(0)
+
+  act(() => navigate('/'))
+
+  // Navigating back up to / should unmount Layout 2 but crucially not remount
+  // Layout 1
+  expect(layoutOneMount).toHaveBeenCalledTimes(1)
+  expect(layoutOneUnmount).toHaveBeenCalledTimes(0)
+  expect(layoutTwoMount).toHaveBeenCalledTimes(1)
+  expect(layoutTwoUnmount).toHaveBeenCalledTimes(1)
+
+  act(() => navigate('/posts'))
+
+  // Going back to /posts should remount Layout 2 but not Layout 1
+  expect(layoutOneMount).toHaveBeenCalledTimes(1)
+  expect(layoutOneUnmount).toHaveBeenCalledTimes(0)
+  expect(layoutTwoMount).toHaveBeenCalledTimes(2)
+  expect(layoutTwoUnmount).toHaveBeenCalledTimes(1)
+
+  act(() => navigate('/posts'))
+
+  // Navigating within Layout 2 should not remount any of the layouts
+  expect(layoutOneMount).toHaveBeenCalledTimes(1)
+  expect(layoutOneUnmount).toHaveBeenCalledTimes(0)
+  expect(layoutTwoMount).toHaveBeenCalledTimes(2)
+  expect(layoutTwoUnmount).toHaveBeenCalledTimes(1)
+
+  act(() => navigate('/'))
+
+  // Back up to / again and we should see Layout 2 unmount
+  expect(layoutOneMount).toHaveBeenCalledTimes(1)
+  expect(layoutOneUnmount).toHaveBeenCalledTimes(0)
   expect(layoutTwoMount).toHaveBeenCalledTimes(2)
   expect(layoutTwoUnmount).toHaveBeenCalledTimes(2)
 })

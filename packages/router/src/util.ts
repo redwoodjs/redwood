@@ -464,7 +464,7 @@ interface AnalyzedRoute {
   page: PageType | null
   redirect: string | null
   sets: Array<{
-    id: number
+    id: string
     wrappers: Wrappers
     isPrivate: boolean
     props: {
@@ -472,7 +472,6 @@ interface AnalyzedRoute {
       [key: string]: unknown
     }
   }>
-  setId: number
 }
 
 export function analyzeRoutes(
@@ -489,7 +488,7 @@ export function analyzeRoutes(
     nodes: ReturnType<typeof Children.toArray>
     whileLoadingPageFromSet?: WhileLoadingPage
     sets?: Array<{
-      id: number
+      id: string
       wrappers: Wrappers
       isPrivate: boolean
       props: {
@@ -497,32 +496,34 @@ export function analyzeRoutes(
         [key: string]: unknown
       }
     }>
-    setId?: number
   }
 
-  // Track the number of sets found.
-  // Because Sets are virtually rendered we can use this setId as a key to
+  // Assign ids to all sets found.
+  // Because Sets are virtually rendered we can use this id as a key to
   // properly manage re-rendering when using the same wrapper Component for
   // different Sets
   //
   // Example:
   // <Router>
-  //   <Set wrap={SetContextProvider}>
+  //   <Set wrap={SetContextProvider}> // id: '0'
   //     <Route path="/" page={HomePage} name="home" />
   //     <Route path="/ctx-1-page" page={Ctx1Page} name="ctx1" />
-  //     <Route path="/ctx-2-page" page={Ctx2Page} name="ctx2" />
+  //     <Set wrap={Ctx2Layout}> // id: '0.0'
+  //       <Route path="/ctx-2-page" page={Ctx2Page} name="ctx2" />
+  //     </Set>
   //   </Set>
-  //   <Set wrap={SetContextProvider}>
+  //   <Set wrap={SetContextProvider}> // id: '1'
   //     <Route path="/ctx-3-page" page={Ctx3Page} name="ctx3" />
   //   </Set>
   // </Router>
-  let setId = 0
 
   const recurseThroughRouter = ({
     nodes,
     whileLoadingPageFromSet,
     sets: previousSets = [],
   }: RecurseParams) => {
+    let nextSetId = 0
+
     nodes.forEach((node) => {
       if (isValidRoute(node)) {
         // Rename for readability
@@ -564,7 +565,6 @@ export function analyzeRoutes(
             path,
             page: null, // Redirects don't need pages. We set this to null for consistency
             sets: previousSets,
-            setId,
           }
 
           if (name) {
@@ -596,7 +596,6 @@ export function analyzeRoutes(
               route.props.whileLoadingPage || whileLoadingPageFromSet,
             page,
             sets: previousSets,
-            setId,
           }
 
           // e.g. namedRoutesMap.homePage = () => '/home'
@@ -606,7 +605,6 @@ export function analyzeRoutes(
 
       // @NOTE: A <PrivateSet> is also a Set
       if (isSetNode(node)) {
-        setId = setId + 1 // increase the Set id for each Set found
         const {
           children,
           whileLoadingPage: whileLoadingPageFromCurrentSet,
@@ -622,6 +620,12 @@ export function analyzeRoutes(
         }
 
         if (children) {
+          const newSetId =
+            previousSets.length === 0
+              ? '' + nextSetId
+              : previousSets.at(-1)?.id + '.' + nextSetId
+          nextSetId = nextSetId + 1
+
           recurseThroughRouter({
             nodes: Children.toArray(children),
             // When there's a whileLoadingPage prop on a Set, we pass it down to all its children
@@ -629,11 +633,10 @@ export function analyzeRoutes(
             // will always take precedence over the parent's
             whileLoadingPageFromSet:
               whileLoadingPageFromCurrentSet || whileLoadingPageFromSet,
-            setId,
             sets: [
               ...previousSets,
               {
-                id: setId,
+                id: newSetId,
                 wrappers: wrapperComponentsArray,
                 isPrivate:
                   isPrivateSetNode(node) ||
