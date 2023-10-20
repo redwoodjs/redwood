@@ -4,6 +4,7 @@ import path from 'path'
 import type { PluginBuild } from 'esbuild'
 import { build as esbuildBuild } from 'esbuild'
 import type { Manifest as ViteBuildManifest } from 'vite'
+import { build as viteBuild } from 'vite'
 
 import {
   getRouteHookBabelPlugins,
@@ -65,18 +66,18 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   // Step 1A: Generate the client bundle
   await buildWeb({ verbose })
 
-  // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
-  // so we can switch to a regular import
-  // @NOTE: Using dynamic import, because vite is still opt-in
-  const { build: viteBuild } = await import('vite')
-
   // Step 1B: Generate the server output
   await viteBuild({
     configFile: viteConfigPath,
     build: {
-      // Because we configure the root to be web/src, we need to go up one level
       outDir: rwPaths.web.distServer,
-      ssr: rwPaths.web.entryServer,
+      ssr: true, // use boolean, and supply the inputs in rollup options (see Documentation)
+      rollupOptions: {
+        input: {
+          'entry.server': rwPaths.web.entryServer,
+          Document: rwPaths.web.document, // We need the document for React's fallback
+        },
+      },
     },
     envFile: false,
     logLevel: verbose ? 'info' : 'warn',
