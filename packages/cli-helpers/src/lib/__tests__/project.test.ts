@@ -1,9 +1,6 @@
 import fs from 'fs'
 
-// import toml from 'toml' // Make sure to import 'toml' or an equivalent library
-
-// import { updateTomlConfig, addEnvVar } from '../project' // Replace with the correct path to your module
-import { addEnvVar } from '../project' // Replace with the correct path to your module
+import { updateTomlConfig, addEnvVar } from '../project' // Replace with the correct path to your module
 
 jest.mock('fs')
 
@@ -17,11 +14,14 @@ jest.mock('@redwoodjs/project-config', () => {
         base: '',
       }
     },
+    getConfigPath: () => {
+      return '.redwood.toml'
+    },
     getConfig: jest.fn(),
   }
 })
 
-describe('addEnvVar adds environment variables as part of a setup task', () => {
+describe('addEnvVar', () => {
   let envFileContent = ''
 
   describe('addEnvVar adds environment variables as part of a setup task', () => {
@@ -41,7 +41,6 @@ describe('addEnvVar adds environment variables as part of a setup task', () => {
     })
 
     afterEach(() => {
-      // Restore the original implementations of fs.existsSync and fs.readFileSync
       jest.restoreAllMocks()
       envFileContent = ''
     })
@@ -91,74 +90,82 @@ describe('addEnvVar adds environment variables as part of a setup task', () => {
   })
 })
 
-// describe('updateTomlConfig', () => {
-//   const redwoodTomlPath = 'fake-path-to-redwood-toml'
-//   const packageName = 'test-package-name'
+describe('updateTomlConfig', () => {
+  let tomlFileContent = `
+[web]
+  title = "Redwood App"
+  port = 8910
+  apiUrl = "/.redwood/functions" # You can customize graphql and dbauth urls individually too: see https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths
+  includeEnvironmentVariables = [
+    # Add any ENV vars that should be available to the web side to this array
+    # See https://redwoodjs.com/docs/environment-variables#web
+  ]
+[api]
+  port = 8911
+[browser]
+  open = false
+[notifications]
+  versionUpdates = ["latest"]
+`
 
-//   beforeEach(() => {
-//     // Reset the mocked functions and data
-//     ;(fs.readFileSync as jest.Mock).mockClear()
-//     ;(fs.writeFileSync as jest.Mock).mockClear()
-//     ;(toml.parse as jest.Mock).mockClear()
-//   })
+  describe('updateTomlConfig configures a new CLI plugin', () => {
+    beforeEach(() => {
+      jest.spyOn(fs, 'existsSync').mockImplementation(() => {
+        return true
+      })
 
-//   test('it should update the configuration with a new package', () => {
-//     const existingConfig = {
-//       experimental: {
-//         cli: {
-//           plugins: [{ package: 'existing-package' }],
-//         },
-//       },
-//     }
+      jest.spyOn(fs, 'readFileSync').mockImplementation(() => {
+        return tomlFileContent
+      })
 
-//     const expectedNewConfig = {
-//       experimental: {
-//         cli: {
-//           plugins: [{ package: 'existing-package' }, { package: packageName }],
-//         },
-//       },
-//     }
+      jest
+        .spyOn(fs, 'writeFileSync')
+        .mockImplementation((tomlPath, tomlFile) => {
+          expect(tomlPath).toContain('redwood.toml')
+          return tomlFile
+        })
+    })
 
-//     ;(fs.readFileSync as jest.Mock).mockReturnValue(
-//       JSON.stringify(existingConfig)
-//     )
-//     ;(toml.parse as jest.Mock).mockReturnValue(existingConfig)
+    afterEach(() => {
+      jest.restoreAllMocks()
+      tomlFileContent = ''
+    })
 
-//     updateTomlConfig(packageName)
+    it('adds when experimental cli is not configured', () => {
+      tomlFileContent += ''
+      const file = updateTomlConfig('@example/test-package-name')
+      expect(file).toMatchSnapshot()
+    })
 
-//     expect(fs.readFileSync).toHaveBeenCalledWith(redwoodTomlPath, 'utf-8')
-//     expect(fs.writeFileSync).toHaveBeenCalledWith(
-//       redwoodTomlPath,
-//       toml(expectedNewConfig),
-//       'utf-8'
-//     )
-//   })
+    it('adds when experimental cli has some plugins configured', () => {
+      tomlFileContent += `
+[experimental.cli]
+  autoInstall = true
+  [[experimental.cli.plugins]]
+    package = "@existing-example/some-package-name"
+`
+      const file = updateTomlConfig('@example/test-package-name')
+      expect(file).toMatchSnapshot()
+    })
 
-//   test('it should add missing configuration sections and the package', () => {
-//     // Simulate a missing 'experimental.cli' section in the configuration
-//     const existingConfig = {}
+    it('adds when experimental cli is setup but has no plugins configured', () => {
+      tomlFileContent += `
+[experimental.cli]
+  autoInstall = true
+`
+      const file = updateTomlConfig('@example/test-package-name')
+      expect(file).toMatchSnapshot()
+    })
 
-//     const expectedNewConfig = {
-//       experimental: {
-//         cli: {
-//           autoInstall: true,
-//           plugins: [{ package: packageName }],
-//         },
-//       },
-//     }
-
-//     fs.readFileSync.mockReturnValue('')
-//     toml.parse.mockReturnValue(existingConfig)
-
-//     updateTomlConfig(packageName)
-
-//     expect(fs.readFileSync).toHaveBeenCalledWith(redwoodTomlPath, 'utf-8')
-//     expect(fs.writeFileSync).toHaveBeenCalledWith(
-//       redwoodTomlPath,
-//       toml.dump(expectedNewConfig),
-//       'utf-8'
-//     )
-//   })
-
-//   // Add more test cases for different scenarios (e.g., autoInstall already set, etc.)
-// })
+    it('does not add duplicate place when experimental cli has that plugin configured', () => {
+      tomlFileContent += `
+[experimental.cli]
+  autoInstall = true
+  [[experimental.cli.plugins]]
+    package = "@existing-example/some-package-name"
+`
+      const file = updateTomlConfig('@existing-example/some-package-name')
+      expect(file).toMatchSnapshot()
+    })
+  })
+})

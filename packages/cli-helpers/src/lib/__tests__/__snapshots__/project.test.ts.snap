@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`addEnvVar adds environment variables as part of a setup task addEnvVar adds environment variables as part of a setup task should add a new environment variable when it does not exist (overwrite: false) 1`] = `
+exports[`addEnvVar addEnvVar adds environment variables as part of a setup task should add a new environment variable when it does not exist (overwrite: false) 1`] = `
 "EXISTING_VAR=value
 # CommentedVar=123
 
@@ -9,21 +9,69 @@ NEW_VAR=new_value
 "
 `;
 
-exports[`addEnvVar adds environment variables as part of a setup task addEnvVar adds environment variables as part of a setup task should not update existing environment variable if exists and overwrite is default 1`] = `
+exports[`addEnvVar addEnvVar adds environment variables as part of a setup task should not update existing environment variable if exists and overwrite is default 1`] = `
 "EXISTING_VAR=value
 # CommentedVar=123
 "
 `;
 
-exports[`addEnvVar adds environment variables as part of a setup task addEnvVar adds environment variables as part of a setup task should not update existing environment variable if exists and overwrite is false 1`] = `
+exports[`addEnvVar addEnvVar adds environment variables as part of a setup task should not update existing environment variable if exists and overwrite is false 1`] = `
 "EXISTING_VAR=value
 # CommentedVar=123
 "
 `;
 
-exports[`addEnvVar adds environment variables as part of a setup task addEnvVar adds environment variables as part of a setup task should updates an existing environment variable when it exists and overwrite chosen 1`] = `
+exports[`addEnvVar addEnvVar adds environment variables as part of a setup task should updates an existing environment variable when it exists and overwrite chosen 1`] = `
 "# Updated existing variable Comment
 EXISTING_VAR=new_value
 # CommentedVar=123
+"
+`;
+
+exports[`updateTomlConfig updateTomlConfig configures a new CLI plugin adds when experimental cli has some plugins configured 1`] = `
+"
+[experimental.cli]
+  autoInstall = true
+  [[experimental.cli.plugins]]
+    package = "@existing-example/some-package-name"
+    package = "@example/test-package-name""
+`;
+
+exports[`updateTomlConfig updateTomlConfig configures a new CLI plugin adds when experimental cli is not configured 1`] = `
+"
+[web]
+  title = "Redwood App"
+  port = 8910
+  apiUrl = "/.redwood/functions" # You can customize graphql and dbauth urls individually too: see https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths
+  includeEnvironmentVariables = [
+    # Add any ENV vars that should be available to the web side to this array
+    # See https://redwoodjs.com/docs/environment-variables#web
+  ]
+[api]
+  port = 8911
+[browser]
+  open = false
+[notifications]
+  versionUpdates = ["latest"]
+[experimental.cli]
+  autoInstall = true
+  [[experimental.cli.plugins]]
+    package = "@example/test-package-name""
+`;
+
+exports[`updateTomlConfig updateTomlConfig configures a new CLI plugin adds when experimental cli is setup but has no plugins configured 1`] = `
+"
+[experimental.cli]
+  autoInstall = true
+  [[experimental.cli.plugins]]
+    package = "@example/test-package-name""
+`;
+
+exports[`updateTomlConfig updateTomlConfig configures a new CLI plugin does not add duplicate place when experimental cli has that plugin configured 1`] = `
+"
+[experimental.cli]
+  autoInstall = true
+  [[experimental.cli.plugins]]
+    package = "@existing-example/some-package-name"
 "
 `;

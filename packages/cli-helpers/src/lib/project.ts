@@ -76,7 +76,7 @@ export const updateTomlConfig = (packageName: string) => {
 
   const newConfig = configContent + configLines.join('\n')
 
-  fs.writeFileSync(redwoodTomlPath, newConfig, 'utf-8')
+  return fs.writeFileSync(redwoodTomlPath, newConfig, 'utf-8')
 }
 
 export const updateTomlConfigTask = (packageName: string) => {
