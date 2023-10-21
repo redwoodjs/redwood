@@ -2,6 +2,11 @@ import path from 'node:path'
 
 import React from 'react'
 
+import type {
+  RenderToReadableStreamOptions,
+  ReactDOMServerReadableStream,
+} from 'react-dom/server'
+
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
 import {
@@ -10,6 +15,7 @@ import {
 } from '@redwoodjs/web/dist/components/ServerInject'
 
 import { createBufferedTransformStream } from './transforms/bufferedTransform'
+import { createTimeoutTransform } from './transforms/cancelTimeoutTransform'
 import { createServerInjectionTransform } from './transforms/serverInjectionTransform'
 
 interface RenderToStreamArgs {
@@ -24,6 +30,7 @@ interface RenderToStreamArgs {
 
 interface StreamOptions {
   waitForAllReady?: boolean
+  onError?: (err: Error) => void
 }
 
 export async function reactRenderToStreamResponse(
@@ -55,12 +62,21 @@ export async function reactRenderToStreamResponse(
   const { injectionState, injectToPage } = createInjector()
 
   // This makes it safe for us to inject at any point in the stream
-  const bufferedTransformStream = createBufferedTransformStream()
+  const bufferTransform = createBufferedTransformStream()
 
   // This is a transformer stream, that will inject all things called with useServerInsertedHtml
-  const serverInjectionTransformer = createServerInjectionTransform({
+  const serverInjectionTransform = createServerInjectionTransform({
     injectionState,
   })
+
+  // Timeout after 10 seconds
+  // @TODO make this configurable
+  const controller = new AbortController()
+  const timeoutHandle = setTimeout(() => {
+    controller.abort()
+  }, 10000)
+
+  const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
   // @ts-expect-error Something in React's packages mean types dont come through
   // Possible that we need to upgrade the @types/* packages
@@ -96,29 +112,27 @@ export async function reactRenderToStreamResponse(
     // This gets set if there are errors inside Suspense boundaries
     let didErrorOutsideShell = false
 
-    // Timeout after 10 seconds
-    // @TODO make this configurable
-    const controller = new AbortController()
-    setTimeout(() => {
-      controller.abort()
-    }, 10000)
+    // Assign here so we get types, the dynamic import messes types
+    const renderToStreamOptions: RenderToReadableStreamOptions = {
+      ...bootstrapOptions,
+      signal: controller.signal,
+      onError: (err: any) => {
+        didErrorOutsideShell = true
+        console.error('🔻 Caught error outside shell')
+        streamOptions.onError?.(err)
+      },
+    }
 
-    const reactStream = await renderToReadableStream(
-      renderRoot(currentPathName),
-      {
-        ...bootstrapOptions,
-        signal: controller.signal,
-        onError: (err: any) => {
-          didErrorOutsideShell = true
-          console.error('🔻 Caught error outside shell')
-          console.error(err)
-        },
-      }
-    )
+    const reactStream: ReactDOMServerReadableStream =
+      await renderToReadableStream(
+        renderRoot(currentPathName),
+        renderToStreamOptions
+      )
 
     const output = reactStream
-      .pipeThrough(bufferedTransformStream)
-      .pipeThrough(serverInjectionTransformer)
+      .pipeThrough(bufferTransform)
+      .pipeThrough(serverInjectionTransform)
+      .pipeThrough(timeoutTransform)
 
     if (waitForAllReady) {
       await reactStream.allReady
@@ -130,7 +144,7 @@ export async function reactRenderToStreamResponse(
     })
   } catch (e) {
     console.error('🔻 Failed to render shell')
-    console.error(e)
+    streamOptions.onError?.(e as Error)
 
     // @TODO Asking for clarification from React team. Their documentation on this is incomplete I think.
     // Having the Document (and bootstrap scripts) here allows client to recover from errors in the shell
