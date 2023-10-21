@@ -455,6 +455,16 @@ export type GeneratedRoutesMap = {
   ) => string
 }
 
+interface Set {
+  id: string
+  wrappers: Wrappers
+  isPrivate: boolean
+  props: {
+    private?: boolean
+    [key: string]: unknown
+  }
+}
+
 type RoutePath = string
 export type Wrappers = Array<(props: any) => ReactNode>
 interface AnalyzedRoute {
@@ -463,15 +473,7 @@ interface AnalyzedRoute {
   whileLoadingPage?: WhileLoadingPage
   page: PageType | null
   redirect: string | null
-  sets: Array<{
-    id: string
-    wrappers: Wrappers
-    isPrivate: boolean
-    props: {
-      private?: boolean
-      [key: string]: unknown
-    }
-  }>
+  sets: Array<Set>
 }
 
 export function analyzeRoutes(
@@ -487,15 +489,7 @@ export function analyzeRoutes(
   interface RecurseParams {
     nodes: ReturnType<typeof Children.toArray>
     whileLoadingPageFromSet?: WhileLoadingPage
-    sets?: Array<{
-      id: string
-      wrappers: Wrappers
-      isPrivate: boolean
-      props: {
-        private?: boolean
-        [key: string]: unknown
-      }
-    }>
+    sets?: Array<Set>
   }
 
   // Assign ids to all sets found.
@@ -619,36 +613,30 @@ export function analyzeRoutes(
             : [wrapFromCurrentSet]
         }
 
-        if (children) {
-          const newSetId =
-            previousSets.length === 0
-              ? '' + nextSetId
-              : previousSets.at(-1)?.id + '.' + nextSetId
-          nextSetId = nextSetId + 1
+        recurseThroughRouter({
+          nodes: Children.toArray(children),
+          // When there's a whileLoadingPage prop on a Set, we pass it down to all its children
+          // If the parent node was also a Set with whileLoadingPage, we pass it down. The child's whileLoadingPage
+          // will always take precedence over the parent's
+          whileLoadingPageFromSet:
+            whileLoadingPageFromCurrentSet || whileLoadingPageFromSet,
+          sets: [
+            ...previousSets,
+            {
+              id: createSetId(nextSetId, previousSets),
+              wrappers: wrapperComponentsArray,
+              isPrivate:
+                isPrivateSetNode(node) ||
+                // The following two conditions can be removed when we remove
+                // the deprecated private prop
+                isPrivateNode(node) ||
+                !!otherPropsFromCurrentSet.private,
+              props: otherPropsFromCurrentSet,
+            },
+          ],
+        })
 
-          recurseThroughRouter({
-            nodes: Children.toArray(children),
-            // When there's a whileLoadingPage prop on a Set, we pass it down to all its children
-            // If the parent node was also a Set with whileLoadingPage, we pass it down. The child's whileLoadingPage
-            // will always take precedence over the parent's
-            whileLoadingPageFromSet:
-              whileLoadingPageFromCurrentSet || whileLoadingPageFromSet,
-            sets: [
-              ...previousSets,
-              {
-                id: newSetId,
-                wrappers: wrapperComponentsArray,
-                isPrivate:
-                  isPrivateSetNode(node) ||
-                  // The following two conditions can be removed when we remove
-                  // the deprecated private prop
-                  isPrivateNode(node) ||
-                  !!otherPropsFromCurrentSet.private,
-                props: otherPropsFromCurrentSet,
-              },
-            ],
-          })
-        }
+        nextSetId = nextSetId + 1
       }
     })
   }
@@ -662,4 +650,16 @@ export function analyzeRoutes(
     NotFoundPage,
     activeRoutePath,
   }
+}
+
+function createSetId(nextSetId: number, previousSets: Array<Set>) {
+  const firstLevel = previousSets.length === 0
+
+  if (firstLevel) {
+    // For the first level we don't want to add any dots ('.') to the id like
+    // we do for all other levels
+    return nextSetId.toString()
+  }
+
+  return previousSets.at(-1)?.id + '.' + nextSetId
 }
