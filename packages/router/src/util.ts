@@ -499,14 +499,14 @@ export function analyzeRoutes(
   //
   // Example:
   // <Router>
-  //   <Set wrap={SetContextProvider}> // id: '0'
+  //   <Set wrap={SetContextProvider}> // id: '1'
   //     <Route path="/" page={HomePage} name="home" />
   //     <Route path="/ctx-1-page" page={Ctx1Page} name="ctx1" />
-  //     <Set wrap={Ctx2Layout}> // id: '0.0'
+  //     <Set wrap={Ctx2Layout}> // id: '1.1'
   //       <Route path="/ctx-2-page" page={Ctx2Page} name="ctx2" />
   //     </Set>
   //   </Set>
-  //   <Set wrap={SetContextProvider}> // id: '1'
+  //   <Set wrap={SetContextProvider}> // id: '2'
   //     <Route path="/ctx-3-page" page={Ctx3Page} name="ctx3" />
   //   </Set>
   // </Router>
@@ -613,6 +613,8 @@ export function analyzeRoutes(
             : [wrapFromCurrentSet]
         }
 
+        nextSetId = nextSetId + 1
+
         recurseThroughRouter({
           nodes: Children.toArray(children),
           // When there's a whileLoadingPage prop on a Set, we pass it down to all its children
@@ -635,8 +637,6 @@ export function analyzeRoutes(
             },
           ],
         })
-
-        nextSetId = nextSetId + 1
       }
     })
   }

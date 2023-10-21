@@ -166,7 +166,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         whileLoadingPage: undefined,
         sets: [
           {
-            id: '0',
+            id: '1',
             wrappers: [WrapperX],
             isPrivate: false,
             props: {
@@ -186,7 +186,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         whileLoadingPage: undefined,
         sets: [
           {
-            id: '0',
+            id: '1',
             wrappers: [WrapperX],
             isPrivate: false,
             props: {
@@ -195,7 +195,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             },
           },
           {
-            id: '0.0',
+            id: '1.1',
             isPrivate: false,
             wrappers: [WrapperY],
             props: {
@@ -215,7 +215,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         whileLoadingPage: undefined,
         sets: [
           {
-            id: '0',
+            id: '1',
             wrappers: [WrapperX],
             isPrivate: false,
             props: {
@@ -224,7 +224,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             },
           },
           {
-            id: '0.0',
+            id: '1.1',
             wrappers: [WrapperY],
             isPrivate: false,
             props: {
@@ -288,7 +288,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         whileLoadingPage: undefined,
         sets: [
           {
-            id: '0',
+            id: '1',
             wrappers: [WrapperX],
             isPrivate: false,
             props: {
@@ -308,7 +308,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         whileLoadingPage: undefined,
         sets: [
           {
-            id: '0',
+            id: '1',
             wrappers: [WrapperX],
             isPrivate: false,
             props: {
@@ -317,7 +317,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             },
           },
           {
-            id: '0.0',
+            id: '1.1',
             wrappers: [WrapperY],
             isPrivate: false,
             props: {
@@ -337,7 +337,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         whileLoadingPage: undefined,
         sets: [
           {
-            id: '0',
+            id: '1',
             wrappers: [WrapperX],
             isPrivate: false,
             props: {
@@ -346,7 +346,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             },
           },
           {
-            id: '0.0',
+            id: '1.1',
             wrappers: [WrapperY],
             isPrivate: false,
             props: {
@@ -453,7 +453,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       page: FakePage,
       sets: [
         {
-          id: '0',
+          id: '1',
           wrappers: [],
           isPrivate: true,
           props: { unauthenticated: 'home' },
@@ -484,7 +484,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       page: FakePage,
       sets: [
         {
-          id: '0',
+          id: '1',
           wrappers: [],
           isPrivate: true,
           props: { unauthenticated: 'home' },
@@ -575,7 +575,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         redirect: null,
         sets: [
           {
-            id: '0',
+            id: '1',
             isPrivate: true,
             props: { unauthenticated: 'home' },
           },
@@ -591,13 +591,13 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         redirect: null,
         sets: [
           {
-            id: '0',
+            id: '1',
             wrappers: [],
             isPrivate: true,
             props: { unauthenticated: 'home' },
           },
           {
-            id: '0.0',
+            id: '1.1',
             wrappers: [],
             isPrivate: true,
             props: expect.objectContaining({
@@ -606,7 +606,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             }),
           },
           {
-            id: '0.0.0',
+            id: '1.1.1',
             wrappers: [],
             isPrivate: true,
             props: {
@@ -625,14 +625,14 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         sets: [
           // Should have the first one, but also..
           {
-            id: '0',
+            id: '1',
             wrappers: [],
             isPrivate: true,
             props: { unauthenticated: 'home' },
           },
           // ...the second private set's props
           {
-            id: '0.0',
+            id: '1.1',
             wrappers: [],
             isPrivate: true,
             props: {
@@ -642,7 +642,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
           },
           // ...and the third private set's props
           {
-            id: '0.0.1',
+            id: '1.1.2',
             wrappers: [],
             isPrivate: true,
             props: {
@@ -686,7 +686,7 @@ test('Give correct ids to root sets', () => {
       redirect: null,
       sets: [
         {
-          id: '0',
+          id: '1',
           wrappers: [Layout],
           isPrivate: false,
         },
@@ -696,7 +696,7 @@ test('Give correct ids to root sets', () => {
       redirect: null,
       sets: [
         {
-          id: '1',
+          id: '2',
           wrappers: [Layout],
           isPrivate: false,
         },
