@@ -543,7 +543,7 @@ jobs:
         working-directory: tasks/smoke-tests/rsa
         run: npx playwright test
         env:
-          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-project.outputs.rsa-project-path }}
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-from-fixture.outputs.rsa-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
   rsc-smoke-tests-mock:
