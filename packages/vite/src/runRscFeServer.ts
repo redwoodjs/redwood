@@ -6,22 +6,17 @@
 import fs from 'fs/promises'
 import path from 'path'
 
-import busboy from 'busboy'
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
-import isbot from 'isbot'
-import RSDWServer from 'react-server-dom-webpack/server.node.unbundled'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { hasStatusCode } from './lib/StatusError'
+import { createRscRequestHandler } from './rsc/rscRequestHandler'
 import { registerFwGlobals } from './streaming/registerGlobals'
-import { renderRSC, setClientEntries } from './waku-lib/rsc-handler-worker'
-
-const { decodeReply, decodeReplyFromBusboy } = RSDWServer
+import { setClientEntries } from './waku-lib/rsc-handler-worker'
 
 /**
  * TODO (STREAMING)
@@ -39,10 +34,7 @@ loadDotEnv({
   defaults: path.join(getPaths().base, '.env.defaults'),
   multiline: true,
 })
-//------------------------------------------------
-
-const checkUaForSeoCrawler = isbot.spawn()
-checkUaForSeoCrawler.exclude(['chrome-lighthouse'])
+// ------------------------------------------------
 
 export async function runFeServer() {
   const app = express()
@@ -72,10 +64,7 @@ export async function runFeServer() {
   // const routeManifest: RWRouteManifest = JSON.parse(routeManifestStr)
 
   // TODO See above about using `import { with: { type: 'json' } }` instead
-  const manifestPath = path.join(
-    getPaths().web.dist,
-    'client-build-manifest.json'
-  )
+  const manifestPath = path.join(rsPaths.web.dist, 'client-build-manifest.json')
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
   const buildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
 
@@ -91,11 +80,11 @@ export async function runFeServer() {
     throw new Error('Could not find index.html in build manifest')
   }
 
-  // 👉 1. Use static handler for assets
+  // 1. Use static handler for assets
   // For CF workers, we'd need an equivalent of this
   app.use('/assets', express.static(rwPaths.web.dist + '/assets'))
 
-  // 👉 2. Proxy the api server
+  // 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
   // e.g. deploying to Netlify, we don't need to proxy but configure it in Netlify
   // Also be careful of differences between v2 and v3 of the server
@@ -114,91 +103,8 @@ export async function runFeServer() {
     })
   )
 
-  app.use((req, _res, next) => {
-    console.log('req.url', req.url)
-    next()
-  })
-
   // Mounting middleware at /RSC will strip /RSC from req.url
-  app.use('/RSC', async (req, res) => {
-    const basePath = '/RSC/'
-    console.log('basePath', basePath)
-    console.log('req.originalUrl', req.originalUrl, 'req.url', req.url)
-    console.log('req.headers.host', req.headers.host)
-
-    const url = new URL(req.originalUrl || '', 'http://' + req.headers.host)
-    let rscId: string | undefined
-    let props = {}
-    let rsfId: string | undefined
-    let args: unknown[] = []
-
-    console.log('url.pathname', url.pathname)
-
-    if (url.pathname.startsWith(basePath)) {
-      const index = url.pathname.lastIndexOf('/')
-      const params = new URLSearchParams(url.pathname.slice(index + 1))
-      rscId = url.pathname.slice(basePath.length, index)
-      rsfId = params.get('action_id') || undefined
-
-      console.log('rscId', rscId)
-      console.log('rsfId', rsfId)
-
-      if (rscId && rscId !== '_') {
-        res.setHeader('Content-Type', 'text/x-component')
-        props = JSON.parse(params.get('props') || '{}')
-      } else {
-        rscId = undefined
-      }
-
-      if (rsfId) {
-        if (req.headers['content-type']?.startsWith('multipart/form-data')) {
-          const bb = busboy({ headers: req.headers })
-          const reply = decodeReplyFromBusboy(bb)
-
-          req.pipe(bb)
-          args = await reply
-        } else {
-          let body = ''
-
-          for await (const chunk of req) {
-            body += chunk
-          }
-
-          if (body) {
-            args = await decodeReply(body)
-          }
-        }
-      }
-    }
-
-    if (rscId || rsfId) {
-      const handleError = (err: unknown) => {
-        if (hasStatusCode(err)) {
-          res.statusCode = err.statusCode
-        } else {
-          console.info('Cannot render RSC', err)
-          res.statusCode = 500
-        }
-
-        res.end(String(err))
-        // TODO (RSC): When we have `yarn rw dev` support we should do this:
-        // if (options.command === 'dev') {
-        //   res.end(String(err))
-        // } else {
-        //   res.end()
-        // }
-      }
-
-      try {
-        const pipeable = await renderRSC({ rscId, props, rsfId, args })
-        // TODO (RSC): See if we can/need to do more error handling here
-        // pipeable.on(handleError)
-        pipeable.pipe(res)
-      } catch (e) {
-        handleError(e)
-      }
-    }
-  })
+  app.use('/RSC', createRscRequestHandler())
 
   app.use(express.static(rwPaths.web.dist))
 
