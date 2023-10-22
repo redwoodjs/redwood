@@ -22,7 +22,7 @@ afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
 })
 
-// Set up and teardown the Fastify instance for each test.
+// Set up and teardown the Fastify instance.
 let fastifyInstance
 let returnedFastifyInstance
 
