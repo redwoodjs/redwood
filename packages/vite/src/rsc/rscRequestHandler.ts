@@ -69,6 +69,9 @@ export function createRscRequestHandler() {
           res.statusCode = 500
         }
 
+        // Getting a warning on GitHub about this
+        // https://github.com/redwoodjs/redwood/security/code-scanning/211
+        // Handle according to TODO below
         res.end(String(err))
         // TODO (RSC): When we have `yarn rw dev` support we should do this:
         // if (options.command === 'dev') {
