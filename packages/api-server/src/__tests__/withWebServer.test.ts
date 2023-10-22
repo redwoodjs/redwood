@@ -105,7 +105,7 @@ describe('withWebServer', () => {
     })
 
     // We don't serve files named index.js at the root level.
-    // This logic ensure nested files aren't affected.
+    // This logic ensures nested files aren't affected.
     it('serves the prerendered nested index page', async () => {
       const res = await fastifyInstance.inject({
         method: 'GET',

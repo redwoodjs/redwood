@@ -373,7 +373,7 @@ describe('dist', () => {
         )
         await new Promise((r) => setTimeout(r, TIMEOUT))
 
-        const res = await fetch(`http://localhost:8911/api/hello`)
+        const res = await fetch(`http://localhost:8911${apiRootPath}/hello`)
         const body = await res.json()
 
         expect(res.status).toEqual(200)
