@@ -13,14 +13,17 @@ import { getPaths } from '@redwoodjs/project-config'
 
 import type { defineEntries } from '../entries'
 import { StatusError } from '../lib/StatusError'
-// import type { unstable_GetCustomModules } from '../waku-server'
-import type { RenderInput, MessageRes } from '../rsc/rsc-handler'
+import { configFileConfig, resolveConfig } from '../waku-lib/config'
+import { transformRsfId } from '../waku-lib/rsc-utils'
+import {
+  rscTransformPlugin,
+  rscReloadPlugin,
+} from '../waku-lib/vite-plugin-rsc'
 
-import { configFileConfig, resolveConfig } from './config'
+// import type { unstable_GetCustomModules } from '../waku-server'
+import type { RenderInput, MessageRes } from './rsc-handler'
 // import type { RenderInput, MessageReq, MessageRes } from './rsc-handler'
 // import { transformRsfId, generatePrefetchCode } from './rsc-utils'
-import { transformRsfId } from './rsc-utils'
-import { rscTransformPlugin, rscReloadPlugin } from './vite-plugin-rsc'
 
 const { renderToPipeableStream } = RSDWServer
 

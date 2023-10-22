@@ -14,7 +14,7 @@ import {
   setClientEntries,
   getCustomModulesRSC,
   buildRSC,
-} from './rsc-handler'
+} from '../rsc/rsc-handler'
 import { rscIndexPlugin, rscAnalyzePlugin } from './vite-plugin-rsc'
 
 export async function build() {
