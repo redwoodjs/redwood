@@ -64,7 +64,7 @@ export async function runFeServer() {
   // const routeManifest: RWRouteManifest = JSON.parse(routeManifestStr)
 
   // TODO See above about using `import { with: { type: 'json' } }` instead
-  const manifestPath = path.join(rsPaths.web.dist, 'client-build-manifest.json')
+  const manifestPath = path.join(rwPaths.web.dist, 'client-build-manifest.json')
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
   const buildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
 
