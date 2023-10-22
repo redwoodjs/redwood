@@ -43,6 +43,26 @@ export default function (
   // @NOTE: This var gets mutated inside the visitors
   let pages = processPagesDir().map(withRelativeImports)
 
+  // Currently processPagesDir() can return duplicate entries when there are multiple files
+  // ending in Page in the individual page directories. This will cause an error upstream.
+  // Here we check for duplicates and throw a more helpful error message.
+  const duplicatePageImports = new Set<string>()
+  const sortedPageImports = pages.map((page) => page.importName).sort()
+  for (let i = 0; i < sortedPageImports.length - 1; i++) {
+    if (sortedPageImports[i + 1] === sortedPageImports[i]) {
+      duplicatePageImports.add(sortedPageImports[i])
+    }
+  }
+  if (duplicatePageImports.size > 0) {
+    throw new Error(
+      `Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the follow page directories: ${Array.from(
+        duplicatePageImports
+      )
+        .map((name) => `'${name}'`)
+        .join(', ')}`
+    )
+  }
+
   return {
     name: 'babel-plugin-redwood-routes-auto-loader',
     visitor: {
