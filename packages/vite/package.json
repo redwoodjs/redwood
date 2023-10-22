@@ -80,7 +80,7 @@
     "isbot": "3.6.8",
     "react": "0.0.0-experimental-e5205658f-20230913",
     "react-server-dom-webpack": "0.0.0-experimental-e5205658f-20230913",
-    "vite": "4.4.11",
+    "vite": "4.5.0",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
