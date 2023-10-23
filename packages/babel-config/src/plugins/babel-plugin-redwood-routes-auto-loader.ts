@@ -46,17 +46,17 @@ export default function (
   // Currently processPagesDir() can return duplicate entries when there are multiple files
   // ending in Page in the individual page directories. This will cause an error upstream.
   // Here we check for duplicates and throw a more helpful error message.
-  const duplicatePageImports = new Set<string>()
-  const sortedPageImports = pages.map((page) => page.importName).sort()
-  for (let i = 0; i < sortedPageImports.length - 1; i++) {
-    if (sortedPageImports[i + 1] === sortedPageImports[i]) {
-      duplicatePageImports.add(sortedPageImports[i])
+  const duplicatePageImportNames = new Set<string>()
+  const sortedPageImportNames = pages.map((page) => page.importName).sort()
+  for (let i = 0; i < sortedPageImportNames.length - 1; i++) {
+    if (sortedPageImportNames[i + 1] === sortedPageImportNames[i]) {
+      duplicatePageImportNames.add(sortedPageImportNames[i])
     }
   }
-  if (duplicatePageImports.size > 0) {
+  if (duplicatePageImportNames.size > 0) {
     throw new Error(
       `Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the follow page directories: ${Array.from(
-        duplicatePageImports
+        duplicatePageImportNames
       )
         .map((name) => `'${name}'`)
         .join(', ')}`
