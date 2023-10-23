@@ -1,0 +1,25 @@
+# To learn about this file, please see https://www.gitpod.io/docs/references/gitpod-yml
+
+image: gitpod/workspace-node-lts
+
+tasks:
+  - init: |
+      # Cleanup terminal
+      printf "\033[3J\033c\033[3J"
+
+      yarn install
+
+    command: yarn rw build -v && yarn rw serve
+ports:
+  - port: 8910
+    name: RedwoodJS web application
+    onOpen: notify # because we already have [browser].open = true in redwood.toml
+  - port: 8911
+    name: Serverless functions
+    onOpen: ignore
+
+vscode:
+  extensions:
+    - "dbaeumer.vscode-eslint"
+    - "mgmcdermott.vscode-language-babel"
+    - "editorconfig.editorconfig"
