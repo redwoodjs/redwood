@@ -24,8 +24,7 @@
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "fix:permissions": "chmod +x dist/index.js; chmod +x dist/watch.js",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "jest src",
-    "test:dist": "jest dist.test.ts",
+    "test": "jest",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {

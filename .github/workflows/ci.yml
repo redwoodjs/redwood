@@ -546,10 +546,10 @@ jobs:
     steps:
       - run: echo "RSC smoke tests mock"
 
-  api-server-dist-test:
+  server-tests:
     needs: check
 
-    name: 📡🔁 api-server tests / node 18 latest
+    name: 📡🔁 server tests / node 18 latest
     runs-on: ubuntu-latest
 
     steps:
@@ -572,14 +572,14 @@ jobs:
         run: yarn build
 
       - name: 🧪 Test
-        run: yarn test:dist
-        working-directory: ./packages/api-server
+        run: REDWOOD_DISABLE_TELEMETRY=1 yarn jest server.test.ts
+        working-directory: ./tasks/server-tests
 
-  api-server-dist-test-docs:
+  server-tests-docs:
     needs: only-doc-changes
     if: needs.only-doc-changes.outputs.only-doc-changes == 'true'
 
-    name: 📡🔁 api-server tests / node 18 latest
+    name: 📡🔁 server tests / node 18 latest
     runs-on: ubuntu-latest
 
     steps:
