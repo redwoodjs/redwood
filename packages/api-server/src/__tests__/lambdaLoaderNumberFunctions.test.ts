@@ -1,4 +1,4 @@
-import { vol } from 'memfs'
+import path from 'path'
 
 import {
   LAMBDA_FUNCTIONS,
@@ -10,79 +10,21 @@ console.log = jest.fn()
 
 // Set up RWJS_CWD.
 let original_RWJS_CWD
-const FIXTURE_PATH = '/redwood-app'
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
 
-  process.env.RWJS_CWD = FIXTURE_PATH
+  process.env.RWJS_CWD = path.resolve(
+    __dirname,
+    'fixtures/redwood-app-number-functions'
+  )
 })
 
 afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
 })
 
-// Mock api dist functions.
-jest.mock('fs', () => require('memfs').fs)
-
-jest.mock(
-  '/redwood-app/api/dist/functions/1/1.js',
-  () => {
-    return {
-      handler: () => {},
-    }
-  },
-  { virtual: true }
-)
-
-jest.mock(
-  '\\redwood-app\\api\\dist\\functions\\1\\1.js',
-  () => {
-    return {
-      handler: () => {},
-    }
-  },
-  { virtual: true }
-)
-
-jest.mock(
-  '/redwood-app/api/dist/functions/graphql.js',
-  () => {
-    return {
-      handler: () => {},
-    }
-  },
-  { virtual: true }
-)
-
-jest.mock(
-  '\\redwood-app\\api\\dist\\functions\\graphql.js',
-  () => {
-    return {
-      handler: () => {},
-    }
-  },
-  { virtual: true }
-)
-
 test('loadFunctionsFromDist puts functions named with numbers before the graphql function', async () => {
-  vol.fromNestedJSON(
-    {
-      'redwood.toml': '',
-      api: {
-        dist: {
-          functions: {
-            1: {
-              '1.js': '',
-            },
-            'graphql.js': '',
-          },
-        },
-      },
-    },
-    FIXTURE_PATH
-  )
-
   expect(LAMBDA_FUNCTIONS).toEqual({})
 
   await loadFunctionsFromDist()
