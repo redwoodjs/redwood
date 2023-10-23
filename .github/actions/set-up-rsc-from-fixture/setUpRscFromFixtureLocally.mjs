@@ -6,7 +6,7 @@ import path from 'node:path'
 
 import execa from 'execa'
 
-import { main } from './setUpRscProject.mjs'
+import { main } from './setUpRscFromFixture.mjs'
 
 class ExecaError extends Error {
   stdout
@@ -71,9 +71,9 @@ function getExecaOptions(cwd, env = {}) {
   }
 }
 
-const rscProjectPath = path.join(
+const rsaProjectPath = path.join(
   os.tmpdir(),
-  'redwood-rsc-project',
+  'redwood-rsa-project',
   // ":" is problematic with paths
   new Date().toISOString().split(':').join('-')
 )
@@ -96,22 +96,8 @@ function execInProject(commandLine, options) {
   return exec(
     commandLine,
     undefined,
-    getExecaOptions(rscProjectPath, options?.env)
+    getExecaOptions(rsaProjectPath, options?.env)
   )
 }
 
-/**
- * Exec a command.
- * Output will be streamed to the live console.
- * Returns promise with return code
- *
- * @param {string} commandLine command to execute (can include additional args). Must be correctly escaped.
- * @param {string[]=} args arguments for tool. Escaping is handled by the lib.
- * @param {ExecOptions=} options exec options.  See ExecOptions
- * @returns {Promise<unknown>} exit code
- */
-function execInRoot(commandLine, args, options) {
-  return exec(commandLine, args, getExecaOptions('/', options?.env))
-}
-
-main(rscProjectPath, core, execInRoot, execInProject)
+main(rsaProjectPath, core, execInProject)
