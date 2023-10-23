@@ -142,10 +142,13 @@ You can now remove the GraphQL handler function that resides in `api/functions/g
 By default, RedwoodJS realtime configures an in-memory store for the Pub Sub client used with subscriptions and live query invalidation.
 
 Realtime supports in-memory and Redis stores:
+
 - In-memory stores are useful for development and testing.
 - Redis stores are useful for production.
 
-Configure a Redis store in:
+To enable defer and streaming, set `enableDeferStream` to true.
+
+Configure a Redis store and defer and stream in:
 
 ```ts
 // api/lib/realtime.ts
@@ -190,6 +193,8 @@ export const realtime: RedwoodRealtimeOptions = {
     // if using a Redis store
     // store: { redis: { publishClient, subscribeClient } },
   },
+  // To enable defer and streaming, set to true.
+  // enableDeferStream: true,
 }
 ```
 
@@ -213,9 +218,6 @@ Where the query is: `auction(id: ID!): Auction @requireAuth`:
 When the query is: `auctions: [Auction!]! @requireAuth`:
 
 * `"Query.auctions"`
-
-
-
 
 ## Subscriptions
 
