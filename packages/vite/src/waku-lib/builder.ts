@@ -11,7 +11,7 @@ import {
   shutdown,
   setClientEntries,
   getCustomModulesRSC,
-  // buildRsc,
+  buildRSC,
 } from '../rsc/rscWorkerCommunication'
 
 import { configFileConfig, resolveConfig } from './config'
@@ -169,7 +169,7 @@ export async function build() {
   )
   await setClientEntries(absoluteClientEntries)
 
-  // await buildRsc()
+  await buildRSC()
 
   const origPackageJson = require(path.join(config.root, 'package.json'))
   const packageJson = {
