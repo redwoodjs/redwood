@@ -192,8 +192,6 @@ if (!parentPort) {
 
 parentPort.on('message', (message: MessageReq) => {
   console.log('message', message)
-  console.log('message.input.args', (message as any).input?.args)
-  console.log('message.input.args[0]', (message as any).input?.args?.[0])
 
   if (message.type === 'shutdown') {
     shutdown()
