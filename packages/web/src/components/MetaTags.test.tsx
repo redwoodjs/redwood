@@ -14,92 +14,102 @@ describe('MetaTags', () => {
   })
 
   it('renders non-namespaced props', () => {
-    const meta = <MetaTags title="My Title" />
+    const input = <MetaTags title="My Title" />
+    const output = (
+      <>
+        <meta name="title" content="My Title" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(1)
-    expect(metaTags[0]).toHaveAttribute('name', 'title')
-    expect(metaTags[0]).toHaveAttribute('content', 'My Title')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('renders children', () => {
-    const meta = (
+    const input = (
       <MetaTags>
         <meta name="foo" content="bar" />
       </MetaTags>
     )
+    const output = (
+      <>
+        <meta name="foo" content="bar" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(1)
-    expect(metaTags[0]).toHaveAttribute('name', 'foo')
-    expect(metaTags[0]).toHaveAttribute('content', 'bar')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('renders props and children', () => {
-    const meta = (
+    const input = (
       <MetaTags title="My Title">
         <meta httpEquiv="refresh" content="30" />
       </MetaTags>
     )
+    const output = (
+      <>
+        <meta name="title" content="My Title" />
+        <meta httpEquiv="refresh" content="30" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(2)
-    expect(metaTags[0]).toHaveAttribute('name', 'title')
-    expect(metaTags[0]).toHaveAttribute('content', 'My Title')
-    expect(metaTags[1]).toHaveAttribute('http-equiv', 'refresh')
-    expect(metaTags[1]).toHaveAttribute('content', '30')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('renders first-level namespaced props', () => {
-    const meta = (
+    const input = (
       <MetaTags og={{ image: 'http://host.test/image.jpg', type: null }} />
     )
+    const output = (
+      <>
+        <meta property="og:image" content="http://host.test/image.jpg" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(1)
-    expect(metaTags[0]).toHaveAttribute('property', 'og:image')
-    expect(metaTags[0]).toHaveAttribute('content', 'http://host.test/image.jpg')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('renders multiple first-level namespaced props', () => {
-    const meta = (
+    const input = (
       <MetaTags
         og={{ image: 'http://host.test/image.jpg', type: null }}
         twitter={{ card: 'summary' }}
       />
     )
+    const output = (
+      <>
+        <meta property="og:image" content="http://host.test/image.jpg" />
+        <meta property="twitter:card" content="summary" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(2)
-    expect(metaTags[0]).toHaveAttribute('property', 'og:image')
-    expect(metaTags[0]).toHaveAttribute('content', 'http://host.test/image.jpg')
-    expect(metaTags[1]).toHaveAttribute('property', 'twitter:card')
-    expect(metaTags[1]).toHaveAttribute('content', 'summary')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('renders second-level namespaced props', () => {
-    const meta = <MetaTags og={{ image: { width: 100 }, type: null }} />
+    const input = <MetaTags og={{ image: { width: 100 }, type: null }} />
+    const output = (
+      <>
+        <meta property="og:image:width" content="100" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(1)
-    expect(metaTags[0]).toHaveAttribute('property', 'og:image:width')
-    expect(metaTags[0]).toHaveAttribute('content', '100')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('renders combined first-level and second-level namespaced props', () => {
-    const meta = (
+    const input = (
       <MetaTags
         og={{
           image: 'http://host.test/image.jpg',
@@ -108,32 +118,34 @@ describe('MetaTags', () => {
         }}
       />
     )
+    const output = (
+      <>
+        <meta property="og:image" content="http://host.test/image.jpg" />
+        <meta property="og:display:type" content="screen" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(2)
-    expect(metaTags[0]).toHaveAttribute('property', 'og:image')
-    expect(metaTags[0]).toHaveAttribute('content', 'http://host.test/image.jpg')
-    expect(metaTags[1]).toHaveAttribute('property', 'og:display:type')
-    expect(metaTags[1]).toHaveAttribute('content', 'screen')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('renders an array of non-namespaced props', () => {
-    const meta = <MetaTags title={['Title 1', 'Title 2']} />
+    const input = <MetaTags title={['Title 1', 'Title 2']} />
+    const output = (
+      <>
+        <meta name="title" content="Title 1" />
+        <meta name="title" content="Title 2" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(2)
-    expect(metaTags[0]).toHaveAttribute('name', 'title')
-    expect(metaTags[0]).toHaveAttribute('content', 'Title 1')
-    expect(metaTags[1]).toHaveAttribute('name', 'title')
-    expect(metaTags[1]).toHaveAttribute('content', 'Title 2')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('renders an array of namespaced props', () => {
-    const meta = (
+    const input = (
       <MetaTags
         og={{
           image: ['http://host.test/image1.jpg', 'http://host.test/image2.jpg'],
@@ -141,25 +153,20 @@ describe('MetaTags', () => {
         }}
       />
     )
-
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(2)
-    expect(metaTags[0]).toHaveAttribute('property', 'og:image')
-    expect(metaTags[0]).toHaveAttribute(
-      'content',
-      'http://host.test/image1.jpg'
+    const output = (
+      <>
+        <meta property="og:image" content="http://host.test/image1.jpg" />
+        <meta property="og:image" content="http://host.test/image2.jpg" />
+      </>
     )
-    expect(metaTags[1]).toHaveAttribute('property', 'og:image')
-    expect(metaTags[1]).toHaveAttribute(
-      'content',
-      'http://host.test/image2.jpg'
-    )
+
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('renders a mixture of namespaced array strings and objects', () => {
-    const meta = (
+    const input = (
       <MetaTags
         og={{
           image: [
@@ -174,161 +181,160 @@ describe('MetaTags', () => {
         }}
       />
     )
+    const output = (
+      <>
+        <meta property="og:image" content="http://host.test/image1.jpg" />
+        <meta property="og:image:width" content="1024" />
+        <meta property="og:image:height" content="768" />
+        <meta property="og:image" content="http://host.test/image2.jpg" />
+        <meta property="og:image" content="http://host.test/image3.jpg" />
+        <meta property="og:image:width" content="640" />
+        <meta property="og:image:height" content="480" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(7)
-    expect(metaTags[0]).toHaveAttribute('property', 'og:image')
-    expect(metaTags[0]).toHaveAttribute(
-      'content',
-      'http://host.test/image1.jpg'
-    )
-    expect(metaTags[1]).toHaveAttribute('property', 'og:image:width')
-    expect(metaTags[1]).toHaveAttribute('content', '1024')
-    expect(metaTags[2]).toHaveAttribute('property', 'og:image:height')
-    expect(metaTags[2]).toHaveAttribute('content', '768')
-    expect(metaTags[3]).toHaveAttribute('property', 'og:image')
-    expect(metaTags[3]).toHaveAttribute(
-      'content',
-      'http://host.test/image2.jpg'
-    )
-    expect(metaTags[4]).toHaveAttribute('property', 'og:image')
-    expect(metaTags[4]).toHaveAttribute(
-      'content',
-      'http://host.test/image3.jpg'
-    )
-    expect(metaTags[5]).toHaveAttribute('property', 'og:image:width')
-    expect(metaTags[5]).toHaveAttribute('content', '640')
-    expect(metaTags[6]).toHaveAttribute('property', 'og:image:height')
-    expect(metaTags[6]).toHaveAttribute('content', '480')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('adds an og:title tag if any og key present', () => {
-    const meta = <MetaTags title="My Title" og={{ type: null }} />
+    const input = <MetaTags title="My Title" og={{ type: null }} />
+    const output = (
+      <>
+        <meta name="title" content="My Title" />
+        <meta property="og:title" content="My Title" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(2)
-    expect(metaTags[0]).toHaveAttribute('name', 'title')
-    expect(metaTags[0]).toHaveAttribute('content', 'My Title')
-    expect(metaTags[1]).toHaveAttribute('property', 'og:title')
-    expect(metaTags[1]).toHaveAttribute('content', 'My Title')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('does not automatically add og:title if already present', () => {
-    const meta = (
+    const input = (
       <MetaTags title="My Title" og={{ title: 'OG Title', type: null }} />
     )
+    const output = (
+      <>
+        <meta name="title" content="My Title" />
+        <meta property="og:title" content="OG Title" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(2)
-    expect(metaTags[0]).toHaveAttribute('name', 'title')
-    expect(metaTags[0]).toHaveAttribute('content', 'My Title')
-    expect(metaTags[1]).toHaveAttribute('property', 'og:title')
-    expect(metaTags[1]).toHaveAttribute('content', 'OG Title')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('does not automatically add og:title if set to null', () => {
-    const meta = <MetaTags title="My Title" og={{ title: null, type: null }} />
+    const input = <MetaTags title="My Title" og={{ title: null, type: null }} />
+    const output = (
+      <>
+        <meta name="title" content="My Title" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(1)
-    expect(metaTags[0]).toHaveAttribute('name', 'title')
-    expect(metaTags[0]).toHaveAttribute('content', 'My Title')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('adds an og:description tag if any og key present', () => {
-    const meta = <MetaTags description="Lorem ipsum" og={{ type: null }} />
+    const input = <MetaTags description="Lorem ipsum" og={{ type: null }} />
+    const output = (
+      <>
+        <meta name="description" content="Lorem ipsum" />
+        <meta property="og:description" content="Lorem ipsum" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(2)
-    expect(metaTags[0]).toHaveAttribute('name', 'description')
-    expect(metaTags[0]).toHaveAttribute('content', 'Lorem ipsum')
-    expect(metaTags[1]).toHaveAttribute('property', 'og:description')
-    expect(metaTags[1]).toHaveAttribute('content', 'Lorem ipsum')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('does not automatically add og:description if already present', () => {
-    const meta = (
+    const input = (
       <MetaTags
         description="Lorem ipsum"
         og={{ description: 'Dolar sit amet', type: null }}
       />
     )
+    const output = (
+      <>
+        <meta name="description" content="Lorem ipsum" />
+        <meta property="og:description" content="Dolar sit amet" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(2)
-    expect(metaTags[0]).toHaveAttribute('name', 'description')
-    expect(metaTags[0]).toHaveAttribute('content', 'Lorem ipsum')
-    expect(metaTags[1]).toHaveAttribute('property', 'og:description')
-    expect(metaTags[1]).toHaveAttribute('content', 'Dolar sit amet')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('does not automatically add og:description if set to null', () => {
-    const meta = (
+    const input = (
       <MetaTags
         description="Lorem ipsum"
         og={{ description: null, type: null }}
       />
     )
+    const output = (
+      <>
+        <meta name="description" content="Lorem ipsum" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(1)
-    expect(metaTags[0]).toHaveAttribute('name', 'description')
-    expect(metaTags[0]).toHaveAttribute('content', 'Lorem ipsum')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('adds an og:type tag if any og key present', () => {
-    const meta = <MetaTags rel="test" og={{}} />
+    const input = <MetaTags rel="test" og={{}} />
+    const output = (
+      <>
+        <meta name="rel" content="test" />
+        <meta property="og:type" content="website" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(2)
-    expect(metaTags[0]).toHaveAttribute('name', 'rel')
-    expect(metaTags[0]).toHaveAttribute('content', 'test')
-    expect(metaTags[1]).toHaveAttribute('property', 'og:type')
-    expect(metaTags[1]).toHaveAttribute('content', 'website')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('does not automatically add og:type if already present', () => {
-    const meta = <MetaTags rel="test" og={{ type: 'article' }} />
+    const input = <MetaTags rel="test" og={{ type: 'article' }} />
+    const output = (
+      <>
+        <meta name="rel" content="test" />
+        <meta property="og:type" content="article" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(2)
-    expect(metaTags[0]).toHaveAttribute('name', 'rel')
-    expect(metaTags[0]).toHaveAttribute('content', 'test')
-    expect(metaTags[1]).toHaveAttribute('property', 'og:type')
-    expect(metaTags[1]).toHaveAttribute('content', 'article')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
   it('does not automatically add og:type if set to null', () => {
-    const meta = (
+    const input = (
       <MetaTags
         description="Lorem ipsum"
         og={{ description: null, type: null }}
       />
     )
+    const output = (
+      <>
+        <meta name="description" content="Lorem ipsum" />
+      </>
+    )
 
-    const { container } = render(meta, { container: document.head })
-    const metaTags = container.querySelectorAll('meta')
-
-    expect(metaTags.length).toEqual(1)
-    expect(metaTags[0]).toHaveAttribute('name', 'description')
-    expect(metaTags[0]).toHaveAttribute('content', 'Lorem ipsum')
+    expect(
+      render(input, { container: document.head }).container.innerHTML
+    ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 })
