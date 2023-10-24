@@ -572,8 +572,10 @@ jobs:
         run: yarn build
 
       - name: 🧪 Test
-        run: REDWOOD_DISABLE_TELEMETRY=1 yarn jest server.test.ts
+        run: yarn jest server.test.ts
         working-directory: ./tasks/server-tests
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
 
   server-tests-docs:
     needs: only-doc-changes

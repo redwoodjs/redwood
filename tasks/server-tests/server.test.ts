@@ -1,7 +1,3 @@
-/**
- * - @redowodjs/web-server handles --socket differently than @redwoodjs/api-server
- * - @redwoodjs/web-server doesn't handle help at all and just runs
- */
 const fs = require('fs')
 const http = require('http')
 const path = require('path')
@@ -13,7 +9,6 @@ let original_RWJS_CWD
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
-
   process.env.RWJS_CWD = path.join(__dirname, './fixtures/redwood-app')
 })
 
@@ -39,7 +34,7 @@ afterEach(async () => {
   }
 })
 
-const TIMEOUT = 2_000
+const TIMEOUT = 1_500
 
 const commandStrings = {
   '@redwoodjs/cli': `node ${path.resolve(
@@ -201,7 +196,7 @@ describe.each([
     const apiPort = 8916
     const apiHost = 'localhost'
 
-    const helloData = { data: 'hello' }
+    const helloData = { data: 'hello from mock server' }
 
     const server = http.createServer((req, res) => {
       if (req.url === '/hello') {
@@ -246,7 +241,7 @@ describe('@redwoodjs/cli', () => {
   describe('both server CLI', () => {
     const commandString = commandStrings['@redwoodjs/cli']
 
-    it.todo('handles socket differently...')
+    it.todo('handles --socket differently')
 
     it('has help configured', () => {
       const { stdout } = execa.commandSync(`${commandString} --help`)
@@ -304,7 +299,18 @@ describe('@redwoodjs/cli', () => {
   describe('api server CLI', () => {
     const commandString = `${commandStrings['@redwoodjs/cli']} api`
 
-    it.todo('handles socket differently...')
+    it.todo('handles --socket differently')
+
+    it('loads dotenv files', async () => {
+      child = execa.command(`${commandString}`)
+      await new Promise((r) => setTimeout(r, TIMEOUT))
+
+      const res = await fetch(`http://localhost:8911/env`)
+      const body = await res.json()
+
+      expect(res.status).toEqual(200)
+      expect(body).toEqual({ data: '42' })
+    })
 
     it('has help configured', () => {
       const { stdout } = execa.commandSync(`${commandString} --help`)
@@ -356,7 +362,7 @@ describe('@redwoodjs/cli', () => {
   describe('web server CLI', () => {
     const commandString = `${commandStrings['@redwoodjs/cli']} web`
 
-    it.todo('handles socket differently...')
+    it.todo('handles --socket differently')
 
     it('has help configured', () => {
       const { stdout } = execa.commandSync(`${commandString} --help`)
@@ -640,7 +646,7 @@ describe('@redwoodjs/api-server', () => {
 describe('@redwoodjs/web-server', () => {
   const commandString = commandStrings['@redwoodjs/web-server']
 
-  it.todo('handles socket differently...')
+  it.todo('handles --socket differently')
 
   // @redwoodjs/web-server doesn't have help configured in a different way than the others.
   // The others output help, it's just empty. This doesn't even do that. It just runs.

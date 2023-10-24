@@ -14,7 +14,6 @@ let original_RWJS_CWD
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
-
   process.env.RWJS_CWD = path.join(__dirname, 'fixtures/redwood-app')
 })
 
@@ -22,7 +21,7 @@ afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
 })
 
-// Set up and teardown the Fastify instance.
+// Set up and teardown the fastify instance with options.
 let fastifyInstance
 let returnedFastifyInstance
 
@@ -46,6 +45,7 @@ afterAll(async () => {
 })
 
 describe('withWebServer', () => {
+  // Deliberately using `toBe` here to check for referential equality.
   it('returns the same fastify instance', async () => {
     expect(returnedFastifyInstance).toBe(fastifyInstance)
   })
@@ -59,9 +59,9 @@ describe('withWebServer', () => {
     expect(res.body).toBe(JSON.stringify({ message }))
   })
 
+  // We can use `printRoutes` with a method for debugging, but not without one.
+  // See https://fastify.dev/docs/latest/Reference/Server#printroutes
   it('builds a tree of routes for GET', async () => {
-    // We can use printRoutes with a method for debugging.
-    // See https://fastify.dev/docs/latest/Reference/Server#printroutes
     expect(fastifyInstance.printRoutes({ method: 'GET' }))
       .toMatchInlineSnapshot(`
       "└── /
@@ -76,49 +76,49 @@ describe('withWebServer', () => {
 
   describe('serves prerendered files', () => {
     it('serves the prerendered about page', async () => {
+      const url = '/about'
+
       const res = await fastifyInstance.inject({
         method: 'GET',
-        url: '/about',
+        url,
       })
 
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
       expect(res.body).toBe(
-        fs.readFileSync(path.join(getPaths().web.dist, 'about.html'), 'utf-8')
+        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8')
       )
     })
 
     it('serves the prerendered new contact page', async () => {
+      const url = '/contacts/new'
+
       const res = await fastifyInstance.inject({
         method: 'GET',
-        url: '/contacts/new',
+        url,
       })
 
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
       expect(res.body).toBe(
-        fs.readFileSync(
-          path.join(getPaths().web.dist, 'contacts/new.html'),
-          'utf-8'
-        )
+        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8')
       )
     })
 
     // We don't serve files named index.js at the root level.
     // This logic ensures nested files aren't affected.
     it('serves the prerendered nested index page', async () => {
+      const url = '/nested/index'
+
       const res = await fastifyInstance.inject({
         method: 'GET',
-        url: '/nested/index',
+        url,
       })
 
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
       expect(res.body).toBe(
-        fs.readFileSync(
-          path.join(getPaths().web.dist, 'nested/index.html'),
-          'utf-8'
-        )
+        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8')
       )
     })
 
@@ -147,15 +147,17 @@ describe('withWebServer', () => {
     // We may want to use the `@fastify/static` plugin's `allowedPath` option.
     // See https://github.com/fastify/fastify-static?tab=readme-ov-file#allowedpath.
     it('serves prerendered files at `${routeName}.html`', async () => {
+      const url = '/about.html'
+
       const res = await fastifyInstance.inject({
         method: 'GET',
-        url: '/about.html',
+        url,
       })
 
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
       expect(res.body).toBe(
-        fs.readFileSync(path.join(getPaths().web.dist, 'about.html'), 'utf-8')
+        fs.readFileSync(path.join(getPaths().web.dist, url), 'utf-8')
       )
     })
 

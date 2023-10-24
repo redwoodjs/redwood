@@ -13,7 +13,6 @@ let original_RWJS_CWD
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
-
   process.env.RWJS_CWD = path.resolve(
     __dirname,
     'fixtures/redwood-app-number-functions'

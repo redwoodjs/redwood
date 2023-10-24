@@ -12,7 +12,6 @@ const FIXTURE_PATH = '/redwood-app'
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
-
   process.env.RWJS_CWD = FIXTURE_PATH
 })
 

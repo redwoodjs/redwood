@@ -12,7 +12,6 @@ let original_RWJS_CWD
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
-
   process.env.RWJS_CWD = path.resolve(__dirname, 'fixtures/redwood-app')
 })
 
@@ -20,7 +19,7 @@ afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
 })
 
-// Set up and teardown the Fastify instance for each test.
+// Set up and teardown the fastify instance for each test.
 let fastifyInstance
 let returnedFastifyInstance
 
@@ -40,6 +39,7 @@ afterAll(async () => {
 })
 
 describe('withFunctions', () => {
+  // Deliberately using `toBe` here to check for referential equality.
   it('returns the same fastify instance', async () => {
     expect(returnedFastifyInstance).toBe(fastifyInstance)
   })
@@ -70,9 +70,11 @@ describe('withFunctions', () => {
   })
 
   // We use `fastify.all` to register functions, which means they're invoked for all HTTP verbs.
+  // Only testing GET and POST here at the moment.
+  //
+  // We can use `printRoutes` with a method for debugging, but not without one.
+  // See https://fastify.dev/docs/latest/Reference/Server#printroutes
   it('builds a tree of routes for GET and POST', async () => {
-    // We can use printRoutes with a method for debugging.
-    // See https://fastify.dev/docs/latest/Reference/Server#printroutes
     expect(fastifyInstance.printRoutes({ method: 'GET' }))
       .toMatchInlineSnapshot(`
       "└── /

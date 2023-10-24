@@ -14,7 +14,6 @@ let original_RWJS_CWD
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
-
   process.env.RWJS_CWD = path.resolve(__dirname, 'fixtures/redwood-app')
 })
 
@@ -45,6 +44,8 @@ describe('loadFunctionsFromDist', () => {
   })
 
   // We have logic that specifically puts the graphql function at the front.
+  // Though it's not clear why or if this is actually respected by how JS objects work.
+  // See the complementary lambdaLoaderNumberFunctions test.
   it('puts the graphql function first', async () => {
     expect(LAMBDA_FUNCTIONS).toEqual({})
 
@@ -53,7 +54,8 @@ describe('loadFunctionsFromDist', () => {
     expect(Object.keys(LAMBDA_FUNCTIONS)[0]).toEqual('graphql')
   })
 
-  // `loadFunctionsFromDist` loads files that don't export a handler into the object.
+  // `loadFunctionsFromDist` loads files that don't export a handler into the object as `undefined`.
+  // This is probably harmless, but we could also probably go without it.
   it("warns if a function doesn't have a handler and sets it to `undefined`", async () => {
     expect(LAMBDA_FUNCTIONS).toEqual({})
 

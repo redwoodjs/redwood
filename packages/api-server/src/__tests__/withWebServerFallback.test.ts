@@ -11,7 +11,6 @@ let original_RWJS_CWD
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
-
   process.env.RWJS_CWD = path.join(__dirname, 'fixtures/redwood-app-fallback')
 })
 
@@ -27,17 +26,17 @@ test("handles not found by serving index.html if 200.html doesn't exist", async 
     }
   )
 
-  const relativeFilePath = '/index.html'
+  const url = '/index.html'
 
   const res = await fastifyInstance.inject({
     method: 'GET',
-    url: relativeFilePath,
+    url,
   })
 
   expect(res.statusCode).toBe(200)
   expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
   expect(res.body).toBe(
-    fs.readFileSync(path.join(getPaths().web.dist, relativeFilePath), 'utf-8')
+    fs.readFileSync(path.join(getPaths().web.dist, url), 'utf-8')
   )
 
   await fastifyInstance.close()

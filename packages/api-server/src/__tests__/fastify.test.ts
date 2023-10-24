@@ -3,25 +3,37 @@ import { vol } from 'memfs'
 
 import { createFastifyInstance, DEFAULT_OPTIONS } from '../fastify'
 
+// We'll be testing how fastify is instantiated, so we'll mock it here.
+jest.mock('fastify', () => {
+  return jest.fn(() => {
+    return {
+      register: () => {},
+    }
+  })
+})
+
 // Suppress terminal logging.
 console.log = jest.fn()
 
 // Set up RWJS_CWD.
 let original_RWJS_CWD
-const redwoodProjectPath = '/redwood-app'
+const FIXTURE_PATH = '/redwood-app'
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
-
-  process.env.RWJS_CWD = redwoodProjectPath
+  process.env.RWJS_CWD = FIXTURE_PATH
 })
 
 afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
 })
 
-// Mock server.config.js.
+// Mock server.config.js to test instantiating fastify with user config.
 jest.mock('fs', () => require('memfs').fs)
+
+afterEach(() => {
+  vol.reset()
+})
 
 const userConfig = {
   requestTimeout: 25_000,
@@ -51,21 +63,13 @@ jest.mock(
   }
 )
 
-jest.mock('fastify', () => {
-  return jest.fn(() => {
-    return {
-      register: () => {},
-    }
-  })
-})
-
 describe('createFastifyInstance', () => {
   it('instantiates a fastify instance with default config', () => {
     vol.fromNestedJSON(
       {
         'redwood.toml': '',
       },
-      redwoodProjectPath
+      FIXTURE_PATH
     )
 
     createFastifyInstance()
@@ -80,7 +84,7 @@ describe('createFastifyInstance', () => {
           'server.config.js': '',
         },
       },
-      redwoodProjectPath
+      FIXTURE_PATH
     )
 
     createFastifyInstance()

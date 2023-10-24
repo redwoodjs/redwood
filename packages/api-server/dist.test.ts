@@ -6,11 +6,10 @@ const packageConfig = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
 
 describe('dist', () => {
   it("shouldn't have the __tests__ directory", () => {
-    expect(fs.existsSync(path.join(distPath, '__tests__'))).toBe(false)
+    expect(fs.existsSync(path.join(distPath, '__tests__'))).toEqual(false)
   })
 
-  // The way this package was written, you can't just import it.
-  // It expects to be in a Redwood project.
+  // The way this package was written, you can't just import it. It expects to be in a Redwood project.
   it('fails if imported outside a Redwood app', async () => {
     try {
       await import(path.join(distPath, 'cliHandlers.js'))
