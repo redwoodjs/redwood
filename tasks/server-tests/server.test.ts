@@ -65,7 +65,7 @@ const {
   groups: { apiUrl },
 } = redwoodToml.match(/apiUrl = "(?<apiUrl>[^"]*)/)
 
-describe.skip.each([
+describe.each([
   [`${commandStrings['@redwoodjs/cli']}`],
   [`${commandStrings['@redwoodjs/api-server']}`],
 ])('serve both (%s)', (commandString) => {
@@ -116,7 +116,7 @@ describe.skip.each([
   })
 })
 
-describe.skip.each([
+describe.each([
   [`${commandStrings['@redwoodjs/cli']} api`],
   [`${commandStrings['@redwoodjs/api-server']} api`],
 ])('serve api (%s)', (commandString) => {
