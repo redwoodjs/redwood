@@ -1,9 +1,9 @@
-// TODO (RSC) Take ownership of this file and move it out ouf the waku-lib folder
+import path from 'node:path'
 import { PassThrough } from 'node:stream'
 import type { Readable } from 'node:stream'
 import { Worker } from 'node:worker_threads'
 
-const worker = new Worker(new URL('rsc-worker.js', import.meta.url), {
+const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
   execArgv: ['--conditions', 'react-server'],
 })
 
@@ -100,7 +100,10 @@ export function setClientEntries(
   })
 }
 
-export function renderRSC(input: RenderInput): Readable {
+export function renderRsc(input: RenderInput): Readable {
+  // TODO (RSC): What's the biggest number JS handles here? What happens when
+  // it overflows? Will it just start over at 0? If so, we should be fine. If
+  // not, we need to figure out a more robust way to handle this.
   const id = nextId++
   const passthrough = new PassThrough()
 
