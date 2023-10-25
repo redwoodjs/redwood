@@ -10,15 +10,9 @@ const EXCLUDE_PROPS = ['charSet']
 
 const propToMetaTag = (
   parentKey: string,
-  parentValue: Array<unknown> | Record<string, unknown> | string | unknown,
+  parentValue: unknown,
   options: { attr: 'name' | 'property' }
-): Array<React.ReactHTML['meta']> | Array<null> => {
-  // allows you to specify the `og` attributes by just doing <Metadata og />
-  // instead of <Metadata og={{}} />
-  if (parentKey === 'og' && parentValue === true) {
-    return [null]
-  }
-
+): JSX.Element | JSX.Element[] => {
   if (Array.isArray(parentValue)) {
     // array of attributes
     return parentValue.flatMap((value) => {
@@ -26,15 +20,18 @@ const propToMetaTag = (
     })
   } else if (typeof parentValue === 'object') {
     // namespaced attributes, <meta> name attribute changes to 'property'
-    return Object.entries(parentValue)
+    return Object.entries(parentValue as Record<string, unknown>)
       .filter(([_, v]) => v !== null)
       .flatMap(([key, value]) => {
         return propToMetaTag(`${parentKey}:${key}`, value, { attr: 'property' })
       })
   } else {
     // plain text
-    const attributes = { [options['attr']]: parentKey, content: parentValue }
-    return [<meta {...attributes} />]
+    const attributes = {
+      [options['attr']]: parentKey,
+      content: parentValue as string,
+    }
+    return <meta {...attributes} />
   }
 }
 
@@ -53,8 +50,13 @@ export const Metadata = (props: Record<string, any>) => {
     Head = PortalHead
   }
 
-  const tags = Object.entries(metaProps)
-    .filter(([key, value]) => !EXCLUDE_PROPS.includes(key) && value !== null)
+  const tags: JSX.Element[] = Object.entries(metaProps)
+    .filter(
+      ([key, value]) =>
+        !EXCLUDE_PROPS.includes(key) &&
+        value !== null &&
+        (key !== 'og' || value !== true)
+    )
     .flatMap(([key, value]) => {
       return propToMetaTag(key, value, { attr: 'name' })
     })
