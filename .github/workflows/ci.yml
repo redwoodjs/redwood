@@ -532,9 +532,9 @@ jobs:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-project.outputs.rsc-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
-      - name: 🌲 Set up RSC from fixture
-        id: set-up-rsc-from-fixture
-        uses: ./.github/actions/set-up-rsc-from-fixture
+      - name: 🌲 Set up RSA smoke test
+        id: set-up-rsa-project
+        uses: ./.github/actions/set-up-rsa-project
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
@@ -543,7 +543,21 @@ jobs:
         working-directory: tasks/smoke-tests/rsa
         run: npx playwright test
         env:
-          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-from-fixture.outputs.rsa-project-path }}
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsa-project.outputs.test-project-path }}
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: 🌲 Set up RSC external packages smoke test
+        id: set-up-rsc-external-packages-project
+        uses: ./.github/actions/set-up-rsc-external-packages-project
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+
+      - name: 🐘 Run RSC external packages smoke tests
+        working-directory: tasks/smoke-tests/rsc-external-packages
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-external-packages-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
   rsc-smoke-tests-mock:
@@ -559,3 +573,44 @@ jobs:
 
     steps:
       - run: echo "RSC smoke tests mock"
+
+  server-tests:
+    needs: check
+
+    name: 📡🔁 server tests / node 18 latest
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 🐈 Set up yarn cache
+        uses: ./.github/actions/set-up-yarn-cache
+
+      - name: 🐈 Yarn install
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: 🔨 Build
+        run: yarn build
+
+      - name: 🧪 Test
+        run: yarn jest server.test.ts
+        working-directory: ./tasks/server-tests
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+  server-tests-docs:
+    needs: only-doc-changes
+    if: needs.only-doc-changes.outputs.only-doc-changes == 'true'
+
+    name: 📡🔁 server tests / node 18 latest
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "Only doc changes"

@@ -7,14 +7,14 @@ import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
 import { onWarn } from '../lib/onWarn'
-
-import { configFileConfig, resolveConfig } from './config'
 import {
   shutdown,
   setClientEntries,
   getCustomModulesRSC,
   buildRSC,
-} from './rsc-handler'
+} from '../rsc/rscWorkerCommunication'
+
+import { configFileConfig, resolveConfig } from './config'
 import { rscIndexPlugin, rscAnalyzePlugin } from './vite-plugin-rsc'
 
 export async function build() {

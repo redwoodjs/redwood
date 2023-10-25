@@ -43,9 +43,9 @@ export async function rscBuild(viteConfigPath: string) {
       // TODO (RSC): Figure out what the `external` list should be. Right
       // now it's just copied from waku
       external: ['react', 'minimatch'],
-    },
-    resolve: {
-      conditions: ['react-server'],
+      resolve: {
+        externalConditions: ['react-server'],
+      },
     },
     build: {
       manifest: 'rsc-build-manifest.json',
