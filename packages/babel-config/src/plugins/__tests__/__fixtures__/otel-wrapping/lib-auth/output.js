@@ -19,13 +19,10 @@ export const getCurrentUser = async (session) => {
   }
   const RW_OTEL_WRAPPER_TRACER = RW_OTEL_WRAPPER_TRACE.getTracer('redwoodjs')
   const RW_OTEL_WRAPPER_RESULT = await RW_OTEL_WRAPPER_TRACER.startActiveSpan(
-    'redwoodjs:api:mw:getCurrentUser',
+    'redwoodjs:api:__MOCKED_API_FOLDER__:getCurrentUser',
     async (span) => {
       span.setAttribute('code.function', 'getCurrentUser')
-      span.setAttribute(
-        'code.filepath',
-        '/Users/jgmw/Development/redwood/redwood/packages/babel-config/src/plugins/__tests__/__fixtures__/otel-wrapping/lib-auth/code.js'
-      )
+      span.setAttribute('code.filepath', '__MOCKED_FILENAME__')
       try {
         const RW_OTEL_WRAPPER_INNER_RESULT = await __getCurrentUser(session)
         span.end()
@@ -50,13 +47,10 @@ export const isAuthenticated = () => {
   }
   const RW_OTEL_WRAPPER_TRACER = RW_OTEL_WRAPPER_TRACE.getTracer('redwoodjs')
   const RW_OTEL_WRAPPER_RESULT = RW_OTEL_WRAPPER_TRACER.startActiveSpan(
-    'redwoodjs:api:mw:isAuthenticated',
+    'redwoodjs:api:__MOCKED_API_FOLDER__:isAuthenticated',
     (span) => {
       span.setAttribute('code.function', 'isAuthenticated')
-      span.setAttribute(
-        'code.filepath',
-        '/Users/jgmw/Development/redwood/redwood/packages/babel-config/src/plugins/__tests__/__fixtures__/otel-wrapping/lib-auth/code.js'
-      )
+      span.setAttribute('code.filepath', '__MOCKED_FILENAME__')
       try {
         const RW_OTEL_WRAPPER_INNER_RESULT = __isAuthenticated()
         span.end()
@@ -107,13 +101,10 @@ export const hasRole = (roles) => {
   }
   const RW_OTEL_WRAPPER_TRACER = RW_OTEL_WRAPPER_TRACE.getTracer('redwoodjs')
   const RW_OTEL_WRAPPER_RESULT = RW_OTEL_WRAPPER_TRACER.startActiveSpan(
-    'redwoodjs:api:mw:hasRole',
+    'redwoodjs:api:__MOCKED_API_FOLDER__:hasRole',
     (span) => {
       span.setAttribute('code.function', 'hasRole')
-      span.setAttribute(
-        'code.filepath',
-        '/Users/jgmw/Development/redwood/redwood/packages/babel-config/src/plugins/__tests__/__fixtures__/otel-wrapping/lib-auth/code.js'
-      )
+      span.setAttribute('code.filepath', '__MOCKED_FILENAME__')
       try {
         const RW_OTEL_WRAPPER_INNER_RESULT = __hasRole(roles)
         span.end()
@@ -143,13 +134,10 @@ export const requireAuth = ({ roles } = {}) => {
   }
   const RW_OTEL_WRAPPER_TRACER = RW_OTEL_WRAPPER_TRACE.getTracer('redwoodjs')
   const RW_OTEL_WRAPPER_RESULT = RW_OTEL_WRAPPER_TRACER.startActiveSpan(
-    'redwoodjs:api:mw:requireAuth',
+    'redwoodjs:api:__MOCKED_API_FOLDER__:requireAuth',
     (span) => {
       span.setAttribute('code.function', 'requireAuth')
-      span.setAttribute(
-        'code.filepath',
-        '/Users/jgmw/Development/redwood/redwood/packages/babel-config/src/plugins/__tests__/__fixtures__/otel-wrapping/lib-auth/code.js'
-      )
+      span.setAttribute('code.filepath', '__MOCKED_FILENAME__')
       try {
         const RW_OTEL_WRAPPER_INNER_RESULT = __requireAuth({
           roles,

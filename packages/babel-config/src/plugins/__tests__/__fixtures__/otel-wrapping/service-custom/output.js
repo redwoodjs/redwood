@@ -19,13 +19,10 @@ export const withDefaultValues = async ({
   }
   const RW_OTEL_WRAPPER_TRACER = RW_OTEL_WRAPPER_TRACE.getTracer('redwoodjs')
   const RW_OTEL_WRAPPER_RESULT = await RW_OTEL_WRAPPER_TRACER.startActiveSpan(
-    'redwoodjs:api:mw:withDefaultValues',
+    'redwoodjs:api:__MOCKED_API_FOLDER__:withDefaultValues',
     async (span) => {
       span.setAttribute('code.function', 'withDefaultValues')
-      span.setAttribute(
-        'code.filepath',
-        '/Users/jgmw/Development/redwood/redwood/packages/babel-config/src/plugins/__tests__/__fixtures__/otel-wrapping/service-custom/code.js'
-      )
+      span.setAttribute('code.filepath', '__MOCKED_FILENAME__')
       try {
         const RW_OTEL_WRAPPER_INNER_RESULT = await __withDefaultValues({
           id,
@@ -74,13 +71,10 @@ export const withDefaultValuesTwo = async (
   }
   const RW_OTEL_WRAPPER_TRACER = RW_OTEL_WRAPPER_TRACE.getTracer('redwoodjs')
   const RW_OTEL_WRAPPER_RESULT = await RW_OTEL_WRAPPER_TRACER.startActiveSpan(
-    'redwoodjs:api:mw:withDefaultValuesTwo',
+    'redwoodjs:api:__MOCKED_API_FOLDER__:withDefaultValuesTwo',
     async (span) => {
       span.setAttribute('code.function', 'withDefaultValuesTwo')
-      span.setAttribute(
-        'code.filepath',
-        '/Users/jgmw/Development/redwood/redwood/packages/babel-config/src/plugins/__tests__/__fixtures__/otel-wrapping/service-custom/code.js'
-      )
+      span.setAttribute('code.filepath', '__MOCKED_FILENAME__')
       try {
         const RW_OTEL_WRAPPER_INNER_RESULT = await __withDefaultValuesTwo(args)
         span.end()

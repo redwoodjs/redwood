@@ -26,6 +26,37 @@ function addOpenTelemetryImport(
   )
 }
 
+function getRedwoodPaths(state: PluginPass): {
+  filename: string | null | undefined
+  apiFolder: string
+} {
+  // NOTE: Unable to get 'babel-plugin-tester' to mock the filename so we have specific
+  // testing logic here. Not ideal but it works for now.
+  if (process.env.NODE_ENV === 'test') {
+    return {
+      filename: '__MOCKED_FILENAME__',
+      apiFolder: '__MOCKED_API_FOLDER__',
+    }
+  }
+
+  const filename = state.file.opts.filename
+  const filenameOffset = filename
+    ? getBaseDirFromFile(filename).length + 9 // 9 is the length of '/api/src/'
+    : 0
+  const apiFolder = filename
+    ? filename.substring(
+        filenameOffset,
+        filename.substring(filenameOffset).indexOf(nodejsPath.sep) +
+          filenameOffset
+      )
+    : '?'
+
+  return {
+    filename,
+    apiFolder,
+  }
+}
+
 function wrapExportNamedDeclaration(
   path: NodePath<types.ExportNamedDeclaration>,
   state: PluginPass,
@@ -115,17 +146,7 @@ function wrapExportNamedDeclaration(
     }
   }
 
-  const filename = state.file.opts.filename
-  const filenameOffset = filename
-    ? getBaseDirFromFile(filename).length + 9 // 9 is the length of '/api/src/'
-    : 0
-  const apiFolder = filename
-    ? filename.substring(
-        filenameOffset,
-        filename.substring(filenameOffset).indexOf(nodejsPath.sep) +
-          filenameOffset
-      )
-    : '?'
+  const { filename, apiFolder } = getRedwoodPaths(state)
 
   const activeSpanBlock = t.callExpression(
     t.memberExpression(
@@ -157,7 +178,7 @@ function wrapExportNamedDeclaration(
               ),
               [
                 t.stringLiteral('code.filepath'),
-                t.stringLiteral(state.file.opts.filename || '?'),
+                t.stringLiteral(filename || '?'),
               ]
             )
           ),
