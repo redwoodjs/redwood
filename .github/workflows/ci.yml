@@ -547,7 +547,7 @@ jobs:
           REDWOOD_DISABLE_TELEMETRY: 1
 
       - name: 🌲 Set up RSC external packages smoke test
-        id: set-up-rsa-project
+        id: set-up-rsc-external-packages-project
         uses: ./.github/actions/set-up-rsc-external-packages-project
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
