@@ -97,7 +97,7 @@ async function setUpRscProject(
   await execInProject(`node ${rwBinPath} build -v`)
   console.log()
 
-  console.log(`Building project in ${rscProjectPath}`)
+  console.log(`Copying over framework files to ${rscProjectPath}`)
   await execInProject(`node ${rwfwBinPath} project:copy`, {
     env: { RWFW_PATH: REDWOOD_FRAMEWORK_PATH },
   })
