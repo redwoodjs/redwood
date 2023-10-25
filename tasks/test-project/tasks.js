@@ -500,12 +500,12 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
           const createPage = createBuilder('yarn redwood g page')
           await createPage('double')
 
-          const doublePageContent = `import { MetaTags } from '@redwoodjs/web'
+          const doublePageContent = `import { Metadata } from '@redwoodjs/web'
 
 const DoublePage = () => {
   return (
     <>
-      <MetaTags title="Double" description="Double page" />
+      <Metadata title="Double" description="Double page" />
 
       <h1 className="mb-1 mt-2 text-xl font-semibold">DoublePage</h1>
       <p>
