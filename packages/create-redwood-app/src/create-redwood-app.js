@@ -222,26 +222,7 @@ async function createProjectFiles(newAppDir, { templateDir, overwrite }) {
   })
   tui.startReactive(tuiContent)
 
-  // Check if the new app directory already exists
-  if (fs.existsSync(newAppDir) && !overwrite) {
-    // Check if the directory contains files and show an error if it does
-    if (fs.readdirSync(newAppDir).length > 0) {
-      tui.stopReactive(true)
-      tui.displayError(
-        'Project directory already contains files',
-        [
-          `'${RedwoodStyling.info(newAppDir)}' already exists and is not empty`,
-          ``,
-          `You can use the '${RedwoodStyling.info(
-            'overwrite'
-          )}' flag to create the project even if target directory isn't empty`,
-        ].join('\n')
-      )
-      recordErrorViaTelemetry(`Project directory already contains files`)
-      await shutdownTelemetry()
-      process.exit(1)
-    }
-  }
+  newAppDir = await doesDirectoryAlreadyExist(newAppDir, overwrite)
 
   // Ensure the new app directory exists
   fs.ensureDirSync(path.dirname(newAppDir))
@@ -496,6 +477,93 @@ async function handleGitPreference(gitInitFlag) {
     return response.git
   } catch (_error) {
     recordErrorViaTelemetry('User cancelled install at git prompt')
+    await shutdownTelemetry()
+    process.exit(1)
+  }
+}
+
+async function doesDirectoryAlreadyExist(appDir, overwrite) {
+  let newAppDir = appDir
+
+  // Check if the new app directory already exists
+  if (fs.existsSync(newAppDir) && !overwrite) {
+    // Check if the directory contains files and show an error if it does
+    if (fs.readdirSync(newAppDir).length > 0) {
+      tui.stopReactive(true)
+      tui.displayWarning(
+        'Project directory already contains files',
+        [
+          `'${RedwoodStyling.info(newAppDir)}' already exists and is not empty`,
+        ].join('\n')
+      )
+
+      try {
+        const response = await tui.prompt({
+          type: 'select',
+          name: 'projectDirectoryAlreadyExists',
+          message: 'How would you like to proceed?',
+          choices: [
+            'Quit install',
+            'Overwrite files and continue install',
+            'Specify a different directory',
+          ],
+          initial: 0,
+        })
+
+        // overwrite the existing files
+        if (
+          response.projectDirectoryAlreadyExists ===
+          'Overwrite files and continue install'
+        ) {
+          // blow away the existing directory and create a new one
+          await fs.remove(newAppDir)
+        } // specify a different directory
+        else if (
+          response.projectDirectoryAlreadyExists ===
+          'Specify a different directory'
+        ) {
+          const newDirectoryName = await handleNewDirectoryNamePreference()
+          newAppDir = path.resolve(process.cwd(), newDirectoryName)
+
+          // check to see if the new directory exists
+          newAppDir = await doesDirectoryAlreadyExist(newAppDir, overwrite)
+        } // Quit Install and Throw and Error
+        else if (response.projectDirectoryAlreadyExists === 'Quit install') {
+          // quit and throw an error
+          recordErrorViaTelemetry(
+            'User quit after directory already exists error'
+          )
+          await shutdownTelemetry()
+          process.exit(1)
+        }
+        // overwrite the existing files
+      } catch (_error) {
+        recordErrorViaTelemetry(
+          `User cancelled install after directory already exists error`
+        )
+        await shutdownTelemetry()
+        process.exit(1)
+      }
+    }
+  }
+
+  return newAppDir
+}
+
+async function handleNewDirectoryNamePreference() {
+  console.log('handle new directory name preference')
+  try {
+    const response = await tui.prompt({
+      type: 'input',
+      name: 'targetDirectoryInput',
+      message: 'What directory would you like to create the app in?',
+      initial: 'my-redwood-app',
+    })
+    return response.targetDirectoryInput
+  } catch (_error) {
+    recordErrorViaTelemetry(
+      'User cancelled install at specify a different directory prompt'
+    )
     await shutdownTelemetry()
     process.exit(1)
   }
