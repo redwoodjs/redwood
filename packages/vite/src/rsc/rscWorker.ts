@@ -165,8 +165,10 @@ const vitePromise = createServer({
       parentPort.postMessage(message)
     }),
   ],
-  resolve: {
-    conditions: ['react-server'],
+  ssr: {
+    resolve: {
+      externalConditions: ['react-server'],
+    },
   },
   appType: 'custom',
 })

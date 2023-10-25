@@ -1,0 +1,7 @@
+/**
+ * This should affect all h3 elements on the page, both server components and
+ * client components. This is just standard CSS stuff
+ */
+h3 {
+  color: orange;
+}

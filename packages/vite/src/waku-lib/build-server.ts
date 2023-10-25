@@ -54,11 +54,11 @@ export async function serverBuild(
         // Packages without scope
         return splitPath[0]
       }),
+      resolve: {
+        externalConditions: ['react-server'],
+      },
     },
     plugins: [react()],
-    resolve: {
-      conditions: ['react-server'],
-    },
     build: {
       ssr: true,
       ssrEmitAssets: true,
