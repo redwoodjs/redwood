@@ -3,6 +3,7 @@ import path from 'path'
 
 import type { JsonMap } from '@iarna/toml'
 import toml from '@iarna/toml'
+import dotenv from 'dotenv'
 
 import {
   findUp,
@@ -55,9 +56,9 @@ export const updateTomlConfig = (packageName: string) => {
 
   let tomlToAppend = {} as JsonMap
 
-  const config = getConfig(redwoodTomlPath) // ?
+  const config = getConfig(redwoodTomlPath)
 
-  const cliSection = config.experimental?.cli // ?
+  const cliSection = config.experimental?.cli
 
   if (!cliSection) {
     tomlToAppend = {
@@ -92,7 +93,7 @@ export const updateTomlConfig = (packageName: string) => {
     }
   }
 
-  const newConfig = originalTomlContent + '\n' + toml.stringify(tomlToAppend) // ?
+  const newConfig = originalTomlContent + '\n' + toml.stringify(tomlToAppend)
 
   return fs.writeFileSync(redwoodTomlPath, newConfig, 'utf-8')
 }
@@ -106,58 +107,49 @@ export const updateTomlConfigTask = (packageName: string) => {
   }
 }
 
-export const addEnvVarTask = (
-  name: string,
-  value: string,
-  comment: string,
-  overwrite = false
-) => {
+export const addEnvVarTask = (name: string, value: string, comment: string) => {
   return {
     title: `Adding ${name} var to .env...`,
     task: () => {
-      addEnvVar(name, value, comment, overwrite)
+      addEnvVar(name, value, comment)
     },
   }
 }
 
-export const addEnvVar = (
-  name: string,
-  value: string,
-  comment: string,
-  overwrite = false
-) => {
+export const addEnvVar = (name: string, value: string, comment: string) => {
   const envPath = path.join(getPaths().base, '.env')
-  const content = [comment && `# ${comment}`, `${name}=${value}`, ''].flat()
   let envFile = ''
+  const newEnvironmentVariable = [
+    comment && `# ${comment}`,
+    `${name} = ${value}`,
+    '',
+  ]
+    .flat()
+    .join('\n')
 
   if (fs.existsSync(envPath)) {
     envFile = fs.readFileSync(envPath).toString()
-    const lines = envFile.split('\n')
+    const existingEnvVars = dotenv.parse(envFile)
 
-    // Check if the variable already exists
-    const existingIndex = lines.findIndex((line) => {
-      const trimmedLine = line.trim()
-      return (
-        trimmedLine.startsWith(`${name}=`) ||
-        trimmedLine.startsWith(`#${name}=`)
-      )
-    })
+    if (existingEnvVars[name] && existingEnvVars[name] === value) {
+      return envFile
+    }
 
-    if (existingIndex !== -1) {
-      // Variable already exists, check if overwrite is true
-      if (overwrite) {
-        // Update the existing line with the new value
-        const existingComment = [content[0]]
-        lines[existingIndex] = `${existingComment}\n${name}=${value}`
-        envFile = lines.join('\n')
-      }
-      // If overwrite is false, do nothing (leave the file unchanged)
+    if (existingEnvVars[name]) {
+      const p = [
+        `# Note: The existing environment variable ${name} was not overwritten. Uncomment to use its new value.`,
+        comment && `# ${comment}`,
+        `# ${name} = ${value}`,
+        '',
+      ]
+        .flat()
+        .join('\n')
+      envFile += '\n' + p
     } else {
-      // Variable doesn't exist, add it
-      envFile += '\n' + content.join('\n')
+      envFile += '\n' + newEnvironmentVariable
     }
   } else {
-    envFile = content.join('\n')
+    envFile = newEnvironmentVariable
   }
 
   return fs.writeFileSync(envPath, envFile)

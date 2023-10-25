@@ -65,46 +65,53 @@ describe('addEnvVar', () => {
       envFileContent = ''
     })
 
-    it('should add a new environment variable when it does not exist (overwrite: false)', () => {
-      envFileContent = 'EXISTING_VAR=value\n# CommentedVar=123\n'
-      const file = addEnvVar(
-        'NEW_VAR',
-        'new_value',
-        'New Variable Comment',
-        false
-      )
+    it('should add a new environment variable when it does not exist', () => {
+      envFileContent = 'EXISTING_VAR = value\n# CommentedVar = 123\n'
+      const file = addEnvVar('NEW_VAR', 'new_value', 'New Variable Comment')
+
       expect(file).toMatchSnapshot()
     })
 
-    it('should updates an existing environment variable when it exists and overwrite chosen', () => {
-      envFileContent = 'EXISTING_VAR=value\n# CommentedVar=123\n'
-      const file = addEnvVar(
-        'EXISTING_VAR',
-        'new_value',
-        'Updated existing variable Comment',
-        true
-      )
+    it('should add a new environment variable when it does not exist when existing envars have no spacing', () => {
+      envFileContent = 'EXISTING_VAR=value\n# CommentedVar = 123\n'
+      const file = addEnvVar('NEW_VAR', 'new_value', 'New Variable Comment')
+
       expect(file).toMatchSnapshot()
     })
 
-    it('should not update existing environment variable if exists and overwrite is default', () => {
+    it('should add a comment that the existing environment variable value was not changed, but include its new value as a comment', () => {
       envFileContent = 'EXISTING_VAR=value\n# CommentedVar=123\n'
       const file = addEnvVar(
         'EXISTING_VAR',
         'new_value',
         'Updated existing variable Comment'
       )
+
       expect(file).toMatchSnapshot()
     })
 
-    it('should not update existing environment variable if exists and overwrite is false', () => {
-      envFileContent = 'EXISTING_VAR=value\n# CommentedVar=123\n'
+    it('should handle existing environment variables with quoted values', () => {
+      envFileContent = `EXISTING_VAR = "value"\n# CommentedVar = 123\n`
+      const file = addEnvVar('EXISTING_VAR', 'value', 'New Variable Comment')
+
+      expect(file).toMatchSnapshot()
+    })
+
+    it('should handle existing environment variables with quoted values and no spacing', () => {
+      envFileContent = `EXISTING_VAR="value"\n# CommentedVar=123\n`
+      const file = addEnvVar('EXISTING_VAR', 'value', 'New Variable Comment')
+
+      expect(file).toMatchSnapshot()
+    })
+
+    it('should handle existing environment variables and new value with quoted values by not updating the original value', () => {
+      envFileContent = `EXISTING_VAR = "value"\n# CommentedVar = 123\n`
       const file = addEnvVar(
         'EXISTING_VAR',
         'new_value',
-        'Updated existing variable Comment',
-        false
+        'New Variable Comment'
       )
+
       expect(file).toMatchSnapshot()
     })
   })
@@ -166,6 +173,20 @@ describe('updateTomlConfig', () => {
 
       const file = updateTomlConfig(
         '@example/test-package-when-no-plugins-configured'
+      )
+
+      expect(file).toMatchSnapshot()
+    })
+
+    it('adds package but keeps autoInstall false', () => {
+      defaultRedwoodToml['experimental'] = {
+        cli: {
+          autoInstall: false,
+        },
+      }
+
+      const file = updateTomlConfig(
+        '@example/test-package-when-autoInstall-false'
       )
 
       expect(file).toMatchSnapshot()
