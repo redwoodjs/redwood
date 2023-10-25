@@ -9,7 +9,7 @@ import {
   TextField,
 } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const LoginPage = () => {
@@ -40,7 +40,7 @@ const LoginPage = () => {
 
   return (
     <>
-      <MetaTags title="Login" />
+      <Metadata title="Login" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
