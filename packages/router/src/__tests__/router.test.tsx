@@ -29,7 +29,7 @@ import {
   waitFor,
 } from '@testing-library/react'
 
-import type { AuthContextInterface } from '@redwoodjs/auth'
+import type { AuthContextInterface, UseAuth } from '@redwoodjs/auth'
 
 import {
   back,
@@ -143,6 +143,10 @@ const mockUseAuth =
     })
   }
 
+interface LayoutProps {
+  children: React.ReactNode
+}
+
 const HomePage = () => <h1>Home Page</h1>
 const LoginPage = () => <h1>Login Page</h1>
 const AboutPage = () => <h1>About Page</h1>
@@ -188,7 +192,7 @@ describe('slow imports', () => {
     )
   }
 
-  const PageLoadingContextLayout = ({ children }) => {
+  const PageLoadingContextLayout = ({ children }: LayoutProps) => {
     const { loading } = usePageLoadingContext()
 
     return (
@@ -463,7 +467,7 @@ describe('slow imports', () => {
   test(
     'path params should never be empty',
     async () => {
-      const PathParamPage = ({ value }) => {
+      const PathParamPage = ({ value }: { value: string }) => {
         expect(value).not.toBeFalsy()
         return <p>{value}</p>
       }
@@ -924,7 +928,7 @@ test('inits routes two private routes with a space in between and loads as expec
 
       <Route
         path="/param-test/:value"
-        page={({ value }) => <div>param {value}</div>}
+        page={({ value }: { value: string }) => <div>param {value}</div>}
         name="params"
       />
     </Router>
@@ -936,7 +940,7 @@ test('inits routes two private routes with a space in between and loads as expec
 })
 
 test('supports <Set>', async () => {
-  const GlobalLayout = ({ children }) => (
+  const GlobalLayout = ({ children }: LayoutProps) => (
     <div>
       <h1>Global Layout</h1>
       {children}
@@ -967,7 +971,7 @@ test('supports <Set>', async () => {
 })
 
 test('can use named routes for navigating', async () => {
-  const MainLayout = ({ children }) => {
+  const MainLayout = ({ children }: LayoutProps) => {
     return (
       <div>
         <h1>Main Layout</h1>
@@ -999,7 +1003,7 @@ test('can use named routes for navigating', async () => {
 })
 
 test('renders only active path', async () => {
-  const AboutLayout = ({ children }) => {
+  const AboutLayout = ({ children }: LayoutProps) => {
     return (
       <div>
         <h1>About Layout</h1>
@@ -1009,7 +1013,7 @@ test('renders only active path', async () => {
     )
   }
 
-  const LoginLayout = ({ children }) => {
+  const LoginLayout = ({ children }: LayoutProps) => {
     return (
       <div>
         <h1>Login Layout</h1>
@@ -1169,10 +1173,10 @@ test('params should never be an empty object in Set', async () => {
     return <div>Param Page</div>
   }
 
-  const SetWithUseParams = ({ children }) => {
+  const SetWithUseParams = ({ children }: LayoutProps) => {
     const params = useParams()
     expect(params).not.toEqual({})
-    return children
+    return <>{children}</>
   }
 
   const TestRouter = () => (
@@ -1194,12 +1198,12 @@ test('params should never be an empty object in Set with waitFor (I)', async () 
     return <>documentId: {documentId}</>
   }
 
-  const SetWithUseParams = ({ children }) => {
+  const SetWithUseParams = ({ children }: LayoutProps) => {
     const params = useParams()
     // 1st run: { documentId: '1' }
     // 2nd run: { documentId: '2' }
     expect(params).not.toEqual({})
-    return children
+    return <>{children}</>
   }
 
   const TestRouter = () => (
@@ -1224,12 +1228,12 @@ test('params should never be an empty object in Set without waitFor (II)', async
     return <>documentId: {documentId}</>
   }
 
-  const SetWithUseParams = ({ children }) => {
+  const SetWithUseParams = ({ children }: LayoutProps) => {
     const params = useParams()
     // 1st run: { documentId: '1' }
     // 2nd run: { documentId: '2' }
     expect(params).not.toEqual({})
-    return children
+    return <>{children}</>
   }
 
   const TestRouter = () => (
@@ -1254,10 +1258,10 @@ test('Set is not rendered for unauthenticated user.', async () => {
     return null
   }
 
-  const SetWithUseParams = ({ children }) => {
+  const SetWithUseParams = ({ children }: LayoutProps) => {
     // This should never be called. We should be redirected to login instead.
     expect(false).toBe(true)
-    return children
+    return <>{children}</>
   }
 
   const TestRouter = () => (
@@ -1287,10 +1291,10 @@ test('Set is not rendered for unauthenticated user on direct navigation', async 
     return null
   }
 
-  const SetWithUseParams = ({ children }) => {
+  const SetWithUseParams = ({ children }: LayoutProps) => {
     // This should never be called. We should be redirected to login instead.
     expect(false).toBe(true)
-    return children
+    return <>{children}</>
   }
 
   const TestRouter = () => (
@@ -1312,7 +1316,12 @@ test('Set is not rendered for unauthenticated user on direct navigation', async 
 
 // TODO: Remove this entire test once we remove the `<Private>` component
 test('Private is an alias for Set private', async () => {
-  const PrivateLayout = ({ children, theme }) => (
+  interface PrivateLayoutProps {
+    children: React.ReactNode
+    theme: string
+  }
+
+  const PrivateLayout = ({ children, theme }: PrivateLayoutProps) => (
     <div>
       <h1>Private Layout ({theme})</h1>
       {children}
@@ -1322,7 +1331,11 @@ test('Private is an alias for Set private', async () => {
   const TestRouter = () => (
     <Router useAuth={mockUseAuth({ isAuthenticated: true })}>
       <Route path="/" page={HomePage} name="home" />
-      <Private wrap={PrivateLayout} unauthenticated="home" theme="dark">
+      <Private<PrivateLayoutProps>
+        wrap={PrivateLayout}
+        unauthenticated="home"
+        theme="dark"
+      >
         <Route path="/private" page={PrivatePage} name="private" />
       </Private>
     </Router>
@@ -1409,7 +1422,7 @@ test('jump to new route, then go back', async () => {
 })
 
 test('redirect replacing route', async () => {
-  const ListWithDefaultParamsPage = (props) => {
+  const ListWithDefaultParamsPage = (props: { _limit: string }) => {
     if (props['_limit']) {
       return <h1>List Page</h1>
     }
@@ -1554,7 +1567,7 @@ test('should handle ref and key as search params', async () => {
 })
 
 describe('Unauthorized redirect error messages', () => {
-  let err
+  let err: typeof console.error
 
   beforeAll(() => {
     err = console.error
@@ -1606,17 +1619,26 @@ describe('Multiple nested private sets', () => {
   const PrivateEmployeePage = () => <h1>Private Employee Page</h1>
   const PrivateAdminPage = () => <h1>Private Admin Page</h1>
 
-  const LevelLayout = ({ children, level }) => (
+  interface LevelLayoutProps {
+    children: React.ReactNode
+    level: string
+  }
+
+  const LevelLayout = ({ children, level }: LevelLayoutProps) => (
     <div>
       Level: {level}
       {children}
     </div>
   )
 
-  const TestRouter = ({ useAuthMock }) => (
+  const TestRouter = ({ useAuthMock }: { useAuthMock: UseAuth }) => (
     <Router useAuth={useAuthMock}>
       <Route path="/" page={HomePage} name="home" />
-      <PrivateSet unauthenticated="home" level="1" wrap={LevelLayout}>
+      <PrivateSet<LevelLayoutProps>
+        unauthenticated="home"
+        level="1"
+        wrap={LevelLayout}
+      >
         <Route
           path="/no-roles-assigned"
           page={PrivateNoRolesAssigned}
@@ -1720,7 +1742,14 @@ describe('Multiple nested sets', () => {
   const HomePage = () => <h1>Home Page</h1>
   const Page = () => <h1>Page</h1>
 
-  const DebugLayout = (props) => {
+  interface DebugLayoutProps {
+    children: React.ReactNode
+    theme: string
+    otherProp?: string
+    level: string
+  }
+
+  const DebugLayout = (props: DebugLayoutProps) => {
     return (
       <div>
         <p>Theme: {props.theme}</p>
@@ -1734,7 +1763,7 @@ describe('Multiple nested sets', () => {
   const TestRouter = () => (
     <Router>
       <Route path="/" page={HomePage} name="home" />
-      <Set level="1" theme="blue" wrap={DebugLayout}>
+      <Set<DebugLayoutProps> level="1" theme="blue" wrap={DebugLayout}>
         <Route path="/level1" page={Page} name="level1" />
         <Set level="2" theme="red" otherProp="bazinga">
           <Route path="/level2" page={Page} name="level2" />

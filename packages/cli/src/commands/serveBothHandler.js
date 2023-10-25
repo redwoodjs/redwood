@@ -19,10 +19,7 @@ export const bothExperimentalServerFileHandler = async () => {
 
     await execa(
       'node',
-      [
-        '--conditions react-server',
-        './node_modules/@redwoodjs/vite/dist/runRscFeServer.js',
-      ],
+      ['./node_modules/@redwoodjs/vite/dist/runRscFeServer.js'],
       {
         cwd: getPaths().base,
         stdio: 'inherit',
@@ -64,9 +61,9 @@ export const bothRscServerHandler = async (argv) => {
   const fePromise = execa(
     'node',
     [
+      // TODO (RSC): Do we need these on the worker thread?
       '--experimental-loader @redwoodjs/vite/node-loader',
       '--experimental-loader @redwoodjs/vite/react-node-loader',
-      '--conditions react-server',
       './node_modules/@redwoodjs/vite/dist/runRscFeServer.js',
     ],
     {
