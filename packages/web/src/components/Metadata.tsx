@@ -6,83 +6,35 @@ import { Head as HelmetHead } from '../index'
 // But.... not worth the effort to remove it from bundle atm
 import PortalHead from './PortalHead'
 
-// type RobotsParams =
-//   | 'noindex'
-//   | 'index'
-//   | 'follow'
-//   | 'nofollow'
-//   | 'none'
-//   | 'noarchive'
-//   | 'nocache'
-//   | 'nosnippet'
-// interface MetaTagsProps {
-//   /**
-//    * @description
-//    * og:image by default
-//    */
-//   tag?: `og:${string}`
-
-//   /**
-//    * @description
-//    * website by default. See https://ogp.me/#types
-//    */
-//   ogType?: string
-//   ogWidth?: string
-//   ogHeight?: string
-
-//   locale?: string
-
-//   /**
-//    * @description
-//    * Link to image/video to display when unfurled
-//    **/
-//   ogContentUrl?: string
-
-//   /**
-//    * @description
-//    * The url to link back to. This must be a canonical (absolute) URL.
-//    * Use `ogContentUrl` to set the actual image to be displayed
-//    **/
-//   ogUrl?: `${'http://' | 'https://'}${string}`
-//   contentType?: string
-
-//   /**
-//    * @description
-//    * String or array of strings to provide crawlers instructions for how to crawl or index web page content.
-//    **/
-//   robots?: RobotsParams | RobotsParams[]
-//   title?: string
-//   description?: string
-//   author?: string
-
-//   /**
-//    * @description
-//    * Any additional metatags
-//    */
-//   children?: React.ReactNode
-// }
+const EXCLUDE_PROPS = ['charSet']
 
 const propToMetaTag = (
   parentKey: string,
-  parentValue: Array<unknown> | Record<string, unknown> | string,
+  parentValue: Array<unknown> | Record<string, unknown> | string | unknown,
   options: { attr: 'name' | 'property' }
-) => {
+): Array<React.ReactHTML['meta']> | Array<null> => {
+  // allows you to specify the `og` attributes by just doing <Metadata og />
+  // instead of <Metadata og={{}} />
+  if (parentKey === 'og' && parentValue === true) {
+    return [null]
+  }
+
   if (Array.isArray(parentValue)) {
     // array of attributes
-    return parentValue.map((value) => {
+    return parentValue.flatMap((value) => {
       return propToMetaTag(parentKey, value, options)
     })
   } else if (typeof parentValue === 'object') {
     // namespaced attributes, <meta> name attribute changes to 'property'
     return Object.entries(parentValue)
       .filter(([_, v]) => v !== null)
-      .map(([key, value]) => {
+      .flatMap(([key, value]) => {
         return propToMetaTag(`${parentKey}:${key}`, value, { attr: 'property' })
       })
   } else {
     // plain text
     const attributes = { [options['attr']]: parentKey, content: parentValue }
-    return <meta {...attributes} />
+    return [<meta {...attributes} />]
   }
 }
 
@@ -90,9 +42,9 @@ const propToMetaTag = (
  * Add commonly used <meta> tags for unfurling/seo purposes
  * using the open graph protocol https://ogp.me/
  * @example
- * <MetaTags title="About Page" ogContentUrl="/static/about-og.png"/>
+ * <Metadata title="About Page" og={{ image: "/static/about-og.png" }} />
  */
-export const MetaTags = (props: Record<string, any>) => {
+export const Metadata = (props: Record<string, any>) => {
   const { children, ...metaProps } = props
 
   let Head: typeof HelmetHead | typeof PortalHead = HelmetHead
@@ -102,15 +54,28 @@ export const MetaTags = (props: Record<string, any>) => {
   }
 
   const tags = Object.entries(metaProps)
-    .filter(([_, v]) => v !== null)
-    .map(([key, value]) => {
+    .filter(([key, value]) => !EXCLUDE_PROPS.includes(key) && value !== null)
+    .flatMap(([key, value]) => {
       return propToMetaTag(key, value, { attr: 'name' })
     })
-    .flat()
+    .filter((tag) => !!tag)
 
   // custom overrides
+  if (metaProps.title) {
+    ;[metaProps.title]
+      .flat()
+      .reverse()
+      .map((title) => {
+        tags.unshift(<title>{title}</title>)
+      })
+  }
+
+  if (metaProps.charSet) {
+    tags.push(<meta charSet={metaProps.charSet} />)
+  }
+
   if (metaProps.og) {
-    // add og:title
+    // add title and og:title
     if (metaProps.title && !metaProps.og.title && metaProps.og.title !== null) {
       tags.push(<meta property="og:title" content={metaProps.title} />)
     }
@@ -140,20 +105,4 @@ export const MetaTags = (props: Record<string, any>) => {
       {children}
     </Head>
   )
-
-  // {locale && (
-  //   <Head>
-  //     <html lang={locale} />
-  //     <meta property="og:locale" content={locale} />
-  //   </Head>
-  // )}
-
-  // {robots && (
-  //   <Head>
-  //     <meta
-  //       name="robots"
-  //       content={Array.isArray(robots) ? robots.join(', ') : robots}
-  //     />
-  //   </Head>
-  // )}
 }
