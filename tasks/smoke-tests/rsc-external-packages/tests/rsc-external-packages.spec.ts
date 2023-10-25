@@ -25,7 +25,7 @@ test('Submitting the form should return a response', async ({ page }) => {
   expect(pageText).toMatch('The form has been submitted 0 times.')
 
   await page.getByRole('textbox').fill('Hello World')
-  await page.getByRole('button').click()
+  await page.getByRole('button').getByText('Send').click()
 
   const submittedPageText = page.locator('#redwood-app > div')
   await expect(submittedPageText).toHaveText(
