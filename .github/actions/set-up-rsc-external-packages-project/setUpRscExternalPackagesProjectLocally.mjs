@@ -6,7 +6,7 @@ import path from 'node:path'
 
 import execa from 'execa'
 
-import { main } from './setUpRscFromFixture.mjs'
+import { setUpRscTestProject } from '../actionsLib.mjs'
 
 class ExecaError extends Error {
   stdout
@@ -71,9 +71,12 @@ function getExecaOptions(cwd, env = {}) {
   }
 }
 
-const rsaProjectPath = path.join(
+const testProjectAndFixtureName = 'test-project-rsc-external-packages'
+
+const testProjectPath = path.join(
   os.tmpdir(),
-  'redwood-rsa-project',
+  'redwood',
+  testProjectAndFixtureName,
   // ":" is problematic with paths
   new Date().toISOString().split(':').join('-')
 )
@@ -96,8 +99,13 @@ function execInProject(commandLine, options) {
   return exec(
     commandLine,
     undefined,
-    getExecaOptions(rsaProjectPath, options?.env)
+    getExecaOptions(testProjectPath, options?.env)
   )
 }
 
-main(rsaProjectPath, core, execInProject)
+setUpRscTestProject(
+  testProjectPath,
+  testProjectAndFixtureName,
+  core,
+  execInProject
+)

@@ -12,17 +12,18 @@ Go into the github actions folder
 `cd .github/actions`
 
 Then run the following command to execute the action
-`node set-up-rsc-from-fixture/setUpRscFixtureLocally.mjs`
+`node set-up-rsa-project/setUpRsaProjectLocally.mjs`
 
 ## Design
 
-The main logic of the action is in the `setUpRscFixture.mjs` file. To be able
-to run that code both on GitHub and locally it uses dependency injection. The
-injection is done by `setupRscFixtureLocally.mjs` for when you want to run
-the action on your own machine and by `setupRscFixtureGitHib.mjs` when it's
+The main logic of the action is in the `../actionsLib.mjs` file. To be able to
+run that code both on GitHub and locally it uses dependency injection. The
+injection is done by `setupRsaProjectLocally.mjs` for when you want to run the
+action on your own machine and by `setupRsaProjectGitHib.mjs` when it's
 triggered by GitHub CI.
 
 When doing further changes to the code here it's very important to keep the
 DI scripts as light on logic as possible. Ideally all logic is kept to
-`setUpRscFixture.mjs` so that the same logic is used both locally and on
-GitHub.
+`../actionsLib.mjs` so that the same logic is used both locally and on GitHub.
+Do note though that more actions share that code, so make sure not to break
+the other actions when making changes there.
