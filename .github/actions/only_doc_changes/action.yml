@@ -4,6 +4,5 @@ outputs:
   only-doc-changes:
     description: If the PR only changes docs
 runs:
-  # `node18` isn't supported yet
-  using: node16
+  using: node20
   main: only_doc_changes.mjs
