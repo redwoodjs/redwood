@@ -27,7 +27,10 @@ async function main() {
     // starting point.
     if (
       changedFile.startsWith('tasks/smoke-tests/rsc/') ||
+      changedFile.startsWith('tasks/smoke-tests/rsa/') ||
       changedFile.startsWith('tasks/smoke-tests/basePlaywright.config.ts') ||
+      changedFile.startsWith('.github/actions/set-up-rsa-project/') ||
+      changedFile.startsWith('.github/actions/set-up-rsc-external-packages-project/') ||
       changedFile.startsWith('.github/actions/set-up-rsc-project/') ||
       changedFile.startsWith('github/actions/rsc_related_changes/') ||
       changedFile.startsWith('packages/internal/') ||
