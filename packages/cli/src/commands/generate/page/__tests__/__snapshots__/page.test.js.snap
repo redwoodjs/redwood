@@ -2,12 +2,12 @@
 
 exports[`Plural word files creates a page component with a plural word for name 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const CatsPage = () => {
   return (
     <>
-      <MetaTags title="Cats" description="Cats page" />
+      <Metadata title="Cats" description="Cats page" />
 
       <h1>CatsPage</h1>
       <p>
@@ -27,12 +27,12 @@ export default CatsPage
 
 exports[`Single world files creates a page component 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const HomePage = () => {
   return (
     <>
-      <MetaTags title="Home" description="Home page" />
+      <Metadata title="Home" description="Home page" />
 
       <h1>HomePage</h1>
       <p>
@@ -83,7 +83,7 @@ describe('HomePage', () => {
 
 exports[`TS Files TS Params 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 type TsParamFilesPageProps = {
   id: string
@@ -92,7 +92,7 @@ type TsParamFilesPageProps = {
 const TsParamFilesPage = ({ id }: TsParamFilesPageProps) => {
   return (
     <>
-      <MetaTags title="TsParamFiles" description="TsParamFiles page" />
+      <Metadata title="TsParamFiles" description="TsParamFiles page" />
 
       <h1>TsParamFilesPage</h1>
       <p>
@@ -114,7 +114,7 @@ export default TsParamFilesPage
 
 exports[`TS Files TS Params with type 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 type TsParamTypeFilesPageProps = {
   id: number
@@ -123,7 +123,7 @@ type TsParamTypeFilesPageProps = {
 const TsParamTypeFilesPage = ({ id }: TsParamTypeFilesPageProps) => {
   return (
     <>
-      <MetaTags title="TsParamTypeFiles" description="TsParamTypeFiles page" />
+      <Metadata title="TsParamTypeFiles" description="TsParamTypeFiles page" />
 
       <h1>TsParamTypeFilesPage</h1>
       <p>
@@ -151,12 +151,12 @@ export default TsParamTypeFilesPage
 
 exports[`TS Files generates typescript pages 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const TsFilesPage = () => {
   return (
     <>
-      <MetaTags title="TsFiles" description="TsFiles page" />
+      <Metadata title="TsFiles" description="TsFiles page" />
 
       <h1>TsFilesPage</h1>
       <p>
@@ -249,12 +249,12 @@ describe('HomePage', () => {
 exports[`handler file generation 3`] = `
 {
   "fileContent": "import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const HomePage = () => {
   return (
     <>
-      <MetaTags title="Home" description="Home page" />
+      <Metadata title="Home" description="Home page" />
 
       <h1>HomePage</h1>
       <p>
@@ -333,12 +333,12 @@ describe('PostPage', () => {
 exports[`handler file generation with route params 3`] = `
 {
   "fileContent": "import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const PostPage = ({ id }) => {
   return (
     <>
-      <MetaTags title="Post" description="Post page" />
+      <Metadata title="Post" description="Post page" />
 
       <h1>PostPage</h1>
       <p>
@@ -380,12 +380,12 @@ export default Routes",
 
 exports[`multiWorldFiles creates a page component 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const ContactUsPage = () => {
   return (
     <>
-      <MetaTags title="ContactUs" description="ContactUs page" />
+      <Metadata title="ContactUs" description="ContactUs page" />
 
       <h1>ContactUsPage</h1>
       <p>
@@ -436,12 +436,12 @@ describe('ContactUsPage', () => {
 
 exports[`paramFiles creates a page component with params 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const PostPage = ({ id }) => {
   return (
     <>
-      <MetaTags title="Post" description="Post page" />
+      <Metadata title="Post" description="Post page" />
 
       <h1>PostPage</h1>
       <p>
