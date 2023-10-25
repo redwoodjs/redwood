@@ -10,6 +10,7 @@ export const createAuthDecoder = (cookieNameOption: string): Decoder => {
       return null
     }
 
+    // @TODO for SSR we need to make sure we are passing the cookie from the FE to the BE
     const session = dbAuthSession(req.event, cookieNameOption)
     const authHeaderUserId = token
 

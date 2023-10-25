@@ -7,6 +7,8 @@ import type {
   ReactDOMServerReadableStream,
 } from 'react-dom/server'
 
+import { ServerAuthProvider } from '@redwoodjs/auth'
+import type { AuthProviderState } from '@redwoodjs/auth/src/AuthProvider/AuthProviderState'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
 import {
@@ -26,6 +28,7 @@ interface RenderToStreamArgs {
   cssLinks: string[]
   isProd: boolean
   jsBundles?: string[]
+  authState?: AuthProviderState<never> | undefined
 }
 
 interface StreamOptions {
@@ -46,7 +49,9 @@ export async function reactRenderToStreamResponse(
     cssLinks,
     isProd,
     jsBundles = [],
+    authState,
   } = renderOptions
+  console.log(`👉 \n ~ file: streamHelpers.ts:54 ~ authState:`, authState)
 
   if (!isProd) {
     // For development, we need to inject the react-refresh runtime
@@ -84,15 +89,21 @@ export async function reactRenderToStreamResponse(
 
   const renderRoot = (path: string) => {
     return React.createElement(
-      ServerHtmlProvider,
+      ServerAuthProvider,
       {
-        value: injectToPage,
+        value: authState,
       },
-      ServerEntry({
-        url: path,
-        css: cssLinks,
-        meta: metaTags,
-      })
+      React.createElement(
+        ServerHtmlProvider,
+        {
+          value: injectToPage,
+        },
+        ServerEntry({
+          url: path,
+          css: cssLinks,
+          meta: metaTags,
+        })
+      )
     )
   }
 

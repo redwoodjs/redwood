@@ -50,6 +50,8 @@ export const createReactStreamingHandler = async (
       })
     }
 
+    let decodedAuthState
+
     // Do this inside the handler for **dev-only**.
     // This makes sure that changes to entry-server are picked up on refresh
     if (!isProd) {
@@ -59,6 +61,12 @@ export const createReactStreamingHandler = async (
       fallbackDocumentImport = await viteDevServer.ssrLoadModule(
         rwPaths.web.document
       )
+
+      const middleware = entryServerImport.middleware
+
+      if (middleware) {
+        decodedAuthState = await middleware(req)
+      }
     }
 
     const ServerEntry =
@@ -112,6 +120,7 @@ export const createReactStreamingHandler = async (
         cssLinks,
         isProd,
         jsBundles,
+        authState: decodedAuthState,
       },
       {
         waitForAllReady: isSeoCrawler,

@@ -76,6 +76,7 @@ export const getAuthenticationContext = async ({
   }
 
   const { schema, token } = parseAuthorizationHeader(event)
+  console.log(`👉 \n ~ file: index.ts:79 ~ token:`, token)
 
   let authDecoders: Array<Decoder> = []
 
