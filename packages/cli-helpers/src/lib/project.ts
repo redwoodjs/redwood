@@ -1,10 +1,15 @@
 import fs from 'fs'
 import path from 'path'
 
-import * as toml from 'toml'
+import type { JsonMap } from '@iarna/toml'
+import toml from '@iarna/toml'
 
-import { resolveFile, findUp } from '@redwoodjs/project-config'
-import { getConfigPath } from '@redwoodjs/project-config'
+import {
+  findUp,
+  getConfigPath,
+  getConfig,
+  resolveFile,
+} from '@redwoodjs/project-config'
 
 import { colors } from './colors'
 import { getPaths } from './paths'
@@ -46,35 +51,48 @@ export const getInstalledRedwoodVersion = () => {
  */
 export const updateTomlConfig = (packageName: string) => {
   const redwoodTomlPath = getConfigPath()
+  const originalTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
 
-  const configLines = []
+  let tomlToAppend = {} as JsonMap
 
-  const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
-  const config = toml.parse(configContent)
+  const config = getConfig(redwoodTomlPath) // ?
 
-  if (!config || !config.experimental || !config.experimental.cli) {
-    configLines.push('[experimental.cli]')
-  }
+  const cliSection = config.experimental?.cli // ?
 
-  if (!config?.experimental?.cli?.autoInstall) {
-    configLines.push('  autoInstall = true')
-  }
-
-  if (!config?.experimental?.cli?.plugins) {
-    // If plugins array is missing, create it.
-    configLines.push('  [[experimental.cli.plugins]]')
-  }
-
-  // Check if the package is not already in the plugins array
-  if (
-    !config?.experimental?.cli?.plugins?.some(
-      (plugin: any) => plugin.package === packageName
+  if (!cliSection) {
+    tomlToAppend = {
+      experimental: {
+        cli: {
+          autoInstall: true,
+          plugins: [{ package: packageName, enabled: true }],
+        },
+      },
+    }
+  } else if (cliSection.plugins) {
+    const packageExists = cliSection.plugins.some(
+      (plugin) => plugin.package === packageName
     )
-  ) {
-    configLines.push(`    package = "${packageName}"`)
+
+    if (!packageExists) {
+      tomlToAppend = {
+        experimental: {
+          cli: {
+            plugins: [{ package: packageName, enabled: true }],
+          },
+        },
+      }
+    }
+  } else {
+    tomlToAppend = {
+      experimental: {
+        cli: {
+          plugins: [{ package: packageName, enabled: true }],
+        },
+      },
+    }
   }
 
-  const newConfig = configContent + configLines.join('\n')
+  const newConfig = originalTomlContent + '\n' + toml.stringify(tomlToAppend) // ?
 
   return fs.writeFileSync(redwoodTomlPath, newConfig, 'utf-8')
 }

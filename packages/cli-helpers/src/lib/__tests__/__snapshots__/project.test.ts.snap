@@ -29,49 +29,80 @@ EXISTING_VAR=new_value
 `;
 
 exports[`updateTomlConfig updateTomlConfig configures a new CLI plugin adds when experimental cli has some plugins configured 1`] = `
-"
+"[web]
+title = "Redwood App"
+port = 8_910
+apiUrl = "/.redwood/functions"
+includeEnvironmentVariables = [ ]
+
+[api]
+port = 8_911
+
 [experimental.cli]
-  autoInstall = true
+autoInstall = true
+
   [[experimental.cli.plugins]]
-    package = "@existing-example/some-package-name"
-    package = "@example/test-package-name""
+  package = "@existing-example/some-package-when-cli-has-some-packages-configured"
+
+[[experimental.cli.plugins]]
+package = "@example/test-package-name"
+enabled = true
+"
 `;
 
 exports[`updateTomlConfig updateTomlConfig configures a new CLI plugin adds when experimental cli is not configured 1`] = `
-"
-[web]
-  title = "Redwood App"
-  port = 8910
-  apiUrl = "/.redwood/functions" # You can customize graphql and dbauth urls individually too: see https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths
-  includeEnvironmentVariables = [
-    # Add any ENV vars that should be available to the web side to this array
-    # See https://redwoodjs.com/docs/environment-variables#web
-  ]
+"[web]
+title = "Redwood App"
+port = 8_910
+apiUrl = "/.redwood/functions"
+includeEnvironmentVariables = [ ]
+
 [api]
-  port = 8911
-[browser]
-  open = false
-[notifications]
-  versionUpdates = ["latest"]
+port = 8_911
+
 [experimental.cli]
-  autoInstall = true
+autoInstall = true
+
   [[experimental.cli.plugins]]
-    package = "@example/test-package-name""
+  package = "@example/test-package-when-cli-not-configured"
+  enabled = true
+"
 `;
 
 exports[`updateTomlConfig updateTomlConfig configures a new CLI plugin adds when experimental cli is setup but has no plugins configured 1`] = `
-"
+"[web]
+title = "Redwood App"
+port = 8_910
+apiUrl = "/.redwood/functions"
+includeEnvironmentVariables = [ ]
+
+[api]
+port = 8_911
+
 [experimental.cli]
-  autoInstall = true
-  [[experimental.cli.plugins]]
-    package = "@example/test-package-name""
+autoInstall = true
+
+[[experimental.cli.plugins]]
+package = "@example/test-package-when-no-plugins-configured"
+enabled = true
+"
 `;
 
 exports[`updateTomlConfig updateTomlConfig configures a new CLI plugin does not add duplicate place when experimental cli has that plugin configured 1`] = `
-"
+"[web]
+title = "Redwood App"
+port = 8_910
+apiUrl = "/.redwood/functions"
+includeEnvironmentVariables = [ ]
+
+[api]
+port = 8_911
+
 [experimental.cli]
-  autoInstall = true
+autoInstall = true
+
   [[experimental.cli.plugins]]
-    package = "@existing-example/some-package-name"
+  package = "@existing-example/some-package-name-already-exists"
+
 "
 `;

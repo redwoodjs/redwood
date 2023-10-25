@@ -8392,6 +8392,7 @@ __metadata:
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.1
+    "@iarna/toml": 2.2.5
     "@opentelemetry/api": 1.4.1
     "@redwoodjs/project-config": 6.0.7
     "@redwoodjs/telemetry": 6.0.7
@@ -8408,7 +8409,6 @@ __metadata:
     prettier: 2.8.8
     prompts: 2.4.2
     terminal-link: 2.1.1
-    toml: 3.0.0
     typescript: 5.2.2
   languageName: unknown
   linkType: soft
@@ -33818,13 +33818,6 @@ __metadata:
     "@tokenizer/token": ^0.3.0
     ieee754: ^1.2.1
   checksum: cb671b2b52271362816d22b7a076082b0da033cd7807992b81ae53cfd8541bd013ac29e455c3c7a8bb4f88aa1c5315a12353c3599b7f568df238d3c1723f9d8d
-  languageName: node
-  linkType: hard
-
-"toml@npm:3.0.0":
-  version: 3.0.0
-  resolution: "toml@npm:3.0.0"
-  checksum: 8d7ed3e700ca602e5419fca343e1c595eb7aa177745141f0761a5b20874b58ee5c878cd045c408da9d130cb2b611c639912210ba96ce2f78e443569aa8060c18
   languageName: node
   linkType: hard
 

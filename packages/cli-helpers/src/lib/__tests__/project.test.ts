@@ -1,8 +1,26 @@
 import fs from 'fs'
 
+import toml from '@iarna/toml'
+
 import { updateTomlConfig, addEnvVar } from '../project' // Replace with the correct path to your module
 
 jest.mock('fs')
+
+const defaultRedwoodToml = {
+  web: {
+    title: 'Redwood App',
+    port: 8910,
+    apiUrl: '/.redwood/functions',
+    includeEnvironmentVariables: [],
+  },
+  api: {
+    port: 8911,
+  },
+}
+
+const getRedwoodToml = () => {
+  return defaultRedwoodToml
+}
 
 jest.mock('@redwoodjs/project-config', () => {
   return {
@@ -17,7 +35,9 @@ jest.mock('@redwoodjs/project-config', () => {
     getConfigPath: () => {
       return '.redwood.toml'
     },
-    getConfig: jest.fn(),
+    getConfig: () => {
+      return getRedwoodToml()
+    },
   }
 })
 
@@ -91,23 +111,6 @@ describe('addEnvVar', () => {
 })
 
 describe('updateTomlConfig', () => {
-  let tomlFileContent = `
-[web]
-  title = "Redwood App"
-  port = 8910
-  apiUrl = "/.redwood/functions" # You can customize graphql and dbauth urls individually too: see https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths
-  includeEnvironmentVariables = [
-    # Add any ENV vars that should be available to the web side to this array
-    # See https://redwoodjs.com/docs/environment-variables#web
-  ]
-[api]
-  port = 8911
-[browser]
-  open = false
-[notifications]
-  versionUpdates = ["latest"]
-`
-
   describe('updateTomlConfig configures a new CLI plugin', () => {
     beforeEach(() => {
       jest.spyOn(fs, 'existsSync').mockImplementation(() => {
@@ -115,7 +118,7 @@ describe('updateTomlConfig', () => {
       })
 
       jest.spyOn(fs, 'readFileSync').mockImplementation(() => {
-        return tomlFileContent
+        return toml.stringify(defaultRedwoodToml)
       })
 
       jest
@@ -128,43 +131,62 @@ describe('updateTomlConfig', () => {
 
     afterEach(() => {
       jest.restoreAllMocks()
-      tomlFileContent = ''
     })
 
     it('adds when experimental cli is not configured', () => {
-      tomlFileContent += ''
-      const file = updateTomlConfig('@example/test-package-name')
+      const file = updateTomlConfig(
+        '@example/test-package-when-cli-not-configured'
+      )
       expect(file).toMatchSnapshot()
     })
 
     it('adds when experimental cli has some plugins configured', () => {
-      tomlFileContent += `
-[experimental.cli]
-  autoInstall = true
-  [[experimental.cli.plugins]]
-    package = "@existing-example/some-package-name"
-`
+      defaultRedwoodToml['experimental'] = {
+        cli: {
+          autoInstall: true,
+          plugins: [
+            {
+              package:
+                '@existing-example/some-package-when-cli-has-some-packages-configured',
+            },
+          ],
+        },
+      }
+
       const file = updateTomlConfig('@example/test-package-name')
       expect(file).toMatchSnapshot()
     })
 
     it('adds when experimental cli is setup but has no plugins configured', () => {
-      tomlFileContent += `
-[experimental.cli]
-  autoInstall = true
-`
-      const file = updateTomlConfig('@example/test-package-name')
+      defaultRedwoodToml['experimental'] = {
+        cli: {
+          autoInstall: true,
+        },
+      }
+
+      const file = updateTomlConfig(
+        '@example/test-package-when-no-plugins-configured'
+      )
+
       expect(file).toMatchSnapshot()
     })
 
     it('does not add duplicate place when experimental cli has that plugin configured', () => {
-      tomlFileContent += `
-[experimental.cli]
-  autoInstall = true
-  [[experimental.cli.plugins]]
-    package = "@existing-example/some-package-name"
-`
-      const file = updateTomlConfig('@existing-example/some-package-name')
+      defaultRedwoodToml['experimental'] = {
+        cli: {
+          autoInstall: true,
+          plugins: [
+            {
+              package: '@existing-example/some-package-name-already-exists',
+            },
+          ],
+        },
+      }
+
+      const file = updateTomlConfig(
+        '@existing-example/some-package-name-already-exists'
+      )
+
       expect(file).toMatchSnapshot()
     })
   })
