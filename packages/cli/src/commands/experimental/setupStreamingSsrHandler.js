@@ -3,6 +3,7 @@ import path from 'path'
 
 import { Listr } from 'listr2'
 
+import { addWebPackages } from '@redwoodjs/cli-helpers'
 import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -158,6 +159,9 @@ export const handler = async ({ force, verbose }) => {
           })
         },
       },
+      addWebPackages([
+        '@apollo/experimental-nextjs-app-support@0.0.0-commit-b8a73fe',
+      ]),
       {
         task: () => {
           printTaskEpilogue(command, description, EXPERIMENTAL_TOPIC_ID)
