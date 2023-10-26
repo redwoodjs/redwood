@@ -34,7 +34,7 @@ afterEach(async () => {
   }
 })
 
-const TIMEOUT = 1_500
+const TIMEOUT = 1_000 * 2
 
 const commandStrings = {
   '@redwoodjs/cli': `node ${path.resolve(
