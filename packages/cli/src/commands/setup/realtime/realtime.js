@@ -10,7 +10,7 @@ export function builder(yargs) {
       alias: ['e', 'examples'],
       default: true,
       description:
-        'Include examples how to implement liveQueries and subscriptions',
+        'Include examples of how to implement liveQueries and subscriptions',
       type: 'boolean',
     })
     .option('force', {
