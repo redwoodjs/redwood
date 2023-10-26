@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.1",
+    "@babel/runtime-corejs3": "7.23.2",
     "@clerk/clerk-sdk-node": "4.12.6",
     "core-js": "3.32.2"
   },

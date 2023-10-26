@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.22.20",
-    "@babel/runtime-corejs3": "7.23.1",
+    "@babel/runtime-corejs3": "7.23.2",
     "@iarna/toml": "2.2.5",
     "@opentelemetry/api": "1.4.1",
     "@redwoodjs/project-config": "6.0.7",
