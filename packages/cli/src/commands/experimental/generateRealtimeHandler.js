@@ -17,9 +17,13 @@ import {
 } from '../../lib'
 import c from '../../lib/colors'
 import { isTypeScriptProject } from '../../lib/project'
+import {
+  command,
+  description,
+  EXPERIMENTAL_TOPIC_ID,
+} from '../setup/realtime/realtime'
 
-import { command, description, EXPERIMENTAL_TOPIC_ID } from './setupRealtime'
-import { printTaskEpilogue, isServerFileSetup, isRealtimeSetup } from './util'
+import { isServerFileSetup, isRealtimeSetup, printTaskEpilogue } from './util'
 
 const templateVariables = (name) => {
   name = singular(name.toLowerCase())

@@ -67,7 +67,7 @@ export const isRealtimeSetup = () => {
 
   if (!fs.existsSync(realtimePath)) {
     throw new Error(
-      'Adding realtime events to requires that RedwoodJS Realtime be setup. Please run `yarn rw exp setup-realtime` first.'
+      'Adding realtime events to requires that RedwoodJS Realtime be setup. Please run `yarn setup realtime` first.'
     )
   }
 

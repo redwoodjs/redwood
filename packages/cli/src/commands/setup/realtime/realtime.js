@@ -1,12 +1,8 @@
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { getEpilogue } from './util'
+export const command = 'realtime'
 
-export const EXPERIMENTAL_TOPIC_ID = 5002
-
-export const command = 'setup-realtime'
-
-export const description = 'Setup the experimental RedwoodJS Realtime feature'
+export const description = 'Setup RedwoodJS Realtime'
 
 export function builder(yargs) {
   yargs
@@ -29,16 +25,15 @@ export function builder(yargs) {
       description: 'Print more logs',
       type: 'boolean',
     })
-    .epilogue(getEpilogue(command, description, EXPERIMENTAL_TOPIC_ID, true))
 }
 
 export async function handler(options) {
   recordTelemetryAttributes({
-    command: 'experimental setup-realtime',
+    command: 'setup realtime',
     includeExamples: options.includeExamples,
     force: options.force,
     verbose: options.verbose,
   })
-  const { handler } = await import('./setupRealtimeHandler.js')
+  const { handler } = await import('./realtimeHandler.js')
   return handler(options)
 }
