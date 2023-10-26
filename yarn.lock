@@ -8076,12 +8076,10 @@ __metadata:
     "@redwoodjs/cli-helpers": 6.0.7
     "@simplewebauthn/browser": 7.2.0
     "@simplewebauthn/typescript-types": 7.0.0
-    "@types/secure-random-password": 0.2.1
     "@types/yargs": 17.0.24
     core-js: 3.32.2
     jest: 29.7.0
     prompts: 2.4.2
-    secure-random-password: 0.2.3
     terminal-link: 2.1.1
     typescript: 5.2.2
   languageName: unknown
@@ -8462,7 +8460,6 @@ __metadata:
     "@redwoodjs/structure": 6.0.7
     "@redwoodjs/telemetry": 6.0.7
     "@types/crypto-js": 4.1.1
-    "@types/secure-random-password": 0.2.1
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
@@ -8492,7 +8489,6 @@ __metadata:
     prisma: 5.4.2
     prompts: 2.4.2
     rimraf: 5.0.1
-    secure-random-password: 0.2.3
     semver: 7.5.3
     string-env-interpolation: 1.0.1
     systeminformation: 5.21.7
@@ -12166,13 +12162,6 @@ __metadata:
   version: 0.16.3
   resolution: "@types/scheduler@npm:0.16.3"
   checksum: c249d4b96fa05165ac22c214f94a045ee0af8beedefdbc54b769febd0044cab3a874e55419841a0dcc76439e379a63e257f3253c87168e3261e7bc783d623302
-  languageName: node
-  linkType: hard
-
-"@types/secure-random-password@npm:0.2.1":
-  version: 0.2.1
-  resolution: "@types/secure-random-password@npm:0.2.1"
-  checksum: 87f0528b7ccb907706b0cc77160c6771279508de3852213f2c4f28a83af482b016cf3e0b414f62d2e8b3713f1733ad787e3bd40c201463ac822c117856a7886a
   languageName: node
   linkType: hard
 
@@ -31689,22 +31678,6 @@ __metadata:
   version: 2.7.0
   resolution: "secure-json-parse@npm:2.7.0"
   checksum: f57eb6a44a38a3eeaf3548228585d769d788f59007454214fab9ed7f01fbf2e0f1929111da6db28cf0bcc1a2e89db5219a59e83eeaec3a54e413a0197ce879e4
-  languageName: node
-  linkType: hard
-
-"secure-random-password@npm:0.2.3":
-  version: 0.2.3
-  resolution: "secure-random-password@npm:0.2.3"
-  dependencies:
-    secure-random: ^1.1.2
-  checksum: ced04529b96724b921b82b7527e1ba2f1299c3f327f941076e9edaea66445118b67a6b7f6edfe3b705a240e595de49144b2b796116c994cb52eb52efdd3d51b5
-  languageName: node
-  linkType: hard
-
-"secure-random@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "secure-random@npm:1.1.2"
-  checksum: 612934cd5b1ea217d5e248a16ff2752411474997ede1f460ff37fe3214eedfd66ef6a5936ff76b3a5df3d057a8d2d4ed48298f5500bf837beb911522caac7f5c
   languageName: node
   linkType: hard
 
