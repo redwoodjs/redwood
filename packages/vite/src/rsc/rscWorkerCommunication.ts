@@ -1,9 +1,9 @@
-// TODO (RSC) Take ownership of this file and move it out ouf the waku-lib folder
+import path from 'node:path'
 import { PassThrough } from 'node:stream'
 import type { Readable } from 'node:stream'
 import { Worker } from 'node:worker_threads'
 
-const worker = new Worker(new URL('rsc-handler-worker.js', import.meta.url), {
+const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
   execArgv: ['--conditions', 'react-server'],
 })
 
@@ -48,29 +48,32 @@ export type MessageRes =
   | { id: number; type: 'err'; err: unknown }
   | { id: number; type: 'customModules'; modules: CustomModules }
 
-const messageCallbacks = new Map<number, (mesg: MessageRes) => void>()
+const messageCallbacks = new Map<number, (message: MessageRes) => void>()
 
-worker.on('message', (mesg: MessageRes) => {
-  if ('id' in mesg) {
-    messageCallbacks.get(mesg.id)?.(mesg)
+worker.on('message', (message: MessageRes) => {
+  if ('id' in message) {
+    messageCallbacks.get(message.id)?.(message)
   }
 })
 
 export function registerReloadCallback(fn: (type: 'full-reload') => void) {
-  const listener = (mesg: MessageRes) => {
-    if (mesg.type === 'full-reload') {
-      fn(mesg.type)
+  const listener = (message: MessageRes) => {
+    if (message.type === 'full-reload') {
+      fn(message.type)
     }
   }
+
   worker.on('message', listener)
+
   return () => worker.off('message', listener)
 }
 
 export function shutdown() {
   return new Promise<void>((resolve) => {
     worker.on('close', resolve)
-    const mesg: MessageReq = { type: 'shutdown' }
-    worker.postMessage(mesg)
+
+    const message: MessageReq = { type: 'shutdown' }
+    worker.postMessage(message)
   })
 }
 
@@ -79,73 +82,83 @@ let nextId = 1
 export function setClientEntries(
   value: 'load' | Record<string, string>
 ): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const id = nextId++
-    messageCallbacks.set(id, (mesg) => {
-      if (mesg.type === 'end') {
+
+    messageCallbacks.set(id, (message) => {
+      if (message.type === 'end') {
         resolve()
         messageCallbacks.delete(id)
-      } else if (mesg.type === 'err') {
-        reject(mesg.err)
+      } else if (message.type === 'err') {
+        reject(message.err)
         messageCallbacks.delete(id)
       }
     })
-    const mesg: MessageReq = { id, type: 'setClientEntries', value }
-    worker.postMessage(mesg)
+
+    const message: MessageReq = { id, type: 'setClientEntries', value }
+    worker.postMessage(message)
   })
 }
 
-export function renderRSC(input: RenderInput): Readable {
+export function renderRsc(input: RenderInput): Readable {
+  // TODO (RSC): What's the biggest number JS handles here? What happens when
+  // it overflows? Will it just start over at 0? If so, we should be fine. If
+  // not, we need to figure out a more robust way to handle this.
   const id = nextId++
   const passthrough = new PassThrough()
-  messageCallbacks.set(id, (mesg) => {
-    if (mesg.type === 'buf') {
-      passthrough.write(Buffer.from(mesg.buf, mesg.offset, mesg.len))
-    } else if (mesg.type === 'end') {
+
+  messageCallbacks.set(id, (message) => {
+    if (message.type === 'buf') {
+      passthrough.write(Buffer.from(message.buf, message.offset, message.len))
+    } else if (message.type === 'end') {
       passthrough.end()
       messageCallbacks.delete(id)
-    } else if (mesg.type === 'err') {
+    } else if (message.type === 'err') {
       passthrough.destroy(
-        mesg.err instanceof Error ? mesg.err : new Error(String(mesg.err))
+        message.err instanceof Error
+          ? message.err
+          : new Error(String(message.err))
       )
       messageCallbacks.delete(id)
     }
   })
-  const mesg: MessageReq = { id, type: 'render', input }
-  worker.postMessage(mesg)
+
+  const message: MessageReq = { id, type: 'render', input }
+  worker.postMessage(message)
+
   return passthrough
 }
 
 export function getCustomModulesRSC(): Promise<CustomModules> {
   return new Promise<CustomModules>((resolve, reject) => {
     const id = nextId++
-    messageCallbacks.set(id, (mesg) => {
-      if (mesg.type === 'customModules') {
-        resolve(mesg.modules)
+    messageCallbacks.set(id, (message) => {
+      if (message.type === 'customModules') {
+        resolve(message.modules)
         messageCallbacks.delete(id)
-      } else if (mesg.type === 'err') {
-        reject(mesg.err)
+      } else if (message.type === 'err') {
+        reject(message.err)
         messageCallbacks.delete(id)
       }
     })
-    const mesg: MessageReq = { id, type: 'getCustomModules' }
-    worker.postMessage(mesg)
+    const message: MessageReq = { id, type: 'getCustomModules' }
+    worker.postMessage(message)
   })
 }
 
 export function buildRSC(): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     const id = nextId++
-    messageCallbacks.set(id, (mesg) => {
-      if (mesg.type === 'end') {
+    messageCallbacks.set(id, (message) => {
+      if (message.type === 'end') {
         resolve()
         messageCallbacks.delete(id)
-      } else if (mesg.type === 'err') {
-        reject(mesg.err)
+      } else if (message.type === 'err') {
+        reject(message.err)
         messageCallbacks.delete(id)
       }
     })
-    const mesg: MessageReq = { id, type: 'build' }
-    worker.postMessage(mesg)
+    const message: MessageReq = { id, type: 'build' }
+    worker.postMessage(message)
   })
 }

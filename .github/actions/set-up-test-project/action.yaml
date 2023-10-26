@@ -2,8 +2,7 @@ name: Set up test project
 description: Sets up the test project fixture in CI for smoke tests and CLI checks
 
 runs:
-  # `node18` isn't supported yet
-  using: node16
+  using: node20
   main: 'setUpTestProject.mjs'
 
 inputs:

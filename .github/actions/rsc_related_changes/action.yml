@@ -4,6 +4,5 @@ outputs:
   rsc-related-changes:
     description: If the PR makes any RSC related changes
 runs:
-  # `node18` isn't supported yet
-  using: node16
+  using: node20
   main: rsc_related_changes.mjs
