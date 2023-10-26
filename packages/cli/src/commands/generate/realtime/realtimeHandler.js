@@ -9,21 +9,16 @@ import prompts from 'prompts'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
+// Move this check out of experimental when server file is moved as well
 import {
   generateTemplate,
   getPaths,
   transformTSToJS,
   writeFile,
-} from '../../lib'
-import c from '../../lib/colors'
-import { isTypeScriptProject } from '../../lib/project'
-import {
-  command,
-  description,
-  EXPERIMENTAL_TOPIC_ID,
-} from '../setup/realtime/realtime'
-
-import { isServerFileSetup, isRealtimeSetup, printTaskEpilogue } from './util'
+} from '../../../lib'
+import c from '../../../lib/colors'
+import { isTypeScriptProject } from '../../../lib/project'
+import { isRealtimeSetup, isServerFileSetup } from '../../experimental/util.js'
 
 const templateVariables = (name) => {
   name = singular(name.toLowerCase())
@@ -78,20 +73,6 @@ export async function handler({ name, type, force, verbose }) {
 
   const tasks = new Listr(
     [
-      {
-        title: 'Confirmation',
-        task: async (_ctx, task) => {
-          const confirmation = await task.prompt({
-            type: 'Confirm',
-            message:
-              'Realtime is currently an experimental RedwoodJS feature. Continue?',
-          })
-
-          if (!confirmation) {
-            throw new Error('User aborted')
-          }
-        },
-      },
       {
         title: 'Checking for realtime environment prerequisites ...',
         task: () => {
@@ -250,11 +231,6 @@ export async function handler({ name, type, force, verbose }) {
           console.log(
             'Note: You may need to manually restart GraphQL in VSCode to see the new types take effect.\n\n'
           )
-        },
-      },
-      {
-        task: () => {
-          printTaskEpilogue(command, description, EXPERIMENTAL_TOPIC_ID)
         },
       },
     ],
