@@ -5,7 +5,7 @@ const path = require('path')
 
 const {
   getExecaOptions: utilGetExecaOptions,
-  // applyCodemod,
+  applyCodemod,
   updatePkgJsonScripts,
   exec,
 } = require('./util')
@@ -31,28 +31,6 @@ function fullPath(name, { addExtension } = { addExtension: true }) {
   return path.join(OUTPUT_PATH, name)
 }
 
-// TODO: Import from ./util.js when everything is using @rwjs/tui
-async function applyCodemod(codemod, target) {
-  const args = [
-    '--fail-on-error',
-    '-t',
-    `${path.resolve(__dirname, 'codemods', codemod)} ${target}`,
-    '--parser',
-    'tsx',
-    '--verbose=2',
-  ]
-
-  args.push()
-
-  const subprocess = exec(
-    'yarn jscodeshift',
-    args,
-    getExecaOptions(path.resolve(__dirname))
-  )
-
-  return subprocess
-}
-
 /**
  * @param {string} cmd The command to run
  * @returns {((positionalArguments: string | string[]) => import('execa').ExecaChildProcess<string>)
@@ -74,14 +52,14 @@ const createBuilder = (cmd) => {
   }
 }
 
+const createPage = createBuilder('yarn redwood g page')
+
 async function webTasks(outputPath, { linkWithLatestFwBuild }) {
   OUTPUT_PATH = outputPath
 
   const execaOptions = getExecaOptions(outputPath)
 
   const createPages = async () => {
-    const createPage = createBuilder('yarn redwood g page')
-
     /** @type import('./typing').TuiTaskList */
     const tuiTaskList = [
       {
