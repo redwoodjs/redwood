@@ -96,6 +96,7 @@ export interface Config {
   experimental: {
     opentelemetry: {
       enabled: boolean
+      wrapApi: boolean
       apiSdk?: string
     }
     studio: StudioConfig
@@ -152,6 +153,7 @@ const DEFAULT_CONFIG: Config = {
   experimental: {
     opentelemetry: {
       enabled: false,
+      wrapApi: true,
       apiSdk: undefined,
     },
     studio: {

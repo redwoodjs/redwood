@@ -69,7 +69,7 @@ export const handler = async ({ force, verbose }) => {
           writeFile(
             redwoodTomlPath,
             configContent.concat(
-              `\n[experimental.opentelemetry]\n\tenabled = true\n\tapiSdk = "${opentelemetryScriptPath}"`
+              `\n[experimental.opentelemetry]\n\tenabled = true\n\twrapApi = true\n\tapiSdk = "${opentelemetryScriptPath}"`
             ),
             {
               overwriteExisting: true, // redwood.toml always exists

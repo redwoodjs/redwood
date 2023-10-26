@@ -57,6 +57,7 @@ describe('getConfig', () => {
           "opentelemetry": {
             "apiSdk": undefined,
             "enabled": false,
+            "wrapApi": true,
           },
           "studio": {
             "graphiql": {
