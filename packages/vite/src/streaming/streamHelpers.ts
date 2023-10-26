@@ -28,7 +28,7 @@ interface RenderToStreamArgs {
   cssLinks: string[]
   isProd: boolean
   jsBundles?: string[]
-  authState?: AuthProviderState<never> | undefined
+  authState: AuthProviderState<never> & { token: string | null }
 }
 
 interface StreamOptions {
@@ -51,7 +51,6 @@ export async function reactRenderToStreamResponse(
     jsBundles = [],
     authState,
   } = renderOptions
-  console.log(`👉 \n ~ file: streamHelpers.ts:54 ~ authState:`, authState)
 
   if (!isProd) {
     // For development, we need to inject the react-refresh runtime

@@ -147,7 +147,16 @@ export function createAuthProvider<
           signUp,
           logIn,
           logOut,
-          getToken,
+          getToken:
+            typeof window === 'undefined'
+              ? async () => {
+                  console.log(
+                    'xxxxx definitely calling this function',
+                    serverAuthState
+                  )
+                  return serverAuthState.token || null
+                }
+              : getToken,
           getCurrentUser,
           hasRole,
           reauthenticate,

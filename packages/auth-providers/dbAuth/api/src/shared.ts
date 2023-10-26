@@ -35,6 +35,10 @@ export const extractCookie = (event: APIGatewayProxyEvent) => {
   return eventGraphiQLHeadersCookie(event) || eventHeadersCookie(event)
 }
 
+function extractSessionFromHeader(event: APIGatewayProxyEvent) {
+  return event.headers.authorization?.split(' ')[1]
+}
+
 // decrypts the session cookie and returns an array: [data, csrf]
 export const decryptSession = (text: string | null) => {
   if (!text || text.trim() === '') {
@@ -83,10 +87,18 @@ export const dbAuthSession = (
   event: APIGatewayProxyEvent,
   cookieNameOption: string | undefined
 ) => {
-  if (extractCookie(event)) {
+  const cookieHeader = extractCookie(event)
+  const sessionInAuthHeader = extractSessionFromHeader(event)
+
+  if (cookieHeader && !sessionInAuthHeader) {
     const [session, _csrfToken] = decryptSession(
-      getSession(extractCookie(event), cookieNameOption)
+      getSession(cookieHeader, cookieNameOption)
     )
+    return session
+  } else if (sessionInAuthHeader) {
+    const [session, _csrfToken] = decryptSession(sessionInAuthHeader)
+
+    console.log(`👉 \n ~ file: shared.ts:103 ~ session:`, session)
     return session
   } else {
     return null
