@@ -1,3 +1,5 @@
+import crypto from 'node:crypto'
+
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
 
@@ -116,10 +118,21 @@ export const hashToken = (token: string) => {
 // hashes a password using either the given `salt` argument, or creates a new
 // salt and hashes using that. Either way, returns an array with [hash, salt]
 export const hashPassword = (text: string, salt?: string) => {
-  const useSalt = salt || CryptoJS.lib.WordArray.random(128 / 8).toString()
-
+  const useSalt = salt || crypto.randomBytes(32).toString('hex')
   return [
-    CryptoJS.PBKDF2(text, useSalt, { keySize: 256 / 32 }).toString(),
+    crypto
+      .scryptSync(text, useSalt, 32, { cost: 2 ** 14, blockSize: 8 })
+      .toString('hex'),
+    useSalt,
+  ]
+}
+
+// uses the old algorithm from CryptoJS:
+//   CryptoJS.PBKDF2(password, salt, { keySize: 8 }).toString()
+export const legacyHashPassword = (text: string, salt?: string) => {
+  const useSalt = salt || crypto.randomBytes(32).toString('hex')
+  return [
+    crypto.pbkdf2Sync(text, useSalt, 1, 32, 'SHA1').toString('hex'),
     useSalt,
   ]
 }

@@ -27,6 +27,7 @@ import {
   extractCookie,
   getSession,
   hashPassword,
+  legacyHashPassword,
   hashToken,
   webAuthnSession,
 } from './shared'
@@ -637,11 +638,13 @@ export class DbAuthHandler<
 
     let user = await this._findUserByToken(resetToken as string)
     const [hashedPassword] = hashPassword(password, user.salt)
+    const [legacyHashedPassword] = legacyHashPassword(password, user.salt)
 
     if (
-      !(this.options.resetPassword as ResetPasswordFlowOptions)
+      (!(this.options.resetPassword as ResetPasswordFlowOptions)
         .allowReusedPassword &&
-      user.hashedPassword === hashedPassword
+        user.hashedPassword === hashedPassword) ||
+      user.hashedPassword === legacyHashedPassword
     ) {
       throw new DbAuthError.ReusedPasswordError(
         (
@@ -1279,16 +1282,36 @@ export class DbAuthHandler<
       )
     }
 
-    // is password correct?
-    const [hashedPassword, _salt] = hashPassword(
+    await this._verifyPassword(user, password)
+    return user
+  }
+
+  async _verifyPassword(user: Record<string, unknown>, password: string) {
+    const [hashedPassword] = hashPassword(
       password,
-      user[this.options.authFields.salt]
+      user[this.options.authFields.salt] as string
     )
+
     if (hashedPassword === user[this.options.authFields.hashedPassword]) {
+      return user
+    }
+
+    // fallback to old CryptoJS hashing
+    const [legacyHashedPassword] = legacyHashPassword(
+      password,
+      user[this.options.authFields.salt] as string
+    )
+
+    if (legacyHashedPassword === user[this.options.authFields.hashedPassword]) {
+      // update user's hash to the new algorithm
+      await this.dbAccessor.update({
+        where: { id: user.id },
+        data: { [this.options.authFields.hashedPassword]: hashedPassword },
+      })
       return user
     } else {
       throw new DbAuthError.IncorrectPasswordError(
-        username,
+        user[this.options.authFields.username] as string,
         (this.options.login as LoginFlowOptions)?.errors?.incorrectPassword
       )
     }

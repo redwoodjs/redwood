@@ -102,9 +102,10 @@ const createDbUser = async (attributes = {}) => {
   return await db.user.create({
     data: {
       email: 'rob@redwoodjs.com',
+      // default hashedPassword is from `node:crypto`
       hashedPassword:
-        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba',
-      salt: '2ef27f4073c603ba8b7807c6de6d6a89',
+        '230847bea5154b6c7d281d09593ad1be26fa03a93c04a73bcc2b608c073a8213',
+      salt: 'ba8b7807c6de6d6a892ef27f4073c603',
       ...attributes,
     },
   })
@@ -2334,6 +2335,38 @@ describe('dbAuth', () => {
       const user = await dbAuth._verifyUser(dbUser.email, 'password')
 
       expect(user.id).toEqual(dbUser.id)
+    })
+
+    it('returns the user if password is hashed with legacy algorithm', async () => {
+      const dbUser = await createDbUser({
+        // CryptoJS hashed password
+        hashedPassword:
+          '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba',
+        salt: '2ef27f4073c603ba8b7807c6de6d6a89',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const user = await dbAuth._verifyUser(dbUser.email, 'password')
+
+      expect(user.id).toEqual(dbUser.id)
+    })
+
+    it('updates the user hashPassword to the new algorithm', async () => {
+      const dbUser = await createDbUser({
+        // CryptoJS hashed password
+        hashedPassword:
+          '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba',
+        salt: '2ef27f4073c603ba8b7807c6de6d6a89',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+      await dbAuth._verifyUser(dbUser.email, 'password')
+      const user = await db.user.findFirst({ where: { id: dbUser.id } })
+
+      // password now hashed by node:crypto
+      expect(user.hashedPassword).toEqual(
+        'f20d69d478fa1afc85057384e21bd457a76b23b23e2a94f5bd982976f700a552'
+      )
+      // salt should remain the same
+      expect(user.salt).toEqual('2ef27f4073c603ba8b7807c6de6d6a89')
     })
   })
 
