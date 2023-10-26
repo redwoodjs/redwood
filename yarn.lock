@@ -1994,8 +1994,8 @@ __metadata:
   linkType: hard
 
 "@babel/traverse@npm:^7.1.6, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.8, @babel/traverse@npm:^7.22.20, @babel/traverse@npm:^7.22.8, @babel/traverse@npm:^7.23.0":
-  version: 7.23.0
-  resolution: "@babel/traverse@npm:7.23.0"
+  version: 7.23.2
+  resolution: "@babel/traverse@npm:7.23.2"
   dependencies:
     "@babel/code-frame": ^7.22.13
     "@babel/generator": ^7.23.0
@@ -2007,7 +2007,7 @@ __metadata:
     "@babel/types": ^7.23.0
     debug: ^4.1.0
     globals: ^11.1.0
-  checksum: 84f93e64179965a0de6109a8b1ce92d66eb52a76e8ba325d27bdec6952cedd8fc98eabf09fe443ef667a051300dc7ed8924e7bf61a87ad456501d1da46657509
+  checksum: d096c7c4bab9262a2f658298a3c630ae4a15a10755bb257ae91d5ab3e3b2877438934859c8d34018b7727379fe6b26c4fa2efc81cf4c462a7fe00caf79fa02ff
   languageName: node
   linkType: hard
 
