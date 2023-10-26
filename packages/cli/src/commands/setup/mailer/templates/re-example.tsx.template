@@ -12,7 +12,7 @@ import {
   Heading,
 } from '@react-email/components'
 
-export function ContactUsEmail(
+export function ExampleEmail(
   { when }: { when: string } = { when: new Date().toLocaleString() }
 ) {
   return (
