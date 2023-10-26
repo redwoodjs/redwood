@@ -6,7 +6,10 @@ import execa from 'execa'
 import { createFastifyInstance, redwoodFastifyAPI } from '@redwoodjs/fastify'
 import { getPaths } from '@redwoodjs/project-config'
 
-export const apiExperimentalServerFileHandler = async () => {
+/**
+ * @returns doesn't pass args through
+ */
+export const apiExperimentalServerFileHandler = async (_argv) => {
   logExperimentalHeader()
 
   await execa('yarn', ['node', path.join('dist', 'server.js')], {

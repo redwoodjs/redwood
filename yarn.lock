@@ -7364,6 +7364,7 @@ __metadata:
     fastify-raw-body: "npm:4.3.0"
     jest: "npm:29.7.0"
     lodash: "npm:4.17.21"
+    pino-abstract-transport: "npm:1.1.0"
     pretty-bytes: "npm:5.6.0"
     pretty-ms: "npm:7.0.1"
     qs: "npm:6.11.2"
@@ -26909,7 +26910,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino-abstract-transport@npm:v1.1.0":
+"pino-abstract-transport@npm:1.1.0, pino-abstract-transport@npm:v1.1.0":
   version: 1.1.0
   resolution: "pino-abstract-transport@npm:1.1.0"
   dependencies:

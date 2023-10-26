@@ -71,12 +71,7 @@ export const setupServerFileTasks = (force = false) => {
         }
       },
     },
-    addApiPackages([
-      'fastify',
-      'chalk@4.1.2',
-      `@redwoodjs/fastify@${version}`,
-      `@redwoodjs/project-config@${version}`,
-    ]),
+    addApiPackages([`@redwoodjs/api-server@${version}`]),
   ]
 }
 

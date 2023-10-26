@@ -11,7 +11,7 @@ import {
 } from '@redwoodjs/fastify'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-export const bothExperimentalServerFileHandler = async () => {
+export const bothExperimentalServerFileHandler = async (argv) => {
   logExperimentalHeader()
 
   if (
@@ -26,11 +26,26 @@ export const bothExperimentalServerFileHandler = async () => {
       shell: true,
     })
   } else {
-    await execa(
+    // need to start two processes...
+    execa('yarn', ['node', path.join('dist', 'server.js')], {
+      cwd: getPaths().api.base,
+      stdio: 'inherit',
+      shell: true,
+    })
+
+    execa(
       'yarn',
-      ['node', path.join('dist', 'server.js'), '--enable-web'],
+      [
+        'rw-web-server',
+        '--port',
+        argv.port,
+        '--socket',
+        argv.socket,
+        '--api-host',
+        argv.apiHost,
+      ],
       {
-        cwd: getPaths().api.base,
+        cwd: getPaths().base,
         stdio: 'inherit',
         shell: true,
       }
