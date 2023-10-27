@@ -62,7 +62,7 @@ describe('Graphiql generator tests', () => {
   })
 
   it('throws an error if auth provider is dbAuth and no supabase env is set', async () => {
-    process.env.SESSION_SECRET = null
+    delete process.env.SESSION_SECRET
     try {
       await graphiqlHelpers.generatePayload('dbAuth', 'user-id-123')
     } catch (e) {
