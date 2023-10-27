@@ -44,13 +44,17 @@ export const printTaskEpilogue = (command, description, topicId) => {
   )
 }
 
-export const isServerFileSetup = () => {
+export const serverFileExists = () => {
   const serverFilePath = path.join(
     getPaths().api.src,
     `server.${isTypeScriptProject() ? 'ts' : 'js'}`
   )
 
-  if (!fs.existsSync(serverFilePath)) {
+  return fs.existsSync(serverFilePath)
+}
+
+export const isServerFileSetup = () => {
+  if (!serverFileExists) {
     throw new Error(
       'RedwoodJS Realtime requires a serverful environment. Please run `yarn rw exp setup-server-file` first.'
     )
@@ -59,13 +63,16 @@ export const isServerFileSetup = () => {
   return true
 }
 
-export const isRealtimeSetup = () => {
+export const realtimeExists = () => {
   const realtimePath = path.join(
     getPaths().api.lib,
     `realtime.${isTypeScriptProject() ? 'ts' : 'js'}`
   )
+  return fs.existsSync(realtimePath)
+}
 
-  if (!fs.existsSync(realtimePath)) {
+export const isRealtimeSetup = () => {
+  if (!realtimeExists) {
     throw new Error(
       'Adding realtime events to requires that RedwoodJS Realtime be setup. Please run `yarn setup realtime` first.'
     )

@@ -11,10 +11,11 @@ import { getPaths, transformTSToJS, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 // Move this check out of experimental when server file is moved as well
-import { isServerFileSetup } from '../../experimental/util.js'
+import { setupServerFileTasks } from '../../experimental/setupServerFileHandler'
+import { serverFileExists } from '../../experimental/util'
 
 const { version } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../../../package.json'), 'utf-8')
+  fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8')
 )
 
 export async function handler({ force, includeExamples, verbose }) {
@@ -28,13 +29,6 @@ export async function handler({ force, includeExamples, verbose }) {
 
   const tasks = new Listr(
     [
-      {
-        title: 'Checking for realtime environment prerequisites ...',
-        task: () => {
-          isServerFileSetup()
-          // do itself and pass f and v
-        },
-      },
       addApiPackages(['ioredis@^5', `@redwoodjs/realtime@${version}`]),
       {
         title: 'Adding the realtime api lib ...',
@@ -248,6 +242,10 @@ export async function handler({ force, includeExamples, verbose }) {
   )
 
   try {
+    if (!serverFileExists()) {
+      tasks.add(setupServerFileTasks(force))
+    }
+
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
