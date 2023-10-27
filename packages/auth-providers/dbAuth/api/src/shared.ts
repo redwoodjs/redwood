@@ -31,7 +31,7 @@ const eventGraphiQLHeadersCookie = (event: APIGatewayProxyEvent) => {
 }
 
 // decrypts session text using old CryptoJS algorithm (using node:crypto library)
-const legacyDecryptSession = (encryptedText) => {
+const legacyDecryptSession = (encryptedText: string) => {
   const cypher = Buffer.from(encryptedText, 'base64')
   const salt = cypher.slice(8, 16)
   const password = Buffer.concat([
