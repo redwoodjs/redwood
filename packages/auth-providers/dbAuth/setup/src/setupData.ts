@@ -9,7 +9,7 @@ export const functionsPath = getPaths().api.functions.replace(
   ''
 )
 
-const secret = crypto.randomBytes(64).toString('base64')
+const secret = crypto.randomBytes(32).toString('base64')
 
 export const extraTask = addEnvVarTask(
   'SESSION_SECRET',
