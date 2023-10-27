@@ -58,6 +58,12 @@ export const extractCookie = (event: APIGatewayProxyEvent) => {
   return eventGraphiQLHeadersCookie(event) || eventHeadersCookie(event)
 }
 
+// whether this encrypted session was made with the old CryptoJS algorithm
+export const isLegacySession = (text) => {
+  const [_encryptedText, iv] = text.split('|')
+  return !iv
+}
+
 // decrypts the session cookie and returns an array: [data, csrf]
 export const decryptSession = (text: string | null) => {
   if (!text || text.trim() === '') {

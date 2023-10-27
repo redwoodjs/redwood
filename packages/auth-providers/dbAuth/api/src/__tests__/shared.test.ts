@@ -9,6 +9,7 @@ import {
   getSession,
   cookieName,
   hashPassword,
+  isLegacySession,
   legacyHashPassword,
   decryptSession,
   dbAuthSession,
@@ -90,6 +91,22 @@ describe('cookieName()', () => {
   })
 })
 
+describe('isLegacySession()', () => {
+  it('returns `true` if the session cookie appears to be encrypted with CryptoJS', () => {
+    expect(
+      isLegacySession('U2FsdGVkX1+s7seQJnVgGgInxuXm13l8VvzA3Mg2fYg=')
+    ).toEqual(true)
+  })
+
+  it('returns `false` if the session cookie appears to be encrypted with node:crypto', () => {
+    expect(
+      isLegacySession(
+        'ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
+      )
+    ).toEqual(false)
+  })
+})
+
 describe('decryptSession()', () => {
   beforeEach(() => {
     process.env.SESSION_SECRET = SESSION_SECRET
@@ -118,7 +135,7 @@ describe('decryptSession()', () => {
     expect(decryptSession(text)).toEqual([first, second])
   })
 
-  it.only('decrypts a session cookie that was created with the legacy CryptoJS algorithm', () => {
+  it('decrypts a session cookie that was created with the legacy CryptoJS algorithm', () => {
     process.env.SESSION_SECRET =
       'QKxN2vFSHAf94XYynK8LUALfDuDSdFowG6evfkFX8uszh4YZqhTiqEdshrhWbwbw'
     const [json] = decryptSession(
