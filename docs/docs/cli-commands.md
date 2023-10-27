@@ -1990,6 +1990,7 @@ It's the author of the npm package's responsibility to specify the correct compa
 
 This command creates the necessary files, installs the required packages, and provides examples to setup RedwoodJS Realtime from GraphQL live queries and subscriptions. See the Realtime docs for more information.
 
+
 ```
 yarn redwood setup realtime
 ```
@@ -1998,6 +1999,12 @@ yarn redwood setup realtime
 | :------------------ | :----------------------- |
 |  `-e, --includeExamples, --examples` | Include examples of how to implement liveQueries and subscriptions. Default: true. |
 | `--force, -f`       | Forgo compatibility checks |
+
+:::note
+
+If the RedwoodJS Server is not setup, it will be installed as well.
+
+:::
 
 #### Usage
 
@@ -2014,6 +2021,15 @@ Run `yarn rw setup realtime`
 ✔ Adding NewMessage example subscription ...
 ✔ Adding Auctions example live query ...
 ✔ Generating types ...
+```
+
+
+If you have not setup the RedwoodJS server file, it will be setup:
+
+```bash
+✔ Adding the experimental server file...
+✔ Adding config to redwood.toml...
+✔ Adding required api packages...
 ```
 
 ### setup tsconfig
