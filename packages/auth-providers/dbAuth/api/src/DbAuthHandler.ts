@@ -1,3 +1,5 @@
+import crypto from 'node:crypto'
+
 import type { PrismaClient } from '@prisma/client'
 import type {
   GenerateAuthenticationOptionsOpts,
@@ -13,7 +15,6 @@ import type {
 } from '@simplewebauthn/typescript-types'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import base64url from 'base64url'
-import CryptoJS from 'crypto-js'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -24,6 +25,7 @@ import * as DbAuthError from './errors'
 import {
   cookieName,
   decryptSession,
+  encryptSession,
   extractCookie,
   getSession,
   hashPassword,
@@ -1157,11 +1159,6 @@ export class DbAuthHandler<
     return meta
   }
 
-  // encrypts a string with the SESSION_SECRET
-  _encrypt(data: string) {
-    return CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET as string)
-  }
-
   // returns the set-cookie header to be returned in the request (effectively
   // creates the session)
   _createSessionHeader<TIdType = any>(
@@ -1169,9 +1166,9 @@ export class DbAuthHandler<
     csrfToken: string
   ): SetCookieHeader {
     const session = JSON.stringify(data) + ';' + csrfToken
-    const encrypted = this._encrypt(session)
+    const encrypted = encryptSession(session)
     const cookie = [
-      `${cookieName(this.options.cookie?.name)}=${encrypted.toString()}`,
+      `${cookieName(this.options.cookie?.name)}=${encrypted}`,
       ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
     ].join(';')
 

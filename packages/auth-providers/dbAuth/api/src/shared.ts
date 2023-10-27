@@ -43,11 +43,42 @@ export const decryptSession = (text: string | null) => {
     return []
   }
 
+  // if cookie contains a pipe then it was encrypted using the `node:crypto`
+  // algorithm (first element is the ecrypted data, second is the initialization vector)
+  // otherwise fall back to using the CryptoJS algorithm
+
+  let decoded
+  const [encryptedText, iv] = text.split('|')
+
+  // console.info(text)
+  // console.info(encryptedText, iv)
+
   try {
-    const decoded = CryptoJS.AES.decrypt(
-      text,
-      process.env.SESSION_SECRET as string
-    ).toString(CryptoJS.enc.Utf8)
+    if (iv) {
+      // decrypt using the `node:crypto` algorithm
+      // console.info('\n\n')
+      // console.info('Using node:crypto algorithm to decrypt session cookie')
+      // console.info('\n\n')
+      const decipher = crypto.createDecipheriv(
+        'aes-256-cbc',
+        process.env.SESSION_SECRET as string,
+        Buffer.from(iv, 'base64')
+      )
+      decoded = decipher.update(encryptedText, 'base64', 'utf-8')
+      decoded += decipher.final('utf-8')
+    } else {
+      // console.info('\n\n')
+      // console.info('Using CryptoJS algorithm to decrypt session cookie')
+      // console.info('\n\n')
+      // decrypt using the CryptoJS algorithm
+      decoded = CryptoJS.AES.decrypt(
+        encryptedText,
+        process.env.SESSION_SECRET as string
+      ).toString(CryptoJS.enc.Utf8)
+    }
+
+    // console.info('decoded', decoded)
+
     const [data, csrf] = decoded.split(';')
     const json = JSON.parse(data)
 
@@ -55,6 +86,19 @@ export const decryptSession = (text: string | null) => {
   } catch (e) {
     throw new DbAuthError.SessionDecryptionError()
   }
+}
+
+export const encryptSession = (data: string) => {
+  const iv = crypto.randomBytes(16)
+  const cipher = crypto.createCipheriv(
+    'aes-256-cbc',
+    (process.env.SESSION_SECRET as string).substring(0, 32),
+    iv
+  )
+  let encryptedSession = cipher.update(data, 'utf-8', 'base64')
+  encryptedSession += cipher.final('base64')
+
+  return `${encryptedSession}|${iv.toString('base64')}`
 }
 
 // returns the actual value of the session cookie
@@ -75,7 +119,7 @@ export const getSession = (
     return null
   }
 
-  return sessionCookie.split('=')[1].trim()
+  return sessionCookie.replace(`${cookieName(cookieNameOption)}=`, '')
 }
 
 // Convenience function to get session, decrypt, and return session data all
