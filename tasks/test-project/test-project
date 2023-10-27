@@ -258,7 +258,7 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-        enabled: () => canary && !link,
+        enabled: () => (canary && !link) || streamingSsr, // @NOTE we need canary for the dev server binary
       },
       {
         title: 'Apply web codemods',
