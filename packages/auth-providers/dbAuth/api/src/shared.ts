@@ -1,7 +1,6 @@
 import crypto from 'node:crypto'
 
 import type { APIGatewayProxyEvent } from 'aws-lambda'
-import CryptoJS from 'crypto-js'
 
 import { getConfig } from '@redwoodjs/project-config'
 
@@ -31,6 +30,28 @@ const eventGraphiQLHeadersCookie = (event: APIGatewayProxyEvent) => {
   return
 }
 
+// decrypts session text using old CryptoJS algorithm (using node:crypto library)
+const legacyDecryptSession = (encryptedText) => {
+  const cypher = Buffer.from(encryptedText, 'base64')
+  const salt = cypher.slice(8, 16)
+  const password = Buffer.concat([
+    Buffer.from(process.env.SESSION_SECRET as string, 'binary'),
+    salt,
+  ])
+  const md5Hashes = []
+  let digest = password
+  for (let i = 0; i < 3; i++) {
+    md5Hashes[i] = crypto.createHash('md5').update(digest).digest()
+    digest = Buffer.concat([md5Hashes[i], password])
+  }
+  const key = Buffer.concat([md5Hashes[0], md5Hashes[1]])
+  const iv = md5Hashes[2]
+  const contents = cypher.slice(16)
+  const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv)
+
+  return decipher.update(contents) + decipher.final('utf-8')
+}
+
 // Extracts the session cookie from an event, handling both
 // development environment GraphiQL headers and production environment headers.
 export const extractCookie = (event: APIGatewayProxyEvent) => {
@@ -43,41 +64,26 @@ export const decryptSession = (text: string | null) => {
     return []
   }
 
+  let decoded
   // if cookie contains a pipe then it was encrypted using the `node:crypto`
   // algorithm (first element is the ecrypted data, second is the initialization vector)
-  // otherwise fall back to using the CryptoJS algorithm
-
-  let decoded
+  // otherwise fall back to using the older CryptoJS algorithm
   const [encryptedText, iv] = text.split('|')
-
-  // console.info(text)
-  // console.info(encryptedText, iv)
 
   try {
     if (iv) {
       // decrypt using the `node:crypto` algorithm
-      // console.info('\n\n')
-      // console.info('Using node:crypto algorithm to decrypt session cookie')
-      // console.info('\n\n')
       const decipher = crypto.createDecipheriv(
         'aes-256-cbc',
         process.env.SESSION_SECRET as string,
         Buffer.from(iv, 'base64')
       )
-      decoded = decipher.update(encryptedText, 'base64', 'utf-8')
-      decoded += decipher.final('utf-8')
+      decoded =
+        decipher.update(encryptedText, 'base64', 'utf-8') +
+        decipher.final('utf-8')
     } else {
-      // console.info('\n\n')
-      // console.info('Using CryptoJS algorithm to decrypt session cookie')
-      // console.info('\n\n')
-      // decrypt using the CryptoJS algorithm
-      decoded = CryptoJS.AES.decrypt(
-        encryptedText,
-        process.env.SESSION_SECRET as string
-      ).toString(CryptoJS.enc.Utf8)
+      decoded = legacyDecryptSession(text)
     }
-
-    // console.info('decoded', decoded)
 
     const [data, csrf] = decoded.split(';')
     const json = JSON.parse(data)
@@ -95,10 +101,10 @@ export const encryptSession = (data: string) => {
     (process.env.SESSION_SECRET as string).substring(0, 32),
     iv
   )
-  let encryptedSession = cipher.update(data, 'utf-8', 'base64')
-  encryptedSession += cipher.final('base64')
+  let encryptedData = cipher.update(data, 'utf-8', 'base64')
+  encryptedData += cipher.final('base64')
 
-  return `${encryptedSession}|${iv.toString('base64')}`
+  return `${encryptedData}|${iv.toString('base64')}`
 }
 
 // returns the actual value of the session cookie
@@ -119,7 +125,7 @@ export const getSession = (
     return null
   }
 
-  return sessionCookie.replace(`${cookieName(cookieNameOption)}=`, '')
+  return sessionCookie.replace(`${cookieName(cookieNameOption)}=`, '').trim()
 }
 
 // Convenience function to get session, decrypt, and return session data all
@@ -156,7 +162,7 @@ export const webAuthnSession = (event: APIGatewayProxyEvent) => {
 }
 
 export const hashToken = (token: string) => {
-  return CryptoJS.SHA256(token).toString(CryptoJS.enc.Hex)
+  return crypto.createHash('sha256').update(token).digest('hex')
 }
 
 // hashes a password using either the given `salt` argument, or creates a new

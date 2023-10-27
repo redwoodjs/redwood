@@ -1,7 +1,7 @@
+import crypto from 'node:crypto'
 import path from 'node:path'
 
 import type { APIGatewayProxyEvent } from 'aws-lambda'
-import CryptoJS from 'crypto-js'
 
 import * as error from '../errors'
 import {
@@ -19,10 +19,19 @@ const FIXTURE_PATH = path.resolve(
   __dirname,
   '../../../../../../__fixtures__/example-todo-main'
 )
-process.env.SESSION_SECRET = 'nREjs1HPS7cFia6tQHK70EWGtfhOgbqJQKsHQz3S'
+const SESSION_SECRET = '540d03ebb00b441f8f7442cbc39958ad'
 
 const encrypt = (data) => {
-  return CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET).toString()
+  const iv = crypto.randomBytes(16)
+  const cipher = crypto.createCipheriv(
+    'aes-256-cbc',
+    SESSION_SECRET.substring(0, 32),
+    iv
+  )
+  let encryptedSession = cipher.update(data, 'utf-8', 'base64')
+  encryptedSession += cipher.final('base64')
+
+  return `${encryptedSession}|${iv.toString('base64')}`
 }
 
 function dummyEvent(cookie?: string) {
@@ -82,6 +91,10 @@ describe('cookieName()', () => {
 })
 
 describe('decryptSession()', () => {
+  beforeEach(() => {
+    process.env.SESSION_SECRET = SESSION_SECRET
+  })
+
   it('returns an empty array if no session', () => {
     expect(decryptSession(null)).toEqual([])
   })
@@ -104,9 +117,23 @@ describe('decryptSession()', () => {
 
     expect(decryptSession(text)).toEqual([first, second])
   })
+
+  it.only('decrypts a session cookie that was created with the legacy CryptoJS algorithm', () => {
+    process.env.SESSION_SECRET =
+      'QKxN2vFSHAf94XYynK8LUALfDuDSdFowG6evfkFX8uszh4YZqhTiqEdshrhWbwbw'
+    const [json] = decryptSession(
+      'U2FsdGVkX1+s7seQJnVgGgInxuXm13l8VvzA3Mg2fYg='
+    )
+
+    expect(json).toEqual({ id: 7 })
+  })
 })
 
 describe('dbAuthSession()', () => {
+  beforeEach(() => {
+    process.env.SESSION_SECRET = SESSION_SECRET
+  })
+
   it('returns null if no cookies', () => {
     expect(dbAuthSession(dummyEvent(), 'session_%port%')).toEqual(null)
   })
@@ -185,7 +212,7 @@ describe('session cookie extraction', () => {
   let event
 
   const encryptToCookie = (data) => {
-    return `session=${CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET)}`
+    return `session=${encrypt(data)}`
   }
 
   beforeEach(() => {

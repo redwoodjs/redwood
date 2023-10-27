@@ -139,7 +139,6 @@ describe('dbAuth', () => {
     // hide deprecation warnings during test
     jest.spyOn(console, 'warn').mockImplementation(() => {})
     // encryption key so results are consistent regardless of settings in .env
-    // CryptoJS secret: process.env.SESSION_SECRET = 'nREjs1HPS7cFia6tQHK70EWGtfhOgbqJQKsHQz3S'
     process.env.SESSION_SECRET = SESSION_SECRET
     delete process.env.DBAUTH_COOKIE_DOMAIN
 
