@@ -1,5 +1,3 @@
-import crypto from 'node:crypto'
-
 import type { PrismaClient } from '@prisma/client'
 import type {
   GenerateAuthenticationOptionsOpts,
