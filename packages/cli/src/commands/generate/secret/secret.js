@@ -4,7 +4,7 @@ import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-const DEFAULT_LENGTH = 32
+export const DEFAULT_LENGTH = 32
 
 export const generateSecret = (length = DEFAULT_LENGTH) => {
   return crypto.randomBytes(length).toString('base64')
