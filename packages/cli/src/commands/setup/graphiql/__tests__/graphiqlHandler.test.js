@@ -53,18 +53,18 @@ describe('Graphiql generator tests', () => {
     expect(processExitSpy).toHaveBeenCalledWith(1)
   })
 
-  it('throws an error if auth provider is dbAuth and no user id is provided', () => {
+  it('throws an error if auth provider is dbAuth and no user id is provided', async () => {
     try {
-      graphiqlHelpers.generatePayload('dbAuth')
+      await graphiqlHelpers.generatePayload('dbAuth')
     } catch (e) {
       expect(e.message).toBe('Require an unique id to generate session cookie')
     }
   })
 
-  it('throws an error if auth provider is dbAuth and no supabase env is set', () => {
+  it('throws an error if auth provider is dbAuth and no supabase env is set', async () => {
     process.env.SESSION_SECRET = null
     try {
-      graphiqlHelpers.generatePayload('dbAuth', 'user-id-123')
+      await graphiqlHelpers.generatePayload('dbAuth', 'user-id-123')
     } catch (e) {
       expect(e.message).toBe(
         'dbAuth requires a SESSION_SECRET environment variable that is used to encrypt session cookies. Use `yarn rw g secret` to create one, then add to your `.env` file. DO NOT check this variable in your version control system!!'
@@ -75,7 +75,11 @@ describe('Graphiql generator tests', () => {
   it('returns a payload if a token is provided', async () => {
     const provider = 'supabase'
     const token = 'mock-token'
-    const response = graphiqlHelpers.generatePayload(provider, null, token)
+    const response = await graphiqlHelpers.generatePayload(
+      provider,
+      null,
+      token
+    )
     expect(response).toEqual({
       'auth-provider': provider,
       authorization: `Bearer ${token}`,
