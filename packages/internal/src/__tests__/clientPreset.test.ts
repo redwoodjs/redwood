@@ -12,7 +12,7 @@ afterEach(() => {
 })
 
 describe('Generate client preset', () => {
-  test('for web and api sides', async () => {
+  test('for web side', async () => {
     const FIXTURE_PATH = path.resolve(
       __dirname,
       '../../../../__fixtures__/example-todo-main'
@@ -39,5 +39,22 @@ describe('Generate client preset', () => {
     )
 
     expect(foundEndings).toHaveLength(expectedEndings.length)
+  })
+
+  test('for api side', async () => {
+    const FIXTURE_PATH = path.resolve(
+      __dirname,
+      '../../../../__fixtures__/example-todo-main'
+    )
+
+    process.env.RWJS_CWD = FIXTURE_PATH
+
+    await generateGraphQLSchema()
+
+    const { trustedDocumentsStoreFile } = await generateClientPreset()
+
+    expect(trustedDocumentsStoreFile).toContain(
+      'api/src/lib/trustedDocumentsStore.ts'
+    )
   })
 })

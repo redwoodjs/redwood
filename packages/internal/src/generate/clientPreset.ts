@@ -51,6 +51,7 @@ export const generateClientPreset = async () => {
     },
   }
 
+  let trustedDocumentsStoreFile = ''
   let generatedFiles = []
 
   try {
@@ -87,12 +88,17 @@ export const generateClientPreset = async () => {
       parser: 'typescript',
     })
 
-    const filename = path.join(getPaths().api.lib, 'trustedDocumentsStore.ts')
-    fs.mkdirSync(path.dirname(filename), { recursive: true })
-    fs.writeFileSync(filename, content)
+    trustedDocumentsStoreFile = path.join(
+      getPaths().api.lib,
+      'trustedDocumentsStore.ts'
+    )
+    fs.mkdirSync(path.dirname(trustedDocumentsStoreFile), { recursive: true })
+    fs.writeFileSync(trustedDocumentsStoreFile, content)
   }
+
   return {
     clientPresetFiles,
+    trustedDocumentsStoreFile,
     errors,
   }
 }
