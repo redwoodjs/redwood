@@ -276,7 +276,7 @@ jobs:
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - name: Run SSR codemods on test project
-        run: ./.tasks/test-project/convert-to-ssr-fixture ${{ steps.set-up-test-project.outputs.test-project-path }}
+        run: ./tasks/test-project/convert-to-ssr-fixture ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: 🎭 Install playwright dependencies
         run: npx playwright install --with-deps chromium
