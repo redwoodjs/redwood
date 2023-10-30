@@ -99,7 +99,7 @@
     "octokit": "2.1.0",
     "ora": "6.3.1",
     "prompts": "2.4.2",
-    "rimraf": "5.0.1",
+    "rimraf": "5.0.5",
     "tsx": "3.12.7",
     "typescript": "5.2.2",
     "yargs": "17.7.2",
