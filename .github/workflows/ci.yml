@@ -277,6 +277,8 @@ jobs:
 
       - name: Run SSR codemods on test project
         run: ./tasks/test-project/convert-to-ssr-fixture ${{ steps.set-up-test-project.outputs.test-project-path }}
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
 
       - name: 🎭 Install playwright dependencies
         run: npx playwright install --with-deps chromium
