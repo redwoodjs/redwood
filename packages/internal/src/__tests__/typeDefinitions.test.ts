@@ -98,6 +98,8 @@ test('generate the correct mirror types for directory named modules', () => {
   import { default as DEFAULT } from './graphql'
   export default DEFAULT
   export * from './graphql'
+
+  //# sourceMappingURL=index.d.ts.map
   "
 `)
 
