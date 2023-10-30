@@ -637,4 +637,4 @@ const Routes = () => {
 ```
 ## You did it!
 
-Now that you did you can rest easy.  You're authentication relies on just your database but also, if some bad actor got access to it the only user data you have is really the email address.
+Now that you did you can rest easy.  Your authentication relies on just your database but also, if some bad actor got access to it the only user data you have is really the email address.
