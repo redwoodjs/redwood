@@ -532,6 +532,34 @@ jobs:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-project.outputs.rsc-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
+      - name: 🌲 Set up RSA smoke test
+        id: set-up-rsa-project
+        uses: ./.github/actions/set-up-rsa-project
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+
+      - name: 🐘 Run RSA smoke tests
+        working-directory: tasks/smoke-tests/rsa
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsa-project.outputs.test-project-path }}
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: 🌲 Set up RSC external packages smoke test
+        id: set-up-rsc-external-packages-project
+        uses: ./.github/actions/set-up-rsc-external-packages-project
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+
+      - name: 🐘 Run RSC external packages smoke tests
+        working-directory: tasks/smoke-tests/rsc-external-packages
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-external-packages-project.outputs.test-project-path }}
+          REDWOOD_DISABLE_TELEMETRY: 1
+
   rsc-smoke-tests-mock:
     needs: rsc-related-changes
     if: needs.rsc-related-changes.outputs.rsc-related-changes != 'true'

@@ -58,6 +58,8 @@ test('generate the correct mirror types for cells', () => {
     type CellInputs = CellProps<SuccessType, NumTodosCell_GetCount, typeof Cell, NumTodosCell_GetCountVariables>
 
     export default function (props: CellInputs): ReturnType<SuccessType>
+
+    //# sourceMappingURL=index.d.ts.map
     "
   `)
 })
@@ -104,6 +106,8 @@ test('generate the correct mirror types for directory named modules', () => {
     import { default as DEFAULT } from './requireAuth'
     export default DEFAULT
     export * from './requireAuth'
+
+    //# sourceMappingURL=index.d.ts.map
     "
   `)
 })

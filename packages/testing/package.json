@@ -27,7 +27,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.22.15",
+    "@babel/runtime-corejs3": "7.23.2",
     "@redwoodjs/auth": "6.0.7",
     "@redwoodjs/babel-config": "6.0.7",
     "@redwoodjs/graphql-server": "6.0.7",
@@ -56,7 +56,7 @@
     "whatwg-fetch": "3.6.17"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.15",
+    "@babel/cli": "7.23.0",
     "@babel/core": "^7.22.20",
     "typescript": "5.2.2"
   },

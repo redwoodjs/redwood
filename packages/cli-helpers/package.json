@@ -23,12 +23,14 @@
   },
   "dependencies": {
     "@babel/core": "^7.22.20",
-    "@babel/runtime-corejs3": "7.22.15",
+    "@babel/runtime-corejs3": "7.23.2",
+    "@iarna/toml": "2.2.5",
     "@opentelemetry/api": "1.4.1",
     "@redwoodjs/project-config": "6.0.7",
     "@redwoodjs/telemetry": "6.0.7",
     "chalk": "4.1.2",
     "core-js": "3.32.2",
+    "dotenv": "16.3.1",
     "execa": "5.1.1",
     "listr2": "6.6.1",
     "lodash": "4.17.21",
@@ -38,7 +40,7 @@
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.15",
+    "@babel/cli": "7.23.0",
     "@types/lodash": "4.14.195",
     "@types/pascalcase": "1.0.1",
     "@types/yargs": "17.0.24",
