@@ -81,7 +81,7 @@ const db = new DbMock(['user', 'userCredential'])
 
 const UUID_REGEX =
   /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
-const SET_SESSION_REGEX = /^session=[a-zA-Z0-9+=/|]+;/
+const SET_SESSION_REGEX = /^session=[a-zA-Z0-9+=/]|[a-zA-Z0-9+=/]+;/
 const UTC_DATE_REGEX = /\w{3}, \d{2} \w{3} \d{4} [\d:]{8} GMT/
 const LOGOUT_COOKIE = 'session=;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
 const SESSION_SECRET = '540d03ebb00b441f8f7442cbc39958ad'
@@ -123,7 +123,7 @@ const encryptToCookie = (data) => {
   const iv = crypto.randomBytes(16)
     const cipher = crypto.createCipheriv(
       'aes-256-cbc',
-      (process.env.SESSION_SECRET as string).substring(0, 32),
+      (SESSION_SECRET as string).substring(0, 32),
       iv
     )
     let encryptedSession = cipher.update(data, 'utf-8', 'base64')
@@ -1568,8 +1568,8 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('getToken', () => {
-    it('returns the ID of the logged in user', async () => {
+  describe('getToken',() => {
+    it('returns the ID of the logged in user',async () => {
       const user = await createDbUser()
       event = {
         headers: {
@@ -1578,20 +1578,20 @@ describe('dbAuth', () => {
           ),
         },
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(event,context,options)
       const response = await dbAuth.getToken()
 
       expect(response[0]).toEqual(user.id)
     })
 
-    it('returns nothing if user is not logged in', async () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+    it('returns nothing if user is not logged in',async () => {
+      const dbAuth = new DbAuthHandler(event,context,options)
       const response = await dbAuth.getToken()
 
       expect(response[0]).toEqual('')
     })
 
-    it('returns any other error', async () => {
+    it('returns any other error',async () => {
       event = {
         headers: {
           cookie: encryptToCookie(
@@ -1600,10 +1600,30 @@ describe('dbAuth', () => {
         },
       }
 
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(event,context,options)
       const response = await dbAuth.getToken()
 
       expect(response[0]).toEqual('{"error":"User not found"}')
+    })
+
+    it('re-encrypts the session cookie if using the legacy algorithm',async () => {
+      const user = await createDbUser({ id: 7 })
+      event = {
+        headers: {
+          // legacy session with { id: 7 } for userID
+          cookie: 'session=U2FsdGVkX1+s7seQJnVgGgInxuXm13l8VvzA3Mg2fYg='
+        },
+      }
+      process.env.SESSION_SECRET = 'QKxN2vFSHAf94XYynK8LUALfDuDSdFowG6evfkFX8uszh4YZqhTiqEdshrhWbwbw'
+
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const [userId, headers] = await dbAuth.getToken()
+
+      expect(userId).toEqual(7)
+      expect(headers['set-cookie']).toMatch(SET_SESSION_REGEX)
+
+      // set session back to default
+      process.env.SESSION_SECRET = SESSION_SECRET
     })
   })
 

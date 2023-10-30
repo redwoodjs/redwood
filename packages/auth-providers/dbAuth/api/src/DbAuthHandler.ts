@@ -28,6 +28,7 @@ import {
   getSession,
   hashPassword,
   legacyHashPassword,
+  isLegacySession,
   hashToken,
   webAuthnSession,
 } from './shared'
@@ -570,11 +571,15 @@ export class DbAuthHandler<
   async getToken() {
     try {
       const user = await this._getCurrentUser()
+      let headers = {}
 
-      // need to return *something* for our existing Authorization header stuff
-      // to work, so return the user's ID in case we can use it for something
-      // in the future
-      return [user[this.options.authFields.id]]
+      // if the session was encrypted with the old algorithm, re-encrypt it
+      // with the new one
+      if (isLegacySession(this.cookie)) {
+        headers = this._loginResponse(user)[1]
+      }
+
+      return [user[this.options.authFields.id], headers]
     } catch (e: any) {
       if (e instanceof DbAuthError.NotLoggedInError) {
         return this._logoutResponse()
@@ -1424,9 +1429,7 @@ export class DbAuthHandler<
   ] {
     const sessionData = { id: user[this.options.authFields.id] }
 
-    // TODO: this needs to go into graphql somewhere so that each request makes
-    // a new CSRF token and sets it in both the encrypted session and the
-    // csrf-token header
+    // TODO: this needs to go into graphql somewhere so that each request makes a new CSRF token and sets it in both the encrypted session and the csrf-token header
     const csrfToken = DbAuthHandler.CSRF_TOKEN
 
     return [

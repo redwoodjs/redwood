@@ -100,14 +100,14 @@ export const decryptSession = (text: string | null) => {
   }
 }
 
-export const encryptSession = (data: string) => {
+export const encryptSession = (dataString: string) => {
   const iv = crypto.randomBytes(16)
   const cipher = crypto.createCipheriv(
     'aes-256-cbc',
     (process.env.SESSION_SECRET as string).substring(0, 32),
     iv
   )
-  let encryptedData = cipher.update(data, 'utf-8', 'base64')
+  let encryptedData = cipher.update(dataString, 'utf-8', 'base64')
   encryptedData += cipher.final('base64')
 
   return `${encryptedData}|${iv.toString('base64')}`
