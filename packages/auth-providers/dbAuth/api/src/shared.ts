@@ -173,11 +173,15 @@ export const hashToken = (token: string) => {
 
 // hashes a password using either the given `salt` argument, or creates a new
 // salt and hashes using that. Either way, returns an array with [hash, salt]
+// normalizes the string in case it contains unicode characters: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize
 export const hashPassword = (text: string, salt?: string) => {
   const useSalt = salt || crypto.randomBytes(32).toString('hex')
   return [
     crypto
-      .scryptSync(text, useSalt, 32, { cost: 2 ** 14, blockSize: 8 })
+      .scryptSync(text.normalize('NFC'), useSalt, 32, {
+        cost: 2 ** 14,
+        blockSize: 8,
+      })
       .toString('hex'),
     useSalt,
   ]

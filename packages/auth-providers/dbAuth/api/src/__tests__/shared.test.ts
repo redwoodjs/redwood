@@ -200,6 +200,17 @@ describe('hashPassword', () => {
     expect(salt).toMatch(/^[a-f0-9]+$/)
     expect(salt.length).toEqual(64)
   })
+
+  it('normalizes strings so utf-8 variants hash to the same output', () => {
+    const salt = crypto.randomBytes(32).toString('hex')
+    const [hash1] = hashPassword('\u0041\u006d\u00e9\u006c\u0069\u0065', salt) // Amélie
+    const [hash2] = hashPassword(
+      '\u0041\u006d\u0065\u0301\u006c\u0069\u0065',
+      salt
+    ) // Amélie but separate e and accent characters
+
+    expect(hash1).toEqual(hash2)
+  })
 })
 
 describe('legacyHashPassword', () => {
