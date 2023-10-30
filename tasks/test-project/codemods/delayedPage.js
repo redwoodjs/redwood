@@ -31,7 +31,7 @@ function DelayedComponent({
       return <></>
     })
   }
-  return <>Delayed by {time} seconds</>
+  return <p data-test-id={\`delayed-text-\${time}\`}>Delayed by {time} seconds</p>
 }
 
 function DelayedStuff() {
