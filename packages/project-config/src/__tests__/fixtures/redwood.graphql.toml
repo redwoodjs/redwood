@@ -1,0 +1,4 @@
+[web]
+  port = 8888
+[graphql]
+  trustedDocuments = true

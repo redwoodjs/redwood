@@ -85,6 +85,9 @@ describe('getConfig', () => {
           "stories": true,
           "tests": true,
         },
+        "graphql": {
+          "trustedDocuments": false,
+        },
         "notifications": {
           "versionUpdates": [],
         },
@@ -161,6 +164,24 @@ describe('getConfig', () => {
       expect(
         config.experimental.studio.graphiql?.authImpersonation?.jwtSecret
       ).toEqual('supa-secret')
+    })
+  })
+
+  describe('with graphql configs', () => {
+    describe('sets defaults', () => {
+      it('sets trustedDocuments to false', () => {
+        const config = getConfig(
+          path.join(__dirname, './fixtures/redwood.toml')
+        )
+        expect(config.graphql.trustedDocuments).toEqual(false)
+      })
+    })
+
+    it('merges graphql configs', () => {
+      const config = getConfig(
+        path.join(__dirname, './fixtures/redwood.graphql.toml')
+      )
+      expect(config.graphql.trustedDocuments).toEqual(true)
     })
   })
 
