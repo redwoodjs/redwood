@@ -104,7 +104,7 @@ const createDbUser = async (attributes = {}) => {
       email: 'rob@redwoodjs.com',
       // default hashedPassword is from `node:crypto`
       hashedPassword:
-        '230847bea5154b6c7d281d09593ad1be26fa03a93c04a73bcc2b608c073a8213',
+        '230847bea5154b6c7d281d09593ad1be26fa03a93c04a73bcc2b608c073a8213|16384|8|1',
       salt: 'ba8b7807c6de6d6a892ef27f4073c603',
       ...attributes,
     },
@@ -969,7 +969,7 @@ describe('dbAuth', () => {
         expect(user).toEqual(user)
         return user
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(event,context,options)
       await dbAuth.login()
     })
 
@@ -2392,7 +2392,7 @@ describe('dbAuth', () => {
 
       // password now hashed by node:crypto
       expect(user.hashedPassword).toEqual(
-        'f20d69d478fa1afc85057384e21bd457a76b23b23e2a94f5bd982976f700a552'
+        'f20d69d478fa1afc85057384e21bd457a76b23b23e2a94f5bd982976f700a552|16384|8|1'
       )
       // salt should remain the same
       expect(user.salt).toEqual('2ef27f4073c603ba8b7807c6de6d6a89')

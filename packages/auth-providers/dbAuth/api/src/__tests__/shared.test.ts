@@ -14,6 +14,7 @@ import {
   decryptSession,
   dbAuthSession,
   webAuthnSession,
+  extractHashingOptions,
 } from '../shared'
 
 const FIXTURE_PATH = path.resolve(
@@ -181,13 +182,12 @@ describe('webAuthnSession', () => {
 
 describe('hashPassword', () => {
   it('hashes a password with a given salt and returns both', () => {
-    const [hash, salt] = hashPassword(
-      'password',
-      'ba8b7807c6de6d6a892ef27f4073c603'
-    )
+    const [hash, salt] = hashPassword('password', {
+      salt: 'ba8b7807c6de6d6a892ef27f4073c603',
+    })
 
     expect(hash).toEqual(
-      '230847bea5154b6c7d281d09593ad1be26fa03a93c04a73bcc2b608c073a8213'
+      '230847bea5154b6c7d281d09593ad1be26fa03a93c04a73bcc2b608c073a8213|16384|8|1'
     )
     expect(salt).toEqual('ba8b7807c6de6d6a892ef27f4073c603')
   })
@@ -195,21 +195,33 @@ describe('hashPassword', () => {
   it('hashes a password with a generated salt if none provided', () => {
     const [hash, salt] = hashPassword('password')
 
-    expect(hash).toMatch(/^[a-f0-9]+$/)
-    expect(hash.length).toEqual(64)
+    expect(hash).toMatch(/^[a-f0-9]+|16384|8|1$/)
+    expect(hash.length).toEqual(74)
     expect(salt).toMatch(/^[a-f0-9]+$/)
     expect(salt.length).toEqual(64)
   })
 
   it('normalizes strings so utf-8 variants hash to the same output', () => {
     const salt = crypto.randomBytes(32).toString('hex')
-    const [hash1] = hashPassword('\u0041\u006d\u00e9\u006c\u0069\u0065', salt) // Amélie
-    const [hash2] = hashPassword(
-      '\u0041\u006d\u0065\u0301\u006c\u0069\u0065',
-      salt
-    ) // Amélie but separate e and accent characters
+    const [hash1] = hashPassword('\u0041\u006d\u00e9\u006c\u0069\u0065', {
+      salt,
+    }) // Amélie
+    const [hash2] = hashPassword('\u0041\u006d\u0065\u0301\u006c\u0069\u0065', {
+      salt,
+    }) // Amélie but separate e and accent codepoints
 
     expect(hash1).toEqual(hash2)
+  })
+
+  it('encodes the scrypt difficulty options into the hash', () => {
+    const [hash] = hashPassword('password', {
+      options: { cost: 8192, blockSize: 16, parallelization: 2 },
+    })
+    const [_hash, cost, blockSize, parallelization] = hash.split('|')
+
+    expect(cost).toEqual('8192')
+    expect(blockSize).toEqual('16')
+    expect(parallelization).toEqual('2')
   })
 })
 
@@ -333,6 +345,39 @@ describe('session cookie extraction', () => {
       })
 
       expect(extractCookie(event)).toEqual(cookie)
+    })
+  })
+})
+
+describe('extractHashingOptions()', () => {
+  it('returns an empty object if no options', () => {
+    expect(extractHashingOptions('')).toEqual({})
+    expect(
+      extractHashingOptions(
+        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba'
+      )
+    ).toEqual({})
+    expect(
+      extractHashingOptions(
+        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba|1'
+      )
+    ).toEqual({})
+    expect(
+      extractHashingOptions(
+        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba|1|2'
+      )
+    ).toEqual({})
+  })
+
+  it('returns an object with scrypt options', () => {
+    expect(
+      extractHashingOptions(
+        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba|16384|8|1'
+      )
+    ).toEqual({
+      cost: 16384,
+      blockSize: 8,
+      parallelization: 1,
     })
   })
 })

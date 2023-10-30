@@ -6,6 +6,22 @@ import { getConfig } from '@redwoodjs/project-config'
 
 import * as DbAuthError from './errors'
 
+type ScryptOptions = {
+  cost?: number
+  blockSize?: number
+  parallelization?: number
+  N?: number
+  r?: number
+  p?: number
+  maxmem?: number
+}
+
+const DEFAULT_SCRYPT_OPTIONS: ScryptOptions = {
+  cost: 2 ** 14,
+  blockSize: 8,
+  parallelization: 1,
+}
+
 // Extracts the cookie from an event, handling lower and upper case header names.
 const eventHeadersCookie = (event: APIGatewayProxyEvent) => {
   return event.headers.cookie || event.headers.Cookie
@@ -174,17 +190,23 @@ export const hashToken = (token: string) => {
 // hashes a password using either the given `salt` argument, or creates a new
 // salt and hashes using that. Either way, returns an array with [hash, salt]
 // normalizes the string in case it contains unicode characters: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize
-export const hashPassword = (text: string, salt?: string) => {
-  const useSalt = salt || crypto.randomBytes(32).toString('hex')
-  return [
-    crypto
-      .scryptSync(text.normalize('NFC'), useSalt, 32, {
-        cost: 2 ** 14,
-        blockSize: 8,
-      })
-      .toString('hex'),
-    useSalt,
+// TODO: Add validation that the options are valid values for the scrypt algorithm
+export const hashPassword = (
+  text: string,
+  {
+    salt = crypto.randomBytes(32).toString('hex'),
+    options = DEFAULT_SCRYPT_OPTIONS,
+  }: { salt?: string; options?: ScryptOptions } = {}
+) => {
+  const encryptedString = crypto
+    .scryptSync(text.normalize('NFC'), salt, 32, options)
+    .toString('hex')
+  const optionsToString = [
+    options.cost,
+    options.blockSize,
+    options.parallelization,
   ]
+  return [`${encryptedString}|${optionsToString.join('|')}`, salt]
 }
 
 // uses the old algorithm from CryptoJS:
@@ -202,4 +224,18 @@ export const cookieName = (name: string | undefined) => {
   const cookieName = name?.replace('%port%', '' + port) ?? 'session'
 
   return cookieName
+}
+
+export const extractHashingOptions = (text: string): ScryptOptions => {
+  const [_hash, ...options] = text.split('|')
+
+  if (options.length === 3) {
+    return {
+      cost: parseInt(options[0]),
+      blockSize: parseInt(options[1]),
+      parallelization: parseInt(options[2]),
+    }
+  } else {
+    return {}
+  }
 }
