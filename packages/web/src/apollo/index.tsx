@@ -256,7 +256,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     { name: 'authMiddleware', link: authMiddleware },
     { name: 'updateDataApolloLink', link: updateDataApolloLink },
     {
-      name: 'terminatingLink',
+      name: 'httpLink',
       link: terminatingLink,
     },
   ]
