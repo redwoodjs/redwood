@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { generateClientPreset } from './clientPreset'
 import { generateGraphQLSchema } from './graphqlSchema'
@@ -8,14 +8,19 @@ import { generatePossibleTypes } from './possibleTypes'
 import { generateTypeDefs } from './typeDefinitions'
 
 export const generate = async () => {
+  const config = getConfig()
   const { schemaPath, errors: generateGraphQLSchemaErrors } =
     await generateGraphQLSchema()
   const { typeDefFiles, errors: generateTypeDefsErrors } =
     await generateTypeDefs()
   const { possibleTypesFiles, errors: generatePossibleTypesErrors } =
     await generatePossibleTypes()
+  const clientPresetFiles = []
 
-  const { clientPresetFiles } = await generateClientPreset()
+  if (config.graphql.trustedDocuments) {
+    const preset = await generateClientPreset()
+    clientPresetFiles.push(...preset.clientPresetFiles)
+  }
 
   let files = []
 

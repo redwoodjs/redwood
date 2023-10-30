@@ -6,10 +6,24 @@ import type { CodegenConfig } from '@graphql-codegen/cli'
 import { addTypenameSelectionDocumentTransform } from '@graphql-codegen/client-preset'
 import { format } from 'prettier'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
+
+export const shouldGenerateTrustedDocuments = (): boolean => {
+  const config = getConfig()
+
+  return config.graphql.trustedDocuments
+}
 
 export const generateClientPreset = async () => {
+  let trustedDocumentsStoreFile = ''
+  let generatedFiles = []
+  let clientPresetFiles = [] as string[]
+
   const errors: { message: string; error: unknown }[] = []
+
+  if (!shouldGenerateTrustedDocuments()) {
+    return { clientPresetFiles, trustedDocumentsStoreFile, errors }
+  }
 
   const documentsGlob = `${getPaths().web.src}/**/!(*.d).{ts,tsx,js,jsx}`
 
@@ -51,9 +65,6 @@ export const generateClientPreset = async () => {
     },
   }
 
-  let trustedDocumentsStoreFile = ''
-  let generatedFiles = []
-
   try {
     generatedFiles = await generate(config, true)
   } catch (e) {
@@ -68,7 +79,8 @@ export const generateClientPreset = async () => {
     content: string
     hooks: string
   }
-  const clientPresetFiles = generatedFiles.map((f: GeneratedFile) => f.filename)
+
+  clientPresetFiles = generatedFiles.map((f: GeneratedFile) => f.filename)
 
   // Copy the persisted-documents.json to api side as a trustedDocumentsStore
   const output = generatedFiles.filter((f: GeneratedFile) =>
