@@ -128,16 +128,6 @@ export type GraphQLClientConfigProp = Omit<
    * - the `HttpLink` should come last (https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link)
    */
   link?: apolloClient.ApolloLink | RedwoodApolloLinkFactory
-  /**
-   * Use Trusted Documents aka Persisted Operations aka Queries
-   *
-   * When setting to true, Apollo Client will generate a hash of the query and send that to the server instead of the query itself.
-   *
-   * You must configure your GraphQL server to support this feature with the useTrustedDocumentation option.
-   *
-   * See https://www.apollographql.com/docs/react/api/link/persisted-queries/
-   */
-  trustedDocuments?: boolean
 }
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
@@ -161,10 +151,20 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   // `updateDataApolloLink` keeps track of the most recent req/res data so they can be passed to
   // any errors passed up to an error boundary.
+  type ApolloRequestData = {
+    mostRecentRequest?: {
+      operationName?: string
+      operationKind?: string
+      variables?: Record<string, unknown>
+      query?: string
+    }
+    mostRecentResponse?: any
+  }
+
   const data = {
     mostRecentRequest: undefined,
     mostRecentResponse: undefined,
-  } as any
+  } as ApolloRequestData
 
   const updateDataApolloLink = new ApolloLink((operation, forward) => {
     const { operationName, query, variables } = operation
@@ -222,10 +222,10 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
   }
 
-  // Our terminating link needs to be smart enough to handle subscriptions, and if the GraphQL query
-  // is subscription it needs to use the SSELink (server sent events link).
-
-  let terminatingLink = apolloClient.split(
+  // Our terminating link needs to be smart enough to handle:
+  // 1. subscriptions
+  // and if the GraphQL query is subscription it needs to use the SSELink (server sent events link).
+  const httpOrSSELink = apolloClient.split(
     ({ query }) => {
       const definition = getMainDefinition(query)
 
@@ -243,12 +243,28 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     httpLink
   )
 
-  if (config.trustedDocuments) {
-    const trustedDocumentsLink = createPersistedQueryLink({
+  // 2. To support Trusted Documents aka Persisted Operations
+  // Check if the query made includes the hash, and if so then make the request with the persisted query link
+
+  /**
+   * Use Trusted Documents aka Persisted Operations aka Queries
+   *
+   * When detecting a meta hash, Apollo Client will send the hash from the document and not the query itself.
+   *
+   * You must configure your GraphQL server to support this feature with the useTrustedDocuments option.
+   *
+   * See https://www.apollographql.com/docs/react/api/link/persisted-queries/
+   */
+  const terminatingLink = apolloClient.split(
+    ({ query }) => {
+      const q = query as unknown as any // hack
+      return q?.['__meta__']?.['hash']
+    },
+    createPersistedQueryLink({
       generateHash: (document: any) => document['__meta__']['hash'],
-    })
-    terminatingLink = trustedDocumentsLink.concat(terminatingLink)
-  }
+    }).concat(httpOrSSELink),
+    httpOrSSELink
+  )
 
   // The order here is important. The last link *must* be a terminating link like HttpLink or SSELink.
   const redwoodApolloLinks: RedwoodApolloLinks = [
