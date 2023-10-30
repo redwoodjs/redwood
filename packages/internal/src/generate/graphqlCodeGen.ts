@@ -114,7 +114,6 @@ export const generateTypeDefGraphQLApi = async (): Promise<TypeDefResult> => {
   }
 }
 
-// could web-side codegen replace with client-present codegen
 export const generateTypeDefGraphQLWeb = async (): Promise<TypeDefResult> => {
   const filename = path.join(getPaths().web.types, 'graphql.d.ts')
   const options = getLoadDocumentsOptions(filename)
