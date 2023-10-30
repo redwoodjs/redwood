@@ -744,6 +744,18 @@ async function streamingTasks(outputPath, { verbose }) {
   OUTPUT_PATH = outputPath
 
   const tasks = [
+    // This could be done in test-project, but for CI
+    // it's easier to do it here
+    {
+      title: 'Upgrading to latest canary version',
+      task: async () => {
+        return execa(
+          'yarn rw upgrade -t canary',
+          [],
+          getExecaOptions(outputPath)
+        )
+      },
+    },
     {
       title: 'Creating Delayed suspense delayed page',
       task: async () => {
