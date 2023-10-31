@@ -420,7 +420,7 @@ export const alphabet = async () => {
 
 Since Apollo Client does not yet support the `@stream` directive, you can use them in the GraphiQL Playground or see them in action via CURL.
 
-When making the request with the @stream directive:
+When making the request with the `@stream` directive:
 
 ```bash
 curl -g -X POST \
