@@ -31,7 +31,7 @@ export async function serverBuild(
     root: rwPaths.web.base,
     ssr: {
       // Externalize everything except packages with files that have
-      // 'use client' in them
+      // 'use client' in them (which are the files in `clientEntryFiles`)
       // Files included in `noExternal` are files we want Vite to analyze
       // The values in the array here are compared to npm package names, like
       // 'react', 'core-js', @anthropic-ai/sdk', @redwoodjs/vite', etc
@@ -44,8 +44,6 @@ export async function serverBuild(
         )
         const splitPath = relativePath.split('/')
 
-        // TODO (RSC): Verify this is correct. Need to find a scoped package
-        // that uses 'use client'
         // Handle scoped packages
         if (relativePath.startsWith('@')) {
           return splitPath[0] + '/' + splitPath[1]
@@ -97,6 +95,11 @@ export async function serverBuild(
             }
             return 'assets/[name].js'
           },
+          // This is not ideal. See
+          // https://rollupjs.org/faqs/#why-do-additional-imports-turn-up-in-my-entry-chunks-when-code-splitting
+          // But we need it to prevent `import 'client-only'` from being
+          // hoisted into App.tsx
+          hoistTransitiveImports: false,
         },
       },
     },
