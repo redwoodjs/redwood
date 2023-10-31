@@ -1,6 +1,5 @@
 # Realtime
 
-
 One of the most often asked questions of RedwoodJS before and after the launch of V1 was, “When will RedwoodJS support a realtime solution?”
 
 The answer is: **now**.
@@ -98,7 +97,16 @@ You will get:
 
 * `api/server.ts` where you configure your Fastify server and GraphQL
 * `api/lib/realtime.ts` where you consume your subscriptions and configure realtime with an in-memory or Redis store
-* The auction, countdown, and chat examples. You'll find sdl, services and subscriptions for each. There is no UI setup for these examples. You can find information on how to try them out using the GraphiQL playground.
+* Usage examples for live queries, subscriptions, defer, and stream. You'll get sdl, services/subscriptions for each.
+* The [`auction` live query](#auction-live-query-example) example
+* The [`countdown timer` subscription](#countdown-timer-example) example
+* The [`chat` subscription](#chatnew-message-example) examples
+* The [`alphabet` stream](#alphabet-stream-example) example
+* The [`slow and fast` field defer](#slow-and-fast-field-defer-example) example
+
+:::note
+There is no UI setup for these examples. You can find information on how to try them out using the GraphiQL playground.
+:::
 
 ### GraphQL Configuration
 
@@ -229,7 +237,7 @@ RedwoodJS has a first-class developer experience for GraphQL subscriptions.
 - Why has the data changed?
 - Spec compliant
 
-### Example
+### Chat/New Message Example
 
 ```graphql
 type Subscription {
@@ -241,6 +249,18 @@ type Subscription {
 2. Someone added a message to room “2” with a from and body
 3. A "NewMessage" event to Room 2 gets published
 4. I find out and see who the message is from and what they messaged (the body)
+
+### Countdown Timer Example
+
+Counts down from a starting values by an interval.
+
+```graphql
+subscription CountdownFromInterval {
+ countdown(from: 100, interval: 10)
+}
+```
+
+This example showcases how a subscription can yields its own response.
 
 ## Live Queries
 
@@ -255,7 +275,7 @@ The invalidation mechanism is based on GraphQL ID fields and schema coordinates.
 - This is not part of the GraphQL specification.
 - There can be multiple root fields.
 
-### Example
+### Auction Live Query Example
 
 ```graphql
 query GetCurrentAuctionBids @live {
@@ -287,7 +307,7 @@ mutation MakeBid {
 
 The `@defer` directive allows you to post-pone the delivery of one or more (slow) fields grouped in an inlined or spread fragment.
 
-### Example
+### Slow and Fast Field Defer Example
 
 Here, the GraphQL schema defines two queries for a "fast" and a "slow" (ie, delayed) information.
 
@@ -365,7 +385,7 @@ and will await the deferred field to then present:
 
 The `@stream` directive allows you to stream the individual items of a field of the list type as the items are available.
 
-### Example
+### Alphabet Stream Example
 
 Here, the GraphQL schema defines a query to return the letters of the alphabet:
 
