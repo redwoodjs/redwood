@@ -6,11 +6,14 @@ import { Head as HelmetHead } from '../index'
 // But.... not worth the effort to remove it from bundle atm
 import PortalHead from './PortalHead'
 
+type ValueOrCollection<T> = T | ValueOrCollection<T>[] | Record<string, T>
+type ParentValue = ValueOrCollection<string>
+
 const EXCLUDE_PROPS = ['charSet']
 
 const propToMetaTag = (
   parentKey: string,
-  parentValue: unknown,
+  parentValue: ParentValue,
   options: { attr: 'name' | 'property' }
 ): JSX.Element | JSX.Element[] => {
   if (Array.isArray(parentValue)) {
@@ -20,7 +23,7 @@ const propToMetaTag = (
     })
   } else if (typeof parentValue === 'object') {
     // namespaced attributes, <meta> name attribute changes to 'property'
-    return Object.entries(parentValue as Record<string, unknown>)
+    return Object.entries(parentValue)
       .filter(([_, v]) => v !== null)
       .flatMap(([key, value]) => {
         return propToMetaTag(`${parentKey}:${key}`, value, { attr: 'property' })
