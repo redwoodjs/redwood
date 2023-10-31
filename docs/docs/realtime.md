@@ -430,7 +430,7 @@ curl -g -X POST \
   http://localhost:8911/graphql
 ```
 
-Here you see the initial response has `[]`` for alphabet data.
+Here you see the initial response has `[]` for alphabet data.
 
 Then on each push to the Repeater, an incremental update the the list of letters is sent.
 
