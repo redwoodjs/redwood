@@ -1906,7 +1906,7 @@ In order to use [Netlify Dev](https://www.netlify.com/products/dev/) you need to
 
 ### setup mailer
 
-This command adds the nessecary packages and files to get started using the redwood mailer. By default it also creates an example mail template which can be prevented with the `--skip-examples` flag.
+This command adds the necessary packages and files to get started using the RedwoodJS mailer. By default it also creates an example mail template which can be skipped with the `--skip-examples` flag.
 
 ```
 yarn redwood setup mailer
@@ -1915,7 +1915,7 @@ yarn redwood setup mailer
 | Arguments & Options     | Description                    |
 | :---------------------- | :----------------------------- |
 | `--force, -f`           | Overwrite existing files       |
-| `--skip-examples`       | Do not include example content |
+| `--skip-examples`       | Do not include example content, such as a React email template |
 
 ### setup package
 

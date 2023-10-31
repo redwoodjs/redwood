@@ -2,7 +2,7 @@ import { Mailer } from '@redwoodjs/mailer-core'
 import { NodemailerMailHandler } from '@redwoodjs/mailer-handler-nodemailer'
 import { ReactEmailRenderer } from '@redwoodjs/mailer-renderer-react-email'
 
-import { logger } from './logger'
+import { logger } from 'src/lib/logger'
 
 export const mailer = new Mailer({
   handling: {
