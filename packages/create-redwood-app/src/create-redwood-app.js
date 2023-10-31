@@ -212,7 +212,9 @@ function checkNodeAndYarnVersion(templateDir) {
   })
 }
 
-async function createProjectFiles(newAppDir, { templateDir, overwrite }) {
+async function createProjectFiles(appDir, { templateDir, overwrite }) {
+  let newAppDir = appDir
+
   const tuiContent = new ReactiveTUIContent({
     mode: 'text',
     content: 'Creating project files',
@@ -247,6 +249,8 @@ async function createProjectFiles(newAppDir, { templateDir, overwrite }) {
     content: `${RedwoodStyling.green('✔')} Project files created`,
   })
   tui.stopReactive()
+
+  return newAppDir
 }
 
 async function installNodeModules(newAppDir) {
@@ -551,7 +555,6 @@ async function doesDirectoryAlreadyExist(appDir, overwrite) {
 }
 
 async function handleNewDirectoryNamePreference() {
-  console.log('handle new directory name preference')
   try {
     const response = await tui.prompt({
       type: 'input',
@@ -742,10 +745,16 @@ async function createRedwoodApp() {
     yarnInstall = await handleYarnInstallPreference(yarnInstallFlag)
   }
 
-  const newAppDir = path.resolve(process.cwd(), targetDir)
+  let newAppDir = path.resolve(process.cwd(), targetDir)
+
+  // DELETE THIS 👇
+  tui.drawText(
+    `${RedwoodStyling.info('ℹ')} generated project files for ${newAppDir}`
+  )
 
   // Create project files
-  await createProjectFiles(newAppDir, { templateDir, overwrite })
+  // if this directory already exists then createProjectFiles may set a new directory name
+  newAppDir = await createProjectFiles(newAppDir, { templateDir, overwrite })
 
   // Install the node packages
   if (yarnInstall) {
@@ -764,6 +773,9 @@ async function createRedwoodApp() {
   if (yarnInstall) {
     await generateTypes(newAppDir)
   }
+
+  // DELETE THIS 👇
+  tui.drawText(`${RedwoodStyling.info('ℹ')} generated types for ${newAppDir}`)
 
   // Initialize git repo
   if (useGit) {
@@ -785,7 +797,7 @@ async function createRedwoodApp() {
       ...[
         `${RedwoodStyling.redwood(
           ` > ${RedwoodStyling.green(
-            `cd ${path.relative(process.cwd(), targetDir)}`
+            `cd ${path.relative(process.cwd(), newAppDir)}`
           )}`
         )}`,
         !yarnInstall &&
