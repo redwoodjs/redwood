@@ -11,7 +11,6 @@
     "packages/studio/web"
   ],
   "scripts": {
-    "benchmark": "tsx ./tasks/benchmark/run-benchmarks.mts",
     "build": "lerna run build",
     "build:clean": "yarn node ./tasks/clean.mjs",
     "build:clean:super": "git clean -fdx && yarn && yarn build",
@@ -31,7 +30,8 @@
     "release": "node ./tasks/release/releaseCLI.mjs",
     "smoke-test": "node ./tasks/smoke-tests/smoke-tests.mjs",
     "test": "lerna run test --concurrency 2 -- --colors --maxWorkers=4",
-    "test-ci": "lerna run test --concurrency 2 -- --colors --maxWorkers"
+    "test-ci": "lerna run test --concurrency 2 -- --colors --maxWorkers",
+    "test:k6": "tsx ./tasks/k6-test/run-k6-tests.mts"
   },
   "resolutions": {
     "vscode-languageserver": "6.1.1",
@@ -99,7 +99,7 @@
     "octokit": "2.1.0",
     "ora": "6.3.1",
     "prompts": "2.4.2",
-    "rimraf": "5.0.1",
+    "rimraf": "5.0.5",
     "tsx": "3.12.7",
     "typescript": "5.2.2",
     "yargs": "17.7.2",
