@@ -1,7 +1,7 @@
 # Realtime
 
 
-One of the most often asked questions of RedwoodJS before and after the launch for V1 was, “When will RedwoodJS support a realtime solution?”
+One of the most often asked questions of RedwoodJS before and after the launch of V1 was, “When will RedwoodJS support a realtime solution?”
 
 The answer is: **now**.
 
