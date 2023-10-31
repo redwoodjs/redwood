@@ -21,6 +21,8 @@ import subscriptions from 'src/subscriptions/**/*.{js,ts}'
  * Redwood Realtime
  *  - uses a publish/subscribe model to broadcast data to clients.
  *  - uses a store to persist Live Query and Subscription data.
+ *  - and enable defer and stream directives to improve latency
+ *    for clients by sending data the most important data as soon as it's ready.
  *
  * Redwood Realtime supports in-memory and Redis stores:
  * - In-memory stores are useful for development and testing.
@@ -39,4 +41,6 @@ export const realtime: RedwoodRealtimeOptions = {
     // if using a Redis store
     // store: { redis: { publishClient, subscribeClient } },
   },
+  // To enable defer and streaming, set to true.
+  // enableDeferStream: true,
 }
