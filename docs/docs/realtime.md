@@ -35,7 +35,7 @@ There are times where subscriptions are well-suited for a realtime problem — a
 
 [Stream and defer](https://the-guild.dev/graphql/yoga-server/docs/features/defer-stream) are directives that allow you to improve latency for clients by sending data the most important data as soon as it's ready.
 
-As applications grow, the GraphQL operation documents can get bigger.. The server will only send the response back once all the data requested in the query is ready. However, not all requested data is of equal importance, and the client may not need all of the data at once.
+As applications grow, the GraphQL operation documents can get bigger. The server will only send the response back once all the data requested in the query is ready. However, not all requested data is of equal importance, and the client may not need all of the data at once.
 
 #### Using Defer
 
