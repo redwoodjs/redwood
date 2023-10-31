@@ -7,10 +7,6 @@ export default defineConfig({
   ...basePlaywrightConfig,
   use: {
     baseURL: 'http://localhost:8910',
-    launchOptions: {
-      slowMo: 1000,
-      headless: false,
-    },
   },
 
   // Run your local dev server before starting the tests

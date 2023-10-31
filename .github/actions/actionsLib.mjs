@@ -76,7 +76,7 @@ export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix, canary }) 
     baseKey,
     'dependencies',
     await hashFiles(['yarn.lock', '.yarnrc.yml'].join('\n')),
-  ].join('-') + canary ? '-canary' : ''
+  ].join('-') + (canary ? '-canary' : '')
 
   const distKey = [
     dependenciesKey,
@@ -91,7 +91,7 @@ export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix, canary }) 
       'lerna.json',
       'packages',
     ].join('\n'))
-  ].join('-') + canary ? '-canary' : ''
+  ].join('-') + (canary ? '-canary' : '')
 
   return {
     baseKey,
