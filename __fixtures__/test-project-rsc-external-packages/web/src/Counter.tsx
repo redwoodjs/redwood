@@ -2,8 +2,7 @@
 
 import React from 'react'
 
-// TODO (RSC): Enable this
-// import 'client-only'
+import 'client-only'
 
 // @ts-expect-error no types
 import styles from './Counter.module.css'

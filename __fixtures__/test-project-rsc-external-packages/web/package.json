@@ -14,7 +14,7 @@
     "@redwoodjs/forms": "7.0.0-canary.413",
     "@redwoodjs/router": "7.0.0-canary.413",
     "@redwoodjs/web": "7.0.0-canary.413",
-    "@tobbe.dev/rsc-test": "0.0.2",
+    "@tobbe.dev/rsc-test": "0.0.3",
     "client-only": "0.0.1",
     "react": "0.0.0-experimental-e5205658f-20230913",
     "react-dom": "0.0.0-experimental-e5205658f-20230913",
