@@ -2,8 +2,6 @@ import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 
 import { setContext } from '@redwoodjs/graphql-server'
 
-import { logger } from 'src/lib/logger'
-
 export const handler = async (
   event: APIGatewayProxyEvent,
   _context: Context
@@ -19,7 +17,7 @@ export const handler = async (
 
   const numberFromContext = (context.magicNumber ?? -1) as number
   if (magicNumber !== numberFromContext) {
-    logger.error(`Expected ${magicNumber} but got ${numberFromContext}`)
+    throw new Error(`Expected ${magicNumber} but got ${numberFromContext}`)
   }
 
   return {
