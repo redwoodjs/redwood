@@ -23,10 +23,5 @@
   "packageManager": "yarn@3.6.3",
   "resolutions": {
     "vite@4.4.9": "patch:vite@npm%3A4.4.9#./.yarn/patches/vite-npm-4.4.9-e845c1bbf8.patch"
-  },
-  "dependencies": {
-    "@tobbe.dev/rsc-test": "^0.0.1",
-    "client-only": "^0.0.1",
-    "server-only": "^0.0.1"
   }
 }
