@@ -105,6 +105,16 @@ async function executeCompatibilityCheck(templateDir) {
                 'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
             }
           )}`,
+          '',
+          `  As an alternative solution, you can launch a Redwood project using GitPod instead. GitPod is a an online IDE.`,
+          `  See: ${terminalLink(
+            'Launch Redwood using GitPod',
+            'https://gitpod.io/#https://github.com/redwoodjs/starter',
+            {
+              fallback: () =>
+                'Launch Redwood using GitPod https://gitpod.io/#https://github.com/redwoodjs/starter',
+            }
+          )}`,
         ].join('\n')
       )
 
@@ -136,6 +146,16 @@ async function executeCompatibilityCheck(templateDir) {
             {
               fallback: () =>
                 'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+            }
+          )}`,
+          '',
+          `  As an alternative solution, you can launch a Redwood project using GitPod instead. GitPod is a an online IDE.`,
+          `  See: ${terminalLink(
+            'Launch Redwood using GitPod',
+            'https://gitpod.io/#https://github.com/redwoodjs/starter',
+            {
+              fallback: () =>
+                'Launch Redwood using GitPod https://gitpod.io/#https://github.com/redwoodjs/starter',
             }
           )}`,
         ].join('\n')
@@ -170,6 +190,16 @@ async function executeCompatibilityCheck(templateDir) {
           {
             fallback: () =>
               'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+          }
+        )}`,
+        '',
+        `  As an alternative solution, you can launch a Redwood project using GitPod instead. GitPod is a an online IDE.`,
+        `  See: ${terminalLink(
+          'Launch Redwood using GitPod',
+          'https://gitpod.io/#https://github.com/redwoodjs/starter',
+          {
+            fallback: () =>
+              'Launch Redwood using GitPod https://gitpod.io/#https://github.com/redwoodjs/starter',
           }
         )}`,
       ].join('\n')
