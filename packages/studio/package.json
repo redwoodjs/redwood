@@ -21,7 +21,7 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.1",
+    "@babel/runtime-corejs3": "7.23.2",
     "@fastify/http-proxy": "9.2.1",
     "@fastify/static": "6.11.2",
     "@fastify/url-data": "5.3.1",
