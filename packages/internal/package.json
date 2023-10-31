@@ -56,7 +56,7 @@
     "graphql": "16.8.1",
     "kill-port": "1.6.1",
     "prettier": "2.8.8",
-    "rimraf": "5.0.1",
+    "rimraf": "5.0.5",
     "source-map": "0.7.4",
     "string-env-interpolation": "1.0.1",
     "systeminformation": "5.21.7",
