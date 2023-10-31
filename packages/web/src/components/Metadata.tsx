@@ -49,7 +49,7 @@ export const Metadata = (props: Record<string, any>) => {
 
   let Head: typeof HelmetHead | typeof PortalHead = HelmetHead
 
-  if (process.env.NODE_ENV === 'test' || RWJS_ENV.RWJS_EXP_STREAMING_SSR) {
+  if (RWJS_ENV.RWJS_EXP_STREAMING_SSR) {
     Head = PortalHead
   }
 

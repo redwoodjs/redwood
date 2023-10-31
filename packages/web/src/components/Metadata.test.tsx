@@ -6,6 +6,14 @@ import { Metadata } from './Metadata'
 // DOCS: can return a structured object from the database and just give it to `og` and it works
 
 describe('Metadata', () => {
+  beforeAll(() => {
+    // TODO: remove this once SSR is released
+    // this is just a workaround so we force the usage of PortalHead instead of Helmet for testing
+    globalThis.RWJS_ENV = {
+      RWJS_EXP_STREAMING_SSR: true,
+    }
+  })
+
   it('renders nothing if no props or children', () => {
     const input = <Metadata />
     const output = <></>
