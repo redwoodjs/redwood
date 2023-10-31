@@ -64,6 +64,31 @@ jobs:
         id: rsc-related-changes
         uses: ./.github/actions/rsc_related_changes
 
+  ssr-related-changes:
+    needs: check
+    if: github.repository == 'redwoodjs/redwood'
+    name: 🌤️ SSR related changes?
+    runs-on: ubuntu-latest
+    outputs:
+      ssr-related-changes: ${{ steps.ssr-related-changes.outputs.ssr-related-changes }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 🐈 Yarn install
+        working-directory: ./.github/actions/ssr_related_changes
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: 🌤️ SSR related changes?
+        id: ssr-related-changes
+        uses: ./.github/actions/ssr_related_changes
+
   check:
     needs: only-doc-changes
     if: needs.only-doc-changes.outputs.only-doc-changes == 'false'
@@ -233,8 +258,8 @@ jobs:
       - run: echo "Only doc changes"
 
   ssr-smoke-tests:
-    needs: only-doc-changes
-    if: needs.only-doc-changes.outputs.only-doc-changes == 'false'
+    needs: ssr-related-changes
+    if: needs.ssr-related-changes.outputs.ssr-related-changes == 'true'
 
     strategy:
       matrix:
@@ -271,6 +296,7 @@ jobs:
         uses: ./.github/actions/set-up-test-project
         with:
           bundler: vite
+          canary: true
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
