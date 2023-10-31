@@ -285,7 +285,7 @@ mutation MakeBid {
 
 ## Defer Directive
 
-The `@defer`` directive allows you to post-pone the delivery of one or more (slow) fields grouped in an inlined or spread fragment.
+The `@defer` directive allows you to post-pone the delivery of one or more (slow) fields grouped in an inlined or spread fragment.
 
 ### Example
 
