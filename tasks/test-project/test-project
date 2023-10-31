@@ -258,7 +258,7 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-        enabled: () => canary && !link,
+        enabled: () => (canary && !link) || streamingSsr,
       },
       {
         title: 'Apply web codemods',
