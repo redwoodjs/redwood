@@ -3,7 +3,8 @@ import type { Request, Response } from 'express'
 import RSDWServer from 'react-server-dom-webpack/server.node.unbundled'
 
 import { hasStatusCode } from '../lib/StatusError'
-import { renderRSC } from '../waku-lib/rsc-handler-worker'
+
+import { renderRsc } from './rscWorkerCommunication'
 
 const { decodeReply, decodeReplyFromBusboy } = RSDWServer
 
@@ -46,6 +47,32 @@ export function createRscRequestHandler() {
 
           req.pipe(bb)
           args = await reply
+
+          // TODO (RSC): Loop over args (to not only look at args[0])
+          // TODO (RSC): Verify that this works with node16 (MDN says FormData is
+          // only supported in node18 and up)
+          if (args[0] instanceof FormData) {
+            const serializedFormData: Record<string, any> = {}
+
+            for (const [key, value] of args[0]) {
+              // Several form fields can share the same name. This should be
+              // represented as an array of the values of all those fields
+              if (serializedFormData[key] !== undefined) {
+                if (!Array.isArray(serializedFormData[key])) {
+                  serializedFormData[key] = [serializedFormData[key]]
+                }
+
+                serializedFormData[key].push(value)
+              } else {
+                serializedFormData[key] = value
+              }
+            }
+
+            args[0] = {
+              __formData__: true,
+              state: serializedFormData,
+            }
+          }
         } else {
           let body = ''
 
@@ -82,7 +109,7 @@ export function createRscRequestHandler() {
       }
 
       try {
-        const pipeable = await renderRSC({ rscId, props, rsfId, args })
+        const pipeable = await renderRsc({ rscId, props, rsfId, args })
         // TODO (RSC): See if we can/need to do more error handling here
         // pipeable.on(handleError)
         pipeable.pipe(res)
