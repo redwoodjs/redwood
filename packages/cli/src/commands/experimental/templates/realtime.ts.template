@@ -30,7 +30,6 @@ import subscriptions from 'src/subscriptions/**/*.{js,ts}'
  *
  */
 export const realtime: RedwoodRealtimeOptions = {
-  enableDeferStream: true,
   subscriptions: {
     subscriptions,
     store: 'in-memory',
