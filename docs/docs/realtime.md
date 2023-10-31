@@ -434,7 +434,7 @@ Here you see the initial response has `[]`` for alphabet data.
 
 Then on each push to the Repeater, an incremental update the the list of letters is sent.
 
-The stream ends when `hasNext`` is false:
+The stream ends when `hasNext` is false:
 
 ```bash
 * Connected to localhost (127.0.0.1) port 8911 (#0)
