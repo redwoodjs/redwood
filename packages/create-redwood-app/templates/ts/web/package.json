@@ -14,8 +14,8 @@
     "@redwoodjs/forms": "6.0.7",
     "@redwoodjs/router": "6.0.7",
     "@redwoodjs/web": "6.0.7",
-    "react": "0.0.0-experimental-08a39539f-20231031",
-    "react-dom": "0.0.0-experimental-08a39539f-20231031"
+    "react": "0.0.0-experimental-e5205658f-20230913",
+    "react-dom": "0.0.0-experimental-e5205658f-20230913"
   },
   "devDependencies": {
     "@types/react": "18.2.14",

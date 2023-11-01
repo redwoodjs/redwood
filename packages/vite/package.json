@@ -78,8 +78,8 @@
     "express": "4.18.2",
     "http-proxy-middleware": "2.0.6",
     "isbot": "3.6.8",
-    "react": "0.0.0-experimental-08a39539f-20231031",
-    "react-server-dom-webpack": "0.0.0-experimental-08a39539f-20231031",
+    "react": "0.0.0-experimental-e5205658f-20230913",
+    "react-server-dom-webpack": "0.0.0-experimental-e5205658f-20230913",
     "vite": "4.5.0",
     "yargs-parser": "21.1.1"
   },

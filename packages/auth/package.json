@@ -24,7 +24,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.2",
     "core-js": "3.32.2",
-    "react": "0.0.0-experimental-08a39539f-20231031"
+    "react": "0.0.0-experimental-e5205658f-20230913"
   },
   "devDependencies": {
     "@babel/cli": "7.23.0",
