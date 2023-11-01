@@ -65,6 +65,7 @@ interface MetaTagsProps {
  * using the open graph protocol https://ogp.me/
  * @example
  * <MetaTags title="About Page" ogContentUrl="/static/about-og.png"/>
+ * @deprecated Please use <Metadata> instead
  */
 export const MetaTags = (props: MetaTagsProps) => {
   const {
