@@ -3,7 +3,7 @@ import { setTimeout } from 'node:timers/promises'
 import type { Page } from '@playwright/test'
 import { expect, test } from '@playwright/test'
 
-import { checkHomePageCellRender } from '../../common/homePage'
+import { checkHomePageCellRender } from '../../shared/homePage'
 
 let pageWithClientBlocked: Page
 
