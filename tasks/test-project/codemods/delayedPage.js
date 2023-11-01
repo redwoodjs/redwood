@@ -23,7 +23,7 @@ function DelayedComponent({
         return (
           <script
             dangerouslySetInnerHTML={{
-              __html: 'console.log("delayed by \${time} seconds")',
+              __html: \`console.log("delayed by \${time} seconds")\`,
             }}
           />
         )
