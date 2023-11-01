@@ -16,8 +16,8 @@
     "@redwoodjs/router": "6.0.7",
     "@redwoodjs/web": "6.0.7",
     "humanize-string": "2.1.0",
-    "react": "0.0.0-experimental-08a39539f-20231031",
-    "react-dom": "0.0.0-experimental-08a39539f-20231031"
+    "react": "0.0.0-experimental-e5205658f-20230913",
+    "react-dom": "0.0.0-experimental-e5205658f-20230913"
   },
   "devDependencies": {
     "@redwoodjs/vite": "6.0.7",
@@ -27,6 +27,6 @@
     "postcss": "^8.4.31",
     "postcss-loader": "^7.3.3",
     "prettier-plugin-tailwindcss": "0.4.1",
-    "tailwindcss": "^3.3.5"
+    "tailwindcss": "^3.3.3"
   }
 }
