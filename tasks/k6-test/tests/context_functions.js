@@ -19,28 +19,7 @@ export const options = {
 
 export default function () {
   const magicNumber = Math.floor(Math.random() * 16000000)
-
-  const payload = (value) => {
-    return JSON.stringify({
-      query: `mutation MagicNumber($value: Int!) {
-        magicNumber(value: $value) {
-          value
-        }
-      }`,
-      variables: {
-        value,
-      },
-      operationName: 'MagicNumber',
-    })
-  }
-
-  const url = `${__ENV.TEST_HOST}/func`
-  const params = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-  const res = http.post(url, payload(magicNumber), params)
+  const res = http.get(`${__ENV.TEST_HOST}/func?magicNumber=${magicNumber}`)
 
   const requestPassed = check(res, {
     'status was 200': (r) => r.status == 200,
@@ -51,7 +30,7 @@ export default function () {
 
   const contextPassed = check(res, {
     'correct magic number': (r) =>
-      r.body != null && r.body.includes(`"value":${magicNumber}}`),
+      r.body != null && r.body.includes(`"value":"${magicNumber}"}`),
   })
   if (!contextPassed) {
     contextErrorCounter.add(1)
