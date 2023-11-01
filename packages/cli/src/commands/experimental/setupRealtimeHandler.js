@@ -246,6 +246,126 @@ export async function handler({ force, includeExamples, verbose }) {
           ]
         },
       },
+
+      {
+        title: 'Adding Defer example queries ...',
+        enabled: () => includeExamples,
+        task: () => {
+          // sdl
+
+          const exampleSdlTemplateContent = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'defer',
+              'fastAndSlowFields',
+              `fastAndSlowFields.sdl.template`
+            ),
+            'utf-8'
+          )
+
+          const sdlFile = path.join(
+            redwoodPaths.api.graphql,
+            `fastAndSlowFields.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`
+          )
+
+          const sdlContent = ts
+            ? exampleSdlTemplateContent
+            : transformTSToJS(sdlFile, exampleSdlTemplateContent)
+
+          // service
+
+          const exampleServiceTemplateContent = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'defer',
+              'fastAndSlowFields',
+              `fastAndSlowFields.ts.template`
+            ),
+            'utf-8'
+          )
+          const serviceFile = path.join(
+            redwoodPaths.api.services,
+            'fastAndSlowFields',
+            `fastAndSlowFields.${isTypeScriptProject() ? 'ts' : 'js'}`
+          )
+
+          const serviceContent = ts
+            ? exampleServiceTemplateContent
+            : transformTSToJS(serviceFile, exampleServiceTemplateContent)
+
+          // write all files
+          return [
+            writeFile(sdlFile, sdlContent, {
+              overwriteExisting: force,
+            }),
+            writeFile(serviceFile, serviceContent, {
+              overwriteExisting: force,
+            }),
+          ]
+        },
+      },
+
+      {
+        title: 'Adding Stream example queries ...',
+        enabled: () => includeExamples,
+        task: () => {
+          // sdl
+
+          const exampleSdlTemplateContent = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'stream',
+              'alphabet',
+              `alphabet.sdl.template`
+            ),
+            'utf-8'
+          )
+
+          const sdlFile = path.join(
+            redwoodPaths.api.graphql,
+            `alphabet.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`
+          )
+
+          const sdlContent = ts
+            ? exampleSdlTemplateContent
+            : transformTSToJS(sdlFile, exampleSdlTemplateContent)
+
+          // service
+
+          const exampleServiceTemplateContent = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'stream',
+              'alphabet',
+              `alphabet.ts.template`
+            ),
+            'utf-8'
+          )
+          const serviceFile = path.join(
+            redwoodPaths.api.services,
+            'alphabet',
+            `alphabet.${isTypeScriptProject() ? 'ts' : 'js'}`
+          )
+
+          const serviceContent = ts
+            ? exampleServiceTemplateContent
+            : transformTSToJS(serviceFile, exampleServiceTemplateContent)
+
+          // write all files
+          return [
+            writeFile(sdlFile, sdlContent, {
+              overwriteExisting: force,
+            }),
+            writeFile(serviceFile, serviceContent, {
+              overwriteExisting: force,
+            }),
+          ]
+        },
+      },
       {
         title: 'Adding config to redwood.toml...',
         task: (_ctx, task) => {
