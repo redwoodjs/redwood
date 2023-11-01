@@ -309,8 +309,21 @@ jobs:
       - name: 🎭 Install playwright dependencies
         run: npx playwright install --with-deps chromium
 
-      - name: Run SSR smoke tests
-        working-directory: ./tasks/smoke-tests/streaming-ssr
+      - name: Run SSR [DEV] smoke tests
+        working-directory: ./tasks/smoke-tests/streaming-ssr-dev
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: Build for production
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
+        run: yarn rw build --no-prerender
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: Run SSR [PROD] smoke tests
+        working-directory: ./tasks/smoke-tests/streaming-ssr-prod
         run: npx playwright test
         env:
           REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
