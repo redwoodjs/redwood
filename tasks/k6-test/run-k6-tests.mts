@@ -12,7 +12,7 @@ import fs from 'fs-extra'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { buildRedwoodFramework, addFrameworkDepsToProject, cleanUp, copyFrameworkPackages, createRedwoodJSApp, initGit, runYarnInstall } from "./util/util.mjs"
+import { buildRedwoodFramework, addFrameworkDepsToProject, cleanUp, copyFrameworkPackages, createRedwoodJSApp, initGit, runYarnInstall, changeTomlConfig } from "./util/util.mjs"
 
 // useful consts
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -46,22 +46,41 @@ const TESTS_DIR = path.join(__dirname, 'tests')
 const API_SERVER_COMMANDS = [
   {
     cmd: `node ${path.resolve(REDWOODJS_FRAMEWORK_PATH, 'packages/cli/dist/index.js')} serve api`,
-    host: 'http://localhost:8911',
+    host: 'http://127.0.0.1:8911',
   },
   {
     cmd: `node ${path.resolve(REDWOODJS_FRAMEWORK_PATH, 'packages/api-server/dist/index.js')} api`,
-    host: 'http://localhost:8911'
+    host: 'http://127.0.0.1:8911'
+  },
+  {
+    cmd: `node ${path.resolve(REDWOODJS_FRAMEWORK_PATH, 'packages/cli/dist/index.js')} dev`,
+    host: 'http://127.0.0.1:8911',
   },
 ]
 let cleanUpExecuted = false
 
 let serverSubprocess: ExecaChildProcess | undefined
-const startServer = async (command: string, gracePeriod?: number) => {
+const startServer = async (command, host) => {
   serverSubprocess = execa.command(command, {
     cwd: REDWOOD_PROJECT_DIRECTORY,
     stdio: args.verbose ? 'inherit' : 'ignore',
   })
-  await new Promise((r) => setTimeout(r, gracePeriod ?? 4000))
+  const checkConnection = async () => {
+    try {
+      await fetch(host)
+      return true
+    } catch (_error) {
+      // ignore
+    }
+    return false
+  }
+  for(let i = 0; i < 15; i++) {
+    await new Promise((r) => setTimeout(r, 2000))
+    if (await checkConnection()) {
+      return
+    }
+  }
+  throw new Error(`Could not start server with: ${command}`)
 }
 const stopServer = async () => {
   if (!serverSubprocess) {
@@ -137,6 +156,10 @@ async function main() {
     projectPath: REDWOOD_PROJECT_DIRECTORY,
     typescript: true,
     verbose: args.verbose,
+  })
+  console.log('- changing the toml config')
+  changeTomlConfig({
+    projectPath: REDWOOD_PROJECT_DIRECTORY,
   })
   console.log('- syncing the framework dependencies')
   addFrameworkDepsToProject({
@@ -218,7 +241,7 @@ async function main() {
         console.log(`${divider}`)
 
         // Start the server
-        await startServer(API_SERVER_COMMANDS[j].cmd, setupModule.startupGracePeriod)
+        await startServer(API_SERVER_COMMANDS[j].cmd, API_SERVER_COMMANDS[j].host)
 
         // Run k6 test
         let passed = false

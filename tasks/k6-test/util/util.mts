@@ -205,3 +205,14 @@ export function cleanUp({
   }
   console.log(divider)
 }
+
+export function changeTomlConfig({
+  projectPath
+}: {
+  projectPath: string
+}){
+  const tomlPath = path.join(projectPath, 'redwood.toml')
+  const toml = fs.readFileSync(tomlPath, 'utf8')
+  const newToml = toml.replace('[browser]\n  open = true', '[browser]\n  open = false')
+  fs.writeFileSync(tomlPath, newToml)
+}
