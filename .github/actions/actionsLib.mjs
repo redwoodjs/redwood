@@ -69,7 +69,7 @@ export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix, canary }) 
     baseKeyPrefix,
     process.env.RUNNER_OS,
     process.env.GITHUB_REF.replaceAll('/', '-'),
-    await hashFiles(path.join('__fixtures__', 'test-project'))
+    await hashFiles(path.join('__fixtures__', 'test-project/**/*'))
   ].join('-')
 
   const dependenciesKey = [
