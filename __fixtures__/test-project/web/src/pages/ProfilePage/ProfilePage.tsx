@@ -12,7 +12,7 @@ const ProfilePage = () => {
 
   return (
     <>
-      <Metadata title="Profile" description="Profile page" />
+      <Metadata title="Profile" description="Profile page" og />
 
       <h1 className="text-2xl">Profile</h1>
 

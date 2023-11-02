@@ -10,7 +10,7 @@ import BlogPostCell from 'src/components/BlogPostCell'
 const BlogPostPage = ({ id }: BlogPostPageProps) => {
   return (
     <>
-      <Metadata title={`Post ${id}`} description={`Description ${id}`} />
+      <Metadata title={`Post ${id}`} description={`Description ${id}`} og />
 
       <BlogPostCell id={id} />
     </>
