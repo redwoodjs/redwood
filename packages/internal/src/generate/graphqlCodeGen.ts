@@ -203,7 +203,7 @@ async function runCodegenGraphQL(
   return [filename]
 }
 
-export function getLoadDocumentsOptions(filename: string) {
+function getLoadDocumentsOptions(filename: string) {
   const loadTypedefsConfig: LoadTypedefsOptions<{ cwd: string }> = {
     cwd: getPaths().base,
     ignore: [path.join(process.cwd(), filename)],
