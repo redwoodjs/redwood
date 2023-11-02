@@ -77,7 +77,7 @@ interface ForgotPasswordFlowOptions<TUser = Record<string | number, any>> {
    * Needs to be explicitly set to false to disable the flow
    */
   enabled?: boolean
-  handler: (user: TUser) => any
+  handler: (user: TUser, token: string) => any
   errors?: {
     usernameNotFound?: string
     usernameRequired?: string
@@ -169,6 +169,12 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
    * ie. if your Prisma model is named `UserCredential` this value would be `userCredential`, as in `db.userCredential`
    */
   credentialModelAccessor?: keyof PrismaClient
+  /**
+   * The fields that are allowed to be returned from the user table when
+   * invoking handlers that return a user object (like forgotPassword and signup)
+   * Defaults to `id` if not set at all.
+   */
+  allowedUserFields?: string[]
   /**
    *  A map of what dbAuth calls a field to what your database calls it.
    * `id` is whatever column you use to uniquely identify a user (probably
@@ -285,6 +291,7 @@ export class DbAuthHandler<
   db: PrismaClient
   dbAccessor: any
   dbCredentialAccessor: any
+  allowedUserFields: string[]
   headerCsrfToken: string | undefined
   hasInvalidSession: boolean
   session: DbAuthSession<TIdType> | undefined
@@ -379,6 +386,7 @@ export class DbAuthHandler<
       : null
     this.headerCsrfToken = this.event.headers['csrf-token']
     this.hasInvalidSession = false
+    this.allowedUserFields = this.options.allowedUserFields || ['id', 'email']
 
     const sessionExpiresAt = new Date()
     sessionExpiresAt.setSeconds(
@@ -534,26 +542,13 @@ export class DbAuthHandler<
         throw new DbAuthError.GenericError()
       }
 
-      // Temporarily set the token on the user back to the raw token so it's
-      // available to the handler.
-      user.resetToken = token
       // call user-defined handler in their functions/auth.js
       const response = await (
         this.options.forgotPassword as ForgotPasswordFlowOptions
-      ).handler(this._sanitizeUser(user))
-
-      // remove resetToken and resetTokenExpiresAt if in the body of the
-      // forgotPassword handler response
-      let responseObj = response
-      if (typeof response === 'object') {
-        responseObj = Object.assign(response, {
-          [this.options.authFields.resetToken]: undefined,
-          [this.options.authFields.resetTokenExpiresAt]: undefined,
-        })
-      }
+      ).handler(this._sanitizeUser(user), token)
 
       return [
-        response ? JSON.stringify(responseObj) : '',
+        response ? JSON.stringify(response) : '',
         {
           ...this._deleteSessionHeader,
         },
@@ -1083,11 +1078,16 @@ export class DbAuthHandler<
     ].join(';')
   }
 
-  // removes sensitive fields from user before sending over the wire
+  // removes any fields not explicitly allowed to be sent to the client before
+  // sending a response over the wire
   _sanitizeUser(user: Record<string, unknown>) {
     const sanitized = JSON.parse(JSON.stringify(user))
-    delete sanitized[this.options.authFields.hashedPassword]
-    delete sanitized[this.options.authFields.salt]
+
+    Object.keys(sanitized).forEach((key) => {
+      if (!this.allowedUserFields.includes(key)) {
+        delete sanitized[key]
+      }
+    })
 
     return sanitized
   }
@@ -1404,7 +1404,7 @@ export class DbAuthHandler<
     SetCookieHeader & CsrfTokenHeader,
     { statusCode: number }
   ] {
-    const sessionData = { id: user[this.options.authFields.id] }
+    const sessionData = this._sanitizeUser(user)
 
     // TODO: this needs to go into graphql somewhere so that each request makes
     // a new CSRF token and sets it in both the encrypted session and the
