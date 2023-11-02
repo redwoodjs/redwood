@@ -279,6 +279,8 @@ interface DbAuthSession<TIdType> {
   id: TIdType
 }
 
+const DEFAULT_ALLOWED_USER_FIELDS = ['id', 'email']
+
 export class DbAuthHandler<
   TUser extends Record<string | number, any>,
   TIdType = any
@@ -386,7 +388,8 @@ export class DbAuthHandler<
       : null
     this.headerCsrfToken = this.event.headers['csrf-token']
     this.hasInvalidSession = false
-    this.allowedUserFields = this.options.allowedUserFields || ['id', 'email']
+    this.allowedUserFields =
+      this.options.allowedUserFields || DEFAULT_ALLOWED_USER_FIELDS
 
     const sessionExpiresAt = new Date()
     sessionExpiresAt.setSeconds(
