@@ -7819,6 +7819,7 @@ __metadata:
     "@fastify/http-proxy": 9.2.1
     "@fastify/static": 6.11.2
     "@fastify/url-data": 5.3.1
+    "@redwoodjs/context": 6.0.7
     "@redwoodjs/project-config": 6.0.7
     "@types/aws-lambda": 8.10.119
     "@types/lodash": 4.14.195

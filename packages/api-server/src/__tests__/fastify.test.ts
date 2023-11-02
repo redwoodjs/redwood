@@ -8,6 +8,7 @@ jest.mock('fastify', () => {
   return jest.fn(() => {
     return {
       register: () => {},
+      addHook: () => {},
     }
   })
 })
