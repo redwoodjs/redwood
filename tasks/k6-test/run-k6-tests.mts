@@ -14,9 +14,6 @@ import yargs from 'yargs/yargs'
 
 import { buildRedwoodFramework, addFrameworkDepsToProject, cleanUp, copyFrameworkPackages, createRedwoodJSApp, initGit, runYarnInstall, changeTomlConfig } from "./util/util.mjs"
 
-// useful consts
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-
 // Parse input
 const args = yargs(hideBin(process.argv))
   .positional('project-directory', {
@@ -31,6 +28,9 @@ const args = yargs(hideBin(process.argv))
   .help()
   .parseSync()
 
+
+// useful consts
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const REDWOODJS_FRAMEWORK_PATH = path.join(__dirname, '..', '..')
 const REDWOOD_PROJECT_DIRECTORY =
   args._?.[0]?.toString() ??
@@ -40,41 +40,60 @@ const REDWOOD_PROJECT_DIRECTORY =
     // ":" is problematic with paths
     new Date().toISOString().split(':').join('-')
   )
-
 const SETUPS_DIR = path.join(__dirname, 'setups')
 const TESTS_DIR = path.join(__dirname, 'tests')
+
+// Commands to start an api server
 const API_SERVER_COMMANDS = [
   {
-    cmd: `node ${path.resolve(REDWOOD_PROJECT_DIRECTORY, 'node_modules/@redwoodjs/cli/dist/index.js')} serve api`,
+    name: 'CLI: serve api',
+    command: `node ${path.resolve(REDWOOD_PROJECT_DIRECTORY, 'node_modules/@redwoodjs/cli/dist/index.js')} serve api`,
     host: 'http://127.0.0.1:8911',
+    skip: () => false
   },
   {
-    cmd: `node ${path.resolve(REDWOOD_PROJECT_DIRECTORY, 'node_modules/@redwoodjs/api-server/dist/index.js')} api`,
-    host: 'http://127.0.0.1:8911'
+    name: 'CLI: serve',
+    command: `node ${path.resolve(REDWOOD_PROJECT_DIRECTORY, 'node_modules/@redwoodjs/cli/dist/index.js')} serve`,
+    host: 'http://127.0.0.1:8910/.redwood/functions',
+    skip: () => false
   },
   {
-    cmd: `node ${path.resolve(REDWOOD_PROJECT_DIRECTORY, 'node_modules/@redwoodjs/cli/dist/index.js')} dev`,
+    name: 'CLI: dev',
+    command: `node ${path.resolve(REDWOOD_PROJECT_DIRECTORY, 'node_modules/@redwoodjs/cli/dist/index.js')} dev`,
     host: 'http://127.0.0.1:8911',
+    skip: () => false
   },
+  {
+    name: '@redwoodjs/api-server: api',
+    command: `node ${path.resolve(REDWOOD_PROJECT_DIRECTORY, 'node_modules/@redwoodjs/api-server/dist/index.js')} api`,
+    host: 'http://127.0.0.1:8911',
+    skip: () => false
+  },
+  {
+    name: 'server file: node api/dist/server.js',
+    command: `node ${path.resolve(REDWOOD_PROJECT_DIRECTORY, 'api/dist/server.js')}`,
+    host: 'http://127.0.0.1:8911',
+    skip: () => !fs.existsSync(path.resolve(REDWOOD_PROJECT_DIRECTORY, 'api/dist/server.js'))
+  }
 ]
-let cleanUpExecuted = false
 
+// Server start/stop
 let serverSubprocess: ExecaChildProcess | undefined
-const startServer = async (command, host) => {
+const startServer = async (command: string, heathcheck: string) => {
   serverSubprocess = execa.command(command, {
     cwd: REDWOOD_PROJECT_DIRECTORY,
     stdio: args.verbose ? 'inherit' : 'ignore',
   })
   const checkConnection = async () => {
     try {
-      await fetch(host)
+      await fetch(heathcheck)
       return true
     } catch (_error) {
       // ignore
     }
     return false
   }
-  for(let i = 0; i < 15; i++) {
+  for (let i = 0; i < 15; i++) {
     await new Promise((r) => setTimeout(r, 2000))
     if (await checkConnection()) {
       return
@@ -105,6 +124,7 @@ async function main() {
 
   // Register clean up
   if (args.cleanUp) {
+    let cleanUpExecuted = false
     console.log('\nThe directory will be deleted after the tests are run')
     process.on('SIGINT', () => {
       if (!cleanUpExecuted) {
@@ -144,7 +164,6 @@ async function main() {
 
   // Create a test project and sync the current framework state
   console.log('\nCreating a fresh project:')
-
   console.log('- building the framework')
   buildRedwoodFramework({
     frameworkPath: REDWOODJS_FRAMEWORK_PATH,
@@ -185,7 +204,30 @@ async function main() {
   })
 
   // Results collection
-  const results = {}
+  const results: {
+    [setup: string]: {
+      [test: string]: ({
+        passed: boolean
+        metrics?: {
+          http_reqs: {
+            values: {
+              count: number
+            }
+          }
+          http_req_duration: {
+            values: {
+              'p(90)': number
+            }
+          }
+          http_req_waiting: {
+            values: {
+              'p(90)': number
+            }
+          }
+        }
+      } | null)[]
+    }
+  } = {}
 
   console.log('The following setups will be run:')
   for (let i = 0; i < setups.length; i++) {
@@ -233,20 +275,34 @@ async function main() {
 
     // Run the tests
     for (let i = 0; i < runForTests.length; i++) {
+      results[setup] ??= {}
+      results[setup][runForTests[i]] ??= []
+
       // Run for different server commands
       for (let j = 0; j < API_SERVER_COMMANDS.length; j++) {
+        const server = API_SERVER_COMMANDS[j]
+        if (server.skip()) {
+          results[setup][runForTests[i]].push(null)
+          continue
+        }
+
         console.log(`\n${divider}`)
         console.log(`Running test ${i * API_SERVER_COMMANDS.length + j + 1}/${runForTests.length * API_SERVER_COMMANDS.length}: ${runForTests[i]}`)
-        console.log(chalk.dim(API_SERVER_COMMANDS[j].cmd))
+        console.log(chalk.dim(server.name))
         console.log(`${divider}`)
 
         // Start the server
-        await startServer(API_SERVER_COMMANDS[j].cmd, API_SERVER_COMMANDS[j].host)
+        try {
+          await startServer(server.command, server.host)
+        } catch (_error) {
+          console.log(`Could not start server with command: ${server.command}`)
+          continue
+        }
 
         // Run k6 test
         let passed = false
         try {
-          await execa('k6', ['run', path.join(TESTS_DIR, `${runForTests[i]}.js`), '--env', `TEST_HOST=${API_SERVER_COMMANDS[j].host}`], {
+          await execa('k6', ['run', path.join(TESTS_DIR, `${runForTests[i]}.js`), '--env', `TEST_HOST=${server.host}`], {
             cwd: REDWOOD_PROJECT_DIRECTORY,
             stdio: 'inherit',
           })
@@ -255,41 +311,60 @@ async function main() {
           // ignore
         }
 
-        results[setup] ??= {}
-        results[setup][runForTests[i]] ??= {}
-        results[setup][runForTests[i]][API_SERVER_COMMANDS[j].cmd] = fs.readJSONSync(path.join(REDWOOD_PROJECT_DIRECTORY, 'summary.json'), {
+        const result = fs.readJSONSync(path.join(REDWOOD_PROJECT_DIRECTORY, 'summary.json'), {
           throws: false,
           flag: 'r',
           encoding: 'utf-8',
         }) ?? {}
-        results[setup][runForTests[i]][API_SERVER_COMMANDS[j].cmd].passed = passed
+        results[setup][runForTests[i]].push({
+          passed,
+          metrics: result.metrics
+        })
 
         // Stop the server
         await stopServer()
       }
     }
+
+    // Explictly clear the dist folder
+    console.log('Building the project...')
+    await execa('rm', ['-r', 'api/dist'], {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      stdio: args.verbose ? 'inherit' : 'ignore',
+    })
+
   }
 
   // Print results
+  let hadFailure = false
   console.log(`\n${divider}\nResults:\n${divider}`)
   for (const setup in results) {
     console.log(chalk.bgBlue(`\nSetup: ${setup}`))
     for (const test in results[setup]) {
-      for (const serverCommand in results[setup][test]) {
-        const passed = results[setup][test][serverCommand].passed
+      for (let i = 0; i < results[setup][test].length; i++) {
+        if (results[setup][test][i] === null) {
+          continue
+        }
+
+        const passed = results[setup][test][i]?.passed
         const bgColor = passed ? chalk.bgGreen : chalk.bgRed
         const bgPrefix = bgColor(' ')
         console.log(passed ? bgColor(' PASS ') : bgColor(' FAIL '))
-        console.log(`${bgPrefix} Test: ${test} [${serverCommand}]`)
-        console.log(`${bgPrefix}   Requests: ${results[setup][test][serverCommand].metrics?.http_reqs.values.count}`)
-        console.log(`${bgPrefix}   Duration (p90): ${results[setup][test][serverCommand].metrics?.http_req_duration.values['p(90)'].toFixed(3)}`)
-        console.log(`${bgPrefix}   TTFB (p90): ${results[setup][test][serverCommand].metrics?.http_req_waiting.values['p(90)'].toFixed(3)}`)
+        console.log(`${bgPrefix} Test: ${test} [${API_SERVER_COMMANDS[i].name}]`)
+        console.log(`${bgPrefix}   Requests: ${results[setup][test][i]?.metrics?.http_reqs.values.count}`)
+        console.log(`${bgPrefix}   Duration (p90): ${results[setup][test][i]?.metrics?.http_req_duration.values['p(90)'].toFixed(3)}`)
+        console.log(`${bgPrefix}   TTFB (p90): ${results[setup][test][i]?.metrics?.http_req_waiting.values['p(90)'].toFixed(3)}`)
         console.log()
+
+        if (!passed) {
+          hadFailure = true
+        }
       }
     }
   }
 
-  process.emit('SIGINT')
+  // Exit code
+  process.exitCode ||= hadFailure ? 1 : 0
 }
 
 main()

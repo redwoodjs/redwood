@@ -12,8 +12,6 @@ export const validForTests = [
   "scalable_graphql_schema",
 ]
 
-export const startupGracePeriod = 8000
-
 export function setup({ projectPath }: { projectPath: string }) {
 
   const modelCount = 1024
