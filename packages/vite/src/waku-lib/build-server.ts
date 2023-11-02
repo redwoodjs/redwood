@@ -8,6 +8,7 @@ import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn'
 
+// This is part of step 3. It's invoked from ./buildRscFeServer
 export async function serverBuild(
   entriesFile: string,
   clientEntryFiles: Record<string, string>,
@@ -43,7 +44,7 @@ export async function serverBuild(
         )
         const splitPath = relativePath.split('/')
 
-        // TODO (RSC): Verify this is correct. Need to find a scoped packages
+        // TODO (RSC): Verify this is correct. Need to find a scoped package
         // that uses 'use client'
         // Handle scoped packages
         if (relativePath.startsWith('@')) {
@@ -53,11 +54,11 @@ export async function serverBuild(
         // Packages without scope
         return splitPath[0]
       }),
+      resolve: {
+        externalConditions: ['react-server'],
+      },
     },
     plugins: [react()],
-    resolve: {
-      conditions: ['react-server'],
-    },
     build: {
       ssr: true,
       ssrEmitAssets: true,

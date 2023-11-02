@@ -13,7 +13,13 @@ export const builder = (yargs) =>
       recordTelemetryAttributes({
         command: 'generate types',
       })
-      execa.sync('yarn rw-gen', { shell: true, stdio: 'inherit' })
+      try {
+        execa.sync('yarn rw-gen', { shell: true, stdio: 'inherit' })
+      } catch (error) {
+        // rw-gen is responsible for logging its own errors but we need to
+        // make sure we exit with a non-zero exit code
+        process.exitCode = error.exitCode ?? 1
+      }
     })
     .commandDir('./generate', {
       recurse: true,

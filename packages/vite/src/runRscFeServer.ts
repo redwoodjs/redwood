@@ -15,8 +15,8 @@ import type { Manifest as ViteBuildManifest } from 'vite'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { createRscRequestHandler } from './rsc/rscRequestHandler'
+import { setClientEntries } from './rsc/rscWorkerCommunication'
 import { registerFwGlobals } from './streaming/registerGlobals'
-import { setClientEntries } from './waku-lib/rsc-handler-worker'
 
 /**
  * TODO (STREAMING)

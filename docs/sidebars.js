@@ -150,6 +150,7 @@ module.exports = {
         'prerender',
         'project-configuration-dev-test-build',
         'redwoodrecord',
+        'realtime',
         'router',
         'schema-relations',
         'security',

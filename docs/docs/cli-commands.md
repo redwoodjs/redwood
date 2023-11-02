@@ -1904,6 +1904,19 @@ In order to use [Netlify Dev](https://www.netlify.com/products/dev/) you need to
 
 > Note: To detect the RedwoodJS framework, please use netlify-cli v3.34.0 or greater.
 
+### setup mailer
+
+This command adds the necessary packages and files to get started using the RedwoodJS mailer. By default it also creates an example mail template which can be skipped with the `--skip-examples` flag.
+
+```
+yarn redwood setup mailer
+```
+
+| Arguments & Options     | Description                    |
+| :---------------------- | :----------------------------- |
+| `--force, -f`           | Overwrite existing files       |
+| `--skip-examples`       | Do not include example content, such as a React email template |
+
 ### setup package
 
 This command takes a published npm package that you specify, performs some compatibility checks, and then executes its bin script. This allows you to use third-party packages that can provide you with an easy-to-use setup command for the particular functionality they provide.
