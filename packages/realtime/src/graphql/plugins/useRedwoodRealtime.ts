@@ -2,6 +2,7 @@ import type { Plugin } from '@envelop/core'
 import { useLiveQuery } from '@envelop/live-query'
 import { mergeSchemas } from '@graphql-tools/schema'
 import { astFromDirective } from '@graphql-tools/utils'
+import { useDeferStream } from '@graphql-yoga/plugin-defer-stream'
 import { useGraphQLSSE } from '@graphql-yoga/plugin-graphql-sse'
 import { createRedisEventTarget } from '@graphql-yoga/redis-event-target'
 import type { CreateRedisEventTargetArgs } from '@graphql-yoga/redis-event-target'
@@ -11,6 +12,8 @@ import { GraphQLLiveDirective } from '@n1ru4l/graphql-live-query'
 import { InMemoryLiveQueryStore } from '@n1ru4l/in-memory-live-query-store'
 import type { execute as defaultExecute } from 'graphql'
 import { print } from 'graphql'
+
+export { Repeater } from 'graphql-yoga'
 
 /**
  * We want SubscriptionsGlobs type to be an object with this shape:
@@ -60,6 +63,7 @@ export type SubscribeClientType = CreateRedisEventTargetArgs['subscribeClient']
  *
  */
 export type RedwoodRealtimeOptions = {
+  enableDeferStream?: boolean
   liveQueries?: {
     /**
      * @description Redwood Realtime supports in-memory and Redis stores.
@@ -231,6 +235,9 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
       }
       if (subscriptionsEnabled) {
         addPlugin(useGraphQLSSE() as Plugin<object>)
+      }
+      if (options.enableDeferStream) {
+        addPlugin(useDeferStream() as Plugin<object>)
       }
     },
     onContextBuilding() {

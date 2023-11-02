@@ -4,8 +4,9 @@ import fg from "fast-glob"
 import fs from "fs-extra"
 import execa from "execa"
 import { rimrafSync } from 'rimraf'
+import chalk from "chalk"
 
-export function buildRedwoodFramework({frameworkPath}: {frameworkPath: string}) {
+export function buildRedwoodFramework({frameworkPath, verbose}: {frameworkPath: string, verbose: boolean}) {
   try {
     const files = fg.sync('packages/**/dist', {
       onlyDirectories: true,
@@ -18,7 +19,7 @@ export function buildRedwoodFramework({frameworkPath}: {frameworkPath: string}) 
       {
         cwd: frameworkPath,
         shell: true,
-        stdio: 'inherit',
+        stdio: verbose ? 'inherit': 'ignore',
       }
     )
   } catch (e) {
@@ -30,7 +31,7 @@ export function buildRedwoodFramework({frameworkPath}: {frameworkPath: string}) 
   }
 }
 
-export function createRedwoodJSApp({ frameworkPath, projectPath, typescript }: { frameworkPath: string, projectPath: string, typescript: boolean }) {
+export function createRedwoodJSApp({ frameworkPath, projectPath, typescript, verbose }: { frameworkPath: string, projectPath: string, typescript: boolean, verbose: boolean }) {
   try {
     execa.sync(
       'yarn node dist/create-redwood-app.js',
@@ -45,7 +46,7 @@ export function createRedwoodJSApp({ frameworkPath, projectPath, typescript }: {
         cwd: path.join(frameworkPath, 'packages/create-redwood-app'),
         env: { REDWOOD_CI: '1' },
         shell: true,
-        stdio: 'inherit',
+        stdio: verbose ? 'inherit' : 'ignore',
       }
     )
 
@@ -79,15 +80,17 @@ export function createRedwoodJSApp({ frameworkPath, projectPath, typescript }: {
 export function addFrameworkDepsToProject({
   frameworkPath,
   projectPath,
+  verbose
 }: {
   frameworkPath: string
   projectPath: string
+  verbose: boolean
 }) {
   try {
     execa.sync('yarn project:deps', {
       cwd: frameworkPath,
       shell: true,
-      stdio: 'inherit',
+      stdio: verbose ? 'inherit' : 'ignore',
       env: {
         RWFW_PATH: frameworkPath,
         RWJS_CWD: projectPath,
@@ -107,15 +110,17 @@ export function addFrameworkDepsToProject({
 export function copyFrameworkPackages({
   frameworkPath,
   projectPath,
+  verbose
 }: {
   frameworkPath: string
   projectPath: string
+  verbose: boolean
 }) {
   try {
     execa.sync('yarn project:copy', {
       cwd: frameworkPath,
       shell: true,
-      stdio: 'inherit',
+      stdio: verbose ? 'inherit' : 'ignore',
       env: {
         RWFW_PATH: frameworkPath,
         RWJS_CWD: projectPath,
@@ -132,14 +137,16 @@ export function copyFrameworkPackages({
 
 export function runYarnInstall({
   projectPath,
+  verbose
 }: {
   projectPath: string
+  verbose: boolean
 }) {
   try {
     execa.sync('yarn install', {
       cwd: projectPath,
       shell: true,
-      stdio: 'inherit',
+      stdio: verbose ? 'inherit' : 'ignore',
     })
   } catch (e) {
     if (e.signal !== 'SIGINT') {
@@ -152,20 +159,22 @@ export function runYarnInstall({
 
 export function initGit({
   projectPath,
+  verbose
 }: {
   projectPath: string
+  verbose: boolean
 }) {
   try {
     console.log('Initializing Git')
     execa.sync('git init --initial-branch main && git add .', {
       cwd: projectPath,
       shell: true,
-      stdio: 'inherit',
+      stdio: verbose ? 'inherit' : 'ignore',
     })
     execa.sync('git commit -a --message=init --no-gpg-sign', {
       cwd: projectPath,
       shell: true,
-      stdio: 'inherit',
+      stdio: verbose ? 'inherit' : 'ignore',
     })
   } catch (e) {
     if (e.signal !== 'SIGINT') {
@@ -183,7 +192,7 @@ export function cleanUp({
 }: {
   projectPath: string
 }) {
-  const divider = '~'.repeat(process.stdout.columns)
+  const divider = chalk.blue('~'.repeat(process.stdout.columns))
   console.log(`\n${divider}`)
   console.log('Cleaning up files (may take a few seconds)...')
   if (fs.existsSync(projectPath)) {
