@@ -172,7 +172,7 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
   /**
    * The fields that are allowed to be returned from the user table when
    * invoking handlers that return a user object (like forgotPassword and signup)
-   * Defaults to `id` if not set at all.
+   * Defaults to `id` and `email` if not set at all.
    */
   allowedUserFields?: string[]
   /**
