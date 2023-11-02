@@ -44,7 +44,6 @@ export function createAuthApolloLink(
 ) {
   return new ApolloLink((operation, forward) => {
     const { token } = operation.getContext()
-
     // Only add auth headers when there's a token. `token` is `null` when `!isAuthenticated`.
     const authHeaders = token
       ? {

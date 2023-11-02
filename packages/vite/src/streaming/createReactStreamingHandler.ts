@@ -65,7 +65,11 @@ export const createReactStreamingHandler = async (
       const middleware = entryServerImport.middleware
 
       if (middleware) {
-        decodedAuthState = await middleware(req)
+        try {
+          decodedAuthState = (await middleware(req)).context
+        } catch (e) {
+          console.error('Whooopsie, error in middleware', e)
+        }
       }
     }
 

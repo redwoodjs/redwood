@@ -148,13 +148,10 @@ export function createAuthProvider<
           logIn,
           logOut,
           getToken:
+            // When its rendering on the server, just get the token from the serverAuthState
             typeof window === 'undefined'
               ? async () => {
-                  console.log(
-                    'xxxxx definitely calling this function',
-                    serverAuthState
-                  )
-                  return serverAuthState.token || null
+                  return serverAuthState.encryptedSession || null
                 }
               : getToken,
           getCurrentUser,

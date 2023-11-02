@@ -10,22 +10,17 @@ export const createAuthDecoder = (cookieNameOption: string): Decoder => {
       return null
     }
 
-    // @TODO for SSR we need to make sure we are passing the cookie from the FE to the BE
     const session = dbAuthSession(req.event, cookieNameOption)
-    const authHeaderUserId = token
 
-    if (session.id.toString() !== authHeaderUserId) {
-      console.error('Authorization header does not match decrypted user ID')
-      throw new Error('Authorization header does not match decrypted user ID')
-    }
-
+    // We no longer compare the session id with the bearer token
+    // Because we only pass around the encrypted session (in both cookie and header)
     return session
   }
 }
 
 /** @deprecated use `createAuthDecoder` */
 export const authDecoder: Decoder = async (
-  authHeaderValue: string,
+  _authHeaderValue: string, // Browser: 4, FEServer: encryptedSession
   type: string,
   req: { event: APIGatewayProxyEvent }
 ) => {
@@ -37,12 +32,6 @@ export const authDecoder: Decoder = async (
   // it fall back to the default cookie name `session`, making it backwards
   // compatible with existing RW apps.
   const session = dbAuthSession(req.event, undefined)
-  const authHeaderUserId = authHeaderValue
-
-  if (session.id.toString() !== authHeaderUserId) {
-    console.error('Authorization header does not match decrypted user ID')
-    throw new Error('Authorization header does not match decrypted user ID')
-  }
 
   return session
 }

@@ -292,6 +292,7 @@ export class DbAuthHandler<
   corsContext: CorsContext | undefined
   sessionExpiresDate: string
   webAuthnExpiresDate: string
+  encryptedSession: string | null = null
 
   // class constant: list of auth methods that are supported
   static get METHODS(): AuthMethodNames[] {
@@ -402,9 +403,9 @@ export class DbAuthHandler<
     }
 
     try {
-      const [session, csrfToken] = decryptSession(
-        getSession(this.cookie, this.options.cookie?.name)
-      )
+      this.encryptedSession = getSession(this.cookie, this.options.cookie?.name)
+
+      const [session, csrfToken] = decryptSession(this.encryptedSession)
       this.session = session
       this.sessionCsrfToken = csrfToken
     } catch (e) {
@@ -568,12 +569,8 @@ export class DbAuthHandler<
 
   async getToken() {
     try {
-      const user = await this._getCurrentUser()
-
-      // need to return *something* for our existing Authorization header stuff
-      // to work, so return the user's ID in case we can use it for something
-      // in the future
-      return [user[this.options.authFields.id]]
+      // Just return the encrypted session cookie, to be passed back in the Authorization header
+      return [this.encryptedSession || '']
     } catch (e: any) {
       if (e instanceof DbAuthError.NotLoggedInError) {
         return this._logoutResponse()
@@ -1435,6 +1432,7 @@ export class DbAuthHandler<
   _ok(body: string, headers = {}, options = { statusCode: 200 }) {
     return {
       statusCode: options.statusCode,
+      // @TODO should we do a null check in body?!
       body: typeof body === 'string' ? body : JSON.stringify(body),
       headers: { 'Content-Type': 'application/json', ...headers },
     }

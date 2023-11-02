@@ -35,7 +35,7 @@ export const extractCookie = (event: APIGatewayProxyEvent) => {
   return eventGraphiQLHeadersCookie(event) || eventHeadersCookie(event)
 }
 
-function extractSessionFromHeader(event: APIGatewayProxyEvent) {
+function extractEncryptedSessionFromHeader(event: APIGatewayProxyEvent) {
   return event.headers.authorization?.split(' ')[1]
 }
 
@@ -88,17 +88,18 @@ export const dbAuthSession = (
   cookieNameOption: string | undefined
 ) => {
   const cookieHeader = extractCookie(event)
-  const sessionInAuthHeader = extractSessionFromHeader(event)
+  const sessionInAuthHeader = extractEncryptedSessionFromHeader(event)
 
-  if (cookieHeader && !sessionInAuthHeader) {
+  if (cookieHeader) {
+    // i.e. Browser making a request
     const [session, _csrfToken] = decryptSession(
       getSession(cookieHeader, cookieNameOption)
     )
     return session
   } else if (sessionInAuthHeader) {
+    // i.e. FE Sever makes the request, and adds encrypted session to the Authorization header
     const [session, _csrfToken] = decryptSession(sessionInAuthHeader)
 
-    console.log(`👉 \n ~ file: shared.ts:103 ~ session:`, session)
     return session
   } else {
     return null
