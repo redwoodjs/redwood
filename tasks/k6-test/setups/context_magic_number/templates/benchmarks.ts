@@ -1,6 +1,6 @@
 import type { MutationResolvers } from 'types/graphql'
 
-import { setContext } from '@redwoodjs/graphql-server'
+import { setContext } from '@redwoodjs/context'
 
 export const magicNumber: MutationResolvers['magicNumber'] = async ({
   value,
