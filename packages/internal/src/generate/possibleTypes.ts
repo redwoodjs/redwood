@@ -44,7 +44,7 @@ type PossibleTypesResult = {
 export const generatePossibleTypes = async (): Promise<PossibleTypesResult> => {
   const config = getConfig()
 
-  if (!config.graphql.possibleTypes) {
+  if (!config.graphql.fragments) {
     return {
       possibleTypesFiles: [],
       errors: [],

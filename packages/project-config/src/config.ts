@@ -91,7 +91,7 @@ export interface Config {
     nestScaffoldByModel: boolean
   }
   graphql: {
-    possibleTypes: boolean
+    fragments: boolean
     trustedDocuments: boolean
   }
   notifications: {
@@ -149,7 +149,7 @@ const DEFAULT_CONFIG: Config = {
     serverConfig: './api/server.config.js',
     debugPort: 18911,
   },
-  graphql: { possibleTypes: false, trustedDocuments: false },
+  graphql: { fragments: false, trustedDocuments: false },
   browser: {
     open: false,
   },

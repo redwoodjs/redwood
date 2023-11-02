@@ -1,5 +1,5 @@
 [web]
   port = 8888
 [graphql]
-  possibleTypes = true
+  fragments = true
   trustedDocuments = true

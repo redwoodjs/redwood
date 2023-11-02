@@ -15,16 +15,13 @@ export const generate = async () => {
     await generateTypeDefs()
 
   const clientPresetFiles = []
-  const possibleTypesFiles = []
-  const generatePossibleTypesErrors = []
 
-  if (config.graphql.trustedDocuments || config.graphql.possibleTypes) {
+  const { possibleTypesFiles, errors: generatePossibleTypesErrors } =
+    await generatePossibleTypes()
+
+  if (config.graphql.trustedDocuments) {
     const preset = await generateClientPreset()
     clientPresetFiles.push(...preset.clientPresetFiles)
-
-    const { possibleTypesFiles: files, errors } = await generatePossibleTypes()
-    possibleTypesFiles.push(...files)
-    generatePossibleTypesErrors.push(...errors)
   }
 
   let files = []
