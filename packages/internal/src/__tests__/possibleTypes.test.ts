@@ -12,60 +12,61 @@ afterEach(() => {
 })
 
 describe('Generate gql possible types web from the GraphQL Schema', () => {
-  test('when there are *no* union types', async () => {
-    const FIXTURE_PATH = path.resolve(
-      __dirname,
-      '../../../../__fixtures__/example-todo-main'
-    )
-
-    process.env.RWJS_CWD = FIXTURE_PATH
-
-    await generateGraphQLSchema()
-
-    jest
-      .spyOn(fs, 'writeFileSync')
-      .mockImplementation(
-        (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
-          expect(file).toMatch(
-            path.join(getPaths().web.graphql, 'possible-types.ts')
-          )
-          expect(data).toMatchSnapshot()
-        }
+  describe('when toml has graphql possible types turned off', () => {
+    test('when there are *no* union types', async () => {
+      const FIXTURE_PATH = path.resolve(
+        __dirname,
+        '../../../../__fixtures__/example-todo-main'
       )
 
-    const { possibleTypesFiles } = await generatePossibleTypes()
+      process.env.RWJS_CWD = FIXTURE_PATH
 
-    expect(possibleTypesFiles).toHaveLength(1)
-    expect(possibleTypesFiles[0]).toMatch(
-      path.join(getPaths().web.graphql, 'possible-types.ts')
-    )
+      await generateGraphQLSchema()
+
+      jest
+        .spyOn(fs, 'writeFileSync')
+        .mockImplementation(
+          (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
+            expect(file).toMatch(
+              path.join(getPaths().web.graphql, 'possibleTypes.ts')
+            )
+            expect(data).toMatchSnapshot()
+          }
+        )
+
+      const { possibleTypesFiles } = await generatePossibleTypes()
+
+      expect(possibleTypesFiles).toHaveLength(0)
+    })
   })
 
-  test('when there are union types ', async () => {
-    const FIXTURE_PATH = path.resolve(
-      __dirname,
-      '../../../../__fixtures__/fragment-test-project'
-    )
-
-    process.env.RWJS_CWD = FIXTURE_PATH
-    await generateGraphQLSchema()
-
-    jest
-      .spyOn(fs, 'writeFileSync')
-      .mockImplementation(
-        (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
-          expect(file).toMatch(
-            path.join(getPaths().web.graphql, 'possible-types.ts')
-          )
-          expect(data).toMatchSnapshot()
-        }
+  describe('when toml has graphql possible types turned om', () => {
+    test('when there are union types ', async () => {
+      const FIXTURE_PATH = path.resolve(
+        __dirname,
+        '../../../../__fixtures__/fragment-test-project'
       )
 
-    const { possibleTypesFiles } = await generatePossibleTypes()
+      process.env.RWJS_CWD = FIXTURE_PATH
+      await generateGraphQLSchema()
 
-    expect(possibleTypesFiles).toHaveLength(1)
-    expect(possibleTypesFiles[0]).toMatch(
-      path.join(getPaths().web.graphql, 'possible-types.ts')
-    )
+      jest
+        .spyOn(fs, 'writeFileSync')
+        .mockImplementation(
+          (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
+            expect(file).toMatch(
+              path.join(getPaths().web.graphql, 'possibleTypes.ts')
+            )
+            expect(data).toMatchSnapshot()
+          }
+        )
+
+      const { possibleTypesFiles } = await generatePossibleTypes()
+
+      expect(possibleTypesFiles).toHaveLength(1)
+      expect(possibleTypesFiles[0]).toMatch(
+        path.join(getPaths().web.graphql, 'possibleTypes.ts')
+      )
+    })
   })
 })

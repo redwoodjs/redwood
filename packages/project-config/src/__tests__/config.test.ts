@@ -86,6 +86,7 @@ describe('getConfig', () => {
           "tests": true,
         },
         "graphql": {
+          "possibleTypes": false,
           "trustedDocuments": false,
         },
         "notifications": {
@@ -174,6 +175,7 @@ describe('getConfig', () => {
           path.join(__dirname, './fixtures/redwood.toml')
         )
         expect(config.graphql.trustedDocuments).toEqual(false)
+        expect(config.graphql.possibleTypes).toEqual(false)
       })
     })
 
@@ -182,6 +184,7 @@ describe('getConfig', () => {
         path.join(__dirname, './fixtures/redwood.graphql.toml')
       )
       expect(config.graphql.trustedDocuments).toEqual(true)
+      expect(config.graphql.possibleTypes).toEqual(true)
     })
   })
 
