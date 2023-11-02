@@ -104,9 +104,7 @@ export const Metadata = (props: Record<string, any>) => {
 
   return (
     <Head>
-      {tags.map((tag, i) => (
-        <React.Fragment key={i}>{tag}</React.Fragment>
-      ))}
+      {tags.map((tag, i) => React.cloneElement(tag, { key: i }))}
       {children}
     </Head>
   )
