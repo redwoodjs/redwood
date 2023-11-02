@@ -64,7 +64,7 @@ const handler = async (
 ): Promise<any> => {
   // @MARK
   // Don't use globalContext until beforeAll runs
-  const globalContext = require('../../globalContext').context
+  const globalContext = require('@redwoodjs/context').context
   const currentUser = globalContext.currentUser
 
   return {
@@ -114,7 +114,7 @@ const handlerWithError = async (
 ): Promise<any> => {
   // @MARK
   // Don't use globalContext until beforeAll runs
-  const globalContext = require('../../globalContext').context
+  const globalContext = require('@redwoodjs/context').context
   const currentUser = globalContext.currentUser
 
   try {

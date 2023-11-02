@@ -110,9 +110,9 @@ export const getApiSideBabelPlugins = (
             path: 'graphql-tag',
           },
           {
-            // import { context } from '@redwoodjs/graphql-server'
+            // import { context } from '@redwoodjs/context'
             members: ['context'],
-            path: '@redwoodjs/graphql-server',
+            path: '@redwoodjs/context',
           },
         ],
       },

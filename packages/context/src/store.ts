@@ -2,7 +2,7 @@
 
 import { AsyncLocalStorage } from 'async_hooks'
 
-import type { GlobalContext } from './globalContext'
+import type { GlobalContext } from './context'
 
 let CONTEXT_STORAGE: AsyncLocalStorage<Map<string, GlobalContext>>
 

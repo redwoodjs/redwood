@@ -212,7 +212,7 @@ describe('api', () => {
             },
             {
               members: ['context'],
-              path: '@redwoodjs/graphql-server',
+              path: '@redwoodjs/context',
             },
           ],
         },

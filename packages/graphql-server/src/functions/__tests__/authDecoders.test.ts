@@ -3,7 +3,6 @@ import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 import { createLogger } from '@redwoodjs/api/logger'
 
 import { createGraphQLHandler } from '../../functions/graphql'
-import { context } from '../../globalContext'
 
 jest.mock('../../makeMergedSchema', () => {
   const { makeExecutableSchema } = require('@graphql-tools/schema')
@@ -28,7 +27,7 @@ jest.mock('../../makeMergedSchema', () => {
         resolvers: {
           Query: {
             me: () => {
-              const globalContext = require('../../globalContext').context
+              const globalContext = require('@redwoodjs/context').context
               const currentUser = globalContext.currentUser
 
               return {

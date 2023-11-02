@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { getAsyncStoreInstance } from './globalContextStore'
+import { getAsyncStoreInstance } from './store'
 
 export interface GlobalContext extends Record<string, unknown> {}
 

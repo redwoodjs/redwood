@@ -4,7 +4,7 @@
 // @NOTE without these imports in the setup file, mockCurrentUser
 // will remain undefined in the user's tests
 // Remember to use specific imports
-const { setContext } = require('@redwoodjs/graphql-server/dist/globalContext')
+const { setContext } = require('@redwoodjs/context')
 const { defineScenario } = require('@redwoodjs/testing/dist/api/scenario')
 
 // @NOTE we do this because jest.setup.js runs every time in each context
@@ -223,10 +223,7 @@ beforeEach(() => {
   const mockContextStore = new Map()
   mockContextStore.set('context', {})
   jest
-    .spyOn(
-      require('@redwoodjs/graphql-server/dist/globalContextStore'),
-      'getAsyncStoreInstance'
-    )
+    .spyOn(require('@redwoodjs/context'), 'getAsyncStoreInstance')
     // @ts-expect-error - We are not providing the full functionality of the AsyncLocalStorage in this returned object
     .mockImplementation(() => {
       return {

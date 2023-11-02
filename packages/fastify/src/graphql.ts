@@ -9,14 +9,10 @@ import type {
 import fastifyRawBody from 'fastify-raw-body'
 import type { Plugin } from 'graphql-yoga'
 
-import type {
-  GraphQLYogaOptions,
-  GlobalContext,
-} from '@redwoodjs/graphql-server'
-import {
-  createGraphQLYoga,
-  getAsyncStoreInstance,
-} from '@redwoodjs/graphql-server'
+import type { GlobalContext } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context'
+import type { GraphQLYogaOptions } from '@redwoodjs/graphql-server'
+import { createGraphQLYoga } from '@redwoodjs/graphql-server'
 
 /**
  * Transform a Fastify Request to an event compatible with the RedwoodGraphQLContext's event
