@@ -152,12 +152,25 @@ The same should be true of your GraphQL Server. [GraphQL Yoga](https://www.graph
 > The fully-featured GraphQL Server with focus on easy setup, performance and great developer experience.
 
 RedwoodJS leverages Yoga's Envelop plugins to implement custom internal plugins to help with [authentication](#authentication), [logging](#logging), [directive handling](#directives), and more.
+
 ### Security Best Practices
 
 
 RedwoodJS implements GraphQL Armor from [Escape Technologies](https://escape.tech) to make your endpoint more secure by default by implementing common GraphQL [security best practices](#security).
 
 GraphQL Armor, developed by Escape in partnership with The Guild, is a middleware for JS servers that adds a security layer to the RedwoodJS GraphQL endpoint.
+
+#### Trusted Documents
+
+In addition, RedwoodJS can be setup to enforce [persisted operations](https://the-guild.dev/graphql/yoga-server/docs/features/persisted-operations) -- alternatively called [Trusted Documents](https://benjie.dev/graphql/trusted-documents).
+
+Use trusted documents if your GraphQL API is only for your own apps (which is the case for most GraphQL APIs) for a massively decreased attack-surface, increased performance, and decreased bandwidth usage.
+
+At app build time, Redwood will extract the GraphQL documents (queries, etc) and make them available to the server. At run time, you can then send documentId or "hash" instead of the whole document; only accept requests with a documentId and one that it knows about.
+
+This prevents malicious attackers from executing arbitrary GraphQL thus helping with unwanted resolver traversal of information leaking.
+
+See [Setup Trusted Documents](#setup-trusted-documents) for more information and usage instructions.
 
 ### Conclusion
 
@@ -2326,6 +2339,26 @@ Orm if you want a custom mask:
 ```
 
 ``Cannot query field "sta" on type "Media". [REDACTED]?`
+
+### Setup Trusted Documents
+
+In addition, RedwoodJS can be setup to enforce [persisted operations](https://the-guild.dev/graphql/yoga-server/docs/features/persisted-operations) -- alternatively called [Trusted Documents](https://benjie.dev/graphql/trusted-documents).
+
+Use trusted documents if your GraphQL API is only for your own apps (which is the case for most GraphQL APIs) for a massively decreased attack-surface, increased performance, and decreased bandwidth usage.
+
+At build time, Redwood will extract the GraphQL documents (queries, etc) and make them available to the server. At run time, you can then send documentId or "hash" instead of the whole document; only accept requests with a documentId and one that it knows about.
+
+This prevents malicious attackers from executing arbitrary GraphQL thus helping with unwanted resolver traversal of information leaking.
+
+* setup command
+* toml config
+
+
+```toml
+[graphql]
+  trustedDocuments = true
+```
+* change to use cell query
 
 ### Error Masking
 
