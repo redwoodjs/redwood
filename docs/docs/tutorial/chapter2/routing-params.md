@@ -775,7 +775,7 @@ export const Success = ({ article }) => {
 // highlight-next-line
 import Article from 'src/components/Article'
 
-import type { FindArticleQuery } from 'types/graphql'
+import type { FindArticleQuery, FindArticleQueryVariables } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
