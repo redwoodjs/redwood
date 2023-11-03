@@ -75,7 +75,11 @@ export const extractCookie = (event: APIGatewayProxyEvent) => {
 }
 
 // whether this encrypted session was made with the old CryptoJS algorithm
-export const isLegacySession = (text: string) => {
+export const isLegacySession = (text: string | undefined) => {
+  if (!text) {
+    return false
+  }
+
   const [_encryptedText, iv] = text.split('|')
   return !iv
 }
