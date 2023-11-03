@@ -74,7 +74,7 @@ export const realtimeExists = () => {
 export const isRealtimeSetup = () => {
   if (!realtimeExists) {
     throw new Error(
-      'Adding realtime events to requires that RedwoodJS Realtime be setup. Please run `yarn setup realtime` first.'
+      'Adding realtime events requires that RedwoodJS Realtime be setup. Please run `yarn setup realtime` first.'
     )
   }
 
