@@ -263,9 +263,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        # [ubuntu-latest, windows-latest] disabled, because windows misbehaving
-        # waiting for help from main-man Josh
+        os: [ubuntu-latest, windows-latest]
 
     name: 🔁 SSR Smoke tests / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
