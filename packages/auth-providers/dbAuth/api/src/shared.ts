@@ -101,7 +101,7 @@ export const decryptSession = (text: string | null) => {
       // decrypt using the `node:crypto` algorithm
       const decipher = crypto.createDecipheriv(
         'aes-256-cbc',
-        process.env.SESSION_SECRET as string,
+        (process.env.SESSION_SECRET as string).substring(0, 32),
         Buffer.from(iv, 'base64')
       )
       decoded =
