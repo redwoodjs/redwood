@@ -64,6 +64,31 @@ jobs:
         id: rsc-related-changes
         uses: ./.github/actions/rsc_related_changes
 
+  ssr-related-changes:
+    needs: check
+    if: github.repository == 'redwoodjs/redwood'
+    name: 🌤️ SSR related changes?
+    runs-on: ubuntu-latest
+    outputs:
+      ssr-related-changes: ${{ steps.ssr-related-changes.outputs.ssr-related-changes }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 🐈 Yarn install
+        working-directory: ./.github/actions/ssr_related_changes
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: 🌤️ SSR related changes?
+        id: ssr-related-changes
+        uses: ./.github/actions/ssr_related_changes
+
   check:
     needs: only-doc-changes
     if: needs.only-doc-changes.outputs.only-doc-changes == 'false'
@@ -231,6 +256,80 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - run: echo "Only doc changes"
+
+  ssr-smoke-tests:
+    needs: ssr-related-changes
+    if: needs.ssr-related-changes.outputs.ssr-related-changes == 'true'
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        # [ubuntu-latest, windows-latest] disabled, because windows misbehaving
+        # waiting for help from main-man Josh
+
+    name: 🔁 SSR Smoke tests / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    env:
+      REDWOOD_CI: 1
+      REDWOOD_VERBOSE_TELEMETRY: 1
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 🐈 Set up yarn cache
+        uses: ./.github/actions/set-up-yarn-cache
+
+      - name: 🐈 Yarn install
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: 🔨 Build
+        run: yarn build
+
+      - name: 🌲 Set up test project
+        id: set-up-test-project
+        uses: ./.github/actions/set-up-test-project
+        with:
+          bundler: vite
+          canary: true
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+
+      - name: Run SSR codemods on test project
+        run: ./tasks/test-project/convert-to-ssr-fixture ${{ steps.set-up-test-project.outputs.test-project-path }}
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: 🎭 Install playwright dependencies
+        run: npx playwright install --with-deps chromium
+
+      - name: Run SSR [DEV] smoke tests
+        working-directory: ./tasks/smoke-tests/streaming-ssr-dev
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: Build for production
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
+        run: yarn rw build --no-prerender
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: Run SSR [PROD] smoke tests
+        working-directory: ./tasks/smoke-tests/streaming-ssr-prod
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
+          REDWOOD_DISABLE_TELEMETRY: 1
 
   smoke-tests:
     needs: check

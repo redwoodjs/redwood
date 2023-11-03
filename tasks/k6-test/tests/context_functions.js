@@ -7,9 +7,9 @@ const contextErrorCounter = new Counter('Context_Errors')
 
 export const options = {
   stages: [
-    { duration: '2s', target: 8 },
-    { duration: '16s', target: 8 },
-    { duration: '2s', target: 0 },
+    { duration: '1s', target: 8 },
+    { duration: '6s', target: 8 },
+    { duration: '1s', target: 0 },
   ],
   thresholds: {
     Request_Failures: ['count<1'],
@@ -19,28 +19,7 @@ export const options = {
 
 export default function () {
   const magicNumber = Math.floor(Math.random() * 16000000)
-
-  const payload = (value) => {
-    return JSON.stringify({
-      query: `mutation MagicNumber($value: Int!) {
-        magicNumber(value: $value) {
-          value
-        }
-      }`,
-      variables: {
-        value,
-      },
-      operationName: 'MagicNumber',
-    })
-  }
-
-  const url = 'http://localhost:8911/graphql'
-  const params = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-  const res = http.post(url, payload(magicNumber), params)
+  const res = http.get(`${__ENV.TEST_HOST}/func?magicNumber=${magicNumber}`)
 
   const requestPassed = check(res, {
     'status was 200': (r) => r.status == 200,
@@ -50,9 +29,16 @@ export default function () {
   }
 
   const contextPassed = check(res, {
-    'correct magic number': (r) => r.body.includes(`"value":${magicNumber}}`),
+    'correct magic number': (r) =>
+      r.body != null && r.body.includes(`"value":"${magicNumber}"}`),
   })
   if (!contextPassed) {
     contextErrorCounter.add(1)
+  }
+}
+
+export function handleSummary(data) {
+  return {
+    'summary.json': JSON.stringify(data),
   }
 }
