@@ -1,6 +1,5 @@
-import path from 'node:path'
-
 import crypto from 'node:crypto'
+import path from 'node:path'
 
 import { DbAuthHandler } from '../DbAuthHandler'
 import * as dbAuthError from '../errors'
@@ -121,16 +120,16 @@ const expectLoggedInResponse = (response) => {
 
 const encryptToCookie = (data) => {
   const iv = crypto.randomBytes(16)
-    const cipher = crypto.createCipheriv(
-      'aes-256-cbc',
-      (SESSION_SECRET as string).substring(0, 32),
-      iv
-    )
-    let encryptedSession = cipher.update(data, 'utf-8', 'base64')
-    encryptedSession += cipher.final('base64')
+  const cipher = crypto.createCipheriv(
+    'aes-256-cbc',
+    SESSION_SECRET.substring(0, 32),
+    iv
+  )
+  let encryptedSession = cipher.update(data, 'utf-8', 'base64')
+  encryptedSession += cipher.final('base64')
 
   return `session=${encryptedSession}|${iv.toString('base64')}`
-  }
+}
 
 let event, context, options
 
@@ -969,7 +968,7 @@ describe('dbAuth', () => {
         expect(user).toEqual(user)
         return user
       }
-      const dbAuth = new DbAuthHandler(event,context,options)
+      const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.login()
     })
 
@@ -1568,8 +1567,8 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('getToken',() => {
-    it('returns the ID of the logged in user',async () => {
+  describe('getToken', () => {
+    it('returns the ID of the logged in user', async () => {
       const user = await createDbUser()
       event = {
         headers: {
@@ -1578,20 +1577,20 @@ describe('dbAuth', () => {
           ),
         },
       }
-      const dbAuth = new DbAuthHandler(event,context,options)
+      const dbAuth = new DbAuthHandler(event, context, options)
       const response = await dbAuth.getToken()
 
       expect(response[0]).toEqual(user.id)
     })
 
-    it('returns nothing if user is not logged in',async () => {
-      const dbAuth = new DbAuthHandler(event,context,options)
+    it('returns nothing if user is not logged in', async () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
       const response = await dbAuth.getToken()
 
       expect(response[0]).toEqual('')
     })
 
-    it('returns any other error',async () => {
+    it('returns any other error', async () => {
       event = {
         headers: {
           cookie: encryptToCookie(
@@ -1600,21 +1599,22 @@ describe('dbAuth', () => {
         },
       }
 
-      const dbAuth = new DbAuthHandler(event,context,options)
+      const dbAuth = new DbAuthHandler(event, context, options)
       const response = await dbAuth.getToken()
 
       expect(response[0]).toEqual('{"error":"User not found"}')
     })
 
-    it('re-encrypts the session cookie if using the legacy algorithm',async () => {
-      const user = await createDbUser({ id: 7 })
+    it('re-encrypts the session cookie if using the legacy algorithm', async () => {
+      await createDbUser({ id: 7 })
       event = {
         headers: {
           // legacy session with { id: 7 } for userID
-          cookie: 'session=U2FsdGVkX1+s7seQJnVgGgInxuXm13l8VvzA3Mg2fYg='
+          cookie: 'session=U2FsdGVkX1+s7seQJnVgGgInxuXm13l8VvzA3Mg2fYg=',
         },
       }
-      process.env.SESSION_SECRET = 'QKxN2vFSHAf94XYynK8LUALfDuDSdFowG6evfkFX8uszh4YZqhTiqEdshrhWbwbw'
+      process.env.SESSION_SECRET =
+        'QKxN2vFSHAf94XYynK8LUALfDuDSdFowG6evfkFX8uszh4YZqhTiqEdshrhWbwbw'
 
       const dbAuth = new DbAuthHandler(event, context, options)
       const [userId, headers] = await dbAuth.getToken()
