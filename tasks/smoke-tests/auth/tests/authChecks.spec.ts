@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-import { loginAsTestUser, signUpTestUser } from '../../common'
+import { loginAsTestUser, signUpTestUser } from '../../shared/common'
 
 // Signs up a user before these tests
 

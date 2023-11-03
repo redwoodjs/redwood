@@ -3,10 +3,9 @@ import * as path from 'node:path'
 
 import { test, expect } from '@playwright/test'
 import type { PlaywrightTestArgs, Page } from '@playwright/test'
-// @ts-expect-error - With `* as` you have to use .default() when calling execa
 import execa from 'execa'
 
-import { loginAsTestUser, signUpTestUser } from '../../common'
+import { loginAsTestUser, signUpTestUser } from '../../shared/common'
 
 // This is a special test that does the following
 // Signup a user (admin@bazinga.com), because salt/secrets won't match, we need to do this
