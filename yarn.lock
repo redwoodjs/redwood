@@ -8072,12 +8072,10 @@ __metadata:
     "@redwoodjs/api": 6.0.7
     "@redwoodjs/project-config": 6.0.7
     "@simplewebauthn/server": 7.3.1
-    "@types/crypto-js": 4.1.1
     "@types/md5": 2.3.2
     "@types/uuid": 9.0.2
     base64url: 3.0.1
     core-js: 3.32.2
-    crypto-js: 4.1.1
     jest: 29.7.0
     md5: 2.3.0
     typescript: 5.2.2
@@ -8478,7 +8476,6 @@ __metadata:
     "@redwoodjs/project-config": 6.0.7
     "@redwoodjs/structure": 6.0.7
     "@redwoodjs/telemetry": 6.0.7
-    "@types/crypto-js": 4.1.1
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
@@ -8487,7 +8484,6 @@ __metadata:
     configstore: 3.1.5
     core-js: 3.32.2
     cross-env: 7.0.3
-    crypto-js: 4.1.1
     decamelize: 5.0.1
     dotenv-defaults: 5.0.2
     enquirer: 2.4.1
@@ -9078,7 +9074,6 @@ __metadata:
     "@tailwindcss/forms": 0.5.3
     "@tremor/react": 3.4.1
     "@types/aws-lambda": 8.10.119
-    "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 9.0.2
     "@types/lodash": 4.14.195
     "@types/mailparser": ^3
@@ -9097,7 +9092,6 @@ __metadata:
     buffer: 6.0.3
     chokidar: 3.5.3
     core-js: 3.32.2
-    crypto-js: 4.1.1
     dotenv: 16.3.1
     fast-json-parse: 1.0.3
     fastify: 4.23.2
@@ -11323,13 +11317,6 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: a8de3fed3e9cacf8ee50e49139ef40b3fd03ee3c135140bdfc1536c00c38bd26c435be885c5facc97404be2e17b7c088fa588b43d6e974bab20cdb0e53ec6c9c
-  languageName: node
-  linkType: hard
-
-"@types/crypto-js@npm:4.1.1":
-  version: 4.1.1
-  resolution: "@types/crypto-js@npm:4.1.1"
-  checksum: e53b712c5d3b72d19c67a06c8bbaaafd989d78f71a2168f1376c8fb84d5744e5166b58d79528a124645e13f13fe4d2c97ee8f03d649ef913e93ca6b8cee41370
   languageName: node
   linkType: hard
 
@@ -16821,13 +16808,6 @@ __metadata:
     randombytes: ^2.0.0
     randomfill: ^1.0.3
   checksum: 0c20198886576050a6aa5ba6ae42f2b82778bfba1753d80c5e7a090836890dc372bdc780986b2568b4fb8ed2a91c958e61db1f0b6b1cc96af4bd03ffc298ba92
-  languageName: node
-  linkType: hard
-
-"crypto-js@npm:4.1.1":
-  version: 4.1.1
-  resolution: "crypto-js@npm:4.1.1"
-  checksum: 50cc66a35f2738171d9a6d80c85ba7d00cb6440b756db035ba9ccd03032c0a803029a62969ecd4c844106c980af87687c64b204dd967989379c4f354fb482d37
   languageName: node
   linkType: hard
 
