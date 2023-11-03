@@ -64,7 +64,7 @@ async function main() {
     .readdirSync(path.dirname(fileURLToPath(import.meta.url)), {
       withFileTypes: true,
     })
-    .filter((dirent) => dirent.isDirectory())
+    .filter((dirent) => dirent.isDirectory() && dirent.name !== 'shared')
     .map((dirent) => dirent.name)
 
   if (smokeTest === undefined) {

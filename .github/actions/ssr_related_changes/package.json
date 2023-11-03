@@ -1,0 +1,9 @@
+{
+  "name": "ssr_related_changes",
+  "private": true,
+  "dependencies": {
+    "@actions/core": "1.10.0",
+    "@actions/exec": "1.1.1"
+  },
+  "packageManager": "yarn@3.6.3"
+}
