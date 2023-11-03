@@ -45,11 +45,11 @@ const SETUPS_DIR = path.join(__dirname, 'setups')
 const TESTS_DIR = path.join(__dirname, 'tests')
 const API_SERVER_COMMANDS = [
   {
-    cmd: `node ${path.resolve(REDWOODJS_FRAMEWORK_PATH, 'packages/cli/dist/index.js')} serve api`,
+    cmd: `node ${path.resolve(REDWOOD_PROJECT_DIRECTORY, 'node_modules/@redwoodjs/cli/dist/index.js')} serve api`,
     host: 'http://localhost:8911',
   },
   {
-    cmd: `node ${path.resolve(REDWOODJS_FRAMEWORK_PATH, 'packages/api-server/dist/index.js')} api`,
+    cmd: `node ${path.resolve(REDWOOD_PROJECT_DIRECTORY, 'node_modules/@redwoodjs/api-server/dist/index.js')} api`,
     host: 'http://localhost:8911'
   },
 ]

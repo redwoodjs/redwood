@@ -2,7 +2,7 @@ import crypto from 'node:crypto'
 
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 
-import { getConfig } from '@redwoodjs/project-config'
+import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 
 import * as DbAuthError from './errors'
 
@@ -25,6 +25,19 @@ const DEFAULT_SCRYPT_OPTIONS: ScryptOptions = {
 // Extracts the cookie from an event, handling lower and upper case header names.
 const eventHeadersCookie = (event: APIGatewayProxyEvent) => {
   return event.headers.cookie || event.headers.Cookie
+}
+
+const getPort = () => {
+  let configPath
+
+  try {
+    configPath = getConfigPath()
+  } catch {
+    // If this throws, we're in a serverless environment, and the `redwood.toml` file doesn't exist.
+    return 8911
+  }
+
+  return getConfig(configPath).api.port
 }
 
 // When in development environment, check for cookie in the request extension headers
@@ -224,7 +237,7 @@ export const legacyHashPassword = (text: string, salt?: string) => {
 }
 
 export const cookieName = (name: string | undefined) => {
-  const port = getConfig().api?.port || 8911
+  const port = getPort()
   const cookieName = name?.replace('%port%', '' + port) ?? 'session'
 
   return cookieName
