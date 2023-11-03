@@ -530,7 +530,8 @@ export class DbAuthHandler<
           },
           data: {
             [this.options.authFields.resetToken]: tokenHash,
-            [this.options.authFields.resetTokenExpiresAt]: tokenExpires,
+            [this.options.authFields.resetTokenExpiresAt]:
+              tokenExpires.toISOString(),
           },
         })
       } catch (e) {
