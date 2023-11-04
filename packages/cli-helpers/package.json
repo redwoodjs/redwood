@@ -29,7 +29,7 @@
     "@redwoodjs/project-config": "6.0.7",
     "@redwoodjs/telemetry": "6.0.7",
     "chalk": "4.1.2",
-    "core-js": "3.32.2",
+    "core-js": "3.33.2",
     "dotenv": "16.3.1",
     "execa": "5.1.1",
     "listr2": "6.6.1",

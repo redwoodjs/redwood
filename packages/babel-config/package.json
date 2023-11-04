@@ -38,7 +38,7 @@
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-module-resolver": "5.0.0",
-    "core-js": "3.32.2",
+    "core-js": "3.33.2",
     "fast-glob": "3.3.1",
     "graphql": "16.8.1",
     "typescript": "5.2.2"
