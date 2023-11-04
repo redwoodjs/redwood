@@ -1,4 +1,3 @@
-import CryptoJS from 'crypto-js'
 import { v4 as uuidv4 } from 'uuid'
 
 // tests if id, which is always a string from cli, is actually a number or uuid
@@ -10,7 +9,7 @@ const getExpiryTime = (expiry) => {
   return expiry ? Date.now() + expiry * 60 * 1000 : Date.now() + 3600 * 1000
 }
 
-const getDBAuthHeader = (userId) => {
+const getDBAuthHeader = async (userId) => {
   if (!userId) {
     throw new Error('Require an unique id to generate session cookie')
   }
@@ -20,11 +19,11 @@ const getDBAuthHeader = (userId) => {
       'dbAuth requires a SESSION_SECRET environment variable that is used to encrypt session cookies. Use `yarn rw g secret` to create one, then add to your `.env` file. DO NOT check this variable in your version control system!!'
     )
   }
+
+  const { encryptSession } = await import('@redwoodjs/auth-dbauth-api')
+
   const id = isNumeric(userId) ? parseInt(userId) : userId
-  const cookie = CryptoJS.AES.encrypt(
-    JSON.stringify({ id }) + ';' + uuidv4(),
-    process.env.SESSION_SECRET
-  ).toString()
+  const cookie = encryptSession(JSON.stringify({ id }) + ';' + uuidv4())
 
   return {
     'auth-provider': 'dbAuth',
