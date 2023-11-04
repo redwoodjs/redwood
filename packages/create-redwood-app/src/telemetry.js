@@ -57,10 +57,12 @@ export async function startTelemetry() {
   const cpu = await system.cpu()
   const mem = await system.mem()
 
-  // Record if this is running on gitpod
-  const isGitpod = Object.keys(process.env).some((key) =>
-    key.startsWith('GITPOD_')
-  )
+  // Record any specific development environment
+  let developmentEnvironment = undefined
+  // Gitpod
+  if (Object.keys(process.env).some((key) => key.startsWith('GITPOD_'))) {
+    developmentEnvironment = 'gitpod'
+  }
 
   const resource = Resource.default().merge(
     new Resource({
@@ -78,7 +80,7 @@ export async function startTelemetry() {
       'env.node_env': process.env.NODE_ENV || null,
       'ci.redwood': !!process.env.REDWOOD_CI,
       'ci.isci': ci.isCI,
-      'platform.gitpod': isGitpod,
+      'dev.environment': developmentEnvironment,
       uid: UID,
     })
   )
