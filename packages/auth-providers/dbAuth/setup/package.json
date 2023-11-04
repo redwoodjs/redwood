@@ -27,14 +27,12 @@
     "@simplewebauthn/browser": "7.2.0",
     "core-js": "3.32.2",
     "prompts": "2.4.2",
-    "secure-random-password": "0.2.3",
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
     "@babel/cli": "7.22.15",
     "@babel/core": "^7.22.20",
     "@simplewebauthn/typescript-types": "7.0.0",
-    "@types/secure-random-password": "0.2.1",
     "@types/yargs": "17.0.24",
     "jest": "29.7.0",
     "typescript": "5.2.2"
