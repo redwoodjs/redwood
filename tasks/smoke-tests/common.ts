@@ -58,31 +58,21 @@ export const signUpTestUser = async ({
 }: AuthUtilsParams) => {
   await page.goto('/signup')
 
-  await page.locator('input[name="username"]').click()
-  // Fill input[name="username"]
-  await page.locator('input[name="username"]').fill(email)
-  // Press Tab
-  await page.locator('input[name="username"]').press('Tab')
-  // Fill input[name="password"]
-  await page.locator('input[name="password"]').fill(password)
-  await page.locator('input[name="full-name"]').click()
-  await page.locator('input[name="full-name"]').fill(fullName)
+  await page.getByLabel('Username').fill(email)
+  await page.getByLabel('Password').fill(password)
+  await page.getByLabel('Full Name').fill(fullName)
 
-  const alreadyRegisteredErr = page.locator(
-    `text=Username \`${email}\` already in use`
-  )
+  await page.getByRole('button', { name: 'Sign Up' }).click()
 
-  // Either wait for signup to succeed and redirect
-  // Or get the username already registered error, either way is fine!
-  await Promise.all([
-    Promise.race([
-      page.waitForURL('**/'),
-      alreadyRegisteredErr.waitFor({ timeout: 5000 }),
-    ]),
-    page.locator('text=Sign Up').click(),
+  // Wait for either...
+  // - signup to succeed and redirect to the home page
+  // - an error message to appear in a toast
+  await Promise.race([
+    page.waitForURL('/'),
+    expect(
+      page.getByText(`Username \`${email}\` already in use`)
+    ).toBeVisible(),
   ])
-
-  console.log(`Signup successful for ${email}!`)
 }
 
 export const loginAsTestUser = async ({
@@ -92,18 +82,10 @@ export const loginAsTestUser = async ({
 }: AuthUtilsParams) => {
   await page.goto('/login')
 
-  // Click input[name="username"]
-  await page.locator('input[name="username"]').click()
-  // Fill input[name="username"]
-  await page.locator('input[name="username"]').fill(email)
-  // Click input[name="password"]
-  await page.locator('input[name="password"]').click()
-  // Fill input[name="password"]
-  await page.locator('input[name="password"]').fill(password)
+  await page.getByLabel('Username').fill(email)
+  await page.getByLabel('Password').fill(password)
 
-  // Click button:has-text("Login")
-  await Promise.all([
-    page.waitForURL('**/'),
-    page.locator('button:has-text("Login")').click(),
-  ])
+  await page.getByRole('button', { name: 'Login' }).click()
+
+  await page.waitForURL('/')
 }

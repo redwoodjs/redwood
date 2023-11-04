@@ -26,7 +26,6 @@
     "@redwoodjs/project-config": "6.3.2",
     "base64url": "3.0.1",
     "core-js": "3.32.2",
-    "crypto-js": "4.1.1",
     "md5": "2.3.0",
     "uuid": "9.0.0"
   },
@@ -35,7 +34,6 @@
     "@babel/core": "^7.22.20",
     "@redwoodjs/api": "6.3.2",
     "@simplewebauthn/server": "7.3.1",
-    "@types/crypto-js": "4.1.1",
     "@types/md5": "2.3.2",
     "@types/uuid": "9.0.2",
     "jest": "29.7.0",

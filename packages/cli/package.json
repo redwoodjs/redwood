@@ -45,7 +45,6 @@
     "@redwoodjs/project-config": "6.3.2",
     "@redwoodjs/structure": "6.3.2",
     "@redwoodjs/telemetry": "6.3.2",
-    "@types/secure-random-password": "0.2.1",
     "boxen": "5.1.2",
     "camelcase": "6.3.0",
     "chalk": "4.1.2",
@@ -54,7 +53,6 @@
     "configstore": "3.1.5",
     "core-js": "3.32.2",
     "cross-env": "7.0.3",
-    "crypto-js": "4.1.1",
     "decamelize": "5.0.1",
     "dotenv-defaults": "5.0.2",
     "enquirer": "2.4.1",
@@ -74,7 +72,6 @@
     "prisma": "5.4.2",
     "prompts": "2.4.2",
     "rimraf": "5.0.5",
-    "secure-random-password": "0.2.3",
     "semver": "7.5.3",
     "string-env-interpolation": "1.0.1",
     "systeminformation": "5.21.7",
@@ -86,7 +83,6 @@
   "devDependencies": {
     "@babel/cli": "7.23.0",
     "@babel/core": "^7.22.20",
-    "@types/crypto-js": "4.1.1",
     "jest": "29.7.0",
     "typescript": "5.2.2"
   },
