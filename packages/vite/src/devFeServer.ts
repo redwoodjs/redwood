@@ -55,18 +55,12 @@ async function createServer() {
 
   const routes = getProjectRoutes()
 
-  // TODO (STREAMING) CSS is handled by Vite in dev mode, we don't need to
-  // worry about it in dev but..... it causes a flash of unstyled content.
-  // For now I'm just injecting index css here
-  // Look at collectStyles in packages/vite/src/fully-react/find-styles.ts
-  const FIXME_HardcodedIndexCss = ['index.css']
-
   for (const route of routes) {
     const routeHandler = await createReactStreamingHandler(
       {
         route,
         clientEntryPath: rwPaths.web.entryClient as string,
-        cssLinks: FIXME_HardcodedIndexCss,
+        cssLinks: [],
       },
       vite
     )

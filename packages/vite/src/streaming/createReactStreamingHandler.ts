@@ -10,6 +10,7 @@ import type { TagDescriptor } from '@redwoodjs/web'
 
 // import { stripQueryStringAndHashFromPath } from '../utils'
 
+import { collectCssPaths, componentsModules } from './collectCss'
 import { reactRenderToStreamResponse } from './streamHelpers'
 import { loadAndRunRouteHooks } from './triggerRouteHooks'
 
@@ -26,7 +27,8 @@ export const createReactStreamingHandler = async (
   { route, clientEntryPath, cssLinks }: CreateReactStreamingHandlerOptions,
   viteDevServer?: ViteDevServer
 ) => {
-  const { redirect, routeHooks, bundle } = route
+  // @ts-expect-error bazinga
+  const { redirect, routeHooks, bundle, filePath } = route
   const rwPaths = getPaths()
 
   const isProd = !viteDevServer
@@ -41,6 +43,17 @@ export const createReactStreamingHandler = async (
 
   // @NOTE: we are returning a FetchAPI handler
   return async (req: Request) => {
+    if (!isProd) {
+      const appModules = componentsModules(
+        [rwPaths.web.app, filePath],
+        viteDevServer
+      )
+
+      const collectedCss = collectCssPaths(appModules)
+
+      cssLinks = Array.from(collectedCss)
+    }
+
     if (redirect) {
       return new Response(null, {
         status: 302,
