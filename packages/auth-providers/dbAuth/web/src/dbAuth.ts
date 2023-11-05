@@ -1,6 +1,7 @@
-import { createAuthentication, CurrentUser } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
+import { createAuthentication } from '@redwoodjs/auth'
 
-import { WebAuthnClientType } from './webAuthn'
+import type { WebAuthnClientType } from './webAuthn'
 
 export interface LoginAttributes {
   username: string
@@ -94,6 +95,9 @@ export function createDbAuthClient({
           lastTokenCheckAt = new Date()
           cachedToken = tokenText.length === 0 ? null : tokenText
           return cachedToken
+        })
+        .catch(() => {
+          return null
         })
         .finally(() => {
           getTokenPromise = null

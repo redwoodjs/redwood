@@ -1,11 +1,11 @@
-import fs from 'node:fs'
-import path from 'node:path'
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 
 import { test, expect } from '@playwright/test'
 import type { PlaywrightTestArgs, Page } from '@playwright/test'
 import execa from 'execa'
 
-import { loginAsTestUser, signUpTestUser } from '../../common'
+import { loginAsTestUser, signUpTestUser } from '../../shared/common'
 
 // This is a special test that does the following
 // Signup a user (admin@bazinga.com), because salt/secrets won't match, we need to do this

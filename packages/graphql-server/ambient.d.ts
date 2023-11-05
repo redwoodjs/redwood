@@ -1,5 +1,7 @@
 declare module '@whatwg-node/server' {
-  export interface ServerAdapterPlugin<TServerContext = {}> {
+  export interface ServerAdapterPlugin<
+    TServerContext = Record<string, unknown>
+  > {
     onRequest?: OnRequestHook<TServerContext>
     onResponse?: OnResponseHook<TServerContext>
   }

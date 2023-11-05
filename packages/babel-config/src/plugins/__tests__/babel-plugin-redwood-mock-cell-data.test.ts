@@ -6,6 +6,7 @@ import plugin from '../babel-plugin-redwood-mock-cell-data'
 
 describe('babel plugin redwood mock cell data', () => {
   const __fixtures__ = path.resolve(__dirname, '../../../../../__fixtures__')
+  process.env.RWJS_CWD = path.join(__fixtures__, 'example-todo-main')
 
   pluginTester({
     plugin,

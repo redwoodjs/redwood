@@ -4,6 +4,9 @@ export {
   liveDirectiveTypeDefs,
   InMemoryLiveQueryStore,
   RedisLiveQueryStore,
+  liveQueryStore,
+  pubSub,
+  Repeater,
 } from './graphql'
 
 export type {

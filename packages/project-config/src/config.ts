@@ -96,6 +96,7 @@ export interface Config {
   experimental: {
     opentelemetry: {
       enabled: boolean
+      wrapApi: boolean
       apiSdk?: string
     }
     studio: StudioConfig
@@ -115,7 +116,6 @@ export interface Config {
 
 export interface CLIPlugin {
   package: string
-  version?: string
   enabled?: boolean
 }
 
@@ -159,6 +159,7 @@ const DEFAULT_CONFIG: Config = {
   experimental: {
     opentelemetry: {
       enabled: false,
+      wrapApi: true,
       apiSdk: undefined,
     },
     studio: {

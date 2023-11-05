@@ -10,13 +10,13 @@ import path from 'path'
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
-import isbot from 'isbot'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { createRscRequestHandler } from './rsc/rscRequestHandler'
+import { setClientEntries } from './rsc/rscWorkerCommunication'
 import { registerFwGlobals } from './streaming/registerGlobals'
-import { renderRSC, setClientEntries } from './waku-lib/rsc-handler-worker'
 
 /**
  * TODO (STREAMING)
@@ -34,10 +34,7 @@ loadDotEnv({
   defaults: path.join(getPaths().base, '.env.defaults'),
   multiline: true,
 })
-//------------------------------------------------
-
-const checkUaForSeoCrawler = isbot.spawn()
-checkUaForSeoCrawler.exclude(['chrome-lighthouse'])
+// ------------------------------------------------
 
 export async function runFeServer() {
   const app = express()
@@ -67,10 +64,7 @@ export async function runFeServer() {
   // const routeManifest: RWRouteManifest = JSON.parse(routeManifestStr)
 
   // TODO See above about using `import { with: { type: 'json' } }` instead
-  const manifestPath = path.join(
-    getPaths().web.dist,
-    'client-build-manifest.json'
-  )
+  const manifestPath = path.join(rwPaths.web.dist, 'client-build-manifest.json')
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
   const buildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
 
@@ -86,11 +80,11 @@ export async function runFeServer() {
     throw new Error('Could not find index.html in build manifest')
   }
 
-  // 👉 1. Use static handler for assets
+  // 1. Use static handler for assets
   // For CF workers, we'd need an equivalent of this
   app.use('/assets', express.static(rwPaths.web.dist + '/assets'))
 
-  // 👉 2. Proxy the api server
+  // 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
   // e.g. deploying to Netlify, we don't need to proxy but configure it in Netlify
   // Also be careful of differences between v2 and v3 of the server
@@ -109,75 +103,8 @@ export async function runFeServer() {
     })
   )
 
-  app.use((req, _res, next) => {
-    console.log('req.url', req.url)
-    next()
-  })
-
   // Mounting middleware at /RSC will strip /RSC from req.url
-  app.use('/RSC', async (req, res) => {
-    const basePath = '/RSC/'
-    console.log('basePath', basePath)
-    console.log('req.originalUrl', req.originalUrl, 'req.url', req.url)
-    console.log('req.headers.host', req.headers.host)
-    const url = new URL(req.originalUrl || '', 'http://' + req.headers.host)
-    let rscId: string | undefined
-    let props = {}
-    let rsfId: string | undefined
-    const args: unknown[] = []
-
-    console.log('url.pathname', url.pathname)
-    if (url.pathname.startsWith(basePath)) {
-      const index = url.pathname.lastIndexOf('/')
-      rscId = url.pathname.slice(basePath.length, index)
-      console.log('rscId', rscId)
-      const params = new URLSearchParams(url.pathname.slice(index + 1))
-      if (rscId && rscId !== '_') {
-        res.setHeader('Content-Type', 'text/x-component')
-        props = JSON.parse(params.get('props') || '{}')
-      } else {
-        rscId = undefined
-      }
-      rsfId = params.get('action_id') || undefined
-      if (rsfId) {
-        console.warn('RSF is not supported yet')
-        console.warn('RSF is not supported yet')
-        console.warn('RSF is not supported yet')
-        // if (req.headers["content-type"]?.startsWith("multipart/form-data")) {
-        //   const bb = busboy({ headers: req.headers });
-        //   const reply = decodeReplyFromBusboy(bb);
-        //   req.pipe(bb);
-        //   args = await reply;
-        // } else {
-        //   let body = "";
-        //   for await (const chunk of req) {
-        //     body += chunk;
-        //   }
-        //   if (body) {
-        //     args = await decodeReply(body);
-        //   }
-        // }
-      }
-    }
-
-    if (rscId || rsfId) {
-      const pipeable = await renderRSC({ rscId, props, rsfId, args })
-
-      // TODO handle errors
-
-      // pipeable.on('error', (err) => {
-      //   console.info('Cannot render RSC', err)
-      //   res.statusCode = 500
-      //   if (options.mode === 'development') {
-      //     res.end(String(err))
-      //   } else {
-      //     res.end()
-      //   }
-      // })
-      pipeable.pipe(res)
-      return
-    }
-  })
+  app.use('/RSC', createRscRequestHandler())
 
   app.use(express.static(rwPaths.web.dist))
 

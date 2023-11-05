@@ -56,14 +56,17 @@ import('${moduleId}');`
 }
 
 // HACK Patching stream is very fragile.
-export const transformRsfId = (prefixToRemove: string) =>
-  new Transform({
+export const transformRsfId = (prefixToRemove: string) => {
+  console.log('prefixToRemove', prefixToRemove)
+
+  return new Transform({
     transform(chunk, encoding, callback) {
       if (encoding !== ('buffer' as any)) {
         throw new Error('Unknown encoding')
       }
       const data = chunk.toString()
       const lines = data.split('\n')
+      console.log('lines', lines)
       let changed = false
       for (let i = 0; i < lines.length; ++i) {
         const match = lines[i].match(
@@ -77,3 +80,4 @@ export const transformRsfId = (prefixToRemove: string) =>
       callback(null, changed ? Buffer.from(lines.join('\n')) : chunk)
     },
   })
+}

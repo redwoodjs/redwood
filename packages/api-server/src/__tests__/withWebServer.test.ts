@@ -1,142 +1,283 @@
+import fs from 'fs'
 import path from 'path'
 
-import { FastifyInstance, FastifyPluginCallback } from 'fastify'
+import { getPaths } from '@redwoodjs/project-config'
 
-import { loadFastifyConfig } from '../fastify'
+import { createFastifyInstance } from '../fastify'
 import withWebServer from '../plugins/withWebServer'
 
-const FIXTURE_PATH = path.resolve(
-  __dirname,
-  '../../../../__fixtures__/example-todo-main'
-)
+// Suppress terminal logging.
+console.log = jest.fn()
 
-// Mock the dist folder from fixtures,
-// because its gitignored
-jest.mock('../plugins/findPrerenderedHtml', () => {
-  return {
-    findPrerenderedHtml: () => {
-      return ['about.html', 'mocked.html', 'posts/new.html', 'index.html']
-    },
-  }
-})
-
-jest.mock('../fastify', () => {
-  return {
-    ...jest.requireActual('../fastify'),
-    loadFastifyConfig: jest.fn(),
-  }
-})
+// Set up RWJS_CWD.
+let original_RWJS_CWD
 
 beforeAll(() => {
-  process.env.RWJS_CWD = FIXTURE_PATH
+  original_RWJS_CWD = process.env.RWJS_CWD
+  process.env.RWJS_CWD = path.join(__dirname, 'fixtures/redwood-app')
 })
+
 afterAll(() => {
-  delete process.env.RWJS_CWD
+  process.env.RWJS_CWD = original_RWJS_CWD
 })
 
-test('Attach handlers for prerendered files', async () => {
-  const mockedFastifyInstance = {
-    register: jest.fn(),
-    get: jest.fn(),
-    setNotFoundHandler: jest.fn(),
-    log: console,
-  } as unknown as FastifyInstance
+// Set up and teardown the fastify instance with options.
+let fastifyInstance
+let returnedFastifyInstance
 
-  await withWebServer(mockedFastifyInstance, { port: 3000 })
+const port = 8910
+const message = 'hello from server.config.js'
 
-  expect(mockedFastifyInstance.get).toHaveBeenCalledWith(
-    '/about',
-    expect.anything()
-  )
-  expect(mockedFastifyInstance.get).toHaveBeenCalledWith(
-    '/mocked',
-    expect.anything()
-  )
-  expect(mockedFastifyInstance.get).toHaveBeenCalledWith(
-    '/posts/new',
-    expect.anything()
-  )
+beforeAll(async () => {
+  fastifyInstance = createFastifyInstance()
 
-  // Ignore index.html
-  expect(mockedFastifyInstance.get).not.toHaveBeenCalledWith(
-    '/index',
-    expect.anything()
-  )
-})
-
-test('Adds SPA fallback', async () => {
-  const mockedFastifyInstance = {
-    register: jest.fn(),
-    get: jest.fn(),
-    setNotFoundHandler: jest.fn(),
-    log: console,
-  } as unknown as FastifyInstance
-
-  await withWebServer(mockedFastifyInstance, { port: 3000 })
-
-  expect(mockedFastifyInstance.setNotFoundHandler).toHaveBeenCalled()
-})
-
-describe('Checks that configureFastify is called for the web side', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
+  returnedFastifyInstance = await withWebServer(fastifyInstance, {
+    port,
+    // @ts-expect-error just testing that options can be passed through
+    message,
   })
 
-  const mockedFastifyInstance = {
-    register: jest.fn(),
-    get: jest.fn(),
-    setNotFoundHandler: jest.fn(),
-    log: jest.fn(),
-  } as unknown as FastifyInstance
+  await fastifyInstance.ready()
+})
 
-  // We're mocking a fake plugin, so don't worry about the type
-  const fakeFastifyPlugin =
-    'Fake bazinga plugin' as unknown as FastifyPluginCallback
+afterAll(async () => {
+  await fastifyInstance.close()
+})
 
-  // Mock the load fastify config function
-  ;(loadFastifyConfig as jest.Mock).mockReturnValue({
-    config: {},
-    configureFastify: jest.fn((fastify) => {
-      fastify.register(fakeFastifyPlugin)
-      fastify.version = 'bazinga'
-      return fastify
-    }),
+describe('withWebServer', () => {
+  // Deliberately using `toBe` here to check for referential equality.
+  it('returns the same fastify instance', async () => {
+    expect(returnedFastifyInstance).toBe(fastifyInstance)
   })
 
-  it('Check that configureFastify is called with the expected side and options', async () => {
-    await withWebServer(mockedFastifyInstance, { port: 3001 })
+  it('can be configured by the user', async () => {
+    const res = await fastifyInstance.inject({
+      method: 'GET',
+      url: '/test-route',
+    })
 
-    const { configureFastify } = loadFastifyConfig()
+    expect(res.body).toBe(JSON.stringify({ message }))
+  })
 
-    expect(configureFastify).toHaveBeenCalledTimes(1)
+  // We can use `printRoutes` with a method for debugging, but not without one.
+  // See https://fastify.dev/docs/latest/Reference/Server#printroutes
+  it('builds a tree of routes for GET', async () => {
+    expect(fastifyInstance.printRoutes({ method: 'GET' }))
+      .toMatchInlineSnapshot(`
+      "└── /
+          ├── about (GET)
+          ├── contacts/new (GET)
+          ├── nested/index (GET)
+          ├── test-route (GET)
+          └── * (GET)
+      "
+    `)
+  })
 
-    // We don't care about the first argument
-    expect(configureFastify).toHaveBeenCalledWith(expect.anything(), {
-      side: 'web',
-      port: 3001,
+  describe('serves prerendered files', () => {
+    it('serves the prerendered about page', async () => {
+      const url = '/about'
+
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url,
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
+      expect(res.body).toBe(
+        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8')
+      )
+    })
+
+    it('serves the prerendered new contact page', async () => {
+      const url = '/contacts/new'
+
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url,
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
+      expect(res.body).toBe(
+        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8')
+      )
+    })
+
+    // We don't serve files named index.js at the root level.
+    // This logic ensures nested files aren't affected.
+    it('serves the prerendered nested index page', async () => {
+      const url = '/nested/index'
+
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url,
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
+      expect(res.body).toBe(
+        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8')
+      )
+    })
+
+    it('serves prerendered files with certain headers', async () => {
+      await fastifyInstance.listen({ port })
+
+      const res = await fetch(`http://localhost:${port}/about`)
+      const headers = [...res.headers.keys()]
+
+      expect(headers).toMatchInlineSnapshot(`
+      [
+        "accept-ranges",
+        "cache-control",
+        "connection",
+        "content-length",
+        "content-type",
+        "date",
+        "etag",
+        "keep-alive",
+        "last-modified",
+      ]
+    `)
+    })
+
+    // I'm not sure if this was intentional, but we support it.
+    // We may want to use the `@fastify/static` plugin's `allowedPath` option.
+    // See https://github.com/fastify/fastify-static?tab=readme-ov-file#allowedpath.
+    it('serves prerendered files at `${routeName}.html`', async () => {
+      const url = '/about.html'
+
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url,
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
+      expect(res.body).toBe(
+        fs.readFileSync(path.join(getPaths().web.dist, url), 'utf-8')
+      )
+    })
+
+    it('handles not found by serving a fallback', async () => {
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: '/absent.html',
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
+      expect(res.body).toBe(
+        fs.readFileSync(path.join(getPaths().web.dist, '200.html'), 'utf-8')
+      )
     })
   })
 
-  it('Check that configureFastify will register in Fastify a plugin', async () => {
-    await withWebServer(mockedFastifyInstance, { port: 3001 })
-    expect(mockedFastifyInstance.register).toHaveBeenCalledWith(
-      'Fake bazinga plugin'
-    )
-  })
+  describe('serves pretty much anything in web dist', () => {
+    it('serves the built AboutPage.js', async () => {
+      const relativeFilePath = '/assets/AboutPage-7ec0f8df.js'
 
-  it('Check that withWebServer returns the same Fastify instance, and not a new one', async () => {
-    await withWebServer(mockedFastifyInstance, { port: 3001 })
-    expect(mockedFastifyInstance.version).toBe('bazinga')
-  })
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: relativeFilePath,
+      })
 
-  it('When configureFastify is missing from server config, it does not throw', () => {
-    ;(loadFastifyConfig as jest.Mock).mockReturnValue({
-      config: {},
-      configureFastify: null,
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe(
+        'application/javascript; charset=UTF-8'
+      )
+      expect(res.body).toBe(
+        fs.readFileSync(
+          path.join(getPaths().web.dist, relativeFilePath),
+          'utf-8'
+        )
+      )
     })
 
-    expect(
-      withWebServer(mockedFastifyInstance, { port: 3001 })
-    ).resolves.not.toThrowError()
+    it('serves the built index.css', async () => {
+      const relativeFilePath = '/assets/index-613d397d.css'
+
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: relativeFilePath,
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe('text/css; charset=UTF-8')
+      expect(res.body).toBe(
+        fs.readFileSync(
+          path.join(getPaths().web.dist, relativeFilePath),
+          'utf-8'
+        )
+      )
+    })
+
+    it('serves build-manifest.json', async () => {
+      const relativeFilePath = '/build-manifest.json'
+
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: relativeFilePath,
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe(
+        'application/json; charset=UTF-8'
+      )
+      expect(res.body).toBe(
+        fs.readFileSync(
+          path.join(getPaths().web.dist, relativeFilePath),
+          'utf-8'
+        )
+      )
+    })
+
+    it('serves favicon.png', async () => {
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: '/favicon.png',
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe('image/png')
+    })
+
+    it('serves README.md', async () => {
+      const relativeFilePath = '/README.md'
+
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: relativeFilePath,
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe('text/markdown; charset=UTF-8')
+      expect(res.body).toBe(
+        fs.readFileSync(
+          path.join(getPaths().web.dist, relativeFilePath),
+          'utf-8'
+        )
+      )
+    })
+
+    it('serves robots.txt', async () => {
+      const relativeFilePath = '/robots.txt'
+
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: relativeFilePath,
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe('text/plain; charset=UTF-8')
+      expect(res.body).toBe(
+        fs.readFileSync(
+          path.join(getPaths().web.dist, relativeFilePath),
+          'utf-8'
+        )
+      )
+    })
   })
 })

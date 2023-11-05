@@ -4,9 +4,11 @@ import { codegen } from '@graphql-codegen/core'
 import type { Types as CodegenTypes } from '@graphql-codegen/plugin-helpers'
 import * as schemaAstPlugin from '@graphql-codegen/schema-ast'
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
-import { loadSchema, LoadSchemaOptions } from '@graphql-tools/load'
+import type { LoadSchemaOptions } from '@graphql-tools/load'
+import { loadSchema } from '@graphql-tools/load'
 import chalk from 'chalk'
-import { DocumentNode, print } from 'graphql'
+import type { DocumentNode } from 'graphql'
+import { print } from 'graphql'
 import terminalLink from 'terminal-link'
 
 import { rootSchema } from '@redwoodjs/graphql-server'
@@ -22,13 +24,16 @@ export const generateGraphQLSchema = async () => {
     'subscriptions/**/*.{js,ts}': {},
   }
 
-  // If we are serverful and the user is using realtime, we need to include the live directive for realtime support.
+  // If we're serverful and the user is using realtime, we need to include the live directive for realtime support.
+  // Note the `ERR_  prefix in`ERR_MODULE_NOT_FOUND`. Since we're using `await import`,
+  // if the package (here, `@redwoodjs/realtime`) can't be found, it throws this error, with the prefix.
+  // Whereas `require('@redwoodjs/realtime')` would throw `MODULE_NOT_FOUND`.
   if (resolveFile(`${getPaths().api.src}/server`)) {
     try {
       const { liveDirectiveTypeDefs } = await import('@redwoodjs/realtime')
       schemaPointerMap[liveDirectiveTypeDefs] = {}
     } catch (error) {
-      if ((error as { code: string }).code !== 'MODULE_NOT_FOUND') {
+      if ((error as { code: string }).code !== 'ERR_MODULE_NOT_FOUND') {
         throw error
       }
     }

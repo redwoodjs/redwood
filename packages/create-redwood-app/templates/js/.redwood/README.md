@@ -2,7 +2,7 @@
 
 ## What is this directory?
 
-Redwood uses this `.redwood` directory to store transitory data that aids in the smooth and convienent operation of your Redwood project.
+Redwood uses this `.redwood` directory to store transitory data that aids in the smooth and convenient operation of your Redwood project.
 
 ## Do I need to do anything with this directory?
 

@@ -1,5 +1,5 @@
 import fastifyUrlData from '@fastify/url-data'
-import { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 
 import { loadFastifyConfig } from '../fastify'
@@ -9,7 +9,7 @@ import { lambdaRequestHandler, loadFunctionsFromDist } from './lambdaLoader'
 
 const withFunctions = async (
   fastify: FastifyInstance,
-  options: ApiServerArgs
+  options: Omit<ApiServerArgs, 'loadEnvFiles'>
 ) => {
   const { apiRootPath } = options
   // Add extra fastify plugins

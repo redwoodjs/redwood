@@ -1,6 +1,7 @@
 /* eslint-env node */
 // @ts-check
 
+import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -22,7 +23,6 @@ function execWithEnv(command, { env = {}, ...rest } = {}) {
     command,
     undefined,
     {
-      // @ts-expect-error TS doesn't like spreading process.env here but it's fine for our purposes.
       env: {
         ...process.env,
         ...env
@@ -62,13 +62,12 @@ export function projectCopy(redwoodProjectCwd) {
 }
 
 /**
- * @param {{ baseKeyPrefix: string, distKeyPrefix: string }} options
+ * @param {{ baseKeyPrefix: string, distKeyPrefix: string, canary: boolean }} options
  */
-export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix }) {
+export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix, canary }) {
   const baseKey = [
     baseKeyPrefix,
     process.env.RUNNER_OS,
-    // @ts-expect-error not sure how to change the lib compiler option to es2021+ here.
     process.env.GITHUB_REF.replaceAll('/', '-'),
     await hashFiles(path.join('__fixtures__', 'test-project'))
   ].join('-')
@@ -77,7 +76,7 @@ export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix }) {
     baseKey,
     'dependencies',
     await hashFiles(['yarn.lock', '.yarnrc.yml'].join('\n')),
-  ].join('-')
+  ].join('-') + (canary ? '-canary' : '')
 
   const distKey = [
     dependenciesKey,
@@ -92,7 +91,7 @@ export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix }) {
       'lerna.json',
       'packages',
     ].join('\n'))
-  ].join('-')
+  ].join('-') + (canary ? '-canary' : '')
 
   return {
     baseKey,
@@ -100,3 +99,69 @@ export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix }) {
     distKey
   }
 }
+
+/**
+ * @callback ExecInProject
+ * @param {string} commandLine command to execute (can include additional args). Must be correctly escaped.
+ * @param {Omit<ExecOptions, "cwd">=} options exec options.  See ExecOptions
+ * @returns {Promise<unknown>} exit code
+ */
+
+/**
+ * @param {string} testProjectPath
+ * @param {string} fixtureName
+ * @param {Object} core
+ * @param {(key: string, value: string) => void} core.setOutput
+ * @param {ExecInProject} execInProject
+ * @returns {Promise<void>}
+ */
+export async function setUpRscTestProject(
+  testProjectPath,
+  fixtureName,
+  core,
+  execInProject
+) {
+  core.setOutput('test-project-path', testProjectPath)
+
+  console.log('rwPath', REDWOOD_FRAMEWORK_PATH)
+  console.log('testProjectPath', testProjectPath)
+
+  const fixturePath = path.join(
+    REDWOOD_FRAMEWORK_PATH,
+    '__fixtures__',
+    fixtureName
+  )
+  const rwBinPath = path.join(
+    REDWOOD_FRAMEWORK_PATH,
+    'packages/cli/dist/index.js'
+  )
+  const rwfwBinPath = path.join(
+    REDWOOD_FRAMEWORK_PATH,
+    'packages/cli/dist/rwfw.js'
+  )
+
+  console.log(`Creating project at ${testProjectPath}`)
+  console.log()
+  fs.cpSync(fixturePath, testProjectPath, { recursive: true })
+
+  console.log(`Adding framework dependencies to ${testProjectPath}`)
+  await projectDeps(testProjectPath)
+  console.log()
+
+  console.log(`Installing node_modules in ${testProjectPath}`)
+  await execInProject('yarn install')
+
+  console.log(`Building project in ${testProjectPath}`)
+  await execInProject(`node ${rwBinPath} build -v`)
+  console.log()
+
+  console.log(`Copying over framework files to ${testProjectPath}`)
+  await execInProject(`node ${rwfwBinPath} project:copy`, {
+    env: { RWFW_PATH: REDWOOD_FRAMEWORK_PATH },
+  })
+  console.log()
+
+  // await cache.saveCache([testProjectPath], dependenciesKey)
+  // console.log(`Cache saved with key: ${dependenciesKey}`)
+}
+

@@ -1,0 +1,8 @@
+name: RSC Related Changes
+description: Determines if the PR makes any changes related to RSCs
+outputs:
+  rsc-related-changes:
+    description: If the PR makes any RSC related changes
+runs:
+  using: node20
+  main: rsc_related_changes.mjs

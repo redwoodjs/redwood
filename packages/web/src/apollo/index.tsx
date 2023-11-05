@@ -8,7 +8,6 @@ import { setContext } from '@apollo/client/link/context'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
-
 // Note: Importing directly from `apollo/client` doesn't work properly in Storybook.
 const {
   ApolloProvider,
@@ -19,10 +18,14 @@ const {
   useQuery,
   useMutation,
   useSubscription,
+  useBackgroundQuery,
+  useReadQuery,
+  useSuspenseQuery,
   setLogVerbosity: apolloSetLogVerbosity,
 } = apolloClient
 
-import { UseAuth, useNoAuth } from '@redwoodjs/auth'
+import type { UseAuth } from '@redwoodjs/auth'
+import { useNoAuth } from '@redwoodjs/auth'
 import './typeOverride'
 
 import {
@@ -31,7 +34,23 @@ import {
 } from '../components/FetchConfigProvider'
 import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
 
+import {
+  fragmentRegistry,
+  registerFragment,
+  registerFragments,
+} from './fragmentRegistry'
 import { SSELink } from './sseLink'
+import { useCache } from './useCache'
+
+export type {
+  CacheKey,
+  FragmentIdentifier,
+  RegisterFragmentResult,
+} from './fragmentRegistry'
+
+export { useCache }
+
+export { fragmentRegistry, registerFragment, registerFragments, SSELink }
 
 export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
 
@@ -39,7 +58,7 @@ export type RedwoodApolloLinkName =
   | 'withToken'
   | 'authMiddleware'
   | 'updateDataApolloLink'
-  | 'terminatingLink'
+  | 'httpLink'
 
 export type RedwoodApolloLink<
   Name extends RedwoodApolloLinkName,
@@ -53,10 +72,7 @@ export type RedwoodApolloLinks = [
   RedwoodApolloLink<'withToken'>,
   RedwoodApolloLink<'authMiddleware'>,
   RedwoodApolloLink<'updateDataApolloLink'>,
-  RedwoodApolloLink<
-    'terminatingLink',
-    apolloClient.ApolloLink | apolloClient.HttpLink
-  >
+  RedwoodApolloLink<'httpLink', apolloClient.ApolloLink | apolloClient.HttpLink>
 ]
 
 export type RedwoodApolloLinkFactory = (
@@ -196,7 +212,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   // Our terminating link needs to be smart enough to handle subscriptions, and if the GraphQL query
   // is subscription it needs to use the SSELink (server sent events link).
-  const terminatingLink = apolloClient.split(
+  const httpOrSSELink = apolloClient.split(
     ({ query }) => {
       const definition = getMainDefinition(query)
 
@@ -219,7 +235,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     { name: 'withToken', link: withToken },
     { name: 'authMiddleware', link: authMiddleware },
     { name: 'updateDataApolloLink', link: updateDataApolloLink },
-    { name: 'terminatingLink', link: terminatingLink },
+    { name: 'httpLink', link: httpOrSSELink },
   ]
 
   let link = redwoodApolloLink
@@ -285,11 +301,13 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
   graphQLClientConfig?: GraphQLClientConfigProp
+  fragments?: apolloClient.DocumentNode[]
   useAuth?: UseAuth
   logLevel?: ReturnType<typeof setLogVerbosity>
   children: React.ReactNode
 }> = ({
   graphQLClientConfig,
+  fragments,
   useAuth = useNoAuth,
   logLevel = 'debug',
   children,
@@ -298,9 +316,15 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   // we have to instantiate `InMemoryCache` here, so that it doesn't get wiped.
   const { cacheConfig, ...config } = graphQLClientConfig ?? {}
 
-  const cache = new InMemoryCache(cacheConfig).restore(
-    globalThis?.__REDWOOD__APOLLO_STATE ?? {}
-  )
+  // Auto register fragments
+  if (fragments) {
+    fragmentRegistry.register(...fragments)
+  }
+
+  const cache = new InMemoryCache({
+    fragments: fragmentRegistry,
+    ...cacheConfig,
+  }).restore(globalThis?.__REDWOOD__APOLLO_STATE ?? {})
 
   return (
     <FetchConfigProvider useAuth={useAuth}>
@@ -314,6 +338,9 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
           useQuery={useQuery}
           useMutation={useMutation}
           useSubscription={useSubscription}
+          useBackgroundQuery={useBackgroundQuery}
+          useReadQuery={useReadQuery}
+          useSuspenseQuery={useSuspenseQuery}
         >
           {children}
         </GraphQLHooksProvider>

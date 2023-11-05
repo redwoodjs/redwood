@@ -1,12 +1,10 @@
-import {
-  TypeScriptResolversPluginConfig,
-  TypeScriptResolversVisitor,
-} from '@graphql-codegen/typescript-resolvers'
+import type { TypeScriptResolversPluginConfig } from '@graphql-codegen/typescript-resolvers'
+import { TypeScriptResolversVisitor } from '@graphql-codegen/typescript-resolvers'
 import {
   indent,
   DeclarationBlock,
 } from '@graphql-codegen/visitor-plugin-common'
-import {
+import type {
   FieldDefinitionNode,
   GraphQLSchema,
   ObjectTypeDefinitionNode,

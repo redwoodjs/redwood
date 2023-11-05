@@ -6,6 +6,7 @@
 import fs from 'fs/promises'
 import path from 'path'
 
+import { createServerAdapter } from '@whatwg-node/server'
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
@@ -16,7 +17,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
 import { registerFwGlobals } from './streaming/registerGlobals'
-import { RWRouteManifest } from './types'
+import type { RWRouteManifest } from './types'
 
 /**
  * TODO (STREAMING)
@@ -112,17 +113,35 @@ export async function runFeServer() {
       continue
     }
 
+    // @TODO: we don't need regexes here
+    // Param matching, etc. all handled within the route handler now
     const expressPathDef = route.hasParams
       ? route.matchRegexString
       : route.pathDefinition
 
-    app.get(expressPathDef, routeHandler)
+    // Wrap with whatg/server adapter. Express handler -> Fetch API handler
+    app.get(expressPathDef, createServerAdapter(routeHandler))
   }
 
-  app.listen(rwConfig.web.port)
-  console.log(
-    `Started production FE server on http://localhost:${rwConfig.web.port}`
+  const server = app.listen(
+    rwConfig.web.port,
+    process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
   )
+
+  server.on('listening', () => {
+    let addressDetails = ''
+    const address = server.address()
+
+    if (typeof address === 'string') {
+      addressDetails = `(${address})`
+    } else if (address && typeof address === 'object') {
+      addressDetails = `(${address.address}:${address.port})`
+    }
+
+    console.log(
+      `Started production FE server on http://localhost:${rwConfig.web.port} ${addressDetails}`
+    )
+  })
 }
 
 runFeServer()

@@ -2,11 +2,11 @@ import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
 
+import type { PagesDependency } from '@redwoodjs/project-config'
 import {
   importStatementPath,
   processPagesDir,
   getPaths,
-  PagesDependency,
   ensurePosixPath,
 } from '@redwoodjs/project-config'
 
@@ -42,6 +42,26 @@ export default function (
 ): PluginObj {
   // @NOTE: This var gets mutated inside the visitors
   let pages = processPagesDir().map(withRelativeImports)
+
+  // Currently processPagesDir() can return duplicate entries when there are multiple files
+  // ending in Page in the individual page directories. This will cause an error upstream.
+  // Here we check for duplicates and throw a more helpful error message.
+  const duplicatePageImportNames = new Set<string>()
+  const sortedPageImportNames = pages.map((page) => page.importName).sort()
+  for (let i = 0; i < sortedPageImportNames.length - 1; i++) {
+    if (sortedPageImportNames[i + 1] === sortedPageImportNames[i]) {
+      duplicatePageImportNames.add(sortedPageImportNames[i])
+    }
+  }
+  if (duplicatePageImportNames.size > 0) {
+    throw new Error(
+      `Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the follow page directories: ${Array.from(
+        duplicatePageImportNames
+      )
+        .map((name) => `'${name}'`)
+        .join(', ')}`
+    )
+  }
 
   return {
     name: 'babel-plugin-redwood-routes-auto-loader',
