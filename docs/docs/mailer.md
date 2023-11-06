@@ -80,7 +80,7 @@ This command will setup the necessary files and include the necessary dependenci
 ## Usage
 
 ### Example
-The easiest way to understand using the mailer is with an example, so let's build one. In the tutorial, we built out a blog site that included a contact us feature. The contact us form takes in a name, email, and message and stores it in the database. For this example let's assume we want to also send an email to some internal inbox with this contact us submission. The service would be updated like so:
+The easiest way to understand using the mailer is with an example, so let's build one. In the tutorial, we built out a blog site. Let's say we have added a contact us functionality and the contact us form takes in a name, email, and message and stores it in the database. For this example let's assume we want to also send an email to some internal inbox with this contact us submission. The service would be updated like so:
 
 ```ts
 import { mailer } from 'src/lib/mailer'
