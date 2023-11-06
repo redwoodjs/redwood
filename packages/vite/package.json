@@ -63,7 +63,7 @@
     "test:watch": "glob './src/**/__tests__/*.test.mts' --cmd='node --loader tsx --no-warnings --test --watch'"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.1",
+    "@babel/runtime-corejs3": "7.23.2",
     "@redwoodjs/internal": "6.0.7",
     "@redwoodjs/project-config": "6.0.7",
     "@redwoodjs/web": "6.0.7",
@@ -80,7 +80,7 @@
     "isbot": "3.6.8",
     "react": "0.0.0-experimental-e5205658f-20230913",
     "react-server-dom-webpack": "0.0.0-experimental-e5205658f-20230913",
-    "vite": "4.4.11",
+    "vite": "4.5.0",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {

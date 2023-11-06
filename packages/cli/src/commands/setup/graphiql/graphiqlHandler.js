@@ -68,8 +68,8 @@ export const handler = async ({ provider, id, token, expiry, view }) => {
     [
       {
         title: 'Generating graphiql header...',
-        task: () => {
-          payload = generatePayload(provider, id, token, expiry)
+        task: async () => {
+          payload = await generatePayload(provider, id, token, expiry)
         },
       },
       {
