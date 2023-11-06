@@ -1261,7 +1261,7 @@ Does anyone else find it confusing that the software itself is called a "databas
 
 When you start your test suite you may notice some output from Prisma talking about migrating the database. Redwood will automatically run `yarn rw prisma db push` against your test database to make sure it's up-to-date.
 
-:::caution What if I have custom migration SQL?
+:::warning What if I have custom migration SQL?
 
 The `prisma db push` command only restores a snapshot of the current database schema (so that it runs as fast as possible). **It does not actually run migrations in sequence.** This can cause a [problem](https://github.com/redwoodjs/redwood/issues/5818) if you have certain database configuration that *must* occur as a result of the SQL statements inside the migration files.
 

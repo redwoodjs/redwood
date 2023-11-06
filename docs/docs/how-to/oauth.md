@@ -133,7 +133,7 @@ Go ahead and click it, and you should be taken to GitHub to authorize your GitHu
 
 ![GitHub Oauth Access Page](https://user-images.githubusercontent.com/300/245899872-8ddd7e69-dbfa-4544-ab6f-78fd4ff02da8.png)
 
-:::caution
+:::warning
 
 If you get an error here that says "The redirect_uri MUST match the registered callback URL for this application" verify that the redirect URL you entered on GitHub and the one you put into the `GITHUB_OAUTH_REDIRECT_URL` ENV var are identical!
 

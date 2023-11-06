@@ -63,7 +63,7 @@ If you're connecting to cloud-based servers, turning them on and off, and potent
 
 Once you're past that prompt you'll then either be prompted for your password, or logged in automatically (when using a private or public key). Let's look at each one in detail.
 
-:::caution Baremetal First Deploy Woes?
+:::warning Baremetal First Deploy Woes?
 
 If you're having trouble deploying to your server with Baremetal, and you've never connected to your server manually via SSH, this could be why: Baremetal provides no interactive prompt to accept this server fingerprint. You need to connect manually at least once before Baremetal can connect.
 

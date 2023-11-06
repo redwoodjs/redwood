@@ -6,7 +6,7 @@
 
 ## Installing nvm
 
-:::caution
+:::warning
 If you've already installed Node.js on your machine, uninstall Node.js before installing nvm. This will prevent any conflicts between the Node.js and nvm.
 
 ### If you're on a Mac
@@ -77,7 +77,7 @@ To see all the versions of Node that you can install, run the following command:
 nvm ls-remote
 ```
 
-:::caution
+:::warning
 You'll need to [install yarn](https://yarnpkg.com/getting-started/install) **for each version of Node that you install.**
 
 [Corepack](https://nodejs.org/dist/latest/docs/api/corepack.html) is included with all Node.js >=16.10 installs, but you must opt-in. To enable it, run the following command:

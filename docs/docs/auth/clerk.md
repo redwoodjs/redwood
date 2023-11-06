@@ -4,7 +4,7 @@ sidebar_label: Clerk
 
 # Clerk Authentication
 
-:::caution Did you set up Clerk a while ago?
+:::warning Did you set up Clerk a while ago?
 
 If you set up Clerk a while ago, you may be using a deprecated `authDecoder` that's subject to rate limiting.
 This decoder will be removed in the next major.

@@ -228,7 +228,7 @@ Which should return the new content of the user:
 }
 ```
 
-:::caution
+:::warning
 
 If you re-used the same console session from the previous section, you'll need to quit it and start it again for it to know about the new Prisma data structure. If you still can't get the update to work, maybe your user doesn't have an `id` of `1`! Run `db.user.findMany()` first and then get the `id` of the user you want to update.
 
@@ -895,7 +895,7 @@ describe('Comment', () => {
 
 We moved the default `comment` object to a constant `COMMENT` and then used that in all tests. We also needed to add `waitFor()` since the `hasRole()` check in the Comment itself actually executes some GraphQL calls behind the scenes to figure out who the user is. The test suite makes mocked GraphQL calls, but they're still asynchronous and need to be waited for. If you don't wait, then `currentUser` will be `null` when the test starts, and Jest will be happy with that result. But we won't—we need to wait for the actual value from the GraphQL call.
 
-:::caution Seeing errors in your test suite?
+:::warning Seeing errors in your test suite?
 
 We added fields to the database and sometimes the test runner doesn't realize this. You may need to restart it to get the test database migrated to match what's in `schema.prisma`. Press `q` or `Ctrl-C` in your test runner if it's still running, then:
 

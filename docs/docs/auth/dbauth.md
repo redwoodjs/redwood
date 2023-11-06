@@ -336,7 +336,7 @@ If you need to change the secret key that's used to encrypt the session cookie, 
 
 Note that the secret that's output is _not_ appended to your `.env` file or anything else, it's merely output to the screen. You'll need to put it in the right place after that.
 
-:::caution .env and Version Control
+:::warning .env and Version Control
 
 The `.env` file is set to be ignored by git and not committed to version control. There is another file, `.env.defaults`, which is meant to be safe to commit and contain simple ENV vars that your dev team can share. The encryption key for the session cookie is NOT one of these shareable vars!
 
@@ -474,7 +474,7 @@ model UserCredential {
 
 Run `yarn rw prisma migrate dev` to apply the changes to your database.
 
-:::caution Do Not Allow GraphQL Access to `UserCredential`
+:::warning Do Not Allow GraphQL Access to `UserCredential`
 
 As you can probably tell by the name, this new model contains secret credential info for the user. You **should not** make this data publicly available by adding an SDL file to `api/src/graphql`.
 

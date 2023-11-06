@@ -4,7 +4,7 @@ description: Change how App mounts to the DOM
 
 # Custom Web Index
 
-:::caution This doc only applies to projects using Webpack
+:::warning This doc only applies to projects using Webpack
 
 As of v6, all Redwood projects use Vite by default.
 When switching projects to Vite, we made the decision to add the the entry file, `web/src/entry.client.{jsx,tsx}`, back to projects.
