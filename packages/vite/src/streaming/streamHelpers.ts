@@ -7,6 +7,7 @@ import type {
   ReactDOMServerReadableStream,
 } from 'react-dom/server'
 
+import { LocationProvider } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
 import {
@@ -88,11 +89,19 @@ export async function reactRenderToStreamResponse(
       {
         value: injectToPage,
       },
-      ServerEntry({
-        url: path,
-        css: cssLinks,
-        meta: metaTags,
-      })
+      React.createElement(
+        LocationProvider,
+        {
+          location: {
+            pathname: path,
+          },
+        },
+        ServerEntry({
+          url: path,
+          css: cssLinks,
+          meta: metaTags,
+        })
+      )
     )
   }
 
