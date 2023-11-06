@@ -6,7 +6,7 @@ import theme from 'config/chakra.config'
 
 const extendedTheme = extendTheme(theme)
 
-/*
+/**
  * @param { import("@storybook/react").StoryFn} StoryFn
  */
 const withChakra = (StoryFn: StoryFn) => {

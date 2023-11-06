@@ -4,7 +4,7 @@ import { MantineProvider } from '@mantine/core'
 import type { StoryFn } from '@storybook/react'
 import theme from 'config/mantine.config'
 
-/*
+/**
  * @param { import("@storybook/react").StoryFn} StoryFn
  */
 const withMantine = (StoryFn: StoryFn) => {
