@@ -23,7 +23,11 @@ export const collectCssPaths = (
   checkedComponents = new Set()
 ) => {
   for (const mod of mods) {
-    if (mod.file?.endsWith('.scss') || mod.file?.endsWith('.css')) {
+    if (
+      mod.file?.endsWith('.scss') ||
+      mod.file?.endsWith('.css') ||
+      mod.file?.endsWith('.less') // technically less is not supported oob by vite
+    ) {
       cssLinks.add(mod.url)
     }
     if (mod.importedModules.size > 0 && !checkedComponents.has(mod.id)) {
