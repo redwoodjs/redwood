@@ -46,7 +46,7 @@ The install script also ran `yarn rw prisma migrate dev --create-only` automatic
 
 Data migrations are just plain Typescript or Javascript files which export a single anonymous function that is given a single argument—an instance of `PrismaClient` called `db` that you can use to access your database. The files have a simple naming convention:
 
-    {version}-{name}.js
+    \{version\}-\{name\}.js
 
 Where `version` is a timestamp, like `20200721123456` (an ISO8601 datetime without any special characters or zone identifier), and `name` is a param-case human readable name for the migration, like `copy-preferences`.
 

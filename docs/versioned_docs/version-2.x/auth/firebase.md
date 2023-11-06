@@ -99,7 +99,7 @@ See the Firebase information within this doc's [Auth Provider Specific Integrati
 
 You must follow the ["Before you begin"](https://firebase.google.com/docs/auth/web/google-signin) part of the "Authenticate Using Google Sign-In with JavaScript" guide.
 
-### Role-Based Access Control (RBAC) 
+### Role-Based Access Control (RBAC)
 
 Requires a custom implementation.
 
@@ -133,7 +133,7 @@ Email/password authentication is supported by calling `login({ email, password }
 In Firebase Console, you must enable "Email link (passwordless sign-in)" with the configuration toggle for the email provider. The authentication sequence for passwordless email links has two steps:
 
 1. First, an email with the link must be generated and sent to the user. Either using using firebase client sdk (web side) [sendSignInLinkToEmail()](https://firebase.google.com/docs/reference/js/auth.emailauthprovider#example_2_2), which generates the link and sends the email to the user on behalf of your application or alternatively, generate the link using backend admin sdk (api side), see ["Generate email link for sign-in](https://firebase.google.com/docs/auth/admin/email-action-links#generate_email_link_for_sign-in) but it is then your responsibility to send an email to the user containing the link.
-2. Second, authentication is completed when the user is redirected back to the application and the AuthProvider's logIn({emailLink, email, providerId: 'emailLink'}) method is called.
+2. Second, authentication is completed when the user is redirected back to the application and the AuthProvider's logIn(\{emailLink, email, providerId: 'emailLink'\}) method is called.
 
 For example, users could be redirected to a dedicated route/page to complete authentication:
 

@@ -53,14 +53,14 @@ Read the post-install instructions carefully as they contain instructions for ad
 
 > You will need to add a couple of fields to your User table in order to store a hashed password and salt:
 >
->     model User {
+>     model User \{
 >       id             Int @id @default(autoincrement())
 >       email          String  @unique
->       hashedPassword      String    // <─┐
->       salt                String    // <─┼─ add these lines
->       resetToken          String?   // <─┤
->       resetTokenExpiresAt DateTime? // <─┘
->     }
+>       hashedPassword      String    // \<─┐
+>       salt                String    // \<─┼─ add these lines
+>       resetToken          String?   // \<─┤
+>       resetTokenExpiresAt DateTime? // \<─┘
+>     \}
 >
 > If you already have existing user records you will need to provide a default value or Prisma complains, so change those to:
 >
@@ -69,14 +69,14 @@ Read the post-install instructions carefully as they contain instructions for ad
 >
 > You'll need to let Redwood know what field you're using for your users' `id` and `username` fields In this case we're using `id` and `email`, so update those in the `authFields` config in `/api/src/functions/auth.js` (this is also the place to tell Redwood if you used a different name for the `hashedPassword` or `salt` fields):
 >
->     authFields: {
+>     authFields: \{
 >       id: 'id',
 >       username: 'email',
 >       hashedPassword: 'hashedPassword',
 >       salt: 'salt',
 >       resetToken: 'resetToken',
 >       resetTokenExpiresAt: 'resetTokenExpiresAt',
->     },
+>     \},
 >
 > To get the actual user that's logged in, take a look at `getCurrentUser()` in `/api/src/lib/auth.js`. We default it to something simple, but you may use different names for your model or unique ID fields, in which case you need to update those calls (instructions are in the comment above the code).
 >

@@ -67,14 +67,14 @@ Read the post-install instructions carefully as they contain instructions for ad
 
 > You will need to add a couple of fields to your User table in order to store a hashed password and salt:
 >
->     model User {
+>     model User \{
 >       id             Int @id @default(autoincrement())
 >       email          String  @unique
->       hashedPassword      String    // <─┐
->       salt                String    // <─┼─ add these lines
->       resetToken          String?   // <─┤
->       resetTokenExpiresAt DateTime? // <─┘
->     }
+>       hashedPassword      String    // \<─┐
+>       salt                String    // \<─┼─ add these lines
+>       resetToken          String?   // \<─┤
+>       resetTokenExpiresAt DateTime? // \<─┘
+>     \}
 >
 > If you already have existing user records you will need to provide a default value or Prisma complains, so change those to:
 >
@@ -83,14 +83,14 @@ Read the post-install instructions carefully as they contain instructions for ad
 >
 > You'll need to let Redwood know what field you're using for your users' `id` and `username` fields In this case we're using `id` and `email`, so update those in the `authFields` config in `/api/src/functions/auth.js` (this is also the place to tell Redwood if you used a different name for the `hashedPassword` or `salt` fields):
 >
->     authFields: {
+>     authFields: \{
 >       id: 'id',
 >       username: 'email',
 >       hashedPassword: 'hashedPassword',
 >       salt: 'salt',
 >       resetToken: 'resetToken',
 >       resetTokenExpiresAt: 'resetTokenExpiresAt',
->     },
+>     \},
 >
 > To get the actual user that's logged in, take a look at `getCurrentUser()` in `/api/src/lib/auth.js`. We default it to something simple, but you may use different names for your model or unique ID fields, in which case you need to update those calls (instructions are in the comment above the code).
 >
@@ -849,7 +849,7 @@ Update your .env file with the following settings supplied when you created your
 
 You can find these values in your project's dashboard under Settings -> API.
 
-For full Supabase documentation, see: <https://supabase.io/docs>
+For full Supabase documentation, see: [https://supabase.io/docs](https://supabase.io/docs)
 
 #### Usage
 
@@ -884,7 +884,7 @@ Depending on the credentials provided:
 - Note: You must enable and configure the OAuth provider appropriately. To configure these providers, you can go to Authentication -> Settings on `app.supabase.io` for your project.
 - Note: To authenticate using SMS based OTP (One-Time Password) you will need a [Twilio](https://www.twilio.com/try-twilio) account
 
-For Supabase Authentication documentation, see: <https://supabase.io/docs/guides/auth>
+For Supabase Authentication documentation, see: [https://supabase.io/docs/guides/auth](https://supabase.io/docs/guides/auth)
 
 +++
 
@@ -940,7 +940,7 @@ Depending on the credentials provided:
 - A user can sign up via email and password. For OAuth simply sign in and the user account will be created if it does not exist.
 - Note: You must enable and configure the OAuth provider appropriately. To enable and configure a provider, please navigate to Users -> Login settings, from your app's dashboard.
 
-For the docs on Authentication, see: <https://docs.nhost.io/platform/authentication>
+For the docs on Authentication, see: [https://docs.nhost.io/platform/authentication](https://docs.nhost.io/platform/authentication)
 
 If you are also **using Nhost as your GraphQL API server**, you will need to pass `skipFetchCurrentUser` as a prop to `AuthProvider` , as follows:
 
@@ -1294,7 +1294,7 @@ Email/password authentication is supported by calling `login({ email, password }
 In Firebase Console, you must enable "Email link (passwordless sign-in)" with the configuration toggle for the email provider. The authentication sequence for passwordless email links has two steps:
 
 1. First, an email with the link must be generated and sent to the user. Either using using firebase client sdk (web side) [sendSignInLinkToEmail()](https://firebase.google.com/docs/reference/js/auth.emailauthprovider#example_2_2), which generates the link and sends the email to the user on behalf of your application or alternatively, generate the link using backend admin sdk (api side), see ["Generate email link for sign-in](https://firebase.google.com/docs/auth/admin/email-action-links#generate_email_link_for_sign-in) but it is then your responsibility to send an email to the user containing the link.
-2. Second, authentication is completed when the user is redirected back to the application and the AuthProvider's logIn({emailLink, email, providerId: 'emailLink'}) method is called.
+2. Second, authentication is completed when the user is redirected back to the application and the AuthProvider's logIn(\{emailLink, email, providerId: 'emailLink'\}) method is called.
 
 For example, users could be redirected to a dedicated route/page to complete authentication:
 
