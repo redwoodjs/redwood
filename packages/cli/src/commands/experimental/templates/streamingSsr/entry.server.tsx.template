@@ -1,5 +1,3 @@
-import { LocationProvider } from '@redwoodjs/router'
-
 import App from './App'
 import { Document } from './Document'
 
