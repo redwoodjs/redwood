@@ -1,10 +1,14 @@
 import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
+import type { ViteDevServer } from 'vite'
 import { createServer as createViteServer } from 'vite'
 
+import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
+import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { collectCssPaths, componentsModules } from './streaming/collectCss'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
 import { registerFwGlobals } from './streaming/registerGlobals'
 import { ensureProcessDirWeb } from './utils'
@@ -60,7 +64,7 @@ async function createServer() {
       {
         route,
         clientEntryPath: rwPaths.web.entryClient as string,
-        cssLinks: [],
+        getStylesheetLinks: () => getCssLinks(rwPaths, route, vite),
       },
       vite
     )
@@ -94,3 +98,21 @@ process.stdin.on('data', async (data) => {
     })
   }
 })
+
+/**
+ * This function is used to collect the CSS links for a given route.
+ *
+ * Passed as a getter to the createReactStreamingHandler function, because
+ * at the time of creating the handler, the ViteDevServer hasn't analysed the module graph yet
+ */
+function getCssLinks(rwPaths: Paths, route: RouteSpec, vite: ViteDevServer) {
+  const appAndRouteModules = componentsModules(
+    [rwPaths.web.app, route.filePath].filter(Boolean) as string[],
+    vite
+  )
+
+  const collectedCss = collectCssPaths(appAndRouteModules)
+
+  const cssLinks = Array.from(collectedCss)
+  return cssLinks
+}
