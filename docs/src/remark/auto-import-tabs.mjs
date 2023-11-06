@@ -20,4 +20,4 @@ const plugin = () => (tree, _file) => {
   }
 }
 
-module.exports = plugin
+export default plugin

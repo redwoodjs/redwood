@@ -1,4 +1,4 @@
-const visit = require('unist-util-visit')
+import { visit } from 'unist-util-visit'
 
 const plugin = () => {
   let needImport = false
@@ -22,4 +22,4 @@ const plugin = () => {
   }
 }
 
-module.exports = plugin
+export default plugin
