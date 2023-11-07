@@ -124,7 +124,7 @@ You can choose to use a different debug port in one of two ways:
 
 **a) Using the redwood.toml**
 
-Add/change the `debugPort` under your api settings
+Add/change the `apiDebugPort` under your api settings
 
 ```toml title="redwood.toml"
 [web]
@@ -133,17 +133,17 @@ Add/change the `debugPort` under your api settings
 [api]
   port = 8911
   // highlight-next-line
-  debugPort = 18911 # 👈 change me!
+  apiDebugPort = 18911 # 👈 change me!
 ```
 
-If you set it to `false`, no debug port will be exposed. The `debugPort` is only ever used during development when running `yarn rw dev`
+If you set it to `false`, no debug port will be exposed. The `apiDebugPort` is only ever used during development when running `yarn rw dev`
 
 **b) Pass a flag to `rw dev` command**
 
 You can also pass a flag when you launch your dev servers, for example:
 
 ```bash
-yarn rw dev --debugPort 75028
+yarn rw dev --apiDebugPort 75028
 ```
 The flag passed in the CLI will always take precedence over your setting in the `redwood.toml`
 
