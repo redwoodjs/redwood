@@ -45,6 +45,18 @@ function isYarnBerryOrNewer() {
   return false
 }
 
+const USE_GITPOD_TEXT = [
+  `  As an alternative solution, you can launch a Redwood project using GitPod instead. GitPod is a an online IDE.`,
+  `  See: ${terminalLink(
+    'Launch Redwood using GitPod',
+    'https://gitpod.io/#https://github.com/redwoodjs/starter',
+    {
+      fallback: () =>
+        'Launch Redwood using GitPod https://gitpod.io/#https://github.com/redwoodjs/starter',
+    }
+  )}`,
+]
+
 async function executeCompatibilityCheck(templateDir) {
   const tuiContent = new ReactiveTUIContent({
     mode: 'text',
@@ -106,15 +118,7 @@ async function executeCompatibilityCheck(templateDir) {
             }
           )}`,
           '',
-          `  As an alternative solution, you can launch a Redwood project using GitPod instead. GitPod is a an online IDE.`,
-          `  See: ${terminalLink(
-            'Launch Redwood using GitPod',
-            'https://gitpod.io/#https://github.com/redwoodjs/starter',
-            {
-              fallback: () =>
-                'Launch Redwood using GitPod https://gitpod.io/#https://github.com/redwoodjs/starter',
-            }
-          )}`,
+          ...USE_GITPOD_TEXT,
         ].join('\n')
       )
 
@@ -149,15 +153,7 @@ async function executeCompatibilityCheck(templateDir) {
             }
           )}`,
           '',
-          `  As an alternative solution, you can launch a Redwood project using GitPod instead. GitPod is a an online IDE.`,
-          `  See: ${terminalLink(
-            'Launch Redwood using GitPod',
-            'https://gitpod.io/#https://github.com/redwoodjs/starter',
-            {
-              fallback: () =>
-                'Launch Redwood using GitPod https://gitpod.io/#https://github.com/redwoodjs/starter',
-            }
-          )}`,
+          ...USE_GITPOD_TEXT,
         ].join('\n')
       )
 
@@ -193,15 +189,7 @@ async function executeCompatibilityCheck(templateDir) {
           }
         )}`,
         '',
-        `  As an alternative solution, you can launch a Redwood project using GitPod instead. GitPod is a an online IDE.`,
-        `  See: ${terminalLink(
-          'Launch Redwood using GitPod',
-          'https://gitpod.io/#https://github.com/redwoodjs/starter',
-          {
-            fallback: () =>
-              'Launch Redwood using GitPod https://gitpod.io/#https://github.com/redwoodjs/starter',
-          }
-        )}`,
+        ...USE_GITPOD_TEXT,
       ].join('\n')
     )
 
