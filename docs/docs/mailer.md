@@ -16,7 +16,11 @@ Redwood currently maintains and provides the following renderers:
 
 You can also find community-maintained renderers by searching across npm, our forums, and our other community spaces.
 
-> Email clients are notoriously inconsistent in how they each render HTML into the visual email content. It is important to consider using a good react library to help you write components that will produce good-looking emails that will be rendered consistently between email clients.
+:::warning
+
+Email clients are notoriously inconsistent in how they each render HTML into the visual email content. It is important to consider using a good react library to help you write components that will produce good-looking emails that will be rendered consistently between email clients.
+
+:::
 
 ### Handlers
 
@@ -208,7 +212,11 @@ development: {
 },
 ```
 
-> The Redwood studio has some helpful features when it comes to using the mailer during development. It can provide a mail inbox so that you can send mail to your local machine and see the results. It can also provide live previews of your rendered mail templates as a guide to what they will likely look like when sent to your end users.
+:::tip
+
+The Redwood studio has some helpful features when it comes to using the mailer during development. It can provide a mail inbox so that you can send mail to your local machine and see the results. It can also provide live previews of your rendered mail templates as a guide to what they will likely look like when sent to your end users.
+
+:::
 
 ### Production
 
