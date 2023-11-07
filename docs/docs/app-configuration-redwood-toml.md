@@ -103,7 +103,7 @@ Instead of including them in `includeEnvironmentVariables`, you can also prefix 
 
 | Key            | Description                         | Default                    |
 | :------------- | :---------------------------------- | :------------------------- |
-| `debugPort`    | Port to expose for the debugger     | `18911`                    |
+| `apiDebugPort`    | Port to expose for the debugger     | `18911`                    |
 | `host`         | Hostname to listen on               | `"localhost"`              |
 | `path`         | Path to the api side                | `"./api"`                  |
 | `port`         | Port to listen on                   | `8911`                     |
