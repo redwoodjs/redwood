@@ -14,9 +14,35 @@ const plugin = () => {
 
     if (needImport) {
       tree.children.unshift({
-        type: 'import',
+        type: 'mdxjsEsm',
         value:
           "import FileExtSwitcher from '@site/src/components/FileExtSwitcher'",
+        data: {
+          estree: {
+            type: 'Program',
+            body: [
+              {
+                type: 'ImportDeclaration',
+                specifiers: [
+                  {
+                    type: 'ImportDefaultSpecifier',
+                    local: {
+                      type: 'Identifier',
+                      name: 'FileExtSwitcher',
+                    },
+                  },
+                ],
+                source: {
+                  type: 'Literal',
+                  value: '@site/src/components/FileExtSwitcher',
+                  raw: "'@site/src/components/FileExtSwitcher'",
+                },
+              },
+            ],
+            sourceType: 'module',
+            comments: [],
+          },
+        },
       })
     }
   }
