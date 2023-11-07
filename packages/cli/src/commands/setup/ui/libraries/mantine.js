@@ -30,7 +30,8 @@ const ALL_MANTINE_PACKAGES = [
 ]
 
 const MANTINE_THEME_AND_COMMENTS = `\
-import { createTheme } from '@mantine/core';
+import { createTheme } from '@mantine/core'
+
 /**
  * This object will be used to override Mantine theme defaults.
  * See https://mantine.dev/theming/mantine-provider/#theme-object for theming options
@@ -118,7 +119,7 @@ export async function handler({ force, install, packages }) {
             imports: [
               "import { MantineProvider } from '@mantine/core'",
               "import theme from 'config/mantine.config'",
-              "import '@mantine/core/styles.css';",
+              "import '@mantine/core/styles.css'",
             ],
           }),
       },

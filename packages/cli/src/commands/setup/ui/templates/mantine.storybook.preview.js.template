@@ -1,7 +1,9 @@
 import * as React from 'react'
 
 import { MantineProvider } from '@mantine/core'
-import * as theme from 'config/mantine.config'
+import theme from 'config/mantine.config'
+
+import '@mantine/core/styles.css'
 
 const withMantine = (StoryFn) => {
   return (
