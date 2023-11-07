@@ -227,13 +227,13 @@ forgotPassword: {
 ### forgotPassword.handler()
 
 This handler is invoked if a user is found with the username/email that they submitted on the Forgot Password page, and that user will be passed as an argument. Inside this function is where you'll send the user a link to reset their password—via an email is most common. The link will, by default, look like:
-
-    https://example.com/reset-password?resetToken=${user.resetToken}
-
+```
+https://example.com/reset-password?resetToken=${user.resetToken}
+```
 If you changed the path to the Reset Password page in your routes you'll need to change it here. If you used another name for the `resetToken` database field, you'll need to change that here as well:
-
-    https://example.com/reset-password?resetKey=${user.resetKey}
-
+```
+https://example.com/reset-password?resetKey=${user.resetKey}
+```
 ### resetPassword.enabled
 
 Allow users to reset their password via a code from a call to `forgotPassword`. Defaults to true. Needs to be explicitly set to false to disable the flow.
@@ -302,9 +302,9 @@ cookie: {
 ### Session Secret Key
 
 If you need to change the secret key that's used to encrypt the session cookie, or deploy to a new target (each deploy environment should have its own unique secret key) we've got a CLI tool for creating a new one:
-
-    yarn rw g secret
-
+```
+yarn rw g secret
+```
 Note that the secret that's output is _not_ appended to your `.env` file or anything else, it's merely output to the screen. You'll need to put it in the right place after that.
 
 :::caution .env and Version Control

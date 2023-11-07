@@ -39,9 +39,9 @@ If there are any shenanigans detected (the cookie can't be decrypted properly, o
 ## Setup
 
 A single CLI command will get you everything you need to get dbAuth working, minus the actual login/signup pages:
-
-    yarn rw setup auth dbAuth
-
+```
+yarn rw setup auth dbAuth
+```
 Read the post-install instructions carefully as they contain instructions for adding database fields for the hashed password and salt, as well as how to configure the auth serverless function based on the name of the table that stores your user data. Here they are, but could change in future releases:
 
 > You will need to add a couple of fields to your User table in order to store a hashed password and salt:
@@ -87,9 +87,9 @@ Note that if you change the fields named `hashedPassword` and `salt`, and you ha
 ## Scaffolding Login/Signup/Forgot Password Pages
 
 If you don't want to create your own login, signup and forgot password pages from scratch we've got a generator for that:
-
-    yarn rw g dbAuth
-
+```
+yarn rw g dbAuth
+```
 The default routes will make them available at `/login`, `/signup`, `/forgot-password`, and `/reset-password` but that's easy enough to change. Again, check the post-install instructions for one change you need to make to those pages: where to redirect the user to once their login/signup is successful.
 
 If you'd rather create your own, you might want to start from the generated pages anyway as they'll contain the other code you need to actually submit the login credentials or signup fields to the server for processing.
@@ -161,13 +161,13 @@ const onSubmit = async (data) => {
 ### forgotPassword.handler()
 
 This handler is invoked if a user is found with the username/email that they submitted on the Forgot Password page, and that user will be passed as an argument. Inside this function is where you'll send the user a link to reset their password—via an email is most common. The link will, by default, look like:
-
-    https://example.com/reset-password?resetToken=${user.resetToken}
-
+```
+https://example.com/reset-password?resetToken=${user.resetToken}
+```
 If you changed the path to the Reset Password page in your routes you'll need to change it here. If you used another name for the `resetToken` database field, you'll need to change that here as well:
-
-    https://example.com/reset-password?resetKey=${user.resetKey}
-
+```
+https://example.com/reset-password?resetKey=${user.resetKey}
+```
 ### resetPassword.handler()
 
 This handler is invoked after the password has been successfully changed in the database. Returning something truthy (like `return user`) will automatically log the user in after their password is changed. If you'd like to return them to the login page and make them log in manually, `return false` and redirect the user in the Reset Password page.
@@ -207,15 +207,15 @@ We've got some default error messages that sound nice, but may not fit the tone 
 By default, the session cookie will not have the `Domain` property set, which a browser will default to be the [current domain only](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_where_cookies_are_sent). If your site is spread across multiple domains (for example, your site is at `example.com` but your api-side is deployed to `api.example.com`) you'll need to explicitly set a Domain so that the cookie is accessible to both.
 
 To do this, create an environment variable named `DBAUTH_COOKIE_DOMAIN` set to the root domain of your site, which will allow it to be read by all subdomains as well. For example:
-
-    DBAUTH_COOKIE_DOMAIN=example.com
-
+```
+DBAUTH_COOKIE_DOMAIN=example.com
+```
 ### Session Secret Key
 
 If you need to change the secret key that's used to encrypt the session cookie, or deploy to a new target (each deploy environment should have its own unique secret key) we've got a CLI tool for creating a new one:
-
-    yarn rw g secret
-
+```
+yarn rw g secret
+```
 Note that the secret that's output is _not_ appended to your `.env` file or anything else, it's merely output to the screen. You'll need to put it in the right place after that.
 
 > The `.env` file is set to be ignored by git and not committed to version control. There is another file, `.env.defaults`, which is meant to be safe to commit and contain simple ENV vars that your dev team can share. The encryption key for the session cookie is NOT one of these shareable vars!
