@@ -1,10 +1,10 @@
 # Mailer
 
-Redwood provides a convenient-to-use mailer that you can reach for when you need to start sending emails to your users.
+RedwoodJS provides a convenient-to-use mailer that you can reach for when you need to start sending emails to your users.
 
 ## Architecture
 
-Redwood's mailer is comprised of handlers and renderers which each perform the core functionality of sending your emails out into the world and rendering your emails respectively. This is combined with just a few required files which define the necessary configuration.
+The RedwoodJS mailer is comprised of handlers and renderers which each perform the core functionality of sending your emails out into the world and rendering your emails respectively. This is combined with just a few required files which define the necessary configuration.
 
 ### Renderers
 
@@ -25,8 +25,8 @@ A 'handler' is the element responsible for taking your rendered content and pass
 Redwood currently maintains and provides the following handlers:
 * [@redwoodjs/mailer-handler-in-memory](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers/in-memory) which is a simple in-memory handler typically used for testing
 * [@redwoodjs/mailer-handler-nodemailer](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers/nodemailer) which allows you to use [nodemailer](https://nodemailer.com/)
-* [@redwoodjs/mailer-handler-studio](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers/studio) which sends emails to the redwood studio using nodemailer internally
-* [@redwoodjs/mailer-handler-resend](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers/resend) which allows you to use [resend](https://resend.com/)
+* [@redwoodjs/mailer-handler-studio](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers/studio) which sends emails to the RedwoodJS Studio using nodemailer internally
+* [@redwoodjs/mailer-handler-resend](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers/resend) which allows you to use [Resend](https://resend.com/)
 
 Again, you can also find community-maintained handlers by searching across npm, our forums, and our other community spaces.
 
