@@ -1,6 +1,8 @@
+import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
+import { outputFileSync } from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
@@ -28,10 +30,15 @@ const ALL_MANTINE_PACKAGES = [
 ]
 
 const MANTINE_THEME_AND_COMMENTS = `\
-// This object will be used to override Mantine theme defaults.
-// See https://mantine.dev/theming/mantine-provider/#theme-object for theming options
+import { createTheme } from '@mantine/core';
+/**
+ * This object will be used to override Mantine theme defaults.
+ * See https://mantine.dev/theming/mantine-provider/#theme-object for theming options
+ * @type {import("@mantine/core").MantineThemeOverride}
+ */
 const theme = {}
-export default theme
+
+export default createTheme(theme)
 `
 
 export function builder(yargs) {
@@ -68,7 +75,9 @@ export async function handler({ force, install, packages }) {
 
   const installPackages = (
     packages.includes(ALL_KEYWORD) ? ALL_MANTINE_PACKAGES : packages
-  ).map((pack) => `@mantine/${pack}`)
+  )
+    .map((pack) => `@mantine/${pack}`)
+    .concat('postcss', 'postcss-preset-mantine', 'postcss-simple-vars')
 
   const tasks = new Listr(
     [
@@ -108,9 +117,36 @@ export async function handler({ force, install, packages }) {
             },
             imports: [
               "import { MantineProvider } from '@mantine/core'",
-              "import * as theme from 'config/mantine.config'",
+              "import theme from 'config/mantine.config'",
+              "import '@mantine/core/styles.css';",
             ],
           }),
+      },
+      {
+        title: 'Configuring PostCSS...',
+        task: () => {
+          /**
+           * Check if PostCSS config already exists.
+           * If it exists, throw an error.
+           */
+          const postCSSConfigPath = rwPaths.web.postcss
+
+          if (!force && fs.existsSync(postCSSConfigPath)) {
+            throw new Error(
+              'PostCSS config already exists.\nUse --force to override existing config.'
+            )
+          } else {
+            const postCSSConfig = fs.readFileSync(
+              path.join(
+                __dirname,
+                '../templates/mantine-postcss.config.js.template'
+              ),
+              'utf-8'
+            )
+
+            return outputFileSync(postCSSConfigPath, postCSSConfig)
+          }
+        },
       },
       {
         title: `Creating Theme File...`,
