@@ -747,11 +747,6 @@ async function createRedwoodApp() {
 
   let newAppDir = path.resolve(process.cwd(), targetDir)
 
-  // DELETE THIS 👇
-  tui.drawText(
-    `${RedwoodStyling.info('ℹ')} generated project files for ${newAppDir}`
-  )
-
   // Create project files
   // if this directory already exists then createProjectFiles may set a new directory name
   newAppDir = await createProjectFiles(newAppDir, { templateDir, overwrite })
@@ -773,9 +768,6 @@ async function createRedwoodApp() {
   if (yarnInstall) {
     await generateTypes(newAppDir)
   }
-
-  // DELETE THIS 👇
-  tui.drawText(`${RedwoodStyling.info('ℹ')} generated types for ${newAppDir}`)
 
   // Initialize git repo
   if (useGit) {
