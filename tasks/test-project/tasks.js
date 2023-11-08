@@ -27,24 +27,22 @@ function fullPath(name, { addExtension } = { addExtension: true }) {
   return path.join(OUTPUT_PATH, name)
 }
 
+const createBuilder = (cmd) => {
+  return async function createItem(positionals) {
+    await execa(
+      cmd,
+      Array.isArray(positionals) ? positionals : [positionals],
+      getExecaOptions(OUTPUT_PATH)
+    )
+  }
+}
+
+const createPage = createBuilder('yarn redwood g page')
+
 async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
   OUTPUT_PATH = outputPath
 
-  const execaOptions = getExecaOptions(outputPath)
-
-  const createBuilder = (cmd) => {
-    return async function createItem(positionals) {
-      await execa(
-        cmd,
-        Array.isArray(positionals) ? positionals : [positionals],
-        execaOptions
-      )
-    }
-  }
-
   const createPages = async () => {
-    const createPage = createBuilder('yarn redwood g page')
-
     return new Listr([
       {
         title: 'Creating home page',
@@ -341,18 +339,6 @@ async function addModel(schema) {
 
 async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
   OUTPUT_PATH = outputPath
-
-  const execaOptions = getExecaOptions(outputPath)
-
-  const createBuilder = (cmd) => {
-    return async function createItem(positionals) {
-      await execa(
-        cmd,
-        Array.isArray(positionals) ? positionals : [positionals],
-        execaOptions
-      )
-    }
-  }
 
   const addDbAuth = async () => {
     // Temporarily disable postinstall script
@@ -748,7 +734,47 @@ export default DoublePage`
   )
 }
 
+/**
+ *
+ * Separates the streaming-ssr related steps. These are all web tasks,
+ * if we choose to move them later
+ * @param {string} outputPath
+ */
+async function streamingTasks(outputPath, { verbose }) {
+  OUTPUT_PATH = outputPath
+
+  const tasks = [
+    {
+      title: 'Creating Delayed suspense delayed page',
+      task: async () => {
+        await createPage('delayed')
+
+        await applyCodemod(
+          'delayedPage.js',
+          fullPath('web/src/pages/DelayedPage/DelayedPage')
+        )
+      },
+    },
+    {
+      title: 'Enable streaming-ssr experiment',
+      task: async () => {
+        const setupExperiment = createBuilder(
+          'yarn rw experimental setup-streaming-ssr'
+        )
+        await setupExperiment('--force')
+      },
+    },
+  ]
+
+  return new Listr(tasks, {
+    exitOnError: true,
+    renderer: verbose && 'verbose',
+    renderOptions: { collapseSubtasks: false },
+  })
+}
+
 module.exports = {
   apiTasks,
   webTasks,
+  streamingTasks,
 }
