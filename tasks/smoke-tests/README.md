@@ -56,7 +56,7 @@ There's a few gotchas to be aware of:
 
 - some smoke tests, like prerender or serve, need the test project to be built (`yarn rw build`)
 
-The CLI tries to warn you about all of these (but the first; that'll have to be fixed by refactoring the tests).
+The CLI tries to warn you about all of these (except the first; that'll have to be fixed by refactoring the tests).
 
 ## Adding a smoke test category
 
