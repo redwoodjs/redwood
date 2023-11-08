@@ -8,7 +8,7 @@ When designing the Mailer, it was crucial that mail could be:
 * sent by [Nodemailer](<https://nodemailer.com>) as a self-hosted OSS solution.
 * use different providers depending on the use case. For instance, some transactional emails might be sent via Resend and some digest emails sent by SES. You should be able to choose the method for a specific email.
 * send safely in both development and test environments in a "sandbox" without worrying that emails might accidentally leak.
-* be sent as text and/or html and composed using templates by popular tools like [React Email](<https://react.email/docs/introduction>) or [MJML](<https://react.email/docs/introduction>), with support for more methods in the future.
+* be sent as text and/or html and composed using templates by popular tools like [React Email](<https://react.email/docs/introduction>) or [MJML](<https://mjml.io/>), with support for more methods in the future.
 * unit tested to set the proper to, from, cc, subject, body, and more.
 * integrated with RedwoodJS Studio to help design and preview templates.
 
@@ -52,7 +52,7 @@ You can find community-maintained handlers by searching across npm, our forums, 
 ### Files & Directories
 
 The core file for the Mailer functions is `api/src/lib/mailer.ts`. This file contains configuration defining which handlers and renderers to use and when. It starts out looking like this:
-```ts
+```ts title=api/src/lib/mailer.ts
 import { Mailer } from '@redwoodjs/mailer-core'
 import { NodemailerMailHandler } from '@redwoodjs/mailer-handler-nodemailer'
 import { ReactEmailRenderer } from '@redwoodjs/mailer-renderer-react-email'
@@ -142,7 +142,6 @@ export const createContact: MutationResolvers['createContact'] = async ({
 
   return contact
 }
-
 ```
 
 In the code above, we do the following:
@@ -160,7 +159,6 @@ In that case, we can use the `defaults` property in our `api/src/lib/mailer.ts` 
 defaults: {
   replyTo: 'no-reply@example.com',
 },
-
 ```
 
 Now that we implemented our example, we might start to think about testing or how to try this out ourselves during development.
@@ -182,7 +180,6 @@ test: {
   when: process.env.NODE_ENV === 'test',
   handler: 'someOtherHandler',
 }
-
 ```
 
 The `when` property can either be a boolean or a function that returns a boolean. This decides if the Mailer starts in test mode when it is created. The `handler` property can specify a different handler to use in test mode.
@@ -232,7 +229,6 @@ describe('contacts', () => {
     expect(sentMail.textContent).toMatchSnapshot()
   })
 })
-
 ```
 
 Above we tested that our service did the following:
@@ -252,7 +248,6 @@ development: {
   when: process.env.NODE_ENV !== 'production',
   handler: 'someOtherHandler',
 },
-
 ```
 
 :::tip
