@@ -257,8 +257,8 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
    */
   const terminatingLink = apolloClient.split(
     ({ query }) => {
-      const q = query as unknown as any // hack
-      return q?.['__meta__']?.['hash']
+      const documentQuery = query as unknown as any // workaround for DocumentNode type not having __meta__ property
+      return documentQuery?.['__meta__']?.['hash']
     },
     createPersistedQueryLink({
       generateHash: (document: any) => document['__meta__']['hash'],
