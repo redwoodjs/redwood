@@ -1,60 +1,57 @@
 # Mailer
 
-RedwoodJS provides a convenient-to-use Mailer that you can reach for when you need to start sending emails to your users.
+RedwoodJS offers a convenient Mailer for sending emails to your users. It's not just about sending an email; delivery matters too. The way you deliver the feature requiring email is as significant as how you prepare the mail to be delivered by the infrastructure that sends emails over the internet.
 
-Send an email isn't just about sending an email; it's about delivery. How one delivers the feature that needs email is as important as how one packages up the mail to be delivered by the infrastructure that actually sends emails over the internet.
+When designing the Mailer, it was crucial that mail could be:
 
-Therefore, when designing the Mailer, it was important that mail could be sent:
+* sent by popular third-party services like [Resend](<https://resend.com>), [SendGrid](<https://sendgrid.com>), [Postmark](<https://postmarkapp.com>), [Amazon SES](<https://aws.amazon.com/ses/>), and others.
+* sent by [Nodemailer](<https://nodemailer.com>) as a self-hosted OSS solution.
+* use different providers depending on the use case. For instance, some transactional emails might be sent via Resend and some digest emails sent by SES. You should be able to choose the method for a specific email.
+* send safely in both development and test environments in a "sandbox" without worrying that emails might accidentally leak.
+* be sent as text and/or html and composed using templates by popular tools like [React Email](<https://react.email/docs/introduction>) or [MJML](<https://react.email/docs/introduction>), with support for more methods in the future.
+* unit tested to set the proper to, from, cc, subject, body, and more.
+* integrated with RedwoodJS Studio to help design and preview templates.
 
-* by popular third-party services like [Resend](https://resend.com), [SendGrid](https://sendgrid.com), [Postmark](https://postmarkapp.com), [Amazon SES](https://aws.amazon.com/ses/) (and more which could be easily added in fuiure).
-* by [Nodemailer](https://nodemailer.com) as a self-hosted OSS solution
-* using different providers depending on the use case; for example, some transactional emails send via Resend and some digest mails sent by SES. You should be able to choose the method for a specific mail to be sent.
-* be sent safely in both development and test environments in a "sandbox" without the worry that mails might accidentally leak into the wild
-* as text and/or html and composed using templates by popular tools like [React Email](https://react.email/docs/introduction) or [MJML](https://react.email/docs/introduction) (and support more methods in future)
-* having been unit tested to set the proper to, from, cc, subject, body, and more
-* integrate with RedwoodJS Studio to help design and preview templates
-
-As you can see, the RedwoodJS Mailer does more than "just send an email" -- it is a complete end-to-end design, development, and testing package for emails.
-
+The RedwoodJS Mailer does more than "just send an email". It is a complete end-to-end design, development, and testing package for emails.
 
 ## Overview
 
-The RedwoodJS Mailer is comprised of [handlers](#handlers), [renderers](#renderers) which each perform the core functionality of sending (handling) your emails out into the world and composing (rendering) your emails respectively. This is combined with just a few required files which define the necessary configuration.
+The RedwoodJS Mailer consists of [handlers](#handlers) and [renderers](#renderers), which carry out the core functionality of sending (handling) your emails and composing (rendering) your emails, respectively. This is combined with a few required files which define the necessary configuration.
 
-A high-level overview of this the Mailer Flow is shown in the diagram below and we'll cover each case in more detail below the diagram.
+A high-level overview of the Mailer Flow is shown in the diagram below, and each case is covered in more detail below the diagram.
 <img alt="mailer-flow" src="/img/mailer/flow.svg" />
 
 ### Renderers
 
-A **renderer** is responsible for taking your React components and rendering them into strings of text or HTML that can be sent as an email.
+A **renderer** transforms your React components into strings of text or HTML that can be sent as an email.
 
-Redwood currently maintains and provides the following renderers:
-* [@redwoodjs/mailer-renderer-react-email](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/renderers/react-email) which is based on [react Email](https://react.email/)
-* [@redwoodjs/mailer-renderer-mjml-react](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/renderers/mjml-react) which is based on [MJML](https://github.com/Faire/mjml-react)
+Mailer currently offers the following renderers:
+* [@redwoodjs/mailer-renderer-react-email](<https://github.com/redwoodjs/redwood/tree/main/packages/mailer/renderers/react-email>) based on [React Email](<https://react.email/>)
+* [@redwoodjs/mailer-renderer-mjml-react](<https://github.com/redwoodjs/redwood/tree/main/packages/mailer/renderers/mjml-react>) based on [MJML](<https://github.com/Faire/mjml-react>)
 
-You can also find community-maintained renderers by searching across npm, our forums, and our other community spaces.
+You can find community-maintained renderers by searching across npm, our forums, and other community spaces.
 
 :::important
 
-Email clients are notoriously inconsistent in how they each render HTML into the visual email content. It is important to consider using a good react library to help you write components that will produce good-looking emails that will be rendered consistently between email clients.
+Email clients are notoriously inconsistent in how they render HTML into the visual email content. Consider using a robust react library to help you write components that produce attractive emails, rendered consistently across email clients.
 
 :::
 
 ### Handlers
 
-A **handler** is the element responsible for taking your rendered content and passing it on to a service that can send your email to the intended recipients, e.g. Nodemailer or Amazon SES.
+A **handler** is responsible for taking your rendered content and passing it on to a service that can send your email to the intended recipients, e.g., Nodemailer or Amazon SES.
 
-Redwood currently maintains and provides the following handlers:
-* [@redwoodjs/mailer-handler-in-memory](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers/in-memory) which is a simple in-memory handler typically used for testing
-* [@redwoodjs/mailer-handler-nodemailer](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers/nodemailer) which allows you to use [Nodemailer](https://nodemailer.com/)
-* [@redwoodjs/mailer-handler-studio](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers/studio) which sends emails to the RedwoodJS Studio using nodemailer internally
-* [@redwoodjs/mailer-handler-resend](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers/resend) which allows you to use [Resend](https://resend.com/)
+Mailer currently offers the following handlers:
+* [@redwoodjs/mailer-handler-in-memory](<https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers/in-memory>), a simple in-memory handler typically used for testing.
+* [@redwoodjs/mailer-handler-nodemailer](<https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers/nodemailer>), which uses [Nodemailer](<https://nodemailer.com/>).
+* [@redwoodjs/mailer-handler-studio](<https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers/studio>), which sends emails to the RedwoodJS Studio using nodemailer internally.
+* [@redwoodjs/mailer-handler-resend](<https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers/resend>), which uses [Resend](<https://resend.com/>).
 
-Again, you can also find community-maintained handlers by searching across npm, our forums, and our other community spaces.
+You can find community-maintained handlers by searching across npm, our forums, and other community spaces.
 
 ### Files & Directories
 
-The central file around which the mailer functions is the `api/src/lib/mailer.ts` file. This contains configuration defining which handlers and renderers to use and how or when to use them. This file starts out looking like this:
+The core file for the mailer functions is `api/src/lib/mailer.ts`. This file contains configuration defining which handlers and renderers to use and when. It starts out looking like this:
 ```ts
 import { Mailer } from '@redwoodjs/mailer-core'
 import { NodemailerMailHandler } from '@redwoodjs/mailer-handler-nodemailer'
@@ -87,25 +84,28 @@ export const mailer = new Mailer({
   logger,
 })
 ```
-In the above you can see how handlers and renderers are defined. Handlers are defined in the `handling` object where the keys are any name you wish to give and the values are instances of the handler you want to use. Similarly for renderers which are defined in the `rendering` object. Each must have a `default` provided which specifies which option to use by default in production.
 
-Redwood also expects you to locate your mail react components inside the `api/src/mail` directory. For example, if you had a welcome email it should be found in `api/src/mail/Welcome/Welcome.tsx`.
+In the above, you can see how handlers and renderers are defined. Handlers are defined in the `handling` object where the keys are any name you wish to give, and the values are instances of the handler you want to use. Similarly for renderers, which are defined in the `rendering` object. Each must have a `default` provided, specifying which option to use by default in production.
+
+Mailer also expects you to put your mail react components inside the `api/src/mail` directory. For example, if you had a welcome email, it should be found in `api/src/mail/Welcome/Welcome.tsx`.
 
 ## Setup
 
-The mailer is not set up by default when you create a new Redwood app but it is super simple to do so. Simply run the following CLI command:
+The mailer is not set up by default when you create a new Mailer app, but it is easy to do so. Simply run the following CLI command:
 
-```bash
+```bash title="RedwoodJS CLI"
 yarn rw setup mailer
 ```
-This command will setup the necessary files and dependencies. You can find more information on this command at [this](https://redwoodjs.com/docs/cli-commands#setup-mailer) specific section of our docs.
+
+This command sets up the necessary files and dependencies. You can find more information on this command at [this](https://redwoodjs.com/docs/cli-commands#setup-mailer) specific section of our docs.
 
 ## Usage
 
 ### Example
-The easiest way to understand using the mailer is with an example, so let's build one. In the tutorial, we built out a blog site. Let's say we have added a contact us functionality and the contact us form takes in a name, email, and message and stores it in the database. For this example let's assume we want to also send an email to some internal inbox with this contact us submission. The service would be updated like so:
 
-```ts
+The best way to understand using the mailer is with an example. In the tutorial, we built out a blog site. Let's say we have added a contact us functionality and the contact us form takes a name, email, and message and stores it in the database. For this example, suppose we want to also send an email to some internal inbox with this contact us submission. The service would be updated like so:
+
+```ts title=api/src/services/contacts.ts
 import { mailer } from 'src/lib/mailer'
 import { ContactUsEmail } from 'src/mail/Example/Example'
 
@@ -136,40 +136,48 @@ export const createContact: MutationResolvers['createContact'] = async ({
 
   return contact
 }
+
 ```
-You can see in the code above we do the following:
-* Import the mailer and our mail template
-* Call the `mailer.send` function with:
-  * Our template which we pass props into based on the user input
-  * A set of send options to specify to, from, etc.
 
-In the example above we specified a `replyTo` because that suited our business logic but we probably don't want to have to write `replyTo: 'no-reply@example.com'` in all our other emails where we might want that to be set. In that case, we can make use of the `defaults` property in our `api/src/lib/mailer.ts` config:
+In the code above, we do the following:
 
-```ts
+- Import the mailer and our mail template.
+- Call the `mailer.send` function with:
+    - Our template, which we pass props into based on the user input.
+    - A set of send options to specify to, from, etc.
+
+In the example above, we specified a `replyTo` because that suited our business logic. However, we probably don't want to write `replyTo: 'no-reply@example.com'` in all our other emails where we might want that to be set. In that case, we can use the `defaults` property in our `api/src/lib/mailer.ts` config:
+
+```ts title=api/src/lib/mailer.ts
 defaults: {
   replyTo: 'no-reply@example.com',
 },
+
 ```
 
-Now that we implemented our example we might start to think about testing or how to try this out ourselves during development. To help with this the mailer behaves slightly differently based on which environment you are running in. This helps make your experience better as you don't have to worry about sending real emails during testing or development.
+Now that we implemented our example, we might start to think about testing or how to try this out ourselves during development. The mailer behaves slightly differently based on which environment you are running in. This helps improve your experience as you don't have to worry about sending real emails during testing or development.
 
 ### Testing
 
-When your `NODE_ENV` is set to `test` then the mailer will start in test mode. In this mode, all mail will be sent using a test handler rather than the default production one or any specific one set when calling `send` or `sendWithoutRendering`.
+When your `NODE_ENV` is set to `test`, then the mailer will start in test mode. In this mode, all mail will be sent using a test handler rather than the default production one or any specific one set when calling `send` or `sendWithoutRendering`.
 
-By default when the mailer is created it will check if the `@redwoodjs/mailer-handler-in-memory` package is available. If it is then this will become the test handler otherwise the test handler will just be a no-op which does nothing. The `yarn rw setup mailer` command adds this `@redwoodjs/mailer-handler-in-memory` package as a `devDependency` automatically for you.
+By default, when the mailer is created, it will check if the `@redwoodjs/mailer-handler-in-memory` package is available. If it is, this will become the test handler; otherwise, the test handler will be a no-op that does nothing. The `yarn rw setup mailer` command adds this `@redwoodjs/mailer-handler-in-memory` package as a `devDependency` automatically for you.
 
-If you want control over this test mode behavior then you can include the following configuration in the `mailer.ts` file:
-```ts
+If you want control over this test mode behavior, you can include the following configuration in the `mailer.ts` file:
+
+```ts title=api/src/lib/mailer.ts
 test: {
   when: process.env.NODE_ENV === 'test',
   handler: 'someOtherHandler',
 }
-```
-The `when` property can either be a boolean or a function that returns a boolean. This is what decides if the mailer starts in test mode when it is created. The `handler` property can be used to specify a different handler to use in test mode.
 
-As an example of how this helps with testing, let us work off the example we created above. Let us now test our email functionality in the corresponding test file:
-```ts
+```
+
+The `when` property can either be a boolean or a function that returns a boolean. This decides if the mailer starts in test mode when it is created. The `handler` property can specify a different handler to use in test mode.
+
+As an example of how this helps with testing, let's work off the example we created above. Let's now test our email functionality in the corresponding test file:
+
+```ts title=api/src/services/contacts/contacts.test.ts
 describe('contacts', () => {
   scenario('creates a contact', async () => {
     const result = await createContact({
@@ -212,43 +220,48 @@ describe('contacts', () => {
     expect(sentMail.textContent).toMatchSnapshot()
   })
 })
+
 ```
+
 Above we tested that our service did the following:
-* Sent one email
-* All the send options (such as to, from, what handler, etc.) match a set of expected values (the inline snapshot)
-* That the rendered text and html content match the expected value (the snapshots)
+
+- Sent one email.
+- All the send options (such as to, from, what handler, etc.) match a set of expected values (the inline snapshot).
+- The rendered text and HTML content match the expected value (the snapshots).
 
 ### Development
 
-Similar to the test mode the mailer also has a development mode. This mode is selected automatically when the mailer is created if `NODE_ENV` is **not** set to `production`. This mode behaves similarly to the test mode and by default will attempt to use the `@redwoodjs/mailer-handler-studio` package if it is available.
+Similar to the test mode, the mailer also has a development mode. This mode is selected automatically when the mailer is created if `NODE_ENV` is **not** set to `production`. This mode behaves similarly to the test mode and by default will attempt to use the `@redwoodjs/mailer-handler-studio` package if it is available.
 
-You can similarly control the development mode behavior with the following configuration in the `mailer.ts` file:
-```ts
+You can control the development mode behavior with the following configuration in the `mailer.ts` file:
+
+```ts title=api/src/lib/mailer.ts
 development: {
   when: process.env.NODE_ENV !== 'production',
   handler: 'someOtherHandler',
 },
+
 ```
 
 :::tip
 
-The Redwood studio has some helpful features when it comes to using the mailer during development. It can provide a mail inbox so that you can send mail to your local machine and see the results. It can also provide live previews of your rendered mail templates as a guide to what they will likely look like when sent to your end users.
+The Mailer studio has some helpful features when it comes to using the mailer during development. It can provide a mail inbox so that you can send mail to your local machine and see the results. It can also provide live previews of your rendered mail templates as a guide to what they will likely look like when sent to your end users.
 
 :::
 
 ### Production
 
-If neither the test nor development mode conditions are met the mailer will start in production mode. In this mode, there is no rerouting of your mail to different handlers. Instead, your mail will go directly to your default handler unless you specifically state a different one in your send options.
+If neither the test nor development mode conditions are met, the mailer will start in production mode. In this mode, there is no rerouting of your mail to different handlers. Instead, your mail will go directly to your default handler unless you specifically state a different one in your send options.
 
 ### Studio
 
-* should screenshot of email preview.
-* note that beta
+- Screenshot of email preview should be here.
+- Note that this is still in beta.
 
 ## Need a Renderer or Handler?
 
-You may find we do not provide a [handler](#handlers) or [renderer](#renderers) for the service or technology you wish to use. This does not prevent you from using the Mailer. Instead, you can use this opportunity to create your own handler or renderer which you can then open source to the wider RedwoodJS community.
+If we do not provide a [handler](notion://www.notion.so/redwoodjs/133467eb46b744fd8ae60df2d493d7d0#handlers) or [renderer](notion://www.notion.so/redwoodjs/133467eb46b744fd8ae60df2d493d7d0#renderers) for the service or technology you wish to use, this doesn't prevent you from using the Mailer. Instead, you can create your own handler or renderer which you can then open source to the wider RedwoodJS community.
 
-To do this you can read over the existing implementations for handlers [here](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers) and renderers [here](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/renderers). You can also find the interfaces that can handler or mailer must satisfy [here](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/core) in the `@redwoodjs/mailer-core` package.
+To do this, read over the existing implementations for handlers [here](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/handlers) and renderers [here](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/renderers). You can also find the interfaces that a handler or mailer must satisfy [here](https://github.com/redwoodjs/redwood/tree/main/packages/mailer/core) in the `@redwoodjs/mailer-core` package.
 
 Be sure to check out the community forum for people working on similar work, to document your own creations, or to get help on anything.
