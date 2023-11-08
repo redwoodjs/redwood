@@ -4969,22 +4969,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna/child-process@npm:7.2.0":
-  version: 7.2.0
-  resolution: "@lerna/child-process@npm:7.2.0"
+"@lerna/child-process@npm:7.4.2":
+  version: 7.4.2
+  resolution: "@lerna/child-process@npm:7.4.2"
   dependencies:
     chalk: ^4.1.0
     execa: ^5.0.0
     strong-log-transformer: ^2.1.0
-  checksum: a02e217cdc2254aa44d7eec90b2b8ea03a218f86f8d59f8c4216365a52729612dbb2a4430b273904a4796d6f549a16e64da2c23111750a892a0a3b4dd1026c5c
+  checksum: 5ca689df4bd9ec456be8be95bb77d06980a81397c5f56e9c2738fbd13dcffe8f789c29d3c39c499e21f568c6fe4ae9fba469d4ea572c809dd62ac68c8fded3ae
   languageName: node
   linkType: hard
 
-"@lerna/create@npm:7.2.0":
-  version: 7.2.0
-  resolution: "@lerna/create@npm:7.2.0"
+"@lerna/create@npm:7.4.2":
+  version: 7.4.2
+  resolution: "@lerna/create@npm:7.4.2"
   dependencies:
-    "@lerna/child-process": 7.2.0
+    "@lerna/child-process": 7.4.2
     "@npmcli/run-script": 6.0.2
     "@nx/devkit": ">=16.5.1 < 17"
     "@octokit/plugin-enterprise-rest": 6.0.1
@@ -5015,7 +5015,7 @@ __metadata:
     libnpmpublish: 7.3.0
     load-json-file: 6.2.0
     lodash: ^4.17.21
-    make-dir: 3.1.0
+    make-dir: 4.0.0
     minimatch: 3.0.5
     multimatch: 5.0.0
     node-fetch: 2.6.7
@@ -5049,7 +5049,7 @@ __metadata:
     write-pkg: 4.0.0
     yargs: 16.2.0
     yargs-parser: 20.2.4
-  checksum: 7a69d29050c1ab434c97e4702d7fd806da99404277b42dbf2f25787a7d09be1cab4c0ab5c3aef711eb04d784d3685e30cae52d6d48f60cbc61d4ada32bfe472b
+  checksum: 035494d4cc474dcf020ea44cbd761911ed10a71d906d3b13bfbef4f81c257a2e73c8f96db808b4fa19dfec2e4ec182148a6bc805bcecff336514c5212f88acc6
   languageName: node
   linkType: hard
 
@@ -16271,12 +16271,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-changelog-angular@npm:6.0.0":
-  version: 6.0.0
-  resolution: "conventional-changelog-angular@npm:6.0.0"
+"conventional-changelog-angular@npm:7.0.0":
+  version: 7.0.0
+  resolution: "conventional-changelog-angular@npm:7.0.0"
   dependencies:
     compare-func: ^2.0.0
-  checksum: a661ff7b79d4b829ccf8f424ef1bb210e777c1152a1ba5b2ba0a8639529c315755b82a6f84684f1b552c4e8ed6696bfe57317c5f7b868274e9a72b2bf13081ba
+  checksum: 90e73e25e224059b02951b6703b5f8742dc2a82c1fea62163978e6735fd3ab04350897a8fc6f443ec6b672d6b66e28a0820e833e544a0101f38879e5e6289b7e
   languageName: node
   linkType: hard
 
@@ -24486,12 +24486,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lerna@npm:7.2.0":
-  version: 7.2.0
-  resolution: "lerna@npm:7.2.0"
+"lerna@npm:7.4.2":
+  version: 7.4.2
+  resolution: "lerna@npm:7.4.2"
   dependencies:
-    "@lerna/child-process": 7.2.0
-    "@lerna/create": 7.2.0
+    "@lerna/child-process": 7.4.2
+    "@lerna/create": 7.4.2
     "@npmcli/run-script": 6.0.2
     "@nx/devkit": ">=16.5.1 < 17"
     "@octokit/plugin-enterprise-rest": 6.0.1
@@ -24501,7 +24501,7 @@ __metadata:
     clone-deep: 4.0.1
     cmd-shim: 6.0.1
     columnify: 1.6.0
-    conventional-changelog-angular: 6.0.0
+    conventional-changelog-angular: 7.0.0
     conventional-changelog-core: 5.0.1
     conventional-recommended-bump: 7.0.1
     cosmiconfig: ^8.2.0
@@ -24528,7 +24528,7 @@ __metadata:
     libnpmpublish: 7.3.0
     load-json-file: 6.2.0
     lodash: ^4.17.21
-    make-dir: 3.1.0
+    make-dir: 4.0.0
     minimatch: 3.0.5
     multimatch: 5.0.0
     node-fetch: 2.6.7
@@ -24567,7 +24567,7 @@ __metadata:
     yargs-parser: 20.2.4
   bin:
     lerna: dist/cli.js
-  checksum: 72d2df221bd71085ee24abed6a62fb05a076cc75bef5fd886ab0076699c206fa807a996cea7f7d903fa7a20c82c7dddaabdf19d61376a49a552729074eb893e9
+  checksum: dff72818afde1e40ade5ce8e0b957c8ba1301a84f37b3d3d38b3b0a20a3529d23300e369a0694434c059ec28feffc16f9e6c77d0cd9372a91ec0661fdf43d7cb
   languageName: node
   linkType: hard
 
@@ -25268,15 +25268,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-dir@npm:3.1.0, make-dir@npm:^3.0.0, make-dir@npm:^3.0.2, make-dir@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "make-dir@npm:3.1.0"
-  dependencies:
-    semver: ^6.0.0
-  checksum: 56aaafefc49c2dfef02c5c95f9b196c4eb6988040cf2c712185c7fe5c99b4091591a7fc4d4eafaaefa70ff763a26f6ab8c3ff60b9e75ea19876f49b18667ecaa
-  languageName: node
-  linkType: hard
-
 "make-dir@npm:4.0.0":
   version: 4.0.0
   resolution: "make-dir@npm:4.0.0"
@@ -25302,6 +25293,15 @@ __metadata:
     pify: ^4.0.1
     semver: ^5.6.0
   checksum: ada869944d866229819735bee5548944caef560d7a8536ecbc6536edca28c72add47cc4f6fc39c54fb25d06b58da1f8994cf7d9df7dadea047064749efc085d8
+  languageName: node
+  linkType: hard
+
+"make-dir@npm:^3.0.0, make-dir@npm:^3.0.2, make-dir@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "make-dir@npm:3.1.0"
+  dependencies:
+    semver: ^6.0.0
+  checksum: 56aaafefc49c2dfef02c5c95f9b196c4eb6988040cf2c712185c7fe5c99b4091591a7fc4d4eafaaefa70ff763a26f6ab8c3ff60b9e75ea19876f49b18667ecaa
   languageName: node
   linkType: hard
 
@@ -31301,7 +31301,7 @@ __metadata:
     jest: 29.7.0
     jest-runner-tsd: 5.0.0
     jscodeshift: 0.15.0
-    lerna: 7.2.0
+    lerna: 7.4.2
     listr2: 6.6.1
     make-dir-cli: 3.0.0
     msw: 1.3.1
