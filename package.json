@@ -11,7 +11,6 @@
     "packages/studio/web"
   ],
   "scripts": {
-    "benchmark": "tsx ./tasks/benchmark/run-benchmarks.mts",
     "build": "lerna run build",
     "build:clean": "yarn node ./tasks/clean.mjs",
     "build:clean:super": "git clean -fdx && yarn && yarn build",
@@ -31,7 +30,8 @@
     "release": "node ./tasks/release/releaseCLI.mjs",
     "smoke-test": "node ./tasks/smoke-tests/smoke-tests.mjs",
     "test": "lerna run test --concurrency 2 -- --colors --maxWorkers=4",
-    "test-ci": "lerna run test --concurrency 2 -- --colors --maxWorkers"
+    "test-ci": "lerna run test --concurrency 2 -- --colors --maxWorkers",
+    "test:k6": "tsx ./tasks/k6-test/run-k6-tests.mts"
   },
   "resolutions": {
     "vscode-languageserver": "6.1.1",
@@ -48,17 +48,17 @@
     "@babel/core": "^7.22.20",
     "@babel/generator": "7.23.0",
     "@babel/node": "7.22.19",
-    "@babel/plugin-proposal-decorators": "7.23.0",
+    "@babel/plugin-proposal-decorators": "7.23.2",
     "@babel/plugin-transform-class-properties": "^7.22.5",
     "@babel/plugin-transform-nullish-coalescing-operator": "7.22.11",
     "@babel/plugin-transform-private-methods": "^7.22.5",
     "@babel/plugin-transform-private-property-in-object": "^7.22.11",
     "@babel/plugin-transform-react-jsx": "^7.22.15",
-    "@babel/plugin-transform-runtime": "7.22.15",
+    "@babel/plugin-transform-runtime": "7.23.2",
     "@babel/preset-env": "^7.22.20",
     "@babel/preset-react": "^7.22.15",
     "@babel/preset-typescript": "^7.22.15",
-    "@babel/runtime-corejs3": "7.23.1",
+    "@babel/runtime-corejs3": "7.23.2",
     "@faker-js/faker": "8.0.2",
     "@npmcli/arborist": "6.2.10",
     "@playwright/test": "1.37.1",
@@ -99,7 +99,7 @@
     "octokit": "2.1.0",
     "ora": "6.3.1",
     "prompts": "2.4.2",
-    "rimraf": "5.0.1",
+    "rimraf": "5.0.5",
     "tsx": "3.12.7",
     "typescript": "5.2.2",
     "yargs": "17.7.2",

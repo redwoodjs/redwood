@@ -10,6 +10,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import handleJsAsJsx from './plugins/vite-plugin-jsx-loader'
 import removeFromBundle from './plugins/vite-plugin-remove-from-bundle'
+import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider'
 
 /**
  * Pre-configured vite plugin, with required config for Redwood apps.
@@ -261,6 +262,8 @@ export default function redwoodPluginVite(): PluginOption[] {
         }
       },
     },
+    // We can remove when streaming is stable
+    rwConfig.experimental.streamingSsr.enabled && swapApolloProvider(),
     // -----------------
     handleJsAsJsx(),
     // Remove the splash-page from the bundle.
