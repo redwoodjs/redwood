@@ -11,15 +11,11 @@ test.beforeAll(async ({ browser }) => {
   const botContext = await browser.newContext({
     userAgent:
       'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html) Chrome/W.X.Y.Z Safari/537.36',
-    // @@MARK TODO awaiting react team feedback. I dont understand why React is still injecting JS instead of giving us
-    // a fully formed HTML page
-    // javaScriptEnabled: false,
+    // Even without JS, this should be a fully rendered page
+    javaScriptEnabled: false,
   })
 
-  const botPage = await botContext.newPage()
-  await botPage.route('**/*.*.{js,tsx,ts,jsx}', (route) => route.abort())
-
-  botPageNoJs = botPage
+  botPageNoJs = await botContext.newPage()
 })
 
 test.afterAll(() => {
