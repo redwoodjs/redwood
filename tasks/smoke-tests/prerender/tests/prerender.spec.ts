@@ -7,8 +7,9 @@ import type {
   PlaywrightTestArgs,
   PlaywrightWorkerArgs,
 } from '@playwright/test'
-// @ts-expect-error - With `* as` you have to use .default() when calling execa
 import execa from 'execa'
+
+import { checkHomePageCellRender } from '../../shared/homePage'
 
 let noJsBrowser: BrowserContext
 
@@ -22,21 +23,7 @@ test('Check that homepage is prerendered', async () => {
   const pageWithoutJs = await noJsBrowser.newPage()
   await pageWithoutJs.goto('/')
 
-  const cellSuccessState = await pageWithoutJs.locator('main').innerHTML()
-  expect(cellSuccessState).toMatch(/Welcome to the blog!/)
-  expect(cellSuccessState).toMatch(/A little more about me/)
-  expect(cellSuccessState).toMatch(/What is the meaning of life\?/)
-
-  const navTitle = await pageWithoutJs.locator('header >> h1').innerText()
-  expect(navTitle).toBe('Redwood Blog')
-
-  const navLinks = await pageWithoutJs.locator('nav >> ul').innerText()
-  expect(navLinks.split('\n')).toEqual([
-    'About',
-    'Contact Us',
-    'Admin',
-    'Log In',
-  ])
+  checkHomePageCellRender(pageWithoutJs)
 
   pageWithoutJs.close()
 })
