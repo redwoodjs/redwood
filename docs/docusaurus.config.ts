@@ -58,7 +58,7 @@ const config: Config = {
       ],
     },
     prism: {
-      additionalLanguages: ['toml'],
+      additionalLanguages: ['toml', 'diff', 'bash', 'json'],
     },
     footer: {
       style: 'dark',
