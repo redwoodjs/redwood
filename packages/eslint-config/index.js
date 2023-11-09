@@ -15,15 +15,18 @@ const getProjectBabelOptions = () => {
   // We can't nest the web overrides inside the overrides block
   // So we just take it out and put it as a separate item
   // Ignoring overrides, as I don't think it has any impact on linting
-  const { overrides: _overrides, ...otherWebConfig } =
+  const { overrides: _webOverrides, ...otherWebConfig } =
     getWebSideDefaultBabelConfig()
+
+  const { overrides: _apiOverrides, ...otherApiConfig } =
+    getApiSideDefaultBabelConfig()
 
   return {
     plugins: getCommonPlugins(),
     overrides: [
       {
         test: ['./api/', './scripts/'],
-        ...getApiSideDefaultBabelConfig(),
+        ...otherApiConfig,
       },
       {
         test: ['./web/'],
