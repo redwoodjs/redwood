@@ -262,8 +262,23 @@ If neither the test nor development mode conditions are met, the Mailer will sta
 
 ### Studio
 
-- Screenshot of email preview should be here.
-- Note that this is still in beta.
+Redwood Studio is tightly integrated with the mailer. The goal is to provide you with not just the ability to send mail but also the development tools to make your experience easier and more enjoyable.
+
+#### Template Previews
+<img alt="mailer-template-preview" src="/img/mailer/template_preview.png" />
+
+You can have a preview of what your mail templates will look like. These will rerender live as you update your template code and you can even provide a JSON payload which will be used as the props to your template component. These previews are approximate but should easily get you 90% of the way there.
+
+#### Local Inbox
+<img alt="mailer-local-inbox" src="/img/mailer/local_inbox.png" />
+
+When running in development mode, using the default `@redwoodjs/mailer-handler-studio` development handler, your mail will be sent to a local SMTP inbox running inside of Studio. This allows you to use your app and have full emails sent without worrying about setting up a local inbox yourself or using some other online temporary inbox service.
+
+:::warning
+
+Redwood Studio is an experimental feature and is still in development. Some of the UI shown above might look slightly different and the functionality may be tweaked over time to provide you with a better experience.
+
+:::
 
 ## Need a Renderer or Handler?
 
