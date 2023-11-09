@@ -5456,6 +5456,7 @@ __metadata:
     "@docusaurus/tsconfig": 3.0.0
     "@mdx-js/react": 3.0.0
     clsx: 1.2.1
+    prism-react-renderer: 2.1.0
     react: 18.2.0
     react-dom: 18.2.0
     react-player: 2.13.0
@@ -10105,7 +10106,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prism-react-renderer@npm:^2.1.0":
+"prism-react-renderer@npm:2.1.0, prism-react-renderer@npm:^2.1.0":
   version: 2.1.0
   resolution: "prism-react-renderer@npm:2.1.0"
   dependencies:
