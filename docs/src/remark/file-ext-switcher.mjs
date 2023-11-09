@@ -4,11 +4,27 @@ const plugin = () => {
   let needImport = false
 
   return (tree, _file) => {
-    visit(tree, (node) => {
+    visit(tree, (node, _index, parent) => {
       if (node.type === 'inlineCode' && /\w\.\{js,tsx?}$/.test(node.value)) {
         needImport = true
-        node.type = 'jsx'
-        node.value = `<FileExtSwitcher path="${node.value}" />`
+        const pathValue = `${node.value}`
+
+        node.type =
+          parent.type === 'paragraph'
+            ? 'mdxJsxTextElement'
+            : 'mdxJsxFlowElement'
+        node.name = 'FileExtSwitcher'
+        node.attributes = [
+          {
+            type: 'mdxJsxAttribute',
+            name: 'path',
+            value: pathValue,
+          },
+        ]
+        node.children = []
+        node.data = {
+          _mdxExplicitJsx: true,
+        }
       }
     })
 
