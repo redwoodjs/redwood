@@ -1,10 +1,7 @@
-import type { Page } from '@playwright/test'
 import { test } from '@playwright/test'
 
 import { checkDelayedPageRendering } from '../../shared/delayedPage'
 import { checkHomePageCellRender } from '../../shared/homePage'
-
-let botPageNoJs: Page
 
 // UA taken from https://developers.google.com/search/docs/crawling-indexing/overview-google-crawlers
 const BOT_USERAGENT =
