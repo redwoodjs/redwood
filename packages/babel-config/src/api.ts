@@ -144,10 +144,25 @@ export const getApiSideBabelConfigPath = () => {
   }
 }
 
+export const getApiSideBabelOverrides = () => {
+  const overrides = [
+    // Apply context wrapping to all functions
+    {
+      // match */api/src/functions/*.js|ts
+      test: /.+api(?:[\\|/])src(?:[\\|/])functions(?:[\\|/]).+.(?:js|ts)$/,
+      plugins: [
+        require('./plugins/babel-plugin-redwood-context-wrapping').default,
+      ],
+    },
+  ].filter(Boolean)
+  return overrides as TransformOptions[]
+}
+
 export const getApiSideDefaultBabelConfig = () => {
   return {
     presets: getApiSideBabelPresets(),
     plugins: getApiSideBabelPlugins(),
+    overrides: getApiSideBabelOverrides(),
     extends: getApiSideBabelConfigPath(),
     babelrc: false,
     ignore: ['node_modules'],
