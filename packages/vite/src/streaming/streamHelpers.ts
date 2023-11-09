@@ -67,6 +67,7 @@ export async function reactRenderToStreamResponse(
   // This is a transformer stream, that will inject all things called with useServerInsertedHtml
   const serverInjectionTransform = createServerInjectionTransform({
     injectionState,
+    onlyOnFlush: waitForAllReady,
   })
 
   // Timeout after 10 seconds
