@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "rootDir": "api",
-    "tsBuildInfoFile": "dist/api/tsconfig.tsbuildinfo",
+    "tsBuildInfoFile": "tsconfig.tsbuildinfo",
     "outDir": "dist/api",
   },
   "include": ["api/**/*"],
