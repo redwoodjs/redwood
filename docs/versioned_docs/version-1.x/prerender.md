@@ -209,8 +209,8 @@ You can remove the default redirect to index in your `netlify.toml`. This means 
 </details>
 
 <details>
-
 <summary>If you don't prerender your 404s, but prerender all your other pages</summary>
+
 You can add a 404 redirect if you want:
 
 ```diff
