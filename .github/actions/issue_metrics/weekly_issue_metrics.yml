@@ -1,0 +1,42 @@
+name: Monthly issue metrics
+on:
+  workflow_dispatch:
+  schedule:
+    # 2:33 AM every Monday
+    - cron: '33 2 * * 1'
+
+permissions:
+  issues: write
+  pull-requests: read
+
+jobs:
+  build:
+    name: monthly issue metrics
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get dates for last month
+      shell: bash
+      run: |
+        # Calculate the first day of the previous week (and as we all know
+        # weeks start on Mondays ;))
+        first_day=$(date -d "last Sunday - 6 days" +%Y-%m-01)
+
+        # Calculate the last day of the previous week
+        last_day=$(date -d "last Sunday" +%Y-%m-%d)
+
+        #Set an environment variable with the date range
+        echo "$first_day..$last_day"
+        echo "last_week=$first_day..$last_day" >> "$GITHUB_ENV"
+
+    - name: Run issue-metrics tool
+      uses: github/issue-metrics@v2
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SEARCH_QUERY: 'repo:owner/repo is:issue created:${{ env.last_week }} -reason:"not planned"'
+
+    - name: Create issue
+      uses: peter-evans/create-issue-from-file@v4
+      with:
+        title: Monthly issue metrics report
+        token: ${{ secrets.GITHUB_TOKEN }}
+        content-filepath: ./issue_metrics.md
