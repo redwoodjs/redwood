@@ -36,6 +36,11 @@ jobs:
 
     - name: Print output of issue metrics tool
       run: |
+        whoami
+        pwd
+        ls -la
+        touch ~/issue_metrics.json
+        touch ./issue_metrics.json
         echo "${{ steps.issue-metrics.outputs.metrics }}" >> ./issue_metrics.json
         cat ./issue_metrics.json
         cat ./issue_metrics.md
