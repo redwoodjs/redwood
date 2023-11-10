@@ -7,6 +7,7 @@ import type {
   ReactDOMServerReadableStream,
 } from 'react-dom/server'
 
+import { LocationProvider } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
 import {
@@ -67,6 +68,7 @@ export async function reactRenderToStreamResponse(
   // This is a transformer stream, that will inject all things called with useServerInsertedHtml
   const serverInjectionTransform = createServerInjectionTransform({
     injectionState,
+    onlyOnFlush: waitForAllReady,
   })
 
   // Timeout after 10 seconds
@@ -88,11 +90,19 @@ export async function reactRenderToStreamResponse(
       {
         value: injectToPage,
       },
-      ServerEntry({
-        url: path,
-        css: cssLinks,
-        meta: metaTags,
-      })
+      React.createElement(
+        LocationProvider,
+        {
+          location: {
+            pathname: path,
+          },
+        },
+        ServerEntry({
+          url: path,
+          css: cssLinks,
+          meta: metaTags,
+        })
+      )
     )
   }
 
@@ -129,22 +139,32 @@ export async function reactRenderToStreamResponse(
         renderToStreamOptions
       )
 
-    const output = reactStream
-      .pipeThrough(bufferTransform)
-      .pipeThrough(serverInjectionTransform)
-      .pipeThrough(timeoutTransform)
-
+    // @NOTE: very important that we await this before we apply any transforms
     if (waitForAllReady) {
       await reactStream.allReady
+      clearTimeout(timeoutHandle)
     }
 
-    return new Response(output, {
+    const transformsToApply = [
+      !waitForAllReady && bufferTransform,
+      serverInjectionTransform,
+      !waitForAllReady && timeoutTransform,
+    ]
+
+    const outputStream: ReadableStream<Uint8Array> = applyStreamTransforms(
+      reactStream,
+      transformsToApply
+    )
+
+    return new Response(outputStream, {
       status: didErrorOutsideShell ? 500 : 200, // I think better right? Prevents caching a bad page
       headers: { 'content-type': 'text/html' },
     })
   } catch (e) {
     console.error('🔻 Failed to render shell')
     streamOptions.onError?.(e as Error)
+
+    clearTimeout(timeoutHandle)
 
     // @TODO Asking for clarification from React team. Their documentation on this is incomplete I think.
     // Having the Document (and bootstrap scripts) here allows client to recover from errors in the shell
@@ -163,4 +183,20 @@ export async function reactRenderToStreamResponse(
       headers: { 'content-type': 'text/html' },
     })
   }
+}
+function applyStreamTransforms(
+  reactStream: ReactDOMServerReadableStream,
+  transformsToApply: (TransformStream | false)[]
+) {
+  let outputStream: ReadableStream<Uint8Array> = reactStream
+
+  for (const transform of transformsToApply) {
+    // If its false, skip
+    if (!transform) {
+      continue
+    }
+    outputStream = outputStream.pipeThrough(transform)
+  }
+
+  return outputStream
 }

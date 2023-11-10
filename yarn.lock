@@ -5012,22 +5012,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna/child-process@npm:7.3.0":
-  version: 7.3.0
-  resolution: "@lerna/child-process@npm:7.3.0"
+"@lerna/child-process@npm:7.4.2":
+  version: 7.4.2
+  resolution: "@lerna/child-process@npm:7.4.2"
   dependencies:
     chalk: ^4.1.0
     execa: ^5.0.0
     strong-log-transformer: ^2.1.0
-  checksum: fb5e8b1076b467303f4040e31484bdeb952fc478fedb62a880754c8014cde79f86b9978caa1ea625146004fb87a9e0d52028d2cb7b911b4650babd1a68e920a6
+  checksum: 5ca689df4bd9ec456be8be95bb77d06980a81397c5f56e9c2738fbd13dcffe8f789c29d3c39c499e21f568c6fe4ae9fba469d4ea572c809dd62ac68c8fded3ae
   languageName: node
   linkType: hard
 
-"@lerna/create@npm:7.3.0":
-  version: 7.3.0
-  resolution: "@lerna/create@npm:7.3.0"
+"@lerna/create@npm:7.4.2":
+  version: 7.4.2
+  resolution: "@lerna/create@npm:7.4.2"
   dependencies:
-    "@lerna/child-process": 7.3.0
+    "@lerna/child-process": 7.4.2
     "@npmcli/run-script": 6.0.2
     "@nx/devkit": ">=16.5.1 < 17"
     "@octokit/plugin-enterprise-rest": 6.0.1
@@ -5092,7 +5092,7 @@ __metadata:
     write-pkg: 4.0.0
     yargs: 16.2.0
     yargs-parser: 20.2.4
-  checksum: 76ef1bcb5ec59fcedced4e6f78002ea82335b7eb99797626f00abf3a7646572b09dc3b7f1e0e0aa4c7a84b89c0807b3590c48158c1c14ba47b61754e877628c9
+  checksum: 035494d4cc474dcf020ea44cbd761911ed10a71d906d3b13bfbef4f81c257a2e73c8f96db808b4fa19dfec2e4ec182148a6bc805bcecff336514c5212f88acc6
   languageName: node
   linkType: hard
 
@@ -8072,12 +8072,10 @@ __metadata:
     "@redwoodjs/api": 6.0.7
     "@redwoodjs/project-config": 6.0.7
     "@simplewebauthn/server": 7.3.1
-    "@types/crypto-js": 4.1.1
     "@types/md5": 2.3.2
     "@types/uuid": 9.0.2
     base64url: 3.0.1
     core-js: 3.32.2
-    crypto-js: 4.1.1
     jest: 29.7.0
     md5: 2.3.0
     typescript: 5.2.2
@@ -8095,12 +8093,10 @@ __metadata:
     "@redwoodjs/cli-helpers": 6.0.7
     "@simplewebauthn/browser": 7.2.0
     "@simplewebauthn/typescript-types": 7.0.0
-    "@types/secure-random-password": 0.2.1
     "@types/yargs": 17.0.24
     core-js: 3.32.2
     jest: 29.7.0
     prompts: 2.4.2
-    secure-random-password: 0.2.3
     terminal-link: 2.1.1
     typescript: 5.2.2
   languageName: unknown
@@ -8480,8 +8476,6 @@ __metadata:
     "@redwoodjs/project-config": 6.0.7
     "@redwoodjs/structure": 6.0.7
     "@redwoodjs/telemetry": 6.0.7
-    "@types/crypto-js": 4.1.1
-    "@types/secure-random-password": 0.2.1
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
@@ -8490,7 +8484,6 @@ __metadata:
     configstore: 3.1.5
     core-js: 3.32.2
     cross-env: 7.0.3
-    crypto-js: 4.1.1
     decamelize: 5.0.1
     dotenv-defaults: 5.0.2
     enquirer: 2.4.1
@@ -8511,7 +8504,6 @@ __metadata:
     prisma: 5.4.2
     prompts: 2.4.2
     rimraf: 5.0.5
-    secure-random-password: 0.2.3
     semver: 7.5.3
     string-env-interpolation: 1.0.1
     systeminformation: 5.21.7
@@ -9082,7 +9074,6 @@ __metadata:
     "@tailwindcss/forms": 0.5.3
     "@tremor/react": 3.4.1
     "@types/aws-lambda": 8.10.119
-    "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 9.0.2
     "@types/lodash": 4.14.195
     "@types/mailparser": ^3
@@ -9101,7 +9092,6 @@ __metadata:
     buffer: 6.0.3
     chokidar: 3.5.3
     core-js: 3.32.2
-    crypto-js: 4.1.1
     dotenv: 16.3.1
     fast-json-parse: 1.0.3
     fastify: 4.23.2
@@ -11330,13 +11320,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/crypto-js@npm:4.1.1":
-  version: 4.1.1
-  resolution: "@types/crypto-js@npm:4.1.1"
-  checksum: e53b712c5d3b72d19c67a06c8bbaaafd989d78f71a2168f1376c8fb84d5744e5166b58d79528a124645e13f13fe4d2c97ee8f03d649ef913e93ca6b8cee41370
-  languageName: node
-  linkType: hard
-
 "@types/d3-array@npm:^3.0.3":
   version: 3.0.5
   resolution: "@types/d3-array@npm:3.0.5"
@@ -12186,13 +12169,6 @@ __metadata:
   version: 0.16.3
   resolution: "@types/scheduler@npm:0.16.3"
   checksum: c249d4b96fa05165ac22c214f94a045ee0af8beedefdbc54b769febd0044cab3a874e55419841a0dcc76439e379a63e257f3253c87168e3261e7bc783d623302
-  languageName: node
-  linkType: hard
-
-"@types/secure-random-password@npm:0.2.1":
-  version: 0.2.1
-  resolution: "@types/secure-random-password@npm:0.2.1"
-  checksum: 87f0528b7ccb907706b0cc77160c6771279508de3852213f2c4f28a83af482b016cf3e0b414f62d2e8b3713f1733ad787e3bd40c201463ac822c117856a7886a
   languageName: node
   linkType: hard
 
@@ -16375,12 +16351,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-changelog-angular@npm:6.0.0":
-  version: 6.0.0
-  resolution: "conventional-changelog-angular@npm:6.0.0"
+"conventional-changelog-angular@npm:7.0.0":
+  version: 7.0.0
+  resolution: "conventional-changelog-angular@npm:7.0.0"
   dependencies:
     compare-func: ^2.0.0
-  checksum: a661ff7b79d4b829ccf8f424ef1bb210e777c1152a1ba5b2ba0a8639529c315755b82a6f84684f1b552c4e8ed6696bfe57317c5f7b868274e9a72b2bf13081ba
+  checksum: 90e73e25e224059b02951b6703b5f8742dc2a82c1fea62163978e6735fd3ab04350897a8fc6f443ec6b672d6b66e28a0820e833e544a0101f38879e5e6289b7e
   languageName: node
   linkType: hard
 
@@ -16832,13 +16808,6 @@ __metadata:
     randombytes: ^2.0.0
     randomfill: ^1.0.3
   checksum: 0c20198886576050a6aa5ba6ae42f2b82778bfba1753d80c5e7a090836890dc372bdc780986b2568b4fb8ed2a91c958e61db1f0b6b1cc96af4bd03ffc298ba92
-  languageName: node
-  linkType: hard
-
-"crypto-js@npm:4.1.1":
-  version: 4.1.1
-  resolution: "crypto-js@npm:4.1.1"
-  checksum: 50cc66a35f2738171d9a6d80c85ba7d00cb6440b756db035ba9ccd03032c0a803029a62969ecd4c844106c980af87687c64b204dd967989379c4f354fb482d37
   languageName: node
   linkType: hard
 
@@ -24620,12 +24589,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lerna@npm:7.3.0":
-  version: 7.3.0
-  resolution: "lerna@npm:7.3.0"
+"lerna@npm:7.4.2":
+  version: 7.4.2
+  resolution: "lerna@npm:7.4.2"
   dependencies:
-    "@lerna/child-process": 7.3.0
-    "@lerna/create": 7.3.0
+    "@lerna/child-process": 7.4.2
+    "@lerna/create": 7.4.2
     "@npmcli/run-script": 6.0.2
     "@nx/devkit": ">=16.5.1 < 17"
     "@octokit/plugin-enterprise-rest": 6.0.1
@@ -24635,7 +24604,7 @@ __metadata:
     clone-deep: 4.0.1
     cmd-shim: 6.0.1
     columnify: 1.6.0
-    conventional-changelog-angular: 6.0.0
+    conventional-changelog-angular: 7.0.0
     conventional-changelog-core: 5.0.1
     conventional-recommended-bump: 7.0.1
     cosmiconfig: ^8.2.0
@@ -24701,7 +24670,7 @@ __metadata:
     yargs-parser: 20.2.4
   bin:
     lerna: dist/cli.js
-  checksum: d68fe0efc1ce3bc0a342c2f4ddc110139a9f1a28385a4b17d1082e6f2d0749461d7aa4a934373041e938d4c20fa6581073927462a3fa811c8888138dfc9338bd
+  checksum: dff72818afde1e40ade5ce8e0b957c8ba1301a84f37b3d3d38b3b0a20a3529d23300e369a0694434c059ec28feffc16f9e6c77d0cd9372a91ec0661fdf43d7cb
   languageName: node
   linkType: hard
 
@@ -31471,7 +31440,7 @@ __metadata:
     jest: 29.7.0
     jest-runner-tsd: 5.0.0
     jscodeshift: 0.15.0
-    lerna: 7.3.0
+    lerna: 7.4.2
     listr2: 6.6.1
     make-dir-cli: 3.0.0
     msw: 1.3.1
@@ -31709,22 +31678,6 @@ __metadata:
   version: 2.7.0
   resolution: "secure-json-parse@npm:2.7.0"
   checksum: f57eb6a44a38a3eeaf3548228585d769d788f59007454214fab9ed7f01fbf2e0f1929111da6db28cf0bcc1a2e89db5219a59e83eeaec3a54e413a0197ce879e4
-  languageName: node
-  linkType: hard
-
-"secure-random-password@npm:0.2.3":
-  version: 0.2.3
-  resolution: "secure-random-password@npm:0.2.3"
-  dependencies:
-    secure-random: ^1.1.2
-  checksum: ced04529b96724b921b82b7527e1ba2f1299c3f327f941076e9edaea66445118b67a6b7f6edfe3b705a240e595de49144b2b796116c994cb52eb52efdd3d51b5
-  languageName: node
-  linkType: hard
-
-"secure-random@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "secure-random@npm:1.1.2"
-  checksum: 612934cd5b1ea217d5e248a16ff2752411474997ede1f460ff37fe3214eedfd66ef6a5936ff76b3a5df3d057a8d2d4ed48298f5500bf837beb911522caac7f5c
   languageName: node
   linkType: hard
 
