@@ -61,7 +61,7 @@ You may be asked to use your 2FA code to verify that you're who you say you are,
 
 Add those to your app's `.env` file (or wherever you're managing your secrets). Note that it's best to have a different OAuth app on GitHub for each environment you deploy to. Consider this one the **dev** app, and you'll create a separate one with a different client ID and secret when you're ready to deploy to production:
 
-```bash title=/.env
+```bash title="/.env"
 GITHUB_OAUTH_CLIENT_ID=41a08ae238b5aee4121d
 GITHUB_OAUTH_CLIENT_SECRET=92e8662e9c562aca8356d45562911542d89450e1
 ```
@@ -69,7 +69,7 @@ GITHUB_OAUTH_CLIENT_SECRET=92e8662e9c562aca8356d45562911542d89450e1
 We also need to denote what data we want permission to read from GitHub once someone authorizes our app. We'll want the user's public info, and probably their email address. That's only two scopes, and we can add those as another ENV var:
 
 
-```bash title=/.env
+```bash title="/.env"
 GITHUB_OAUTH_CLIENT_ID=41a08ae238b5aee4121d
 GITHUB_OAUTH_CLIENT_SECRET=92e8662e9c562aca8356d45562911542d89450e1
 # highlight-next-line
@@ -80,7 +80,7 @@ If you wanted access to more GitHub data, you can specify additional scopes here
 
 One more ENV var, this is the same callback URL we told GitHub about. This is used in the link in the **Login with GitHub** button and gives GitHub another chance to verify that you're who you say you are: you're proving that you know where you're supposed to redirect back to:
 
-```bash title=/.env
+```bash title="/.env"
 GITHUB_OAUTH_CLIENT_ID=41a08ae238b5aee4121d
 GITHUB_OAUTH_CLIENT_SECRET=92e8662e9c562aca8356d45562911542d89450e1
 GITHUB_OAUTH_SCOPES="read:user user:email"
@@ -92,7 +92,7 @@ GITHUB_OAUTH_REDIRECT_URI="http://localhost:8910/.redwood/functions/oauth/callba
 
 This part is pretty easy, we're just going to add a link/button to go directly to GitHub to begin the OAuth process:
 
-```jsx title=/web/src/pages/LoginPage/LoginPage.jsx
+```jsx title="/web/src/pages/LoginPage/LoginPage.jsx"
 <a href={`https://github.com/login/oauth/authorize?client_id=${
     process.env.GITHUB_OAUTH_CLIENT_ID
   }&redirect_uri=${
@@ -111,7 +111,7 @@ You can put this same link on your signup page as well, since using the OAuth fl
 
 We're using several of our new ENV vars here, and need to tell Redwood to make them available to the web side during the build process. Add them to the `includeEnvironmentVariables` key in `redwood.toml`:
 
-```toml title=/redwood.toml
+```toml title="/redwood.toml"
 [web]
   title = "Redwood App"
   port = "${WEB_DEV_PORT:8910}"
@@ -168,7 +168,7 @@ Now let's start filling out this function with the code we need to get the `acce
 
 We told GitHub to redirect to `/oauth/callback` which *appears* like it would be a subdirectory, or child route of our `oauth` function, but in reality everything after `/oauth` just gets shoved into a `path` variable that we'll need to inspect to make sure it has the proper parts (like `/callback`). We can  do that in the `hander()`:
 
-```js title=/api/src/functions/oauth/oauth.js
+```js title="/api/src/functions/oauth/oauth.js"
 export const handler = async (event, _context) => {
   switch (event.path) {
     case '/oauth/callback':
@@ -190,7 +190,7 @@ The `callback()` function is where we'll actually define the rest of our flow. W
 
 Now we need to make a request to GitHub to trade the `code` for an `access_token`. This is handled by a `fetch`:
 
-```js title=/api/src/functions/oauth/oauth.js
+```js title="/api/src/functions/oauth/oauth.js"
 const callback = async (event) => {
   // highlight-start
   const { code } = event.queryStringParameters
@@ -242,7 +242,7 @@ To keep things straight in our heads, let's call our local user `user` and the G
 
 Let's make the API call to GitHub's user info endpoint and dump the result to the browser:
 
-```js title=/api/src/functions/oauth/oauth.js
+```js title="/api/src/functions/oauth/oauth.js"
 const callback = async (event) => {
   const { code } = event.queryStringParameters
 
@@ -331,7 +331,7 @@ For now `provider` will always be `github` and the `uid` will be the GitHub's un
 
 Here's the `Identity` model definition:
 
-```prisma title=/api/db/schema.prisma
+```prisma title="/api/db/schema.prisma"
 model Identity {
   id                  Int       @id @default(autoincrement())
   provider            String
@@ -354,7 +354,7 @@ We're also storing the `accessToken` and `scope` that we got back from the last 
 We'll also need to add an `identities` relation to the `User` model, and make the previously required `hashedPassword` and `salt` fields optional (since users may want to *only* authenticate via GitHub, they'll never get to enter a password):
 
 
-```prisma title=/api/db/schema.prisma
+```prisma title="/api/db/schema.prisma"
 model User {
   id                  Int       @id @default(autoincrement())
   email               String    @unique
@@ -386,7 +386,7 @@ Be to import `db` at the top of the file if you haven't already!
 :::
 
 
-```js title=/api/src/functions/oauth/oauth.js
+```js title="/api/src/functions/oauth/oauth.js"
 // highlight-next-line
 import { db } from 'src/lib/db'
 
@@ -573,7 +573,7 @@ Setting a cookie in the browser is a matter of returning a `Set-Cookie` header i
 
 Don't forget the new `CryptoJS` import at the top!
 
-```js title=/api/src/functions/oauth/oauth.js
+```js title="/api/src/functions/oauth/oauth.js"
 // highlight-next-line
 import CryptoJS from 'crypto-js'
 
@@ -657,7 +657,7 @@ Try it out, and as long as you have an indication on your site that a user is lo
 
 Here's the `oauth` function in its entirety:
 
-```jsx title=/api/src/functions/oauth/oauth.js
+```jsx title="/api/src/functions/oauth/oauth.js"
 import CryptoJS from 'crypto-js'
 
 import { db } from 'src/lib/db'

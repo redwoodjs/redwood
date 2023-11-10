@@ -313,7 +313,7 @@ By default, the session cookie will not have the `Domain` property set, which a 
 
 To do this, set the `cookie.Domain` property in your `api/src/functions/auth.js` configuration, set to the root domain of your site, which will allow it to be read by all subdomains as well. For example:
 
-```json title=api/src/functions/auth.js
+```json title="api/src/functions/auth.js"
 cookie: {
   HttpOnly: true,
   Path: '/',
@@ -431,7 +431,7 @@ If you didn't setup WebAuthn at first, but decided you now want WebAuthn, you co
 
 You'll need to add two fields to your `User` model, and a new `UserCredential` model to store the devices that are used and associate them with a user:
 
-```javascript title=api/db/schema.prisma
+```javascript title="api/db/schema.prisma"
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -487,7 +487,7 @@ credentials: [UserCredential]!
 
 Next we need to let dbAuth know about the new field and model names, as well as how you want WebAuthn to behave (see the highlighted section)
 
-```javascript title=api/src/functions/auth.js
+```javascript title="api/src/functions/auth.js"
 import { db } from 'src/lib/db'
 import { DbAuthHandler } from '@redwoodjs/api'
 
