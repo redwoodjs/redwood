@@ -359,6 +359,7 @@ This makes your app behave much more like a traditional website, where all the p
 <details>
 
 <summary>If you don't prerender your 404s, but prerender all your other pages</summary>
+
 You can add a 404 redirect if you want:
 
 ```diff
