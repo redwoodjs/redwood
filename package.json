@@ -31,7 +31,8 @@
     "smoke-test": "node ./tasks/smoke-tests/smoke-tests.mjs",
     "test": "lerna run test --concurrency 2 -- --colors --maxWorkers=4",
     "test-ci": "lerna run test --concurrency 2 -- --colors --maxWorkers",
-    "test:k6": "tsx ./tasks/k6-test/run-k6-tests.mts"
+    "test:k6": "tsx ./tasks/k6-test/run-k6-tests.mts",
+    "test:types": "tstyche"
   },
   "resolutions": {
     "vscode-languageserver": "6.1.1",
@@ -65,7 +66,6 @@
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
-    "@tsd/typescript": "5.1.6",
     "@types/babel__generator": "7.6.5",
     "@types/fs-extra": "11.0.1",
     "@types/jest": "29.5.4",
@@ -85,7 +85,6 @@
     "fast-glob": "3.3.1",
     "fs-extra": "11.1.1",
     "jest": "29.7.0",
-    "jest-runner-tsd": "5.0.0",
     "jscodeshift": "0.15.0",
     "lerna": "7.4.2",
     "listr2": "6.6.1",
@@ -100,6 +99,7 @@
     "ora": "6.3.1",
     "prompts": "2.4.2",
     "rimraf": "5.0.5",
+    "tstyche": "^1.0.0-beta.1",
     "tsx": "3.12.7",
     "typescript": "5.2.2",
     "yargs": "17.7.2",

@@ -7,13 +7,5 @@ module.exports = {
       testEnvironment: 'jest-environment-jsdom',
       testMatch: ['**/*.test.+(ts|tsx|js|jsx)', '!**/__typetests__/*.ts'],
     },
-    {
-      displayName: {
-        color: 'blue',
-        name: 'types',
-      },
-      runner: 'jest-runner-tsd',
-      testMatch: ['**/__typetests__/*.test.ts'],
-    },
   ],
 }

@@ -9,11 +9,6 @@
     }
   },
   "include": ["src", "./ambient.d.ts"],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "**/__mocks__",
-  ],
   "references": [
     { "path": "../auth" },
   ]

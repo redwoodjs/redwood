@@ -2,7 +2,7 @@
 import React from 'react'
 
 import gql from 'graphql-tag'
-import { expectAssignable } from 'tsd-lite'
+import { describe, expect, test } from 'tstyche'
 
 import type { CellProps, CellSuccessProps } from '@redwoodjs/web'
 
@@ -68,7 +68,7 @@ describe('CellProps mapper type', () => {
         ExampleQueryVariables
       >
 
-      expectAssignable<CellInputs>({
+      expect<CellInputs>().type.toBeAssignable({
         customProp: 55,
         category: 'Dinner',
         saved: true,
@@ -83,7 +83,7 @@ describe('CellProps mapper type', () => {
         EmptyVariables
       >
 
-      expectAssignable<CellWithoutVariablesInputs>({
+      expect<CellWithoutVariablesInputs>().type.toBeAssignable({
         customProp: 55,
       })
     })
@@ -111,7 +111,7 @@ describe('CellProps mapper type', () => {
       >
 
       // Note that the gql variables are no longer required here
-      expectAssignable<CellWithBeforeQueryInputs>({
+      expect<CellWithBeforeQueryInputs>().type.toBeAssignable({
         word: 'abracadabra',
         customProp: 99,
       })
@@ -134,7 +134,7 @@ describe('CellProps mapper type', () => {
         EmptyVariables
       >
 
-      expectAssignable<CellWithBeforeQueryInputs>({
+      expect<CellWithBeforeQueryInputs>().type.toBeAssignable({
         fetchPolicy: 'cache-only',
         customProp: 55,
       })
@@ -163,7 +163,7 @@ describe('CellProps mapper type', () => {
       >
 
       // Note that the gql variables are no longer required here
-      expectAssignable<CellWithBeforeQueryInputs>({
+      expect<CellWithBeforeQueryInputs>().type.toBeAssignable({
         customProp: 99,
       })
     })
@@ -185,7 +185,7 @@ describe('CellProps mapper type', () => {
         EmptyVariables
       >
 
-      expectAssignable<CellWithBeforeQueryInputs>({
+      expect<CellWithBeforeQueryInputs>().type.toBeAssignable({
         customProp: 55,
       })
     })

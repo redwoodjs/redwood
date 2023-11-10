@@ -1,10 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "composite": false,
     "incremental": true,
-    "declaration": false,
     "declarationMap": false,
-    "emitDeclarationOnly": false
+    "emitDeclarationOnly": false,
+    "sourceMap": true,
+    "types": []
   },
+  "include": ["./"],
+  "exclude": []
 }

@@ -153,6 +153,9 @@ jobs:
       - name: 🔎 Lint
         run: yarn lint
 
+      - name: 🌡 Test Types
+        run: yarn test:types --target 4.8,latest
+
       - name: Get number of CPU cores
         if: always()
         id: cpu-cores
