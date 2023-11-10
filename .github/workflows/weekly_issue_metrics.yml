@@ -11,15 +11,15 @@ permissions:
 
 jobs:
   build:
-    name: monthly issue metrics
+    name: weekly issue metrics
     runs-on: ubuntu-latest
     steps:
-    - name: Get dates for last month
+    - name: Get dates for last week
       shell: bash
       run: |
         # Calculate the first day of the previous week (and as we all know
         # weeks start on Mondays ;))
-        first_day=$(date -d "last Sunday - 6 days" +%Y-%m-01)
+        first_day=$(date -d "last Sunday - 6 days" +%Y-%m-%d)
 
         # Calculate the last day of the previous week
         last_day=$(date -d "last Sunday" +%Y-%m-%d)
@@ -37,6 +37,6 @@ jobs:
     - name: Create issue
       uses: peter-evans/create-issue-from-file@v4
       with:
-        title: Monthly issue metrics report
+        title: Weekly issue metrics report
         token: ${{ secrets.GITHUB_TOKEN }}
         content-filepath: ./issue_metrics.md
