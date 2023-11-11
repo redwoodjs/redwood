@@ -36,12 +36,6 @@ jobs:
 
     - name: Print output of issue metrics tool
       run: |
-        whoami
-        pwd
-        ls -la
         cat ./issue_metrics.json
-        cat ./issue_metrics.md
-        touch ./issue_metrics_test.json
-        echo "${{ steps.issue-metrics.outputs.metrics }}" >> ./issue_metrics_test.json
-        cat ./issue_metrics_test.json
-        cat ./issue_metrics.md
+        cat ./issue_metrics.json | js .total_item_count
+        cat ./issue_metrics.json | js .average_time_to_first_response
