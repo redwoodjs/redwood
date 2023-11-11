@@ -178,6 +178,18 @@ And there you have it.
   </tr>
 </table>
 
+### Leadership Team
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center" valign="top" width="25%"><a href="https://github.com/ahaywood/"><img src="https://avatars0.githubusercontent.com/u/212300?v=4" width="100px;" alt=""/><br /><sub><b>Amy Haywood Dutton</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="https://thedavidprice.com/"><img src="https://avatars0.githubusercontent.com/u/2951?v=4" width="100px;" alt=""/><br /><sub><b>David Price</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="https://github.com/tobbe/"><img src="https://avatars0.githubusercontent.com/u/30793?v=4" width="100px;" alt=""/><br /><sub><b>Tobbe Lundberg</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="https://tom.preston-werner.com/"><img src="https://avatars0.githubusercontent.com/u/1?v=4" width="100px;" alt=""/><br /><sub><b>Tom Preston-Werner</b></sub></a></td>
+  </tr>
+</table>
+
 ### Core Team: Lead Maintainers and Community Leads
 
 <table>
