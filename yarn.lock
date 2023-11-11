@@ -9293,7 +9293,7 @@ __metadata:
     "@types/testing-library__jest-dom": 5.14.8
     core-js: 3.32.2
     graphql: 16.8.1
-    graphql-sse: 2.2.1
+    graphql-sse: 2.3.0
     graphql-tag: 2.12.6
     jest: 29.7.0
     jest-runner-tsd: 5.0.0
@@ -21406,12 +21406,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-sse@npm:2.2.1, graphql-sse@npm:^2.0.0":
-  version: 2.2.1
-  resolution: "graphql-sse@npm:2.2.1"
+"graphql-sse@npm:2.3.0, graphql-sse@npm:^2.0.0":
+  version: 2.3.0
+  resolution: "graphql-sse@npm:2.3.0"
   peerDependencies:
     graphql: ">=0.11 <=16"
-  checksum: 7f7100152db61ef9c6980a41781975b28e895de23253232720218d66215ff784fabd50d423997989b44ced581bb660500ce8e84928d938e0ac17428018c90a6d
+  checksum: 8cfc3db28094008fb33e04b9289d17ed7173ba6dfc01d9d0d686ae621c7cff33418657deb61429a498058cfad06e1282b89d3275ede87791fb065056db38e8a8
   languageName: node
   linkType: hard
 
