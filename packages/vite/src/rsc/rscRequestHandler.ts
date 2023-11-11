@@ -9,9 +9,9 @@ import { renderRsc } from './rscWorkerCommunication'
 const { decodeReply, decodeReplyFromBusboy } = RSDWServer
 
 export function createRscRequestHandler() {
-  // This is mounted at /RSC, so will have /RSC stripped from req.url
+  // This is mounted at /rw-rsc, so will have /rw-rsc stripped from req.url
   return async (req: Request, res: Response, next: () => void) => {
-    const basePath = '/RSC/'
+    const basePath = '/rw-rsc/'
     console.log('basePath', basePath)
     console.log('req.originalUrl', req.originalUrl, 'req.url', req.url)
     console.log('req.headers.host', req.headers.host)
