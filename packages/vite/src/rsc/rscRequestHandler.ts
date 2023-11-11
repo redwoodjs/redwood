@@ -10,11 +10,18 @@ const { decodeReply, decodeReplyFromBusboy } = RSDWServer
 
 export function createRscRequestHandler() {
   // This is mounted at /RSC, so will have /RSC stripped from req.url
-  return async (req: Request, res: Response) => {
+  return async (req: Request, res: Response, next: () => void) => {
     const basePath = '/RSC/'
     console.log('basePath', basePath)
     console.log('req.originalUrl', req.originalUrl, 'req.url', req.url)
     console.log('req.headers.host', req.headers.host)
+    console.log("req.headers['rw-rsc']", req.headers['rw-rsc'])
+
+    // https://www.rfc-editor.org/rfc/rfc6648
+    // SHOULD NOT prefix their parameter names with "X-" or similar constructs.
+    if (req.headers['rw-rsc'] !== '1') {
+      return next()
+    }
 
     const url = new URL(req.originalUrl || '', 'http://' + req.headers.host)
     let rscId: string | undefined
