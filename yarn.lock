@@ -8607,7 +8607,7 @@ __metadata:
     style-loader: 3.3.3
     typescript: 5.2.2
     url-loader: 4.1.1
-    webpack: 5.88.2
+    webpack: 5.89.0
     webpack-bundle-analyzer: 4.9.0
     webpack-cli: 5.1.4
     webpack-dev-server: 4.15.1
@@ -9186,7 +9186,7 @@ __metadata:
     "@types/node": 18.16.18
     "@types/react": 18.2.14
     "@types/react-dom": 18.2.6
-    "@types/webpack": 5.28.1
+    "@types/webpack": 5.28.5
     "@types/webpack-env": 1.18.1
     babel-jest: ^29.7.0
     core-js: 3.32.2
@@ -12298,14 +12298,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/webpack@npm:5.28.1":
-  version: 5.28.1
-  resolution: "@types/webpack@npm:5.28.1"
+"@types/webpack@npm:5.28.5":
+  version: 5.28.5
+  resolution: "@types/webpack@npm:5.28.5"
   dependencies:
     "@types/node": "*"
     tapable: ^2.2.0
     webpack: ^5
-  checksum: 6c11713b1543b8f29a78a6cfddb738a4408cbef82f67b96bab7aa495c5bb22cb2a8c8b179a0beefa3faa4c5e5a37e5ff7dee1ac38bd10a9b29d15d5f2f3575be
+  checksum: d1fec1f678af79dd0d84333740bdd2ce128c7f4fd1f8d14bb0ec0f4c5af70580af68350f677e3696003a8cb2e2b5f510f8c0ed7ee5ad2bc7874c87f80ecd7c8d
   languageName: node
   linkType: hard
 
@@ -35435,9 +35435,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5, webpack@npm:5.88.2, webpack@npm:^5":
-  version: 5.88.2
-  resolution: "webpack@npm:5.88.2"
+"webpack@npm:5, webpack@npm:5.89.0, webpack@npm:^5":
+  version: 5.89.0
+  resolution: "webpack@npm:5.89.0"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^1.0.0
@@ -35468,7 +35468,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 743acf04cdb7f73ec059761d3921798014139005c88e136ab99fe158f544695eee2caf4be775cc06e7f481d84725d443df2c1c8e00ec24a130e8b8fd514ff7b9
+  checksum: 2562bf48788d651634fb7db6a5378c2fe3fce7f66831af38468da3944bd98756d68efea94a6909593993fb57b2d14cf802cbef2c83c6ef0047f7f606d59bec50
   languageName: node
   linkType: hard
 
