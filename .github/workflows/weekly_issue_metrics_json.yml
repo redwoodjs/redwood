@@ -39,8 +39,9 @@ jobs:
         whoami
         pwd
         ls -la
-        touch ~/issue_metrics.json
-        touch ./issue_metrics.json
-        echo "${{ steps.issue-metrics.outputs.metrics }}" >> ./issue_metrics.json
         cat ./issue_metrics.json
+        cat ./issue_metrics.md
+        touch ./issue_metrics_test.json
+        echo "${{ steps.issue-metrics.outputs.metrics }}" >> ./issue_metrics_test.json
+        cat ./issue_metrics_test.json
         cat ./issue_metrics.md
