@@ -42,7 +42,10 @@ describe('CellSuccessData', () => {
         bar: '',
       }
 
-      expect<{ foo?: string | null; bar?: string | null }>().type.toBeAssignable(value)
+      expect<{
+        foo?: string | null
+        bar?: string | null
+      }>().type.toBeAssignable(value)
     })
   })
 })
