@@ -4,7 +4,7 @@ import type { RouteParams, ParamType } from '../routeParamsTypes'
 
 /**
  * FAQ:
- * - why aren't you using expectAssignable in all tests?
+ * - why aren't you using .toBeAssignable() in all tests?
  * because {b: string} is assignable to Record, and then test isn't accurate enough
  *
  * - why aren't you just checking the entire type?
