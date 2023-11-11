@@ -50,7 +50,7 @@ export type {
 
 export { useCache }
 
-export { fragmentRegistry, registerFragment, registerFragments, SSELink }
+export { fragmentRegistry, registerFragment, registerFragments }
 
 export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
 
