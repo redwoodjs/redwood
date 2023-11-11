@@ -342,7 +342,7 @@ module.exports = (webpackEnv) => {
             },
             // (8)
             !redwoodConfig.experimental.realtime.enabled && {
-              test: require.resolve('@redwoodjs/web/dist/apollo/sseLink/'),
+              test: require.resolve('@redwoodjs/web/dist/apollo/sseLink'),
               use: require.resolve('null-loader'),
             },
           ].filter(Boolean),
