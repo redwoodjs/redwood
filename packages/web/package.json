@@ -40,7 +40,7 @@
     "@redwoodjs/auth": "6.0.7",
     "core-js": "3.32.2",
     "graphql": "16.8.1",
-    "graphql-sse": "2.2.1",
+    "graphql-sse": "2.3.0",
     "graphql-tag": "2.12.6",
     "react-helmet-async": "1.3.0",
     "react-hot-toast": "2.4.1",

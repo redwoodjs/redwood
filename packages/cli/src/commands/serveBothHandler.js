@@ -60,12 +60,7 @@ export const bothRscServerHandler = async (argv) => {
   // TODO (RSC) More gracefully handle Ctrl-C
   const fePromise = execa(
     'node',
-    [
-      // TODO (RSC): Do we need these on the worker thread?
-      '--experimental-loader @redwoodjs/vite/node-loader',
-      '--experimental-loader @redwoodjs/vite/react-node-loader',
-      './node_modules/@redwoodjs/vite/dist/runRscFeServer.js',
-    ],
+    ['./node_modules/@redwoodjs/vite/dist/runRscFeServer.js'],
     {
       cwd: getPaths().base,
       stdio: 'inherit',

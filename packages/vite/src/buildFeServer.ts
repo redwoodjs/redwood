@@ -71,13 +71,8 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     configFile: viteConfigPath,
     build: {
       outDir: rwPaths.web.distServer,
-      ssr: true, // use boolean, and supply the inputs in rollup options (see Documentation)
-      rollupOptions: {
-        input: {
-          'entry.server': rwPaths.web.entryServer,
-          Document: rwPaths.web.document, // We need the document for React's fallback
-        },
-      },
+      ssr: true, // use boolean here, instead of string.
+      // rollup inputs are defined in the vite plugin
     },
     envFile: false,
     logLevel: verbose ? 'info' : 'warn',
