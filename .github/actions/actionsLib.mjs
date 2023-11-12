@@ -161,4 +161,3 @@ export async function setUpRscTestProject(
   await execInProject(`node ${rwBinPath} build -v`)
   console.log()
 }
-
