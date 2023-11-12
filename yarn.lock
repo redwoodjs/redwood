@@ -9002,7 +9002,7 @@ __metadata:
     jest: 29.7.0
     react: 0.0.0-experimental-e5205658f-20230913
     react-dom: 0.0.0-experimental-e5205658f-20230913
-    tstyche: ^1.0.0-beta.1
+    tstyche: 1.0.0-beta.2
     typescript: 5.2.2
   peerDependencies:
     react: 0.0.0-experimental-e5205658f-20230913
@@ -9292,7 +9292,7 @@ __metadata:
     react-hot-toast: 2.4.1
     stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
-    tstyche: ^1.0.0-beta.1
+    tstyche: 1.0.0-beta.2
     typescript: 5.2.2
   peerDependencies:
     react: 0.0.0-experimental-e5205658f-20230913
@@ -31410,7 +31410,7 @@ __metadata:
     ora: 6.3.1
     prompts: 2.4.2
     rimraf: 5.0.5
-    tstyche: ^1.0.0-beta.1
+    tstyche: 1.0.0-beta.2
     tsx: 3.12.7
     typescript: 5.2.2
     yargs: 17.7.2
@@ -34012,9 +34012,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tstyche@npm:^1.0.0-beta.1":
-  version: 1.0.0-beta.1
-  resolution: "tstyche@npm:1.0.0-beta.1"
+"tstyche@npm:1.0.0-beta.2":
+  version: 1.0.0-beta.2
+  resolution: "tstyche@npm:1.0.0-beta.2"
   peerDependencies:
     typescript: 4.x || 5.x
   peerDependenciesMeta:
@@ -34022,7 +34022,7 @@ __metadata:
       optional: true
   bin:
     tstyche: build/bin.js
-  checksum: b0c67a2066320d81aa6fdb392d55463ec2c8f2e08b1c176488fbdfd17c38c337b9a7c8527b2b8e1506efcc239448497d46c8d5b5ddb155900d82c2457be52610
+  checksum: 3921b0fd009470fb32f07c8502f1a9fd12ef87edc514f295a40fe9c734d0a69c84e90568efac3a9f02da4f5441c2507ef1773b147702e1c527275c4a10f31efa
   languageName: node
   linkType: hard
 
