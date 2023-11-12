@@ -255,13 +255,13 @@ const resolveClientEntry = (
 ) => {
   const clientEntry = absoluteClientEntries[filePath]
 
+  console.log('absoluteClientEntries', absoluteClientEntries)
+  console.log('filePath', filePath)
+
   if (!clientEntry) {
     if (absoluteClientEntries['*'] === '*') {
       return config.base + path.relative(config.root, filePath)
     }
-
-    console.log('absoluteClientEntries', absoluteClientEntries)
-    console.log('filePath', filePath)
 
     throw new Error('No client entry found for ' + filePath)
   }
