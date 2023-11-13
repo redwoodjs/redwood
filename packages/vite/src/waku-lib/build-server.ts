@@ -39,16 +39,30 @@ export async function serverBuild(
       // very pretty, but it works. It just won't match anything.
       noExternal: Object.values(clientEntryFiles).map((fname) => {
         console.log('noExternal fname', fname)
-        const relativePath = path.relative(
+        let relativePath = path.relative(
           path.join(rwPaths.base, 'node_modules'),
           fname
         )
         console.log('noExternal relativePath', relativePath)
+        if (process.platform === 'win32') {
+          relativePath = relativePath.replaceAll('\\', '/')
+          console.log('noExternal win32 relativePath', relativePath)
+        }
+
         const splitPath = relativePath.split('/')
+
+        console.log('noExternal splitPath', splitPath)
 
         // Handle scoped packages
         if (relativePath.startsWith('@')) {
-          return splitPath[0] + '/' + splitPath[1]
+          const stringToCompareToPackageName = splitPath[0] + '/' + splitPath[1]
+
+          console.log(
+            'noExternal stringToCompareToPackageName',
+            stringToCompareToPackageName
+          )
+
+          return stringToCompareToPackageName
         }
 
         // Packages without scope
