@@ -4,7 +4,7 @@ import type { Decoder } from '@redwoodjs/api'
 import { getAuthenticationContext } from '@redwoodjs/api'
 import type { GlobalContext } from '@redwoodjs/context'
 import { context as globalContext } from '@redwoodjs/context'
-import { getAsyncStoreInstance } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 
 import type { GetCurrentUser } from '../types'
 

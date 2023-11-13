@@ -3,7 +3,7 @@ import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 
 import type { GlobalContext } from '@redwoodjs/context'
-import { getAsyncStoreInstance } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 
 import { loadFastifyConfig } from './config'
 import { lambdaRequestHandler, loadFunctionsFromDist } from './lambda'

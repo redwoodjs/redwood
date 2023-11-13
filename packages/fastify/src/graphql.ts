@@ -10,7 +10,7 @@ import fastifyRawBody from 'fastify-raw-body'
 import type { Plugin } from 'graphql-yoga'
 
 import type { GlobalContext } from '@redwoodjs/context'
-import { getAsyncStoreInstance } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 import type { GraphQLYogaOptions } from '@redwoodjs/graphql-server'
 import { createGraphQLYoga } from '@redwoodjs/graphql-server'
 

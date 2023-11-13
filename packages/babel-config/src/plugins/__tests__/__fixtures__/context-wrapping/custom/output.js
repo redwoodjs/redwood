@@ -16,7 +16,7 @@ import { logger } from 'src/lib/logger'
  * @param { Context } context - contains information about the invocation,
  * function, and execution environment.
  */
-import { getAsyncStoreInstance as __rw_getAsyncStoreInstance } from '@redwoodjs/context'
+import { getAsyncStoreInstance as __rw_getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 const __rw_handler = async (event, _context) => {
   logger.info(`${event.httpMethod} ${event.path}: custom function`)
   return {

@@ -5,7 +5,7 @@ import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 import Fastify from 'fastify'
 
 import type { GlobalContext } from '@redwoodjs/context'
-import { getAsyncStoreInstance } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import type { FastifySideConfigFn } from './types'
