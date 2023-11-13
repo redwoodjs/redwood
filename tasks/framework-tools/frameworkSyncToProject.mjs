@@ -49,6 +49,8 @@ const ignored = [
   // esbuild emits meta.json files that we sometimes suffix.
   /meta.(\w*\.?)json/,
 
+  /tsconfig.tsbuildinfo/,
+
   (filePath) => IGNORE_EXTENSIONS.some((ext) => filePath.endsWith(ext)),
 ]
 
@@ -241,6 +243,9 @@ async function main() {
     try {
       logStatus(`Cleaning ${c.magenta(packageName)}...`)
       await rimraf(path.join(path.dirname(packageJsonPath), 'dist'))
+      await rimraf(
+        path.join(path.dirname(packageJsonPath), 'tsconfig.tsbuildinfo')
+      )
 
       logStatus(`Building ${c.magenta(packageName)}...`)
       execSync('yarn build', {
