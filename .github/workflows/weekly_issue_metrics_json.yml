@@ -36,6 +36,6 @@ jobs:
 
     - name: Print output of issue metrics tool
       run: |
-        echo "${{ steps.issue-metrics.outputs.metrics }}" >> ./issue_metrics.json
         cat ./issue_metrics.json
-        cat ./issue_metrics.md
+        cat ./issue_metrics.json | jq .total_item_count
+        cat ./issue_metrics.json | jq .average_time_to_first_response
