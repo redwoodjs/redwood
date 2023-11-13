@@ -59,6 +59,8 @@ export const buildRscFeServer = async ({
           // https://rollupjs.org/faqs/#why-do-additional-imports-turn-up-in-my-entry-chunks-when-code-splitting
           // But we need it to prevent `import 'client-only'` from being
           // hoisted into App.tsx
+          // TODO (RSC): Fix when https://github.com/rollup/rollup/issues/5235
+          // is resolved
           hoistTransitiveImports: false,
         },
       },
