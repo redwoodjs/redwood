@@ -38,10 +38,12 @@ export async function serverBuild(
       // The map function below will return '..' for local files. That's not
       // very pretty, but it works. It just won't match anything.
       noExternal: Object.values(clientEntryFiles).map((fname) => {
+        console.log('noExternal fname', fname)
         const relativePath = path.relative(
           path.join(rwPaths.base, 'node_modules'),
           fname
         )
+        console.log('noExternal relativePath', relativePath)
         const splitPath = relativePath.split('/')
 
         // Handle scoped packages

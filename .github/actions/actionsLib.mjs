@@ -165,5 +165,5 @@ export async function setUpRscTestProject(
   const files = fs.readdirSync(serverAssetsPath)
   const appMjsFileName = files.find((file) => /App-.*\.mjs/.test(file))
   const appMjs = fs.readFileSync(path.join(serverAssetsPath, appMjsFileName), 'utf8')
-  console.log('appMjs', appMjs)
+  console.log('App-<hash>.mjs\n', appMjs)
 }
