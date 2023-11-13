@@ -37,37 +37,32 @@ export async function serverBuild(
       // 'react', 'core-js', @anthropic-ai/sdk', @redwoodjs/vite', etc
       // The map function below will return '..' for local files. That's not
       // very pretty, but it works. It just won't match anything.
-      noExternal: Object.values(clientEntryFiles).map((fname) => {
-        console.log('noExternal fname', fname)
+      noExternal: Object.values(clientEntryFiles).map((fullPath) => {
+        // On Windows `fullPath` will be something like
+        // D:/a/redwood/test-project-rsc-external-packages/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
         const relativePath = path.relative(
           path.join(rwPaths.base, 'node_modules'),
-          fname
+          fullPath
         )
-        console.log('noExternal relativePath', relativePath)
-        // if (process.platform === 'win32') {
-        //   relativePath = relativePath.replaceAll('\\', '/')
-        //   console.log('noExternal win32 relativePath', relativePath)
-        // }
-
+        // On Windows `relativePath` will be something like
+        // @tobbe.dev\rsc-test\dist\rsc-test.es.js
+        // So `splitPath` will in this case become
+        // ['@tobbe.dev', 'rsc-test', 'dist', 'rsc-test.es.js']
         const splitPath = relativePath.split(path.sep)
 
-        console.log('noExternal splitPath', splitPath)
+        // Packages without scope. Package name looks like: package_name
+        let packageName = splitPath[0]
 
-        // Handle scoped packages
-        if (relativePath.startsWith('@')) {
-          const stringToCompareToPackageName =
-            splitPath[0] + path.sep + splitPath[1]
-
-          console.log(
-            'noExternal stringToCompareToPackageName',
-            stringToCompareToPackageName
-          )
-
-          return stringToCompareToPackageName
+        // Handle scoped packages. Full package name looks like:
+        // @org_name/package_name
+        if (splitPath[0].startsWith('@')) {
+          // join @org_name with package_name
+          packageName = path.join(splitPath[0], splitPath[1])
         }
 
-        // Packages without scope
-        return splitPath[0]
+        console.log('noExternal packageName', packageName)
+
+        return packageName
       }),
       resolve: {
         externalConditions: ['react-server'],
