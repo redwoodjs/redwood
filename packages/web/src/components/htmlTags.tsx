@@ -8,15 +8,25 @@ const extractFromAssetMap = (key: 'css' | 'meta') => {
   return null
 }
 
+function addSlashIfNeeded(path: string): string {
+  if (path.startsWith('http') || path.startsWith('/')) {
+    return path
+  } else {
+    return '/' + path
+  }
+}
+
 /** CSS is a specialised metatag */
 export const Css = ({ css }: { css: string[] }) => {
-  const cssLinks = css || extractFromAssetMap('css') || []
+  const cssLinks = (css || extractFromAssetMap('css') || []).map(
+    addSlashIfNeeded
+  )
 
   return (
     <>
       {cssLinks.map((cssLink, index) => {
         return (
-          <link rel="stylesheet" key={`css-${index}`} href={`/${cssLink}`} />
+          <link rel="stylesheet" key={`css-${index}`} href={`${cssLink}`} />
         )
       })}
     </>
