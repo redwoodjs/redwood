@@ -48,6 +48,9 @@ export function createRscRequestHandler() {
       }
 
       if (rsfId) {
+        // TODO (RSC): For React Server Actions we need to limit the request
+        // size somehow
+        // https://nextjs.org/docs/app/api-reference/functions/server-actions#size-limitation
         if (req.headers['content-type']?.startsWith('multipart/form-data')) {
           const bb = busboy({ headers: req.headers })
           const reply = decodeReplyFromBusboy(bb)
