@@ -1,14 +1,12 @@
-// import { RscForm } from '@tobbe.dev/rsc-test'
+import { RscForm } from '@tobbe.dev/rsc-test'
 
 import { Assets } from '@redwoodjs/vite/assets'
 import { ProdRwRscServerGlobal } from '@redwoodjs/vite/rwRscGlobal'
 
 // @ts-expect-error no types
 import styles from './App.module.css'
-import { onSend } from './chat'
+import { onSend } from './actions'
 import { Counter } from './Counter'
-// TODO (RSC): Switch to RscForm from @tobbe.dev as commented above
-import { Form as RscForm } from './Form'
 
 import './App.css'
 

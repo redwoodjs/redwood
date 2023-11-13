@@ -1,0 +1,8 @@
+name: Streaming-SSR Related Changes
+description: Determines if the PR makes any changes related to SSR or streaming
+outputs:
+  rsc-related-changes:
+    description: If the PR makes any SSR related changes
+runs:
+  using: node20
+  main: ssr_related_changes.mjs
