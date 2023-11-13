@@ -55,7 +55,8 @@ export async function serverBuild(
 
         // Handle scoped packages
         if (relativePath.startsWith('@')) {
-          const stringToCompareToPackageName = splitPath[0] + '/' + splitPath[1]
+          const stringToCompareToPackageName =
+            splitPath[0] + path.sep + splitPath[1]
 
           console.log(
             'noExternal stringToCompareToPackageName',
