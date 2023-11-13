@@ -50,7 +50,7 @@ export async function serverBuild(
         // ['@tobbe.dev', 'rsc-test', 'dist', 'rsc-test.es.js']
         const splitPath = relativePath.split(path.sep)
 
-        // Packages without scope. Package name looks like: package_name
+        // Packages without scope. Full package name looks like: package_name
         let packageName = splitPath[0]
 
         // Handle scoped packages. Full package name looks like:
