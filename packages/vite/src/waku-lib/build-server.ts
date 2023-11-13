@@ -39,17 +39,17 @@ export async function serverBuild(
       // very pretty, but it works. It just won't match anything.
       noExternal: Object.values(clientEntryFiles).map((fname) => {
         console.log('noExternal fname', fname)
-        let relativePath = path.relative(
+        const relativePath = path.relative(
           path.join(rwPaths.base, 'node_modules'),
           fname
         )
         console.log('noExternal relativePath', relativePath)
-        if (process.platform === 'win32') {
-          relativePath = relativePath.replaceAll('\\', '/')
-          console.log('noExternal win32 relativePath', relativePath)
-        }
+        // if (process.platform === 'win32') {
+        //   relativePath = relativePath.replaceAll('\\', '/')
+        //   console.log('noExternal win32 relativePath', relativePath)
+        // }
 
-        const splitPath = relativePath.split('/')
+        const splitPath = relativePath.split(path.sep)
 
         console.log('noExternal splitPath', splitPath)
 
