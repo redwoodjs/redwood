@@ -166,34 +166,43 @@ And there you have it.
 ## Contributors
 *A gigantic "Thank YOU!" to everyone below who has contributed to one or more Redwood projects: [Framework](https://github.com/redwoodjs/redwood), [Website](https://github.com/redwoodjs/sprout), [Docs](https://github.com/redwoodjs/redwood/tree/main/docs), and [Create-Redwood Template](https://github.com/redwoodjs/redwood/tree/main/packages/create-redwood-app/template). 🚀*
 
-### Co-founders
+### Core Team: Leadership
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center" valign="top" width="25%"><a href="http://tom.preston-werner.com/"><img src="https://avatars0.githubusercontent.com/u/1?v=4" width="100px;" alt=""/><br /><sub><b>Tom Preston-Werner</b></sub></a><br /><sub>founder, leadership</sub></td>
-    <td align="center" valign="top" width="25%"><a href="http://peterp.org/"><img src="https://avatars0.githubusercontent.com/u/44849?v=4" width="100px;" alt=""/><br /><sub><b>Peter Pistorius</b></sub></a><br /><sub>founder</sub></td>
-    <td align="center" valign="top" width="25%"><a href="http://ridingtheclutch.com/"><img src="https://avatars1.githubusercontent.com/u/300?v=4" width="100px;" alt=""/><br /><sub><b>Rob Cameron</b></sub></a><br /><sub>founder</sub></td>
-    <td align="center" valign="top" width="25%"><a href="http://thedavidprice.com/"><img src="https://avatars0.githubusercontent.com/u/2951?v=4" width="100px;" alt=""/><br /><sub><b>David Price</b></sub></a><br /><sub>founder, leadership</sub></td>
+    <td align="center" valign="top" width="25%"><a href="https://github.com/ahaywood/"><img src="https://avatars0.githubusercontent.com/u/212300?v=4" width="100px;" alt=""/><br /><sub><b>Amy Haywood Dutton</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="https://thedavidprice.com/"><img src="https://avatars0.githubusercontent.com/u/2951?v=4" width="100px;" alt=""/><br /><sub><b>David Price</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="https://github.com/tobbe/"><img src="https://avatars0.githubusercontent.com/u/30793?v=4" width="100px;" alt=""/><br /><sub><b>Tobbe Lundberg</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="https://tom.preston-werner.com/"><img src="https://avatars0.githubusercontent.com/u/1?v=4" width="100px;" alt=""/><br /><sub><b>Tom Preston-Werner</b></sub></a></td>
   </tr>
 </table>
 
-### Core Team: Lead Maintainers and Community Leads
+### Core Team: Maintainer and Community Leads
 
 <table>
   <tr>
     <td align="center" valign="top" width="20%"><a href="https://github.com/jtoar"><img src="https://avatars2.githubusercontent.com/u/32992335?v=4" width="100px;" alt=""/><br /><sub><b>Dominic Saadi</b></sub></a><br /><sub>maintainer</sub></td>
     <td align="center" valign="top" width="20%"><a href="https://github.com/dthyresson"><img src="https://avatars2.githubusercontent.com/u/1051633?v=4" width="100px;" alt=""/><br /><sub><b>David Thyresson</b></sub></a><br /><sub>maintainer</sub></td>
     <td align="center"><a href="https://edamame.studio/"><img src="https://avatars0.githubusercontent.com/u/1521877?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Choudhury</b></sub></a><br /><sub>maintainer</sub></td>
-    <td align="center"><a href="http://tlundberg.com/"><img src="https://avatars1.githubusercontent.com/u/30793?v=4" width="100px;" alt=""/><br /><sub><b>Tobbe Lundberg</b></sub></a><br /><sub>maintainer</sub></td>
     <td align="center" valign="top" width="20%"><a href="http://kriscoulson.com/"><img src="https://avatars3.githubusercontent.com/u/6943688?v=4" width="100px;" alt=""/><br /><sub><b>Kris Coulson</b></sub></a><br /><sub>maintainer</sub></td>
+    <td align="center" valign="top" width="20%"><a href="https://github.com/keithtelliott"><img src="https://avatars.githubusercontent.com/u/43206213?v=4" width="100px;" alt=""/><br /><sub><b>Keith T Elliot</b></sub></a><br /><sub>community</sub></td>
 </tr>
 <tr>
-    <td align="center" valign="top" width="20%"><a href="https://github.com/keithtelliott"><img src="https://avatars.githubusercontent.com/u/43206213?v=4" width="100px;" alt=""/><br /><sub><b>Keith T Elliot</b></sub></a><br /><sub>community</sub></td>
     <td align="center" valign="top" width="20%"><a href="https://github.com/BBurnworth"><img src="https://avatars.githubusercontent.com/u/5750537?v=4" width="100px;" alt=""/><br /><sub><b>Barrett Burnworth</b></sub></a><br /><sub>community</sub></td>
     <td align="center" valign="top" width="20%"><a href="https://github.com/Josh-Walker-GM"><img src="https://avatars.githubusercontent.com/u/56300765?v=4" width="100px;" alt=""/><br /><sub><b>Josh Walker</b></sub></a><br /><sub>maintainer</sub></td>
-    <td align="center" valign="top" width="20%"><a href="https://github.com/ahaywood"><img src="https://avatars.githubusercontent.com/u/212300?v=4" width="100px;" alt=""/><br /><sub><b>Amy Haywood Dutton</b></sub></a><br /><sub>maintainer</sub></td>
 </tr>
+</table>
+
+### Founders
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="25%"><a href="http://tom.preston-werner.com/"><img src="https://avatars0.githubusercontent.com/u/1?v=4" width="100px;" alt=""/><br /><sub><b>Tom Preston-Werner</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="http://peterp.org/"><img src="https://avatars0.githubusercontent.com/u/44849?v=4" width="100px;" alt=""/><br /><sub><b>Peter Pistorius</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="http://ridingtheclutch.com/"><img src="https://avatars1.githubusercontent.com/u/300?v=4" width="100px;" alt=""/><br /><sub><b>Rob Cameron</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="http://thedavidprice.com/"><img src="https://avatars0.githubusercontent.com/u/2951?v=4" width="100px;" alt=""/><br /><sub><b>David Price</b></sub></a></td>
+  </tr>
 </table>
 
 ### Core Team: Alumni

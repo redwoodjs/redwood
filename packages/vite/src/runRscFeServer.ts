@@ -103,8 +103,8 @@ export async function runFeServer() {
     })
   )
 
-  // Mounting middleware at /RSC will strip /RSC from req.url
-  app.use('/RSC', createRscRequestHandler())
+  // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
+  app.use('/rw-rsc', createRscRequestHandler())
 
   app.use(express.static(rwPaths.web.dist))
 
