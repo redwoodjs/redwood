@@ -2,7 +2,6 @@
 module.exports = {
   projects: [
     {
-      displayName: 'code',
       testEnvironment: 'jest-environment-jsdom',
       testMatch: [
         '**/*.test.+(ts|tsx|js|jsx)',
