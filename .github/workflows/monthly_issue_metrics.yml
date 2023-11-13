@@ -2,8 +2,8 @@ name: Monthly issue metrics
 on:
   workflow_dispatch:
   schedule:
-    # 3:04 AM on the 1st day of every month
-    - cron: '4 3 1 * *'
+    # 2:03 AM on the 1st day of every month
+    - cron: '3 2 1 * *'
 
 permissions:
   issues: write
@@ -11,9 +11,8 @@ permissions:
 
 jobs:
   build:
-    name: monthly issue metrics (json)
+    name: monthly issue metrics
     runs-on: ubuntu-latest
-
     steps:
     - name: Get dates for last month
       shell: bash
@@ -29,11 +28,14 @@ jobs:
         echo "last_month=$first_day..$last_day" >> "$GITHUB_ENV"
 
     - name: Run issue-metrics tool
-      id: issue-metrics
       uses: github/issue-metrics@v2
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SEARCH_QUERY: 'repo:owner/repo is:issue created:${{ env.last_month }} -reason:"not planned"'
+        SEARCH_QUERY: 'repo:redwoodjs/redwood is:issue created:${{ env.last_month }} -reason:"not planned"'
 
-    - name: Print output of issue metrics tool
-      run: echo "${{ steps.issue-metrics.outputs.metrics }}"
+    - name: Create issue
+      uses: peter-evans/create-issue-from-file@v4
+      with:
+        title: Monthly issue metrics report
+        token: ${{ secrets.GITHUB_TOKEN }}
+        content-filepath: ./issue_metrics.md
