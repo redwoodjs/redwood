@@ -160,10 +160,4 @@ export async function setUpRscTestProject(
   console.log(`Building project in ${testProjectPath}`)
   await execInProject(`node ${rwBinPath} build -v`)
   console.log()
-
-  const serverAssetsPath = path.join(testProjectPath, 'web', 'dist', 'server', 'assets')
-  const files = fs.readdirSync(serverAssetsPath)
-  const appMjsFileName = files.find((file) => /App-.*\.mjs/.test(file))
-  const appMjs = fs.readFileSync(path.join(serverAssetsPath, appMjsFileName), 'utf8')
-  console.log('App-<hash>.mjs\n', appMjs)
 }
