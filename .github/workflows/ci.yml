@@ -154,7 +154,7 @@ jobs:
         run: yarn lint
 
       - name: 🌡 Test Types
-        run: yarn test:types --target '4.6,5.0,latest' # commas has to be escaped in PowerShell
+        run: yarn test:types
 
       - name: Get number of CPU cores
         if: always()
