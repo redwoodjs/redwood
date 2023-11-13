@@ -265,6 +265,12 @@ export default function redwoodPluginVite(): PluginOption[] {
         id: /@redwoodjs\/router\/dist\/splash-page/,
       },
     ]),
+    !rwConfig.experimental.realtime.enabled &&
+      removeFromBundle([
+        {
+          id: /@redwoodjs\/web\/dist\/apollo\/sseLink/,
+        },
+      ]),
     react({
       babel: {
         ...getWebSideDefaultBabelConfig({

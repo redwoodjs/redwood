@@ -341,6 +341,11 @@ module.exports = (webpackEnv) => {
                 filename: 'static/media/[name].[contenthash:8][ext]',
               },
             },
+            // (8)
+            !redwoodConfig.experimental.realtime.enabled && {
+              test: require.resolve('@redwoodjs/web/dist/apollo/sseLink'),
+              use: require.resolve('null-loader'),
+            },
           ].filter(Boolean),
         },
       ],

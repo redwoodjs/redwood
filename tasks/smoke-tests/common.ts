@@ -3,43 +3,50 @@ import { expect, PlaywrightTestArgs } from '@playwright/test'
 export async function smokeTest({ page }: PlaywrightTestArgs) {
   await page.goto('/')
 
-  // Check that the blog posts are being loaded.
-  // Avoid checking titles because we edit them in other tests.
-  await page.textContent('text=Meh waistcoat succulents umami')
-  await page.textContent('text=Raclette shoreditch before they sold out lyft.')
-  await page.textContent(
-    'text=baby single- origin coffee kickstarter lo - fi paleo skateboard.'
-  )
+  // Check that the blog posts load. We're deliberately not checking their titles because we edit them in other tests.
+  await expect(
+    page.getByText(
+      'Meh waistcoat succulents umami asymmetrical, hoodie post-ironic paleo chillwave '
+    )
+  ).toBeVisible()
+  await expect(
+    page.getByText(
+      'Raclette shoreditch before they sold out lyft. Ethical bicycle rights meh prism '
+    )
+  ).toBeVisible()
+  await expect(
+    page.getByText(
+      "I'm baby single- origin coffee kickstarter lo - fi paleo skateboard.Tumblr hasht"
+    )
+  ).toBeVisible()
 
+  // CSS checks. We saw this break when we switched bundlers, so while it's not comprehensive, it's at least something.
+  // While playwright recommends against using locators that are too-closely tied to the DOM, `#redwood-app` is a stable ID.
   const bgBlue700 = 'rgb(29, 78, 216)'
-  expect(
-    await page
-      .locator('#redwood-app > header')
-      .evaluate((e) => window.getComputedStyle(e).backgroundColor)
-  ).toBe(bgBlue700)
+  expect(page.locator('#redwood-app > header')).toHaveCSS(
+    'background-color',
+    bgBlue700
+  )
 
   const textBlue400 = 'rgb(96, 165, 250)'
-  expect(
-    await page
-      .locator('header a')
-      .filter({ hasText: 'Redwood Blog' })
-      .evaluate((e) => window.getComputedStyle(e).color)
-  ).toBe(textBlue400)
-
-  // Click text=About
-  await page.click('text=About')
-
-  expect(page.url()).toBe('http://localhost:8910/about')
-
-  await page.textContent(
-    'text=This site was created to demonstrate my mastery of Redwood: Look on my works, ye'
+  expect(await page.getByRole('link', { name: 'Redwood Blog' })).toHaveCSS(
+    'color',
+    textBlue400
   )
-  // Click text=Contact
-  await page.click('text=Contact')
+
+  // Check the about page.
+  await page.getByRole('link', { name: 'About', exact: true }).click()
+  expect(page.url()).toBe('http://localhost:8910/about')
+  await page.getByText(
+    'This site was created to demonstrate my mastery of Redwood: Look on my works, ye'
+  )
+
+  // Check the contact us page.
+  await page.getByRole('link', { name: 'Contact Us' }).click()
   expect(page.url()).toBe('http://localhost:8910/contact')
 
-  // Click text=Admin
-  await page.click('text=Admin')
+  // Check the admin page.
+  await page.getByRole('link', { name: 'Admin' }).click()
   expect(page.url()).toBe('http://localhost:8910/posts')
 }
 
