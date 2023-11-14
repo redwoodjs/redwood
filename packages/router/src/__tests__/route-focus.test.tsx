@@ -20,6 +20,7 @@ const NoRouteFocusPage = () => <h1>No Route Focus Page</h1>
 
 const RouteFocusNoChildren = () => (
   <>
+    {/* @ts-expect-error - Testing a JS scenario */}
     <RouteFocus></RouteFocus>
     <h1>Route Focus No Children Page</h1>
     <p></p>
@@ -45,7 +46,8 @@ const RouteFocusNegativeTabIndexPage = () => (
 )
 
 beforeEach(() => {
-  window.history.pushState({}, null, '/')
+  window.history.pushState({}, '', '/')
+  // @ts-expect-error - No type gen here for routes like there is in a real app
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 

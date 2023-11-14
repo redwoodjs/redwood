@@ -26,7 +26,7 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.1",
+    "@babel/runtime-corejs3": "7.23.2",
     "@redwoodjs/project-config": "6.0.7",
     "@redwoodjs/structure": "6.0.7",
     "@whatwg-node/fetch": "0.9.9",

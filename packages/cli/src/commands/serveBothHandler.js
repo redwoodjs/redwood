@@ -19,10 +19,7 @@ export const bothExperimentalServerFileHandler = async () => {
 
     await execa(
       'node',
-      [
-        '--conditions react-server',
-        './node_modules/@redwoodjs/vite/dist/runRscFeServer.js',
-      ],
+      ['./node_modules/@redwoodjs/vite/dist/runRscFeServer.js'],
       {
         cwd: getPaths().base,
         stdio: 'inherit',
@@ -63,12 +60,7 @@ export const bothRscServerHandler = async (argv) => {
   // TODO (RSC) More gracefully handle Ctrl-C
   const fePromise = execa(
     'node',
-    [
-      '--experimental-loader @redwoodjs/vite/node-loader',
-      '--experimental-loader @redwoodjs/vite/react-node-loader',
-      '--conditions react-server',
-      './node_modules/@redwoodjs/vite/dist/runRscFeServer.js',
-    ],
+    ['./node_modules/@redwoodjs/vite/dist/runRscFeServer.js'],
     {
       cwd: getPaths().base,
       stdio: 'inherit',

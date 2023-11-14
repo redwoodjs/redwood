@@ -50,7 +50,7 @@ export type {
 
 export { useCache }
 
-export { fragmentRegistry, registerFragment, registerFragments, SSELink }
+export { fragmentRegistry, registerFragment, registerFragments }
 
 export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
 
@@ -58,7 +58,7 @@ export type RedwoodApolloLinkName =
   | 'withToken'
   | 'authMiddleware'
   | 'updateDataApolloLink'
-  | 'terminatingLink'
+  | 'httpLink'
 
 export type RedwoodApolloLink<
   Name extends RedwoodApolloLinkName,
@@ -72,10 +72,7 @@ export type RedwoodApolloLinks = [
   RedwoodApolloLink<'withToken'>,
   RedwoodApolloLink<'authMiddleware'>,
   RedwoodApolloLink<'updateDataApolloLink'>,
-  RedwoodApolloLink<
-    'terminatingLink',
-    apolloClient.ApolloLink | apolloClient.HttpLink
-  >
+  RedwoodApolloLink<'httpLink', apolloClient.ApolloLink | apolloClient.HttpLink>
 ]
 
 export type RedwoodApolloLinkFactory = (
@@ -215,30 +212,33 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   // Our terminating link needs to be smart enough to handle subscriptions, and if the GraphQL query
   // is subscription it needs to use the SSELink (server sent events link).
-  const terminatingLink = apolloClient.split(
-    ({ query }) => {
-      const definition = getMainDefinition(query)
+  const httpOrSSELink =
+    typeof SSELink !== 'undefined'
+      ? apolloClient.split(
+          ({ query }) => {
+            const definition = getMainDefinition(query)
 
-      return (
-        definition.kind === 'OperationDefinition' &&
-        definition.operation === 'subscription'
-      )
-    },
-    new SSELink({
-      url: uri,
-      auth: { authProviderType, tokenFn: getToken },
-      httpLinkConfig,
-      headers,
-    }),
-    httpLink
-  )
+            return (
+              definition.kind === 'OperationDefinition' &&
+              definition.operation === 'subscription'
+            )
+          },
+          new SSELink({
+            url: uri,
+            auth: { authProviderType, tokenFn: getToken },
+            httpLinkConfig,
+            headers,
+          }),
+          httpLink
+        )
+      : httpLink
 
   // The order here is important. The last link *must* be a terminating link like HttpLink or SSELink.
   const redwoodApolloLinks: RedwoodApolloLinks = [
     { name: 'withToken', link: withToken },
     { name: 'authMiddleware', link: authMiddleware },
     { name: 'updateDataApolloLink', link: updateDataApolloLink },
-    { name: 'terminatingLink', link: terminatingLink },
+    { name: 'httpLink', link: httpOrSSELink },
   ]
 
   let link = redwoodApolloLink

@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist",
@@ -10,6 +9,11 @@
     }
   },
   "include": ["src", "./ambient.d.ts"],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/__mocks__",
+  ],
   "references": [
     { "path": "../auth" },
   ]

@@ -96,6 +96,7 @@ export interface Config {
   experimental: {
     opentelemetry: {
       enabled: boolean
+      wrapApi: boolean
       apiSdk?: string
     }
     studio: StudioConfig
@@ -108,6 +109,9 @@ export interface Config {
       enabled: boolean
     }
     rsc: {
+      enabled: boolean
+    }
+    realtime: {
       enabled: boolean
     }
   }
@@ -158,6 +162,7 @@ const DEFAULT_CONFIG: Config = {
   experimental: {
     opentelemetry: {
       enabled: false,
+      wrapApi: true,
       apiSdk: undefined,
     },
     studio: {
@@ -189,6 +194,9 @@ const DEFAULT_CONFIG: Config = {
       enabled: false,
     },
     rsc: {
+      enabled: false,
+    },
+    realtime: {
       enabled: false,
     },
   },

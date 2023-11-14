@@ -8,7 +8,8 @@ import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import type { FastifySideConfigFn } from './types'
 
-const DEFAULT_OPTIONS = {
+// Exported for testing.
+export const DEFAULT_OPTIONS = {
   logger: {
     level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
   },

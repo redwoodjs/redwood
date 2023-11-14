@@ -1,5 +1,6 @@
 import type { Logger } from '@redwoodjs/api/logger'
 
+import type { AbstractMailHandler } from './handler'
 import type {
   MailerConfig,
   MailSendWithoutRenderingOptions,
@@ -26,6 +27,11 @@ export class Mailer<
   public defaults: MailerDefaults
   public handlers: THandlers
   public renderers: TRenderers
+
+  // TODO: These would be better typed as the specific InMemoryMailHandler and StudioMailHandler classes
+  //       However, that would require a circular dependency between this file and those files
+  private fallbackTestHandler?: AbstractMailHandler
+  private fallbackDevelopmentHandler?: AbstractMailHandler
 
   constructor(
     public config: MailerConfig<
@@ -59,15 +65,18 @@ export class Mailer<
     // Validate handlers for test and development modes
     const testHandlerKey = this.config.test?.handler
     if (testHandlerKey === undefined) {
-      // TODO: Attempt to use a default in-memory handler if the required package is installed
-      //       otherwise default to null and log a warning
-      this.config.test = {
-        ...this.config.test,
-        handler: null,
+      // Attempt to use a default in-memory handler if the required package is installed
+      try {
+        this.fallbackTestHandler =
+          new (require('@redwoodjs/mailer-handler-in-memory').InMemoryMailHandler)()
+        this.logger.warn(
+          "Automatically loaded the '@redwoodjs/mailer-handler-in-memory' handler, this will be used to process mail in test mode"
+        )
+      } catch (_error) {
+        this.logger.warn(
+          "No test handler specified and could not load the '@redwoodjs/mailer-handler-in-memory' handler automatically, this will prevent mail from being processed in test mode"
+        )
       }
-      this.logger.warn(
-        'The test handler is null, this will prevent mail from being processed in test mode'
-      )
     } else if (testHandlerKey === null) {
       this.logger.warn(
         'The test handler is null, this will prevent mail from being processed in test mode'
@@ -81,15 +90,18 @@ export class Mailer<
     }
     const developmentHandlerKey = this.config.development?.handler
     if (developmentHandlerKey === undefined) {
-      // TODO: Attempt to use a default studio handler if the required package is installed
-      //       otherwise default to null and log a warning
-      this.config.development = {
-        ...this.config.development,
-        handler: null,
+      // Attempt to use a default studio handler if the required package is installed
+      try {
+        this.fallbackDevelopmentHandler =
+          new (require('@redwoodjs/mailer-handler-studio').StudioMailHandler)()
+        this.logger.warn(
+          "Automatically loaded the '@redwoodjs/mailer-handler-studio' handler, this will be used to process mail in development mode"
+        )
+      } catch (_error) {
+        this.logger.warn(
+          "No development handler specified and could not load the '@redwoodjs/mailer-handler-studio' handler automatically, this will prevent mail from being processed in development mode"
+        )
       }
-      this.logger.warn(
-        'The development handler is null, this will prevent mail from being processed in development mode'
-      )
     } else if (developmentHandlerKey === null) {
       this.logger.warn(
         'The development handler is null, this will prevent mail from being processed in development mode'
@@ -171,13 +183,6 @@ export class Mailer<
       // Handler is null, which indicates a no-op
       return {}
     }
-    if (handlerKey === undefined) {
-      throw new Error('No handler specified and no default handler configured')
-    }
-    const handler = this.handlers[handlerKey]
-    if (handler === undefined) {
-      throw new Error(`No handler found to match '${handlerKey.toString()}'`)
-    }
 
     const completedSendOptions = constructCompleteSendOptions(
       sendOptions,
@@ -210,10 +215,23 @@ export class Mailer<
       }
     )
 
-    const defaultedHandlerOptions = {
-      ...this.config.handling.options?.[handlerKeyForProduction],
-      ...handlerOptions,
+    const defaultedHandlerOptions =
+      handlerKey === undefined
+        ? handlerOptions
+        : {
+            ...this.config.handling.options?.[handlerKey],
+            ...handlerOptions,
+          }
+
+    const handler =
+      handlerKey === undefined
+        ? this.getDefaultHandler()
+        : this.handlers[handlerKey]
+    if (handler === null || handler === undefined) {
+      // Handler is null or missing, which indicates a no-op
+      return {}
     }
+
     const result = await handler.send(
       renderedContent,
       completedSendOptions,
@@ -260,23 +278,29 @@ export class Mailer<
       // Handler is null, which indicates a no-op
       return {}
     }
-    if (handlerKey === undefined) {
-      throw new Error('No handler specified and no default handler configured')
-    }
-    const handler = this.handlers[handlerKey]
-    if (handler === undefined) {
-      throw new Error(`No handler found to match '${handlerKey.toString()}'`)
-    }
 
     const completedSendOptions = constructCompleteSendOptions(
       sendOptions,
       this.defaults
     )
 
-    const defaultedHandlerOptions = {
-      ...this.config.handling.options?.[handlerKeyForProduction],
-      ...handlerOptions,
+    const defaultedHandlerOptions =
+      handlerKey === undefined
+        ? handlerOptions
+        : {
+            ...this.config.handling.options?.[handlerKey],
+            ...handlerOptions,
+          }
+
+    const handler =
+      handlerKey === undefined
+        ? this.getDefaultHandler()
+        : this.handlers[handlerKey]
+    if (handler === null || handler === undefined) {
+      // Handler is null or missing, which indicates a no-op
+      return {}
     }
+
     const result = await handler.send(
       content,
       completedSendOptions,
@@ -322,16 +346,22 @@ export class Mailer<
 
   getTestHandler() {
     const handlerKey = this.config.test?.handler
-    if (handlerKey === undefined || handlerKey === null) {
+    if (handlerKey === null) {
       return handlerKey
+    }
+    if (handlerKey === undefined) {
+      return this.fallbackTestHandler
     }
     return this.handlers[handlerKey]
   }
 
   getDevelopmentHandler() {
     const handlerKey = this.config.development?.handler
-    if (handlerKey === undefined || handlerKey === null) {
+    if (handlerKey === null) {
       return handlerKey
+    }
+    if (handlerKey === undefined) {
+      return this.fallbackDevelopmentHandler
     }
     return this.handlers[handlerKey]
   }
