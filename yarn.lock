@@ -8775,7 +8775,7 @@ __metadata:
     aws-lambda: 1.0.7
     core-js: 3.32.2
     graphql: 16.8.1
-    graphql-scalars: 1.22.2
+    graphql-scalars: 1.22.4
     graphql-tag: 2.12.6
     graphql-yoga: 4.0.4
     jest: 29.7.0
@@ -9125,7 +9125,7 @@ __metadata:
     fastify-raw-body: 4.2.2
     graphiql: 2.4.7
     graphql: 16.8.1
-    graphql-scalars: 1.22.2
+    graphql-scalars: 1.22.4
     graphql-yoga: 4.0.4
     jest: 29.7.0
     json-bigint-patch: 0.0.8
@@ -21410,14 +21410,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-scalars@npm:1.22.2":
-  version: 1.22.2
-  resolution: "graphql-scalars@npm:1.22.2"
+"graphql-scalars@npm:1.22.4":
+  version: 1.22.4
+  resolution: "graphql-scalars@npm:1.22.4"
   dependencies:
     tslib: ^2.5.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 8ba7e0e2ea90a0067cdbffcd67a8ff486ce4accceabe15a5b9bc7749204ea3ce31630619d9069153147661a885118e93983582b3914c982fa48f09c18edacdad
+  checksum: d7df28c7bcd274049ee2b93536036b22bc2591bdb86a627a46d4557161965df96c8da6c4f7dc01684d46580d75c7b2fbba7fc5042b763b5b6cba879dc79e010e
   languageName: node
   linkType: hard
 
