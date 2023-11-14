@@ -59,6 +59,9 @@ describe('getConfig', () => {
             "enabled": false,
             "wrapApi": true,
           },
+          "realtime": {
+            "enabled": false,
+          },
           "rsc": {
             "enabled": false,
           },
