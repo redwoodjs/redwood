@@ -63,8 +63,6 @@ describe('Generate client preset', () => {
 
     const { trustedDocumentsStoreFile } = await generateClientPreset()
 
-    expect(trustedDocumentsStoreFile).toContain(
-      'api/src/lib/trustedDocumentsStore.ts'
-    )
+    expect(trustedDocumentsStoreFile).toContain('trustedDocumentsStore.ts')
   })
 })
