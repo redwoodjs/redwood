@@ -1,12 +1,14 @@
-import fs from 'fs'
-import path from 'path'
-
 import { generate } from '@graphql-codegen/cli'
 import type { CodegenConfig } from '@graphql-codegen/cli'
 import { addTypenameSelectionDocumentTransform } from '@graphql-codegen/client-preset'
-import { format } from 'prettier'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
+
+import {
+  trustedDocumentsStore,
+  replaceGqlTagWithTrustedDocumentGraphql,
+} from './trustedDocuments'
+import type { GeneratedFile } from './types'
 
 export const shouldGenerateTrustedDocuments = (): boolean => {
   const config = getConfig()
@@ -15,14 +17,13 @@ export const shouldGenerateTrustedDocuments = (): boolean => {
 }
 
 export const generateClientPreset = async () => {
-  let trustedDocumentsStoreFile = ''
   let generatedFiles = []
   let clientPresetFiles = [] as string[]
 
   const errors: { message: string; error: unknown }[] = []
 
   if (!shouldGenerateTrustedDocuments()) {
-    return { clientPresetFiles, trustedDocumentsStoreFile, errors }
+    return { clientPresetFiles, trustedDocumentsStoreFile: [], errors }
   }
 
   const documentsGlob = `${getPaths().web.src}/**/!(*.d).{ts,tsx,js,jsx}`
@@ -67,50 +68,27 @@ export const generateClientPreset = async () => {
 
   try {
     generatedFiles = await generate(config, true)
+
+    clientPresetFiles = generatedFiles.map((f: GeneratedFile) => f.filename)
+
+    const trustedDocumentsStoreFile = trustedDocumentsStore(generatedFiles)
+    replaceGqlTagWithTrustedDocumentGraphql(generatedFiles)
+
+    return {
+      clientPresetFiles,
+      trustedDocumentsStoreFile,
+      errors,
+    }
   } catch (e) {
     errors.push({
       message: 'Error: Could not generate GraphQL client preset',
       error: e,
     })
-  }
 
-  interface GeneratedFile {
-    filename: string
-    content: string
-    hooks: string
-  }
-
-  clientPresetFiles = generatedFiles.map((f: GeneratedFile) => f.filename)
-
-  // Copy the persisted-documents.json to api side as a trustedDocumentsStore
-  const output = generatedFiles.filter((f: GeneratedFile) =>
-    f.filename.endsWith('persisted-documents.json')
-  )
-
-  const storeFile = output[0]
-
-  if (storeFile && storeFile.content) {
-    const content = format(`export const store = ${storeFile.content}`, {
-      trailingComma: 'es5',
-      bracketSpacing: true,
-      tabWidth: 2,
-      semi: false,
-      singleQuote: true,
-      arrowParens: 'always',
-      parser: 'typescript',
-    })
-
-    trustedDocumentsStoreFile = path.join(
-      getPaths().api.lib,
-      'trustedDocumentsStore.ts'
-    )
-    fs.mkdirSync(path.dirname(trustedDocumentsStoreFile), { recursive: true })
-    fs.writeFileSync(trustedDocumentsStoreFile, content)
-  }
-
-  return {
-    clientPresetFiles,
-    trustedDocumentsStoreFile,
-    errors,
+    return {
+      clientPresetFiles,
+      trustedDocumentsStoreFile: [],
+      errors,
+    }
   }
 }

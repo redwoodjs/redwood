@@ -255,10 +255,16 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
    *
    * See https://www.apollographql.com/docs/react/api/link/persisted-queries/
    */
+  interface DocumentNodeWithMeta extends apolloClient.DocumentNode {
+    __meta__?: {
+      hash: string
+    }
+  }
+
   const terminatingLink = apolloClient.split(
     ({ query }) => {
-      const documentQuery = query as unknown as any // workaround for DocumentNode type not having __meta__ property
-      return documentQuery?.['__meta__']?.['hash']
+      const documentQuery = query as DocumentNodeWithMeta
+      return documentQuery?.['__meta__']?.['hash'] !== undefined
     },
     createPersistedQueryLink({
       generateHash: (document: any) => document['__meta__']['hash'],
