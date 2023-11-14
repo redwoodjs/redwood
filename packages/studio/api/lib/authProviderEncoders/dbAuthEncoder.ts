@@ -1,4 +1,3 @@
-import CryptoJS from 'crypto-js'
 import { v4 as uuidv4 } from 'uuid'
 
 import { SESSION_SECRET } from '../envars'
@@ -18,11 +17,10 @@ export const getDBAuthHeader = async (userId?: string) => {
     )
   }
 
+  const { encryptSession } = await import('@redwoodjs/auth-dbauth-api')
+
   const id = isNumeric(userId) ? parseInt(userId) : userId
-  const cookie = CryptoJS.AES.encrypt(
-    JSON.stringify({ id }) + ';' + uuidv4(),
-    SESSION_SECRET
-  ).toString()
+  const cookie = encryptSession(JSON.stringify({ id }) + ';' + uuidv4())
 
   return {
     authProvider: 'dbAuth',
