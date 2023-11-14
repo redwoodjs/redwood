@@ -599,7 +599,7 @@ it('renders an error message', async () => {
 
 #### mockGraphQLMutation()
 
-Similar to how we mocked GraphQL queries, we can mock mutations as well. Read more about GraphQL mocking in our [Mocking GraphQL requests](mocking-graphql-requests.md) docs.
+Similar to how we mocked GraphQL queries, we can mock mutations as well. Read more about GraphQL mocking in our [Mocking GraphQL requests](graphql/mocking-graphql-requests.md) docs.
 
 ### Mocking Auth
 
