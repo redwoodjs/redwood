@@ -1,13 +1,43 @@
-import type { APIGatewayProxyEvent } from 'aws-lambda'
-import CryptoJS from 'crypto-js'
+import crypto from 'node:crypto'
 
-import { getConfig } from '@redwoodjs/project-config'
+import type { APIGatewayProxyEvent } from 'aws-lambda'
+
+import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 
 import * as DbAuthError from './errors'
+
+type ScryptOptions = {
+  cost?: number
+  blockSize?: number
+  parallelization?: number
+  N?: number
+  r?: number
+  p?: number
+  maxmem?: number
+}
+
+const DEFAULT_SCRYPT_OPTIONS: ScryptOptions = {
+  cost: 2 ** 14,
+  blockSize: 8,
+  parallelization: 1,
+}
 
 // Extracts the cookie from an event, handling lower and upper case header names.
 const eventHeadersCookie = (event: APIGatewayProxyEvent) => {
   return event.headers.cookie || event.headers.Cookie
+}
+
+const getPort = () => {
+  let configPath
+
+  try {
+    configPath = getConfigPath()
+  } catch {
+    // If this throws, we're in a serverless environment, and the `redwood.toml` file doesn't exist.
+    return 8911
+  }
+
+  return getConfig(configPath).api.port
 }
 
 // When in development environment, check for cookie in the request extension headers
@@ -29,10 +59,42 @@ const eventGraphiQLHeadersCookie = (event: APIGatewayProxyEvent) => {
   return
 }
 
+// decrypts session text using old CryptoJS algorithm (using node:crypto library)
+const legacyDecryptSession = (encryptedText: string) => {
+  const cypher = Buffer.from(encryptedText, 'base64')
+  const salt = cypher.slice(8, 16)
+  const password = Buffer.concat([
+    Buffer.from(process.env.SESSION_SECRET as string, 'binary'),
+    salt,
+  ])
+  const md5Hashes = []
+  let digest = password
+  for (let i = 0; i < 3; i++) {
+    md5Hashes[i] = crypto.createHash('md5').update(digest).digest()
+    digest = Buffer.concat([md5Hashes[i], password])
+  }
+  const key = Buffer.concat([md5Hashes[0], md5Hashes[1]])
+  const iv = md5Hashes[2]
+  const contents = cypher.slice(16)
+  const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv)
+
+  return decipher.update(contents) + decipher.final('utf-8')
+}
+
 // Extracts the session cookie from an event, handling both
 // development environment GraphiQL headers and production environment headers.
 export const extractCookie = (event: APIGatewayProxyEvent) => {
   return eventGraphiQLHeadersCookie(event) || eventHeadersCookie(event)
+}
+
+// whether this encrypted session was made with the old CryptoJS algorithm
+export const isLegacySession = (text: string | undefined) => {
+  if (!text) {
+    return false
+  }
+
+  const [_encryptedText, iv] = text.split('|')
+  return !iv
 }
 
 // decrypts the session cookie and returns an array: [data, csrf]
@@ -41,11 +103,27 @@ export const decryptSession = (text: string | null) => {
     return []
   }
 
+  let decoded
+  // if cookie contains a pipe then it was encrypted using the `node:crypto`
+  // algorithm (first element is the ecrypted data, second is the initialization vector)
+  // otherwise fall back to using the older CryptoJS algorithm
+  const [encryptedText, iv] = text.split('|')
+
   try {
-    const decoded = CryptoJS.AES.decrypt(
-      text,
-      process.env.SESSION_SECRET as string
-    ).toString(CryptoJS.enc.Utf8)
+    if (iv) {
+      // decrypt using the `node:crypto` algorithm
+      const decipher = crypto.createDecipheriv(
+        'aes-256-cbc',
+        (process.env.SESSION_SECRET as string).substring(0, 32),
+        Buffer.from(iv, 'base64')
+      )
+      decoded =
+        decipher.update(encryptedText, 'base64', 'utf-8') +
+        decipher.final('utf-8')
+    } else {
+      decoded = legacyDecryptSession(text)
+    }
+
     const [data, csrf] = decoded.split(';')
     const json = JSON.parse(data)
 
@@ -53,6 +131,19 @@ export const decryptSession = (text: string | null) => {
   } catch (e) {
     throw new DbAuthError.SessionDecryptionError()
   }
+}
+
+export const encryptSession = (dataString: string) => {
+  const iv = crypto.randomBytes(16)
+  const cipher = crypto.createCipheriv(
+    'aes-256-cbc',
+    (process.env.SESSION_SECRET as string).substring(0, 32),
+    iv
+  )
+  let encryptedData = cipher.update(dataString, 'utf-8', 'base64')
+  encryptedData += cipher.final('base64')
+
+  return `${encryptedData}|${iv.toString('base64')}`
 }
 
 // returns the actual value of the session cookie
@@ -73,7 +164,7 @@ export const getSession = (
     return null
   }
 
-  return sessionCookie.split('=')[1].trim()
+  return sessionCookie.replace(`${cookieName(cookieNameOption)}=`, '').trim()
 }
 
 // Convenience function to get session, decrypt, and return session data all
@@ -110,23 +201,58 @@ export const webAuthnSession = (event: APIGatewayProxyEvent) => {
 }
 
 export const hashToken = (token: string) => {
-  return CryptoJS.SHA256(token).toString(CryptoJS.enc.Hex)
+  return crypto.createHash('sha256').update(token).digest('hex')
 }
 
 // hashes a password using either the given `salt` argument, or creates a new
 // salt and hashes using that. Either way, returns an array with [hash, salt]
-export const hashPassword = (text: string, salt?: string) => {
-  const useSalt = salt || CryptoJS.lib.WordArray.random(128 / 8).toString()
+// normalizes the string in case it contains unicode characters: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize
+// TODO: Add validation that the options are valid values for the scrypt algorithm
+export const hashPassword = (
+  text: string,
+  {
+    salt = crypto.randomBytes(32).toString('hex'),
+    options = DEFAULT_SCRYPT_OPTIONS,
+  }: { salt?: string; options?: ScryptOptions } = {}
+) => {
+  const encryptedString = crypto
+    .scryptSync(text.normalize('NFC'), salt, 32, options)
+    .toString('hex')
+  const optionsToString = [
+    options.cost,
+    options.blockSize,
+    options.parallelization,
+  ]
+  return [`${encryptedString}|${optionsToString.join('|')}`, salt]
+}
 
+// uses the old algorithm from CryptoJS:
+//   CryptoJS.PBKDF2(password, salt, { keySize: 8 }).toString()
+export const legacyHashPassword = (text: string, salt?: string) => {
+  const useSalt = salt || crypto.randomBytes(32).toString('hex')
   return [
-    CryptoJS.PBKDF2(text, useSalt, { keySize: 256 / 32 }).toString(),
+    crypto.pbkdf2Sync(text, useSalt, 1, 32, 'SHA1').toString('hex'),
     useSalt,
   ]
 }
 
 export const cookieName = (name: string | undefined) => {
-  const port = getConfig().api?.port || 8911
+  const port = getPort()
   const cookieName = name?.replace('%port%', '' + port) ?? 'session'
 
   return cookieName
+}
+
+export const extractHashingOptions = (text: string): ScryptOptions => {
+  const [_hash, ...options] = text.split('|')
+
+  if (options.length === 3) {
+    return {
+      cost: parseInt(options[0]),
+      blockSize: parseInt(options[1]),
+      parallelization: parseInt(options[2]),
+    }
+  } else {
+    return {}
+  }
 }

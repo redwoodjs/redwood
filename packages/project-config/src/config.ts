@@ -111,6 +111,9 @@ export interface Config {
     rsc: {
       enabled: boolean
     }
+    realtime: {
+      enabled: boolean
+    }
   }
 }
 
@@ -191,6 +194,9 @@ const DEFAULT_CONFIG: Config = {
       enabled: false,
     },
     rsc: {
+      enabled: false,
+    },
+    realtime: {
       enabled: false,
     },
   },
