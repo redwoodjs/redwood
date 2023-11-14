@@ -1,5 +1,5 @@
 {
-  "name": "ssr_related_changes",
+  "name": "detect-changes",
   "private": true,
   "dependencies": {
     "@actions/core": "1.10.0",

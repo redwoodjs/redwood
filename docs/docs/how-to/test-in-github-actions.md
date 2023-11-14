@@ -93,7 +93,7 @@ model UserExample {
 
 Then add your connection strings to your `.env` file:
 
-:::caution
+:::warning
 
 Make sure you don't commit this file to your repo since it contains sensitive information.
 
