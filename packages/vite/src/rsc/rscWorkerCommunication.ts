@@ -4,7 +4,14 @@ import type { Readable } from 'node:stream'
 import { Worker } from 'node:worker_threads'
 
 const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
-  execArgv: ['--conditions', 'react-server'],
+  execArgv: [
+    '--conditions',
+    'react-server',
+    '--experimental-loader',
+    '@redwoodjs/vite/node-loader',
+    '--experimental-loader',
+    '@redwoodjs/vite/react-node-loader',
+  ],
 })
 
 export type RenderInput<
