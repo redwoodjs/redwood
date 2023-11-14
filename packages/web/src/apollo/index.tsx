@@ -9,7 +9,6 @@ import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
-
 // Note: Importing directly from `apollo/client` doesn't work properly in Storybook.
 const {
   ApolloProvider,
@@ -52,7 +51,7 @@ export type {
 
 export { useCache }
 
-export { fragmentRegistry, registerFragment, registerFragments, SSELink }
+export { fragmentRegistry, registerFragment, registerFragments }
 
 export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
 
@@ -222,29 +221,28 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
   }
 
-  // Our terminating link needs to be smart enough to handle:
-  // 1. subscriptions
-  // and if the GraphQL query is subscription it needs to use the SSELink (server sent events link).
-  const httpOrSSELink = apolloClient.split(
-    ({ query }) => {
-      const definition = getMainDefinition(query)
+  // Our terminating link needs to be smart enough to handle subscriptions, and if the GraphQL query
+  // is subscription it needs to use the SSELink (server sent events link).
+  const httpOrSSELink =
+    typeof SSELink !== 'undefined'
+      ? apolloClient.split(
+          ({ query }) => {
+            const definition = getMainDefinition(query)
 
-      return (
-        definition.kind === 'OperationDefinition' &&
-        definition.operation === 'subscription'
-      )
-    },
-    new SSELink({
-      url: uri,
-      auth: { authProviderType, tokenFn: getToken },
-      httpLinkConfig,
-      headers,
-    }),
-    httpLink
-  )
-
-  // 2. To support Trusted Documents aka Persisted Operations
-  // Check if the query made includes the hash, and if so then make the request with the persisted query link
+            return (
+              definition.kind === 'OperationDefinition' &&
+              definition.operation === 'subscription'
+            )
+          },
+          new SSELink({
+            url: uri,
+            auth: { authProviderType, tokenFn: getToken },
+            httpLinkConfig,
+            headers,
+          }),
+          httpLink
+        )
+      : httpLink
 
   /**
    * Use Trusted Documents aka Persisted Operations aka Queries
@@ -261,6 +259,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     }
   }
 
+  // Check if the query made includes the hash, and if so then make the request with the persisted query link
   const terminatingLink = apolloClient.split(
     ({ query }) => {
       const documentQuery = query as DocumentNodeWithMeta
@@ -272,15 +271,12 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     httpOrSSELink
   )
 
-  // The order here is important. The last link *must* be a terminating link like HttpLink or SSELink.
+  // The order here is important. The last link *must* be a terminating link like HttpLink, SSELink, or the PersistedQueryLink.
   const redwoodApolloLinks: RedwoodApolloLinks = [
     { name: 'withToken', link: withToken },
     { name: 'authMiddleware', link: authMiddleware },
     { name: 'updateDataApolloLink', link: updateDataApolloLink },
-    {
-      name: 'httpLink',
-      link: terminatingLink,
-    },
+    { name: 'httpLink', link: terminatingLink },
   ]
 
   let link = redwoodApolloLink
