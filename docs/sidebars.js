@@ -146,6 +146,7 @@ module.exports = {
         'graphql',
         'local-postgres-setup',
         'logger',
+        'mailer',
         'mocking-graphql-requests',
         'prerender',
         'project-configuration-dev-test-build',
