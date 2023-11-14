@@ -22,9 +22,9 @@ Imagine a `User` model that contains several columns for user preferences. Over 
 Just like Prisma, we will store which data migrations have run in the database itself. We'll create a new database table `DataMigration` to keep track of which ones have run already.
 
 Rather than create this model by hand, Redwood includes a CLI tool to add the model to `schema.prisma` and create the DB migration that adds the table to the database:
-
-    yarn rw data-migrate install
-
+```
+yarn rw data-migrate install
+```
 You'll see a new directory created at `api/db/dataMigrations` which will store our individual migration tasks.
 
 Take a look at `schema.prisma` to see the new model definition:
@@ -39,21 +39,21 @@ model RW_DataMigration {
 ```
 
 The install script also ran `yarn rw prisma migrate dev --create-only` automatically so you have a DB migration ready to go. You just need to run the `prisma migrate dev` command to apply it:
-
-    yarn rw prisma migrate dev
-
+```
+yarn rw prisma migrate dev
+```
 ## Creating a New Data Migration
 
 Data migrations are just plain Typescript or Javascript files which export a single anonymous function that is given a single argument—an instance of `PrismaClient` called `db` that you can use to access your database. The files have a simple naming convention:
-
-    {version}-{name}.js
-
+```
+{version}-{name}.js
+```
 Where `version` is a timestamp, like `20200721123456` (an ISO8601 datetime without any special characters or zone identifier), and `name` is a param-case human readable name for the migration, like `copy-preferences`.
 
 To create a data migration we have a generator:
-
-    yarn rw generate dataMigration copyPreferences
-
+```
+yarn rw generate dataMigration copyPreferences
+```
 This will create `api/db/dataMigrations/20200721123456-copy-preferences.js`:
 
 ```jsx title="api/db/dataMigrations/20200721123456-copy-preferences.js"
@@ -107,9 +107,9 @@ This loops through each existing `User` and creates a new `Preference` record co
 ## Running a Data Migration
 
 When you're ready, you can execute your data migration with `data-migrate`'s `up` command:
-
-    yarn rw data-migrate up
-
+```
+yarn rw data-migrate up
+```
 This goes through each file in `api/db/dataMigrations`, compares it against the list of migrations that have already run according to the `DataMigration` table in the database, and executes any that aren't present in that table, sorted oldest to newest based on the timestamp in the filename.
 
 Any logging statements (like `console.info()`) you include in your data migration script will be output to the console as the script is running.
@@ -148,11 +148,12 @@ export default async ({ db }) => {
 ## Lifecycle Summary
 
 Run once:
-
-    yarn rw data-migrate install
-    yarn rw prisma migrate dev
-
+```
+yarn rw data-migrate install
+yarn rw prisma migrate dev
+```
 Run every time you need a new data migration:
-
-    yarn rw generate dataMigration migrationName
-    yarn rw data-migrate up
+```
+yarn rw generate dataMigration migrationName
+yarn rw data-migrate up
+```

@@ -22,7 +22,7 @@ Update your .env file with the following settings supplied when you created your
 
 You can find these values in your project's dashboard under Settings -> API.
 
-For full Supabase documentation, see: <https://supabase.io/docs>
+For full Supabase documentation, see: [https://supabase.io/docs](https://supabase.io/docs)
 
 ## Usage
 
@@ -57,4 +57,4 @@ Depending on the credentials provided:
 - Note: You must enable and configure the OAuth provider appropriately. To configure these providers, you can go to Authentication -> Settings on `app.supabase.io` for your project.
 - Note: To authenticate using SMS based OTP (One-Time Password) you will need a [Twilio](https://www.twilio.com/try-twilio) account
 
-For Supabase Authentication documentation, see: <https://supabase.io/docs/guides/auth>
+For Supabase Authentication documentation, see: [https://supabase.io/docs/guides/auth](https://supabase.io/docs/guides/auth)
