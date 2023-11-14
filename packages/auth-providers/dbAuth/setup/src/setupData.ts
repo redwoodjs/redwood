@@ -1,6 +1,5 @@
+import crypto from 'node:crypto'
 import path from 'path'
-
-import password from 'secure-random-password'
 
 import { getPaths, colors, addEnvVarTask } from '@redwoodjs/cli-helpers'
 
@@ -10,10 +9,7 @@ export const functionsPath = getPaths().api.functions.replace(
   ''
 )
 
-const secret = password.randomPassword({
-  length: 64,
-  characters: [password.lower, password.upper, password.digits],
-})
+const secret = crypto.randomBytes(32).toString('base64')
 
 export const extraTask = addEnvVarTask(
   'SESSION_SECRET',
