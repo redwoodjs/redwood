@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "esbuild": "0.18.19",
-    "fast-glob": "3.3.1",
+    "fast-glob": "3.3.2",
     "typescript": "5.2.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

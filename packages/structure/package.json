@@ -40,7 +40,7 @@
     "deepmerge": "4.3.1",
     "dotenv-defaults": "5.0.2",
     "enquirer": "2.4.1",
-    "fast-glob": "3.3.1",
+    "fast-glob": "3.3.2",
     "graphql": "16.8.1",
     "lazy-get-decorator": "2.2.1",
     "line-column": "1.0.2",
