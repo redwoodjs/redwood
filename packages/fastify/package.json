@@ -18,7 +18,7 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@fastify/http-proxy": "9.2.1",
+    "@fastify/http-proxy": "9.3.0",
     "@fastify/static": "6.12.0",
     "@fastify/url-data": "5.4.0",
     "@redwoodjs/graphql-server": "6.0.7",
