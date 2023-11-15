@@ -124,9 +124,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.8.5":
-  version: 3.8.5
-  resolution: "@apollo/client@npm:3.8.5"
+"@apollo/client@npm:3.8.7":
+  version: 3.8.7
+  resolution: "@apollo/client@npm:3.8.7"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.3
@@ -156,22 +156,22 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 70a054ffc4518dd2b88b2d76018c1c3a68474c7d4edb96cc85f4a879d8345afa992b2a041157b36f01c32a2221d8ae79f395e5a41969755291eb8accd719b9d1
+  checksum: e88be52f6393ab0625999abf7f6ed6c1035e5f290a738477210f9563d85d369b3dcb86dff7613be84a012192b66c2fae18ee9d5acf55f2b0ca30c1cc77c38559
   languageName: node
   linkType: hard
 
-"@apollo/experimental-nextjs-app-support@npm:0.4.3":
-  version: 0.4.3
-  resolution: "@apollo/experimental-nextjs-app-support@npm:0.4.3"
+"@apollo/experimental-nextjs-app-support@npm:0.5.1":
+  version: 0.5.1
+  resolution: "@apollo/experimental-nextjs-app-support@npm:0.5.1"
   dependencies:
     server-only: ^0.0.1
     superjson: ^1.12.2
     ts-invariant: ^0.10.3
   peerDependencies:
-    "@apollo/client": ">=3.8.0-rc || ^3.8.0"
-    next: ^13.4.1
+    "@apollo/client": ">=3.8.0-rc || ^3.8.0 || >=3.9.0-alpha || >=3.9.0-beta || >=3.9.0-rc"
+    next: ^13.4.1 || ^14.0.0
     react: ^18
-  checksum: ab4b6c316a2a37b1afc80391640c3273964e57e84987331ef3a3e0e4b2a20b89d7eccb266fcaf9a4f9e926f990d63c7e5f0155494cc8478c205dcd0c37ca8499
+  checksum: fe6df5624df7e6268eb3dde7c34c78350ed37efcfa5c317c6f6d9705ab62a513d1950e7bd17748853103d96208e57934d1841b52454165b723237585998bdcae
   languageName: node
   linkType: hard
 
@@ -9079,7 +9079,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/studio@workspace:packages/studio"
   dependencies:
-    "@apollo/client": 3.8.5
+    "@apollo/client": 3.8.7
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
@@ -9295,8 +9295,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.8.5
-    "@apollo/experimental-nextjs-app-support": 0.4.3
+    "@apollo/client": 3.8.7
+    "@apollo/experimental-nextjs-app-support": 0.5.1
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
