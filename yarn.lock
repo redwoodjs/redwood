@@ -2766,9 +2766,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@escape.tech/graphql-armor-max-aliases@npm:2.1.0":
-  version: 2.1.0
-  resolution: "@escape.tech/graphql-armor-max-aliases@npm:2.1.0"
+"@escape.tech/graphql-armor-max-aliases@npm:2.2.0":
+  version: 2.2.0
+  resolution: "@escape.tech/graphql-armor-max-aliases@npm:2.2.0"
   dependencies:
     "@envelop/core": ^4.0.0
     "@escape.tech/graphql-armor-types": 0.5.0
@@ -2778,7 +2778,7 @@ __metadata:
       optional: true
     "@escape.tech/graphql-armor-types":
       optional: true
-  checksum: 7eb9132b95d6f7c638983cec4756359bda5805ccd369facedc168e2112602b2db46280ad3755f1fa586c77cb132a853e470bec6400a5b5ae25f9b5f7bae619d1
+  checksum: 8a961967d183044e9ddb8b1ad9d7c677eb3078e84f14f615cbbbc65715b61048bb9af5a1e6c449bbfd91762fce98de093288ae24420568ace82d4fae1066644b
   languageName: node
   linkType: hard
 
@@ -2839,13 +2839,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@escape.tech/graphql-armor@npm:2.3.1":
-  version: 2.3.1
-  resolution: "@escape.tech/graphql-armor@npm:2.3.1"
+"@escape.tech/graphql-armor@npm:2.3.2":
+  version: 2.3.2
+  resolution: "@escape.tech/graphql-armor@npm:2.3.2"
   dependencies:
     "@escape.tech/graphql-armor-block-field-suggestions": 2.1.0
     "@escape.tech/graphql-armor-cost-limit": 2.1.0
-    "@escape.tech/graphql-armor-max-aliases": 2.1.0
+    "@escape.tech/graphql-armor-max-aliases": 2.2.0
     "@escape.tech/graphql-armor-max-depth": 2.2.0
     "@escape.tech/graphql-armor-max-directives": 2.1.0
     "@escape.tech/graphql-armor-max-tokens": 2.2.0
@@ -2861,7 +2861,7 @@ __metadata:
       optional: true
     "@escape.tech/graphql-armor-types":
       optional: true
-  checksum: 40ecfb643fea264eacb7d3d4031e139a3bb3cea6f1519146042d2eb9bbad64b1f5d570886459da75c25ff1a471fc13b04fae2f2795b0c6e0b97922bfb9191d47
+  checksum: 1928e3bce8400e3ed003a6b04c7d5601573c454c01195ae788123b8cbc913188d124a1aa23938510c6bce92333bb5662e954bb01564b0e499b03bfb016d26e3d
   languageName: node
   linkType: hard
 
@@ -8753,7 +8753,7 @@ __metadata:
     "@envelop/on-resolve": 3.0.3
     "@envelop/testing": 6.0.3
     "@envelop/types": 4.0.1
-    "@escape.tech/graphql-armor": 2.3.1
+    "@escape.tech/graphql-armor": 2.3.2
     "@graphql-tools/merge": 9.0.0
     "@graphql-tools/schema": 10.0.0
     "@graphql-tools/utils": 10.0.8
