@@ -65,7 +65,7 @@
     "@nivo/treemap": "0.83.0",
     "@tailwindcss/forms": "0.5.3",
     "@tremor/react": "3.4.1",
-    "@types/aws-lambda": "8.10.119",
+    "@types/aws-lambda": "8.10.126",
     "@types/jsonwebtoken": "9.0.5",
     "@types/lodash": "4.14.195",
     "@types/mailparser": "^3",
