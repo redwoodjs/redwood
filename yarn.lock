@@ -7644,6 +7644,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-email/render@npm:0.0.9":
+  version: 0.0.9
+  resolution: "@react-email/render@npm:0.0.9"
+  dependencies:
+    html-to-text: 9.0.5
+    pretty: 2.0.0
+    react: 18.2.0
+    react-dom: 18.2.0
+  checksum: 128b3a7c65e77a14600e48fb24183e182de82b4ddc8ff11bb239c421fa68bd6eb8b063822b5abe9f8599e34ece315cdb961b4133c59285cebcc517d2ec0ae8da
+  languageName: node
+  linkType: hard
+
 "@react-spring/animated@npm:~9.7.3":
   version: 9.7.3
   resolution: "@react-spring/animated@npm:9.7.3"
@@ -8833,7 +8845,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/mailer-renderer-react-email@workspace:packages/mailer/renderers/react-email"
   dependencies:
-    "@react-email/render": 0.0.7
+    "@react-email/render": 0.0.9
     "@redwoodjs/mailer-core": 6.4.0
     esbuild: 0.18.19
     fast-glob: 3.3.2
