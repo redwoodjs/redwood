@@ -9221,7 +9221,7 @@ __metadata:
     "@types/react": 18.2.14
     "@types/yargs-parser": 21.0.0
     "@vitejs/plugin-react": 4.1.1
-    "@whatwg-node/server": 0.9.14
+    "@whatwg-node/server": 0.9.16
     acorn-loose: 8.3.0
     buffer: 6.0.3
     busboy: ^1.6.0
@@ -12954,13 +12954,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/server@npm:0.9.14, @whatwg-node/server@npm:^0.9.1":
-  version: 0.9.14
-  resolution: "@whatwg-node/server@npm:0.9.14"
+"@whatwg-node/server@npm:0.9.16, @whatwg-node/server@npm:^0.9.1":
+  version: 0.9.16
+  resolution: "@whatwg-node/server@npm:0.9.16"
   dependencies:
     "@whatwg-node/fetch": ^0.9.10
     tslib: ^2.3.1
-  checksum: d56512e81e4f0f01e54a20945150e9997d21ad21c15740f7d3b5d3aac7f88615ae02e31ba1cd93902f95692137ab880b6478b022abd0b58f865615226e18f61d
+  checksum: 8de5ef7cd1bb462754043a83eda88c4b5848a5f7ae11d91def86c795e3fb71fcba41879e0483b7fe72c00a1661aaaa6721739a296662049460901f7f05b9ce67
   languageName: node
   linkType: hard
 
