@@ -39,7 +39,7 @@
   "dependencies": {
     "@babel/cli": "7.23.0",
     "@babel/runtime-corejs3": "7.23.2",
-    "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.5.11",
     "@redwoodjs/cli": "6.0.7",
     "@redwoodjs/eslint-config": "6.0.7",
     "@redwoodjs/internal": "6.0.7",
