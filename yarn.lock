@@ -6580,19 +6580,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.37.1":
-  version: 1.37.1
-  resolution: "@playwright/test@npm:1.37.1"
+"@playwright/test@npm:1.39.0":
+  version: 1.39.0
+  resolution: "@playwright/test@npm:1.39.0"
   dependencies:
-    "@types/node": "*"
-    fsevents: 2.3.2
-    playwright-core: 1.37.1
-  dependenciesMeta:
-    fsevents:
-      optional: true
+    playwright: 1.39.0
   bin:
     playwright: cli.js
-  checksum: 82f12766cfbbc38592d38e8ddca185c488332b0747fb607ddc00b4f8cbb7311cfb712b27f780504b737c71aec9c49748bca7ad7784521ece5b5bb5db3d3031c8
+  checksum: d808ca36f0a411ae09eece19fc93fcbd048541253c6c9e341fc9488613395bb94ebf65ad64e920d6be0fb20e887cf317c532a45d2c30e1804d6842e55c1fe6e9
   languageName: node
   linkType: hard
 
@@ -28839,12 +28834,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.37.1":
-  version: 1.37.1
-  resolution: "playwright-core@npm:1.37.1"
+"playwright-core@npm:1.39.0":
+  version: 1.39.0
+  resolution: "playwright-core@npm:1.39.0"
   bin:
     playwright-core: cli.js
-  checksum: 3eddeb05569a2aa54375bcc4955fe2e497865481cd523cdaa095d7695b1ea48f3f34438cc652e4a9096e1d7b2c47e29776713a4730c171f6186805866a0aa53b
+  checksum: dbd719ae77ae84a43f831beb89514ca5cca62840a2f0cce445645002ac045c256c19b5f4f3cf9a7aa205428a1571e9e8d946ff1937cc316033ea58090c549a76
+  languageName: node
+  linkType: hard
+
+"playwright@npm:1.39.0":
+  version: 1.39.0
+  resolution: "playwright@npm:1.39.0"
+  dependencies:
+    fsevents: 2.3.2
+    playwright-core: 1.39.0
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    playwright: cli.js
+  checksum: b55adb3453a9c2a02fe61dbcbd5fcb0cbae1038ea6115158c7933d203ae5b62a13cb294905d6661836751a5825bc2cfdc71b67988082ec47ac6930ca744af724
   languageName: node
   linkType: hard
 
@@ -31408,7 +31418,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.23.2
     "@faker-js/faker": 8.0.2
     "@npmcli/arborist": 6.2.10
-    "@playwright/test": 1.37.1
+    "@playwright/test": 1.39.0
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.5.1
