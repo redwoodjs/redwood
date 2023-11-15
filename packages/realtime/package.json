@@ -23,7 +23,7 @@
     "test:watch": "run test --watch"
   },
   "dependencies": {
-    "@envelop/live-query": "6.0.0",
+    "@envelop/live-query": "6.0.3",
     "@graphql-tools/schema": "10.0.0",
     "@graphql-tools/utils": "10.0.8",
     "@graphql-yoga/plugin-defer-stream": "2.0.5",

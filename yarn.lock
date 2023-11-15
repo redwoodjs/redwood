@@ -2313,46 +2313,46 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/depth-limit@npm:3.0.0":
-  version: 3.0.0
-  resolution: "@envelop/depth-limit@npm:3.0.0"
+"@envelop/depth-limit@npm:3.0.3":
+  version: 3.0.3
+  resolution: "@envelop/depth-limit@npm:3.0.3"
   dependencies:
     graphql-depth-limit: ^1.1.0
     tslib: ^2.5.0
   peerDependencies:
-    "@envelop/core": ^4.0.0
+    "@envelop/core": ^4.0.3
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: b0121ad4233f6a4a18bd742012c15acbbc20ae343b969f0c7f9efc32897499a5354d87bbfbf75440dd3c684ea702f7dbf2d64d20c3220a1e0044040c630f75ca
+  checksum: 062d15cf8c51b37454a3b64d504f756501353e33702ded9c13e183c13ed01be249bc66fc1967de869d163eb1c5dc56f7bae0b2ec757b1543266b171c5f3dc6bd
   languageName: node
   linkType: hard
 
-"@envelop/disable-introspection@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@envelop/disable-introspection@npm:5.0.0"
+"@envelop/disable-introspection@npm:5.0.3":
+  version: 5.0.3
+  resolution: "@envelop/disable-introspection@npm:5.0.3"
   dependencies:
     tslib: ^2.5.0
   peerDependencies:
-    "@envelop/core": ^4.0.0
+    "@envelop/core": ^4.0.3
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 99fd4a4986057db2839c433d7ad1efbf37b9e7b5b200b99129b01040711f0f54051696fa13da9bdfe8fec4c74e4998ec8b45fa4f9800f6d35f8311b1e372e9de
+  checksum: e6a22aae5a25f79a414a9de56930f358fc084be69d99f8641b684d45d3a4d727a7e16cb5d79f195eda4bb482952331098758dcc9cc81892ffd072701cf5495e8
   languageName: node
   linkType: hard
 
-"@envelop/filter-operation-type@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@envelop/filter-operation-type@npm:5.0.0"
+"@envelop/filter-operation-type@npm:5.0.3":
+  version: 5.0.3
+  resolution: "@envelop/filter-operation-type@npm:5.0.3"
   dependencies:
     tslib: ^2.5.0
   peerDependencies:
-    "@envelop/core": ^4.0.0
+    "@envelop/core": ^4.0.3
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: a38133727098c1c3c1350937cc9fbe83b7e92ac03f7856f81204900f515d06e87b2e7a427ff8c87554bc2d8725eb4f1b2e493b0cc2961e39c0b3a38f40ab547b
+  checksum: c48af3ca4608e703b2825d2e2ee1d615f1b0e07c617f99b3dd76eabe84937970b5e5d9f99c3ccdfb30e05e263b0159f87fa86b763904bc80898a3ab7dde6e6e5
   languageName: node
   linkType: hard
 
-"@envelop/live-query@npm:6.0.0":
-  version: 6.0.0
-  resolution: "@envelop/live-query@npm:6.0.0"
+"@envelop/live-query@npm:6.0.3":
+  version: 6.0.3
+  resolution: "@envelop/live-query@npm:6.0.3"
   dependencies:
     "@graphql-tools/utils": ^10.0.0
     "@n1ru4l/graphql-live-query": ^0.10.0
@@ -2360,19 +2360,19 @@ __metadata:
     "@n1ru4l/in-memory-live-query-store": ^0.10.0
     tslib: ^2.5.0
   peerDependencies:
-    "@envelop/core": ^4.0.0
+    "@envelop/core": ^4.0.3
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 3a3a741c454abc09ea51308ebc7f1b78306647957cfa75b8323db2cae35139a8515c1a2760ccb4d19604ea3da768db5ed55b1d5dc9576986b37a3db1d771abfd
+  checksum: bf8648a68ad43ac90cdf5615601e2973f371e283e35f9e9232837d2948cc9e41e056b731512f4c9341b0c95e3ed37bf26fa7cb83dc94b76b7630c79ff04ad49a
   languageName: node
   linkType: hard
 
-"@envelop/on-resolve@npm:3.0.0":
-  version: 3.0.0
-  resolution: "@envelop/on-resolve@npm:3.0.0"
+"@envelop/on-resolve@npm:3.0.3":
+  version: 3.0.3
+  resolution: "@envelop/on-resolve@npm:3.0.3"
   peerDependencies:
-    "@envelop/core": ^4.0.0
+    "@envelop/core": ^4.0.3
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: eac2bc3c322d1f7eeb101e28c2d35bf33da39fd1cbbf98a669dc1a80998385671bae869432cce86cd0146717b3adb0b403da15caa82f1476002e207669f3d394
+  checksum: 56e791a35b41a21f9f856f33c4d22de15876c1b40f97f50db1880e128ca6495affe1ab35689aa2c4ee30880daa1bde19fabc2a90af4af8d255502d7625ffba8b
   languageName: node
   linkType: hard
 
@@ -8747,10 +8747,10 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
     "@envelop/core": 4.0.3
-    "@envelop/depth-limit": 3.0.0
-    "@envelop/disable-introspection": 5.0.0
-    "@envelop/filter-operation-type": 5.0.0
-    "@envelop/on-resolve": 3.0.0
+    "@envelop/depth-limit": 3.0.3
+    "@envelop/disable-introspection": 5.0.3
+    "@envelop/filter-operation-type": 5.0.3
+    "@envelop/on-resolve": 3.0.3
     "@envelop/testing": 6.0.3
     "@envelop/types": 4.0.1
     "@escape.tech/graphql-armor": 2.3.1
@@ -8966,7 +8966,7 @@ __metadata:
   resolution: "@redwoodjs/realtime@workspace:packages/realtime"
   dependencies:
     "@envelop/core": 4.0.3
-    "@envelop/live-query": 6.0.0
+    "@envelop/live-query": 6.0.3
     "@envelop/testing": 6.0.3
     "@envelop/types": 4.0.1
     "@graphql-tools/schema": 10.0.0
