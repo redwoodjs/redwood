@@ -20,7 +20,7 @@
   "dependencies": {
     "@fastify/http-proxy": "9.2.1",
     "@fastify/static": "6.11.2",
-    "@fastify/url-data": "5.3.1",
+    "@fastify/url-data": "5.4.0",
     "@redwoodjs/graphql-server": "6.3.3",
     "@redwoodjs/project-config": "6.3.3",
     "ansi-colors": "4.1.3",
