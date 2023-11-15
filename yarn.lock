@@ -8484,7 +8484,7 @@ __metadata:
     decamelize: 5.0.1
     dotenv-defaults: 5.0.2
     enquirer: 2.4.1
-    envinfo: 7.9.0
+    envinfo: 7.11.0
     execa: 5.1.1
     fast-glob: 3.3.2
     fs-extra: 11.1.1
@@ -9136,13 +9136,13 @@ __metadata:
     "@babel/runtime-corejs3": 7.23.2
     "@redwoodjs/project-config": 6.0.7
     "@redwoodjs/structure": 6.0.7
-    "@types/envinfo": 7.8.1
+    "@types/envinfo": 7.8.3
     "@types/uuid": 9.0.7
     "@types/yargs": 17.0.24
     "@whatwg-node/fetch": 0.9.14
     ci-info: 3.9.0
     core-js: 3.33.2
-    envinfo: 7.9.0
+    envinfo: 7.11.0
     jest: 29.7.0
     systeminformation: 5.21.17
     uuid: 9.0.1
@@ -11492,10 +11492,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/envinfo@npm:7.8.1":
-  version: 7.8.1
-  resolution: "@types/envinfo@npm:7.8.1"
-  checksum: 2f343301bf5f0bcfdba0d39423f895c51337b68b1d76ea5f51557afcd5198e2eb685b0cc7d377e812357d7a9650360b2727ef37eb53d71532d3eb4dac1232037
+"@types/envinfo@npm:7.8.3":
+  version: 7.8.3
+  resolution: "@types/envinfo@npm:7.8.3"
+  checksum: 31a504f317c8b2c93dda513d3c117f518f27cf3f36aba65e78bf908927f9ef304351fe49d6ba19515994b91d1d1c23a089bfd3c8b0f1e84737606f6791a05ff6
   languageName: node
   linkType: hard
 
@@ -16678,7 +16678,7 @@ __metadata:
     chalk: 4.1.2
     check-node-version: 4.2.1
     ci-info: 3.9.0
-    envinfo: 7.9.0
+    envinfo: 7.11.0
     esbuild: 0.19.5
     execa: 5.1.1
     fs-extra: 11.1.1
@@ -18464,30 +18464,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"envinfo@npm:7.11.0, envinfo@npm:^7.7.3":
+  version: 7.11.0
+  resolution: "envinfo@npm:7.11.0"
+  bin:
+    envinfo: dist/cli.js
+  checksum: 4415b9c1ca32cdf92ce126136b9965eeac2efd6ab7e5278c06e8f86d048edad87ef4084710313a6d938ef9bc084ab17e1caee16339d731d230f3e2650f3aaf4d
+  languageName: node
+  linkType: hard
+
 "envinfo@npm:7.8.1":
   version: 7.8.1
   resolution: "envinfo@npm:7.8.1"
   bin:
     envinfo: dist/cli.js
   checksum: 01efe7fcf55d4b84a146bc638ef89a89a70b610957db64636ac7cc4247d627eeb1c808ed79d3cfbe3d4fed5e8ba3d61db79c1ca1a3fea9f38639561eefd68733
-  languageName: node
-  linkType: hard
-
-"envinfo@npm:7.9.0":
-  version: 7.9.0
-  resolution: "envinfo@npm:7.9.0"
-  bin:
-    envinfo: dist/cli.js
-  checksum: b77bca09a6d57400d1be35c13885a0488e6341cce79b5806570e12aca6290a0694ca7a8708558b062024aeb67e345d4d6f95234c8dd051e4c74b5ab2ffa858f1
-  languageName: node
-  linkType: hard
-
-"envinfo@npm:^7.7.3":
-  version: 7.10.0
-  resolution: "envinfo@npm:7.10.0"
-  bin:
-    envinfo: dist/cli.js
-  checksum: ebc7792fbedca72bc829913abe0c2a3384b883903012f97b56085afd4e83d26f7dd0652403fedd99cd3e1c93d4fb0706f5d2c3dc06ac6a1eda348280a06a9dcf
   languageName: node
   linkType: hard
 
