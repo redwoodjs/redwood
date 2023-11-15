@@ -28,7 +28,7 @@
     "resend": "1.0.0"
   },
   "devDependencies": {
-    "esbuild": "0.19.3",
+    "esbuild": "0.19.5",
     "fast-glob": "3.3.2",
     "typescript": "5.2.2"
   },
