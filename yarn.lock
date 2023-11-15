@@ -8747,7 +8747,7 @@ __metadata:
     graphql: 16.8.1
     graphql-scalars: 1.22.4
     graphql-tag: 2.12.6
-    graphql-yoga: 4.0.4
+    graphql-yoga: 4.0.5
     jest: 29.7.0
     jsonwebtoken: 9.0.2
     lodash: 4.17.21
@@ -9097,7 +9097,7 @@ __metadata:
     graphiql: 2.4.7
     graphql: 16.8.1
     graphql-scalars: 1.22.4
-    graphql-yoga: 4.0.4
+    graphql-yoga: 4.0.5
     jest: 29.7.0
     json-bigint-patch: 0.0.8
     jsonwebtoken: 9.0.2
@@ -21431,9 +21431,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-yoga@npm:4.0.4":
-  version: 4.0.4
-  resolution: "graphql-yoga@npm:4.0.4"
+"graphql-yoga@npm:4.0.5":
+  version: 4.0.5
+  resolution: "graphql-yoga@npm:4.0.5"
   dependencies:
     "@envelop/core": ^4.0.0
     "@graphql-tools/executor": ^1.0.0
@@ -21448,7 +21448,7 @@ __metadata:
     tslib: ^2.5.2
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: 147471c0c2da15567b0f49f6f8e62d92761c4bee6a953152b1ecfa0041a56bd100b3975218680a35cfe30fdbaf0e9d9fbd764f4d63ec4c217afac27ce9c0bf5d
+  checksum: e0a6f76ee2598e6d116dc755b6d1705410425d3eea98649e9d655c867c4b30800c9b519bdc3b928ada2626eefcbaf55ef5d97b432f361250530a922929365fb6
   languageName: node
   linkType: hard
 
