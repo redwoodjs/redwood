@@ -48,7 +48,7 @@
     "split2": "4.2.0",
     "sqlite": "4.2.1",
     "sqlite3": "5.1.6",
-    "uuid": "9.0.0",
+    "uuid": "9.0.1",
     "yargs": "17.7.2"
   },
   "devDependencies": {
@@ -75,7 +75,7 @@
     "@types/react-grid-layout": "1",
     "@types/smtp-server": "^3",
     "@types/split2": "4.2.0",
-    "@types/uuid": "9.0.2",
+    "@types/uuid": "9.0.7",
     "@types/yargs": "17.0.24",
     "@vitejs/plugin-react": "4.1.1",
     "autoprefixer": "10.4.14",

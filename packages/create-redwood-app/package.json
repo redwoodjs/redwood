@@ -36,7 +36,7 @@
     "systeminformation": "5.21.17",
     "terminal-link": "2.1.1",
     "untildify": "4.0.0",
-    "uuid": "9.0.0",
+    "uuid": "9.0.1",
     "yargs": "17.7.2"
   },
   "devDependencies": {
