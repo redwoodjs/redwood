@@ -3044,13 +3044,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/url-data@npm:5.3.1":
-  version: 5.3.1
-  resolution: "@fastify/url-data@npm:5.3.1"
+"@fastify/url-data@npm:5.4.0":
+  version: 5.4.0
+  resolution: "@fastify/url-data@npm:5.4.0"
   dependencies:
     fast-uri: ^2.2.0
     fastify-plugin: ^4.0.0
-  checksum: 8f3eee7d8328a2df993a4d34b09031a9d32dca08de9a702ba87bd4241c7064e22dc836029b6016925bf649274a155196a947414974a49ebb81e3fb84882b694f
+  checksum: 727822f90277b937eabdbbdbf14ae1f8b9fb495ae7b9799bdd383a56f784eb3c9929998a3ac133881afd9871b7c6d9261c3f2e339f82d793f4535e25079e5621
   languageName: node
   linkType: hard
 
@@ -7838,7 +7838,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.23.2
     "@fastify/http-proxy": 9.2.1
     "@fastify/static": 6.11.2
-    "@fastify/url-data": 5.3.1
+    "@fastify/url-data": 5.4.0
     "@redwoodjs/project-config": 6.0.7
     "@types/aws-lambda": 8.10.119
     "@types/lodash": 4.14.195
@@ -8692,7 +8692,7 @@ __metadata:
   dependencies:
     "@fastify/http-proxy": 9.2.1
     "@fastify/static": 6.11.2
-    "@fastify/url-data": 5.3.1
+    "@fastify/url-data": 5.4.0
     "@redwoodjs/graphql-server": 6.0.7
     "@redwoodjs/project-config": 6.0.7
     "@types/aws-lambda": 8.10.119
@@ -9078,7 +9078,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.23.2
     "@fastify/http-proxy": 9.2.1
     "@fastify/static": 6.11.2
-    "@fastify/url-data": 5.3.1
+    "@fastify/url-data": 5.4.0
     "@graphiql/plugin-explorer": 0.1.22
     "@graphiql/toolkit": 0.8.4
     "@headlessui/react": 1.7.15
