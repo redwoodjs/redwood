@@ -8536,7 +8536,7 @@ __metadata:
     jest: 29.7.0
     lodash: 4.17.21
     mini-css-extract-plugin: 2.7.6
-    nodemon: 2.0.22
+    nodemon: 3.0.1
     null-loader: 4.0.1
     react-refresh: 0.14.0
     resolve-url-loader: 5.0.0
@@ -8653,7 +8653,7 @@ __metadata:
     core-js: 3.33.2
     graphql: 16.8.1
     jest: 29.7.0
-    nodemon: 2.0.22
+    nodemon: 3.0.1
     pascalcase: 1.0.0
     react: 18.2.0
     react-dom: 18.2.0
@@ -8905,7 +8905,7 @@ __metadata:
     graphql: 16.8.1
     ioredis: 5.3.2
     jest: 29.7.0
-    nodemon: 2.0.22
+    nodemon: 3.0.1
     typescript: 5.2.2
   peerDependencies:
     ioredis: ^5.3.2
@@ -9214,7 +9214,7 @@ __metadata:
     graphql-sse: 2.3.0
     graphql-tag: 2.12.6
     jest: 29.7.0
-    nodemon: 2.0.22
+    nodemon: 3.0.1
     prop-types: 15.8.1
     react: 18.2.0
     react-dom: 18.2.0
@@ -27017,23 +27017,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemon@npm:2.0.22":
-  version: 2.0.22
-  resolution: "nodemon@npm:2.0.22"
+"nodemon@npm:3.0.1":
+  version: 3.0.1
+  resolution: "nodemon@npm:3.0.1"
   dependencies:
     chokidar: ^3.5.2
     debug: ^3.2.7
     ignore-by-default: ^1.0.1
     minimatch: ^3.1.2
     pstree.remy: ^1.1.8
-    semver: ^5.7.1
-    simple-update-notifier: ^1.0.7
+    semver: ^7.5.3
+    simple-update-notifier: ^2.0.0
     supports-color: ^5.5.0
     touch: ^3.1.0
     undefsafe: ^2.0.5
   bin:
     nodemon: bin/nodemon.js
-  checksum: 37e960b995b66e6d9e3b0e435ecc07a45200c4c566c4820a4deb6e7cc234b305e076a8ff0b4dc9c01ee690c663ae82a217d60c591dcbbcd4af1e3a7d0ad2b2c6
+  checksum: 471a218227949b38926de78237004c91e226b63ee06f433cf85c2f1c1f8b6bfbef9bceaa8d27786e7cfb539eb84da357d01741884d08a3ae172bebecd0f1de5b
   languageName: node
   linkType: hard
 
@@ -31293,7 +31293,7 @@ __metadata:
     make-dir-cli: 3.0.0
     msw: 1.3.2
     ncp: 2.0.0
-    nodemon: 2.0.22
+    nodemon: 3.0.1
     npm-packlist: 7.0.4
     nx: 16.4.1
     nx-cloud: 16.2.0
@@ -31580,7 +31580,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:2 || 3 || 4 || 5, semver@npm:^5.6.0, semver@npm:^5.7.0, semver@npm:^5.7.1":
+"semver@npm:2 || 3 || 4 || 5, semver@npm:^5.6.0, semver@npm:^5.7.0":
   version: 5.7.1
   resolution: "semver@npm:5.7.1"
   bin:
@@ -31617,15 +31617,6 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: e3d79b609071caa78bcb6ce2ad81c7966a46a7431d9d58b8800cfa9cb6a63699b3899a0e4bcce36167a284578212d9ae6942b6929ba4aa5015c079a67751d42d
-  languageName: node
-  linkType: hard
-
-"semver@npm:~7.0.0":
-  version: 7.0.0
-  resolution: "semver@npm:7.0.0"
-  bin:
-    semver: bin/semver.js
-  checksum: 7fd341680a967a0abfd66f3a7d36ba44e52ff5d3e799e9a6cdb01a68160b64ef09be82b4af05459effeecdd836f002c2462555d2821cd890dfdfe36a0d9f56a5
   languageName: node
   linkType: hard
 
@@ -31879,15 +31870,6 @@ __metadata:
   bin:
     sigstore: bin/sigstore.js
   checksum: 2cf2b7fe40323ef7a664627ac9e862cad985685bbc14528355d7a0813916dd4c96d94ffd3149de08d2ea33a86dfd4b073908d995cfcedba510cdb5073a49382c
-  languageName: node
-  linkType: hard
-
-"simple-update-notifier@npm:^1.0.7":
-  version: 1.1.0
-  resolution: "simple-update-notifier@npm:1.1.0"
-  dependencies:
-    semver: ~7.0.0
-  checksum: 3cbbbc71a5d9a2924f0e3f42fbf3cbe1854bfe142203456b00d5233bdbbdeb5091b8067cd34fb00f81dbfbc29fc30dbb6e026b3d58ea0551e3f26c0e64082092
   languageName: node
   linkType: hard
 
