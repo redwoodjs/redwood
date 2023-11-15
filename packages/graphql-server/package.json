@@ -36,7 +36,7 @@
     "@redwoodjs/api": "6.4.0",
     "core-js": "3.33.2",
     "graphql": "16.8.1",
-    "graphql-scalars": "1.22.2",
+    "graphql-scalars": "1.22.4",
     "graphql-tag": "2.12.6",
     "graphql-yoga": "4.0.4",
     "lodash": "4.17.21",
