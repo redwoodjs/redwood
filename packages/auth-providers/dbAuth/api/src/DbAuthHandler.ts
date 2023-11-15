@@ -28,7 +28,6 @@ import {
   getSession,
   hashPassword,
   legacyHashPassword,
-  isLegacySession,
   hashToken,
   webAuthnSession,
   extractHashingOptions,

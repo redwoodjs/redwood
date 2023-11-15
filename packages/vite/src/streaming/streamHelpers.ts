@@ -85,6 +85,7 @@ export async function reactRenderToStreamResponse(
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
   // Possible that we need to upgrade the @types/* packages
+  // @ts-expect-error Something in React's packages mean types dont come through
   const { renderToReadableStream } = await import('react-dom/server.edge')
 
   const renderRoot = (path: string) => {
