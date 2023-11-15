@@ -2859,9 +2859,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "@eslint/eslintrc@npm:2.1.1"
+"@eslint/eslintrc@npm:^2.1.3":
+  version: 2.1.3
+  resolution: "@eslint/eslintrc@npm:2.1.3"
   dependencies:
     ajv: ^6.12.4
     debug: ^4.3.2
@@ -2872,14 +2872,14 @@ __metadata:
     js-yaml: ^4.1.0
     minimatch: ^3.1.2
     strip-json-comments: ^3.1.1
-  checksum: 104ec8997206eabc87de84b87a2852efce0ff98730d377061734da2554c79c9b6d417fbe66248ef5566a0501ef41fddec3a00f79b77731102903586a63b2ed34
+  checksum: f4103f4346126292eb15581c5a1d12bef03410fd3719dedbdb92e1f7031d46a5a2d60de8566790445d5d4b70b75ba050876799a11f5fff8265a91ee3fa77dab0
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:^8.46.0":
-  version: 8.46.0
-  resolution: "@eslint/js@npm:8.46.0"
-  checksum: 674c5800e4e9829322aa84195b23c59db326cb42190ac0284bdfe70b2442d544837f3006d8d8c166afaa86ab7072df1b77f7fdb43a60aa2bb1ede90d82e38540
+"@eslint/js@npm:8.53.0":
+  version: 8.53.0
+  resolution: "@eslint/js@npm:8.53.0"
+  checksum: d29f6c207b2f6dc4ef174d16a3c07b0d3a17ca3d805680496ff267edd773e3bac41db4e7dcab622ca1970d892535bd19671e2a756d4eac75e96fd8c8dcdb619b
   languageName: node
   linkType: hard
 
@@ -4602,14 +4602,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@humanwhocodes/config-array@npm:^0.11.10":
-  version: 0.11.10
-  resolution: "@humanwhocodes/config-array@npm:0.11.10"
+"@humanwhocodes/config-array@npm:^0.11.13":
+  version: 0.11.13
+  resolution: "@humanwhocodes/config-array@npm:0.11.13"
   dependencies:
-    "@humanwhocodes/object-schema": ^1.2.1
+    "@humanwhocodes/object-schema": ^2.0.1
     debug: ^4.1.1
     minimatch: ^3.0.5
-  checksum: 9e307a49a5baa28beb243d2c14c145f288fccd6885f4c92a9055707057ec40980242256b2a07c976cfa6c75f7081da111a40a9844d1ca8daeff2302f8b640e76
+  checksum: d76ca802d853366094d0e98ff0d0994117fc8eff96649cd357b15e469e428228f597cd2e929d54ab089051684949955f16ee905bb19f7b2f0446fb377157be7a
   languageName: node
   linkType: hard
 
@@ -4620,10 +4620,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@humanwhocodes/object-schema@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@humanwhocodes/object-schema@npm:1.2.1"
-  checksum: c3c35fdb70c04a569278351c75553e293ae339684ed75895edc79facc7276e351115786946658d78133130c0cca80e57e2203bc07f8fa7fe7980300e8deef7db
+"@humanwhocodes/object-schema@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@humanwhocodes/object-schema@npm:2.0.1"
+  checksum: 9dba24e59fdb4041829d92b693aacb778add3b6f612aaa9c0774f3b650c11a378cc64f042a59da85c11dae33df456580a3c36837b953541aed6ff94294f97fac
   languageName: node
   linkType: hard
 
@@ -7817,7 +7817,7 @@ __metadata:
     "@fastify/static": 6.12.0
     "@fastify/url-data": 5.4.0
     "@redwoodjs/project-config": 6.0.7
-    "@types/aws-lambda": 8.10.119
+    "@types/aws-lambda": 8.10.126
     "@types/lodash": 4.14.195
     "@types/qs": 6.9.7
     "@types/split2": 4.2.0
@@ -7855,7 +7855,7 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
     "@prisma/client": 5.6.0
-    "@types/aws-lambda": 8.10.119
+    "@types/aws-lambda": 8.10.126
     "@types/jsonwebtoken": 9.0.5
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
@@ -7948,7 +7948,7 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
     "@redwoodjs/api": 6.0.7
-    "@types/aws-lambda": 8.10.119
+    "@types/aws-lambda": 8.10.126
     "@types/jsonwebtoken": 9.0.5
     core-js: 3.33.2
     jest: 29.7.0
@@ -8002,7 +8002,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.23.2
     "@clerk/clerk-sdk-node": 4.12.6
     "@redwoodjs/api": 6.0.7
-    "@types/aws-lambda": 8.10.119
+    "@types/aws-lambda": 8.10.126
     core-js: 3.33.2
     jest: 29.7.0
     typescript: 5.2.2
@@ -8125,7 +8125,7 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
     "@redwoodjs/api": 6.0.7
-    "@types/aws-lambda": 8.10.119
+    "@types/aws-lambda": 8.10.126
     core-js: 3.33.2
     firebase-admin: 11.11.0
     jest: 29.7.0
@@ -8175,7 +8175,7 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
     "@redwoodjs/api": 6.0.7
-    "@types/aws-lambda": 8.10.119
+    "@types/aws-lambda": 8.10.126
     "@types/jsonwebtoken": 9.0.5
     core-js: 3.33.2
     jest: 29.7.0
@@ -8226,7 +8226,7 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
     "@redwoodjs/api": 6.0.7
-    "@types/aws-lambda": 8.10.119
+    "@types/aws-lambda": 8.10.126
     "@types/jsonwebtoken": 9.0.5
     core-js: 3.33.2
     jest: 29.7.0
@@ -8631,7 +8631,7 @@ __metadata:
     "@redwoodjs/project-config": 6.0.7
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
-    eslint: 8.46.0
+    eslint: 8.53.0
     eslint-config-prettier: 8.10.0
     eslint-import-resolver-babel-module: 5.3.2
     eslint-plugin-babel: 5.3.1
@@ -8656,7 +8656,7 @@ __metadata:
     "@typescript-eslint/parser": 5.62.0
     "@typescript-eslint/utils": 5.62.0
     esbuild: 0.19.5
-    eslint: 8.46.0
+    eslint: 8.53.0
     fast-glob: 3.3.2
     glob: 10.3.1
     typescript: 5.2.2
@@ -8672,7 +8672,7 @@ __metadata:
     "@fastify/url-data": 5.4.0
     "@redwoodjs/graphql-server": 6.0.7
     "@redwoodjs/project-config": 6.0.7
-    "@types/aws-lambda": 8.10.119
+    "@types/aws-lambda": 8.10.126
     "@types/lodash": 4.14.195
     "@types/qs": 6.9.7
     ansi-colors: 4.1.3
@@ -9071,7 +9071,7 @@ __metadata:
     "@swc/core": 1.3.60
     "@tailwindcss/forms": 0.5.3
     "@tremor/react": 3.4.1
-    "@types/aws-lambda": 8.10.119
+    "@types/aws-lambda": 8.10.126
     "@types/jsonwebtoken": 9.0.5
     "@types/lodash": 4.14.195
     "@types/mailparser": ^3
@@ -9166,7 +9166,7 @@ __metadata:
     "@testing-library/jest-dom": 5.17.0
     "@testing-library/react": 14.1.0
     "@testing-library/user-event": 14.5.1
-    "@types/aws-lambda": 8.10.119
+    "@types/aws-lambda": 8.10.126
     "@types/babel-core": 6.25.8
     "@types/jest": 29.5.4
     "@types/node": 18.16.18
@@ -11083,10 +11083,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.119, @types/aws-lambda@npm:^8.10.83":
-  version: 8.10.119
-  resolution: "@types/aws-lambda@npm:8.10.119"
-  checksum: cf30ca6f53b372ef1715a8451db324981de241fe58a5da1d82a79c4a972ddea66a252cfe71cd4e578e17bdc2d5ac11b4954bc2b84b8157f50af5a06df996b929
+"@types/aws-lambda@npm:8.10.126, @types/aws-lambda@npm:^8.10.83":
+  version: 8.10.126
+  resolution: "@types/aws-lambda@npm:8.10.126"
+  checksum: 4b538cbb3c730c08d921ff13943b39f9a68d89c2ad64b54dff82768e949b4cacd3d82c028bb5fce495f0a66b37b6299052367d419890229956565ccbc2bd9767
   languageName: node
   linkType: hard
 
@@ -12486,6 +12486,13 @@ __metadata:
     "@typescript-eslint/types": 5.62.0
     eslint-visitor-keys: ^3.3.0
   checksum: 7c3b8e4148e9b94d9b7162a596a1260d7a3efc4e65199693b8025c71c4652b8042501c0bc9f57654c1e2943c26da98c0f77884a746c6ae81389fcb0b513d995d
+  languageName: node
+  linkType: hard
+
+"@ungap/structured-clone@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@ungap/structured-clone@npm:1.2.0"
+  checksum: 8209c937cb39119f44eb63cf90c0b73e7c754209a6411c707be08e50e29ee81356dca1a848a405c8bdeebfe2f5e4f831ad310ae1689eeef65e7445c090c6657d
   languageName: node
   linkType: hard
 
@@ -19181,24 +19188,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-visitor-keys@npm:^3.3.0, eslint-visitor-keys@npm:^3.4.1, eslint-visitor-keys@npm:^3.4.2":
-  version: 3.4.2
-  resolution: "eslint-visitor-keys@npm:3.4.2"
-  checksum: 4521d1d470490c89fb613aec6fb2f0814b496a4618619ec8dfcc985640fe33c9c64f3dab882f50ebb401b4613f35f2601a9ef9a72b57739af5b0150fecdaf1f1
+"eslint-visitor-keys@npm:^3.3.0, eslint-visitor-keys@npm:^3.4.1, eslint-visitor-keys@npm:^3.4.3":
+  version: 3.4.3
+  resolution: "eslint-visitor-keys@npm:3.4.3"
+  checksum: 92708e882c0a5ffd88c23c0b404ac1628cf20104a108c745f240a13c332a11aac54f49a22d5762efbffc18ecbc9a580d1b7ad034bf5f3cc3307e5cbff2ec9820
   languageName: node
   linkType: hard
 
-"eslint@npm:8.46.0":
-  version: 8.46.0
-  resolution: "eslint@npm:8.46.0"
+"eslint@npm:8.53.0":
+  version: 8.53.0
+  resolution: "eslint@npm:8.53.0"
   dependencies:
     "@eslint-community/eslint-utils": ^4.2.0
     "@eslint-community/regexpp": ^4.6.1
-    "@eslint/eslintrc": ^2.1.1
-    "@eslint/js": ^8.46.0
-    "@humanwhocodes/config-array": ^0.11.10
+    "@eslint/eslintrc": ^2.1.3
+    "@eslint/js": 8.53.0
+    "@humanwhocodes/config-array": ^0.11.13
     "@humanwhocodes/module-importer": ^1.0.1
     "@nodelib/fs.walk": ^1.2.8
+    "@ungap/structured-clone": ^1.2.0
     ajv: ^6.12.4
     chalk: ^4.0.0
     cross-spawn: ^7.0.2
@@ -19206,7 +19214,7 @@ __metadata:
     doctrine: ^3.0.0
     escape-string-regexp: ^4.0.0
     eslint-scope: ^7.2.2
-    eslint-visitor-keys: ^3.4.2
+    eslint-visitor-keys: ^3.4.3
     espree: ^9.6.1
     esquery: ^1.4.2
     esutils: ^2.0.2
@@ -19231,7 +19239,7 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: 81abddb21e540dcd509ba08fdf524b494cbda69a62ffce2a61b5adfcdeb3cbf713f72c6cbb42932333decb4b067ae7a89e4cb5e908e0d42e4287d4f357576a72
+  checksum: c5cd0049488c0463dab7d97466767ca5a1d0b3b59d0a223122683dc8039ecea30b27867fb9e38906b4c1ab9d09ece8a802a6c540d8905016f1cc4b4bb27329af
   languageName: node
   linkType: hard
 
@@ -31496,7 +31504,7 @@ __metadata:
     cypress: 12.15.0
     cypress-wait-until: 1.7.2
     dependency-cruiser: 13.0.4
-    eslint: 8.46.0
+    eslint: 8.53.0
     fast-glob: 3.3.2
     fs-extra: 11.1.1
     jest: 29.7.0
