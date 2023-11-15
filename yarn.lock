@@ -6630,9 +6630,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pmmmwh/react-refresh-webpack-plugin@npm:0.5.10, @pmmmwh/react-refresh-webpack-plugin@npm:^0.5.5":
-  version: 0.5.10
-  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.10"
+"@pmmmwh/react-refresh-webpack-plugin@npm:0.5.11, @pmmmwh/react-refresh-webpack-plugin@npm:^0.5.5":
+  version: 0.5.11
+  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.11"
   dependencies:
     ansi-html-community: ^0.0.8
     common-path-prefix: ^3.0.0
@@ -6647,7 +6647,7 @@ __metadata:
     "@types/webpack": 4.x || 5.x
     react-refresh: ">=0.10.0 <1.0.0"
     sockjs-client: ^1.4.0
-    type-fest: ">=0.17.0 <4.0.0"
+    type-fest: ">=0.17.0 <5.0.0"
     webpack: ">=4.43.0 <6.0.0"
     webpack-dev-server: 3.x || 4.x
     webpack-hot-middleware: 2.x
@@ -6665,7 +6665,7 @@ __metadata:
       optional: true
     webpack-plugin-serve:
       optional: true
-  checksum: e470b543c5e8d73eeaa73636e1976e6719db6ae29c93fa62818f5796c1883051f379a3cb1ff85d909ef2c6bb9ef13ca46c36f1878c48d143b1355fea6660e547
+  checksum: a9c8468417a14a23339e313cff6ddb8029e0637748973070e61d83a2534620b3492b9a42ecf9eb9d63cb709f53c17fe814bc7dd68d64c300db338e9fd7287bc4
   languageName: node
   linkType: hard
 
@@ -8598,7 +8598,7 @@ __metadata:
   dependencies:
     "@babel/cli": 7.23.0
     "@babel/runtime-corejs3": 7.23.2
-    "@pmmmwh/react-refresh-webpack-plugin": 0.5.10
+    "@pmmmwh/react-refresh-webpack-plugin": 0.5.11
     "@redwoodjs/cli": 6.0.7
     "@redwoodjs/eslint-config": 6.0.7
     "@redwoodjs/internal": 6.0.7
