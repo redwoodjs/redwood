@@ -23,17 +23,17 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.2",
-    "core-js": "3.32.2",
+    "core-js": "3.33.2",
     "pascalcase": "1.0.0",
     "react-hook-form": "7.48.2"
   },
   "devDependencies": {
     "@babel/cli": "7.23.0",
     "@babel/core": "^7.22.20",
-    "@testing-library/dom": "9.3.1",
+    "@testing-library/dom": "9.3.3",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
-    "@testing-library/user-event": "14.4.3",
+    "@testing-library/user-event": "14.5.1",
     "@types/pascalcase": "1.0.1",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",

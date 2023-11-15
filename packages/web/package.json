@@ -36,10 +36,10 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@apollo/client": "3.8.5",
+    "@apollo/client": "3.8.7",
     "@babel/runtime-corejs3": "7.23.2",
     "@redwoodjs/auth": "6.0.7",
-    "core-js": "3.32.2",
+    "core-js": "3.33.2",
     "graphql": "16.8.1",
     "graphql-sse": "2.3.0",
     "graphql-tag": "2.12.6",
@@ -49,7 +49,7 @@
     "ts-toolbelt": "9.6.0"
   },
   "devDependencies": {
-    "@apollo/experimental-nextjs-app-support": "0.4.3",
+    "@apollo/experimental-nextjs-app-support": "0.5.1",
     "@babel/cli": "7.23.0",
     "@babel/core": "^7.22.20",
     "@testing-library/jest-dom": "5.16.5",
