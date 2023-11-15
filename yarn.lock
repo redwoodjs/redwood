@@ -8283,7 +8283,7 @@ __metadata:
     jwks-rsa: 3.0.1
     typescript: 5.2.2
   peerDependencies:
-    supertokens-node: 15.0.0
+    supertokens-node: 15.2.1
   languageName: unknown
   linkType: soft
 
