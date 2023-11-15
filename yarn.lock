@@ -2395,6 +2395,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@envelop/types@npm:4.0.1":
+  version: 4.0.1
+  resolution: "@envelop/types@npm:4.0.1"
+  dependencies:
+    tslib: ^2.5.0
+  checksum: 81e09afaf60d036102f7992daeefb0cd5380bb1484dd19cb90db73db4ae730b5297823439711fb8315ee01485a37f1c8155aa1111c7dc4ea11c77b7f25945633
+  languageName: node
+  linkType: hard
+
 "@esbuild-kit/cjs-loader@npm:^2.4.2":
   version: 2.4.2
   resolution: "@esbuild-kit/cjs-loader@npm:2.4.2"
@@ -8759,7 +8768,7 @@ __metadata:
     "@envelop/filter-operation-type": 5.0.0
     "@envelop/on-resolve": 3.0.0
     "@envelop/testing": 6.0.3
-    "@envelop/types": 4.0.0
+    "@envelop/types": 4.0.1
     "@escape.tech/graphql-armor": 2.3.1
     "@graphql-tools/merge": 9.0.0
     "@graphql-tools/schema": 10.0.0
@@ -8975,7 +8984,7 @@ __metadata:
     "@envelop/core": 4.0.0
     "@envelop/live-query": 6.0.0
     "@envelop/testing": 6.0.3
-    "@envelop/types": 4.0.0
+    "@envelop/types": 4.0.1
     "@graphql-tools/schema": 10.0.0
     "@graphql-tools/utils": 10.0.1
     "@graphql-yoga/plugin-defer-stream": 2.0.4
