@@ -11988,11 +11988,11 @@ __metadata:
   linkType: hard
 
 "@types/nodemailer@npm:*, @types/nodemailer@npm:6, @types/nodemailer@npm:^6":
-  version: 6.4.9
-  resolution: "@types/nodemailer@npm:6.4.9"
+  version: 6.4.14
+  resolution: "@types/nodemailer@npm:6.4.14"
   dependencies:
     "@types/node": "*"
-  checksum: 2c18ccdcd0db56504250b67949983838f3befca2edb754017818e07d1581c8fd15a561f4dbeec37a75b7677cb08621f9d72c467850743a3a87cc2d1606ddd2a8
+  checksum: b5958843576cde76dc532aa7b726182fef8b466fa9fcaf1aa03f89f02e896bec4e28b593ffa1a289a46bd0b7fdf34da0640ab7ef8f0811948016f58f77e16307
   languageName: node
   linkType: hard
 
