@@ -4414,28 +4414,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:10.0.1":
-  version: 10.0.1
-  resolution: "@graphql-tools/utils@npm:10.0.1"
+"@graphql-tools/utils@npm:10.0.8, @graphql-tools/utils@npm:^10.0.0":
+  version: 10.0.8
+  resolution: "@graphql-tools/utils@npm:10.0.8"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
-    tslib: ^2.4.0
-  peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: c3562240f99543428fa960c1c9836225b33492e16a1ce0622ca71a3abbc3ef4e4f8e453cdb5cc32227e1866f1cdd9e20e09518f8354fa50c87164b2f793f03ae
-  languageName: node
-  linkType: hard
-
-"@graphql-tools/utils@npm:^10.0.0":
-  version: 10.0.3
-  resolution: "@graphql-tools/utils@npm:10.0.3"
-  dependencies:
-    "@graphql-typed-document-node/core": ^3.1.1
+    cross-inspect: 1.0.0
     dset: ^3.1.2
     tslib: ^2.4.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 68cddc24bbf7a96479444a644b3c41b2ed3616d127159d420589162b85dddada8a3c9b726fba96740bca3a05ee913dc5d6e5e32c6855e3958833c0dff0d225cf
+  checksum: ea0dfa4535ba360d27a1eb501d48a114a9ebb6224d178b89e3d978b19bd30d98fc1622cbeb31b2198b3e06cb9f717edb70933530958509bfcf0458842618a1b0
   languageName: node
   linkType: hard
 
@@ -8767,7 +8756,7 @@ __metadata:
     "@escape.tech/graphql-armor": 2.3.1
     "@graphql-tools/merge": 9.0.0
     "@graphql-tools/schema": 10.0.0
-    "@graphql-tools/utils": 10.0.1
+    "@graphql-tools/utils": 10.0.8
     "@opentelemetry/api": 1.4.1
     "@redwoodjs/api": 6.0.7
     "@redwoodjs/project-config": 6.0.7
@@ -8981,7 +8970,7 @@ __metadata:
     "@envelop/testing": 6.0.3
     "@envelop/types": 4.0.1
     "@graphql-tools/schema": 10.0.0
-    "@graphql-tools/utils": 10.0.1
+    "@graphql-tools/utils": 10.0.8
     "@graphql-yoga/plugin-defer-stream": 2.0.5
     "@graphql-yoga/plugin-graphql-sse": 2.0.4
     "@graphql-yoga/redis-event-target": 2.0.0
@@ -16760,6 +16749,15 @@ __metadata:
   dependencies:
     node-fetch: ^2.6.12
   checksum: 4c5e022ffe6abdf380faa6e2373c0c4ed7ef75e105c95c972b6f627c3f083170b6886f19fb488a7fa93971f4f69dcc890f122b0d97f0bf5f41ca1d9a8f58c8af
+  languageName: node
+  linkType: hard
+
+"cross-inspect@npm:1.0.0":
+  version: 1.0.0
+  resolution: "cross-inspect@npm:1.0.0"
+  dependencies:
+    tslib: ^2.4.0
+  checksum: 53530865c357c69a5a0543e2f2c61d3d46c9c316a19169372f5094cfb0a7c7e674f2daf2d5253a6731dfd9a8538aa4a4e13c6b4613b6f72b48bb0c41d2015ff4
   languageName: node
   linkType: hard
 
