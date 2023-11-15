@@ -4496,15 +4496,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/plugin-graphql-sse@npm:2.0.4":
-  version: 2.0.4
-  resolution: "@graphql-yoga/plugin-graphql-sse@npm:2.0.4"
+"@graphql-yoga/plugin-graphql-sse@npm:2.0.5":
+  version: 2.0.5
+  resolution: "@graphql-yoga/plugin-graphql-sse@npm:2.0.5"
   dependencies:
     graphql-sse: ^2.0.0
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-    graphql-yoga: ^4.0.4
-  checksum: 61c7fa4d44f33d440a59a1504febfceb22ad91d7afdad1cdf1aff53b744bf61ee7c940e4a2f94f9d421d7f1d42e8e733f6f51f098d2625c6e87e4abcfea0b024
+    graphql-yoga: ^4.0.5
+  checksum: 5da378feeef61c134ff7a95dfe8d8cab38df33a64218209e4ab918310fef853a975f354a2d23174fab506f47153a35fd6fa51f2204b427070680011a8b9d5cc9
   languageName: node
   linkType: hard
 
@@ -8972,7 +8972,7 @@ __metadata:
     "@graphql-tools/schema": 10.0.0
     "@graphql-tools/utils": 10.0.8
     "@graphql-yoga/plugin-defer-stream": 2.0.5
-    "@graphql-yoga/plugin-graphql-sse": 2.0.4
+    "@graphql-yoga/plugin-graphql-sse": 2.0.5
     "@graphql-yoga/redis-event-target": 2.0.0
     "@graphql-yoga/subscription": 4.0.0
     "@n1ru4l/graphql-live-query": 0.10.0
