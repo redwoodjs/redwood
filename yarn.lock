@@ -2181,16 +2181,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.25.1":
-  version: 4.25.1
-  resolution: "@clerk/clerk-react@npm:4.25.1"
+"@clerk/clerk-react@npm:4.28.0":
+  version: 4.28.0
+  resolution: "@clerk/clerk-react@npm:4.28.0"
   dependencies:
-    "@clerk/shared": ^0.23.0
-    "@clerk/types": ^3.52.0
+    "@clerk/shared": 1.1.0
+    "@clerk/types": 3.58.0
     tslib: 2.4.1
   peerDependencies:
     react: ">=16"
-  checksum: 4eea68a911847a33fb852c660e047ffe1f7f206f3f3a116b91526b30bd2745849ffdb129ef113a8e0154d2ba3f94eff9a98f7e0b21e25976c68a863b41cc6aab
+  checksum: c8d0472ecc3c52d8ae41d3b14a6e01d5d66b7322bb30176a896d858b31c8c8775c9f4a68fa3a2eb3a2559f5e51362eb0f90fddc36536bc6b3a1b8f397dbad6be
   languageName: node
   linkType: hard
 
@@ -2210,16 +2210,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/shared@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "@clerk/shared@npm:0.23.0"
+"@clerk/shared@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@clerk/shared@npm:1.1.0"
   dependencies:
     glob-to-regexp: 0.4.1
     js-cookie: 3.0.1
     swr: 2.2.0
   peerDependencies:
     react: ">=16"
-  checksum: 1bac558fbabd66eb53cf6d098c086ce0c2bdf6b54f45e7906091b469a2b524b45ad4405e3a897a146d17606b850c888be50fd10b0168ee7eab859cff9e0f3bcf
+  peerDependenciesMeta:
+    react:
+      optional: true
+  checksum: 2fe53d0838668f56813942398d3e80652a7475f6b94907da47eb34dccc0e55c4d2fdbdfb837e6b75d4c96fa3b7d6fa179f122bb35382a237554d1583b373c8ff
   languageName: node
   linkType: hard
 
@@ -8062,7 +8065,7 @@ __metadata:
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
-    "@clerk/clerk-react": 4.25.1
+    "@clerk/clerk-react": 4.28.0
     "@clerk/types": 3.58.0
     "@redwoodjs/auth": 6.0.7
     "@types/react": 18.2.14
@@ -8071,7 +8074,7 @@ __metadata:
     react: 0.0.0-experimental-e5205658f-20230913
     typescript: 5.2.2
   peerDependencies:
-    "@clerk/clerk-react": 4.25.1
+    "@clerk/clerk-react": 4.28.0
   languageName: unknown
   linkType: soft
 
