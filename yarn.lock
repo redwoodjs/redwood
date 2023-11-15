@@ -12,21 +12,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/cache@npm:3.2.1":
-  version: 3.2.1
-  resolution: "@actions/cache@npm:3.2.1"
+"@actions/cache@npm:3.2.2":
+  version: 3.2.2
+  resolution: "@actions/cache@npm:3.2.2"
   dependencies:
     "@actions/core": ^1.10.0
     "@actions/exec": ^1.0.1
     "@actions/glob": ^0.1.0
-    "@actions/http-client": ^2.0.1
+    "@actions/http-client": ^2.1.1
     "@actions/io": ^1.0.1
     "@azure/abort-controller": ^1.1.0
     "@azure/ms-rest-js": ^2.6.0
     "@azure/storage-blob": ^12.13.0
     semver: ^6.1.0
     uuid: ^3.3.3
-  checksum: eae40199a2b32abc72803143fbb9aa81077098bcd15b027b9b9485ccbea59fc03585f6b75068bf6f5becac3c63da9131138f13e6566bfe678372f433dcb72b79
+  checksum: 60ce5ef0ae902ffcf4c20b4940b764df8790decd0846c642f46b44c1497a8d0b47830c78c660b2eab1eb7ddf7008bd9a93f1f2c6ff15341deb58d9ef5c497bdd
   languageName: node
   linkType: hard
 
@@ -69,12 +69,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/http-client@npm:^2.0.1":
-  version: 2.1.0
-  resolution: "@actions/http-client@npm:2.1.0"
+"@actions/http-client@npm:^2.0.1, @actions/http-client@npm:^2.1.1":
+  version: 2.2.0
+  resolution: "@actions/http-client@npm:2.2.0"
   dependencies:
     tunnel: ^0.0.6
-  checksum: 3936947d05c394ec3365a8757e13bd8cd0fb124cc1503254e46a95b2b8342fbf3f2a3c13d56d37e1d6705939cf2808dc64b4a38b75f83995fdc2e878e3aef89c
+    undici: ^5.25.4
+  checksum: 868fe8529d78beb72f84ea2486e232fa6f66abe00d6ec4591b98c37e762c3d812868a3548638d75b49917961fd10ba1556916b47b1e9e4b55c266e2013c3ae8e
   languageName: node
   linkType: hard
 
@@ -213,10 +214,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:2.1.1":
-  version: 2.1.1
-  resolution: "@auth0/auth0-spa-js@npm:2.1.1"
-  checksum: 3a30a950fcc81b2b91e6b3852b36e4993655929ecd8e943bef2d8e8aa0785e5fc471e0c6f2bb7ca0b14ca7d53bf0c8d2911b25fd7636be83eee6e77f3309b92f
+"@auth0/auth0-spa-js@npm:2.1.2":
+  version: 2.1.2
+  resolution: "@auth0/auth0-spa-js@npm:2.1.2"
+  checksum: fb3a6b2ca2782a2f4aa03afe539a042076d0683c3f08e87a3bf93c6db6ad89f79441cb525f768b8bd3bb0c6b240833390bb2e06055ae30e9edf02575233ed4c7
   languageName: node
   linkType: hard
 
@@ -2180,16 +2181,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.25.1":
-  version: 4.25.1
-  resolution: "@clerk/clerk-react@npm:4.25.1"
+"@clerk/clerk-react@npm:4.28.0":
+  version: 4.28.0
+  resolution: "@clerk/clerk-react@npm:4.28.0"
   dependencies:
-    "@clerk/shared": ^0.23.0
-    "@clerk/types": ^3.52.0
+    "@clerk/shared": 1.1.0
+    "@clerk/types": 3.58.0
     tslib: 2.4.1
   peerDependencies:
     react: ">=16"
-  checksum: 4eea68a911847a33fb852c660e047ffe1f7f206f3f3a116b91526b30bd2745849ffdb129ef113a8e0154d2ba3f94eff9a98f7e0b21e25976c68a863b41cc6aab
+  checksum: c8d0472ecc3c52d8ae41d3b14a6e01d5d66b7322bb30176a896d858b31c8c8775c9f4a68fa3a2eb3a2559f5e51362eb0f90fddc36536bc6b3a1b8f397dbad6be
   languageName: node
   linkType: hard
 
@@ -2209,16 +2210,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/shared@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "@clerk/shared@npm:0.23.0"
+"@clerk/shared@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@clerk/shared@npm:1.1.0"
   dependencies:
     glob-to-regexp: 0.4.1
     js-cookie: 3.0.1
     swr: 2.2.0
   peerDependencies:
     react: ">=16"
-  checksum: 1bac558fbabd66eb53cf6d098c086ce0c2bdf6b54f45e7906091b469a2b524b45ad4405e3a897a146d17606b850c888be50fd10b0168ee7eab859cff9e0f3bcf
+  peerDependenciesMeta:
+    react:
+      optional: true
+  checksum: 2fe53d0838668f56813942398d3e80652a7475f6b94907da47eb34dccc0e55c4d2fdbdfb837e6b75d4c96fa3b7d6fa179f122bb35382a237554d1583b373c8ff
   languageName: node
   linkType: hard
 
@@ -2299,13 +2303,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/core@npm:4.0.0, @envelop/core@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@envelop/core@npm:4.0.0"
+"@envelop/core@npm:4.0.3, @envelop/core@npm:^4.0.0":
+  version: 4.0.3
+  resolution: "@envelop/core@npm:4.0.3"
   dependencies:
-    "@envelop/types": 4.0.0
+    "@envelop/types": 4.0.1
     tslib: ^2.5.0
-  checksum: 2745008b823b64ac49a6b099b401a2809d8cf323a7a704163d4ca9bdade6551c2d94f76d345e35a70d9940f150d431c74daf2073f18feaddfd583a935a7e0918
+  checksum: 37a9cdab390a354be8612e92891dbd13de0a58aedfad0728cbe2111069ca599c9ee5c542b3f4de9f155123b0cac776aa60ef10c5a3721ce58b5cb3b2383ddda6
   languageName: node
   linkType: hard
 
@@ -2386,12 +2390,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/types@npm:4.0.0":
-  version: 4.0.0
-  resolution: "@envelop/types@npm:4.0.0"
+"@envelop/types@npm:4.0.1":
+  version: 4.0.1
+  resolution: "@envelop/types@npm:4.0.1"
   dependencies:
     tslib: ^2.5.0
-  checksum: e81fe3a1873686f04d24f4093dacfd55c6504f654eeb5cb700341335fc6922f48d90b34bc664affac6d9cacc3cdba9f5fb2d9a140a0f1f503db062b65c69a88f
+  checksum: 81e09afaf60d036102f7992daeefb0cd5380bb1484dd19cb90db73db4ae730b5297823439711fb8315ee01485a37f1c8155aa1111c7dc4ea11c77b7f25945633
   languageName: node
   linkType: hard
 
@@ -7955,7 +7959,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-auth0-web@workspace:packages/auth-providers/auth0/web"
   dependencies:
-    "@auth0/auth0-spa-js": 2.1.1
+    "@auth0/auth0-spa-js": 2.1.2
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
@@ -7966,7 +7970,7 @@ __metadata:
     react: 0.0.0-experimental-e5205658f-20230913
     typescript: 5.2.2
   peerDependencies:
-    "@auth0/auth0-spa-js": 2.1.1
+    "@auth0/auth0-spa-js": 2.1.2
   languageName: unknown
   linkType: soft
 
@@ -8061,7 +8065,7 @@ __metadata:
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
-    "@clerk/clerk-react": 4.25.1
+    "@clerk/clerk-react": 4.28.0
     "@clerk/types": 3.58.0
     "@redwoodjs/auth": 6.0.7
     "@types/react": 18.2.14
@@ -8070,7 +8074,7 @@ __metadata:
     react: 0.0.0-experimental-e5205658f-20230913
     typescript: 5.2.2
   peerDependencies:
-    "@clerk/clerk-react": 4.25.1
+    "@clerk/clerk-react": 4.28.0
   languageName: unknown
   linkType: soft
 
@@ -8753,13 +8757,13 @@ __metadata:
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
-    "@envelop/core": 4.0.0
+    "@envelop/core": 4.0.3
     "@envelop/depth-limit": 3.0.3
     "@envelop/disable-introspection": 5.0.3
     "@envelop/filter-operation-type": 5.0.3
     "@envelop/on-resolve": 3.0.3
     "@envelop/testing": 6.0.3
-    "@envelop/types": 4.0.0
+    "@envelop/types": 4.0.1
     "@escape.tech/graphql-armor": 2.3.1
     "@graphql-tools/merge": 9.0.0
     "@graphql-tools/schema": 10.0.0
@@ -8972,10 +8976,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/realtime@workspace:packages/realtime"
   dependencies:
-    "@envelop/core": 4.0.0
+    "@envelop/core": 4.0.3
     "@envelop/live-query": 6.0.3
     "@envelop/testing": 6.0.3
-    "@envelop/types": 4.0.0
+    "@envelop/types": 4.0.1
     "@graphql-tools/schema": 10.0.0
     "@graphql-tools/utils": 10.0.1
     "@graphql-yoga/plugin-defer-stream": 2.0.4
@@ -31375,7 +31379,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@actions/cache": 3.2.1
+    "@actions/cache": 3.2.2
     "@actions/core": 1.10.1
     "@actions/exec": 1.1.1
     "@actions/glob": 0.4.0
@@ -34370,12 +34374,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^5.19.1":
-  version: 5.26.3
-  resolution: "undici@npm:5.26.3"
+"undici@npm:^5.19.1, undici@npm:^5.25.4":
+  version: 5.27.2
+  resolution: "undici@npm:5.27.2"
   dependencies:
     "@fastify/busboy": ^2.0.0
-  checksum: af418c4ea429fdd63640b780a21c4f790685f60aa3766663bbff1081c3d20a70da70cbb4d4955d5c0c78f06cd13527d171edf3a65db8476a6c02539f495e9f48
+  checksum: 0cb62c57edc938f242c116e41fb2a74f81ed20e7e2e554cf1ceae548520df0592385b53d444f8cf59e1e10e6b27acd153198d8a2353b3040d0a778a099aac92c
   languageName: node
   linkType: hard
 
