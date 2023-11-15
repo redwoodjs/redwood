@@ -24,7 +24,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.2",
     "@clerk/clerk-sdk-node": "4.12.6",
-    "core-js": "3.32.2"
+    "core-js": "3.33.2"
   },
   "devDependencies": {
     "@babel/cli": "7.23.0",
