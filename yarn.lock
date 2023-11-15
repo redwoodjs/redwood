@@ -2299,7 +2299,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/core@npm:4.0.0, @envelop/core@npm:^4.0.0":
+"@envelop/core@npm:4.0.3":
+  version: 4.0.3
+  resolution: "@envelop/core@npm:4.0.3"
+  dependencies:
+    "@envelop/types": 4.0.1
+    tslib: ^2.5.0
+  checksum: 37a9cdab390a354be8612e92891dbd13de0a58aedfad0728cbe2111069ca599c9ee5c542b3f4de9f155123b0cac776aa60ef10c5a3721ce58b5cb3b2383ddda6
+  languageName: node
+  linkType: hard
+
+"@envelop/core@npm:^4.0.0":
   version: 4.0.0
   resolution: "@envelop/core@npm:4.0.0"
   dependencies:
@@ -8762,7 +8772,7 @@ __metadata:
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
-    "@envelop/core": 4.0.0
+    "@envelop/core": 4.0.3
     "@envelop/depth-limit": 3.0.0
     "@envelop/disable-introspection": 5.0.0
     "@envelop/filter-operation-type": 5.0.0
@@ -8981,7 +8991,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/realtime@workspace:packages/realtime"
   dependencies:
-    "@envelop/core": 4.0.0
+    "@envelop/core": 4.0.3
     "@envelop/live-query": 6.0.0
     "@envelop/testing": 6.0.3
     "@envelop/types": 4.0.1

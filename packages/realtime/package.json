@@ -36,7 +36,7 @@
     "ioredis": "5.3.2"
   },
   "devDependencies": {
-    "@envelop/core": "4.0.0",
+    "@envelop/core": "4.0.3",
     "@envelop/testing": "6.0.3",
     "@envelop/types": "4.0.1",
     "esbuild": "0.19.3",
