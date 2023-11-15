@@ -79,7 +79,7 @@
     "@types/uuid": "9.0.7",
     "@types/yargs": "17.0.24",
     "@vitejs/plugin-react": "4.1.1",
-    "autoprefixer": "10.4.14",
+    "autoprefixer": "10.4.16",
     "aws-lambda": "1.0.7",
     "buffer": "6.0.3",
     "graphiql": "2.4.7",
