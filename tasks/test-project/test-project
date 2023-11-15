@@ -16,7 +16,7 @@ const {
   addFrameworkDepsToProject,
   copyFrameworkPackages,
 } = require('./frameworkLinking')
-const { webTasks, apiTasks } = require('./tasks')
+const { webTasks, apiTasks, streamingTasks } = require('./tasks')
 const {
   getExecaOptions,
   updatePkgJsonScripts,
@@ -40,6 +40,11 @@ const args = yargs(hideBin(process.argv))
     default: true,
     type: 'boolean',
     describe: 'Copy the test project from the __fixtures__ folder',
+  })
+  .option('streamingSsr', {
+    default: false,
+    type: 'boolean',
+    describe: 'Enable streaming-ssr experiment (RW v7)',
   })
   .option('rebuildFixture', {
     default: false,
@@ -74,6 +79,7 @@ const {
   copyFromFixture,
   rebuildFixture,
   javascript,
+  streamingSsr,
 } = args
 
 if (rebuildFixture) {
@@ -252,7 +258,7 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-        enabled: () => canary && !link,
+        enabled: () => (canary && !link) || streamingSsr,
       },
       {
         title: 'Apply web codemods',
@@ -262,6 +268,13 @@ const globalTasks = () =>
             linkWithLatestFwBuild: link,
           }),
         enabled: () => !copyFromFixture,
+      },
+      {
+        // These are also web tasks... we can move them into the webTasks function
+        // when streaming isn't experimental
+        title: 'Enabling streaming-ssr experiment and applying codemods....',
+        task: () => streamingTasks(OUTPUT_PROJECT_PATH, { verbose }),
+        enabled: () => streamingSsr,
       },
       {
         title: 'Apply api codemods',
@@ -339,6 +352,7 @@ const globalTasks = () =>
     ],
     {
       exitOnError: true,
+      // @ts-expect-error Allowed
       renderer: verbose && 'verbose',
       renderOptions: { collapseSubtasks: false },
     }
