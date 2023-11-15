@@ -229,7 +229,7 @@ async function getAuthHandler(module) {
       version = version.split('+')[0]
     }
 
-    const versionIsPublished = JSON.parse(stdout).versions.includes(version)
+    const versionIsPublished = stdout.includes(version)
 
     if (!versionIsPublished) {
       // Fallback to canary. This is most likely because it's a new package
@@ -238,7 +238,7 @@ async function getAuthHandler(module) {
 
     // We use `version` to make sure we install the same version of the auth
     // setup package as the rest of the RW packages
-    await execa.command(`yarn add -D ${module}@${version}`, {
+    await execa.command(`yarn add -W -D ${module}@${version}`, {
       stdio: 'inherit',
       cwd: getPaths().base,
     })
