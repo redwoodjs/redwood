@@ -8111,7 +8111,7 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
     "@redwoodjs/cli-helpers": 6.0.7
-    "@simplewebauthn/browser": 7.2.0
+    "@simplewebauthn/browser": 7.4.0
     "@simplewebauthn/typescript-types": 7.0.0
     "@types/yargs": 17.0.24
     core-js: 3.33.2
@@ -8130,7 +8130,7 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
     "@redwoodjs/auth": 6.0.7
-    "@simplewebauthn/browser": 7.2.0
+    "@simplewebauthn/browser": 7.4.0
     "@simplewebauthn/typescript-types": 7.0.0
     "@types/react": 18.2.14
     core-js: 3.33.2
@@ -9396,12 +9396,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/browser@npm:7.2.0":
-  version: 7.2.0
-  resolution: "@simplewebauthn/browser@npm:7.2.0"
+"@simplewebauthn/browser@npm:7.4.0":
+  version: 7.4.0
+  resolution: "@simplewebauthn/browser@npm:7.4.0"
   dependencies:
-    "@simplewebauthn/typescript-types": "*"
-  checksum: 7a12b06bb20e1f6214524603b5d030ec110c85dee1399946400315ee4fb9e1fcc79809a41851445b7f09513b56fb6e6fca5c78365e04dee7244e19b985672cb4
+    "@simplewebauthn/typescript-types": ^7.4.0
+  checksum: cd69d51511e1bb75603b254b706194e8b7c3849e8f02fcb373cc8bb8c789df803a1bb900de7853c0cc63c0ad81fd56497ca63885638d566137afa387674099ad
   languageName: node
   linkType: hard
 
@@ -9436,7 +9436,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/typescript-types@npm:*, @simplewebauthn/typescript-types@npm:7.0.0":
+"@simplewebauthn/typescript-types@npm:*, @simplewebauthn/typescript-types@npm:^7.4.0":
+  version: 7.4.0
+  resolution: "@simplewebauthn/typescript-types@npm:7.4.0"
+  checksum: b7aefd742d2f483531ff96509475571339660addba1f140883d8e489601d6a3a5b1c6759aa5ba27a9da5b502709aee9f060a4d4e57010f32c94eb5c42ef562a3
+  languageName: node
+  linkType: hard
+
+"@simplewebauthn/typescript-types@npm:7.0.0":
   version: 7.0.0
   resolution: "@simplewebauthn/typescript-types@npm:7.0.0"
   checksum: 4682a353bace25f195b6621d4b96e9db48562edc68a005785230519c71838028de20154a842c4c1859f605562668ff689ab532b0afdce926d5720e7573160da4
