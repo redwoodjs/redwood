@@ -11176,12 +11176,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__generator@npm:*, @types/babel__generator@npm:7.6.5":
-  version: 7.6.5
-  resolution: "@types/babel__generator@npm:7.6.5"
+"@types/babel__generator@npm:*, @types/babel__generator@npm:7.6.7":
+  version: 7.6.7
+  resolution: "@types/babel__generator@npm:7.6.7"
   dependencies:
     "@babel/types": ^7.0.0
-  checksum: b3e2668950208a681966fb93faa3a9164319caf960ff2ae232469fd09aa9b59a35d3328221027c373bb29d250b709073479f4fa1e404d109515846a65e06f0e2
+  checksum: 2427203864ef231857e102eeb32b731a419164863983119cdd4dac9f1503c2831eb4262d05ade95d4574aa410b94c16e54e36a616758452f685a34881f4596d9
   languageName: node
   linkType: hard
 
@@ -31569,7 +31569,7 @@ __metadata:
     "@testing-library/jest-dom": 5.17.0
     "@testing-library/react": 14.1.0
     "@testing-library/user-event": 14.5.1
-    "@types/babel__generator": 7.6.5
+    "@types/babel__generator": 7.6.7
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.4
     "@types/jscodeshift": 0.11.6
