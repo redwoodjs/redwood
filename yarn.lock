@@ -7862,7 +7862,7 @@ __metadata:
     chokidar: 3.5.3
     core-js: 3.33.2
     dotenv-defaults: 5.0.2
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     fast-json-parse: 1.0.3
     fastify: 4.23.2
     fastify-raw-body: 4.2.2
@@ -8398,7 +8398,7 @@ __metadata:
     babel-plugin-tester: 11.0.4
     core-js: 3.33.2
     esbuild: 0.19.3
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     graphql: 16.8.1
     jest: 29.7.0
     typescript: 5.2.2
@@ -8418,7 +8418,7 @@ __metadata:
     dotenv-defaults: 5.0.2
     esbuild: 0.19.3
     execa: 5.1.1
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     fs-extra: 11.1.1
     jest: 29.7.0
     listr2: 6.6.1
@@ -8475,7 +8475,7 @@ __metadata:
     chalk: 4.1.2
     esbuild: 0.19.3
     execa: 5.1.1
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     jest: 29.7.0
     storybook: 7.5.3
     terminal-link: 2.1.1
@@ -8520,7 +8520,7 @@ __metadata:
     enquirer: 2.4.1
     envinfo: 7.9.0
     execa: 5.1.1
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     fs-extra: 11.1.1
     humanize-string: 2.1.0
     jest: 29.7.0
@@ -8576,7 +8576,7 @@ __metadata:
     core-js: 3.33.2
     deepmerge: 4.3.1
     execa: 5.1.1
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     fs-extra: 11.1.1
     graphql: 16.8.1
     jest: 29.7.0
@@ -8691,7 +8691,7 @@ __metadata:
     "@typescript-eslint/utils": 5.61.0
     esbuild: 0.19.3
     eslint: 8.46.0
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     glob: 10.3.1
     typescript: 5.2.2
   languageName: unknown
@@ -8711,7 +8711,7 @@ __metadata:
     "@types/qs": 6.9.7
     ansi-colors: 4.1.3
     esbuild: 0.19.3
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     fastify: 4.23.2
     fastify-raw-body: 4.2.2
     lodash: 4.17.21
@@ -8820,7 +8820,7 @@ __metadata:
     core-js: 3.33.2
     deepmerge: 4.3.1
     esbuild: 0.19.3
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     fs-extra: 11.1.1
     graphql: 16.8.1
     graphql-tag: 2.12.6
@@ -8847,7 +8847,7 @@ __metadata:
   dependencies:
     "@redwoodjs/api": 6.0.7
     esbuild: 0.19.3
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     jest: 29.7.0
     typescript: 5.2.2
   languageName: unknown
@@ -8859,7 +8859,7 @@ __metadata:
   dependencies:
     "@redwoodjs/mailer-core": 6.0.7
     esbuild: 0.19.3
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     typescript: 5.2.2
   languageName: unknown
   linkType: soft
@@ -8871,7 +8871,7 @@ __metadata:
     "@redwoodjs/mailer-core": 6.0.7
     "@types/nodemailer": 6
     esbuild: 0.19.3
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     nodemailer: 6.9.5
     typescript: 5.2.2
   languageName: unknown
@@ -8883,7 +8883,7 @@ __metadata:
   dependencies:
     "@redwoodjs/mailer-core": 6.0.7
     esbuild: 0.19.3
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     resend: 1.0.0
     typescript: 5.2.2
   languageName: unknown
@@ -8897,7 +8897,7 @@ __metadata:
     "@redwoodjs/mailer-handler-nodemailer": 6.0.7
     "@types/nodemailer": ^6
     esbuild: 0.19.3
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     typescript: 5.2.2
   languageName: unknown
   linkType: soft
@@ -8910,7 +8910,7 @@ __metadata:
     "@redwoodjs/mailer-core": 6.0.7
     "@types/mjml": 4
     esbuild: 0.19.3
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     mjml: 4.14.1
     typescript: 5.2.2
   languageName: unknown
@@ -8923,7 +8923,7 @@ __metadata:
     "@react-email/render": 0.0.7
     "@redwoodjs/mailer-core": 6.0.7
     esbuild: 0.19.3
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     typescript: 5.2.2
   languageName: unknown
   linkType: soft
@@ -8964,7 +8964,7 @@ __metadata:
     "@iarna/toml": 2.2.5
     deepmerge: 4.3.1
     esbuild: 0.19.3
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     jest: 29.7.0
     rimraf: 5.0.5
     string-env-interpolation: 1.0.1
@@ -9061,7 +9061,7 @@ __metadata:
     deepmerge: 4.3.1
     dotenv-defaults: 5.0.2
     enquirer: 2.4.1
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     graphql: 16.8.1
     jest: 29.7.0
     lazy-get-decorator: 2.2.1
@@ -9209,7 +9209,7 @@ __metadata:
     "@types/webpack-env": 1.18.1
     babel-jest: ^29.7.0
     core-js: 3.33.2
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     jest: 29.7.0
     jest-environment-jsdom: 29.7.0
     jest-watch-typeahead: 2.2.2
@@ -9286,7 +9286,7 @@ __metadata:
     chalk: 4.1.2
     dotenv-defaults: 5.0.2
     esbuild: 0.19.3
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     fastify: 4.23.2
     typescript: 5.2.2
     yargs-parser: 21.1.1
@@ -19711,16 +19711,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:3.3.1, fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.5, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0":
-  version: 3.3.1
-  resolution: "fast-glob@npm:3.3.1"
+"fast-glob@npm:3.3.2, fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.5, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0":
+  version: 3.3.2
+  resolution: "fast-glob@npm:3.3.2"
   dependencies:
     "@nodelib/fs.stat": ^2.0.2
     "@nodelib/fs.walk": ^1.2.3
     glob-parent: ^5.1.2
     merge2: ^1.3.0
     micromatch: ^4.0.4
-  checksum: b68431128fb6ce4b804c5f9622628426d990b66c75b21c0d16e3d80e2d1398bf33f7e1724e66a2e3f299285dcf5b8d745b122d0304e7dd66f5231081f33ec67c
+  checksum: 42baad7b9cd40b63e42039132bde27ca2cb3a4950d0a0f9abe4639ea1aa9d3e3b40f98b1fe31cbc0cc17b664c9ea7447d911a152fa34ec5b72977b125a6fc845
   languageName: node
   linkType: hard
 
@@ -31421,7 +31421,7 @@ __metadata:
     cypress-wait-until: 1.7.2
     dependency-cruiser: 13.0.4
     eslint: 8.46.0
-    fast-glob: 3.3.1
+    fast-glob: 3.3.2
     fs-extra: 11.1.1
     jest: 29.7.0
     jest-runner-tsd: 5.0.0
