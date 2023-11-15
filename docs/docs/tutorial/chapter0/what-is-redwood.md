@@ -28,7 +28,7 @@ You can start them both with a single command: `yarn redwood dev`
 
 ### The Router
 
-When you open your web app in a browser, React does its thing initializing your app and monitoring the history for changes so that new content can be shown. Redwood features a custom, declaritive Router that lets you specify URLs and the requisite pages (just a React component) will be shown. A simple routes file may look something like:
+When you open your web app in a browser, React does its thing initializing your app and monitoring the history for changes so that new content can be shown. Redwood features a custom, declarative Router that lets you specify URLs and the requisite pages (just a React component) will be shown. A simple routes file may look something like:
 
 ```jsx
 import { Set, Router, Route } from '@redwoodjs/router'
