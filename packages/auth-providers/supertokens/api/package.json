@@ -25,7 +25,7 @@
     "@babel/runtime-corejs3": "7.23.2",
     "core-js": "3.33.2",
     "jsonwebtoken": "9.0.2",
-    "jwks-rsa": "3.0.1"
+    "jwks-rsa": "3.1.0"
   },
   "devDependencies": {
     "@babel/cli": "7.23.0",
@@ -36,7 +36,7 @@
     "typescript": "5.2.2"
   },
   "peerDependencies": {
-    "supertokens-node": "15.0.0"
+    "supertokens-node": "15.2.1"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
