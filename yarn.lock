@@ -2299,23 +2299,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/core@npm:4.0.3":
+"@envelop/core@npm:4.0.3, @envelop/core@npm:^4.0.0":
   version: 4.0.3
   resolution: "@envelop/core@npm:4.0.3"
   dependencies:
     "@envelop/types": 4.0.1
     tslib: ^2.5.0
   checksum: 37a9cdab390a354be8612e92891dbd13de0a58aedfad0728cbe2111069ca599c9ee5c542b3f4de9f155123b0cac776aa60ef10c5a3721ce58b5cb3b2383ddda6
-  languageName: node
-  linkType: hard
-
-"@envelop/core@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@envelop/core@npm:4.0.0"
-  dependencies:
-    "@envelop/types": 4.0.0
-    tslib: ^2.5.0
-  checksum: 2745008b823b64ac49a6b099b401a2809d8cf323a7a704163d4ca9bdade6551c2d94f76d345e35a70d9940f150d431c74daf2073f18feaddfd583a935a7e0918
   languageName: node
   linkType: hard
 
@@ -2393,15 +2383,6 @@ __metadata:
     "@envelop/types": ^4.0.1
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
   checksum: 7397d0bb734397c9a2962e94440a3502f4772169eb6dc507439d1847cac0f9d4a3d170b0bf337a24a5f735fd796b135303afd485e87e2a3e94f24c6824069501
-  languageName: node
-  linkType: hard
-
-"@envelop/types@npm:4.0.0":
-  version: 4.0.0
-  resolution: "@envelop/types@npm:4.0.0"
-  dependencies:
-    tslib: ^2.5.0
-  checksum: e81fe3a1873686f04d24f4093dacfd55c6504f654eeb5cb700341335fc6922f48d90b34bc664affac6d9cacc3cdba9f5fb2d9a140a0f1f503db062b65c69a88f
   languageName: node
   linkType: hard
 
