@@ -90,7 +90,8 @@ export async function reactRenderToStreamResponse(
     return React.createElement(
       ServerAuthProvider,
       {
-        value: authState,
+        // @TODO: figure out types
+        value: authState as any,
       },
       React.createElement(
         ServerHtmlProvider,

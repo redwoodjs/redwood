@@ -5,7 +5,7 @@ import type { Decoder } from '@redwoodjs/api'
 import { dbAuthSession } from './shared'
 
 export const createAuthDecoder = (cookieNameOption: string): Decoder => {
-  return async (token, type, req) => {
+  return async (_token, type, req) => {
     if (type !== 'dbAuth') {
       return null
     }
