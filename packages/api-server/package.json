@@ -53,7 +53,7 @@
     "@babel/cli": "7.23.0",
     "@babel/core": "^7.22.20",
     "@types/aws-lambda": "8.10.126",
-    "@types/lodash": "4.14.195",
+    "@types/lodash": "4.14.201",
     "@types/qs": "6.9.7",
     "@types/split2": "4.2.0",
     "@types/yargs": "17.0.31",

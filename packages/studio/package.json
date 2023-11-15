@@ -67,7 +67,7 @@
     "@tremor/react": "3.4.1",
     "@types/aws-lambda": "8.10.126",
     "@types/jsonwebtoken": "9.0.5",
-    "@types/lodash": "4.14.195",
+    "@types/lodash": "4.14.201",
     "@types/mailparser": "^3",
     "@types/qs": "6.9.7",
     "@types/react": "18.2.14",
