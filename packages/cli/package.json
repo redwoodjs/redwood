@@ -48,7 +48,7 @@
     "boxen": "5.1.2",
     "camelcase": "6.3.0",
     "chalk": "4.1.2",
-    "ci-info": "3.8.0",
+    "ci-info": "3.9.0",
     "concurrently": "8.2.2",
     "configstore": "3.1.5",
     "core-js": "3.33.2",

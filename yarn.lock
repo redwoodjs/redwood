@@ -8476,7 +8476,7 @@ __metadata:
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
-    ci-info: 3.8.0
+    ci-info: 3.9.0
     concurrently: 8.2.2
     configstore: 3.1.5
     core-js: 3.33.2
@@ -9140,7 +9140,7 @@ __metadata:
     "@types/uuid": 9.0.7
     "@types/yargs": 17.0.24
     "@whatwg-node/fetch": 0.9.14
-    ci-info: 3.8.0
+    ci-info: 3.9.0
     core-js: 3.33.2
     envinfo: 7.9.0
     jest: 29.7.0
@@ -15673,10 +15673,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ci-info@npm:3.8.0, ci-info@npm:^3.2.0, ci-info@npm:^3.6.1":
+"ci-info@npm:3.8.0":
   version: 3.8.0
   resolution: "ci-info@npm:3.8.0"
   checksum: 0d3052193b58356372b34ab40d2668c3e62f1006d5ca33726d1d3c423853b19a85508eadde7f5908496fb41448f465263bf61c1ee58b7832cb6a924537e3863a
+  languageName: node
+  linkType: hard
+
+"ci-info@npm:3.9.0, ci-info@npm:^3.2.0, ci-info@npm:^3.6.1":
+  version: 3.9.0
+  resolution: "ci-info@npm:3.9.0"
+  checksum: 6f0109e36e111684291d46123d491bc4e7b7a1934c3a20dea28cba89f1d4a03acd892f5f6a81ed3855c38647e285a150e3c9ba062e38943bef57fee6c1554c3a
   languageName: node
   linkType: hard
 
@@ -16670,7 +16677,7 @@ __metadata:
     "@types/babel__core": 7.20.2
     chalk: 4.1.2
     check-node-version: 4.2.1
-    ci-info: 3.8.0
+    ci-info: 3.9.0
     envinfo: 7.9.0
     esbuild: 0.19.5
     execa: 5.1.1
