@@ -24,7 +24,7 @@ jobs:
       onlydocs: ${{ steps.detect-changes.outputs.onlydocs }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v3
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v3
@@ -90,7 +90,7 @@ jobs:
         if: matrix.os != 'ubuntu-latest'
         run: echo "echo "::remove-matcher owner=tsc::""
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v3
@@ -144,7 +144,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v3
@@ -237,7 +237,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v3
@@ -440,7 +440,7 @@ jobs:
       REDWOOD_REDIRECT_TELEMETRY: "http://127.0.0.1:48619" # Random port
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v3
