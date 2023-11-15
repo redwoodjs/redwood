@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.2",
-    "@fastify/http-proxy": "9.2.1",
+    "@fastify/http-proxy": "9.3.0",
     "@fastify/static": "6.12.0",
     "@fastify/url-data": "5.4.0",
     "@redwoodjs/internal": "6.3.3",

@@ -2972,14 +2972,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/http-proxy@npm:9.2.1":
-  version: 9.2.1
-  resolution: "@fastify/http-proxy@npm:9.2.1"
+"@fastify/http-proxy@npm:9.3.0":
+  version: 9.3.0
+  resolution: "@fastify/http-proxy@npm:9.3.0"
   dependencies:
     "@fastify/reply-from": ^9.0.0
+    fast-querystring: ^1.1.2
     fastify-plugin: ^4.5.0
     ws: ^8.4.2
-  checksum: 0fddfb5236b07671d964e7e4edb259ba57265b39b283ddbe24b10fab99f501c2c9e59bfa7eaba69e4b8790b1d550f098dd23356c604f1aacb8315719675be9e9
+  checksum: c8f7fe380580f53059f676ca5b2bbdb1eef0a2d3dce28568e8932aeedb992efdc5fc40dae41b6d52f2f0ce14036af182664d0276ea9366e31fd920a119e7a03a
   languageName: node
   linkType: hard
 
@@ -7800,7 +7801,7 @@ __metadata:
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
-    "@fastify/http-proxy": 9.2.1
+    "@fastify/http-proxy": 9.3.0
     "@fastify/static": 6.12.0
     "@fastify/url-data": 5.4.0
     "@redwoodjs/project-config": 6.3.3
@@ -8651,7 +8652,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/fastify@workspace:packages/fastify"
   dependencies:
-    "@fastify/http-proxy": 9.2.1
+    "@fastify/http-proxy": 9.3.0
     "@fastify/static": 6.12.0
     "@fastify/url-data": 5.4.0
     "@redwoodjs/graphql-server": 6.3.3
@@ -9035,7 +9036,7 @@ __metadata:
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
-    "@fastify/http-proxy": 9.2.1
+    "@fastify/http-proxy": 9.3.0
     "@fastify/static": 6.12.0
     "@fastify/url-data": 5.4.0
     "@graphiql/plugin-explorer": 0.1.22
@@ -9212,7 +9213,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web-server@workspace:packages/web-server"
   dependencies:
-    "@fastify/http-proxy": 9.2.1
+    "@fastify/http-proxy": 9.3.0
     "@fastify/static": 6.12.0
     "@redwoodjs/project-config": 6.3.3
     "@types/yargs-parser": 21.0.0
@@ -19680,7 +19681,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-querystring@npm:^1.0.0, fast-querystring@npm:^1.1.1":
+"fast-querystring@npm:^1.0.0, fast-querystring@npm:^1.1.1, fast-querystring@npm:^1.1.2":
   version: 1.1.2
   resolution: "fast-querystring@npm:1.1.2"
   dependencies:
