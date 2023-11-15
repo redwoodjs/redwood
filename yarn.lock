@@ -8792,7 +8792,7 @@ __metadata:
     "@types/nodemailer": 6
     esbuild: 0.18.19
     fast-glob: 3.3.2
-    nodemailer: 6.9.5
+    nodemailer: 6.9.7
     typescript: 5.2.2
   languageName: unknown
   linkType: soft
@@ -27051,10 +27051,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:6.9.5":
-  version: 6.9.5
-  resolution: "nodemailer@npm:6.9.5"
-  checksum: 690602304f98e2de08db613c29715f3bb0e44236a9bfa8766ab5edb43350060c0269c03d6ac90f700871bbe4832e8158eac6b1e9fbe0d83e49acea7d06b4a1f8
+"nodemailer@npm:6.9.7":
+  version: 6.9.7
+  resolution: "nodemailer@npm:6.9.7"
+  checksum: 5ea7f781782361890d4492dc2412496e89fb04c498814e6c4fe7b168a27d7491a00f725cf90c26768907506e8afb76e8cfe6f6300def9940bc7f7e323405eaa6
   languageName: node
   linkType: hard
 
