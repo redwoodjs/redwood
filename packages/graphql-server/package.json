@@ -25,7 +25,7 @@
     "@babel/runtime-corejs3": "7.23.2",
     "@envelop/core": "4.0.0",
     "@envelop/depth-limit": "3.0.0",
-    "@envelop/disable-introspection": "5.0.0",
+    "@envelop/disable-introspection": "5.0.3",
     "@envelop/filter-operation-type": "5.0.0",
     "@envelop/on-resolve": "3.0.0",
     "@escape.tech/graphql-armor": "2.3.1",
