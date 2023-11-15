@@ -20,7 +20,7 @@ jobs:
     if: github.repository == 'redwoodjs/redwood'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         # Required because lerna uses tags to determine the version.
         with:
           fetch-depth: 0
@@ -56,7 +56,7 @@ jobs:
     outputs:
       version: ${{ steps.get-version.outputs.value }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           # `fetch-depth`—number of commits to fetch. `0` fetches all history for all branches and tags.
           #  This is required because lerna uses tags to determine the version.
@@ -116,7 +116,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 💬 Message Slack
         uses: ./.github/actions/message_slack_publishing
         with:
