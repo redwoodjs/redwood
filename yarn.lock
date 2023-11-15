@@ -398,7 +398,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.15.8, @babel/code-frame@npm:^7.16.7, @babel/code-frame@npm:^7.22.13":
+"@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.16.7, @babel/code-frame@npm:^7.22.13":
   version: 7.22.13
   resolution: "@babel/code-frame@npm:7.22.13"
   dependencies:
@@ -2991,14 +2991,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/http-proxy@npm:9.2.1":
-  version: 9.2.1
-  resolution: "@fastify/http-proxy@npm:9.2.1"
+"@fastify/http-proxy@npm:9.3.0":
+  version: 9.3.0
+  resolution: "@fastify/http-proxy@npm:9.3.0"
   dependencies:
     "@fastify/reply-from": ^9.0.0
+    fast-querystring: ^1.1.2
     fastify-plugin: ^4.5.0
     ws: ^8.4.2
-  checksum: 0fddfb5236b07671d964e7e4edb259ba57265b39b283ddbe24b10fab99f501c2c9e59bfa7eaba69e4b8790b1d550f098dd23356c604f1aacb8315719675be9e9
+  checksum: c8f7fe380580f53059f676ca5b2bbdb1eef0a2d3dce28568e8932aeedb992efdc5fc40dae41b6d52f2f0ce14036af182664d0276ea9366e31fd920a119e7a03a
   languageName: node
   linkType: hard
 
@@ -3030,9 +3031,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/static@npm:6.11.2":
-  version: 6.11.2
-  resolution: "@fastify/static@npm:6.11.2"
+"@fastify/static@npm:6.12.0":
+  version: 6.12.0
+  resolution: "@fastify/static@npm:6.12.0"
   dependencies:
     "@fastify/accept-negotiator": ^1.0.0
     "@fastify/send": ^2.0.0
@@ -3040,7 +3041,7 @@ __metadata:
     fastify-plugin: ^4.0.0
     glob: ^8.0.1
     p-limit: ^3.1.0
-  checksum: dac6d0d611656770c276d594e26e1df0da3a2f81e54593317d4aedd8ac23fb0e7f43b08360d606bf3b9a0f9ba1ab0be55d63eac4322d0429721e822f8e1c2ef6
+  checksum: 9248c9851c4bb24965e88eb2f0825fda2b2b08ddb83aa5f08e529b8a522cf20978f81e8e4837e2cb550b39ea433790b0fd82db4b2f0673133325e265c9099fff
   languageName: node
   linkType: hard
 
@@ -7836,8 +7837,8 @@ __metadata:
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
-    "@fastify/http-proxy": 9.2.1
-    "@fastify/static": 6.11.2
+    "@fastify/http-proxy": 9.3.0
+    "@fastify/static": 6.12.0
     "@fastify/url-data": 5.4.0
     "@redwoodjs/project-config": 6.0.7
     "@types/aws-lambda": 8.10.119
@@ -8690,8 +8691,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/fastify@workspace:packages/fastify"
   dependencies:
-    "@fastify/http-proxy": 9.2.1
-    "@fastify/static": 6.11.2
+    "@fastify/http-proxy": 9.3.0
+    "@fastify/static": 6.12.0
     "@fastify/url-data": 5.4.0
     "@redwoodjs/graphql-server": 6.0.7
     "@redwoodjs/project-config": 6.0.7
@@ -9022,6 +9023,7 @@ __metadata:
     jest: 29.7.0
     react: 0.0.0-experimental-e5205658f-20230913
     react-dom: 0.0.0-experimental-e5205658f-20230913
+    tstyche: 1.0.0-beta.3
     typescript: 5.2.2
   peerDependencies:
     react: 0.0.0-experimental-e5205658f-20230913
@@ -9076,8 +9078,8 @@ __metadata:
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
-    "@fastify/http-proxy": 9.2.1
-    "@fastify/static": 6.11.2
+    "@fastify/http-proxy": 9.3.0
+    "@fastify/static": 6.12.0
     "@fastify/url-data": 5.4.0
     "@graphiql/plugin-explorer": 0.1.22
     "@graphiql/toolkit": 0.8.4
@@ -9268,8 +9270,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web-server@workspace:packages/web-server"
   dependencies:
-    "@fastify/http-proxy": 9.2.1
-    "@fastify/static": 6.11.2
+    "@fastify/http-proxy": 9.3.0
+    "@fastify/static": 6.12.0
     "@redwoodjs/project-config": 6.0.7
     "@types/yargs-parser": 21.0.0
     chalk: 4.1.2
@@ -9304,7 +9306,6 @@ __metadata:
     graphql-sse: 2.3.0
     graphql-tag: 2.12.6
     jest: 29.7.0
-    jest-runner-tsd: 5.0.0
     nodemon: 2.0.22
     react: 0.0.0-experimental-e5205658f-20230913
     react-dom: 0.0.0-experimental-e5205658f-20230913
@@ -9312,6 +9313,7 @@ __metadata:
     react-hot-toast: 2.4.1
     stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
+    tstyche: 1.0.0-beta.3
     typescript: 5.2.2
   peerDependencies:
     react: 0.0.0-experimental-e5205658f-20230913
@@ -11075,13 +11077,6 @@ __metadata:
   version: 1.0.4
   resolution: "@tsconfig/node16@npm:1.0.4"
   checksum: 05f8f2734e266fb1839eb1d57290df1664fe2aa3b0fdd685a9035806daa635f7519bf6d5d9b33f6e69dd545b8c46bd6e2b5c79acb2b1f146e885f7f11a42a5bb
-  languageName: node
-  linkType: hard
-
-"@tsd/typescript@npm:5.1.6":
-  version: 5.1.6
-  resolution: "@tsd/typescript@npm:5.1.6"
-  checksum: 375f339ccc9ad45fdc8358c062d719e9778c804343ccbc5751a68a9d18e328e746eceb7d6ff411f77fa37d0415271ab9c44592f29490d981d417df4b4f0ca7ea
   languageName: node
   linkType: hard
 
@@ -16674,27 +16669,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"create-jest-runner@npm:^0.12.0":
-  version: 0.12.3
-  resolution: "create-jest-runner@npm:0.12.3"
-  dependencies:
-    chalk: ^4.1.0
-    jest-worker: ^29.5.0
-    p-limit: ^3.1.0
-  peerDependencies:
-    "@jest/test-result": ^28.0.0 || ^29.0.0
-    jest-runner: ^28.0.0 || ^29.0.0
-  peerDependenciesMeta:
-    "@jest/test-result":
-      optional: true
-    jest-runner:
-      optional: true
-  bin:
-    create-jest-runner: generator/index.js
-  checksum: 9ff765b642078e2702f90af05d8a78792e04b683ad8fd10e2c3b207a4effa87e869e515e127184b84098eee34e651c5b83f922f3cc636de40db062736d869868
-  languageName: node
-  linkType: hard
-
 "create-jest@npm:^29.7.0":
   version: 29.7.0
   resolution: "create-jest@npm:29.7.0"
@@ -19785,7 +19759,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-querystring@npm:^1.0.0, fast-querystring@npm:^1.1.1":
+"fast-querystring@npm:^1.0.0, fast-querystring@npm:^1.1.1, fast-querystring@npm:^1.1.2":
   version: 1.1.2
   resolution: "fast-querystring@npm:1.1.2"
   dependencies:
@@ -23652,20 +23626,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-runner-tsd@npm:5.0.0":
-  version: 5.0.0
-  resolution: "jest-runner-tsd@npm:5.0.0"
-  dependencies:
-    "@babel/code-frame": ^7.15.8
-    chalk: ^4.1.2
-    create-jest-runner: ^0.12.0
-    tsd-lite: ^0.7.0
-  peerDependencies:
-    "@tsd/typescript": 4.x || 5.x
-  checksum: 33f7a30a42601d62816b71220e1e176f3512c61e48680572879f1e6c0c1c1eb746d82f3da49581ee9c6215f7616b4838bd2e98870dc609b99e96a6782be924bf
-  languageName: node
-  linkType: hard
-
 "jest-runner@npm:^29.7.0":
   version: 29.7.0
   resolution: "jest-runner@npm:29.7.0"
@@ -23825,7 +23785,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-worker@npm:^29.4.3, jest-worker@npm:^29.5.0, jest-worker@npm:^29.7.0":
+"jest-worker@npm:^29.4.3, jest-worker@npm:^29.7.0":
   version: 29.7.0
   resolution: "jest-worker@npm:29.7.0"
   dependencies:
@@ -31466,7 +31426,6 @@ __metadata:
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.5.1
-    "@tsd/typescript": 5.1.6
     "@types/babel__generator": 7.6.5
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.4
@@ -31486,7 +31445,6 @@ __metadata:
     fast-glob: 3.3.2
     fs-extra: 11.1.1
     jest: 29.7.0
-    jest-runner-tsd: 5.0.0
     jscodeshift: 0.15.0
     lerna: 7.4.2
     listr2: 6.6.1
@@ -31501,6 +31459,7 @@ __metadata:
     ora: 7.0.1
     prompts: 2.4.2
     rimraf: 5.0.5
+    tstyche: 1.0.0-beta.3
     tsx: 3.12.7
     typescript: 5.2.2
     yargs: 17.7.2
@@ -34105,15 +34064,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsd-lite@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "tsd-lite@npm:0.7.0"
-  peerDependencies:
-    "@tsd/typescript": 4.x || 5.x
-  checksum: 855a14ba9edc262500365b2b47d0fa5302148e6228a962d88a4519ffe77a8cc80474b45a95071891f90c70bcd4eee16cad47a0144ec4c7ce92c550e9d67808f4
-  languageName: node
-  linkType: hard
-
 "tslib@npm:2.4.1, tslib@npm:~2.4.0":
   version: 2.4.1
   resolution: "tslib@npm:2.4.1"
@@ -34139,6 +34089,20 @@ __metadata:
   version: 2.5.3
   resolution: "tslib@npm:2.5.3"
   checksum: 4cb1817d34fae5b27d146e6c4a468d4155097d95c1335d0bc9690f11f33e63844806bf4ed6d97c30c72b8d85261b66cbbe16d871d9c594ac05701ec83e62a607
+  languageName: node
+  linkType: hard
+
+"tstyche@npm:1.0.0-beta.3":
+  version: 1.0.0-beta.3
+  resolution: "tstyche@npm:1.0.0-beta.3"
+  peerDependencies:
+    typescript: 4.x || 5.x
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  bin:
+    tstyche: build/bin.js
+  checksum: 8db6acde30b8905c891c3854837340e7bbfee20e79e6eae2e674e1e966737f8c79079325c330b51b922f3157a3fcb26da0005032a45ade302f20b1d3e3ccfd37
   languageName: node
   linkType: hard
 
