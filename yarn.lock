@@ -2346,9 +2346,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/live-query@npm:6.0.0":
-  version: 6.0.0
-  resolution: "@envelop/live-query@npm:6.0.0"
+"@envelop/live-query@npm:6.0.3":
+  version: 6.0.3
+  resolution: "@envelop/live-query@npm:6.0.3"
   dependencies:
     "@graphql-tools/utils": ^10.0.0
     "@n1ru4l/graphql-live-query": ^0.10.0
@@ -2356,9 +2356,9 @@ __metadata:
     "@n1ru4l/in-memory-live-query-store": ^0.10.0
     tslib: ^2.5.0
   peerDependencies:
-    "@envelop/core": ^4.0.0
+    "@envelop/core": ^4.0.3
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 3a3a741c454abc09ea51308ebc7f1b78306647957cfa75b8323db2cae35139a8515c1a2760ccb4d19604ea3da768db5ed55b1d5dc9576986b37a3db1d771abfd
+  checksum: bf8648a68ad43ac90cdf5615601e2973f371e283e35f9e9232837d2948cc9e41e056b731512f4c9341b0c95e3ed37bf26fa7cb83dc94b76b7630c79ff04ad49a
   languageName: node
   linkType: hard
 
@@ -8973,7 +8973,7 @@ __metadata:
   resolution: "@redwoodjs/realtime@workspace:packages/realtime"
   dependencies:
     "@envelop/core": 4.0.0
-    "@envelop/live-query": 6.0.0
+    "@envelop/live-query": 6.0.3
     "@envelop/testing": 6.0.3
     "@envelop/types": 4.0.0
     "@graphql-tools/schema": 10.0.0
