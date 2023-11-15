@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@redwoodjs/mailer-core": "6.0.7",
-    "resend": "1.0.0"
+    "resend": "1.1.0"
   },
   "devDependencies": {
     "esbuild": "0.19.5",
