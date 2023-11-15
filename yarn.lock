@@ -7815,7 +7815,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.23.2
     "@prisma/client": 5.6.0
     "@types/aws-lambda": 8.10.119
-    "@types/jsonwebtoken": 9.0.2
+    "@types/jsonwebtoken": 9.0.5
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
     "@types/split2": 4.2.0
@@ -7823,7 +7823,7 @@ __metadata:
     core-js: 3.33.2
     humanize-string: 2.1.0
     jest: 29.7.0
-    jsonwebtoken: 9.0.0
+    jsonwebtoken: 9.0.2
     memjs: 1.3.1
     pascalcase: 1.0.0
     pino: 8.16.2
@@ -7856,10 +7856,10 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
     "@redwoodjs/api": 6.4.0
-    "@types/jsonwebtoken": 9.0.2
+    "@types/jsonwebtoken": 9.0.5
     core-js: 3.33.2
     jest: 29.7.0
-    jsonwebtoken: 9.0.0
+    jsonwebtoken: 9.0.2
     jwks-rsa: 3.0.1
     typescript: 5.2.2
   languageName: unknown
@@ -7908,10 +7908,10 @@ __metadata:
     "@babel/runtime-corejs3": 7.23.2
     "@redwoodjs/api": 6.4.0
     "@types/aws-lambda": 8.10.119
-    "@types/jsonwebtoken": 9.0.2
+    "@types/jsonwebtoken": 9.0.5
     core-js: 3.33.2
     jest: 29.7.0
-    jsonwebtoken: 9.0.0
+    jsonwebtoken: 9.0.2
     jwks-rsa: 3.0.1
     typescript: 5.2.2
   languageName: unknown
@@ -8135,10 +8135,10 @@ __metadata:
     "@babel/runtime-corejs3": 7.23.2
     "@redwoodjs/api": 6.4.0
     "@types/aws-lambda": 8.10.119
-    "@types/jsonwebtoken": 9.0.2
+    "@types/jsonwebtoken": 9.0.5
     core-js: 3.33.2
     jest: 29.7.0
-    jsonwebtoken: 9.0.0
+    jsonwebtoken: 9.0.2
     typescript: 5.2.2
   languageName: unknown
   linkType: soft
@@ -8186,10 +8186,10 @@ __metadata:
     "@babel/runtime-corejs3": 7.23.2
     "@redwoodjs/api": 6.4.0
     "@types/aws-lambda": 8.10.119
-    "@types/jsonwebtoken": 9.0.2
+    "@types/jsonwebtoken": 9.0.5
     core-js: 3.33.2
     jest: 29.7.0
-    jsonwebtoken: 9.0.0
+    jsonwebtoken: 9.0.2
     typescript: 5.2.2
   languageName: unknown
   linkType: soft
@@ -8235,10 +8235,10 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
     "@redwoodjs/api": 6.4.0
-    "@types/jsonwebtoken": 9.0.2
+    "@types/jsonwebtoken": 9.0.5
     core-js: 3.33.2
     jest: 29.7.0
-    jsonwebtoken: 9.0.0
+    jsonwebtoken: 9.0.2
     jwks-rsa: 3.0.1
     typescript: 5.2.2
   peerDependencies:
@@ -8694,7 +8694,7 @@ __metadata:
     "@redwoodjs/api": 6.4.0
     "@redwoodjs/project-config": 6.4.0
     "@redwoodjs/realtime": 6.4.0
-    "@types/jsonwebtoken": 9.0.2
+    "@types/jsonwebtoken": 9.0.5
     "@types/lodash": 4.14.195
     "@types/uuid": 9.0.2
     "@whatwg-node/fetch": 0.9.9
@@ -8705,7 +8705,7 @@ __metadata:
     graphql-tag: 2.12.6
     graphql-yoga: 4.0.4
     jest: 29.7.0
-    jsonwebtoken: 9.0.0
+    jsonwebtoken: 9.0.2
     lodash: 4.17.21
     typescript: 5.2.2
     uuid: 9.0.0
@@ -9025,7 +9025,7 @@ __metadata:
     "@tailwindcss/forms": 0.5.3
     "@tremor/react": 3.4.1
     "@types/aws-lambda": 8.10.119
-    "@types/jsonwebtoken": 9.0.2
+    "@types/jsonwebtoken": 9.0.5
     "@types/lodash": 4.14.195
     "@types/mailparser": ^3
     "@types/qs": 6.9.7
@@ -9053,7 +9053,7 @@ __metadata:
     graphql-yoga: 4.0.4
     jest: 29.7.0
     json-bigint-patch: 0.0.8
-    jsonwebtoken: 9.0.0
+    jsonwebtoken: 9.0.2
     lodash: 4.17.21
     mailparser: ^3.6.5
     postcss: 8.4.31
@@ -11670,12 +11670,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:9.0.2, @types/jsonwebtoken@npm:^9.0.0":
-  version: 9.0.2
-  resolution: "@types/jsonwebtoken@npm:9.0.2"
+"@types/jsonwebtoken@npm:9.0.5, @types/jsonwebtoken@npm:^9.0.0":
+  version: 9.0.5
+  resolution: "@types/jsonwebtoken@npm:9.0.5"
   dependencies:
     "@types/node": "*"
-  checksum: 5af586c291b3e3341be844f76ce0de53e15f3cbc8dbc147f79ab3af4f5e2a2bf3499f3dcbfb85752f1f265d9a9362bbe8104d0173e24c6d8d7b23e41821e0dbe
+  checksum: c582b8420586f3b9550f7e34992cb32be300bc953636f3b087ed9c180ce7ea5c2e4b35090be2d57f0d3168cc3ca1074932907caa2afe09f4e9c84cf5c0daefa8
   languageName: node
   linkType: hard
 
@@ -24198,27 +24198,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonwebtoken@npm:9.0.0":
-  version: 9.0.0
-  resolution: "jsonwebtoken@npm:9.0.0"
+"jsonwebtoken@npm:9.0.2, jsonwebtoken@npm:^9.0.0":
+  version: 9.0.2
+  resolution: "jsonwebtoken@npm:9.0.2"
   dependencies:
     jws: ^3.2.2
-    lodash: ^4.17.21
+    lodash.includes: ^4.3.0
+    lodash.isboolean: ^3.0.3
+    lodash.isinteger: ^4.0.4
+    lodash.isnumber: ^3.0.3
+    lodash.isplainobject: ^4.0.6
+    lodash.isstring: ^4.0.1
+    lodash.once: ^4.0.0
     ms: ^2.1.1
-    semver: ^7.3.8
-  checksum: 60c30d90d8a69b8e7148306e0c299ac120dbde9c032add48d26df928fe349e952cf4b09f12d7942257681a936e3374e4d49280ab20f8a4578688c7f08d87f9bc
-  languageName: node
-  linkType: hard
-
-"jsonwebtoken@npm:^9.0.0":
-  version: 9.0.1
-  resolution: "jsonwebtoken@npm:9.0.1"
-  dependencies:
-    jws: ^3.2.2
-    lodash: ^4.17.21
-    ms: ^2.1.1
-    semver: ^7.3.8
-  checksum: 3508912a0fb5ad06a09a79f655681f6fc389376fb8e7fdcaf367fbdd02e9fb5e11a7a4ff715cbe44d8be0e7a99319b03a7d34ef5daede61cf1f8d3519bbb08d6
+    semver: ^7.5.4
+  checksum: d287a29814895e866db2e5a0209ce730cbc158441a0e5a70d5e940eb0d28ab7498c6bf45029cc8b479639bca94056e9a7f254e2cdb92a2f5750c7f358657a131
   languageName: node
   linkType: hard
 
@@ -24958,10 +24952,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.includes@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "lodash.includes@npm:4.3.0"
+  checksum: 7ca498b9b75bf602d04e48c0adb842dfc7d90f77bcb2a91a2b2be34a723ad24bc1c8b3683ec6b2552a90f216c723cdea530ddb11a3320e08fa38265703978f4b
+  languageName: node
+  linkType: hard
+
 "lodash.isarguments@npm:^3.1.0":
   version: 3.1.0
   resolution: "lodash.isarguments@npm:3.1.0"
   checksum: 5e8f95ba10975900a3920fb039a3f89a5a79359a1b5565e4e5b4310ed6ebe64011e31d402e34f577eca983a1fc01ff86c926e3cbe602e1ddfc858fdd353e62d8
+  languageName: node
+  linkType: hard
+
+"lodash.isboolean@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "lodash.isboolean@npm:3.0.3"
+  checksum: 0aac604c1ef7e72f9a6b798e5b676606042401dd58e49f051df3cc1e3adb497b3d7695635a5cbec4ae5f66456b951fdabe7d6b387055f13267cde521f10ec7f7
   languageName: node
   linkType: hard
 
@@ -24972,10 +24980,38 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.isinteger@npm:^4.0.4":
+  version: 4.0.4
+  resolution: "lodash.isinteger@npm:4.0.4"
+  checksum: 4c3e023a2373bf65bf366d3b8605b97ec830bca702a926939bcaa53f8e02789b6a176e7f166b082f9365bfec4121bfeb52e86e9040cb8d450e64c858583f61b7
+  languageName: node
+  linkType: hard
+
 "lodash.ismatch@npm:^4.4.0":
   version: 4.4.0
   resolution: "lodash.ismatch@npm:4.4.0"
   checksum: 8f96a5dc4b8d3fc5a033dcb259d0c3148a1044fa4d02b4a0e8dce0fa1f2ef3ec4ac131e20b5cb2c985a4e9bcb1c37c0aa5af2cef70094959389617347b8fc645
+  languageName: node
+  linkType: hard
+
+"lodash.isnumber@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "lodash.isnumber@npm:3.0.3"
+  checksum: 2d01530513a1ee4f72dd79528444db4e6360588adcb0e2ff663db2b3f642d4bb3d687051ae1115751ca9082db4fdef675160071226ca6bbf5f0c123dbf0aa12d
+  languageName: node
+  linkType: hard
+
+"lodash.isplainobject@npm:^4.0.6":
+  version: 4.0.6
+  resolution: "lodash.isplainobject@npm:4.0.6"
+  checksum: afd70b5c450d1e09f32a737bed06ff85b873ecd3d3d3400458725283e3f2e0bb6bf48e67dbe7a309eb371a822b16a26cca4a63c8c52db3fc7dc9d5f9dd324cbb
+  languageName: node
+  linkType: hard
+
+"lodash.isstring@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "lodash.isstring@npm:4.0.1"
+  checksum: 09eaf980a283f9eef58ef95b30ec7fee61df4d6bf4aba3b5f096869cc58f24c9da17900febc8ffd67819b4e29de29793190e88dc96983db92d84c95fa85d1c92
   languageName: node
   linkType: hard
 
@@ -25007,7 +25043,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.once@npm:^4.1.1":
+"lodash.once@npm:^4.0.0, lodash.once@npm:^4.1.1":
   version: 4.1.1
   resolution: "lodash.once@npm:4.1.1"
   checksum: 46a9a0a66c45dd812fcc016e46605d85ad599fe87d71a02f6736220554b52ffbe82e79a483ad40f52a8a95755b0d1077fba259da8bfb6694a7abbf4a48f1fc04
