@@ -9229,7 +9229,7 @@ __metadata:
     jest: 29.7.0
     react: 0.0.0-experimental-e5205658f-20230913
     react-server-dom-webpack: 0.0.0-experimental-e5205658f-20230913
-    rollup: 3.27.2
+    rollup: 3.29.4
     typescript: 5.2.2
     vite: 4.5.0
     yargs-parser: 21.1.1
@@ -31369,9 +31369,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:3.27.2, rollup@npm:^3.27.1":
-  version: 3.27.2
-  resolution: "rollup@npm:3.27.2"
+"rollup@npm:3.29.4, rollup@npm:^3.27.1":
+  version: 3.29.4
+  resolution: "rollup@npm:3.29.4"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -31379,7 +31379,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: feb1e76f50fb502e106954a621b2d0b3e2e92e2552f938a0cbef5f7931c9f4283d05076d47311a4582863205f377e3e2d7314a1626e3c7d9c7330527ddeb7562
+  checksum: 65eddf84bf389ea8e4d4c1614b1c6a298d08f8ae785c0c087e723a879190c8aaddbab4aa3b8a0524551b9036750c9f8bfea27b377798accfd2ba5084ceff5aaa
   languageName: node
   linkType: hard
 
