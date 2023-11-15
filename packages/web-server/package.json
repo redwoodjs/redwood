@@ -31,7 +31,7 @@
     "chalk": "4.1.2",
     "dotenv-defaults": "5.0.2",
     "fast-glob": "3.3.1",
-    "fastify": "4.23.2",
+    "fastify": "4.24.3",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
