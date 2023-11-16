@@ -88,7 +88,7 @@
     "@types/busboy": "^1",
     "@types/express": "4",
     "@types/react": "18.2.14",
-    "@types/yargs-parser": "21.0.0",
+    "@types/yargs-parser": "21.0.3",
     "glob": "10.3.1",
     "jest": "29.7.0",
     "rollup": "3.29.4",
