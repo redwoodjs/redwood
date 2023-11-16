@@ -35,7 +35,7 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@types/yargs-parser": "21.0.0",
+    "@types/yargs-parser": "21.0.3",
     "esbuild": "0.19.5",
     "typescript": "5.2.2"
   },
