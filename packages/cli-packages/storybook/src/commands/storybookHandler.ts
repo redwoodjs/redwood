@@ -63,7 +63,7 @@ export async function handler({
   let command = ''
   const flags = [
     `--config-dir "${storybookConfigPath}"`,
-    "--webpack-stats-json",
+    '--webpack-stats-json',
   ]
 
   if (build) {
