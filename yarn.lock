@@ -8534,7 +8534,7 @@ __metadata:
     "@svgr/plugin-jsx": 8.0.1
     "@types/babel__core": 7.20.4
     "@types/fs-extra": 11.0.1
-    "@types/jest": 29.5.4
+    "@types/jest": 29.5.8
     "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.3
     "@types/yargs": 17.0.31
@@ -9170,7 +9170,7 @@ __metadata:
     "@testing-library/user-event": 14.5.1
     "@types/aws-lambda": 8.10.126
     "@types/babel-core": 6.25.10
-    "@types/jest": 29.5.4
+    "@types/jest": 29.5.8
     "@types/node": 18.18.9
     "@types/react": 18.2.14
     "@types/react-dom": 18.2.6
@@ -11656,13 +11656,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:29.5.4":
-  version: 29.5.4
-  resolution: "@types/jest@npm:29.5.4"
+"@types/jest@npm:*, @types/jest@npm:29.5.8":
+  version: 29.5.8
+  resolution: "@types/jest@npm:29.5.8"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
-  checksum: 49c1f0fa20e45b1dfd69aea8af667a8be30e210f00673c365d504ca285cf9040d8f4861dd89657640af5f4a49eadcadc08907b5cf82eda28afea8ddd3dda8390
+  checksum: a28e7827ea7e1a2aace6a386868fa6b8402c162d6c71570aed2c29d3745ddc22ceef6899a20643071817905d3c57b670a7992fc8760bff65939351fd4dc481cf
   languageName: node
   linkType: hard
 
@@ -31558,7 +31558,7 @@ __metadata:
     "@testing-library/user-event": 14.5.1
     "@types/babel__generator": 7.6.7
     "@types/fs-extra": 11.0.1
-    "@types/jest": 29.5.4
+    "@types/jest": 29.5.8
     "@types/jscodeshift": 0.11.6
     "@types/ncp": 2.0.5
     "@types/prompts": 2.4.4
