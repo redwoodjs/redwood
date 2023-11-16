@@ -33,7 +33,7 @@
   "devDependencies": {
     "@types/aws-lambda": "8.10.126",
     "@types/lodash": "4.14.201",
-    "@types/qs": "6.9.7",
+    "@types/qs": "6.9.10",
     "esbuild": "0.19.5",
     "typescript": "5.2.2"
   },
