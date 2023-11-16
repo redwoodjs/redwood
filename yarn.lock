@@ -7942,7 +7942,7 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
     "@redwoodjs/auth": 6.4.0
-    "@types/netlify-identity-widget": 1.9.3
+    "@types/netlify-identity-widget": 1.9.6
     "@types/react": 18.2.14
     core-js: 3.33.2
     jest: 29.7.0
@@ -8167,7 +8167,7 @@ __metadata:
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
     "@redwoodjs/auth": 6.4.0
-    "@types/netlify-identity-widget": 1.9.3
+    "@types/netlify-identity-widget": 1.9.6
     "@types/react": 18.2.14
     core-js: 3.33.2
     jest: 29.7.0
@@ -11848,10 +11848,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/netlify-identity-widget@npm:1.9.3":
-  version: 1.9.3
-  resolution: "@types/netlify-identity-widget@npm:1.9.3"
-  checksum: 921f5439c3b8fa0fb27058be39f5c6e965ee69a82484a55d3ccb247f6849fd0b4e8170a42e45667bc64869e1ec46d8a2577e63689c949c3fbdb7f67199dfcb86
+"@types/netlify-identity-widget@npm:1.9.6":
+  version: 1.9.6
+  resolution: "@types/netlify-identity-widget@npm:1.9.6"
+  checksum: 730b17f9271d27a9640b4494f49d988ad6c99f373c8954c2b57cbac82816f5196977f43d0232d7a4fd77702fe2d666aaac05241aa5381de46158369be9288a84
   languageName: node
   linkType: hard
 
