@@ -7823,7 +7823,7 @@ __metadata:
     "@types/aws-lambda": 8.10.126
     "@types/lodash": 4.14.201
     "@types/qs": 6.9.10
-    "@types/split2": 4.2.0
+    "@types/split2": 4.2.3
     "@types/yargs": 17.0.31
     ansi-colors: 4.1.3
     aws-lambda: 1.0.7
@@ -7862,7 +7862,7 @@ __metadata:
     "@types/jsonwebtoken": 9.0.5
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
-    "@types/split2": 4.2.0
+    "@types/split2": 4.2.3
     "@whatwg-node/fetch": 0.9.14
     core-js: 3.33.2
     humanize-string: 2.1.0
@@ -9083,7 +9083,7 @@ __metadata:
     "@types/react-dom": 18.2.6
     "@types/react-grid-layout": 1
     "@types/smtp-server": ^3
-    "@types/split2": 4.2.0
+    "@types/split2": 4.2.3
     "@types/uuid": 9.0.7
     "@types/yargs": 17.0.31
     "@vitejs/plugin-react": 4.1.1
@@ -12214,12 +12214,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/split2@npm:4.2.0":
-  version: 4.2.0
-  resolution: "@types/split2@npm:4.2.0"
+"@types/split2@npm:4.2.3":
+  version: 4.2.3
+  resolution: "@types/split2@npm:4.2.3"
   dependencies:
     "@types/node": "*"
-  checksum: a0b8ba04ee7f60aef4d1367df11d5688a92a057c368a8280b6329106dd87eb71c49e264a924dbd2ceee798a4ab0a1c21e0a54c622a87ec1b438ec9368db1b909
+  checksum: 92326872b1f6f2e5a0808682a3f0630efb98bed51b1e40e2133e740f664bbde7a21af54e2a1f1a1f6eac218a70d7a9bae22d3e6d614950c06ddab391b7a1dfca
   languageName: node
   linkType: hard
 
