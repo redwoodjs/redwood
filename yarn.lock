@@ -5417,9 +5417,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/arborist@npm:6.2.10":
-  version: 6.2.10
-  resolution: "@npmcli/arborist@npm:6.2.10"
+"@npmcli/arborist@npm:6.5.0":
+  version: 6.5.0
+  resolution: "@npmcli/arborist@npm:6.5.0"
   dependencies:
     "@isaacs/string-locale-compare": ^1.1.0
     "@npmcli/fs": ^3.1.0
@@ -5428,7 +5428,7 @@ __metadata:
     "@npmcli/metavuln-calculator": ^5.0.0
     "@npmcli/name-from-folder": ^2.0.0
     "@npmcli/node-gyp": ^3.0.0
-    "@npmcli/package-json": ^3.0.0
+    "@npmcli/package-json": ^4.0.0
     "@npmcli/query": ^3.0.0
     "@npmcli/run-script": ^6.0.0
     bin-links: ^4.0.1
@@ -5439,7 +5439,7 @@ __metadata:
     json-stringify-nice: ^1.1.4
     minimatch: ^9.0.0
     nopt: ^7.0.0
-    npm-install-checks: ^6.0.0
+    npm-install-checks: ^6.2.0
     npm-package-arg: ^10.1.0
     npm-pick-manifest: ^8.0.1
     npm-registry-fetch: ^14.0.3
@@ -5456,7 +5456,7 @@ __metadata:
     walk-up-path: ^3.0.1
   bin:
     arborist: bin/index.js
-  checksum: 2bd713fa742e72cdad62307a92c5bba61bfb6de910d61b9b94dd21d67bbd917257ff127eeb11d9231af7dd7fc3700b46142e06fb782c6ebb3b4e163df0d0698f
+  checksum: f245b372e4d9319aa41aa2e16ff8ffdbbb6ce13a34c090eb4dda9b5597c031dcfc97f0f2f918b576667e0ae0544f36ed1bccbc53f401209184268608fc1e19cc
   languageName: node
   linkType: hard
 
@@ -5555,17 +5555,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/package-json@npm:^3.0.0":
-  version: 3.1.1
-  resolution: "@npmcli/package-json@npm:3.1.1"
+"@npmcli/package-json@npm:^4.0.0":
+  version: 4.0.1
+  resolution: "@npmcli/package-json@npm:4.0.1"
   dependencies:
     "@npmcli/git": ^4.1.0
     glob: ^10.2.2
+    hosted-git-info: ^6.1.1
     json-parse-even-better-errors: ^3.0.0
     normalize-package-data: ^5.0.0
-    npm-normalize-package-bin: ^3.0.1
     proc-log: ^3.0.0
-  checksum: fc3052a36cb65c011da75dfdb051b631557e5ccc7b25b64be87cb363e8f2e99d78fcf94495f456406ada2c75afaff8177a2a06a46594f15eb0b4e667110a415e
+    semver: ^7.5.3
+  checksum: 61adec288372827e482d4c6bda8186e239b1419a6f018552a0444520720022fb2903d08438f32881fe2eccabb8cf29dcb1c5c5c62c4fc970d79ad71fe9a41e46
   languageName: node
   linkType: hard
 
@@ -27300,12 +27301,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-install-checks@npm:^6.0.0":
-  version: 6.1.1
-  resolution: "npm-install-checks@npm:6.1.1"
+"npm-install-checks@npm:^6.0.0, npm-install-checks@npm:^6.2.0":
+  version: 6.3.0
+  resolution: "npm-install-checks@npm:6.3.0"
   dependencies:
     semver: ^7.1.1
-  checksum: f61bbd7e27738037a3e836e1b154f668f774a4eb5fd66830b9edf3ef4b0648d4477cb0c73c129a255445109a5c18f16413e1b356d56c0cac006e57ab21c66ede
+  checksum: b046ef1de9b40f5d3a9831ce198e1770140a1c3f253dae22eb7b06045191ef79f18f1dcc15a945c919b3c161426861a28050abd321bf439190185794783b6452
   languageName: node
   linkType: hard
 
@@ -27323,7 +27324,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-normalize-package-bin@npm:^3.0.0, npm-normalize-package-bin@npm:^3.0.1":
+"npm-normalize-package-bin@npm:^3.0.0":
   version: 3.0.1
   resolution: "npm-normalize-package-bin@npm:3.0.1"
   checksum: f1831a7f12622840e1375c785c3dab7b1d82dd521211c17ee5e9610cd1a34d8b232d3fdeebf50c170eddcb321d2c644bf73dbe35545da7d588c6b3fa488db0a5
@@ -31422,7 +31423,7 @@ __metadata:
     "@babel/preset-typescript": ^7.22.15
     "@babel/runtime-corejs3": 7.23.2
     "@faker-js/faker": 8.0.2
-    "@npmcli/arborist": 6.2.10
+    "@npmcli/arborist": 6.5.0
     "@playwright/test": 1.39.0
     "@testing-library/jest-dom": 5.17.0
     "@testing-library/react": 14.1.0
