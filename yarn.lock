@@ -8338,7 +8338,7 @@ __metadata:
     "@prisma/client": 5.6.0
     "@redwoodjs/babel-config": 6.4.0
     "@redwoodjs/project-config": 6.4.0
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.4
     "@types/yargs": 17.0.31
     chalk: 4.1.2
     dotenv-defaults: 5.0.2
@@ -8491,7 +8491,7 @@ __metadata:
     "@svgr/core": 8.0.0
     "@svgr/plugin-jsx": 8.0.1
     "@types/babel__core": 7.20.4
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.3
@@ -8736,7 +8736,7 @@ __metadata:
     "@redwoodjs/graphql-server": 6.4.0
     "@redwoodjs/project-config": 6.4.0
     "@sdl-codegen/node": 0.0.10
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.4
     chalk: 4.1.2
     core-js: 3.33.2
     deepmerge: 4.3.1
@@ -8972,7 +8972,7 @@ __metadata:
     "@iarna/toml": 2.2.5
     "@prisma/internals": 5.6.0
     "@redwoodjs/project-config": 6.4.0
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.4
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.201
     "@types/lru-cache": 7.10.10
@@ -11503,13 +11503,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/fs-extra@npm:11.0.1, @types/fs-extra@npm:^11.0.1":
-  version: 11.0.1
-  resolution: "@types/fs-extra@npm:11.0.1"
+"@types/fs-extra@npm:11.0.4, @types/fs-extra@npm:^11.0.1":
+  version: 11.0.4
+  resolution: "@types/fs-extra@npm:11.0.4"
   dependencies:
     "@types/jsonfile": "*"
     "@types/node": "*"
-  checksum: a65f1fae47849fe1a17441dcabc9400390303405972ff3cbb3578746cea8916b23d5e7652bf57a87767f75a9b2f37caac499b78b5230ae08fef0ba58b34c3a85
+  checksum: 9e34f9b24ea464f3c0b18c3f8a82aefc36dc524cc720fc2b886e5465abc66486ff4e439ea3fb2c0acebf91f6d3f74e514f9983b1f02d4243706bdbb7511796ad
   languageName: node
   linkType: hard
 
@@ -31429,7 +31429,7 @@ __metadata:
     "@testing-library/react": 14.1.0
     "@testing-library/user-event": 14.5.1
     "@types/babel__generator": 7.6.7
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/jscodeshift": 0.11.6
     "@types/ncp": 2.0.5
