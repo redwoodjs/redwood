@@ -1,12 +1,11 @@
 import * as Sentry from '@sentry/node'
-import { Prisma } from '@sentry/node/types/tracing/integrations'
 
 import { db as client } from 'src/lib/db'
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.NODE_ENV,
-  integrations: [new Prisma({ client })],
+  integrations: [new Sentry.Integrations.Prisma({ client })],
   tracesSampleRate: 1.0,
 })
 
