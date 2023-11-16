@@ -6,18 +6,18 @@
  * Read more: https://mantine.dev/styles/postcss-preset/
 
  * `postcss-simple-vars` enables use of SCSS-like variables inside CSS files:
-```postcss
-$blue    : #056ef0;
-$width-sm: rem(37.5);
-$selector: .my-component
-
-@media (min-width: $width-sm) {
-  $selector {
-    background: $blue;
-  }
-}
-```
-Read more: https://github.com/postcss/postcss-simple-vars
+ * ```postcss
+ * $blue    : #056ef0;
+ * $width-sm: rem(37.5);
+ * $selector: .my-component
+ *
+ * @media (min-width: $width-sm) {
+ *   $selector {
+ *     background: $blue;
+ *   }
+ * }
+ * ```
+ * Read more: https://github.com/postcss/postcss-simple-vars
 */
 module.exports = {
   plugins: [

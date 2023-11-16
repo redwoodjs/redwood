@@ -1,8 +1,7 @@
-import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
-import { outputFileSync } from 'fs-extra'
+import fse from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
@@ -132,12 +131,12 @@ export async function handler({ force, install, packages }) {
            */
           const postCSSConfigPath = rwPaths.web.postcss
 
-          if (!force && fs.existsSync(postCSSConfigPath)) {
+          if (!force && fse.existsSync(postCSSConfigPath)) {
             throw new Error(
               'PostCSS config already exists.\nUse --force to override existing config.'
             )
           } else {
-            const postCSSConfig = fs.readFileSync(
+            const postCSSConfig = fse.readFileSync(
               path.join(
                 __dirname,
                 '../templates/mantine-postcss.config.js.template'
@@ -145,7 +144,7 @@ export async function handler({ force, install, packages }) {
               'utf-8'
             )
 
-            return outputFileSync(postCSSConfigPath, postCSSConfig)
+            return fse.outputFileSync(postCSSConfigPath, postCSSConfig)
           }
         },
       },
