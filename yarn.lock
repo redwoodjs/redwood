@@ -7779,7 +7779,7 @@ __metadata:
     "@redwoodjs/project-config": 6.4.0
     "@types/aws-lambda": 8.10.126
     "@types/lodash": 4.14.201
-    "@types/qs": 6.9.7
+    "@types/qs": 6.9.10
     "@types/split2": 4.2.0
     "@types/yargs": 17.0.31
     ansi-colors: 4.1.3
@@ -8631,7 +8631,7 @@ __metadata:
     "@redwoodjs/project-config": 6.4.0
     "@types/aws-lambda": 8.10.126
     "@types/lodash": 4.14.201
-    "@types/qs": 6.9.7
+    "@types/qs": 6.9.10
     ansi-colors: 4.1.3
     esbuild: 0.18.19
     fast-glob: 3.3.2
@@ -9030,7 +9030,7 @@ __metadata:
     "@types/jsonwebtoken": 9.0.5
     "@types/lodash": 4.14.201
     "@types/mailparser": ^3
-    "@types/qs": 6.9.7
+    "@types/qs": 6.9.10
     "@types/react": 18.2.14
     "@types/react-dom": 18.2.6
     "@types/react-grid-layout": 1
@@ -11980,10 +11980,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/qs@npm:*, @types/qs@npm:6.9.7, @types/qs@npm:^6.9.5":
-  version: 6.9.7
-  resolution: "@types/qs@npm:6.9.7"
-  checksum: 157eb05f4c75790b0ebdcf7b0547ff117feabc8cda03c3cac3d3ea82bb19a1912e76a411df3eb0bdd01026a9770f07bc0e7e3fbe39ebb31c1be4564c16be35f1
+"@types/qs@npm:*, @types/qs@npm:6.9.10, @types/qs@npm:^6.9.5":
+  version: 6.9.10
+  resolution: "@types/qs@npm:6.9.10"
+  checksum: 6be12e5f062d1b41eb037d59bf9cb65bc9410cedd5e6da832dfd7c8e2b3f4c91e81c9b90b51811140770e5052c6c4e8361181bd9437ddcd4515dc128b7c00353
   languageName: node
   linkType: hard
 
