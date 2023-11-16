@@ -325,17 +325,6 @@ describe('Uses the correct modes', () => {
       expect(console.warn).toBeCalledWith(
         'The test handler is null, this will prevent mail from being processed in test mode'
       )
-      console.warn.mockClear()
-      const _mailer2 = new Mailer({
-        ...baseConfig,
-        test: {
-          when: true,
-          handler: undefined,
-        },
-      })
-      expect(console.warn).toBeCalledWith(
-        'The test handler is null, this will prevent mail from being processed in test mode'
-      )
     })
 
     test('development', () => {
@@ -350,8 +339,31 @@ describe('Uses the correct modes', () => {
       expect(console.warn).toBeCalledWith(
         'The development handler is null, this will prevent mail from being processed in development mode'
       )
+    })
+  })
+
+  describe('attempts to use fallback handlers', () => {
+    beforeAll(() => {
+      jest.spyOn(console, 'warn').mockImplementation(() => {})
+    })
+
+    test('test', () => {
       console.warn.mockClear()
-      const _mailer2 = new Mailer({
+      const _mailer = new Mailer({
+        ...baseConfig,
+        test: {
+          when: true,
+          handler: undefined,
+        },
+      })
+      expect(console.warn).toBeCalledWith(
+        "Automatically loaded the '@redwoodjs/mailer-handler-in-memory' handler, this will be used to process mail in test mode"
+      )
+    })
+
+    test('development', () => {
+      console.warn.mockClear()
+      const _mailer = new Mailer({
         ...baseConfig,
         development: {
           when: true,
@@ -359,7 +371,7 @@ describe('Uses the correct modes', () => {
         },
       })
       expect(console.warn).toBeCalledWith(
-        'The development handler is null, this will prevent mail from being processed in development mode'
+        "Automatically loaded the '@redwoodjs/mailer-handler-studio' handler, this will be used to process mail in development mode"
       )
     })
   })
@@ -804,7 +816,7 @@ describe('Uses the correct modes', () => {
     expect(mailerExplicitlyNullTestHandler.getTestHandler()).toBeNull()
 
     const mailerNoTestHandlerDefined = new Mailer(baseConfig)
-    expect(mailerNoTestHandlerDefined.getTestHandler()).toBeNull()
+    expect(mailerNoTestHandlerDefined.getTestHandler()).not.toBeNull()
   })
 
   test('getDevelopmentHandler', () => {
@@ -835,7 +847,9 @@ describe('Uses the correct modes', () => {
     ).toBeNull()
 
     const mailerNoDevelopmentHandlerDefined = new Mailer(baseConfig)
-    expect(mailerNoDevelopmentHandlerDefined.getDevelopmentHandler()).toBeNull()
+    expect(
+      mailerNoDevelopmentHandlerDefined.getDevelopmentHandler()
+    ).not.toBeNull()
   })
 
   test('getDefaultProductionHandler', () => {
