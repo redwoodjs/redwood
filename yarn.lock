@@ -9166,7 +9166,7 @@ __metadata:
     "@redwoodjs/project-config": 6.4.0
     "@types/express": 4
     "@types/react": 18.2.14
-    "@types/yargs-parser": 21.0.0
+    "@types/yargs-parser": 21.0.3
     "@vitejs/plugin-react": 4.1.1
     buffer: 6.0.3
     core-js: 3.33.2
@@ -9189,7 +9189,7 @@ __metadata:
     "@fastify/http-proxy": 9.3.0
     "@fastify/static": 6.12.0
     "@redwoodjs/project-config": 6.4.0
-    "@types/yargs-parser": 21.0.0
+    "@types/yargs-parser": 21.0.3
     chalk: 4.1.2
     dotenv-defaults: 5.0.2
     esbuild: 0.18.19
@@ -12249,10 +12249,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs-parser@npm:*, @types/yargs-parser@npm:21.0.0":
-  version: 21.0.0
-  resolution: "@types/yargs-parser@npm:21.0.0"
-  checksum: cb89f3bb2e8002f1479a65a934e825be4cc18c50b350bbc656405d41cf90b8a299b105e7da497d7eb1aa460472a07d1e5a389f3af0862f1d1252279cfcdd017c
+"@types/yargs-parser@npm:*, @types/yargs-parser@npm:21.0.3":
+  version: 21.0.3
+  resolution: "@types/yargs-parser@npm:21.0.3"
+  checksum: e71c3bd9d0b73ca82e10bee2064c384ab70f61034bbfb78e74f5206283fc16a6d85267b606b5c22cb2a3338373586786fed595b2009825d6a9115afba36560a0
   languageName: node
   linkType: hard
 
