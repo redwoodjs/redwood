@@ -1,5 +1,5 @@
+import { BrowserTracing } from '@sentry/browser'
 import * as Sentry from '@sentry/react'
-import { BrowserTracing } from '@sentry/tracing'
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,

@@ -29,9 +29,8 @@ export const handler = async ({ force }) => {
     addApiPackages([
       '@envelop/sentry@5',
       '@sentry/node@7',
-      '@sentry/tracing@7',
     ]),
-    addWebPackages(['@sentry/react@7', '@sentry/tracing@7']),
+    addWebPackages(['@sentry/react@7', '@sentry/browser@7']),
     addEnvVarTask(
       'SENTRY_DSN',
       'https://XXXXXXX@XXXXXXX.ingest.sentry.io/XXXXXXX',
