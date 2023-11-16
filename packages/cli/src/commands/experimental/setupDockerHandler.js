@@ -185,20 +185,36 @@ export async function handler({ force }) {
             ].join('\n')
           }
 
-          writeFile(dockerfilePath, dockerfileTemplateContent, {
-            existingFiles: force ? 'OVERWRITE' : 'SKIP',
-          })
-          writeFile(dockerComposeDevFilePath, dockerComposeDevTemplateContent, {
-            existingFiles: force ? 'OVERWRITE' : 'SKIP',
-          })
+          writeFile(
+            dockerfilePath,
+            dockerfileTemplateContent,
+            {
+              existingFiles: force ? 'OVERWRITE' : 'SKIP',
+            },
+            task
+          )
+          writeFile(
+            dockerComposeDevFilePath,
+            dockerComposeDevTemplateContent,
+            {
+              existingFiles: force ? 'OVERWRITE' : 'SKIP',
+            },
+            task
+          )
           writeFile(
             dockerComposeProdFilePath,
             dockerComposeProdTemplateContent,
-            { existingFiles: force ? 'OVERWRITE' : 'SKIP' }
+            { existingFiles: force ? 'OVERWRITE' : 'SKIP' },
+            task
           )
-          writeFile(dockerignoreFilePath, dockerignoreTemplateContent, {
-            existingFiles: force ? 'OVERWRITE' : 'SKIP',
-          })
+          writeFile(
+            dockerignoreFilePath,
+            dockerignoreTemplateContent,
+            {
+              existingFiles: force ? 'OVERWRITE' : 'SKIP',
+            },
+            task
+          )
         },
       },
 

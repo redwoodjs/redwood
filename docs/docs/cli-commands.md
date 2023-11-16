@@ -290,7 +290,7 @@ The following command will build, apply Prisma DB migrations, and skip data migr
 yarn redwood deploy netlify --no-data-migrate
 ```
 
-:::caution
+:::warning
 While you may be tempted to use the [Netlify CLI](https://cli.netlify.com) commands to [build](https://cli.netlify.com/commands/build) and [deploy](https://cli.netlify.com/commands/deploy) your project directly from you local project directory, doing so **will lead to errors when deploying and/or when running functions**. I.e. errors in the function needed for the GraphQL server, but also other serverless functions.
 
 The main reason for this is that these Netlify CLI commands simply build and deploy -- they build your project locally and then push the dist folder. That means that when building a RedwoodJS project, the [Prisma client is generated with binaries matching the operating system at build time](https://cli.netlify.com/commands/link) -- and not the [OS compatible](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#binarytargets-options) with running functions on Netlify. Your Prisma client engine may be `darwin` for OSX or `windows` for Windows, but it needs to be `debian-openssl-1.1.x` or `rhel-openssl-1.1.x`. If the client is incompatible, your functions will fail.
@@ -1780,7 +1780,7 @@ yarn redwood setup cache <client>
 
 ### setup custom-web-index
 
-:::caution This command only applies to projects using Webpack
+:::warning This command only applies to projects using Webpack
 
 As of v6, all Redwood projects use Vite by default.
 When switching projects to Vite, we made the decision to add the the entry file, `web/src/entry.client.{jsx,tsx}`, back to projects.
