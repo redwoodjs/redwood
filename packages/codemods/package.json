@@ -32,7 +32,7 @@
     "@redwoodjs/project-config": "6.4.0",
     "@svgr/core": "8.0.0",
     "@svgr/plugin-jsx": "8.0.1",
-    "@vscode/ripgrep": "1.15.5",
+    "@vscode/ripgrep": "1.15.6",
     "@whatwg-node/fetch": "0.9.14",
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.33.2",

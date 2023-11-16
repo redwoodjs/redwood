@@ -8496,7 +8496,7 @@ __metadata:
     "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.3
     "@types/yargs": 17.0.31
-    "@vscode/ripgrep": 1.15.5
+    "@vscode/ripgrep": 1.15.6
     "@whatwg-node/fetch": 0.9.14
     cheerio: 1.0.0-rc.12
     core-js: 3.33.2
@@ -12424,13 +12424,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vscode/ripgrep@npm:1.15.5":
-  version: 1.15.5
-  resolution: "@vscode/ripgrep@npm:1.15.5"
+"@vscode/ripgrep@npm:1.15.6":
+  version: 1.15.6
+  resolution: "@vscode/ripgrep@npm:1.15.6"
   dependencies:
-    https-proxy-agent: ^5.0.0
+    https-proxy-agent: ^7.0.2
     proxy-from-env: ^1.1.0
-  checksum: 68235fc669a00ce5108ac3075b5a6b2898c57aac5f9ffb0462fc69322400f3a0410662b202dddbb0626806ee052d998fc53bb4e4f10f012925efbde6ee59e960
+  checksum: e98cfdb4cadd0a5d0ae9d52e0807098ea7a9a3c7b1dc52f1213271278e565c3de6280ce29319aebf12c4d643ebe4e2e8ffa4ab613d03994688c1f6ebff4d1216
   languageName: node
   linkType: hard
 
@@ -22052,7 +22052,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"https-proxy-agent@npm:7.0.2":
+"https-proxy-agent@npm:7.0.2, https-proxy-agent@npm:^7.0.2":
   version: 7.0.2
   resolution: "https-proxy-agent@npm:7.0.2"
   dependencies:
