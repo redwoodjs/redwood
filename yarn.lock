@@ -8391,7 +8391,7 @@ __metadata:
     fs-extra: 11.1.1
     jest: 29.7.0
     listr2: 6.6.1
-    memfs: 4.2.1
+    memfs: 4.6.0
     terminal-link: 2.1.1
     typescript: 5.2.2
     yargs: 17.7.2
@@ -25723,15 +25723,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memfs@npm:4.2.1":
-  version: 4.2.1
-  resolution: "memfs@npm:4.2.1"
+"memfs@npm:4.6.0":
+  version: 4.6.0
+  resolution: "memfs@npm:4.6.0"
   dependencies:
     json-joy: ^9.2.0
     thingies: ^1.11.1
   peerDependencies:
     tslib: 2
-  checksum: 07b8322faf533d19ab658c4254d65e560fcc7a4a89ab15fb10b9aead786d91b6a27b658ec5213e9d59701185f5d35eba45def334bd2d5d321bb068cf8f07fe37
+  checksum: 370a70ff9156aaf5a75bfeca265d66b08795bf736c5ad0c1a597e489864d4f031f424b320ef3f331a99f0fa36ad90688ab28859b7c647ee3b473d4ee1fdd8d95
   languageName: node
   linkType: hard
 
