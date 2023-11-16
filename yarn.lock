@@ -7861,7 +7861,7 @@ __metadata:
     "@types/aws-lambda": 8.10.126
     "@types/jsonwebtoken": 9.0.5
     "@types/memjs": 1
-    "@types/pascalcase": 1.0.1
+    "@types/pascalcase": 1.0.3
     "@types/split2": 4.2.3
     "@whatwg-node/fetch": 0.9.14
     core-js: 3.33.2
@@ -8412,7 +8412,7 @@ __metadata:
     "@redwoodjs/project-config": 6.0.7
     "@redwoodjs/telemetry": 6.0.7
     "@types/lodash": 4.14.201
-    "@types/pascalcase": 1.0.1
+    "@types/pascalcase": 1.0.3
     "@types/yargs": 17.0.31
     chalk: 4.1.2
     core-js: 3.33.2
@@ -8700,7 +8700,7 @@ __metadata:
     "@testing-library/jest-dom": 5.17.0
     "@testing-library/react": 14.1.0
     "@testing-library/user-event": 14.5.1
-    "@types/pascalcase": 1.0.1
+    "@types/pascalcase": 1.0.3
     "@types/react": 18.2.14
     "@types/react-dom": 18.2.6
     "@types/testing-library__jest-dom": 5.14.9
@@ -11998,10 +11998,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/pascalcase@npm:1.0.1":
-  version: 1.0.1
-  resolution: "@types/pascalcase@npm:1.0.1"
-  checksum: beb5e1568f9dc2335c20c1f7df1332b0a357c6492e3ba04e14e0b908ff2e10509c94a991d1f90a384a0dae7c862d8c1107141dacab80532738fadd085cdbb26e
+"@types/pascalcase@npm:1.0.3":
+  version: 1.0.3
+  resolution: "@types/pascalcase@npm:1.0.3"
+  checksum: 4bc93fee5a7e3ea63a1c92f66cc72462dc557430c705ecefd834181950a779cf188f24e9afac15687ff9fdf360cb5f233130c6fc92d4bb94772551557adb8281
   languageName: node
   linkType: hard
 
