@@ -8359,7 +8359,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.23.2
     "@babel/traverse": ^7.22.20
     "@redwoodjs/project-config": 6.0.7
-    "@types/babel-plugin-tester": 9.0.7
+    "@types/babel-plugin-tester": 9.0.9
     "@types/babel__core": 7.20.4
     babel-plugin-auto-import: 1.1.0
     babel-plugin-graphql-tag: 3.3.0
@@ -11115,13 +11115,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel-plugin-tester@npm:9.0.7":
-  version: 9.0.7
-  resolution: "@types/babel-plugin-tester@npm:9.0.7"
+"@types/babel-plugin-tester@npm:9.0.9":
+  version: 9.0.9
+  resolution: "@types/babel-plugin-tester@npm:9.0.9"
   dependencies:
     "@types/babel__core": "*"
     "@types/prettier": ^2.0.0
-  checksum: 66e4adbd005bafa94eb289387e3ea8a503475e52265086fcb7fcaa213a954d193108af01ae758c4bb2b8d1e8d59ccca637d053e8563b0d2255b4e6da51e57052
+  checksum: b05e4d551a98d74a743945fa109cf1866fc6b57303f3daee29276e1e6ca354ff647f946e047747e5104f5d9f26cd09d2c22599b1282454283a59248e6a164fb8
   languageName: node
   linkType: hard
 
