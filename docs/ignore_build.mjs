@@ -19,9 +19,8 @@ function main() {
     }
   }
 
-  const changedFiles = execSync(
-    'git diff --name-only $CACHED_COMMIT_REF $COMMIT_REF'
-  )
+  // Compare the changes between the main branch and the current commit
+  const changedFiles = execSync('git diff --name-only origin/main $COMMIT_REF')
     .toString()
     .trim()
     .split('\n')
