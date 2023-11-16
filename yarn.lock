@@ -8609,7 +8609,7 @@ __metadata:
   resolution: "@redwoodjs/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
     "@types/eslint": 8
-    "@types/estree": 1.0.1
+    "@types/estree": 1.0.5
     "@typescript-eslint/parser": 5.62.0
     "@typescript-eslint/utils": 5.62.0
     esbuild: 0.18.19
@@ -11446,10 +11446,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/estree@npm:*, @types/estree@npm:1.0.1, @types/estree@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "@types/estree@npm:1.0.1"
-  checksum: b4022067f834d86766f23074a1a7ac6c460e823b00cd8fe94c997bc491e7794615facd3e1520a934c42bd8c0689dbff81e5c643b01f1dee143fc758cac19669e
+"@types/estree@npm:*, @types/estree@npm:1.0.5, @types/estree@npm:^1.0.0":
+  version: 1.0.5
+  resolution: "@types/estree@npm:1.0.5"
+  checksum: b3b0e334288ddb407c7b3357ca67dbee75ee22db242ca7c56fe27db4e1a31989cb8af48a84dd401deb787fe10cc6b2ab1ee82dc4783be87ededbe3d53c79c70d
   languageName: node
   linkType: hard
 
