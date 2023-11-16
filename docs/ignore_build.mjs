@@ -30,11 +30,14 @@ function main() {
     changedFiles,
   })
 
-  const shouldBuild = changedFiles.some((changedFile) =>
+  const docFilesChanged = changedFiles.filter((changedFile) =>
     changedFile.startsWith('docs')
   )
+  console.log({
+    docFilesChanged,
+  })
 
-  if (shouldBuild) {
+  if (docFilesChanged.length > 0) {
     console.log(
       `PR '${process.env.HEAD}' has docs changes. Proceeding with build`
     )
