@@ -9176,7 +9176,7 @@ __metadata:
     "@types/react": 18.2.14
     "@types/react-dom": 18.2.6
     "@types/webpack": 5.28.5
-    "@types/webpack-env": 1.18.1
+    "@types/webpack-env": 1.18.4
     babel-jest: ^29.7.0
     core-js: 3.33.2
     fast-glob: 3.3.2
@@ -12276,10 +12276,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/webpack-env@npm:1.18.1":
-  version: 1.18.1
-  resolution: "@types/webpack-env@npm:1.18.1"
-  checksum: 7b7cb8d22fe85fb3f87f592cb5ba2fb3b1057d1d5ce8d770b28728095879f5921085fae97f5bc479bdca55f2cb3111bd9148dc36cd641a5694dfbe001c5fc2f7
+"@types/webpack-env@npm:1.18.4":
+  version: 1.18.4
+  resolution: "@types/webpack-env@npm:1.18.4"
+  checksum: 3fa77dbff0ed71685404576b0a1cf74587567fe2ee1cfd11d56d6eefcab7a61e4c9ead0eced264e289d2cf0fc74296dbd55ed6c95774fe0fd6264d156c5a59f0
   languageName: node
   linkType: hard
 
