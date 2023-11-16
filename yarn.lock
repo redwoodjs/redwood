@@ -11909,12 +11909,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/ncp@npm:2.0.5":
-  version: 2.0.5
-  resolution: "@types/ncp@npm:2.0.5"
+"@types/ncp@npm:2.0.8":
+  version: 2.0.8
+  resolution: "@types/ncp@npm:2.0.8"
   dependencies:
     "@types/node": "*"
-  checksum: 19b009b5e8b82bec7a00b974bb99f241b7a2fe80309803d4f765bdf527b37fbd890dc6cc5ea71c3287b9e14f8a7636251a02981f2758919c0e3f3422f679fe8b
+  checksum: c488159404263d2a7d0d560eb8f3102ddd47de46587144d2f48bff9b856bec24a89c6fd7d1061052f1d17223534de3b391616dc92ff0e99615654e31e4164f87
   languageName: node
   linkType: hard
 
@@ -31561,7 +31561,7 @@ __metadata:
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.8
     "@types/jscodeshift": 0.11.6
-    "@types/ncp": 2.0.5
+    "@types/ncp": 2.0.8
     "@types/prompts": 2.4.8
     all-contributors-cli: 6.26.1
     babel-jest: ^29.7.0
