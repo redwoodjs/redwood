@@ -8072,7 +8072,7 @@ __metadata:
     "@redwoodjs/api": 6.0.7
     "@redwoodjs/project-config": 6.0.7
     "@simplewebauthn/server": 7.4.0
-    "@types/md5": 2.3.2
+    "@types/md5": 2.3.5
     "@types/uuid": 9.0.7
     base64url: 3.0.1
     core-js: 3.33.2
@@ -11814,10 +11814,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/md5@npm:2.3.2":
-  version: 2.3.2
-  resolution: "@types/md5@npm:2.3.2"
-  checksum: caea0f607c79af22b80d25c9eae08ff3bb50abfcd4b776fbbabeb90791897c7ab1ac2342acd3f6ac80784106d93b3851b887c7cb62b2979c81a213738cda0a49
+"@types/md5@npm:2.3.5":
+  version: 2.3.5
+  resolution: "@types/md5@npm:2.3.5"
+  checksum: aef9c40ab0ec61f1ae2acb04ee04e55b99eeec64af58176ef36d4feaf6aac335f32caca07eca0e3a1813fc362bf0b8663423250e24b39ebcfdc24c6ca4abe1cf
   languageName: node
   linkType: hard
 
