@@ -5652,12 +5652,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/nx-cloud@npm:16.2.0":
-  version: 16.2.0
-  resolution: "@nrwl/nx-cloud@npm:16.2.0"
+"@nrwl/nx-cloud@npm:16.5.2":
+  version: 16.5.2
+  resolution: "@nrwl/nx-cloud@npm:16.5.2"
   dependencies:
-    nx-cloud: 16.2.0
-  checksum: f64edb06a6567e764812105b7ee440f3d2828bf946813cf630e443a0e72ea8017203f347c1d916026af8522021f36e47be8dc8374847fd89e9c678ae32bc427a
+    nx-cloud: 16.5.2
+  checksum: 2e33e731968245938d489480fd65e47d9fcf60b69b62a3aea3ff8eb777a87e650557ea7923d26381f26b72ce97c35de312183e858bd8e2549cc6690b1fe7106a
   languageName: node
   linkType: hard
 
@@ -27599,11 +27599,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx-cloud@npm:16.2.0":
-  version: 16.2.0
-  resolution: "nx-cloud@npm:16.2.0"
+"nx-cloud@npm:16.5.2":
+  version: 16.5.2
+  resolution: "nx-cloud@npm:16.5.2"
   dependencies:
-    "@nrwl/nx-cloud": 16.2.0
+    "@nrwl/nx-cloud": 16.5.2
     axios: 1.1.3
     chalk: ^4.1.0
     dotenv: ~10.0.0
@@ -27615,7 +27615,7 @@ __metadata:
     yargs-parser: ">=21.1.1"
   bin:
     nx-cloud: bin/nx-cloud.js
-  checksum: ff642f4eb1002574d30789e5c9451d52ea5a78e37f639c7bed9bcdd236e7d46108d0a79bca978e7c0c4e24c4c2ae0b8ff747d64afc8dc115e1be990eea168c7d
+  checksum: 7c4ccecd567c9cc68bb24b2f8921b8791d8822a097624de91bfcbbfcdd0b1e93c8a08e769c3d1c8e0616d2096d0416b94f472555de3de6ba6af37d4ab1df6d2a
   languageName: node
   linkType: hard
 
@@ -31584,7 +31584,7 @@ __metadata:
     nodemon: 3.0.1
     npm-packlist: 7.0.4
     nx: 16.4.1
-    nx-cloud: 16.2.0
+    nx-cloud: 16.5.2
     octokit: 2.1.0
     ora: 7.0.1
     prompts: 2.4.2

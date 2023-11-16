@@ -94,7 +94,7 @@
     "nodemon": "3.0.1",
     "npm-packlist": "7.0.4",
     "nx": "16.4.1",
-    "nx-cloud": "16.2.0",
+    "nx-cloud": "16.5.2",
     "octokit": "2.1.0",
     "ora": "7.0.1",
     "prompts": "2.4.2",
