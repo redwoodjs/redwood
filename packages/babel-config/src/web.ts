@@ -78,7 +78,7 @@ export const getWebSideBabelPlugins = (
           // if projects use trusted documents
           // then it auto-imports the gql function from the generated codegen client preset
           useTrustedDocumentsGqlTag && {
-            //  import { graphql as gql} from 'src/graphql/gql'
+            // import { gql } from 'src/graphql/gql'
             members: ['gql'],
             path: `web/src/graphql/gql`,
           },
