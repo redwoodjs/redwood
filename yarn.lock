@@ -8316,7 +8316,7 @@ __metadata:
     "@babel/traverse": ^7.22.20
     "@redwoodjs/project-config": 6.4.0
     "@types/babel-plugin-tester": 9.0.7
-    "@types/babel__core": 7.20.2
+    "@types/babel__core": 7.20.4
     babel-plugin-auto-import: 1.1.0
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-module-resolver: 5.0.0
@@ -8489,7 +8489,7 @@ __metadata:
     "@redwoodjs/project-config": 6.4.0
     "@svgr/core": 8.0.0
     "@svgr/plugin-jsx": 8.0.1
-    "@types/babel__core": 7.20.2
+    "@types/babel__core": 7.20.4
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.4
     "@types/jscodeshift": 0.11.6
@@ -11089,7 +11089,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:*, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14, @types/babel__core@npm:^7.20.3":
+"@types/babel__core@npm:*, @types/babel__core@npm:7.20.4, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14, @types/babel__core@npm:^7.20.3":
   version: 7.20.4
   resolution: "@types/babel__core@npm:7.20.4"
   dependencies:
@@ -11099,19 +11099,6 @@ __metadata:
     "@types/babel__template": "*"
     "@types/babel__traverse": "*"
   checksum: 2adc7ec49de5f922271ce087cedee000de468a3e13f92b7b6254016bd8357298cb98e6d2b3c9defc69bb6e38e0c134ffe80776a8ce4e9fb167bbffcb4d7613b7
-  languageName: node
-  linkType: hard
-
-"@types/babel__core@npm:7.20.2":
-  version: 7.20.2
-  resolution: "@types/babel__core@npm:7.20.2"
-  dependencies:
-    "@babel/parser": ^7.20.7
-    "@babel/types": ^7.20.7
-    "@types/babel__generator": "*"
-    "@types/babel__template": "*"
-    "@types/babel__traverse": "*"
-  checksum: 4bd4bc0803ddd17af37871a8139e5b6c80b182f5f6d716c6484da1286522eba84750ffc527539bc39496876e7193f316b7493b99caa37af2b4e6ef345ee2ff8c
   languageName: node
   linkType: hard
 
@@ -11918,11 +11905,11 @@ __metadata:
   linkType: hard
 
 "@types/nodemailer@npm:*, @types/nodemailer@npm:6, @types/nodemailer@npm:^6":
-  version: 6.4.14
-  resolution: "@types/nodemailer@npm:6.4.14"
+  version: 6.4.9
+  resolution: "@types/nodemailer@npm:6.4.9"
   dependencies:
     "@types/node": "*"
-  checksum: b5958843576cde76dc532aa7b726182fef8b466fa9fcaf1aa03f89f02e896bec4e28b593ffa1a289a46bd0b7fdf34da0640ab7ef8f0811948016f58f77e16307
+  checksum: 2c18ccdcd0db56504250b67949983838f3befca2edb754017818e07d1581c8fd15a561f4dbeec37a75b7677cb08621f9d72c467850743a3a87cc2d1606ddd2a8
   languageName: node
   linkType: hard
 
@@ -16642,7 +16629,7 @@ __metadata:
     "@opentelemetry/sdk-trace-node": 1.18.1
     "@opentelemetry/semantic-conventions": 1.18.1
     "@redwoodjs/tui": 6.4.0
-    "@types/babel__core": 7.20.2
+    "@types/babel__core": 7.20.4
     chalk: 4.1.2
     check-node-version: 4.2.1
     ci-info: 3.9.0
