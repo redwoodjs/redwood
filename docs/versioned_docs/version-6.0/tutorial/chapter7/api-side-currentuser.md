@@ -112,7 +112,7 @@ Whoops!
 
 Similar to what happened when we added `roles` to `User`, We made `userId` a required field, but we already have several posts in our development database. Since we don't have a default value for `userId` defined, it's impossible to add this column to the database.
 
-:::caution Why don't we just set `@default(1)` in the schema?
+:::warning Why don't we just set `@default(1)` in the schema?
 
 This would get us past this problem, but could cause hard-to-track-down bugs in the future: if you ever forget to assign a `post` to a `user`, rather than fail it'll happily just set `userId` to `1`, which may or may not even exist some day! It's best to take the extra time to do things The Right Way and avoid the quick hacks to get past an annoyance like this. Your future self will thank you!
 

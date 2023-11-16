@@ -1131,9 +1131,9 @@ export default NameForm
 
 Now, we can extend the `test` file which Redwood generated. We're going to want to:
 
-1) Import `waitFor` from the `@redwoodjs/testing/web` library.
-2) Add an import to `@testing-library/user-event` for its `default`.
-3) Provide an `onSubmit` prop to our "renders successfully" test.
+1. Import `waitFor` from the `@redwoodjs/testing/web` library.
+2. Add an import to `@testing-library/user-event` for its `default`.
+3. Provide an `onSubmit` prop to our "renders successfully" test.
 
 ```jsx title="NameForm.test.js"
 import { render, screen, waitFor } from '@redwoodjs/testing/web'
@@ -1154,9 +1154,9 @@ describe('NameForm', () => {
 
 Finally, we'll create three simple tests which ensure our form works as expected.
 
-1) Does our component NOT submit when required fields are empty?
-2) Does our component submit when required fields are populated?
-3) Does our component submit, passing our (submit) handler the data we entered?
+1. Does our component NOT submit when required fields are empty?
+2. Does our component submit when required fields are populated?
+3. Does our component submit, passing our (submit) handler the data we entered?
 
 The important takeaways are:
 
@@ -1261,13 +1261,13 @@ Does anyone else find it confusing that the software itself is called a "databas
 
 When you start your test suite you may notice some output from Prisma talking about migrating the database. Redwood will automatically run `yarn rw prisma db push` against your test database to make sure it's up-to-date.
 
-:::caution What if I have custom migration SQL?
+:::warning What if I have custom migration SQL?
 
 The `prisma db push` command only restores a snapshot of the current database schema (so that it runs as fast as possible). **It does not actually run migrations in sequence.** This can cause a [problem](https://github.com/redwoodjs/redwood/issues/5818) if you have certain database configuration that *must* occur as a result of the SQL statements inside the migration files.
 
 In order to preserve those statements in your test database, you can set an additional ENV var which will use the command `yarn rw prisma migrate reset` instead. This will run each migration in sequence against your test database. The tradeoff is that starting your test suite will take a little longer depending on how many migrations you have:
 
-```.env title=/.env
+```.env title="/.env"
 TEST_DATABASE_STRATEGY=reset
 ```
 
