@@ -6,7 +6,7 @@ import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadDocuments, loadSchemaSync } from '@graphql-tools/load'
 import { format } from 'prettier'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { getLoadDocumentsOptions } from './graphqlCodeGen'
 
@@ -42,6 +42,15 @@ type PossibleTypesResult = {
  * @see https://www.apollographql.com/docs/react/data/fragments/#using-fragments-with-unions-and-interfaces
  **/
 export const generatePossibleTypes = async (): Promise<PossibleTypesResult> => {
+  const config = getConfig()
+
+  if (!config.graphql.fragments) {
+    return {
+      possibleTypesFiles: [],
+      errors: [],
+    }
+  }
+
   const filename = path.join(getPaths().web.graphql, 'possibleTypes.ts')
   const options = getLoadDocumentsOptions(filename)
   const documentsGlob = './web/src/**/!(*.d).{ts,tsx,js,jsx}'
