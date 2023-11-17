@@ -1,8 +1,6 @@
 import core from '@actions/core'
 import { exec, getExecOutput } from '@actions/exec'
 import { onlyDocsChanged } from './cases/onlydocs.mjs'
-import { rscChanged } from './cases/rsc.mjs'
-import { ssrChanged } from './cases/ssr.mjs'
 
 async function main() {
   const branch = process.env.GITHUB_BASE_REF
@@ -10,8 +8,6 @@ async function main() {
   // If there's no branch, we're not in a pull request.
   if (!branch) {
     core.setOutput('onlydocs', false)
-    core.setOutput('rsc', false)
-    core.setOutput('ssr', false)
     return
   }
 
@@ -24,14 +20,10 @@ async function main() {
   const onlyDocs = onlyDocsChanged(changedFiles)
   if(onlyDocs){
     core.setOutput('onlydocs', true)
-    core.setOutput('rsc', false)
-    core.setOutput('ssr', false)
     return
   }
 
   core.setOutput('onlydocs', false)
-  core.setOutput('rsc', rscChanged(changedFiles))
-  core.setOutput('ssr', ssrChanged(changedFiles))
 }
 
 main()
