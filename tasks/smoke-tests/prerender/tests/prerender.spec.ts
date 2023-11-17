@@ -23,7 +23,7 @@ test('Check that homepage is prerendered', async () => {
   const pageWithoutJs = await noJsBrowser.newPage()
   await pageWithoutJs.goto('/')
 
-  checkHomePageCellRender(pageWithoutJs)
+  await checkHomePageCellRender(pageWithoutJs)
 
   pageWithoutJs.close()
 })
