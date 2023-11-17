@@ -1,4 +1,4 @@
-import { expectType } from 'tsd-lite'
+import { describe, expect, it } from 'tstyche'
 
 import type { CellSuccessData } from '@redwoodjs/web'
 
@@ -9,13 +9,13 @@ describe('CellSuccessData', () => {
         foo: '',
       }
 
-      expectType<{ foo: string }>(value)
+      expect(value).type.toEqual<{ foo: string }>()
     })
 
     it('removes null and undefined from properties', () => {
       const value: CellSuccessData<{ foo?: string | null }> = { foo: '' }
 
-      expectType<{ foo: string }>(value)
+      expect(value).type.toEqual<{ foo: string }>()
     })
   })
 
@@ -30,7 +30,7 @@ describe('CellSuccessData', () => {
         bar: '',
       }
 
-      expectType<{ foo: string; bar: string }>(value)
+      expect(value).type.toEqual<{ foo: string; bar: string }>()
     })
 
     it('does not remove null or undefined from properties', () => {
@@ -42,7 +42,7 @@ describe('CellSuccessData', () => {
         bar: '',
       }
 
-      expectType<{ foo?: string | null; bar?: string | null }>(value)
+      expect(value).type.toEqual<{ foo?: string | null; bar?: string | null }>()
     })
   })
 })

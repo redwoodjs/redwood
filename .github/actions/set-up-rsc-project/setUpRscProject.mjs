@@ -93,13 +93,17 @@ async function setUpRscProject(
   await execInProject(`node ${rwBinPath} experimental setup-rsc`)
   console.log()
 
-  console.log(`Building project in ${rscProjectPath}`)
-  await execInProject(`node ${rwBinPath} build -v`)
-  console.log()
-
   console.log(`Copying over framework files to ${rscProjectPath}`)
   await execInProject(`node ${rwfwBinPath} project:copy`, {
     env: { RWFW_PATH: REDWOOD_FRAMEWORK_PATH },
   })
+  console.log()
+
+  console.log('Installing dependencies')
+  await execInProject('yarn install')
+  console.log()
+
+  console.log(`Building project in ${rscProjectPath}`)
+  await execInProject(`node ${rwBinPath} build -v`)
   console.log()
 }

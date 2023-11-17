@@ -28,7 +28,7 @@ You can start them both with a single command: `yarn redwood dev`
 
 ### The Router
 
-When you open your web app in a browser, React does its thing initializing your app and monitoring the history for changes so that new content can be shown. Redwood features a custom, declaritive Router that lets you specify URLs and the requisite pages (just a React component) will be shown. A simple routes file may look something like:
+When you open your web app in a browser, React does its thing initializing your app and monitoring the history for changes so that new content can be shown. Redwood features a custom, declarative Router that lets you specify URLs and the requisite pages (just a React component) will be shown. A simple routes file may look something like:
 
 ```jsx
 import { Set, Router, Route } from '@redwoodjs/router'
@@ -234,7 +234,7 @@ export const schema = gql`
 `
 ```
 
-The `testimonials` query is marked with the [GraphQL directive](../../directives.md) `@skipAuth` meaning that requests here should *not* be limited to authenticated users. However, the critical `createTestimonail` and `deleteTestimonial` mutations are marked `@requireAuth`, and so can only be called by a logged in user.
+The `testimonials` query is marked with the [GraphQL directive](../../directives.md) `@skipAuth` meaning that requests here should *not* be limited to authenticated users. However, the critical `createTestimonial` and `deleteTestimonial` mutations are marked `@requireAuth`, and so can only be called by a logged in user.
 
 Redwood's backend GraphQL server is powered by [GraphQL Yoga](https://the-guild.dev/graphql/yoga-server) and so you have access to everything that makes Yoga secure and performant: rate and depth limiting, logging, directives, and a ton more.
 
