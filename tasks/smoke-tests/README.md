@@ -52,7 +52,7 @@ There's a few gotchas to be aware of:
 
 - Not all smoke tests are idempotent
 
-  This means you may need to reset the test project's database (`yarn rw prisma migreate reset --force`) between runs or remove files that were written or undo file changes. (For this reason, you may find it helpful to initialize a git repo in the test project before running smoke tests.)
+  This means you may need to reset the test project's database (`yarn rw prisma migrate reset --force`) between runs or remove files that were written or undo file changes. (For this reason, you may find it helpful to initialize a git repo in the test project before running smoke tests.)
 
 - `yarn rwfw project:sync` needs to be running in the test project to test framework changes
 
