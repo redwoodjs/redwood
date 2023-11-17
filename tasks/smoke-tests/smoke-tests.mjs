@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-/* eslint-env node */
 // @ts-check
 
-// There's a few footguns to running a smoke tests locally. (And if you have to run a smoke tests locally, it's already painful enough.)
+// There are a few footguns to running a smoke tests locally. (And if you have to run a smoke tests locally, it's already painful enough.)
 //
 // - you don't have a test project, or you're running against a different test project than you expect
 // - `yarn rwfw project:sync` isn't running
@@ -24,7 +23,7 @@
 // - [ ] passes `--playwrightOptions` to `npx playwright test` (`yarn smoke-tests --playwrightOptions="--debug"`)
 
 import { fileURLToPath } from 'node:url'
-import { parseArgs as _parseArgs } from 'node:util'
+import util from 'node:util'
 
 import execa from 'execa'
 import prompts from 'prompts'
@@ -66,6 +65,16 @@ main()
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
+/**
+ * Parses the command line arguments and returns an object containing the parsed values.
+ *
+ * @typedef {Object} CliArgs
+ * @property {string} testProjectPath The path to the test project.
+ * @property {string[]} smokeTests The smoke tests to run.
+ * @property {string | undefined} playwrightOptions The options to forward to `npx playwright test`.
+ *
+ * @returns {Promise<CliArgs>} The parsed command line arguments.
+ */
 async function parseArgs() {
   let positionals
   let values
@@ -76,27 +85,27 @@ async function parseArgs() {
         'REDWOOD_TEST_PROJECT_PATH'
       )} env var`,
       short: 'p',
-      type: 'string',
+      type: /** @type {const} */ ('string'),
       default:
         process.env.REDWOOD_TEST_PROJECT_PATH ?? process.env.PROJECT_PATH,
     },
 
     playwrightOptions: {
       description: `Options to forward to ${chalk.cyan('npx playwright test')}`,
-      type: 'string',
+      type: /** @type {const} */ ('string'),
       default: '',
     },
 
     help: {
       description: 'Show help',
       short: 'h',
-      type: 'boolean',
+      type: /** @type {const} */ ('boolean'),
       default: false,
     },
   }
 
   try {
-    const parsedArgs = _parseArgs({
+    const parsedArgs = util.parseArgs({
       allowPositionals: true,
       options,
     })
@@ -137,7 +146,7 @@ async function parseArgs() {
   }
 
   // Handle `testProjectPath` not being set.
-  if (testProjectPath === undefined) {
+  if (typeof testProjectPath !== 'string') {
     process.exitCode = 1
     throw new Error(
       [
@@ -152,6 +161,13 @@ async function parseArgs() {
         '',
       ].join('\n')
     )
+  }
+
+  if (typeof playwrightOptions !== 'string') {
+    // This should never happen. Node's parseArgs should make sure of that.
+    // Only have this to make TypeScript happy.
+    process.exitCode = 1
+    throw new Error(chalk.red('Error: playwrightOptions must be a string.'))
   }
 
   if (!(await fs.exists(testProjectPath))) {
