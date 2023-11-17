@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-env node */
 // @ts-check
 
 // There are a few footguns to running a smoke tests locally. (And if you have to run a smoke tests locally, it's already painful enough.)
