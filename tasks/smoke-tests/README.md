@@ -44,6 +44,8 @@ cd ./tasks/smoke-tests/dev
 npx playwright test
 ```
 
+Just remember to set `REDWOOD_TEST_PROJECT_PATH` and have `yarn rwfw project:sync` running in your test project if you want to test against framework changes.
+
 ### Gotchas
 
 There's a few gotchas to be aware of:
