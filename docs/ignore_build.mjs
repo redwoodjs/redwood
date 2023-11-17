@@ -19,6 +19,19 @@ function main() {
     }
   }
 
+  // Ensure we know the latest changes on the main branch
+  execSync('git fetch origin main')
+
+  // TODO: Remove this:
+  console.log('---')
+  console.log('BRANCH', process.env.BRANCH)
+  console.log('HEAD', process.env.HEAD)
+  console.log('COMMIT_REF', process.env.COMMIT_REF)
+  console.log('CACHED_COMMIT_REF', process.env.CACHED_COMMIT_REF)
+  console.log('main', execSync('git rev-parse main').toString())
+  console.log('origin/main', execSync('git rev-parse origin/main').toString())
+  console.log('---')
+
   // Compare the changes between the main branch and the current commit
   const changedFiles = execSync('git diff --name-only origin/main $COMMIT_REF')
     .toString()
