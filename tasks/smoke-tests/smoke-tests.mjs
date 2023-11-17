@@ -236,7 +236,23 @@ async function parseArgs() {
         type: 'multiselect',
         name: 'smokeTests',
         message: 'Which smoke test(s) would you like to run?',
+
         choices,
+        min: 1,
+
+        // These are the default instructions with a space added to the end.
+        // With the defaults, if the user doesn't select an option, the error renders right next to the last line:
+        //
+        // ```
+        // enter/return: Complete answerYou must select a minimum of 1 choices.
+        // ```
+        instructions: [
+          'Instructions:',
+          '    ↑/↓: Highlight option',
+          '    ←/→/[space]: Toggle selection',
+          '    a: Toggle all',
+          '    enter/return: Complete answer ',
+        ].join('\n'),
       },
       {
         onCancel: () => {
