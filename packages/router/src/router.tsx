@@ -146,7 +146,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     return null
   }
 
-  const { path, page, name, redirect, whileLoadingPage, sets, setId } =
+  const { path, page, name, redirect, whileLoadingPage, sets } =
     pathRouteMap[activeRoutePath]
 
   if (!path) {
@@ -171,7 +171,6 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
           {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
           {!redirect && page && (
             <WrappedPage
-              key={setId}
               sets={sets}
               routeLoaderElement={
                 <ActiveRouteLoader
@@ -192,7 +191,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 interface WrappedPageProps {
   routeLoaderElement: ReactNode
   sets: Array<{
-    id: number
+    id: string
     wrappers: Wrappers
     isPrivate: boolean
     props: {
@@ -231,8 +230,12 @@ const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
 
     // Bundle up all the wrappers into a single element with each wrapper as a
     // child of the previous (that's why we do reduceRight)
-    let wrapped = set.wrappers.reduceRight((acc, Wrapper) => {
-      return React.createElement(Wrapper, set.props, acc)
+    let wrapped = set.wrappers.reduceRight((acc, Wrapper, index) => {
+      return React.createElement(
+        Wrapper,
+        { ...set.props, key: set.id + '-' + index },
+        acc
+      )
     }, acc)
 
     // If set is private, wrap it in AuthenticatedRoute

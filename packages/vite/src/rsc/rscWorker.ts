@@ -165,8 +165,10 @@ const vitePromise = createServer({
       parentPort.postMessage(message)
     }),
   ],
-  resolve: {
-    conditions: ['react-server'],
+  ssr: {
+    resolve: {
+      externalConditions: ['react-server'],
+    },
   },
   appType: 'custom',
 })
@@ -252,6 +254,9 @@ const resolveClientEntry = (
   filePath: string
 ) => {
   const clientEntry = absoluteClientEntries[filePath]
+
+  console.log('absoluteClientEntries', absoluteClientEntries)
+  console.log('filePath', filePath)
 
   if (!clientEntry) {
     if (absoluteClientEntries['*'] === '*') {

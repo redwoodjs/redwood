@@ -33,11 +33,11 @@ export const registerFwGlobals = () => {
       if (/^[a-zA-Z][a-zA-Z\d+\-.]*?:/.test(apiPath)) {
         return apiPath
       } else {
-        const proxiedApiUrl =
-          // NOTE: rwConfig.web.host defaults to "localhost", which is
-          //       troublesome in regards to IPv6/IPv4. So all the more
-          //       reason to set RWJS_EXP_SSR_GRAPHQL_ENDPOINT
+        // NOTE: rwConfig.web.host defaults to "localhost", which is
+        // When running in production, the api server does not listen on localhost
+        const proxiedApiUrl = swapLocalhostFor127(
           'http://' + rwConfig.web.host + ':' + rwConfig.web.port + apiPath
+        )
 
         if (
           process.env.NODE_ENV === 'production' &&
@@ -47,9 +47,7 @@ export const registerFwGlobals = () => {
           console.warn()
           console.warn()
 
-          console.warn(
-            `You haven't configured your API absolute url. Localhost is unlikely to work in production`
-          )
+          console.warn(`You haven't configured your API absolute url.`)
 
           console.warn(`Using ${proxiedApiUrl}`)
           console.warn()
@@ -64,7 +62,7 @@ export const registerFwGlobals = () => {
           return proxiedApiUrl
         }
 
-        return (
+        return swapLocalhostFor127(
           (process.env.RWJS_EXP_SSR_GRAPHQL_ENDPOINT as string) ?? proxiedApiUrl
         )
       }
@@ -75,4 +73,8 @@ export const registerFwGlobals = () => {
     RWJS_SRC_ROOT: rwPaths.web.src,
     REDWOOD_ENV_EDITOR: JSON.stringify(process.env.REDWOOD_ENV_EDITOR),
   }
+}
+
+function swapLocalhostFor127(hostString: string) {
+  return hostString.replace('localhost', '127.0.0.1')
 }

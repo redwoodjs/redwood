@@ -1,7 +1,16 @@
 import fs from 'fs'
 import path from 'path'
 
-import { resolveFile, findUp } from '@redwoodjs/project-config'
+import type { JsonMap } from '@iarna/toml'
+import toml from '@iarna/toml'
+import dotenv from 'dotenv'
+
+import {
+  findUp,
+  getConfigPath,
+  getConfig,
+  resolveFile,
+} from '@redwoodjs/project-config'
 
 import { colors } from './colors'
 import { getPaths } from './paths'
@@ -33,21 +42,117 @@ export const getInstalledRedwoodVersion = () => {
   }
 }
 
+/**
+ * Updates the project's redwood.toml file to include the specified packages plugin
+ *
+ * Uses toml parsing to determine if the plugin is already included in the file and
+ * only adds it if it is not.
+ *
+ * Writes the updated config to the file system by appending strings, not stringify-ing the toml.
+ */
+export const updateTomlConfig = (packageName: string) => {
+  const redwoodTomlPath = getConfigPath()
+  const originalTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
+
+  let tomlToAppend = {} as JsonMap
+
+  const config = getConfig(redwoodTomlPath)
+
+  const cliSection = config.experimental?.cli
+
+  if (!cliSection) {
+    tomlToAppend = {
+      experimental: {
+        cli: {
+          autoInstall: true,
+          plugins: [{ package: packageName, enabled: true }],
+        },
+      },
+    }
+  } else if (cliSection.plugins) {
+    const packageExists = cliSection.plugins.some(
+      (plugin) => plugin.package === packageName
+    )
+
+    if (!packageExists) {
+      tomlToAppend = {
+        experimental: {
+          cli: {
+            plugins: [{ package: packageName, enabled: true }],
+          },
+        },
+      }
+    }
+  } else {
+    tomlToAppend = {
+      experimental: {
+        cli: {
+          plugins: [{ package: packageName, enabled: true }],
+        },
+      },
+    }
+  }
+
+  const newConfig = originalTomlContent + '\n' + toml.stringify(tomlToAppend)
+
+  return fs.writeFileSync(redwoodTomlPath, newConfig, 'utf-8')
+}
+
+export const updateTomlConfigTask = (packageName: string) => {
+  return {
+    title: `Updating redwood.toml to configure ${packageName} ...`,
+    task: () => {
+      updateTomlConfig(packageName)
+    },
+  }
+}
+
 export const addEnvVarTask = (name: string, value: string, comment: string) => {
   return {
     title: `Adding ${name} var to .env...`,
     task: () => {
-      const envPath = path.join(getPaths().base, '.env')
-      const content = [comment && `# ${comment}`, `${name}=${value}`, ''].flat()
-      let envFile = ''
-
-      if (fs.existsSync(envPath)) {
-        envFile = fs.readFileSync(envPath).toString() + '\n'
-      }
-
-      fs.writeFileSync(envPath, envFile + content.join('\n'))
+      addEnvVar(name, value, comment)
     },
   }
+}
+
+export const addEnvVar = (name: string, value: string, comment: string) => {
+  const envPath = path.join(getPaths().base, '.env')
+  let envFile = ''
+  const newEnvironmentVariable = [
+    comment && `# ${comment}`,
+    `${name} = ${value}`,
+    '',
+  ]
+    .flat()
+    .join('\n')
+
+  if (fs.existsSync(envPath)) {
+    envFile = fs.readFileSync(envPath).toString()
+    const existingEnvVars = dotenv.parse(envFile)
+
+    if (existingEnvVars[name] && existingEnvVars[name] === value) {
+      return envFile
+    }
+
+    if (existingEnvVars[name]) {
+      const p = [
+        `# Note: The existing environment variable ${name} was not overwritten. Uncomment to use its new value.`,
+        comment && `# ${comment}`,
+        `# ${name} = ${value}`,
+        '',
+      ]
+        .flat()
+        .join('\n')
+      envFile += '\n' + p
+    } else {
+      envFile += '\n' + newEnvironmentVariable
+    }
+  } else {
+    envFile = newEnvironmentVariable
+  }
+
+  return fs.writeFileSync(envPath, envFile)
 }
 
 /**

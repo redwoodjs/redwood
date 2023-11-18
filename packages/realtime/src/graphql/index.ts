@@ -6,6 +6,7 @@ export {
   RedisLiveQueryStore,
   liveQueryStore,
   pubSub,
+  Repeater,
 } from './plugins/useRedwoodRealtime'
 
 export type {

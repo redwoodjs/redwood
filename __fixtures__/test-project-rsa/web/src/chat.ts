@@ -3,7 +3,13 @@
 import { randomWords } from './words'
 
 export async function onSend(formData: FormData) {
-  console.log('message', formData.get('message'))
+  const message = formData.get('message')
+
+  console.log('message', message)
+
+  if (typeof message !== 'string') {
+    throw new Error('message must be a string')
+  }
 
   // Locally you could do this:
   // const words = await fetch(
@@ -12,5 +18,6 @@ export async function onSend(formData: FormData) {
   // But in CI we don't want to hit an external API, so we just do this instead:
   const words = await randomWords(5)
 
-  return { messages: [formData.get('message'), words.join(' ')] }
+  return { messages: [message, words.join(' ')] }
 }
+

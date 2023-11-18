@@ -81,7 +81,9 @@ export const isSetNode = (
 ): node is ReactElement<SetProps<any>> => {
   return (
     React.isValidElement(node) &&
-    (node.type === Set || node.type === PrivateSet || node.type === Private)
+    (node.type === Set || node.type === PrivateSet || node.type === Private) &&
+    // Don't even bother including Sets without children. They're useless.
+    node.props.children
   )
 }
 
