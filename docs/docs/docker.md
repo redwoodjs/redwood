@@ -373,9 +373,9 @@ docker run --rm -it console /bin/bash
 As the comment says, feel free to add more packages.
 We intentionally kept them to a minimum in the base stage, but you shouldn't worry about the size of the image here.
 
-# Troubleshooting
+## Troubleshooting
 
-## Python
+### Python
 
 We've tried to make the Dockerfile as lean as possible.
 But in some cases, that means we've excluded a dependency your project needs to build.
