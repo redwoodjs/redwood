@@ -26,10 +26,7 @@ export const handler = async ({ force }) => {
   const notes = []
 
   const tasks = new Listr([
-    addApiPackages([
-      '@envelop/sentry@5',
-      '@sentry/node@7',
-    ]),
+    addApiPackages(['@envelop/sentry@5', '@sentry/node@7']),
     addWebPackages(['@sentry/react@7', '@sentry/browser@7']),
     addEnvVarTask(
       'SENTRY_DSN',
