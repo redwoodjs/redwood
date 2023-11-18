@@ -62,9 +62,9 @@ export function projectCopy(redwoodProjectCwd) {
 }
 
 /**
- * @param {{ baseKeyPrefix: string, distKeyPrefix: string }} options
+ * @param {{ baseKeyPrefix: string, distKeyPrefix: string, canary: boolean }} options
  */
-export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix }) {
+export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix, canary }) {
   const baseKey = [
     baseKeyPrefix,
     process.env.RUNNER_OS,
@@ -76,7 +76,7 @@ export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix }) {
     baseKey,
     'dependencies',
     await hashFiles(['yarn.lock', '.yarnrc.yml'].join('\n')),
-  ].join('-')
+  ].join('-') + (canary ? '-canary' : '')
 
   const distKey = [
     dependenciesKey,
@@ -91,7 +91,7 @@ export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix }) {
       'lerna.json',
       'packages',
     ].join('\n'))
-  ].join('-')
+  ].join('-') + (canary ? '-canary' : '')
 
   return {
     baseKey,
@@ -151,17 +151,13 @@ export async function setUpRscTestProject(
   console.log(`Installing node_modules in ${testProjectPath}`)
   await execInProject('yarn install')
 
-  console.log(`Building project in ${testProjectPath}`)
-  await execInProject(`node ${rwBinPath} build -v`)
-  console.log()
-
   console.log(`Copying over framework files to ${testProjectPath}`)
   await execInProject(`node ${rwfwBinPath} project:copy`, {
     env: { RWFW_PATH: REDWOOD_FRAMEWORK_PATH },
   })
   console.log()
 
-  // await cache.saveCache([testProjectPath], dependenciesKey)
-  // console.log(`Cache saved with key: ${dependenciesKey}`)
+  console.log(`Building project in ${testProjectPath}`)
+  await execInProject(`node ${rwBinPath} build -v`)
+  console.log()
 }
-

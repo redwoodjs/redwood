@@ -20,6 +20,7 @@ import {
   useRedwoodOpenTelemetry,
   useRedwoodLogger,
   useRedwoodPopulateContext,
+  useRedwoodTrustedDocuments,
 } from './plugins'
 import type {
   useRedwoodDirectiveReturn,
@@ -50,6 +51,7 @@ export const createGraphQLYoga = ({
   graphiQLEndpoint = '/graphql',
   schemaOptions,
   realtime,
+  trustedDocuments,
   openTelemetryOptions,
 }: GraphQLYogaOptions) => {
   let schema: GraphQLSchema
@@ -141,6 +143,10 @@ export const createGraphQLYoga = ({
     plugins.push(
       useFilterAllowedOperations(allowedOperations || defaultAllowedOperations)
     )
+
+    if (trustedDocuments && !trustedDocuments.disabled) {
+      plugins.push(useRedwoodTrustedDocuments(trustedDocuments))
+    }
 
     // App-defined plugins
     if (extraPlugins && extraPlugins.length > 0) {

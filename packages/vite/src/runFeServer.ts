@@ -98,14 +98,14 @@ export async function runFeServer() {
     })
   )
 
-  const collectedCss = indexEntry.css || []
+  const getStylesheetLinks = () => indexEntry.css || []
   const clientEntry = '/' + indexEntry.file
 
   for (const route of Object.values(routeManifest)) {
     const routeHandler = await createReactStreamingHandler({
       route,
       clientEntryPath: clientEntry,
-      cssLinks: collectedCss,
+      getStylesheetLinks,
     })
 
     // if it is a 404, register it at the end somehow.

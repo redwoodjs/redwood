@@ -73,3 +73,18 @@ Go ahead, click that "Visit" button. You’ve earned it 🎉
 From the Vercel Dashboard you can access the full settings and information for your Redwood App. The default settings seem to work just fine for most Redwood projects. Do take a look around, but be sure check out the [docs as well](https://vercel.com/docs).
 
 From now on, each time you push code to your git repo, Vercel will automatically trigger a deploy of the new code. You can also manually redeploy if you select "Deployments", then the specific deployment from the list, and finally the "Redeploy" option from the vertical dots menu next to "Visit".
+
+## vercel.json configuration
+
+By default, API requests in Vercel have a timeout limit of 15 seconds. To extend this duration, you can modify the vercel.json file by inserting the code snippet provided below. Please be aware that the ability to increase the timeout limit is exclusive to Pro plan subscribers. Additionally, it is important to note that the timeout can be increased up to a maximum of 300 seconds, which is equivalent to 5 minutes.
+
+```
+{
+  "functions": {
+    "api/src/functions/graphql.*": {
+      "maxDuration": 120,
+      "runtime": "@vercel/redwood@2.0.5"
+    }
+  }
+}
+```

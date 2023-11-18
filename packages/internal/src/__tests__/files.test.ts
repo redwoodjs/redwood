@@ -47,6 +47,7 @@ test('finds directory named modules', () => {
 
   expect(p).toMatchInlineSnapshot(`
     [
+      "web/src/graphql/graphql.ts",
       "api/src/directives/requireAuth/requireAuth.js",
       "api/src/directives/skipAuth/skipAuth.js",
       "api/src/functions/healthz/healthz.js",

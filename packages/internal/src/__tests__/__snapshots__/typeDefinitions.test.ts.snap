@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mirror path for directory named modules 1`] = `".redwood/types/mirror/web/src/graphql"`;
+
+exports[`mirror path for directory named modules 2`] = `"../../packages/internal/index.d.ts"`;

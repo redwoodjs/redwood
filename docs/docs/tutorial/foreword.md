@@ -24,7 +24,7 @@ They might look like this...
 
 :::
 
-:::caution
+:::warning
 
 or sometimes like this...
 
