@@ -224,7 +224,7 @@ async function createProjectFiles(appDir, { templateDir, overwrite }) {
   })
   tui.startReactive(tuiContent)
 
-  newAppDir = await doesDirectoryAlreadyExist(newAppDir, overwrite)
+  newAppDir = await doesDirectoryAlreadyExist(newAppDir, { overwrite })
 
   // Ensure the new app directory exists
   fs.ensureDirSync(path.dirname(newAppDir))
@@ -486,20 +486,25 @@ async function handleGitPreference(gitInitFlag) {
   }
 }
 
-async function doesDirectoryAlreadyExist(appDir, overwrite) {
+async function doesDirectoryAlreadyExist(
+  appDir,
+  { overwrite, suppressWarning }
+) {
   let newAppDir = appDir
 
   // Check if the new app directory already exists
   if (fs.existsSync(newAppDir) && !overwrite) {
     // Check if the directory contains files and show an error if it does
     if (fs.readdirSync(newAppDir).length > 0) {
-      tui.stopReactive(true)
-      tui.displayWarning(
-        'Project directory already contains files',
-        [
-          `'${RedwoodStyling.info(newAppDir)}' already exists and is not empty`,
-        ].join('\n')
-      )
+      const styledAppDir = RedwoodStyling.info(newAppDir)
+
+      if (!suppressWarning) {
+        tui.stopReactive(true)
+        tui.displayWarning(
+          'Project directory already contains files',
+          [`'${styledAppDir}' already exists and is not empty`].join('\n')
+        )
+      }
 
       try {
         const response = await tui.prompt({
@@ -508,7 +513,7 @@ async function doesDirectoryAlreadyExist(appDir, overwrite) {
           message: 'How would you like to proceed?',
           choices: [
             'Quit install',
-            'Overwrite files and continue install',
+            `Overwrite files in '${styledAppDir}' and continue install`,
             'Specify a different directory',
           ],
           initial: 0,
@@ -517,7 +522,7 @@ async function doesDirectoryAlreadyExist(appDir, overwrite) {
         // overwrite the existing files
         if (
           response.projectDirectoryAlreadyExists ===
-          'Overwrite files and continue install'
+          `Overwrite files in '${styledAppDir}' and continue install`
         ) {
           // blow away the existing directory and create a new one
           await fs.remove(newAppDir)
@@ -527,10 +532,27 @@ async function doesDirectoryAlreadyExist(appDir, overwrite) {
           'Specify a different directory'
         ) {
           const newDirectoryName = await handleNewDirectoryNamePreference()
-          newAppDir = path.resolve(process.cwd(), newDirectoryName)
+
+          if (/^~\w/.test(newDirectoryName)) {
+            tui.stopReactive(true)
+            tui.displayError(
+              'The `~username` syntax is not supported here',
+              'Please use the full path or specify the target directory on the command line.'
+            )
+
+            // Calling doesDirectoryAlreadyExist again with the same old
+            // appDir as a way to prompt the user for a new directory name
+            // after displaying the error above
+            newAppDir = await doesDirectoryAlreadyExist(appDir, {
+              overwrite,
+              suppressWarning: true,
+            })
+          } else {
+            newAppDir = path.resolve(process.cwd(), untildify(newDirectoryName))
+          }
 
           // check to see if the new directory exists
-          newAppDir = await doesDirectoryAlreadyExist(newAppDir, overwrite)
+          newAppDir = await doesDirectoryAlreadyExist(newAppDir, { overwrite })
         } // Quit Install and Throw and Error
         else if (response.projectDirectoryAlreadyExists === 'Quit install') {
           // quit and throw an error
