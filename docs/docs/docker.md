@@ -6,7 +6,7 @@ description: Redwood's Dockerfile
 
 :::note The Dockerfile is experimental
 
-We've worked hard to optimize the Dockerfile and make the whole experience from setup to deploy smooth, but the Dockerfile still may change slightly as we make more optimizations and collaborate with more deploy providers.
+We've worked hard to optimize the Dockerfile and make the whole experience from setup to deploy smooth, but the Dockerfile still may change as we make more optimizations and collaborate with more deploy providers.
 
 :::
 
@@ -372,3 +372,84 @@ docker run --rm -it console /bin/bash
 
 As the comment says, feel free to add more packages.
 We intentionally kept them to a minimum in the base stage, but you shouldn't worry about the size of the image here.
+
+# Troubleshooting
+
+## Python
+
+We've tried to make the Dockerfile as lean as possible.
+But in some cases, that means we've excluded a dependency your project needs to build.
+And by far the most common is Python.
+
+During a stage's `yarn install` step (RUN --mount=type=cache ... CI=1 yarn install`), if you see an error like the following:
+
+```
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python Python is not set from command line or npm configuration
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python Python is not set from environment variable PYTHON
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python checking if "python3" can be used
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python - executable path is ""
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python - "" could not be run
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python checking if "python" can be used
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python - executable path is ""
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python - "" could not be run
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python **********************************************************
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python You need to install the latest version of Python.
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python Node-gyp should be able to find and use Python. If not,
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python you can try one of the following options:
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python - Use the switch --python="/path/to/pythonexecutable"
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python (accepted by both node-gyp and npm)
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python - Set the environment variable PYTHON
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python - Set the npm configuration variable python:
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python npm config set python "/path/to/pythonexecutable"
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python For more information consult the documentation at:
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python https://github.com/nodejs/node-gyp#installation
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python **********************************************************
+➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python
+```
+
+It's because your project depends on Python 3 and the image doesn't provide it.
+The solution is as simple as adding it:
+
+```diff
+# base
+# ------------------------------------------------
+  FROM node:18-bookworm-slim as base
+
+  RUN apt-get update && apt-get install -y \
+      openssl \
++     python3 \
+      && rm -rf /var/lib/apt/lists/*
+```
+
+If it's a production dependency, you'll need to do add it in the serve stage too.
+
+Not sure why your project depends on Python 3? `yarn why` is your friend:
+
+```
+yarn why bufferutil
+└─ websocket@npm:1.0.34
+   └─ bufferutil@npm:4.0.8 (via npm:^4.0.1)
+```
+
+Just keep pulling the thread:
+
+```
+yarn why websocket
+└─ @supabase/realtime-js@npm:2.8.4
+   └─ websocket@npm:1.0.34 (via npm:^1.0.34)
+
+yarn why @supabase/realtime-js
+└─ @supabase/supabase-js@npm:2.38.4
+   └─ @supabase/realtime-js@npm:2.8.4 (via npm:^2.8.4)
+
+yarn why @supabase/supabase-js
+├─ api@workspace:api
+│  └─ @supabase/supabase-js@npm:2.38.4 (via npm:^2.21.0)
+│
+└─ web@workspace:web
+   └─ @supabase/supabase-js@npm:2.38.4 (via npm:^2.21.0)
+```
+
+In this case, it's because of `@supabase/supabase-js`.
