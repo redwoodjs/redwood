@@ -377,11 +377,11 @@ We intentionally kept them to a minimum in the base stage, but you shouldn't wor
 
 ### Python
 
-We've tried to make the Dockerfile as lean as possible.
-But in some cases, that means we've excluded a dependency your project needs to build.
+We tried to make the Dockerfile as lean as possible.
+In some cases, that means we excluded a dependency your project needs.
 And by far the most common is Python.
 
-During a stage's `yarn install` step (RUN --mount=type=cache ... CI=1 yarn install`), if you see an error like the following:
+During a stage's `yarn install` step (`RUN ... yarn install`), if you see an error like the following:
 
 ```
 ➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python
@@ -409,12 +409,11 @@ During a stage's `yarn install` step (RUN --mount=type=cache ... CI=1 yarn insta
 ➤ YN0000: │ bufferutil@npm:4.0.8 STDERR gyp ERR! find Python
 ```
 
-It's because your project depends on Python 3 and the image doesn't provide it.
-The solution is as simple as adding it:
+It's because your project depends on Python and the image doesn't provide it.
+
+It's easy to fix: just add `python3` and its dependencies (usually `make` and `gcc`):
 
 ```diff
-# base
-# ------------------------------------------------
   FROM node:18-bookworm-slim as base
 
   RUN apt-get update && apt-get install -y \
@@ -423,9 +422,9 @@ The solution is as simple as adding it:
       && rm -rf /var/lib/apt/lists/*
 ```
 
-If it's a production dependency, you'll need to do add it in the serve stage too.
-
-Not sure why your project depends on Python 3? `yarn why` is your friend:
+Not sure why your project depends on Python? `yarn why` is your friend.
+From the error message, we know `bufferutil` couldn't build.
+But why do we have `bufferutil`?
 
 ```
 yarn why bufferutil
@@ -433,7 +432,8 @@ yarn why bufferutil
    └─ bufferutil@npm:4.0.8 (via npm:^4.0.1)
 ```
 
-Just keep pulling the thread:
+`websocket` needs `bufferutil`. But why do we have `websocket`?
+Keep pulling the thread till you get to a top-level dependency:
 
 ```
 yarn why websocket
@@ -452,4 +452,4 @@ yarn why @supabase/supabase-js
    └─ @supabase/supabase-js@npm:2.38.4 (via npm:^2.21.0)
 ```
 
-In this case, it's because of `@supabase/supabase-js`.
+In this case, it looks like it's ultimately because of our auth provider, `@supabase/supabase-js`.
