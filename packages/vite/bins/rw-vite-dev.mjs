@@ -17,7 +17,7 @@ const startDevServer = async () => {
   // e.g. yarn rw dev web --fwd="--force"
   const {
     force: forceOptimize,
-    forwardedServerArgs,
+    open,
     debug,
   } = yargsParser(process.argv.slice(2), {
     boolean: ['https', 'open', 'strictPort', 'force', 'cors', 'debug'],
@@ -31,7 +31,9 @@ const startDevServer = async () => {
       // This is the only value that isn't a server option
       force: forceOptimize,
     },
-    server: forwardedServerArgs,
+    server: {
+      open,
+    },
     logLevel: debug ? 'info' : undefined,
   })
 
