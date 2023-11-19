@@ -7,7 +7,7 @@ description: Redwood's Dockerfile
 :::note The Dockerfile is experimental
 
 Redwood's Dockerfile is the collective effort of several hard-working community members.
-We've worked hard to optimize the it, but expect changes as we we collaborate with users and deploy providers.
+We've worked hard to optimize the it, but expect changes as we collaborate with users and deploy providers.
 
 :::
 
@@ -124,7 +124,7 @@ COPY --chown=node:node yarn.lock .
 Here we copy the minimum set of files that the `yarn install` step needs.
 The order isn't completely arbitrary—it tries to maximize [Docker's layer caching](https://docs.docker.com/build/cache/).
 We expect `yarn.lock` to change more than the package.json files, the package.json files to change more than `.yarnrc.yml` , and `.yarnrc.yml` to change more than the binary, etc.
-That said, it's hard to argue that these files couldn't be arranged differently, or tht the `COPY` instructions couldn't be combined.
+That said, it's hard to argue that these files couldn't be arranged differently, or that the `COPY` instructions couldn't be combined.
 The important thing is that they're all here, before the `yarn install` step:
 
 ```Dockerfile
@@ -240,7 +240,7 @@ COPY --chown=node:node --from=api_build /home/node/app/api/db /home/node/app/api
 COPY --chown=node:node --from=api_build /home/node/app/node_modules/.prisma /home/node/app/node_modules/.prisma
 ```
 
-Here's where we really take advantage multi-stage builds by copying from the `api_build` stage.
+Here's where we really take advantage of multi-stage builds by copying from the `api_build` stage.
 All the building has been done for us—now we can just grab the artifacts without having to lug around the dev dependencies.
 
 There's one more thing that was built—the prisma client in `node_modules/.prisma`.
@@ -256,7 +256,7 @@ Lastly, the default command is to start the api server using the bin from the `@
 You can override this command if you have more specific needs.
 
 Note that the Redwood CLI isn't available anymore.
-To access the server bin, we have to find it's path in `node_modules`.
+To access the server bin, we have to find its path in `node_modules`.
 Though this is somewhat discouraged in modern yarn, since we're using the `node-modules` node linker, it's in `node_modules/.bin`.
 
 ### The `web_build` stage
