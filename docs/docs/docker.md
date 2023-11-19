@@ -95,18 +95,17 @@ RUN apt-get update && apt-get install -y \
 The `node:18-bookworm-slim` image doesn't have [OpenSSL](https://www.openssl.org/), which [seems to be a bug](https://github.com/nodejs/docker-node/issues/1919).
 (It was included in the "bullseye" image, the codename for Debian 11.)
 On Linux, [Prisma needs OpenSSL](https://www.prisma.io/docs/reference/system-requirements#linux-runtime-dependencies).
-After installing it, we clean up the apt cache, adhering to [Docker best practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#apt-get).
+We install it, and Python and its dependencies are there ready to be uncommented if you need them. See the [Troubleshooting](#python) section for more.
 
-[It's recommended](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#apt-get) to combine `apt-get update` and `apt-get install -y` in the same `RUN` statement for cache busting.
-
-Lastly, Python and its dependencies are there ready to be uncommented if you need them. See the [Troubleshooting](#python) section for more.
+[It's recommended](https://docs.docker.com/develop/develop-images/instructions/#apt-get) to combine `apt-get update` and `apt-get install -y` in the same `RUN` statement for cache busting.
+After installing, we clean up the apt cache to keep the layer lean. (Running `apt-get clean` isn't required—[official Debian images do it automatically](https://github.com/moby/moby/blob/03e2923e42446dbb830c654d0eec323a0b4ef02a/contrib/mkimage/debootstrap#L82-L105).)
 
 ```Dockerfile
 USER node
 ```
 
 This and subsequent `chown` options in `COPY` instructions are for security.
-[Services that can run without privileges should](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user).
+[Services that can run without privileges should](https://docs.docker.com/develop/develop-images/instructions/#user).
 The Node.js image includes a user, `node`, created with an explicit `uid` and `gid`.
 We reuse it.
 
@@ -136,7 +135,7 @@ RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
 
 This step installs all your project's dependencies—production and dev.
 Since we use multi-stage builds, your production images won't pay for the dev dependencies installed in this step.
-The build stages need the dev dependnecies.
+The build stages need the dev dependencies.
 
 This step is a bit more involved than the others.
 It uses a [cache mount](https://docs.docker.com/build/cache/#use-your-package-manager-wisely).
@@ -150,7 +149,7 @@ The last thing to note is that we designate the node user.
 [The node user's `uid` is `1000`](https://github.com/nodejs/docker-node/blob/57d57436d1cb175e5f7c8d501df5893556c886c2/18/bookworm-slim/Dockerfile#L3-L4).
 
 One more thing to note: without setting `CI=1`, depending on the deploy provider, yarn may think it's in a TTY, making the logs difficult to read. With this set, yarn adapts accordingly.
-Enabling CI enables [immutable installs](https://yarnpkg.com/configuration/yarnrc#enableImmutableInstalls) and [inline builds](https://yarnpkg.com/configuration/yarnrc#enableInlineBuilds), both of which are highly recommended. For more information on those settings:
+Enabling CI enables [immutable installs](https://v3.yarnpkg.com/configuration/yarnrc#enableImmutableInstalls) and [inline builds](https://v3.yarnpkg.com/configuration/yarnrc#enableInlineBuilds), both of which are highly recommended. For more information on those settings:
 
 ```Dockerfile
 COPY --chown=node:node redwood.toml .
@@ -242,7 +241,7 @@ COPY --chown=node:node --from=api_build /home/node/app/node_modules/.prisma /hom
 ```
 
 Here's where we really take advantage multi-stage builds by copying from the `api_build` stage.
-All the building has been done for us—now we can just grab the artifacts without having to lug aronud the dev dependencies.
+All the building has been done for us—now we can just grab the artifacts without having to lug around the dev dependencies.
 
 There's one more thing that was built—the prisma client in `node_modules/.prisma`.
 We need to grab it too.
