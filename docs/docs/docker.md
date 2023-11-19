@@ -419,7 +419,7 @@ The solution is as simple as adding it:
 
   RUN apt-get update && apt-get install -y \
       openssl \
-+     python3 \
++     python3 make gcc \
       && rm -rf /var/lib/apt/lists/*
 ```
 
