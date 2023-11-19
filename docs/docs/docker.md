@@ -98,7 +98,7 @@ On Linux, [Prisma needs OpenSSL](https://www.prisma.io/docs/reference/system-req
 We install it, and Python and its dependencies are there ready to be uncommented if you need them. See the [Troubleshooting](#python) section for more.
 
 [It's recommended](https://docs.docker.com/develop/develop-images/instructions/#apt-get) to combine `apt-get update` and `apt-get install -y` in the same `RUN` statement for cache busting.
-After installing it, we clean up the apt cache.
+After installing, we clean up the apt cache to keep the layer lean. (Running `apt-get clean` isn't required—[official Debian images do it automatically](https://github.com/moby/moby/blob/03e2923e42446dbb830c654d0eec323a0b4ef02a/contrib/mkimage/debootstrap#L82-L105).)
 
 ```Dockerfile
 USER node
