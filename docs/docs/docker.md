@@ -200,7 +200,7 @@ RUN apt-get update && apt-get install -y \
 
 We don't start from the `base` stage, but begin anew with the `node:18-bookworm-slim` image.
 Since this is a production stage, it's important for it to be as small as possible.
-Docker's [multi-stage builds](https://docs.docker.com/build/building/multi-stage) enables this.
+Docker's [multi-stage builds](https://docs.docker.com/build/building/multi-stage/) enables this.
 
 ```Dockerfile
 USER node
