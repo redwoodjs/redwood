@@ -322,7 +322,10 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
   // comes from our `redwood()` vite plugin defined in index.ts. By default
   // (i.e. in the redwood() plugin) it points to <base>/web/src. But we need it
   // to be just <base>/, so for now we override it here.
-  config.root = rwPaths.base
+  config.root =
+    process.platform === 'win32'
+      ? rwPaths.base.replaceAll('\\', '/')
+      : rwPaths.base
   console.log('config.root', config.root)
   console.log('rwPaths.base', rwPaths.base)
   const bundlerConfig = new Proxy(
