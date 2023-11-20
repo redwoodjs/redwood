@@ -56,7 +56,7 @@
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build:js": "yarn node ./build.mjs",
     "build:types": "tsc --build --verbose",
     "test": "yarn test:node && echo",
     "test:node": "glob './src/**/__tests__/*.test.mts' --cmd='node --loader tsx --no-warnings --test'",
