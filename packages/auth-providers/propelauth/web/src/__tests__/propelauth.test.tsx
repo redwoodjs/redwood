@@ -49,7 +49,7 @@ const mockPropelauthClient: Partial<IAuthClient> = {
   },
   getAuthenticationInfoOrNull: async () => {
     return mockAuthenticationInfo as AuthenticationInfo
-  }
+  },
 }
 
 const fetchMock = jest.fn()
@@ -89,7 +89,7 @@ beforeEach(() => {
 
 function getPropelauthAuth() {
   const { useAuth, AuthProvider } = createAuth(
-    mockPropelauthClient as IAuthClient,
+    mockPropelauthClient as IAuthClient
   )
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,
@@ -121,7 +121,6 @@ describe('PropelAuth Authentication', () => {
   })
 
   it('is not authenticated after logging out', async () => {
-
     const authRef = getPropelauthAuth()
 
     await act(async () => {

@@ -1,4 +1,4 @@
-import { initAuth } from "@propelauth/shared";
+import { initAuth } from '@propelauth/shared'
 
 export const authDecoder = async (token: string, type: string) => {
   if (type !== 'propelauth-redwoodjs') {
@@ -9,7 +9,7 @@ export const authDecoder = async (token: string, type: string) => {
     integrationApiKey: process.env.PROPELAUTH_INTEGRATION_API_KEY ?? '',
     verifierKey: process.env.PROPELAUTH_VERIFIER_KEY ?? '',
     applicationUrl: process.env.PROPELAUTH_APPLICATION_URL ?? '',
-  });
+  })
 
-  return await auth.validation.validateAccessToken(token);
+  return await auth.validation.validateAccessToken(token)
 }

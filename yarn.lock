@@ -6879,6 +6879,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@propelauth/javascript@npm:^2.0.6":
+  version: 2.0.6
+  resolution: "@propelauth/javascript@npm:2.0.6"
+  checksum: b074eb31bcd8b84335683e30101d709f9dc18ff0c98face89ab7404fc43293008be029801b149e62beb5868f12aec8c01e9415055b7e2aac91db1e2c137e81e5
+  languageName: node
+  linkType: hard
+
+"@propelauth/shared@file:.yalc/@propelauth/shared::locator=%40redwoodjs%2Fauth-propelauth-api%40workspace%3Apackages%2Fauth-providers%2Fpropelauth%2Fapi":
+  version: 0.0.1
+  resolution: "@propelauth/shared@file:.yalc/@propelauth/shared#.yalc/@propelauth/shared::hash=c960d2&locator=%40redwoodjs%2Fauth-propelauth-api%40workspace%3Apackages%2Fauth-providers%2Fpropelauth%2Fapi"
+  dependencies:
+    jose: ^5.1.0
+  checksum: 7f6da9bcc6cfe3bbe271991a0bca31a333e91682d2210850607d27eb1c5e50cb6e68289b02d6087d1b46cc0a4749d08020d040a61cec948611cbfa4bc31c2668
+  languageName: node
+  linkType: hard
+
 "@protobufjs/aspromise@npm:^1.1.1, @protobufjs/aspromise@npm:^1.1.2":
   version: 1.1.2
   resolution: "@protobufjs/aspromise@npm:1.1.2"
@@ -8313,6 +8329,56 @@ __metadata:
     typescript: 5.2.2
   peerDependencies:
     netlify-identity-widget: 1.9.2
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/auth-propelauth-api@workspace:packages/auth-providers/propelauth/api":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth-propelauth-api@workspace:packages/auth-providers/propelauth/api"
+  dependencies:
+    "@babel/cli": 7.23.0
+    "@babel/core": ^7.22.20
+    "@babel/runtime-corejs3": 7.23.2
+    "@propelauth/shared": "file:.yalc/@propelauth/shared"
+    "@redwoodjs/api": 6.0.7
+    "@types/aws-lambda": 8.10.126
+    "@types/jsonwebtoken": 9.0.5
+    core-js: 3.33.2
+    jest: 29.7.0
+    jsonwebtoken: 9.0.2
+    typescript: 5.2.2
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/auth-propelauth-setup@workspace:packages/auth-providers/propelauth/setup":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth-propelauth-setup@workspace:packages/auth-providers/propelauth/setup"
+  dependencies:
+    "@babel/cli": 7.23.0
+    "@babel/core": ^7.22.20
+    "@babel/runtime-corejs3": 7.23.2
+    "@redwoodjs/cli-helpers": 6.0.7
+    "@types/yargs": 17.0.31
+    core-js: 3.33.2
+    jest: 29.7.0
+    typescript: 5.2.2
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/auth-propelauth-web@workspace:packages/auth-providers/propelauth/web":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth-propelauth-web@workspace:packages/auth-providers/propelauth/web"
+  dependencies:
+    "@babel/cli": 7.23.0
+    "@babel/core": ^7.22.20
+    "@babel/runtime-corejs3": 7.23.2
+    "@propelauth/javascript": ^2.0.6
+    "@redwoodjs/auth": 6.0.7
+    "@types/react": 18.2.14
+    core-js: 3.33.2
+    jest: 29.7.0
+    react: 0.0.0-experimental-e5205658f-20230913
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -23982,6 +24048,13 @@ __metadata:
   version: 4.15.4
   resolution: "jose@npm:4.15.4"
   checksum: ce8b29f84d6172a566b12b599dafa82f3bef0f16278bb76d562490ac1516fcc14017b05a39d20ffad25ed504f4996d4af4c9d3e0273d95b2d5559bf6d1112bc0
+  languageName: node
+  linkType: hard
+
+"jose@npm:^5.1.0":
+  version: 5.1.1
+  resolution: "jose@npm:5.1.1"
+  checksum: 897cc1d4a6a62c31c579dd8fcaea84e91398525ddf9ad26e01031e7ef4ca48db715748596c0afe6afa26d397a8e3b3f8331bcea533d553dd6f89be77d8f75e1c
   languageName: node
   linkType: hard
 

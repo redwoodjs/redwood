@@ -16,8 +16,6 @@ export async function handler({ force: forceArg }: Args) {
     provider: 'propelauth',
     authDecoderImport: `import { authDecoder } from '@redwoodjs/auth-propelauth-api'`,
     apiPackages: [`@redwoodjs/auth-propelauth-api@${version}`],
-    webPackages: [
-      `@redwoodjs/auth-propelauth-web@${version}`,
-    ],
+    webPackages: [`@redwoodjs/auth-propelauth-web@${version}`],
   })
 }
