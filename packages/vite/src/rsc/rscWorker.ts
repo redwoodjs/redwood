@@ -312,7 +312,11 @@ function isSerializedFormData(data?: unknown): data is SerializedFormData {
 }
 
 async function renderRsc(input: RenderInput): Promise<PipeableStream> {
+  const rwPaths = getPaths()
+
   const config = await configPromise
+  console.log('config.root', config.root)
+  console.log('rwPaths.base', rwPaths.base)
   const bundlerConfig = new Proxy(
     {},
     {
@@ -364,7 +368,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
     return renderToPipeableStream(
       createElement(component, input.props),
       bundlerConfig
-    ).pipe(transformRsfId(config.root))
+    ).pipe(transformRsfId(rwPaths.base))
   }
 
   throw new Error('Unexpected input')
