@@ -14,7 +14,8 @@ export function ssrChanged(changedFiles){
       changedFile.startsWith('packages/web/') ||
       changedFile.startsWith('packages/router/') ||
       changedFile.startsWith('packages/web-server/') ||
-      changedFile.startsWith('packages/vite/')
+      changedFile.startsWith('packages/vite/') ||
+      changedFile.startsWith('.github/workflows/ci.yml')
     ) {
       console.log('SSR change detected:', changedFile)
       return true

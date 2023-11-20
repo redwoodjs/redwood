@@ -584,8 +584,7 @@ jobs:
 
     strategy:
       matrix:
-        # TODO: add `windows-latest`.
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest]
 
     name: 🔁 SSR Smoke tests / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -657,8 +656,7 @@ jobs:
 
     strategy:
       matrix:
-        # TODO: add `windows-latest`.
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest]
 
     name: 🔁 SSR Smoke tests / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
