@@ -5,8 +5,15 @@ import { print } from 'graphql/language/printer'
 
 export function createHttpLink(
   uri: string,
-  httpLinkConfig: HttpOptions | undefined
+  httpLinkConfig: HttpOptions | undefined,
+  cookieHeader?: string
 ) {
+  const headers: Record<string, string> = {}
+
+  if (cookieHeader) {
+    headers.cookie = cookieHeader
+  }
+
   return new HttpLink({
     // @MARK: we have to construct the absoltue url for SSR
     uri,
@@ -14,6 +21,8 @@ export function createHttpLink(
     // you can disable result caching here if you want to
     // (this does not work if you are rendering your page with `export const dynamic = "force-static"`)
     fetchOptions: { cache: 'no-store' },
+    credentials: 'include',
+    headers,
   })
 }
 export function createUpdateDataLink(data: any) {
@@ -107,8 +116,8 @@ export type RedwoodApolloLink<
 }
 
 export type RedwoodApolloLinks = [
-  RedwoodApolloLink<'withToken'>,
-  RedwoodApolloLink<'authMiddleware'>,
+  // RedwoodApolloLink<'withToken'>,
+  // RedwoodApolloLink<'authMiddleware'>,
   RedwoodApolloLink<'updateDataApolloLink'>,
   RedwoodApolloLink<'httpLink', HttpLink>
 ]

@@ -186,6 +186,7 @@ export const dbAuthSession = (
     const [session, _csrfToken] = decryptSession(
       getSession(cookieHeader, cookieNameOption)
     )
+    console.log(`👉 \n ~ file: shared.ts:190 ~ session:`, session)
     return session
   } else if (sessionInAuthHeader) {
     // i.e. FE Sever makes the request, and adds encrypted session to the Authorization header

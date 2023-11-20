@@ -5,10 +5,10 @@ import type { Decoder } from '@redwoodjs/api'
 import { dbAuthSession } from './shared'
 
 export const createAuthDecoder = (cookieNameOption: string): Decoder => {
-  return async (_token, type, req) => {
-    if (type !== 'dbAuth') {
-      return null
-    }
+  return async (_token, _type, req) => {
+    // if (type !== 'dbAuth') {
+    //   return null
+    // }
 
     const session = dbAuthSession(req.event, cookieNameOption)
 
@@ -21,12 +21,13 @@ export const createAuthDecoder = (cookieNameOption: string): Decoder => {
 /** @deprecated use `createAuthDecoder` */
 export const authDecoder: Decoder = async (
   _authHeaderValue: string, // Browser: 4, FEServer: encryptedSession
-  type: string,
+  type: string | null,
   req: { event: APIGatewayProxyEvent }
 ) => {
-  if (type !== 'dbAuth') {
-    return null
-  }
+  console.log(`👉 \n ~ file: decoder.ts:27 ~ type:`, type)
+  // if (type !== 'dbAuth') {
+  //   return null
+  // }
 
   // Passing `undefined` as the second argument to `dbAuthSession` will make
   // it fall back to the default cookie name `session`, making it backwards

@@ -29,6 +29,13 @@ export interface AuthorizationHeader {
 export const parseAuthorizationHeader = (
   event: APIGatewayProxyEvent
 ): AuthorizationHeader => {
+  console.log(`👉 \n ~ file: index.ts:33 ~ event.headers:`, event.headers)
+  if (event.headers.cookie) {
+    return {
+      schema: 'cookie',
+      token: event.headers.cookie,
+    }
+  }
   const parts = (
     event.headers?.authorization || event.headers?.Authorization
   )?.split(' ')
@@ -44,13 +51,13 @@ export const parseAuthorizationHeader = (
 
 export type AuthContextPayload = [
   Decoded,
-  { type: string } & AuthorizationHeader,
+  { type: string | null } & AuthorizationHeader,
   { event: APIGatewayProxyEvent; context: LambdaContext }
 ]
 
 export type Decoder = (
   token: string,
-  type: string,
+  type: string | null,
   req: { event: APIGatewayProxyEvent; context: LambdaContext }
 ) => Promise<Decoded>
 
@@ -67,14 +74,6 @@ export const getAuthenticationContext = async ({
   event: APIGatewayProxyEvent
   context: LambdaContext
 }): Promise<undefined | AuthContextPayload> => {
-  const type = getAuthProviderHeader(event)
-
-  // No `auth-provider` header means that the user is logged out,
-  // and none of this auth malarky is required.
-  if (!type) {
-    return undefined
-  }
-
   const { schema, token } = parseAuthorizationHeader(event)
 
   let authDecoders: Array<Decoder> = []
@@ -89,9 +88,9 @@ export const getAuthenticationContext = async ({
 
   let i = 0
   while (!decoded && i < authDecoders.length) {
-    decoded = await authDecoders[i](token, type, { event, context })
+    decoded = await authDecoders[i](token, null, { event, context })
     i++
   }
 
-  return [decoded, { type, schema, token }, { event, context }]
+  return [decoded, { type: null, schema, token }, { event, context }]
 }
