@@ -1,0 +1,34 @@
+{
+  "name": "@propelauth/shared",
+  "version": "0.0.1",
+  "description": "",
+  "exports": {
+    ".": {
+      "browser": "./dist/index.mjs",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "jest"
+  },
+  "author": "PropelAuth",
+  "dependencies": {
+    "jose": "^5.1.0"
+  },
+  "yalcSig": "b037ed342802486eba898793159edbe4"
+}

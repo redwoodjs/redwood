@@ -1,0 +1,9 @@
+import { createClient } from '@propelauth/javascript'
+
+import { createAuthentication } from '@redwoodjs/auth'
+
+const authClient = createClient({
+  authUrl: process.env.AUTH_URL ?? '',
+})
+
+export const { AuthProvider, useAuth } = createAuth(authClient)
