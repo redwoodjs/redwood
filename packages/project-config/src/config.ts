@@ -90,6 +90,10 @@ export interface Config {
     stories: boolean
     nestScaffoldByModel: boolean
   }
+  graphql: {
+    fragments: boolean
+    trustedDocuments: boolean
+  }
   notifications: {
     versionUpdates: string[]
   }
@@ -148,6 +152,7 @@ const DEFAULT_CONFIG: Config = {
     serverConfig: './api/server.config.js',
     debugPort: 18911,
   },
+  graphql: { fragments: false, trustedDocuments: false },
   browser: {
     open: false,
   },
