@@ -117,7 +117,7 @@ describe('PropelAuth Authentication', () => {
     const currentUser = authRef.current.currentUser
 
     expect(authRef.current.isAuthenticated).toBeTruthy()
-    expect(currentUser?.email).toEqual('mock@example.com')
+    expect(currentUser?.email).toEqual('mock@email.com')
   })
 
   it('is not authenticated after logging out', async () => {

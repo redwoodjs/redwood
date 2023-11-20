@@ -2,7 +2,7 @@ import { initAuth } from '@propelauth/shared'
 
 export const authDecoder = async (token: string, type: string) => {
   if (type !== 'propelauth-redwoodjs') {
-    throw new Error('Invalid auth type')
+    return null
   }
   const auth = initAuth({
     authUrl: process.env.PROPELAUTH_AUTH_URL ?? '',
