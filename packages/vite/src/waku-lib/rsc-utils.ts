@@ -57,6 +57,7 @@ import('${moduleId}');`
 
 // HACK Patching stream is very fragile.
 export const transformRsfId = (prefixToRemove: string) => {
+  // Should be something like /home/runner/work/redwood/test-project-rsa
   console.log('prefixToRemove', prefixToRemove)
 
   return new Transform({
