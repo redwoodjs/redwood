@@ -9,6 +9,7 @@ import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
+
 // Note: Importing directly from `apollo/client` doesn't work properly in Storybook.
 const {
   ApolloProvider,
@@ -40,6 +41,7 @@ import {
   registerFragment,
   registerFragments,
 } from './fragmentRegistry'
+import possibleTypes from './possibleTypes'
 import { SSELink } from './sseLink'
 import { useCache } from './useCache'
 
@@ -364,6 +366,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
 
   const cache = new InMemoryCache({
     fragments: fragmentRegistry,
+    possibleTypes: cacheConfig?.possibleTypes ?? possibleTypes.possibleTypes,
     ...cacheConfig,
   }).restore(globalThis?.__REDWOOD__APOLLO_STATE ?? {})
 

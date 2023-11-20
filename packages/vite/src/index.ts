@@ -9,6 +9,7 @@ import { normalizePath } from 'vite'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import configureGraphQLFragments from './plugins/vite-plugin-configure-graphql-fragments'
 import handleJsAsJsx from './plugins/vite-plugin-jsx-loader'
 import removeFromBundle from './plugins/vite-plugin-remove-from-bundle'
 import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider'
@@ -270,6 +271,7 @@ export default function redwoodPluginVite(): PluginOption[] {
     rwConfig.experimental.streamingSsr.enabled && swapApolloProvider(),
     // -----------------
     handleJsAsJsx(),
+    configureGraphQLFragments(),
     // Remove the splash-page from the bundle.
     removeFromBundle([
       {
