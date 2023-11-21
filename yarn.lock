@@ -6879,19 +6879,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@propelauth/backend-js-utilities@npm:^0.0.2":
+  version: 0.0.2
+  resolution: "@propelauth/backend-js-utilities@npm:0.0.2"
+  dependencies:
+    jose: ^5.1.0
+  checksum: 17f1aeb17076ecdba2a1413ba6b7eef070ce4b24cb53f583025dd9e913fb79b58d495bdaa4c2af13097e2cd308f4a01fabaf252a9fdbf960ebbdfe63b9e89ae5
+  languageName: node
+  linkType: hard
+
 "@propelauth/javascript@npm:^2.0.6":
   version: 2.0.6
   resolution: "@propelauth/javascript@npm:2.0.6"
   checksum: b074eb31bcd8b84335683e30101d709f9dc18ff0c98face89ab7404fc43293008be029801b149e62beb5868f12aec8c01e9415055b7e2aac91db1e2c137e81e5
-  languageName: node
-  linkType: hard
-
-"@propelauth/shared@file:.yalc/@propelauth/shared::locator=%40redwoodjs%2Fauth-propelauth-api%40workspace%3Apackages%2Fauth-providers%2Fpropelauth%2Fapi":
-  version: 0.0.1
-  resolution: "@propelauth/shared@file:.yalc/@propelauth/shared#.yalc/@propelauth/shared::hash=c960d2&locator=%40redwoodjs%2Fauth-propelauth-api%40workspace%3Apackages%2Fauth-providers%2Fpropelauth%2Fapi"
-  dependencies:
-    jose: ^5.1.0
-  checksum: 7f6da9bcc6cfe3bbe271991a0bca31a333e91682d2210850607d27eb1c5e50cb6e68289b02d6087d1b46cc0a4749d08020d040a61cec948611cbfa4bc31c2668
   languageName: node
   linkType: hard
 
@@ -8339,7 +8339,7 @@ __metadata:
     "@babel/cli": 7.23.0
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.2
-    "@propelauth/shared": "file:.yalc/@propelauth/shared"
+    "@propelauth/backend-js-utilities": ^0.0.2
     "@redwoodjs/api": 6.0.7
     "@types/aws-lambda": 8.10.126
     "@types/jsonwebtoken": 9.0.5

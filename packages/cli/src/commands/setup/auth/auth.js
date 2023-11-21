@@ -147,6 +147,21 @@ export async function builder(yargs) {
       }
     )
     .command(
+      'propelauth',
+      'Set up auth for PropelAuth',
+      (yargs) => standardAuthBuilder(yargs),
+      async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth propelauth',
+          force: args.force,
+          verbose: args.verbose,
+        })
+        const handler = await getAuthHandler('@redwoodjs/auth-propelauth-setup')
+        console.log()
+        handler(args)
+      }
+    )
+    .command(
       'supabase',
       'Set up auth for Supabase',
       (yargs) => standardAuthBuilder(yargs),
