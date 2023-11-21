@@ -1,0 +1,73 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "WaitForApiPort",
+      "group": "none",
+      "type": "shell",
+      "windows": {
+        "command": "powershell",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy", "Bypass",
+          "-Command",
+          "$port = 18911; while (-not (Test-NetConnection -ComputerName localhost -Port $port -InformationLevel Quiet)) { Start-Sleep -Seconds 1 };"
+        ]
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "port=18911; while ! nc -z localhost $port; do sleep 1; done;"
+        ]
+      },
+      "osx": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "port=18911; while ! nc -z localhost $port; do sleep 1; done;"
+        ]
+      },
+      "presentation": {
+        "reveal": "silent",
+        "revealProblems": "onProblem",
+        "panel": "shared",
+        "close": true
+      }
+    },
+    {
+      "label": "WaitForWebPort",
+      "group": "none",
+      "type": "shell",
+      "windows": {
+        "command": "powershell",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy", "Bypass",
+          "-Command",
+          "$port = 8910; while (-not (Test-NetConnection -ComputerName localhost -Port $port -InformationLevel Quiet)) { Start-Sleep -Seconds 1 };"
+        ]
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "port=8910; while ! nc -z localhost $port; do sleep 1; done;"
+        ]
+      },
+      "osx": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "port=8910; while ! nc -z localhost $port; do sleep 1; done;"
+        ]
+      },
+      "presentation": {
+        "reveal": "silent",
+        "revealProblems": "onProblem",
+        "panel": "shared",
+        "close": true
+      }
+    }
+  ]
+}
