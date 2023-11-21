@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.2",
-    "core-js": "3.33.2",
+    "core-js": "3.33.3",
     "jsonwebtoken": "9.0.2"
   },
   "devDependencies": {
