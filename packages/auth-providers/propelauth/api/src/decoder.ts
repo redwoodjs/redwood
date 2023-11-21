@@ -1,4 +1,4 @@
-import { initAuth } from '@propelauth/shared'
+import { initAuth } from '@propelauth/backend-js-utilities'
 
 export const authDecoder = async (token: string, type: string) => {
   if (type !== 'propelauth-redwoodjs') {

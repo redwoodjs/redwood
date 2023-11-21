@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.2",
-    "@propelauth/shared": "file:.yalc/@propelauth/shared",
+    "@propelauth/backend-js-utilities": "^0.0.2",
     "core-js": "3.33.2",
     "jsonwebtoken": "9.0.2"
   },
