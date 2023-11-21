@@ -281,7 +281,7 @@ module.exports = (webpackEnv) => {
         }),
       isEnvProduction &&
         new WebpackManifestPlugin({
-          fileName: 'build-manifest.json',
+          fileName: 'client-build-manifest.json',
         }),
       isEnvProduction && new ChunkReferencesPlugin(),
       ...getSharedPlugins(isEnvProduction),
