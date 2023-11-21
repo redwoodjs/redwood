@@ -239,7 +239,7 @@ export default function redwoodPluginVite(): PluginOption[] {
           build: {
             outDir: options.build?.outDir || rwPaths.web.dist,
             emptyOutDir: true,
-            manifest: !env.ssrBuild ? 'build-manifest.json' : undefined,
+            manifest: !env.ssrBuild ? 'client-build-manifest.json' : undefined,
             sourcemap: !env.ssrBuild && rwConfig.web.sourceMap, // Note that this can be boolean or 'inline'
             rollupOptions: {
               input: getRollupInput(!!env.ssrBuild),
