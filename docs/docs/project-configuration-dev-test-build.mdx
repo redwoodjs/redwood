@@ -95,6 +95,8 @@ You can find all the details in the [source](https://github.com/redwoodjs/redwoo
 The api side is configured similarly, with the configuration sitting in `./api/jest.config.js`.
 But the api preset is slightly different in that:
 
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
 - it's configured to run tests serially (because Scenarios seed your test database)
 - it has setup code to make sure your database is 1) seeded before running tests 2) reset between Scenarios
 
@@ -104,39 +106,27 @@ You can find all the details in the [source](https://github.com/redwoodjs/redwoo
 
 You can customize the types that Redwood generates from your project too! This is documented in a bit more detail in the [Generated Types](typescript/generated-types#customising-codegen-config) doc.
 
-## Debugger configuration
-The `yarn rw dev` command is configured by default to launch a debugger on the port `18911`, your Redwood app also ships with default configuration to attach a debugger from VSCode.
+## Debug configurations
 
-Simply run your dev server, then attach the debugger from the "run and debug" panel. Quick demo below:
+### Dev Server
+The `yarn rw dev` command is configured by default to open a browser and a debugger on the port `18911` and your redwood app ships with several default configurations to debug with VSCode.
 
-<ReactPlayer width='100%' height='100%' controls url='https://user-images.githubusercontent.com/1521877/159887978-95075ccd-d10c-403c-90cc-a5b944c429e3.mp4' />
-
-
-<br/>
-
-> **ℹ️ Tip: Can't see the "Attach debugger" configuration?** In VSCode
->
-> You can grab the latest launch.json from the Redwood template [here](https://github.com/redwoodjs/redwood/blob/main/packages/create-redwood-app/templates/ts/.vscode/launch.json). Copy the contents into your project's `.vscode/launch.json`
-
-
-#### Customizing the debug port
-You can choose to use a different debug port in one of two ways:
-
+#### Customizing the configuration
 **a) Using the redwood.toml**
 
-Add/change the `debugPort` under your api settings
+Add/change the `debugPort` or `open` under your api settings
 
 ```toml title="redwood.toml"
 [web]
   # .
-  # .
 [api]
-  port = 8911
+  # .
   // highlight-next-line
   debugPort = 18911 # 👈 change me!
+[browser]
+  // highlight-next-line
+  open = true # 👈 change me!
 ```
-
-If you set it to `false`, no debug port will be exposed. The `debugPort` is only ever used during development when running `yarn rw dev`
 
 **b) Pass a flag to `rw dev` command**
 
@@ -148,6 +138,21 @@ yarn rw dev --debugPort 75028
 The flag passed in the CLI will always take precedence over your setting in the `redwood.toml`
 
 Just remember to also change the port you are attaching to in your `./vscode/launch.json`
+
+### API and Web Debuggers
+Simply run your dev server, then attach the debugger from the "run and debug" panel. Quick demo below:
+
+<ReactPlayer width='100%' height='100%' controls url='https://user-images.githubusercontent.com/1521877/159887978-95075ccd-d10c-403c-90cc-a5b944c429e3.mp4' />
+
+### Compound Debugger
+The compound configuration is a combination of the dev, api and web configurations.
+It allows you to start all debugging configurations at once, facilitating simultaneous debugging of server and client-side code.
+
+<br/>
+
+> **ℹ️ Tip: Can't see the debug configurations?** In VSCode
+>
+> You can grab the latest launch.json from the Redwood template [here](https://github.com/redwoodjs/redwood/blob/main/packages/create-redwood-app/templates/ts/.vscode/launch.json). Copy the contents into your project's `.vscode/launch.json`
 
 ## Ignoring the `.yarn` folder
 
