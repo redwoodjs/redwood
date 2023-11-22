@@ -4,6 +4,8 @@
 // @NOTE without these imports in the setup file, mockCurrentUser
 // will remain undefined in the user's tests
 // Remember to use specific imports
+const { async } = require('fast-glob')
+
 const { setContext } = require('@redwoodjs/graphql-server/dist/globalContext')
 const { defineScenario } = require('@redwoodjs/testing/dist/api/scenario')
 
@@ -84,7 +86,7 @@ const getProjectDb = () => {
 }
 
 const buildScenario =
-  (it, testPath) =>
+  (itFunc, testPath) =>
   (...args) => {
     let scenarioName, testName, testFunc
 
@@ -97,39 +99,50 @@ const buildScenario =
       throw new Error('scenario() requires 2 or 3 arguments')
     }
 
-    return it(testName, async () => {
-      const path = require('path')
-      const testFileDir = path.parse(testPath)
-      // e.g. ['comments', 'test'] or ['signup', 'state', 'machine', 'test']
-      const testFileNameParts = testFileDir.name.split('.')
-      const testFilePath = `${testFileDir.dir}/${testFileNameParts
-        .slice(0, testFileNameParts.length - 1)
-        .join('.')}.scenarios`
-      let allScenarios, scenario, result
-
-      try {
-        allScenarios = require(testFilePath)
-      } catch (e) {
-        // ignore error if scenario file not found, otherwise re-throw
-        if (e.code !== 'MODULE_NOT_FOUND') {
-          throw e
-        }
-      }
-
-      if (allScenarios) {
-        if (allScenarios[scenarioName]) {
-          scenario = allScenarios[scenarioName]
-        } else {
-          throw new Error(
-            `UndefinedScenario: There is no scenario named "${scenarioName}" in ${testFilePath}.{js,ts}`
-          )
-        }
-      }
+    return itFunc(testName, async () => {
+      let { scenario } = loadScenarios(testPath, scenarioName)
 
       const scenarioData = await seedScenario(scenario)
-      result = await testFunc(scenarioData)
+      const result = await testFunc(scenarioData)
+
+      if (wasDbUsed()) {
+        await teardown()
+      }
 
       return result
+    })
+  }
+
+const buildDescribeScenario =
+  (describeFunc, testPath) =>
+  (...args) => {
+    let scenarioName, testName, describeBlock
+
+    if (args.length === 3) {
+      ;[scenarioName, testName, describeBlock] = args
+    } else if (args.length === 2) {
+      scenarioName = DEFAULT_SCENARIO
+      ;[testName, describeBlock] = args
+    } else {
+      throw new Error('describeScenario() requires 2 or 3 arguments')
+    }
+
+    return describeFunc(testName, () => {
+      let scenarioData
+      beforeAll(async () => {
+        let { scenario } = loadScenarios(testPath, scenarioName)
+        scenarioData = await seedScenario(scenario)
+      })
+
+      afterAll(async () => {
+        if (wasDbUsed()) {
+          await teardown()
+        }
+      })
+
+      const getScenario = () => scenarioData
+
+      describeBlock(getScenario)
     })
   }
 
@@ -190,6 +203,18 @@ const seedScenario = async (scenario) => {
 
 global.scenario = buildScenario(global.it, global.testPath)
 global.scenario.only = buildScenario(global.it.only, global.testPath)
+global.scenarioSetup = async (scenarioName = DEFAULT_SCENARIO) => {
+  let { scenario } = loadScenarios(global.testPath, scenarioName)
+
+  const scenarioData = await seedScenario(scenario)
+
+  return scenarioData
+}
+
+global.describeScenario = buildDescribeScenario(
+  global.describe,
+  global.testPath
+)
 
 global.mockCurrentUser = (currentUser) => {
   setContext({ currentUser })
@@ -249,8 +274,40 @@ afterAll(async () => {
   }
 })
 
-afterEach(async () => {
-  if (wasDbUsed()) {
-    await teardown()
+// Moved this to inside buildScenario() and buildDescribeScenario()
+// afterEach(async () => {
+//   if (wasDbUsed()) {
+//     await teardown()
+//   }
+// })
+
+function loadScenarios(testPath, scenarioName) {
+  const path = require('path')
+  const testFileDir = path.parse(testPath)
+  // e.g. ['comments', 'test'] or ['signup', 'state', 'machine', 'test']
+  const testFileNameParts = testFileDir.name.split('.')
+  const testFilePath = `${testFileDir.dir}/${testFileNameParts
+    .slice(0, testFileNameParts.length - 1)
+    .join('.')}.scenarios`
+  let allScenarios, scenario
+
+  try {
+    allScenarios = require(testFilePath)
+  } catch (e) {
+    // ignore error if scenario file not found, otherwise re-throw
+    if (e.code !== 'MODULE_NOT_FOUND') {
+      throw e
+    }
   }
-})
+
+  if (allScenarios) {
+    if (allScenarios[scenarioName]) {
+      scenario = allScenarios[scenarioName]
+    } else {
+      throw new Error(
+        `UndefinedScenario: There is no scenario named "${scenarioName}" in ${testFilePath}.{js,ts}`
+      )
+    }
+  }
+  return { scenario }
+}
