@@ -1,29 +1,31 @@
 import path from 'path'
 
-import type { Request, Response } from 'express'
 import isbot from 'isbot'
 import type { ViteDevServer } from 'vite'
 
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
+import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-// import { stripQueryStringAndHashFromPath } from '../utils'
-
-import { reactRenderToStream } from './streamHelpers'
+import { reactRenderToStreamResponse } from './streamHelpers'
 import { loadAndRunRouteHooks } from './triggerRouteHooks'
 
 interface CreateReactStreamingHandlerOptions {
   route: RWRouteManifestItem
   clientEntryPath: string
-  cssLinks: string[]
+  getStylesheetLinks: () => string[]
 }
 
 const checkUaForSeoCrawler = isbot.spawn()
 checkUaForSeoCrawler.exclude(['chrome-lighthouse'])
 
 export const createReactStreamingHandler = async (
-  { route, clientEntryPath, cssLinks }: CreateReactStreamingHandlerOptions,
+  {
+    route,
+    clientEntryPath,
+    getStylesheetLinks,
+  }: CreateReactStreamingHandlerOptions,
   viteDevServer?: ViteDevServer
 ) => {
   const { redirect, routeHooks, bundle } = route
@@ -32,14 +34,22 @@ export const createReactStreamingHandler = async (
   const isProd = !viteDevServer
 
   let entryServerImport: any
+  let fallbackDocumentImport: any
 
   if (isProd) {
     entryServerImport = await import(rwPaths.web.distEntryServer)
+    fallbackDocumentImport = await import(rwPaths.web.distDocumentServer)
   }
 
-  return async (req: Request, res: Response) => {
+  // @NOTE: we are returning a FetchAPI handler
+  return async (req: Request) => {
     if (redirect) {
-      res.redirect(redirect.to)
+      return new Response(null, {
+        status: 302,
+        headers: {
+          Location: redirect.to,
+        },
+      })
     }
 
     // Do this inside the handler for **dev-only**.
@@ -48,12 +58,21 @@ export const createReactStreamingHandler = async (
       entryServerImport = await viteDevServer.ssrLoadModule(
         rwPaths.web.entryServer as string // already validated in dev server
       )
+      fallbackDocumentImport = await viteDevServer.ssrLoadModule(
+        rwPaths.web.document
+      )
     }
 
     const ServerEntry =
       entryServerImport.ServerEntry || entryServerImport.default
 
-    const currentPathName = req.path
+    const FallbackDocument =
+      fallbackDocumentImport.Document || fallbackDocumentImport.default
+
+    const { pathname: currentPathName } = new URL(req.url)
+
+    // @TODO validate this is correct
+    const parsedParams = matchPath(route.pathDefinition, currentPathName)
 
     let metaTags: TagDescriptor[] = []
 
@@ -70,7 +89,7 @@ export const createReactStreamingHandler = async (
       paths: [getAppRouteHook(isProd), routeHookPath],
       reqMeta: {
         req,
-        parsedParams: req.params,
+        parsedParams,
       },
       viteDevServer,
     })
@@ -82,21 +101,36 @@ export const createReactStreamingHandler = async (
       bundle && '/' + bundle,
     ].filter(Boolean) as string[]
 
-    const isSeoCrawler = checkUaForSeoCrawler(req.headers['user-agent'] || '')
+    const isSeoCrawler = checkUaForSeoCrawler(
+      req.headers.get('user-agent') || ''
+    )
 
-    reactRenderToStream(
+    // Using a function to get the CSS links because we need to wait for the
+    // vite dev server to analyze the module graph
+    const cssLinks = getStylesheetLinks()
+
+    const reactResponse = await reactRenderToStreamResponse(
       {
         ServerEntry,
+        FallbackDocument,
         currentPathName,
         metaTags,
         cssLinks,
         isProd,
         jsBundles,
-        res,
       },
       {
         waitForAllReady: isSeoCrawler,
+        onError: (err) => {
+          if (!isProd && viteDevServer) {
+            viteDevServer.ssrFixStacktrace(err)
+          }
+
+          console.error(err)
+        },
       }
     )
+
+    return reactResponse
   }
 }

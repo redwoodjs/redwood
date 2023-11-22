@@ -18,23 +18,23 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@fastify/http-proxy": "9.2.1",
-    "@fastify/static": "6.11.2",
-    "@fastify/url-data": "5.3.1",
+    "@fastify/http-proxy": "9.3.0",
+    "@fastify/static": "6.12.0",
+    "@fastify/url-data": "5.4.0",
     "@redwoodjs/graphql-server": "6.0.7",
     "@redwoodjs/project-config": "6.0.7",
     "ansi-colors": "4.1.3",
-    "fast-glob": "3.3.1",
-    "fastify": "4.23.2",
-    "fastify-raw-body": "4.2.2",
+    "fast-glob": "3.3.2",
+    "fastify": "4.24.3",
+    "fastify-raw-body": "4.3.0",
     "lodash": "4.17.21",
     "qs": "6.11.2"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.119",
-    "@types/lodash": "4.14.195",
-    "@types/qs": "6.9.7",
-    "esbuild": "0.19.3",
+    "@types/aws-lambda": "8.10.126",
+    "@types/lodash": "4.14.201",
+    "@types/qs": "6.9.10",
+    "esbuild": "0.19.5",
     "typescript": "5.2.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

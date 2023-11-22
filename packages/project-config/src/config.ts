@@ -90,12 +90,17 @@ export interface Config {
     stories: boolean
     nestScaffoldByModel: boolean
   }
+  graphql: {
+    fragments: boolean
+    trustedDocuments: boolean
+  }
   notifications: {
     versionUpdates: string[]
   }
   experimental: {
     opentelemetry: {
       enabled: boolean
+      wrapApi: boolean
       apiSdk?: string
     }
     studio: StudioConfig
@@ -108,6 +113,9 @@ export interface Config {
       enabled: boolean
     }
     rsc: {
+      enabled: boolean
+    }
+    realtime: {
       enabled: boolean
     }
   }
@@ -144,6 +152,7 @@ const DEFAULT_CONFIG: Config = {
     serverConfig: './api/server.config.js',
     debugPort: 18911,
   },
+  graphql: { fragments: false, trustedDocuments: false },
   browser: {
     open: false,
   },
@@ -158,6 +167,7 @@ const DEFAULT_CONFIG: Config = {
   experimental: {
     opentelemetry: {
       enabled: false,
+      wrapApi: true,
       apiSdk: undefined,
     },
     studio: {
@@ -189,6 +199,9 @@ const DEFAULT_CONFIG: Config = {
       enabled: false,
     },
     rsc: {
+      enabled: false,
+    },
+    realtime: {
       enabled: false,
     },
   },

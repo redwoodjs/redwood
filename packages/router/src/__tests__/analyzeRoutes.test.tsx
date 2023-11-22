@@ -1,14 +1,24 @@
 import React, { isValidElement } from 'react'
 
 import { Route, Router } from '../router'
-import { Private, Set } from '../Set'
+import { Private, PrivateSet, Set } from '../Set'
 import { analyzeRoutes } from '../util'
 
 const FakePage = () => <h1>Fake Page</h1>
 
-const FakeLayout1 = ({ children }) => <div className="layout1">{children}</div>
-const FakeLayout2 = ({ children }) => <div className="layout2">{children}</div>
-const FakeLayout3 = ({ children }) => <div className="layout2">{children}</div>
+interface LayoutProps {
+  children: React.ReactNode
+}
+
+const FakeLayout1 = ({ children }: LayoutProps) => (
+  <div className="layout1">{children}</div>
+)
+const FakeLayout2 = ({ children }: LayoutProps) => (
+  <div className="layout2">{children}</div>
+)
+const FakeLayout3 = ({ children }: LayoutProps) => (
+  <div className="layout2">{children}</div>
+)
 
 describe('AnalyzeRoutes: with homePage and Children', () => {
   const CheckRoutes = (
@@ -106,14 +116,26 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
   })
 
   test('Creates setWrapper map', () => {
-    const WrapperX = ({ children }) => (
+    interface WrapperXProps {
+      children: React.ReactNode
+      id: string
+      passThruProp: string
+    }
+
+    const WrapperX = ({ children }: WrapperXProps) => (
       <>
         <h1>WrapperA</h1>
         {children}
       </>
     )
 
-    const WrapperY = ({ children }) => (
+    interface WrapperYProps {
+      children: React.ReactNode
+      id: string
+      theme: string
+    }
+
+    const WrapperY = ({ children }: WrapperYProps) => (
       <>
         <h1>WrapperY</h1>
         {children}
@@ -142,12 +164,15 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         name: 'routeA',
         path: '/a',
         whileLoadingPage: undefined,
-        wrappers: [WrapperX],
-        // Props passed through from set
-        setProps: [
+        sets: [
           {
-            id: 'set-one',
-            passThruProp: 'bazinga',
+            id: '1',
+            wrappers: [WrapperX],
+            isPrivate: false,
+            props: {
+              id: 'set-one',
+              passThruProp: 'bazinga',
+            },
           },
         ],
       })
@@ -159,15 +184,24 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         name: 'routeB',
         path: '/b',
         whileLoadingPage: undefined,
-        wrappers: [WrapperX, WrapperY], // both wrappers
-        setProps: [
+        sets: [
           {
-            id: 'set-one',
-            passThruProp: 'bazinga',
+            id: '1',
+            wrappers: [WrapperX],
+            isPrivate: false,
+            props: {
+              id: 'set-one',
+              passThruProp: 'bazinga',
+            },
           },
           {
-            id: 'set-two',
-            theme: 'blue',
+            id: '1.1',
+            isPrivate: false,
+            wrappers: [WrapperY],
+            props: {
+              id: 'set-two',
+              theme: 'blue',
+            },
           },
         ],
       })
@@ -179,15 +213,146 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         name: 'routeC',
         path: '/c',
         whileLoadingPage: undefined,
-        wrappers: [WrapperX, WrapperY], // both wrappers
-        setProps: [
+        sets: [
           {
-            id: 'set-one',
-            passThruProp: 'bazinga',
+            id: '1',
+            wrappers: [WrapperX],
+            isPrivate: false,
+            props: {
+              id: 'set-one',
+              passThruProp: 'bazinga',
+            },
           },
           {
-            id: 'set-two',
-            theme: 'blue',
+            id: '1.1',
+            wrappers: [WrapperY],
+            isPrivate: false,
+            props: {
+              id: 'set-two',
+              theme: 'blue',
+            },
+          },
+        ],
+      })
+    )
+  })
+
+  test('Connects Set wrapper props with correct Set', () => {
+    interface WrapperXProps {
+      children: React.ReactNode
+      id: string
+      passThruProp: string
+    }
+
+    const WrapperX = ({ children }: WrapperXProps) => (
+      <>
+        <h1>WrapperA</h1>
+        {children}
+      </>
+    )
+
+    interface WrapperYProps {
+      children: React.ReactNode
+      id: string
+      theme: string
+    }
+
+    const WrapperY = ({ children }: WrapperYProps) => (
+      <>
+        <h1>WrapperY</h1>
+        {children}
+      </>
+    )
+
+    const Simple = (
+      <Router>
+        <Set wrap={[WrapperX]} id="set-one" passThruProp="bazinga">
+          <Route path="/a" name="routeA" page={FakePage} />
+          <Set wrap={[WrapperY]} id="set-two" theme="blue">
+            <Route name="routeB" path="/b" page={FakePage} />
+            <Route name="routeC" path="/c" page={FakePage} />
+          </Set>
+        </Set>
+      </Router>
+    )
+
+    const { pathRouteMap } = analyzeRoutes(Simple.props.children, {
+      currentPathName: '/',
+    })
+
+    expect(pathRouteMap['/a']).toEqual(
+      expect.objectContaining({
+        redirect: null,
+        name: 'routeA',
+        path: '/a',
+        whileLoadingPage: undefined,
+        sets: [
+          {
+            id: '1',
+            wrappers: [WrapperX],
+            isPrivate: false,
+            props: {
+              id: 'set-one',
+              passThruProp: 'bazinga',
+            },
+          },
+        ],
+      })
+    )
+
+    expect(pathRouteMap['/b']).toEqual(
+      expect.objectContaining({
+        redirect: null,
+        name: 'routeB',
+        path: '/b',
+        whileLoadingPage: undefined,
+        sets: [
+          {
+            id: '1',
+            wrappers: [WrapperX],
+            isPrivate: false,
+            props: {
+              id: 'set-one',
+              passThruProp: 'bazinga',
+            },
+          },
+          {
+            id: '1.1',
+            wrappers: [WrapperY],
+            isPrivate: false,
+            props: {
+              id: 'set-two',
+              theme: 'blue',
+            },
+          },
+        ],
+      })
+    )
+
+    expect(pathRouteMap['/c']).toEqual(
+      expect.objectContaining({
+        redirect: null,
+        name: 'routeC',
+        path: '/c',
+        whileLoadingPage: undefined,
+        sets: [
+          {
+            id: '1',
+            wrappers: [WrapperX],
+            isPrivate: false,
+            props: {
+              id: 'set-one',
+              passThruProp: 'bazinga',
+            },
+          },
+          {
+            id: '1.1',
+            wrappers: [WrapperY],
+            isPrivate: false,
+            props: {
+              id: 'set-two',
+              theme: 'blue',
+            },
           },
         ],
       })
@@ -196,7 +361,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
 
   test('Creates setWrapper map with nested sets', () => {
     const KrismasTree = (
-      <Private unauthenticated="signIn">
+      <PrivateSet unauthenticated="signIn">
         <Route path="/dashboard" page={FakePage} name="dashboard" />
         <Set wrap={[FakeLayout1, FakeLayout2]}>
           <Route
@@ -254,7 +419,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             />
           </Set>
         </Set>
-      </Private>
+      </PrivateSet>
     )
 
     const { pathRouteMap } = analyzeRoutes(KrismasTree.props.children, {
@@ -286,12 +451,43 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       path: '/private',
       whileLoadingPage: undefined,
       page: FakePage,
-      wrappers: [],
-      setId: 1,
-      setProps: [
+      sets: [
         {
-          private: true,
-          unauthenticated: 'home',
+          id: '1',
+          wrappers: [],
+          isPrivate: true,
+          props: { unauthenticated: 'home' },
+        },
+      ],
+    })
+  })
+
+  test('Handles PrivateSet', () => {
+    const Routes = (
+      <Router>
+        <Route path="/" name="home" page={FakePage} />
+        <PrivateSet unauthenticated="home">
+          <Route path="/private" name="privateRoute" page={FakePage} />
+        </PrivateSet>
+      </Router>
+    )
+
+    const { pathRouteMap } = analyzeRoutes(Routes.props.children, {
+      currentPathName: '/',
+    })
+
+    expect(pathRouteMap['/private']).toStrictEqual({
+      redirect: null,
+      name: 'privateRoute',
+      path: '/private',
+      whileLoadingPage: undefined,
+      page: FakePage,
+      sets: [
+        {
+          id: '1',
+          wrappers: [],
+          isPrivate: true,
+          props: { unauthenticated: 'home' },
         },
       ],
     })
@@ -334,7 +530,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     const RedirectedRoutes = (
       <Router>
         <Route path="/" page={HomePage} name="home" />
-        <Private unauthenticated="home">
+        <PrivateSet unauthenticated="home">
           <Route
             path="/no-roles-assigned"
             page={PrivateNoRolesAssigned}
@@ -346,30 +542,30 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             roles={['ADMIN', 'EMPLOYEE']}
             someProp="propFromNoRolesSet"
           >
-            <Private unauthenticated="admin" roles={'EMPLOYEE'}>
+            <PrivateSet unauthenticated="admin" roles={'EMPLOYEE'}>
               <Route
                 path="/employee"
                 page={PrivateEmployeePage}
                 name="privateEmployee"
               />
-            </Private>
+            </PrivateSet>
 
-            <Private unauthenticated="employee" roles={'ADMIN'}>
+            <PrivateSet unauthenticated="employee" roles={'ADMIN'}>
               <Route
                 path="/admin"
                 page={PrivateAdminPage}
                 name="privateAdmin"
               />
-            </Private>
+            </PrivateSet>
           </Set>
-        </Private>
+        </PrivateSet>
       </Router>
     )
 
     const { pathRouteMap, namedRoutesMap } = analyzeRoutes(
       RedirectedRoutes.props.children,
       {
-        currentPathName: '/simple',
+        currentPathName: '/does-not-exist',
       }
     )
 
@@ -377,12 +573,13 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     expect(pathRouteMap).toMatchObject({
       '/no-roles-assigned': {
         redirect: null,
-        setProps: expect.arrayContaining([
-          expect.objectContaining({
-            unauthenticated: 'home',
-            private: true,
-          }),
-        ]),
+        sets: [
+          {
+            id: '1',
+            isPrivate: true,
+            props: { unauthenticated: 'home' },
+          },
+        ],
       },
     })
 
@@ -392,19 +589,32 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     expect(pathRouteMap).toMatchObject({
       '/employee': {
         redirect: null,
-        setProps: expect.arrayContaining([
-          // Should have the first one, but also..
-          expect.objectContaining({
-            unauthenticated: 'home',
-            private: true,
-          }),
-          // ...the second private set's props
-          expect.objectContaining({
-            private: true,
-            unauthenticated: 'noRolesAssigned',
-            roles: ['ADMIN', 'EMPLOYEE'],
-          }),
-        ]),
+        sets: [
+          {
+            id: '1',
+            wrappers: [],
+            isPrivate: true,
+            props: { unauthenticated: 'home' },
+          },
+          {
+            id: '1.1',
+            wrappers: [],
+            isPrivate: true,
+            props: expect.objectContaining({
+              unauthenticated: 'noRolesAssigned',
+              roles: ['ADMIN', 'EMPLOYEE'],
+            }),
+          },
+          {
+            id: '1.1.1',
+            wrappers: [],
+            isPrivate: true,
+            props: {
+              unauthenticated: 'admin',
+              roles: 'EMPLOYEE',
+            },
+          },
+        ],
       },
     })
 
@@ -412,27 +622,85 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     expect(pathRouteMap).toMatchObject({
       '/admin': {
         redirect: null,
-        setProps: expect.arrayContaining([
+        sets: [
           // Should have the first one, but also..
-          expect.objectContaining({
-            unauthenticated: 'home',
-            private: true,
-          }),
+          {
+            id: '1',
+            wrappers: [],
+            isPrivate: true,
+            props: { unauthenticated: 'home' },
+          },
           // ...the second private set's props
-          expect.objectContaining({
-            private: true,
-            unauthenticated: 'noRolesAssigned',
-            roles: ['ADMIN', 'EMPLOYEE'],
-          }),
-
+          {
+            id: '1.1',
+            wrappers: [],
+            isPrivate: true,
+            props: {
+              unauthenticated: 'noRolesAssigned',
+              roles: ['ADMIN', 'EMPLOYEE'],
+            },
+          },
           // ...and the third private set's props
-          expect.objectContaining({
-            unauthenticated: 'employee',
-            roles: 'ADMIN',
-            private: true,
-          }),
-        ]),
+          {
+            id: '1.1.2',
+            wrappers: [],
+            isPrivate: true,
+            props: {
+              unauthenticated: 'employee',
+              roles: 'ADMIN',
+            },
+          },
+        ],
       },
     })
+  })
+})
+
+test('Give correct ids to root sets', () => {
+  const HomePage = () => <h1>Home Page</h1>
+  const Page = () => <h1>Page</h1>
+  const Layout = ({ children }: LayoutProps) => <>{children}</>
+
+  const Routes = (
+    <Router>
+      <Route path="/" page={HomePage} name="home" />
+      <Set wrap={Layout}>
+        <Route path="/one" page={Page} name="one" />
+      </Set>
+      <Set wrap={Layout}>
+        <Route path="/two" page={Page} name="two" />
+      </Set>
+    </Router>
+  )
+
+  const { pathRouteMap } = analyzeRoutes(Routes.props.children, {
+    currentPathName: '/',
+  })
+
+  expect(pathRouteMap).toMatchObject({
+    '/': {
+      redirect: null,
+      sets: [],
+    },
+    '/one': {
+      redirect: null,
+      sets: [
+        {
+          id: '1',
+          wrappers: [Layout],
+          isPrivate: false,
+        },
+      ],
+    },
+    '/two': {
+      redirect: null,
+      sets: [
+        {
+          id: '2',
+          wrappers: [Layout],
+          isPrivate: false,
+        },
+      ],
+    },
   })
 })

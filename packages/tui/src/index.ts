@@ -179,7 +179,7 @@ export class RedwoodTUI {
   private outStream: NodeJS.WriteStream
   private errStream: NodeJS.WriteStream
 
-  private timerId?: NodeJS.Timer
+  private timerId?: NodeJS.Timeout
   private isReactive = false
 
   private reactiveContent?: ReactiveTUIContent

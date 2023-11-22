@@ -73,7 +73,7 @@ function getExecaOptions(cwd, env = {}) {
 
 const rscProjectPath = path.join(
   os.tmpdir(),
-  'rsc-project',
+  'redwood-rsc-project',
   // ":" is problematic with paths
   new Date().toISOString().split(':').join('-')
 )
