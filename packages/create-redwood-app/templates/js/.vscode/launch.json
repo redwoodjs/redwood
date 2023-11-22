@@ -19,15 +19,15 @@
       "remoteRoot": "${workspaceFolder}/node_modules/@redwoodjs/api-server/dist",
       "sourceMaps": true,
       "restart": true,
-      "preLaunchTask": "WaitForApiPort",
+      "preLaunchTask": "WaitForDevServer",
     },
     {
       "name": "Launch Web debugger",
-      "type": "chrome", // vscode built-in options: chrome or edge
+      "type": "chrome",
       "request": "launch",
       "url": "http://localhost:8910",
       "webRoot": "${workspaceRoot}/web/src",
-      "preLaunchTask": "WaitForWebPort",
+      "preLaunchTask": "WaitForDevServer",
     },
     {
       "command": "yarn redwood test api",

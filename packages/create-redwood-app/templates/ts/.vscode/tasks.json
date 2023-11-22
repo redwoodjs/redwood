@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "WaitForApiPort",
+      "label": "WaitForDevServer",
       "group": "none",
       "type": "shell",
       "windows": {
@@ -10,23 +10,27 @@
         "args": [
           "-NoProfile",
           "-ExecutionPolicy", "Bypass",
-          "-Command",
-          "$port = 18911; while (-not (Test-NetConnection -ComputerName localhost -Port $port -InformationLevel Quiet)) { Start-Sleep -Seconds 1 };"
+          "$port = $env:PORT; while (-not (Test-NetConnection -ComputerName localhost -Port $port)) { Start-Sleep -Seconds 1 };"
         ]
       },
       "linux": {
         "command": "bash",
         "args": [
           "-c",
-          "port=18911; while ! nc -z localhost $port; do sleep 1; done;"
+          "port=$PORT; while ! nc -z localhost $port; do sleep 1; done;"
         ]
       },
       "osx": {
         "command": "bash",
         "args": [
           "-c",
-          "port=18911; while ! nc -z localhost $port; do sleep 1; done;"
+          "port=$PORT; while ! nc -z localhost $port; do sleep 1; done;"
         ]
+      },
+      "options": {
+        "env": {
+          "port": "18911"
+        }
       },
       "presentation": {
         "reveal": "silent",
@@ -35,39 +39,5 @@
         "close": true
       }
     },
-    {
-      "label": "WaitForWebPort",
-      "group": "none",
-      "type": "shell",
-      "windows": {
-        "command": "powershell",
-        "args": [
-          "-NoProfile",
-          "-ExecutionPolicy", "Bypass",
-          "-Command",
-          "$port = 8910; while (-not (Test-NetConnection -ComputerName localhost -Port $port -InformationLevel Quiet)) { Start-Sleep -Seconds 1 };"
-        ]
-      },
-      "linux": {
-        "command": "bash",
-        "args": [
-          "-c",
-          "port=8910; while ! nc -z localhost $port; do sleep 1; done;"
-        ]
-      },
-      "osx": {
-        "command": "bash",
-        "args": [
-          "-c",
-          "port=8910; while ! nc -z localhost $port; do sleep 1; done;"
-        ]
-      },
-      "presentation": {
-        "reveal": "silent",
-        "revealProblems": "onProblem",
-        "panel": "shared",
-        "close": true
-      }
-    }
   ]
 }
