@@ -131,17 +131,23 @@ export interface Scenario {
   only: Scenario
 }
 
-export interface DescribeScenario<TData = any> {
-  (title: string, describeBlock: DescribeBlockWithGetScenario<TData>): void
+export interface DescribeScenario {
+  <TData = any>(
+    title: string,
+    describeBlock: DescribeBlockWithGetScenario<TData>
+  ): void
 }
 
-export interface DescribeScenario<TData = any> {
-  (title: string, describeBlock: DescribeBlockWithGetScenario<TData>): void
+export interface DescribeScenario {
+  <TData>(
+    title: string,
+    describeBlock: DescribeBlockWithGetScenario<TData>
+  ): void
 }
 
 // Overload for namedScenario
-export interface DescribeScenario<TData = any> {
-  (
+export interface DescribeScenario {
+  <TData>(
     namedScenario: string,
     title: string,
     describeBlock: DescribeBlockWithGetScenario<TData>
