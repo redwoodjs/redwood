@@ -4,8 +4,6 @@
 // @NOTE without these imports in the setup file, mockCurrentUser
 // will remain undefined in the user's tests
 // Remember to use specific imports
-const { async } = require('fast-glob')
-
 const { setContext } = require('@redwoodjs/graphql-server/dist/globalContext')
 const { defineScenario } = require('@redwoodjs/testing/dist/api/scenario')
 
@@ -85,6 +83,10 @@ const getProjectDb = () => {
   return db
 }
 
+/**
+ * Wraps "it" or "test", to seed and teardown the scenario after each test
+ * This one passes scenario data to the test function
+ */
 const buildScenario =
   (itFunc, testPath) =>
   (...args) => {
@@ -113,21 +115,25 @@ const buildScenario =
     })
   }
 
+/**
+ * This creates a describe() block that will seed the scenario ONCE before all tests in the block
+ * Note that you need to use the getScenario() function to get the data.
+ */
 const buildDescribeScenario =
   (describeFunc, testPath) =>
   (...args) => {
-    let scenarioName, testName, describeBlock
+    let scenarioName, describeBlockName, describeBlock
 
     if (args.length === 3) {
-      ;[scenarioName, testName, describeBlock] = args
+      ;[scenarioName, describeBlockName, describeBlock] = args
     } else if (args.length === 2) {
       scenarioName = DEFAULT_SCENARIO
-      ;[testName, describeBlock] = args
+      ;[describeBlockName, describeBlock] = args
     } else {
       throw new Error('describeScenario() requires 2 or 3 arguments')
     }
 
-    return describeFunc(testName, () => {
+    return describeFunc(describeBlockName, () => {
       let scenarioData
       beforeAll(async () => {
         let { scenario } = loadScenarios(testPath, scenarioName)
@@ -203,16 +209,12 @@ const seedScenario = async (scenario) => {
 
 global.scenario = buildScenario(global.it, global.testPath)
 global.scenario.only = buildScenario(global.it.only, global.testPath)
-global.scenarioSetup = async (scenarioName = DEFAULT_SCENARIO) => {
-  let { scenario } = loadScenarios(global.testPath, scenarioName)
-
-  const scenarioData = await seedScenario(scenario)
-
-  return scenarioData
-}
-
 global.describeScenario = buildDescribeScenario(
   global.describe,
+  global.testPath
+)
+global.describeScenario.only = buildDescribeScenario(
+  global.describe.only,
   global.testPath
 )
 
@@ -273,13 +275,6 @@ afterAll(async () => {
     getProjectDb().$disconnect()
   }
 })
-
-// Moved this to inside buildScenario() and buildDescribeScenario()
-// afterEach(async () => {
-//   if (wasDbUsed()) {
-//     await teardown()
-//   }
-// })
 
 function loadScenarios(testPath, scenarioName) {
   const path = require('path')
