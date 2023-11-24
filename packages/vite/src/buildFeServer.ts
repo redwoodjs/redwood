@@ -124,7 +124,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
   // should try to do this instead:
   // const clientBuildManifest: ViteBuildManifest = await import(
-  //   path.join(getPaths().web.dist, 'build-manifest.json'),
+  //   path.join(getPaths().web.dist, 'client-build-manifest.json'),
   //   { with: { type: 'json' } }
   // )
   // NOTES:
@@ -136,7 +136,10 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   //  * With `assert` and `@babel/plugin-syntax-import-assertions` the
   //    code compiled and ran properly, but Jest tests failed, complaining
   //    about the syntax.
-  const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
+  const manifestPath = path.join(
+    getPaths().web.dist,
+    'client-build-manifest.json'
+  )
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
   const clientBuildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
 
