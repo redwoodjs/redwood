@@ -123,14 +123,19 @@ export const parseTypeScriptConfigFiles = () => {
   }
 }
 
+type CompilerOptionsForPaths = {
+  compilerOptions: { baseUrl: string; paths: string }
+}
 /**
  * Extracts and formats the paths from the [ts|js]config.json file
  * @param config The config object
+ * @param rootDir {string} Where the jsconfig/tsconfig is loaded from
  * @returns {Record<string, string>} The paths object
  */
-export const getPathsFromTypeScriptConfig = (config: {
-  compilerOptions: { baseUrl: string; paths: string }
-}): Record<string, string> => {
+export const getPathsFromTypeScriptConfig = (
+  config: CompilerOptionsForPaths,
+  rootDir: string
+): Record<string, string> => {
   if (!config) {
     return {}
   }
@@ -140,6 +145,8 @@ export const getPathsFromTypeScriptConfig = (config: {
   }
 
   const { baseUrl, paths } = config.compilerOptions
+
+  const absoluteBase = path.resolve(rootDir, baseUrl)
 
   const pathsObj: Record<string, string> = {}
   for (const [key, value] of Object.entries(paths)) {
@@ -153,16 +160,11 @@ export const getPathsFromTypeScriptConfig = (config: {
     }
     const aliasKey = key.replace('/*', '')
     const aliasValue = path.join(
-      baseUrl,
+      absoluteBase,
       (value as string)[0].replace('/*', '')
     )
 
-    if (aliasValue.startsWith('src')) {
-      // src/y/x -> ./src/y/x
-      pathsObj[aliasKey] = `./${aliasValue}`
-    } else {
-      pathsObj[aliasKey] = aliasValue
-    }
+    pathsObj[aliasKey] = aliasValue
   }
   return pathsObj
 }

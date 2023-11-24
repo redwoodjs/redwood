@@ -17,6 +17,9 @@ afterEach(() => {
   vol.reset()
 })
 
+const FAKE_API_ROOT = '/redwood-app/api'
+const FAKE_WEB_ROOT = '/redwood-app/web'
+
 describe('common', () => {
   it("common plugins haven't changed unintentionally", () => {
     const commonPlugins = getCommonPlugins()
@@ -118,10 +121,16 @@ describe('common', () => {
 
         const typeScriptConfig = parseTypeScriptConfigFiles()
 
-        const apiPaths = getPathsFromTypeScriptConfig(typeScriptConfig.api)
+        const apiPaths = getPathsFromTypeScriptConfig(
+          typeScriptConfig.api,
+          FAKE_API_ROOT
+        )
         expect(apiPaths).toMatchObject({})
 
-        const webPaths = getPathsFromTypeScriptConfig(typeScriptConfig.web)
+        const webPaths = getPathsFromTypeScriptConfig(
+          typeScriptConfig.web,
+          FAKE_WEB_ROOT
+        )
         expect(webPaths).toMatchObject({})
       })
 
@@ -144,10 +153,16 @@ describe('common', () => {
 
         const typeScriptConfig = parseTypeScriptConfigFiles()
 
-        const apiPaths = getPathsFromTypeScriptConfig(typeScriptConfig.api)
+        const apiPaths = getPathsFromTypeScriptConfig(
+          typeScriptConfig.api,
+          FAKE_API_ROOT
+        )
         expect(apiPaths).toMatchInlineSnapshot(`{}`)
 
-        const webPaths = getPathsFromTypeScriptConfig(typeScriptConfig.web)
+        const webPaths = getPathsFromTypeScriptConfig(
+          typeScriptConfig.web,
+          FAKE_WEB_ROOT
+        )
         expect(webPaths).toMatchInlineSnapshot(`{}`)
       })
 
@@ -172,10 +187,16 @@ describe('common', () => {
 
         const typeScriptConfig = parseTypeScriptConfigFiles()
 
-        const apiPaths = getPathsFromTypeScriptConfig(typeScriptConfig.api)
+        const apiPaths = getPathsFromTypeScriptConfig(
+          typeScriptConfig.api,
+          FAKE_API_ROOT
+        )
         expect(apiPaths).toMatchInlineSnapshot(`{}`)
 
-        const webPaths = getPathsFromTypeScriptConfig(typeScriptConfig.web)
+        const webPaths = getPathsFromTypeScriptConfig(
+          typeScriptConfig.web,
+          FAKE_WEB_ROOT
+        )
         expect(webPaths).toMatchInlineSnapshot(`{}`)
       })
 
@@ -200,14 +221,20 @@ describe('common', () => {
 
         const typeScriptConfig = parseTypeScriptConfigFiles()
 
-        const apiPaths = getPathsFromTypeScriptConfig(typeScriptConfig.api)
+        const apiPaths = getPathsFromTypeScriptConfig(
+          typeScriptConfig.api,
+          FAKE_API_ROOT
+        )
         expect(ensurePosixPath(apiPaths['@services'])).toMatchInlineSnapshot(
-          `"src/services"`
+          `"/redwood-app/api/src/services"`
         )
 
-        const webPaths = getPathsFromTypeScriptConfig(typeScriptConfig.web)
+        const webPaths = getPathsFromTypeScriptConfig(
+          typeScriptConfig.web,
+          FAKE_WEB_ROOT
+        )
         expect(ensurePosixPath(webPaths['@ui'])).toMatchInlineSnapshot(
-          `"src/ui"`
+          `"/redwood-app/web/src/ui"`
         )
       })
     })
