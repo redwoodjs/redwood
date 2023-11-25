@@ -14,10 +14,10 @@ describe('MockRouter', () => {
       <Router>
         <Route name="a" path="/a" page={FakePage} />
         <Route name="b" path="/b" page={FakePage} />
-        <Private unauthenticated="a">
+        <PrivateSet unauthenticated="a">
           <Route name="c" path="/c" page={FakePage} />
           <Route name="d" path="/d" page={FakePage} />
-        </Private>
+        </PrivateSet>
       </Router>
     )
 
