@@ -37,8 +37,10 @@ export const createReactStreamingHandler = async (
   let fallbackDocumentImport: any
 
   if (isProd) {
-    entryServerImport = await import(rwPaths.web.distEntryServer)
-    fallbackDocumentImport = await import(rwPaths.web.distDocumentServer)
+    entryServerImport = await import(makeFilePath(rwPaths.web.distEntryServer))
+    fallbackDocumentImport = await import(
+      makeFilePath(rwPaths.web.distDocumentServer)
+    )
   }
 
   // @NOTE: we are returning a FetchAPI handler
@@ -133,4 +135,9 @@ export const createReactStreamingHandler = async (
 
     return reactResponse
   }
+}
+
+function makeFilePath(path: string): string {
+  // Without this, absolute paths can't be imported on Windows
+  return 'file:///' + path
 }
