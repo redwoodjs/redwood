@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { createServer } from 'vite'
 import yargsParser from 'yargs-parser'
 
