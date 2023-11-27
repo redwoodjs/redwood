@@ -5,18 +5,17 @@ import { Listr } from 'listr2'
 
 import { addApiPackages } from '@redwoodjs/cli-helpers'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
-import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, transformTSToJS, writeFile } from '../../lib'
-import c from '../../lib/colors'
-import { isTypeScriptProject } from '../../lib/project'
-
-import { command, description, EXPERIMENTAL_TOPIC_ID } from './setupRealtime'
-import { printTaskEpilogue, isServerFileSetup } from './util'
+import { getPaths, transformTSToJS, writeFile } from '../../../lib'
+import c from '../../../lib/colors'
+import { isTypeScriptProject } from '../../../lib/project'
+// Move this check out of experimental when server file is moved as well
+import { setupServerFileTasks } from '../../experimental/setupServerFileHandler'
+import { serverFileExists } from '../../experimental/util'
 
 const { version } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../../../package.json'), 'utf-8')
+  fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8')
 )
 
 export async function handler({ force, includeExamples, verbose }) {
@@ -30,26 +29,6 @@ export async function handler({ force, includeExamples, verbose }) {
 
   const tasks = new Listr(
     [
-      {
-        title: 'Confirmation',
-        task: async (_ctx, task) => {
-          const confirmation = await task.prompt({
-            type: 'Confirm',
-            message:
-              'Realtime is currently an experimental RedwoodJS feature. Continue?',
-          })
-
-          if (!confirmation) {
-            throw new Error('User aborted')
-          }
-        },
-      },
-      {
-        title: 'Checking for realtime environment prerequisites ...',
-        task: () => {
-          isServerFileSetup()
-        },
-      },
       addApiPackages(['ioredis@^5', `@redwoodjs/realtime@${version}`]),
       {
         title: 'Adding the realtime api lib ...',
@@ -367,40 +346,12 @@ export async function handler({ force, includeExamples, verbose }) {
         },
       },
       {
-        title: 'Adding config to redwood.toml...',
-        task: (_ctx, task) => {
-          const redwoodTomlPath = getConfigPath()
-          const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
-          if (!configContent.includes('[experimental.realtime]')) {
-            // Use string replace to preserve comments and formatting
-            writeFile(
-              redwoodTomlPath,
-              configContent.concat(
-                `\n[experimental.realtime]\n\tenabled = true\n`
-              ),
-              {
-                overwriteExisting: true, // redwood.toml always exists
-              }
-            )
-          } else {
-            task.skip(
-              `The [experimental.realtime] config block already exists in your 'redwood.toml' file.`
-            )
-          }
-        },
-      },
-      {
         title: `Generating types ...`,
         task: async () => {
           await generateTypes()
           console.log(
             'Note: You may need to manually restart GraphQL in VSCode to see the new types take effect.\n\n'
           )
-        },
-      },
-      {
-        task: () => {
-          printTaskEpilogue(command, description, EXPERIMENTAL_TOPIC_ID)
         },
       },
     ],
@@ -411,6 +362,10 @@ export async function handler({ force, includeExamples, verbose }) {
   )
 
   try {
+    if (!serverFileExists()) {
+      tasks.add(setupServerFileTasks(force))
+    }
+
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)

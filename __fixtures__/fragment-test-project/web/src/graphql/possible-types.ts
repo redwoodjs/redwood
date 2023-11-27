@@ -4,6 +4,9 @@ export interface PossibleTypesResultData {
   }
 }
 const result: PossibleTypesResultData = {
-  possibleTypes: {},
+  possibleTypes: {
+    Groceries: ['Fruit', 'Vegetable'],
+    Grocery: ['Fruit', 'Vegetable'],
+  },
 }
 export default result
