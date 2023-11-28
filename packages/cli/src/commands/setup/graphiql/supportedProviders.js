@@ -20,7 +20,7 @@ const getDBAuthHeader = async (userId) => {
     )
   }
 
-  const { encryptSession } = await import('@redwoodjs/auth-dbauth-api')
+  const { default: { encryptSession } } = await import('@redwoodjs/auth-dbauth-api')
 
   const id = isNumeric(userId) ? parseInt(userId) : userId
   const cookie = encryptSession(JSON.stringify({ id }) + ';' + uuidv4())
