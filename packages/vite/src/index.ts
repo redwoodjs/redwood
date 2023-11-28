@@ -269,9 +269,9 @@ export default function redwoodPluginVite(): PluginOption[] {
     },
     // We can remove when streaming is stable
     rwConfig.experimental.streamingSsr.enabled && swapApolloProvider(),
-    // -----------------
-    handleJsAsJsx(),
+    // When using GraphQL Fragments, handle possible types for Apollo Client Cache
     configureGraphQLFragments(),
+    handleJsAsJsx(),
     // Remove the splash-page from the bundle.
     removeFromBundle([
       {
