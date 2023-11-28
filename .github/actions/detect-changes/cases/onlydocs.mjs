@@ -10,6 +10,8 @@ export function onlyDocsChanged(changedFiles){
       continue
     }
 
+    // CHANGE
+
     for (const fileToIgnore of [
       'CHANGELOG.md',
       'CODE_OF_CONDUCT.md',

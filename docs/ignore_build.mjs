@@ -4,7 +4,7 @@
 
 import { execSync } from 'node:child_process'
 
-function main() {
+async function main() {
   const branch = process.env.BRANCH
 
   // Reproduce the default behavior for main.
@@ -19,25 +19,17 @@ function main() {
     }
   }
 
-  // Ensure we know the latest changes on the main branch
-  execSync('git fetch origin main')
-
-  // TODO: Remove this:
-  console.log('---')
-  console.log('BRANCH', process.env.BRANCH)
-  console.log('HEAD', process.env.HEAD)
-  console.log('COMMIT_REF', process.env.COMMIT_REF)
-  console.log('CACHED_COMMIT_REF', process.env.CACHED_COMMIT_REF)
-  console.log('main', execSync('git rev-parse main').toString())
-  console.log('origin/main', execSync('git rev-parse origin/main').toString())
-  console.log('---')
-
-  // Compare the changes between the main branch and the current commit
-  const changedFiles = execSync('git diff --name-only origin/main $COMMIT_REF')
-    .toString()
-    .trim()
-    .split('\n')
-    .filter(Boolean)
+  // Query the GithHub API to get the changed files in the PR
+  const url = `https://api.github.com/repos/redwoodjs/redwood/pulls/${process.env.REVIEW_ID}/files?per_page=100`
+  const resp = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.RW_GITHUB_TOKEN}`,
+      ['X-GitHub-Api-Version']: '2022-11-28',
+      Accept: 'application/vnd.github+json',
+    },
+  })
+  const json = await resp.json()
+  const changedFiles = json.map((file) => file.filename)
 
   console.log({
     changedFiles,
@@ -50,7 +42,9 @@ function main() {
     docFilesChanged,
   })
 
-  if (docFilesChanged.length > 0) {
+  // We don't handle pagination here. If there are more than 100 changed files,
+  // we assume that there are docs changes.
+  if (docFilesChanged.length > 0 || changedFiles.length >= 100) {
     console.log(
       `PR '${process.env.HEAD}' has docs changes. Proceeding with build`
     )
@@ -62,7 +56,7 @@ function main() {
 }
 
 const dashes = '-'.repeat(10)
-
 console.log(`${dashes} IGNORE BUILD START ${dashes}`)
-main()
-console.log(`${dashes} IGNORE BUILD END ${dashes}`)
+main().finally(() => {
+  console.log(`${dashes} IGNORE BUILD END ${dashes}`)
+})

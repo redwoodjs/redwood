@@ -4,6 +4,36 @@ import { onlyDocsChanged } from './cases/onlydocs.mjs'
 import { rscChanged } from './cases/rsc.mjs'
 import { ssrChanged } from './cases/ssr.mjs'
 
+async function getChangedFiles(page = 1){
+  console.log(`Getting changed files (${page}) for PR ${process.env.GITHUB_BASE_REF}`)
+  const changedFiles = []
+
+  // Query the GithHub API to get the changed files in the PR
+  const githubToken = process.env.GITHUB_TOKEN
+  const url = `https://api.github.com/repos/redwoodjs/redwood/pulls/${process.env.GITHUB_BASE_REF}/files?per_page=1&page=${page}`
+  const resp = await fetch(url, {
+    headers: {
+      Authorization: githubToken ? `Bearer ${githubToken}` : undefined,
+      ['X-GitHub-Api-Version']: '2022-11-28',
+      Accept: 'application/vnd.github+json',
+    },
+  })
+  console.log({resp})
+  const json = await resp.json()
+  const files = json.map((file) => file.filename) || []
+  console.log({files})
+
+  changedFiles.push(...files)
+
+  const linkHeader = resp.headers.get('link')
+  if(linkHeader && linkHeader.includes('rel="next"')){
+    const nextChangedFiles = await getChangedFiles(page + 1)
+    changedFiles.push(...nextChangedFiles)
+  }
+
+  return changedFiles
+}
+
 async function main() {
   const branch = process.env.GITHUB_BASE_REF
 
@@ -15,10 +45,7 @@ async function main() {
     return
   }
 
-  await exec(`git fetch origin ${branch}`)
-
-  const { stdout } = await getExecOutput(`git diff origin/${branch} --name-only`)
-  const changedFiles = stdout.toString().trim().split('\n').filter(Boolean)
+  const changedFiles = await getChangedFiles()
   console.log(`${changedFiles.length} changed files`)
 
   const onlyDocs = onlyDocsChanged(changedFiles)
