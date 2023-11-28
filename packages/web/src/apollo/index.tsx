@@ -5,6 +5,7 @@ import type {
 } from '@apollo/client'
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
@@ -149,10 +150,20 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   // `updateDataApolloLink` keeps track of the most recent req/res data so they can be passed to
   // any errors passed up to an error boundary.
+  type ApolloRequestData = {
+    mostRecentRequest?: {
+      operationName?: string
+      operationKind?: string
+      variables?: Record<string, unknown>
+      query?: string
+    }
+    mostRecentResponse?: any
+  }
+
   const data = {
     mostRecentRequest: undefined,
     mostRecentResponse: undefined,
-  } as any
+  } as ApolloRequestData
 
   const updateDataApolloLink = new ApolloLink((operation, forward) => {
     const { operationName, query, variables } = operation
@@ -233,12 +244,39 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
         )
       : httpLink
 
-  // The order here is important. The last link *must* be a terminating link like HttpLink or SSELink.
+  /**
+   * Use Trusted Documents aka Persisted Operations aka Queries
+   *
+   * When detecting a meta hash, Apollo Client will send the hash from the document and not the query itself.
+   *
+   * You must configure your GraphQL server to support this feature with the useTrustedDocuments option.
+   *
+   * See https://www.apollographql.com/docs/react/api/link/persisted-queries/
+   */
+  interface DocumentNodeWithMeta extends apolloClient.DocumentNode {
+    __meta__?: {
+      hash: string
+    }
+  }
+
+  // Check if the query made includes the hash, and if so then make the request with the persisted query link
+  const terminatingLink = apolloClient.split(
+    ({ query }) => {
+      const documentQuery = query as DocumentNodeWithMeta
+      return documentQuery?.['__meta__']?.['hash'] !== undefined
+    },
+    createPersistedQueryLink({
+      generateHash: (document: any) => document['__meta__']['hash'],
+    }).concat(httpOrSSELink),
+    httpOrSSELink
+  )
+
+  // The order here is important. The last link *must* be a terminating link like HttpLink, SSELink, or the PersistedQueryLink.
   const redwoodApolloLinks: RedwoodApolloLinks = [
     { name: 'withToken', link: withToken },
     { name: 'authMiddleware', link: authMiddleware },
     { name: 'updateDataApolloLink', link: updateDataApolloLink },
-    { name: 'httpLink', link: httpOrSSELink },
+    { name: 'httpLink', link: terminatingLink },
   ]
 
   let link = redwoodApolloLink

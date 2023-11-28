@@ -22,12 +22,12 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.2",
+    "@babel/runtime-corejs3": "7.23.4",
     "@clerk/clerk-sdk-node": "4.12.21",
-    "core-js": "3.33.2"
+    "core-js": "3.33.3"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.0",
+    "@babel/cli": "7.23.4",
     "@babel/core": "^7.22.20",
     "@redwoodjs/api": "6.0.7",
     "@types/aws-lambda": "8.10.126",
