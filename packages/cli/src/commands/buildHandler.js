@@ -8,6 +8,7 @@ import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
+import { generate } from '@redwoodjs/internal/dist/generate/generate'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { timedTelemetry } from '@redwoodjs/telemetry'
@@ -73,6 +74,19 @@ export const handler = async ({
           shell: true,
           cwd: rwjsPaths.api.base,
         })
+      },
+    },
+    // If using GraphQL Fragments or Trusted Documents, then we need use coden to generate the types
+    // needed for possible types and the trusted document store hashes
+    (getConfig().graphql.fragments || getConfig().graphql.trustedDocuments) && {
+      title: `Generating types needed for ${[
+        getConfig().graphql.fragments && 'GraphQL Fragments',
+        getConfig().graphql.trustedDocuments && 'Trusted Documents',
+      ]
+        .filter(Boolean)
+        .join(' and ')} support...`,
+      task: async () => {
+        await generate()
       },
     },
     side.includes('api') && {
