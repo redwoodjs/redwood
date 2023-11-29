@@ -1,4 +1,3 @@
-// TODO (RSC) Take ownership of this file and move it out ouf the waku-lib folder
 import path from 'node:path'
 
 import react from '@vitejs/plugin-react'
@@ -8,8 +7,12 @@ import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn'
 
-// This is part of step 3. It's invoked from ./buildRscFeServer
-export async function serverBuild(
+/**
+ * RSC build. Step 3.
+ * buildFeServer -> buildRscFeServer -> rscBuildClient
+ * Generate the client bundle
+ */
+export async function rscBuildServer(
   entriesFile: string,
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
@@ -123,5 +126,5 @@ export async function serverBuild(
     throw new Error('Unexpected vite server build output')
   }
 
-  return serverBuildOutput
+  return serverBuildOutput.output
 }

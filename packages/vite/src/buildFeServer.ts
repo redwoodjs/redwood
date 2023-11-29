@@ -58,7 +58,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
       entries: rwPaths.web.entries,
       webDist: rwPaths.web.dist,
       webDistServer: rwPaths.web.distServer,
-      webDistEntries: rwPaths.web.distServerEntries,
+      webDistServerEntries: rwPaths.web.distServerEntries,
       webRouteManifest: rwPaths.web.routeManifest,
     })
   }
