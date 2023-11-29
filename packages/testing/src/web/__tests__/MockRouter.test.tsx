@@ -2,7 +2,7 @@ import React from 'react'
 
 import { render } from '@testing-library/react'
 
-import { Route, Private } from '@redwoodjs/router'
+import { Route, PrivateSet } from '@redwoodjs/router'
 
 import { routes, Router } from '../MockRouter'
 
