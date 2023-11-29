@@ -103,6 +103,7 @@ module.exports = {
         version: packageJSON.devDependencies['@babel/runtime-corejs3'],
       },
     ],
+    '@babel/plugin-syntax-import-attributes',
   ],
   overrides: [
     // ** WEB PACKAGES **
