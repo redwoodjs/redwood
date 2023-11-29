@@ -3,11 +3,16 @@ import fs from 'fs/promises'
 import type { rscBuildClient } from './rscBuildClient'
 import type { rscBuildServer } from './rscBuildServer'
 
-export function rscBuildClientEntriesFile(
+/**
+ * RSC build. Step 5.
+ * Append a mapping of server asset names to client asset names to the
+ * `web/dist/server/entries.js` file.
+ */
+export function rscBuildClientEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
   serverBuildOutput: Awaited<ReturnType<typeof rscBuildServer>>,
   clientEntryFiles: Record<string, string>,
-  webDistEntries: string
+  webDistServerEntries: string
 ) {
   const clientEntries: Record<string, string> = {}
   for (const item of clientBuildOutput) {
@@ -38,7 +43,7 @@ export function rscBuildClientEntriesFile(
   console.log('clientEntries', clientEntries)
 
   return fs.appendFile(
-    webDistEntries,
+    webDistServerEntries,
     `export const clientEntries=${JSON.stringify(clientEntries)};`
   )
 }

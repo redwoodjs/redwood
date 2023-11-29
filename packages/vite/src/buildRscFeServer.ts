@@ -7,7 +7,7 @@ import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
 
 import { rscBuildAnalyze } from './rsc/rscBuildAnalyze'
 import { rscBuildClient } from './rsc/rscBuildClient'
-import { rscBuildClientEntriesFile } from './rsc/rscBuildClientEntriesFile'
+import { rscBuildClientEntriesMappings } from './rsc/rscBuildClientEntriesFile'
 import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets'
 import { rscBuildServer } from './rsc/rscBuildServer'
 import type { RWRouteManifest } from './types'
@@ -19,7 +19,7 @@ interface Args {
   entries: string
   webDist: string
   webDistServer: string
-  webDistEntries: string
+  webDistServerEntries: string
   webRouteManifest: string
 }
 
@@ -30,7 +30,7 @@ export const buildRscFeServer = async ({
   entries,
   webDist,
   webDistServer,
-  webDistEntries,
+  webDistServerEntries,
   webRouteManifest,
 }: Args) => {
   // Analyze all files and generate a list of RSCs and RSFs
@@ -57,11 +57,12 @@ export const buildRscFeServer = async ({
   // Copy CSS assets from server to client
   await rscBuildCopyCssAssets(serverBuildOutput, webDist, webDistServer)
 
-  await rscBuildClientEntriesFile(
+  // Mappings from server to client asset file names
+  await rscBuildClientEntriesMappings(
     clientBuildOutput,
     serverBuildOutput,
     clientEntryFiles,
-    webDistEntries
+    webDistServerEntries
   )
 
   // TODO When https://github.com/tc39/proposal-import-attributes and
