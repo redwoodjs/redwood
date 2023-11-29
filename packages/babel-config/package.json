@@ -41,7 +41,7 @@
     "core-js": "3.33.3",
     "fast-glob": "3.3.2",
     "graphql": "16.8.1",
-    "typescript": "5.2.2"
+    "typescript": "5.3.2"
   },
   "devDependencies": {
     "@types/babel-plugin-tester": "9.0.9",
