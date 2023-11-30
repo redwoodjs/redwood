@@ -6,7 +6,7 @@ import type _gql from 'graphql-tag'
 // For "internal" global types see ambient.d.ts
 
 declare global {
-  const gql: typeof _gql
+  // const gql: typeof _gql
 
   // Having this as a type instead of a const allows us to augment/override it
   // in other packages

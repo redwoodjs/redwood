@@ -4,6 +4,7 @@ import path from 'path'
 import type { PluginBuild } from 'esbuild'
 import { build as esbuildBuild } from 'esbuild'
 import type { Manifest as ViteBuildManifest } from 'vite'
+import { build as viteBuild } from 'vite'
 
 import {
   getRouteHookBabelPlugins,
@@ -57,7 +58,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
       entries: rwPaths.web.entries,
       webDist: rwPaths.web.dist,
       webDistServer: rwPaths.web.distServer,
-      webDistEntries: rwPaths.web.distServerEntries,
+      webDistServerEntries: rwPaths.web.distServerEntries,
       webRouteManifest: rwPaths.web.routeManifest,
     })
   }
@@ -65,18 +66,13 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   // Step 1A: Generate the client bundle
   await buildWeb({ verbose })
 
-  // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
-  // so we can switch to a regular import
-  // @NOTE: Using dynamic import, because vite is still opt-in
-  const { build: viteBuild } = await import('vite')
-
   // Step 1B: Generate the server output
   await viteBuild({
     configFile: viteConfigPath,
     build: {
-      // Because we configure the root to be web/src, we need to go up one level
       outDir: rwPaths.web.distServer,
-      ssr: rwPaths.web.entryServer,
+      ssr: true, // use boolean here, instead of string.
+      // rollup inputs are defined in the vite plugin
     },
     envFile: false,
     logLevel: verbose ? 'info' : 'warn',
@@ -128,7 +124,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
   // should try to do this instead:
   // const clientBuildManifest: ViteBuildManifest = await import(
-  //   path.join(getPaths().web.dist, 'build-manifest.json'),
+  //   path.join(getPaths().web.dist, 'client-build-manifest.json'),
   //   { with: { type: 'json' } }
   // )
   // NOTES:
@@ -140,7 +136,10 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   //  * With `assert` and `@babel/plugin-syntax-import-assertions` the
   //    code compiled and ran properly, but Jest tests failed, complaining
   //    about the syntax.
-  const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
+  const manifestPath = path.join(
+    getPaths().web.dist,
+    'client-build-manifest.json'
+  )
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
   const clientBuildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
 

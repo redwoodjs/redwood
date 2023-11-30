@@ -37,8 +37,11 @@ export const cleanApiBuild = () => {
  */
 export const prebuildApiFiles = (srcFiles: string[]) => {
   const rwjsPaths = getPaths()
+  const rwjsConfig = getConfig()
   const plugins = getApiSideBabelPlugins({
-    openTelemetry: getConfig().experimental.opentelemetry.enabled,
+    openTelemetry:
+      rwjsConfig.experimental.opentelemetry.enabled &&
+      rwjsConfig.experimental.opentelemetry.wrapApi,
   })
 
   return srcFiles.map((srcPath) => {

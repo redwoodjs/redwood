@@ -17,7 +17,7 @@ To deploy to Coherence, your Redwood project needs to be hosted on GitHub and yo
 
 ## Coherence Deploy
 
-:::caution Prerender doesn't work with Coherence yet
+:::warning Prerender doesn't work with Coherence yet
 
 You can see its current status and follow updates here on GitHub: https://github.com/redwoodjs/redwood/issues/8333.
 

@@ -413,8 +413,6 @@ async function releaseMajorOrMinor() {
   await $`git commit -am "chore: temporary update to workspaces"`
   console.log()
 
-  await removeTSConfigTSBuildInfo()
-
   //  ------------------------
   try {
     await $`yarn lerna publish from-package`
@@ -575,8 +573,6 @@ async function releasePatch() {
 
   await $`git commit -am "chore: temporary update to workspaces"`
   console.log()
-
-  await removeTSConfigTSBuildInfo()
 
   //  ------------------------
   try {
@@ -792,8 +788,4 @@ async function versionDocs() {
   await $`git add .`
   await $`git commit -m "Version docs to ${nextDocsVersion}"`
   await cd('../')
-}
-
-async function removeTSConfigTSBuildInfo() {
-  await rimraf('packages/**/dist/tsconfig.tsbuildinfo')
 }

@@ -108,6 +108,7 @@ describe('paths', () => {
           layouts: path.join(FIXTURE_BASEDIR, 'web', 'src', 'layouts/'),
           src: path.join(FIXTURE_BASEDIR, 'web', 'src'),
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
+          document: null, // this fixture doesnt have a document
           app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.tsx'),
           index: null,
           html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
@@ -158,6 +159,13 @@ describe('paths', () => {
             'routeHooks'
           ),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
+          distDocumentServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'Document.js'
+          ),
           distServerEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -380,6 +388,7 @@ describe('paths', () => {
           src: path.join(FIXTURE_BASEDIR, 'web', 'src'),
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.js'),
+          document: null, // this fixture doesnt have a document
           index: null,
           html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
@@ -421,6 +430,13 @@ describe('paths', () => {
             'dist',
             'server',
             'entry.server.js'
+          ),
+          distDocumentServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'Document.js'
           ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
@@ -696,6 +712,7 @@ describe('paths', () => {
           components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
           layouts: path.join(FIXTURE_BASEDIR, 'web', 'src', 'layouts/'),
           src: path.join(FIXTURE_BASEDIR, 'web', 'src'),
+          document: null, // this fixture doesnt have a document
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           app: null,
           index: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.js'),
@@ -743,6 +760,13 @@ describe('paths', () => {
             'server',
             'entry.server.js'
           ),
+          distDocumentServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'Document.js'
+          ), // this is constructed regardless of presence of src/Document
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -971,6 +995,7 @@ describe('paths', () => {
           pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
           components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
           layouts: path.join(FIXTURE_BASEDIR, 'web', 'src', 'layouts/'),
+          document: null, // this fixture doesnt have a document
           src: path.join(FIXTURE_BASEDIR, 'web', 'src'),
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.tsx'),
@@ -1014,6 +1039,13 @@ describe('paths', () => {
             'dist',
             'server',
             'entry.server.js'
+          ),
+          distDocumentServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'Document.js'
           ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,

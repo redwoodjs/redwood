@@ -1,0 +1,230 @@
+{
+  "_ContactForm-d76f67ab.js": {
+    "file": "assets/ContactForm-d76f67ab.js",
+    "imports": [
+      "index.html",
+      "_index-77bc0912.js"
+    ]
+  },
+  "_PostForm-4b7853da.js": {
+    "file": "assets/PostForm-4b7853da.js",
+    "imports": [
+      "index.html",
+      "_index-77bc0912.js"
+    ]
+  },
+  "_formatters-2fce1756.js": {
+    "file": "assets/formatters-2fce1756.js",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_index-77bc0912.js": {
+    "file": "assets/index-77bc0912.js",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "index.css": {
+    "file": "assets/index-613d397d.css",
+    "src": "index.css"
+  },
+  "index.html": {
+    "css": [
+      "assets/index-613d397d.css"
+    ],
+    "dynamicImports": [
+      "pages/AboutPage/AboutPage.tsx",
+      "pages/BlogPostPage/BlogPostPage.tsx",
+      "pages/ContactUsPage/ContactUsPage.tsx",
+      "pages/DoublePage/DoublePage.tsx",
+      "pages/ForgotPasswordPage/ForgotPasswordPage.tsx",
+      "pages/LoginPage/LoginPage.tsx",
+      "pages/NotFoundPage/NotFoundPage.tsx",
+      "pages/ProfilePage/ProfilePage.tsx",
+      "pages/ResetPasswordPage/ResetPasswordPage.tsx",
+      "pages/SignupPage/SignupPage.tsx",
+      "pages/WaterfallPage/WaterfallPage.tsx",
+      "pages/Contact/ContactPage/ContactPage.tsx",
+      "pages/Contact/ContactsPage/ContactsPage.tsx",
+      "pages/Contact/EditContactPage/EditContactPage.tsx",
+      "pages/Contact/NewContactPage/NewContactPage.tsx",
+      "pages/Post/EditPostPage/EditPostPage.tsx",
+      "pages/Post/NewPostPage/NewPostPage.tsx",
+      "pages/Post/PostPage/PostPage.tsx",
+      "pages/Post/PostsPage/PostsPage.tsx"
+    ],
+    "file": "assets/index-ff057e8f.js",
+    "isEntry": true,
+    "src": "index.html"
+  },
+  "pages/AboutPage/AboutPage.tsx": {
+    "file": "assets/AboutPage-7ec0f8df.js",
+    "imports": [
+      "index.html"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/AboutPage/AboutPage.tsx"
+  },
+  "pages/BlogPostPage/BlogPostPage.tsx": {
+    "file": "assets/BlogPostPage-526c7060.js",
+    "imports": [
+      "index.html"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/BlogPostPage/BlogPostPage.tsx"
+  },
+  "pages/Contact/ContactPage/ContactPage.tsx": {
+    "file": "assets/ContactPage-4a851c42.js",
+    "imports": [
+      "index.html",
+      "_formatters-2fce1756.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/Contact/ContactPage/ContactPage.tsx"
+  },
+  "pages/Contact/ContactsPage/ContactsPage.tsx": {
+    "file": "assets/ContactsPage-1fcf6187.js",
+    "imports": [
+      "index.html",
+      "_formatters-2fce1756.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/Contact/ContactsPage/ContactsPage.tsx"
+  },
+  "pages/Contact/EditContactPage/EditContactPage.tsx": {
+    "file": "assets/EditContactPage-1622b085.js",
+    "imports": [
+      "index.html",
+      "_ContactForm-d76f67ab.js",
+      "_index-77bc0912.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/Contact/EditContactPage/EditContactPage.tsx"
+  },
+  "pages/Contact/NewContactPage/NewContactPage.tsx": {
+    "file": "assets/NewContactPage-5935f0db.js",
+    "imports": [
+      "index.html",
+      "_ContactForm-d76f67ab.js",
+      "_index-77bc0912.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/Contact/NewContactPage/NewContactPage.tsx"
+  },
+  "pages/ContactUsPage/ContactUsPage.tsx": {
+    "file": "assets/ContactUsPage-71f00589.js",
+    "imports": [
+      "index.html",
+      "_index-77bc0912.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/ContactUsPage/ContactUsPage.tsx"
+  },
+  "pages/DoublePage/DoublePage.tsx": {
+    "file": "assets/DoublePage-0bee4876.js",
+    "imports": [
+      "index.html"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/DoublePage/DoublePage.tsx"
+  },
+  "pages/ForgotPasswordPage/ForgotPasswordPage.tsx": {
+    "file": "assets/ForgotPasswordPage-15d7cf2f.js",
+    "imports": [
+      "index.html",
+      "_index-77bc0912.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/ForgotPasswordPage/ForgotPasswordPage.tsx"
+  },
+  "pages/LoginPage/LoginPage.tsx": {
+    "file": "assets/LoginPage-5f6d498c.js",
+    "imports": [
+      "index.html",
+      "_index-77bc0912.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/LoginPage/LoginPage.tsx"
+  },
+  "pages/NotFoundPage/NotFoundPage.tsx": {
+    "file": "assets/NotFoundPage-0903a03f.js",
+    "imports": [
+      "index.html"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/NotFoundPage/NotFoundPage.tsx"
+  },
+  "pages/Post/EditPostPage/EditPostPage.tsx": {
+    "file": "assets/EditPostPage-abe727e6.js",
+    "imports": [
+      "index.html",
+      "_PostForm-4b7853da.js",
+      "_index-77bc0912.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/Post/EditPostPage/EditPostPage.tsx"
+  },
+  "pages/Post/NewPostPage/NewPostPage.tsx": {
+    "file": "assets/NewPostPage-dcbeffd5.js",
+    "imports": [
+      "index.html",
+      "_PostForm-4b7853da.js",
+      "_index-77bc0912.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/Post/NewPostPage/NewPostPage.tsx"
+  },
+  "pages/Post/PostPage/PostPage.tsx": {
+    "file": "assets/PostPage-292888c6.js",
+    "imports": [
+      "index.html",
+      "_formatters-2fce1756.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/Post/PostPage/PostPage.tsx"
+  },
+  "pages/Post/PostsPage/PostsPage.tsx": {
+    "file": "assets/PostsPage-cacd5a1e.js",
+    "imports": [
+      "index.html",
+      "_formatters-2fce1756.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/Post/PostsPage/PostsPage.tsx"
+  },
+  "pages/ProfilePage/ProfilePage.tsx": {
+    "file": "assets/ProfilePage-133e6e05.js",
+    "imports": [
+      "index.html"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/ProfilePage/ProfilePage.tsx"
+  },
+  "pages/ResetPasswordPage/ResetPasswordPage.tsx": {
+    "file": "assets/ResetPasswordPage-a3399e1b.js",
+    "imports": [
+      "index.html",
+      "_index-77bc0912.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/ResetPasswordPage/ResetPasswordPage.tsx"
+  },
+  "pages/SignupPage/SignupPage.tsx": {
+    "file": "assets/SignupPage-44411fe1.js",
+    "imports": [
+      "index.html",
+      "_index-77bc0912.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/SignupPage/SignupPage.tsx"
+  },
+  "pages/WaterfallPage/WaterfallPage.tsx": {
+    "file": "assets/WaterfallPage-46b80a6f.js",
+    "imports": [
+      "index.html"
+    ],
+    "isDynamicEntry": true,
+    "src": "pages/WaterfallPage/WaterfallPage.tsx"
+  }
+}

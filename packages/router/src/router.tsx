@@ -44,10 +44,9 @@ export interface RouteProps {
 }
 
 /**
- *
  * Route is now a "virtual" component
  * it is actually never rendered. All the page loading logic happens in active-route-loader
- * and all the validation happens within utlity functions called from the Router
+ * and all the validation happens within utility functions called from the Router
  */
 function Route(props: RouteProps): JSX.Element
 function Route(props: RedirectRouteProps): JSX.Element
@@ -147,16 +146,8 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     return null
   }
 
-  const {
-    path,
-    page,
-    name,
-    redirect,
-    whileLoadingPage,
-    wrappers = [],
-    setProps,
-    setId,
-  } = pathRouteMap[activeRoutePath]
+  const { path, page, name, redirect, whileLoadingPage, sets } =
+    pathRouteMap[activeRoutePath]
 
   if (!path) {
     throw new Error(`Route "${name}" needs to specify a path`)
@@ -180,8 +171,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
           {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
           {!redirect && page && (
             <WrappedPage
-              key={setId}
-              wrappers={wrappers}
+              sets={sets}
               routeLoaderElement={
                 <ActiveRouteLoader
                   path={path}
@@ -190,7 +180,6 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
                   whileLoadingPage={whileLoadingPage as any}
                 />
               }
-              setProps={setProps}
             />
           )}
         </PageLoadingContextProvider>
@@ -200,77 +189,76 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 }
 
 interface WrappedPageProps {
-  wrappers: Wrappers
   routeLoaderElement: ReactNode
-  setProps: Record<any, any>[]
+  sets: Array<{
+    id: string
+    wrappers: Wrappers
+    isPrivate: boolean
+    props: {
+      private?: boolean
+      [key: string]: unknown
+    }
+  }>
 }
 
 /**
  * This is effectively a Set (without auth-related code)
  *
- * This means that the <Set> and <Private> components become "virtual"
+ * This means that the <Set> and <PrivateSet> components become "virtual"
  * i.e. they are never actually Rendered, but their props are extracted by the
  * analyze routes function.
  *
  * This is so that we can have all the information up front in the routes-manifest
  * for SSR, but also so that we only do one loop of all the Routes.
  */
-const WrappedPage = memo(
-  ({ wrappers, routeLoaderElement, setProps }: WrappedPageProps) => {
-    // @NOTE: don't mutate the wrappers array, it causes full page re-renders
-    // Instead just create a new array with the AuthenticatedRoute wrapper
+const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
+  // @NOTE: don't mutate the wrappers array, it causes full page re-renders
+  // Instead just create a new array with the AuthenticatedRoute wrapper
 
-    // we need to pass the setProps from each set to each wrapper
-    let wrappersWithAuthMaybe = wrappers
-    const reveresedSetProps = [...setProps].reverse()
-
-    reveresedSetProps
-      // @MARK note the reverse() here, because we spread wrappersWithAuthMaybe
-      .forEach((propsFromSet) => {
-        if (propsFromSet.private) {
-          if (!propsFromSet.unauthenticated) {
-            throw new Error(
-              'You must specify an `unauthenticated` route when marking a Route as private'
-            )
-          }
-
-          // @MARK: this component intentionally removes all props except children
-          // because the .reduce below will apply props inside out
-          const AuthComponent: React.FC<{ children: ReactNode }> = ({
-            children,
-          }) => {
-            return (
-              <AuthenticatedRoute {...propsFromSet}>
-                {children}
-              </AuthenticatedRoute>
-            )
-          }
-
-          wrappersWithAuthMaybe = [AuthComponent, ...wrappersWithAuthMaybe]
-        }
-      })
-
-    if (wrappersWithAuthMaybe.length > 0) {
-      // If wrappers exist e.g. [a,b,c] -> <a><b><c><routeLoader></c></b></a> and returns a single ReactNode
-      // Wrap AuthenticatedRoute this way, because if we mutate the wrappers array itself
-      // it causes full rerenders of the page
-      return wrappersWithAuthMaybe.reduceRight((acc, wrapper) => {
-        // Merge props from set, the lowest set props will override the higher ones
-        const mergedSetProps = setProps.reduce((acc, props) => {
-          return { ...acc, ...props }
-        }, {})
-
-        return React.createElement(
-          wrapper as any,
-          mergedSetProps,
-          acc ? acc : routeLoaderElement
-        )
-      }, undefined as ReactNode)
-    }
-
+  if (!sets || sets.length === 0) {
     return routeLoaderElement
   }
-)
+
+  return sets.reduceRight<ReactNode | undefined>((acc, set) => {
+    // For each set in `sets`, if you have `<Set wrap={[a,b,c]} p="p" />` then
+    // this will return
+    // <a p="p"><b p="p"><c p="p"><routeLoaderElement /></c></b></a>
+    // If you have `<PrivateSet wrap={[a,b,c]} p="p" />` instead it will return
+    // <AuthenticatedRoute>
+    //   <a p="p"><b p="p"><c p="p"><routeLoaderElement /></c></b></a>
+    // </AuthenticatedRoute>
+
+    // Bundle up all the wrappers into a single element with each wrapper as a
+    // child of the previous (that's why we do reduceRight)
+    let wrapped = set.wrappers.reduceRight((acc, Wrapper, index) => {
+      return React.createElement(
+        Wrapper,
+        { ...set.props, key: set.id + '-' + index },
+        acc
+      )
+    }, acc)
+
+    // If set is private, wrap it in AuthenticatedRoute
+    if (set.isPrivate) {
+      const unauthenticated = set.props.unauthenticated
+      if (!unauthenticated || typeof unauthenticated !== 'string') {
+        throw new Error(
+          'You must specify an `unauthenticated` route when using PrivateSet'
+        )
+      }
+
+      // We do this last, to make sure that none of the wrapper elements are
+      // rendered if the user isn't authenticated
+      wrapped = (
+        <AuthenticatedRoute {...set.props} unauthenticated={unauthenticated}>
+          {wrapped}
+        </AuthenticatedRoute>
+      )
+    }
+
+    return wrapped
+  }, routeLoaderElement)
+})
 
 export {
   Router,

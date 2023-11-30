@@ -52,8 +52,12 @@ export const useRedwoodError = (
                 }
               })
 
+              // be certain to return the complete result
+              // and not just the data or the errors
+              // because defer, stream and AsyncIterator results
+              // need to be returned as is
               setResult({
-                data: result.data,
+                ...result,
                 errors,
                 extensions: result.extensions || {},
               })

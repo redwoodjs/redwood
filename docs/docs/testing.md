@@ -616,7 +616,7 @@ it('renders an error message', async () => {
 
 #### mockGraphQLMutation()
 
-Similar to how we mocked GraphQL queries, we can mock mutations as well. Read more about GraphQL mocking in our [Mocking GraphQL requests](mocking-graphql-requests.md) docs.
+Similar to how we mocked GraphQL queries, we can mock mutations as well. Read more about GraphQL mocking in our [Mocking GraphQL requests](graphql/mocking-graphql-requests.md) docs.
 
 ### Mocking Auth
 
@@ -1278,13 +1278,13 @@ Does anyone else find it confusing that the software itself is called a "databas
 
 When you start your test suite you may notice some output from Prisma talking about migrating the database. Redwood will automatically run `yarn rw prisma db push` against your test database to make sure it's up-to-date.
 
-:::caution What if I have custom migration SQL?
+:::warning What if I have custom migration SQL?
 
 The `prisma db push` command only restores a snapshot of the current database schema (so that it runs as fast as possible). **It does not actually run migrations in sequence.** This can cause a [problem](https://github.com/redwoodjs/redwood/issues/5818) if you have certain database configuration that *must* occur as a result of the SQL statements inside the migration files.
 
 In order to preserve those statements in your test database, you can set an additional ENV var which will use the command `yarn rw prisma migrate reset` instead. This will run each migration in sequence against your test database. The tradeoff is that starting your test suite will take a little longer depending on how many migrations you have:
 
-```.env title=/.env
+```.env title="/.env"
 TEST_DATABASE_STRATEGY=reset
 ```
 
