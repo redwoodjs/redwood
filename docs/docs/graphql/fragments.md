@@ -296,7 +296,7 @@ import possibleTypes from 'src/graphql/possibleTypes'
 
 To generate the `src/graphql/possibleTypes`, configure the `redwood.toml`:
 
-```toml title=redwood.roml
+```toml title=redwood.toml
 [graphql]
-  fragments=true
+  fragments = true
 ```
