@@ -41,10 +41,10 @@ const Routes = () => {
       <Set wrap={ApplicationLayout}>
         <Route path="/login" page={LoginPage} name="login" />
         <Route path="/signup" page={SignupPage} name="signup" />
-        <Private unauthenticated="login">
+        <PrivateSet unauthenticated="login">
           <Route path="/dashboard" page={DashboardPage} name="dashboard" />
           <Route path="/products/{sku}" page={ProductsPage} name="products" />
-        </Private>
+        </PrivateSet>
       </Set>
 
       <Route path="/" page={HomePage} name="home" />
@@ -54,7 +54,7 @@ const Routes = () => {
 }
 ```
 
-You can probably get a sense of how all of this works without ever having seen a Redwood route before! Some routes can be marked as `<Private>` and will not be accessible without being logged in. Others can be wrapped in a "layout" (again, just a React component) to provide common styling shared between pages in your app.
+You can probably get a sense of how all of this works without ever having seen a Redwood route before! Some routes can be marked as `<PrivateSet>` and will not be accessible without being logged in. Others can be wrapped in a "layout" (again, just a React component) to provide common styling shared between pages in your app.
 
 #### Prerender
 
@@ -66,7 +66,7 @@ This is Redwood's version of static site generation, aka SSG.
 
 ### Authentication
 
-The `<Private>` route limits access to users that are authenticated, but how do they authenticate? Redwood includes integrations to many popular third party authentication hosts (including [Auth0](https://auth0.com/), [Supabase](https://supabase.com/docs/guides/auth) and [Clerk](https://clerk.com/)). You can also [host your own auth](https://redwoodjs.com/docs/auth/dbauth), or write your own [custom authentication](https://redwoodjs.com/docs/auth/custom) option. If going self-hosted, we include login, signup, and reset password pages, as well as the option to include TouchID/FaceID and third party biometric readers!
+The `<PrivateSet>` route limits access to users that are authenticated, but how do they authenticate? Redwood includes integrations to many popular third party authentication hosts (including [Auth0](https://auth0.com/), [Supabase](https://supabase.com/docs/guides/auth) and [Clerk](https://clerk.com/)). You can also [host your own auth](https://redwoodjs.com/docs/auth/dbauth), or write your own [custom authentication](https://redwoodjs.com/docs/auth/custom) option. If going self-hosted, we include login, signup, and reset password pages, as well as the option to include TouchID/FaceID and third party biometric readers!
 
 Once authenticated, how do you know what a user is allowed to do or not do? Redwood includes helpers for [role-based access control](https://redwoodjs.com/docs/how-to/role-based-access-control-rbac) that integrates on both the front- and backend.
 
