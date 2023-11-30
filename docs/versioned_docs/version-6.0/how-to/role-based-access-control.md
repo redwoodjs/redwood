@@ -246,9 +246,9 @@ import { Router, Route, Private } from '@redwoodjs/router'
 const Routes = () => {
   return (
     <Router>
-      <Private unauthenticated="home" roles="admin">
+      <PrivateSet unauthenticated="home" roles="admin">
         <Route path="/admin/users" page={UsersPage} name="users" />
-      </Private>
+      </PrivateSet>
     </Router>
   )
 }
@@ -262,28 +262,28 @@ import { Router, Route, Private } from '@redwoodjs/router'
 const Routes = () => {
   return (
     <Router>
-      <Private unauthenticated="home" roles={['admin', 'editor', 'publisher']}>
+      <PrivateSet unauthenticated="home" roles={['admin', 'editor', 'publisher']}>
         <Route path="/admin/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />
-      </Private>
+      </PrivateSet>
     </Router>
   )
 }
 ```
 
-> Note: If you are using `Set` you can use its `private` attribute instead of the `<Private>` component.
+> Note: If you are using `Set` you can use its `private` attribute instead of the `<PrivateSet>` component.
 
 If the currentUser is not assigned the role, they will be redirected to the page specified in the `unauthenticated` property. Therefore, you can define a specific page to be seen when attempting to access the protected route and denied access such as a "forbidden" page:
 
 ```jsx
-import { Router, Route, Private } from '@redwoodjs/router'
+import { Router, Route, PrivateSet } from '@redwoodjs/router'
 
 const Routes = () => {
   return (
     <Router>
-      <Private unauthenticated="forbidden" roles="admin">
+      <PrivateSet unauthenticated="forbidden" roles="admin">
         <Route path="/settings" page={SettingsPage} name="settings" />
         <Route path="/admin" page={AdminPage} name="sites" />
-      </Private>
+      </PrivateSet>
 
       <Route notfound page={NotFoundPage} />
       <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />

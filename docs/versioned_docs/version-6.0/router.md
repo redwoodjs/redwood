@@ -46,7 +46,7 @@ The `path` prop specifies the URL path to match, starting with the beginning sla
 
 Some pages should only be visible to authenticated users.
 
-We support this using private `<Set>`s or the `<Private>` component. Read more [further down](#private-set).
+We support this using private `<PrivateSet>` component. Read more [further down](#private-set).
 
 ## Sets of Routes
 
@@ -145,40 +145,40 @@ Here's an example of how you'd use a private set:
 </Router>
 ```
 
-Private routes are important and should be easy to spot in your Routes file. The larger your Routes file gets, the more difficult it will probably become to find `<Set private /*...*/>` among your other Sets. So we also provide a `<Private>` component that's just an alias for `<Set private /*...*/>`. Most of our documentation uses `<Private>`.
+Private routes are important and should be easy to spot in your Routes file. The larger your Routes file gets, the more difficult it will probably become to find `<Set private /*...*/>` among your other Sets. So we also provide a `<PrivateSet>` component that's just an alias for `<Set private /*...*/>`. Most of our documentation uses `<PrivateSet>`.
 
-Here's the same example again, but now using `<Private>`
+Here's the same example again, but now using `<PrivateSet>`
 
 ```jsx title="Routes.js"
 <Router>
   <Route path="/" page={HomePage} name="home" />
-  <Private unauthenticated="home">
+  <PrivateSet unauthenticated="home">
     <Route path="/admin" page={AdminPage} name="admin" />
-  </Private>
+  </PrivateSet>
 </Router>
 ```
 
 For more fine-grained control, you can specify `roles` (which takes a string for a single role or an array of roles), and the router will check to see that the current user is authorized before giving them access to the Route. If they're not, they will be redirected to the page specified in the `unauthenticated` prop, such as a "forbidden" page. Read more about Role-based Access Control in Redwood [here](how-to/role-based-access-control.md).
 
-To protect `Private` routes for access by a single role:
+To protect `PrivateSet` routes for access by a single role:
 
 ```jsx title="Routes.js"
 <Router>
-  <Private unauthenticated="forbidden" roles="admin">
+  <PrivateSet unauthenticated="forbidden" roles="admin">
     <Route path="/admin/users" page={UsersPage} name="users" />
-  </Private>
+  </PrivateSet>
 
   <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />
 </Router>
 ```
 
-To protect `Private` routes for access by multiple roles:
+To protect `PrivateSet` routes for access by multiple roles:
 
 ```jsx title="Routes.js"
 <Router>
-  <Private unauthenticated="forbidden" roles={['admin', 'editor', 'publisher']}>
+  <PrivateSet unauthenticated="forbidden" roles={['admin', 'editor', 'publisher']}>
     <Route path="/admin/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />
-  </Private>
+  </PrivateSet>
 
   <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />
 </Router>
@@ -574,13 +574,13 @@ When the lazy-loaded page is loading, `PageLoadingContext.Consumer` will pass `{
 
 Let's say you have a dashboard area on your Redwood app, which can only be accessed after logging in. When Redwood Router renders your private page, it will first fetch the user's details, and only render the page if it determines the user is indeed logged in.
 
-In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your private `<Route>`, `<Set private>` or the `<Private>` component:
+In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your private `<Route>`, `<PrivateSet>` component:
 
 ```jsx
 //Routes.js
 
 <Router>
-  <Private
+  <PrivateSet
     wrap={DashboardLayout}
     unauthenticated="login"
     whileLoadingAuth={SkeletonLoader} //<-- auth loader
@@ -590,7 +590,7 @@ In order to display a loader while auth details are being retrieved you can add 
     <Route path="/dashboard" page={DashboardHomePage} name="dashboard" />
 
     {/* other routes */}
-  </Private>
+  </PrivateSet>
 </Router>
 ```
 
