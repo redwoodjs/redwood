@@ -2,7 +2,7 @@ import React from 'react'
 
 import { render } from '@testing-library/react'
 
-import { Route, Private } from '@redwoodjs/router'
+import { Route, PrivateSet } from '@redwoodjs/router'
 
 import { routes, Router } from '../MockRouter'
 
@@ -14,10 +14,10 @@ describe('MockRouter', () => {
       <Router>
         <Route name="a" path="/a" page={FakePage} />
         <Route name="b" path="/b" page={FakePage} />
-        <Private unauthenticated="a">
+        <PrivateSet unauthenticated="a">
           <Route name="c" path="/c" page={FakePage} />
           <Route name="d" path="/d" page={FakePage} />
-        </Private>
+        </PrivateSet>
       </Router>
     )
 
