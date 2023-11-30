@@ -127,28 +127,28 @@ export async function runFeServer() {
   const getStylesheetLinks = () => indexEntry.css || []
   const clientEntry = '/' + indexEntry.file
 
-  // `routeManifest` is empty for RSC builds for now, so we're not doing SSR
-  // when we have RSC experimental support enabled
-  for (const route of Object.values(routeManifest)) {
-    const routeHandler = await createReactStreamingHandler({
-      route,
-      clientEntryPath: clientEntry,
-      getStylesheetLinks,
-    })
+  if (!rwConfig.experimental?.rsc?.enabled) {
+    for (const route of Object.values(routeManifest)) {
+      const routeHandler = await createReactStreamingHandler({
+        route,
+        clientEntryPath: clientEntry,
+        getStylesheetLinks,
+      })
 
-    // if it is a 404, register it at the end somehow.
-    if (!route.matchRegexString) {
-      continue
+      // if it is a 404, register it at the end somehow.
+      if (!route.matchRegexString) {
+        continue
+      }
+
+      // @TODO: we don't need regexes here
+      // Param matching, etc. all handled within the route handler now
+      const expressPathDef = route.hasParams
+        ? route.matchRegexString
+        : route.pathDefinition
+
+      // Wrap with whatg/server adapter. Express handler -> Fetch API handler
+      app.get(expressPathDef, createServerAdapter(routeHandler))
     }
-
-    // @TODO: we don't need regexes here
-    // Param matching, etc. all handled within the route handler now
-    const expressPathDef = route.hasParams
-      ? route.matchRegexString
-      : route.pathDefinition
-
-    // Wrap with whatg/server adapter. Express handler -> Fetch API handler
-    app.get(expressPathDef, createServerAdapter(routeHandler))
   }
 
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url

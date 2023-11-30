@@ -149,7 +149,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     acc[route.pathDefinition] = {
       name: route.name,
       bundle: route.relativeFilePath
-        ? clientBuildManifest[route.relativeFilePath]?.file
+        ? clientBuildManifest[route.relativeFilePath]?.file ?? null
         : null,
       matchRegexString: route.matchRegexString,
       // @NOTE this is the path definition, not the actual path
@@ -165,10 +165,14 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
         : null,
       renderMode: route.renderMode,
     }
+
     return acc
   }, {})
 
-  await fs.writeFile(rwPaths.web.routeManifest, JSON.stringify(routeManifest))
+  await fs.writeFile(
+    rwPaths.web.routeManifest,
+    JSON.stringify(routeManifest, null, 2)
+  )
 }
 
 // TODO (STREAMING) Hacky work around because when you don't have a App.routeHook, esbuild doesn't create
