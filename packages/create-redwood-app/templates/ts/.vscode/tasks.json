@@ -5,26 +5,17 @@
       "label": "WaitForDevServer",
       "group": "none",
       "type": "shell",
+      "command": "bash",
+        "args": [
+          "-c",
+          "while ! echo -n > /dev/tcp/localhost/18911; do sleep 1; done;"
+      ],
       "windows": {
         "command": "powershell",
         "args": [
           "-NoProfile",
           "-ExecutionPolicy", "Bypass",
           "while (-not (Test-NetConnection -ComputerName localhost -Port 18911)) { Start-Sleep -Seconds 1 };"
-        ]
-      },
-      "linux": {
-        "command": "bash",
-        "args": [
-          "-c",
-          "while ! echo -n > /dev/tcp/localhost/18911; do sleep 1; done;"
-        ]
-      },
-      "osx": {
-        "command": "bash",
-        "args": [
-          "-c",
-          "while ! echo -n > /dev/tcp/localhost/18911; do sleep 1; done;"
         ]
       },
       "presentation": {
