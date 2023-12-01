@@ -125,17 +125,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.8.7":
-  version: 3.8.7
-  resolution: "@apollo/client@npm:3.8.7"
+"@apollo/client@npm:3.8.8":
+  version: 3.8.8
+  resolution: "@apollo/client@npm:3.8.8"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
-    "@wry/context": ^0.7.3
     "@wry/equality": ^0.5.6
-    "@wry/trie": ^0.4.3
+    "@wry/trie": ^0.5.0
     graphql-tag: ^2.12.6
     hoist-non-react-statics: ^3.3.2
-    optimism: ^0.17.5
+    optimism: ^0.18.0
     prop-types: ^15.7.2
     response-iterator: ^0.2.6
     symbol-observable: ^4.0.0
@@ -157,7 +156,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: e88be52f6393ab0625999abf7f6ed6c1035e5f290a738477210f9563d85d369b3dcb86dff7613be84a012192b66c2fae18ee9d5acf55f2b0ca30c1cc77c38559
+  checksum: a097fb49d68fa77d59f8d63f73f0335624608102ebe2a30270d679b50f3fc2d697298fde8619571b419c93660a5ba90874d93e3b10efc8d910d752f14df1770b
   languageName: node
   linkType: hard
 
@@ -9152,7 +9151,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/studio@workspace:packages/studio"
   dependencies:
-    "@apollo/client": 3.8.7
+    "@apollo/client": 3.8.8
     "@babel/cli": 7.23.4
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.4
@@ -9368,7 +9367,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.8.7
+    "@apollo/client": 3.8.8
     "@apollo/experimental-nextjs-app-support": 0.5.1
     "@babel/cli": 7.23.4
     "@babel/core": ^7.22.20
@@ -13041,7 +13040,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wry/context@npm:^0.7.0, @wry/context@npm:^0.7.3":
+"@wry/caches@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "@wry/caches@npm:1.0.1"
+  dependencies:
+    tslib: ^2.3.0
+  checksum: a7bca3377f1131d3f1080f2e39d0692c9d1ca86bfd55734786f167f46aad28a4c8e772107324e8319843fb8068fdf98abcdea376d8a589316b1f0cdadf81f8b1
+  languageName: node
+  linkType: hard
+
+"@wry/context@npm:^0.7.0":
   version: 0.7.3
   resolution: "@wry/context@npm:0.7.3"
   dependencies:
@@ -13065,6 +13073,15 @@ __metadata:
   dependencies:
     tslib: ^2.3.0
   checksum: 1a14edba595b1967d0cf38208c2660b2952a8e8a649bb669b67907df48f602c7f2acbe16c1e1b115afa7d7effb9f1a4dbde38eef16ee92e7521a511262a53281
+  languageName: node
+  linkType: hard
+
+"@wry/trie@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@wry/trie@npm:0.5.0"
+  dependencies:
+    tslib: ^2.3.0
+  checksum: 8c8cfcac96ba4bc69dabf02740e19e613f501b398e80bacc32cd95e87228f75ecb41cd1a76a65abae9756c0f61ab3536e0da52de28857456f9381ffdf5995d3e
   languageName: node
   linkType: hard
 
@@ -28051,14 +28068,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"optimism@npm:^0.17.5":
-  version: 0.17.5
-  resolution: "optimism@npm:0.17.5"
+"optimism@npm:^0.18.0":
+  version: 0.18.0
+  resolution: "optimism@npm:0.18.0"
   dependencies:
+    "@wry/caches": ^1.0.0
     "@wry/context": ^0.7.0
     "@wry/trie": ^0.4.3
     tslib: ^2.3.0
-  checksum: 0c3a526e2dc1451735e66d2a6bef46a6395e8c7e7f6f323d998361ad281f01d91337a58ad4ad5fa5db18a87d6c9e64ff79a564aff9fb5d3ce614cb3d921c027d
+  checksum: 8e97c6d660cb80cf5f444209b9dd29ee6951fa7b344d4c4fc6d4aaf0ad0710dddaf834d0f5d7211b3658b15ef6c6a22cbcb98c7a8121e3fee9666fe0fd62d876
   languageName: node
   linkType: hard
 
