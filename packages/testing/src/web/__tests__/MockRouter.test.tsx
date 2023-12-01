@@ -2,7 +2,9 @@ import React from 'react'
 
 import { render } from '@testing-library/react'
 
-import { Route, PrivateSet } from '@redwoodjs/router'
+// Private is deprecated, but we still want to test it so we don't break
+// people's projects that still use it.
+import { Route, Private } from '@redwoodjs/router'
 
 import { routes, Router } from '../MockRouter'
 
@@ -14,10 +16,10 @@ describe('MockRouter', () => {
       <Router>
         <Route name="a" path="/a" page={FakePage} />
         <Route name="b" path="/b" page={FakePage} />
-        <PrivateSet unauthenticated="a">
+        <Private unauthenticated="a">
           <Route name="c" path="/c" page={FakePage} />
           <Route name="d" path="/d" page={FakePage} />
-        </PrivateSet>
+        </Private>
       </Router>
     )
 
