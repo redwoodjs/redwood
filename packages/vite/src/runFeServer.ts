@@ -127,36 +127,49 @@ export async function runFeServer() {
   const getStylesheetLinks = () => indexEntry.css || []
   const clientEntry = '/' + indexEntry.file
 
-  if (!rwConfig.experimental?.rsc?.enabled) {
-    for (const route of Object.values(routeManifest)) {
+  for (const route of Object.values(routeManifest)) {
+    // if it is a 404, register it at the end somehow.
+    if (!route.matchRegexString) {
+      continue
+    }
+
+    // @TODO: we don't need regexes here
+    // Param matching, etc. all handled within the route handler now
+    const expressPathDef = route.hasParams
+      ? route.matchRegexString
+      : route.pathDefinition
+
+    if (!getConfig().experimental?.rsc?.enabled) {
       const routeHandler = await createReactStreamingHandler({
         route,
         clientEntryPath: clientEntry,
         getStylesheetLinks,
       })
 
-      // if it is a 404, register it at the end somehow.
-      if (!route.matchRegexString) {
-        continue
-      }
-
-      // @TODO: we don't need regexes here
-      // Param matching, etc. all handled within the route handler now
-      const expressPathDef = route.hasParams
-        ? route.matchRegexString
-        : route.pathDefinition
-
       // Wrap with whatg/server adapter. Express handler -> Fetch API handler
       app.get(expressPathDef, createServerAdapter(routeHandler))
+    } else {
+      console.log('expressPathDef', expressPathDef)
+
+      // This is for RSC only. And only for now, until we have SSR working we
+      // with RSC. This maps /, /about, etc to index.html
+      app.get(expressPathDef, (req, res, next) => {
+        // Serve index.html for all routes, to let client side routing take
+        // over
+        req.url = '/'
+        // Without this, we get a flash of a url with a trailing slash. Still
+        // works, but doesn't look nice
+        // For example, if we navigate to /about we'll see a flash of /about/
+        // before returning to /about
+        req.originalUrl = '/'
+
+        return express.static(rwPaths.web.dist)(req, res, next)
+      })
     }
   }
 
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
   app.use('/rw-rsc', createRscRequestHandler())
-
-  // This is basically the route for / -> HomePage. Used by RSC
-  // Using .get() here to get exact path matching
-  app.get('/', express.static(rwPaths.web.dist))
 
   app.listen(rwConfig.web.port)
   console.log(
