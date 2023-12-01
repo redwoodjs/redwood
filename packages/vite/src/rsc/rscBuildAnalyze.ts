@@ -3,16 +3,17 @@ import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { onWarn } from './lib/onWarn'
-import { rscAnalyzePlugin } from './waku-lib/vite-plugin-rsc'
+import { onWarn } from '../lib/onWarn'
+import { rscAnalyzePlugin } from '../waku-lib/vite-plugin-rsc'
 
 /**
- * RSC build. Step 1 of 3.
+ * RSC build. Step 1.
+ * buildFeServer -> buildRscFeServer -> rscBuildAnalyze
  * Uses rscAnalyzePlugin to collect client and server entry points
  * Starts building the AST in entries.ts
  * Doesn't output any files, only collects a list of RSCs and RSFs
  */
-export async function rscBuild(viteConfigPath: string) {
+export async function rscBuildAnalyze(viteConfigPath: string) {
   const rwPaths = getPaths()
   const clientEntryFileSet = new Set<string>()
   const serverEntryFileSet = new Set<string>()

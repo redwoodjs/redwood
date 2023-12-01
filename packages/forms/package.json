@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.4",
+    "@babel/runtime-corejs3": "7.23.5",
     "core-js": "3.33.3",
     "pascalcase": "1.0.0",
     "react-hook-form": "7.48.2"
@@ -43,7 +43,7 @@
     "nodemon": "3.0.1",
     "react": "0.0.0-experimental-e5205658f-20230913",
     "react-dom": "0.0.0-experimental-e5205658f-20230913",
-    "typescript": "5.2.2"
+    "typescript": "5.3.2"
   },
   "peerDependencies": {
     "graphql": "16.8.1",
