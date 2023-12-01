@@ -58,7 +58,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
       entries: rwPaths.web.entries,
       webDist: rwPaths.web.dist,
       webDistServer: rwPaths.web.distServer,
-      webDistEntries: rwPaths.web.distServerEntries,
+      webDistServerEntries: rwPaths.web.distServerEntries,
       webRouteManifest: rwPaths.web.routeManifest,
     })
   }
@@ -71,13 +71,8 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     configFile: viteConfigPath,
     build: {
       outDir: rwPaths.web.distServer,
-      ssr: true, // use boolean, and supply the inputs in rollup options (see Documentation)
-      rollupOptions: {
-        input: {
-          'entry.server': rwPaths.web.entryServer,
-          Document: rwPaths.web.document, // We need the document for React's fallback
-        },
-      },
+      ssr: true, // use boolean here, instead of string.
+      // rollup inputs are defined in the vite plugin
     },
     envFile: false,
     logLevel: verbose ? 'info' : 'warn',
@@ -129,7 +124,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
   // should try to do this instead:
   // const clientBuildManifest: ViteBuildManifest = await import(
-  //   path.join(getPaths().web.dist, 'build-manifest.json'),
+  //   path.join(getPaths().web.dist, 'client-build-manifest.json'),
   //   { with: { type: 'json' } }
   // )
   // NOTES:
@@ -141,7 +136,10 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   //  * With `assert` and `@babel/plugin-syntax-import-assertions` the
   //    code compiled and ran properly, but Jest tests failed, complaining
   //    about the syntax.
-  const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
+  const manifestPath = path.join(
+    getPaths().web.dist,
+    'client-build-manifest.json'
+  )
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
   const clientBuildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
 
@@ -151,7 +149,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     acc[route.pathDefinition] = {
       name: route.name,
       bundle: route.relativeFilePath
-        ? clientBuildManifest[route.relativeFilePath]?.file
+        ? clientBuildManifest[route.relativeFilePath]?.file ?? null
         : null,
       matchRegexString: route.matchRegexString,
       // @NOTE this is the path definition, not the actual path
@@ -167,10 +165,14 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
         : null,
       renderMode: route.renderMode,
     }
+
     return acc
   }, {})
 
-  await fs.writeFile(rwPaths.web.routeManifest, JSON.stringify(routeManifest))
+  await fs.writeFile(
+    rwPaths.web.routeManifest,
+    JSON.stringify(routeManifest, null, 2)
+  )
 }
 
 // TODO (STREAMING) Hacky work around because when you don't have a App.routeHook, esbuild doesn't create

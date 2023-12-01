@@ -255,6 +255,9 @@ const resolveClientEntry = (
 ) => {
   const clientEntry = absoluteClientEntries[filePath]
 
+  console.log('absoluteClientEntries', absoluteClientEntries)
+  console.log('filePath', filePath)
+
   if (!clientEntry) {
     if (absoluteClientEntries['*'] === '*') {
       return config.base + path.relative(config.root, filePath)
@@ -309,7 +312,22 @@ function isSerializedFormData(data?: unknown): data is SerializedFormData {
 }
 
 async function renderRsc(input: RenderInput): Promise<PipeableStream> {
+  const rwPaths = getPaths()
+
   const config = await configPromise
+  // TODO (RSC): Should root be configurable by the user? We probably need it
+  // to be different values in different contexts. Should we introduce more
+  // config options?
+  // config.root currently comes from the user's project, where it in turn
+  // comes from our `redwood()` vite plugin defined in index.ts. By default
+  // (i.e. in the redwood() plugin) it points to <base>/web/src. But we need it
+  // to be just <base>/, so for now we override it here.
+  config.root =
+    process.platform === 'win32'
+      ? rwPaths.base.replaceAll('\\', '/')
+      : rwPaths.base
+  console.log('config.root', config.root)
+  console.log('rwPaths.base', rwPaths.base)
   const bundlerConfig = new Proxy(
     {},
     {
@@ -319,6 +337,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
         // filePath /Users/tobbe/dev/waku/examples/01_counter/dist/assets/rsc0.js
         // name Counter
         const id = resolveClientEntry(config, filePath)
+        console.log('Proxy id', id)
         // id /assets/rsc0-beb48afe.js
         return { id, chunks: [id], name, async: true }
       },

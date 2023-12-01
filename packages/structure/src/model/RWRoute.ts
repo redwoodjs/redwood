@@ -192,7 +192,7 @@ export class RWRoute extends BaseNode {
     if (this.isPrivate && this.isNotFound) {
       yield err(
         this.jsxNode!,
-        "The 'Not Found' page cannot be within a <Private> tag"
+        "The 'Not Found' page cannot be within a <PrivateSet> or a <Private> tag"
       )
     }
     if (this.isNotFound && this.path) {

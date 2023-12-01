@@ -185,20 +185,36 @@ export async function handler({ force }) {
             ].join('\n')
           }
 
-          writeFile(dockerfilePath, dockerfileTemplateContent, {
-            existingFiles: force ? 'OVERWRITE' : 'SKIP',
-          })
-          writeFile(dockerComposeDevFilePath, dockerComposeDevTemplateContent, {
-            existingFiles: force ? 'OVERWRITE' : 'SKIP',
-          })
+          writeFile(
+            dockerfilePath,
+            dockerfileTemplateContent,
+            {
+              existingFiles: force ? 'OVERWRITE' : 'SKIP',
+            },
+            task
+          )
+          writeFile(
+            dockerComposeDevFilePath,
+            dockerComposeDevTemplateContent,
+            {
+              existingFiles: force ? 'OVERWRITE' : 'SKIP',
+            },
+            task
+          )
           writeFile(
             dockerComposeProdFilePath,
             dockerComposeProdTemplateContent,
-            { existingFiles: force ? 'OVERWRITE' : 'SKIP' }
+            { existingFiles: force ? 'OVERWRITE' : 'SKIP' },
+            task
           )
-          writeFile(dockerignoreFilePath, dockerignoreTemplateContent, {
-            existingFiles: force ? 'OVERWRITE' : 'SKIP',
-          })
+          writeFile(
+            dockerignoreFilePath,
+            dockerignoreTemplateContent,
+            {
+              existingFiles: force ? 'OVERWRITE' : 'SKIP',
+            },
+            task
+          )
         },
       },
 
@@ -295,7 +311,7 @@ export async function handler({ force }) {
         "Lastly, ensure you have Docker. If you don't, see https://docs.docker.com/desktop/",
         '',
         "There's a lot in the Dockerfile and there's a reason for every line.",
-        'Be sure to check ou the docs: https://redwoodjs.com/docs/docker',
+        'Be sure to check out the docs: https://redwoodjs.com/docs/docker',
       ].join('\n')
     )
   } catch (e) {
