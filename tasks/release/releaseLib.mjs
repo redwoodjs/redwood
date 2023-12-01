@@ -165,7 +165,7 @@ export async function resolveBranchStatuses(branches) {
 }
 
 /**
- * Find the remote that points to `git@github.com:redwoodjs/redwood.git`.
+ * Find the remote that points to `redwoodjs/redwood.git`.
  */
 export async function getRedwoodRemote() {
   const result = {
@@ -181,7 +181,7 @@ export async function getRedwoodRemote() {
     }
 
     const found = remote.match(
-      /(?<name>\w+)\s+git@github\.com:redwoodjs\/redwood\.git/
+      /(?<name>\w+)\s+(git@|https:\/\/)github\.com(:|\/)redwoodjs\/redwood\.git/
     )
 
     if (found?.groups.name) {
@@ -191,7 +191,7 @@ export async function getRedwoodRemote() {
 
   if (!result.redwoodRemote) {
     result.error =
-      "Couldn't find a git remote that points to git@github.com:redwoodjs/redwood.git"
+      "Couldn't find a git remote that points to redwoodjs/redwood.git"
   }
 
   return result
