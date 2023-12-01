@@ -2200,22 +2200,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/shared@npm:1.1.0":
-  version: 1.1.0
-  resolution: "@clerk/shared@npm:1.1.0"
-  dependencies:
-    glob-to-regexp: 0.4.1
-    js-cookie: 3.0.1
-    swr: 2.2.0
-  peerDependencies:
-    react: ">=16"
-  peerDependenciesMeta:
-    react:
-      optional: true
-  checksum: 2fe53d0838668f56813942398d3e80652a7475f6b94907da47eb34dccc0e55c4d2fdbdfb837e6b75d4c96fa3b7d6fa179f122bb35382a237554d1583b373c8ff
-  languageName: node
-  linkType: hard
-
 "@clerk/shared@npm:1.1.1":
   version: 1.1.1
   resolution: "@clerk/shared@npm:1.1.1"
@@ -9409,7 +9393,7 @@ __metadata:
     "@types/testing-library__jest-dom": 5.14.9
     core-js: 3.33.3
     graphql: 16.8.1
-    graphql-sse: 2.3.0
+    graphql-sse: 2.4.0
     graphql-tag: 2.12.6
     jest: 29.7.0
     nodemon: 3.0.1
@@ -21373,12 +21357,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-sse@npm:2.3.0, graphql-sse@npm:^2.0.0":
-  version: 2.3.0
-  resolution: "graphql-sse@npm:2.3.0"
+"graphql-sse@npm:2.4.0, graphql-sse@npm:^2.0.0":
+  version: 2.4.0
+  resolution: "graphql-sse@npm:2.4.0"
   peerDependencies:
     graphql: ">=0.11 <=16"
-  checksum: 8cfc3db28094008fb33e04b9289d17ed7173ba6dfc01d9d0d686ae621c7cff33418657deb61429a498058cfad06e1282b89d3275ede87791fb065056db38e8a8
+  checksum: 8653b334653fe232a1632f3ec3aa1af1fe77369e43fe9fc4e8a1e113af5ea9db673279df671d74ced49bfcd8f61d24ec824e2381eab0eab85232a3a4b611dd48
   languageName: node
   linkType: hard
 
