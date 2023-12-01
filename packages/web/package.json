@@ -36,7 +36,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@apollo/client": "3.8.7",
+    "@apollo/client": "3.8.8",
     "@babel/runtime-corejs3": "7.23.4",
     "@redwoodjs/auth": "6.0.7",
     "core-js": "3.33.3",
@@ -62,7 +62,7 @@
     "react": "0.0.0-experimental-e5205658f-20230913",
     "react-dom": "0.0.0-experimental-e5205658f-20230913",
     "tstyche": "1.0.0-beta.3",
-    "typescript": "5.2.2"
+    "typescript": "5.3.2"
   },
   "peerDependencies": {
     "react": "0.0.0-experimental-e5205658f-20230913",

@@ -1,4 +1,4 @@
-import { context, describe, expect, test } from 'tstyche'
+import { describe, expect, test } from 'tstyche'
 
 import type { RouteParams, ParamType } from '../routeParamsTypes'
 
@@ -90,14 +90,12 @@ describe('RouteParams<>', () => {
     expect(globRoutes.description).type.toBeString()
   })
 
-  context('Glob params in the middle', () => {
-    test('Multiple Glob route params', () => {
-      const middleGlob: RouteParams<'/repo/{folders...}/edit'> = {
-        folders: 'src/lib/auth.js',
-      }
+  test('Glob params in the middle', () => {
+    const middleGlob: RouteParams<'/repo/{folders...}/edit'> = {
+      folders: 'src/lib/auth.js',
+    }
 
-      expect(middleGlob.folders).type.toBeString()
-    })
+    expect(middleGlob.folders).type.toBeString()
   })
 
   test('Mixed typed and untyped params', () => {
