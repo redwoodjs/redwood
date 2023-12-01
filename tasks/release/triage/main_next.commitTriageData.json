@@ -325,27 +325,7 @@
   },
   "1e1c8d1a37d665ca5fc3c14649907dee1dec73fa": {
     "message": "fix(deps): update dependency @whatwg-node/server to v0.9.18 (#9602)",
-    "needsCherryPick": true
-  },
-  "75e0317e477fc9dc86bda1209e1506704d472ac6": {
-    "message": "fix(deps): update docusaurus monorepo to v3.0.1 (#9608)",
-    "needsCherryPick": true
-  },
-  "cef41b53d2c1b1cd1cc91ccf42ae7ffbaad0a67c": {
-    "message": "fix(deps): update dependency graphql-sse to v2.4.0 (#9607)",
-    "needsCherryPick": true
-  },
-  "969ee35d0d26038da83cbc8459abb030d2ac2d38": {
-    "message": "fix(deps): update dependency fs-extra to v11.2.0 (#9606)",
-    "needsCherryPick": true
-  },
-  "dfa7b0424f0f24a5271190bb3b94ba9c01684c45": {
-    "message": "fix(deps): update graphql-tools monorepo (#9609)",
-    "needsCherryPick": true
-  },
-  "02e3edcb808fe7e69f716bb5123da4a6fd13ec54": {
-    "message": "Add note about base 64 encoded event body (#9595)",
-    "needsCherryPick": true
+    "needsCherryPick": false
   },
   "a7ea8cdc35772234cbc7ac5e3c36446213ebe61a": {
     "message": "RSC: Include routing in initial RSC example app (#9611)",

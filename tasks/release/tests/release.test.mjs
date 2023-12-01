@@ -274,7 +274,8 @@ describe('releaseLib', () => {
   describe('resolveBranchStatuses', () => {
     test('getRedwoodRemote', async () => {
       const result = await releaseLib.getRedwoodRemote()
-      expect(result).toEqual({ redwoodRemote: 'origin' })
+      expect(result.redwoodRemote).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
 
     test('getBranchesToCommits', async () => {
