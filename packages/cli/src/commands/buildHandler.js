@@ -33,7 +33,12 @@ export const handler = async ({
     prisma,
     prerender,
   })
+
   const rwjsPaths = getPaths()
+  const rwjsConfig = getConfig()
+  const useGraphQL = rwjsConfig.graphql
+  const useFragments = useGraphQL && useGraphQL.fragments
+  const useTrustedDocuments = useGraphQL && useGraphQL.trustedDocuments
 
   if (performance) {
     console.log('Measuring Web Build Performance...')
@@ -78,10 +83,10 @@ export const handler = async ({
     },
     // If using GraphQL Fragments or Trusted Documents, then we need use coden to generate the types
     // needed for possible types and the trusted document store hashes
-    (getConfig().graphql.fragments || getConfig().graphql.trustedDocuments) && {
+    (useFragments || useTrustedDocuments) && {
       title: `Generating types needed for ${[
-        getConfig().graphql.fragments && 'GraphQL Fragments',
-        getConfig().graphql.trustedDocuments && 'Trusted Documents',
+        useFragments && 'GraphQL Fragments',
+        useTrustedDocuments && 'Trusted Documents',
       ]
         .filter(Boolean)
         .join(' and ')} support...`,
