@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.8.8",
-    "@babel/runtime-corejs3": "7.23.4",
+    "@babel/runtime-corejs3": "7.23.5",
     "@redwoodjs/auth": "6.4.1",
     "core-js": "3.33.3",
     "graphql": "16.8.1",
