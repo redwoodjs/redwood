@@ -2199,22 +2199,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/shared@npm:1.1.0":
-  version: 1.1.0
-  resolution: "@clerk/shared@npm:1.1.0"
-  dependencies:
-    glob-to-regexp: 0.4.1
-    js-cookie: 3.0.1
-    swr: 2.2.0
-  peerDependencies:
-    react: ">=16"
-  peerDependenciesMeta:
-    react:
-      optional: true
-  checksum: 2fe53d0838668f56813942398d3e80652a7475f6b94907da47eb34dccc0e55c4d2fdbdfb837e6b75d4c96fa3b7d6fa179f122bb35382a237554d1583b373c8ff
-  languageName: node
-  linkType: hard
-
 "@clerk/shared@npm:1.1.1":
   version: 1.1.1
   resolution: "@clerk/shared@npm:1.1.1"
