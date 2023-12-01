@@ -217,7 +217,6 @@ Svix (and by extension, Clerk) gives you a secret token that it uses to create a
 > Some production environments, like Vercel, might base64 encode the request body string. In that case, the body must be conditionally parsed.
 > ```js
 > export const handler = async (event: APIGatewayEvent) => {
->   const webhookLogger = logger.child({ clerkInfo })
 >   const body = event.isBase64Encoded
 >     ? Buffer.from(event.body, 'base64').toString('utf-8')
 >     : event.body
