@@ -7765,6 +7765,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-email/render@npm:0.0.10":
+  version: 0.0.10
+  resolution: "@react-email/render@npm:0.0.10"
+  dependencies:
+    html-to-text: 9.0.5
+    pretty: 2.0.0
+    react: 18.2.0
+    react-dom: 18.2.0
+  checksum: ea0db578ef58734160ac512d04de5b09f558d192fbb74c0b9bdb3006e91d0d73ee7d77007f4740bef0d587f8b231f8dba5ef01e16e18d2deb37859ddd2e7d09a
+  languageName: node
+  linkType: hard
+
 "@react-email/render@npm:0.0.7":
   version: 0.0.7
   resolution: "@react-email/render@npm:0.0.7"
@@ -7774,18 +7786,6 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
   checksum: 12c1767995e0994cfeb8e81b17ea6a326db25d3bb290297d2889cde0b37de02384ad1fb36f9902ac9a147b8ff0a4cb1134b0c2aa17b59ec154441b553d4e09c1
-  languageName: node
-  linkType: hard
-
-"@react-email/render@npm:0.0.9":
-  version: 0.0.9
-  resolution: "@react-email/render@npm:0.0.9"
-  dependencies:
-    html-to-text: 9.0.5
-    pretty: 2.0.0
-    react: 18.2.0
-    react-dom: 18.2.0
-  checksum: 128b3a7c65e77a14600e48fb24183e182de82b4ddc8ff11bb239c421fa68bd6eb8b063822b5abe9f8599e34ece315cdb961b4133c59285cebcc517d2ec0ae8da
   languageName: node
   linkType: hard
 
@@ -8987,7 +8987,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/mailer-renderer-react-email@workspace:packages/mailer/renderers/react-email"
   dependencies:
-    "@react-email/render": 0.0.9
+    "@react-email/render": 0.0.10
     "@redwoodjs/mailer-core": 6.0.7
     esbuild: 0.19.5
     fast-glob: 3.3.2
