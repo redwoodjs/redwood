@@ -158,7 +158,8 @@ export async function handler({ force, install, packages }) {
       },
       {
         title: 'Configure Storybook...',
-        skip: () => fileIncludes(rwPaths.web.storybookConfig, 'withMantine'),
+        skip: () =>
+          fileIncludes(rwPaths.web.storybookPreviewConfig, 'withMantine'),
         task: async () =>
           extendStorybookConfiguration(
             path.join(

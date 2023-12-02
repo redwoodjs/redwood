@@ -212,9 +212,8 @@ function mergeAST(baseAST, extAST, strategy = {}) {
 export function merge(base, extension, strategy) {
   function parseReact(code) {
     return parse(code, {
-      filename: 'merge.tsx',
-      presets: ['@babel/preset-react', '@babel/preset-typescript'],
-      plugins: ['@babel/plugin-transform-typescript'],
+      filename: 'merged.tsx',
+      presets: ['@babel/preset-typescript'],
     })
   }
 

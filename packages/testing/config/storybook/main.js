@@ -74,15 +74,10 @@ const baseConfig = {
       }
     }
 
-    const tsPreviewConfigPath = `${redwoodProjectPaths.storybookPreviewConfig}.tsx`
-    const jsPreviewConfigPath = `${redwoodProjectPaths.storybookPreviewConfig}.js`
-
     let userPreviewPath = './preview.example.js'
 
-    if (fs.existsSync(tsPreviewConfigPath)) {
-      userPreviewPath = tsPreviewConfigPath
-    } else if (fs.existsSync(jsPreviewConfigPath)) {
-      userPreviewPath = jsPreviewConfigPath
+    if (fs.existsSync(redwoodProjectPaths.storybookPreviewConfig)) {
+      userPreviewPath = redwoodProjectPaths.storybookPreviewConfig
     }
 
     sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_PREVIEW_CONFIG'] =

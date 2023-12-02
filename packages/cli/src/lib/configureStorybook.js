@@ -21,10 +21,11 @@ import { getPaths, transformTSToJS, writeFile } from '.'
 export default async function extendStorybookConfiguration(
   newConfigPath = undefined
 ) {
+  const webPaths = getPaths().web
   const ts = isTypeScriptProject()
-  const sbPreviewConfigPath = `${getPaths().web.storybookPreviewConfig}.${
-    ts ? 'tsx' : 'js'
-  }`
+  const sbPreviewConfigPath =
+    webPaths.storybookPreviewConfig ??
+    `${webPaths.config}/storybook.preview.${ts ? 'tsx' : 'js'}`
   const read = (path) => fse.readFileSync(path, { encoding: 'utf-8' })
 
   if (!fse.existsSync(sbPreviewConfigPath)) {

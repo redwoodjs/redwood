@@ -45,7 +45,7 @@ export interface WebPaths {
   entries: string | null
   postcss: string
   storybookConfig: string
-  storybookPreviewConfig: string
+  storybookPreviewConfig: string | null
   storybookManagerConfig: string
   dist: string
   distServer: string
@@ -228,9 +228,8 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         BASE_DIR,
         PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG
       ),
-      storybookPreviewConfig: path.join(
-        BASE_DIR,
-        PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW
+      storybookPreviewConfig: resolveFile(
+        path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW)
       ),
       storybookManagerConfig: path.join(
         BASE_DIR,
