@@ -13,6 +13,7 @@ import {
   getOctokit,
   getLatestRelease,
   getPRsWithMilestone,
+  getRedwoodRemote,
   getSpinner,
   isYes,
   prompts,
@@ -26,6 +27,7 @@ let latestRelease
 let nextRelease
 let milestone
 let releaseBranch
+let redwoodRemote
 
 const compareURL = 'https://github.com/redwoodjs/redwood/compare'
 
@@ -35,29 +37,37 @@ export async function main() {
   const { verbose } = options
   setVerbosity(verbose)
 
-  // We'll be making requests to GitHub for PRs. While this data isn't private, we could get rate-limited without a token.
   try {
+    // We'll be making requests to GitHub for PRs. While this data isn't private, we could get rate-limited without a token.
     octokit = await getOctokit()
+
+    const result = await getRedwoodRemote()
+    $.verbose && console.log()
+
+    if (result.error) {
+      throw new Error(result.error)
+    }
+
+    redwoodRemote = result.redwoodRemote
   } catch (e) {
     consoleBoxen('👷 Heads up', e.message)
     process.exitCode = 1
     return
   }
 
-  // The initial is set to `patch`, because that's the most common.
   const semverPromptRes = await prompts({
     name: 'semver',
     message: 'Which semver do you want to release?',
     type: 'select',
 
     choices: [{ value: 'major' }, { value: 'minor' }, { value: 'patch' }],
+    // `initial` is set to `patch` because that's the most common.
     initial: 2,
   })
 
   semver = semverPromptRes.semver
 
   latestRelease = await getLatestRelease()
-  console.log()
 
   exitIfNo(
     await question(
@@ -74,7 +84,7 @@ export async function main() {
   )
 
   // If the git tag for the desired semver already exists, this script was run before, but not to completion.
-  // The git tag is one of the last steps, so we need that to be deleted first...
+  // The git tag is one of the last steps, so we need it to be deleted first.
   const gitTagAlreadyExists = unwrap(await $`git tag -l ${nextRelease}`)
 
   if (gitTagAlreadyExists) {
@@ -92,10 +102,7 @@ export async function main() {
     return
   }
 
-  // We use milestones to keep track of where commits are supposed to land in a release.
-  // Let's double check that everything lines up.
-  // milestone = await getMilestone(nextRelease)
-  // TODO: this function is great for the first time we cut a release branch but not if it's already there.
+  // We use milestones to keep track of where commits are supposed to land in a release. Let's double check that everything lines up.
   await resolveMilestones()
   console.log()
 
@@ -376,15 +383,11 @@ async function releaseMajorOrMinor() {
   await $`git reset --soft HEAD~2`
   await $`git commit -m "${nextRelease}"`
   await $`git tag -am ${nextRelease} "${nextRelease}"`
-  await $`git push`
-  await $`git push --tags`
+  await $`git push -u ${redwoodRemote} ${releaseBranch} --follow-tags`
 
   console.log()
   console.log(`🚀 Released ${chalk.green(nextRelease)}`)
   console.log()
-
-  // TODO:
-  // await generateReleaseNotes({ milestone: milestone?.title ?? nextRelease })
 
   if (milestone) {
     await closeMilestone(milestone.number)
@@ -393,12 +396,10 @@ async function releaseMajorOrMinor() {
   console.log(
     [
       'Only a few more things to do:',
-      '',
-      '  - Remove the yarn.lock files in the create-redwood-app templates',
-      '  - Merge the release branch into next (updating yarn.lock if necessary)',
-      '  - Push',
-      '  - Delete the release branch locally and on https://github.com/redwoodjs/redwood/branches',
-      '  - Post on discord and twitter',
+      '  - publish the release notes',
+      '  - merge the release branch into next and push the merge commit',
+      '  - Delete the release branch locally and on GitHub (https://github.com/redwoodjs/redwood/branches)',
+      '  - post on Slack, Discord, and Buffer',
     ].join('\n')
   )
 }
@@ -504,8 +505,8 @@ async function updateCreateRedwoodAppTemplates() {
   ) {
     return
   }
-  console.log()
 
+  const spinner = getSpinner('Updating create-redwood-app templates')
   cd('./packages/create-redwood-app/templates/ts')
   await $`rm -f yarn.lock`
   await $`touch yarn.lock`
@@ -516,6 +517,7 @@ async function updateCreateRedwoodAppTemplates() {
   await $`git add .`
   await $`git commit -m "chore: update create-redwood-app templates"`
   cd('../..')
+  spinner.stop()
 }
 
 function closeMilestone(number) {
@@ -551,43 +553,28 @@ async function releasePatch() {
     await $`git checkout -b ${releaseBranch} ${latestRelease}`
   }
 
-  // TODO:
-  if (!(await branchExistsOnRedwoodRemote(releaseBranch, 'origin'))) {
-    exitIfNo(
-      await question(
-        `Ok to push new branch ${chalk.magenta(
-          releaseBranch
-        )} to GitHub and the open diff between it and the latest release? [Y/n] > `
-      )
-    )
-
-    await $`git push -u origin ${releaseBranch}`
-    await $`open ${compareURL}/${latestRelease}...${releaseBranch}`
-
-    exitIfNo(
-      await question(
-        "🤔 Does the diff look ok? (It's brand new--it should!) [Y/n] > "
-      )
-    )
+  if (!(await branchExistsOnRedwoodRemote(releaseBranch, redwoodRemote))) {
+    await pushAndDiff()
 
     console.log(
       [
-        "Remember to cherry pick PRs _in the same order as they were merged_. And after you're done, run:",
-        '  1. yarn (to update the lock file), and',
-        '  2. yarn check',
-        '',
+        "Time to cherry pick PRs. Here's a few things to keep in mind:",
+        '  - cherry pick PRs in the same order they were merged',
+        '  - after cherry picking PRs that change dependencies, run `yarn && yarn check`',
       ].join('\n')
     )
 
     exitIfNo(await question(`Done cherry picking? [Y/n] > `))
     await pushAndDiff()
+
+    exitIfNo(await question(`Does the diff look ok? [Y/n] > `))
+    console.log()
   }
 
-  $.verbose && console.log()
   await cleanInstallUpdate()
-  console.log()
+  $.verbose && console.log()
   await runQA()
-  console.log()
+  $.verbose && console.log()
 
   exitIfNo(
     await question(`Everything passed local QA. Ok to publish to NPM? [Y/n] > `)
@@ -627,15 +614,11 @@ async function releasePatch() {
   await $`git reset --soft HEAD~2`
   await $`git commit -m "${nextRelease}"`
   await $`git tag -am ${nextRelease} "${nextRelease}"`
-  await $`git push`
-  await $`git push --tags`
+  await $`git push -u ${redwoodRemote} ${releaseBranch} --follow-tags`
 
   console.log()
   console.log(`🚀 Released ${chalk.green(nextRelease)}`)
   console.log()
-
-  // TODO:
-  // await generateReleaseNotes({ milestone: milestone?.title ?? nextRelease })
 
   if (milestone) {
     await closeMilestone(milestone.number)
@@ -644,12 +627,10 @@ async function releasePatch() {
   console.log(
     [
       'Only a few more things to do:',
-      '',
-      '  - Remove the yarn.lock files in the create-redwood-app templates',
-      '  - Merge the release branch into next (updating yarn.lock if necessary)',
-      '  - Push',
-      '  - Delete the release branch locally and on https://github.com/redwoodjs/redwood/branches',
-      '  - Post on discord and twitter',
+      '  - publish the release notes',
+      '  - merge the release branch into next and push the merge commit',
+      '  - delete the release branch locally and on GitHub (https://github.com/redwoodjs/redwood/branches)',
+      '  - post on Slack, Discord, and Buffer',
     ].join('\n')
   )
 }
@@ -657,20 +638,14 @@ async function releasePatch() {
 async function pushAndDiff() {
   exitIfNo(
     await question(
-      `Ok to push branch ${chalk.magenta(
+      `Ok to push ${chalk.magenta(
         releaseBranch
-      )} to GitHub and open diff? [Y/n] > `
+      )} to GitHub and open the diff? [Y/n] > `
     )
   )
-  console.log()
 
-  await $`git push`
-  console.log()
-
+  await $`git push -u ${redwoodRemote} ${releaseBranch}`
   await $`open ${compareURL}/${latestRelease}...${releaseBranch}`
-  console.log()
-
-  exitIfNo(await question(`Diff look ok? [Y/n] > `))
 }
 
 async function exitIfNo(answer, { code } = { code: 1 }) {
