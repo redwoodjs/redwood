@@ -41,7 +41,7 @@
     "@envelop/types": "4.0.1",
     "esbuild": "0.18.19",
     "jest": "29.7.0",
-    "nodemon": "3.0.1",
+    "nodemon": "3.0.2",
     "typescript": "5.3.2"
   },
   "peerDependencies": {
