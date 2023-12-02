@@ -24,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "@react-email/render": "0.0.9",
+    "@react-email/render": "0.0.10",
     "@redwoodjs/mailer-core": "6.4.2"
   },
   "devDependencies": {
