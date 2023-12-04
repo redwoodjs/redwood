@@ -32,7 +32,7 @@ describe('releaseLib', () => {
         "getLatestRelease": [Function],
         "getMilestone": [Function],
         "getOctokit": [Function],
-        "getPR_MilestoneFromURL": [Function],
+        "getPRMilestoneFromURL": [Function],
         "getRedwoodRemote": [Function],
         "getReleaseBranches": [Function],
         "getSymmetricDifference": [Function],
@@ -430,13 +430,13 @@ describe('releaseLib', () => {
     })
   })
 
-  test("`getPR_MilestoneFromURL` gets a PR's milestone", async () => {
+  test("`getPRMilestoneFromURL` gets a PR's milestone", async () => {
     const pr = {
       url: 'https://github.com/redwoodjs/redwood/pull/9361',
       milestone: 'v6.4.0',
     }
 
-    const milestone = await releaseLib.getPR_MilestoneFromURL(pr.url)
+    const milestone = await releaseLib.getPRMilestoneFromURL(pr.url)
 
     expect(milestone).toEqual(pr.milestone)
     expect(releaseLib.prMilestoneCache.has(pr.url)).toEqual(true)
