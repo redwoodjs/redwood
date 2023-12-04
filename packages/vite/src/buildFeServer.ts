@@ -57,7 +57,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     })
 
     // Write a route manifest
-    buildRouteManifest()
+    return await buildRouteManifest()
   }
 
   // Step 1A: Generate the client bundle
@@ -116,5 +116,5 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   })
 
   // Write a route manifest
-  buildRouteManifest()
+  await buildRouteManifest()
 }
