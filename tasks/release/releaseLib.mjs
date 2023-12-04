@@ -802,7 +802,10 @@ export async function triageCommits({ commits, commitTriageData, range }) {
         .filter(Boolean)
         .join('\n')
 
-      const answer = await question(message)
+      let answer = 'n'
+      if (commit.milestone !== 'RSC') {
+        answer = await question(message)
+      }
 
       if (['open', 'o'].includes(answer)) {
         if (commit.url) {

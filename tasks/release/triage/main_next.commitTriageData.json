@@ -334,5 +334,9 @@
   "2c638c38b97da8179f222d4515e83e7378ecb527": {
     "message": "RSC: Fake server-side routing (#9593)",
     "needsCherryPick": false
+  },
+  "00462e511c772fd03226f576816039a8e62f5ea2": {
+    "message": "RSC: Refactor to share buildRouteManifest function with SSR process (#9618)",
+    "needsCherryPick": false
   }
 }
