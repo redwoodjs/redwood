@@ -338,5 +338,9 @@
   "00462e511c772fd03226f576816039a8e62f5ea2": {
     "message": "RSC: Refactor to share buildRouteManifest function with SSR process (#9618)",
     "needsCherryPick": false
+  },
+  "f99866178e4d335d4a087c66b10eb90cb81fff26": {
+    "message": "chore(release): Automatically triage RSC PRs",
+    "needsCherryPick": true
   }
 }
