@@ -799,14 +799,29 @@ export async function triageCommits({ commits, commitTriageData, range }) {
           .join(' '),
         `need to be cherry picked into ${chalk.magenta(
           range.to
-        )}? [Y/n/o(pen)] > `,
+        )}? [Y/n/s(kip)/o(pen)] > `,
       ]
         .filter(Boolean)
         .join('\n')
 
-      let answer = 'n'
-      if (commit.milestone !== 'RSC') {
+      let answer = 'no'
+      if (!['RSC', 'v7.0.0'].includes(commit.milestone)) {
         answer = await question(message)
+      }
+
+      answer = getLongAnswer(answer)
+
+      let comment = ''
+      if (answer === 'skip') {
+        const commentRes = await prompts({
+          type: 'text',
+          name: 'comment',
+          message: 'Why are you skipping it?',
+
+          validate: (comment) => comment.length > 0 || 'Please enter a comment',
+        })
+
+        comment = commentRes.comment
       }
 
       if (['open', 'o'].includes(answer)) {
@@ -821,11 +836,33 @@ export async function triageCommits({ commits, commitTriageData, range }) {
 
       commitTriageData.set(commit.hash, {
         message: commit.message,
-        needsCherryPick: isYes(answer),
+        needsCherryPick: answer,
+        ...(comment && { comment }),
       })
 
       break
     }
+  }
+}
+
+/**
+ *
+ * @param {string} answer
+ * @returns {'yes'|'no'|'skip'}
+ */
+function getLongAnswer(answer) {
+  answer = answer.toLowerCase()
+
+  if (['', 'y', 'yes'].includes(answer)) {
+    return 'yes'
+  }
+
+  if (['n', 'no'].includes(answer)) {
+    return 'no'
+  }
+
+  if (['s', 'skip'].includes(answer)) {
+    return 'skip'
   }
 }
 
@@ -902,9 +939,16 @@ export function reportCommitStatuses({ commits, commitTriageData, range }) {
   }
 
   for (const commit of commitsToColor) {
-    const { needsCherryPick } = commitTriageData.get(commit.hash)
-    const prettyFn = needsCherryPick ? chalk.green : chalk.red
-    commit.pretty = prettyFn(commit.line)
+    const { needsCherryPick, comment } = commitTriageData.get(commit.hash)
+
+    if (needsCherryPick === 'yes') {
+      commit.pretty = chalk.green(commit.line)
+    } else if (needsCherryPick === 'no') {
+      commit.pretty = chalk.red(commit.line)
+    } else {
+      commit.pretty = [chalk.yellow(commit.line), `  ${comment}`].join('\n')
+    }
+
     commit.needsCherryPick = needsCherryPick
   }
 
@@ -914,6 +958,7 @@ export function reportCommitStatuses({ commits, commitTriageData, range }) {
       `${chalk.green('■')} Needs to be cherry picked into ${chalk.magenta(
         range.to
       )}`,
+      `${chalk.yellow('■')} Skipped (see comments for details)`,
       $.verbose &&
         `${chalk.blue('■')} Was cherry picked into ${chalk.magenta(
           range.to
@@ -930,7 +975,10 @@ export function reportCommitStatuses({ commits, commitTriageData, range }) {
   console.log()
   console.log(
     commits
-      .filter((commit) => $.verbose || commit.needsCherryPick)
+      .filter(
+        (commit) =>
+          $.verbose || ['yes', 'skip'].includes(commit.needsCherryPick)
+      )
       .map(({ pretty }) => pretty)
       .join('\n')
   )
