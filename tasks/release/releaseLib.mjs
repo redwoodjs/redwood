@@ -16,6 +16,7 @@ import { chalk, fs, question, $ } from 'zx'
  *   ref: string,
  *   type: 'commit' | 'ui' | 'release-chore' | 'tag'
  *   pretty: string,
+ *   needsCherryPick?: boolean,
  * }} Commit
  *
  * @typedef {Map<string, { message: string, needsCherryPick: boolean }>} CommitTriageData
@@ -903,6 +904,7 @@ export function reportCommitStatuses({ commits, commitTriageData, range }) {
     const { needsCherryPick } = commitTriageData.get(commit.hash)
     const prettyFn = needsCherryPick ? chalk.green : chalk.red
     commit.pretty = prettyFn(commit.line)
+    commit.needsCherryPick = needsCherryPick
   }
 
   consoleBoxen(
@@ -911,17 +913,26 @@ export function reportCommitStatuses({ commits, commitTriageData, range }) {
       `${chalk.green('■')} Needs to be cherry picked into ${chalk.magenta(
         range.to
       )}`,
-      `${chalk.blue('■')} Was cherry picked into ${chalk.magenta(
-        range.to
-      )} with changes`,
-      `${chalk.dim.red('■')} Shouldn't be cherry picked into ${chalk.magenta(
-        range.to
-      )}`,
-      `${chalk.dim('■')} Chore commit or purely-decorative line`,
-    ].join('\n')
+      $.verbose &&
+        `${chalk.blue('■')} Was cherry picked into ${chalk.magenta(
+          range.to
+        )} with changes`,
+      $.verbose &&
+        `${chalk.dim.red('■')} Shouldn't be cherry picked into ${chalk.magenta(
+          range.to
+        )}`,
+      $.verbose && `${chalk.dim('■')} Chore commit or purely-decorative line`,
+    ]
+      .filter(Boolean)
+      .join('\n')
   )
   console.log()
-  console.log(commits.map(({ pretty }) => pretty).join('\n'))
+  console.log(
+    commits
+      .filter((commit) => $.verbose || commit.needsCherryPick)
+      .map(({ pretty }) => pretty)
+      .join('\n')
+  )
 }
 
 /**
