@@ -83,6 +83,7 @@
     "cypress": "12.17.4",
     "cypress-wait-until": "1.7.2",
     "dependency-cruiser": "13.1.5",
+    "dotenv": "16.3.1",
     "eslint": "8.54.0",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",

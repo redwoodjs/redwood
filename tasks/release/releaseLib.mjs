@@ -7,6 +7,7 @@ import ora from 'ora'
 import _prompts from 'prompts'
 import semver from 'semver'
 import { chalk, fs, question, $ } from 'zx'
+import 'dotenv/config'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -626,7 +627,7 @@ async function resolveCommitType(commit, { logs }) {
 
   // If we can't get a commit that has a PR's milestone, it's a bug.
   try {
-    commit.milestone = await getPR_MilestoneFromURL(commit.url)
+    commit.milestone = await getPRMilestoneFromURL(commit.url)
   } catch (e) {
     throw new Error(
       [
@@ -833,7 +834,7 @@ export let prMilestoneCache
 /**
  * @param {string} prURL
  */
-export async function getPR_MilestoneFromURL(prURL) {
+export async function getPRMilestoneFromURL(prURL) {
   if (!prMilestoneCache) {
     prMilestoneCache = setUpDataFile(
       new URL('./prMilestoneCache.json', import.meta.url)
@@ -850,14 +851,14 @@ export async function getPR_MilestoneFromURL(prURL) {
     resource: {
       milestone: { title },
     },
-  } = await octokit.graphql(getPR_MilestoneFromURLQuery, { prURL })
+  } = await octokit.graphql(getPRMilestoneFromURLQuery, { prURL })
 
   prMilestoneCache.set(prURL, title)
 
   return title
 }
 
-const getPR_MilestoneFromURLQuery = `
+const getPRMilestoneFromURLQuery = `
   query GetMilestoneForCommitQuery($prURL: URI!) {
     resource(url: $prURL) {
       ...on PullRequest {
