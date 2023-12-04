@@ -14,7 +14,6 @@ import { rscIndexPlugin } from '../waku-lib/vite-plugin-rsc'
  * Generate the client bundle
  */
 export async function rscBuildClient(
-  webSrc: string,
   webHtml: string,
   webDist: string,
   clientEntryFiles: Record<string, string>
@@ -22,21 +21,20 @@ export async function rscBuildClient(
   const rwPaths = getPaths()
   const rwConfig = getConfig()
 
+  const graphQlUrl =
+    rwConfig.web.apiGraphQLUrl ?? rwConfig.web.apiUrl + '/graphql'
+
   const clientBuildOutput = await viteBuild({
     // configFile: viteConfigPath,
-    root: webSrc,
+    root: rwPaths.web.src,
     envPrefix: 'REDWOOD_ENV_',
     publicDir: path.join(rwPaths.web.base, 'public'),
     define: {
       RWJS_ENV: {
-        // @NOTE we're avoiding process.env here, unlike webpack
-        RWJS_API_GRAPHQL_URL:
-          rwConfig.web.apiGraphQLUrl ?? rwConfig.web.apiUrl + '/graphql',
-        RWJS_API_URL: rwConfig.web.apiUrl,
         __REDWOOD__APP_TITLE: rwConfig.web.title || path.basename(rwPaths.base),
-        RWJS_EXP_STREAMING_SSR:
-          rwConfig.experimental.streamingSsr &&
-          rwConfig.experimental.streamingSsr.enabled,
+        RWJS_API_GRAPHQL_URL: graphQlUrl,
+        RWJS_API_URL: rwConfig.web.apiUrl,
+        RWJS_EXP_STREAMING_SSR: rwConfig.experimental?.streamingSsr?.enabled,
         RWJS_EXP_RSC: rwConfig.experimental?.rsc?.enabled,
       },
       RWJS_DEBUG_ENV: {

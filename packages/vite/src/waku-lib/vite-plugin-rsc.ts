@@ -93,7 +93,9 @@ export function rscTransformPlugin(): Plugin {
         resolve
       )
 
-      return (await RSDWNodeLoader.load(id, null, load)).source
+      const source = (await RSDWNodeLoader.load(id, null, load)).source
+
+      return source
     },
   }
 }
