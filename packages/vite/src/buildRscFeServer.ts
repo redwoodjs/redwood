@@ -2,7 +2,6 @@ import { rscBuildAnalyze } from './rsc/rscBuildAnalyze'
 import { rscBuildClient } from './rsc/rscBuildClient'
 import { rscBuildClientEntriesMappings } from './rsc/rscBuildClientEntriesFile'
 import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets'
-import { rscBuildRouteManifest } from './rsc/rscBuildRouteManifest'
 import { rscBuildServer } from './rsc/rscBuildServer'
 
 interface Args {
@@ -13,7 +12,6 @@ interface Args {
   webDist: string
   webDistServer: string
   webDistServerEntries: string
-  webRouteManifest: string
 }
 
 export const buildRscFeServer = async ({
@@ -24,7 +22,6 @@ export const buildRscFeServer = async ({
   webDist,
   webDistServer,
   webDistServerEntries,
-  webRouteManifest,
 }: Args) => {
   // Analyze all files and generate a list of RSCs and RSFs
   const { clientEntryFiles, serverEntryFiles } = await rscBuildAnalyze(
@@ -57,7 +54,4 @@ export const buildRscFeServer = async ({
     clientEntryFiles,
     webDistServerEntries
   )
-
-  // Write a route manifest
-  await rscBuildRouteManifest(webRouteManifest)
 }
