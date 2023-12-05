@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-supertokens-api",
-  "version": "6.4.2",
+  "version": "6.5.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -30,7 +30,7 @@
   "devDependencies": {
     "@babel/cli": "7.23.4",
     "@babel/core": "^7.22.20",
-    "@redwoodjs/api": "6.4.2",
+    "@redwoodjs/api": "6.5.0",
     "@types/jsonwebtoken": "9.0.5",
     "jest": "29.7.0",
     "typescript": "5.3.2"
