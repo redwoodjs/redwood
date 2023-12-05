@@ -94,37 +94,32 @@ export async function rscBuildServer(
       // The map function below will return '..' for local files. That's not
       // very pretty, but it works. It just won't match anything.
       noExternal: Object.values(clientEntryFiles).map((fullPath) => {
-          // On Windows `fullPath` will be something like
-          // D:/a/redwood/test-project-rsc-external-packages/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
-          const relativePath = path.relative(
-            path.join(rwPaths.base, 'node_modules'),
-            fullPath
-          )
-          // On Windows `relativePath` will be something like
-          // @tobbe.dev\rsc-test\dist\rsc-test.es.js
-          // So `splitPath` will in this case become
-          // ['@tobbe.dev', 'rsc-test', 'dist', 'rsc-test.es.js']
-          const splitPath = relativePath.split(path.sep)
+        // On Windows `fullPath` will be something like
+        // D:/a/redwood/test-project-rsc-external-packages/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
+        const relativePath = path.relative(
+          path.join(rwPaths.base, 'node_modules'),
+          fullPath
+        )
+        // On Windows `relativePath` will be something like
+        // @tobbe.dev\rsc-test\dist\rsc-test.es.js
+        // So `splitPath` will in this case become
+        // ['@tobbe.dev', 'rsc-test', 'dist', 'rsc-test.es.js']
+        const splitPath = relativePath.split(path.sep)
 
-          // Packages without scope. Full package name looks like: package_name
-          let packageName = splitPath[0]
+        // Packages without scope. Full package name looks like: package_name
+        let packageName = splitPath[0]
 
-          // Handle scoped packages. Full package name looks like:
-          // @org_name/package_name
-          if (splitPath[0].startsWith('@')) {
-            // join @org_name with package_name
-            packageName = path.join(splitPath[0], splitPath[1])
-          }
+        // Handle scoped packages. Full package name looks like:
+        // @org_name/package_name
+        if (splitPath[0].startsWith('@')) {
+          // join @org_name with package_name
+          packageName = path.join(splitPath[0], splitPath[1])
+        }
 
-          console.log(
-            'noExternal fullPath',
-            fullPath,
-            'packageName',
-            packageName
-          )
+        console.log('noExternal fullPath', fullPath, 'packageName', packageName)
 
-          return packageName
-        }),
+        return packageName
+      }),
       resolve: {
         externalConditions: ['react-server'],
       },
