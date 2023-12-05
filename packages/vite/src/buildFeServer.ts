@@ -48,7 +48,6 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
 
     await buildRscFeServer({
       viteConfigPath,
-      webSrc: rwPaths.web.src,
       webHtml: rwPaths.web.html,
       entries: rwPaths.web.entries,
       webDist: rwPaths.web.dist,

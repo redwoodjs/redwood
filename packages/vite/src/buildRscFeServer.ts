@@ -2,11 +2,11 @@ import { rscBuildAnalyze } from './rsc/rscBuildAnalyze'
 import { rscBuildClient } from './rsc/rscBuildClient'
 import { rscBuildClientEntriesMappings } from './rsc/rscBuildClientEntriesFile'
 import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets'
+import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars'
 import { rscBuildServer } from './rsc/rscBuildServer'
 
 interface Args {
   viteConfigPath: string
-  webSrc: string
   webHtml: string
   entries: string
   webDist: string
@@ -16,7 +16,6 @@ interface Args {
 
 export const buildRscFeServer = async ({
   viteConfigPath,
-  webSrc,
   webHtml,
   entries,
   webDist,
@@ -30,7 +29,6 @@ export const buildRscFeServer = async ({
 
   // Generate the client bundle
   const clientBuildOutput = await rscBuildClient(
-    webSrc,
     webHtml,
     webDist,
     clientEntryFiles
@@ -54,4 +52,7 @@ export const buildRscFeServer = async ({
     clientEntryFiles,
     webDistServerEntries
   )
+
+  // Mappings from server to client asset file names
+  await rscBuildRwEnvVars(webDistServerEntries)
 }

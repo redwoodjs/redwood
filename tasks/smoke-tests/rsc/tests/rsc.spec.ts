@@ -16,3 +16,12 @@ test('Setting up RSC should give you a test project with a client side counter c
 
   page.close()
 })
+
+test('RWJS_* env vars', async ({ page }) => {
+  await page.goto('/about')
+
+  await expect(page.getByText('RSC on client: enabled')).toBeVisible()
+  await expect(page.getByText('RSC on server: enabled')).toBeVisible()
+
+  page.close()
+})

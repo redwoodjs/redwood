@@ -149,6 +149,25 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       {
+        title: 'Adding AboutCounter.tsx...',
+        task: async () => {
+          const counterTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'AboutCounter.tsx.template'
+            ),
+            'utf-8'
+          )
+          const counterPath = path.join(rwPaths.web.src, 'AboutCounter.tsx')
+
+          writeFile(counterPath, counterTemplate, {
+            overwriteExisting: force,
+          })
+        },
+      },
+      {
         title: 'Adding CSS files...',
         task: async () => {
           const files = [
