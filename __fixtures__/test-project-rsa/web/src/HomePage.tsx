@@ -1,29 +1,29 @@
 import { Assets } from '@redwoodjs/vite/assets'
 import { ProdRwRscServerGlobal } from '@redwoodjs/vite/rwRscGlobal'
 
+import { onSend } from './chat'
+import { Form } from './Form'
 // @ts-expect-error no types
-import styles from './App.module.css'
-import { Counter } from './Counter'
+import styles from './HomePage.module.css'
 
-import './App.css'
+import './HomePage.css'
 
 // TODO (RSC) Something like this will probably be needed
 // const RwRscGlobal = import.meta.env.PROD ? ProdRwRscServerGlobal : DevRwRscServerGlobal;
 
 globalThis.rwRscGlobal = new ProdRwRscServerGlobal()
 
-const App = ({ name = 'Anonymous' }) => {
+const HomePage = ({ name = 'Anonymous' }) => {
   return (
-    <>
+    <div className="home-page">
       {/* TODO (RSC) <Assets /> should be part of the router later */}
       <Assets />
       <div style={{ border: '3px red dashed', margin: '1em', padding: '1em' }}>
         <h1 className={styles.title}>Hello {name}!!</h1>
-        <h3>This is a server component.</h3>
-        <Counter />
+        <Form onSend={onSend} />
       </div>
-    </>
+    </div>
   )
 }
 
-export default App
+export default HomePage

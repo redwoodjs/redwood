@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@babel/cli": "7.23.4",
-    "@babel/runtime-corejs3": "7.23.4",
+    "@babel/runtime-corejs3": "7.23.5",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.11",
     "@redwoodjs/cli": "6.0.7",
     "@redwoodjs/eslint-config": "6.0.7",
@@ -57,7 +57,7 @@
     "html-webpack-plugin": "5.5.3",
     "lodash": "4.17.21",
     "mini-css-extract-plugin": "2.7.6",
-    "nodemon": "3.0.1",
+    "nodemon": "3.0.2",
     "null-loader": "4.0.1",
     "react-refresh": "0.14.0",
     "resolve-url-loader": "5.0.0",
