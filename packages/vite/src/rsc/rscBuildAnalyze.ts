@@ -4,7 +4,8 @@ import { build as viteBuild } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn'
-import { rscAnalyzePlugin } from '../waku-lib/vite-plugin-rsc'
+
+import { rscAnalyzePlugin } from './rscVitePlugins'
 
 /**
  * RSC build. Step 1.
