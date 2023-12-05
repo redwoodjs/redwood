@@ -5,6 +5,8 @@ import fs from 'fs/promises'
  * Make RW specific env vars available to server components.
  * For client components this is done as a side-effect of importing from
  * @redwoodjs/web (see packages/web/src/config.ts).
+ * The import of entries.js that we're adding this to is handled by the
+ * RSC worker we've got set up
  */
 export async function rscBuildRwEnvVars(webDistServerEntries: string) {
   await fs.appendFile(
