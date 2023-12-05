@@ -570,6 +570,7 @@ export async function load(
       url,
       defaultLoad
     )
+
     return {
       format: 'module',
       source: newSrc,

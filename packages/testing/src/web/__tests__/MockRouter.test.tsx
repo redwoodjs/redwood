@@ -2,6 +2,8 @@ import React from 'react'
 
 import { render } from '@testing-library/react'
 
+// Private is deprecated, but we still want to test it so we don't break
+// people's projects that still use it.
 import { Route, Private } from '@redwoodjs/router'
 
 import { routes, Router } from '../MockRouter'

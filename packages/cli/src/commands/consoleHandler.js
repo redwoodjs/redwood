@@ -11,6 +11,8 @@ const paths = getPaths()
 
 const loadPrismaClient = (replContext) => {
   const { db } = require(path.join(paths.api.lib, 'db'))
+  // workaround for Prisma issue: https://github.com/prisma/prisma/issues/18292
+  db[Symbol.for('nodejs.util.inspect.custom')] = 'PrismaClient'
   replContext.db = db
 }
 
