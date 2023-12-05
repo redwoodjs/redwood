@@ -385,6 +385,8 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
 }
 
 // HACK Patching stream is very fragile.
+// TODO (RSC): Sanitize prefixToRemove to make sure it's safe to use in a
+// RegExp (CodeQL is complaining on GitHub)
 function transformRsfId(prefixToRemove: string) {
   // Should be something like /home/runner/work/redwood/test-project-rsa
   console.log('prefixToRemove', prefixToRemove)
