@@ -824,7 +824,7 @@ export async function triageCommits({ commits, commitTriageData, range }) {
         comment = commentRes.comment
       }
 
-      if (['open', 'o'].includes(answer)) {
+      if (answer === 'open') {
         if (commit.url) {
           await $`open ${commit.url}`
         } else {
@@ -848,7 +848,7 @@ export async function triageCommits({ commits, commitTriageData, range }) {
 /**
  *
  * @param {string} answer
- * @returns {'yes'|'no'|'skip'}
+ * @returns {'yes'|'no'|'skip'|'open'}
  */
 function getLongAnswer(answer) {
   answer = answer.toLowerCase()
@@ -863,6 +863,10 @@ function getLongAnswer(answer) {
 
   if (['s', 'skip'].includes(answer)) {
     return 'skip'
+  }
+
+  if (['o', 'open'].includes(answer)) {
+    return 'open'
   }
 }
 

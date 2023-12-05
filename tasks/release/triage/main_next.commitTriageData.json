@@ -333,9 +333,12 @@
     "needsCherryPick": "skip",
     "comment": "Needs another PR to complete the feature"
   },
-  "8759c0cf0209ded8c49f0071dd032ac5f4162e9b": {
-    "message": "fix(cli): avoid calling rw-vite-build via yarn (#9624)",
-    "needsCherryPick": "skip",
-    "comment": "We need to vet this in an RC before releasing it"
+  "69a17708e868cb49a13d88085e36c1dca34e2940": {
+    "message": "RSC: Add RW env var definitions to Vite config and include FatalErrorBoundary (#9622)",
+    "needsCherryPick": "no"
+  },
+  "e9f5f015b7184a3aba103863330b6813125ab15c": {
+    "message": "RSC: Use Routes.tsx for (client-side) routing (#9630)",
+    "needsCherryPick": "no"
   }
 }
