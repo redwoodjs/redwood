@@ -332,5 +332,10 @@
     "message": "feature: Support GraphQL Trusted Documents aka Persisted Operations for added security (#9416)",
     "needsCherryPick": "skip",
     "comment": "Needs another PR to complete the feature"
+  },
+  "8759c0cf0209ded8c49f0071dd032ac5f4162e9b": {
+    "message": "fix(cli): avoid calling rw-vite-build via yarn (#9624)",
+    "needsCherryPick": "skip",
+    "comment": "We need to vet this in an RC before releasing it"
   }
 }
