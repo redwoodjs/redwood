@@ -3,8 +3,9 @@
 import { fileURLToPath } from 'node:url'
 import { parseArgs as _parseArgs } from 'node:util'
 
+import execa from 'execa'
 import semverPackage from 'semver'
-import { cd, chalk, fs, path, question, within, $ } from 'zx'
+import { cd, chalk, fs, path, question, $ } from 'zx'
 
 import {
   branchExists,
@@ -392,10 +393,7 @@ async function releaseMajorOrMinor() {
 
   // Publish.
   try {
-    await within(async () => {
-      $.verbose = true
-      await $`yarn lerna publish from-package`
-    })
+    await execa.command('yarn lerna publish from-package', { stdio: 'inherit' })
   } catch {
     exitIfNo(
       await question(
@@ -410,10 +408,7 @@ async function releaseMajorOrMinor() {
   await updateCreateRedwoodAppTemplates()
   console.log()
   try {
-    await within(async () => {
-      $.verbose = true
-      await $`yarn lerna publish from-package`
-    })
+    await execa.command('yarn lerna publish from-package', { stdio: 'inherit' })
   } catch {
     exitIfNo(
       await question(
@@ -668,9 +663,8 @@ async function releasePatch() {
 
   // Publish.
   try {
-    await within(async () => {
-      $.verbose = true
-      await $`yarn lerna publish from-package`
+    await execa.command('yarn lerna publish from-package', {
+      stdio: 'inherit',
     })
   } catch {
     exitIfNo(
@@ -686,10 +680,7 @@ async function releasePatch() {
   await updateCreateRedwoodAppTemplates()
   console.log()
   try {
-    await within(async () => {
-      $.verbose = true
-      await $`yarn lerna publish from-package`
-    })
+    await execa.command('yarn lerna publish from-package', { stdio: 'inherit' })
   } catch {
     exitIfNo(
       await question(
