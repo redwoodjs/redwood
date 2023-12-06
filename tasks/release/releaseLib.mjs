@@ -6,7 +6,7 @@ import { Octokit } from 'octokit'
 import ora from 'ora'
 import _prompts from 'prompts'
 import semver from 'semver'
-import { chalk, fs, question, $ } from 'zx'
+import { chalk, fs, path, question, $ } from 'zx'
 import 'dotenv/config'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -1264,9 +1264,28 @@ export async function openCherryPickPRs() {
   await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Aopen+label%3Acherry-pick`
 }
 
-// ─── Wip ─────────────────────────────────────────────────────────────────────
+// ─── Misc ────────────────────────────────────────────────────────────────────
 
-// Troublesome lines to test...
-// Here, there's two PR syntaxes. We want the last one
-// < | | f5d1a1a1f77afafb252031c07f5405b998004f20 feature(#8676): added usernameMatch criteria to login methods to match signup (#8686)
-// Find one with square brackets ([])
+/**
+ * Find a file by walking up parent directories.
+ *
+ * @param {string} file
+ * @param {string} [startingDirectory=process.cwd()]
+ * @returns {string | null}
+ */
+export function findUp(file, startingDirectory = process.cwd()) {
+  const possibleFilepath = path.join(startingDirectory, file)
+
+  if (fs.existsSync(possibleFilepath)) {
+    return possibleFilepath
+  }
+
+  const parentDirectory = path.dirname(startingDirectory)
+
+  // If we've reached the root directory, there's no file to be found.
+  if (parentDirectory === startingDirectory) {
+    return null
+  }
+
+  return findUp(file, parentDirectory)
+}
