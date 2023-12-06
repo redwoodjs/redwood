@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import execa from 'execa'
 import { Listr } from 'listr2'
 
 import { prettify } from '@redwoodjs/cli-helpers'
