@@ -74,6 +74,9 @@ const createRedwoodJSApp = ({ typescript, bundler }) => {
     // of Redwood when installing, but then when we use rwfw to link, newer
     // versions of packages might be installed causing conflicts. Setting
     // resolutions prevents this.
+    // Note that this isn't limited to any specific versions. It's always
+    // going to be a potential issue when package versions differ between
+    // stable and canary.
     // See https://github.com/redwoodjs/redwood/pull/6772 for more info.
 
     const packageJSONPath = path.join(REDWOOD_PROJECT_DIRECTORY, 'package.json')
