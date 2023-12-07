@@ -12,7 +12,6 @@ import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { exitWithError } from '../lib/exit'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
-import { getNodeOptions } from '../lib/getNodeOptions'
 import { getFreePort } from '../lib/ports'
 
 const defaultApiDebugPort = 18911
@@ -222,4 +221,26 @@ export const handler = async ({
       exitWithError(e)
     }
   })
+}
+
+/**
+ * Gets the NODE_OPTIONS environment variable from `process.env`, appending `--enable-source-maps` if it's not already there.
+ * See https://nodejs.org/api/cli.html#node_optionsoptions.
+ *
+ * @returns {string}
+ */
+export function getDevNodeOptions() {
+  const { NODE_OPTIONS } = process.env
+
+  const enableSourceMapsOption = '--enable-source-maps'
+
+  if (!NODE_OPTIONS) {
+    return `NODE_OPTIONS=${enableSourceMapsOption}`
+  }
+
+  if (NODE_OPTIONS.includes(enableSourceMapsOption)) {
+    return NODE_OPTIONS
+  }
+
+  return `${NODE_OPTIONS} ${enableSourceMapsOption}`
 }
