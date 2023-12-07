@@ -100,18 +100,10 @@ describe('TypeScript config file parsing', () => {
 })
 
 describe('getPathsFromTypeScriptConfig', () => {
-  const FAKE_API_ROOT = '/redwood-app/api'
-  const FAKE_WEB_ROOT = '/redwood-app/web'
-
-  jest.mock('path', () => {
-    return {
-      ...jest.requireActual('path'),
-      // Mocking resolve here, so that Windows doesn't return d:/
-      resolve: (path) => {
-        return path
-      },
-    }
-  })
+  const FAKE_API_ROOT =
+    process.platform === 'win32' ? '/e/redwood-app/api' : '/redwood-app/api'
+  const FAKE_WEB_ROOT =
+    process.platform === 'win32' ? '/e/redwood-app/web' : '/redwood-app/web'
 
   it("returns an empty object if there's no TypeScript config files", () => {
     vol.fromNestedJSON(
@@ -231,7 +223,7 @@ describe('getPathsFromTypeScriptConfig', () => {
     )
 
     expect(ensurePosixPath(apiPaths['@services'])).toEqual(
-      ensurePosixPath('/redwood-app/api/src/services')
+      ensurePosixPath(`${FAKE_API_ROOT}/services`)
     )
 
     const webPaths = getPathsFromTypeScriptConfig(
@@ -239,7 +231,7 @@ describe('getPathsFromTypeScriptConfig', () => {
       FAKE_WEB_ROOT
     )
     expect(ensurePosixPath(webPaths['@ui'])).toEqual(
-      ensurePosixPath('/redwood-app/web/src/ui')
+      ensurePosixPath(`${FAKE_WEB_ROOT}/src/ui`)
     )
   })
 })
