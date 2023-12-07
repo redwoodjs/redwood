@@ -212,12 +212,28 @@ async function resolveMilestones() {
   }
 
   // Depending on if we're releasing a patch or not, there's a few things we need to check.
+  const {
+    search: { nodes: prs },
+  } = await octokit.graphql(`
+      {
+        search(
+          query: "repo:redwoodjs/redwood is:pr is:merged milestone:next-release-patch"
+          first: 5
+          type: ISSUE
+        ) {
+          nodes {
+            ... on PullRequest {
+              id
+            }
+          }
+        }
+      }
+    `)
+
   if (semver === 'patch') {
     console.log()
     console.log(
-      `Since we're releasing a ${chalk.magenta(
-        'patch'
-      )}, we'll be releasing all the PRs that have the ${chalk.magenta(
+      `There's ${prs.length} PR(s) that have the ${chalk.magenta(
         'next-release-patch'
       )} milestone.`
     )
@@ -238,24 +254,6 @@ async function resolveMilestones() {
       )
     }
   } else {
-    const {
-      search: { nodes: prs },
-    } = await octokit.graphql(`
-      {
-        search(
-          query: "repo:redwoodjs/redwood is:pr is:merged milestone:next-release-patch"
-          first: 5
-          type: ISSUE
-        ) {
-          nodes {
-            ... on PullRequest {
-              id
-            }
-          }
-        }
-      }
-    `)
-
     if (prs.length) {
       console.log()
       console.log(
