@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import execa from 'execa'
 import { Listr } from 'listr2'
 
 import { prettify } from '@redwoodjs/cli-helpers'
@@ -142,6 +141,25 @@ export const handler = async ({ force, verbose }) => {
             'utf-8'
           )
           const counterPath = path.join(rwPaths.web.src, 'Counter.tsx')
+
+          writeFile(counterPath, counterTemplate, {
+            overwriteExisting: force,
+          })
+        },
+      },
+      {
+        title: 'Adding AboutCounter.tsx...',
+        task: async () => {
+          const counterTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'AboutCounter.tsx.template'
+            ),
+            'utf-8'
+          )
+          const counterPath = path.join(rwPaths.web.src, 'AboutCounter.tsx')
 
           writeFile(counterPath, counterTemplate, {
             overwriteExisting: force,
@@ -328,46 +346,6 @@ export const handler = async ({ force, verbose }) => {
 
           writeFile(rwPaths.web.routes, routesTemplate, {
             overwriteExisting: true,
-          })
-        },
-      },
-      {
-        title: 'Patch vite',
-        task: async () => {
-          const vitePatchTemplate = fs.readFileSync(
-            path.resolve(
-              __dirname,
-              'templates',
-              'rsc',
-              'vite-npm-4.4.9-e845c1bbf8.patch.template'
-            ),
-            'utf-8'
-          )
-
-          const yarnPatchDir = path.join(rwPaths.base, '.yarn', 'patches')
-          const vitePatchPath = path.join(
-            yarnPatchDir,
-            'vite-npm-4.4.9-e845c1bbf8.patch'
-          )
-          writeFile(vitePatchPath, vitePatchTemplate, {
-            overwriteExisting: force,
-          })
-
-          const packageJsonPath = path.join(rwPaths.base, 'package.json')
-          const packageJson = JSON.parse(
-            fs.readFileSync(packageJsonPath, 'utf-8')
-          )
-          packageJson.resolutions = packageJson.resolutions || {}
-          packageJson.resolutions['vite@4.4.9'] =
-            'patch:vite@npm%3A4.4.9#./.yarn/patches/vite-npm-4.4.9-e845c1bbf8.patch'
-          writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2), {
-            overwriteExisting: true,
-          })
-
-          await execa('yarn install', {
-            stdio: 'ignore',
-            shell: true,
-            cwd: rwPaths.base,
           })
         },
       },
