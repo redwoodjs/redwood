@@ -2157,16 +2157,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.28.2":
-  version: 4.28.2
-  resolution: "@clerk/clerk-react@npm:4.28.2"
+"@clerk/clerk-react@npm:4.28.3":
+  version: 4.28.3
+  resolution: "@clerk/clerk-react@npm:4.28.3"
   dependencies:
     "@clerk/shared": 1.1.1
-    "@clerk/types": 3.58.0
+    "@clerk/types": 3.58.1
     tslib: 2.4.1
   peerDependencies:
     react: ">=16"
-  checksum: 0617d92172790d4109dbaf8c10be489dc272889462ce433b71c15d3131527d60d477a9d437cf6dbe0f63a6305631fec85999138243af58e0f2ba8892334d955d
+  checksum: 5b360bc43d35a9a66b8fe387df4283ad217221e90822bc12b3dbb8d41df9f638a877f9e6cfd2b7aac800f940744f94670668b239bc65732afcdbcbe04d7bc8d7
   languageName: node
   linkType: hard
 
@@ -2209,6 +2209,15 @@ __metadata:
   dependencies:
     csstype: 3.1.1
   checksum: 28f3839d7749aa648334791dd6c1b2b88db7f06bed53b810c7678bf12fce1adad249db89c8bf5b67dbe54c04a3ec10823dab38a5cc6990e39a7f57a07c14e0a7
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:3.58.1":
+  version: 3.58.1
+  resolution: "@clerk/types@npm:3.58.1"
+  dependencies:
+    csstype: 3.1.1
+  checksum: 4d87820ab676cc8897e91d4f37ad1074200790c6fe1c866470c786877930e9eda42dea25f778518171a6e56f16f4965fa750bdfc1b32b7ebf1c3f81770ae1055
   languageName: node
   linkType: hard
 
@@ -8128,7 +8137,7 @@ __metadata:
     "@babel/cli": 7.23.4
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.5
-    "@clerk/clerk-react": 4.28.2
+    "@clerk/clerk-react": 4.28.3
     "@clerk/types": 3.58.0
     "@redwoodjs/auth": 6.0.7
     "@types/react": 18.2.37
@@ -8137,7 +8146,7 @@ __metadata:
     react: 0.0.0-experimental-e5205658f-20230913
     typescript: 5.3.2
   peerDependencies:
-    "@clerk/clerk-react": 4.28.2
+    "@clerk/clerk-react": 4.28.3
   languageName: unknown
   linkType: soft
 
