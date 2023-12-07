@@ -159,7 +159,7 @@ export const handler = async ({
   const jobs = {
     api: {
       name: 'api',
-      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch --port ${apiAvailablePort} ${getApiDebugFlag()} | rw-log-formatter"`,
+      command: `yarn cross-env NODE_ENV=development ${getDevNodeOptions()} yarn nodemon --quiet --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch --port ${apiAvailablePort} ${getApiDebugFlag()} | rw-log-formatter"`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
@@ -202,4 +202,26 @@ export const handler = async ({
       exitWithError(e)
     }
   })
+}
+
+/**
+ * Gets the NODE_OPTIONS environment variable from `process.env`, appending `--enable-source-maps` if it's not already there.
+ * See https://nodejs.org/api/cli.html#node_optionsoptions.
+ *
+ * @returns {string}
+ */
+export function getDevNodeOptions() {
+  const { NODE_OPTIONS } = process.env
+
+  const enableSourceMapsOption = '--enable-source-maps'
+
+  if (!NODE_OPTIONS) {
+    return `NODE_OPTIONS=${enableSourceMapsOption}`
+  }
+
+  if (NODE_OPTIONS.includes(enableSourceMapsOption)) {
+    return NODE_OPTIONS
+  }
+
+  return `${NODE_OPTIONS} ${enableSourceMapsOption}`
 }
