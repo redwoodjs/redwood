@@ -223,7 +223,7 @@ describe('getPathsFromTypeScriptConfig', () => {
     )
 
     expect(ensurePosixPath(apiPaths['@services'])).toEqual(
-      ensurePosixPath(`${FAKE_API_ROOT}/services`)
+      ensurePosixPath(`${FAKE_API_ROOT}/src/services`)
     )
 
     const webPaths = getPathsFromTypeScriptConfig(
