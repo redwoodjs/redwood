@@ -16,6 +16,7 @@ import Author from './Author'
 
 const meta: Meta<typeof Author> = {
   component: Author,
+  tags: ['autodocs'],
 }
 
 export default meta
