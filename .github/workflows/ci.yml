@@ -94,12 +94,10 @@ jobs:
 
       - uses: actions/checkout@v4
 
-        # Temporarily pinned to `18.18` because `18.19` has a breaking change
-        # related to loaders affecting one of our tests.
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18.18
+          node-version: 18
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
