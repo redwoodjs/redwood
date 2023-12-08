@@ -42,7 +42,7 @@
     "esbuild": "0.19.5",
     "jest": "29.7.0",
     "nodemon": "3.0.2",
-    "typescript": "5.3.2"
+    "typescript": "5.3.3"
   },
   "peerDependencies": {
     "ioredis": "^5.3.2"
