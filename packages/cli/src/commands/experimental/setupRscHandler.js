@@ -91,15 +91,6 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       {
-        title: 'Removing App.tsx...',
-        task: async () => {
-          const appPath =
-            rwPaths.web.app ?? path.join(rwPaths.web.src, 'App.tsx')
-
-          fs.rmSync(appPath, { force: true })
-        },
-      },
-      {
         title: 'Adding Pages...',
         task: async () => {
           const homePageTemplate = fs.readFileSync(
@@ -260,7 +251,6 @@ export const handler = async ({ force, verbose }) => {
           indexHtml = indexHtml.replace(
             'href="/favicon.png" />',
             'href="/favicon.png" />\n' +
-              '  <link rel="stylesheet" href="index.css" />\n' +
               '  <script type="module" src="entry.client.tsx"></script>'
           )
 
@@ -284,31 +274,17 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       {
-        title: 'Overwrite entry.client.tsx...',
+        title: 'Overwrite App.tsx...',
         task: async () => {
-          const entryClientTemplate = fs.readFileSync(
-            path.resolve(
-              __dirname,
-              'templates',
-              'rsc',
-              'entry.client.tsx.template'
-            ),
+          const appTemplate = fs.readFileSync(
+            path.resolve(__dirname, 'templates', 'rsc', 'App.tsx.template'),
             'utf-8'
           )
 
-          writeFile(rwPaths.web.entryClient, entryClientTemplate, {
-            overwriteExisting: true,
-          })
-        },
-      },
-      {
-        title: 'Updating entry.server.tsx...',
-        task: async () => {
-          let entryServer = fs.readFileSync(rwPaths.web.entryServer, 'utf-8')
+          const appPath =
+            rwPaths.web.app ?? path.join(rwPaths.web.src, 'App.tsx')
 
-          entryServer = entryServer.replaceAll('App', 'HomePage')
-
-          writeFile(rwPaths.web.entryServer, entryServer, {
+          writeFile(appPath, appTemplate, {
             overwriteExisting: true,
           })
         },
