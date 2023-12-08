@@ -65,7 +65,7 @@ export const verifyAuth0Token = (
   })
 }
 
-export const authDecoder: Decoder = async (token: string, type: string) => {
+export const authDecoder: Decoder = async (token: string, type: string | null) => {
   if (type !== 'auth0') {
     return null
   }

@@ -3,7 +3,10 @@ import type { Decoder } from '@redwoodjs/api'
 /**
  * @deprecated This function will be removed; it uses a rate-limited API. Use `clerkAuthDecoder` instead.
  */
-export const authDecoder: Decoder = async (token: string, type: string) => {
+export const authDecoder: Decoder = async (
+  token: string,
+  type: string | null
+) => {
   if (type !== 'clerk') {
     return null
   }
@@ -40,7 +43,7 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
 
 export const clerkAuthDecoder: Decoder = async (
   token: string,
-  type: string
+  type: string | null
 ) => {
   if (type !== 'clerk') {
     return null
