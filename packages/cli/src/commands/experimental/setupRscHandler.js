@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import execa from 'execa'
 import { Listr } from 'listr2'
 
 import { prettify } from '@redwoodjs/cli-helpers'
@@ -92,16 +91,45 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       {
-        title: 'Overwriting App.tsx...',
+        title: 'Removing App.tsx...',
         task: async () => {
-          const appTemplate = fs.readFileSync(
-            path.resolve(__dirname, 'templates', 'rsc', 'App.tsx.template'),
+          const appPath =
+            rwPaths.web.app ?? path.join(rwPaths.web.src, 'App.tsx')
+
+          fs.rmSync(appPath, { force: true })
+        },
+      },
+      {
+        title: 'Adding Pages...',
+        task: async () => {
+          const homePageTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'HomePage.tsx.template'
+            ),
             'utf-8'
           )
-          const appPath = rwPaths.web.app
+          const homePagePath = path.join(rwPaths.web.src, 'HomePage.tsx')
 
-          writeFile(appPath, appTemplate, {
-            overwriteExisting: true,
+          writeFile(homePagePath, homePageTemplate, {
+            overwriteExisting: force,
+          })
+
+          const aboutPageTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'AboutPage.tsx.template'
+            ),
+            'utf-8'
+          )
+          const aboutPagePath = path.join(rwPaths.web.src, 'AboutPage.tsx')
+
+          writeFile(aboutPagePath, aboutPageTemplate, {
+            overwriteExisting: force,
           })
         },
       },
@@ -113,6 +141,25 @@ export const handler = async ({ force, verbose }) => {
             'utf-8'
           )
           const counterPath = path.join(rwPaths.web.src, 'Counter.tsx')
+
+          writeFile(counterPath, counterTemplate, {
+            overwriteExisting: force,
+          })
+        },
+      },
+      {
+        title: 'Adding AboutCounter.tsx...',
+        task: async () => {
+          const counterTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'AboutCounter.tsx.template'
+            ),
+            'utf-8'
+          )
+          const counterPath = path.join(rwPaths.web.src, 'AboutCounter.tsx')
 
           writeFile(counterPath, counterTemplate, {
             overwriteExisting: force,
@@ -132,12 +179,16 @@ export const handler = async ({ force, verbose }) => {
               path: 'Counter.module.css',
             },
             {
-              template: 'App.css.template',
-              path: 'App.css',
+              template: 'HomePage.css.template',
+              path: 'HomePage.css',
             },
             {
-              template: 'App.module.css.template',
-              path: 'App.module.css',
+              template: 'HomePage.module.css.template',
+              path: 'HomePage.module.css',
+            },
+            {
+              template: 'AboutPage.css.template',
+              path: 'AboutPage.css',
             },
           ]
 
@@ -152,6 +203,44 @@ export const handler = async ({ force, verbose }) => {
               overwriteExisting: force,
             })
           })
+        },
+      },
+      {
+        title: 'Adding Layout...',
+        task: async () => {
+          const layoutTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'NavigationLayout.tsx.template'
+            ),
+            'utf-8'
+          )
+          const layoutPath = path.join(
+            rwPaths.web.layouts,
+            'NavigationLayout',
+            'NavigationLayout.tsx'
+          )
+
+          writeFile(layoutPath, layoutTemplate, { overwriteExisting: force })
+
+          const cssTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'NavigationLayout.css.template'
+            ),
+            'utf-8'
+          )
+          const cssPath = path.join(
+            rwPaths.web.layouts,
+            'NavigationLayout',
+            'NavigationLayout.css'
+          )
+
+          writeFile(cssPath, cssTemplate, { overwriteExisting: force })
         },
       },
       {
@@ -170,10 +259,26 @@ export const handler = async ({ force, verbose }) => {
 
           indexHtml = indexHtml.replace(
             'href="/favicon.png" />',
-            'href="/favicon.png" />\n  <script type="module" src="entry.client.tsx"></script>'
+            'href="/favicon.png" />\n' +
+              '  <link rel="stylesheet" href="index.css" />\n' +
+              '  <script type="module" src="entry.client.tsx"></script>'
           )
 
           writeFile(rwPaths.web.html, indexHtml, {
+            overwriteExisting: true,
+          })
+        },
+      },
+      {
+        title: 'Overwriting index.css...',
+        task: async () => {
+          const template = fs.readFileSync(
+            path.resolve(__dirname, 'templates', 'rsc', 'index.css.template'),
+            'utf-8'
+          )
+          const filePath = path.join(rwPaths.web.src, 'index.css')
+
+          writeFile(filePath, template, {
             overwriteExisting: true,
           })
         },
@@ -192,6 +297,18 @@ export const handler = async ({ force, verbose }) => {
           )
 
           writeFile(rwPaths.web.entryClient, entryClientTemplate, {
+            overwriteExisting: true,
+          })
+        },
+      },
+      {
+        title: 'Updating entry.server.tsx...',
+        task: async () => {
+          let entryServer = fs.readFileSync(rwPaths.web.entryServer, 'utf-8')
+
+          entryServer = entryServer.replaceAll('App', 'HomePage')
+
+          writeFile(rwPaths.web.entryServer, entryServer, {
             overwriteExisting: true,
           })
         },
@@ -217,43 +334,18 @@ export const handler = async ({ force, verbose }) => {
           )
         },
       },
+      // TODO (RSC): Remove this once we have a better way to handle routes.
+      // This is a total hack right now
       {
-        title: 'Patch vite',
+        title: 'Overwriting routes...',
         task: async () => {
-          const vitePatchTemplate = fs.readFileSync(
-            path.resolve(
-              __dirname,
-              'templates',
-              'rsc',
-              'vite-npm-4.4.9-e845c1bbf8.patch.template'
-            ),
+          const routesTemplate = fs.readFileSync(
+            path.resolve(__dirname, 'templates', 'rsc', 'Routes.tsx.template'),
             'utf-8'
           )
 
-          const yarnPatchDir = path.join(rwPaths.base, '.yarn', 'patches')
-          const vitePatchPath = path.join(
-            yarnPatchDir,
-            'vite-npm-4.4.9-e845c1bbf8.patch'
-          )
-          writeFile(vitePatchPath, vitePatchTemplate, {
-            overwriteExisting: force,
-          })
-
-          const packageJsonPath = path.join(rwPaths.base, 'package.json')
-          const packageJson = JSON.parse(
-            fs.readFileSync(packageJsonPath, 'utf-8')
-          )
-          packageJson.resolutions = packageJson.resolutions || {}
-          packageJson.resolutions['vite@4.4.9'] =
-            'patch:vite@npm%3A4.4.9#./.yarn/patches/vite-npm-4.4.9-e845c1bbf8.patch'
-          writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2), {
+          writeFile(rwPaths.web.routes, routesTemplate, {
             overwriteExisting: true,
-          })
-
-          await execa('yarn install', {
-            stdio: 'ignore',
-            shell: true,
-            cwd: rwPaths.base,
           })
         },
       },

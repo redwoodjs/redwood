@@ -4,6 +4,7 @@ FROM node:18-bookworm-slim as base
 
 RUN apt-get update && apt-get install -y \
     openssl \
+    # python3 make gcc \
     && rm -rf /var/lib/apt/lists/*
 
 USER node
@@ -57,6 +58,7 @@ FROM node:18-bookworm-slim as api_serve
 
 RUN apt-get update && apt-get install -y \
     openssl \
+    # python3 make gcc \
     && rm -rf /var/lib/apt/lists/*
 
 USER node

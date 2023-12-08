@@ -1,10 +1,20 @@
 import { createRoot } from 'react-dom/client'
 
-import { serve } from '@redwoodjs/vite/client'
+import { FatalErrorBoundary } from '@redwoodjs/web'
+
+import FatalErrorPage from './pages/FatalErrorPage/FatalErrorPage'
+import Routes from './Routes'
 
 const redwoodAppElement = document.getElementById('redwood-app')
 
-const App = serve('App')
-
 const root = createRoot(redwoodAppElement)
-root.render(<App name="Redwood RSAs" />)
+
+const App = () => {
+  return (
+    <FatalErrorBoundary page={FatalErrorPage}>
+      <Routes />
+    </FatalErrorBoundary>
+  )
+}
+
+root.render(<App />)

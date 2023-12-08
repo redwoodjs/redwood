@@ -4,7 +4,7 @@ import isbot from 'isbot'
 import type { ViteDevServer } from 'vite'
 
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
-import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
+import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
@@ -37,8 +37,24 @@ export const createReactStreamingHandler = async (
   let fallbackDocumentImport: any
 
   if (isProd) {
-    entryServerImport = await import(rwPaths.web.distEntryServer)
-    fallbackDocumentImport = await import(rwPaths.web.distDocumentServer)
+    // TODO (RSC) Consolidate paths, so we can have the same code for SSR and RSC
+    if (getConfig().experimental?.rsc?.enabled) {
+      entryServerImport = await import(
+        makeFilePath(
+          path.join(rwPaths.web.distServer, 'assets', 'entry.server.js')
+        )
+      )
+      fallbackDocumentImport = await import(
+        makeFilePath(path.join(rwPaths.web.distServer, 'assets', 'Document.js'))
+      )
+    } else {
+      entryServerImport = await import(
+        makeFilePath(rwPaths.web.distEntryServer)
+      )
+      fallbackDocumentImport = await import(
+        makeFilePath(rwPaths.web.distDocumentServer)
+      )
+    }
   }
 
   // @NOTE: we are returning a FetchAPI handler
@@ -146,4 +162,9 @@ export const createReactStreamingHandler = async (
 
     return reactResponse
   }
+}
+
+function makeFilePath(path: string): string {
+  // Without this, absolute paths can't be imported on Windows
+  return 'file:///' + path
 }
