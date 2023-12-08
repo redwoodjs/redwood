@@ -251,7 +251,6 @@ export const handler = async ({ force, verbose }) => {
           indexHtml = indexHtml.replace(
             'href="/favicon.png" />',
             'href="/favicon.png" />\n' +
-              '  <link rel="stylesheet" href="index.css" />\n' +
               '  <script type="module" src="entry.client.tsx"></script>'
           )
 
@@ -286,18 +285,6 @@ export const handler = async ({ force, verbose }) => {
             rwPaths.web.app ?? path.join(rwPaths.web.src, 'App.tsx')
 
           writeFile(appPath, appTemplate, {
-            overwriteExisting: true,
-          })
-        },
-      },
-      {
-        title: 'Updating entry.server.tsx...',
-        task: async () => {
-          let entryServer = fs.readFileSync(rwPaths.web.entryServer, 'utf-8')
-
-          entryServer = entryServer.replaceAll('App', 'HomePage')
-
-          writeFile(rwPaths.web.entryServer, entryServer, {
             overwriteExisting: true,
           })
         },
