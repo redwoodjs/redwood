@@ -8661,6 +8661,7 @@ __metadata:
     eslint: 8.55.0
     fast-glob: 3.3.2
     glob: 10.3.10
+    tsx: 4.6.2
     typescript: 5.3.2
   languageName: unknown
   linkType: soft
