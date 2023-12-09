@@ -134,7 +134,9 @@ export const handler = async ({
           // We don't have any parallel tasks right now, but someone might add
           // one in the future as a performance optimization.
           await execa(
-            `yarn rw-vite-build --webDir="${rwjsPaths.web.base}" --verbose=${verbose}`,
+            `node ${require.resolve(
+              '@redwoodjs/vite/bins/rw-vite-build.mjs'
+            )} --webDir="${rwjsPaths.web.base}" --verbose=${verbose}`,
             {
               stdio: verbose ? 'inherit' : 'pipe',
               shell: true,

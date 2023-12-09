@@ -1,4 +1,3 @@
-// TODO (RSC) Take ownership of this file and move it out ouf the waku-lib folder
 import path from 'node:path'
 
 import * as swc from '@swc/core'
@@ -7,10 +6,19 @@ import type { Plugin } from 'vite'
 import * as RSDWNodeLoader from '../react-server-dom-webpack/node-loader'
 import type { ResolveFunction } from '../react-server-dom-webpack/node-loader'
 
-import { codeToInject } from './rsc-utils.js'
-
 // Used in Step 2 of the build process, for the client bundle
 export function rscIndexPlugin(): Plugin {
+  const codeToInject = `
+    globalThis.__rw_module_cache__ = new Map();
+
+    globalThis.__webpack_chunk_load__ = (id) => {
+      return import(id).then((m) => globalThis.__rw_module_cache__.set(id, m))
+    };
+
+    globalThis.__webpack_require__ = (id) => {
+      return globalThis.__rw_module_cache__.get(id)
+    };\n  `
+
   return {
     name: 'rsc-index-plugin',
     async transformIndexHtml() {
@@ -93,7 +101,9 @@ export function rscTransformPlugin(): Plugin {
         resolve
       )
 
-      return (await RSDWNodeLoader.load(id, null, load)).source
+      const source = (await RSDWNodeLoader.load(id, null, load)).source
+
+      return source
     },
   }
 }

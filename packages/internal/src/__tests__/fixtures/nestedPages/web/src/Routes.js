@@ -7,7 +7,9 @@
 // 'src/pages/HomePage/HomePage.js'         -> HomePage
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
-import { PrivateSet, Route, Router, Set } from '@redwoodjs/router'
+// Private is deprecated, but we still want to test it so we don't break
+// people's projects that still use it.
+import { Private, Route, Router, Set } from '@redwoodjs/router'
 
 import AdminLayout from 'src/layouts/AdminLayout/AdminLayout'
 import MainLayout from 'src/layouts/MainLayout/MainLayout'
@@ -44,7 +46,7 @@ const Routes = () => {
         <Route notfound page={NotFoundPage} />
       </Set>
 
-      <PrivateSet unauthenticated={'home'}>
+      <Private unauthenticated={'home'}>
         <Set wrap={[AdminLayout]} role={'admin'}>
           <Route path="/admin/users/new" page={AdminUserNewUserPage} name="newUser" />
           <Route path="/admin/users/{id:Int}/edit" page={AdminUserEditUserPage} name="editUser" />
@@ -52,7 +54,7 @@ const Routes = () => {
           <Route path="/admin/users" page={AdminUserUsersPage} name="users" />
         </Set>
 
-      </PrivateSet>
+      </Private>
     </Router>
   )
 }
