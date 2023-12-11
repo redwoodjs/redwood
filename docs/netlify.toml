@@ -279,3 +279,9 @@
   from = "/docs/3.2/*"
   to = "/docs/3.x/:splat"
   status = 301
+
+[[plugins]]
+  package = "@algolia/netlify-plugin-crawler"
+
+  [plugins.inputs]
+    branches = ['next']

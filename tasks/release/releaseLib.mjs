@@ -6,7 +6,8 @@ import { Octokit } from 'octokit'
 import ora from 'ora'
 import _prompts from 'prompts'
 import semver from 'semver'
-import { chalk, fs, question, $ } from 'zx'
+import { chalk, fs, path, question, $ } from 'zx'
+import 'dotenv/config'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -16,6 +17,7 @@ import { chalk, fs, question, $ } from 'zx'
  *   ref: string,
  *   type: 'commit' | 'ui' | 'release-chore' | 'tag'
  *   pretty: string,
+ *   needsCherryPick?: boolean,
  * }} Commit
  *
  * @typedef {Map<string, { message: string, needsCherryPick: boolean }>} CommitTriageData
@@ -625,7 +627,7 @@ async function resolveCommitType(commit, { logs }) {
 
   // If we can't get a commit that has a PR's milestone, it's a bug.
   try {
-    commit.milestone = await getPR_MilestoneFromURL(commit.url)
+    commit.milestone = await getPRMilestoneFromURL(commit.url)
   } catch (e) {
     throw new Error(
       [
@@ -797,14 +799,32 @@ export async function triageCommits({ commits, commitTriageData, range }) {
           .join(' '),
         `need to be cherry picked into ${chalk.magenta(
           range.to
-        )}? [Y/n/o(pen)] > `,
+        )}? [Y/n/s(kip)/o(pen)] > `,
       ]
         .filter(Boolean)
         .join('\n')
 
-      const answer = await question(message)
+      let answer = 'no'
+      if (!['RSC', 'v7.0.0'].includes(commit.milestone)) {
+        answer = await question(message)
+      }
 
-      if (['open', 'o'].includes(answer)) {
+      answer = getLongAnswer(answer)
+
+      let comment = ''
+      if (answer === 'skip') {
+        const commentRes = await prompts({
+          type: 'text',
+          name: 'comment',
+          message: 'Why are you skipping it?',
+
+          validate: (comment) => comment.length > 0 || 'Please enter a comment',
+        })
+
+        comment = commentRes.comment
+      }
+
+      if (answer === 'open') {
         if (commit.url) {
           await $`open ${commit.url}`
         } else {
@@ -816,11 +836,37 @@ export async function triageCommits({ commits, commitTriageData, range }) {
 
       commitTriageData.set(commit.hash, {
         message: commit.message,
-        needsCherryPick: isYes(answer),
+        needsCherryPick: answer,
+        ...(comment && { comment }),
       })
 
       break
     }
+  }
+}
+
+/**
+ *
+ * @param {string} answer
+ * @returns {'yes'|'no'|'skip'|'open'}
+ */
+function getLongAnswer(answer) {
+  answer = answer.toLowerCase()
+
+  if (['', 'y', 'yes'].includes(answer)) {
+    return 'yes'
+  }
+
+  if (['n', 'no'].includes(answer)) {
+    return 'no'
+  }
+
+  if (['s', 'skip'].includes(answer)) {
+    return 'skip'
+  }
+
+  if (['o', 'open'].includes(answer)) {
+    return 'open'
   }
 }
 
@@ -829,7 +875,7 @@ export let prMilestoneCache
 /**
  * @param {string} prURL
  */
-export async function getPR_MilestoneFromURL(prURL) {
+export async function getPRMilestoneFromURL(prURL) {
   if (!prMilestoneCache) {
     prMilestoneCache = setUpDataFile(
       new URL('./prMilestoneCache.json', import.meta.url)
@@ -846,14 +892,14 @@ export async function getPR_MilestoneFromURL(prURL) {
     resource: {
       milestone: { title },
     },
-  } = await octokit.graphql(getPR_MilestoneFromURLQuery, { prURL })
+  } = await octokit.graphql(getPRMilestoneFromURLQuery, { prURL })
 
   prMilestoneCache.set(prURL, title)
 
   return title
 }
 
-const getPR_MilestoneFromURLQuery = `
+const getPRMilestoneFromURLQuery = `
   query GetMilestoneForCommitQuery($prURL: URI!) {
     resource(url: $prURL) {
       ...on PullRequest {
@@ -897,9 +943,17 @@ export function reportCommitStatuses({ commits, commitTriageData, range }) {
   }
 
   for (const commit of commitsToColor) {
-    const { needsCherryPick } = commitTriageData.get(commit.hash)
-    const prettyFn = needsCherryPick ? chalk.green : chalk.red
-    commit.pretty = prettyFn(commit.line)
+    const { needsCherryPick, comment } = commitTriageData.get(commit.hash)
+
+    if (needsCherryPick === 'yes') {
+      commit.pretty = chalk.green(commit.line)
+    } else if (needsCherryPick === 'no') {
+      commit.pretty = chalk.red(commit.line)
+    } else {
+      commit.pretty = [chalk.yellow(commit.line), `  ${comment}`].join('\n')
+    }
+
+    commit.needsCherryPick = needsCherryPick
   }
 
   consoleBoxen(
@@ -908,17 +962,30 @@ export function reportCommitStatuses({ commits, commitTriageData, range }) {
       `${chalk.green('■')} Needs to be cherry picked into ${chalk.magenta(
         range.to
       )}`,
-      `${chalk.blue('■')} Was cherry picked into ${chalk.magenta(
-        range.to
-      )} with changes`,
-      `${chalk.dim.red('■')} Shouldn't be cherry picked into ${chalk.magenta(
-        range.to
-      )}`,
-      `${chalk.dim('■')} Chore commit or purely-decorative line`,
-    ].join('\n')
+      `${chalk.yellow('■')} Skipped (see comments for details)`,
+      $.verbose &&
+        `${chalk.blue('■')} Was cherry picked into ${chalk.magenta(
+          range.to
+        )} with changes`,
+      $.verbose &&
+        `${chalk.dim.red('■')} Shouldn't be cherry picked into ${chalk.magenta(
+          range.to
+        )}`,
+      $.verbose && `${chalk.dim('■')} Chore commit or purely-decorative line`,
+    ]
+      .filter(Boolean)
+      .join('\n')
   )
   console.log()
-  console.log(commits.map(({ pretty }) => pretty).join('\n'))
+  console.log(
+    commits
+      .filter(
+        (commit) =>
+          $.verbose || ['yes', 'skip'].includes(commit.needsCherryPick)
+      )
+      .map(({ pretty }) => pretty)
+      .join('\n')
+  )
 }
 
 /**
@@ -1197,9 +1264,28 @@ export async function openCherryPickPRs() {
   await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Aopen+label%3Acherry-pick`
 }
 
-// ─── Wip ─────────────────────────────────────────────────────────────────────
+// ─── Misc ────────────────────────────────────────────────────────────────────
 
-// Troublesome lines to test...
-// Here, there's two PR syntaxes. We want the last one
-// < | | f5d1a1a1f77afafb252031c07f5405b998004f20 feature(#8676): added usernameMatch criteria to login methods to match signup (#8686)
-// Find one with square brackets ([])
+/**
+ * Find a file by walking up parent directories.
+ *
+ * @param {string} file
+ * @param {string} [startingDirectory=process.cwd()]
+ * @returns {string | null}
+ */
+export function findUp(file, startingDirectory = process.cwd()) {
+  const possibleFilepath = path.join(startingDirectory, file)
+
+  if (fs.existsSync(possibleFilepath)) {
+    return possibleFilepath
+  }
+
+  const parentDirectory = path.dirname(startingDirectory)
+
+  // If we've reached the root directory, there's no file to be found.
+  if (parentDirectory === startingDirectory) {
+    return null
+  }
+
+  return findUp(file, parentDirectory)
+}

@@ -6,12 +6,12 @@ The answer is: **now**.
 
 ## What is Realtime?
 
-RedwoodJS's initial real-time solution leverages on GraphQL and relies on a serverful deployment to maintain a long-running connection between the client and server.
+RedwoodJS's initial real-time solution leverages GraphQL and relies on a serverful deployment to maintain a long-running connection between the client and server.
 
 :::note
-This means that your cannot currently use RedwoodJS when deployed to Netlify or Vercel.
+This means that your cannot currently use RedwoodJS Realtime when deployed to Netlify or Vercel.
 
-**More information about deploying a serverful RedwoodJS is forthcoming.**
+**More information about deploying a serverful RedwoodJS application is forthcoming.**
 :::
 
 RedwoodJS's GraphQL Server uses [GraphQL over Server-Sent Events](https://github.com/enisdenjo/graphql-sse/blob/master/PROTOCOL.md#distinct-connections-mode) spec "distinct connections mode" for subscriptions.
@@ -19,7 +19,8 @@ RedwoodJS's GraphQL Server uses [GraphQL over Server-Sent Events](https://github
 Advantages of SSE over WebSockets include:
 
 * Transported over simple HTTP instead of a custom protocol
-* Built in support for re-connection and event-id Simpler protocol
+* Built in support for re-connection and event-id
+* Simpler protocol
 * No trouble with corporate firewalls doing packet inspection
 
 ### Subscriptions and Live Queries
@@ -71,8 +72,8 @@ and have the latest data reflected in your app.
 Lastly, the Redwood CLI has commands to
 
 - generate a boilerplate implementation and sample code needed to create your custom
-    - subscriptions
-    - live Queries
+  - subscriptions
+  - live Queries
 
 Regardless of the implementation chosen, **a stateful server and store are needed** to track changes, invalidation, or who wants to be informed about the change.
 
@@ -187,7 +188,6 @@ import subscriptions from 'src/subscriptions/**/*.{js,ts}'
  * Redwood Realtime supports in-memory and Redis stores:
  * - In-memory stores are useful for development and testing.
  * - Redis stores are useful for production.
- *
  */
 export const realtime: RedwoodRealtimeOptions = {
   subscriptions: {
@@ -256,7 +256,7 @@ Counts down from a starting values by an interval.
 
 ```graphql
 subscription CountdownFromInterval {
- countdown(from: 100, interval: 10)
+  countdown(from: 100, interval: 10)
 }
 ```
 
@@ -279,15 +279,15 @@ The invalidation mechanism is based on GraphQL ID fields and schema coordinates.
 
 ```graphql
 query GetCurrentAuctionBids @live {
- auction(id: "1") {
-   bids {
-     amount
-   }
-   highestBid {
-     amount
-   }
-   id
-   title
+  auction(id: "1") {
+    bids {
+      amount
+    }
+    highestBid {
+      amount
+    }
+    id
+    title
   }
 }
 
@@ -596,7 +596,6 @@ Bid on a fancy pair of new sneaks!
 When a bid is made, the auction updates via a Live Query due to the invalidation of the auction key.
 
 ```ts
-
   const key = `Auction:${auctionId}`
   context.liveQueryStore.invalidate(key)
   ```
@@ -616,7 +615,6 @@ Options:
 #### Test
 
 ```ts
-
 /**
  * To test this live query, run the following in the GraphQL Playground:
  *
@@ -706,4 +704,3 @@ Powered by OpenAI, this movie tagline and treatment updates on each stream conte
 ```ts
 context.liveQueryStore.invalidate(`MovieMashup:${id}`)
 ```
-
