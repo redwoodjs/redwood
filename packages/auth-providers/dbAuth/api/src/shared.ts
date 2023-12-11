@@ -2,6 +2,7 @@ import crypto from 'node:crypto'
 
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 
+import { isFetchApiRequest } from '@redwoodjs/api'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 
 import * as DbAuthError from './errors'
@@ -22,9 +23,16 @@ const DEFAULT_SCRYPT_OPTIONS: ScryptOptions = {
   parallelization: 1,
 }
 
-// Extracts the cookie from an event, handling lower and upper case header names.
-const eventHeadersCookie = (event: APIGatewayProxyEvent) => {
-  return event.headers.cookie || event.headers.Cookie
+// Extracts the header from an event, handling lower and upper case header names.
+const eventGetHeader = (
+  event: APIGatewayProxyEvent | Request,
+  headerName: string
+) => {
+  if (isFetchApiRequest(event)) {
+    return event.headers.get(headerName)
+  }
+
+  return event.headers[headerName] || event.headers[headerName.toLowerCase()]
 }
 
 const getPort = () => {
@@ -40,24 +48,9 @@ const getPort = () => {
   return getConfig(configPath).api.port
 }
 
-// When in development environment, check for cookie in the request extension headers
-// if user has generated graphiql headers
-const eventGraphiQLHeadersCookie = (event: APIGatewayProxyEvent) => {
-  if (process.env.NODE_ENV === 'development') {
-    try {
-      const jsonBody = JSON.parse(event.body ?? '{}')
-      return (
-        jsonBody?.extensions?.headers?.cookie ||
-        jsonBody?.extensions?.headers?.Cookie
-      )
-    } catch {
-      // sometimes the event body isn't json
-      return
-    }
-  }
-
-  return
-}
+// @TODO: reimplement eventGraphiQLHeadersCookie
+// Needs a re-implementation on the studio side, because using
+// body to send Auth headers requires this function to be async
 
 // decrypts session text using old CryptoJS algorithm (using node:crypto library)
 const legacyDecryptSession = (encryptedText: string) => {
@@ -83,8 +76,12 @@ const legacyDecryptSession = (encryptedText: string) => {
 
 // Extracts the session cookie from an event, handling both
 // development environment GraphiQL headers and production environment headers.
-export const extractCookie = (event: APIGatewayProxyEvent) => {
-  return eventGraphiQLHeadersCookie(event) || eventHeadersCookie(event)
+export const extractCookie = (event: APIGatewayProxyEvent | Request) => {
+  // @TODO Disabling Studio Auth impersonation: it uses body instead of headers
+  // this feels a bit off, but also requires the parsing to become async
+
+  // return eventGraphiQLHeadersCookie(event) || eventHeadersCookie(event)
+  return eventGetHeader(event, 'Cookie')
 }
 
 function extractEncryptedSessionFromHeader(event: APIGatewayProxyEvent) {
@@ -198,12 +195,12 @@ export const dbAuthSession = (
   }
 }
 
-export const webAuthnSession = (event: APIGatewayProxyEvent) => {
-  if (!event.headers.cookie) {
+export const webAuthnSession = (cookieHeader: string) => {
+  if (!cookieHeader) {
     return null
   }
 
-  const webAuthnCookie = event.headers.cookie.split(';').find((cook) => {
+  const webAuthnCookie = cookieHeader.split(';').find((cook) => {
     return cook.split('=')[0].trim() === 'webAuthn'
   })
 

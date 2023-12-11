@@ -3,7 +3,7 @@ import type { APIGatewayProxyEvent } from 'aws-lambda'
 
 import { normalizeRequest } from '../transforms'
 
-export const createMockedEvent = (
+export const createMockedLambdaEvent = (
   httpMethod = 'POST',
   body: any = undefined,
   isBase64Encoded = false
@@ -53,41 +53,78 @@ export const createMockedEvent = (
   }
 }
 
-test('Normalizes an aws event with base64', () => {
-  const corsEventB64 = createMockedEvent(
-    'POST',
-    Buffer.from(JSON.stringify({ bazinga: 'hello_world' }), 'utf8').toString(
-      'base64'
-    ),
-    true
-  )
+describe('Lambda Request', () => {
+  it('Normalizes an aws event with base64', async () => {
+    const corsEventB64 = createMockedLambdaEvent(
+      'POST',
+      Buffer.from(JSON.stringify({ bazinga: 'hello_world' }), 'utf8').toString(
+        'base64'
+      ),
+      true
+    )
 
-  expect(normalizeRequest(corsEventB64)).toEqual({
-    headers: new Headers(corsEventB64.headers),
-    method: 'POST',
-    query: null,
-    body: {
-      bazinga: 'hello_world',
-    },
+    expect(await normalizeRequest(corsEventB64)).toEqual({
+      headers: new Headers(corsEventB64.headers as Record<string, string>),
+      method: 'POST',
+      query: null,
+      jsonBody: {
+        bazinga: 'hello_world',
+      },
+    })
+  })
+
+  it('Handles CORS requests with and without b64 encoded', async () => {
+    const corsEventB64 = createMockedLambdaEvent('OPTIONS', undefined, true)
+
+    expect(await normalizeRequest(corsEventB64)).toEqual({
+      headers: new Headers(corsEventB64.headers as Record<string, string>), // headers returned as symbol
+      method: 'OPTIONS',
+      query: null,
+      jsonBody: undefined,
+    })
+
+    const corsEventWithoutB64 = createMockedLambdaEvent(
+      'OPTIONS',
+      undefined,
+      false
+    )
+
+    expect(await normalizeRequest(corsEventWithoutB64)).toEqual({
+      headers: new Headers(corsEventB64.headers as Record<string, string>), // headers returned as symbol
+      method: 'OPTIONS',
+      query: null,
+      jsonBody: undefined,
+    })
   })
 })
 
-test('Handles CORS requests with and without b64 encoded', () => {
-  const corsEventB64 = createMockedEvent('OPTIONS', undefined, true)
+describe('Fetch API Request', () => {
+  it('Normalizes a fetch event', async () => {
+    const fetchEvent = new Request(
+      'http://localhost:9210/graphql?whatsup=doc&its=bugs',
+      {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ bazinga: 'kittens_purr_purr' }),
+      }
+    )
 
-  expect(normalizeRequest(corsEventB64)).toEqual({
-    headers: new Headers(corsEventB64.headers), // headers returned as symbol
-    method: 'OPTIONS',
-    query: null,
-    body: undefined,
-  })
+    const partial = await normalizeRequest(fetchEvent)
 
-  const corsEventWithoutB64 = createMockedEvent('OPTIONS', undefined, false)
+    expect(partial).toMatchObject({
+      // headers: fetchEvent.headers,
+      method: 'POST',
+      query: {
+        whatsup: 'doc',
+        its: 'bugs',
+      },
+      jsonBody: {
+        bazinga: 'kittens_purr_purr',
+      },
+    })
 
-  expect(normalizeRequest(corsEventWithoutB64)).toEqual({
-    headers: new Headers(corsEventB64.headers), // headers returned as symbol
-    method: 'OPTIONS',
-    query: null,
-    body: undefined,
+    expect(partial.headers.get('content-type')).toEqual('application/json')
   })
 })

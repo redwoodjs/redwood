@@ -115,8 +115,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   useAuth?: UseAuth
   logLevel: ReturnType<typeof setLogVerbosity>
   children: React.ReactNode
-}> = ({ config, children, useAuth = useNoAuth, logLevel }) => {
-  console.log(`👉 \n ~ file: suspense.tsx:119 ~ useAuth:`, useAuth)
+}> = ({ config, children, logLevel }) => {
   // Should they run into it, this helps users with the "Cannot render cell; GraphQL success but data is null" error.
   // See https://github.com/redwoodjs/redwood/issues/2473.
   apolloSetLogVerbosity(logLevel)
