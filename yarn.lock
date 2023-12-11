@@ -2110,12 +2110,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend@npm:0.34.2":
-  version: 0.34.2
-  resolution: "@clerk/backend@npm:0.34.2"
+"@clerk/backend@npm:0.35.1":
+  version: 0.35.1
+  resolution: "@clerk/backend@npm:0.35.1"
   dependencies:
     "@clerk/shared": 1.1.1
-    "@clerk/types": 3.58.0
+    "@clerk/types": 3.59.0
     "@peculiar/webcrypto": 1.4.1
     "@types/node": 16.18.6
     cookie: 0.5.0
@@ -2123,7 +2123,7 @@ __metadata:
     node-fetch-native: 1.0.1
     snakecase-keys: 5.4.4
     tslib: 2.4.1
-  checksum: 0780d96e6d2896b23853550ff6d38257f77849eedde21c2da19bd7c39ebe46413aaff92ce3ee2496f647cd9c006986a34e0c182a493ef637f0e2ff5012b5c676
+  checksum: 83d89ab874304a334b9c49884d2194a1c09fe85634e734b5c086f464db433527f19cfea685d1aef3e7705827c5369bc3f61f07eb4b7875b06a574e9441c19ef0
   languageName: node
   linkType: hard
 
@@ -2140,20 +2140,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:4.12.22":
-  version: 4.12.22
-  resolution: "@clerk/clerk-sdk-node@npm:4.12.22"
+"@clerk/clerk-sdk-node@npm:4.13.1":
+  version: 4.13.1
+  resolution: "@clerk/clerk-sdk-node@npm:4.13.1"
   dependencies:
-    "@clerk/backend": 0.34.2
+    "@clerk/backend": 0.35.1
     "@clerk/shared": 1.1.1
-    "@clerk/types": 3.58.0
+    "@clerk/types": 3.59.0
     "@types/cookies": 0.7.7
     "@types/express": 4.17.14
     "@types/node-fetch": 2.6.2
     camelcase-keys: 6.2.2
     snakecase-keys: 3.2.1
     tslib: 2.4.1
-  checksum: 4eb43f57d4d71f083ee1156ec3456363205e442a64b1c5be8d6cad9e05e7c8612637a83667c9507981aee0481eb643a6152e3a2fd5b8f675a720c17048f94ac5
+  checksum: 6ef16ff5edc84563883f141935bc0c34d1c69dfa09a23cda135cd48feb5521d0cbcd6d6f275bb710f10a5dcb322750ddafda408a6ab01903af430104219e6309
   languageName: node
   linkType: hard
 
@@ -2188,6 +2188,15 @@ __metadata:
   dependencies:
     csstype: 3.1.1
   checksum: 4d87820ab676cc8897e91d4f37ad1074200790c6fe1c866470c786877930e9eda42dea25f778518171a6e56f16f4965fa750bdfc1b32b7ebf1c3f81770ae1055
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:3.59.0":
+  version: 3.59.0
+  resolution: "@clerk/types@npm:3.59.0"
+  dependencies:
+    csstype: 3.1.1
+  checksum: 1ca212fd94ddc22386a5151e51584d96dd62738916b8bf88269c6459bc87d62913f9e80c88a8ea27a4724fe6511fcc9923e68fd54f1467f620a88ce1c345bfe9
   languageName: node
   linkType: hard
 
@@ -2352,36 +2361,6 @@ __metadata:
   dependencies:
     tslib: ^2.5.0
   checksum: 81e09afaf60d036102f7992daeefb0cd5380bb1484dd19cb90db73db4ae730b5297823439711fb8315ee01485a37f1c8155aa1111c7dc4ea11c77b7f25945633
-  languageName: node
-  linkType: hard
-
-"@esbuild-kit/cjs-loader@npm:^2.4.2":
-  version: 2.4.2
-  resolution: "@esbuild-kit/cjs-loader@npm:2.4.2"
-  dependencies:
-    "@esbuild-kit/core-utils": ^3.0.0
-    get-tsconfig: ^4.4.0
-  checksum: 44502097eb9287dc4f25d5c34acdbf5462228a91a348d08fe315939f14ac29fa47704cdcee9f6fca3db4ace93ed63825f06187325e45381a78ecbf3a65eaf759
-  languageName: node
-  linkType: hard
-
-"@esbuild-kit/core-utils@npm:^3.0.0":
-  version: 3.2.2
-  resolution: "@esbuild-kit/core-utils@npm:3.2.2"
-  dependencies:
-    esbuild: ~0.18.20
-    source-map-support: ^0.5.21
-  checksum: 0e973190d1b40a6166b4741d43d7a20552efae289a92629999f68609550cd4bbd7e6b0438f027ba1291815bf9803db17bb6dbab4a041cc317ea973c6d4147b70
-  languageName: node
-  linkType: hard
-
-"@esbuild-kit/esm-loader@npm:^2.5.5":
-  version: 2.5.5
-  resolution: "@esbuild-kit/esm-loader@npm:2.5.5"
-  dependencies:
-    "@esbuild-kit/core-utils": ^3.0.0
-    get-tsconfig: ^4.4.0
-  checksum: 6133f784322e617cac5649e9489c580047e7095cd9ad9e693b03b1cd3df9809e02e224d488d93c1a889441d01e4210c66d01adf53383eefbbe9a585dcbccacc2
   languageName: node
   linkType: hard
 
@@ -7812,7 +7791,7 @@ __metadata:
     "@babel/cli": 7.23.4
     "@babel/core": ^7.22.20
     "@babel/runtime-corejs3": 7.23.5
-    "@clerk/clerk-sdk-node": 4.12.22
+    "@clerk/clerk-sdk-node": 4.13.1
     "@redwoodjs/api": 6.5.1
     "@types/aws-lambda": 8.10.126
     core-js: 3.33.3
