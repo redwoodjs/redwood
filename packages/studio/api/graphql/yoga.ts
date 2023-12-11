@@ -150,6 +150,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
 
       type StudioConfig {
         inMemory: Boolean
+        port: Int!
         graphiql: GraphiQLConfig
       }
 

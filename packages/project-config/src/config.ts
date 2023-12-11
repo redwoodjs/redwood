@@ -76,6 +76,7 @@ interface AuthImpersonationConfig {
 
 interface StudioConfig {
   inMemory: boolean
+  port: number
   graphiql?: GraphiQLStudioConfig
 }
 
@@ -171,6 +172,7 @@ const DEFAULT_CONFIG: Config = {
       apiSdk: undefined,
     },
     studio: {
+      port: 4318,
       inMemory: false,
       graphiql: {
         endpoint: 'graphql',

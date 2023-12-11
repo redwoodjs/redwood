@@ -15,6 +15,8 @@ const {
 } = require('@opentelemetry/semantic-conventions')
 const { PrismaInstrumentation } = require ('@prisma/instrumentation')
 
+const { getConfig } from '@redwoodjs/project-config'
+
 // You may wish to set this to DiagLogLevel.DEBUG when you need to debug opentelemetry itself
 diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO)
 
@@ -27,8 +29,8 @@ const resource = Resource.default().merge(
 
 const exporter = new OTLPTraceExporter({
   // Update this URL to point to where your OTLP compatible collector is listening
-  // The redwood development studio (`yarn rw exp studio`) can collect your telemetry at `http://127.0.0.1:4318/v1/traces`
-  url: 'http://127.0.0.1:4318/v1/traces',
+  // The redwood development studio (`yarn rw exp studio`) can collect your telemetry at `http://127.0.0.1:<PORT>/v1/traces`
+  url: `http://127.0.0.1:${getConfig().experimental.studio.port}/v1/traces`,
 })
 
 // You may wish to switch to BatchSpanProcessor in production as it is the recommended choice for performance reasons
