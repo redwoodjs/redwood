@@ -14,13 +14,14 @@ import yargs from 'yargs/yargs'
 
 import { RedwoodTUI, ReactiveTUIContent, RedwoodStyling } from '@redwoodjs/tui'
 
-import { name, version } from '../package'
 
 import {
   UID,
   startTelemetry,
   shutdownTelemetry,
   recordErrorViaTelemetry,
+  packageName,
+  packageVersion,
 } from './telemetry'
 
 const INITIAL_COMMIT_MESSAGE = 'Initial commit'
@@ -683,7 +684,7 @@ async function createRedwoodApp() {
   )
 
   const cli = yargs(hideBin(process.argv))
-    .scriptName(name)
+    .scriptName(packageName)
     .usage('Usage: $0 <project directory> [option]')
     .example('$0 newapp')
     .option('typescript', {
@@ -721,7 +722,7 @@ async function createRedwoodApp() {
       type: 'boolean',
       describe: 'Skip prompts and use defaults.',
     })
-    .version(version)
+    .version(packageVersion)
 
   const _isYarnBerryOrNewer = isYarnBerryOrNewer()
 
