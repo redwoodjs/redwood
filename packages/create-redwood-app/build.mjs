@@ -9,6 +9,7 @@ const result = await esbuild.build({
   bundle: true,
   minify: true,
 
+  format: 'esm',
   platform: 'node',
   target: ['node18'],
   packages: 'external',

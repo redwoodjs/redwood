@@ -1,6 +1,7 @@
 {
   "name": "create-redwood-app",
   "version": "6.0.7",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",

@@ -14,7 +14,8 @@ import yargs from 'yargs/yargs'
 
 import { RedwoodTUI, ReactiveTUIContent, RedwoodStyling } from '@redwoodjs/tui'
 
-
+// In ESM, for relative paths, the extension is important.
+// See https://nodejs.org/dist/latest-v18.x/docs/api/esm.html#mandatory-file-extensions.
 import {
   UID,
   startTelemetry,
@@ -22,7 +23,7 @@ import {
   recordErrorViaTelemetry,
   packageName,
   packageVersion,
-} from './telemetry'
+} from './telemetry.js'
 
 const INITIAL_COMMIT_MESSAGE = 'Initial commit'
 
@@ -223,7 +224,7 @@ async function executeCompatibilityCheck(templateDir) {
  */
 function checkNodeAndYarnVersion(templateDir) {
   return new Promise((resolve) => {
-    const { engines } = require(path.join(templateDir, 'package.json'))
+    const { engines } = fs.readJSONSync(path.join(templateDir, 'package.json'))
 
     checkNodeVersionCb(engines, (_error, result) => {
       return resolve([result.isSatisfied, result.versions])
