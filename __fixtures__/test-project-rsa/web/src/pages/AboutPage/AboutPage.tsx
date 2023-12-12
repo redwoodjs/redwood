@@ -1,7 +1,7 @@
 import { Assets } from '@redwoodjs/vite/assets'
 import { ProdRwRscServerGlobal } from '@redwoodjs/vite/rwRscGlobal'
 
-import { AboutCounter } from './AboutCounter'
+import { AboutCounter } from '../../components/Counter/AboutCounter'
 
 import './AboutPage.css'
 
