@@ -1,3 +1,6 @@
+import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
 import opentelemetry, { SpanStatusCode } from '@opentelemetry/api'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
@@ -9,11 +12,16 @@ import {
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
 import ci from 'ci-info'
 import envinfo from 'envinfo'
+import fs from 'fs-extra'
 import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
-import { name as packageName, version as packageVersion } from '../package'
+// https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/#help-im-missing-dirname
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
+export const { name: packageName, version: packageVersion } = fs.readJSONSync(
+  resolve(__dirname, '../package.json')
+)
 /**
  * @type NodeTracerProvider
  */
