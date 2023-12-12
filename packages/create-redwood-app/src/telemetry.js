@@ -17,10 +17,12 @@ import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
 // https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/#help-im-missing-dirname
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
+export const currentModuleDirectory = fileURLToPath(
+  new URL('.', import.meta.url)
+)
 
 export const { name: packageName, version: packageVersion } = fs.readJSONSync(
-  resolve(__dirname, '../package.json')
+  resolve(currentModuleDirectory, '../package.json')
 )
 /**
  * @type NodeTracerProvider

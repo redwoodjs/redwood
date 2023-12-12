@@ -21,6 +21,7 @@ import {
   startTelemetry,
   shutdownTelemetry,
   recordErrorViaTelemetry,
+  currentModuleDirectory,
   packageName,
   packageVersion,
 } from './telemetry.js'
@@ -758,7 +759,7 @@ async function createRedwoodApp() {
   // Get the directory for installation from the args
   let targetDir = String(args).replace(/,/g, '-')
 
-  const templatesDir = path.resolve(__dirname, '../templates')
+  const templatesDir = path.resolve(currentModuleDirectory, '../templates')
 
   // Engine check
   await executeCompatibilityCheck(path.join(templatesDir, 'ts'))
