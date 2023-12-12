@@ -8,11 +8,11 @@ import './index.css'
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodApolloProvider>
-      <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+      <RedwoodApolloProvider>
         <Routes />
-      </RedwoodProvider>
-    </RedwoodApolloProvider>
+      </RedwoodApolloProvider>
+    </RedwoodProvider>
   </FatalErrorBoundary>
 )
 

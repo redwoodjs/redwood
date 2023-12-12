@@ -64,7 +64,7 @@ export default function (
     )
   }
 
-  if (getConfig().experimental?.rsc) {
+  if (getConfig().experimental?.rsc?.enabled) {
     // TODO (RSC): Enable auto-loader for RSC
     return {
       name: 'babel-plugin-redwood-routes-auto-loader',
