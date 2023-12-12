@@ -1,6 +1,10 @@
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import klawSync from 'klaw-sync'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const TS_TEMPLATE_DIR = path.join(__dirname, '../templates', 'ts')
 
