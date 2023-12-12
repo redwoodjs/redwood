@@ -20,6 +20,7 @@ module.exports = {
       configFile: findBabelConfig(),
     },
   },
+  plugins: ['unicorn'],
   ignorePatterns: [
     'dist',
     'fixtures',
@@ -182,6 +183,12 @@ module.exports = {
       ],
       rules: {
         '@redwoodjs/process-env-computed': 'off',
+      },
+    },
+    {
+      files: ['packages/create-redwood-app/**'],
+      rules: {
+        'unicorn/prefer-node-protocol': 'error',
       },
     },
   ],

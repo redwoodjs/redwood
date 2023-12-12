@@ -1,4 +1,4 @@
-import dns from 'dns'
+import dns from 'node:dns'
 
 import { defineConfig } from 'vite'
 
