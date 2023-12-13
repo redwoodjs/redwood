@@ -243,6 +243,44 @@ export const handler = async ({ force, install }) => {
         },
       },
       {
+        title: "Updating tailwind 'scaffold.css'...",
+        skip: () => {
+          // Skip this step if the 'scaffold.css' file does not exist
+          return !fs.existsSync(path.join(rwPaths.web.src, 'scaffold.css'))
+        },
+        task: async (_ctx, task) => {
+          const overrideScaffoldCss =
+            force ||
+            (await task.prompt({
+              type: 'Confirm',
+              message:
+                "Do you want to override your 'scaffold.css' to use tailwind too?",
+            }))
+
+          if (overrideScaffoldCss) {
+            const tailwindScaffoldTemplate = fs.readFileSync(
+              path.join(
+                __dirname,
+                '..',
+                '..',
+                '..',
+                'generate',
+                'scaffold',
+                'templates',
+                'assets',
+                'scaffold.tailwind.css.template'
+              )
+            )
+            fs.writeFileSync(
+              path.join(rwPaths.web.src, 'scaffold.css'),
+              tailwindScaffoldTemplate
+            )
+          } else {
+            task.skip('Skipping scaffold.css override')
+          }
+        },
+      },
+      {
         title: 'Adding recommended VS Code extensions to project settings...',
         task: (_ctx, task) => {
           const VS_CODE_EXTENSIONS_PATH = path.join(

@@ -47,7 +47,7 @@ const args = yargs(hideBin(process.argv))
     describe: 'Resume rebuild given the specified test-project path',
   })
   .option('resumeStep', {
-    type: 'number',
+    type: 'string',
     describe: 'Resume rebuild from the given step',
   })
   .help()
@@ -64,6 +64,24 @@ const OUTPUT_PROJECT_PATH = resumePath
       new Date().toISOString().split(':').join('-')
     )
 
+let startStep = resumeStep || ''
+
+if (!startStep) {
+  // Figure out what step to restart the rebuild from
+  try {
+    const stepTxt = fs.readFileSync(
+      path.join(OUTPUT_PROJECT_PATH, 'step.txt'),
+      'utf-8'
+    )
+
+    if (stepTxt) {
+      startStep = stepTxt
+    }
+  } catch {
+    // No step.txt file found, start from the beginning
+  }
+}
+
 const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
 
 const tui = new RedwoodTUI()
@@ -74,7 +92,7 @@ function getExecaOptions(cwd) {
 }
 
 /**
- * @param {number} step
+ * @param {string} step
  */
 function beginStep(step) {
   fs.mkdirSync(OUTPUT_PROJECT_PATH, { recursive: true })
@@ -84,7 +102,7 @@ function beginStep(step) {
 /**
  * @param {import('./typing').TuiTaskDef} taskDef
  */
-async function tuiTask({ step, title, content, skip: skipFn, task, parent }) {
+async function tuiTask({ step, title, content, task, parent }) {
   const stepId = (parent ? parent + '.' : '') + step
 
   const tuiContent = new ReactiveTUIContent({
@@ -98,13 +116,9 @@ async function tuiTask({ step, title, content, skip: skipFn, task, parent }) {
 
   tui.startReactive(tuiContent)
 
-  // In the future you should be able to resume from subtasks too, but for now
-  // we only support main level tasks
-  if (!parent) {
-    beginStep(step)
-  }
+  beginStep(stepId)
 
-  let skip = skipFn?.()
+  let skip = skipFn(startStep, stepId)
 
   if (skip) {
     if (typeof skip === 'boolean' && skip) {
@@ -195,17 +209,23 @@ async function tuiTask({ step, title, content, skip: skipFn, task, parent }) {
 }
 
 /**
- * @param {number} startStep
- * @param {number} step
+ * Function that returns a string to show when skipping the task, or just
+ * true|false to indicate whether the task should be skipped or not.
+ *
+ * @param {string} startStep
+ * @param {string} currentStep
  */
-function skipStep(startStep, step) {
-  return () => {
-    if (startStep > step) {
+function skipFn(startStep, currentStep) {
+  const startStepNrs = startStep.split('.').map((s) => parseInt(s, 10))
+  const currentStepNrs = currentStep.split('.').map((s) => parseInt(s, 10))
+
+  for (let i = 0; i < startStepNrs.length; i++) {
+    if (startStepNrs[i] > currentStepNrs[i]) {
       return 'Skipping... Resuming from step ' + startStep
     }
-
-    return false
   }
+
+  return false
 }
 
 if (resume) {
@@ -257,24 +277,6 @@ const copyProject = async () => {
   await rimraf(OUTPUT_PROJECT_PATH)
 }
 
-let startStep = resumeStep || 0
-
-if (!startStep) {
-  // Figure out what step to restart the rebuild from
-  try {
-    const stepTxtNumber = parseInt(
-      fs.readFileSync(path.join(OUTPUT_PROJECT_PATH, 'step.txt'), 'utf-8'),
-      10
-    )
-
-    if (!Number.isNaN(stepTxtNumber)) {
-      startStep = stepTxtNumber
-    }
-  } catch {
-    // No step.txt file found, start from the beginning
-  }
-}
-
 async function runCommand() {
   console.log()
   console.log('Rebuilding test project fixture...')
@@ -292,7 +294,6 @@ async function runCommand() {
     title: 'Creating project',
     content: 'Building test-project from scratch...',
     task: createProject,
-    skip: skipStep(startStep, 0),
   })
 
   await tuiTask({
@@ -306,7 +307,6 @@ async function runCommand() {
         getExecaOptions(RW_FRAMEWORKPATH)
       )
     },
-    skip: skipStep(startStep, 1),
   })
 
   await tuiTask({
@@ -320,7 +320,6 @@ async function runCommand() {
         'pipe' // TODO: Remove this when everything is using @rwjs/tui
       )
     },
-    skip: skipStep(startStep, 2),
   })
 
   await tuiTask({
@@ -330,7 +329,6 @@ async function runCommand() {
     task: () => {
       return exec('yarn install', getExecaOptions(OUTPUT_PROJECT_PATH))
     },
-    skip: skipStep(startStep, 3),
   })
 
   await tuiTask({
@@ -357,7 +355,6 @@ async function runCommand() {
 
       fs.writeFileSync(REDWOOD_TOML_PATH, newRedwoodToml)
     },
-    skip: skipStep(startStep, 4),
   })
 
   await tuiTask({
@@ -370,7 +367,6 @@ async function runCommand() {
         'pipe'
       )
     },
-    skip: skipStep(startStep, 5),
   })
 
   // Note that we undo this at the end
@@ -385,7 +381,6 @@ async function runCommand() {
         },
       })
     },
-    skip: skipStep(startStep, 6),
   })
 
   await tuiTask({
@@ -396,7 +391,6 @@ async function runCommand() {
         linkWithLatestFwBuild: true,
       })
     },
-    skip: skipStep(startStep, 7),
   })
 
   await tuiTask({
@@ -407,7 +401,6 @@ async function runCommand() {
         linkWithLatestFwBuild: true,
       })
     },
-    skip: skipStep(startStep, 8),
   })
 
   await tuiTask({
@@ -420,7 +413,6 @@ async function runCommand() {
         getExecaOptions(OUTPUT_PROJECT_PATH)
       )
     },
-    skip: skipStep(startStep, 9),
   })
 
   await tuiTask({
@@ -441,7 +433,7 @@ async function runCommand() {
         if (
           e instanceof ExecaError &&
           !e.stderr &&
-          e.stdout.includes('15 problems (15 errors, 0 warnings)')
+          e.stdout.includes('14 problems (14 errors, 0 warnings)')
         ) {
           // This is unfortunate, but linting is expected to fail.
           // This is the expected error message, so we just fall through
@@ -453,7 +445,6 @@ async function runCommand() {
         }
       }
     },
-    skip: skipStep(startStep, 10),
   })
 
   await tuiTask({
@@ -491,7 +482,6 @@ async function runCommand() {
       // then removes new Project temp directory
       await copyProject()
     },
-    skip: skipStep(startStep, 11),
   })
 
   await tuiTask({

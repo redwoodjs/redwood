@@ -9,7 +9,7 @@ import { lambdaRequestHandler, loadFunctionsFromDist } from './lambdaLoader'
 
 const withFunctions = async (
   fastify: FastifyInstance,
-  options: ApiServerArgs
+  options: Omit<ApiServerArgs, 'loadEnvFiles'>
 ) => {
   const { apiRootPath } = options
   // Add extra fastify plugins

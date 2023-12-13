@@ -2,10 +2,13 @@
 // well in naming with @redwoodjs/api-server)
 // Only things used during dev can be in @redwoodjs/vite. Everything else has
 // to go in fe-server
+// UPDATE: We decided to name the package @redwoodjs/web-server instead of
+// fe-server. And it's already created, but this hasn't been moved over yet.
 
 import fs from 'fs/promises'
 import path from 'path'
 
+import { createServerAdapter } from '@whatwg-node/server'
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
@@ -14,6 +17,8 @@ import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { createRscRequestHandler } from './rsc/rscRequestHandler'
+import { setClientEntries } from './rsc/rscWorkerCommunication'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
 import { registerFwGlobals } from './streaming/registerGlobals'
 import type { RWRouteManifest } from './types'
@@ -34,7 +39,7 @@ loadDotEnv({
   defaults: path.join(getPaths().base, '.env.defaults'),
   multiline: true,
 })
-//------------------------------------------------
+// ------------------------------------------------
 
 export async function runFeServer() {
   const app = express()
@@ -42,6 +47,19 @@ export async function runFeServer() {
   const rwConfig = getConfig()
 
   registerFwGlobals()
+
+  try {
+    // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
+    // TODO (RSC) Remove the try/catch, or at least the if-statement in there
+    // once RSC is always enabled
+    await setClientEntries('load')
+  } catch (e) {
+    if (rwConfig.experimental?.rsc?.enabled) {
+      console.error('Failed to load client entries')
+      console.error(e)
+      process.exit(1)
+    }
+  }
 
   // TODO When https://github.com/tc39/proposal-import-attributes and
   // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
@@ -62,9 +80,15 @@ export async function runFeServer() {
   const routeManifest: RWRouteManifest = JSON.parse(routeManifestStr)
 
   // TODO See above about using `import { with: { type: 'json' } }` instead
-  const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
+  const manifestPath = path.join(rwPaths.web.dist, 'client-build-manifest.json')
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
   const buildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
+
+  if (rwConfig.experimental?.rsc?.enabled) {
+    console.log('='.repeat(80))
+    console.log('buildManifest', buildManifest)
+    console.log('='.repeat(80))
+  }
 
   const indexEntry = Object.values(buildManifest).find((manifestItem) => {
     return manifestItem.isEntry
@@ -74,11 +98,14 @@ export async function runFeServer() {
     throw new Error('Could not find index.html in build manifest')
   }
 
-  // 👉 1. Use static handler for assets
+  // 1. Use static handler for assets
   // For CF workers, we'd need an equivalent of this
-  app.use('/', express.static(rwPaths.web.dist, { index: false }))
+  app.use(
+    '/assets',
+    express.static(rwPaths.web.dist + '/assets', { index: false })
+  )
 
-  // 👉 2. Proxy the api server
+  // 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
   // e.g. deploying to Netlify, we don't need to proxy but configure it in Netlify
   // Also be careful of differences between v2 and v3 of the server
@@ -97,47 +124,57 @@ export async function runFeServer() {
     })
   )
 
-  const collectedCss = indexEntry.css || []
+  const getStylesheetLinks = () => indexEntry.css || []
   const clientEntry = '/' + indexEntry.file
 
   for (const route of Object.values(routeManifest)) {
-    const routeHandler = await createReactStreamingHandler({
-      route,
-      clientEntryPath: clientEntry,
-      cssLinks: collectedCss,
-    })
-
     // if it is a 404, register it at the end somehow.
     if (!route.matchRegexString) {
       continue
     }
 
+    // @TODO: we don't need regexes here
+    // Param matching, etc. all handled within the route handler now
     const expressPathDef = route.hasParams
       ? route.matchRegexString
       : route.pathDefinition
 
-    app.get(expressPathDef, routeHandler)
+    if (!getConfig().experimental?.rsc?.enabled) {
+      const routeHandler = await createReactStreamingHandler({
+        route,
+        clientEntryPath: clientEntry,
+        getStylesheetLinks,
+      })
+
+      // Wrap with whatg/server adapter. Express handler -> Fetch API handler
+      app.get(expressPathDef, createServerAdapter(routeHandler))
+    } else {
+      console.log('expressPathDef', expressPathDef)
+
+      // This is for RSC only. And only for now, until we have SSR working we
+      // with RSC. This maps /, /about, etc to index.html
+      app.get(expressPathDef, (req, res, next) => {
+        // Serve index.html for all routes, to let client side routing take
+        // over
+        req.url = '/'
+        // Without this, we get a flash of a url with a trailing slash. Still
+        // works, but doesn't look nice
+        // For example, if we navigate to /about we'll see a flash of /about/
+        // before returning to /about
+        req.originalUrl = '/'
+
+        return express.static(rwPaths.web.dist)(req, res, next)
+      })
+    }
   }
 
-  const server = app.listen(
-    rwConfig.web.port,
-    process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
+  // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
+  app.use('/rw-rsc', createRscRequestHandler())
+
+  app.listen(rwConfig.web.port)
+  console.log(
+    `Started production FE server on http://localhost:${rwConfig.web.port}`
   )
-
-  server.on('listening', () => {
-    let addressDetails = ''
-    const address = server.address()
-
-    if (typeof address === 'string') {
-      addressDetails = `(${address})`
-    } else if (address && typeof address === 'object') {
-      addressDetails = `(${address.address}:${address.port})`
-    }
-
-    console.log(
-      `Started production FE server on http://localhost:${rwConfig.web.port} ${addressDetails}`
-    )
-  })
 }
 
 runFeServer()

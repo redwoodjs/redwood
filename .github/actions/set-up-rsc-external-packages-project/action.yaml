@@ -1,0 +1,10 @@
+name: Set up RSC test project with external packages from fixture
+description: Sets up an RSC project that imports external packages for smoke-tests
+
+runs:
+  using: node20
+  main: 'setUpRscExternalPackagesProjectGitHub.mjs'
+
+outputs:
+  test-project-path:
+    description: Path to the test project

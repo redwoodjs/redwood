@@ -57,6 +57,10 @@ describe('getConfig', () => {
           "opentelemetry": {
             "apiSdk": undefined,
             "enabled": false,
+            "wrapApi": true,
+          },
+          "realtime": {
+            "enabled": false,
           },
           "rsc": {
             "enabled": false,
@@ -83,6 +87,10 @@ describe('getConfig', () => {
           "nestScaffoldByModel": true,
           "stories": true,
           "tests": true,
+        },
+        "graphql": {
+          "fragments": false,
+          "trustedDocuments": false,
         },
         "notifications": {
           "versionUpdates": [],
@@ -160,6 +168,26 @@ describe('getConfig', () => {
       expect(
         config.experimental.studio.graphiql?.authImpersonation?.jwtSecret
       ).toEqual('supa-secret')
+    })
+  })
+
+  describe('with graphql configs', () => {
+    describe('sets defaults', () => {
+      it('sets trustedDocuments to false', () => {
+        const config = getConfig(
+          path.join(__dirname, './fixtures/redwood.toml')
+        )
+        expect(config.graphql.trustedDocuments).toEqual(false)
+        expect(config.graphql.fragments).toEqual(false)
+      })
+    })
+
+    it('merges graphql configs', () => {
+      const config = getConfig(
+        path.join(__dirname, './fixtures/redwood.graphql.toml')
+      )
+      expect(config.graphql.trustedDocuments).toEqual(true)
+      expect(config.graphql.fragments).toEqual(true)
     })
   })
 

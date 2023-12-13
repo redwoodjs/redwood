@@ -320,7 +320,7 @@ So we can just spread the result of `standard()` in a story or test when using t
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title=web/src/components/ArticlesCell/ArticlesCell.stories.js
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.stories.js"
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -335,7 +335,7 @@ export default { title: 'Cells/ArticlesCell' }
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```tsx title=web/src/components/ArticlesCell/ArticlesCell.stories.tsx
+```tsx title="web/src/components/ArticlesCell/ArticlesCell.stories.tsx"
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -355,7 +355,7 @@ Some folks find this syntax a little *too* succinct and would rather see the `<S
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title=web/src/components/ArticlesCell/ArticlesCell.stories.js
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.stories.js"
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -370,7 +370,7 @@ export default { title: 'Cells/ArticlesCell' }
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```tsx title=web/src/components/ArticlesCell/ArticlesCell.stories.tsx
+```tsx title="web/src/components/ArticlesCell/ArticlesCell.stories.tsx"
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 

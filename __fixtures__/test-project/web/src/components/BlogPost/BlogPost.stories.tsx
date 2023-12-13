@@ -1,6 +1,6 @@
 // Pass props to your component by passing an `args` object to your story
 //
-// ```jsx
+// ```tsx
 // export const Primary: Story = {
 //  args: {
 //    propName: propValue
