@@ -101,9 +101,9 @@ describe('TypeScript config file parsing', () => {
 
 describe('getPathsFromTypeScriptConfig', () => {
   const FAKE_API_ROOT =
-    process.platform === 'win32' ? '/e/redwood-app/api' : '/redwood-app/api'
+    process.platform === 'win32' ? '/d/redwood-app/api' : '/redwood-app/api'
   const FAKE_WEB_ROOT =
-    process.platform === 'win32' ? '/e/redwood-app/web' : '/redwood-app/web'
+    process.platform === 'win32' ? '/d/redwood-app/web' : '/redwood-app/web'
 
   it("returns an empty object if there's no TypeScript config files", () => {
     vol.fromNestedJSON(
