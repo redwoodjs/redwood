@@ -99,7 +99,7 @@
     "nodemon": "3.0.2",
     "npm-packlist": "7.0.4",
     "nx": "17.2.3",
-    "octokit": "2.1.0",
+    "octokit": "3.1.2",
     "ora": "7.0.1",
     "prompts": "2.4.2",
     "rimraf": "5.0.5",
