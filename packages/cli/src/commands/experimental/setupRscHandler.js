@@ -102,7 +102,11 @@ export const handler = async ({ force, verbose }) => {
             ),
             'utf-8'
           )
-          const homePagePath = path.join(rwPaths.web.src, 'HomePage.tsx')
+          const homePagePath = path.join(
+            rwPaths.web.pages,
+            'HomePage',
+            'HomePage.tsx'
+          )
 
           writeFile(homePagePath, homePageTemplate, {
             overwriteExisting: force,
@@ -117,7 +121,11 @@ export const handler = async ({ force, verbose }) => {
             ),
             'utf-8'
           )
-          const aboutPagePath = path.join(rwPaths.web.src, 'AboutPage.tsx')
+          const aboutPagePath = path.join(
+            rwPaths.web.pages,
+            'AboutPage',
+            'AboutPage.tsx'
+          )
 
           writeFile(aboutPagePath, aboutPageTemplate, {
             overwriteExisting: force,
@@ -131,7 +139,11 @@ export const handler = async ({ force, verbose }) => {
             path.resolve(__dirname, 'templates', 'rsc', 'Counter.tsx.template'),
             'utf-8'
           )
-          const counterPath = path.join(rwPaths.web.src, 'Counter.tsx')
+          const counterPath = path.join(
+            rwPaths.web.components,
+            'Counter',
+            'Counter.tsx'
+          )
 
           writeFile(counterPath, counterTemplate, {
             overwriteExisting: force,
@@ -150,7 +162,11 @@ export const handler = async ({ force, verbose }) => {
             ),
             'utf-8'
           )
-          const counterPath = path.join(rwPaths.web.src, 'AboutCounter.tsx')
+          const counterPath = path.join(
+            rwPaths.web.components,
+            'Counter',
+            'AboutCounter.tsx'
+          )
 
           writeFile(counterPath, counterTemplate, {
             overwriteExisting: force,
@@ -163,23 +179,23 @@ export const handler = async ({ force, verbose }) => {
           const files = [
             {
               template: 'Counter.css.template',
-              path: 'Counter.css',
+              path: ['components', 'Counter', 'Counter.css'],
             },
             {
               template: 'Counter.module.css.template',
-              path: 'Counter.module.css',
+              path: ['components', 'Counter', 'Counter.module.css'],
             },
             {
               template: 'HomePage.css.template',
-              path: 'HomePage.css',
+              path: ['pages', 'HomePage', 'HomePage.css'],
             },
             {
               template: 'HomePage.module.css.template',
-              path: 'HomePage.module.css',
+              path: ['pages', 'HomePage', 'HomePage.module.css'],
             },
             {
               template: 'AboutPage.css.template',
-              path: 'AboutPage.css',
+              path: ['pages', 'AboutPage', 'AboutPage.css'],
             },
           ]
 
@@ -188,7 +204,7 @@ export const handler = async ({ force, verbose }) => {
               path.resolve(__dirname, 'templates', 'rsc', file.template),
               'utf-8'
             )
-            const filePath = path.join(rwPaths.web.src, file.path)
+            const filePath = path.join(rwPaths.web.src, ...file.path)
 
             writeFile(filePath, template, {
               overwriteExisting: force,
