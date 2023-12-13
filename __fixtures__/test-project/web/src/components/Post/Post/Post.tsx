@@ -1,12 +1,20 @@
-import type { DeletePostMutationVariables, FindPostById } from 'types/graphql'
+import type {
+  DeletePostMutation,
+  DeletePostMutationVariables,
+  FindPostById,
+} from 'types/graphql'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+import type { TypedDocumentNode } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { timeTag } from 'src/lib/formatters'
 
-const DELETE_POST_MUTATION = gql`
+const DELETE_POST_MUTATION: TypedDocumentNode<
+  DeletePostMutation,
+  DeletePostMutationVariables
+> = gql`
   mutation DeletePostMutation($id: Int!) {
     deletePost(id: $id) {
       id

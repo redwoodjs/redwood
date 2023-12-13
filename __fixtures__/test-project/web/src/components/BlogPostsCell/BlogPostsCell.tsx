@@ -1,10 +1,17 @@
-import type { BlogPostsQuery } from 'types/graphql'
+import type { BlogPostsQuery, BlogPostsQueryVariables } from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
 import BlogPost from 'src/components/BlogPost'
 
-export const QUERY = gql`
+export const QUERY: TypedDocumentNode<
+  BlogPostsQuery,
+  BlogPostsQueryVariables
+> = gql`
   query BlogPostsQuery {
     blogPosts: posts {
       id
