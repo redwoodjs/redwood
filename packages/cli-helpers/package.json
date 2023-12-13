@@ -32,7 +32,7 @@
     "core-js": "3.33.3",
     "dotenv": "16.3.1",
     "execa": "5.1.1",
-    "listr2": "6.6.1",
+    "listr2": "8.0.0",
     "lodash": "4.17.21",
     "pascalcase": "1.0.0",
     "prettier": "2.8.8",
