@@ -3,14 +3,10 @@
 // Framework main config is in monorepo root ./.eslintrc.js
 
 const {
-  getApiSideDefaultBabelConfig,
-} = require('@redwoodjs/internal/dist/build/babel/api')
-const {
   getCommonPlugins,
-} = require('@redwoodjs/internal/dist/build/babel/common')
-const {
+  getApiSideDefaultBabelConfig,
   getWebSideDefaultBabelConfig,
-} = require('@redwoodjs/internal/dist/build/babel/web')
+} = require('@redwoodjs/babel-config')
 const { getConfig } = require('@redwoodjs/project-config')
 
 const config = getConfig()

@@ -133,11 +133,6 @@ module.exports = {
                 default: 'React',
                 path: 'react',
               },
-              {
-                // import { PropTypes } from 'prop-types'
-                default: 'PropTypes',
-                path: 'prop-types',
-              },
             ],
           },
         ],

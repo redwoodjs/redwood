@@ -1,6 +1,7 @@
 import path from 'path'
 
-import { DocumentNode, print } from 'graphql'
+import type { DocumentNode } from 'graphql'
+import { print } from 'graphql'
 
 import { getPaths } from '@redwoodjs/project-config'
 // @MARK: have to do this, otherwise rwjs/web is loaded before shims

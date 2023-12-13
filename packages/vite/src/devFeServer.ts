@@ -1,11 +1,14 @@
-// TODO (STREAMING) Merge with runFeServer so we only have one file
-
+import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
+import type { ViteDevServer } from 'vite'
 import { createServer as createViteServer } from 'vite'
 
+import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
+import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { collectCssPaths, componentsModules } from './streaming/collectCss'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
 import { registerFwGlobals } from './streaming/registerGlobals'
 import { ensureProcessDirWeb } from './utils'
@@ -56,18 +59,12 @@ async function createServer() {
 
   const routes = getProjectRoutes()
 
-  // TODO (STREAMING) CSS is handled by Vite in dev mode, we don't need to
-  // worry about it in dev but..... it causes a flash of unstyled content.
-  // For now I'm just injecting index css here
-  // Look at collectStyles in packages/vite/src/fully-react/find-styles.ts
-  const FIXME_HardcodedIndexCss = ['index.css']
-
   for (const route of routes) {
     const routeHandler = await createReactStreamingHandler(
       {
         route,
         clientEntryPath: rwPaths.web.entryClient as string,
-        cssLinks: FIXME_HardcodedIndexCss,
+        getStylesheetLinks: () => getCssLinks(rwPaths, route, vite),
       },
       vite
     )
@@ -77,11 +74,12 @@ async function createServer() {
       continue
     }
 
+    // @TODO we no longer need to use the regex
     const expressPathDef = route.hasParams
       ? route.matchRegexString
       : route.pathDefinition
 
-    app.get(expressPathDef, routeHandler)
+    app.get(expressPathDef, createServerAdapter(routeHandler))
   }
 
   const port = getConfig().web.port
@@ -100,3 +98,21 @@ process.stdin.on('data', async (data) => {
     })
   }
 })
+
+/**
+ * This function is used to collect the CSS links for a given route.
+ *
+ * Passed as a getter to the createReactStreamingHandler function, because
+ * at the time of creating the handler, the ViteDevServer hasn't analysed the module graph yet
+ */
+function getCssLinks(rwPaths: Paths, route: RouteSpec, vite: ViteDevServer) {
+  const appAndRouteModules = componentsModules(
+    [rwPaths.web.app, route.filePath].filter(Boolean) as string[],
+    vite
+  )
+
+  const collectedCss = collectCssPaths(appAndRouteModules)
+
+  const cssLinks = Array.from(collectedCss)
+  return cssLinks
+}

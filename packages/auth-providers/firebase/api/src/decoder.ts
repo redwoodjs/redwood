@@ -1,7 +1,7 @@
 import admin from 'firebase-admin'
 import type { FirebaseError } from 'firebase-admin'
 
-import { Decoder } from '@redwoodjs/api'
+import type { Decoder } from '@redwoodjs/api'
 
 // Alternative third-party JWT verification process described here:
 // https://firebase.google.com/docs/auth/admin/verify-id-tokens#verify_id_tokens_using_a_third-party_jwt_library

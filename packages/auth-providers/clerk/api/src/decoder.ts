@@ -1,4 +1,4 @@
-import { Decoder } from '@redwoodjs/api'
+import type { Decoder } from '@redwoodjs/api'
 
 /**
  * @deprecated This function will be removed; it uses a rate-limited API. Use `clerkAuthDecoder` instead.

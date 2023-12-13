@@ -66,8 +66,8 @@ export const handler = async ({ force, ...args }) => {
       {
         title: 'Parsing datamodel, generating api/src/models/index.js...',
         task: async () => {
-          const { parseDatamodel } = await import('@redwoodjs/record')
-          await parseDatamodel()
+          const redwoodRecordModule = await import('@redwoodjs/record')
+          await redwoodRecordModule.default.parseDatamodel()
         },
       },
     ].filter(Boolean),

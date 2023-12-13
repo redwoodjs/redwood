@@ -12,7 +12,7 @@ import projectConfig from '@redwoodjs/project-config'
 import {
   Flags,
   getWebSideDefaultBabelConfig,
-} from '@redwoodjs/internal/dist/build/babel/web'
+} from '@redwoodjs/babel-config'
 
 async function vitePrebuildWebFile(
   srcPath: string,

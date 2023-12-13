@@ -1,4 +1,5 @@
-import { PluginOption, transformWithEsbuild } from 'vite'
+import type { PluginOption } from 'vite'
+import { transformWithEsbuild } from 'vite'
 
 /**
  *
