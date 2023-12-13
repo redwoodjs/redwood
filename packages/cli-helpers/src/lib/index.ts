@@ -2,11 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import * as babel from '@babel/core'
-import type {
-  ListrTaskWrapper,
-  ListrRenderer,
-  ListrGetRendererClassFromValue,
-} from 'listr2'
+import type { ListrTaskFn } from 'listr2'
 import { Listr } from 'listr2'
 import { format } from 'prettier'
 
@@ -86,15 +82,13 @@ export const prettify = (
 
 export type ExistingFiles = 'OVERWRITE' | 'SKIP' | 'FAIL'
 
-export const writeFile = <Renderer extends typeof ListrRenderer>(
+export type Task = Parameters<ListrTaskFn<any, any, any>>[1]
+
+export const writeFile = (
   target: string,
   contents: string,
   { existingFiles = 'FAIL' }: { existingFiles?: ExistingFiles } = {},
-  // TODO: Remove type cast
-  task: ListrTaskWrapper<never, Renderer> = {} as ListrTaskWrapper<
-    never,
-    Renderer
-  >
+  task: Task
 ) => {
   const { base } = getPaths()
   task.title = `Writing \`./${path.relative(base, target)}\``
@@ -121,7 +115,7 @@ export const writeFile = <Renderer extends typeof ListrRenderer>(
  *
  * @param files - {[filepath]: contents}
  */
-export const writeFilesTask = <Renderer extends typeof ListrRenderer>(
+export const writeFilesTask = (
   files: Record<string, string>,
   options: { existingFiles: ExistingFiles }
 ) => {
@@ -133,13 +127,7 @@ export const writeFilesTask = <Renderer extends typeof ListrRenderer>(
 
       return {
         title: `...waiting to write file \`./${path.relative(base, file)}\`...`,
-        task: (
-          _ctx: never,
-          task: ListrTaskWrapper<
-            never,
-            ListrGetRendererClassFromValue<Renderer>
-          >
-        ) => {
+        task: (_ctx, task) => {
           return writeFile(file, contents, options, task)
         },
       }

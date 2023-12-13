@@ -1,11 +1,11 @@
 import fs from 'fs'
 import path from 'path'
 
-import type { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
+import type { ListrRenderer, ListrTask } from 'listr2'
 
 import { resolveFile } from '@redwoodjs/project-config'
 
-import type { ExistingFiles } from '../lib'
+import type { ExistingFiles, Task } from '../lib'
 import { transformTSToJS, writeFilesTask } from '../lib'
 import { colors } from '../lib/colors'
 import { getPaths } from '../lib/paths'
@@ -433,13 +433,10 @@ export const addConfigToRoutes = () => {
  *
  * @returns Listr task
  */
-export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
-  basedir: string,
-  webAuthn: boolean
-): ListrTask<AuthGeneratorCtx, Renderer> => {
+export const generateAuthApiFiles = (basedir: string, webAuthn: boolean) => {
   return {
     title: 'Generating auth api side files...',
-    task: async (ctx, task) => {
+    task: async (ctx: AuthGeneratorCtx, task: Task) => {
       if (!apiSrcDoesExist()) {
         return new Error(
           'Could not find api/src directory. Cannot continue setup!'
@@ -493,14 +490,9 @@ function findExistingFiles(filesMap: Record<string, string>) {
     .map((filePath) => filePath.replace(getPaths().base, ''))
 }
 
-export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
-  authDecoderImport?: string
-) => ({
+export const addAuthConfigToGqlApi = (authDecoderImport?: string) => ({
   title: 'Adding auth config to GraphQL API...',
-  task: (
-    ctx: AuthGeneratorCtx,
-    _task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>
-  ) => {
+  task: (ctx: AuthGeneratorCtx, _task: Task) => {
     if (graphFunctionDoesExist()) {
       addApiConfig({
         authDecoderImport,
@@ -526,15 +518,10 @@ export interface AuthGeneratorCtx {
   provider: string
 }
 
-export const setAuthSetupMode = <Renderer extends typeof ListrRenderer>(
-  force: boolean
-) => {
+export const setAuthSetupMode = (force: boolean) => {
   return {
     title: 'Checking project for existing auth...',
-    task: async (
-      ctx: AuthGeneratorCtx,
-      task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>
-    ) => {
+    task: async (ctx: AuthGeneratorCtx, task: Task) => {
       if (force) {
         ctx.setupMode = 'FORCE'
 
