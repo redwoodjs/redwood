@@ -1,20 +1,27 @@
 import type { Edit${singularPascalName}ById, Update${singularPascalName}Input } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import ${singularPascalName}Form from '${importComponentNameForm}'
 
-export const QUERY = gql`
+export const QUERY: TypedDocumentNode<Edit${singularPascalName}ById> = gql`
   query Edit${singularPascalName}ById($id: ${idType}!) {
     ${singularCamelName}: ${singularCamelName}(id: $id) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
     }
   }
 `
-const UPDATE_${singularConstantName}_MUTATION = gql`
+const UPDATE_${singularConstantName}_MUTATION: TypedDocumentNode<
+  Edit${singularPascalName}ById,
+  Update${singularPascalName}Input
+> = gql`
   mutation Update${singularPascalName}Mutation($id: ${idType}!, $input: Update${singularPascalName}Input!) {
     update${singularPascalName}(id: $id, input: $input) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
