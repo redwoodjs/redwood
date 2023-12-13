@@ -511,9 +511,16 @@ describe('UserProfileCell', () => {
 exports[`TypeScript: generates list cells if list flag passed in 1`] = `
 "import type { FindBazingaQuery, FindBazingaQueryVariables } from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
-export const QUERY = gql\`
+export const QUERY: TypedDocumentNode<
+  FindBazingaQuery,
+  FindBazingaQueryVariables
+> = gql\`
   query FindBazingaQuery($id: Int!) {
     bazinga: bazinga(id: $id) {
       id
@@ -633,11 +640,18 @@ export const standard = (/* vars, { ctx, req } */) => ({
 `;
 
 exports[`TypeScript: generates list cells if name is plural 1`] = `
-"import type { MembersQuery } from 'types/graphql'
+"import type { MembersQuery, MembersQueryVariables } from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
-export const QUERY = gql\`
+export const QUERY: TypedDocumentNode<
+  MembersQuery,
+  MembersQueryVariables
+> = gql\`
   query MembersQuery {
     members {
       id
