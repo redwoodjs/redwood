@@ -292,16 +292,41 @@ function getPluginConfig(side: CodegenSide) {
     showUnusedMappers: false,
     customResolverFn: getResolverFnType(),
     mappers: prismaModels,
-    avoidOptionals: {
-      // We do this, so that service tests can call resolvers without doing a null check
-      // see https://github.com/redwoodjs/redwood/pull/6222#issuecomment-1230156868
-      // Look at type or source https://shrtm.nu/2BA0 for possible config, not well documented
-      resolvers: true,
-    },
+    avoidOptionals: getAvoidOptionals(),
     contextType: `@redwoodjs/graphql-server/dist/types#RedwoodGraphQLContext`,
   }
 
   return pluginConfig
+}
+
+export const getAvoidOptionals = () => {
+  const tsConfig = getTsConfigs()
+
+  let avoidOptionals = {
+    // We do this, so that service tests can call resolvers without doing a null check
+    // see https://github.com/redwoodjs/redwood/pull/6222#issuecomment-1230156868
+    // Look at type or source https://shrtm.nu/2BA0 for possible config, not well documented
+    resolvers: true,
+  }
+
+  if (tsConfig.api?.compilerOptions?.strict) {
+    // In strict mode, set optionals to true
+    avoidOptionals = {
+      ...avoidOptionals,
+      field: true,
+      inputValue: true,
+      object: true,
+      defaultValue: true,
+    } as {
+      resolvers: boolean
+      field: boolean
+      inputValue: boolean
+      object: boolean
+      defaultValue: boolean
+    }
+  }
+
+  return avoidOptionals
 }
 
 export const getResolverFnType = () => {
