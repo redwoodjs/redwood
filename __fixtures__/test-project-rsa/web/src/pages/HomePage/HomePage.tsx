@@ -1,8 +1,10 @@
+import { RscForm } from '@tobbe.dev/rsc-test'
+
 import { Assets } from '@redwoodjs/vite/assets'
 import { ProdRwRscServerGlobal } from '@redwoodjs/vite/rwRscGlobal'
 
-import { onSend } from './chat'
-import { Form } from './Form'
+import { Counter } from '../../components/Counter/Counter'
+import { onSend } from './actions'
 // @ts-expect-error no types
 import styles from './HomePage.module.css'
 
@@ -20,7 +22,8 @@ const HomePage = ({ name = 'Anonymous' }) => {
       <Assets />
       <div style={{ border: '3px red dashed', margin: '1em', padding: '1em' }}>
         <h1 className={styles.title}>Hello {name}!!</h1>
-        <Form onSend={onSend} />
+        <RscForm onSend={onSend} />
+        <Counter />
       </div>
     </div>
   )

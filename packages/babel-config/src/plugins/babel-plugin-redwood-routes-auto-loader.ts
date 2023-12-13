@@ -8,6 +8,7 @@ import {
   processPagesDir,
   getPaths,
   ensurePosixPath,
+  getConfig,
 } from '@redwoodjs/project-config'
 
 interface PluginOptions {
@@ -61,6 +62,14 @@ export default function (
         .map((name) => `'${name}'`)
         .join(', ')}`
     )
+  }
+
+  if (getConfig().experimental?.rsc?.enabled) {
+    // TODO (RSC): Enable auto-loader for RSC
+    return {
+      name: 'babel-plugin-redwood-routes-auto-loader',
+      visitor: {},
+    }
   }
 
   return {
