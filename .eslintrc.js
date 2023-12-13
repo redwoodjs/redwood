@@ -186,6 +186,24 @@ module.exports = {
       },
     },
     {
+      files: ['packages/project-config/**'],
+      excludedFiles: [
+        '**/__tests__/**',
+        '**/*.test.ts?(x)',
+        '**/*.spec.ts?(x)',
+      ],
+      rules: {
+        'import/no-extraneous-dependencies': [
+          'error',
+          {
+            devDependencies: false,
+            optionalDependencies: false,
+            peerDependencies: true,
+          },
+        ],
+      },
+    },
+    {
       files: ['packages/create-redwood-app/**'],
       rules: {
         'unicorn/prefer-node-protocol': 'error',
