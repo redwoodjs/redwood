@@ -60,8 +60,8 @@
     "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
     "build:types": "tsc --build --verbose",
     "test": "yarn test:node && echo",
-    "test:node": "glob './src/**/__tests__/*.test.mts' --cmd='node --loader tsx --no-warnings --test'",
-    "test:watch": "glob './src/**/__tests__/*.test.mts' --cmd='node --loader tsx --no-warnings --test --watch'"
+    "test:node": "glob './src/**/__tests__/*.test.mts' --cmd='tsx --no-warnings --test'",
+    "test:watch": "glob './src/**/__tests__/*.test.mts' --cmd='tsx --no-warnings --test --watch'"
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.5",

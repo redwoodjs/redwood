@@ -3,8 +3,8 @@ import { RscForm } from '@tobbe.dev/rsc-test'
 import { Assets } from '@redwoodjs/vite/assets'
 import { ProdRwRscServerGlobal } from '@redwoodjs/vite/rwRscGlobal'
 
+import { Counter } from '../../components/Counter/Counter'
 import { onSend } from './actions'
-import { Counter } from './Counter'
 // @ts-expect-error no types
 import styles from './HomePage.module.css'
 
