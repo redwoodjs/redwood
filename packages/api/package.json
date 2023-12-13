@@ -39,7 +39,7 @@
     "jsonwebtoken": "9.0.2",
     "pascalcase": "1.0.0",
     "pino": "8.16.2",
-    "title-case": "3.0.3"
+    "title-case": "4.2.0"
   },
   "devDependencies": {
     "@babel/cli": "7.23.4",

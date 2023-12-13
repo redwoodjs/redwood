@@ -7930,7 +7930,7 @@ __metadata:
     pino: 8.16.2
     redis: 4.6.7
     split2: 4.2.0
-    title-case: 3.0.3
+    title-case: 4.2.0
     ts-toolbelt: 9.6.0
     typescript: 5.3.2
   peerDependencies:
@@ -8567,7 +8567,7 @@ __metadata:
     string-env-interpolation: 1.0.1
     systeminformation: 5.21.20
     terminal-link: 2.1.1
-    title-case: 3.0.3
+    title-case: 4.2.0
     typescript: 5.3.2
     uuid: 9.0.1
     yargs: 17.7.2
@@ -33514,7 +33514,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"title-case@npm:3.0.3, title-case@npm:^3.0.3":
+"title-case@npm:4.2.0":
+  version: 4.2.0
+  resolution: "title-case@npm:4.2.0"
+  checksum: 5ae56ec2d10b5c71d209c5c276a9b5d7b679a1a542795a73f84d1fd47fee6e06b3b57b70e0da443a93f92371e2532645354ebdfd58bfe9b58a5113371343c979
+  languageName: node
+  linkType: hard
+
+"title-case@npm:^3.0.3":
   version: 3.0.3
   resolution: "title-case@npm:3.0.3"
   dependencies:
