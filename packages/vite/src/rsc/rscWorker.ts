@@ -3,32 +3,31 @@
 // `--condition react-server`. If we did try to do that the main process
 // couldn't do SSR because it would be missing client-side React functions
 // like `useState` and `createContext`.
+
+import { Buffer } from 'node:buffer'
 import path from 'node:path'
-import { Writable } from 'node:stream'
+import { Transform, Writable } from 'node:stream'
 import { parentPort } from 'node:worker_threads'
 
 import { createElement } from 'react'
 
 import RSDWServer from 'react-server-dom-webpack/server'
-import { createServer } from 'vite'
+import type { ResolvedConfig } from 'vite'
+import { createServer, resolveConfig } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
 import type { defineEntries } from '../entries'
 import { StatusError } from '../lib/StatusError'
-import { configFileConfig, resolveConfig } from '../waku-lib/config'
-import { transformRsfId } from '../waku-lib/rsc-utils'
-import {
-  rscTransformPlugin,
-  rscReloadPlugin,
-} from '../waku-lib/vite-plugin-rsc'
 
-// import type { unstable_GetCustomModules } from '../waku-server'
+import { rscTransformPlugin, rscReloadPlugin } from './rscVitePlugins'
 import type {
   RenderInput,
   MessageRes,
   MessageReq,
 } from './rscWorkerCommunication'
+
+// import type { unstable_GetCustomModules } from '../waku-server'
 // import type { RenderInput, MessageReq, MessageRes } from './rsc-handler'
 // import { transformRsfId, generatePrefetchCode } from './rsc-utils'
 
@@ -153,7 +152,6 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
 // }
 
 const vitePromise = createServer({
-  ...configFileConfig,
   plugins: [
     rscTransformPlugin(),
     rscReloadPlugin((type) => {
@@ -208,7 +206,9 @@ parentPort.on('message', (message: MessageReq) => {
   }
 })
 
-const configPromise = resolveConfig('serve')
+// Let me re-assign root
+type ConfigType = Omit<ResolvedConfig, 'root'> & { root: string }
+const configPromise: Promise<ConfigType> = resolveConfig({}, 'serve')
 
 const getEntriesFile = async (
   config: Awaited<ReturnType<typeof resolveConfig>>,
@@ -217,11 +217,9 @@ const getEntriesFile = async (
   const rwPaths = getPaths()
 
   if (isBuild) {
-    return path.join(
-      config.root,
-      config.build.outDir,
-      config.framework.entriesJs
-    )
+    // TODO (RSC): Should we make this path configurable? Or at least read
+    // from getPaths()?
+    return path.join(config.root, config.build.outDir, 'entries.js')
   }
 
   return rwPaths.web.distServerEntries
@@ -386,137 +384,32 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
   throw new Error('Unexpected input')
 }
 
-// async function getCustomModulesRSC(): Promise<{ [name: string]: string }> {
-//   const config = await configPromise
-//   const entriesFile = await getEntriesFile(config, false)
-//   const {
-//     default: { unstable_getCustomModules: getCustomModules },
-//   } = await (loadServerFile(entriesFile) as Promise<{
-//     default: Entries['default'] & {
-//       unstable_getCustomModules?: unstable_GetCustomModules
-//     }
-//   }>)
-//   if (!getCustomModules) {
-//     return {}
-//   }
-//   const modules = await getCustomModules()
-//   return modules
-// }
+// HACK Patching stream is very fragile.
+// TODO (RSC): Sanitize prefixToRemove to make sure it's safe to use in a
+// RegExp (CodeQL is complaining on GitHub)
+function transformRsfId(prefixToRemove: string) {
+  // Should be something like /home/runner/work/redwood/test-project-rsa
+  console.log('prefixToRemove', prefixToRemove)
 
-// // FIXME this may take too much responsibility
-// async function buildRSC(): Promise<void> {
-//   const config = await resolveConfig('build')
-//   const basePath = config.base + config.framework.rscPrefix
-//   const distEntriesFile = await getEntriesFile(config, true)
-//   const {
-//     default: { getBuilder },
-//   } = await (loadServerFile(distEntriesFile) as Promise<Entries>)
-//   if (!getBuilder) {
-//     console.warn(
-//       "getBuilder is undefined. It's recommended for optimization and sometimes required."
-//     )
-//     return
-//   }
-
-//   // FIXME this doesn't seem an ideal solution
-//   const decodeId = (encodedId: string): [id: string, name: string] => {
-//     const [filePath, name] = encodedId.split('#') as [string, string]
-//     const id = resolveClientEntry(config, filePath)
-//     return [id, name]
-//   }
-
-//   const pathMap = await getBuilder(decodeId)
-//   const clientModuleMap = new Map<string, Set<string>>()
-//   const addClientModule = (pathStr: string, id: string) => {
-//     let idSet = clientModuleMap.get(pathStr)
-//     if (!idSet) {
-//       idSet = new Set()
-//       clientModuleMap.set(pathStr, idSet)
-//     }
-//     idSet.add(id)
-//   }
-//   await Promise.all(
-//     Object.entries(pathMap).map(async ([pathStr, { elements }]) => {
-//       for (const [rscId, props] of elements || []) {
-//         // FIXME we blindly expect JSON.stringify usage is deterministic
-//         const serializedProps = JSON.stringify(props)
-//         const searchParams = new URLSearchParams()
-//         searchParams.set('props', serializedProps)
-//         const destFile = path.join(
-//           config.root,
-//           config.build.outDir,
-//           config.framework.outPublic,
-//           config.framework.rscPrefix,
-//           decodeURIComponent(rscId),
-//           decodeURIComponent(`${searchParams}`)
-//         )
-//         fs.mkdirSync(path.dirname(destFile), { recursive: true })
-//         const bundlerConfig = new Proxy(
-//           {},
-//           {
-//             get(_target, encodedId: string) {
-//               const [id, name] = decodeId(encodedId)
-//               addClientModule(pathStr, id)
-//               return { id, chunks: [id], name, async: true }
-//             },
-//           }
-//         )
-//         const component = await getFunctionComponent(rscId, config, true)
-//         const pipeable = renderToPipeableStream(
-//           createElement(component, props as any),
-//           bundlerConfig
-//         ).pipe(transformRsfId(path.join(config.root, config.build.outDir)))
-//         await new Promise<void>((resolve, reject) => {
-//           const stream = fs.createWriteStream(destFile)
-//           stream.on('finish', resolve)
-//           stream.on('error', reject)
-//           pipeable.pipe(stream)
-//         })
-//       }
-//     })
-//   )
-
-//   const publicIndexHtmlFile = path.join(
-//     config.root,
-//     config.build.outDir,
-//     config.framework.outPublic,
-//     config.framework.indexHtml
-//   )
-//   const publicIndexHtml = fs.readFileSync(publicIndexHtmlFile, {
-//     encoding: 'utf8',
-//   })
-//   await Promise.all(
-//     Object.entries(pathMap).map(async ([pathStr, { elements, customCode }]) => {
-//       const destFile = path.join(
-//         config.root,
-//         config.build.outDir,
-//         config.framework.outPublic,
-//         pathStr,
-//         pathStr.endsWith('/') ? 'index.html' : ''
-//       )
-//       let data = ''
-//       if (fs.existsSync(destFile)) {
-//         data = fs.readFileSync(destFile, { encoding: 'utf8' })
-//       } else {
-//         fs.mkdirSync(path.dirname(destFile), { recursive: true })
-//         data = publicIndexHtml
-//       }
-//       const code =
-//         generatePrefetchCode(
-//           basePath,
-//           Array.from(elements || []).flatMap(([rscId, props, skipPrefetch]) => {
-//             if (skipPrefetch) {
-//               return []
-//             }
-//             return [[rscId, props]]
-//           }),
-//           clientModuleMap.get(pathStr) || []
-//         ) + (customCode || '')
-//       if (code) {
-//         // HACK is this too naive to inject script code?
-//         data = data.replace(/<\/body>/, `<script>${code}</script></body>`)
-//       }
-//       fs.writeFileSync(destFile, data, { encoding: 'utf8' })
-//     })
-//   )
-// }
+  return new Transform({
+    transform(chunk, encoding, callback) {
+      if (encoding !== ('buffer' as any)) {
+        throw new Error('Unknown encoding')
+      }
+      const data = chunk.toString()
+      const lines = data.split('\n')
+      console.log('lines', lines)
+      let changed = false
+      for (let i = 0; i < lines.length; ++i) {
+        const match = lines[i].match(
+          new RegExp(`^([0-9]+):{"id":"${prefixToRemove}(.*?)"(.*)$`)
+        )
+        if (match) {
+          lines[i] = `${match[1]}:{"id":"${match[2]}"${match[3]}`
+          changed = true
+        }
+      }
+      callback(null, changed ? Buffer.from(lines.join('\n')) : chunk)
+    },
+  })
+}

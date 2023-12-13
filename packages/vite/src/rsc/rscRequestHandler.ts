@@ -18,7 +18,7 @@ export function createRscRequestHandler() {
     console.log("req.headers['rw-rsc']", req.headers['rw-rsc'])
 
     // https://www.rfc-editor.org/rfc/rfc6648
-    // SHOULD NOT prefix their parameter names with "X-" or similar constructs.
+    // "SHOULD NOT prefix their parameter names with "X-" or similar constructs."
     if (req.headers['rw-rsc'] !== '1') {
       return next()
     }

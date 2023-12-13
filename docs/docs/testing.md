@@ -274,6 +274,7 @@ render(<Article article={ title: 'Foobar' } />, {
 })
 ```
 :::
+
 ### Mocking useLocation
 
 To mock `useLocation` in your component tests, wrap the component with `LocationProvider`:
@@ -287,6 +288,22 @@ render(
   </LocationProvider>
 )
 ```
+
+### Mocking useParams
+
+To mock `useParams` in your component tests, wrap the component with `ParamsProvider`:
+
+```jsx
+import { ParamsProvider } from '@redwoodjs/router';
+
+render(
+  <ParamsProvider allParams={{ param1: 'val1', param2: 'val2' }}>
+    <Component />
+  </ParamsProvider>
+)
+```
+
+The `allParams` argument accepts an object that will provide parameters as you expect them from the query parameters of a URL string. In the above example, we are assuming the URL looks like `/?param1=val1&param2=val2`.
 
 ### Queries
 
@@ -1958,6 +1975,16 @@ console.log(testCacheClient.storage)
 This is mainly helpful when you are testing for a very specific value, or have edgecases in how the serialization/deserialization works in the cache.
 
 
+## Testing Mailer
+
+If your project uses [RedwoodJS Mailer](./mailer.md) to send emails, you can [also write tests](./mailer.md#testing) to make sure that email:
+
+* is sent to an sandbox inbox
+* renders properly
+* sets the expected to, from, cc, bcc, subject attributes based on the email sending logic
+* checks that the html and text content is set correctly
+
+Since these tests send mail to a sandbox inbox, you can be confident that no emails accidentally get sent into the wild as part of your test or CI runs.
 
 
 ## Wrapping Up
