@@ -362,7 +362,7 @@ export const createWebAuth = (basedir: string, webAuthn: boolean) => {
 
   return {
     title: `Creating web/src/auth.${ext}`,
-    task: (ctx: AuthGeneratorCtx) => {
+    task: async (ctx: AuthGeneratorCtx) => {
       // @MARK - finding unused file name here,
       // We should only use an unused filename, if the user is CHOOSING not to replace the existing provider
 
@@ -399,7 +399,7 @@ export const createWebAuth = (basedir: string, webAuthn: boolean) => {
 
       template = isTSProject
         ? template
-        : transformTSToJS(authFileName, template)
+        : await transformTSToJS(authFileName, template)
 
       fs.writeFileSync(authFileName, template)
     },
@@ -448,7 +448,7 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
 
       // The keys in `filesRecord` are the full paths to where the file contents,
       // which is the values in `filesRecord`, will be written.
-      let filesRecord = apiSideFiles({ basedir, webAuthn })
+      let filesRecord = await apiSideFiles({ basedir, webAuthn })
 
       // Always overwrite files in force mode, no need to prompt
       let existingFiles: ExistingFiles = 'FAIL'

@@ -29,8 +29,12 @@ export const apiSideFiles = ({ basedir, webAuthn }: FilesArgs) => {
   const apiBaseTemplatePath = path.join(basedir, 'templates', 'api')
   const templateDirectories = fs.readdirSync(apiBaseTemplatePath)
 
-  const filesRecord = templateDirectories.reduce<Record<string, string>>(
-    (acc, dir) => {
+  type FilesRecordP = Promise<Record<string, string>>
+
+  const filesRecord = templateDirectories.reduce<FilesRecordP>(
+    async (acc, dir) => {
+      await acc
+
       const templateFiles = fs.readdirSync(path.join(apiBaseTemplatePath, dir))
       const filePaths = templateFiles
         .filter((fileName) => {
@@ -79,20 +83,20 @@ export const apiSideFiles = ({ basedir, webAuthn }: FilesArgs) => {
           return { templateFilePath, outputFilePath }
         })
 
-      filePaths.forEach((paths) => {
-        const content = fs.readFileSync(paths.templateFilePath, 'utf8')
+      for (const filePath of filePaths) {
+        const content = fs.readFileSync(filePath.templateFilePath, 'utf8')
 
         acc = {
           ...acc,
-          [paths.outputFilePath]: isTypeScriptProject()
+          [filePath.outputFilePath]: isTypeScriptProject()
             ? content
-            : transformTSToJS(paths.outputFilePath, content),
+            : await transformTSToJS(filePath.outputFilePath, content),
         }
-      })
+      }
 
       return acc
     },
-    {}
+    Promise.resolve({})
   )
 
   return filesRecord

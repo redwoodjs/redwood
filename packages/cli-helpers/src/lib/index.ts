@@ -60,10 +60,10 @@ export const prettierOptions = () => {
   }
 }
 
-export const prettify = (
+export const prettify = async (
   templateFilename: string,
   renderedTemplate: string
-): string => {
+): Promise<string> => {
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
   // https://prettier.io/docs/en/options.html#parser

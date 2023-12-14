@@ -9,10 +9,10 @@ export const command = 'ts-to-js'
 export const description =
   '[DEPRECATED]\n' + 'Convert a TypeScript project to JavaScript'
 
-export const handler = () => {
+export const handler = async () => {
   recordTelemetryAttributes({
     command: 'ts-to-js',
   })
-  convertTsProjectToJs(getPaths().base)
-  convertTsScriptsToJs(getPaths().base)
+  await convertTsProjectToJs(getPaths().base)
+  await convertTsScriptsToJs(getPaths().base)
 }
