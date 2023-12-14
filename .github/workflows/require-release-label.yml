@@ -19,4 +19,4 @@ jobs:
         with:
           mode: exactly
           count: 1
-          labels: "release:docs, release:chore, release:experiment, release:fix, release:feature, release:feature-breaking"
+          labels: "release:docs, release:chore, release:experiment, release:fix, release:feature, release:breaking"
