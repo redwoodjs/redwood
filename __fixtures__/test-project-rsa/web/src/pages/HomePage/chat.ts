@@ -1,6 +1,6 @@
 'use server'
 
-import { randomWords } from './words'
+import { randomWords } from '../../words'
 
 export async function onSend(formData: FormData) {
   const message = formData.get('message')
