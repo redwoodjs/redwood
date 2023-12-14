@@ -1,6 +1,7 @@
 import { parse } from 'path'
 
 import type { PluginObj, types } from '@babel/core'
+import generate from '@babel/generator'
 
 // This wraps a file that has a suffix of `Cell` in Redwood's `createCell` higher
 // order component. The HOC deals with the lifecycle methods during a GraphQL query.
@@ -31,12 +32,33 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
   let exportNames: string[] = []
   let hasDefaultExport = false
 
+  //
+  // TODO (RSC):
+  // There's now code added here to generate `createServerCell` related code
+  // I'm not sure that should live here intertwined with the code that
+  // generates `createCell` related code.
+  // Perhaps it's better to have two separate plugins.
+  //
+
+  // let hasCreateCellImport = false
+
   return {
     name: 'babel-plugin-redwood-cell',
     visitor: {
-      ExportDefaultDeclaration() {
+      ExportDefaultDeclaration(path) {
         hasDefaultExport = true
-        return
+
+        // Determine if this is `export default createCell(...)`
+        // If it is, then we change it to `export default createServerCell(...)`
+        const declaration = path.node.declaration
+        if (
+          t.isCallExpression(declaration) &&
+          t.isIdentifier(declaration.callee) &&
+          declaration.callee.name === 'createCell'
+        ) {
+          console.log('updating to `export default createServerCell(...)`')
+          declaration.callee.name = 'createServerCell'
+        }
       },
       ExportNamedDeclaration(path) {
         const declaration = path.node.declaration
@@ -58,15 +80,85 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           exportNames.push(name)
         }
       },
+      ImportDeclaration(path) {
+        console.log('ImportDeclaration from', path.node.source.value)
+
+        const source = path.node.source.value
+        if (source === '@redwoodjs/web') {
+          const specifiers = path.node.specifiers
+          // const createCellSpecifierIndex = specifiers.findIndex(
+          //   (specifier) =>
+          //     t.isImportSpecifier(specifier) &&
+          //     t.isIdentifier(specifier.imported) &&
+          //     specifier.imported.name === 'createCell'
+          // )
+
+          // if (createCellSpecifierIndex !== -1) {
+          //   const createServerCellSpecifier = t.importSpecifier(
+          //     t.identifier('createServerCell'),
+          //     t.identifier('createServerCell')
+          //   )
+
+          //   // Replace createCellSpecifier with createServerCellSpecifier
+          //   specifiers.splice(
+          //     createCellSpecifierIndex,
+          //     1,
+          //     createServerCellSpecifier
+          //   )
+          // }
+
+          const createCellSpecifier: types.ImportSpecifier | undefined =
+            specifiers.find((specifier): specifier is types.ImportSpecifier => {
+              return (
+                t.isImportSpecifier(specifier) &&
+                t.isIdentifier(specifier.imported) &&
+                specifier.imported.name === 'createCell'
+              )
+            })
+
+          if (
+            createCellSpecifier &&
+            t.isIdentifier(createCellSpecifier.imported)
+          ) {
+            console.log('set import name to createServerCell')
+            createCellSpecifier.imported.name = 'createServerCell'
+            createCellSpecifier.local.name = 'createServerCell'
+          }
+
+          //   specifiers.some(
+          //     (specifier) =>
+          //       t.isImportSpecifier(specifier) &&
+          //       t.isIdentifier(specifier.imported) &&
+          //       specifier.imported.name === 'createCell'
+          //   )
+          // ) {
+          //   // hasCreateCellImport = true
+          // }
+        }
+      },
       Program: {
         exit(path) {
+          console.log()
+          console.log('exiting')
+          console.log('exiting')
+          console.log()
+          console.log()
+          console.log(generate(path.node).code)
+          console.log()
+          console.log()
+          console.log('exiting')
+          console.log('-------')
+          console.log()
           // If the file already has a default export then
           //   1. It's likely not a cell, or it's a cell that's already been
           //      wrapped in `createCell`
           //   2. If we added another default export we'd be breaking JS module
           //      rules. There can only be one default export.
-          // If there's no QUERY export it's not a valid cell
-          if (hasDefaultExport || !exportNames.includes('QUERY')) {
+          // If there's no QUERY or DATA export it's not a valid cell
+          if (
+            hasDefaultExport ||
+            !(exportNames.includes('QUERY') || exportNames.includes('DATA'))
+          ) {
             return
           }
 
