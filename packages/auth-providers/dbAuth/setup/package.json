@@ -25,7 +25,7 @@
     "@babel/runtime-corejs3": "7.23.5",
     "@redwoodjs/cli-helpers": "6.5.1",
     "@simplewebauthn/browser": "7.4.0",
-    "core-js": "3.33.3",
+    "core-js": "3.34.0",
     "prompts": "2.4.2",
     "terminal-link": "2.1.1"
   },

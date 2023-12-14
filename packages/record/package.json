@@ -30,7 +30,7 @@
     "@babel/runtime-corejs3": "7.23.5",
     "@prisma/client": "5.7.0",
     "@redwoodjs/project-config": "6.5.1",
-    "core-js": "3.33.3"
+    "core-js": "3.34.0"
   },
   "devDependencies": {
     "@babel/cli": "7.23.4",
