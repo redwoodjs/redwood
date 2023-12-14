@@ -1696,6 +1696,80 @@ Only the posts scenarios will be present in the database when running the `posts
 
 During the run of any single test, there is only ever one scenario's worth of data present in the database: users.standard *or* users.incomplete.
 
+### describeScenario
+
+The scenario feature described above should be the base starting point for setting up test that depend on the database.  The scenario sets up the database before each scenario test, runs the test, and then tears down (deletes) the database scenario.  However, there are some situations where you as the user may want additional control regarding when the database is setup and torn down.
+
+The `describeScenario` function is utilized to run a sequence of multiple tests within a single database setup and tear-down.  T
+
+```
+describeScenario<StandardScenario>('contacts', (getScenario) => {
+  it('xxx', () => {
+    //
+    const scenario = getScenario()
+    /...
+  })
+
+  it('xxx', () => {
+    //
+    const scenario = getScenario()
+    /...
+  })
+
+})
+```
+
+> **CAUTION**: With describeScenario, you no long have isolation between tests.  The results, or side-effects, of prior tests can affect later tests.
+
+Rational for using `describeScenario` include:
+<ul>
+<li>Create multi-step tests where the next test is dependent upon the results of the previous test (Note caution above).
+<li>Reduce testing run time.  There is an overhead to setting up and tearing down the db on each test, and in some cases a reduced testing run time may be of significant benefit.  This may be of benefit where the likelihood of side-effects is low, such as in query testing
+</ul>
+
+### describeScenario Examples
+
+Following is an example of the use of `describeScenario` to speed up testing of a user query service function, where the risk of side-effects is low.
+
+```
+describeScenario<StandardScenario>('user query service', (getScenario) => {
+
+  it('retrieves a single user for a validated user', async (scenario) => {
+    mockCurrentUser({ id: 123, name: 'Admin' })
+
+    const scenario = getScenario()
+    const record = await user({ id: scenario.user.dom.id })
+
+    expect(record.id).toEqual(scenario.user.dom.id)
+  })
+
+  it('throws an error upon an invalid user id', async (scenario) => {
+    mockCurrentUser({ id: 123, name: 'Admin' })
+
+    const scenario = getScenario()
+    const fcn = async () => await user({ id: null as unknown as number })
+
+    await expect(fcn).rejects.toThrow()
+  })
+
+  it('throws an error if not authenticated', async (scenario) => {
+    const scenario = getScenario()
+    const fcn = async () => await user({ id: scenario.user.dom.id })
+
+    await expect(fcn).rejects.toThrow(AuthenticationError)
+  })
+
+  it('throws an error if the user is not authorized to query the user', async (scenario) => {
+    mockCurrentUser({ id: 999, name: 'BaseLevelUser' })
+
+    const scenario = getScenario()
+    const fcn = async () => await user({ id: scenario.user.dom.id })
+
+    await expect(fcn).rejects.toThrow(ForbiddenError)
+  })
+})
+```
+
 ### mockCurrentUser() on the API-side
 
 Just like when testing the web-side, we can use `mockCurrentUser()` to mock out the user that's currently logged in (or not) on the api-side.
