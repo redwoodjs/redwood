@@ -17,7 +17,6 @@ import {
   generateTemplate,
   readFile,
   writeFile,
-  asyncForEach,
   getDefaultArgs,
   getPaths,
   writeFilesTask,
@@ -183,7 +182,7 @@ export const files = async ({
     })),
     ...assetFiles(name, tailwind),
     ...(await formatters(name, typescript)),
-    ...layoutFiles(name, force, typescript, templateStrings),
+    ...(await layoutFiles(name, force, typescript, templateStrings)),
     ...(await pageFiles(
       name,
       pascalScaffoldPath,
@@ -280,10 +279,10 @@ const formatters = async (name, isTypescript) => {
   return {
     [outputPath]: isTypescript
       ? template
-      : transformTSToJS(outputPath, template),
+      : await transformTSToJS(outputPath, template),
     [outputPathTest]: isTypescript
       ? templateTest
-      : transformTSToJS(outputPathTest, templateTest),
+      : await transformTSToJS(outputPathTest, templateTest),
   }
 }
 
@@ -436,7 +435,12 @@ const modelRelatedVariables = (model) => {
   }
 }
 
-const layoutFiles = (name, force, generateTypescript, templateStrings) => {
+const layoutFiles = async (
+  name,
+  force,
+  generateTypescript,
+  templateStrings
+) => {
   let fileList = {}
 
   const layouts = fs.readdirSync(
@@ -447,7 +451,7 @@ const layoutFiles = (name, force, generateTypescript, templateStrings) => {
     })
   )
 
-  layouts.forEach((layout) => {
+  for (const layout of layouts) {
     const outputLayoutName = layout.replace(
       /\.tsx\.template/,
       generateTypescript ? '.tsx' : '.jsx'
@@ -476,9 +480,9 @@ const layoutFiles = (name, force, generateTypescript, templateStrings) => {
 
       fileList[outputPath] = generateTypescript
         ? template
-        : transformTSToJS(outputPath, template)
+        : await transformTSToJS(outputPath, template)
     }
-  })
+  }
 
   return fileList
 }
@@ -506,7 +510,7 @@ const pageFiles = async (
     })
   )
 
-  pages.forEach((page) => {
+  for (const page of pages) {
     // Sanitize page names
     const outputPageName = page
       .replace(/Names/, pluralName)
@@ -540,8 +544,8 @@ const pageFiles = async (
 
     fileList[outputPath] = generateTypescript
       ? template
-      : transformTSToJS(outputPath, template)
-  })
+      : await transformTSToJS(outputPath, template)
+  }
 
   return fileList
 }
@@ -568,7 +572,7 @@ const componentFiles = async (
     })
   )
 
-  await asyncForEach(components, (component) => {
+  for (const component of components) {
     const outputComponentName = component
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
@@ -603,8 +607,8 @@ const componentFiles = async (
 
     fileList[outputPath] = generateTypescript
       ? template
-      : transformTSToJS(outputPath, template)
-  })
+      : await transformTSToJS(outputPath, template)
+  }
 
   return fileList
 }

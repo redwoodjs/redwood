@@ -70,14 +70,16 @@ export const files = ({ name, typescript = false, type, tests }) => {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return files.reduce((acc, [outputPath, content]) => {
-    const template = typescript ? content : transformTSToJS(outputPath, content)
+  return files.reduce(async (acc, [outputPath, content]) => {
+    const template = typescript
+      ? content
+      : await transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolved({}))
 }
 
 const positionalsObj = {

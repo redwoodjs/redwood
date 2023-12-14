@@ -343,9 +343,11 @@ export const files = async ({
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return files.reduce((acc, [outputPath, content]) => {
+  return files.reduce(async (acc, [outputPath, content]) => {
+    await acc
+
     if (!typescript) {
-      content = transformTSToJS(outputPath, content)
+      content = await transformTSToJS(outputPath, content)
       outputPath = outputPath.replace('.ts', '.js')
     }
 
@@ -353,7 +355,7 @@ export const files = async ({
       [outputPath]: content,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 export const defaults = {

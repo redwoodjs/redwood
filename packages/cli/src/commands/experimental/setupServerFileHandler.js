@@ -30,7 +30,7 @@ export const setupServerFileTasks = (force = false) => {
   return [
     {
       title: 'Adding the experimental server files...',
-      task: () => {
+      task: async () => {
         const serverFileTemplateContent = fs.readFileSync(
           path.resolve(__dirname, 'templates', 'server.ts.template'),
           'utf-8'
@@ -38,7 +38,7 @@ export const setupServerFileTasks = (force = false) => {
 
         const setupScriptContent = ts
           ? serverFileTemplateContent
-          : transformTSToJS(serverFilePath, serverFileTemplateContent)
+          : await transformTSToJS(serverFilePath, serverFileTemplateContent)
 
         return [
           writeFile(serverFilePath, setupScriptContent, {

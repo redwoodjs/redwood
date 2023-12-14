@@ -27,12 +27,6 @@ import { pluralize, singularize } from './rwPluralize'
 
 export { findUp }
 
-export const asyncForEach = async (array, callback) => {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array)
-  }
-}
-
 /**
  * Returns variants of the passed `name` for usage in templates. If the given
  * name was "fooBar" then these would be:

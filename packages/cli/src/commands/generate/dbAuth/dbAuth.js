@@ -225,18 +225,19 @@ export const files = ({
     files.push([scaffoldOutputPath, scaffoldTemplate])
   }
 
-  return files.reduce((acc, [outputPath, content]) => {
+  return files.reduce(async (acc, [outputPath, content]) => {
+    await acc
     let template = content
 
     if (outputPath.match(/\.[jt]sx?/) && !typescript) {
-      template = transformTSToJS(outputPath, content)
+      template = await transformTSToJS(outputPath, content)
     }
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolved({}))
 }
 
 const tasks = ({

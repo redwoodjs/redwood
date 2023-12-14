@@ -137,14 +137,17 @@ export const files = async ({ name, typescript, ...options }) => {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return files.reduce((acc, [outputPath, content]) => {
-    const template = typescript ? content : transformTSToJS(outputPath, content)
+  return files.reduce(async (acc, [outputPath, content]) => {
+    await acc
+    const template = typescript
+      ? content
+      : await transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 export const { command, description, builder, handler } =

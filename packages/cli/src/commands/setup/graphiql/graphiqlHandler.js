@@ -74,7 +74,7 @@ export const handler = async ({ provider, id, token, expiry, view }) => {
       },
       {
         title: 'Generating file in src/lib/generateGraphiQLHeader.{js,ts}...',
-        task: () => {
+        task: async () => {
           const fileName =
             token || provider === 'dbAuth'
               ? 'graphiql-token.ts.template'
@@ -99,7 +99,7 @@ export const handler = async ({ provider, id, token, expiry, view }) => {
             {
               [outputPath]: isTypeScriptProject()
                 ? content
-                : transformTSToJS(outputPath, content),
+                : await transformTSToJS(outputPath, content),
             },
             { overwriteExisting: true }
           )

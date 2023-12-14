@@ -77,16 +77,16 @@ export const files = ({
     outputFiles.push(scenarioFile)
   }
 
-  return outputFiles.reduce((acc, [outputPath, content]) => {
+  return outputFiles.reduce(async (acc, [outputPath, content]) => {
     const template = generateTypescript
       ? content
-      : transformTSToJS(outputPath, content)
+      : await transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolved({}))
 }
 
 export const command = 'function <name>'

@@ -21,7 +21,7 @@ export const handler = async ({ force, verbose, addPackage }) => {
     [
       {
         title: 'Adding vite.config.js...',
-        task: () => {
+        task: async () => {
           // @NOTE: do not use getPaths().viteConfig because it'll come through as null
           // this is because we do a check for the file's existence in getPaths()
           const viteConfigPath = `${getPaths().web.base}/vite.config.${
@@ -35,7 +35,7 @@ export const handler = async ({ force, verbose, addPackage }) => {
 
           const viteConfigContent = ts
             ? templateContent
-            : transformTSToJS(viteConfigPath, templateContent)
+            : await transformTSToJS(viteConfigPath, templateContent)
 
           return writeFile(viteConfigPath, viteConfigContent, {
             overwriteExisting: force,

@@ -211,7 +211,7 @@ export const files = async ({
   )
 
   if (typescript) {
-    template = transformTSToJS(outputPath, template)
+    template = await transformTSToJS(outputPath, template)
   }
 
   return {
