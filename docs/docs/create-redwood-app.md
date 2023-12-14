@@ -14,7 +14,7 @@ yarn create redwood-app <your-app-name>
 ## Set up for success
 Redwood requires that you're running Node version 20 or higher.
 
-If you're running Node version 19.0.0 or higher, you can still use Create Redwood App, but it may make your project incompatible with some deploy targets, such as AWS Lambdas.
+If you're running Node version 21.0.0 or higher, you can still use Create Redwood App, but it may make your project incompatible with some deploy targets, such as AWS Lambdas.
 
 To see what version of Node you're running, you can run the following command in your terminal:
 
