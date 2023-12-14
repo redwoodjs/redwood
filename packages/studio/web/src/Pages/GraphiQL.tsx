@@ -24,7 +24,7 @@ const DEFAULT_QUERY = `{
 }`
 
 function GraphiQL() {
-  const port = window.RWJS_STUDIO_PORT
+  const port = window.RWJS_STUDIO_BASE_PORT
   const { data } = useQuery(GET_AUTH)
   let headers: undefined | Record<string, string> = undefined
 

@@ -75,8 +75,8 @@ interface AuthImpersonationConfig {
 }
 
 interface StudioConfig {
-  inMemory: boolean
   basePort: number
+  inMemory: boolean
   graphiql?: GraphiQLStudioConfig
 }
 

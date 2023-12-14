@@ -72,7 +72,7 @@ export const start = async (
   // Routes
   fastify.register(spanRoutes)
   fastify.register(yogaRoutes, { yoga: yogaServer })
-  // Statically serving the web side (React)
+  // Statically serve the web side (React)
   fastify.register(fastifyStatic, { root: webPath })
 
   fastify.listen({ port: studioPort, host: HOST })

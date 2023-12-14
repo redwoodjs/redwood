@@ -2,7 +2,7 @@
 
 declare global {
   interface Window {
-    RWJS_STUDIO_PORT: number
+    RWJS_STUDIO_BASE_PORT: number
   }
 }
 
