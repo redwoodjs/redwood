@@ -20,7 +20,9 @@ export function rscChanged(changedFiles){
       changedFile.startsWith('packages/internal/') ||
       changedFile.startsWith('packages/project-config/') ||
       changedFile.startsWith('packages/web/') ||
-      changedFile.startsWith('packages/vite/')
+      changedFile.startsWith('packages/vite/') ||
+      changedFile.startsWith('__fixtures__/test-project-rsa') ||
+      changedFile.startsWith('__fixtures__/test-project-rsc-external-packages')
     ) {
       console.log('RSC change detected:', changedFile)
       return true
