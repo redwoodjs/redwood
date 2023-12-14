@@ -64,7 +64,7 @@ describe('api', () => {
                 "@babel/plugin-transform-private-methods",
               ],
               "targets": {
-                "node": "18.16",
+                "node": "20.10",
               },
               "useBuiltIns": "usage",
             },
