@@ -64,7 +64,7 @@ Grove collected all the code for your app and put it in a Docker container. It c
 
 ## Claiming Your App
 
-That gets our site online, but there's no way to watch what's happening, set ENV vars, re-deploy it, etc. To do that, you'll need to claim your app by creating an account at [https://grove.dev](https://grove.dev) In addition to the URL you opened above, the CLI also returned a URL to claim your account. Follow that link and you'll be ready to go!
+That gets our site online, but there's no way to check on the status of our containers, watch logs, set ENV vars, create a custom domain, etc. To do that, you'll need to claim your app by creating an account at [https://grove.dev](https://grove.dev) In addition to the URL you opened above, the CLI also returned a URL to claim your account. Follow that link and you'll be ready to go!
 
 ## Where are my blog posts?
 
