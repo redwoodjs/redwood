@@ -28,7 +28,7 @@
     "@redwoodjs/mailer-core": "6.0.7"
   },
   "devDependencies": {
-    "esbuild": "0.19.5",
+    "esbuild": "0.19.9",
     "fast-glob": "3.3.2",
     "typescript": "5.3.3"
   },

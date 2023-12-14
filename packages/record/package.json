@@ -36,7 +36,7 @@
     "@babel/cli": "7.23.4",
     "@babel/core": "^7.22.20",
     "@prisma/internals": "5.7.0",
-    "esbuild": "0.19.5",
+    "esbuild": "0.19.9",
     "jest": "29.7.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
