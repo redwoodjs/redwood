@@ -128,6 +128,6 @@ export default PostForm
 
 :::warning
 
-You can put the email validation back into the `<TextField>` now, but you should leave the server validation in place, just in case.
+You can't use the [onError](https://www.apollographql.com/docs/react/api/react/hooks/#onerror) callback in combination with the `toast.promise` function.
 
 :::
