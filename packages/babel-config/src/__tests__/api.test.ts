@@ -20,7 +20,7 @@ afterEach(() => {
 
 describe('api', () => {
   test("TARGETS_NODE hasn't unintentionally changed", () => {
-    expect(TARGETS_NODE).toMatchInlineSnapshot(`"18.16"`)
+    expect(TARGETS_NODE).toMatchInlineSnapshot(`"20.10"`)
   })
 
   describe('getApiSideBabelPresets', () => {
