@@ -78,6 +78,6 @@ dbAuth provides an API for signup and login that the client knows how to call, b
 
 To close this hole, check out `api/src/functions/auth.js`, this is where the configuration for dbAuth lives. Take a gander at the `signupOptions` object, specifically the `handler()` function. This defines what to do with the user data that's submitted on the signup form. If you simply have this function return `false`, instead of creating a user, we will have effectively shut the door on the API signup hack.
 
-Commit your changes and push your repo, and Netlify will re-deploy your site. Take that you hacking [snollygosters](https://www.merriam-webster.com/dictionary/snollygoster)!
+Be sure to save your changes, then run `grove deploy` to push the changes live. Take that you hacking [snollygosters](https://www.merriam-webster.com/dictionary/snollygoster)!
 
 ![100% accurate portrayal of hacking](https://user-images.githubusercontent.com/300/152592915-609747f9-3d68-4d72-8cd8-e120ef83b640.gif)
