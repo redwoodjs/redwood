@@ -54,7 +54,7 @@
     "css-minimizer-webpack-plugin": "5.0.1",
     "dotenv-webpack": "8.0.1",
     "graphql-tag": "2.12.6",
-    "html-webpack-plugin": "5.5.3",
+    "html-webpack-plugin": "5.5.4",
     "lodash": "4.17.21",
     "mini-css-extract-plugin": "2.7.6",
     "nodemon": "3.0.2",
