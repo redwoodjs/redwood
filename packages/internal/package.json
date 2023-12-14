@@ -51,7 +51,7 @@
     "@redwoodjs/router": "6.0.7",
     "@sdl-codegen/node": "0.0.10",
     "chalk": "4.1.2",
-    "core-js": "3.33.3",
+    "core-js": "3.34.0",
     "deepmerge": "4.3.1",
     "esbuild": "0.19.5",
     "fast-glob": "3.3.2",
