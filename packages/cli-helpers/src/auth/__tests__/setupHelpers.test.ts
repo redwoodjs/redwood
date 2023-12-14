@@ -1,4 +1,13 @@
-globalThis.__dirname = __dirname
+import fs from 'fs'
+import path from 'path'
+
+import { Listr } from 'listr2'
+import prompts from 'prompts'
+
+// import * as auth from '../auth'
+import { standardAuthHandler } from '../setupHelpers'
+
+// globalThis.__dirname = __dirname
 
 // mock Telemetry for CLI commands so they don't try to spawn a process
 jest.mock('@redwoodjs/telemetry', () => {
@@ -35,15 +44,6 @@ jest.mock('../../lib/project', () => ({
 jest.mock('execa', () => {})
 jest.mock('listr2')
 jest.mock('prompts', () => jest.fn(() => ({ answer: true })))
-
-import fs from 'fs'
-import path from 'path'
-
-import { Listr } from 'listr2'
-import prompts from 'prompts'
-
-// import * as auth from '../auth'
-import { standardAuthHandler } from '../setupHelpers'
 
 describe('Auth generator tests', () => {
   const processExitSpy = jest
