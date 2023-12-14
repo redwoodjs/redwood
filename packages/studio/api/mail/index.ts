@@ -1,5 +1,6 @@
 import path from 'node:path'
 
+import { getStudioConfig } from 'api/lib/config'
 import chokidar from 'chokidar'
 import fs from 'fs-extra'
 import { simpleParser as simpleMailParser } from 'mailparser'
@@ -38,8 +39,11 @@ export function startServer() {
       })
     },
   })
-  smtpServer.listen(4319, undefined, () => {
-    console.log('Studio SMTP Server listening on 4319')
+
+  const port = getStudioConfig().port + 1
+
+  smtpServer.listen(port, undefined, () => {
+    console.log('Studio SMTP Server listening on ' + port)
   })
 }
 
