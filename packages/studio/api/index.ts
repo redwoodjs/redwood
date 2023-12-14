@@ -61,7 +61,7 @@ export const start = async (
     rewritePrefix: '/' + graphqlEndpoint.split('/').slice(3).join('/'),
   })
 
-  const studioPort = getStudioConfig().port
+  const studioPort = getStudioConfig().basePort
   const webPath = path.join(__dirname, '..', '..', 'web')
 
   rewriteWebToUsePort(webPath, studioPort)

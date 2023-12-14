@@ -40,7 +40,7 @@ export function startServer() {
     },
   })
 
-  const port = getStudioConfig().port + 1
+  const port = getStudioConfig().basePort + 1
 
   smtpServer.listen(port, undefined, () => {
     console.log('Studio SMTP Server listening on ' + port)
