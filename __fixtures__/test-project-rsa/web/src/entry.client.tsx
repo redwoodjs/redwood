@@ -1,20 +1,23 @@
-import { createRoot } from 'react-dom/client'
+import { hydrateRoot, createRoot } from 'react-dom/client'
 
-import { FatalErrorBoundary } from '@redwoodjs/web'
-
-import FatalErrorPage from './pages/FatalErrorPage/FatalErrorPage'
-import Routes from './Routes'
-
+import App from './App'
+/**
+ * When `#redwood-app` isn't empty then it's very likely that you're using
+ * prerendering. So React attaches event listeners to the existing markup
+ * rather than replacing it.
+ * https://reactjs.org/docs/react-dom-client.html#hydrateroot
+ */
 const redwoodAppElement = document.getElementById('redwood-app')
 
-const root = createRoot(redwoodAppElement)
-
-const App = () => {
-  return (
-    <FatalErrorBoundary page={FatalErrorPage}>
-      <Routes />
-    </FatalErrorBoundary>
+if (!redwoodAppElement) {
+  throw new Error(
+    "Could not find an element with ID 'redwood-app'. Please ensure it exists in your 'web/src/index.html' file."
   )
 }
 
-root.render(<App />)
+if (redwoodAppElement.children?.length > 0) {
+  hydrateRoot(redwoodAppElement, <App />)
+} else {
+  const root = createRoot(redwoodAppElement)
+  root.render(<App />)
+}
