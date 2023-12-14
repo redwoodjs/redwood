@@ -3,6 +3,7 @@ import path from 'node:path'
 import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
+import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn'
@@ -74,7 +75,16 @@ export async function rscBuildClient(
         {}
       ),
     },
-    plugins: [react(), rscIndexPlugin()],
+    plugins: [
+      react({
+        babel: {
+          ...getWebSideDefaultBabelConfig({
+            forVite: true,
+          }),
+        },
+      }),
+      rscIndexPlugin(),
+    ],
     build: {
       outDir: webDist,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
