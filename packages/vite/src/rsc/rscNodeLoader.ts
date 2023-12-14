@@ -14,10 +14,12 @@
 // Error: Expected source to have been loaded into a string.
 //     at load (/Users/tobbe/tmp/rw-rsc-esm/node_modules/@redwoodjs/vite/dist/react-server-dom-webpack/node-loader.js:357:13)
 //     at async nextLoad (node:internal/modules/esm/loader:163:22)
+//
+// TODO (RSC): Verify that the above is still true
+//
+// This loader is exported in package.json and used with the rsc worker
 
 export async function load(url: string, context: any, nextLoad: any) {
-  // console.log('waku-lib/node-loader: load', context.format, url)
-
   const result = await nextLoad(url, context, nextLoad)
 
   if (result.format === 'module') {
