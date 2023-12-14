@@ -64,7 +64,7 @@ Grove collected all the code for your app and put it in a Docker container. It c
 
 ## Claiming Your App
 
-That gets our site online, but there's no way to watch what's happening, set ENV vars, re-deploy it, etc. To do that, you'll need to claim your app by creating an account at [https://grove.dev](https://grove.dev) In additional to the URL you opened above, the CLI also returned a URL to claim your account. Follow that link and you'll be ready to go!
+That gets our site online, but there's no way to watch what's happening, set ENV vars, re-deploy it, etc. To do that, you'll need to claim your app by creating an account at [https://grove.dev](https://grove.dev) In addition to the URL you opened above, the CLI also returned a URL to claim your account. Follow that link and you'll be ready to go!
 
 ## Where are my blog posts?
 
@@ -81,4 +81,3 @@ To close this hole, check out `api/src/functions/auth.js`, this is where the con
 Commit your changes and push your repo, and Netlify will re-deploy your site. Take that you hacking [snollygosters](https://www.merriam-webster.com/dictionary/snollygoster)!
 
 ![100% accurate portrayal of hacking](https://user-images.githubusercontent.com/300/152592915-609747f9-3d68-4d72-8cd8-e120ef83b640.gif)
-
