@@ -2,7 +2,7 @@ import * as React from 'react'
 import type { ReactNode } from 'react'
 
 import { act, render, waitFor } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom/jest-globals'
 
 import { navigate } from '../history'
 import { Route, Router } from '../router'

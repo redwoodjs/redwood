@@ -7,7 +7,7 @@ import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom/jest-globals'
 
 globalThis.RWJS_API_GRAPHQL_URL = 'https://api.example.com/graphql'
 
