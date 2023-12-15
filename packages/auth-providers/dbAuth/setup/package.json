@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.5",
+    "@babel/runtime-corejs3": "7.23.6",
     "@redwoodjs/cli-helpers": "6.5.1",
     "@simplewebauthn/browser": "7.4.0",
     "core-js": "3.34.0",

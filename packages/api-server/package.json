@@ -28,7 +28,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.5",
+    "@babel/runtime-corejs3": "7.23.6",
     "@fastify/http-proxy": "9.3.0",
     "@fastify/static": "6.12.0",
     "@fastify/url-data": "5.4.0",
