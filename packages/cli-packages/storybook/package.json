@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@types/yargs": "17.0.31",
-    "esbuild": "0.19.5",
+    "esbuild": "0.19.9",
     "fast-glob": "3.3.2",
     "jest": "29.7.0",
     "typescript": "5.3.3"

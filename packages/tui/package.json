@@ -33,7 +33,7 @@
     "stdout-update": "1.6.8"
   },
   "devDependencies": {
-    "esbuild": "0.19.5",
+    "esbuild": "0.19.9",
     "jest": "29.7.0",
     "typescript": "5.3.3"
   }

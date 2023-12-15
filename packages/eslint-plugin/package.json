@@ -28,7 +28,7 @@
     "@types/eslint": "8",
     "@types/estree": "1.0.5",
     "@typescript-eslint/parser": "5.62.0",
-    "esbuild": "0.19.5",
+    "esbuild": "0.19.9",
     "fast-glob": "3.3.2",
     "glob": "10.3.10",
     "tsx": "4.6.2",
