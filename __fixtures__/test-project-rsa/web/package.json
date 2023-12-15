@@ -11,13 +11,13 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/forms": "7.0.0-canary.404",
-    "@redwoodjs/router": "7.0.0-canary.404",
-    "@redwoodjs/web": "7.0.0-canary.404",
+    "@redwoodjs/forms": "7.0.0-canary.717",
+    "@redwoodjs/router": "7.0.0-canary.717",
+    "@redwoodjs/web": "7.0.0-canary.717",
     "react": "0.0.0-experimental-e5205658f-20230913",
     "react-dom": "0.0.0-experimental-e5205658f-20230913"
   },
   "devDependencies": {
-    "@redwoodjs/vite": "7.0.0-canary.404"
+    "@redwoodjs/vite": "7.0.0-canary.717"
   }
 }
