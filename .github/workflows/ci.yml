@@ -89,7 +89,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-      fail-fast: false
 
     name: 🏗 Build, lint, test / ${{ matrix.os }} / node 18 latest
     runs-on: ${{ matrix.os }}
