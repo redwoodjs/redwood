@@ -35,7 +35,7 @@
     "@vscode/ripgrep": "1.15.6",
     "@whatwg-node/fetch": "0.9.14",
     "cheerio": "1.0.0-rc.12",
-    "core-js": "3.33.3",
+    "core-js": "3.34.0",
     "deepmerge": "4.3.1",
     "execa": "5.1.1",
     "fast-glob": "3.3.2",
@@ -45,7 +45,7 @@
     "pascalcase": "1.0.0",
     "prettier": "2.8.8",
     "tasuku": "2.0.1",
-    "typescript": "5.3.2",
+    "typescript": "5.3.3",
     "yargs": "17.7.2"
   },
   "devDependencies": {
