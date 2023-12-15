@@ -33,6 +33,9 @@ jobs:
         with:
           node-version: 18
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: 🐈 Yarn install
         working-directory: ./.github/actions/detect-changes
         run: yarn install --inline-builds
