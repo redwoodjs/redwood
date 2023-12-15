@@ -5,7 +5,7 @@ import { act, render, waitFor } from '@testing-library/react'
 import { Route, Router, navigate } from '../'
 import { Set } from '../Set'
 
-import '@testing-library/jest-dom/jest-globals'
+import '@testing-library/jest-dom/extend-expect'
 
 const HomePage = () => {
   return <p>Home Page</p>
