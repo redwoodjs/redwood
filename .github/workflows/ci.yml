@@ -26,6 +26,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -50,6 +53,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
@@ -92,10 +98,16 @@ jobs:
 
       - uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
@@ -148,6 +160,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
@@ -242,10 +257,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
@@ -445,10 +466,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache

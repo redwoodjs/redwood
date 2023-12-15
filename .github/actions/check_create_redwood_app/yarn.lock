@@ -2,16 +2,16 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 6
-  cacheKey: 8c0
+  version: 8
+  cacheKey: 10c0
 
 "@actions/core@npm:1.10.1":
   version: 1.10.1
   resolution: "@actions/core@npm:1.10.1"
   dependencies:
-    "@actions/http-client": ^2.0.1
-    uuid: ^8.3.2
-  checksum: 7a61446697a23dcad3545cf0634dedbdedf20ae9a0ee6ee977554589a15deb4a93593ee48a41258933d58ce0778f446b0d2c162b60750956fb75e0b9560fb832
+    "@actions/http-client": "npm:^2.0.1"
+    uuid: "npm:^8.3.2"
+  checksum: 8c0/7a61446697a23dcad3545cf0634dedbdedf20ae9a0ee6ee977554589a15deb4a93593ee48a41258933d58ce0778f446b0d2c162b60750956fb75e0b9560fb832
   languageName: node
   linkType: hard
 
@@ -19,8 +19,8 @@ __metadata:
   version: 1.1.1
   resolution: "@actions/exec@npm:1.1.1"
   dependencies:
-    "@actions/io": ^1.0.1
-  checksum: 4a09f6bdbe50ce68b5cf8a7254d176230d6a74bccf6ecc3857feee209a8c950ba9adec87cc5ecceb04110182d1c17117234e45557d72fde6229b7fd3a395322a
+    "@actions/io": "npm:^1.0.1"
+  checksum: 8c0/4a09f6bdbe50ce68b5cf8a7254d176230d6a74bccf6ecc3857feee209a8c950ba9adec87cc5ecceb04110182d1c17117234e45557d72fde6229b7fd3a395322a
   languageName: node
   linkType: hard
 
@@ -28,15 +28,15 @@ __metadata:
   version: 2.0.1
   resolution: "@actions/http-client@npm:2.0.1"
   dependencies:
-    tunnel: ^0.0.6
-  checksum: b58987ba2f53d7988f612ede7ff834573a3360c21f8fdea9fea92f26ada0fd0efafb22aa7d83f49c18965a5b765775d5253e2edb8d9476d924c4b304ef726b67
+    tunnel: "npm:^0.0.6"
+  checksum: 8c0/b58987ba2f53d7988f612ede7ff834573a3360c21f8fdea9fea92f26ada0fd0efafb22aa7d83f49c18965a5b765775d5253e2edb8d9476d924c4b304ef726b67
   languageName: node
   linkType: hard
 
 "@actions/io@npm:^1.0.1":
   version: 1.1.2
   resolution: "@actions/io@npm:1.1.2"
-  checksum: 61c871bbee1cf58f57917d9bb2cf6bb7ea4dc40de3f65c7fb4ec619ceff57fc98f56be9cca2d476b09e7a96e1cba0d88cd125c4f690d384b9483935186f256c1
+  checksum: 8c0/61c871bbee1cf58f57917d9bb2cf6bb7ea4dc40de3f65c7fb4ec619ceff57fc98f56be9cca2d476b09e7a96e1cba0d88cd125c4f690d384b9483935186f256c1
   languageName: node
   linkType: hard
 
@@ -44,15 +44,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "check_test_project_fixture@workspace:."
   dependencies:
-    "@actions/core": 1.10.1
-    "@actions/exec": 1.1.1
+    "@actions/core": "npm:1.10.1"
+    "@actions/exec": "npm:1.1.1"
   languageName: unknown
   linkType: soft
 
 "tunnel@npm:^0.0.6":
   version: 0.0.6
   resolution: "tunnel@npm:0.0.6"
-  checksum: e27e7e896f2426c1c747325b5f54efebc1a004647d853fad892b46d64e37591ccd0b97439470795e5262b5c0748d22beb4489a04a0a448029636670bfd801b75
+  checksum: 8c0/e27e7e896f2426c1c747325b5f54efebc1a004647d853fad892b46d64e37591ccd0b97439470795e5262b5c0748d22beb4489a04a0a448029636670bfd801b75
   languageName: node
   linkType: hard
 
@@ -61,6 +61,6 @@ __metadata:
   resolution: "uuid@npm:8.3.2"
   bin:
     uuid: dist/bin/uuid
-  checksum: bcbb807a917d374a49f475fae2e87fdca7da5e5530820ef53f65ba1d12131bd81a92ecf259cc7ce317cbe0f289e7d79fdfebcef9bfa3087c8c8a2fa304c9be54
+  checksum: 8c0/bcbb807a917d374a49f475fae2e87fdca7da5e5530820ef53f65ba1d12131bd81a92ecf259cc7ce317cbe0f289e7d79fdfebcef9bfa3087c8c8a2fa304c9be54
   languageName: node
   linkType: hard

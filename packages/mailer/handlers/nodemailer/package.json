@@ -28,7 +28,7 @@
     "nodemailer": "6.9.7"
   },
   "devDependencies": {
-    "@types/nodemailer": "6",
+    "@types/nodemailer": "^6",
     "esbuild": "0.18.19",
     "fast-glob": "3.3.2",
     "typescript": "5.3.3"
