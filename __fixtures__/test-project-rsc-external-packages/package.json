@@ -7,14 +7,14 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "7.0.0-canary.413"
+    "@redwoodjs/core": "7.0.0-canary.717"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
     "root": true
   },
   "engines": {
-    "node": "=18.x",
+    "node": "=20.x",
     "yarn": ">=1.22.21"
   },
   "prisma": {

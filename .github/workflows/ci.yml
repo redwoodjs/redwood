@@ -34,7 +34,7 @@ jobs:
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: 🐈 Yarn install
         working-directory: ./.github/actions/detect-changes
@@ -62,7 +62,7 @@ jobs:
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: 🐈 Yarn install
         working-directory: ./tasks/check
@@ -106,7 +106,7 @@ jobs:
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Enable Corepack
         run: corepack enable
@@ -169,7 +169,7 @@ jobs:
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
@@ -265,7 +265,7 @@ jobs:
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Enable Corepack
         run: corepack enable
@@ -474,7 +474,7 @@ jobs:
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Enable Corepack
         run: corepack enable
@@ -536,7 +536,7 @@ jobs:
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Enable Corepack
         run: corepack enable
@@ -636,7 +636,7 @@ jobs:
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
