@@ -17,7 +17,7 @@ let result = await esbuild.build({
 
   format: 'cjs',
   platform: 'node',
-  target: ['node18'],
+  target: ['node20'],
 
   logLevel: 'info',
 
@@ -44,7 +44,7 @@ result = await esbuild.build({
   minify: true,
 
   platform: 'node',
-  target: ['node18'],
+  target: ['node20'],
   packages: 'external',
 
   logLevel: 'info',
