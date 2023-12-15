@@ -67,13 +67,13 @@ The `base` stage installs dependencies.
 It's used as the base image for the build stages and the `console` stage.
 
 ```Dockerfile
-FROM node:18-bookworm-slim as base
+FROM node:20-bookworm-slim as base
 ```
 
-We use a Node.js 18 image as the base image because that's the version Redwood targets.
+We use a Node.js 20 image as the base image because that's the version Redwood targets.
 "bookworm" is the codename for the current stable distribution of Debian (version 12).
 We think it's important to pin the version of the OS just like we pin the version of Node.js.
-Lastly, the "slim" variant of the `node:18-bookworm` image only includes what Node.js needs which reduces the image's size while making it more secure.
+Lastly, the "slim" variant of the `node:20-bookworm` image only includes what Node.js needs which reduces the image's size while making it more secure.
 
 :::tip Why not alpine?
 
@@ -92,7 +92,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 ```
 
-The `node:18-bookworm-slim` image doesn't have [OpenSSL](https://www.openssl.org/), which [seems to be a bug](https://github.com/nodejs/docker-node/issues/1919).
+The `node:20-bookworm-slim` image doesn't have [OpenSSL](https://www.openssl.org/), which [seems to be a bug](https://github.com/nodejs/docker-node/issues/1919).
 (It was included in the "bullseye" image, the codename for Debian 11.)
 On Linux, [Prisma needs OpenSSL](https://www.prisma.io/docs/reference/system-requirements#linux-runtime-dependencies).
 We install it, and Python and its dependencies are there ready to be uncommented if you need them. See the [Troubleshooting](#python) section for more.
@@ -190,7 +190,7 @@ After the work we did in the base stage, building the api side amounts to copyin
 The `api_serve` stage serves your GraphQL api and functions:
 
 ```Dockerfile
-FROM node:18-bookworm-slim as api_serve
+FROM node:20-bookworm-slim as api_serve
 
 RUN apt-get update && apt-get install -y \
     openssl \
@@ -198,7 +198,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 ```
 
-We don't start from the `base` stage, but begin anew with the `node:18-bookworm-slim` image.
+We don't start from the `base` stage, but begin anew with the `node:20-bookworm-slim` image.
 Since this is a production stage, it's important for it to be as small as possible.
 Docker's [multi-stage builds](https://docs.docker.com/build/building/multi-stage/) enables this.
 
@@ -297,7 +297,7 @@ The key line here is the first one—this stage uses the `api_build` stage as it
 ### The `web_serve` stage
 
 ```Dockerfile
-FROM node:18-bookworm-slim as web_serve
+FROM node:20-bookworm-slim as web_serve
 
 USER node
 WORKDIR /home/node/app
@@ -411,7 +411,7 @@ It's because your project depends on Python and the image doesn't provide it.
 It's easy to fix: just add `python3` and its dependencies (usually `make` and `gcc`):
 
 ```diff
-  FROM node:18-bookworm-slim as base
+  FROM node:20-bookworm-slim as base
 
   RUN apt-get update && apt-get install -y \
       openssl \
