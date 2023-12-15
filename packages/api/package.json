@@ -31,7 +31,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.5",
+    "@babel/runtime-corejs3": "7.23.6",
     "@prisma/client": "5.7.0",
     "@whatwg-node/fetch": "0.9.14",
     "core-js": "3.34.0",

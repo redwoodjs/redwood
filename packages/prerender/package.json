@@ -24,7 +24,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.5",
+    "@babel/runtime-corejs3": "7.23.6",
     "@redwoodjs/auth": "6.0.7",
     "@redwoodjs/internal": "6.0.7",
     "@redwoodjs/project-config": "6.0.7",
