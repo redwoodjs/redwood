@@ -9368,7 +9368,7 @@ __metadata:
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.201
     "@types/lru-cache": 7.10.10
-    "@types/node": 18.18.9
+    "@types/node": 20.10.4
     "@types/vscode": 1.79.1
     camelcase: 6.3.0
     core-js: 3.34.0
@@ -9516,7 +9516,7 @@ __metadata:
     "@types/aws-lambda": 8.10.126
     "@types/babel-core": 6.25.10
     "@types/jest": 29.5.8
-    "@types/node": 18.18.9
+    "@types/node": 20.10.4
     "@types/react": 18.2.37
     "@types/react-dom": 18.2.15
     "@types/webpack": 5.28.5
@@ -12268,10 +12268,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0":
-  version: 20.4.0
-  resolution: "@types/node@npm:20.4.0"
-  checksum: b45864c70d3642611a82a55b4d1734cae9ae5341f4af3dcb7e42aedbe3ca66d766c0dffe26bb94af030b52a45ba5af370fd3104a3b41fa70addbc4fae7322516
+"@types/node@npm:*, @types/node@npm:20.10.4, @types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0":
+  version: 20.10.4
+  resolution: "@types/node@npm:20.10.4"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: 2c8b70cba731eb2ae3ae046daa74903bfcbb0e7b9196da767e5895054f6d252296ae7a04fb1dbbcb53bb004c4c658c05eaea2731bc9e2dd9e08f7e88d672f563
   languageName: node
   linkType: hard
 
@@ -12282,19 +12284,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.18.9, @types/node@npm:^18.0.0, @types/node@npm:^18.11.9, @types/node@npm:^18.16.3":
+"@types/node@npm:^16.18.39":
+  version: 16.18.61
+  resolution: "@types/node@npm:16.18.61"
+  checksum: 219423dbb29ee1a84feb3e2e7b985eccd05e00dfc6efa18b5e2e1713be1df3578ca9f9c51354d66bd8d0d4ab8f0e1959e7de1ef7d03869ff27ed5ba885c6a8cd
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^18.0.0, @types/node@npm:^18.11.9, @types/node@npm:^18.16.3":
   version: 18.18.9
   resolution: "@types/node@npm:18.18.9"
   dependencies:
     undici-types: ~5.26.4
   checksum: 8d58fba5eede0df009412ee188bc96f4baf340f4fafbda1bc66fb680fa775aedc88f0cb154a2455966443d9538af402fff022fb0632bddb1bd0648e5a86e5db9
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^16.18.39":
-  version: 16.18.61
-  resolution: "@types/node@npm:16.18.61"
-  checksum: 219423dbb29ee1a84feb3e2e7b985eccd05e00dfc6efa18b5e2e1713be1df3578ca9f9c51354d66bd8d0d4ab8f0e1959e7de1ef7d03869ff27ed5ba885c6a8cd
   languageName: node
   linkType: hard
 
