@@ -26,6 +26,9 @@ jobs:
         with:
           node-version: 18
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - run: yarn install
 
       - name: Update all contributors

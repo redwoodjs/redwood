@@ -67,6 +67,9 @@ jobs:
         with:
           node-version: 18
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
 

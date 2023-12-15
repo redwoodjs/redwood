@@ -61,6 +61,9 @@ jobs:
         with:
           node-version: 18
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: 🐈 Yarn install
         working-directory: ./tasks/check
         run: yarn install --inline-builds
@@ -101,6 +104,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
@@ -158,6 +164,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
@@ -251,6 +260,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
@@ -455,6 +467,9 @@ jobs:
         with:
           node-version: 18
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
 
@@ -510,6 +525,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
@@ -604,6 +622,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
