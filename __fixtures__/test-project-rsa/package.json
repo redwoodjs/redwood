@@ -15,12 +15,12 @@
   },
   "engines": {
     "node": "=20.x",
-    "yarn": ">=1.15"
+    "yarn": ">=1.22.21"
   },
   "prisma": {
     "seed": "yarn rw exec seed"
   },
-  "packageManager": "yarn@3.7.0",
+  "packageManager": "yarn@4.0.2",
   "resolutions": {
     "vite@4.4.9": "patch:vite@npm%3A4.4.9#./.yarn/patches/vite-npm-4.4.9-e845c1bbf8.patch"
   }
