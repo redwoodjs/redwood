@@ -1,7 +1,7 @@
 import * as React from 'react'
 import type { ReactNode } from 'react'
 
-import '@testing-library/jest-dom/jest-globals'
+import '@testing-library/jest-dom/extend-expect'
 import { act, render } from '@testing-library/react'
 
 import { navigate, Route, Router } from '../'
