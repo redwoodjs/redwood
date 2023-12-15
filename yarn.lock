@@ -3702,17 +3702,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/plugin-explorer@npm:0.1.22":
-  version: 0.1.22
-  resolution: "@graphiql/plugin-explorer@npm:0.1.22"
+"@graphiql/plugin-explorer@npm:1.0.2":
+  version: 1.0.2
+  resolution: "@graphiql/plugin-explorer@npm:1.0.2"
   dependencies:
     graphiql-explorer: "npm:^0.9.0"
   peerDependencies:
-    "@graphiql/react": ^0.18.0
+    "@graphiql/react": ^0.20.2
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17 || ^18
     react-dom: ^16.8.0 || ^17 || ^18
-  checksum: 35c0e5ecd7c432b0177df4e09f7954e9cc0cac26424a7322ad21176b64ea4f180a3b4eaaf20a178242b4cf4e8727cd98620477318699a9242a2cb42b968de811
+  checksum: d08c782916f6aaba7820f25ceac9e25d2bbe970707bd17c01576787f55d6dd5a456f0eeaa6e1ee9d73565246f003fa5c8684bd463639d9bebf5337650c34c759
   languageName: node
   linkType: hard
 
@@ -9322,7 +9322,7 @@ __metadata:
     "@fastify/http-proxy": "npm:9.3.0"
     "@fastify/static": "npm:6.12.0"
     "@fastify/url-data": "npm:5.4.0"
-    "@graphiql/plugin-explorer": "npm:0.1.22"
+    "@graphiql/plugin-explorer": "npm:1.0.2"
     "@graphiql/toolkit": "npm:0.8.4"
     "@headlessui/react": "npm:1.7.15"
     "@heroicons/react": "npm:2.0.18"
