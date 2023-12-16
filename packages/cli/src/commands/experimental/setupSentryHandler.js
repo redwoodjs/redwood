@@ -178,7 +178,7 @@ export const handler = async ({ force }) => {
           )
         } else {
           notes.push(
-            "Check out RedwoodJS' docs for more: https://redwoodjs.com/docs/cli-commands#setup-sentry"
+            "Check out RedwoodJS forums' for more: https://community.redwoodjs.com/t/sentry-error-and-performance-monitoring-experimental/4880"
           )
         }
       },
