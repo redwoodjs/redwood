@@ -22,7 +22,7 @@ To see the version of yarn that you have installed, run the following command:
 yarn --version
 ```
 
-**Redwood requires Yarn (>=1.15)**
+**Redwood requires Yarn (>=1.22.21)**
 
 You can upgrade yarn by running the following command:
 

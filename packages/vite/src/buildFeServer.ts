@@ -1,9 +1,5 @@
-import fs from 'fs/promises'
-import path from 'path'
-
 import type { PluginBuild } from 'esbuild'
 import { build as esbuildBuild } from 'esbuild'
-import type { Manifest as ViteBuildManifest } from 'vite'
 import { build as viteBuild } from 'vite'
 
 import {
@@ -12,11 +8,10 @@ import {
 } from '@redwoodjs/babel-config'
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { findRouteHooksSrc } from '@redwoodjs/internal/dist/files'
-import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
-import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { buildRouteManifest } from './buildRouteManifest'
 import { buildRscFeServer } from './buildRscFeServer'
-import type { RWRouteManifest } from './types'
 import { ensureProcessDirWeb } from './utils'
 
 export interface BuildOptions {
@@ -51,16 +46,17 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
       throw new Error('RSC entries file not found')
     }
 
-    return await buildRscFeServer({
+    await buildRscFeServer({
       viteConfigPath,
-      webSrc: rwPaths.web.src,
       webHtml: rwPaths.web.html,
       entries: rwPaths.web.entries,
       webDist: rwPaths.web.dist,
       webDistServer: rwPaths.web.distServer,
       webDistServerEntries: rwPaths.web.distServerEntries,
-      webRouteManifest: rwPaths.web.routeManifest,
     })
+
+    // Write a route manifest
+    return await buildRouteManifest()
   }
 
   // Step 1A: Generate the client bundle
@@ -118,55 +114,6 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     outdir: rwPaths.web.distRouteHooks,
   })
 
-  // Generate route-manifest.json
-
-  const clientBuildManifest: ViteBuildManifest = await import(
-    path.join(getPaths().web.dist, 'client-build-manifest.json'),
-    { with: { type: 'json' } }
-  )
-
-  const routesList = getProjectRoutes()
-
-  const routeManifest = routesList.reduce<RWRouteManifest>((acc, route) => {
-    acc[route.pathDefinition] = {
-      name: route.name,
-      bundle: route.relativeFilePath
-        ? clientBuildManifest[route.relativeFilePath]?.file
-        : null,
-      matchRegexString: route.matchRegexString,
-      // @NOTE this is the path definition, not the actual path
-      // E.g. /blog/post/{id:Int}
-      pathDefinition: route.pathDefinition,
-      hasParams: route.hasParams,
-      routeHooks: FIXME_constructRouteHookPath(route.routeHooks),
-      redirect: route.redirect
-        ? {
-            to: route.redirect?.to,
-            permanent: false,
-          }
-        : null,
-      renderMode: route.renderMode,
-    }
-    return acc
-  }, {})
-
-  await fs.writeFile(rwPaths.web.routeManifest, JSON.stringify(routeManifest))
-}
-
-// TODO (STREAMING) Hacky work around because when you don't have a App.routeHook, esbuild doesn't create
-// the pages folder in the dist/server/routeHooks directory.
-// @MARK need to change to .mjs here if we use esm
-const FIXME_constructRouteHookPath = (rhSrcPath: string | null | undefined) => {
-  const rwPaths = getPaths()
-  if (!rhSrcPath) {
-    return null
-  }
-
-  if (getAppRouteHook()) {
-    return path.relative(rwPaths.web.src, rhSrcPath).replace('.ts', '.js')
-  } else {
-    return path
-      .relative(path.join(rwPaths.web.src, 'pages'), rhSrcPath)
-      .replace('.ts', '.js')
-  }
+  // Write a route manifest
+  await buildRouteManifest()
 }

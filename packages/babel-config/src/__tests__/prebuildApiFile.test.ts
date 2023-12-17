@@ -466,7 +466,6 @@ describe('api prebuild ', () => {
      */
     expect(list).toMatchInlineSnapshot(`
     [
-      "es.regexp.flags",
       "esnext.array.last-index",
       "esnext.array.last-item",
       "esnext.composite-key",
@@ -533,7 +532,6 @@ describe('api prebuild ', () => {
       "esnext.set.union",
       "esnext.string.at",
       "esnext.string.code-points",
-      "esnext.symbol.dispose",
       "esnext.symbol.observable",
       "esnext.symbol.pattern-match",
       "esnext.weak-map.delete-all",
