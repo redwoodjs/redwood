@@ -184,5 +184,23 @@ module.exports = {
         '@redwoodjs/process-env-computed': 'off',
       },
     },
+    {
+      files: ['packages/project-config/**'],
+      excludedFiles: [
+        '**/__tests__/**',
+        '**/*.test.ts?(x)',
+        '**/*.spec.ts?(x)',
+      ],
+      rules: {
+        'import/no-extraneous-dependencies': [
+          'error',
+          {
+            devDependencies: false,
+            optionalDependencies: false,
+            peerDependencies: true,
+          },
+        ],
+      },
+    },
   ],
 }

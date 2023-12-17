@@ -56,16 +56,16 @@ This will prerender your NotFoundPage to `404.html` in your dist folder. Note th
 For Private Routes, Redwood prerenders your Private Routes' `whileLoadingAuth` prop:
 
 ```jsx
-<Private >
+<PrivateSet>
   // Loading is shown while we're checking to see if the user's logged in
   <Route path="/super-secret-admin-dashboard" page={SuperSecretAdminDashboard} name="ssad" whileLoadingAuth={() => <Loading />} prerender/>
-</Private>
+</PrivateSet>
 ```
 
 ### Rendering skeletons while authenticating
 Sometimes you want to render the shell of the page, while you wait for your authentication checks to happen. This can make the experience feel a lot snappier to the user, since they don't wait on a blank screen while their credentials are checked.
 
-To do this, make use of the `whileLoadingAuth` prop on `<Private>` or a `<Set private>` in your Routes file. For example, if we have a dashboard that you need to be logged in to access:
+To do this, make use of the `whileLoadingAuth` prop on `<PrivateSet>` in your Routes file. For example, if we have a dashboard that you need to be logged in to access:
 
 ```js ./web/src/Routes.{tsx,js}
 // This renders the layout with skeleton loaders in the content area

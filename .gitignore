@@ -9,7 +9,6 @@ yarn-error.log
 **/*.tsbuildinfo
 tasks/.verdaccio
 tasks/e2e/cypress/fixtures/example.json
-tasks/release/*.md
 tmp/
 blog-test-project/*
 .yarn/*
@@ -26,3 +25,5 @@ blog-test-project/*
 # For esbuild.
 **/meta.json
 **/meta.*.json
+
+.nx/cache

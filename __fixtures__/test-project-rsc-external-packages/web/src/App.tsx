@@ -1,28 +1,19 @@
-import { RscForm } from '@tobbe.dev/rsc-test'
+import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
-import { Assets } from '@redwoodjs/vite/assets'
-import { ProdRwRscServerGlobal } from '@redwoodjs/vite/rwRscGlobal'
+import FatalErrorPage from './pages/FatalErrorPage/FatalErrorPage'
+import Routes from './Routes'
 
-// @ts-expect-error no types
-import styles from './App.module.css'
-import { onSend } from './actions'
-import { Counter } from './Counter'
+import './index.css'
 
-import './App.css'
-
-globalThis.rwRscGlobal = new ProdRwRscServerGlobal()
-
-const App = ({ name = 'Anonymous' }) => {
-  return (
-    <>
-      <Assets />
-      <div style={{ border: '3px red dashed', margin: '1em', padding: '1em' }}>
-        <h1 className={styles.title}>Hello {name}!!</h1>
-        <RscForm onSend={onSend} />
-        <Counter />
-      </div>
-    </>
-  )
-}
+const App = () => (
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+      <RedwoodApolloProvider>
+        <Routes />
+      </RedwoodApolloProvider>
+    </RedwoodProvider>
+  </FatalErrorBoundary>
+)
 
 export default App
