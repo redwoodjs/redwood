@@ -78,9 +78,9 @@ async function main() {
 
   const changedFiles = await getChangedFiles()
   console.log(`${changedFiles.length} changed files`)
-  console.log({ changedFiles })
 
   if (!hasCodeChanges(changedFiles)) {
+    console.log('No code changes detected, only docs')
     core.setOutput('onlydocs', true)
     core.setOutput('rsc', false)
     core.setOutput('ssr', false)

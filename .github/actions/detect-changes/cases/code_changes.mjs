@@ -27,5 +27,12 @@ function isCodeFile(filePath) {
  * code changes
  */
 export function hasCodeChanges(changedFiles) {
-  return changedFiles.some((file) => isCodeFile(file))
+  return changedFiles.some((file) => {
+    if (isCodeFile(file)) {
+      console.log(`Found code file: ${file}`)
+      return true
+    }
+
+    return false
+  })
 }
