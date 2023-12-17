@@ -3,7 +3,7 @@
   "files.trimTrailingWhitespace": true,
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "workbench.colorCustomizations": {
     "statusBar.background": "#b85833",
