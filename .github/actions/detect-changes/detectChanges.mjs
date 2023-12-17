@@ -27,6 +27,7 @@ async function getChangedFiles(page = 1) {
   console.log('CACHED_COMMIT_REF', process.env.CACHED_COMMIT_REF)
   console.log('GITHUB_BASE_REF', process.env.GITHUB_BASE_REF)
   console.log('GITHUB_EVENT_PATH', process.env.GITHUB_EVENT_PATH)
+  console.log('GITHUB_REF', process.env.GITHUB_REF)
   console.log('issueNumber', issueNumber)
   console.log('ev.pull_request.number', ev.pull_request.number)
   console.log('---')
