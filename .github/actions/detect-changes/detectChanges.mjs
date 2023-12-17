@@ -1,5 +1,7 @@
+import fs from 'node:fs'
+
 import core from '@actions/core'
-import * as github from '@actions/github';
+import * as github from '@actions/github'
 import { exec, getExecOutput } from '@actions/exec'
 import { onlyDocsChanged } from './cases/onlydocs.mjs'
 import { rscChanged } from './cases/rsc.mjs'
@@ -11,7 +13,11 @@ async function getChangedFiles(page = 1) {
   )
   let changedFiles = []
 
-  const issueNumber = github.context.issue.number;
+  const issueNumber = github.context.issue.number
+
+  const ev = JSON.parse(
+    fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8')
+  )
 
   // TODO: Remove this:
   console.log('---')
@@ -22,6 +28,7 @@ async function getChangedFiles(page = 1) {
   console.log('GITHUB_BASE_REF', process.env.GITHUB_BASE_REF)
   console.log('GITHUB_EVENT_PATH', process.env.GITHUB_EVENT_PATH)
   console.log('issueNumber', issueNumber)
+  console.log('ev.pull_request.number', ev.pull_request.number)
   console.log('---')
 
   // Query the GitHub API to get the changed files in the PR
