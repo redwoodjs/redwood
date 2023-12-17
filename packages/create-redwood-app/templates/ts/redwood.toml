@@ -7,15 +7,22 @@
 
 [web]
   title = "Redwood App"
-  port = 8910
-  apiUrl = "/.redwood/functions" # You can customize graphql and dbauth urls individually too: see https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths
+  port = "${WEB_DEV_PORT:8910}"
+
+  # You can customize the GraphQL and dbAuth URLs individually too;
+  # see https://redwoodjs.com/docs/app-configuration-redwood-toml#customizing-the-graphql-endpoint.
+  apiUrl = "/.redwood/functions"
+
   includeEnvironmentVariables = [
-    # Add any ENV vars that should be available to the web side to this array
-    # See https://redwoodjs.com/docs/environment-variables#web
+    # Add any env vars that should be available to the web side to this array;
+    # see https://redwoodjs.com/docs/environment-variables#including-environment-variables.
   ]
+
 [api]
-  port = 8911
+  port = "${API_DEV_PORT:8911}"
+
 [browser]
   open = true
+
 [notifications]
   versionUpdates = ["latest"]
