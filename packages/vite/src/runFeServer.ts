@@ -5,8 +5,8 @@
 // UPDATE: We decided to name the package @redwoodjs/web-server instead of
 // fe-server. And it's already created, but this hasn't been moved over yet.
 
-import fs from 'fs/promises'
-import path from 'path'
+import path from 'node:path'
+import url from 'node:url'
 
 import { createServerAdapter } from '@whatwg-node/server'
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
@@ -61,32 +61,21 @@ export async function runFeServer() {
     }
   }
 
-  // TODO When https://github.com/tc39/proposal-import-attributes and
-  // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
-  // should try to do this instead:
-  // const routeManifest: RWRouteManifest = await import(
-  //   rwPaths.web.routeManifest, { with: { type: 'json' } }
-  // )
-  // NOTES:
-  //  * There's a related babel plugin here
-  //    https://babeljs.io/docs/babel-plugin-syntax-import-attributes
-  //     * Included in `preset-env` if you set `shippedProposals: true`
-  //  * We had this before, but with `assert` instead of `with`. We really
-  //    should be using `with`. See motivation in issues linked above.
-  //  * With `assert` and `@babel/plugin-syntax-import-assertions` the
-  //    code compiled and ran properly, but Jest tests failed, complaining
-  //    about the syntax.
-  const routeManifestStr = await fs.readFile(rwPaths.web.routeManifest, 'utf-8')
-  const routeManifest: RWRouteManifest = JSON.parse(routeManifestStr)
+  const routeManifestUrl = url.pathToFileURL(rwPaths.web.routeManifest).href
+  const routeManifest: RWRouteManifest = (
+    await import(routeManifestUrl, { with: { type: 'json' } })
+  ).default
 
-  // TODO See above about using `import { with: { type: 'json' } }` instead
-  const manifestPath = path.join(rwPaths.web.dist, 'client-build-manifest.json')
-  const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
-  const buildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
+  const buildManifestUrl = url.pathToFileURL(
+    path.join(rwPaths.web.dist, 'client-build-manifest.json')
+  ).href
+  const buildManifest: ViteBuildManifest = (
+    await import(buildManifestUrl, { with: { type: 'json' } })
+  ).default
 
   if (rwConfig.experimental?.rsc?.enabled) {
     console.log('='.repeat(80))
-    console.log('buildManifest', buildManifest)
+    console.log('buildManifest', buildManifest.default)
     console.log('='.repeat(80))
   }
 
