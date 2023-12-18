@@ -63,12 +63,12 @@ export async function runFeServer() {
   const routeManifest: RWRouteManifest = await import(
     rwPaths.web.routeManifest,
     { with: { type: 'json' } }
-  )
+  ).default
 
   const buildManifest: ViteBuildManifest = await import(
     path.join(rwPaths.web.dist, 'client-build-manifest.json'),
     { with: { type: 'json' } }
-  )
+  ).default
 
   if (rwConfig.experimental?.rsc?.enabled) {
     console.log('='.repeat(80))
