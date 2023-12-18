@@ -2,7 +2,7 @@ const path = require('path')
 
 const packageJSON = require(path.join(__dirname, 'package.json'))
 
-const TARGETS_NODE = '18.16'
+const TARGETS_NODE = '20.10'
 
 // Run `npx browserslist "defaults"` to see a list of target browsers.
 const TARGETS_BROWSERS = ['defaults']

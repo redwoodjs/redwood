@@ -3,8 +3,9 @@
 import { fileURLToPath } from 'node:url'
 import { parseArgs as _parseArgs } from 'node:util'
 
+import execa from 'execa'
 import semverPackage from 'semver'
-import { cd, chalk, fs, question, within, $ } from 'zx'
+import { cd, chalk, fs, path, question, $ } from 'zx'
 
 import {
   branchExists,
@@ -12,6 +13,7 @@ import {
   consoleBoxen,
   getOctokit,
   getLatestRelease,
+  getMilestones,
   getPRsWithMilestone,
   getRedwoodRemote,
   getSpinner,
@@ -19,6 +21,7 @@ import {
   prompts,
   unwrap,
   setVerbosity,
+  findUp,
 } from './releaseLib.mjs'
 
 let octokit
@@ -36,6 +39,14 @@ export async function main() {
 
   const { verbose } = options
   setVerbosity(verbose)
+
+  try {
+    await doChecks()
+  } catch (e) {
+    consoleBoxen('👷 Heads up', e.message)
+    process.exitCode = 1
+    return
+  }
 
   try {
     // We'll be making requests to GitHub for PRs. While this data isn't private, we could get rate-limited without a token.
@@ -121,6 +132,20 @@ main()
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
+async function doChecks() {
+  // Check Node.js version. Right now, v18.19 breaks one of our tests.
+  const nodeVersion = unwrap(await $`node -v`)
+
+  if (nodeVersion.startsWith('v20')) {
+    throw new Error(
+      [
+        'The framework is currently built for Node v18; running QA with v20 may cause issues.',
+        'Please switch to Node v18.',
+      ].join('\n')
+    )
+  }
+}
+
 function parseArgs() {
   const { values } = _parseArgs({
     options: {
@@ -178,12 +203,28 @@ async function resolveMilestones() {
   }
 
   // Depending on if we're releasing a patch or not, there's a few things we need to check.
+  const {
+    search: { nodes: prs },
+  } = await octokit.graphql(`
+      {
+        search(
+          query: "repo:redwoodjs/redwood is:pr is:merged milestone:next-release-patch"
+          first: 5
+          type: ISSUE
+        ) {
+          nodes {
+            ... on PullRequest {
+              id
+            }
+          }
+        }
+      }
+    `)
+
   if (semver === 'patch') {
     console.log()
     console.log(
-      `Since we're releasing a ${chalk.magenta(
-        'patch'
-      )}, we'll be releasing all the PRs that have the ${chalk.magenta(
+      `There's ${prs.length} PR(s) that have the ${chalk.magenta(
         'next-release-patch'
       )} milestone.`
     )
@@ -204,24 +245,6 @@ async function resolveMilestones() {
       )
     }
   } else {
-    const {
-      search: { nodes: prs },
-    } = await octokit.graphql(`
-      {
-        search(
-          query: "repo:redwoodjs/redwood is:pr is:merged milestone:next-release-patch"
-          first: 5
-          type: ISSUE
-        ) {
-          nodes {
-            ... on PullRequest {
-              id
-            }
-          }
-        }
-      }
-    `)
-
     if (prs.length) {
       console.log()
       console.log(
@@ -262,6 +285,9 @@ async function resolveMilestones() {
         )
       )
     ) {
+      const milestones = await getMilestones()
+      milestone = milestones.find(({ title }) => title === nextRelease)
+
       if (!milestone) {
         milestone = await createMilestone(nextRelease)
       }
@@ -356,10 +382,7 @@ async function releaseMajorOrMinor() {
 
   // Publish.
   try {
-    await within(async () => {
-      $.verbose = true
-      await $`yarn lerna publish from-package`
-    })
+    await execa.command('yarn lerna publish from-package', { stdio: 'inherit' })
   } catch {
     exitIfNo(
       await question(
@@ -373,10 +396,15 @@ async function releaseMajorOrMinor() {
   await $`git reset --hard HEAD~1`
   await updateCreateRedwoodAppTemplates()
   console.log()
-  await within(async () => {
-    $.verbose = true
-    await $`yarn lerna publish from-package`
-  })
+  try {
+    await execa.command('yarn lerna publish from-package', { stdio: 'inherit' })
+  } catch {
+    exitIfNo(
+      await question(
+        'Publishing failed. You can usually recover from this by running `yarn lerna publish from-package` again. Continue? [Y/n] > '
+      )
+    )
+  }
   console.log()
 
   // Clean up commits and push. This combines the update package versions commit and update CRWA commit into one.
@@ -419,6 +447,14 @@ async function versionDocs() {
 
   const spinner = getSpinner('Versioning docs')
   await cd('./docs')
+
+  if (fs.existsSync(`./versioned_docs/version-${nextDocsVersion}`)) {
+    await $`rm -rf ./versioned_docs/version-${nextDocsVersion}`
+
+    const versions = await fs.readJSON('./versions.json')
+    await fs.writeJSON('./versions.json', versions.slice(1))
+  }
+
   await $`yarn`
   await $`yarn clear`
   await $`yarn docusaurus docs:version ${nextDocsVersion}`
@@ -442,18 +478,45 @@ async function cleanInstallUpdate() {
   await $`yarn install`
 
   spinner.text = 'Updating package versions'
-  await $`./tasks/update-package-versions ${nextRelease}`
+
+  const lernaVersion = nextRelease.replace('v', '')
+  await $`yarn lerna version ${lernaVersion} --force-publish --no-push --no-git-tag-version --exact --yes`
+
+  const cwd = path.dirname(findUp('lerna.json'))
+
+  spinner.text = 'Updating CRWA templates...'
+
+  const tsTemplatePath = path.join(
+    cwd,
+    'packages/create-redwood-app/templates/ts'
+  )
+  updateRWJSPkgsVersion(tsTemplatePath, lernaVersion)
+  updateRWJSPkgsVersion(path.join(tsTemplatePath, 'api'), lernaVersion)
+  updateRWJSPkgsVersion(path.join(tsTemplatePath, 'web'), lernaVersion)
+  $.verbose && console.log()
+
+  const jsTemplatePath = path.join(
+    cwd,
+    'packages/create-redwood-app/templates/js'
+  )
+  updateRWJSPkgsVersion(jsTemplatePath, lernaVersion)
+  updateRWJSPkgsVersion(path.join(jsTemplatePath, 'api'), lernaVersion)
+  updateRWJSPkgsVersion(path.join(jsTemplatePath, 'web'), lernaVersion)
+  $.verbose && console.log()
+
+  spinner.text = 'Updating test-project fixture...'
+
+  const fixturePath = path.join(cwd, '__fixtures__/test-project')
+  updateRWJSPkgsVersion(fixturePath, lernaVersion)
+  updateRWJSPkgsVersion(path.join(fixturePath, 'api'), lernaVersion)
+  updateRWJSPkgsVersion(path.join(fixturePath, 'web'), lernaVersion)
+  $.verbose && console.log()
 
   spinner.text = 'Installing'
   await $`yarn install`
   spinner.stop()
 
   $.verbose && console.log()
-  exitIfNo(
-    await question(
-      `The package versions have been updated. Everything look ok? [Y/n] > `
-    )
-  )
 
   await $`git commit -am "chore: update package versions to ${nextRelease}"`
 }
@@ -575,6 +638,8 @@ async function releasePatch() {
   $.verbose && console.log()
   await runQA()
   $.verbose && console.log()
+  await versionDocs()
+  $.verbose && console.log()
 
   exitIfNo(
     await question(`Everything passed local QA. Ok to publish to NPM? [Y/n] > `)
@@ -587,9 +652,8 @@ async function releasePatch() {
 
   // Publish.
   try {
-    await within(async () => {
-      $.verbose = true
-      await $`yarn lerna publish from-package`
+    await execa.command('yarn lerna publish from-package', {
+      stdio: 'inherit',
     })
   } catch {
     exitIfNo(
@@ -604,10 +668,15 @@ async function releasePatch() {
   await $`git reset --hard HEAD~1`
   await updateCreateRedwoodAppTemplates()
   console.log()
-  await within(async () => {
-    $.verbose = true
-    await $`yarn lerna publish from-package`
-  })
+  try {
+    await execa.command('yarn lerna publish from-package', { stdio: 'inherit' })
+  } catch {
+    exitIfNo(
+      await question(
+        'Publishing failed. You can usually recover from this by running `yarn lerna publish from-package` again. Continue? [Y/n] > '
+      )
+    )
+  }
   console.log()
 
   // Clean up commits and push. This combines the update package versions commit and update CRWA commit into one.
@@ -655,3 +724,32 @@ async function exitIfNo(answer, { code } = { code: 1 }) {
 
   process.exit(code)
 }
+
+/**
+ * Iterates over `@redwoodjs/*` dependencies in a package.json and updates their version.
+ *
+ * @param {string} pkgPath
+ * @param {string} version
+ */
+function updateRWJSPkgsVersion(pkgPath, version) {
+  const pkg = fs.readJSONSync(path.join(pkgPath, 'package.json'), 'utf-8')
+
+  for (const dep of Object.keys(pkg.dependencies ?? {}).filter(isRWJSPkg)) {
+    console.log(` - ${dep}: ${pkg.dependencies[dep]} => ${version}`)
+    pkg.dependencies[dep] = `${version}`
+  }
+
+  for (const dep of Object.keys(pkg.devDependencies ?? {}).filter(isRWJSPkg)) {
+    console.log(` - ${dep}: ${pkg.devDependencies[dep]} => ${version}`)
+    pkg.devDependencies[dep] = `${version}`
+  }
+
+  for (const dep of Object.keys(pkg.peerDependencies ?? {}).filter(isRWJSPkg)) {
+    console.log(` - ${dep}: ${pkg.devDependencies[dep]} => ${version}`)
+    pkg.devDependencies[dep] = `${version}`
+  }
+
+  fs.writeJSONSync(path.join(pkgPath, 'package.json'), pkg, { spaces: 2 })
+}
+
+const isRWJSPkg = (pkg) => pkg.startsWith('@redwoodjs/')

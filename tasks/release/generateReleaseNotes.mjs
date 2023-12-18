@@ -51,8 +51,6 @@ export async function main() {
         label.name.startsWith('release:')
       )
 
-      // TODO: docs types don't really need the body.
-
       const releaseNotesEntry = [
         `- ${pr.title} #${pr.number} by @${pr.author.login}`,
         '',
@@ -69,6 +67,17 @@ export async function main() {
         ...pr,
         type: releaseLabel.name.replace('release:', ''),
         releaseNotesEntry,
+      }
+    })
+    // Handle docs.
+    .map((pr) => {
+      if (pr.type !== 'docs') {
+        return pr
+      }
+
+      return {
+        ...pr,
+        releaseNotesEntry: `- ${pr.title} #${pr.number} by @${pr.author.login}`,
       }
     })
     // Handle renovate.

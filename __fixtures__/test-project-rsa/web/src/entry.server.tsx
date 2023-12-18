@@ -1,5 +1,5 @@
+import App from './App'
 import { Document } from './Document'
-import HomePage from './HomePage'
 
 interface Props {
   css: string[]
@@ -9,7 +9,7 @@ interface Props {
 export const ServerEntry: React.FC<Props> = ({ css, meta }) => {
   return (
     <Document css={css} meta={meta}>
-      <HomePage />
+      <App />
     </Document>
   )
 }

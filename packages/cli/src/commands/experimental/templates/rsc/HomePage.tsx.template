@@ -1,7 +1,7 @@
 import { Assets } from '@redwoodjs/vite/assets'
 import { ProdRwRscServerGlobal } from '@redwoodjs/vite/rwRscGlobal'
 
-import { Counter } from './Counter'
+import { Counter } from '../../components/Counter/Counter'
 // @ts-expect-error no types
 import styles from './HomePage.module.css'
 
