@@ -41,6 +41,7 @@
     "core-js": "3.34.0",
     "fast-glob": "3.3.2",
     "graphql": "16.8.1",
+    "graphql-tag": "2.12.6",
     "typescript": "5.3.3"
   },
   "devDependencies": {
