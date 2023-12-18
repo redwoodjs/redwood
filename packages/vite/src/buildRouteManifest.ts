@@ -1,5 +1,6 @@
-import fs from 'fs/promises'
-import path from 'path'
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import url from 'node:url'
 
 import type { Manifest as ViteBuildManifest } from 'vite'
 
@@ -13,30 +14,12 @@ import type { RWRouteManifest } from './types'
  * Generate a route manifest file for the web server side.
  */
 export async function buildRouteManifest() {
-  const webRouteManifest = getPaths().web.routeManifest
-
-  // TODO When https://github.com/tc39/proposal-import-attributes and
-  // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
-  // should try to do this instead:
-  // const clientBuildManifest: ViteBuildManifest = await import(
-  //   path.join(getPaths().web.dist, 'client-build-manifest.json'),
-  //   { with: { type: 'json' } }
-  // )
-  // NOTES:
-  //  * There's a related babel plugin here
-  //    https://babeljs.io/docs/babel-plugin-syntax-import-attributes
-  //     * Included in `preset-env` if you set `shippedProposals: true`
-  //  * We had this before, but with `assert` instead of `with`. We really
-  //    should be using `with`. See motivation in issues linked above.
-  //  * With `assert` and `@babel/plugin-syntax-import-assertions` the
-  //    code compiled and ran properly, but Jest tests failed, complaining
-  //    about the syntax.
-  const manifestPath = path.join(
-    getPaths().web.dist,
-    'client-build-manifest.json'
-  )
-  const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
-  const clientBuildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
+  const buildManifestUrl = url.pathToFileURL(
+    path.join(getPaths().web.dist, 'client-build-manifest.json')
+  ).href
+  const clientBuildManifest: ViteBuildManifest = (
+    await import(buildManifestUrl, { with: { type: 'json' } })
+  ).default
 
   const routesList = getProjectRoutes()
 
@@ -66,6 +49,7 @@ export async function buildRouteManifest() {
 
   console.log('routeManifest', JSON.stringify(routeManifest, null, 2))
 
+  const webRouteManifest = getPaths().web.routeManifest
   return fs.writeFile(webRouteManifest, JSON.stringify(routeManifest, null, 2))
 }
 
