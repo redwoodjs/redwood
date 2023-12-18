@@ -18,7 +18,7 @@ export function createRscRequestHandler() {
     console.log("req.headers['rw-rsc']", req.headers['rw-rsc'])
 
     // https://www.rfc-editor.org/rfc/rfc6648
-    // SHOULD NOT prefix their parameter names with "X-" or similar constructs.
+    // "SHOULD NOT prefix their parameter names with "X-" or similar constructs."
     if (req.headers['rw-rsc'] !== '1') {
       return next()
     }
@@ -52,6 +52,7 @@ export function createRscRequestHandler() {
         // size somehow
         // https://nextjs.org/docs/app/api-reference/functions/server-actions#size-limitation
         if (req.headers['content-type']?.startsWith('multipart/form-data')) {
+          console.log('RSA: multipart/form-data')
           const bb = busboy({ headers: req.headers })
           const reply = decodeReplyFromBusboy(bb)
 
@@ -84,6 +85,7 @@ export function createRscRequestHandler() {
             }
           }
         } else {
+          console.log('RSA: regular body')
           let body = ''
 
           for await (const chunk of req) {
@@ -96,6 +98,8 @@ export function createRscRequestHandler() {
         }
       }
     }
+
+    console.log('rscRequestHandler: args', args)
 
     if (rscId || rsfId) {
       const handleError = (err: unknown) => {
