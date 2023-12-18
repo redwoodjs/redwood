@@ -120,7 +120,19 @@ Almost all config for dbAuth lives in `api/src/functions/auth.js` in the object 
 
 ### allowedUserFields
 
-The auth functions for `signup` and `forgotPassword` return a `user` object to the client. As a security measure, `allowedUserFields` defines the only properties that will be returned from that `user`. This is defaulted to `id` and `email`, but you can add anything you like to that list. Just remember that these fields will be inspectable by the client (since they're being sent back in the response body) so don't send back any secrets (especially not `hashedPassword` or `salt`).
+```javascript
+allowedUserFields: ["id", "email"]
+```
+
+Most of the auth handlers accept a `user` argument that you can reference in the body of the function. These handlers also sometimes return that `user` object. As a security measure, `allowedUserFields` defines the only properties that will be available in that object so that sensitive data isn't accidentally leaked by these handlers to the client.
+
+:::info
+
+The `signup` and `forgotPassword` handlers return to the client whatever data is returned from their handlers, which can be used to display something like the email address that a verification email was just sent to. Without `allowedUserFields` it would be very easy to include the user's `hashedPassword` and `salt` in that response (just return `user` from those handlers) and then any customer could open the Web Inspector in their browser and see those values in plain text!
+
+:::
+
+`allowedUserFields` is defaulted to `id` and `email` but you can add any property on `user` to that list.
 
 ### login.enabled
 
@@ -583,7 +595,7 @@ export const handler = async (event, context) => {
 - `webAuthn.expires` is the number of seconds that a user will be allowed to keep using their fingerprint/face scan to re-authenticate into your site. Once this value expires, the user _must_ use their username/password to authenticate the next time, and then WebAuthn will be re-enabled (again, for this length of time). For security, you may want to log users out of your app after an hour of inactivity, but allow them to easily use their fingerprint/face to re-authenticate for the next two weeks (this is similar to login on macOS where your TouchID session expires after a couple of days of inactivity). In this example you would set `login.expires` to `60 * 60` and `webAuthn.expires` to `60 * 60 * 24 * 14`.
 - `webAuthn.name` is the name of the app that will show in some browser's prompts to use the device
 - `webAuthn.domain` is the name of domain making the request. This is just the domain part of the URL, ex: `app.server.com`, or in development mode `localhost`
-- `webAuthn.origin` is the domain _including_ the protocol and port that the request is coming from, ex: <https://app.server.com> In development mode, this would be `http://localhost:8910`
+- `webAuthn.origin` is the domain _including_ the protocol and port that the request is coming from, ex: [https://app.server.com](https://app.server.com) In development mode, this would be `http://localhost:8910`
 - `webAuthn.type`: the type of device that's allowed to be used (see [next section below](#webauthn-type-option))
 - `webAuthn.timeout`: how long to wait for a device to be used in milliseconds (defaults to 60 seconds)
 - `webAuthn.credentialFields`: lists the expected field names that dbAuth uses internally mapped to what they're actually called in your model. This includes 5 fields total: `id`, `userId`, `publicKey`, `transports`, `counter`.
