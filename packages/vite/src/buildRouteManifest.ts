@@ -1,5 +1,6 @@
-import fs from 'fs/promises'
-import path from 'path'
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import url from 'node:url'
 
 import type { Manifest as ViteBuildManifest } from 'vite'
 
@@ -13,10 +14,11 @@ import type { RWRouteManifest } from './types'
  * Generate a route manifest file for the web server side.
  */
 export async function buildRouteManifest() {
+  const buildManifestUrl = url.pathToFileURL(
+    path.join(getPaths().web.dist, 'client-build-manifest.json')
+  ).href
   const clientBuildManifest: ViteBuildManifest = (
-    await import(path.join(getPaths().web.dist, 'client-build-manifest.json'), {
-      with: { type: 'json' },
-    })
+    await import(buildManifestUrl, { with: { type: 'json' } })
   ).default
 
   const routesList = getProjectRoutes()

@@ -5,7 +5,8 @@
 // UPDATE: We decided to name the package @redwoodjs/web-server instead of
 // fe-server. And it's already created, but this hasn't been moved over yet.
 
-import path from 'path'
+import path from 'node:path'
+import url from 'node:url'
 
 import { createServerAdapter } from '@whatwg-node/server'
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
@@ -60,14 +61,16 @@ export async function runFeServer() {
     }
   }
 
+  const routeManifestUrl = url.pathToFileURL(rwPaths.web.routeManifest).href
   const routeManifest: RWRouteManifest = (
-    await import(rwPaths.web.routeManifest, { with: { type: 'json' } })
+    await import(routeManifestUrl, { with: { type: 'json' } })
   ).default
 
+  const buildManifestUrl = url.pathToFileURL(
+    path.join(rwPaths.web.dist, 'client-build-manifest.json')
+  ).href
   const buildManifest: ViteBuildManifest = (
-    await import(path.join(rwPaths.web.dist, 'client-build-manifest.json'), {
-      with: { type: 'json' },
-    })
+    await import(buildManifestUrl, { with: { type: 'json' } })
   ).default
 
   if (rwConfig.experimental?.rsc?.enabled) {
