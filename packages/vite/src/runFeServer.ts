@@ -60,14 +60,14 @@ export async function runFeServer() {
     }
   }
 
-  const routeManifest: RWRouteManifest = await import(
-    rwPaths.web.routeManifest,
-    { with: { type: 'json' } }
-  )
+  const routeManifest: RWRouteManifest = (
+    await import(rwPaths.web.routeManifest, { with: { type: 'json' } })
+  ).default
 
-  const buildManifest: ViteBuildManifest = await import(
-    path.join(rwPaths.web.dist, 'client-build-manifest.json'),
-    { with: { type: 'json' } }
+  const buildManifest: ViteBuildManifest = (
+    await import(path.join(rwPaths.web.dist, 'client-build-manifest.json'), {
+      with: { type: 'json' },
+    })
   ).default
 
   if (rwConfig.experimental?.rsc?.enabled) {
@@ -76,11 +76,9 @@ export async function runFeServer() {
     console.log('='.repeat(80))
   }
 
-  const indexEntry = Object.values(buildManifest.default).find(
-    (manifestItem) => {
-      return manifestItem.isEntry
-    }
-  )
+  const indexEntry = Object.values(buildManifest).find((manifestItem) => {
+    return manifestItem.isEntry
+  })
 
   if (!indexEntry) {
     throw new Error('Could not find index.html in build manifest')
@@ -115,7 +113,7 @@ export async function runFeServer() {
   const getStylesheetLinks = () => indexEntry.css || []
   const clientEntry = '/' + indexEntry.file
 
-  for (const route of Object.values(routeManifest.default)) {
+  for (const route of Object.values(routeManifest)) {
     // if it is a 404, register it at the end somehow.
     if (!route.matchRegexString) {
       continue

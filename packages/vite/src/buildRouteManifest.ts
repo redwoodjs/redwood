@@ -13,10 +13,11 @@ import type { RWRouteManifest } from './types'
  * Generate a route manifest file for the web server side.
  */
 export async function buildRouteManifest() {
-  const clientBuildManifest: ViteBuildManifest = await import(
-    path.join(getPaths().web.dist, 'client-build-manifest.json'),
-    { with: { type: 'json' } }
-  )
+  const clientBuildManifest: ViteBuildManifest = (
+    await import(path.join(getPaths().web.dist, 'client-build-manifest.json'), {
+      with: { type: 'json' },
+    })
+  ).default
 
   const routesList = getProjectRoutes()
 
@@ -24,7 +25,7 @@ export async function buildRouteManifest() {
     acc[route.pathDefinition] = {
       name: route.name,
       bundle: route.relativeFilePath
-        ? clientBuildManifest.default[route.relativeFilePath]?.file ?? null
+        ? clientBuildManifest[route.relativeFilePath]?.file ?? null
         : null,
       matchRegexString: route.matchRegexString,
       // NOTE this is the path definition, not the actual path
