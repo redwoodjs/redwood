@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import jwksClient from 'jwks-rsa'
 
-import { Decoder } from '@redwoodjs/api'
+import type { Decoder } from '@redwoodjs/api'
 
 export const authDecoder: Decoder = async (token: string, type: string) => {
   if (type !== 'azureActiveDirectory') {

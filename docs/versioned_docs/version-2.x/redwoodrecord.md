@@ -58,15 +58,16 @@ Now we're back to one-to-many relationships. In Prisma this join table is create
 If you want to create the join table yourself and potentially store additional data there (like a timestamp of when the product was categorized) then this is simply a one-to-many relationship on both sides: a Product has many ProductCategories and a Category has many ProductCategories. Prisma refers to this as an [explicitly many-to-many](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/many-to-many-relations#explicit-many-to-many-relations) relationship.
 
 > TODO: We'll be adding logic soon that will let you get to the categories from a product record (and vice versa) in explicit many-to-manys without having to manually go through ProductCategory. From this:
->
->     const product = await Product.find(1)
->     const productCategories = await product.productCategories.all()
->     const categories = productCategories.map(async (pc) => await pc.categories.all()).flat()
->
+> ```
+> const product = await Product.find(1)
+> const productCategories = await product.productCategories.all()
+> const categories = productCategories.map(async (pc) => await pc.categories.all()).flat()
+> ```
 > To this:
->
->     const product = await Product.find(1)
->     const categories = await product.categories.all()
+> ```
+> const product = await Product.find(1)
+> const categories = await product.categories.all()
+> ```
 
 The only other terminology to keep in mind are the terms *model* and *record*. A *model* is the name for the class that represents one database table. The example above has three models: User, Post and Comment. Prisma also calls each database-table declaration in their `schema.prisma` declaration file a "model", but when we refer to a "model" in this doc it will mean the class that extends `RedwoodRecord`. A *record* is a single instance of our model that now represents a single row of data in the database.
 

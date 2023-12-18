@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { DirectiveParams } from '..'
+import type { DirectiveParams } from '..'
 import {
   makeDirectivesForPlugin,
   createTransformerDirective,

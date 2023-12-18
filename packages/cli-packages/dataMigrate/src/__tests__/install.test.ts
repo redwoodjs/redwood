@@ -1,9 +1,6 @@
-import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
-
 import * as installCommand from '../commands/install'
 import { handler as dataMigrateInstallHandler } from '../commands/installHandler.js'
 
-jest.mock('@redwoodjs/cli-helpers')
 jest.mock(
   '../commands/installHandler.js',
   () => ({
@@ -34,14 +31,6 @@ describe('install', () => {
       // eslint-disable-next-line no-irregular-whitespace
       'Also see the Redwood CLI Reference (​https://redwoodjs.com/docs/cli-commands#datamigrate-install​)'
     )
-  })
-
-  it('`handler` records telemetry attributes', async () => {
-    await installCommand.handler()
-
-    expect(recordTelemetryAttributes).toHaveBeenCalledWith({
-      command: 'data-migrate install',
-    })
   })
 
   it('`handler` proxies to `./installHandler.js`', async () => {

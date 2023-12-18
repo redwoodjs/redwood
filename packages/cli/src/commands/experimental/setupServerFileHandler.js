@@ -18,7 +18,7 @@ const { version } = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, '../../../package.json'), 'utf-8')
 )
 
-export async function handler({ force, verbose }) {
+export const setupServerFileTasks = (force = false) => {
   const redwoodPaths = getPaths()
   const ts = isTypeScriptProject()
 
@@ -27,6 +27,60 @@ export async function handler({ force, verbose }) {
     `server.${isTypeScriptProject() ? 'ts' : 'js'}`
   )
 
+  return [
+    {
+      title: 'Adding the experimental server files...',
+      task: () => {
+        const serverFileTemplateContent = fs.readFileSync(
+          path.resolve(__dirname, 'templates', 'server.ts.template'),
+          'utf-8'
+        )
+
+        const setupScriptContent = ts
+          ? serverFileTemplateContent
+          : transformTSToJS(serverFilePath, serverFileTemplateContent)
+
+        return [
+          writeFile(serverFilePath, setupScriptContent, {
+            overwriteExisting: force,
+          }),
+        ]
+      },
+    },
+    {
+      title: 'Adding config to redwood.toml...',
+      task: (_ctx, task) => {
+        //
+        const redwoodTomlPath = getConfigPath()
+        const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
+        if (!configContent.includes('[experimental.serverFile]')) {
+          // Use string replace to preserve comments and formatting
+          writeFile(
+            redwoodTomlPath,
+            configContent.concat(
+              `\n[experimental.serverFile]\n\tenabled = true\n`
+            ),
+            {
+              overwriteExisting: true, // redwood.toml always exists
+            }
+          )
+        } else {
+          task.skip(
+            `The [experimental.serverFile] config block already exists in your 'redwood.toml' file.`
+          )
+        }
+      },
+    },
+    addApiPackages([
+      'fastify',
+      'chalk@4.1.2',
+      `@redwoodjs/fastify@${version}`,
+      `@redwoodjs/project-config@${version}`,
+    ]),
+  ]
+}
+
+export async function handler({ force, verbose }) {
   const tasks = new Listr(
     [
       {
@@ -42,54 +96,7 @@ export async function handler({ force, verbose }) {
           }
         },
       },
-      {
-        title: 'Adding the experimental server file...',
-        task: () => {
-          const serverFileTemplateContent = fs.readFileSync(
-            path.resolve(__dirname, 'templates', 'server.ts.template'),
-            'utf-8'
-          )
-
-          const setupScriptContent = ts
-            ? serverFileTemplateContent
-            : transformTSToJS(serverFilePath, serverFileTemplateContent)
-
-          return [
-            writeFile(serverFilePath, setupScriptContent, {
-              overwriteExisting: force,
-            }),
-          ]
-        },
-      },
-      {
-        title: 'Adding config to redwood.toml...',
-        task: (_ctx, task) => {
-          const redwoodTomlPath = getConfigPath()
-          const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
-          if (!configContent.includes('[experimental.serverFile]')) {
-            // Use string replace to preserve comments and formatting
-            writeFile(
-              redwoodTomlPath,
-              configContent.concat(
-                `\n[experimental.serverFile]\n\tenabled = true\n`
-              ),
-              {
-                overwriteExisting: true, // redwood.toml always exists
-              }
-            )
-          } else {
-            task.skip(
-              `The [experimental.serverFile] config block already exists in your 'redwood.toml' file.`
-            )
-          }
-        },
-      },
-      addApiPackages([
-        'fastify',
-        'chalk@4.1.2',
-        `@redwoodjs/fastify@${version}`,
-        `@redwoodjs/project-config@${version}`,
-      ]),
+      ...setupServerFileTasks(force),
       {
         task: () => {
           printTaskEpilogue(command, description, EXPERIMENTAL_TOPIC_ID)

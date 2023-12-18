@@ -30,7 +30,6 @@ const ROUTES = [
 ]
 
 const POST_INSTALL =
-  `One more thing...\n\n` +
   `   ${c.warning("Pages created! But you're not done yet:")}\n\n` +
   `   You'll need to tell your pages where to redirect after a user has logged in,\n` +
   `   signed up, or reset their password. Look in LoginPage, SignupPage,\n` +
@@ -48,7 +47,6 @@ const POST_INSTALL =
   `   Happy authenticating!\n`
 
 const WEBAUTHN_POST_INSTALL =
-  `One more thing...\n\n` +
   `   ${c.warning("Pages created! But you're not done yet:")}\n\n` +
   "   You'll need to tell your pages where to redirect after a user has logged in,\n" +
   '   signed up, or reset their password. In LoginPage, look for the `REDIRECT`\n' +
@@ -359,8 +357,10 @@ const tasks = ({
       },
       {
         title: 'One more thing...',
-        task: (ctx, task) => {
-          task.title = webauthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL
+        task: () => {
+          // This doesn't preserve formatting, so it's been moved to regular
+          // console.log()s after the tasks have all finished running
+          // task.title = webauthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL
         },
       },
     ],
@@ -391,6 +391,8 @@ export const handler = async (yargs) => {
       prepareForRollback(t)
     }
     await t.run()
+    console.log('')
+    console.log(yargs.webauthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL)
   } catch (e) {
     console.log(c.error(e.message))
   }

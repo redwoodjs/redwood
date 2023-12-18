@@ -7,7 +7,11 @@ import type {
   Handler,
 } from 'aws-lambda'
 import fg from 'fast-glob'
-import { FastifyReply, FastifyRequest, RequestGenericInterface } from 'fastify'
+import type {
+  FastifyReply,
+  FastifyRequest,
+  RequestGenericInterface,
+} from 'fastify'
 import { escape } from 'lodash'
 import qs from 'qs'
 

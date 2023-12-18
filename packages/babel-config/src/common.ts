@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import type { TransformOptions, PluginItem } from '@babel/core'
+import { parseConfigFileTextToJson } from 'typescript'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -102,21 +103,23 @@ export const parseTypeScriptConfigFiles = () => {
 
   const parseConfigFile = (basePath: string) => {
     let configPath = path.join(basePath, 'tsconfig.json')
-
     if (!fs.existsSync(configPath)) {
       configPath = path.join(basePath, 'jsconfig.json')
       if (!fs.existsSync(configPath)) {
         return null
       }
     }
-    return JSON.parse(fs.readFileSync(configPath, 'utf-8'))
+    return parseConfigFileTextToJson(
+      configPath,
+      fs.readFileSync(configPath, 'utf-8')
+    )
   }
   const apiConfig = parseConfigFile(rwPaths.api.base)
   const webConfig = parseConfigFile(rwPaths.web.base)
 
   return {
-    api: apiConfig,
-    web: webConfig,
+    api: apiConfig?.config ?? null,
+    web: webConfig?.config ?? null,
   }
 }
 

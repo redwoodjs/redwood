@@ -3,7 +3,7 @@ import type { Argv } from 'yargs'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { StorybookYargsOptions } from '../types'
+import type { StorybookYargsOptions } from '../types'
 
 export const command = 'storybook'
 export const aliases = ['sb']

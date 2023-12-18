@@ -13,9 +13,9 @@ import type {
   HttpOptions,
   InMemoryCacheConfig,
   setLogVerbosity,
+  ApolloLink,
 } from '@apollo/client'
 import {
-  ApolloLink,
   setLogVerbosity as apolloSetLogVerbosity,
   useMutation,
   useSubscription,
@@ -30,7 +30,8 @@ import {
   useQuery,
 } from '@apollo/experimental-nextjs-app-support/ssr'
 
-import { UseAuth, useNoAuth } from '@redwoodjs/auth'
+import type { UseAuth } from '@redwoodjs/auth'
+import { useNoAuth } from '@redwoodjs/auth'
 import './typeOverride'
 
 import {

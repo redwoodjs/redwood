@@ -6,13 +6,14 @@ import fg from 'fast-glob'
 import type {
   FastifyInstance,
   FastifyReply,
+  FastifyRequest,
   HookHandlerDoneFunction,
 } from 'fastify'
 
 import { getPaths } from '@redwoodjs/project-config'
 
 import { loadFastifyConfig } from './config'
-import { RedwoodFastifyWebOptions } from './types'
+import type { RedwoodFastifyWebOptions } from './types'
 
 export async function redwoodFastifyWeb(
   fastify: FastifyInstance,
@@ -47,10 +48,21 @@ export async function redwoodFastifyWeb(
   const indexPath = getFallbackIndexPath()
 
   // For SPA routing, fallback on unmatched routes and let client-side routing take over.
-  fastify.setNotFoundHandler({}, function (_, reply: FastifyReply) {
-    reply.header('Content-Type', 'text/html; charset=UTF-8')
-    reply.sendFile(indexPath)
-  })
+  fastify.setNotFoundHandler(
+    {},
+    function (req: FastifyRequest, reply: FastifyReply) {
+      const requestedExtension = path.extname(req.url)
+      // If it's requesting some sort of asset, e.g. .js or .jpg files
+      // Html files should fallback to the index.html
+      if (requestedExtension !== '' && requestedExtension !== '.html') {
+        reply.code(404)
+        return reply.send('Not Found')
+      }
+
+      reply.header('Content-Type', 'text/html; charset=UTF-8')
+      return reply.sendFile(indexPath)
+    }
+  )
 
   done()
 }

@@ -1,8 +1,5 @@
-import opentelemetry, {
-  SpanStatusCode,
-  AttributeValue,
-  Span,
-} from '@opentelemetry/api'
+import type { AttributeValue, Span } from '@opentelemetry/api'
+import opentelemetry, { SpanStatusCode } from '@opentelemetry/api'
 
 type TelemetryAttributes = {
   [key: string]: AttributeValue

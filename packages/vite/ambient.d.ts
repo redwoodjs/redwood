@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-/// <reference types="react/canary" />
+/// <reference types="react/experimental" />
 import type { HelmetServerState } from 'react-helmet-async'
 
 declare global {

@@ -1,6 +1,6 @@
-import { CORSOptions } from 'graphql-yoga'
+import type { CORSOptions } from 'graphql-yoga'
 
-import { CorsConfig } from '@redwoodjs/api'
+import type { CorsConfig } from '@redwoodjs/api'
 
 export const mapRwCorsOptionsToYoga = (
   rwCorsConfig?: CorsConfig,

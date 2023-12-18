@@ -1,4 +1,4 @@
-import { DataObject } from './cellTypes'
+import type { DataObject } from './cellTypes'
 
 /**
  * The default `isEmpty` implementation. Checks if any of the field is `null` or an empty array.

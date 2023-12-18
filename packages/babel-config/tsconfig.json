@@ -3,12 +3,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": "src",
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
   },
   "include": ["src"],
   "references": [
-    { "path": "../project-config" },
-    { "path": "../structure" }
+    { "path": "../project-config" }
   ]
 }

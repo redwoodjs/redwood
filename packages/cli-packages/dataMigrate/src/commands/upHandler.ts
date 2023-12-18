@@ -6,7 +6,6 @@ import { Listr } from 'listr2'
 
 import { registerApiSideBabelHook } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
-import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
 import type { DataMigrateUpOptions, DataMigration } from '../types'
@@ -120,8 +119,6 @@ export async function handler({
     console.log()
     reportDataMigrations(counters)
     console.log()
-
-    errorTelemetry(process.argv, (e as Error).message)
   }
 }
 

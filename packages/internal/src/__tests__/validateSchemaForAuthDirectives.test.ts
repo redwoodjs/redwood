@@ -3,7 +3,7 @@ import path from 'path'
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { loadTypedefs } from '@graphql-tools/load'
 import { mergeTypeDefs } from '@graphql-tools/merge'
-import { DocumentNode } from 'graphql'
+import type { DocumentNode } from 'graphql'
 
 import { getPaths } from '@redwoodjs/project-config'
 

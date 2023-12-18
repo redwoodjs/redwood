@@ -1,23 +1,25 @@
 import { basename } from 'path'
 
-import * as tsm from 'ts-morph'
-import { TextDocuments } from 'vscode-languageserver'
-import { TextDocument } from 'vscode-languageserver-textdocument'
-import {
+import type * as tsm from 'ts-morph'
+import type { TextDocuments } from 'vscode-languageserver'
+import type { TextDocument } from 'vscode-languageserver-textdocument'
+import type {
   CodeLens,
   DocumentLink,
   Hover,
   Location,
-  Range,
 } from 'vscode-languageserver-types'
+import { Range } from 'vscode-languageserver-types'
 
-import { Host, DefaultHost } from './hosts'
-import { ArrayLike, ArrayLike_normalize } from './x/Array'
+import type { Host } from './hosts'
+import { DefaultHost } from './hosts'
+import type { ArrayLike } from './x/Array'
+import { ArrayLike_normalize } from './x/Array'
 import { lazy, memo } from './x/decorators'
 import { basenameNoExt } from './x/path'
 import { createTSMSourceFile_cached } from './x/ts-morph'
 import { URL_file } from './x/URL'
-import { ExtendedDiagnostic } from './x/vscode-languageserver-types'
+import type { ExtendedDiagnostic } from './x/vscode-languageserver-types'
 
 export type NodeID = string
 

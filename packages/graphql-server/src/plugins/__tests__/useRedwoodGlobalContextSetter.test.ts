@@ -2,12 +2,8 @@ import { useEngine } from '@envelop/core'
 import { createTestkit } from '@envelop/testing'
 import * as GraphQLJS from 'graphql'
 
-import {
-  GlobalContext,
-  context,
-  getAsyncStoreInstance,
-  setContext,
-} from '../../index'
+import type { GlobalContext } from '../../index'
+import { context, getAsyncStoreInstance, setContext } from '../../index'
 import { testSchema, testQuery } from '../__fixtures__/common'
 import { useRedwoodGlobalContextSetter } from '../useRedwoodGlobalContextSetter'
 import { useRedwoodPopulateContext } from '../useRedwoodPopulateContext'

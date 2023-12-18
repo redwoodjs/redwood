@@ -1,11 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
-import { GraphQLSchema, OperationTypeNode } from 'graphql'
-import { Plugin, useReadinessCheck, createYoga } from 'graphql-yoga'
+import type { GraphQLSchema } from 'graphql'
+import { OperationTypeNode } from 'graphql'
+import type { Plugin } from 'graphql-yoga'
+import { useReadinessCheck, createYoga } from 'graphql-yoga'
 
 import { mapRwCorsOptionsToYoga } from './cors'
 import { makeDirectivesForPlugin } from './directives/makeDirectives'
+import { configureGraphiQLPlayground } from './graphiql'
+import { configureGraphQLIntrospection } from './introspection'
 import { makeMergedSchema } from './makeMergedSchema'
 import {
   useArmor,
@@ -16,6 +20,7 @@ import {
   useRedwoodOpenTelemetry,
   useRedwoodLogger,
   useRedwoodPopulateContext,
+  useRedwoodTrustedDocuments,
 } from './plugins'
 import type {
   useRedwoodDirectiveReturn,
@@ -46,11 +51,14 @@ export const createGraphQLYoga = ({
   graphiQLEndpoint = '/graphql',
   schemaOptions,
   realtime,
+  trustedDocuments,
   openTelemetryOptions,
 }: GraphQLYogaOptions) => {
   let schema: GraphQLSchema
   let redwoodDirectivePlugins = [] as Plugin[]
   const logger = loggerConfig.logger
+
+  const isDevEnv = process.env.NODE_ENV === 'development'
 
   try {
     // @NOTE: Directives are optional
@@ -94,31 +102,9 @@ export const createGraphQLYoga = ({
     // so the order here matters
     const plugins: Array<Plugin<any>> = []
 
-    const isDevEnv = process.env.NODE_ENV === 'development'
-    const disableIntrospection =
-      (allowIntrospection === null && !isDevEnv) || allowIntrospection === false
-    const disableGraphQL =
-      (allowGraphiQL === null && !isDevEnv) || allowGraphiQL === false
-
-    const defaultQuery = `query Redwood {
-    redwood {
-    version
-    }
-  }`
-
-    // TODO: Once Studio is not experimental, can remove these generateGraphiQLHeaders
-    const authHeader = `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiql-headers on how to auto generate auth headers"}`
-
-    const graphiql = !disableGraphQL
-      ? {
-          title: 'Redwood GraphQL Playground',
-          headers: generateGraphiQLHeader
-            ? generateGraphiQLHeader()
-            : authHeader,
-          defaultQuery,
-          headerEditorEnabled: true,
-        }
-      : false
+    const { disableIntrospection } = configureGraphQLIntrospection({
+      allowIntrospection,
+    })
 
     if (disableIntrospection) {
       plugins.push(useDisableIntrospection())
@@ -157,6 +143,10 @@ export const createGraphQLYoga = ({
     plugins.push(
       useFilterAllowedOperations(allowedOperations || defaultAllowedOperations)
     )
+
+    if (trustedDocuments && !trustedDocuments.disabled) {
+      plugins.push(useRedwoodTrustedDocuments(trustedDocuments))
+    }
 
     // App-defined plugins
     if (extraPlugins && extraPlugins.length > 0) {
@@ -208,7 +198,10 @@ export const createGraphQLYoga = ({
       logging: logger,
       healthCheckEndpoint: graphiQLEndpoint + '/health',
       graphqlEndpoint: graphiQLEndpoint,
-      graphiql,
+      graphiql: configureGraphiQLPlayground({
+        allowGraphiQL,
+        generateGraphiQLHeader,
+      }),
       cors: (request: Request) => {
         const requestOrigin = request.headers.get('origin')
         return mapRwCorsOptionsToYoga(cors, requestOrigin)

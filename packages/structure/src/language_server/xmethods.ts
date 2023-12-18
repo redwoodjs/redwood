@@ -1,6 +1,6 @@
 import { memo } from '../x/decorators'
 
-import { RWLanguageServer } from './RWLanguageServer'
+import type { RWLanguageServer } from './RWLanguageServer'
 
 /**
  * A set of custom methods (not included in the LSP spec) exposed to the client

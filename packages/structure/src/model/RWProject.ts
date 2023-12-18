@@ -5,7 +5,7 @@ import { getDMMF } from '@prisma/internals'
 
 import { getPaths, processPagesDir } from '@redwoodjs/project-config'
 
-import { Host } from '../hosts'
+import type { Host } from '../hosts'
 import { BaseNode } from '../ide'
 import { lazy, memo } from '../x/decorators'
 import {

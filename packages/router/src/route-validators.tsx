@@ -1,7 +1,9 @@
-import { isValidElement, ReactNode, ReactElement } from 'react'
+import type { ReactNode, ReactElement } from 'react'
+import { isValidElement } from 'react'
 
-import { Route, RouteProps } from './router'
-import { Spec } from './util'
+import type { RouteProps } from './router'
+import { Route } from './router'
+import type { Spec } from './util'
 
 export type RenderMode = 'stream' | 'html'
 

@@ -11,5 +11,7 @@ export default meta
 type Story = StoryObj<typeof WaterfallPage>
 
 export const Primary: Story = {
-  render: (args) => <WaterfallPage id={42} {...args} />,
+  render: (args) => {
+    return <WaterfallPage id={42} {...args} />
+  },
 }

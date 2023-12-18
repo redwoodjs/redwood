@@ -1,4 +1,5 @@
-import React, { Fragment, ReactNode, useContext, useId } from 'react'
+import type { ReactNode } from 'react'
+import React, { Fragment, useContext, useId } from 'react'
 
 /**
  *

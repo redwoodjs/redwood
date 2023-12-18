@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react'
 
-import { DocumentNode } from 'graphql'
+import type { DocumentNode } from 'graphql'
 
 export interface QueryInfo {
   query: DocumentNode

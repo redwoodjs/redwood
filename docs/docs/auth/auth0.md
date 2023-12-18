@@ -28,7 +28,7 @@ But where in your Redwood app exactly?
 Auth0 needs to know, and this setting tells it.
 
 We'll keep things simple for now and make it "http://localhost:8910", but feel free to configure it as you wish.
-Paste "http://localhost:8910" in the text area below "Allowed Callback URLs", then click "Save Changes" at the bottom of the page.
+Paste "http://localhost:8910" in the text areas below "Allowed Callback URLs", "Allowed Logout URLs" and "Allowed Web Origins" then click "Save Changes" at the bottom of the page.
 Copy this one over to your project's `.env` file too, as `AUTH0_REDIRECT_URI`.
 
 Ok, just one more to go: under "Applications" in the nav on the left, click "APIs".
