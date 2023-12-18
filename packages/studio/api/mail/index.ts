@@ -1,6 +1,5 @@
 import path from 'node:path'
 
-import { getStudioConfig } from 'api/lib/config'
 import chokidar from 'chokidar'
 import fs from 'fs-extra'
 import { simpleParser as simpleMailParser } from 'mailparser'
@@ -9,6 +8,7 @@ import { SMTPServer } from 'smtp-server'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { getDatabase } from '../database'
+import { getStudioConfig } from '../lib/config'
 
 const swc = require('@swc/core')
 
@@ -221,6 +221,67 @@ export async function updateMailTemplates() {
   )
 }
 
+function extractParamAndValue(
+  component: any,
+  functionsAndVariables: any[]
+): {
+  value: any
+  param: any | null
+} {
+  switch (component.type) {
+    case 'ExportDeclaration':
+      if (component.declaration.type === 'VariableDeclaration') {
+        return {
+          value: component.declaration.declarations[0].id.value,
+          param: component.declaration.declarations[0].init.params[0] ?? null,
+        }
+      }
+
+      if (component.declaration.type === 'FunctionDeclaration') {
+        return {
+          value: component.declaration.identifier.value,
+          param: component.declaration.params[0] ?? null,
+        }
+      }
+
+      return { value: null, param: null }
+
+    case 'ExportDefaultExpression':
+      if (component.expression.type === 'ArrowFunctionExpression') {
+        return {
+          value: null,
+          param: component.expression.params[0] ?? null,
+        }
+      }
+
+      if (component.expression.type === 'Identifier') {
+        const variable = functionsAndVariables.find((v) => {
+          return (
+            (v.type === 'FunctionDeclaration' &&
+              v.identifier.value === component.expression.value) || // function
+            v.declarations[0].id.value === component.expression.value
+          )
+        })
+        if (variable) {
+          return variable.type === 'FunctionDeclaration'
+            ? {
+                value: variable.identifier.value + ' (default)',
+                param: variable.params[0] ?? null,
+              }
+            : {
+                value: variable.declarations[0].id.value + ' (default)',
+                param: variable.declarations[0].init.params[0] ?? null,
+              }
+        }
+      }
+
+      return { value: null, param: null }
+
+    default:
+      return { value: null, param: null }
+  }
+}
+
 function getMailTemplateComponents(templateFilePath: string) {
   const ast = swc.parseFileSync(templateFilePath, {
     syntax: templateFilePath.endsWith('.js') ? 'ecmascript' : 'typescript',
@@ -229,17 +290,29 @@ function getMailTemplateComponents(templateFilePath: string) {
 
   const components = []
 
-  // `export function X(){};`
+  const functionsAndVariables = ast.body.filter((node: any) => {
+    return (
+      node.type === 'VariableDeclaration' || node.type === 'FunctionDeclaration'
+    )
+  })
+
   const exportedComponents = ast.body.filter((node: any) => {
-    return node.type === 'ExportDeclaration'
+    return [
+      'ExportDeclaration',
+      'ExportDefaultDeclaration',
+      'ExportDefaultExpression',
+    ].includes(node.type)
   })
   for (let i = 0; i < exportedComponents.length; i++) {
+    const { param, value } = extractParamAndValue(
+      exportedComponents[i],
+      functionsAndVariables
+    )
+
     let propsTemplate = null
-    const hasParams = exportedComponents[i].declaration.params.length > 0
-    if (hasParams) {
+    if (param) {
       propsTemplate = 'Provide your props here as JSON'
       try {
-        const param = exportedComponents[i].declaration.params[0]
         switch (param.pat.type) {
           case 'ObjectPattern':
             propsTemplate = `{${param.pat.properties
@@ -250,18 +323,14 @@ function getMailTemplateComponents(templateFilePath: string) {
             break
         }
       } catch (_error) {
-        // Ignore for now
+        // ignore for now
       }
     }
     components.push({
-      name: exportedComponents[i].declaration?.identifier?.value ?? 'Unknown',
+      name: value ?? 'default',
       propsTemplate,
     })
   }
-
-  // TODO: Support `const X = () => {}; export default X;`
-  // TODO: Support `export default function X () => {}`
-  // TODO: Support `export default () => {}`
 
   return components
 }

@@ -62,7 +62,7 @@ export const start = async (
   })
 
   const studioPort = getStudioConfig().basePort
-  const webPath = path.join(__dirname, '..', '..', 'web')
+  const webPath = path.join(__dirname, '..', '..', 'dist/web')
 
   rewriteWebToUsePort(webPath, studioPort)
 
