@@ -126,7 +126,7 @@ export const Success = ({ testimonials }) => {
 
 If you ever create additional clients for your server (a mobile app, perhaps) you'll be giving yourself a huge advantage by using GraphQL from the start.
 
-Oh, and prerendering also works with cells! At build time, Redwood will start up the GraphQL server and make requests, just as if a user were accessing the pages, rendering the result to plain HTML, ready to be loaded instantly by the browser.
+Oh, and prerendering also works with cells! At build time, Redwood will start up the GraphQL server and make requests, just as if a user was accessing the pages, rendering the result to plain HTML, ready to be loaded instantly by the browser.
 
 ### Apollo Cache
 
