@@ -8,15 +8,25 @@ import { ServerInjectedHtml } from '@redwoodjs/web/dist/components/ServerInject'
 
 import { encodeText } from './encode-decode'
 
+type CreateServerInjectionArgs = {
+  injectionState: Set<RenderCallback>
+  onlyOnFlush?: boolean
+}
+
 export function createServerInjectionTransform({
   injectionState,
-}: {
-  injectionState: Set<RenderCallback>
-}) {
+  onlyOnFlush = false,
+}: CreateServerInjectionArgs) {
   const transformStream = new TransformStream({
     transform(chunk, controller) {
-      const mergedBytes = insertHtml(chunk)
-      controller.enqueue(mergedBytes)
+      if (onlyOnFlush) {
+        // when waiting for flush (or all ready), we do NOT buffer the stream
+        // and its not safe to inject except at the end
+        controller.enqueue(chunk)
+      } else {
+        const mergedBytes = insertHtml(chunk)
+        controller.enqueue(mergedBytes)
+      }
     },
     flush(controller) {
       // Before you finish, flush injected HTML again

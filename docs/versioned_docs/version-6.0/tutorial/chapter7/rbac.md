@@ -156,21 +156,21 @@ export const hasRole = (roles: AllowedRoles): boolean => {
 
 ### Restricting Access via Routes
 
-The easiest way to prevent access to an entire URL is via the Router. The `<Private>` component takes a prop `roles` in which you can give a list of only those role(s) that should have access:
+The easiest way to prevent access to an entire URL is via the Router. The `<PrivateSet>` component takes a prop `roles` in which you can give a list of only those role(s) that should have access:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/Routes.jsx"
 // highlight-next-line
-<Private unauthenticated="home" roles="admin">
+<PrivateSet unauthenticated="home" roles="admin">
   <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
     <Route path="/admin/posts/new" page={PostNewPostPage} name="newPost" />
     <Route path="/admin/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
     <Route path="/admin/posts/{id:Int}" page={PostPostPage} name="post" />
     <Route path="/admin/posts" page={PostPostsPage} name="posts" />
   </Set>
-</Private>
+</PrivateSet>
 ```
 
 </TabItem>

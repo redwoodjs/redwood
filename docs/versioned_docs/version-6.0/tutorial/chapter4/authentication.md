@@ -195,7 +195,7 @@ Try reloading the Posts admin and we'll see something that's 50% correct:
 
 ![image](https://user-images.githubusercontent.com/300/146462761-d21c93f0-289a-4e11-bccf-8e4e68f21438.png)
 
-Going to the admin section now prevents a non-logged in user from seeing posts, great! This is the result of the `@requireAuth` directive in `api/src/graphql/posts.sdl.{js,ts}`: you're not authenticated so GraphQL will not respond to your request for data. But, ideally they wouldn't be able to see the admin pages themselves. Let's fix that with a new component in the Routes file, `<Private>`:
+Going to the admin section now prevents a non-logged in user from seeing posts, great! This is the result of the `@requireAuth` directive in `api/src/graphql/posts.sdl.{js,ts}`: you're not authenticated so GraphQL will not respond to your request for data. But, ideally they wouldn't be able to see the admin pages themselves. Let's fix that with a new component in the Routes file, `<PrivateSet>`:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -213,7 +213,7 @@ const Routes = () => {
   return (
     <Router useAuth={useAuth}>
       // highlight-next-line
-      <Private unauthenticated="home">
+      <PrivateSet unauthenticated="home">
         <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
           <Route path="/admin/posts/new" page={PostNewPostPage} name="newPost" />
           <Route path="/admin/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
@@ -221,7 +221,7 @@ const Routes = () => {
           <Route path="/admin/posts" page={PostPostsPage} name="posts" />
         </Set>
       // highlight-next-line
-      </Private>
+      </PrivateSet>
       <Set wrap={BlogLayout}>
         <Route path="/article/{id:Int}" page={ArticlePage} name="article" />
         <Route path="/contact" page={ContactPage} name="contact" />
@@ -241,7 +241,7 @@ export default Routes
 
 ```jsx title="web/src/Routes.tsx"
 // highlight-next-line
-import { Private, Router, Route, Set } from '@redwoodjs/router'
+import { PrivateSet, Router, Route, Set } from '@redwoodjs/router'
 
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -252,7 +252,7 @@ const Routes = () => {
   return (
     <Router useAuth={useAuth}>
       // highlight-next-line
-      <Private unauthenticated="home">
+      <PrivateSet unauthenticated="home">
         <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
           <Route path="/admin/posts/new" page={PostNewPostPage} name="newPost" />
           <Route path="/admin/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
@@ -260,7 +260,7 @@ const Routes = () => {
           <Route path="/admin/posts" page={PostPostsPage} name="posts" />
         </Set>
       // highlight-next-line
-      </Private>
+      </PrivateSet>
       <Set wrap={BlogLayout}>
         <Route path="/article/{id:Int}" page={ArticlePage} name="article" />
         <Route path="/contact" page={ContactPage} name="contact" />
@@ -278,7 +278,7 @@ export default Routes
 </TabItem>
 </Tabs>
 
-We wrap the routes we want to be private (that is, only accessible when logged in) in the `<Private>` component, and tell our app where to send them if they are unauthenticated. In this case they should go to the `home` route.
+We wrap the routes we want to be private (that is, only accessible when logged in) in the `<PrivateSet>` component, and tell our app where to send them if they are unauthenticated. In this case they should go to the `home` route.
 
 Try going back to [http://localhost:8910/admin/posts](http://localhost:8910/admin/posts) now and—yikes!
 
@@ -288,7 +288,7 @@ Well, we couldn't get to the admin pages, but we also can't see our blog posts a
 
 It's because the `posts` query in `posts.sdl.{js,ts}` is used by both the homepage *and* the posts admin page. Since it has the `@requireAuth` directive, it's locked down and can only be accessed when logged in. But we *do* want people that aren't logged in to be able to view the posts on the homepage!
 
-Now that our admin pages are behind a `<Private>` route, what if we set the `posts` query to be `@skipAuth` instead? Let's try:
+Now that our admin pages are behind a `<PrivateSet>` route, what if we set the `posts` query to be `@skipAuth` instead? Let's try:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -888,7 +888,7 @@ You can generate a new value with the `yarn rw g secret` command. It only output
 
 ## Wrapping Up
 
-Believe it or not, that's pretty much it for authentication! You can use the combination of `@requireAuth` and `@skipAuth` directives to lock down access to GraphQL query/mutations, and the `<Private>` component to restrict access to entire pages of your app. If you only want to restrict access to certain components, or certain parts of a component, you can always get `isAuthenticated` from the `useAuth()` hook and then render one thing or another.
+Believe it or not, that's pretty much it for authentication! You can use the combination of `@requireAuth` and `@skipAuth` directives to lock down access to GraphQL query/mutations, and the `<PrivateSet>` component to restrict access to entire pages of your app. If you only want to restrict access to certain components, or certain parts of a component, you can always get `isAuthenticated` from the `useAuth()` hook and then render one thing or another.
 
 Head over to the Redwood docs to read more about [self-hosted](../../auth/dbauth.md) and [third-party authentication](../../authentication.md#official-integrations).
 

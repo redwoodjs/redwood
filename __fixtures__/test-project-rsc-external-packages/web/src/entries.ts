@@ -4,8 +4,10 @@ export default defineEntries(
   // getEntry
   async (id) => {
     switch (id) {
-      case 'App':
-        return import('./App')
+      case 'AboutPage':
+        return import('./pages/AboutPage/AboutPage')
+      case 'HomePage':
+        return import('./pages/HomePage/HomePage')
       default:
         return null
     }

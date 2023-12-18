@@ -9,12 +9,19 @@ import { renderRsc } from './rscWorkerCommunication'
 const { decodeReply, decodeReplyFromBusboy } = RSDWServer
 
 export function createRscRequestHandler() {
-  // This is mounted at /RSC, so will have /RSC stripped from req.url
-  return async (req: Request, res: Response) => {
-    const basePath = '/RSC/'
+  // This is mounted at /rw-rsc, so will have /rw-rsc stripped from req.url
+  return async (req: Request, res: Response, next: () => void) => {
+    const basePath = '/rw-rsc/'
     console.log('basePath', basePath)
     console.log('req.originalUrl', req.originalUrl, 'req.url', req.url)
     console.log('req.headers.host', req.headers.host)
+    console.log("req.headers['rw-rsc']", req.headers['rw-rsc'])
+
+    // https://www.rfc-editor.org/rfc/rfc6648
+    // "SHOULD NOT prefix their parameter names with "X-" or similar constructs."
+    if (req.headers['rw-rsc'] !== '1') {
+      return next()
+    }
 
     const url = new URL(req.originalUrl || '', 'http://' + req.headers.host)
     let rscId: string | undefined
@@ -41,7 +48,11 @@ export function createRscRequestHandler() {
       }
 
       if (rsfId) {
+        // TODO (RSC): For React Server Actions we need to limit the request
+        // size somehow
+        // https://nextjs.org/docs/app/api-reference/functions/server-actions#size-limitation
         if (req.headers['content-type']?.startsWith('multipart/form-data')) {
+          console.log('RSA: multipart/form-data')
           const bb = busboy({ headers: req.headers })
           const reply = decodeReplyFromBusboy(bb)
 
@@ -74,6 +85,7 @@ export function createRscRequestHandler() {
             }
           }
         } else {
+          console.log('RSA: regular body')
           let body = ''
 
           for await (const chunk of req) {
@@ -86,6 +98,8 @@ export function createRscRequestHandler() {
         }
       }
     }
+
+    console.log('rscRequestHandler: args', args)
 
     if (rscId || rsfId) {
       const handleError = (err: unknown) => {

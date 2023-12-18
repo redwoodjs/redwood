@@ -349,7 +349,7 @@ export const Success = ({ article }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/ArticleCell/ArticleCell.tsx"
-import type { FindArticleQuery } from 'types/graphql'
+import type { FindArticleQuery, FindArticleQueryVariables } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
@@ -775,7 +775,7 @@ export const Success = ({ article }) => {
 // highlight-next-line
 import Article from 'src/components/Article'
 
-import type { FindArticleQuery } from 'types/graphql'
+import type { FindArticleQuery, FindArticleQueryVariables } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
