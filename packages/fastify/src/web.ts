@@ -54,7 +54,8 @@ export async function redwoodFastifyWeb(
     {},
     function (req: FastifyRequest, reply: FastifyReply) {
       const urlData = req.urlData()
-      const requestedExtension = path.extname(urlData.path || '')
+      const requestedExtension = path.extname(urlData.path ?? '')
+
       // If it's requesting some sort of asset, e.g. .js or .jpg files
       // Html files should fallback to the index.html
       if (requestedExtension !== '' && requestedExtension !== '.html') {
