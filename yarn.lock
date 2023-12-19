@@ -8878,7 +8878,6 @@ __metadata:
     "@typescript-eslint/parser": "npm:5.62.0"
     eslint: "npm:8.55.0"
     eslint-config-prettier: "npm:8.10.0"
-    eslint-import-resolver-babel-module: "npm:5.3.2"
     eslint-plugin-babel: "npm:5.3.1"
     eslint-plugin-import: "npm:2.29.0"
     eslint-plugin-jest-dom: "npm:4.0.3"
@@ -9030,6 +9029,7 @@ __metadata:
     "@redwoodjs/router": "npm:6.0.7"
     "@sdl-codegen/node": "npm:0.0.10"
     "@types/fs-extra": "npm:11.0.4"
+    "@types/node": "npm:20.10.4"
     chalk: "npm:4.1.2"
     core-js: "npm:3.34.0"
     deepmerge: "npm:4.3.1"
@@ -19165,19 +19165,6 @@ __metadata:
   bin:
     eslint-config-prettier: bin/cli.js
   checksum: 19f8c497d9bdc111a17a61b25ded97217be3755bbc4714477dfe535ed539dddcaf42ef5cf8bb97908b058260cf89a3d7c565cb0be31096cbcd39f4c2fa5fe43c
-  languageName: node
-  linkType: hard
-
-"eslint-import-resolver-babel-module@npm:5.3.2":
-  version: 5.3.2
-  resolution: "eslint-import-resolver-babel-module@npm:5.3.2"
-  dependencies:
-    pkg-up: "npm:^3.1.0"
-    resolve: "npm:^1.20.0"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-    babel-plugin-module-resolver: ^3.0.0 || ^4.0.0 || ^5.0.0
-  checksum: 168fc793cc565cb8c27eb69c67872420980a6fcaac4a5b6951bdaa2700c0745c997d282b3c8cce313c423a12933a0f6fcc347a799398f3cf7f91e9e8a35d2d69
   languageName: node
   linkType: hard
 
