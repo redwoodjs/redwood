@@ -91,7 +91,7 @@ const querySDL = (model, docs = false) => {
 }
 
 const inputSDL = (model, required, types = {}, docs = false) => {
-  let ignoredFields = DEFAULT_IGNORE_FIELDS_FOR_INPUT
+  const ignoredFields = DEFAULT_IGNORE_FIELDS_FOR_INPUT
 
   return model.fields
     .filter((field) => {
