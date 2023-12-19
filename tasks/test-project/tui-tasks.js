@@ -122,9 +122,14 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
         task: async () => {
           await createPage('blogPost /blog-post/{id:Int}')
 
-          return applyCodemod(
+          await applyCodemod(
             'blogPostPage.js',
             fullPath('web/src/pages/BlogPostPage/BlogPostPage')
+          )
+
+          return applyCodemod(
+            'updateBlogPostPageStories.js',
+            fullPath('web/src/pages/BlogPostPage/BlogPostPage.stories')
           )
         },
       },
@@ -191,6 +196,11 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
           await applyCodemod(
             'waterfallPage.js',
             fullPath('web/src/pages/WaterfallPage/WaterfallPage')
+          )
+
+          await applyCodemod(
+            'updateWaterfallPageStories.js',
+            fullPath('web/src/pages/WaterfallPage/WaterfallPage.stories')
           )
         },
       },
@@ -337,7 +347,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
       // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
       task: async () => {
         await exec(
-          'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss',
+          'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss@0.4.1',
           [],
           getExecaOptions(outputPath)
         )

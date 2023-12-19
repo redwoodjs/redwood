@@ -1,5 +1,3 @@
-const {
-  getWebSideDefaultBabelConfig,
-} = require('@redwoodjs/internal/dist/build/babel/web')
+const { getWebSideDefaultBabelConfig } = require('@redwoodjs/babel-config')
 
 module.exports = getWebSideDefaultBabelConfig({ forJest: true })

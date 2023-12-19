@@ -4,13 +4,11 @@ import { DiagnosticSeverity } from 'vscode-languageserver-types'
 import { BaseNode } from '../ide'
 import { iter } from '../x/Array'
 import { lazy } from '../x/decorators'
-import {
-  ExtendedDiagnostic,
-  Location_fromNode,
-} from '../x/vscode-languageserver-types'
+import type { ExtendedDiagnostic } from '../x/vscode-languageserver-types'
+import { Location_fromNode } from '../x/vscode-languageserver-types'
 
-import { RWSDLField } from './RWSDLField'
-import { RWService } from './RWService'
+import type { RWSDLField } from './RWSDLField'
+import type { RWService } from './RWService'
 
 export class RWServiceFunction extends BaseNode {
   constructor(

@@ -24,7 +24,7 @@ export default async () => {
 
     // Note: if using PostgreSQL, using `createMany` to insert multiple records is much faster
     // @see: https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany
-    Promise.all(
+    await Promise.all(
       //
       // Change to match your data model and seeding needs
       //

@@ -13,11 +13,6 @@ gen_enforced_dependency(WorkspaceCwd, DependencyIdent, DependencyRange2, Depende
   workspace_has_dependency(OtherWorkspaceCwd, DependencyIdent, DependencyRange2, DependencyType2),
   DependencyRange \= DependencyRange2.
 
-% Prevents a dependency from having a caret in its version
-gen_enforced_dependency(WorkspaceCwd, DependencyIdent, TargetDependencyRange, DependencyType) :-
-  workspace_has_dependency(WorkspaceCwd, DependencyIdent, CurrentDependencyRange, DependencyType),
-  atom_concat('^', TargetDependencyRange, CurrentDependencyRange).
-
 % Enforce that all workspaces building with Babel depend on '@babel/runtime-corejs3' and 'core-js'.
 gen_enforced_dependency(WorkspaceCwd, DependencyIdent, DependencyRange, 'dependencies') :-
   member(DependencyIdent, [

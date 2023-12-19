@@ -9,16 +9,7 @@
  *
  * **All** of these properties are used by the prod FE server
  */
-export interface RWRouteManifestItem {
-  matchRegexString: string | null // xAR, RouteSpec.matchRegexString
-  routeHooks: string | null // xAR, RouteSpec.routeHooks BUT in RouteSpec its the src path, here its the dist path
-  bundle: string | null // xAR, xRS
-  pathDefinition: PathDefinition // <-- AnalyzedRoute.path, RouteSpec.path
-  hasParams: boolean // xAR, RouteSpec.hasParams
-  name: string // <-- AnalyzedRoute.name, RouteSpec.name
-  redirect: { to: string; permanent: boolean } | null // xAR (not same type), RouteSpec.redirect
-  renderMode: 'html' | 'stream' // x, RouteSpec.renderMode
-}
+import type { RWRouteManifestItem } from '@redwoodjs/internal'
 
 export type RWRouteManifest = Record<PathDefinition, RWRouteManifestItem>
 

@@ -1,4 +1,4 @@
-import { A } from 'ts-toolbelt'
+import type { A } from 'ts-toolbelt'
 
 /**
  * Use this function to define your scenario.

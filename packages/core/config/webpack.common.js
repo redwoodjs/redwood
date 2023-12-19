@@ -12,9 +12,7 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 
-const {
-  getWebSideDefaultBabelConfig,
-} = require('@redwoodjs/internal/dist/build/babel/web')
+const { getWebSideDefaultBabelConfig } = require('@redwoodjs/babel-config')
 const {
   ChunkReferencesPlugin,
 } = require('@redwoodjs/internal/dist/webpackPlugins/ChunkReferencesPlugin')
@@ -173,7 +171,6 @@ const getSharedPlugins = (isEnvProduction) => {
       new ReactRefreshWebpackPlugin({ overlay: false }),
     new webpack.ProvidePlugin({
       React: 'react',
-      PropTypes: 'prop-types',
       gql: 'graphql-tag',
       ...devTimeAutoImports,
     }),
@@ -284,7 +281,7 @@ module.exports = (webpackEnv) => {
         }),
       isEnvProduction &&
         new WebpackManifestPlugin({
-          fileName: 'build-manifest.json',
+          fileName: 'client-build-manifest.json',
         }),
       isEnvProduction && new ChunkReferencesPlugin(),
       ...getSharedPlugins(isEnvProduction),
@@ -342,6 +339,11 @@ module.exports = (webpackEnv) => {
               generator: {
                 filename: 'static/media/[name].[contenthash:8][ext]',
               },
+            },
+            // (8)
+            !redwoodConfig.experimental.realtime.enabled && {
+              test: require.resolve('@redwoodjs/web/dist/apollo/sseLink'),
+              use: require.resolve('null-loader'),
             },
           ].filter(Boolean),
         },

@@ -1,6 +1,6 @@
 import type { Logger } from '../logger'
 
-import BaseClient from './clients/BaseClient'
+import type BaseClient from './clients/BaseClient'
 import { CacheTimeoutError } from './errors'
 
 export { default as MemcachedClient } from './clients/MemcachedClient'

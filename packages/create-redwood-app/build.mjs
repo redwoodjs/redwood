@@ -10,7 +10,7 @@ const result = await esbuild.build({
   minify: true,
 
   platform: 'node',
-  target: ['node18'],
+  target: ['node20'],
   packages: 'external',
 
   logLevel: 'info',

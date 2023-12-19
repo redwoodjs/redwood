@@ -14,16 +14,17 @@ export {
   useSubscription,
 } from './components/GraphQLHooksProvider'
 
-export * from './components/CellCacheContext'
+export * from './components/cell/CellCacheContext'
+
+export { createCell } from './components/cell/createCell'
 
 export {
-  createCell,
   CellProps,
   CellFailureProps,
   CellLoadingProps,
   CellSuccessProps,
   CellSuccessData,
-} from './components/createCell'
+} from './components/cell/cellTypes'
 
 export * from './graphql'
 
@@ -34,3 +35,5 @@ export { Helmet as Head, Helmet } from 'react-helmet-async'
 
 export * from './components/htmlTags'
 export * from './routeHooks.types'
+
+export * from './components/ServerInject'

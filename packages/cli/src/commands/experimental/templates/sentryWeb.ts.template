@@ -3,9 +3,10 @@ import * as Sentry from '@sentry/react'
 let dsn = ''
 let environment = 'development'
 
-if (typeof process === 'undefined' || !process.env.SENTRY_DSN) {
+if (typeof process === 'undefined' || !process.env?.SENTRY_DSN) {
   console.error(
-    'Missing SENTRY_DSN environment variable. Did you forget to add it to your redwood.toml file in `includeEnvironmentVariables`?'
+    'Missing SENTRY_DSN environment variable. Did you forget to add it to ' +
+      'your redwood.toml file in `includeEnvironmentVariables`?'
   )
   console.info(`Copy this into your redwood.toml file:`)
   console.info(`

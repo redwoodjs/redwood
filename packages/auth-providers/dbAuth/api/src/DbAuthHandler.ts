@@ -13,26 +13,25 @@ import type {
 } from '@simplewebauthn/typescript-types'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import base64url from 'base64url'
-import CryptoJS from 'crypto-js'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 
-import {
-  CorsConfig,
-  CorsContext,
-  CorsHeaders,
-  createCorsContext,
-  normalizeRequest,
-} from '@redwoodjs/api'
+import type { CorsConfig, CorsContext, CorsHeaders } from '@redwoodjs/api'
+import { createCorsContext, normalizeRequest } from '@redwoodjs/api'
 
 import * as DbAuthError from './errors'
 import {
+  cookieName,
   decryptSession,
+  encryptSession,
   extractCookie,
   getSession,
   hashPassword,
+  legacyHashPassword,
+  isLegacySession,
   hashToken,
   webAuthnSession,
+  extractHashingOptions,
 } from './shared'
 
 type SetCookieHeader = { 'set-cookie': string }
@@ -81,7 +80,7 @@ interface ForgotPasswordFlowOptions<TUser = Record<string | number, any>> {
    * Needs to be explicitly set to false to disable the flow
    */
   enabled?: boolean
-  handler: (user: TUser) => any
+  handler: (user: TUser, token: string) => any
   errors?: {
     usernameNotFound?: string
     usernameRequired?: string
@@ -174,6 +173,12 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
    */
   credentialModelAccessor?: keyof PrismaClient
   /**
+   * The fields that are allowed to be returned from the user table when
+   * invoking handlers that return a user object (like forgotPassword and signup)
+   * Defaults to `id` and `email` if not set at all.
+   */
+  allowedUserFields?: string[]
+  /**
    *  A map of what dbAuth calls a field to what your database calls it.
    * `id` is whatever column you use to uniquely identify a user (probably
    * something like `id` or `userId` or even `email`)
@@ -191,11 +196,31 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
    * Object containing cookie config options
    */
   cookie?: {
+    /** @deprecated set this option in `cookie.attributes` */
     Path?: string
+    /** @deprecated set this option in `cookie.attributes` */
     HttpOnly?: boolean
+    /** @deprecated set this option in `cookie.attributes` */
     Secure?: boolean
+    /** @deprecated set this option in `cookie.attributes` */
     SameSite?: string
+    /** @deprecated set this option in `cookie.attributes` */
     Domain?: string
+    attributes?: {
+      Path?: string
+      HttpOnly?: boolean
+      Secure?: boolean
+      SameSite?: string
+      Domain?: string
+    }
+    /**
+     * The name of the cookie that dbAuth sets
+     *
+     * %port% will be replaced with the port the api server is running on.
+     * If you have multiple RW apps running on the same host, you'll need to
+     * make sure they all use unique cookie names
+     */
+    name?: string
   }
   /**
    * Object containing forgot password options
@@ -257,6 +282,8 @@ interface DbAuthSession<TIdType> {
   id: TIdType
 }
 
+const DEFAULT_ALLOWED_USER_FIELDS = ['id', 'email']
+
 export class DbAuthHandler<
   TUser extends Record<string | number, any>,
   TIdType = any
@@ -269,6 +296,7 @@ export class DbAuthHandler<
   db: PrismaClient
   dbAccessor: any
   dbCredentialAccessor: any
+  allowedUserFields: string[]
   headerCsrfToken: string | undefined
   hasInvalidSession: boolean
   session: DbAuthSession<TIdType> | undefined
@@ -325,8 +353,9 @@ export class DbAuthHandler<
     return ['usb', 'ble', 'nfc', 'internal']
   }
 
-  // returns the set-cookie header to mark the cookie as expired ("deletes" the session)
   /**
+   * Returns the set-cookie header to mark the cookie as expired ("deletes" the session)
+   *
    * The header keys are case insensitive, but Fastify prefers these to be lowercase.
    * Therefore, we want to ensure that the headers are always lowercase and unique
    * for compliance with HTTP/2.
@@ -336,7 +365,7 @@ export class DbAuthHandler<
   get _deleteSessionHeader() {
     return {
       'set-cookie': [
-        'session=',
+        `${cookieName(this.options.cookie?.name)}=`,
         ...this._cookieAttributes({ expires: 'now' }),
       ].join(';'),
     }
@@ -362,6 +391,8 @@ export class DbAuthHandler<
       : null
     this.headerCsrfToken = this.event.headers['csrf-token']
     this.hasInvalidSession = false
+    this.allowedUserFields =
+      this.options.allowedUserFields || DEFAULT_ALLOWED_USER_FIELDS
 
     const sessionExpiresAt = new Date()
     sessionExpiresAt.setSeconds(
@@ -385,7 +416,9 @@ export class DbAuthHandler<
     }
 
     try {
-      const [session, csrfToken] = decryptSession(getSession(this.cookie))
+      const [session, csrfToken] = decryptSession(
+        getSession(this.cookie, this.options.cookie?.name)
+      )
       this.session = session
       this.sessionCsrfToken = csrfToken
     } catch (e) {
@@ -515,26 +548,13 @@ export class DbAuthHandler<
         throw new DbAuthError.GenericError()
       }
 
-      // Temporarily set the token on the user back to the raw token so it's
-      // available to the handler.
-      user.resetToken = token
       // call user-defined handler in their functions/auth.js
       const response = await (
         this.options.forgotPassword as ForgotPasswordFlowOptions
-      ).handler(this._sanitizeUser(user))
-
-      // remove resetToken and resetTokenExpiresAt if in the body of the
-      // forgotPassword handler response
-      let responseObj = response
-      if (typeof response === 'object') {
-        responseObj = Object.assign(response, {
-          [this.options.authFields.resetToken]: undefined,
-          [this.options.authFields.resetTokenExpiresAt]: undefined,
-        })
-      }
+      ).handler(this._sanitizeUser(user), token)
 
       return [
-        response ? JSON.stringify(responseObj) : '',
+        response ? JSON.stringify(response) : '',
         {
           ...this._deleteSessionHeader,
         },
@@ -550,11 +570,15 @@ export class DbAuthHandler<
   async getToken() {
     try {
       const user = await this._getCurrentUser()
+      let headers = {}
 
-      // need to return *something* for our existing Authorization header stuff
-      // to work, so return the user's ID in case we can use it for something
-      // in the future
-      return [user[this.options.authFields.id]]
+      // if the session was encrypted with the old algorithm, re-encrypt it
+      // with the new one
+      if (isLegacySession(this.cookie)) {
+        headers = this._loginResponse(user)[1]
+      }
+
+      return [user[this.options.authFields.id], headers]
     } catch (e: any) {
       if (e instanceof DbAuthError.NotLoggedInError) {
         return this._logoutResponse()
@@ -617,12 +641,16 @@ export class DbAuthHandler<
     }
 
     let user = await this._findUserByToken(resetToken as string)
-    const [hashedPassword] = hashPassword(password, user.salt)
+    const [hashedPassword] = hashPassword(password, {
+      salt: user.salt,
+    })
+    const [legacyHashedPassword] = legacyHashPassword(password, user.salt)
 
     if (
-      !(this.options.resetPassword as ResetPasswordFlowOptions)
+      (!(this.options.resetPassword as ResetPasswordFlowOptions)
         .allowReusedPassword &&
-      user.hashedPassword === hashedPassword
+        user.hashedPassword === hashedPassword) ||
+      user.hashedPassword === legacyHashedPassword
     ) {
       throw new DbAuthError.ReusedPasswordError(
         (
@@ -1064,11 +1092,16 @@ export class DbAuthHandler<
     ].join(';')
   }
 
-  // removes sensitive fields from user before sending over the wire
+  // removes any fields not explicitly allowed to be sent to the client before
+  // sending a response over the wire
   _sanitizeUser(user: Record<string, unknown>) {
     const sanitized = JSON.parse(JSON.stringify(user))
-    delete sanitized[this.options.authFields.hashedPassword]
-    delete sanitized[this.options.authFields.salt]
+
+    Object.keys(sanitized).forEach((key) => {
+      if (!this.allowedUserFields.includes(key)) {
+        delete sanitized[key]
+      }
+    })
 
     return sanitized
   }
@@ -1099,7 +1132,17 @@ export class DbAuthHandler<
     expires?: 'now' | string
     options?: DbAuthHandlerOptions['cookie']
   }) {
-    const cookieOptions = { ...this.options.cookie, ...options } || {
+    // TODO: When we drop support for specifying cookie attributes directly on
+    // `options.cookie` we can get rid of all of this and just spread
+    // `this.options.cookie?.attributes` directly into `cookieOptions` below
+    const userCookieAttributes = this.options.cookie?.attributes
+      ? { ...this.options.cookie?.attributes }
+      : { ...this.options.cookie }
+    if (!this.options.cookie?.attributes) {
+      delete userCookieAttributes.name
+    }
+
+    const cookieOptions = { ...userCookieAttributes, ...options } || {
       ...options,
     }
     const meta = Object.keys(cookieOptions)
@@ -1125,11 +1168,6 @@ export class DbAuthHandler<
     return meta
   }
 
-  // encrypts a string with the SESSION_SECRET
-  _encrypt(data: string) {
-    return CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET as string)
-  }
-
   // returns the set-cookie header to be returned in the request (effectively
   // creates the session)
   _createSessionHeader<TIdType = any>(
@@ -1137,9 +1175,9 @@ export class DbAuthHandler<
     csrfToken: string
   ): SetCookieHeader {
     const session = JSON.stringify(data) + ';' + csrfToken
-    const encrypted = this._encrypt(session)
+    const encrypted = encryptSession(session)
     const cookie = [
-      `session=${encrypted.toString()}`,
+      `${cookieName(this.options.cookie?.name)}=${encrypted}`,
       ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
     ].join(';')
 
@@ -1250,19 +1288,56 @@ export class DbAuthHandler<
       )
     }
 
-    // is password correct?
-    const [hashedPassword, _salt] = hashPassword(
-      password,
-      user[this.options.authFields.salt]
+    await this._verifyPassword(user, password)
+    return user
+  }
+
+  // extracts scrypt strength options from hashed password (if present) and
+  // compares the hashed plain text password just submitted using those options
+  // with the one in the database. Falls back to the legacy CryptoJS algorihtm
+  // if no options are present.
+  async _verifyPassword(user: Record<string, unknown>, password: string) {
+    const options = extractHashingOptions(
+      user[this.options.authFields.hashedPassword] as string
     )
-    if (hashedPassword === user[this.options.authFields.hashedPassword]) {
-      return user
+
+    if (Object.keys(options).length) {
+      // hashed using the node:crypto algorithm
+      const [hashedPassword] = hashPassword(password, {
+        salt: user[this.options.authFields.salt] as string,
+        options,
+      })
+
+      if (hashedPassword === user[this.options.authFields.hashedPassword]) {
+        return user
+      }
     } else {
-      throw new DbAuthError.IncorrectPasswordError(
-        username,
-        (this.options.login as LoginFlowOptions)?.errors?.incorrectPassword
+      // fallback to old CryptoJS hashing
+      const [legacyHashedPassword] = legacyHashPassword(
+        password,
+        user[this.options.authFields.salt] as string
       )
+
+      if (
+        legacyHashedPassword === user[this.options.authFields.hashedPassword]
+      ) {
+        const [newHashedPassword] = hashPassword(password, {
+          salt: user[this.options.authFields.salt] as string,
+        })
+
+        // update user's hash to the new algorithm
+        await this.dbAccessor.update({
+          where: { id: user.id },
+          data: { [this.options.authFields.hashedPassword]: newHashedPassword },
+        })
+        return user
+      }
     }
+
+    throw new DbAuthError.IncorrectPasswordError(
+      user[this.options.authFields.username] as string,
+      (this.options.login as LoginFlowOptions)?.errors?.incorrectPassword
+    )
   }
 
   // gets the user from the database and returns only its ID
@@ -1314,6 +1389,7 @@ export class DbAuthHandler<
       const user = await this.dbAccessor.findFirst({
         where: findUniqueUserMatchCriteriaOptions,
       })
+
       if (user) {
         throw new DbAuthError.DuplicateUsernameError(
           username,
@@ -1321,8 +1397,7 @@ export class DbAuthHandler<
         )
       }
 
-      // if we get here everything is good, call the app's signup handler and let
-      // them worry about scrubbing data and saving to the DB
+      // if we get here everything is good, call the app's signup handler
       const [hashedPassword, salt] = hashPassword(password)
       const newUser = await (this.options.signup as SignupFlowOptions).handler({
         username,
@@ -1352,7 +1427,7 @@ export class DbAuthHandler<
     return methodName
   }
 
-  // checks that a single field meets validation requirements and
+  // checks that a single field meets validation requirements
   // currently checks for presence only
   _validateField(name: string, value: string | undefined): value is string {
     // check for presence
@@ -1374,11 +1449,9 @@ export class DbAuthHandler<
     SetCookieHeader & CsrfTokenHeader,
     { statusCode: number }
   ] {
-    const sessionData = { id: user[this.options.authFields.id] }
+    const sessionData = this._sanitizeUser(user)
 
-    // TODO: this needs to go into graphql somewhere so that each request makes
-    // a new CSRF token and sets it in both the encrypted session and the
-    // csrf-token header
+    // TODO: this needs to go into graphql somewhere so that each request makes a new CSRF token and sets it in both the encrypted session and the csrf-token header
     const csrfToken = DbAuthHandler.CSRF_TOKEN
 
     return [

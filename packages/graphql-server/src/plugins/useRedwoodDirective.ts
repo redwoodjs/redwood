@@ -1,17 +1,16 @@
 import { mapSchema, MapperKind } from '@graphql-tools/utils'
-import {
-  defaultFieldResolver,
+import type {
   DirectiveNode,
   DocumentNode,
-  getDirectiveValues,
   GraphQLFieldConfig,
   GraphQLObjectType,
   GraphQLResolveInfo,
   GraphQLSchema,
 } from 'graphql'
-import { Plugin } from 'graphql-yoga'
+import { defaultFieldResolver, getDirectiveValues } from 'graphql'
+import type { Plugin } from 'graphql-yoga'
 
-import { GlobalContext } from '../index'
+import type { GlobalContext } from '../index'
 
 export interface DirectiveParams<
   FieldType = any,

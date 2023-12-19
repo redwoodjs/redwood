@@ -1,5 +1,5 @@
 import type { FileInfo, API, Identifier, ASTNode, ASTPath } from 'jscodeshift'
-import core from 'jscodeshift'
+import type core from 'jscodeshift'
 
 function renameTimestamp(
   j: core.JSCodeshift,

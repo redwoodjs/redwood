@@ -1,4 +1,8 @@
-import { Head } from '../index'
+import { Head as HelmetHead } from '../index'
+
+// Ideally we wouldn't include this for non experiment builds
+// But.... not worth the effort to remove it from bundle atm
+import PortalHead from './PortalHead'
 
 type RobotsParams =
   | 'noindex'
@@ -78,6 +82,13 @@ export const MetaTags = (props: MetaTagsProps) => {
     author,
     children,
   } = props
+
+  let Head: typeof HelmetHead | typeof PortalHead = HelmetHead
+
+  if (RWJS_ENV.RWJS_EXP_STREAMING_SSR) {
+    Head = PortalHead
+  }
+
   return (
     <>
       {title && (
