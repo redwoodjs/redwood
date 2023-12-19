@@ -28,7 +28,7 @@ import { yargsDefaults } from '../helpers'
 import { customOrDefaultTemplatePath, relationsForModel } from '../helpers'
 import { files as serviceFiles } from '../service/service'
 
-const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
+const DEFAULT_IGNORE_FIELDS_FOR_INPUT = ['createdAt', 'updatedAt']
 
 const missingIdConsoleMessage = () => {
   const line1 =
@@ -91,12 +91,17 @@ const querySDL = (model, docs = false) => {
 }
 
 const inputSDL = (model, required, types = {}, docs = false) => {
+  const ignoredFields = DEFAULT_IGNORE_FIELDS_FOR_INPUT
+
   return model.fields
     .filter((field) => {
-      return (
-        IGNORE_FIELDS_FOR_INPUT.indexOf(field.name) === -1 &&
-        field.kind !== 'object'
-      )
+      const idField = model.fields.find((field) => field.isId)
+
+      if (idField) {
+        ignoredFields.push(idField.name)
+      }
+
+      return ignoredFields.indexOf(field.name) === -1 && field.kind !== 'object'
     })
     .map((field) => modelFieldToSDL({ field, required, types, docs }))
 }
@@ -122,6 +127,19 @@ const idType = (model, crud) => {
     throw new Error('Failed: Could not generate SDL')
   }
   return idField.type
+}
+
+const idName = (model, crud) => {
+  if (!crud) {
+    return undefined
+  }
+
+  const idField = model.fields.find((field) => field.isId)
+  if (!idField) {
+    missingIdConsoleMessage()
+    throw new Error('Failed: Could not generate SDL')
+  }
+  return idField.name
 }
 
 const sdlFromSchemaModel = async (name, crud, docs = false) => {
@@ -162,6 +180,7 @@ const sdlFromSchemaModel = async (name, crud, docs = false) => {
     createInput: createInputSDL(model, types, docs).join('\n    '),
     updateInput: updateInputSDL(model, types, docs).join('\n    '),
     idType: idType(model, crud),
+    idName: idName(model, crud),
     relations: relationsForModel(model),
     enums,
   }
@@ -181,6 +200,7 @@ export const files = async ({
     createInput,
     updateInput,
     idType,
+    idName,
     relations,
     enums,
   } = await sdlFromSchemaModel(name, crud, docs)
@@ -201,6 +221,7 @@ export const files = async ({
     createInput,
     updateInput,
     idType,
+    idName,
     enums,
   })
 
