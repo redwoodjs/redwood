@@ -3,14 +3,10 @@
 // Framework main config is in monorepo root ./.eslintrc.js
 
 const {
-  getApiSideDefaultBabelConfig,
-} = require('@redwoodjs/internal/dist/build/babel/api')
-const {
   getCommonPlugins,
-} = require('@redwoodjs/internal/dist/build/babel/common')
-const {
+  getApiSideDefaultBabelConfig,
   getWebSideDefaultBabelConfig,
-} = require('@redwoodjs/internal/dist/build/babel/web')
+} = require('@redwoodjs/babel-config')
 const { getConfig } = require('@redwoodjs/project-config')
 
 const config = getConfig()
@@ -48,7 +44,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['web/src/Routes.js', 'web/src/Routes.tsx'],
+      files: ['web/src/Routes.js', 'web/src/Routes.jsx', 'web/src/Routes.tsx'],
       rules: {
         'no-undef': 'off',
         'jsx-a11y/aria-role': [
@@ -57,6 +53,7 @@ module.exports = {
             ignoreNonDOM: true,
           },
         ],
+        '@redwoodjs/unsupported-route-components': 'error',
       },
     },
     // `api` side
@@ -69,6 +66,13 @@ module.exports = {
       globals: {
         gql: 'readonly',
         context: 'readonly',
+      },
+    },
+    {
+      files: ['api/src/services/**/*.ts'],
+      plugins: ['@redwoodjs'],
+      rules: {
+        '@redwoodjs/service-type-annotations': 'off',
       },
     },
     {

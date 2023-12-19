@@ -1,6 +1,7 @@
 import path from 'path'
 
-import { DocumentNode, print } from 'graphql'
+import type { DocumentNode } from 'graphql'
+import { print } from 'graphql'
 
 import { getPaths } from '@redwoodjs/project-config'
 // @MARK: have to do this, otherwise rwjs/web is loaded before shims
@@ -39,7 +40,7 @@ export async function getGqlHandler() {
   const gqlPath = path.join(getPaths().api.functions, 'graphql')
 
   try {
-    const { handler } = await import(gqlPath)
+    const { handler } = require(gqlPath)
 
     return async (operation: Record<string, unknown>) => {
       return await handler(buildApiEvent(operation), buildContext())

@@ -75,6 +75,7 @@ interface AuthImpersonationConfig {
 }
 
 interface StudioConfig {
+  basePort: number
   inMemory: boolean
   graphiql?: GraphiQLStudioConfig
 }
@@ -90,16 +91,40 @@ export interface Config {
     stories: boolean
     nestScaffoldByModel: boolean
   }
+  graphql: {
+    fragments: boolean
+    trustedDocuments: boolean
+  }
   notifications: {
     versionUpdates: string[]
   }
   experimental: {
     opentelemetry: {
       enabled: boolean
+      wrapApi: boolean
       apiSdk?: string
     }
     studio: StudioConfig
+    cli: {
+      autoInstall: boolean
+      plugins: CLIPlugin[]
+    }
+    useSDLCodeGenForGraphQLTypes: boolean
+    streamingSsr: {
+      enabled: boolean
+    }
+    rsc: {
+      enabled: boolean
+    }
+    realtime: {
+      enabled: boolean
+    }
   }
+}
+
+export interface CLIPlugin {
+  package: string
+  enabled?: boolean
 }
 
 // Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
@@ -111,7 +136,7 @@ const DEFAULT_CONFIG: Config = {
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
-    bundler: BundlerEnum.WEBPACK,
+    bundler: BundlerEnum.VITE,
     includeEnvironmentVariables: [],
     apiUrl: '/.redwood/functions',
     fastRefresh: true,
@@ -128,6 +153,7 @@ const DEFAULT_CONFIG: Config = {
     serverConfig: './api/server.config.js',
     debugPort: 18911,
   },
+  graphql: { fragments: false, trustedDocuments: false },
   browser: {
     open: false,
   },
@@ -142,9 +168,11 @@ const DEFAULT_CONFIG: Config = {
   experimental: {
     opentelemetry: {
       enabled: false,
+      wrapApi: true,
       apiSdk: undefined,
     },
     studio: {
+      basePort: 4318,
       inMemory: false,
       graphiql: {
         endpoint: 'graphql',
@@ -156,6 +184,27 @@ const DEFAULT_CONFIG: Config = {
           jwtSecret: 'secret',
         },
       },
+    },
+    cli: {
+      autoInstall: true,
+      plugins: [
+        {
+          package: '@redwoodjs/cli-storybook',
+        },
+        {
+          package: '@redwoodjs/cli-data-migrate',
+        },
+      ],
+    },
+    useSDLCodeGenForGraphQLTypes: false,
+    streamingSsr: {
+      enabled: false,
+    },
+    rsc: {
+      enabled: false,
+    },
+    realtime: {
+      enabled: false,
     },
   },
 }

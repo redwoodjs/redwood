@@ -61,7 +61,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -73,7 +73,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/pages/EditPostPage/EditPostPage.js'
+          '/path/to/project/web/src/pages/EditPostPage/EditPostPage.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -82,7 +82,7 @@ describe('in javascript (default) mode', () => {
   test('creates a index page', async () => {
     expect(
       files[
-        path.normalize('/path/to/project/web/src/pages/PostsPage/PostsPage.js')
+        path.normalize('/path/to/project/web/src/pages/PostsPage/PostsPage.jsx')
       ]
     ).toMatchSnapshot()
   })
@@ -91,7 +91,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/pages/NewPostPage/NewPostPage.js'
+          '/path/to/project/web/src/pages/NewPostPage/NewPostPage.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -100,7 +100,7 @@ describe('in javascript (default) mode', () => {
   test('creates a show page', async () => {
     expect(
       files[
-        path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js')
+        path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.jsx')
       ]
     ).toMatchSnapshot()
   })
@@ -111,7 +111,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/PostEditCell/PostEditCell.js'
+          '/path/to/project/web/src/components/PostEditCell/PostEditCell.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -121,7 +121,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/PostsCell/PostsCell.js'
+          '/path/to/project/web/src/components/PostsCell/PostsCell.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -131,7 +131,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/PostCell/PostCell.js'
+          '/path/to/project/web/src/components/PostCell/PostCell.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -143,7 +143,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/PostForm/PostForm.js'
+          '/path/to/project/web/src/components/PostForm/PostForm.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -152,7 +152,7 @@ describe('in javascript (default) mode', () => {
   test('creates an index component', async () => {
     expect(
       files[
-        path.normalize('/path/to/project/web/src/components/Posts/Posts.js')
+        path.normalize('/path/to/project/web/src/components/Posts/Posts.jsx')
       ]
     ).toMatchSnapshot()
   })
@@ -160,14 +160,16 @@ describe('in javascript (default) mode', () => {
   test('creates a new component', async () => {
     expect(
       files[
-        path.normalize('/path/to/project/web/src/components/PostNew/PostNew.js')
+        path.normalize(
+          '/path/to/project/web/src/components/PostNew/PostNew.jsx'
+        )
       ]
     ).toMatchSnapshot()
   })
 
   test('creates a show component', async () => {
     expect(
-      files[path.normalize('/path/to/project/web/src/components/Post/Post.js')]
+      files[path.normalize('/path/to/project/web/src/components/Post/Post.jsx')]
     ).toMatchSnapshot()
   })
 
@@ -209,7 +211,7 @@ describe('in javascript (default) mode', () => {
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfilesCell/UserProfilesCell.js'
+          '/path/to/project/web/src/components/UserProfilesCell/UserProfilesCell.jsx'
         )
       ]
     const query = cell.match(/(userProfiles.*?\})/s)[1]
@@ -226,7 +228,7 @@ describe('in javascript (default) mode', () => {
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.jsx'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -243,7 +245,7 @@ describe('in javascript (default) mode', () => {
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+          '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.jsx'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -263,7 +265,7 @@ describe('in javascript (default) mode', () => {
     expect(
       foreignKeyFiles[
         path.normalize(
-          '/path/to/project/web/src/components/NewUserProfile/NewUserProfile.js'
+          '/path/to/project/web/src/components/NewUserProfile/NewUserProfile.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -279,7 +281,7 @@ describe('in javascript (default) mode', () => {
     expect(
       foreignKeyFiles[
         path.normalize(
-          '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+          '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -491,7 +493,7 @@ describe('in typescript mode', () => {
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfilesCell/UserProfilesCell.js'
+          '/path/to/project/web/src/components/UserProfilesCell/UserProfilesCell.jsx'
         )
       ]
     const query = cell.match(/(userProfiles.*?\})/s)[1]
@@ -508,7 +510,7 @@ describe('in typescript mode', () => {
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.jsx'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]

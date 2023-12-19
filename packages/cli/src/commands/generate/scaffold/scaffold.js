@@ -9,6 +9,7 @@ import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { getConfig } from '@redwoodjs/project-config'
 
@@ -245,12 +246,12 @@ const formatters = async (name, isTypescript) => {
   const outputPath = path.join(
     getPaths().web.src,
     'lib',
-    isTypescript ? 'formatters.tsx' : 'formatters.js'
+    isTypescript ? 'formatters.tsx' : 'formatters.jsx'
   )
   const outputPathTest = path.join(
     getPaths().web.src,
     'lib',
-    isTypescript ? 'formatters.test.tsx' : 'formatters.test.js'
+    isTypescript ? 'formatters.test.tsx' : 'formatters.test.jsx'
   )
 
   // skip files that already exist on disk, never worry about overwriting
@@ -453,7 +454,7 @@ const layoutFiles = (name, force, generateTypescript, templateStrings) => {
   layouts.forEach((layout) => {
     const outputLayoutName = layout.replace(
       /\.tsx\.template/,
-      generateTypescript ? '.tsx' : '.js'
+      generateTypescript ? '.tsx' : '.jsx'
     )
 
     const outputPath = path.join(
@@ -515,11 +516,11 @@ const pageFiles = async (
     const outputPageName = page
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
+      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.jsx')
 
     const finalFolder =
       (nestScaffoldByModel ? singularName + '/' : '') +
-      outputPageName.replace(/\.(js|tsx?)/, '')
+      outputPageName.replace(/\.[jt]sx?/, '')
 
     const outputPath = path.join(
       getPaths().web.pages,
@@ -579,11 +580,11 @@ const componentFiles = async (
     const outputComponentName = component
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
+      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.jsx')
 
     const finalFolder =
       (nestScaffoldByModel ? singularName + '/' : '') +
-      outputComponentName.replace(/\.(js|tsx?)/, '')
+      outputComponentName.replace(/\.[jt]sx?/, '')
 
     const outputPath = path.join(
       getPaths().web.components,
@@ -668,9 +669,9 @@ const addLayoutImport = () => {
     )
     writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
-    return 'Added layout import to Routes.{js,tsx}'
+    return 'Added layout import to Routes.{jsx,tsx}'
   } else {
-    return 'Layout import already exists in Routes.{js,tsx}'
+    return 'Layout import already exists in Routes.{jsx,tsx}'
   }
 }
 
@@ -702,7 +703,7 @@ const addSetImport = (task) => {
 
   if (!redwoodRouterImport) {
     task.skip(
-      "Couldn't add Set import from @redwoodjs/router to Routes.{js,tsx}"
+      "Couldn't add Set import from @redwoodjs/router to Routes.{jsx,tsx}"
     )
     return undefined
   }
@@ -724,7 +725,7 @@ const addSetImport = (task) => {
 
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
-  return 'Added Set import to Routes.{js,tsx}'
+  return 'Added Set import to Routes.{jsx,tsx}'
 }
 
 const addScaffoldSetToRouter = async (model, path) => {
@@ -834,7 +835,15 @@ export const tasks = ({
       {
         title: `Generating types ...`,
         task: async () => {
-          await generateTypes()
+          const { errors } = await generateTypes()
+
+          for (const { message, error } of errors) {
+            console.error(message)
+            console.log()
+            console.error(error)
+            console.log()
+          }
+
           addFunctionToRollback(generateTypes, true)
         },
       },
@@ -855,6 +864,16 @@ export const handler = async ({
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
+  recordTelemetryAttributes({
+    command: 'generate scaffold',
+    force,
+    tests,
+    typescript,
+    tailwind,
+    docs,
+    rollback,
+  })
+
   const { model, path } = splitPathAndModel(modelArg)
 
   tailwind = shouldUseTailwindCSS(tailwind)

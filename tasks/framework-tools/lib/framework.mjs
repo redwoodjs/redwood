@@ -1,122 +1,130 @@
 /* eslint-env node */
+// @ts-check
 
-import fs from 'node:fs'
+import { execSync } from 'node:child_process'
 import path from 'node:path'
 import url from 'node:url'
 
 import Arborist from '@npmcli/arborist'
-import c from 'ansi-colors'
-import execa from 'execa'
-import fg from 'fast-glob'
+import fs from 'fs-extra'
 import packlist from 'npm-packlist'
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
 
-export const REDWOOD_PACKAGES_PATH = path.resolve(
-  __dirname,
-  '../../../packages'
+export const REDWOOD_FRAMEWORK_PATH = path.resolve(__dirname, '../../../')
+
+export const REDWOOD_PACKAGES_PATH = path.join(
+  REDWOOD_FRAMEWORK_PATH,
+  'packages'
 )
 
+const IGNORE_PACKAGES = ['@redwoodjs/codemods', 'create-redwood-app']
+
 /**
- * A list of the `@redwoodjs` package.json files that are published to npm
- * and installed into a Redwood Project.
+ * Get the names, locations, and absolute package.json file paths of all the packages we publish to NPM.
  *
- * The reason there's more logic here than seems necessary is because we have package.json files
- * like packages/web/toast/package.json that aren't real packages, but just entry points.
+ * @returns {{ location: string, name: string, packageJsonPath: string }[]}
  */
-export function frameworkPkgJsonFiles() {
-  let pkgJsonFiles = fg.sync('**/package.json', {
-    cwd: REDWOOD_PACKAGES_PATH,
-    ignore: [
-      '**/node_modules/**',
-      '**/create-redwood-app/**',
-      '**/codemods/**',
-    ],
-    absolute: true,
+function getFrameworkPackagesData() {
+  const output = execSync('yarn workspaces list --json', {
+    encoding: 'utf-8',
   })
 
-  for (const pkgJsonFile of pkgJsonFiles) {
-    try {
-      JSON.parse(fs.readFileSync(pkgJsonFile))
-    } catch (e) {
-      throw new Error(pkgJsonFile + ' is not a valid package.json file.')
-    }
+  const frameworkPackagesData = output
+    .trim()
+    .split('\n')
+    .map(JSON.parse)
+    // Fliter out the root package.
+    .filter(({ location }) => location !== '.')
+    // Some packages we won't bother copying into Redwood projects.
+    .filter(({ name }) => !IGNORE_PACKAGES.includes(name))
+
+  for (const frameworkPackage of frameworkPackagesData) {
+    frameworkPackage.packageJsonPath = path.join(
+      REDWOOD_FRAMEWORK_PATH,
+      frameworkPackage.location,
+      'package.json'
+    )
   }
 
-  pkgJsonFiles = pkgJsonFiles.filter((pkgJsonFile) => {
-    const pkgJson = JSON.parse(fs.readFileSync(pkgJsonFile))
-    return !!pkgJson.name
-  })
+  return frameworkPackagesData
+}
 
-  return pkgJsonFiles
+/**
+ * @returns {string[]} A list of absolute package.json file paths.
+ */
+export function getFrameworkPackageJsonPaths() {
+  return getFrameworkPackagesData().map(
+    ({ packageJsonPath }) => packageJsonPath
+  )
 }
 
 /**
  * The dependencies used by `@redwoodjs` packages.
+ *
+ * @returns {{ [key: string]: string }?} A map of package names to versions.
  */
-export function frameworkDependencies(packages = frameworkPkgJsonFiles()) {
+export function getFrameworkDependencies(
+  packageJsonPaths = getFrameworkPackageJsonPaths()
+) {
   const dependencies = {}
 
-  for (const packageJsonPath of packages) {
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath))
+  for (const packageJsonPath of packageJsonPaths) {
+    const packageJson = fs.readJSONSync(packageJsonPath)
 
     for (const [name, version] of Object.entries(
       packageJson?.dependencies ?? {}
     )) {
-      // Skip `@redwoodjs/*` packages, since these are processed
-      // by the workspace.
-      if (!name.startsWith('@redwoodjs/')) {
-        dependencies[name] = version
+      // Skip `@redwoodjs` packages, since these are processed by the workspace.
+      if (name.startsWith('@redwoodjs/')) {
+        continue
+      }
 
-        // Warn if the packages are duplicated and are not the same version.
-        if (dependencies[name] && dependencies[name] !== version) {
-          console.warn(
-            c.yellow('Warning:'),
-            name,
-            'dependency version mismatched, please make sure the versions are the same!'
-          )
-        }
+      dependencies[name] = version
+
+      // Throw if there's duplicate dependencies that aren't same version.
+      if (dependencies[name] && dependencies[name] !== version) {
+        throw new Error(
+          `${name} dependency version mismatched, please make sure the versions are the same`
+        )
       }
     }
   }
-  return sortObjectKeys(dependencies)
+
+  return dependencies
 }
 
 /**
- * The files included in `@redwoodjs` packages.
- * Note: The packages must be built.
+ * The files included in all the `@redwoodjs` packages.
+ * The packages must be built for this to work.
+ *
+ * @returns {Promise<{ [key: string]: string[] }>} A map of package names to files.
  */
-export async function frameworkPackagesFiles(
-  packages = frameworkPkgJsonFiles()
+export async function getFrameworkPackagesFiles(
+  packageJsonPaths = getFrameworkPackageJsonPaths()
 ) {
-  const fileList = {}
-  for (const packageFile of packages) {
-    const packageJson = JSON.parse(fs.readFileSync(packageFile))
+  const frameworkPackageFiles = {}
 
-    const arborist = new Arborist({ path: path.dirname(packageFile) })
+  for (const packageJsonPath of packageJsonPaths) {
+    const packageJson = fs.readJSONSync(packageJsonPath)
+    const arborist = new Arborist({ path: path.dirname(packageJsonPath) })
     const tree = await arborist.loadActual()
-    fileList[packageJson.name] = await packlist(tree)
+    frameworkPackageFiles[packageJson.name] = await packlist(tree)
   }
-  return fileList
+
+  return frameworkPackageFiles
 }
 
 /**
  * Returns execute files for `@redwoodjs` packages.
  **/
-export function frameworkPackagesBins(packages = frameworkPkgJsonFiles()) {
+export function getFrameworkPackagesBins(
+  packageJsonPaths = getFrameworkPackageJsonPaths()
+) {
   let bins = {}
-  for (const packageFile of packages) {
-    let packageJson
 
-    try {
-      packageJson = JSON.parse(fs.readFileSync(packageFile))
-    } catch (e) {
-      throw new Error(packageFile + ' is not a valid package.json file.')
-    }
-
-    if (!packageJson.name) {
-      continue
-    }
+  for (const packageJsonPath of packageJsonPaths) {
+    const packageJson = fs.readJSONSync(packageJsonPath)
 
     if (!packageJson.bin) {
       continue
@@ -128,62 +136,58 @@ export function frameworkPackagesBins(packages = frameworkPkgJsonFiles()) {
       bins[binName] = path.join(packageJson.name, binPath)
     }
   }
+
   return bins
 }
 
 /**
  * Determine base package directory for any filename in it's path.
+ *
+ * @param {string} filePath
+ * @returns {string} The package.json path
  **/
-export function resolvePackageJsonPath(filePath) {
-  // Do we want the package name?
-  const packageName = filePath
-    .replace(REDWOOD_PACKAGES_PATH, '')
-    .split(path.sep)[1]
-  return path.join(REDWOOD_PACKAGES_PATH, packageName, 'package.json')
-}
+export function resolvePackageJsonPathFromFilePath(filePath) {
+  const packageJsonPath = findUp('package.json', path.dirname(filePath))
 
-export function packageJsonName(packageJsonPath) {
-  return JSON.parse(fs.readFileSync(packageJsonPath), 'utf-8').name
-}
+  const frameworkPackageJsonPaths = getFrameworkPackageJsonPaths()
 
-/**
- * Clean Redwood packages.
- */
-export function cleanPackages(packages = frameworkPkgJsonFiles()) {
-  const packageNames = packages.map(packageJsonName)
+  if (frameworkPackageJsonPaths.includes(packageJsonPath)) {
+    return packageJsonPath
+  }
 
-  execa.sync(
-    'yarn lerna run build:clean',
-    ['--parallel', `--scope={${packageNames.join(',') + ','}}`],
-    {
-      shell: true,
-      stdio: 'inherit',
-      cwd: path.resolve(__dirname, '../../../'),
-    }
-  )
+  // There's some directories that have their own package.json, but aren't published to npm,
+  // like @redwoodjs/web/apollo. We want the path to @redwoodjs/web's package.json, not @redwoodjs/web/apollo's.
+  return findUp('package.json', path.resolve(filePath, '../../'))
 }
 
 /**
- * Build Redwood packages.
+ * @param {string} packageJsonPath
+ * @returns {string} The package name if it has one
  */
-export function buildPackages(packages = frameworkPkgJsonFiles()) {
-  const packageNames = packages.map(packageJsonName)
-  execa.sync(
-    'yarn lerna run build',
-    ['--parallel', `--scope={${packageNames.join(',') + ','}}`],
-    {
-      shell: true,
-      stdio: 'inherit',
-      cwd: path.resolve(__dirname, '../../../'),
-    }
-  )
+export function getPackageName(packageJsonPath) {
+  return fs.readJSONSync(packageJsonPath).name
 }
 
-function sortObjectKeys(obj) {
-  return Object.keys(obj)
-    .sort()
-    .reduce((acc, key) => {
-      acc[key] = obj[key]
-      return acc
-    }, {})
+/**
+ * Find a file by walking up parent directories. Taken from @redwoodjs/project-config.
+ *
+ * @param {string} file The file to find.
+ * @param {string} startingDirectory The directory to start searching from.
+ * @returns {string | null} The path to the file, or null if it can't be found.
+ */
+export function findUp(file, startingDirectory = process.cwd()) {
+  const possibleFilepath = path.join(startingDirectory, file)
+
+  if (fs.existsSync(possibleFilepath)) {
+    return possibleFilepath
+  }
+
+  const parentDirectory = path.dirname(startingDirectory)
+
+  // If we've reached the root directory, there's no file to be found.
+  if (parentDirectory === startingDirectory) {
+    return null
+  }
+
+  return findUp(file, parentDirectory)
 }

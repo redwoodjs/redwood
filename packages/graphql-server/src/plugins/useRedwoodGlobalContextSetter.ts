@@ -1,7 +1,7 @@
-import { Plugin } from 'graphql-yoga'
+import type { Plugin } from 'graphql-yoga'
 
-import { RedwoodGraphQLContext } from '../functions/types'
 import { setContext } from '../index'
+import type { RedwoodGraphQLContext } from '../types'
 
 /**
  * This Envelop plugin waits until the GraphQL context is done building and sets the

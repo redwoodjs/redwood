@@ -49,7 +49,7 @@ const buildRedwoodFramework = () => {
   }
 }
 
-const createRedwoodJSApp = ({ typescript }) => {
+const createRedwoodJSApp = ({ typescript, bundler }) => {
   try {
     execa.sync(
       'yarn node dist/create-redwood-app.js',
@@ -68,24 +68,47 @@ const createRedwoodJSApp = ({ typescript }) => {
       }
     )
 
-    // Add prisma resolutions
+    // Add package resolutions
+    //
+    // This is needed because the test project uses the current stable version
+    // of Redwood when installing, but then when we use rwfw to link, newer
+    // versions of packages might be installed causing conflicts. Setting
+    // resolutions prevents this.
+    // Note that this isn't limited to any specific versions. It's always
+    // going to be a potential issue when package versions differ between
+    // stable and canary.
+    // See https://github.com/redwoodjs/redwood/pull/6772 for more info.
+
     const packageJSONPath = path.join(REDWOOD_PROJECT_DIRECTORY, 'package.json')
     const packageJSON = fs.readJSONSync(packageJSONPath)
 
-    const getVersionFrmRwPkg = (dep, pkg) => {
+    const getVersionFromRwPackage = (dep, pkg) => {
       return fs.readJSONSync(
         path.join(REDWOODJS_FRAMEWORK_PATH, 'packages', pkg, 'package.json')
       ).dependencies[dep]
     }
 
     packageJSON.resolutions = {
-      prisma: getVersionFrmRwPkg('prisma', 'cli'),
-      '@prisma/client': getVersionFrmRwPkg('@prisma/client', 'api'),
-      '@prisma/internals': getVersionFrmRwPkg('@prisma/internals', 'cli'),
-      'graphql-yoga': getVersionFrmRwPkg('graphql-yoga', 'graphql-server'),
+      prisma: getVersionFromRwPackage('prisma', 'cli'),
+      '@prisma/client': getVersionFromRwPackage('@prisma/client', 'api'),
+      '@prisma/internals': getVersionFromRwPackage('@prisma/internals', 'cli'),
+      'graphql-yoga': getVersionFromRwPackage('graphql-yoga', 'graphql-server'),
+      graphql: getVersionFromRwPackage('graphql', 'graphql-server'),
     }
 
     fs.writeFileSync(packageJSONPath, JSON.stringify(packageJSON, null, 2))
+
+    if (bundler === 'webpack') {
+      const redwoodTOMLPath = path.join(
+        REDWOOD_PROJECT_DIRECTORY,
+        'redwood.toml'
+      )
+      const redwoodTOML = fs.readFileSync(redwoodTOMLPath, 'utf-8')
+      fs.writeFileSync(
+        redwoodTOMLPath,
+        redwoodTOML.replace('[web]\n', '[web]\n  bundler = "webpack"\n')
+      )
+    }
   } catch (e) {
     if (e.signal !== 'SIGINT') {
       console.error('Error: Could not create Redwood Project')
@@ -232,6 +255,11 @@ const args = yargs(hideBin(process.argv))
   .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
   .option('clean-files', { default: true, type: 'boolean' })
+  .option('bundler', {
+    default: 'vite',
+    type: 'string',
+    choices: ['vite', 'webpack'],
+  })
   .scriptName('run-e2e')
   .example('run-e2e')
   .example('run-e2e /tmp/redwood-app --ts')
@@ -260,12 +288,13 @@ let {
   copyFramework,
   createProject,
   typescript,
+  bundler,
   autoStart,
   cleanFiles,
 } = args
 const tasks = [
   buildFramework && buildRedwoodFramework,
-  createProject && (() => createRedwoodJSApp({ typescript })),
+  createProject && (() => createRedwoodJSApp({ typescript, bundler })),
   copyFramework && addFrameworkDepsToProject,
   copyFramework && runYarnInstall,
   copyFramework && copyFrameworkPackages,

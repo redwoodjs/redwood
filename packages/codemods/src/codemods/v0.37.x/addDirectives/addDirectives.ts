@@ -4,10 +4,10 @@ import path from 'path'
 import { fetch } from '@whatwg-node/fetch'
 import fg from 'fast-glob'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 
 export const addDirectives = async () => {
-  const rwPaths = getRWPaths()
+  const rwPaths = getPaths()
 
   /**
    * An object where the keys are resolved filenames and the values are (for the most part) URLs to fetch.

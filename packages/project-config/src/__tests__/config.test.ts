@@ -43,11 +43,33 @@ describe('getConfig', () => {
           "open": false,
         },
         "experimental": {
+          "cli": {
+            "autoInstall": true,
+            "plugins": [
+              {
+                "package": "@redwoodjs/cli-storybook",
+              },
+              {
+                "package": "@redwoodjs/cli-data-migrate",
+              },
+            ],
+          },
           "opentelemetry": {
             "apiSdk": undefined,
             "enabled": false,
+            "wrapApi": true,
+          },
+          "realtime": {
+            "enabled": false,
+          },
+          "rsc": {
+            "enabled": false,
+          },
+          "streamingSsr": {
+            "enabled": false,
           },
           "studio": {
+            "basePort": 4318,
             "graphiql": {
               "authImpersonation": {
                 "authProvider": undefined,
@@ -60,11 +82,16 @@ describe('getConfig', () => {
             },
             "inMemory": false,
           },
+          "useSDLCodeGenForGraphQLTypes": false,
         },
         "generate": {
           "nestScaffoldByModel": true,
           "stories": true,
           "tests": true,
+        },
+        "graphql": {
+          "fragments": false,
+          "trustedDocuments": false,
         },
         "notifications": {
           "versionUpdates": [],
@@ -72,7 +99,7 @@ describe('getConfig', () => {
         "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
-          "bundler": "webpack",
+          "bundler": "vite",
           "fastRefresh": true,
           "host": "localhost",
           "includeEnvironmentVariables": [],
@@ -145,6 +172,26 @@ describe('getConfig', () => {
     })
   })
 
+  describe('with graphql configs', () => {
+    describe('sets defaults', () => {
+      it('sets trustedDocuments to false', () => {
+        const config = getConfig(
+          path.join(__dirname, './fixtures/redwood.toml')
+        )
+        expect(config.graphql.trustedDocuments).toEqual(false)
+        expect(config.graphql.fragments).toEqual(false)
+      })
+    })
+
+    it('merges graphql configs', () => {
+      const config = getConfig(
+        path.join(__dirname, './fixtures/redwood.graphql.toml')
+      )
+      expect(config.graphql.trustedDocuments).toEqual(true)
+      expect(config.graphql.fragments).toEqual(true)
+    })
+  })
+
   it('throws an error when given a bad config path', () => {
     const runGetConfig = () => {
       getConfig(path.join(__dirname, './fixtures/fake_redwood.toml'))
@@ -169,7 +216,7 @@ describe('getConfig', () => {
     expect(config.web.apiUrl).toBe('/bazinga')
     expect(config.web.title).toBe('App running on staging')
 
-    delete process.env['API_URL']
-    delete process.env['APP_ENV']
+    delete process.env.API_URL
+    delete process.env.APP_ENV
   })
 })

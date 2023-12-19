@@ -2,10 +2,10 @@ import { spawnSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 
 async function upgradeYarn() {
-  const rwPaths = getRWPaths()
+  const rwPaths = getPaths()
 
   console.log('Preparing and enabling corepack...')
 

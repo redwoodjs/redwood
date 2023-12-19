@@ -1,11 +1,12 @@
 import { transform } from '@babel/core'
 
-import getRWPaths from './getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
+
 import prettify from './prettify'
 
 const ts2js = (file: string) => {
   const result = transform(file, {
-    cwd: getRWPaths().base,
+    cwd: getPaths().base,
     configFile: false,
     plugins: [
       [

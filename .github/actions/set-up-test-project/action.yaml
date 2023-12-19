@@ -1,0 +1,18 @@
+name: Set up test project
+description: Sets up the test project fixture in CI for smoke tests and CLI checks
+
+runs:
+  using: node20
+  main: 'setUpTestProject.mjs'
+
+inputs:
+  bundler:
+    description: The bundler to use (vite or webpack)
+    default: vite
+  canary:
+    description: Upgrade the project to canary?
+    default: "false"
+
+outputs:
+  test-project-path:
+    description: Path to the test project

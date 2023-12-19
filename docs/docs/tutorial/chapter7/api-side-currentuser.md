@@ -30,7 +30,7 @@ Making data changes like this will start becoming second nature soon:
 
 First we'll add the new `userId` field to `Post` and the relation to `User`:
 
-```javascript title=api/db/schema.prisma
+```javascript title="api/db/schema.prisma"
 model Post {
   id        Int      @id @default(autoincrement())
   title     String
@@ -71,7 +71,7 @@ We'll comment out the sensitive fields of our GraphQL User type so there's no ch
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="api/src/graphql/users.sdl.js"
+```js title="api/src/graphql/users.sdl.js"
   type User {
     ...
     # hashedPassword: String!
@@ -84,7 +84,7 @@ We'll comment out the sensitive fields of our GraphQL User type so there's no ch
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```tsx title="api/src/graphql/users.sdl.tsx"
+```ts title="api/src/graphql/users.sdl.ts"
   type User {
     ...
     # hashedPassword: String!
@@ -112,7 +112,7 @@ Whoops!
 
 Similar to what happened when we added `roles` to `User`, We made `userId` a required field, but we already have several posts in our development database. Since we don't have a default value for `userId` defined, it's impossible to add this column to the database.
 
-:::caution Why don't we just set `@default(1)` in the schema?
+:::warning Why don't we just set `@default(1)` in the schema?
 
 This would get us past this problem, but could cause hard-to-track-down bugs in the future: if you ever forget to assign a `post` to a `user`, rather than fail it'll happily just set `userId` to `1`, which may or may not even exist some day! It's best to take the extra time to do things The Right Way and avoid the quick hacks to get past an annoyance like this. Your future self will thank you!
 
@@ -128,7 +128,7 @@ yarn rw prisma migrate reset
 
 If you started the second half the tutorial from the [Redwood Tutorial repo](https://github.com/redwoodjs/redwood-tutorial) you'll get an error after resetting the database—Prisma attempts to seed the database with a user and some posts to get you started, but the posts in that seed do not have the new required `userId` field! Open up `scripts/seed.js` and edit each post to add `userId: 1` to each:
 
-```javascript title=scripts/seed.js
+```javascript title="scripts/seed.js"
 {
   id: 1,
   name: 'John Doe',
@@ -187,7 +187,7 @@ To enable this we'll need to make two modifications on the api side:
 
 #### Add User to Posts SDL
 
-```javascript title=api/src/graphql/posts.sdl.js
+```javascript title="api/src/graphql/posts.sdl.js"
   type Post {
     id: Int!
     title: String!
@@ -210,7 +210,7 @@ Here we're using `User!` with an exclamation point because we know that every `P
 
 This one is a little tricker: we need to add a "lookup" in the `posts` service, so that it knows how to get the associated user. When we generated the `comments` SDL and service we got this **relation resolver** created for us. We could re-run the service generator for `Post` but that could blow away changes we made to this file. Our only option would be to include the `--force` flag since the file already exists, which will write over everything. In this case we'll just add the resolver manually:
 
-```javascript title=api/src/services/posts/posts.js
+```javascript title="api/src/services/posts/posts.js"
 import { db } from 'src/lib/db'
 
 export const posts = () => {
@@ -328,7 +328,7 @@ There are two places where we publicly present a post:
 
 Let's update their respective Cells to include the name of the user that created the post:
 
-```jsx title=web/src/components/ArticlesCell/ArticlesCell.js
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
   query ArticlesQuery {
     articles: posts {
@@ -346,7 +346,7 @@ export const QUERY = gql`
 `
 ```
 
-```jsx title=web/src/components/ArticleCell/ArticleCell.js
+```jsx title="web/src/components/ArticleCell/ArticleCell.js"
 export const QUERY = gql`
   query ArticleQuery($id: Int!) {
     article: post(id: $id) {
@@ -366,7 +366,7 @@ export const QUERY = gql`
 
 And then update the display component that shows an Article:
 
-```jsx title=web/src/components/Article/Article.js
+```jsx title="web/src/components/Article/Article.js"
 import { Link, routes } from '@redwoodjs/router'
 
 const Article = ({ article }) => {
@@ -397,7 +397,7 @@ Depending on whether you started from the Redwood Tutorial repo or not, you may 
 
 There's a magical variable named `context` that's available within any of your service functions. It contains the context in which the service function is being called. One property available on this context is the user that's logged in (*if* someone is logged in). It's the same `currentUser` that is available on the web side:
 
-```javascript title=api/src/service/posts/posts.js
+```javascript title="api/src/service/posts/posts.js"
 export const createPost = ({ input }) => {
   return db.post.create({
     // highlight-next-line
@@ -422,7 +422,7 @@ Right now any admin that visits `/admin/posts` can still see all posts, not only
 
 Since we know we have access to `context.currentUser` we can sprinkle it throughout our posts service to limit what's returned to only those posts that the currently logged in user owns:
 
-```javascript title=api/src/services/posts/posts.js
+```javascript title="api/src/services/posts/posts.js"
 import { db } from 'src/lib/db'
 
 export const posts = () => {
@@ -493,7 +493,7 @@ There are several steps we'll need to complete:
 
 Let's keep the existing `posts.sdl.js` and make that the "public" interface. Duplicate that SDL, naming it `adminPosts.sdl.js`, and modify it like so:
 
-```javascript title=api/src/graphql/adminPosts.sdl.js
+```javascript title="api/src/graphql/adminPosts.sdl.js"
 export const schema = gql`
   type Query {
     adminPosts: [Post!]! @requireAuth(roles: ["admin"])
@@ -518,7 +518,7 @@ export const schema = gql`
 `
 ```
 
-```javascript title=api/src/graphql/posts.sdl.js
+```javascript title="api/src/graphql/posts.sdl.js"
 export const schema = gql`
   type Post {
     id: Int!
@@ -543,7 +543,7 @@ In `adminPosts` we've updated the queries to use `@requireAuth` instead of `@ski
 
 Next let's create an `adminPosts` service. We'll need to move our create/update/delete mutations to it, as the name of the SDL needs to match the name of the service:
 
-```javascript title=api/src/services/adminPosts/adminPosts.js
+```javascript title="api/src/services/adminPosts/adminPosts.js"
 import { db } from 'src/lib/db'
 
 export const adminPosts = () => {
@@ -578,7 +578,7 @@ export const deletePost = ({ id }) => {
 
 (Again, don't forget the change from `findUnique()` to `findFirst()`.) And update `posts` to remove some of the functions that live in `adminPosts` now:
 
-```javascript title=api/src/services/posts/posts.js
+```javascript title="api/src/services/posts/posts.js"
 import { db } from 'src/lib/db'
 
 export const posts = () => {
@@ -603,7 +603,21 @@ Note that we kept the relation resolver here `Post.user`, and there's none in `a
 
 Finally, we'll need to update several of the scaffold components to use the new `adminPosts` and `adminPost` queries (we'll limit the code snippets below to just the changes to save some room, this page is getting long enough!):
 
-```javascript title=web/src/components/Post/EditPostCell/EditPostCell.js
+```javascript title="web/src/components/Post/EditPostCell/EditPostCell.js"
+export const QUERY = gql`
+  query EditPostById($id: Int!) {
+    // highlight-next-line
+    post: adminPost(id: $id) {
+      id
+      title
+      body
+      createdAt
+    }
+  }
+`
+```
+
+```jsx title="web/src/components/Post/PostCell/PostCell.js"
 export const QUERY = gql`
   query FindPostById($id: Int!) {
     // highlight-next-line
@@ -617,21 +631,7 @@ export const QUERY = gql`
 `
 ```
 
-```jsx title=web/src/components/Post/PostCell/PostCell.js
-export const QUERY = gql`
-  query FindPostById($id: Int!) {
-    // highlight-next-line
-    post: adminPost(id: $id) {
-      id
-      title
-      body
-      createdAt
-    }
-  }
-`
-```
-
-```jsx title=web/src/components/Post/PostsCell/PostsCell.js
+```jsx title="web/src/components/Post/PostsCell/PostsCell.js"
 export const QUERY = gql`
   query POSTS {
     // highlight-next-line
@@ -674,16 +674,13 @@ import { ForbiddenError } from '@redwoodjs/graphql-server'
 // highlight-start
 export const updatePost = async ({ id, input }) => {
   if (await adminPost({ id })) {
-    return true
+    return db.post.update({
+      data: input,
+      where: { id },
+    })
   } else {
     throw new ForbiddenError("You don't have access to this post")
   }
-  // highlight-end
-
-  return db.post.update({
-    data: input,
-    where: { id },
-  })
 }
 ```
 
@@ -693,7 +690,7 @@ This works, but we'll need to do the same thing in `deletePost`. Let's extract t
 
 ```javascript
 // highlight-start
-const verifyOwnership = async (id) {
+const verifyOwnership = async ({ id }) => {
   if (await adminPost({ id })) {
     return true
   } else {
@@ -704,7 +701,7 @@ const verifyOwnership = async (id) {
 
 export const updatePost = async ({ id, input }) => {
   // highlight-next-line
-  await verifyOwnership(id)
+  await verifyOwnership({ id })
 
   return db.post.update({
     data: input,
@@ -720,7 +717,7 @@ import { ForbiddenError } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
 
-const validateOwnership = async ({ id }) => {
+const verifyOwnership = async ({ id }) => {
   if (await adminPost({ id })) {
     return true
   } else {
@@ -745,7 +742,7 @@ export const createPost = ({ input }) => {
 }
 
 export const updatePost = async ({ id, input }) => {
-  await validateOwnership({ id })
+  await verifyOwnership({ id })
 
   return db.post.update({
     data: input,
@@ -754,7 +751,7 @@ export const updatePost = async ({ id, input }) => {
 }
 
 export const deletePost = async ({ id }) => {
-  await validateOwnership({ id })
+  await verifyOwnership({ id })
 
   return db.post.delete({
     where: { id },

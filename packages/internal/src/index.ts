@@ -11,8 +11,6 @@ export { buildApi } from './build/api'
 export * from './validateSchema'
 
 // Babel helpers
-export * from './build/babel/api'
-export * from './build/babel/web'
-export * from './build/babel/common'
+export * from '@redwoodjs/babel-config'
 
 export { listQueryTypeFieldsInProject } from './gql'

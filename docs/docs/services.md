@@ -60,7 +60,7 @@ export const createUser = async ({ input }) => {
       throw 'Only Admins can create new Managers'
     }
   })
-  validateWith(async () => {
+  await validateWith(async () => {
     const inviteCount = await db.invites.count({ where: { userId: currentUser.id  } })
     if (inviteCount >= 10) {
       throw 'You have already invited your max of 10 users'
@@ -522,8 +522,8 @@ validate(input.debt, 'Debt', {
 * `message`: a custom message if validation fails. Some options can be used in string interpolation: `lessThan`, `lessThanOrEqual`, `greaterThan`, `greaterThanOrEqual`, `equal`, and `otherThan`
 
 ```jsx
-validate(input.floor, {
-  numericality: { otherThan: 13, 'You cannot go to floor ${otherThan}' }
+validate(input.floor, 'Floor', {
+  numericality: { otherThan: 13, message: 'You cannot go to floor ${otherThan}' }
 })
 ```
 
@@ -618,7 +618,7 @@ validate(input.value, 'Value', {
 ```
 ### validateWithSync()
 
-`validateWith()` is simply given a function to execute. This function should throw with a message if there is a problem, otherwise do nothing.
+`validateWithSync()` is simply given a function to execute. This function should throw with a message if there is a problem, otherwise do nothing.
 
 ```jsx
 validateWithSync(() => {
@@ -636,14 +636,14 @@ validateWithSync(() => {
 
 Either of these errors will be caught and re-thrown as a `ServiceValidationError` with your text as the `message` of the error (although technically you should always throw errors with `new Error()` like in the second example).
 
-You could just write your own function and throw whatever you like, without using `validateWith()`. But, when accessing your Service function through GraphQL, that error would be swallowed and the user would simply see "Something went wrong" for security reasons: error messages could reveal source code or other sensitive information so most are hidden. Errors thrown by Service Validations are considered "safe" and allowed to be shown to the client.
+You could just write your own function and throw whatever you like, without using `validateWithSync()`. But, when accessing your Service function through GraphQL, that error would be swallowed and the user would simply see "Something went wrong" for security reasons: error messages could reveal source code or other sensitive information so most are hidden. Errors thrown by Service Validations are considered "safe" and allowed to be shown to the client.
 
-### validateWithSync()
+### validateWith()
 
-The same behavior as `validateWithSync()` but works with Promises.
+The same behavior as `validateWithSync()` but works with Promises. Remember to `await` the validation.
 
 ```jsx
-validateWithSync(async () => {
+await validateWith(async () => {
   if (await db.products.count() >= 100) {
     throw "There can only be a maximum of 100 products in your store"
   }
@@ -782,7 +782,7 @@ In our example above you could cache the GraphQL query for the most popular prod
 
 As of this writing, Redwood ships with clients for the two most popular cache backends: [Memcached](https://memcached.org/) and [Redis](https://redis.io/). Service caching wraps each of these in an adapter, which makes it easy to add more clients in the future. If you're interested in adding an adapter for your favorite cache client, [open a issue](https://github.com/redwoodjs/redwood/issues) and tell us about it! Instructions for getting started with the code are [below](#creating-your-own-client).
 
-::: info
+:::info
 
 If you need to access functionality in your cache client that the `cache()` and `cacheFindMany()` functions do not handle, you can always get access to the underlying raw client library and use it however you want:
 
@@ -900,7 +900,7 @@ This leads to your product cache being rebuilt every hour, even though you haven
 
 Just like the `v1` we added to the `product` cache key above, you can globally prefix a string to *all* of your cache keys:
 
-```js title=api/src/lib/cache.js
+```js title="api/src/lib/cache.js"
 export const { cache, cacheFindMany } = createCache(client, {
   logger,
   timeout: 500,
@@ -938,7 +938,7 @@ yarn rw setup cache redis
 
 This generates the following (memcached example shown):
 
-```js title=api/src/lib/cache.js
+```js title="api/src/lib/cache.js"
 import { createCache, MemcachedClient } from '@redwoodjs/api/cache'
 
 import { logger } from './logger'
@@ -1114,7 +1114,7 @@ const updateUser = async ({ id, input }) => {
 })
 ```
 
-:::caution
+:::warning
 
 When explicitly deleting cache keys like this you could find yourself going down a rabbit hole. What if there is another service somewhere that also updates user? Or another service that updates an organization, as well as all of its underlying child users at the same time? You'll need to be sure to call `deleteCacheKey()` in these places as well. As a general guideline, it's better to come up with a cache key that encapsulates any triggers for when the data has changed (like the `updatedAt` timestamp, which will change no matter who updates the user, anywhere in your codebase).
 

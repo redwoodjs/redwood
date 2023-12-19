@@ -2,7 +2,8 @@ import path from 'path'
 
 import task from 'tasuku'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
+
 import isTSProject from '../../../lib/isTSProject'
 import runTransform from '../../../lib/runTransform'
 
@@ -16,12 +17,7 @@ export const handler = () => {
     await runTransform({
       transformPath: path.join(__dirname, 'useArmor.js'),
       targetPaths: [
-        path.join(
-          getRWPaths().api.base,
-          'src',
-          'functions',
-          graphqlHandlerFile
-        ),
+        path.join(getPaths().api.base, 'src', 'functions', graphqlHandlerFile),
       ],
     })
 

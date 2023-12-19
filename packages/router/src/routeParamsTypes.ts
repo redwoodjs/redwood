@@ -1,4 +1,4 @@
-import { A } from 'ts-toolbelt'
+import type { A } from 'ts-toolbelt'
 
 export type GenericParams = Record<string | number, string | number | boolean>
 

@@ -15,7 +15,9 @@ import './mockTelemetry'
 
 jest.mock('@redwoodjs/internal/dist/generate/generate', () => {
   return {
-    generate: () => {},
+    generate: () => {
+      return { errors: [] }
+    },
   }
 })
 

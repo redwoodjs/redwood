@@ -2,12 +2,12 @@ import fs from 'fs'
 import path from 'path'
 
 import * as babel from '@babel/core'
-import {
-  Listr,
+import type {
   ListrTaskWrapper,
   ListrRenderer,
   ListrGetRendererClassFromValue,
 } from 'listr2'
+import { Listr } from 'listr2'
 import { format } from 'prettier'
 
 import { colors } from './colors'
@@ -46,7 +46,7 @@ export const transformTSToJS = (filename: string, content: string) => {
     process.exit(1)
   }
 
-  return prettify(filename.replace(/\.tsx?$/, '.js'), babelFileResult.code)
+  return prettify(filename.replace(/\.ts(x)?$/, '.js$1'), babelFileResult.code)
 }
 
 /**

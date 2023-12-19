@@ -4,7 +4,7 @@ import path from 'path'
 import execa from 'execa'
 import { Listr } from 'listr2'
 
-import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
+import { registerApiSideBabelHook } from '@redwoodjs/babel-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {
@@ -57,7 +57,7 @@ const printHeaders = async () => {
     )
   }
 
-  const script = await import(srcPath)
+  const script = require(srcPath)
   await script.default()
 }
 
@@ -68,8 +68,8 @@ export const handler = async ({ provider, id, token, expiry, view }) => {
     [
       {
         title: 'Generating graphiql header...',
-        task: () => {
-          payload = generatePayload(provider, id, token, expiry)
+        task: async () => {
+          payload = await generatePayload(provider, id, token, expiry)
         },
       },
       {

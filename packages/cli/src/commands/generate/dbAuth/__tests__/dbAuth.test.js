@@ -66,13 +66,15 @@ describe('dbAuth', () => {
 
   it('creates a login page', () => {
     expect(dbAuth.files(true, false)).toHaveProperty([
-      path.normalize('/path/to/project/web/src/pages/LoginPage/LoginPage.js'),
+      path.normalize('/path/to/project/web/src/pages/LoginPage/LoginPage.jsx'),
     ])
   })
 
   it('creates a signup page', () => {
     expect(dbAuth.files(true, false)).toHaveProperty([
-      path.normalize('/path/to/project/web/src/pages/SignupPage/SignupPage.js'),
+      path.normalize(
+        '/path/to/project/web/src/pages/SignupPage/SignupPage.jsx'
+      ),
     ])
   })
 
@@ -230,7 +232,7 @@ describe('dbAuth', () => {
       const forgotPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.jsx'
           )
         )
         .toString()
@@ -239,7 +241,7 @@ describe('dbAuth', () => {
       const loginPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.jsx'
           )
         )
         .toString()
@@ -248,7 +250,7 @@ describe('dbAuth', () => {
       const resetPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.jsx'
           )
         )
         .toString()
@@ -257,7 +259,7 @@ describe('dbAuth', () => {
       const signupPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.jsx'
           )
         )
         .toString()
@@ -279,7 +281,7 @@ describe('dbAuth', () => {
       const forgotPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.jsx'
           )
         )
         .toString()
@@ -288,7 +290,7 @@ describe('dbAuth', () => {
       const loginPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.jsx'
           )
         )
         .toString()
@@ -297,7 +299,7 @@ describe('dbAuth', () => {
       const resetPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.jsx'
           )
         )
         .toString()
@@ -306,7 +308,7 @@ describe('dbAuth', () => {
       const signupPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.jsx'
           )
         )
         .toString()
@@ -330,7 +332,7 @@ describe('dbAuth', () => {
       const forgotPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.jsx'
           )
         )
         .toString()
@@ -339,7 +341,7 @@ describe('dbAuth', () => {
       const loginPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.jsx'
           )
         )
         .toString()
@@ -348,7 +350,7 @@ describe('dbAuth', () => {
       const resetPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.jsx'
           )
         )
         .toString()
@@ -357,7 +359,7 @@ describe('dbAuth', () => {
       const signupPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.jsx'
           )
         )
         .toString()
@@ -379,7 +381,7 @@ describe('dbAuth', () => {
       const forgotPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.jsx'
           )
         )
         .toString()
@@ -388,7 +390,7 @@ describe('dbAuth', () => {
       const loginPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.jsx'
           )
         )
         .toString()
@@ -397,7 +399,7 @@ describe('dbAuth', () => {
       const resetPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.jsx'
           )
         )
         .toString()
@@ -406,7 +408,7 @@ describe('dbAuth', () => {
       const signupPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.jsx'
           )
         )
         .toString()
@@ -430,7 +432,7 @@ describe('dbAuth', () => {
       const forgotPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.jsx'
           )
         )
         .toString()
@@ -439,7 +441,7 @@ describe('dbAuth', () => {
       const loginPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.jsx'
           )
         )
         .toString()
@@ -448,7 +450,7 @@ describe('dbAuth', () => {
       const resetPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.jsx'
           )
         )
         .toString()
@@ -457,7 +459,7 @@ describe('dbAuth', () => {
       const signupPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.jsx'
           )
         )
         .toString()
@@ -480,7 +482,7 @@ describe('dbAuth', () => {
       const forgotPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.jsx'
           )
         )
         .toString()
@@ -489,7 +491,7 @@ describe('dbAuth', () => {
       const loginPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.jsx'
           )
         )
         .toString()
@@ -498,7 +500,7 @@ describe('dbAuth', () => {
       const resetPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.jsx'
           )
         )
         .toString()
@@ -507,7 +509,7 @@ describe('dbAuth', () => {
       const signupPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.jsx'
           )
         )
         .toString()
@@ -534,7 +536,7 @@ describe('dbAuth', () => {
       const forgotPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.jsx'
           )
         )
         .toString()
@@ -543,7 +545,7 @@ describe('dbAuth', () => {
       const loginPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.jsx'
           )
         )
         .toString()
@@ -552,7 +554,7 @@ describe('dbAuth', () => {
       const resetPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.jsx'
           )
         )
         .toString()
@@ -561,7 +563,7 @@ describe('dbAuth', () => {
       const signupPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.jsx'
           )
         )
         .toString()
@@ -589,7 +591,7 @@ describe('dbAuth', () => {
       const forgotPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.jsx'
           )
         )
         .toString()
@@ -598,7 +600,7 @@ describe('dbAuth', () => {
       const loginPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.jsx'
           )
         )
         .toString()
@@ -607,7 +609,7 @@ describe('dbAuth', () => {
       const resetPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.jsx'
           )
         )
         .toString()
@@ -616,7 +618,7 @@ describe('dbAuth', () => {
       const signupPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.jsx'
           )
         )
         .toString()
@@ -646,7 +648,7 @@ describe('dbAuth', () => {
       const forgotPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.jsx'
           )
         )
         .toString()
@@ -655,7 +657,7 @@ describe('dbAuth', () => {
       const loginPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.jsx'
           )
         )
         .toString()
@@ -664,7 +666,7 @@ describe('dbAuth', () => {
       const resetPasswordPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.jsx'
           )
         )
         .toString()
@@ -673,7 +675,7 @@ describe('dbAuth', () => {
       const signupPage = fs
         .readFileSync(
           path.normalize(
-            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.jsx'
           )
         )
         .toString()

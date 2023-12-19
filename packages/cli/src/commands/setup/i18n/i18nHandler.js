@@ -149,10 +149,10 @@ export const handler = async ({ force }) => {
         },
       },
       {
-        title: 'Adding import to App.{js,tsx}...',
+        title: 'Adding import to App.{jsx,tsx}...',
         task: (_ctx, task) => {
           /**
-           * Add i18n import to the last import of App.{js,tsx}
+           * Add i18n import to the last import of App.{jsx,tsx}
            *
            * Check if i18n import already exists.
            * If it exists, throw an error.

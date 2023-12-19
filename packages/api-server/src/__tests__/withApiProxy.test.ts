@@ -1,65 +1,23 @@
-import path from 'path'
-
-import { FastifyInstance } from 'fastify'
+import httpProxy from '@fastify/http-proxy'
+import type { FastifyInstance } from 'fastify'
 
 import withApiProxy from '../plugins/withApiProxy'
 
-const FIXTURE_PATH = path.resolve(
-  __dirname,
-  '../../../../__fixtures__/example-todo-main'
-)
-
-// Mock the dist folder from fixtures,
-// because its gitignored
-jest.mock('@redwoodjs/internal', () => {
-  return {
-    ...jest.requireActual('@redwoodjs/internal'),
+test('withApiProxy registers `@fastify/http-proxy`', async () => {
+  const mockedFastifyInstance = {
+    register: jest.fn(),
   }
-})
 
-jest.mock('../fastify', () => {
-  return {
-    ...jest.requireActual('../fastify'),
-    loadFastifyConfig: jest.fn().mockReturnValue({
-      config: {},
-      configureFastify: jest.fn((fastify) => fastify),
-    }),
-  }
-})
-
-describe('Configures the ApiProxy', () => {
-  beforeAll(() => {
-    process.env.RWJS_CWD = FIXTURE_PATH
-  })
-  afterAll(() => {
-    delete process.env.RWJS_CWD
+  // `apiUrl` is unfortunately named. It isn't a URL, it's just a prefix. Meanwhile, `apiHost` _is_ a URL.
+  // See https://github.com/fastify/fastify-http-proxy and https://github.com/fastify/fastify-reply-from.
+  await withApiProxy(mockedFastifyInstance as unknown as FastifyInstance, {
+    apiUrl: 'my-api-host',
+    apiHost: 'http://localhost:8910',
   })
 
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
-
-  test('Checks that the fastify http-proxy plugin is configured correctly', async () => {
-    const mockedFastifyInstance = {
-      register: jest.fn(),
-      get: jest.fn(),
-      all: jest.fn(),
-      addContentTypeParser: jest.fn(),
-      log: console,
-    }
-
-    await withApiProxy(mockedFastifyInstance as unknown as FastifyInstance, {
-      apiUrl: 'http://localhost',
-      apiHost: 'my-api-host',
-    })
-
-    const mockedFastifyInstanceOptions =
-      mockedFastifyInstance.register.mock.calls[0][1]
-
-    expect(mockedFastifyInstanceOptions).toEqual({
-      disableCache: true,
-      prefix: 'http://localhost',
-      upstream: 'my-api-host',
-    })
+  expect(mockedFastifyInstance.register).toHaveBeenCalledWith(httpProxy, {
+    disableCache: true,
+    prefix: 'my-api-host',
+    upstream: 'http://localhost:8910',
   })
 })

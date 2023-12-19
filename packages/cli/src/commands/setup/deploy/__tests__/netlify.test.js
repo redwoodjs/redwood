@@ -12,7 +12,10 @@ import '../../../../lib/test'
 jest.mock('../../../../lib', () => {
   const path = jest.requireActual('path')
 
+  const { printSetupNotes } = jest.requireActual('../../../../lib')
+
   return {
+    printSetupNotes,
     getPaths: () => {
       return {
         base: path.resolve(

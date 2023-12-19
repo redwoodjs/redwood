@@ -38,6 +38,16 @@ describe('Update is not available (1.0.0 -> 1.0.0)', () => {
         versionUpdates: ['latest'],
       },
     })
+    // Prevent the appearance of stale locks
+    fs.statSync = jest.fn(() => {
+      return {
+        birthtimeMs: Date.now(),
+      }
+    })
+
+    // Prevent console output during tests
+    console.log = jest.fn()
+    console.time = jest.fn()
   })
 
   afterAll(() => {
@@ -96,10 +106,8 @@ describe('Update is not available (1.0.0 -> 1.0.0)', () => {
   })
 
   it('Respects the lock', async () => {
-    setLock(updateCheck.LOCK_IDENTIFIER)
-    await expect(updateCheck.check()).rejects.toThrow(
-      `Lock "${updateCheck.LOCK_IDENTIFIER}" is already set`
-    )
+    setLock(updateCheck.CHECK_LOCK_IDENTIFIER)
+    expect(updateCheck.shouldCheck()).toBe(false)
   })
 })
 
@@ -112,6 +120,12 @@ describe('Update is available (1.0.0 -> 2.0.0)', () => {
       notifications: {
         versionUpdates: ['latest'],
       },
+    })
+    // Prevent the appearance of stale locks
+    fs.statSync = jest.fn(() => {
+      return {
+        birthtimeMs: Date.now(),
+      }
     })
   })
 
@@ -171,10 +185,8 @@ describe('Update is available (1.0.0 -> 2.0.0)', () => {
   })
 
   it('Respects the lock', async () => {
-    setLock(updateCheck.LOCK_IDENTIFIER)
-    await expect(updateCheck.check()).rejects.toThrow(
-      `Lock "${updateCheck.LOCK_IDENTIFIER}" is already set`
-    )
+    setLock(updateCheck.CHECK_LOCK_IDENTIFIER)
+    expect(updateCheck.shouldCheck()).toBe(false)
   })
 })
 
@@ -187,6 +199,12 @@ describe('Update is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
       notifications: {
         versionUpdates: ['latest', 'rc'],
       },
+    })
+    // Prevent the appearance of stale locks
+    fs.statSync = jest.fn(() => {
+      return {
+        birthtimeMs: Date.now(),
+      }
     })
   })
 
@@ -246,9 +264,7 @@ describe('Update is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
   })
 
   it('Respects the lock', async () => {
-    setLock(updateCheck.LOCK_IDENTIFIER)
-    await expect(updateCheck.check()).rejects.toThrow(
-      `Lock "${updateCheck.LOCK_IDENTIFIER}" is already set`
-    )
+    setLock(updateCheck.CHECK_LOCK_IDENTIFIER)
+    expect(updateCheck.shouldCheck()).toBe(false)
   })
 })

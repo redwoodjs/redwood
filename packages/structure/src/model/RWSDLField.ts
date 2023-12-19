@@ -1,27 +1,27 @@
-import {
+import type {
   FieldDefinitionNode,
   ObjectTypeDefinitionNode,
 } from 'graphql/language/ast'
+import type { CodeAction, Location } from 'vscode-languageserver-types'
 import {
-  CodeAction,
   DiagnosticSeverity,
-  Location,
   Position,
   WorkspaceChange,
 } from 'vscode-languageserver-types'
 
 import { RWError } from '../errors'
-import { BaseNode, Implementation } from '../ide'
+import type { Implementation } from '../ide'
+import { BaseNode } from '../ide'
 import { lazy } from '../x/decorators'
 import { URL_file } from '../x/URL'
+import type { ExtendedDiagnostic } from '../x/vscode-languageserver-types'
 import {
-  ExtendedDiagnostic,
   Location_fromNode,
   Position_fromTSMorphOffset,
 } from '../x/vscode-languageserver-types'
 
-import { RWSDL } from './RWSDL'
-import { RWServiceFunction } from './RWServiceFunction'
+import type { RWSDL } from './RWSDL'
+import type { RWServiceFunction } from './RWServiceFunction'
 
 export class RWSDLField extends BaseNode {
   constructor(

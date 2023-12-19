@@ -1,17 +1,23 @@
 import fs from 'fs'
 import path from 'path'
 
-import chalk from 'chalk'
 import execa from 'execa'
 import { Listr } from 'listr2'
 
 import { addApiPackages } from '@redwoodjs/cli-helpers'
-import { getConfigPath } from '@redwoodjs/project-config'
+import { getConfigPath, resolveFile } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFile } from '../../lib'
 import c from '../../lib/colors'
 import { isTypeScriptProject } from '../../lib/project'
+
+import {
+  command,
+  description,
+  EXPERIMENTAL_TOPIC_ID,
+} from './setupOpentelemetry'
+import { printTaskEpilogue } from './util'
 
 export const handler = async ({ force, verbose }) => {
   const ts = isTypeScriptProject()
@@ -63,7 +69,7 @@ export const handler = async ({ force, verbose }) => {
           writeFile(
             redwoodTomlPath,
             configContent.concat(
-              `\n[experimental.opentelemetry]\n\tenabled = true\n\tapiSdk = "${opentelemetryScriptPath}"`
+              `\n[experimental.opentelemetry]\n\tenabled = true\n\twrapApi = true\n\tapiSdk = "${opentelemetryScriptPath}"`
             ),
             {
               overwriteExisting: true, // redwood.toml always exists
@@ -75,6 +81,52 @@ export const handler = async ({ force, verbose }) => {
           )
         }
       },
+    },
+    {
+      title: 'Notice: GraphQL function update...',
+      enabled: () => {
+        return fs.existsSync(
+          resolveFile(path.join(getPaths().api.functions, 'graphql'))
+        )
+      },
+      task: (_ctx, task) => {
+        task.output = [
+          "Please add the following to your 'createGraphQLHandler' function options to enable OTel for your graphql",
+          'openTelemetryOptions: {',
+          '  resolvers: true,',
+          '  result: true,',
+          '  variables: true,',
+          '}',
+          '',
+          `Which can found at ${c.info(
+            path.join(getPaths().api.functions, 'graphql')
+          )}`,
+        ].join('\n')
+      },
+      options: { persistentOutput: true },
+    },
+    {
+      title: 'Notice: GraphQL function update (server file)...',
+      enabled: () => {
+        return fs.existsSync(
+          resolveFile(path.join(getPaths().api.src, 'server'))
+        )
+      },
+      task: (_ctx, task) => {
+        task.output = [
+          "Please add the following to your 'redwoodFastifyGraphQLServer' plugin options to enable OTel for your graphql",
+          'openTelemetryOptions: {',
+          '  resolvers: true,',
+          '  result: true,',
+          '  variables: true,',
+          '}',
+          '',
+          `Which can found at ${c.info(
+            path.join(getPaths().api.src, 'server')
+          )}`,
+        ].join('\n')
+      },
+      options: { persistentOutput: true },
     },
     addApiPackages(opentelemetryPackages),
   ]
@@ -154,33 +206,8 @@ export const handler = async ({ force, verbose }) => {
       ...opentelemetryTasks,
       ...prismaTasks,
       {
-        title: 'One more thing...',
-        task: (_ctx, task) => {
-          console.log(
-            `${chalk.hex('#ff845e')(
-              `------------------------------------------------------------------\n 🧪 ${chalk.green(
-                'Experimental Feature'
-              )} 🧪\n------------------------------------------------------------------`
-            )}`
-          )
-          console.log(
-            `Studio is an experimental feature, please find documentation and links to provide feedback at:\n -> https://community.redwoodjs.com/t/redwood-studio-experimental/4771`
-          )
-          console.log(
-            `${chalk.hex('#ff845e')(
-              '------------------------------------------------------------------'
-            )}\n`
-          )
-
-          task.title = `One more thing...\n
-          ${c.green('OpenTelemetry Support is still experimental!')}
-          ${c.green(
-            'Please let us know if you find bugs or quirks or if you have any feedback!'
-          )}
-          ${chalk.hex('#e8e8e8')(
-            'https://community.redwoodjs.com/t/opentelemetry-support-experimental/4772'
-          )}
-        `
+        task: () => {
+          printTaskEpilogue(command, description, EXPERIMENTAL_TOPIC_ID)
         },
       },
     ],

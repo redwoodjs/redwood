@@ -1,6 +1,9 @@
+import path from 'path'
+
 import chalk from 'chalk'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getPaths, getRouteHookForPage } from '@redwoodjs/project-config'
+import { getRouteRegexAndParams } from '@redwoodjs/router'
 
 // Circular dependency when trying to use the standard import
 const { getProject } = require('@redwoodjs/structure/dist/index')
@@ -62,4 +65,54 @@ export function warningForDuplicateRoutes() {
     })
   }
   return message.trimEnd()
+}
+
+export interface RWRouteManifestItem {
+  name: string
+  pathDefinition: string
+  matchRegexString: string | null
+  routeHooks: string | null
+  bundle: string | null
+  hasParams: boolean
+  redirect: { to: string; permanent: boolean } | null
+  renderMode: 'html' | 'stream'
+  // Probably want isNotFound here, so we can attach a separate 404 handler
+}
+
+export interface RouteSpec extends RWRouteManifestItem {
+  id: string
+  isNotFound: boolean
+  filePath: string | undefined
+  relativeFilePath: string | undefined
+}
+
+export const getProjectRoutes = (): RouteSpec[] => {
+  const rwProject = getProject(getPaths().base)
+  const routes = rwProject.getRouter().routes
+
+  return routes.map((route: any) => {
+    const { matchRegexString, routeParams } = route.isNotFound
+      ? { matchRegexString: null, routeParams: null }
+      : getRouteRegexAndParams(route.path)
+
+    return {
+      name: route.isNotFound ? 'NotFoundPage' : route.name,
+      pathDefinition: route.isNotFound ? 'notfound' : route.path,
+      hasParams: route.hasParameters,
+      id: route.id,
+      isNotFound: route.isNotFound,
+      filePath: route.page?.filePath,
+      relativeFilePath: route.page?.filePath
+        ? path.relative(getPaths().web.src, route.page?.filePath)
+        : undefined,
+      routeHooks: getRouteHookForPage(route.page?.filePath),
+      renderMode: route.renderMode,
+      matchRegexString: matchRegexString,
+      paramNames: routeParams,
+      // TODO (STREAMING) deal with permanent/temp later
+      redirect: route.redirect
+        ? { to: route.redirect, permanent: false }
+        : null,
+    }
+  })
 }

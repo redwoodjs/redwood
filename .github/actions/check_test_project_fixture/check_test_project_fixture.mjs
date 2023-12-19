@@ -47,7 +47,7 @@ if (hasFixtureOkLabel) {
           'That usually means the test-project fixture needs to be rebuilt.',
           `If you know that it doesn't, add the "fixture-ok" label. Otherwise, rebuild the fixture and commit the changes:`,
           '',
-          '  yarn build:test-project --rebuild-fixture',
+          '  yarn rebuild-test-project-fixture',
           '',
         ].join('\n')
       )

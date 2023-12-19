@@ -1,3 +1,5 @@
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getEpilogue } from './util'
 
 export const command = 'setup-inngest'
@@ -19,6 +21,10 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./setupInngestHandler')
+  recordTelemetryAttributes({
+    command: 'experimental setup-inngest',
+    force: options.force,
+  })
+  const { handler } = await import('./setupInngestHandler.js')
   return handler(options)
 }

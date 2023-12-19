@@ -18,6 +18,9 @@ export const RedwoodProvider = ({
     }
     return ''
   }
+
+  // @TODO (STREAMING): We can remove Helmet, HelmetProvider
+  // Once we've migrated to using the new PortalHead component
   return (
     <HelmetProvider context={globalThis.__REDWOOD__HELMET_CONTEXT}>
       <Helmet titleTemplate={template()} defaultTitle={appTitle}>

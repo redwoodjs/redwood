@@ -5,6 +5,9 @@ export * from './lib'
 export * from './lib/colors'
 export * from './lib/paths'
 export * from './lib/project'
+export * from './lib/version'
 export * from './auth/setupHelpers'
 
 export * from './lib/installHelpers'
+
+export * from './telemetry/index'

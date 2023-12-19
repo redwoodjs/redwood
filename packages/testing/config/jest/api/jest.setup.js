@@ -218,9 +218,26 @@ const wasDbUsed = () => {
   }
 }
 
+beforeEach(() => {
+  // Attempt to emulate the request context isolation behavior
+  const mockContextStore = new Map()
+  mockContextStore.set('context', {})
+  jest
+    .spyOn(
+      require('@redwoodjs/graphql-server/dist/globalContextStore'),
+      'getAsyncStoreInstance'
+    )
+    // @ts-expect-error - We are not providing the full functionality of the AsyncLocalStorage in this returned object
+    .mockImplementation(() => {
+      return {
+        getStore: () => {
+          return mockContextStore
+        },
+      }
+    })
+})
+
 beforeAll(async () => {
-  // Disable perRequestContext for tests
-  process.env.DISABLE_CONTEXT_ISOLATION = '1'
   if (wasDbUsed()) {
     await configureTeardown()
   }

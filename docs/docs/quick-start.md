@@ -6,7 +6,7 @@ description: Redwood quick start
 
 :::info Prerequisites
 
-- Redwood requires [Node.js](https://nodejs.org/en/) (=18.x) and [Yarn](https://yarnpkg.com/) (>=1.15)
+- Redwood requires [Node.js](https://nodejs.org/en/) (=20.x) and [Yarn](https://yarnpkg.com/) (>=1.22.21)
 - Are you on Windows? For best results, follow our [Windows development setup](how-to/windows-development-setup.md) guide
 
 :::
@@ -102,7 +102,17 @@ Mockup, build, and verify your React components, even in complete isolation from
 yarn rw storybook
 ```
 
-Before you start, see if the CLI's `setup ui` command has your favorite styling library:
+Seeing "Couldn't find any stories"?
+That's because you need a `*.stories.{tsx,jsx}` file.
+The Redwood CLI makes getting one easy enough—try generating a [Cell](./cells), Redwood's data-fetching abstraction:
+
+```
+yarn rw generate cell examplePosts
+```
+
+The Storybook server should hot reload and now you'll have four stories to work with.
+They'll probably look a little bland since there's no styling.
+See if the Redwood CLI's `setup ui` command has your favorite styling library:
 
 ```
 yarn rw setup ui --help
