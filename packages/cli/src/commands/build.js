@@ -1,7 +1,7 @@
 import terminalLink from 'terminal-link'
 
 import { sides } from '../lib/project'
-import checkForBabelConfig from '../middleware/checkForBabelConfig'
+import { checkNodeVersion } from '../middleware/checkNodeVersion'
 
 export const command = 'build [side..]'
 export const description = 'Build for production'
@@ -47,7 +47,7 @@ export const builder = (yargs) => {
       default: false,
       description: 'Measure build performance',
     })
-    .middleware(checkForBabelConfig)
+    .middlware(checkNodeVersion)
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',

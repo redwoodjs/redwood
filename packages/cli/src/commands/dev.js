@@ -1,9 +1,10 @@
 import terminalLink from 'terminal-link'
 
-import checkForBabelConfig from '../middleware/checkForBabelConfig'
+import { checkNodeVersion } from '../middleware/checkNodeVersion'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'
+
 export const builder = (yargs) => {
   yargs
     .positional('side', {
@@ -32,7 +33,7 @@ export const builder = (yargs) => {
       description:
         'Port on which to expose API server debugger. If you supply the flag with no value it defaults to 18911.',
     })
-    .middleware(checkForBabelConfig)
+    .middleware(checkNodeVersion)
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
