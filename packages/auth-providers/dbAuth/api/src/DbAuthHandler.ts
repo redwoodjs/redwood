@@ -74,7 +74,7 @@ interface SignupFlowOptions<TUserAttributes = Record<string, unknown>> {
   usernameMatch?: string
 }
 
-interface ForgotPasswordFlowOptions<TUser = Record<string | number, any>> {
+interface ForgotPasswordFlowOptions<TUser = UserType> {
   /**
    * Allow users to request a new password via a call to forgotPassword. Defaults to true.
    * Needs to be explicitly set to false to disable the flow
@@ -89,7 +89,7 @@ interface ForgotPasswordFlowOptions<TUser = Record<string | number, any>> {
   expires: number
 }
 
-interface LoginFlowOptions<TUser = Record<string | number, any>> {
+interface LoginFlowOptions<TUser = UserType> {
   /**
    * Allow users to login. Defaults to true.
    * Needs to be explicitly set to false to disable the flow
@@ -123,7 +123,7 @@ interface LoginFlowOptions<TUser = Record<string | number, any>> {
   usernameMatch?: string
 }
 
-interface ResetPasswordFlowOptions<TUser = Record<string | number, any>> {
+interface ResetPasswordFlowOptions<TUser = UserType> {
   /**
    * Allow users to reset their password via a code from a call to forgotPassword. Defaults to true.
    * Needs to be explicitly set to false to disable the flow
@@ -157,8 +157,10 @@ interface WebAuthnFlowOptions {
   }
 }
 
+export type UserType = Record<string | number, any>
+
 export interface DbAuthHandlerOptions<
-  TUser = Record<string | number, any>,
+  TUser = UserType,
   TUserAttributes = Record<string, unknown>
 > {
   /**
@@ -288,7 +290,7 @@ interface DbAuthSession<TIdType> {
 const DEFAULT_ALLOWED_USER_FIELDS = ['id', 'email']
 
 export class DbAuthHandler<
-  TUser extends Record<string | number, any>,
+  TUser extends UserType,
   TIdType = any,
   TUserAttributes = Record<string, unknown>
 > {
