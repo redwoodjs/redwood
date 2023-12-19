@@ -24,8 +24,9 @@ const DEFAULT_QUERY = `{
 }`
 
 function GraphiQL() {
+  const port = window.RWJS_STUDIO_BASE_PORT
   const { data } = useQuery(GET_AUTH)
-  let headers = undefined as undefined | Record<string, string>
+  let headers: undefined | Record<string, string> = undefined
 
   if (data && data.generateAuthHeaders) {
     const { authProvider, authorization, cookie } = data.generateAuthHeaders
@@ -46,12 +47,10 @@ function GraphiQL() {
     }
 
     if (headers) {
-      console.debug('headers', headers)
-      console.debug('headers JSON', JSON.stringify(headers))
       return (
         <RedwoodGraphiQL
           headers={JSON.stringify(headers)}
-          endpoint="http://localhost:4318/proxies/graphql"
+          endpoint={`http://localhost:${port}/proxies/graphql`}
           defaultQuery={DEFAULT_QUERY}
         />
       )
@@ -59,7 +58,7 @@ function GraphiQL() {
 
     return (
       <RedwoodGraphiQL
-        endpoint="http://localhost:4318/proxies/graphql"
+        endpoint={`http://localhost:${port}/proxies/graphql`}
         defaultQuery={DEFAULT_QUERY}
       />
     )

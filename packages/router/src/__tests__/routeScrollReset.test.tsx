@@ -1,6 +1,6 @@
 import React from 'react'
 
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom/jest-globals'
 import { act, cleanup, render, screen } from '@testing-library/react'
 
 import { navigate } from '../history'

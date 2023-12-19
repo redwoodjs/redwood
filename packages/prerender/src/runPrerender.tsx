@@ -168,7 +168,7 @@ function insertChunkLoadingScript(
 
   const buildManifest = JSON.parse(
     fs.readFileSync(
-      path.join(getPaths().web.dist, 'build-manifest.json'),
+      path.join(getPaths().web.dist, 'client-build-manifest.json'),
       'utf-8'
     )
   )

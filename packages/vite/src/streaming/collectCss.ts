@@ -1,4 +1,5 @@
 import type { ViteDevServer, ModuleNode } from 'vite'
+import { normalizePath } from 'vite'
 
 /**
  * Collect SSR CSS for Vite
@@ -9,7 +10,7 @@ export const componentsModules = (
 ) => {
   const matchedModules: Set<ModuleNode> = new Set()
   components.forEach((component) => {
-    const modules = vite.moduleGraph.getModulesByFile(component)
+    const modules = vite.moduleGraph.getModulesByFile(normalizePath(component))
     modules?.forEach((mod) => {
       matchedModules.add(mod)
     })
