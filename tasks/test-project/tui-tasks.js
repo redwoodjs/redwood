@@ -526,6 +526,7 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
     const contentAuthTs = fs.readFileSync(pathAuthTs).toString()
     const resultsAuthTs = contentAuthTs
       .replace('name: string', "'full-name': string")
+      .replace('userAttributes: _userAttributes', 'userAttributes')
       .replace(
         '// name: userAttributes.name',
         "fullName: userAttributes['full-name']"

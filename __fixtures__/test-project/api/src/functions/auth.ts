@@ -96,7 +96,10 @@ export const handler = async (
     'full-name': string
   }
 
-  const signupOptions: DbAuthHandlerOptions<UserType, UserAttributes>['signup'] = {
+  const signupOptions: DbAuthHandlerOptions<
+    UserType,
+    UserAttributes
+  >['signup'] = {
     // Whatever you want to happen to your data on new user signup. Redwood will
     // check for duplicate usernames before calling this handler. At a minimum
     // you need to save the `username`, `hashedPassword` and `salt` to your
