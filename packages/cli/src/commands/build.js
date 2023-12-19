@@ -47,7 +47,7 @@ export const builder = (yargs) => {
       default: false,
       description: 'Measure build performance',
     })
-    .middlware(checkNodeVersion)
+    .middleware(checkNodeVersion)
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
