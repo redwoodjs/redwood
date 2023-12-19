@@ -48,8 +48,7 @@ You can use whatever formatting you'd like in here. Some examples:
 
 So you want to change the title of your page, or add elements to the `<head>` of the page? We've got you!
 
-Let's say you want to change the title of your About page,
-Redwood provides a built in `<Head>` component, which you can use like this
+Let's say you want to change the title of your About page, Redwood provides a built in `<Head>` component, which you can use like this:
 
 ```diff title=web/src/pages/AboutPage/AboutPage.(tsx|jsx)
 +import { Head } from '@redwoodjs/web'
@@ -137,6 +136,8 @@ Setting an `og:image` is how sites like Facebook and Slack can show a preview of
 Sites like GitHub go a step farther than a generic image by actually creating an image for a repo on the fly, including details about the repo itself:
 
 ![GitHub's og:image for the redwood repo](https://opengraph.githubassets.com/322ce8081bb85a86397a59494eab1c0fbe942b5104461f625e2c973c46ae4179/redwoodjs/redwood)
+
+If you want to write your own `<meta>` tags, skipping the interpolation that `<Metadata>` does for you, you can pass them as children to `<Metadata>` or just write them into the `<head>` tag as normal.
 
 ### `<Metadata>` Props
 
