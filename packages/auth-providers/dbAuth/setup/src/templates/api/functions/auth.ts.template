@@ -129,7 +129,7 @@ export const handler = async (
       username,
       hashedPassword,
       salt,
-      userAttributes: _userAttributes
+      userAttributes: _userAttributes,
     }) => {
       return db.user.create({
         data: {
