@@ -1,5 +1,7 @@
 import semver from 'semver'
 
+import c from '../lib/colors'
+
 export function checkNodeVersion() {
   const pVersion = process.version
   const pVersionC = semver.clean(pVersion)
@@ -12,7 +14,9 @@ export function checkNodeVersion() {
 
   console.warn(
     [
-      `👷 Heads up: Your Node.js version is ${pVersion}, but Redwood requires >=${LOWER_BOUND}`,
+      `${c.warning('Warning')}: Your Node.js version is ${c.warning(
+        pVersion
+      )}, but Redwood requires ${c.green(`>=${LOWER_BOUND}`)}.`,
       'Upgrade your Node.js version using `nvm` or a similar tool. See https://redwoodjs.com/docs/how-to/using-nvm.',
       '',
     ].join('\n')
