@@ -30,7 +30,8 @@
     ],
     "types": [
       "jest"
-    ]
+    ],
+    "jsx": "react-jsx"
   },
   "include": [
     "src",

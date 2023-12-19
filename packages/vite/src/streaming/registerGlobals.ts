@@ -33,8 +33,37 @@ export const registerFwGlobals = () => {
       if (/^[a-zA-Z][a-zA-Z\d+\-.]*?:/.test(apiPath)) {
         return apiPath
       } else {
-        return (
-          'http://' + rwConfig.api.host + ':' + rwConfig.api.port + '/graphql'
+        // NOTE: rwConfig.web.host defaults to "localhost", which is
+        // When running in production, the api server does not listen on localhost
+        const proxiedApiUrl = swapLocalhostFor127(
+          'http://' + rwConfig.web.host + ':' + rwConfig.web.port + apiPath
+        )
+
+        if (
+          process.env.NODE_ENV === 'production' &&
+          !process.env.RWJS_EXP_SSR_GRAPHQL_ENDPOINT?.length
+        ) {
+          console.log('------------------ WARNING ! -------------------------')
+          console.warn()
+          console.warn()
+
+          console.warn(`You haven't configured your API absolute url.`)
+
+          console.warn(`Using ${proxiedApiUrl}`)
+          console.warn()
+
+          console.warn(
+            'You can override this for SSR by setting RWJS_EXP_SSR_GRAPHQL_ENDPOINT in your environment vars'
+          )
+          console.warn()
+
+          console.log('------------------ WARNING ! -------------------------')
+
+          return proxiedApiUrl
+        }
+
+        return swapLocalhostFor127(
+          (process.env.RWJS_EXP_SSR_GRAPHQL_ENDPOINT as string) ?? proxiedApiUrl
         )
       }
     })(),
@@ -44,4 +73,8 @@ export const registerFwGlobals = () => {
     RWJS_SRC_ROOT: rwPaths.web.src,
     REDWOOD_ENV_EDITOR: JSON.stringify(process.env.REDWOOD_ENV_EDITOR),
   }
+}
+
+function swapLocalhostFor127(hostString: string) {
+  return hostString.replace('localhost', '127.0.0.1')
 }

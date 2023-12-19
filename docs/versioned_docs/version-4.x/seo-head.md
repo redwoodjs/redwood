@@ -22,7 +22,7 @@ Now that you have the app title set, you probably want some consistence with the
 
 Add `titleTemplate` as a prop for `RedwoodProvider` to have a title template for every pages
 
-In _web/src/App.{tsx,js}_
+In _web/src/App.\{tsx,js\}_
 ```diff
 -  <RedwoodProvider>
 +  <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
@@ -51,7 +51,7 @@ Let's say you want to change the title of your About page,
 Redwood provides a built in `<Head>` component, which you can use like this
 
 
-In _AboutPage/AboutPage.{tsx,js}_
+In _AboutPage/AboutPage.\{tsx,js\}_
 ```diff
 +import { Head } from '@redwoodjs/web'
 

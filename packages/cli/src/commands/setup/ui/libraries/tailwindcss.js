@@ -115,7 +115,7 @@ export const handler = async ({ force, install }) => {
   })
   const rwPaths = getPaths()
 
-  const projectPackages = ['prettier-plugin-tailwindcss']
+  const projectPackages = ['prettier-plugin-tailwindcss@0.4.1']
 
   const webWorkspacePackages = [
     'postcss',
@@ -239,6 +239,44 @@ export const handler = async ({ force, install }) => {
           } else {
             const newIndexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
             fs.writeFileSync(INDEX_CSS_PATH, newIndexCSS)
+          }
+        },
+      },
+      {
+        title: "Updating tailwind 'scaffold.css'...",
+        skip: () => {
+          // Skip this step if the 'scaffold.css' file does not exist
+          return !fs.existsSync(path.join(rwPaths.web.src, 'scaffold.css'))
+        },
+        task: async (_ctx, task) => {
+          const overrideScaffoldCss =
+            force ||
+            (await task.prompt({
+              type: 'Confirm',
+              message:
+                "Do you want to override your 'scaffold.css' to use tailwind too?",
+            }))
+
+          if (overrideScaffoldCss) {
+            const tailwindScaffoldTemplate = fs.readFileSync(
+              path.join(
+                __dirname,
+                '..',
+                '..',
+                '..',
+                'generate',
+                'scaffold',
+                'templates',
+                'assets',
+                'scaffold.tailwind.css.template'
+              )
+            )
+            fs.writeFileSync(
+              path.join(rwPaths.web.src, 'scaffold.css'),
+              tailwindScaffoldTemplate
+            )
+          } else {
+            task.skip('Skipping scaffold.css override')
           }
         },
       },

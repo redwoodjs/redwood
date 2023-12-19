@@ -115,7 +115,9 @@ export const handler = async ({
           // We don't have any parallel tasks right now, but someone might add
           // one in the future as a performance optimization.
           await execa(
-            `yarn rw-vite-build --webDir="${rwjsPaths.web.base}" --verbose=${verbose}`,
+            `node ${require.resolve(
+              '@redwoodjs/vite/bins/rw-vite-build.mjs'
+            )} --webDir="${rwjsPaths.web.base}" --verbose=${verbose}`,
             {
               stdio: verbose ? 'inherit' : 'pipe',
               shell: true,
@@ -138,14 +140,17 @@ export const handler = async ({
           )
         }
 
-        console.log('Creating 200.html...')
+        // Streaming SSR does not use the index.html file.
+        if (!getConfig().experimental?.streamingSsr?.enabled) {
+          console.log('Creating 200.html...')
 
-        const indexHtmlPath = path.join(getPaths().web.dist, 'index.html')
+          const indexHtmlPath = path.join(getPaths().web.dist, 'index.html')
 
-        fs.copyFileSync(
-          indexHtmlPath,
-          path.join(getPaths().web.dist, '200.html')
-        )
+          fs.copyFileSync(
+            indexHtmlPath,
+            path.join(getPaths().web.dist, '200.html')
+          )
+        }
       },
     },
   ].filter(Boolean)

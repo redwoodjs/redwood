@@ -8,6 +8,9 @@ module.exports = {
       items: [
         { type: 'doc', label: 'Foreword', id: 'tutorial/foreword' },
         {
+          'Chapter 0': ['tutorial/chapter0/what-is-redwood'],
+        },
+        {
           'Chapter 1': [
             'tutorial/chapter1/prerequisites',
             'tutorial/chapter1/installation',
@@ -137,15 +140,44 @@ module.exports = {
           ],
         },
         'directives',
+        'docker',
         'environment-variables',
         'forms',
-        'graphql',
+        {
+          type: 'category',
+          label: 'GraphQL',
+          link: {
+            type: 'generated-index',
+            title: 'GraphQL',
+            slug: 'graphql/index',
+          },
+          items: [
+            { type: 'doc', label: 'About', id: 'graphql' },
+            { type: 'doc', label: 'Fragments', id: 'graphql/fragments' },
+            {
+              type: 'doc',
+              label: 'Trusted Documents',
+              id: 'graphql/trusted-documents',
+            },
+            {
+              type: 'doc',
+              label: 'Mocking GraphQL Requests',
+              id: 'graphql/mocking-graphql-requests',
+            },
+            {
+              type: 'doc',
+              label: 'Realtime',
+              id: 'graphql/realtime',
+            },
+          ],
+        },
         'local-postgres-setup',
         'logger',
-        'mocking-graphql-requests',
+        'mailer',
         'prerender',
         'project-configuration-dev-test-build',
         'redwoodrecord',
+        'realtime',
         'router',
         'schema-relations',
         'security',

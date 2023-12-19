@@ -2,9 +2,9 @@ import path from 'path'
 
 import { expect } from '@jest/globals'
 
+import { prebuildWebFile } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
-import { prebuildWebFile } from '../build/babel/web'
 import { cleanWebBuild } from '../build/web'
 
 const FIXTURE_PATH = path.join(__dirname, 'fixtures/nestedPages')

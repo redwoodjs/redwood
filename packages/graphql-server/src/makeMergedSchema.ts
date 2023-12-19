@@ -1,10 +1,13 @@
 import { mergeTypeDefs } from '@graphql-tools/merge'
+import type { IExecutableSchemaDefinition } from '@graphql-tools/schema'
 import {
   addResolversToSchema,
   makeExecutableSchema,
-  IExecutableSchemaDefinition,
 } from '@graphql-tools/schema'
-import { IResolvers, IResolverValidationOptions } from '@graphql-tools/utils'
+import type {
+  IResolvers,
+  IResolverValidationOptions,
+} from '@graphql-tools/utils'
 import * as opentelemetry from '@opentelemetry/api'
 import type {
   GraphQLSchema,
@@ -18,7 +21,7 @@ import { merge, omitBy } from 'lodash'
 import type { RedwoodDirective } from './plugins/useRedwoodDirective'
 import * as rootGqlSchema from './rootSchema'
 import type { RedwoodSubscription } from './subscriptions/makeSubscriptions'
-import {
+import type {
   Services,
   ServicesGlobImports,
   GraphQLTypeWithFields,

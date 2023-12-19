@@ -31,9 +31,9 @@ const mockFS = fs as unknown as Omit<jest.Mocked<typeof fs>, 'readdirSync'> & {
 
 import fs from 'fs'
 
-import { extraTask } from '../setupHandler'
+import { addRoutingLogic } from '../setupHandler'
 
-describe('extraTask', () => {
+describe('addRoutingLogic', () => {
   it('modifies the Routes.{jsx,tsx} file', () => {
     mockFS.__setMockFiles({
       'Routes.tsx':
@@ -57,7 +57,7 @@ export default Routes
 `,
     })
 
-    extraTask.task()
+    addRoutingLogic.task()
 
     expect(mockFS.readFileSync('Routes.tsx')).toMatchInlineSnapshot(`
           "// In this file, all Page components from 'src/pages' are auto-imported.
@@ -116,7 +116,7 @@ export default Routes
 `,
     })
 
-    extraTask.task()
+    addRoutingLogic.task()
 
     expect(mockFS.readFileSync('Routes.tsx')).toMatchInlineSnapshot(`
       "// In this file, all Page components from 'src/pages' are auto-imported.

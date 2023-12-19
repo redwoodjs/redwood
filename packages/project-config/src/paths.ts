@@ -22,12 +22,14 @@ export interface NodeTargetPaths {
   dist: string
   types: string
   models: string
+  mail: string
 }
 
 export interface WebPaths {
   base: string
   src: string
   app: string
+  document: string
   generators: string
   index: string | null
   html: string
@@ -48,10 +50,12 @@ export interface WebPaths {
   dist: string
   distServer: string
   distEntryServer: string
+  distDocumentServer: string
   distRouteHooks: string
   distServerEntries: string
   routeManifest: string
   types: string
+  graphql: string
 }
 
 export interface Paths {
@@ -101,6 +105,7 @@ const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
 const PATH_WEB_DIR_SRC_APP = 'web/src/App'
+const PATH_WEB_DIR_SRC_DOCUMENT = 'web/src/Document'
 const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .jsx|.tsx
 const PATH_WEB_INDEX_HTML = 'web/src/index.html'
 const PATH_WEB_DIR_GENERATORS = 'web/generators'
@@ -110,6 +115,7 @@ const PATH_WEB_DIR_CONFIG_VITE = 'web/vite.config' // .js,.ts
 const PATH_WEB_DIR_ENTRY_CLIENT = 'web/src/entry.client' // .jsx,.tsx
 const PATH_WEB_DIR_ENTRY_SERVER = 'web/src/entry.server' // .jsx,.tsx
 const PATH_WEB_DIR_ENTRIES = 'web/src/entries' // .js,.ts
+const PATH_WEB_DIR_GRAPHQL = 'web/src/graphql' // .js,.ts
 
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
@@ -119,6 +125,8 @@ const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
 const PATH_WEB_DIR_DIST = 'web/dist'
 const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
 const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server.js'
+const PATH_WEB_DIR_DIST_DOCUMENT = 'web/dist/server/Document.js'
+
 const PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS = 'web/dist/server/routeHooks'
 const PATH_WEB_DIR_DIST_SERVER_ENTRIES = 'web/dist/server/entries.js'
 const PATH_WEB_DIR_ROUTE_MANIFEST = 'web/dist/server/route-manifest.json'
@@ -196,6 +204,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       dist: path.join(BASE_DIR, 'api/dist'),
       types: path.join(BASE_DIR, 'api/types'),
       models: path.join(BASE_DIR, PATH_API_DIR_MODELS),
+      mail: path.join(BASE_DIR, PATH_API_DIR_SRC, 'mail'),
     },
 
     web: {
@@ -207,6 +216,9 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
       generators: path.join(BASE_DIR, PATH_WEB_DIR_GENERATORS),
       app: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_APP)) as string,
+      document: resolveFile(
+        path.join(BASE_DIR, PATH_WEB_DIR_SRC_DOCUMENT)
+      ) as string,
       index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)), // old webpack entry point
       html: path.join(BASE_DIR, PATH_WEB_INDEX_HTML),
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
@@ -231,6 +243,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         BASE_DIR,
         PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER
       ),
+      distDocumentServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT),
       distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
       distServerEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ENTRIES),
       routeManifest: path.join(BASE_DIR, PATH_WEB_DIR_ROUTE_MANIFEST),
@@ -238,6 +251,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       entryClient: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_CLIENT)), // new vite/stream entry point for client
       entryServer: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_SERVER)),
       entries: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRIES)),
+      graphql: path.join(BASE_DIR, PATH_WEB_DIR_GRAPHQL),
     },
   }
 
@@ -262,16 +276,43 @@ export const getRouteHookForPage = (pagePath: string | undefined | null) => {
 
   // We just use fg, so if they make typos in the routeHook file name,
   // it's all good, we'll still find it
-  return fg
-    .sync('*.routeHooks.{js,ts,tsx,jsx}', {
-      absolute: true,
-      cwd: path.dirname(pagePath), // the page's folder
-    })
-    .at(0)
+  return (
+    fg
+      .sync('*.routeHooks.{js,ts,tsx,jsx}', {
+        absolute: true,
+        cwd: path.dirname(pagePath), // the page's folder
+      })
+      .at(0) || null
+  )
 }
 
-export const getAppRouteHook = () => {
-  return resolveFile(path.join(getPaths().web.src, 'App.routeHooks'))
+/**
+ * Use this function to find the app route hook.
+ * If it is present, you get the path to the file - in prod, you get the built version in dist.
+ * In dev, you get the source version.
+ *
+ * @param forProd
+ * @returns string | null
+ */
+export const getAppRouteHook = (forProd = false) => {
+  const rwPaths = getPaths()
+
+  if (forProd) {
+    const distAppRouteHook = path.join(
+      rwPaths.web.distRouteHooks,
+      'App.routeHooks.js'
+    )
+
+    try {
+      // Stat sync throws if file doesn't exist
+      fs.statSync(distAppRouteHook).isFile()
+      return distAppRouteHook
+    } catch (e) {
+      return null
+    }
+  }
+
+  return resolveFile(path.join(rwPaths.web.src, 'App.routeHooks'))
 }
 
 /**

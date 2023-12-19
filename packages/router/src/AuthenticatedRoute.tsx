@@ -8,20 +8,16 @@ import type { GeneratedRoutesMap } from './util'
 interface AuthenticatedRouteProps {
   children: React.ReactNode
   roles?: string | string[]
-  unauthenticated?: keyof GeneratedRoutesMap
+  unauthenticated: keyof GeneratedRoutesMap
   whileLoadingAuth?: () => React.ReactElement | null
-  private?: boolean
 }
-export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = (
-  props
-) => {
-  const {
-    private: isPrivate,
-    unauthenticated,
-    roles,
-    whileLoadingAuth,
-    children,
-  } = props
+
+export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
+  unauthenticated,
+  roles,
+  whileLoadingAuth,
+  children,
+}) => {
   const routerState = useRouterState()
   const {
     loading: authLoading,
@@ -34,14 +30,7 @@ export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = (
   }, [isAuthenticated, roles, hasRole])
 
   // Make sure `wrappers` is always an array with at least one wrapper component
-  if (isPrivate && unauthorized()) {
-    if (!unauthenticated) {
-      throw new Error(
-        'Private Sets need to specify what route to redirect unauthorized ' +
-          'users to by setting the `unauthenticated` prop'
-      )
-    }
-
+  if (unauthorized()) {
     if (authLoading) {
       return whileLoadingAuth?.() || null
     } else {

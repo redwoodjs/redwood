@@ -39,7 +39,7 @@ model Tag {
 }
 ```
 
-These relationships can be [implicit](https://www.prisma.io/docs/concepts/components/prisma-schema/relations#implicit-many-to-many-relations) (as this diagram shows) or [explicit](https://www.prisma.io/docs/concepts/components/prisma-schema/relations#explicit-many-to-many-relations) (explained below). Redwood's SDL generator (which is also used by the scaffold generator) only supports an **explicit** many-to-many relationship when generating with the `--crud` flag. What's up with that?
+These relationships can be [implicit](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/many-to-many-relations#implicit-many-to-many-relations) (as this diagram shows) or [explicit](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/many-to-many-relations#explicit-many-to-many-relations) (explained below). Redwood's SDL generator (which is also used by the scaffold generator) only supports an **explicit** many-to-many relationship when generating with the `--crud` flag. What's up with that?
 
 ## CRUD Requires an `@id`
 

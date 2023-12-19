@@ -5,7 +5,7 @@ import type {
 } from 'aws-lambda'
 
 import { createGraphQLYoga } from '../createGraphQLYoga'
-import { GlobalContext } from '../globalContext'
+import type { GlobalContext } from '../globalContext'
 import { getAsyncStoreInstance } from '../globalContextStore'
 import type { GraphQLHandlerOptions } from '../types'
 
@@ -41,6 +41,7 @@ export const createGraphQLHandler = ({
   graphiQLEndpoint = '/graphql',
   schemaOptions,
   openTelemetryOptions,
+  trustedDocuments,
 }: GraphQLHandlerOptions) => {
   const { yoga, logger } = createGraphQLYoga({
     healthCheckId,
@@ -63,6 +64,7 @@ export const createGraphQLHandler = ({
     graphiQLEndpoint,
     schemaOptions,
     openTelemetryOptions,
+    trustedDocuments,
   })
 
   const handlerFn = async (

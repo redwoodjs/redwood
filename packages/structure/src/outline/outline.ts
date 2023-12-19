@@ -1,9 +1,10 @@
-import { FileNode } from '../ide'
-import { RWProject } from '../model'
-import { RWPage } from '../model/RWPage'
-import { RWRoute } from '../model/RWRoute'
+import type { FileNode } from '../ide'
+import type { RWProject } from '../model'
+import type { RWPage } from '../model/RWPage'
+import type { RWRoute } from '../model/RWRoute'
 import { URL_file } from '../x/URL'
-import { Command_cli, Command_open, TreeItem2 } from '../x/vscode'
+import type { TreeItem2 } from '../x/vscode'
+import { Command_cli, Command_open } from '../x/vscode'
 
 export function getOutline(project: RWProject): TreeItem2 {
   return {

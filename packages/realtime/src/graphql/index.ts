@@ -4,6 +4,9 @@ export {
   liveDirectiveTypeDefs,
   InMemoryLiveQueryStore,
   RedisLiveQueryStore,
+  liveQueryStore,
+  pubSub,
+  Repeater,
 } from './plugins/useRedwoodRealtime'
 
 export type {

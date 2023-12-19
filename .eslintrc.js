@@ -23,7 +23,8 @@ module.exports = {
   ignorePatterns: [
     'dist',
     'fixtures',
-    'packages/internal/src/build/babelPlugins/__tests__/__fixtures__/**/*',
+    'packages/babel-config/src/plugins/__tests__/__fixtures__/**/*',
+    'packages/babel-config/src/__tests__/__fixtures__/**/*',
     'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
     'packages/core/config/storybook/**/*',
@@ -32,6 +33,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
     curly: 'error',
+    '@typescript-eslint/consistent-type-imports': 'error',
   },
   env: {
     // We use the most modern environment available. Then we rely on Babel to
@@ -180,6 +182,24 @@ module.exports = {
       ],
       rules: {
         '@redwoodjs/process-env-computed': 'off',
+      },
+    },
+    {
+      files: ['packages/project-config/**'],
+      excludedFiles: [
+        '**/__tests__/**',
+        '**/*.test.ts?(x)',
+        '**/*.spec.ts?(x)',
+      ],
+      rules: {
+        'import/no-extraneous-dependencies': [
+          'error',
+          {
+            devDependencies: false,
+            optionalDependencies: false,
+            peerDependencies: true,
+          },
+        ],
       },
     },
   ],
