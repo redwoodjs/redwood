@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { navigate, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import { FieldError, Form, Label, Submit, TextField } from '@redwoodjs/forms'
 
@@ -38,7 +38,7 @@ const ForgotPasswordPage = () => {
 
   return (
     <>
-      <MetaTags title="Forgot Password" />
+      <Metadata title="Forgot Password" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
