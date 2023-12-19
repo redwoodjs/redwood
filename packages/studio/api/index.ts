@@ -64,8 +64,6 @@ export const start = async (
   const studioPort = getStudioConfig().basePort
   const webPath = path.join(__dirname, '..', '..', 'dist', 'web')
 
-  console.log('webPath', webPath)
-
   rewriteWebToUsePort(webPath, studioPort)
 
   // GraphQL
