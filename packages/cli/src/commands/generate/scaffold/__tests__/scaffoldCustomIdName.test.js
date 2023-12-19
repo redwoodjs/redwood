@@ -16,6 +16,7 @@ describe('support custom @id name', () => {
   beforeAll(async () => {
     files = await scaffold.files({
       ...getDefaultArgs(defaults),
+      typescript: true,
       model: 'CustomIdField',
       tests: true,
       nestScaffoldByModel: true,
@@ -37,7 +38,7 @@ describe('support custom @id name', () => {
 
   test('creates a cell with the custom id name', () => {
     const customIdFieldCellPath =
-      '/path/to/project/web/src/components/CustomIdField/CustomIdFieldCell/CustomIdFieldCell.js'
+      '/path/to/project/web/src/components/CustomIdField/CustomIdFieldCell/CustomIdFieldCell.tsx'
 
     const cell = files[path.normalize(customIdFieldCellPath)]
     expect(cell).toContain('FindCustomIdFieldByUuid($uuid: String!)')
@@ -46,7 +47,7 @@ describe('support custom @id name', () => {
 
   test('creates an edit cell with the custom id name', () => {
     const customIdFieldEditCellPath =
-      '/path/to/project/web/src/components/CustomIdField/EditCustomIdFieldCell/EditCustomIdFieldCell.js'
+      '/path/to/project/web/src/components/CustomIdField/EditCustomIdFieldCell/EditCustomIdFieldCell.tsx'
 
     const cell = files[path.normalize(customIdFieldEditCellPath)]
     expect(cell).toContain('query EditCustomIdFieldByUuid($uuid: String!)')
@@ -54,7 +55,7 @@ describe('support custom @id name', () => {
 
   test('creates a component with the custom id name', () => {
     const customIdFieldComponentPath =
-      '/path/to/project/web/src/components/CustomIdField/CustomIdField/CustomIdField.js'
+      '/path/to/project/web/src/components/CustomIdField/CustomIdField/CustomIdField.tsx'
 
     const cell = files[path.normalize(customIdFieldComponentPath)]
     expect(cell).toContain('DeleteCustomIdFieldMutation($uuid: String!)')
@@ -64,7 +65,7 @@ describe('support custom @id name', () => {
 
   test('creates a form with the custom id name', () => {
     const customIdFieldFormPath =
-      '/path/to/project/web/src/components/CustomIdField/CustomIdFieldForm/CustomIdFieldForm.js'
+      '/path/to/project/web/src/components/CustomIdField/CustomIdFieldForm/CustomIdFieldForm.tsx'
 
     const cell = files[path.normalize(customIdFieldFormPath)]
     expect(cell).toContain('props.onSave(data, props?.customIdField?.uuid)')
@@ -72,7 +73,7 @@ describe('support custom @id name', () => {
 
   test('creates a sdl with the custom id name', () => {
     const customIdFieldSdlPath =
-      '/path/to/project/api/src/graphql/customIdFields.sdl.js'
+      '/path/to/project/api/src/graphql/customIdFields.sdl.ts'
 
     const sdl = files[path.normalize(customIdFieldSdlPath)]
     const match = sdl.match(/uuid: String!/g)
@@ -81,7 +82,7 @@ describe('support custom @id name', () => {
 
   test('creates a service with the custom id name', () => {
     const customIdFieldServicePath =
-      '/path/to/project/api/src/graphql/customIdFields.sdl.js'
+      '/path/to/project/api/src/graphql/customIdFields.sdl.ts'
 
     const sdl = files[path.normalize(customIdFieldServicePath)]
     const match = sdl.match(/uuid: String!/g)
