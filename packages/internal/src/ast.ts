@@ -41,6 +41,10 @@ export const fileToAst = (filePath: string): types.Node => {
 interface NamedExports {
   name: string
   type: 're-export' | 'variable' | 'function' | 'class'
+  location: {
+    line: number
+    column: number
+  }
 }
 /**
  * get all the named exports in a given piece of code.
@@ -58,6 +62,10 @@ export const getNamedExports = (ast: types.Node): NamedExports[] => {
           namedExports.push({
             name: id.name,
             type: 're-export',
+            location: {
+              line: id.loc?.start.line ?? 1,
+              column: id.loc?.start.column ?? 0,
+            },
           })
         }
         return
@@ -73,16 +81,28 @@ export const getNamedExports = (ast: types.Node): NamedExports[] => {
         namedExports.push({
           name: id.name as string,
           type: 'variable',
+          location: {
+            line: id.loc?.start.line ?? 1,
+            column: id.loc?.start.column ?? 0,
+          },
         })
       } else if (declaration.type === 'FunctionDeclaration') {
         namedExports.push({
           name: declaration?.id?.name as string,
           type: 'function',
+          location: {
+            line: declaration?.id?.loc?.start.line ?? 1,
+            column: declaration?.id?.loc?.start.column ?? 0,
+          },
         })
       } else if (declaration.type === 'ClassDeclaration') {
         namedExports.push({
           name: declaration?.id?.name as string,
           type: 'class',
+          location: {
+            line: declaration?.id?.loc?.start.line ?? 1,
+            column: declaration?.id?.loc?.start.column ?? 0,
+          },
         })
       }
     },
@@ -147,4 +167,50 @@ export const hasDefaultExport = (ast: types.Node): boolean => {
     },
   })
   return exported
+}
+
+export const getDefaultExportLocation = (
+  ast: types.Node
+): { line: number; column: number } | null => {
+  // Get the default export
+  let defaultExport: types.ExportDefaultDeclaration | undefined
+  traverse(ast, {
+    ExportDefaultDeclaration(path) {
+      defaultExport = path.node
+    },
+  })
+
+  if (!defaultExport) {
+    return null
+  }
+
+  // Handle the case were we're exporting a variable declared elsewhere
+  // as we will want to find the location of that declaration instead
+  if (types.isIdentifier(defaultExport.declaration) && types.isFile(ast)) {
+    // Directly search the program body for the declaration of the identifier
+    // to avoid picking up other identifiers with the same name in the file
+    const exportedName = defaultExport.declaration.name
+    const declaration = ast.program.body.find((node) => {
+      return (
+        types.isVariableDeclaration(node) &&
+        node.declarations.find((d) => {
+          return (
+            types.isVariableDeclarator(d) &&
+            types.isIdentifier(d.id) &&
+            d.id.name === exportedName
+          )
+        })
+      )
+    })
+
+    return {
+      line: declaration?.loc?.start.line ?? 1,
+      column: declaration?.loc?.start.column ?? 0,
+    }
+  }
+
+  return {
+    line: defaultExport.loc?.start.line ?? 1,
+    column: defaultExport.loc?.start.column ?? 0,
+  }
 }

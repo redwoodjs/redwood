@@ -22,16 +22,19 @@ jobs:
     outputs:
       version: ${{ steps.get-version.outputs.value }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         # `fetch-depth`—number of commits to fetch. `0` fetches all history for all branches and tags.
         #  This is required because lerna uses tags to determine the version.
         with:
           fetch-depth: 0
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: ⬢ Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
@@ -71,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 💬 Message Slack
         uses: ./.github/actions/message_slack_publishing
         with:

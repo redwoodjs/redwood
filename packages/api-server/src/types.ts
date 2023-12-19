@@ -8,6 +8,7 @@ export interface WebServerArgs extends Omit<HttpServerParams, 'fastify'> {
 
 export interface ApiServerArgs extends Omit<HttpServerParams, 'fastify'> {
   apiRootPath: string // either user supplied or '/'
+  loadEnvFiles: boolean
 }
 
 export type BothServerArgs = Omit<HttpServerParams, 'fastify'>

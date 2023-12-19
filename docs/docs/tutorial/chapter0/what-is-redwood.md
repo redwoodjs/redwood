@@ -28,7 +28,7 @@ You can start them both with a single command: `yarn redwood dev`
 
 ### The Router
 
-When you open your web app in a browser, React does its thing initializing your app and monitoring the history for changes so that new content can be shown. Redwood features a custom, declaritive Router that lets you specify URLs and the requisite pages (just a React component) will be shown. A simple routes file may look something like:
+When you open your web app in a browser, React does its thing initializing your app and monitoring the history for changes so that new content can be shown. Redwood features a custom, declarative Router that lets you specify URLs and the requisite pages (just a React component) will be shown. A simple routes file may look something like:
 
 ```jsx
 import { Set, Router, Route } from '@redwoodjs/router'
@@ -41,10 +41,10 @@ const Routes = () => {
       <Set wrap={ApplicationLayout}>
         <Route path="/login" page={LoginPage} name="login" />
         <Route path="/signup" page={SignupPage} name="signup" />
-        <Private unauthenticated="login">
+        <PrivateSet unauthenticated="login">
           <Route path="/dashboard" page={DashboardPage} name="dashboard" />
           <Route path="/products/{sku}" page={ProductsPage} name="products" />
-        </Private>
+        </PrivateSet>
       </Set>
 
       <Route path="/" page={HomePage} name="home" />
@@ -54,7 +54,7 @@ const Routes = () => {
 }
 ```
 
-You can probably get a sense of how all of this works without ever having seen a Redwood route before! Some routes can be marked as `<Private>` and will not be accessible without being logged in. Others can be wrapped in a "layout" (again, just a React component) to provide common styling shared between pages in your app.
+You can probably get a sense of how all of this works without ever having seen a Redwood route before! Some routes can be marked as `<PrivateSet>` and will not be accessible without being logged in. Others can be wrapped in a "layout" (again, just a React component) to provide common styling shared between pages in your app.
 
 #### Prerender
 
@@ -66,7 +66,7 @@ This is Redwood's version of static site generation, aka SSG.
 
 ### Authentication
 
-The `<Private>` route limits access to users that are authenticated, but how do they authenticate? Redwood includes integrations to many popular third party authentication hosts (including [Auth0](https://auth0.com/), [Supabase](https://supabase.com/docs/guides/auth) and [Clerk](https://clerk.com/)). You can also [host your own auth](https://redwoodjs.com/docs/auth/dbauth), or write your own [custom authentication](https://redwoodjs.com/docs/auth/custom) option. If going self-hosted, we include login, signup, and reset password pages, as well as the option to include TouchID/FaceID and third party biometric readers!
+The `<PrivateSet>` route limits access to users that are authenticated, but how do they authenticate? Redwood includes integrations to many popular third party authentication hosts (including [Auth0](https://auth0.com/), [Supabase](https://supabase.com/docs/guides/auth) and [Clerk](https://clerk.com/)). You can also [host your own auth](https://redwoodjs.com/docs/auth/dbauth), or write your own [custom authentication](https://redwoodjs.com/docs/auth/custom) option. If going self-hosted, we include login, signup, and reset password pages, as well as the option to include TouchID/FaceID and third party biometric readers!
 
 Once authenticated, how do you know what a user is allowed to do or not do? Redwood includes helpers for [role-based access control](https://redwoodjs.com/docs/how-to/role-based-access-control-rbac) that integrates on both the front- and backend.
 
@@ -122,11 +122,11 @@ export const Success = ({ testimonials }) => {
 }
 ```
 
-(In this case we don't export `Empty` so that if there aren't any, that section of the final page won't render anything, not even indicating to the user that something is missing.)
+(In this case we don't export `Empty` so that if there aren't any testimonials, that section of the final page won't render anything, not even indicating to the user that something is missing.)
 
 If you ever create additional clients for your server (a mobile app, perhaps) you'll be giving yourself a huge advantage by using GraphQL from the start.
 
-Oh, and prerendering also works with cells! At build time, Redwood will start up the GraphQL server and make requests, just as if a user was access the pages, rendering the result to plain HTML, ready to be loaded instantly by the browser.
+Oh, and prerendering also works with cells! At build time, Redwood will start up the GraphQL server and make requests, just as if a user was accessing the pages, rendering the result to plain HTML, ready to be loaded instantly by the browser.
 
 ### Apollo Cache
 
@@ -170,7 +170,7 @@ model Testimonial {
 }
 ```
 
-Prisma has a couple command line tools that take changes to this file and turn them into [SQL DDL commands](https://www.sqlshack.com/sql-ddl-getting-started-with-sql-ddl-commands-in-sql-server/) which are executed against your database to update its structure to match.
+Prisma has a couple of command line tools that take changes to this file and turn them into [SQL DDL commands](https://www.sqlshack.com/sql-ddl-getting-started-with-sql-ddl-commands-in-sql-server/) which are executed against your database to update its structure to match.
 
 #### GraphQL
 
@@ -234,7 +234,7 @@ export const schema = gql`
 `
 ```
 
-The `testimonials` query is marked with the [GraphQL directive](../../directives.md) `@skipAuth` meaning that requests here should *not* be limited to authenticated users. However, the critical `createTestimonail` and `deleteTestimonial` mutations are marked `@requireAuth`, and so can only be called by a logged in user.
+The `testimonials` query is marked with the [GraphQL directive](../../directives.md) `@skipAuth` meaning that requests here should *not* be limited to authenticated users. However, the critical `createTestimonial` and `deleteTestimonial` mutations are marked `@requireAuth`, and so can only be called by a logged in user.
 
 Redwood's backend GraphQL server is powered by [GraphQL Yoga](https://the-guild.dev/graphql/yoga-server) and so you have access to everything that makes Yoga secure and performant: rate and depth limiting, logging, directives, and a ton more.
 

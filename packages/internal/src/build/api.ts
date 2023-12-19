@@ -37,8 +37,11 @@ export const cleanApiBuild = () => {
  */
 export const prebuildApiFiles = (srcFiles: string[]) => {
   const rwjsPaths = getPaths()
+  const rwjsConfig = getConfig()
   const plugins = getApiSideBabelPlugins({
-    openTelemetry: getConfig().experimental.opentelemetry.enabled,
+    openTelemetry:
+      rwjsConfig.experimental.opentelemetry.enabled &&
+      rwjsConfig.experimental.opentelemetry.wrapApi,
   })
 
   return srcFiles.map((srcPath) => {
@@ -69,7 +72,7 @@ export const transpileApi = (files: string[], options = {}) => {
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',
-    target: 'node18',
+    target: 'node20',
     format: 'cjs',
     bundle: false,
     outdir: rwjsPaths.api.dist,

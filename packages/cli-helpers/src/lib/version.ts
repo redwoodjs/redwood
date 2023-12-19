@@ -67,18 +67,15 @@ export async function getCompatibilityData(
     ? packument['dist-tags'][preferredVersionOrTag]
     : preferredVersionOrTag
 
-  // Does that version of the package support the current version of RedwoodJS?
+  // Extract the package's redwoodjs engine specification for the preferred version
   const packageRedwoodSpecification =
     packument.versions[preferredVersion].engines?.redwoodjs
 
-  if (packageRedwoodSpecification === undefined) {
-    throw new Error(
-      `The package '${packageName}' does not specify a RedwoodJS compatibility version/range`
-    )
-  }
-
   // We have to use the semver.intersects function because the package's redwoodjs engine could be a range
-  if (semver.intersects(projectRedwoodVersion, packageRedwoodSpecification)) {
+  if (
+    packageRedwoodSpecification !== undefined &&
+    semver.intersects(projectRedwoodVersion, packageRedwoodSpecification)
+  ) {
     const tag = getCorrespondingTag(preferredVersion, packument['dist-tags'])
     return {
       preferred: {
