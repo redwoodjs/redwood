@@ -55,23 +55,20 @@ export async function redwoodFastifyWeb(
   const indexPath = getFallbackIndexPath()
 
   // For SPA routing, fallback on unmatched routes and let client-side routing take over.
-  fastify.setNotFoundHandler(
-    {},
-    function (req: FastifyRequest, reply: FastifyReply) {
-      const urlData = req.urlData()
-      const requestedExtension = path.extname(urlData.path ?? '')
+  fastify.setNotFoundHandler({}, function (req, reply) {
+    const urlData = req.urlData()
+    const requestedExtension = path.extname(urlData.path ?? '')
 
-      // If it's requesting some sort of asset, e.g. .js or .jpg files
-      // Html files should fallback to the index.html
-      if (requestedExtension !== '' && requestedExtension !== '.html') {
-        reply.code(404)
-        return reply.send('Not Found')
-      }
-
-      reply.header('Content-Type', 'text/html; charset=UTF-8')
-      return reply.sendFile(indexPath)
+    // If it's requesting some sort of asset, e.g. .js or .jpg files
+    // Html files should fallback to the index.html
+    if (requestedExtension !== '' && requestedExtension !== '.html') {
+      reply.code(404)
+      return reply.send('Not Found')
     }
-  )
+
+    reply.header('Content-Type', 'text/html; charset=UTF-8')
+    return reply.sendFile(indexPath)
+  })
 
   done()
 }
