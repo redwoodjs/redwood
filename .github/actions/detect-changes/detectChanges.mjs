@@ -77,7 +77,8 @@ async function main() {
   }
 
   const changedFiles = await getChangedFiles()
-  console.log(`${changedFiles.length} changed files`)
+  console.log(`${changedFiles.length} changed files:`)
+  console.log(changedFiles.map(file => `• ${file}`).join('\n'))
 
   if (!hasCodeChanges(changedFiles)) {
     console.log('No code changes detected, only docs')
