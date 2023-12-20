@@ -8,7 +8,9 @@ import { getPaths } from '@redwoodjs/project-config'
 
 const DEFAULT_POSSIBLE_TYPES_FILE_CONTENTS =
   'export default { possibleTypes: {} }'
-const virtualPossibleTypesModuleId = 'virtual:possibleTypes'
+// TODO: Change the name to virtual:possibleTypes when we no longer have to
+// support Webpack
+const virtualPossibleTypesModuleId = 'virtual-possibleTypes'
 const virtualPossibleTypesResolvedId = '\0' + virtualPossibleTypesModuleId
 
 /**
@@ -18,7 +20,7 @@ const virtualPossibleTypesResolvedId = '\0' + virtualPossibleTypesModuleId
  * the GraphQL Code Generator
  *
  * See:
- * packages/web/src/apollo/index.ts -> import possibleTypes from 'virtual:possibleTypes'
+ * packages/web/src/apollo/index.ts -> import possibleTypes from 'virtual-possibleTypes'
  */
 export default function configureGraphQLFragments(): PluginOption {
   const possibleTypesFilePath = path.join(

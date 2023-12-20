@@ -17,7 +17,7 @@ import { print } from 'graphql/language/printer'
  *
  * See: packages/vite/src/plugins/vite-plugin-configure-graphql-fragments.ts
  */
-import possibleTypes from 'virtual:possibleTypes'
+import possibleTypes from 'virtual-possibleTypes'
 
 // Note: Importing directly from `apollo/client` doesn't work properly in Storybook.
 const {

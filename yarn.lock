@@ -8861,6 +8861,7 @@ __metadata:
     webpack-manifest-plugin: "npm:5.0.0"
     webpack-merge: "npm:5.10.0"
     webpack-retry-chunk-load-plugin: "npm:3.1.1"
+    webpack-virtual-modules: "npm:^0.6.1"
   bin:
     cross-env: ./dist/bins/cross-env.js
     eslint: ./dist/bins/eslint.js
@@ -35809,6 +35810,13 @@ __metadata:
   version: 0.5.0
   resolution: "webpack-virtual-modules@npm:0.5.0"
   checksum: 0742e069cd49d91ccd0b59431b3666903d321582c1b1062fa6bdae005c3538af55ff8787ea5eafbf72662f3496d3a879e2c705d55ca0af8283548a925be18484
+  languageName: node
+  linkType: hard
+
+"webpack-virtual-modules@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "webpack-virtual-modules@npm:0.6.1"
+  checksum: 696bdc1acf3806374bdeb4b9b9856b79ee70b31e92f325dfab9b8c8c7e14bb6ddffa9f895a214770c4fb8fea45a21f34ca64310f74e877292a90f4a9966c9c2f
   languageName: node
   linkType: hard
 
