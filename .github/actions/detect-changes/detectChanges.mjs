@@ -1,7 +1,6 @@
 import fs from 'node:fs'
 
 import core from '@actions/core'
-import { exec, getExecOutput } from '@actions/exec'
 import { hasCodeChanges } from './cases/code_changes.mjs'
 import { rscChanged } from './cases/rsc.mjs'
 import { ssrChanged } from './cases/ssr.mjs'
@@ -77,8 +76,7 @@ async function main() {
   }
 
   const changedFiles = await getChangedFiles()
-  console.log(`${changedFiles.length} changed files:`)
-  console.log(changedFiles.map(file => `• ${file}`).join('\n'))
+  console.log(`${changedFiles.length} changed files`)
 
   if (!hasCodeChanges(changedFiles)) {
     console.log('No code changes detected, only docs')
