@@ -303,7 +303,9 @@ describe('session cookie extraction', () => {
       expect(extractCookie(event)).toBeUndefined()
     })
 
-    it('extracts GraphiQL cookie from the header extensions', () => {
+    // @TODO: Disabled Studio Auth Implementation
+    // we need to avoid using body instead of headers
+    it.skip('extracts GraphiQL cookie from the header extensions', () => {
       const dbUserId = 42
 
       const cookie = encryptToCookie(JSON.stringify({ id: dbUserId }))
@@ -320,7 +322,9 @@ describe('session cookie extraction', () => {
       expect(extractCookie(event)).toEqual(cookie)
     })
 
-    it('overwrites cookie with event header GraphiQL when in dev', () => {
+    // @TODO: Disabled Studio Auth Implementation
+    // we need to avoid using body instead of headers
+    it.skip('overwrites cookie with event header GraphiQL when in dev', () => {
       const sessionCookie = encryptToCookie(
         JSON.stringify({ id: 9999999999 }) + ';' + 'token'
       )

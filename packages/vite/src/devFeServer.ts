@@ -1,4 +1,4 @@
-import { createServerAdapter } from '@whatwg-node/server'
+import { Response, createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
 import type { ViteDevServer } from 'vite'
 import { createServer as createViteServer } from 'vite'
@@ -81,6 +81,29 @@ async function createServer() {
 
     app.get(expressPathDef, createServerAdapter(routeHandler))
   }
+
+  app.post(
+    '/',
+    createServerAdapter(async (req: Request) => {
+      const entryServerImport = await vite.ssrLoadModule(
+        rwPaths.web.entryServer as string // already validated in dev server
+      )
+
+      const middleware = entryServerImport.middleware
+
+      let out = null
+      if (middleware) {
+        try {
+          out = await middleware(req)
+          console.log(`👉 \n ~ file: devFeServer.ts:97 ~ out:`, out)
+        } catch (e) {
+          console.error('Whooopsie, error in middleware', e)
+        }
+      }
+
+      return new Response(out)
+    })
+  )
 
   const port = getConfig().web.port
   console.log(`Started server on http://localhost:${port}`)

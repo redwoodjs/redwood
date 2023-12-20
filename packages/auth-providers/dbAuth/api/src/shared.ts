@@ -84,8 +84,10 @@ export const extractCookie = (event: APIGatewayProxyEvent | Request) => {
   return eventGetHeader(event, 'Cookie')
 }
 
-function extractEncryptedSessionFromHeader(event: APIGatewayProxyEvent) {
-  return event.headers.authorization?.split(' ')[1]
+function extractEncryptedSessionFromHeader(
+  event: APIGatewayProxyEvent | Request
+) {
+  return eventGetHeader(event, 'Authorization')?.split(' ')[1]
 }
 
 // whether this encrypted session was made with the old CryptoJS algorithm
@@ -172,22 +174,21 @@ export const getSession = (
 // at once. Accepts the `event` argument from a Lambda function call and the
 // name of the dbAuth session cookie
 export const dbAuthSession = (
-  event: APIGatewayProxyEvent,
+  event: APIGatewayProxyEvent | Request,
   cookieNameOption: string | undefined
 ) => {
-  const cookieHeader = extractCookie(event)
-  const sessionInAuthHeader = extractEncryptedSessionFromHeader(event)
+  const sessionCookie = extractCookie(event)
+  const bearerToken = extractEncryptedSessionFromHeader(event)
 
-  if (cookieHeader) {
+  if (sessionCookie) {
     // i.e. Browser making a request
     const [session, _csrfToken] = decryptSession(
-      getSession(cookieHeader, cookieNameOption)
+      getSession(sessionCookie, cookieNameOption)
     )
-    console.log(`👉 \n ~ file: shared.ts:190 ~ session:`, session)
     return session
-  } else if (sessionInAuthHeader) {
+  } else if (bearerToken) {
     // i.e. FE Sever makes the request, and adds encrypted session to the Authorization header
-    const [session, _csrfToken] = decryptSession(sessionInAuthHeader)
+    const [session, _csrfToken] = decryptSession(bearerToken)
 
     return session
   } else {
@@ -195,7 +196,9 @@ export const dbAuthSession = (
   }
 }
 
-export const webAuthnSession = (cookieHeader: string) => {
+export const webAuthnSession = (event: APIGatewayProxyEvent | Request) => {
+  const cookieHeader = extractCookie(event)
+
   if (!cookieHeader) {
     return null
   }

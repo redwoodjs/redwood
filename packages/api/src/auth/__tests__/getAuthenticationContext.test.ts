@@ -2,17 +2,12 @@ import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 
 import { getAuthenticationContext } from '../index'
 
-export const createMockedEvent = ({
-  authProvider,
-}: {
-  authProvider: string
-}): APIGatewayProxyEvent => {
+export const createMockedEvent = (
+  headers: Record<string, string>
+): APIGatewayProxyEvent => {
   return {
     body: null,
-    headers: {
-      'auth-provider': authProvider,
-      authorization: 'Bearer auth-test-token',
-    },
+    headers,
     multiValueHeaders: {},
     httpMethod: 'POST',
     isBase64Encoded: false,
@@ -55,7 +50,7 @@ export const createMockedEvent = ({
   }
 }
 
-describe('getAuthenticationContext', () => {
+describe('getAuthenticationContext with bearer tokens', () => {
   it('Can take a single auth decoder for the given provider', async () => {
     const authDecoderOne = async (_token: string, type: string) => {
       if (type !== 'one') {
@@ -70,7 +65,10 @@ describe('getAuthenticationContext', () => {
 
     const result = await getAuthenticationContext({
       authDecoder: authDecoderOne,
-      event: createMockedEvent({ authProvider: 'one' }),
+      event: createMockedEvent({
+        'auth-provider': 'one',
+        authorization: 'Bearer auth-test-token',
+      }),
       context: {} as Context,
     })
 
@@ -103,7 +101,10 @@ describe('getAuthenticationContext', () => {
 
     const result = await getAuthenticationContext({
       authDecoder: authDecoderOne,
-      event: createMockedEvent({ authProvider: 'some-other' }),
+      event: createMockedEvent({
+        'auth-provider': 'some-other',
+        authorization: 'Bearer auth-test-token',
+      }),
       context: {} as Context,
     })
 
@@ -122,7 +123,10 @@ describe('getAuthenticationContext', () => {
   it('Can take an empty array of auth decoders', async () => {
     const result = await getAuthenticationContext({
       authDecoder: [],
-      event: createMockedEvent({ authProvider: 'two' }),
+      event: createMockedEvent({
+        'auth-provider': 'two',
+        authorization: 'Bearer auth-test-token',
+      }),
       context: {} as Context,
     })
 
@@ -163,7 +167,10 @@ describe('getAuthenticationContext', () => {
 
     const result = await getAuthenticationContext({
       authDecoder: [authDecoderOne, authDecoderTwo],
-      event: createMockedEvent({ authProvider: 'two' }),
+      event: createMockedEvent({
+        'auth-provider': 'two',
+        authorization: 'Bearer auth-test-token',
+      }),
       context: {} as Context,
     })
 
@@ -184,7 +191,10 @@ describe('getAuthenticationContext', () => {
 
   it('Works even without any auth decoders', async () => {
     const result = await getAuthenticationContext({
-      event: createMockedEvent({ authProvider: 'two' }),
+      event: createMockedEvent({
+        'auth-provider': 'two',
+        authorization: 'Bearer auth-test-token',
+      }),
       context: {} as Context,
     })
 
@@ -200,3 +210,6 @@ describe('getAuthenticationContext', () => {
     expect(token).toEqual('auth-test-token')
   })
 })
+
+// @TODO add tests for requests with Cookie headers
+describe('getAuthenticationContext with cookies', () => {})

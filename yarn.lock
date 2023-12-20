@@ -7886,11 +7886,13 @@ __metadata:
     "@babel/runtime-corejs3": 7.23.5
     "@prisma/client": 5.7.0
     "@types/aws-lambda": 8.10.126
+    "@types/cookie": ^0
     "@types/jsonwebtoken": 9.0.5
     "@types/memjs": 1
     "@types/pascalcase": 1.0.3
     "@types/split2": 4.2.3
     "@whatwg-node/fetch": 0.9.14
+    cookie: 0.6.0
     core-js: 3.33.3
     humanize-string: 2.1.0
     jest: 29.7.0
@@ -11187,6 +11189,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: f11a1ccfed540723dddd7cb496543ad40a2f663f22ff825e9b220f0bae86db8b1ced2184ee41d3fb358b019ad6519e39481b06386db91ebb859003ad1d54fe6a
+  languageName: node
+  linkType: hard
+
+"@types/cookie@npm:^0":
+  version: 0.6.0
+  resolution: "@types/cookie@npm:0.6.0"
+  checksum: 5b326bd0188120fb32c0be086b141b1481fec9941b76ad537f9110e10d61ee2636beac145463319c71e4be67a17e85b81ca9e13ceb6e3bb63b93d16824d6c149
   languageName: node
   linkType: hard
 
@@ -16364,6 +16373,13 @@ __metadata:
   version: 0.5.0
   resolution: "cookie@npm:0.5.0"
   checksum: c01ca3ef8d7b8187bae434434582288681273b5a9ed27521d4d7f9f7928fe0c920df0decd9f9d3bbd2d14ac432b8c8cf42b98b3bdd5bfe0e6edddeebebe8b61d
+  languageName: node
+  linkType: hard
+
+"cookie@npm:0.6.0":
+  version: 0.6.0
+  resolution: "cookie@npm:0.6.0"
+  checksum: f2318b31af7a31b4ddb4a678d024514df5e705f9be5909a192d7f116cfb6d45cbacf96a473fa733faa95050e7cff26e7832bb3ef94751592f1387b71c8956686
   languageName: node
   linkType: hard
 
