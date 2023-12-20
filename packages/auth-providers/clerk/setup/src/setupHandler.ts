@@ -33,7 +33,7 @@ export const handler = async ({ force: forceArg }: Args) => {
       '',
       '```toml title="redwood.toml"',
       'includeEnvironmentVariables = [',
-      '  "CLERK_PUBLISHABLE_KEY,"',
+      '  "CLERK_PUBLISHABLE_KEY"',
       ']',
       '```',
       '',

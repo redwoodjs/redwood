@@ -17,7 +17,7 @@ const checkStatus = async (
   return response
 }
 
-export function serve<Props>(rscId: string, basePath = '/RSC/') {
+export function serve<Props>(rscId: string, basePath = '/rw-rsc/') {
   type SetRerender = (
     rerender: (next: [ReactElement, string]) => void
   ) => () => void
@@ -54,6 +54,9 @@ export function serve<Props>(rscId: string, basePath = '/RSC/') {
           const response = fetch(basePath + id + '/' + searchParams, {
             method: 'POST',
             body: await encodeReply(args),
+            headers: {
+              'rw-rsc': '1',
+            },
           })
 
           const data = createFromFetch(response, options)
@@ -76,7 +79,12 @@ export function serve<Props>(rscId: string, basePath = '/RSC/') {
       )
 
       const response =
-        prefetched || fetch(basePath + rscId + '/' + searchParams)
+        prefetched ||
+        fetch(basePath + rscId + '/' + searchParams, {
+          headers: {
+            'rw-rsc': '1',
+          },
+        })
       const data = createFromFetch(checkStatus(response), options)
       console.log('fetchRSC after createFromFetch. data:', data)
 

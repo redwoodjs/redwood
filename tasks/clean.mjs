@@ -11,3 +11,8 @@ await rimraf('packages/**/dist', {
     ignore: 'packages/**/{fixtures,__fixtures__}/**/dist',
   },
 })
+
+// Remove all `tsconfig.tsbuildinfo` files.
+await rimraf('packages/**/tsconfig.tsbuildinfo', {
+  glob: true,
+})

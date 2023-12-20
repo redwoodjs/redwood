@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import fs from 'node:fs'
 
 import yargsParser from 'yargs-parser'

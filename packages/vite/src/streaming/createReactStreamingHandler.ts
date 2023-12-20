@@ -4,11 +4,9 @@ import isbot from 'isbot'
 import type { ViteDevServer } from 'vite'
 
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
-import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
+import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
-
-// import { stripQueryStringAndHashFromPath } from '../utils'
 
 import { reactRenderToStreamResponse } from './streamHelpers'
 import { loadAndRunRouteHooks } from './triggerRouteHooks'
@@ -16,14 +14,18 @@ import { loadAndRunRouteHooks } from './triggerRouteHooks'
 interface CreateReactStreamingHandlerOptions {
   route: RWRouteManifestItem
   clientEntryPath: string
-  cssLinks: string[]
+  getStylesheetLinks: () => string[]
 }
 
 const checkUaForSeoCrawler = isbot.spawn()
 checkUaForSeoCrawler.exclude(['chrome-lighthouse'])
 
 export const createReactStreamingHandler = async (
-  { route, clientEntryPath, cssLinks }: CreateReactStreamingHandlerOptions,
+  {
+    route,
+    clientEntryPath,
+    getStylesheetLinks,
+  }: CreateReactStreamingHandlerOptions,
   viteDevServer?: ViteDevServer
 ) => {
   const { redirect, routeHooks, bundle } = route
@@ -35,8 +37,24 @@ export const createReactStreamingHandler = async (
   let fallbackDocumentImport: any
 
   if (isProd) {
-    entryServerImport = await import(rwPaths.web.distEntryServer)
-    fallbackDocumentImport = await import(rwPaths.web.distDocumentServer)
+    // TODO (RSC) Consolidate paths, so we can have the same code for SSR and RSC
+    if (getConfig().experimental?.rsc?.enabled) {
+      entryServerImport = await import(
+        makeFilePath(
+          path.join(rwPaths.web.distServer, 'assets', 'entry.server.js')
+        )
+      )
+      fallbackDocumentImport = await import(
+        makeFilePath(path.join(rwPaths.web.distServer, 'assets', 'Document.js'))
+      )
+    } else {
+      entryServerImport = await import(
+        makeFilePath(rwPaths.web.distEntryServer)
+      )
+      fallbackDocumentImport = await import(
+        makeFilePath(rwPaths.web.distDocumentServer)
+      )
+    }
   }
 
   // @NOTE: we are returning a FetchAPI handler
@@ -103,6 +121,10 @@ export const createReactStreamingHandler = async (
       req.headers.get('user-agent') || ''
     )
 
+    // Using a function to get the CSS links because we need to wait for the
+    // vite dev server to analyze the module graph
+    const cssLinks = getStylesheetLinks()
+
     const reactResponse = await reactRenderToStreamResponse(
       {
         ServerEntry,
@@ -127,4 +149,9 @@ export const createReactStreamingHandler = async (
 
     return reactResponse
   }
+}
+
+function makeFilePath(path: string): string {
+  // Without this, absolute paths can't be imported on Windows
+  return 'file:///' + path
 }

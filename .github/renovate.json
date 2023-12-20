@@ -39,7 +39,9 @@
         "pretty-ms",
         "stdout-update",
         "tempy",
-        "terminal-link"
+        "terminal-link",
+        "title-case",
+        "untildify"
       ],
       "matchPackagePatterns": [
         "^@redwoodjs/"

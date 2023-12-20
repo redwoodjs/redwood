@@ -152,12 +152,20 @@ The same should be true of your GraphQL Server. [GraphQL Yoga](https://www.graph
 > The fully-featured GraphQL Server with focus on easy setup, performance and great developer experience.
 
 RedwoodJS leverages Yoga's Envelop plugins to implement custom internal plugins to help with [authentication](#authentication), [logging](#logging), [directive handling](#directives), and more.
+
 ### Security Best Practices
 
 
 RedwoodJS implements GraphQL Armor from [Escape Technologies](https://escape.tech) to make your endpoint more secure by default by implementing common GraphQL [security best practices](#security).
 
 GraphQL Armor, developed by Escape in partnership with The Guild, is a middleware for JS servers that adds a security layer to the RedwoodJS GraphQL endpoint.
+
+### Trusted Documents
+
+In addition, RedwoodJS can be setup to enforce [persisted operations](https://the-guild.dev/graphql/yoga-server/docs/features/persisted-operations) -- alternatively called [Trusted Documents](https://benjie.dev/graphql/trusted-documents).
+
+See [Configure Trusted Documents](graphql/trusted-documents#configure-trusted-documents) for more information and usage instructions.
+
 
 ### Conclusion
 
@@ -237,48 +245,7 @@ For example, if you have a query named `search` that supports [Apollo's offset p
 }}>
 ```
 
-### Generate Possible Types
 
-
-In order to use [fragments](#fragments) with [unions](#unions) and interfaces in Apollo Client, you need to tell the client how to discriminate between the different types that implement or belong to a supertype.
-
-You pass a possibleTypes option to the InMemoryCache constructor to specify these relationships in your schema.
-
-This object maps the name of an interface or union type (the supertype) to the types that implement or belong to it (the subtypes).
-
-For example:
-
-```ts
-/// web/src/App.tsx
-
-<RedwoodApolloProvider graphQLClientConfig={{
-  cacheConfig: {
-    possibleTypes: {
-      Character: ["Jedi", "Droid"],
-      Test: ["PassingTest", "FailingTest", "SkippedTest"],
-      Snake: ["Viper", "Python"],
-      Groceries: ['Fruit', 'Vegetable'],
-    },
-  },
-}}>
-```
-
-To make this easier to maintain, RedwoodJS GraphQL CodeGen automatically generates `possibleTypes` so you can simply assign it to the `graphQLClientConfig`:
-
-
-```ts
-import possibleTypes from 'src/graphql/possibleTypes'
-
-...
-/// web/src/App.tsx
-<RedwoodApolloProvider
-  graphQLClientConfig={{
-    cacheConfig: {
-      ...possibleTypes,
-    },
-  }}
->
-```
 
 ### Swapping out the RedwoodApolloProvider
 
@@ -853,256 +820,7 @@ See the [Directives](directives) section for complete information on RedwoodJS D
 
 ## Fragments
 
-[GraphQL fragments](https://graphql.org/learn/queries/#fragments) are reusable units of GraphQL queries that allow developers to define a set of fields that can be included in multiple queries. Fragments help improve code organization, reduce duplication, and make GraphQL queries more maintainable. They are particularly useful when you want to request the same set of fields on different parts of your data model or when you want to share query structures across multiple components or pages in your application.
-
-### What are Fragments?
-
-Here are some key points about GraphQL fragments:
-
-1. **Reusability**: Fragments allow you to define a set of fields once and reuse them in multiple queries. This reduces redundancy and makes your code more DRY (Don't Repeat Yourself).
-
-2. **Readability**: Fragments make queries more readable by separating the query structure from the actual query usage. This can lead to cleaner and more maintainable code.
-
-3. **Maintainability**: When you need to make changes to the requested fields, you only need to update the fragment definition in one place, and all queries using that fragment will automatically reflect the changes.
-
-### Basic Usage
-
-Here's a basic example of how you might use GraphQL fragments in developer documentation:
-
-Let's say you have a GraphQL schema representing books, and you want to create a fragment for retrieving basic book information like title, author, and publication year.
-
-
-```graphql
-# Define a GraphQL fragment for book information
-fragment BookInfo on Book {
-  id
-  title
-  author
-  publicationYear
-}
-
-# Example query using the BookInfo fragment
-query GetBookDetails($bookId: ID!) {
-  book(id: $bookId) {
-    ...BookInfo
-    description
-    # Include other fields specific to this query
-  }
-}
-```
-
-In this example:
-
-- We've defined a fragment called `BookInfo` that specifies the fields we want for book information.
-- In the `GetBookDetails` query, we use the `...BookInfo` spread syntax to include the fields defined in the fragment.
-- We also include additional fields specific to this query, such as `description`.
-
-By using the `BookInfo` fragment, you can maintain a consistent set of fields for book information across different parts of your application without duplicating the field selection in every query. This improves code maintainability and reduces the chance of errors.
-
-In developer documentation, you can explain the purpose of the fragment, provide examples like the one above, and encourage developers to use fragments to organize and reuse their GraphQL queries effectively.
-
-### Using Fragments in RedwoodJS
-
-RedwoodJS makes it easy to use fragments, especially with VS Code and Apollo GraphQL Client.
-
-First, RedwoodJS instructs the VS Code GraphQL Plugin where to look for fragments by configuring the `documents` attribute of your project's `graphql.config.js`:
-
-```js
-// graphql.config.js
-
-const { getPaths } = require('@redwoodjs/internal')
-
-module.exports = {
-  schema: getPaths().generated.schema,
-  documents: './web/src/**/!(*.d).{ts,tsx,js,jsx}', // 👈 Tells VS Code plugin where to find fragments
-}
-```
-
-Second, RedwoodJS automatically creates the [fragmentRegistry](https://www.apollographql.com/docs/react/data/fragments/#registering-named-fragments-using-createfragmentregistry) needed for Apollo to know about the fragments in your project without needing to interpolate their declarations.
-
-Redwood exports ways to interact with fragments in the `@redwoodjs/web/apollo` package.
-
-```
-import { fragmentRegistry, registerFragment } from '@redwoodjs/web/apollo'
-```
-
-With `fragmentRegistry`, you can interact with the registry directly.
-
-With `registerFragment`, you can register a fragment with the registry and get back:
-
- ```ts
- { fragment, typename, getCacheKey, useRegisteredFragment }
- ```
-
-which can then be used to work with the registered fragment.
-
-### registerFragment
-
-To register a fragment, you can simply register it with `registerFragment`.
-
-```ts
-import { registerFragment } from '@redwoodjs/web/apollo'
-
-registerFragment(
-  gql`
-    fragment BookInfo on Book {
-      id
-      title
-      author
-      publicationYear
-    }
-  `
-)
-```
-
-This makes the `BookInfo` available to use in your query:
-
-
-```ts
-import type { GetBookDetails } from 'types/graphql'
-
-import { useQuery } from '@redwoodjs/web'
-
-import BookInfo from 'src/components/BookInfo'
-
-const GET_BOOK_DETAILS = gql`
-  query GetBookDetails($bookId: ID!) {
-    book(id: $bookId) {
-      ...BookInfo
-      description
-      # Include other fields specific to this query
-    }
-  }
-
-...
-
-const { data, loading} = useQuery<GetBookDetails>(GET_BOOK_DETAILS)
-
-```
-
-
-You can then access the book info from `data` and render:
-
-```ts
-{!loading  && (
-  <div key={`book-id-${id}`}>
-    <h3>Title: {data.title}</h3>
-    <p>by {data.author} ({data.publicationYear})<>
-  </div>
-)}
-```
-
-### fragment
-
-Access the original fragment you registered.
-
-```ts
-import { fragment } from '@redwoodjs/web/apollo'
-```
-
-### typename
-
-Access typename of fragment you registered.
-
-
-```ts
-import { typename } from '@redwoodjs/web/apollo'
-```
-
-For example, with
-
-```graphql
-# Define a GraphQL fragment for book information
-fragment BookInfo on Book {
-  id
-  title
-  author
-  publicationYear
-}
-
-the `typename` is `Book`.
-
-
-### useCache!!!
-
-### getCacheKey
-
-A helper function to create the cache key for the data associated with the fragment in Apollo cache.
-
-```ts
-import { getCacheKey } from '@redwoodjs/web/apollo'
-```
-
-For example, with
-
-```graphql
-# Define a GraphQL fragment for book information
-fragment BookInfo on Book {
-  id
-  title
-  author
-  publicationYear
-}
-```
-
-the `getCacheKey` is a function where `getCacheKey(42)` would return `Book:42`.
-
-### useRegisteredFragment
-
-```ts
-import { registerFragment } from '@redwoodjs/web/apollo'
-
-const { useRegisteredFragment } = registerFragment(
-...
-)
-```
-
-A helper function relies on Apollo's [`useFragment` hook](https://www.apollographql.com/docs/react/data/fragments/#usefragment) in Apollo cache.
-
-The useFragment hook represents a lightweight live binding into the Apollo Client Cache. It enables Apollo Client to broadcast specific fragment results to individual components. This hook returns an always-up-to-date view of whatever data the cache currently contains for a given fragment. useFragment never triggers network requests of its own.
-
-
-This means that once the Apollo Client Cache has loaded the data needed for the fragment, one can simply render the data for the fragment component with its id reference.
-
-Also, anywhere the fragment component is rendered will be updated with teh latest data if any of `useQuery` with uses the fragment received new data.
-
-```ts
-import type { Book } from 'types/graphql'
-
-import { registerFragment } from '@redwoodjs/web/apollo'
-
-const { useRegisteredFragment } = registerFragment(
-  gql`
-    fragment BookInfo on Book {
-      id
-      title
-      author
-      publicationYear
-    }
-  `
-)
-
-const Book = ({ id }: { id: string }) => {
-  const { data, complete } = useRegisteredFragment<Book>(id)
-
-  return (
-    complete && (
-      <div key={`book-id-${id}`}>
-        <h3>Title: {data.title}</h3>
-        <p>by {data.author} ({data.publicationYear})<>
-      </div>
-    )
-  )
-}
-
-export default Book
-```
-
-:::note
-In order to use [fragments](#fragments) with [unions](#unions) and interfaces in Apollo Client, you need to tell the client how to discriminate between the different types that implement or belong to a supertype.
-
-Please see how to [generate possible types from fragments and union types](#generate-possible-types).
-:::
+See [fragments](graphql/fragments.md)
 
 ## Unions
 
@@ -1879,7 +1597,7 @@ type Query {
 
 Because it is often useful to ask a GraphQL schema for information about what queries it supports, GraphQL allows us to do so using the [introspection](https://graphql.org/learn/introspection/) system.
 
-The [GraphQL Playground](https://www.graphql-yoga.com/docs/features/graphiql) is a way for you to interact with your schema and try out queries and mutations. It can show you the schema by inspecting it. You can find the GraphQL Playground at http://localhost:8911/graphql when your dev server is running.
+The [GraphQL Playground](https://www.graphql-yoga.com/docs/features/graphiql) is a way for you to interact with your schema and try out queries and mutations. It can show you the schema by inspecting it. You can find the GraphQL Playground at [http://localhost:8911/graphql](http://localhost:8911/graphql) when your dev server is running.
 
 > Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to disable these in production, RedwoodJS **, by default, only enables introspection and the playground when running in development**. That is when `process.env.NODE_ENV === 'development'`.
 
@@ -1903,7 +1621,7 @@ export const handler = createGraphQLHandler({
 })
 ```
 
-:::caution
+:::warning
 
 Enabling introspection in production may pose a security risk, as it allows users to access information about your schema, queries, and mutations. Use this option with caution and make sure to secure your GraphQL API properly.
 
@@ -2326,6 +2044,7 @@ Orm if you want a custom mask:
 ```
 
 ``Cannot query field "sta" on type "Media". [REDACTED]?`
+
 
 ### Error Masking
 

@@ -36,31 +36,98 @@ export default MainLayout
 
 ### Call the `toast` function
 
-To render a toast notification, call the `toast` function or one of its methods:
+To render a basic toast notification with default styles, call the `toast` function:
 
-```jsx title="web/src/components/PostForm/PostForm.js"
-// highlight-next-line
+```jsx title="web/src/layouts/MainLayout/MainLayout.js"
 import { toast } from '@redwoodjs/web/toast'
 
 // ...
 
 const PostForm = () => {
-  const onSubmit = () => {
+  const [create, { loading, error }] = useMutation(CREATE_POST_MUTATION)
+
+  const onSubmit = async (data) => {
     try {
-      // Code to save a record...
+      await create({ variables: { input: data }})
       // highlight-next-line
-      toast('User created!')
-    } catch (e) {
-      // There's also methods for default styling:
+      toast('Post created')
+    }
+    catch (e) {
       // highlight-next-line
-      toast.error("Error creating post...")
+      toast('Error creating post')
     }
   }
 
   return (
-    // JSX...
+    // <Form onSubmit={onSubmit}> ... </Form>
   )
 })
 
 export default PostForm
 ```
+
+### Call the `toast` variants
+
+To render a toast notification with default icons and default styles, call the `toast` variants:
+
+```jsx title="web/src/components/PostForm/PostForm.js"
+import { toast } from '@redwoodjs/web/toast'
+
+// ...
+
+const PostForm = () => {
+  const [create, { loading, error }] = useMutation(CREATE_POST_MUTATION, {
+    onCompleted: () => {
+      // highlight-next-line
+      toast.success('Post created')
+    }
+    onError: () => {
+      // highlight-next-line
+      toast.error('Error creating post')
+    }
+  })
+
+  const onSubmit = (data) => {
+    create({ variables: { input: data }})
+  }
+
+  return (
+    // <Form onSubmit={onSubmit}> ... </Form>
+  )
+})
+
+export default PostForm
+```
+
+or render an async toast by calling the `toast.promise` function:
+
+```jsx title="web/src/components/PostForm/PostForm.js"
+import { toast } from '@redwoodjs/web/toast'
+
+// ...
+
+const PostForm = () => {
+  const [create, { loading, error }] = useMutation(CREATE_POST_MUTATION)
+
+  const onSubmit = (data) => {
+    // highlight-next-line
+    toast.promise(create({ variables: { input: data }}), {
+      loading: 'Creating post...',
+      success: 'Post created',
+      error: 'Error creating post',
+    })
+  }
+
+  return (
+    // <Form onSubmit={onSubmit}> ... </Form>
+  )
+})
+
+export default PostForm
+```
+
+:::warning
+
+You can't use the [onError](https://www.apollographql.com/docs/react/api/react/hooks/#onerror) callback in combination with the `toast.promise` function.
+
+:::
