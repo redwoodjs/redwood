@@ -1,7 +1,6 @@
 import fs from 'node:fs'
 
 import core from '@actions/core'
-import { exec, getExecOutput } from '@actions/exec'
 import { hasCodeChanges } from './cases/code_changes.mjs'
 
 const getPrNumber = (githubRef) => {
