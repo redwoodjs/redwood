@@ -17,7 +17,11 @@ const { getWebSideDefaultBabelConfig } = require('@redwoodjs/babel-config')
 const {
   ChunkReferencesPlugin,
 } = require('@redwoodjs/internal/dist/webpackPlugins/ChunkReferencesPlugin')
-const { getConfig, getPaths, findUp } = require('@redwoodjs/project-config')
+const {
+  getConfig,
+  getPaths,
+  getConfigPath,
+} = require('@redwoodjs/project-config')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -200,7 +204,7 @@ const getSharedPlugins = (isEnvProduction) => {
   ].filter(Boolean)
 }
 
-const tomlPath = findUp('redwood.toml', process.cwd())
+const tomlPath = getConfigPath()
 const virtualPossibleTypesPath = path.join(
   path.dirname(tomlPath),
   'node_modules',
