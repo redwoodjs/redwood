@@ -20,6 +20,8 @@ function isCodeFile(filePath) {
   ) {
     return false
   }
+
+  return true
 }
 
 /**
