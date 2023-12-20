@@ -263,6 +263,7 @@ export default function redwoodPluginVite(): PluginOption[] {
                 global: 'globalThis',
               },
             },
+            exclude: ['virtual:possibleTypes'],
           },
         }
       },
