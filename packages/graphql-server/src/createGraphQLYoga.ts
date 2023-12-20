@@ -6,8 +6,6 @@ import { OperationTypeNode } from 'graphql'
 import type { Plugin } from 'graphql-yoga'
 import { useReadinessCheck, createYoga } from 'graphql-yoga'
 
-import { getConfig } from '@redwoodjs/project-config'
-
 import { mapRwCorsOptionsToYoga } from './cors'
 import { makeDirectivesForPlugin } from './directives/makeDirectives'
 import { configureGraphiQLPlayground } from './graphiql'
@@ -59,7 +57,6 @@ export const createGraphQLYoga = ({
   let schema: GraphQLSchema
   let redwoodDirectivePlugins = [] as Plugin[]
   const logger = loggerConfig.logger
-  const rwjsConfig = getConfig()
 
   const isDevEnv = process.env.NODE_ENV === 'development'
 
@@ -147,8 +144,7 @@ export const createGraphQLYoga = ({
       useFilterAllowedOperations(allowedOperations || defaultAllowedOperations)
     )
 
-    const useTrustedDocuments = rwjsConfig.graphql?.trustedDocuments
-    if (useTrustedDocuments && trustedDocuments && !trustedDocuments.disabled) {
+    if (trustedDocuments && !trustedDocuments.disabled) {
       plugins.push(useRedwoodTrustedDocuments(trustedDocuments))
     }
 
