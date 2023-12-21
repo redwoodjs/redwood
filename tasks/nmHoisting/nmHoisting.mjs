@@ -53,7 +53,7 @@ rawData.push(\`${JSON.stringify(data, null, 2)}\`)
 main()
 
 // ------------------------
-// Helpers.
+// Helpers
 // ------------------------
 
 function batchLines(lines) {
