@@ -1,21 +1,21 @@
-# Nested `node_modules` 
+# Nested `node_modules`
 
 When packages request different versions of the same dependency, Yarn tries to
 make both packages happy by installing two copies of that dependency. With a
-little bit of hand-waving here, for the `node-modules` linker, since packages
-have to exist in a single place on disk, Yarn has to decide which one gets
+little bit of hand-waving here, for the `node-modules` linker, since dependencies
+have to exist at a single place on disk, Yarn has to decide which one gets
 hoisted to the top level (i.e. `node_modules/dependency`) and which one has to
 be nested
 (`node_modules/package-requesting-different-version/node_modules/dependency`).
 As far as I can tell, it does this in a more or less sensible way by hoisting
 the version that's requested the most.
 
-When our own `@redwoodjs` packages becomes nested, it's usually a (painful)
+But when our own `@redwoodjs` packages become nested, it's usually a (painful)
 problem for us and for our users. This script identifies which of CRWA's
 dependencies have a lot of nested dependencies:
 
-```
-yarn node ./tasks/hoisting/hoisting.mjs
+```bash
+yarn node ./tasks/nmHoisting/nmHoisting.mjs
 ```
 
 Here's a snippet of the nested dependencies for the `@redwoodjs` packages as of
@@ -56,3 +56,5 @@ version `v6.5.1`:
   }
 }
 ```
+
+You can also see a visualization by opening [nmHoistingVisualize.html](./nmHoistingVisualize.html):
