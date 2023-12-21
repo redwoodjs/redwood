@@ -1,4 +1,4 @@
-# Hoisting
+# Nested `node_modules` 
 
 When packages request different versions of the same dependency, Yarn tries to
 make both packages happy by installing two copies of that dependency. With a
