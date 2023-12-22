@@ -13,7 +13,7 @@ services:
 - name: ${PROJECT_NAME}-web
   type: web
   env: static
-  buildCommand: yarn install && yarn rw deploy render web
+  buildCommand: corepack enable && yarn install && yarn rw deploy render web
   staticPublishPath: ./web/dist
 
   envVars:
@@ -38,7 +38,7 @@ services:
   plan: free
   env: node
   region: oregon
-  buildCommand: yarn && yarn rw build api
+  buildCommand: corepack enable && yarn && yarn rw build api
   startCommand: yarn rw deploy render api
 
   envVars:
