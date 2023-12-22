@@ -379,8 +379,8 @@ export class DbAuthHandler<
       'set-cookie': [
         `${cookieName(this.options.cookie?.name)}=`,
         ...this._cookieAttributes({ expires: 'now' }),
-        `auth-provider=`,
-        ...this._cookieAttributes({ expires: 'now' }),
+        // `auth-provider=`,
+        // ...this._cookieAttributes({ expires: 'now' }),
       ].join(';'),
     }
   }
@@ -479,7 +479,7 @@ export class DbAuthHandler<
     }
 
     try {
-      const method = this._getAuthMethod()
+      const method = await this._getAuthMethod()
 
       // get the auth method the incoming request is trying to call
       if (!DbAuthHandler.METHODS.includes(method)) {
@@ -1208,8 +1208,8 @@ export class DbAuthHandler<
     const cookie = [
       `${cookieName(this.options.cookie?.name)}=${encrypted}`,
       ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
-      'auth-provider=dbAuth',
-      ...this._cookieAttributes({ expires: this.sessionExpiresDate }), // TODO need this to be not http-only
+      // 'auth-provider=dbAuth',
+      // ...this._cookieAttributes({ expires: this.sessionExpiresDate }), // TODO need this to be not http-only
     ].join(';')
 
     return { 'set-cookie': cookie }
@@ -1446,7 +1446,8 @@ export class DbAuthHandler<
   }
 
   // figure out which auth method we're trying to call
-  _getAuthMethod() {
+  async _getAuthMethod() {
+    await this.init()
     // try getting it from the query string, /.redwood/functions/auth?method=[methodName]
     let methodName = this.normalizedRequest.query.method as AuthMethodNames
 

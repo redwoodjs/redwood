@@ -127,4 +127,34 @@ describe('Fetch API Request', () => {
 
     expect(partial.headers.get('content-type')).toEqual('application/json')
   })
+
+  it('Handles an empty body', async () => {
+    const headers = {
+      'content-type': 'application/json',
+      'x-custom-header': 'bazinga',
+    }
+
+    const fetchEvent = new Request(
+      'http://localhost:9210/graphql?whatsup=doc&its=bugs',
+      {
+        method: 'PUT',
+        headers,
+        body: '',
+      }
+    )
+
+    const partial = await normalizeRequest(fetchEvent)
+
+    expect(partial).toMatchObject({
+      method: 'PUT',
+      query: {
+        whatsup: 'doc',
+        its: 'bugs',
+      },
+      jsonBody: undefined,
+    })
+
+    expect(partial.headers.get('content-type')).toEqual(headers['content-type'])
+    expect(partial.headers.get('x-custom-header')).toEqual('bazinga')
+  })
 })

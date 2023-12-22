@@ -26,6 +26,27 @@ export const parseLambdaEventBody = (event: APIGatewayProxyEvent) => {
   }
 }
 
+/**
+ * Extracts and parses body payload from Fetch Request
+ * with check for empty body (and base64 later)
+ */
+export const parseFetchEventBody = async (event: Request) => {
+  if (!event.body) {
+    return
+  }
+
+  // @TODO: We need to understand what happens on Vercel
+  // if (event.isBase64Encoded) {
+  //   return JSON.parse(Buffer.from(event.body, 'base64').toString('utf-8'))
+  // } else {
+  //   return JSON.parse(event.body)
+  // }
+
+  const body = await event.text()
+
+  return body ? JSON.parse(body) : undefined
+}
+
 export const isFetchApiRequest = (event: any): event is Request => {
   return event instanceof Request || event instanceof PonyFillRequest
 }
@@ -56,7 +77,7 @@ export async function normalizeRequest(
       headers: event.headers,
       method: event.method,
       query: getQueryStringParams(event.url),
-      jsonBody: await event.json(),
+      jsonBody: await parseFetchEventBody(event),
     }
   }
 

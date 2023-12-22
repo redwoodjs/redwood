@@ -83,7 +83,7 @@ async function createServer() {
   }
 
   app.post(
-    '/',
+    '/_rw_mw',
     createServerAdapter(async (req: Request) => {
       const entryServerImport = await vite.ssrLoadModule(
         rwPaths.web.entryServer as string // already validated in dev server
