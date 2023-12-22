@@ -145,9 +145,11 @@ const sshExec = async (ssh, path, command, args) => {
   })
 
   if (result.code !== 0) {
-    const error = new Error(`Error while running command \`${command} ${args.join(' ')}\``);
-    error.exitCode = result.code;
-    throw error;
+    const error = new Error(
+      `Error while running command \`${command} ${args.join(' ')}\``
+    )
+    error.exitCode = result.code
+    throw error
   }
 
   return result
