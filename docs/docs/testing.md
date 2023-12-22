@@ -1696,7 +1696,7 @@ Only the posts scenarios will be present in the database when running the `posts
 
 During the run of any single test, there is only ever one scenario's worth of data present in the database: users.standard *or* users.incomplete.
 
-### describeScenario
+### describeScenario - a performance optimisation
 
 The scenario feature described above should be the base starting point for setting up test that depend on the database.  The scenario sets up the database before each scenario _test_, runs the test, and then tears down (deletes) the database scenario.  This ensures that each of your tests are isolated, and that they do not affect each other.
 
