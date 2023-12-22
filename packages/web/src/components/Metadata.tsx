@@ -2,10 +2,6 @@ import React from 'react'
 
 import { Head as HelmetHead } from '../index'
 
-// Ideally we wouldn't include this for non experiment builds
-// But.... not worth the effort to remove it from bundle atm
-import PortalHead from './PortalHead'
-
 type ValueOrCollection<T> = T | ValueOrCollection<T>[] | Record<string, T>
 type ParentValue = ValueOrCollection<string>
 
@@ -47,11 +43,7 @@ const propToMetaTag = (
 export const Metadata = (props: Record<string, any>) => {
   const { children, ...metaProps } = props
 
-  let Head: typeof HelmetHead | typeof PortalHead = HelmetHead
-
-  if (RWJS_ENV.RWJS_EXP_STREAMING_SSR) {
-    Head = PortalHead
-  }
+  const Head = HelmetHead
 
   const tags: JSX.Element[] = Object.entries(metaProps)
     .filter(
