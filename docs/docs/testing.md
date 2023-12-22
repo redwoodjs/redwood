@@ -1702,7 +1702,7 @@ The scenario feature described above should be the base starting point for setti
 
 However, there are some situations where you as the user may want additional control regarding when the database is setup and torn down. 
 
-The `describeScenario` function is utilized to run a sequence of multiple tests within a single database setup and tear-down.  T
+The `describeScenario` function is utilized to run a sequence of multiple tests within a single database setup and tear-down.
 
 ```
 describeScenario<StandardScenario>('contacts', (getScenario) => {
