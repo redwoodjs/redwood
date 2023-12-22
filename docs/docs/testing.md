@@ -1698,7 +1698,9 @@ During the run of any single test, there is only ever one scenario's worth of da
 
 ### describeScenario
 
-The scenario feature described above should be the base starting point for setting up test that depend on the database.  The scenario sets up the database before each scenario test, runs the test, and then tears down (deletes) the database scenario.  However, there are some situations where you as the user may want additional control regarding when the database is setup and torn down.
+The scenario feature described above should be the base starting point for setting up test that depend on the database.  The scenario sets up the database before each scenario _test_, runs the test, and then tears down (deletes) the database scenario.  This ensures that each of your tests are isolated, and that they do not affect each other.
+
+However, there are some situations where you as the user may want additional control regarding when the database is setup and torn down. 
 
 The `describeScenario` function is utilized to run a sequence of multiple tests within a single database setup and tear-down.  T
 
