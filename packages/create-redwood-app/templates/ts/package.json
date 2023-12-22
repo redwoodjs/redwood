@@ -7,9 +7,7 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "6.0.7",
-    "@types/react": "^18.2.37",
-    "@types/react-dom": "^18.2.15"
+    "@redwoodjs/core": "6.0.7"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",

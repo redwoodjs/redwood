@@ -41,6 +41,8 @@
     "@types/babel-core": "6.25.10",
     "@types/jest": "29.5.8",
     "@types/node": "20.10.4",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
     "@types/webpack": "5.28.5",
     "@types/webpack-env": "1.18.4",
     "babel-jest": "^29.7.0",
