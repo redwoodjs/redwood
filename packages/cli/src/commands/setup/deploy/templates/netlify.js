@@ -8,8 +8,8 @@ export const NETLIFY_TOML = `\
   publish = "web/dist"
   functions = "api/dist/functions"
 
-[context]
-  environment = { NODE_VERSION = "20" }
+  [build.environment]
+    NODE_VERSION = "20"
 
 [[redirects]]
   from = "/*"
