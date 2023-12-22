@@ -1,4 +1,4 @@
-import { Response, createServerAdapter } from '@whatwg-node/server'
+import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
 import type { ViteDevServer } from 'vite'
 import { createServer as createViteServer } from 'vite'
@@ -82,7 +82,9 @@ async function createServer() {
     app.get(expressPathDef, createServerAdapter(routeHandler))
   }
 
-  app.post(
+  // @TODO: DbAuth still sends a GET request for getToken
+  // Do we still need getToken if gets updated by middleware anyway?
+  app.all(
     '/_rw_mw',
     createServerAdapter(async (req: Request) => {
       const entryServerImport = await vite.ssrLoadModule(
@@ -95,13 +97,14 @@ async function createServer() {
       if (middleware) {
         try {
           out = await middleware(req)
-          console.log(`👉 \n ~ file: devFeServer.ts:97 ~ out:`, out)
         } catch (e) {
-          console.error('Whooopsie, error in middleware', e)
+          console.error('Whooopsie, error in middleware POST handler')
+          console.error(e)
         }
       }
 
-      return new Response(out)
+      // @TODO: We should check the type of resposne here I guess
+      return out
     })
   )
 

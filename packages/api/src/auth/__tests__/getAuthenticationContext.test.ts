@@ -212,4 +212,47 @@ describe('getAuthenticationContext with bearer tokens', () => {
 })
 
 // @TODO add tests for requests with Cookie headers
-describe('getAuthenticationContext with cookies', () => {})
+describe('getAuthenticationContext with cookies', () => {
+  it('Can take a single auth decoder for the given provider', async () => {
+    const authDecoderOne = async (_token: string, type: string) => {
+      if (type !== 'one') {
+        return null
+      }
+
+      return {
+        iss: 'one',
+        sub: 'user-id',
+      }
+    }
+
+    const fetchRequest = new Request('http://localhost:3000', {
+      method: 'POST',
+      body: '',
+      headers: {
+        cookie: 'auth-provider=one; session=xx/yy/zz',
+      },
+    })
+
+    const result = await getAuthenticationContext({
+      authDecoder: authDecoderOne,
+      event: fetchRequest,
+      context: {} as Context,
+    })
+
+    if (!result) {
+      fail('Result is undefined')
+    }
+
+    const [decoded, { type, schema, token }] = result
+
+    expect(decoded).toMatchObject({
+      iss: 'one',
+      sub: 'user-id',
+    })
+    expect(type).toEqual('one')
+    expect(schema).toEqual('cookie')
+    // @TODO we need to rename this. It's not actually the token, because
+    // some auth providers will have a cookie where we don't know the key
+    expect(token).toEqual('auth-provider=one; session=xx/yy/zz')
+  })
+})

@@ -47,8 +47,21 @@ export const parseFetchEventBody = async (event: Request) => {
   return body ? JSON.parse(body) : undefined
 }
 
+// @TODO
+// @TODO
+// @TODO
+// THis is in a hacked state. Need to figure out why instanceof isn't working in middleware
 export const isFetchApiRequest = (event: any): event is Request => {
-  return event instanceof Request || event instanceof PonyFillRequest
+  if (event instanceof Request || event instanceof PonyFillRequest) {
+    return true
+  }
+
+  if (event.httpMethod || event.queryStringParameters) {
+    return false
+  }
+
+  // @TODO I dont know why instance of Request is not working in middleware
+  return true
 }
 
 function getQueryStringParams(reqUrl: string) {

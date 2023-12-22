@@ -12,12 +12,16 @@ export type { Decoded }
 // This is shared by `@redwoodjs/web`
 const AUTH_PROVIDER_HEADER = 'auth-provider'
 
-export const getAuthProviderHeader = (event: APIGatewayProxyEvent) => {
+export const getAuthProviderHeader = (
+  event: APIGatewayProxyEvent | Request
+) => {
   const authProviderKey = Object.keys(event?.headers ?? {}).find(
     (key) => key.toLowerCase() === AUTH_PROVIDER_HEADER
   )
   if (authProviderKey) {
-    return event?.headers[authProviderKey]
+    return isFetchApiRequest(event)
+      ? event?.headers.get(authProviderKey)
+      : event?.headers[authProviderKey]
   }
   return undefined
 }
@@ -44,7 +48,7 @@ export const parseAuthorizationCookie = (
   return {
     parsedCookie,
     rawCookie: cookie,
-    type: parsedCookie.authProvider,
+    type: parsedCookie['auth-provider'],
   }
 }
 
@@ -89,11 +93,11 @@ export const getAuthenticationContext = async ({
   context,
 }: {
   authDecoder?: Decoder | Decoder[]
-  event: APIGatewayProxyEvent
+  event: APIGatewayProxyEvent | Request
   context: LambdaContext
 }): Promise<undefined | AuthContextPayload> => {
   const typeFromHeader = getAuthProviderHeader(event)
-  const cookieHeader = parseAuthorizationCookie(event)
+  const cookieHeader = parseAuthorizationCookie(event) //?
 
   // Shortcircuit - if no auth-provider or cookie header, its
   // an unauthenticated request
@@ -107,7 +111,7 @@ export const getAuthenticationContext = async ({
 
   // If type is set in the header, use Bearer token auth
   if (typeFromHeader) {
-    const parsedAuthHeader = parseAuthorizationHeader(event)
+    const parsedAuthHeader = parseAuthorizationHeader(event as any)
     token = parsedAuthHeader.token
     type = typeFromHeader
     schema = parsedAuthHeader.schema
@@ -136,9 +140,15 @@ export const getAuthenticationContext = async ({
 
   let i = 0
   while (!decoded && i < authDecoders.length) {
-    decoded = await authDecoders[i](token, type, { event, context })
+    decoded = await authDecoders[i](token, type, {
+      // @TODO We will need to make a breaking change to auth decoders maybe
+      event: event as any,
+      context,
+    })
     i++
   }
 
-  return [decoded, { type, schema, token }, { event, context }]
+  // @TODO we need to rename this. It's not actually the token, because
+  // some auth providers will have a cookie where we don't know the key
+  return [decoded, { type, schema, token }, { event: event as any, context }]
 }

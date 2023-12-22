@@ -393,6 +393,10 @@ export class DbAuthHandler<
     this.options = options
     this.event = event
     this.httpMethod = isFetchApiRequest(event) ? event.method : event.httpMethod
+    console.log(
+      `👉 \n ~ file: DbAuthHandler.ts:396 ~ isFetchApiRequest(event):`,
+      isFetchApiRequest(event)
+    )
 
     this.cookie = extractCookie(event) || ''
 
