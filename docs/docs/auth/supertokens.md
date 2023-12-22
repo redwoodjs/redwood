@@ -14,7 +14,7 @@ This installs all the packages, writes all the files, and makes all the code mod
 
 :::info
 
-You may have noticed that in `api/src/functions/auth.ts` there's an import from `'supertokens-node/framework/awsLambda'`. This is fine, even if your app is not running in a serverless environment like AWS Lambda. Redwood automatically handles the translation between Fastify's request/reply objects, and the AWS Lambda signature.
+You may have noticed that in `api/src/functions/auth.ts` there's an import from `'supertokens-node/framework/awsLambda'`. This is fine, even if your app isn't running in a serverless environment like AWS Lambda. In "serverful" environments, Redwood automatically handles the translation between Fastify's request and reply objects and functions' AWS Lambda signature.
 
 :::
 
