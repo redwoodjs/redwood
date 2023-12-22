@@ -1721,7 +1721,7 @@ describeScenario<StandardScenario>('contacts', (getScenario) => {
 })
 ```
 
-> **CAUTION**: With describeScenario, you no long have isolation between tests.  The results, or side-effects, of prior tests can affect later tests.
+> **CAUTION**: With describeScenario, your tests are no longer isolated.  The results, or side-effects, of prior tests can affect later tests.
 
 Rational for using `describeScenario` include:
 <ul>
