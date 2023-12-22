@@ -357,7 +357,7 @@ async function releaseMajorOrMinor() {
       await question(
         `Ok to checkout a new release branch, ${chalk.magenta(
           releaseBranch
-        )}, from the ${chalk.magenta(checkoutFromBranch)}? [Y/n] > `
+        )}, from the ${chalk.magenta(checkoutFromBranch)} branch? [Y/n] > `
       )
     )
     await $`git checkout -b ${releaseBranch} ${checkoutFromBranch}`
