@@ -9,9 +9,9 @@ description: Create, develop, and run serverless functions
 
 :::info
 
-You can think of serverless functions as API Endpoints, and in the future we will update the terminology used.
+You can think of serverless functions as API Endpoints, and in the future we'll update the terminology used.
 
-Originally, Redwood apps were intended to be deployed as serverless functions to AWS Lambda. Whenever a Redwood app is deployed to a 'serverful' environment such as Render or Heroku, a Fastify server gets started automatically, which automatically registers the functions in `api/src/functions` onto the server. Request adapters are also automatically configured to handle the translation between Fastify's request/reply objects to the functions' AWS Lambda signature.
+Originally, Redwood apps were intended to be deployed as serverless functions to AWS Lambda. Whenever a Redwood app is deployed to a "serverful" environment such as Fly or Render, a Fastify server is started and your Redwood app's functions in `api/src/functions` are automatically registered onto the server. Request adapters are also automatically configured to handle the translation between Fastify's request and reply objects to the functions' AWS Lambda signature.
 
 :::
 
