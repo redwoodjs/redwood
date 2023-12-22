@@ -1,5 +1,7 @@
 import terminalLink from 'terminal-link'
 
+import c from '../lib/colors'
+import { exitWithError } from '../lib/exit'
 import { sides } from '../lib/project'
 import { checkNodeVersion } from '../middleware/checkNodeVersion'
 
@@ -54,7 +56,10 @@ export const builder = (yargs) => {
         return
       }
 
-      throw new Error(check.warning)
+      exitWithError(undefined, {
+        message: `${c.error('Error')}: ${check.message}`,
+        includeEpilogue: false,
+      })
     })
     .epilogue(
       `Also see the ${terminalLink(

@@ -1,5 +1,6 @@
 import terminalLink from 'terminal-link'
 
+import c from '../lib/colors'
 import { checkNodeVersion } from '../middleware/checkNodeVersion'
 
 export const command = 'dev [side..]'
@@ -40,7 +41,7 @@ export const builder = (yargs) => {
         return
       }
 
-      console.warn(check.warning)
+      console.warn(`${c.warning('Warning')}: ${check.message}\n`)
     })
     .epilogue(
       `Also see the ${terminalLink(
