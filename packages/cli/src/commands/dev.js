@@ -33,7 +33,15 @@ export const builder = (yargs) => {
       description:
         'Port on which to expose API server debugger. If you supply the flag with no value it defaults to 18911.',
     })
-    .middleware(checkNodeVersion)
+    .middleware(() => {
+      const check = checkNodeVersion()
+
+      if (check.ok) {
+        return
+      }
+
+      console.warn(check.warning)
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
