@@ -1,6 +1,5 @@
 import path from 'node:path'
 
-import { getStudioConfig } from 'api/lib/config'
 import chokidar from 'chokidar'
 import fs from 'fs-extra'
 import { simpleParser as simpleMailParser } from 'mailparser'
@@ -9,6 +8,7 @@ import { SMTPServer } from 'smtp-server'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { getDatabase } from '../database'
+import { getStudioConfig } from '../lib/config'
 
 const swc = require('@swc/core')
 
