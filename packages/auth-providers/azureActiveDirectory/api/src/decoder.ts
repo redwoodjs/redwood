@@ -3,7 +3,7 @@ import jwksClient from 'jwks-rsa'
 
 import type { Decoder } from '@redwoodjs/api'
 
-export const authDecoder: Decoder = async (token: string, type: string | null) => {
+export const authDecoder: Decoder = async (token: string, type: string) => {
   if (type !== 'azureActiveDirectory') {
     return null
   }

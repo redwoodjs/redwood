@@ -2,10 +2,7 @@ import jwt from 'jsonwebtoken'
 
 import type { Decoder } from '@redwoodjs/api'
 
-export const authDecoder: Decoder = async (
-  token: string,
-  type: string | null
-) => {
+export const authDecoder: Decoder = async (token: string, type: string) => {
   if (type !== 'supabase') {
     return null
   }

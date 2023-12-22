@@ -17,7 +17,7 @@ interface NetlifyTokenPayload extends Record<string, unknown> {
 
 export const authDecoder: Decoder = async (
   token: string,
-  type: string | null,
+  type: string,
   req: { context: LambdaContext }
 ) => {
   if (type !== 'netlify') {
