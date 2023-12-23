@@ -1,5 +1,6 @@
 import path from 'node:path'
 
+import * as swc from '@swc/core'
 import chokidar from 'chokidar'
 import fs from 'fs-extra'
 import { simpleParser as simpleMailParser } from 'mailparser'
@@ -9,8 +10,6 @@ import { getPaths } from '@redwoodjs/project-config'
 
 import { getDatabase } from '../database'
 import { getStudioConfig } from '../lib/config'
-
-const swc = require('@swc/core')
 
 let smtpServer: SMTPServer
 
@@ -288,8 +287,7 @@ function getMailTemplateComponents(templateFilePath: string) {
     tsx: templateFilePath.endsWith('.tsx') || templateFilePath.endsWith('.jsx'),
   })
 
-  const components = []
-
+  const components: { name: string; propsTemplate: string | null }[] = []
   const functionsAndVariables = ast.body.filter((node: any) => {
     return (
       node.type === 'VariableDeclaration' || node.type === 'FunctionDeclaration'
@@ -347,7 +345,7 @@ export async function updateMailRenderers() {
     const suffix = `studio_${Date.now()}`
     const importPath = mailerFilePath.replace('.js', `.${suffix}.js`)
     fs.copyFileSync(mailerFilePath, importPath)
-    const mailer = (await import(importPath)).mailer
+    const mailer = (await import(`file://${importPath}`)).mailer
     fs.removeSync(importPath)
     const renderers = Object.keys(mailer.renderers)
     const defaultRenderer = mailer.config.rendering.default

@@ -105,7 +105,7 @@ export async function getRenderedMail(
       `.studio_${Date.now()}.js`
     )
     fs.copyFileSync(templateComponentDistPath, templateImportPath)
-    const templateComponent = await import(templateImportPath)
+    const templateComponent = await import(`file://${templateImportPath}`)
     fs.removeSync(templateImportPath)
 
     const Component =
@@ -120,7 +120,7 @@ export async function getRenderedMail(
       `.studio_${Date.now()}.js`
     )
     fs.copyFileSync(mailerFilePath, mailerImportPath)
-    const mailer = (await import(mailerImportPath)).mailer
+    const mailer = (await import(`file://${mailerImportPath}`)).mailer
     fs.removeSync(mailerImportPath)
 
     // Render the component
