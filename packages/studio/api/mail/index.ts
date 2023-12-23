@@ -236,6 +236,18 @@ function generatePropsTemplate(param: swc.Param | swc.Pattern | null) {
   let propsTemplate = 'Provide your props here as JSON'
   try {
     switch (pattern.type) {
+      case 'Identifier':
+        propsTemplate = `{${pattern.value}: ?}`
+        break
+      case 'AssignmentPattern':
+        if (pattern.left.type === 'ObjectPattern') {
+          propsTemplate = `{${pattern.left.properties
+            .map((p: any) => {
+              return `\n  "${p.key.value}": ?`
+            })
+            .join(',')}\n}`
+        }
+        break
       case 'ObjectPattern':
         propsTemplate = `{${pattern.properties
           .map((p: any) => {
