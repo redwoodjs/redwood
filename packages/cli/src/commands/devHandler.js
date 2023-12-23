@@ -1,7 +1,7 @@
-import fs from 'fs'
 import { argv } from 'process'
 
 import concurrently from 'concurrently'
+import fs from 'fs-extra'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { shutdownPort } from '@redwoodjs/internal/dist/dev'
