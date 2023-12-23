@@ -105,12 +105,13 @@ export async function getRenderedMail(
       `.studio_${Date.now()}.js`
     )
     fs.copyFileSync(templateComponentDistPath, templateImportPath)
-    const templateComponent = await import(`file://${templateImportPath}`)
+    const templateComponent = (await import(`file://${templateImportPath}`))
+      .default
     fs.removeSync(templateImportPath)
 
     const Component =
       component.name.indexOf('default') !== -1
-        ? templateComponent.default.default
+        ? templateComponent.default
         : templateComponent[component.name]
 
     // Import the mailer
