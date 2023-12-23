@@ -128,7 +128,7 @@ becomes...
 </MainLayout>
 ```
 
-### `private` Set
+### `PrivateSet`
 
 A `PrivateSet` makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the PrivateSet, they'll be redirected to the Route passed as the PrivateSet's `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
 
