@@ -1,14 +1,25 @@
-export const command = 'deploy <target>'
-export const description = 'Deploy your Redwood project'
 import terminalLink from 'terminal-link'
 
-export const builder = (yargs) =>
+import * as baremetalCommand from './deploy/baremetal'
+import * as flightcontrolCommand from './deploy/flightcontrol'
+import * as netlifyCommand from './deploy/netlify'
+import * as renderCommand from './deploy/render'
+import * as vercelCommand from './deploy/vercel'
+
+export const command = 'deploy <target>'
+export const description = 'Deploy your Redwood project'
+
+export function builder(yargs) {
   yargs
-    .commandDir('./deploy', { recurse: false })
-    .demandCommand()
+    .command(baremetalCommand)
+    .command(flightcontrolCommand)
+    .command(netlifyCommand)
+    .command(renderCommand)
+    .command(vercelCommand)
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
         'https://redwoodjs.com/docs/cli-commands#deploy'
       )}\n`
     )
+}

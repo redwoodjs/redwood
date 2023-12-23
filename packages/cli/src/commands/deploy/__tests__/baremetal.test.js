@@ -8,7 +8,7 @@ jest.mock('@redwoodjs/project-config', () => {
   }
 })
 
-import * as baremetal from '../baremetal'
+import * as baremetal from '../baremetalHandler'
 
 describe('verifyConfig', () => {
   it('throws an error if no environment specified', () => {

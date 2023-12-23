@@ -2,20 +2,19 @@
 /* eslint-env node */
 // @ts-check
 
-import { execSync } from 'node:child_process'
-import fs from 'node:fs'
-import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 
-import chalk from 'chalk'
-import { default as enquirer } from 'enquirer'
-
-const rootDir = fileURLToPath(new URL('../', import.meta.url))
-const DEPENDENCY_CRUISER_CONFIG_FILE = '.dependency-cruiser.mjs'
-const globalConfigPath = path.join(rootDir, DEPENDENCY_CRUISER_CONFIG_FILE)
+import prompts from 'prompts'
+import { chalk, fs, path, $ } from 'zx'
 
 async function main() {
+  $.verbose = false
+
+  const rootDir = fileURLToPath(new URL('../', import.meta.url))
+  const DEPENDENCY_CRUISER_CONFIG_FILE = '.dependency-cruiser.mjs'
+  const globalConfigPath = path.join(rootDir, DEPENDENCY_CRUISER_CONFIG_FILE)
+
   const { positionals, values } = parseArgs({
     allowPositionals: true,
     options: {
@@ -29,56 +28,55 @@ async function main() {
 
   let [targetDir] = positionals
 
-  const packages = execSync('yarn workspaces list --json', {
-    encoding: 'utf-8',
-  })
+  const choices = (await $`yarn workspaces list --json`).stdout
     .trim()
     .split('\n')
     .map(JSON.parse)
     .filter(({ name }) => name)
-    .flatMap(({ location }) => {
+    .flatMap(({ name, location }) => {
       const srcPath = path.join(rootDir, location, 'src')
       const distPath = path.join(rootDir, location, 'dist')
-      return [srcPath, distPath]
+      return [
+        { title: `${name} (src)`, value: srcPath },
+        { title: `${name} (dist)`, value: distPath },
+      ]
     })
 
   if (!targetDir) {
-    const res = await enquirer.prompt({
-      type: 'select',
-      name: 'targetDir',
-      message: 'Choose a target directory',
-      // Unfortunately we exceed the terminal's height with all our packages
-      // and enquirer doesn't handle it too well.
-      // But showing choices gives users an idea of how it works.
-      choices: [...packages.slice(0, 10), '...'],
-    })
+    const res = await prompts(
+      {
+        type: 'autocomplete',
+        name: 'targetDir',
+        message: 'Choose a package',
+        choices,
+        async suggest(input, choices) {
+          return Promise.resolve(
+            choices.filter(({ title }) => title.includes(input))
+          )
+        },
+      },
+      {
+        onCancel: () => {
+          process.exit(1)
+        },
+      }
+    )
 
     targetDir = res.targetDir
   }
 
   const { dir: packageDir, base } = path.parse(targetDir)
 
-  const localConfigPath = path.join(packageDir, DEPENDENCY_CRUISER_CONFIG_FILE)
   let configPath = globalConfigPath
+  const localConfigPath = path.join(packageDir, DEPENDENCY_CRUISER_CONFIG_FILE)
 
   if (fs.existsSync(localConfigPath)) {
     configPath = localConfigPath
   }
 
-  const depcruiseCommand = [
-    'depcruise',
-    targetDir,
-    '--config',
-    configPath,
-    '--output-type dot',
-    '--exclude "src/__tests__"',
-  ].join(' ')
-
   const outputPath = path.join(packageDir, `./dependencyGraph.${base}.svg`)
 
-  const dotCommand = ['dot', '-T svg', `-o ${outputPath}`].join(' ')
-
-  execSync(`${depcruiseCommand} | ${dotCommand}`)
+  await $`yarn depcruise ${targetDir} --config ${configPath} --output-type dot --exclude "src/__tests__" | dot -T svg -o ${outputPath}`
 
   console.log(
     `Wrote ${chalk.magenta(base)} dependency graph to ${chalk.magenta(
@@ -88,7 +86,7 @@ async function main() {
 
   if (values.open) {
     console.log(`Opening ${chalk.magenta(outputPath)}...`)
-    execSync(`open ${outputPath}`)
+    await $`open ${outputPath}`
   }
 }
 
