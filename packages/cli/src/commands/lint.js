@@ -1,6 +1,5 @@
-import fs from 'fs'
-
 import execa from 'execa'
+import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
