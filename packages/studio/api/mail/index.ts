@@ -220,64 +220,167 @@ export async function updateMailTemplates() {
   )
 }
 
-function extractParamAndValue(
-  component: any,
-  functionsAndVariables: any[]
+function generatePropsTemplate(param: swc.Param | swc.Pattern | null) {
+  // No param means no props template
+  if (!param) {
+    return null
+  }
+
+  // Get the pattern
+  const pattern = param.type === 'Parameter' ? param.pat : param
+  if (!pattern) {
+    return null
+  }
+
+  // Attempt to generate a props template from the pattern
+  let propsTemplate = 'Provide your props here as JSON'
+  try {
+    switch (pattern.type) {
+      case 'ObjectPattern':
+        propsTemplate = `{${pattern.properties
+          .map((p: any) => {
+            return `\n  "${p.key.value}": ?`
+          })
+          .join(',')}\n}`
+        break
+    }
+  } catch (_error) {
+    // ignore for now, we'll fallback to the generic props template
+  }
+
+  // Fallback to a generic props template if we can't figure out anything more helpful
+  return propsTemplate
+}
+
+function extractNameAndPropsTemplate(
+  component: swc.ModuleItem,
+  functionsAndVariables: swc.ModuleItem[]
 ): {
-  value: any
-  param: any | null
+  name: string
+  propsTemplate: string | null
 } {
   switch (component.type) {
     case 'ExportDeclaration':
+      // Arrow functions
       if (component.declaration.type === 'VariableDeclaration') {
+        // We only support the identifier type for now
+        const identifier = component.declaration.declarations[0].id
+        if (identifier.type !== 'Identifier') {
+          throw new Error('Unexpected identifier type: ' + identifier.type)
+        }
+        // We only support arrow and normal functions for now
+        const expression = component.declaration.declarations[0].init
+        if (!expression) {
+          throw new Error('Unexpected undefined expression')
+        }
+        if (
+          expression.type !== 'ArrowFunctionExpression' &&
+          expression.type !== 'FunctionExpression'
+        ) {
+          throw new Error('Unexpected expression type: ' + expression.type)
+        }
         return {
-          value: component.declaration.declarations[0].id.value,
-          param: component.declaration.declarations[0].init.params[0] ?? null,
+          name: identifier.value,
+          propsTemplate: generatePropsTemplate(expression.params[0] ?? null),
         }
       }
 
+      // Normal functions
       if (component.declaration.type === 'FunctionDeclaration') {
         return {
-          value: component.declaration.identifier.value,
-          param: component.declaration.params[0] ?? null,
+          name: component.declaration.identifier.value,
+          propsTemplate: generatePropsTemplate(
+            component.declaration.params[0] ?? null
+          ),
         }
       }
 
-      return { value: null, param: null }
+      // Throw for anything else
+      throw new Error(
+        'Unexpected declaration type: ' + component.declaration.type
+      )
 
     case 'ExportDefaultExpression':
+      // Arrow functions
       if (component.expression.type === 'ArrowFunctionExpression') {
         return {
-          value: null,
-          param: component.expression.params[0] ?? null,
+          name: 'default',
+          propsTemplate: generatePropsTemplate(
+            component.expression.params[0] ?? null
+          ),
         }
       }
 
+      // Variables defined elsewhere and then exported as default
       if (component.expression.type === 'Identifier') {
+        const expression = component.expression
         const variable = functionsAndVariables.find((v) => {
           return (
             (v.type === 'FunctionDeclaration' &&
-              v.identifier.value === component.expression.value) || // function
-            v.declarations[0].id.value === component.expression.value
+              v.identifier.value === expression.value) || // function
+            (v.type === 'VariableDeclaration' &&
+              v.declarations[0].type === 'VariableDeclarator' &&
+              v.declarations[0].id.type === 'Identifier' &&
+              v.declarations[0].id.value === expression.value) // variable
           )
         })
         if (variable) {
-          return variable.type === 'FunctionDeclaration'
-            ? {
-                value: variable.identifier.value + ' (default)',
-                param: variable.params[0] ?? null,
-              }
-            : {
-                value: variable.declarations[0].id.value + ' (default)',
-                param: variable.declarations[0].init.params[0] ?? null,
-              }
+          if (variable.type === 'FunctionDeclaration') {
+            return {
+              name: variable.identifier.value + ' (default)',
+              propsTemplate: generatePropsTemplate(variable.params[0] ?? null),
+            }
+          }
+          if (variable.type === 'VariableDeclaration') {
+            if (variable.declarations[0].id.type !== 'Identifier') {
+              throw new Error(
+                'Unexpected identifier type: ' +
+                  variable.declarations[0].id.type
+              )
+            }
+            if (
+              variable.declarations[0].init?.type !== 'FunctionExpression' &&
+              variable.declarations[0].init?.type !== 'ArrowFunctionExpression'
+            ) {
+              throw new Error(
+                'Unexpected init type: ' + variable.declarations[0].init?.type
+              )
+            }
+            return {
+              name: variable.declarations[0].id.value + ' (default)',
+              propsTemplate: generatePropsTemplate(
+                variable.declarations[0].init?.params[0] ?? null
+              ),
+            }
+          }
         }
       }
 
-      return { value: null, param: null }
+      // Throw for anything else
+      throw new Error(
+        'Unexpected expression type: ' + component.expression.type
+      )
+
+    case 'ExportDefaultDeclaration':
+      // Normal functions
+      if (component.decl.type === 'FunctionExpression') {
+        let name = 'default'
+        if (component.decl.identifier) {
+          name = component.decl.identifier.value
+        }
+        return {
+          name,
+          propsTemplate: generatePropsTemplate(
+            component.decl.params[0] ?? null
+          ),
+        }
+      }
+
+      // Throw for anything else
+      throw new Error('Unexpected declaration type: ' + component.decl.type)
 
     default:
-      return { value: null, param: null }
+      throw new Error('Unexpected component type: ' + component.type)
   }
 }
 
@@ -302,32 +405,21 @@ function getMailTemplateComponents(templateFilePath: string) {
     ].includes(node.type)
   })
   for (let i = 0; i < exportedComponents.length; i++) {
-    const { param, value } = extractParamAndValue(
-      exportedComponents[i],
-      functionsAndVariables
-    )
-
-    let propsTemplate = null
-    if (param) {
-      propsTemplate = 'Provide your props here as JSON'
-      try {
-        switch (param.pat.type) {
-          case 'ObjectPattern':
-            propsTemplate = `{${param.pat.properties
-              .map((p: any) => {
-                return `\n  "${p.key.value}": ?`
-              })
-              .join(',')}\n}`
-            break
-        }
-      } catch (_error) {
-        // ignore for now
-      }
+    try {
+      const { propsTemplate, name } = extractNameAndPropsTemplate(
+        exportedComponents[i],
+        functionsAndVariables
+      )
+      components.push({
+        name,
+        propsTemplate,
+      })
+    } catch (error) {
+      console.error(
+        `Error extracting template component name and props template from ${templateFilePath}:`
+      )
+      console.error(error)
     }
-    components.push({
-      name: value ?? 'default',
-      propsTemplate,
-    })
   }
 
   return components
