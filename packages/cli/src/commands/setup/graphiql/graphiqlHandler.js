@@ -1,7 +1,7 @@
-import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { registerApiSideBabelHook } from '@redwoodjs/babel-config'

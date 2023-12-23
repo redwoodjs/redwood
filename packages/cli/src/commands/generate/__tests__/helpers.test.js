@@ -1,5 +1,6 @@
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
 
 // Setup test mocks
 globalThis.__dirname = __dirname

@@ -1,8 +1,8 @@
-import fs from 'fs'
 import path from 'path'
 
 import boxen from 'boxen'
 import chalk from 'chalk'
+import fs from 'fs-extra'
 import latestVersion from 'latest-version'
 import semver from 'semver'
 
