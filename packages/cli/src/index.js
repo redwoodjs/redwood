@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import fs from 'fs'
 import path from 'path'
 
 import { trace, SpanStatusCode } from '@opentelemetry/api'
 import { config } from 'dotenv-defaults'
+import fs from 'fs-extra'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 

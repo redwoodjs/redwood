@@ -1,6 +1,6 @@
-import fs from 'fs'
 import path from 'path'
 
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import {
@@ -30,7 +30,7 @@ export const handler = async ({ force }) => {
     addWebPackages(['@sentry/react@7', '@sentry/browser@7']),
     addEnvVarTask(
       'SENTRY_DSN',
-      'https://XXXXXXX@XXXXXXX.ingest.sentry.io/XXXXXXX',
+      '',
       'https://docs.sentry.io/product/sentry-basics/dsn-explainer/'
     ),
     {

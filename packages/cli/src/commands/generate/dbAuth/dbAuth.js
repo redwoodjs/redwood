@@ -1,8 +1,8 @@
-import fs from 'fs'
 import path from 'path'
 
 import { camelCase } from 'camel-case'
 import Enquirer from 'enquirer'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 import { titleCase } from 'title-case'

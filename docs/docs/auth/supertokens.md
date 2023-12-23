@@ -11,6 +11,13 @@ yarn rw setup auth supertokens
 ```
 
 This installs all the packages, writes all the files, and makes all the code modifications you need.
+
+:::info
+
+You may have noticed that in `api/src/functions/auth.ts` there's an import from `'supertokens-node/framework/awsLambda'`. This is fine, even if your app isn't running in a serverless environment like AWS Lambda. In "serverful" environments, Redwood automatically handles the translation between Fastify's request and reply objects and functions' AWS Lambda signature.
+
+:::
+
 For a detailed explanation of all the api- and web-side changes that aren't exclusive to SuperTokens, see the top-level [Authentication](../authentication.md) doc.
 For now, let's focus on SuperTokens's side of things.
 

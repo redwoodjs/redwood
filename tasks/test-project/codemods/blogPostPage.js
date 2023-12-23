@@ -2,7 +2,7 @@ const body = `
 {
   return (
     <>
-      <MetaTags title={\`Post \${id}\`} description={\`Description \${id}\`} />
+      <Metadata title={\`Post \${id}\`} description={\`Description \${id}\`} og />
 
       <BlogPostCell id={id} />
     </>

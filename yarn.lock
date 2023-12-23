@@ -9545,6 +9545,7 @@ __metadata:
   dependencies:
     "@fastify/http-proxy": "npm:9.3.0"
     "@fastify/static": "npm:6.12.0"
+    "@fastify/url-data": "npm:5.4.0"
     "@redwoodjs/project-config": "npm:6.0.7"
     "@types/yargs-parser": "npm:21.0.3"
     chalk: "npm:4.1.2"
