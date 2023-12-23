@@ -139,7 +139,7 @@ Here's an example of how you'd use a private set:
   <Route path="/" page={HomePage} name="home" />
   <PrivateSet unauthenticated="home">
     <Route path="/admin" page={AdminPage} name="admin" />
-  </Set>
+  </PrivateSet>
 </Router>
 ```
 
