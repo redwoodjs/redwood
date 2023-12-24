@@ -23,11 +23,13 @@ async function main() {
   await within(async () => {
     cd(TMP_DIR)
 
-    if (!projectProvided) {
+    if (projectProvided) {
+      cd(CRWA_DIR)
+    } else {
       await $`yarn create redwood-app ${CRWA_DIR} -y`
+      cd(CRWA_DIR)
+      await $`yarn`
     }
-
-    cd(CRWA_DIR)
 
     data.version = (
       await $`jq -r '.devDependencies."@redwoodjs/core"' < package.json`
