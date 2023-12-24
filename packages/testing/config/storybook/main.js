@@ -76,7 +76,7 @@ const baseConfig = {
 
     let userPreviewPath = './preview.example.js'
 
-    if (fs.existsSync(redwoodProjectPaths.storybookPreviewConfig)) {
+    if (redwoodProjectPaths.storybookPreviewConfig) {
       userPreviewPath = redwoodProjectPaths.storybookPreviewConfig
     }
 

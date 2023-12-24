@@ -212,7 +212,7 @@ function mergeAST(baseAST, extAST, strategy = {}) {
 export function merge(base, extension, strategy) {
   function parseReact(code) {
     return parse(code, {
-      filename: 'merged.tsx',
+      filename: 'merged.tsx', // required to prevent babel error. The .tsx is relevant
       presets: ['@babel/preset-typescript'],
     })
   }
