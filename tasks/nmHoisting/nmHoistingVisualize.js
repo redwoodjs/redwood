@@ -322,7 +322,13 @@ const analyseWithComparison = () => {
         plugins: {
           tooltip: {
             callbacks: {
-              footer: undefined,
+              footer: ([data]) => {
+                let index = data.dataIndex
+                let type = data.dataset.label
+                return node_modulesDiff[sortedKeys[index]][
+                  type.toLowerCase()
+                ].join('\n')
+              },
             },
           },
         },
@@ -330,7 +336,7 @@ const analyseWithComparison = () => {
     })
   )
 
-  redwoodKeys = sortedKeys.filter(isRWDep)
+  const redwoodKeys = sortedKeys.filter(isRWDep)
 
   element = document.querySelector('#rw-bar-chart')
   element.style.maxHeight = `${redwoodKeys.length * 30}px`
@@ -398,8 +404,12 @@ const analyseWithComparison = () => {
         plugins: {
           tooltip: {
             callbacks: {
-              footer: (x) => {
-                console.log({ x })
+              footer: ([data]) => {
+                let index = data.dataIndex
+                let type = data.dataset.label
+                return node_modulesDiff[redwoodKeys[index]][
+                  type.toLowerCase()
+                ].join('\n')
               },
             },
           },
