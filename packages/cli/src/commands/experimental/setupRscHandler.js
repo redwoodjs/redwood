@@ -1,7 +1,6 @@
-import fs from 'fs'
 import path from 'path'
 
-import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { prettify } from '@redwoodjs/cli-helpers'
@@ -92,16 +91,44 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       {
-        title: 'Overwriting App.tsx...',
+        title: 'Adding Pages...',
         task: async () => {
-          const appTemplate = fs.readFileSync(
-            path.resolve(__dirname, 'templates', 'rsc', 'App.tsx.template'),
+          const homePageTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'HomePage.tsx.template'
+            ),
             'utf-8'
           )
-          const appPath = rwPaths.web.app
+          const homePagePath = path.join(
+            rwPaths.web.pages,
+            'HomePage',
+            'HomePage.tsx'
+          )
 
-          writeFile(appPath, appTemplate, {
-            overwriteExisting: true,
+          writeFile(homePagePath, homePageTemplate, {
+            overwriteExisting: force,
+          })
+
+          const aboutPageTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'AboutPage.tsx.template'
+            ),
+            'utf-8'
+          )
+          const aboutPagePath = path.join(
+            rwPaths.web.pages,
+            'AboutPage',
+            'AboutPage.tsx'
+          )
+
+          writeFile(aboutPagePath, aboutPageTemplate, {
+            overwriteExisting: force,
           })
         },
       },
@@ -112,7 +139,34 @@ export const handler = async ({ force, verbose }) => {
             path.resolve(__dirname, 'templates', 'rsc', 'Counter.tsx.template'),
             'utf-8'
           )
-          const counterPath = path.join(rwPaths.web.src, 'Counter.tsx')
+          const counterPath = path.join(
+            rwPaths.web.components,
+            'Counter',
+            'Counter.tsx'
+          )
+
+          writeFile(counterPath, counterTemplate, {
+            overwriteExisting: force,
+          })
+        },
+      },
+      {
+        title: 'Adding AboutCounter.tsx...',
+        task: async () => {
+          const counterTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'AboutCounter.tsx.template'
+            ),
+            'utf-8'
+          )
+          const counterPath = path.join(
+            rwPaths.web.components,
+            'Counter',
+            'AboutCounter.tsx'
+          )
 
           writeFile(counterPath, counterTemplate, {
             overwriteExisting: force,
@@ -125,19 +179,23 @@ export const handler = async ({ force, verbose }) => {
           const files = [
             {
               template: 'Counter.css.template',
-              path: 'Counter.css',
+              path: ['components', 'Counter', 'Counter.css'],
             },
             {
               template: 'Counter.module.css.template',
-              path: 'Counter.module.css',
+              path: ['components', 'Counter', 'Counter.module.css'],
             },
             {
-              template: 'App.css.template',
-              path: 'App.css',
+              template: 'HomePage.css.template',
+              path: ['pages', 'HomePage', 'HomePage.css'],
             },
             {
-              template: 'App.module.css.template',
-              path: 'App.module.css',
+              template: 'HomePage.module.css.template',
+              path: ['pages', 'HomePage', 'HomePage.module.css'],
+            },
+            {
+              template: 'AboutPage.css.template',
+              path: ['pages', 'AboutPage', 'AboutPage.css'],
             },
           ]
 
@@ -146,12 +204,50 @@ export const handler = async ({ force, verbose }) => {
               path.resolve(__dirname, 'templates', 'rsc', file.template),
               'utf-8'
             )
-            const filePath = path.join(rwPaths.web.src, file.path)
+            const filePath = path.join(rwPaths.web.src, ...file.path)
 
             writeFile(filePath, template, {
               overwriteExisting: force,
             })
           })
+        },
+      },
+      {
+        title: 'Adding Layout...',
+        task: async () => {
+          const layoutTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'NavigationLayout.tsx.template'
+            ),
+            'utf-8'
+          )
+          const layoutPath = path.join(
+            rwPaths.web.layouts,
+            'NavigationLayout',
+            'NavigationLayout.tsx'
+          )
+
+          writeFile(layoutPath, layoutTemplate, { overwriteExisting: force })
+
+          const cssTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'NavigationLayout.css.template'
+            ),
+            'utf-8'
+          )
+          const cssPath = path.join(
+            rwPaths.web.layouts,
+            'NavigationLayout',
+            'NavigationLayout.css'
+          )
+
+          writeFile(cssPath, cssTemplate, { overwriteExisting: force })
         },
       },
       {
@@ -170,7 +266,8 @@ export const handler = async ({ force, verbose }) => {
 
           indexHtml = indexHtml.replace(
             'href="/favicon.png" />',
-            'href="/favicon.png" />\n  <script type="module" src="entry.client.tsx"></script>'
+            'href="/favicon.png" />\n' +
+              '  <script type="module" src="entry.client.tsx"></script>'
           )
 
           writeFile(rwPaths.web.html, indexHtml, {
@@ -179,19 +276,31 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       {
-        title: 'Overwrite entry.client.tsx...',
+        title: 'Overwriting index.css...',
         task: async () => {
-          const entryClientTemplate = fs.readFileSync(
-            path.resolve(
-              __dirname,
-              'templates',
-              'rsc',
-              'entry.client.tsx.template'
-            ),
+          const template = fs.readFileSync(
+            path.resolve(__dirname, 'templates', 'rsc', 'index.css.template'),
+            'utf-8'
+          )
+          const filePath = path.join(rwPaths.web.src, 'index.css')
+
+          writeFile(filePath, template, {
+            overwriteExisting: true,
+          })
+        },
+      },
+      {
+        title: 'Overwrite App.tsx...',
+        task: async () => {
+          const appTemplate = fs.readFileSync(
+            path.resolve(__dirname, 'templates', 'rsc', 'App.tsx.template'),
             'utf-8'
           )
 
-          writeFile(rwPaths.web.entryClient, entryClientTemplate, {
+          const appPath =
+            rwPaths.web.app ?? path.join(rwPaths.web.src, 'App.tsx')
+
+          writeFile(appPath, appTemplate, {
             overwriteExisting: true,
           })
         },
@@ -217,43 +326,18 @@ export const handler = async ({ force, verbose }) => {
           )
         },
       },
+      // TODO (RSC): Remove this once we have a better way to handle routes.
+      // This is a total hack right now
       {
-        title: 'Patch vite',
+        title: 'Overwriting routes...',
         task: async () => {
-          const vitePatchTemplate = fs.readFileSync(
-            path.resolve(
-              __dirname,
-              'templates',
-              'rsc',
-              'vite-npm-4.4.9-e845c1bbf8.patch.template'
-            ),
+          const routesTemplate = fs.readFileSync(
+            path.resolve(__dirname, 'templates', 'rsc', 'Routes.tsx.template'),
             'utf-8'
           )
 
-          const yarnPatchDir = path.join(rwPaths.base, '.yarn', 'patches')
-          const vitePatchPath = path.join(
-            yarnPatchDir,
-            'vite-npm-4.4.9-e845c1bbf8.patch'
-          )
-          writeFile(vitePatchPath, vitePatchTemplate, {
-            overwriteExisting: force,
-          })
-
-          const packageJsonPath = path.join(rwPaths.base, 'package.json')
-          const packageJson = JSON.parse(
-            fs.readFileSync(packageJsonPath, 'utf-8')
-          )
-          packageJson.resolutions = packageJson.resolutions || {}
-          packageJson.resolutions['vite@4.4.9'] =
-            'patch:vite@npm%3A4.4.9#./.yarn/patches/vite-npm-4.4.9-e845c1bbf8.patch'
-          writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2), {
+          writeFile(rwPaths.web.routes, routesTemplate, {
             overwriteExisting: true,
-          })
-
-          await execa('yarn install', {
-            stdio: 'ignore',
-            shell: true,
-            cwd: rwPaths.base,
           })
         },
       },

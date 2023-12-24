@@ -28,10 +28,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: 🐈 Yarn install
         working-directory: ./.github/actions/detect-changes
@@ -53,10 +56,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: 🐈 Yarn install
         working-directory: ./tasks/check
@@ -94,10 +100,16 @@ jobs:
 
       - uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
@@ -119,7 +131,7 @@ jobs:
       - name: Get number of CPU cores
         if: always()
         id: cpu-cores
-        uses: SimenB/github-actions-cpu-cores@v1
+        uses: SimenB/github-actions-cpu-cores@v2
 
       - name: 🧪 Test
         run: yarn test-ci ${{ steps.cpu-cores.outputs.count }}
@@ -151,10 +163,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
@@ -244,10 +259,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
@@ -447,10 +468,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
@@ -503,10 +530,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache
@@ -597,10 +630,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: 🐈 Set up yarn cache
         uses: ./.github/actions/set-up-yarn-cache

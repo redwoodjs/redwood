@@ -524,10 +524,13 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
     // set fullName when signing up
     const pathAuthTs = `${OUTPUT_PATH}/api/src/functions/auth.ts`
     const contentAuthTs = fs.readFileSync(pathAuthTs).toString()
-    const resultsAuthTs = contentAuthTs.replace(
-      '// name: userAttributes.name',
-      "fullName: userAttributes['full-name']"
-    )
+    const resultsAuthTs = contentAuthTs
+      .replace('name: string', "'full-name': string")
+      .replace('userAttributes: _userAttributes', 'userAttributes')
+      .replace(
+        '// name: userAttributes.name',
+        "fullName: userAttributes['full-name']"
+      )
 
     fs.writeFileSync(pathAuthTs, resultsAuthTs)
   }
@@ -544,12 +547,12 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
           const createPage = createBuilder('yarn redwood g page')
           await createPage('double')
 
-          const doublePageContent = `import { MetaTags } from '@redwoodjs/web'
+          const doublePageContent = `import { Metadata } from '@redwoodjs/web'
 
 const DoublePage = () => {
   return (
     <>
-      <MetaTags title="Double" description="Double page" />
+      <Metadata title="Double" description="Double page" og />
 
       <h1 className="mb-1 mt-2 text-xl font-semibold">DoublePage</h1>
       <p>

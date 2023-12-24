@@ -75,6 +75,7 @@ interface AuthImpersonationConfig {
 }
 
 interface StudioConfig {
+  basePort: number
   inMemory: boolean
   graphiql?: GraphiQLStudioConfig
 }
@@ -89,6 +90,10 @@ export interface Config {
     tests: boolean
     stories: boolean
     nestScaffoldByModel: boolean
+  }
+  graphql: {
+    fragments: boolean
+    trustedDocuments: boolean
   }
   notifications: {
     versionUpdates: string[]
@@ -148,6 +153,7 @@ const DEFAULT_CONFIG: Config = {
     serverConfig: './api/server.config.js',
     debugPort: 18911,
   },
+  graphql: { fragments: false, trustedDocuments: false },
   browser: {
     open: false,
   },
@@ -166,6 +172,7 @@ const DEFAULT_CONFIG: Config = {
       apiSdk: undefined,
     },
     studio: {
+      basePort: 4318,
       inMemory: false,
       graphiql: {
         endpoint: 'graphql',

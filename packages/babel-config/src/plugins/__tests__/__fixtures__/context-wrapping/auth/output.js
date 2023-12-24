@@ -143,7 +143,6 @@ const __rw_handler = async (event, context) => {
       // the dbAuth session cookie:
       // Domain: 'example.com',
     },
-
     forgotPassword: forgotPasswordOptions,
     login: loginOptions,
     resetPassword: resetPasswordOptions,

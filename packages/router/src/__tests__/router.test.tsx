@@ -20,7 +20,7 @@ jest.mock('../util', () => {
 
 import React, { useEffect, useState } from 'react'
 
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom/jest-globals'
 import {
   act,
   configure,

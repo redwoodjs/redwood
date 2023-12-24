@@ -1,6 +1,6 @@
-import fs from 'fs'
 import path from 'path'
 
+import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
@@ -47,12 +47,14 @@ export const builder = async (yargs) => {
             './serveBothHandler.js'
           )
           await bothExperimentalServerFileHandler()
-        } else if (getConfig().experimental?.rsc?.enabled) {
-          const { bothRscServerHandler } = await import('./serveBothHandler.js')
-          await bothRscServerHandler(argv)
-        } else if (getConfig().experimental?.streamingSsr?.enabled) {
-          const { bothSsrServerHandler } = await import('./serveBothHandler.js')
-          await bothSsrServerHandler(argv)
+        } else if (
+          getConfig().experimental?.rsc?.enabled ||
+          getConfig().experimental?.streamingSsr?.enabled
+        ) {
+          const { bothSsrRscServerHandler } = await import(
+            './serveBothHandler.js'
+          )
+          await bothSsrRscServerHandler(argv)
         } else {
           // Wanted to use the new web-server package here, but can't because
           // of backwards compatibility reasons. With `bothServerHandler` both

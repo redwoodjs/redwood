@@ -16,7 +16,7 @@ import {
   getPathsFromTypeScriptConfig,
 } from './common'
 
-export const TARGETS_NODE = '18.16'
+export const TARGETS_NODE = '20.10'
 
 export const getApiSideBabelPresets = (
   { presetEnv } = { presetEnv: false }

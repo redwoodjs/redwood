@@ -8,6 +8,7 @@ import { SMTPServer } from 'smtp-server'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { getDatabase } from '../database'
+import { getStudioConfig } from '../lib/config'
 
 const swc = require('@swc/core')
 
@@ -38,8 +39,11 @@ export function startServer() {
       })
     },
   })
-  smtpServer.listen(4319, undefined, () => {
-    console.log('Studio SMTP Server listening on 4319')
+
+  const port = getStudioConfig().basePort + 1
+
+  smtpServer.listen(port, undefined, () => {
+    console.log('Studio SMTP Server listening on ' + port)
   })
 }
 
