@@ -31,6 +31,7 @@ export function builder(yargs) {
     .command(i18nCommand)
     .command(mailerCommand)
     .command(packageCommand)
+    .command(realtimeCommand)
     .command(tsconfigCommand)
     .command(uiCommand)
     .command(viteCommand)
