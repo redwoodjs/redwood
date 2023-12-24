@@ -21,11 +21,12 @@ export async function handler() {
 
     exitWithError(undefined, {
       message: [
-        "Error: Can't find module `@redwoojds/record`. Have you installed `@redwoodjs/record` in the api side?",
+        "Error: Can't find module `@redwoojds/record`. Have you added `@redwoodjs/record` to the api side?",
         '',
         '  yarn workspace api add @redwoodjs/record',
         '',
       ].join('\n'),
+      includeEpilogue: false,
     })
   }
 }
