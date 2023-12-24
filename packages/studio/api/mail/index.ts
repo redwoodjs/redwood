@@ -128,7 +128,7 @@ export async function updateMailTemplates() {
     (file) => {
       const correspondingDistEntry =
         file
-          .replace('api/src', 'api/dist')
+          .replace(path.join('api', 'src'), path.join('api', 'dist'))
           .substring(0, file.lastIndexOf('.') + 1) + '.js'
       return distFiles.includes(correspondingDistEntry)
     }

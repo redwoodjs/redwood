@@ -97,7 +97,7 @@ export async function getRenderedMail(
     // Import the template component
     const templateComponentDistPath =
       template.path
-        .replace('api/src', 'api/dist')
+        .replace(path.join('api', 'src'), path.join('api', 'dist'))
         .substring(0, template.path.lastIndexOf('.') + 1) + '.js'
 
     const templateImportPath = templateComponentDistPath.replace(
