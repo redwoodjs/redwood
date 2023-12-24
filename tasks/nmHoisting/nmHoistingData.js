@@ -971,7 +971,7 @@ rawData.push(`{
 }`)
 
 rawData.push(`{
-  "version": "6.5.99",
+  "version": "6.6.0",
   "node_modules": {
     "jest-runtime": {
       "strip-bom": "4.0.0"
@@ -983,7 +983,7 @@ rawData.push(`{
       "@types/jest": "29.5.11"
     },
     "@types/react-dom": {
-      "@types/react": "18.2.42"
+      "@types/react": "18.2.45"
     },
     "@types/serve-static": {
       "@types/mime": "3.0.4"
@@ -1011,6 +1011,8 @@ rawData.push(`{
       "is-binary-path": "1.0.1",
       "readdirp": "2.2.1",
       "fill-range": "4.0.0",
+      "binary-extensions": "1.13.1",
+      "to-regex-range": "2.1.1",
       "define-property": "2.0.2",
       "extend-shallow": "3.0.2",
       "micromatch": "3.1.10",
@@ -1113,7 +1115,7 @@ rawData.push(`{
       "define-property": "1.0.0"
     },
     "@eslint/eslintrc": {
-      "globals": "13.23.0"
+      "globals": "13.24.0"
     },
     "concurrently": {
       "supports-color": "8.1.1"
@@ -1152,11 +1154,11 @@ rawData.push(`{
       "pify": "3.0.0"
     },
     "@ardatan/relay-compiler": {
+      "wrap-ansi": "6.2.0",
       "yargs-parser": "18.1.3",
       "cliui": "6.0.0",
       "yargs": "15.4.1",
-      "camelcase": "5.3.1",
-      "slash": "4.0.0"
+      "camelcase": "5.3.1"
     },
     "copy-webpack-plugin": {
       "slash": "4.0.0",
@@ -1167,13 +1169,20 @@ rawData.push(`{
       "source-map": "0.7.4"
     },
     "@redwoodjs/cli": {
+      "ci-info": "4.0.0",
       "decamelize": "5.0.1"
     },
     "@redwoodjs/testing": {
       "@types/node": "18.18.9"
     },
     "@redwoodjs/api": {
+      "pino/test/fixtures/transport": "0.0.1",
+      "pino": "8.16.2",
       "@whatwg-node/fetch": "0.9.14"
+    },
+    "@redwoodjs/telemetry": {
+      "@whatwg-node/fetch": "0.9.14",
+      "ci-info": "4.0.0"
     },
     "@redwoodjs/prerender": {
       "@whatwg-node/fetch": "0.9.14"
@@ -1182,6 +1191,8 @@ rawData.push(`{
       "lru-cache": "7.18.3"
     },
     "@redwoodjs/graphql-server": {
+      "@graphql-tools/utils": "10.0.11",
+      "@graphql-tools/utils/cjs": "null",
       "@graphql-tools/schema": "10.0.2",
       "@graphql-tools/schema/cjs": "null"
     },
@@ -1237,6 +1248,7 @@ rawData.push(`{
       "json-buffer": "3.0.1"
     },
     "split-string": {
+      "is-extendable": "1.0.1",
       "extend-shallow": "3.0.2"
     },
     "ansi-diff-stream": {
@@ -1341,6 +1353,9 @@ rawData.push(`{
     },
     "supports-color": {
       "has-flag": "3.0.0"
+    },
+    "webpack-cli": {
+      "commander": "10.0.1"
     },
     "istanbul-lib-report": {
       "make-dir": "4.0.0",
@@ -1455,6 +1470,8 @@ rawData.push(`{
       "ts-morph": "18.0.0",
       "@ts-morph/common": "0.19.0",
       "code-block-writer/esm": "null",
+      "code-block-writer/script": "null",
+      "code-block-writer": "12.0.0",
       "minimatch/dist/mjs": "null",
       "minimatch/dist/cjs": "null",
       "minimatch": "7.4.6",
@@ -1645,7 +1662,7 @@ rawData.push(`{
       "rimraf": "2.7.1"
     },
     "eslint": {
-      "globals": "13.23.0",
+      "globals": "13.24.0",
       "escape-string-regexp": "4.0.0",
       "eslint-scope": "7.2.2",
       "p-locate": "5.0.0",
@@ -1832,7 +1849,7 @@ rawData.push(`{
       "mkdirp": "1.0.4"
     },
     "pino-abstract-transport": {
-      "readable-stream": "4.4.2"
+      "readable-stream": "4.5.1"
     },
     "portfinder": {
       "async": "2.6.4",
