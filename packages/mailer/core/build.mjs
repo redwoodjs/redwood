@@ -15,7 +15,7 @@ const result = await esbuild.build({
 
   format: 'cjs',
   platform: 'node',
-  target: ['node18'],
+  target: ['node20'],
 
   logLevel: 'info',
 

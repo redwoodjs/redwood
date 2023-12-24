@@ -599,7 +599,7 @@ First you'll need to import the `WebAuthnClient` and give it to the `<AuthProvid
 ```jsx title="web/src/App.js"
 import { AuthProvider } from '@redwoodjs/auth'
 // highlight-start
-import WebAuthnClient from '@redwoodjs/auth/webAuthn'
+import WebAuthnClient from '@redwoodjs/auth-dbauth-web/webAuthn'
 // highlight-end
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'

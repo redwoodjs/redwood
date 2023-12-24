@@ -68,22 +68,32 @@ const createRedwoodJSApp = ({ typescript, bundler }) => {
       }
     )
 
-    // Add prisma resolutions
+    // Add package resolutions
+    //
+    // This is needed because the test project uses the current stable version
+    // of Redwood when installing, but then when we use rwfw to link, newer
+    // versions of packages might be installed causing conflicts. Setting
+    // resolutions prevents this.
+    // Note that this isn't limited to any specific versions. It's always
+    // going to be a potential issue when package versions differ between
+    // stable and canary.
+    // See https://github.com/redwoodjs/redwood/pull/6772 for more info.
+
     const packageJSONPath = path.join(REDWOOD_PROJECT_DIRECTORY, 'package.json')
     const packageJSON = fs.readJSONSync(packageJSONPath)
 
-    const getVersionFrmRwPkg = (dep, pkg) => {
+    const getVersionFromRwPackage = (dep, pkg) => {
       return fs.readJSONSync(
         path.join(REDWOODJS_FRAMEWORK_PATH, 'packages', pkg, 'package.json')
       ).dependencies[dep]
     }
 
     packageJSON.resolutions = {
-      prisma: getVersionFrmRwPkg('prisma', 'cli'),
-      '@prisma/client': getVersionFrmRwPkg('@prisma/client', 'api'),
-      '@prisma/internals': getVersionFrmRwPkg('@prisma/internals', 'cli'),
-      'graphql-yoga': getVersionFrmRwPkg('graphql-yoga', 'graphql-server'),
-      graphql: getVersionFrmRwPkg('graphql', 'graphql-server'),
+      prisma: getVersionFromRwPackage('prisma', 'cli'),
+      '@prisma/client': getVersionFromRwPackage('@prisma/client', 'api'),
+      '@prisma/internals': getVersionFromRwPackage('@prisma/internals', 'cli'),
+      'graphql-yoga': getVersionFromRwPackage('graphql-yoga', 'graphql-server'),
+      graphql: getVersionFromRwPackage('graphql', 'graphql-server'),
     }
 
     fs.writeFileSync(packageJSONPath, JSON.stringify(packageJSON, null, 2))
