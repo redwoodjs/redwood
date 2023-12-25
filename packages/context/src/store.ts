@@ -2,14 +2,14 @@
 
 import { AsyncLocalStorage } from 'async_hooks'
 
-import type { GlobalContext } from './globalContext'
+import type { GlobalContext } from './context'
 
 let CONTEXT_STORAGE: AsyncLocalStorage<Map<string, GlobalContext>>
 
 /**
- * This returns a AsyncLocalStorage instance, not the actual store
- *
- * @deprecated This function will be available only from the `@redwoodjs/context` package in a future release.
+ * This returns a AsyncLocalStorage instance, not the actual store.
+ * Should not be used by Redwood apps directly. The framework handles
+ * this.
  */
 export const getAsyncStoreInstance = () => {
   if (!CONTEXT_STORAGE) {
