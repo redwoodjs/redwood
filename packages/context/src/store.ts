@@ -7,7 +7,9 @@ import type { GlobalContext } from './context'
 let CONTEXT_STORAGE: AsyncLocalStorage<Map<string, GlobalContext>>
 
 /**
- * This returns a AsyncLocalStorage instance, not the actual store
+ * This returns a AsyncLocalStorage instance, not the actual store.
+ * Should not be used by Redwood apps directly. The framework handles
+ * this.
  */
 export const getAsyncStoreInstance = () => {
   if (!CONTEXT_STORAGE) {
