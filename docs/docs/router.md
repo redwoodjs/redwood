@@ -130,7 +130,7 @@ becomes...
 
 ### `PrivateSet`
 
-A `PrivateSet` makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the PrivateSet, they'll be redirected to the Route passed as the PrivateSet's `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
+A `PrivateSet` makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the `PrivateSet`, they'll be redirected to the Route passed as the `PrivateSet`'s `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
 
 Here's an example of how you'd use a private set:
 
@@ -559,7 +559,7 @@ When the lazy-loaded page is loading, `PageLoadingContext.Consumer` will pass `{
 
 Let's say you have a dashboard area on your Redwood app, which can only be accessed after logging in. When Redwood Router renders your private page, it will first fetch the user's details, and only render the page if it determines the user is indeed logged in.
 
-In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your private `<Route>`, or the `<PrivateSet>` component:
+In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your private `<Route>` or `<PrivateSet>` component:
 
 ```jsx
 //Routes.js
