@@ -123,12 +123,7 @@ describe('paths', () => {
             'config',
             'storybook.config.js'
           ),
-          storybookPreviewConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'storybook.preview.js'
-          ),
+          storybookPreviewConfig: null,
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -363,12 +358,7 @@ describe('paths', () => {
             'config',
             'storybook.config.js'
           ),
-          storybookPreviewConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'storybook.preview.js'
-          ),
+          storybookPreviewConfig: null,
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -649,12 +639,7 @@ describe('paths', () => {
             'config',
             'storybook.config.js'
           ),
-          storybookPreviewConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'storybook.preview.js'
-          ),
+          storybookPreviewConfig: null,
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -892,12 +877,7 @@ describe('paths', () => {
             'config',
             'storybook.config.js'
           ),
-          storybookPreviewConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'storybook.preview.js'
-          ),
+          storybookPreviewConfig: null,
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',

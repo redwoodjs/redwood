@@ -171,7 +171,7 @@ export const handler = async ({ force }) => {
         skip: () => fileIncludes(rwPaths.web.storybookConfig, 'withI18n'),
         task: async () =>
           extendStorybookConfiguration(
-            path.join(__dirname, 'templates', 'storybook.preview.js.template')
+            path.join(__dirname, 'templates', 'storybook.preview.tsx.template')
           ),
       },
       {

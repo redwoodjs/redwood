@@ -42,7 +42,7 @@ export interface WebPaths {
   entryClient: string | null
   postcss: string
   storybookConfig: string
-  storybookPreviewConfig: string
+  storybookPreviewConfig: string | null
   storybookManagerConfig: string
   dist: string
   types: string
@@ -105,9 +105,8 @@ const PATH_WEB_DIR_ENTRY_CLIENT = 'web/src/entry.client' // .jsx,.tsx
 
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
-const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview.js'
+const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview' // .js, .tsx
 const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
-
 const PATH_WEB_DIR_DIST = 'web/dist'
 
 /**
@@ -205,9 +204,8 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         BASE_DIR,
         PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG
       ),
-      storybookPreviewConfig: path.join(
-        BASE_DIR,
-        PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW
+      storybookPreviewConfig: resolveFile(
+        path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW)
       ),
       storybookManagerConfig: path.join(
         BASE_DIR,
