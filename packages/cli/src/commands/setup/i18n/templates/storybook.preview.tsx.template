@@ -1,9 +1,11 @@
 import * as React from 'react'
 import { I18nextProvider } from 'react-i18next'
+import type { GlobalTypes } from '@storybook/csf'
+import type { StoryFn, StoryContext } from '@storybook/react'
 import i18n from 'web/src/i18n'
 
 /** @type { import("@storybook/csf").GlobalTypes } */
-export const globalTypes = {
+export const globalTypes: GlobalTypes = {
   locale: {
     name: 'Locale',
     description: 'Internationalization locale',
@@ -23,12 +25,10 @@ export const globalTypes = {
  * https://github.com/storybookjs/addon-kit/blob/main/src/withGlobals.ts
  * Unfortunately that will make eslint complain, so we have to disable it when
  * using a hook below
- *
- * @param { import("@storybook/addons").StoryFn} StoryFn
- * @param { import("@storybook/addons").StoryContext} context
- * @returns a story wrapped in an I18nextProvider
+ * @param { import("@storybook/react").StoryFn} StoryFn
+ * @param { import("@storybook/react").StoryContext} context
  */
-const withI18n = (StoryFn, context) => {
+const withI18n = (StoryFn: StoryFn, context: StoryContext) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   React.useEffect(() => {
     i18n.changeLanguage(context.globals.locale)
