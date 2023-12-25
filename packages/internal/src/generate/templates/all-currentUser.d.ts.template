@@ -17,7 +17,7 @@ type UndefinedRoles = {
 
 type Overwrite<T, U> = Omit<T, keyof U> & U
 
-declare module '@redwoodjs/graphql-server' {
+declare module '@redwoodjs/context' {
   interface GlobalContext {
     currentUser?: Overwrite<UndefinedRoles, InferredCurrentUser>
   }

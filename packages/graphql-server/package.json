@@ -35,6 +35,7 @@
     "@graphql-yoga/plugin-persisted-operations": "2.0.5",
     "@opentelemetry/api": "1.7.0",
     "@redwoodjs/api": "6.0.7",
+    "@redwoodjs/context": "6.0.7",
     "core-js": "3.34.0",
     "graphql": "16.8.1",
     "graphql-scalars": "1.22.4",

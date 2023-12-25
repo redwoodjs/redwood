@@ -21,6 +21,7 @@
     "@fastify/http-proxy": "9.3.0",
     "@fastify/static": "6.12.0",
     "@fastify/url-data": "5.4.0",
+    "@redwoodjs/context": "6.0.7",
     "@redwoodjs/graphql-server": "6.0.7",
     "@redwoodjs/project-config": "6.0.7",
     "ansi-colors": "4.1.3",
