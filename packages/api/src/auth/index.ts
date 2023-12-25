@@ -4,7 +4,7 @@ import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 // @ts-expect-error Types are incorrect in 0.6, but will be fixed in the next version probably
 import { parse as parseCookie } from 'cookie'
 
-import { isFetchApiRequest } from '../transforms'
+import { getEventHeader } from '../event'
 
 import type { Decoded } from './parseJWT'
 export type { Decoded }
@@ -19,9 +19,7 @@ export const getAuthProviderHeader = (
     (key) => key.toLowerCase() === AUTH_PROVIDER_HEADER
   )
   if (authProviderKey) {
-    return isFetchApiRequest(event)
-      ? event?.headers.get(authProviderKey)
-      : event?.headers[authProviderKey]
+    return getEventHeader(event, authProviderKey)
   }
   return undefined
 }
@@ -34,9 +32,7 @@ export interface AuthorizationHeader {
 export const parseAuthorizationCookie = (
   event: APIGatewayProxyEvent | Request
 ) => {
-  const cookie = isFetchApiRequest(event)
-    ? event.headers.get('Cookie')
-    : event.headers?.Cookie || event.headers.cookie
+  const cookie = getEventHeader(event, 'cookie')
 
   // Unauthenticated request
   if (!cookie) {
@@ -56,11 +52,9 @@ export const parseAuthorizationCookie = (
  * Split the `Authorization` header into a schema and token part.
  */
 export const parseAuthorizationHeader = (
-  event: APIGatewayProxyEvent
+  event: APIGatewayProxyEvent | Request
 ): AuthorizationHeader => {
-  const parts = (
-    event.headers?.authorization || event.headers?.Authorization
-  )?.split(' ')
+  const parts = getEventHeader(event, 'authorization')?.split(' ')
   if (parts?.length !== 2) {
     throw new Error('The `Authorization` header is not valid.')
   }

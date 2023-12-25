@@ -2,7 +2,7 @@ import crypto from 'node:crypto'
 
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 
-import { isFetchApiRequest } from '@redwoodjs/api'
+import { getEventHeader } from '@redwoodjs/api'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 
 import * as DbAuthError from './errors'
@@ -21,18 +21,6 @@ const DEFAULT_SCRYPT_OPTIONS: ScryptOptions = {
   cost: 2 ** 14,
   blockSize: 8,
   parallelization: 1,
-}
-
-// Extracts the header from an event, handling lower and upper case header names.
-const eventGetHeader = (
-  event: APIGatewayProxyEvent | Request,
-  headerName: string
-) => {
-  if (isFetchApiRequest(event)) {
-    return event.headers.get(headerName)
-  }
-
-  return event.headers[headerName] || event.headers[headerName.toLowerCase()]
 }
 
 const getPort = () => {
@@ -81,13 +69,13 @@ export const extractCookie = (event: APIGatewayProxyEvent | Request) => {
   // this feels a bit off, but also requires the parsing to become async
 
   // return eventGraphiQLHeadersCookie(event) || eventHeadersCookie(event)
-  return eventGetHeader(event, 'Cookie')
+  return getEventHeader(event, 'Cookie')
 }
 
 function extractEncryptedSessionFromHeader(
   event: APIGatewayProxyEvent | Request
 ) {
-  return eventGetHeader(event, 'Authorization')?.split(' ')[1]
+  return getEventHeader(event, 'Authorization')?.split(' ')[1]
 }
 
 // whether this encrypted session was made with the old CryptoJS algorithm

@@ -2801,11 +2801,15 @@ describe('dbAuth', () => {
 
     it('throw an error if user is not found', async () => {
       const data = { id: 999999999999 }
-      req = {
-        headers: {
-          cookie: encryptToCookie(JSON.stringify(data) + ';' + 'token'),
-        },
+      const headers = {
+        cookie: encryptToCookie(JSON.stringify(data) + ';' + 'token'),
       }
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers,
+      })
+
       const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
@@ -2819,13 +2823,17 @@ describe('dbAuth', () => {
 
     it('throws a generic error for an invalid client', async () => {
       const dbUser = await createDbUser()
-      req = {
-        headers: {
-          cookie: encryptToCookie(
-            JSON.stringify({ id: dbUser.id }) + ';' + 'token'
-          ),
-        },
+      const headers = {
+        cookie: encryptToCookie(
+          JSON.stringify({ id: dbUser.id }) + ';' + 'token'
+        ),
       }
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers,
+      })
+
       // invalid db client
       const dbAuth = new DbAuthHandler(req, context, options)
       dbAuth.dbAccessor = undefined
@@ -2841,13 +2849,17 @@ describe('dbAuth', () => {
 
     it('returns the user whos id is in session', async () => {
       const dbUser = await createDbUser()
-      req = {
-        headers: {
-          cookie: encryptToCookie(
-            JSON.stringify({ id: dbUser.id }) + ';' + 'token'
-          ),
-        },
+      const headers = {
+        cookie: encryptToCookie(
+          JSON.stringify({ id: dbUser.id }) + ';' + 'token'
+        ),
       }
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers,
+      })
+
       const dbAuth = new DbAuthHandler(req, context, options)
       const user = await dbAuth._getCurrentUser()
 
