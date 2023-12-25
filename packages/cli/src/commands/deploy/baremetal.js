@@ -1,8 +1,8 @@
-import fs from 'fs'
 import path from 'path'
 
 import toml from '@iarna/toml'
 import boxen from 'boxen'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import { env as envInterpolation } from 'string-env-interpolation'
 import terminalLink from 'terminal-link'
