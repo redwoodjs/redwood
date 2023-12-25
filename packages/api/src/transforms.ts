@@ -1,4 +1,4 @@
-import { Headers, Request as PonyFillRequest } from '@whatwg-node/fetch'
+import { Headers } from '@whatwg-node/fetch'
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 
 // This is part of the request, dreived either from a LambdaEvent or FetchAPI Request
@@ -50,14 +50,13 @@ export const parseFetchEventBody = async (event: Request) => {
 export const isFetchApiRequest = (
   event: Request | APIGatewayProxyEvent
 ): event is Request => {
-  if (
-    event.constructor.name === 'Request' ||
-    event.constructor.name === PonyFillRequest.name
-  ) {
-    return true
+  // Arda has suggested it's better to check for a lambda event than a fetch event
+  // as there are some edgecases with constructor name in PonyfillRequest
+  if ('httpMethod' in event || 'resource' in event) {
+    return false
   }
 
-  return false
+  return true
 }
 
 function getQueryStringParams(reqUrl: string) {
