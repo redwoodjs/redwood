@@ -246,8 +246,6 @@ More granular match, `page` key only and `tab=tutorial`
 activeMatchParams={[{ tab: 'tutorial' }, 'page' ]}
 ```
 
-### `useMatch`
-
 You can `useMatch` to create your own component with active styles.
 
 > `NavLink` uses it internally!
@@ -480,12 +478,12 @@ Example output:
 
 This is a convenience hook for when you only want the path for a single route.
 ```jsx
-const aboutPath = useRoutePath('about')
+const aboutPath = useRoutePath('about') // returns "/about"
 ```
 is the same as
 ```jsx
 const routePaths = useRoutePaths()
-const aboutPath = routePaths.about
+const aboutPath = routePaths.about // Also returns "/about"
 ```
 
 ## Navigation
