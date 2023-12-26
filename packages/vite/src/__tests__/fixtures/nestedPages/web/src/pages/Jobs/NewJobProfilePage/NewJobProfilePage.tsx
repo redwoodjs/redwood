@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 import { navigate, routes } from '@redwoodjs/router'
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import JobProfileForm from 'src/components/Jobs/JobProfileForm'
@@ -38,7 +38,7 @@ const NewJobProfilePage = () => {
 
   return (
     <>
-      <MetaTags
+      <Metadata
         title="Post a Job"
         description="Looking to hire RedwoodJS developers? Post on the Redwood job board!"
       />

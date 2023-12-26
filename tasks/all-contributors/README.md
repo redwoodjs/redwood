@@ -33,7 +33,7 @@ In general, this is a three-part process:
 > **NOTE:**
 > Do not add [bot] accounts to the files.
 >
-> Also, members of the Core Team are manually added to the #core-team section. To avoid duplication, do not add the following profiles to the files below:
+> Also, members of the Core Team are manually added to the relevant section of #contributors. To avoid duplication, do not add the following profiles to .all-contributorsrc:
 > - peterp
 > - thedavidprice
 > - mojombo

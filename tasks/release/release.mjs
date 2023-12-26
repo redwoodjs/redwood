@@ -139,17 +139,8 @@ async function doChecks() {
   if (nodeVersion.startsWith('v20')) {
     throw new Error(
       [
-        'The framework is currently built for v18; running QA with v20 may cause issues.',
-        'Switch to v18.18.2.',
-      ].join('\n')
-    )
-  }
-
-  if (nodeVersion.startsWith('v18.19')) {
-    throw new Error(
-      [
-        'Node.js v18.19 currently has a breaking change that makes one of our tests fail.',
-        'Switch to v18.18.2.',
+        'The framework is currently built for Node v18; running QA with v20 may cause issues.',
+        'Please switch to Node v18.',
       ].join('\n')
     )
   }
@@ -366,7 +357,7 @@ async function releaseMajorOrMinor() {
       await question(
         `Ok to checkout a new release branch, ${chalk.magenta(
           releaseBranch
-        )}, from the ${chalk.magenta(checkoutFromBranch)}? [Y/n] > `
+        )}, from the ${chalk.magenta(checkoutFromBranch)} branch? [Y/n] > `
       )
     )
     await $`git checkout -b ${releaseBranch} ${checkoutFromBranch}`

@@ -1,7 +1,8 @@
 jest.mock('fs')
 
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
 
 const INITIAL_FS = {
   file_a: 'content_a',
