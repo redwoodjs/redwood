@@ -1,8 +1,8 @@
 import path from 'path'
 
+import { prebuildWebFile } from '@redwoodjs/babel-config'
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
-import { prebuildWebFile } from '../build/babel/web'
 import { prebuildWebFiles, cleanWebBuild } from '../build/web'
 import { findWebFiles } from '../files'
 
@@ -35,6 +35,10 @@ test('web files are prebuilt (no prerender)', async () => {
     [
       ".redwood/prebuild/web/src/App.js",
       ".redwood/prebuild/web/src/Routes.js",
+      ".redwood/prebuild/web/src/graphql/fragment-masking.js",
+      ".redwood/prebuild/web/src/graphql/gql.js",
+      ".redwood/prebuild/web/src/graphql/graphql.js",
+      ".redwood/prebuild/web/src/graphql/index.js",
       ".redwood/prebuild/web/src/components/AddTodo/AddTodo.js",
       ".redwood/prebuild/web/src/components/AddTodoControl/AddTodoControl.js",
       ".redwood/prebuild/web/src/components/Check/Check.js",

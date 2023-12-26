@@ -4,7 +4,7 @@ import AboutPage from './AboutPage'
 
 const meta: Meta<typeof AboutPage> = {
   component: AboutPage,
-};
+}
 
 export default meta
 

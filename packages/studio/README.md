@@ -161,6 +161,25 @@ Some ideas to improve the Studio are:
   * Prisma version
   * RedwoodJS Version
 
+## Troubleshooting
+If you have problems relating to the `@swc` packages then please try adding the following configuration to your `.yarnrc.yml`
+
+```yml
+supportedArchitectures:
+  os:
+    - darwin
+    - linux
+    - win32
+  cpu:
+    - arm64
+    - arm
+    - x64
+    - ia32
+  libc:
+    - glibc
+    - musl
+```
+
 ## Contributing
 
 We welcome your [feedback](https://community.redwoodjs.com/t/redwood-studio-experimental/4771) and also your contributions to improve Studio.

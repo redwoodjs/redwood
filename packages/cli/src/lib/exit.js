@@ -1,4 +1,4 @@
-import boxen from 'boxen'
+import chalk from 'chalk'
 import terminalLink from 'terminal-link'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -36,25 +36,25 @@ export function exitWithError(
   // the error in telemetry if needed and if the user chooses to share it
   const errorReferenceCode = uuidv4()
 
-  // Generate and print a nice message to the user
-  const content = [
-    message,
-    includeEpilogue && `\n${'-'.repeat(process.stderr.columns - 8)}\n`,
-    includeEpilogue && epilogue,
-    includeReferenceCode &&
-      ` - Here's your unique error reference to quote: '${errorReferenceCode}'`,
-  ]
-    .filter(Boolean)
-    .join('\n')
+  const line = chalk.red('-'.repeat(process.stderr.columns))
 
-  console.error(
-    boxen(content, {
-      padding: 1,
-      borderColor: 'red',
-      title: `Error`,
-      titleAlignment: 'left',
-    })
-  )
+  // Generate and print a nice message to the user
+  const content = !includeEpilogue
+    ? message
+    : [
+        '',
+        line,
+        message,
+        `\n${line}`,
+        epilogue,
+        includeReferenceCode &&
+          ` - Here's your unique error reference to quote: '${errorReferenceCode}'`,
+        line,
+      ]
+        .filter(Boolean)
+        .join('\n')
+
+  console.error(content)
 
   // Record the error in telemetry
   recordTelemetryError(error ?? new Error(message))

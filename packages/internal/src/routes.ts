@@ -67,18 +67,23 @@ export function warningForDuplicateRoutes() {
   return message.trimEnd()
 }
 
-export interface RouteSpec {
+export interface RWRouteManifestItem {
   name: string
-  path: string
+  pathDefinition: string
+  matchRegexString: string | null
+  routeHooks: string | null
+  bundle: string | null
   hasParams: boolean
+  redirect: { to: string; permanent: boolean } | null
+  renderMode: 'html' | 'stream'
+  // Probably want isNotFound here, so we can attach a separate 404 handler
+}
+
+export interface RouteSpec extends RWRouteManifestItem {
   id: string
   isNotFound: boolean
   filePath: string | undefined
   relativeFilePath: string | undefined
-  routeHooks: string | undefined | null
-  matchRegexString: string | null
-  redirect: { to: string; permanent: boolean } | null
-  renderMode: 'stream' | 'html'
 }
 
 export const getProjectRoutes = (): RouteSpec[] => {
@@ -92,7 +97,7 @@ export const getProjectRoutes = (): RouteSpec[] => {
 
     return {
       name: route.isNotFound ? 'NotFoundPage' : route.name,
-      path: route.isNotFound ? 'notfound' : route.path,
+      pathDefinition: route.isNotFound ? 'notfound' : route.path,
       hasParams: route.hasParameters,
       id: route.id,
       isNotFound: route.isNotFound,

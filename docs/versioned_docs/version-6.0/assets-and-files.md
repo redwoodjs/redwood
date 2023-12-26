@@ -145,24 +145,36 @@ export const CarIcon = (props: SVGProps) => {
 If you needed to convert a whole library of SVGs into stylable (or animatable!) components, one easy way would be to use the [SVGR cli](https://react-svgr.com/docs/cli/)
 
 
-
 ## Custom fonts
 There are many different ways to peel this potato – it's all a search away – but if you're using the CSS `@font-face` rule, we have a quick tip for you:
 
 1. Place your fonts in the public folder, so it gets carried across
-2. In your CSS, use relative paths to point to the font file, for example:
+2. In your CSS, use absolute paths - the public folder being your root - to point to the font file (same as the [Vite docs](https://vitejs.dev/guide/assets.html#the-public-directory)), for example:
+
+```shell
+web/
+├── src
+  ├── App.tsx
+  ├── entry.client.tsx
+  ├── index.css
+  ├── ...
+├── public
+│   ├── favicon.png
+│   ├── fonts
+// highlight-next-line
+│   │   └── RedwoodNeue.woff2
+```
 
 ```css
-/* in some CSS file you are loading in your project */
+/* in e.g. index.css */
 @font-face {
   font-family: 'Redwood Neue';
   /* 👇 it's a relative path */
   // highlight-next-line
-  src: url('../../public/fonts/RedwoodNeue.woff2')
+  src: url('/fonts/RedwoodNeue.woff2')
     format('woff2');
   font-weight: 300;
   font-style: italic;
   ascent-override: 97%;
 }
 ```
-This will make sure that the fonts are being loaded correctly across your dev server and storybook – where there are subtle differences in how paths are processed.

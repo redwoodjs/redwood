@@ -239,12 +239,6 @@ export const schema = gql`
     message: String!
   }
 
-  input UpdateContactInput {
-    name: String
-    email: String
-    message: String
-  }
-
   // highlight-start
   type Mutation {
     createContact(input: CreateContactInput!): Contact! @skipAuth
@@ -1801,7 +1795,7 @@ const [create, { loading, error }] = useMutation<
 </TabItem>
 </Tabs>
 
-:::caution
+:::warning
 
 You can put the email validation back into the `<TextField>` now, but you should leave the server validation in place, just in case.
 

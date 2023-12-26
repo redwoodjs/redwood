@@ -1,6 +1,6 @@
 // Pass props to your component by passing an `args` object to your story
 //
-// ```jsx
+// ```tsx
 // export const Primary: Story = {
 //  args: {
 //    propName: propValue
@@ -16,6 +16,7 @@ import Author from './Author'
 
 const meta: Meta<typeof Author> = {
   component: Author,
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -30,5 +31,5 @@ const author = {
 export const Primary: Story = {
   render: () => {
     return <Author author={author} />
-  }
+  },
 }

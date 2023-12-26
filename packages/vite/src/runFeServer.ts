@@ -2,27 +2,26 @@
 // well in naming with @redwoodjs/api-server)
 // Only things used during dev can be in @redwoodjs/vite. Everything else has
 // to go in fe-server
+// UPDATE: We decided to name the package @redwoodjs/web-server instead of
+// fe-server. And it's already created, but this hasn't been moved over yet.
 
-import fs from 'fs/promises'
-import path from 'path'
+import path from 'node:path'
+import url from 'node:url'
 
+import { createServerAdapter } from '@whatwg-node/server'
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
-import isbot from 'isbot'
-import { renderToPipeableStream } from 'react-dom/server'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
-import { matchPath } from '@redwoodjs/router'
-import type { TagDescriptor } from '@redwoodjs/web'
 
-import { loadAndRunRouteHooks } from './triggerRouteHooks'
-import { RWRouteManifest } from './types'
-import { stripQueryStringAndHashFromPath } from './utils'
-
-globalThis.RWJS_ENV = {}
+import { createRscRequestHandler } from './rsc/rscRequestHandler'
+import { setClientEntries } from './rsc/rscWorkerCommunication'
+import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
+import { registerFwGlobals } from './streaming/registerGlobals'
+import type { RWRouteManifest } from './types'
 
 /**
  * TODO (STREAMING)
@@ -40,38 +39,45 @@ loadDotEnv({
   defaults: path.join(getPaths().base, '.env.defaults'),
   multiline: true,
 })
-//------------------------------------------------
-
-const checkUaForSeoCrawler = isbot.spawn()
-checkUaForSeoCrawler.exclude(['chrome-lighthouse'])
+// ------------------------------------------------
 
 export async function runFeServer() {
   const app = express()
   const rwPaths = getPaths()
   const rwConfig = getConfig()
 
-  // TODO When https://github.com/tc39/proposal-import-attributes and
-  // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
-  // should try to do this instead:
-  // const routeManifest: RWRouteManifest = await import(
-  //   rwPaths.web.routeManifest, { with: { type: 'json' } }
-  // )
-  // NOTES:
-  //  * There's a related babel plugin here
-  //    https://babeljs.io/docs/babel-plugin-syntax-import-attributes
-  //     * Included in `preset-env` if you set `shippedProposals: true`
-  //  * We had this before, but with `assert` instead of `with`. We really
-  //    should be using `with`. See motivation in issues linked above.
-  //  * With `assert` and `@babel/plugin-syntax-import-assertions` the
-  //    code compiled and ran properly, but Jest tests failed, complaining
-  //    about the syntax.
-  const routeManifestStr = await fs.readFile(rwPaths.web.routeManifest, 'utf-8')
-  const routeManifest: RWRouteManifest = JSON.parse(routeManifestStr)
+  registerFwGlobals()
 
-  // TODO See above about using `import { with: { type: 'json' } }` instead
-  const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
-  const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
-  const buildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
+  try {
+    // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
+    // TODO (RSC) Remove the try/catch, or at least the if-statement in there
+    // once RSC is always enabled
+    await setClientEntries('load')
+  } catch (e) {
+    if (rwConfig.experimental?.rsc?.enabled) {
+      console.error('Failed to load client entries')
+      console.error(e)
+      process.exit(1)
+    }
+  }
+
+  const routeManifestUrl = url.pathToFileURL(rwPaths.web.routeManifest).href
+  const routeManifest: RWRouteManifest = (
+    await import(routeManifestUrl, { with: { type: 'json' } })
+  ).default
+
+  const buildManifestUrl = url.pathToFileURL(
+    path.join(rwPaths.web.dist, 'client-build-manifest.json')
+  ).href
+  const buildManifest: ViteBuildManifest = (
+    await import(buildManifestUrl, { with: { type: 'json' } })
+  ).default
+
+  if (rwConfig.experimental?.rsc?.enabled) {
+    console.log('='.repeat(80))
+    console.log('buildManifest', buildManifest.default)
+    console.log('='.repeat(80))
+  }
 
   const indexEntry = Object.values(buildManifest).find((manifestItem) => {
     return manifestItem.isEntry
@@ -81,11 +87,14 @@ export async function runFeServer() {
     throw new Error('Could not find index.html in build manifest')
   }
 
-  // 👉 1. Use static handler for assets
+  // 1. Use static handler for assets
   // For CF workers, we'd need an equivalent of this
-  app.use('/assets', express.static(rwPaths.web.dist + '/assets'))
+  app.use(
+    '/assets',
+    express.static(rwPaths.web.dist + '/assets', { index: false })
+  )
 
-  // 👉 2. Proxy the api server
+  // 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
   // e.g. deploying to Netlify, we don't need to proxy but configure it in Netlify
   // Also be careful of differences between v2 and v3 of the server
@@ -104,167 +113,52 @@ export async function runFeServer() {
     })
   )
 
-  // 👉 3. Handle all other requests with the server entry
-  // This is where we match the url to the correct route, and render it
-  // We also call the relevant routeHooks here
-  app.use('*', async (req, res) => {
-    const currentPathName = stripQueryStringAndHashFromPath(req.originalUrl)
+  const getStylesheetLinks = () => indexEntry.css || []
+  const clientEntry = '/' + indexEntry.file
 
-    try {
-      const { ServerEntry } = await import(rwPaths.web.distEntryServer)
-
-      // TODO (STREAMING) should we generate individual express Routes for each Route?
-      // This would make handling 404s and favicons / public assets etc. easier
-      const currentRoute = Object.values(routeManifest).find((route) => {
-        if (!route.matchRegexString) {
-          // This is the 404/NotFoundPage case
-          return false
-        }
-
-        const matches = [
-          ...currentPathName.matchAll(new RegExp(route.matchRegexString, 'g')),
-        ]
-        return matches.length > 0
-      })
-
-      // Doesn't match any of the defined Routes
-      // Render 404 page, and send back 404 status
-      if (!currentRoute) {
-        // TODO (STREAMING) should we CONST it?
-        const fourOhFourRoute = routeManifest['notfound']
-
-        if (!fourOhFourRoute) {
-          return res.sendStatus(404)
-        }
-
-        const assetMap = JSON.stringify({ css: indexEntry.css })
-
-        const { pipe } = renderToPipeableStream(
-          ServerEntry({
-            url: currentPathName,
-            routeContext: null,
-            css: indexEntry.css,
-          }),
-          {
-            bootstrapScriptContent: `window.__assetMap = function() { return ${assetMap} }`,
-            // @NOTE have to add slash so subpaths still pick up the right file
-            // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
-            bootstrapModules: [
-              '/' + indexEntry.file,
-              '/' + fourOhFourRoute.bundle,
-            ],
-            onShellReady() {
-              res.setHeader('content-type', 'text/html')
-              res.status(404)
-              pipe(res)
-            },
-          }
-        )
-
-        return
-      }
-
-      let metaTags: TagDescriptor[] = []
-
-      if (currentRoute?.redirect) {
-        // TODO (STREAMING) deal with permanent/temp
-        // Short-circuit, and return a 301 or 302
-        return res.redirect(currentRoute.redirect.to)
-      }
-
-      if (currentRoute) {
-        // TODO (STREAMING) hardcoded JS file, watchout if we switch to ESM!
-        const appRouteHooksPath = path.join(
-          rwPaths.web.distRouteHooks,
-          'App.routeHooks.js'
-        )
-
-        let appRouteHooksExists = false
-        try {
-          appRouteHooksExists = (await fs.stat(appRouteHooksPath)).isFile()
-        } catch {
-          // noop
-        }
-
-        // Make sure we access the dist routeHooks!
-        const routeHookPaths = [
-          appRouteHooksExists ? appRouteHooksPath : null,
-          currentRoute.routeHooks
-            ? path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks)
-            : null,
-        ]
-
-        const parsedParams = currentRoute.hasParams
-          ? matchPath(currentRoute.pathDefinition, currentPathName).params
-          : undefined
-
-        const routeHookOutput = await loadAndRunRouteHooks({
-          paths: routeHookPaths,
-          reqMeta: {
-            req,
-            parsedParams,
-          },
-        })
-
-        metaTags = routeHookOutput.meta
-      }
-
-      const pageWithJs = currentRoute.renderMode !== 'html'
-      // @NOTE have to add slash so subpaths still pick up the right file
-      // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
-      const bootstrapModules = pageWithJs
-        ? ['/' + indexEntry.file, '/' + currentRoute.bundle]
-        : undefined
-
-      const isSeoCrawler = checkUaForSeoCrawler(req.get('user-agent'))
-
-      const { pipe, abort } = renderToPipeableStream(
-        // we should use the same shape as Remix or Next for the meta object
-        ServerEntry({
-          url: currentPathName,
-          css: indexEntry.css,
-          meta: metaTags,
-        }),
-        {
-          bootstrapScriptContent: pageWithJs
-            ? `window.__assetMap = function() { return ${JSON.stringify({
-                css: indexEntry.css,
-                meta: metaTags,
-              })} }`
-            : undefined,
-          bootstrapModules,
-          onShellReady() {
-            if (!isSeoCrawler) {
-              res.setHeader('content-type', 'text/html; charset=utf-8')
-              pipe(res)
-            }
-          },
-          onAllReady() {
-            if (isSeoCrawler) {
-              res.setHeader('content-type', 'text/html; charset=utf-8')
-              pipe(res)
-            }
-          },
-          onError(error) {
-            console.error(error)
-          },
-        }
-      )
-
-      // TODO (STREAMING) make the timeout configurable
-      setTimeout(() => {
-        abort()
-      }, 10_000)
-    } catch (e) {
-      console.error(e)
-
-      // streaming no longer requires us to send back a blank page
-      // React will automatically switch to client rendering on error
-      return res.sendStatus(500)
+  for (const route of Object.values(routeManifest)) {
+    // if it is a 404, register it at the end somehow.
+    if (!route.matchRegexString) {
+      continue
     }
 
-    return
-  })
+    // @TODO: we don't need regexes here
+    // Param matching, etc. all handled within the route handler now
+    const expressPathDef = route.hasParams
+      ? route.matchRegexString
+      : route.pathDefinition
+
+    if (!getConfig().experimental?.rsc?.enabled) {
+      const routeHandler = await createReactStreamingHandler({
+        route,
+        clientEntryPath: clientEntry,
+        getStylesheetLinks,
+      })
+
+      // Wrap with whatg/server adapter. Express handler -> Fetch API handler
+      app.get(expressPathDef, createServerAdapter(routeHandler))
+    } else {
+      console.log('expressPathDef', expressPathDef)
+
+      // This is for RSC only. And only for now, until we have SSR working we
+      // with RSC. This maps /, /about, etc to index.html
+      app.get(expressPathDef, (req, res, next) => {
+        // Serve index.html for all routes, to let client side routing take
+        // over
+        req.url = '/'
+        // Without this, we get a flash of a url with a trailing slash. Still
+        // works, but doesn't look nice
+        // For example, if we navigate to /about we'll see a flash of /about/
+        // before returning to /about
+        req.originalUrl = '/'
+
+        return express.static(rwPaths.web.dist)(req, res, next)
+      })
+    }
+  }
+
+  // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
+  app.use('/rw-rsc', createRscRequestHandler())
 
   app.listen(rwConfig.web.port)
   console.log(

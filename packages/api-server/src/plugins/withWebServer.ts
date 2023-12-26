@@ -2,12 +2,13 @@ import fs from 'fs'
 import path from 'path'
 
 import fastifyStatic from '@fastify/static'
-import { FastifyInstance, FastifyReply } from 'fastify'
+import fastifyUrlData from '@fastify/url-data'
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 
 import { getPaths } from '@redwoodjs/project-config'
 
 import { loadFastifyConfig } from '../fastify'
-import { WebServerArgs } from '../types'
+import type { WebServerArgs } from '../types'
 
 import { findPrerenderedHtml } from './findPrerenderedHtml'
 
@@ -27,6 +28,8 @@ const withWebServer = async (
   fastify: FastifyInstance,
   options: WebServerArgs
 ) => {
+  fastify.register(fastifyUrlData)
+
   const prerenderedFiles = findPrerenderedHtml()
   const indexPath = getFallbackIndexPath()
 
@@ -54,10 +57,23 @@ const withWebServer = async (
 
   // For SPA routing fallback on unmatched routes
   // And let JS routing take over
-  fastify.setNotFoundHandler({}, function (_, reply: FastifyReply) {
-    reply.header('Content-Type', 'text/html; charset=UTF-8')
-    reply.sendFile(indexPath)
-  })
+  fastify.setNotFoundHandler(
+    {},
+    function (req: FastifyRequest, reply: FastifyReply) {
+      const urlData = req.urlData()
+      const requestedExtension = path.extname(urlData.path ?? '')
+
+      // If it's requesting some sort of asset, e.g. .js or .jpg files
+      // Html files should fallback to the index.html
+      if (requestedExtension !== '' && requestedExtension !== '.html') {
+        reply.code(404)
+        return reply.send('Not Found')
+      }
+
+      reply.header('Content-Type', 'text/html; charset=UTF-8')
+      return reply.sendFile(indexPath)
+    }
+  )
 
   return fastify
 }

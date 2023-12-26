@@ -1,13 +1,15 @@
+import path from 'path'
+
 import c from 'ansi-colors'
 
-import { getConfig } from '@redwoodjs/project-config'
+import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import createFastifyInstance from './fastify'
 import withApiProxy from './plugins/withApiProxy'
 import withFunctions from './plugins/withFunctions'
 import withWebServer from './plugins/withWebServer'
 import { startServer as startFastifyServer } from './server'
-import { BothServerArgs, WebServerArgs, ApiServerArgs } from './types'
+import type { BothServerArgs, WebServerArgs, ApiServerArgs } from './types'
 
 /*
  * This file has defines CLI handlers used by the redwood cli, for `rw serve`
@@ -33,6 +35,12 @@ export const apiCliOptions = {
     desc: 'Root path where your api functions are served',
     coerce: coerceRootPath,
   },
+  loadEnvFiles: {
+    description: 'Load .env and .env.defaults files',
+    type: 'boolean',
+    // We have to default to `false` for backwards compatibility.
+    default: false,
+  },
 } as const
 
 export const webCliOptions = {
@@ -46,9 +54,20 @@ export const webCliOptions = {
 } as const
 
 export const apiServerHandler = async (options: ApiServerArgs) => {
-  const { port, socket, apiRootPath } = options
+  const { port, socket, apiRootPath, loadEnvFiles } = options
   const tsApiServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API Server...\n')))
+
+  if (loadEnvFiles) {
+    // @ts-expect-error for some reason ts can't find the types here but can find them for other packages
+    const { config } = await import('dotenv-defaults')
+
+    config({
+      path: path.join(getPaths().base, '.env'),
+      defaults: path.join(getPaths().base, '.env.defaults'),
+      multiline: true,
+    })
+  }
 
   let fastify = createFastifyInstance()
 

@@ -2,13 +2,16 @@ import { existsSync } from 'fs'
 import path from 'path'
 
 import react from '@vitejs/plugin-react'
+import type { InputOption } from 'rollup'
 import type { ConfigEnv, UserConfig, PluginOption } from 'vite'
 import { normalizePath } from 'vite'
 
-import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
+import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { handleJsAsJsx } from './vite-plugin-jsx-loader'
+import handleJsAsJsx from './plugins/vite-plugin-jsx-loader'
+import removeFromBundle from './plugins/vite-plugin-remove-from-bundle'
+import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider'
 
 /**
  * Pre-configured vite plugin, with required config for Redwood apps.
@@ -60,7 +63,9 @@ export default function redwoodPluginVite(): PluginOption[] {
           })
 
           Object.entries(process.env).forEach(([envName, value]) => {
-            newHtml = newHtml.replaceAll(`%${envName}%`, value || '')
+            if (envName.startsWith('REDWOOD_ENV_')) {
+              newHtml = newHtml.replaceAll(`%${envName}%`, value || '')
+            }
           })
 
           return newHtml
@@ -186,11 +191,11 @@ export default function redwoodPluginVite(): PluginOption[] {
           server: {
             open: rwConfig.browser.open,
             port: rwConfig.web.port,
-            host: rwConfig.web.host,
+            host: true, // Listen to all hosts
             proxy: {
               [rwConfig.web.apiUrl]: {
                 target: `http://${rwConfig.api.host}:${rwConfig.api.port}`,
-                changeOrigin: true,
+                changeOrigin: false,
                 // Remove the `.redwood/functions` part, but leave the `/graphql`
                 rewrite: (path) => path.replace(rwConfig.web.apiUrl, ''),
                 configure: (proxy) => {
@@ -234,8 +239,11 @@ export default function redwoodPluginVite(): PluginOption[] {
           build: {
             outDir: options.build?.outDir || rwPaths.web.dist,
             emptyOutDir: true,
-            manifest: !env.ssrBuild ? 'build-manifest.json' : undefined,
+            manifest: !env.ssrBuild ? 'client-build-manifest.json' : undefined,
             sourcemap: !env.ssrBuild && rwConfig.web.sourceMap, // Note that this can be boolean or 'inline'
+            rollupOptions: {
+              input: getRollupInput(!!env.ssrBuild),
+            },
           },
           legacy: {
             buildSsrCjsExternalHeuristics: rwConfig.experimental?.rsc?.enabled
@@ -258,8 +266,22 @@ export default function redwoodPluginVite(): PluginOption[] {
         }
       },
     },
+    // We can remove when streaming is stable
+    rwConfig.experimental.streamingSsr.enabled && swapApolloProvider(),
     // -----------------
     handleJsAsJsx(),
+    // Remove the splash-page from the bundle.
+    removeFromBundle([
+      {
+        id: /@redwoodjs\/router\/dist\/splash-page/,
+      },
+    ]),
+    !rwConfig.experimental.realtime.enabled &&
+      removeFromBundle([
+        {
+          id: /@redwoodjs\/web\/dist\/apollo\/sseLink/,
+        },
+      ]),
     react({
       babel: {
         ...getWebSideDefaultBabelConfig({
@@ -268,4 +290,33 @@ export default function redwoodPluginVite(): PluginOption[] {
       },
     }),
   ]
+}
+
+/**
+ *
+ * This function configures how vite (actually Rollup) will bundle.
+ *
+ * By default, the entry point is the index.html file - even if you don't specify it in RollupOptions
+ *
+ * With streaming SSR, out entrypoint is different - either entry.client.tsx or entry.server.tsx
+ * and the html file is not used at all, because it is defined in Document.tsx
+ *
+ * @param ssr {boolean} Whether to return the SSR inputs or not
+ * @returns Rollup input Options
+ */
+function getRollupInput(ssr: boolean): InputOption | undefined {
+  const rwConfig = getConfig()
+  const rwPaths = getPaths()
+
+  // @NOTE once streaming ssr is out of experimental, this will become the default
+  if (rwConfig.experimental.streamingSsr.enabled) {
+    return ssr
+      ? {
+          'entry.server': rwPaths.web.entryServer as string,
+          Document: rwPaths.web.document, // We need the document for React's fallback
+        }
+      : (rwPaths.web.entryClient as string)
+  }
+
+  return rwPaths.web.html
 }

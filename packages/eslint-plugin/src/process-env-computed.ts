@@ -1,5 +1,5 @@
-import { Rule } from 'eslint'
-import { Identifier, MemberExpression } from 'estree'
+import type { Rule } from 'eslint'
+import type { Identifier, MemberExpression } from 'estree'
 
 function isProcessEnv(node: unknown) {
   return (

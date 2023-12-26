@@ -1,11 +1,12 @@
-import { A } from 'ts-toolbelt'
+import type { A } from 'ts-toolbelt'
 
+import { setContext, context as globalContext } from '@redwoodjs/context'
 import type {
   DirectiveParams,
   ValidatorDirective,
   TransformerDirective,
 } from '@redwoodjs/graphql-server'
-import { setContext, DirectiveType } from '@redwoodjs/graphql-server'
+import { DirectiveType } from '@redwoodjs/graphql-server'
 
 export { getDirectiveName } from '@redwoodjs/graphql-server'
 
@@ -73,20 +74,22 @@ export const mockRedwoodDirective: DirectiveMocker = (
 
   if (directive.onResolvedValue.constructor.name === 'AsyncFunction') {
     return async () => {
-      if (context) {
-        setContext(context || {})
+      if (context !== undefined) {
+        setContext(context)
       }
 
       if (directive.type === DirectiveType.TRANSFORMER) {
         const { mockedResolvedValue } = others as TransformerMock
         return directive.onResolvedValue({
           resolvedValue: mockedResolvedValue,
-          directiveArgs: directiveArgs || {},
+          directiveArgs: directiveArgs ?? {},
+          context: globalContext,
           ...others,
         } as DirectiveParams)
       } else {
         await directive.onResolvedValue({
-          directiveArgs: directiveArgs || {},
+          directiveArgs: directiveArgs ?? {},
+          context: globalContext,
           ...others,
         } as DirectiveParams)
       }
@@ -94,20 +97,22 @@ export const mockRedwoodDirective: DirectiveMocker = (
   }
 
   return () => {
-    if (context) {
-      setContext(context || {})
+    if (context !== undefined) {
+      setContext(context)
     }
 
     if (directive.type === DirectiveType.TRANSFORMER) {
       const { mockedResolvedValue } = others as TransformerMock
       return directive.onResolvedValue({
         resolvedValue: mockedResolvedValue,
-        directiveArgs: directiveArgs || {},
+        directiveArgs: directiveArgs ?? {},
+        context: globalContext,
         ...others,
       } as DirectiveParams)
     } else {
       directive.onResolvedValue({
-        directiveArgs: directiveArgs || {},
+        directiveArgs: directiveArgs ?? {},
+        context: globalContext,
         ...others,
       } as DirectiveParams)
     }

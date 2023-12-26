@@ -18,6 +18,10 @@ test('simple jsx tree', () => {
             "children": [
               {
                 "children": [],
+                "location": {
+                  "column": 8,
+                  "line": 5,
+                },
                 "name": "Route",
                 "props": {
                   "name": "home",
@@ -27,6 +31,10 @@ test('simple jsx tree', () => {
               },
               {
                 "children": [],
+                "location": {
+                  "column": 8,
+                  "line": 6,
+                },
                 "name": "Route",
                 "props": {
                   "name": "login",
@@ -36,6 +44,10 @@ test('simple jsx tree', () => {
               },
               {
                 "children": [],
+                "location": {
+                  "column": 8,
+                  "line": 7,
+                },
                 "name": "Route",
                 "props": {
                   "name": "404",
@@ -44,12 +56,20 @@ test('simple jsx tree', () => {
                 },
               },
             ],
+            "location": {
+              "column": 6,
+              "line": 4,
+            },
             "name": "Set",
             "props": {
               "private": true,
             },
           },
         ],
+        "location": {
+          "column": 4,
+          "line": 3,
+        },
         "name": "Router",
         "props": {},
       },

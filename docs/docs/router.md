@@ -46,8 +46,6 @@ The `path` prop specifies the URL path to match, starting with the beginning sla
 
 Some pages should only be visible to authenticated users.
 
-We support this using private `<Set>`s or the `<Private>` component. Read more [further down](#private-set).
-
 ## Sets of Routes
 
 You can group Routes into sets using the `Set` component. `Set` allows you to wrap a set of Routes in another component or array of components—usually a Context, a Layout, or both:
@@ -130,31 +128,18 @@ becomes...
 </MainLayout>
 ```
 
-### `private` Set
+### `PrivateSet`
 
-Sets can take a `private` prop which makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the private Set, they'll be redirected to the Route passed as the Set's `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
+A `PrivateSet` makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the `PrivateSet`, they'll be redirected to the Route passed as the `PrivateSet`'s `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
 
 Here's an example of how you'd use a private set:
 
 ```jsx title="Routes.js"
 <Router>
   <Route path="/" page={HomePage} name="home" />
-  <Set private unauthenticated="home">
+  <PrivateSet unauthenticated="home">
     <Route path="/admin" page={AdminPage} name="admin" />
-  </Set>
-</Router>
-```
-
-Private routes are important and should be easy to spot in your Routes file. The larger your Routes file gets, the more difficult it will probably become to find `<Set private /*...*/>` among your other Sets. So we also provide a `<Private>` component that's just an alias for `<Set private /*...*/>`. Most of our documentation uses `<Private>`.
-
-Here's the same example again, but now using `<Private>`
-
-```jsx title="Routes.js"
-<Router>
-  <Route path="/" page={HomePage} name="home" />
-  <Private unauthenticated="home">
-    <Route path="/admin" page={AdminPage} name="admin" />
-  </Private>
+  </PrivateSet>
 </Router>
 ```
 
@@ -164,9 +149,9 @@ To protect `Private` routes for access by a single role:
 
 ```jsx title="Routes.js"
 <Router>
-  <Private unauthenticated="forbidden" roles="admin">
+  <PrivateSet unauthenticated="forbidden" roles="admin">
     <Route path="/admin/users" page={UsersPage} name="users" />
-  </Private>
+  </PrivateSet>
 
   <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />
 </Router>
@@ -176,9 +161,9 @@ To protect `Private` routes for access by multiple roles:
 
 ```jsx title="Routes.js"
 <Router>
-  <Private unauthenticated="forbidden" roles={['admin', 'editor', 'publisher']}>
+  <PrivateSet unauthenticated="forbidden" roles={['admin', 'editor', 'publisher']}>
     <Route path="/admin/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />
-  </Private>
+  </PrivateSet>
 
   <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />
 </Router>
@@ -574,13 +559,13 @@ When the lazy-loaded page is loading, `PageLoadingContext.Consumer` will pass `{
 
 Let's say you have a dashboard area on your Redwood app, which can only be accessed after logging in. When Redwood Router renders your private page, it will first fetch the user's details, and only render the page if it determines the user is indeed logged in.
 
-In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your private `<Route>`, `<Set private>` or the `<Private>` component:
+In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your private `<Route>` or `<PrivateSet>` component:
 
 ```jsx
 //Routes.js
 
 <Router>
-  <Private
+  <PrivateSet
     wrap={DashboardLayout}
     unauthenticated="login"
     whileLoadingAuth={SkeletonLoader} //<-- auth loader
@@ -590,7 +575,7 @@ In order to display a loader while auth details are being retrieved you can add 
     <Route path="/dashboard" page={DashboardHomePage} name="dashboard" />
 
     {/* other routes */}
-  </Private>
+  <PrivateSet>
 </Router>
 ```
 

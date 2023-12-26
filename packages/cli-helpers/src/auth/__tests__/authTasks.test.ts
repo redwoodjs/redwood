@@ -67,12 +67,12 @@ import fs from 'fs'
 import path from 'path'
 
 import { getPaths } from '../../lib/paths'
+import type { AuthGeneratorCtx } from '../authTasks'
 import {
   addApiConfig,
   addConfigToWebApp,
   addConfigToRoutes,
   createWebAuth,
-  AuthGeneratorCtx,
   hasAuthProvider,
   removeAuthProvider,
 } from '../authTasks'

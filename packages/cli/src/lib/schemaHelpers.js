@@ -1,6 +1,5 @@
-import fs from 'fs'
-
 import { getConfig, getDMMF } from '@prisma/internals'
+import fs from 'fs-extra'
 
 import { ensureUniquePlural } from './pluralHelpers'
 import { singularize, isPlural } from './rwPluralize'

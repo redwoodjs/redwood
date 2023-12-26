@@ -25,15 +25,26 @@ export const findPages = (cwd: string = getPaths().web.pages) => {
   return modules.filter(isPageFile)
 }
 
+/**
+ * This function finds all modules in the 'web' and 'api' directories excluding 'node_modules' and Cell files.
+ * Cell files are also directory named modules but they have their special type mirror file, so they are ignored.
+ *
+ * @param {string} cwd - The directory path to start searching from. By default, it is the base path of the project.
+ * @returns {Array} modules - An array of absolute paths for the found modules.
+ *
+ * @example
+ * // Assuming the base directory of your project is '/Users/user/myproject'
+ * findDirectoryNamedModules('/Users/user/myproject');
+ * // This will return an array with the absolute paths of all matching files, e.g.:
+ * // ['/Users/user/myproject/web/src/components/Author/Author.tsx', '/Users/user/myproject/web/src/pages/AboutPage/AboutPage.tsx']
+ */
 export const findDirectoryNamedModules = (cwd: string = getPaths().base) => {
-  const modules = fg.sync('**/src/**/*.{ts,js,jsx,tsx}', {
+  const modules = fg.sync('(api|web)/src/**/*.{ts,js,jsx,tsx}', {
     cwd,
     absolute: true,
     ignore: ['node_modules'],
   })
 
-  // Cell's also follow use the directory-named-module pattern,
-  // but they get their own special type mirror file, so ignore them.
   return modules
     .filter(isDirectoryNamedModuleFile)
     .filter((p) => !isCellFile(p))
@@ -103,9 +114,6 @@ export const findRouteHooksSrc = (cwd: string = getPaths().web.src) => {
   })
 }
 
-export const findPrerenderedHtml = (cwd = getPaths().web.dist) =>
-  fg.sync('**/*.html', { cwd, ignore: ['200.html', '404.html'] })
-
 export const isCellFile = (p: string) => {
   const { dir, name } = path.parse(p)
 
@@ -166,7 +174,20 @@ export const isPageFile = (p: string) => {
 
   return true
 }
-
+/**
+ * This function checks if the given path belongs to a directory named module.
+ * A directory named module is where the filename (without extension) is the same as the directory it is in.
+ *
+ * @param {string} p - The absolute path of the file.
+ * @returns {boolean} - Returns true if the path belongs to a directory named module, false otherwise.
+ *
+ * @example
+ * isDirectoryNamedModuleFile('/Users/user/myproject/web/src/components/Author/Author.tsx');
+ * // Returns: true
+ *
+ * isDirectoryNamedModuleFile('/Users/user/myproject/web/src/components/Author/AuthorInfo.tsx');
+ * // Returns: false
+ */
 export const isDirectoryNamedModuleFile = (p: string) => {
   const { dir, name } = path.parse(p)
   return dir.endsWith(name)

@@ -17,8 +17,7 @@ jest.mock('@redwoodjs/project-config', () => {
   }
 })
 
-import fs from 'fs'
-
+import fs from 'fs-extra'
 import latestVersion from 'latest-version'
 
 import { getConfig } from '@redwoodjs/project-config'
