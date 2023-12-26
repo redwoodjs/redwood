@@ -41,13 +41,15 @@ const ignored = [
   /__fixtures__/,
   /__mocks__/,
   /__tests__/,
-  /.test./,
+  /\.test\./,
   /jest.config.{js,ts}/,
 
   /README.md/,
 
   // esbuild emits meta.json files that we sometimes suffix.
   /meta.(\w*\.?)json/,
+
+  /tsconfig.tsbuildinfo/,
 
   (filePath) => IGNORE_EXTENSIONS.some((ext) => filePath.endsWith(ext)),
 ]
@@ -58,6 +60,12 @@ async function main() {
   const { _: positionals, ...options } = yargs(hideBin(process.argv))
     .option('setUpForWatch', {
       description: 'Set up the project for watching for framework changes',
+      type: 'boolean',
+      default: true,
+    })
+    .option('addFwDeps', {
+      description:
+        'Modify the projects package.json to include fw dependencies',
       type: 'boolean',
       default: true,
     })
@@ -162,8 +170,13 @@ async function main() {
       process.on('exit', cleanUp)
     }
 
-    logStatus("Adding the Redwood framework's dependencies...")
-    addDependenciesToPackageJson(redwoodProjectPackageJsonPath)
+    if (options.addFwDeps) {
+      // Rare case, but sometimes we don't want to modify any dependency versions
+      logStatus("Adding the Redwood framework's dependencies...")
+      addDependenciesToPackageJson(redwoodProjectPackageJsonPath)
+    } else {
+      logStatus("Skipping adding framework's dependencies...")
+    }
 
     try {
       execSync('yarn install', {
@@ -241,6 +254,9 @@ async function main() {
     try {
       logStatus(`Cleaning ${c.magenta(packageName)}...`)
       await rimraf(path.join(path.dirname(packageJsonPath), 'dist'))
+      await rimraf(
+        path.join(path.dirname(packageJsonPath), 'tsconfig.tsbuildinfo')
+      )
 
       logStatus(`Building ${c.magenta(packageName)}...`)
       execSync('yarn build', {

@@ -130,12 +130,11 @@ const Routes = () => {
       <Route path="/login" page={LoginPage} name="login" />
 
       // highlight-start
-      <Private unauthenticated="login">
-      {/* Or... <Set private unauthenticated="login"> */}
+      <PrivateSet unauthenticated="login">
       // highlight-end
         <Route path="/admin" page={AdminPage} name="admin" />
         <Route path="/secret-page" page={SecretPage} name="secret" />
-      </Private>
+      <PrivateSet>
     </Router>
   )
 }
@@ -153,9 +152,9 @@ const Routes = () => {
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />
 
-      <Private unauthenticated="login">
+      <PrivateSet unauthenticated="login">
         <Route path="/secret-page" page={SecretPage} name="secret" />
-      </Private>
+      <PrivateSet>
 
       // highlight-next-line
       <Set private unauthenticated="forbidden" hasRole="admin">
@@ -163,9 +162,9 @@ const Routes = () => {
       </Set>
 
       // highlight-next-line
-      <Private unauthenticated="forbidden" hasRole={['author', 'editor']}>
+      <PrivateSet unauthenticated="forbidden" hasRole={['author', 'editor']}>
         <Route path="/posts" page={PostsPage} name="posts" />
-      </Private>
+      <PrivateSet>
     </Router>
   )
 }

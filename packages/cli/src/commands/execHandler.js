@@ -1,10 +1,14 @@
 import path from 'path'
 
+import { context } from '@opentelemetry/api'
+import { suppressTracing } from '@opentelemetry/core'
 import { Listr } from 'listr2'
 
+import {
+  getWebSideDefaultBabelConfig,
+  registerApiSideBabelHook,
+} from '@redwoodjs/babel-config'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
-import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
-import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
 import { findScripts } from '@redwoodjs/internal/dist/files'
 
 import { getPaths } from '../lib'
@@ -134,5 +138,8 @@ export const handler = async (args) => {
     renderer: 'verbose',
   })
 
-  await tasks.run()
+  // Prevent user project telemetry from within the script from being recorded
+  await context.with(suppressTracing(context.active()), async () => {
+    await tasks.run()
+  })
 }

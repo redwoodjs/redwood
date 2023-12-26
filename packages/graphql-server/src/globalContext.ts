@@ -1,21 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { AsyncLocalStorage } from 'async_hooks'
-
-export interface GlobalContext extends Record<string, unknown> {}
-
-let CONTEXT_STORAGE: AsyncLocalStorage<Map<string, GlobalContext>>
+import { getAsyncStoreInstance } from './globalContextStore'
 
 /**
- * This returns a AsyncLocalStorage instance, not the actual store
+ * @deprecated This type will be available only from the `@redwoodjs/context` package in a future release.
  */
-export const getAsyncStoreInstance = () => {
-  if (!CONTEXT_STORAGE) {
-    CONTEXT_STORAGE = new AsyncLocalStorage<Map<string, GlobalContext>>()
-  }
-  return CONTEXT_STORAGE as AsyncLocalStorage<Map<string, GlobalContext>>
-}
+export interface GlobalContext extends Record<string, unknown> {}
 
+/**
+ * @deprecated This function will be available only from the `@redwoodjs/context` package in a future release.
+ */
 export const createContextProxy = (target: GlobalContext) => {
   return new Proxy<GlobalContext>(target, {
     get: (_target, property: string) => {
@@ -33,6 +27,9 @@ export const createContextProxy = (target: GlobalContext) => {
   })
 }
 
+/**
+ * @deprecated This value will be available only from the `@redwoodjs/context` package in a future release.
+ */
 export let context: GlobalContext = createContextProxy({})
 
 /**
@@ -42,6 +39,8 @@ export let context: GlobalContext = createContextProxy({})
  *
  * If you wish to extend the context simply use the `context` object directly,
  * such as `context.magicNumber = 1`, or `setContext({ ...context, magicNumber: 1 })`
+ *
+ * @deprecated This function will be available only from the `@redwoodjs/context` package in a future release.
  */
 export const setContext = (newContext: GlobalContext): GlobalContext => {
   // re-init the proxy against the new context object,

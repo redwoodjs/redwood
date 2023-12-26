@@ -1,11 +1,6 @@
 import React from 'react'
 
 import {
-  toHaveFocus,
-  toHaveClass,
-  toBeInTheDocument,
-} from '@testing-library/jest-dom/matchers'
-import {
   screen,
   render,
   cleanup,
@@ -13,7 +8,6 @@ import {
   waitFor,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-expect.extend({ toHaveFocus, toHaveClass, toBeInTheDocument })
 
 import {
   Form,
@@ -109,9 +103,9 @@ describe('Form', () => {
   }
 
   const TestComponentWithRef = () => {
-    const inputEl = React.useRef(null)
+    const inputEl = React.useRef<HTMLInputElement>(null)
     React.useEffect(() => {
-      inputEl.current.focus()
+      inputEl.current?.focus()
     })
     return (
       <Form>
@@ -200,9 +194,9 @@ describe('Form', () => {
 
   it('lets users pass custom coercion functions', async () => {
     const mockFn = jest.fn()
-    const coercionFunctionNumber = (value) =>
+    const coercionFunctionNumber = (value: string) =>
       parseInt(value.replace('_', ''), 10)
-    const coercionFunctionText = (value) => value.replace('_', '-')
+    const coercionFunctionText = (value: string) => value.replace('_', '-')
 
     render(
       <Form onSubmit={mockFn}>
@@ -550,6 +544,17 @@ describe('Form', () => {
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
+        <SelectField
+          name="selectFieldAsNumber"
+          defaultValue=""
+          emptyAs={'undefined'}
+          validation={{ valueAsNumber: true }}
+        >
+          <option value={''}>No option selected</option>
+          <option value={1}>Option 1</option>
+          <option value={2}>Option 2</option>
+          <option value={3}>Option 3</option>
+        </SelectField>
         <TextAreaField
           name="jsonField"
           defaultValue=""
@@ -572,6 +577,7 @@ describe('Form', () => {
         numberField: undefined,
         dateField: undefined,
         selectField: undefined,
+        selectFieldAsNumber: undefined,
         jsonField: undefined,
         fieldId: undefined,
       },
@@ -888,5 +894,20 @@ describe('Form', () => {
       },
       expect.anything() // event that triggered the onSubmit call
     )
+  })
+
+  it('should throw an intelligible error if the name prop is missing', async () => {
+    const mockFn = jest.fn()
+
+    const testRender = () =>
+      render(
+        <Form onSubmit={mockFn}>
+          {/* @ts-expect-error - Testing a JS scenario */}
+          <TextField />
+          <Submit>Save</Submit>
+        </Form>
+      )
+
+    expect(testRender).toThrow('`name` prop must be provided')
   })
 })

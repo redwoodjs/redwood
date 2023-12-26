@@ -1,14 +1,12 @@
 import { useEngine } from '@envelop/core'
 import { assertSingleExecutionValue, createTestkit } from '@envelop/testing'
+import type { FieldDefinitionNode, GraphQLDirective } from 'graphql'
 import * as GraphQLJS from 'graphql'
-import {
-  FieldDefinitionNode,
-  getDirectiveValues,
-  GraphQLDirective,
-} from 'graphql'
-import { Plugin, createSchema } from 'graphql-yoga'
+import { getDirectiveValues } from 'graphql'
+import type { Plugin } from 'graphql-yoga'
+import { createSchema } from 'graphql-yoga'
 
-import { GraphQLTypeWithFields } from '../../index'
+import type { GraphQLTypeWithFields } from '../../index'
 import { useRedwoodDirective, DirectiveType } from '../useRedwoodDirective'
 
 //  ===== Test Setup ======

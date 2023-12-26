@@ -1,11 +1,32 @@
 import { Fragment } from 'react'
+
+const extractFromAssetMap = (key: 'css' | 'meta') => {
+  if (typeof window !== 'undefined') {
+    return window?.__REDWOOD__ASSET_MAP?.[key]
+  }
+
+  return null
+}
+
+function addSlashIfNeeded(path: string): string {
+  if (path.startsWith('http') || path.startsWith('/')) {
+    return path
+  } else {
+    return '/' + path
+  }
+}
+
 /** CSS is a specialised metatag */
-export const Css = ({ css = [] }: { css: string[] }) => {
+export const Css = ({ css }: { css: string[] }) => {
+  const cssLinks = (css || extractFromAssetMap('css') || []).map(
+    addSlashIfNeeded
+  )
+
   return (
     <>
-      {css.map((cssLinks, index) => {
+      {cssLinks.map((cssLink, index) => {
         return (
-          <link rel="stylesheet" key={`css-${index}`} href={`/${cssLinks}`} />
+          <link rel="stylesheet" key={`css-${index}`} href={`${cssLink}`} />
         )
       })}
     </>
@@ -77,10 +98,12 @@ interface MetaProps {
   tags: TagDescriptor[] | undefined
 }
 
-export const Meta = ({ tags = [] }: MetaProps) => {
+export const Meta = ({ tags }: MetaProps) => {
+  const metaTags = tags || extractFromAssetMap('meta') || []
+
   return (
     <>
-      {tags.map((tag, index) => {
+      {metaTags.map((tag, index) => {
         if (!tag) {
           return null
         }

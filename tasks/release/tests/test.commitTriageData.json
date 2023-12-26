@@ -1,0 +1,6 @@
+{
+  "ed8a87d98d8c3e5dad23ac3e2143b46a201194dc": {
+    "message": "chore(deps): update dependency esbuild to v0.19.2 (#9029)",
+    "needsCherryPick": false
+  }
+}

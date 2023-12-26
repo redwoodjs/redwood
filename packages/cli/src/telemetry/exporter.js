@@ -53,9 +53,7 @@ export class CustomFileExporter {
         this.#storageFilePath,
         JSON.stringify(span, undefined, 2)
       )
-      if (i < spans.length - 1) {
-        fs.appendFileSync(this.#storageFilePath, ',')
-      }
+      fs.appendFileSync(this.#storageFilePath, ',')
     }
     resultCallback({ code: 0 })
   }
@@ -64,6 +62,11 @@ export class CustomFileExporter {
   shutdown() {
     // Close the JSON array
     if (!this.#isShutdown) {
+      // Remove the trailing comma
+      fs.truncateSync(
+        this.#storageFilePath,
+        fs.statSync(this.#storageFilePath).size - 1
+      )
       fs.appendFileSync(this.#storageFilePath, ']')
       this.#isShutdown = true
     }

@@ -2,18 +2,18 @@ import fs from 'fs'
 import path from 'path'
 
 import { types } from '@babel/core'
-import { parse as babelParse, ParserPlugin } from '@babel/parser'
+import type { ParserPlugin } from '@babel/parser'
+import { parse as babelParse } from '@babel/parser'
 import traverse from '@babel/traverse'
 import fg from 'fast-glob'
-import {
+import type {
   DocumentNode,
   FieldNode,
   InlineFragmentNode,
   OperationDefinitionNode,
   OperationTypeNode,
-  parse,
-  visit,
 } from 'graphql'
+import { parse, visit } from 'graphql'
 
 import { getPaths } from '@redwoodjs/project-config'
 

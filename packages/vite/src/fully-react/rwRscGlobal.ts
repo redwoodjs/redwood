@@ -1,4 +1,4 @@
-import { RwRscServerGlobal } from './RwRscServerGlobal'
+import type { RwRscServerGlobal } from './RwRscServerGlobal'
 export { RwRscServerGlobal } from './RwRscServerGlobal'
 export { DevRwRscServerGlobal } from './DevRwRscServerGlobal'
 export { ProdRwRscServerGlobal } from './ProdRwRscServerGlobal'

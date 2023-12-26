@@ -1,19 +1,21 @@
 import lc from 'line-column'
 import { groupBy, mapValues, uniqBy } from 'lodash'
 import * as tsm from 'ts-morph'
-import { TextDocuments } from 'vscode-languageserver'
-import { TextDocument } from 'vscode-languageserver-textdocument'
-import {
+import type { TextDocuments } from 'vscode-languageserver'
+import type { TextDocument } from 'vscode-languageserver-textdocument'
+import type {
   CodeAction,
   CodeActionContext,
+  DocumentUri,
+  WorkspaceEdit,
+} from 'vscode-languageserver-types'
+import {
   Diagnostic,
   DiagnosticSeverity,
-  DocumentUri,
   Location,
   Position,
   Range,
   WorkspaceChange,
-  WorkspaceEdit,
 } from 'vscode-languageserver-types'
 
 import { URL_file } from './URL'

@@ -10,8 +10,9 @@ For full inspiration and vision, see Redwood's [README](https://github.com/redwo
 
 Development on Redwood happens in the [redwoodjs/redwood repo on GitHub](https://github.com/redwoodjs/redwood).
 The docs are [there too](https://github.com/redwoodjs/redwood/tree/main/docs).
-While Redwood's [founders and core team](https://github.com/redwoodjs/redwood#core-team) handle most of the high-priority items and the day-to-day,
-Redwood wouldn't be where it is without [all its contributors](https://github.com/redwoodjs/redwood#all-contributors)!
+While Redwood's [leadership and maintainers](https://github.com/redwoodjs/redwood#core-team-leadership)
+handle most of the high-priority items and the day-to-day, Redwood wouldn't be
+where it is without [all its contributors](https://github.com/redwoodjs/redwood#all-contributors)!
 Feel free to reach out to us on the [forums](https://community.redwoodjs.com) or on [Discord](https://discord.gg/redwoodjs), and follow us on [Twitter](https://twitter.com/redwoodjs) for updates.
 
 ## Getting the Most out of Redwood

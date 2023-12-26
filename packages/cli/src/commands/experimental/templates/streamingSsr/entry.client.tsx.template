@@ -1,10 +1,5 @@
 import { hydrateRoot, createRoot } from 'react-dom/client'
 
-// TODO (STREAMING) This was marked "temporary workaround"
-// Need to figure out why it's a temporary workaround and what we
-// should do instead.
-import { ServerContextProvider } from '@redwoodjs/web/dist/serverContext'
-
 import App from './App'
 import { Document } from './Document'
 
@@ -19,20 +14,15 @@ const redwoodAppElement = document.getElementById('redwood-app')
 if (redwoodAppElement.children?.length > 0) {
   hydrateRoot(
     document,
-    <ServerContextProvider value={{}}>
-      <Document css={window.__assetMap?.()?.css}>
-        <App />
-      </Document>
-    </ServerContextProvider>
+    <Document css={window.__assetMap?.()?.css}>
+      <App />
+    </Document>
   )
 } else {
-  console.log('Rendering from scratch')
   const root = createRoot(document)
   root.render(
-    <ServerContextProvider value={{}}>
-      <Document css={window.__assetMap?.()?.css}>
-        <App />
-      </Document>
-    </ServerContextProvider>
+    <Document css={window.__assetMap?.()?.css}>
+      <App />
+    </Document>
   )
 }
