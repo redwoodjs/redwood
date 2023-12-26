@@ -1,11 +1,6 @@
 import React from 'react'
 
 import {
-  toHaveFocus,
-  toHaveClass,
-  toBeInTheDocument,
-} from '@testing-library/jest-dom/matchers'
-import {
   screen,
   render,
   cleanup,
@@ -27,7 +22,6 @@ import {
   FieldError,
   Label,
 } from '../index'
-expect.extend({ toHaveFocus, toHaveClass, toBeInTheDocument })
 
 describe('Form', () => {
   const TestComponent = ({ onSubmit = () => {} }) => {

@@ -1,11 +1,6 @@
 import React from 'react'
 
-import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
 import { render } from '@testing-library/react'
-
-// TODO: Remove when jest configs are in place
-// @ts-expect-error - Issue with TS and jest-dom
-expect.extend({ toHaveClass, toHaveStyle })
 
 import { NavLink, useMatch, Link } from '../links'
 import { LocationProvider } from '../location'
