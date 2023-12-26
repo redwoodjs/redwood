@@ -31,21 +31,12 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     </Router>
   )
 
-  let analyzeRoutesResult: ReturnType<typeof analyzeRoutes> | undefined
-
-  beforeAll(() => {
-    analyzeRoutesResult = analyzeRoutes(CheckRoutes.props.children, {
+  const { pathRouteMap, namedRoutesMap, hasHomeRoute, NotFoundPage } =
+    analyzeRoutes(CheckRoutes.props.children, {
       currentPathName: '/',
     })
-  })
 
   test('Should return namePathMap and hasHomeRoute correctly', () => {
-    if (!analyzeRoutesResult) {
-      throw new Error('analyzeRoutesResult is undefined')
-    }
-
-    const { pathRouteMap, hasHomeRoute } = analyzeRoutesResult
-
     expect(Object.keys(pathRouteMap)).toEqual([
       '/hello',
       '/world',
@@ -82,25 +73,13 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
   })
 
   test('Should return namedRoutesMap correctly', () => {
-    if (!analyzeRoutesResult) {
-      throw new Error('analyzeRoutesResult is undefined')
-    }
-
-    const { namedRoutesMap } = analyzeRoutesResult
-
     expect(namedRoutesMap.home()).toEqual('/')
     expect(namedRoutesMap.world()).toEqual('/world')
     expect(namedRoutesMap.hello({ queryGuy: 1 })).toEqual('/hello?queryGuy=1')
     expect(namedRoutesMap.recipeById({ id: 55 })).toEqual('/recipe/55')
   })
 
-  test('Should return the NotFoundPage', () => {
-    if (!analyzeRoutesResult) {
-      throw new Error('analyzeRoutesResult is undefined')
-    }
-
-    const { NotFoundPage } = analyzeRoutesResult
-
+  test('Should return the notFoundPage', () => {
     expect(NotFoundPage).toBeDefined()
 
     // @ts-expect-error We know its a valid element
