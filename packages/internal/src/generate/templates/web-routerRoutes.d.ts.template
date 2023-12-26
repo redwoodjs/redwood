@@ -11,6 +11,9 @@ ${routes.map(
   }
 ).join('\n')}
   }
+
+  /** Gets the name of the current route (as defined in your Routes file) */
+  export function useRouteName(): keyof AvailableRoutes | undefined
 }
 
 //# sourceMappingURL=web-routerRoutes.d.ts.map

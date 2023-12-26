@@ -22,6 +22,7 @@ type UseAuth = () => AuthContextInterface<
 
 export interface RouterState {
   paramTypes?: Record<string, ParamType>
+  activeRouteName?: string | undefined | null
   useAuth: UseAuth
 }
 
@@ -35,16 +36,15 @@ const RouterSetContext = createContext<
   React.Dispatch<Partial<RouterState>> | undefined
 >(undefined)
 
-/***
- *
+/**
  * This file splits the context into getter and setter contexts.
  * This was originally meant to optimize the number of redraws
  * See https://kentcdodds.com/blog/how-to-optimize-your-context-value
- *
  */
 export interface RouterContextProviderProps
   extends Omit<RouterState, 'useAuth'> {
   useAuth?: UseAuth
+  activeRouteName?: string | undefined | null
   children: React.ReactNode
 }
 
@@ -55,10 +55,12 @@ function stateReducer(state: RouterState, newState: Partial<RouterState>) {
 export const RouterContextProvider: React.FC<RouterContextProviderProps> = ({
   useAuth,
   paramTypes,
+  activeRouteName,
   children,
 }) => {
   const [state, setState] = useReducer(stateReducer, {
     useAuth: useAuth || useNoAuth,
+    activeRouteName,
     paramTypes,
   })
 

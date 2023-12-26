@@ -18,6 +18,7 @@ export { default as RouteAnnouncement } from './route-announcement'
 export * from './route-announcement'
 export { default as RouteFocus } from './route-focus'
 export * from './route-focus'
+export * from './useRouteName'
 
 export { parseSearch, getRouteRegexAndParams, matchPath } from './util'
 
