@@ -106,7 +106,8 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     })
   }, [location.pathname, children, paramTypes])
 
-  // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
+  // Assign namedRoutes so it can be imported like
+  // `import { routes } from 'rwjs/router'`
   // Note that the value changes at runtime
   Object.assign(namedRoutes, namedRoutesMap)
 

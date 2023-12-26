@@ -12,8 +12,8 @@ type UseMatchOptions = {
 }
 
 /**
- * Returns an object of { match: boolean; params: Record<string, unknown>; }
- * if the path matches the current location match will be true.
+ * Returns an object of `{ match: boolean; params: Record<string, unknown>; }`.
+ * If the path matches the current location `match` will be true.
  * Params will be an object of the matched params, if there are any.
  *
  * Provide searchParams options to match the current location.search
@@ -35,10 +35,10 @@ type UseMatchOptions = {
  * Match sub paths
  * const match = useMatch('/product', { matchSubPaths: true })
  *
- *  Match parameter paths
- *  const match = useMatch('/post/{id:Int}') // works for all '/post/7', 'post/8' ...
- *  const match = useMatch(routes.post({id: RouteParams.LITERAL})) // same as above. RouteParams.LITERAL can be imported and equals: '/post/{id:Int}'
- *  const match = useMatch(routes.post({id: 7})) // works only for '/post/7'
+ * Match parameter paths
+ * const match = useMatch('/post/{id:Int}') // works for all '/post/7', 'post/8' ...
+ * const match = useMatch(routes.post({id: RouteParams.LITERAL})) // same as above. RouteParams.LITERAL can be imported and equals: '/post/{id:Int}'
+ * const match = useMatch(routes.post({id: 7})) // works only for '/post/7'
  */
 const useMatch = (pathname: string, options?: UseMatchOptions) => {
   const location = useLocation()

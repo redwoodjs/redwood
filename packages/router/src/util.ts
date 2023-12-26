@@ -154,7 +154,7 @@ export function matchPath(
   // Map extracted values to their param name, casting the value if needed
   const providedParams = matches[0].slice(1)
 
-  // @NOTE: refers to definiton e.g. '/page/{id}', not the actual params
+  // @NOTE: refers to definition e.g. '/page/{id}', not the actual params
   if (routeParamsDefinition.length > 0) {
     const params = providedParams.reduce<Record<string, unknown>>(
       (acc, value, index) => {
@@ -330,7 +330,7 @@ export function replaceParams(
     const value = args[name]
 
     if (value !== undefined) {
-      // replace {tag} with 'code' only if it is not RouteParams.Literal
+      // replace {tag} with 'code' only if it is not RouteParams.LITERAL
       if (value !== RouteParams.LITERAL) {
         path = path.replace(match, value as string)
       }
@@ -461,7 +461,7 @@ type WhileLoadingPage = () => ReactElement | null
 // We can't index it correctly in the framework
 export type GeneratedRoutesMap = {
   [key: string]: (
-    args?: Record<string | number, string | number | boolean>
+    args?: Record<string | number, string | number | boolean | symbol>
   ) => string
 }
 

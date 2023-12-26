@@ -7,9 +7,10 @@ import { act, render, waitFor } from '@testing-library/react'
 // @ts-expect-error - Issue with TS and jest-dom
 expect.extend({ toHaveClass, toHaveStyle })
 
-import { navigate, Route, Router, routes } from '../'
+import { navigate, Route, Router, routes as generatedRoutes } from '../'
 import { NavLink, useMatch, Link } from '../links'
 import { LocationProvider } from '../location'
+import type { GeneratedRoutesMap } from '../util'
 import { flattenSearchParams, RouteParams } from '../util'
 
 function createDummyLocation(pathname: string, search = '') {
@@ -360,6 +361,8 @@ describe('useMatch', () => {
   })
 
   it('returns a match on the same pathname', async () => {
+    const routes = generatedRoutes as GeneratedRoutesMap
+
     Object.keys(routes).forEach((key) => delete routes[key])
 
     const HomePage = () => {
