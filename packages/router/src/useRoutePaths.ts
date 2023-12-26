@@ -3,7 +3,8 @@ import type { GeneratedRoutesMap } from './util'
 
 import type { AvailableRoutes } from '.'
 
-export const useRoutePaths = () => {
+// This has to be a function, otherwise we're not able to do declaration merging
+export function useRoutePaths() {
   const routerState = useRouterState()
 
   const routePaths = Object.values(routerState.routes.pathRouteMap).reduce<
@@ -16,10 +17,10 @@ export const useRoutePaths = () => {
     return routePaths
   }, {})
 
-  return routePaths as Record<keyof AvailableRoutes, string>
+  return routePaths
 }
 
-export const useRoutePath = (routeName: keyof AvailableRoutes) => {
+export function useRoutePath(routeName: keyof AvailableRoutes) {
   const routePaths = useRoutePaths()
 
   return routePaths[routeName]
