@@ -246,7 +246,9 @@ More granular match, `page` key only and `tab=tutorial`
 activeMatchParams={[{ tab: 'tutorial' }, 'page' ]}
 ```
 
-You can `useMatch` to create your own component with active styles.
+### useMatch
+
+You can use `useMatch` to create your own component with active styles.
 
 > `NavLink` uses it internally!
 
