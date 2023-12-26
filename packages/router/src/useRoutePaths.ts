@@ -9,12 +9,12 @@ export function useRoutePaths() {
 
   const routePaths = Object.values(routerState.routes.pathRouteMap).reduce<
     Record<keyof GeneratedRoutesMap, string>
-  >((routePaths, route) => {
-    if (route.name) {
-      routePaths[route.name] = route.path
+  >((routePathsAcc, currRoute) => {
+    if (currRoute.name) {
+      routePathsAcc[currRoute.name] = currRoute.path
     }
 
-    return routePaths
+    return routePathsAcc
   }, {})
 
   return routePaths
