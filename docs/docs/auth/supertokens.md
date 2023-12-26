@@ -41,7 +41,7 @@ Assuming that your web side is hosted on `https://myapp.com`:
 
 ```bash
 SUPERTOKENS_WEBSITE_DOMAIN=https://myapp.com
-SUPERTOKENS_JWKS_URL=https://my.app.com/.redwood/functions/auth/jwt/jwks.json
+SUPERTOKENS_JWKS_URL=https://myapp.com/.redwood/functions/auth/jwt/jwks.json
 ```
 
 ## Managed Supertokens service setup
