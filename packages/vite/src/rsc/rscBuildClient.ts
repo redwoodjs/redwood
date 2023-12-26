@@ -6,7 +6,8 @@ import { build as viteBuild } from 'vite'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn'
-import { rscIndexPlugin } from '../waku-lib/vite-plugin-rsc'
+
+import { rscIndexPlugin } from './rscVitePlugins'
 
 /**
  * RSC build. Step 2.

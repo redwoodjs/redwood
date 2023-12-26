@@ -1,13 +1,20 @@
 /* eslint-env node */
 
+import { fileURLToPath } from 'node:url'
+
 import { faker } from '@faker-js/faker'
 import boxen from 'boxen'
 import { Octokit } from 'octokit'
 import ora from 'ora'
 import _prompts from 'prompts'
 import semver from 'semver'
-import { chalk, fs, question, $ } from 'zx'
+import { cd, chalk, fs, path, question, $ } from 'zx'
+
 import 'dotenv/config'
+
+// ─── Constants ───────────────────────────────────────────────────────────────
+
+const triageDataRepoPath = new URL(`../../../triage-data/`, import.meta.url)
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -69,6 +76,7 @@ export function unwrap(processOutput) {
  * @param {string} message
  */
 export function consoleBoxen(title, message) {
+  console.log()
   console.log(
     boxen(message, {
       title,
@@ -335,6 +343,25 @@ export async function triageRange(range) {
     range.to.replaceAll('/', '-'),
   ].join('_')
 
+  // Commit triage data files (like `main_next.commitTriageData.json`) come in and out of existence,
+  // so we can't rely on them to know if the triage data repo was cloned. Instead we use `.git`.
+  if (!fs.existsSync(new URL('./.git', triageDataRepoPath))) {
+    spinner.stop()
+    throw new Error(
+      [
+        "You're missing commit triage data.",
+        'You need to clone the triage data repo (https://github.com/redwoodjs/triage-data)',
+        'adjacent to the redwood one:',
+        '',
+        '```',
+        '.',
+        '├── redwood',
+        '└── triage-data',
+        '```',
+      ].join('\n')
+    )
+  }
+
   // Set up the commit triage data. This reads a file like `./main_next.commitTriageData.json` into a map
   // and sets up a hook on `process.exit` so that we don't have to remember to write it.
   //
@@ -346,9 +373,23 @@ export async function triageRange(range) {
   //   needsCherryPick: false
   // }
   // ```
-  const commitTriageData = setUpDataFile(
-    new URL(`./triage/${fileNamePrefix}.commitTriageData.json`, import.meta.url)
+  let commitTriageData
+  const commitTriageDataPath = new URL(
+    `./${fileNamePrefix}.commitTriageData.json`,
+    triageDataRepoPath
   )
+
+  try {
+    commitTriageData = new Map(
+      Object.entries(fs.readJSONSync(commitTriageDataPath, 'utf-8'))
+    )
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      commitTriageData = new Map()
+    } else {
+      throw e
+    }
+  }
 
   // In git, the "symmetric difference" (syntactically, three dots: `...`) is what's different between two branches.
   // It's the commits one branch has that the other doesn't, and vice versa:
@@ -406,35 +447,27 @@ export async function triageRange(range) {
   }
 
   reportCommitStatuses({ commits, commitTriageData, range })
-}
 
-/**
- * @param {URL} path
- */
-export function setUpDataFile(path) {
-  let data
+  if (commitTriageData.size || prMilestoneCache.size) {
+    fs.writeJSONSync(
+      commitTriageDataPath,
+      Object.fromEntries(commitTriageData),
+      {
+        spaces: 2,
+      }
+    )
+    fs.writeJSONSync(
+      prMilestoneCachePath,
+      Object.fromEntries(prMilestoneCache),
+      {
+        spaces: 2,
+      }
+    )
 
-  // Return an empty map if the file doesn't exist.
-  try {
-    data = new Map(Object.entries(fs.readJSONSync(path, 'utf-8')))
-  } catch (e) {
-    if (e.code === 'ENOENT') {
-      data = new Map()
-    } else {
-      throw e
-    }
+    await cd(fileURLToPath(triageDataRepoPath))
+    await $`git commit -am "triage ${new Date().toISOString()}"`
+    await $`git push`
   }
-
-  // Write the file on the process's exit event so we don't have to remember to.
-  // Note that this is different from `process.exit`, and calling `process.exit` actually doesn't trigger this event. (So avoid doing it.)
-  // The conditional is just to avoid writing an empty map to a file (which JSON stringifies as `{}`), which is just noise.
-  process.on('exit', () => {
-    if (data.size) {
-      fs.writeJSONSync(path, Object.fromEntries(data), { spaces: 2 })
-    }
-  })
-
-  return data
 }
 
 export const defaultGitLogOptions = [
@@ -824,7 +857,7 @@ export async function triageCommits({ commits, commitTriageData, range }) {
         comment = commentRes.comment
       }
 
-      if (['open', 'o'].includes(answer)) {
+      if (answer === 'open') {
         if (commit.url) {
           await $`open ${commit.url}`
         } else {
@@ -848,7 +881,7 @@ export async function triageCommits({ commits, commitTriageData, range }) {
 /**
  *
  * @param {string} answer
- * @returns {'yes'|'no'|'skip'}
+ * @returns {'yes'|'no'|'skip'|'open'}
  */
 function getLongAnswer(answer) {
   answer = answer.toLowerCase()
@@ -864,18 +897,34 @@ function getLongAnswer(answer) {
   if (['s', 'skip'].includes(answer)) {
     return 'skip'
   }
+
+  if (['o', 'open'].includes(answer)) {
+    return 'open'
+  }
 }
 
 export let prMilestoneCache
+const prMilestoneCachePath = new URL(
+  './prMilestoneCache.json',
+  triageDataRepoPath
+)
 
 /**
  * @param {string} prURL
  */
 export async function getPRMilestoneFromURL(prURL) {
   if (!prMilestoneCache) {
-    prMilestoneCache = setUpDataFile(
-      new URL('./prMilestoneCache.json', import.meta.url)
-    )
+    try {
+      prMilestoneCache = new Map(
+        Object.entries(fs.readJSONSync(prMilestoneCachePath, 'utf-8'))
+      )
+    } catch (e) {
+      if (e.code === 'ENOENT') {
+        prMilestoneCache = new Map()
+      } else {
+        throw e
+      }
+    }
   }
 
   if (prMilestoneCache.has(prURL)) {
@@ -1260,9 +1309,28 @@ export async function openCherryPickPRs() {
   await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Aopen+label%3Acherry-pick`
 }
 
-// ─── Wip ─────────────────────────────────────────────────────────────────────
+// ─── Misc ────────────────────────────────────────────────────────────────────
 
-// Troublesome lines to test...
-// Here, there's two PR syntaxes. We want the last one
-// < | | f5d1a1a1f77afafb252031c07f5405b998004f20 feature(#8676): added usernameMatch criteria to login methods to match signup (#8686)
-// Find one with square brackets ([])
+/**
+ * Find a file by walking up parent directories.
+ *
+ * @param {string} file
+ * @param {string} [startingDirectory=process.cwd()]
+ * @returns {string | null}
+ */
+export function findUp(file, startingDirectory = process.cwd()) {
+  const possibleFilepath = path.join(startingDirectory, file)
+
+  if (fs.existsSync(possibleFilepath)) {
+    return possibleFilepath
+  }
+
+  const parentDirectory = path.dirname(startingDirectory)
+
+  // If we've reached the root directory, there's no file to be found.
+  if (parentDirectory === startingDirectory) {
+    return null
+  }
+
+  return findUp(file, parentDirectory)
+}

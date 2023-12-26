@@ -56,10 +56,15 @@ Lastly, in your project's `redwood.toml` file, include `CLERK_PUBLISHABLE_KEY` i
 ```
 
 That should be enough; now, things should just work.
-Let's make sure: if this is a brand new project, generate a home page.
+Let's make sure: if this is a brand new project, generate a home page:
+
+```bash
+yarn rw g page Home /
+```
+
 There we'll try to sign up by destructuring `signUp` from the `useAuth` hook (import that from `'src/auth'`). We'll also destructure and display `isAuthenticated` to see if it worked:
 
-```tsx title="web/src/pages/HomePage.tsx"
+```tsx title="web/src/pages/HomePage/HomePage.tsx"
 import { useAuth } from 'src/auth'
 
 const HomePage = () => {
@@ -76,11 +81,8 @@ const HomePage = () => {
 }
 ```
 
-Clicking sign up should open a sign-up box:
+Clicking sign up should open a sign-up box and after you sign up, you should see `{"isAuthenticated":true}` on the page.
 
-<img width="1522" alt="image" src="https://user-images.githubusercontent.com/32992335/208342825-b380f8f8-7b76-4be9-a0a5-e64740a03bd3.png" />
-
-After you sign up, you should see `{"isAuthenticated":true}` on the page.
 
 ## Customizing the session token
 

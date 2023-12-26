@@ -1,5 +1,6 @@
 import path from 'node:path'
 
+import * as swc from '@swc/core'
 import chokidar from 'chokidar'
 import fs from 'fs-extra'
 import { simpleParser as simpleMailParser } from 'mailparser'
@@ -8,8 +9,7 @@ import { SMTPServer } from 'smtp-server'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { getDatabase } from '../database'
-
-const swc = require('@swc/core')
+import { getStudioConfig } from '../lib/config'
 
 let smtpServer: SMTPServer
 
@@ -38,8 +38,11 @@ export function startServer() {
       })
     },
   })
-  smtpServer.listen(4319, undefined, () => {
-    console.log('Studio SMTP Server listening on 4319')
+
+  const port = getStudioConfig().basePort + 1
+
+  smtpServer.listen(port, undefined, () => {
+    console.log('Studio SMTP Server listening on ' + port)
   })
 }
 
@@ -124,7 +127,7 @@ export async function updateMailTemplates() {
     (file) => {
       const correspondingDistEntry =
         file
-          .replace('api/src', 'api/dist')
+          .replace(path.join('api', 'src'), path.join('api', 'dist'))
           .substring(0, file.lastIndexOf('.') + 1) + '.js'
       return distFiles.includes(correspondingDistEntry)
     }
@@ -217,47 +220,219 @@ export async function updateMailTemplates() {
   )
 }
 
+function generatePropsTemplate(param: swc.Param | swc.Pattern | null) {
+  // No param means no props template
+  if (!param) {
+    return null
+  }
+
+  // Get the pattern
+  const pattern = param.type === 'Parameter' ? param.pat : param
+  if (!pattern) {
+    return null
+  }
+
+  // Attempt to generate a props template from the pattern
+  let propsTemplate = 'Provide your props here as JSON'
+  try {
+    switch (pattern.type) {
+      case 'Identifier':
+        propsTemplate = `{${pattern.value}: ?}`
+        break
+      case 'AssignmentPattern':
+        if (pattern.left.type === 'ObjectPattern') {
+          propsTemplate = `{${pattern.left.properties
+            .map((p: any) => {
+              return `\n  "${p.key.value}": ?`
+            })
+            .join(',')}\n}`
+        }
+        break
+      case 'ObjectPattern':
+        propsTemplate = `{${pattern.properties
+          .map((p: any) => {
+            return `\n  "${p.key.value}": ?`
+          })
+          .join(',')}\n}`
+        break
+    }
+  } catch (_error) {
+    // ignore for now, we'll fallback to the generic props template
+  }
+
+  // Fallback to a generic props template if we can't figure out anything more helpful
+  return propsTemplate
+}
+
+function extractNameAndPropsTemplate(
+  component: swc.ModuleItem,
+  functionsAndVariables: swc.ModuleItem[]
+): {
+  name: string
+  propsTemplate: string | null
+} {
+  switch (component.type) {
+    case 'ExportDeclaration':
+      // Arrow functions
+      if (component.declaration.type === 'VariableDeclaration') {
+        // We only support the identifier type for now
+        const identifier = component.declaration.declarations[0].id
+        if (identifier.type !== 'Identifier') {
+          throw new Error('Unexpected identifier type: ' + identifier.type)
+        }
+        // We only support arrow and normal functions for now
+        const expression = component.declaration.declarations[0].init
+        if (!expression) {
+          throw new Error('Unexpected undefined expression')
+        }
+        if (
+          expression.type !== 'ArrowFunctionExpression' &&
+          expression.type !== 'FunctionExpression'
+        ) {
+          throw new Error('Unexpected expression type: ' + expression.type)
+        }
+        return {
+          name: identifier.value,
+          propsTemplate: generatePropsTemplate(expression.params[0] ?? null),
+        }
+      }
+
+      // Normal functions
+      if (component.declaration.type === 'FunctionDeclaration') {
+        return {
+          name: component.declaration.identifier.value,
+          propsTemplate: generatePropsTemplate(
+            component.declaration.params[0] ?? null
+          ),
+        }
+      }
+
+      // Throw for anything else
+      throw new Error(
+        'Unexpected declaration type: ' + component.declaration.type
+      )
+
+    case 'ExportDefaultExpression':
+      // Arrow functions
+      if (component.expression.type === 'ArrowFunctionExpression') {
+        return {
+          name: 'default',
+          propsTemplate: generatePropsTemplate(
+            component.expression.params[0] ?? null
+          ),
+        }
+      }
+
+      // Variables defined elsewhere and then exported as default
+      if (component.expression.type === 'Identifier') {
+        const expression = component.expression
+        const variable = functionsAndVariables.find((v) => {
+          return (
+            (v.type === 'FunctionDeclaration' &&
+              v.identifier.value === expression.value) || // function
+            (v.type === 'VariableDeclaration' &&
+              v.declarations[0].type === 'VariableDeclarator' &&
+              v.declarations[0].id.type === 'Identifier' &&
+              v.declarations[0].id.value === expression.value) // variable
+          )
+        })
+        if (variable) {
+          if (variable.type === 'FunctionDeclaration') {
+            return {
+              name: variable.identifier.value + ' (default)',
+              propsTemplate: generatePropsTemplate(variable.params[0] ?? null),
+            }
+          }
+          if (variable.type === 'VariableDeclaration') {
+            if (variable.declarations[0].id.type !== 'Identifier') {
+              throw new Error(
+                'Unexpected identifier type: ' +
+                  variable.declarations[0].id.type
+              )
+            }
+            if (
+              variable.declarations[0].init?.type !== 'FunctionExpression' &&
+              variable.declarations[0].init?.type !== 'ArrowFunctionExpression'
+            ) {
+              throw new Error(
+                'Unexpected init type: ' + variable.declarations[0].init?.type
+              )
+            }
+            return {
+              name: variable.declarations[0].id.value + ' (default)',
+              propsTemplate: generatePropsTemplate(
+                variable.declarations[0].init?.params[0] ?? null
+              ),
+            }
+          }
+        }
+      }
+
+      // Throw for anything else
+      throw new Error(
+        'Unexpected expression type: ' + component.expression.type
+      )
+
+    case 'ExportDefaultDeclaration':
+      // Normal functions
+      if (component.decl.type === 'FunctionExpression') {
+        let name = 'default'
+        if (component.decl.identifier) {
+          name = component.decl.identifier.value
+        }
+        return {
+          name,
+          propsTemplate: generatePropsTemplate(
+            component.decl.params[0] ?? null
+          ),
+        }
+      }
+
+      // Throw for anything else
+      throw new Error('Unexpected declaration type: ' + component.decl.type)
+
+    default:
+      throw new Error('Unexpected component type: ' + component.type)
+  }
+}
+
 function getMailTemplateComponents(templateFilePath: string) {
   const ast = swc.parseFileSync(templateFilePath, {
     syntax: templateFilePath.endsWith('.js') ? 'ecmascript' : 'typescript',
     tsx: templateFilePath.endsWith('.tsx') || templateFilePath.endsWith('.jsx'),
   })
 
-  const components = []
+  const components: { name: string; propsTemplate: string | null }[] = []
+  const functionsAndVariables = ast.body.filter((node: any) => {
+    return (
+      node.type === 'VariableDeclaration' || node.type === 'FunctionDeclaration'
+    )
+  })
 
-  // `export function X(){};`
   const exportedComponents = ast.body.filter((node: any) => {
-    return node.type === 'ExportDeclaration'
+    return [
+      'ExportDeclaration',
+      'ExportDefaultDeclaration',
+      'ExportDefaultExpression',
+    ].includes(node.type)
   })
   for (let i = 0; i < exportedComponents.length; i++) {
-    let propsTemplate = null
-    const hasParams = exportedComponents[i].declaration.params.length > 0
-    if (hasParams) {
-      propsTemplate = 'Provide your props here as JSON'
-      try {
-        const param = exportedComponents[i].declaration.params[0]
-        switch (param.pat.type) {
-          case 'ObjectPattern':
-            propsTemplate = `{${param.pat.properties
-              .map((p: any) => {
-                return `\n  "${p.key.value}": ?`
-              })
-              .join(',')}\n}`
-            break
-        }
-      } catch (_error) {
-        // Ignore for now
-      }
+    try {
+      const { propsTemplate, name } = extractNameAndPropsTemplate(
+        exportedComponents[i],
+        functionsAndVariables
+      )
+      components.push({
+        name,
+        propsTemplate,
+      })
+    } catch (error) {
+      console.error(
+        `Error extracting template component name and props template from ${templateFilePath}:`
+      )
+      console.error(error)
     }
-    components.push({
-      name: exportedComponents[i].declaration?.identifier?.value ?? 'Unknown',
-      propsTemplate,
-    })
   }
-
-  // TODO: Support `const X = () => {}; export default X;`
-  // TODO: Support `export default function X () => {}`
-  // TODO: Support `export default () => {}`
 
   return components
 }
@@ -274,7 +449,7 @@ export async function updateMailRenderers() {
     const suffix = `studio_${Date.now()}`
     const importPath = mailerFilePath.replace('.js', `.${suffix}.js`)
     fs.copyFileSync(mailerFilePath, importPath)
-    const mailer = (await import(importPath)).mailer
+    const mailer = (await import(`file://${importPath}`)).mailer
     fs.removeSync(importPath)
     const renderers = Object.keys(mailer.renderers)
     const defaultRenderer = mailer.config.rendering.default

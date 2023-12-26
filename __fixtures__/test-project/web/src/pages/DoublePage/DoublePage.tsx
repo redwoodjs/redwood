@@ -1,9 +1,9 @@
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const DoublePage = () => {
   return (
     <>
-      <MetaTags title="Double" description="Double page" />
+      <Metadata title="Double" description="Double page" og />
 
       <h1 className="mb-1 mt-2 text-xl font-semibold">DoublePage</h1>
       <p>

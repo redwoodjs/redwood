@@ -1,12 +1,12 @@
 import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import JobsCell from 'src/components/Jobs/JobsCell'
 import JobProfilesCell from 'src/components/Jobs/JobProfilesCell'
 
 const JobsPage = () => {
   return (
     <>
-      <MetaTags
+      <Metadata
         title="Jobs"
         description="Want to get paid to write RedwoodJS?"
       />

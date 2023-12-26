@@ -22,7 +22,7 @@ services:
       - NODE_ENV=development
 
   db:
-    image: postgres:15-bookworm
+    image: postgres:16-bookworm
     environment:
       POSTGRES_USER: redwood
       POSTGRES_PASSWORD: redwood
