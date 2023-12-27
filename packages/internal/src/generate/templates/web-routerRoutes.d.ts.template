@@ -11,6 +11,9 @@ ${routes.map(
   }
 ).join('\n')}
   }
+
+  export function useRoutePaths(): Record<keyof AvailableRoutes, string>
+  export function useRoutePath(routeName: keyof AvailableRoutes): string
 }
 
 //# sourceMappingURL=web-routerRoutes.d.ts.map
