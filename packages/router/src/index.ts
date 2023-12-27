@@ -20,6 +20,8 @@ export { default as RouteFocus } from './route-focus'
 export * from './route-focus'
 export * from './useRouteName'
 
+export * from './useRoutePaths'
+
 export { parseSearch, getRouteRegexAndParams, matchPath } from './util'
 
 /**

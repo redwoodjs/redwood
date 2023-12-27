@@ -56,7 +56,7 @@ function Route(_props: RouteProps | RedirectRouteProps | NotFoundRouteProps) {
 }
 
 export interface RouterProps
-  extends Omit<RouterContextProviderProps, 'activeRouteName'> {
+  extends Omit<RouterContextProviderProps, 'routes' | 'activeRouteName'> {
   trailingSlashes?: TrailingSlashesTypes
   pageLoadingDelay?: number
   children: ReactNode
@@ -92,13 +92,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 }) => {
   const location = useLocation()
 
-  const {
-    pathRouteMap,
-    hasHomeRoute,
-    namedRoutesMap,
-    NotFoundPage,
-    activeRoutePath,
-  } = useMemo(() => {
+  const analyzeRoutesResult = useMemo(() => {
     return analyzeRoutes(children, {
       currentPathName: location.pathname,
       // @TODO We haven't handled this with SSR/Streaming yet.
@@ -106,6 +100,14 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
       userParamTypes: paramTypes,
     })
   }, [location.pathname, children, paramTypes])
+
+  const {
+    pathRouteMap,
+    hasHomeRoute,
+    namedRoutesMap,
+    NotFoundPage,
+    activeRoutePath,
+  } = analyzeRoutesResult
 
   // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
   // Note that the value changes at runtime
@@ -131,7 +133,11 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   if (!activeRoutePath) {
     if (NotFoundPage) {
       return (
-        <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
+        <RouterContextProvider
+          useAuth={useAuth}
+          paramTypes={paramTypes}
+          routes={analyzeRoutesResult}
+        >
           <ParamsProvider>
             <PageLoadingContextProvider delay={pageLoadingDelay}>
               <ActiveRouteLoader
@@ -169,6 +175,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     <RouterContextProvider
       useAuth={useAuth}
       paramTypes={paramTypes}
+      routes={analyzeRoutesResult}
       activeRouteName={name}
     >
       <ParamsProvider allParams={allParams}>
