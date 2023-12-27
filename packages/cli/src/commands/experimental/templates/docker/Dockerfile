@@ -2,6 +2,8 @@
 # ------------------------------------------------
 FROM node:20-bookworm-slim as base
 
+RUN corepack enable
+
 RUN apt-get update && apt-get install -y \
     openssl \
     # python3 make gcc \
@@ -15,6 +17,8 @@ COPY --chown=node:node package.json .
 COPY --chown=node:node api/package.json api/
 COPY --chown=node:node web/package.json web/
 COPY --chown=node:node yarn.lock .
+
+RUN mkdir -p /home/node/.yarn/berry/info
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
@@ -54,6 +58,8 @@ RUN yarn redwood build web --no-prerender
 # ------------------------------------------------
 FROM node:20-bookworm-slim as api_serve
 
+RUN corepack enable
+
 RUN apt-get update && apt-get install -y \
     openssl \
     # python3 make gcc \
@@ -65,6 +71,8 @@ WORKDIR /home/node/app
 COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node api/package.json .
 COPY --chown=node:node yarn.lock .
+
+RUN mkdir -p /home/node/.yarn/berry/info
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
@@ -86,12 +94,16 @@ CMD [ "node_modules/.bin/rw-server", "api", "--load-env-files" ]
 # ------------------------------------------------
 FROM node:20-bookworm-slim as web_serve
 
+RUN corepack enable
+
 USER node
 WORKDIR /home/node/app
 
 COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node web/package.json .
 COPY --chown=node:node yarn.lock .
+
+RUN mkdir -p /home/node/.yarn/berry/info
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
