@@ -11,6 +11,9 @@ ${routes.map(
   }
 ).join('\n')}
   }
+
+  export function useRoutePaths(): Record<keyof AvailableRoutes, string>
+  export function useRoutePath(routeName: keyof AvailableRoutes): string
 }
 
 ${params.map(p => `export type ${p.name} = {${p.params.length ? "\n" :""}${p.params.map(([key, type]) =>`  ${key}: ${type}` ).join("\n")}${p.params.length ? "\n" :""}}`).join('\n\n')}
