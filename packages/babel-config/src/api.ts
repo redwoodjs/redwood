@@ -87,7 +87,7 @@ export const getApiSideBabelPlugins = (
         alias: {
           src: './src',
           // adds the paths from [ts|js]config.json to the module resolver
-          ...getPathsFromTypeScriptConfig(tsConfig.api),
+          ...getPathsFromTypeScriptConfig(tsConfig.api, getPaths().api.base),
         },
         root: [getPaths().api.base],
         cwd: 'packagejson',
