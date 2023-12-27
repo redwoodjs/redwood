@@ -79,8 +79,8 @@ COPY --chown=node:node yarn.lock .
 COPY --chown=node:node package.json /tmp/root-package.json
 RUN export PACKAGE_MANAGER=$(jq -r .packageManager /tmp/root-package.json) \
     && jq --arg packageManager $PACKAGE_MANAGER '. + { "packageManager": $packageManager }' package.json \
-    > /tmp/api-package.json \
-    && mv /tmp/api-package.json package.json
+    > /tmp/tmp-package.json \
+    && mv /tmp/tmp-package.json package.json
 
 RUN mkdir -p /home/node/.yarn/berry/info
 
@@ -118,13 +118,13 @@ COPY --chown=node:node web/package.json .
 COPY --chown=node:node yarn.lock .
 
 # Copy over the project root package.json to get the packageManager from it,
-# then write it to the api package.json that is the new root package.json in
+# then write it to the web package.json that is the new root package.json in
 # the container
 COPY --chown=node:node package.json /tmp/root-package.json
 RUN export PACKAGE_MANAGER=$(jq -r .packageManager /tmp/root-package.json) \
     && jq --arg packageManager $PACKAGE_MANAGER '. + { "packageManager": $packageManager }' package.json \
-    > /tmp/api-package.json \
-    && mv /tmp/api-package.json package.json
+    > /tmp/tmp-package.json \
+    && mv /tmp/tmp-package.json package.json
 
 RUN mkdir -p /home/node/.yarn/berry/info
 
