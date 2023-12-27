@@ -134,7 +134,7 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
 
   if (getConfig().graphql?.fragments) {
     console.log(
-      'Creating the virtual modules needed for prerendering when GraphQLfragments are configured ...'
+      'Creating the virtual modules needed for prerendering when GraphQL fragments are configured ...'
     )
     const possibleTypes = path.join(
       getPaths().base,
