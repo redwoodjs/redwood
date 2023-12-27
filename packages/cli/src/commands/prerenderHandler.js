@@ -132,6 +132,34 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     return []
   }
 
+  if (getConfig().graphql?.fragments) {
+    console.log(
+      'Creating the virtual modules needed for prerendering when GraphQLfragments are configured ...'
+    )
+    const possibleTypes = path.join(
+      getPaths().base,
+      'node_modules',
+      '@redwoodjs',
+      'web',
+      'dist',
+      'apollo',
+      'possibleTypes.js'
+    )
+
+    const f = fs.readFileSync(possibleTypes, 'utf8')
+    fs.writeFileSync(
+      path.join(
+        getPaths().base,
+        'node_modules',
+        '@redwoodjs',
+        'web',
+        'dist',
+        'virtual-possibleTypes.js'
+      ),
+      f
+    )
+  }
+
   if (!fs.existsSync(indexHtmlPath)) {
     console.error(
       'You must run `yarn rw build web` before trying to prerender.'
@@ -140,6 +168,7 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     // TODO: Run this automatically at this point.
   }
 
+  // Do we also need to configure vite for the possible types virtual module import?
   configureBabel()
 
   const expandedRouteParameters = await Promise.all(
