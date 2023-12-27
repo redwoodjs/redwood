@@ -1,5 +1,8 @@
-// Update db during dev, creates no migration files: yarn rw prisma db push
-// When you're ready to commit: yarn rw prisma migrate dev
+// Don't forget to tell Prisma about your edits to this file using
+// `yarn rw prisma migrate dev` or `yarn rw prisma db push`.
+// `migrate` is like committing while `push` is for prototyping.
+// Read more about both here:
+// https://www.prisma.io/docs/orm/prisma-migrate
 
 datasource db {
   provider = "sqlite"
