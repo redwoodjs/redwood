@@ -80,7 +80,13 @@ While alpine may be smaller, it uses musl, a different C standard library.
 In developing this Dockerfile, we prioritized security over size.
 
 If you know what you're doing feel free to change this—it's your Dockerfile now!
-Just remember to change the `apt-get` instructions below too if needed.
+Just remember to change the `apt-get` instructions further down too if needed.
+
+```Dockerfile
+RUN corepack enable
+```
+
+corepack is enabled to make yarn v4 available to the Redwood project
 
 :::
 
@@ -111,8 +117,6 @@ We reuse it.
 ```Dockerfile
 WORKDIR /home/node/app
 
-COPY --chown=node:node .yarn/plugins .yarn/plugins
-COPY --chown=node:node .yarn/releases .yarn/releases
 COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node package.json .
 COPY --chown=node:node api/package.json api/
@@ -207,8 +211,6 @@ In comparison to `base` we've also added `jq` here. It's needed to manipulate `p
 USER node
 WORKDIR /home/node/app
 
-COPY --chown=node:node .yarn/plugins .yarn/plugins
-COPY --chown=node:node .yarn/releases .yarn/releases
 COPY --chown=node:node .yarnrc.yml .yarnrc.yml
 COPY --chown=node:node api/package.json .
 COPY --chown=node:node yarn.lock yarn.lock
@@ -227,7 +229,7 @@ RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
 
 This is a critical step for image size.
 We don't use the regular `yarn install` command.
-Using the [official workspaces plugin](https://github.com/yarnpkg/berry/tree/master/packages/plugin-workspace-tools)—which will be included by default in yarn v4—we "focus" on the api workspace, only installing its production dependencies.
+Using the [official workspaces plugin](https://github.com/yarnpkg/berry/tree/master/packages/plugin-workspace-tools)—which is included by default in yarn v4—we "focus" on the api workspace, only installing its production dependencies.
 
 The cache mount will be populated at this point from the install in the `base` stage, so the fetch step should fly by.
 
@@ -303,8 +305,6 @@ FROM node:20-bookworm-slim as web_serve
 USER node
 WORKDIR /home/node/app
 
-COPY --chown=node:node .yarn/plugins .yarn/plugins
-COPY --chown=node:node .yarn/releases .yarn/releases
 COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node web/package.json .
 COPY --chown=node:node yarn.lock .
