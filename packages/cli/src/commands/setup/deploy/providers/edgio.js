@@ -1,5 +1,4 @@
-import fs from 'fs'
-
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'

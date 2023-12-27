@@ -28,7 +28,7 @@ services:
       - API_HOST=http://api:8911
 
   db:
-    image: postgres:15-bookworm
+    image: postgres:16-bookworm
     environment:
       POSTGRES_USER: redwood
       POSTGRES_PASSWORD: redwood

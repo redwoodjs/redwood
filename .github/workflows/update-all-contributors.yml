@@ -22,9 +22,12 @@ jobs:
         with:
           token: ${{ secrets.JTOAR_TOKEN }}
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - run: yarn install
 

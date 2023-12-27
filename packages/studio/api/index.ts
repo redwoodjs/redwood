@@ -1,13 +1,16 @@
+import path from 'node:path'
+
+import fastifyStatic from '@fastify/static'
 import Fastify from 'fastify'
 import type { FastifyInstance } from 'fastify'
 import open from 'open'
 
 import withApiProxy from './fastify/plugins/withApiProxy'
-import reactRoutes from './fastify/react'
 import spanRoutes from './fastify/spanIngester'
 import yogaRoutes from './fastify/yoga'
 import { setupYoga } from './graphql/yoga'
-import { getWebConfig } from './lib/config'
+import { getStudioConfig, getWebConfig } from './lib/config'
+import { rewriteWebToUsePort } from './lib/rewriteWebToUsePort'
 import {
   registerMailRelatedWatchers,
   startServer as startMailServer,
@@ -16,7 +19,6 @@ import {
 import { runMigrations } from './migrations'
 
 const HOST = 'localhost'
-const PORT = 4318
 
 let fastify: FastifyInstance
 
@@ -59,20 +61,26 @@ export const start = async (
     rewritePrefix: '/' + graphqlEndpoint.split('/').slice(3).join('/'),
   })
 
+  const studioPort = getStudioConfig().basePort
+  const webPath = path.join(__dirname, '..', '..', 'dist', 'web')
+
+  rewriteWebToUsePort(webPath, studioPort)
+
   // GraphQL
   const yogaServer = setupYoga(fastify)
 
   // Routes
   fastify.register(spanRoutes)
   fastify.register(yogaRoutes, { yoga: yogaServer })
-  fastify.register(reactRoutes)
+  // Statically serve the web side (React)
+  fastify.register(fastifyStatic, { root: webPath })
 
-  fastify.listen({ port: PORT, host: HOST })
+  fastify.listen({ port: studioPort, host: HOST })
   fastify.ready(() => {
-    console.log(`Studio API listening on ${HOST}:${PORT}`)
+    console.log(`Studio API listening on ${HOST}:${studioPort}`)
 
     if (autoOpen) {
-      open(`http://${HOST}:${PORT}`)
+      open(`http://${HOST}:${studioPort}`)
     }
   })
 
