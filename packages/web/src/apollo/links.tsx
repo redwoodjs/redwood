@@ -1,5 +1,5 @@
-import type { HttpOptions } from '@apollo/client'
-import { ApolloLink, HttpLink } from '@apollo/client'
+import type { HttpOptions, Operation } from '@apollo/client'
+import { ApolloLink, HttpLink, Observable } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { print } from 'graphql/language/printer'
 
@@ -8,28 +8,44 @@ export function createHttpLink(
   httpLinkConfig: HttpOptions | undefined
 ) {
   return new HttpLink({
-    // @MARK: we have to construct the absoltue url for SSR
     uri,
     ...httpLinkConfig,
     // you can disable result caching here if you want to
-    // (this does not work if you are rendering your page with `export const dynamic = "force-static"`)
+    // @TODO: this is probably NextJS specific. Revisit once we have our own apollo package
     fetchOptions: { cache: 'no-store' },
   })
 }
-export function createUpdateDataLink(data: any) {
+
+function enhanceError(operation: Operation, error: any) {
+  const { operationName, query, variables } = operation
+
+  error.__RedwoodEnhancedError = {
+    operationName,
+    operationKind: query?.kind.toString(),
+    variables,
+    query: query && print(query),
+  }
+
+  return error
+}
+
+export function createUpdateDataLink() {
   return new ApolloLink((operation, forward) => {
-    const { operationName, query, variables } = operation
-
-    data.mostRecentRequest = {}
-    data.mostRecentRequest.operationName = operationName
-    data.mostRecentRequest.operationKind = query?.kind.toString()
-    data.mostRecentRequest.variables = variables
-    data.mostRecentRequest.query = query && print(operation.query)
-
-    return forward(operation).map((result) => {
-      data.mostRecentResponse = result
-
-      return result
+    return new Observable((observer) => {
+      forward(operation).subscribe({
+        next(result) {
+          if (result.errors) {
+            result.errors.forEach((error) => {
+              enhanceError(operation, error)
+            })
+          }
+          observer.next(result)
+        },
+        error(error: any) {
+          observer.error(enhanceError(operation, error))
+        },
+        complete: observer.complete.bind(observer),
+      })
     })
   })
 }
@@ -96,7 +112,7 @@ export function createFinalLink({
 export type RedwoodApolloLinkName =
   | 'withToken'
   | 'authMiddleware'
-  | 'updateDataApolloLink'
+  | 'enhanceErrorLink'
   | 'httpLink'
 
 export type RedwoodApolloLink<
@@ -110,7 +126,7 @@ export type RedwoodApolloLink<
 export type RedwoodApolloLinks = [
   RedwoodApolloLink<'withToken'>,
   RedwoodApolloLink<'authMiddleware'>,
-  RedwoodApolloLink<'updateDataApolloLink'>,
+  RedwoodApolloLink<'enhanceErrorLink'>,
   RedwoodApolloLink<'httpLink', HttpLink>
 ]
 
