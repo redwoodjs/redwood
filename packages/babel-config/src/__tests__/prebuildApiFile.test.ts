@@ -443,9 +443,7 @@ describe('api prebuild ', () => {
     })
 
     it('auto imports', () => {
-      expect(code).toContain(
-        'import { context } from "@redwoodjs/graphql-server"'
-      )
+      expect(code).toContain('import { context } from "@redwoodjs/context"')
       expect(code).toContain('import gql from "graphql-tag"')
     })
   })

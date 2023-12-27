@@ -39,19 +39,21 @@ export function exitWithError(
   const line = chalk.red('-'.repeat(process.stderr.columns))
 
   // Generate and print a nice message to the user
-  const content = [
-    line,
-    message,
-    includeEpilogue && `\n${line}`,
-    includeEpilogue && epilogue,
-    includeReferenceCode &&
-      ` - Here's your unique error reference to quote: '${errorReferenceCode}'`,
-    line,
-  ]
-    .filter(Boolean)
-    .join('\n')
+  const content = !includeEpilogue
+    ? message
+    : [
+        '',
+        line,
+        message,
+        `\n${line}`,
+        epilogue,
+        includeReferenceCode &&
+          ` - Here's your unique error reference to quote: '${errorReferenceCode}'`,
+        line,
+      ]
+        .filter(Boolean)
+        .join('\n')
 
-  console.error()
   console.error(content)
 
   // Record the error in telemetry

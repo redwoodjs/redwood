@@ -97,7 +97,7 @@ export async function getRenderedMail(
     // Import the template component
     const templateComponentDistPath =
       template.path
-        .replace('api/src', 'api/dist')
+        .replace(path.join('api', 'src'), path.join('api', 'dist'))
         .substring(0, template.path.lastIndexOf('.') + 1) + '.js'
 
     const templateImportPath = templateComponentDistPath.replace(
@@ -105,9 +105,14 @@ export async function getRenderedMail(
       `.studio_${Date.now()}.js`
     )
     fs.copyFileSync(templateComponentDistPath, templateImportPath)
-    const templateComponent = await import(templateImportPath)
+    const templateComponent = (await import(`file://${templateImportPath}`))
+      .default
     fs.removeSync(templateImportPath)
-    const Component = templateComponent[component.name]
+
+    const Component =
+      component.name.indexOf('default') !== -1
+        ? templateComponent.default
+        : templateComponent[component.name]
 
     // Import the mailer
     const mailerFilePath = path.join(getPaths().api.dist, 'lib', 'mailer.js')
@@ -116,7 +121,7 @@ export async function getRenderedMail(
       `.studio_${Date.now()}.js`
     )
     fs.copyFileSync(mailerFilePath, mailerImportPath)
-    const mailer = (await import(mailerImportPath)).mailer
+    const mailer = (await import(`file://${mailerImportPath}`)).mailer
     fs.removeSync(mailerImportPath)
 
     // Render the component

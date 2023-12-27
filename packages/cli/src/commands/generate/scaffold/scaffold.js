@@ -1,8 +1,8 @@
-import fs from 'fs'
 import path from 'path'
 
 import camelcase from 'camelcase'
 import execa from 'execa'
+import fs from 'fs-extra'
 import humanize from 'humanize-string'
 import { Listr } from 'listr2'
 import { paramCase } from 'param-case'
