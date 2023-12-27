@@ -9,10 +9,11 @@ const apiGatewayPath =
   process.env.SUPERTOKENS_API_GATEWAY_PATH || '/.redwood/functions'
 
 export const config: TypeInput = {
+  # The below options are ok here even if you're not running on top of AWS Lambda, since Redwood internally translates Fastify request/response objects to and from the AWS Lambda format.
   framework: 'awsLambda',
   isInServerlessEnv: true,
   appInfo: {
-    appName: 'SuperTokens RedwoodJS',
+    appName: process.env.SUPERTOKENS_APP_NAME,
     apiDomain,
     websiteDomain,
     apiGatewayPath,
@@ -21,6 +22,7 @@ export const config: TypeInput = {
   },
   supertokens: {
     connectionURI: process.env.SUPERTOKENS_CONNECTION_URI,
+    apiKey: process.env.SUPERTOKENS_API_KEY,
   },
   recipeList: [
     ThirdPartyEmailPassword.init({
