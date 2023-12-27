@@ -91,6 +91,7 @@ import { standard } from './UserProfileCell.mock'
 
 const meta = {
   title: 'Cells/UserProfileCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -205,6 +206,7 @@ import { standard } from './UserProfileCell.mock'
 
 const meta = {
   title: 'Cells/UserProfileCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -319,6 +321,7 @@ import { standard } from './UserCell.mock'
 
 const meta = {
   title: 'Cells/UserCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -433,6 +436,7 @@ import { standard } from './UserProfileCell.mock'
 
 const meta = {
   title: 'Cells/UserProfileCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -599,6 +603,7 @@ import { standard } from './BazingaCell.mock'
 
 const meta: Meta = {
   title: 'Cells/BazingaCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -718,6 +723,7 @@ import { standard } from './UserProfileCell.mock'
 
 const meta = {
   title: 'Cells/UserProfileCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -867,6 +873,7 @@ import { standard } from './AddressCell.mock'
 
 const meta = {
   title: 'Cells/AddressCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -987,6 +994,7 @@ import { standard } from './AddressesCell.mock'
 
 const meta = {
   title: 'Cells/AddressesCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -1105,6 +1113,7 @@ import { standard } from './MembersCell.mock'
 
 const meta = {
   title: 'Cells/MembersCell',
+  tags: ['autodocs'],
 }
 
 export default meta

@@ -10,7 +10,7 @@ import ${singularPascalName}Form from '${importComponentNameForm}'
 const CREATE_${singularConstantName}_MUTATION: TypedDocumentNode<Create${singularPascalName}Mutation, Create${singularPascalName}Input> = gql`
   mutation Create${singularPascalName}Mutation($input: Create${singularPascalName}Input!) {
     create${singularPascalName}(input: $input) {
-      id
+      ${idName}
     }
   }
 `

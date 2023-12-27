@@ -1,15 +1,12 @@
 import type { A } from 'ts-toolbelt'
 
+import { setContext, context as globalContext } from '@redwoodjs/context'
 import type {
   DirectiveParams,
   ValidatorDirective,
   TransformerDirective,
 } from '@redwoodjs/graphql-server'
-import {
-  DirectiveType,
-  setContext,
-  context as globalContext,
-} from '@redwoodjs/graphql-server'
+import { DirectiveType } from '@redwoodjs/graphql-server'
 
 export { getDirectiveName } from '@redwoodjs/graphql-server'
 

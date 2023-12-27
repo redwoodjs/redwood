@@ -1,5 +1,4 @@
 import { execSync } from 'child_process'
-import fs from 'fs'
 import https from 'https'
 import path from 'path'
 
@@ -8,6 +7,7 @@ import boxen from 'boxen'
 import camelcase from 'camelcase'
 import decamelize from 'decamelize'
 import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import { memoize, template } from 'lodash'
 import { paramCase } from 'param-case'

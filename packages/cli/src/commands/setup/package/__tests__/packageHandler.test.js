@@ -34,10 +34,10 @@ jest.mock('enquirer', () => {
   }
 })
 
-import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
+import fs from 'fs-extra'
 
 import { getCompatibilityData } from '@redwoodjs/cli-helpers'
 

@@ -1,6 +1,7 @@
 import type { Plugin } from 'graphql-yoga'
 
-import { setContext } from '../index'
+import { setContext } from '@redwoodjs/context'
+
 import type { RedwoodGraphQLContext } from '../types'
 
 /**

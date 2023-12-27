@@ -17,7 +17,7 @@ You could definitely learn them all at once, but it will be harder to determine 
 
 ### Redwood Versions
 
-You will want to be on at least version 5.0.0 to complete the tutorial. If this is your first time using Redwood then no worries: the latest version will be installed automatically when you create your app skeleton!
+You will want to be on at least version 7.0.0 to complete the tutorial. If this is your first time using Redwood then no worries: the latest version will be installed automatically when you create your app skeleton!
 
 If you have an existing site created with a prior version, you'll need to upgrade and (most likely) apply code modifications. Follow this two step process:
 
@@ -30,8 +30,8 @@ If you have an existing site created with a prior version, you'll need to upgrad
 
 During installation, RedwoodJS checks if your system meets version requirements for Node and Yarn:
 
-- node: "=18.x"
-- yarn: ">=1.15"
+- node: "=20.x"
+- yarn: ">=1.22.21"
 
 If you're using a version of Node or Yarn that's **less** than what's required, _the installation bootstrap will result in an ERROR_. To check, please run the following from your terminal command line:
 
