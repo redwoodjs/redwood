@@ -1,9 +1,6 @@
 import React from 'react'
 
-import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
 import { render } from '@testing-library/react'
-// TODO: Remove when jest configs are in place
-expect.extend({ toHaveClass, toHaveStyle })
 
 import { NavLink, useMatch, Link } from '../links'
 import { LocationProvider } from '../location'
@@ -284,7 +281,10 @@ describe('<NavLink />', () => {
 })
 
 describe('useMatch', () => {
-  const MyLink = ({ to, ...rest }) => {
+  const MyLink = ({
+    to,
+    ...rest
+  }: React.ComponentPropsWithoutRef<typeof Link>) => {
     const [pathname, queryString] = to.split('?')
     const matchInfo = useMatch(pathname, {
       searchParams: flattenSearchParams(queryString),

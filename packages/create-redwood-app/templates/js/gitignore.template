@@ -2,7 +2,8 @@
 .DS_Store
 .env
 .netlify
-.redwood
+.redwood/*
+!.redwood/README.md
 dev.db*
 dist
 dist-babel

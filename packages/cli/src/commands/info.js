@@ -3,6 +3,8 @@
 import envinfo from 'envinfo'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 export const command = 'info'
 export const description = 'Print your system environment information'
 export const builder = (yargs) => {
@@ -14,19 +16,16 @@ export const builder = (yargs) => {
   )
 }
 export const handler = async () => {
-  try {
-    const output = await envinfo.run({
-      System: ['OS', 'Shell'],
-      Binaries: ['Node', 'Yarn'],
-      Browsers: ['Chrome', 'Edge', 'Firefox', 'Safari'],
-      // yarn workspaces not supported :-/
-      npmPackages: '@redwoodjs/*',
-      Databases: ['SQLite'],
-    })
-    console.log(output)
-  } catch (e) {
-    console.log('Error: Cannot access environment info')
-    console.log(e)
-    process.exit(1)
-  }
+  recordTelemetryAttributes({
+    command: 'info',
+  })
+  const output = await envinfo.run({
+    System: ['OS', 'Shell'],
+    Binaries: ['Node', 'Yarn'],
+    Browsers: ['Chrome', 'Edge', 'Firefox', 'Safari'],
+    // yarn workspaces not supported :-/
+    npmPackages: '@redwoodjs/*',
+    Databases: ['SQLite'],
+  })
+  console.log(output)
 }

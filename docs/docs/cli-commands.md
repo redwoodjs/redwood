@@ -74,14 +74,13 @@ We use Babel to transpile the api side into `./api/dist` and Webpack to package 
 | Arguments & Options | Description                                                                                                                                                                 |
 | :------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `side`              | Which side(s) to build. Choices are `api` and `web`. Defaults to `api` and `web`                                                                                            |
-| `--stats`           | Use [Webpack Bundle Analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) to visualize the size of Webpack output files via an interactive zoomable treemap |
 | `--verbose, -v`     | Print more information while building                                                                                                                                       |
 
-**Usage**
+#### Usage
 
 See [Builds](builds.md).
 
-**Example**
+#### Example
 
 Running `yarn redwood build` without any arguments generates the Prisma client and builds both sides of your project:
 
@@ -116,7 +115,7 @@ Get structural diagnostics for a Redwood project (experimental).
 yarn redwood check
 ```
 
-**Example**
+#### Example
 
 ```bash
 ~/redwood-app$ yarn redwood check
@@ -141,7 +140,7 @@ yarn redwood console
 
 Right now, you can only use the Redwood console to interact with your database (always with `await`):
 
-**Example**
+#### Example
 
 ```bash
 ~/redwood-app$ yarn redwood console
@@ -196,9 +195,9 @@ yarn redwood dev [side..]
 | Argument           | Description                                                                                                                                                                                 |
 | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `side`             | Which dev server(s) to start. Choices are `api` and `web`. Defaults to `api` and `web`                                                                                                      |
-| `--forward, --fwd` | String of one or more Webpack Dev Server config options. See example usage below. See the [Redwood Webpack Doc](webpack-configuration.md#webpack-dev-server) for more details and examples. |
+| `--forward, --fwd` | String of one or more Vite Dev Server config options. See example usage below |
 
-**Usage**
+#### Usage
 
 If you're only working on your sdl and services, you can run just the api server to get GraphQL Playground on port 8911:
 
@@ -284,14 +283,14 @@ yarn redwood deploy netlify
 | `--prisma`             | Apply database migrations [default: "true"]         |
 | `--data-migrate, --dm` | Migrate the data in your database [default: "true"] |
 
-**Example**
+#### Example
 The following command will build, apply Prisma DB migrations, and skip data migrations.
 
 ```
 yarn redwood deploy netlify --no-data-migrate
 ```
 
-:::caution
+:::warning
 While you may be tempted to use the [Netlify CLI](https://cli.netlify.com) commands to [build](https://cli.netlify.com/commands/build) and [deploy](https://cli.netlify.com/commands/deploy) your project directly from you local project directory, doing so **will lead to errors when deploying and/or when running functions**. I.e. errors in the function needed for the GraphQL server, but also other serverless functions.
 
 The main reason for this is that these Netlify CLI commands simply build and deploy -- they build your project locally and then push the dist folder. That means that when building a RedwoodJS project, the [Prisma client is generated with binaries matching the operating system at build time](https://cli.netlify.com/commands/link) -- and not the [OS compatible](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#binarytargets-options) with running functions on Netlify. Your Prisma client engine may be `darwin` for OSX or `windows` for Windows, but it needs to be `debian-openssl-1.1.x` or `rhel-openssl-1.1.x`. If the client is incompatible, your functions will fail.
@@ -316,7 +315,7 @@ yarn redwood deploy render <side>
 | `--data-migrate, --dm` | Migrate the data in your database [default: "true"] |
 | `--serve`              | Run server for api in production [default: "true"]  |
 
-**Example**
+#### Example
 The following command will build the Web side for static-site CDN deployment.
 
 ```
@@ -343,7 +342,7 @@ yarn redwood deploy vercel
 | `--prisma`             | Apply database migrations [default: "true"]         |
 | `--data-migrate, --dm` | Migrate the data in your database [default: "true"] |
 
-**Example**
+#### Example
 The following command will build, apply Prisma DB migrations, and skip data migrations.
 
 ```
@@ -375,7 +374,7 @@ yarn redwood destroy <type>
 
 Execute scripts generated by [`yarn redwood generate script <name>`](#generate-script) to run one-off operations, long-running jobs, or utility scripts.
 
-**Usage**
+#### Usage
 
 You can pass any flags to the command and use them within your script:
 
@@ -473,7 +472,7 @@ Cells are signature to Redwood. We think they provide a simpler and more declara
 | `--stories`          | Generate Storybook files [default: true]                                                                                                                         |
 | `--rollback`         | Rollback changes if an error occurs [default: true]                                                                                                              |
 
-**Usage**
+#### Usage
 
 The cell generator supports both single items and lists. See the [Single Item Cell vs List Cell](cells.md#single-item-cell-vs-list-cell) section of the Cell documentation.
 
@@ -485,7 +484,7 @@ See the [Cells](tutorial/chapter2/cells.md) section of the Tutorial for usage ex
 yarn redwood destroy cell <name>
 ```
 
-**Example**
+#### Example
 
 Generating a user cell:
 
@@ -546,7 +545,7 @@ Redwood loves function components and makes extensive use of React Hooks, which 
 yarn redwood destroy component <name>
 ```
 
-**Example**
+#### Example
 
 Generating a user component:
 
@@ -590,11 +589,11 @@ Creates a data migration script in `api/db/dataMigrations`.
 | `name`              | Name of the data migration, prefixed with a timestamp at generation time |
 | `--rollback`        | Rollback changes if an error occurs [default: true]                      |
 
-**Usage**
+#### Usage
 
 See the [Data Migration](data-migrations.md) docs.
 
-**Usage**
+#### Usage
 
 See the [Deploy](/docs/deploy/introduction) docs.
 
@@ -639,7 +638,7 @@ yarn redwood generate directive <name>
 | `--type`             | Directive type [Choices: "validator", "transformer"]                  |
 | `--rollback`         | Rollback changes if an error occurs [default: true]                   |
 
-**Usage**
+#### Usage
 
 See [Redwood Directives](directives.md).
 
@@ -649,7 +648,7 @@ See [Redwood Directives](directives.md).
 yarn redwood destroy directive <name>
 ```
 
-**Example**
+#### Example
 
 Generating a `myDirective` directive using the interactive command:
 
@@ -678,7 +677,7 @@ Not to be confused with Javascript functions, Capital-F Functions are meant to b
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
 | `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
-**Usage**
+#### Usage
 
 See the [Custom Function](how-to/custom-function.md) how to.
 
@@ -688,7 +687,7 @@ See the [Custom Function](how-to/custom-function.md) how to.
 yarn redwood destroy function <name>
 ```
 
-**Example**
+#### Example
 
 Generating a user function:
 
@@ -748,7 +747,7 @@ Layouts wrap pages and help you stay DRY.
 | `--skipLink`         | Generate a layout with a skip link [default: false]                                  |
 | `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
-**Usage**
+#### Usage
 
 See the [Layouts](tutorial/chapter1/layouts.md) section of the tutorial.
 
@@ -758,7 +757,7 @@ See the [Layouts](tutorial/chapter1/layouts.md) section of the tutorial.
 yarn redwood destroy layout <name>
 ```
 
-**Example**
+#### Example
 
 Generating a user layout:
 
@@ -772,7 +771,7 @@ $ /redwood-app/node_modules/.bin/redwood g layout user
 Done in 1.00s.
 ```
 
-A layout will just export it's children:
+A layout will just export its children:
 
 ```jsx title="./web/src/layouts/UserLayout/UserLayout.test.js"
 const UserLayout = ({ children }) => {
@@ -796,11 +795,11 @@ yarn redwood generate model <name>
 | `--force, -f`       | Overwrite existing files                            |
 | `--rollback`        | Rollback changes if an error occurs [default: true] |
 
-**Usage**
+#### Usage
 
 See the [RedwoodRecord docs](redwoodrecord.md).
 
-**Example**
+#### Example
 
 ```bash
 ~/redwood-app$ yarn redwood generate model User
@@ -941,6 +940,56 @@ const Routes = () => {
   )
 }
 ```
+### generate realtime
+
+Generate a boilerplate subscription or live query used with RedwoodJS Realtime.
+
+```bash
+yarn redwood generate realtime <name>
+```
+
+| Arguments & Options  | Description                                                                                                                                                                                           |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`              | Name of the realtime event to setup.post`                                   |
+| `-t, --type`        | Choices: `liveQuery`, `subscription`. Optional. If not provided, you will be prompted to select.
+| `--force, -f`        | Overwrite existing files
+
+
+#### Usage
+
+See Realtime for more information on how to [setup RedwoodJS Realtime](#setup-realtime) and use Live Queries, and Subscriptions.
+
+**Examples**
+
+Generate a live query.
+
+```bash
+~/redwood-app$ yarn rw g realtime NewLiveQuery
+? What type of realtime event would you like to create? › - Use arrow-keys. Return to submit.
+❯   Live Query
+    Create a Live Query to watch for changes in data
+    Subscription
+
+✔ What type of realtime event would you like to create? › Live Query
+✔ Checking for realtime environment prerequisites ...
+✔ Adding newlivequery example live query ...
+✔ Generating types ...
+```
+
+Generate a subscription.
+
+```bash
+~/redwood-app$ yarn rw g realtime NewSub
+? What type of realtime event would you like to create? › - Use arrow-keys. Return to submit.
+    Live Query
+❯   Subscription - Create a Subscription to watch for events
+
+✔ What type of realtime event would you like to create? › Subscription
+✔ Checking for realtime environment prerequisites ...
+✔ Adding newsub example subscription ...
+✔ Generating types ...
+```
+
 
 ### generate scaffold
 
@@ -970,7 +1019,7 @@ The content of the generated components is different from what you'd get by runn
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                                                  |
 | `--rollback`         | Rollback changes if an error occurs [default: true]                                                                                                                                                   |
 
-**Usage**
+#### Usage
 
 See [Creating a Post Editor](tutorial/chapter2/getting-dynamic.md#creating-a-post-editor).
 
@@ -1114,7 +1163,7 @@ Scripts have access to services and libraries used in your project. Some example
 - running cleanup jobs on a regular basis e.g. delete stale/expired data
 - sync data between platforms e.g. email from your db to your email marketing platform
 
-**Usage**
+#### Usage
 
 ```
 ❯ yarn rw g script syncStripeProducts
@@ -1167,7 +1216,7 @@ In that case, you can run the following to "regenerate" **just** the SDL file an
 yarn redwood g sdl <model> --force --no-tests
 ```
 
-**Example**
+#### Example
 
 ```bash
 ~/redwood-app$ yarn redwood generate sdl user --force --no-tests
@@ -1185,7 +1234,7 @@ Done in 1.04s.
 yarn redwood destroy sdl <model>
 ```
 
-**Example**
+#### Example
 
 Generating a user sdl:
 
@@ -1307,7 +1356,7 @@ Generate a secret key using a cryptographically-secure source of entropy. Common
 | :------------------ | :------------------------------------------------- |
 | `--raw`             | Print just the key, without any informational text |
 
-**Usage**
+#### Usage
 
 Using the `--raw` option you can easily append a secret key to your .env file, like so:
 
@@ -1344,7 +1393,7 @@ Services are where Redwood puts its business logic. They can be used by your Gra
 yarn redwood destroy service <name>
 ```
 
-**Example**
+#### Example
 
 Generating a user service:
 
@@ -1377,7 +1426,7 @@ Generates supplementary code (project types)
 yarn redwood generate types
 ```
 
-**Usage**
+#### Usage
 
 ```
 ~/redwood-app$ yarn redwood generate types
@@ -1723,6 +1772,7 @@ yarn redwood setup <category>
 | `deploy`           | Set up a deployment configuration for a provider                                           |
 | `generator`        | Copy default Redwood generator templates locally for customization                         |
 | `i18n`             | Set up i18n                                                                                |
+| `package`          | Peform setup actions by running a third-party npm package                                  |
 | `tsconfig`         | Add relevant tsconfig so you can start using TypeScript                                    |
 | `ui`               | Set up a UI design or style library                                                        |
 | `webpack`          | Set up a webpack config file in your project so you can add custom config                  |
@@ -1740,7 +1790,7 @@ yarn redwood setup auth <provider>
 | `provider`          | Auth provider to configure. Choices are `auth0`, `azureActiveDirectory`, `clerk`, `dbAuth`, `ethereum`, `firebase`, `goTrue`, `magicLink`, `netlify`, `nhost`, and `supabase` |
 | `--force, -f`       | Overwrite existing configuration                                                                                                                                              |
 
-**Usage**
+#### Usage
 
 See [Authentication](authentication.md).
 
@@ -1753,6 +1803,8 @@ A `generateGraphiQLHeader` file will be created in your `api/lib` folder and inc
 ```
 yarn redwood setup graphiql <provider>
 ```
+
+If you're using `dbAuth`, make sure the `-i` id you provided is not logged in from the web app.
 
 | Arguments & Options | Description                                                                                                                                           |
 | :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1778,6 +1830,13 @@ yarn redwood setup cache <client>
 
 ### setup custom-web-index
 
+:::warning This command only applies to projects using Webpack
+
+As of v6, all Redwood projects use Vite by default.
+When switching projects to Vite, we made the decision to add the the entry file, `web/src/entry.client.{jsx,tsx}`, back to projects.
+
+:::
+
 Redwood automatically mounts your `<App />` to the DOM, but if you want to customize how that happens, you can use this setup command to generate an `index.js` file in `web/src`.
 
 ```
@@ -1801,7 +1860,7 @@ yarn rw setup generator <name>
 | `name`              | Name of the generator template(s) to copy (see help for list) |
 | `--force, -f`       | Overwrite existing copied template files                      |
 
-**Usage**
+#### Usage
 
 If you wanted to customize the page generator template, run the command:
 
@@ -1832,7 +1891,7 @@ For example, given the name `fooBar` your template will receive the following _v
 | `singularConstantName` | `FOO_BAR`  |
 | `pluralConstantName`   | `FOO_BARS` |
 
-**Example**
+#### Example
 
 Copying the cell generator templates:
 
@@ -1855,7 +1914,7 @@ yarn redwood setup deploy <provider>
 
 | Arguments & Options | Description                                                                                           |
 | :------------------ | :---------------------------------------------------------------------------------------------------- |
-| `provider`          | Deploy provider to configure. Choices are `aws-serverless`, `netlify`, `render`, or `vercel`          |
+| `provider`          | Deploy provider to configure. Choices are `baremetal`, `coherence`, `edgio`, `flightcontrol`, `netlify`, `render`, `vercel`, or `aws-serverless [deprecated]`,          |
 | `--database, -d`    | Database deployment for Render only [choices: "none", "postgresql", "sqlite"] [default: "postgresql"] |
 | `--force, -f`       | Overwrite existing configuration [default: false]                                                     |
 
@@ -1895,6 +1954,97 @@ In order to use [Netlify Dev](https://www.netlify.com/products/dev/) you need to
 
 > Note: To detect the RedwoodJS framework, please use netlify-cli v3.34.0 or greater.
 
+### setup mailer
+
+This command adds the necessary packages and files to get started using the RedwoodJS mailer. By default it also creates an example mail template which can be skipped with the `--skip-examples` flag.
+
+```
+yarn redwood setup mailer
+```
+
+| Arguments & Options     | Description                    |
+| :---------------------- | :----------------------------- |
+| `--force, -f`           | Overwrite existing files       |
+| `--skip-examples`       | Do not include example content, such as a React email template |
+
+### setup package
+
+This command takes a published npm package that you specify, performs some compatibility checks, and then executes its bin script. This allows you to use third-party packages that can provide you with an easy-to-use setup command for the particular functionality they provide.
+
+This command behaves similarly to `yarn dlx` but will attempt to confirm compatibility between the package you are attempting to run and the current version of Redwood you are running. You can bypass this check by passing the `--force` flag if you feel you understand any potential compatibility issues.
+
+```
+yarn redwood setup package <npm-package>
+```
+
+| Arguments & Options | Description              |
+| :------------------ | :----------------------- |
+| `--force, -f`       | Forgo compatibility checks |
+
+#### Usage
+
+Run the made up `@redwoodjs/setup-example` package:
+```bash
+~/redwood-app$ yarn rw setup package @redwoodjs/setup-example
+```
+
+Run the same package but using a particular npm tag and avoiding any compatibility checks:
+```bash
+~/redwood-app$ yarn rw setup package @redwoodjs/setup-example@beta --force
+```
+
+**Compatibility Checks**
+
+We perform a simple compatibility check in an attempt to make you aware of potential compatibility issues with setup packages you might wish to run. This works by examining the version of `@redwoodjs/core` you are using within your root `package.json`. We compare this value with a compatibility range the npm package specifies in the `engines.redwoodjs` field of its own `package.json`. If the version of `@redwoodjs/core` you are using falls outside of the compatibility range specified by the package you are attempting to run, we will warn you and ask you to confirm that you wish to continue.
+
+It's the author of the npm package's responsibility to specify the correct compatibility range, so **you should always research the packages you use with this command**. Especially since they will be executing code on your machine!
+
+### setup realtime
+
+This command creates the necessary files, installs the required packages, and provides examples to setup RedwoodJS Realtime from GraphQL live queries and subscriptions. See the Realtime docs for more information.
+
+
+```
+yarn redwood setup realtime
+```
+
+| Arguments & Options | Description              |
+| :------------------ | :----------------------- |
+|  `-e, --includeExamples, --examples` | Include examples of how to implement liveQueries and subscriptions. Default: true. |
+| `--force, -f`       | Forgo compatibility checks |
+
+:::note
+
+If the RedwoodJS Server is not setup, it will be installed as well.
+
+:::
+
+#### Usage
+
+Run `yarn rw setup realtime`
+
+#### Example
+
+```bash
+~/redwood-app$ yarn rw setup realtime
+✔ Checking for realtime environment prerequisites ...
+✔ Adding required api packages...
+✔ Adding the realtime api lib ...
+✔ Adding Countdown example subscription ...
+✔ Adding NewMessage example subscription ...
+✔ Adding Auctions example live query ...
+✔ Generating types ...
+```
+
+
+If you have not setup the RedwoodJS server file, it will be setup:
+
+```bash
+✔ Adding the experimental server file...
+✔ Adding config to redwood.toml...
+✔ Adding required api packages...
+```
+
 ### setup tsconfig
 
 Add a `tsconfig.json` to both the web and api sides so you can start using [TypeScript](typescript/index).
@@ -1907,9 +2057,11 @@ yarn redwood setup tsconfig
 | :------------------ | :----------------------- |
 | `--force, -f`       | Overwrite existing files |
 
+
+
 ### setup ui
 
-Set up a UI design or style library. Right now the choices are [TailwindCSS](https://tailwindcss.com/), [Chakra UI](https://chakra-ui.com/), [Mantine UI](https://ui.mantine.dev/) and [WindiCSS](https://windicss.org/).
+Set up a UI design or style library. Right now the choices are [TailwindCSS](https://tailwindcss.com/), [Chakra UI](https://chakra-ui.com/), and [Mantine UI](https://ui.mantine.dev/).
 
 ```
 yarn rw setup ui <library>
@@ -1917,7 +2069,7 @@ yarn rw setup ui <library>
 
 | Arguments & Options | Description                                                                             |
 | :------------------ | :-------------------------------------------------------------------------------------- |
-| `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss`, `mantine`, and `windicss` |
+| `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss`, and `mantine` |
 | `--force, -f`       | Overwrite existing configuration                                                        |
 
 ## storybook
@@ -1973,7 +2125,7 @@ yarn redwood type-check [side]
 | ------------------- | ------------------------------------------------------------------------------ |
 | `side`              | Which side(s) to run. Choices are `api` and `web`. Defaults to `api` and `web` |
 
-**Usage**
+#### Usage
 
 See [Running Type Checks](typescript/introduction.md#running-type-checks).
 
@@ -1989,12 +2141,11 @@ yarn redwood serve [side]
 
 `yarn rw serve` is useful for debugging locally or for self-hosting—deploying a single server into a serverful environment. Since both the api and the web sides run in the same server, CORS isn't a problem.
 
-| Arguments & Options | Description                                                                                                                                     |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `side`              | Which side(s) to run. Choices are `api` and `web`. Defaults to `api` and `web`                                                                  |
-| `--port`            | What port should the server run on [default: 8911]                                                                                              |
-| `--host`            | What host should the server run on. This defaults to the value of `web.host` in the `redwood.toml` file which itself defaults to `'localhost'`. |
-| `--socket`          | The socket the server should run. This takes precedence over port                                                                               |
+| Arguments & Options | Description                                                                    |
+| ------------------- | ------------------------------------------------------------------------------ |
+| `side`              | Which side(s) to run. Choices are `api` and `web`. Defaults to `api` and `web` |
+| `--port`            | What port should the server run on [default: 8911]                             |
+| `--socket`          | The socket the server should run. This takes precedence over port              |
 
 ### serve api
 
@@ -2006,12 +2157,11 @@ yarn rw serve api
 
 This command uses `apiUrl` in your `redwood.toml`. Use this command if you want to run just the api side on a server (e.g. running on Render).
 
-| Arguments & Options | Description                                                                                                                                     |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--port`            | What port should the server run on [default: 8911]                                                                                              |
-| `--host`            | What host should the server run on. This defaults to the value of `api.host` in the `redwood.toml` file which itself defaults to `'localhost'`. |
-| `--socket`          | The socket the server should run. This takes precedence over port                                                                               |
-| `--apiRootPath`     | The root path where your api functions are served                                                                                               |
+| Arguments & Options | Description                                                       |
+| ------------------- | ----------------------------------------------------------------- |
+| `--port`            | What port should the server run on [default: 8911]                |
+| `--socket`          | The socket the server should run. This takes precedence over port |
+| `--apiRootPath`     | The root path where your api functions are served                 |
 
 For the full list of Server Configuration settings, see [this documentation](app-configuration-redwood-toml.md#api).
 If you want to format your log output, you can pipe the command to the Redwood LogFormatter:
@@ -2034,12 +2184,11 @@ This command serves the contents in `web/dist`. Use this command if you're debug
 >
 > Probably, but it can be a challenge to setup when you just want something running quickly!
 
-| Arguments & Options | Description                                                                                                                                     |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--port`            | What port should the server run on [default: 8911]                                                                                              |
-| `--host`            | What host should the server run on. This defaults to the value of `web.host` in the `redwood.toml` file which itself defaults to `'localhost'`. |
-| `--socket`          | The socket the server should run. This takes precedence over port                                                                               |
-| `--apiHost`         | Forwards requests from the `apiUrl` (defined in `redwood.toml`) to the specified host                                                           |
+| Arguments & Options | Description                                                                           |
+| ------------------- | ------------------------------------------------------------------------------------- |
+| `--port`            | What port should the server run on [default: 8911]                                    |
+| `--socket`          | The socket the server should run. This takes precedence over port                     |
+| `--apiHost`         | Forwards requests from the `apiUrl` (defined in `redwood.toml`) to the specified host |
 
 If you want to format your log output, you can pipe the command to the Redwood LogFormatter:
 
@@ -2066,7 +2215,7 @@ A canary release is published to npm every time a PR is merged to the `main` bra
 | `--dry-run, -d` | Check for outdated packages without upgrading                                                                                                                                                                      |
 | `--tag, -t`     | Choices are "rc", "canary", "latest", "next", "experimental", or a specific version (e.g. "0.19.3"). WARNING: Unstable releases in the case of "canary", "rc", "next", and "experimental". And "canary" releases include breaking changes often requiring codemods if upgrading a project. |
 
-**Example**
+#### Example
 
 Upgrade to the most recent canary:
 

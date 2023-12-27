@@ -85,19 +85,28 @@ The installation script is built with [Yargs](https://github.com/yargs/yargs)
 The project codebase in `template/` uses [Yarn Workspace v1](https://classic.yarnpkg.com/en/docs/workspaces/) for a monorepo project containing the API and Web Sides. Redwood packages are included in `template/package.json`, `template/web/package.json`, and `template/api/package.json`, respectively.
 
 ### How to run create-redwood-app from your local repo and create a project
-Make sure you to first run `yarn install` in your project root.
-
-Step into the `create-redwood-app` package and run the script:
-
+First, run the following commands in the root of the monorepo:
 ```bash
-cd packages/create-redwood-app
-yarn babel-node src/create-redwood-app.js /path/to/new/redwood-app
+yarn install
+yarn build
 ```
 
-This will create a new project using the local `template/` codebase
+Then, we need to navigate to the create redwood app package and build the script:
+```bash
+cd packages/create-redwood-app
+yarn build
+```
 
-> Note: the new project will install with the most recent stable Redwood package version by default
+_Note:_ You can also use `yarn build:watch` instead of `yarn build` to watch for changes and rebuild automatically.
 
+This will generate the `create-redwood-app.js` file inside the `dist` directory.
+
+To use the script, run `node` on that file (dist/create-redwood-app.js) and pass in the path to the new project:
+```bash
+node dist/create-redwood-app.js /path/to/new/redwood-app
+```
+
+> Note: the new project will install with the most recent major Redwood package version by default
 
 ### How to run other published versions for debugging
 By default yarn create will pick the latest stable version to run, but you can specify a different version via yarn too!

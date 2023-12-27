@@ -1,6 +1,5 @@
+import type { Types, PluginFunction } from '@graphql-codegen/plugin-helpers'
 import {
-  Types,
-  PluginFunction,
   getCachedDocumentNodeFromSchema,
   oldVisit,
 } from '@graphql-codegen/plugin-helpers'
@@ -8,7 +7,7 @@ import {
   TypeScriptResolversPluginConfig,
   plugin as originalPlugin,
 } from '@graphql-codegen/typescript-resolvers'
-import { GraphQLSchema } from 'graphql'
+import type { GraphQLSchema } from 'graphql'
 
 import { RwTypeScriptResolversVisitor } from './visitor'
 

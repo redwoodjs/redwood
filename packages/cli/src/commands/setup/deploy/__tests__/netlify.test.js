@@ -1,8 +1,9 @@
 // Automock fs using ../..../__mocks__/fs
 jest.mock('fs')
 
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
 
 import { getPaths } from '../../../../lib'
 import { updateApiURLTask } from '../helpers'
@@ -12,7 +13,10 @@ import '../../../../lib/test'
 jest.mock('../../../../lib', () => {
   const path = jest.requireActual('path')
 
+  const { printSetupNotes } = jest.requireActual('../../../../lib')
+
   return {
+    printSetupNotes,
     getPaths: () => {
       return {
         base: path.resolve(

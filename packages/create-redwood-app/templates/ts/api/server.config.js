@@ -16,7 +16,7 @@
 const config = {
   requestTimeout: 15_000,
   logger: {
-    // Note: If running locally using `yarn rw serve` you may want to adust
+    // Note: If running locally using `yarn rw serve` you may want to adjust
     // the default non-development level to `info`
     level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
   },
@@ -33,14 +33,14 @@ const config = {
  * Note: This configuration does not apply in a serverless deploy.
  */
 
-/** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
+/** @type {import('@redwoodjs/api-server/dist/types').FastifySideConfigFn} */
 const configureFastify = async (fastify, options) => {
   if (options.side === 'api') {
-    fastify.log.info({ custom: { options } }, 'Configuring api side')
+    fastify.log.trace({ custom: { options } }, 'Configuring api side')
   }
 
   if (options.side === 'web') {
-    fastify.log.info({ custom: { options } }, 'Configuring web side')
+    fastify.log.trace({ custom: { options } }, 'Configuring web side')
   }
 
   return fastify

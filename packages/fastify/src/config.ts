@@ -5,14 +5,17 @@ import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
-import { FastifySideConfigFn, FastifySideConfigFnOptions } from './types'
+import type { FastifySideConfigFn, FastifySideConfigFnOptions } from './types'
 
 export const DEFAULT_REDWOOD_FASTIFY_CONFIG: FastifyServerOptions = {
   requestTimeout: 15_000,
   logger: {
     // Note: If running locally using `yarn rw serve` you may want to adust
     // the default non-development level to `info`
-    level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
+    level:
+      process.env.LOG_LEVEL ?? process.env.NODE_ENV === 'development'
+        ? 'debug'
+        : 'warn',
   },
 }
 
@@ -24,7 +27,7 @@ let serverConfigFile: {
 } = {
   config: DEFAULT_REDWOOD_FASTIFY_CONFIG,
   configureFastify: async (fastify, options) => {
-    fastify.log.info(
+    fastify.log.trace(
       options,
       `In configureFastify hook for side: ${options?.side}`
     )

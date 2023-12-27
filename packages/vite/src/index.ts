@@ -2,19 +2,19 @@ import { existsSync } from 'fs'
 import path from 'path'
 
 import react from '@vitejs/plugin-react'
+import type { InputOption } from 'rollup'
 import type { ConfigEnv, UserConfig, PluginOption } from 'vite'
 import { normalizePath } from 'vite'
-import commonjs from 'vite-plugin-commonjs'
-import EnvironmentPlugin from 'vite-plugin-environment'
 
-import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
+import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { handleJsAsJsx } from './vite-plugin-jsx-loader'
+import handleJsAsJsx from './plugins/vite-plugin-jsx-loader'
+import removeFromBundle from './plugins/vite-plugin-remove-from-bundle'
+import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider'
 
 /**
- * Preconfigured vite plugin, with required config for Redwood apps.
- *
+ * Pre-configured vite plugin, with required config for Redwood apps.
  */
 export default function redwoodPluginVite(): PluginOption[] {
   const rwPaths = getPaths()
@@ -24,13 +24,54 @@ export default function redwoodPluginVite(): PluginOption[] {
 
   if (!clientEntryPath) {
     throw new Error(
-      'Vite client entry point not found. Please check that your project has an entry-client.{jsx,tsx} file in the web/src directory.'
+      'Vite client entry point not found. Please check that your project has an entry.client.{jsx,tsx} file in the web/src directory.'
     )
   }
 
   const relativeEntryPath = path.relative(rwPaths.web.src, clientEntryPath)
 
   return [
+    {
+      name: 'redwood-plugin-vite-html-env',
+
+      // Vite can support replacing environment variables in index.html but
+      // there are currently two issues with that:
+      // 1. It requires the environment variables to be exposed on
+      //    `import.meta.env`, but we expose them on `process.env` in Redwood.
+      // 2. There's an open issue on Vite where it adds extra quotes around
+      //    the replaced values, which breaks trying to use environment
+      //    variables in src attributes for example.
+      // Until those issues are resolved, we'll do the replacement ourselves
+      // instead using transformIndexHtml. Doing it this was was also the
+      // recommended way until Vite added built-in support for it.
+      //
+      // Extra quotes issue: https://github.com/vitejs/vite/issues/13424
+      // transformIndexHtml being the recommended way:
+      //   https://github.com/vitejs/vite/issues/3105#issuecomment-1059975023
+      transformIndexHtml: {
+        // Setting order: 'pre' so that it runs before the built-in
+        // html env replacement.
+        order: 'pre',
+        handler: (html: string) => {
+          let newHtml = html
+
+          rwConfig.web.includeEnvironmentVariables.map((envName) => {
+            newHtml = newHtml.replaceAll(
+              `%${envName}%`,
+              process.env[envName] || ''
+            )
+          })
+
+          Object.entries(process.env).forEach(([envName, value]) => {
+            if (envName.startsWith('REDWOOD_ENV_')) {
+              newHtml = newHtml.replaceAll(`%${envName}%`, value || '')
+            }
+          })
+
+          return newHtml
+        },
+      },
+    },
     {
       name: 'redwood-plugin-vite',
 
@@ -93,7 +134,6 @@ export default function redwoodPluginVite(): PluginOption[] {
           envPrefix: 'REDWOOD_ENV_',
           publicDir: path.join(rwPaths.web.base, 'public'),
           define: {
-            RWJS_WEB_BUNDLER: JSON.stringify('vite'),
             RWJS_ENV: {
               // @NOTE we're avoiding process.env here, unlike webpack
               RWJS_API_GRAPHQL_URL:
@@ -101,6 +141,10 @@ export default function redwoodPluginVite(): PluginOption[] {
               RWJS_API_URL: rwConfig.web.apiUrl,
               __REDWOOD__APP_TITLE:
                 rwConfig.web.title || path.basename(rwPaths.base),
+              RWJS_EXP_STREAMING_SSR:
+                rwConfig.experimental.streamingSsr &&
+                rwConfig.experimental.streamingSsr.enabled,
+              RWJS_EXP_RSC: rwConfig.experimental?.rsc?.enabled,
             },
             RWJS_DEBUG_ENV: {
               RWJS_SRC_ROOT: rwPaths.web.src,
@@ -108,6 +152,36 @@ export default function redwoodPluginVite(): PluginOption[] {
                 process.env.REDWOOD_ENV_EDITOR
               ),
             },
+            // Vite can automatically expose environment variables, but we
+            // disable that in `buildFeServer.ts` by setting `envFile: false`
+            // because we want to use our own logic for loading .env,
+            // .env.defaults, etc
+            // The two object spreads below will expose all environment
+            // variables listed in redwood.toml and all environment variables
+            // prefixed with REDWOOD_ENV_
+            ...Object.fromEntries(
+              rwConfig.web.includeEnvironmentVariables.flatMap((envName) => [
+                [
+                  `import.meta.env.${envName}`,
+                  JSON.stringify(process.env[envName]),
+                ],
+                [
+                  `process.env.${envName}`,
+                  JSON.stringify(process.env[envName]),
+                ],
+              ])
+            ),
+            ...Object.entries(process.env).reduce<Record<string, any>>(
+              (acc, [key, value]) => {
+                if (key.startsWith('REDWOOD_ENV_')) {
+                  acc[`import.meta.env.${key}`] = JSON.stringify(value)
+                  acc[`process.env.${key}`] = JSON.stringify(value)
+                }
+
+                return acc
+              },
+              {}
+            ),
           },
           css: {
             // @NOTE config path is relative to where vite.config.js is if you use relative path
@@ -117,25 +191,64 @@ export default function redwoodPluginVite(): PluginOption[] {
           server: {
             open: rwConfig.browser.open,
             port: rwConfig.web.port,
-            host: rwConfig.web.host,
+            host: true, // Listen to all hosts
             proxy: {
               [rwConfig.web.apiUrl]: {
                 target: `http://${rwConfig.api.host}:${rwConfig.api.port}`,
-                changeOrigin: true,
+                changeOrigin: false,
                 // Remove the `.redwood/functions` part, but leave the `/graphql`
                 rewrite: (path) => path.replace(rwConfig.web.apiUrl, ''),
+                configure: (proxy) => {
+                  // @MARK: this is a hack to prevent showing confusing proxy errors on startup
+                  // because Vite launches so much faster than the API server.
+                  let waitingForApiServer = true
+
+                  // Wait for 2.5s, then restore regular proxy error logging
+                  setTimeout(() => {
+                    waitingForApiServer = false
+                  }, 2500)
+
+                  proxy.on('error', (err, _req, res) => {
+                    if (
+                      waitingForApiServer &&
+                      err.message.includes('ECONNREFUSED')
+                    ) {
+                      err.stack =
+                        '⌛ API Server launching, please refresh your page...'
+                    }
+                    const msg = {
+                      errors: [
+                        {
+                          message:
+                            'The RedwoodJS API server is not available or is currently reloading. Please refresh.',
+                        },
+                      ],
+                    }
+
+                    res.writeHead(203, {
+                      'Content-Type': 'application/json',
+                      'Cache-Control': 'no-cache',
+                    })
+                    res.write(JSON.stringify(msg))
+                    res.end()
+                  })
+                },
               },
             },
           },
           build: {
             outDir: options.build?.outDir || rwPaths.web.dist,
             emptyOutDir: true,
-            manifest: !env.ssrBuild ? 'build-manifest.json' : undefined,
+            manifest: !env.ssrBuild ? 'client-build-manifest.json' : undefined,
             sourcemap: !env.ssrBuild && rwConfig.web.sourceMap, // Note that this can be boolean or 'inline'
+            rollupOptions: {
+              input: getRollupInput(!!env.ssrBuild),
+            },
           },
-          // To produce a cjs bundle for SSR
           legacy: {
-            buildSsrCjsExternalHeuristics: env.ssrBuild,
+            buildSsrCjsExternalHeuristics: rwConfig.experimental?.rsc?.enabled
+              ? false
+              : env.ssrBuild,
           },
           optimizeDeps: {
             esbuildOptions: {
@@ -153,22 +266,22 @@ export default function redwoodPluginVite(): PluginOption[] {
         }
       },
     },
-    // Loading Environment Variables, to process.env in the browser
-    // This maintains compatibility with Webpack. We can choose to switch to import.meta.env at a later stage
-    EnvironmentPlugin('all', { prefix: 'REDWOOD_ENV_', loadEnvFiles: false }),
-    EnvironmentPlugin(
-      Object.fromEntries(
-        rwConfig.web.includeEnvironmentVariables.map((envName) => [
-          envName,
-          JSON.stringify(process.env[envName]),
-        ])
-      ),
-      {
-        loadEnvFiles: false, // to prevent vite from loading .env files
-      }
-    ),
+    // We can remove when streaming is stable
+    rwConfig.experimental.streamingSsr.enabled && swapApolloProvider(),
     // -----------------
     handleJsAsJsx(),
+    // Remove the splash-page from the bundle.
+    removeFromBundle([
+      {
+        id: /@redwoodjs\/router\/dist\/splash-page/,
+      },
+    ]),
+    !rwConfig.experimental.realtime.enabled &&
+      removeFromBundle([
+        {
+          id: /@redwoodjs\/web\/dist\/apollo\/sseLink/,
+        },
+      ]),
     react({
       babel: {
         ...getWebSideDefaultBabelConfig({
@@ -176,15 +289,34 @@ export default function redwoodPluginVite(): PluginOption[] {
         }),
       },
     }),
-    // End HTML transform------------------
-
-    // @TODO We add this as a temporary workaround for DevFatalErrorPage being required
-    // Note that it only transforms commonjs in dev, which is exactly what we want!
-    // and is limited to the default FatalErrorPage (by name)
-    commonjs({
-      filter: (id: string) => {
-        return id.includes('FatalErrorPage')
-      },
-    }),
   ]
+}
+
+/**
+ *
+ * This function configures how vite (actually Rollup) will bundle.
+ *
+ * By default, the entry point is the index.html file - even if you don't specify it in RollupOptions
+ *
+ * With streaming SSR, out entrypoint is different - either entry.client.tsx or entry.server.tsx
+ * and the html file is not used at all, because it is defined in Document.tsx
+ *
+ * @param ssr {boolean} Whether to return the SSR inputs or not
+ * @returns Rollup input Options
+ */
+function getRollupInput(ssr: boolean): InputOption | undefined {
+  const rwConfig = getConfig()
+  const rwPaths = getPaths()
+
+  // @NOTE once streaming ssr is out of experimental, this will become the default
+  if (rwConfig.experimental.streamingSsr.enabled) {
+    return ssr
+      ? {
+          'entry.server': rwPaths.web.entryServer as string,
+          Document: rwPaths.web.document, // We need the document for React's fallback
+        }
+      : (rwPaths.web.entryClient as string)
+  }
+
+  return rwPaths.web.html
 }

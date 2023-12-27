@@ -239,12 +239,6 @@ export const schema = gql`
     message: String!
   }
 
-  input UpdateContactInput {
-    name: String
-    email: String
-    message: String
-  }
-
   // highlight-start
   type Mutation {
     createContact(input: CreateContactInput!): Contact! @skipAuth
@@ -366,7 +360,7 @@ Our GraphQL mutation is ready to go on the backend so all that's left is to invo
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 import { MetaTags } from '@redwoodjs/web'
 import {
   FieldError,
@@ -538,7 +532,7 @@ Next we'll call the `useMutation` hook provided by Redwood which will allow us t
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 // highlight-next-line
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import {
@@ -753,7 +747,7 @@ That means we can update the `onSubmit` function to invoke the mutation with the
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
@@ -955,7 +949,7 @@ The `useMutation` hook returns a couple more elements along with the function to
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 // ...
 
 const ContactPage = () => {
@@ -1003,7 +997,7 @@ Now we know if the database call is still in progress by looking at `loading`. A
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 return (
   // ...
   // highlight-next-line
@@ -1044,7 +1038,7 @@ Add the `onCompleted` callback to `useMutation` and include the **&lt;Toaster&gt
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 import { MetaTags, useMutation } from '@redwoodjs/web'
 // highlight-next-line
 import { toast, Toaster } from '@redwoodjs/web/toast'
@@ -1352,7 +1346,7 @@ Add a `<FormError>` component, passing the `error` constant we got from `useMuta
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
@@ -1661,7 +1655,7 @@ First we'll import `useForm`:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 import {
   FieldError,
   Form,
@@ -1700,7 +1694,7 @@ And now call it inside of our component:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 const ContactPage = () => {
   // highlight-next-line
   const formMethods = useForm()
@@ -1725,7 +1719,7 @@ Finally we'll tell `<Form>` to use the `formMethods` we just got from `useForm()
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 return (
   <>
     <Toaster />
@@ -1764,7 +1758,7 @@ Now we can call `reset()` on `formMethods` after we call `toast()`:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 // ...
 
 const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
@@ -1801,7 +1795,7 @@ const [create, { loading, error }] = useMutation<
 </TabItem>
 </Tabs>
 
-:::caution
+:::warning
 
 You can put the email validation back into the `<TextField>` now, but you should leave the server validation in place, just in case.
 
@@ -1812,7 +1806,7 @@ Here's the entire page:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
@@ -2030,7 +2024,7 @@ You may have noticed that the onBlur form config stopped working once you starte
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```js title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 const ContactPage = () => {
   const formMethods = useForm({ mode: 'onBlur' })
   //...

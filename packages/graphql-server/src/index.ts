@@ -1,7 +1,6 @@
 import './global.api-auto-imports'
 
 export * from './global.api-auto-imports'
-export * from './globalContext'
 
 export * from './errors'
 export * from './functions/graphql'
@@ -31,12 +30,4 @@ export {
   useRedwoodDirective,
 } from './plugins/useRedwoodDirective'
 
-export {
-  useRedwoodRealtime,
-  createPubSub,
-  InMemoryLiveQueryStore,
-  liveDirectiveTypeDefs,
-} from './plugins/useRedwoodRealtime'
-
-export type { PubSub } from './plugins/useRedwoodRealtime'
 export * as rootSchema from './rootSchema'

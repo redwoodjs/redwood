@@ -1,13 +1,15 @@
-import fs from 'fs'
 import path from 'path'
 
 import boxen from 'boxen'
 import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
 import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
+
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
@@ -82,7 +84,7 @@ export const buildCommands = ({ sides }) => {
       task: async () => {
         // Dynamically import this function
         // because its dependencies are only installed when `rw setup deploy serverless` is run
-        const { nftPack } = (await import('./packing/nft.js')).default
+        const { nftPack } = await import('./packing/nft.js')
 
         await nftPack()
       },
@@ -127,6 +129,14 @@ const loadDotEnvForStage = (dotEnvPath) => {
 }
 
 export const handler = async (yargs) => {
+  recordTelemetryAttributes({
+    command: 'deploy serverless',
+    sides: JSON.stringify(yargs.sides),
+    verbose: yargs.verbose,
+    packOnly: yargs.packOnly,
+    firstRun: yargs.firstRun,
+  })
+
   const rwjsPaths = getPaths()
   const dotEnvPath = path.join(rwjsPaths.base, `.env.${yargs.stage}`)
 

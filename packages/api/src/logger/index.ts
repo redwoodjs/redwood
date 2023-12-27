@@ -159,10 +159,10 @@ export const logLevel: LevelWithSilent | string = (() => {
  *
  * @see {@link https://github.com/pinojs/pino/blob/master/docs/api.md}
  */
-export const defaultLoggerOptions: LoggerOptions = {
+export const defaultLoggerOptions = {
   level: logLevel,
   redact: redactionsList,
-}
+} satisfies LoggerOptions
 
 /**
  * RedwoodLoggerOptions defines custom logger options that extend those available in LoggerOptions

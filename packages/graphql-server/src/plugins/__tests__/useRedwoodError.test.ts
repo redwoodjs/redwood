@@ -6,8 +6,12 @@ import { createLogger } from '@redwoodjs/api/logger'
 import { createGraphQLHandler } from '../../functions/graphql'
 
 jest.mock('../../makeMergedSchema', () => {
+  const { createGraphQLError } = require('graphql-yoga')
   const { makeExecutableSchema } = require('@graphql-tools/schema')
-  const { ForbiddenError } = require('@redwoodjs/graphql-server/dist/errors')
+  const {
+    ForbiddenError,
+    RedwoodGraphQLError,
+  } = require('@redwoodjs/graphql-server/dist/errors')
   const { EmailValidationError, RedwoodError } = require('@redwoodjs/api')
 
   const { CurrencyResolver } = require('graphql-scalars')
@@ -37,6 +41,8 @@ jest.mock('../../makeMergedSchema', () => {
             getUser(id: Int!): User!
             invalidUser: User!
             unexpectedUser: User!
+            graphQLErrorUser: User!
+            redwoodGraphQLErrorUser: User!
           }
 
           scalar Currency
@@ -44,7 +50,6 @@ jest.mock('../../makeMergedSchema', () => {
           type Product {
             id: Int!
             name: String!
-
             currency_iso_4217: Currency!
           }
 
@@ -69,6 +74,14 @@ jest.mock('../../makeMergedSchema', () => {
             },
             forbiddenUser: () => {
               throw new ForbiddenError('You are forbidden')
+            },
+            graphQLErrorUser: () => {
+              throw createGraphQLError('You are forbidden by a GraphQLError')
+            },
+            redwoodGraphQLErrorUser: () => {
+              throw new RedwoodGraphQLError(
+                'You are forbidden by a RedwoodGraphQLError'
+              )
             },
             invalidUser: () => {
               throw new EmailValidationError('emailmissingatexample.com')
@@ -262,7 +275,75 @@ describe('useRedwoodError', () => {
         })
 
         const response = await handler(mockedEvent, {} as Context)
+        const { data, errors } = JSON.parse(response.body)
+
         expect(response.statusCode).toBe(200)
+        expect(data).toBeNull()
+        expect(errors[0].message).toContain(
+          'Emailmissingatexample.com must be formatted'
+        )
+      })
+    })
+
+    describe('with a RedwoodGraphQLError', () => {
+      it('does not mask error message', async () => {
+        const handler = createGraphQLHandler({
+          loggerConfig: { logger: createLogger({}), options: {} },
+          sdls: {},
+          directives: {},
+          services: {},
+          onException: () => {},
+        })
+
+        const mockedEvent = mockLambdaEvent({
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: '{ redwoodGraphQLErrorUser { id, name } }',
+          }),
+          httpMethod: 'POST',
+        })
+
+        const response = await handler(mockedEvent, {} as Context)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(data).toBeNull()
+        expect(errors[0].message).toContain(
+          'You are forbidden by a RedwoodGraphQLError'
+        )
+      })
+    })
+
+    describe('with a GraphQLError', () => {
+      it('does not mask error message', async () => {
+        const handler = createGraphQLHandler({
+          loggerConfig: { logger: createLogger({}), options: {} },
+          sdls: {},
+          directives: {},
+          services: {},
+          onException: () => {},
+        })
+
+        const mockedEvent = mockLambdaEvent({
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: '{ graphQLErrorUser { id, name } }',
+          }),
+          httpMethod: 'POST',
+        })
+
+        const response = await handler(mockedEvent, {} as Context)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(data).toBeNull()
+        expect(errors[0].message).toContain(
+          'You are forbidden by a GraphQLError'
+        )
       })
     })
 
@@ -297,7 +378,7 @@ describe('useRedwoodError', () => {
         expect(data.products[0].currency_iso_4217).toEqual('USD')
       })
 
-      it('shows the custom scalar currency type validation error message', async () => {
+      it('masks a custom scalar currency type runtime validation error message', async () => {
         const handler = createGraphQLHandler({
           loggerConfig: { logger: createLogger({}), options: {} },
           sdls: {},
@@ -324,9 +405,7 @@ describe('useRedwoodError', () => {
         const { data, errors } = JSON.parse(response.body)
 
         expect(data).toBeNull()
-        expect(errors[0].message).toEqual(
-          'Value is not a valid currency value: Calamari flan'
-        )
+        expect(errors[0].message).toEqual('Something went wrong.')
       })
     })
 

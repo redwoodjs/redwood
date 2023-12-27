@@ -564,7 +564,7 @@ We'll use the [Netlify Identity](https://github.com/redwoodjs/redwood/blob/main/
 ```javascript
 // ./src/commands/setup/auth/providers/netlify.js
 
-// the lines that need to be added to App.{js,tsx}
+// the lines that need to be added to App.{jsx,tsx}
 export const config = {
   imports: [
     `import netlifyIdentity from 'netlify-identity-widget'`,

@@ -23,10 +23,22 @@ const TEST_PROJECT_PATH = path.join(
 
 core.setOutput('test-project-path', TEST_PROJECT_PATH)
 
+const bundler = core.getInput('bundler')
+
+const canary = core.getInput('canary') === 'true'
+
+
+console.log({
+  bundler,
+  canary
+})
+
+console.log()
+
 const {
   dependenciesKey,
   distKey
-} = await createCacheKeys('test-project')
+} = await createCacheKeys({ baseKeyPrefix: 'test-project', distKeyPrefix: bundler, canary })
 
 /**
  * @returns {Promise<void>}
@@ -46,7 +58,9 @@ async function main() {
     await sharedTasks()
   } else {
     console.log(`Cache not found for input keys: ${distKey}, ${dependenciesKey}`)
-    await setUpTestProject()
+    await setUpTestProject({
+      canary: true
+    })
   }
 
   await cache.saveCache([TEST_PROJECT_PATH], distKey)
@@ -54,9 +68,10 @@ async function main() {
 }
 
 /**
+ *  *@param {{canary: boolean}} options
  * @returns {Promise<void>}
  */
-async function setUpTestProject() {
+async function setUpTestProject({ canary }) {
   const TEST_PROJECT_FIXTURE_PATH = path.join(
     REDWOOD_FRAMEWORK_PATH,
     '__fixtures__',
@@ -75,6 +90,12 @@ async function setUpTestProject() {
   await execInProject('yarn install')
   console.log()
 
+  if (canary) {
+    console.log(`Upgrading project to canary`)
+    await execInProject('yarn rw upgrade -t canary')
+    console.log()
+  }
+
   await cache.saveCache([TEST_PROJECT_PATH], dependenciesKey)
   console.log(`Cache saved with key: ${dependenciesKey}`)
 
@@ -90,6 +111,22 @@ async function sharedTasks() {
   console.log('Copying framework packages to project')
   await projectCopy(TEST_PROJECT_PATH)
   console.log()
+
+  console.log({ bundler })
+  console.log()
+
+  if (bundler === 'webpack') {
+    console.log(`Setting the bundler to ${bundler}`)
+    console.log()
+
+    const redwoodTOMLPath = path.join(TEST_PROJECT_PATH, 'redwood.toml')
+    const redwoodTOML = fs.readFileSync(redwoodTOMLPath, 'utf-8')
+    const redwoodTOMLWithWebpack = redwoodTOML.replace('[web]\n', '[web]\n  bundler = "webpack"\n')
+    fs.writeFileSync(redwoodTOMLPath, redwoodTOMLWithWebpack)
+
+    // There's an empty line at the end of the redwood.toml file, so no need to console.log after.
+    console.log(fs.readFileSync(redwoodTOMLPath, 'utf-8'))
+  }
 
   console.log('Generating dbAuth secret')
   const { stdout } = await execInProject(

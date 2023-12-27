@@ -7,6 +7,8 @@ import type {
   OperationVariables,
   SubscriptionHookOptions,
   SubscriptionResult,
+  UseSuspenseQueryResult,
+  SuspenseQueryHookOptions,
 } from '@apollo/client'
 
 // @MARK: Override relevant types from Apollo here
@@ -36,6 +38,16 @@ declare global {
     TData,
     TVariables extends OperationVariables
   > extends SubscriptionHookOptions<TData, TVariables> {}
+
+  interface SuspenseQueryOperationResult<
+    TData = any,
+    TVariables extends OperationVariables = OperationVariables
+  > extends UseSuspenseQueryResult<TData, TVariables> {}
+
+  interface GraphQLSuspenseQueryHookOptions<
+    TData,
+    TVariables extends OperationVariables
+  > extends SuspenseQueryHookOptions<TData, TVariables> {}
 }
 
 export {}

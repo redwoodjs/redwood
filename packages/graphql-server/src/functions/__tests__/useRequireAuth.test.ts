@@ -64,7 +64,7 @@ const handler = async (
 ): Promise<any> => {
   // @MARK
   // Don't use globalContext until beforeAll runs
-  const globalContext = require('../../globalContext').context
+  const globalContext = require('@redwoodjs/context').context
   const currentUser = globalContext.currentUser
 
   return {
@@ -114,7 +114,7 @@ const handlerWithError = async (
 ): Promise<any> => {
   // @MARK
   // Don't use globalContext until beforeAll runs
-  const globalContext = require('../../globalContext').context
+  const globalContext = require('@redwoodjs/context').context
   const currentUser = globalContext.currentUser
 
   try {
@@ -146,20 +146,6 @@ const getCurrentUserWithError = async (
 }
 
 describe('useRequireAuth', () => {
-  beforeAll(() => {
-    process.env.DISABLE_CONTEXT_ISOLATION = '1'
-  })
-
-  afterAll(() => {
-    process.env.DISABLE_CONTEXT_ISOLATION = '0'
-  })
-
-  afterEach(() => {
-    // Clean up after test cases
-    const globalContext = require('../../globalContext').context
-    delete globalContext.currentUser
-  })
-
   it('Updates context with output of current user', async () => {
     // @MARK
     // Because we use context inside useRequireAuth, we only want to import this function

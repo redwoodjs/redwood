@@ -161,7 +161,7 @@ The easiest way to prevent access to an entire URL is via the Router. The `<Priv
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 // highlight-next-line
 <Private unauthenticated="home" roles="admin">
   <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
@@ -228,7 +228,7 @@ Which should return the new content of the user:
 }
 ```
 
-:::caution
+:::warning
 
 If you re-used the same console session from the previous section, you'll need to quit it and start it again for it to know about the new Prisma data structure. If you still can't get the update to work, maybe your user doesn't have an `id` of `1`! Run `db.user.findMany()` first and then get the `id` of the user you want to update.
 
@@ -279,7 +279,7 @@ Redwood provides a `hasRole()` function you can get from the `useAuth()` hook (y
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Comment/Comment.js"
+```jsx title="web/src/components/Comment/Comment.jsx"
 // highlight-next-line
 import { useAuth } from 'src/auth'
 
@@ -400,7 +400,7 @@ And due to the nice encapsulation of our **Comment** component we can make all t
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Comment/Comment.js"
+```jsx title="web/src/components/Comment/Comment.jsx"
 // highlight-next-line
 import { useMutation } from '@redwoodjs/web'
 
@@ -565,7 +565,7 @@ We'll also need to update the `CommentsQuery` we're importing from `CommentsCell
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.js"
+```jsx title="web/src/components/CommentsCell/CommentsCell.jsx"
 import Comment from 'src/components/Comment'
 
 export const QUERY = gql`
@@ -613,12 +613,12 @@ Ideally we'd have both versions of this component (with and without the "Delete"
 
 Similar to how we can mock GraphQL calls in Storybook, we can mock user authentication and authorization functionality in a story.
 
-In `Comment.stories.{js,tsx}` let's add a second story for the moderator view of the component (and rename the existing one for clarity):
+In `Comment.stories.{jsx,tsx}` let's add a second story for the moderator view of the component (and rename the existing one for clarity):
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Comment/Comment.stories.js"
+```jsx title="web/src/components/Comment/Comment.stories.jsx"
 import Comment from './Comment'
 
 // highlight-next-line
@@ -705,7 +705,7 @@ The **moderatorView** story needs to have a user available that has the moderato
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Comment/Comment.stories.js"
+```jsx title="web/src/components/Comment/Comment.stories.jsx"
 export const moderatorView = () => {
   // highlight-start
   mockCurrentUser({
@@ -778,7 +778,7 @@ We can use the same `mockCurrentUser()` function in our Jest tests as well. Let'
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Comment/Comment.test.js"
+```jsx title="web/src/components/Comment/Comment.test.jsx"
 // highlight-next-line
 import { render, screen, waitFor } from '@redwoodjs/testing'
 
@@ -895,7 +895,7 @@ describe('Comment', () => {
 
 We moved the default `comment` object to a constant `COMMENT` and then used that in all tests. We also needed to add `waitFor()` since the `hasRole()` check in the Comment itself actually executes some GraphQL calls behind the scenes to figure out who the user is. The test suite makes mocked GraphQL calls, but they're still asynchronous and need to be waited for. If you don't wait, then `currentUser` will be `null` when the test starts, and Jest will be happy with that result. But we won't—we need to wait for the actual value from the GraphQL call.
 
-:::caution Seeing errors in your test suite?
+:::warning Seeing errors in your test suite?
 
 We added fields to the database and sometimes the test runner doesn't realize this. You may need to restart it to get the test database migrated to match what's in `schema.prisma`. Press `q` or `Ctrl-C` in your test runner if it's still running, then:
 

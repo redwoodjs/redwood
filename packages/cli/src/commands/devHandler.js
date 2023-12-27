@@ -1,14 +1,16 @@
-import fs from 'fs'
 import { argv } from 'process'
 
 import concurrently from 'concurrently'
+import fs from 'fs-extra'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { shutdownPort } from '@redwoodjs/internal/dist/dev'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
+import { exitWithError } from '../lib/exit'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 import { getFreePort } from '../lib/ports'
 
@@ -21,12 +23,18 @@ export const handler = async ({
   watchNodeModules = process.env.RWJS_WATCH_NODE_MODULES === '1',
   apiDebugPort,
 }) => {
-  const redwoodProjectPaths = getPaths()
-  const redwoodProjectConfig = getConfig()
+  recordTelemetryAttributes({
+    command: 'dev',
+    side: JSON.stringify(side),
+    generate,
+    watchNodeModules,
+  })
+
+  const rwjsPaths = getPaths()
 
   // Starting values of ports from config (redwood.toml)
-  let apiPreferredPort = parseInt(redwoodProjectConfig.api.port)
-  let webPreferredPort = parseInt(redwoodProjectConfig.web.port)
+  let apiPreferredPort = parseInt(getConfig().api.port)
+  let webPreferredPort = parseInt(getConfig().web.port)
 
   // Assume we can have the ports we want
   let apiAvailablePort = apiPreferredPort
@@ -38,8 +46,9 @@ export const handler = async ({
   if (side.includes('api')) {
     apiAvailablePort = await getFreePort(apiPreferredPort)
     if (apiAvailablePort === -1) {
-      console.error(`Error could not determine a free port for the api server`)
-      process.exit(1)
+      exitWithError(undefined, {
+        message: `Could not determine a free port for the api server`,
+      })
     }
     apiPortChangeNeeded = apiAvailablePort !== apiPreferredPort
   }
@@ -58,8 +67,9 @@ export const handler = async ({
       apiAvailablePort,
     ])
     if (webAvailablePort === -1) {
-      console.error(`Error could not determine a free port for the web server`)
-      process.exit(1)
+      exitWithError(undefined, {
+        message: `Could not determine a free port for the web server`,
+      })
     }
     webPortChangeNeeded = webAvailablePort !== webPreferredPort
   }
@@ -73,11 +83,10 @@ export const handler = async ({
     message += webPortChangeNeeded
       ? `  - Web to use port ${webAvailablePort} instead of your currently configured ${webPreferredPort}\n`
       : ``
-    console.error(message)
-    console.error(
-      `Cannot run the development server until your configured ports are changed or become available.`
-    )
-    process.exit(1)
+    message += `\nCannot run the development server until your configured ports are changed or become available.`
+    exitWithError(undefined, {
+      message,
+    })
   }
 
   if (side.includes('api')) {
@@ -85,7 +94,7 @@ export const handler = async ({
       await generatePrismaClient({
         verbose: false,
         force: false,
-        schema: redwoodProjectPaths.api.dbSchema,
+        schema: rwjsPaths.api.dbSchema,
       })
     } catch (e) {
       errorTelemetry(
@@ -128,7 +137,7 @@ export const handler = async ({
       return `--debug-port ${defaultApiDebugPort}`
     }
 
-    const apiDebugPortInToml = redwoodProjectConfig.api.debugPort
+    const apiDebugPortInToml = getConfig().api.debugPort
     if (apiDebugPortInToml) {
       return `--debug-port ${apiDebugPortInToml}`
     }
@@ -139,48 +148,46 @@ export const handler = async ({
 
   const redwoodConfigPath = getConfigPath()
 
-  const webCommand =
-    redwoodProjectConfig.web.bundler === 'vite' // @NOTE: can't use enums, not TS
-      ? `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
-      : `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
-          watchNodeModules ? '1' : ''
-        } webpack serve --config "${webpackDevConfig}" ${forward}`
+  const streamingSsrEnabled = getConfig().experimental.streamingSsr?.enabled
 
-  const apiCommand = [
-    'yarn',
-    'cross-env',
-    'NODE_ENV=development',
-    'NODE_OPTIONS=--enable-source-maps',
-    'yarn',
-    'nodemon',
-    '--quiet',
-    `--watch "${redwoodConfigPath}"`,
-    '--exec',
-    `"${[
-      'yarn',
-      'rw-api-server-watch',
-      `--port ${apiAvailablePort}`,
-      `--host '::'`,
-      getApiDebugFlag(),
-      '|',
-      'rw-log-formatter',
-    ].join(' ')}"`,
-  ].join(' ')
+  // @TODO (Streaming) Lot of temporary feature flags for started dev server.
+  // Written this way to make it easier to read
+
+  // 1. default: Vite (SPA)
+  let webCommand = `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
+
+  // 2. Vite with SSR
+  if (streamingSsrEnabled) {
+    webCommand = `yarn cross-env NODE_ENV=development rw-dev-fe ${forward}`
+  }
+
+  // 3. Webpack (SPA): we will remove this override after v7
+  if (getConfig().web.bundler === 'webpack') {
+    if (streamingSsrEnabled) {
+      throw new Error(
+        'Webpack does not support SSR. Please switch your bundler to Vite in redwood.toml first'
+      )
+    } else {
+      webCommand = `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
+        watchNodeModules ? '1' : ''
+      } webpack serve --config "${webpackDevConfig}" ${forward}`
+    }
+  }
 
   /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
       name: 'api',
-      command: apiCommand,
+      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS="${getDevNodeOptions()}" yarn nodemon --quiet --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch --port ${apiAvailablePort} ${getApiDebugFlag()} | rw-log-formatter"`,
       prefixColor: 'cyan',
-      runWhen: () => fs.existsSync(redwoodProjectPaths.api.src),
+      runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
     web: {
       name: 'web',
       command: webCommand,
       prefixColor: 'blue',
-      cwd: redwoodProjectPaths.web.base,
-      runWhen: () => fs.existsSync(redwoodProjectPaths.web.src),
+      cwd: rwjsPaths.web.base,
+      runWhen: () => fs.existsSync(rwjsPaths.web.src),
     },
     gen: {
       name: 'gen',
@@ -211,8 +218,28 @@ export const handler = async ({
         process.argv,
         `Error concurrently starting sides: ${e.message}`
       )
-      console.error(c.error(e.message))
-      process.exit(1)
+      exitWithError(e)
     }
   })
+}
+
+/**
+ * Gets the value of the `NODE_OPTIONS` env var from `process.env`, appending `--enable-source-maps` if it's not already there.
+ * See https://nodejs.org/api/cli.html#node_optionsoptions.
+ *
+ * @returns {string}
+ */
+export function getDevNodeOptions() {
+  const { NODE_OPTIONS } = process.env
+  const enableSourceMapsOption = '--enable-source-maps'
+
+  if (!NODE_OPTIONS) {
+    return enableSourceMapsOption
+  }
+
+  if (NODE_OPTIONS.includes(enableSourceMapsOption)) {
+    return NODE_OPTIONS
+  }
+
+  return `${NODE_OPTIONS} ${enableSourceMapsOption}`
 }

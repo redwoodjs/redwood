@@ -1,14 +1,15 @@
-import fs from 'fs'
-import path from 'path'
+import * as fs from 'fs'
+import * as path from 'path'
 
-import {
-  test,
+import { test, expect } from '@playwright/test'
+import type {
   BrowserContext,
-  expect,
   PlaywrightTestArgs,
   PlaywrightWorkerArgs,
 } from '@playwright/test'
 import execa from 'execa'
+
+import { checkHomePageCellRender } from '../../shared/homePage'
 
 let noJsBrowser: BrowserContext
 
@@ -22,21 +23,7 @@ test('Check that homepage is prerendered', async () => {
   const pageWithoutJs = await noJsBrowser.newPage()
   await pageWithoutJs.goto('/')
 
-  const cellSuccessState = await pageWithoutJs.locator('main').innerHTML()
-  expect(cellSuccessState).toMatch(/Welcome to the blog!/)
-  expect(cellSuccessState).toMatch(/A little more about me/)
-  expect(cellSuccessState).toMatch(/What is the meaning of life\?/)
-
-  const navTitle = await pageWithoutJs.locator('header >> h1').innerText()
-  expect(navTitle).toBe('Redwood Blog')
-
-  const navLinks = await pageWithoutJs.locator('nav >> ul').innerText()
-  expect(navLinks.split('\n')).toEqual([
-    'About',
-    'Contact Us',
-    'Admin',
-    'Log In',
-  ])
+  await checkHomePageCellRender(pageWithoutJs)
 
   pageWithoutJs.close()
 })
@@ -270,7 +257,10 @@ test('Check that about is prerendered', async () => {
 // `rwServeTest()` does that. If we try to add project building to this test as
 // well we will build twice, and we don't want that. Hence we use rwServeTest.
 test('prerender with broken gql query', async () => {
-  const redwoodProjectPath = process.env.REDWOOD_PROJECT_PATH || ''
+  // Running the prerender command twice takes much longer than typical tests should
+  test.slow()
+
+  const redwoodProjectPath = process.env.REDWOOD_TEST_PROJECT_PATH || ''
 
   const cellBasePath = path.join(
     redwoodProjectPath,
@@ -280,7 +270,7 @@ test('prerender with broken gql query', async () => {
     'BlogPostsCell'
   )
 
-  const cellPathJs = path.join(cellBasePath, 'BlogPostsCell.js')
+  const cellPathJs = path.join(cellBasePath, 'BlogPostsCell.jsx')
   const cellPathTs = path.join(cellBasePath, 'BlogPostsCell.tsx')
   const cellPath = fs.existsSync(cellPathTs) ? cellPathTs : cellPathJs
 

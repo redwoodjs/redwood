@@ -135,7 +135,7 @@ Okay but what if we click "Delete"?
 
 So, Redwood just created all the pages, components and services necessary to perform all CRUD actions on our posts table. No need to even open Prisma Studio or login through a terminal window and write SQL from scratch. Redwood calls these _scaffolds_.
 
-:::caution
+:::warning
 
 If you head back to VSCode at some point and get a notice in one of the generated Post cells about `Cannot query "posts" on type "Query"` don't worry: we've seen this from time to time on some systems. There are two easy fixes:
 
@@ -151,8 +151,8 @@ Here's what happened when we ran that `yarn rw g scaffold post` command:
   - `NewPostPage` for creating a new post
   - `PostPage` for showing the detail of a post
   - `PostsPage` for listing all the posts
-- Created a _layout_ file in `web/src/layouts/ScaffoldLayout/ScaffoldLayout.{js,tsx}` that serves as a container for pages with common elements like page heading and "New Posts" button
-- Created routes wrapped in the `Set` component with the layout as `PostsLayout` for those pages in `web/src/Routes.{js,tsx}`
+- Created a _layout_ file in `web/src/layouts/ScaffoldLayout/ScaffoldLayout.{jsx,tsx}` that serves as a container for pages with common elements like page heading and "New Posts" button
+- Created routes wrapped in the `Set` component with the layout as `ScaffoldLayout` for those pages in `web/src/Routes.{jsx,tsx}`
 - Created three _cells_ in `web/src/components/Post`:
   - `EditPostCell` gets the post to edit in the database
   - `PostCell` gets the post to display
@@ -162,7 +162,7 @@ Here's what happened when we ran that `yarn rw g scaffold post` command:
   - `Post` displays a single post
   - `PostForm` the actual form used by both the New and Edit components
   - `Posts` displays the table of all posts
-- Added an _SDL_ file to define several GraphQL queries and mutations in `api/src/graphql/posts.sdl.{js,ts}`
+- Added an _SDL_ file to define several GraphQL queries and mutations in `api/src/graphql/posts.sdl.{jsx,ts}`
 - Added a _services_ file in `api/src/services/posts/posts.{js,ts}` that makes the Prisma client calls to get data in and out of the database
 
 Pages and components/cells are nicely contained in `Post` directories to keep them organized while the layout is at the top level since there's only one of them.

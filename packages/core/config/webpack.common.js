@@ -12,9 +12,7 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 
-const {
-  getWebSideDefaultBabelConfig,
-} = require('@redwoodjs/internal/dist/build/babel/web')
+const { getWebSideDefaultBabelConfig } = require('@redwoodjs/babel-config')
 const {
   ChunkReferencesPlugin,
 } = require('@redwoodjs/internal/dist/webpackPlugins/ChunkReferencesPlugin')
@@ -22,6 +20,8 @@ const { getConfig, getPaths } = require('@redwoodjs/project-config')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
+
+const isUsingVite = redwoodConfig.web.bundler !== 'webpack'
 
 /** @returns {{[key: string]: string}} Env vars */
 const getEnvVars = () => {
@@ -68,6 +68,13 @@ const getStyleLoaders = (isEnvProduction) => {
     return loaderConfig
   }
 
+  const resolveUrlLoader = {
+    loader: require.resolve('resolve-url-loader'),
+    options: {
+      root: path.join(redwoodPaths.web.base, '/public'),
+    },
+  }
+
   const paths = getPaths()
   const hasPostCssConfig = fs.existsSync(paths.web.postcss)
 
@@ -80,6 +87,7 @@ const getStyleLoaders = (isEnvProduction) => {
           postcssOptions: {
             config: paths.web.postcss,
           },
+          sourceMap: true, // required for resolve-url-loader
         },
       }
     : null
@@ -87,12 +95,20 @@ const getStyleLoaders = (isEnvProduction) => {
   const numImportLoadersForCSS = hasPostCssConfig ? 1 : 0
   const numImportLoadersForSCSS = hasPostCssConfig ? 2 : 1
 
+  const sassLoader = {
+    loader: 'sass-loader',
+    options: {
+      sourceMap: true, // required for resolve-url-loader
+    },
+  }
+
   return [
     {
       test: /\.module\.css$/,
       use: [
         styleOrExtractLoader,
         cssLoader(true, numImportLoadersForCSS),
+        isUsingVite && resolveUrlLoader,
         postCssLoader,
       ].filter(Boolean),
     },
@@ -101,6 +117,7 @@ const getStyleLoaders = (isEnvProduction) => {
       use: [
         styleOrExtractLoader,
         cssLoader(false, numImportLoadersForCSS),
+        isUsingVite && resolveUrlLoader,
         postCssLoader,
       ].filter(Boolean),
       sideEffects: true,
@@ -110,8 +127,9 @@ const getStyleLoaders = (isEnvProduction) => {
       use: [
         styleOrExtractLoader,
         cssLoader(true, numImportLoadersForSCSS),
+        isUsingVite && resolveUrlLoader,
         postCssLoader,
-        'sass-loader',
+        sassLoader,
       ].filter(Boolean),
     },
     {
@@ -119,8 +137,9 @@ const getStyleLoaders = (isEnvProduction) => {
       use: [
         styleOrExtractLoader,
         cssLoader(false, numImportLoadersForSCSS),
+        isUsingVite && resolveUrlLoader,
         postCssLoader,
-        'sass-loader',
+        sassLoader,
       ].filter(Boolean),
       sideEffects: true,
     },
@@ -152,14 +171,12 @@ const getSharedPlugins = (isEnvProduction) => {
       new ReactRefreshWebpackPlugin({ overlay: false }),
     new webpack.ProvidePlugin({
       React: 'react',
-      PropTypes: 'prop-types',
       gql: 'graphql-tag',
       ...devTimeAutoImports,
     }),
     // The define plugin will replace these keys with their values during build
     // time. Note that they're used in packages/web/src/config.ts, and made available in globalThis
     new webpack.DefinePlugin({
-      ['RWJS_WEB_BUNDLER']: JSON.stringify('webpack'),
       ['RWJS_ENV']: JSON.stringify({
         RWJS_API_GRAPHQL_URL:
           redwoodConfig.web.apiGraphQLUrl ??
@@ -264,7 +281,7 @@ module.exports = (webpackEnv) => {
         }),
       isEnvProduction &&
         new WebpackManifestPlugin({
-          fileName: 'build-manifest.json',
+          fileName: 'client-build-manifest.json',
         }),
       isEnvProduction && new ChunkReferencesPlugin(),
       ...getSharedPlugins(isEnvProduction),
@@ -322,6 +339,11 @@ module.exports = (webpackEnv) => {
               generator: {
                 filename: 'static/media/[name].[contenthash:8][ext]',
               },
+            },
+            // (8)
+            !redwoodConfig.experimental.realtime.enabled && {
+              test: require.resolve('@redwoodjs/web/dist/apollo/sseLink'),
+              use: require.resolve('null-loader'),
             },
           ].filter(Boolean),
         },

@@ -3,12 +3,12 @@
 import path from 'path'
 
 import { trace, SpanStatusCode } from '@opentelemetry/api'
-import chalk from 'chalk'
 import checkNodeVersionCb from 'check-node-version'
 import execa from 'execa'
 import fs from 'fs-extra'
 import semver from 'semver'
 import terminalLink from 'terminal-link'
+import untildify from 'untildify'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
@@ -22,6 +22,8 @@ import {
   shutdownTelemetry,
   recordErrorViaTelemetry,
 } from './telemetry'
+
+const INITIAL_COMMIT_MESSAGE = 'Initial commit'
 
 // Telemetry
 const { telemetry } = Parser(hideBin(process.argv))
@@ -42,6 +44,18 @@ function isYarnBerryOrNewer() {
 
   return false
 }
+
+const USE_GITPOD_TEXT = [
+  `  As an alternative solution, you can launch a Redwood project using GitPod instead. GitPod is a an online IDE.`,
+  `  See: ${terminalLink(
+    'Launch Redwood using GitPod',
+    'https://gitpod.io/#https://github.com/redwoodjs/starter',
+    {
+      fallback: () =>
+        'Launch Redwood using GitPod https://gitpod.io/#https://github.com/redwoodjs/starter',
+    }
+  )}`,
+]
 
 async function executeCompatibilityCheck(templateDir) {
   const tuiContent = new ReactiveTUIContent({
@@ -78,33 +92,23 @@ async function executeCompatibilityCheck(templateDir) {
       semver.minVersion(checksData.yarn.wanted.raw)
     )
 
-    if (
-      foundNodeVersionIsLessThanRequired ||
-      foundYarnVersionIsLessThanRequired
-    ) {
-      const errorMessages = [
-        {
-          type: 'node',
-          failedCompatibilityCheck: foundNodeVersionIsLessThanRequired,
-        },
-        {
-          type: 'yarn',
-          failedCompatibilityCheck: foundYarnVersionIsLessThanRequired,
-        },
-      ]
-        .filter(({ failedCompatibilityCheck }) => failedCompatibilityCheck)
-        .map(
-          ({ type }) =>
-            `  ${type} ${checksData[type].wanted.range} required; found ${checksData[type].version.version}`
-        )
-
+    if (foundNodeVersionIsLessThanRequired) {
       tui.stopReactive(true)
       tui.displayError(
         'Compatibility checks failed',
         [
-          `  ${errorMessages.join('\n')}`,
+          `  You need to upgrade the version of node you're using.`,
+          `  You're using ${checksData.node.version.version} and we currently support node ${checksData.node.wanted.range}.`,
           '',
           `  Please use tools like nvm or corepack to change to a compatible version.`,
+          `  See: ${terminalLink(
+            'How to - Using nvm',
+            'https://redwoodjs.com/docs/how-to/using-nvm',
+            {
+              fallback: () =>
+                'How to - Using nvm https://redwoodjs.com/docs/how-to/using-nvm',
+            }
+          )}`,
           `  See: ${terminalLink(
             'Tutorial - Prerequisites',
             'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
@@ -113,6 +117,43 @@ async function executeCompatibilityCheck(templateDir) {
                 'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
             }
           )}`,
+          '',
+          ...USE_GITPOD_TEXT,
+        ].join('\n')
+      )
+
+      recordErrorViaTelemetry('Compatibility checks failed')
+      await shutdownTelemetry()
+      process.exit(1)
+    }
+
+    if (foundYarnVersionIsLessThanRequired) {
+      tui.stopReactive(true)
+      tui.displayError(
+        'Compatibility checks failed',
+        [
+          `  You need to upgrade the version of yarn you're using.`,
+          `  You're using ${checksData.yarn.version.version} and we currently support node ${checksData.yarn.wanted.range}.`,
+          '',
+          `  Please use tools like corepack to change to a compatible version.`,
+          `  See: ${terminalLink(
+            'How to - Using Yarn',
+            'https://redwoodjs.com/docs/how-to/using-yarn',
+            {
+              fallback: () =>
+                'How to - Using Yarn https://redwoodjs.com/docs/how-to/using-yarn',
+            }
+          )}`,
+          `  See: ${terminalLink(
+            'Tutorial - Prerequisites',
+            'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+            {
+              fallback: () =>
+                'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+            }
+          )}`,
+          '',
+          ...USE_GITPOD_TEXT,
         ].join('\n')
       )
 
@@ -125,9 +166,20 @@ async function executeCompatibilityCheck(templateDir) {
     tui.displayWarning(
       'Compatibility checks failed',
       [
-        `  node ${checksData.node.wanted.range} supported; found ${checksData.node.version.version}`,
+        `  You may want to downgrade the version of node you're using.`,
+        `  You're using ${checksData.node.version.version} and we currently support node ${checksData.node.wanted.range}.`,
         '',
         `  This may make your project incompatible with some deploy targets, especially those using AWS Lambdas.`,
+        '',
+        `  Please use tools like nvm or corepack to change to a compatible version.`,
+        `  See: ${terminalLink(
+          'How to - Use nvm',
+          'https://redwoodjs.com/docs/how-to/using-nvm',
+          {
+            fallback: () =>
+              'How to - Use nvm https://redwoodjs.com/docs/how-to/using-nvm',
+          }
+        )}`,
         `  See: ${terminalLink(
           'Tutorial - Prerequisites',
           'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
@@ -136,6 +188,8 @@ async function executeCompatibilityCheck(templateDir) {
               'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
           }
         )}`,
+        '',
+        ...USE_GITPOD_TEXT,
       ].join('\n')
     )
 
@@ -176,7 +230,9 @@ function checkNodeAndYarnVersion(templateDir) {
   })
 }
 
-async function createProjectFiles(newAppDir, { templateDir, overwrite }) {
+async function createProjectFiles(appDir, { templateDir, overwrite }) {
+  let newAppDir = appDir
+
   const tuiContent = new ReactiveTUIContent({
     mode: 'text',
     content: 'Creating project files',
@@ -186,26 +242,7 @@ async function createProjectFiles(newAppDir, { templateDir, overwrite }) {
   })
   tui.startReactive(tuiContent)
 
-  // Check if the new app directory already exists
-  if (fs.existsSync(newAppDir) && !overwrite) {
-    // Check if the directory contains files and show an error if it does
-    if (fs.readdirSync(newAppDir).length > 0) {
-      tui.stopReactive(true)
-      tui.displayError(
-        'Project directory already contains files',
-        [
-          `'${RedwoodStyling.info(newAppDir)}' already exists and is not empty`,
-          ``,
-          `You can use the '${RedwoodStyling.info(
-            'overwrite'
-          )}' flag to create the project even if target directory isn't empty`,
-        ].join('\n')
-      )
-      recordErrorViaTelemetry(`Project directory already contains files`)
-      await shutdownTelemetry()
-      process.exit(1)
-    }
-  }
+  newAppDir = await doesDirectoryAlreadyExist(newAppDir, { overwrite })
 
   // Ensure the new app directory exists
   fs.ensureDirSync(path.dirname(newAppDir))
@@ -220,7 +257,8 @@ async function createProjectFiles(newAppDir, { templateDir, overwrite }) {
   )
 
   // Write the uid
-  fs.ensureFileSync(path.join(newAppDir, '.redwood', 'telemetry.txt'), UID)
+  fs.ensureDirSync(path.join(newAppDir, '.redwood'))
+  fs.writeFileSync(path.join(newAppDir, '.redwood', 'telemetry.txt'), UID)
 
   tuiContent.update({
     spinner: {
@@ -229,6 +267,8 @@ async function createProjectFiles(newAppDir, { templateDir, overwrite }) {
     content: `${RedwoodStyling.green('✔')} Project files created`,
   })
   tui.stopReactive()
+
+  return newAppDir
 }
 
 async function installNodeModules(newAppDir) {
@@ -345,7 +385,7 @@ async function initializeGit(newAppDir, commitMessage) {
       "Couldn't initialize a git repo",
       [
         `We could not initialize a git repo using ${RedwoodStyling.info(
-          'git init && git add . && git commit -m "Initial commit"'
+          `git init && git add . && git commit -m "${commitMessage}"`
         )}. Please see below for the full error message.`,
         '',
         error,
@@ -365,6 +405,46 @@ async function initializeGit(newAppDir, commitMessage) {
     },
   })
   tui.stopReactive()
+}
+
+async function handleTargetDirPreference(targetDir) {
+  if (targetDir) {
+    tui.drawText(
+      `${RedwoodStyling.green(
+        '✔'
+      )} Creating your Redwood app in ${targetDir} based on command line argument`
+    )
+
+    return targetDir
+  }
+
+  // Prompt user for preference
+  try {
+    const response = await tui.prompt({
+      type: 'input',
+      name: 'targetDir',
+      message: 'Where would you like to create your Redwood app?',
+      initial: 'my-redwood-app',
+    })
+
+    if (/^~\w/.test(response.targetDir)) {
+      tui.stopReactive(true)
+      tui.displayError(
+        'The `~username` syntax is not supported here',
+        'Please use the full path or specify the target directory on the command line.'
+      )
+
+      recordErrorViaTelemetry('Target dir prompt path syntax not supported')
+      await shutdownTelemetry()
+      process.exit(1)
+    }
+
+    return untildify(response.targetDir)
+  } catch {
+    recordErrorViaTelemetry('User cancelled install at target dir prompt')
+    await shutdownTelemetry()
+    process.exit(1)
+  }
 }
 
 async function handleTypescriptPreference(typescriptFlag) {
@@ -424,6 +504,114 @@ async function handleGitPreference(gitInitFlag) {
   }
 }
 
+async function doesDirectoryAlreadyExist(
+  appDir,
+  { overwrite, suppressWarning }
+) {
+  let newAppDir = appDir
+
+  // Check if the new app directory already exists
+  if (fs.existsSync(newAppDir) && !overwrite) {
+    // Check if the directory contains files and show an error if it does
+    if (fs.readdirSync(newAppDir).length > 0) {
+      const styledAppDir = RedwoodStyling.info(newAppDir)
+
+      if (!suppressWarning) {
+        tui.stopReactive(true)
+        tui.displayWarning(
+          'Project directory already contains files',
+          [`'${styledAppDir}' already exists and is not empty`].join('\n')
+        )
+      }
+
+      try {
+        const response = await tui.prompt({
+          type: 'select',
+          name: 'projectDirectoryAlreadyExists',
+          message: 'How would you like to proceed?',
+          choices: [
+            'Quit install',
+            `Overwrite files in '${styledAppDir}' and continue install`,
+            'Specify a different directory',
+          ],
+          initial: 0,
+        })
+
+        // overwrite the existing files
+        if (
+          response.projectDirectoryAlreadyExists ===
+          `Overwrite files in '${styledAppDir}' and continue install`
+        ) {
+          // blow away the existing directory and create a new one
+          await fs.remove(newAppDir)
+        } // specify a different directory
+        else if (
+          response.projectDirectoryAlreadyExists ===
+          'Specify a different directory'
+        ) {
+          const newDirectoryName = await handleNewDirectoryNamePreference()
+
+          if (/^~\w/.test(newDirectoryName)) {
+            tui.stopReactive(true)
+            tui.displayError(
+              'The `~username` syntax is not supported here',
+              'Please use the full path or specify the target directory on the command line.'
+            )
+
+            // Calling doesDirectoryAlreadyExist again with the same old
+            // appDir as a way to prompt the user for a new directory name
+            // after displaying the error above
+            newAppDir = await doesDirectoryAlreadyExist(appDir, {
+              overwrite,
+              suppressWarning: true,
+            })
+          } else {
+            newAppDir = path.resolve(process.cwd(), untildify(newDirectoryName))
+          }
+
+          // check to see if the new directory exists
+          newAppDir = await doesDirectoryAlreadyExist(newAppDir, { overwrite })
+        } // Quit Install and Throw and Error
+        else if (response.projectDirectoryAlreadyExists === 'Quit install') {
+          // quit and throw an error
+          recordErrorViaTelemetry(
+            'User quit after directory already exists error'
+          )
+          await shutdownTelemetry()
+          process.exit(1)
+        }
+        // overwrite the existing files
+      } catch (_error) {
+        recordErrorViaTelemetry(
+          `User cancelled install after directory already exists error`
+        )
+        await shutdownTelemetry()
+        process.exit(1)
+      }
+    }
+  }
+
+  return newAppDir
+}
+
+async function handleNewDirectoryNamePreference() {
+  try {
+    const response = await tui.prompt({
+      type: 'input',
+      name: 'targetDirectoryInput',
+      message: 'What directory would you like to create the app in?',
+      initial: 'my-redwood-app',
+    })
+    return response.targetDirectoryInput
+  } catch (_error) {
+    recordErrorViaTelemetry(
+      'User cancelled install at specify a different directory prompt'
+    )
+    await shutdownTelemetry()
+    process.exit(1)
+  }
+}
+
 /**
  * @param {string?} commitMessageFlag
  */
@@ -439,7 +627,7 @@ async function handleCommitMessagePreference(commitMessageFlag) {
       type: 'input',
       name: 'commitMessage',
       message: 'Enter a commit message',
-      initial: 'Initial commit',
+      initial: INITIAL_COMMIT_MESSAGE,
     })
     return response.commitMessage
   } catch (_error) {
@@ -527,6 +715,12 @@ async function createRedwoodApp() {
       type: 'string',
       describe: 'Commit message for the initial commit.',
     })
+    .option('yes', {
+      alias: 'y',
+      default: null,
+      type: 'boolean',
+      describe: 'Skip prompts and use defaults.',
+    })
     .version(version)
 
   const _isYarnBerryOrNewer = isYarnBerryOrNewer()
@@ -540,51 +734,34 @@ async function createRedwoodApp() {
     })
   }
 
+  const parsedFlags = cli.parse()
+
   // Extract the args as provided by the user in the command line
   // TODO: Make all flags have the 'flag' suffix
-  const {
-    _: args,
-    'yarn-install': yarnInstallFlag,
-    typescript: typescriptFlag,
-    overwrite,
-    // telemetry, // Extracted above to check if telemetry is disabled before we even reach this point
-    'git-init': gitInitFlag,
-    'commit-message': commitMessageFlag,
-  } = cli.parse()
+  const args = parsedFlags._
+  const yarnInstallFlag =
+    parsedFlags['yarn-install'] ?? !_isYarnBerryOrNewer ? parsedFlags.yes : null
+  const typescriptFlag = parsedFlags.typescript ?? parsedFlags.yes
+  const overwrite = parsedFlags.overwrite
+  // telemetry, // Extracted above to check if telemetry is disabled before we even reach this point
+  const gitInitFlag = parsedFlags['git-init'] ?? parsedFlags.yes
+  const commitMessageFlag =
+    parsedFlags['commit-message'] ??
+    (parsedFlags.yes ? INITIAL_COMMIT_MESSAGE : null)
 
   // Record some of the arguments for telemetry
   trace.getActiveSpan()?.setAttribute('yarn-install', yarnInstallFlag)
   trace.getActiveSpan()?.setAttribute('overwrite', overwrite)
 
   // Get the directory for installation from the args
-  const targetDir = String(args).replace(/,/g, '-')
+  let targetDir = String(args).replace(/,/g, '-')
 
-  // Throw an error if there is no target directory specified
-  if (!targetDir) {
-    tui.displayError(
-      'No target directory specified',
-      [
-        'Please specify the project directory',
-        `  ${chalk.cyan('yarn create redwood-app')} ${chalk.green(
-          '<project-directory>'
-        )}`,
-        '',
-        'For example:',
-        `  ${chalk.cyan('yarn create redwood-app')} ${chalk.green(
-          'my-redwood-app'
-        )}`,
-      ].join('\n')
-    )
-    recordErrorViaTelemetry('No target directory specified')
-    await shutdownTelemetry()
-    process.exit(1)
-  }
-
-  const newAppDir = path.resolve(process.cwd(), targetDir)
   const templatesDir = path.resolve(__dirname, '../templates')
 
   // Engine check
   await executeCompatibilityCheck(path.join(templatesDir, 'ts'))
+
+  targetDir = await handleTargetDirPreference(targetDir)
 
   // Determine ts/js preference
   const useTypescript = await handleTypescriptPreference(typescriptFlag)
@@ -608,13 +785,11 @@ async function createRedwoodApp() {
     yarnInstall = await handleYarnInstallPreference(yarnInstallFlag)
   }
 
-  // Create project files
-  await createProjectFiles(newAppDir, { templateDir, overwrite })
+  let newAppDir = path.resolve(process.cwd(), targetDir)
 
-  // Initialize git repo
-  if (useGit) {
-    await initializeGit(newAppDir, commitMessage)
-  }
+  // Create project files
+  // if this directory already exists then createProjectFiles may set a new directory name
+  newAppDir = await createProjectFiles(newAppDir, { templateDir, overwrite })
 
   // Install the node packages
   if (yarnInstall) {
@@ -634,6 +809,11 @@ async function createRedwoodApp() {
     await generateTypes(newAppDir)
   }
 
+  // Initialize git repo
+  if (useGit) {
+    await initializeGit(newAppDir, commitMessage)
+  }
+
   // Post install message
   tui.drawText(
     [
@@ -649,7 +829,7 @@ async function createRedwoodApp() {
       ...[
         `${RedwoodStyling.redwood(
           ` > ${RedwoodStyling.green(
-            `cd ${path.relative(process.cwd(), targetDir)}`
+            `cd ${path.relative(process.cwd(), newAppDir)}`
           )}`
         )}`,
         !yarnInstall &&

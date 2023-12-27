@@ -1,8 +1,8 @@
-import fs from 'fs'
 import path from 'path'
 
 import toml from '@iarna/toml'
 import { getSchema, getConfig } from '@prisma/internals'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import {
@@ -12,7 +12,8 @@ import {
 } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { printSetupNotes, addFilesTask } from '../helpers'
+import { printSetupNotes } from '../../../../lib'
+import { addFilesTask } from '../helpers'
 
 const redwoodProjectPaths = getPaths()
 

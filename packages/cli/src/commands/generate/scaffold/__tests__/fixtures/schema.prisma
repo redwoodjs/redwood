@@ -72,3 +72,8 @@ model Tag {
   post   Post?  @relation(fields: [postId], references: [id])
   postId Int?
 }
+
+model CustomIdField {
+  uuid String @id @default(uuid())
+  name String
+}

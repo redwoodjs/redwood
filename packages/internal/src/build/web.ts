@@ -3,9 +3,9 @@ import path from 'path'
 
 import { removeSync } from 'fs-extra'
 
+import type { Flags } from '@redwoodjs/babel-config'
+import { prebuildWebFile } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
-
-import { prebuildWebFile, Flags } from './babel/web'
 
 // @MARK
 // This whole file is currently only used in testing
@@ -49,11 +49,8 @@ interface BuildOptions {
 }
 
 /**
- *
- * @WARN: This is currently only used in testing
  * Builds the web side with Vite, but not used in the buildHandler currently
  * because we want to set the process.cwd to web.base
- *
  */
 export const buildWeb = async ({ verbose }: BuildOptions) => {
   // @NOTE: Using dynamic import, because vite is still opt-in

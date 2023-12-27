@@ -48,7 +48,7 @@ console.log('Copying TS template to JS template')
 fs.copySync(TS_TEMPLATE_FILEPATH, JS_TEMPLATE_FILEPATH)
 
 // Find files and transform.
-const apiWebFilePaths = fg.sync('{api,web}/src/**/*.{ts,tsx}', {
+const apiWebFilePaths = fg.sync('{api,web}/**/*.{ts,tsx}', {
   cwd: JS_TEMPLATE_FILEPATH,
   absolute: true,
 })
@@ -88,7 +88,7 @@ for (const filePath of [...apiWebFilePaths, ...scriptFilePaths]) {
   })
 
   fs.writeFileSync(
-    filePath.replace('.tsx', '.js').replace('.ts', '.js'),
+    filePath.replace('.tsx', '.jsx').replace('.ts', '.js'),
     formattedCode,
     'utf-8'
   )

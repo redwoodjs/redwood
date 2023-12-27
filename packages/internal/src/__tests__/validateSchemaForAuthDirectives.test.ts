@@ -3,12 +3,12 @@ import path from 'path'
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { loadTypedefs } from '@graphql-tools/load'
 import { mergeTypeDefs } from '@graphql-tools/merge'
-import { DocumentNode } from 'graphql'
+import type { DocumentNode } from 'graphql'
 
 import { getPaths } from '@redwoodjs/project-config'
 
 import {
-  validateSchemaForDirectives,
+  validateSchema,
   DIRECTIVE_REQUIRED_ERROR_MESSAGE,
   DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE,
 } from '../validateSchema'
@@ -43,7 +43,7 @@ const validateSdlFile = async (sdlFile: string) => {
 
   // Merge in the rootSchema with JSON scalars, etc.
   const mergedDocumentNode = mergeTypeDefs([projectDocumentNodes])
-  validateSchemaForDirectives(mergedDocumentNode)
+  validateSchema(mergedDocumentNode)
 }
 
 describe('SDL uses auth directives', () => {

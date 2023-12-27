@@ -17,8 +17,8 @@ This package offers functionality to parse Redwood's configuration file, redwood
 
 ### src
 
-![src](./dependency-graph-src.svg)
+![src](./dependencyGraph.src.svg)
 
 ### dist
 
-![dist](./dependency-graph-dist.svg)
+![dist](./dependencyGraph.dist.svg)

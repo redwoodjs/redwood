@@ -1,21 +1,26 @@
 import type { AllowedOperations } from '@envelop/filter-operation-type'
 import type { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types'
-import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
+import type { IExecutableSchemaDefinition } from '@graphql-tools/schema'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
-import { GraphQLObjectType, GraphQLInterfaceType, DocumentNode } from 'graphql'
+import type {
+  GraphQLObjectType,
+  GraphQLInterfaceType,
+  DocumentNode,
+} from 'graphql'
 import type { Plugin } from 'graphql-yoga'
 
 import type { AuthContextPayload, Decoder } from '@redwoodjs/api'
-import { CorsConfig } from '@redwoodjs/api'
+import type { CorsConfig } from '@redwoodjs/api'
+import type { RedwoodRealtimeOptions } from '@redwoodjs/realtime'
 
-import { DirectiveGlobImports } from 'src/directives/makeDirectives'
+import type { DirectiveGlobImports } from 'src/directives/makeDirectives'
 
 import type {
   useRedwoodDirectiveReturn,
   DirectivePluginOptions,
 } from './plugins/useRedwoodDirective'
-import { LoggerConfig } from './plugins/useRedwoodLogger'
-import type { RedwoodRealtimeOptions } from './plugins/useRedwoodRealtime'
+import type { LoggerConfig } from './plugins/useRedwoodLogger'
+import type { RedwoodTrustedDocumentOptions } from './plugins/useRedwoodTrustedDocuments'
 
 export type Resolver = (...args: unknown[]) => unknown
 export type Services = {
@@ -73,6 +78,23 @@ export interface RedwoodGraphQLContext {
   currentUser?: ThenArg<ReturnType<GetCurrentUser>> | AuthContextPayload | null
 
   [index: string]: unknown
+}
+
+export interface RedwoodOpenTelemetryConfig {
+  /**
+   * @description Enables the creation of a span for each resolver execution.
+   */
+  resolvers: boolean
+
+  /**
+   * @description Includes the execution result in the span attributes.
+   */
+  variables: boolean
+
+  /**
+   * @description Includes the variables in the span attributes.
+   */
+  result: boolean
 }
 
 /**
@@ -211,9 +233,22 @@ export type GraphQLYogaOptions = {
   /**
    * @description Configure RedwoodRealtime plugin with subscriptions and live queries
    *
-   * Only supported in a swerver deploy and not allowed with GraphQLHandler config
+   * Only supported in a server deploy and not allowed with GraphQLHandler config
    */
   realtime?: RedwoodRealtimeOptions
+
+  /**
+   * @description Configure Trusted Documents options
+   *
+   * @see https://benjie.dev/graphql/trusted-documents
+   * @see https://the-guild.dev/graphql/yoga-server/docs/features/persisted-operations
+   */
+  trustedDocuments?: RedwoodTrustedDocumentOptions
+
+  /**
+   * @description Configure OpenTelemetry plugin behaviour
+   */
+  openTelemetryOptions?: RedwoodOpenTelemetryConfig
 }
 
 /**
@@ -222,3 +257,8 @@ export type GraphQLYogaOptions = {
  * Note: RedwoodRealtime is not supported
  */
 export type GraphQLHandlerOptions = Omit<GraphQLYogaOptions, 'realtime'>
+
+export type GraphiQLOptions = Pick<
+  GraphQLYogaOptions,
+  'allowGraphiQL' | 'generateGraphiQLHeader'
+>

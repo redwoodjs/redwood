@@ -1,10 +1,13 @@
 import { mergeTypeDefs } from '@graphql-tools/merge'
+import type { IExecutableSchemaDefinition } from '@graphql-tools/schema'
 import {
   addResolversToSchema,
   makeExecutableSchema,
-  IExecutableSchemaDefinition,
 } from '@graphql-tools/schema'
-import { IResolvers, IResolverValidationOptions } from '@graphql-tools/utils'
+import type {
+  IResolvers,
+  IResolverValidationOptions,
+} from '@graphql-tools/utils'
 import * as opentelemetry from '@opentelemetry/api'
 import type {
   GraphQLSchema,
@@ -13,15 +16,12 @@ import type {
   GraphQLUnionType,
   GraphQLObjectType,
 } from 'graphql'
-import merge from 'lodash.merge'
-import omitBy from 'lodash.omitby'
-
-import { getConfig } from '@redwoodjs/project-config'
+import { merge, omitBy } from 'lodash'
 
 import type { RedwoodDirective } from './plugins/useRedwoodDirective'
 import * as rootGqlSchema from './rootSchema'
 import type { RedwoodSubscription } from './subscriptions/makeSubscriptions'
-import {
+import type {
   Services,
   ServicesGlobImports,
   GraphQLTypeWithFields,
@@ -105,18 +105,11 @@ const mapFieldsToService = ({
           context: unknown,
           info: unknown
         ) => {
-          // In serverless deploys like Netilfy and Vercel, the redwood.toml file may not be present,
-          // so we need to try-catch the attempt here to read it
-          let experimentalOpenTelemetryEnabled = false
+          const captureResolvers =
+            // @ts-expect-error context is unknown
+            context && context['OPEN_TELEMETRY_GRAPHQL'] !== undefined
 
-          try {
-            experimentalOpenTelemetryEnabled =
-              getConfig().experimental.opentelemetry.enabled
-          } catch (e) {
-            // Swallow the error for now
-          }
-
-          if (experimentalOpenTelemetryEnabled) {
+          if (captureResolvers) {
             return wrapWithOpenTelemetry(
               services[name],
               args,

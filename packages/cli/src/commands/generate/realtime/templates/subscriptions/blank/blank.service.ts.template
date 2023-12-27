@@ -1,0 +1,19 @@
+import type { ${subscriptionInputType} } from 'types/graphql'
+
+import { logger } from 'src/lib/logger'
+import type { Publish${typeName}ChannelType } from 'src/subscriptions/${name}/${name}'
+
+export const ${subscriptionQueryName} = ({ id }) => [id]
+
+export const ${subscriptionServiceResolver} = async (
+  { input }: { input: ${subscriptionInputType} },
+  { context }: { context: { pubSub: Publish${typeName}ChannelType } }
+) => {
+  logger.debug({ input }, 'publishing ${name} ....')
+
+  const { id, from, body } = input
+
+context.pubSub.publish('${typeName}', id, { from, body })
+
+  return input
+}

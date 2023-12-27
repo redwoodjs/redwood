@@ -1,10 +1,12 @@
-import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
+import fs from 'fs-extra'
 import { outputFileSync } from 'fs-extra'
 import { Listr } from 'listr2'
+import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, usingVSCode } from '../../../../lib'
@@ -29,48 +31,97 @@ export const builder = (yargs) => {
   })
 }
 
-const tailwindImports = [
-  // using outer double quotes and inner single quotes here to generate code
-  // the way prettier wants it in the actual RW app where this will be used
-  "@import 'tailwindcss/base';",
-  "@import 'tailwindcss/components';",
-  "@import 'tailwindcss/utilities';",
+const tailwindDirectives = [
+  '@tailwind base;',
+  '@tailwind components;',
+  '@tailwind utilities;',
 ]
 
-const tailwindImportsExist = (indexCSS) =>
-  tailwindImports
-    .map((el) => new RegExp(el))
-    .every((tailwindDirective) => tailwindDirective.test(indexCSS))
+/** @param {string} indexCSS */
+const tailwindDirectivesExist = (indexCSS) =>
+  tailwindDirectives.every((tailwindDirective) =>
+    indexCSS.includes(tailwindDirective)
+  )
 
 const tailwindImportsAndNotes = [
   '/**',
   ' * START --- SETUP TAILWINDCSS EDIT',
   ' *',
-  ' * `yarn rw setup ui tailwindcss` placed these imports here',
+  ' * `yarn rw setup ui tailwindcss` placed these directives here',
   " * to inject Tailwind's styles into your CSS.",
-  ' * For more information, see: https://tailwindcss.com/docs/installation#include-tailwind-in-your-css',
+  ' * For more information, see: https://tailwindcss.com/docs/installation',
   ' */',
-  ...tailwindImports,
+  ...tailwindDirectives,
   '/**',
   ' * END --- SETUP TAILWINDCSS EDIT',
   ' */\n',
 ]
 
+const recommendedVSCodeExtensions = [
+  'csstools.postcss',
+  'bradlc.vscode-tailwindcss',
+]
+
+const recommendationTexts = {
+  'csstools.postcss': terminalLink(
+    'PostCSS Language Support',
+    'https://marketplace.visualstudio.com/items?itemName=csstools.postcss'
+  ),
+  'bradlc.vscode-tailwindcss': terminalLink(
+    'Tailwind CSS IntelliSense',
+    'https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss'
+  ),
+}
+
+async function recommendExtensionsToInstall() {
+  if (!usingVSCode()) {
+    return
+  }
+
+  let recommendations = []
+
+  try {
+    const { stdout } = await execa('code', ['--list-extensions'])
+    const installedExtensions = stdout.split('\n').map((ext) => ext.trim())
+    recommendations = recommendedVSCodeExtensions.filter(
+      (ext) => !installedExtensions.includes(ext)
+    )
+  } catch {
+    // `code` probably not in PATH so can't check for installed extensions.
+    // We'll just recommend all extensions
+    recommendations = recommendedVSCodeExtensions
+  }
+
+  if (recommendations.length > 0) {
+    console.log()
+    console.log(
+      c.info(
+        'For the best experience we recommend that you install the following ' +
+          (recommendations.length === 1 ? 'extension:' : 'extensions:')
+      )
+    )
+
+    recommendations.forEach((extension) => {
+      console.log(c.info('  ' + recommendationTexts[extension]))
+    })
+  }
+}
+
 export const handler = async ({ force, install }) => {
+  recordTelemetryAttributes({
+    command: 'setup ui tailwindcss',
+    force,
+    install,
+  })
   const rwPaths = getPaths()
 
-  const projectPackages = ['prettier-plugin-tailwindcss']
+  const projectPackages = ['prettier-plugin-tailwindcss@0.4.1']
 
   const webWorkspacePackages = [
     'postcss',
     'postcss-loader',
     'tailwindcss',
     'autoprefixer',
-  ]
-
-  const recommendedVSCodeExtensions = [
-    'csstools.postcss',
-    'bradlc.vscode-tailwindcss',
   ]
 
   const tasks = new Listr(
@@ -100,7 +151,7 @@ export const handler = async ({ force, install }) => {
         },
       },
       {
-        title: 'Installing web workspace-wide packages...',
+        title: 'Installing web side packages...',
         skip: () => !install,
         task: () => {
           return new Listr(
@@ -155,7 +206,7 @@ export const handler = async ({ force, install }) => {
 
           if (fs.existsSync(tailwindConfigPath)) {
             if (force) {
-              // `yarn tailwindcss init` will fail these files already exists
+              // `yarn tailwindcss init` will fail if these files already exists
               fs.unlinkSync(tailwindConfigPath)
             } else {
               throw new Error(
@@ -178,13 +229,13 @@ export const handler = async ({ force, install }) => {
         },
       },
       {
-        title: 'Adding import to index.css...',
+        title: 'Adding directives to index.css...',
         task: (_ctx, task) => {
           const INDEX_CSS_PATH = path.join(rwPaths.web.src, 'index.css')
           const indexCSS = fs.readFileSync(INDEX_CSS_PATH, 'utf-8')
 
-          if (tailwindImportsExist(indexCSS)) {
-            task.skip('Imports already exist in index.css')
+          if (tailwindDirectivesExist(indexCSS)) {
+            task.skip('Directives already exist in index.css')
           } else {
             const newIndexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
             fs.writeFileSync(INDEX_CSS_PATH, newIndexCSS)
@@ -192,7 +243,45 @@ export const handler = async ({ force, install }) => {
         },
       },
       {
-        title: 'Adding recommended VS Code extensions...',
+        title: "Updating tailwind 'scaffold.css'...",
+        skip: () => {
+          // Skip this step if the 'scaffold.css' file does not exist
+          return !fs.existsSync(path.join(rwPaths.web.src, 'scaffold.css'))
+        },
+        task: async (_ctx, task) => {
+          const overrideScaffoldCss =
+            force ||
+            (await task.prompt({
+              type: 'Confirm',
+              message:
+                "Do you want to override your 'scaffold.css' to use tailwind too?",
+            }))
+
+          if (overrideScaffoldCss) {
+            const tailwindScaffoldTemplate = fs.readFileSync(
+              path.join(
+                __dirname,
+                '..',
+                '..',
+                '..',
+                'generate',
+                'scaffold',
+                'templates',
+                'assets',
+                'scaffold.tailwind.css.template'
+              )
+            )
+            fs.writeFileSync(
+              path.join(rwPaths.web.src, 'scaffold.css'),
+              tailwindScaffoldTemplate
+            )
+          } else {
+            task.skip('Skipping scaffold.css override')
+          }
+        },
+      },
+      {
+        title: 'Adding recommended VS Code extensions to project settings...',
         task: (_ctx, task) => {
           const VS_CODE_EXTENSIONS_PATH = path.join(
             rwPaths.base,
@@ -310,6 +399,7 @@ export const handler = async ({ force, install }) => {
 
   try {
     await tasks.run()
+    await recommendExtensionsToInstall()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))

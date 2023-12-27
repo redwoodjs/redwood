@@ -30,9 +30,6 @@ export const registerShims = (routerPath: string) => {
     RWJS_SRC_ROOT: getPaths().web.src,
   }
 
-  // For now set bundler to webpack for prerendering
-  globalThis.RWJS_WEB_BUNDLER = 'webpack'
-
   globalThis.__REDWOOD__PRERENDERING = true
 
   globalThis.__REDWOOD__HELMET_CONTEXT = {}

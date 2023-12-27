@@ -8,7 +8,7 @@ const result = await esbuild.build({
   entryPoints: ['src/index.ts'],
   format: 'cjs',
   platform: 'node',
-  target: ['node18'],
+  target: ['node20'],
   outfile: 'dist/index.js',
 
   // For visualizing the bundle.

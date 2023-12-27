@@ -323,8 +323,8 @@ describe('parseConfig', () => {
     // No substitution should work
     expect(server.privateKeyPath).toEqual('/Users/me/.ssh/id_rsa')
 
-    delete process.env['TEST_VAR_HOST']
-    delete process.env['TEST_VAR_REPO']
+    delete process.env.TEST_VAR_HOST
+    delete process.env.TEST_VAR_REPO
   })
 })
 

@@ -1,4 +1,5 @@
-import { parse, GraphQLResolveInfo, graphql, GraphQLError } from 'graphql'
+import type { GraphQLResolveInfo } from 'graphql'
+import { parse, graphql, GraphQLError } from 'graphql'
 import gql from 'graphql-tag'
 
 import {
@@ -7,7 +8,7 @@ import {
   createValidatorDirective,
 } from '../directives/makeDirectives'
 import { makeMergedSchema } from '../makeMergedSchema'
-import {
+import type {
   GraphQLTypeWithFields,
   ServicesGlobImports,
   SdlGlobImports,

@@ -1,8 +1,8 @@
-import fs from 'fs'
 import path from 'path'
 
 import chalk from 'chalk'
 import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -149,10 +149,10 @@ export const handler = async ({ force }) => {
         },
       },
       {
-        title: 'Adding import to App.{js,tsx}...',
+        title: 'Adding import to App.{jsx,tsx}...',
         task: (_ctx, task) => {
           /**
-           * Add i18n import to the last import of App.{js,tsx}
+           * Add i18n import to the last import of App.{jsx,tsx}
            *
            * Check if i18n import already exists.
            * If it exists, throw an error.
@@ -171,7 +171,7 @@ export const handler = async ({ force }) => {
         skip: () => fileIncludes(rwPaths.web.storybookConfig, 'withI18n'),
         task: async () =>
           extendStorybookConfiguration(
-            path.join(__dirname, 'templates', 'storybook.preview.js.template')
+            path.join(__dirname, 'templates', 'storybook.preview.tsx.template')
           ),
       },
       {

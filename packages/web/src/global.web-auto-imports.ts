@@ -1,15 +1,16 @@
 import type _React from 'react'
 
 import type _gql from 'graphql-tag'
-import type _PropTypes from 'prop-types'
 
 // These are the global types exposed to a user's project
 // For "internal" global types see ambient.d.ts
 
 declare global {
-  const React: typeof _React
-  const PropTypes: typeof _PropTypes
-  const gql: typeof _gql
+  // const gql: typeof _gql
+
+  // Having this as a type instead of a const allows us to augment/override it
+  // in other packages
+  type React = typeof _React
 
   interface Window {
     /** URL or absolute path to the GraphQL serverless function */
@@ -17,9 +18,6 @@ declare global {
     /** URL or absolute path to serverless functions */
     RWJS_API_URL: string
     __REDWOOD__APP_TITLE: string
-
-    // Used by FatalErrorPage to determine how to import the DevFatalErrorPage
-    RWJS_WEB_BUNDLER: string
   }
 
   type GraphQLOperationVariables = Record<string, any>

@@ -201,7 +201,7 @@ Now if you take a look back at the real app in the browser (not Storybook) you s
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.js"
+```jsx title="web/src/components/CommentsCell/CommentsCell.jsx"
 export const Empty = () => {
   // highlight-next-line
   return <div className="text-center text-gray-500">No comments yet</div>
@@ -228,7 +228,7 @@ That's better. Let's update the test that covers the Empty component render as w
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.test.js"
+```jsx title="web/src/components/CommentsCell/CommentsCell.test.jsx"
 it('renders Empty successfully', async () => {
   // highlight-start
   render(<Empty />)
@@ -685,7 +685,7 @@ export const standard = defineScenario({
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```javascript title="api/src/services/comments/comments.scenarios.ts"
+```ts title="api/src/services/comments/comments.scenarios.ts"
 import type { Prisma } from '@prisma/client'
 
 export const standard = defineScenario<Prisma.CommentCreateArgs>({

@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { LocationContextType } from './location'
+import type { LocationContextType } from './location'
 import { createNamedContext } from './util'
 
 export type LoadingState = 'PRE_SHOW' | 'SHOW_LOADING' | 'DONE'

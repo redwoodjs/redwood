@@ -47,7 +47,7 @@ export default function (
   { types: t }: { types: typeof types },
   { bundler }: { bundler: BundlerEnum }
 ): PluginObj {
-  const manifestPath = join(getPaths().web.dist, 'build-manifest.json')
+  const manifestPath = join(getPaths().web.dist, 'client-build-manifest.json')
   const buildManifest = require(manifestPath)
 
   return {
@@ -65,7 +65,7 @@ export default function (
           const importConstName = getVariableName(p)
           let copiedAssetPath
 
-          if (bundler === BundlerEnum.VITE) {
+          if (bundler !== BundlerEnum.WEBPACK) {
             if (state.filename === undefined) {
               return
             }

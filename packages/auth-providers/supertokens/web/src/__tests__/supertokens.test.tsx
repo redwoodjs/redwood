@@ -1,13 +1,13 @@
 import { renderHook, act } from '@testing-library/react'
 
-import { CurrentUser } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
 
-import {
-  createAuth,
+import type {
   SuperTokensUser,
   SessionRecipe,
   SuperTokensAuth,
 } from '../supertokens'
+import { createAuth } from '../supertokens'
 
 const user: SuperTokensUser = {
   userId: 'unique_user_id',

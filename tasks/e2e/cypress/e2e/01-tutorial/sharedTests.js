@@ -73,13 +73,13 @@ export const test_pages = () =>
     // https://redwoodjs.com/docs/tutorial/chapter1/second-page
     cy.exec(`cd ${BASE_DIR}; yarn redwood generate page about --force`)
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
+      path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.jsx'),
       Step2_1_PagesHome
     )
     cy.contains('About').click()
     cy.get('h1').should('contain', 'AboutPage')
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
+      path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.jsx'),
       Step2_2_PagesAbout
     )
     cy.get('h1').should('contain', 'Redwood Blog')
@@ -90,19 +90,19 @@ export const test_layouts = () =>
   it('3. Layouts', () => {
     cy.exec(`cd ${BASE_DIR}; yarn redwood generate layout blog --force`)
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
+      path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.jsx'),
       Step3_1_LayoutsBlog
     )
-    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step3_2_Routes)
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.jsx'), Step3_2_Routes)
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
+      path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.jsx'),
       Step3_3_PagesHome
     )
     cy.contains('Redwood Blog').click()
     cy.get('main').should('contain', 'Home')
 
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
+      path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.jsx'),
       Step3_4_PagesAbout
     )
     cy.contains('About').click()
@@ -182,18 +182,18 @@ export const test_cells = () =>
   it('5. Cells', () => {
     cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPosts --force`)
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.js'),
+      path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.jsx'),
       Step5_1_ComponentsCellBlogPost
     )
     cy.writeFile(
       path.join(
         BASE_DIR,
-        'web/src/components/BlogPostsCell/BlogPostsCell.test.js'
+        'web/src/components/BlogPostsCell/BlogPostsCell.test.jsx'
       ),
       Step5_2_ComponentsCellBlogPostTest
     )
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
+      path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.jsx'),
       Step5_3_PagesHome
     )
 
@@ -213,32 +213,32 @@ export const test_routing_params = () =>
     cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPost --force`)
     cy.exec(`cd ${BASE_DIR}; yarn rw g component BlogPost --force`)
 
-    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step6_1_Routes)
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.jsx'), Step6_1_Routes)
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/BlogPostPage/BlogPostPage.js'),
+      path.join(BASE_DIR, 'web/src/pages/BlogPostPage/BlogPostPage.jsx'),
       Step6_2_BlogPostPage
     )
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/components/BlogPostCell/BlogPostCell.js'),
+      path.join(BASE_DIR, 'web/src/components/BlogPostCell/BlogPostCell.jsx'),
       Step6_3_BlogPostCell
     )
     cy.writeFile(
       path.join(
         BASE_DIR,
-        'web/src/components/BlogPostCell/BlogPostCell.test.js'
+        'web/src/components/BlogPostCell/BlogPostCell.test.jsx'
       ),
       Step6_3_BlogPostCellTest
     )
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.js'),
+      path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.jsx'),
       Step6_4_BlogPost
     )
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.test.js'),
+      path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.test.jsx'),
       Step6_4_BlogPostTest
     )
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.js'),
+      path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.jsx'),
       Step6_5_BlogPostsCell
     )
     cy.writeFile(
@@ -276,15 +276,15 @@ export const test_forms = () =>
     // https://redwoodjs.com/docs/tutorial/everyone-s-favorite-thing-to-build-forms
     cy.exec(`cd ${BASE_DIR}; yarn rw g page contact --force`)
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
+      path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.jsx'),
       Step7_1_BlogLayout
     )
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
+      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.jsx'),
       Step7_2_ContactPage
     )
     cy.writeFile(path.join(BASE_DIR, 'web/src/index.css'), Step7_3_Css)
-    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step7_4_Routes)
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.jsx'), Step7_4_Routes)
 
     cy.contains('Contact').click()
     cy.contains('Save').click()
@@ -312,7 +312,7 @@ export const test_saving_data = () =>
     cy.exec(`cd ${BASE_DIR}; yarn rw g sdl contact --force --crud`)
 
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
+      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.jsx'),
       Step8_1_ContactPageWithoutJsEmailValidation
     )
 
