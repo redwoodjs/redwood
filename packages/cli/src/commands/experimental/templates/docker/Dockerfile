@@ -10,8 +10,6 @@ RUN apt-get update && apt-get install -y \
 USER node
 WORKDIR /home/node/app
 
-COPY --chown=node:node .yarn/plugins .yarn/plugins
-COPY --chown=node:node .yarn/releases .yarn/releases
 COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node package.json .
 COPY --chown=node:node api/package.json api/
