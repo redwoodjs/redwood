@@ -1,10 +1,10 @@
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import JobCell from 'src/components/Jobs/JobCell'
 
 const JobPage = ({ id }) => {
   return (
     <>
-      <MetaTags
+      <Metadata
         title="Job"
         description="Job opening for RedwoodJS developers"
       />

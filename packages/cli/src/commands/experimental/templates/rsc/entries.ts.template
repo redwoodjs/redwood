@@ -5,9 +5,9 @@ export default defineEntries(
   async (id) => {
     switch (id) {
       case 'AboutPage':
-        return import('./AboutPage')
+        return import('./pages/AboutPage/AboutPage')
       case 'HomePage':
-        return import('./HomePage')
+        return import('./pages/HomePage/HomePage')
       default:
         return null
     }

@@ -52,7 +52,13 @@ async function main() {
     }
   }
 
-  await triageRange(range)
+  try {
+    await triageRange(range)
+  } catch (e) {
+    consoleBoxen('👷 Heads up', e.message)
+    process.exitCode = 1
+    return
+  }
 }
 
 main()

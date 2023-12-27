@@ -59,9 +59,10 @@ async function migrate001(db: Database<sqlite3.Database, sqlite3.Statement>) {
       CREATE TABLE IF NOT EXISTS mail_template_component (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         mail_template_id INTEGER NOT NULL,
-        name TEXT NOT NULL UNIQUE,
+        name TEXT NOT NULL,
         props_template TEXT,
-        updated_at INTEGER DEFAULT (strftime('%s', 'now'))
+        updated_at INTEGER DEFAULT (strftime('%s', 'now')),
+        UNIQUE(mail_template_id, name)
       );
       CREATE TABLE IF NOT EXISTS mail_renderer (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

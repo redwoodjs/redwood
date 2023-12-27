@@ -1,12 +1,12 @@
-import type { Find${singularPascalName}ById } from 'types/graphql'
+import type { Find${singularPascalName}By${pascalIdName} } from 'types/graphql'
 
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import ${singularPascalName} from '${importComponentName}'
 
 export const QUERY = gql`
-  query Find${singularPascalName}ById($id: ${idType}!) {
-    ${singularCamelName}: ${singularCamelName}(id: $id) {<% columns.forEach(column => { %>
+  query Find${singularPascalName}By${pascalIdName}($${idName}: ${idType}!) {
+    ${singularCamelName}: ${singularCamelName}(${idName}: $${idName}) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
     }
   }
@@ -20,6 +20,6 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error?.message}</div>
 )
 
-export const Success = ({ ${singularCamelName} }: CellSuccessProps<Find${singularPascalName}ById>) => {
+export const Success = ({ ${singularCamelName} }: CellSuccessProps<Find${singularPascalName}By${pascalIdName}>) => {
   return <${singularPascalName} ${singularCamelName}={${singularCamelName}} />
 }
