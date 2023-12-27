@@ -600,9 +600,9 @@ Or if the variable passed as a prop to a component can't be found:
 
 ![fatal_error_message_query](/img/router/fatal_error_message_query.png)
 
-And if the page has a Cell, you'll see the Cell's request and response which may have contributed to the error:
+And if the page has a Cell, you'll see the Cell's request which may have contributed to the error - but will depend on how your Suspense boundary is setup:
 
-![fatal_error_message_request](/img/router/fatal_error_request.png)
+![cell_error_request](/img/router/cell_req_error.png)
 
 ### In Production
 
@@ -664,7 +664,7 @@ Note that if you're copy-pasting this example, it uses [Tailwind CSS](https://ta
 
 :::note Can I customize the development one?
 
-As it's part of the RedwoodJS framework, you can't. But if there's a feature you want to add, let us know on the [forums](https://community.redwoodjs.com/).
+As it's part of the RedwoodJS framework, you can't _change_ the dev fatal error page - but you can always build your own that takes the same props. If there's a feature you want to add to the built-in version, let us know on the [forums](https://community.redwoodjs.com/).
 
 :::
 
