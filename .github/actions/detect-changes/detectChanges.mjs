@@ -48,7 +48,7 @@ async function getChangedFiles(page = 1) {
   })
 
   const json = await resp.json()
-  const files = json.map((file) => file.filename) || []
+  const files = json?.map((file) => file.filename) || []
 
   changedFiles = changedFiles.concat(files)
 
@@ -73,6 +73,17 @@ async function main() {
 
   const changedFiles = await getChangedFiles()
   console.log(`${changedFiles.length} changed files`)
+
+  if (changedFiles.length === 0) {
+    console.log(
+      'No changed files found. Something must have gone wrong. Fall back to ' +
+        'running all tests.'
+    )
+    core.setOutput('onlydocs', false)
+    core.setOutput('rsc', true)
+    core.setOutput('ssr', true)
+    return
+  }
 
   if (!hasCodeChanges(changedFiles)) {
     console.log('No code changes detected, only docs')
