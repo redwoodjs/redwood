@@ -22,9 +22,9 @@ type UseAuth = () => AuthContextInterface<
 
 export interface RouterState {
   paramTypes?: Record<string, ParamType>
-  activeRouteName?: string | undefined | null
   useAuth: UseAuth
   routes: ReturnType<typeof analyzeRoutes>
+  activeRouteName?: string | undefined | null
 }
 
 const RouterStateContext = createContext<RouterState | undefined>(undefined)
@@ -63,9 +63,9 @@ export const RouterContextProvider: React.FC<RouterContextProviderProps> = ({
 }) => {
   const [state, setState] = useReducer(stateReducer, {
     useAuth: useAuth || useNoAuth,
-    activeRouteName,
     paramTypes,
     routes,
+    activeRouteName,
   })
 
   return (
