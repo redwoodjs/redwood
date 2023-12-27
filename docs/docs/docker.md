@@ -23,7 +23,6 @@ yarn rw experimental setup-docker
 
 The setup commands does several things:
 - writes four files: `Dockerfile`, `.dockerignore`, `docker-compose.dev.yml`, and `docker-compose.prod.yml`
-- adds the official yarn [workspace-tools](https://v3.yarnpkg.com/features/plugins#official-plugins) plugin to configure yarn with the ability to only install production dependencies
 - adds the `@redwoodjs/api-server` and `@redwoodjs/web-server` packages to the api and web sides respectively
 - edits the `browser.open` setting in the `redwood.toml` (right now, if it's set to `true`, it'll break the dev server when running the `docker-compose.dev.yml`)
 
@@ -94,8 +93,8 @@ RUN apt-get update && apt-get install -y \
 
 The `node:20-bookworm-slim` image doesn't have [OpenSSL](https://www.openssl.org/), which [seems to be a bug](https://github.com/nodejs/docker-node/issues/1919).
 (It was included in the "bullseye" image, the codename for Debian 11.)
-On Linux, [Prisma needs OpenSSL](https://www.prisma.io/docs/reference/system-requirements#linux-runtime-dependencies).
-We install it, and Python and its dependencies are there ready to be uncommented if you need them. See the [Troubleshooting](#python) section for more.
+On Linux, [Prisma needs OpenSSL](https://www.prisma.io/docs/reference/system-requirements#linux-runtime-dependencies),
+that's why we install it. Python and its dependencies are there ready to be uncommented if you need them. See the [Troubleshooting](#python) section for more info.
 
 [It's recommended](https://docs.docker.com/develop/develop-images/instructions/#apt-get) to combine `apt-get update` and `apt-get install -y` in the same `RUN` statement for cache busting.
 After installing, we clean up the apt cache to keep the layer lean. (Running `apt-get clean` isn't required—[official Debian images do it automatically](https://github.com/moby/moby/blob/03e2923e42446dbb830c654d0eec323a0b4ef02a/contrib/mkimage/debootstrap#L82-L105).)
@@ -194,6 +193,7 @@ FROM node:20-bookworm-slim as api_serve
 
 RUN apt-get update && apt-get install -y \
     openssl \
+    jq \
     # python3 make gcc \
     && rm -rf /var/lib/apt/lists/*
 ```
@@ -201,6 +201,7 @@ RUN apt-get update && apt-get install -y \
 We don't start from the `base` stage, but begin anew with the `node:20-bookworm-slim` image.
 Since this is a production stage, it's important for it to be as small as possible.
 Docker's [multi-stage builds](https://docs.docker.com/build/building/multi-stage/) enables this.
+In comparison to `base` we've also added `jq` here. It's needed to manipulate `package.json` later.
 
 ```Dockerfile
 USER node
@@ -415,6 +416,7 @@ It's easy to fix: just add `python3` and its dependencies (usually `make` and `g
 
   RUN apt-get update && apt-get install -y \
       openssl \
+      jq \
 +     python3 make gcc \
       && rm -rf /var/lib/apt/lists/*
 ```
