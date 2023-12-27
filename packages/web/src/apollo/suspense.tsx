@@ -10,10 +10,10 @@
 import type {
   ApolloCache,
   ApolloClientOptions,
+  ApolloLink,
   HttpOptions,
   InMemoryCacheConfig,
   setLogVerbosity,
-  ApolloLink,
 } from '@apollo/client'
 import {
   setLogVerbosity as apolloSetLogVerbosity,
@@ -24,10 +24,10 @@ import {
   ApolloNextAppProvider,
   NextSSRApolloClient,
   NextSSRInMemoryCache,
-  useSuspenseQuery,
   useBackgroundQuery,
-  useReadQuery,
   useQuery,
+  useReadQuery,
+  useSuspenseQuery,
 } from '@apollo/experimental-nextjs-app-support/ssr'
 
 import type { UseAuth } from '@redwoodjs/auth'
@@ -127,13 +127,6 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   // See https://www.apollographql.com/docs/react/api/link/introduction.
   const { getToken, type: authProviderType } = useAuth()
 
-  // `updateDataApolloLink` keeps track of the most recent req/res data so they can be passed to
-  // any errors passed up to an error boundary.
-  const data = {
-    mostRecentRequest: undefined,
-    mostRecentResponse: undefined,
-  } as any
-
   const { headers, uri } = useFetchConfig()
 
   const getGraphqlUrl = () => {
@@ -157,16 +150,10 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
       name: 'authMiddleware',
       link: createAuthApolloLink(authProviderType, headers),
     },
-    // @TODO: do we need this in prod? I think it's only for dev errors
-    { name: 'updateDataApolloLink', link: createUpdateDataLink(data) },
+    // @REVIEW: Should we take this out for prod?
+    { name: 'enhanceErrorLink', link: createUpdateDataLink() },
     { name: 'httpLink', link: createHttpLink(getGraphqlUrl(), httpLinkConfig) },
   ]
-
-  const extendErrorAndRethrow = (error: any, _errorInfo: React.ErrorInfo) => {
-    error['mostRecentRequest'] = data.mostRecentRequest
-    error['mostRecentResponse'] = data.mostRecentResponse
-    throw error
-  }
 
   function makeClient() {
     // @MARK use special Apollo client
@@ -181,28 +168,9 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   return (
     <ApolloNextAppProvider makeClient={makeClient}>
-      <ErrorBoundary onError={extendErrorAndRethrow}>{children}</ErrorBoundary>
+      {children}
     </ApolloNextAppProvider>
   )
-}
-
-type ComponentDidCatch = React.ComponentLifecycle<any, any>['componentDidCatch']
-
-interface ErrorBoundaryProps {
-  error?: unknown
-  onError: NonNullable<ComponentDidCatch>
-  children: React.ReactNode
-}
-
-class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
-  componentDidCatch(...args: Parameters<NonNullable<ComponentDidCatch>>) {
-    this.setState({})
-    this.props.onError(...args)
-  }
-
-  render() {
-    return this.props.children
-  }
 }
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
