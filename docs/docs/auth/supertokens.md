@@ -25,7 +25,7 @@ When you run the setup command it configures your app to support both email+pass
 
 # Environment variables
 
-The environment variables have to be added either to your project's `.env` file (when running in development environment), or to the environment variables of your hosting provider (where running in production).
+The environment variables have to be added either to your project's `.env` file (when running in development environment), or to the environment variables of your hosting provider (when running in production).
 
 ## Base setup
 
