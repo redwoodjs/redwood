@@ -451,7 +451,7 @@ const App = () => {
 
 Use the `useRouteName()` hook to get the name of the current route (the page
 the user is currently visiting). The name can then also be used with `routes`
-if needed to dynamically get the url to the current page:
+if you need to dynamically get the url to the current page:
 
 ```jsx
 const routeName = useRouteName()
