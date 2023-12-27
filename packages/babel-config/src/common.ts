@@ -146,7 +146,10 @@ export const getPathsFromTypeScriptConfig = (
 
   const { baseUrl, paths } = config.compilerOptions
 
-  const absoluteBase = path.resolve(rootDir, baseUrl)
+  // Convert it to absolute path - on windows the baseUrl is already absolute
+  const absoluteBase = path.isAbsolute(baseUrl)
+    ? baseUrl
+    : path.join(rootDir, baseUrl)
 
   const pathsObj: Record<string, string> = {}
   for (const [key, value] of Object.entries(paths)) {
