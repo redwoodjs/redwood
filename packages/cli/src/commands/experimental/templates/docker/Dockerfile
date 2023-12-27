@@ -62,6 +62,7 @@ RUN corepack enable
 
 RUN apt-get update && apt-get install -y \
     openssl \
+    jq \
     # python3 make gcc \
     && rm -rf /var/lib/apt/lists/*
 
@@ -71,6 +72,15 @@ WORKDIR /home/node/app
 COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node api/package.json .
 COPY --chown=node:node yarn.lock .
+
+# Copy over the project root package.json to get the packageManager from it,
+# then write it to the api package.json that is the new root package.json in
+# the container
+COPY --chown=node:node package.json /tmp/root-package.json
+RUN export PACKAGE_MANAGER=$(jq -r .packageManager /tmp/root-package.json) \
+    && jq --arg packageManager $PACKAGE_MANAGER '. + { "packageManager": $packageManager }' package.json \
+    > /tmp/api-package.json \
+    && mv /tmp/api-package.json package.json
 
 RUN mkdir -p /home/node/.yarn/berry/info
 
@@ -96,12 +106,25 @@ FROM node:20-bookworm-slim as web_serve
 
 RUN corepack enable
 
+RUN apt-get update && apt-get install -y \
+    jq \
+    && rm -rf /var/lib/apt/lists/*
+
 USER node
 WORKDIR /home/node/app
 
 COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node web/package.json .
 COPY --chown=node:node yarn.lock .
+
+# Copy over the project root package.json to get the packageManager from it,
+# then write it to the api package.json that is the new root package.json in
+# the container
+COPY --chown=node:node package.json /tmp/root-package.json
+RUN export PACKAGE_MANAGER=$(jq -r .packageManager /tmp/root-package.json) \
+    && jq --arg packageManager $PACKAGE_MANAGER '. + { "packageManager": $packageManager }' package.json \
+    > /tmp/api-package.json \
+    && mv /tmp/api-package.json package.json
 
 RUN mkdir -p /home/node/.yarn/berry/info
 
