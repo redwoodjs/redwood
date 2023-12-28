@@ -56,7 +56,7 @@ function Route(_props: RouteProps | RedirectRouteProps | NotFoundRouteProps) {
 }
 
 export interface RouterProps
-  extends Omit<RouterContextProviderProps, 'routes'> {
+  extends Omit<RouterContextProviderProps, 'routes' | 'activeRouteName'> {
   trailingSlashes?: TrailingSlashesTypes
   pageLoadingDelay?: number
   children: ReactNode
@@ -176,6 +176,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
       useAuth={useAuth}
       paramTypes={paramTypes}
       routes={analyzeRoutesResult}
+      activeRouteName={name}
     >
       <ParamsProvider allParams={allParams}>
         <PageLoadingContextProvider delay={pageLoadingDelay}>
