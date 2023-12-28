@@ -44,7 +44,7 @@ docker compose -f ./docker-compose.prod.yml up
 
 If your api side or web side depend on env vars at build time, you may need to supply them as `--build-args`, or in the compose files.
 
-This is often the most tedious part of setting up Docker. Have ideas of how it could be better? Let us know on the forums!
+This is often the most tedious part of setting up Docker. Have ideas of how it could be better? Let us know on the [forums](https://community.redwoodjs.com/)!
 
 :::
 
