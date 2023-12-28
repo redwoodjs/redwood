@@ -154,7 +154,7 @@ export function matchPath(
   // Map extracted values to their param name, casting the value if needed
   const providedParams = matches[0].slice(1)
 
-  // @NOTE: refers to definiton e.g. '/page/{id}', not the actual params
+  // @NOTE: refers to definition e.g. '/page/{id}', not the actual params
   if (routeParamsDefinition.length > 0) {
     const params = providedParams.reduce<Record<string, unknown>>(
       (acc, value, index) => {
