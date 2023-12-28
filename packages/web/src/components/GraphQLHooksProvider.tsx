@@ -4,8 +4,9 @@ import type {
   useReadQuery as apolloUseReadQuery,
 } from '@apollo/client'
 import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
-export type { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import type { DocumentNode } from 'graphql'
+
+export type { TypedDocumentNode }
 
 /**
  * @NOTE
