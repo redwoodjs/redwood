@@ -2,13 +2,13 @@ import path from 'path'
 
 import compat from 'core-js-compat'
 
-import { getPaths, getConfig } from '@redwoodjs/project-config'
+import { getConfig } from '@redwoodjs/project-config'
 
 import {
   BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS,
-  getApiSideBabelPlugins,
-  prebuildApiFile,
   TARGETS_NODE,
+  getApiSideBabelPlugins,
+  transformWithBabel,
 } from '../api'
 
 const RWJS_CWD = path.join(__dirname, '__fixtures__/redwood-app')
@@ -386,7 +386,7 @@ describe('api prebuild ', () => {
 
       expect(sources).toMatchInlineSnapshot(`
         [
-          "../../../../../api/src/lib/polyfill.js",
+          "polyfill.js",
         ]
       `)
     })
@@ -463,84 +463,84 @@ describe('api prebuild ', () => {
      * Some "ES Next" polyfills have landed in v12+ Node.js versions.
      */
     expect(list).toMatchInlineSnapshot(`
-    [
-      "esnext.array.last-index",
-      "esnext.array.last-item",
-      "esnext.composite-key",
-      "esnext.composite-symbol",
-      "esnext.map.delete-all",
-      "esnext.map.every",
-      "esnext.map.filter",
-      "esnext.map.find",
-      "esnext.map.find-key",
-      "esnext.map.from",
-      "esnext.map.group-by",
-      "esnext.map.includes",
-      "esnext.map.key-by",
-      "esnext.map.key-of",
-      "esnext.map.map-keys",
-      "esnext.map.map-values",
-      "esnext.map.merge",
-      "esnext.map.of",
-      "esnext.map.reduce",
-      "esnext.map.some",
-      "esnext.map.update",
-      "esnext.math.clamp",
-      "esnext.math.deg-per-rad",
-      "esnext.math.degrees",
-      "esnext.math.fscale",
-      "esnext.math.iaddh",
-      "esnext.math.imulh",
-      "esnext.math.isubh",
-      "esnext.math.rad-per-deg",
-      "esnext.math.radians",
-      "esnext.math.scale",
-      "esnext.math.seeded-prng",
-      "esnext.math.signbit",
-      "esnext.math.umulh",
-      "esnext.number.from-string",
-      "esnext.observable",
-      "esnext.promise.try",
-      "esnext.reflect.define-metadata",
-      "esnext.reflect.delete-metadata",
-      "esnext.reflect.get-metadata",
-      "esnext.reflect.get-metadata-keys",
-      "esnext.reflect.get-own-metadata",
-      "esnext.reflect.get-own-metadata-keys",
-      "esnext.reflect.has-metadata",
-      "esnext.reflect.has-own-metadata",
-      "esnext.reflect.metadata",
-      "esnext.set.add-all",
-      "esnext.set.delete-all",
-      "esnext.set.difference",
-      "esnext.set.every",
-      "esnext.set.filter",
-      "esnext.set.find",
-      "esnext.set.from",
-      "esnext.set.intersection",
-      "esnext.set.is-disjoint-from",
-      "esnext.set.is-subset-of",
-      "esnext.set.is-superset-of",
-      "esnext.set.join",
-      "esnext.set.map",
-      "esnext.set.of",
-      "esnext.set.reduce",
-      "esnext.set.some",
-      "esnext.set.symmetric-difference",
-      "esnext.set.union",
-      "esnext.string.at",
-      "esnext.string.code-points",
-      "esnext.symbol.observable",
-      "esnext.symbol.pattern-match",
-      "esnext.weak-map.delete-all",
-      "esnext.weak-map.from",
-      "esnext.weak-map.of",
-      "esnext.weak-set.add-all",
-      "esnext.weak-set.delete-all",
-      "esnext.weak-set.from",
-      "esnext.weak-set.of",
-    ]
-  `)
+          [
+            "esnext.array.last-index",
+            "esnext.array.last-item",
+            "esnext.composite-key",
+            "esnext.composite-symbol",
+            "esnext.map.delete-all",
+            "esnext.map.every",
+            "esnext.map.filter",
+            "esnext.map.find",
+            "esnext.map.find-key",
+            "esnext.map.from",
+            "esnext.map.group-by",
+            "esnext.map.includes",
+            "esnext.map.key-by",
+            "esnext.map.key-of",
+            "esnext.map.map-keys",
+            "esnext.map.map-values",
+            "esnext.map.merge",
+            "esnext.map.of",
+            "esnext.map.reduce",
+            "esnext.map.some",
+            "esnext.map.update",
+            "esnext.math.clamp",
+            "esnext.math.deg-per-rad",
+            "esnext.math.degrees",
+            "esnext.math.fscale",
+            "esnext.math.iaddh",
+            "esnext.math.imulh",
+            "esnext.math.isubh",
+            "esnext.math.rad-per-deg",
+            "esnext.math.radians",
+            "esnext.math.scale",
+            "esnext.math.seeded-prng",
+            "esnext.math.signbit",
+            "esnext.math.umulh",
+            "esnext.number.from-string",
+            "esnext.observable",
+            "esnext.promise.try",
+            "esnext.reflect.define-metadata",
+            "esnext.reflect.delete-metadata",
+            "esnext.reflect.get-metadata",
+            "esnext.reflect.get-metadata-keys",
+            "esnext.reflect.get-own-metadata",
+            "esnext.reflect.get-own-metadata-keys",
+            "esnext.reflect.has-metadata",
+            "esnext.reflect.has-own-metadata",
+            "esnext.reflect.metadata",
+            "esnext.set.add-all",
+            "esnext.set.delete-all",
+            "esnext.set.difference",
+            "esnext.set.every",
+            "esnext.set.filter",
+            "esnext.set.find",
+            "esnext.set.from",
+            "esnext.set.intersection",
+            "esnext.set.is-disjoint-from",
+            "esnext.set.is-subset-of",
+            "esnext.set.is-superset-of",
+            "esnext.set.join",
+            "esnext.set.map",
+            "esnext.set.of",
+            "esnext.set.reduce",
+            "esnext.set.some",
+            "esnext.set.symmetric-difference",
+            "esnext.set.union",
+            "esnext.string.at",
+            "esnext.string.code-points",
+            "esnext.symbol.observable",
+            "esnext.symbol.pattern-match",
+            "esnext.weak-map.delete-all",
+            "esnext.weak-map.from",
+            "esnext.weak-map.of",
+            "esnext.weak-set.add-all",
+            "esnext.weak-set.delete-all",
+            "esnext.weak-set.from",
+            "esnext.weak-set.of",
+          ]
+      `)
   })
 })
 
@@ -549,19 +549,19 @@ describe('api prebuild ', () => {
  * This will be re-architected, but doing so now would introduce breaking changes.
  */
 export const prebuildApiFileWrapper = (srcFile: string) => {
-  const redwoodProjectPaths = getPaths()
+  // const redwoodProjectPaths = getPaths()
 
   const plugins = getApiSideBabelPlugins({
     openTelemetry: getConfig().experimental.opentelemetry.enabled,
   })
 
-  const relativePathFromSrc = path.relative(redwoodProjectPaths.base, srcFile)
+  // const relativePathFromSrc = path.relative(redwoodProjectPaths.base, srcFile)
 
-  const dstPath = path
-    .join(redwoodProjectPaths.generated.prebuild, relativePathFromSrc)
-    .replace(/\.(ts)$/, '.js')
+  // const dstPath = path
+  //   .join(redwoodProjectPaths.generated.prebuild, relativePathFromSrc)
+  //   .replace(/\.(ts)$/, '.js')
 
-  const result = prebuildApiFile(srcFile, dstPath, plugins)
+  const result = transformWithBabel(srcFile, plugins)
 
   if (!result?.code) {
     throw new Error(`Couldn't prebuild ${srcFile}`)
