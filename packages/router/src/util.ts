@@ -348,8 +348,9 @@ export function replaceParams(
   return path
 }
 
+export type FlattenSearchParams = ReturnType<typeof flattenSearchParams>
+
 /**
- *
  * @param {string} queryString
  * @returns {Array<string | Record<string, any>>} A flat array of search params
  *
@@ -362,7 +363,6 @@ export function replaceParams(
  *
  * flattenSearchParams(parseSearch('?key1=val1&key2=val2'))
  * => [ { key1: 'val1' }, { key2: 'val2' } ]
- *
  */
 export function flattenSearchParams(
   queryString: string
