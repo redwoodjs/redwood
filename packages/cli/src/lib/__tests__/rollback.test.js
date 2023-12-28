@@ -1,6 +1,6 @@
-import fs from 'fs'
 import path from 'path'
 
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 jest.mock('fs')
@@ -181,13 +181,13 @@ it('prepare sets listr2 rollback functions and rollback executes correctly', asy
         },
       },
     ],
-    { rendererSilent: true }
+    { silentRendererCondition: true }
   )
 
   rollback.prepareForRollback(tasks)
 
   tasks.tasks.forEach((task) => {
-    expect(task.tasks.rollback).toBe(rollback.executeRollback)
+    expect(task.task.rollback).toBe(rollback.executeRollback)
   })
 
   try {

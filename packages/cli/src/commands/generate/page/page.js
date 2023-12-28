@@ -4,6 +4,7 @@ import camelcase from 'camelcase'
 import { Listr } from 'listr2'
 import pascalcase from 'pascalcase'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { getConfig } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -85,10 +86,11 @@ export const paramVariants = (path) => {
 }
 
 export const files = ({ name, tests, stories, typescript, ...rest }) => {
+  const extension = typescript ? '.tsx' : '.jsx'
   const pageFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: typescript ? '.tsx' : '.js',
+    extension,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
     templatePath: 'page.tsx.template',
@@ -98,7 +100,7 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
   const testFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: typescript ? '.test.tsx' : '.test.js',
+    extension: `.test${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
     templatePath: 'test.tsx.template',
@@ -108,7 +110,7 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
   const storiesFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: typescript ? '.stories.tsx' : '.stories.js',
+    extension: `.stories${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
     templatePath:
@@ -181,6 +183,16 @@ export const handler = async ({
   if (stories === undefined) {
     stories = getConfig().generate.stories
   }
+
+  recordTelemetryAttributes({
+    command: 'generate page',
+    force,
+    tests,
+    stories,
+    typescript,
+    rollback,
+  })
+
   if (process.platform === 'win32') {
     // running `yarn rw g page home /` on Windows using GitBash
     // POSIX-to-Windows path conversion will kick in.
@@ -236,7 +248,14 @@ export const handler = async ({
       {
         title: `Generating types...`,
         task: async () => {
-          await generateTypes()
+          const { errors } = await generateTypes()
+
+          for (const { message, error } of errors) {
+            console.error(message)
+            console.log()
+            console.error(error)
+            console.log()
+          }
           addFunctionToRollback(generateTypes, true)
         },
       },
@@ -245,15 +264,15 @@ export const handler = async ({
         task: (ctx, task) => {
           task.title =
             `One more thing...\n\n` +
-            `   ${c.warning('Page created! A note about <MetaTags>:')}\n\n` +
-            `   At the top of your newly created page is a <MetaTags> component,\n` +
+            `   ${c.warning('Page created! A note about <Metadata>:')}\n\n` +
+            `   At the top of your newly created page is a <Metadata> component,\n` +
             `   which contains the title and description for your page, essential\n` +
             `   to good SEO. Check out this page for best practices: \n\n` +
             `   https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets\n`
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {

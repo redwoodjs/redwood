@@ -1,16 +1,17 @@
-import {
+import type {
   DefinitionNode,
   ExecutionResult,
-  Kind,
   OperationDefinitionNode,
 } from 'graphql'
-import { Plugin, handleStreamOrSingleExecutionResult } from 'graphql-yoga'
+import { Kind } from 'graphql'
+import type { Plugin } from 'graphql-yoga'
+import { handleStreamOrSingleExecutionResult } from 'graphql-yoga'
 import { v4 as uuidv4 } from 'uuid'
 
 import type { Logger, LevelWithSilent } from '@redwoodjs/api/logger'
 
 import { AuthenticationError, ForbiddenError } from '../errors'
-import { RedwoodGraphQLContext } from '../functions/types'
+import type { RedwoodGraphQLContext } from '../types'
 
 /**
  * Options for request and response information to include in the log statements
@@ -85,7 +86,7 @@ type GraphQLLoggerOptions = {
   /**
    * @description Include the tracing and timing information.
    *
-   * This will log various performance timings withing the GraphQL event lifecycle (parsing, validating, executing, etc).
+   * This will log various performance timings within the GraphQL event lifecycle (parsing, validating, executing, etc).
    */
   tracing?: boolean
 

@@ -43,7 +43,7 @@ const tasks = ({ name, force }) => {
         },
       },
     ],
-    { rendererOptions: { collapse: false }, errorOnExist: true }
+    { rendererOptions: { collapseSubtasks: false }, errorOnExist: true }
   )
 }
 

@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.compilerOption.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "rootDir": "api",
+    "tsBuildInfoFile": "tsconfig.tsbuildinfo",
+    "outDir": "dist/api",
+  },
+  "include": ["api/**/*"],
+  "references": [{ "path": "../internal" }]
+}

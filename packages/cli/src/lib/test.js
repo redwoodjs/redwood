@@ -8,14 +8,17 @@
 //   expect('some output').toEqual(loadComponentFixture('component', 'filename.js'))
 // })
 
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
 
 import './mockTelemetry'
 
 jest.mock('@redwoodjs/internal/dist/generate/generate', () => {
   return {
-    generate: () => {},
+    generate: () => {
+      return { errors: [] }
+    },
   }
 })
 

@@ -1,5 +1,6 @@
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
 
 // The stack containing rollback actions
 let rollback = []
@@ -93,6 +94,6 @@ export function resetRollback() {
 export function prepareForRollback(tasks) {
   resetRollback()
   tasks.tasks?.forEach((task) => {
-    task.tasks.rollback = executeRollback
+    task.task.rollback = executeRollback
   })
 }

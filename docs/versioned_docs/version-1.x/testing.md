@@ -350,7 +350,7 @@ describe('useAccumulator hook example in docs', () => {
     expect(result.current.total).toBe(15)
   })
 
-  it('re-initializes the accumulator if passed a new initilizing value', () => {
+  it('re-initializes the accumulator if passed a new initializing value', () => {
     const { result, rerender } = renderHook(
       (initialValue) => useAccumulator(initialValue),
       {

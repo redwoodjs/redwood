@@ -1,0 +1,19 @@
+body,
+html {
+  margin: 0;
+}
+
+.graphiql-container {
+  height: 100vh;
+  width: 100%;
+}
+
+body.graphiql-dark .graphiql-container,body.graphiql-dark .CodeMirror-info,body.graphiql-dark .CodeMirror-lint-tooltip,body.graphiql-dark reach-portal {
+  --color-primary: 12, 98%, 44%;
+}
+
+@media (prefers-color-scheme: dark) {
+  body:not(.graphiql-light) .graphiql-container,body:not(.graphiql-light) .CodeMirror-info,body:not(.graphiql-light) .CodeMirror-lint-tooltip,body:not(.graphiql-light) reach-portal {
+    --color-primary: 12, 98%, 44%;
+  }
+}

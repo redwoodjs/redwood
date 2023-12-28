@@ -21,7 +21,7 @@ both auth service providers and RW apps we recommend you start looking in
 `authFactory.ts` and then continue to `AuthProvider.tsx`. `AuthProvider.tsx`
 has most of our implementation together with all the custom hooks it uses.
 Another file to be accustomed with is `AuthContext.ts`. The interface in there
-has pretty god code comments, and is what will be exposed to RW apps.
+has pretty good code comments, and is what will be exposed to RW apps.
 
 ## getCurrentUser
 

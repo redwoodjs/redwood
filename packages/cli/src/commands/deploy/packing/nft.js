@@ -9,7 +9,7 @@ import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
 const ZIPBALL_DIR = './api/dist/zipball'
 
-function zipDirectory(source, out) {
+export function zipDirectory(source, out) {
   const archive = archiver('zip', { zlib: { level: 5 } })
   const stream = fse.createWriteStream(out)
 
@@ -25,7 +25,7 @@ function zipDirectory(source, out) {
 }
 
 // returns a tuple of [filePath, fileContent]
-function generateEntryFile(functionAbsolutePath, name) {
+export function generateEntryFile(functionAbsolutePath, name) {
   const relativeImport = ensurePosixPath(
     path.relative(getPaths().base, functionAbsolutePath)
   )
@@ -35,7 +35,7 @@ function generateEntryFile(functionAbsolutePath, name) {
   ]
 }
 
-async function packageSingleFunction(functionFile) {
+export async function packageSingleFunction(functionFile) {
   const { name: functionName } = path.parse(functionFile)
 
   const { fileList: functionDependencyFileList } = await nodeFileTrace([
@@ -67,18 +67,7 @@ async function packageSingleFunction(functionFile) {
   return
 }
 
-function nftPack() {
+export function nftPack() {
   const filesToBePacked = findApiDistFunctions()
   return Promise.all(filesToBePacked.map(exports.packageSingleFunction))
 }
-
-// We do this, so we can spy the functions in the test
-// It didn't make sense to separate into different files
-const exports = {
-  nftPack,
-  packageSingleFunction,
-  generateEntryFile,
-  zipDirectory,
-}
-
-export default exports

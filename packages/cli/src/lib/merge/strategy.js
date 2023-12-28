@@ -162,7 +162,7 @@ export function concatUnique(baseOrEq, ext) {
   // This function can be used directly as a node reducer, or to return a node reducer.
   // If it's used as a node reducer, it will receive two arguments like any other node reducer.
   //    1) the base to merge into
-  //    2) the extention to merge into the base
+  //    2) the extension to merge into the base
   // If it's used to return a node reducer, it will receive one argument:
   //    1) the equality operator to use in the returned node reducer
   // So, we call the first argument baseOrEq to represent this duality.

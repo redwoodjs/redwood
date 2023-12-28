@@ -5,7 +5,7 @@ import {
   RemoteTreeDataProvider_publishOverLSPConnection,
 } from '../x/vscode'
 
-import { RWLanguageServer } from './RWLanguageServer'
+import type { RWLanguageServer } from './RWLanguageServer'
 
 export class OutlineManager {
   constructor(public server: RWLanguageServer) {}

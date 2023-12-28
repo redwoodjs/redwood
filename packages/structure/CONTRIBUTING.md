@@ -5,7 +5,7 @@ In general, modifying code in the structure package is no different from the res
 
 # Editing the Outline, Diagnostics, and other VSCode Features Locally
 
-Some of the code in this package can only be experienced trough the [Redwood IDE VSCode extension](https://marketplace.visualstudio.com/items?itemName=decoupled.redwoodjs-ide) (like the Outline, CodeLens, and some Diagnostics).
+Some of the code in this package can only be experienced through the [Redwood IDE VSCode extension](https://marketplace.visualstudio.com/items?itemName=decoupled.redwoodjs-ide) (like the Outline, CodeLens, and some Diagnostics).
 If you plan to modify code that falls in this category (for example [outline.ts](https://github.com/redwoodjs/redwood/blob/main/packages/structure/src/language_server/outline.ts)) then you'll need to follow this workflow so you can test your changes locally:
 
 ## Workflow

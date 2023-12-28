@@ -1,5 +1,19 @@
-import { OperationVariables } from '@apollo/client'
+import type {
+  OperationVariables,
+  useBackgroundQuery as apolloUseBackgroundQuery,
+  useReadQuery as apolloUseReadQuery,
+} from '@apollo/client'
 import type { DocumentNode } from 'graphql'
+
+/**
+ * @NOTE
+ * The types QueryOperationResult, MutationOperationResult, SubscriptionOperationResult, and SuspenseQueryOperationResult
+ * are overridden in packages/web/src/apollo/typeOverride.ts. This was originally so that you could bring your own gql client.
+ *
+ * The default (empty) types are defined in packages/web/src/global.web-auto-imports.ts
+ *
+ * Do not import types for hooks directly from Apollo here, unless it is an Apollo specific hook.
+ */
 
 type DefaultUseQueryType = <
   TData = any,
@@ -16,12 +30,37 @@ type DefaultUseMutationType = <
   mutation: DocumentNode,
   options?: GraphQLMutationHookOptions<TData, TVariables>
 ) => MutationOperationResult<TData, TVariables>
+
+type DefaultUseSubscriptionType = <
+  TData = any,
+  TVariables extends OperationVariables = GraphQLOperationVariables
+>(
+  subscription: DocumentNode,
+  options?: GraphQLSubscriptionHookOptions<TData, TVariables>
+) => SubscriptionOperationResult<TData, TVariables>
+
+type DefaultUseSuspenseType = <
+  TData = any,
+  TVariables extends OperationVariables = GraphQLOperationVariables
+>(
+  query: DocumentNode,
+  options?: GraphQLSuspenseQueryHookOptions<TData, TVariables>
+) => SuspenseQueryOperationResult<TData, TVariables>
+
 export interface GraphQLHooks<
   TuseQuery = DefaultUseQueryType,
-  TuseMutation = DefaultUseMutationType
+  TuseMutation = DefaultUseMutationType,
+  TuseSubscription = DefaultUseSubscriptionType,
+  TuseSuspenseQuery = DefaultUseSuspenseType
 > {
   useQuery: TuseQuery
   useMutation: TuseMutation
+  useSubscription: TuseSubscription
+  useSuspenseQuery: TuseSuspenseQuery
+  // @NOTE note that we aren't using typeoverride here.
+  // This is because useBackgroundQuery and useReadQuery are apollo specific hooks.
+  useBackgroundQuery: typeof apolloUseBackgroundQuery
+  useReadQuery: typeof apolloUseReadQuery
 }
 
 export const GraphQLHooksContext = React.createContext<GraphQLHooks>({
@@ -35,12 +74,42 @@ export const GraphQLHooksContext = React.createContext<GraphQLHooks>({
       'You must register a useMutation hook via the `GraphQLHooksProvider`'
     )
   },
+  useSubscription: () => {
+    throw new Error(
+      'You must register a useSubscription hook via the `GraphQLHooksProvider`'
+    )
+  },
+  useSuspenseQuery: () => {
+    throw new Error(
+      'You must register a useSuspenseQuery hook via the `GraphQLHooksProvider`.'
+    )
+  },
+
+  //  These are apollo specific hooks!
+  useBackgroundQuery: () => {
+    throw new Error(
+      'You must register a useBackgroundQuery hook via the `GraphQLHooksProvider`.'
+    )
+  },
+
+  useReadQuery: () => {
+    throw new Error(
+      'You must register a useReadQuery hook via the `GraphQLHooksProvider`.'
+    )
+  },
 })
 
 interface GraphQlHooksProviderProps<
   TuseQuery = DefaultUseQueryType,
-  TuseMutation = DefaultUseMutationType
-> extends GraphQLHooks<TuseQuery, TuseMutation> {
+  TuseMutation = DefaultUseMutationType,
+  TuseSubscription = DefaultUseSubscriptionType,
+  TuseSuspenseQuery = DefaultUseSuspenseType
+> extends GraphQLHooks<
+    TuseQuery,
+    TuseMutation,
+    TuseSubscription,
+    TuseSuspenseQuery
+  > {
   children: React.ReactNode
 }
 
@@ -57,6 +126,10 @@ export const GraphQLHooksProvider = <
 >({
   useQuery,
   useMutation,
+  useSubscription,
+  useSuspenseQuery,
+  useBackgroundQuery,
+  useReadQuery,
   children,
 }: GraphQlHooksProviderProps<TuseQuery, TuseMutation>) => {
   return (
@@ -64,6 +137,10 @@ export const GraphQLHooksProvider = <
       value={{
         useQuery,
         useMutation,
+        useSubscription,
+        useSuspenseQuery,
+        useBackgroundQuery,
+        useReadQuery,
       }}
     >
       {children}
@@ -95,4 +172,43 @@ export function useMutation<
     mutation,
     options
   )
+}
+
+export function useSubscription<
+  TData = any,
+  TVariables extends OperationVariables = GraphQLOperationVariables
+>(
+  query: DocumentNode,
+  options?: GraphQLSubscriptionHookOptions<TData, TVariables>
+): SubscriptionOperationResult<TData, TVariables> {
+  return React.useContext(GraphQLHooksContext).useSubscription<
+    TData,
+    TVariables
+  >(query, options)
+}
+
+export function useSuspenseQuery<
+  TData = any,
+  TVariables extends OperationVariables = GraphQLOperationVariables
+>(
+  query: DocumentNode,
+  options?: GraphQLSuspenseQueryHookOptions<TData, TVariables>
+): SuspenseQueryOperationResult<TData, TVariables> {
+  return React.useContext(GraphQLHooksContext).useSuspenseQuery<
+    TData,
+    TVariables
+  >(query, options)
+}
+
+export const useBackgroundQuery: typeof apolloUseBackgroundQuery<any> = (
+  ...args
+) => {
+  // @TODO something about the apollo types here mean I need to override the return type
+  return React.useContext(GraphQLHooksContext).useBackgroundQuery(
+    ...args
+  ) as any
+}
+
+export const useReadQuery: typeof apolloUseReadQuery = (...args) => {
+  return React.useContext(GraphQLHooksContext).useReadQuery(...args)
 }

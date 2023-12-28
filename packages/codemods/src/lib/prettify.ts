@@ -2,11 +2,11 @@ import path from 'path'
 
 import { format } from 'prettier'
 
-import getRWPaths from './getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 
 const getPrettierConfig = () => {
   try {
-    return require(path.join(getRWPaths().base, 'prettier.config.js'))
+    return require(path.join(getPaths().base, 'prettier.config.js'))
   } catch (e) {
     return undefined
   }

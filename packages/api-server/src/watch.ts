@@ -2,9 +2,11 @@
 
 import { fork } from 'child_process'
 import type { ChildProcess } from 'child_process'
+import fs from 'fs'
 import path from 'path'
 
 import c from 'ansi-colors'
+import chalk from 'chalk'
 import chokidar from 'chokidar'
 import dotenv from 'dotenv'
 import { debounce } from 'lodash'
@@ -13,7 +15,12 @@ import yargs from 'yargs/yargs'
 
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
-import { getPaths, ensurePosixPath, getConfig } from '@redwoodjs/project-config'
+import {
+  getPaths,
+  ensurePosixPath,
+  getConfig,
+  resolveFile,
+} from '@redwoodjs/project-config'
 
 const argv = yargs(hideBin(process.argv))
   .option('debug-port', {
@@ -74,6 +81,27 @@ const rebuildApiServer = async () => {
     const forkOpts = {
       execArgv: process.execArgv,
     }
+
+    // OpenTelemetry SDK Setup
+    if (getConfig().experimental.opentelemetry.enabled) {
+      const opentelemetrySDKScriptPath =
+        getConfig().experimental.opentelemetry.apiSdk
+      if (opentelemetrySDKScriptPath) {
+        console.log(
+          `Setting up OpenTelemetry using the setup file: ${opentelemetrySDKScriptPath}`
+        )
+        if (fs.existsSync(opentelemetrySDKScriptPath)) {
+          forkOpts.execArgv = forkOpts.execArgv.concat([
+            `--require=${opentelemetrySDKScriptPath}`,
+          ])
+        } else {
+          console.error(
+            `OpenTelemetry setup file does not exist at ${opentelemetrySDKScriptPath}`
+          )
+        }
+      }
+    }
+
     const debugPort = argv['debug-port']
     if (debugPort) {
       forkOpts.execArgv = forkOpts.execArgv.concat([`--inspect=${debugPort}`])
@@ -82,11 +110,30 @@ const rebuildApiServer = async () => {
     const port = argv.port ?? getConfig().api.port
 
     // Start API server
-    httpServerProcess = fork(
-      path.join(__dirname, 'index.js'),
-      ['api', '--port', port.toString()],
-      forkOpts
-    )
+
+    // Check if experimental server file exists
+    const serverFile = resolveFile(`${rwjsPaths.api.dist}/server`)
+    if (serverFile) {
+      const separator = chalk.hex('#ff845e')(
+        '------------------------------------------------------------------'
+      )
+      console.log(
+        [
+          separator,
+          `🧪 ${chalk.green('Experimental Feature')} 🧪`,
+          separator,
+          'Using the experimental API server file at api/dist/server.js',
+          separator,
+        ].join('\n')
+      )
+      httpServerProcess = fork(serverFile, [], forkOpts)
+    } else {
+      httpServerProcess = fork(
+        path.join(__dirname, 'index.js'),
+        ['api', '--port', port.toString()],
+        forkOpts
+      )
+    }
   } catch (e) {
     console.error(e)
   }
@@ -140,6 +187,13 @@ chokidar
     await validate()
   })
   .on('all', async (eventName, filePath) => {
+    // On sufficiently large projects (500+ files, or >= 2000 ms build times) on older machines, esbuild writing to the api directory
+    // makes chokidar emit an `addDir` event. This starts an infinite loop where the api starts building itself as soon as it's finished.
+    // This could probably be fixed with some sort of build caching.
+    if (eventName === 'addDir' && filePath === rwjsPaths.api.base) {
+      return
+    }
+
     // We validate here, so that developers will see the error
     // As they're running the dev server
     if (filePath.includes('.sdl')) {

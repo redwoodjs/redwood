@@ -1,6 +1,7 @@
 import { forwardRef, useEffect } from 'react'
 
-import { navigate, NavigateOptions } from './history'
+import type { NavigateOptions } from './history'
+import { navigate } from './history'
 import { useLocation } from './location'
 import { flattenSearchParams, matchPath } from './util'
 
@@ -179,7 +180,10 @@ interface RedirectProps {
  * A declarative way to redirect to a route name
  */
 const Redirect = ({ to, options }: RedirectProps) => {
-  useEffect(() => navigate(to, options), [to, options])
+  useEffect(() => {
+    navigate(to, options)
+  }, [to, options])
+
   return null
 }
 

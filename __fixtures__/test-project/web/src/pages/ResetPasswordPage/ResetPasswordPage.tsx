@@ -8,7 +8,7 @@ import {
   FieldError,
 } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
 import { useAuth } from 'src/auth'
@@ -35,7 +35,7 @@ const ResetPasswordPage = ({ resetToken }: { resetToken: string }) => {
       }
     }
     validateToken()
-  }, [])
+  }, [resetToken, validateResetToken])
 
   const passwordRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
@@ -59,7 +59,7 @@ const ResetPasswordPage = ({ resetToken }: { resetToken: string }) => {
 
   return (
     <>
-      <MetaTags title="Reset Password" />
+      <Metadata title="Reset Password" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />

@@ -8,8 +8,5 @@
       "src/*": ["./src/*"]
     }
   },
-  "include": ["src"],
-  "references": [
-    { "path": "../project-config" },
-  ]
+  "include": ["src"]
 }

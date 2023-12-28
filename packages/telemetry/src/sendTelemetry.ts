@@ -8,7 +8,8 @@ import envinfo from 'envinfo'
 import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
-import { getConfig } from '@redwoodjs/project-config'
+import { getConfig, getRawConfig } from '@redwoodjs/project-config'
+import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
 
 // circular dependency when trying to import @redwoodjs/structure so lets do it
 // the old fashioned way
@@ -20,21 +21,31 @@ interface SensitiveArgPositions {
     positions: Array<number>
     options?: never
     redactWith: Array<string>
+    allowOnly: Array<string>
   }
   g: {
     positions: Array<number>
     options?: never
     redactWith: Array<string>
+    allowOnly?: Array<string>
   }
   generate: {
     positions: Array<number>
     options?: never
     redactWith: Array<string>
+    allowOnly?: Array<string>
   }
   prisma: {
     positions?: never
     options: Array<string>
     redactWith: Array<string>
+    allowOnly?: Array<string>
+  }
+  lint: {
+    positions?: Array<number>
+    options?: never
+    redactWith: Array<string>
+    allowOnly: Array<string>
   }
 }
 
@@ -44,6 +55,7 @@ const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
   exec: {
     positions: [1],
     redactWith: ['[script]'],
+    allowOnly: ['exec'],
   },
   g: {
     positions: [2, 3],
@@ -56,6 +68,10 @@ const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
   prisma: {
     options: ['--name'],
     redactWith: ['[name]'],
+  },
+  lint: {
+    allowOnly: ['lint', '--fix'],
+    redactWith: ['[path]'],
   },
 }
 
@@ -95,6 +111,15 @@ const getInfo = async (presets: Args = {}) => {
     ? 'webpack'
     : getConfig().web.bundler
 
+  // Returns a list of all enabled experiments
+  // This detects all top level [experimental.X] and returns all X's, ignoring all Y's for any [experimental.X.Y]
+  const experiments = Object.keys(getRawConfig()['experimental'] || {})
+
+  // NOTE: Added this way to avoid the need to disturb the existing toml structure
+  if (webBundler !== 'webpack') {
+    experiments.push(webBundler)
+  }
+
   return {
     os: info.System?.OS?.split(' ')[0],
     osVersion: info.System?.OS?.split(' ')[1],
@@ -107,6 +132,7 @@ const getInfo = async (presets: Args = {}) => {
       presets.redwoodVersion || info.npmPackages['@redwoodjs/core']?.installed,
     system: `${cpu.physicalCores}.${Math.round(mem.total / 1073741824)}`,
     webBundler,
+    experiments,
   }
 }
 
@@ -135,6 +161,18 @@ export const sanitizeArgv = (
         const argIndex = args.indexOf(option)
         if (argIndex !== -1) {
           args[argIndex + 1] = sensitiveCommand.redactWith[index]
+        }
+      })
+    }
+
+    // allow only clause
+    if (sensitiveCommand.allowOnly) {
+      args.forEach((arg: string, index: number) => {
+        if (
+          !sensitiveCommand.allowOnly?.includes(arg) &&
+          !sensitiveCommand.redactWith.includes(arg)
+        ) {
+          args[index] = sensitiveCommand.redactWith[0]
         }
       })
     }
@@ -200,12 +238,16 @@ const buildPayload = async () => {
     })
   }
 
+  const routes: RWRoute[] = project.getRouter().routes
+  const prerenderedRoutes = routes.filter((route) => route.hasPrerender)
+
   // add in app stats
   payload = {
     ...payload,
-    complexity: `${project.getRouter().routes.length}.${
-      project.services.length
-    }.${project.cells.length}.${project.pages.length}`,
+    complexity:
+      `${routes.length}.${prerenderedRoutes.length}.` +
+      `${project.services.length}.${project.cells.length}.` +
+      `${project.pages.length}`,
     sides: project.sides.join(','),
   }
 

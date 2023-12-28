@@ -22,7 +22,7 @@ Subsequent deploys:
 yarn rw deploy baremetal production
 ```
 
-:::caution Deploying to baremetal is an advanced topic
+:::warning Deploying to baremetal is an advanced topic
 
 If you haven't done any kind of remote server work before, you may be in a little over your head to start with. But don't worry: until relatively recently (cloud computing, serverless, lambda functions) this is how all websites were deployed, so we've got a good 30 years of experience getting this working!
 
@@ -173,7 +173,11 @@ This lists a single server, in the `production` environment, providing the hostn
 * `branch` - [optional] The branch to deploy (defaults to `main`)
 * `keepReleases` - [optional] The number of previous releases to keep on the server, including the one currently being served (defaults to 5)
 
-The easiest connection method is generally to include your own public key in the server's `~/.ssh/authorized_keys` file, [enable agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding), and then set `agentForward = true` in `deploy.toml`. This will allow you to use your own credentials when pulling code from GitHub (required for private repos). Otherwise you can create a [deploy key](https://docs.github.com/en/developers/overview/managing-deploy-keys) and keep it on the server.
+The easiest connection method is generally to include your own public key in the server's `~/.ssh/authorized_keys` mannually or by running `ssh-copy-id user@server.com` from your local machine, [enable agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding), and then set `agentForward = true` in `deploy.toml`. This will allow you to use your own credentials when pulling code from GitHub (required for private repos). Otherwise you can create a [deploy key](https://docs.github.com/en/developers/overview/managing-deploy-keys) and keep it on the server.
+
+#### Using Environment Variables in `deploy.toml`
+
+Similarly to `redwood.toml`, `deploy.toml` supports interpolation of environment variables.  For more details on how to use the environment variable interpolation see [Using Environment Variables in redwood.toml](/docs/app-configuration-redwood-toml#using-environment-variables-in-redwoodtoml)
 
 #### Multiple Servers
 
@@ -270,7 +274,7 @@ sudo chown deploy:deploy /var/www/myapp
 
 You'll want to create an `.env` file in this directory containing any environment variables that are needed by your app (like `DATABASE_URL` at a minimum). This will be symlinked to each release directory so that it's available as the app expects (in the root directory of the codebase).
 
-:::caution SSH and Non-interactive Sessions
+:::warning SSH and Non-interactive Sessions
 
 The deployment process uses a '[non-interactive](https://tldp.org/LDP/abs/html/intandnonint.html)' SSH session to run commands on the remote server. A non-interactive session will often load a minimal amount of settings for better compatibility and speed. In some versions of Linux `.bashrc` by default does not load (by design) from a non-interactive session. This can lead to `yarn` (or other commands) not being found by the deployment script, even though they are in your path, because additional ENV vars are set in `~/.bashrc` which provide things like NPM paths and setup.
 
@@ -414,7 +418,7 @@ pm2 startup
 
 You will see some output similar to the output below. We care about the output after "copy/paste the following command:" You'll need to do just that: copy the command starting with `sudo` and then paste and execute it. *Note* this command uses `sudo` so you'll need the root password to the machine in order for it to complete successfully.
 
-:::caution
+:::warning
 
 The below text is *example* output, yours will be different, don't copy and paste ours!
 
@@ -463,7 +467,7 @@ You can define your before/after commands in three different places:
 * Environment specific - runs for only a single environment
 * Server specific - runs for only a single server in a single environment
 
-:::caution
+:::warning
 
 Custom commands are run in the new **deploy** directory, not the root of your application directory. During a deploy the `current` symlink will point to the previous directory while your code is executed in the new one, before the `current` symlink location is updated.
 
@@ -650,7 +654,7 @@ If nginx will be serving our web side, what about api-side? Redwood's internal A
 
 This doc isn't going to go through installing and getting nginx running, there are plenty of resources for that available. What we will show is a successful nginx configuration file used by several Redwood apps currently in production.
 
-```text title=nginx.conf
+```text title="nginx.conf"
 upstream redwood_server {
   server 127.0.0.1:8911 fail_timeout=0;
 }
@@ -697,7 +701,7 @@ yarn rw serve api
 
 When using `pm2` to start/monitor your processes, you can simplify your `deploy.toml` and `ecosystem.config.js` files to only worry about the api side:
 
-```toml title=deploy.toml
+```toml title="deploy.toml"
 [[production.servers]]
 host = "myserver.com"
 username = "ubuntu"
@@ -713,7 +717,7 @@ packageManagerCommand = "yarn"
 monitorCommand = "pm2"
 ```
 
-```js title=ecosystem.config.js
+```js title="ecosystem.config.js"
 module.exports = {
   apps: [
     {
@@ -738,7 +742,7 @@ If you don't love the path of `/.redwood/functions` for your API calls, this is 
 
 For example, to simplify the path to just `/api` you'll need to make a change to `redwood.toml` and your new nginx config file:
 
-```toml title=redwood.toml
+```toml title="redwood.toml"
 [web]
   title = "My App"
   port = 8910
@@ -751,7 +755,7 @@ For example, to simplify the path to just `/api` you'll need to make a change to
   open = true
 ```
 
-```text title=nginx.conf
+```text title="nginx.conf"
 upstream redwood_server {
   server 127.0.0.1:8911 fail_timeout=0;
 }

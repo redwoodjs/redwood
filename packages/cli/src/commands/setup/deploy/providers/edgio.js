@@ -1,16 +1,16 @@
-import fs from 'fs'
-
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { addPackagesTask, getPaths } from '../../../../lib'
+import { addPackagesTask, getPaths, printSetupNotes } from '../../../../lib'
 import c from '../../../../lib/colors'
 import {
   ERR_MESSAGE_MISSING_CLI,
   ERR_MESSAGE_NOT_INITIALIZED,
 } from '../../../deploy/edgio'
-import { preRequisiteCheckTask, printSetupNotes } from '../helpers'
+import { preRequisiteCheckTask } from '../helpers'
 
 export const command = 'edgio'
 export const description = 'Setup Edgio deploy'
@@ -36,6 +36,9 @@ const prismaBinaryTargetAdditions = () => {
 }
 
 export const handler = async () => {
+  recordTelemetryAttributes({
+    command: 'setup deploy edgio',
+  })
   const tasks = new Listr(
     [
       addPackagesTask({
@@ -60,7 +63,7 @@ export const handler = async () => {
       },
       printSetupNotes(notes),
     ],
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
   try {
     await tasks.run()

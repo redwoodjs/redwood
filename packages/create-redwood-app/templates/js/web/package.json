@@ -1,0 +1,25 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "private": true,
+  "browserslist": {
+    "development": [
+      "last 1 version"
+    ],
+    "production": [
+      "defaults"
+    ]
+  },
+  "dependencies": {
+    "@redwoodjs/forms": "6.0.7",
+    "@redwoodjs/router": "6.0.7",
+    "@redwoodjs/web": "6.0.7",
+    "react": "0.0.0-experimental-e5205658f-20230913",
+    "react-dom": "0.0.0-experimental-e5205658f-20230913"
+  },
+  "devDependencies": {
+    "@types/react": "18.2.37",
+    "@types/react-dom": "18.2.15",
+    "@redwoodjs/vite": "6.0.7"
+  }
+}

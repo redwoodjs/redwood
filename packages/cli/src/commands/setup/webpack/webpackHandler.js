@@ -1,7 +1,7 @@
-import fs from 'fs'
 import path from 'path'
 
 import chalk from 'chalk'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -46,7 +46,7 @@ export const handler = async ({ force }) => {
         },
       },
     ],
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {

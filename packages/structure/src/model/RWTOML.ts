@@ -1,11 +1,12 @@
-import { JsonMap, parse as parseTOML } from '@iarna/toml'
+import type { JsonMap } from '@iarna/toml'
+import { parse as parseTOML } from '@iarna/toml'
 import { Range } from 'vscode-languageserver-types'
 
 import { FileNode } from '../ide'
 import { lazy } from '../x/decorators'
 import { err } from '../x/vscode-languageserver-types'
 
-import { RWProject } from './RWProject'
+import type { RWProject } from './RWProject'
 
 export class RWTOML extends FileNode {
   constructor(public filePath: string, public parent: RWProject) {

@@ -3,8 +3,9 @@ import path from 'path'
 
 import { fetch } from '@whatwg-node/fetch'
 
+import { getPaths } from '@redwoodjs/project-config'
+
 import getRootPackageJson from '../../../lib/getRootPackageJSON'
-import getRWPaths from '../../../lib/getRWPaths'
 import isTSProject from '../../../lib/isTSProject'
 import ts2js from '../../../lib/ts2js'
 
@@ -32,7 +33,7 @@ export const updateSeedScript = async () => {
   /**
    * Add `scripts/seed.{js,ts}` template.
    */
-  const rwPaths = getRWPaths()
+  const rwPaths = getPaths()
 
   const hasScripts = fs.existsSync(rwPaths.scripts)
 

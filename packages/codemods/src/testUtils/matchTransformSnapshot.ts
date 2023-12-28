@@ -7,10 +7,14 @@ import runTransform from '../lib/runTransform'
 
 import { formatCode } from './index'
 
-export const matchTransformSnapshot = async (
-  transformName: string,
-  fixtureName: string = transformName,
-  parser: 'ts' | 'tsx' | 'babel' = 'tsx'
+export interface MatchTransformSnapshotFunction {
+  (transformName: string, fixtureName?: string, parser?: 'ts' | 'tsx'): void
+}
+
+export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
+  transformName,
+  fixtureName,
+  parser
 ) => {
   const tempFilePath = tempy.file()
 
@@ -21,7 +25,7 @@ export const matchTransformSnapshot = async (
     throw new Error('Could not find test path')
   }
 
-  // Use require.resolve, so we can pass in ts/js/tsx without specifying
+  // Use require.resolve, so we can pass in ts/js/tsx/jsx without specifying
   const fixturePath = require.resolve(
     path.join(testPath, '../../__testfixtures__', `${fixtureName}.input`)
   )
@@ -39,7 +43,8 @@ export const matchTransformSnapshot = async (
     targetPaths: [tempFilePath],
     parser,
     options: {
-      verbose: true,
+      verbose: 1,
+      print: true,
     },
   })
 

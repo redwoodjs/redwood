@@ -43,6 +43,6 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./testHandler')
+  const { handler } = await import('./testHandler.js')
   return handler(options)
 }

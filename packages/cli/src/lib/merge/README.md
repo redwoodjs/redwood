@@ -175,7 +175,7 @@ const x = { foo: 'foo2' }
 const x = { foo: 'foo1', foo: 'foo2' } // Probably a bug.
 ```
 
-At this stage, you have two choices. Assuming you're using semantic identity to identify your merge candidates, you can 1) recursively define the problem as how to merge the string literals `'foo'` and `'bar'`, since they have the same semantic identity, or 2) define a merge strategy that filters out this possiblity by only merging properties with different keys.
+At this stage, you have two choices. Assuming you're using semantic identity to identify your merge candidates, you can 1) recursively define the problem as how to merge the string literals `'foo'` and `'bar'`, since they have the same semantic identity, or 2) define a merge strategy that filters out this possibility by only merging properties with different keys.
 
 Option 1 looks like this:
 

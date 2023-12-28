@@ -1,0 +1,26 @@
+/* Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-error {
+  /* Diagonal red stripes */
+  background: repeating-linear-gradient(
+    135deg,
+    #6a040f,
+    #6a040f 2vw,
+    #9d0208 2vw,
+    #9d0208 4vw
+  )
+}
+
+.bg-warning {
+  /* Diagonal red stripes */
+  background: repeating-linear-gradient(
+    135deg,
+    #e85d04,
+    #e85d04 2vw,
+    #f48c06 2vw,
+    #f48c06 4vw
+  )
+}

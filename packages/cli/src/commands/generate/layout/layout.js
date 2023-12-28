@@ -11,7 +11,7 @@ const REDWOOD_WEB_PATH_NAME = 'layouts'
 
 export const files = ({ name, typescript = false, ...options }) => {
   const layoutName = removeGeneratorName(name, 'layout')
-  const extension = typescript ? '.tsx' : '.js'
+  const extension = typescript ? '.tsx' : '.jsx'
   const layoutFile = templateForComponentFile({
     name: layoutName,
     suffix: COMPONENT_SUFFIX,

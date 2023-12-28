@@ -3,9 +3,3 @@ validateWithSync(() => {
     throw "You'll have to be more creative than that"
   }
 })
-
-validateWithSync(() => {
-  if (input.name === 'Name') {
-    throw new Error("You'll have to be more creative than that")
-  }
-})

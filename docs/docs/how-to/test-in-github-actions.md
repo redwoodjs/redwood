@@ -93,7 +93,7 @@ model UserExample {
 
 Then add your connection strings to your `.env` file:
 
-:::caution
+:::warning
 
 Make sure you don't commit this file to your repo since it contains sensitive information.
 
@@ -204,7 +204,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     services:
@@ -303,7 +303,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     services:

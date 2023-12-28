@@ -3,7 +3,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": "src",
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
     "paths": {
       "src/*": ["./src/*"],
@@ -14,7 +13,7 @@
   ],
   "references": [
     { "path": "../router" },
-    { "path": "../internal" },
+    { "path": "../babel-config" },
     { "path": "../project-config" },
     { "path": "../web" },
     { "path": "../auth" },

@@ -1,4 +1,4 @@
-import { DocumentNode } from 'graphql'
+import type { DocumentNode } from 'graphql'
 
 /**
  * Given a query like the one below this function will return

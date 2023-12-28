@@ -27,24 +27,22 @@ function fullPath(name, { addExtension } = { addExtension: true }) {
   return path.join(OUTPUT_PATH, name)
 }
 
+const createBuilder = (cmd) => {
+  return async function createItem(positionals) {
+    await execa(
+      cmd,
+      Array.isArray(positionals) ? positionals : [positionals],
+      getExecaOptions(OUTPUT_PATH)
+    )
+  }
+}
+
+const createPage = createBuilder('yarn redwood g page')
+
 async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
   OUTPUT_PATH = outputPath
 
-  const execaOptions = getExecaOptions(outputPath)
-
-  const createBuilder = (cmd) => {
-    return async function createItem(positionals) {
-      await execa(
-        cmd,
-        Array.isArray(positionals) ? positionals : [positionals],
-        execaOptions
-      )
-    }
-  }
-
   const createPages = async () => {
-    const createPage = createBuilder('yarn redwood g page')
-
     return new Listr([
       {
         title: 'Creating home page',
@@ -263,49 +261,6 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
     )
   }
 
-  // add prerender to some routes
-  const pathRoutes = `${OUTPUT_PATH}/web/src/Routes.tsx`
-  const addPrerender = async () => {
-    const contentRoutes = fs.readFileSync(pathRoutes).toString()
-    const resultsRoutesAbout = contentRoutes.replace(
-      /name="about"/,
-      `name="about" prerender`
-    )
-    const resultsRoutesHome = resultsRoutesAbout.replace(
-      /name="home"/,
-      `name="home" prerender`
-    )
-    const resultsRoutesBlogPost = resultsRoutesHome.replace(
-      /name="blogPost"/,
-      `name="blogPost" prerender`
-    )
-    const resultsRoutesNotFound = resultsRoutesBlogPost.replace(
-      /page={NotFoundPage}/,
-      `page={NotFoundPage} prerender`
-    )
-    const resultsRoutesWaterfall = resultsRoutesNotFound.replace(
-      /page={WaterfallPage}/,
-      `page={WaterfallPage} prerender`
-    )
-    fs.writeFileSync(pathRoutes, resultsRoutesWaterfall)
-
-    const blogPostRouteHooks = `import { db } from '$api/src/lib/db'
-
-      export async function routeParameters() {
-        return (await db.post.findMany({ take: 7 })).map((post) => ({ id: post.id }))
-      }
-      `.replaceAll(/ {6}/g, '')
-    const blogPostRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/BlogPostPage/BlogPostPage.routeHooks.ts`
-    fs.writeFileSync(blogPostRouteHooksPath, blogPostRouteHooks)
-
-    const waterfallRouteHooks = `export async function routeParameters() {
-        return [{ id: 2 }]
-      }
-      `.replaceAll(/ {6}/g, '')
-    const waterfallRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/WaterfallPage/WaterfallPage.routeHooks.ts`
-    fs.writeFileSync(waterfallRouteHooksPath, waterfallRouteHooks)
-  }
-
   return new Listr(
     [
       {
@@ -332,10 +287,6 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
         title: 'Changing routes',
         task: () => applyCodemod('routes.js', fullPath('web/src/Routes')),
       },
-      {
-        title: 'Add Prerender to Routes',
-        task: () => addPrerender(),
-      },
 
       // ====== NOTE: rufus needs this workaround for tailwind =======
       // Setup tailwind in a linked project, due to rwfw we install deps manually
@@ -344,7 +295,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
         // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
         task: () =>
           execa(
-            'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss',
+            'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss@0.4.1',
             [],
             getExecaOptions(outputPath)
           ),
@@ -388,18 +339,6 @@ async function addModel(schema) {
 
 async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
   OUTPUT_PATH = outputPath
-
-  const execaOptions = getExecaOptions(outputPath)
-
-  const createBuilder = (cmd) => {
-    return async function createItem(positionals) {
-      await execa(
-        cmd,
-        Array.isArray(positionals) ? positionals : [positionals],
-        execaOptions
-      )
-    }
-  }
 
   const addDbAuth = async () => {
     // Temporarily disable postinstall script
@@ -528,12 +467,113 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     // set fullName when signing up
     const pathAuthTs = `${OUTPUT_PATH}/api/src/functions/auth.ts`
     const contentAuthTs = fs.readFileSync(pathAuthTs).toString()
-    const resultsAuthTs = contentAuthTs.replace(
-      '// name: userAttributes.name',
-      "fullName: userAttributes['full-name']"
-    )
+    const resultsAuthTs = contentAuthTs
+      .replace('name: string', "'full-name': string")
+      .replace('userAttributes: _userAttributes', 'userAttributes')
+      .replace(
+        '// name: userAttributes.name',
+        "fullName: userAttributes['full-name']"
+      )
 
     fs.writeFileSync(pathAuthTs, resultsAuthTs)
+  }
+
+  // add prerender to some routes
+  const addPrerender = async () => {
+    return new Listr([
+      {
+        // We need to do this here, and not where we create the other pages, to
+        // keep it outside of BlogLayout
+        title: 'Creating double rendering test page',
+        task: async () => {
+          const createPage = createBuilder('yarn redwood g page')
+          await createPage('double')
+
+          const doublePageContent = `import { Metadata } from '@redwoodjs/web'
+
+const DoublePage = () => {
+  return (
+    <>
+      <Metadata title="Double" description="Double page" og />
+
+      <h1 className="mb-1 mt-2 text-xl font-semibold">DoublePage</h1>
+      <p>
+        This page exists to make sure we don&apos;t regress on{' '}
+        <a
+          href="https://github.com/redwoodjs/redwood/issues/7757"
+          className="text-blue-600 underline visited:text-purple-600 hover:text-blue-800"
+          target="_blank"
+          rel="noreferrer"
+        >
+          #7757
+        </a>
+      </p>
+      <p>It needs to be a page that is not wrapped in a Set</p>
+    </>
+  )
+}
+
+export default DoublePage`
+
+          fs.writeFileSync(
+            fullPath('web/src/pages/DoublePage/DoublePage'),
+            doublePageContent
+          )
+        },
+      },
+      {
+        title: 'Update Routes.tsx',
+        task: () => {
+          const pathRoutes = `${OUTPUT_PATH}/web/src/Routes.tsx`
+          const contentRoutes = fs.readFileSync(pathRoutes).toString()
+          const resultsRoutesAbout = contentRoutes.replace(
+            /name="about"/,
+            `name="about" prerender`
+          )
+          const resultsRoutesHome = resultsRoutesAbout.replace(
+            /name="home"/,
+            `name="home" prerender`
+          )
+          const resultsRoutesBlogPost = resultsRoutesHome.replace(
+            /name="blogPost"/,
+            `name="blogPost" prerender`
+          )
+          const resultsRoutesNotFound = resultsRoutesBlogPost.replace(
+            /page={NotFoundPage}/,
+            `page={NotFoundPage} prerender`
+          )
+          const resultsRoutesWaterfall = resultsRoutesNotFound.replace(
+            /page={WaterfallPage}/,
+            `page={WaterfallPage} prerender`
+          )
+          const resultsRoutesDouble = resultsRoutesWaterfall.replace(
+            'name="double"',
+            'name="double" prerender'
+          )
+          const resultsRoutesNewContact = resultsRoutesDouble.replace(
+            'name="newContact"',
+            'name="newContact" prerender'
+          )
+          fs.writeFileSync(pathRoutes, resultsRoutesNewContact)
+
+          const blogPostRouteHooks = `import { db } from '$api/src/lib/db'
+
+      export async function routeParameters() {
+        return (await db.post.findMany({ take: 7 })).map((post) => ({ id: post.id }))
+      }
+      `.replaceAll(/ {6}/g, '')
+          const blogPostRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/BlogPostPage/BlogPostPage.routeHooks.ts`
+          fs.writeFileSync(blogPostRouteHooksPath, blogPostRouteHooks)
+
+          const waterfallRouteHooks = `export async function routeParameters() {
+        return [{ id: 2 }]
+      }
+      `.replaceAll(/ {6}/g, '')
+          const waterfallRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/WaterfallPage/WaterfallPage.routeHooks.ts`
+          fs.writeFileSync(waterfallRouteHooksPath, waterfallRouteHooks)
+        },
+      },
+    ])
   }
 
   const generateScaffold = createBuilder('yarn rw g scaffold')
@@ -592,11 +632,11 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
             execaOptions
           )
 
-          return generateScaffold('contacts')
+          await generateScaffold('contacts')
         },
       },
       {
-        // This task renames the migration folders so that we don't have to deal with duplicates/conflicts when commiting to the repo
+        // This task renames the migration folders so that we don't have to deal with duplicates/conflicts when committing to the repo
         title: 'Adjust dates within migration folder names',
         task: () => {
           const migrationsFolderPath = path.join(
@@ -680,16 +720,64 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
           return createBuilder('yarn redwood g types')()
         },
       },
+      {
+        // This is probably more of a web side task really, but the scaffolded
+        // pages aren't generated until we get here to the api side tasks. So
+        // instead of doing some up in the web side tasks, and then the rest
+        // here I decided to move all of them here
+        title: 'Add Prerender to Routes',
+        task: () => addPrerender(),
+      },
     ],
     {
       exitOnError: true,
       renderer: verbose && 'verbose',
-      renderOptions: { collapse: false },
+      renderOptions: { collapseSubtasks: false },
     }
   )
+}
+
+/**
+ *
+ * Separates the streaming-ssr related steps. These are all web tasks,
+ * if we choose to move them later
+ * @param {string} outputPath
+ */
+async function streamingTasks(outputPath, { verbose }) {
+  OUTPUT_PATH = outputPath
+
+  const tasks = [
+    {
+      title: 'Creating Delayed suspense delayed page',
+      task: async () => {
+        await createPage('delayed')
+
+        await applyCodemod(
+          'delayedPage.js',
+          fullPath('web/src/pages/DelayedPage/DelayedPage')
+        )
+      },
+    },
+    {
+      title: 'Enable streaming-ssr experiment',
+      task: async () => {
+        const setupExperiment = createBuilder(
+          'yarn rw experimental setup-streaming-ssr'
+        )
+        await setupExperiment('--force')
+      },
+    },
+  ]
+
+  return new Listr(tasks, {
+    exitOnError: true,
+    renderer: verbose && 'verbose',
+    renderOptions: { collapseSubtasks: false },
+  })
 }
 
 module.exports = {
   apiTasks,
   webTasks,
+  streamingTasks,
 }

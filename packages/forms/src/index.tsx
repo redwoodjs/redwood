@@ -45,7 +45,8 @@
  *
  * @see {@link https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces}
  */
-import React, { useContext, forwardRef, ForwardedRef } from 'react'
+import type { ForwardedRef } from 'react'
+import React, { useContext, forwardRef } from 'react'
 
 import pascalcase from 'pascalcase'
 import { get, useForm, FormProvider, useFormContext } from 'react-hook-form'
@@ -363,7 +364,7 @@ const setCoercion = (
   { type, name, emptyAs }: SetCoersionProps
 ) => {
   if (validation.setValueAs) {
-    // Note, this case could overide other props
+    // Note, this case could override other props
     return
   }
   let valueAs: ValueAsType
@@ -385,6 +386,12 @@ const setCoercion = (
     valueAs = 'valueAsDate'
   } else if (type === 'number' || validation.valueAsNumber) {
     valueAs = 'valueAsNumber'
+    // If we are using the emptyAs feature, it does not work well
+    // with react-hook-form valueAsNumber, and thus we will rely
+    // on the setValueAs function below, which will do the same thing
+    if (validation.valueAsNumber && emptyAs !== undefined) {
+      delete validation.valueAsNumber
+    }
   } else {
     valueAs = 'valueAsString'
   }
@@ -431,12 +438,16 @@ const useRegister = <
   emptyAs?: EmptyAsValue
 ) => {
   const { register } = useFormContext()
+  const { name } = props
+  if (!name) {
+    throw Error('`name` prop must be provided')
+  }
 
   const validation = props.validation || { required: false }
 
   setCoercion(validation, {
     type: props.type,
-    name: props.name,
+    name,
     emptyAs,
   })
 
@@ -445,7 +456,7 @@ const useRegister = <
     onBlur: handleBlur,
     onChange: handleChange,
     ...rest
-  } = register(props.name, validation)
+  } = register(name, validation)
 
   const onBlur: React.FocusEventHandler<Element> = (event) => {
     handleBlur(event)

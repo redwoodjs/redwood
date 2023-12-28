@@ -152,12 +152,20 @@ The same should be true of your GraphQL Server. [GraphQL Yoga](https://www.graph
 > The fully-featured GraphQL Server with focus on easy setup, performance and great developer experience.
 
 RedwoodJS leverages Yoga's Envelop plugins to implement custom internal plugins to help with [authentication](#authentication), [logging](#logging), [directive handling](#directives), and more.
+
 ### Security Best Practices
 
 
 RedwoodJS implements GraphQL Armor from [Escape Technologies](https://escape.tech) to make your endpoint more secure by default by implementing common GraphQL [security best practices](#security).
 
 GraphQL Armor, developed by Escape in partnership with The Guild, is a middleware for JS servers that adds a security layer to the RedwoodJS GraphQL endpoint.
+
+### Trusted Documents
+
+In addition, RedwoodJS can be setup to enforce [persisted operations](https://the-guild.dev/graphql/yoga-server/docs/features/persisted-operations) -- alternatively called [Trusted Documents](https://benjie.dev/graphql/trusted-documents).
+
+See [Configure Trusted Documents](graphql/trusted-documents#configure-trusted-documents) for more information and usage instructions.
+
 
 ### Conclusion
 
@@ -236,6 +244,8 @@ For example, if you have a query named `search` that supports [Apollo's offset p
   }
 }}>
 ```
+
+
 
 ### Swapping out the RedwoodApolloProvider
 
@@ -806,6 +816,12 @@ type Mutation {
 }
 ```
 
+See the [Directives](directives) section for complete information on RedwoodJS Directives.
+
+## Fragments
+
+See [fragments](graphql/fragments.md)
+
 ## Unions
 
 Unions are abstract GraphQL types that enable a schema field to return one of multiple object types.
@@ -845,6 +861,139 @@ query GetFavoriteTrees {
 ```
 
 Redwood will automatically detect your union types in your `sdl` files and resolve *which* of your union's types is being returned. If the returned object does not match any of the valid types, the associated operation will produce a GraphQL error.
+
+:::note
+
+In order to use Union types web-side with your Apollo GraphQL client, you will need to [generate possible types from fragments and union types](#generate-possible-types).
+
+:::
+
+### useCache
+
+Apollo Client stores the results of your GraphQL queries in a local, normalized, in-memory cache. This enables the client to respond almost immediately to queries for already-cached data, without even sending a network request.
+
+useCache is a custom hook that returns the cache object and some useful methods to interact with the cache:
+
+* [evict](#evict)
+* [extract](#extract)
+* [identify](#identify)
+* [modify](#modify)
+* [resetStore](#resetStore)
+* [clearStore](#clearStore)
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+```
+
+#### cache
+
+Returns the normalized, in-memory cache.
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+
+const { cache } = useCache()
+```
+
+#### evict
+
+Either removes a normalized object from the cache or removes a specific field from a normalized object in the cache.
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+
+
+const Fruit = ({ id }: { id: FragmentIdentifier }) => {
+  const { evict } = useCache()
+  const { data: fruit, complete } = useRegisteredFragment<Fruit>(id)
+
+  evict(fruit)
+}
+```
+
+#### extract
+
+Returns a serialized representation of the cache's current contents
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+
+const Fruit = ({ id }: { id: FragmentIdentifier }) => {
+  const { extract } = useCache()
+
+  // Logs the cache's current contents
+  console.log(extract())
+
+```
+
+#### identify
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+
+const Fruit = ({ id }: { id: FragmentIdentifier }) => {
+  const { identify } = useCache()
+  const { data: fruit, complete } = useRegisteredFragment<Fruit>(id)
+
+  // Returns "Fruit:ownpc6co8a1w5bhfmavecko9"
+  console.log(identify(fruit))
+}
+```
+
+#### modify
+
+Modifies one or more field values of a cached object. Must provide a modifier function for each field to modify. A modifier function takes a cached field's current value and returns the value that should replace it.
+
+Returns true if the cache was modified successfully and false otherwise.
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+
+const Fruit = ({ id }: { id: FragmentIdentifier }) => {
+  const { modify } = useCache()
+  const { data: fruit, complete } = useRegisteredFragment<Fruit>(id)
+
+  // Modify the name of a given fruit entity to be uppercase
+
+  <button onClick={() => modify(fruit,  {
+    name(cachedName) {
+      return cachedName.toUpperCase()
+  }})}>
+    Uppercase {fruit.name}
+  </button>
+
+  // ...
+}
+```
+
+#### clearStore
+
+To reset the cache without refetching active queries, use the clearStore method.
+
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+
+const Fruit = ({ id }: { id: FragmentIdentifier }) => {
+  const { clearStore } = useCache()
+
+  clearStore()
+}
+```
+
+#### resetStore
+
+Reset the cache entirely, such as when a user logs out.
+
+```ts
+import { useCache } from '@redwoodjs/web/apollo'
+
+const Fruit = ({ id }: { id: FragmentIdentifier }) => {
+  const { resetStore } = useCache()
+
+  resetStore()
+}
+```
 
 ## GraphQL Handler Setup
 
@@ -999,7 +1148,7 @@ export const handler = createGraphQLHandler({
 })
 ```
 
-> Note: Check-out the [in-depth look at Redwood Directives](directives.md) that explains how to generate directives so you may use them to validate access and transform the response.
+> Note: Check-out the [in-depth look at Redwood Directives](directives) that explains how to generate directives so you may use them to validate access and transform the response.
 
 
 ### Logging Setup
@@ -1014,9 +1163,9 @@ Logging is essential in production apps to be alerted about critical errors and 
 
 We want to make logging simple when using RedwoodJS and therefore have configured the api-side GraphQL handler to log common information about your queries and mutations. Log statements also be optionally enriched with [operation names](https://graphql.org/learn/queries/#operation-name), user agents, request ids, and performance timings to give you more visibility into your GraphQL api.
 
-By configuring the GraphQL handler to use your api side [RedwoodJS logger](logger.md), any errors and other log statements about the [GraphQL execution](https://graphql.org/learn/execution/) will be logged to the [destination](logger.md#destination-aka-where-to-log) you've set up: to standard output, file, or transport stream.
+By configuring the GraphQL handler to use your api side [RedwoodJS logger](logger), any errors and other log statements about the [GraphQL execution](https://graphql.org/learn/execution/) will be logged to the [destination](logger#destination-aka-where-to-log) you've set up: to standard output, file, or transport stream.
 
-You configure the logger using the `loggerConfig` that accepts a [`logger`](logger.md) and a set of [GraphQL Logger Options](#graphql-logger-options).
+You configure the logger using the `loggerConfig` that accepts a [`logger`](logger) and a set of [GraphQL Logger Options](#graphql-logger-options).
 
 ### Configure the GraphQL Logger
 
@@ -1147,9 +1296,9 @@ export const post = async ({ id }) => {
 //...
 ```
 
-The GraphQL handler will then take care of logging your query and data -- as long as your logger is setup to log at the `info` [level](logger.md#log-level) and above.
+The GraphQL handler will then take care of logging your query and data -- as long as your logger is setup to log at the `info` [level](logger#log-level) and above.
 
-> You can also disable the statements in production by just logging at the `warn` [level](logger.md#log-level) or above
+> You can also disable the statements in production by just logging at the `warn` [level](logger#log-level) or above
 
 This means that you can keep your services free of logger statements, but still see what's happening!
 
@@ -1184,7 +1333,7 @@ Stream to third-party log and application monitoring services vital to productio
 
 Everyone has heard of reports that Company X logged emails, or passwords to files or systems that may not have been secured. While RedwoodJS logging won't necessarily prevent that, it does provide you with the mechanism to ensure that won't happen.
 
-To redact sensitive information, you can supply paths to keys that hold sensitive data using the RedwoodJS logger [redact option](logger.md#redaction).
+To redact sensitive information, you can supply paths to keys that hold sensitive data using the RedwoodJS logger [redact option](logger#redaction).
 
 Because this logger is used with the GraphQL handler, it will respect any redaction paths setup.
 
@@ -1291,7 +1440,7 @@ By default, your GraphQL endpoint is open to the world.
 That means anyone can request any query and invoke any Mutation.
 Whatever types and fields are defined in your SDL is data that anyone can access.
 
-Redwood [encourages being secure by default](http://localhost:3000/docs/canary/directives#secure-by-default-with-built-in-directives) by defaulting all queries and mutations to have the `@requireAuth` directive when generating SDL or a service.
+Redwood [encourages being secure by default](directives) by defaulting all queries and mutations to have the `@requireAuth` directive when generating SDL or a service.
 
 When your app builds and your server starts up, Redwood checks that **all** queries and mutations have `@requireAuth`, `@skipAuth` or a custom directive applied.
 
@@ -1417,7 +1566,7 @@ The `@requireAuth` directive lets you define roles that are permitted to perform
 ```ts
 type Mutation {
   createPost(input: CreatePostInput!): Post! @requireAuth(roles: ['AUTHOR', 'EDITOR'])
-  updatePost(id: Int!, input: UpdatePostInput!): Post! @@requireAuth(roles: ['EDITOR']
+  updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth(roles: ['EDITOR']
   deletePost(id: Int!): Post! @requireAuth(roles: ['ADMIN']
 }
 ```
@@ -1448,15 +1597,46 @@ type Query {
 
 Because it is often useful to ask a GraphQL schema for information about what queries it supports, GraphQL allows us to do so using the [introspection](https://graphql.org/learn/introspection/) system.
 
-The [GraphQL Playground](https://www.graphql-yoga.com/docs/features/graphiql) is a way for you to interact with your schema and try out queries and mutations. It can show you the schema by inspecting it. You can find the GraphQL Playground at http://localhost:8911/graphql when your dev server is running.
+The [GraphQL Playground](https://www.graphql-yoga.com/docs/features/graphiql) is a way for you to interact with your schema and try out queries and mutations. It can show you the schema by inspecting it. You can find the GraphQL Playground at [http://localhost:8911/graphql](http://localhost:8911/graphql) when your dev server is running.
 
-> Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to disable these in production, RedwoodJS **only enables introspection and the playground when running in development**. That is when `process.env.NODE_ENV === 'development'`.
+> Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to disable these in production, RedwoodJS **, by default, only enables introspection and the playground when running in development**. That is when `process.env.NODE_ENV === 'development'`.
+
+However, there may be cases where you want to enable introspection as well as the GraphQL PLaygrouns. You can enable introspection by setting the `allowIntrospection` option to `true` and enable GraphiQL by setting `allowGraphiQL` to `true`.
+
+Here is an example of `createGraphQLHandler` function with the `allowIntrospection` and `allowGraphiQL` options set to `true`:
+```ts {8}
+export const handler = createGraphQLHandler({
+  authDecoder,
+  getCurrentUser,
+  loggerConfig: { logger, options: {} },
+  directives,
+  sdls,
+  services,
+  allowIntrospection: true, // 👈 enable introspection in all environments
+  allowGraphiQL: true, // 👈 enable GraphiQL Playground in all environments
+  onException: () => {
+    // Disconnect from your database with an unhandled exception.
+    db.$disconnect()
+  },
+})
+```
+
+:::warning
+
+Enabling introspection in production may pose a security risk, as it allows users to access information about your schema, queries, and mutations. Use this option with caution and make sure to secure your GraphQL API properly.
+
+The may be cases where one wants to allow introspection, but not GraphiQL.
+
+Or, you may want to enable GraphiQL, but not allow introspection; for example, to try out known queries, but not to share the entire set of possible operations and types.
+
+:::
+
 
 ### GraphQL Armor Configuration
 
 [GraphQL Armor](https://escape.tech/graphql-armor/) is a middleware that adds a security layer the RedwoodJS GraphQL endpoint configured with sensible defaults.
 
-You don't have to configure anything to enforce protection against alias, cost, depth, directive, tokens abuse in GraphQL operations as well as to block field suggestions or revealing error messages that might leak sensitive infomration.
+You don't have to configure anything to enforce protection against alias, cost, depth, directive, tokens abuse in GraphQL operations as well as to block field suggestions or revealing error messages that might leak sensitive information.
 
 But, if you need to enable, disable to modify the default settings, GraphQL Armor is fully configurable in a per-plugin fashion.
 
@@ -1865,6 +2045,7 @@ Orm if you want a custom mask:
 
 ``Cannot query field "sta" on type "Media". [REDACTED]?`
 
+
 ### Error Masking
 
 In many GraphQL servers, when an error is thrown, the details of that error are leaked to the outside world. The error and its message are then returned in the response and a client might reveal those errors in logs or even render the message to the user. You could potentially leak sensitive or other information about your app you don't want to share—such as database connection failures or even the presence of certain fields.
@@ -2016,7 +2197,7 @@ enum Color {
 
 ### SDL Comments
 
-When used with `--docs` option, [SDL generator](./cli-commands.md#generate-sdl) adds comments for:
+When used with `--docs` option, [SDL generator](cli-commands#generate-sdl) adds comments for:
 
 * Directives
 * Queries

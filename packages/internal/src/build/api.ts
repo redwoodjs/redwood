@@ -2,11 +2,13 @@ import type { PluginBuild } from 'esbuild'
 import { build } from 'esbuild'
 import { removeSync } from 'fs-extra'
 
-import { getPaths } from '@redwoodjs/project-config'
+import {
+  getApiSideBabelPlugins,
+  transformWithBabel,
+} from '@redwoodjs/babel-config'
+import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import { findApiFiles } from '../files'
-
-import { getApiSideBabelPlugins, transformWithBabel } from './babel/api'
 
 export const buildApi = async () => {
   // TODO: Be smarter about caching and invalidating files,
@@ -20,6 +22,8 @@ export const cleanApiBuild = () => {
   removeSync(rwjsPaths.api.dist)
 }
 
+const rwjsConfig = getConfig()
+
 const runRwBabelTransformsPlugin = {
   name: 'rw-esbuild-babel-transform',
   setup(build: PluginBuild) {
@@ -27,7 +31,11 @@ const runRwBabelTransformsPlugin = {
       //  Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
       const transformedCode = transformWithBabel(
         args.path,
-        getApiSideBabelPlugins()
+        getApiSideBabelPlugins({
+          openTelemetry:
+            rwjsConfig.experimental.opentelemetry.enabled &&
+            rwjsConfig.experimental.opentelemetry.wrapApi,
+        })
       )
 
       if (transformedCode?.code) {
@@ -49,7 +57,7 @@ export const transpileApi = async (files: string[], options = {}) => {
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',
-    target: 'node16',
+    target: 'node20',
     format: 'cjs',
     bundle: false,
     plugins: [runRwBabelTransformsPlugin],

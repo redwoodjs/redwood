@@ -299,6 +299,33 @@ describe('parseConfig', () => {
     })
     expect(envLifecycle.after).toEqual({})
   })
+
+  it('interpolates environment variables correctly', () => {
+    process.env.TEST_VAR_HOST = 'staging.server.com'
+    process.env.TEST_VAR_REPO = 'git://staging.github.com'
+    const {
+      envConfig: { servers },
+    } = baremetal.parseConfig(
+      { environment: 'production' },
+      `
+        [[production.servers]]
+        host = '\${TEST_VAR_HOST:server.com}'
+        repo = '\${TEST_VAR_REPO:git://github.com}'
+        path = '\${TEST_VAR_PATH:/var/www/app}'
+        privateKeyPath = '/Users/me/.ssh/id_rsa'
+      `
+    )
+    const server = servers[0]
+    expect(server.host).toEqual('staging.server.com')
+    expect(server.repo).toEqual('git://staging.github.com')
+    // Default value should work
+    expect(server.path).toEqual('/var/www/app')
+    // No substitution should work
+    expect(server.privateKeyPath).toEqual('/Users/me/.ssh/id_rsa')
+
+    delete process.env.TEST_VAR_HOST
+    delete process.env.TEST_VAR_REPO
+  })
 })
 
 describe('commandWithLifecycleEvents', () => {

@@ -35,5 +35,5 @@ export function checkAndReplaceDirectUrl(
   return directUrlEnv
 }
 
-const PRISMA_DIRECT_URL_REGEXP = /directUrl(\s?)=(\s?)env\(('|")(.*)('|")\)/g
+const PRISMA_DIRECT_URL_REGEXP = /directUrl(\s*)=(\s*)env\(('|")(.*)('|")\)/g
 const BETWEEN_PARENTHESES_REGEXP = /\(('|")([^)]+)('|")\)/

@@ -30,6 +30,7 @@ module.exports = {
     'react',
     'react-hooks',
     'jest-dom',
+    '@redwoodjs',
   ],
   ignorePatterns: ['node_modules', 'dist'],
   settings: {
@@ -45,6 +46,7 @@ module.exports = {
     'import/internal-regex': '^src/',
   },
   rules: {
+    '@redwoodjs/process-env-computed': 'error',
     'prettier/prettier': 'warn',
     'no-console': 'off',
     'prefer-object-spread': 'warn',
@@ -62,13 +64,7 @@ module.exports = {
       { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
     ],
     // React rules
-    'react/prop-types': [
-      'warn',
-      {
-        skipUndeclared: true,
-        ignore: ['style', 'children', 'className', 'theme'],
-      },
-    ],
+    'react/prop-types': 'off',
     'react/display-name': 'off',
     'react-hooks/exhaustive-deps': 'warn',
     'import/order': [

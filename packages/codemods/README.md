@@ -19,13 +19,13 @@ This package contains codemods that automate upgrading a Redwood project.
 Listing available codemods:
 
 ```
-npx @redwood/codemods list v0.38.x
+npx @redwoodjs/codemods list v0.38.x
 ```
 
 Applying a single one:
 
 ```
-npx @redwood/codemods add-directives
+npx @redwoodjs/codemods add-directives
 ```
 
 ---

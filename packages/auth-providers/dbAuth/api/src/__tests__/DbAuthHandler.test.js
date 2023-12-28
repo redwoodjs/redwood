@@ -1,7 +1,9 @@
-import CryptoJS from 'crypto-js'
+import crypto from 'node:crypto'
+import path from 'node:path'
 
 import { DbAuthHandler } from '../DbAuthHandler'
 import * as dbAuthError from '../errors'
+import { hashToken } from '../shared'
 
 // mock prisma db client
 const DbMock = class {
@@ -78,17 +80,31 @@ const db = new DbMock(['user', 'userCredential'])
 
 const UUID_REGEX =
   /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
-const SET_SESSION_REGEX = /^session=[a-zA-Z0-9+=/]+;/
+const SET_SESSION_REGEX = /^session=[a-zA-Z0-9+=/]|[a-zA-Z0-9+=/]+;/
 const UTC_DATE_REGEX = /\w{3}, \d{2} \w{3} \d{4} [\d:]{8} GMT/
 const LOGOUT_COOKIE = 'session=;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
+const SESSION_SECRET = '540d03ebb00b441f8f7442cbc39958ad'
+const FIXTURE_PATH = path.resolve(
+  __dirname,
+  '../../../../../../__fixtures__/example-todo-main'
+)
+
+beforeAll(() => {
+  process.env.RWJS_CWD = FIXTURE_PATH
+})
+
+afterAll(() => {
+  delete process.env.RWJS_CWD
+})
 
 const createDbUser = async (attributes = {}) => {
   return await db.user.create({
     data: {
       email: 'rob@redwoodjs.com',
+      // default hashedPassword is from `node:crypto`
       hashedPassword:
-        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba',
-      salt: '2ef27f4073c603ba8b7807c6de6d6a89',
+        '230847bea5154b6c7d281d09593ad1be26fa03a93c04a73bcc2b608c073a8213|16384|8|1',
+      salt: 'ba8b7807c6de6d6a892ef27f4073c603',
       ...attributes,
     },
   })
@@ -103,7 +119,16 @@ const expectLoggedInResponse = (response) => {
 }
 
 const encryptToCookie = (data) => {
-  return `session=${CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET)}`
+  const iv = crypto.randomBytes(16)
+  const cipher = crypto.createCipheriv(
+    'aes-256-cbc',
+    SESSION_SECRET.substring(0, 32),
+    iv
+  )
+  let encryptedSession = cipher.update(data, 'utf-8', 'base64')
+  encryptedSession += cipher.final('base64')
+
+  return `session=${encryptedSession}|${iv.toString('base64')}`
 }
 
 let event, context, options
@@ -113,7 +138,7 @@ describe('dbAuth', () => {
     // hide deprecation warnings during test
     jest.spyOn(console, 'warn').mockImplementation(() => {})
     // encryption key so results are consistent regardless of settings in .env
-    process.env.SESSION_SECRET = 'nREjs1HPS7cFia6tQHK70EWGtfhOgbqJQKsHQz3S'
+    process.env.SESSION_SECRET = SESSION_SECRET
     delete process.env.DBAUTH_COOKIE_DOMAIN
 
     event = {
@@ -188,6 +213,9 @@ describe('dbAuth', () => {
           transports: 'transports',
           counter: 'counter',
         },
+      },
+      cookie: {
+        name: 'session',
       },
     }
   })
@@ -562,7 +590,7 @@ describe('dbAuth', () => {
       event = {
         headers: {
           cookie:
-            'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx',
+            'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w==',
         },
       }
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -595,7 +623,7 @@ describe('dbAuth', () => {
       event.body = JSON.stringify({ method: 'logout' })
       event.httpMethod = 'GET'
       event.headers.cookie =
-        'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
+        'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
       const dbAuth = new DbAuthHandler(event, context, options)
       const response = await dbAuth.invoke()
 
@@ -606,7 +634,7 @@ describe('dbAuth', () => {
       event.body = JSON.stringify({ method: 'foobar' })
       event.httpMethod = 'POST'
       event.headers.cookie =
-        'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
+        'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
       const dbAuth = new DbAuthHandler(event, context, options)
       const response = await dbAuth.invoke()
 
@@ -617,7 +645,7 @@ describe('dbAuth', () => {
       event.body = JSON.stringify({ method: 'logout' })
       event.httpMethod = 'POST'
       event.headers.cookie =
-        'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
+        'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
       const dbAuth = new DbAuthHandler(event, context, options)
       dbAuth.logout = jest.fn(() => {
         throw Error('Logout error')
@@ -655,7 +683,7 @@ describe('dbAuth', () => {
       event.body = JSON.stringify({ method: 'logout' })
       event.httpMethod = 'POST'
       event.headers.cookie =
-        'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
+        'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
       const dbAuth = new DbAuthHandler(event, context, options)
       dbAuth.logout = jest.fn(() => ['body', { foo: 'bar' }])
       const response = await dbAuth.invoke()
@@ -759,8 +787,8 @@ describe('dbAuth', () => {
       })
 
       expect(resetUser.resetToken).not.toEqual(undefined)
-      // base64 characters only, except =
-      expect(resetUser.resetToken).toMatch(/^\w{16}$/)
+      // Should be a 64 character hex string for a 256 bit token hash (sha256)
+      expect(resetUser.resetToken).toMatch(/^\w{64}$/)
       expect(resetUser.resetTokenExpiresAt instanceof Date).toEqual(true)
 
       // response contains data returned from the handler
@@ -790,12 +818,29 @@ describe('dbAuth', () => {
       event.body = JSON.stringify({
         username: user.email,
       })
-      options.forgotPassword.handler = (handlerUser) => {
+      options.forgotPassword.handler = (handlerUser, token) => {
         expect(handlerUser.id).toEqual(user.id)
+        expect(token).toMatch(/^[A-Za-z0-9/+]{16}$/)
       }
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.forgotPassword()
-      expect.assertions(1)
+      expect.assertions(2)
+    })
+
+    it('invokes forgotPassword.handler() with the raw resetToken', async () => {
+      const user = await createDbUser()
+      event.body = JSON.stringify({
+        username: user.email,
+      })
+      options.forgotPassword.handler = (handlerUser, token) => {
+        // tokens should be the raw resetToken NOT the hash
+        // resetToken consists of 16 base64 characters
+        expect(handlerUser.resetToken).toBeUndefined()
+        expect(token).toMatch(/^[A-Za-z0-9/+]{16}$/)
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      await dbAuth.forgotPassword()
+      expect.assertions(2)
     })
 
     it('removes the token from the forgotPassword response', async () => {
@@ -868,6 +913,9 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
     it('throws an error if username is not found', async () => {
+      delete options.signup.usernameMatch
+      delete options.login.usernameMatch
+
       await createDbUser()
       event.body = JSON.stringify({
         username: 'missing@redwoodjs.com',
@@ -970,7 +1018,7 @@ describe('dbAuth', () => {
 
       const response = await dbAuth.login()
 
-      expect(response[0]).toEqual({ id: user.id })
+      expect(response[0].id).toEqual(user.id)
     })
 
     it('returns a CSRF token in the header', async () => {
@@ -1009,6 +1057,58 @@ describe('dbAuth', () => {
       const response = await dbAuth.login()
 
       expectLoggedInResponse(response)
+    })
+
+    it('login db check is called with insensitive string when user has provided one in LoginFlowOptions', async () => {
+      jest.clearAllMocks()
+      const spy = jest.spyOn(db.user, 'findFirst')
+
+      options.signup.usernameMatch = 'insensitive'
+      options.login.usernameMatch = 'insensitive'
+
+      await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+      })
+
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.login()
+      } catch (e) {
+        expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
+      }
+
+      return expect(spy).toHaveBeenCalledWith({
+        where: {
+          email: expect.objectContaining({ mode: 'insensitive' }),
+        },
+      })
+    })
+
+    it('login db check is not called with insensitive string when user has not provided one in LoginFlowOptions', async () => {
+      jest.clearAllMocks()
+      const spy = jest.spyOn(db.user, 'findFirst')
+
+      delete options.signup.usernameMatch
+      delete options.login.usernameMatch
+
+      await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+      })
+
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      await dbAuth.login()
+
+      return expect(spy).not.toHaveBeenCalledWith({
+        where: {
+          email: expect.objectContaining({ mode: 'insensitive' }),
+        },
+      })
     })
   })
 
@@ -1123,7 +1223,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires - 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
 
@@ -1144,7 +1244,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires - 1
       )
       const user = await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
 
@@ -1172,7 +1272,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
 
@@ -1194,7 +1294,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
 
@@ -1214,7 +1314,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       const user = await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
@@ -1240,7 +1340,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       const user = await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
@@ -1265,7 +1365,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       const user = await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
@@ -1287,7 +1387,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
@@ -1308,7 +1408,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
@@ -1505,6 +1605,27 @@ describe('dbAuth', () => {
       const response = await dbAuth.getToken()
 
       expect(response[0]).toEqual('{"error":"User not found"}')
+    })
+
+    it('re-encrypts the session cookie if using the legacy algorithm', async () => {
+      await createDbUser({ id: 7 })
+      event = {
+        headers: {
+          // legacy session with { id: 7 } for userID
+          cookie: 'session=U2FsdGVkX1+s7seQJnVgGgInxuXm13l8VvzA3Mg2fYg=',
+        },
+      }
+      process.env.SESSION_SECRET =
+        'QKxN2vFSHAf94XYynK8LUALfDuDSdFowG6evfkFX8uszh4YZqhTiqEdshrhWbwbw'
+
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const [userId, headers] = await dbAuth.getToken()
+
+      expect(userId).toEqual(7)
+      expect(headers['set-cookie']).toMatch(SET_SESSION_REGEX)
+
+      // set session back to default
+      process.env.SESSION_SECRET = SESSION_SECRET
     })
   })
 
@@ -1997,11 +2118,13 @@ describe('dbAuth', () => {
         {
           ...options,
           cookie: {
-            Path: '/',
-            HttpOnly: true,
-            SameSite: 'Strict',
-            Secure: true,
-            Domain: 'example.com',
+            attributes: {
+              Path: '/',
+              HttpOnly: true,
+              SameSite: 'Strict',
+              Secure: true,
+              Domain: 'example.com',
+            },
           },
         }
       )
@@ -2077,11 +2200,11 @@ describe('dbAuth', () => {
         `Expires=${dbAuth.sessionExpiresDate}`
       )
       // can't really match on the session value since it will change on every render,
-      // due to CSRF token generation but we can check that it contains a only the
-      // characters that would be returned by the hash function
+      // due to CSRF token generation but we can check that it contains only the
+      // characters that would be returned by the encrypt function
       expect(headers['set-cookie']).toMatch(SET_SESSION_REGEX)
       // and we can check that it's a certain number of characters
-      expect(headers['set-cookie'].split(';')[0].length).toEqual(72)
+      expect(headers['set-cookie'].split(';')[0].length).toEqual(77)
     })
   })
 
@@ -2244,6 +2367,38 @@ describe('dbAuth', () => {
 
       expect(user.id).toEqual(dbUser.id)
     })
+
+    it('returns the user if password is hashed with legacy algorithm', async () => {
+      const dbUser = await createDbUser({
+        // CryptoJS hashed password
+        hashedPassword:
+          '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba',
+        salt: '2ef27f4073c603ba8b7807c6de6d6a89',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const user = await dbAuth._verifyUser(dbUser.email, 'password')
+
+      expect(user.id).toEqual(dbUser.id)
+    })
+
+    it('updates the user hashPassword to the new algorithm', async () => {
+      const dbUser = await createDbUser({
+        // CryptoJS hashed password
+        hashedPassword:
+          '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba',
+        salt: '2ef27f4073c603ba8b7807c6de6d6a89',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+      await dbAuth._verifyUser(dbUser.email, 'password')
+      const user = await db.user.findFirst({ where: { id: dbUser.id } })
+
+      // password now hashed by node:crypto
+      expect(user.hashedPassword).toEqual(
+        'f20d69d478fa1afc85057384e21bd457a76b23b23e2a94f5bd982976f700a552|16384|8|1'
+      )
+      // salt should remain the same
+      expect(user.salt).toEqual('2ef27f4073c603ba8b7807c6de6d6a89')
+    })
   })
 
   describe('_getCurrentUser()', () => {
@@ -2338,6 +2493,55 @@ describe('dbAuth', () => {
         expect(e.message).toEqual(`${dbUser.email} taken`)
       })
       expect.assertions(2)
+    })
+
+    it('createUser db check is called with insensitive string when user has provided one in SignupFlowOptions', async () => {
+      const spy = jest.spyOn(db.user, 'findFirst')
+      options.signup.usernameMatch = 'insensitive'
+
+      const dbUser = await createDbUser()
+      event.body = JSON.stringify({
+        username: dbUser.email,
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      await dbAuth._createUser()
+      expect(spy).toHaveBeenCalled()
+      return expect(spy).toHaveBeenCalledWith({
+        where: {
+          email: expect.objectContaining({ mode: 'insensitive' }),
+        },
+      })
+    })
+
+    it('createUser db check is not called with insensitive string when user has not provided one in SignupFlowOptions', async () => {
+      jest.resetAllMocks()
+      jest.clearAllMocks()
+
+      const defaultMessage = options.signup.errors.usernameTaken
+      const spy = jest.spyOn(db.user, 'findFirst')
+      delete options.signup.usernameMatch
+
+      const dbUser = await createDbUser()
+      event.body = JSON.stringify({
+        username: dbUser.email,
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+      await dbAuth._createUser().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
+        expect(e.message).toEqual(
+          defaultMessage.replace(/\$\{username\}/, dbUser.email)
+        )
+      })
+
+      expect(spy).toHaveBeenCalled()
+      return expect(spy).not.toHaveBeenCalledWith({
+        where: {
+          email: expect.objectContaining({ mode: 'insensitive' }),
+        },
+      })
     })
 
     it('throws a default error message if username is missing', async () => {
@@ -2549,6 +2753,35 @@ describe('dbAuth', () => {
 
       expect(response.statusCode).toEqual(400)
       expect(response.body).toEqual('{"error":"bad"}')
+    })
+  })
+
+  describe('_sanitizeUser', () => {
+    it('removes all but the default fields [id, email] on user', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const user = {
+        id: 1,
+        email: 'rob@redwoodjs.com',
+        password: 'secret',
+      }
+
+      expect(dbAuth._sanitizeUser(user).id).toEqual(user.id)
+      expect(dbAuth._sanitizeUser(user).email).toEqual(user.email)
+      expect(dbAuth._sanitizeUser(user).secret).toBeUndefined()
+    })
+
+    it('removes any fields not explictly allowed in allowedUserFields', () => {
+      options.allowedUserFields = ['foo']
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const user = {
+        id: 1,
+        email: 'rob@redwoodjs.com',
+        foo: 'bar',
+      }
+
+      expect(dbAuth._sanitizeUser(user).id).toBeUndefined()
+      expect(dbAuth._sanitizeUser(user).email).toBeUndefined()
+      expect(dbAuth._sanitizeUser(user).foo).toEqual('bar')
     })
   })
 })

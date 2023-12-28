@@ -4,7 +4,7 @@ import { APIGatewayEvent } from 'aws-lambda'
 
 interface Context extends Record<string, any> {}
 
-import { context } from '../../../globalContext'
+import { context } from '@redwoodjs/context'
 
 /**
  * Represents the user attributes returned by the decoding the
@@ -34,9 +34,9 @@ type RedwoodUser = Record<string, unknown> & { roles?: string[] }
  */
 export const getCurrentUser = async (
   decoded,
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  /* eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars */
   { token, type },
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  /* eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars */
   req?: { event: APIGatewayEvent, context: Context }
 ): Promise<RedwoodUser | null> => {
   if (!decoded) {
