@@ -6,8 +6,8 @@ interface UsePathMatchOptions {
 }
 
 /**
- * Will match the current location against the given path, making any
- * replacements as provided in the options.
+ * Will match the current location against the given path, also matching all
+ * supplied param values
  *
  * @param path The path as defined in your Routes file
  * @param options {UsePathMatchOptions}
@@ -18,6 +18,9 @@ export function usePathMatch(
   options?: UsePathMatchOptions
 ): boolean
 /**
+ * Will match the given url against the given path, also matching all supplied
+ * param values
+ *
  * @param url The url to match against
  * @param path The path as defined in your Routes file
  * @param options {UsePathMatchOptions}
