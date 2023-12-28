@@ -17,6 +17,7 @@ model UserExample {
   name  String?
 }
 
+
 model Post {
   id        Int      @id @default(autoincrement())
   title     String
@@ -39,7 +40,7 @@ model User {
 }
 
 model Contact {
-  id        Int      @id @default(autoincrement())
+  id        Int @id @default(autoincrement())
   name      String
   email     String
   message   String

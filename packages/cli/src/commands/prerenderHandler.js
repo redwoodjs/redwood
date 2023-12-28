@@ -130,11 +130,9 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
 
     // Don't error out
     return []
-  }
-
-  if (getConfig().graphql?.fragments) {
+  } else {
     console.log(
-      'Creating the virtual modules needed for prerendering when GraphQL fragments are configured ...'
+      'Creating the virtual modules needed for prerendering with GraphQL fragments ...'
     )
     const possibleTypes = path.join(
       getPaths().base,
@@ -146,16 +144,12 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
       'possibleTypes.js'
     )
 
-    const f = fs.readFileSync(possibleTypes, 'utf8')
+    const f = fs.existsSync(possibleTypes)
+      ? fs.readFileSync(possibleTypes, 'utf8')
+      : `export default { possibleTypes: {} }`
+
     fs.writeFileSync(
-      path.join(
-        getPaths().base,
-        'node_modules',
-        '@redwoodjs',
-        'web',
-        'dist',
-        'virtual-possibleTypes.js'
-      ),
+      path.join(getPaths().base, 'node_modules', 'virtual-possibleTypes.js'),
       f
     )
   }
