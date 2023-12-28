@@ -26,6 +26,7 @@ export const config = {
   },
   supertokens: {
     connectionURI: process.env.SUPERTOKENS_CONNECTION_URI,
+    apiKey: process.env.SUPERTOKENS_API_KEY,
   },
   recipeList: [
     ThirdPartyEmailPassword.init({
