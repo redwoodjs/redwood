@@ -4,6 +4,9 @@ FROM node:20-bookworm-slim as base
 
 RUN corepack enable
 
+# We tried to make the Dockerfile as lean as possible. In some cases, that means we excluded a dependency your project needs.
+# By far the most common is Python. If you're running into build errors because `python3` isn't available,
+# uncomment the line below here and in other stages as necessary:
 RUN apt-get update && apt-get install -y \
     openssl \
     # python3 make gcc \
