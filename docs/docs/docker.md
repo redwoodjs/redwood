@@ -316,7 +316,7 @@ WORKDIR /home/node/app
 
 COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node package.json .
-COPY --chown=node:node web/package.json .
+COPY --chown=node:node web/package.json web/
 COPY --chown=node:node yarn.lock .
 
 RUN mkdir -p /home/node/.yarn/berry/index
