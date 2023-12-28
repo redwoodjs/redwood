@@ -70,7 +70,7 @@ async function getChangedFiles(page = 1, retries = 0) {
 
       return []
     } else {
-      await new Promise((resolve) => setTimeout(resolve, 3000))
+      await new Promise((resolve) => setTimeout(resolve, 3000 * retries))
       files = await getChangedFiles(page, ++retries)
     }
   }
