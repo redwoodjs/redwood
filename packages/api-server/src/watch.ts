@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import type { ChildProcess } from 'child_process'
 import { fork } from 'child_process'
@@ -13,7 +14,6 @@ import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
 import { buildApi, watchApi } from '@redwoodjs/internal/dist/build/api'
-import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { getConfig, getPaths, resolveFile } from '@redwoodjs/project-config'
 
 const argv = yargs(hideBin(process.argv))
@@ -37,9 +37,6 @@ dotenv.config({
   path: rwjsPaths.base,
 })
 
-// TODO:
-// 1. Move this file out of the HTTP server, and place it in the CLI?
-
 let httpServerProcess: ChildProcess
 
 const killApiServer = () => {
@@ -47,20 +44,21 @@ const killApiServer = () => {
   httpServerProcess?.kill()
 }
 
-const validate = async () => {
-  try {
-    await loadAndValidateSdls()
-    return true
-  } catch (e: any) {
-    killApiServer()
-    console.log(c.redBright(`[GQL Server Error] - Schema validation failed`))
-    console.error(c.red(e?.message))
-    console.log(c.redBright('-'.repeat(40)))
+// @TODO need to enable validation
+// const validate = async () => {
+//   try {
+//     await loadAndValidateSdls()
+//     return true
+//   } catch (e: any) {
+//     killApiServer()
+//     console.log(c.redBright(`[GQL Server Error] - Schema validation failed`))
+//     console.error(c.red(e?.message))
+//     console.log(c.redBright('-'.repeat(40)))
 
-    delayRestartServer.cancel()
-    return false
-  }
-}
+//     delayRestartServer.cancel()
+//     return false
+//   }
+// }
 
 const rebuildApiServer = async () => {
   try {
@@ -146,4 +144,4 @@ const delayRestartServer = debounce(
 
 // Use esbuild's watcher instead of chokidar
 // Restarts seem to be handled by nodemon
-watchApi()
+watchApi(delayRestartServer)
