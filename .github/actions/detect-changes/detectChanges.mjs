@@ -5,7 +5,7 @@ import { hasCodeChanges } from './cases/code_changes.mjs'
 import { rscChanged } from './cases/rsc.mjs'
 import { ssrChanged } from './cases/ssr.mjs'
 
-const getPrNumber = (githubRef) => {
+const getPrNumber = () => {
   // Example GITHUB_REF refs/pull/9544/merge
   const result = /refs\/pull\/(\d+)\/merge/g.exec(process.env.GITHUB_REF)
 
@@ -48,7 +48,7 @@ async function getChangedFiles(page = 1, retries = 0) {
   const githubToken = process.env.GITHUB_TOKEN
   const url = `https://api.github.com/repos/redwoodjs/redwood/pulls/${prNumber}/files?per_page=100&page=${page}`
   let resp
-  let files
+  let files = []
 
   try {
     resp = await fetch(url, {
@@ -71,7 +71,7 @@ async function getChangedFiles(page = 1, retries = 0) {
       return []
     } else {
       await new Promise((resolve) => setTimeout(resolve, 3000))
-      getChangedFiles(page, ++retries)
+      files = await getChangedFiles(page, ++retries)
     }
   }
 
