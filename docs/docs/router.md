@@ -447,6 +447,47 @@ const App = () => {
 }
 ```
 
+## useRoutePaths
+
+`useRoutePaths()` is a React hook you can use to get a map of all routes mapped to their literal paths, as they're defined in your routes file.
+
+Example usage:
+
+```jsx
+const routePaths = useRoutePaths()
+
+return <pre><code>{JSON.stringify(routePaths, undefined, 2)}</code></pre>
+```
+
+Example output:
+
+```
+{
+  "home": "/"
+  "about": "/about",
+  "login": "/login",
+  "signup": "/signup",
+  "forgotPassword": "/forgot-password",
+  "resetPassword": "/reset-password",
+  "newContact": "/contacts/new",
+  "editContact": "/contacts/{id:Int}/edit",
+  "contact": "/contacts/{id:Int}",
+  "contacts": "/contacts",
+}
+```
+
+## useRoutePath
+
+This is a convenience hook for when you only want the path for a single route.
+```jsx
+const aboutPath = useRoutePath('about') // returns "/about"
+```
+is the same as
+```jsx
+const routePaths = useRoutePaths()
+const aboutPath = routePaths.about // Also returns "/about"
+```
+
 ## Navigation
 
 ### navigate
