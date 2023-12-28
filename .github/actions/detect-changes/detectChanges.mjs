@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import core from '@actions/core'
 import { hasCodeChanges } from './cases/code_changes.mjs'
 
-const getPrNumber = (githubRef) => {
+const getPrNumber = () => {
   // Example GITHUB_REF refs/pull/9544/merge
   const result = /refs\/pull\/(\d+)\/merge/g.exec(process.env.GITHUB_REF)
 
@@ -46,7 +46,7 @@ async function getChangedFiles(page = 1, retries = 0) {
   const githubToken = process.env.GITHUB_TOKEN
   const url = `https://api.github.com/repos/redwoodjs/redwood/pulls/${prNumber}/files?per_page=100&page=${page}`
   let resp
-  let files
+  let files = []
 
   try {
     resp = await fetch(url, {
@@ -56,6 +56,12 @@ async function getChangedFiles(page = 1, retries = 0) {
         Accept: 'application/vnd.github+json',
       },
     })
+
+    if (!resp.ok) {
+      console.log()
+      console.error('Response not ok')
+      console.log('resp', resp)
+    }
 
     const json = await resp.json()
     files = json.map((file) => file.filename) || []
@@ -68,8 +74,8 @@ async function getChangedFiles(page = 1, retries = 0) {
 
       return []
     } else {
-      await new Promise((resolve) => setTimeout(resolve, 3000))
-      getChangedFiles(page, ++retries)
+      await new Promise((resolve) => setTimeout(resolve, 3000 * retries))
+      files = await getChangedFiles(page, ++retries)
     }
   }
 
@@ -99,8 +105,8 @@ async function main() {
 
   if (changedFiles.length === 0) {
     console.log(
-      'No changed files found. Something must have gone wrong. Fall back to ' +
-        'running all tests.'
+      'No changed files found. Something must have gone wrong. Falling back ' +
+        'to running all tests.'
     )
     core.setOutput('onlydocs', false)
     core.setOutput('rsc', true)
