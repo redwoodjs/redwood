@@ -197,7 +197,6 @@ FROM node:20-bookworm-slim as api_serve
 
 RUN apt-get update && apt-get install -y \
     openssl \
-    jq \
     # python3 make gcc \
     && rm -rf /var/lib/apt/lists/*
 ```
@@ -205,8 +204,6 @@ RUN apt-get update && apt-get install -y \
 We don't start from the `base` stage, but begin anew with the `node:20-bookworm-slim` image.
 Since this is a production stage, it's important for it to be as small as possible.
 Docker's [multi-stage builds](https://docs.docker.com/build/building/multi-stage/) enables this.
-Compared to `base`, we've also added `jq` here.
-It's needed to manipulate `package.json`s later.
 
 ```Dockerfile
 USER node
@@ -417,7 +414,6 @@ It's easy to fix: just add `python3` and its dependencies (usually `make` and `g
 
   RUN apt-get update && apt-get install -y \
       openssl \
-      jq \
 +     python3 make gcc \
       && rm -rf /var/lib/apt/lists/*
 ```
