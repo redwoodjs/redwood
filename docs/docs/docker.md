@@ -88,7 +88,7 @@ Just remember to change the `apt-get` instructions further down too if needed.
 RUN corepack enable
 ```
 
-[corepack](https://nodejs.org/docs/latest-v18.x/api/corepack.html) is enabled to make yarn v4 available.
+[corepack](https://nodejs.org/docs/latest-v18.x/api/corepack.html) is enabled to make Yarn v4 available.
 
 ```Dockerfile
 RUN apt-get update && apt-get install -y \
@@ -206,7 +206,7 @@ We don't start from the `base` stage, but begin anew with the `node:20-bookworm-
 Since this is a production stage, it's important for it to be as small as possible.
 Docker's [multi-stage builds](https://docs.docker.com/build/building/multi-stage/) enables this.
 Compared to `base`, we've also added `jq` here.
-It's needed to manipulate `package.json` later.
+It's needed to manipulate `package.json`s later.
 
 ```Dockerfile
 USER node
