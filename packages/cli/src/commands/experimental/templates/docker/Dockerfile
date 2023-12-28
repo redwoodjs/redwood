@@ -1,7 +1,12 @@
 # base
 # ------------------------------------------------
-FROM node:18-bookworm-slim as base
+FROM node:20-bookworm-slim as base
 
+RUN corepack enable
+
+# We tried to make the Dockerfile as lean as possible. In some cases, that means we excluded a dependency your project needs.
+# By far the most common is Python. If you're running into build errors because `python3` isn't available,
+# uncomment the line below here and in other stages as necessary:
 RUN apt-get update && apt-get install -y \
     openssl \
     # python3 make gcc \
@@ -10,13 +15,13 @@ RUN apt-get update && apt-get install -y \
 USER node
 WORKDIR /home/node/app
 
-COPY --chown=node:node .yarn/plugins .yarn/plugins
-COPY --chown=node:node .yarn/releases .yarn/releases
 COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node package.json .
 COPY --chown=node:node api/package.json api/
 COPY --chown=node:node web/package.json web/
 COPY --chown=node:node yarn.lock .
+
+RUN mkdir -p /home/node/.yarn/berry/index
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
@@ -54,7 +59,9 @@ RUN yarn redwood build web --no-prerender
 
 # serve api
 # ------------------------------------------------
-FROM node:18-bookworm-slim as api_serve
+FROM node:20-bookworm-slim as api_serve
+
+RUN corepack enable
 
 RUN apt-get update && apt-get install -y \
     openssl \
@@ -64,11 +71,12 @@ RUN apt-get update && apt-get install -y \
 USER node
 WORKDIR /home/node/app
 
-COPY --chown=node:node .yarn/plugins .yarn/plugins
-COPY --chown=node:node .yarn/releases .yarn/releases
 COPY --chown=node:node .yarnrc.yml .
-COPY --chown=node:node api/package.json .
+COPY --chown=node:node package.json .
+COPY --chown=node:node api/package.json api/
 COPY --chown=node:node yarn.lock .
+
+RUN mkdir -p /home/node/.yarn/berry/index
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
@@ -88,16 +96,19 @@ CMD [ "node_modules/.bin/rw-server", "api", "--load-env-files" ]
 
 # serve web
 # ------------------------------------------------
-FROM node:18-bookworm-slim as web_serve
+FROM node:20-bookworm-slim as web_serve
+
+RUN corepack enable
 
 USER node
 WORKDIR /home/node/app
 
-COPY --chown=node:node .yarn/plugins .yarn/plugins
-COPY --chown=node:node .yarn/releases .yarn/releases
 COPY --chown=node:node .yarnrc.yml .
-COPY --chown=node:node web/package.json .
+COPY --chown=node:node package.json .
+COPY --chown=node:node web/package.json web/
 COPY --chown=node:node yarn.lock .
+
+RUN mkdir -p /home/node/.yarn/berry/index
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \

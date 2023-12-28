@@ -76,6 +76,7 @@ export function unwrap(processOutput) {
  * @param {string} message
  */
 export function consoleBoxen(title, message) {
+  console.log()
   console.log(
     boxen(message, {
       title,

@@ -1,10 +1,10 @@
-import fs from 'fs'
 import path from 'path'
 
 import boxen from 'boxen'
 import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
 import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'

@@ -31,6 +31,7 @@ export * from './graphql'
 export * from './components/RedwoodProvider'
 
 export * from './components/MetaTags'
+export * from './components/Metadata'
 export { Helmet as Head, Helmet } from 'react-helmet-async'
 
 export * from './components/htmlTags'

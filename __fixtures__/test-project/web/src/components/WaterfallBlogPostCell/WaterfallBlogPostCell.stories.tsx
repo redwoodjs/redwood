@@ -5,6 +5,7 @@ import { standard } from './WaterfallBlogPostCell.mock'
 
 const meta: Meta = {
   title: 'Cells/WaterfallBlogPostCell',
+  tags: ['autodocs'],
 }
 
 export default meta

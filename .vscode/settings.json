@@ -3,7 +3,7 @@
   "files.trimTrailingWhitespace": true,
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "workbench.colorCustomizations": {
     "statusBar.background": "#b85833",
@@ -15,6 +15,9 @@
     "**/node_modules": true,
     "**/__fixtures__": true,
     ".yarn-packages-cache": true
+  },
+  "[markdown][html][mjml]": {
+    "files.trimTrailingWhitespace": false
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "peacock.color": "#b85833"

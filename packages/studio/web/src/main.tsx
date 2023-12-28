@@ -25,7 +25,7 @@ import Overview from './Pages/Overview'
 import Performance from './Pages/Performance'
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4318/graphql',
+  uri: `http://localhost:${window.RWJS_STUDIO_BASE_PORT}/graphql`,
   cache: new InMemoryCache({
     typePolicies: {
       Span: {

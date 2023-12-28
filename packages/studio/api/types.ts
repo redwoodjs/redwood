@@ -126,6 +126,7 @@ export interface AuthImpersonationConfig {
 }
 
 export interface StudioConfig {
+  basePort: number
   inMemory: boolean
   graphiql?: GraphiQLStudioConfig
 }

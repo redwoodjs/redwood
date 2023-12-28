@@ -16,6 +16,7 @@ import BlogPost from './BlogPost'
 
 const meta: Meta<typeof BlogPost> = {
   component: BlogPost,
+  tags: ['autodocs'],
 }
 
 export default meta
