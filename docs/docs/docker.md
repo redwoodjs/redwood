@@ -44,6 +44,8 @@ docker compose -f ./docker-compose.prod.yml up
 
 If your api side or web side depend on env vars at build time, you may need to supply them as `--build-args`, or in the compose files.
 
+This is often the most tedious part of setting up Docker. Have ideas of how it could be better? Let us know on the forums!
+
 :::
 
 The first time you do this, you'll have to use the `console` stage to go in and migrate the database—just like you would with a Redwood app on your machine:
@@ -71,7 +73,6 @@ FROM node:20-bookworm-slim as base
 
 We use a Node.js 20 image as the base image because that's the version Redwood targets.
 "bookworm" is the codename for the current stable distribution of Debian (version 12).
-We think it's important to pin the version of the OS just like we pin the version of Node.js.
 Lastly, the "slim" variant of the `node:20-bookworm` image only includes what Node.js needs which reduces the image's size while making it more secure.
 
 :::tip Why not alpine?
@@ -84,11 +85,14 @@ Just remember to change the `apt-get` instructions further down too if needed.
 
 :::
 
+Moving on, next we have `corepack enable`:
+
 ```Dockerfile
 RUN corepack enable
 ```
 
-[corepack](https://nodejs.org/docs/latest-v18.x/api/corepack.html) is enabled to make Yarn v4 available.
+[Corepack](https://nodejs.org/docs/latest-v18.x/api/corepack.html), Node's manager for package managers, needs to be enabled so that Yarn can use the `packageManager` field in your project's root `package.json` to pick the right version of itself.
+If you'd rather check in the binary, you still can, but you'll need to remember to copy it over (i.e. `COPY --chown=node:node .yarn/releases .yarn/releases`).
 
 ```Dockerfile
 RUN apt-get update && apt-get install -y \
@@ -99,7 +103,7 @@ RUN apt-get update && apt-get install -y \
 
 The `node:20-bookworm-slim` image doesn't have [OpenSSL](https://www.openssl.org/), which [seems to be a bug](https://github.com/nodejs/docker-node/issues/1919).
 (It was included in the "bullseye" image, the codename for Debian 11.)
-On Linux, [Prisma needs OpenSSL](https://www.prisma.io/docs/reference/system-requirements#linux-runtime-dependencies), so we install it.
+On Linux, [Prisma needs OpenSSL](https://www.prisma.io/docs/reference/system-requirements#linux-runtime-dependencies), so we install it here via Ubuntu's package manager APT.
 Python and its dependencies are there ready to be uncommented if you need them. See the [Troubleshooting](#python) section for more information.
 
 [It's recommended](https://docs.docker.com/develop/develop-images/instructions/#apt-get) to combine `apt-get update` and `apt-get install -y` in the same `RUN` statement for cache busting.
@@ -111,7 +115,7 @@ USER node
 
 This and subsequent `chown` options in `COPY` instructions are for security.
 [Services that can run without privileges should](https://docs.docker.com/develop/develop-images/instructions/#user).
-The Node.js image includes a user, `node`, created with an explicit `uid` and `gid`.
+The Node.js image includes a user, `node`, created with an explicit `uid` and `gid` (`1000`).
 We reuse it.
 
 ```Dockerfile
@@ -126,11 +130,13 @@ COPY --chown=node:node yarn.lock .
 
 Here we copy the minimum set of files that the `yarn install` step needs.
 The order isn't completely arbitrary—it tries to maximize [Docker's layer caching](https://docs.docker.com/build/cache/).
-We expect `yarn.lock` to change more than the package.json files, the package.json files to change more than `.yarnrc.yml` , and `.yarnrc.yml` to change more than the binary, etc.
+We expect `yarn.lock` to change more than the `package.json`s and the `package.json`s  to change more than `.yarnrc.yml`.
 That said, it's hard to argue that these files couldn't be arranged differently, or that the `COPY` instructions couldn't be combined.
 The important thing is that they're all here, before the `yarn install` step:
 
 ```Dockerfile
+RUN mkdir -p /home/node/.yarn/berry/index
+
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
     CI=1 yarn install
@@ -140,6 +146,8 @@ This step installs all your project's dependencies—production and dev.
 Since we use multi-stage builds, your production images won't pay for the dev dependencies installed in this step.
 The build stages need the dev dependencies.
 
+The `mkdir` step is a workaround for a permission error. We're working on removing it, but for now if you remove it the install step will probably fail.
+
 This step is a bit more involved than the others.
 It uses a [cache mount](https://docs.docker.com/build/cache/#use-your-package-manager-wisely).
 Yarn operates in three steps: resolution, fetch, and link.
@@ -148,11 +156,8 @@ We could disable it all together, but by using a cache mount, we can still get t
 We set it to the default directory here, but you can change its location in `.yarnrc.yml`.
 If you've done so you'll have to change it here too.
 
-The last thing to note is that we designate the node user.
-[The node user's `uid` is `1000`](https://github.com/nodejs/docker-node/blob/57d57436d1cb175e5f7c8d501df5893556c886c2/18/bookworm-slim/Dockerfile#L3-L4).
-
 One more thing to note: without setting `CI=1`, depending on the deploy provider, yarn may think it's in a TTY, making the logs difficult to read. With this set, yarn adapts accordingly.
-Enabling CI enables [immutable installs](https://v3.yarnpkg.com/configuration/yarnrc#enableImmutableInstalls) and [inline builds](https://v3.yarnpkg.com/configuration/yarnrc#enableInlineBuilds), both of which are highly recommended. For more information on those settings:
+Enabling CI enables [immutable installs](https://v3.yarnpkg.com/configuration/yarnrc#enableImmutableInstalls) and [inline builds](https://v3.yarnpkg.com/configuration/yarnrc#enableInlineBuilds), both of which are highly recommended.
 
 ```Dockerfile
 COPY --chown=node:node redwood.toml .
@@ -164,11 +169,13 @@ We'll need these config files for the build and production stages.
 The `redwood.toml` file is Redwood's de-facto config file.
 Both the build and serve stages read it to enable and configure functionality.
 
-`.env.defaults` is ok to include.
-This file is committed to git, but `.env` is not.
+:::warning `.env.defaults` is ok to include but `.env` is not
+
 If you add a secret to the Dockerfile, it can be excavated.
 While it's technically true that multi stage builds add a sort of security layer, it's not a best practice.
 Leave them out and look to your deploy provider for further configuration.
+
+:::
 
 ### The `api_build` stage
 
@@ -195,6 +202,8 @@ The `api_serve` stage serves your GraphQL api and functions:
 ```Dockerfile
 FROM node:20-bookworm-slim as api_serve
 
+RUN corepack enable
+
 RUN apt-get update && apt-get install -y \
     openssl \
     # python3 make gcc \
@@ -210,16 +219,16 @@ USER node
 WORKDIR /home/node/app
 
 COPY --chown=node:node .yarnrc.yml .yarnrc.yml
-COPY --chown=node:node api/package.json .
+COPY --chown=node:node package.json .
+COPY --chown=node:node api/package.json api/
 COPY --chown=node:node yarn.lock yarn.lock
 ```
-
-The thing that's easy to miss here is that we're copying the `api/package.json` file into the base directory, so that it's just `package.json` in the image.
-This is for the production `yarn install` in the next step.
 
 Like other `COPY` instructions, ordering these files with care enables layering caching.
 
 ```Dockerfile
+RUN mkdir -p /home/node/.yarn/berry/index
+
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
     CI=1 yarn workspaces focus api --production
@@ -242,9 +251,9 @@ COPY --chown=node:node --from=api_build /home/node/app/node_modules/.prisma /hom
 ```
 
 Here's where we really take advantage of multi-stage builds by copying from the `api_build` stage.
-All the building has been done for us—now we can just grab the artifacts without having to lug around the dev dependencies.
+At this point all the building has been done. Now we can just grab the artifacts without having to lug around the dev dependencies.
 
-There's one more thing that was built—the prisma client in `node_modules/.prisma`.
+There's one more thing that was built: the prisma client in `node_modules/.prisma`.
 We need to grab it too.
 
 ```Dockerfile
@@ -256,7 +265,7 @@ CMD [ "node_modules/.bin/rw-server", "api", "--load-env-files" ]
 Lastly, the default command is to start the api server using the bin from the `@redwoodjs/api-server` package.
 You can override this command if you have more specific needs.
 
-Note that the Redwood CLI isn't available anymore.
+Note that the Redwood CLI isn't available anymore. (It's a dev dependency.)
 To access the server bin, we have to find its path in `node_modules`.
 Though this is somewhat discouraged in modern yarn, since we're using the `node-modules` node linker, it's in `node_modules/.bin`.
 
@@ -268,7 +277,7 @@ This `web_build` builds the web side:
 FROM base as web_build
 
 COPY --chown=node:node web web
-RUN node_modules/.bin/redwood build web --no-prerender
+RUN yarn redwood build web --no-prerender
 ```
 
 After the work we did in the base stage, building the web side amounts to copying in the web directory and running `yarn redwood build web`.
@@ -300,12 +309,17 @@ The key line here is the first one—this stage uses the `api_build` stage as it
 ```Dockerfile
 FROM node:20-bookworm-slim as web_serve
 
+RUN corepack enable
+
 USER node
 WORKDIR /home/node/app
 
 COPY --chown=node:node .yarnrc.yml .
+COPY --chown=node:node package.json .
 COPY --chown=node:node web/package.json .
 COPY --chown=node:node yarn.lock .
+
+RUN mkdir -p /home/node/.yarn/berry/index
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
