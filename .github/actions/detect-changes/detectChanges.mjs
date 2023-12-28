@@ -59,6 +59,12 @@ async function getChangedFiles(page = 1, retries = 0) {
       },
     })
 
+    if (!resp.ok) {
+      console.log()
+      console.error('Response not ok')
+      console.log('resp', resp)
+    }
+
     const json = await resp.json()
     files = json.map((file) => file.filename) || []
   } catch (e) {
@@ -103,8 +109,8 @@ async function main() {
 
   if (changedFiles.length === 0) {
     console.log(
-      'No changed files found. Something must have gone wrong. Fall back to ' +
-        'running all tests.'
+      'No changed files found. Something must have gone wrong. Falling back ' +
+        'to running all tests.'
     )
     core.setOutput('onlydocs', false)
     core.setOutput('rsc', true)
