@@ -1,18 +1,16 @@
-import type { PluginBuild } from 'esbuild'
-import { build } from 'esbuild'
+import type { Format, Platform, PluginBuild } from 'esbuild'
+import { build, context } from 'esbuild'
 import { removeSync } from 'fs-extra'
 
 import {
   getApiSideBabelPlugins,
   transformWithBabel,
 } from '@redwoodjs/babel-config'
-import { getPaths, getConfig } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { findApiFiles } from '../files'
 
 export const buildApi = async () => {
-  // TODO: Be smarter about caching and invalidating files,
-  // but right now we just delete everything.
   cleanApiBuild()
   return transpileApi(findApiFiles())
 }
@@ -50,15 +48,28 @@ const runRwBabelTransformsPlugin = {
   },
 }
 
-export const transpileApi = async (files: string[], options = {}) => {
+export const watchApi = async () => {
+  const apiFiles = findApiFiles()
+
+  const esbCtx = await context(getEsbuildOptions(apiFiles))
+
+  return esbCtx.watch()
+}
+
+export const transpileApi = async (files: string[]) => {
+  return build(getEsbuildOptions(files))
+}
+
+function getEsbuildOptions(files: string[]) {
   const rwjsPaths = getPaths()
 
-  return build({
+  return {
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
-    platform: 'node',
+    platform: 'node' as Platform,
     target: 'node20',
-    format: 'cjs',
+    format: 'cjs' as Format,
+    allowOverwrite: true,
     bundle: false,
     plugins: [runRwBabelTransformsPlugin],
     outdir: rwjsPaths.api.dist,
@@ -66,6 +77,5 @@ export const transpileApi = async (files: string[], options = {}) => {
     // AND set the sourceMappingURL comment
     // (setting it to 'external' will ONLY generate the file, but won't add the comment)
     sourcemap: true,
-    ...options,
-  })
+  }
 }

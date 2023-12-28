@@ -1,26 +1,20 @@
 #!/usr/bin/env node
 
-import { fork } from 'child_process'
 import type { ChildProcess } from 'child_process'
+import { fork } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
 import c from 'ansi-colors'
 import chalk from 'chalk'
-import chokidar from 'chokidar'
 import dotenv from 'dotenv'
 import { debounce } from 'lodash'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { buildApi } from '@redwoodjs/internal/dist/build/api'
+import { buildApi, watchApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
-import {
-  getPaths,
-  ensurePosixPath,
-  getConfig,
-  resolveFile,
-} from '@redwoodjs/project-config'
+import { getConfig, getPaths, resolveFile } from '@redwoodjs/project-config'
 
 const argv = yargs(hideBin(process.argv))
   .option('debug-port', {
@@ -150,64 +144,6 @@ const delayRestartServer = debounce(
     : 5
 )
 
-// NOTE: the file comes through as a unix path, even on windows
-// So we need to convert the rwjsPaths
-
-const IGNORED_API_PATHS = [
-  'api/dist', // use this, because using rwjsPaths.api.dist seems to not ignore on first build
-  rwjsPaths.api.types,
-  rwjsPaths.api.db,
-].map((path) => ensurePosixPath(path))
-
-chokidar
-  .watch(rwjsPaths.api.base, {
-    persistent: true,
-    ignoreInitial: true,
-    ignored: (file: string) => {
-      const x =
-        file.includes('node_modules') ||
-        IGNORED_API_PATHS.some((ignoredPath) => file.includes(ignoredPath)) ||
-        [
-          '.DS_Store',
-          '.db',
-          '.sqlite',
-          '-journal',
-          '.test.js',
-          '.test.ts',
-          '.scenarios.ts',
-          '.scenarios.js',
-          '.d.ts',
-          '.log',
-        ].some((ext) => file.endsWith(ext))
-      return x
-    },
-  })
-  .on('ready', async () => {
-    rebuildApiServer()
-    await validate()
-  })
-  .on('all', async (eventName, filePath) => {
-    // On sufficiently large projects (500+ files, or >= 2000 ms build times) on older machines, esbuild writing to the api directory
-    // makes chokidar emit an `addDir` event. This starts an infinite loop where the api starts building itself as soon as it's finished.
-    // This could probably be fixed with some sort of build caching.
-    if (eventName === 'addDir' && filePath === rwjsPaths.api.base) {
-      return
-    }
-
-    // We validate here, so that developers will see the error
-    // As they're running the dev server
-    if (filePath.includes('.sdl')) {
-      const isValid = await validate()
-
-      // Exit early if not valid
-      if (!isValid) {
-        return
-      }
-    }
-
-    console.log(
-      c.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`)
-    )
-    delayRestartServer.cancel()
-    delayRestartServer()
-  })
+// Use esbuild's watcher instead of chokidar
+// Restarts seem to be handled by nodemon
+watchApi()
