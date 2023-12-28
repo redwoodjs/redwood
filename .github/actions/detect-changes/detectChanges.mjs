@@ -29,26 +29,49 @@ const getPrNumber = (githubRef) => {
   return prNumber
 }
 
-async function getChangedFiles(page = 1) {
+async function getChangedFiles(page = 1, retries = 0) {
   const prNumber = getPrNumber()
 
-  console.log(`Getting changed files for PR ${prNumber} (page ${page})`)
+  if (retries) {
+    console.log(
+      `Retry ${retries}: Getting changed files for PR ${prNumber} (page ${page})`
+    )
+  } else {
+    console.log(`Getting changed files for PR ${prNumber} (page ${page})`)
+  }
 
   let changedFiles = []
 
   // Query the GitHub API to get the changed files in the PR
   const githubToken = process.env.GITHUB_TOKEN
   const url = `https://api.github.com/repos/redwoodjs/redwood/pulls/${prNumber}/files?per_page=100&page=${page}`
-  const resp = await fetch(url, {
-    headers: {
-      Authorization: githubToken ? `Bearer ${githubToken}` : undefined,
-      ['X-GitHub-Api-Version']: '2022-11-28',
-      Accept: 'application/vnd.github+json',
-    },
-  })
+  let resp
+  let files
 
-  const json = await resp.json()
-  const files = json?.map((file) => file.filename) || []
+  try {
+    resp = await fetch(url, {
+      headers: {
+        Authorization: githubToken ? `Bearer ${githubToken}` : undefined,
+        ['X-GitHub-Api-Version']: '2022-11-28',
+        Accept: 'application/vnd.github+json',
+      },
+    })
+
+    const json = await resp.json()
+    files = json.map((file) => file.filename) || []
+  } catch (e) {
+    if (retries >= 3) {
+      console.error(e)
+
+      console.log()
+      console.log('Too many retries, giving up.')
+
+      return []
+    } else {
+      await new Promise((resolve) => setTimeout(resolve, 3000))
+      getChangedFiles(page, ++retries)
+    }
+  }
 
   changedFiles = changedFiles.concat(files)
 
