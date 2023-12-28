@@ -27,17 +27,14 @@ describe('usePathMatch', () => {
   let locationPathname = '/dummy-location'
   let locationSearch = ''
 
-  function createLocationWrapper() {
-    const mockLocation = createDummyLocation(locationPathname, locationSearch)
-    return ({ children }) => (
-      <LocationProvider location={mockLocation}>{children}</LocationProvider>
-    )
-  }
-
   type CallbackType = Parameters<typeof testingLibraryReact.renderHook>[0]
   function renderHook(cb: CallbackType) {
+    const mockLocation = createDummyLocation(locationPathname, locationSearch)
+
     return testingLibraryReact.renderHook(cb, {
-      wrapper: createLocationWrapper(),
+      wrapper: ({ children }) => (
+        <LocationProvider location={mockLocation}>{children}</LocationProvider>
+      ),
     })
   }
 
@@ -45,8 +42,6 @@ describe('usePathMatch', () => {
     locationPathname = pathname
     locationSearch = search
   }
-
-  beforeAll(() => {})
 
   afterEach(() => {
     setLocation('/dummy-location')

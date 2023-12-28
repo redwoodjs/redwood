@@ -149,7 +149,7 @@ export function matchPath(
   const matches = [...pathname.matchAll(matchRegex)]
 
   if (matches.length === 0) {
-    return { match: false, params: undefined }
+    return { match: false }
   }
   // Map extracted values to their param name, casting the value if needed
   const providedParams = matches[0].slice(1)
@@ -177,7 +177,7 @@ export function matchPath(
     return { match: true, params }
   }
 
-  return { match: true, params: undefined }
+  return { match: true }
 }
 
 interface GetRouteRegexOptions {

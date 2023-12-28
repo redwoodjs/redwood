@@ -42,7 +42,7 @@ export const useLocationMatch = (
   options?: UseMatchOptions
 ) => {
   if (!location) {
-    return { match: false, params: undefined }
+    return { match: false }
   }
 
   if (options?.searchParams) {
@@ -58,7 +58,7 @@ export const useLocationMatch = (
     })
 
     if (hasUnmatched) {
-      return { match: false, params: undefined }
+      return { match: false }
     }
   }
 
