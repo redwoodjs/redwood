@@ -143,5 +143,4 @@ const delayRestartServer = debounce(
 )
 
 // Use esbuild's watcher instead of chokidar
-// Restarts seem to be handled by nodemon
 watchApi(delayRestartServer)
