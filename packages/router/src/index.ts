@@ -3,7 +3,7 @@
 // latter of which has closely inspired some of this code).
 
 export { navigate, back } from './history'
-export { Link, NavLink, useMatch, Redirect } from './links'
+export { Link, NavLink, Redirect } from './links'
 export { useLocation, LocationProvider } from './location'
 export {
   usePageLoadingContext,
