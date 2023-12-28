@@ -18,7 +18,7 @@ COPY --chown=node:node api/package.json api/
 COPY --chown=node:node web/package.json web/
 COPY --chown=node:node yarn.lock .
 
-RUN mkdir -p /home/node/.yarn/berry/info
+RUN mkdir -p /home/node/.yarn/berry/index
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
@@ -73,16 +73,15 @@ COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node api/package.json .
 COPY --chown=node:node yarn.lock .
 
-# Copy over the project root package.json to get the packageManager from it,
-# then write it to the api package.json that is the new root package.json in
-# the container
+# Here we're copying over the root `package.json` to get `packageManager` from it,
+# then writing it to the api side's `package.json` since it's the new root `package.json`.
 COPY --chown=node:node package.json /tmp/root-package.json
-RUN export PACKAGE_MANAGER=$(jq -r .packageManager /tmp/root-package.json) \
+RUN PACKAGE_MANAGER=$(jq -r .packageManager /tmp/root-package.json) \
     && jq --arg packageManager $PACKAGE_MANAGER '. + { "packageManager": $packageManager }' package.json \
-    > /tmp/tmp-package.json \
-    && mv /tmp/tmp-package.json package.json
+    > /tmp/api-package.json \
+    && mv /tmp/api-package.json package.json
 
-RUN mkdir -p /home/node/.yarn/berry/info
+RUN mkdir -p /home/node/.yarn/berry/index
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
@@ -117,16 +116,15 @@ COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node web/package.json .
 COPY --chown=node:node yarn.lock .
 
-# Copy over the project root package.json to get the packageManager from it,
-# then write it to the web package.json that is the new root package.json in
-# the container
+# Here we're copying over the root `package.json` to get `packageManager` from it,
+# then writing it to the web side's `package.json` since it's the new root `package.json`.
 COPY --chown=node:node package.json /tmp/root-package.json
-RUN export PACKAGE_MANAGER=$(jq -r .packageManager /tmp/root-package.json) \
+RUN PACKAGE_MANAGER=$(jq -r .packageManager /tmp/root-package.json) \
     && jq --arg packageManager $PACKAGE_MANAGER '. + { "packageManager": $packageManager }' package.json \
-    > /tmp/tmp-package.json \
-    && mv /tmp/tmp-package.json package.json
+    > /tmp/web-package.json \
+    && mv /tmp/web-package.json package.json
 
-RUN mkdir -p /home/node/.yarn/berry/info
+RUN mkdir -p /home/node/.yarn/berry/index
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
