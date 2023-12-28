@@ -1,3 +1,4 @@
+import type { LocationContextType } from './location'
 import { useLocation } from './location'
 import { matchPath } from './util'
 import type { FlattenSearchParams } from './util'
@@ -32,9 +33,16 @@ type UseMatchOptions = {
  * const match = useMatch('/product', { matchSubPaths: true })
  */
 export const useMatch = (pathname: string, options?: UseMatchOptions) => {
-  const location = useLocation()
+  return useLocationMatch(useLocation(), pathname, options)
+}
+
+export const useLocationMatch = (
+  location: LocationContextType,
+  pathname: string,
+  options?: UseMatchOptions
+) => {
   if (!location) {
-    return { match: false }
+    return { match: false, params: undefined }
   }
 
   if (options?.searchParams) {
@@ -50,7 +58,7 @@ export const useMatch = (pathname: string, options?: UseMatchOptions) => {
     })
 
     if (hasUnmatched) {
-      return { match: false }
+      return { match: false, params: undefined }
     }
   }
 
