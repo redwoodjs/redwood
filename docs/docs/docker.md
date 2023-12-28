@@ -88,7 +88,7 @@ Just remember to change the `apt-get` instructions further down too if needed.
 RUN corepack enable
 ```
 
-[corepack](https://nodejs.org/docs/latest-v18.x/api/corepack.html) is enabled to make yarn v4 available to the Redwood project.
+[corepack](https://nodejs.org/docs/latest-v18.x/api/corepack.html) is enabled to make yarn v4 available.
 
 ```Dockerfile
 RUN apt-get update && apt-get install -y \
