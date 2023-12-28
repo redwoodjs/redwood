@@ -82,13 +82,13 @@ In developing this Dockerfile, we prioritized security over size.
 If you know what you're doing feel free to change this—it's your Dockerfile now!
 Just remember to change the `apt-get` instructions further down too if needed.
 
+:::
+
 ```Dockerfile
 RUN corepack enable
 ```
 
-corepack is enabled to make yarn v4 available to the Redwood project
-
-:::
+[corepack](https://nodejs.org/docs/latest-v18.x/api/corepack.html) is enabled to make yarn v4 available to the Redwood project.
 
 ```Dockerfile
 RUN apt-get update && apt-get install -y \
@@ -99,8 +99,8 @@ RUN apt-get update && apt-get install -y \
 
 The `node:20-bookworm-slim` image doesn't have [OpenSSL](https://www.openssl.org/), which [seems to be a bug](https://github.com/nodejs/docker-node/issues/1919).
 (It was included in the "bullseye" image, the codename for Debian 11.)
-On Linux, [Prisma needs OpenSSL](https://www.prisma.io/docs/reference/system-requirements#linux-runtime-dependencies),
-that's why we install it. Python and its dependencies are there ready to be uncommented if you need them. See the [Troubleshooting](#python) section for more info.
+On Linux, [Prisma needs OpenSSL](https://www.prisma.io/docs/reference/system-requirements#linux-runtime-dependencies), so we install it.
+Python and its dependencies are there ready to be uncommented if you need them. See the [Troubleshooting](#python) section for more information.
 
 [It's recommended](https://docs.docker.com/develop/develop-images/instructions/#apt-get) to combine `apt-get update` and `apt-get install -y` in the same `RUN` statement for cache busting.
 After installing, we clean up the apt cache to keep the layer lean. (Running `apt-get clean` isn't required—[official Debian images do it automatically](https://github.com/moby/moby/blob/03e2923e42446dbb830c654d0eec323a0b4ef02a/contrib/mkimage/debootstrap#L82-L105).)
@@ -205,7 +205,8 @@ RUN apt-get update && apt-get install -y \
 We don't start from the `base` stage, but begin anew with the `node:20-bookworm-slim` image.
 Since this is a production stage, it's important for it to be as small as possible.
 Docker's [multi-stage builds](https://docs.docker.com/build/building/multi-stage/) enables this.
-In comparison to `base` we've also added `jq` here. It's needed to manipulate `package.json` later.
+Compared to `base`, we've also added `jq` here.
+It's needed to manipulate `package.json` later.
 
 ```Dockerfile
 USER node
