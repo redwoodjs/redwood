@@ -47,10 +47,11 @@ async function getChangedFiles(page = 1, retries = 0) {
   // Query the GitHub API to get the changed files in the PR
   const githubToken = process.env.GITHUB_TOKEN
   const url = `https://api.github.com/repos/redwoodjs/redwood/pulls/${prNumber}/files?per_page=100&page=${page}`
+  let resp
   let files
 
   try {
-    const resp = await fetch(url, {
+    resp = await fetch(url, {
       headers: {
         Authorization: githubToken ? `Bearer ${githubToken}` : undefined,
         ['X-GitHub-Api-Version']: '2022-11-28',
