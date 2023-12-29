@@ -1272,6 +1272,7 @@ export const QUERY = gql\`
     }
   }
 \`
+
 const UPDATE_USER_PROFILE_MUTATION = gql\`
   mutation UpdateUserProfileMutation(
     $id: Int!
@@ -1514,6 +1515,7 @@ export default EditPostPage
 exports[`in typescript mode creates a form component 1`] = `
 "import type { EditPostById, UpdatePostInput } from 'types/graphql'
 
+import type { RWGqlError } from '@redwoodjs/forms'
 import {
   Form,
   FormError,
@@ -1526,7 +1528,6 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-import type { RWGqlError } from '@redwoodjs/forms'
 
 const formatDatetime = (value) => {
   if (value) {
@@ -2849,6 +2850,7 @@ export const QUERY: TypedDocumentNode<EditPostById> = gql\`
     }
   }
 \`
+
 const UPDATE_POST_MUTATION: TypedDocumentNode<
   EditPostById,
   UpdatePostInput
@@ -2932,6 +2934,7 @@ export const QUERY: TypedDocumentNode<EditUserProfileById> = gql\`
     }
   }
 \`
+
 const UPDATE_USER_PROFILE_MUTATION: TypedDocumentNode<
   EditUserProfileById,
   UpdateUserProfileInput

@@ -11,7 +11,7 @@ import { toast } from '@redwoodjs/web/toast'
 
 import ${singularPascalName}Form from '${importComponentNameForm}'
 
-export const QUERY: TypedDocumentNode<Edit${singularPascalName}ById> = gql`
+export const QUERY: TypedDocumentNode<Edit${singularPascalName}By${pascalIdName}> = gql`
   query Edit${singularPascalName}By${pascalIdName}($${idName}: ${idType}!) {
     ${singularCamelName}: ${singularCamelName}(${idName}: $${idName}) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>

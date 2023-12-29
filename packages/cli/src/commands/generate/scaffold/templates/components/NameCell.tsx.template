@@ -1,4 +1,4 @@
-import type { Find${singularPascalName}ById, Find${singularPascalName}ByIdVariables } from 'types/graphql'
+import type { Find${singularPascalName}By${pascalIdName}, Find${singularPascalName}By${pascalIdName}Variables } from 'types/graphql'
 
 import type {
   CellSuccessProps,
@@ -9,8 +9,8 @@ import type {
 import ${singularPascalName} from '${importComponentName}'
 
 export const QUERY: TypedDocumentNode<
-   Find${singularPascalName}ById,
-   Find${singularPascalName}ByIdVariables
+   Find${singularPascalName}By${pascalIdName},
+   Find${singularPascalName}By${pascalIdName}Variables
 > = gql`
   query Find${singularPascalName}By${pascalIdName}($${idName}: ${idType}!) {
     ${singularCamelName}: ${singularCamelName}(${idName}: $${idName}) {<% columns.forEach(column => { %>
@@ -23,10 +23,10 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>${singularPascalName} not found</div>
 
-export const Failure = ({ error }: CellFailureProps<Find${singularPascalName}ByIdVariables>) => (
+export const Failure = ({ error }: CellFailureProps<Find${singularPascalName}By${pascalIdName}Variables>) => (
   <div className="rw-cell-error">{error?.message}</div>
 )
 
-export const Success = ({ ${singularCamelName} }: CellSuccessProps<Find${singularPascalName}ById, Find${singularPascalName}ByIdVariables>) => {
+export const Success = ({ ${singularCamelName} }: CellSuccessProps<Find${singularPascalName}By${pascalIdName}, Find${singularPascalName}By${pascalIdName}Variables>) => {
   return <${singularPascalName} ${singularCamelName}={${singularCamelName}} />
 }

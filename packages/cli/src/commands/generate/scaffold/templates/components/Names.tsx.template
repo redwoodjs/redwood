@@ -1,4 +1,4 @@
-import type { Delete${singularPascalName}Mutation, Delete${singularPascalName}MutationVariables, Find${pluralPascalName}} from 'types/graphql'
+import type { Delete${singularPascalName}Mutation, Delete${singularPascalName}MutationVariables, Find${pluralPascalName} } from 'types/graphql'
 
 import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
