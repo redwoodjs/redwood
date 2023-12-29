@@ -1,5 +1,5 @@
+import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import path from 'path'
 
 import klawSync from 'klaw-sync'
 
@@ -7,7 +7,7 @@ const TS_TEMPLATE_DIR = fileURLToPath(
   new URL('../templates/ts', import.meta.url)
 )
 
-describe('template', () => {
+describe('TS template', () => {
   it('files should not have changed unintentionally', () => {
     expect(getDirectoryStructure(TS_TEMPLATE_DIR)).toMatchInlineSnapshot(`
       [

@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /* eslint-env node */
 
 import { cd, fs, $ } from 'zx'
@@ -7,36 +6,31 @@ const projectPath = await fs.realpath(process.env.PROJECT_PATH)
 
 cd(projectPath)
 
-describe('crwa', () => {
+describe('create-redwood-app', () => {
   test('--help', async () => {
     const p = await $`yarn create-redwood-app --help`
 
     expect(p.exitCode).toEqual(0)
     expect(p.stdout).toMatchInlineSnapshot(`
-      "------------------------------------------------------------------
-                      🌲⚡️ Welcome to RedwoodJS! ⚡️🌲
-      ------------------------------------------------------------------
-      Usage: create-redwood-app <project directory> [option]
+      "Usage: create-redwood-app <project directory>
 
       Options:
             --help              Show help                                    [boolean]
-            --typescript, --ts  Generate a TypeScript project.
-                                                             [boolean] [default: null]
+            --version           Show version number                          [boolean]
+        -y, --yes               Skip prompts and use defaults[boolean] [default: null]
             --overwrite         Create even if target directory isn't empty
                                                             [boolean] [default: false]
+            --typescript, --ts  Generate a TypeScript project[boolean] [default: null]
+            --git-init, --git   Initialize a git repository  [boolean] [default: null]
+        -m, --commit-message    Commit message for the initial commit
+                                                              [string] [default: null]
             --telemetry         Enables sending telemetry events for this create
                                 command and all Redwood CLI commands
                                 https://telemetry.redwoodjs.com
                                                              [boolean] [default: true]
-            --git-init, --git   Initialize a git repository. [boolean] [default: null]
-        -m, --commit-message    Commit message for the initial commit.
-                                                              [string] [default: null]
-        -y, --yes               Skip prompts and use defaults.
-                                                             [boolean] [default: null]
-            --version           Show version number                          [boolean]
 
       Examples:
-        create-redwood-app newapp
+        create-redwood-app my-redwood-app
       [?25l[?25h"
     `)
     expect(p.stderr).toMatchInlineSnapshot(`"[?25l[?25h"`)
@@ -47,10 +41,7 @@ describe('crwa', () => {
 
     expect(p.exitCode).toEqual(0)
     expect(p.stdout).toMatchInlineSnapshot(`
-      "------------------------------------------------------------------
-                      🌲⚡️ Welcome to RedwoodJS! ⚡️🌲
-      ------------------------------------------------------------------
-      6.0.7
+      "6.0.7
       [?25l[?25h"
     `)
     expect(p.stderr).toMatchInlineSnapshot(`"[?25l[?25h"`)
@@ -58,10 +49,6 @@ describe('crwa', () => {
 
   test('--yes, -y', async () => {
     const p = await $`yarn create-redwood-app ./redwood-app --yes`
-
-    // await $`yarn create-redwood-app redwood-app -y`
-    // # `yarn pack` seems to ignore `.yarnrc.yml`
-    // # cp "$SCRIPT_DIR/templates/ts/.yarnrc.yml" "$CRWA_ESM_TESTING_DIR"
 
     expect(p.exitCode).toEqual(0)
     expect(p.stdout).toMatchInlineSnapshot(`
@@ -96,7 +83,7 @@ describe('crwa', () => {
     await fs.rm('./redwood-app', { recursive: true, force: true })
   })
 
-  test.failing('fails on unknown options', async () => {
+  it.failing('fails on unknown options', async () => {
     try {
       await $`yarn create-redwood-app --unknown-options`.timeout(2500)
       // Fail the test if the function didn't throw.

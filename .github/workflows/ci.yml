@@ -750,11 +750,13 @@ jobs:
         env:
           PROJECT_PATH: ${{ env.PROJECT_PATH }}
 
-      - name: Prompt tests
+      - name: Install expect
         run: |
           sudo apt-get update
           sudo apt-get install expect
 
+      - name: Prompt tests
+        run: |
           ./tests/e2e_prompts.sh
           sleep 1
           ./tests/e2e_prompts_git.sh
@@ -764,6 +766,28 @@ jobs:
           ./tests/e2e_prompts_ts.sh
           sleep 1
           ./tests/e2e_prompts_overwrite.sh
+        working-directory: ./packages/create-redwood-app
+        env:
+          PROJECT_PATH: ${{ env.PROJECT_PATH }}
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Prompt tests
+        run: ./tests/e2e_prompts_node_less.sh
+        working-directory: ./packages/create-redwood-app
+        env:
+          PROJECT_PATH: ${{ env.PROJECT_PATH }}
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+
+      - name: Prompt tests
+        run: ./tests/e2e_prompts_node_greater.sh
         working-directory: ./packages/create-redwood-app
         env:
           PROJECT_PATH: ${{ env.PROJECT_PATH }}
