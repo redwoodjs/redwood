@@ -1,4 +1,4 @@
-import type { Format, Platform, PluginBuild } from 'esbuild'
+import type { Format, Platform, PluginBuild, BuildContext } from 'esbuild'
 import { build, context } from 'esbuild'
 import { removeSync } from 'fs-extra'
 
@@ -10,9 +10,25 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { findApiFiles } from '../files'
 
+let BUILD_CTX: BuildContext | null = null
+
 export const buildApi = async () => {
   cleanApiBuild()
   return transpileApi(findApiFiles())
+}
+
+export const rebuildApi = async () => {
+  const apiFiles = findApiFiles()
+
+  if (!BUILD_CTX) {
+    BUILD_CTX = await context(getEsbuildOptions(apiFiles, () => {}))
+  }
+
+  console.log('definitely rebuilding!!')
+  console.log('definitely rebuilding!!')
+  console.log('definitely rebuilding!!')
+  console.log('definitely rebuilding!!')
+  return BUILD_CTX.rebuild()
 }
 
 export const cleanApiBuild = () => {

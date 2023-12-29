@@ -1,20 +1,27 @@
 #!/usr/bin/env node
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
-import type { ChildProcess } from 'child_process'
 import { fork } from 'child_process'
+import type { ChildProcess } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
 import c from 'ansi-colors'
 import chalk from 'chalk'
+import chokidar from 'chokidar'
 import dotenv from 'dotenv'
 import { debounce } from 'lodash'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { buildApi, watchApi } from '@redwoodjs/internal/dist/build/api'
-import { getConfig, getPaths, resolveFile } from '@redwoodjs/project-config'
+import { buildApi, rebuildApi } from '@redwoodjs/internal/dist/build/api'
+import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
+import {
+  getPaths,
+  ensurePosixPath,
+  getConfig,
+  resolveFile,
+  getConfigPath,
+} from '@redwoodjs/project-config'
 
 const argv = yargs(hideBin(process.argv))
   .option('debug-port', {
@@ -44,30 +51,34 @@ const killApiServer = () => {
   httpServerProcess?.kill()
 }
 
-// @TODO need to enable validation
-// const validate = async () => {
-//   try {
-//     await loadAndValidateSdls()
-//     return true
-//   } catch (e: any) {
-//     killApiServer()
-//     console.log(c.redBright(`[GQL Server Error] - Schema validation failed`))
-//     console.error(c.red(e?.message))
-//     console.log(c.redBright('-'.repeat(40)))
+const validate = async () => {
+  try {
+    await loadAndValidateSdls()
+    return true
+  } catch (e: any) {
+    killApiServer()
+    console.log(c.redBright(`[GQL Server Error] - Schema validation failed`))
+    console.error(c.red(e?.message))
+    console.log(c.redBright('-'.repeat(40)))
 
-//     delayRestartServer.cancel()
-//     return false
-//   }
-// }
+    delayRestartServer.cancel()
+    return false
+  }
+}
 
-const rebuildApiServer = async () => {
+const rebuildApiServer = (rebuild = false) => {
   try {
     // Shutdown API server
     killApiServer()
 
     const buildTs = Date.now()
     process.stdout.write(c.dim(c.italic('Building... ')))
-    await buildApi()
+
+    if (rebuild) {
+      rebuildApi()
+    } else {
+      buildApi()
+    }
     console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
 
     const forkOpts = {
@@ -136,11 +147,70 @@ const rebuildApiServer = async () => {
 // Local writes are very fast, but writes in e2e environments are not,
 // so allow the default to be adjust with a env-var.
 const delayRestartServer = debounce(
-  rebuildApiServer,
+  () => rebuildApiServer(true),
   process.env.RWJS_DELAY_RESTART
     ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
     : 5
 )
 
-// Use esbuild's watcher instead of chokidar
-watchApi(delayRestartServer)
+// NOTE: the file comes through as a unix path, even on windows
+// So we need to convert the rwjsPaths
+
+const IGNORED_API_PATHS = [
+  'api/dist', // use this, because using rwjsPaths.api.dist seems to not ignore on first build
+  rwjsPaths.api.types,
+  rwjsPaths.api.db,
+].map((path) => ensurePosixPath(path))
+
+chokidar
+  .watch([rwjsPaths.api.src, getConfigPath()], {
+    persistent: true,
+    ignoreInitial: true,
+    ignored: (file: string) => {
+      const x =
+        file.includes('node_modules') ||
+        IGNORED_API_PATHS.some((ignoredPath) => file.includes(ignoredPath)) ||
+        [
+          '.DS_Store',
+          '.db',
+          '.sqlite',
+          '-journal',
+          '.test.js',
+          '.test.ts',
+          '.scenarios.ts',
+          '.scenarios.js',
+          '.d.ts',
+          '.log',
+        ].some((ext) => file.endsWith(ext))
+      return x
+    },
+  })
+  .on('ready', async () => {
+    rebuildApiServer()
+    await validate()
+  })
+  .on('all', async (eventName, filePath) => {
+    // On sufficiently large projects (500+ files, or >= 2000 ms build times) on older machines, esbuild writing to the api directory
+    // makes chokidar emit an `addDir` event. This starts an infinite loop where the api starts building itself as soon as it's finished.
+    // This could probably be fixed with some sort of build caching.
+    if (eventName === 'addDir' && filePath === rwjsPaths.api.base) {
+      return
+    }
+
+    // We validate here, so that developers will see the error
+    // As they're running the dev server
+    if (filePath.includes('.sdl')) {
+      const isValid = await validate()
+
+      // Exit early if not valid
+      if (!isValid) {
+        return
+      }
+    }
+
+    console.log(
+      c.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`)
+    )
+    delayRestartServer.cancel()
+    delayRestartServer()
+  })
