@@ -38,3 +38,5 @@ export * from './components/htmlTags'
 export * from './routeHooks.types'
 
 export * from './components/ServerInject'
+
+export type { TypedDocumentNode } from './components/GraphQLHooksProvider'
