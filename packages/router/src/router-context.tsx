@@ -3,7 +3,7 @@ import React, { useReducer, createContext, useContext } from 'react'
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import { useNoAuth } from '@redwoodjs/auth'
 
-import type { ParamType } from './util'
+import type { ParamType, analyzeRoutes } from './util'
 
 type UseAuth = () => AuthContextInterface<
   unknown,
@@ -23,6 +23,8 @@ type UseAuth = () => AuthContextInterface<
 export interface RouterState {
   paramTypes?: Record<string, ParamType>
   useAuth: UseAuth
+  routes: ReturnType<typeof analyzeRoutes>
+  activeRouteName?: string | undefined | null
 }
 
 const RouterStateContext = createContext<RouterState | undefined>(undefined)
@@ -35,16 +37,16 @@ const RouterSetContext = createContext<
   React.Dispatch<Partial<RouterState>> | undefined
 >(undefined)
 
-/***
- *
+/**
  * This file splits the context into getter and setter contexts.
  * This was originally meant to optimize the number of redraws
  * See https://kentcdodds.com/blog/how-to-optimize-your-context-value
- *
  */
 export interface RouterContextProviderProps
   extends Omit<RouterState, 'useAuth'> {
   useAuth?: UseAuth
+  routes: ReturnType<typeof analyzeRoutes>
+  activeRouteName?: string | undefined | null
   children: React.ReactNode
 }
 
@@ -55,11 +57,15 @@ function stateReducer(state: RouterState, newState: Partial<RouterState>) {
 export const RouterContextProvider: React.FC<RouterContextProviderProps> = ({
   useAuth,
   paramTypes,
+  routes,
+  activeRouteName,
   children,
 }) => {
   const [state, setState] = useReducer(stateReducer, {
     useAuth: useAuth || useNoAuth,
     paramTypes,
+    routes,
+    activeRouteName,
   })
 
   return (

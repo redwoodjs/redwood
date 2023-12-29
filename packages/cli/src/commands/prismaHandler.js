@@ -1,8 +1,8 @@
-import fs from 'fs'
 import path from 'path'
 
 import boxen from 'boxen'
 import execa from 'execa'
+import fs from 'fs-extra'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'

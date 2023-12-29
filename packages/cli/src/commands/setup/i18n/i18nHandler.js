@@ -1,8 +1,8 @@
-import fs from 'fs'
 import path from 'path'
 
 import chalk from 'chalk'
 import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -171,7 +171,7 @@ export const handler = async ({ force }) => {
         skip: () => fileIncludes(rwPaths.web.storybookConfig, 'withI18n'),
         task: async () =>
           extendStorybookConfiguration(
-            path.join(__dirname, 'templates', 'storybook.preview.js.template')
+            path.join(__dirname, 'templates', 'storybook.preview.tsx.template')
           ),
       },
       {
