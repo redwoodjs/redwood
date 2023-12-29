@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { fork } from 'child_process'
 import type { ChildProcess } from 'child_process'
+import { fork } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
@@ -16,11 +16,10 @@ import yargs from 'yargs/yargs'
 import { buildApi, rebuildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import {
-  getPaths,
   ensurePosixPath,
   getConfig,
+  getPaths,
   resolveFile,
-  getConfigPath,
 } from '@redwoodjs/project-config'
 
 const argv = yargs(hideBin(process.argv))
@@ -61,7 +60,8 @@ const validate = async () => {
     console.error(c.red(e?.message))
     console.log(c.redBright('-'.repeat(40)))
 
-    delayRestartServer.cancel()
+    debouncedBuild.cancel()
+    debouncedRebuild.cancel()
     return false
   }
 }
@@ -146,8 +146,15 @@ const rebuildApiServer = (rebuild = false) => {
 // this usually happens when running RedwoodJS generator commands.
 // Local writes are very fast, but writes in e2e environments are not,
 // so allow the default to be adjust with a env-var.
-const delayRestartServer = debounce(
+const debouncedRebuild = debounce(
   () => rebuildApiServer(true),
+  process.env.RWJS_DELAY_RESTART
+    ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
+    : 5
+)
+
+const debouncedBuild = debounce(
+  () => rebuildApiServer(false),
   process.env.RWJS_DELAY_RESTART
     ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
     : 5
@@ -163,7 +170,7 @@ const IGNORED_API_PATHS = [
 ].map((path) => ensurePosixPath(path))
 
 chokidar
-  .watch([rwjsPaths.api.src, getConfigPath()], {
+  .watch([rwjsPaths.api.src], {
     persistent: true,
     ignoreInitial: true,
     ignored: (file: string) => {
@@ -197,20 +204,30 @@ chokidar
       return
     }
 
-    // We validate here, so that developers will see the error
-    // As they're running the dev server
-    if (filePath.includes('.sdl')) {
-      const isValid = await validate()
+    if (eventName) {
+      if (filePath.includes('.sdl')) {
+        // We validate here, so that developers will see the error
+        // As they're running the dev server
+        const isValid = await validate()
 
-      // Exit early if not valid
-      if (!isValid) {
-        return
+        // Exit early if not valid
+        if (!isValid) {
+          return
+        }
       }
     }
 
     console.log(
       c.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`)
     )
-    delayRestartServer.cancel()
-    delayRestartServer()
+
+    if (eventName === 'add' || eventName === 'unlink') {
+      debouncedBuild.cancel()
+      debouncedRebuild.cancel()
+      debouncedBuild()
+    } else {
+      // If files have just changed, then rebuild
+      debouncedRebuild.cancel()
+      debouncedRebuild()
+    }
   })

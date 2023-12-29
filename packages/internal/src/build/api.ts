@@ -14,6 +14,9 @@ let BUILD_CTX: BuildContext | null = null
 
 export const buildApi = async () => {
   cleanApiBuild()
+  // Reset the build context for rebuildling
+  BUILD_CTX = null
+
   return transpileApi(findApiFiles())
 }
 
@@ -21,7 +24,7 @@ export const rebuildApi = async () => {
   const apiFiles = findApiFiles()
 
   if (!BUILD_CTX) {
-    BUILD_CTX = await context(getEsbuildOptions(apiFiles, () => {}))
+    BUILD_CTX = await context(getEsbuildOptions(apiFiles))
   }
 
   console.log('definitely rebuilding!!')
@@ -64,32 +67,11 @@ const runRwBabelTransformsPlugin = {
   },
 }
 
-const createBuildEndPlugin = (cb: Function) => ({
-  name: 'buildEndPLugin',
-  setup(build: PluginBuild) {
-    // const rwjsConfig = getConfig()
-
-    build.onEnd(async (result) => {
-      console.log(`👉 \n ~ file: api.ts:57 ~ result:`, result)
-
-      await cb()
-    })
-  },
-})
-
-export const watchApi = async (cb: Function) => {
-  const apiFiles = findApiFiles()
-
-  const esbCtx = await context(getEsbuildOptions(apiFiles, cb))
-
-  return esbCtx.watch()
-}
-
 export const transpileApi = async (files: string[]) => {
-  return build(getEsbuildOptions(files, () => {}))
+  return build(getEsbuildOptions(files))
 }
 
-function getEsbuildOptions(files: string[], cb: Function) {
+function getEsbuildOptions(files: string[]) {
   const rwjsPaths = getPaths()
 
   return {
@@ -100,7 +82,7 @@ function getEsbuildOptions(files: string[], cb: Function) {
     format: 'cjs' as Format,
     allowOverwrite: true,
     bundle: false,
-    plugins: [runRwBabelTransformsPlugin, createBuildEndPlugin(cb)],
+    plugins: [runRwBabelTransformsPlugin],
     outdir: rwjsPaths.api.dist,
     // setting this to 'true' will generate an external sourcemap x.js.map
     // AND set the sourceMappingURL comment
