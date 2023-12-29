@@ -178,7 +178,9 @@ export const handler = async ({
   const jobs = {
     api: {
       name: 'api',
-      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS="${getDevNodeOptions()}" yarn nodemon --quiet --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch --port ${apiAvailablePort} ${getApiDebugFlag()} | rw-log-formatter"`,
+      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS="${getDevNodeOptions()}" node ${require.resolve(
+        '@redwoodjs/api-server/dist/watch.js'
+      )} --port ${apiAvailablePort} ${getApiDebugFlag()}`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
