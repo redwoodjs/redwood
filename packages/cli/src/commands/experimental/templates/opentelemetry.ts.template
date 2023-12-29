@@ -15,7 +15,7 @@ const {
 } = require('@opentelemetry/semantic-conventions')
 const { PrismaInstrumentation } = require ('@prisma/instrumentation')
 
-const { getConfig } from '@redwoodjs/project-config'
+const { getConfig } = require('@redwoodjs/project-config')
 
 // You may wish to set this to DiagLogLevel.DEBUG when you need to debug opentelemetry itself
 diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO)
