@@ -22,7 +22,6 @@ const App = () => (
             },
           }}
         >
-        <RedwoodApolloProvider useAuth={useAuth}>
           <Routes />
         </RedwoodApolloProvider>
       </AuthProvider>
