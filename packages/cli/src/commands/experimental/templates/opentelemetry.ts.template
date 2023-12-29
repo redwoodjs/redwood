@@ -1,21 +1,17 @@
-const { diag, DiagConsoleLogger, DiagLogLevel } = require('@opentelemetry/api')
-const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-http')
-const { registerInstrumentations } = require('@opentelemetry/instrumentation')
-const {
-  FastifyInstrumentation,
-} = require('@opentelemetry/instrumentation-fastify')
-const { HttpInstrumentation } = require('@opentelemetry/instrumentation-http')
-const { Resource } = require('@opentelemetry/resources')
-const {
+import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
+import { registerInstrumentations } from '@opentelemetry/instrumentation'
+import { FastifyInstrumentation } from '@opentelemetry/instrumentation-fastify'
+import { HttpInstrumentation } from '@opentelemetry/instrumentation-http'
+import { Resource } from '@opentelemetry/resources'
+import {
   NodeTracerProvider,
   SimpleSpanProcessor,
-} = require('@opentelemetry/sdk-trace-node')
-const {
-  SemanticResourceAttributes,
-} = require('@opentelemetry/semantic-conventions')
-const { PrismaInstrumentation } = require ('@prisma/instrumentation')
+} from '@opentelemetry/sdk-trace-node'
+import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
+import { PrismaInstrumentation } from '@prisma/instrumentation'
 
-const { getConfig } = require('@redwoodjs/project-config')
+import { getConfig } from '@redwoodjs/project-config'
 
 // You may wish to set this to DiagLogLevel.DEBUG when you need to debug opentelemetry itself
 diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO)
@@ -51,7 +47,7 @@ registerInstrumentations({
     new FastifyInstrumentation(),
     new PrismaInstrumentation({
       middleware: true,
-    })
+    }),
   ],
 })
 
