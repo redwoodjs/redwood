@@ -66,7 +66,7 @@ const validate = async () => {
   }
 }
 
-const rebuildApiServer = (rebuild = false) => {
+const rebuildApiServer = async (rebuild = false) => {
   try {
     // Shutdown API server
     killApiServer()
@@ -75,9 +75,9 @@ const rebuildApiServer = (rebuild = false) => {
     process.stdout.write(c.dim(c.italic('Building... ')))
 
     if (rebuild) {
-      rebuildApi()
+      await rebuildApi()
     } else {
-      buildApi()
+      await buildApi()
     }
     console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
 
@@ -193,7 +193,7 @@ chokidar
     },
   })
   .on('ready', async () => {
-    rebuildApiServer()
+    await rebuildApiServer()
     await validate()
   })
   .on('all', async (eventName, filePath) => {
