@@ -158,7 +158,6 @@ const DEFAULT_CONFIG: Config = {
     opentelemetry: {
       enabled: false,
       wrapApi: true,
-      apiSdk: undefined,
     },
     studio: {
       basePort: 4318,
