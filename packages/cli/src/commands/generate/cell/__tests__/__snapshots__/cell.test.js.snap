@@ -52,8 +52,6 @@ export const Success = ({ equipment }) => {
 "
 `;
 
-exports[`Custom Id Field files List cell creates a cell component with a custom id field 1`] = `undefined`;
-
 exports[`Custom Id Field files List cell creates a cell list component with a custom id field 1`] = `
 "export const QUERY = gql\`
   query CustomIdFieldsQuery {
@@ -172,12 +170,6 @@ describe('CustomIdFieldsCell', () => {
 })
 "
 `;
-
-exports[`Custom Id Field files List cell creates a cell mock with a custom id field 1`] = `undefined`;
-
-exports[`Custom Id Field files List cell creates a cell stories with a custom id field 1`] = `undefined`;
-
-exports[`Custom Id Field files List cell creates a cell test with a custom id field 1`] = `undefined`;
 
 exports[`Custom Id Field files Single cell creates a cell component with a custom id field 1`] = `
 "export const QUERY = gql\`
