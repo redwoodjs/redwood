@@ -9,7 +9,8 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "build": "echo 'Nothing to build..'"
+    "build": "echo 'Nothing to build..'",
+    "build:pack": "yarn pack -o redwoodjs-eslint-config.tgz"
   },
   "dependencies": {
     "@babel/core": "^7.22.20",
