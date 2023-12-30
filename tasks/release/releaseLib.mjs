@@ -126,7 +126,7 @@ export function prompts(promptsObject, promptsOptions) {
 // ─── Branch Statuses ─────────────────────────────────────────────────────────
 
 /**
- * Basically runs `git fetch origin` on branches with safety checks and logging.
+ * Basically runs `git pull upstream` on branches with safety checks and logging.
  *
  * @param {string[]} branches
  */
@@ -149,7 +149,7 @@ export async function resolveBranchStatuses(branches) {
   let result
 
   // We need to run `git remote update ${redwoodRemote}` to `git fetch ${branch}`.
-  // Nine out of ten times, the redwood remote is `origin`. But let's just be sure.
+  // Nine out of ten times, the redwood remote is `upstream`. But let's just be sure.
   result = await getRedwoodRemote()
 
   if (result.error) {
@@ -313,10 +313,10 @@ export async function handleBranchesToCommits(
       if (
         status.commitsExclusiveToRemoteBranch &&
         isYes(
-          await question(`Ok to \`git fetch\` ${chalk.magenta(branch)}? [Y/n] `)
+          await question(`Ok to \`git pull\` ${chalk.magenta(branch)}? [Y/n] `)
         )
       ) {
-        await $`git fetch ${redwoodRemote} ${branch}:${branch}`
+        await $`git pull ${redwoodRemote} ${branch}:${branch}`
       }
     }
   }
