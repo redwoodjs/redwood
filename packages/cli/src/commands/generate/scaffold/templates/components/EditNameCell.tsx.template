@@ -1,4 +1,8 @@
-import type { Edit${singularPascalName}By${pascalIdName}, Update${singularPascalName}Input } from 'types/graphql'
+import type {
+  Edit${singularPascalName}By${pascalIdName},
+  Update${singularPascalName}Input,
+  Update${singularPascalName}MutationVariables
+} from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
 import type {
@@ -21,7 +25,7 @@ export const QUERY: TypedDocumentNode<Edit${singularPascalName}By${pascalIdName}
 
 const UPDATE_${singularConstantName}_MUTATION: TypedDocumentNode<
   Edit${singularPascalName}ById,
-  Update${singularPascalName}Input
+  Update${singularPascalName}MutationVariables
 > = gql`
   mutation Update${singularPascalName}Mutation($${idName}: ${idType}!, $input: Update${singularPascalName}Input!) {
     update${singularPascalName}(${idName}: $${idName}, input: $input) {<% columns.forEach(column => { %>
