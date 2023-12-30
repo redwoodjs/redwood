@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "build": "yarn node ./build.mjs && run build:types",
+    "build:pack": "yarn pack -o redwoodjs-realtime.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
