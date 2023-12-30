@@ -22,6 +22,7 @@ export const QUERY: TypedDocumentNode<EditPostById> = gql`
     }
   }
 `
+
 const UPDATE_POST_MUTATION: TypedDocumentNode<
   EditPostById,
   UpdatePostInput

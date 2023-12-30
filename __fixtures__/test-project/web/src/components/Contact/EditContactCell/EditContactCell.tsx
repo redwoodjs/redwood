@@ -22,6 +22,7 @@ export const QUERY: TypedDocumentNode<EditContactById> = gql`
     }
   }
 `
+
 const UPDATE_CONTACT_MUTATION: TypedDocumentNode<
   EditContactById,
   UpdateContactInput
