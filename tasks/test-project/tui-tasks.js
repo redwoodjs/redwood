@@ -444,19 +444,10 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
 
     const setupTgzDest = path.join(
       outputPath,
-      'node_modules',
-      'auth-dbauth-setup.tgz'
+      'redwoodjs-auth-dbauth-setup.tgz'
     )
-    const apiTgzDest = path.join(
-      outputPath,
-      'node_modules',
-      'auth-dbauth-api.tgz'
-    )
-    const webTgzDest = path.join(
-      outputPath,
-      'node_modules',
-      'auth-dbauth-web.tgz'
-    )
+    const apiTgzDest = path.join(outputPath, 'redwoodjs-auth-dbauth-api.tgz')
+    const webTgzDest = path.join(outputPath, 'redwoodjs-auth-dbauth-web.tgz')
 
     fs.copyFileSync(setupTgz, setupTgzDest)
     fs.copyFileSync(apiTgz, apiTgzDest)
@@ -467,12 +458,16 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
       fs.readFileSync(projectPackageJsonPath, 'utf-8')
     )
 
+    const existingResolutions = projectPackageJson.resolutions
+      ? { ...projectPackageJson.resolutions }
+      : undefined
+
     projectPackageJson.resolutions ??= {}
     projectPackageJson.resolutions = {
       ...projectPackageJson.resolutions,
-      'auth-dbauth-setup': './node_modules/auth-dbauth-setup.tgz',
-      'auth-dbauth-api': './node_modules/auth-dbauth-api.tgz',
-      'auth-dbauth-web': './node_modules/auth-dbauth-web.tgz',
+      '@redwoodjs/auth-dbauth-setup': './redwoodjs-auth-dbauth-setup.tgz',
+      '@redwoodjs/auth-dbauth-api': './redwoodjs-auth-dbauth-api.tgz',
+      '@redwoodjs/auth-dbauth-web': './redwoodjs-auth-dbauth-web.tgz',
     }
 
     fs.writeFileSync(
@@ -480,11 +475,30 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
       JSON.stringify(projectPackageJson, null, 2)
     )
 
+    // Run `yarn install` to have the resolutions take effect and install the
+    // tarballs we copied over
+    await exec('yarn install', [], execaOptions)
+
     await exec(
       'yarn rw setup auth dbAuth --force --no-webauthn',
       [],
       execaOptions
     )
+
+    // Restore old resolutions
+    if (existingResolutions) {
+      projectPackageJson.resolutions = existingResolutions
+    }
+
+    fs.writeFileSync(
+      projectPackageJsonPath,
+      JSON.stringify(projectPackageJson, null, 2)
+    )
+
+    // Remove tarballs
+    fs.unlinkSync(setupTgzDest)
+    fs.unlinkSync(apiTgzDest)
+    fs.unlinkSync(webTgzDest)
 
     // Restore postinstall script
     updatePkgJsonScripts({
