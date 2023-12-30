@@ -1,4 +1,8 @@
-import type { EditContactById, UpdateContactInput } from 'types/graphql'
+import type {
+  EditContactById,
+  UpdateContactInput,
+  UpdateContactMutationVariables,
+} from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
 import type {
@@ -25,7 +29,7 @@ export const QUERY: TypedDocumentNode<EditContactById> = gql`
 
 const UPDATE_CONTACT_MUTATION: TypedDocumentNode<
   EditContactById,
-  UpdateContactInput
+  UpdateContactMutationVariables
 > = gql`
   mutation UpdateContactMutation($id: Int!, $input: UpdateContactInput!) {
     updateContact(id: $id, input: $input) {

@@ -1,4 +1,8 @@
-import type { CreateContactMutation, CreateContactInput } from 'types/graphql'
+import type {
+  CreateContactMutation,
+  CreateContactInput,
+  CreateContactMutationVariables,
+} from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
@@ -9,7 +13,7 @@ import ContactForm from 'src/components/Contact/ContactForm'
 
 const CREATE_CONTACT_MUTATION: TypedDocumentNode<
   CreateContactMutation,
-  CreateContactInput
+  CreateContactMutationVariables
 > = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
     createContact(input: $input) {
