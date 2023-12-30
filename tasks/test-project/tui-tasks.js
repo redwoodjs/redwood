@@ -19,6 +19,8 @@ function getExecaOptions(cwd) {
 // and is set when webTasks or apiTasks are called
 let OUTPUT_PATH
 
+const RW_FRAMEWORK_PATH = path.join(__dirname, '../../')
+
 function fullPath(name, { addExtension } = { addExtension: true }) {
   if (addExtension) {
     if (name.startsWith('api')) {
@@ -406,45 +408,97 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
       },
     })
 
-    // At an earlier step we run `yarn rwfw project:copy` which gives us
-    // auth-dbauth-setup@3.2.0 currently. We need that version to be a canary
-    // version for auth-dbauth-api and auth-dbauth-web package installations
-    // to work. So we update the package.json to make the setup use the latest
-    // canary version for the api and web sides
+    // We want to use the latest version of the auth-dbauth-{setup,api,web}
+    // packages. But they're not published yet. So let's package them up as
+    // tarballs and install them using that by setting yarn resolutions
 
-    const { stdout } = await exec(
-      `yarn npm info @redwoodjs/auth-dbauth-setup --fields versions --json`,
-      [],
-      execaOptions
+    const setupPkg = path.join(
+      RW_FRAMEWORK_PATH,
+      'packages',
+      'auth-providers',
+      'dbAuth',
+      'setup'
+    )
+    const apiPkg = path.join(
+      RW_FRAMEWORK_PATH,
+      'packages',
+      'auth-providers',
+      'dbAuth',
+      'api'
+    )
+    const webPkg = path.join(
+      RW_FRAMEWORK_PATH,
+      'packages',
+      'auth-providers',
+      'dbAuth',
+      'web'
     )
 
-    const latestCanaryVersion = JSON.parse(stdout)
-      .versions.filter((version) => version.includes('canary'))
-      .at(-1)
+    await exec('yarn build:pack', [], getExecaOptions(setupPkg))
+    await exec('yarn build:pack', [], getExecaOptions(apiPkg))
+    await exec('yarn build:pack', [], getExecaOptions(webPkg))
 
-    const dbAuthSetupPath = path.join(
+    const setupTgz = path.join(setupPkg, 'redwoodjs-auth-dbauth-setup.tgz')
+    const apiTgz = path.join(apiPkg, 'redwoodjs-auth-dbauth-api.tgz')
+    const webTgz = path.join(webPkg, 'redwoodjs-auth-dbauth-web.tgz')
+
+    const setupTgzDest = path.join(
       outputPath,
-      'node_modules',
-      '@redwoodjs',
-      'auth-dbauth-setup'
+      'redwoodjs-auth-dbauth-setup.tgz'
+    )
+    const apiTgzDest = path.join(outputPath, 'redwoodjs-auth-dbauth-api.tgz')
+    const webTgzDest = path.join(outputPath, 'redwoodjs-auth-dbauth-web.tgz')
+
+    fs.copyFileSync(setupTgz, setupTgzDest)
+    fs.copyFileSync(apiTgz, apiTgzDest)
+    fs.copyFileSync(webTgz, webTgzDest)
+
+    const projectPackageJsonPath = path.join(outputPath, 'package.json')
+    const projectPackageJson = JSON.parse(
+      fs.readFileSync(projectPackageJsonPath, 'utf-8')
     )
 
-    const dbAuthSetupPackageJson = JSON.parse(
-      fs.readFileSync(path.join(dbAuthSetupPath, 'package.json'), 'utf-8')
-    )
+    const existingResolutions = projectPackageJson.resolutions
+      ? { ...projectPackageJson.resolutions }
+      : undefined
 
-    dbAuthSetupPackageJson.version = latestCanaryVersion
+    projectPackageJson.resolutions ??= {}
+    projectPackageJson.resolutions = {
+      ...projectPackageJson.resolutions,
+      '@redwoodjs/auth-dbauth-setup': './redwoodjs-auth-dbauth-setup.tgz',
+      '@redwoodjs/auth-dbauth-api': './redwoodjs-auth-dbauth-api.tgz',
+      '@redwoodjs/auth-dbauth-web': './redwoodjs-auth-dbauth-web.tgz',
+    }
 
     fs.writeFileSync(
-      path.join(dbAuthSetupPath, 'package.json'),
-      JSON.stringify(dbAuthSetupPackageJson, null, 2)
+      projectPackageJsonPath,
+      JSON.stringify(projectPackageJson, null, 2)
     )
+
+    // Run `yarn install` to have the resolutions take effect and install the
+    // tarballs we copied over
+    await exec('yarn install', [], execaOptions)
 
     await exec(
       'yarn rw setup auth dbAuth --force --no-webauthn',
       [],
       execaOptions
     )
+
+    // Restore old resolutions
+    if (existingResolutions) {
+      projectPackageJson.resolutions = existingResolutions
+    }
+
+    fs.writeFileSync(
+      projectPackageJsonPath,
+      JSON.stringify(projectPackageJson, null, 2)
+    )
+
+    // Remove tarballs
+    fs.unlinkSync(setupTgzDest)
+    fs.unlinkSync(apiTgzDest)
+    fs.unlinkSync(webTgzDest)
 
     // Restore postinstall script
     updatePkgJsonScripts({
