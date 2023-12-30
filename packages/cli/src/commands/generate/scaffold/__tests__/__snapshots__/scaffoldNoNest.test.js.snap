@@ -1541,6 +1541,7 @@ exports[`in typescript mode creates a new component with int foreign keys conver
 "import type {
   CreateUserProfileMutation,
   CreateUserProfileInput,
+  CreateUserProfileMutationVariables,
 } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
@@ -1552,7 +1553,7 @@ import UserProfileForm from 'src/components/UserProfileForm'
 
 const CREATE_USER_PROFILE_MUTATION: TypedDocumentNode<
   CreateUserProfileMutation,
-  CreateUserProfileInput
+  CreateUserProfileMutationVariables
 > = gql\`
   mutation CreateUserProfileMutation($input: CreateUserProfileInput!) {
     createUserProfile(input: $input) {
@@ -2207,7 +2208,11 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 `;
 
 exports[`in typescript mode creates an edit cell 1`] = `
-"import type { EditPostById, UpdatePostInput } from 'types/graphql'
+"import type {
+  EditPostById,
+  UpdatePostInput,
+  UpdatePostMutationVariables,
+} from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
 import type {
@@ -2242,7 +2247,7 @@ export const QUERY: TypedDocumentNode<EditPostById> = gql\`
 
 const UPDATE_POST_MUTATION: TypedDocumentNode<
   EditPostById,
-  UpdatePostInput
+  UpdatePostMutationVariables
 > = gql\`
   mutation UpdatePostMutation($id: Int!, $input: UpdatePostInput!) {
     updatePost(id: $id, input: $input) {
@@ -2301,7 +2306,11 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
 `;
 
 exports[`in typescript mode creates an edit component with int foreign keys converted in onSave 1`] = `
-"import type { EditUserProfileById, UpdateUserProfileInput } from 'types/graphql'
+"import type {
+  EditUserProfileById,
+  UpdateUserProfileInput,
+  UpdateUserProfileMutationVariables,
+} from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
 import type {
@@ -2326,7 +2335,7 @@ export const QUERY: TypedDocumentNode<EditUserProfileById> = gql\`
 
 const UPDATE_USER_PROFILE_MUTATION: TypedDocumentNode<
   EditUserProfileById,
-  UpdateUserProfileInput
+  UpdateUserProfileMutationVariables
 > = gql\`
   mutation UpdateUserProfileMutation(
     $id: Int!
