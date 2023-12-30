@@ -387,9 +387,9 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
 async function addModel(schema) {
   const path = `${OUTPUT_PATH}/api/db/schema.prisma`
 
-  const current = fs.readFileSync(path)
+  const current = fs.readFileSync(path, 'utf-8')
 
-  fs.writeFileSync(path, `${current}\n\n${schema}`)
+  fs.writeFileSync(path, `${current.trim()}\n\n${schema}\n`)
 }
 
 async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
@@ -406,6 +406,22 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
       },
     })
 
+    // At an earlier step we run `yarn rwfw project:copy` which gives us
+    // auth-dbauth-setup@3.2.0 currently. We need that version to be a canary
+    // version for auth-dbauth-api and auth-dbauth-web package installations
+    // to work. So we update the package.json to make the setup use the latest
+    // canary version for the api and web sides
+
+    const { stdout } = await exec(
+      `yarn npm info @redwoodjs/auth-dbauth-setup --fields versions --json`,
+      [],
+      execaOptions
+    )
+
+    const latestCanaryVersion = JSON.parse(stdout)
+      .versions.filter((version) => version.includes('canary'))
+      .at(-1)
+
     const dbAuthSetupPath = path.join(
       outputPath,
       'node_modules',
@@ -413,13 +429,16 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
       'auth-dbauth-setup'
     )
 
-    // At an earlier step we run `yarn rwfw project:copy` which gives us
-    // auth-dbauth-setup@3.2.0 currently. We need that version to be a canary
-    // version for auth-dbauth-api and auth-dbauth-web package installations
-    // to work. So we remove the current version and add a canary version
-    // instead.
+    const dbAuthSetupPackageJson = JSON.parse(
+      fs.readFileSync(path.join(dbAuthSetupPath, 'package.json'), 'utf-8')
+    )
 
-    fs.rmSync(dbAuthSetupPath, { recursive: true, force: true })
+    dbAuthSetupPackageJson.version = latestCanaryVersion
+
+    fs.writeFileSync(
+      path.join(dbAuthSetupPath, 'package.json'),
+      JSON.stringify(dbAuthSetupPackageJson, null, 2)
+    )
 
     await exec(
       'yarn rw setup auth dbAuth --force --no-webauthn',
