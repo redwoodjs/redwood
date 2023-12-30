@@ -3,11 +3,18 @@ import type {
   FindBlogPostQueryVariables,
 } from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
 import BlogPost from 'src/components/BlogPost'
 
-export const QUERY = gql`
+export const QUERY: TypedDocumentNode<
+  FindBlogPostQuery,
+  FindBlogPostQueryVariables
+> = gql`
   query FindBlogPostQuery($id: Int!) {
     blogPost: post(id: $id) {
       id

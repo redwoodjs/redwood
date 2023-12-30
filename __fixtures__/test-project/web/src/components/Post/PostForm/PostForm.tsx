@@ -1,5 +1,6 @@
 import type { EditPostById, UpdatePostInput } from 'types/graphql'
 
+import type { RWGqlError } from '@redwoodjs/forms'
 import {
   Form,
   FormError,
@@ -9,7 +10,6 @@ import {
   NumberField,
   Submit,
 } from '@redwoodjs/forms'
-import type { RWGqlError } from '@redwoodjs/forms'
 
 type FormPost = NonNullable<EditPostById['post']>
 

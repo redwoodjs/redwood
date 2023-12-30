@@ -1,9 +1,15 @@
-import type { ${operationName} } from 'types/graphql'
+import type { ${operationName}, ${operationName}Variables  } from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
-
-export const QUERY = gql`
+export const QUERY: TypedDocumentNode<
+  ${operationName},
+  ${operationName}Variables
+> = gql`
   query ${operationName} {
     ${camelName} {
       ${idName}

@@ -1,10 +1,17 @@
 import type { FindAuthorQuery, FindAuthorQueryVariables } from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
 import Author from 'src/components/Author'
 
-export const QUERY = gql`
+export const QUERY: TypedDocumentNode<
+  FindAuthorQuery,
+  FindAuthorQueryVariables
+> = gql`
   query FindAuthorQuery($id: Int!) {
     author: user(id: $id) {
       email
