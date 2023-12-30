@@ -10,7 +10,7 @@ const post = `model Post {
 }`
 
 const contact = `model Contact {
-  id        Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
   email     String
   message   String

@@ -12,7 +12,7 @@ export const QUERY: TypedDocumentNode<
 > = gql`
   query ${operationName} {
     ${camelName} {
-      id
+      ${idName}
     }
   }
 `
@@ -29,7 +29,7 @@ export const Success = ({ ${camelName} }: CellSuccessProps<${operationName}>) =>
   return (
     <ul>
       {${camelName}.map((item) => {
-        return <li key={item.id}>{JSON.stringify(item)}</li>
+        return <li key={item.${idName}}>{JSON.stringify(item)}</li>
       })}
     </ul>
   )

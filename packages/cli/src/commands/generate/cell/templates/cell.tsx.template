@@ -11,8 +11,8 @@ export const QUERY: TypedDocumentNode<
   ${operationName}Variables
 > = gql`
   query ${operationName}($id: ${idType}!) {
-    ${camelName}: ${camelName}(id: $id) {
-      id
+    ${camelName}: ${camelName}(${idName}: $id) {
+      ${idName}
     }
   }
 `
