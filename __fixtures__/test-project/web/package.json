@@ -11,7 +11,7 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/auth-dbauth-web": "6.0.7",
+    "@redwoodjs/auth-dbauth-web": "7.0.0-canary.787",
     "@redwoodjs/forms": "6.0.7",
     "@redwoodjs/router": "6.0.7",
     "@redwoodjs/web": "6.0.7",
@@ -25,8 +25,8 @@
     "@types/react-dom": "18.2.15",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
-    "postcss-loader": "^7.3.3",
+    "postcss-loader": "^7.3.4",
     "prettier-plugin-tailwindcss": "0.4.1",
-    "tailwindcss": "^3.3.6"
+    "tailwindcss": "^3.4.0"
   }
 }
