@@ -701,3 +701,79 @@ jobs:
 
     steps:
       - run: echo "Skipped"
+
+  crwa:
+    needs: check
+
+    name: 🌲 Create Redwood App
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ⬢ Enable Corepack
+        run: corepack enable
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 🐈 Set up yarn cache
+        uses: ./.github/actions/set-up-yarn-cache
+
+      - name: 🐈 Yarn install
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: 🏗️ Build
+        run: yarn build
+
+      - name: Set up test project
+        run: |
+          yarn build:pack
+          PROJECT_PATH=$(yarn set-up-test-project)
+          echo "PROJECT_PATH=$PROJECT_PATH" >> $GITHUB_ENV
+        working-directory: ./packages/create-redwood-app
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+
+      - name: Set up git
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+
+      - name: e2e test
+        run: yarn test e2e
+        working-directory: ./packages/create-redwood-app
+        env:
+          PROJECT_PATH: ${{ env.PROJECT_PATH }}
+
+      - name: Prompt tests
+        run: |
+          sudo apt-get update
+          sudo apt-get install expect
+
+          ./tests/e2e_prompts.sh
+          sleep 1
+          ./tests/e2e_prompts_git.sh
+          sleep 1
+          ./tests/e2e_prompts_m.sh
+          sleep 1
+          ./tests/e2e_prompts_ts.sh
+          sleep 1
+          ./tests/e2e_prompts_overwrite.sh
+        working-directory: ./packages/create-redwood-app
+        env:
+          PROJECT_PATH: ${{ env.PROJECT_PATH }}
+
+  crwa-skip:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.onlydocs == 'true'
+
+    name: 🌲 Create Redwood App
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "Skipped"

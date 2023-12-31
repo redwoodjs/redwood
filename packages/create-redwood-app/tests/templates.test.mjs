@@ -1,8 +1,11 @@
+import { fileURLToPath } from 'node:url'
 import path from 'path'
 
 import klawSync from 'klaw-sync'
 
-const TS_TEMPLATE_DIR = path.join(__dirname, '../templates', 'ts')
+const TS_TEMPLATE_DIR = fileURLToPath(
+  new URL('../templates/ts', import.meta.url)
+)
 
 describe('template', () => {
   it('files should not have changed unintentionally', () => {
@@ -85,7 +88,9 @@ describe('template', () => {
   })
 })
 
-const JS_TEMPLATE_DIR = path.join(__dirname, '../templates', 'js')
+const JS_TEMPLATE_DIR = fileURLToPath(
+  new URL('../templates/js', import.meta.url)
+)
 
 describe('JS template', () => {
   it('files should not have changed unintentionally', () => {
