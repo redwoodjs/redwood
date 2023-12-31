@@ -17,8 +17,10 @@
     "build:pack": "yarn pack -o create-redwood-app.tgz",
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "yarn run jest tests",
-    "ts-to-js": "yarn node ./tsToJS.mjs"
+    "set-up-test-project": "node ./scripts/setUpTestProject.mjs",
+    "test": "node --experimental-vm-modules $(yarn bin jest) templates",
+    "test:e2e": "node --experimental-vm-modules $(yarn bin jest) e2e",
+    "ts-to-js": "yarn node ./scripts/tsToJS.mjs"
   },
   "dependencies": {
     "@opentelemetry/api": "1.7.0",

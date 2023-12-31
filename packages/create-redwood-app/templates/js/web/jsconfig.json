@@ -37,7 +37,7 @@
     ],
     "types": [
       "jest",
-      "@testing-library/jest-dom"
+      "jest-dom"
     ],
     "jsx": "preserve"
   },
