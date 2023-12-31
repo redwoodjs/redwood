@@ -126,7 +126,8 @@ export function prompts(promptsObject, promptsOptions) {
 // ─── Branch Statuses ─────────────────────────────────────────────────────────
 
 /**
- * Basically runs `git pull upstream` on branches with safety checks and logging.
+ * Basically runs `git pull upstream` or `git fetch upstream` on branches with
+ * safety checks and logging.
  *
  * @param {string[]} branches
  */
@@ -310,13 +311,17 @@ export async function handleBranchesToCommits(
     ].join('\n')
   } else {
     for (const [branch, status] of Object.entries(branchesToCommits)) {
+      const pullOrFetch = branch === 'main' ? 'pull' : 'fetch'
+
       if (
         status.commitsExclusiveToRemoteBranch &&
         isYes(
-          await question(`Ok to \`git pull\` ${chalk.magenta(branch)}? [Y/n] `)
+          await question(
+            `Ok to \`git ${pullOrFetch}\` ${chalk.magenta(branch)}? [Y/n] `
+          )
         )
       ) {
-        await $`git pull ${redwoodRemote} ${branch}:${branch}`
+        await $`git ${pullOrFetch} ${redwoodRemote} ${branch}:${branch}`
       }
     }
   }
