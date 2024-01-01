@@ -209,7 +209,7 @@ async function resolveMilestones() {
       {
         search(
           query: "repo:redwoodjs/redwood is:pr is:merged milestone:next-release-patch"
-          first: 5
+          first: 51
           type: ISSUE
         ) {
           nodes {
@@ -222,12 +222,14 @@ async function resolveMilestones() {
     `)
 
   if (semver === 'patch') {
+    const prettyPatch = chalk.magenta('next-release-patch')
+    const singularMsg = `There's 1 PR that has the ${prettyPatch} milestone.`
+    const pluralMsg =
+      prs.length <= 50
+        ? `There are ${prs.length} PRs that have the ${prettyPatch} milestone.`
+        : `There are more than 50 PRs that have the ${prettyPatch} milestone.`
     console.log()
-    console.log(
-      `There's ${prs.length} PR(s) that have the ${chalk.magenta(
-        'next-release-patch'
-      )} milestone.`
-    )
+    console.log(prs.length === 1 ? singularMsg : pluralMsg)
 
     if (
       !isYes(
