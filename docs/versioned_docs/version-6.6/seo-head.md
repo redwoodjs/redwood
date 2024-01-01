@@ -62,11 +62,11 @@ const AboutPage = () => {
 +     </Head>
 ```
 
-You can include any valid `<head>` tag in here that you like. However, Redwood also provides we also have a utility component [&lt;Metadata&gt;](#setting-meta-tags-and-opengraph-directives-with-metadata).
+You can include any valid `<head>` tag in here that you like. However, Redwood also provides a utility component [&lt;Metadata&gt;](#setting-meta-tags-and-opengraph-directives-with-metadata).
 
 :::caution `<MetaTags>` Deprecation
 
-Prior to Redwood 7.0 this component was called `<MetaTags>` and had several special hard-coded props like `ogContentUrl`, which didn't properly map to the OpenGraph spec. We'll still render `<MetaTags>` for the foreseeable future, but it is deprecated and should migrate to `<Metadata>` if you have an existing app.
+Prior to Redwood 6.6.0 this component was called `<MetaTags>` and had several special hard-coded props like `ogContentUrl`, which didn't properly map to the OpenGraph spec. We'll still render `<MetaTags>` for the foreseeable future, but it's deprecated and you should migrate to `<Metadata>` if you have an existing app.
 
 :::
 
@@ -86,12 +86,12 @@ For these headers to appear to bots and scrapers e.g. for twitter to show your t
 
 Often we want to set more than just the title and description of the page—most commonly [OpenGraph](https://ogp.me/) headers.
 
-Redwood provides a convenience component `<Metadata>` to help you create most of these `<meta>` tags for you swith a more concise syntax. But, you can also pass children and define any custom content that you want.
+Redwood provides a convenience component `<Metadata>` to help you create most of these `<meta>` tags for you with a more concise syntax. But, you can also pass children and define any custom content that you want.
 
 Here's an example setting some common meta, including a page title, description, `og:image` and an `http-equiv`:
 
 ```jsx
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const AboutPage = () => {
   return (
@@ -129,7 +129,7 @@ This code would be transformed into this HTML and injected into the `<head>` tag
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 ```
 
-Setting an `og:image` is how sites like Facebook and Slack can show a preview of a URL when pasted into a post (also known an "unfurling"):
+Setting an `og:image` is how sites like Facebook and Slack can show a preview of a URL when pasted into a post (also known as "unfurling"):
 
 ![Typical URL unfurl](/img/facebook_unfurl.png)
 
