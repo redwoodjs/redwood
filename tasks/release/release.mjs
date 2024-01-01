@@ -700,7 +700,12 @@ async function releasePatch() {
       'Only a few more things to do:',
       '  - publish the release notes',
       '  - merge the release branch into next and push the merge commit',
+      '    - `git switch next`',
+      `    - \`git merge ${releaseBranch}\``,
+      `    - \`git push ${redwoodRemote}\``,
       '  - delete the release branch locally and on GitHub (https://github.com/redwoodjs/redwood/branches)',
+      `    - \`git branch -d ${releaseBranch}\``,
+      `    - \`git push ${redwoodRemote} --delete ${releaseBranch}\``,
       '  - post on Slack, Discord, and Buffer',
     ].join('\n')
   )
