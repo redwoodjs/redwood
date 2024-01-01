@@ -38,6 +38,21 @@ const { telemetry } = Parser(hideBin(process.argv), {
 
 const tui = new RedwoodTUI()
 
+// Credit to esbuild: https://github.com/rtsao/esbuild/blob/c35a4cebf037237559213abc684504658966f9d6/lib/install.ts#L190-L199
+function isYarnBerryOrNewer() {
+  const { npm_config_user_agent: npmConfigUserAgent } = process.env
+
+  if (npmConfigUserAgent) {
+    const match = npmConfigUserAgent.match(/yarn\/(\d+)/)
+
+    if (match && match[1]) {
+      return parseInt(match[1], 10) >= 2
+    }
+  }
+
+  return false
+}
+
 const USE_GITPOD_TEXT = [
   `  As an alternative solution, you can launch a Redwood project using GitPod instead. GitPod is a an online IDE.`,
   `  See: ${terminalLink(
@@ -222,6 +237,94 @@ async function createProjectFiles(appDir, { templateDir, overwrite }) {
   tui.stopReactive()
 
   return newAppDir
+}
+
+async function installNodeModules(newAppDir) {
+  const tuiContent = new ReactiveTUIContent({
+    mode: 'text',
+    header: 'Installing node modules',
+    content: '  ⏱ This could take a while...',
+    spinner: {
+      enabled: true,
+    },
+  })
+  tui.startReactive(tuiContent)
+
+  const yarnInstallSubprocess = execa('yarn install', {
+    shell: true,
+    cwd: newAppDir,
+  })
+
+  try {
+    await yarnInstallSubprocess
+  } catch (error) {
+    tui.stopReactive(true)
+    tui.displayError(
+      "Couldn't install node modules",
+      [
+        `We couldn't install node modules via ${RedwoodStyling.info(
+          "'yarn install'"
+        )}. Please see below for the full error message.`,
+        '',
+        error,
+      ].join('\n')
+    )
+    recordErrorViaTelemetry(error)
+    await shutdownTelemetry()
+    process.exit(1)
+  }
+
+  tuiContent.update({
+    header: '',
+    content: `${RedwoodStyling.green('✔')} Installed node modules`,
+    spinner: {
+      enabled: false,
+    },
+  })
+  tui.stopReactive()
+}
+
+async function generateTypes(newAppDir) {
+  const tuiContent = new ReactiveTUIContent({
+    mode: 'text',
+    content: 'Generating types',
+    spinner: {
+      enabled: true,
+    },
+  })
+  tui.startReactive(tuiContent)
+
+  const generateSubprocess = execa('yarn rw-gen', {
+    shell: true,
+    cwd: newAppDir,
+  })
+
+  try {
+    await generateSubprocess
+  } catch (error) {
+    tui.stopReactive(true)
+    tui.displayError(
+      "Couldn't generate types",
+      [
+        `We could not generate types using ${RedwoodStyling.info(
+          "'yarn rw-gen'"
+        )}. Please see below for the full error message.`,
+        '',
+        error,
+      ].join('\n')
+    )
+    recordErrorViaTelemetry(error)
+    await shutdownTelemetry()
+    process.exit(1)
+  }
+
+  tuiContent.update({
+    content: `${RedwoodStyling.green('✔')} Generated types`,
+    spinner: {
+      enabled: false,
+    },
+  })
+  tui.stopReactive()
 }
 
 async function initializeGit(newAppDir, commitMessage) {
@@ -503,6 +606,33 @@ async function handleCommitMessagePreference(commitMessageFlag) {
 }
 
 /**
+ * @param {boolean?} yarnInstallFlag
+ */
+async function handleYarnInstallPreference(yarnInstallFlag) {
+  // Handle case where flag is set
+  if (yarnInstallFlag !== null) {
+    return yarnInstallFlag
+  }
+
+  // Prompt user for preference
+  try {
+    const response = await tui.prompt({
+      type: 'Toggle',
+      name: 'yarnInstall',
+      message: 'Do you want to run yarn install?',
+      enabled: 'Yes',
+      disabled: 'no',
+      initial: 'Yes',
+    })
+    return response.yarnInstall
+  } catch (_error) {
+    recordErrorViaTelemetry('User cancelled install at yarn install prompt')
+    await shutdownTelemetry()
+    process.exit(1)
+  }
+}
+
+/**
  * This function creates a new RedwoodJS app.
  *
  * It performs the following actions:
@@ -562,9 +692,22 @@ async function createRedwoodApp() {
     ].join('\n')
   )
 
+  const _isYarnBerryOrNewer = isYarnBerryOrNewer()
+
+  // Only permit the yarn install flag on yarn 1.
+  if (!_isYarnBerryOrNewer) {
+    cli.option('yarn-install', {
+      default: null,
+      type: 'boolean',
+      describe: 'Install node modules. Skip via --no-yarn-install.',
+    })
+  }
+
   // Extract the args as provided by the user in the command line
   // TODO: Make all flags have the 'flag' suffix
   const args = parsedFlags._
+  const yarnInstallFlag =
+    parsedFlags['yarn-install'] ?? !_isYarnBerryOrNewer ? parsedFlags.yes : null
   const typescriptFlag = parsedFlags.typescript ?? parsedFlags.yes
   const overwrite = parsedFlags.overwrite
   const gitInitFlag = parsedFlags['git-init'] ?? parsedFlags.yes
@@ -573,6 +716,7 @@ async function createRedwoodApp() {
     (parsedFlags.yes ? INITIAL_COMMIT_MESSAGE : null)
 
   // Record some of the arguments for telemetry
+  trace.getActiveSpan()?.setAttribute('yarn-install', yarnInstallFlag)
   trace.getActiveSpan()?.setAttribute('overwrite', overwrite)
 
   // Get the directory for installation from the args
@@ -601,11 +745,35 @@ async function createRedwoodApp() {
     commitMessage = await handleCommitMessagePreference(commitMessageFlag)
   }
 
+  let yarnInstall = false
+
+  if (!_isYarnBerryOrNewer) {
+    yarnInstall = await handleYarnInstallPreference(yarnInstallFlag)
+  }
+
   let newAppDir = path.resolve(process.cwd(), targetDir)
 
   // Create project files
   // if this directory already exists then createProjectFiles may set a new directory name
   newAppDir = await createProjectFiles(newAppDir, { templateDir, overwrite })
+
+  // Install the node packages
+  if (yarnInstall) {
+    const yarnInstallStart = Date.now()
+    await installNodeModules(newAppDir)
+    trace
+      .getActiveSpan()
+      ?.setAttribute('yarn-install-time', Date.now() - yarnInstallStart)
+  } else {
+    if (!_isYarnBerryOrNewer) {
+      tui.drawText(`${RedwoodStyling.info('ℹ')} Skipped yarn install step`)
+    }
+  }
+
+  // Generate types
+  if (yarnInstall) {
+    await generateTypes(newAppDir)
+  }
 
   // Initialize git repo
   if (useGit) {
@@ -630,9 +798,10 @@ async function createRedwoodApp() {
             `cd ${path.relative(process.cwd(), newAppDir)}`
           )}`
         )}`,
-        `${RedwoodStyling.redwood(
-          ` > ${RedwoodStyling.green(`yarn install`)}`
-        )}`,
+        !yarnInstall &&
+          `${RedwoodStyling.redwood(
+            ` > ${RedwoodStyling.green(`yarn install`)}`
+          )}`,
         `${RedwoodStyling.redwood(
           ` > ${RedwoodStyling.green(`yarn rw dev`)}`
         )}`,
