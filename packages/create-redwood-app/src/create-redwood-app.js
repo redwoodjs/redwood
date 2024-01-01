@@ -251,7 +251,7 @@ async function createProjectFiles(appDir, { templateDir, overwrite }) {
   fs.copySync(templateDir, newAppDir, { overwrite })
 
   // .gitignore is renamed here to force file inclusion during publishing
-  fs.rename(
+  fs.renameSync(
     path.join(newAppDir, 'gitignore.template'),
     path.join(newAppDir, '.gitignore')
   )
