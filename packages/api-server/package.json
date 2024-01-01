@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api-server",
-  "version": "6.6.0",
+  "version": "6.6.1",
   "description": "Redwood's HTTP server for Serverless Functions",
   "repository": {
     "type": "git",
@@ -33,8 +33,8 @@
     "@fastify/http-proxy": "9.3.0",
     "@fastify/static": "6.12.0",
     "@fastify/url-data": "5.4.0",
-    "@redwoodjs/context": "6.6.0",
-    "@redwoodjs/project-config": "6.6.0",
+    "@redwoodjs/context": "6.6.1",
+    "@redwoodjs/project-config": "6.6.1",
     "ansi-colors": "4.1.3",
     "chalk": "4.1.2",
     "chokidar": "3.5.3",

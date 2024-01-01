@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/cli-data-migrate",
-  "version": "6.6.0",
+  "version": "6.6.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -25,8 +25,8 @@
     "test:unit": "yarn jest src"
   },
   "dependencies": {
-    "@redwoodjs/babel-config": "6.6.0",
-    "@redwoodjs/project-config": "6.6.0",
+    "@redwoodjs/babel-config": "6.6.1",
+    "@redwoodjs/project-config": "6.6.1",
     "chalk": "4.1.2",
     "dotenv-defaults": "5.0.2",
     "execa": "5.1.1",
