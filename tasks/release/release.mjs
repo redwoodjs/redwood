@@ -133,14 +133,14 @@ main()
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 async function doChecks() {
-  // Check Node.js version. Right now, v18.19 breaks one of our tests.
   const nodeVersion = unwrap(await $`node -v`)
 
-  if (nodeVersion.startsWith('v20')) {
+  if (!nodeVersion.startsWith('v20')) {
     throw new Error(
       [
-        'The framework is currently built for Node v18; running QA with v20 may cause issues.',
-        'Please switch to Node v18.',
+        'The framework is currently built for Node v20; running QA with any ' +
+          'other version may cause issues.',
+        'Please switch to Node v20.',
       ].join('\n')
     )
   }
