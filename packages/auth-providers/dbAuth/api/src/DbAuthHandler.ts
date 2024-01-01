@@ -970,8 +970,9 @@ export class DbAuthHandler<
 
       const existingDevice = await this.dbCredentialAccessor.findFirst({
         where: {
-          id: plainCredentialId,
-          userId: user[this.options.authFields.id],
+          [this.options.webAuthn.credentialFields.id]: plainCredentialId,
+          [this.options.webAuthn.credentialFields.userId]:
+            user[this.options.authFields.id],
         },
       })
 
