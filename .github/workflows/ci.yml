@@ -564,13 +564,9 @@ jobs:
           sudo apt-get install expect
 
           ./tests/e2e_prompts.sh
-          sleep 1
           ./tests/e2e_prompts_git.sh
-          sleep 1
           ./tests/e2e_prompts_m.sh
-          sleep 1
           ./tests/e2e_prompts_ts.sh
-          sleep 1
           ./tests/e2e_prompts_overwrite.sh
         working-directory: ./packages/create-redwood-app
         env:
