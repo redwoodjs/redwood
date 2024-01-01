@@ -713,6 +713,9 @@ async function releasePatch() {
       '  - delete the release branch locally and on GitHub (https://github.com/redwoodjs/redwood/branches)',
       `    - \`git branch -d ${releaseBranch}\``,
       `    - \`git push ${redwoodRemote} --delete ${releaseBranch}\``,
+      '  - Update the Algolia search index',
+      '    - https://crawler.algolia.com',
+      '    - "Restart crawling" (top right)',
       '  - post on Slack, Discord, and Buffer',
     ].join('\n')
   )
