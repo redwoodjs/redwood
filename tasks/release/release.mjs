@@ -117,6 +117,13 @@ export async function main() {
   await resolveMilestones()
   console.log()
 
+  console.log(
+    'If you want to use `yarn release:notes` to generate release notes, now would be a good time to do so.'
+  )
+  await question(
+    "Press any key to continue when you're done with the release notes > "
+  )
+
   switch (semver) {
     case 'major':
     case 'minor':
