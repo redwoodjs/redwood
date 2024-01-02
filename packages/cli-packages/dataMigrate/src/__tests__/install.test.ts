@@ -26,6 +26,8 @@ describe('install', () => {
   })
 
   it('`builder` has an epilogue', () => {
+    // The typecasting here is to make TS happy when calling `builder(yargs)`
+    // further down. We know that only `epilogue` will be called.
     const yargs = { epilogue: jest.fn() } as unknown as yargs.Argv
 
     installCommand.builder(yargs)
