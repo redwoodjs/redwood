@@ -30,9 +30,17 @@ describe('install', () => {
 
     installCommand.builder(yargs)
 
+    // The epilogue is a string that contains a link to the docs. The string
+    // contains special control characters when rendered in a terminal that
+    // supports clickable links. We use regular expressions and wildcards here
+    // to avoid having to match control characters that might not even always
+    // be there
+    expect(yargs.epilogue).toHaveBeenCalledWith(
+      expect.stringMatching(/Also see the .*Redwood CLI Reference.*/)
+    )
     expect(yargs.epilogue).toHaveBeenCalledWith(
       expect.stringMatching(
-        /:\/\/redwoodjs\.com\/docs\/cli-commands#datamigrate-install/
+        /https:\/\/redwoodjs\.com\/docs\/cli-commands#datamigrate-install/
       )
     )
   })
