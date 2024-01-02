@@ -19,6 +19,8 @@ function getExecaOptions(cwd) {
 // and is set when webTasks or apiTasks are called
 let OUTPUT_PATH
 
+const RW_FRAMEWORK_PATH = path.join(__dirname, '../../')
+
 function fullPath(name, { addExtension } = { addExtension: true }) {
   if (addExtension) {
     if (name.startsWith('api')) {
@@ -387,9 +389,9 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
 async function addModel(schema) {
   const path = `${OUTPUT_PATH}/api/db/schema.prisma`
 
-  const current = fs.readFileSync(path)
+  const current = fs.readFileSync(path, 'utf-8')
 
-  fs.writeFileSync(path, `${current}\n\n${schema}`)
+  fs.writeFileSync(path, `${current.trim()}\n\n${schema}\n`)
 }
 
 async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
@@ -406,26 +408,97 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
       },
     })
 
-    const dbAuthSetupPath = path.join(
-      outputPath,
-      'node_modules',
-      '@redwoodjs',
-      'auth-dbauth-setup'
+    // We want to use the latest version of the auth-dbauth-{setup,api,web}
+    // packages. But they're not published yet. So let's package them up as
+    // tarballs and install them using that by setting yarn resolutions
+
+    const setupPkg = path.join(
+      RW_FRAMEWORK_PATH,
+      'packages',
+      'auth-providers',
+      'dbAuth',
+      'setup'
+    )
+    const apiPkg = path.join(
+      RW_FRAMEWORK_PATH,
+      'packages',
+      'auth-providers',
+      'dbAuth',
+      'api'
+    )
+    const webPkg = path.join(
+      RW_FRAMEWORK_PATH,
+      'packages',
+      'auth-providers',
+      'dbAuth',
+      'web'
     )
 
-    // At an earlier step we run `yarn rwfw project:copy` which gives us
-    // auth-dbauth-setup@3.2.0 currently. We need that version to be a canary
-    // version for auth-dbauth-api and auth-dbauth-web package installations
-    // to work. So we remove the current version and add a canary version
-    // instead.
+    await exec('yarn build:pack', [], getExecaOptions(setupPkg))
+    await exec('yarn build:pack', [], getExecaOptions(apiPkg))
+    await exec('yarn build:pack', [], getExecaOptions(webPkg))
 
-    fs.rmSync(dbAuthSetupPath, { recursive: true, force: true })
+    const setupTgz = path.join(setupPkg, 'redwoodjs-auth-dbauth-setup.tgz')
+    const apiTgz = path.join(apiPkg, 'redwoodjs-auth-dbauth-api.tgz')
+    const webTgz = path.join(webPkg, 'redwoodjs-auth-dbauth-web.tgz')
+
+    const setupTgzDest = path.join(
+      outputPath,
+      'redwoodjs-auth-dbauth-setup.tgz'
+    )
+    const apiTgzDest = path.join(outputPath, 'redwoodjs-auth-dbauth-api.tgz')
+    const webTgzDest = path.join(outputPath, 'redwoodjs-auth-dbauth-web.tgz')
+
+    fs.copyFileSync(setupTgz, setupTgzDest)
+    fs.copyFileSync(apiTgz, apiTgzDest)
+    fs.copyFileSync(webTgz, webTgzDest)
+
+    const projectPackageJsonPath = path.join(outputPath, 'package.json')
+    const projectPackageJson = JSON.parse(
+      fs.readFileSync(projectPackageJsonPath, 'utf-8')
+    )
+
+    const existingResolutions = projectPackageJson.resolutions
+      ? { ...projectPackageJson.resolutions }
+      : undefined
+
+    projectPackageJson.resolutions ??= {}
+    projectPackageJson.resolutions = {
+      ...projectPackageJson.resolutions,
+      '@redwoodjs/auth-dbauth-setup': './redwoodjs-auth-dbauth-setup.tgz',
+      '@redwoodjs/auth-dbauth-api': './redwoodjs-auth-dbauth-api.tgz',
+      '@redwoodjs/auth-dbauth-web': './redwoodjs-auth-dbauth-web.tgz',
+    }
+
+    fs.writeFileSync(
+      projectPackageJsonPath,
+      JSON.stringify(projectPackageJson, null, 2)
+    )
+
+    // Run `yarn install` to have the resolutions take effect and install the
+    // tarballs we copied over
+    await exec('yarn install', [], execaOptions)
 
     await exec(
       'yarn rw setup auth dbAuth --force --no-webauthn',
       [],
       execaOptions
     )
+
+    // Restore old resolutions
+    if (existingResolutions) {
+      projectPackageJson.resolutions = existingResolutions
+    }
+
+    fs.writeFileSync(
+      projectPackageJsonPath,
+      JSON.stringify(projectPackageJson, null, 2)
+    )
+
+    // Remove tarballs
+    fs.unlinkSync(setupTgzDest)
+    fs.unlinkSync(apiTgzDest)
+    fs.unlinkSync(webTgzDest)
 
     // Restore postinstall script
     updatePkgJsonScripts({
@@ -524,10 +597,13 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
     // set fullName when signing up
     const pathAuthTs = `${OUTPUT_PATH}/api/src/functions/auth.ts`
     const contentAuthTs = fs.readFileSync(pathAuthTs).toString()
-    const resultsAuthTs = contentAuthTs.replace(
-      '// name: userAttributes.name',
-      "fullName: userAttributes['full-name']"
-    )
+    const resultsAuthTs = contentAuthTs
+      .replace('name: string', "'full-name': string")
+      .replace('userAttributes: _userAttributes', 'userAttributes')
+      .replace(
+        '// name: userAttributes.name',
+        "fullName: userAttributes['full-name']"
+      )
 
     fs.writeFileSync(pathAuthTs, resultsAuthTs)
   }
@@ -544,12 +620,12 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
           const createPage = createBuilder('yarn redwood g page')
           await createPage('double')
 
-          const doublePageContent = `import { MetaTags } from '@redwoodjs/web'
+          const doublePageContent = `import { Metadata } from '@redwoodjs/web'
 
 const DoublePage = () => {
   return (
     <>
-      <MetaTags title="Double" description="Double page" />
+      <Metadata title="Double" description="Double page" og />
 
       <h1 className="mb-1 mt-2 text-xl font-semibold">DoublePage</h1>
       <p>

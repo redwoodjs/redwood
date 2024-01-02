@@ -15,6 +15,7 @@
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build:pack": "yarn pack -o redwoodjs-graphql-server.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
@@ -22,7 +23,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.5",
+    "@babel/runtime-corejs3": "7.23.6",
     "@envelop/core": "5.0.0",
     "@envelop/depth-limit": "3.0.3",
     "@envelop/disable-introspection": "5.0.3",
@@ -35,6 +36,7 @@
     "@graphql-yoga/plugin-persisted-operations": "2.0.5",
     "@opentelemetry/api": "1.7.0",
     "@redwoodjs/api": "6.0.7",
+    "@redwoodjs/context": "6.0.7",
     "core-js": "3.34.0",
     "graphql": "16.8.1",
     "graphql-scalars": "1.22.4",

@@ -1,7 +1,7 @@
-import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { addApiPackages } from '@redwoodjs/cli-helpers'
@@ -69,7 +69,7 @@ export const handler = async ({ force, verbose }) => {
           writeFile(
             redwoodTomlPath,
             configContent.concat(
-              `\n[experimental.opentelemetry]\n\tenabled = true\n\twrapApi = true\n\tapiSdk = "${opentelemetryScriptPath}"`
+              `\n[experimental.opentelemetry]\n\tenabled = true\n\twrapApi = true`
             ),
             {
               overwriteExisting: true, // redwood.toml always exists

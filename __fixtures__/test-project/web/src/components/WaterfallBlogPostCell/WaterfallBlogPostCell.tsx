@@ -3,11 +3,18 @@ import type {
   FindWaterfallBlogPostQueryVariables,
 } from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
 import AuthorCell from 'src/components/AuthorCell'
 
-export const QUERY = gql`
+export const QUERY: TypedDocumentNode<
+  FindWaterfallBlogPostQuery,
+  FindWaterfallBlogPostQueryVariables
+> = gql`
   query FindWaterfallBlogPostQuery($id: Int!) {
     waterfallBlogPost: post(id: $id) {
       id

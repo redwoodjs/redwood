@@ -2,7 +2,6 @@ global.__dirname = __dirname
 
 jest.mock('fs')
 
-import fs from 'fs'
 import path from 'path'
 
 // Load mocks
@@ -10,6 +9,7 @@ import '../../../../lib/test'
 
 const realfs = jest.requireActual('fs')
 import Enquirer from 'enquirer'
+import fs from 'fs-extra'
 
 import { getPaths } from '../../../../lib'
 import * as dbAuth from '../dbAuth'

@@ -20,7 +20,7 @@ afterEach(() => {
 
 describe('api', () => {
   test("TARGETS_NODE hasn't unintentionally changed", () => {
-    expect(TARGETS_NODE).toMatchInlineSnapshot(`"18.16"`)
+    expect(TARGETS_NODE).toMatchInlineSnapshot(`"20.10"`)
   })
 
   describe('getApiSideBabelPresets', () => {
@@ -64,7 +64,7 @@ describe('api', () => {
                 "@babel/plugin-transform-private-methods",
               ],
               "targets": {
-                "node": "18.16",
+                "node": "20.10",
               },
               "useBuiltIns": "usage",
             },
@@ -174,7 +174,7 @@ describe('api', () => {
             proposals: true,
             version: 3,
           },
-          version: '7.23.5',
+          version: '7.23.6',
         },
       ])
 
@@ -212,7 +212,7 @@ describe('api', () => {
             },
             {
               members: ['context'],
-              path: '@redwoodjs/graphql-server',
+              path: '@redwoodjs/context',
             },
           ],
         },

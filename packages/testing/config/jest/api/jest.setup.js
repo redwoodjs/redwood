@@ -4,7 +4,6 @@
 // @NOTE without these imports in the setup file, mockCurrentUser
 // will remain undefined in the user's tests
 // Remember to use specific imports
-const { setContext } = require('@redwoodjs/graphql-server/dist/globalContext')
 const { defineScenario } = require('@redwoodjs/testing/dist/api/scenario')
 
 // @NOTE we do this because jest.setup.js runs every time in each context
@@ -191,10 +190,6 @@ const seedScenario = async (scenario) => {
 global.scenario = buildScenario(global.it, global.testPath)
 global.scenario.only = buildScenario(global.it.only, global.testPath)
 
-global.mockCurrentUser = (currentUser) => {
-  setContext({ currentUser })
-}
-
 /**
  *
  * All these hooks run in the VM/Context that the test runs in since we're using "setupAfterEnv".
@@ -218,24 +213,41 @@ const wasDbUsed = () => {
   }
 }
 
-beforeEach(() => {
-  // Attempt to emulate the request context isolation behavior
-  const mockContextStore = new Map()
-  mockContextStore.set('context', {})
-  jest
-    .spyOn(
-      require('@redwoodjs/graphql-server/dist/globalContextStore'),
-      'getAsyncStoreInstance'
-    )
-    // @ts-expect-error - We are not providing the full functionality of the AsyncLocalStorage in this returned object
-    .mockImplementation(() => {
-      return {
-        getStore: () => {
-          return mockContextStore
-        },
+// Attempt to emulate the request context isolation behavior
+// This is a little more complicated than it would necessarily need to be
+// but we're following the same pattern as in `@redwoodjs/context`
+const mockContextStore = new Map()
+const mockContext = new Proxy(
+  {},
+  {
+    get: (_target, prop) => {
+      // Handle toJSON() calls, i.e. JSON.stringify(context)
+      if (prop === 'toJSON') {
+        return () => mockContextStore.get('context')
       }
-    })
+      return mockContextStore.get('context')[prop]
+    },
+    set: (_target, prop, value) => {
+      const ctx = mockContextStore.get('context')
+      ctx[prop] = value
+      return true
+    },
+  }
+)
+jest.mock('@redwoodjs/context', () => {
+  return {
+    context: mockContext,
+    setContext: (newContext) => {
+      mockContextStore.set('context', newContext)
+    },
+  }
 })
+beforeEach(() => {
+  mockContextStore.set('context', {})
+})
+global.mockCurrentUser = (currentUser) => {
+  mockContextStore.set('context', { currentUser })
+}
 
 beforeAll(async () => {
   if (wasDbUsed()) {

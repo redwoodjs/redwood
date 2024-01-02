@@ -1,13 +1,21 @@
-import type { EditPostById, UpdatePostInput } from 'types/graphql'
+import type {
+  EditPostById,
+  UpdatePostInput,
+  UpdatePostMutationVariables,
+} from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import PostForm from 'src/components/Post/PostForm'
 
-export const QUERY = gql`
+export const QUERY: TypedDocumentNode<EditPostById> = gql`
   query EditPostById($id: Int!) {
     post: post(id: $id) {
       id
@@ -18,7 +26,11 @@ export const QUERY = gql`
     }
   }
 `
-const UPDATE_POST_MUTATION = gql`
+
+const UPDATE_POST_MUTATION: TypedDocumentNode<
+  EditPostById,
+  UpdatePostMutationVariables
+> = gql`
   mutation UpdatePostMutation($id: Int!, $input: UpdatePostInput!) {
     updatePost(id: $id, input: $input) {
       id

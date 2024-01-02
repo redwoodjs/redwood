@@ -74,11 +74,12 @@ const baseConfig = {
       }
     }
 
-    const userPreviewPath = fs.existsSync(
-      redwoodProjectPaths.web.storybookPreviewConfig
-    )
-      ? redwoodProjectPaths.web.storybookPreviewConfig
-      : './preview.example.js'
+    let userPreviewPath = './preview.example.js'
+
+    if (redwoodProjectPaths.storybookPreviewConfig) {
+      userPreviewPath = redwoodProjectPaths.storybookPreviewConfig
+    }
+
     sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_PREVIEW_CONFIG'] =
       userPreviewPath
 

@@ -28,6 +28,7 @@
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build:pack": "yarn pack -o redwoodjs-web.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
@@ -37,7 +38,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.8.8",
-    "@babel/runtime-corejs3": "7.23.5",
+    "@babel/runtime-corejs3": "7.23.6",
     "@redwoodjs/auth": "6.0.7",
     "core-js": "3.34.0",
     "graphql": "16.8.1",

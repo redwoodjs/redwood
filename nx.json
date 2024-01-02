@@ -30,15 +30,24 @@
       ],
       "cache": true
     },
+
     "test": {
       "inputs": [
         "default",
         "^prod"
       ],
       "cache": true
+    },
+
+    "build:pack": {
+      "dependsOn": ["build"],
+      "outputs": [
+        "{projectRoot}/*.tgz"
+      ],
+      "cache": true
     }
+
   },
 
-  "nxCloudAccessToken": "ODMxYWQ1ZjgtMTJhNi00M2Q1LTg1YTAtNTk3NjFkNzNmZjk0fHJlYWQ=",
-  "parallel": 5
+  "nxCloudAccessToken": "ODMxYWQ1ZjgtMTJhNi00M2Q1LTg1YTAtNTk3NjFkNzNmZjk0fHJlYWQ="
 }
