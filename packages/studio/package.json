@@ -39,7 +39,7 @@
     "fastify-raw-body": "4.3.0",
     "graphql": "16.8.1",
     "graphql-scalars": "1.22.4",
-    "graphql-yoga": "4.0.4",
+    "graphql-yoga": "5.1.0",
     "jsonwebtoken": "9.0.2",
     "lodash": "4.17.21",
     "mailparser": "3.6.5",
