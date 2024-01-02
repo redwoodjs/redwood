@@ -33,16 +33,18 @@
     },
     "typeRoots": [
       "../node_modules/@types",
-      "./node_modules/@types"
+      "./node_modules/@types",
+      "../node_modules/@testing-library"
     ],
     "types": [
       "jest",
-      "@testing-library/jest-dom"
+      "jest-dom"
     ],
     "jsx": "preserve"
   },
   "include": [
     "src",
+    "config",
     "../.redwood/types/includes/all-*",
     "../.redwood/types/includes/web-*",
     "../types",

@@ -128,31 +128,18 @@ becomes...
 </MainLayout>
 ```
 
-### `private` Set
+### `PrivateSet`
 
-Sets can take a `private` prop which makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the private Set, they'll be redirected to the Route passed as the Set's `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
+A `PrivateSet` makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the `PrivateSet`, they'll be redirected to the Route passed as the `PrivateSet`'s `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
 
 Here's an example of how you'd use a private set:
 
 ```jsx title="Routes.js"
 <Router>
   <Route path="/" page={HomePage} name="home" />
-  <Set private unauthenticated="home">
-    <Route path="/admin" page={AdminPage} name="admin" />
-  </Set>
-</Router>
-```
-
-Private routes are important and should be easy to spot in your Routes file. The larger your Routes file gets, the more difficult it will probably become to find `<Set private /*...*/>` among your other Sets. So we also provide a `<PrivateSet>` component that's just an alias for `<Set private /*...*/>`. Most of our documentation uses `<PrivateSet>`.
-
-Here's the same example again, but now using `<PrivateSet>`
-
-```jsx title="Routes.js"
-<Router>
-  <Route path="/" page={HomePage} name="home" />
   <PrivateSet unauthenticated="home">
     <Route path="/admin" page={AdminPage} name="admin" />
-  <PrivateSet>
+  </PrivateSet>
 </Router>
 ```
 
@@ -164,7 +151,7 @@ To protect `Private` routes for access by a single role:
 <Router>
   <PrivateSet unauthenticated="forbidden" roles="admin">
     <Route path="/admin/users" page={UsersPage} name="users" />
-  <PrivateSet>
+  </PrivateSet>
 
   <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />
 </Router>
@@ -176,7 +163,7 @@ To protect `Private` routes for access by multiple roles:
 <Router>
   <PrivateSet unauthenticated="forbidden" roles={['admin', 'editor', 'publisher']}>
     <Route path="/admin/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />
-  <PrivateSet>
+  </PrivateSet>
 
   <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />
 </Router>
@@ -259,7 +246,9 @@ More granular match, `page` key only and `tab=tutorial`
 activeMatchParams={[{ tab: 'tutorial' }, 'page' ]}
 ```
 
-You can `useMatch` to create your own component with active styles.
+### useMatch
+
+You can use `useMatch` to create your own component with active styles.
 
 > `NavLink` uses it internally!
 
@@ -458,6 +447,58 @@ const App = () => {
 }
 ```
 
+## useRoutePaths
+
+`useRoutePaths()` is a React hook you can use to get a map of all routes mapped to their literal paths, as they're defined in your routes file.
+
+Example usage:
+
+```jsx
+const routePaths = useRoutePaths()
+
+return <pre><code>{JSON.stringify(routePaths, undefined, 2)}</code></pre>
+```
+
+Example output:
+
+```
+{
+  "home": "/"
+  "about": "/about",
+  "login": "/login",
+  "signup": "/signup",
+  "forgotPassword": "/forgot-password",
+  "resetPassword": "/reset-password",
+  "newContact": "/contacts/new",
+  "editContact": "/contacts/{id:Int}/edit",
+  "contact": "/contacts/{id:Int}",
+  "contacts": "/contacts",
+}
+```
+
+## useRoutePath
+
+This is a convenience hook for when you only want the path for a single route.
+```jsx
+const aboutPath = useRoutePath('about') // returns "/about"
+```
+is the same as
+```jsx
+const routePaths = useRoutePaths()
+const aboutPath = routePaths.about // Also returns "/about"
+```
+
+## useRouteName
+
+Use the `useRouteName()` hook to get the name of the current route (the page
+the user is currently visiting). The name can then also be used with `routes`
+if you need to dynamically get the url to the current page:
+
+```jsx
+const routeName = useRouteName()
+const routeUrl = routeName ? routes[routeName]() : undefined
+```
+
 ## Navigation
 
 ### navigate
@@ -572,7 +613,7 @@ When the lazy-loaded page is loading, `PageLoadingContext.Consumer` will pass `{
 
 Let's say you have a dashboard area on your Redwood app, which can only be accessed after logging in. When Redwood Router renders your private page, it will first fetch the user's details, and only render the page if it determines the user is indeed logged in.
 
-In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your private `<Route>`, `<Set private>` or the `<PrivateSet>` component:
+In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your private `<Route>` or `<PrivateSet>` component:
 
 ```jsx
 //Routes.js
@@ -611,9 +652,9 @@ Or if the variable passed as a prop to a component can't be found:
 
 ![fatal_error_message_query](/img/router/fatal_error_message_query.png)
 
-And if the page has a Cell, you'll see the Cell's request and response which may have contributed to the error:
+And if the page has a Cell, you'll see the Cell's request which may have contributed to the error - but will depend on how your Suspense boundary is setup:
 
-![fatal_error_message_request](/img/router/fatal_error_request.png)
+![cell_error_request](/img/router/cell_req_error.png)
 
 ### In Production
 
@@ -675,7 +716,7 @@ Note that if you're copy-pasting this example, it uses [Tailwind CSS](https://ta
 
 :::note Can I customize the development one?
 
-As it's part of the RedwoodJS framework, you can't. But if there's a feature you want to add, let us know on the [forums](https://community.redwoodjs.com/).
+As it's part of the RedwoodJS framework, you can't _change_ the dev fatal error page - but you can always build your own that takes the same props. If there's a feature you want to add to the built-in version, let us know on the [forums](https://community.redwoodjs.com/).
 
 :::
 

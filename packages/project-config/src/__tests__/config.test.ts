@@ -55,7 +55,6 @@ describe('getConfig', () => {
             ],
           },
           "opentelemetry": {
-            "apiSdk": undefined,
             "enabled": false,
             "wrapApi": true,
           },
@@ -69,6 +68,7 @@ describe('getConfig', () => {
             "enabled": false,
           },
           "studio": {
+            "basePort": 4318,
             "graphiql": {
               "authImpersonation": {
                 "authProvider": undefined,

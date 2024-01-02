@@ -1,7 +1,6 @@
 export * from './parseJWT'
 
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
-// @ts-expect-error Types are incorrect in 0.6, but will be fixed in the next version probably
 import { parse as parseCookie } from 'cookie'
 
 import { getEventHeader } from '../event'

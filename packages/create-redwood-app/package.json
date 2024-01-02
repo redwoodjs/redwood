@@ -14,10 +14,13 @@
   ],
   "scripts": {
     "build": "yarn node ./build.mjs",
+    "build:pack": "yarn pack -o create-redwood-app.tgz",
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "yarn run jest tests",
-    "ts-to-js": "yarn node ./tsToJS.mjs"
+    "set-up-test-project": "node ./scripts/setUpTestProject.mjs",
+    "test": "node --experimental-vm-modules $(yarn bin jest) templates",
+    "test:e2e": "node --experimental-vm-modules $(yarn bin jest) e2e",
+    "ts-to-js": "yarn node ./scripts/tsToJS.mjs"
   },
   "dependencies": {
     "@opentelemetry/api": "1.7.0",
@@ -28,7 +31,7 @@
     "@redwoodjs/tui": "6.0.7",
     "chalk": "4.1.2",
     "check-node-version": "4.2.1",
-    "ci-info": "3.9.0",
+    "ci-info": "4.0.0",
     "envinfo": "7.11.0",
     "execa": "5.1.1",
     "fs-extra": "11.2.0",
@@ -43,7 +46,7 @@
     "@babel/core": "^7.22.20",
     "@babel/plugin-transform-typescript": "^7.22.15",
     "@types/babel__core": "7.20.4",
-    "esbuild": "0.19.5",
+    "esbuild": "0.19.9",
     "jest": "29.7.0",
     "klaw-sync": "6.0.0"
   },

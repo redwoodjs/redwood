@@ -24,9 +24,9 @@
     "@types/react": "18.2.37",
     "@types/react-dom": "18.2.15",
     "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.31",
-    "postcss-loader": "^7.3.3",
+    "postcss": "^8.4.32",
+    "postcss-loader": "^7.3.4",
     "prettier-plugin-tailwindcss": "0.4.1",
-    "tailwindcss": "^3.3.5"
+    "tailwindcss": "^3.4.0"
   }
 }

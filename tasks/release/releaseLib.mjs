@@ -1,13 +1,20 @@
 /* eslint-env node */
 
+import { fileURLToPath } from 'node:url'
+
 import { faker } from '@faker-js/faker'
 import boxen from 'boxen'
 import { Octokit } from 'octokit'
 import ora from 'ora'
 import _prompts from 'prompts'
 import semver from 'semver'
-import { chalk, fs, path, question, $ } from 'zx'
+import { cd, chalk, fs, path, question, $ } from 'zx'
+
 import 'dotenv/config'
+
+// ─── Constants ───────────────────────────────────────────────────────────────
+
+const triageDataRepoPath = new URL(`../../../triage-data/`, import.meta.url)
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -69,6 +76,7 @@ export function unwrap(processOutput) {
  * @param {string} message
  */
 export function consoleBoxen(title, message) {
+  console.log()
   console.log(
     boxen(message, {
       title,
@@ -118,7 +126,8 @@ export function prompts(promptsObject, promptsOptions) {
 // ─── Branch Statuses ─────────────────────────────────────────────────────────
 
 /**
- * Basically runs `git fetch origin` on branches with safety checks and logging.
+ * Basically runs `git pull upstream` or `git fetch upstream` on branches with
+ * safety checks and logging.
  *
  * @param {string[]} branches
  */
@@ -141,7 +150,7 @@ export async function resolveBranchStatuses(branches) {
   let result
 
   // We need to run `git remote update ${redwoodRemote}` to `git fetch ${branch}`.
-  // Nine out of ten times, the redwood remote is `origin`. But let's just be sure.
+  // Nine out of ten times, the redwood remote is `upstream`. But let's just be sure.
   result = await getRedwoodRemote()
 
   if (result.error) {
@@ -302,13 +311,17 @@ export async function handleBranchesToCommits(
     ].join('\n')
   } else {
     for (const [branch, status] of Object.entries(branchesToCommits)) {
+      const pullOrFetch = branch === 'main' ? 'pull' : 'fetch'
+
       if (
         status.commitsExclusiveToRemoteBranch &&
         isYes(
-          await question(`Ok to \`git fetch\` ${chalk.magenta(branch)}? [Y/n] `)
+          await question(
+            `Ok to \`git ${pullOrFetch}\` ${chalk.magenta(branch)}? [Y/n] `
+          )
         )
       ) {
-        await $`git fetch ${redwoodRemote} ${branch}:${branch}`
+        await $`git ${pullOrFetch} ${redwoodRemote} ${branch}:${branch}`
       }
     }
   }
@@ -335,6 +348,25 @@ export async function triageRange(range) {
     range.to.replaceAll('/', '-'),
   ].join('_')
 
+  // Commit triage data files (like `main_next.commitTriageData.json`) come in and out of existence,
+  // so we can't rely on them to know if the triage data repo was cloned. Instead we use `.git`.
+  if (!fs.existsSync(new URL('./.git', triageDataRepoPath))) {
+    spinner.stop()
+    throw new Error(
+      [
+        "You're missing commit triage data.",
+        'You need to clone the triage data repo (https://github.com/redwoodjs/triage-data)',
+        'adjacent to the redwood one:',
+        '',
+        '```',
+        '.',
+        '├── redwood',
+        '└── triage-data',
+        '```',
+      ].join('\n')
+    )
+  }
+
   // Set up the commit triage data. This reads a file like `./main_next.commitTriageData.json` into a map
   // and sets up a hook on `process.exit` so that we don't have to remember to write it.
   //
@@ -346,9 +378,23 @@ export async function triageRange(range) {
   //   needsCherryPick: false
   // }
   // ```
-  const commitTriageData = setUpDataFile(
-    new URL(`./triage/${fileNamePrefix}.commitTriageData.json`, import.meta.url)
+  let commitTriageData
+  const commitTriageDataPath = new URL(
+    `./${fileNamePrefix}.commitTriageData.json`,
+    triageDataRepoPath
   )
+
+  try {
+    commitTriageData = new Map(
+      Object.entries(fs.readJSONSync(commitTriageDataPath, 'utf-8'))
+    )
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      commitTriageData = new Map()
+    } else {
+      throw e
+    }
+  }
 
   // In git, the "symmetric difference" (syntactically, three dots: `...`) is what's different between two branches.
   // It's the commits one branch has that the other doesn't, and vice versa:
@@ -406,35 +452,27 @@ export async function triageRange(range) {
   }
 
   reportCommitStatuses({ commits, commitTriageData, range })
-}
 
-/**
- * @param {URL} path
- */
-export function setUpDataFile(path) {
-  let data
+  if (commitTriageData.size || prMilestoneCache.size) {
+    fs.writeJSONSync(
+      commitTriageDataPath,
+      Object.fromEntries(commitTriageData),
+      {
+        spaces: 2,
+      }
+    )
+    fs.writeJSONSync(
+      prMilestoneCachePath,
+      Object.fromEntries(prMilestoneCache),
+      {
+        spaces: 2,
+      }
+    )
 
-  // Return an empty map if the file doesn't exist.
-  try {
-    data = new Map(Object.entries(fs.readJSONSync(path, 'utf-8')))
-  } catch (e) {
-    if (e.code === 'ENOENT') {
-      data = new Map()
-    } else {
-      throw e
-    }
+    await cd(fileURLToPath(triageDataRepoPath))
+    await $`git commit -am "triage ${new Date().toISOString()}"`
+    await $`git push`
   }
-
-  // Write the file on the process's exit event so we don't have to remember to.
-  // Note that this is different from `process.exit`, and calling `process.exit` actually doesn't trigger this event. (So avoid doing it.)
-  // The conditional is just to avoid writing an empty map to a file (which JSON stringifies as `{}`), which is just noise.
-  process.on('exit', () => {
-    if (data.size) {
-      fs.writeJSONSync(path, Object.fromEntries(data), { spaces: 2 })
-    }
-  })
-
-  return data
 }
 
 export const defaultGitLogOptions = [
@@ -871,15 +909,27 @@ function getLongAnswer(answer) {
 }
 
 export let prMilestoneCache
+const prMilestoneCachePath = new URL(
+  './prMilestoneCache.json',
+  triageDataRepoPath
+)
 
 /**
  * @param {string} prURL
  */
 export async function getPRMilestoneFromURL(prURL) {
   if (!prMilestoneCache) {
-    prMilestoneCache = setUpDataFile(
-      new URL('./prMilestoneCache.json', import.meta.url)
-    )
+    try {
+      prMilestoneCache = new Map(
+        Object.entries(fs.readJSONSync(prMilestoneCachePath, 'utf-8'))
+      )
+    } catch (e) {
+      if (e.code === 'ENOENT') {
+        prMilestoneCache = new Map()
+      } else {
+        throw e
+      }
+    }
   }
 
   if (prMilestoneCache.has(prURL)) {

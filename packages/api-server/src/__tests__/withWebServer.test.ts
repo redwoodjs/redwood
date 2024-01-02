@@ -280,4 +280,24 @@ describe('withWebServer', () => {
       )
     })
   })
+
+  describe("returns a 404 for assets that can't be found", () => {
+    it("returns a 404 for non-html assets that can't be found", async () => {
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: '/kittens.png',
+      })
+
+      expect(res.statusCode).toBe(404)
+    })
+
+    it('handles "."s in routes', async () => {
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: '/my-page?loading=spinner.blue',
+      })
+
+      expect(res.statusCode).toBe(200)
+    })
+  })
 })

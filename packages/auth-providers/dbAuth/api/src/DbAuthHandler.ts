@@ -45,7 +45,7 @@ import {
 type SetCookieHeader = { 'set-cookie': string }
 type CsrfTokenHeader = { 'csrf-token': string }
 
-interface SignupFlowOptions {
+interface SignupFlowOptions<TUserAttributes = Record<string, unknown>> {
   /**
    * Allow users to sign up. Defaults to true.
    * Needs to be explicitly set to false to disable the flow
@@ -59,7 +59,7 @@ interface SignupFlowOptions {
    * were included in the object given to the `signUp()` function you got
    * from `useAuth()`
    */
-  handler: (signupHandlerOptions: SignupHandlerOptions) => any
+  handler: (signupHandlerOptions: SignupHandlerOptions<TUserAttributes>) => any
 
   /**
    * Validate the user-supplied password with whatever logic you want. Return
@@ -82,13 +82,13 @@ interface SignupFlowOptions {
   usernameMatch?: string
 }
 
-interface ForgotPasswordFlowOptions<TUser = Record<string | number, any>> {
+interface ForgotPasswordFlowOptions<TUser = UserType> {
   /**
    * Allow users to request a new password via a call to forgotPassword. Defaults to true.
    * Needs to be explicitly set to false to disable the flow
    */
   enabled?: boolean
-  handler: (user: TUser) => any
+  handler: (user: TUser, token: string) => any
   errors?: {
     usernameNotFound?: string
     usernameRequired?: string
@@ -97,7 +97,7 @@ interface ForgotPasswordFlowOptions<TUser = Record<string | number, any>> {
   expires: number
 }
 
-interface LoginFlowOptions<TUser = Record<string | number, any>> {
+interface LoginFlowOptions<TUser = UserType> {
   /**
    * Allow users to login. Defaults to true.
    * Needs to be explicitly set to false to disable the flow
@@ -131,7 +131,7 @@ interface LoginFlowOptions<TUser = Record<string | number, any>> {
   usernameMatch?: string
 }
 
-interface ResetPasswordFlowOptions<TUser = Record<string | number, any>> {
+interface ResetPasswordFlowOptions<TUser = UserType> {
   /**
    * Allow users to reset their password via a code from a call to forgotPassword. Defaults to true.
    * Needs to be explicitly set to false to disable the flow
@@ -165,7 +165,12 @@ interface WebAuthnFlowOptions {
   }
 }
 
-export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
+export type UserType = Record<string | number, any>
+
+export interface DbAuthHandlerOptions<
+  TUser = UserType,
+  TUserAttributes = Record<string, unknown>
+> {
   /**
    * Provide prisma db client
    */
@@ -180,6 +185,12 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
    * ie. if your Prisma model is named `UserCredential` this value would be `userCredential`, as in `db.userCredential`
    */
   credentialModelAccessor?: keyof PrismaClient
+  /**
+   * The fields that are allowed to be returned from the user table when
+   * invoking handlers that return a user object (like forgotPassword and signup)
+   * Defaults to `id` and `email` if not set at all.
+   */
+  allowedUserFields?: string[]
   /**
    *  A map of what dbAuth calls a field to what your database calls it.
    * `id` is whatever column you use to uniquely identify a user (probably
@@ -239,7 +250,7 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
   /**
    * Object containing login options
    */
-  signup: SignupFlowOptions | { enabled: false }
+  signup: SignupFlowOptions<TUserAttributes> | { enabled: false }
 
   /**
    * Object containing WebAuthn options
@@ -252,11 +263,11 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
   cors?: CorsConfig
 }
 
-interface SignupHandlerOptions {
+export interface SignupHandlerOptions<TUserAttributes> {
   username: string
   hashedPassword: string
   salt: string
-  userAttributes?: Record<string, string>
+  userAttributes?: TUserAttributes
 }
 
 export type AuthMethodNames =
@@ -287,18 +298,22 @@ interface DbAuthSession<TIdType> {
   id: TIdType
 }
 
+const DEFAULT_ALLOWED_USER_FIELDS = ['id', 'email']
+
 export class DbAuthHandler<
-  TUser extends Record<string | number, any>,
-  TIdType = any
+  TUser extends UserType,
+  TIdType = any,
+  TUserAttributes = Record<string, unknown>
 > {
   event: Request | APIGatewayProxyEvent
   _normalizedRequest: PartialRequest<Params> | undefined
   httpMethod: string
-  options: DbAuthHandlerOptions<TUser>
+  options: DbAuthHandlerOptions<TUser, TUserAttributes>
   cookie: string
   db: PrismaClient
   dbAccessor: any
   dbCredentialAccessor: any
+  allowedUserFields: string[]
   hasInvalidSession: boolean
   session: DbAuthSession<TIdType> | undefined
   sessionCsrfToken: string | undefined
@@ -387,8 +402,8 @@ export class DbAuthHandler<
 
   constructor(
     event: APIGatewayProxyEvent | Request,
-    _context: LambdaContext, // @TODO: we should make this generic, not sure its required
-    options: DbAuthHandlerOptions<TUser>
+    _context: LambdaContext, // @TODO:
+    options: DbAuthHandlerOptions<TUser, TUserAttributes>
   ) {
     this.options = options
     this.event = event
@@ -404,6 +419,8 @@ export class DbAuthHandler<
       ? this.db[this.options.credentialModelAccessor]
       : null
     this.hasInvalidSession = false
+    this.allowedUserFields =
+      this.options.allowedUserFields || DEFAULT_ALLOWED_USER_FIELDS
 
     const sessionExpiresAt = new Date()
     sessionExpiresAt.setSeconds(
@@ -572,26 +589,13 @@ export class DbAuthHandler<
         throw new DbAuthError.GenericError()
       }
 
-      // Temporarily set the token on the user back to the raw token so it's
-      // available to the handler.
-      user.resetToken = token
       // call user-defined handler in their functions/auth.js
       const response = await (
         this.options.forgotPassword as ForgotPasswordFlowOptions
-      ).handler(this._sanitizeUser(user))
-
-      // remove resetToken and resetTokenExpiresAt if in the body of the
-      // forgotPassword handler response
-      let responseObj = response
-      if (typeof response === 'object') {
-        responseObj = Object.assign(response, {
-          [this.options.authFields.resetToken]: undefined,
-          [this.options.authFields.resetTokenExpiresAt]: undefined,
-        })
-      }
+      ).handler(this._sanitizeUser(user), token)
 
       return [
-        response ? JSON.stringify(responseObj) : '',
+        response ? JSON.stringify(response) : '',
         {
           ...this._deleteSessionHeader,
         },
@@ -1138,11 +1142,16 @@ export class DbAuthHandler<
     ].join(';')
   }
 
-  // removes sensitive fields from user before sending over the wire
+  // removes any fields not explicitly allowed to be sent to the client before
+  // sending a response over the wire
   _sanitizeUser(user: Record<string, unknown>) {
     const sanitized = JSON.parse(JSON.stringify(user))
-    delete sanitized[this.options.authFields.hashedPassword]
-    delete sanitized[this.options.authFields.salt]
+
+    Object.keys(sanitized).forEach((key) => {
+      if (!this.allowedUserFields.includes(key)) {
+        delete sanitized[key]
+      }
+    })
 
     return sanitized
   }
@@ -1488,7 +1497,7 @@ export class DbAuthHandler<
     SetCookieHeader & CsrfTokenHeader,
     { statusCode: number }
   ] {
-    const sessionData = { id: user[this.options.authFields.id] }
+    const sessionData = this._sanitizeUser(user)
 
     // TODO: this needs to go into graphql somewhere so that each request makes a new CSRF token and sets it in both the encrypted session and the csrf-token header
     const csrfToken = DbAuthHandler.CSRF_TOKEN

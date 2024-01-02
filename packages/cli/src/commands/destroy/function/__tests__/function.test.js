@@ -7,7 +7,7 @@ jest.mock('../../../../lib', () => {
   }
 })
 
-import fs from 'fs'
+import fs from 'fs-extra'
 
 import '../../../../lib/test'
 
