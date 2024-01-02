@@ -1,3 +1,5 @@
+import type yargs from 'yargs'
+
 import * as installCommand from '../commands/install'
 import { handler as dataMigrateInstallHandler } from '../commands/installHandler.js'
 
@@ -24,12 +26,14 @@ describe('install', () => {
   })
 
   it('`builder` has an epilogue', () => {
-    const yargs = { epilogue: jest.fn() }
-    // @ts-expect-error this is a test file; epilogue is the only thing `builder` calls right now
+    const yargs = { epilogue: jest.fn() } as unknown as yargs.Argv
+
     installCommand.builder(yargs)
-    expect(yargs.epilogue).toBeCalledWith(
-      // eslint-disable-next-line no-irregular-whitespace
-      'Also see the Redwood CLI Reference (​https://redwoodjs.com/docs/cli-commands#datamigrate-install​)'
+
+    expect(yargs.epilogue).toHaveBeenCalledWith(
+      expect.stringMatching(
+        /:\/\/redwoodjs\.com\/docs\/cli-commands#datamigrate-install/
+      )
     )
   })
 
