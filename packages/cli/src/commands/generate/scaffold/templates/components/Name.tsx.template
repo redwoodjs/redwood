@@ -1,13 +1,13 @@
+import type { Delete${singularPascalName}Mutation, Delete${singularPascalName}MutationVariables, Find${singularPascalName}By${pascalIdName} } from 'types/graphql'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+import type { TypedDocumentNode } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { ${formattersImports} } from 'src/lib/formatters'
 
-import type { Delete${singularPascalName}MutationVariables, Find${singularPascalName}By${pascalIdName} } from 'types/graphql'
-
-const DELETE_${singularConstantName}_MUTATION = gql`
+const DELETE_${singularConstantName}_MUTATION: TypedDocumentNode<Delete${singularPascalName}Mutation, Delete${singularPascalName}MutationVariables> = gql`
   mutation Delete${singularPascalName}Mutation($${idName}: ${idType}!) {
     delete${singularPascalName}(${idName}: $${idName}) {
       ${idName}

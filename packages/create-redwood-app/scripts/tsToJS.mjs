@@ -10,12 +10,12 @@ import fs from 'fs-extra'
 import { format } from 'prettier'
 
 const [TS_TEMPLATE_FILEPATH, JS_TEMPLATE_FILEPATH] = [
-  new URL('./templates/ts', import.meta.url),
-  new URL('./templates/js', import.meta.url),
+  new URL('../templates/ts', import.meta.url),
+  new URL('../templates/js', import.meta.url),
 ].map(fileURLToPath)
 
 const { default: prettierConfig } = await import(
-  new URL('./templates/ts/prettier.config.js', import.meta.url)
+  new URL('../templates/ts/prettier.config.js', import.meta.url)
 )
 
 // Handle node_modules, .yarn/install-state.gz.
