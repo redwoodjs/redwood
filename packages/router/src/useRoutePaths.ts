@@ -21,9 +21,15 @@ export function useRoutePaths() {
   return routePaths
 }
 
-export function useRoutePath(routeName: keyof AvailableRoutes) {
+export function useRoutePath(routeName?: keyof AvailableRoutes) {
   const currentRouteName = useRouteName()
   const routePaths = useRoutePaths()
 
-  return routePaths[routeName || currentRouteName]
+  const name = routeName || currentRouteName
+
+  if (!name) {
+    return undefined
+  }
+
+  return routePaths[name]
 }
