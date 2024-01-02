@@ -117,6 +117,13 @@ export async function main() {
   await resolveMilestones()
   console.log()
 
+  console.log(
+    'If you want to use `yarn release:notes` to generate release notes, now would be a good time to do so.'
+  )
+  await question(
+    "Press any key to continue when you're done with the release notes > "
+  )
+
   switch (semver) {
     case 'major':
     case 'minor':
@@ -700,7 +707,15 @@ async function releasePatch() {
       'Only a few more things to do:',
       '  - publish the release notes',
       '  - merge the release branch into next and push the merge commit',
+      '    - `git switch next`',
+      `    - \`git merge ${releaseBranch}\``,
+      `    - \`git push ${redwoodRemote}\``,
       '  - delete the release branch locally and on GitHub (https://github.com/redwoodjs/redwood/branches)',
+      `    - \`git branch -d ${releaseBranch}\``,
+      `    - \`git push ${redwoodRemote} --delete ${releaseBranch}\``,
+      '  - Update the Algolia search index',
+      '    - https://crawler.algolia.com',
+      '    - "Restart crawling" (top right)',
       '  - post on Slack, Discord, and Buffer',
     ].join('\n')
   )
