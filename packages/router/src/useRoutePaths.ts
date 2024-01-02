@@ -1,4 +1,5 @@
 import { useRouterState } from './router-context'
+import { useRouteName } from './useRouteName'
 import type { GeneratedRoutesMap } from './util'
 
 import type { AvailableRoutes } from '.'
@@ -21,7 +22,8 @@ export function useRoutePaths() {
 }
 
 export function useRoutePath(routeName: keyof AvailableRoutes) {
+  const currentRouteName = useRouteName()
   const routePaths = useRoutePaths()
 
-  return routePaths[routeName]
+  return routePaths[routeName || currentRouteName]
 }
