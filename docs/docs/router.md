@@ -487,13 +487,15 @@ const aboutPath = useRoutePath()
 
 You can also pass in the name of a route and get the path for that route
 ```jsx
-const aboutPath = useRoutePath('about') // returns "/about"
+// returns "/about"
+const aboutPath = useRoutePath('about')
 ```
 
 Note that the above is the same as
 ```jsx
 const routePaths = useRoutePaths()
-const aboutPath = routePaths.about // Also returns "/about"
+// returns "/about"
+const aboutPath = routePaths.about
 ```
 
 ## useRouteName
