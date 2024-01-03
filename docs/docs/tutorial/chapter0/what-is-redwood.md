@@ -126,7 +126,7 @@ export const Success = ({ testimonials }) => {
 
 If you ever create additional clients for your server (a mobile app, perhaps) you'll be giving yourself a huge advantage by using GraphQL from the start.
 
-Oh, and prerendering also works with cells! At build time, Redwood will start up the GraphQL server and make requests, just as if a user was access the pages, rendering the result to plain HTML, ready to be loaded instantly by the browser.
+Oh, and prerendering also works with cells! At build time, Redwood will start up the GraphQL server and make requests, just as if a user was accessing the pages, rendering the result to plain HTML, ready to be loaded instantly by the browser.
 
 ### Apollo Cache
 
@@ -170,7 +170,7 @@ model Testimonial {
 }
 ```
 
-Prisma has a couple command line tools that take changes to this file and turn them into [SQL DDL commands](https://www.sqlshack.com/sql-ddl-getting-started-with-sql-ddl-commands-in-sql-server/) which are executed against your database to update its structure to match.
+Prisma has a couple of command line tools that take changes to this file and turn them into [SQL DDL commands](https://www.sqlshack.com/sql-ddl-getting-started-with-sql-ddl-commands-in-sql-server/) which are executed against your database to update its structure to match.
 
 #### GraphQL
 

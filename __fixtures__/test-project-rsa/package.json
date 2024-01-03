@@ -7,20 +7,19 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "7.0.0-canary.348"
+    "@redwoodjs/core": "7.0.0-canary.717"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
     "root": true
   },
   "engines": {
-    "node": "=18.x",
-    "yarn": ">=1.15"
+    "node": "=20.x"
   },
   "prisma": {
     "seed": "yarn rw exec seed"
   },
-  "packageManager": "yarn@3.7.0",
+  "packageManager": "yarn@4.0.2",
   "resolutions": {
     "vite@4.4.9": "patch:vite@npm%3A4.4.9#./.yarn/patches/vite-npm-4.4.9-e845c1bbf8.patch"
   }

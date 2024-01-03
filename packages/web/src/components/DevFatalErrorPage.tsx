@@ -9,6 +9,7 @@ if (typeof window !== 'undefined') {
 
 import { useState } from 'react'
 
+import type { GraphQLError } from 'graphql'
 import StackTracey from 'stacktracey'
 
 // RWJS_SRC_ROOT is defined and defaulted in webpack+vite to the base path
@@ -27,14 +28,21 @@ if (/^[A-Z]:\\/.test(srcRoot)) {
   appRoot = srcRoot.substring(1)
 }
 
+type RequestDetails = {
+  query: string
+  operationName: string
+  operationKind: string
+  variables: any
+}
+
+interface EnhancedGqlError extends GraphQLError {
+  __RedwoodEnhancedError: RequestDetails
+}
+
 // Allow APIs client to attach response/request
 type ErrorWithRequestMeta = Error & {
-  mostRecentRequest?: {
-    query: string
-    operationName: string
-    operationKind: string
-    variables: any
-  }
+  mostRecentRequest?: RequestDetails
+  graphQLErrors: EnhancedGqlError[]
   mostRecentResponse?: any
 }
 
@@ -90,9 +98,7 @@ export const DevFatalErrorPage = (props: { error?: ErrorWithRequestMeta }) => {
             ))}
           </div>
         </div>
-        {props.error.mostRecentRequest ? (
-          <ResponseRequest error={props.error} />
-        ) : null}
+        <ResponseRequest error={props.error} />
       </section>
     </main>
   )
@@ -226,20 +232,28 @@ function ResponseRequest(props: { error: ErrorWithRequestMeta }) {
   const [openQuery, setOpenQuery] = useState(false)
   const [openResponse, setOpenResponse] = useState(false)
 
+  if (!props.error) {
+    return null
+  }
+
+  const mostRecentRequest =
+    props.error.mostRecentRequest ||
+    props.error.graphQLErrors?.find((gqlErr) => gqlErr.__RedwoodEnhancedError)
+      ?.__RedwoodEnhancedError
+
+  // Does not exist with Suspense Cells
+  const mostRecentResponse = props.error.mostRecentResponse
+
   return (
     <div className="request-response">
-      {props.error.mostRecentRequest ? (
+      {mostRecentRequest ? (
         <div>
-          <h4>Request: {props.error.mostRecentRequest.operationName}</h4>
+          <h4>Request: {mostRecentRequest.operationName}</h4>
           <div>
             <h5>Variables:</h5>
             <code>
               <pre>
-                {JSON.stringify(
-                  props.error.mostRecentRequest.variables,
-                  null,
-                  '  '
-                )}
+                {JSON.stringify(mostRecentRequest.variables, null, '  ')}
               </pre>
             </code>
           </div>
@@ -250,13 +264,13 @@ function ResponseRequest(props: { error: ErrorWithRequestMeta }) {
                 onClick={() => setOpenQuery(!openQuery)}
                 className={openQuery ? 'open' : 'preview'}
               >
-                {props.error.mostRecentRequest.query}
+                {mostRecentRequest.query}
               </pre>
             </code>
           </div>
         </div>
       ) : null}
-      {props.error.mostRecentRequest ? (
+      {mostRecentResponse ? (
         <div className="response">
           <h4>Response</h4>
           <div>
@@ -266,7 +280,7 @@ function ResponseRequest(props: { error: ErrorWithRequestMeta }) {
                 onClick={() => setOpenResponse(!openResponse)}
                 className={openResponse ? 'open' : 'preview'}
               >
-                {JSON.stringify(props.error.mostRecentResponse, null, '  ')}
+                {JSON.stringify(mostRecentResponse, null, '  ')}
               </pre>
             </code>
           </div>

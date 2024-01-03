@@ -40,7 +40,7 @@ It's usually something that goes into more detail about a specific point, refers
 
 :::info
 
-This tutorial assumes you are using version 5.0.0 or greater of RedwoodJS.
+This tutorial assumes you are using version 7.0.0 or greater of RedwoodJS.
 
 :::
 
