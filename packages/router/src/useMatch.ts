@@ -3,6 +3,7 @@ import { matchPath } from './util'
 import type { FlattenSearchParams } from './util'
 
 type UseMatchOptions = {
+  routeParams?: Record<string, any>
   searchParams?: FlattenSearchParams
   matchSubPaths?: boolean
 }
@@ -54,7 +55,34 @@ export const useMatch = (pathname: string, options?: UseMatchOptions) => {
     }
   }
 
-  return matchPath(pathname, location.pathname, {
+  const matchInfo = matchPath(pathname, location.pathname, {
     matchSubPaths: options?.matchSubPaths,
   })
+
+  if (!matchInfo.match) {
+    return { match: false }
+  }
+
+  const routeParams = Object.entries(options?.routeParams || {})
+
+  if (routeParams.length > 0) {
+    if (!isMatchWithParams(matchInfo) || !matchInfo.params) {
+      return { match: false }
+    }
+
+    // If paramValues were given, they must all match
+    const isParamMatch = routeParams.every(([key, value]) => {
+      return matchInfo.params[key] === value
+    })
+
+    if (!isParamMatch) {
+      return { match: false }
+    }
+  }
+
+  return matchInfo
+}
+
+function isMatchWithParams(match: unknown): match is { params: any } {
+  return match !== null && typeof match === 'object' && 'params' in match
 }
