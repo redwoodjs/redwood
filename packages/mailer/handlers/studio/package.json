@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/mailer-handler-studio",
-  "version": "6.6.1",
+  "version": "6.6.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -25,8 +25,8 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/mailer-core": "6.6.1",
-    "@redwoodjs/mailer-handler-nodemailer": "6.6.1"
+    "@redwoodjs/mailer-core": "6.6.2",
+    "@redwoodjs/mailer-handler-nodemailer": "6.6.2"
   },
   "devDependencies": {
     "@types/nodemailer": "^6",

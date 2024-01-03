@@ -7732,7 +7732,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redwoodjs/api-server@npm:6.6.1, @redwoodjs/api-server@workspace:packages/api-server":
+"@redwoodjs/api-server@npm:6.6.2, @redwoodjs/api-server@workspace:packages/api-server":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/api-server@workspace:packages/api-server"
   dependencies:
@@ -7742,8 +7742,8 @@ __metadata:
     "@fastify/http-proxy": "npm:9.3.0"
     "@fastify/static": "npm:6.12.0"
     "@fastify/url-data": "npm:5.4.0"
-    "@redwoodjs/context": "npm:6.6.1"
-    "@redwoodjs/project-config": "npm:6.6.1"
+    "@redwoodjs/context": "npm:6.6.2"
+    "@redwoodjs/project-config": "npm:6.6.2"
     "@types/aws-lambda": "npm:8.10.126"
     "@types/lodash": "npm:4.14.201"
     "@types/qs": "npm:6.9.11"
@@ -7774,7 +7774,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/api@npm:6.6.1, @redwoodjs/api@workspace:packages/api":
+"@redwoodjs/api@npm:6.6.2, @redwoodjs/api@workspace:packages/api":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/api@workspace:packages/api"
   dependencies:
@@ -7823,7 +7823,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/api": "npm:6.6.1"
+    "@redwoodjs/api": "npm:6.6.2"
     "@types/jsonwebtoken": "npm:9.0.5"
     core-js: "npm:3.34.0"
     jest: "npm:29.7.0"
@@ -7840,7 +7840,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/cli-helpers": "npm:6.6.1"
+    "@redwoodjs/cli-helpers": "npm:6.6.2"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
     jest: "npm:29.7.0"
@@ -7856,7 +7856,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/auth": "npm:6.6.1"
+    "@redwoodjs/auth": "npm:6.6.2"
     "@types/react": "npm:18.2.37"
     core-js: "npm:3.34.0"
     jest: "npm:29.7.0"
@@ -7874,7 +7874,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/api": "npm:6.6.1"
+    "@redwoodjs/api": "npm:6.6.2"
     "@types/aws-lambda": "npm:8.10.126"
     "@types/jsonwebtoken": "npm:9.0.5"
     core-js: "npm:3.34.0"
@@ -7892,7 +7892,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/cli-helpers": "npm:6.6.1"
+    "@redwoodjs/cli-helpers": "npm:6.6.2"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
     jest: "npm:29.7.0"
@@ -7908,7 +7908,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/auth": "npm:6.6.1"
+    "@redwoodjs/auth": "npm:6.6.2"
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:18.2.37"
     core-js: "npm:3.34.0"
@@ -7928,7 +7928,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
     "@clerk/clerk-sdk-node": "npm:4.13.1"
-    "@redwoodjs/api": "npm:6.6.1"
+    "@redwoodjs/api": "npm:6.6.2"
     "@types/aws-lambda": "npm:8.10.126"
     core-js: "npm:3.34.0"
     jest: "npm:29.7.0"
@@ -7943,7 +7943,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/cli-helpers": "npm:6.6.1"
+    "@redwoodjs/cli-helpers": "npm:6.6.2"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
     jest: "npm:29.7.0"
@@ -7960,7 +7960,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.23.6"
     "@clerk/clerk-react": "npm:4.28.3"
     "@clerk/types": "npm:3.60.0"
-    "@redwoodjs/auth": "npm:6.6.1"
+    "@redwoodjs/auth": "npm:6.6.2"
     "@types/react": "npm:18.2.37"
     core-js: "npm:3.34.0"
     jest: "npm:29.7.0"
@@ -7978,7 +7978,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/cli-helpers": "npm:6.6.1"
+    "@redwoodjs/cli-helpers": "npm:6.6.2"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
     jest: "npm:29.7.0"
@@ -7993,8 +7993,8 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/api": "npm:6.6.1"
-    "@redwoodjs/project-config": "npm:6.6.1"
+    "@redwoodjs/api": "npm:6.6.2"
+    "@redwoodjs/project-config": "npm:6.6.2"
     "@simplewebauthn/server": "npm:7.4.0"
     "@types/md5": "npm:2.3.5"
     "@types/uuid": "npm:9.0.7"
@@ -8014,7 +8014,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/cli-helpers": "npm:6.6.1"
+    "@redwoodjs/cli-helpers": "npm:6.6.2"
     "@simplewebauthn/browser": "npm:7.4.0"
     "@simplewebauthn/typescript-types": "npm:7.4.0"
     "@types/yargs": "npm:17.0.32"
@@ -8033,7 +8033,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/auth": "npm:6.6.1"
+    "@redwoodjs/auth": "npm:6.6.2"
     "@simplewebauthn/browser": "npm:7.4.0"
     "@simplewebauthn/typescript-types": "npm:7.4.0"
     "@types/react": "npm:18.2.37"
@@ -8051,7 +8051,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/api": "npm:6.6.1"
+    "@redwoodjs/api": "npm:6.6.2"
     "@types/aws-lambda": "npm:8.10.126"
     core-js: "npm:3.34.0"
     firebase-admin: "npm:11.11.0"
@@ -8067,7 +8067,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/cli-helpers": "npm:6.6.1"
+    "@redwoodjs/cli-helpers": "npm:6.6.2"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
     jest: "npm:29.7.0"
@@ -8082,7 +8082,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/auth": "npm:6.6.1"
+    "@redwoodjs/auth": "npm:6.6.2"
     "@types/react": "npm:18.2.37"
     core-js: "npm:3.34.0"
     firebase: "npm:10.6.0"
@@ -8101,7 +8101,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/api": "npm:6.6.1"
+    "@redwoodjs/api": "npm:6.6.2"
     "@types/aws-lambda": "npm:8.10.126"
     "@types/jsonwebtoken": "npm:9.0.5"
     core-js: "npm:3.34.0"
@@ -8118,7 +8118,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/cli-helpers": "npm:6.6.1"
+    "@redwoodjs/cli-helpers": "npm:6.6.2"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
     jest: "npm:29.7.0"
@@ -8133,7 +8133,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/auth": "npm:6.6.1"
+    "@redwoodjs/auth": "npm:6.6.2"
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:18.2.37"
     core-js: "npm:3.34.0"
@@ -8152,7 +8152,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/api": "npm:6.6.1"
+    "@redwoodjs/api": "npm:6.6.2"
     "@types/aws-lambda": "npm:8.10.126"
     "@types/jsonwebtoken": "npm:9.0.5"
     core-js: "npm:3.34.0"
@@ -8169,7 +8169,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/cli-helpers": "npm:6.6.1"
+    "@redwoodjs/cli-helpers": "npm:6.6.2"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
     jest: "npm:29.7.0"
@@ -8202,7 +8202,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/api": "npm:6.6.1"
+    "@redwoodjs/api": "npm:6.6.2"
     "@types/jsonwebtoken": "npm:9.0.5"
     core-js: "npm:3.34.0"
     jest: "npm:29.7.0"
@@ -8221,7 +8221,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/cli-helpers": "npm:6.6.1"
+    "@redwoodjs/cli-helpers": "npm:6.6.2"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
     jest: "npm:29.7.0"
@@ -8236,7 +8236,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/auth": "npm:6.6.1"
+    "@redwoodjs/auth": "npm:6.6.2"
     "@types/react": "npm:18.2.37"
     core-js: "npm:3.34.0"
     jest: "npm:29.7.0"
@@ -8248,7 +8248,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth@npm:6.6.1, @redwoodjs/auth@workspace:packages/auth":
+"@redwoodjs/auth@npm:6.6.2, @redwoodjs/auth@workspace:packages/auth":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
@@ -8265,7 +8265,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/babel-config@npm:6.6.1, @redwoodjs/babel-config@workspace:packages/babel-config":
+"@redwoodjs/babel-config@npm:6.6.2, @redwoodjs/babel-config@workspace:packages/babel-config":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/babel-config@workspace:packages/babel-config"
   dependencies:
@@ -8282,7 +8282,7 @@ __metadata:
     "@babel/register": "npm:^7.22.15"
     "@babel/runtime-corejs3": "npm:7.23.6"
     "@babel/traverse": "npm:^7.22.20"
-    "@redwoodjs/project-config": "npm:6.6.1"
+    "@redwoodjs/project-config": "npm:6.6.2"
     "@types/babel-plugin-tester": "npm:9.0.9"
     "@types/babel__core": "npm:7.20.4"
     babel-plugin-auto-import: "npm:1.1.0"
@@ -8303,8 +8303,8 @@ __metadata:
   resolution: "@redwoodjs/cli-data-migrate@workspace:packages/cli-packages/dataMigrate"
   dependencies:
     "@prisma/client": "npm:5.7.0"
-    "@redwoodjs/babel-config": "npm:6.6.1"
-    "@redwoodjs/project-config": "npm:6.6.1"
+    "@redwoodjs/babel-config": "npm:6.6.2"
+    "@redwoodjs/project-config": "npm:6.6.2"
     "@types/fs-extra": "npm:11.0.4"
     "@types/yargs": "npm:17.0.32"
     chalk: "npm:4.1.2"
@@ -8324,7 +8324,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/cli-helpers@npm:6.6.1, @redwoodjs/cli-helpers@workspace:packages/cli-helpers":
+"@redwoodjs/cli-helpers@npm:6.6.2, @redwoodjs/cli-helpers@workspace:packages/cli-helpers":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli-helpers@workspace:packages/cli-helpers"
   dependencies:
@@ -8333,8 +8333,8 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.23.6"
     "@iarna/toml": "npm:2.2.5"
     "@opentelemetry/api": "npm:1.7.0"
-    "@redwoodjs/project-config": "npm:6.6.1"
-    "@redwoodjs/telemetry": "npm:6.6.1"
+    "@redwoodjs/project-config": "npm:6.6.2"
+    "@redwoodjs/telemetry": "npm:6.6.2"
     "@types/lodash": "npm:4.14.201"
     "@types/pascalcase": "npm:1.0.3"
     "@types/yargs": "npm:17.0.32"
@@ -8357,9 +8357,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli-storybook@workspace:packages/cli-packages/storybook"
   dependencies:
-    "@redwoodjs/cli-helpers": "npm:6.6.1"
-    "@redwoodjs/project-config": "npm:6.6.1"
-    "@redwoodjs/telemetry": "npm:6.6.1"
+    "@redwoodjs/cli-helpers": "npm:6.6.2"
+    "@redwoodjs/project-config": "npm:6.6.2"
+    "@redwoodjs/telemetry": "npm:6.6.2"
     "@storybook/addon-a11y": "npm:7.6.4"
     "@storybook/addon-docs": "npm:7.6.4"
     "@storybook/addon-essentials": "npm:7.6.4"
@@ -8377,7 +8377,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/cli@npm:6.6.1, @redwoodjs/cli@workspace:packages/cli":
+"@redwoodjs/cli@npm:6.6.2, @redwoodjs/cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli@workspace:packages/cli"
   dependencies:
@@ -8392,14 +8392,14 @@ __metadata:
     "@opentelemetry/sdk-trace-node": "npm:1.18.1"
     "@opentelemetry/semantic-conventions": "npm:1.18.1"
     "@prisma/internals": "npm:5.7.0"
-    "@redwoodjs/api-server": "npm:6.6.1"
-    "@redwoodjs/cli-helpers": "npm:6.6.1"
-    "@redwoodjs/fastify": "npm:6.6.1"
-    "@redwoodjs/internal": "npm:6.6.1"
-    "@redwoodjs/prerender": "npm:6.6.1"
-    "@redwoodjs/project-config": "npm:6.6.1"
-    "@redwoodjs/structure": "npm:6.6.1"
-    "@redwoodjs/telemetry": "npm:6.6.1"
+    "@redwoodjs/api-server": "npm:6.6.2"
+    "@redwoodjs/cli-helpers": "npm:6.6.2"
+    "@redwoodjs/fastify": "npm:6.6.2"
+    "@redwoodjs/internal": "npm:6.6.2"
+    "@redwoodjs/prerender": "npm:6.6.2"
+    "@redwoodjs/project-config": "npm:6.6.2"
+    "@redwoodjs/structure": "npm:6.6.2"
+    "@redwoodjs/telemetry": "npm:6.6.2"
     "@types/archiver": "npm:^6"
     archiver: "npm:6.0.1"
     boxen: "npm:5.1.2"
@@ -8456,7 +8456,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.23.6"
     "@babel/traverse": "npm:^7.22.20"
     "@iarna/toml": "npm:2.2.5"
-    "@redwoodjs/project-config": "npm:6.6.1"
+    "@redwoodjs/project-config": "npm:6.6.2"
     "@svgr/core": "npm:8.0.0"
     "@svgr/plugin-jsx": "npm:8.0.1"
     "@types/babel__core": "npm:7.20.4"
@@ -8487,7 +8487,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/context@npm:6.6.1, @redwoodjs/context@workspace:packages/context":
+"@redwoodjs/context@npm:6.6.2, @redwoodjs/context@workspace:packages/context":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/context@workspace:packages/context"
   dependencies:
@@ -8505,12 +8505,12 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/runtime-corejs3": "npm:7.23.6"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:0.5.11"
-    "@redwoodjs/cli": "npm:6.6.1"
-    "@redwoodjs/eslint-config": "npm:6.6.1"
-    "@redwoodjs/internal": "npm:6.6.1"
-    "@redwoodjs/project-config": "npm:6.6.1"
-    "@redwoodjs/testing": "npm:6.6.1"
-    "@redwoodjs/web-server": "npm:6.6.1"
+    "@redwoodjs/cli": "npm:6.6.2"
+    "@redwoodjs/eslint-config": "npm:6.6.2"
+    "@redwoodjs/internal": "npm:6.6.2"
+    "@redwoodjs/project-config": "npm:6.6.2"
+    "@redwoodjs/testing": "npm:6.6.2"
+    "@redwoodjs/web-server": "npm:6.6.2"
     "@types/lodash": "npm:4.14.201"
     babel-loader: "npm:^9.1.3"
     babel-timing: "npm:0.9.1"
@@ -8555,7 +8555,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/eslint-config@npm:6.6.1, @redwoodjs/eslint-config@workspace:packages/eslint-config":
+"@redwoodjs/eslint-config@npm:6.6.2, @redwoodjs/eslint-config@workspace:packages/eslint-config":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/eslint-config@workspace:packages/eslint-config"
   dependencies:
@@ -8563,9 +8563,9 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/eslint-parser": "npm:7.23.3"
     "@babel/eslint-plugin": "npm:7.23.5"
-    "@redwoodjs/eslint-plugin": "npm:6.6.1"
-    "@redwoodjs/internal": "npm:6.6.1"
-    "@redwoodjs/project-config": "npm:6.6.1"
+    "@redwoodjs/eslint-plugin": "npm:6.6.2"
+    "@redwoodjs/internal": "npm:6.6.2"
+    "@redwoodjs/project-config": "npm:6.6.2"
     "@typescript-eslint/eslint-plugin": "npm:5.62.0"
     "@typescript-eslint/parser": "npm:5.62.0"
     eslint: "npm:8.55.0"
@@ -8584,7 +8584,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/eslint-plugin@npm:6.6.1, @redwoodjs/eslint-plugin@workspace:packages/eslint-plugin":
+"@redwoodjs/eslint-plugin@npm:6.6.2, @redwoodjs/eslint-plugin@workspace:packages/eslint-plugin":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
@@ -8601,16 +8601,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/fastify@npm:6.6.1, @redwoodjs/fastify@workspace:packages/fastify":
+"@redwoodjs/fastify@npm:6.6.2, @redwoodjs/fastify@workspace:packages/fastify":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/fastify@workspace:packages/fastify"
   dependencies:
     "@fastify/http-proxy": "npm:9.3.0"
     "@fastify/static": "npm:6.12.0"
     "@fastify/url-data": "npm:5.4.0"
-    "@redwoodjs/context": "npm:6.6.1"
-    "@redwoodjs/graphql-server": "npm:6.6.1"
-    "@redwoodjs/project-config": "npm:6.6.1"
+    "@redwoodjs/context": "npm:6.6.2"
+    "@redwoodjs/graphql-server": "npm:6.6.2"
+    "@redwoodjs/project-config": "npm:6.6.2"
     "@types/aws-lambda": "npm:8.10.126"
     "@types/lodash": "npm:4.14.201"
     "@types/qs": "npm:6.9.11"
@@ -8655,7 +8655,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/graphql-server@npm:6.6.1, @redwoodjs/graphql-server@workspace:packages/graphql-server":
+"@redwoodjs/graphql-server@npm:6.6.2, @redwoodjs/graphql-server@workspace:packages/graphql-server":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/graphql-server@workspace:packages/graphql-server"
   dependencies:
@@ -8674,10 +8674,10 @@ __metadata:
     "@graphql-tools/schema": "npm:10.0.2"
     "@graphql-tools/utils": "npm:10.0.11"
     "@opentelemetry/api": "npm:1.7.0"
-    "@redwoodjs/api": "npm:6.6.1"
-    "@redwoodjs/context": "npm:6.6.1"
-    "@redwoodjs/project-config": "npm:6.6.1"
-    "@redwoodjs/realtime": "npm:6.6.1"
+    "@redwoodjs/api": "npm:6.6.2"
+    "@redwoodjs/context": "npm:6.6.2"
+    "@redwoodjs/project-config": "npm:6.6.2"
+    "@redwoodjs/realtime": "npm:6.6.2"
     "@types/jsonwebtoken": "npm:9.0.5"
     "@types/lodash": "npm:4.14.201"
     "@types/uuid": "npm:9.0.7"
@@ -8696,7 +8696,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/internal@npm:6.6.1, @redwoodjs/internal@workspace:packages/internal":
+"@redwoodjs/internal@npm:6.6.2, @redwoodjs/internal@workspace:packages/internal":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/internal@workspace:packages/internal"
   dependencies:
@@ -8715,9 +8715,9 @@ __metadata:
     "@graphql-codegen/typescript-operations": "npm:3.0.4"
     "@graphql-codegen/typescript-react-apollo": "npm:3.3.7"
     "@graphql-codegen/typescript-resolvers": "npm:3.2.1"
-    "@redwoodjs/babel-config": "npm:6.6.1"
-    "@redwoodjs/graphql-server": "npm:6.6.1"
-    "@redwoodjs/project-config": "npm:6.6.1"
+    "@redwoodjs/babel-config": "npm:6.6.2"
+    "@redwoodjs/graphql-server": "npm:6.6.2"
+    "@redwoodjs/project-config": "npm:6.6.2"
     "@sdl-codegen/node": "npm:0.0.10"
     "@types/fs-extra": "npm:11.0.4"
     chalk: "npm:4.1.2"
@@ -8745,11 +8745,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/mailer-core@npm:6.6.1, @redwoodjs/mailer-core@workspace:packages/mailer/core":
+"@redwoodjs/mailer-core@npm:6.6.2, @redwoodjs/mailer-core@workspace:packages/mailer/core":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/mailer-core@workspace:packages/mailer/core"
   dependencies:
-    "@redwoodjs/api": "npm:6.6.1"
+    "@redwoodjs/api": "npm:6.6.2"
     esbuild: "npm:0.18.19"
     fast-glob: "npm:3.3.2"
     jest: "npm:29.7.0"
@@ -8761,18 +8761,18 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/mailer-handler-in-memory@workspace:packages/mailer/handlers/in-memory"
   dependencies:
-    "@redwoodjs/mailer-core": "npm:6.6.1"
+    "@redwoodjs/mailer-core": "npm:6.6.2"
     esbuild: "npm:0.18.19"
     fast-glob: "npm:3.3.2"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/mailer-handler-nodemailer@npm:6.6.1, @redwoodjs/mailer-handler-nodemailer@workspace:packages/mailer/handlers/nodemailer":
+"@redwoodjs/mailer-handler-nodemailer@npm:6.6.2, @redwoodjs/mailer-handler-nodemailer@workspace:packages/mailer/handlers/nodemailer":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/mailer-handler-nodemailer@workspace:packages/mailer/handlers/nodemailer"
   dependencies:
-    "@redwoodjs/mailer-core": "npm:6.6.1"
+    "@redwoodjs/mailer-core": "npm:6.6.2"
     "@types/nodemailer": "npm:^6"
     esbuild: "npm:0.18.19"
     fast-glob: "npm:3.3.2"
@@ -8785,7 +8785,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/mailer-handler-resend@workspace:packages/mailer/handlers/resend"
   dependencies:
-    "@redwoodjs/mailer-core": "npm:6.6.1"
+    "@redwoodjs/mailer-core": "npm:6.6.2"
     esbuild: "npm:0.18.19"
     fast-glob: "npm:3.3.2"
     resend: "npm:1.1.0"
@@ -8797,8 +8797,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/mailer-handler-studio@workspace:packages/mailer/handlers/studio"
   dependencies:
-    "@redwoodjs/mailer-core": "npm:6.6.1"
-    "@redwoodjs/mailer-handler-nodemailer": "npm:6.6.1"
+    "@redwoodjs/mailer-core": "npm:6.6.2"
+    "@redwoodjs/mailer-handler-nodemailer": "npm:6.6.2"
     "@types/nodemailer": "npm:^6"
     esbuild: "npm:0.18.19"
     fast-glob: "npm:3.3.2"
@@ -8811,7 +8811,7 @@ __metadata:
   resolution: "@redwoodjs/mailer-renderer-mjml-react@workspace:packages/mailer/renderers/mjml-react"
   dependencies:
     "@faire/mjml-react": "npm:3.3.0"
-    "@redwoodjs/mailer-core": "npm:6.6.1"
+    "@redwoodjs/mailer-core": "npm:6.6.2"
     "@types/mjml": "npm:4"
     esbuild: "npm:0.18.19"
     fast-glob: "npm:3.3.2"
@@ -8825,26 +8825,26 @@ __metadata:
   resolution: "@redwoodjs/mailer-renderer-react-email@workspace:packages/mailer/renderers/react-email"
   dependencies:
     "@react-email/render": "npm:0.0.10"
-    "@redwoodjs/mailer-core": "npm:6.6.1"
+    "@redwoodjs/mailer-core": "npm:6.6.2"
     esbuild: "npm:0.18.19"
     fast-glob: "npm:3.3.2"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/prerender@npm:6.6.1, @redwoodjs/prerender@workspace:packages/prerender":
+"@redwoodjs/prerender@npm:6.6.2, @redwoodjs/prerender@workspace:packages/prerender":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/prerender@workspace:packages/prerender"
   dependencies:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/auth": "npm:6.6.1"
-    "@redwoodjs/internal": "npm:6.6.1"
-    "@redwoodjs/project-config": "npm:6.6.1"
-    "@redwoodjs/router": "npm:6.6.1"
-    "@redwoodjs/structure": "npm:6.6.1"
-    "@redwoodjs/web": "npm:6.6.1"
+    "@redwoodjs/auth": "npm:6.6.2"
+    "@redwoodjs/internal": "npm:6.6.2"
+    "@redwoodjs/project-config": "npm:6.6.2"
+    "@redwoodjs/router": "npm:6.6.2"
+    "@redwoodjs/structure": "npm:6.6.2"
+    "@redwoodjs/web": "npm:6.6.2"
     "@types/mime-types": "npm:2.1.4"
     "@whatwg-node/fetch": "npm:0.9.14"
     babel-plugin-ignore-html-and-css-imports: "npm:0.1.0"
@@ -8861,7 +8861,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/project-config@npm:6.6.1, @redwoodjs/project-config@workspace:packages/project-config":
+"@redwoodjs/project-config@npm:6.6.2, @redwoodjs/project-config@workspace:packages/project-config":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/project-config@workspace:packages/project-config"
   dependencies:
@@ -8876,7 +8876,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/realtime@npm:6.6.1, @redwoodjs/realtime@workspace:packages/realtime":
+"@redwoodjs/realtime@npm:6.6.2, @redwoodjs/realtime@workspace:packages/realtime":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/realtime@workspace:packages/realtime"
   dependencies:
@@ -8915,14 +8915,14 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.23.6"
     "@prisma/client": "npm:5.7.0"
     "@prisma/internals": "npm:5.7.0"
-    "@redwoodjs/project-config": "npm:6.6.1"
+    "@redwoodjs/project-config": "npm:6.6.2"
     core-js: "npm:3.34.0"
     esbuild: "npm:0.18.19"
     jest: "npm:29.7.0"
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/router@npm:6.6.1, @redwoodjs/router@workspace:packages/router":
+"@redwoodjs/router@npm:6.6.2, @redwoodjs/router@workspace:packages/router":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/router@workspace:packages/router"
   dependencies:
@@ -8930,7 +8930,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
     "@reach/skip-nav": "npm:0.18.0"
-    "@redwoodjs/auth": "npm:6.6.1"
+    "@redwoodjs/auth": "npm:6.6.2"
     "@types/react": "npm:18.2.37"
     "@types/react-dom": "npm:18.2.15"
     core-js: "npm:3.34.0"
@@ -8945,7 +8945,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/structure@npm:6.6.1, @redwoodjs/structure@workspace:packages/structure":
+"@redwoodjs/structure@npm:6.6.2, @redwoodjs/structure@workspace:packages/structure":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/structure@workspace:packages/structure"
   dependencies:
@@ -8954,7 +8954,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.23.6"
     "@iarna/toml": "npm:2.2.5"
     "@prisma/internals": "npm:5.7.0"
-    "@redwoodjs/project-config": "npm:6.6.1"
+    "@redwoodjs/project-config": "npm:6.6.2"
     "@types/fs-extra": "npm:11.0.4"
     "@types/line-column": "npm:1.0.0"
     "@types/lodash": "npm:4.14.201"
@@ -9003,8 +9003,8 @@ __metadata:
     "@nivo/core": "npm:0.83.0"
     "@nivo/tooltip": "npm:0.83.0"
     "@nivo/treemap": "npm:0.83.0"
-    "@redwoodjs/internal": "npm:6.6.1"
-    "@redwoodjs/project-config": "npm:6.6.1"
+    "@redwoodjs/internal": "npm:6.6.2"
+    "@redwoodjs/project-config": "npm:6.6.2"
     "@swc/cli": "npm:0.1.62"
     "@swc/core": "npm:1.3.60"
     "@swc/core-darwin-arm64": "npm:1.3.60"
@@ -9096,15 +9096,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/telemetry@npm:6.6.1, @redwoodjs/telemetry@workspace:packages/telemetry":
+"@redwoodjs/telemetry@npm:6.6.2, @redwoodjs/telemetry@workspace:packages/telemetry":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/telemetry@workspace:packages/telemetry"
   dependencies:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/project-config": "npm:6.6.1"
-    "@redwoodjs/structure": "npm:6.6.1"
+    "@redwoodjs/project-config": "npm:6.6.2"
+    "@redwoodjs/structure": "npm:6.6.2"
     "@types/envinfo": "npm:7.8.3"
     "@types/uuid": "npm:9.0.7"
     "@types/yargs": "npm:17.0.32"
@@ -9119,20 +9119,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/testing@npm:6.6.1, @redwoodjs/testing@workspace:packages/testing":
+"@redwoodjs/testing@npm:6.6.2, @redwoodjs/testing@workspace:packages/testing":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/testing@workspace:packages/testing"
   dependencies:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/auth": "npm:6.6.1"
-    "@redwoodjs/babel-config": "npm:6.6.1"
-    "@redwoodjs/context": "npm:6.6.1"
-    "@redwoodjs/graphql-server": "npm:6.6.1"
-    "@redwoodjs/project-config": "npm:6.6.1"
-    "@redwoodjs/router": "npm:6.6.1"
-    "@redwoodjs/web": "npm:6.6.1"
+    "@redwoodjs/auth": "npm:6.6.2"
+    "@redwoodjs/babel-config": "npm:6.6.2"
+    "@redwoodjs/context": "npm:6.6.2"
+    "@redwoodjs/graphql-server": "npm:6.6.2"
+    "@redwoodjs/project-config": "npm:6.6.2"
+    "@redwoodjs/router": "npm:6.6.2"
+    "@redwoodjs/web": "npm:6.6.2"
     "@testing-library/jest-dom": "npm:5.17.0"
     "@testing-library/react": "npm:14.1.2"
     "@testing-library/user-event": "npm:14.5.1"
@@ -9157,7 +9157,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/tui@npm:6.6.1, @redwoodjs/tui@workspace:packages/tui":
+"@redwoodjs/tui@npm:6.6.2, @redwoodjs/tui@workspace:packages/tui":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/tui@workspace:packages/tui"
   dependencies:
@@ -9177,8 +9177,8 @@ __metadata:
   dependencies:
     "@babel/cli": "npm:7.23.4"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/internal": "npm:6.6.1"
-    "@redwoodjs/project-config": "npm:6.6.1"
+    "@redwoodjs/internal": "npm:6.6.2"
+    "@redwoodjs/project-config": "npm:6.6.2"
     "@types/express": "npm:4"
     "@types/react": "npm:18.2.37"
     "@types/yargs-parser": "npm:21.0.3"
@@ -9197,14 +9197,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/web-server@npm:6.6.1, @redwoodjs/web-server@workspace:packages/web-server":
+"@redwoodjs/web-server@npm:6.6.2, @redwoodjs/web-server@workspace:packages/web-server":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web-server@workspace:packages/web-server"
   dependencies:
     "@fastify/http-proxy": "npm:9.3.0"
     "@fastify/static": "npm:6.12.0"
     "@fastify/url-data": "npm:5.4.0"
-    "@redwoodjs/project-config": "npm:6.6.1"
+    "@redwoodjs/project-config": "npm:6.6.2"
     "@types/yargs-parser": "npm:21.0.3"
     chalk: "npm:4.1.2"
     dotenv-defaults: "npm:5.0.2"
@@ -9218,7 +9218,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/web@npm:6.6.1, @redwoodjs/web@workspace:packages/web":
+"@redwoodjs/web@npm:6.6.2, @redwoodjs/web@workspace:packages/web":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
@@ -9226,7 +9226,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@redwoodjs/auth": "npm:6.6.1"
+    "@redwoodjs/auth": "npm:6.6.2"
     "@testing-library/jest-dom": "npm:5.17.0"
     "@testing-library/react": "npm:14.1.2"
     "@types/prop-types": "npm:15.7.5"
@@ -16563,7 +16563,7 @@ __metadata:
     "@opentelemetry/resources": "npm:1.18.1"
     "@opentelemetry/sdk-trace-node": "npm:1.18.1"
     "@opentelemetry/semantic-conventions": "npm:1.18.1"
-    "@redwoodjs/tui": "npm:6.6.1"
+    "@redwoodjs/tui": "npm:6.6.2"
     "@types/babel__core": "npm:7.20.4"
     chalk: "npm:4.1.2"
     check-node-version: "npm:4.2.1"
