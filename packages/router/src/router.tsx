@@ -55,7 +55,8 @@ function Route(_props: RouteProps | RedirectRouteProps | NotFoundRouteProps) {
   return <></>
 }
 
-export interface RouterProps extends RouterContextProviderProps {
+export interface RouterProps
+  extends Omit<RouterContextProviderProps, 'routes' | 'activeRouteName'> {
   trailingSlashes?: TrailingSlashesTypes
   pageLoadingDelay?: number
   children: ReactNode
@@ -91,13 +92,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 }) => {
   const location = useLocation()
 
-  const {
-    pathRouteMap,
-    hasHomeRoute,
-    namedRoutesMap,
-    NotFoundPage,
-    activeRoutePath,
-  } = useMemo(() => {
+  const analyzeRoutesResult = useMemo(() => {
     return analyzeRoutes(children, {
       currentPathName: location.pathname,
       // @TODO We haven't handled this with SSR/Streaming yet.
@@ -105,6 +100,14 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
       userParamTypes: paramTypes,
     })
   }, [location.pathname, children, paramTypes])
+
+  const {
+    pathRouteMap,
+    hasHomeRoute,
+    namedRoutesMap,
+    NotFoundPage,
+    activeRoutePath,
+  } = analyzeRoutesResult
 
   // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
   // Note that the value changes at runtime
@@ -130,7 +133,11 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   if (!activeRoutePath) {
     if (NotFoundPage) {
       return (
-        <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
+        <RouterContextProvider
+          useAuth={useAuth}
+          paramTypes={paramTypes}
+          routes={analyzeRoutesResult}
+        >
           <ParamsProvider>
             <PageLoadingContextProvider delay={pageLoadingDelay}>
               <ActiveRouteLoader
@@ -165,7 +172,12 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 
   // Level 2/3 (LocationAwareRouter)
   return (
-    <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
+    <RouterContextProvider
+      useAuth={useAuth}
+      paramTypes={paramTypes}
+      routes={analyzeRoutesResult}
+      activeRouteName={name}
+    >
       <ParamsProvider allParams={allParams}>
         <PageLoadingContextProvider delay={pageLoadingDelay}>
           {redirect && <Redirect to={replaceParams(redirect, allParams)} />}

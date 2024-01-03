@@ -84,21 +84,26 @@ const rebuildApiServer = () => {
 
     // OpenTelemetry SDK Setup
     if (getConfig().experimental.opentelemetry.enabled) {
-      const opentelemetrySDKScriptPath =
-        getConfig().experimental.opentelemetry.apiSdk
-      if (opentelemetrySDKScriptPath) {
-        console.log(
-          `Setting up OpenTelemetry using the setup file: ${opentelemetrySDKScriptPath}`
+      // We expect the OpenTelemetry SDK setup file to be in a specific location
+      const opentelemetrySDKScriptPath = path.join(
+        getPaths().api.dist,
+        'opentelemetry.js'
+      )
+      const opentelemetrySDKScriptPathRelative = path.relative(
+        getPaths().base,
+        opentelemetrySDKScriptPath
+      )
+      console.log(
+        `Setting up OpenTelemetry using the setup file: ${opentelemetrySDKScriptPathRelative}`
+      )
+      if (fs.existsSync(opentelemetrySDKScriptPath)) {
+        forkOpts.execArgv = forkOpts.execArgv.concat([
+          `--require=${opentelemetrySDKScriptPath}`,
+        ])
+      } else {
+        console.error(
+          `OpenTelemetry setup file does not exist at ${opentelemetrySDKScriptPathRelative}`
         )
-        if (fs.existsSync(opentelemetrySDKScriptPath)) {
-          forkOpts.execArgv = forkOpts.execArgv.concat([
-            `--require=${opentelemetrySDKScriptPath}`,
-          ])
-        } else {
-          console.error(
-            `OpenTelemetry setup file does not exist at ${opentelemetrySDKScriptPath}`
-          )
-        }
       }
     }
 

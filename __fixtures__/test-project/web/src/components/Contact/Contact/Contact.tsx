@@ -1,15 +1,20 @@
 import type {
+  DeleteContactMutation,
   DeleteContactMutationVariables,
   FindContactById,
 } from 'types/graphql'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+import type { TypedDocumentNode } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { timeTag } from 'src/lib/formatters'
 
-const DELETE_CONTACT_MUTATION = gql`
+const DELETE_CONTACT_MUTATION: TypedDocumentNode<
+  DeleteContactMutation,
+  DeleteContactMutationVariables
+> = gql`
   mutation DeleteContactMutation($id: Int!) {
     deleteContact(id: $id) {
       id

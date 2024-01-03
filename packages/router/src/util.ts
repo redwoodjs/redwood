@@ -154,7 +154,7 @@ export function matchPath(
   // Map extracted values to their param name, casting the value if needed
   const providedParams = matches[0].slice(1)
 
-  // @NOTE: refers to definiton e.g. '/page/{id}', not the actual params
+  // @NOTE: refers to definition e.g. '/page/{id}', not the actual params
   if (routeParamsDefinition.length > 0) {
     const params = providedParams.reduce<Record<string, unknown>>(
       (acc, value, index) => {
@@ -348,8 +348,9 @@ export function replaceParams(
   return path
 }
 
+export type FlattenSearchParams = ReturnType<typeof flattenSearchParams>
+
 /**
- *
  * @param {string} queryString
  * @returns {Array<string | Record<string, any>>} A flat array of search params
  *
@@ -362,7 +363,6 @@ export function replaceParams(
  *
  * flattenSearchParams(parseSearch('?key1=val1&key2=val2'))
  * => [ { key1: 'val1' }, { key2: 'val2' } ]
- *
  */
 export function flattenSearchParams(
   queryString: string
