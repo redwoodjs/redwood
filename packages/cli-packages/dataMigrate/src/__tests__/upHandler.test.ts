@@ -248,6 +248,8 @@ describe('upHandler', () => {
       importDbClientFromDist: true,
       distPath: getPaths().api.dist,
     })
+    // The handler will error and set the exit code to 1, we must revert that or test suite itself will fail.
+    process.exitCode = 0
 
     expect(console.info.mock.calls[0][0]).toMatch(
       '1 data migration(s) completed successfully.'
