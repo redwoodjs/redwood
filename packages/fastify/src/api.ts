@@ -14,7 +14,9 @@ export async function redwoodFastifyAPI(
   opts: RedwoodFastifyAPIOptions,
   done: HookHandlerDoneFunction
 ) {
-  fastify.register(fastifyUrlData)
+  if (!fastify.hasPlugin('@fastify/url-data')) {
+    await fastify.register(fastifyUrlData)
+  }
   await fastify.register(fastifyRawBody)
 
   // TODO: This should be refactored to only be defined once and it might not live here

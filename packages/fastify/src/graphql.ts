@@ -38,7 +38,9 @@ export async function redwoodFastifyGraphQLServer(
   // These two plugins are needed to transform a Fastify Request to a Lambda event
   // which is used by the RedwoodGraphQLContext and mimics the behavior of the
   // api-server withFunction plugin
-  fastify.register(fastifyUrlData)
+  if (!fastify.hasPlugin('@fastify/url-data')) {
+    await fastify.register(fastifyUrlData)
+  }
   await fastify.register(fastifyRawBody)
 
   try {
