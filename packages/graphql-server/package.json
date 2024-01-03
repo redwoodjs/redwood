@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.6",
-    "@envelop/core": "4.0.3",
+    "@envelop/core": "5.0.0",
     "@envelop/depth-limit": "3.0.3",
     "@envelop/disable-introspection": "5.0.3",
     "@envelop/filter-operation-type": "5.0.3",
@@ -41,7 +41,7 @@
     "graphql": "16.8.1",
     "graphql-scalars": "1.22.4",
     "graphql-tag": "2.12.6",
-    "graphql-yoga": "4.0.4",
+    "graphql-yoga": "5.1.0",
     "lodash": "4.17.21",
     "uuid": "9.0.1"
   },

@@ -1,5 +1,4 @@
-import type { FastifyInstance } from 'fastify'
-import type { FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import type { YogaServerInstance } from 'graphql-yoga'
 
 export default async function routes(
@@ -12,7 +11,7 @@ export default async function routes(
         req: FastifyRequest
         reply: FastifyReply
       },
-      Record<string, unknown>
+      {}
     >
   }
 ) {
@@ -24,9 +23,9 @@ export default async function routes(
         req,
         reply,
       })
-      response.headers.forEach((value, key) => {
-        reply.header(key, value)
-      })
+      for (const [name, value] of response.headers) {
+        reply.header(name, value)
+      }
       reply.status(response.status)
       reply.send(response.body)
       return reply
