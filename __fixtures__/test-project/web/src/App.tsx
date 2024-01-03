@@ -1,5 +1,7 @@
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import possibleTypes from 'src/graphql/possibleTypes'
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
@@ -13,7 +15,13 @@ const App = () => (
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <AuthProvider>
         <RedwoodApolloProvider
-          useAuth={useAuth}>
+          useAuth={useAuth}
+          graphQLClientConfig={{
+            cacheConfig: {
+              ...possibleTypes,
+            },
+          }}
+        >
           <Routes />
         </RedwoodApolloProvider>
       </AuthProvider>

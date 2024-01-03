@@ -20,6 +20,7 @@
     "build": "yarn build:js",
     "build:clean-dist": "rimraf 'dist/**/*/__tests__' --glob",
     "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
+    "build:pack": "yarn pack -o redwoodjs-cli.tgz",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "dev": "RWJS_CWD=../../__fixtures__/example-todo-main node dist/index.js",
     "fix:permissions": "chmod +x dist/index.js dist/rwfw.js",
@@ -28,7 +29,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.5",
+    "@babel/runtime-corejs3": "7.23.6",
     "@iarna/toml": "2.2.5",
     "@opentelemetry/api": "1.7.0",
     "@opentelemetry/core": "1.18.1",

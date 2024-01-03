@@ -605,7 +605,7 @@ Finally, we'll need to update several of the scaffold components to use the new 
 
 ```javascript title="web/src/components/Post/EditPostCell/EditPostCell.js"
 export const QUERY = gql`
-  query FindPostById($id: Int!) {
+  query EditPostById($id: Int!) {
     // highlight-next-line
     post: adminPost(id: $id) {
       id

@@ -6,6 +6,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import fastifyStatic from '@fastify/static'
+import fastifyUrlData from '@fastify/url-data'
 import fg from 'fast-glob'
 import type {
   FastifyInstance,
@@ -26,6 +27,9 @@ export async function redwoodFastifyWeb(
   opts: RedwoodFastifyWebOptions,
   done: HookHandlerDoneFunction
 ) {
+  if (!fastify.hasPlugin('@fastify/url-data')) {
+    await fastify.register(fastifyUrlData)
+  }
   const prerenderedFiles = findPrerenderedHtml()
 
   // Serve prerendered HTML directly, instead of the index.
@@ -53,9 +57,19 @@ export async function redwoodFastifyWeb(
   const indexPath = getFallbackIndexPath()
 
   // For SPA routing, fallback on unmatched routes and let client-side routing take over.
-  fastify.setNotFoundHandler({}, function (_, reply: FastifyReply) {
+  fastify.setNotFoundHandler({}, function (req, reply) {
+    const urlData = req.urlData()
+    const requestedExtension = path.extname(urlData.path ?? '')
+
+    // If it's requesting some sort of asset, e.g. .js or .jpg files
+    // Html files should fallback to the index.html
+    if (requestedExtension !== '' && requestedExtension !== '.html') {
+      reply.code(404)
+      return reply.send('Not Found')
+    }
+
     reply.header('Content-Type', 'text/html; charset=UTF-8')
-    reply.sendFile(indexPath)
+    return reply.sendFile(indexPath)
   })
 
   done()

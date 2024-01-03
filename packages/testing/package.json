@@ -20,6 +20,7 @@
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build:pack": "yarn pack -o redwoodjs-testing.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext 'js,jsx,ts,tsx' --ignore dist --exec 'yarn build'",
     "prepublishOnly": "NODE_ENV=production yarn build",
@@ -27,14 +28,15 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.5",
+    "@babel/runtime-corejs3": "7.23.6",
     "@redwoodjs/auth": "6.0.7",
     "@redwoodjs/babel-config": "6.0.7",
+    "@redwoodjs/context": "6.0.7",
     "@redwoodjs/graphql-server": "6.0.7",
     "@redwoodjs/project-config": "6.0.7",
     "@redwoodjs/router": "6.0.7",
     "@redwoodjs/web": "6.0.7",
-    "@testing-library/jest-dom": "5.17.0",
+    "@testing-library/jest-dom": "6.1.5",
     "@testing-library/react": "14.1.2",
     "@testing-library/user-event": "14.5.1",
     "@types/aws-lambda": "8.10.126",

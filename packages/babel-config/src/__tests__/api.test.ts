@@ -174,7 +174,7 @@ describe('api', () => {
             proposals: true,
             version: 3,
           },
-          version: '7.23.5',
+          version: '7.23.6',
         },
       ])
 
@@ -212,7 +212,7 @@ describe('api', () => {
             },
             {
               members: ['context'],
-              path: '@redwoodjs/graphql-server',
+              path: '@redwoodjs/context',
             },
           ],
         },

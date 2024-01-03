@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import fastifyStatic from '@fastify/static'
+import fastifyUrlData from '@fastify/url-data'
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -27,6 +28,10 @@ const withWebServer = async (
   fastify: FastifyInstance,
   options: WebServerArgs
 ) => {
+  if (!fastify.hasPlugin('@fastify/url-data')) {
+    await fastify.register(fastifyUrlData)
+  }
+
   const prerenderedFiles = findPrerenderedHtml()
   const indexPath = getFallbackIndexPath()
 
@@ -57,7 +62,9 @@ const withWebServer = async (
   fastify.setNotFoundHandler(
     {},
     function (req: FastifyRequest, reply: FastifyReply) {
-      const requestedExtension = path.extname(req.url)
+      const urlData = req.urlData()
+      const requestedExtension = path.extname(urlData.path ?? '')
+
       // If it's requesting some sort of asset, e.g. .js or .jpg files
       // Html files should fallback to the index.html
       if (requestedExtension !== '' && requestedExtension !== '.html') {

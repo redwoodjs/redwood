@@ -4,6 +4,8 @@ import path from 'path'
 import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 import Fastify from 'fastify'
 
+import type { GlobalContext } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import type { FastifySideConfigFn } from './types'
@@ -59,6 +61,11 @@ export const createFastifyInstance = (
   const { config } = loadFastifyConfig()
 
   const fastify = Fastify(options || config || DEFAULT_OPTIONS)
+
+  // Ensure that each request has a unique global context
+  fastify.addHook('onRequest', (_req, _reply, done) => {
+    getAsyncStoreInstance().run(new Map<string, GlobalContext>(), done)
+  })
 
   return fastify
 }
