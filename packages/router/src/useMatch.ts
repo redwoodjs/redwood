@@ -36,7 +36,7 @@ type UseMatchOptions = {
  * Match only specific route param values
  * const match = useMatch('/product/{category}/{id}', { routeParams: { category: 'shirts' } })
  */
-export const useMatch = (pathname: string, options?: UseMatchOptions) => {
+export const useMatch = (routePath: string, options?: UseMatchOptions) => {
   const location = useLocation()
   if (!location) {
     return { match: false }
@@ -59,7 +59,7 @@ export const useMatch = (pathname: string, options?: UseMatchOptions) => {
     }
   }
 
-  const matchInfo = matchPath(pathname, location.pathname, {
+  const matchInfo = matchPath(routePath, location.pathname, {
     matchSubPaths: options?.matchSubPaths,
   })
 

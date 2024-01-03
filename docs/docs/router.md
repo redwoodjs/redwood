@@ -278,6 +278,20 @@ const CustomLink = ({ to, ...rest }) => {
 }
 ```
 
+Passing in `routeParams` you can make it match only on specific route parameter
+values.
+
+```jsx
+const match = useMatch('/product/{category}/{id}', {
+  routeParams: { category: 'shirts' }
+})
+```
+
+The above example will match /product/shirts/213, but not /product/pants/213
+(whereas not specifying `routeParams` at all would match both)
+
+See below for more info on route parameters
+
 ## Route parameters
 
 To match variable data in a path, you can use route parameters, which are specified by a parameter name surrounded by curly braces:
