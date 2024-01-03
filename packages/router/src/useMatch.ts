@@ -10,9 +10,10 @@ type UseMatchOptions = {
 
 /**
  * Returns an object of { match: boolean; params: Record<string, unknown>; }
- * if the path matches the current location match will be true.
+ * If the path matches the current location `match` will be true.
  * Params will be an object of the matched params, if there are any.
  *
+ * Provide routeParams options to match specific route param values
  * Provide searchParams options to match the current location.search
  *
  * This is useful for components that need to know "active" state, e.g.
