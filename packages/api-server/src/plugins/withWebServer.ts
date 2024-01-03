@@ -29,7 +29,7 @@ const withWebServer = async (
   options: WebServerArgs
 ) => {
   if (!fastify.hasPlugin('@fastify/url-data')) {
-    fastify.register(fastifyUrlData)
+    await fastify.register(fastifyUrlData)
   }
 
   const prerenderedFiles = findPrerenderedHtml()

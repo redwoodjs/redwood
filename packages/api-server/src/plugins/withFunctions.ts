@@ -14,7 +14,7 @@ const withFunctions = async (
   const { apiRootPath } = options
   // Add extra fastify plugins
   if (!fastify.hasPlugin('@fastify/url-data')) {
-    fastify.register(fastifyUrlData)
+    await fastify.register(fastifyUrlData)
   }
 
   // Fastify v4 must await the fastifyRawBody plugin
