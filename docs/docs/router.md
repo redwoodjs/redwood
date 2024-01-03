@@ -293,6 +293,25 @@ The above example will match /product/shirts/213, but not /product/pants/213
 To get the path you need to pass to `useMatch` you can use
 [`useRoutePaths`](#useroutepaths) or [`useRoutePath`](#useroutepath)
 
+Here's an example:
+
+```jsx
+<Route path="/{animal}/{name}" page={AnimalPage} name="animal" />
+
+const animalRoutePath = useRoutePath('animal')
+// => '/{animal}/{name}'
+
+const matchOnlyDog = useMatch(animalRoutePath, { routeParams: { animal: 'dog' }})
+const matchFullyDynamic = useMatch(animalRoutePath)
+```
+
+In the above example, if the current page url was
+`https://example.org/dog/fido` then both `matchOnlyDog` and `matchFullyDynamic`
+would have `match: true`.
+
+If the current page instead was `https://example.org/cat/garfield` then only
+`matchFullyDynamic` would match
+
 See below for more info on route parameters.
 
 ## Route parameters
