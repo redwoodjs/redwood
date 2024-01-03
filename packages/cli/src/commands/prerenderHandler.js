@@ -131,9 +131,7 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     // Don't error out
     return []
   } else {
-    console.log(
-      'Creating the virtual modules needed for prerendering with GraphQL fragments ...'
-    )
+    console.log('Creating the virtual modules needed for prerendering ...')
     const possibleTypes = path.join(
       getPaths().base,
       'node_modules',
@@ -146,7 +144,7 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
 
     const f = fs.existsSync(possibleTypes)
       ? fs.readFileSync(possibleTypes, 'utf8')
-      : `export default { possibleTypes: {} }`
+      : `module.exports = { possibleTypes: {} };`
 
     fs.writeFileSync(
       path.join(getPaths().base, 'node_modules', 'virtual-possibleTypes.js'),
