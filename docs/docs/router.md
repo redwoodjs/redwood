@@ -478,14 +478,24 @@ Example output:
 
 ## useRoutePath
 
-This is a convenience hook for when you only want the path for a single route.
+Use this hook when you only want the path for a single route. By default it
+will give you the path for the current route
 ```jsx
-const aboutPath = useRoutePath('about') // returns "/about"
+// returns "/about" if you're currently on https://example.org/about
+const aboutPath = useRoutePath() 
 ```
-is the same as
+
+You can also pass in the name of a route and get the path for that route
+```jsx
+// returns "/about"
+const aboutPath = useRoutePath('about')
+```
+
+Note that the above is the same as
 ```jsx
 const routePaths = useRoutePaths()
-const aboutPath = routePaths.about // Also returns "/about"
+// returns "/about"
+const aboutPath = routePaths.about
 ```
 
 ## useRouteName
