@@ -160,7 +160,6 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     // TODO: Run this automatically at this point.
   }
 
-  // Do we also need to configure vite for the possible types virtual module import?
   configureBabel()
 
   const expandedRouteParameters = await Promise.all(
