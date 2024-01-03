@@ -290,6 +290,9 @@ const match = useMatch('/product/{category}/{id}', {
 The above example will match /product/shirts/213, but not /product/pants/213
 (whereas not specifying `routeParams` at all would match both).
 
+To get the path you need to pass to `useMatch` you can use
+[`useRoutePaths`](#useroutepaths) or [`useRoutePath`](#useroutepath)
+
 See below for more info on route parameters.
 
 ## Route parameters
