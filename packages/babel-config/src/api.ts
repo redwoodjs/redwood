@@ -16,7 +16,7 @@ import {
   getPathsFromTypeScriptConfig,
 } from './common'
 
-export const TARGETS_NODE = '18.16'
+export const TARGETS_NODE = '20.10'
 
 export const getApiSideBabelPresets = (
   { presetEnv } = { presetEnv: false }
@@ -87,7 +87,7 @@ export const getApiSideBabelPlugins = (
         alias: {
           src: './src',
           // adds the paths from [ts|js]config.json to the module resolver
-          ...getPathsFromTypeScriptConfig(tsConfig.api),
+          ...getPathsFromTypeScriptConfig(tsConfig.api, getPaths().api.base),
         },
         root: [getPaths().api.base],
         cwd: 'packagejson',
@@ -110,9 +110,9 @@ export const getApiSideBabelPlugins = (
             path: 'graphql-tag',
           },
           {
-            // import { context } from '@redwoodjs/graphql-server'
+            // import { context } from '@redwoodjs/context'
             members: ['context'],
-            path: '@redwoodjs/graphql-server',
+            path: '@redwoodjs/context',
           },
         ],
       },
@@ -144,10 +144,25 @@ export const getApiSideBabelConfigPath = () => {
   }
 }
 
+export const getApiSideBabelOverrides = () => {
+  const overrides = [
+    // Apply context wrapping to all functions
+    {
+      // match */api/src/functions/*.js|ts
+      test: /.+api(?:[\\|/])src(?:[\\|/])functions(?:[\\|/]).+.(?:js|ts)$/,
+      plugins: [
+        require('./plugins/babel-plugin-redwood-context-wrapping').default,
+      ],
+    },
+  ].filter(Boolean)
+  return overrides as TransformOptions[]
+}
+
 export const getApiSideDefaultBabelConfig = () => {
   return {
     presets: getApiSideBabelPresets(),
     plugins: getApiSideBabelPlugins(),
+    overrides: getApiSideBabelOverrides(),
     extends: getApiSideBabelConfigPath(),
     babelrc: false,
     ignore: ['node_modules'],

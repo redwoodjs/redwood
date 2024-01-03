@@ -1,4 +1,4 @@
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 
 const CREATE_JOB = gql`
@@ -12,7 +12,7 @@ const CREATE_JOB = gql`
 const NewJobPage = ({ token }) => {
   return (
     <>
-      <MetaTags
+      <Metadata
         title="Post a Job"
         description="Looking to hire RedwoodJS developers? Post on the Redwood job board!"
       />

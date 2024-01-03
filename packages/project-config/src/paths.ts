@@ -45,7 +45,7 @@ export interface WebPaths {
   entries: string | null
   postcss: string
   storybookConfig: string
-  storybookPreviewConfig: string
+  storybookPreviewConfig: string | null
   storybookManagerConfig: string
   dist: string
   distServer: string
@@ -119,9 +119,8 @@ const PATH_WEB_DIR_GRAPHQL = 'web/src/graphql' // .js,.ts
 
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
-const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview.js'
+const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview' // .js, .tsx
 const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
-
 const PATH_WEB_DIR_DIST = 'web/dist'
 const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
 const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server.js'
@@ -229,9 +228,8 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         BASE_DIR,
         PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG
       ),
-      storybookPreviewConfig: path.join(
-        BASE_DIR,
-        PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW
+      storybookPreviewConfig: resolveFile(
+        path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW)
       ),
       storybookManagerConfig: path.join(
         BASE_DIR,

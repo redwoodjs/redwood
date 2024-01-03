@@ -1,5 +1,6 @@
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
 
 // Setup test mocks
 globalThis.__dirname = __dirname
@@ -9,12 +10,12 @@ import * as helpers from '../helpers'
 import * as page from '../page/page'
 
 const PAGE_TEMPLATE_OUTPUT = `import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const FooBarPage = () => {
   return (
     <>
-      <MetaTags title="FooBar" description="FooBar page" />
+      <Metadata title="FooBar" description="FooBar page" />
 
       <h1>FooBarPage</h1>
       <p>

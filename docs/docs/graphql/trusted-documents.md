@@ -1,12 +1,12 @@
 # Trusted Documents
 
-In addition, RedwoodJS can be setup to enforce [persisted operations](https://the-guild.dev/graphql/yoga-server/docs/features/persisted-operations) -- alternatively called [Trusted Documents](https://benjie.dev/graphql/trusted-documents).
+RedwoodJS can be setup to enforce [persisted operations](https://the-guild.dev/graphql/yoga-server/docs/features/persisted-operations) – alternatively called [Trusted Documents](https://benjie.dev/graphql/trusted-documents).
 
-Use trusted documents if your GraphQL API is only for your own apps (which is the case for most GraphQL APIs) for a massively decreased attack-surface, increased performance, and decreased bandwidth usage.
+Use trusted documents if your GraphQL API is only for your own app (which is the case for most GraphQL APIs) for a massively decreased attack-surface, increased performance, and decreased bandwidth usage.
 
-At app build time, Redwood will extract the GraphQL documents (queries, etc) and make them available to the server. At run time, you can then send documentId or "hash" instead of the whole document; only accept requests with a documentId and one that it knows about.
+At app build time, Redwood will extract the GraphQL documents (queries, etc) and make them available to the server. At run time, you can then send "document id" or "hash" instead of the whole document; only accept requests with a known document id.
 
-This prevents malicious attackers from executing arbitrary GraphQL thus helping with unwanted resolver traversal of information leaking.
+This prevents malicious attackers from executing arbitrary GraphQL thus helping with unwanted resolver traversal or information leaking.
 
 See [Configure Trusted Documents](#configure-trusted-documents) for more information and usage instructions.
 
@@ -37,7 +37,7 @@ When configured to use Trusted Documents, your project will:
 }
 ```
 
-2. The contain the query and hash that represents and identifies that query
+2. They contain the query and hash that represents and identifies that query
 3. Files with functions to lookup the generated trusted document such as:
 
 ```ts title=web/src/graphql/gql.ts
@@ -60,13 +60,13 @@ export const FindPostsDocument = {"__meta__":{"hash":"76308e971322b1ece4cdff7518
 // ...
 ```
 
-so that when a query or mutation is made, the web side GraphQL client doesn't send the query, but rather **just the has id** so that the GraphQL Server can lookup the pre-generated query to run.
+so that when a query or mutation is made, the web side GraphQL client doesn't send the query, but rather **just the hash id** so that the GraphQL Server can lookup the pre-generated query to run.
 
 ```http
 {"operationName":"FindPosts","variables":{},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"76308e971322b1ece4cdff75185bb61d7139e343"}}}
 ```
 
-It does so by adding a `api/src/lib/trustedDocumentsStore.ts` for use on the GraphQL api side.
+It does so by adding a `api/src/lib/trustedDocumentsStore.ts` file for use on the GraphQL api side.
 
 ```ts title=api/src/lib/trustedDocumentsStore.ts
 export const store = {
@@ -84,7 +84,7 @@ See how the `76308e971322b1ece4cdff75185bb61d7139e343` hash ids match?
 
 Now, when the client requests to make a query for `76308e971322b1ece4cdff75185bb61d7139e343`, the GraphQL server knows to execute the corresponding query associated with that hash.
 
-This means that because queries are pre-generated and teh has ids ***must match**, there is no way for any un-trusted or ad-hock queries to get executed by the GraphQL server.
+This means that because queries are pre-generated and the hash ids ***must match**, there is no way for any un-trusted or ad-hock queries to get executed by the GraphQL server.
 
 Thus preventing unwanted queries or GraphQl traversal attacks,
 
@@ -92,14 +92,6 @@ Thus preventing unwanted queries or GraphQl traversal attacks,
 * Configure the GraphQL Server
 
 ## Configure Trusted Documents
-
-In addition, RedwoodJS can be setup to enforce [persisted operations](https://the-guild.dev/graphql/yoga-server/docs/features/persisted-operations) -- alternatively called [Trusted Documents](https://benjie.dev/graphql/trusted-documents).
-
-Use trusted documents if your GraphQL API is only for your own apps (which is the case for most GraphQL APIs) for a massively decreased attack-surface, increased performance, and decreased bandwidth usage.
-
-At build time, Redwood will extract the GraphQL documents (queries, etc) and make them available to the server. At run time, you can then send documentId or "hash" instead of the whole document; only accept requests with a documentId and one that it knows about.
-
-This prevents malicious attackers from executing arbitrary GraphQL thus helping with unwanted resolver traversal of information leaking.
 
 ### Configure redwood.toml
 
@@ -114,11 +106,12 @@ Setting `trustedDocuments` to true will
   trustedDocuments = true
 ...
 ```
+
 ### Configure GraphQL Handler
 
-As part or GraphQL type and codegen, the `trustedDocumentsStore` is created in `api/src/lib`.
+As part of GraphQL type and codegen, the `trustedDocumentsStore` is created in `api/src/lib`.
 
-This is a the same information that is created in `web/src/graphql/persisted-documents.json` but wrapped in a `store` that can be easily be imported and passed to the GraphQL Handler.
+This is the same information that is created in `web/src/graphql/persisted-documents.json` but wrapped in a `store` that can be easily imported and passed to the GraphQL Handler.
 
 To enable trusted documents, configure `trustedDocuments` with the store.
 
@@ -140,10 +133,9 @@ export const handler = createGraphQLHandler({
     db.$disconnect()
   },
 })
-
 ```
-If you would like to customize the message when a query is not permitted, you can set the `persistedQueryOnly` in the `customErrors` configuration setting:
 
+If you'd like to customize the message when a query is not permitted, you can set the `persistedQueryOnly` configuration setting in `customErrors`:
 
 ```
   trustedDocuments: {

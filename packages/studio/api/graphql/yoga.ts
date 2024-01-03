@@ -149,6 +149,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
       }
 
       type StudioConfig {
+        basePort: Int!
         inMemory: Boolean
         graphiql: GraphiQLConfig
       }
@@ -289,13 +290,10 @@ export const setupYoga = (fastify: FastifyInstance) => {
     },
   })
 
-  const yoga = createYoga<
-    {
-      req: FastifyRequest
-      reply: FastifyReply
-    },
-    Record<string, unknown>
-  >({
+  const yoga = createYoga<{
+    req: FastifyRequest
+    reply: FastifyReply
+  }>({
     schema,
     logging: {
       debug: (...args) => args.forEach((arg) => fastify.log.debug(arg)),
