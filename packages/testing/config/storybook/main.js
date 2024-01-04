@@ -74,6 +74,7 @@ const baseConfig = {
     // If one isn't provided, set the alias to `false` to tell webpack to ignore it.
     // See https://webpack.js.org/configuration/resolve/#resolvealias.
     sbConfig.resolve.alias['~__REDWOOD__USER_WEB_DEFAULT_CSS'] = false
+
     if (fs.existsSync(possibleTypesPath)) {
       sbConfig.resolve.alias['virtual-possibleTypes'] = require.resolve(
         '@redwoodjs/web/dist/apollo/possibleTypes.js'

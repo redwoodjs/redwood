@@ -1,9 +1,20 @@
+const fs = require('fs')
 const path = require('path')
 
 const { getPaths } = require('@redwoodjs/project-config')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
+
+const possibleTypesPath = path.join(
+  getPaths().base,
+  'node_modules',
+  '@redwoodjs',
+  'web',
+  'dist',
+  'apollo',
+  'possibleTypes.js'
+)
 
 /** @type {import('jest').Config} */
 module.exports = {
@@ -62,6 +73,14 @@ module.exports = {
       NODE_MODULES_PATH,
       '@redwoodjs/testing/dist/web/mockAuth.js'
     ),
+
+    // For GraphQL Fragments
+    'virtual-possibleTypes': fs.existsSync(possibleTypesPath)
+      ? path.join(NODE_MODULES_PATH, '@redwoodjs/web/dist/apollo/possibleTypes')
+      : path.join(
+          NODE_MODULES_PATH,
+          '@redwoodjs/testing/dist/web/possibleTypes'
+        ),
 
     // @NOTE: Import @redwoodjs/testing in web tests, and it automatically remaps to the web side only
     // This is to prevent web stuff leaking into api, and vice versa
