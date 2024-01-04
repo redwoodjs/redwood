@@ -22,6 +22,8 @@ declare global {
     __REDWOOD__APP_TITLE: string
   }
 
+  var __REDWOOD__SERVER__AUTH_STATE__: AuthProviderState<any>
+
   namespace NodeJS {
     interface Global {
       /** URL or absolute path to the GraphQL serverless function */

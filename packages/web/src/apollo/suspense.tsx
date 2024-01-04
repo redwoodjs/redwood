@@ -122,6 +122,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   const { uri } = useFetchConfig()
 
+  // @MARK server auth state should never be undefined???
   const serverAuthState = useContext(ServerAuthContext)
 
   const getGraphqlUrl = () => {
@@ -147,7 +148,8 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
       link: createHttpLink(
         getGraphqlUrl(),
         httpLinkConfig,
-        serverAuthState.cookieHeader
+        // @TODO how is serverAuthState not the default
+        serverAuthState?.cookieHeader
       ),
     },
   ]

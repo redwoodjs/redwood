@@ -7,8 +7,8 @@ import type {
   ReactDOMServerReadableStream,
 } from 'react-dom/server'
 
+import type { ServerAuthState } from '@redwoodjs/auth'
 import { ServerAuthProvider } from '@redwoodjs/auth'
-import type { AuthProviderState } from '@redwoodjs/auth/src/AuthProvider/AuthProviderState'
 import { LocationProvider } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
@@ -29,7 +29,7 @@ interface RenderToStreamArgs {
   cssLinks: string[]
   isProd: boolean
   jsBundles?: string[]
-  authState: AuthProviderState<never> & { token: string | null }
+  authState: ServerAuthState
 }
 
 interface StreamOptions {
@@ -92,8 +92,7 @@ export async function reactRenderToStreamResponse(
     return React.createElement(
       ServerAuthProvider,
       {
-        // @TODO: figure out types
-        value: authState as any,
+        value: authState,
       },
       React.createElement(
         LocationProvider,
@@ -144,11 +143,10 @@ export async function reactRenderToStreamResponse(
       },
     }
 
+    const root = renderRoot(currentPathName)
+
     const reactStream: ReactDOMServerReadableStream =
-      await renderToReadableStream(
-        renderRoot(currentPathName),
-        renderToStreamOptions
-      )
+      await renderToReadableStream(root, renderToStreamOptions)
 
     // @NOTE: very important that we await this before we apply any transforms
     if (waitForAllReady) {
