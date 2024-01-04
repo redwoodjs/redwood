@@ -14,6 +14,18 @@ import { configureBabel, runScriptFunction } from '../lib/exec'
 
 class PathParamError extends Error {}
 
+const apolloDistPath = path.join(
+  getPaths().base,
+  'node_modules',
+  '@redwoodjs',
+  'web',
+  'dist',
+  'apollo'
+)
+const apolloIndexJsPath = path.join(apolloDistPath, 'index.js')
+
+let apolloIndexJs
+
 const mapRouterPathToHtml = (routerPath) => {
   if (routerPath === '/') {
     return 'web/dist/index.html'
@@ -130,26 +142,6 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
 
     // Don't error out
     return []
-  } else {
-    console.log('Creating the virtual modules needed for prerendering ...')
-    const possibleTypes = path.join(
-      getPaths().base,
-      'node_modules',
-      '@redwoodjs',
-      'web',
-      'dist',
-      'apollo',
-      'possibleTypes.js'
-    )
-
-    const f = fs.existsSync(possibleTypes)
-      ? fs.readFileSync(possibleTypes, 'utf8')
-      : `module.exports = { possibleTypes: {} };`
-
-    fs.writeFileSync(
-      path.join(getPaths().base, 'node_modules', 'virtual-possibleTypes.js'),
-      f
-    )
   }
 
   if (!fs.existsSync(indexHtmlPath)) {
@@ -159,6 +151,25 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     process.exit(1)
     // TODO: Run this automatically at this point.
   }
+
+  const possibleTypesPath = path.join(apolloDistPath, 'possibleTypes.js')
+  apolloIndexJs = fs.readFileSync(apolloIndexJsPath, 'utf8')
+  let newApolloIndexJs
+
+  if (fs.existsSync(possibleTypesPath)) {
+    // Patch virtual-possibleTypes require path in the framework code
+    newApolloIndexJs = apolloIndexJs.replace(
+      'require("virtual-possibleTypes")',
+      'require("@redwoodjs/web/dist/apollo/possibleTypes")'
+    )
+  } else {
+    // Inline default definition of possibleTypes
+    newApolloIndexJs = apolloIndexJs.replace(
+      /\n.*var (.*virtualPossibleTypes)\s*=.*require\("virtual-possibleTypes"\).*\n/,
+      '\nvar $1 = { default: { possibleTypes: {} } }\n'
+    )
+  }
+  fs.writeFileSync(apolloIndexJsPath, newApolloIndexJs)
 
   configureBabel()
 
@@ -319,6 +330,8 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
     concurrent: false,
   })
 
+  let exitCode = 0
+
   try {
     if (dryRun) {
       console.log(c.info('::: Dry run, not writing changes :::'))
@@ -357,7 +370,12 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
     }
 
     console.log()
+    exitCode = 1
+  } finally {
+    fs.writeFileSync(apolloIndexJsPath, apolloIndexJs)
 
-    process.exit(1)
+    if (exitCode) {
+      process.exit(exitCode)
+    }
   }
 }
