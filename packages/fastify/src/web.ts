@@ -21,7 +21,9 @@ export async function redwoodFastifyWeb(
   opts: RedwoodFastifyWebOptions,
   done: HookHandlerDoneFunction
 ) {
-  fastify.register(fastifyUrlData)
+  if (!fastify.hasPlugin('@fastify/url-data')) {
+    await fastify.register(fastifyUrlData)
+  }
   const prerenderedFiles = findPrerenderedHtml()
 
   // Serve prerendered HTML directly, instead of the index.

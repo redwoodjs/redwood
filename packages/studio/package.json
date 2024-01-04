@@ -39,7 +39,7 @@
     "fastify-raw-body": "4.3.0",
     "graphql": "16.8.1",
     "graphql-scalars": "1.22.4",
-    "graphql-yoga": "4.0.4",
+    "graphql-yoga": "5.1.0",
     "jsonwebtoken": "9.0.2",
     "lodash": "4.17.21",
     "mailparser": "3.6.5",
@@ -47,7 +47,7 @@
     "qs": "6.11.2",
     "smtp-server": "3.13.0",
     "split2": "4.2.0",
-    "sqlite": "4.2.1",
+    "sqlite": "5.1.1",
     "sqlite3": "5.1.6",
     "uuid": "9.0.1",
     "yargs": "17.7.2"
