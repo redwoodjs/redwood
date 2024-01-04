@@ -14,18 +14,6 @@ import { configureBabel, runScriptFunction } from '../lib/exec'
 
 class PathParamError extends Error {}
 
-const apolloDistPath = path.join(
-  getPaths().base,
-  'node_modules',
-  '@redwoodjs',
-  'web',
-  'dist',
-  'apollo'
-)
-const apolloIndexJsPath = path.join(apolloDistPath, 'index.js')
-
-let apolloIndexJs
-
 const mapRouterPathToHtml = (routerPath) => {
   if (routerPath === '/') {
     return 'web/dist/index.html'
@@ -151,25 +139,6 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     process.exit(1)
     // TODO: Run this automatically at this point.
   }
-
-  const possibleTypesPath = path.join(apolloDistPath, 'possibleTypes.js')
-  apolloIndexJs = fs.readFileSync(apolloIndexJsPath, 'utf8')
-  let newApolloIndexJs
-
-  if (fs.existsSync(possibleTypesPath)) {
-    // Patch virtual-possibleTypes require path in the framework code
-    newApolloIndexJs = apolloIndexJs.replace(
-      'require("virtual-possibleTypes")',
-      'require("@redwoodjs/web/dist/apollo/possibleTypes")'
-    )
-  } else {
-    // Inline default definition of possibleTypes
-    newApolloIndexJs = apolloIndexJs.replace(
-      /\n.*var (.*virtualPossibleTypes)\s*=.*require\("virtual-possibleTypes"\).*\n/,
-      '\nvar $1 = { default: { possibleTypes: {} } }\n'
-    )
-  }
-  fs.writeFileSync(apolloIndexJsPath, newApolloIndexJs)
 
   configureBabel()
 
@@ -322,6 +291,30 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
     verbose,
   })
 
+  const possibleTypesPath = path.join(
+    getPaths().base,
+    'node_modules',
+    '@redwoodjs',
+    'web',
+    'dist',
+    'apollo',
+    'possibleTypes.js'
+  )
+
+  const Mod = require('module')
+  const originalRequire = Mod.prototype.require
+  Mod.prototype.require = function (path) {
+    if (path === 'virtual-possibleTypes') {
+      if (fs.existsSync(possibleTypesPath)) {
+        return originalRequire.call(this, possibleTypesPath)
+      } else {
+        return { possibleTypes: {} }
+      }
+    }
+
+    return originalRequire.apply(this, arguments)
+  }
+
   const listrTasks = await getTasks(dryRun, routerPath)
 
   const tasks = new Listr(listrTasks, {
@@ -329,8 +322,6 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
     rendererOptions: { collapseSubtasks: false },
     concurrent: false,
   })
-
-  let exitCode = 0
 
   try {
     if (dryRun) {
@@ -370,12 +361,7 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
     }
 
     console.log()
-    exitCode = 1
-  } finally {
-    fs.writeFileSync(apolloIndexJsPath, apolloIndexJs)
 
-    if (exitCode) {
-      process.exit(exitCode)
-    }
+    process.exit(1)
   }
 }
