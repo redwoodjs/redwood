@@ -93,6 +93,11 @@ Thus preventing unwanted queries or GraphQl traversal attacks,
 
 ## Configure Trusted Documents
 
+Below are instructions to manually configure Trusted Documents in your redwoodJS project.
+
+Alternatively, you can use the `yarn redwood setup graphql trusted-documents` [CLI setup command](../cli-commands.md#setup-graphql-trusted-docs).
+
+
 ### Configure redwood.toml
 
 Setting `trustedDocuments` to true will

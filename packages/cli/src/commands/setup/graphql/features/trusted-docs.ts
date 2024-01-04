@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import execa from 'execa'
 import { Listr } from 'listr2'
 import { format } from 'prettier'
 import { Project, SyntaxKind, type PropertyAssignment } from 'ts-morph'
@@ -24,16 +25,12 @@ export function builder(yargs: any) {
     description: 'Overwrite existing configuration',
     type: 'boolean',
   })
-  yargs.option('install', {
-    alias: 'i',
-    default: true,
-    description: 'Install packages',
-    type: 'boolean',
-  })
 }
+
 function configureGraphQLHandlerWithStore() {
   return {
-    title: 'Configuring the GraphQL Handler to use a Trusted Documents store..',
+    title:
+      'Configuring the GraphQL Handler to use a Trusted Documents store ...',
     task: async () => {
       // locate "api/functions/graphql.[js|ts]"
       let graphQlSourcePath: string | undefined
@@ -145,31 +142,27 @@ export async function handler({
     install,
   })
 
-  // const rwPaths = getPaths()
-
   const tasks = new Listr(
     [
       {
-        title: 'Update graphql handler..',
-        skip: () => false,
-        task: () => console.log('handler update'),
-      },
-      {
-        title: 'Update Redwood Project toml..',
+        title:
+          'Update Redwood Project Configuration to enable GraphQL Trusted Documents ...',
         skip: () => false,
         task: () => {
           const redwoodTomlPath = getConfigPath()
           const originalTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
 
-          // const config = getConfig(redwoodTomlPath)
-
           const tomlToAppend = `[graphql]\n  trustedDocuments = true`
-
-          console.debug('tomlToAppend', tomlToAppend)
 
           const newConfig = originalTomlContent + '\n' + tomlToAppend
 
           fs.writeFileSync(redwoodTomlPath, newConfig, 'utf-8')
+        },
+      },
+      {
+        title: 'Generating Trusted Documents store ...',
+        task: () => {
+          execa.commandSync('yarn redwood generate types', { stdio: 'ignore' })
         },
       },
       configureGraphQLHandlerWithStore(),
