@@ -1999,6 +1999,13 @@ We perform a simple compatibility check in an attempt to make you aware of poten
 
 It's the author of the npm package's responsibility to specify the correct compatibility range, so **you should always research the packages you use with this command**. Especially since they will be executing code on your machine!
 
+### setup graphql
+
+This command creates the necessary files to support GraphQL features like trusted documents.
+
+#### setup graphql trusted-docs
+
+
 ### setup realtime
 
 This command creates the necessary files, installs the required packages, and provides examples to setup RedwoodJS Realtime from GraphQL live queries and subscriptions. See the Realtime docs for more information.
