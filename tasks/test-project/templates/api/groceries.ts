@@ -1,6 +1,8 @@
+import { Produce } from 'types/graphql'
+
 import { db } from 'src/lib/db'
 
-const isFruit = (grocery) => {
+const isFruit = (grocery: Produce) => {
   return grocery.isSeedless !== null && grocery.ripenessIndicators !== null
 }
 
