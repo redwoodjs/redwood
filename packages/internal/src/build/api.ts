@@ -13,7 +13,9 @@ import { findApiFiles } from '../files'
 let BUILD_CTX: BuildContext | null = null
 
 export const buildApi = async () => {
-  cleanApiBuild()
+  // @MARK: mai tong clean, overwriting already
+  // cleanApiBuild()
+
   // Reset the build context for rebuildling
   BUILD_CTX = null
 
@@ -45,7 +47,7 @@ const runRwBabelTransformsPlugin = {
     const rwjsConfig = getConfig()
 
     build.onLoad({ filter: /\.(js|ts|tsx|jsx)$/ }, async (args) => {
-      //  Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
+      // @TODO I khitwaa implement LRU cache here
       const transformedCode = transformWithBabel(
         args.path,
         getApiSideBabelPlugins({
