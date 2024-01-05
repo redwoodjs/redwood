@@ -827,6 +827,11 @@ async function fragmentsTasks(outputPath, { verbose }) {
 
         await generateSdl('stall')
         await generateSdl('produce')
+
+        await applyCodemod(
+          'producesSdl.ts',
+          fullPath('api/src/graphql/produces.sdl')
+        )
       },
     },
     {

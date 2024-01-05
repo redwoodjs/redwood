@@ -22,7 +22,7 @@ const componentBlock = `{
           ))}
 
         {!produceLoading &&
-          produceData.produces.map((produce) => (
+          produceData.produces?.map((produce) => (
             <ProduceInfo key={produce.id} id={produce.id} />
           ))}
       </div>

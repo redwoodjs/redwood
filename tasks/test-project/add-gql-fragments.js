@@ -1,7 +1,5 @@
 #!/usr/bin/env node
-
 /* eslint-env node, es6*/
-
 const path = require('path')
 
 const { hideBin } = require('yargs/helpers')
