@@ -17,6 +17,7 @@ import {
 
 import {
   checkProjectForQueryField,
+  getIdName,
   getIdType,
   operationNameIsUnique,
   uniqueOperationName,
@@ -27,6 +28,7 @@ const REDWOOD_WEB_PATH_NAME = 'components'
 
 export const files = async ({ name, typescript, ...options }) => {
   let cellName = removeGeneratorName(name, 'cell')
+  let idName = 'id'
   let idType,
     mockIdValues = [42, 43, 44],
     model = null
@@ -41,6 +43,7 @@ export const files = async ({ name, typescript, ...options }) => {
   // needed for the singular cell GQL query find by id case
   try {
     model = await getSchema(pascalcase(singularize(cellName)))
+    idName = getIdName(model)
     idType = getIdType(model)
     mockIdValues =
       idType === 'String'
@@ -84,6 +87,7 @@ export const files = async ({ name, typescript, ...options }) => {
     templatePath: `cell${templateNameSuffix}.tsx.template`,
     templateVars: {
       operationName,
+      idName,
       idType,
     },
   })
@@ -114,6 +118,7 @@ export const files = async ({ name, typescript, ...options }) => {
     generator: 'cell',
     templatePath: `mock${templateNameSuffix}.js.template`,
     templateVars: {
+      idName,
       mockIdValues,
     },
   })

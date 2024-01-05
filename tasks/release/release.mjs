@@ -117,6 +117,13 @@ export async function main() {
   await resolveMilestones()
   console.log()
 
+  console.log(
+    'If you want to use `yarn release:notes` to generate release notes, now would be a good time to do so.'
+  )
+  await question(
+    "Press any key to continue when you're done with the release notes > "
+  )
+
   switch (semver) {
     case 'major':
     case 'minor':
@@ -133,14 +140,14 @@ main()
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 async function doChecks() {
-  // Check Node.js version. Right now, v18.19 breaks one of our tests.
   const nodeVersion = unwrap(await $`node -v`)
 
-  if (nodeVersion.startsWith('v20')) {
+  if (!nodeVersion.startsWith('v20')) {
     throw new Error(
       [
-        'The framework is currently built for Node v18; running QA with v20 may cause issues.',
-        'Please switch to Node v18.',
+        'The framework is currently built for Node v20; running QA with any ' +
+          'other version may cause issues.',
+        'Please switch to Node v20.',
       ].join('\n')
     )
   }
@@ -209,7 +216,7 @@ async function resolveMilestones() {
       {
         search(
           query: "repo:redwoodjs/redwood is:pr is:merged milestone:next-release-patch"
-          first: 5
+          first: 51
           type: ISSUE
         ) {
           nodes {
@@ -222,12 +229,14 @@ async function resolveMilestones() {
     `)
 
   if (semver === 'patch') {
+    const prettyPatch = chalk.magenta('next-release-patch')
+    const singularMsg = `There's 1 PR that has the ${prettyPatch} milestone.`
+    const pluralMsg =
+      prs.length <= 50
+        ? `There are ${prs.length} PRs that have the ${prettyPatch} milestone.`
+        : `There are more than 50 PRs that have the ${prettyPatch} milestone.`
     console.log()
-    console.log(
-      `There's ${prs.length} PR(s) that have the ${chalk.magenta(
-        'next-release-patch'
-      )} milestone.`
-    )
+    console.log(prs.length === 1 ? singularMsg : pluralMsg)
 
     if (
       !isYes(
@@ -698,7 +707,15 @@ async function releasePatch() {
       'Only a few more things to do:',
       '  - publish the release notes',
       '  - merge the release branch into next and push the merge commit',
+      '    - `git switch next`',
+      `    - \`git merge ${releaseBranch}\``,
+      `    - \`git push ${redwoodRemote}\``,
       '  - delete the release branch locally and on GitHub (https://github.com/redwoodjs/redwood/branches)',
+      `    - \`git branch -d ${releaseBranch}\``,
+      `    - \`git push ${redwoodRemote} --delete ${releaseBranch}\``,
+      '  - Update the Algolia search index',
+      '    - https://crawler.algolia.com',
+      '    - "Restart crawling" (top right)',
       '  - post on Slack, Discord, and Buffer',
     ].join('\n')
   )

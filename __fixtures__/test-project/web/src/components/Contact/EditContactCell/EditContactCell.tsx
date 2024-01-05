@@ -1,13 +1,21 @@
-import type { EditContactById, UpdateContactInput } from 'types/graphql'
+import type {
+  EditContactById,
+  UpdateContactInput,
+  UpdateContactMutationVariables,
+} from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import ContactForm from 'src/components/Contact/ContactForm'
 
-export const QUERY = gql`
+export const QUERY: TypedDocumentNode<EditContactById> = gql`
   query EditContactById($id: Int!) {
     contact: contact(id: $id) {
       id
@@ -18,7 +26,11 @@ export const QUERY = gql`
     }
   }
 `
-const UPDATE_CONTACT_MUTATION = gql`
+
+const UPDATE_CONTACT_MUTATION: TypedDocumentNode<
+  EditContactById,
+  UpdateContactMutationVariables
+> = gql`
   mutation UpdateContactMutation($id: Int!, $input: UpdateContactInput!) {
     updateContact(id: $id, input: $input) {
       id

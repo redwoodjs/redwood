@@ -278,6 +278,42 @@ const CustomLink = ({ to, ...rest }) => {
 }
 ```
 
+Passing in `routeParams` you can make it match only on specific route parameter
+values.
+
+```jsx
+const match = useMatch('/product/{category}/{id}', {
+  routeParams: { category: 'shirts' }
+})
+```
+
+The above example will match /product/shirts/213, but not /product/pants/213
+(whereas not specifying `routeParams` at all would match both).
+
+To get the path you need to pass to `useMatch` you can use
+[`useRoutePaths`](#useroutepaths) or [`useRoutePath`](#useroutepath)
+
+Here's an example:
+
+```jsx
+<Route path="/{animal}/{name}" page={AnimalPage} name="animal" />
+
+const animalRoutePath = useRoutePath('animal')
+// => '/{animal}/{name}'
+
+const matchOnlyDog = useMatch(animalRoutePath, { routeParams: { animal: 'dog' }})
+const matchFullyDynamic = useMatch(animalRoutePath)
+```
+
+In the above example, if the current page url was
+`https://example.org/dog/fido` then both `matchOnlyDog` and `matchFullyDynamic`
+would have `match: true`.
+
+If the current page instead was `https://example.org/cat/garfield` then only
+`matchFullyDynamic` would match
+
+See below for more info on route parameters.
+
 ## Route parameters
 
 To match variable data in a path, you can use route parameters, which are specified by a parameter name surrounded by curly braces:
@@ -478,14 +514,24 @@ Example output:
 
 ## useRoutePath
 
-This is a convenience hook for when you only want the path for a single route.
+Use this hook when you only want the path for a single route. By default it
+will give you the path for the current route
 ```jsx
-const aboutPath = useRoutePath('about') // returns "/about"
+// returns "/about" if you're currently on https://example.org/about
+const aboutPath = useRoutePath() 
 ```
-is the same as
+
+You can also pass in the name of a route and get the path for that route
+```jsx
+// returns "/about"
+const aboutPath = useRoutePath('about')
+```
+
+Note that the above is the same as
 ```jsx
 const routePaths = useRoutePaths()
-const aboutPath = routePaths.about // Also returns "/about"
+// returns "/about"
+const aboutPath = routePaths.about
 ```
 
 ## useRouteName
