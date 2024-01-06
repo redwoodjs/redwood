@@ -2,7 +2,9 @@
 import React from 'react'
 
 import { render } from '@testing-library/react'
+import { act } from 'react-dom/test-utils'
 
+import { navigate } from '../history'
 import { Route, Router } from '../router'
 import { Set } from '../Set'
 import { useRoutePaths, useRoutePath } from '../useRoutePaths'
@@ -27,17 +29,25 @@ test('useRoutePaths and useRoutePath', async () => {
     children: React.ReactNode
   }
 
-  const Layout = ({ children }: LayoutProps) => <>{children}</>
+  const Layout = ({ children }: LayoutProps) => {
+    // No name means current route
+    const routePath = useRoutePath()
+
+    return (
+      <>
+        <h1>Current route path: &quot;{routePath}&quot;</h1>
+        {children}
+      </>
+    )
+  }
 
   const Page = () => <h1>Page</h1>
 
   const TestRouter = () => (
     <Router>
-      <Route path="/" page={HomePage} name="home" />
       <Set wrap={Layout}>
+        <Route path="/" page={HomePage} name="home" />
         <Route path="/one" page={Page} name="one" />
-      </Set>
-      <Set wrap={Layout}>
         <Route path="/two/{id:Int}" page={Page} name="two" />
       </Set>
     </Router>
@@ -48,4 +58,11 @@ test('useRoutePaths and useRoutePath', async () => {
   await screen.findByText('Home Page')
   await screen.findByText(/^My path is\s+\/$/)
   await screen.findByText(/^All paths:\s+\/,\/one,\/two\/\{id:Int\}$/)
+  await screen.findByText('Current route path: "/"')
+
+  act(() => navigate('/one'))
+  await screen.findByText('Current route path: "/one"')
+
+  act(() => navigate('/two/123'))
+  await screen.findByText('Current route path: "/two/{id:Int}"')
 })
