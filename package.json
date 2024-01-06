@@ -28,6 +28,7 @@
     "project:sync": "node ./tasks/framework-tools/frameworkSyncToProject.mjs",
     "project:tarsync": "node ./tasks/framework-tools/tarsync.mjs",
     "rebuild-test-project-fixture": "tsx ./tasks/test-project/rebuild-test-project-fixture.ts",
+    "rebuild-fragments-test-project-fixture": "tsx ./tasks/test-project/rebuild-fragments-test-project-fixture.ts",
     "release": "node ./tasks/release/release.mjs",
     "release:compare": "node ./tasks/release/compare/compare.mjs",
     "release:notes": "node ./tasks/release/generateReleaseNotes.mjs",
