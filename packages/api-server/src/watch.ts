@@ -155,14 +155,14 @@ const debouncedRebuild = debounce(
   () => rebuildApiServer(true),
   process.env.RWJS_DELAY_RESTART
     ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
-    : 5
+    : 500
 )
 
 const debouncedBuild = debounce(
   () => rebuildApiServer(false),
   process.env.RWJS_DELAY_RESTART
     ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
-    : 5
+    : 500
 )
 
 // NOTE: the file comes through as a unix path, even on windows
