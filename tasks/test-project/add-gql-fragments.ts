@@ -1,14 +1,13 @@
-#!/usr/bin/env node
 /* eslint-env node, es6*/
-const path = require('path')
+import path from 'node:path'
 
-const { hideBin } = require('yargs/helpers')
-const yargs = require('yargs/yargs')
+import { hideBin } from 'yargs/helpers'
+import yargs from 'yargs/yargs'
 
-const { fragmentsTasks } = require('./tasks.js')
+import { fragmentsTasks } from './tasks.js'
 
 const args = yargs(hideBin(process.argv))
-  .usage('Usage: $0 <project directory> [option]')
+  .usage('Usage: $0 <project directory>')
   .parseSync()
 
 /**
@@ -21,7 +20,7 @@ async function runCommand() {
     verbose: true,
   })
 
-  tasks.run().catch((err) => {
+  tasks.run().catch((err: unknown) => {
     console.error(err)
     process.exit(1)
   })

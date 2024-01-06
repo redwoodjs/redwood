@@ -752,7 +752,7 @@ jobs:
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - name: Run Fragments codemods on test project
-        run: node ./tasks/test-project/add-gql-fragments ${{ steps.set-up-test-project.outputs.test-project-path }}
+        run: npx -y tsx ./tasks/test-project/add-gql-fragments ${{ steps.set-up-test-project.outputs.test-project-path }}
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
 
