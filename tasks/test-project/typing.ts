@@ -17,5 +17,10 @@ export interface TuiTaskDef {
 }
 
 export function isAwaitable(promise: unknown): promise is Promise<unknown> {
-  return typeof promise !== 'undefined' && 'then' in promise
+  return (
+    !!promise &&
+    typeof promise === 'object' &&
+    'then' in promise &&
+    typeof promise.then === 'function'
+  )
 }
