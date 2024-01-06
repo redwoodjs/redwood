@@ -1,34 +1,28 @@
-#!/usr/bin/env node
-/* eslint-env node, es6*/
-//@ts-check
-const fs = require('fs')
-const os = require('os')
-const path = require('path')
+import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
 
-const chalk = require('chalk')
-const fse = require('fs-extra')
-const { rimraf } = require('rimraf')
-const { hideBin } = require('yargs/helpers')
-const yargs = require('yargs/yargs')
+import chalk from 'chalk'
+import fse from 'fs-extra'
+import { rimraf } from 'rimraf'
+import { hideBin } from 'yargs/helpers'
+import yargs from 'yargs/yargs'
 
-const {
-  RedwoodTUI,
-  ReactiveTUIContent,
-  RedwoodStyling,
-} = require('@redwoodjs/tui')
+import { RedwoodTUI, ReactiveTUIContent, RedwoodStyling } from '@redwoodjs/tui'
 
-const {
+import {
   addFrameworkDepsToProject,
   copyFrameworkPackages,
-} = require('./frameworkLinking')
-const { webTasks, apiTasks } = require('./tui-tasks')
-const { isAwaitable } = require('./typing')
-const {
-  getExecaOptions: utilGetExecaOptions,
+} from './frameworkLinking'
+import { webTasks, apiTasks } from './tui-tasks'
+import { isAwaitable } from './typing'
+import type { TuiTaskDef } from './typing'
+import {
+  getExecaOptions as utilGetExecaOptions,
   updatePkgJsonScripts,
   ExecaError,
   exec,
-} = require('./util')
+} from './util'
 
 const args = yargs(hideBin(process.argv))
   .usage('Usage: $0 [option]')
@@ -55,6 +49,7 @@ const args = yargs(hideBin(process.argv))
 
 const { verbose, resume, resumePath, resumeStep } = args
 
+const RW_FRAMEWORK_PATH = path.join(__dirname, '../../')
 const OUTPUT_PROJECT_PATH = resumePath
   ? /* path.resolve(String(resumePath)) */ resumePath
   : path.join(
@@ -82,27 +77,18 @@ if (!startStep) {
   }
 }
 
-const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
-
 const tui = new RedwoodTUI()
 
-/** @type {(string) => import('execa').Options} */
-function getExecaOptions(cwd) {
+function getExecaOptions(cwd: string) {
   return { ...utilGetExecaOptions(cwd), stdio: 'pipe' }
 }
 
-/**
- * @param {string} step
- */
-function beginStep(step) {
+function beginStep(step: string) {
   fs.mkdirSync(OUTPUT_PROJECT_PATH, { recursive: true })
   fs.writeFileSync(path.join(OUTPUT_PROJECT_PATH, 'step.txt'), '' + step)
 }
 
-/**
- * @param {import('./typing').TuiTaskDef} taskDef
- */
-async function tuiTask({ step, title, content, task, parent }) {
+async function tuiTask({ step, title, content, task, parent }: TuiTaskDef) {
   const stepId = (parent ? parent + '.' : '') + step
 
   const tuiContent = new ReactiveTUIContent({
@@ -139,7 +125,7 @@ async function tuiTask({ step, title, content, task, parent }) {
     return
   }
 
-  let promise
+  let promise: void | Promise<unknown>
 
   try {
     promise = task()
@@ -251,28 +237,25 @@ if (resumePath && !fs.existsSync(path.join(resumePath, 'redwood.toml'))) {
 }
 
 const createProject = () => {
-  let cmd = `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
+  const cmd = `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
 
   const subprocess = exec(
     cmd,
     // We create a ts project and convert using ts-to-js at the end if typescript flag is false
     ['--no-yarn-install', '--typescript', '--overwrite', '--no-git'],
-    getExecaOptions(RW_FRAMEWORKPATH)
+    getExecaOptions(RW_FRAMEWORK_PATH)
   )
 
   return subprocess
 }
 
 const copyProject = async () => {
-  const FIXTURE_TESTPROJ_PATH = path.join(
-    RW_FRAMEWORKPATH,
-    '__fixtures__/test-project'
-  )
+  const fixturePath = path.join(RW_FRAMEWORK_PATH, '__fixtures__/test-project')
 
   // remove existing Fixture
-  await rimraf(FIXTURE_TESTPROJ_PATH)
+  await rimraf(fixturePath)
   // copy from tempDir to Fixture dir
-  await fse.copy(OUTPUT_PROJECT_PATH, FIXTURE_TESTPROJ_PATH)
+  await fse.copy(OUTPUT_PROJECT_PATH, fixturePath)
   // cleanup after ourselves
   await rimraf(OUTPUT_PROJECT_PATH)
 }
@@ -304,7 +287,7 @@ async function runCommand() {
       return exec(
         'yarn build:clean && yarn build',
         [],
-        getExecaOptions(RW_FRAMEWORKPATH)
+        getExecaOptions(RW_FRAMEWORK_PATH)
       )
     },
   })
@@ -315,7 +298,7 @@ async function runCommand() {
     content: 'Adding framework dependencies to project...',
     task: () => {
       return addFrameworkDepsToProject(
-        RW_FRAMEWORKPATH,
+        RW_FRAMEWORK_PATH,
         OUTPUT_PROJECT_PATH,
         'pipe' // TODO: Remove this when everything is using @rwjs/tui
       )
@@ -362,7 +345,7 @@ async function runCommand() {
     title: '[link] Copying framework packages to project',
     task: () => {
       return copyFrameworkPackages(
-        RW_FRAMEWORKPATH,
+        RW_FRAMEWORK_PATH,
         OUTPUT_PROJECT_PATH,
         'pipe'
       )
