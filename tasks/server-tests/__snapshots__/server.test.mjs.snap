@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`serve web (/Users/dom/projects/redwood/redwood/packages/web-server/dist/server.js) errors out on unknown args 1`] = `
+"rw-web-server
+
+Start server for serving only the web side
+
+Options:
+      --help                 Show help                                 [boolean]
+      --version              Show version number                       [boolean]
+  -p, --port                                            [number] [default: 8910]
+      --socket                                                          [string]
+      --apiHost, --api-host  Forward requests from the apiUrl, defined in
+                             redwood.toml to this host                  [string]
+
+Unknown arguments: foo, bar, baz
+"
+`;
+
+exports[`serve web ([
+  '/Users/dom/projects/redwood/redwood/packages/api-server/dist/index.js',
+  'web'
+]) errors out on unknown args 1`] = `
+"rw-server web
+
+Start server for serving only the web side
+
+Options:
+      --help                 Show help                                 [boolean]
+      --version              Show version number                       [boolean]
+  -p, --port                                            [number] [default: 8910]
+      --socket                                                          [string]
+      --apiHost, --api-host  Forward requests from the apiUrl, defined in
+                             redwood.toml to this host                  [string]
+
+Unknown arguments: foo, bar, baz
+"
+`;

@@ -29,7 +29,7 @@ export const apiCliOptions = {
   port: { default: getConfig().api?.port || 8911, type: 'number', alias: 'p' },
   socket: { type: 'string' },
   apiRootPath: {
-    alias: ['rootPath', 'root-path'],
+    alias: ['api-root-path', 'rootPath', 'root-path'],
     default: '/',
     type: 'string',
     desc: 'Root path where your api functions are served',
