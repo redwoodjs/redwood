@@ -52,6 +52,9 @@ async function createServer() {
     logLevel: 'info',
     clearScreen: false,
     appType: 'custom',
+    ssr: {
+      noExternal: ['virtual-possibleTypes'],
+    },
   })
 
   // use vite's connect instance as middleware
