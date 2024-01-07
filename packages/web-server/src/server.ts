@@ -47,7 +47,7 @@ async function serve() {
   const port = options.port ? parseInt(options.port) : redwoodConfig.web.port
   const apiUrl = redwoodConfig.web.apiUrl
 
-  if (!isFullyQualifiedUrl(apiUrl)) {
+  if (!options.apiHost && !isFullyQualifiedUrl(apiUrl)) {
     console.error(
       `${chalk.red('Error')}: If you don't provide ${chalk.magenta(
         'apiHost'
