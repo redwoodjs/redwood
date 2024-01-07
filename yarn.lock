@@ -9610,6 +9610,7 @@ __metadata:
     fast-glob: "npm:3.3.2"
     fastify: "npm:4.24.3"
     typescript: "npm:5.3.3"
+    yargs: "npm:17.7.2"
     yargs-parser: "npm:21.1.1"
   bin:
     rw-web-server: ./dist/server.js
