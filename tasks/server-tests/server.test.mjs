@@ -241,7 +241,7 @@ describe.each([
     }
   })
 
-  it.todo('changing redwood.toml web.port works')
+  it.todo('works to change web.port in redwood.toml')
   it.todo("if apiHost isn't set, and apiUrl isn't fully qualified, exits")
   it.todo(
     "if api host isn't set, and api url is fully qualified, hits upstream"
