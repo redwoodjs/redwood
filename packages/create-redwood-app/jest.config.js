@@ -1,8 +1,5 @@
 /** @type {import('jest').Config} */
-const config = {
-  testMatch: ['<rootDir>/tests/*.test.mjs'],
+export default {
   testPathIgnorePatterns: ['/node_modules/', '<rootDir>/templates/'],
   transform: {},
 }
-
-module.exports = config

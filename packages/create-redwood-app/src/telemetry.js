@@ -12,7 +12,7 @@ import envinfo from 'envinfo'
 import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
-import { name as packageName, version as packageVersion } from '../package'
+import { name as packageName, version as packageVersion } from '../package.json'
 
 /**
  * @type NodeTracerProvider
