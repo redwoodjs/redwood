@@ -37,6 +37,7 @@ describe('dist', () => {
         "apiCliOptions": {
           "apiRootPath": {
             "alias": [
+              "api-root-path",
               "rootPath",
               "root-path",
             ],
