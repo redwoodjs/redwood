@@ -128,9 +128,24 @@ export const bothServerHandler = async (options: BothServerArgs) => {
 
 export const webServerHandler = async (options: WebServerArgs) => {
   const { port, socket, apiHost } = options
+  const apiUrl = getConfig().web.apiUrl
+
+  if (!apiHost && !isFullyQualifiedUrl(apiUrl)) {
+    console.error(
+      `${c.red('Error')}: If you don't provide ${c.magenta(
+        'apiHost'
+      )}, ${c.magenta(
+        'apiUrl'
+      )} needs to be a fully-qualified URL. But ${c.magenta(
+        'apiUrl'
+      )} is ${c.yellow(apiUrl)}.`
+    )
+    process.exitCode = 1
+    return
+  }
+
   const tsServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting Web Server...\n')))
-  const apiUrl = getConfig().web.apiUrl
   // Construct the graphql url from apiUrl by default
   // But if apiGraphQLUrl is specified, use that instead
   const graphqlEndpoint = coerceRootPath(
@@ -171,4 +186,14 @@ function coerceRootPath(path: string) {
   const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
 
   return `${prefix}${path}${suffix}`
+}
+
+function isFullyQualifiedUrl(url: string) {
+  try {
+    // eslint-disable-next-line no-new
+    new URL(url)
+    return true
+  } catch (e) {
+    return false
+  }
 }
