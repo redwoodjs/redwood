@@ -18,7 +18,15 @@ interface Opts {
   apiHost?: string
 }
 
-// no help option...
+function isFullyQualifiedUrl(url: string) {
+  try {
+    // eslint-disable-next-line no-new
+    new URL(url)
+    return true
+  } catch (e) {
+    return false
+  }
+}
 
 async function serve() {
   // Parse server file args
@@ -38,6 +46,24 @@ async function serve() {
 
   const port = options.port ? parseInt(options.port) : redwoodConfig.web.port
   const apiUrl = redwoodConfig.web.apiUrl
+
+  if (!isFullyQualifiedUrl(apiUrl)) {
+    console.error(
+      `${chalk.red('Error')}: If you don't provide ${chalk.magenta(
+        'apiHost'
+      )}, ${chalk.magenta(
+        'apiUrl'
+      )} needs to be a fully-qualified URL. But ${chalk.magenta(
+        'apiUrl'
+      )} is ${chalk.yellow(apiUrl)}.`
+    )
+    // We're using a custom error exit code here to tell `@redwoodjs/cli` that this error has been handled.
+    // While any other exit code than `0` is considered an error, there seems to be some conventions around some of them
+    // like `127`, etc. We chose 64 because it's in the range where there deliberately aren't any previous conventions.
+    // See https://tldp.org/LDP/abs/html/exitcodes.html.
+    process.exitCode = 64
+    return
+  }
 
   const tsServer = Date.now()
 
