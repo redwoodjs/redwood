@@ -53,7 +53,7 @@ async function createServer() {
     clearScreen: false,
     appType: 'custom',
     ssr: {
-      noExternal: ['virtual-possibleTypes'],
+      noExternal: ['@redwoodjs/web', '@apollo/experimental-nextjs-app-support'],
     },
   })
 
