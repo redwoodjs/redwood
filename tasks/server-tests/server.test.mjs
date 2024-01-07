@@ -116,8 +116,8 @@ describe.each([
     expect(apiBody).toEqual({ data: 'hello function' })
   })
 
-  it.todo('changing redwood.toml api.port does nothing')
-  it.todo('changing redwood.toml web.port works')
+  it.todo("doesn't respect api.port in redwood.toml")
+  it.todo('respects web.port in redwood.toml')
 })
 
 describe.each([
@@ -161,8 +161,8 @@ describe.each([
     expect(body).toEqual({ data: 'hello function' })
   })
 
-  it.todo('changing redwood.toml api.port works')
-  it.todo('changing redwood.toml web.apiUrl does nothing?')
+  it.todo('respects api.port in redwood.toml')
+  it.todo("apiRootPath isn't affected by apiUrl")
 })
 
 // We can't test @redwoodjs/cli here because it depends on node_modules.
@@ -241,14 +241,10 @@ describe.each([
     }
   })
 
-  it.todo('works to change web.port in redwood.toml')
-  it.todo("if apiHost isn't set, and apiUrl isn't fully qualified, exits")
-  it.todo(
-    "if api host isn't set, and api url is fully qualified, hits upstream"
-  )
-  it.todo(
-    'if api host is set, and api url is fully qualified, also breaks cause it tries to proxy?'
-  )
+  it.todo('respects web.port in redwood.toml')
+  it.todo("fails if apiHost isn't set and apiUrl isn't fully qualified")
+  it.todo("works if apiHost isn't set and apiUrl is fully qualified")
+  it.todo('fails if apiHost is set and apiUrl is fully qualified')
 })
 
 describe('@redwoodjs/cli', () => {
