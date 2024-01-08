@@ -90,7 +90,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
 
-    name: 🏗 Build, lint, test / ${{ matrix.os }} / node 18 latest
+    name: 🏗 Build, lint, test / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -144,7 +144,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
 
-    name: 🏗 Build, lint, test / ${{ matrix.os }} / node 18 latest
+    name: 🏗 Build, lint, test / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -157,7 +157,7 @@ jobs:
       matrix:
         bundler: [vite, webpack]
 
-    name: 🌲 Tutorial E2E / ${{ matrix.bundler }} / node 18 latest
+    name: 🌲 Tutorial E2E / ${{ matrix.bundler }} / node 20 latest
     runs-on: ubuntu-latest
 
     steps:
@@ -236,7 +236,7 @@ jobs:
       matrix:
         bundler: [vite, webpack]
 
-    name: 🌲 Tutorial E2E / ${{ matrix.bundler }} / node 18 latest
+    name: 🌲 Tutorial E2E / ${{ matrix.bundler }} / node 20 latest
     runs-on: ubuntu-latest
 
     steps:
@@ -250,7 +250,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         bundler: [vite, webpack]
 
-    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 18 latest
+    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     env:
@@ -428,7 +428,7 @@ jobs:
       #
       # ```
       # env:
-      #   RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄  Smoke tests / ${{ matrix.os }} / node 18 latest
+      #   RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄  Smoke tests / ${{ matrix.os }} / node 20 latest
       #   RECORD_REPLAY_TEST_METRICS: 1
       # ```
       #
@@ -447,7 +447,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         bundler: [vite, webpack]
 
-    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 18 latest
+    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -460,7 +460,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
 
-    name: 🔭 Telemetry check / ${{ matrix.os }} / node 18 latest
+    name: 🔭 Telemetry check / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     env:
@@ -507,7 +507,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
 
-    name: 🔭 Telemetry check / ${{ matrix.os }} / node 18 latest
+    name: 🔭 Telemetry check / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -751,16 +751,40 @@ jobs:
         env:
           PROJECT_PATH: ${{ env.PROJECT_PATH }}
 
-      - name: Prompt tests
+      - name: Install expect
         run: |
           sudo apt-get update
           sudo apt-get install expect
 
+      - name: Prompt tests
+        run: |
           ./tests/e2e_prompts.sh
           ./tests/e2e_prompts_git.sh
           ./tests/e2e_prompts_m.sh
           ./tests/e2e_prompts_ts.sh
           ./tests/e2e_prompts_overwrite.sh
+        working-directory: ./packages/create-redwood-app
+        env:
+          PROJECT_PATH: ${{ env.PROJECT_PATH }}
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Prompt tests
+        run: ./tests/e2e_prompts_node_less.sh
+        working-directory: ./packages/create-redwood-app
+        env:
+          PROJECT_PATH: ${{ env.PROJECT_PATH }}
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+
+      - name: Prompt tests
+        run: ./tests/e2e_prompts_node_greater.sh
         working-directory: ./packages/create-redwood-app
         env:
           PROJECT_PATH: ${{ env.PROJECT_PATH }}
