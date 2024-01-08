@@ -14,6 +14,8 @@ let BUILD_CTX: BuildContext | null = null
 
 export const buildApi = async () => {
   // Reset the build context for rebuildling
+  // No need to wait for promise to resolve
+  BUILD_CTX?.dispose()
   BUILD_CTX = null
 
   return transpileApi(findApiFiles())
@@ -26,10 +28,6 @@ export const rebuildApi = async () => {
     BUILD_CTX = await context(getEsbuildOptions(apiFiles))
   }
 
-  console.log('definitely rebuilding!!')
-  console.log('definitely rebuilding!!')
-  console.log('definitely rebuilding!!')
-  console.log('definitely rebuilding!!')
   return BUILD_CTX.rebuild()
 }
 

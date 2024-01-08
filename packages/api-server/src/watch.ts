@@ -70,7 +70,7 @@ const validate = async () => {
   }
 }
 
-const rebuildApiServer = async ({
+const buildAndRestart = async ({
   rebuild = false,
   clean = false,
 }: { rebuild?: boolean; clean?: boolean } = {}) => {
@@ -163,14 +163,14 @@ const rebuildApiServer = async ({
 // Local writes are very fast, but writes in e2e environments are not,
 // so allow the default to be adjust with a env-var.
 const debouncedRebuild = debounce(
-  () => rebuildApiServer({ rebuild: true }),
+  () => buildAndRestart({ rebuild: true }),
   process.env.RWJS_DELAY_RESTART
     ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
     : 500
 )
 
 const debouncedBuild = debounce(
-  () => rebuildApiServer({ rebuild: false }),
+  () => buildAndRestart({ rebuild: false }),
   process.env.RWJS_DELAY_RESTART
     ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
     : 500
@@ -210,7 +210,7 @@ chokidar
   })
   .on('ready', async () => {
     // First time
-    await rebuildApiServer({
+    await buildAndRestart({
       clean: true,
       rebuild: false,
     })
