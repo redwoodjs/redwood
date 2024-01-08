@@ -1999,6 +1999,47 @@ We perform a simple compatibility check in an attempt to make you aware of poten
 
 It's the author of the npm package's responsibility to specify the correct compatibility range, so **you should always research the packages you use with this command**. Especially since they will be executing code on your machine!
 
+### setup graphql
+
+This command creates the necessary files to support GraphQL features like trusted documents.
+
+#### Usage
+
+Run `yarn rw setup graphql <feature>`
+
+#### setup graphql fragments
+
+This command creates the necessary configuration to start using [GraphQL Fragments](./graphql/fragments.md).
+
+```
+yarn redwood setup graphql fragments
+```
+
+| Arguments & Options | Description                              |
+| :------------------ | :--------------------------------------- |
+| `--force, -f`       | Overwrite existing files and skip checks |
+
+#### Usage
+
+Run `yarn rw setup graphql fragments`
+
+#### Example
+
+```bash
+~/redwood-app$ yarn rw setup graphql fragments
+✔ Update Redwood Project Configuration to enable GraphQL fragments...
+✔ Generating Trusted Documents store ...
+✔ Configuring the GraphQL Handler to use a Trusted Documents store ...
+```
+
+If you have not setup the RedwoodJS server file, it will be setup:
+
+```bash
+✔ Adding the experimental server file...
+✔ Adding config to redwood.toml...
+✔ Adding required api packages...
+```
+
 ### setup realtime
 
 This command creates the necessary files, installs the required packages, and provides examples to setup RedwoodJS Realtime from GraphQL live queries and subscriptions. See the Realtime docs for more information.
