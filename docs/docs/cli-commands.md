@@ -2023,7 +2023,7 @@ yarn redwood setup graphql trusted-documents
 
 #### Usage
 
-Run `yarn rw graphql trusted-documents`
+Run `yarn rw setup graphql trusted-documents`
 
 #### Example
 
