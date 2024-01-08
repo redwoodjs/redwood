@@ -1,7 +1,7 @@
 import terminalLink from 'terminal-link'
 import type { Argv } from 'yargs'
 
-import * as fragmentsCommand from './features/fragments'
+import * as fragmentsCommand from './features/fragments/fragments'
 
 export const command = 'graphql <feature>'
 export const description = 'Set up GraphQL feature support'
