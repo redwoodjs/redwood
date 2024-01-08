@@ -119,9 +119,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/experimental-nextjs-app-support@npm:0.5.1":
-  version: 0.5.1
-  resolution: "@apollo/experimental-nextjs-app-support@npm:0.5.1"
+"@apollo/experimental-nextjs-app-support@npm:0.5.2":
+  version: 0.5.2
+  resolution: "@apollo/experimental-nextjs-app-support@npm:0.5.2"
   dependencies:
     server-only: "npm:^0.0.1"
     superjson: "npm:^1.12.2"
@@ -130,7 +130,7 @@ __metadata:
     "@apollo/client": ">=3.8.0-rc || ^3.8.0 || >=3.9.0-alpha || >=3.9.0-beta || >=3.9.0-rc"
     next: ^13.4.1 || ^14.0.0
     react: ^18
-  checksum: fe6df5624df7e6268eb3dde7c34c78350ed37efcfa5c317c6f6d9705ab62a513d1950e7bd17748853103d96208e57934d1841b52454165b723237585998bdcae
+  checksum: 3070a5a02dcb4b62cf813379335d1c639371ba36f8d5553af6e45201cdf6efb8fab3fcf68e74567e5110dd5b76047f5aa310b6bfef8f36a660be88de16906c95
   languageName: node
   linkType: hard
 
@@ -5552,13 +5552,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/core@npm:4.0.3":
-  version: 4.0.3
-  resolution: "@envelop/core@npm:4.0.3"
+"@envelop/core@npm:5.0.0, @envelop/core@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "@envelop/core@npm:5.0.0"
   dependencies:
-    "@envelop/types": "npm:4.0.1"
+    "@envelop/types": "npm:5.0.0"
     tslib: "npm:^2.5.0"
-  checksum: 37a9cdab390a354be8612e92891dbd13de0a58aedfad0728cbe2111069ca599c9ee5c542b3f4de9f155123b0cac776aa60ef10c5a3721ce58b5cb3b2383ddda6
+  checksum: abc06585177a634d355fd7cec22a838086e6ccf20317f34b4b9eb92c4acb1aee7f09f621197f065619148a58de027a968ecb26d0bdee87bf0380769816ad4be2
   languageName: node
   linkType: hard
 
@@ -5664,6 +5664,15 @@ __metadata:
   dependencies:
     tslib: "npm:^2.5.0"
   checksum: 81e09afaf60d036102f7992daeefb0cd5380bb1484dd19cb90db73db4ae730b5297823439711fb8315ee01485a37f1c8155aa1111c7dc4ea11c77b7f25945633
+  languageName: node
+  linkType: hard
+
+"@envelop/types@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@envelop/types@npm:5.0.0"
+  dependencies:
+    tslib: "npm:^2.5.0"
+  checksum: 0cbaa68218cb6121b58c6d354b0a17913ded042673df7bfcf385cac6c3b42713b82719875f553b31e8f059727ff5478ed11b33b4febf8deeaf902f1a92b212a8
   languageName: node
   linkType: hard
 
@@ -6230,17 +6239,18 @@ __metadata:
   linkType: hard
 
 "@fastify/reply-from@npm:^9.0.0":
-  version: 9.0.1
-  resolution: "@fastify/reply-from@npm:9.0.1"
+  version: 9.6.0
+  resolution: "@fastify/reply-from@npm:9.6.0"
   dependencies:
     "@fastify/error": "npm:^3.0.0"
     end-of-stream: "npm:^1.4.4"
+    fast-content-type-parse: "npm:^1.1.0"
     fast-querystring: "npm:^1.0.0"
     fastify-plugin: "npm:^4.0.0"
     pump: "npm:^3.0.0"
-    tiny-lru: "npm:^10.0.0"
+    tiny-lru: "npm:^11.0.0"
     undici: "npm:^5.19.1"
-  checksum: 8c0/eadee7751ec2679cb9ae732258bc53a57e7232f1bec0fd4265e4124e27301dc879972adc024435d36a271b632cbd9283b819a41b71fd44d0d329f74156bede72
+  checksum: 01d6dd4cffb6810415ccf04718d1477acf7acc18ec2f7b26537b994b6037b9ff25df6e2778e1f1017fd35f9cad85a1b7d540db2aa20e21db04b30f4fd3449913
   languageName: node
   linkType: hard
 
@@ -7410,12 +7420,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/logger@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@graphql-yoga/logger@npm:1.0.0"
+"@graphql-yoga/logger@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@graphql-yoga/logger@npm:2.0.0"
   dependencies:
     tslib: "npm:^2.5.2"
-  checksum: 8c0/b43a7c86faad2447a696b2c4f46e9219cc1ae95484857c8f54e5ad4ba7d984a3f37149c45320659ffc89da2aefdb44ad2a68a5b57acb88d3aad86caad2a8bcfe
+  checksum: 1489588485c9974aba66c0e5002a1251085771b0703ac1aaa2a3df93b895fc57f7cf6203680ff453b304d4ba438ea6a4cc9999d13a4bf6fd5128f3f088ff927b
   languageName: node
   linkType: hard
 
@@ -7466,7 +7476,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/subscription@npm:4.0.0, @graphql-yoga/subscription@npm:^4.0.0":
+"@graphql-yoga/subscription@npm:4.0.0":
   version: 4.0.0
   resolution: "@graphql-yoga/subscription@npm:4.0.0"
   dependencies:
@@ -7478,6 +7488,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@graphql-yoga/subscription@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "@graphql-yoga/subscription@npm:5.0.0"
+  dependencies:
+    "@graphql-yoga/typed-event-target": "npm:^3.0.0"
+    "@repeaterjs/repeater": "npm:^3.0.4"
+    "@whatwg-node/events": "npm:^0.1.0"
+    tslib: "npm:^2.5.2"
+  checksum: 05e2f5cb23ea2b3cfe3737cf13fb98ebb3ded8a6a8239a170a6bd65b443109595e1bf2bbef94e3b18438b63dae18761bce4225eb437420bae651131457ede8b5
+  languageName: node
+  linkType: hard
+
 "@graphql-yoga/typed-event-target@npm:^2.0.0":
   version: 2.0.0
   resolution: "@graphql-yoga/typed-event-target@npm:2.0.0"
@@ -7485,6 +7507,16 @@ __metadata:
     "@repeaterjs/repeater": "npm:^3.0.4"
     tslib: "npm:^2.5.2"
   checksum: 8c0/41d9c84f4935151d78a5c07db041d3a96f6ac62c10e71ea77f76b79fc00835dd042b5d91ef6cf67a7e766cd9718fa8ee301ee7b3a39d445c7618b3a23988df77
+  languageName: node
+  linkType: hard
+
+"@graphql-yoga/typed-event-target@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@graphql-yoga/typed-event-target@npm:3.0.0"
+  dependencies:
+    "@repeaterjs/repeater": "npm:^3.0.4"
+    tslib: "npm:^2.5.2"
+  checksum: 563c26e4ef8f116e3b2991651acc2a80a37e1c53c6df4159e46e948b226624fc3c414663deef063fa19a7a63bc6a2d2ed8b950782b4d57f34eea775e3312d61c
   languageName: node
   linkType: hard
 
@@ -10948,7 +10980,7 @@ __metadata:
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
-    "@envelop/core": "npm:4.0.3"
+    "@envelop/core": "npm:5.0.0"
     "@envelop/depth-limit": "npm:3.0.3"
     "@envelop/disable-introspection": "npm:5.0.3"
     "@envelop/filter-operation-type": "npm:5.0.3"
@@ -10974,7 +11006,7 @@ __metadata:
     graphql: "npm:16.8.1"
     graphql-scalars: "npm:1.22.4"
     graphql-tag: "npm:2.12.6"
-    graphql-yoga: "npm:4.0.4"
+    graphql-yoga: "npm:5.1.0"
     jest: "npm:29.7.0"
     jsonwebtoken: "npm:9.0.2"
     lodash: "npm:4.17.21"
@@ -11119,7 +11151,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/realtime@workspace:../../packages/realtime"
   dependencies:
-    "@envelop/core": "npm:4.0.3"
+    "@envelop/core": "npm:5.0.0"
     "@envelop/live-query": "npm:6.0.3"
     "@envelop/testing": "npm:6.0.3"
     "@envelop/types": "npm:4.0.1"
@@ -11188,7 +11220,7 @@ __metadata:
     jest: "npm:29.7.0"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     react-dom: "npm:0.0.0-experimental-e5205658f-20230913"
-    tstyche: "npm:1.0.0-beta.3"
+    tstyche: "npm:1.0.0-beta.9"
     typescript: "npm:5.3.3"
   peerDependencies:
     react: 0.0.0-experimental-e5205658f-20230913
@@ -11325,7 +11357,7 @@ __metadata:
     graphiql: "npm:3.0.10"
     graphql: "npm:16.8.1"
     graphql-scalars: "npm:1.22.4"
-    graphql-yoga: "npm:4.0.4"
+    graphql-yoga: "npm:5.1.0"
     jest: "npm:29.7.0"
     json-bigint-patch: "npm:0.0.8"
     jsonwebtoken: "npm:9.0.2"
@@ -11344,7 +11376,7 @@ __metadata:
     react-toastify: "npm:9.1.3"
     smtp-server: "npm:3.13.0"
     split2: "npm:4.2.0"
-    sqlite: "npm:4.2.1"
+    sqlite: "npm:5.1.1"
     sqlite3: "npm:5.1.6"
     tailwindcss: "npm:3.3.5"
     typescript: "npm:5.3.3"
@@ -11549,7 +11581,7 @@ __metadata:
   resolution: "@redwoodjs/web@workspace:../../packages/web"
   dependencies:
     "@apollo/client": "npm:3.8.8"
-    "@apollo/experimental-nextjs-app-support": "npm:0.5.1"
+    "@apollo/experimental-nextjs-app-support": "npm:0.5.2"
     "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.6"
@@ -11566,11 +11598,11 @@ __metadata:
     nodemon: "npm:3.0.2"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     react-dom: "npm:0.0.0-experimental-e5205658f-20230913"
-    react-helmet-async: "npm:1.3.0"
+    react-helmet-async: "npm:2.0.3"
     react-hot-toast: "npm:2.4.1"
     stacktracey: "npm:2.1.8"
     ts-toolbelt: "npm:9.6.0"
-    tstyche: "npm:1.0.0-beta.3"
+    tstyche: "npm:1.0.0-beta.9"
     typescript: "npm:5.3.3"
   peerDependencies:
     react: 0.0.0-experimental-e5205658f-20230913
@@ -26659,16 +26691,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-yoga@npm:4.0.4":
-  version: 4.0.4
-  resolution: "graphql-yoga@npm:4.0.4"
+"graphql-yoga@npm:5.1.0":
+  version: 5.1.0
+  resolution: "graphql-yoga@npm:5.1.0"
   dependencies:
-    "@envelop/core": "npm:^4.0.0"
+    "@envelop/core": "npm:^5.0.0"
     "@graphql-tools/executor": "npm:^1.0.0"
     "@graphql-tools/schema": "npm:^10.0.0"
     "@graphql-tools/utils": "npm:^10.0.0"
-    "@graphql-yoga/logger": "npm:^1.0.0"
-    "@graphql-yoga/subscription": "npm:^4.0.0"
+    "@graphql-yoga/logger": "npm:^2.0.0"
+    "@graphql-yoga/subscription": "npm:^5.0.0"
     "@whatwg-node/fetch": "npm:^0.9.7"
     "@whatwg-node/server": "npm:^0.9.1"
     dset: "npm:^3.1.1"
@@ -26676,7 +26708,7 @@ __metadata:
     tslib: "npm:^2.5.2"
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: 8c0/147471c0c2da15567b0f49f6f8e62d92761c4bee6a953152b1ecfa0041a56bd100b3975218680a35cfe30fdbaf0e9d9fbd764f4d63ec4c217afac27ce9c0bf5d
+  checksum: 9814a12c279ea52050367a2c803d50669a180347e94ddd48bfc0579ecf0b0c686bcc824df564a47f5c280c91214779515e35955c00ccdee6ac60fe45bd7f69ed
   languageName: node
   linkType: hard
 
@@ -36663,6 +36695,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-fast-compare@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "react-fast-compare@npm:3.2.2"
+  checksum: 0bbd2f3eb41ab2ff7380daaa55105db698d965c396df73e6874831dbafec8c4b5b08ba36ff09df01526caa3c61595247e3269558c284e37646241cba2b90a367
+  languageName: node
+  linkType: hard
+
 "react-grid-layout@npm:1.3.4":
   version: 1.3.4
   resolution: "react-grid-layout@npm:1.3.4"
@@ -36679,19 +36718,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-helmet-async@npm:1.3.0":
-  version: 1.3.0
-  resolution: "react-helmet-async@npm:1.3.0"
+"react-helmet-async@npm:2.0.3":
+  version: 2.0.3
+  resolution: "react-helmet-async@npm:2.0.3"
   dependencies:
-    "@babel/runtime": "npm:^7.12.5"
     invariant: "npm:^2.2.4"
-    prop-types: "npm:^15.7.2"
-    react-fast-compare: "npm:^3.2.0"
+    react-fast-compare: "npm:^3.2.2"
     shallowequal: "npm:^1.1.0"
   peerDependencies:
     react: ^16.6.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.6.0 || ^17.0.0 || ^18.0.0
-  checksum: 8c0/8f3e6d26beff61d2ed18f7b41561df3e4d83a7582914c7196aa65158c7f3cce939276547d7a0b8987952d9d44131406df74efba02d1f8fa8a3940b49e6ced70b
+  checksum: 3ac58fac566e3f4951c3853975afd57dbc3af1442a897391a226fb1a54cc757506912d13485e897c61ecefe5d97e673ee91688b11ff20eb769b172c0309514ee
   languageName: node
   linkType: hard
 
@@ -39579,10 +39616,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sqlite@npm:4.2.1":
-  version: 4.2.1
-  resolution: "sqlite@npm:4.2.1"
-  checksum: 8c0/55cd4161aedcf41e3ca05990fd036d38a248503f0d2c7c5df67ae01c17059188c38219fbc679965dcab26c5d5a9431b25f12f9c46d65f377d8d851c5a4d48334
+"sqlite@npm:5.1.1":
+  version: 5.1.1
+  resolution: "sqlite@npm:5.1.1"
+  checksum: d656055cd8d4c4637c8ad4d14d4c8e04a5fd44ede5eae54f36deefa844724588e6c45dbb50ab45954fca24ba1362b6936df1bd42ad0c511275e6dbcffbb62e52
   languageName: node
   linkType: hard
 
@@ -40984,10 +41021,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tiny-lru@npm:^10.0.0":
-  version: 10.0.1
-  resolution: "tiny-lru@npm:10.0.1"
-  checksum: 8c0/37cbb0419044026cf3d701734bd03e360315aba338f346736a46d8aaaafec8b4f1054c2e4e614a34ab19a5ad04673ee95fdd2d7b97e2b5e7cf9db2426f00d114
+"tiny-lru@npm:^11.0.0":
+  version: 11.2.5
+  resolution: "tiny-lru@npm:11.2.5"
+  checksum: bda6de074035ca108ce179ba4ceb02a3eca6aab78b5cf161736035f2af562644594435d8fa4c07f098eee96e1a483992025af72f25e6033d54a66cf270fa8372
   languageName: node
   linkType: hard
 
@@ -41486,17 +41523,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tstyche@npm:1.0.0-beta.3":
-  version: 1.0.0-beta.3
-  resolution: "tstyche@npm:1.0.0-beta.3"
+"tstyche@npm:1.0.0-beta.9":
+  version: 1.0.0-beta.9
+  resolution: "tstyche@npm:1.0.0-beta.9"
   peerDependencies:
     typescript: 4.x || 5.x
   peerDependenciesMeta:
     typescript:
       optional: true
   bin:
-    tstyche: build/bin.js
-  checksum: 8db6acde30b8905c891c3854837340e7bbfee20e79e6eae2e674e1e966737f8c79079325c330b51b922f3157a3fcb26da0005032a45ade302f20b1d3e3ccfd37
+    tstyche: ./build/bin.js
+  checksum: 2682c3f7e2d83fa0af795ba14e1c83873e3f8c31f761a8af10512c3476cf824b7ef096ba9deec3fc0e12356beaf2a20abfafcb73202db4f14c7c2877db2c5a87
   languageName: node
   linkType: hard
 
