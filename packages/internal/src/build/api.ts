@@ -1,6 +1,6 @@
 import type { Format, Platform, PluginBuild, BuildContext } from 'esbuild'
 import { build, context } from 'esbuild'
-import { removeSync } from 'fs-extra'
+import { remove } from 'fs-extra'
 
 import {
   getApiSideBabelPlugins,
@@ -13,9 +13,6 @@ import { findApiFiles } from '../files'
 let BUILD_CTX: BuildContext | null = null
 
 export const buildApi = async () => {
-  // @MARK: mai tong clean, overwriting already
-  // cleanApiBuild()
-
   // Reset the build context for rebuildling
   BUILD_CTX = null
 
@@ -36,9 +33,9 @@ export const rebuildApi = async () => {
   return BUILD_CTX.rebuild()
 }
 
-export const cleanApiBuild = () => {
+export const cleanApiBuild = async () => {
   const rwjsPaths = getPaths()
-  removeSync(rwjsPaths.api.dist)
+  return remove(rwjsPaths.api.dist)
 }
 
 const runRwBabelTransformsPlugin = {
@@ -48,7 +45,7 @@ const runRwBabelTransformsPlugin = {
 
     build.onLoad({ filter: /\.(js|ts|tsx|jsx)$/ }, async (args) => {
       // @TODO I khitwaa implement LRU cache here
-      const transformedCode = transformWithBabel(
+      const transformedCode = await transformWithBabel(
         args.path,
         getApiSideBabelPlugins({
           openTelemetry:

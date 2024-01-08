@@ -87,7 +87,7 @@ describe('api', () => {
       )
 
       const apiSideBabelConfigPath = getApiSideBabelConfigPath()
-      expect(ensurePosixPath(apiSideBabelConfigPath)).toMatch(
+      expect(ensurePosixPath(apiSideBabelConfigPath || '')).toMatch(
         '/redwood-app/api/babel.config.js'
       )
     })

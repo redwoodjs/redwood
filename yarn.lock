@@ -8660,6 +8660,7 @@ __metadata:
     "@redwoodjs/project-config": "npm:6.0.7"
     "@types/babel-plugin-tester": "npm:9.0.9"
     "@types/babel__core": "npm:7.20.4"
+    "@types/node": "npm:20.10.4"
     babel-plugin-auto-import: "npm:1.1.0"
     babel-plugin-graphql-tag: "npm:3.3.0"
     babel-plugin-module-resolver: "npm:5.0.0"

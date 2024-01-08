@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist",
+    "types": ["node"],
   },
   "include": ["src"],
   "references": [

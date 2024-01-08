@@ -13,7 +13,11 @@ import { debounce } from 'lodash'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { buildApi, rebuildApi } from '@redwoodjs/internal/dist/build/api'
+import {
+  buildApi,
+  cleanApiBuild,
+  rebuildApi,
+} from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import {
   ensurePosixPath,
@@ -66,13 +70,20 @@ const validate = async () => {
   }
 }
 
-const rebuildApiServer = async (rebuild = false) => {
+const rebuildApiServer = async ({
+  rebuild = false,
+  clean = false,
+}: { rebuild?: boolean; clean?: boolean } = {}) => {
   try {
     // Shutdown API server
     killApiServer()
 
     const buildTs = Date.now()
     process.stdout.write(c.dim(c.italic('Building... ')))
+
+    if (clean) {
+      await cleanApiBuild()
+    }
 
     if (rebuild) {
       await rebuildApi()
@@ -152,14 +163,14 @@ const rebuildApiServer = async (rebuild = false) => {
 // Local writes are very fast, but writes in e2e environments are not,
 // so allow the default to be adjust with a env-var.
 const debouncedRebuild = debounce(
-  () => rebuildApiServer(true),
+  () => rebuildApiServer({ rebuild: true }),
   process.env.RWJS_DELAY_RESTART
     ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
     : 500
 )
 
 const debouncedBuild = debounce(
-  () => rebuildApiServer(false),
+  () => rebuildApiServer({ rebuild: false }),
   process.env.RWJS_DELAY_RESTART
     ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
     : 500
@@ -198,7 +209,11 @@ chokidar
     },
   })
   .on('ready', async () => {
-    await rebuildApiServer()
+    // First time
+    await rebuildApiServer({
+      clean: true,
+      rebuild: false,
+    })
     await validate()
   })
   .on('all', async (eventName, filePath) => {

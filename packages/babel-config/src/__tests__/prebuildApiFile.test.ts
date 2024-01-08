@@ -18,9 +18,9 @@ let code
 
 describe('api prebuild ', () => {
   describe('polyfills unsupported functionality', () => {
-    beforeAll(() => {
+    beforeAll(async () => {
       const apiFile = path.join(RWJS_CWD, 'api/src/lib/polyfill.js')
-      code = prebuildApiFileWrapper(apiFile)
+      code = await prebuildApiFileWrapper(apiFile)
     })
 
     describe('ES features', () => {
@@ -393,9 +393,9 @@ describe('api prebuild ', () => {
   })
 
   describe('uses core-js3 aliasing', () => {
-    beforeAll(() => {
+    beforeAll(async () => {
       const apiFile = path.join(RWJS_CWD, 'api/src/lib/transform.js')
-      code = prebuildApiFileWrapper(apiFile)
+      code = await prebuildApiFileWrapper(apiFile)
     })
 
     it('works', () => {
@@ -425,9 +425,9 @@ describe('api prebuild ', () => {
   })
 
   describe('typescript', () => {
-    beforeAll(() => {
+    beforeAll(async () => {
       const apiFile = path.join(RWJS_CWD, 'api/src/lib/typescript.ts')
-      code = prebuildApiFileWrapper(apiFile)
+      code = await prebuildApiFileWrapper(apiFile)
     })
 
     it('transpiles ts to js', () => {
@@ -437,9 +437,9 @@ describe('api prebuild ', () => {
   })
 
   describe('auto imports', () => {
-    beforeAll(() => {
+    beforeAll(async () => {
       const apiFile = path.join(RWJS_CWD, 'api/src/lib/autoImports.ts')
-      code = prebuildApiFileWrapper(apiFile)
+      code = await prebuildApiFileWrapper(apiFile)
     })
 
     it('auto imports', () => {
@@ -548,7 +548,7 @@ describe('api prebuild ', () => {
  * A copy of prebuildApiFiles from packages/internal/src/build/api.ts
  * This will be re-architected, but doing so now would introduce breaking changes.
  */
-export const prebuildApiFileWrapper = (srcFile: string) => {
+export const prebuildApiFileWrapper = async (srcFile: string) => {
   // const redwoodProjectPaths = getPaths()
 
   const plugins = getApiSideBabelPlugins({
@@ -561,7 +561,7 @@ export const prebuildApiFileWrapper = (srcFile: string) => {
   //   .join(redwoodProjectPaths.generated.prebuild, relativePathFromSrc)
   //   .replace(/\.(ts)$/, '.js')
 
-  const result = transformWithBabel(srcFile, plugins)
+  const result = await transformWithBabel(srcFile, plugins)
 
   if (!result?.code) {
     throw new Error(`Couldn't prebuild ${srcFile}`)

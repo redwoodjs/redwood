@@ -1,19 +1,20 @@
-import fs from 'fs'
+import { existsSync } from 'fs'
+import fs from 'fs/promises'
 import path from 'path'
 
-import { transform } from '@babel/core'
 import type { PluginItem, TransformOptions } from '@babel/core'
+import { transformAsync } from '@babel/core'
 
 import { getPaths } from '@redwoodjs/project-config'
 
 import type { RegisterHookOptions } from './common'
 import {
-  registerBabel,
   CORE_JS_VERSION,
   RUNTIME_CORE_JS_VERSION,
   getCommonPlugins,
-  parseTypeScriptConfigFiles,
   getPathsFromTypeScriptConfig,
+  parseTypeScriptConfigFiles,
+  registerBabel,
 } from './common'
 
 export const TARGETS_NODE = '20.10'
@@ -137,9 +138,10 @@ export const getApiSideBabelPlugins = (
 
 export const getApiSideBabelConfigPath = () => {
   const p = path.join(getPaths().api.base, 'babel.config.js')
-  if (fs.existsSync(p)) {
+  if (existsSync(p)) {
     return p
   } else {
+    // Null and undefined do not have the same effect I believe
     return undefined
   }
 }
@@ -188,14 +190,14 @@ export const registerApiSideBabelHook = ({
   })
 }
 
-export const transformWithBabel = (
+export const transformWithBabel = async (
   srcPath: string,
   plugins: TransformOptions['plugins']
 ) => {
-  const code = fs.readFileSync(srcPath, 'utf-8')
+  const code = await fs.readFile(srcPath, 'utf-8')
   const defaultOptions = getApiSideDefaultBabelConfig()
 
-  const result = transform(code, {
+  const result = transformAsync(code, {
     ...defaultOptions,
     cwd: getPaths().api.base,
     filename: srcPath,
@@ -206,5 +208,6 @@ export const transformWithBabel = (
     sourceMaps: 'inline',
     plugins,
   })
+
   return result
 }

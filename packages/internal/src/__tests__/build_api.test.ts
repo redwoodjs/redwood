@@ -21,26 +21,28 @@ const FIXTURE_PATH = path.resolve(
 // @NOTE: we no longer prebuild files into the .redwood/prebuild folder
 // However, prebuilding in the tests still helpful for us to  validate
 // that everything is working as expected.
-export const prebuildApiFiles = (srcFiles: string[]) => {
+export const prebuildApiFiles = async (srcFiles: string[]) => {
   const rwjsPaths = getPaths()
   const plugins = getApiSideBabelPlugins()
 
-  return srcFiles.map((srcPath) => {
-    const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)
-    const dstPath = path
-      .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
-      .replace(/\.(ts)$/, '.js')
+  return Promise.all(
+    srcFiles.map(async (srcPath) => {
+      const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)
+      const dstPath = path
+        .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
+        .replace(/\.(ts)$/, '.js')
 
-    const result = transformWithBabel(srcPath, plugins)
-    if (!result?.code) {
-      throw new Error(`Could not prebuild ${srcPath}`)
-    }
+      const result = await transformWithBabel(srcPath, plugins)
+      if (!result?.code) {
+        throw new Error(`Could not prebuild ${srcPath}`)
+      }
 
-    fs.mkdirSync(path.dirname(dstPath), { recursive: true })
-    fs.writeFileSync(dstPath, result.code)
+      fs.mkdirSync(path.dirname(dstPath), { recursive: true })
+      fs.writeFileSync(dstPath, result.code)
 
-    return dstPath
-  })
+      return dstPath
+    })
+  )
 }
 
 const cleanPaths = (p) => {
@@ -51,12 +53,12 @@ const cleanPaths = (p) => {
 let prebuiltFiles
 let relativePaths
 
-beforeAll(() => {
+beforeAll(async () => {
   process.env.RWJS_CWD = FIXTURE_PATH
   cleanApiBuild()
 
   const apiFiles = findApiFiles()
-  prebuiltFiles = prebuildApiFiles(apiFiles)
+  prebuiltFiles = await prebuildApiFiles(apiFiles)
 
   relativePaths = prebuiltFiles
     .filter((x) => typeof x !== 'undefined')

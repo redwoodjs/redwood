@@ -7,7 +7,7 @@ import { rimraf } from 'rimraf'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
-import { buildApi } from '@redwoodjs/internal/dist/build/api'
+import { buildApi, cleanApiBuild } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { timedTelemetry } from '@redwoodjs/telemetry'
@@ -82,6 +82,7 @@ export const handler = async ({
     side.includes('api') && {
       title: 'Building API...',
       task: async () => {
+        await cleanApiBuild()
         const { errors, warnings } = await buildApi()
 
         if (errors.length) {
