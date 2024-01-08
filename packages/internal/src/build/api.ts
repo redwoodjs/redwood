@@ -44,7 +44,9 @@ const runRwBabelTransformsPlugin = {
     const rwjsConfig = getConfig()
 
     build.onLoad({ filter: /\.(js|ts|tsx|jsx)$/ }, async (args) => {
-      // @TODO I khitwaa implement LRU cache here
+      // @TODO Implement LRU cache? Unsure how much of a performance benefit its going to be
+      // Generate a CRC of file contents, then save it to LRU cache with a limit
+      // without LRU cache, the memory usage can be come unbound
       const transformedCode = await transformWithBabel(
         args.path,
         getApiSideBabelPlugins({
