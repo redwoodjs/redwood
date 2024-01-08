@@ -6,7 +6,6 @@ import { build as viteBuild } from 'vite'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn'
-import configureGraphQLFragments from '../plugins/vite-plugin-configure-graphql-fragments'
 
 /**
  * RSC build. Step 3.
@@ -125,7 +124,7 @@ export async function rscBuildServer(
         externalConditions: ['react-server'],
       },
     },
-    plugins: [react(), configureGraphQLFragments()],
+    plugins: [react()],
     build: {
       ssr: true,
       ssrEmitAssets: true,

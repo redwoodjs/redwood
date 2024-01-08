@@ -6,7 +6,6 @@ import { build as viteBuild } from 'vite'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn'
-import configureGraphQLFragments from '../plugins/vite-plugin-configure-graphql-fragments'
 
 import { rscIndexPlugin } from './rscVitePlugins'
 
@@ -74,7 +73,7 @@ export async function rscBuildClient(
         {}
       ),
     },
-    plugins: [react(), rscIndexPlugin(), configureGraphQLFragments()],
+    plugins: [react(), rscIndexPlugin()],
     build: {
       outDir: webDist,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`

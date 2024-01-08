@@ -291,30 +291,6 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
     verbose,
   })
 
-  const possibleTypesPath = path.join(
-    getPaths().base,
-    'node_modules',
-    '@redwoodjs',
-    'web',
-    'dist',
-    'apollo',
-    'possibleTypes.js'
-  )
-
-  const Mod = require('module')
-  const originalRequire = Mod.prototype.require
-  Mod.prototype.require = function (path) {
-    if (path === 'virtual-possibleTypes') {
-      if (fs.existsSync(possibleTypesPath)) {
-        return originalRequire.call(this, possibleTypesPath)
-      } else {
-        return { possibleTypes: {} }
-      }
-    }
-
-    return originalRequire.apply(this, arguments)
-  }
-
   const listrTasks = await getTasks(dryRun, routerPath)
 
   const tasks = new Listr(listrTasks, {

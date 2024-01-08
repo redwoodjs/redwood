@@ -9,7 +9,4 @@ module.exports = {
     // Required for code that use experimental flags
     RWJS_ENV: {},
   },
-  moduleNameMapper: {
-    'virtual-possibleTypes': '@redwoodjs/testing/dist/web/possibleTypes',
-  },
 }

@@ -72,19 +72,6 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     },
     envFile: false,
     logLevel: verbose ? 'info' : 'warn',
-    ssr: {
-      // If @redwoodjs/web/apollo was its own separate package we could've been
-      // much more granular here. Now we have to mark all of @redwoodjs/web as
-      // noExternal.
-      // And for apollo, we use a specific build of their experimental package
-      // that includes a reference to `@redwoodjs/web` so we have to mark that
-      // package for noExternal too. This seems to be somewhat of a
-      // limitation/bug in Vite. There's a related issue filed here:
-      // https://github.com/vitejs/vite/issues/15503
-      // Especially the quote and answer here:
-      // https://github.com/vitejs/vite/issues/15503#issuecomment-1877902830
-      noExternal: ['@redwoodjs/web', '@apollo/experimental-nextjs-app-support'],
-    },
   })
 
   const allRouteHooks = findRouteHooksSrc()

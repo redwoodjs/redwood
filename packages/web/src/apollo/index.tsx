@@ -9,15 +9,6 @@ import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
-/**
- * The contents of this virtual module is generated at dev/build time. If the
- * user has a possibleTypes file, we'll read that and serve that as the
- * content. If there is no possibleTypes file we'll return an empty default
- * instead
- *
- * See: packages/vite/src/plugins/vite-plugin-configure-graphql-fragments.ts
- */
-import possibleTypes from 'virtual-possibleTypes'
 
 // Note: Importing directly from `apollo/client` doesn't work properly in Storybook.
 const {
@@ -374,7 +365,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
 
   const cache = new InMemoryCache({
     fragments: fragmentRegistry,
-    possibleTypes: cacheConfig?.possibleTypes ?? possibleTypes.possibleTypes,
+    possibleTypes: cacheConfig?.possibleTypes,
     ...cacheConfig,
   }).restore(globalThis?.__REDWOOD__APOLLO_STATE ?? {})
 

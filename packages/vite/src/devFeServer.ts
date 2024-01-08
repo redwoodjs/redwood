@@ -52,9 +52,6 @@ async function createServer() {
     logLevel: 'info',
     clearScreen: false,
     appType: 'custom',
-    ssr: {
-      noExternal: ['@redwoodjs/web', '@apollo/experimental-nextjs-app-support'],
-    },
   })
 
   // use vite's connect instance as middleware

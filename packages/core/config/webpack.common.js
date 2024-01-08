@@ -11,17 +11,12 @@ const webpack = require('webpack')
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
-const VirtualModulesPlugin = require('webpack-virtual-modules')
 
 const { getWebSideDefaultBabelConfig } = require('@redwoodjs/babel-config')
 const {
   ChunkReferencesPlugin,
 } = require('@redwoodjs/internal/dist/webpackPlugins/ChunkReferencesPlugin')
-const {
-  getConfig,
-  getPaths,
-  getConfigPath,
-} = require('@redwoodjs/project-config')
+const { getConfig, getPaths } = require('@redwoodjs/project-config')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -204,13 +199,6 @@ const getSharedPlugins = (isEnvProduction) => {
   ].filter(Boolean)
 }
 
-const tomlPath = getConfigPath()
-const virtualPossibleTypesPath = path.join(
-  path.dirname(tomlPath),
-  'node_modules',
-  'virtual-possibleTypes'
-)
-
 // I've borrowed and learnt extensively from the `create-react-app` repo:
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.js
 module.exports = (webpackEnv) => {
@@ -261,12 +249,6 @@ module.exports = (webpackEnv) => {
       },
     },
     plugins: [
-      new VirtualModulesPlugin({
-        [path.join(virtualPossibleTypesPath, 'index.js')]:
-          'module.exports = { default: { possibleTypes: {} } }',
-        [path.join(virtualPossibleTypesPath, 'package.json')]:
-          '{ "name": "virtualPossibleTypes", "main": "index.js"}',
-      }),
       !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),

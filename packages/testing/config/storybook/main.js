@@ -10,16 +10,6 @@ const {
   importStatementPath,
 } = require('@redwoodjs/project-config')
 
-const possibleTypesPath = path.join(
-  getPaths().base,
-  'node_modules',
-  '@redwoodjs',
-  'web',
-  'dist',
-  'apollo',
-  'possibleTypes.js'
-)
-
 const redwoodProjectConfig = getConfig()
 const redwoodProjectPaths = getPaths()
 
@@ -74,16 +64,6 @@ const baseConfig = {
     // If one isn't provided, set the alias to `false` to tell webpack to ignore it.
     // See https://webpack.js.org/configuration/resolve/#resolvealias.
     sbConfig.resolve.alias['~__REDWOOD__USER_WEB_DEFAULT_CSS'] = false
-
-    if (fs.existsSync(possibleTypesPath)) {
-      sbConfig.resolve.alias['virtual-possibleTypes'] = require.resolve(
-        '@redwoodjs/web/dist/apollo/possibleTypes.js'
-      )
-    } else {
-      sbConfig.resolve.alias['virtual-possibleTypes'] = require.resolve(
-        '@redwoodjs/testing/dist/web/possibleTypes.js'
-      )
-    }
 
     const supportedStyleIndexFiles = ['index.scss', 'index.sass', 'index.css']
     for (const file of supportedStyleIndexFiles) {
