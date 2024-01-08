@@ -8,6 +8,7 @@ import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { buildApi, cleanApiBuild } from '@redwoodjs/internal/dist/build/api'
+import { generate } from '@redwoodjs/internal/dist/generate/generate'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { timedTelemetry } from '@redwoodjs/telemetry'
@@ -32,7 +33,11 @@ export const handler = async ({
     prisma,
     prerender,
   })
+
   const rwjsPaths = getPaths()
+  const rwjsConfig = getConfig()
+  const useFragments = rwjsConfig.graphql?.fragments
+  const useTrustedDocuments = rwjsConfig.graphql?.trustedDocuments
 
   if (performance) {
     console.log('Measuring Web Build Performance...')
@@ -73,6 +78,20 @@ export const handler = async ({
           shell: true,
           cwd: rwjsPaths.api.base,
         })
+      },
+    },
+    // If using GraphQL Fragments or Trusted Documents, then we need to use
+    // codegen to generate the types needed for possible types and the
+    // trusted document store hashes
+    (useFragments || useTrustedDocuments) && {
+      title: `Generating types needed for ${[
+        useFragments && 'GraphQL Fragments',
+        useTrustedDocuments && 'Trusted Documents',
+      ]
+        .filter(Boolean)
+        .join(' and ')} support...`,
+      task: async () => {
+        await generate()
       },
     },
     side.includes('api') && {
