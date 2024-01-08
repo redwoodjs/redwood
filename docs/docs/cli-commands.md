@@ -2019,7 +2019,7 @@ yarn redwood setup graphql trusted-documents
 
 | Arguments & Options | Description              |
 | :------------------ | :----------------------- |
-| `--force, -f`       | Forgo compatibility checks |
+| `--force, -f`       | Force overwrite files |
 
 #### Usage
 

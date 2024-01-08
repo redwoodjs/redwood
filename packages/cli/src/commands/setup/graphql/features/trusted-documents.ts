@@ -9,7 +9,6 @@ import { recordTelemetryAttributes, prettifyFile } from '@redwoodjs/cli-helpers'
 import { getConfigPath } from '@redwoodjs/project-config'
 
 import { getPaths } from '../../../../lib'
-import c from '../../../../lib/colors'
 
 export const command = 'trusted-documents'
 export const description = 'Set up Trusted Documents for GraphQL'
@@ -39,12 +38,10 @@ function configureGraphQLHandlerWithStore() {
 
       if (!graphQlSourcePath) {
         console.warn(
-          c.yellow(
-            `Unable to find the GraphQL Handler source file: ${path.join(
-              functionsDir,
-              'graphql.(js|ts)'
-            )}`
-          )
+          `Unable to find the GraphQL Handler source file: ${path.join(
+            functionsDir,
+            'graphql.(js|ts)'
+          )}`
         )
         return
       }
@@ -56,12 +53,10 @@ function configureGraphQLHandlerWithStore() {
 
       if (!graphQlSourceFile) {
         console.error(
-          c.error(
-            `Unable to determine the GraphQL Handler source path for: ${path.join(
-              functionsDir,
-              'graphql.(js|ts)'
-            )}`
-          )
+          `Unable to determine the GraphQL Handler source path for: ${path.join(
+            functionsDir,
+            'graphql.(js|ts)'
+          )}`
         )
         return
       }
@@ -118,9 +113,7 @@ function configureGraphQLHandlerWithStore() {
 
       if (!identified) {
         console.warn(
-          c.warning(
-            'Unable to determine how to setup Trusted Documents in the GraphQL Handler. Please add it manually following https://docs.redwoodjs.com/docs/graphql/trusted-documents#configure-graphql-handler'
-          )
+          'Unable to determine how to setup Trusted Documents in the GraphQL Handler. Please add it manually following https://docs.redwoodjs.com/docs/graphql/trusted-documents#configure-graphql-handler'
         )
       }
 
@@ -150,7 +143,6 @@ export async function handler({
       {
         title:
           'Update Redwood Project Configuration to enable GraphQL Trusted Documents ...',
-        skip: () => false,
         task: () => {
           const redwoodTomlPath = getConfigPath()
           const originalTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
@@ -168,9 +160,7 @@ export async function handler({
 
           if (trustedDocumentsExists) {
             console.info(
-              c.white(
-                'GraphQL Trusted Documents are already enabled in your Redwood project.'
-              )
+              'GraphQL Trusted Documents are already enabled in your Redwood project.'
             )
           } else if (graphqlExists && fragmentsExists) {
             const insertIndex = originalTomlContent.indexOf('fragments')
@@ -193,15 +183,8 @@ export async function handler({
                 originalTomlContent.slice(insertIndex)
             }
           }
-
           if (newConfig && (force || !trustedDocumentsExists)) {
             fs.writeFileSync(redwoodTomlPath, newConfig, 'utf-8')
-          } else {
-            console.warn(
-              c.yellow(
-                'Unable to update Redwood Project Configuration to enable GraphQL Trusted Documents. Please add it manually following https://docs.redwoodjs.com/docs/graphql/trusted-documents#configure-redwood-project-configuration'
-              )
-            )
           }
         },
       },
@@ -219,7 +202,7 @@ export async function handler({
   try {
     await tasks.run()
   } catch (e: any) {
-    console.error(c.error(e.message))
+    console.error(e.message)
     process.exit(e?.exitCode || 1)
   }
 }

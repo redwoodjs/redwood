@@ -1,11 +1,11 @@
 import terminalLink from 'terminal-link'
 
+import * as trustedDocumentsCommand from './features/trusted-documents'
 export const command = 'graphql <feature>'
 export const description = 'Set up GraphQL feature support'
 export const builder = (yargs) =>
   yargs
-    .commandDir('./features')
-    .demandCommand()
+    .command(trustedDocumentsCommand)
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
