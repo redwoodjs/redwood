@@ -170,38 +170,15 @@ describe.each([
   [[`${commandStrings['@redwoodjs/api-server']}`, 'web']],
   [commandStrings['@redwoodjs/web-server']],
 ])('serve web (%s)', (commandString) => {
-  it('serves the web side', async () => {
-    p = $`yarn node ${commandString}`
-    await new Promise((r) => setTimeout(r, TIMEOUT))
-
-    const res = await fetch('http://localhost:8910/about')
-    const body = await res.text()
-
-    expect(res.status).toEqual(200)
-    expect(body).toEqual(
-      await fs.readFile(
-        path.join(__dirname, './fixtures/redwood-app/web/dist/about.html'),
-        'utf-8'
-      )
-    )
-  })
-
-  it('--port changes the port', async () => {
-    const port = 8912
-
-    p = $`yarn node ${commandString} --port ${port}`
-    await new Promise((r) => setTimeout(r, TIMEOUT))
-
-    const res = await fetch(`http://localhost:${port}/about`)
-    const body = await res.text()
-
-    expect(res.status).toEqual(200)
-    expect(body).toEqual(
-      await fs.readFile(
-        path.join(__dirname, './fixtures/redwood-app/web/dist/about.html'),
-        'utf-8'
-      )
-    )
+  it("fails if apiHost isn't set and apiUrl isn't fully qualified", async () => {
+    try {
+      await $`yarn node ${commandString}`
+      expect(true).toEqual(false)
+    } catch (p) {
+      expect(p.exitCode).not.toEqual(0)
+      expect(p.stdout).toEqual('')
+      expect(p.stderr).toMatchSnapshot()
+    }
   })
 
   it('--apiHost changes the upstream api url', async () => {
@@ -230,6 +207,24 @@ describe.each([
     server.close()
   })
 
+  it('--port changes the port', async () => {
+    const port = 8912
+
+    p = $`yarn node ${commandString} --apiHost http://localhost:8916 --port ${port}`
+    await new Promise((r) => setTimeout(r, TIMEOUT))
+
+    const res = await fetch(`http://localhost:${port}/about`)
+    const body = await res.text()
+
+    expect(res.status).toEqual(200)
+    expect(body).toEqual(
+      await fs.readFile(
+        path.join(__dirname, './fixtures/redwood-app/web/dist/about.html'),
+        'utf-8'
+      )
+    )
+  })
+
   it('errors out on unknown args', async () => {
     try {
       await $`yarn node ${commandString} --foo --bar --baz`
@@ -242,7 +237,6 @@ describe.each([
   })
 
   it.todo('respects web.port in redwood.toml')
-  it.todo("fails if apiHost isn't set and apiUrl isn't fully qualified")
   it.todo("works if apiHost isn't set and apiUrl is fully qualified")
   it.todo('fails if apiHost is set and apiUrl is fully qualified')
 })
@@ -639,7 +633,7 @@ describe('@redwoodjs/api-server', () => {
     it('--socket changes the port', async () => {
       const socket = 8913
 
-      p = $`yarn node ${commandStrings['@redwoodjs/api-server']} web --socket ${socket}`
+      p = $`yarn node ${commandStrings['@redwoodjs/api-server']} web --socket ${socket} --apiHost="http://localhost:8910"`
 
       await new Promise((r) => setTimeout(r, TIMEOUT))
 
@@ -659,7 +653,7 @@ describe('@redwoodjs/api-server', () => {
       const socket = 8914
       const port = 8915
 
-      p = $`yarn node ${commandStrings['@redwoodjs/api-server']} web --socket ${socket} --port ${port}`
+      p = $`yarn node ${commandStrings['@redwoodjs/api-server']} web --socket ${socket} --port ${port} --apiHost="http://localhost:8910"`
       await new Promise((r) => setTimeout(r, TIMEOUT))
 
       const res = await fetch(`http://localhost:${socket}/about`)

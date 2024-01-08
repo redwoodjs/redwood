@@ -17,6 +17,11 @@ Unknown arguments: foo, bar, baz
 "
 `;
 
+exports[`serve web (/Users/dom/projects/redwood/redwood/packages/web-server/dist/server.js) fails if apiHost isn't set and apiUrl isn't fully qualified 1`] = `
+"Error: If you don't provide apiHost, apiUrl needs to be a fully-qualified URL. But apiUrl is /.redwood/functions.
+"
+`;
+
 exports[`serve web ([
   '/Users/dom/projects/redwood/redwood/packages/api-server/dist/index.js',
   'web'
@@ -34,5 +39,13 @@ Options:
                              redwood.toml to this host                  [string]
 
 Unknown arguments: foo, bar, baz
+"
+`;
+
+exports[`serve web ([
+  '/Users/dom/projects/redwood/redwood/packages/api-server/dist/index.js',
+  'web'
+]) fails if apiHost isn't set and apiUrl isn't fully qualified 1`] = `
+"[31mError[39m: If you don't provide [35mapiHost[39m, [35mapiUrl[39m needs to be a fully-qualified URL. But [35mapiUrl[39m is [33m/.redwood/functions[39m.
 "
 `;
