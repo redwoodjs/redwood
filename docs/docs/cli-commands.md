@@ -2010,7 +2010,7 @@ Run `yarn rw setup graphql <feature>`
 
 #### setup graphql trusted-docs
 
-This command creates the necessary configuratiion to start using [GraphQL Trusted Documents](./graphql/trusted-documents.md).
+This command creates the necessary configuration to start using [GraphQL Trusted Documents](./graphql/trusted-documents.md).
 
 
 ```
