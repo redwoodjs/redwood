@@ -2017,10 +2017,6 @@ This command creates the necessary configuration to start using [GraphQL Trusted
 yarn redwood setup graphql trusted-documents
 ```
 
-| Arguments & Options | Description              |
-| :------------------ | :----------------------- |
-| `--force, -f`       | Force overwrite files |
-
 #### Usage
 
 Run `yarn rw setup graphql trusted-documents`

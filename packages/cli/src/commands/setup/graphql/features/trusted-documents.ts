@@ -13,14 +13,7 @@ import { getPaths } from '../../../../lib'
 export const command = 'trusted-documents'
 export const description = 'Set up Trusted Documents for GraphQL'
 
-export function builder(yargs: any) {
-  yargs.option('force', {
-    alias: 'f',
-    default: false,
-    description: 'Overwrite existing configuration',
-    type: 'boolean',
-  })
-}
+export function builder() {}
 
 function configureGraphQLHandlerWithStore() {
   return {
