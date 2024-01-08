@@ -90,7 +90,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
 
-    name: 🏗 Build, lint, test / ${{ matrix.os }} / node 18 latest
+    name: 🏗 Build, lint, test / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -144,7 +144,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
 
-    name: 🏗 Build, lint, test / ${{ matrix.os }} / node 18 latest
+    name: 🏗 Build, lint, test / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -157,7 +157,7 @@ jobs:
       matrix:
         bundler: [vite, webpack]
 
-    name: 🌲 Tutorial E2E / ${{ matrix.bundler }} / node 18 latest
+    name: 🌲 Tutorial E2E / ${{ matrix.bundler }} / node 20 latest
     runs-on: ubuntu-latest
 
     steps:
@@ -235,7 +235,7 @@ jobs:
       matrix:
         bundler: [vite, webpack]
 
-    name: 🌲 Tutorial E2E / ${{ matrix.bundler }} / node 18 latest
+    name: 🌲 Tutorial E2E / ${{ matrix.bundler }} / node 20 latest
     runs-on: ubuntu-latest
 
     steps:
@@ -249,7 +249,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         bundler: [vite, webpack]
 
-    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 18 latest
+    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     env:
@@ -427,7 +427,7 @@ jobs:
       #
       # ```
       # env:
-      #   RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄  Smoke tests / ${{ matrix.os }} / node 18 latest
+      #   RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄  Smoke tests / ${{ matrix.os }} / node 20 latest
       #   RECORD_REPLAY_TEST_METRICS: 1
       # ```
       #
@@ -446,7 +446,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         bundler: [vite, webpack]
 
-    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 18 latest
+    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -459,7 +459,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
 
-    name: 🔭 Telemetry check / ${{ matrix.os }} / node 18 latest
+    name: 🔭 Telemetry check / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     env:
@@ -506,7 +506,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
 
-    name: 🔭 Telemetry check / ${{ matrix.os }} / node 18 latest
+    name: 🔭 Telemetry check / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -702,6 +702,96 @@ jobs:
     steps:
       - run: echo "Skipped"
 
+  fragments-smoke-tests:
+    needs: check
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    name: 📄 Fragments Smoke tests / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    env:
+      REDWOOD_CI: 1
+      REDWOOD_VERBOSE_TELEMETRY: 1
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: 🐈 Set up yarn cache
+        uses: ./.github/actions/set-up-yarn-cache
+
+      - name: 🐈 Yarn install
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: 🔨 Build
+        run: yarn build
+
+      - name: 🌲 Set up test project
+        id: set-up-test-project
+        uses: ./.github/actions/set-up-test-project
+        with:
+          bundler: vite
+          canary: true
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+
+      - name: Run Fragments codemods on test project
+        run: npx -y tsx ./tasks/test-project/add-gql-fragments ${{ steps.set-up-test-project.outputs.test-project-path }}
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: 🎭 Install playwright dependencies
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Fragments dev smoke tests
+        working-directory: ./tasks/smoke-tests/fragments-dev
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: Build for production
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
+        run: yarn rw build
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: Run Fragments serve smoke tests
+        working-directory: ./tasks/smoke-tests/fragments-serve
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+  fragments-smoke-tests-skip:
+    needs: detect-changes
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    name: 📄 Fragments Smoke tests / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - run: echo "Skipped"
+
   crwa:
     needs: check
 
@@ -750,16 +840,40 @@ jobs:
         env:
           PROJECT_PATH: ${{ env.PROJECT_PATH }}
 
-      - name: Prompt tests
+      - name: Install expect
         run: |
           sudo apt-get update
           sudo apt-get install expect
 
+      - name: Prompt tests
+        run: |
           ./tests/e2e_prompts.sh
           ./tests/e2e_prompts_git.sh
           ./tests/e2e_prompts_m.sh
           ./tests/e2e_prompts_ts.sh
           ./tests/e2e_prompts_overwrite.sh
+        working-directory: ./packages/create-redwood-app
+        env:
+          PROJECT_PATH: ${{ env.PROJECT_PATH }}
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Prompt tests
+        run: ./tests/e2e_prompts_node_less.sh
+        working-directory: ./packages/create-redwood-app
+        env:
+          PROJECT_PATH: ${{ env.PROJECT_PATH }}
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+
+      - name: Prompt tests
+        run: ./tests/e2e_prompts_node_greater.sh
         working-directory: ./packages/create-redwood-app
         env:
           PROJECT_PATH: ${{ env.PROJECT_PATH }}

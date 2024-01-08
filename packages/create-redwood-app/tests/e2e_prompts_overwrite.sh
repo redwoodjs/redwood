@@ -20,18 +20,18 @@ expect "Where would you like to create your Redwood app?"
 send "$projectDirectory\n"
 
 expect "Select your preferred language"
-# TypeScript
+# ❯ TypeScript
 send "\n"
 
 expect "Do you want to initialize a git repo?"
-# Yes
+# ❯ Yes
 send "\n"
 
 expect "Enter a commit message"
 send "first\n"
 
 expect "How would you like to proceed?"
-# Quit install
+# ❯ Quit install
 send "\n"
 
 expect eof

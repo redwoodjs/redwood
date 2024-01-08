@@ -61,7 +61,7 @@
     "nodemon": "3.0.2",
     "react": "0.0.0-experimental-e5205658f-20230913",
     "react-dom": "0.0.0-experimental-e5205658f-20230913",
-    "tstyche": "1.0.0-beta.3",
+    "tstyche": "1.0.0-beta.9",
     "typescript": "5.3.3"
   },
   "peerDependencies": {
