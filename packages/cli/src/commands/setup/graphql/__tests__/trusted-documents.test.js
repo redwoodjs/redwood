@@ -1,6 +1,10 @@
 import path from 'path'
 
-import { updateRedwoodToml } from '../features/trusted-documents'
+import {
+  updateGraphQLHandler,
+  updateRedwoodToml,
+} from '../features/trusted-documents'
+
 describe('Trusted documents setup tests', () => {
   describe('Project toml configuration updates', () => {
     describe('default toml where no graphql or trusted documents is setup', () => {
@@ -9,6 +13,7 @@ describe('Trusted documents setup tests', () => {
           __dirname,
           '../',
           '__fixtures__',
+          'toml',
           'default.toml'
         )
         const result = updateRedwoodToml(redwoodTomlPath)
@@ -21,6 +26,7 @@ describe('Trusted documents setup tests', () => {
           __dirname,
           '../',
           '__fixtures__',
+          'toml',
           'fragments.toml'
         )
         const result = updateRedwoodToml(redwoodTomlPath)
@@ -33,6 +39,7 @@ describe('Trusted documents setup tests', () => {
           __dirname,
           '../',
           '__fixtures__',
+          'toml',
           'fragments_no_space_equals.toml'
         )
         const result = updateRedwoodToml(redwoodTomlPath)
@@ -45,6 +52,7 @@ describe('Trusted documents setup tests', () => {
           __dirname,
           '../',
           '__fixtures__',
+          'toml',
           'trusted_docs_already_setup.toml'
         )
         const result = updateRedwoodToml(redwoodTomlPath)
@@ -57,6 +65,7 @@ describe('Trusted documents setup tests', () => {
           __dirname,
           '../',
           '__fixtures__',
+          'toml',
           'trusted_docs_already_setup_no_space_equals.toml'
         )
         const result = updateRedwoodToml(redwoodTomlPath)
@@ -69,10 +78,28 @@ describe('Trusted documents setup tests', () => {
           __dirname,
           '../',
           '__fixtures__',
+          'toml',
           'trusted_docs_and_fragments_already_setup.toml'
         )
         const result = updateRedwoodToml(redwoodTomlPath)
         expect(result).toMatchSnapshot()
+      })
+    })
+  })
+  describe('GraphQL Handler updates', () => {
+    describe('default handler where the trusted document store is not configured', () => {
+      it('updates the handler with the trusted document store', async () => {
+        const handlerPath = path.join(
+          __dirname,
+          '../',
+          '__fixtures__',
+          'graphQLHandler',
+          'trustedDocumentSetupHandler.js'
+        )
+        const { graphQlSourceFile, graphQlSourceFileChanged } =
+          updateGraphQLHandler(handlerPath)
+        expect(graphQlSourceFileChanged).toBe(false)
+        expect(graphQlSourceFile.getFullText()).toMatchSnapshot()
       })
     })
   })

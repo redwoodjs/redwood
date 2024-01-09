@@ -18,6 +18,7 @@ export function builder() {}
 export function updateGraphQLHandler(graphQlSourcePath: string) {
   // add import
   const project = new Project()
+
   const graphQlSourceFile =
     project.addSourceFileAtPathIfExists(graphQlSourcePath)
 
@@ -87,7 +88,7 @@ export function updateGraphQLHandler(graphQlSourcePath: string) {
     )
   }
 
-  return { graphQlSourceFileChanged, project }
+  return { graphQlSourceFileChanged, graphQlSourceFile, project }
 }
 
 export function updateRedwoodToml(redwoodTomlPath: string) {
