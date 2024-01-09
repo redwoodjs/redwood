@@ -1,14 +1,29 @@
 export const schema = gql`
   type Stall {
-    id: ID!
-    stallNumber: String!
+    id: String!
     name: String!
-    fruits: [Fruit]
-    vegetables: [Vegetable]
+    stallNumber: String!
+    produce: [Produce]!
   }
 
   type Query {
-    stalls: [Stall!]! @skipAuth
-    stallById(id: ID!): Stall @skipAuth
+    stalls: [Stall!]! @requireAuth
+    stall(id: String!): Stall @requireAuth
+  }
+
+  input CreateStallInput {
+    name: String!
+    stallNumber: String!
+  }
+
+  input UpdateStallInput {
+    name: String
+    stallNumber: String
+  }
+
+  type Mutation {
+    createStall(input: CreateStallInput!): Stall! @requireAuth
+    updateStall(id: String!, input: UpdateStallInput!): Stall! @requireAuth
+    deleteStall(id: String!): Stall! @requireAuth
   }
 `

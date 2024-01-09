@@ -1,3 +1,4 @@
+import { fragmentRegistry } from '../../apollo'
 import { getOperationName } from '../../graphql'
 /**
  * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
@@ -67,6 +68,7 @@ function createNonSuspendingCell<
       /* eslint-disable-next-line react-hooks/rules-of-hooks */
       const { queryCache } = useCellCacheContext()
       const operationName = getOperationName(query)
+      const transformedQuery = fragmentRegistry.transform(query)
 
       let cacheKey
 
@@ -99,7 +101,7 @@ function createNonSuspendingCell<
         } else {
           queryCache[cacheKey] ||
             (queryCache[cacheKey] = {
-              query,
+              query: transformedQuery,
               variables: options.variables,
               hasProcessed: false,
             })

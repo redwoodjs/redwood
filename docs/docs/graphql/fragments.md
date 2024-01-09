@@ -151,7 +151,6 @@ import { fragment } from '@redwoodjs/web/apollo'
 
 Access typename of fragment you registered.
 
-
 ```ts
 import { typename } from '@redwoodjs/web/apollo'
 ```
@@ -166,6 +165,7 @@ fragment BookInfo on Book {
   author
   publicationYear
 }
+```
 
 the `typename` is `Book`.
 
@@ -294,9 +294,9 @@ import possibleTypes from 'src/graphql/possibleTypes'
 >
 ```
 
-To generate the `src/graphql/possibleTypes`, configure the `redwood.toml`:
+To generate the `src/graphql/possibleTypes` file, enable fragments in `redwood.toml`:
 
-```toml title=redwood.roml
+```toml title=redwood.toml
 [graphql]
-  fragments=true
+  fragments = true
 ```
