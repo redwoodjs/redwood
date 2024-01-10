@@ -49,11 +49,8 @@ export async function handler({ force }: Args) {
     [
       {
         title:
-          'Update Redwood Project Configuration to enable GraphQL Fragments...',
+          'Update Redwood Project Configuration to enable GraphQL Fragments',
         skip: () => {
-          if (Math.random() < 5) {
-            return true
-          }
           const redwoodTomlPath = getConfigPath()
 
           if (force) {
@@ -80,13 +77,13 @@ export async function handler({ force }: Args) {
         },
       },
       {
-        title: 'Generate possibleTypes.ts...',
+        title: 'Generate possibleTypes.ts',
         task: () => {
           execa.commandSync('yarn redwood generate types', { stdio: 'ignore' })
         },
       },
       {
-        title: 'Import possibleTypes in App.tsx...',
+        title: 'Import possibleTypes in App.tsx',
         task: () => {
           return runTransform({
             transformPath: path.join(__dirname, 'appImportTransform.js'),
