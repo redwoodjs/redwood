@@ -36,7 +36,6 @@ describe('<NavLink />', () => {
           </NavLink>
         </LocationProvider>
       </NavigationProvider>
-      </NavigationProvider>
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
