@@ -2,7 +2,7 @@
 // Rails' routing approach and from both React Router and Reach Router (the
 // latter of which has closely inspired some of this code).
 
-export { navigate, back, useNavigation } from './NavigationContext'
+export { navigate, back, useNavigation } from './navigation'
 export { Link, NavLink, Redirect } from './links'
 export { useLocation, LocationProvider } from './location'
 export {

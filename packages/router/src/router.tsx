@@ -5,7 +5,7 @@ import { ActiveRouteLoader } from './active-route-loader'
 import { AuthenticatedRoute } from './AuthenticatedRoute'
 import { Redirect } from './links'
 import { LocationProvider, useLocation } from './location'
-import { NavigationContextProvider } from './NavigationContext'
+import { NavigationContextProvider } from './navigation'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { ParamsProvider } from './params'
 import type {

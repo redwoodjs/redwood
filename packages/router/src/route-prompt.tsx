@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { useNavigation } from './NavigationContext'
+import { useNavigation } from './navigation'
 
 interface RoutePromptProps extends React.HTMLAttributes<HTMLDivElement> {
   when?: boolean

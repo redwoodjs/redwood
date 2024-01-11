@@ -1,7 +1,7 @@
 import { forwardRef, useEffect } from 'react'
 
 import type { NavigateOptions } from './history'
-import { useNavigation } from './NavigationContext'
+import { useNavigation } from './navigation'
 import { useMatch } from './useMatch'
 import type { FlattenSearchParams } from './util'
 import { flattenSearchParams } from './util'
