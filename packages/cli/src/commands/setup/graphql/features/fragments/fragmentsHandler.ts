@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
+import toml from '@iarna/toml'
 import execa from 'execa'
 import { Listr } from 'listr2'
 import { format } from 'prettier'
@@ -24,6 +25,12 @@ export async function handler({ force }: Args) {
     force,
   })
 
+  const redwoodTomlPath = getConfigPath()
+  const redwoodTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
+  // Can't type toml.parse because this PR has not been included in a released yet
+  // https://github.com/iarna/iarna-toml/commit/5a89e6e65281e4544e23d3dbaf9e8428ed8140e9
+  const redwoodTomlObject = toml.parse(redwoodTomlContent) as any
+
   const tasks = new Listr(
     [
       {
@@ -35,9 +42,7 @@ export async function handler({ force }: Args) {
             return false
           }
 
-          const redwoodTomlPath = getConfigPath()
-          const redwoodTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
-          if (/\bfragments\s*=\s*true/.test(redwoodTomlContent)) {
+          if (redwoodTomlObject?.graphql?.fragments) {
             return 'GraphQL Fragments are already enabled.'
           }
 
@@ -46,12 +51,56 @@ export async function handler({ force }: Args) {
         task: () => {
           const redwoodTomlPath = getConfigPath()
           const originalTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
+          const hasExistingGraphqlSection = !!redwoodTomlObject?.graphql
 
-          const tomlToAppend = `[graphql]\n  fragments = true`
+          let newTomlContent =
+            originalTomlContent + '\n\n[graphql]\n  fragments = true'
 
-          const newConfig = originalTomlContent + '\n' + tomlToAppend
+          if (hasExistingGraphqlSection) {
+            const existingGraphqlSetting = Object.keys(
+              redwoodTomlObject.graphql
+            )
 
-          fs.writeFileSync(redwoodTomlPath, newConfig, 'utf-8')
+            let inGraphqlSection = false
+            let indentation = ''
+            let lastGraphqlSettingIndex = 0
+
+            const tomlLines = originalTomlContent.split('\n')
+            tomlLines.forEach((line, index) => {
+              if (line.startsWith('[graphql]')) {
+                inGraphqlSection = true
+                lastGraphqlSettingIndex = index
+              } else {
+                if (/^\s*\[/.test(line)) {
+                  inGraphqlSection = false
+                }
+              }
+
+              if (inGraphqlSection) {
+                const matches = line.match(
+                  new RegExp(`^(\\s*)(${existingGraphqlSetting})\\s*=`, 'i')
+                )
+
+                if (matches) {
+                  indentation = matches[1]
+                }
+
+                if (/^\s*\w+\s*=/.test(line)) {
+                  lastGraphqlSettingIndex = index
+                }
+              }
+            })
+
+            tomlLines.splice(
+              lastGraphqlSettingIndex + 1,
+              0,
+              `${indentation}fragments = true`
+            )
+
+            newTomlContent = tomlLines.join('\n')
+          }
+
+          fs.writeFileSync(redwoodTomlPath, newTomlContent)
         },
       },
       {

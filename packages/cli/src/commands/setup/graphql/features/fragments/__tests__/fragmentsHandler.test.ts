@@ -1,7 +1,6 @@
 let mockExecutedTaskTitles: Array<string> = []
 let mockSkippedTaskTitles: Array<string> = []
 
-console.log('mockity mock?')
 jest.mock('fs', () => require('memfs').fs)
 jest.mock('node:fs', () => require('memfs').fs)
 jest.mock('execa')
@@ -40,56 +39,17 @@ jest.mock('listr2', () => {
   }
 })
 
-import path from 'node:path'
-
 import { vol } from 'memfs'
 
 import { handler } from '../fragmentsHandler'
-
-// Suppress terminal logging.
-// console.log = jest.fn()
 
 // Set up RWJS_CWD
 let original_RWJS_CWD: string | undefined
 const FIXTURE_PATH = '/redwood-app'
 
-let testProjectAppTsx: string
-
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
   process.env.RWJS_CWD = FIXTURE_PATH
-
-  const actualFs = jest.requireActual('fs')
-  testProjectAppTsx = actualFs.readFileSync(
-    path.join(
-      __dirname,
-      '../../../../../../../../../__fixtures__/test-project/web/src/App.tsx'
-    ),
-    'utf-8'
-  )
-})
-
-beforeEach(() => {
-  mockExecutedTaskTitles = []
-  mockSkippedTaskTitles = []
-
-  vol.reset()
-  vol.fromNestedJSON(
-    {
-      'redwood.toml': '',
-      web: {
-        src: {
-          'App.tsx': testProjectAppTsx,
-        },
-      },
-    },
-    FIXTURE_PATH
-  )
-})
-
-afterEach(() => {
-  mockExecutedTaskTitles = []
-  mockSkippedTaskTitles = []
 })
 
 afterAll(() => {
@@ -99,6 +59,8 @@ afterAll(() => {
 })
 
 test('`fragments = true` is added to redwood.toml', async () => {
+  vol.fromJSON({ 'redwood.toml': '', 'web/src/App.tsx': '' }, FIXTURE_PATH)
+
   await handler({ force: false })
 
   expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toMatch(
@@ -107,6 +69,8 @@ test('`fragments = true` is added to redwood.toml', async () => {
 })
 
 test('all tasks are being called', async () => {
+  vol.fromJSON({ 'redwood.toml': '', 'web/src/App.tsx': '' }, FIXTURE_PATH)
+
   await handler({ force: false })
 
   expect(mockExecutedTaskTitles).toMatchInlineSnapshot(`
@@ -120,17 +84,10 @@ test('all tasks are being called', async () => {
 })
 
 test('redwood.toml update is skipped if fragments are already enabled', async () => {
-  vol.fromNestedJSON(
+  vol.fromJSON(
     {
-      'redwood.toml': `
-        [graphql]
-          fragments = true
-      `,
-      web: {
-        src: {
-          'App.tsx': testProjectAppTsx,
-        },
-      },
+      'redwood.toml': '[graphql]\nfragments = true',
+      'web/src/App.tsx': '',
     },
     FIXTURE_PATH
   )
@@ -152,4 +109,95 @@ test('redwood.toml update is skipped if fragments are already enabled', async ()
   `)
 })
 
-// Add test that checks all steps being called
+test('redwood.toml update is skipped if fragments are already enabled, together with other settings', async () => {
+  const toml = `
+[graphql]
+foo = "bar"
+fragments = true
+`
+  vol.fromJSON({ 'redwood.toml': toml, 'web/src/App.tsx': '' }, FIXTURE_PATH)
+
+  await handler({ force: false })
+
+  expect(mockSkippedTaskTitles).toMatchInlineSnapshot(`
+    [
+      "Update Redwood Project Configuration to enable GraphQL Fragments",
+    ]
+  `)
+
+  expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toEqual(toml)
+})
+
+test('redwood.toml is updated even if `fragments = true` exists for other sections', async () => {
+  const toml = `
+[notGraphql]
+  fragments = true
+`
+  vol.fromJSON({ 'redwood.toml': toml, 'web/src/App.tsx': '' }, FIXTURE_PATH)
+
+  await handler({ force: false })
+
+  expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toEqual(
+    toml + '\n\n[graphql]\n  fragments = true'
+  )
+})
+
+test('`fragments = true` is added to existing [graphql] section', async () => {
+  const toml = `
+[graphql]
+
+  isAwesome = true
+
+[browser]
+  open = true
+`
+  vol.fromJSON({ 'redwood.toml': toml, 'web/src/App.tsx': '' }, FIXTURE_PATH)
+
+  await handler({ force: false })
+
+  expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toEqual(`
+[graphql]
+
+  isAwesome = true
+  fragments = true
+
+[browser]
+  open = true
+`)
+})
+
+test("`fragments = true` is not indented if other settings aren't", async () => {
+  const toml = `
+[graphql]
+isAwesome = true
+
+[browser]
+open = true
+`
+  vol.fromJSON({ 'redwood.toml': toml, 'web/src/App.tsx': '' }, FIXTURE_PATH)
+
+  await handler({ force: false })
+
+  expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toEqual(`
+[graphql]
+isAwesome = true
+fragments = true
+
+[browser]
+open = true
+`)
+})
+
+test('[graphql] is last section in redwood.toml', async () => {
+  const toml = `
+[graphql]
+  isAwesome = true`
+
+  vol.fromJSON({ 'redwood.toml': toml, 'web/src/App.tsx': '' }, FIXTURE_PATH)
+
+  await handler({ force: false })
+
+  expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toEqual(
+    toml + '\n  fragments = true'
+  )
+})
