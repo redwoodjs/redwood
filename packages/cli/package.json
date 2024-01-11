@@ -19,7 +19,7 @@
   "scripts": {
     "build": "yarn build:js",
     "build:clean-dist": "rimraf 'dist/**/*/__tests__' --glob",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
+    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\" --ignore \"src/**/__tests__/**\" --ignore \"src/**/__testfixtures__/**\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "build:pack": "yarn pack -o redwoodjs-cli.tgz",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "dev": "RWJS_CWD=../../__fixtures__/example-todo-main node dist/index.js",
