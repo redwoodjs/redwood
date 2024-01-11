@@ -19,7 +19,9 @@ const RoutePrompt = React.forwardRef<HTMLDivElement, RoutePromptProps>(
     // https://caniuse.com/mdn-api_window_beforeunload_event_generic_string_displayed
     // custom messages are deprecated and should not be used
     const confirm = (e: BeforeUnloadEvent) => {
-      if (when) e.preventDefault()
+      if (when) {
+        e.preventDefault()
+      }
     }
 
     useEffect(() => {

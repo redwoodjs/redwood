@@ -36,7 +36,9 @@ export const NavigationContextProvider: React.FC<Props> = ({ children }) => {
   }
 
   const back = useCallback(() => {
-    if (blocked) setWaiting(true)
+    if (blocked) {
+      setWaiting(true)
+    }
     setQueue([
       ...queue,
       () => {
@@ -47,7 +49,9 @@ export const NavigationContextProvider: React.FC<Props> = ({ children }) => {
 
   const navigate = useCallback(
     (to: string, options?: NavigateOptions) => {
-      if (blocked) setWaiting(true)
+      if (blocked) {
+        setWaiting(true)
+      }
       setQueue([
         ...queue,
         () => {
@@ -59,7 +63,9 @@ export const NavigationContextProvider: React.FC<Props> = ({ children }) => {
   )
 
   useEffect(() => {
-    if (waiting) return
+    if (waiting) {
+      return
+    }
     if (queue.length > 0) {
       const next = queue.shift()
       if (next) {
