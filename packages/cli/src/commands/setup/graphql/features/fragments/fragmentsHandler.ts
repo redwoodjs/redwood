@@ -6,11 +6,7 @@ import execa from 'execa'
 import { Listr } from 'listr2'
 import { format } from 'prettier'
 
-import {
-  colors,
-  recordTelemetryAttributes,
-  prettierOptions,
-} from '@redwoodjs/cli-helpers'
+import { colors, prettierOptions } from '@redwoodjs/cli-helpers'
 import { getConfigPath, getPaths } from '@redwoodjs/project-config'
 
 import type { Args } from './fragments'
@@ -20,11 +16,6 @@ export const command = 'fragments'
 export const description = 'Set up Fragments for GraphQL'
 
 export async function handler({ force }: Args) {
-  recordTelemetryAttributes({
-    command: 'setup graphql fragments',
-    force,
-  })
-
   const redwoodTomlPath = getConfigPath()
   const redwoodTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
   // Can't type toml.parse because this PR has not been included in a released yet
