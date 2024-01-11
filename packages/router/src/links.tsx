@@ -1,7 +1,7 @@
 import { forwardRef, useEffect } from 'react'
 
 import type { NavigateOptions } from './history'
-import { navigate } from './history'
+import { useNavigation } from './NavigationContext'
 import { useMatch } from './useMatch'
 import type { FlattenSearchParams } from './util'
 import { flattenSearchParams } from './util'
@@ -14,35 +14,38 @@ interface LinkProps {
 const Link = forwardRef<
   HTMLAnchorElement,
   LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement>
->(({ to, onClick, ...rest }, ref) => (
-  <a
-    href={to}
-    ref={ref}
-    {...rest}
-    onClick={(event) => {
-      if (
-        event.button !== 0 ||
-        event.altKey ||
-        event.ctrlKey ||
-        event.metaKey ||
-        event.shiftKey
-      ) {
-        return
-      }
+>(({ to, onClick, ...rest }, ref) => {
+  const { navigate } = useNavigation()
+  return (
+    <a
+      href={to}
+      ref={ref}
+      {...rest}
+      onClick={(event) => {
+        if (
+          event.button !== 0 ||
+          event.altKey ||
+          event.ctrlKey ||
+          event.metaKey ||
+          event.shiftKey
+        ) {
+          return
+        }
 
-      event.preventDefault()
+        event.preventDefault()
 
-      if (onClick) {
-        const result = onClick(event)
-        if (typeof result !== 'boolean' || result) {
+        if (onClick) {
+          const result = onClick(event)
+          if (typeof result !== 'boolean' || result) {
+            navigate(to)
+          }
+        } else {
           navigate(to)
         }
-      } else {
-        navigate(to)
-      }
-    }}
-  />
-))
+      }}
+    />
+  )
+})
 
 interface NavLinkProps {
   to: string
@@ -69,6 +72,7 @@ const NavLink = forwardRef<
     ref
   ) => {
     // Separate pathname and search parameters, USVString expected
+    const { navigate } = useNavigation()
     const [pathname, queryString] = to.split('?')
     const searchParams = activeMatchParams || flattenSearchParams(queryString)
     const matchInfo = useMatch(pathname, {
@@ -122,9 +126,10 @@ interface RedirectProps {
  * A declarative way to redirect to a route name
  */
 const Redirect = ({ to, options }: RedirectProps) => {
+  const { navigate } = useNavigation()
   useEffect(() => {
     navigate(to, options)
-  }, [to, options])
+  }, [to, options, navigate])
 
   return null
 }

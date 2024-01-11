@@ -2,7 +2,7 @@
 // Rails' routing approach and from both React Router and Reach Router (the
 // latter of which has closely inspired some of this code).
 
-export { navigate, back } from './history'
+export { navigate, back, useNavigation } from './NavigationContext'
 export { Link, NavLink, Redirect } from './links'
 export { useLocation, LocationProvider } from './location'
 export {
@@ -18,6 +18,9 @@ export { default as RouteAnnouncement } from './route-announcement'
 export * from './route-announcement'
 export { default as RouteFocus } from './route-focus'
 export * from './route-focus'
+export { default as RoutePrompt } from './route-prompt'
+export * from './route-prompt'
+
 export * from './useRouteName'
 export * from './useRoutePaths'
 export * from './useMatch'
