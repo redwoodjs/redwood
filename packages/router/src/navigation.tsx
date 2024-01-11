@@ -23,7 +23,7 @@ interface Props {
   children: React.ReactNode
 }
 
-export const NavigationContextProvider: React.FC<Props> = ({ children }) => {
+export const NavigationProvider: React.FC<Props> = ({ children }) => {
   const [queue, setQueue] = useState<(() => void)[]>([])
   const [blocked, setBlocked] = useState(false)
   const [waiting, setWaiting] = useState(false)

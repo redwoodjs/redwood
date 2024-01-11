@@ -5,7 +5,7 @@ import { ActiveRouteLoader } from './active-route-loader'
 import { AuthenticatedRoute } from './AuthenticatedRoute'
 import { Redirect } from './links'
 import { LocationProvider, useLocation } from './location'
-import { NavigationContextProvider } from './navigation'
+import { NavigationProvider } from './navigation'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { ParamsProvider } from './params'
 import type {
@@ -73,15 +73,17 @@ const Router: React.FC<RouterProps> = ({
   return (
     // Level 1/3 (outer-most)
     // Wrap it in the provider so that useLocation can be used
-    <LocationProvider trailingSlashes={trailingSlashes}>
-      <LocationAwareRouter
-        useAuth={useAuth}
-        paramTypes={paramTypes}
-        pageLoadingDelay={pageLoadingDelay}
-      >
-        {children}
-      </LocationAwareRouter>
-    </LocationProvider>
+    <NavigationProvider>
+      <LocationProvider trailingSlashes={trailingSlashes}>
+        <LocationAwareRouter
+          useAuth={useAuth}
+          paramTypes={paramTypes}
+          pageLoadingDelay={pageLoadingDelay}
+          >
+          {children}
+        </LocationAwareRouter>
+      </LocationProvider>
+    </NavigationProvider>
   )
 }
 
@@ -140,14 +142,12 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
           routes={analyzeRoutesResult}
         >
           <ParamsProvider>
-            <NavigationContextProvider>
-              <PageLoadingContextProvider delay={pageLoadingDelay}>
-                <ActiveRouteLoader
-                  spec={normalizePage(NotFoundPage)}
-                  path={location.pathname}
-                />
-              </PageLoadingContextProvider>
-            </NavigationContextProvider>
+            <PageLoadingContextProvider delay={pageLoadingDelay}>
+              <ActiveRouteLoader
+                spec={normalizePage(NotFoundPage)}
+                path={location.pathname}
+              />
+            </PageLoadingContextProvider>
           </ParamsProvider>
         </RouterContextProvider>
       )
