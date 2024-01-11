@@ -6,6 +6,7 @@ import { render, renderHook as tlrRenderHook } from '@testing-library/react'
 
 import { Link } from '../links'
 import { LocationProvider } from '../location'
+import { NavigationProvider } from '../navigation'
 import { useMatch } from '../useMatch'
 import { flattenSearchParams } from '../util'
 
@@ -50,9 +51,11 @@ describe('useMatch', () => {
     const mockLocation = createDummyLocation('/dunder-mifflin')
 
     const { getByText } = render(
-      <LocationProvider location={mockLocation}>
-        <MyLink to="/dunder-mifflin">Dunder Mifflin</MyLink>
-      </LocationProvider>
+      <NavigationProvider>
+        <LocationProvider location={mockLocation}>
+          <MyLink to="/dunder-mifflin">Dunder Mifflin</MyLink>
+        </LocationProvider>
+      </NavigationProvider>
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: green')
@@ -65,9 +68,11 @@ describe('useMatch', () => {
     )
 
     const { getByText } = render(
-      <LocationProvider location={mockLocation}>
-        <MyLink to={`/search-params?tab=main&page=1`}>Dunder Mifflin</MyLink>
-      </LocationProvider>
+      <NavigationProvider>
+        <LocationProvider location={mockLocation}>
+          <MyLink to={`/search-params?tab=main&page=1`}>Dunder Mifflin</MyLink>
+        </LocationProvider>
+      </NavigationProvider>
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: green')
@@ -77,9 +82,11 @@ describe('useMatch', () => {
     const mockLocation = createDummyLocation('/staples')
 
     const { getByText } = render(
-      <LocationProvider location={mockLocation}>
-        <MyLink to="/dunder-mifflin">Dunder Mifflin</MyLink>
-      </LocationProvider>
+      <NavigationProvider>
+        <LocationProvider location={mockLocation}>
+          <MyLink to="/dunder-mifflin">Dunder Mifflin</MyLink>
+        </LocationProvider>
+      </NavigationProvider>
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: red')
@@ -92,9 +99,11 @@ describe('useMatch', () => {
     )
 
     const { getByText } = render(
-      <LocationProvider location={mockLocation}>
-        <MyLink to={`/search-params?page=2&tab=main`}>Dunder Mifflin</MyLink>
-      </LocationProvider>
+      <NavigationProvider>
+        <LocationProvider location={mockLocation}>
+          <MyLink to={`/search-params?page=2&tab=main`}>Dunder Mifflin</MyLink>
+        </LocationProvider>
+      </NavigationProvider>
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: red')
@@ -107,9 +116,11 @@ describe('useMatch', () => {
     function renderHook(cb: CallbackType) {
       return tlrRenderHook(cb, {
         wrapper: ({ children }) => (
-          <LocationProvider location={mockLocation}>
-            {children}
-          </LocationProvider>
+          <NavigationProvider>
+            <LocationProvider location={mockLocation}>
+              {children}
+            </LocationProvider>
+          </NavigationProvider>
         ),
       })
     }
@@ -256,9 +267,11 @@ describe('useMatch', () => {
     function renderHook(cb: CallbackType) {
       return tlrRenderHook(cb, {
         wrapper: ({ children }) => (
-          <LocationProvider location={mockLocation}>
-            {children}
-          </LocationProvider>
+          <NavigationProvider>
+            <LocationProvider location={mockLocation}>
+              {children}
+            </LocationProvider>
+          </NavigationProvider>
         ),
       })
     }
