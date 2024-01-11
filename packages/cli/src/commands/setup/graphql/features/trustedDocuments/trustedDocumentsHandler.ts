@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import toml from '@iarna/toml'
 import execa from 'execa'
 import { Listr } from 'listr2'
 import { Project, SyntaxKind, type PropertyAssignment } from 'ts-morph'
@@ -82,46 +83,68 @@ export function updateGraphQLHandler(graphQlSourcePath: string) {
 }
 
 export function updateRedwoodToml(redwoodTomlPath: string) {
-  let newConfig = undefined
-
   const originalTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
-  const graphqlExists = originalTomlContent.includes('[graphql]')
+  const redwoodTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
+  // Can't type toml.parse because this PR has not been included in a released yet
+  // https://github.com/iarna/iarna-toml/commit/5a89e6e65281e4544e23d3dbaf9e8428ed8140e9
+  const redwoodTomlObject = toml.parse(redwoodTomlContent) as any
+  const hasExistingGraphqlSection = !!redwoodTomlObject?.graphql
 
-  const trustedDocumentsExists =
-    originalTomlContent.includes('trustedDocuments =') ||
-    originalTomlContent.includes('trustedDocuments=')
-
-  const fragmentsExists =
-    originalTomlContent.includes('fragments =') ||
-    originalTomlContent.includes('fragments=')
-
-  if (trustedDocumentsExists) {
+  if (redwoodTomlObject?.graphql?.trustedDocuments) {
     console.info(
       'GraphQL Trusted Documents are already enabled in your Redwood project.'
     )
-  } else if (graphqlExists && fragmentsExists) {
-    const insertIndex = originalTomlContent.indexOf('fragments')
-    const trustedDocuments = 'trustedDocuments = true\n  '
-    newConfig =
-      originalTomlContent.slice(0, insertIndex) +
-      trustedDocuments +
-      originalTomlContent.slice(insertIndex)
-  } else {
-    if (!graphqlExists) {
-      const tomlToAppend = `[graphql]\n  trustedDocuments = true`
 
-      newConfig = originalTomlContent + '\n' + tomlToAppend
-    } else {
-      const graphqlIndex = originalTomlContent.indexOf('[graphql]')
-      const insertIndex = graphqlIndex + '[graphql]\n'.length
-      newConfig =
-        originalTomlContent.slice(0, insertIndex) +
-        '  trustedDocuments = true\n' +
-        originalTomlContent.slice(insertIndex)
-    }
+    return { newConfig: undefined, trustedDocumentsExists: true }
   }
 
-  return { newConfig, trustedDocumentsExists }
+  let newTomlContent =
+    originalTomlContent.replace(/\n$/, '') +
+    '\n\n[graphql]\n  trustedDocuments = true'
+
+  if (hasExistingGraphqlSection) {
+    const existingGraphqlSetting = Object.keys(redwoodTomlObject.graphql)
+
+    let inGraphqlSection = false
+    let indentation = ''
+    let lastGraphqlSettingIndex = 0
+
+    const tomlLines = originalTomlContent.split('\n')
+    tomlLines.forEach((line, index) => {
+      if (line.startsWith('[graphql]')) {
+        inGraphqlSection = true
+        lastGraphqlSettingIndex = index
+      } else {
+        if (/^\s*\[/.test(line)) {
+          inGraphqlSection = false
+        }
+      }
+
+      if (inGraphqlSection) {
+        const matches = line.match(
+          new RegExp(`^(\\s*)(${existingGraphqlSetting})\\s*=`, 'i')
+        )
+
+        if (matches) {
+          indentation = matches[1]
+        }
+
+        if (/^\s*\w+\s*=/.test(line)) {
+          lastGraphqlSettingIndex = index
+        }
+      }
+    })
+
+    tomlLines.splice(
+      lastGraphqlSettingIndex + 1,
+      0,
+      `${indentation}trustedDocuments = true`
+    )
+
+    newTomlContent = tomlLines.join('\n')
+  }
+
+  return { newConfig: newTomlContent, trustedDocumentsExists: false }
 }
 
 function configureGraphQLHandlerWithStore() {

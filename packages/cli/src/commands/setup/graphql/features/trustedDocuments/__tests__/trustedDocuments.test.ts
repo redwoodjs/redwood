@@ -3,7 +3,7 @@ import path from 'path'
 import {
   updateGraphQLHandler,
   updateRedwoodToml,
-} from '../features/trustedDocuments/trustedDocumentsHandler'
+} from '../trustedDocumentsHandler'
 
 describe('Trusted documents setup tests', () => {
   describe('Project toml configuration updates', () => {
@@ -80,6 +80,19 @@ describe('Trusted documents setup tests', () => {
           '__fixtures__',
           'toml',
           'trusted_docs_and_fragments_already_setup.toml'
+        )
+        const result = updateRedwoodToml(redwoodTomlPath)
+        expect(result).toMatchSnapshot()
+      })
+    })
+    describe('toml where graphql section is commented out', () => {
+      it('adds a new section with `trustedDocuments = true`', () => {
+        const redwoodTomlPath = path.join(
+          __dirname,
+          '../',
+          '__fixtures__',
+          'toml',
+          'trusted_docs_commented_graphql.toml'
         )
         const result = updateRedwoodToml(redwoodTomlPath)
         expect(result).toMatchSnapshot()
