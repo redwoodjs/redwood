@@ -8,12 +8,12 @@ export interface NavigateOptions {
 }
 
 export interface NavigationContextInterface {
-  blocked: boolean
+  waiting: boolean
   navigate: (to: string, options?: NavigateOptions) => void
   back: () => void
-  block: () => void
-  unblock: () => void
-  flush: () => void
+  block: (when: boolean) => void
+  confirm: () => void
+  abort: () => void
 }
 
 const NavigationContext =
@@ -24,55 +24,52 @@ interface Props {
 }
 
 export const NavigationContextProvider: React.FC<Props> = ({ children }) => {
+  const [queue, setQueue] = useState<(() => void)[]>([])
   const [blocked, setBlocked] = useState(false)
-  const [blockedQueue, setBlockedQueue] = useState<(() => void)[]>([])
+  const [waiting, setWaiting] = useState(false)
 
-  const block = () => setBlocked(true)
-  const unblock = () => setBlocked(false)
-  const flush = () => setBlockedQueue([])
+  const block = (when: boolean) => setBlocked(when)
+  const confirm = () => setWaiting(false)
+  const abort = () => {
+    setQueue([])
+    setWaiting(false)
+  }
 
   const back = useCallback(() => {
-    if (!blocked) {
-      gHistory.back()
-    } else {
-      setBlockedQueue([
-        ...blockedQueue,
-        () => {
-          gHistory.back()
-        },
-      ])
-    }
-  }, [blocked, blockedQueue])
+    if (blocked) setWaiting(true)
+    setQueue([
+      ...queue,
+      () => {
+        gHistory.back()
+      },
+    ])
+  }, [blocked, queue])
 
   const navigate = useCallback(
     (to: string, options?: NavigateOptions) => {
-      if (!blocked) {
-        gHistory.navigate(to, options)
-      } else {
-        setBlockedQueue([
-          ...blockedQueue,
-          () => {
-            gHistory.navigate(to, options)
-          },
-        ])
-      }
+      if (blocked) setWaiting(true)
+      setQueue([
+        ...queue,
+        () => {
+          gHistory.navigate(to, options)
+        },
+      ])
     },
-    [blocked, blockedQueue]
+    [blocked, queue]
   )
 
   useEffect(() => {
-    if (blocked && blockedQueue.length > 0) {
-      const next = blockedQueue.shift()
+    if (waiting) return
+    if (queue.length > 0) {
+      const next = queue.shift()
       if (next) {
         next()
       }
     }
-  }, [blocked, blockedQueue])
+  }, [queue, waiting])
 
   return (
-    <NavigationContext.Provider
-      value={{ blocked, navigate, back, block, unblock, flush }}
-    >
+    <NavigationContext.Provider value={{ waiting, navigate, back, block, confirm, abort }}>
       {children}
     </NavigationContext.Provider>
   )
@@ -91,23 +88,15 @@ export const useNavigation = () => {
 }
 
 /**
- * @deprecated Please use useNavigation instead
+ * @deprecated Please use navigate() from useNavigation instead
  */
 export const navigate = (to: string, options?: NavigateOptions) => {
-  // Disable warning because we need it to be named navigate
-  // instead of useNavigate for backwards compatibility
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { navigate } = useNavigation()
-  navigate(to, options)
+  return gHistory.navigate(to, options)
 }
 
 /**
- * @deprecated Please use useNavigation instead
+ * @deprecated Please use back() from useNavigation instead
  */
 export const back = () => {
-  // Disable warning because we need it to be named back
-  // instead of useBack for backwards compatibility
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { back } = useNavigation()
-  back()
+  return gHistory.back()
 }

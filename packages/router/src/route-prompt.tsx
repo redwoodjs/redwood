@@ -6,30 +6,32 @@ interface RoutePromptProps extends React.HTMLAttributes<HTMLDivElement> {
   when?: boolean
 }
 
+/**
+ * Renders a component when the user tries to navigate away from the page
+ * and shows a message to the user on tab close or reload.
+ */
 const RoutePrompt = React.forwardRef<HTMLDivElement, RoutePromptProps>(
   ({ when, children, ...props }, ref) => {
-    const { blocked, block, unblock } = useNavigation()
+    const { waiting, block } = useNavigation()
 
     // The browser will display a generic message in the language of the browser.
     // eg. "Reload page? Changes you made may not be saved."
     // https://caniuse.com/mdn-api_window_beforeunload_event_generic_string_displayed
     // custom messages are deprecated and should not be used
     const confirm = (e: BeforeUnloadEvent) => {
-      e.preventDefault()
+      if (when) e.preventDefault()
     }
 
     useEffect(() => {
-      if (when) {
-        block()
-        window.addEventListener('beforeunload', confirm)
-      }
+      block(!!when)
+      window.addEventListener('beforeunload', confirm)
       return () => {
-        unblock()
+        block(false)
         window.removeEventListener('beforeunload', confirm)
       }
-    }, [block, unblock, when])
+    }, [block, when])
 
-    if (!blocked) {
+    if (!waiting) {
       return null
     } else {
       return (
@@ -52,13 +54,13 @@ const RoutePromptConfirm = React.forwardRef<
   HTMLButtonElement,
   RoutePromptButton
 >(({ onClick, children, ...props }, ref) => {
-  const { unblock } = useNavigation()
+  const { confirm } = useNavigation()
 
   const handleClick = () => {
     if (onClick) {
       onClick()
     }
-    unblock()
+    confirm()
   }
 
   return (
@@ -71,14 +73,13 @@ RoutePromptConfirm.displayName = 'RoutePromptConfirm'
 
 const RoutePromptAbort = React.forwardRef<HTMLButtonElement, RoutePromptButton>(
   ({ onClick, children, ...props }, ref) => {
-    const { flush, unblock } = useNavigation()
+    const { abort } = useNavigation()
 
     const handleClick = () => {
       if (onClick) {
         onClick()
       }
-      flush()
-      unblock()
+      abort()
     }
 
     return (

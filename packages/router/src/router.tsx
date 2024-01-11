@@ -79,7 +79,7 @@ const Router: React.FC<RouterProps> = ({
         paramTypes={paramTypes}
         pageLoadingDelay={pageLoadingDelay}
       >
-        <NavigationContextProvider>{children}</NavigationContextProvider>
+        {children}
       </LocationAwareRouter>
     </LocationProvider>
   )
@@ -140,12 +140,14 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
           routes={analyzeRoutesResult}
         >
           <ParamsProvider>
-            <PageLoadingContextProvider delay={pageLoadingDelay}>
-              <ActiveRouteLoader
-                spec={normalizePage(NotFoundPage)}
-                path={location.pathname}
-              />
-            </PageLoadingContextProvider>
+            <NavigationContextProvider>
+              <PageLoadingContextProvider delay={pageLoadingDelay}>
+                <ActiveRouteLoader
+                  spec={normalizePage(NotFoundPage)}
+                  path={location.pathname}
+                />
+              </PageLoadingContextProvider>
+            </NavigationContextProvider>
           </ParamsProvider>
         </RouterContextProvider>
       )
@@ -180,22 +182,24 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
       activeRouteName={name}
     >
       <ParamsProvider allParams={allParams}>
-        <PageLoadingContextProvider delay={pageLoadingDelay}>
-          {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
-          {!redirect && page && (
-            <WrappedPage
-              sets={sets}
-              routeLoaderElement={
-                <ActiveRouteLoader
-                  path={path}
-                  spec={normalizePage(page as any)}
-                  params={allParams}
-                  whileLoadingPage={whileLoadingPage as any}
-                />
-              }
-            />
-          )}
-        </PageLoadingContextProvider>
+        <NavigationContextProvider>
+          <PageLoadingContextProvider delay={pageLoadingDelay}>
+            {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
+            {!redirect && page && (
+              <WrappedPage
+                sets={sets}
+                routeLoaderElement={
+                  <ActiveRouteLoader
+                    path={path}
+                    spec={normalizePage(page as any)}
+                    params={allParams}
+                    whileLoadingPage={whileLoadingPage as any}
+                  />
+                }
+              />
+            )}
+          </PageLoadingContextProvider>
+        </NavigationContextProvider>
       </ParamsProvider>
     </RouterContextProvider>
   )
