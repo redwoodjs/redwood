@@ -138,7 +138,7 @@ test('redwood.toml is updated even if `fragments = true` exists for other sectio
   await handler({ force: false })
 
   expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toEqual(
-    toml + '\n\n[graphql]\n  fragments = true'
+    toml + '\n[graphql]\n  fragments = true'
   )
 })
 
