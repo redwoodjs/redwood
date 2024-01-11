@@ -79,7 +79,7 @@ const Router: React.FC<RouterProps> = ({
           useAuth={useAuth}
           paramTypes={paramTypes}
           pageLoadingDelay={pageLoadingDelay}
-          >
+        >
           {children}
         </LocationAwareRouter>
       </LocationProvider>

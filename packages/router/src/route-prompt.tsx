@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 
 import { useNavigation } from './navigation'
 
@@ -14,15 +14,14 @@ const RoutePrompt = React.forwardRef<HTMLDivElement, RoutePromptProps>(
   ({ when, children, ...props }, ref) => {
     const { waiting, block } = useNavigation()
 
-    // The browser will display a generic message in the language of the browser.
-    // eg. "Reload page? Changes you made may not be saved."
-    // https://caniuse.com/mdn-api_window_beforeunload_event_generic_string_displayed
-    // custom messages are deprecated and should not be used
-    const confirm = (e: BeforeUnloadEvent) => {
-      if (when) {
-        e.preventDefault()
-      }
-    }
+    const confirm = useCallback(
+      (e: BeforeUnloadEvent) => {
+        if (when) {
+          e.preventDefault()
+        }
+      },
+      [when]
+    )
 
     useEffect(() => {
       block(!!when)
@@ -31,7 +30,7 @@ const RoutePrompt = React.forwardRef<HTMLDivElement, RoutePromptProps>(
         block(false)
         window.removeEventListener('beforeunload', confirm)
       }
-    }, [block, when])
+    }, [block, when, confirm])
 
     if (!waiting) {
       return null
