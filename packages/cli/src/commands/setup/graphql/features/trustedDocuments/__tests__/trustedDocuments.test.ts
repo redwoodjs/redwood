@@ -14,7 +14,6 @@ describe('Trusted documents setup tests', () => {
       it('updates the toml file with graphql and trusted documents enabled', () => {
         const redwoodTomlPath = path.join(
           __dirname,
-          '../',
           '__fixtures__',
           'toml',
           'default.toml'
@@ -27,7 +26,6 @@ describe('Trusted documents setup tests', () => {
       it('updates the toml file with graphql and trusted documents enabled and keeps fragments', () => {
         const redwoodTomlPath = path.join(
           __dirname,
-          '../',
           '__fixtures__',
           'toml',
           'fragments.toml'
@@ -40,7 +38,6 @@ describe('Trusted documents setup tests', () => {
       it('updates the toml file with graphql and trusted documents enabled and keeps fragments', () => {
         const redwoodTomlPath = path.join(
           __dirname,
-          '../',
           '__fixtures__',
           'toml',
           'fragments_no_space_equals.toml'
@@ -53,7 +50,6 @@ describe('Trusted documents setup tests', () => {
       it('makes no changes as trusted documents are already setup', () => {
         const redwoodTomlPath = path.join(
           __dirname,
-          '../',
           '__fixtures__',
           'toml',
           'trusted_docs_already_setup.toml'
@@ -66,7 +62,6 @@ describe('Trusted documents setup tests', () => {
       it('makes no changes as trusted documents are already setup', () => {
         const redwoodTomlPath = path.join(
           __dirname,
-          '../',
           '__fixtures__',
           'toml',
           'trusted_docs_already_setup_no_space_equals.toml'
@@ -79,7 +74,6 @@ describe('Trusted documents setup tests', () => {
       it('makes no changes as trusted documents are already setup', () => {
         const redwoodTomlPath = path.join(
           __dirname,
-          '../',
           '__fixtures__',
           'toml',
           'trusted_docs_and_fragments_already_setup.toml'
@@ -92,7 +86,6 @@ describe('Trusted documents setup tests', () => {
       it('adds a new section with `trustedDocuments = true`', () => {
         const redwoodTomlPath = path.join(
           __dirname,
-          '../',
           '__fixtures__',
           'toml',
           'trusted_docs_commented_graphql.toml'
@@ -107,7 +100,6 @@ describe('Trusted documents setup tests', () => {
       it('updates the handler with the trusted document store', async () => {
         const handlerPath = path.join(
           __dirname,
-          '../',
           '__fixtures__',
           'graphQLHandler',
           'trustedDocumentSetupHandler.js'
