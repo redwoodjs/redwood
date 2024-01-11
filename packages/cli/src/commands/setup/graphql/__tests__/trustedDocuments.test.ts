@@ -3,7 +3,7 @@ import path from 'path'
 import {
   updateGraphQLHandler,
   updateRedwoodToml,
-} from '../features/trusted-documents'
+} from '../features/trustedDocuments/trustedDocumentsHandler'
 
 describe('Trusted documents setup tests', () => {
   describe('Project toml configuration updates', () => {
@@ -96,10 +96,9 @@ describe('Trusted documents setup tests', () => {
           'graphQLHandler',
           'trustedDocumentSetupHandler.js'
         )
-        const { graphQlSourceFile, graphQlSourceFileChanged } =
-          updateGraphQLHandler(handlerPath)
-        expect(graphQlSourceFileChanged).toBe(false)
-        expect(graphQlSourceFile.getFullText()).toMatchSnapshot()
+        const updateResult = updateGraphQLHandler(handlerPath)
+        expect(updateResult?.graphQlSourceFileChanged).toBe(false)
+        expect(updateResult?.graphQlSourceFile.getFullText()).toMatchSnapshot()
       })
     })
   })
