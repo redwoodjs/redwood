@@ -5,6 +5,9 @@ import {
   updateRedwoodToml,
 } from '../trustedDocumentsHandler'
 
+// Silence console.info
+console.info = jest.fn()
+
 describe('Trusted documents setup tests', () => {
   describe('Project toml configuration updates', () => {
     describe('default toml where no graphql or trusted documents is setup', () => {

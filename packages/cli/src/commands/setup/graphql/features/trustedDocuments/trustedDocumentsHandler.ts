@@ -1,12 +1,11 @@
 import fs from 'fs'
-import path from 'path'
 
 import toml from '@iarna/toml'
 import execa from 'execa'
 import { Listr } from 'listr2'
 import { Project, SyntaxKind, type PropertyAssignment } from 'ts-morph'
 
-import { recordTelemetryAttributes, prettifyFile } from '@redwoodjs/cli-helpers'
+import { prettifyFile } from '@redwoodjs/cli-helpers'
 import { getConfigPath, getPaths } from '@redwoodjs/project-config'
 
 export function updateGraphQLHandler(graphQlSourcePath: string) {
@@ -147,46 +146,18 @@ export function updateRedwoodToml(redwoodTomlPath: string) {
   return { newConfig: newTomlContent, trustedDocumentsExists: false }
 }
 
-function configureGraphQLHandlerWithStore() {
-  return {
-    title:
-      'Configuring the GraphQL Handler to use a Trusted Documents store ...',
-    task: async () => {
-      // locate "api/functions/graphql.[js|ts]"
-      let graphQlSourcePath: string | undefined
-      const functionsDir = getPaths().api.functions
-      if (fs.existsSync(path.join(functionsDir, 'graphql.ts'))) {
-        graphQlSourcePath = path.join(functionsDir, 'graphql.ts')
-      } else if (fs.existsSync(path.join(functionsDir, 'graphql.js'))) {
-        graphQlSourcePath = path.join(functionsDir, 'graphql.js')
-      }
+async function configureGraphQLHandlerWithStore() {
+  const graphQlSourcePath = getPaths().api.graphql
 
-      if (!graphQlSourcePath) {
-        console.warn(
-          `Unable to find the GraphQL Handler source file: ${path.join(
-            functionsDir,
-            'graphql.(js|ts)'
-          )}`
-        )
-        return
-      }
+  const updateResult = updateGraphQLHandler(graphQlSourcePath)
 
-      const updateResult = updateGraphQLHandler(graphQlSourcePath)
-
-      if (updateResult?.graphQlSourceFileChanged) {
-        await updateResult?.project.save()
-        prettifyFile(graphQlSourcePath, 'babel-ts')
-      }
-    },
+  if (updateResult?.graphQlSourceFileChanged) {
+    await updateResult?.project.save()
+    prettifyFile(graphQlSourcePath, 'babel-ts')
   }
 }
 
 export async function handler({ force }: { force: boolean }) {
-  recordTelemetryAttributes({
-    command: 'setup graphql trusted-documents',
-    force,
-  })
-
   const tasks = new Listr(
     [
       {
@@ -209,7 +180,13 @@ export async function handler({ force }: { force: boolean }) {
           execa.commandSync('yarn redwood generate types', { stdio: 'ignore' })
         },
       },
-      configureGraphQLHandlerWithStore(),
+      {
+        title:
+          'Configuring the GraphQL Handler to use a Trusted Documents store ...',
+        task: async () => {
+          return configureGraphQLHandlerWithStore()
+        },
+      },
     ],
     { rendererOptions: { collapseSubtasks: false } }
   )
