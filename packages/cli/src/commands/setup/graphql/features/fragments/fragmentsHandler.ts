@@ -18,27 +18,6 @@ import { runTransform } from './runTransform'
 export const command = 'fragments'
 export const description = 'Set up Fragments for GraphQL'
 
-async function updateGraphQlCacheConfig() {
-  const result = await runTransform({
-    transformPath: path.join(__dirname, 'appGqlConfigTransform.js'),
-    targetPaths: [getPaths().web.app],
-  })
-
-  if (result.error) {
-    throw new Error(result.error)
-  }
-
-  const appPath = getPaths().web.app
-  const source = fs.readFileSync(appPath, 'utf-8')
-
-  const prettifiedApp = format(source, {
-    ...prettierOptions(),
-    parser: 'babel-ts',
-  })
-
-  fs.writeFileSync(getPaths().web.app, prettifiedApp, 'utf-8')
-}
-
 export async function handler({ force }: Args) {
   recordTelemetryAttributes({
     command: 'setup graphql fragments',
@@ -51,13 +30,12 @@ export async function handler({ force }: Args) {
         title:
           'Update Redwood Project Configuration to enable GraphQL Fragments',
         skip: () => {
-          const redwoodTomlPath = getConfigPath()
-
           if (force) {
             // Never skip when --force is used
             return false
           }
 
+          const redwoodTomlPath = getConfigPath()
           const redwoodTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
           if (/\bfragments\s*=\s*true/.test(redwoodTomlContent)) {
             return 'GraphQL Fragments are already enabled.'
@@ -93,8 +71,25 @@ export async function handler({ force }: Args) {
       },
       {
         title: 'Add possibleTypes to the GraphQL cache config',
-        task: () => {
-          return updateGraphQlCacheConfig()
+        task: async () => {
+          const result = await runTransform({
+            transformPath: path.join(__dirname, 'appGqlConfigTransform.js'),
+            targetPaths: [getPaths().web.app],
+          })
+
+          if (result.error) {
+            throw new Error(result.error)
+          }
+
+          const appPath = getPaths().web.app
+          const source = fs.readFileSync(appPath, 'utf-8')
+
+          const prettifiedApp = format(source, {
+            ...prettierOptions(),
+            parser: 'babel-ts',
+          })
+
+          fs.writeFileSync(getPaths().web.app, prettifiedApp, 'utf-8')
         },
       },
     ],

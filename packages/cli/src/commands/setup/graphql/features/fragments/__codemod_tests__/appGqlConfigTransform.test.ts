@@ -1,5 +1,10 @@
+import fs from 'node:fs'
+import path from 'node:path'
+
+import { findUp } from '@redwoodjs/project-config'
+
 describe('fragments graphQLClientConfig', () => {
-  test('Default App.tsx', async () => {
+  test('App.tsx with no graphQLClientConfig', async () => {
     await matchFolderTransform('appGqlConfigTransform', 'config-simple', {
       useJsCodeshift: true,
     })
@@ -38,6 +43,59 @@ describe('fragments graphQLClientConfig', () => {
       {
         useJsCodeshift: true,
       }
+    )
+  })
+
+  test('test-project App.tsx', async () => {
+    const rootFwPath = path.dirname(findUp('lerna.json') || '')
+    const testProjectAppTsx = fs.readFileSync(
+      path.join(
+        rootFwPath,
+        '__fixtures__',
+        'test-project',
+        'web',
+        'src',
+        'App.tsx'
+      ),
+      'utf-8'
+    )
+    await matchInlineTransformSnapshot(
+      'appGqlConfigTransform',
+      testProjectAppTsx,
+      `import { FatalErrorBoundary, RedwoodProvider } from \"@redwoodjs/web\";
+      import { RedwoodApolloProvider } from \"@redwoodjs/web/apollo\";
+
+      import FatalErrorPage from \"src/pages/FatalErrorPage\";
+      import Routes from \"src/Routes\";
+
+      import { AuthProvider, useAuth } from \"./auth\";
+
+      import \"./scaffold.css\";
+      import \"./index.css\";
+
+      const graphQLClientConfig = {
+        cacheConfig: {
+          possibleTypes: possibleTypes.possibleTypes,
+        },
+      };
+
+      const App = () => (
+        <FatalErrorBoundary page={FatalErrorPage}>
+          <RedwoodProvider titleTemplate=\"%PageTitle | %AppTitle\">
+            <AuthProvider>
+              <RedwoodApolloProvider
+                useAuth={useAuth}
+                graphQLClientConfig={graphQLClientConfig}
+              >
+                <Routes />
+              </RedwoodApolloProvider>
+            </AuthProvider>
+          </RedwoodProvider>
+        </FatalErrorBoundary>
+      );
+
+      export default App;
+      `
     )
   })
 })

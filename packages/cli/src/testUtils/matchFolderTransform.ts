@@ -35,12 +35,12 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
   const tempDir = createProjectMock()
 
   // Override paths used in getPaths() utility func
+  const original_RWJS_CWD = process.env.RWJS_CWD
+  const originalCwd = process.cwd()
   process.env.RWJS_CWD = tempDir
 
   // Looks up the path of the caller
   const testPath = expect.getState().testPath
-
-  console.log('testPath', testPath)
 
   if (!testPath) {
     throw new Error('Could not find test path')
@@ -122,5 +122,10 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
     expect(actualPath).toMatchFileContents(expectedPath, { removeWhitespace })
   })
 
-  delete process.env.RWJS_CWD
+  if (original_RWJS_CWD) {
+    process.env.RWJS_CWD = original_RWJS_CWD
+  } else {
+    delete process.env.RWJS_CWD
+  }
+  process.chdir(originalCwd)
 }
