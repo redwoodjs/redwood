@@ -6,14 +6,7 @@ import { Listr } from 'listr2'
 import { Project, SyntaxKind, type PropertyAssignment } from 'ts-morph'
 
 import { recordTelemetryAttributes, prettifyFile } from '@redwoodjs/cli-helpers'
-import { getConfigPath } from '@redwoodjs/project-config'
-
-import { getPaths } from '../../../../lib'
-
-export const command = 'trusted-documents'
-export const description = 'Set up Trusted Documents for GraphQL'
-
-export function builder() {}
+import { getConfigPath, getPaths } from '@redwoodjs/project-config'
 
 export function updateGraphQLHandler(graphQlSourcePath: string) {
   // add import
@@ -24,10 +17,7 @@ export function updateGraphQLHandler(graphQlSourcePath: string) {
 
   if (!graphQlSourceFile) {
     console.error(
-      `Unable to determine the GraphQL Handler source path for: ${path.join(
-        functionsDir,
-        'graphql.(js|ts)'
-      )}`
+      `Unable to determine the GraphQL Handler source path for: ${graphQlSourcePath}`
     )
     return
   }
@@ -158,28 +148,20 @@ function configureGraphQLHandlerWithStore() {
         return
       }
 
-      const { project, graphQlSourceFileChanged } =
-        updateGraphQLHandler(graphQlSourcePath)
+      const updateResult = updateGraphQLHandler(graphQlSourcePath)
 
-      if (graphQlSourceFileChanged) {
-        await project.save()
+      if (updateResult?.graphQlSourceFileChanged) {
+        await updateResult?.project.save()
         prettifyFile(graphQlSourcePath, 'babel-ts')
       }
     },
   }
 }
 
-export async function handler({
-  force,
-  install,
-}: {
-  force: boolean
-  install: boolean
-}) {
+export async function handler({ force }: { force: boolean }) {
   recordTelemetryAttributes({
     command: 'setup graphql trusted-documents',
     force,
-    install,
   })
 
   const tasks = new Listr(
