@@ -54,7 +54,8 @@ export async function handler({ force }: Args) {
           const hasExistingGraphqlSection = !!redwoodTomlObject?.graphql
 
           let newTomlContent =
-            originalTomlContent + '\n\n[graphql]\n  fragments = true'
+            originalTomlContent.replace(/\n$/, '') +
+            '\n\n[graphql]\n  fragments = true'
 
           if (hasExistingGraphqlSection) {
             const existingGraphqlSetting = Object.keys(
