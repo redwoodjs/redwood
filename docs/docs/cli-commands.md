@@ -2001,7 +2001,7 @@ It's the author of the npm package's responsibility to specify the correct compa
 
 ### setup graphql
 
-This command creates the necessary files to support GraphQL features like fragments.
+This command creates the necessary files to support GraphQL features like fragments and trusted documents.
 
 #### Usage
 
@@ -2032,6 +2032,38 @@ Run `yarn rw setup graphql fragments`
 ✔ Import possibleTypes in App.tsx
 ✔ Add possibleTypes to the GraphQL cache config
 ```
+
+#### setup graphql trusted-documents
+
+This command creates the necessary configuration to start using [GraphQL Trusted Documents](./graphql/trusted-documents.md).
+
+
+```
+yarn redwood setup graphql trusted-documents
+```
+
+#### Usage
+
+Run `yarn rw setup graphql trusted-documents`
+
+#### Example
+
+```bash
+~/redwood-app$ yarn rw setup graphql trusted-documents
+✔ Update Redwood Project Configuration to enable GraphQL Trusted Documents ...
+✔ Generating Trusted Documents store ...
+✔ Configuring the GraphQL Handler to use a Trusted Documents store ...
+```
+
+
+If you have not setup the RedwoodJS server file, it will be setup:
+
+```bash
+✔ Adding the experimental server file...
+✔ Adding config to redwood.toml...
+✔ Adding required api packages...
+```
+
 
 ### setup realtime
 
