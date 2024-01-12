@@ -1,39 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Trusted documents setup tests GraphQL Handler updates default handler where the trusted document store is not configured updates the handler with the trusted document store 1`] = `
-"import { createAuthDecoder } from '@redwoodjs/auth-dbauth-api'
-import { createGraphQLHandler } from '@redwoodjs/graphql-server'
-
-import directives from 'src/directives/**/*.{js,ts}'
-import sdls from 'src/graphql/**/*.sdl.{js,ts}'
-import services from 'src/services/**/*.{js,ts}'
-
-import { cookieName, getCurrentUser } from 'src/lib/auth'
-import { db } from 'src/lib/db'
-import { logger } from 'src/lib/logger'
-import { store } from 'src/lib/trustedDocumentsStore'
-
-const authDecoder = createAuthDecoder(cookieName)
-
-export const handler = createGraphQLHandler({
-  authDecoder,
-  getCurrentUser,
-  loggerConfig: { logger, options: {} },
-  directives,
-  sdls,
-  services,
-  onException: () => {
-    // Disconnect from your database with an unhandled exception.
-    db.$disconnect()
-  },
-  trustedDocuments: { store },
-})
-"
-`;
-
-exports[`Trusted documents setup tests Project toml configuration updates default toml where graphql fragments are already setup updates the toml file with graphql and trusted documents enabled and keeps fragments 1`] = `
-{
-  "newConfig": "# This file contains the configuration settings for your Redwood app.
+exports[`Trusted documents setup Project toml configuration updates default toml where graphql fragments are already setup updates the toml file with graphql and trusted documents enabled and keeps fragments 1`] = `
+"# This file contains the configuration settings for your Redwood app.
 # This file is also what makes your Redwood app a Redwood app.
 # If you remove it and try to run \`yarn rw dev\`, you'll get an error.
 #
@@ -57,14 +25,11 @@ exports[`Trusted documents setup tests Project toml configuration updates defaul
   open = true
 [notifications]
   versionUpdates = ["latest"]
-",
-  "trustedDocumentsExists": false,
-}
+"
 `;
 
-exports[`Trusted documents setup tests Project toml configuration updates default toml where graphql fragments are already setup using no spaces updates the toml file with graphql and trusted documents enabled and keeps fragments 1`] = `
-{
-  "newConfig": "# This file contains the configuration settings for your Redwood app.
+exports[`Trusted documents setup Project toml configuration updates default toml where graphql fragments are already setup using no spaces updates the toml file with graphql and trusted documents enabled and keeps fragments 1`] = `
+"# This file contains the configuration settings for your Redwood app.
 # This file is also what makes your Redwood app a Redwood app.
 # If you remove it and try to run \`yarn rw dev\`, you'll get an error.
 #
@@ -88,35 +53,11 @@ exports[`Trusted documents setup tests Project toml configuration updates defaul
   open = true
 [notifications]
   versionUpdates = ["latest"]
-",
-  "trustedDocumentsExists": false,
-}
+"
 `;
 
-exports[`Trusted documents setup tests Project toml configuration updates default toml where graphql trusted documents and fragments are already setup makes no changes as trusted documents are already setup 1`] = `
-{
-  "newConfig": undefined,
-  "trustedDocumentsExists": true,
-}
-`;
-
-exports[`Trusted documents setup tests Project toml configuration updates default toml where graphql trusted documents are already setup makes no changes as trusted documents are already setup 1`] = `
-{
-  "newConfig": undefined,
-  "trustedDocumentsExists": true,
-}
-`;
-
-exports[`Trusted documents setup tests Project toml configuration updates default toml where graphql trusted documents are already setup using no spaces makes no changes as trusted documents are already setup 1`] = `
-{
-  "newConfig": undefined,
-  "trustedDocumentsExists": true,
-}
-`;
-
-exports[`Trusted documents setup tests Project toml configuration updates default toml where no graphql or trusted documents is setup updates the toml file with graphql and trusted documents enabled 1`] = `
-{
-  "newConfig": "# This file contains the configuration settings for your Redwood app.
+exports[`Trusted documents setup Project toml configuration updates default toml where no graphql or trusted documents is setup updates the toml file with graphql and trusted documents enabled 1`] = `
+"# This file contains the configuration settings for your Redwood app.
 # This file is also what makes your Redwood app a Redwood app.
 # If you remove it and try to run \`yarn rw dev\`, you'll get an error.
 #
@@ -139,14 +80,11 @@ exports[`Trusted documents setup tests Project toml configuration updates defaul
   versionUpdates = ["latest"]
 
 [graphql]
-  trustedDocuments = true",
-  "trustedDocumentsExists": false,
-}
+  trustedDocuments = true"
 `;
 
-exports[`Trusted documents setup tests Project toml configuration updates toml where graphql section is commented out adds a new section with \`trustedDocuments = true\` 1`] = `
-{
-  "newConfig": "# This file contains the configuration settings for your Redwood app.
+exports[`Trusted documents setup Project toml configuration updates toml where graphql section is commented out adds a new section with \`trustedDocuments = true\` 1`] = `
+"# This file contains the configuration settings for your Redwood app.
 # This file is also what makes your Redwood app a Redwood app.
 # If you remove it and try to run \`yarn rw dev\`, you'll get an error.
 #
@@ -171,7 +109,5 @@ exports[`Trusted documents setup tests Project toml configuration updates toml w
   versionUpdates = ["latest"]
 
 [graphql]
-  trustedDocuments = true",
-  "trustedDocumentsExists": false,
-}
+  trustedDocuments = true"
 `;

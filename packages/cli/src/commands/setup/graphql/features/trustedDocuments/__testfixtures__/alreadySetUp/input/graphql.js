@@ -8,6 +8,7 @@ import services from 'src/services/**/*.{js,ts}'
 import { cookieName, getCurrentUser } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
+
 import { store } from 'src/lib/trustedDocumentsStore'
 
 const authDecoder = createAuthDecoder(cookieName)
@@ -19,9 +20,13 @@ export const handler = createGraphQLHandler({
   directives,
   sdls,
   services,
+
   onException: () => {
     // Disconnect from your database with an unhandled exception.
     db.$disconnect()
   },
-  trustedDocuments: { store },
+
+  trustedDocuments: {
+    store
+  },
 })

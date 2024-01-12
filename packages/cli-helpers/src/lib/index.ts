@@ -70,21 +70,6 @@ export const prettierOptions = () => {
   }
 }
 
-export const prettifyFile = (filePath: string, parser: string | undefined) => {
-  try {
-    const file = fs.readFileSync(filePath, 'utf-8')
-    const prettifiedFile = format(file, {
-      ...prettierOptions(),
-      parser: parser || 'babel-ts',
-    })
-    fs.writeFileSync(filePath, prettifiedFile, 'utf-8')
-  } catch (e) {
-    const message = `Could not prettify ${filePath}`
-    console.error(colors.error(message))
-    throw Error(message)
-  }
-}
-
 export const prettify = (
   templateFilename: string,
   renderedTemplate: string
