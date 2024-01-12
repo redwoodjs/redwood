@@ -105,7 +105,7 @@ console.info = jest.fn()
 
 describe('Trusted documents setup', () => {
   it('runs all tasks', async () => {
-    vol.fromJSON({ 'redwood.toml': '', 'web/src/App.tsx': '' }, APP_PATH)
+    vol.fromJSON({ 'redwood.toml': '', 'api/src/functions/graphql.js': '' }, APP_PATH)
 
     await handler({ force: false })
 
