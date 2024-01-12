@@ -54,7 +54,8 @@ export async function handler({ force }: Args) {
           const hasExistingGraphqlSection = !!redwoodTomlObject?.graphql
 
           let newTomlContent =
-            originalTomlContent + '\n\n[graphql]\n  fragments = true'
+            originalTomlContent.replace(/\n$/, '') +
+            '\n\n[graphql]\n  fragments = true'
 
           if (hasExistingGraphqlSection) {
             const existingGraphqlSetting = Object.keys(
@@ -121,13 +122,13 @@ export async function handler({ force }: Args) {
       {
         title: 'Add possibleTypes to the GraphQL cache config',
         task: async () => {
-          const result = await runTransform({
+          const transformResult = await runTransform({
             transformPath: path.join(__dirname, 'appGqlConfigTransform.js'),
             targetPaths: [getPaths().web.app],
           })
 
-          if (result.error) {
-            throw new Error(result.error)
+          if (transformResult.error) {
+            throw new Error(transformResult.error)
           }
 
           const appPath = getPaths().web.app
