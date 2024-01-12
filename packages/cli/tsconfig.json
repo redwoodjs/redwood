@@ -8,5 +8,14 @@
   },
   "include": ["src", "./testUtils.d.ts"],
   "exclude": ["**/__testfixtures__"],
-  "references": [{ "path": "../cli-helpers" }, { "path": "../project-config" }]
+  "references": [
+    { "path": "../api-server" },
+    { "path": "../cli-helpers" },
+    { "path": "../fastify" },
+    { "path": "../internal" },
+    { "path": "../prerender" },
+    { "path": "../project-config" },
+    { "path": "../structure" },
+    { "path": "../telemetry" }
+  ]
 }
