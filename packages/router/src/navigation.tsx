@@ -12,6 +12,7 @@ export interface NavigationContextInterface {
   navigate: (to: string, options?: NavigateOptions) => void
   back: () => void
   block: (when: boolean) => void
+  release: () => void
   confirm: () => void
   abort: () => void
 }
@@ -39,15 +40,27 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({
   /**
    * Sets the state flag that blocks any navigation
    */
-  const block = (when: boolean) => setBlockonNavigation(when)
+  const block = (when: boolean) => {
+    setBlockonNavigation(when)
+  }
 
   /**
-   * Confirms a navigation action and releases the navigation block.
+   * Releases the navigation block without flushing the queue.
+   */
+  const release = () => {
+    setBlockedNavigation(false)
+    setBlockonNavigation(false)
+  }
+
+  /**
+   * Confirms a navigation action during a blocked state.
+   * Starts the next navigation action in the queue.
    */
   const confirm = () => setBlockedNavigation(false)
 
   /**
-   * Aborts a navigation action and resets the queue and waiting state.
+   * Aborts a navigation action during a blocked state.
+   * Flushes the queue before releasing the navigation block.
    */
   const abort = () => {
     setQueue([])
@@ -101,7 +114,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <NavigationContext.Provider
-      value={{ blocked, navigate, back, block, confirm, abort }}
+      value={{ blocked, navigate, back, block, confirm, abort, release }}
     >
       {children}
     </NavigationContext.Provider>
@@ -126,6 +139,7 @@ export const useNavigation = () => {
 }
 
 /**
+ * Bypass the NavigationContext and navigate to a specified page.
  * @deprecated Please use navigate() from useNavigation instead.
  * @param {string} to - The destination page.
  * @param {NavigateOptions} [options] - Options for navigation.
@@ -136,6 +150,7 @@ export const navigate = (to: string, options?: NavigateOptions) => {
 }
 
 /**
+ * Bypass the NavigationContext and navigate back in the history.
  * @deprecated Please use back() from useNavigation instead.
  * @returns {void}
  */
