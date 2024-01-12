@@ -8,7 +8,7 @@ export interface NavigateOptions {
 }
 
 export interface NavigationContextInterface {
-  waiting: boolean
+  blocked: boolean
   navigate: (to: string, options?: NavigateOptions) => void
   back: () => void
   block: (when: boolean) => void
@@ -16,54 +16,72 @@ export interface NavigationContextInterface {
   abort: () => void
 }
 
+/**
+ * Context for managing page navigation.
+ */
 const NavigationContext =
   createNamedContext<NavigationContextInterface>('PageNavigation')
 
-interface Props {
-  children: React.ReactNode
-}
-
-export const NavigationProvider: React.FC<Props> = ({ children }) => {
+/**
+ * Provides the NavigationContext to its children components.
+ * @component
+ * @param {Object} props - Component props.
+ * @param {React.ReactNode} props.children - Child components to be wrapped by the NavigationProvider.
+ * @returns {React.ReactNode} - Wrapped components with the NavigationContext.
+ */
+export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [queue, setQueue] = useState<(() => void)[]>([])
-  const [blocked, setBlocked] = useState(false)
-  const [waiting, setWaiting] = useState(false)
+  const [blockOnNavigation, setBlockonNavigation] = useState(false)
+  const [blockedNavigation, setBlockedNavigation] = useState(false)
 
-  const block = (when: boolean) => setBlocked(when)
-  const confirm = () => setWaiting(false)
+  /**
+   * Blocks or unblocks navigation based on the provided condition.
+   */
+  const block = (when: boolean) => setBlockonNavigation(when)
+
+  /**
+   * Confirms a navigation action and releases the navigation block.
+   */
+  const confirm = () => setBlockedNavigation(false)
+
+  /**
+   * Aborts a navigation action and resets the queue and waiting state.
+   */
   const abort = () => {
     setQueue([])
-    setWaiting(false)
+    setBlockedNavigation(false)
   }
 
+  /**
+   * Navigates back in the history.
+   */
   const back = useCallback(() => {
-    if (blocked) {
-      setWaiting(true)
+    if (blockOnNavigation) {
+      setBlockedNavigation(true)
     }
-    setQueue([
-      ...queue,
-      () => {
-        gHistory.back()
-      },
-    ])
-  }, [blocked, queue])
+    setQueue((prev) => [...prev, () => gHistory.back()])
+  }, [blockOnNavigation])
 
+  /**
+   * Navigates to a specified page.
+   */
   const navigate = useCallback(
     (to: string, options?: NavigateOptions) => {
-      if (blocked) {
-        setWaiting(true)
+      if (blockOnNavigation) {
+        setBlockedNavigation(true)
       }
-      setQueue([
-        ...queue,
-        () => {
-          gHistory.navigate(to, options)
-        },
-      ])
+      setQueue((prev) => [...prev, () => gHistory.navigate(to, options)])
     },
-    [blocked, queue]
+    [blockOnNavigation]
   )
 
+  /**
+   * Executes the next navigation action when not in a blocked state.
+   */
   useEffect(() => {
-    if (waiting) {
+    if (blockedNavigation) {
       return
     }
     if (queue.length > 0) {
@@ -72,15 +90,27 @@ export const NavigationProvider: React.FC<Props> = ({ children }) => {
         next()
       }
     }
-  }, [queue, waiting])
+  }, [queue, blockedNavigation])
+
+  /**
+   * External state name
+   */
+  const blocked = blockedNavigation
 
   return (
-    <NavigationContext.Provider value={{ waiting, navigate, back, block, confirm, abort }}>
+    <NavigationContext.Provider
+      value={{ blocked, navigate, back, block, confirm, abort }}
+    >
       {children}
     </NavigationContext.Provider>
   )
 }
 
+/**
+ * Hook for accessing the NavigationContext.
+ * @returns {NavigationContextInterface} - Navigation context object.
+ * @throws {Error} - Throws an error if used outside a NavigationContext provider.
+ */
 export const useNavigation = () => {
   const navigationContext = useContext(NavigationContext)
 
@@ -94,14 +124,18 @@ export const useNavigation = () => {
 }
 
 /**
- * @deprecated Please use navigate() from useNavigation instead
+ * @deprecated Please use navigate() from useNavigation instead.
+ * @param {string} to - The destination page.
+ * @param {NavigateOptions} [options] - Options for navigation.
+ * @returns {void}
  */
 export const navigate = (to: string, options?: NavigateOptions) => {
   return gHistory.navigate(to, options)
 }
 
 /**
- * @deprecated Please use back() from useNavigation instead
+ * @deprecated Please use back() from useNavigation instead.
+ * @returns {void}
  */
 export const back = () => {
   return gHistory.back()
