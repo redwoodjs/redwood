@@ -27,6 +27,13 @@ export default function transform(file: FileInfo, api: API) {
     },
   })
 
+  if (createGraphQLHandlerCalls.length === 0) {
+    throw new Error(
+      "Error updating your graphql handler function. You'll have to do it manually. " +
+        "(Couldn't find a call to `createGraphQLHandler`)"
+    )
+  }
+
   const existingTrustedDocumentsProperty = createGraphQLHandlerCalls.find(
     j.ObjectProperty,
     {

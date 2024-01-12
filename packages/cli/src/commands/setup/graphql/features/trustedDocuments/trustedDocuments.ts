@@ -20,6 +20,6 @@ export async function handler({ force }: { force: boolean }) {
     force,
   })
 
-  const { handler } = await import('./trustedDocumentsHandler')
+  const { handler } = await import('./trustedDocumentsHandler.js')
   return handler({ force })
 }

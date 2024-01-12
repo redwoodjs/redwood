@@ -7,7 +7,7 @@ import { Listr } from 'listr2'
 import { format } from 'prettier'
 
 import { prettierOptions } from '@redwoodjs/cli-helpers'
-import { getConfigPath, getPaths } from '@redwoodjs/project-config'
+import { getConfigPath, getPaths, resolveFile } from '@redwoodjs/project-config'
 
 import { runTransform } from '../fragments/runTransform'
 
@@ -103,24 +103,31 @@ export async function handler({ force }: { force: boolean }) {
         title:
           'Configuring the GraphQL Handler to use a Trusted Documents store ...',
         task: async () => {
+          const graphqlPath = resolveFile(
+            path.join(getPaths().api.functions, 'graphql')
+          )
+
+          if (!graphqlPath) {
+            throw new Error('Could not find a GraphQL handler in your project.')
+          }
+
           const transformResult = await runTransform({
             transformPath: path.join(__dirname, 'graphqlTransform.js'),
-            targetPaths: [getPaths().web.app],
+            targetPaths: [graphqlPath],
           })
 
           if (transformResult.error) {
             throw new Error(transformResult.error)
           }
 
-          const appPath = getPaths().web.app
-          const source = fs.readFileSync(appPath, 'utf-8')
+          const source = fs.readFileSync(graphqlPath, 'utf-8')
 
           const prettifiedApp = format(source, {
             ...prettierOptions(),
             parser: 'babel-ts',
           })
 
-          fs.writeFileSync(getPaths().web.app, prettifiedApp, 'utf-8')
+          fs.writeFileSync(graphqlPath, prettifiedApp, 'utf-8')
         },
       },
     ],
