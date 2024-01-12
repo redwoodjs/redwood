@@ -56,7 +56,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({
 
   /**
    * Navigates back in the history
-   * and sets the navigation block state if the block flag is set.
+   * and sets the navigation blocked state if the block flag is set.
    */
   const back = useCallback(() => {
     if (blockOnNavigation) {
@@ -67,7 +67,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({
 
   /**
    * Navigates to a specified page.
-   * and sets the navigation block state if the block flag is set.
+   * and sets the navigation blocked state if the block flag is set.
    */
   const navigate = useCallback(
     (to: string, options?: NavigateOptions) => {
