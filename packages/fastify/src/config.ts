@@ -36,14 +36,16 @@ let serverConfigFile: {
 }
 
 export function loadFastifyConfig() {
-  const serverFileExists =
-    fs.existsSync(path.join(getPaths().api.src, 'server.js')) ||
-    fs.existsSync(path.join(getPaths().api.src, 'server.ts'))
+  const serverTsFileExists = fs.existsSync(
+    path.join(getPaths().api.src, 'server.ts')
+  )
+  const serverJsFileExists =
+    !serverTsFileExists &&
+    fs.existsSync(path.join(getPaths().api.src, 'server.js'))
 
-  if (serverFileExists) {
-    console.log(
-      "Ignoring Fastify config inside 'api/src/server.config.(js|ts)'"
-    )
+  if (serverTsFileExists || serverJsFileExists) {
+    const ext = serverTsFileExists ? 'ts' : 'js'
+    console.log(`Ignoring Fastify config inside 'api/src/server.config.${ext}`)
 
     return {
       config: {},
