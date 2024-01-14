@@ -12,7 +12,6 @@ export interface NavigationContextInterface {
   navigate: (to: string, options?: NavigateOptions) => void
   back: () => void
   block: (when: boolean) => void
-  release: () => void
   confirm: () => void
   abort: () => void
 }
@@ -42,14 +41,6 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({
    */
   const block = (when: boolean) => {
     setBlockonNavigation(when)
-  }
-
-  /**
-   * Releases the navigation block without flushing the queue.
-   */
-  const release = () => {
-    setBlockedNavigation(false)
-    setBlockonNavigation(false)
   }
 
   /**
@@ -114,7 +105,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <NavigationContext.Provider
-      value={{ blocked, navigate, back, block, confirm, abort, release }}
+      value={{ blocked, navigate, back, block, confirm, abort }}
     >
       {children}
     </NavigationContext.Provider>
@@ -139,21 +130,25 @@ export const useNavigation = () => {
 }
 
 /**
- * Bypass the NavigationContext and navigate to a specified page.
+ * Navigated to a specified page. Causes a page refresh.
  * @deprecated Please use navigate() from useNavigation instead.
  * @param {string} to - The destination page.
  * @param {NavigateOptions} [options] - Options for navigation.
  * @returns {void}
  */
 export const navigate = (to: string, options?: NavigateOptions) => {
-  return gHistory.navigate(to, options)
+  if (options?.replace) {
+    window.location.replace(to)
+  } else {
+    window.location.href = to
+  }
 }
 
 /**
- * Bypass the NavigationContext and navigate back in the history.
+ * Navigate back in the history. Causes a page refresh.
  * @deprecated Please use back() from useNavigation instead.
  * @returns {void}
  */
 export const back = () => {
-  return gHistory.back()
+  navigate(document.referrer)
 }

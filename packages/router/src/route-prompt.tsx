@@ -12,7 +12,7 @@ interface RoutePromptProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 const RoutePrompt = React.forwardRef<HTMLDivElement, RoutePromptProps>(
   ({ when, children, ...props }, ref) => {
-    const { blocked, block, release } = useNavigation()
+    const { blocked, block } = useNavigation()
 
     const confirm = useCallback(
       (e: BeforeUnloadEvent) => {
@@ -27,10 +27,10 @@ const RoutePrompt = React.forwardRef<HTMLDivElement, RoutePromptProps>(
       block(!!when)
       window.addEventListener('beforeunload', confirm)
       return () => {
-        release()
+        block(false)
         window.removeEventListener('beforeunload', confirm)
       }
-    }, [block, when, confirm, release])
+    }, [block, when, confirm])
 
     if (!blocked) {
       return null
