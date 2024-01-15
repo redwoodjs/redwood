@@ -21,7 +21,7 @@ import { writeFile } from '../../lib'
 const PATHS = getPaths()
 
 export const handler = async ({ force }) => {
-  const extension = isTypeScriptProject ? 'ts' : 'js'
+  const extension = isTypeScriptProject() ? 'ts' : 'js'
 
   const notes = []
 
@@ -85,9 +85,9 @@ export const handler = async ({ force }) => {
           '',
           'export const handler = createGraphQLHandler({',
           'extraPlugins: [useSentry({',
-          'includeRawResult: true,',
-          'includeResolverArgs: true,',
-          'includeExecuteVariables: true,',
+          '  includeRawResult: true,',
+          '  includeResolverArgs: true,',
+          '  includeExecuteVariables: true,',
           '})],'
         )
 
@@ -149,7 +149,7 @@ export const handler = async ({ force }) => {
           // Use string replace to preserve comments and formatting
           writeFile(
             redwoodTomlPath,
-            configContent.concat(`\n[experimental.sentry]\n\tenabled = true\n`),
+            configContent.concat(`\n[experimental.sentry]\n  enabled = true\n`),
             {
               overwriteExisting: true, // redwood.toml always exists
             }
