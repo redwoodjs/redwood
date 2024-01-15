@@ -7,7 +7,7 @@ export const command = 'sentry'
 export const description = 'Setup Sentry error and performance tracking'
 
 export const builder = (yargs: Argv) => {
-  yargs.option('force', {
+  return yargs.option('force', {
     alias: 'f',
     default: false,
     description: 'Overwrite existing Sentry config files',
