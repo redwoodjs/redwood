@@ -54,7 +54,17 @@ export const transformTSToJS = (filename: string, content: string) => {
  */
 export const prettierOptions = () => {
   try {
-    return require(path.join(getPaths().base, 'prettier.config.js'))
+    const options = require(path.join(getPaths().base, 'prettier.config.js'))
+
+    if (options.tailwindConfig?.startsWith('.')) {
+      // Make this work with --cwd
+      options.tailwindConfig = path.join(
+        process.env.RWJS_CWD ?? process.cwd(),
+        options.tailwindConfig
+      )
+    }
+
+    return options
   } catch (e) {
     return undefined
   }

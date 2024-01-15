@@ -9,7 +9,6 @@ await esbuild.build({
     'src/types.ts',
     'src/web.ts',
     'src/lambda/index.ts',
-    'src/plugins/withApiProxy.ts',
   ],
   outdir: 'dist',
 

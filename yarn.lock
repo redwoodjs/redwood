@@ -8795,6 +8795,7 @@ __metadata:
     fs-extra: "npm:11.2.0"
     humanize-string: "npm:2.1.0"
     jest: "npm:29.7.0"
+    jscodeshift: "npm:0.15.0"
     latest-version: "npm:5.1.0"
     listr2: "npm:6.6.1"
     lodash: "npm:4.17.21"
