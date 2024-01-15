@@ -2,7 +2,7 @@ import { existsSync } from 'fs'
 import fs from 'fs/promises'
 import path from 'path'
 
-import type { PluginItem, TransformOptions } from '@babel/core'
+import type { PluginOptions, PluginTarget, TransformOptions } from '@babel/core'
 import { transformAsync } from '@babel/core'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -66,17 +66,21 @@ export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
   version: RUNTIME_CORE_JS_VERSION,
 }
 
+// Plugin shape: [ ["Target", "Options", "name"] ],
+// a custom "name" is supplied so that user's do not accidentally overwrite
+// Redwood's own plugins when they specify their own.
+export type PluginList = Array<
+  [PluginTarget, PluginOptions, string | undefined]
+>
+
 export const getApiSideBabelPlugins = (
   { openTelemetry } = {
     openTelemetry: false,
   }
-) => {
-  // Plugin shape: [ ["Target", "Options", "name"] ],
-  // a custom "name" is supplied so that user's do not accidentally overwrite
-  // Redwood's own plugins when they specify their own.
+): PluginList => {
   const tsConfig = parseTypeScriptConfigFiles()
 
-  const plugins: TransformOptions['plugins'] = [
+  const plugins: PluginList = [
     ...getCommonPlugins(),
     // Needed to support `/** @jsxImportSource custom-jsx-library */`
     // comments in JSX files
@@ -131,7 +135,7 @@ export const getApiSideBabelPlugins = (
       undefined,
       'rwjs-babel-otel-wrapping',
     ],
-  ].filter(Boolean) as PluginItem[]
+  ].filter(Boolean) as PluginList // ts doesn't play nice with filter(Boolean)
 
   return plugins
 }
@@ -141,8 +145,7 @@ export const getApiSideBabelConfigPath = () => {
   if (existsSync(p)) {
     return p
   } else {
-    // Null and undefined do not have the same effect I believe
-    return undefined
+    return
   }
 }
 

@@ -19,7 +19,7 @@ const FIXTURE_PATH = path.resolve(
 )
 
 // @NOTE: we no longer prebuild files into the .redwood/prebuild folder
-// However, prebuilding in the tests still helpful for us to  validate
+// However, prebuilding in the tests is still helpful for us to  validate
 // that everything is working as expected.
 export const prebuildApiFiles = async (srcFiles: string[]) => {
   const rwjsPaths = getPaths()

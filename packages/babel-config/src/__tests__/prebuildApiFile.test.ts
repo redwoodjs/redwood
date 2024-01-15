@@ -14,7 +14,7 @@ import {
 const RWJS_CWD = path.join(__dirname, '__fixtures__/redwood-app')
 process.env.RWJS_CWD = RWJS_CWD
 
-let code
+let code: string
 
 describe('api prebuild ', () => {
   describe('polyfills unsupported functionality', () => {
@@ -371,7 +371,7 @@ describe('api prebuild ', () => {
     })
 
     it('includes source maps', () => {
-      const sourceMaps = code.split('\n').pop()
+      const sourceMaps = code.split('\n').pop() as string
 
       const sourceMapsMatcher =
         '//# sourceMappingURL=data:application/json;charset=utf-8;base64,'
@@ -451,7 +451,7 @@ describe('api prebuild ', () => {
   test('core-js polyfill list', () => {
     const { list } = compat({
       targets: { node: TARGETS_NODE },
-      version: BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS.corejs.version,
+      version: BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS.corejs.version.toString(),
     })
 
     /**
@@ -545,21 +545,13 @@ describe('api prebuild ', () => {
 })
 
 /**
- * A copy of prebuildApiFiles from packages/internal/src/build/api.ts
- * This will be re-architected, but doing so now would introduce breaking changes.
+ * We no longer prebuild files as part of the build process
+ * This is so we can test the babel configuration in isolation
  */
 export const prebuildApiFileWrapper = async (srcFile: string) => {
-  // const redwoodProjectPaths = getPaths()
-
   const plugins = getApiSideBabelPlugins({
     openTelemetry: getConfig().experimental.opentelemetry.enabled,
   })
-
-  // const relativePathFromSrc = path.relative(redwoodProjectPaths.base, srcFile)
-
-  // const dstPath = path
-  //   .join(redwoodProjectPaths.generated.prebuild, relativePathFromSrc)
-  //   .replace(/\.(ts)$/, '.js')
 
   const result = await transformWithBabel(srcFile, plugins)
 

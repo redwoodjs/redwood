@@ -1,4 +1,4 @@
-import type { Format, Platform, PluginBuild, BuildContext } from 'esbuild'
+import type { BuildContext, BuildOptions, PluginBuild } from 'esbuild'
 import { build, context } from 'esbuild'
 import { remove } from 'fs-extra'
 
@@ -13,7 +13,7 @@ import { findApiFiles } from '../files'
 let BUILD_CTX: BuildContext | null = null
 
 export const buildApi = async () => {
-  // Reset the build context for rebuildling
+  // Reset the build context for rebuilding
   // No need to wait for promise to resolve
   BUILD_CTX?.dispose()
   BUILD_CTX = null
@@ -44,7 +44,7 @@ const runRwBabelTransformsPlugin = {
     build.onLoad({ filter: /\.(js|ts|tsx|jsx)$/ }, async (args) => {
       // @TODO Implement LRU cache? Unsure how much of a performance benefit its going to be
       // Generate a CRC of file contents, then save it to LRU cache with a limit
-      // without LRU cache, the memory usage can be come unbound
+      // without LRU cache, the memory usage can become unbound
       const transformedCode = await transformWithBabel(
         args.path,
         getApiSideBabelPlugins({
@@ -70,15 +70,15 @@ export const transpileApi = async (files: string[]) => {
   return build(getEsbuildOptions(files))
 }
 
-function getEsbuildOptions(files: string[]) {
+function getEsbuildOptions(files: string[]): BuildOptions {
   const rwjsPaths = getPaths()
 
   return {
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
-    platform: 'node' as Platform,
+    platform: 'node',
     target: 'node20',
-    format: 'cjs' as Format,
+    format: 'cjs',
     allowOverwrite: true,
     bundle: false,
     plugins: [runRwBabelTransformsPlugin],
