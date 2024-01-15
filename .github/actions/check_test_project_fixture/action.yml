@@ -2,10 +2,11 @@ name: Check test project fixture
 description: Determines if the test project fixture should be rebuilt
 runs:
   using: 'composite'
+  shell: 'bash'
   steps:
     - name: Rebuild test-project fixture
       run: yarn rebuild-test-project-fixture
-  steps:
+
     - name: Check for changed files
       run: if [ $(git status --porcelain | wc -l) -gt 0 ]; then exit 1; fi
 inputs:
