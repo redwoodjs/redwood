@@ -5,7 +5,11 @@ import path from 'node:path'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { exec, getExecaOptions } from './util'
+import { exec, getExecaOptions as utilGetExecaOptions } from './util'
+
+function getExecaOptions(cwd: string) {
+  return { ...utilGetExecaOptions(cwd), stdio: 'pipe' }
+}
 
 const args = yargs(hideBin(process.argv))
   .usage('Usage: $0 <project directory>')
