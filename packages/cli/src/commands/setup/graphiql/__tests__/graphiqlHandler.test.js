@@ -57,7 +57,7 @@ describe('Graphiql generator tests', () => {
     try {
       await graphiqlHelpers.generatePayload('dbAuth')
     } catch (e) {
-      expect(e.message).toBe('Require an unique id to generate session cookie')
+      expect(e.message).toBe('Require a unique id to generate session cookie')
     }
   })
 
@@ -67,7 +67,10 @@ describe('Graphiql generator tests', () => {
       await graphiqlHelpers.generatePayload('dbAuth', 'user-id-123')
     } catch (e) {
       expect(e.message).toBe(
-        'dbAuth requires a SESSION_SECRET environment variable that is used to encrypt session cookies. Use `yarn rw g secret` to create one, then add to your `.env` file. DO NOT check this variable in your version control system!!'
+        'dbAuth requires a SESSION_SECRET environment variable that is used ' +
+          'to encrypt session cookies. Use `yarn rw g secret` to create ' +
+          'one, then add to your `.env` file. DO NOT check this variable in ' +
+          'to your version control system!!'
       )
     }
   })
