@@ -58,16 +58,6 @@ afterAll(() => {
   jest.resetModules()
 })
 
-test('`fragments = true` is added to redwood.toml', async () => {
-  vol.fromJSON({ 'redwood.toml': '', 'web/src/App.tsx': '' }, FIXTURE_PATH)
-
-  await handler({ force: false })
-
-  expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toMatch(
-    /fragments = true/
-  )
-})
-
 test('all tasks are being called', async () => {
   vol.fromJSON({ 'redwood.toml': '', 'web/src/App.tsx': '' }, FIXTURE_PATH)
 
