@@ -4,19 +4,16 @@ import { gHistory } from './history'
 import type { TrailingSlashesTypes } from './util'
 import { createNamedContext } from './util'
 
-export interface LocationContextType {
+export interface Location {
   pathname: string
   search?: string
   hash?: string
 }
+
+export interface LocationContextType extends Location {}
 
 const LocationContext = createNamedContext<LocationContextType>('Location')
 
-interface Location {
-  pathname: string
-  search?: string
-  hash?: string
-}
 interface LocationProviderProps {
   location?: Location
   trailingSlashes?: TrailingSlashesTypes

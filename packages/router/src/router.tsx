@@ -5,6 +5,7 @@ import { ActiveRouteLoader } from './active-route-loader'
 import { AuthenticatedRoute } from './AuthenticatedRoute'
 import { Redirect } from './links'
 import { LocationProvider, useLocation } from './location'
+import { NavigationProvider } from './navigation'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { ParamsProvider } from './params'
 import type {
@@ -73,13 +74,15 @@ const Router: React.FC<RouterProps> = ({
     // Level 1/3 (outer-most)
     // Wrap it in the provider so that useLocation can be used
     <LocationProvider trailingSlashes={trailingSlashes}>
-      <LocationAwareRouter
-        useAuth={useAuth}
-        paramTypes={paramTypes}
-        pageLoadingDelay={pageLoadingDelay}
-      >
-        {children}
-      </LocationAwareRouter>
+      <NavigationProvider>
+        <LocationAwareRouter
+          useAuth={useAuth}
+          paramTypes={paramTypes}
+          pageLoadingDelay={pageLoadingDelay}
+        >
+          {children}
+        </LocationAwareRouter>
+      </NavigationProvider>
     </LocationProvider>
   )
 }
