@@ -7,19 +7,17 @@ import {
   addApiPackages,
   addEnvVarTask,
   addWebPackages,
-  colors as c,
+  colors,
   getPaths,
   isTypeScriptProject,
   prettify,
   writeFilesTask,
-  writeFile,
 } from '@redwoodjs/cli-helpers'
-import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import type { Args } from './sentry'
 
-const PATHS = getPaths()
+const rwPaths = getPaths()
 
 export const handler = async ({ force }: Args) => {
   const extension = isTypeScriptProject() ? 'ts' : 'js'
@@ -36,28 +34,29 @@ export const handler = async ({ force }: Args) => {
     ),
     {
       title: 'Setting up Sentry on the API and web sides',
-      task: () =>
-        writeFilesTask(
+      task: () => {
+        return writeFilesTask(
           {
-            [path.join(PATHS.api.lib, `sentry.${extension}`)]: fs
+            [path.join(rwPaths.api.lib, `sentry.${extension}`)]: fs
               .readFileSync(
                 path.join(__dirname, 'templates/sentryApi.ts.template')
               )
               .toString(),
-            [path.join(PATHS.web.src, 'lib', `sentry.${extension}`)]: fs
+            [path.join(rwPaths.web.src, 'lib', `sentry.${extension}`)]: fs
               .readFileSync(
                 path.join(__dirname, 'templates/sentryWeb.ts.template')
               )
               .toString(),
           },
           { existingFiles: force ? 'OVERWRITE' : 'SKIP' }
-        ),
+        )
+      },
     },
     {
       title: 'Implementing the Envelop plugin',
       task: (ctx) => {
         const graphqlHandlerPath = path.join(
-          PATHS.api.functions,
+          rwPaths.api.functions,
           `graphql.${extension}`
         )
 
@@ -104,7 +103,7 @@ export const handler = async ({ force }: Args) => {
       title: "Replacing Redwood's Error boundary",
       task: () => {
         const contentLines = fs
-          .readFileSync(PATHS.web.app)
+          .readFileSync(rwPaths.web.app)
           .toString()
           .split('\n')
 
@@ -136,50 +135,29 @@ export const handler = async ({ force }: Args) => {
         contentLines.splice(0, 0, "import Sentry from 'src/lib/sentry'")
 
         fs.writeFileSync(
-          PATHS.web.app,
+          rwPaths.web.app,
           prettify('App.tsx', contentLines.join('\n'))
         )
-      },
-    },
-    {
-      title: 'Adding config to redwood.toml...',
-      task: (_ctx, task) => {
-        const redwoodTomlPath = getConfigPath()
-        const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
-        if (!configContent.includes('[experimental.sentry]')) {
-          // Use string replace to preserve comments and formatting
-          writeFile(
-            redwoodTomlPath,
-            configContent.concat(`\n[experimental.sentry]\n  enabled = true\n`),
-            {
-              existingFiles: 'OVERWRITE', // redwood.toml always exists
-            }
-          )
-        } else {
-          task.skip(
-            `The [experimental.sentry] config block already exists in your 'redwood.toml' file.`
-          )
-        }
       },
     },
     {
       title: 'One more thing...',
       task: (ctx) => {
         notes.push(
-          c.green(
+          colors.green(
             'You will need to add `SENTRY_DSN` to `includeEnvironmentVariables` in redwood.toml.'
           )
         )
 
         if (ctx.addEnvelopPluginSkipped) {
           notes.push(
-            `${c.underline(
+            `${colors.underline(
               'Make sure you implement the Sentry Envelop plugin:'
             )} https://redwoodjs.com/docs/cli-commands#sentry-envelop-plugin`
           )
         } else {
           notes.push(
-            "Check out RedwoodJS forums' for more: https://community.redwoodjs.com/t/sentry-error-and-performance-monitoring-experimental/4880"
+            "Check out the RedwoodJS forums for more: https://community.redwoodjs.com/t/sentry-error-and-performance-monitoring-experimental/4880"
           )
         }
       },
@@ -192,7 +170,7 @@ export const handler = async ({ force }: Args) => {
   } catch (e) {
     if (isErrorWithMessage(e)) {
       errorTelemetry(process.argv, e.message)
-      console.error(c.error(e.message))
+      console.error(colors.error(e.message))
     }
 
     if (isErrorWithExitCode(e)) {
