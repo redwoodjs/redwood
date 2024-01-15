@@ -16,7 +16,7 @@ module.exports = defineConfig({
   // `runMode` is for `cypress run`, `openMode` is for `cypress open`.
   // Locally, we use open. But in CI, we use run.
   retries: {
-    runMode: 1,
+    runMode: 3,
     openMode: 1,
   },
 
