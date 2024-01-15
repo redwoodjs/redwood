@@ -2,6 +2,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
+import execa from 'execa'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
@@ -22,7 +23,24 @@ const args = yargs(hideBin(process.argv))
 async function runCommand() {
   const OUTPUT_PROJECT_PATH = path.resolve(String(args._))
 
+  const frameworkPath = path.resolve(path.join(__dirname, '..', '..'))
+
   console.log('OUTPUT_PROJECT_PATH', OUTPUT_PROJECT_PATH)
+  console.log('frameworkPath', frameworkPath)
+
+  const execaResult = await execa('yarn rw setup graphql trusted-documents', {
+    cwd: OUTPUT_PROJECT_PATH,
+    shell: true,
+    stdio: 'pipe',
+    env: {
+      RWFW_PATH: frameworkPath,
+      RWJS_CWD: OUTPUT_PROJECT_PATH,
+    },
+  })
+
+  console.log('stdout:', execaResult.stdout)
+  console.log('stderr:', execaResult.stderr)
+  console.log('exitCode:', execaResult.exitCode)
 
   const res = await exec(
     'yarn rw setup graphql trusted-documents',
