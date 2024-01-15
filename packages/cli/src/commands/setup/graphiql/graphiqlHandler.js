@@ -64,6 +64,8 @@ const printHeaders = async () => {
 export const handler = async ({ provider, id, token, expiry, view }) => {
   let payload
 
+  const ext = isTypeScriptProject() ? 'ts' : 'js'
+
   const tasks = new Listr(
     [
       {
@@ -73,7 +75,7 @@ export const handler = async ({ provider, id, token, expiry, view }) => {
         },
       },
       {
-        title: 'Generating file in src/lib/generateGraphiQLHeader.{js,ts}...',
+        title: `Generating file in src/lib/generateGraphiQLHeader.${ext}...`,
         task: () => {
           const fileName =
             token || provider === 'dbAuth'
