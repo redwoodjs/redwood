@@ -38,6 +38,10 @@ async function runCommand() {
     console.error('trustedDocuments = true not set in redwood.toml')
     console.error()
     console.error('Please run this command locally to make sure it works')
+    console.error()
+    console.error('This is the content of redwood.toml:')
+    console.error(redwoodTomlContent)
+    console.error()
     throw new Error('Failed to set up trusted-document')
   }
 
