@@ -11,12 +11,15 @@ const getExpiryTime = (expiry) => {
 
 const getDBAuthHeader = async (userId) => {
   if (!userId) {
-    throw new Error('Require an unique id to generate session cookie')
+    throw new Error('Require a unique id to generate session cookie')
   }
 
   if (!process.env.SESSION_SECRET) {
     throw new Error(
-      'dbAuth requires a SESSION_SECRET environment variable that is used to encrypt session cookies. Use `yarn rw g secret` to create one, then add to your `.env` file. DO NOT check this variable in your version control system!!'
+      'dbAuth requires a SESSION_SECRET environment variable that is used ' +
+        'to encrypt session cookies. Use `yarn rw g secret` to create one, ' +
+        'then add to your `.env` file. DO NOT check this variable in to ' +
+        'your version control system!!'
     )
   }
 
