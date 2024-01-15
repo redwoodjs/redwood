@@ -67,20 +67,21 @@ export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
 }
 
 // Plugin shape: [ ["Target", "Options", "name"] ],
-// a custom "name" is supplied so that user's do not accidentally overwrite
+// a custom "name" can be supplied so that user's do not accidentally overwrite
 // Redwood's own plugins when they specify their own.
-export type PluginList = Array<
-  [PluginTarget, PluginOptions, string | undefined]
->
+export type PluginList = Array<PluginShape>
+type PluginShape =
+  | [PluginTarget, PluginOptions, undefined | string]
+  | [PluginTarget, PluginOptions]
 
 export const getApiSideBabelPlugins = (
   { openTelemetry } = {
     openTelemetry: false,
   }
-): PluginList => {
+) => {
   const tsConfig = parseTypeScriptConfigFiles()
 
-  const plugins: PluginList = [
+  const plugins: Array<PluginShape | boolean> = [
     ...getCommonPlugins(),
     // Needed to support `/** @jsxImportSource custom-jsx-library */`
     // comments in JSX files
@@ -135,9 +136,9 @@ export const getApiSideBabelPlugins = (
       undefined,
       'rwjs-babel-otel-wrapping',
     ],
-  ].filter(Boolean) as PluginList // ts doesn't play nice with filter(Boolean)
+  ]
 
-  return plugins
+  return plugins.filter(Boolean) as PluginList // ts doesn't play nice with filter(Boolean)
 }
 
 export const getApiSideBabelConfigPath = () => {
