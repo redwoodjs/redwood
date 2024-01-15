@@ -12,18 +12,19 @@ import {
   isTypeScriptProject,
   prettify,
   writeFilesTask,
+  writeFile,
 } from '@redwoodjs/cli-helpers'
 import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { writeFile } from '../../lib'
+import type { Args } from './sentry'
 
 const PATHS = getPaths()
 
-export const handler = async ({ force }) => {
+export const handler = async ({ force }: Args) => {
   const extension = isTypeScriptProject() ? 'ts' : 'js'
 
-  const notes = []
+  const notes: Array<string> = []
 
   const tasks = new Listr([
     addApiPackages(['@envelop/sentry@5', '@sentry/node@7']),
@@ -151,7 +152,7 @@ export const handler = async ({ force }) => {
             redwoodTomlPath,
             configContent.concat(`\n[experimental.sentry]\n  enabled = true\n`),
             {
-              overwriteExisting: true, // redwood.toml always exists
+              existingFiles: 'OVERWRITE', // redwood.toml always exists
             }
           )
         } else {
@@ -189,8 +190,28 @@ export const handler = async ({ force }) => {
     await tasks.run()
     console.log(notes.join('\n'))
   } catch (e) {
-    errorTelemetry(process.argv, e.message)
-    console.error(c.error(e.message))
-    process.exit(e?.exitCode || 1)
+    if (isErrorWithMessage(e)) {
+      errorTelemetry(process.argv, e.message)
+      console.error(c.error(e.message))
+    }
+
+    if (isErrorWithExitCode(e)) {
+      process.exit(e.exitCode)
+    }
+
+    process.exit(1)
   }
+}
+
+function isErrorWithMessage(e: unknown): e is { message: string } {
+  return !!e && typeof e === 'object' && 'message' in e
+}
+
+function isErrorWithExitCode(e: unknown): e is { exitCode: number } {
+  return (
+    !!e &&
+    typeof e === 'object' &&
+    'exitCode' in e &&
+    typeof e.exitCode === 'number'
+  )
 }

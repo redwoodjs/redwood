@@ -100,7 +100,8 @@ export const writeFile = <Renderer extends typeof ListrRenderer>(
   target: string,
   contents: string,
   { existingFiles = 'FAIL' }: { existingFiles?: ExistingFiles } = {},
-  // TODO: Remove type cast
+  // TODO: Remove type cast by finding all places `writeFile` is used and
+  // making sure a proper task is passed in
   task: ListrTaskWrapper<never, Renderer> = {} as ListrTaskWrapper<
     never,
     Renderer
@@ -115,7 +116,7 @@ export const writeFile = <Renderer extends typeof ListrRenderer>(
   }
 
   if (exists && existingFiles === 'SKIP') {
-    task.skip()
+    task.skip(`Skipping update of \`./${path.relative(base, target)}\``)
     return
   }
 
