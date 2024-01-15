@@ -18,11 +18,17 @@ const args = yargs(hideBin(process.argv))
 async function runCommand() {
   const OUTPUT_PROJECT_PATH = path.resolve(String(args._))
 
-  await exec(
+  console.log('OUTPUT_PROJECT_PATH', OUTPUT_PROJECT_PATH)
+
+  const res = await exec(
     'yarn rw setup graphql trusted-documents',
     [],
     getExecaOptions(OUTPUT_PROJECT_PATH)
   )
+
+  console.log('stdout:', res.stdout)
+  console.log('stderr:', res.stderr)
+  console.log('exitCode:', res.exitCode)
 
   const redwoodTomlPath = path.join(OUTPUT_PROJECT_PATH, 'redwood.toml')
   const redwoodTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
