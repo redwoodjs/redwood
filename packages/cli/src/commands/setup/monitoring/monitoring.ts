@@ -3,8 +3,8 @@ import type { Argv } from 'yargs'
 
 import * as sentryCommand from './sentry/sentry.js'
 
-export const command = 'graphql <feature>'
-export const description = 'Set up GraphQL feature support'
+export const command = 'monitoring <provider>'
+export const description = 'Set up monitoring in your Redwood app'
 export function builder(yargs: Argv) {
   return yargs
     .command(sentryCommand)
