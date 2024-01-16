@@ -1,8 +1,5 @@
-import fs from 'fs-extra'
+import { setTomlSetting } from '@redwoodjs/cli-helpers'
 
-import { getConfigPath } from '@redwoodjs/project-config'
-
-import { writeFile } from '../lib'
 import { isModuleInstalled, installModule } from '../lib/packages'
 
 export const handler = async (options) => {
@@ -16,23 +13,7 @@ export const handler = async (options) => {
       console.log('Studio package installed successfully.')
 
       console.log('Adding config to redwood.toml...')
-      const redwoodTomlPath = getConfigPath()
-      const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
-
-      if (!configContent.includes('[experimental.studio]')) {
-        // Use string replace to preserve comments and formatting
-        writeFile(
-          redwoodTomlPath,
-          configContent.concat(`\n[experimental.studio]\n  enabled = true\n`),
-          {
-            overwriteExisting: true, // redwood.toml always exists
-          }
-        )
-      } else {
-        console.log(
-          `The [experimental.studio] config block already exists in your 'redwood.toml' file.`
-        )
-      }
+      setTomlSetting('studio', 'enabled', true)
     }
 
     // Import studio and start it
