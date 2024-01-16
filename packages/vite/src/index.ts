@@ -268,7 +268,6 @@ export default function redwoodPluginVite(): PluginOption[] {
     },
     // We can remove when streaming is stable
     rwConfig.experimental.streamingSsr.enabled && swapApolloProvider(),
-    // -----------------
     handleJsAsJsx(),
     // Remove the splash-page from the bundle.
     removeFromBundle([

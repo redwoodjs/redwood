@@ -31,6 +31,7 @@ export const generateClientPreset = async () => {
   const config: CodegenConfig = {
     schema: getPaths().generated.schema,
     documents: documentsGlob,
+    silent: true, // Plays nicely with cli task output
     generates: {
       [`${getPaths().web.src}/graphql/`]: {
         preset: 'client',
