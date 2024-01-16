@@ -1,8 +1,7 @@
 /* eslint-env node, es6*/
-import fs from 'node:fs'
-import path from 'node:path'
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 
-import execa from 'execa'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
@@ -22,39 +21,11 @@ const args = yargs(hideBin(process.argv))
  */
 async function runCommand() {
   const OUTPUT_PROJECT_PATH = path.resolve(String(args._))
-
-  const frameworkPath = path.resolve(path.join(__dirname, '..', '..'))
-
-  console.log('OUTPUT_PROJECT_PATH', OUTPUT_PROJECT_PATH)
-  console.log('frameworkPath', frameworkPath)
-
-  console.time('yarn rw setup graphql')
-  const execaResult = await execa('yarn rw setup graphql', {
-    cwd: OUTPUT_PROJECT_PATH,
-    shell: true,
-    stdio: 'pipe',
-    env: {
-      RWFW_PATH: frameworkPath,
-      RWJS_CWD: OUTPUT_PROJECT_PATH,
-    },
-  })
-  console.timeEnd('yarn rw setup graphql')
-
-  console.log('stdout:', execaResult.stdout)
-  console.log('stderr:', execaResult.stderr)
-  console.log('exitCode:', execaResult.exitCode)
-
-  console.time('yarn rw setup graphql trusted-documents')
-  const res = await exec(
+  await exec(
     'yarn rw setup graphql trusted-documents',
     [],
     getExecaOptions(OUTPUT_PROJECT_PATH)
   )
-  console.timeEnd('yarn rw setup graphql trusted-documents')
-
-  console.log('stdout:', res.stdout)
-  console.log('stderr:', res.stderr)
-  console.log('exitCode:', res.exitCode)
 
   const redwoodTomlPath = path.join(OUTPUT_PROJECT_PATH, 'redwood.toml')
   const redwoodTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
@@ -71,7 +42,7 @@ async function runCommand() {
     console.error()
     console.error('Please run this command locally to make sure it works')
     console.error()
-    console.error('This is the content of redwood.toml:')
+    console.error("For debugging purposes, here's the content of redwood.toml:")
     console.error(redwoodTomlContent)
     console.error()
     throw new Error('Failed to set up trusted-document')
