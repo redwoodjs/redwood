@@ -2,7 +2,6 @@
 .cosine
 .idea
 .DS_Store
-.nx
 node_modules
 dist
 lerna-debug.log
