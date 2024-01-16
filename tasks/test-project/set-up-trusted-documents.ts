@@ -28,7 +28,8 @@ async function runCommand() {
   console.log('OUTPUT_PROJECT_PATH', OUTPUT_PROJECT_PATH)
   console.log('frameworkPath', frameworkPath)
 
-  const execaResult = await execa('yarn rw setup graphql trusted-documents', {
+  console.time('yarn rw setup graphql')
+  const execaResult = await execa('yarn rw setup graphql', {
     cwd: OUTPUT_PROJECT_PATH,
     shell: true,
     stdio: 'pipe',
@@ -37,16 +38,19 @@ async function runCommand() {
       RWJS_CWD: OUTPUT_PROJECT_PATH,
     },
   })
+  console.timeEnd('yarn rw setup graphql')
 
   console.log('stdout:', execaResult.stdout)
   console.log('stderr:', execaResult.stderr)
   console.log('exitCode:', execaResult.exitCode)
 
+  console.time('yarn rw setup graphql trusted-documents')
   const res = await exec(
     'yarn rw setup graphql trusted-documents',
     [],
     getExecaOptions(OUTPUT_PROJECT_PATH)
   )
+  console.timeEnd('yarn rw setup graphql trusted-documents')
 
   console.log('stdout:', res.stdout)
   console.log('stderr:', res.stderr)
