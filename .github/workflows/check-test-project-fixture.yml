@@ -29,15 +29,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - run: yarn install
-        working-directory: ./.github/actions/check_test_project_fixture
+      - name: 🔨 Build
+        run: yarn build
 
-      - name: Check test project fixture
-        uses: ./.github/actions/check_test_project_fixture
+      - name: Rebuild test-project fixture
+        run: yarn rebuild-test-project-fixture
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
-        with:
-          # bundler: vite
-          # canary: true
-          labels: '{ "labels": ${{ toJSON(github.event.pull_request.labels) }} }'
+
+      - name: Check for changed files
+        run: if [ $(git status --porcelain | wc -l) -gt 0 ]; then exit 1; fi
