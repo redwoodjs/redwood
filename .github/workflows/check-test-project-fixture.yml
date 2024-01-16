@@ -20,9 +20,13 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
-      - uses: actions/setup-node@v4
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: 🐈 Set up yarn cache
+        uses: ./.github/actions/set-up-yarn-cache
 
       - name: 🐈 Yarn install
         run: yarn install --inline-builds
@@ -39,4 +43,7 @@ jobs:
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - name: Check for changed files
-        run: if [ $(git status --porcelain | wc -l) -gt 0 ]; then exit 1; fi
+        run: |
+          if [ $(git status --porcelain | wc -l) -gt 0 ]; then
+            exit 1;
+          fi
