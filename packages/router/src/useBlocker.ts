@@ -1,79 +1,94 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { useNavigation, type HistoryAction, ActionType } from './navigation'
+import type { Location } from './location'
+import type { NavigationAction } from './navigation'
+import { NavigationMethod } from './navigation'
+import { useNavigation } from './navigation'
 
-enum BlockerState {
+enum BlockState {
   UNBLOCKED,
   BLOCKED,
-  PROCEEDING,
 }
+
+type BlockedLocation = Location | null
 
 export interface BlockerContextValue {
   state: string
-  proceed: () => void
-  reset: () => void
+  location: BlockedLocation
+  confirm: () => void
+  abort: () => void
 }
 
-export type BlockerFunction = (args: { from: string; to: string }) => boolean
+export type BlockerFunction = (args: {
+  from: Location
+  to: Location
+  method: NavigationMethod
+}) => boolean
+
+export type BlockedAction = NavigationAction
 
 export type ShouldBlock = boolean | BlockerFunction
 
-type BlockedAction = HistoryAction
+const useBlocker = (when: ShouldBlock): BlockerContextValue => {
+  const { navigation, register, unregister } = useNavigation()
+  const [blockState, setBlockState] = useState<BlockState>(BlockState.UNBLOCKED)
+  const [blockedLocation, setBlockeedLocation] = useState<BlockedLocation>(null)
 
-/*
-const handleIntercept: NavigationInterceptorFn = (from, to, action) => {
-      console.log('intercepting')
-      console.log('from', from)
-      console.log('to', to)
-      console.log('action', action)
-      setTo(action)
-      const blockWhen = typeof when === 'function' ? when({ from, to }) : when
-      const shouldBlock = blockWhen && blockerState !== BlockerState.PROCEEDING
-      setBlockerState(
-        shouldBlock ? BlockerState.BLOCKED : BlockerState.UNBLOCKED
-      )
-      return shouldBlock
-    }*/
+  const block = (blocked: boolean, location: Location): boolean => {
+    setBlockState(blocked ? BlockState.BLOCKED : BlockState.UNBLOCKED)
+    setBlockeedLocation(blocked ? location : null)
+    return blocked
+  }
 
-const useBlocker = (_when: ShouldBlock): BlockerContextValue => {
-  const { register, unregister } = useNavigation()
-  const [blockerState, setBlockerState] = useState<BlockerState>(
-    BlockerState.UNBLOCKED
+  const navigationBlocker = useCallback(
+    (from: Location, to: Location, method: NavigationMethod) => {
+      if (typeof when !== 'function') {
+        return block(!!when, to)
+      } else {
+        return block(when({ from, to, method }), to)
+      }
+    },
+    [when]
   )
-  const [blockedAction, _setBockedAction] = useState<BlockedAction | null>(null)
+
+  const unloadBlocker = useCallback(
+    (ev: BeforeUnloadEvent) => {
+      let blocks = false
+      if (typeof when !== 'function') {
+        blocks = block(!!when, navigation.to)
+      } else {
+        const { from, to } = navigation
+        blocks = block(when({ from, to, method: NavigationMethod.UNLOAD }), to)
+      }
+      if (blocks) {
+        ev.preventDefault()
+      }
+    },
+    [navigation, when]
+  )
 
   useEffect(() => {
-    //test always block
-    const interceptorId = register(() => {
-      return true
-    })
+    window.addEventListener('beforeunload', unloadBlocker)
+    const interceptorId = register(navigationBlocker)
     return () => {
+      window.removeEventListener('beforeunload', unloadBlocker)
       unregister(interceptorId)
     }
-  }, [register, unregister])
+  }, [register, unregister, unloadBlocker, navigationBlocker])
 
-  const proceed = useCallback(() => {
-    console.log('proceeding')
-    setBlockerState(BlockerState.PROCEEDING)
-    if (blockedAction) {
-      const { type, data, unused, url } = blockedAction
-      if (type === ActionType.PUSH) {
-        window.history.pushState(data, unused, url)
-      } else {
-        window.history.replaceState(data, unused, url)
-      }
-    }
-  }, [blockedAction])
+  const confirm = () => {
+    setBlockState(BlockState.UNBLOCKED)
+  }
 
-  const reset = () => {
-    console.log('resetting')
-    setBlockerState(BlockerState.UNBLOCKED)
+  const abort = () => {
+    setBlockState(BlockState.UNBLOCKED)
   }
 
   return {
-    state: BlockerState[blockerState],
-    proceed,
-    reset,
+    state: BlockState[blockState],
+    location: blockedLocation,
+    confirm,
+    abort,
   }
 }
 
