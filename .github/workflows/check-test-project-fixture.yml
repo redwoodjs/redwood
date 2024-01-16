@@ -24,10 +24,20 @@ jobs:
         with:
           node-version: 20
 
+      - name: 🐈 Yarn install
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
       - run: yarn install
         working-directory: ./.github/actions/check_test_project_fixture
 
       - name: Check test project fixture
         uses: ./.github/actions/check_test_project_fixture
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
         with:
+          # bundler: vite
+          # canary: true
           labels: '{ "labels": ${{ toJSON(github.event.pull_request.labels) }} }'
