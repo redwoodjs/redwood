@@ -1,12 +1,11 @@
 import type { ReactNode } from 'react'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import type { AuthContextInterface, CurrentUser } from '../AuthContext'
 import type { AuthImplementation } from '../AuthImplementation'
 
 import type { AuthProviderState } from './AuthProviderState'
 import { defaultAuthProviderState } from './AuthProviderState'
-import { ServerAuthContext } from './ServerAuthProvider'
 import { useCurrentUser } from './useCurrentUser'
 import { useForgotPassword } from './useForgotPassword'
 import { useHasRole } from './useHasRole'
@@ -83,11 +82,9 @@ export function createAuthProvider<
   }: AuthProviderProps) => {
     // const [hasRestoredState, setHasRestoredState] = useState(false)
 
-    const serverAuthState = useContext(ServerAuthContext)
-
     const [authProviderState, setAuthProviderState] = useState<
       AuthProviderState<TUser>
-    >(serverAuthState || defaultAuthProviderState)
+    >(defaultAuthProviderState)
 
     const getToken = useToken(authImplementation)
 
@@ -147,13 +144,7 @@ export function createAuthProvider<
           signUp,
           logIn,
           logOut,
-          getToken:
-            // When its rendering on the server, just get the token from the serverAuthState
-            typeof window === 'undefined'
-              ? async () => {
-                  return serverAuthState.encryptedSession || null
-                }
-              : getToken,
+          getToken,
           getCurrentUser,
           hasRole,
           reauthenticate,

@@ -82,32 +82,6 @@ async function createServer() {
     app.get(expressPathDef, createServerAdapter(routeHandler))
   }
 
-  // @TODO: DbAuth still sends a GET request for getToken
-  // Do we still need getToken if gets updated by middleware anyway?
-  app.all(
-    '/_rw_mw',
-    createServerAdapter(async (req: Request) => {
-      const entryServerImport = await vite.ssrLoadModule(
-        rwPaths.web.entryServer as string // already validated in dev server
-      )
-
-      const middleware = entryServerImport.middleware
-
-      let out = null
-      if (middleware) {
-        try {
-          out = await middleware(req)
-        } catch (e) {
-          console.error('Whooopsie, error in middleware POST handler')
-          console.error(e)
-        }
-      }
-
-      // @TODO: We should check the type of resposne here I guess
-      return out
-    })
-  )
-
   const port = getConfig().web.port
   console.log(`Started server on http://localhost:${port}`)
   return await app.listen(port)

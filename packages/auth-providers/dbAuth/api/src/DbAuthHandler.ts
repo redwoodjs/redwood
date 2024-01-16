@@ -40,6 +40,7 @@ import {
   hashToken,
   webAuthnSession,
   extractHashingOptions,
+  isLegacySession,
 } from './shared'
 
 type SetCookieHeader = { 'set-cookie': string }
@@ -610,8 +611,16 @@ export class DbAuthHandler<
 
   async getToken() {
     try {
-      // Just return the encrypted session cookie, to be passed back in the Authorization header
-      return [this.encryptedSession || '']
+      const user = await this._getCurrentUser()
+      let headers = {}
+
+      // if the session was encrypted with the old algorithm, re-encrypt it
+      // with the new one
+      if (isLegacySession(this.cookie)) {
+        headers = this._loginResponse(user)[1]
+      }
+
+      return [user[this.options.authFields.id], headers]
     } catch (e: any) {
       if (e instanceof DbAuthError.NotLoggedInError) {
         return this._logoutResponse()

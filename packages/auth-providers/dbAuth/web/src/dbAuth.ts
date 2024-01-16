@@ -121,10 +121,6 @@ export function createDbAuthClient({
       body: JSON.stringify({ username, password, method: 'login' }),
     })
 
-    if (typeof window !== undefined) {
-      document.cookie = 'auth-provider=dbAuth'
-    }
-
     return response.json()
   }
 

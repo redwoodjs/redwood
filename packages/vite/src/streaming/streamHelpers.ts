@@ -7,8 +7,6 @@ import type {
   ReactDOMServerReadableStream,
 } from 'react-dom/server'
 
-import type { ServerAuthState } from '@redwoodjs/auth'
-import { ServerAuthProvider } from '@redwoodjs/auth'
 import { LocationProvider } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
@@ -29,7 +27,6 @@ interface RenderToStreamArgs {
   cssLinks: string[]
   isProd: boolean
   jsBundles?: string[]
-  authState: ServerAuthState
 }
 
 interface StreamOptions {
@@ -50,7 +47,6 @@ export async function reactRenderToStreamResponse(
     cssLinks,
     isProd,
     jsBundles = [],
-    authState,
   } = renderOptions
 
   if (!isProd) {
@@ -84,15 +80,15 @@ export async function reactRenderToStreamResponse(
 
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
-  // Possible that we need to upgrade the @types/* packages
   // @ts-expect-error Something in React's packages mean types dont come through
+  // Possible that we need to upgrade the @types/* packages
   const { renderToReadableStream } = await import('react-dom/server.edge')
 
   const renderRoot = (path: string) => {
     return React.createElement(
-      ServerAuthProvider,
+      ServerHtmlProvider,
       {
-        value: authState,
+        value: injectToPage,
       },
       React.createElement(
         LocationProvider,
@@ -101,17 +97,11 @@ export async function reactRenderToStreamResponse(
             pathname: path,
           },
         },
-        React.createElement(
-          ServerHtmlProvider,
-          {
-            value: injectToPage,
-          },
-          ServerEntry({
-            url: path,
-            css: cssLinks,
-            meta: metaTags,
-          })
-        )
+        ServerEntry({
+          url: path,
+          css: cssLinks,
+          meta: metaTags,
+        })
       )
     )
   }
@@ -143,10 +133,11 @@ export async function reactRenderToStreamResponse(
       },
     }
 
-    const root = renderRoot(currentPathName)
-
     const reactStream: ReactDOMServerReadableStream =
-      await renderToReadableStream(root, renderToStreamOptions)
+      await renderToReadableStream(
+        renderRoot(currentPathName),
+        renderToStreamOptions
+      )
 
     // @NOTE: very important that we await this before we apply any transforms
     if (waitForAllReady) {

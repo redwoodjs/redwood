@@ -2,12 +2,17 @@ import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 
 import { getAuthenticationContext } from '../index'
 
-export const createMockedEvent = (
-  headers: Record<string, string>
-): APIGatewayProxyEvent => {
+export const createMockedEvent = ({
+  authProvider,
+}: {
+  authProvider: string
+}): APIGatewayProxyEvent => {
   return {
     body: null,
-    headers,
+    headers: {
+      'auth-provider': authProvider,
+      authorization: 'Bearer auth-test-token',
+    },
     multiValueHeaders: {},
     httpMethod: 'POST',
     isBase64Encoded: false,
@@ -50,7 +55,7 @@ export const createMockedEvent = (
   }
 }
 
-describe('getAuthenticationContext with bearer tokens', () => {
+describe('getAuthenticationContext', () => {
   it('Can take a single auth decoder for the given provider', async () => {
     const authDecoderOne = async (_token: string, type: string) => {
       if (type !== 'one') {
@@ -65,10 +70,7 @@ describe('getAuthenticationContext with bearer tokens', () => {
 
     const result = await getAuthenticationContext({
       authDecoder: authDecoderOne,
-      event: createMockedEvent({
-        'auth-provider': 'one',
-        authorization: 'Bearer auth-test-token',
-      }),
+      event: createMockedEvent({ authProvider: 'one' }),
       context: {} as Context,
     })
 
@@ -101,10 +103,7 @@ describe('getAuthenticationContext with bearer tokens', () => {
 
     const result = await getAuthenticationContext({
       authDecoder: authDecoderOne,
-      event: createMockedEvent({
-        'auth-provider': 'some-other',
-        authorization: 'Bearer auth-test-token',
-      }),
+      event: createMockedEvent({ authProvider: 'some-other' }),
       context: {} as Context,
     })
 
@@ -123,10 +122,7 @@ describe('getAuthenticationContext with bearer tokens', () => {
   it('Can take an empty array of auth decoders', async () => {
     const result = await getAuthenticationContext({
       authDecoder: [],
-      event: createMockedEvent({
-        'auth-provider': 'two',
-        authorization: 'Bearer auth-test-token',
-      }),
+      event: createMockedEvent({ authProvider: 'two' }),
       context: {} as Context,
     })
 
@@ -167,10 +163,7 @@ describe('getAuthenticationContext with bearer tokens', () => {
 
     const result = await getAuthenticationContext({
       authDecoder: [authDecoderOne, authDecoderTwo],
-      event: createMockedEvent({
-        'auth-provider': 'two',
-        authorization: 'Bearer auth-test-token',
-      }),
+      event: createMockedEvent({ authProvider: 'two' }),
       context: {} as Context,
     })
 
@@ -191,10 +184,7 @@ describe('getAuthenticationContext with bearer tokens', () => {
 
   it('Works even without any auth decoders', async () => {
     const result = await getAuthenticationContext({
-      event: createMockedEvent({
-        'auth-provider': 'two',
-        authorization: 'Bearer auth-test-token',
-      }),
+      event: createMockedEvent({ authProvider: 'two' }),
       context: {} as Context,
     })
 
@@ -208,51 +198,5 @@ describe('getAuthenticationContext with bearer tokens', () => {
     expect(type).toEqual('two')
     expect(schema).toEqual('Bearer')
     expect(token).toEqual('auth-test-token')
-  })
-})
-
-// @TODO add tests for requests with Cookie headers
-describe('getAuthenticationContext with cookies', () => {
-  it('Can take a single auth decoder for the given provider', async () => {
-    const authDecoderOne = async (_token: string, type: string) => {
-      if (type !== 'one') {
-        return null
-      }
-
-      return {
-        iss: 'one',
-        sub: 'user-id',
-      }
-    }
-
-    const fetchRequest = new Request('http://localhost:3000', {
-      method: 'POST',
-      body: '',
-      headers: {
-        cookie: 'auth-provider=one; session=xx/yy/zz',
-      },
-    })
-
-    const result = await getAuthenticationContext({
-      authDecoder: authDecoderOne,
-      event: fetchRequest,
-      context: {} as Context,
-    })
-
-    if (!result) {
-      fail('Result is undefined')
-    }
-
-    const [decoded, { type, schema, token }] = result
-
-    expect(decoded).toMatchObject({
-      iss: 'one',
-      sub: 'user-id',
-    })
-    expect(type).toEqual('one')
-    expect(schema).toEqual('cookie')
-    // @TODO we need to rename this. It's not actually the token, because
-    // some auth providers will have a cookie where we don't know the key
-    expect(token).toEqual('auth-provider=one; session=xx/yy/zz')
   })
 })
