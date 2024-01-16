@@ -48,6 +48,9 @@ const eventGraphiQLHeadersCookie = (event: APIGatewayProxyEvent) => {
       return event.headers['rw-studio-impersonation-cookie']
     }
 
+    // TODO: Remove code below when we remove the old way of passing the cookie
+    // from Studio, and decide it's OK to break compatibility with older Studio
+    // versions
     try {
       const jsonBody = JSON.parse(event.body ?? '{}')
       return (
