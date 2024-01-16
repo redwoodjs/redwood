@@ -2,11 +2,11 @@ import fs from 'fs-extra'
 
 import { getConfigPath } from '@redwoodjs/project-config'
 
-import { writeFile } from '../../lib'
-import { isModuleInstalled, installModule } from '../../lib/packages'
+import { writeFile } from '../lib'
+import { isModuleInstalled, installModule } from '../lib/packages'
 
+import { printTaskEpilogue } from './experimental/util'
 import { command, description, EXPERIMENTAL_TOPIC_ID } from './studio'
-import { printTaskEpilogue } from './util'
 
 export const handler = async (options) => {
   printTaskEpilogue(command, description, EXPERIMENTAL_TOPIC_ID)
@@ -16,7 +16,7 @@ export const handler = async (options) => {
       console.log(
         'The studio package is not installed, installing it for you, this may take a moment...'
       )
-      await installModule('@redwoodjs/studio', '10.0.2')
+      await installModule('@redwoodjs/studio', '11.0.0')
       console.log('Studio package installed successfully.')
 
       console.log('Adding config to redwood.toml...')

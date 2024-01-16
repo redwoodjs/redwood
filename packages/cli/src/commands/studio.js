@@ -1,6 +1,6 @@
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { getEpilogue } from './util'
+import { getEpilogue } from './experimental/util'
 
 export const command = 'studio'
 export const description = 'Run the Redwood development studio'
@@ -21,6 +21,6 @@ export async function handler(options) {
     command: 'experimental studio',
     open: options.open,
   })
-  const { handler } = await import('./studioHandler.js')
+  const { handler } = await import('../experimental/studioHandler.js')
   return handler(options)
 }
