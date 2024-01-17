@@ -15,24 +15,10 @@ const createHistory = () => {
       return listenerId
     },
     navigate: (to: string, options?: NavigateOptions) => {
-      const { pathname, search, hash } = new URL(
-        globalThis?.location?.origin + to
-      )
-      console.log('navigating to', to, options)
-
-      if (
-        globalThis?.location?.pathname !== pathname ||
-        globalThis?.location?.search !== search ||
-        globalThis?.location?.hash !== hash
-      ) {
-        console.log('new location')
-        if (options?.replace) {
-          globalThis.history.replaceState({}, '', to)
-        } else {
-          globalThis.history.pushState({}, '', to)
-        }
+      if (options?.replace) {
+        globalThis.history.replaceState({}, '', to)
       } else {
-        console.log('same location')
+        globalThis.history.pushState({}, '', to)
       }
 
       for (const listener of Object.values(listeners)) {

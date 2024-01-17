@@ -42,9 +42,6 @@ const useBlocker = (when: ShouldBlock): BlockerContextValue => {
     location: Location,
     confirm?: ConfirmFn
   ): boolean => {
-    console.log('block', blocked)
-    console.log('location', location)
-    console.log('confirm', confirm !== undefined && confirm !== null)
     setBlockState(blocked ? BlockState.BLOCKED : BlockState.UNBLOCKED)
     setBlockeedLocation(blocked ? location : null)
     setConfirmBlocked(blocked ? confirm || null : null)
@@ -58,12 +55,9 @@ const useBlocker = (when: ShouldBlock): BlockerContextValue => {
       method: NavigationMethod,
       confirm?: ConfirmFn
     ) => {
-      console.log('blocker check')
       if (typeof when !== 'function') {
-        console.log('!!when', !!when)
         return block(!!when, to, confirm)
       } else {
-        console.log('when({ from, to, method })', when({ from, to, method }))
         return block(when({ from, to, method }), to, confirm)
       }
     },
@@ -74,10 +68,10 @@ const useBlocker = (when: ShouldBlock): BlockerContextValue => {
     (ev: BeforeUnloadEvent) => {
       let blocks = false
       if (typeof when !== 'function') {
-        blocks = block(!!when, navigation.to)
+        blocks = !!when
       } else {
         const { from, to } = navigation
-        blocks = block(when({ from, to, method: NavigationMethod.UNLOAD }), to)
+        blocks = when({ from, to, method: NavigationMethod.UNLOAD })
       }
       if (blocks) {
         ev.preventDefault()
@@ -97,15 +91,12 @@ const useBlocker = (when: ShouldBlock): BlockerContextValue => {
 
   const confirm = useCallback(() => {
     setBlockState(BlockState.UNBLOCKED)
-    if (confirmBlocked) {
-      console.log('confirming blocked navigation')
-    }
     confirmBlocked?.()
   }, [confirmBlocked])
 
   const abort = () => {
-    console.log('aborting blocked navigation')
     setBlockState(BlockState.UNBLOCKED)
+    setConfirmBlocked(null)
   }
 
   return {

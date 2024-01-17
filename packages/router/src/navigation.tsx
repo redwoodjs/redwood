@@ -60,7 +60,7 @@ const NavigationProvider = ({ children }: NavigationProviderProps) => {
   const [blockers, setBlockers] = useState<NavigationBlocker[]>([])
 
   /**
-   * Navigation state is used to keep track of the current and previous location
+   * Navigation state is used to keep track of the current and previous location data
    */
   const location: Location = useLocation()
   const [navigation, setNavigation] = useState({
@@ -81,99 +81,70 @@ const NavigationProvider = ({ children }: NavigationProviderProps) => {
    * Register the interceptors and override the browser history methods
    */
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return
-    }
-
-    const originalPushState = window.history.pushState.bind(window.history)
-    const originalReplaceState = window.history.replaceState.bind(
-      window.history
+    const originalPushState = globalThis.history.pushState.bind(
+      globalThis.history
+    )
+    const originalReplaceState = globalThis.history.replaceState.bind(
+      globalThis.history
     )
 
-    window.history.pushState = function pushState(
+    globalThis.history.pushState = function pushState(
       data: any,
       unused: string,
       url?: string | URL | null
     ) {
-      /**
-       * Call the interceptors in order, if any of them returns true, the navigation
-       * action is cancelled
-       */
-      console.log('checking blockers', NavigationMethod.PUSH)
-      for (const { check } of blockers) {
-        if (
-          check(navigation.from, navigation.to, NavigationMethod.PUSH, () => {
-            originalPushState(data, unused, url)
-          })
-        ) {
-          console.log('dispatching pushstate')
-          window.dispatchEvent(new Event('popstate'))
-          console.log('blocker returned true')
-          return
-        }
+      const currentLocation = new URL(globalThis.location.href)
+      const newLocation = new URL(globalThis.location.origin + url)
+
+      if (
+        currentLocation.pathname === newLocation.pathname &&
+        currentLocation.search === newLocation.search &&
+        currentLocation.hash === newLocation.hash
+      ) {
+        return
       }
-      /**
-       * If no interceptor cancels the navigation, we call the original function
-       */
-      console.log('calling original push state')
-      originalPushState(data, unused, url)
+
+      const blocked = blockers.some(({ check }) =>
+        check(currentLocation, newLocation, NavigationMethod.PUSH, () => {
+          originalPushState(data, unused, url)
+        })
+      )
+
+      if (!blocked) {
+        originalPushState(data, unused, url)
+      }
     }
 
-    window.history.replaceState = function replaceState(
+    globalThis.history.replaceState = function replaceState(
       data: any,
       unused: string,
       url?: string | URL | null
     ) {
-      /**
-       * Call the interceptors in order, if any of them returns true, the navigation
-       * action is cancelled
-       */
-      console.log('checking blockers', NavigationMethod.REPLACE)
-      for (const { check } of blockers) {
-        if (
-          check(
-            navigation.from,
-            navigation.to,
-            NavigationMethod.REPLACE,
-            () => {
-              originalReplaceState(data, unused, url)
-            }
-          )
-        ) {
-          window.dispatchEvent(new Event('popstate'))
-          console.log('blocker returned true')
-          return
-        }
-      }
-      /**
-       * If no interceptor cancels the navigation, we call the original function
-       */
-      console.log('calling original replace state')
-      originalReplaceState(data, unused, url)
-    }
+      const currentLocation = new URL(globalThis.location.href)
+      const newLocation = new URL(globalThis.location.origin + url)
 
-    const onPopState = (e: PopStateEvent) => {
-      /**
-       * Call the interceptors in order, if any of them returns true, the navigation
-       * action is cancelled
-       */
-      console.log('checking blockers', NavigationMethod.POP)
-      for (const { check } of blockers) {
-        if (check(navigation.from, navigation.to, NavigationMethod.POP)) {
-          console.log('blocker returned true')
-          e.preventDefault()
-          return
-        }
+      if (
+        currentLocation.pathname === newLocation.pathname &&
+        currentLocation.search === newLocation.search &&
+        currentLocation.hash === newLocation.hash
+      ) {
+        return
       }
-      console.log('no blockers returned true')
-    }
 
-    window.addEventListener('popstate', onPopState)
+      const blocked = blockers.some(({ check }) =>
+        check(navigation.from, navigation.to, NavigationMethod.REPLACE, () => {
+          originalReplaceState(data, unused, url)
+        })
+      )
+
+      if (!blocked) {
+        originalReplaceState(data, unused, url)
+      }
+    }
 
     return () => {
-      window.history.pushState = originalPushState
-      window.history.replaceState = originalReplaceState
-      window.removeEventListener('popstate', onPopState)
+      globalThis.history.pushState = originalPushState
+      globalThis.history.replaceState = originalReplaceState
     }
   }, [blockers, location, navigation])
 
