@@ -56,5 +56,6 @@ jobs:
             echo
             echo 'Untracked files:'
             git status --porcelain | grep '^?? ' | awk '{print "        " $2}'
+            echo
             exit 1;
           fi
