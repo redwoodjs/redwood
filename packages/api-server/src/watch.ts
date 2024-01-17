@@ -28,6 +28,7 @@ const argv = yargs(hideBin(process.argv))
     description: 'Debugging port',
     type: 'number',
   })
+  // `port` is not used when server-file is used
   .option('port', {
     alias: 'p',
     description: 'Port',
@@ -119,19 +120,19 @@ const rebuildApiServer = () => {
     // Check if experimental server file exists
     const serverFile = resolveFile(`${rwjsPaths.api.dist}/server`)
     if (serverFile) {
-      const separator = chalk.hex('#ff845e')(
-        '------------------------------------------------------------------'
-      )
+      const separator = chalk.hex('#ff845e')('-'.repeat(79))
       console.log(
         [
           separator,
           `🧪 ${chalk.green('Experimental Feature')} 🧪`,
           separator,
-          'Using the experimental API server file at api/dist/server.js',
+          'Using the experimental API server file at api/dist/server.js (in watch mode)',
           separator,
         ].join('\n')
       )
       httpServerProcess = fork(serverFile, [], forkOpts)
+      httpServerProcess.stdout.pipe(process.stdout)
+      httpServerProcess.stderr.pipe(process.stderr)
     } else {
       httpServerProcess = fork(
         path.join(__dirname, 'index.js'),
