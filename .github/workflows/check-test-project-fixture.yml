@@ -45,5 +45,16 @@ jobs:
       - name: Check for changed files
         run: |
           if [ $(git status --porcelain | wc -l) -gt 0 ]; then
+            echo 'Updating the test project fixture caused files to change'
+            echo 'Please run `yarn rebuild-test-project-fixture` locally and commit any changes'
+            echo
+            echo 'Deleted files:'
+            git status --porcelain | grep '^ D ' | awk '{print "        " $2}'
+            echo
+            echo 'Modified files:'
+            git status --porcelain | grep '^ M ' | awk '{print "        " $2}'
+            echo
+            echo 'Untracked files:'
+            git status --porcelain | grep '^?? ' | awk '{print "        " $2}'
             exit 1;
           fi
