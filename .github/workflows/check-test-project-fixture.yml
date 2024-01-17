@@ -34,15 +34,18 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: 🔨 Build
+        if: !contains(github.event.pull_request.labels.*.name, 'fixture-ok')
         run: yarn build
 
       - name: Rebuild test-project fixture
+        if: !contains(github.event.pull_request.labels.*.name, 'fixture-ok')
         run: yarn rebuild-test-project-fixture
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - name: Check for changed files
+        if: !contains(github.event.pull_request.labels.*.name, 'fixture-ok')
         run: |
           if [ $(git status --porcelain | wc -l) -gt 0 ]; then
             echo 'Updating the test project fixture caused files to change'
