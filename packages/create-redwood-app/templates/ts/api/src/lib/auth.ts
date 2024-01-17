@@ -26,6 +26,7 @@ export const requireAuth = ({ roles }) => {
 
 export const getCurrentUser = async () => {
   throw new Error(
-    'Auth is not set up yet. See https://redwoodjs.com/docs/authentication to get started'
+    'Auth is not set up yet. See https://redwoodjs.com/docs/authentication ' +
+      'to get started'
   )
 }
