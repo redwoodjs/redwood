@@ -7,10 +7,11 @@ import { config } from 'dotenv-defaults'
 import Fastify from 'fastify'
 import yargsParser from 'yargs-parser'
 
+import { RedwoodStreaming } from '@redwoodjs/fastify-plugin-streaming'
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
-import { redwoodFastifyWeb } from './web'
-import { withApiProxy } from './withApiProxy'
+// import { redwoodFastifyWeb } from './web'
+// import { withApiProxy } from './withApiProxy'
 
 interface Opts {
   socket?: string
@@ -18,15 +19,15 @@ interface Opts {
   apiHost?: string
 }
 
-function isFullyQualifiedUrl(url: string) {
-  try {
-    // eslint-disable-next-line no-new
-    new URL(url)
-    return true
-  } catch (e) {
-    return false
-  }
-}
+// function isFullyQualifiedUrl(url: string) {
+//   try {
+//     // eslint-disable-next-line no-new
+//     new URL(url)
+//     return true
+//   } catch (e) {
+//     return false
+//   }
+// }
 
 async function serve() {
   // Parse server file args
@@ -45,25 +46,25 @@ async function serve() {
   const redwoodConfig = getConfig()
 
   const port = options.port ? parseInt(options.port) : redwoodConfig.web.port
-  const apiUrl = redwoodConfig.web.apiUrl
+  // const apiUrl = redwoodConfig.web.apiUrl
 
-  if (!options.apiHost && !isFullyQualifiedUrl(apiUrl)) {
-    console.error(
-      `${chalk.red('Error')}: If you don't provide ${chalk.magenta(
-        'apiHost'
-      )}, ${chalk.magenta(
-        'apiUrl'
-      )} needs to be a fully-qualified URL. But ${chalk.magenta(
-        'apiUrl'
-      )} is ${chalk.yellow(apiUrl)}.`
-    )
-    // We're using a custom error exit code here to tell `@redwoodjs/cli` that this error has been handled.
-    // While any other exit code than `0` is considered an error, there seems to be some conventions around some of them
-    // like `127`, etc. We chose 64 because it's in the range where there deliberately aren't any previous conventions.
-    // See https://tldp.org/LDP/abs/html/exitcodes.html.
-    process.exitCode = 64
-    return
-  }
+  // if (!options.apiHost && !isFullyQualifiedUrl(apiUrl)) {
+  //   console.error(
+  //     `${chalk.red('Error')}: If you don't provide ${chalk.magenta(
+  //       'apiHost'
+  //     )}, ${chalk.magenta(
+  //       'apiUrl'
+  //     )} needs to be a fully-qualified URL. But ${chalk.magenta(
+  //       'apiUrl'
+  //     )} is ${chalk.yellow(apiUrl)}.`
+  //   )
+  //   // We're using a custom error exit code here to tell `@redwoodjs/cli` that this error has been handled.
+  //   // While any other exit code than `0` is considered an error, there seems to be some conventions around some of them
+  //   // like `127`, etc. We chose 64 because it's in the range where there deliberately aren't any previous conventions.
+  //   // See https://tldp.org/LDP/abs/html/exitcodes.html.
+  //   process.exitCode = 64
+  //   return
+  // }
 
   const tsServer = Date.now()
 
@@ -89,18 +90,20 @@ async function serve() {
     },
   })
 
-  await fastify.register(redwoodFastifyWeb, {
-    redwood: {
-      ...options,
-    },
-  })
+  await fastify.register(RedwoodStreaming)
 
-  // TODO: Could this be folded into redwoodFastifyWeb?
-  // If apiHost is supplied, it means the functions are running elsewhere, so we should just proxy requests.
-  if (options.apiHost) {
-    // Attach plugin for proxying
-    fastify.register(withApiProxy, { apiHost: options.apiHost, apiUrl })
-  }
+  // await fastify.register(redwoodFastifyWeb, {
+  //   redwood: {
+  //     ...options,
+  //   },
+  // })
+
+  // // TODO: Could this be folded into redwoodFastifyWeb?
+  // // If apiHost is supplied, it means the functions are running elsewhere, so we should just proxy requests.
+  // if (options.apiHost) {
+  //   // Attach plugin for proxying
+  //   fastify.register(withApiProxy, { apiHost: options.apiHost, apiUrl })
+  // }
 
   let listenOptions:
     | { path: string; port?: never; host?: never }

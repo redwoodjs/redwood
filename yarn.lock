@@ -2939,7 +2939,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/error@npm:^3.0.0, @fastify/error@npm:^3.4.0":
+"@fastify/error@npm:^3.0.0, @fastify/error@npm:^3.2.0, @fastify/error@npm:^3.4.0":
   version: 3.4.1
   resolution: "@fastify/error@npm:3.4.1"
   checksum: 1f1a0faa8c86639afb6f4bd47a9cdc1f0f20ce0d6944340fbdec8218aaba91dc9cae9ed78e24e61bceb782a867efda2b9a6320091f00dcbb896d9c8a9bdf5f96
@@ -2964,6 +2964,18 @@ __metadata:
     fastify-plugin: "npm:^4.5.0"
     ws: "npm:^8.4.2"
   checksum: c8f7fe380580f53059f676ca5b2bbdb1eef0a2d3dce28568e8932aeedb992efdc5fc40dae41b6d52f2f0ce14036af182664d0276ea9366e31fd920a119e7a03a
+  languageName: node
+  linkType: hard
+
+"@fastify/middie@npm:8.3.0":
+  version: 8.3.0
+  resolution: "@fastify/middie@npm:8.3.0"
+  dependencies:
+    "@fastify/error": "npm:^3.2.0"
+    fastify-plugin: "npm:^4.0.0"
+    path-to-regexp: "npm:^6.1.0"
+    reusify: "npm:^1.0.4"
+  checksum: 8cb39ce3f203c66de9ce40eb2cc7324fd3d79fb78872a6b7dcfb0b7cbb7b02e349d710520b7ecb100d8e4bc396fbc7596a0bee9514e8a9f832d171ac3ae572cd
   languageName: node
   linkType: hard
 
@@ -8208,6 +8220,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/fastify-plugin-streaming@npm:6.0.7, @redwoodjs/fastify-plugin-streaming@workspace:packages/adapters/fastify-plugin-streaming":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/fastify-plugin-streaming@workspace:packages/adapters/fastify-plugin-streaming"
+  dependencies:
+    "@fastify/middie": "npm:8.3.0"
+    "@redwoodjs/internal": "npm:6.0.7"
+    "@redwoodjs/project-config": "npm:6.0.7"
+    typescript: "npm:5.3.3"
+    vite: "npm:4.5.1"
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/fastify@npm:6.0.7, @redwoodjs/fastify@workspace:packages/fastify":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/fastify@workspace:packages/fastify"
@@ -8719,6 +8743,7 @@ __metadata:
     "@fastify/http-proxy": "npm:9.3.0"
     "@fastify/static": "npm:6.12.0"
     "@fastify/url-data": "npm:5.4.0"
+    "@redwoodjs/fastify-plugin-streaming": "npm:6.0.7"
     "@redwoodjs/project-config": "npm:6.0.7"
     "@types/yargs-parser": "npm:21.0.3"
     chalk: "npm:4.1.2"
@@ -26749,7 +26774,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-to-regexp@npm:^6.2.0":
+"path-to-regexp@npm:^6.1.0, path-to-regexp@npm:^6.2.0":
   version: 6.2.1
   resolution: "path-to-regexp@npm:6.2.1"
   checksum: 7a73811ca703e5c199e5b50b9649ab8f6f7b458a37f7dff9ea338815203f5b1f95fe8cb24d4fdfe2eab5d67ce43562d92534330babca35cdf3231f966adb9360
