@@ -40,10 +40,17 @@ const getPort = () => {
   return getConfig(configPath).api.port
 }
 
-// When in development environment, check for cookie in the request extension headers
+// When in development environment, check for auth impersonation cookie
 // if user has generated graphiql headers
 const eventGraphiQLHeadersCookie = (event: APIGatewayProxyEvent) => {
   if (process.env.NODE_ENV === 'development') {
+    if (event.headers['rw-studio-impersonation-cookie']) {
+      return event.headers['rw-studio-impersonation-cookie']
+    }
+
+    // TODO: Remove code below when we remove the old way of passing the cookie
+    // from Studio, and decide it's OK to break compatibility with older Studio
+    // versions
     try {
       const jsonBody = JSON.parse(event.body ?? '{}')
       return (

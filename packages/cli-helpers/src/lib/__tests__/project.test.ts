@@ -1,10 +1,11 @@
-import fs from 'fs'
-
-import toml from '@iarna/toml'
-
-import { updateTomlConfig, addEnvVar } from '../project' // Replace with the correct path to your module
-
 jest.mock('fs')
+jest.mock('node:fs')
+
+import * as fs from 'node:fs'
+
+import * as toml from '@iarna/toml'
+
+import { updateTomlConfig, addEnvVar } from '../project'
 
 const defaultRedwoodToml = {
   web: {

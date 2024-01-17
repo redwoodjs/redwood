@@ -1,80 +1,14 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import toml from '@iarna/toml'
 import execa from 'execa'
 import { Listr } from 'listr2'
 import { format } from 'prettier'
 
-import { prettierOptions } from '@redwoodjs/cli-helpers'
-import { getConfigPath, getPaths, resolveFile } from '@redwoodjs/project-config'
+import { prettierOptions, setTomlSetting } from '@redwoodjs/cli-helpers'
+import { getConfig, getPaths, resolveFile } from '@redwoodjs/project-config'
 
 import { runTransform } from '../fragments/runTransform'
-
-function updateRedwoodToml(redwoodTomlPath: string) {
-  const originalTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
-  const redwoodTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
-  // Can't type toml.parse because this PR has not been included in a released yet
-  // https://github.com/iarna/iarna-toml/commit/5a89e6e65281e4544e23d3dbaf9e8428ed8140e9
-  const redwoodTomlObject = toml.parse(redwoodTomlContent) as any
-  const hasExistingGraphqlSection = !!redwoodTomlObject?.graphql
-
-  if (redwoodTomlObject?.graphql?.trustedDocuments) {
-    console.info(
-      'GraphQL Trusted Documents are already enabled in your Redwood project.'
-    )
-
-    return { newConfig: undefined, trustedDocumentsExists: true }
-  }
-
-  let newTomlContent =
-    originalTomlContent.replace(/\n$/, '') +
-    '\n\n[graphql]\n  trustedDocuments = true'
-
-  if (hasExistingGraphqlSection) {
-    const existingGraphqlSetting = Object.keys(redwoodTomlObject.graphql)
-
-    let inGraphqlSection = false
-    let indentation = ''
-    let lastGraphqlSettingIndex = 0
-
-    const tomlLines = originalTomlContent.split('\n')
-    tomlLines.forEach((line, index) => {
-      if (line.startsWith('[graphql]')) {
-        inGraphqlSection = true
-        lastGraphqlSettingIndex = index
-      } else {
-        if (/^\s*\[/.test(line)) {
-          inGraphqlSection = false
-        }
-      }
-
-      if (inGraphqlSection) {
-        const matches = line.match(
-          new RegExp(`^(\\s*)(${existingGraphqlSetting})\\s*=`, 'i')
-        )
-
-        if (matches) {
-          indentation = matches[1]
-        }
-
-        if (/^\s*\w+\s*=/.test(line)) {
-          lastGraphqlSettingIndex = index
-        }
-      }
-    })
-
-    tomlLines.splice(
-      lastGraphqlSettingIndex + 1,
-      0,
-      `${indentation}trustedDocuments = true`
-    )
-
-    newTomlContent = tomlLines.join('\n')
-  }
-
-  return { newConfig: newTomlContent, trustedDocumentsExists: false }
-}
 
 export async function handler({ force }: { force: boolean }) {
   const tasks = new Listr(
@@ -82,15 +16,21 @@ export async function handler({ force }: { force: boolean }) {
       {
         title:
           'Update Redwood Project Configuration to enable GraphQL Trusted Documents ...',
-        task: () => {
-          const redwoodTomlPath = getConfigPath()
-
-          const { newConfig, trustedDocumentsExists } =
-            updateRedwoodToml(redwoodTomlPath)
-
-          if (newConfig && (force || !trustedDocumentsExists)) {
-            fs.writeFileSync(redwoodTomlPath, newConfig, 'utf-8')
+        skip: () => {
+          if (force) {
+            // Never skip when --force is used
+            return false
           }
+
+          const config = getConfig()
+          if (config.graphql.trustedDocuments) {
+            return 'GraphQL Trusted Documents are already enabled in your Redwood project.'
+          }
+
+          return false
+        },
+        task: () => {
+          setTomlSetting('graphql', 'trustedDocuments', true)
         },
       },
       {
