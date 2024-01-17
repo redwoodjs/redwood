@@ -18,17 +18,21 @@ const createHistory = () => {
       const { pathname, search, hash } = new URL(
         globalThis?.location?.origin + to
       )
+      console.log('navigating to', to, options)
 
       if (
         globalThis?.location?.pathname !== pathname ||
         globalThis?.location?.search !== search ||
         globalThis?.location?.hash !== hash
       ) {
+        console.log('new location')
         if (options?.replace) {
           globalThis.history.replaceState({}, '', to)
         } else {
           globalThis.history.pushState({}, '', to)
         }
+      } else {
+        console.log('same location')
       }
 
       for (const listener of Object.values(listeners)) {

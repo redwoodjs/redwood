@@ -18,15 +18,16 @@ export type NavigationAction = {
   url?: string | URL | null
 }
 
-export type NavigationInterceptorFn = (
+export type NavigationBlockerFn = (
   from: Location,
   to: Location,
-  method: NavigationMethod
+  method: NavigationMethod,
+  confirm?: () => void
 ) => boolean
 
-type NavigationInterceptor = {
+type NavigationBlocker = {
   id: string
-  fn: NavigationInterceptorFn
+  check: NavigationBlockerFn
 }
 
 type Navigation = {
@@ -41,8 +42,8 @@ export type NavigationState = {
 
 export type NavigationContextState = {
   navigation: Navigation
-  register: (interceptor: NavigationInterceptorFn) => string
-  unregister: (interceptorId: string) => void
+  register: (blocker: NavigationBlockerFn) => string
+  unregister: (blockerId: string) => void
 }
 
 const NavigationContext =
@@ -54,9 +55,9 @@ type NavigationProviderProps = {
 
 const NavigationProvider = ({ children }: NavigationProviderProps) => {
   /**
-   * Interceptors are functions that are called before a navigation action is performed
+   * Blockers are functions that are called before a navigation action is performed
    */
-  const [interceptors, setInterceptors] = useState<NavigationInterceptor[]>([])
+  const [blockers, setBlockers] = useState<NavigationBlocker[]>([])
 
   /**
    * Navigation state is used to keep track of the current and previous location
@@ -84,77 +85,108 @@ const NavigationProvider = ({ children }: NavigationProviderProps) => {
       return
     }
 
-    /**
-     * Override the browser history methods
-     */
-    const pushState = window.history.pushState.bind(window.history)
-    const replaceState = window.history.replaceState.bind(window.history)
+    const originalPushState = window.history.pushState.bind(window.history)
+    const originalReplaceState = window.history.replaceState.bind(
+      window.history
+    )
 
-    /**
-     * Dry function
-     */
-    const createInterceptedStateFunction = (
-      originalFunction: (
-        data: any,
-        unused: string,
-        url?: string | URL | null
-      ) => void,
-      method: NavigationMethod
-    ) => {
-      return (data: any, unused: string, url?: string | URL | null) => {
-        /**
-         * Call the interceptors in order, if any of them returns true, the navigation
-         * action is cancelled
-         */
-        for (const { fn: interceptor } of interceptors) {
-          if (interceptor(navigation.from, navigation.to, method)) {
-            return
-          }
+    window.history.pushState = function pushState(
+      data: any,
+      unused: string,
+      url?: string | URL | null
+    ) {
+      /**
+       * Call the interceptors in order, if any of them returns true, the navigation
+       * action is cancelled
+       */
+      console.log('checking blockers', NavigationMethod.PUSH)
+      for (const { check } of blockers) {
+        if (
+          check(navigation.from, navigation.to, NavigationMethod.PUSH, () => {
+            originalPushState(data, unused, url)
+          })
+        ) {
+          console.log('dispatching pushstate')
+          window.dispatchEvent(new Event('popstate'))
+          console.log('blocker returned true')
+          return
         }
-        /**
-         * If no interceptor cancels the navigation, we call the original function
-         */
-        originalFunction(data, unused, url)
       }
+      /**
+       * If no interceptor cancels the navigation, we call the original function
+       */
+      console.log('calling original push state')
+      originalPushState(data, unused, url)
     }
 
-    window.history.pushState = createInterceptedStateFunction(
-      window.history.pushState,
-      NavigationMethod.PUSH
-    )
-    window.history.replaceState = createInterceptedStateFunction(
-      window.history.replaceState,
-      NavigationMethod.REPLACE
-    )
-
-    const onPopState = () => {
-      setNavigation((prev) => {
-        return {
-          from: prev.to,
-          to: location,
+    window.history.replaceState = function replaceState(
+      data: any,
+      unused: string,
+      url?: string | URL | null
+    ) {
+      /**
+       * Call the interceptors in order, if any of them returns true, the navigation
+       * action is cancelled
+       */
+      console.log('checking blockers', NavigationMethod.REPLACE)
+      for (const { check } of blockers) {
+        if (
+          check(
+            navigation.from,
+            navigation.to,
+            NavigationMethod.REPLACE,
+            () => {
+              originalReplaceState(data, unused, url)
+            }
+          )
+        ) {
+          window.dispatchEvent(new Event('popstate'))
+          console.log('blocker returned true')
+          return
         }
-      })
+      }
+      /**
+       * If no interceptor cancels the navigation, we call the original function
+       */
+      console.log('calling original replace state')
+      originalReplaceState(data, unused, url)
+    }
+
+    const onPopState = (e: PopStateEvent) => {
+      /**
+       * Call the interceptors in order, if any of them returns true, the navigation
+       * action is cancelled
+       */
+      console.log('checking blockers', NavigationMethod.POP)
+      for (const { check } of blockers) {
+        if (check(navigation.from, navigation.to, NavigationMethod.POP)) {
+          console.log('blocker returned true')
+          e.preventDefault()
+          return
+        }
+      }
+      console.log('no blockers returned true')
     }
 
     window.addEventListener('popstate', onPopState)
 
     return () => {
-      window.history.pushState = pushState
-      window.history.replaceState = replaceState
+      window.history.pushState = originalPushState
+      window.history.replaceState = originalReplaceState
       window.removeEventListener('popstate', onPopState)
     }
-  }, [interceptors, location, navigation])
+  }, [blockers, location, navigation])
 
   /**
    * Adds an interceptor to the list of interceptors
    */
-  const register = useCallback((fn: NavigationInterceptorFn): string => {
+  const register = useCallback((fn: NavigationBlockerFn): string => {
     const id = 'RW_NAVIGATION_INTERCEPTOR_ID_' + Date.now()
-    setInterceptors((prev) => [
+    setBlockers((prev) => [
       ...prev,
       {
         id: id,
-        fn: fn,
+        check: fn,
       },
     ])
     return id
@@ -163,11 +195,9 @@ const NavigationProvider = ({ children }: NavigationProviderProps) => {
   /**
    * Removes an interceptor from the list of interceptors
    */
-  const unregister = useCallback((interceptorId: string) => {
-    setInterceptors((prev) => {
-      const index = prev.findIndex(
-        (interceptor) => interceptor.id === interceptorId
-      )
+  const unregister = useCallback((blockerId: string) => {
+    setBlockers((prev) => {
+      const index = prev.findIndex((blocker) => blocker.id === blockerId)
       if (index > -1) {
         prev.splice(index, 1)
       }

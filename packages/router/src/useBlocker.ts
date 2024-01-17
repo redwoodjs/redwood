@@ -29,23 +29,42 @@ export type BlockedAction = NavigationAction
 
 export type ShouldBlock = boolean | BlockerFunction
 
+type ConfirmFn = () => void
+
 const useBlocker = (when: ShouldBlock): BlockerContextValue => {
   const { navigation, register, unregister } = useNavigation()
   const [blockState, setBlockState] = useState<BlockState>(BlockState.UNBLOCKED)
   const [blockedLocation, setBlockeedLocation] = useState<BlockedLocation>(null)
+  const [confirmBlocked, setConfirmBlocked] = useState<ConfirmFn | null>(null)
 
-  const block = (blocked: boolean, location: Location): boolean => {
+  const block = (
+    blocked: boolean,
+    location: Location,
+    confirm?: ConfirmFn
+  ): boolean => {
+    console.log('block', blocked)
+    console.log('location', location)
+    console.log('confirm', confirm !== undefined && confirm !== null)
     setBlockState(blocked ? BlockState.BLOCKED : BlockState.UNBLOCKED)
     setBlockeedLocation(blocked ? location : null)
+    setConfirmBlocked(blocked ? confirm || null : null)
     return blocked
   }
 
   const navigationBlocker = useCallback(
-    (from: Location, to: Location, method: NavigationMethod) => {
+    (
+      from: Location,
+      to: Location,
+      method: NavigationMethod,
+      confirm?: ConfirmFn
+    ) => {
+      console.log('blocker check')
       if (typeof when !== 'function') {
-        return block(!!when, to)
+        console.log('!!when', !!when)
+        return block(!!when, to, confirm)
       } else {
-        return block(when({ from, to, method }), to)
+        console.log('when({ from, to, method })', when({ from, to, method }))
+        return block(when({ from, to, method }), to, confirm)
       }
     },
     [when]
@@ -69,18 +88,23 @@ const useBlocker = (when: ShouldBlock): BlockerContextValue => {
 
   useEffect(() => {
     window.addEventListener('beforeunload', unloadBlocker)
-    const interceptorId = register(navigationBlocker)
+    const blockerId = register(navigationBlocker)
     return () => {
       window.removeEventListener('beforeunload', unloadBlocker)
-      unregister(interceptorId)
+      unregister(blockerId)
     }
   }, [register, unregister, unloadBlocker, navigationBlocker])
 
-  const confirm = () => {
+  const confirm = useCallback(() => {
     setBlockState(BlockState.UNBLOCKED)
-  }
+    if (confirmBlocked) {
+      console.log('confirming blocked navigation')
+    }
+    confirmBlocked?.()
+  }, [confirmBlocked])
 
   const abort = () => {
+    console.log('aborting blocked navigation')
     setBlockState(BlockState.UNBLOCKED)
   }
 
