@@ -22,6 +22,12 @@ import {
   lambdaRequestHandler,
 } from './plugins/lambdaLoader'
 
+type StartOptions = Omit<FastifyListenOptions, 'port' | 'host'>
+
+interface Server extends FastifyInstance {
+  start: (options: StartOptions) => Promise<string>
+}
+
 // Load .env files if they haven't already been loaded. This makes importing this file effectful:
 //
 // ```js
@@ -116,7 +122,13 @@ export async function createServer(options: CreateServerOptions = {}) {
 
   // ------------------------
   // Initialize the fastify instance.
-  const server = fastify(fastifyServerOptions)
+  const server: Server = {
+    ...fastify(fastifyServerOptions),
+    // `start` will get replaced further down in this file
+    start: async () => {
+      throw new Error('Not added yet')
+    },
+  }
   await server.register(redwoodFastify, { redwood: { apiRootPath } })
 
   // ------------------------
@@ -154,13 +166,9 @@ export async function createServer(options: CreateServerOptions = {}) {
    * - `REDWOOD_API_PORT`
    * - [api].port in redwood.toml
    */
-  function start(options: Omit<FastifyListenOptions, 'port' | 'host'> = {}) {
+  server.start = (options: StartOptions = {}) => {
     return server.listen(resolveStartOptions(options))
   }
-
-  // TODO: type this.
-  // @ts-expect-error TODO
-  server.start = start
 
   return server
 }
