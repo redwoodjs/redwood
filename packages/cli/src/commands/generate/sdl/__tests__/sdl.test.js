@@ -2,24 +2,6 @@ globalThis.__dirname = __dirname
 
 globalThis.mockFs = false
 
-// jest.mock('console', () => {
-//   return {
-//     info: jest.fn(),
-//     log: jest.fn(),
-//   }
-// })
-
-// jest.mock('process', () => {
-//   const actualProcess = jest.requireActual('process')
-//   return {
-//     ...actualProcess,
-//     stdout: {
-//       ...actualProcess.stdout,
-//       write: () => true,
-//     },
-//   }
-// })
-
 jest.mock('fs', () => {
   const actual = jest.requireActual('fs')
 
@@ -55,15 +37,7 @@ import { ensurePosixPath } from '@redwoodjs/project-config'
 import { getDefaultArgs } from '../../../../lib'
 import * as sdl from '../sdl'
 
-beforeEach(() => {
-  // jest.spyOn(console, 'info').mockImplementation(() => {})
-  // jest.spyOn(console, 'log').mockImplementation(() => {})
-})
-
 afterEach(() => {
-  // console.info.mockRestore()
-  // console.log.mockRestore()
-
   jest.clearAllMocks()
 })
 

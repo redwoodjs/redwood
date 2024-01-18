@@ -332,7 +332,6 @@ export const handler = async ({
         {
           title: `Generating types ...`,
           task: async () => {
-            console.log('about to generate types')
             const { errors } = await generateTypes()
 
             for (const { message, error } of errors) {
