@@ -534,7 +534,7 @@ describe('mapPrismaScalarToPagePropTsType', () => {
   })
 
   it('maps scalar type Decimal to TS type number', () => {
-    expect(helpers.mapPrismaScalarToPagePropTsType('Float')).toBe('number')
+    expect(helpers.mapPrismaScalarToPagePropTsType('Decimal')).toBe('number')
   })
 
   it('maps scalar type DateTime to TS type string', () => {
