@@ -101,16 +101,16 @@ export const handler = async (args) => {
 
   // check the script exists, and that there are no ambiguous conflicts like [foo.js, foo.ts]
   const targetScriptPath = path.parse(scriptPath)
-  const targetScriptName = targetScriptPath?.base
+  const targetScriptName = targetScriptPath.base
   const targetMatch = findScripts()
     .map((p) => path.parse(p))
     .filter((p) => {
-      if (!p || !targetScriptName) {
-        return false
-      }
       // Compares with base when file specified as 'foo.ts', otherwise compares with name
       // when file specified as 'foo'
-      return (targetScriptPath?.ext ? p.base : p.name) === targetScriptName
+      return (
+        targetScriptName &&
+        (targetScriptPath.ext ? p.base : p.name) === targetScriptName
+      )
     })
   if (targetMatch.length !== 1) {
     console.error(
@@ -118,9 +118,9 @@ export const handler = async (args) => {
         `\n${
           !targetMatch.length ? 'No script' : 'Multiple scripts'
         } called ${c.underline(
-          targetScriptPath?.ext
+          targetScriptPath.ext
             ? targetScriptPath.base
-            : targetScriptPath?.name + '.{js,jsx,ts,tsx}'
+            : targetScriptPath.name + '.{js,jsx,ts,tsx}'
         )} in ./scripts folder.\n`
       )
     )
