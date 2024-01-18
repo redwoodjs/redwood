@@ -341,8 +341,11 @@ export function replaceParams(
   })
 
   // Append any unnamed params as search params.
-  if (queryParams.length) {
-    path += `?${queryParams.join('&')}`
+  if (extraArgKeys.length) {
+    const extraArgs = Object.fromEntries(
+      extraArgKeys.map((key) => [key, `${args[key]}`])
+    )
+    path += `?${new URLSearchParams(extraArgs).toString()}`
   }
 
   return path
