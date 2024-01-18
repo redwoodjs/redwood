@@ -13,7 +13,6 @@ export const createAuthDecoder = (cookieNameOption: string): Decoder => {
     const session = dbAuthSession(req.event, cookieNameOption)
 
     // We no longer compare the session id with the bearer token
-    // Because we only pass around the encrypted session (in both cookie and header)
     return session
   }
 }
