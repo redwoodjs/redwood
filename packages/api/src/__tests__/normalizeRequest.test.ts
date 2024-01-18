@@ -80,7 +80,7 @@ describe('Lambda Request', () => {
       headers: new Headers(corsEventB64.headers as Record<string, string>), // headers returned as symbol
       method: 'OPTIONS',
       query: null,
-      jsonBody: undefined,
+      jsonBody: {},
     })
 
     const corsEventWithoutB64 = createMockedLambdaEvent(
@@ -93,7 +93,7 @@ describe('Lambda Request', () => {
       headers: new Headers(corsEventB64.headers as Record<string, string>), // headers returned as symbol
       method: 'OPTIONS',
       query: null,
-      jsonBody: undefined,
+      jsonBody: {},
     })
   })
 })
@@ -151,7 +151,7 @@ describe('Fetch API Request', () => {
         whatsup: 'doc',
         its: 'bugs',
       },
-      jsonBody: undefined,
+      jsonBody: {}, // @NOTE empty body is {} not undefined
     })
 
     expect(partial.headers.get('content-type')).toEqual(headers['content-type'])

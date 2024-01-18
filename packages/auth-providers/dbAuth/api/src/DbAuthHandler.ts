@@ -1236,7 +1236,8 @@ export class DbAuthHandler<
 
   // checks the CSRF token in the header against the CSRF token in the session
   // and throw an error if they are not the same (not used yet)
-  _validateCsrf() {
+  async _validateCsrf() {
+    await this.init()
     if (
       this.sessionCsrfToken !== this.normalizedRequest.headers.get('csrf-token')
     ) {
@@ -1394,6 +1395,8 @@ export class DbAuthHandler<
 
   // gets the user from the database and returns only its ID
   async _getCurrentUser() {
+    await this.init()
+
     if (!this.session?.id) {
       throw new DbAuthError.NotLoggedInError()
     }

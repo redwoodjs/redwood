@@ -294,7 +294,7 @@ describe('dbAuth', () => {
     })
   })
 
-  describe.only('constructor', () => {
+  describe('constructor', () => {
     it('initializes some variables with passed values', () => {
       event = { headers: {} }
       context = { foo: 'bar' }
@@ -523,8 +523,7 @@ describe('dbAuth', () => {
       })
     })
 
-    it.skip('parses an empty plain text body and still sets params', async () => {
-      // @TODO(Rob): This test is failing due to refactor, not sure its necessary
+    it('parses an empty plain text body and still sets params', async () => {
       event = { isBase64Encoded: false, headers: {}, body: '' }
       context = { foo: 'bar' }
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -533,9 +532,7 @@ describe('dbAuth', () => {
       expect(dbAuth.normalizedRequest.jsonBody).toEqual({})
     })
 
-    it.skip('parses params from an undefined body when isBase64Encoded == false', async () => {
-      // @TODO(Rob): This test is failing due to refactor, not sure its necessary
-
+    it('parses params from an undefined body when isBase64Encoded == false', async () => {
       event = {
         isBase64Encoded: false,
         headers: {},
@@ -562,7 +559,6 @@ describe('dbAuth', () => {
     })
 
     it('parses params from an undefined body when isBase64Encoded == true', async () => {
-      // @TODO(Rob): Not sure this is necessary any more?
       event = {
         isBase64Encoded: true,
         headers: {},
@@ -571,11 +567,10 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.init()
 
-      expect(dbAuth.normalizedRequest.jsonBody).toEqual(undefined)
+      expect(dbAuth.normalizedRequest.jsonBody).toEqual({})
     })
 
     it('parses params from an empty body when isBase64Encoded == true', async () => {
-      // @TODO(Rob): Not sure this is necessary any more?
       event = {
         isBase64Encoded: true,
         headers: {},
@@ -585,7 +580,7 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.init()
 
-      expect(dbAuth.normalizedRequest.jsonBody).toEqual(undefined)
+      expect(dbAuth.normalizedRequest.jsonBody).toEqual({})
     })
 
     it('sets header-based CSRF token', async () => {
@@ -1613,14 +1608,12 @@ describe('dbAuth', () => {
     })
   })
 
-  describe.only('getToken', () => {
+  describe('getToken', () => {
     it('returns the token from the cookie', async () => {
       const user = await createDbUser()
       const cookie = encryptToCookie(
         JSON.stringify({ id: user.id }) + ';' + 'token'
       )
-
-      const justEncryptedSession = cookie.split('session=')[1]
 
       event = {
         headers: {
@@ -1630,10 +1623,9 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       const response = await dbAuth.getToken()
 
-      expect(response[0]).toEqual(justEncryptedSession)
+      expect(response[0]).toEqual(user.id)
     })
 
-    // @TODO Rob HELP, change in behaviour
     it('returns nothing if user is not logged in', async () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       const response = await dbAuth.getToken()
@@ -1656,7 +1648,6 @@ describe('dbAuth', () => {
       expect(response[0]).toEqual('{"error":"User not found"}')
     })
 
-    // @TODO Rob HELP, change in behaviour
     it('re-encrypts the session cookie if using the legacy algorithm', async () => {
       await createDbUser({ id: 7 })
       event = {
@@ -1679,11 +1670,7 @@ describe('dbAuth', () => {
     })
   })
 
-  // @TODO: Studio should not use body to send auth impersonation details
-  // @TODO: Studio should not use body to send auth impersonation details
-  // @TODO: Studio should not use body to send auth impersonation details
-  // @TODO: Studio should not use body to send auth impersonation details
-  describe.skip('When a developer has set GraphiQL headers to mock a session cookie', () => {
+  describe('When a developer has set GraphiQL headers to mock a session cookie', () => {
     describe('when in development environment', () => {
       const curNodeEnv = process.env.NODE_ENV
 
@@ -2263,7 +2250,7 @@ describe('dbAuth', () => {
   })
 
   describe('_validateCsrf()', () => {
-    it('returns true if session and header token match', () => {
+    it('returns true if session and header token match', async () => {
       const data = { foo: 'bar' }
       const token = 'abcd'
       event = {
@@ -2274,7 +2261,9 @@ describe('dbAuth', () => {
       }
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      expect(dbAuth._validateCsrf()).toEqual(true)
+      const output = await dbAuth._validateCsrf()
+
+      expect(output).toEqual(true)
     })
 
     it('throws an error if session and header token do not match', () => {
@@ -2288,9 +2277,9 @@ describe('dbAuth', () => {
       }
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      expect(() => {
-        dbAuth._validateCsrf()
-      }).toThrow(dbAuthError.CsrfTokenMismatchError)
+      expect(async () => {
+        await dbAuth._validateCsrf()
+      }).rejects.toThrow(dbAuthError.CsrfTokenMismatchError)
     })
   })
 
@@ -2741,7 +2730,7 @@ describe('dbAuth', () => {
   })
 
   describe('getAuthMethod', () => {
-    it('gets methodName out of the query string', () => {
+    it('gets methodName out of the query string', async () => {
       event = {
         path: '/.redwood/functions/auth',
         queryStringParameters: { method: 'logout' },
@@ -2749,11 +2738,11 @@ describe('dbAuth', () => {
         headers: {},
       }
       const dbAuth = new DbAuthHandler(event, context, options)
-
-      expect(dbAuth._getAuthMethod()).toEqual('logout')
+      const method = await dbAuth._getAuthMethod()
+      expect(method).toEqual('logout')
     })
 
-    it('gets methodName out of a JSON body', () => {
+    it('gets methodName out of a JSON body', async () => {
       event = {
         path: '/.redwood/functions/auth',
         queryStringParameters: {},
@@ -2761,11 +2750,12 @@ describe('dbAuth', () => {
         headers: {},
       }
       const dbAuth = new DbAuthHandler(event, context, options)
+      const method = await dbAuth._getAuthMethod()
 
-      expect(dbAuth._getAuthMethod()).toEqual('signup')
+      expect(method).toEqual('signup')
     })
 
-    it('otherwise returns undefined', () => {
+    it('otherwise returns undefined', async () => {
       event = {
         path: '/.redwood/functions/auth',
         queryStringParameters: {},
@@ -2774,7 +2764,8 @@ describe('dbAuth', () => {
       }
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      expect(dbAuth._getAuthMethod()).toBeUndefined()
+      const method = await dbAuth._getAuthMethod()
+      expect(method).toBeUndefined()
     })
   })
 

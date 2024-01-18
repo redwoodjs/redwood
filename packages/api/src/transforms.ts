@@ -5,7 +5,7 @@ import type { APIGatewayProxyEvent } from 'aws-lambda'
 // We do this to keep the API consistent between the two
 // When we support only the FetchAPI request, we should remove this
 export interface PartialRequest<TBody = Record<string, any>> {
-  jsonBody?: TBody
+  jsonBody: TBody
   headers: Headers
   method: string
   query: any
@@ -16,7 +16,7 @@ export interface PartialRequest<TBody = Record<string, any>> {
  */
 export const parseLambdaEventBody = (event: APIGatewayProxyEvent) => {
   if (!event.body) {
-    return
+    return {}
   }
 
   if (event.isBase64Encoded) {
@@ -28,23 +28,19 @@ export const parseLambdaEventBody = (event: APIGatewayProxyEvent) => {
 
 /**
  * Extracts and parses body payload from Fetch Request
- * with check for empty body (and base64 later)
+ * with check for empty body
+ *
+ * NOTE: whatwg/server expects that you will decode the base64 body yourself
+ * see readme here: https://github.com/ardatan/whatwg-node/tree/master/packages/server#aws-lambda
  */
 export const parseFetchEventBody = async (event: Request) => {
   if (!event.body) {
-    return
+    return {}
   }
-
-  // @TODO: We need to understand what happens on Vercel
-  // if (event.isBase64Encoded) {
-  //   return JSON.parse(Buffer.from(event.body, 'base64').toString('utf-8'))
-  // } else {
-  //   return JSON.parse(event.body)
-  // }
 
   const body = await event.text()
 
-  return body ? JSON.parse(body) : undefined
+  return body ? JSON.parse(body) : {}
 }
 
 export const isFetchApiRequest = (

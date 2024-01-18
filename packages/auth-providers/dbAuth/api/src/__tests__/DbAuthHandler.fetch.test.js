@@ -523,9 +523,12 @@ describe('dbAuth', () => {
       })
     })
 
-    it.skip('parses an empty plain text body and still sets params', async () => {
-      // @TODO(Rob): This test is failing due to refactor, not sure its necessary
-      req = { isBase64Encoded: false, headers: {}, body: '' }
+    it('parses an empty plain text body and still sets params', async () => {
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body: '',
+      })
+
       context = { foo: 'bar' }
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
@@ -533,9 +536,7 @@ describe('dbAuth', () => {
       expect(dbAuth.normalizedRequest.jsonBody).toEqual({})
     })
 
-    it.skip('parses params from an undefined body when isBase64Encoded == false', async () => {
-      // @TODO(Rob): This test is failing due to refactor, not sure its necessary
-
+    it('parses params from an undefined body', async () => {
       req = {
         isBase64Encoded: false,
         headers: {},
@@ -545,47 +546,6 @@ describe('dbAuth', () => {
       await dbAuth.init()
 
       expect(dbAuth.normalizedRequest.jsonBody).toEqual({})
-    })
-
-    it('parses params from a base64 encoded body', async () => {
-      req = {
-        isBase64Encoded: true,
-        headers: {},
-        body: Buffer.from(`{"foo":"bar", "baz":123}`, 'utf8'),
-      }
-      const dbAuth = new DbAuthHandler(req, context, options)
-      await dbAuth.init()
-      expect(dbAuth.normalizedRequest.jsonBody).toEqual({
-        foo: 'bar',
-        baz: 123,
-      })
-    })
-
-    it('parses params from an undefined body when isBase64Encoded == true', async () => {
-      // @TODO(Rob): Not sure this is necessary any more?
-      req = {
-        isBase64Encoded: true,
-        headers: {},
-      }
-      context = { foo: 'bar' }
-      const dbAuth = new DbAuthHandler(req, context, options)
-      await dbAuth.init()
-
-      expect(dbAuth.normalizedRequest.jsonBody).toEqual(undefined)
-    })
-
-    it('parses params from an empty body when isBase64Encoded == true', async () => {
-      // @TODO(Rob): Not sure this is necessary any more?
-      req = {
-        isBase64Encoded: true,
-        headers: {},
-        body: '',
-      }
-      context = { foo: 'bar' }
-      const dbAuth = new DbAuthHandler(req, context, options)
-      await dbAuth.init()
-
-      expect(dbAuth.normalizedRequest.jsonBody).toEqual(undefined)
     })
 
     it('sets header-based CSRF token', async () => {
@@ -936,14 +896,15 @@ describe('dbAuth', () => {
         body,
       })
 
-      options.forgotPassword.handler = (handlerUser) => {
-        // user should have the raw resetToken NOT the hash
+      options.forgotPassword.handler = (handlerUser, token) => {
+        // tokens should be the raw resetToken NOT the hash
         // resetToken consists of 16 base64 characters
-        expect(handlerUser.resetToken).toMatch(/^\w{16}$/)
+        expect(handlerUser.resetToken).toBeUndefined()
+        expect(token).toMatch(/^[A-Za-z0-9/+]{16}$/)
       }
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.forgotPassword()
-      expect.assertions(1)
+      expect.assertions(2)
     })
 
     it('removes the token from the forgotPassword response', async () => {
@@ -1190,7 +1151,7 @@ describe('dbAuth', () => {
 
       const response = await dbAuth.login()
 
-      expect(response[0]).toEqual({ id: user.id })
+      expect(response[0].id).toEqual(user.id)
     })
 
     it('returns a CSRF token in the header', async () => {
@@ -1887,7 +1848,6 @@ describe('dbAuth', () => {
         JSON.stringify({ id: user.id }) + ';' + 'token'
       )
 
-      const justEncryptedSession = cookie.split('session=')[1]
       const headers = {
         cookie,
       }
@@ -1901,7 +1861,7 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       const response = await dbAuth.getToken()
 
-      expect(response[0]).toEqual(justEncryptedSession)
+      expect(response[0]).toEqual(user.id)
     })
 
     it('returns nothing if user is not logged in', async () => {
@@ -1911,7 +1871,6 @@ describe('dbAuth', () => {
       expect(response[0]).toEqual('')
     })
 
-    // @TODO(Rob) HELP, change in behaviour
     it('returns any other error', async () => {
       req = {
         headers: {
@@ -1927,7 +1886,6 @@ describe('dbAuth', () => {
       expect(response[0]).toEqual('{"error":"User not found"}')
     })
 
-    // @TODO(Rob) HELP, change in behaviour
     it('re-encrypts the session cookie if using the legacy algorithm', async () => {
       await createDbUser({ id: 7 })
       req = {
@@ -1950,11 +1908,7 @@ describe('dbAuth', () => {
     })
   })
 
-  // @TODO: Studio should not use body to send auth impersonation details
-  // @TODO: Studio should not use body to send auth impersonation details
-  // @TODO: Studio should not use body to send auth impersonation details
-  // @TODO: Studio should not use body to send auth impersonation details
-  describe.skip('When a developer has set GraphiQL headers to mock a session cookie', () => {
+  describe('When a developer has set GraphiQL headers to mock a session cookie', () => {
     describe('when in development environment', () => {
       const curNodeEnv = process.env.NODE_ENV
 
@@ -1968,17 +1922,20 @@ describe('dbAuth', () => {
         expect(process.env.NODE_ENV).toBe('test')
       })
 
-      it('authenticates the user based on GraphiQL headers when no event.headers present', async () => {
-        // setup graphiQL header cookie in extensions
+      it('authenticates the user based on GraphiQL impersonated headers when no cookie present', async () => {
+        // Making Fetch API Requests with GraphiQL Headers in the body does not work because it's async
+        // but we can set the new 'rw-studio-impersonation-cookie' header
         const dbUser = await createDbUser()
-        req.body = JSON.stringify({
-          extensions: {
-            headers: {
-              'auth-provider': 'dbAuth',
-              cookie: encryptToCookie(JSON.stringify({ id: dbUser.id })),
-              authorization: 'Bearer ' + dbUser.id,
-            },
-          },
+        const headers = {
+          'auth-provider': 'dbAuth',
+          'rw-studio-impersonation-cookie': encryptToCookie(
+            JSON.stringify({ id: dbUser.id })
+          ),
+        }
+
+        const req = new Request('http://localhost:8910/_rw_mw', {
+          method: 'POST',
+          headers,
         })
 
         const dbAuth = new DbAuthHandler(req, context, options)
@@ -1986,23 +1943,23 @@ describe('dbAuth', () => {
         expect(user.id).toEqual(dbUser.id)
       })
 
-      it('Cookie from GraphiQLHeaders takes precedence over event headers when authenticating user', async () => {
+      it('Cookie from GraphiQLHeaders takes precedence over real headers when authenticating user', async () => {
         // setup session cookie in GraphiQL header
         const dbUser = await createDbUser()
         const dbUserId = dbUser.id
 
-        req.body = JSON.stringify({
-          extensions: {
-            headers: {
-              'auth-provider': 'dbAuth',
-              cookie: encryptToCookie(JSON.stringify({ id: dbUserId })),
-              authorization: 'Bearer ' + dbUserId,
-            },
+        const req = new Request('http://localhost:8910/_rw_mw', {
+          method: 'POST',
+          headers: {
+            'auth-provider': 'dbAuth',
+            authorization: 'Bearer ' + dbUserId,
+            cookie: encryptToCookie(JSON.stringify({ id: 9999999999 })), // The "real" cookie with an invalid userId
+            // 👇 The impersonated header takes precendence
+            'rw-studio-impersonation-cookie': encryptToCookie(
+              JSON.stringify({ id: dbUser.id })
+            ),
           },
         })
-
-        // create session cookie in event header
-        req.headers.cookie = encryptToCookie(JSON.stringify({ id: 9999999999 }))
 
         // should read session from graphiQL header, not from cookie
         const dbAuth = new DbAuthHandler(req, context, options)
@@ -2016,13 +1973,14 @@ describe('dbAuth', () => {
         const dbUser = await createDbUser()
         const dbUserId = dbUser.id
 
-        req.body = JSON.stringify({
-          extensions: {
-            headers: {
-              'auth-provider': 'dbAuth',
-              cookie: encryptToCookie(JSON.stringify({ id: dbUserId })),
-              authorization: 'Bearer ' + dbUserId,
-            },
+        const req = new Request('http://localhost:8910/_rw_mw', {
+          method: 'POST',
+          headers: {
+            'auth-provider': 'dbAuth',
+            'rw-studio-impersonation-cookie': encryptToCookie(
+              JSON.stringify({ id: dbUserId })
+            ),
+            authorization: 'Bearer ' + dbUserId,
           },
         })
 
@@ -2053,7 +2011,6 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
 
-    // @TODO(Rob) Failing test here
     it('throws an error if WebAuthn is disabled', async () => {
       const req = new Request('http://localhost:8910/_rw_mw', {
         method: 'POST',
@@ -2183,7 +2140,6 @@ describe('dbAuth', () => {
   })
 
   describe('webAuthnAuthOptions', () => {
-    // @TODO(Rob): HELP, failing test here
     it('throws an error if user is not logged in', async () => {
       const req = new Request('http://localhost:8910/_rw_mw', {
         method: 'POST',
@@ -2564,20 +2520,23 @@ describe('dbAuth', () => {
     })
   })
 
-  // @TODO(Rob): Not used yet.
-  describe.skip('_validateCsrf()', () => {
-    it('returns true if session and header token match', () => {
+  describe('_validateCsrf()', () => {
+    it('returns true if session and header token match', async () => {
       const data = { foo: 'bar' }
       const token = 'abcd'
-      req = {
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
         headers: {
           cookie: encryptToCookie(JSON.stringify(data) + ';' + token),
           'csrf-token': token,
         },
-      }
-      const dbAuth = new DbAuthHandler(req, context, options)
+      })
 
-      expect(dbAuth._validateCsrf()).toEqual(true)
+      const dbAuth = new DbAuthHandler(req, context, options)
+      const output = await dbAuth._validateCsrf()
+
+      expect(output).toEqual(true)
     })
 
     it('throws an error if session and header token do not match', () => {
@@ -2591,9 +2550,9 @@ describe('dbAuth', () => {
       }
       const dbAuth = new DbAuthHandler(req, context, options)
 
-      expect(() => {
-        dbAuth._validateCsrf()
-      }).toThrow(dbAuthError.CsrfTokenMismatchError)
+      expect(async () => {
+        await dbAuth._validateCsrf()
+      }).rejects.toThrow(dbAuthError.CsrfTokenMismatchError)
     })
   })
 
