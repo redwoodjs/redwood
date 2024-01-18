@@ -1,11 +1,15 @@
 /* eslint-env node, es6*/
-import fs from 'node:fs'
-import path from 'node:path'
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { exec, getExecaOptions } from './util'
+import { exec, getExecaOptions as utilGetExecaOptions } from './util'
+
+function getExecaOptions(cwd: string) {
+  return { ...utilGetExecaOptions(cwd), stdio: 'pipe' }
+}
 
 const args = yargs(hideBin(process.argv))
   .usage('Usage: $0 <project directory>')
@@ -17,7 +21,6 @@ const args = yargs(hideBin(process.argv))
  */
 async function runCommand() {
   const OUTPUT_PROJECT_PATH = path.resolve(String(args._))
-
   await exec(
     'yarn rw setup graphql trusted-documents',
     [],
@@ -38,6 +41,10 @@ async function runCommand() {
     console.error('trustedDocuments = true not set in redwood.toml')
     console.error()
     console.error('Please run this command locally to make sure it works')
+    console.error()
+    console.error("For debugging purposes, here's the content of redwood.toml:")
+    console.error(redwoodTomlContent)
+    console.error()
     throw new Error('Failed to set up trusted-document')
   }
 

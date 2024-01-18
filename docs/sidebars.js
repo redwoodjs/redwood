@@ -185,6 +185,7 @@ module.exports = {
         'serverless-functions',
         'services',
         'storybook',
+        'studio',
         'testing',
         'toast-notifications',
         {

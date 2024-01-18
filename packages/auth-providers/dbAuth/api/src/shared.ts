@@ -2,7 +2,7 @@ import crypto from 'node:crypto'
 
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 
-import { getEventHeader } from '@redwoodjs/api'
+import { getEventHeader, isFetchApiRequest } from '@redwoodjs/api'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 
 import * as DbAuthError from './errors'
@@ -36,9 +36,38 @@ const getPort = () => {
   return getConfig(configPath).api.port
 }
 
-// @TODO: reimplement eventGraphiQLHeadersCookie
-// Needs a re-implementation on the studio side, because using
-// body to send Auth headers requires this function to be async
+// When in development environment, check for auth impersonation cookie
+// if user has generated graphiql headers
+const eventGraphiQLHeadersCookie = (event: APIGatewayProxyEvent | Request) => {
+  if (process.env.NODE_ENV === 'development') {
+    const impersationationHeader = getEventHeader(
+      event,
+      'rw-studio-impersonation-cookie'
+    )
+
+    if (impersationationHeader) {
+      return impersationationHeader
+    }
+
+    // TODO: Remove code below when we remove the old way of passing the cookie
+    // from Studio, and decide it's OK to break compatibility with older Studio
+    // versions
+    try {
+      if (!isFetchApiRequest(event)) {
+        const jsonBody = JSON.parse(event.body ?? '{}')
+        return (
+          jsonBody?.extensions?.headers?.cookie ||
+          jsonBody?.extensions?.headers?.Cookie
+        )
+      }
+    } catch {
+      // sometimes the event body isn't json
+      return
+    }
+  }
+
+  return
+}
 
 // decrypts session text using old CryptoJS algorithm (using node:crypto library)
 const legacyDecryptSession = (encryptedText: string) => {
@@ -68,8 +97,7 @@ export const extractCookie = (event: APIGatewayProxyEvent | Request) => {
   // @TODO Disabling Studio Auth impersonation: it uses body instead of headers
   // this feels a bit off, but also requires the parsing to become async
 
-  // return eventGraphiQLHeadersCookie(event) || eventHeadersCookie(event)
-  return getEventHeader(event, 'Cookie')
+  return eventGraphiQLHeadersCookie(event) || getEventHeader(event, 'Cookie')
 }
 
 function extractEncryptedSessionFromHeader(
@@ -191,7 +219,7 @@ export const webAuthnSession = (event: APIGatewayProxyEvent | Request) => {
     return null
   }
 
-  const webAuthnCookie = cookieHeader.split(';').find((cook) => {
+  const webAuthnCookie = cookieHeader.split(';').find((cook: string) => {
     return cook.split('=')[0].trim() === 'webAuthn'
   })
 
