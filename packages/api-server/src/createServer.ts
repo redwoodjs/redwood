@@ -25,7 +25,7 @@ import {
 type StartOptions = Omit<FastifyListenOptions, 'port' | 'host'>
 
 interface Server extends FastifyInstance {
-  start: (options: StartOptions) => Promise<string>
+  start: (options?: StartOptions) => Promise<string>
 }
 
 // Load .env files if they haven't already been loaded. This makes importing this file effectful:
