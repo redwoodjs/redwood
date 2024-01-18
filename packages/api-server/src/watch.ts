@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { fork } from 'child_process'
 import type { ChildProcess } from 'child_process'
+import { fork } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
@@ -13,12 +13,16 @@ import { debounce } from 'lodash'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { buildApi } from '@redwoodjs/internal/dist/build/api'
+import {
+  buildApi,
+  cleanApiBuild,
+  rebuildApi,
+} from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import {
-  getPaths,
   ensurePosixPath,
   getConfig,
+  getPaths,
   resolveFile,
 } from '@redwoodjs/project-config'
 
@@ -43,9 +47,6 @@ dotenv.config({
   path: rwjsPaths.base,
 })
 
-// TODO:
-// 1. Move this file out of the HTTP server, and place it in the CLI?
-
 let httpServerProcess: ChildProcess
 
 const killApiServer = () => {
@@ -63,19 +64,32 @@ const validate = async () => {
     console.error(c.red(e?.message))
     console.log(c.redBright('-'.repeat(40)))
 
-    delayRestartServer.cancel()
+    debouncedBuild.cancel()
+    debouncedRebuild.cancel()
     return false
   }
 }
 
-const rebuildApiServer = () => {
+const buildAndRestart = async ({
+  rebuild = false,
+  clean = false,
+}: { rebuild?: boolean; clean?: boolean } = {}) => {
   try {
     // Shutdown API server
     killApiServer()
 
     const buildTs = Date.now()
     process.stdout.write(c.dim(c.italic('Building... ')))
-    buildApi()
+
+    if (clean) {
+      await cleanApiBuild()
+    }
+
+    if (rebuild) {
+      await rebuildApi()
+    } else {
+      await buildApi()
+    }
     console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
 
     const forkOpts = {
@@ -148,11 +162,18 @@ const rebuildApiServer = () => {
 // this usually happens when running RedwoodJS generator commands.
 // Local writes are very fast, but writes in e2e environments are not,
 // so allow the default to be adjust with a env-var.
-const delayRestartServer = debounce(
-  rebuildApiServer,
+const debouncedRebuild = debounce(
+  () => buildAndRestart({ rebuild: true }),
   process.env.RWJS_DELAY_RESTART
     ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
-    : 5
+    : 500
+)
+
+const debouncedBuild = debounce(
+  () => buildAndRestart({ rebuild: false }),
+  process.env.RWJS_DELAY_RESTART
+    ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
+    : 500
 )
 
 // NOTE: the file comes through as a unix path, even on windows
@@ -165,7 +186,7 @@ const IGNORED_API_PATHS = [
 ].map((path) => ensurePosixPath(path))
 
 chokidar
-  .watch(rwjsPaths.api.base, {
+  .watch([rwjsPaths.api.src], {
     persistent: true,
     ignoreInitial: true,
     ignored: (file: string) => {
@@ -188,7 +209,11 @@ chokidar
     },
   })
   .on('ready', async () => {
-    rebuildApiServer()
+    // First time
+    await buildAndRestart({
+      clean: true,
+      rebuild: false,
+    })
     await validate()
   })
   .on('all', async (eventName, filePath) => {
@@ -199,20 +224,30 @@ chokidar
       return
     }
 
-    // We validate here, so that developers will see the error
-    // As they're running the dev server
-    if (filePath.includes('.sdl')) {
-      const isValid = await validate()
+    if (eventName) {
+      if (filePath.includes('.sdl')) {
+        // We validate here, so that developers will see the error
+        // As they're running the dev server
+        const isValid = await validate()
 
-      // Exit early if not valid
-      if (!isValid) {
-        return
+        // Exit early if not valid
+        if (!isValid) {
+          return
+        }
       }
     }
 
     console.log(
       c.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`)
     )
-    delayRestartServer.cancel()
-    delayRestartServer()
+
+    if (eventName === 'add' || eventName === 'unlink') {
+      debouncedBuild.cancel()
+      debouncedRebuild.cancel()
+      debouncedBuild()
+    } else {
+      // If files have just changed, then rebuild
+      debouncedRebuild.cancel()
+      debouncedRebuild()
+    }
   })

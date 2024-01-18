@@ -179,53 +179,54 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: 📁 Create a temporary directory
-        id: createpath
-        run: |
-          project_path=$(mktemp -d -t redwood.XXXXXX)
-          echo "::set-output name=project_path::$project_path"
-          framework_path=$(pwd)
-          echo "::set-output name=framework_path::$framework_path"
-
-      - name: 🌲 Create a Redwood App
-        run: |
-          ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} \
-            --no-start \
-            --bundler ${{ matrix.bundler }}
-        env:
-          YARN_ENABLE_IMMUTABLE_INSTALLS: false
-
-      - name: 🐙 Git init in the Redwood App directory
-        run: |
-          git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
-          git init --initial-branch main && git add .
-          git commit -a --message=init
-        working-directory: ${{ steps.createpath.outputs.project_path }}
-
-      - name: Start server in background
-        run: yarn rw dev --no-generate --fwd="--no-open" &
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+      - name: 🔨 Build
+        run: yarn build
 
       - name: 🌲 Install Cypress
-        run: yarn run cypress install
+        run: yarn cypress install
 
-      - name: 🌲 Run cypress
-        uses: cypress-io/github-action@v5
+      - name: 🌲 Create a Redwood App
+        id: crwa
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+        run: |
+          project_path=$(mktemp -d -t redwood.XXXXXX)
+          echo "project-path=$project_path" >> $GITHUB_OUTPUT
+
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+
+          ./tasks/run-e2e "$project_path" \
+            --bundler ${{ matrix.bundler }} \
+            --no-build-framework \
+            --no-start
+
+      - name: Start the dev server in the background
+        run: |
+          yarn rw dev --no-generate --fwd="--no-open" 2>&1 | tee dev_server.log &
+        working-directory: ${{ steps.crwa.outputs.project-path }}
+
+      - name: 🌲 Run Cypress
+        uses: cypress-io/github-action@v6
+        env:
+          CYPRESS_RW_PATH: ${{ steps.crwa.outputs.project-path }}
         with:
-          # We've already installed dependencies.
-          install: false
-          env: true
           browser: chrome
-          record: false
+          env: true
+          install: false
           wait-on: 'http://[::1]:8910'
           working-directory: ./tasks/e2e
           spec: |
              cypress/e2e/01-tutorial/*.cy.js
              cypress/e2e/04-logger/*.cy.js
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ matrix.bundler }}-logs
+          path: |
+            ${{ steps.crwa.outputs.project-path }}/dev_server.log
+            ${{ steps.crwa.outputs.project-path }}/e2e.log
 
   tutorial-e2e-skip:
     needs: detect-changes

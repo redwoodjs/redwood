@@ -7888,6 +7888,7 @@ __metadata:
     "@redwoodjs/project-config": "npm:6.0.7"
     "@types/babel-plugin-tester": "npm:9.0.9"
     "@types/babel__core": "npm:7.20.4"
+    "@types/node": "npm:20.10.4"
     babel-plugin-auto-import: "npm:1.1.0"
     babel-plugin-graphql-tag: "npm:3.3.0"
     babel-plugin-module-resolver: "npm:5.0.0"
@@ -15961,6 +15962,17 @@ __metadata:
   version: 1.0.2
   resolution: "cyclist@npm:1.0.2"
   checksum: 163e2f7207180ccf2bb5a6ca8a7360469c13fad631509ef96de02397266b3a42089e2b2b51b97d3d8fdc4709d2fbe651c309670e5cc28b0ae445b1e5a34a98e2
+  languageName: node
+  linkType: hard
+
+"cypress-fail-fast@npm:7.1.0":
+  version: 7.1.0
+  resolution: "cypress-fail-fast@npm:7.1.0"
+  dependencies:
+    chalk: "npm:4.1.2"
+  peerDependencies:
+    cypress: ">=8.0.0"
+  checksum: a523c0dac14c8c6a7297282e0dfd275f9bbcf242661932a449a5a2a02521886ceb70d420ed81d042a1d69bc62dc96209310225a9e54a2c44cf9c929dd2b8d7e4
   languageName: node
   linkType: hard
 
@@ -29195,6 +29207,7 @@ __metadata:
     boxen: "npm:5.1.2"
     core-js: "npm:3.34.0"
     cypress: "npm:13.6.1"
+    cypress-fail-fast: "npm:7.1.0"
     cypress-wait-until: "npm:3.0.1"
     dependency-cruiser: "npm:15.5.0"
     dotenv: "npm:16.3.1"
