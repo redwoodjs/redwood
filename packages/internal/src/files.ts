@@ -172,7 +172,7 @@ export const resolveSourcePath = (pathNoExt: string) => {
     absolute: true,
     ignore: ['node_modules'],
   })
-  if (files.length == 1) {
+  if (files.length === 1) {
     return files[0]
   }
   return false

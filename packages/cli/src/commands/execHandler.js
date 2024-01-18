@@ -100,15 +100,15 @@ export const handler = async (args) => {
   })
 
   // check the script exists, and that there are no ambiguous conflicts like [foo.js, foo.ts]
-  const tgtScriptName = path.parse(scriptPath)?.name
-  const tgtMatch = findScripts()
+  const targetScriptName = path.parse(scriptPath)?.name
+  const targetMatch = findScripts()
     .map((p) => path.parse(p)?.name)
-    .filter((n) => tgtScriptName && n == tgtScriptName)
-  if (tgtMatch.length != 1) {
+    .filter((n) => targetScriptName && n === targetScriptName)
+  if (targetMatch.length !== 1) {
     console.error(
       c.error(
         `\n${
-          !tgtMatch.length ? 'No script' : 'Multiple scripts'
+          !targetMatch.length ? 'No script' : 'Multiple scripts'
         } called ${c.underline(name)}.{js,jsx,ts,tsx} in ./scripts folder.\n`
       )
     )
