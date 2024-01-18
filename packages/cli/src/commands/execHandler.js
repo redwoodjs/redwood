@@ -19,8 +19,8 @@ import { generatePrismaClient } from '../lib/generatePrismaClient'
 const printAvailableScriptsToConsole = () => {
   console.log('Available scripts:')
   findScripts().forEach((scriptPath) => {
-    const { name } = path.parse(scriptPath)
-    console.log(c.info(`- ${name}`))
+    const { base } = path.parse(scriptPath)
+    console.log(c.info(`- ${base}`))
   })
   console.log()
 }
@@ -100,16 +100,28 @@ export const handler = async (args) => {
   })
 
   // check the script exists, and that there are no ambiguous conflicts like [foo.js, foo.ts]
-  const targetScriptName = path.parse(scriptPath)?.name
+  const targetScriptPath = path.parse(scriptPath)
+  const targetScriptName = targetScriptPath?.base
   const targetMatch = findScripts()
-    .map((p) => path.parse(p)?.name)
-    .filter((n) => targetScriptName && n === targetScriptName)
+    .map((p) => path.parse(p))
+    .filter((p) => {
+      if (!p || !targetScriptName) {
+        return false
+      }
+      // Compares with base when file specified as 'foo.ts', otherwise compares with name
+      // when file specified as 'foo'
+      return (targetScriptPath?.ext ? p.base : p.name) === targetScriptName
+    })
   if (targetMatch.length !== 1) {
     console.error(
       c.error(
         `\n${
           !targetMatch.length ? 'No script' : 'Multiple scripts'
-        } called ${c.underline(name)}.{js,jsx,ts,tsx} in ./scripts folder.\n`
+        } called ${c.underline(
+          targetScriptPath?.ext
+            ? targetScriptPath.base
+            : targetScriptPath?.name + '.{js,jsx,ts,tsx}'
+        )} in ./scripts folder.\n`
       )
     )
 
