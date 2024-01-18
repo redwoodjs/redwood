@@ -541,6 +541,10 @@ describe('mapPrismaScalarToPagePropTsType', () => {
     expect(helpers.mapPrismaScalarToPagePropTsType('DateTime')).toBe('string')
   })
 
+  it('maps scalar type Bytes to TS type Buffer', () => {
+    expect(helpers.mapPrismaScalarToPagePropTsType('Bytes')).toBe('Buffer')
+  })
+
   it('maps all other type not-known to TS to unknown', () => {
     expect(helpers.mapPrismaScalarToPagePropTsType('Json')).toBe('unknown')
   })

@@ -69,13 +69,14 @@ const modelFieldToSDL = ({
       field.kind === 'object' ? idType(types[field.type]) : field.type
   }
 
-  const dictionary = {
+  const prismaTypeToGraphqlType = {
     Json: 'JSON',
     Decimal: 'Float',
+    Bytes: 'Byte',
   }
 
   const fieldContent = `${field.name}: ${field.isList ? '[' : ''}${
-    dictionary[field.type] || field.type
+    prismaTypeToGraphqlType[field.type] || field.type
   }${field.isList ? ']' : ''}${
     (field.isRequired && required) | field.isList ? '!' : ''
   }`
@@ -331,6 +332,7 @@ export const handler = async ({
         {
           title: `Generating types ...`,
           task: async () => {
+            console.log('about to generate types')
             const { errors } = await generateTypes()
 
             for (const { message, error } of errors) {
@@ -344,7 +346,11 @@ export const handler = async ({
           },
         },
       ].filter(Boolean),
-      { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
+      {
+        rendererOptions: { collapseSubtasks: false },
+        exitOnError: true,
+        silentRendererCondition: process.env.NODE_ENV === 'test',
+      }
     )
 
     if (rollback && !force) {
