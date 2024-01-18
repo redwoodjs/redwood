@@ -126,7 +126,7 @@ export const buildScenario = async (model) => {
       const value = scenarioData[key]
 
       if (value && typeof value === 'string' && value.match(/^\d+n$/)) {
-        scenarioData[key] = `${value.substr(0, value.length - 1)}n`
+        scenarioData[key] = `${value.slice(0, value.length - 1)}n`
       }
     })
 
@@ -141,13 +141,13 @@ export const buildScenario = async (model) => {
 export const buildStringifiedScenario = async (model) => {
   const scenario = await buildScenario(model)
 
-  return JSON.stringify(scenario, (key, value) => {
+  return JSON.stringify(scenario, (_key, value) => {
     if (typeof value === 'bigint') {
       return value.toString()
     }
 
     if (typeof value === 'string' && value.match(/^\d+n$/)) {
-      return Number(value.substr(0, value.length - 1))
+      return Number(value.slice(0, value.length - 1))
     }
 
     return value
