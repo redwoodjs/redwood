@@ -99,11 +99,18 @@ export const handler = async (args) => {
     ],
   })
 
-  try {
-    require.resolve(scriptPath)
-  } catch {
+  // check the script exists, and that there are no ambiguous conflicts like [foo.js, foo.ts]
+  const tgtScriptName = path.parse(scriptPath)?.name
+  const tgtMatch = findScripts()
+    .map((p) => path.parse(p)?.name)
+    .filter((n) => tgtScriptName && n == tgtScriptName)
+  if (tgtMatch.length != 1) {
     console.error(
-      c.error(`\nNo script called ${c.underline(name)} in ./scripts folder.\n`)
+      c.error(
+        `\n${
+          !tgtMatch.length ? 'No script' : 'Multiple scripts'
+        } called ${c.underline(name)}.{js,jsx,ts,tsx} in ./scripts folder.\n`
+      )
     )
 
     printAvailableScriptsToConsole()

@@ -4,6 +4,7 @@ import {
   getWebSideDefaultBabelConfig,
   registerApiSideBabelHook,
 } from '@redwoodjs/babel-config'
+import { resolveSourcePath } from '@redwoodjs/internal/dist/files'
 import { getPaths } from '@redwoodjs/project-config'
 
 export async function runScriptFunction({
@@ -11,7 +12,7 @@ export async function runScriptFunction({
   functionName,
   args,
 }) {
-  const script = require(scriptPath)
+  const script = require(resolveSourcePath(scriptPath))
   const returnValue = await script[functionName](args)
 
   try {
