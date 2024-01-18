@@ -122,13 +122,12 @@ export async function createServer(options: CreateServerOptions = {}) {
 
   // ------------------------
   // Initialize the fastify instance.
-  const server: Server = {
-    ...fastify(fastifyServerOptions),
+  const server: Server = Object.assign(fastify(fastifyServerOptions), {
     // `start` will get replaced further down in this file
     start: async () => {
       throw new Error('Not added yet')
     },
-  }
+  })
   await server.register(redwoodFastify, { redwood: { apiRootPath } })
 
   // ------------------------
