@@ -131,8 +131,6 @@ const rebuildApiServer = () => {
         ].join('\n')
       )
       httpServerProcess = fork(serverFile, [], forkOpts)
-      httpServerProcess.stdout?.pipe?.(process.stdout)
-      httpServerProcess.stderr?.pipe?.(process.stderr)
     } else {
       httpServerProcess = fork(
         path.join(__dirname, 'index.js'),
