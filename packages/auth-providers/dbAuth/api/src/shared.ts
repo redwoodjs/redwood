@@ -94,9 +94,6 @@ const legacyDecryptSession = (encryptedText: string) => {
 // Extracts the session cookie from an event, handling both
 // development environment GraphiQL headers and production environment headers.
 export const extractCookie = (event: APIGatewayProxyEvent | Request) => {
-  // @TODO Disabling Studio Auth impersonation: it uses body instead of headers
-  // this feels a bit off, but also requires the parsing to become async
-
   return eventGraphiQLHeadersCookie(event) || getEventHeader(event, 'Cookie')
 }
 

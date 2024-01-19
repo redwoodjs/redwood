@@ -303,9 +303,7 @@ describe('session cookie extraction', () => {
       expect(extractCookie(event)).toBeUndefined()
     })
 
-    // @TODO: Disabled Studio Auth Implementation
-    // we need to avoid using body instead of headers
-    it.skip('extracts GraphiQL cookie from the header extensions', () => {
+    it('extracts GraphiQL cookie from the body extensions', () => {
       const dbUserId = 42
 
       const cookie = encryptToCookie(JSON.stringify({ id: dbUserId }))
@@ -322,33 +320,46 @@ describe('session cookie extraction', () => {
       expect(extractCookie(event)).toEqual(cookie)
     })
 
-    // @TODO: Disabled Studio Auth Implementation
-    // we need to avoid using body instead of headers
-    it.skip('overwrites cookie with event header GraphiQL when in dev', () => {
+    it('extracts GraphiQL cookie from the rw-studio header (Fetch request)', () => {
+      const dbUserId = 42
+
+      const impersonatedCookie = encryptToCookie(
+        JSON.stringify({ id: dbUserId })
+      )
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers: {
+          'auth-provider': 'dbAuth',
+          'rw-studio-impersonation-cookie': impersonatedCookie,
+          authorization: 'Bearer ' + dbUserId,
+        },
+      })
+
+      expect(extractCookie(req)).toEqual(impersonatedCookie)
+    })
+
+    it('impersonation cookie takes precendence', () => {
       const sessionCookie = encryptToCookie(
         JSON.stringify({ id: 9999999999 }) + ';' + 'token'
       )
 
+      const dbUserId = 42
+
+      const impersonatedCookie = encryptToCookie(
+        JSON.stringify({ id: dbUserId })
+      )
+
       event = {
         headers: {
-          cookie: sessionCookie,
+          cookie: sessionCookie, // This user doesn't exist
+          'auth-provider': 'dbAuth',
+          'rw-studio-impersonation-cookie': impersonatedCookie,
+          authorization: 'Bearer ' + dbUserId,
         },
       }
 
-      const dbUserId = 42
-
-      const cookie = encryptToCookie(JSON.stringify({ id: dbUserId }))
-      event.body = JSON.stringify({
-        extensions: {
-          headers: {
-            'auth-provider': 'dbAuth',
-            cookie,
-            authorization: 'Bearer ' + dbUserId,
-          },
-        },
-      })
-
-      expect(extractCookie(event)).toEqual(cookie)
+      expect(extractCookie(event)).toEqual(impersonatedCookie)
     })
   })
 })
