@@ -4,7 +4,6 @@ import { parseArgs as _parseArgs } from 'util'
 
 import fastifyUrlData from '@fastify/url-data'
 import c from 'ansi-colors'
-// @ts-expect-error can't be typed
 import { config } from 'dotenv-defaults'
 import fg from 'fast-glob'
 import fastify from 'fastify'
