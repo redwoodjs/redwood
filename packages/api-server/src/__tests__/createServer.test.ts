@@ -71,10 +71,6 @@ describe('createServer', () => {
   it('`apiRootPath` prefixes all routes', async () => {
     const server = await createServer({ apiRootPath: '/api' })
 
-    await server.listen({
-      port: 8910,
-    })
-
     const res = await server.inject({
       method: 'GET',
       url: '/api/hello',
@@ -103,7 +99,7 @@ describe('createServer', () => {
     console.warn = jest.fn()
 
     // Here we create a logger that outputs to an array.
-    const loggerLogs = []
+    const loggerLogs: string[] = []
     const stream = build(async (source) => {
       for await (const obj of source) {
         loggerLogs.push(obj)
@@ -182,7 +178,13 @@ describe('createServer', () => {
       const server = await createServer()
       await server.start()
 
-      expect(server.server.address().port).toBe(getConfig().api.port)
+      const address = server.server.address()
+
+      if (!address || typeof address === 'string') {
+        throw new Error('No address or address is a string')
+      }
+
+      expect(address.port).toBe(getConfig().api.port)
 
       await server.close()
     })
@@ -193,7 +195,13 @@ describe('createServer', () => {
       const server = await createServer()
       await server.start()
 
-      expect(server.server.address().port).toBe(+process.env.REDWOOD_API_PORT)
+      const address = server.server.address()
+
+      if (!address || typeof address === 'string') {
+        throw new Error('No address or address is a string')
+      }
+
+      expect(address.port).toBe(+process.env.REDWOOD_API_PORT)
 
       await server.close()
 
@@ -298,7 +306,3 @@ describe('parseArgs', () => {
     expect(args).toEqual({})
   })
 })
-
-// it.todo('`fastifyServerOptions` configures the fastify server')
-// it.todo('returns a fastify server instance that can register plugins')
-// it.todo('fastifyServerOptions defaults to...')
