@@ -39,7 +39,7 @@ async function serve() {
       apiHost: {
         alias: 'api-host',
         type: 'string',
-        desc: 'Forward requests from the apiUrl, defined in redwood.toml to this host',
+        desc: 'Forward requests from the apiUrl, defined in redwood.toml, to this host',
       },
     })
     .parseSync()
