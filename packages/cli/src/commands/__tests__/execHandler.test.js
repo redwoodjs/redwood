@@ -87,6 +87,32 @@ describe('execHandler.js', () => {
       })
     })
 
+    it('verify execHandler resolves script without extension when similarly named non-script files are present', async () => {
+      const fooScript =
+        'export default async ({ args }) => { console.log(`:: Executing script ${__filename} ::`) }'
+
+      vol.fromNestedJSON(
+        {
+          'redwood.toml': '',
+          scripts: {
+            'foo.ts': fooScript,
+            'foo.json': '{"should": "not conflict with resolving foo.ts"}',
+          },
+        },
+        redwoodProjectPath
+      )
+
+      await handler({ name: 'foo', prisma: true, arg1: 'a1', arg2: 'a2' })
+
+      expect(mockExit).not.toHaveBeenCalled()
+      expect(mockGeneratePrismaClient).toHaveBeenCalledWith({ force: false })
+      expect(mockRunScriptFunction).toHaveBeenCalledWith({
+        path: '/redwood-app/scripts/foo',
+        functionName: 'default',
+        args: { args: { arg1: 'a1', arg2: 'a2' } },
+      })
+    })
+
     it('verify execHandler stops for non-matching script with no extension', async () => {
       const fooScript =
         'export default async ({ args }) => { console.log(`:: Executing script ${__filename} ::`) }'
