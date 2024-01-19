@@ -3,8 +3,6 @@ import type {
   APIGatewayProxyResult,
   Context as LambdaContext,
 } from 'aws-lambda'
-import type { FastifyReply, FastifyRequest } from 'fastify'
-import qs from 'qs'
 
 import type { GlobalContext } from '@redwoodjs/context'
 import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
@@ -45,17 +43,7 @@ export const createGraphQLHandler = ({
   schemaOptions,
   openTelemetryOptions,
   trustedDocuments,
-  realtime,
 }: GraphQLHandlerOptions) => {
-  if (realtime) {
-    const { useRedwoodRealtime } = require('@redwoodjs/realtime')
-
-    // @ts-expect-error wip
-    const originalExtraPlugins: Array<Plugin<any>> = extraPlugins || []
-    originalExtraPlugins.push(useRedwoodRealtime(realtime))
-    extraPlugins = originalExtraPlugins
-  }
-
   const { yoga, logger } = createGraphQLYoga({
     healthCheckId,
     loggerConfig,
@@ -78,33 +66,7 @@ export const createGraphQLHandler = ({
     schemaOptions,
     openTelemetryOptions,
     trustedDocuments,
-    realtime,
   })
-
-  if (realtime) {
-    const graphQLYogaHandler = async (
-      req: FastifyRequest,
-      reply: FastifyReply
-    ) => {
-      const response = await yoga.handleNodeRequest(req, {
-        req,
-        reply,
-        event: transformToRedwoodGraphQLContextEvent(req),
-        requestContext: {},
-      })
-
-      for (const [name, value] of response.headers) {
-        reply.header(name, value)
-      }
-
-      reply.status(response.status)
-      reply.send(response.body)
-
-      return reply
-    }
-
-    return graphQLYogaHandler
-  }
 
   const handlerFn = async (
     event: APIGatewayProxyEvent,
@@ -204,34 +166,4 @@ export const createGraphQLHandler = ({
     }
     return getAsyncStoreInstance().run(new Map<string, GlobalContext>(), execFn)
   }
-}
-
-function transformToRedwoodGraphQLContextEvent(
-  request: FastifyRequest
-): APIGatewayProxyEvent {
-  return {
-    httpMethod: request.method,
-    headers: request.headers,
-    // @ts-expect-error todo
-    path: request.urlData('path'),
-    queryStringParameters: qs.parse(request.url.split(/\?(.+)/)[1]),
-    requestContext: {
-      requestId: request.id,
-      identity: {
-        sourceIp: request.ip,
-      },
-    },
-    // @ts-expect-error todo
-    ...parseBody(request.rawBody || ''), // adds `body` and `isBase64Encoded`
-  } as APIGatewayProxyEvent
-}
-
-export function parseBody(rawBody: string | Buffer) {
-  if (typeof rawBody === 'string') {
-    return { body: rawBody, isBase64Encoded: false }
-  }
-  if (rawBody instanceof Buffer) {
-    return { body: rawBody.toString('base64'), isBase64Encoded: true }
-  }
-  return { body: '', isBase64Encoded: false }
 }
