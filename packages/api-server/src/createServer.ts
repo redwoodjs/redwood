@@ -6,6 +6,7 @@ import fastifyUrlData from '@fastify/url-data'
 import c from 'ansi-colors'
 // @ts-expect-error can't be typed
 import { config } from 'dotenv-defaults'
+import fg from 'fast-glob'
 import fastify from 'fastify'
 import type {
   FastifyListenOptions,
@@ -17,7 +18,6 @@ import fastifyRawBody from 'fastify-raw-body'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { redwoodFastifyGraphQLServer } from './plugins/graphql'
 import {
   loadFunctionsFromDist,
   lambdaRequestHandler,
@@ -131,9 +131,25 @@ export async function createServer(options: CreateServerOptions = {}) {
   })
 
   await server.register(redwoodFastifyFunctions, { redwood: { apiRootPath } })
-  await server.register(redwoodFastifyGraphQLServer, {
-    redwood: { apiRootPath },
+
+  // ------------------------
+  // If we can find api/dist/functions/graphql.js, register the GraphQL plugin.
+  const [graphqlFunctionPath] = await fg('dist/functions/graphql.{ts,js}', {
+    cwd: getPaths().api.base,
+    absolute: true,
   })
+
+  if (graphqlFunctionPath) {
+    const { redwoodFastifyGraphQLServer } = await import('./plugins/graphql.js')
+    const { __rw_graphqlOptions } = await import(graphqlFunctionPath)
+
+    await server.register(redwoodFastifyGraphQLServer, {
+      redwood: {
+        apiRootPath,
+        graphql: __rw_graphqlOptions,
+      },
+    })
+  }
 
   // ------------------------
   // See https://github.com/redwoodjs/redwood/pull/4744.
