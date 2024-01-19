@@ -219,7 +219,7 @@ async function runYargs() {
   // Run
   await yarg.parse(process.argv.slice(2), {}, (err, _argv, output) => {
     // Configuring yargs with `strict` makes it error on unknown args;
-    // here we're propagating the exit code.
+    // here we're signaling that with an exit code.
     if (err) {
       process.exitCode = 1
     }
