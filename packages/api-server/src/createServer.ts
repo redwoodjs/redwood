@@ -92,8 +92,7 @@ export async function createServer(options: CreateServerOptions = {}) {
   const { apiRootPath, fastifyServerOptions } =
     resolveCreateServerOptions(options)
 
-  // ------------------------
-  // Warn about `api/server.config.js`.
+  // Warn about `api/server.config.js`
   const serverConfigPath = path.join(
     getPaths().base,
     getConfig().api.serverConfig
@@ -122,8 +121,7 @@ export async function createServer(options: CreateServerOptions = {}) {
     )
   }
 
-  // ------------------------
-  // Initialize the fastify instance.
+  // Initialize the fastify instance
   const server: Server = Object.assign(fastify(fastifyServerOptions), {
     // `start` will get replaced further down in this file
     start: async () => {
@@ -137,8 +135,7 @@ export async function createServer(options: CreateServerOptions = {}) {
 
   await server.register(redwoodFastifyFunctions, { redwood: { apiRootPath } })
 
-  // ------------------------
-  // If we can find api/dist/functions/graphql.js, register the GraphQL plugin.
+  // If we can find `api/dist/functions/graphql.js`, register the GraphQL plugin
   const [graphqlFunctionPath] = await fg('dist/functions/graphql.{ts,js}', {
     cwd: getPaths().api.base,
     absolute: true,
@@ -156,17 +153,15 @@ export async function createServer(options: CreateServerOptions = {}) {
     })
   }
 
-  // ------------------------
-  // See https://github.com/redwoodjs/redwood/pull/4744.
+  // For baremetal and pm2. See https://github.com/redwoodjs/redwood/pull/4744
   server.addHook('onReady', (done) => {
     process.send?.('ready')
     done()
   })
 
-  // ------------------------
   // Just logging. The conditional here is to appease TS.
   // `server.server.address()` can return a string, an AddressInfo object, or null.
-  // Note that the logging here ("Listening on...") seems to be duplicated, probably by `@redwoodjs/graphql-server`.
+  // Note that the logging here ("Listening on...") seems to be duplicated, probably by `@redwoodjs/graphql-server`
   server.addHook('onListen', (done) => {
     const addressInfo = server.server.address()
 
@@ -356,7 +351,7 @@ export function parseArgs(args?: string[]) {
     parsedArgs.port = +values.port
 
     if (isNaN(parsedArgs.port)) {
-      throw new Error('`--port` must be a number')
+      throw new Error('`--port` must be an integer')
     }
   }
 

@@ -298,7 +298,7 @@ describe('parseArgs', () => {
   it("throws if `--port` can't be converted to a number", () => {
     expect(() => {
       parseArgs(['--port', 'eight-nine-ten'])
-    }).toThrowErrorMatchingInlineSnapshot(`"\`--port\` must be a number"`)
+    }).toThrowErrorMatchingInlineSnapshot(`"\`--port\` must be an integer"`)
   })
 
   it('returns an empty object if passed no args', () => {
