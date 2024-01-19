@@ -90,7 +90,10 @@ async function main() {
     projectPackageJsonPath,
     {
       ...projectPackageJson,
-      resolutions,
+      resolutions: {
+        ...projectPackageJson.resolutions,
+        ...resolutions,
+      },
     },
     {
       spaces: 2,
