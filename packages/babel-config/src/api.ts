@@ -152,21 +152,22 @@ export const getApiSideBabelConfigPath = () => {
 
 export const getApiSideBabelOverrides = () => {
   const overrides = [
-    // Apply context wrapping to all functions
-    {
-      // match */api/src/functions/*.js|ts
-      test: /.+api(?:[\\|/])src(?:[\\|/])functions(?:[\\|/]).+.(?:js|ts)$/,
-      plugins: [
-        require('./plugins/babel-plugin-redwood-context-wrapping').default,
-      ],
-    },
     // Extract graphql options from the graphql function
+    // NOTE: this must come before the context wrapping
     {
       // match */api/src/functions/graphql.js|ts
       test: /.+api(?:[\\|/])src(?:[\\|/])functions(?:[\\|/])graphql\.(?:js|ts)$/,
       plugins: [
         require('./plugins/babel-plugin-redwood-graphql-options-extract')
           .default,
+      ],
+    },
+    // Apply context wrapping to all functions
+    {
+      // match */api/src/functions/*.js|ts
+      test: /.+api(?:[\\|/])src(?:[\\|/])functions(?:[\\|/]).+.(?:js|ts)$/,
+      plugins: [
+        require('./plugins/babel-plugin-redwood-context-wrapping').default,
       ],
     },
   ].filter(Boolean)

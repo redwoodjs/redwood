@@ -1,99 +1,68 @@
-import type { NodePath, PluginObj, types } from '@babel/core'
+// import type { NodePath, PluginObj, types } from '@babel/core'
+import type { PluginObj, PluginPass, types } from '@babel/core'
 
 // This extracts the options passed to the graphql function and stores them in a file so they can be imported elsewhere.
 
 const exportVariableName = '__rw_graphqlOptions' as const
 
-function optionsExportNode(
+function optionsConstNode(
   t: typeof types,
-  value: types.Expression | null | undefined
+  value:
+    | types.ArgumentPlaceholder
+    | types.JSXNamespacedName
+    | types.SpreadElement
+    | types.Expression,
+  state: PluginPass
 ) {
-  return t.exportNamedDeclaration(
-    t.variableDeclaration('const', [
-      t.variableDeclarator(t.identifier(exportVariableName), value),
-    ])
-  )
+  if (
+    t.isIdentifier(value) ||
+    t.isObjectExpression(value) ||
+    t.isCallExpression(value) ||
+    t.isConditionalExpression(value)
+  ) {
+    return t.exportNamedDeclaration(
+      t.variableDeclaration('const', [
+        t.variableDeclarator(t.identifier(exportVariableName), value),
+      ])
+    )
+  } else {
+    throw new Error(
+      `Unable to parse graphql function options in '${state.file.opts.filename}'`
+    )
+  }
 }
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   return {
     name: 'babel-plugin-redwood-graphql-options-extract',
     visitor: {
-      Program(path) {
-        // Find the "handler" export
-        let handlerExportDeclaration = undefined
-        let handlerVariableDeclarator = undefined
-        for (let i = 0; i < path.node.body.length; i++) {
-          const node = path.node.body[i]
-          if (
-            t.isExportNamedDeclaration(node) &&
-            t.isVariableDeclaration(node.declaration) &&
-            node.declaration.declarations.length >= 0 &&
-            t.isVariableDeclarator(node.declaration.declarations[0]) &&
-            t.isIdentifier(node.declaration.declarations[0].id) &&
-            node.declaration.declarations[0].id.name === 'handler'
-          ) {
-            handlerExportDeclaration = path.get(
-              `body.${i}`
-            ) as NodePath<types.ExportNamedDeclaration>
-            handlerVariableDeclarator = node.declaration.declarations[0]
-            break
-          }
-        }
-
-        // There was no handler export, so we'll just export undefined for the graphql options
-        if (handlerExportDeclaration === undefined) {
-          path.pushContainer(
-            'body',
-            optionsExportNode(t, t.identifier('undefined'))
-          )
+      ExportNamedDeclaration(path, state) {
+        const declaration = path.node.declaration
+        if (declaration?.type !== 'VariableDeclaration') {
           return
         }
 
-        // This should never happen, but just in case
-        if (handlerVariableDeclarator === undefined) {
-          path.pushContainer(
-            'body',
-            optionsExportNode(t, t.identifier('undefined'))
-          )
+        const declarator = declaration.declarations[0]
+        if (declarator?.type !== 'VariableDeclarator') {
           return
         }
 
-        // There was a handler export, so we'll export the graphql options
-        // We (this babel plugin) only support directly exporting the call expression
-        if (!t.isCallExpression(handlerVariableDeclarator.init)) {
-          path.pushContainer(
-            'body',
-            optionsExportNode(t, t.identifier('undefined'))
-          )
+        const identifier = declarator.id
+        if (identifier?.type !== 'Identifier') {
+          return
+        }
+        if (identifier.name !== 'handler') {
           return
         }
 
-        // Just be sure that the argument is what we expect
-        if (handlerVariableDeclarator.init.arguments.length !== 1) {
-          path.pushContainer(
-            'body',
-            optionsExportNode(t, t.identifier('undefined'))
-          )
-          return
-        }
-        if (
-          !t.isObjectExpression(handlerVariableDeclarator.init.arguments[0])
-        ) {
-          path.pushContainer(
-            'body',
-            optionsExportNode(t, t.identifier('undefined'))
-          )
+        const init = declarator.init
+        if (init?.type !== 'CallExpression') {
           return
         }
 
-        // We have a valid options object, so let's export it so we can import it elsewhere
-        handlerExportDeclaration.insertBefore(
-          optionsExportNode(t, handlerVariableDeclarator.init.arguments[0])
-        )
-        // Use this exported variable rather than have the options object declared twice
-        handlerVariableDeclarator.init.arguments[0] =
-          t.identifier(exportVariableName)
+        const options = init.arguments[0]
+        path.insertBefore(optionsConstNode(t, options, state))
+        init.arguments[0] = t.identifier(exportVariableName)
       },
     },
   }

@@ -7,11 +7,7 @@ import { logger } from 'src/lib/logger'
 export const handling = () => {
   console.log('handling')
 }
-
-/**
- * Comments...
- */
-export const __rw_graphqlOptions = {
+const config = {
   loggerConfig: {
     logger,
     options: {},
@@ -34,4 +30,9 @@ export const __rw_graphqlOptions = {
   graphiQLEndpoint: 'coolness',
   allowGraphiQL: false,
 }
+
+/**
+ * Comments...
+ */
+export const __rw_graphqlOptions = config
 export const handler = createGraphQLHandler(__rw_graphqlOptions)

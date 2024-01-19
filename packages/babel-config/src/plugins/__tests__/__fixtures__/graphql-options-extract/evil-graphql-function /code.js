@@ -33,4 +33,4 @@ const config = {
 /**
  * Comments...
  */
-export const handler = createGraphQLHandler(config)
+export const handler = createGraphQLHandler(process.env.EVIL ? config : {sadness: true})
