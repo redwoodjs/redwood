@@ -136,11 +136,6 @@ export const getApiSideBabelPlugins = (
       undefined,
       'rwjs-babel-otel-wrapping',
     ],
-    [
-      require('./plugins/babel-plugin-redwood-graphql-options-extract').default,
-      undefined,
-      'rwjs-babel-graphql-options-extract',
-    ],
   ]
 
   return plugins.filter(Boolean) as PluginList // ts doesn't play nice with filter(Boolean)
@@ -163,6 +158,15 @@ export const getApiSideBabelOverrides = () => {
       test: /.+api(?:[\\|/])src(?:[\\|/])functions(?:[\\|/]).+.(?:js|ts)$/,
       plugins: [
         require('./plugins/babel-plugin-redwood-context-wrapping').default,
+      ],
+    },
+    // Extract graphql options from the graphql function
+    {
+      // match */api/src/functions/graphql.js|ts
+      test: /.+api(?:[\\|/])src(?:[\\|/])functions(?:[\\|/])graphql\.(?:js|ts)$/,
+      plugins: [
+        require('./plugins/babel-plugin-redwood-graphql-options-extract')
+          .default,
       ],
     },
   ].filter(Boolean)

@@ -1,12 +1,8 @@
-import path from 'path'
-
 import type { NodePath, PluginObj, types } from '@babel/core'
-
-import { getPaths } from '@redwoodjs/project-config'
 
 // This extracts the options passed to the graphql function and stores them in a file so they can be imported elsewhere.
 
-const exportVariableName = '__redwoodGraphqlOptionsExtract' as const
+const exportVariableName = '__rw_graphqlOptions' as const
 
 function optionsExportNode(
   t: typeof types,
@@ -20,20 +16,10 @@ function optionsExportNode(
 }
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
-  const graphqlFunctionFilename = path.join(getPaths().api.functions, 'graphql')
-
   return {
     name: 'babel-plugin-redwood-graphql-options-extract',
     visitor: {
-      Program(path, state) {
-        // TODO: Just have this plugin run on the graphql function file instead of checking the filename here
-        if (
-          state.file.opts.filename !== `${graphqlFunctionFilename}.ts` &&
-          state.file.opts.filename !== `${graphqlFunctionFilename}.js`
-        ) {
-          return
-        }
-
+      Program(path) {
         // Find the "handler" export
         let handlerExportDeclaration = undefined
         let handlerVariableDeclarator = undefined

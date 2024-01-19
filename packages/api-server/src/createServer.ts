@@ -6,7 +6,7 @@ import fastifyUrlData from '@fastify/url-data'
 import c from 'ansi-colors'
 // @ts-expect-error can't be typed
 import { config } from 'dotenv-defaults'
-import fg from 'fast-glob'
+// import fg from 'fast-glob'
 import fastify from 'fastify'
 import type {
   FastifyListenOptions,
@@ -259,20 +259,20 @@ export async function redwoodFastify(
 
   await loadFunctionsFromDist()
 
-  const [graphqlFunctionPath] = await fg('dist/functions/graphql.{ts,js}', {
-    cwd: getPaths().api.base,
-    absolute: true,
-  })
+  // const [graphqlFunctionPath] = await fg('dist/functions/graphql.{ts,js}', {
+  //   cwd: getPaths().api.base,
+  //   absolute: true,
+  // })
 
-  const { __redwoodGraphqlOptionsExtract } = await import(graphqlFunctionPath)
+  // const { __redwoodGraphqlOptionsExtract } = await import(graphqlFunctionPath)
 
   // plugin...
 
-  fastify.route({
-    url: '/graphql',
-    method: ['GET', 'POST', 'OPTIONS', 'PUT'],
-    handler: async (req, reply) => await handler(req, reply),
-  })
+  // fastify.route({
+  //   url: '/graphql',
+  //   method: ['GET', 'POST', 'OPTIONS', 'PUT'],
+  //   handler: async (req, reply) => await handler(req, reply),
+  // })
 
   done()
 }
