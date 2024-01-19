@@ -11,9 +11,7 @@ import {
 } from '@redwoodjs/fastify'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-export const bothExperimentalServerFileHandler = async (argv) => {
-  logExperimentalHeader()
-
+export const bothServerFileHandler = async (argv) => {
   if (
     getConfig().experimental?.rsc?.enabled ||
     getConfig().experimental?.streamingSsr?.enabled
@@ -135,22 +133,6 @@ export const bothServerHandler = async (options) => {
 
 function sendProcessReady() {
   return process.send && process.send('ready')
-}
-
-const separator = chalk.hex('#ff845e')(
-  '------------------------------------------------------------------'
-)
-
-function logExperimentalHeader() {
-  console.log(
-    [
-      separator,
-      `🧪 ${chalk.green('Experimental Feature')} 🧪`,
-      separator,
-      'Using the experimental API server file at api/dist/server.js',
-      separator,
-    ].join('\n')
-  )
 }
 
 function logSkippingFastifyWebServer() {

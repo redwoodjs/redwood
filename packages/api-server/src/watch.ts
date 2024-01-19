@@ -31,7 +31,6 @@ const argv = yargs(hideBin(process.argv))
     description: 'Debugging port',
     type: 'number',
   })
-  // `port` is not used when server-file is used
   .option('port', {
     alias: 'p',
     description: 'Port',
@@ -132,7 +131,11 @@ const buildAndRestart = async ({
 
     const serverFile = resolveFile(`${rwjsPaths.api.dist}/server`)
     if (serverFile) {
-      httpServerProcess = fork(serverFile, [], forkOpts)
+      httpServerProcess = fork(
+        serverFile,
+        ['--port', port.toString()],
+        forkOpts
+      )
     } else {
       httpServerProcess = fork(
         path.join(__dirname, 'index.js'),

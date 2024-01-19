@@ -13,7 +13,7 @@ import { webServerHandler, webSsrServerHandler } from './serveWebHandler'
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
 
-function hasExperimentalServerFile() {
+function hasServerFile() {
   const serverFilePath = path.join(getPaths().api.dist, 'server.js')
   return fs.existsSync(serverFilePath)
 }
@@ -41,12 +41,12 @@ export const builder = async (yargs) => {
           socket: argv.socket,
         })
 
-        // Run the experimental server file, if it exists, with web side also
-        if (hasExperimentalServerFile()) {
-          const { bothExperimentalServerFileHandler } = await import(
+        // Run the server file, if it exists, with web side also
+        if (hasServerFile()) {
+          const { bothServerFileHandler } = await import(
             './serveBothHandler.js'
           )
-          await bothExperimentalServerFileHandler(argv)
+          await bothServerFileHandler(argv)
         } else if (
           getConfig().experimental?.rsc?.enabled ||
           getConfig().experimental?.streamingSsr?.enabled
@@ -96,12 +96,10 @@ export const builder = async (yargs) => {
           apiRootPath: argv.apiRootPath,
         })
 
-        // Run the experimental server file, if it exists, api side only
-        if (hasExperimentalServerFile()) {
-          const { apiExperimentalServerFileHandler } = await import(
-            './serveApiHandler.js'
-          )
-          await apiExperimentalServerFileHandler(argv)
+        // Run the server file, if it exists, api side only
+        if (hasServerFile()) {
+          const { apiServerFileHandler } = await import('./serveApiHandler.js')
+          await apiServerFileHandler(argv)
         } else {
           const { apiServerHandler } = await import('./serveApiHandler.js')
           await apiServerHandler(argv)
