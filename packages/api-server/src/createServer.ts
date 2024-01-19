@@ -261,7 +261,9 @@ export async function redwoodFastify(
   fastify.all(`${opts.redwood.apiRootPath}:routeName/*`, lambdaRequestHandler)
 
   await loadFunctionsFromDist({
-    filterFn: (fnPath) => fnPath.endsWith('graphql.js'),
+    fastGlobOptions: {
+      ignore: ['**/dist/functions/graphql.js'],
+    },
   })
 
   done()

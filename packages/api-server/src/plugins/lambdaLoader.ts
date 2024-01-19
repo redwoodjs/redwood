@@ -3,6 +3,7 @@ import path from 'path'
 import c from 'ansi-colors'
 import type { Handler } from 'aws-lambda'
 import fg from 'fast-glob'
+import type { Options as FastGlobOptions } from 'fast-glob'
 import type {
   FastifyReply,
   FastifyRequest,
@@ -55,32 +56,38 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
 }
 
 type LoadFunctionsFromDistOptions = {
-  filterFn: (fnPath: string) => boolean
+  fastGlobOptions?: FastGlobOptions
 }
 
+// TODO: Use v8 caching to load these crazy fast.
 export const loadFunctionsFromDist = async (
-  options?: LoadFunctionsFromDistOptions
+  options: LoadFunctionsFromDistOptions = {}
 ) => {
-  let serverFunctions = findApiDistFunctions()
+  const serverFunctions = findApiDistFunctions(
+    getPaths().api.base,
+    options?.fastGlobOptions
+  )
 
-  if (options?.filterFn) {
-    serverFunctions = serverFunctions.filter(options.filterFn)
+  // Place `GraphQL` serverless function at the start.
+  const i = serverFunctions.findIndex((x) => x.indexOf('graphql') !== -1)
+  if (i >= 0) {
+    const graphQLFn = serverFunctions.splice(i, 1)[0]
+    serverFunctions.unshift(graphQLFn)
   }
-
-  serverFunctions = serverFunctions.filter((fnPath) => {
-    return !fnPath.includes('graphql')
-  })
-
   await setLambdaFunctions(serverFunctions)
 }
 
 // NOTE: Copied from @redwoodjs/internal/dist/files to avoid depending on @redwoodjs/internal.
 // import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
-function findApiDistFunctions(cwd: string = getPaths().api.base) {
+function findApiDistFunctions(
+  cwd: string = getPaths().api.base,
+  options: FastGlobOptions = {}
+) {
   return fg.sync('dist/functions/**/*.{ts,js}', {
     cwd,
     deep: 2, // We don't support deeply nested api functions, to maximise compatibility with deployment providers
     absolute: true,
+    ...options,
   })
 }
 
