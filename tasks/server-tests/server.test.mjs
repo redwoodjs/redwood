@@ -398,7 +398,7 @@ describe('@redwoodjs/cli', () => {
           -p, --port                                            [number] [default: 8910]
               --socket                                                          [string]
               --apiHost, --api-host  Forward requests from the apiUrl, defined in
-                                     redwood.toml to this host                  [string]
+                                     redwood.toml, to this host                 [string]
         "
       `)
     })
@@ -425,7 +425,7 @@ describe('@redwoodjs/cli', () => {
             -p, --port                                            [number] [default: 8910]
                 --socket                                                          [string]
                 --apiHost, --api-host  Forward requests from the apiUrl, defined in
-                                       redwood.toml to this host                  [string]
+                                       redwood.toml, to this host                 [string]
 
           Unknown arguments: foo, bar, baz
           "
@@ -683,7 +683,7 @@ describe('@redwoodjs/api-server', () => {
           -p, --port                                            [number] [default: 8910]
               --socket                                                          [string]
               --apiHost, --api-host  Forward requests from the apiUrl, defined in
-                                     redwood.toml to this host                  [string]
+                                     redwood.toml, to this host                 [string]
         "
       `)
     })
@@ -706,7 +706,7 @@ describe('@redwoodjs/api-server', () => {
             -p, --port                                            [number] [default: 8910]
                 --socket                                                          [string]
                 --apiHost, --api-host  Forward requests from the apiUrl, defined in
-                                       redwood.toml to this host                  [string]
+                                       redwood.toml, to this host                 [string]
 
           Unknown arguments: foo, bar, baz
           "
@@ -734,7 +734,7 @@ describe('@redwoodjs/web-server', () => {
         -p, --port                                            [number] [default: 8910]
             --socket                                                          [string]
             --apiHost, --api-host  Forward requests from the apiUrl, defined in
-                                   redwood.toml to this host                  [string]
+                                   redwood.toml, to this host                 [string]
       "
     `)
   })
