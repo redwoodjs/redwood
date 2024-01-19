@@ -54,15 +54,13 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
   })
 }
 
-// TODO: Use v8 caching to load these crazy fast.
 export const loadFunctionsFromDist = async () => {
-  const serverFunctions = findApiDistFunctions()
-  // Place `GraphQL` serverless function at the start.
-  const i = serverFunctions.findIndex((x) => x.indexOf('graphql') !== -1)
-  if (i >= 0) {
-    const graphQLFn = serverFunctions.splice(i, 1)[0]
-    serverFunctions.unshift(graphQLFn)
-  }
+  let serverFunctions = findApiDistFunctions()
+
+  serverFunctions = serverFunctions.filter((fnPath) => {
+    return !fnPath.includes('graphql')
+  })
+
   await setLambdaFunctions(serverFunctions)
 }
 
