@@ -15,6 +15,8 @@ import type {
 } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 
+import type { GlobalContext } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import {
@@ -127,6 +129,10 @@ export async function createServer(options: CreateServerOptions = {}) {
     start: async () => {
       throw new Error('Not added yet')
     },
+  })
+
+  server.addHook('onRequest', (_req, _reply, done) => {
+    getAsyncStoreInstance().run(new Map<string, GlobalContext>(), done)
   })
 
   await server.register(redwoodFastifyFunctions, { redwood: { apiRootPath } })
