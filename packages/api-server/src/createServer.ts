@@ -129,7 +129,8 @@ export async function createServer(options: CreateServerOptions = {}) {
       throw new Error('Not added yet')
     },
   })
-  await server.register(redwoodFastify, { redwood: { apiRootPath } })
+
+  await server.register(redwoodFastifyFunctions, { redwood: { apiRootPath } })
   await server.register(redwoodFastifyGraphQLServer, {
     redwood: { apiRootPath },
   })
@@ -243,7 +244,7 @@ export interface RedwoodFastifyAPIOptions {
 }
 
 // TODO: isolate context.
-export async function redwoodFastify(
+export async function redwoodFastifyFunctions(
   fastify: FastifyInstance,
   opts: RedwoodFastifyAPIOptions,
   done: HookHandlerDoneFunction
