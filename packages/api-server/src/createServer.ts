@@ -130,7 +130,9 @@ export async function createServer(options: CreateServerOptions = {}) {
     },
   })
   await server.register(redwoodFastify, { redwood: { apiRootPath } })
-  await server.register(redwoodFastifyGraphQLServer)
+  await server.register(redwoodFastifyGraphQLServer, {
+    redwood: { apiRootPath },
+  })
 
   // ------------------------
   // See https://github.com/redwoodjs/redwood/pull/4744.
