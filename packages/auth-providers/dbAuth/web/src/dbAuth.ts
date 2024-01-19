@@ -86,10 +86,6 @@ export function createDbAuthClient({
       return getTokenPromise
     }
 
-    // Set-Cookie: same-session-xxx-yy
-    // Before body: 4
-    // After body: same-session-xxx-yy
-
     if (isTokenCacheExpired()) {
       getTokenPromise = fetch(`${getApiDbAuthUrl()}?method=getToken`, {
         credentials,
