@@ -62,7 +62,7 @@ describe('execHandler.js', () => {
   })
 
   describe('handler', () => {
-    it('verify execHandler resolves script without extension', async () => {
+    it('resolves script without extension', async () => {
       const fooScript =
         'export default async ({ args }) => { console.log(`:: Executing script ${__filename} ::`) }'
 
@@ -87,7 +87,7 @@ describe('execHandler.js', () => {
       })
     })
 
-    it('verify execHandler resolves script without extension when similarly named non-script files are present', async () => {
+    it('resolves script without extension when similarly named non-script files are present', async () => {
       const fooScript =
         'export default async ({ args }) => { console.log(`:: Executing script ${__filename} ::`) }'
 
@@ -113,7 +113,7 @@ describe('execHandler.js', () => {
       })
     })
 
-    it('verify execHandler stops for non-matching script with no extension', async () => {
+    it('stops for non-matching script with no extension', async () => {
       const fooScript =
         'export default async ({ args }) => { console.log(`:: Executing script ${__filename} ::`) }'
 
@@ -136,7 +136,7 @@ describe('execHandler.js', () => {
       expect(mockRunScriptFunction).not.toHaveBeenCalled()
     })
 
-    it('verify execHandler stops for non-existing script with extension', async () => {
+    it('stops for non-existing script with extension', async () => {
       const fooScript =
         'export default async ({ args }) => { console.log(`:: Executing script ${__filename} ::`) }'
 
@@ -159,7 +159,7 @@ describe('execHandler.js', () => {
       expect(mockRunScriptFunction).not.toHaveBeenCalled()
     })
 
-    it('verify execHandler resolves script with extension', async () => {
+    it('resolves script with extension', async () => {
       const fooScript =
         'export default async ({ args }) => { console.log(`:: Executing script ${__filename} ::`) }'
 
@@ -184,7 +184,7 @@ describe('execHandler.js', () => {
       })
     })
 
-    it('verify execHandler resolves script with extension when similarly named scripts are present', async () => {
+    it('resolves script with extension when similarly named scripts are present', async () => {
       const fooScript =
         'export default async ({ args }) => { console.log(`:: Executing script ${__filename} ::`) }'
 
@@ -216,7 +216,7 @@ describe('execHandler.js', () => {
       }
     })
 
-    it('verify execHandler identifies ambiguously named files without extension', async () => {
+    it('identifies ambiguously named files without extension', async () => {
       const fooScript =
         'export default async ({ args }) => { console.log(`:: Executing script ${__filename} ::`) }'
 
