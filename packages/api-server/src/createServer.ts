@@ -264,7 +264,9 @@ export async function redwoodFastify(
     absolute: true,
   })
 
-  const { handler } = require(graphqlFunctionPath)
+  const { __redwoodGraphqlOptionsExtract } = await import(graphqlFunctionPath)
+
+  // plugin...
 
   fastify.route({
     url: '/graphql',

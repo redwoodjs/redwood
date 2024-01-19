@@ -136,6 +136,11 @@ export const getApiSideBabelPlugins = (
       undefined,
       'rwjs-babel-otel-wrapping',
     ],
+    [
+      require('./plugins/babel-plugin-redwood-graphql-options-extract').default,
+      undefined,
+      'rwjs-babel-graphql-options-extract',
+    ],
   ]
 
   return plugins.filter(Boolean) as PluginList // ts doesn't play nice with filter(Boolean)
