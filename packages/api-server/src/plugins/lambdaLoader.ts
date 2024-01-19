@@ -54,8 +54,18 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
   })
 }
 
-export const loadFunctionsFromDist = async () => {
+type LoadFunctionsFromDistOptions = {
+  filterFn: (fnPath: string) => boolean
+}
+
+export const loadFunctionsFromDist = async (
+  options?: LoadFunctionsFromDistOptions
+) => {
   let serverFunctions = findApiDistFunctions()
+
+  if (options?.filterFn) {
+    serverFunctions = serverFunctions.filter(options.filterFn)
+  }
 
   serverFunctions = serverFunctions.filter((fnPath) => {
     return !fnPath.includes('graphql')
