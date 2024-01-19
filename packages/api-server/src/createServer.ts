@@ -139,8 +139,8 @@ export async function createServer(options: CreateServerOptions = {}) {
   })
 
   if (graphqlFunctionPath) {
-    const { redwoodFastifyGraphQLServer } = await import('./plugins/graphql.js')
-    const { __rw_graphqlOptions } = await import(graphqlFunctionPath)
+    const { redwoodFastifyGraphQLServer } = require('./plugins/graphql')
+    const { __rw_graphqlOptions } = require(graphqlFunctionPath)
 
     await server.register(redwoodFastifyGraphQLServer, {
       redwood: {
