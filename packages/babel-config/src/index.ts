@@ -9,7 +9,6 @@ export {
   getApiSideBabelPlugins,
   getApiSideBabelPresets,
   getApiSideDefaultBabelConfig,
-  prebuildApiFile,
   registerApiSideBabelHook,
   transformWithBabel,
 } from './api'

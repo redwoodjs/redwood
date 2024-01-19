@@ -1,7 +1,8 @@
 import { vol } from 'memfs'
 
-import { getPaths, ensurePosixPath } from '@redwoodjs/project-config'
+import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
+import type { PluginList } from '../api'
 import {
   getApiSideBabelConfigPath,
   getApiSideBabelPlugins,
@@ -87,7 +88,7 @@ describe('api', () => {
       )
 
       const apiSideBabelConfigPath = getApiSideBabelConfigPath()
-      expect(ensurePosixPath(apiSideBabelConfigPath)).toMatch(
+      expect(ensurePosixPath(apiSideBabelConfigPath || '')).toMatch(
         '/redwood-app/api/babel.config.js'
       )
     })
@@ -185,9 +186,17 @@ describe('api', () => {
         },
       ])
 
+      type ModuleResolverConfig = {
+        root: string[]
+        alias: Record<string, string>
+        cwd: string
+        loglevel: string
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const [_, babelPluginModuleResolverConfig] = apiSideBabelPlugins.find(
         (plugin) => plugin[0] === 'babel-plugin-module-resolver'
-      )
+      )! as [any, ModuleResolverConfig, any]
 
       expect(babelPluginModuleResolverConfig).toMatchObject({
         alias: {
@@ -238,12 +247,12 @@ describe('api', () => {
   })
 })
 
-function getPluginAliases(plugins) {
+function getPluginAliases(plugins: PluginList) {
   return plugins.reduce((pluginAliases, plugin) => {
     if (plugin.length !== 3) {
       return pluginAliases
     }
 
     return [...pluginAliases, plugin[2]]
-  }, [])
+  }, [] as any)
 }

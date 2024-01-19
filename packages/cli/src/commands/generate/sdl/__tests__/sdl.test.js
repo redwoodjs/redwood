@@ -203,6 +203,21 @@ const itCreatesAnSDLFileWithJsonDefinitions = (baseArgs = {}) => {
   })
 }
 
+const itCreatesAnSDLFileWithByteDefinitions = (baseArgs = {}) => {
+  test('creates a sdl file with Byte definitions', async () => {
+    const files = await sdl.files({
+      ...baseArgs,
+      name: 'Key',
+      crud: true,
+    })
+    const ext = extensionForBaseArgs(baseArgs)
+
+    expect(
+      files[path.normalize(`/path/to/project/api/src/graphql/keys.sdl.${ext}`)]
+    ).toMatchSnapshot()
+  })
+}
+
 describe('without graphql documentations', () => {
   describe('in javascript mode', () => {
     const baseArgs = { ...getDefaultArgs(sdl.defaults), tests: true }
@@ -215,6 +230,7 @@ describe('without graphql documentations', () => {
     itCreateAMultiWordSDLFileWithCRUD(baseArgs)
     itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
     itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+    itCreatesAnSDLFileWithByteDefinitions(baseArgs)
   })
 
   describe('in typescript mode', () => {
@@ -232,6 +248,7 @@ describe('without graphql documentations', () => {
     itCreateAMultiWordSDLFileWithCRUD(baseArgs)
     itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
     itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+    itCreatesAnSDLFileWithByteDefinitions(baseArgs)
   })
 })
 
@@ -251,6 +268,7 @@ describe('with graphql documentations', () => {
     itCreateAMultiWordSDLFileWithCRUD(baseArgs)
     itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
     itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+    itCreatesAnSDLFileWithByteDefinitions(baseArgs)
   })
 
   describe('in typescript mode', () => {
@@ -269,20 +287,11 @@ describe('with graphql documentations', () => {
     itCreateAMultiWordSDLFileWithCRUD(baseArgs)
     itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
     itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+    itCreatesAnSDLFileWithByteDefinitions(baseArgs)
   })
 })
 
 describe('handler', () => {
-  beforeEach(() => {
-    jest.spyOn(console, 'info').mockImplementation(() => {})
-    jest.spyOn(console, 'log').mockImplementation(() => {})
-  })
-
-  afterEach(() => {
-    console.info.mockRestore()
-    console.log.mockRestore()
-  })
-
   const canBeCalledWithGivenModelName = (letterCase, model) => {
     test(`can be called with ${letterCase} model name`, async () => {
       const spy = jest.spyOn(fs, 'writeFileSync')

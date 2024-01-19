@@ -80,7 +80,7 @@ export const generateTypeDefGraphQLApi = async (): Promise<TypeDefResult> => {
       codegenPlugin: addPlugin,
     },
     {
-      name: 'print-mapped-moddels',
+      name: 'print-mapped-models',
       options: {},
       codegenPlugin: printMappedModelsPlugin,
     },
@@ -285,6 +285,7 @@ function getPluginConfig(side: CodegenSide) {
       JSON: 'Prisma.JsonValue',
       JSONObject: 'Prisma.JsonObject',
       Time: side === CodegenSide.WEB ? 'string' : 'Date | string',
+      Byte: 'Buffer',
     },
     // prevent type names being PetQueryQuery, RW generators already append
     // Query/Mutation/etc

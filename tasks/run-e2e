@@ -58,7 +58,8 @@ const createRedwoodJSApp = ({ typescript, bundler }) => {
         '--no-yarn-install',
         `--typescript ${typescript}`,
         '--no-telemetry',
-        '--no-git',
+        '--git',
+        '-m "first"',
       ].filter(Boolean),
       {
         cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),

@@ -6,6 +6,7 @@ import {
   DateTimeResolver,
   JSONResolver,
   JSONObjectResolver,
+  ByteResolver,
 } from 'graphql-scalars'
 import gql from 'graphql-tag'
 
@@ -29,6 +30,7 @@ export const schema = gql`
   scalar DateTime
   scalar JSON
   scalar JSONObject
+  scalar Byte
 
   """
   The RedwoodJS Root Schema
@@ -61,6 +63,7 @@ export interface Resolvers {
   JSON: typeof JSONResolver
   JSONObject: typeof JSONObjectResolver
   Query: Record<string, unknown>
+  Byte: typeof ByteResolver
 }
 
 export const resolvers: Resolvers = {
@@ -79,4 +82,5 @@ export const resolvers: Resolvers = {
       },
     }),
   },
+  Byte: ByteResolver,
 }

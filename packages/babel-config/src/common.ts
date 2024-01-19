@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import type { TransformOptions, PluginItem } from '@babel/core'
+import type { PluginItem, PluginOptions, TransformOptions } from '@babel/core'
 import { parseConfigFileTextToJson } from 'typescript'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -61,7 +61,7 @@ if (!RUNTIME_CORE_JS_VERSION) {
   )
 }
 
-export const getCommonPlugins = () => {
+export const getCommonPlugins = (): Array<[string, PluginOptions]> => {
   return [
     ['@babel/plugin-transform-class-properties', { loose: true }],
     // Note: The private method loose mode configuration setting must be the

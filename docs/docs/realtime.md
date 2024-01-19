@@ -260,7 +260,7 @@ subscription CountdownFromInterval {
 }
 ```
 
-This example showcases how a subscription can yields its own response.
+This example showcases how a subscription yields its own response.
 
 ## Live Queries
 

@@ -53,6 +53,11 @@ model Photo {
   metadata Json
 }
 
+model Key {
+  id        Int   @id @default(autoincrement())
+  publicKey Bytes
+}
+
 /// A list of allowed colors.
 enum Color {
   RED

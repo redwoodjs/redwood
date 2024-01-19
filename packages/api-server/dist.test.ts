@@ -37,6 +37,7 @@ describe('dist', () => {
         "apiCliOptions": {
           "apiRootPath": {
             "alias": [
+              "api-root-path",
               "rootPath",
               "root-path",
             ],
@@ -74,7 +75,7 @@ describe('dist', () => {
         "webCliOptions": {
           "apiHost": {
             "alias": "api-host",
-            "desc": "Forward requests from the apiUrl, defined in redwood.toml to this host",
+            "desc": "Forward requests from the apiUrl, defined in redwood.toml, to this host",
             "type": "string",
           },
           "port": {

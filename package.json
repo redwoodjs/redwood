@@ -84,6 +84,7 @@
     "boxen": "5.1.2",
     "core-js": "3.34.0",
     "cypress": "13.6.1",
+    "cypress-fail-fast": "7.1.0",
     "cypress-wait-until": "3.0.1",
     "dependency-cruiser": "15.5.0",
     "dotenv": "16.3.1",

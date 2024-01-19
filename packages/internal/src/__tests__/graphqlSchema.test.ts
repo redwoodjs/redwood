@@ -73,10 +73,6 @@ test('Returns error message when schema loading fails', async () => {
 
     const [schemaLoadingError] = errors
 
-    console.log({
-      errors,
-    })
-
     expect(schemaLoadingError.message).toEqual(
       [
         'Schema loading failed. Unknown type: "Shelf".',

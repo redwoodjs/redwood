@@ -15,6 +15,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   BigInt: { input: any; output: any; }
+  Byte: { input: any; output: any; }
   Date: { input: any; output: any; }
   DateTime: { input: any; output: any; }
   JSON: { input: any; output: any; }
