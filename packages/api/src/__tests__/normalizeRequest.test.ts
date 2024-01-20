@@ -1,5 +1,6 @@
 import { Headers } from '@whatwg-node/fetch'
 import type { APIGatewayProxyEvent } from 'aws-lambda'
+import { test, expect } from 'vitest'
 
 import { normalizeRequest } from '../transforms'
 
