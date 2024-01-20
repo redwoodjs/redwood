@@ -12627,7 +12627,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn-walk@npm:8.3.0, acorn-walk@npm:^8.0.0, acorn-walk@npm:^8.0.2, acorn-walk@npm:^8.1.1":
+"acorn-walk@npm:8.3.0":
   version: 8.3.0
   resolution: "acorn-walk@npm:8.3.0"
   checksum: 24346e595f507b6e704a60d35f3c5e1aa9891d4fb6a3fc3d856503ab718cc26cabb5e3e1ff0ff8da6ec03d60a8226ebdb602805a94f970e7f797ea3b8b09437f
@@ -12641,14 +12641,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn-walk@npm:^8.3.2":
+"acorn-walk@npm:^8.0.0, acorn-walk@npm:^8.0.2, acorn-walk@npm:^8.1.1, acorn-walk@npm:^8.3.2":
   version: 8.3.2
   resolution: "acorn-walk@npm:8.3.2"
   checksum: 7e2a8dad5480df7f872569b9dccff2f3da7e65f5353686b1d6032ab9f4ddf6e3a2cb83a9b52cf50b1497fd522154dda92f0abf7153290cc79cd14721ff121e52
   languageName: node
   linkType: hard
 
-"acorn@npm:8.11.2, acorn@npm:^8.0.4, acorn@npm:^8.1.0, acorn@npm:^8.11.0, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.7.1, acorn@npm:^8.8.1, acorn@npm:^8.8.2, acorn@npm:^8.9.0":
+"acorn@npm:8.11.2":
   version: 8.11.2
   resolution: "acorn@npm:8.11.2"
   bin:
@@ -12675,7 +12675,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.10.0, acorn@npm:^8.11.3":
+"acorn@npm:^8.0.4, acorn@npm:^8.1.0, acorn@npm:^8.10.0, acorn@npm:^8.11.0, acorn@npm:^8.11.3, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.7.1, acorn@npm:^8.8.1, acorn@npm:^8.8.2, acorn@npm:^8.9.0":
   version: 8.11.3
   resolution: "acorn@npm:8.11.3"
   bin:
@@ -25636,15 +25636,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.3.6":
-  version: 3.3.6
-  resolution: "nanoid@npm:3.3.6"
-  bin:
-    nanoid: bin/nanoid.cjs
-  checksum: 606b355960d0fcbe3d27924c4c52ef7d47d3b57208808ece73279420d91469b01ec1dce10fae512b6d4a8c5a5432b352b228336a8b2202a6ea68e67fa348e2ee
-  languageName: node
-  linkType: hard
-
 "nanoid@npm:^3.3.7":
   version: 3.3.7
   resolution: "nanoid@npm:3.3.7"
@@ -27367,14 +27358,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pathe@npm:^1.1.0":
-  version: 1.1.1
-  resolution: "pathe@npm:1.1.1"
-  checksum: 3ae5a0529c3415d91c3ac9133f52cffea54a0dd46892fe059f4b80faf36fd207957d4594bdc87043b65d0761b1e5728f81f46bafff3b5302da4e2e48889b8c0e
-  languageName: node
-  linkType: hard
-
-"pathe@npm:^1.1.1, pathe@npm:^1.1.2":
+"pathe@npm:^1.1.0, pathe@npm:^1.1.1, pathe@npm:^1.1.2":
   version: 1.1.2
   resolution: "pathe@npm:1.1.2"
   checksum: 64ee0a4e587fb0f208d9777a6c56e4f9050039268faaaaecd50e959ef01bf847b7872785c36483fa5cdcdbdfdb31fef2ff222684d4fc21c330ab60395c681897
@@ -28031,18 +28015,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.14, postcss@npm:^8.4.21, postcss@npm:^8.4.24, postcss@npm:^8.4.27":
-  version: 8.4.31
-  resolution: "postcss@npm:8.4.31"
-  dependencies:
-    nanoid: "npm:^3.3.6"
-    picocolors: "npm:^1.0.0"
-    source-map-js: "npm:^1.0.2"
-  checksum: 748b82e6e5fc34034dcf2ae88ea3d11fd09f69b6c50ecdd3b4a875cfc7cdca435c958b211e2cb52355422ab6fccb7d8f2f2923161d7a1b281029e4a913d59acf
-  languageName: node
-  linkType: hard
-
-"postcss@npm:^8.4.32":
+"postcss@npm:^8.2.14, postcss@npm:^8.4.21, postcss@npm:^8.4.24, postcss@npm:^8.4.27, postcss@npm:^8.4.32":
   version: 8.4.33
   resolution: "postcss@npm:8.4.33"
   dependencies:
@@ -30451,14 +30424,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"signal-exit@npm:^4.0.1":
-  version: 4.0.2
-  resolution: "signal-exit@npm:4.0.2"
-  checksum: 3c36ae214f4774b4a7cbbd2d090b2864f8da4dc3f9140ba5b76f38bea7605c7aa8042adf86e48ee8a0955108421873f9b0f20281c61b8a65da4d9c1c1de4929f
-  languageName: node
-  linkType: hard
-
-"signal-exit@npm:^4.1.0":
+"signal-exit@npm:^4.0.1, signal-exit@npm:^4.1.0":
   version: 4.1.0
   resolution: "signal-exit@npm:4.1.0"
   checksum: 41602dce540e46d599edba9d9860193398d135f7ff72cab629db5171516cfae628d21e7bfccde1bbfdf11c48726bc2a6d1a8fb8701125852fbfda7cf19c6aa83
