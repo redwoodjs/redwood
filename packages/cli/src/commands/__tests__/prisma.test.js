@@ -1,5 +1,7 @@
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const mod = await importOriginal()
   return {
+    ...mod,
     getPaths: () => {
       return {
         api: {
@@ -12,30 +14,36 @@ jest.mock('@redwoodjs/project-config', () => {
   }
 })
 
-jest.mock('execa', () => ({
-  sync: jest.fn((cmd, params, options) => {
-    return {
-      cmd,
-      params,
-      options,
-    }
-  }),
+vi.mock('execa', () => ({
+  default: {
+    sync: vi.fn((cmd, params, options) => {
+      return {
+        cmd,
+        params,
+        options,
+      }
+    }),
+  },
 }))
 
-jest.mock('fs', () => {
+vi.mock('fs-extra', async (importOriginal) => {
+  const mod = await importOriginal()
   return {
-    ...jest.requireActual('fs'),
-    existsSync: () => true,
+    default: {
+      ...mod,
+      existsSync: () => true,
+    },
   }
 })
 
 import execa from 'execa'
+import { vi, beforeEach, afterEach, test, expect } from 'vitest'
 
 import { handler } from '../prisma'
 
 beforeEach(() => {
-  jest.spyOn(console, 'info').mockImplementation(() => {})
-  jest.spyOn(console, 'log').mockImplementation(() => {})
+  vi.spyOn(console, 'info').mockImplementation(() => {})
+  vi.spyOn(console, 'log').mockImplementation(() => {})
 })
 
 afterEach(() => {
