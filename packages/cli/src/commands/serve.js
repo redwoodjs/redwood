@@ -24,15 +24,34 @@ export const builder = async (yargs) => {
     .command({
       command: '$0',
       description: 'Run both api and web servers',
-      builder: (yargs) =>
-        yargs.options({
-          port: {
-            default: getConfig().web?.port || 8910,
-            type: 'number',
-            alias: 'p',
-          },
-          socket: { type: 'string' },
-        }),
+      builder: (yargs) => {
+        if (!hasServerFile()) {
+          yargs.options({
+            port: {
+              default: getConfig().web?.port || 8910,
+              type: 'number',
+              alias: 'p',
+            },
+            socket: { type: 'string' },
+          })
+
+          return
+        }
+
+        yargs
+          .options({
+            webPort: {
+              default: getConfig().web?.port || 8910,
+              type: 'number',
+            },
+          })
+          .options({
+            apiPort: {
+              default: getConfig().api?.port || 8911,
+              type: 'number',
+            },
+          })
+      },
       handler: async (argv) => {
         recordTelemetryAttributes({
           command: 'serve',

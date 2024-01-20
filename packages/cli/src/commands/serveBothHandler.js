@@ -24,28 +24,23 @@ export const bothServerFileHandler = async (argv) => {
       shell: true,
     })
   } else {
-    // need to start two processes...
-    execa('yarn', ['node', path.join('dist', 'server.js')], {
-      cwd: getPaths().api.base,
-      stdio: 'inherit',
-      shell: true,
-    })
+    execa(
+      'yarn',
+      ['node', path.join('dist', 'server.js'), '--port', argv.apiPort],
+      {
+        cwd: getPaths().api.base,
+        stdio: 'inherit',
+      }
+    )
+
+    const apiHost = `http://127.0.0.1:${argv.apiPort}`
 
     execa(
       'yarn',
-      [
-        'rw-web-server',
-        '--port',
-        argv.port,
-        '--socket',
-        argv.socket,
-        '--api-host',
-        argv.apiHost,
-      ],
+      ['rw-web-server', '--port', argv.webPort, '--api-host', apiHost],
       {
         cwd: getPaths().base,
         stdio: 'inherit',
-        shell: true,
       }
     )
   }
