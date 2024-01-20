@@ -811,6 +811,10 @@ jobs:
     name: 🌲 Create Redwood App
     runs-on: ubuntu-latest
 
+    env:
+      REDWOOD_CI: 1
+      REDWOOD_DISABLE_TELEMETRY: 1
+
     steps:
       - uses: actions/checkout@v4
 
