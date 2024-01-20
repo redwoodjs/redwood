@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { parseArgs as _parseArgs } from 'util'
+import { parseArgs } from 'util'
 
 import fastifyUrlData from '@fastify/url-data'
 import c from 'ansi-colors'
@@ -89,8 +89,7 @@ export interface CreateServerOptions {
  * ```
  */
 export async function createServer(options: CreateServerOptions = {}) {
-  const { apiRootPath, fastifyServerOptions } =
-    resolveCreateServerOptions(options)
+  const { apiRootPath, fastifyServerOptions, port } = resolveOptions(options)
 
   // Warn about `api/server.config.js`
   const serverConfigPath = path.join(
@@ -188,25 +187,39 @@ export async function createServer(options: CreateServerOptions = {}) {
    * - [api].port in redwood.toml
    */
   server.start = (options: StartOptions = {}) => {
-    return server.listen(resolveStartOptions(options))
+    return server.listen({
+      ...options,
+      port,
+      host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+    })
   }
 
   return server
 }
 
-type ResolvedCreateServerOptions = Required<
+type ResolvedOptions = Required<
   Omit<CreateServerOptions, 'logger' | 'fastifyServerOptions'> & {
     fastifyServerOptions: FastifyServerOptions
+    port: number
   }
 >
 
-export function resolveCreateServerOptions(
-  options: CreateServerOptions = {}
-): ResolvedCreateServerOptions {
+export function resolveOptions(
+  options: CreateServerOptions = {},
+  args?: string[]
+) {
   options.logger ??= DEFAULT_CREATE_SERVER_OPTIONS.logger
 
+  let defaultPort: number | undefined
+
+  if (process.env.REDWOOD_API_PORT === undefined) {
+    defaultPort = getConfig().api.port
+  } else {
+    defaultPort = parseInt(process.env.REDWOOD_API_PORT)
+  }
+
   // Set defaults.
-  const resolvedOptions: ResolvedCreateServerOptions = {
+  const resolvedOptions: ResolvedOptions = {
     apiRootPath:
       options.apiRootPath ?? DEFAULT_CREATE_SERVER_OPTIONS.apiRootPath,
 
@@ -215,6 +228,8 @@ export function resolveCreateServerOptions(
         DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.requestTimeout,
       logger: options.logger ?? DEFAULT_CREATE_SERVER_OPTIONS.logger,
     },
+
+    port: defaultPort,
   }
 
   // Merge fastifyServerOptions.
@@ -222,7 +237,42 @@ export function resolveCreateServerOptions(
     DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.requestTimeout
   resolvedOptions.fastifyServerOptions.logger = options.logger
 
-  // Ensure the apiRootPath begins and ends with a slash.
+  const { values } = parseArgs({
+    options: {
+      apiRootPath: {
+        type: 'string',
+      },
+      port: {
+        type: 'string',
+        short: 'p',
+      },
+    },
+
+    // When running Jest, `process.argv` is...
+    //
+    // ```js
+    // [
+    //    'path/to/node'
+    //    'path/to/jest.js'
+    //    'file/under/test.js'
+    // ]
+    // ```
+    //
+    // `parseArgs` strips the first two, leaving the third, which is interpreted as a positional argument.
+    // Which fails our options. We'd still like to be strict, but can't do it for tests.
+    strict: process.env.NODE_ENV === 'test' ? false : true,
+    ...(args && { args }),
+  })
+
+  if (values.apiRootPath && typeof values.apiRootPath !== 'string') {
+    throw new Error('`apiRootPath` must be a string')
+  }
+
+  if (values.apiRootPath) {
+    resolvedOptions.apiRootPath = values.apiRootPath
+  }
+
+  // Format `apiRootPath`
   if (resolvedOptions.apiRootPath.charAt(0) !== '/') {
     resolvedOptions.apiRootPath = `/${resolvedOptions.apiRootPath}`
   }
@@ -233,6 +283,14 @@ export function resolveCreateServerOptions(
     ) !== '/'
   ) {
     resolvedOptions.apiRootPath = `${resolvedOptions.apiRootPath}/`
+  }
+
+  if (values.port) {
+    resolvedOptions.port = +values.port
+
+    if (isNaN(resolvedOptions.port)) {
+      throw new Error('`port` must be an integer')
+    }
   }
 
   return resolvedOptions
@@ -260,7 +318,6 @@ export interface RedwoodFastifyAPIOptions {
   }
 }
 
-// TODO: isolate context.
 export async function redwoodFastifyFunctions(
   fastify: FastifyInstance,
   opts: RedwoodFastifyAPIOptions,
@@ -285,76 +342,4 @@ export async function redwoodFastifyFunctions(
   })
 
   done()
-}
-
-function resolveStartOptions(
-  options: Omit<FastifyListenOptions, 'port' | 'host'>
-): FastifyListenOptions {
-  const resolvedOptions: FastifyListenOptions = options
-
-  // Right now, `host` isn't configurable and is set based on `NODE_ENV` for Docker.
-  resolvedOptions.host =
-    process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
-
-  const args = parseArgs()
-
-  if (args.port) {
-    resolvedOptions.port = args.port
-  } else {
-    if (process.env.REDWOOD_API_PORT === undefined) {
-      resolvedOptions.port = getConfig().api.port
-    } else {
-      resolvedOptions.port = parseInt(process.env.REDWOOD_API_PORT)
-    }
-  }
-
-  return resolvedOptions
-}
-
-/**
- * The `args` parameter is just for testing. `_parseArgs` defaults to `process.argv`, which is what we want.
- * This is also exported just for testing.
- */
-export function parseArgs(args?: string[]) {
-  const options = {
-    apiRootPath: {
-      type: 'string',
-    },
-    port: {
-      type: 'string',
-      short: 'p',
-    },
-  }
-
-  const { values } = _parseArgs({
-    // When running Jest, `process.argv` is...
-    //
-    // ```js
-    // [
-    //    'path/to/node'
-    //    'path/to/jest.js'
-    //    'file/under/test.js'
-    // ]
-    // ```
-    //
-    // `parseArgs` strips the first two, leaving the third, which is interpreted as a positional argument.
-    // Which fails our options. We'd still like to be strict, but can't do it for tests.
-    strict: process.env.NODE_ENV === 'test' ? false : true,
-
-    ...(args && { args }),
-    // @ts-expect-error TODO
-    options,
-  })
-
-  const parsedArgs: { port?: number } = {}
-
-  if (values.port) {
-    parsedArgs.port = +values.port
-
-    if (isNaN(parsedArgs.port)) {
-      throw new Error('`--port` must be an integer')
-    }
-  }
-
-  return parsedArgs
 }

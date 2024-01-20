@@ -7,9 +7,8 @@ import { getConfig } from '@redwoodjs/project-config'
 
 import {
   createServer,
-  resolveCreateServerOptions,
+  resolveOptions,
   DEFAULT_CREATE_SERVER_OPTIONS,
-  parseArgs,
 } from '../createServer'
 
 // Set up RWJS_CWD.
@@ -57,8 +56,6 @@ describe('createServer', () => {
     })
 
     it('warns about server.config.js', async () => {
-      console.warn = jest.fn()
-
       await createServer()
 
       expect(consoleWarnSpy.mock.calls[0][0]).toMatchInlineSnapshot(`
@@ -228,9 +225,9 @@ describe('createServer', () => {
   })
 })
 
-describe('resolveCreateServerOptions', () => {
+describe('resolveOptions', () => {
   it('nothing passed', () => {
-    const resolvedOptions = resolveCreateServerOptions()
+    const resolvedOptions = resolveOptions()
 
     expect(resolvedOptions).toEqual({
       apiRootPath: DEFAULT_CREATE_SERVER_OPTIONS.apiRootPath,
@@ -239,6 +236,7 @@ describe('resolveCreateServerOptions', () => {
           DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.requestTimeout,
         logger: DEFAULT_CREATE_SERVER_OPTIONS.logger,
       },
+      port: 8911,
     })
   })
 
@@ -246,26 +244,26 @@ describe('resolveCreateServerOptions', () => {
     const expected = '/v1/'
 
     expect(
-      resolveCreateServerOptions({
+      resolveOptions({
         apiRootPath: 'v1',
       }).apiRootPath
     ).toEqual(expected)
 
     expect(
-      resolveCreateServerOptions({
+      resolveOptions({
         apiRootPath: '/v1',
       }).apiRootPath
     ).toEqual(expected)
 
     expect(
-      resolveCreateServerOptions({
+      resolveOptions({
         apiRootPath: 'v1/',
       }).apiRootPath
     ).toEqual(expected)
   })
 
   it('moves `logger` to `fastifyServerOptions.logger`', () => {
-    const resolvedOptions = resolveCreateServerOptions({
+    const resolvedOptions = resolveOptions({
       logger: { level: 'info' },
     })
 
@@ -277,7 +275,7 @@ describe('resolveCreateServerOptions', () => {
   })
 
   it('`logger` overwrites `fastifyServerOptions.logger`', () => {
-    const resolvedOptions = resolveCreateServerOptions({
+    const resolvedOptions = resolveOptions({
       logger: false,
       fastifyServerOptions: {
         // @ts-expect-error this is invalid TS but valid JS
@@ -293,7 +291,7 @@ describe('resolveCreateServerOptions', () => {
   })
 
   it('`DEFAULT_CREATE_SERVER_OPTIONS` overwrites `fastifyServerOptions.logger`', () => {
-    const resolvedOptions = resolveCreateServerOptions({
+    const resolvedOptions = resolveOptions({
       fastifyServerOptions: {
         // @ts-expect-error this is invalid TS but valid JS
         logger: true,
@@ -306,21 +304,27 @@ describe('resolveCreateServerOptions', () => {
       },
     })
   })
-})
 
-describe('parseArgs', () => {
   it('parses `--port`', () => {
-    expect(parseArgs(['--port', '8930']).port).toEqual(8930)
+    expect(resolveOptions({}, ['--port', '8930']).port).toEqual(8930)
   })
 
-  it("throws if `--port` can't be converted to a number", () => {
+  it("throws if `--port` can't be converted to an integer", () => {
     expect(() => {
-      parseArgs(['--port', 'eight-nine-ten'])
-    }).toThrowErrorMatchingInlineSnapshot(`"\`--port\` must be an integer"`)
+      resolveOptions({}, ['--port', 'eight-nine-ten'])
+    }).toThrowErrorMatchingInlineSnapshot(`"\`port\` must be an integer"`)
   })
 
-  it('returns an empty object if passed no args', () => {
-    const args = parseArgs([])
-    expect(args).toEqual({})
+  it('parses `--apiRootPath`', () => {
+    expect(resolveOptions({}, ['--apiRootPath', 'foo']).apiRootPath).toEqual(
+      '/foo/'
+    )
+  })
+
+  it('the `--apiRootPath` flag has precedence', () => {
+    expect(
+      resolveOptions({ apiRootPath: 'foo' }, ['--apiRootPath', 'bar'])
+        .apiRootPath
+    ).toEqual('/bar/')
   })
 })
