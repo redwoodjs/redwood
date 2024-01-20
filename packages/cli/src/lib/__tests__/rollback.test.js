@@ -1,14 +1,25 @@
 import path from 'path'
 
+vi.mock('fs-extra', async () => {
+  const memfs = await import('memfs')
+  return {
+    default: memfs.fs,
+  }
+})
+
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
-
-jest.mock('fs')
+import { vol } from 'memfs'
+import { vi, it, expect, beforeEach } from 'vitest'
 
 import * as rollback from '../rollback'
 
+beforeEach(() => {
+  vol.reset()
+})
+
 it('resets file contents', async () => {
-  fs.__setMockFiles({
+  vol.fromJSON({
     'fake-file-1': 'fake-content-1',
     'fake-file-2': 'fake-content-2',
   })
@@ -17,12 +28,12 @@ it('resets file contents', async () => {
   fs.writeFileSync('fake-file-1', 'fake-content-changed')
 
   await rollback.executeRollback()
-  expect(fs.readFileSync('fake-file-1')).toBe('fake-content-1')
-  expect(fs.readFileSync('fake-file-2')).toBe('fake-content-2')
+  expect(fs.readFileSync('fake-file-1', 'utf-8')).toBe('fake-content-1')
+  expect(fs.readFileSync('fake-file-2', 'utf-8')).toBe('fake-content-2')
 })
 
 it('removes new files', async () => {
-  fs.__setMockFiles({
+  vol.fromJSON({
     'fake-file-1': 'fake-content-1',
   })
   rollback.addFileToRollback('fake-file-1')
@@ -31,12 +42,12 @@ it('removes new files', async () => {
   fs.writeFileSync('fake-file-2', 'fake-content-new')
 
   await rollback.executeRollback()
-  expect(fs.readFileSync('fake-file-1')).toBe('fake-content-1')
+  expect(fs.readFileSync('fake-file-1', 'utf-8')).toBe('fake-content-1')
   expect(fs.existsSync('fake-file-2')).toBe(false)
 })
 
 it('removes empty folders after removing files', async () => {
-  fs.__setMockFiles({
+  vol.fromJSON({
     [path.join('fake_dir', 'mock_dir', 'test_dir')]: undefined,
   })
   rollback.addFileToRollback(
@@ -55,30 +66,30 @@ it('removes empty folders after removing files', async () => {
 })
 
 it('executes sync functions', async () => {
-  fs.__setMockFiles({})
+  vol.fromJSON({})
   rollback.addFunctionToRollback(() => {
-    fs.writeFileSync('fake-file', 'fake-content')
+    fs.writeFileSync('/fake-file', 'fake-content')
   })
   await rollback.executeRollback()
-  expect(fs.readFileSync('fake-file')).toBe('fake-content')
+  expect(fs.readFileSync('/fake-file', 'utf-8')).toBe('fake-content')
 })
 
 it('executes async functions', async () => {
-  fs.__setMockFiles({})
+  vol.fromJSON({})
   rollback.addFunctionToRollback(async () => {
     // make up some async process
     await new Promise((resolve, _) => {
-      fs.writeFileSync('fake-file', 'fake-content')
+      fs.writeFileSync('/fake-file', 'fake-content')
       resolve()
     })
   })
   await rollback.executeRollback()
-  expect(fs.readFileSync('fake-file')).toBe('fake-content')
+  expect(fs.readFileSync('/fake-file', 'utf-8')).toBe('fake-content')
 })
 
 it('executes rollback in order', async () => {
   // default stack ordering LIFO
-  fs.__setMockFiles({
+  vol.fromJSON({
     'fake-file': '0',
   })
   rollback.addFunctionToRollback(() => {
@@ -91,10 +102,10 @@ it('executes rollback in order', async () => {
     fs.writeFileSync('fake-file', '3')
   })
   await rollback.executeRollback()
-  expect(fs.readFileSync('fake-file')).toBe('1')
+  expect(fs.readFileSync('fake-file', 'utf-8')).toBe('1')
 
   // handles the atEnd flag
-  fs.__setMockFiles({
+  vol.fromJSON({
     'fake-file': '0',
   })
   rollback.addFunctionToRollback(() => {
@@ -107,10 +118,10 @@ it('executes rollback in order', async () => {
     fs.writeFileSync('fake-file', '3')
   })
   await rollback.executeRollback()
-  expect(fs.readFileSync('fake-file')).toBe('2')
+  expect(fs.readFileSync('fake-file', 'utf-8')).toBe('2')
 
   // using files rather than functions
-  fs.__setMockFiles({
+  vol.fromJSON({
     'fake-file': '0',
   })
   rollback.addFileToRollback('fake-file')
@@ -120,10 +131,10 @@ it('executes rollback in order', async () => {
   rollback.addFileToRollback('fake-file')
   fs.writeFileSync('fake-file', '3')
   await rollback.executeRollback()
-  expect(fs.readFileSync('fake-file')).toBe('0')
+  expect(fs.readFileSync('fake-file', 'utf-8')).toBe('0')
 
   // using files rather than functions and the atEnd flag
-  fs.__setMockFiles({
+  vol.fromJSON({
     'fake-file': '0',
   })
   rollback.addFileToRollback('fake-file')
@@ -133,11 +144,11 @@ it('executes rollback in order', async () => {
   rollback.addFileToRollback('fake-file', true)
   fs.writeFileSync('fake-file', '3')
   await rollback.executeRollback()
-  expect(fs.readFileSync('fake-file')).toBe('2')
+  expect(fs.readFileSync('fake-file', 'utf-8')).toBe('2')
 })
 
 it('reset clears the stack', async () => {
-  fs.__setMockFiles({})
+  vol.fromJSON({})
   rollback.addFunctionToRollback(() => {
     fs.writeFileSync('fake-file', 'fake-content')
   })
@@ -147,7 +158,7 @@ it('reset clears the stack', async () => {
 })
 
 it('prepare clears the stack', async () => {
-  fs.__setMockFiles({})
+  vol.fromJSON({})
   rollback.addFunctionToRollback(() => {
     fs.writeFileSync('fake-file', 'fake-content')
   })
@@ -157,8 +168,8 @@ it('prepare clears the stack', async () => {
 })
 
 it('prepare sets listr2 rollback functions and rollback executes correctly', async () => {
-  const fakeTaskFunction = jest.fn()
-  const fakeRollbackFunction = jest.fn()
+  const fakeTaskFunction = vi.fn()
+  const fakeRollbackFunction = vi.fn()
   const tasks = new Listr(
     [
       {
