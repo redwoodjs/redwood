@@ -20,7 +20,6 @@
     "prepublishOnly": "NODE_ENV=production yarn build",
     "set-up-test-project": "node ./scripts/setUpTestProject.js",
     "test": "vitest run templates",
-    "test:watch": "vitest watch templates",
     "test:e2e": "vitest --pool=forks run e2e",
     "ts-to-js": "yarn node ./scripts/tsToJS.js"
   },
