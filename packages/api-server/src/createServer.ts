@@ -125,7 +125,7 @@ export async function createServer(options: CreateServerOptions = {}) {
   const server: Server = Object.assign(fastify(fastifyServerOptions), {
     // `start` will get replaced further down in this file
     start: async () => {
-      throw new Error('Not added yet')
+      throw new Error('Not implemented yet')
     },
   })
 
