@@ -1,7 +1,8 @@
 global.__dirname = __dirname
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const mod = await importOriginal()
   return {
-    ...jest.requireActual('@redwoodjs/project-config'),
+    ...mod,
     getPaths: () => {
       return {
         generated: {
@@ -11,18 +12,25 @@ jest.mock('@redwoodjs/project-config', () => {
     },
   }
 })
-jest.mock('fs')
+vi.mock('fs-extra', async () => {
+  const memfs = await import('memfs')
+  return {
+    default: memfs.fs,
+  }
+})
 
 import path from 'path'
 
 import fs from 'fs-extra'
+import { vol } from 'memfs'
+import { vi, it, expect, beforeEach } from 'vitest'
 
 import { setLock, unsetLock, isLockSet, clearLocks } from '../locking'
 
 beforeEach(() => {
   // Start with no files
-  fs.__setMockFiles({})
-  fs.statSync = jest.fn(() => {
+  vol.reset()
+  fs.statSync = vi.fn(() => {
     return {
       birthtimeMs: Date.now(),
     }
@@ -80,7 +88,7 @@ it('Detects a stale lock', () => {
       birthtimeMs: Date.now() - 3600001,
     }
   })
-  const spy = jest.spyOn(fs, 'rmSync')
+  const spy = vi.spyOn(fs, 'rmSync')
 
   setLock('TEST')
 
