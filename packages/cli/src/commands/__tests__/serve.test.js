@@ -64,7 +64,7 @@ vi.mock('execa', () => ({
 
 import execa from 'execa'
 import { vi, describe, afterEach, it, expect } from 'vitest'
-import yargs from 'yargs'
+import yargs from 'yargs/yargs'
 
 import { builder } from '../serve'
 import { apiServerHandler } from '../serveApiHandler'
