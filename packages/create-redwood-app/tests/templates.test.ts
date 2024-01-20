@@ -2,6 +2,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import klawSync from 'klaw-sync'
+import { describe, it, expect } from 'vitest'
 
 const TS_TEMPLATE_DIR = fileURLToPath(
   new URL('../templates/ts', import.meta.url)
@@ -192,7 +193,7 @@ describe('JS template', () => {
  * @returns string[]
  */
 function getDirectoryStructure(dir) {
-  let fileStructure = klawSync(dir)
+  const fileStructure = klawSync(dir)
 
   return fileStructure
     .filter(

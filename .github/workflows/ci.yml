@@ -848,7 +848,7 @@ jobs:
           git config --global user.name "Your Name"
 
       - name: e2e test
-        run: yarn test e2e
+        run: yarn test:e2e
         working-directory: ./packages/create-redwood-app
         env:
           PROJECT_PATH: ${{ env.PROJECT_PATH }}
