@@ -6,13 +6,7 @@ import execa from 'execa'
 import { createFastifyInstance, redwoodFastifyAPI } from '@redwoodjs/fastify'
 import { getPaths } from '@redwoodjs/project-config'
 
-/**
- * @returns doesn't pass args through
- */
 export const apiServerFileHandler = async (argv) => {
-  console.log({
-    argv,
-  })
   await execa(
     'yarn',
     [
@@ -26,7 +20,6 @@ export const apiServerFileHandler = async (argv) => {
     {
       cwd: getPaths().api.base,
       stdio: 'inherit',
-      shell: true,
     }
   )
 }
