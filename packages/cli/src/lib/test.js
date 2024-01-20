@@ -11,10 +11,11 @@
 import path from 'path'
 
 import fs from 'fs-extra'
+import { vi } from 'vitest'
 
 import './mockTelemetry'
 
-jest.mock('@redwoodjs/internal/dist/generate/generate', () => {
+vi.mock('@redwoodjs/internal/dist/generate/generate', () => {
   return {
     generate: () => {
       return { errors: [] }
@@ -22,10 +23,11 @@ jest.mock('@redwoodjs/internal/dist/generate/generate', () => {
   }
 })
 
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
   const path = require('path')
+  const mod = await importOriginal()
   return {
-    ...jest.requireActual('@redwoodjs/project-config'),
+    ...mod,
     getPaths: () => {
       const BASE_PATH = '/path/to/project'
       return {
@@ -69,7 +71,7 @@ jest.mock('@redwoodjs/project-config', () => {
   }
 })
 
-jest.mock('./project', () => ({
+vi.mock('./project', () => ({
   isTypeScriptProject: () => false,
   sides: () => ['web', 'api'],
 }))
@@ -79,10 +81,10 @@ globalThis.__prettierPath = path.resolve(
   './__tests__/fixtures/prettier.config.js'
 )
 
-jest.mock('path', () => {
-  const path = jest.requireActual('path')
+vi.mock('path', async (importOriginal) => {
+  const mod = await importOriginal()
   return {
-    ...path,
+    ...mod,
     join: (...paths) => {
       if (
         paths &&
@@ -96,7 +98,7 @@ jest.mock('path', () => {
   }
 })
 
-jest.spyOn(Math, 'random').mockReturnValue(0.123456789)
+vi.spyOn(Math, 'random').mockReturnValue(0.123456789)
 
 export const generatorsRootPath = path.join(
   __dirname,
