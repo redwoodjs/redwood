@@ -8194,6 +8194,7 @@ __metadata:
     latest-version: "npm:5.1.0"
     listr2: "npm:6.6.1"
     lodash: "npm:4.17.21"
+    memfs: "npm:4.6.0"
     param-case: "npm:3.0.4"
     pascalcase: "npm:1.0.0"
     pluralize: "npm:8.0.0"
@@ -8209,6 +8210,7 @@ __metadata:
     title-case: "npm:3.0.3"
     typescript: "npm:5.3.3"
     uuid: "npm:9.0.1"
+    vitest: "npm:1.2.1"
     yargs: "npm:17.7.2"
   bin:
     redwood: ./dist/index.js
