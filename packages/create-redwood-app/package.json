@@ -19,8 +19,9 @@
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "set-up-test-project": "node ./scripts/setUpTestProject.js",
-    "test": "node --experimental-vm-modules $(yarn bin jest) templates",
-    "test:e2e": "node --experimental-vm-modules $(yarn bin jest) e2e",
+    "test": "vitest run templates",
+    "test:watch": "vitest watch templates",
+    "test:e2e": "vitest --pool=forks run e2e",
     "ts-to-js": "yarn node ./scripts/tsToJS.js"
   },
   "devDependencies": {
@@ -47,6 +48,7 @@
     "terminal-link": "2.1.1",
     "untildify": "4.0.0",
     "uuid": "9.0.1",
+    "vitest": "1.2.1",
     "yargs": "17.7.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

@@ -15992,6 +15992,7 @@ __metadata:
     terminal-link: "npm:2.1.1"
     untildify: "npm:4.0.0"
     uuid: "npm:9.0.1"
+    vitest: "npm:1.2.1"
     yargs: "npm:17.7.2"
   bin:
     create-redwood-app: ./dist/create-redwood-app.js
