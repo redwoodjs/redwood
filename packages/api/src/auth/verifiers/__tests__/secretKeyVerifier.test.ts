@@ -1,3 +1,5 @@
+import { beforeEach, afterEach, describe, test, vi, expect } from 'vitest'
+
 import { createVerifier, WebhookVerificationError } from '../index'
 
 const payload = 'No more secrets, Marty.'
@@ -6,11 +8,11 @@ const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'
 const { sign, verify } = createVerifier('secretKeyVerifier')
 
 beforeEach(() => {
-  jest.spyOn(console, 'warn').mockImplementation(jest.fn())
+  vi.spyOn(console, 'warn').mockImplementation(vi.fn())
 })
 
 afterEach(() => {
-  jest.spyOn(console, 'warn').mockRestore()
+  vi.spyOn(console, 'warn').mockRestore()
 })
 
 describe('secretKey verifier', () => {
@@ -21,10 +23,10 @@ describe('secretKey verifier', () => {
     })
 
     test('it verifies that the secret and signature are identical', () => {
-      jest.spyOn(console, 'warn').mockImplementation(jest.fn())
+      vi.spyOn(console, 'warn').mockImplementation(vi.fn())
       const signature = sign({ payload, secret })
       expect(verify({ payload, secret, signature })).toBeTruthy()
-      jest.spyOn(console, 'warn').mockRestore()
+      vi.spyOn(console, 'warn').mockRestore()
     })
 
     test('it denies verification if the secret and signature are not the same', () => {
