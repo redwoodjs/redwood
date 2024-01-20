@@ -1,8 +1,9 @@
 global.__dirname = __dirname
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const mod = await importOriginal()
   const path = require('path')
   return {
-    ...jest.requireActual('@redwoodjs/project-config'),
+    ...mod,
     getPaths: () => {
       const BASE_PATH = path.join(globalThis.__dirname, 'fixtures')
       return {
@@ -17,6 +18,7 @@ jest.mock('@redwoodjs/project-config', () => {
 })
 
 import prompts from 'prompts'
+import { vi, test, expect, describe, it } from 'vitest'
 
 import { getSchema, verifyModelName } from '../schemaHelpers'
 
