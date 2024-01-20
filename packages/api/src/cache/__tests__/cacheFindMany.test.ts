@@ -7,18 +7,16 @@ import { createCache } from '../index'
 const mockFindFirst = vi.fn()
 const mockFindMany = vi.fn()
 
-vi.mock('@prisma/client', () => {
-  return {
-    PrismaClient: vi.fn(() => ({
-      user: {
-        findFirst: mockFindFirst,
-        findMany: mockFindMany,
-      },
-    })),
-    // NOTE: This is only available after `prisma generate` has been run
-    PrismaClientValidationError: new Error('PrismaClientValidationError'),
-  }
-})
+vi.mock('@prisma/client', () => ({
+  PrismaClient: vi.fn(() => ({
+    user: {
+      findFirst: mockFindFirst,
+      findMany: mockFindMany,
+    },
+  })),
+  // NOTE: This is only available after `prisma generate` has been run
+  PrismaClientValidationError: new Error('PrismaClientValidationError'),
+}))
 
 describe('cacheFindMany', () => {
   afterEach(() => {
