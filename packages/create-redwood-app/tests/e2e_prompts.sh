@@ -11,7 +11,7 @@ cd $projectPath
 
 set projectDirectory "redwood-app-prompt-test"
 
-spawn yarn create-redwood-app
+spawn yarn create-redwood-app --no-yarn-install
 
 expect "Where would you like to create your Redwood app?"
 send "$projectDirectory\n"
@@ -26,6 +26,9 @@ send "\n"
 
 expect "Enter a commit message"
 send "first\n"
+
+expect "Do you want to run yarn install?"
+send "\n"
 
 expect eof
 catch wait result
