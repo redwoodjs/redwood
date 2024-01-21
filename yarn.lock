@@ -8648,7 +8648,6 @@ __metadata:
     deepmerge: "npm:4.3.1"
     esbuild: "npm:0.19.9"
     fast-glob: "npm:3.3.2"
-    jest: "npm:29.7.0"
     rimraf: "npm:5.0.5"
     string-env-interpolation: "npm:1.0.1"
     typescript: "npm:5.3.3"
