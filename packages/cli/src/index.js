@@ -217,10 +217,20 @@ async function runYargs() {
   await loadPlugins(yarg)
 
   // Run
-  await yarg.parse(process.argv.slice(2), {}, (_err, _argv, output) => {
+  await yarg.parse(process.argv.slice(2), {}, (err, _argv, output) => {
+    // Configuring yargs with `strict` makes it error on unknown args;
+    // here we're signaling that with an exit code.
+    if (err) {
+      process.exitCode = 1
+    }
+
     // Show the output that yargs was going to if there was no callback provided
     if (output) {
-      console.log(output)
+      if (err) {
+        console.error(output)
+      } else {
+        console.log(output)
+      }
     }
   })
 }

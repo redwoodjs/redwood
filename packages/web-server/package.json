@@ -34,10 +34,9 @@
     "dotenv-defaults": "5.0.2",
     "fast-glob": "3.3.2",
     "fastify": "4.24.3",
-    "yargs-parser": "21.1.1"
+    "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@types/yargs-parser": "21.0.3",
     "esbuild": "0.19.9",
     "typescript": "5.3.3"
   },
