@@ -59,7 +59,6 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
   process.stdout.write(c.dim(c.italic('Starting API Server...\n')))
 
   if (loadEnvFiles) {
-    // @ts-expect-error for some reason ts can't find the types here but can find them for other packages
     const { config } = await import('dotenv-defaults')
 
     config({
@@ -197,3 +196,6 @@ function isFullyQualifiedUrl(url: string) {
     return false
   }
 }
+
+// Temporarily here till we refactor server code
+export { createServer } from './createServer'

@@ -7525,12 +7525,18 @@ __metadata:
     fastify-raw-body: "npm:4.3.0"
     jest: "npm:29.7.0"
     lodash: "npm:4.17.21"
+    pino-abstract-transport: "npm:1.1.0"
     pretty-bytes: "npm:5.6.0"
     pretty-ms: "npm:7.0.1"
     qs: "npm:6.11.2"
     split2: "npm:4.2.0"
     typescript: "npm:5.3.3"
     yargs: "npm:17.7.2"
+  peerDependencies:
+    "@redwoodjs/graphql-server": 6.0.7
+  peerDependenciesMeta:
+    "@redwoodjs/graphql-server":
+      optional: true
   bin:
     rw-api-server-watch: ./dist/watch.js
     rw-log-formatter: ./dist/logFormatter/bin.js
@@ -8378,7 +8384,6 @@ __metadata:
     "@fastify/static": "npm:6.12.0"
     "@fastify/url-data": "npm:5.4.0"
     "@redwoodjs/context": "npm:6.0.7"
-    "@redwoodjs/graphql-server": "npm:6.0.7"
     "@redwoodjs/project-config": "npm:6.0.7"
     "@types/aws-lambda": "npm:8.10.126"
     "@types/lodash": "npm:4.14.201"
@@ -27492,7 +27497,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino-abstract-transport@npm:v1.1.0":
+"pino-abstract-transport@npm:1.1.0, pino-abstract-transport@npm:v1.1.0":
   version: 1.1.0
   resolution: "pino-abstract-transport@npm:1.1.0"
   dependencies:
