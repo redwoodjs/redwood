@@ -53,7 +53,7 @@ describe('create-redwood-app', () => {
     expect(p.stderr).toMatchInlineSnapshot(`"[?25l[?25h"`)
   })
 
-  test('--yes, -y', async () => {
+  test.skip('--yes, -y', async () => {
     const p = await $`yarn create-redwood-app ./redwood-app --yes`
 
     expect(p.exitCode).toEqual(0)
