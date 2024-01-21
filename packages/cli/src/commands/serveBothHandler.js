@@ -1,6 +1,7 @@
 import path from 'path'
 
 import chalk from 'chalk'
+import concurrently from 'concurrently'
 import execa from 'execa'
 
 import {
@@ -10,10 +11,11 @@ import {
   redwoodFastifyWeb,
 } from '@redwoodjs/fastify'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
-export const bothExperimentalServerFileHandler = async () => {
-  logExperimentalHeader()
+import { exitWithError } from '../lib/exit'
 
+export const bothServerFileHandler = async (argv) => {
   if (
     getConfig().experimental?.rsc?.enabled ||
     getConfig().experimental?.streamingSsr?.enabled
@@ -26,15 +28,43 @@ export const bothExperimentalServerFileHandler = async () => {
       shell: true,
     })
   } else {
-    await execa(
-      'yarn',
-      ['node', path.join('dist', 'server.js'), '--enable-web'],
+    const apiHost = `http://0.0.0.0:${argv.apiPort}`
+
+    const { result } = concurrently(
+      [
+        {
+          name: 'api',
+          command: `yarn node ${path.join('dist', 'server.js')} --port ${
+            argv.apiPort
+          }`,
+          cwd: getPaths().api.base,
+          prefixColor: 'cyan',
+        },
+        {
+          name: 'web',
+          command: `yarn rw-web-server --port ${argv.webPort} --api-host ${apiHost}`,
+          cwd: getPaths().base,
+          prefixColor: 'blue',
+        },
+      ],
       {
-        cwd: getPaths().api.base,
-        stdio: 'inherit',
-        shell: true,
+        prefix: '{name} |',
+        timestampFormat: 'HH:mm:ss',
+        handleInput: true,
       }
     )
+
+    try {
+      await result
+    } catch (error) {
+      if (typeof error?.message !== 'undefined') {
+        errorTelemetry(
+          process.argv,
+          `Error concurrently starting sides: ${error.message}`
+        )
+        exitWithError(error)
+      }
+    }
   }
 }
 
@@ -120,22 +150,6 @@ export const bothServerHandler = async (options) => {
 
 function sendProcessReady() {
   return process.send && process.send('ready')
-}
-
-const separator = chalk.hex('#ff845e')(
-  '------------------------------------------------------------------'
-)
-
-function logExperimentalHeader() {
-  console.log(
-    [
-      separator,
-      `🧪 ${chalk.green('Experimental Feature')} 🧪`,
-      separator,
-      'Using the experimental API server file at api/dist/server.js',
-      separator,
-    ].join('\n')
-  )
 }
 
 function logSkippingFastifyWebServer() {

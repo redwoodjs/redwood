@@ -1,3 +1,5 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+
 import * as ValidationErrors from '../errors'
 import {
   validate,
@@ -1153,7 +1155,7 @@ describe('validate', () => {
 
 describe('validateWithSync', () => {
   it('runs a custom function as a validation', () => {
-    const validateFunction = jest.fn()
+    const validateFunction = vi.fn()
     validateWithSync(validateFunction)
 
     expect(validateFunction).toBeCalledWith()
@@ -1186,7 +1188,7 @@ describe('validateWithSync', () => {
 
 describe('validateWith', () => {
   it('runs a custom function as a validation', () => {
-    const validateFunction = jest.fn()
+    const validateFunction = vi.fn()
     validateWith(validateFunction)
 
     expect(validateFunction).toBeCalledWith()
@@ -1220,9 +1222,9 @@ describe('validateWith', () => {
 // the actual methods of an instance of the class
 //
 // mockFindFirst.mockImplementation() to change what `findFirst()` would return
-const mockFindFirst = jest.fn()
-jest.mock('@prisma/client', () => ({
-  PrismaClient: jest.fn(() => ({
+const mockFindFirst = vi.fn()
+vi.mock('@prisma/client', () => ({
+  PrismaClient: vi.fn(() => ({
     $transaction: async (func) =>
       func({
         user: {
@@ -1309,7 +1311,7 @@ describe('validateUniqueness', () => {
   })
 
   it('uses the given prisma client', async () => {
-    const mockFindFirstOther = jest.fn()
+    const mockFindFirstOther = vi.fn()
     mockFindFirstOther.mockImplementation(() => ({
       id: 2,
       email: 'rob@redwoodjs.com',

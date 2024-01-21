@@ -3,6 +3,7 @@ import os from 'os'
 import { join } from 'path'
 
 import split from 'split2'
+import { describe, test, expect } from 'vitest'
 
 const pid = process.pid
 const hostname = os.hostname()

@@ -224,8 +224,8 @@ function updatePackageJsonVersion(pkgPath, version, { dryRun, verbose }) {
   )
 
   if (pkg.dependencies) {
-    for (const depName of Object.keys(pkg.dependencies).filter((x) =>
-      x.startsWith('@redwoodjs/')
+    for (const depName of Object.keys(pkg.dependencies).filter(
+      (x) => x.startsWith('@redwoodjs/') && x !== '@redwoodjs/studio'
     )) {
       if (verbose || dryRun) {
         console.log(` - ${depName}: ${pkg.dependencies[depName]} => ${version}`)
@@ -234,8 +234,8 @@ function updatePackageJsonVersion(pkgPath, version, { dryRun, verbose }) {
     }
   }
   if (pkg.devDependencies) {
-    for (const depName of Object.keys(pkg.devDependencies).filter((x) =>
-      x.startsWith('@redwoodjs/')
+    for (const depName of Object.keys(pkg.devDependencies).filter(
+      (x) => x.startsWith('@redwoodjs/') && x !== '@redwoodjs/studio'
     )) {
       if (verbose || dryRun) {
         console.log(

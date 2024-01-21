@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest'
+
 import { createCache, formatCacheKey, InMemoryClient } from '../index'
 
 describe('exports', () => {

@@ -173,7 +173,7 @@ async function executeCompatibilityCheck(templateDir) {
       if (response['override-engine-error'] === 'Quit install') {
         recordErrorViaTelemetry('User quit after engine check error')
         await shutdownTelemetry()
-        process.exit(1)
+        process.exit(0)
       }
     } catch (error) {
       recordErrorViaTelemetry('User cancelled install at engine check error')

@@ -1,4 +1,5 @@
 import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
+import { describe, it, expect } from 'vitest'
 
 import { getAuthenticationContext } from '../index'
 

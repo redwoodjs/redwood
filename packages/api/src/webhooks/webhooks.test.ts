@@ -1,4 +1,5 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda'
+import { beforeEach, afterEach, describe, test, expect, vi } from 'vitest'
 
 import {
   signPayload,
@@ -44,11 +45,11 @@ const buildEvent = ({
 }
 
 beforeEach(() => {
-  jest.spyOn(console, 'warn').mockImplementation(jest.fn())
+  vi.spyOn(console, 'warn').mockImplementation(vi.fn())
 })
 
 afterEach(() => {
-  jest.spyOn(console, 'warn').mockRestore()
+  vi.spyOn(console, 'warn').mockRestore()
 })
 
 describe('webhooks', () => {

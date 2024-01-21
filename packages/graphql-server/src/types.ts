@@ -256,7 +256,7 @@ export type GraphQLYogaOptions = {
  *
  * Note: RedwoodRealtime is not supported
  */
-export type GraphQLHandlerOptions = Omit<GraphQLYogaOptions, 'realtime'>
+export type GraphQLHandlerOptions = GraphQLYogaOptions
 
 export type GraphiQLOptions = Pick<
   GraphQLYogaOptions,

@@ -1,7 +1,11 @@
 /* eslint-env node */
 
+import { describe, test, expect, it } from 'vitest'
 import { cd, fs, $ } from 'zx'
 
+if (!process.env.PROJECT_PATH) {
+  throw new Error('PROJECT_PATH environment variable is not set')
+}
 const projectPath = await fs.realpath(process.env.PROJECT_PATH)
 
 cd(projectPath)
@@ -83,7 +87,7 @@ describe('create-redwood-app', () => {
     await fs.rm('./redwood-app', { recursive: true, force: true })
   })
 
-  it.failing('fails on unknown options', async () => {
+  it.fails('fails on unknown options', async () => {
     try {
       await $`yarn create-redwood-app --unknown-options`.timeout(2500)
       // Fail the test if the function didn't throw.

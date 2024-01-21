@@ -6,15 +6,22 @@ import execa from 'execa'
 import { createFastifyInstance, redwoodFastifyAPI } from '@redwoodjs/fastify'
 import { getPaths } from '@redwoodjs/project-config'
 
-export const apiExperimentalServerFileHandler = async () => {
-  logExperimentalHeader()
-
-  await execa('yarn', ['node', path.join('dist', 'server.js')], {
-    cwd: getPaths().api.base,
-    stdio: 'inherit',
-    shell: true,
-  })
-  return
+export const apiServerFileHandler = async (argv) => {
+  await execa(
+    'yarn',
+    [
+      'node',
+      path.join('dist', 'server.js'),
+      '--port',
+      argv.port,
+      '--apiRootPath',
+      argv.apiRootPath,
+    ],
+    {
+      cwd: getPaths().api.base,
+      stdio: 'inherit',
+    }
+  )
 }
 
 export const apiServerHandler = async (options) => {
@@ -70,20 +77,4 @@ export const apiServerHandler = async (options) => {
 
 function sendProcessReady() {
   return process.send && process.send('ready')
-}
-
-const separator = chalk.hex('#ff845e')(
-  '------------------------------------------------------------------'
-)
-
-function logExperimentalHeader() {
-  console.log(
-    [
-      separator,
-      `🧪 ${chalk.green('Experimental Feature')} 🧪`,
-      separator,
-      'Using the experimental API server file at api/dist/server.js',
-      separator,
-    ].join('\n')
-  )
 }

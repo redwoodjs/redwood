@@ -8,7 +8,7 @@ import qs from 'qs'
 
 import { mergeMultiValueHeaders, parseBody } from './utils'
 
-const lambdaEventForFastifyRequest = (
+export const lambdaEventForFastifyRequest = (
   request: FastifyRequest
 ): APIGatewayProxyEvent => {
   return {
