@@ -1,14 +1,22 @@
 globalThis.__dirname = __dirname
 
-jest.mock('fs')
-jest.mock('../../../../lib', () => {
+vi.mock('fs-extra', async () => {
+  const memfs = await import('memfs')
   return {
-    ...jest.requireActual('../../../../lib'),
+    default: memfs.fs,
+  }
+})
+vi.mock('../../../../lib', async (importOriginal) => {
+  const mod = await importOriginal()
+  return {
+    ...mod,
     generateTemplate: () => '',
   }
 })
 
 import fs from 'fs-extra'
+import { vol } from 'memfs'
+import { vi, beforeEach, afterEach, test, expect } from 'vitest'
 
 import '../../../../lib/test'
 
@@ -16,22 +24,20 @@ import { files } from '../../../generate/directive/directive'
 import { tasks } from '../directive'
 
 beforeEach(() => {
-  fs.__setMockFiles(
-    files({ name: 'require-admin', type: 'validator', tests: true })
-  )
-  jest.spyOn(console, 'info').mockImplementation(() => {})
-  jest.spyOn(console, 'log').mockImplementation(() => {})
+  vol.fromJSON(files({ name: 'require-admin', type: 'validator', tests: true }))
+  vi.spyOn(console, 'info').mockImplementation(() => {})
+  vi.spyOn(console, 'log').mockImplementation(() => {})
 })
 
 afterEach(() => {
-  fs.__setMockFiles({})
-  jest.spyOn(fs, 'unlinkSync').mockClear()
+  vol.reset()
+  vi.spyOn(fs, 'unlinkSync').mockClear()
   console.info.mockRestore()
   console.log.mockRestore()
 })
 
 test('destroys directive files', async () => {
-  const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+  const unlinkSpy = vi.spyOn(fs, 'unlinkSync')
   const t = tasks({
     componentName: 'directive',
     filesFn: (args) => files({ ...args, type: 'validator' }),
