@@ -27,9 +27,6 @@ send "\n"
 expect "Enter a commit message"
 send "first\n"
 
-expect "Do you want to run yarn install?"
-send "\n"
-
 expect eof
 catch wait result
 set exitStatus [lindex $result 3]
