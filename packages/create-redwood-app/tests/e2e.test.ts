@@ -76,7 +76,6 @@ describe('create-redwood-app', () => {
       Fire it up! 🚀
 
        > cd redwood-app
-       > yarn install
        > yarn rw dev
 
       [?25l✔ Initialized a git repo with commit message "Initial commit"
