@@ -3,6 +3,8 @@ globalThis.__dirname = __dirname
 import path from 'path'
 
 import fs from 'fs-extra'
+import { vol } from 'memfs'
+import { vi, test, describe, beforeEach, afterEach, expect } from 'vitest'
 
 import '../../../../lib/test'
 
@@ -14,20 +16,27 @@ import {
 import { files } from '../../../generate/scaffold/scaffold'
 import { tasks } from '../scaffold'
 
-jest.mock('fs')
-jest.mock('execa')
-
-jest.mock('../../../../lib', () => {
+vi.mock('fs-extra', async () => {
+  const memfs = await import('memfs')
   return {
-    ...jest.requireActual('../../../../lib'),
+    default: memfs.fs,
+  }
+})
+vi.mock('execa')
+
+vi.mock('../../../../lib', async (importOriginal) => {
+  const mod = await importOriginal()
+  return {
+    ...mod,
     generateTemplate: () => '',
   }
 })
 
-jest.mock('../../../../lib/schemaHelpers', () => {
+vi.mock('../../../../lib/schemaHelpers', async (importOriginal) => {
+  const mod = await importOriginal()
   const path = require('path')
   return {
-    ...jest.requireActual('../../../../lib/schemaHelpers'),
+    ...mod,
     getSchema: () =>
       require(path.join(globalThis.__dirname, 'fixtures', 'post.json')),
   }
@@ -48,21 +57,20 @@ const templateDirectories = templateDirectoryNames.map((name) => {
   })
 })
 const scaffoldTemplates = {}
+const actualFs = await vi.importActual('fs-extra')
 templateDirectories.forEach((directory) => {
-  const files = jest.requireActual('fs').readdirSync(directory)
+  const files = actualFs.readdirSync(directory)
   files.forEach((file) => {
     const filePath = path.join(directory, file)
-    scaffoldTemplates[filePath] = jest
-      .requireActual('fs')
-      .readFileSync(filePath, { encoding: 'utf8', flag: 'r' })
+    scaffoldTemplates[filePath] = actualFs.readFileSync(filePath, 'utf-8')
   })
 })
 
 describe('rw destroy scaffold', () => {
   describe('destroy scaffold post', () => {
     beforeEach(async () => {
-      fs.__setMockFiles(scaffoldTemplates)
-      fs.__setMockFiles({
+      vol.fromJSON(scaffoldTemplates)
+      vol.fromJSON({
         ...scaffoldTemplates,
         ...(await files({
           ...getDefaultArgs(defaults),
@@ -84,12 +92,12 @@ describe('rw destroy scaffold', () => {
     })
 
     afterEach(() => {
-      fs.__setMockFiles(scaffoldTemplates)
-      jest.spyOn(fs, 'unlinkSync').mockClear()
+      vol.fromJSON(scaffoldTemplates)
+      vi.spyOn(fs, 'unlinkSync').mockClear()
     })
 
     test('destroys files', async () => {
-      const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+      const unlinkSpy = vi.spyOn(fs, 'unlinkSync')
       const t = tasks({
         model: 'Post',
         tests: false,
@@ -114,9 +122,9 @@ describe('rw destroy scaffold', () => {
     describe('for typescript files', () => {
       beforeEach(async () => {
         // clear filesystem so files call works as expected
-        fs.__setMockFiles(scaffoldTemplates)
+        vol.fromJSON(scaffoldTemplates)
 
-        fs.__setMockFiles({
+        vol.fromJSON({
           ...scaffoldTemplates,
           ...(await files({
             ...getDefaultArgs(defaults),
@@ -139,7 +147,7 @@ describe('rw destroy scaffold', () => {
       })
 
       test('destroys files', async () => {
-        const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+        const unlinkSpy = vi.spyOn(fs, 'unlinkSync')
         const t = tasks({
           model: 'Post',
           tests: false,
@@ -157,6 +165,10 @@ describe('rw destroy scaffold', () => {
               nestScaffoldByModel: true,
             })
           )
+          console.log({
+            generatedFiles,
+            unlinkSpy: unlinkSpy.mock.calls.length,
+          })
           expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
           generatedFiles.forEach((f) =>
             expect(unlinkSpy).toHaveBeenCalledWith(f)
@@ -174,7 +186,7 @@ describe('rw destroy scaffold', () => {
       t.options.renderer = 'silent'
 
       return t.tasks[1].run().then(() => {
-        const routes = fs.readFileSync(getPaths().web.routes)
+        const routes = fs.readFileSync(getPaths().web.routes, 'utf-8')
         expect(routes).toEqual(
           [
             '<Routes>',
@@ -189,8 +201,8 @@ describe('rw destroy scaffold', () => {
 
   describe('destroy namespaced scaffold post', () => {
     beforeEach(async () => {
-      fs.__setMockFiles(scaffoldTemplates)
-      fs.__setMockFiles({
+      vol.fromJSON(scaffoldTemplates)
+      vol.fromJSON({
         ...scaffoldTemplates,
         ...(await files({
           ...getDefaultArgs(defaults),
@@ -212,12 +224,12 @@ describe('rw destroy scaffold', () => {
     })
 
     afterEach(() => {
-      fs.__setMockFiles(scaffoldTemplates)
-      jest.spyOn(fs, 'unlinkSync').mockClear()
+      vol.fromJSON(scaffoldTemplates)
+      vi.spyOn(fs, 'unlinkSync').mockClear()
     })
 
     test('destroys files', async () => {
-      const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+      const unlinkSpy = vi.spyOn(fs, 'unlinkSync')
       const t = tasks({
         model: 'Post',
         path: 'admin',
@@ -244,9 +256,9 @@ describe('rw destroy scaffold', () => {
     describe('for typescript files', () => {
       beforeEach(async () => {
         // clear filesystem so files call works as expected
-        fs.__setMockFiles(scaffoldTemplates)
+        vol.fromJSON(scaffoldTemplates)
 
-        fs.__setMockFiles({
+        vol.fromJSON({
           ...scaffoldTemplates,
           ...(await files({
             ...getDefaultArgs(defaults),
@@ -267,7 +279,7 @@ describe('rw destroy scaffold', () => {
         })
       })
       test('destroys files', async () => {
-        const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+        const unlinkSpy = vi.spyOn(fs, 'unlinkSync')
         const t = tasks({
           model: 'Post',
           path: 'admin',
@@ -304,7 +316,7 @@ describe('rw destroy scaffold', () => {
       t.options.renderer = 'silent'
 
       return t.tasks[1].run().then(() => {
-        const routes = fs.readFileSync(getPaths().web.routes)
+        const routes = fs.readFileSync(getPaths().web.routes, 'utf-8')
         expect(routes).toEqual(
           [
             '<Routes>',

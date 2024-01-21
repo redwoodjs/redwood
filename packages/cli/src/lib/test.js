@@ -81,22 +81,23 @@ globalThis.__prettierPath = path.resolve(
   './__tests__/fixtures/prettier.config.js'
 )
 
-vi.mock('path', async (importOriginal) => {
-  const mod = await importOriginal()
-  return {
-    ...mod,
-    join: (...paths) => {
-      if (
-        paths &&
-        paths[0] === '/path/to/project' &&
-        paths[1] === 'prettier.config.js'
-      ) {
-        return globalThis.__prettierPath
-      }
-      return path.join(...paths)
-    },
-  }
-})
+// TODO: JGMW come back and fix this or maybe just get rid of it
+// vi.mock('path', async (importOriginal) => {
+//   const mod = await importOriginal()
+//   return {
+//     ...mod,
+//     join: (...paths) => {
+//       if (
+//         paths &&
+//         paths[0] === '/path/to/project' &&
+//         paths[1] === 'prettier.config.js'
+//       ) {
+//         return globalThis.__prettierPath
+//       }
+//       return path.join(...paths)
+//     },
+//   }
+// })
 
 vi.spyOn(Math, 'random').mockReturnValue(0.123456789)
 
