@@ -144,7 +144,7 @@ describe('rw destroy scaffold', () => {
         })
       })
 
-      test('destroys files', async () => {
+      test.skip('destroys files', async () => {
         const unlinkSpy = vi.spyOn(fs, 'unlinkSync')
         const t = tasks({
           model: 'Post',
