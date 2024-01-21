@@ -30,18 +30,21 @@ vi.mock('execa', () => ({
 
 vi.mock('enquirer', () => {
   return {
-    Select: vi.fn(() => {
-      return {
-        run: vi.fn(() => {
-          throw new Error('Mock Not Implemented')
-        }),
-      }
-    }),
+    default: {
+      Select: vi.fn(() => {
+        return {
+          run: vi.fn(() => {
+            throw new Error('Mock Not Implemented')
+          }),
+        }
+      }),
+    },
   }
 })
 
 import path from 'path'
 
+import enq from 'enquirer'
 import execa from 'execa'
 import { vol } from 'memfs'
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
@@ -49,8 +52,6 @@ import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 import { getCompatibilityData } from '@redwoodjs/cli-helpers'
 
 import { handler } from '../packageHandler'
-
-const { Select } = require('enquirer')
 
 describe('packageHandler', () => {
   beforeEach(() => {
@@ -109,12 +110,12 @@ describe('packageHandler', () => {
     )
   })
 
-  test.skip('compatiblity check error prompts to continue', async () => {
+  test('compatiblity check error prompts to continue', async () => {
     getCompatibilityData.mockImplementation(() => {
       throw new Error('No compatible version found')
     })
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
         run: vi.fn(() => 'cancel'),
       }
@@ -124,10 +125,10 @@ describe('packageHandler', () => {
       force: false,
       _: ['setup', 'package'],
     })
-    expect(Select).toHaveBeenCalledTimes(1)
+    expect(enq.Select).toHaveBeenCalledTimes(1)
     expect(execa).not.toHaveBeenCalled()
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
         run: vi.fn(() => 'continue'),
       }
@@ -137,14 +138,14 @@ describe('packageHandler', () => {
       force: false,
       _: ['setup', 'package'],
     })
-    expect(Select).toHaveBeenCalledTimes(2)
+    expect(enq.Select).toHaveBeenCalledTimes(2)
     expect(execa).toHaveBeenCalledWith('yarn', ['dlx', 'some-package@latest'], {
       stdio: 'inherit',
       cwd: path.join('mocked', 'project'),
     })
   })
 
-  test.skip('default of latest is compatible', async () => {
+  test('default of latest is compatible', async () => {
     getCompatibilityData.mockImplementation(() => {
       return {
         preferred: {
@@ -170,7 +171,7 @@ describe('packageHandler', () => {
     })
   })
 
-  test.skip('default of latest is not compatible', async () => {
+  test('default of latest is not compatible', async () => {
     getCompatibilityData.mockImplementation(() => {
       return {
         preferred: {
@@ -184,7 +185,7 @@ describe('packageHandler', () => {
       }
     })
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
         run: vi.fn(() => 'useLatestCompatibleVersion'),
       }
@@ -199,7 +200,7 @@ describe('packageHandler', () => {
       'some-package',
       'latest'
     )
-    expect(Select).toHaveBeenCalledTimes(1)
+    expect(enq.Select).toHaveBeenCalledTimes(1)
     expect(execa).toHaveBeenNthCalledWith(
       1,
       'yarn',
@@ -210,7 +211,7 @@ describe('packageHandler', () => {
       }
     )
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
         run: vi.fn(() => 'usePreferredVersion'),
       }
@@ -225,7 +226,7 @@ describe('packageHandler', () => {
       'some-package',
       'latest'
     )
-    expect(Select).toHaveBeenCalledTimes(2)
+    expect(enq.Select).toHaveBeenCalledTimes(2)
     expect(execa).toHaveBeenNthCalledWith(
       2,
       'yarn',
@@ -236,7 +237,7 @@ describe('packageHandler', () => {
       }
     )
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
         run: vi.fn(() => 'cancel'),
       }
@@ -251,7 +252,7 @@ describe('packageHandler', () => {
       'some-package',
       'latest'
     )
-    expect(Select).toHaveBeenCalledTimes(3)
+    expect(enq.Select).toHaveBeenCalledTimes(3)
     expect(execa).toBeCalledTimes(2) // Only called for the previous two select options
   })
 
@@ -282,7 +283,7 @@ describe('packageHandler', () => {
     })
   })
 
-  test.skip('tag is not compatible', async () => {
+  test('tag is not compatible', async () => {
     getCompatibilityData.mockImplementation(() => {
       return {
         preferred: {
@@ -296,7 +297,7 @@ describe('packageHandler', () => {
       }
     })
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
         run: vi.fn(() => 'useLatestCompatibleVersion'),
       }
@@ -311,7 +312,7 @@ describe('packageHandler', () => {
       'some-package',
       'stable'
     )
-    expect(Select).toHaveBeenCalledTimes(1)
+    expect(enq.Select).toHaveBeenCalledTimes(1)
     expect(execa).toHaveBeenNthCalledWith(
       1,
       'yarn',
@@ -322,7 +323,7 @@ describe('packageHandler', () => {
       }
     )
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
         run: vi.fn(() => 'usePreferredVersion'),
       }
@@ -337,7 +338,7 @@ describe('packageHandler', () => {
       'some-package',
       'stable'
     )
-    expect(Select).toHaveBeenCalledTimes(2)
+    expect(enq.Select).toHaveBeenCalledTimes(2)
     expect(execa).toHaveBeenNthCalledWith(
       2,
       'yarn',
@@ -348,7 +349,7 @@ describe('packageHandler', () => {
       }
     )
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
         run: vi.fn(() => 'cancel'),
       }
@@ -363,7 +364,7 @@ describe('packageHandler', () => {
       'some-package',
       'stable'
     )
-    expect(Select).toHaveBeenCalledTimes(3)
+    expect(enq.Select).toHaveBeenCalledTimes(3)
     expect(execa).toBeCalledTimes(2) // Only called for the previous two select options
   })
 
@@ -393,7 +394,7 @@ describe('packageHandler', () => {
     })
   })
 
-  test.skip('specific version is not compatible', async () => {
+  test('specific version is not compatible', async () => {
     getCompatibilityData.mockImplementation(() => {
       return {
         preferred: {
@@ -407,7 +408,7 @@ describe('packageHandler', () => {
       }
     })
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
         run: vi.fn(() => 'useLatestCompatibleVersion'),
       }
@@ -422,7 +423,7 @@ describe('packageHandler', () => {
       'some-package',
       '1.0.0'
     )
-    expect(Select).toHaveBeenCalledTimes(1)
+    expect(enq.Select).toHaveBeenCalledTimes(1)
     expect(execa).toHaveBeenNthCalledWith(
       1,
       'yarn',
@@ -433,7 +434,7 @@ describe('packageHandler', () => {
       }
     )
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
         run: vi.fn(() => 'usePreferredVersion'),
       }
@@ -448,7 +449,7 @@ describe('packageHandler', () => {
       'some-package',
       '1.0.0'
     )
-    expect(Select).toHaveBeenCalledTimes(2)
+    expect(enq.Select).toHaveBeenCalledTimes(2)
     expect(execa).toHaveBeenNthCalledWith(
       2,
       'yarn',
@@ -459,7 +460,7 @@ describe('packageHandler', () => {
       }
     )
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
         run: vi.fn(() => 'cancel'),
       }
@@ -474,11 +475,11 @@ describe('packageHandler', () => {
       'some-package',
       '1.0.0'
     )
-    expect(Select).toHaveBeenCalledTimes(3)
+    expect(enq.Select).toHaveBeenCalledTimes(3)
     expect(execa).toBeCalledTimes(2) // Only called for the previous two select options
   })
 
-  test.skip('specific version is experimental', async () => {
+  test('specific version is experimental', async () => {
     getCompatibilityData.mockImplementation(() => {
       return {
         preferred: {
@@ -503,7 +504,7 @@ describe('packageHandler', () => {
     )
 
     // No force should prompt
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
         run: vi.fn(() => 'useLatestCompatibleVersion'),
       }
@@ -518,7 +519,7 @@ describe('packageHandler', () => {
       'some-package',
       '0.0.1'
     )
-    expect(Select).toHaveBeenCalledTimes(1)
+    expect(enq.Select).toHaveBeenCalledTimes(1)
     expect(execa).toHaveBeenNthCalledWith(
       1,
       'yarn',
