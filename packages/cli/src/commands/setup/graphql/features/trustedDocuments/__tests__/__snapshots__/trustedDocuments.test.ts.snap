@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Trusted documents setup Project toml configuration updates default toml where graphql fragments are already setup updates the toml file with graphql and trusted documents enabled and keeps fragments 1`] = `
 "# This file contains the configuration settings for your Redwood app.
