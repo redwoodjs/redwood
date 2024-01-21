@@ -1,16 +1,16 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`in javascript mode creates a multi word service file 1`] = `
-"import { db } from 'src/lib/db'
+exports[`in javascript mode > creates a multi word service file 1`] = `
+"import { db } from "src/lib/db";
 
 export const userProfiles = () => {
-  return db.userProfile.findMany()
-}
+  return db.userProfile.findMany();
+};
 "
 `;
 
-exports[`in javascript mode creates a multi word service test file 1`] = `
-"import { userProfiles } from './userProfiles'
+exports[`in javascript mode > creates a multi word service test file 1`] = `
+"import { userProfiles } from "./userProfiles";
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -18,24 +18,24 @@ exports[`in javascript mode creates a multi word service test file 1`] = `
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
-describe('userProfiles', () => {
-  scenario('returns all userProfiles', async (scenario) => {
-    const result = await userProfiles()
+describe("userProfiles", () => {
+  scenario("returns all userProfiles", async (scenario) => {
+    const result = await userProfiles();
 
-    expect(result.length).toEqual(Object.keys(scenario.userProfile).length)
-  })
-})
+    expect(result.length).toEqual(Object.keys(scenario.userProfile).length);
+  });
+});
 "
 `;
 
-exports[`in javascript mode creates a multi word service test file with crud actions and only foreign as mandatory field 1`] = `
+exports[`in javascript mode > creates a multi word service test file with crud actions and only foreign as mandatory field 1`] = `
 "import {
   transactions,
   transaction,
   createTransaction,
   updateTransaction,
   deleteTransaction,
-} from './transactions'
+} from "./transactions";
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -43,59 +43,59 @@ exports[`in javascript mode creates a multi word service test file with crud act
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
-describe('transactions', () => {
-  scenario('returns all transactions', async (scenario) => {
-    const result = await transactions()
+describe("transactions", () => {
+  scenario("returns all transactions", async (scenario) => {
+    const result = await transactions();
 
-    expect(result.length).toEqual(Object.keys(scenario.transaction).length)
-  })
+    expect(result.length).toEqual(Object.keys(scenario.transaction).length);
+  });
 
-  scenario('returns a single transaction', async (scenario) => {
-    const result = await transaction({ id: scenario.transaction.one.id })
+  scenario("returns a single transaction", async (scenario) => {
+    const result = await transaction({ id: scenario.transaction.one.id });
 
-    expect(result).toEqual(scenario.transaction.one)
-  })
+    expect(result).toEqual(scenario.transaction.one);
+  });
 
-  scenario('creates a transaction', async (scenario) => {
+  scenario("creates a transaction", async (scenario) => {
     const result = await createTransaction({
       input: { userId: scenario.transaction.two.userId },
-    })
+    });
 
-    expect(result.userId).toEqual(scenario.transaction.two.userId)
-  })
+    expect(result.userId).toEqual(scenario.transaction.two.userId);
+  });
 
-  scenario('updates a transaction', async (scenario) => {
+  scenario("updates a transaction", async (scenario) => {
     const original = await transaction({
       id: scenario.transaction.one.id,
-    })
+    });
     const result = await updateTransaction({
       id: original.id,
       input: { userId: scenario.transaction.two.userId },
-    })
+    });
 
-    expect(result.userId).toEqual(scenario.transaction.two.userId)
-  })
+    expect(result.userId).toEqual(scenario.transaction.two.userId);
+  });
 
-  scenario('deletes a transaction', async (scenario) => {
+  scenario("deletes a transaction", async (scenario) => {
     const original = await deleteTransaction({
       id: scenario.transaction.one.id,
-    })
-    const result = await transaction({ id: original.id })
+    });
+    const result = await transaction({ id: original.id });
 
-    expect(result).toEqual(null)
-  })
-})
+    expect(result).toEqual(null);
+  });
+});
 "
 `;
 
-exports[`in javascript mode creates a multi word service test file with multiple scalar types 1`] = `
+exports[`in javascript mode > creates a multi word service test file with multiple scalar types 1`] = `
 "import {
   scalarTypes,
   scalarType,
   createScalarType,
   updateScalarType,
   deleteScalarType,
-} from './scalarTypes'
+} from "./scalarTypes";
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -103,207 +103,207 @@ exports[`in javascript mode creates a multi word service test file with multiple
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
-describe('scalarTypes', () => {
-  scenario('returns all scalarTypes', async (scenario) => {
-    const result = await scalarTypes()
+describe("scalarTypes", () => {
+  scenario("returns all scalarTypes", async (scenario) => {
+    const result = await scalarTypes();
 
-    expect(result.length).toEqual(Object.keys(scenario.scalarType).length)
-  })
+    expect(result.length).toEqual(Object.keys(scenario.scalarType).length);
+  });
 
-  scenario('returns a single scalarType', async (scenario) => {
-    const result = await scalarType({ id: scenario.scalarType.one.id })
+  scenario("returns a single scalarType", async (scenario) => {
+    const result = await scalarType({ id: scenario.scalarType.one.id });
 
-    expect(result).toEqual(scenario.scalarType.one)
-  })
+    expect(result).toEqual(scenario.scalarType.one);
+  });
 
-  scenario('creates a scalarType', async () => {
+  scenario("creates a scalarType", async () => {
     const result = await createScalarType({
       input: {
-        email: 'String',
-        date: '2022-09-30T09:50:00.000Z',
+        email: "String",
+        date: "2022-09-30T09:50:00.000Z",
         bigInt: 1234567n,
         integer: 1234567,
         boolean: true,
       },
-    })
+    });
 
-    expect(result.email).toEqual('String')
-    expect(result.date).toEqual(new Date('2022-09-30T09:50:00.000Z'))
-    expect(result.bigInt).toEqual(1234567n)
-    expect(result.integer).toEqual(1234567)
-    expect(result.boolean).toEqual(true)
-  })
+    expect(result.email).toEqual("String");
+    expect(result.date).toEqual(new Date("2022-09-30T09:50:00.000Z"));
+    expect(result.bigInt).toEqual(1234567n);
+    expect(result.integer).toEqual(1234567);
+    expect(result.boolean).toEqual(true);
+  });
 
-  scenario('updates a scalarType', async (scenario) => {
+  scenario("updates a scalarType", async (scenario) => {
     const original = await scalarType({
       id: scenario.scalarType.one.id,
-    })
+    });
     const result = await updateScalarType({
       id: original.id,
-      input: { email: 'String2' },
-    })
+      input: { email: "String2" },
+    });
 
-    expect(result.email).toEqual('String2')
-  })
+    expect(result.email).toEqual("String2");
+  });
 
-  scenario('deletes a scalarType', async (scenario) => {
+  scenario("deletes a scalarType", async (scenario) => {
     const original = await deleteScalarType({
       id: scenario.scalarType.one.id,
-    })
-    const result = await scalarType({ id: original.id })
+    });
+    const result = await scalarType({ id: original.id });
 
-    expect(result).toEqual(null)
-  })
-})
+    expect(result).toEqual(null);
+  });
+});
 "
 `;
 
-exports[`in javascript mode creates a single word service file 1`] = `
-"import { db } from 'src/lib/db'
+exports[`in javascript mode > creates a single word service file 1`] = `
+"import { db } from "src/lib/db";
 
 export const users = () => {
-  return db.user.findMany()
-}
+  return db.user.findMany();
+};
 
 export const user = ({ id }) => {
   return db.user.findUnique({
     where: { id },
-  })
-}
+  });
+};
 
 export const createUser = ({ input }) => {
   return db.user.create({
     data: input,
-  })
-}
+  });
+};
 
 export const updateUser = ({ id, input }) => {
   return db.user.update({
     data: input,
     where: { id },
-  })
-}
+  });
+};
 
 export const deleteUser = ({ id }) => {
   return db.user.delete({
     where: { id },
-  })
-}
+  });
+};
 "
 `;
 
-exports[`in javascript mode creates a single word service file with CRUD actions 1`] = `
-"import { db } from 'src/lib/db'
+exports[`in javascript mode > creates a single word service file with CRUD actions 1`] = `
+"import { db } from "src/lib/db";
 
 export const posts = () => {
-  return db.post.findMany()
-}
+  return db.post.findMany();
+};
 
 export const post = ({ id }) => {
   return db.post.findUnique({
     where: { id },
-  })
-}
+  });
+};
 
 export const createPost = ({ input }) => {
   return db.post.create({
     data: input,
-  })
-}
+  });
+};
 
 export const updatePost = ({ id, input }) => {
   return db.post.update({
     data: input,
     where: { id },
-  })
-}
+  });
+};
 
 export const deletePost = ({ id }) => {
   return db.post.delete({
     where: { id },
-  })
-}
+  });
+};
 "
 `;
 
-exports[`in javascript mode creates a single word service file with a belongsTo relation 1`] = `
-"import { db } from 'src/lib/db'
+exports[`in javascript mode > creates a single word service file with a belongsTo relation 1`] = `
+"import { db } from "src/lib/db";
 
 export const users = () => {
-  return db.user.findMany()
-}
+  return db.user.findMany();
+};
 
 export const user = ({ id }) => {
   return db.user.findUnique({
     where: { id },
-  })
-}
+  });
+};
 
 export const User = {
   identity: (_obj, { root }) => {
-    return db.user.findUnique({ where: { id: root?.id } }).identity()
+    return db.user.findUnique({ where: { id: root?.id } }).identity();
   },
-}
+};
 "
 `;
 
-exports[`in javascript mode creates a single word service file with a hasMany relation 1`] = `
-"import { db } from 'src/lib/db'
+exports[`in javascript mode > creates a single word service file with a hasMany relation 1`] = `
+"import { db } from "src/lib/db";
 
 export const users = () => {
-  return db.user.findMany()
-}
+  return db.user.findMany();
+};
 
 export const user = ({ id }) => {
   return db.user.findUnique({
     where: { id },
-  })
-}
+  });
+};
 
 export const User = {
   userProfiles: (_obj, { root }) => {
-    return db.user.findUnique({ where: { id: root?.id } }).userProfiles()
+    return db.user.findUnique({ where: { id: root?.id } }).userProfiles();
   },
-}
+};
 "
 `;
 
-exports[`in javascript mode creates a single word service file with multiple relations 1`] = `
-"import { db } from 'src/lib/db'
+exports[`in javascript mode > creates a single word service file with multiple relations 1`] = `
+"import { db } from "src/lib/db";
 
 export const users = () => {
-  return db.user.findMany()
-}
+  return db.user.findMany();
+};
 
 export const user = ({ id }) => {
   return db.user.findUnique({
     where: { id },
-  })
-}
+  });
+};
 
 export const User = {
   userProfiles: (_obj, { root }) => {
-    return db.user.findUnique({ where: { id: root?.id } }).userProfiles()
+    return db.user.findUnique({ where: { id: root?.id } }).userProfiles();
   },
   identity: (_obj, { root }) => {
-    return db.user.findUnique({ where: { id: root?.id } }).identity()
+    return db.user.findUnique({ where: { id: root?.id } }).identity();
   },
-}
+};
 "
 `;
 
-exports[`in javascript mode creates a single word service scenario file 1`] = `
+exports[`in javascript mode > creates a single word service scenario file 1`] = `
 "export const standard = defineScenario({
   user: {
-    one: { data: { email: 'String1234567' } },
-    two: { data: { email: 'String1234567' } },
+    one: { data: { email: "String1234567" } },
+    two: { data: { email: "String1234567" } },
   },
-})
+});
 "
 `;
 
-exports[`in javascript mode creates a single word service test file 1`] = `
-"import { users, user, createUser, updateUser, deleteUser } from './users'
+exports[`in javascript mode > creates a single word service test file 1`] = `
+"import { users, user, createUser, updateUser, deleteUser } from "./users";
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -311,63 +311,63 @@ exports[`in javascript mode creates a single word service test file 1`] = `
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
-describe('users', () => {
-  scenario('returns all users', async (scenario) => {
-    const result = await users()
+describe("users", () => {
+  scenario("returns all users", async (scenario) => {
+    const result = await users();
 
-    expect(result.length).toEqual(Object.keys(scenario.user).length)
-  })
+    expect(result.length).toEqual(Object.keys(scenario.user).length);
+  });
 
-  scenario('returns a single user', async (scenario) => {
-    const result = await user({ id: scenario.user.one.id })
+  scenario("returns a single user", async (scenario) => {
+    const result = await user({ id: scenario.user.one.id });
 
-    expect(result).toEqual(scenario.user.one)
-  })
+    expect(result).toEqual(scenario.user.one);
+  });
 
-  scenario('creates a user', async () => {
+  scenario("creates a user", async () => {
     const result = await createUser({
-      input: { email: 'String1234567' },
-    })
+      input: { email: "String1234567" },
+    });
 
-    expect(result.email).toEqual('String1234567')
-  })
+    expect(result.email).toEqual("String1234567");
+  });
 
-  scenario('updates a user', async (scenario) => {
-    const original = await user({ id: scenario.user.one.id })
+  scenario("updates a user", async (scenario) => {
+    const original = await user({ id: scenario.user.one.id });
     const result = await updateUser({
       id: original.id,
-      input: { email: 'String12345672' },
-    })
+      input: { email: "String12345672" },
+    });
 
-    expect(result.email).toEqual('String12345672')
-  })
+    expect(result.email).toEqual("String12345672");
+  });
 
-  scenario('deletes a user', async (scenario) => {
-    const original = await deleteUser({ id: scenario.user.one.id })
-    const result = await user({ id: original.id })
+  scenario("deletes a user", async (scenario) => {
+    const original = await deleteUser({ id: scenario.user.one.id });
+    const result = await user({ id: original.id });
 
-    expect(result).toEqual(null)
-  })
-})
+    expect(result).toEqual(null);
+  });
+});
 "
 `;
 
-exports[`in typescript mode creates a multi word service file 1`] = `
-"import type { QueryResolvers } from 'types/graphql'
+exports[`in typescript mode > creates a multi word service file 1`] = `
+"import type { QueryResolvers } from "types/graphql";
 
-import { db } from 'src/lib/db'
+import { db } from "src/lib/db";
 
-export const userProfiles: QueryResolvers['userProfiles'] = () => {
-  return db.userProfile.findMany()
-}
+export const userProfiles: QueryResolvers["userProfiles"] = () => {
+  return db.userProfile.findMany();
+};
 "
 `;
 
-exports[`in typescript mode creates a multi word service test file 1`] = `
-"import type { UserProfile } from '@prisma/client'
+exports[`in typescript mode > creates a multi word service test file 1`] = `
+"import type { UserProfile } from "@prisma/client";
 
-import { userProfiles } from './userProfiles'
-import type { StandardScenario } from './userProfiles.scenarios'
+import { userProfiles } from "./userProfiles";
+import type { StandardScenario } from "./userProfiles.scenarios";
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -375,18 +375,18 @@ import type { StandardScenario } from './userProfiles.scenarios'
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
-describe('userProfiles', () => {
-  scenario('returns all userProfiles', async (scenario: StandardScenario) => {
-    const result = await userProfiles()
+describe("userProfiles", () => {
+  scenario("returns all userProfiles", async (scenario: StandardScenario) => {
+    const result = await userProfiles();
 
-    expect(result.length).toEqual(Object.keys(scenario.userProfile).length)
-  })
-})
+    expect(result.length).toEqual(Object.keys(scenario.userProfile).length);
+  });
+});
 "
 `;
 
-exports[`in typescript mode creates a multi word service test file with crud actions and only foreign as mandatory field 1`] = `
-"import type { Transaction } from '@prisma/client'
+exports[`in typescript mode > creates a multi word service test file with crud actions and only foreign as mandatory field 1`] = `
+"import type { Transaction } from "@prisma/client";
 
 import {
   transactions,
@@ -394,8 +394,8 @@ import {
   createTransaction,
   updateTransaction,
   deleteTransaction,
-} from './transactions'
-import type { StandardScenario } from './transactions.scenarios'
+} from "./transactions";
+import type { StandardScenario } from "./transactions.scenarios";
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -403,56 +403,56 @@ import type { StandardScenario } from './transactions.scenarios'
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
-describe('transactions', () => {
-  scenario('returns all transactions', async (scenario: StandardScenario) => {
-    const result = await transactions()
+describe("transactions", () => {
+  scenario("returns all transactions", async (scenario: StandardScenario) => {
+    const result = await transactions();
 
-    expect(result.length).toEqual(Object.keys(scenario.transaction).length)
-  })
+    expect(result.length).toEqual(Object.keys(scenario.transaction).length);
+  });
 
   scenario(
-    'returns a single transaction',
+    "returns a single transaction",
     async (scenario: StandardScenario) => {
-      const result = await transaction({ id: scenario.transaction.one.id })
+      const result = await transaction({ id: scenario.transaction.one.id });
 
-      expect(result).toEqual(scenario.transaction.one)
+      expect(result).toEqual(scenario.transaction.one);
     }
-  )
+  );
 
-  scenario('creates a transaction', async (scenario: StandardScenario) => {
+  scenario("creates a transaction", async (scenario: StandardScenario) => {
     const result = await createTransaction({
       input: { userId: scenario.transaction.two.userId },
-    })
+    });
 
-    expect(result.userId).toEqual(scenario.transaction.two.userId)
-  })
+    expect(result.userId).toEqual(scenario.transaction.two.userId);
+  });
 
-  scenario('updates a transaction', async (scenario: StandardScenario) => {
+  scenario("updates a transaction", async (scenario: StandardScenario) => {
     const original = (await transaction({
       id: scenario.transaction.one.id,
-    })) as Transaction
+    })) as Transaction;
     const result = await updateTransaction({
       id: original.id,
       input: { userId: scenario.transaction.two.userId },
-    })
+    });
 
-    expect(result.userId).toEqual(scenario.transaction.two.userId)
-  })
+    expect(result.userId).toEqual(scenario.transaction.two.userId);
+  });
 
-  scenario('deletes a transaction', async (scenario: StandardScenario) => {
+  scenario("deletes a transaction", async (scenario: StandardScenario) => {
     const original = (await deleteTransaction({
       id: scenario.transaction.one.id,
-    })) as Transaction
-    const result = await transaction({ id: original.id })
+    })) as Transaction;
+    const result = await transaction({ id: original.id });
 
-    expect(result).toEqual(null)
-  })
-})
+    expect(result).toEqual(null);
+  });
+});
 "
 `;
 
-exports[`in typescript mode creates a multi word service test file with multiple scalar types 1`] = `
-"import type { ScalarType } from '@prisma/client'
+exports[`in typescript mode > creates a multi word service test file with multiple scalar types 1`] = `
+"import type { ScalarType } from "@prisma/client";
 
 import {
   scalarTypes,
@@ -460,8 +460,8 @@ import {
   createScalarType,
   updateScalarType,
   deleteScalarType,
-} from './scalarTypes'
-import type { StandardScenario } from './scalarTypes.scenarios'
+} from "./scalarTypes";
+import type { StandardScenario } from "./scalarTypes.scenarios";
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -469,228 +469,228 @@ import type { StandardScenario } from './scalarTypes.scenarios'
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
-describe('scalarTypes', () => {
-  scenario('returns all scalarTypes', async (scenario: StandardScenario) => {
-    const result = await scalarTypes()
+describe("scalarTypes", () => {
+  scenario("returns all scalarTypes", async (scenario: StandardScenario) => {
+    const result = await scalarTypes();
 
-    expect(result.length).toEqual(Object.keys(scenario.scalarType).length)
-  })
+    expect(result.length).toEqual(Object.keys(scenario.scalarType).length);
+  });
 
   scenario(
-    'returns a single scalarType',
+    "returns a single scalarType",
     async (scenario: StandardScenario) => {
-      const result = await scalarType({ id: scenario.scalarType.one.id })
+      const result = await scalarType({ id: scenario.scalarType.one.id });
 
-      expect(result).toEqual(scenario.scalarType.one)
+      expect(result).toEqual(scenario.scalarType.one);
     }
-  )
+  );
 
-  scenario('creates a scalarType', async () => {
+  scenario("creates a scalarType", async () => {
     const result = await createScalarType({
       input: {
-        email: 'String',
-        date: '2022-09-30T09:50:00.000Z',
+        email: "String",
+        date: "2022-09-30T09:50:00.000Z",
         bigInt: 1234567n,
         integer: 1234567,
         boolean: true,
       },
-    })
+    });
 
-    expect(result.email).toEqual('String')
-    expect(result.date).toEqual(new Date('2022-09-30T09:50:00.000Z'))
-    expect(result.bigInt).toEqual(1234567n)
-    expect(result.integer).toEqual(1234567)
-    expect(result.boolean).toEqual(true)
-  })
+    expect(result.email).toEqual("String");
+    expect(result.date).toEqual(new Date("2022-09-30T09:50:00.000Z"));
+    expect(result.bigInt).toEqual(1234567n);
+    expect(result.integer).toEqual(1234567);
+    expect(result.boolean).toEqual(true);
+  });
 
-  scenario('updates a scalarType', async (scenario: StandardScenario) => {
+  scenario("updates a scalarType", async (scenario: StandardScenario) => {
     const original = (await scalarType({
       id: scenario.scalarType.one.id,
-    })) as ScalarType
+    })) as ScalarType;
     const result = await updateScalarType({
       id: original.id,
-      input: { email: 'String2' },
-    })
+      input: { email: "String2" },
+    });
 
-    expect(result.email).toEqual('String2')
-  })
+    expect(result.email).toEqual("String2");
+  });
 
-  scenario('deletes a scalarType', async (scenario: StandardScenario) => {
+  scenario("deletes a scalarType", async (scenario: StandardScenario) => {
     const original = (await deleteScalarType({
       id: scenario.scalarType.one.id,
-    })) as ScalarType
-    const result = await scalarType({ id: original.id })
+    })) as ScalarType;
+    const result = await scalarType({ id: original.id });
 
-    expect(result).toEqual(null)
-  })
-})
+    expect(result).toEqual(null);
+  });
+});
 "
 `;
 
-exports[`in typescript mode creates a single word service file 1`] = `
-"import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+exports[`in typescript mode > creates a single word service file 1`] = `
+"import type { QueryResolvers, MutationResolvers } from "types/graphql";
 
-import { db } from 'src/lib/db'
+import { db } from "src/lib/db";
 
-export const users: QueryResolvers['users'] = () => {
-  return db.user.findMany()
-}
+export const users: QueryResolvers["users"] = () => {
+  return db.user.findMany();
+};
 
-export const user: QueryResolvers['user'] = ({ id }) => {
+export const user: QueryResolvers["user"] = ({ id }) => {
   return db.user.findUnique({
     where: { id },
-  })
-}
+  });
+};
 
-export const createUser: MutationResolvers['createUser'] = ({ input }) => {
+export const createUser: MutationResolvers["createUser"] = ({ input }) => {
   return db.user.create({
     data: input,
-  })
-}
+  });
+};
 
-export const updateUser: MutationResolvers['updateUser'] = ({ id, input }) => {
+export const updateUser: MutationResolvers["updateUser"] = ({ id, input }) => {
   return db.user.update({
     data: input,
     where: { id },
-  })
-}
+  });
+};
 
-export const deleteUser: MutationResolvers['deleteUser'] = ({ id }) => {
+export const deleteUser: MutationResolvers["deleteUser"] = ({ id }) => {
   return db.user.delete({
     where: { id },
-  })
-}
+  });
+};
 "
 `;
 
-exports[`in typescript mode creates a single word service file with CRUD actions 1`] = `
-"import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+exports[`in typescript mode > creates a single word service file with CRUD actions 1`] = `
+"import type { QueryResolvers, MutationResolvers } from "types/graphql";
 
-import { db } from 'src/lib/db'
+import { db } from "src/lib/db";
 
-export const posts: QueryResolvers['posts'] = () => {
-  return db.post.findMany()
-}
+export const posts: QueryResolvers["posts"] = () => {
+  return db.post.findMany();
+};
 
-export const post: QueryResolvers['post'] = ({ id }) => {
+export const post: QueryResolvers["post"] = ({ id }) => {
   return db.post.findUnique({
     where: { id },
-  })
-}
+  });
+};
 
-export const createPost: MutationResolvers['createPost'] = ({ input }) => {
+export const createPost: MutationResolvers["createPost"] = ({ input }) => {
   return db.post.create({
     data: input,
-  })
-}
+  });
+};
 
-export const updatePost: MutationResolvers['updatePost'] = ({ id, input }) => {
+export const updatePost: MutationResolvers["updatePost"] = ({ id, input }) => {
   return db.post.update({
     data: input,
     where: { id },
-  })
-}
+  });
+};
 
-export const deletePost: MutationResolvers['deletePost'] = ({ id }) => {
+export const deletePost: MutationResolvers["deletePost"] = ({ id }) => {
   return db.post.delete({
     where: { id },
-  })
-}
+  });
+};
 "
 `;
 
-exports[`in typescript mode creates a single word service file with a belongsTo relation 1`] = `
-"import type { QueryResolvers, UserRelationResolvers } from 'types/graphql'
+exports[`in typescript mode > creates a single word service file with a belongsTo relation 1`] = `
+"import type { QueryResolvers, UserRelationResolvers } from "types/graphql";
 
-import { db } from 'src/lib/db'
+import { db } from "src/lib/db";
 
-export const users: QueryResolvers['users'] = () => {
-  return db.user.findMany()
-}
+export const users: QueryResolvers["users"] = () => {
+  return db.user.findMany();
+};
 
-export const user: QueryResolvers['user'] = ({ id }) => {
+export const user: QueryResolvers["user"] = ({ id }) => {
   return db.user.findUnique({
     where: { id },
-  })
-}
+  });
+};
 
 export const User: UserRelationResolvers = {
   identity: (_obj, { root }) => {
-    return db.user.findUnique({ where: { id: root?.id } }).identity()
+    return db.user.findUnique({ where: { id: root?.id } }).identity();
   },
-}
+};
 "
 `;
 
-exports[`in typescript mode creates a single word service file with a hasMany relation 1`] = `
-"import type { QueryResolvers, UserRelationResolvers } from 'types/graphql'
+exports[`in typescript mode > creates a single word service file with a hasMany relation 1`] = `
+"import type { QueryResolvers, UserRelationResolvers } from "types/graphql";
 
-import { db } from 'src/lib/db'
+import { db } from "src/lib/db";
 
-export const users: QueryResolvers['users'] = () => {
-  return db.user.findMany()
-}
+export const users: QueryResolvers["users"] = () => {
+  return db.user.findMany();
+};
 
-export const user: QueryResolvers['user'] = ({ id }) => {
+export const user: QueryResolvers["user"] = ({ id }) => {
   return db.user.findUnique({
     where: { id },
-  })
-}
+  });
+};
 
 export const User: UserRelationResolvers = {
   userProfiles: (_obj, { root }) => {
-    return db.user.findUnique({ where: { id: root?.id } }).userProfiles()
+    return db.user.findUnique({ where: { id: root?.id } }).userProfiles();
   },
-}
+};
 "
 `;
 
-exports[`in typescript mode creates a single word service file with multiple relations 1`] = `
-"import type { QueryResolvers, UserRelationResolvers } from 'types/graphql'
+exports[`in typescript mode > creates a single word service file with multiple relations 1`] = `
+"import type { QueryResolvers, UserRelationResolvers } from "types/graphql";
 
-import { db } from 'src/lib/db'
+import { db } from "src/lib/db";
 
-export const users: QueryResolvers['users'] = () => {
-  return db.user.findMany()
-}
+export const users: QueryResolvers["users"] = () => {
+  return db.user.findMany();
+};
 
-export const user: QueryResolvers['user'] = ({ id }) => {
+export const user: QueryResolvers["user"] = ({ id }) => {
   return db.user.findUnique({
     where: { id },
-  })
-}
+  });
+};
 
 export const User: UserRelationResolvers = {
   userProfiles: (_obj, { root }) => {
-    return db.user.findUnique({ where: { id: root?.id } }).userProfiles()
+    return db.user.findUnique({ where: { id: root?.id } }).userProfiles();
   },
   identity: (_obj, { root }) => {
-    return db.user.findUnique({ where: { id: root?.id } }).identity()
+    return db.user.findUnique({ where: { id: root?.id } }).identity();
   },
-}
+};
 "
 `;
 
-exports[`in typescript mode creates a single word service scenario file 1`] = `
-"import type { Prisma, User } from '@prisma/client'
-import type { ScenarioData } from '@redwoodjs/testing/api'
+exports[`in typescript mode > creates a single word service scenario file 1`] = `
+"import type { Prisma, User } from "@prisma/client";
+import type { ScenarioData } from "@redwoodjs/testing/api";
 
 export const standard = defineScenario<Prisma.UserCreateArgs>({
   user: {
-    one: { data: { email: 'String1234567' } },
-    two: { data: { email: 'String1234567' } },
+    one: { data: { email: "String1234567" } },
+    two: { data: { email: "String1234567" } },
   },
-})
+});
 
-export type StandardScenario = ScenarioData<User, 'user'>
+export type StandardScenario = ScenarioData<User, "user">;
 "
 `;
 
-exports[`in typescript mode creates a single word service test file 1`] = `
-"import type { User } from '@prisma/client'
+exports[`in typescript mode > creates a single word service test file 1`] = `
+"import type { User } from "@prisma/client";
 
-import { users, user, createUser, updateUser, deleteUser } from './users'
-import type { StandardScenario } from './users.scenarios'
+import { users, user, createUser, updateUser, deleteUser } from "./users";
+import type { StandardScenario } from "./users.scenarios";
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -698,43 +698,43 @@ import type { StandardScenario } from './users.scenarios'
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
-describe('users', () => {
-  scenario('returns all users', async (scenario: StandardScenario) => {
-    const result = await users()
+describe("users", () => {
+  scenario("returns all users", async (scenario: StandardScenario) => {
+    const result = await users();
 
-    expect(result.length).toEqual(Object.keys(scenario.user).length)
-  })
+    expect(result.length).toEqual(Object.keys(scenario.user).length);
+  });
 
-  scenario('returns a single user', async (scenario: StandardScenario) => {
-    const result = await user({ id: scenario.user.one.id })
+  scenario("returns a single user", async (scenario: StandardScenario) => {
+    const result = await user({ id: scenario.user.one.id });
 
-    expect(result).toEqual(scenario.user.one)
-  })
+    expect(result).toEqual(scenario.user.one);
+  });
 
-  scenario('creates a user', async () => {
+  scenario("creates a user", async () => {
     const result = await createUser({
-      input: { email: 'String1234567' },
-    })
+      input: { email: "String1234567" },
+    });
 
-    expect(result.email).toEqual('String1234567')
-  })
+    expect(result.email).toEqual("String1234567");
+  });
 
-  scenario('updates a user', async (scenario: StandardScenario) => {
-    const original = (await user({ id: scenario.user.one.id })) as User
+  scenario("updates a user", async (scenario: StandardScenario) => {
+    const original = (await user({ id: scenario.user.one.id })) as User;
     const result = await updateUser({
       id: original.id,
-      input: { email: 'String12345672' },
-    })
+      input: { email: "String12345672" },
+    });
 
-    expect(result.email).toEqual('String12345672')
-  })
+    expect(result.email).toEqual("String12345672");
+  });
 
-  scenario('deletes a user', async (scenario: StandardScenario) => {
-    const original = (await deleteUser({ id: scenario.user.one.id })) as User
-    const result = await user({ id: original.id })
+  scenario("deletes a user", async (scenario: StandardScenario) => {
+    const original = (await deleteUser({ id: scenario.user.one.id })) as User;
+    const result = await user({ id: original.id });
 
-    expect(result).toEqual(null)
-  })
-})
+    expect(result).toEqual(null);
+  });
+});
 "
 `;
