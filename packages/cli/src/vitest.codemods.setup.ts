@@ -1,19 +1,21 @@
 /* eslint-env node, jest */
 
-import { formatCode } from './testUtils'
-
 // Disable telemetry within framework tests
 process.env.REDWOOD_DISABLE_TELEMETRY = 1
 
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 
-globalThis.matchTransformSnapshot =
-  require('./testUtils/matchTransformSnapshot').matchTransformSnapshot
-globalThis.matchInlineTransformSnapshot =
-  require('./testUtils/matchInlineTransformSnapshot').matchInlineTransformSnapshot
-globalThis.matchFolderTransform =
-  require('./testUtils/matchFolderTransform').matchFolderTransform
+import { expect } from 'vitest'
+
+import { formatCode } from './testUtils'
+
+globalThis.matchInlineTransformSnapshot = (
+  await import('./testUtils/matchInlineTransformSnapshot')
+).matchInlineTransformSnapshot
+globalThis.matchFolderTransform = (
+  await import('./testUtils/matchFolderTransform')
+).matchFolderTransform
 
 // Custom matcher for checking fixtures using paths
 // e.g. expect(transformedPath).toMatchFileContents(expectedPath)
