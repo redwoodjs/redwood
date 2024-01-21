@@ -8652,6 +8652,7 @@ __metadata:
     rimraf: "npm:5.0.5"
     string-env-interpolation: "npm:1.0.1"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
