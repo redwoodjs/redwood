@@ -12,7 +12,7 @@ export default defineWorkspace([
         '__testfixtures__',
         '__codemod_tests__',
         '__tests__/utils/*',
-        '__tests__/fixtures/*',
+        '**/__tests__/fixtures/**/*',
         '.d.ts',
         'dist',
       ],
