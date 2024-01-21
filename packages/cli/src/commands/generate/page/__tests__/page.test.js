@@ -7,31 +7,33 @@ vi.mock('fs-extra', async (importOriginal) => {
   const mod = await importOriginal()
 
   return {
-    ...mod,
-    existsSync: (...args) => {
-      if (!globalThis.mockFs) {
-        return mod.existsSync.apply(null, args)
-      }
-      return false
-    },
-    mkdirSync: (...args) => {
-      if (!globalThis.mockFs) {
-        return mod.mkdirSync.apply(null, args)
-      }
-    },
-    writeFileSync: (target, contents) => {
-      if (!globalThis.mockFs) {
-        return mod.writeFileSync.call(null, target, contents)
-      }
-    },
-    readFileSync: (path) => {
-      if (!globalThis.mockFs) {
-        return mod.readFileSync.call(null, path)
-      }
+    default: {
+      ...mod,
+      existsSync: (...args) => {
+        if (!globalThis.mockFs) {
+          return mod.existsSync.apply(null, args)
+        }
+        return false
+      },
+      mkdirSync: (...args) => {
+        if (!globalThis.mockFs) {
+          return mod.mkdirSync.apply(null, args)
+        }
+      },
+      writeFileSync: (target, contents) => {
+        if (!globalThis.mockFs) {
+          return mod.writeFileSync.call(null, target, contents)
+        }
+      },
+      readFileSync: (path) => {
+        if (!globalThis.mockFs) {
+          return mod.readFileSync.call(null, path)
+        }
 
-      const mockedContent = mockFiles[path]
+        const mockedContent = mockFiles[path]
 
-      return mockedContent || mod.readFileSync.call(null, path)
+        return mockedContent || mod.readFileSync.call(null, path)
+      },
     },
   }
 })
@@ -338,7 +340,7 @@ test('paramVariants paramType defaults to string', () => {
   })
 })
 
-describe.skip('handler', () => {
+describe('handler', () => {
   beforeEach(() => {
     vi.spyOn(console, 'info').mockImplementation(() => {})
     vi.spyOn(console, 'log').mockImplementation(() => {})

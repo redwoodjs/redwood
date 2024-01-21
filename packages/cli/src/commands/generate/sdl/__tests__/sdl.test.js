@@ -1,25 +1,42 @@
 globalThis.__dirname = __dirname
 
 globalThis.mockFs = false
+const mockFiles = {}
 
 vi.mock('fs-extra', async (importOriginal) => {
   const mod = await importOriginal()
-
   return {
-    ...mod,
-    mkdirSync: (...args) => {
-      if (globalThis.mockFs) {
-        return
-      }
+    default: {
+      ...mod,
+      existsSync: (...args) => {
+        if (!globalThis.mockFs) {
+          return mod.existsSync.apply(null, args)
+        }
+        return false
+      },
+      mkdirSync: (...args) => {
+        if (globalThis.mockFs) {
+          return
+        }
 
-      return mod.mkdirSync.apply(null, args)
-    },
-    writeFileSync: (target, contents) => {
-      if (globalThis.mockFs) {
-        return
-      }
+        return mod.mkdirSync.apply(null, args)
+      },
+      writeFileSync: (target, contents) => {
+        if (globalThis.mockFs) {
+          return
+        }
 
-      return mod.writeFileSync.call(null, target, contents)
+        return mod.writeFileSync.call(null, target, contents)
+      },
+      readFileSync: (path) => {
+        if (!globalThis.mockFs) {
+          return mod.readFileSync.call(null, path)
+        }
+
+        const mockedContent = mockFiles[path]
+
+        return mockedContent || mod.readFileSync.call(null, path)
+      },
     },
   }
 })
@@ -292,7 +309,7 @@ describe('with graphql documentations', () => {
   })
 })
 
-describe.skip('handler', () => {
+describe('handler', () => {
   const canBeCalledWithGivenModelName = (letterCase, model) => {
     test(`can be called with ${letterCase} model name`, async () => {
       const spy = vi.spyOn(fs, 'writeFileSync')
