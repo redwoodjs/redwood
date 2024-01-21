@@ -31,6 +31,8 @@ describe('crwa', () => {
             --git-init, --git   Initialize a git repository. [boolean] [default: null]
         -m, --commit-message    Commit message for the initial commit.
                                                               [string] [default: null]
+            --yarn-install      Install node modules. Skip via --no-yarn-install.
+                                                             [boolean] [default: null]
         -y, --yes               Skip prompts and use defaults.
                                                              [boolean] [default: null]
             --version           Show version number                          [boolean]
@@ -73,6 +75,7 @@ describe('crwa', () => {
       [?25h✔ Creating your Redwood app in ./redwood-app based on command line argument
       ✔ Using TypeScript based on command line flag
       ✔ Will initialize a git repo based on command line flag
+      ✔ Will run yarn install based on command line flag
       [?25l⠋ Creating project files
       [?25h[?25l✔ Project files created
       [?25h[?25l⠋ Initializing a git repo

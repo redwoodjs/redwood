@@ -30,21 +30,6 @@ const { telemetry } = Parser(hideBin(process.argv))
 
 const tui = new RedwoodTUI()
 
-// Credit to esbuild: https://github.com/rtsao/esbuild/blob/c35a4cebf037237559213abc684504658966f9d6/lib/install.ts#L190-L199
-function isYarnBerryOrNewer() {
-  const { npm_config_user_agent: npmConfigUserAgent } = process.env
-
-  if (npmConfigUserAgent) {
-    const match = npmConfigUserAgent.match(/yarn\/(\d+)/)
-
-    if (match && match[1]) {
-      return parseInt(match[1], 10) >= 2
-    }
-  }
-
-  return false
-}
-
 const USE_GITPOD_TEXT = [
   `  As an alternative solution, you can launch a Redwood project using GitPod instead. GitPod is a an online IDE.`,
   `  See: ${terminalLink(
@@ -282,7 +267,10 @@ async function installNodeModules(newAppDir) {
   })
   tui.startReactive(tuiContent)
 
-  const yarnInstallSubprocess = execa('yarn install', {
+  const oldCwd = process.cwd()
+  process.chdir(newAppDir)
+
+  const yarnInstallSubprocess = execa(`yarn install`, {
     shell: true,
     cwd: newAppDir,
   })
@@ -303,8 +291,11 @@ async function installNodeModules(newAppDir) {
     )
     recordErrorViaTelemetry(error)
     await shutdownTelemetry()
+    process.chdir(oldCwd)
     process.exit(1)
   }
+
+  process.chdir(oldCwd)
 
   tuiContent.update({
     header: '',
@@ -643,6 +634,11 @@ async function handleCommitMessagePreference(commitMessageFlag) {
 async function handleYarnInstallPreference(yarnInstallFlag) {
   // Handle case where flag is set
   if (yarnInstallFlag !== null) {
+    tui.drawText(
+      `${RedwoodStyling.green('✔')} ${
+        yarnInstallFlag ? 'Will' : 'Will not'
+      } run yarn install based on command line flag`
+    )
     return yarnInstallFlag
   }
 
@@ -715,6 +711,11 @@ async function createRedwoodApp() {
       type: 'string',
       describe: 'Commit message for the initial commit.',
     })
+    .option('yarn-install', {
+      default: null,
+      type: 'boolean',
+      describe: 'Install node modules. Skip via --no-yarn-install.',
+    })
     .option('yes', {
       alias: 'y',
       default: null,
@@ -723,24 +724,12 @@ async function createRedwoodApp() {
     })
     .version(version)
 
-  const _isYarnBerryOrNewer = isYarnBerryOrNewer()
-
-  // Only permit the yarn install flag on yarn 1.
-  if (!_isYarnBerryOrNewer) {
-    cli.option('yarn-install', {
-      default: null,
-      type: 'boolean',
-      describe: 'Install node modules. Skip via --no-yarn-install.',
-    })
-  }
-
   const parsedFlags = cli.parse()
 
   // Extract the args as provided by the user in the command line
   // TODO: Make all flags have the 'flag' suffix
   const args = parsedFlags._
-  const yarnInstallFlag =
-    parsedFlags['yarn-install'] ?? !_isYarnBerryOrNewer ? parsedFlags.yes : null
+  const yarnInstallFlag = parsedFlags['yarn-install'] ?? parsedFlags.yes
   const typescriptFlag = parsedFlags.typescript ?? parsedFlags.yes
   const overwrite = parsedFlags.overwrite
   // telemetry, // Extracted above to check if telemetry is disabled before we even reach this point
@@ -779,11 +768,7 @@ async function createRedwoodApp() {
     commitMessage = await handleCommitMessagePreference(commitMessageFlag)
   }
 
-  let yarnInstall = false
-
-  if (!_isYarnBerryOrNewer) {
-    yarnInstall = await handleYarnInstallPreference(yarnInstallFlag)
-  }
+  const yarnInstall = await handleYarnInstallPreference(yarnInstallFlag)
 
   let newAppDir = path.resolve(process.cwd(), targetDir)
 
@@ -799,9 +784,7 @@ async function createRedwoodApp() {
       .getActiveSpan()
       ?.setAttribute('yarn-install-time', Date.now() - yarnInstallStart)
   } else {
-    if (!_isYarnBerryOrNewer) {
-      tui.drawText(`${RedwoodStyling.info('ℹ')} Skipped yarn install step`)
-    }
+    tui.drawText(`${RedwoodStyling.info('ℹ')} Skipped yarn install step`)
   }
 
   // Generate types
