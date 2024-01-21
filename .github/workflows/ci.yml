@@ -134,7 +134,7 @@ jobs:
         uses: SimenB/github-actions-cpu-cores@v2
 
       - name: 🧪 Test
-        run: yarn test-ci ${{ steps.cpu-cores.outputs.count }}
+        run: yarn test-ci --minWorkers=1 --maxWorkers=${{ steps.cpu-cores.outputs.count }}
 
   build-lint-test-skip:
     needs: detect-changes
@@ -811,6 +811,10 @@ jobs:
     name: 🌲 Create Redwood App
     runs-on: ubuntu-latest
 
+    env:
+      REDWOOD_CI: 1
+      REDWOOD_DISABLE_TELEMETRY: 1
+
     steps:
       - uses: actions/checkout@v4
 
@@ -848,7 +852,7 @@ jobs:
           git config --global user.name "Your Name"
 
       - name: e2e test
-        run: yarn test e2e
+        run: yarn test:e2e
         working-directory: ./packages/create-redwood-app
         env:
           PROJECT_PATH: ${{ env.PROJECT_PATH }}

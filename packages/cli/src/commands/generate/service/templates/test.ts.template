@@ -15,18 +15,21 @@
       return `new Prisma.Decimal(${obj})`
     }
 
-    return JSON.stringify(obj).replace(/['"].*?['"]/g, (string) => {
+    const jsonString = JSON.stringify(obj).replace(/['"].*?['"]/g, (string) => {
       if (string.match(/scenario\./)) {
         return string.replace(/['"]/g, '')
       }
 
       // BigInt
       if (string.match(/^\"\d+n\"$/)) {
-        return string.substr(1, string.length - 2)
+        return string.slice(1, string.length - 1)
       }
 
       return string
     })
+
+    // Not all values can be represented as JSON, like function invocations
+    return jsonString.replace(/"Buffer\.from\(([^)]+)\)"/g, 'Buffer.from($1)')
   } %>
 <% if (prismaImport) { %>import { Prisma, ${prismaModel} } from '@prisma/client'<% } else { %>import type { ${prismaModel} } from '@prisma/client'<% } %>
 
