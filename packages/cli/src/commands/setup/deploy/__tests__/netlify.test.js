@@ -101,6 +101,12 @@ describe('netlify', () => {
   it('should add netlify.toml', async () => {
     const netlify = await import('../providers/netlify')
     await netlify.handler({ force: true })
-    // Will be verified by a snapshot up above in the mocked `writeFilesTask`
+
+    const filesystem = vol.toJSON()
+    const netlifyTomlPath = Object.keys(filesystem).find((path) =>
+      path.endsWith('netlify.toml')
+    )
+    expect(netlifyTomlPath).toBeDefined()
+    expect(filesystem[netlifyTomlPath]).toMatchSnapshot()
   })
 })
