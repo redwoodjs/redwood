@@ -1,17 +1,12 @@
 globalThis.__dirname = __dirname
 
 import fs from 'fs-extra'
+import { vi, describe, expect, test } from 'vitest'
 
 import '../../../../lib/test'
 import { shouldUseTailwindCSS } from '../scaffold'
 
-jest.mock('fs', () => {
-  const fs = jest.requireActual('fs')
-  return {
-    ...fs,
-    existsSync: jest.fn(),
-  }
-})
+vi.mock('fs-extra')
 
 describe('with --tailwind flag not set', () => {
   test('having a tailwind config file present', () => {
