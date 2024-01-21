@@ -116,7 +116,7 @@ export const handler = async (args) => {
     console.error(
       c.error(
         `\n${
-          !targetMatch.length ? 'No script' : 'Multiple scripts'
+          targetMatch.length ? 'Multiple scripts' : 'No script'
         } called ${c.underline(
           targetScriptPath.ext
             ? targetScriptPath.base
