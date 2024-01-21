@@ -47,7 +47,9 @@ vi.mock('../../../../lib', async (importOriginal) => {
       // interpreted as a new-line. And need to use double backslashes, so
       // that one "survives" into the regexp
       expect(keys[0]).toMatch(new RegExp(`\\${path.sep}netlify.toml$`))
-      expect(fileNameToContentMap[keys[0]]).toMatchSnapshot()
+      for (const key of keys) {
+        fs.writeFileSync(key, fileNameToContentMap[key])
+      }
     },
   }
 })
@@ -70,9 +72,22 @@ beforeEach(() => {
 })
 
 describe('netlify', () => {
-  it.skip('should call the handler without error', async () => {
+  it('should call the handler without error', async () => {
     const netlify = await import('../providers/netlify')
-    expect(async () => await netlify.handler({ force: true })).not.toThrow()
+
+    let error = undefined
+    try {
+      await netlify.handler({ force: true })
+    } catch (err) {
+      error = err
+    }
+    expect(error).toBeUndefined()
+    const filesystem = vol.toJSON()
+    const netlifyTomlPath = Object.keys(filesystem).find((path) =>
+      path.endsWith('netlify.toml')
+    )
+    expect(netlifyTomlPath).toBeDefined()
+    expect(filesystem[netlifyTomlPath]).toMatchSnapshot()
   })
 
   it('Should update redwood.toml apiUrl', () => {
