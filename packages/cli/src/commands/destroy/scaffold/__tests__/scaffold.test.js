@@ -122,6 +122,7 @@ describe('rw destroy scaffold', () => {
     describe('for typescript files', () => {
       beforeEach(async () => {
         // clear filesystem so files call works as expected
+        vol.reset()
         vol.fromJSON(scaffoldTemplates)
 
         vol.fromJSON({
@@ -146,7 +147,7 @@ describe('rw destroy scaffold', () => {
         })
       })
 
-      test.skip('destroys files', async () => {
+      test('destroys files', async () => {
         const unlinkSpy = vi.spyOn(fs, 'unlinkSync')
         const t = tasks({
           model: 'Post',
@@ -165,10 +166,6 @@ describe('rw destroy scaffold', () => {
               nestScaffoldByModel: true,
             })
           )
-          console.log({
-            generatedFiles,
-            unlinkSpy: unlinkSpy.mock.calls.length,
-          })
           expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
           generatedFiles.forEach((f) =>
             expect(unlinkSpy).toHaveBeenCalledWith(f)
