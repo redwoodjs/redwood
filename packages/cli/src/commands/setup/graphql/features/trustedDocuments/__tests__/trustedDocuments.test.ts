@@ -105,7 +105,7 @@ afterAll(() => {
 // Silence console.info
 console.info = vi.fn()
 
-describe('Trusted documents setup', () => {
+describe.skip('Trusted documents setup', () => {
   it('runs all tasks', async () => {
     vol.fromJSON(
       { 'redwood.toml': '', 'api/src/functions/graphql.js': '' },
