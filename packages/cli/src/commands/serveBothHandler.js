@@ -57,12 +57,12 @@ export const bothServerFileHandler = async (argv) => {
     try {
       await result
     } catch (error) {
-      if (typeof e?.message !== 'undefined') {
+      if (typeof error?.message !== 'undefined') {
         errorTelemetry(
           process.argv,
-          `Error concurrently starting sides: ${e.message}`
+          `Error concurrently starting sides: ${error.message}`
         )
-        exitWithError(e)
+        exitWithError(error)
       }
     }
   }
