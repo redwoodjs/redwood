@@ -66,7 +66,7 @@ mockFiles[getPaths().web.app] = realfs
   )
   .toString()
 
-describe.skip('dbAuth', () => {
+describe('dbAuth', () => {
   beforeEach(() => {
     vol.fromJSON(mockFiles)
   })
