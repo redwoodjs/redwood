@@ -10,7 +10,7 @@ export default defineWorkspace([
         ...configDefaults.exclude,
         '__fixtures__',
         '__testfixtures__',
-        '__codemod_tests__',
+        '**/__codemod_tests__',
         '__tests__/utils/*',
         '**/__tests__/fixtures/**/*',
         '.d.ts',
