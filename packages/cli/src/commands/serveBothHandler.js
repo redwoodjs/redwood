@@ -1,6 +1,7 @@
 import path from 'path'
 
 import chalk from 'chalk'
+import concurrently from 'concurrently'
 import execa from 'execa'
 
 import {
@@ -10,6 +11,9 @@ import {
   redwoodFastifyWeb,
 } from '@redwoodjs/fastify'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { errorTelemetry } from '@redwoodjs/telemetry'
+
+import { exitWithError } from '../lib/exit'
 
 export const bothServerFileHandler = async (argv) => {
   if (
@@ -24,25 +28,43 @@ export const bothServerFileHandler = async (argv) => {
       shell: true,
     })
   } else {
-    execa(
-      'yarn',
-      ['node', path.join('dist', 'server.js'), '--port', argv.apiPort],
+    const apiHost = `http://0.0.0.0:${argv.apiPort}`
+
+    const { result } = concurrently(
+      [
+        {
+          name: 'api',
+          command: `yarn node ${path.join('dist', 'server.js')} --port ${
+            argv.apiPort
+          }`,
+          cwd: getPaths().api.base,
+          prefixColor: 'cyan',
+        },
+        {
+          name: 'web',
+          command: `yarn rw-web-server --port ${argv.webPort} --api-host ${apiHost}`,
+          cwd: getPaths().base,
+          prefixColor: 'blue',
+        },
+      ],
       {
-        cwd: getPaths().api.base,
-        stdio: 'inherit',
+        prefix: '{name} |',
+        timestampFormat: 'HH:mm:ss',
+        handleInput: true,
       }
     )
 
-    const apiHost = `http://127.0.0.1:${argv.apiPort}`
-
-    execa(
-      'yarn',
-      ['rw-web-server', '--port', argv.webPort, '--api-host', apiHost],
-      {
-        cwd: getPaths().base,
-        stdio: 'inherit',
+    try {
+      await result
+    } catch (error) {
+      if (typeof e?.message !== 'undefined') {
+        errorTelemetry(
+          process.argv,
+          `Error concurrently starting sides: ${e.message}`
+        )
+        exitWithError(e)
       }
-    )
+    }
   }
 }
 

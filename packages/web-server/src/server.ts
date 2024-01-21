@@ -123,7 +123,9 @@ async function serve() {
     if (options.socket) {
       console.log(`Web server started on ${options.socket}`)
     } else {
-      console.log(`Web server started on http://localhost:${options.port}`)
+      console.log(
+        `Web server started on http://${listenOptions.host}:${options.port}`
+      )
     }
   })
 
