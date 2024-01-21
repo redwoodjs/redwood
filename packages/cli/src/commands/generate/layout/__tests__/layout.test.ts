@@ -1,6 +1,8 @@
 globalThis.__dirname = __dirname
 import path from 'path'
 
+import { describe, test, it, expect } from 'vitest'
+
 // Load shared mocks
 import '../../../../lib/test'
 
