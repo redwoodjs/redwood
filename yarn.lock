@@ -8697,7 +8697,7 @@ __metadata:
     "@redwoodjs/project-config": "npm:6.0.7"
     core-js: "npm:3.34.0"
     esbuild: "npm:0.19.9"
-    jest: "npm:29.7.0"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
