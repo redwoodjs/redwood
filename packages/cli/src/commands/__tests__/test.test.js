@@ -23,10 +23,10 @@ vi.mock('@redwoodjs/structure', () => {
 
 // Before rw tests run, api/ and web/ `jest.config.js` is confirmed via existsSync()
 vi.mock('fs-extra', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalFsExtra = await importOriginal()
   return {
     default: {
-      ...mod,
+      ...originalFsExtra,
       existsSync: () => true,
     },
   }

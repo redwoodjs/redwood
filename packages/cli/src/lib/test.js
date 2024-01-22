@@ -25,9 +25,9 @@ vi.mock('@redwoodjs/internal/dist/generate/generate', () => {
 
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {
   const path = require('path')
-  const mod = await importOriginal()
+  const originalProjectConfig = await importOriginal()
   return {
-    ...mod,
+    ...originalProjectConfig,
     getPaths: () => {
       const BASE_PATH = '/path/to/project'
       return {
@@ -80,24 +80,6 @@ globalThis.__prettierPath = path.resolve(
   __dirname,
   './__tests__/fixtures/prettier.config.js'
 )
-
-// TODO: JGMW come back and fix this or maybe just get rid of it
-// vi.mock('path', async (importOriginal) => {
-//   const mod = await importOriginal()
-//   return {
-//     ...mod,
-//     join: (...paths) => {
-//       if (
-//         paths &&
-//         paths[0] === '/path/to/project' &&
-//         paths[1] === 'prettier.config.js'
-//       ) {
-//         return globalThis.__prettierPath
-//       }
-//       return path.join(...paths)
-//     },
-//   }
-// })
 
 vi.spyOn(Math, 'random').mockReturnValue(0.123456789)
 

@@ -2,9 +2,9 @@ import { Listr } from 'listr2'
 import { vi, describe, it, expect } from 'vitest'
 
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalProjectConfig = await importOriginal()
   return {
-    ...mod,
+    ...originalProjectConfig,
     getPaths: () => ({
       base: `${__dirname}/fixtures`,
     }),

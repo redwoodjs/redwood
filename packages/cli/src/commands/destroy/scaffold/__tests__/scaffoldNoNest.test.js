@@ -20,18 +20,18 @@ vi.mock('fs-extra')
 vi.mock('execa')
 
 vi.mock('../../../../lib', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalLib = await importOriginal()
   return {
-    ...mod,
+    ...originalLib,
     generateTemplate: () => '',
   }
 })
 
 vi.mock('../../../../lib/schemaHelpers', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalSchemaHelpers = await importOriginal()
   const path = require('path')
   return {
-    ...mod,
+    ...originalSchemaHelpers,
     getSchema: () =>
       require(path.join(globalThis.__dirname, 'fixtures', 'post.json')),
   }

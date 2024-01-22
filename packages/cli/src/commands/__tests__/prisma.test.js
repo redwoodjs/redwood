@@ -1,7 +1,7 @@
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalProjectConfig = await importOriginal()
   return {
-    ...mod,
+    ...originalProjectConfig,
     getPaths: () => {
       return {
         api: {
@@ -27,10 +27,10 @@ vi.mock('execa', () => ({
 }))
 
 vi.mock('fs-extra', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalFsExtra = await importOriginal()
   return {
     default: {
-      ...mod,
+      ...originalFsExtra,
       existsSync: () => true,
     },
   }

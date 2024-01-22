@@ -1,9 +1,9 @@
 global.__dirname = __dirname
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalProjectConfig = await importOriginal()
   const path = require('path')
   return {
-    ...mod,
+    ...originalProjectConfig,
     getPaths: () => {
       const BASE_PATH = path.join(globalThis.__dirname, 'fixtures')
       return {

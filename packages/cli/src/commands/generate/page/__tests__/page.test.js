@@ -4,35 +4,35 @@ globalThis.mockFs = false
 let mockFiles = {}
 
 vi.mock('fs-extra', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalFsExtra = await importOriginal()
 
   return {
     default: {
-      ...mod,
+      ...originalFsExtra,
       existsSync: (...args) => {
         if (!globalThis.mockFs) {
-          return mod.existsSync.apply(null, args)
+          return originalFsExtra.existsSync.apply(null, args)
         }
         return false
       },
       mkdirSync: (...args) => {
         if (!globalThis.mockFs) {
-          return mod.mkdirSync.apply(null, args)
+          return originalFsExtra.mkdirSync.apply(null, args)
         }
       },
       writeFileSync: (target, contents) => {
         if (!globalThis.mockFs) {
-          return mod.writeFileSync.call(null, target, contents)
+          return originalFsExtra.writeFileSync.call(null, target, contents)
         }
       },
       readFileSync: (path) => {
         if (!globalThis.mockFs) {
-          return mod.readFileSync.call(null, path)
+          return originalFsExtra.readFileSync.call(null, path)
         }
 
         const mockedContent = mockFiles[path]
 
-        return mockedContent || mod.readFileSync.call(null, path)
+        return mockedContent || originalFsExtra.readFileSync.call(null, path)
       },
     },
   }

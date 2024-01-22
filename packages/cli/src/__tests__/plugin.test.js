@@ -19,9 +19,9 @@ import { loadPlugins } from '../plugin'
 
 vi.mock('fs-extra')
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalProjectConfig = await importOriginal()
   return {
-    ...mod,
+    ...originalProjectConfig,
     getPaths: vi.fn(),
     getConfig: vi.fn(),
   }

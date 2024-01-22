@@ -2,9 +2,9 @@ globalThis.__dirname = __dirname
 
 // We mock these to skip the check for web/dist and api/dist
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalProjectConfig = await importOriginal()
   return {
-    ...mod,
+    ...originalProjectConfig,
     getPaths: () => {
       return {
         api: {
@@ -26,10 +26,10 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
 })
 
 vi.mock('fs-extra', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalFsExtra = await importOriginal()
   return {
     default: {
-      ...mod,
+      ...originalFsExtra,
       existsSync: (p) => {
         // Don't detect the experimental server file, can't use path.sep here so the replaceAll is used
         if (p.replaceAll('\\', '/') === '/mocked/project/api/dist/server.js') {
@@ -42,16 +42,16 @@ vi.mock('fs-extra', async (importOriginal) => {
 })
 
 vi.mock('../serveApiHandler', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalHandler = await importOriginal()
   return {
-    ...mod,
+    ...originalHandler,
     apiServerHandler: vi.fn(),
   }
 })
 vi.mock('../serveBothHandler', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalHandler = await importOriginal()
   return {
-    ...mod,
+    ...originalHandler,
     bothServerHandler: vi.fn(),
   }
 })

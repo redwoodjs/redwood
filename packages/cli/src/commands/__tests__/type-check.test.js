@@ -24,9 +24,9 @@ let mockedRedwoodConfig = {
 }
 
 vi.mock('../../lib', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalLib = await importOriginal()
   return {
-    ...mod,
+    ...originalLib,
     runCommandTask: vi.fn((commands) => {
       return commands.map(({ cmd, args }) => `${cmd} ${args?.join(' ')}`)
     }),

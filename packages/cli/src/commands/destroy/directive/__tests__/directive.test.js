@@ -2,9 +2,9 @@ globalThis.__dirname = __dirname
 
 vi.mock('fs-extra')
 vi.mock('../../../../lib', async (importOriginal) => {
-  const mod = await importOriginal()
+  const originalLib = await importOriginal()
   return {
-    ...mod,
+    ...originalLib,
     generateTemplate: () => '',
   }
 })
