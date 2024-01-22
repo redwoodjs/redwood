@@ -1704,7 +1704,7 @@ The scenario feature described above should be the base starting point for setti
 
 The `describeScenario` function is utilized to run a sequence of multiple tests, with a single database setup and tear-down.
 
-```
+```js
 // highlight-next-line
 describeScenario('contacts', (getScenario) => {
   // You can imagine the scenario setup happens here
