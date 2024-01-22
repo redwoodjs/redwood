@@ -17,12 +17,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 import * as pluginLib from '../lib/plugin'
 import { loadPlugins } from '../plugin'
 
-vi.mock('fs-extra', async () => {
-  const memfs = await import('memfs')
-  return {
-    default: memfs,
-  }
-})
+vi.mock('fs-extra')
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {
   const mod = await importOriginal()
   return {

@@ -16,12 +16,7 @@ import {
 import { files } from '../../../generate/scaffold/scaffold'
 import { tasks } from '../scaffold'
 
-vi.mock('fs-extra', async () => {
-  const memfs = await import('memfs')
-  return {
-    default: memfs.fs,
-  }
-})
+vi.mock('fs-extra')
 vi.mock('execa')
 
 vi.mock('../../../../lib', async (importOriginal) => {

@@ -1,11 +1,6 @@
 import path from 'path'
 
-vi.mock('fs-extra', async () => {
-  const memfs = await import('memfs')
-  return {
-    default: memfs.fs,
-  }
-})
+vi.mock('fs-extra')
 
 import fs from 'fs-extra'
 import { Listr } from 'listr2'

@@ -15,12 +15,7 @@ vi.mock('@redwoodjs/cli-helpers', () => {
     }),
   }
 })
-vi.mock('fs-extra', async () => {
-  const memfs = await import('memfs')
-  return {
-    default: memfs.fs,
-  }
-})
+vi.mock('fs-extra')
 vi.mock('execa', () => ({
   default: vi.fn((cmd, params) => ({
     cmd,

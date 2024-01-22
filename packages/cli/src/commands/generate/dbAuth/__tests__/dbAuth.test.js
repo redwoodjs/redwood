@@ -1,11 +1,6 @@
 global.__dirname = __dirname
 
-vi.mock('fs-extra', async () => {
-  const memfs = await import('memfs')
-  return {
-    default: memfs.fs,
-  }
-})
+vi.mock('fs-extra')
 
 import path from 'path'
 

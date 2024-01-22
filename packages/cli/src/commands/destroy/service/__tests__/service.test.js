@@ -9,12 +9,7 @@ import { getDefaultArgs } from '../../../../lib'
 import { builder, files } from '../../../generate/service/service'
 import { tasks } from '../service'
 
-vi.mock('fs-extra', async () => {
-  const memfs = await import('memfs')
-  return {
-    default: memfs.fs,
-  }
-})
+vi.mock('fs-extra')
 
 vi.mock('../../../../lib', async (importOriginal) => {
   const mod = await importOriginal()
