@@ -1,4 +1,4 @@
-/* eslint-env jest */
+/* eslint-env vitest */
 
 import { vi } from 'vitest'
 

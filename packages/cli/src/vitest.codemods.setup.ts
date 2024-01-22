@@ -1,4 +1,4 @@
-/* eslint-env node, jest */
+/* eslint-env node, vitest */
 
 // Disable telemetry within framework tests
 process.env.REDWOOD_DISABLE_TELEMETRY = 1

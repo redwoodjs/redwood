@@ -1,4 +1,4 @@
-/* eslint-env jest */
+/* eslint-env vitest */
 
 // Include at the top of your tests. Automatically mocks out the file system
 //

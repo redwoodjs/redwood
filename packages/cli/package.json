@@ -87,7 +87,6 @@
     "@babel/cli": "7.23.4",
     "@babel/core": "^7.22.20",
     "@types/archiver": "^6",
-    "jest": "29.7.0",
     "memfs": "4.6.0",
     "typescript": "5.3.3",
     "vitest": "1.2.1"
