@@ -3,7 +3,10 @@ import type {
   useBackgroundQuery as apolloUseBackgroundQuery,
   useReadQuery as apolloUseReadQuery,
 } from '@apollo/client'
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import type { DocumentNode } from 'graphql'
+
+export type { TypedDocumentNode }
 
 /**
  * @NOTE
@@ -19,7 +22,7 @@ type DefaultUseQueryType = <
   TData = any,
   TVariables extends OperationVariables = GraphQLOperationVariables
 >(
-  query: DocumentNode,
+  query: DocumentNode | TypedDocumentNode<TData, TVariables>,
   options?: GraphQLQueryHookOptions<TData, TVariables>
 ) => QueryOperationResult<TData, TVariables>
 
@@ -27,7 +30,7 @@ type DefaultUseMutationType = <
   TData = any,
   TVariables = GraphQLOperationVariables
 >(
-  mutation: DocumentNode,
+  mutation: DocumentNode | TypedDocumentNode<TData, TVariables>,
   options?: GraphQLMutationHookOptions<TData, TVariables>
 ) => MutationOperationResult<TData, TVariables>
 
@@ -35,7 +38,7 @@ type DefaultUseSubscriptionType = <
   TData = any,
   TVariables extends OperationVariables = GraphQLOperationVariables
 >(
-  subscription: DocumentNode,
+  subscription: DocumentNode | TypedDocumentNode<TData, TVariables>,
   options?: GraphQLSubscriptionHookOptions<TData, TVariables>
 ) => SubscriptionOperationResult<TData, TVariables>
 
@@ -43,7 +46,7 @@ type DefaultUseSuspenseType = <
   TData = any,
   TVariables extends OperationVariables = GraphQLOperationVariables
 >(
-  query: DocumentNode,
+  query: DocumentNode | TypedDocumentNode<TData, TVariables>,
   options?: GraphQLSuspenseQueryHookOptions<TData, TVariables>
 ) => SuspenseQueryOperationResult<TData, TVariables>
 
@@ -152,7 +155,7 @@ export function useQuery<
   TData = any,
   TVariables extends OperationVariables = GraphQLOperationVariables
 >(
-  query: DocumentNode,
+  query: DocumentNode | TypedDocumentNode<TData, TVariables>,
   options?: GraphQLQueryHookOptions<TData, TVariables>
 ): QueryOperationResult<TData, TVariables> {
   return React.useContext(GraphQLHooksContext).useQuery<TData, TVariables>(
@@ -165,7 +168,7 @@ export function useMutation<
   TData = any,
   TVariables = GraphQLOperationVariables
 >(
-  mutation: DocumentNode,
+  mutation: DocumentNode | TypedDocumentNode<TData, TVariables>,
   options?: GraphQLMutationHookOptions<TData, TVariables>
 ): MutationOperationResult<TData, TVariables> {
   return React.useContext(GraphQLHooksContext).useMutation<TData, TVariables>(
@@ -178,7 +181,7 @@ export function useSubscription<
   TData = any,
   TVariables extends OperationVariables = GraphQLOperationVariables
 >(
-  query: DocumentNode,
+  query: DocumentNode | TypedDocumentNode<TData, TVariables>,
   options?: GraphQLSubscriptionHookOptions<TData, TVariables>
 ): SubscriptionOperationResult<TData, TVariables> {
   return React.useContext(GraphQLHooksContext).useSubscription<
@@ -191,7 +194,7 @@ export function useSuspenseQuery<
   TData = any,
   TVariables extends OperationVariables = GraphQLOperationVariables
 >(
-  query: DocumentNode,
+  query: DocumentNode | TypedDocumentNode<TData, TVariables>,
   options?: GraphQLSuspenseQueryHookOptions<TData, TVariables>
 ): SuspenseQueryOperationResult<TData, TVariables> {
   return React.useContext(GraphQLHooksContext).useSuspenseQuery<

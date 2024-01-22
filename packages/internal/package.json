@@ -20,6 +20,7 @@
     "build": "yarn build:js && yarn build:types",
     "build:clean-dist": "rimraf 'dist/**/*/__tests__' --glob",
     "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
+    "build:pack": "yarn pack -o redwoodjs-internal.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "fix:permissions": "chmod +x dist/generate/generate.js dist/generate/watch.js",

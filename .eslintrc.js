@@ -27,6 +27,7 @@ module.exports = {
     'packages/babel-config/src/__tests__/__fixtures__/**/*',
     'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
+    'packages/cli/**/__testfixtures__/**/*',
     'packages/core/config/storybook/**/*',
     'packages/studio/dist-*/**/*',
   ],

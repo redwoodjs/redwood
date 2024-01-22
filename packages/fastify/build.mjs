@@ -4,12 +4,10 @@ await esbuild.build({
   entryPoints: [
     'src/api.ts',
     'src/config.ts',
-    'src/graphql.ts',
     'src/index.ts',
     'src/types.ts',
     'src/web.ts',
     'src/lambda/index.ts',
-    'src/plugins/withApiProxy.ts',
   ],
   outdir: 'dist',
 

@@ -246,7 +246,9 @@ More granular match, `page` key only and `tab=tutorial`
 activeMatchParams={[{ tab: 'tutorial' }, 'page' ]}
 ```
 
-You can `useMatch` to create your own component with active styles.
+### useMatch
+
+You can use `useMatch` to create your own component with active styles.
 
 > `NavLink` uses it internally!
 
@@ -275,6 +277,42 @@ const CustomLink = ({ to, ...rest }) => {
   return <SomeStyledComponent as={Link} to={to} isActive={matchInfo.match} />
 }
 ```
+
+Passing in `routeParams` you can make it match only on specific route parameter
+values.
+
+```jsx
+const match = useMatch('/product/{category}/{id}', {
+  routeParams: { category: 'shirts' }
+})
+```
+
+The above example will match /product/shirts/213, but not /product/pants/213
+(whereas not specifying `routeParams` at all would match both).
+
+To get the path you need to pass to `useMatch` you can use
+[`useRoutePaths`](#useroutepaths) or [`useRoutePath`](#useroutepath)
+
+Here's an example:
+
+```jsx
+<Route path="/{animal}/{name}" page={AnimalPage} name="animal" />
+
+const animalRoutePath = useRoutePath('animal')
+// => '/{animal}/{name}'
+
+const matchOnlyDog = useMatch(animalRoutePath, { routeParams: { animal: 'dog' }})
+const matchFullyDynamic = useMatch(animalRoutePath)
+```
+
+In the above example, if the current page url was
+`https://example.org/dog/fido` then both `matchOnlyDog` and `matchFullyDynamic`
+would have `match: true`.
+
+If the current page instead was `https://example.org/cat/garfield` then only
+`matchFullyDynamic` would match
+
+See below for more info on route parameters.
 
 ## Route parameters
 
@@ -445,6 +483,68 @@ const App = () => {
 }
 ```
 
+## useRoutePaths
+
+`useRoutePaths()` is a React hook you can use to get a map of all routes mapped to their literal paths, as they're defined in your routes file.
+
+Example usage:
+
+```jsx
+const routePaths = useRoutePaths()
+
+return <pre><code>{JSON.stringify(routePaths, undefined, 2)}</code></pre>
+```
+
+Example output:
+
+```
+{
+  "home": "/"
+  "about": "/about",
+  "login": "/login",
+  "signup": "/signup",
+  "forgotPassword": "/forgot-password",
+  "resetPassword": "/reset-password",
+  "newContact": "/contacts/new",
+  "editContact": "/contacts/{id:Int}/edit",
+  "contact": "/contacts/{id:Int}",
+  "contacts": "/contacts",
+}
+```
+
+## useRoutePath
+
+Use this hook when you only want the path for a single route. By default it
+will give you the path for the current route
+```jsx
+// returns "/about" if you're currently on https://example.org/about
+const aboutPath = useRoutePath() 
+```
+
+You can also pass in the name of a route and get the path for that route
+```jsx
+// returns "/about"
+const aboutPath = useRoutePath('about')
+```
+
+Note that the above is the same as
+```jsx
+const routePaths = useRoutePaths()
+// returns "/about"
+const aboutPath = routePaths.about
+```
+
+## useRouteName
+
+Use the `useRouteName()` hook to get the name of the current route (the page
+the user is currently visiting). The name can then also be used with `routes`
+if you need to dynamically get the url to the current page:
+
+```jsx
+const routeName = useRouteName()
+const routeUrl = routeName ? routes[routeName]() : undefined
+```
+
 ## Navigation
 
 ### navigate
@@ -598,9 +698,9 @@ Or if the variable passed as a prop to a component can't be found:
 
 ![fatal_error_message_query](/img/router/fatal_error_message_query.png)
 
-And if the page has a Cell, you'll see the Cell's request and response which may have contributed to the error:
+And if the page has a Cell, you'll see the Cell's request which may have contributed to the error - but will depend on how your Suspense boundary is setup:
 
-![fatal_error_message_request](/img/router/fatal_error_request.png)
+![cell_error_request](/img/router/cell_req_error.png)
 
 ### In Production
 
@@ -662,7 +762,7 @@ Note that if you're copy-pasting this example, it uses [Tailwind CSS](https://ta
 
 :::note Can I customize the development one?
 
-As it's part of the RedwoodJS framework, you can't. But if there's a feature you want to add, let us know on the [forums](https://community.redwoodjs.com/).
+As it's part of the RedwoodJS framework, you can't _change_ the dev fatal error page - but you can always build your own that takes the same props. If there's a feature you want to add to the built-in version, let us know on the [forums](https://community.redwoodjs.com/).
 
 :::
 

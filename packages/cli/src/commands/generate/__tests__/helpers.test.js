@@ -534,11 +534,15 @@ describe('mapPrismaScalarToPagePropTsType', () => {
   })
 
   it('maps scalar type Decimal to TS type number', () => {
-    expect(helpers.mapPrismaScalarToPagePropTsType('Float')).toBe('number')
+    expect(helpers.mapPrismaScalarToPagePropTsType('Decimal')).toBe('number')
   })
 
   it('maps scalar type DateTime to TS type string', () => {
     expect(helpers.mapPrismaScalarToPagePropTsType('DateTime')).toBe('string')
+  })
+
+  it('maps scalar type Bytes to TS type Buffer', () => {
+    expect(helpers.mapPrismaScalarToPagePropTsType('Bytes')).toBe('Buffer')
   })
 
   it('maps all other type not-known to TS to unknown', () => {
