@@ -8863,7 +8863,6 @@ __metadata:
     glob: "npm:10.3.10"
     http-proxy-middleware: "npm:2.0.6"
     isbot: "npm:3.7.1"
-    jest: "npm:29.7.0"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     react-server-dom-webpack: "npm:0.0.0-experimental-e5205658f-20230913"
     rollup: "npm:3.29.4"
