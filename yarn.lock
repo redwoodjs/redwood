@@ -8097,9 +8097,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli-helpers@workspace:packages/cli-helpers"
   dependencies:
-    "@babel/cli": "npm:7.23.4"
     "@babel/core": "npm:^7.22.20"
-    "@babel/runtime-corejs3": "npm:7.23.6"
     "@iarna/toml": "npm:2.2.5"
     "@opentelemetry/api": "npm:1.7.0"
     "@redwoodjs/project-config": "npm:6.0.7"
@@ -8108,7 +8106,6 @@ __metadata:
     "@types/pascalcase": "npm:1.0.3"
     "@types/yargs": "npm:17.0.32"
     chalk: "npm:4.1.2"
-    core-js: "npm:3.34.0"
     dotenv: "npm:16.3.1"
     execa: "npm:5.1.1"
     jest: "npm:29.7.0"
