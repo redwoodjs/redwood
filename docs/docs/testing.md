@@ -1725,8 +1725,8 @@ describeScenario<StandardScenario>('contacts', (getScenario) => {
 
 Rational for using `describeScenario` include:
 <ul>
-<li>Create multi-step tests where the next test is dependent upon the results of the previous test (Note caution above).
-<li>Reduce testing run time.  There is an overhead to setting up and tearing down the db on each test, and in some cases a reduced testing run time may be of significant benefit.  This may be of benefit where the likelihood of side-effects is low, such as in query testing
+<li>Create multi-step tests where the next test is dependent upon the results of the previous test (Note caution above).</li>
+<li>Reduce testing run time.  There is an overhead to setting up and tearing down the db on each test, and in some cases a reduced testing run time may be of significant benefit.  This may be of benefit where the likelihood of side-effects is low, such as in query testing</l1>
 </ul>
 
 ### describeScenario Examples
