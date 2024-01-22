@@ -115,7 +115,7 @@ export async function redwoodFastifyGraphQLServer(
       })
     }
 
-    fastify.ready(() => {
+    fastify.addHook('onReady', (done) => {
       console.info(`GraphQL Yoga Server endpoint at ${yoga.graphqlEndpoint}`)
       console.info(
         `GraphQL Yoga Server Health Check endpoint at ${yoga.graphqlEndpoint}/health`
@@ -123,6 +123,8 @@ export async function redwoodFastifyGraphQLServer(
       console.info(
         `GraphQL Yoga Server Readiness endpoint at ${yoga.graphqlEndpoint}/readiness`
       )
+
+      done()
     })
 
     done()
