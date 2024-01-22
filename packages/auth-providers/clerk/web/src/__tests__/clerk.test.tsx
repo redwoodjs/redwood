@@ -5,6 +5,7 @@ import type {
   ActiveSessionResource,
 } from '@clerk/types'
 import { renderHook, act } from '@testing-library/react'
+import { vi, expect, describe, it, beforeAll, beforeEach } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
@@ -63,7 +64,7 @@ const clerkMockClient: Partial<ClerkClient> = {
   },
 }
 
-const fetchMock = jest.fn()
+const fetchMock = vi.fn()
 fetchMock.mockImplementation(async (_url, options) => {
   const body = options?.body ? JSON.parse(options.body) : {}
 
