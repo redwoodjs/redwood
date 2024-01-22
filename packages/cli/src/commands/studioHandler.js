@@ -9,7 +9,7 @@ export const handler = async (options) => {
       console.log(
         'The studio package is not installed, installing it for you, this may take a moment...'
       )
-      await installModule('@redwoodjs/studio', '11.0.0')
+      await installModule('@redwoodjs/studio', '11.0.1')
       console.log('Studio package installed successfully.')
 
       console.log('Adding config to redwood.toml...')
@@ -18,7 +18,7 @@ export const handler = async (options) => {
 
     // Import studio and start it
     const { serve } = await import('@redwoodjs/studio')
-    await serve({ open: options.open })
+    await serve({ open: options.open, enableWeb: true })
   } catch (e) {
     console.log('Cannot start the development studio')
     console.log(e)

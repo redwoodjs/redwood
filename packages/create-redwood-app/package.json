@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "node ./scripts/build.js",
-    "build:pack": "yarn pack -o create-redwood-app.tgz",
+    "build:pack": "node ./scripts/buildPack.js",
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "set-up-test-project": "node ./scripts/setUpTestProject.js",

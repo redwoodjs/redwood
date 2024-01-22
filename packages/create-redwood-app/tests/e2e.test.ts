@@ -28,6 +28,8 @@ describe('create-redwood-app', () => {
             --git-init, --git   Initialize a git repository  [boolean] [default: null]
         -m, --commit-message    Commit message for the initial commit
                                                               [string] [default: null]
+            --yarn-install      Install node modules. Skip via --no-yarn-install.
+                                                             [boolean] [default: null]
             --telemetry         Enables sending telemetry events for this create
                                 command and all Redwood CLI commands
                                 https://telemetry.redwoodjs.com
@@ -52,7 +54,11 @@ describe('create-redwood-app', () => {
   })
 
   test('--yes, -y', async () => {
-    const p = await $`yarn create-redwood-app ./redwood-app --yes`
+    // Running `yarn install` in Jest test times out  and the subsequent step,
+    // generating types, is also flakey since `yarn pack` seems to skip `.yarnrc.yml`
+    // which is necessary for configuring a proper install.
+    const p =
+      await $`yarn create-redwood-app ./redwood-app --no-yarn-install --yes`
 
     expect(p.exitCode).toEqual(0)
     expect(p.stdout).toMatchInlineSnapshot(`
@@ -64,9 +70,11 @@ describe('create-redwood-app', () => {
       [?25h✔ Creating your Redwood app in ./redwood-app based on command line argument
       ✔ Using TypeScript based on command line flag
       ✔ Will initialize a git repo based on command line flag
+      ✔ Will not run yarn install based on command line flag
       [?25l⠋ Creating project files
       [?25h[?25l✔ Project files created
-      [?25h[?25l⠋ Initializing a git repo
+      [?25hℹ Skipped yarn install step
+      [?25l⠋ Initializing a git repo
       [?25h[?25l✔ Initialized a git repo with commit message "Initial commit"
       [?25h
       Thanks for trying out Redwood!
