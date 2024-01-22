@@ -14,6 +14,7 @@
   ],
   "scripts": {
     "build": "yarn node ./build.mjs && yarn build:types",
+    "build:pack": "yarn pack -o redwoodjs-eslint-plugin.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
@@ -28,7 +29,7 @@
     "@types/eslint": "8",
     "@types/estree": "1.0.5",
     "@typescript-eslint/parser": "5.62.0",
-    "esbuild": "0.19.5",
+    "esbuild": "0.19.9",
     "fast-glob": "3.3.2",
     "glob": "10.3.10",
     "tsx": "4.6.2",

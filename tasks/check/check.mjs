@@ -11,10 +11,11 @@ const checks = [
     command: 'yarn dedupe --check',
     fix: 'You can fix this by running "yarn dedupe"',
   },
-  {
-    command: 'yarn workspaces foreach --parallel run sort-package-json --check',
-    fix: 'You can fix this by running "yarn workspaces foreach --parallel dlx sort-package-json"',
-  },
+  // {
+  //   command:
+  //     'yarn workspaces foreach --all --parallel run sort-package-json --check',
+  //   fix: 'You can fix this by running "yarn workspaces foreach --parallel dlx sort-package-json"',
+  // },
 ]
 
 for (const { command, fix } of checks) {

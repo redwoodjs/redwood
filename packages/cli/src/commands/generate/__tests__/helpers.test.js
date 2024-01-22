@@ -1,5 +1,6 @@
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
 
 // Setup test mocks
 globalThis.__dirname = __dirname
@@ -9,12 +10,12 @@ import * as helpers from '../helpers'
 import * as page from '../page/page'
 
 const PAGE_TEMPLATE_OUTPUT = `import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const FooBarPage = () => {
   return (
     <>
-      <MetaTags title="FooBar" description="FooBar page" />
+      <Metadata title="FooBar" description="FooBar page" />
 
       <h1>FooBarPage</h1>
       <p>
@@ -533,11 +534,15 @@ describe('mapPrismaScalarToPagePropTsType', () => {
   })
 
   it('maps scalar type Decimal to TS type number', () => {
-    expect(helpers.mapPrismaScalarToPagePropTsType('Float')).toBe('number')
+    expect(helpers.mapPrismaScalarToPagePropTsType('Decimal')).toBe('number')
   })
 
   it('maps scalar type DateTime to TS type string', () => {
     expect(helpers.mapPrismaScalarToPagePropTsType('DateTime')).toBe('string')
+  })
+
+  it('maps scalar type Bytes to TS type Buffer', () => {
+    expect(helpers.mapPrismaScalarToPagePropTsType('Bytes')).toBe('Buffer')
   })
 
   it('maps all other type not-known to TS to unknown', () => {

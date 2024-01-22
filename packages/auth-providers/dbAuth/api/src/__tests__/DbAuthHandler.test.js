@@ -818,12 +818,13 @@ describe('dbAuth', () => {
       event.body = JSON.stringify({
         username: user.email,
       })
-      options.forgotPassword.handler = (handlerUser) => {
+      options.forgotPassword.handler = (handlerUser, token) => {
         expect(handlerUser.id).toEqual(user.id)
+        expect(token).toMatch(/^[A-Za-z0-9/+]{16}$/)
       }
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.forgotPassword()
-      expect.assertions(1)
+      expect.assertions(2)
     })
 
     it('invokes forgotPassword.handler() with the raw resetToken', async () => {
@@ -831,14 +832,15 @@ describe('dbAuth', () => {
       event.body = JSON.stringify({
         username: user.email,
       })
-      options.forgotPassword.handler = (handlerUser) => {
-        // user should have the raw resetToken NOT the hash
+      options.forgotPassword.handler = (handlerUser, token) => {
+        // tokens should be the raw resetToken NOT the hash
         // resetToken consists of 16 base64 characters
-        expect(handlerUser.resetToken).toMatch(/^\w{16}$/)
+        expect(handlerUser.resetToken).toBeUndefined()
+        expect(token).toMatch(/^[A-Za-z0-9/+]{16}$/)
       }
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.forgotPassword()
-      expect.assertions(1)
+      expect.assertions(2)
     })
 
     it('removes the token from the forgotPassword response', async () => {
@@ -1016,7 +1018,7 @@ describe('dbAuth', () => {
 
       const response = await dbAuth.login()
 
-      expect(response[0]).toEqual({ id: user.id })
+      expect(response[0].id).toEqual(user.id)
     })
 
     it('returns a CSRF token in the header', async () => {
@@ -2751,6 +2753,35 @@ describe('dbAuth', () => {
 
       expect(response.statusCode).toEqual(400)
       expect(response.body).toEqual('{"error":"bad"}')
+    })
+  })
+
+  describe('_sanitizeUser', () => {
+    it('removes all but the default fields [id, email] on user', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const user = {
+        id: 1,
+        email: 'rob@redwoodjs.com',
+        password: 'secret',
+      }
+
+      expect(dbAuth._sanitizeUser(user).id).toEqual(user.id)
+      expect(dbAuth._sanitizeUser(user).email).toEqual(user.email)
+      expect(dbAuth._sanitizeUser(user).secret).toBeUndefined()
+    })
+
+    it('removes any fields not explictly allowed in allowedUserFields', () => {
+      options.allowedUserFields = ['foo']
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const user = {
+        id: 1,
+        email: 'rob@redwoodjs.com',
+        foo: 'bar',
+      }
+
+      expect(dbAuth._sanitizeUser(user).id).toBeUndefined()
+      expect(dbAuth._sanitizeUser(user).email).toBeUndefined()
+      expect(dbAuth._sanitizeUser(user).foo).toEqual('bar')
     })
   })
 })

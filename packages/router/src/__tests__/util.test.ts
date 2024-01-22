@@ -427,4 +427,26 @@ describe('replaceParams', () => {
       '/a/1/c/2/e'
     )
   })
+
+  // See link below for the rules
+  // https://blog.lunatech.com/posts/2009-02-03-what-every-web-developer-must-know-about-url-encoding
+  it('properly encodes search parameters', () => {
+    expect(replaceParams('/search', { q: 'foo bar' })).toEqual(
+      '/search?q=foo+bar'
+    )
+
+    expect(replaceParams('/index-value', { 's&p500': '2024-01-17' })).toEqual(
+      '/index-value?s%26p500=2024-01-17'
+    )
+
+    expect(replaceParams('/search', { q: 'home & garden' })).toEqual(
+      '/search?q=home+%26+garden'
+    )
+
+    expect(replaceParams('/dir', { path: '/Users/rob/Photos' })).toEqual(
+      '/dir?path=%2FUsers%2Frob%2FPhotos'
+    )
+
+    expect(replaceParams('/calc', { expr: '1+2' })).toEqual('/calc?expr=1%2B2')
+  })
 })

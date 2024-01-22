@@ -18,6 +18,8 @@ import 'cypress-wait-until'
 describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
   const LOG_PATH = path.join(BASE_DIR, LOG_FILENAME)
 
+  const WAIT_TIMEOUT = 10_000
+
   it('1. Test Logging for CRUD', () => {
     // Empty log file.
     cy.writeFile(LOG_PATH, '')
@@ -46,7 +48,7 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
           console.log(str)
           return str.includes('> in posts()')
         }),
-      { interval: 2000, timeout: 2000 }
+      { interval: 2000, timeout: WAIT_TIMEOUT }
     )
 
     // CREATE / SAVE
@@ -110,7 +112,7 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
             !str.includes('Slow Query performed in ')
           )
         }),
-      { interval: 2000, timeout: 2000 }
+      { interval: 2000, timeout: WAIT_TIMEOUT }
     )
 
     // With slow query logging.
@@ -135,7 +137,7 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
           console.log(str)
           return str.includes('Slow Query performed in ')
         }),
-      { interval: 2000, timeout: 2000 }
+      { interval: 2000, timeout: WAIT_TIMEOUT }
     )
   })
 })

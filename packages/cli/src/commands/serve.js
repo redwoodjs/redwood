@@ -1,6 +1,6 @@
-import fs from 'fs'
 import path from 'path'
 
+import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
@@ -13,7 +13,7 @@ import { webServerHandler, webSsrServerHandler } from './serveWebHandler'
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
 
-function hasExperimentalServerFile() {
+function hasServerFile() {
   const serverFilePath = path.join(getPaths().api.dist, 'server.js')
   return fs.existsSync(serverFilePath)
 }
@@ -24,15 +24,34 @@ export const builder = async (yargs) => {
     .command({
       command: '$0',
       description: 'Run both api and web servers',
-      builder: (yargs) =>
-        yargs.options({
-          port: {
-            default: getConfig().web?.port || 8910,
-            type: 'number',
-            alias: 'p',
-          },
-          socket: { type: 'string' },
-        }),
+      builder: (yargs) => {
+        if (!hasServerFile()) {
+          yargs.options({
+            port: {
+              default: getConfig().web?.port || 8910,
+              type: 'number',
+              alias: 'p',
+            },
+            socket: { type: 'string' },
+          })
+
+          return
+        }
+
+        yargs
+          .options({
+            webPort: {
+              default: getConfig().web?.port || 8910,
+              type: 'number',
+            },
+          })
+          .options({
+            apiPort: {
+              default: getConfig().api?.port || 8911,
+              type: 'number',
+            },
+          })
+      },
       handler: async (argv) => {
         recordTelemetryAttributes({
           command: 'serve',
@@ -41,12 +60,12 @@ export const builder = async (yargs) => {
           socket: argv.socket,
         })
 
-        // Run the experimental server file, if it exists, with web side also
-        if (hasExperimentalServerFile()) {
-          const { bothExperimentalServerFileHandler } = await import(
+        // Run the server file, if it exists, with web side also
+        if (hasServerFile()) {
+          const { bothServerFileHandler } = await import(
             './serveBothHandler.js'
           )
-          await bothExperimentalServerFileHandler()
+          await bothServerFileHandler(argv)
         } else if (
           getConfig().experimental?.rsc?.enabled ||
           getConfig().experimental?.streamingSsr?.enabled
@@ -96,12 +115,10 @@ export const builder = async (yargs) => {
           apiRootPath: argv.apiRootPath,
         })
 
-        // Run the experimental server file, if it exists, api side only
-        if (hasExperimentalServerFile()) {
-          const { apiExperimentalServerFileHandler } = await import(
-            './serveApiHandler.js'
-          )
-          await apiExperimentalServerFileHandler()
+        // Run the server file, if it exists, api side only
+        if (hasServerFile()) {
+          const { apiServerFileHandler } = await import('./serveApiHandler.js')
+          await apiServerFileHandler(argv)
         } else {
           const { apiServerHandler } = await import('./serveApiHandler.js')
           await apiServerHandler(argv)
@@ -122,7 +139,7 @@ export const builder = async (yargs) => {
           apiHost: {
             alias: 'api-host',
             type: 'string',
-            desc: 'Forward requests from the apiUrl, defined in redwood.toml to this host',
+            desc: 'Forward requests from the apiUrl, defined in redwood.toml, to this host',
           },
         }),
       handler: async (argv) => {

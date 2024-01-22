@@ -2,8 +2,8 @@ import fastifyUrlData from '@fastify/url-data'
 import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 
-import type { GlobalContext } from '@redwoodjs/graphql-server'
-import { getAsyncStoreInstance } from '@redwoodjs/graphql-server'
+import type { GlobalContext } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 
 import { loadFastifyConfig } from './config'
 import { lambdaRequestHandler, loadFunctionsFromDist } from './lambda'
@@ -14,7 +14,9 @@ export async function redwoodFastifyAPI(
   opts: RedwoodFastifyAPIOptions,
   done: HookHandlerDoneFunction
 ) {
-  fastify.register(fastifyUrlData)
+  if (!fastify.hasPlugin('@fastify/url-data')) {
+    await fastify.register(fastifyUrlData)
+  }
   await fastify.register(fastifyRawBody)
 
   // TODO: This should be refactored to only be defined once and it might not live here

@@ -15,6 +15,7 @@
   "scripts": {
     "build": "yarn build:js",
     "build:js": "babel src -d dist --extensions \".js,.ts\" --ignore \"src/**/__tests__/**\" --ignore \"src/**/__testfixtures__/**\"",
+    "build:pack": "yarn pack -o redwoodjs-codemods.tgz",
     "build:watch": "nodemon --watch src --ignore dist --exec \"yarn build\"",
     "generate:codemod": "yarn node ./tasks/generateCodemod/generateCodemod.mjs",
     "prepublishOnly": "yarn build",
@@ -26,7 +27,7 @@
     "@babel/core": "^7.22.20",
     "@babel/parser": "^7.22.16",
     "@babel/plugin-transform-typescript": "^7.22.15",
-    "@babel/runtime-corejs3": "7.23.5",
+    "@babel/runtime-corejs3": "7.23.6",
     "@babel/traverse": "^7.22.20",
     "@iarna/toml": "2.2.5",
     "@redwoodjs/project-config": "6.0.7",
@@ -54,7 +55,7 @@
     "@types/jest": "29.5.8",
     "@types/jscodeshift": "0.11.6",
     "@types/prettier": "2.7.3",
-    "@types/yargs": "17.0.31",
+    "@types/yargs": "17.0.32",
     "fs-extra": "11.2.0",
     "tempy": "1.0.1"
   },

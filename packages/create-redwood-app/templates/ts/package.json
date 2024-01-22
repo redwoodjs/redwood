@@ -14,11 +14,10 @@
     "root": true
   },
   "engines": {
-    "node": "=18.x",
-    "yarn": ">=1.15"
+    "node": "=20.x"
   },
   "prisma": {
     "seed": "yarn rw exec seed"
   },
-  "packageManager": "yarn@3.7.0"
+  "packageManager": "yarn@4.0.2"
 }

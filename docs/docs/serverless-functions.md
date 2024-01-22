@@ -2,9 +2,18 @@
 description: Create, develop, and run serverless functions
 ---
 
-# Serverless Functions
+# Serverless Functions (API Endpoints)
 
 <!-- `redwood.toml`&mdash;`api/src/functions` by default.  -->
+
+
+:::info
+
+You can think of serverless functions as API Endpoints, and in the future we'll update the terminology used.
+
+Originally, Redwood apps were intended to be deployed as serverless functions to AWS Lambda. Whenever a Redwood app is deployed to a "serverful" environment such as Fly or Render, a Fastify server is started and your Redwood app's functions in `api/src/functions` are automatically registered onto the server. Request adapters are also automatically configured to handle the translation between Fastify's request and reply objects to the functions' AWS Lambda signature.
+
+:::
 
 Redwood looks for serverless functions in `api/src/functions`. Each function is mapped to a URI based on its filename. For example, you can find `api/src/functions/graphql.js` at `http://localhost:8911/graphql`.
 
@@ -33,12 +42,6 @@ export const handler = async (event, context) => {
   }
 }
 ```
-
-:::info
-
-We call them 'serverless' but they can also be used on 'serverful' hosted environments too, such as Render or Heroku.
-
-:::
 
 ## The handler
 
