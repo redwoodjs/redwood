@@ -1700,12 +1700,15 @@ During the run of any single test, there is only ever one scenario's worth of da
 
 The scenario feature described above should be the base starting point for setting up test that depend on the database.  The scenario sets up the database before each scenario _test_, runs the test, and then tears down (deletes) the database scenario.  This ensures that each of your tests are isolated, and that they do not affect each other.
 
-However, there are some situations where you as the user may want additional control regarding when the database is setup and torn down. 
+**However**, there are some situations where you as the developer may want additional control regarding when the database is setup and torn down - maybe to run your test suite faster. 
 
-The `describeScenario` function is utilized to run a sequence of multiple tests within a single database setup and tear-down.
+The `describeScenario` function is utilized to run a sequence of multiple tests, with a single database setup and tear-down.
 
 ```
-describeScenario<StandardScenario>('contacts', (getScenario) => {
+describeScenario('contacts', (getScenario) => {
+  // You can imagine the scenario setup happens here
+
+  // All these tests now use the same setup 👇
   it('xxx', () => {
     //
     const scenario = getScenario()
@@ -1723,7 +1726,7 @@ describeScenario<StandardScenario>('contacts', (getScenario) => {
 
 > **CAUTION**: With describeScenario, your tests are no longer isolated.  The results, or side-effects, of prior tests can affect later tests.
 
-Rational for using `describeScenario` include:
+Rationale for using `describeScenario` include:
 <ul>
 <li>Create multi-step tests where the next test is dependent upon the results of the previous test (Note caution above).</li>
 <li>Reduce testing run time.  There is an overhead to setting up and tearing down the db on each test, and in some cases a reduced testing run time may be of significant benefit.  This may be of benefit where the likelihood of side-effects is low, such as in query testing</li>
@@ -1733,44 +1736,65 @@ Rational for using `describeScenario` include:
 
 Following is an example of the use of `describeScenario` to speed up testing of a user query service function, where the risk of side-effects is low.
 
-```
+```ts
+// highlight-next-line
 describeScenario<StandardScenario>('user query service', (getScenario) => {
 
-  it('retrieves a single user for a validated user', async (scenario) => {
+  let scenario: StandardScenario
+
+  beforeEach(() => {
+    // Grab the scenario before each test 
+    // highlight-next-line
+    scenario = getScenario()
+  })
+
+  it('retrieves a single user for a validated user', async () => {
     mockCurrentUser({ id: 123, name: 'Admin' })
 
-    const scenario = getScenario()
     const record = await user({ id: scenario.user.dom.id })
 
     expect(record.id).toEqual(scenario.user.dom.id)
   })
 
-  it('throws an error upon an invalid user id', async (scenario) => {
+  it('throws an error upon an invalid user id', async () => {
     mockCurrentUser({ id: 123, name: 'Admin' })
 
-    const scenario = getScenario()
     const fcn = async () => await user({ id: null as unknown as number })
 
     await expect(fcn).rejects.toThrow()
   })
 
-  it('throws an error if not authenticated', async (scenario) => {
-    const scenario = getScenario()
+  it('throws an error if not authenticated', async () => {
     const fcn = async () => await user({ id: scenario.user.dom.id })
 
     await expect(fcn).rejects.toThrow(AuthenticationError)
   })
 
-  it('throws an error if the user is not authorized to query the user', async (scenario) => {
+  it('throws an error if the user is not authorized to query the user', async () => {
     mockCurrentUser({ id: 999, name: 'BaseLevelUser' })
 
-    const scenario = getScenario()
     const fcn = async () => await user({ id: scenario.user.dom.id })
 
     await expect(fcn).rejects.toThrow(ForbiddenError)
   })
 })
 ```
+
+:::tip Using named scenarios with describeScenario
+
+If you have multiple scenarios, you can also use named scenario with `describeScenario`
+
+For example:
+```js
+  // If we have a paymentDeclined scenario defined in the .scenario.{js,ts} file
+  // The second parameter is the name of the "describe" block
+  describeScenario('paymentDeclined', 'Retrieving details',  () => {
+    // ....
+  })
+```
+:::
+
+
 
 ### mockCurrentUser() on the API-side
 
