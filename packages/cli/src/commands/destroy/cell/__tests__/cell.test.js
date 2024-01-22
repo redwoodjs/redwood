@@ -38,7 +38,6 @@ beforeEach(() => {
 
 afterEach(() => {
   vol.reset()
-  vi.spyOn(fs, 'unlinkSync').mockClear()
   console.info.mockRestore()
   console.log.mockRestore()
 })
