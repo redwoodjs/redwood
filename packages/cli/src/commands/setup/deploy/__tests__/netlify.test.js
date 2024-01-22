@@ -1,4 +1,3 @@
-// Automock fs using ../..../__mocks__/fs
 vi.mock('fs-extra', async () => {
   const memfs = await import('memfs')
   return {
@@ -18,8 +17,6 @@ import { updateApiURLTask } from '../helpers'
 // Mock telemetry and other things
 
 vi.mock('../../../../lib', async (importOriginal) => {
-  // const path = await vi.importActual('path')
-
   const { printSetupNotes } = await importOriginal()
 
   return {
