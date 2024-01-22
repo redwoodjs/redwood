@@ -63,6 +63,7 @@ mockFiles[getPaths().web.app] = realfs
 
 describe('dbAuth', () => {
   beforeEach(() => {
+    vol.reset()
     vol.fromJSON(mockFiles)
   })
 

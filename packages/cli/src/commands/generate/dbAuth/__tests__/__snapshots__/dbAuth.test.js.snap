@@ -41,25 +41,21 @@ const ForgotPasswordPage = () => {
       // The function \`forgotPassword.handler\` in api/src/functions/auth.js has
       // been invoked, let the user know how to get the link to reset their
       // password (sent in email, perhaps?)
-      toast.success(
-        'A link to reset your password was sent to ' + response.email
-      )
+      toast.success('A link to reset your secret was sent to ' + response.email)
       navigate(routes.login())
     }
   }
 
   return (
     <>
-      <Metadata title="Forgot Password" />
+      <Metadata title="Forgot Secret" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Forgot Password
-              </h2>
+              <h2 className="rw-heading rw-heading-secondary">Forgot Secret</h2>
             </header>
 
             <div className="rw-segment-main">
@@ -141,7 +137,7 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     const response = await logIn({
       username: data.username,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.message) {
@@ -191,21 +187,21 @@ const LoginPage = () => {
                   <FieldError name="username" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: 'Secret is required',
                       },
                     }}
                   />
@@ -215,11 +211,11 @@ const LoginPage = () => {
                       to={routes.forgotPassword()}
                       className="rw-forgot-link"
                     >
-                      Forgot Password?
+                      Forgot Secret?
                     </Link>
                   </div>
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">Login</Submit>
@@ -284,21 +280,21 @@ const ResetPasswordPage = ({ resetToken }) => {
     validateToken()
   }, [resetToken, validateResetToken])
 
-  const passwordRef = useRef(null)
+  const secretRef = useRef(null)
   useEffect(() => {
-    passwordRef.current?.focus()
+    secretRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await resetPassword({
       resetToken,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success('Password changed!')
+      toast.success('Secret changed!')
       await reauthenticate()
       navigate(routes.login())
     }
@@ -306,16 +302,14 @@ const ResetPasswordPage = ({ resetToken }) => {
 
   return (
     <>
-      <Metadata title="Reset Password" />
+      <Metadata title="Reset Secret" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Reset Password
-              </h2>
+              <h2 className="rw-heading rw-heading-secondary">Reset Secret</h2>
             </header>
 
             <div className="rw-segment-main">
@@ -323,28 +317,28 @@ const ResetPasswordPage = ({ resetToken }) => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="password"
+                      name="secret"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
-                      New Password
+                      New Secret
                     </Label>
                     <PasswordField
-                      name="password"
+                      name="secret"
                       autoComplete="new-password"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       disabled={!enabled}
-                      ref={passwordRef}
+                      ref={secretRef}
                       validation={{
                         required: {
                           value: true,
-                          message: 'New Password is required',
+                          message: 'New Secret is required',
                         },
                       }}
                     />
 
-                    <FieldError name="password" className="rw-field-error" />
+                    <FieldError name="secret" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -405,7 +399,7 @@ const SignupPage = () => {
   const onSubmit = async (data) => {
     const response = await signUp({
       username: data.username,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.message) {
@@ -456,26 +450,26 @@ const SignupPage = () => {
                   <FieldError name="username" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: 'Secret is required',
                       },
                     }}
                   />
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">
@@ -535,25 +529,21 @@ const ForgotPasswordPage = () => {
       // The function \`forgotPassword.handler\` in api/src/functions/auth.js has
       // been invoked, let the user know how to get the link to reset their
       // password (sent in email, perhaps?)
-      toast.success(
-        'A link to reset your password was sent to ' + response.email
-      )
+      toast.success('A link to reset your secret was sent to ' + response.email)
       navigate(routes.login())
     }
   }
 
   return (
     <>
-      <Metadata title="Forgot Password" />
+      <Metadata title="Forgot Secret" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Forgot Password
-              </h2>
+              <h2 className="rw-heading rw-heading-secondary">Forgot Secret</h2>
             </header>
 
             <div className="rw-segment-main">
@@ -635,7 +625,7 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     const response = await logIn({
       username: data.username,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.message) {
@@ -685,21 +675,21 @@ const LoginPage = () => {
                   <FieldError name="username" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: 'Secret is required',
                       },
                     }}
                   />
@@ -709,11 +699,11 @@ const LoginPage = () => {
                       to={routes.forgotPassword()}
                       className="rw-forgot-link"
                     >
-                      Forgot Password?
+                      Forgot Secret?
                     </Link>
                   </div>
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">Login</Submit>
@@ -778,21 +768,21 @@ const ResetPasswordPage = ({ resetToken }) => {
     validateToken()
   }, [resetToken, validateResetToken])
 
-  const passwordRef = useRef(null)
+  const secretRef = useRef(null)
   useEffect(() => {
-    passwordRef.current?.focus()
+    secretRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await resetPassword({
       resetToken,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success('Password changed!')
+      toast.success('Secret changed!')
       await reauthenticate()
       navigate(routes.login())
     }
@@ -800,16 +790,14 @@ const ResetPasswordPage = ({ resetToken }) => {
 
   return (
     <>
-      <Metadata title="Reset Password" />
+      <Metadata title="Reset Secret" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Reset Password
-              </h2>
+              <h2 className="rw-heading rw-heading-secondary">Reset Secret</h2>
             </header>
 
             <div className="rw-segment-main">
@@ -817,28 +805,28 @@ const ResetPasswordPage = ({ resetToken }) => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="password"
+                      name="secret"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
-                      New Password
+                      New Secret
                     </Label>
                     <PasswordField
-                      name="password"
+                      name="secret"
                       autoComplete="new-password"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       disabled={!enabled}
-                      ref={passwordRef}
+                      ref={secretRef}
                       validation={{
                         required: {
                           value: true,
-                          message: 'New Password is required',
+                          message: 'New Secret is required',
                         },
                       }}
                     />
 
-                    <FieldError name="password" className="rw-field-error" />
+                    <FieldError name="secret" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -899,7 +887,7 @@ const SignupPage = () => {
   const onSubmit = async (data) => {
     const response = await signUp({
       username: data.username,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.message) {
@@ -950,26 +938,26 @@ const SignupPage = () => {
                   <FieldError name="username" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: 'Secret is required',
                       },
                     }}
                   />
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">
@@ -1015,13 +1003,13 @@ const ForgotPasswordPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef?.current?.focus()
+    emailRef?.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await forgotPassword(data.username)
+    const response = await forgotPassword(data.email)
 
     if (response.error) {
       toast.error(response.error)
@@ -1029,25 +1017,21 @@ const ForgotPasswordPage = () => {
       // The function \`forgotPassword.handler\` in api/src/functions/auth.js has
       // been invoked, let the user know how to get the link to reset their
       // password (sent in email, perhaps?)
-      toast.success(
-        'A link to reset your password was sent to ' + response.email
-      )
+      toast.success('A link to reset your secret was sent to ' + response.email)
       navigate(routes.login())
     }
   }
 
   return (
     <>
-      <Metadata title="Forgot Password" />
+      <Metadata title="Forgot Secret" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Forgot Password
-              </h2>
+              <h2 className="rw-heading rw-heading-secondary">Forgot Secret</h2>
             </header>
 
             <div className="rw-segment-main">
@@ -1055,26 +1039,26 @@ const ForgotPasswordPage = () => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="username"
+                      name="email"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
-                      Username
+                      Email
                     </Label>
                     <TextField
-                      name="username"
+                      name="email"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
-                      ref={usernameRef}
+                      ref={emailRef}
                       validation={{
                         required: {
                           value: true,
-                          message: 'Username is required',
+                          message: 'Email is required',
                         },
                       }}
                     />
 
-                    <FieldError name="username" className="rw-field-error" />
+                    <FieldError name="email" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -1121,15 +1105,15 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await logIn({
-      username: data.username,
-      password: data.password,
+      username: data.email,
+      password: data.secret,
     })
 
     if (response.message) {
@@ -1157,43 +1141,43 @@ const LoginPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: 'Email is required',
                       },
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: 'Secret is required',
                       },
                     }}
                   />
@@ -1203,11 +1187,11 @@ const LoginPage = () => {
                       to={routes.forgotPassword()}
                       className="rw-forgot-link"
                     >
-                      Forgot Password?
+                      Forgot Secret?
                     </Link>
                   </div>
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">Login</Submit>
@@ -1272,21 +1256,21 @@ const ResetPasswordPage = ({ resetToken }) => {
     validateToken()
   }, [resetToken, validateResetToken])
 
-  const passwordRef = useRef(null)
+  const secretRef = useRef(null)
   useEffect(() => {
-    passwordRef.current?.focus()
+    secretRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await resetPassword({
       resetToken,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success('Password changed!')
+      toast.success('Secret changed!')
       await reauthenticate()
       navigate(routes.login())
     }
@@ -1294,16 +1278,14 @@ const ResetPasswordPage = ({ resetToken }) => {
 
   return (
     <>
-      <Metadata title="Reset Password" />
+      <Metadata title="Reset Secret" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Reset Password
-              </h2>
+              <h2 className="rw-heading rw-heading-secondary">Reset Secret</h2>
             </header>
 
             <div className="rw-segment-main">
@@ -1311,28 +1293,28 @@ const ResetPasswordPage = ({ resetToken }) => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="password"
+                      name="secret"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
-                      New Password
+                      New Secret
                     </Label>
                     <PasswordField
-                      name="password"
+                      name="secret"
                       autoComplete="new-password"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       disabled={!enabled}
-                      ref={passwordRef}
+                      ref={secretRef}
                       validation={{
                         required: {
                           value: true,
-                          message: 'New Password is required',
+                          message: 'New Secret is required',
                         },
                       }}
                     />
 
-                    <FieldError name="password" className="rw-field-error" />
+                    <FieldError name="secret" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -1384,16 +1366,16 @@ const SignupPage = () => {
     }
   }, [isAuthenticated])
 
-  // focus on username box on page load
-  const usernameRef = useRef(null)
+  // focus on email box on page load
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await signUp({
-      username: data.username,
-      password: data.password,
+      username: data.email,
+      password: data.secret,
     })
 
     if (response.message) {
@@ -1422,48 +1404,48 @@ const SignupPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: 'Email is required',
                       },
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: 'Secret is required',
                       },
                     }}
                   />
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">
@@ -1509,13 +1491,13 @@ const ForgotPasswordPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef?.current?.focus()
+    emailRef?.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await forgotPassword(data.username)
+    const response = await forgotPassword(data.email)
 
     if (response.error) {
       toast.error(response.error)
@@ -1523,25 +1505,21 @@ const ForgotPasswordPage = () => {
       // The function \`forgotPassword.handler\` in api/src/functions/auth.js has
       // been invoked, let the user know how to get the link to reset their
       // password (sent in email, perhaps?)
-      toast.success(
-        'A link to reset your password was sent to ' + response.email
-      )
+      toast.success('A link to reset your secret was sent to ' + response.email)
       navigate(routes.login())
     }
   }
 
   return (
     <>
-      <Metadata title="Forgot Password" />
+      <Metadata title="Forgot Secret" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Forgot Password
-              </h2>
+              <h2 className="rw-heading rw-heading-secondary">Forgot Secret</h2>
             </header>
 
             <div className="rw-segment-main">
@@ -1549,26 +1527,26 @@ const ForgotPasswordPage = () => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="username"
+                      name="email"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
-                      Username
+                      Email
                     </Label>
                     <TextField
-                      name="username"
+                      name="email"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
-                      ref={usernameRef}
+                      ref={emailRef}
                       validation={{
                         required: {
                           value: true,
-                          message: 'Username is required',
+                          message: 'Email is required',
                         },
                       }}
                     />
 
-                    <FieldError name="username" className="rw-field-error" />
+                    <FieldError name="email" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -1615,15 +1593,15 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await logIn({
-      username: data.username,
-      password: data.password,
+      username: data.email,
+      password: data.secret,
     })
 
     if (response.message) {
@@ -1651,43 +1629,43 @@ const LoginPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: 'Email is required',
                       },
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: 'Secret is required',
                       },
                     }}
                   />
@@ -1697,11 +1675,11 @@ const LoginPage = () => {
                       to={routes.forgotPassword()}
                       className="rw-forgot-link"
                     >
-                      Forgot Password?
+                      Forgot Secret?
                     </Link>
                   </div>
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">Login</Submit>
@@ -1766,21 +1744,21 @@ const ResetPasswordPage = ({ resetToken }) => {
     validateToken()
   }, [resetToken, validateResetToken])
 
-  const passwordRef = useRef(null)
+  const secretRef = useRef(null)
   useEffect(() => {
-    passwordRef.current?.focus()
+    secretRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await resetPassword({
       resetToken,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success('Password changed!')
+      toast.success('Secret changed!')
       await reauthenticate()
       navigate(routes.login())
     }
@@ -1788,16 +1766,14 @@ const ResetPasswordPage = ({ resetToken }) => {
 
   return (
     <>
-      <Metadata title="Reset Password" />
+      <Metadata title="Reset Secret" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Reset Password
-              </h2>
+              <h2 className="rw-heading rw-heading-secondary">Reset Secret</h2>
             </header>
 
             <div className="rw-segment-main">
@@ -1805,28 +1781,28 @@ const ResetPasswordPage = ({ resetToken }) => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="password"
+                      name="secret"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
-                      New Password
+                      New Secret
                     </Label>
                     <PasswordField
-                      name="password"
+                      name="secret"
                       autoComplete="new-password"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       disabled={!enabled}
-                      ref={passwordRef}
+                      ref={secretRef}
                       validation={{
                         required: {
                           value: true,
-                          message: 'New Password is required',
+                          message: 'New Secret is required',
                         },
                       }}
                     />
 
-                    <FieldError name="password" className="rw-field-error" />
+                    <FieldError name="secret" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -1878,16 +1854,16 @@ const SignupPage = () => {
     }
   }, [isAuthenticated])
 
-  // focus on username box on page load
-  const usernameRef = useRef(null)
+  // focus on email box on page load
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await signUp({
-      username: data.username,
-      password: data.password,
+      username: data.email,
+      password: data.secret,
     })
 
     if (response.message) {
@@ -1916,48 +1892,48 @@ const SignupPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: 'Email is required',
                       },
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: 'Secret is required',
                       },
                     }}
                   />
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">
@@ -2003,13 +1979,13 @@ const ForgotPasswordPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef?.current?.focus()
+    emailRef?.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await forgotPassword(data.username)
+    const response = await forgotPassword(data.email)
 
     if (response.error) {
       toast.error(response.error)
@@ -2017,25 +1993,21 @@ const ForgotPasswordPage = () => {
       // The function \`forgotPassword.handler\` in api/src/functions/auth.js has
       // been invoked, let the user know how to get the link to reset their
       // password (sent in email, perhaps?)
-      toast.success(
-        'A link to reset your password was sent to ' + response.email
-      )
+      toast.success('A link to reset your secret was sent to ' + response.email)
       navigate(routes.login())
     }
   }
 
   return (
     <>
-      <Metadata title="Forgot Password" />
+      <Metadata title="Forgot Secret" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Forgot Password
-              </h2>
+              <h2 className="rw-heading rw-heading-secondary">Forgot Secret</h2>
             </header>
 
             <div className="rw-segment-main">
@@ -2043,26 +2015,26 @@ const ForgotPasswordPage = () => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="username"
+                      name="email"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
-                      Username
+                      Email
                     </Label>
                     <TextField
-                      name="username"
+                      name="email"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
-                      ref={usernameRef}
+                      ref={emailRef}
                       validation={{
                         required: {
                           value: true,
-                          message: 'Username is required',
+                          message: 'Email is required',
                         },
                       }}
                     />
 
-                    <FieldError name="username" className="rw-field-error" />
+                    <FieldError name="email" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -2083,7 +2055,7 @@ export default ForgotPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt and with webauthn enabled via flag 2`] = `
-"import { useRef } from 'react'
+"import { useRef, useState } from 'react'
 import { useEffect } from 'react'
 
 import {
@@ -2100,33 +2072,229 @@ import { toast, Toaster } from '@redwoodjs/web/toast'
 
 import { useAuth } from 'src/auth'
 
-const LoginPage = () => {
-  const { isAuthenticated, logIn } = useAuth()
+const WELCOME_MESSAGE = 'Welcome back!'
+const REDIRECT = routes.home()
 
+const LoginPage = ({ type }) => {
+  const {
+    isAuthenticated,
+    client: webAuthn,
+    loading,
+    logIn,
+    reauthenticate,
+  } = useAuth()
+  const [shouldShowWebAuthn, setShouldShowWebAuthn] = useState(false)
+  const [showWebAuthn, setShowWebAuthn] = useState(
+    webAuthn.isEnabled() && type !== 'password'
+  )
+
+  // should redirect right after login or wait to show the webAuthn prompts?
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate(routes.home())
+    if (isAuthenticated && (!shouldShowWebAuthn || webAuthn.isEnabled())) {
+      navigate(REDIRECT)
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, shouldShowWebAuthn])
 
-  const usernameRef = useRef(null)
+  // if WebAuthn is enabled, show the prompt as soon as the page loads
   useEffect(() => {
-    usernameRef.current?.focus()
+    if (!loading && !isAuthenticated && showWebAuthn) {
+      onAuthenticate()
+    }
+  }, [loading, isAuthenticated])
+
+  // focus on the email field as soon as the page loads
+  const emailRef = useRef()
+  useEffect(() => {
+    emailRef.current && emailRef.current.focus()
   }, [])
 
   const onSubmit = async (data) => {
+    const webAuthnSupported = await webAuthn.isSupported()
+
+    if (webAuthnSupported) {
+      setShouldShowWebAuthn(true)
+    }
     const response = await logIn({
-      username: data.username,
-      password: data.password,
+      username: data.email,
+      password: data.secret,
     })
 
     if (response.message) {
+      // auth details good, but user not logged in
       toast(response.message)
     } else if (response.error) {
+      // error while authenticating
       toast.error(response.error)
     } else {
-      toast.success('Welcome back!')
+      // user logged in
+      if (webAuthnSupported) {
+        setShowWebAuthn(true)
+      } else {
+        toast.success(WELCOME_MESSAGE)
+      }
     }
+  }
+
+  const onAuthenticate = async () => {
+    try {
+      await webAuthn.authenticate()
+      await reauthenticate()
+      toast.success(WELCOME_MESSAGE)
+      navigate(REDIRECT)
+    } catch (e) {
+      if (e.name === 'WebAuthnDeviceNotFoundError') {
+        toast.error('Device not found, log in with Email/Secret to continue')
+        setShowWebAuthn(false)
+      } else {
+        toast.error(e.message)
+      }
+    }
+  }
+
+  const onRegister = async () => {
+    try {
+      await webAuthn.register()
+      toast.success(WELCOME_MESSAGE)
+      navigate(REDIRECT)
+    } catch (e) {
+      toast.error(e.message)
+    }
+  }
+
+  const onSkip = () => {
+    toast.success(WELCOME_MESSAGE)
+    setShouldShowWebAuthn(false)
+  }
+
+  const AuthWebAuthnPrompt = () => {
+    return (
+      <div className="rw-webauthn-wrapper">
+        <h2>WebAuthn Login Enabled</h2>
+        <p>Log in with your fingerprint, face or PIN</p>
+        <div className="rw-button-group">
+          <button className="rw-button rw-button-blue" onClick={onAuthenticate}>
+            Open Authenticator
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  const RegisterWebAuthnPrompt = () => (
+    <div className="rw-webauthn-wrapper">
+      <h2>No more Secrets!</h2>
+      <p>
+        Depending on your device you can log in with your fingerprint, face or
+        PIN next time.
+      </p>
+      <div className="rw-button-group">
+        <button className="rw-button rw-button-blue" onClick={onRegister}>
+          Turn On
+        </button>
+        <button className="rw-button" onClick={onSkip}>
+          Skip for now
+        </button>
+      </div>
+    </div>
+  )
+
+  const PasswordForm = () => (
+    <Form onSubmit={onSubmit} className="rw-form-wrapper">
+      <Label
+        name="email"
+        className="rw-label"
+        errorClassName="rw-label rw-label-error"
+      >
+        Email
+      </Label>
+      <TextField
+        name="email"
+        className="rw-input"
+        errorClassName="rw-input rw-input-error"
+        ref={emailRef}
+        autoFocus
+        validation={{
+          required: {
+            value: true,
+            message: 'Email is required',
+          },
+        }}
+      />
+
+      <FieldError name="email" className="rw-field-error" />
+
+      <Label
+        name="secret"
+        className="rw-label"
+        errorClassName="rw-label rw-label-error"
+      >
+        Secret
+      </Label>
+      <PasswordField
+        name="secret"
+        className="rw-input"
+        errorClassName="rw-input rw-input-error"
+        autoComplete="current-password"
+        validation={{
+          required: {
+            value: true,
+            message: 'Secret is required',
+          },
+        }}
+      />
+
+      <div className="rw-forgot-link">
+        <Link to={routes.forgotPassword()} className="rw-forgot-link">
+          Forgot Secret?
+        </Link>
+      </div>
+
+      <FieldError name="secret" className="rw-field-error" />
+
+      <div className="rw-button-group">
+        <Submit className="rw-button rw-button-blue">Login</Submit>
+      </div>
+    </Form>
+  )
+
+  const formToRender = () => {
+    if (showWebAuthn) {
+      if (webAuthn.isEnabled()) {
+        return <AuthWebAuthnPrompt />
+      } else {
+        return <RegisterWebAuthnPrompt />
+      }
+    } else {
+      return <PasswordForm />
+    }
+  }
+
+  const linkToRender = () => {
+    if (showWebAuthn) {
+      if (webAuthn.isEnabled()) {
+        return (
+          <div className="rw-login-link">
+            <span>or login with </span>{' '}
+            <a href="?type=password" className="rw-link">
+              email and secret
+            </a>
+          </div>
+        )
+      }
+    } else {
+      return (
+        <div className="rw-login-link">
+          <span>Don&apos;t have an account?</span>{' '}
+          <Link to={routes.signup()} className="rw-link">
+            Sign up!
+          </Link>
+        </div>
+      )
+    }
+  }
+
+  if (loading) {
+    return null
   }
 
   return (
@@ -2142,74 +2310,10 @@ const LoginPage = () => {
             </header>
 
             <div className="rw-segment-main">
-              <div className="rw-form-wrapper">
-                <Form onSubmit={onSubmit} className="rw-form-wrapper">
-                  <Label
-                    name="username"
-                    className="rw-label"
-                    errorClassName="rw-label rw-label-error"
-                  >
-                    Username
-                  </Label>
-                  <TextField
-                    name="username"
-                    className="rw-input"
-                    errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
-                    validation={{
-                      required: {
-                        value: true,
-                        message: 'Username is required',
-                      },
-                    }}
-                  />
-
-                  <FieldError name="username" className="rw-field-error" />
-
-                  <Label
-                    name="password"
-                    className="rw-label"
-                    errorClassName="rw-label rw-label-error"
-                  >
-                    Password
-                  </Label>
-                  <PasswordField
-                    name="password"
-                    className="rw-input"
-                    errorClassName="rw-input rw-input-error"
-                    autoComplete="current-password"
-                    validation={{
-                      required: {
-                        value: true,
-                        message: 'Password is required',
-                      },
-                    }}
-                  />
-
-                  <div className="rw-forgot-link">
-                    <Link
-                      to={routes.forgotPassword()}
-                      className="rw-forgot-link"
-                    >
-                      Forgot Password?
-                    </Link>
-                  </div>
-
-                  <FieldError name="password" className="rw-field-error" />
-
-                  <div className="rw-button-group">
-                    <Submit className="rw-button rw-button-blue">Login</Submit>
-                  </div>
-                </Form>
-              </div>
+              <div className="rw-form-wrapper">{formToRender()}</div>
             </div>
           </div>
-          <div className="rw-login-link">
-            <span>Don&apos;t have an account?</span>{' '}
-            <Link to={routes.signup()} className="rw-link">
-              Sign up!
-            </Link>
-          </div>
+          {linkToRender()}
         </div>
       </main>
     </>
@@ -2260,21 +2364,21 @@ const ResetPasswordPage = ({ resetToken }) => {
     validateToken()
   }, [resetToken, validateResetToken])
 
-  const passwordRef = useRef(null)
+  const secretRef = useRef(null)
   useEffect(() => {
-    passwordRef.current?.focus()
+    secretRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await resetPassword({
       resetToken,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success('Password changed!')
+      toast.success('Secret changed!')
       await reauthenticate()
       navigate(routes.login())
     }
@@ -2282,16 +2386,14 @@ const ResetPasswordPage = ({ resetToken }) => {
 
   return (
     <>
-      <Metadata title="Reset Password" />
+      <Metadata title="Reset Secret" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Reset Password
-              </h2>
+              <h2 className="rw-heading rw-heading-secondary">Reset Secret</h2>
             </header>
 
             <div className="rw-segment-main">
@@ -2299,28 +2401,28 @@ const ResetPasswordPage = ({ resetToken }) => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="password"
+                      name="secret"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
-                      New Password
+                      New Secret
                     </Label>
                     <PasswordField
-                      name="password"
+                      name="secret"
                       autoComplete="new-password"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       disabled={!enabled}
-                      ref={passwordRef}
+                      ref={secretRef}
                       validation={{
                         required: {
                           value: true,
-                          message: 'New Password is required',
+                          message: 'New Secret is required',
                         },
                       }}
                     />
 
-                    <FieldError name="password" className="rw-field-error" />
+                    <FieldError name="secret" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -2372,16 +2474,16 @@ const SignupPage = () => {
     }
   }, [isAuthenticated])
 
-  // focus on username box on page load
-  const usernameRef = useRef(null)
+  // focus on email box on page load
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await signUp({
-      username: data.username,
-      password: data.password,
+      username: data.email,
+      password: data.secret,
     })
 
     if (response.message) {
@@ -2410,48 +2512,48 @@ const SignupPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: 'Email is required',
                       },
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: 'Secret is required',
                       },
                     }}
                   />
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">
@@ -2497,13 +2599,13 @@ const ForgotPasswordPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef?.current?.focus()
+    emailRef?.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await forgotPassword(data.username)
+    const response = await forgotPassword(data.email)
 
     if (response.error) {
       toast.error(response.error)
@@ -2511,25 +2613,21 @@ const ForgotPasswordPage = () => {
       // The function \`forgotPassword.handler\` in api/src/functions/auth.js has
       // been invoked, let the user know how to get the link to reset their
       // password (sent in email, perhaps?)
-      toast.success(
-        'A link to reset your password was sent to ' + response.email
-      )
+      toast.success('A link to reset your secret was sent to ' + response.email)
       navigate(routes.login())
     }
   }
 
   return (
     <>
-      <Metadata title="Forgot Password" />
+      <Metadata title="Forgot Secret" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Forgot Password
-              </h2>
+              <h2 className="rw-heading rw-heading-secondary">Forgot Secret</h2>
             </header>
 
             <div className="rw-segment-main">
@@ -2537,26 +2635,26 @@ const ForgotPasswordPage = () => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="username"
+                      name="email"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
-                      Username
+                      Email
                     </Label>
                     <TextField
-                      name="username"
+                      name="email"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
-                      ref={usernameRef}
+                      ref={emailRef}
                       validation={{
                         required: {
                           value: true,
-                          message: 'Username is required',
+                          message: 'Email is required',
                         },
                       }}
                     />
 
-                    <FieldError name="username" className="rw-field-error" />
+                    <FieldError name="email" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -2603,15 +2701,15 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await logIn({
-      username: data.username,
-      password: data.password,
+      username: data.email,
+      password: data.secret,
     })
 
     if (response.message) {
@@ -2639,43 +2737,43 @@ const LoginPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: 'Email is required',
                       },
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: 'Secret is required',
                       },
                     }}
                   />
@@ -2685,11 +2783,11 @@ const LoginPage = () => {
                       to={routes.forgotPassword()}
                       className="rw-forgot-link"
                     >
-                      Forgot Password?
+                      Forgot Secret?
                     </Link>
                   </div>
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">Login</Submit>
@@ -2754,21 +2852,21 @@ const ResetPasswordPage = ({ resetToken }) => {
     validateToken()
   }, [resetToken, validateResetToken])
 
-  const passwordRef = useRef(null)
+  const secretRef = useRef(null)
   useEffect(() => {
-    passwordRef.current?.focus()
+    secretRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await resetPassword({
       resetToken,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success('Password changed!')
+      toast.success('Secret changed!')
       await reauthenticate()
       navigate(routes.login())
     }
@@ -2776,16 +2874,14 @@ const ResetPasswordPage = ({ resetToken }) => {
 
   return (
     <>
-      <Metadata title="Reset Password" />
+      <Metadata title="Reset Secret" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Reset Password
-              </h2>
+              <h2 className="rw-heading rw-heading-secondary">Reset Secret</h2>
             </header>
 
             <div className="rw-segment-main">
@@ -2793,28 +2889,28 @@ const ResetPasswordPage = ({ resetToken }) => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="password"
+                      name="secret"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
-                      New Password
+                      New Secret
                     </Label>
                     <PasswordField
-                      name="password"
+                      name="secret"
                       autoComplete="new-password"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       disabled={!enabled}
-                      ref={passwordRef}
+                      ref={secretRef}
                       validation={{
                         required: {
                           value: true,
-                          message: 'New Password is required',
+                          message: 'New Secret is required',
                         },
                       }}
                     />
 
-                    <FieldError name="password" className="rw-field-error" />
+                    <FieldError name="secret" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -2866,16 +2962,16 @@ const SignupPage = () => {
     }
   }, [isAuthenticated])
 
-  // focus on username box on page load
-  const usernameRef = useRef(null)
+  // focus on email box on page load
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await signUp({
-      username: data.username,
-      password: data.password,
+      username: data.email,
+      password: data.secret,
     })
 
     if (response.message) {
@@ -2904,48 +3000,48 @@ const SignupPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: 'Email is required',
                       },
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: 'Secret is required',
                       },
                     }}
                   />
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">
@@ -2991,13 +3087,13 @@ const ForgotPasswordPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef?.current?.focus()
+    emailRef?.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await forgotPassword(data.username)
+    const response = await forgotPassword(data.email)
 
     if (response.error) {
       toast.error(response.error)
@@ -3031,26 +3127,26 @@ const ForgotPasswordPage = () => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="username"
+                      name="email"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
-                      Username
+                      Email
                     </Label>
                     <TextField
-                      name="username"
+                      name="email"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
-                      ref={usernameRef}
+                      ref={emailRef}
                       validation={{
                         required: {
                           value: true,
-                          message: 'Username is required',
+                          message: 'Email is required',
                         },
                       }}
                     />
 
-                    <FieldError name="username" className="rw-field-error" />
+                    <FieldError name="email" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -3097,14 +3193,14 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await logIn({
-      username: data.username,
+      username: data.email,
       password: data.password,
     })
 
@@ -3133,26 +3229,26 @@ const LoginPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: 'Email is required',
                       },
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
                     name="password"
@@ -3360,15 +3456,15 @@ const SignupPage = () => {
     }
   }, [isAuthenticated])
 
-  // focus on username box on page load
-  const usernameRef = useRef(null)
+  // focus on email box on page load
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await signUp({
-      username: data.username,
+      username: data.email,
       password: data.password,
     })
 
@@ -3398,26 +3494,26 @@ const SignupPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: 'Email is required',
                       },
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
                     name="password"
@@ -3485,13 +3581,13 @@ const ForgotPasswordPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef?.current?.focus()
+    emailRef?.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await forgotPassword(data.username)
+    const response = await forgotPassword(data.email)
 
     if (response.error) {
       toast.error(response.error)
@@ -3525,26 +3621,26 @@ const ForgotPasswordPage = () => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="username"
+                      name="email"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
-                      Username
+                      Email
                     </Label>
                     <TextField
-                      name="username"
+                      name="email"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
-                      ref={usernameRef}
+                      ref={emailRef}
                       validation={{
                         required: {
                           value: true,
-                          message: 'Username is required',
+                          message: 'Email is required',
                         },
                       }}
                     />
 
-                    <FieldError name="username" className="rw-field-error" />
+                    <FieldError name="email" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -3591,14 +3687,14 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await logIn({
-      username: data.username,
+      username: data.email,
       password: data.password,
     })
 
@@ -3627,26 +3723,26 @@ const LoginPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: 'Email is required',
                       },
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
                     name="password"
@@ -3854,15 +3950,15 @@ const SignupPage = () => {
     }
   }, [isAuthenticated])
 
-  // focus on username box on page load
-  const usernameRef = useRef(null)
+  // focus on email box on page load
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await signUp({
-      username: data.username,
+      username: data.email,
       password: data.password,
     })
 
@@ -3892,26 +3988,26 @@ const SignupPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: 'Email is required',
                       },
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
                     name="password"
