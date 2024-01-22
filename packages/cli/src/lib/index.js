@@ -232,7 +232,7 @@ export const prettierOptions = () => {
   try {
     return require(path.join(getPaths().base, 'prettier.config.js'))
   } catch (e) {
-    // If we're our vitest environment we want to return a consistent set of prettier options
+    // If we're in our vitest environment we want to return a consistent set of prettier options
     // such that snapshots don't change unexpectedly.
     if (process.env.VITEST_POOL_ID !== undefined) {
       return {
