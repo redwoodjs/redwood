@@ -3,6 +3,7 @@ import path from 'path'
 import isbot from 'isbot'
 import type { ViteDevServer } from 'vite'
 
+import { defaultAuthProviderState } from '@redwoodjs/auth'
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
@@ -68,6 +69,8 @@ export const createReactStreamingHandler = async (
       })
     }
 
+    let decodedAuthState = defaultAuthProviderState
+
     // Do this inside the handler for **dev-only**.
     // This makes sure that changes to entry-server are picked up on refresh
     if (!isProd) {
@@ -77,6 +80,16 @@ export const createReactStreamingHandler = async (
       fallbackDocumentImport = await viteDevServer.ssrLoadModule(
         rwPaths.web.document
       )
+
+      const middleware = entryServerImport.middleware
+
+      if (middleware) {
+        try {
+          decodedAuthState = (await middleware(req)).context
+        } catch (e) {
+          console.error('Whooopsie, error in middleware', e)
+        }
+      }
     }
 
     const ServerEntry =
@@ -134,6 +147,7 @@ export const createReactStreamingHandler = async (
         cssLinks,
         isProd,
         jsBundles,
+        authState: decodedAuthState,
       },
       {
         waitForAllReady: isSeoCrawler,

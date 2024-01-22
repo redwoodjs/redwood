@@ -86,6 +86,10 @@ export function createDbAuthClient({
       return getTokenPromise
     }
 
+    // Set-Cookie: same-session-xxx-yy
+    // Before body: 4
+    // After body: same-session-xxx-yy
+
     if (isTokenCacheExpired()) {
       getTokenPromise = fetch(`${getApiDbAuthUrl()}?method=getToken`, {
         credentials,
@@ -116,6 +120,10 @@ export function createDbAuthClient({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password, method: 'login' }),
     })
+
+    if (typeof window !== undefined) {
+      document.cookie = 'auth-provider=dbAuth'
+    }
 
     return response.json()
   }

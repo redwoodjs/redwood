@@ -1,6 +1,6 @@
 import { Headers } from '@whatwg-node/fetch'
 
-import type { Request } from './transforms'
+import type { PartialRequest } from './transforms'
 
 export type CorsConfig = {
   origin?: boolean | string | string[]
@@ -59,10 +59,10 @@ export function createCorsContext(cors: CorsConfig | undefined) {
   }
 
   return {
-    shouldHandleCors(request: Request) {
+    shouldHandleCors(request: PartialRequest) {
       return request.method === 'OPTIONS'
     },
-    getRequestHeaders(request: Request): CorsHeaders {
+    getRequestHeaders(request: PartialRequest): CorsHeaders {
       const eventHeaders = new Headers(request.headers as HeadersInit)
       const requestCorsHeaders = new Headers(corsHeaders)
 

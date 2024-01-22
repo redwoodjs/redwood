@@ -131,7 +131,7 @@ const encryptToCookie = (data) => {
   return `session=${encryptedSession}|${iv.toString('base64')}`
 }
 
-let event, context, options
+let req, context, options
 
 describe('dbAuth', () => {
   beforeEach(() => {
@@ -141,11 +141,11 @@ describe('dbAuth', () => {
     process.env.SESSION_SECRET = SESSION_SECRET
     delete process.env.DBAUTH_COOKIE_DOMAIN
 
-    event = {
-      queryStringParameters: {},
-      path: '/.redwood/functions/auth',
-      headers: {},
-    }
+    req = new Request('http://localhost:8910/_rw_mw', {
+      method: 'POST',
+      headers: new Headers(),
+    })
+
     context = {}
 
     options = {
@@ -251,21 +251,21 @@ describe('dbAuth', () => {
 
   describe('dbAccessor', () => {
     it('returns the prisma db accessor for a model', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       expect(dbAuth.dbAccessor).toEqual(db.user)
     })
   })
 
   describe('dbCredentialAccessor', () => {
     it('returns the prisma db accessor for a UserCredential model', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       expect(dbAuth.dbCredentialAccessor).toEqual(db.userCredential)
     })
   })
 
   describe('sessionExpiresDate', () => {
     it('returns a date in the future as a UTCString', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const expiresAt = new Date()
       expiresAt.setSeconds(expiresAt.getSeconds() + options.login.expires)
 
@@ -275,7 +275,7 @@ describe('dbAuth', () => {
 
   describe('webAuthnExpiresDate', () => {
     it('returns a date in the future as a UTCString', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const expiresAt = new Date()
       expiresAt.setSeconds(expiresAt.getSeconds() + options.webAuthn.expires)
 
@@ -285,7 +285,7 @@ describe('dbAuth', () => {
 
   describe('_deleteSessionHeader', () => {
     it('returns a Set-Cookie header to delete the session cookie', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const headers = dbAuth._deleteSessionHeader
 
       expect(Object.keys(headers).length).toEqual(1)
@@ -294,9 +294,9 @@ describe('dbAuth', () => {
     })
   })
 
-  describe.only('constructor', () => {
+  describe('constructor', () => {
     it('initializes some variables with passed values', () => {
-      event = { headers: {} }
+      req = { headers: {} }
       context = { foo: 'bar' }
       options = {
         db: db,
@@ -314,16 +314,16 @@ describe('dbAuth', () => {
           handler: () => {},
         },
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
-      expect(dbAuth.event).toEqual(event)
+      expect(dbAuth.event).toEqual(req)
       expect(dbAuth.options).toEqual(options)
     })
 
     it('throws an error if no forgotPassword.handler option', () => {
       expect(
         () =>
-          new DbAuthHandler(event, context, {
+          new DbAuthHandler(req, context, {
             login: {
               handler: () => {},
               expires: 1,
@@ -339,7 +339,7 @@ describe('dbAuth', () => {
 
       expect(
         () =>
-          new DbAuthHandler(event, context, {
+          new DbAuthHandler(req, context, {
             forgotPassword: {},
             login: {
               handler: () => {},
@@ -358,7 +358,7 @@ describe('dbAuth', () => {
     it('does not throw an error if no forgotPassword.handler option but forgotPassword.enabled set to false', () => {
       expect(
         () =>
-          new DbAuthHandler(event, context, {
+          new DbAuthHandler(req, context, {
             db: db,
             login: {
               handler: () => {},
@@ -381,7 +381,7 @@ describe('dbAuth', () => {
       // login object doesn't exist at all
       expect(
         () =>
-          new DbAuthHandler(event, context, {
+          new DbAuthHandler(req, context, {
             forgotPassword: {
               handler: () => {},
             },
@@ -396,7 +396,7 @@ describe('dbAuth', () => {
       // login object exists, but not `expires` key
       expect(
         () =>
-          new DbAuthHandler(event, context, {
+          new DbAuthHandler(req, context, {
             forgotPassword: {
               handler: () => {},
             },
@@ -416,7 +416,7 @@ describe('dbAuth', () => {
     it('throws an error if no login.handler option', () => {
       expect(
         () =>
-          new DbAuthHandler(event, context, {
+          new DbAuthHandler(req, context, {
             forgotPassword: {
               handler: () => {},
             },
@@ -436,7 +436,7 @@ describe('dbAuth', () => {
     it('does not throw an error if no login.handler option but login.enabled set to false', () => {
       expect(
         () =>
-          new DbAuthHandler(event, context, {
+          new DbAuthHandler(req, context, {
             login: {
               enabled: false,
             },
@@ -456,7 +456,7 @@ describe('dbAuth', () => {
     it('throws an error if no signup.handler option', () => {
       expect(
         () =>
-          new DbAuthHandler(event, context, {
+          new DbAuthHandler(req, context, {
             forgotPassword: {
               handler: () => {},
             },
@@ -472,7 +472,7 @@ describe('dbAuth', () => {
 
       expect(
         () =>
-          new DbAuthHandler(event, context, {
+          new DbAuthHandler(req, context, {
             forgotPassword: {
               handler: () => {},
             },
@@ -491,7 +491,7 @@ describe('dbAuth', () => {
     it('does not throw an error if no signup.handler option but signup.enabled set to false', () => {
       expect(
         () =>
-          new DbAuthHandler(event, context, {
+          new DbAuthHandler(req, context, {
             db: db,
             login: {
               handler: () => {},
@@ -511,8 +511,8 @@ describe('dbAuth', () => {
     })
 
     it('parses params from a plain text body', async () => {
-      event = { headers: {}, body: `{"foo":"bar", "baz":123}` }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      req = { headers: {}, body: `{"foo":"bar", "baz":123}` }
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       // Need to wait for reqq to be parsed
       await dbAuth.init()
@@ -525,9 +525,9 @@ describe('dbAuth', () => {
 
     it.skip('parses an empty plain text body and still sets params', async () => {
       // @TODO(Rob): This test is failing due to refactor, not sure its necessary
-      event = { isBase64Encoded: false, headers: {}, body: '' }
+      req = { isBase64Encoded: false, headers: {}, body: '' }
       context = { foo: 'bar' }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
 
       expect(dbAuth.normalizedRequest.jsonBody).toEqual({})
@@ -536,24 +536,24 @@ describe('dbAuth', () => {
     it.skip('parses params from an undefined body when isBase64Encoded == false', async () => {
       // @TODO(Rob): This test is failing due to refactor, not sure its necessary
 
-      event = {
+      req = {
         isBase64Encoded: false,
         headers: {},
       }
       context = { foo: 'bar' }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
 
       expect(dbAuth.normalizedRequest.jsonBody).toEqual({})
     })
 
     it('parses params from a base64 encoded body', async () => {
-      event = {
+      req = {
         isBase64Encoded: true,
         headers: {},
         body: Buffer.from(`{"foo":"bar", "baz":123}`, 'utf8'),
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
       expect(dbAuth.normalizedRequest.jsonBody).toEqual({
         foo: 'bar',
@@ -563,12 +563,12 @@ describe('dbAuth', () => {
 
     it('parses params from an undefined body when isBase64Encoded == true', async () => {
       // @TODO(Rob): Not sure this is necessary any more?
-      event = {
+      req = {
         isBase64Encoded: true,
         headers: {},
       }
       context = { foo: 'bar' }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
 
       expect(dbAuth.normalizedRequest.jsonBody).toEqual(undefined)
@@ -576,21 +576,21 @@ describe('dbAuth', () => {
 
     it('parses params from an empty body when isBase64Encoded == true', async () => {
       // @TODO(Rob): Not sure this is necessary any more?
-      event = {
+      req = {
         isBase64Encoded: true,
         headers: {},
         body: '',
       }
       context = { foo: 'bar' }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
 
       expect(dbAuth.normalizedRequest.jsonBody).toEqual(undefined)
     })
 
     it('sets header-based CSRF token', async () => {
-      event = { headers: { 'csrf-token': 'qwerty' } }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      req = { headers: { 'csrf-token': 'qwerty' } }
+      const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
       expect(dbAuth.normalizedRequest.headers.get('csrf-token')).toEqual(
         'qwerty'
@@ -598,21 +598,21 @@ describe('dbAuth', () => {
     })
 
     it('sets session variables to nothing if session cannot be decrypted', () => {
-      event = { headers: { 'csrf-token': 'qwerty' } }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      req = { headers: { 'csrf-token': 'qwerty' } }
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       expect(dbAuth.session).toBeUndefined()
       expect(dbAuth.sessionCsrfToken).toBeUndefined()
     })
 
     it('sets session variables to valid session data', () => {
-      event = {
+      req = {
         headers: {
           cookie:
             'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w==',
         },
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       expect(dbAuth.session).toEqual({ foo: 'bar' })
       expect(dbAuth.sessionCsrfToken).toEqual('abcd')
@@ -621,7 +621,7 @@ describe('dbAuth', () => {
     it('throws an error if SESSION_SECRET is not defined', () => {
       delete process.env.SESSION_SECRET
 
-      expect(() => new DbAuthHandler(event, context, options)).toThrow(
+      expect(() => new DbAuthHandler(req, context, options)).toThrow(
         dbAuthError.NoSessionSecretError
       )
     })
@@ -629,43 +629,66 @@ describe('dbAuth', () => {
 
   describe('invoke', () => {
     it('returns a logout response if session is not valid', async () => {
-      event.body = JSON.stringify({ method: 'logout' })
-      event.httpMethod = 'GET'
-      event.headers.cookie = 'session=invalid'
-      const dbAuth = new DbAuthHandler(event, context, options)
+      // event.body = JSON.stringify({ method: 'logout' })
+      // event.httpMethod = 'GET'
+      // event.headers.cookie = 'session=invalid'
+
+      const myEvent = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers: new Headers({
+          cookie: 'session=invalid',
+        }),
+        body: JSON.stringify({ method: 'logout' }),
+      })
+
+      const dbAuth = new DbAuthHandler(myEvent, context, options)
       const response = await dbAuth.invoke()
 
       expect(response.headers['set-cookie']).toEqual(LOGOUT_COOKIE)
     })
 
     it('returns a 404 if using the wrong HTTP verb', async () => {
-      event.body = JSON.stringify({ method: 'logout' })
-      event.httpMethod = 'GET'
-      event.headers.cookie =
-        'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const fetchEvent = new Request('http://localhost:8910/_rw_mw', {
+        method: 'PUT', // wrong verb
+        headers: new Headers({
+          cookie:
+            'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w==',
+        }),
+        body: JSON.stringify({ method: 'logout' }),
+      })
+
+      const dbAuth = new DbAuthHandler(fetchEvent, context, options)
       const response = await dbAuth.invoke()
 
       expect(response.statusCode).toEqual(404)
     })
 
     it('returns a 404 for unsupported method name', async () => {
-      event.body = JSON.stringify({ method: 'foobar' })
-      event.httpMethod = 'POST'
-      event.headers.cookie =
-        'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const fetchEvent = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers: new Headers({
+          cookie:
+            'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w==',
+        }),
+        body: JSON.stringify({ method: 'foobar' }),
+      })
+      const dbAuth = new DbAuthHandler(fetchEvent, context, options)
       const response = await dbAuth.invoke()
 
       expect(response.statusCode).toEqual(404)
     })
 
     it('returns a 400 for any other errors', async () => {
-      event.body = JSON.stringify({ method: 'logout' })
-      event.httpMethod = 'POST'
-      event.headers.cookie =
-        'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const fetchEvent = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers: new Headers({
+          cookie:
+            'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w==',
+        }),
+        body: JSON.stringify({ method: 'logout' }),
+      })
+
+      const dbAuth = new DbAuthHandler(fetchEvent, context, options)
       dbAuth.logout = jest.fn(() => {
         throw Error('Logout error')
       })
@@ -676,10 +699,12 @@ describe('dbAuth', () => {
     })
 
     it('handlers CORS OPTIONS request', async () => {
-      event.httpMethod = 'OPTIONS'
-      event.body = JSON.stringify({ method: 'auth' })
+      const fetchEvent = new Request('http://localhost:8910/_rw_mw', {
+        method: 'OPTIONS',
+        body: JSON.stringify({ method: 'auth' }),
+      })
 
-      const dbAuth = new DbAuthHandler(event, context, {
+      const dbAuth = new DbAuthHandler(fetchEvent, context, {
         ...options,
         cors: {
           origin: 'https://www.myRedwoodWebSide.com',
@@ -699,11 +724,16 @@ describe('dbAuth', () => {
     })
 
     it('calls the appropriate auth function', async () => {
-      event.body = JSON.stringify({ method: 'logout' })
-      event.httpMethod = 'POST'
-      event.headers.cookie =
-        'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const fetchEvent = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body: JSON.stringify({ method: 'logout' }),
+        headers: {
+          cookie:
+            'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w==',
+        },
+      })
+
+      const dbAuth = new DbAuthHandler(fetchEvent, context, options)
       dbAuth.logout = jest.fn(() => ['body', { foo: 'bar' }])
       const response = await dbAuth.invoke()
 
@@ -719,13 +749,19 @@ describe('dbAuth', () => {
 
   describe('forgotPassword', () => {
     it('throws default error when not enabled', async () => {
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
       })
+
+      const fetchEvent = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
       options.forgotPassword.enabled = false
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(fetchEvent, context, options)
 
       try {
         await dbAuth.forgotPassword()
@@ -736,17 +772,23 @@ describe('dbAuth', () => {
     })
 
     it('throws custom error when not enabled and message provided', async () => {
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
       })
+
+      const fetchEvent = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
       options.forgotPassword.enabled = false
       options.forgotPassword.errors = {
         ...options.forgotPassword.errors,
         flowNotEnabled: 'Custom flow not enabled error',
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(fetchEvent, context, options)
 
       try {
         await dbAuth.forgotPassword()
@@ -758,8 +800,12 @@ describe('dbAuth', () => {
 
     it('throws an error if username is blank', async () => {
       // missing completely
-      event.body = JSON.stringify({})
-      let dbAuth = new DbAuthHandler(event, context, options)
+      const emptyBodyReq = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body: JSON.stringify({}),
+      })
+
+      let dbAuth = new DbAuthHandler(emptyBodyReq, context, options)
 
       try {
         await dbAuth.forgotPassword()
@@ -768,8 +814,12 @@ describe('dbAuth', () => {
       }
 
       // empty string
-      event.body = JSON.stringify({ username: ' ' })
-      dbAuth = new DbAuthHandler(event, context, options)
+      const emptyStringReq = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body: JSON.stringify({ username: ' ' }),
+      })
+
+      dbAuth = new DbAuthHandler(emptyStringReq, context, options)
 
       try {
         await dbAuth.forgotPassword()
@@ -782,10 +832,16 @@ describe('dbAuth', () => {
 
     it('throws an error if username is not found', async () => {
       // missing completely
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'notfound',
       })
-      let dbAuth = new DbAuthHandler(event, context, options)
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      let dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.forgotPassword()
@@ -798,10 +854,16 @@ describe('dbAuth', () => {
 
     it('sets the resetToken and resetTokenExpiresAt on the user', async () => {
       const user = await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: user.email,
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       expect(user.resetToken).toEqual(undefined)
       expect(user.resetTokenExpiresAt).toEqual(undefined)
@@ -830,10 +892,15 @@ describe('dbAuth', () => {
 
     it('returns a logout session cookie', async () => {
       const user = await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: user.email,
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = await dbAuth.forgotPassword()
 
       expectLoggedOutResponse(response)
@@ -841,43 +908,59 @@ describe('dbAuth', () => {
 
     it('invokes forgotPassword.handler() with the user', async () => {
       const user = await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: user.email,
       })
-      options.forgotPassword.handler = (handlerUser, token) => {
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      options.forgotPassword.handler = (handlerUser) => {
         expect(handlerUser.id).toEqual(user.id)
-        expect(token).toMatch(/^[A-Za-z0-9/+]{16}$/)
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.forgotPassword()
-      expect.assertions(2)
+      expect.assertions(1)
     })
 
     it('invokes forgotPassword.handler() with the raw resetToken', async () => {
       const user = await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: user.email,
       })
-      options.forgotPassword.handler = (handlerUser, token) => {
-        // tokens should be the raw resetToken NOT the hash
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      options.forgotPassword.handler = (handlerUser) => {
+        // user should have the raw resetToken NOT the hash
         // resetToken consists of 16 base64 characters
-        expect(handlerUser.resetToken).toBeUndefined()
-        expect(token).toMatch(/^[A-Za-z0-9/+]{16}$/)
+        expect(handlerUser.resetToken).toMatch(/^\w{16}$/)
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.forgotPassword()
-      expect.assertions(2)
+      expect.assertions(1)
     })
 
     it('removes the token from the forgotPassword response', async () => {
       const user = await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: user.email,
       })
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
       options.forgotPassword.handler = (handlerUser) => {
         return handlerUser
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = await dbAuth.forgotPassword()
       const jsonResponse = JSON.parse(response[0])
 
@@ -887,11 +970,17 @@ describe('dbAuth', () => {
 
     it('throws a generic error for an invalid client', async () => {
       const user = await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: user.email,
       })
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
       // invalid db client
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       dbAuth.dbAccessor = undefined
 
       try {
@@ -906,13 +995,19 @@ describe('dbAuth', () => {
 
   describe('login', () => {
     it('throws default error when not enabled', async () => {
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
       })
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
       options.login.enabled = false
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.login()
@@ -923,17 +1018,23 @@ describe('dbAuth', () => {
     })
 
     it('throws custom error when not enabled and message provided', async () => {
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
       })
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
       options.login.enabled = false
       options.login.errors = {
         ...options.signup.errors,
         flowNotEnabled: 'Custom flow not enabled error',
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.login()
@@ -947,11 +1048,16 @@ describe('dbAuth', () => {
       delete options.login.usernameMatch
 
       await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'missing@redwoodjs.com',
         password: 'password',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.login()
@@ -964,11 +1070,15 @@ describe('dbAuth', () => {
 
     it('throws an error if password is wrong', async () => {
       await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'incorrect',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.login()
@@ -981,14 +1091,18 @@ describe('dbAuth', () => {
 
     it('throws an error if login.handler throws', async () => {
       const _user = await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
       options.login.handler = () => {
         throw new Error('Cannot log in')
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.login()
@@ -1001,7 +1115,7 @@ describe('dbAuth', () => {
 
     it('passes the found user to login.handler', async () => {
       const user = await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
@@ -1009,20 +1123,28 @@ describe('dbAuth', () => {
         expect(user).toEqual(user)
         return user
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.login()
     })
 
     it('throws an error if login.handler returns null', async () => {
       const _user = await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
       options.login.handler = () => {
         return null
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
       try {
         await dbAuth.login()
       } catch (e) {
@@ -1034,14 +1156,18 @@ describe('dbAuth', () => {
 
     it('throws an error if login.handler returns an object without an id', async () => {
       const _user = await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
       options.login.handler = () => {
         return { name: 'Rob' }
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
       try {
         await dbAuth.login()
       } catch (e) {
@@ -1052,24 +1178,32 @@ describe('dbAuth', () => {
 
     it('returns a JSON body of the user that is logged in', async () => {
       const user = await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       const response = await dbAuth.login()
 
-      expect(response[0].id).toEqual(user.id)
+      expect(response[0]).toEqual({ id: user.id })
     })
 
     it('returns a CSRF token in the header', async () => {
       await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       const response = await dbAuth.login()
       expect(response[1]['csrf-token']).toMatch(UUID_REGEX)
@@ -1077,11 +1211,15 @@ describe('dbAuth', () => {
 
     it('returns a set-cookie header to create session', async () => {
       await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       const response = await dbAuth.login()
 
@@ -1090,11 +1228,15 @@ describe('dbAuth', () => {
 
     it('returns a CSRF token in the header', async () => {
       await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       const response = await dbAuth.login()
 
@@ -1109,12 +1251,17 @@ describe('dbAuth', () => {
       options.login.usernameMatch = 'insensitive'
 
       await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
 
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.login()
@@ -1137,12 +1284,17 @@ describe('dbAuth', () => {
       delete options.login.usernameMatch
 
       await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
 
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       await dbAuth.login()
 
@@ -1156,7 +1308,7 @@ describe('dbAuth', () => {
 
   describe('logout', () => {
     it('returns set-cookie header for removing session', async () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = dbAuth.logout()
 
       expectLoggedOutResponse(response)
@@ -1165,13 +1317,19 @@ describe('dbAuth', () => {
 
   describe('resetPassword', () => {
     it('throws default error when not enabled', async () => {
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
       })
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
       options.resetPassword.enabled = false
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.resetPassword()
@@ -1182,17 +1340,23 @@ describe('dbAuth', () => {
     })
 
     it('throws custom error when not enabled and message provided', async () => {
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
       })
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
       options.resetPassword.enabled = false
       options.resetPassword.errors = {
         ...options.signup.errors,
         flowNotEnabled: 'Custom flow not enabled error',
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.resetPassword()
@@ -1203,8 +1367,12 @@ describe('dbAuth', () => {
     })
     it('throws an error if resetToken is blank', async () => {
       // missing completely
-      event.body = JSON.stringify({})
-      let dbAuth = new DbAuthHandler(event, context, options)
+      const emptyBody = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body: JSON.stringify({}),
+      })
+
+      let dbAuth = new DbAuthHandler(emptyBody, context, options)
 
       try {
         await dbAuth.resetPassword()
@@ -1213,8 +1381,11 @@ describe('dbAuth', () => {
       }
 
       // empty string
-      event.body = JSON.stringify({ resetToken: ' ' })
-      dbAuth = new DbAuthHandler(event, context, options)
+      const emptyString = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body: JSON.stringify({ resetToken: ' ' }),
+      })
+      dbAuth = new DbAuthHandler(emptyString, context, options)
 
       try {
         await dbAuth.resetPassword()
@@ -1227,8 +1398,11 @@ describe('dbAuth', () => {
 
     it('throws an error if password is blank', async () => {
       // missing completely
-      event.body = JSON.stringify({ resetToken: '1234' })
-      let dbAuth = new DbAuthHandler(event, context, options)
+      const noPwd = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body: JSON.stringify({ resetToken: '1234' }),
+      })
+      let dbAuth = new DbAuthHandler(noPwd, context, options)
 
       try {
         await dbAuth.resetPassword()
@@ -1237,8 +1411,11 @@ describe('dbAuth', () => {
       }
 
       // empty string
-      event.body = JSON.stringify({ resetToken: '1234', password: ' ' })
-      dbAuth = new DbAuthHandler(event, context, options)
+      const pwdEmpty = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body: JSON.stringify({ resetToken: '1234', password: ' ' }),
+      })
+      dbAuth = new DbAuthHandler(pwdEmpty, context, options)
 
       try {
         await dbAuth.resetPassword()
@@ -1250,8 +1427,13 @@ describe('dbAuth', () => {
     })
 
     it('throws an error if no user found with resetToken', async () => {
-      event.body = JSON.stringify({ resetToken: '1234', password: 'password' })
-      let dbAuth = new DbAuthHandler(event, context, options)
+      const body = JSON.stringify({ resetToken: '1234', password: 'password' })
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      let dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.resetPassword()
@@ -1271,8 +1453,13 @@ describe('dbAuth', () => {
         resetTokenExpiresAt: tokenExpires,
       })
 
-      event.body = JSON.stringify({ resetToken: '1234', password: 'password1' })
-      let dbAuth = new DbAuthHandler(event, context, options)
+      const body = JSON.stringify({ resetToken: '1234', password: 'password1' })
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      let dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.resetPassword()
@@ -1292,11 +1479,16 @@ describe('dbAuth', () => {
         resetTokenExpiresAt: tokenExpires,
       })
 
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         resetToken: '1234',
         password: 'password1',
       })
-      let dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      let dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.resetPassword()
@@ -1320,12 +1512,17 @@ describe('dbAuth', () => {
         resetTokenExpiresAt: tokenExpires,
       })
 
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         resetToken: '1234',
         password: 'password',
       })
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
       options.resetPassword.allowReusedPassword = false
-      let dbAuth = new DbAuthHandler(event, context, options)
+      let dbAuth = new DbAuthHandler(req, context, options)
 
       await expect(dbAuth.resetPassword()).rejects.toThrow(
         dbAuthError.ReusedPasswordError
@@ -1342,12 +1539,17 @@ describe('dbAuth', () => {
         resetTokenExpiresAt: tokenExpires,
       })
 
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         resetToken: '1234',
         password: 'password',
       })
       options.resetPassword.allowReusedPassword = true
-      let dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      let dbAuth = new DbAuthHandler(req, context, options)
 
       await expect(dbAuth.resetPassword()).resolves.not.toThrow()
     })
@@ -1361,11 +1563,16 @@ describe('dbAuth', () => {
         resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         resetToken: '1234',
         password: 'new-password',
       })
-      let dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      let dbAuth = new DbAuthHandler(req, context, options)
 
       await expect(dbAuth.resetPassword()).resolves.not.toThrow()
 
@@ -1387,11 +1594,16 @@ describe('dbAuth', () => {
         resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         resetToken: '1234',
         password: 'new-password',
       })
-      let dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      let dbAuth = new DbAuthHandler(req, context, options)
 
       await expect(dbAuth.resetPassword()).resolves.not.toThrow()
 
@@ -1412,14 +1624,19 @@ describe('dbAuth', () => {
         resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         resetToken: '1234',
         password: 'new-password',
       })
       options.resetPassword.handler = (handlerUser) => {
         expect(handlerUser.id).toEqual(user.id)
       }
-      let dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      let dbAuth = new DbAuthHandler(req, context, options)
 
       await dbAuth.resetPassword()
       expect.assertions(1)
@@ -1434,12 +1651,17 @@ describe('dbAuth', () => {
         resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         resetToken: '1234',
         password: 'new-password',
       })
       options.resetPassword.handler = () => false
-      let dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      let dbAuth = new DbAuthHandler(req, context, options)
 
       const response = await dbAuth.resetPassword()
 
@@ -1455,12 +1677,17 @@ describe('dbAuth', () => {
         resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         resetToken: '1234',
         password: 'new-password',
       })
       options.resetPassword.handler = () => true
-      let dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      let dbAuth = new DbAuthHandler(req, context, options)
 
       const response = await dbAuth.resetPassword()
 
@@ -1470,7 +1697,7 @@ describe('dbAuth', () => {
 
   describe('signup', () => {
     it('bubbles up any error that is raised', async () => {
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
@@ -1478,20 +1705,30 @@ describe('dbAuth', () => {
       options.signup.handler = () => {
         throw Error('Cannot signup')
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       expect.assertions(1)
       await expect(dbAuth.signup()).rejects.toThrow('Cannot signup')
     })
 
     it('throws default error when not enabled', async () => {
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
       })
       options.signup.enabled = false
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.signup()
@@ -1502,7 +1739,7 @@ describe('dbAuth', () => {
     })
 
     it('throws custom error when not enabled and message provided', async () => {
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
@@ -1512,7 +1749,12 @@ describe('dbAuth', () => {
         ...options.signup.errors,
         flowNotEnabled: 'Custom flow not enabled error',
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.signup()
@@ -1523,7 +1765,7 @@ describe('dbAuth', () => {
     })
 
     it('throws password validation error if password invalid', async () => {
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'pass',
         name: 'Rob',
@@ -1533,7 +1775,12 @@ describe('dbAuth', () => {
           throw new dbAuthError.PasswordValidationError('Password too short')
         }
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.signup()
@@ -1544,7 +1791,7 @@ describe('dbAuth', () => {
     })
 
     it('throws no error if password valid', async () => {
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
@@ -1554,31 +1801,46 @@ describe('dbAuth', () => {
           throw new dbAuthError.PasswordValidationError('Password too short')
         }
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       expect(() => dbAuth.signup()).not.toThrow()
     })
 
     it('throws no error if passwordValidation function is undefined', async () => {
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
       })
       delete options.signup.passwordValidation
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       expect(() => dbAuth.signup()).not.toThrow()
     })
 
     it('creates a new user and logs them in', async () => {
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
       })
       const oldUserCount = await db.user.count()
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = await dbAuth.signup()
       const newUserCount = await db.user.count()
 
@@ -1592,7 +1854,7 @@ describe('dbAuth', () => {
     })
 
     it('returns a message if a string is returned and does not log in', async () => {
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
@@ -1600,7 +1862,12 @@ describe('dbAuth', () => {
       options.signup.handler = () => {
         return 'Hello, world'
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       const response = await dbAuth.signup()
 
@@ -1613,36 +1880,40 @@ describe('dbAuth', () => {
     })
   })
 
-  describe.only('getToken', () => {
-    it('returns the token from the cookie', async () => {
+  describe('getToken', () => {
+    it('returns the ID of the logged in user', async () => {
       const user = await createDbUser()
       const cookie = encryptToCookie(
         JSON.stringify({ id: user.id }) + ';' + 'token'
       )
 
       const justEncryptedSession = cookie.split('session=')[1]
-
-      event = {
-        headers: {
-          cookie,
-        },
+      const headers = {
+        cookie,
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers,
+      })
+
+      req.headers.get('cookie')
+
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = await dbAuth.getToken()
 
       expect(response[0]).toEqual(justEncryptedSession)
     })
 
-    // @TODO Rob HELP, change in behaviour
     it('returns nothing if user is not logged in', async () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = await dbAuth.getToken()
 
       expect(response[0]).toEqual('')
     })
 
+    // @TODO(Rob) HELP, change in behaviour
     it('returns any other error', async () => {
-      event = {
+      req = {
         headers: {
           cookie: encryptToCookie(
             JSON.stringify({ id: 9999999999 }) + ';' + 'token'
@@ -1650,16 +1921,16 @@ describe('dbAuth', () => {
         },
       }
 
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = await dbAuth.getToken()
 
       expect(response[0]).toEqual('{"error":"User not found"}')
     })
 
-    // @TODO Rob HELP, change in behaviour
+    // @TODO(Rob) HELP, change in behaviour
     it('re-encrypts the session cookie if using the legacy algorithm', async () => {
       await createDbUser({ id: 7 })
-      event = {
+      req = {
         headers: {
           // legacy session with { id: 7 } for userID
           cookie: 'session=U2FsdGVkX1+s7seQJnVgGgInxuXm13l8VvzA3Mg2fYg=',
@@ -1668,7 +1939,7 @@ describe('dbAuth', () => {
       process.env.SESSION_SECRET =
         'QKxN2vFSHAf94XYynK8LUALfDuDSdFowG6evfkFX8uszh4YZqhTiqEdshrhWbwbw'
 
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const [userId, headers] = await dbAuth.getToken()
 
       expect(userId).toEqual(7)
@@ -1700,7 +1971,7 @@ describe('dbAuth', () => {
       it('authenticates the user based on GraphiQL headers when no event.headers present', async () => {
         // setup graphiQL header cookie in extensions
         const dbUser = await createDbUser()
-        event.body = JSON.stringify({
+        req.body = JSON.stringify({
           extensions: {
             headers: {
               'auth-provider': 'dbAuth',
@@ -1710,7 +1981,7 @@ describe('dbAuth', () => {
           },
         })
 
-        const dbAuth = new DbAuthHandler(event, context, options)
+        const dbAuth = new DbAuthHandler(req, context, options)
         const user = await dbAuth._getCurrentUser()
         expect(user.id).toEqual(dbUser.id)
       })
@@ -1720,7 +1991,7 @@ describe('dbAuth', () => {
         const dbUser = await createDbUser()
         const dbUserId = dbUser.id
 
-        event.body = JSON.stringify({
+        req.body = JSON.stringify({
           extensions: {
             headers: {
               'auth-provider': 'dbAuth',
@@ -1731,12 +2002,10 @@ describe('dbAuth', () => {
         })
 
         // create session cookie in event header
-        event.headers.cookie = encryptToCookie(
-          JSON.stringify({ id: 9999999999 })
-        )
+        req.headers.cookie = encryptToCookie(JSON.stringify({ id: 9999999999 }))
 
         // should read session from graphiQL header, not from cookie
-        const dbAuth = new DbAuthHandler(event, context, options)
+        const dbAuth = new DbAuthHandler(req, context, options)
         const user = await dbAuth._getCurrentUser()
         expect(user.id).toEqual(dbUserId)
       })
@@ -1747,7 +2016,7 @@ describe('dbAuth', () => {
         const dbUser = await createDbUser()
         const dbUserId = dbUser.id
 
-        event.body = JSON.stringify({
+        req.body = JSON.stringify({
           extensions: {
             headers: {
               'auth-provider': 'dbAuth',
@@ -1758,7 +2027,7 @@ describe('dbAuth', () => {
         })
 
         try {
-          const dbAuth = new DbAuthHandler(event, context, options)
+          const dbAuth = new DbAuthHandler(req, context, options)
           await dbAuth._getCurrentUser()
         } catch (e) {
           expect(e.message).toEqual(
@@ -1771,25 +2040,28 @@ describe('dbAuth', () => {
 
   describe('webAuthnAuthenticate', () => {
     it('throws an error if WebAuthn options are not defined', async () => {
-      event = {
+      req = {
         headers: {},
       }
       options.webAuthn = undefined
 
       try {
-        const _dbAuth = new DbAuthHandler(event, context, options)
+        const _dbAuth = new DbAuthHandler(req, context, options)
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.NoWebAuthnConfigError)
       }
       expect.assertions(1)
     })
 
+    // @TODO(Rob) Failing test here
     it('throws an error if WebAuthn is disabled', async () => {
-      event = {
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
         headers: {},
-      }
+      })
+
       options.webAuthn.enabled = false
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       expect.assertions(1)
       await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
@@ -1798,11 +2070,16 @@ describe('dbAuth', () => {
     })
 
     it('throws an error if UserCredential is not found in database', async () => {
-      event = {
-        headers: { 'Content-Type': 'application/json' },
-        body: '{"method":"webAuthnAuthenticate","id":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","rawId":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","response":{"authenticatorData":"SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAA","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiTHRnV3BoWUtfZU41clhjX0hkdlVMdk9xcFBXeW9SdmJtbDJQbzAwVUhhZyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9","signature":"MEUCIQD3NOM7Aw0HxPw6EFGf86iwf2yd3p4NncNNLcjd-86zgwIgHuh80bLNV7EcwBi4IAcH57iueLg0X2gLtO5_Y6PMCFE","userHandle":"2"},"type":"public-key","clientExtensionResults":{}}',
-      }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const headers = { 'Content-Type': 'application/json' }
+      const body =
+        '{"method":"webAuthnAuthenticate","id":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","rawId":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","response":{"authenticatorData":"SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAA","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiTHRnV3BoWUtfZU41clhjX0hkdlVMdk9xcFBXeW9SdmJtbDJQbzAwVUhhZyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9","signature":"MEUCIQD3NOM7Aw0HxPw6EFGf86iwf2yd3p4NncNNLcjd-86zgwIgHuh80bLNV7EcwBi4IAcH57iueLg0X2gLtO5_Y6PMCFE","userHandle":"2"},"type":"public-key","clientExtensionResults":{}}'
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+        headers,
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       expect.assertions(1)
       await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
@@ -1822,11 +2099,14 @@ describe('dbAuth', () => {
           publicKey: 'foobar',
         },
       })
-      event = {
-        headers: { 'Content-Type': 'application/json' },
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
         body: '{"method":"webAuthnAuthenticate","id":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","rawId":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","response":{"authenticatorData":"SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAA","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiTHRnV3BoWUtfZU41clhjX0hkdlVMdk9xcFBXeW9SdmJtbDJQbzAwVUhhZyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9","signature":"MEUCIQD3NOM7Aw0HxPw6EFGf86iwf2yd3p4NncNNLcjd-86zgwIgHuh80bLNV7EcwBi4IAcH57iueLg0X2gLtO5_Y6PMCFE","userHandle":"2"},"type":"public-key","clientExtensionResults":{}}',
-      }
-      const dbAuth = new DbAuthHandler(event, context, options)
+        headers: { 'Content-Type': 'application/json' },
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       expect.assertions(1)
       await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
@@ -1846,11 +2126,14 @@ describe('dbAuth', () => {
           publicKey: 'foobar',
         },
       })
-      event = {
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: '{"method":"webAuthnAuthenticate","id":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","rawId":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","response":{"authenticatorData":"SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAA","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiTHRnV3BoWUtfZU41clhjX0hkdlVMdk9xcFBXeW9SdmJtbDJQbzAwVUhhZyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9","signature":"MEUCIQD3NOM7Aw0HxPw6EFGf86iwf2yd3p4NncNNLcjd-86zgwIgHuh80bLNV7EcwBi4IAcH57iueLg0X2gLtO5_Y6PMCFE","userHandle":"2"},"type":"public-key","clientExtensionResults":{}}',
-      }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       expect.assertions(1)
       try {
@@ -1882,11 +2165,13 @@ describe('dbAuth', () => {
         },
       })
 
-      event = {
-        headers: { 'Content-Type': 'application/json' },
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
         body: '{"method":"webAuthnAuthenticate","id":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","rawId":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","response":{"authenticatorData":"SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAA","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiTHRnV3BoWUtfZU41clhjX0hkdlVMdk9xcFBXeW9SdmJtbDJQbzAwVUhhZyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9","signature":"MEUCIQD3NOM7Aw0HxPw6EFGf86iwf2yd3p4NncNNLcjd-86zgwIgHuh80bLNV7EcwBi4IAcH57iueLg0X2gLtO5_Y6PMCFE","userHandle":"2"},"type":"public-key","clientExtensionResults":{}}',
-      }
-      const dbAuth = new DbAuthHandler(event, context, options)
+        headers: { 'Content-Type': 'application/json' },
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       const [body, headers] = await dbAuth.webAuthnAuthenticate()
 
@@ -1898,11 +2183,13 @@ describe('dbAuth', () => {
   })
 
   describe('webAuthnAuthOptions', () => {
+    // @TODO(Rob): HELP, failing test here
     it('throws an error if user is not logged in', async () => {
-      event = {
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
         headers: {},
-      }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.webAuthnAuthOptions()
@@ -1913,11 +2200,11 @@ describe('dbAuth', () => {
     })
 
     it('throws an error if WebAuthn is disabled', async () => {
-      event = {
+      req = {
         headers: {},
       }
       options.webAuthn.enabled = false
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.webAuthnAuthOptions()
@@ -1929,14 +2216,14 @@ describe('dbAuth', () => {
 
     it('returns options needed for webAuthn registration', async () => {
       const user = await createDbUser()
-      event = {
+      req = {
         headers: {
           cookie: encryptToCookie(
             JSON.stringify({ id: user.id }) + ';' + 'token'
           ),
         },
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = await dbAuth.webAuthnAuthOptions()
       const regOptions = response[0]
 
@@ -1956,14 +2243,14 @@ describe('dbAuth', () => {
         },
       })
 
-      event = {
+      req = {
         headers: {
           cookie: encryptToCookie(
             JSON.stringify({ id: user.id }) + ';' + 'token'
           ),
         },
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = await dbAuth.webAuthnAuthOptions()
       const regOptions = response[0]
 
@@ -1980,10 +2267,11 @@ describe('dbAuth', () => {
 
   describe('webAuthnRegOptions', () => {
     it('throws an error if user is not logged in', async () => {
-      event = {
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
         headers: {},
-      }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.webAuthnRegOptions()
@@ -1994,11 +2282,13 @@ describe('dbAuth', () => {
     })
 
     it('throws an error if WebAuthn is disabled', async () => {
-      event = {
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
         headers: {},
-      }
+      })
+
       options.webAuthn.enabled = false
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth.webAuthnRegOptions()
@@ -2010,14 +2300,18 @@ describe('dbAuth', () => {
 
     it('returns options needed for webAuthn registration', async () => {
       const user = await createDbUser()
-      event = {
-        headers: {
-          cookie: encryptToCookie(
-            JSON.stringify({ id: user.id }) + ';' + 'token'
-          ),
-        },
+      const headers = {
+        cookie: encryptToCookie(
+          JSON.stringify({ id: user.id }) + ';' + 'token'
+        ),
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = await dbAuth.webAuthnRegOptions()
       const regOptions = response[0]
 
@@ -2036,15 +2330,19 @@ describe('dbAuth', () => {
 
     it('defaults timeout if not set', async () => {
       const user = await createDbUser()
-      event = {
-        headers: {
-          cookie: encryptToCookie(
-            JSON.stringify({ id: user.id }) + ';' + 'token'
-          ),
-        },
+      const headers = {
+        cookie: encryptToCookie(
+          JSON.stringify({ id: user.id }) + ';' + 'token'
+        ),
       }
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers,
+      })
+
       options.webAuthn.timeout = null
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = await dbAuth.webAuthnRegOptions()
 
       expect(response[0].timeout).toEqual(60000)
@@ -2052,14 +2350,18 @@ describe('dbAuth', () => {
 
     it('saves the generated challenge to the user record', async () => {
       let user = await createDbUser()
-      event = {
-        headers: {
-          cookie: encryptToCookie(
-            JSON.stringify({ id: user.id }) + ';' + 'token'
-          ),
-        },
+      const headers = {
+        cookie: encryptToCookie(
+          JSON.stringify({ id: user.id }) + ';' + 'token'
+        ),
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = await dbAuth.webAuthnRegOptions()
       user = await db.user.findFirst({ where: { id: user.id } })
 
@@ -2072,7 +2374,7 @@ describe('dbAuth', () => {
       const user = await createDbUser({
         webAuthnChallenge: 'HuGPrQqK7f53NLwMZMst_DL9Dig2BBivDYWWpawIPVM',
       })
-      event = {
+      req = {
         headers: {
           'Content-Type': 'application/json',
           cookie: encryptToCookie(
@@ -2081,7 +2383,7 @@ describe('dbAuth', () => {
         },
         body: '{"method":"webAuthnRegister","id":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","rawId":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","response":{"attestationObject":"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVisSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAK3OAAI1vMYKZIsLJfHwVQMAKBqo2TrmGKaTmwQ3lZJ263AS5GmvYpkuRCScLQle-NGrFM9uLHQJhhalAQIDJiABIVggGIipTQt-gcoDPOpW6Zje_Av9C0-jWb2R2PBmXJJL-c8iWCC76wxo3uzG8cPqb0A8Vij-dqMbrEytEHjuFOtiQ2dt8A","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiSHVHUHJRcUs3ZjUzTkx3TVpNc3RfREw5RGlnMkJCaXZEWVdXcGF3SVBWTSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9"},"type":"public-key","clientExtensionResults":{},"transports":["internal"]}',
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       await dbAuth.webAuthnRegister()
 
@@ -2100,7 +2402,7 @@ describe('dbAuth', () => {
       const user = await createDbUser({
         webAuthnChallenge: 'HuGPrQqK7f53NLwMZMst_DL9Dig2BBivDYWWpawIPVM',
       })
-      event = {
+      req = {
         headers: {
           'Content-Type': 'application/json',
           cookie: encryptToCookie(
@@ -2112,7 +2414,7 @@ describe('dbAuth', () => {
           'utf8'
         ),
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       await dbAuth.webAuthnRegister()
 
@@ -2195,7 +2497,7 @@ describe('dbAuth', () => {
     })
 
     it('includes just a key if option set to `true`', () => {
-      const dbAuth = new DbAuthHandler(event, context, {
+      const dbAuth = new DbAuthHandler(req, context, {
         ...options,
         cookie: { Secure: true },
       })
@@ -2205,7 +2507,7 @@ describe('dbAuth', () => {
     })
 
     it('does not include a key if option set to `false`', () => {
-      const dbAuth = new DbAuthHandler(event, context, {
+      const dbAuth = new DbAuthHandler(req, context, {
         ...options,
         cookie: { Secure: false },
       })
@@ -2215,7 +2517,7 @@ describe('dbAuth', () => {
     })
 
     it('includes key=value if property value is set', () => {
-      const dbAuth = new DbAuthHandler(event, context, {
+      const dbAuth = new DbAuthHandler(req, context, {
         ...options,
         cookie: { Domain: 'example.com' },
       })
@@ -2225,7 +2527,7 @@ describe('dbAuth', () => {
     })
 
     it('includes no cookie attributes if cookie options are empty', () => {
-      const dbAuth = new DbAuthHandler(event, context, {
+      const dbAuth = new DbAuthHandler(req, context, {
         ...options,
         cookie: {},
       })
@@ -2236,7 +2538,7 @@ describe('dbAuth', () => {
     })
 
     it('includes no cookie attributes if cookie options not set', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const attributes = dbAuth._cookieAttributes({})
 
       expect(attributes.length).toEqual(1)
@@ -2246,7 +2548,7 @@ describe('dbAuth', () => {
 
   describe('_createSessionHeader()', () => {
     it('returns a Set-Cookie header', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const headers = dbAuth._createSessionHeader({ foo: 'bar' }, 'abcd')
 
       expect(Object.keys(headers).length).toEqual(1)
@@ -2262,17 +2564,18 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('_validateCsrf()', () => {
+  // @TODO(Rob): Not used yet.
+  describe.skip('_validateCsrf()', () => {
     it('returns true if session and header token match', () => {
       const data = { foo: 'bar' }
       const token = 'abcd'
-      event = {
+      req = {
         headers: {
           cookie: encryptToCookie(JSON.stringify(data) + ';' + token),
           'csrf-token': token,
         },
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       expect(dbAuth._validateCsrf()).toEqual(true)
     })
@@ -2280,13 +2583,13 @@ describe('dbAuth', () => {
     it('throws an error if session and header token do not match', () => {
       const data = { foo: 'bar' }
       const token = 'abcd'
-      event = {
+      req = {
         headers: {
           cookie: encryptToCookie(JSON.stringify(data) + ';' + token),
           'csrf-token': 'invalid',
         },
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       expect(() => {
         dbAuth._validateCsrf()
@@ -2296,7 +2599,7 @@ describe('dbAuth', () => {
 
   describe('_verifyUser()', () => {
     it('throws an error if username is missing', async () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth._verifyUser(null, 'password')
@@ -2317,7 +2620,7 @@ describe('dbAuth', () => {
     })
 
     it('throws an error if password is missing', async () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth._verifyUser('username')
@@ -2350,7 +2653,7 @@ describe('dbAuth', () => {
       // default error message
       const defaultMessage = options.login.errors.usernameOrPasswordMissing
       delete options.login.errors.usernameOrPasswordMissing
-      const dbAuth1 = new DbAuthHandler(event, context, options)
+      const dbAuth1 = new DbAuthHandler(req, context, options)
       try {
         await dbAuth1._verifyUser(null, 'password')
       } catch (e) {
@@ -2359,7 +2662,7 @@ describe('dbAuth', () => {
 
       // custom error message
       options.login.errors.usernameOrPasswordMissing = 'Missing!'
-      const customMessage = new DbAuthHandler(event, context, options)
+      const customMessage = new DbAuthHandler(req, context, options)
 
       try {
         await customMessage._verifyUser(null, 'password')
@@ -2372,7 +2675,7 @@ describe('dbAuth', () => {
 
     it('throws a default error message if user is not found', async () => {
       delete options.login.errors.usernameNotFound
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       try {
         await dbAuth._verifyUser('username', 'password')
       } catch (e) {
@@ -2385,7 +2688,7 @@ describe('dbAuth', () => {
 
     it('throws a custom error message if user is not found', async () => {
       options.login.errors.usernameNotFound = 'Cannot find ${username}'
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth._verifyUser('Alice', 'password')
@@ -2400,7 +2703,7 @@ describe('dbAuth', () => {
     it('throws a default error if password is incorrect', async () => {
       delete options.login.errors.incorrectPassword
       const dbUser = await createDbUser()
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth._verifyUser(dbUser.email, 'incorrect')
@@ -2415,7 +2718,7 @@ describe('dbAuth', () => {
     it('throws a custom error if password is incorrect', async () => {
       options.login.errors.incorrectPassword = 'Wrong password for ${username}'
       const dbUser = await createDbUser()
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth._verifyUser(dbUser.email, 'incorrect')
@@ -2430,7 +2733,7 @@ describe('dbAuth', () => {
     it('throws a generic error for an invalid client', async () => {
       const dbUser = await createDbUser()
       // invalid db client
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       dbAuth.dbAccessor = undefined
 
       try {
@@ -2444,7 +2747,7 @@ describe('dbAuth', () => {
 
     it('returns the user with matching username and password', async () => {
       const dbUser = await createDbUser()
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const user = await dbAuth._verifyUser(dbUser.email, 'password')
 
       expect(user.id).toEqual(dbUser.id)
@@ -2457,7 +2760,7 @@ describe('dbAuth', () => {
           '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba',
         salt: '2ef27f4073c603ba8b7807c6de6d6a89',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const user = await dbAuth._verifyUser(dbUser.email, 'password')
 
       expect(user.id).toEqual(dbUser.id)
@@ -2470,7 +2773,7 @@ describe('dbAuth', () => {
           '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba',
         salt: '2ef27f4073c603ba8b7807c6de6d6a89',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth._verifyUser(dbUser.email, 'password')
       const user = await db.user.findFirst({ where: { id: dbUser.id } })
 
@@ -2485,7 +2788,7 @@ describe('dbAuth', () => {
 
   describe('_getCurrentUser()', () => {
     it('throw an error if user is not logged in', async () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth._getCurrentUser()
@@ -2498,12 +2801,16 @@ describe('dbAuth', () => {
 
     it('throw an error if user is not found', async () => {
       const data = { id: 999999999999 }
-      event = {
-        headers: {
-          cookie: encryptToCookie(JSON.stringify(data) + ';' + 'token'),
-        },
+      const headers = {
+        cookie: encryptToCookie(JSON.stringify(data) + ';' + 'token'),
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth._getCurrentUser()
@@ -2516,15 +2823,19 @@ describe('dbAuth', () => {
 
     it('throws a generic error for an invalid client', async () => {
       const dbUser = await createDbUser()
-      event = {
-        headers: {
-          cookie: encryptToCookie(
-            JSON.stringify({ id: dbUser.id }) + ';' + 'token'
-          ),
-        },
+      const headers = {
+        cookie: encryptToCookie(
+          JSON.stringify({ id: dbUser.id }) + ';' + 'token'
+        ),
       }
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers,
+      })
+
       // invalid db client
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       dbAuth.dbAccessor = undefined
 
       try {
@@ -2538,14 +2849,18 @@ describe('dbAuth', () => {
 
     it('returns the user whos id is in session', async () => {
       const dbUser = await createDbUser()
-      event = {
-        headers: {
-          cookie: encryptToCookie(
-            JSON.stringify({ id: dbUser.id }) + ';' + 'token'
-          ),
-        },
+      const headers = {
+        cookie: encryptToCookie(
+          JSON.stringify({ id: dbUser.id }) + ';' + 'token'
+        ),
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
       const user = await dbAuth._getCurrentUser()
 
       expect(user.id).toEqual(dbUser.id)
@@ -2557,11 +2872,18 @@ describe('dbAuth', () => {
       const defaultMessage = options.signup.errors.usernameTaken
       delete options.signup.errors.usernameTaken
       const dbUser = await createDbUser()
-      event.body = JSON.stringify({
+
+      const body = JSON.stringify({
         username: dbUser.email,
         password: 'password',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth._createUser()
@@ -2578,11 +2900,17 @@ describe('dbAuth', () => {
     it('throws a custom error message if username is already taken', async () => {
       options.signup.errors.usernameTaken = '${username} taken'
       const dbUser = await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: dbUser.email,
         password: 'password',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth._createUser()
@@ -2599,11 +2927,15 @@ describe('dbAuth', () => {
       options.signup.usernameMatch = 'insensitive'
 
       const dbUser = await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: dbUser.email,
         password: 'password',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       await dbAuth._createUser()
       expect(spy).toHaveBeenCalled()
@@ -2623,11 +2955,16 @@ describe('dbAuth', () => {
       delete options.signup.usernameMatch
 
       const dbUser = await createDbUser()
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: dbUser.email,
         password: 'password',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth._createUser()
@@ -2649,10 +2986,16 @@ describe('dbAuth', () => {
     it('throws a default error message if username is missing', async () => {
       const defaultMessage = options.signup.errors.fieldMissing
       delete options.signup.errors.fieldMissing
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         password: 'password',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth._createUser()
@@ -2668,10 +3011,16 @@ describe('dbAuth', () => {
 
     it('throws a custom error message if username is missing', async () => {
       options.signup.errors.fieldMissing = '${field} blank'
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         password: 'password',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth._createUser()
@@ -2686,10 +3035,16 @@ describe('dbAuth', () => {
     it('throws a default error message if password is missing', async () => {
       const defaultMessage = options.signup.errors.fieldMissing
       delete options.signup.errors.fieldMissing
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'user@redwdoodjs.com',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
       try {
         await dbAuth._createUser()
       } catch (e) {
@@ -2704,10 +3059,15 @@ describe('dbAuth', () => {
 
     it('throws a custom error message if password is missing', async () => {
       options.signup.errors.fieldMissing = '${field} blank'
-      event.body = JSON.stringify({
+      const body = JSON.stringify({
         username: 'user@redwdoodjs.com',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         await dbAuth._createUser()
@@ -2720,13 +3080,20 @@ describe('dbAuth', () => {
     })
 
     it('creates a new user', async () => {
-      event.headers = { 'Content-Type': 'application/json' }
-      event.body = JSON.stringify({
+      const headers = { 'Content-Type': 'application/json' }
+      const body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
       })
-      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body,
+        headers,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       try {
         const user = await dbAuth._createUser()
@@ -2741,46 +3108,44 @@ describe('dbAuth', () => {
   })
 
   describe('getAuthMethod', () => {
-    it('gets methodName out of the query string', () => {
-      event = {
-        path: '/.redwood/functions/auth',
-        queryStringParameters: { method: 'logout' },
+    it('gets methodName out of the query string', async () => {
+      const req = new Request('http://localhost:8910/_rw_mw?method=logout', {
+        method: 'POST',
         body: '',
         headers: {},
-      }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
 
-      expect(dbAuth._getAuthMethod()).toEqual('logout')
+      expect(await dbAuth._getAuthMethod()).toEqual('logout')
     })
 
-    it('gets methodName out of a JSON body', () => {
-      event = {
+    it('gets methodName out of a JSON body', async () => {
+      req = {
         path: '/.redwood/functions/auth',
         queryStringParameters: {},
         body: '{"method":"signup"}',
         headers: {},
       }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
-      expect(dbAuth._getAuthMethod()).toEqual('signup')
+      expect(await dbAuth._getAuthMethod()).toEqual('signup')
     })
 
-    it('otherwise returns undefined', () => {
-      event = {
-        path: '/.redwood/functions/auth',
-        queryStringParameters: {},
+    it('otherwise returns undefined', async () => {
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
         body: '',
         headers: {},
-      }
-      const dbAuth = new DbAuthHandler(event, context, options)
+      })
+      const dbAuth = new DbAuthHandler(req, context, options)
 
-      expect(dbAuth._getAuthMethod()).toBeUndefined()
+      expect(await dbAuth._getAuthMethod()).toBeUndefined()
     })
   })
 
   describe('validateField', () => {
     it('checks for the presence of a field', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       expect(() => {
         dbAuth._validateField('username', null)
@@ -2794,7 +3159,7 @@ describe('dbAuth', () => {
     })
 
     it('passes validation if everything is present', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
 
       expect(dbAuth._validateField('username', 'cannikin')).toEqual(true)
     })
@@ -2802,7 +3167,7 @@ describe('dbAuth', () => {
 
   describe('logoutResponse', () => {
     it('returns the response array necessary to log user out', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const [body, headers] = dbAuth._logoutResponse()
 
       expect(body).toEqual('')
@@ -2810,7 +3175,7 @@ describe('dbAuth', () => {
     })
 
     it('can accept an object to return in the body', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const [body, _headers] = dbAuth._logoutResponse({
         error: 'error message',
       })
@@ -2821,28 +3186,28 @@ describe('dbAuth', () => {
 
   describe('ok', () => {
     it('returns a 200 response by default', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = dbAuth._ok('', {})
 
       expect(response.statusCode).toEqual(200)
     })
 
     it('can return other status codes', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = dbAuth._ok('', {}, { statusCode: 201 })
 
       expect(response.statusCode).toEqual(201)
     })
 
     it('stringifies a JSON body', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = dbAuth._ok({ foo: 'bar' }, {}, { statusCode: 201 })
 
       expect(response.body).toEqual('{"foo":"bar"}')
     })
 
     it('does not stringify a body that is a string already', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = dbAuth._ok('{"foo":"bar"}', {}, { statusCode: 201 })
 
       expect(response.body).toEqual('{"foo":"bar"}')
@@ -2851,7 +3216,7 @@ describe('dbAuth', () => {
 
   describe('_notFound', () => {
     it('returns a 404 response', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = dbAuth._notFound()
 
       expect(response.statusCode).toEqual(404)
@@ -2861,40 +3226,11 @@ describe('dbAuth', () => {
 
   describe('_badRequest', () => {
     it('returns a 400 response', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(req, context, options)
       const response = dbAuth._badRequest('bad')
 
       expect(response.statusCode).toEqual(400)
       expect(response.body).toEqual('{"error":"bad"}')
-    })
-  })
-
-  describe('_sanitizeUser', () => {
-    it('removes all but the default fields [id, email] on user', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
-      const user = {
-        id: 1,
-        email: 'rob@redwoodjs.com',
-        password: 'secret',
-      }
-
-      expect(dbAuth._sanitizeUser(user).id).toEqual(user.id)
-      expect(dbAuth._sanitizeUser(user).email).toEqual(user.email)
-      expect(dbAuth._sanitizeUser(user).secret).toBeUndefined()
-    })
-
-    it('removes any fields not explictly allowed in allowedUserFields', () => {
-      options.allowedUserFields = ['foo']
-      const dbAuth = new DbAuthHandler(event, context, options)
-      const user = {
-        id: 1,
-        email: 'rob@redwoodjs.com',
-        foo: 'bar',
-      }
-
-      expect(dbAuth._sanitizeUser(user).id).toBeUndefined()
-      expect(dbAuth._sanitizeUser(user).email).toBeUndefined()
-      expect(dbAuth._sanitizeUser(user).foo).toEqual('bar')
     })
   })
 })

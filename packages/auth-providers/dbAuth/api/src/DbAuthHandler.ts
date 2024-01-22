@@ -16,8 +16,17 @@ import base64url from 'base64url'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 
-import type { CorsConfig, CorsContext, CorsHeaders } from '@redwoodjs/api'
-import { createCorsContext, normalizeRequest } from '@redwoodjs/api'
+import type {
+  CorsConfig,
+  CorsContext,
+  CorsHeaders,
+  PartialRequest,
+} from '@redwoodjs/api'
+import {
+  createCorsContext,
+  isFetchApiRequest,
+  normalizeRequest,
+} from '@redwoodjs/api'
 
 import * as DbAuthError from './errors'
 import {
@@ -28,7 +37,6 @@ import {
   getSession,
   hashPassword,
   legacyHashPassword,
-  isLegacySession,
   hashToken,
   webAuthnSession,
   extractHashingOptions,
@@ -279,8 +287,11 @@ type Params = AuthenticationResponseJSON &
   RegistrationResponseJSON & {
     username?: string
     password?: string
+    resetToken?: string
     method: AuthMethodNames
     [key: string]: any
+  } & {
+    transports?: string // used by webAuthN for something
   }
 
 interface DbAuthSession<TIdType> {
@@ -294,22 +305,32 @@ export class DbAuthHandler<
   TIdType = any,
   TUserAttributes = Record<string, unknown>
 > {
-  event: APIGatewayProxyEvent
-  context: LambdaContext
+  event: Request | APIGatewayProxyEvent
+  _normalizedRequest: PartialRequest<Params> | undefined
+  httpMethod: string
   options: DbAuthHandlerOptions<TUser, TUserAttributes>
-  cookie: string | undefined
-  params: Params
+  cookie: string
   db: PrismaClient
   dbAccessor: any
   dbCredentialAccessor: any
   allowedUserFields: string[]
-  headerCsrfToken: string | undefined
   hasInvalidSession: boolean
   session: DbAuthSession<TIdType> | undefined
   sessionCsrfToken: string | undefined
   corsContext: CorsContext | undefined
   sessionExpiresDate: string
   webAuthnExpiresDate: string
+  encryptedSession: string | null = null
+
+  public get normalizedRequest() {
+    if (!this._normalizedRequest) {
+      // This is a dev time error, no need to throw a specialized error
+      throw new Error(
+        'dbAuthHandler has not been initialised. Either await dbAuthHandler.invoke() or call await dbAuth.init()'
+      )
+    }
+    return this._normalizedRequest
+  }
 
   // class constant: list of auth methods that are supported
   static get METHODS(): AuthMethodNames[] {
@@ -373,29 +394,30 @@ export class DbAuthHandler<
       'set-cookie': [
         `${cookieName(this.options.cookie?.name)}=`,
         ...this._cookieAttributes({ expires: 'now' }),
+        // `auth-provider=`,
+        // ...this._cookieAttributes({ expires: 'now' }),
       ].join(';'),
     }
   }
 
   constructor(
-    event: APIGatewayProxyEvent,
-    context: LambdaContext,
+    event: APIGatewayProxyEvent | Request,
+    _context: LambdaContext, // @TODO:
     options: DbAuthHandlerOptions<TUser, TUserAttributes>
   ) {
-    this.event = event
-    this.context = context
     this.options = options
-    this.cookie = extractCookie(this.event)
+    this.event = event
+    this.httpMethod = isFetchApiRequest(event) ? event.method : event.httpMethod
+
+    this.cookie = extractCookie(event) || ''
 
     this._validateOptions()
 
-    this.params = this._parseBody()
     this.db = this.options.db
     this.dbAccessor = this.db[this.options.authModelAccessor]
     this.dbCredentialAccessor = this.options.credentialModelAccessor
       ? this.db[this.options.credentialModelAccessor]
       : null
-    this.headerCsrfToken = this.event.headers['csrf-token']
     this.hasInvalidSession = false
     this.allowedUserFields =
       this.options.allowedUserFields || DEFAULT_ALLOWED_USER_FIELDS
@@ -422,9 +444,9 @@ export class DbAuthHandler<
     }
 
     try {
-      const [session, csrfToken] = decryptSession(
-        getSession(this.cookie, this.options.cookie?.name)
-      )
+      this.encryptedSession = getSession(this.cookie, this.options.cookie?.name)
+
+      const [session, csrfToken] = decryptSession(this.encryptedSession)
       this.session = session
       this.sessionCsrfToken = csrfToken
     } catch (e) {
@@ -438,15 +460,25 @@ export class DbAuthHandler<
     }
   }
 
+  // Initialize the request object. This is async now, because body in Fetch Request
+  // is parsed async
+  async init() {
+    if (!this._normalizedRequest) {
+      this._normalizedRequest = (await normalizeRequest(
+        this.event
+      )) as PartialRequest<Params>
+    }
+  }
+
   // Actual function that triggers everything else to happen: `login`, `signup`,
   // etc. is called from here, after some checks to make sure the request is good
   async invoke() {
-    const request = normalizeRequest(this.event)
     let corsHeaders = {}
+    await this.init()
     if (this.corsContext) {
-      corsHeaders = this.corsContext.getRequestHeaders(request)
+      corsHeaders = this.corsContext.getRequestHeaders(this.normalizedRequest)
       // Return CORS headers for OPTIONS requests
-      if (this.corsContext.shouldHandleCors(request)) {
+      if (this.corsContext.shouldHandleCors(this.normalizedRequest)) {
         return this._buildResponseWithCorsHeaders(
           { body: '', statusCode: 200 },
           corsHeaders
@@ -464,7 +496,7 @@ export class DbAuthHandler<
     }
 
     try {
-      const method = this._getAuthMethod()
+      const method = await this._getAuthMethod()
 
       // get the auth method the incoming request is trying to call
       if (!DbAuthHandler.METHODS.includes(method)) {
@@ -472,7 +504,7 @@ export class DbAuthHandler<
       }
 
       // make sure it's using the correct verb, GET vs POST
-      if (this.event.httpMethod !== DbAuthHandler.VERBS[method]) {
+      if (this.httpMethod !== DbAuthHandler.VERBS[method]) {
         return this._buildResponseWithCorsHeaders(this._notFound(), corsHeaders)
       }
 
@@ -499,14 +531,17 @@ export class DbAuthHandler<
 
   async forgotPassword() {
     const { enabled = true } = this.options.forgotPassword
+
     if (!enabled) {
       throw new DbAuthError.FlowNotEnabledError(
         (this.options.forgotPassword as ForgotPasswordFlowOptions)?.errors
           ?.flowNotEnabled || `Forgot password flow is not enabled`
       )
     }
-    const { username } = this.params
 
+    await this.init()
+
+    const { username } = this.normalizedRequest.jsonBody || {}
     // was the username sent in at all?
     if (!username || username.trim() === '') {
       throw new DbAuthError.UsernameRequiredError(
@@ -575,16 +610,8 @@ export class DbAuthHandler<
 
   async getToken() {
     try {
-      const user = await this._getCurrentUser()
-      let headers = {}
-
-      // if the session was encrypted with the old algorithm, re-encrypt it
-      // with the new one
-      if (isLegacySession(this.cookie)) {
-        headers = this._loginResponse(user)[1]
-      }
-
-      return [user[this.options.authFields.id], headers]
+      // Just return the encrypted session cookie, to be passed back in the Authorization header
+      return [this.encryptedSession || '']
     } catch (e: any) {
       if (e instanceof DbAuthError.NotLoggedInError) {
         return this._logoutResponse()
@@ -596,13 +623,16 @@ export class DbAuthHandler<
 
   async login() {
     const { enabled = true } = this.options.login
+
     if (!enabled) {
       throw new DbAuthError.FlowNotEnabledError(
         (this.options.login as LoginFlowOptions)?.errors?.flowNotEnabled ||
           `Login flow is not enabled`
       )
     }
-    const { username, password } = this.params
+
+    await this.init()
+    const { username, password } = this.normalizedRequest.jsonBody || {}
     const dbUser = await this._verifyUser(username, password)
     const handlerUser = await (this.options.login as LoginFlowOptions).handler(
       dbUser
@@ -630,7 +660,9 @@ export class DbAuthHandler<
           ?.flowNotEnabled || `Reset password flow is not enabled`
       )
     }
-    const { password, resetToken } = this.params
+
+    await this.init()
+    const { password, resetToken } = this.normalizedRequest.jsonBody || {}
 
     // is the resetToken present?
     if (resetToken == null || String(resetToken).trim() === '') {
@@ -702,9 +734,10 @@ export class DbAuthHandler<
           `Signup flow is not enabled`
       )
     }
+    await this.init()
 
     // check if password is valid
-    const { password } = this.params
+    const { password } = this.normalizedRequest.jsonBody || {}
     ;(this.options.signup as SignupFlowOptions).passwordValidation?.(
       password as string
     )
@@ -724,11 +757,10 @@ export class DbAuthHandler<
   }
 
   async validateResetToken() {
+    await this.init()
+    const { resetToken } = this.normalizedRequest.jsonBody || {}
     // is token present at all?
-    if (
-      this.params.resetToken == null ||
-      String(this.params.resetToken).trim() === ''
-    ) {
+    if (!resetToken || String(resetToken).trim() === '') {
       throw new DbAuthError.ResetTokenRequiredError(
         (
           this.options.resetPassword as ResetPasswordFlowOptions
@@ -736,7 +768,7 @@ export class DbAuthHandler<
       )
     }
 
-    const user = await this._findUserByToken(this.params.resetToken as string)
+    const user = await this._findUserByToken(resetToken)
 
     return [
       JSON.stringify(this._sanitizeUser(user)),
@@ -750,13 +782,20 @@ export class DbAuthHandler<
   async webAuthnAuthenticate() {
     const { verifyAuthenticationResponse } = require('@simplewebauthn/server')
     const webAuthnOptions = this.options.webAuthn
+    await this.init()
+
+    const { rawId } = this.normalizedRequest.jsonBody || {}
+
+    if (!rawId) {
+      throw new DbAuthError.WebAuthnError('Missing Id in request')
+    }
 
     if (!webAuthnOptions || !webAuthnOptions.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
 
     const credential = await this.dbCredentialAccessor.findFirst({
-      where: { id: this.params.rawId },
+      where: { id: rawId },
     })
 
     if (!credential) {
@@ -773,7 +812,8 @@ export class DbAuthHandler<
     let verification: VerifiedAuthenticationResponse
     try {
       const opts: VerifyAuthenticationResponseOpts = {
-        response: this.params,
+        response: this.normalizedRequest
+          ?.jsonBody as AuthenticationResponseJSON, // by this point jsonBody has been validated
         expectedChallenge: user[this.options.authFields.challenge as string],
         expectedOrigin: webAuthnOptions.origin,
         expectedRPID: webAuthnOptions.domain,
@@ -821,7 +861,7 @@ export class DbAuthHandler<
     // get the regular `login` cookies
     const [, loginHeaders] = this._loginResponse(user)
     const cookies = [
-      this._webAuthnCookie(this.params.rawId, this.webAuthnExpiresDate),
+      this._webAuthnCookie(rawId, this.webAuthnExpiresDate),
       loginHeaders['set-cookie'],
     ].flat()
 
@@ -835,6 +875,8 @@ export class DbAuthHandler<
     if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
+    await this.init()
+
     const webAuthnOptions = this.options.webAuthn
 
     const credentialId = webAuthnSession(this.event)
@@ -900,6 +942,7 @@ export class DbAuthHandler<
     if (!this.options?.webAuthn?.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
+    await this.init()
 
     const webAuthnOptions = this.options.webAuthn
 
@@ -944,13 +987,14 @@ export class DbAuthHandler<
     if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
+    await this.init()
 
     const user = await this._getCurrentUser()
 
     let verification: VerifiedRegistrationResponse
     try {
       const options: VerifyRegistrationResponseOpts = {
-        response: this.params,
+        response: this.normalizedRequest.jsonBody as RegistrationResponseJSON, // by this point jsonBody has been validated
         expectedChallenge: user[this.options.authFields.challenge as string],
         expectedOrigin: this.options.webAuthn.origin,
         expectedRPID: this.options.webAuthn.domain,
@@ -977,6 +1021,7 @@ export class DbAuthHandler<
       })
 
       if (!existingDevice) {
+        const { transports } = this.normalizedRequest.jsonBody || {}
         await this.dbCredentialAccessor.create({
           data: {
             [this.options.webAuthn.credentialFields.id]: plainCredentialId,
@@ -984,9 +1029,8 @@ export class DbAuthHandler<
               user[this.options.authFields.id],
             [this.options.webAuthn.credentialFields.publicKey]:
               Buffer.from(credentialPublicKey),
-            [this.options.webAuthn.credentialFields.transports]: this.params
-              .transports
-              ? JSON.stringify(this.params.transports)
+            [this.options.webAuthn.credentialFields.transports]: transports
+              ? JSON.stringify(transports)
               : null,
             [this.options.webAuthn.credentialFields.counter]: counter,
           },
@@ -1113,20 +1157,8 @@ export class DbAuthHandler<
     return sanitized
   }
 
-  // parses the event body into JSON, whether it's base64 encoded or not
-  _parseBody() {
-    if (this.event.body) {
-      if (this.event.isBase64Encoded) {
-        return JSON.parse(
-          Buffer.from(this.event.body || '', 'base64').toString('utf-8')
-        )
-      } else {
-        return JSON.parse(this.event.body)
-      }
-    } else {
-      return {}
-    }
-  }
+  // Converts LambdaEvent or FetchRequest to
+  _decodeEvent() {}
 
   // returns all the cookie attributes in an array with the proper expiration date
   //
@@ -1186,6 +1218,8 @@ export class DbAuthHandler<
     const cookie = [
       `${cookieName(this.options.cookie?.name)}=${encrypted}`,
       ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
+      // 'auth-provider=dbAuth',
+      // ...this._cookieAttributes({ expires: this.sessionExpiresDate }), // TODO need this to be not http-only
     ].join(';')
 
     return { 'set-cookie': cookie }
@@ -1194,7 +1228,9 @@ export class DbAuthHandler<
   // checks the CSRF token in the header against the CSRF token in the session
   // and throw an error if they are not the same (not used yet)
   _validateCsrf() {
-    if (this.sessionCsrfToken !== this.headerCsrfToken) {
+    if (
+      this.sessionCsrfToken !== this.normalizedRequest.headers.get('csrf-token')
+    ) {
       throw new DbAuthError.CsrfTokenMismatchError()
     }
     return true
@@ -1383,7 +1419,9 @@ export class DbAuthHandler<
   // creates and returns a user, first checking that the username/password
   // values pass validation
   async _createUser() {
-    const { username, password, ...userAttributes } = this.params
+    await this.init()
+    const { username, password, ...userAttributes } =
+      this.normalizedRequest.jsonBody || {}
     if (
       this._validateField('username', username) &&
       this._validateField('password', password)
@@ -1418,14 +1456,18 @@ export class DbAuthHandler<
   }
 
   // figure out which auth method we're trying to call
-  _getAuthMethod() {
+  async _getAuthMethod() {
+    await this.init()
     // try getting it from the query string, /.redwood/functions/auth?method=[methodName]
-    let methodName = this.event.queryStringParameters?.method as AuthMethodNames
+    let methodName = this.normalizedRequest.query.method as AuthMethodNames
 
-    if (!DbAuthHandler.METHODS.includes(methodName) && this.params) {
+    if (
+      !DbAuthHandler.METHODS.includes(methodName) &&
+      this.normalizedRequest.jsonBody
+    ) {
       // try getting it from the body in JSON: { method: [methodName] }
       try {
-        methodName = this.params.method
+        methodName = this.normalizedRequest.jsonBody.method
       } catch (e) {
         // there's no body, or it's not JSON, `handler` will return a 404
       }
@@ -1465,6 +1507,8 @@ export class DbAuthHandler<
       sessionData,
       {
         'csrf-token': csrfToken,
+        // @TODO We need to have multiple Set-Cookie headers
+        // Not sure how to do this yet!
         ...this._createSessionHeader(sessionData, csrfToken),
       },
       { statusCode },
@@ -1485,6 +1529,7 @@ export class DbAuthHandler<
   _ok(body: string, headers = {}, options = { statusCode: 200 }) {
     return {
       statusCode: options.statusCode,
+      // @TODO should we do a null check in body?!
       body: typeof body === 'string' ? body : JSON.stringify(body),
       headers: { 'Content-Type': 'application/json', ...headers },
     }

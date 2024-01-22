@@ -7,6 +7,8 @@
  * Eventually we will have one ApolloProvider, not multiple.
  */
 
+import { useContext } from 'react'
+
 import type {
   ApolloCache,
   ApolloClientOptions,
@@ -31,7 +33,7 @@ import {
 } from '@apollo/experimental-nextjs-app-support/ssr'
 
 import type { UseAuth } from '@redwoodjs/auth'
-import { useNoAuth } from '@redwoodjs/auth'
+import { ServerAuthContext, useNoAuth } from '@redwoodjs/auth'
 import './typeOverride'
 
 import {
@@ -46,13 +48,7 @@ import type {
   RedwoodApolloLinkName,
   RedwoodApolloLinks,
 } from './links'
-import {
-  createAuthApolloLink,
-  createFinalLink,
-  createHttpLink,
-  createTokenLink,
-  createUpdateDataLink,
-} from './links'
+import { createFinalLink, createHttpLink, createUpdateDataLink } from './links'
 
 export type ApolloClientCacheConfig = InMemoryCacheConfig
 
@@ -119,15 +115,15 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   useAuth?: UseAuth
   logLevel: ReturnType<typeof setLogVerbosity>
   children: React.ReactNode
-}> = ({ config, children, useAuth = useNoAuth, logLevel }) => {
+}> = ({ config, children, logLevel }) => {
   // Should they run into it, this helps users with the "Cannot render cell; GraphQL success but data is null" error.
   // See https://github.com/redwoodjs/redwood/issues/2473.
   apolloSetLogVerbosity(logLevel)
 
-  // See https://www.apollographql.com/docs/react/api/link/introduction.
-  const { getToken, type: authProviderType } = useAuth()
+  const { uri } = useFetchConfig()
 
-  const { headers, uri } = useFetchConfig()
+  // @MARK server auth state should never be undefined???
+  const serverAuthState = useContext(ServerAuthContext)
 
   const getGraphqlUrl = () => {
     // @NOTE: This comes from packages/vite/src/streaming/registerGlobals.ts
@@ -145,14 +141,17 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   // We use this object, because that's the shape of what we pass to the config.link factory
   const redwoodApolloLinks: RedwoodApolloLinks = [
-    { name: 'withToken', link: createTokenLink(getToken) },
-    {
-      name: 'authMiddleware',
-      link: createAuthApolloLink(authProviderType, headers),
-    },
-    // @REVIEW: Should we take this out for prod?
+    // @TODO: do we need this in prod? I think it's only for dev errors
     { name: 'enhanceErrorLink', link: createUpdateDataLink() },
-    { name: 'httpLink', link: createHttpLink(getGraphqlUrl(), httpLinkConfig) },
+    {
+      name: 'httpLink',
+      link: createHttpLink(
+        getGraphqlUrl(),
+        httpLinkConfig,
+        // @TODO how is serverAuthState not the default
+        serverAuthState?.cookieHeader
+      ),
+    },
   ]
 
   function makeClient() {

@@ -5,14 +5,23 @@ import { print } from 'graphql/language/printer'
 
 export function createHttpLink(
   uri: string,
-  httpLinkConfig: HttpOptions | undefined
+  httpLinkConfig: HttpOptions | undefined,
+  cookieHeader?: string
 ) {
+  const headers: Record<string, string> = {}
+
+  if (cookieHeader) {
+    headers.cookie = cookieHeader
+  }
+
   return new HttpLink({
     uri,
     ...httpLinkConfig,
     // you can disable result caching here if you want to
     // @TODO: this is probably NextJS specific. Revisit once we have our own apollo package
     fetchOptions: { cache: 'no-store' },
+    credentials: 'include',
+    headers,
   })
 }
 
@@ -60,7 +69,6 @@ export function createAuthApolloLink(
 ) {
   return new ApolloLink((operation, forward) => {
     const { token } = operation.getContext()
-
     // Only add auth headers when there's a token. `token` is `null` when `!isAuthenticated`.
     const authHeaders = token
       ? {
@@ -124,8 +132,8 @@ export type RedwoodApolloLink<
 }
 
 export type RedwoodApolloLinks = [
-  RedwoodApolloLink<'withToken'>,
-  RedwoodApolloLink<'authMiddleware'>,
+  // RedwoodApolloLink<'withToken'>,
+  // RedwoodApolloLink<'authMiddleware'>,
   RedwoodApolloLink<'enhanceErrorLink'>,
   RedwoodApolloLink<'httpLink', HttpLink>
 ]
