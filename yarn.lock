@@ -8108,7 +8108,6 @@ __metadata:
     chalk: "npm:4.1.2"
     dotenv: "npm:16.3.1"
     execa: "npm:5.1.1"
-    jest: "npm:29.7.0"
     listr2: "npm:6.6.1"
     lodash: "npm:4.17.21"
     pascalcase: "npm:1.0.0"
@@ -8116,6 +8115,7 @@ __metadata:
     prompts: "npm:2.4.2"
     terminal-link: "npm:2.1.1"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
