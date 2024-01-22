@@ -43,6 +43,9 @@ export const getIdType = (model) => {
   return model.fields.find((field) => field.isId)?.type
 }
 
+export const getIdName = (model) => {
+  return model.fields.find((field) => field.isId)?.name
+}
 /**
  *
  * This function checks the project for the field name supplied,

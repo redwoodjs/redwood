@@ -83,6 +83,12 @@ With `registerFragment`, you can register a fragment with the registry and get b
 
 which can then be used to work with the registered fragment.
 
+### Setup
+
+`yarn rw setup graphql fragments`
+
+See more in [cli commands - setup graphql fragments](../cli-commands.md#setup-graphql-fragments).
+
 ### registerFragment
 
 To register a fragment, you can simply register it with `registerFragment`.
@@ -151,7 +157,6 @@ import { fragment } from '@redwoodjs/web/apollo'
 
 Access typename of fragment you registered.
 
-
 ```ts
 import { typename } from '@redwoodjs/web/apollo'
 ```
@@ -166,6 +171,7 @@ fragment BookInfo on Book {
   author
   publicationYear
 }
+```
 
 the `typename` is `Book`.
 
@@ -200,7 +206,7 @@ the `getCacheKey` is a function where `getCacheKey(42)` would return `Book:42`.
 import { registerFragment } from '@redwoodjs/web/apollo'
 
 const { useRegisteredFragment } = registerFragment(
-...
+  // ...
 )
 ```
 
@@ -281,22 +287,24 @@ To make this easier to maintain, RedwoodJS GraphQL CodeGen automatically generat
 
 
 ```ts
+// web/src/App.tsx
+
 import possibleTypes from 'src/graphql/possibleTypes'
 
-...
-/// web/src/App.tsx
-<RedwoodApolloProvider
-  graphQLClientConfig={{
-    cacheConfig: {
-      ...possibleTypes,
-    },
-  }}
->
+// ...
+
+const graphQLClientConfig = {
+  cacheConfig: {
+    ...possibleTypes,
+  },
+}
+
+<RedwoodApolloProvider graphQLClientConfig={graphQLClientConfig}>
 ```
 
-To generate the `src/graphql/possibleTypes`, configure the `redwood.toml`:
+To generate the `src/graphql/possibleTypes` file, enable fragments in `redwood.toml`:
 
-```toml title=redwood.roml
+```toml title=redwood.toml
 [graphql]
-  fragments=true
+  fragments = true
 ```

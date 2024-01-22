@@ -15,6 +15,7 @@
   "scripts": {
     "build": "yarn build:js",
     "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build:pack": "yarn pack -o redwoodjs-record.tgz",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "datamodel:parse": "node src/scripts/parse.js",
     "prepublishOnly": "NODE_ENV=production yarn build",
@@ -27,16 +28,16 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.4",
-    "@prisma/client": "5.6.0",
+    "@babel/runtime-corejs3": "7.23.6",
+    "@prisma/client": "5.7.0",
     "@redwoodjs/project-config": "6.0.7",
-    "core-js": "3.33.3"
+    "core-js": "3.34.0"
   },
   "devDependencies": {
     "@babel/cli": "7.23.4",
     "@babel/core": "^7.22.20",
-    "@prisma/internals": "5.6.0",
-    "esbuild": "0.19.5",
+    "@prisma/internals": "5.7.0",
+    "esbuild": "0.19.9",
     "jest": "29.7.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

@@ -15,6 +15,7 @@
   "scripts": {
     "build": "yarn build:js",
     "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build:pack": "yarn pack -o redwoodjs-telemetry.tgz",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "jest src",
@@ -26,14 +27,14 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.4",
+    "@babel/runtime-corejs3": "7.23.6",
     "@redwoodjs/project-config": "6.0.7",
     "@redwoodjs/structure": "6.0.7",
     "@whatwg-node/fetch": "0.9.14",
-    "ci-info": "3.9.0",
-    "core-js": "3.33.3",
+    "ci-info": "4.0.0",
+    "core-js": "3.34.0",
     "envinfo": "7.11.0",
-    "systeminformation": "5.21.17",
+    "systeminformation": "5.21.20",
     "uuid": "9.0.1",
     "yargs": "17.7.2"
   },
@@ -42,7 +43,7 @@
     "@babel/core": "^7.22.20",
     "@types/envinfo": "7.8.3",
     "@types/uuid": "9.0.7",
-    "@types/yargs": "17.0.31",
+    "@types/yargs": "17.0.32",
     "jest": "29.7.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

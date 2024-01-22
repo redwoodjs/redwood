@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "build": "yarn node ./build.mjs && run build:types",
+    "build:pack": "yarn pack -o redwoodjs-realtime.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
@@ -24,8 +25,8 @@
   },
   "dependencies": {
     "@envelop/live-query": "6.0.3",
-    "@graphql-tools/schema": "10.0.0",
-    "@graphql-tools/utils": "10.0.8",
+    "@graphql-tools/schema": "10.0.2",
+    "@graphql-tools/utils": "10.0.11",
     "@graphql-yoga/plugin-defer-stream": "2.0.5",
     "@graphql-yoga/plugin-graphql-sse": "2.0.5",
     "@graphql-yoga/redis-event-target": "2.0.0",
@@ -33,16 +34,16 @@
     "@n1ru4l/graphql-live-query": "0.10.0",
     "@n1ru4l/in-memory-live-query-store": "0.10.0",
     "graphql": "16.8.1",
-    "ioredis": "5.3.2"
+    "ioredis": "^5.3.2"
   },
   "devDependencies": {
-    "@envelop/core": "4.0.3",
+    "@envelop/core": "5.0.0",
     "@envelop/testing": "6.0.3",
     "@envelop/types": "4.0.1",
-    "esbuild": "0.19.5",
+    "esbuild": "0.19.9",
     "jest": "29.7.0",
-    "nodemon": "3.0.1",
-    "typescript": "5.3.2"
+    "nodemon": "3.0.2",
+    "typescript": "5.3.3"
   },
   "peerDependencies": {
     "ioredis": "^5.3.2"

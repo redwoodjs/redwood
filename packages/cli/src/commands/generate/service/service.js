@@ -44,6 +44,11 @@ export const parseSchema = async (model) => {
 export const scenarioFieldValue = (field) => {
   const randFloat = Math.random() * 10000000
   const randInt = parseInt(Math.random() * 10000000)
+  const randIntArray = [
+    parseInt(Math.random() * 300),
+    parseInt(Math.random() * 300),
+    parseInt(Math.random() * 300),
+  ]
 
   switch (field.type) {
     case 'BigInt':
@@ -61,6 +66,8 @@ export const scenarioFieldValue = (field) => {
       return { foo: 'bar' }
     case 'String':
       return field.isUnique ? `String${randInt}` : 'String'
+    case 'Bytes':
+      return `Buffer.from([${randIntArray}])`
     default: {
       if (field.kind === 'enum' && field.enumValues[0]) {
         return field.enumValues[0].dbName || field.enumValues[0].name
@@ -125,8 +132,9 @@ export const buildScenario = async (model) => {
     Object.keys(scenarioData).forEach((key) => {
       const value = scenarioData[key]
 
+      // Support BigInt
       if (value && typeof value === 'string' && value.match(/^\d+n$/)) {
-        scenarioData[key] = `${value.substr(0, value.length - 1)}n`
+        scenarioData[key] = `${value.slice(0, value.length - 1)}n`
       }
     })
 
@@ -141,17 +149,20 @@ export const buildScenario = async (model) => {
 export const buildStringifiedScenario = async (model) => {
   const scenario = await buildScenario(model)
 
-  return JSON.stringify(scenario, (key, value) => {
+  const jsonString = JSON.stringify(scenario, (_key, value) => {
     if (typeof value === 'bigint') {
       return value.toString()
     }
 
     if (typeof value === 'string' && value.match(/^\d+n$/)) {
-      return Number(value.substr(0, value.length - 1))
+      return Number(value.slice(0, value.length - 1))
     }
 
     return value
   })
+
+  // Not all values can be represented as JSON, like function invocations
+  return jsonString.replace(/"Buffer\.from\(([^)]+)\)"/g, 'Buffer.from($1)')
 }
 
 export const fieldTypes = async (model) => {
@@ -277,6 +288,11 @@ export const fieldsToUpdate = async (model) => {
   return { [fieldName]: newValue }
 }
 
+const getIdName = async (model) => {
+  const schema = await getSchema(model)
+  return schema.fields.find((field) => field.isId)?.name
+}
+
 export const files = async ({
   name,
   tests,
@@ -286,6 +302,7 @@ export const files = async ({
 }) => {
   const componentName = camelcase(pluralize(name))
   const model = name
+  const idName = await getIdName(model)
   const extension = 'ts'
   const serviceFile = templateForComponentFile({
     name,
@@ -294,7 +311,7 @@ export const files = async ({
     apiPathSection: 'services',
     generator: 'service',
     templatePath: `service.${extension}.template`,
-    templateVars: { relations: relations || [], ...rest },
+    templateVars: { relations: relations || [], idName, ...rest },
   })
 
   const testFile = templateForComponentFile({
@@ -313,6 +330,7 @@ export const files = async ({
         (field) => field.type === 'Decimal'
       ),
       prismaModel: model,
+      idName,
       ...rest,
     },
   })
@@ -328,6 +346,7 @@ export const files = async ({
       scenario: await buildScenario(model),
       stringifiedScenario: await buildStringifiedScenario(model),
       prismaModel: model,
+      idName,
       ...rest,
     },
   })

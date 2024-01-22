@@ -1,6 +1,6 @@
-import fs from 'fs'
 import path from 'path'
 
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { addApiPackages } from '@redwoodjs/cli-helpers'
@@ -11,8 +11,8 @@ import { getPaths, transformTSToJS, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 // Move this check out of experimental when server file is moved as well
-import { setupServerFileTasks } from '../../experimental/setupServerFileHandler'
 import { serverFileExists } from '../../experimental/util'
+import { setupServerFileTasks } from '../server-file/serverFileHandler'
 
 const { version } = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8')
@@ -363,7 +363,7 @@ export async function handler({ force, includeExamples, verbose }) {
 
   try {
     if (!serverFileExists()) {
-      tasks.add(setupServerFileTasks(force))
+      tasks.add(setupServerFileTasks({ force }))
     }
 
     await tasks.run()

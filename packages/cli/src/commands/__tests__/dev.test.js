@@ -25,9 +25,12 @@ jest.mock('@redwoodjs/internal/dist/dev', () => {
 })
 
 jest.mock('@redwoodjs/project-config', () => {
+  const actualProjectConfig = jest.requireActual('@redwoodjs/project-config')
+
   return {
     getConfig: jest.fn(),
     getConfigPath: () => '/mocked/project/redwood.toml',
+    resolveFile: actualProjectConfig.resolveFile,
     getPaths: () => {
       return {
         api: {
@@ -104,8 +107,8 @@ describe('yarn rw dev', () => {
       'yarn cross-env NODE_ENV=development rw-vite-dev'
     )
 
-    expect(apiCommand.command).toMatchInlineSnapshot(
-      `"yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter""`
+    expect(apiCommand.command.replace(/\s+/g, ' ')).toEqual(
+      'yarn cross-env NODE_ENV=development NODE_OPTIONS="--enable-source-maps" yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter"'
     )
 
     expect(generateCommand.command).toEqual('yarn rw-gen-watch')
@@ -143,8 +146,8 @@ describe('yarn rw dev', () => {
       'yarn cross-env NODE_ENV=development rw-dev-fe'
     )
 
-    expect(apiCommand.command).toMatchInlineSnapshot(
-      `"yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter""`
+    expect(apiCommand.command.replace(/\s+/g, ' ')).toEqual(
+      'yarn cross-env NODE_ENV=development NODE_OPTIONS="--enable-source-maps" yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter"'
     )
 
     expect(generateCommand.command).toEqual('yarn rw-gen-watch')
@@ -175,7 +178,7 @@ describe('yarn rw dev', () => {
 
     const apiCommand = find(concurrentlyArgs, { name: 'api' })
 
-    expect(apiCommand.command).toContain(
+    expect(apiCommand.command.replace(/\s+/g, ' ')).toContain(
       'yarn rw-api-server-watch --port 8911 --debug-port 90909090'
     )
   })

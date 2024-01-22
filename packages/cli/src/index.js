@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import fs from 'fs'
 import path from 'path'
 
 import { trace, SpanStatusCode } from '@opentelemetry/api'
 import { config } from 'dotenv-defaults'
+import fs from 'fs-extra'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
@@ -27,6 +27,7 @@ import * as prismaCommand from './commands/prisma'
 import * as recordCommand from './commands/record'
 import * as serveCommand from './commands/serve'
 import * as setupCommand from './commands/setup'
+import * as studioCommand from './commands/studio'
 import * as testCommand from './commands/test'
 import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
@@ -206,6 +207,7 @@ async function runYargs() {
     .command(recordCommand)
     .command(serveCommand)
     .command(setupCommand)
+    .command(studioCommand)
     .command(testCommand)
     .command(tstojsCommand)
     .command(typeCheckCommand)
@@ -215,10 +217,20 @@ async function runYargs() {
   await loadPlugins(yarg)
 
   // Run
-  await yarg.parse(process.argv.slice(2), {}, (_err, _argv, output) => {
+  await yarg.parse(process.argv.slice(2), {}, (err, _argv, output) => {
+    // Configuring yargs with `strict` makes it error on unknown args;
+    // here we're signaling that with an exit code.
+    if (err) {
+      process.exitCode = 1
+    }
+
     // Show the output that yargs was going to if there was no callback provided
     if (output) {
-      console.log(output)
+      if (err) {
+        console.error(output)
+      } else {
+        console.log(output)
+      }
     }
   })
 }

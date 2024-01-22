@@ -52,6 +52,240 @@ export const Success = ({ equipment }) => {
 "
 `;
 
+exports[`Custom Id Field files List cell creates a cell list component with a custom id field 1`] = `
+"export const QUERY = gql\`
+  query CustomIdFieldsQuery {
+    customIdFields {
+      uuid
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
+)
+
+export const Success = ({ customIdFields }) => {
+  return (
+    <ul>
+      {customIdFields.map((item) => {
+        return <li key={item.uuid}>{JSON.stringify(item)}</li>
+      })}
+    </ul>
+  )
+}
+"
+`;
+
+exports[`Custom Id Field files List cell creates a cell list mock with a custom id field 1`] = `
+"// Define your own mock data here:
+export const standard = (/* vars, { ctx, req } */) => ({
+  customIdFields: [{ uuid: '42' }, { uuid: '43' }, { uuid: '44' }],
+})
+"
+`;
+
+exports[`Custom Id Field files List cell creates a cell list stories with a custom id field 1`] = `
+"import { Loading, Empty, Failure, Success } from './CustomIdFieldsCell'
+import { standard } from './CustomIdFieldsCell.mock'
+
+const meta = {
+  title: 'Cells/CustomIdFieldsCell',
+  tags: ['autodocs'],
+}
+
+export default meta
+
+export const loading = {
+  render: () => {
+    return Loading ? <Loading /> : <></>
+  },
+}
+
+export const empty = {
+  render: () => {
+    return Empty ? <Empty /> : <></>
+  },
+}
+
+export const failure = {
+  render: (args) => {
+    return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+  },
+}
+
+export const success = {
+  render: (args) => {
+    return Success ? <Success {...standard()} {...args} /> : <></>
+  },
+}
+"
+`;
+
+exports[`Custom Id Field files List cell creates a cell list test with a custom id field 1`] = `
+"import { render } from '@redwoodjs/testing/web'
+import { Loading, Empty, Failure, Success } from './CustomIdFieldsCell'
+import { standard } from './CustomIdFieldsCell.mock'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//        https://redwoodjs.com/docs/testing#testing-cells
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
+describe('CustomIdFieldsCell', () => {
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
+  })
+
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  // 1. import { screen } from '@redwoodjs/testing/web'
+  // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success customIdFields={standard().customIdFields} />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`Custom Id Field files Single cell creates a cell component with a custom id field 1`] = `
+"export const QUERY = gql\`
+  query FindCustomIdFieldQuery($id: String!) {
+    customIdField: customIdField(uuid: $id) {
+      uuid
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
+)
+
+export const Success = ({ customIdField }) => {
+  return <div>{JSON.stringify(customIdField)}</div>
+}
+"
+`;
+
+exports[`Custom Id Field files Single cell creates a cell mock with a custom id field 1`] = `
+"// Define your own mock data here:
+export const standard = (/* vars, { ctx, req } */) => ({
+  customIdField: {
+    uuid: '42',
+  },
+})
+"
+`;
+
+exports[`Custom Id Field files Single cell creates a cell stories with a custom id field 1`] = `
+"import { Loading, Empty, Failure, Success } from './CustomIdFieldCell'
+import { standard } from './CustomIdFieldCell.mock'
+
+const meta = {
+  title: 'Cells/CustomIdFieldCell',
+  tags: ['autodocs'],
+}
+
+export default meta
+
+export const loading = {
+  render: () => {
+    return Loading ? <Loading /> : <></>
+  },
+}
+
+export const empty = {
+  render: () => {
+    return Empty ? <Empty /> : <></>
+  },
+}
+
+export const failure = {
+  render: (args) => {
+    return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+  },
+}
+
+export const success = {
+  render: (args) => {
+    return Success ? <Success {...standard()} {...args} /> : <></>
+  },
+}
+"
+`;
+
+exports[`Custom Id Field files Single cell creates a cell test with a custom id field 1`] = `
+"import { render } from '@redwoodjs/testing/web'
+import { Loading, Empty, Failure, Success } from './CustomIdFieldCell'
+import { standard } from './CustomIdFieldCell.mock'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//        https://redwoodjs.com/docs/testing#testing-cells
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
+describe('CustomIdFieldCell', () => {
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
+  })
+
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  // 1. import { screen } from '@redwoodjs/testing/web'
+  // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success customIdField={standard().customIdField} />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
 exports[`Kebab case words creates a cell component with a kebabCase word name 1`] = `
 "export const QUERY = gql\`
   query FindUserProfileQuery($id: Int!) {
@@ -91,6 +325,7 @@ import { standard } from './UserProfileCell.mock'
 
 const meta = {
   title: 'Cells/UserProfileCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -205,6 +440,7 @@ import { standard } from './UserProfileCell.mock'
 
 const meta = {
   title: 'Cells/UserProfileCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -319,6 +555,7 @@ import { standard } from './UserCell.mock'
 
 const meta = {
   title: 'Cells/UserCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -433,6 +670,7 @@ import { standard } from './UserProfileCell.mock'
 
 const meta = {
   title: 'Cells/UserProfileCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -511,9 +749,16 @@ describe('UserProfileCell', () => {
 exports[`TypeScript: generates list cells if list flag passed in 1`] = `
 "import type { FindBazingaQuery, FindBazingaQueryVariables } from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
-export const QUERY = gql\`
+export const QUERY: TypedDocumentNode<
+  FindBazingaQuery,
+  FindBazingaQueryVariables
+> = gql\`
   query FindBazingaQuery($id: Int!) {
     bazinga: bazinga(id: $id) {
       id
@@ -592,6 +837,7 @@ import { standard } from './BazingaCell.mock'
 
 const meta: Meta = {
   title: 'Cells/BazingaCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -633,11 +879,18 @@ export const standard = (/* vars, { ctx, req } */) => ({
 `;
 
 exports[`TypeScript: generates list cells if name is plural 1`] = `
-"import type { MembersQuery } from 'types/graphql'
+"import type { MembersQuery, MembersQueryVariables } from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
-export const QUERY = gql\`
+export const QUERY: TypedDocumentNode<
+  MembersQuery,
+  MembersQueryVariables
+> = gql\`
   query MembersQuery {
     members {
       id
@@ -704,6 +957,7 @@ import { standard } from './UserProfileCell.mock'
 
 const meta = {
   title: 'Cells/UserProfileCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -853,6 +1107,7 @@ import { standard } from './AddressCell.mock'
 
 const meta = {
   title: 'Cells/AddressCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -973,6 +1228,7 @@ import { standard } from './AddressesCell.mock'
 
 const meta = {
   title: 'Cells/AddressesCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -1091,6 +1347,7 @@ import { standard } from './MembersCell.mock'
 
 const meta = {
   title: 'Cells/MembersCell',
+  tags: ['autodocs'],
 }
 
 export default meta

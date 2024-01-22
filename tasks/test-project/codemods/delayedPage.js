@@ -63,7 +63,7 @@ const body = `
 {
  return (
   <>
-  <MetaTags title="Delayed" description="Delayed page" />
+  <Metadata title="Delayed" description="Delayed page" />
 
   <h1>DelayedPage</h1>
   <p>The following component will render over 4 seconds...</p>

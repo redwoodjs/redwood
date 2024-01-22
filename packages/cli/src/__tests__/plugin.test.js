@@ -1,5 +1,4 @@
-import fs from 'fs'
-
+import fs from 'fs-extra'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 

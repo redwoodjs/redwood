@@ -1,5 +1,7 @@
 // import type { APIGatewayProxyEvent } from 'aws-lambda'
 
+import { describe, test, expect } from 'vitest'
+
 import { createVerifier, WebhookVerificationError } from '../index'
 
 const payload = 'No more secrets, Marty.'

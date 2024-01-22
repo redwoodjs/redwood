@@ -15,6 +15,7 @@
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\" --copy-files --no-copy-ignored",
+    "build:pack": "yarn pack -o redwoodjs-auth-auth0-web.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
@@ -22,9 +23,9 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.4",
+    "@babel/runtime-corejs3": "7.23.6",
     "@redwoodjs/auth": "6.0.7",
-    "core-js": "3.33.3"
+    "core-js": "3.34.0"
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "2.1.2",
@@ -33,7 +34,7 @@
     "@types/react": "18.2.37",
     "jest": "29.7.0",
     "react": "0.0.0-experimental-e5205658f-20230913",
-    "typescript": "5.3.2"
+    "typescript": "5.3.3"
   },
   "peerDependencies": {
     "@auth0/auth0-spa-js": "2.1.2"
