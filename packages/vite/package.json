@@ -60,9 +60,8 @@
     "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
     "build:pack": "yarn pack -o redwoodjs-vite.tgz",
     "build:types": "tsc --build --verbose",
-    "test": "yarn test:node && echo",
-    "test:node": "glob './src/**/__tests__/*.test.mts' --cmd='tsx --no-warnings --test'",
-    "test:watch": "glob './src/**/__tests__/*.test.mts' --cmd='tsx --no-warnings --test --watch'"
+    "test": "vitest run src",
+    "test:watch": "vitest watch src"
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.6",
@@ -94,7 +93,8 @@
     "glob": "10.3.10",
     "jest": "29.7.0",
     "rollup": "3.29.4",
-    "typescript": "5.3.3"
+    "typescript": "5.3.3",
+    "vitest": "1.2.1"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
