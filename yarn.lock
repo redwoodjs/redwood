@@ -8533,6 +8533,7 @@ __metadata:
     fast-glob: "npm:3.3.2"
     jest: "npm:29.7.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
