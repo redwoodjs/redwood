@@ -8531,8 +8531,8 @@ __metadata:
     "@redwoodjs/api": "npm:6.0.7"
     esbuild: "npm:0.19.9"
     fast-glob: "npm:3.3.2"
-    jest: "npm:29.7.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -8697,7 +8697,7 @@ __metadata:
     "@redwoodjs/project-config": "npm:6.0.7"
     core-js: "npm:3.34.0"
     esbuild: "npm:0.19.9"
-    jest: "npm:29.7.0"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -8779,9 +8779,9 @@ __metadata:
     ci-info: "npm:4.0.0"
     core-js: "npm:3.34.0"
     envinfo: "npm:7.11.0"
-    jest: "npm:29.7.0"
     systeminformation: "npm:5.21.20"
     uuid: "npm:9.0.1"
+    vitest: "npm:1.2.1"
     yargs: "npm:17.7.2"
   languageName: unknown
   linkType: soft
@@ -8832,7 +8832,6 @@ __metadata:
     chalk: "npm:4.1.2"
     enquirer: "npm:2.4.1"
     esbuild: "npm:0.19.9"
-    jest: "npm:29.7.0"
     stdout-update: "npm:1.6.8"
     typescript: "npm:5.3.3"
   languageName: unknown
@@ -8863,12 +8862,12 @@ __metadata:
     glob: "npm:10.3.10"
     http-proxy-middleware: "npm:2.0.6"
     isbot: "npm:3.7.1"
-    jest: "npm:29.7.0"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     react-server-dom-webpack: "npm:0.0.0-experimental-e5205658f-20230913"
     rollup: "npm:3.29.4"
     typescript: "npm:5.3.3"
     vite: "npm:4.5.1"
+    vitest: "npm:1.2.1"
     yargs-parser: "npm:21.1.1"
   bin:
     rw-dev-fe: ./dist/devFeServer.js
