@@ -54,9 +54,9 @@ describe('create-redwood-app', () => {
   })
 
   test('--yes, -y', async () => {
-    // Running `yarn install` in Jest test times out  and the subsequent step,
-    // generating types, is also flakey since `yarn pack` seems to skip `.yarnrc.yml`
-    // which is necessary for configuring a proper install.
+    // Running `yarn install` in Jest test times out and the subsequent step,
+    // generating types, is also flakey since `yarn pack` seems to skip
+    // `.yarnrc.yml` which is necessary for configuring a proper install.
     const p =
       await $`yarn create-redwood-app ./redwood-app --no-yarn-install --yes`
 
