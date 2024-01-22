@@ -7769,10 +7769,10 @@ __metadata:
     "@types/uuid": "npm:9.0.7"
     base64url: "npm:3.0.1"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     md5: "npm:2.3.0"
     typescript: "npm:5.3.3"
     uuid: "npm:9.0.1"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -7788,7 +7788,6 @@ __metadata:
     "@simplewebauthn/typescript-types": "npm:7.4.0"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     prompts: "npm:2.4.2"
     terminal-link: "npm:2.1.1"
     typescript: "npm:5.3.3"
