@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { describe, it, expect } from 'vitest'
+
 import { getConfig, getRawConfig } from '../config'
 
 describe('getRawConfig', () => {
