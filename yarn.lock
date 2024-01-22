@@ -7973,10 +7973,10 @@ __metadata:
     "@redwoodjs/api": "npm:6.0.7"
     "@types/jsonwebtoken": "npm:9.0.5"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   peerDependencies:
     supertokens-node: 15.2.1
   languageName: unknown
@@ -7992,8 +7992,9 @@ __metadata:
     "@redwoodjs/cli-helpers": "npm:6.0.7"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
+    memfs: "npm:4.6.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -8007,10 +8008,10 @@ __metadata:
     "@redwoodjs/auth": "npm:6.0.7"
     "@types/react": "npm:18.2.37"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     supertokens-auth-react: "npm:0.34.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   peerDependencies:
     supertokens-auth-react: 0.34.0
   languageName: unknown
