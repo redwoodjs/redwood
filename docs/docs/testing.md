@@ -1705,18 +1705,19 @@ The scenario feature described above should be the base starting point for setti
 The `describeScenario` function is utilized to run a sequence of multiple tests, with a single database setup and tear-down.
 
 ```
+// highlight-next-line
 describeScenario('contacts', (getScenario) => {
   // You can imagine the scenario setup happens here
 
   // All these tests now use the same setup 👇
   it('xxx', () => {
-    //
+    // Notice that the scenario has to be retrieved using the getter
+    // highlight-next-line
     const scenario = getScenario()
-    /...
+    //...
   })
 
   it('xxx', () => {
-    //
     const scenario = getScenario()
     /...
   })
