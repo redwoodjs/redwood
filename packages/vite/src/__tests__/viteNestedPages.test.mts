@@ -229,9 +229,9 @@ describe('User specified imports, with static imports', () => {
   })
 
   it('Handles when imports from a page include non-default imports too', () => {
-     // Because we import import EditJobPage, 👉 { NonDefaultExport } from 'src/pages/Jobs/EditJobPage'
+    // Because we import import EditJobPage, 👉 { NonDefaultExport } from 'src/pages/Jobs/EditJobPage'
 
-     expect(outputWithStaticImports).toContain(
+    expect(outputWithStaticImports).toContain(
       'import { NonDefaultExport } from "'
     )
 
