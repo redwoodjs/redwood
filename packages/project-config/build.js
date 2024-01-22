@@ -2,7 +2,7 @@
 
 import * as esbuild from 'esbuild'
 
-const optiions = {
+const options = {
   entryPoints: ['./src/index.ts'],
   outdir: 'dist',
 
@@ -16,13 +16,13 @@ const optiions = {
 }
 
 await esbuild.build({
-  ...optiions,
+  ...options,
   format: 'esm',
   outExtension: { '.js': '.mjs' },
 })
 
 await esbuild.build({
-  ...optiions,
+  ...options,
   format: 'cjs',
   outExtension: { '.js': '.cjs' },
 })
