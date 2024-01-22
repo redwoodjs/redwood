@@ -11,7 +11,7 @@ beforeEach(() => {
   TestClass.validates = {}
 })
 
-describe.only('hasError', () => {
+describe('hasError', () => {
   it('defaults to false', () => {
     const record = new TestClass()
 
@@ -42,7 +42,7 @@ describe.only('hasError', () => {
   })
 })
 
-describe.only('isValid', () => {
+describe('isValid', () => {
   it('returns true if record has no validations', () => {
     const record = new TestClass()
 
@@ -72,7 +72,7 @@ describe.only('isValid', () => {
   })
 })
 
-describe.only('validate', () => {
+describe('validate', () => {
   it('returns true if record has no validations', () => {
     const record = new TestClass()
 
