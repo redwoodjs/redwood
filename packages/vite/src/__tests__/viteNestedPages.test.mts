@@ -6,7 +6,7 @@ import { transformWithEsbuild } from 'vite'
 import { test, describe, beforeEach, afterAll, beforeAll, it, expect, vi } from 'vitest'
 
 import * as babel from '@babel/core'
-import projectConfig from '@redwoodjs/project-config'
+import { getPaths } from '@redwoodjs/project-config'
 
 import {
   Flags,
@@ -41,7 +41,6 @@ async function transform(srcPath: string) {
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const FIXTURE_PATH = path.join(__dirname, 'fixtures/nestedPages')
-const { getPaths } = projectConfig
 
 test('transform', async () => {
   vi.spyOn(fs, 'readFileSync').mockImplementationOnce(() => {

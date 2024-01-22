@@ -3,8 +3,8 @@ import path from 'path'
 
 import fg from 'fast-glob'
 
-import { getConfig } from './config'
-import { getConfigPath } from './configPath'
+import { getConfig } from './config.js'
+import { getConfigPath } from './configPath.js'
 
 export interface NodeTargetPaths {
   base: string
