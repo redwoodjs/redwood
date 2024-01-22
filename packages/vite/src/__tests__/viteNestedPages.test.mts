@@ -1,10 +1,9 @@
-import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import path from 'node:path'
-import { test, after, before, beforeEach, describe, it } from 'node:test'
 import { fileURLToPath } from 'url'
 
 import { transformWithEsbuild } from 'vite'
+import { test, describe, beforeEach, afterAll, beforeAll, it, expect, vi } from 'vitest'
 
 import * as babel from '@babel/core'
 import projectConfig from '@redwoodjs/project-config'
@@ -44,15 +43,14 @@ const __dirname = path.dirname(__filename)
 const FIXTURE_PATH = path.join(__dirname, 'fixtures/nestedPages')
 const { getPaths } = projectConfig
 
-test('transform', async (t) => {
-  t.mock.method(fs, 'readFileSync', () => {
+test('transform', async () => {
+  vi.spyOn(fs, 'readFileSync').mockImplementationOnce(() => {
     return '<Router><Route path="/" page={HomePage} name="home" /></Router>'
   })
+  vi.spyOn(fs, 'existsSync').mockImplementationOnce(() => true)
 
-  t.mock.method(fs, 'existsSync', () => true)
-
-  assert.equal(
-    await transform('Router.jsx'),
+  const transformed = await transform('Router.jsx')
+  expect(transformed).toEqual(
     '/* @__PURE__ */ React.createElement(Router, null, /* @__PURE__ */ React.createElement(Route, { path: "/", page: HomePage, name: "home" }));\n'
   )
 })
@@ -65,11 +63,11 @@ describe('User specified imports, with static imports', () => {
     process.env.RWJS_CWD = FIXTURE_PATH
   })
 
-  after(() => {
+  afterAll(() => {
     delete process.env.RWJS_CWD
   })
 
-  before(async () => {
+  beforeAll(async () => {
     process.env.RWJS_CWD = FIXTURE_PATH
 
     const routesFile = getPaths().web.routes
@@ -258,27 +256,3 @@ describe('User specified imports, with static imports', () => {
     )
   })
 })
-
-function expect(str) {
-  return {
-    toContain: (sub) => {
-      assert.equal(str.includes(sub), true, `Expected ${str} to contain ${sub}`)
-    },
-    not: {
-      toContain: (sub) => {
-        assert.equal(
-          str.includes(sub),
-          false,
-          `Expected ${str} to not contain ${sub}`
-        )
-      },
-      toMatch: (regex) => {
-        assert.equal(
-          regex.test(str),
-          false,
-          `Expected ${str} to not match ${regex}`
-        )
-      },
-    },
-  }
-}
