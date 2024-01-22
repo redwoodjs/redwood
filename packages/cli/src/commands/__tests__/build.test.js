@@ -1,5 +1,5 @@
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {
-  const mod = await importOriginal('@redwoodjs/project-config')
+  const mod = await importOriginal()
   return {
     ...mod,
     getPaths: () => {
