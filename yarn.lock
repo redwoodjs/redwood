@@ -7823,8 +7823,8 @@ __metadata:
     "@types/aws-lambda": "npm:8.10.126"
     core-js: "npm:3.34.0"
     firebase-admin: "npm:11.11.0"
-    jest: "npm:29.7.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -7838,8 +7838,8 @@ __metadata:
     "@redwoodjs/cli-helpers": "npm:6.0.7"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
