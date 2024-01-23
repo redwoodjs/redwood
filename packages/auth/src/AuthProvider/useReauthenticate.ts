@@ -53,15 +53,13 @@ export const useReauthenticate = <TUser>(
           client: authImplementation.client,
         })
       } else {
-        await getToken()
-
         const currentUser = skipFetchCurrentUser ? null : await getCurrentUser()
 
         setAuthProviderState((oldState) => ({
           ...oldState,
           userMetadata,
           currentUser,
-          isAuthenticated: true,
+          isAuthenticated: !!currentUser,
           loading: false,
           client: authImplementation.client,
         }))
