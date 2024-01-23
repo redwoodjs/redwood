@@ -1,4 +1,5 @@
 import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
+import { describe, test, expect } from 'vitest'
 
 import { getAuthenticationContext } from '../index'
 
@@ -51,7 +52,7 @@ export const createMockedEvent = (
 }
 
 describe('getAuthenticationContext with bearer tokens', () => {
-  it('Can take a single auth decoder for the given provider', async () => {
+  test('Can take a single auth decoder for the given provider', async () => {
     const authDecoderOne = async (_token: string, type: string) => {
       if (type !== 'one') {
         return null
@@ -87,7 +88,7 @@ describe('getAuthenticationContext with bearer tokens', () => {
     expect(token).toEqual('auth-test-token')
   })
 
-  it('Can take a single auth decoder for some other provider', async () => {
+  test('Can take a single auth decoder for some other provider', async () => {
     const authDecoderOne = async (_token: string, type: string) => {
       if (type !== 'one') {
         return null
@@ -120,7 +121,7 @@ describe('getAuthenticationContext with bearer tokens', () => {
     expect(token).toEqual('auth-test-token')
   })
 
-  it('Can take an empty array of auth decoders', async () => {
+  test('Can take an empty array of auth decoders', async () => {
     const result = await getAuthenticationContext({
       authDecoder: [],
       event: createMockedEvent({
@@ -142,7 +143,7 @@ describe('getAuthenticationContext with bearer tokens', () => {
     expect(token).toEqual('auth-test-token')
   })
 
-  it('Can take an array of auth decoders', async () => {
+  test('Can take an array of auth decoders', async () => {
     const authDecoderOne = async (_token: string, type: string) => {
       if (type !== 'one') {
         return null
@@ -189,7 +190,7 @@ describe('getAuthenticationContext with bearer tokens', () => {
     expect(token).toEqual('auth-test-token')
   })
 
-  it('Works even without any auth decoders', async () => {
+  test('Works even without any auth decoders', async () => {
     const result = await getAuthenticationContext({
       event: createMockedEvent({
         'auth-provider': 'two',
@@ -213,7 +214,7 @@ describe('getAuthenticationContext with bearer tokens', () => {
 
 // @TODO add tests for requests with Cookie headers
 describe('getAuthenticationContext with cookies', () => {
-  it('Can take a single auth decoder for the given provider', async () => {
+  test('Can take a single auth decoder for the given provider', async () => {
     const authDecoderOne = async (_token: string, type: string) => {
       if (type !== 'one') {
         return null
