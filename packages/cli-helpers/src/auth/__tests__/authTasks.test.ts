@@ -37,18 +37,18 @@ vi.mock('node:fs', async () => {
 })
 
 const mockedPathGenerator = (app: string, routes: string) => {
-  const basedir = platformPath('/mock/setup/path')
+  const basedir = '/mock/setup/path'
   return {
     api: {
       functions: '',
       src: '',
       lib: '',
-      graphql: path.join(basedir, platformPath('api/src/functions/graphql.ts')),
+      graphql: path.join(basedir, 'api/src/functions/graphql.ts'),
     },
     web: {
-      src: path.join(basedir, platformPath('web/src')),
-      app: path.join(basedir, platformPath(`web/src/${app}`)),
-      routes: path.join(basedir, platformPath(`web/src/${routes}`)),
+      src: path.join(basedir, 'web/src'),
+      app: path.join(basedir, `web/src/${app}`),
+      routes: path.join(basedir, `web/src/${routes}`),
     },
     base: path.join(basedir),
   }
