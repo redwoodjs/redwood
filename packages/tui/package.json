@@ -19,11 +19,6 @@
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/dist/"
-    ]
-  },
   "dependencies": {
     "boxen": "5.1.2",
     "chalk": "4.1.2",
@@ -31,7 +26,6 @@
     "stdout-update": "1.6.8"
   },
   "devDependencies": {
-    "esbuild": "0.19.9",
     "typescript": "5.3.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
