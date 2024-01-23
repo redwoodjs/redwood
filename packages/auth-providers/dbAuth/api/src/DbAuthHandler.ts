@@ -540,8 +540,6 @@ export class DbAuthHandler<
       )
     }
 
-    await this.init()
-
     const { username } = this.normalizedRequest.jsonBody || {}
     // was the username sent in at all?
     if (!username || username.trim() === '') {
@@ -640,7 +638,6 @@ export class DbAuthHandler<
       )
     }
 
-    await this.init()
     const { username, password } = this.normalizedRequest.jsonBody || {}
     const dbUser = await this._verifyUser(username, password)
     const handlerUser = await (this.options.login as LoginFlowOptions).handler(
@@ -670,7 +667,6 @@ export class DbAuthHandler<
       )
     }
 
-    await this.init()
     const { password, resetToken } = this.normalizedRequest.jsonBody || {}
 
     // is the resetToken present?
@@ -743,7 +739,6 @@ export class DbAuthHandler<
           `Signup flow is not enabled`
       )
     }
-    await this.init()
 
     // check if password is valid
     const { password } = this.normalizedRequest.jsonBody || {}
@@ -766,7 +761,6 @@ export class DbAuthHandler<
   }
 
   async validateResetToken() {
-    await this.init()
     const { resetToken } = this.normalizedRequest.jsonBody || {}
     // is token present at all?
     if (!resetToken || String(resetToken).trim() === '') {
@@ -791,7 +785,6 @@ export class DbAuthHandler<
   async webAuthnAuthenticate() {
     const { verifyAuthenticationResponse } = require('@simplewebauthn/server')
     const webAuthnOptions = this.options.webAuthn
-    await this.init()
 
     const { rawId } = this.normalizedRequest.jsonBody || {}
 
@@ -884,7 +877,6 @@ export class DbAuthHandler<
     if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
-    await this.init()
 
     const webAuthnOptions = this.options.webAuthn
 
@@ -951,7 +943,6 @@ export class DbAuthHandler<
     if (!this.options?.webAuthn?.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
-    await this.init()
 
     const webAuthnOptions = this.options.webAuthn
 
@@ -996,7 +987,6 @@ export class DbAuthHandler<
     if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
-    await this.init()
 
     const user = await this._getCurrentUser()
 
@@ -1237,7 +1227,6 @@ export class DbAuthHandler<
   // checks the CSRF token in the header against the CSRF token in the session
   // and throw an error if they are not the same (not used yet)
   async _validateCsrf() {
-    await this.init()
     if (
       this.sessionCsrfToken !== this.normalizedRequest.headers.get('csrf-token')
     ) {
@@ -1395,8 +1384,6 @@ export class DbAuthHandler<
 
   // gets the user from the database and returns only its ID
   async _getCurrentUser() {
-    await this.init()
-
     if (!this.session?.id) {
       throw new DbAuthError.NotLoggedInError()
     }
@@ -1431,7 +1418,6 @@ export class DbAuthHandler<
   // creates and returns a user, first checking that the username/password
   // values pass validation
   async _createUser() {
-    await this.init()
     const { username, password, ...userAttributes } =
       this.normalizedRequest.jsonBody || {}
     if (
@@ -1469,7 +1455,6 @@ export class DbAuthHandler<
 
   // figure out which auth method we're trying to call
   async _getAuthMethod() {
-    await this.init()
     // try getting it from the query string, /.redwood/functions/auth?method=[methodName]
     let methodName = this.normalizedRequest.query.method as AuthMethodNames
 
