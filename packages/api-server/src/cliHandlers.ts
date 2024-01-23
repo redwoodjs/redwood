@@ -2,14 +2,13 @@ import path from 'path'
 
 import c from 'ansi-colors'
 
+import { redwoodFastifyWeb } from '@redwoodjs/fastify-web'
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import createFastifyInstance from './fastify'
-import withApiProxy from './plugins/withApiProxy'
 import withFunctions from './plugins/withFunctions'
-import withWebServer from './plugins/withWebServer'
 import { startServer as startFastifyServer } from './server'
-import type { BothServerArgs, WebServerArgs, ApiServerArgs } from './types'
+import type { BothServerArgs, ApiServerArgs } from './types'
 
 /*
  * This file has defines CLI handlers used by the redwood cli, for `rw serve`
@@ -40,16 +39,6 @@ export const apiCliOptions = {
     type: 'boolean',
     // We have to default to `false` for backwards compatibility.
     default: false,
-  },
-} as const
-
-export const webCliOptions = {
-  port: { default: getConfig().web?.port || 8910, type: 'number', alias: 'p' },
-  socket: { type: 'string' },
-  apiHost: {
-    alias: 'api-host',
-    type: 'string',
-    desc: 'Forward requests from the apiUrl, defined in redwood.toml, to this host',
   },
 } as const
 
@@ -101,8 +90,8 @@ export const bothServerHandler = async (options: BothServerArgs) => {
 
   let fastify = createFastifyInstance()
 
-  // Attach plugins
-  fastify = await withWebServer(fastify, options)
+  // @ts-expect-error TODO
+  await fastify.register(redwoodFastifyWeb, { redwood: options })
   fastify = await withFunctions(fastify, { ...options, apiRootPath })
 
   startFastifyServer({
@@ -125,76 +114,12 @@ export const bothServerHandler = async (options: BothServerArgs) => {
   })
 }
 
-export const webServerHandler = async (options: WebServerArgs) => {
-  const { port, socket, apiHost } = options
-  const apiUrl = getConfig().web.apiUrl
-
-  if (!apiHost && !isFullyQualifiedUrl(apiUrl)) {
-    console.error(
-      `${c.red('Error')}: If you don't provide ${c.magenta(
-        'apiHost'
-      )}, ${c.magenta(
-        'apiUrl'
-      )} needs to be a fully-qualified URL. But ${c.magenta(
-        'apiUrl'
-      )} is ${c.yellow(apiUrl)}.`
-    )
-    process.exitCode = 1
-    return
-  }
-
-  const tsServer = Date.now()
-  process.stdout.write(c.dim(c.italic('Starting Web Server...\n')))
-  // Construct the graphql url from apiUrl by default
-  // But if apiGraphQLUrl is specified, use that instead
-  const graphqlEndpoint = coerceRootPath(
-    getConfig().web.apiGraphQLUrl ?? `${apiUrl}/graphql`
-  )
-
-  let fastify = createFastifyInstance()
-
-  // serve static files from "web/dist"
-  fastify = await withWebServer(fastify, options)
-
-  // If apiHost is supplied, it means the functions are running elsewhere
-  // So we should just proxy requests
-  if (apiHost) {
-    // Attach plugin for proxying
-    fastify = await withApiProxy(fastify, { apiHost, apiUrl })
-  }
-
-  startFastifyServer({
-    port,
-    socket,
-    fastify,
-  }).ready(() => {
-    console.log(c.italic(c.dim('Took ' + (Date.now() - tsServer) + ' ms')))
-    if (socket) {
-      console.log(`Listening on ` + c.magenta(`${socket}`))
-    }
-    const webServer = c.green(`http://localhost:${port}`)
-    console.log(`Web server started on ${webServer}`)
-    console.log(`GraphQL endpoint is set to ` + c.magenta(`${graphqlEndpoint}`))
-    sendProcessReady()
-  })
-}
-
 function coerceRootPath(path: string) {
   // Make sure that we create a root path that starts and ends with a slash (/)
   const prefix = path.charAt(0) !== '/' ? '/' : ''
   const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
 
   return `${prefix}${path}${suffix}`
-}
-
-function isFullyQualifiedUrl(url: string) {
-  try {
-    // eslint-disable-next-line no-new
-    new URL(url)
-    return true
-  } catch (e) {
-    return false
-  }
 }
 
 // Temporarily here till we refactor server code

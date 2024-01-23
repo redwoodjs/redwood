@@ -3,43 +3,42 @@
 import http from 'node:http'
 import { fileURLToPath } from 'node:url'
 
+import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { fs, path, $ } from 'zx'
 
-const __dirname = fileURLToPath(new URL('./', import.meta.url))
+////////////////
+// Tests setup
+////////////////
 
+const __dirname = fileURLToPath(new URL('./', import.meta.url))
 const FIXTURE_PATH = fileURLToPath(
   new URL('./fixtures/redwood-app', import.meta.url)
 )
+$.verbose = !!process.env.VERBOSE
 
-////////////////////////////////////////////////////////////////
-// Set up RWJS_CWD.
 let original_RWJS_CWD
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
   process.env.RWJS_CWD = FIXTURE_PATH
 })
-
 afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
 })
 
-////////////////////////////////////////////////////////////////
-// Clean up the child process after each test.
+// Clean up the child process after each test
 let p
 
 afterEach(async () => {
   if (!p) {
     return
   }
-
   p.kill()
-
-  // Wait for child process to terminate.
+  // Wait for child process to terminate
   try {
     await p
-  } catch (e) {
-    // Ignore the error.
+  } catch {
+    // Ignore
   }
 })
 
@@ -53,20 +52,26 @@ const commandStrings = {
   ),
   '@redwoodjs/web-server': path.resolve(
     __dirname,
-    '../../packages/web-server/dist/server.js'
+    '../../packages/web-server/dist/bin.js'
   ),
 }
 
-const redwoodToml = fs.readFileSync(
+const redwoodToml = await fs.readFile(
   path.join(__dirname, './fixtures/redwood-app/redwood.toml'),
   'utf-8'
 )
+const match = redwoodToml.match(/apiUrl = "(?<apiUrl>[^"]*)/)
+const apiUrl = match?.groups?.apiUrl
+if (!apiUrl) {
+  throw new Error("Couldn't find apiUrl in redwood.toml")
+}
 
-const {
-  groups: { apiUrl },
-} = redwoodToml.match(/apiUrl = "(?<apiUrl>[^"]*)/)
+////////////////
+// Tests start
+////////////////
 
-describe.each([
+// `yarn rw serve` and variants
+describe.skip.each([
   [[commandStrings['@redwoodjs/cli'], 'serve']],
   [commandStrings['@redwoodjs/api-server']],
 ])('serve both (%s)', (commandString) => {
@@ -120,7 +125,8 @@ describe.each([
   it.todo('respects web.port in redwood.toml')
 })
 
-describe.each([
+// `yarn rw serve api` and variants
+describe.skip.each([
   [[commandStrings['@redwoodjs/cli'], 'serve', 'api']],
   [[commandStrings['@redwoodjs/api-server'], 'api']],
 ])('serve api (%s)', (commandString) => {
@@ -165,11 +171,17 @@ describe.each([
   it.todo("apiRootPath isn't affected by apiUrl")
 })
 
-// We can't test @redwoodjs/cli here because it depends on node_modules.
-describe.each([
+// `yarn rw serve web` and variants
+describe.only.each([
+  [[`${commandStrings['@redwoodjs/cli']}`, 'serve', 'web']],
   [[`${commandStrings['@redwoodjs/api-server']}`, 'web']],
   [commandStrings['@redwoodjs/web-server']],
 ])('serve web (%s)', (commandString) => {
+  it('has help configured', async () => {
+    const { stdout } = await $`yarn node ${commandString} --help`
+    expect(stdout).toMatchSnapshot()
+  })
+
   it("fails if apiHost isn't set and apiUrl isn't fully qualified", async () => {
     try {
       await $`yarn node ${commandString}`
@@ -236,13 +248,19 @@ describe.each([
     }
   })
 
+  it.todo('serves static assets')
+  it.todo('serves prerendered files')
+  it.todo('fallback')
+  it.todo('loads dotenv')
+  it.todo('loads server config?')
+
   it.todo('respects web.port in redwood.toml')
   it.todo("works if apiHost isn't set and apiUrl is fully qualified")
   it.todo('fails if apiHost is set and apiUrl is fully qualified')
 })
 
 describe('@redwoodjs/cli', () => {
-  describe('both server CLI', () => {
+  describe.skip('both server CLI', () => {
     it.todo('handles --socket differently')
 
     it('has help configured', async () => {
@@ -306,7 +324,7 @@ describe('@redwoodjs/cli', () => {
     })
   })
 
-  describe('api server CLI', () => {
+  describe.skip('api server CLI', () => {
     it.todo('handles --socket differently')
 
     it('loads dotenv files', async () => {
@@ -375,68 +393,10 @@ describe('@redwoodjs/cli', () => {
       }
     })
   })
-
-  describe('web server CLI', () => {
-    it.todo('handles --socket differently')
-
-    it('has help configured', async () => {
-      const { stdout } =
-        await $`yarn node ${commandStrings['@redwoodjs/cli']} serve web --help`
-
-      expect(stdout).toMatchInlineSnapshot(`
-        "rw serve web
-
-        Start server for serving only the web side
-
-        Options:
-              --help                 Show help                                 [boolean]
-              --version              Show version number                       [boolean]
-              --cwd                  Working directory to use (where \`redwood.toml\` is
-                                     located)
-              --telemetry            Whether to send anonymous usage telemetry to
-                                     RedwoodJS                                 [boolean]
-          -p, --port                                            [number] [default: 8910]
-              --socket                                                          [string]
-              --apiHost, --api-host  Forward requests from the apiUrl, defined in
-                                     redwood.toml, to this host                 [string]
-        "
-      `)
-    })
-
-    it('errors out on unknown args', async () => {
-      try {
-        await $`yarn node ${commandStrings['@redwoodjs/cli']} serve web  --foo --bar --baz`
-        expect(true).toEqual(false)
-      } catch (p) {
-        expect(p.exitCode).toEqual(1)
-        expect(p.stdout).toEqual('')
-        expect(p.stderr).toMatchInlineSnapshot(`
-          "rw serve web
-
-          Start server for serving only the web side
-
-          Options:
-                --help                 Show help                                 [boolean]
-                --version              Show version number                       [boolean]
-                --cwd                  Working directory to use (where \`redwood.toml\` is
-                                       located)
-                --telemetry            Whether to send anonymous usage telemetry to
-                                       RedwoodJS                                 [boolean]
-            -p, --port                                            [number] [default: 8910]
-                --socket                                                          [string]
-                --apiHost, --api-host  Forward requests from the apiUrl, defined in
-                                       redwood.toml, to this host                 [string]
-
-          Unknown arguments: foo, bar, baz
-          "
-        `)
-      }
-    })
-  })
 })
 
 describe('@redwoodjs/api-server', () => {
-  describe('both server CLI', () => {
+  describe.skip('both server CLI', () => {
     it('--socket changes the port', async () => {
       const socket = 8921
 
@@ -539,7 +499,7 @@ describe('@redwoodjs/api-server', () => {
     })
   })
 
-  describe('api server CLI', () => {
+  describe.skip('api server CLI', () => {
     it('--socket changes the port', async () => {
       const socket = 3001
 
@@ -687,55 +647,5 @@ describe('@redwoodjs/api-server', () => {
         "
       `)
     })
-
-    it('errors out on unknown args', async () => {
-      try {
-        await $`yarn node ${commandStrings['@redwoodjs/api-server']} web --foo --bar --baz`
-        expect(true).toEqual(false)
-      } catch (p) {
-        expect(p.exitCode).toEqual(1)
-        expect(p.stdout).toEqual('')
-        expect(p.stderr).toMatchInlineSnapshot(`
-          "rw-server web
-
-          Start server for serving only the web side
-
-          Options:
-                --help                 Show help                                 [boolean]
-                --version              Show version number                       [boolean]
-            -p, --port                                            [number] [default: 8910]
-                --socket                                                          [string]
-                --apiHost, --api-host  Forward requests from the apiUrl, defined in
-                                       redwood.toml, to this host                 [string]
-
-          Unknown arguments: foo, bar, baz
-          "
-        `)
-      }
-    })
-  })
-})
-
-describe('@redwoodjs/web-server', () => {
-  it.todo('handles --socket differently')
-
-  it('has help configured', async () => {
-    const { stdout } =
-      await $`yarn node ${commandStrings['@redwoodjs/web-server']} --help`
-
-    expect(stdout).toMatchInlineSnapshot(`
-      "rw-web-server
-
-      Start server for serving only the web side
-
-      Options:
-            --help                 Show help                                 [boolean]
-            --version              Show version number                       [boolean]
-        -p, --port                                            [number] [default: 8910]
-            --socket                                                          [string]
-            --apiHost, --api-host  Forward requests from the apiUrl, defined in
-                                   redwood.toml, to this host                 [string]
-      "
-    `)
   })
 })

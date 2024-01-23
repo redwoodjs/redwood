@@ -8,8 +8,8 @@ import {
   coerceRootPath,
   createFastifyInstance,
   redwoodFastifyAPI,
-  redwoodFastifyWeb,
 } from '@redwoodjs/fastify'
+import { redwoodFastifyWeb } from '@redwoodjs/fastify-web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 

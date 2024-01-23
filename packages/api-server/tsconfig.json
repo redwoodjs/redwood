@@ -6,5 +6,10 @@
     "outDir": "dist",
   },
   "include": ["src", "ambient.d.ts"],
-  "references": [{ "path": "../internal" }, { "path": "../project-config" }]
+  "references": [
+    { "path": "../internal" },
+    { "path": "../project-config" },
+    { "path": "../adapters/fastify/web" },
+    { "path": "../web-server" }
+  ]
 }
