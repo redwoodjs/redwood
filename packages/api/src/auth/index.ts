@@ -5,6 +5,8 @@ import { parse as parseCookie } from 'cookie'
 
 import { getEventHeader } from '../event'
 
+import { getEventHeader } from '../event'
+
 import type { Decoded } from './parseJWT'
 export type { Decoded }
 
@@ -64,16 +66,24 @@ export const parseAuthorizationHeader = (
   return { schema, token }
 }
 
+/** @MARK Note that we do not send LambdaContext when making fetch requests
+ *
+ * This part is incomplete, as we need to decide how we will make the breaking change to
+ * 1. getCurrentUser
+ * 2. authDecoders
+
+ */
+
 export type AuthContextPayload = [
   Decoded,
   { type: string } & AuthorizationHeader,
-  { event: APIGatewayProxyEvent; context: LambdaContext }
+  { event: APIGatewayProxyEvent | Request; context: LambdaContext }
 ]
 
 export type Decoder = (
   token: string,
   type: string,
-  req: { event: APIGatewayProxyEvent; context: LambdaContext }
+  req: { event: APIGatewayProxyEvent | Request; context: LambdaContext }
 ) => Promise<Decoded>
 
 /**
@@ -134,8 +144,9 @@ export const getAuthenticationContext = async ({
   let i = 0
   while (!decoded && i < authDecoders.length) {
     decoded = await authDecoders[i](token, type, {
-      // @TODO We will need to make a breaking change to auth decoders maybe
-      event: event as any,
+      // @TODO: We will need to make a breaking change to support `Request` objects.
+      // We can remove this typecast
+      event: event,
       context,
     })
     i++

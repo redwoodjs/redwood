@@ -1,22 +1,27 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import jwt from 'jsonwebtoken'
+import { vi, beforeAll, afterAll, test, expect } from 'vitest'
 
 import { authDecoder } from '../decoder'
 
-jest.mock('jsonwebtoken', () => {
-  const jsonwebtoken = jest.requireActual('jsonwebtoken')
+vi.mock('jsonwebtoken', async (importOriginal) => {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+  const originalJWT = await importOriginal<typeof import('jsonwebtoken')>()
 
   return {
-    ...jsonwebtoken,
-    verify: jest.fn(),
-    decode: jest.fn((token: string) => {
-      const exp =
-        token === 'expired-token'
-          ? Math.floor(Date.now() / 1000) - 3600
-          : Math.floor(Date.now() / 1000) + 3600
+    ...originalJWT,
+    default: {
+      verify: vi.fn(),
+      decode: vi.fn((token: string) => {
+        const exp =
+          token === 'expired-token'
+            ? Math.floor(Date.now() / 1000) - 3600
+            : Math.floor(Date.now() / 1000) + 3600
 
-      return { exp, sub: 'abc123' }
-    }),
+        return { exp, sub: 'abc123' }
+      }),
+    },
+    TokenExpiredError: originalJWT.TokenExpiredError,
   }
 })
 

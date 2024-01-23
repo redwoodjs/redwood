@@ -1,5 +1,6 @@
 import { Headers } from '@whatwg-node/fetch'
 import type { APIGatewayProxyEvent } from 'aws-lambda'
+import { test, expect, describe } from 'vitest'
 
 import { normalizeRequest } from '../transforms'
 
@@ -54,7 +55,7 @@ export const createMockedLambdaEvent = (
 }
 
 describe('Lambda Request', () => {
-  it('Normalizes an aws event with base64', async () => {
+  test('Normalizes an aws event with base64', async () => {
     const corsEventB64 = createMockedLambdaEvent(
       'POST',
       Buffer.from(JSON.stringify({ bazinga: 'hello_world' }), 'utf8').toString(
@@ -73,14 +74,14 @@ describe('Lambda Request', () => {
     })
   })
 
-  it('Handles CORS requests with and without b64 encoded', async () => {
+  test('Handles CORS requests with and without b64 encoded', async () => {
     const corsEventB64 = createMockedLambdaEvent('OPTIONS', undefined, true)
 
     expect(await normalizeRequest(corsEventB64)).toEqual({
       headers: new Headers(corsEventB64.headers as Record<string, string>), // headers returned as symbol
       method: 'OPTIONS',
       query: null,
-      jsonBody: undefined,
+      jsonBody: {},
     })
 
     const corsEventWithoutB64 = createMockedLambdaEvent(
@@ -93,13 +94,13 @@ describe('Lambda Request', () => {
       headers: new Headers(corsEventB64.headers as Record<string, string>), // headers returned as symbol
       method: 'OPTIONS',
       query: null,
-      jsonBody: undefined,
+      jsonBody: {},
     })
   })
 })
 
 describe('Fetch API Request', () => {
-  it('Normalizes a fetch event', async () => {
+  test('Normalizes a fetch event', async () => {
     const fetchEvent = new Request(
       'http://localhost:9210/graphql?whatsup=doc&its=bugs',
       {
@@ -128,7 +129,7 @@ describe('Fetch API Request', () => {
     expect(partial.headers.get('content-type')).toEqual('application/json')
   })
 
-  it('Handles an empty body', async () => {
+  test('Handles an empty body', async () => {
     const headers = {
       'content-type': 'application/json',
       'x-custom-header': 'bazinga',
@@ -151,7 +152,7 @@ describe('Fetch API Request', () => {
         whatsup: 'doc',
         its: 'bugs',
       },
-      jsonBody: undefined,
+      jsonBody: {}, // @NOTE empty body is {} not undefined
     })
 
     expect(partial.headers.get('content-type')).toEqual(headers['content-type'])

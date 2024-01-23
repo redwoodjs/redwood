@@ -1,6 +1,17 @@
 import crypto from 'node:crypto'
 import path from 'node:path'
 
+import {
+  vi,
+  describe,
+  it,
+  expect,
+  beforeAll,
+  afterAll,
+  beforeEach,
+  afterEach,
+} from 'vitest'
+
 import { DbAuthHandler } from '../DbAuthHandler'
 import * as dbAuthError from '../errors'
 import { hashToken } from '../shared'
@@ -136,7 +147,7 @@ let req, context, options
 describe('dbAuth', () => {
   beforeEach(() => {
     // hide deprecation warnings during test
-    jest.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
     // encryption key so results are consistent regardless of settings in .env
     process.env.SESSION_SECRET = SESSION_SECRET
     delete process.env.DBAUTH_COOKIE_DOMAIN
@@ -221,7 +232,7 @@ describe('dbAuth', () => {
   })
 
   afterEach(async () => {
-    jest.spyOn(console, 'warn').mockRestore()
+    vi.spyOn(console, 'warn').mockRestore()
     await db.user.deleteMany({
       where: { email: 'rob@redwoodjs.com' },
     })
@@ -250,22 +261,25 @@ describe('dbAuth', () => {
   })
 
   describe('dbAccessor', () => {
-    it('returns the prisma db accessor for a model', () => {
+    it('returns the prisma db accessor for a model', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       expect(dbAuth.dbAccessor).toEqual(db.user)
     })
   })
 
   describe('dbCredentialAccessor', () => {
-    it('returns the prisma db accessor for a UserCredential model', () => {
+    it('returns the prisma db accessor for a UserCredential model', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       expect(dbAuth.dbCredentialAccessor).toEqual(db.userCredential)
     })
   })
 
   describe('sessionExpiresDate', () => {
-    it('returns a date in the future as a UTCString', () => {
+    it('returns a date in the future as a UTCString', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const expiresAt = new Date()
       expiresAt.setSeconds(expiresAt.getSeconds() + options.login.expires)
 
@@ -274,8 +288,9 @@ describe('dbAuth', () => {
   })
 
   describe('webAuthnExpiresDate', () => {
-    it('returns a date in the future as a UTCString', () => {
+    it('returns a date in the future as a UTCString', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const expiresAt = new Date()
       expiresAt.setSeconds(expiresAt.getSeconds() + options.webAuthn.expires)
 
@@ -284,8 +299,9 @@ describe('dbAuth', () => {
   })
 
   describe('_deleteSessionHeader', () => {
-    it('returns a Set-Cookie header to delete the session cookie', () => {
+    it('returns a Set-Cookie header to delete the session cookie', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const headers = dbAuth._deleteSessionHeader
 
       expect(Object.keys(headers).length).toEqual(1)
@@ -295,7 +311,7 @@ describe('dbAuth', () => {
   })
 
   describe('constructor', () => {
-    it('initializes some variables with passed values', () => {
+    it('initializes some variables with passed values', async () => {
       req = { headers: {} }
       context = { foo: 'bar' }
       options = {
@@ -315,6 +331,7 @@ describe('dbAuth', () => {
         },
       }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect(dbAuth.event).toEqual(req)
       expect(dbAuth.options).toEqual(options)
@@ -513,6 +530,7 @@ describe('dbAuth', () => {
     it('parses params from a plain text body', async () => {
       req = { headers: {}, body: `{"foo":"bar", "baz":123}` }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       // Need to wait for reqq to be parsed
       await dbAuth.init()
@@ -523,19 +541,21 @@ describe('dbAuth', () => {
       })
     })
 
-    it.skip('parses an empty plain text body and still sets params', async () => {
-      // @TODO(Rob): This test is failing due to refactor, not sure its necessary
-      req = { isBase64Encoded: false, headers: {}, body: '' }
+    it('parses an empty plain text body and still sets params', async () => {
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        body: '',
+      })
+
       context = { foo: 'bar' }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       await dbAuth.init()
 
       expect(dbAuth.normalizedRequest.jsonBody).toEqual({})
     })
 
-    it.skip('parses params from an undefined body when isBase64Encoded == false', async () => {
-      // @TODO(Rob): This test is failing due to refactor, not sure its necessary
-
+    it('parses params from an undefined body', async () => {
       req = {
         isBase64Encoded: false,
         headers: {},
@@ -543,69 +563,31 @@ describe('dbAuth', () => {
       context = { foo: 'bar' }
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
+      await dbAuth.init()
 
       expect(dbAuth.normalizedRequest.jsonBody).toEqual({})
-    })
-
-    it('parses params from a base64 encoded body', async () => {
-      req = {
-        isBase64Encoded: true,
-        headers: {},
-        body: Buffer.from(`{"foo":"bar", "baz":123}`, 'utf8'),
-      }
-      const dbAuth = new DbAuthHandler(req, context, options)
-      await dbAuth.init()
-      expect(dbAuth.normalizedRequest.jsonBody).toEqual({
-        foo: 'bar',
-        baz: 123,
-      })
-    })
-
-    it('parses params from an undefined body when isBase64Encoded == true', async () => {
-      // @TODO(Rob): Not sure this is necessary any more?
-      req = {
-        isBase64Encoded: true,
-        headers: {},
-      }
-      context = { foo: 'bar' }
-      const dbAuth = new DbAuthHandler(req, context, options)
-      await dbAuth.init()
-
-      expect(dbAuth.normalizedRequest.jsonBody).toEqual(undefined)
-    })
-
-    it('parses params from an empty body when isBase64Encoded == true', async () => {
-      // @TODO(Rob): Not sure this is necessary any more?
-      req = {
-        isBase64Encoded: true,
-        headers: {},
-        body: '',
-      }
-      context = { foo: 'bar' }
-      const dbAuth = new DbAuthHandler(req, context, options)
-      await dbAuth.init()
-
-      expect(dbAuth.normalizedRequest.jsonBody).toEqual(undefined)
     })
 
     it('sets header-based CSRF token', async () => {
       req = { headers: { 'csrf-token': 'qwerty' } }
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
+      await dbAuth.init()
       expect(dbAuth.normalizedRequest.headers.get('csrf-token')).toEqual(
         'qwerty'
       )
     })
 
-    it('sets session variables to nothing if session cannot be decrypted', () => {
+    it('sets session variables to nothing if session cannot be decrypted', async () => {
       req = { headers: { 'csrf-token': 'qwerty' } }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect(dbAuth.session).toBeUndefined()
       expect(dbAuth.sessionCsrfToken).toBeUndefined()
     })
 
-    it('sets session variables to valid session data', () => {
+    it('sets session variables to valid session data', async () => {
       req = {
         headers: {
           cookie:
@@ -613,6 +595,7 @@ describe('dbAuth', () => {
         },
       }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect(dbAuth.session).toEqual({ foo: 'bar' })
       expect(dbAuth.sessionCsrfToken).toEqual('abcd')
@@ -658,6 +641,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(fetchEvent, context, options)
+      await dbAuth.init()
       const response = await dbAuth.invoke()
 
       expect(response.statusCode).toEqual(404)
@@ -673,6 +657,7 @@ describe('dbAuth', () => {
         body: JSON.stringify({ method: 'foobar' }),
       })
       const dbAuth = new DbAuthHandler(fetchEvent, context, options)
+
       const response = await dbAuth.invoke()
 
       expect(response.statusCode).toEqual(404)
@@ -689,7 +674,9 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(fetchEvent, context, options)
-      dbAuth.logout = jest.fn(() => {
+      await dbAuth.init()
+
+      dbAuth.logout = vi.fn(() => {
         throw Error('Logout error')
       })
       const response = await dbAuth.invoke()
@@ -711,7 +698,7 @@ describe('dbAuth', () => {
           credentials: true,
         },
       })
-      dbAuth.logout = jest.fn(() => {
+      dbAuth.logout = vi.fn(() => {
         throw Error('Logout error')
       })
       const response = await dbAuth.invoke()
@@ -734,7 +721,8 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(fetchEvent, context, options)
-      dbAuth.logout = jest.fn(() => ['body', { foo: 'bar' }])
+      await dbAuth.init()
+      dbAuth.logout = vi.fn(() => ['body', { foo: 'bar' }])
       const response = await dbAuth.invoke()
 
       expect(dbAuth.logout).toHaveBeenCalled()
@@ -762,6 +750,7 @@ describe('dbAuth', () => {
 
       options.forgotPassword.enabled = false
       const dbAuth = new DbAuthHandler(fetchEvent, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.forgotPassword()
@@ -789,6 +778,7 @@ describe('dbAuth', () => {
         flowNotEnabled: 'Custom flow not enabled error',
       }
       const dbAuth = new DbAuthHandler(fetchEvent, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.forgotPassword()
@@ -806,6 +796,7 @@ describe('dbAuth', () => {
       })
 
       let dbAuth = new DbAuthHandler(emptyBodyReq, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.forgotPassword()
@@ -820,6 +811,7 @@ describe('dbAuth', () => {
       })
 
       dbAuth = new DbAuthHandler(emptyStringReq, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.forgotPassword()
@@ -842,6 +834,7 @@ describe('dbAuth', () => {
       })
 
       let dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.forgotPassword()
@@ -864,6 +857,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect(user.resetToken).toEqual(undefined)
       expect(user.resetTokenExpiresAt).toEqual(undefined)
@@ -901,6 +895,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = await dbAuth.forgotPassword()
 
       expectLoggedOutResponse(response)
@@ -921,6 +916,7 @@ describe('dbAuth', () => {
         expect(handlerUser.id).toEqual(user.id)
       }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       await dbAuth.forgotPassword()
       expect.assertions(1)
     })
@@ -936,14 +932,16 @@ describe('dbAuth', () => {
         body,
       })
 
-      options.forgotPassword.handler = (handlerUser) => {
-        // user should have the raw resetToken NOT the hash
+      options.forgotPassword.handler = (handlerUser, token) => {
+        // tokens should be the raw resetToken NOT the hash
         // resetToken consists of 16 base64 characters
-        expect(handlerUser.resetToken).toMatch(/^\w{16}$/)
+        expect(handlerUser.resetToken).toBeUndefined()
+        expect(token).toMatch(/^[A-Za-z0-9/+]{16}$/)
       }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       await dbAuth.forgotPassword()
-      expect.assertions(1)
+      expect.assertions(2)
     })
 
     it('removes the token from the forgotPassword response', async () => {
@@ -961,6 +959,7 @@ describe('dbAuth', () => {
         return handlerUser
       }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = await dbAuth.forgotPassword()
       const jsonResponse = JSON.parse(response[0])
 
@@ -981,6 +980,7 @@ describe('dbAuth', () => {
 
       // invalid db client
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       dbAuth.dbAccessor = undefined
 
       try {
@@ -1008,6 +1008,7 @@ describe('dbAuth', () => {
 
       options.login.enabled = false
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.login()
@@ -1035,6 +1036,7 @@ describe('dbAuth', () => {
         flowNotEnabled: 'Custom flow not enabled error',
       }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.login()
@@ -1058,6 +1060,7 @@ describe('dbAuth', () => {
         body,
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.login()
@@ -1079,6 +1082,7 @@ describe('dbAuth', () => {
         body,
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.login()
@@ -1103,6 +1107,7 @@ describe('dbAuth', () => {
         body,
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.login()
@@ -1128,6 +1133,7 @@ describe('dbAuth', () => {
         body,
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       await dbAuth.login()
     })
 
@@ -1145,6 +1151,7 @@ describe('dbAuth', () => {
         body,
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       try {
         await dbAuth.login()
       } catch (e) {
@@ -1168,6 +1175,7 @@ describe('dbAuth', () => {
         body,
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       try {
         await dbAuth.login()
       } catch (e) {
@@ -1187,10 +1195,11 @@ describe('dbAuth', () => {
         body,
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       const response = await dbAuth.login()
 
-      expect(response[0]).toEqual({ id: user.id })
+      expect(response[0].id).toEqual(user.id)
     })
 
     it('returns a CSRF token in the header', async () => {
@@ -1204,6 +1213,7 @@ describe('dbAuth', () => {
         body,
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       const response = await dbAuth.login()
       expect(response[1]['csrf-token']).toMatch(UUID_REGEX)
@@ -1220,6 +1230,7 @@ describe('dbAuth', () => {
         body,
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       const response = await dbAuth.login()
 
@@ -1237,6 +1248,7 @@ describe('dbAuth', () => {
         body,
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       const response = await dbAuth.login()
 
@@ -1244,8 +1256,8 @@ describe('dbAuth', () => {
     })
 
     it('login db check is called with insensitive string when user has provided one in LoginFlowOptions', async () => {
-      jest.clearAllMocks()
-      const spy = jest.spyOn(db.user, 'findFirst')
+      vi.clearAllMocks()
+      const spy = vi.spyOn(db.user, 'findFirst')
 
       options.signup.usernameMatch = 'insensitive'
       options.login.usernameMatch = 'insensitive'
@@ -1262,6 +1274,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.login()
@@ -1277,8 +1290,8 @@ describe('dbAuth', () => {
     })
 
     it('login db check is not called with insensitive string when user has not provided one in LoginFlowOptions', async () => {
-      jest.clearAllMocks()
-      const spy = jest.spyOn(db.user, 'findFirst')
+      vi.clearAllMocks()
+      const spy = vi.spyOn(db.user, 'findFirst')
 
       delete options.signup.usernameMatch
       delete options.login.usernameMatch
@@ -1295,6 +1308,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       await dbAuth.login()
 
@@ -1309,6 +1323,7 @@ describe('dbAuth', () => {
   describe('logout', () => {
     it('returns set-cookie header for removing session', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = dbAuth.logout()
 
       expectLoggedOutResponse(response)
@@ -1330,6 +1345,7 @@ describe('dbAuth', () => {
 
       options.resetPassword.enabled = false
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.resetPassword()
@@ -1357,6 +1373,7 @@ describe('dbAuth', () => {
         flowNotEnabled: 'Custom flow not enabled error',
       }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.resetPassword()
@@ -1373,6 +1390,7 @@ describe('dbAuth', () => {
       })
 
       let dbAuth = new DbAuthHandler(emptyBody, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.resetPassword()
@@ -1386,6 +1404,7 @@ describe('dbAuth', () => {
         body: JSON.stringify({ resetToken: ' ' }),
       })
       dbAuth = new DbAuthHandler(emptyString, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.resetPassword()
@@ -1403,6 +1422,7 @@ describe('dbAuth', () => {
         body: JSON.stringify({ resetToken: '1234' }),
       })
       let dbAuth = new DbAuthHandler(noPwd, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.resetPassword()
@@ -1416,6 +1436,7 @@ describe('dbAuth', () => {
         body: JSON.stringify({ resetToken: '1234', password: ' ' }),
       })
       dbAuth = new DbAuthHandler(pwdEmpty, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.resetPassword()
@@ -1434,6 +1455,7 @@ describe('dbAuth', () => {
       })
 
       let dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.resetPassword()
@@ -1460,6 +1482,7 @@ describe('dbAuth', () => {
       })
 
       let dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.resetPassword()
@@ -1489,6 +1512,7 @@ describe('dbAuth', () => {
       })
 
       let dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.resetPassword()
@@ -1523,6 +1547,7 @@ describe('dbAuth', () => {
 
       options.resetPassword.allowReusedPassword = false
       let dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       await expect(dbAuth.resetPassword()).rejects.toThrow(
         dbAuthError.ReusedPasswordError
@@ -1550,6 +1575,7 @@ describe('dbAuth', () => {
       })
 
       let dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       await expect(dbAuth.resetPassword()).resolves.not.toThrow()
     })
@@ -1573,6 +1599,7 @@ describe('dbAuth', () => {
       })
 
       let dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       await expect(dbAuth.resetPassword()).resolves.not.toThrow()
 
@@ -1604,6 +1631,7 @@ describe('dbAuth', () => {
       })
 
       let dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       await expect(dbAuth.resetPassword()).resolves.not.toThrow()
 
@@ -1637,6 +1665,7 @@ describe('dbAuth', () => {
       })
 
       let dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       await dbAuth.resetPassword()
       expect.assertions(1)
@@ -1662,6 +1691,7 @@ describe('dbAuth', () => {
       })
 
       let dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       const response = await dbAuth.resetPassword()
 
@@ -1688,6 +1718,7 @@ describe('dbAuth', () => {
       })
 
       let dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       const response = await dbAuth.resetPassword()
 
@@ -1711,6 +1742,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect.assertions(1)
       await expect(dbAuth.signup()).rejects.toThrow('Cannot signup')
@@ -1729,6 +1761,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.signup()
@@ -1755,6 +1788,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.signup()
@@ -1781,6 +1815,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.signup()
@@ -1807,6 +1842,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect(() => dbAuth.signup()).not.toThrow()
     })
@@ -1824,6 +1860,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect(() => dbAuth.signup()).not.toThrow()
     })
@@ -1841,6 +1878,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = await dbAuth.signup()
       const newUserCount = await db.user.count()
 
@@ -1868,6 +1906,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       const response = await dbAuth.signup()
 
@@ -1887,7 +1926,6 @@ describe('dbAuth', () => {
         JSON.stringify({ id: user.id }) + ';' + 'token'
       )
 
-      const justEncryptedSession = cookie.split('session=')[1]
       const headers = {
         cookie,
       }
@@ -1899,19 +1937,20 @@ describe('dbAuth', () => {
       req.headers.get('cookie')
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = await dbAuth.getToken()
 
-      expect(response[0]).toEqual(justEncryptedSession)
+      expect(response[0]).toEqual(user.id)
     })
 
     it('returns nothing if user is not logged in', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = await dbAuth.getToken()
 
       expect(response[0]).toEqual('')
     })
 
-    // @TODO(Rob) HELP, change in behaviour
     it('returns any other error', async () => {
       req = {
         headers: {
@@ -1922,12 +1961,12 @@ describe('dbAuth', () => {
       }
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = await dbAuth.getToken()
 
       expect(response[0]).toEqual('{"error":"User not found"}')
     })
 
-    // @TODO(Rob) HELP, change in behaviour
     it('re-encrypts the session cookie if using the legacy algorithm', async () => {
       await createDbUser({ id: 7 })
       req = {
@@ -1940,6 +1979,7 @@ describe('dbAuth', () => {
         'QKxN2vFSHAf94XYynK8LUALfDuDSdFowG6evfkFX8uszh4YZqhTiqEdshrhWbwbw'
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const [userId, headers] = await dbAuth.getToken()
 
       expect(userId).toEqual(7)
@@ -1950,11 +1990,7 @@ describe('dbAuth', () => {
     })
   })
 
-  // @TODO: Studio should not use body to send auth impersonation details
-  // @TODO: Studio should not use body to send auth impersonation details
-  // @TODO: Studio should not use body to send auth impersonation details
-  // @TODO: Studio should not use body to send auth impersonation details
-  describe.skip('When a developer has set GraphiQL headers to mock a session cookie', () => {
+  describe('When a developer has set GraphiQL headers to mock a session cookie', () => {
     describe('when in development environment', () => {
       const curNodeEnv = process.env.NODE_ENV
 
@@ -1968,44 +2004,49 @@ describe('dbAuth', () => {
         expect(process.env.NODE_ENV).toBe('test')
       })
 
-      it('authenticates the user based on GraphiQL headers when no event.headers present', async () => {
-        // setup graphiQL header cookie in extensions
+      it('authenticates the user based on GraphiQL impersonated headers when no cookie present', async () => {
+        // Making Fetch API Requests with GraphiQL Headers in the body does not work because it's async
+        // but we can set the new 'rw-studio-impersonation-cookie' header
         const dbUser = await createDbUser()
-        req.body = JSON.stringify({
-          extensions: {
-            headers: {
-              'auth-provider': 'dbAuth',
-              cookie: encryptToCookie(JSON.stringify({ id: dbUser.id })),
-              authorization: 'Bearer ' + dbUser.id,
-            },
-          },
+        const headers = {
+          'auth-provider': 'dbAuth',
+          'rw-studio-impersonation-cookie': encryptToCookie(
+            JSON.stringify({ id: dbUser.id })
+          ),
+        }
+
+        const req = new Request('http://localhost:8910/_rw_mw', {
+          method: 'POST',
+          headers,
         })
 
         const dbAuth = new DbAuthHandler(req, context, options)
+        await dbAuth.init()
         const user = await dbAuth._getCurrentUser()
         expect(user.id).toEqual(dbUser.id)
       })
 
-      it('Cookie from GraphiQLHeaders takes precedence over event headers when authenticating user', async () => {
+      it('Cookie from GraphiQLHeaders takes precedence over real headers when authenticating user', async () => {
         // setup session cookie in GraphiQL header
         const dbUser = await createDbUser()
         const dbUserId = dbUser.id
 
-        req.body = JSON.stringify({
-          extensions: {
-            headers: {
-              'auth-provider': 'dbAuth',
-              cookie: encryptToCookie(JSON.stringify({ id: dbUserId })),
-              authorization: 'Bearer ' + dbUserId,
-            },
+        const req = new Request('http://localhost:8910/_rw_mw', {
+          method: 'POST',
+          headers: {
+            'auth-provider': 'dbAuth',
+            authorization: 'Bearer ' + dbUserId,
+            cookie: encryptToCookie(JSON.stringify({ id: 9999999999 })), // The "real" cookie with an invalid userId
+            // 👇 The impersonated header takes precendence
+            'rw-studio-impersonation-cookie': encryptToCookie(
+              JSON.stringify({ id: dbUser.id })
+            ),
           },
         })
 
-        // create session cookie in event header
-        req.headers.cookie = encryptToCookie(JSON.stringify({ id: 9999999999 }))
-
         // should read session from graphiQL header, not from cookie
         const dbAuth = new DbAuthHandler(req, context, options)
+        await dbAuth.init()
         const user = await dbAuth._getCurrentUser()
         expect(user.id).toEqual(dbUserId)
       })
@@ -2016,18 +2057,20 @@ describe('dbAuth', () => {
         const dbUser = await createDbUser()
         const dbUserId = dbUser.id
 
-        req.body = JSON.stringify({
-          extensions: {
-            headers: {
-              'auth-provider': 'dbAuth',
-              cookie: encryptToCookie(JSON.stringify({ id: dbUserId })),
-              authorization: 'Bearer ' + dbUserId,
-            },
+        const req = new Request('http://localhost:8910/_rw_mw', {
+          method: 'POST',
+          headers: {
+            'auth-provider': 'dbAuth',
+            'rw-studio-impersonation-cookie': encryptToCookie(
+              JSON.stringify({ id: dbUserId })
+            ),
+            authorization: 'Bearer ' + dbUserId,
           },
         })
 
         try {
           const dbAuth = new DbAuthHandler(req, context, options)
+          await dbAuth.init()
           await dbAuth._getCurrentUser()
         } catch (e) {
           expect(e.message).toEqual(
@@ -2053,7 +2096,6 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
 
-    // @TODO(Rob) Failing test here
     it('throws an error if WebAuthn is disabled', async () => {
       const req = new Request('http://localhost:8910/_rw_mw', {
         method: 'POST',
@@ -2062,6 +2104,7 @@ describe('dbAuth', () => {
 
       options.webAuthn.enabled = false
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect.assertions(1)
       await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
@@ -2080,6 +2123,7 @@ describe('dbAuth', () => {
         headers,
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect.assertions(1)
       await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
@@ -2107,6 +2151,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect.assertions(1)
       await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
@@ -2134,6 +2179,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect.assertions(1)
       try {
@@ -2172,6 +2218,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       const [body, headers] = await dbAuth.webAuthnAuthenticate()
 
@@ -2183,13 +2230,13 @@ describe('dbAuth', () => {
   })
 
   describe('webAuthnAuthOptions', () => {
-    // @TODO(Rob): HELP, failing test here
     it('throws an error if user is not logged in', async () => {
       const req = new Request('http://localhost:8910/_rw_mw', {
         method: 'POST',
         headers: {},
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.webAuthnAuthOptions()
@@ -2205,6 +2252,7 @@ describe('dbAuth', () => {
       }
       options.webAuthn.enabled = false
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.webAuthnAuthOptions()
@@ -2224,6 +2272,7 @@ describe('dbAuth', () => {
         },
       }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = await dbAuth.webAuthnAuthOptions()
       const regOptions = response[0]
 
@@ -2251,6 +2300,7 @@ describe('dbAuth', () => {
         },
       }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = await dbAuth.webAuthnAuthOptions()
       const regOptions = response[0]
 
@@ -2272,6 +2322,7 @@ describe('dbAuth', () => {
         headers: {},
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.webAuthnRegOptions()
@@ -2289,6 +2340,7 @@ describe('dbAuth', () => {
 
       options.webAuthn.enabled = false
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth.webAuthnRegOptions()
@@ -2312,6 +2364,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = await dbAuth.webAuthnRegOptions()
       const regOptions = response[0]
 
@@ -2343,6 +2396,7 @@ describe('dbAuth', () => {
 
       options.webAuthn.timeout = null
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = await dbAuth.webAuthnRegOptions()
 
       expect(response[0].timeout).toEqual(60000)
@@ -2362,6 +2416,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = await dbAuth.webAuthnRegOptions()
       user = await db.user.findFirst({ where: { id: user.id } })
 
@@ -2384,6 +2439,7 @@ describe('dbAuth', () => {
         body: '{"method":"webAuthnRegister","id":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","rawId":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","response":{"attestationObject":"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVisSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAK3OAAI1vMYKZIsLJfHwVQMAKBqo2TrmGKaTmwQ3lZJ263AS5GmvYpkuRCScLQle-NGrFM9uLHQJhhalAQIDJiABIVggGIipTQt-gcoDPOpW6Zje_Av9C0-jWb2R2PBmXJJL-c8iWCC76wxo3uzG8cPqb0A8Vij-dqMbrEytEHjuFOtiQ2dt8A","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiSHVHUHJRcUs3ZjUzTkx3TVpNc3RfREw5RGlnMkJCaXZEWVdXcGF3SVBWTSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9"},"type":"public-key","clientExtensionResults":{},"transports":["internal"]}',
       }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       await dbAuth.webAuthnRegister()
 
@@ -2415,6 +2471,7 @@ describe('dbAuth', () => {
         ),
       }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       await dbAuth.webAuthnRegister()
 
@@ -2501,6 +2558,7 @@ describe('dbAuth', () => {
         ...options,
         cookie: { Secure: true },
       })
+
       const attributes = dbAuth._cookieAttributes({})
 
       expect(attributes[0]).toEqual('Secure')
@@ -2547,8 +2605,9 @@ describe('dbAuth', () => {
   })
 
   describe('_createSessionHeader()', () => {
-    it('returns a Set-Cookie header', () => {
+    it('returns a Set-Cookie header', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const headers = dbAuth._createSessionHeader({ foo: 'bar' }, 'abcd')
 
       expect(Object.keys(headers).length).toEqual(1)
@@ -2564,23 +2623,27 @@ describe('dbAuth', () => {
     })
   })
 
-  // @TODO(Rob): Not used yet.
-  describe.skip('_validateCsrf()', () => {
-    it('returns true if session and header token match', () => {
+  describe('_validateCsrf()', () => {
+    it('returns true if session and header token match', async () => {
       const data = { foo: 'bar' }
       const token = 'abcd'
-      req = {
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
         headers: {
           cookie: encryptToCookie(JSON.stringify(data) + ';' + token),
           'csrf-token': token,
         },
-      }
-      const dbAuth = new DbAuthHandler(req, context, options)
+      })
 
-      expect(dbAuth._validateCsrf()).toEqual(true)
+      const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
+      const output = await dbAuth._validateCsrf()
+
+      expect(output).toEqual(true)
     })
 
-    it('throws an error if session and header token do not match', () => {
+    it('throws an error if session and header token do not match', async () => {
       const data = { foo: 'bar' }
       const token = 'abcd'
       req = {
@@ -2590,16 +2653,18 @@ describe('dbAuth', () => {
         },
       }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
-      expect(() => {
-        dbAuth._validateCsrf()
-      }).toThrow(dbAuthError.CsrfTokenMismatchError)
+      expect(async () => {
+        await dbAuth._validateCsrf()
+      }).rejects.toThrow(dbAuthError.CsrfTokenMismatchError)
     })
   })
 
   describe('_verifyUser()', () => {
     it('throws an error if username is missing', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth._verifyUser(null, 'password')
@@ -2621,6 +2686,7 @@ describe('dbAuth', () => {
 
     it('throws an error if password is missing', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth._verifyUser('username')
@@ -2654,6 +2720,7 @@ describe('dbAuth', () => {
       const defaultMessage = options.login.errors.usernameOrPasswordMissing
       delete options.login.errors.usernameOrPasswordMissing
       const dbAuth1 = new DbAuthHandler(req, context, options)
+      await dbAuth1.init()
       try {
         await dbAuth1._verifyUser(null, 'password')
       } catch (e) {
@@ -2676,6 +2743,7 @@ describe('dbAuth', () => {
     it('throws a default error message if user is not found', async () => {
       delete options.login.errors.usernameNotFound
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       try {
         await dbAuth._verifyUser('username', 'password')
       } catch (e) {
@@ -2689,6 +2757,7 @@ describe('dbAuth', () => {
     it('throws a custom error message if user is not found', async () => {
       options.login.errors.usernameNotFound = 'Cannot find ${username}'
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth._verifyUser('Alice', 'password')
@@ -2704,6 +2773,7 @@ describe('dbAuth', () => {
       delete options.login.errors.incorrectPassword
       const dbUser = await createDbUser()
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth._verifyUser(dbUser.email, 'incorrect')
@@ -2719,6 +2789,7 @@ describe('dbAuth', () => {
       options.login.errors.incorrectPassword = 'Wrong password for ${username}'
       const dbUser = await createDbUser()
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth._verifyUser(dbUser.email, 'incorrect')
@@ -2734,6 +2805,7 @@ describe('dbAuth', () => {
       const dbUser = await createDbUser()
       // invalid db client
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       dbAuth.dbAccessor = undefined
 
       try {
@@ -2748,6 +2820,7 @@ describe('dbAuth', () => {
     it('returns the user with matching username and password', async () => {
       const dbUser = await createDbUser()
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const user = await dbAuth._verifyUser(dbUser.email, 'password')
 
       expect(user.id).toEqual(dbUser.id)
@@ -2761,6 +2834,7 @@ describe('dbAuth', () => {
         salt: '2ef27f4073c603ba8b7807c6de6d6a89',
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const user = await dbAuth._verifyUser(dbUser.email, 'password')
 
       expect(user.id).toEqual(dbUser.id)
@@ -2774,6 +2848,7 @@ describe('dbAuth', () => {
         salt: '2ef27f4073c603ba8b7807c6de6d6a89',
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       await dbAuth._verifyUser(dbUser.email, 'password')
       const user = await db.user.findFirst({ where: { id: dbUser.id } })
 
@@ -2789,6 +2864,7 @@ describe('dbAuth', () => {
   describe('_getCurrentUser()', () => {
     it('throw an error if user is not logged in', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth._getCurrentUser()
@@ -2811,6 +2887,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth._getCurrentUser()
@@ -2836,6 +2913,7 @@ describe('dbAuth', () => {
 
       // invalid db client
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       dbAuth.dbAccessor = undefined
 
       try {
@@ -2861,6 +2939,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const user = await dbAuth._getCurrentUser()
 
       expect(user.id).toEqual(dbUser.id)
@@ -2884,6 +2963,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth._createUser()
@@ -2911,6 +2991,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth._createUser()
@@ -2923,7 +3004,7 @@ describe('dbAuth', () => {
     })
 
     it('createUser db check is called with insensitive string when user has provided one in SignupFlowOptions', async () => {
-      const spy = jest.spyOn(db.user, 'findFirst')
+      const spy = vi.spyOn(db.user, 'findFirst')
       options.signup.usernameMatch = 'insensitive'
 
       const dbUser = await createDbUser()
@@ -2936,6 +3017,7 @@ describe('dbAuth', () => {
         body,
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       await dbAuth._createUser()
       expect(spy).toHaveBeenCalled()
@@ -2947,11 +3029,11 @@ describe('dbAuth', () => {
     })
 
     it('createUser db check is not called with insensitive string when user has not provided one in SignupFlowOptions', async () => {
-      jest.resetAllMocks()
-      jest.clearAllMocks()
+      vi.resetAllMocks()
+      vi.clearAllMocks()
 
       const defaultMessage = options.signup.errors.usernameTaken
-      const spy = jest.spyOn(db.user, 'findFirst')
+      const spy = vi.spyOn(db.user, 'findFirst')
       delete options.signup.usernameMatch
 
       const dbUser = await createDbUser()
@@ -2965,6 +3047,7 @@ describe('dbAuth', () => {
         body,
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth._createUser()
@@ -2996,6 +3079,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth._createUser()
@@ -3021,6 +3105,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth._createUser()
@@ -3045,6 +3130,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       try {
         await dbAuth._createUser()
       } catch (e) {
@@ -3068,6 +3154,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         await dbAuth._createUser()
@@ -3094,6 +3181,7 @@ describe('dbAuth', () => {
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       try {
         const user = await dbAuth._createUser()
@@ -3115,6 +3203,7 @@ describe('dbAuth', () => {
         headers: {},
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect(await dbAuth._getAuthMethod()).toEqual('logout')
     })
@@ -3127,6 +3216,7 @@ describe('dbAuth', () => {
         headers: {},
       }
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect(await dbAuth._getAuthMethod()).toEqual('signup')
     })
@@ -3138,14 +3228,16 @@ describe('dbAuth', () => {
         headers: {},
       })
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect(await dbAuth._getAuthMethod()).toBeUndefined()
     })
   })
 
   describe('validateField', () => {
-    it('checks for the presence of a field', () => {
+    it('checks for the presence of a field', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect(() => {
         dbAuth._validateField('username', null)
@@ -3158,24 +3250,27 @@ describe('dbAuth', () => {
       }).toThrow(dbAuth.FieldRequiredError)
     })
 
-    it('passes validation if everything is present', () => {
+    it('passes validation if everything is present', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
 
       expect(dbAuth._validateField('username', 'cannikin')).toEqual(true)
     })
   })
 
   describe('logoutResponse', () => {
-    it('returns the response array necessary to log user out', () => {
+    it('returns the response array necessary to log user out', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const [body, headers] = dbAuth._logoutResponse()
 
       expect(body).toEqual('')
       expect(headers['set-cookie']).toMatch(/^session=;/)
     })
 
-    it('can accept an object to return in the body', () => {
+    it('can accept an object to return in the body', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const [body, _headers] = dbAuth._logoutResponse({
         error: 'error message',
       })
@@ -3185,29 +3280,33 @@ describe('dbAuth', () => {
   })
 
   describe('ok', () => {
-    it('returns a 200 response by default', () => {
+    it('returns a 200 response by default', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = dbAuth._ok('', {})
 
       expect(response.statusCode).toEqual(200)
     })
 
-    it('can return other status codes', () => {
+    it('can return other status codes', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = dbAuth._ok('', {}, { statusCode: 201 })
 
       expect(response.statusCode).toEqual(201)
     })
 
-    it('stringifies a JSON body', () => {
+    it('stringifies a JSON body', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = dbAuth._ok({ foo: 'bar' }, {}, { statusCode: 201 })
 
       expect(response.body).toEqual('{"foo":"bar"}')
     })
 
-    it('does not stringify a body that is a string already', () => {
+    it('does not stringify a body that is a string already', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = dbAuth._ok('{"foo":"bar"}', {}, { statusCode: 201 })
 
       expect(response.body).toEqual('{"foo":"bar"}')
@@ -3215,8 +3314,9 @@ describe('dbAuth', () => {
   })
 
   describe('_notFound', () => {
-    it('returns a 404 response', () => {
+    it('returns a 404 response', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = dbAuth._notFound()
 
       expect(response.statusCode).toEqual(404)
@@ -3225,8 +3325,9 @@ describe('dbAuth', () => {
   })
 
   describe('_badRequest', () => {
-    it('returns a 400 response', () => {
+    it('returns a 400 response', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
       const response = dbAuth._badRequest('bad')
 
       expect(response.statusCode).toEqual(400)
