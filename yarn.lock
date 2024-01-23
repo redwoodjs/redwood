@@ -7596,10 +7596,10 @@ __metadata:
     "@redwoodjs/api": "npm:6.0.7"
     "@types/jsonwebtoken": "npm:9.0.5"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -7613,8 +7613,8 @@ __metadata:
     "@redwoodjs/cli-helpers": "npm:6.0.7"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -7629,9 +7629,9 @@ __metadata:
     "@redwoodjs/auth": "npm:6.0.7"
     "@types/react": "npm:18.2.37"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   peerDependencies:
     "@auth0/auth0-spa-js": 2.1.2
   languageName: unknown
@@ -7648,10 +7648,10 @@ __metadata:
     "@types/aws-lambda": "npm:8.10.126"
     "@types/jsonwebtoken": "npm:9.0.5"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -7665,8 +7665,8 @@ __metadata:
     "@redwoodjs/cli-helpers": "npm:6.0.7"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -7682,9 +7682,9 @@ __metadata:
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:18.2.37"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   peerDependencies:
     "@azure/msal-browser": 2.38.3
   languageName: unknown
@@ -7701,8 +7701,8 @@ __metadata:
     "@redwoodjs/api": "npm:6.0.7"
     "@types/aws-lambda": "npm:8.10.126"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -7716,7 +7716,6 @@ __metadata:
     "@redwoodjs/cli-helpers": "npm:6.0.7"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
@@ -7733,9 +7732,9 @@ __metadata:
     "@redwoodjs/auth": "npm:6.0.7"
     "@types/react": "npm:18.2.37"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   peerDependencies:
     "@clerk/clerk-react": 4.28.3
   languageName: unknown
@@ -7751,8 +7750,8 @@ __metadata:
     "@redwoodjs/cli-helpers": "npm:6.0.7"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -7770,10 +7769,10 @@ __metadata:
     "@types/uuid": "npm:9.0.7"
     base64url: "npm:3.0.1"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     md5: "npm:2.3.0"
     typescript: "npm:5.3.3"
     uuid: "npm:9.0.1"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -7789,7 +7788,6 @@ __metadata:
     "@simplewebauthn/typescript-types": "npm:7.4.0"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     prompts: "npm:2.4.2"
     terminal-link: "npm:2.1.1"
     typescript: "npm:5.3.3"
@@ -7825,8 +7823,8 @@ __metadata:
     "@types/aws-lambda": "npm:8.10.126"
     core-js: "npm:3.34.0"
     firebase-admin: "npm:11.11.0"
-    jest: "npm:29.7.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -7840,8 +7838,8 @@ __metadata:
     "@redwoodjs/cli-helpers": "npm:6.0.7"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -7875,9 +7873,9 @@ __metadata:
     "@types/aws-lambda": "npm:8.10.126"
     "@types/jsonwebtoken": "npm:9.0.5"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     jsonwebtoken: "npm:9.0.2"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -7891,8 +7889,8 @@ __metadata:
     "@redwoodjs/cli-helpers": "npm:6.0.7"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -7907,9 +7905,9 @@ __metadata:
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:18.2.37"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   peerDependencies:
     netlify-identity-widget: 1.9.2
   languageName: unknown
@@ -7926,9 +7924,9 @@ __metadata:
     "@types/aws-lambda": "npm:8.10.126"
     "@types/jsonwebtoken": "npm:9.0.5"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     jsonwebtoken: "npm:9.0.2"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -7942,7 +7940,6 @@ __metadata:
     "@redwoodjs/cli-helpers": "npm:6.0.7"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
@@ -7957,9 +7954,9 @@ __metadata:
     "@supabase/supabase-js": "npm:2.39.0"
     "@types/react": "npm:18.2.37"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   peerDependencies:
     "@supabase/supabase-js": 2.39.0
   languageName: unknown
@@ -7975,10 +7972,10 @@ __metadata:
     "@redwoodjs/api": "npm:6.0.7"
     "@types/jsonwebtoken": "npm:9.0.5"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   peerDependencies:
     supertokens-node: 15.2.1
   languageName: unknown
@@ -7994,8 +7991,9 @@ __metadata:
     "@redwoodjs/cli-helpers": "npm:6.0.7"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
+    memfs: "npm:4.6.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -8009,10 +8007,10 @@ __metadata:
     "@redwoodjs/auth": "npm:6.0.7"
     "@types/react": "npm:18.2.37"
     core-js: "npm:3.34.0"
-    jest: "npm:29.7.0"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     supertokens-auth-react: "npm:0.34.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   peerDependencies:
     supertokens-auth-react: 0.34.0
   languageName: unknown
@@ -8532,8 +8530,8 @@ __metadata:
     "@redwoodjs/api": "npm:6.0.7"
     esbuild: "npm:0.19.9"
     fast-glob: "npm:3.3.2"
-    jest: "npm:29.7.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -8649,10 +8647,10 @@ __metadata:
     deepmerge: "npm:4.3.1"
     esbuild: "npm:0.19.9"
     fast-glob: "npm:3.3.2"
-    jest: "npm:29.7.0"
     rimraf: "npm:5.0.5"
     string-env-interpolation: "npm:1.0.1"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -8698,7 +8696,7 @@ __metadata:
     "@redwoodjs/project-config": "npm:6.0.7"
     core-js: "npm:3.34.0"
     esbuild: "npm:0.19.9"
-    jest: "npm:29.7.0"
+    vitest: "npm:1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -8780,9 +8778,9 @@ __metadata:
     ci-info: "npm:4.0.0"
     core-js: "npm:3.34.0"
     envinfo: "npm:7.11.0"
-    jest: "npm:29.7.0"
     systeminformation: "npm:5.21.20"
     uuid: "npm:9.0.1"
+    vitest: "npm:1.2.1"
     yargs: "npm:17.7.2"
   languageName: unknown
   linkType: soft
@@ -8833,7 +8831,6 @@ __metadata:
     chalk: "npm:4.1.2"
     enquirer: "npm:2.4.1"
     esbuild: "npm:0.19.9"
-    jest: "npm:29.7.0"
     stdout-update: "npm:1.6.8"
     typescript: "npm:5.3.3"
   languageName: unknown
@@ -8864,12 +8861,12 @@ __metadata:
     glob: "npm:10.3.10"
     http-proxy-middleware: "npm:2.0.6"
     isbot: "npm:3.7.1"
-    jest: "npm:29.7.0"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     react-server-dom-webpack: "npm:0.0.0-experimental-e5205658f-20230913"
     rollup: "npm:3.29.4"
     typescript: "npm:5.3.3"
     vite: "npm:4.5.1"
+    vitest: "npm:1.2.1"
     yargs-parser: "npm:21.1.1"
   bin:
     rw-dev-fe: ./dist/devFeServer.js

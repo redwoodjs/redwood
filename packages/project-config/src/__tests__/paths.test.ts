@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { describe, beforeAll, afterAll, it, expect, test } from 'vitest'
+
 import {
   processPagesDir,
   resolveFile,
@@ -226,7 +228,7 @@ describe('paths', () => {
       })
     })
 
-    describe('resolveFile', () => {
+    test('resolveFile', () => {
       const p = resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'App'))
       expect(path.extname(p)).toEqual('.tsx')
 
@@ -547,7 +549,7 @@ describe('paths', () => {
       })
     })
 
-    describe('resolveFile', () => {
+    test('resolveFile', () => {
       const p = resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'App'))
       expect(path.extname(p)).toEqual('.js')
 
@@ -826,7 +828,7 @@ describe('paths', () => {
       })
     })
 
-    describe('resolveFile', () => {
+    test('resolveFile', () => {
       const p = resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'index'))
       expect(path.extname(p)).toEqual('.js')
 
@@ -1158,7 +1160,7 @@ describe('paths', () => {
       })
     })
 
-    describe('resolveFile', () => {
+    test('resolveFile', () => {
       const p = resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes'))
       expect(path.extname(p)).toEqual('.tsx')
 

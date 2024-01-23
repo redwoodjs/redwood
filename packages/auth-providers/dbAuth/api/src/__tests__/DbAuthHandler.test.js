@@ -1,6 +1,17 @@
 import crypto from 'node:crypto'
 import path from 'node:path'
 
+import {
+  vi,
+  describe,
+  it,
+  expect,
+  beforeAll,
+  afterAll,
+  beforeEach,
+  afterEach,
+} from 'vitest'
+
 import { DbAuthHandler } from '../DbAuthHandler'
 import * as dbAuthError from '../errors'
 import { hashToken } from '../shared'
@@ -136,7 +147,7 @@ let event, context, options
 describe('dbAuth', () => {
   beforeEach(() => {
     // hide deprecation warnings during test
-    jest.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
     // encryption key so results are consistent regardless of settings in .env
     process.env.SESSION_SECRET = SESSION_SECRET
     delete process.env.DBAUTH_COOKIE_DOMAIN
@@ -221,7 +232,7 @@ describe('dbAuth', () => {
   })
 
   afterEach(async () => {
-    jest.spyOn(console, 'warn').mockRestore()
+    vi.spyOn(console, 'warn').mockRestore()
     await db.user.deleteMany({
       where: { email: 'rob@redwoodjs.com' },
     })
@@ -647,7 +658,7 @@ describe('dbAuth', () => {
       event.headers.cookie =
         'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
       const dbAuth = new DbAuthHandler(event, context, options)
-      dbAuth.logout = jest.fn(() => {
+      dbAuth.logout = vi.fn(() => {
         throw Error('Logout error')
       })
       const response = await dbAuth.invoke()
@@ -667,7 +678,7 @@ describe('dbAuth', () => {
           credentials: true,
         },
       })
-      dbAuth.logout = jest.fn(() => {
+      dbAuth.logout = vi.fn(() => {
         throw Error('Logout error')
       })
       const response = await dbAuth.invoke()
@@ -685,7 +696,7 @@ describe('dbAuth', () => {
       event.headers.cookie =
         'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
       const dbAuth = new DbAuthHandler(event, context, options)
-      dbAuth.logout = jest.fn(() => ['body', { foo: 'bar' }])
+      dbAuth.logout = vi.fn(() => ['body', { foo: 'bar' }])
       const response = await dbAuth.invoke()
 
       expect(dbAuth.logout).toHaveBeenCalled()
@@ -742,17 +753,21 @@ describe('dbAuth', () => {
       event.body = JSON.stringify({})
       let dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth.forgotPassword().catch((e) => {
+      try {
+        await dbAuth.forgotPassword()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UsernameRequiredError)
-      })
+      }
 
       // empty string
       event.body = JSON.stringify({ username: ' ' })
       dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth.forgotPassword().catch((e) => {
+      try {
+        await dbAuth.forgotPassword()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UsernameRequiredError)
-      })
+      }
 
       expect.assertions(2)
     })
@@ -764,9 +779,12 @@ describe('dbAuth', () => {
       })
       let dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth.forgotPassword().catch((e) => {
+      try {
+        await dbAuth.forgotPassword()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UsernameNotFoundError)
-      })
+      }
+
       expect.assertions(1)
     })
 
@@ -867,9 +885,11 @@ describe('dbAuth', () => {
       // invalid db client
       const dbAuth = new DbAuthHandler(event, context, options)
       dbAuth.dbAccessor = undefined
-      dbAuth.forgotPassword().catch((e) => {
+      try {
+        await dbAuth.forgotPassword()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.GenericError)
-      })
+      }
       expect.assertions(1)
     })
   })
@@ -923,9 +943,12 @@ describe('dbAuth', () => {
       })
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth.login().catch((e) => {
+      try {
+        await dbAuth.login()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
-      })
+      }
+
       expect.assertions(1)
     })
 
@@ -937,9 +960,12 @@ describe('dbAuth', () => {
       })
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth.login().catch((e) => {
+      try {
+        await dbAuth.login()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.IncorrectPasswordError)
-      })
+      }
+
       expect.assertions(1)
     })
 
@@ -954,9 +980,12 @@ describe('dbAuth', () => {
       }
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth.login().catch((e) => {
+      try {
+        await dbAuth.login()
+      } catch (e) {
         expect(e).toBeInstanceOf(Error)
-      })
+      }
+
       expect.assertions(1)
     })
 
@@ -984,9 +1013,13 @@ describe('dbAuth', () => {
         return null
       }
       const dbAuth = new DbAuthHandler(event, context, options)
-      dbAuth.login().catch((e) => {
+
+      try {
+        await dbAuth.login()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.NoUserIdError)
-      })
+      }
+
       expect.assertions(1)
     })
 
@@ -1060,8 +1093,8 @@ describe('dbAuth', () => {
     })
 
     it('login db check is called with insensitive string when user has provided one in LoginFlowOptions', async () => {
-      jest.clearAllMocks()
-      const spy = jest.spyOn(db.user, 'findFirst')
+      vi.clearAllMocks()
+      const spy = vi.spyOn(db.user, 'findFirst')
 
       options.signup.usernameMatch = 'insensitive'
       options.login.usernameMatch = 'insensitive'
@@ -1088,8 +1121,8 @@ describe('dbAuth', () => {
     })
 
     it('login db check is not called with insensitive string when user has not provided one in LoginFlowOptions', async () => {
-      jest.clearAllMocks()
-      const spy = jest.spyOn(db.user, 'findFirst')
+      vi.clearAllMocks()
+      const spy = vi.spyOn(db.user, 'findFirst')
 
       delete options.signup.usernameMatch
       delete options.login.usernameMatch
@@ -1188,9 +1221,11 @@ describe('dbAuth', () => {
       event.body = JSON.stringify({ resetToken: '1234' })
       let dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth.resetPassword().catch((e) => {
+      try {
+        await dbAuth.resetPassword()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.PasswordRequiredError)
-      })
+      }
 
       // empty string
       event.body = JSON.stringify({ resetToken: '1234', password: ' ' })
@@ -2262,39 +2297,52 @@ describe('dbAuth', () => {
       expect.assertions(3)
     })
 
-    it('throws an error if password is missing', () => {
+    it('throws an error if password is missing', async () => {
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth._verifyUser('username').catch((e) => {
+      try {
+        await dbAuth._verifyUser('username')
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UsernameAndPasswordRequiredError)
-      })
-      dbAuth._verifyUser('username', null).catch((e) => {
+      }
+      try {
+        await dbAuth._verifyUser('username', null)
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UsernameAndPasswordRequiredError)
-      })
-      dbAuth._verifyUser('username', '').catch((e) => {
+      }
+      try {
+        await dbAuth._verifyUser('username', '')
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UsernameAndPasswordRequiredError)
-      })
-      dbAuth._verifyUser('username', ' ').catch((e) => {
+      }
+      try {
+        await dbAuth._verifyUser('username', ' ')
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UsernameAndPasswordRequiredError)
-      })
+      }
+
       expect.assertions(4)
     })
 
-    it('can throw a custom error message', () => {
+    it('can throw a custom error message', async () => {
       // default error message
       const defaultMessage = options.login.errors.usernameOrPasswordMissing
       delete options.login.errors.usernameOrPasswordMissing
       const dbAuth1 = new DbAuthHandler(event, context, options)
-      dbAuth1._verifyUser(null, 'password').catch((e) => {
+      try {
+        await dbAuth1._verifyUser(null, 'password')
+      } catch (e) {
         expect(e.message).toEqual(defaultMessage)
-      })
+      }
 
       // custom error message
       options.login.errors.usernameOrPasswordMissing = 'Missing!'
       const customMessage = new DbAuthHandler(event, context, options)
-      customMessage._verifyUser(null, 'password').catch((e) => {
+      try {
+        await customMessage._verifyUser(null, 'password')
+      } catch (e) {
         expect(e.message).toEqual('Missing!')
-      })
+      }
 
       expect.assertions(2)
     })
@@ -2303,10 +2351,12 @@ describe('dbAuth', () => {
       delete options.login.errors.usernameNotFound
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth._verifyUser('username', 'password').catch((e) => {
+      try {
+        await dbAuth._verifyUser('username', 'password')
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
         expect(e.message).toEqual('Username username not found')
-      })
+      }
 
       expect.assertions(2)
     })
@@ -2315,10 +2365,12 @@ describe('dbAuth', () => {
       options.login.errors.usernameNotFound = 'Cannot find ${username}'
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth._verifyUser('Alice', 'password').catch((e) => {
+      try {
+        await dbAuth._verifyUser('Alice', 'password')
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
         expect(e.message).toEqual('Cannot find Alice')
-      })
+      }
 
       expect.assertions(2)
     })
@@ -2328,10 +2380,12 @@ describe('dbAuth', () => {
       const dbUser = await createDbUser()
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth._verifyUser(dbUser.email, 'incorrect').catch((e) => {
+      try {
+        await dbAuth._verifyUser(dbUser.email, 'incorrect')
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.IncorrectPasswordError)
         expect(e.message).toEqual(`Incorrect password for ${dbUser.email}`)
-      })
+      }
 
       expect.assertions(2)
     })
@@ -2341,10 +2395,12 @@ describe('dbAuth', () => {
       const dbUser = await createDbUser()
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth._verifyUser(dbUser.email, 'incorrect').catch((e) => {
+      try {
+        await dbAuth._verifyUser(dbUser.email, 'incorrect')
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.IncorrectPasswordError)
         expect(e.message).toEqual(`Wrong password for ${dbUser.email}`)
-      })
+      }
 
       expect.assertions(2)
     })
@@ -2354,9 +2410,11 @@ describe('dbAuth', () => {
       // invalid db client
       const dbAuth = new DbAuthHandler(event, context, options)
       dbAuth.dbAccessor = undefined
-      dbAuth._verifyUser(dbUser.email, 'password').catch((e) => {
+      try {
+        await dbAuth._verifyUser(dbUser.email, 'password')
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.GenericError)
-      })
+      }
       expect.assertions(1)
     })
 
@@ -2404,9 +2462,11 @@ describe('dbAuth', () => {
   describe('_getCurrentUser()', () => {
     it('throw an error if user is not logged in', async () => {
       const dbAuth = new DbAuthHandler(event, context, options)
-      dbAuth._getCurrentUser().catch((e) => {
+      try {
+        await dbAuth._getCurrentUser()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.NotLoggedInError)
-      })
+      }
       expect.assertions(1)
     })
 
@@ -2419,9 +2479,11 @@ describe('dbAuth', () => {
       }
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth._getCurrentUser().catch((e) => {
+      try {
+        await dbAuth._getCurrentUser()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
-      })
+      }
       expect.assertions(1)
     })
 
@@ -2437,9 +2499,11 @@ describe('dbAuth', () => {
       // invalid db client
       const dbAuth = new DbAuthHandler(event, context, options)
       dbAuth.dbAccessor = undefined
-      dbAuth._getCurrentUser().catch((e) => {
+      try {
+        await dbAuth._getCurrentUser()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.GenericError)
-      })
+      }
       expect.assertions(1)
     })
 
@@ -2470,12 +2534,15 @@ describe('dbAuth', () => {
       })
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth._createUser().catch((e) => {
+      try {
+        await dbAuth._createUser()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
         expect(e.message).toEqual(
           defaultMessage.replace(/\$\{username\}/, dbUser.email)
         )
-      })
+      }
+
       expect.assertions(2)
     })
 
@@ -2488,15 +2555,18 @@ describe('dbAuth', () => {
       })
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth._createUser().catch((e) => {
+      try {
+        await dbAuth._createUser()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
         expect(e.message).toEqual(`${dbUser.email} taken`)
-      })
+      }
+
       expect.assertions(2)
     })
 
     it('createUser db check is called with insensitive string when user has provided one in SignupFlowOptions', async () => {
-      const spy = jest.spyOn(db.user, 'findFirst')
+      const spy = vi.spyOn(db.user, 'findFirst')
       options.signup.usernameMatch = 'insensitive'
 
       const dbUser = await createDbUser()
@@ -2516,11 +2586,11 @@ describe('dbAuth', () => {
     })
 
     it('createUser db check is not called with insensitive string when user has not provided one in SignupFlowOptions', async () => {
-      jest.resetAllMocks()
-      jest.clearAllMocks()
+      vi.resetAllMocks()
+      vi.clearAllMocks()
 
       const defaultMessage = options.signup.errors.usernameTaken
-      const spy = jest.spyOn(db.user, 'findFirst')
+      const spy = vi.spyOn(db.user, 'findFirst')
       delete options.signup.usernameMatch
 
       const dbUser = await createDbUser()
@@ -2529,12 +2599,15 @@ describe('dbAuth', () => {
         password: 'password',
       })
       const dbAuth = new DbAuthHandler(event, context, options)
-      await dbAuth._createUser().catch((e) => {
+
+      try {
+        await dbAuth._createUser()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
         expect(e.message).toEqual(
           defaultMessage.replace(/\$\{username\}/, dbUser.email)
         )
-      })
+      }
 
       expect(spy).toHaveBeenCalled()
       return expect(spy).not.toHaveBeenCalledWith({
@@ -2552,12 +2625,15 @@ describe('dbAuth', () => {
       })
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth._createUser().catch((e) => {
+      try {
+        await dbAuth._createUser()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
         expect(e.message).toEqual(
           defaultMessage.replace(/\$\{field\}/, 'username')
         )
-      })
+      }
+
       expect.assertions(2)
     })
 
@@ -2568,10 +2644,13 @@ describe('dbAuth', () => {
       })
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth._createUser().catch((e) => {
+      try {
+        await dbAuth._createUser()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
         expect(e.message).toEqual('username blank')
-      })
+      }
+
       expect.assertions(2)
     })
 
@@ -2583,12 +2662,15 @@ describe('dbAuth', () => {
       })
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth._createUser().catch((e) => {
+      try {
+        await dbAuth._createUser()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
         expect(e.message).toEqual(
           defaultMessage.replace(/\$\{field\}/, 'password')
         )
-      })
+      }
+
       expect.assertions(2)
     })
 
@@ -2599,10 +2681,13 @@ describe('dbAuth', () => {
       })
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth._createUser().catch((e) => {
+      try {
+        await dbAuth._createUser()
+      } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
         expect(e.message).toEqual('password blank')
-      })
+      }
+
       expect.assertions(2)
     })
 
