@@ -10,14 +10,29 @@ export type ServerAuthState = AuthProviderState<never> & {
   cookieHeader?: string
 }
 
+const getAuthInitialStateFromServer = () => {
+  if (globalThis?.__REDWOOD__SERVER__AUTH_STATE__) {
+    const initialState = {
+      ...defaultAuthProviderState,
+      encryptedSession: null,
+      ...(globalThis?.__REDWOOD__SERVER__AUTH_STATE__ || {}),
+    }
+    // Clear it so we don't accidentally use it again
+    globalThis.__REDWOOD__SERVER__AUTH_STATE__ = null
+    return initialState
+  }
+
+  // Already restored
+  return null
+}
+
 /**
- * On the server, it resolve to the defaultAuthProviderState first
+ * On the server, it resolves to the defaultAuthProviderState first.
+ *
+ * On the client it restores from the initial server state injected in the ServerAuthProvider
  */
 export const ServerAuthContext = React.createContext<ServerAuthState>(
-  globalThis?.__REDWOOD__SERVER__AUTH_STATE__ || {
-    ...defaultAuthProviderState,
-    encryptedSession: null,
-  }
+  getAuthInitialStateFromServer()
 )
 
 /***
