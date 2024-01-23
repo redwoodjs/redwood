@@ -1,3 +1,5 @@
+import { describe, test, expect } from 'vitest'
+
 import type { MailerDefaults } from '../types'
 import {
   constructCompleteSendOptions,
@@ -120,7 +122,7 @@ describe('constructCompleteSendOptions', () => {
         },
         blankDefaults
       )
-    }).toThrowErrorMatchingInlineSnapshot(`"Missing from address"`)
+    }).toThrowErrorMatchingInlineSnapshot(`[Error: Missing from address]`)
 
     expect(() => {
       constructCompleteSendOptions(
@@ -153,7 +155,7 @@ describe('constructCompleteSendOptions', () => {
         },
         blankDefaults
       )
-    }).toThrowErrorMatchingInlineSnapshot(`"Missing to address"`)
+    }).toThrowErrorMatchingInlineSnapshot(`[Error: Missing to address]`)
 
     expect(() => {
       constructCompleteSendOptions(
@@ -176,7 +178,7 @@ describe('constructCompleteSendOptions', () => {
         },
         blankDefaults
       )
-    }).toThrowErrorMatchingInlineSnapshot(`"Missing subject"`)
+    }).toThrowErrorMatchingInlineSnapshot(`[Error: Missing subject]`)
 
     expect(() => {
       constructCompleteSendOptions(

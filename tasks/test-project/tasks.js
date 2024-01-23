@@ -318,7 +318,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
             ['--force', linkWithLatestFwBuild && '--no-install'].filter(
               Boolean
             ),
-            execaOptions
+            getExecaOptions(outputPath)
           )
         },
       },
@@ -368,7 +368,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     await execa(
       'yarn rw setup auth dbAuth --force --no-webauthn',
       [],
-      execaOptions
+      getExecaOptions(outputPath)
     )
 
     // Restore postinstall script
@@ -380,7 +380,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     })
 
     if (linkWithLatestFwBuild) {
-      await execa('yarn rwfw project:copy', [], execaOptions)
+      await execa('yarn rwfw project:copy', [], getExecaOptions(outputPath))
     }
 
     await execa(
@@ -593,7 +593,7 @@ export default DoublePage`
           return execa(
             `yarn rw prisma migrate dev --name create_post_user`,
             [],
-            execaOptions
+            getExecaOptions(outputPath)
           )
         },
       },
@@ -608,7 +608,7 @@ export default DoublePage`
             fullPath('api/src/services/posts/posts.scenarios')
           )
 
-          await execa(`yarn rwfw project:copy`, [], execaOptions)
+          await execa(`yarn rwfw project:copy`, [], getExecaOptions(outputPath))
         },
       },
       {
@@ -630,7 +630,7 @@ export default DoublePage`
           await execa(
             `yarn rw prisma migrate dev --name create_contact`,
             [],
-            execaOptions
+            getExecaOptions(outputPath)
           )
 
           await generateScaffold('contacts')
@@ -719,6 +719,29 @@ export default DoublePage`
           fs.writeFileSync(fullPath('api/src/services/users/users.test'), test)
 
           return createBuilder('yarn redwood g types')()
+        },
+      },
+      {
+        title: 'Add describeScenario tests',
+        task: async () => {
+          // Copy contact.scenarios.ts, because scenario tests look for the same filename
+          fs.copyFileSync(
+            fullPath('api/src/services/contacts/contacts.scenarios'),
+            fullPath('api/src/services/contacts/describeContacts.scenarios')
+          )
+
+          // Create describeContacts.test.ts
+          const describeScenarioFixture = path.join(
+            __dirname,
+            'templates',
+            'api',
+            'contacts.describeScenario.test.ts.template'
+          )
+
+          fs.copyFileSync(
+            describeScenarioFixture,
+            fullPath('api/src/services/contacts/describeContacts.test')
+          )
         },
       },
       {

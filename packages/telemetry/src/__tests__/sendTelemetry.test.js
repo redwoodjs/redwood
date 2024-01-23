@@ -1,4 +1,6 @@
-const { sanitizeArgv } = require('../sendTelemetry')
+import { describe, it, expect } from 'vitest'
+
+import { sanitizeArgv } from '../sendTelemetry'
 
 describe('sanitizeArgv', () => {
   it('ignores commands with no replacements', () => {

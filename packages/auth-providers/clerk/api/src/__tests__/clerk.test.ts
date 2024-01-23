@@ -1,4 +1,5 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+import { beforeAll, afterAll, describe, test, expect } from 'vitest'
 
 import { authDecoder, clerkAuthDecoder } from '../decoder'
 

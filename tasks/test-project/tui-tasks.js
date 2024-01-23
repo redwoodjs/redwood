@@ -847,6 +847,29 @@ export default DoublePage`
       },
     },
     {
+      title: 'Add describeScenario tests',
+      task: () => {
+        // Copy contact.scenarios.ts, because scenario tests look for the same filename
+        fs.copyFileSync(
+          fullPath('api/src/services/contacts/contacts.scenarios'),
+          fullPath('api/src/services/contacts/describeContacts.scenarios')
+        )
+
+        // Create describeContacts.test.ts
+        const describeScenarioFixture = path.join(
+          __dirname,
+          'templates',
+          'api',
+          'contacts.describeScenario.test.ts.template'
+        )
+
+        fs.copyFileSync(
+          describeScenarioFixture,
+          fullPath('api/src/services/contacts/describeContacts.test')
+        )
+      },
+    },
+    {
       // This is probably more of a web side task really, but the scaffolded
       // pages aren't generated until we get here to the api side tasks. So
       // instead of doing some up in the web side tasks, and then the rest

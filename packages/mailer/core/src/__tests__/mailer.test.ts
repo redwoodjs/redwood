@@ -1,3 +1,14 @@
+import {
+  vi,
+  describe,
+  test,
+  expect,
+  beforeAll,
+  afterAll,
+  beforeEach,
+  afterEach,
+} from 'vitest'
+
 import { AbstractMailHandler } from '../handler'
 import { Mailer } from '../mailer'
 import { AbstractMailRenderer } from '../renderer'
@@ -61,13 +72,13 @@ describe('Uses the correct modes', () => {
 
   beforeAll(() => {
     // prevent console output
-    jest.spyOn(console, 'log').mockImplementation(() => {})
-    jest.spyOn(console, 'warn').mockImplementation(() => {})
-    jest.spyOn(console, 'debug').mockImplementation(() => {})
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.spyOn(console, 'debug').mockImplementation(() => {})
   })
 
   afterAll(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   describe('starts in test mode', () => {
@@ -131,7 +142,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Invalid 'when' configuration for test mode"`
+        `[Error: Invalid 'when' configuration for test mode]`
       )
 
       expect(() => {
@@ -143,7 +154,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Invalid 'when' configuration for test mode"`
+        `[Error: Invalid 'when' configuration for test mode]`
       )
     })
   })
@@ -224,7 +235,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Invalid 'when' configuration for development mode"`
+        `[Error: Invalid 'when' configuration for development mode]`
       )
 
       expect(() => {
@@ -239,7 +250,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Invalid 'when' configuration for development mode"`
+        `[Error: Invalid 'when' configuration for development mode]`
       )
     })
   })
@@ -310,7 +321,7 @@ describe('Uses the correct modes', () => {
 
   describe('warns about null handlers', () => {
     beforeAll(() => {
-      jest.spyOn(console, 'warn').mockImplementation(() => {})
+      vi.spyOn(console, 'warn').mockImplementation(() => {})
     })
 
     test('test', () => {
@@ -344,7 +355,7 @@ describe('Uses the correct modes', () => {
 
   describe('attempts to use fallback handlers', () => {
     beforeAll(() => {
-      jest.spyOn(console, 'warn').mockImplementation(() => {})
+      vi.spyOn(console, 'warn').mockImplementation(() => {})
     })
 
     test('test', () => {
@@ -388,7 +399,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"The specified test handler 'handlerC' is not defined"`
+        `[Error: The specified test handler 'handlerC' is not defined]`
       )
     })
     test('development', () => {
@@ -402,7 +413,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"The specified development handler 'handlerC' is not defined"`
+        `[Error: The specified development handler 'handlerC' is not defined]`
       )
     })
     test('production', () => {
@@ -422,7 +433,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"The specified default handler 'handlerC' is not defined"`
+        `[Error: The specified default handler 'handlerC' is not defined]`
       )
     })
   })
@@ -442,7 +453,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"The specified default renderer 'rendererC' is not defined"`
+        `[Error: The specified default renderer 'rendererC' is not defined]`
       )
     })
     test('development', () => {
@@ -459,7 +470,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"The specified default renderer 'rendererC' is not defined"`
+        `[Error: The specified default renderer 'rendererC' is not defined]`
       )
     })
     test('production', () => {
@@ -479,13 +490,13 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"The specified default renderer 'rendererC' is not defined"`
+        `[Error: The specified default renderer 'rendererC' is not defined]`
       )
     })
   })
 
   describe('calls the correct handler and renderer function', () => {
-    jest.spyOn(console, 'debug').mockImplementation(() => {})
+    vi.spyOn(console, 'debug').mockImplementation(() => {})
 
     describe('test', () => {
       const testHandler = new MockMailHandler()
@@ -522,12 +533,12 @@ describe('Uses the correct modes', () => {
         const handlerKeys = Object.keys(mailer.handlers)
         for (let i = 0; i < handlerKeys.length; i++) {
           const key = handlerKeys[i]
-          jest.spyOn(mailer.handlers[key], 'send')
+          vi.spyOn(mailer.handlers[key], 'send')
         }
         const rendererKeys = Object.keys(mailer.renderers)
         for (let i = 0; i < rendererKeys.length; i++) {
           const key = rendererKeys[i]
-          jest.spyOn(mailer.renderers[key], 'render')
+          vi.spyOn(mailer.renderers[key], 'render')
         }
       })
 
@@ -622,12 +633,12 @@ describe('Uses the correct modes', () => {
         const handlerKeys = Object.keys(mailer.handlers)
         for (let i = 0; i < handlerKeys.length; i++) {
           const key = handlerKeys[i]
-          jest.spyOn(mailer.handlers[key], 'send')
+          vi.spyOn(mailer.handlers[key], 'send')
         }
         const rendererKeys = Object.keys(mailer.renderers)
         for (let i = 0; i < rendererKeys.length; i++) {
           const key = rendererKeys[i]
-          jest.spyOn(mailer.renderers[key], 'render')
+          vi.spyOn(mailer.renderers[key], 'render')
         }
       })
 
@@ -723,12 +734,12 @@ describe('Uses the correct modes', () => {
         const handlerKeys = Object.keys(mailer.handlers)
         for (let i = 0; i < handlerKeys.length; i++) {
           const key = handlerKeys[i]
-          jest.spyOn(mailer.handlers[key], 'send')
+          vi.spyOn(mailer.handlers[key], 'send')
         }
         const rendererKeys = Object.keys(mailer.renderers)
         for (let i = 0; i < rendererKeys.length; i++) {
           const key = rendererKeys[i]
-          jest.spyOn(mailer.renderers[key], 'render')
+          vi.spyOn(mailer.renderers[key], 'render')
         }
       })
 

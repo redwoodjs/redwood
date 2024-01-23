@@ -4,7 +4,7 @@ import toml from '@iarna/toml'
 import merge from 'deepmerge'
 import { env as envInterpolation } from 'string-env-interpolation'
 
-import { getConfigPath } from './configPath'
+import { getConfigPath } from './configPath.js'
 
 export enum TargetEnum {
   NODE = 'node',

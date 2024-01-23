@@ -2,6 +2,7 @@ import crypto from 'node:crypto'
 import path from 'node:path'
 
 import type { APIGatewayProxyEvent } from 'aws-lambda'
+import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
 
 import * as error from '../errors'
 import {

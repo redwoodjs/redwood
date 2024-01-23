@@ -5,6 +5,7 @@ import type {
   User,
 } from '@auth0/auth0-spa-js'
 import { renderHook, act } from '@testing-library/react'
+import { vi, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
@@ -52,7 +53,7 @@ const auth0MockClient: Partial<Auth0Client> = {
   },
 }
 
-const fetchMock = jest.fn()
+const fetchMock = vi.fn()
 fetchMock.mockImplementation(async (_url, options) => {
   const body = options?.body ? JSON.parse(options.body) : {}
 

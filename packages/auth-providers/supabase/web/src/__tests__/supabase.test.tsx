@@ -14,6 +14,7 @@ import type {
 } from '@supabase/supabase-js'
 import { AuthError } from '@supabase/supabase-js'
 import { renderHook, act } from '@testing-library/react'
+import { vi, it, describe, beforeAll, beforeEach, expect } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
@@ -250,7 +251,7 @@ const supabaseMockClient: Partial<SupabaseClient> = {
   auth: mockSupabaseAuthClient as SupabaseClient['auth'],
 }
 
-const fetchMock = jest.fn()
+const fetchMock = vi.fn()
 fetchMock.mockImplementation(async (_url, options) => {
   const body = options?.body ? JSON.parse(options.body) : {}
 

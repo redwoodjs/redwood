@@ -1,4 +1,4 @@
-import { findUp } from './findUp'
+import { findUp } from './findUp.js'
 
 const CONFIG_FILE_NAME = 'redwood.toml'
 

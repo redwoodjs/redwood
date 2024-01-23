@@ -14,7 +14,7 @@ set projectDirectory "redwood-app-prompt-overwrite-test"
 exec mkdir $projectDirectory
 exec touch $projectDirectory/README.md
 
-spawn yarn create-redwood-app
+spawn yarn create-redwood-app --no-yarn-install
 
 expect "Where would you like to create your Redwood app?"
 send "$projectDirectory\n"

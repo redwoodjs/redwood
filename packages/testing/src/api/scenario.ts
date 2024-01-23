@@ -110,6 +110,10 @@ interface TestFunctionWithScenario<TData> {
   (scenario?: TData): Promise<void>
 }
 
+interface DescribeBlockWithGetScenario<TData> {
+  (getScenario?: () => TData): void
+}
+
 export interface Scenario {
   (title: string, testFunction: TestFunctionWithScenario<any>): void
 }
@@ -125,4 +129,31 @@ export interface Scenario {
 
 export interface Scenario {
   only: Scenario
+}
+
+export interface DescribeScenario {
+  <TData = any>(
+    title: string,
+    describeBlock: DescribeBlockWithGetScenario<TData>
+  ): void
+}
+
+export interface DescribeScenario {
+  <TData>(
+    title: string,
+    describeBlock: DescribeBlockWithGetScenario<TData>
+  ): void
+}
+
+// Overload for namedScenario
+export interface DescribeScenario {
+  <TData>(
+    namedScenario: string,
+    title: string,
+    describeBlock: DescribeBlockWithGetScenario<TData>
+  ): void
+}
+
+export interface DescribeScenario {
+  only: DescribeScenario
 }
