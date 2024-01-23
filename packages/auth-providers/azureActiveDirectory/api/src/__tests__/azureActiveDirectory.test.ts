@@ -1,11 +1,14 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import jwt from 'jsonwebtoken'
+import { vi, test, beforeAll, afterAll, expect, describe } from 'vitest'
 
 import { authDecoder } from '../decoder'
 
-jest.mock('jsonwebtoken', () => ({
-  verify: jest.fn(),
-  decode: jest.fn(),
+vi.mock('jsonwebtoken', () => ({
+  default: {
+    verify: vi.fn(),
+    decode: vi.fn(),
+  },
 }))
 
 const req = {

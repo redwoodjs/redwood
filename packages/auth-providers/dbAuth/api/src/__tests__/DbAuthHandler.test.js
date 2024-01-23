@@ -1,6 +1,17 @@
 import crypto from 'node:crypto'
 import path from 'node:path'
 
+import {
+  vi,
+  describe,
+  it,
+  expect,
+  beforeAll,
+  afterAll,
+  beforeEach,
+  afterEach,
+} from 'vitest'
+
 import { DbAuthHandler } from '../DbAuthHandler'
 import * as dbAuthError from '../errors'
 import { hashToken } from '../shared'
@@ -136,7 +147,7 @@ let event, context, options
 describe('dbAuth', () => {
   beforeEach(() => {
     // hide deprecation warnings during test
-    jest.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
     // encryption key so results are consistent regardless of settings in .env
     process.env.SESSION_SECRET = SESSION_SECRET
     delete process.env.DBAUTH_COOKIE_DOMAIN
@@ -221,7 +232,7 @@ describe('dbAuth', () => {
   })
 
   afterEach(async () => {
-    jest.spyOn(console, 'warn').mockRestore()
+    vi.spyOn(console, 'warn').mockRestore()
     await db.user.deleteMany({
       where: { email: 'rob@redwoodjs.com' },
     })
@@ -680,7 +691,7 @@ describe('dbAuth', () => {
         'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.init()
-      dbAuth.logout = jest.fn(() => {
+      dbAuth.logout = vi.fn(() => {
         throw Error('Logout error')
       })
       const response = await dbAuth.invoke()
@@ -702,7 +713,7 @@ describe('dbAuth', () => {
       })
       await dbAuth.init()
 
-      dbAuth.logout = jest.fn(() => {
+      dbAuth.logout = vi.fn(() => {
         throw Error('Logout error')
       })
       const response = await dbAuth.invoke()
@@ -721,7 +732,7 @@ describe('dbAuth', () => {
         'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.init()
-      dbAuth.logout = jest.fn(() => ['body', { foo: 'bar' }])
+      dbAuth.logout = vi.fn(() => ['body', { foo: 'bar' }])
       const response = await dbAuth.invoke()
 
       expect(dbAuth.logout).toHaveBeenCalled()
@@ -920,13 +931,11 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.init()
       dbAuth.dbAccessor = undefined
-
       try {
         await dbAuth.forgotPassword()
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.GenericError)
       }
-
       expect.assertions(1)
     })
   })
@@ -1141,8 +1150,8 @@ describe('dbAuth', () => {
     })
 
     it('login db check is called with insensitive string when user has provided one in LoginFlowOptions', async () => {
-      jest.clearAllMocks()
-      const spy = jest.spyOn(db.user, 'findFirst')
+      vi.clearAllMocks()
+      const spy = vi.spyOn(db.user, 'findFirst')
 
       options.signup.usernameMatch = 'insensitive'
       options.login.usernameMatch = 'insensitive'
@@ -1170,8 +1179,8 @@ describe('dbAuth', () => {
     })
 
     it('login db check is not called with insensitive string when user has not provided one in LoginFlowOptions', async () => {
-      jest.clearAllMocks()
-      const spy = jest.spyOn(db.user, 'findFirst')
+      vi.clearAllMocks()
+      const spy = vi.spyOn(db.user, 'findFirst')
 
       delete options.signup.usernameMatch
       delete options.login.usernameMatch
@@ -2413,19 +2422,16 @@ describe('dbAuth', () => {
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UsernameAndPasswordRequiredError)
       }
-
       try {
         await dbAuth._verifyUser('username', null)
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UsernameAndPasswordRequiredError)
       }
-
       try {
         await dbAuth._verifyUser('username', '')
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UsernameAndPasswordRequiredError)
       }
-
       try {
         await dbAuth._verifyUser('username', ' ')
       } catch (e) {
@@ -2450,7 +2456,6 @@ describe('dbAuth', () => {
       // custom error message
       options.login.errors.usernameOrPasswordMissing = 'Missing!'
       const customMessage = new DbAuthHandler(event, context, options)
-
       try {
         await customMessage._verifyUser(null, 'password')
       } catch (e) {
@@ -2527,13 +2532,11 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.init()
       dbAuth.dbAccessor = undefined
-
       try {
         await dbAuth._verifyUser(dbUser.email, 'password')
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.GenericError)
       }
-
       expect.assertions(1)
     })
 
@@ -2591,7 +2594,6 @@ describe('dbAuth', () => {
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.NotLoggedInError)
       }
-
       expect.assertions(1)
     })
 
@@ -2610,7 +2612,6 @@ describe('dbAuth', () => {
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
       }
-
       expect.assertions(1)
     })
 
@@ -2627,13 +2628,11 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.init()
       dbAuth.dbAccessor = undefined
-
       try {
         await dbAuth._getCurrentUser()
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.GenericError)
       }
-
       expect.assertions(1)
     })
 
@@ -2699,7 +2698,7 @@ describe('dbAuth', () => {
     })
 
     it('createUser db check is called with insensitive string when user has provided one in SignupFlowOptions', async () => {
-      const spy = jest.spyOn(db.user, 'findFirst')
+      const spy = vi.spyOn(db.user, 'findFirst')
       options.signup.usernameMatch = 'insensitive'
 
       const dbUser = await createDbUser()
@@ -2720,11 +2719,11 @@ describe('dbAuth', () => {
     })
 
     it('createUser db check is not called with insensitive string when user has not provided one in SignupFlowOptions', async () => {
-      jest.resetAllMocks()
-      jest.clearAllMocks()
+      vi.resetAllMocks()
+      vi.clearAllMocks()
 
       const defaultMessage = options.signup.errors.usernameTaken
-      const spy = jest.spyOn(db.user, 'findFirst')
+      const spy = vi.spyOn(db.user, 'findFirst')
       delete options.signup.usernameMatch
 
       const dbUser = await createDbUser()

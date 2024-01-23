@@ -1,11 +1,12 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import admin from 'firebase-admin'
+import { vi, test, expect } from 'vitest'
 
 import { authDecoder } from '../decoder'
 
-const verifyIdToken = jest.fn()
+const verifyIdToken = vi.fn()
 
-jest.spyOn(admin, 'auth').mockImplementation((() => {
+vi.spyOn(admin, 'auth').mockImplementation((() => {
   return {
     verifyIdToken,
   }
