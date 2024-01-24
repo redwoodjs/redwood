@@ -24,12 +24,6 @@
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/fixtures/",
-      "/dist/"
-    ]
-  },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.6",
     "@iarna/toml": "2.2.5",
