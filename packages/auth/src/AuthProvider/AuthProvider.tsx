@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import type { AuthContextInterface, CurrentUser } from '../AuthContext'
 import type { AuthImplementation } from '../AuthImplementation'
 
 import type { AuthProviderState } from './AuthProviderState'
 import { defaultAuthProviderState } from './AuthProviderState'
+import { ServerAuthContext } from './ServerAuthProvider'
 import { useCurrentUser } from './useCurrentUser'
 import { useForgotPassword } from './useForgotPassword'
 import { useHasRole } from './useHasRole'
@@ -82,9 +83,11 @@ export function createAuthProvider<
   }: AuthProviderProps) => {
     // const [hasRestoredState, setHasRestoredState] = useState(false)
 
+    const serverAuthState = useContext(ServerAuthContext)
+
     const [authProviderState, setAuthProviderState] = useState<
       AuthProviderState<TUser>
-    >(defaultAuthProviderState)
+    >(serverAuthState || defaultAuthProviderState)
 
     const getToken = useToken(authImplementation)
 
@@ -130,12 +133,24 @@ export function createAuthProvider<
     // Whenever the authImplementation is ready to go, restore auth and reauthenticate
     useEffect(() => {
       async function doRestoreState() {
+        // @MARK: this is where we fetch currentUser from graphql again
+        // because without SSR, initial state doesn't exist
+        // what we want to do here is to conditionally call reauthenticate
+        // so that the restoreAuthState comes from the injected state
+
+        // the problem is that reauthenticate does both getCurrentUser and udpate the auth state
         await authImplementation.restoreAuthState?.()
-        reauthenticate()
+
+        // If the inital state didn't come from the server (or was restored before)
+        // reauthenticate will make an API call to the middleware to receive the current user
+        // (instead of called the graphql endpoint with currentUser)
+        if (!serverAuthState) {
+          reauthenticate()
+        }
       }
 
       doRestoreState()
-    }, [reauthenticate])
+    }, [reauthenticate, serverAuthState])
 
     return (
       <AuthContext.Provider

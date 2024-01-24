@@ -80,6 +80,30 @@ async function createServer() {
       : route.pathDefinition
 
     app.get(expressPathDef, createServerAdapter(routeHandler))
+
+    app.all(
+      '/_rw_mw',
+      createServerAdapter(async (req: Request) => {
+        const entryServerImport = await vite.ssrLoadModule(
+          rwPaths.web.entryServer as string // already validated in dev server
+        )
+
+        const middleware = entryServerImport.middleware
+
+        let out = null
+        if (middleware) {
+          try {
+            out = await middleware(req)
+          } catch (e) {
+            console.error('Whooopsie, error in middleware POST handler')
+            console.error(e)
+          }
+        }
+
+        // @TODO: We should check the type of resposne here I guess
+        return out
+      })
+    )
   }
 
   const port = getConfig().web.port
