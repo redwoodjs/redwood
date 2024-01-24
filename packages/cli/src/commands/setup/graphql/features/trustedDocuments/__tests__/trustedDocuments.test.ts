@@ -1,8 +1,8 @@
 let mockExecutedTaskTitles: Array<string> = []
 let mockSkippedTaskTitles: Array<string> = []
 
-vi.mock('fs', () => require('memfs').fs)
-vi.mock('node:fs', () => require('memfs').fs)
+vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
+vi.mock('node:fs', async () => ({ default: (await import('memfs')).fs }))
 vi.mock('execa')
 // The jscodeshift parts are tested by another test
 vi.mock('../../fragments/runTransform', () => {
@@ -105,7 +105,7 @@ afterAll(() => {
 // Silence console.info
 console.info = vi.fn()
 
-describe.skip('Trusted documents setup', () => {
+describe('Trusted documents setup', () => {
   it('runs all tasks', async () => {
     vol.fromJSON(
       { 'redwood.toml': '', 'api/src/functions/graphql.js': '' },

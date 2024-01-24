@@ -1,8 +1,8 @@
 let mockExecutedTaskTitles: Array<string> = []
 let mockSkippedTaskTitles: Array<string> = []
 
-vi.mock('fs', () => require('memfs').fs)
-vi.mock('node:fs', () => require('memfs').fs)
+vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
+vi.mock('node:fs', async () => ({ default: (await import('memfs')).fs }))
 vi.mock('execa')
 // The jscodeshift parts are tested by another test
 vi.mock('../runTransform', () => {
@@ -59,7 +59,7 @@ afterAll(() => {
   vi.resetModules()
 })
 
-test.skip('all tasks are being called', async () => {
+test('all tasks are being called', async () => {
   vol.fromJSON({ 'redwood.toml': '', 'web/src/App.tsx': '' }, FIXTURE_PATH)
 
   await handler({ force: false })
@@ -74,7 +74,7 @@ test.skip('all tasks are being called', async () => {
   `)
 })
 
-test.skip('redwood.toml update is skipped if fragments are already enabled', async () => {
+test('redwood.toml update is skipped if fragments are already enabled', async () => {
   vol.fromJSON(
     {
       'redwood.toml': '[graphql]\nfragments = true',
@@ -100,7 +100,7 @@ test.skip('redwood.toml update is skipped if fragments are already enabled', asy
   `)
 })
 
-test.skip('redwood.toml update is skipped if fragments are already enabled, together with other settings', async () => {
+test('redwood.toml update is skipped if fragments are already enabled, together with other settings', async () => {
   const toml = `
 [graphql]
 foo = "bar"
@@ -119,7 +119,7 @@ fragments = true
   expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toEqual(toml)
 })
 
-test.skip('redwood.toml is updated even if `fragments = true` exists for other sections', async () => {
+test('redwood.toml is updated even if `fragments = true` exists for other sections', async () => {
   const toml = `
 [notGraphql]
   fragments = true
@@ -133,7 +133,7 @@ test.skip('redwood.toml is updated even if `fragments = true` exists for other s
   )
 })
 
-test.skip('`fragments = true` is added to existing [graphql] section', async () => {
+test('`fragments = true` is added to existing [graphql] section', async () => {
   const toml = `
 [graphql]
 
@@ -179,7 +179,7 @@ open = true
 `)
 })
 
-test.skip('[graphql] is last section in redwood.toml', async () => {
+test('[graphql] is last section in redwood.toml', async () => {
   const toml = `
 [graphql]
   isAwesome = true`
