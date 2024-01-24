@@ -20,7 +20,7 @@ export interface AuthImplementation<
   login(options?: TLogInOptions): Promise<TLogIn>
   logout(options?: TLogOutOptions): Promise<TLogOut>
   signup(options?: TSignUpOptions): Promise<TSignUp>
-  getToken(): Promise<string | null>
+  getToken?(): Promise<string | null>
   forgotPassword?(username: string): Promise<TForgotPassword>
   resetPassword?(options?: TResetPasswordOptions): Promise<TResetPassword>
   validateResetToken?(token: string | null): Promise<TValidateResetToken>
@@ -46,7 +46,7 @@ export interface AuthImplementation<
    * }
    * ```
    */
-  getUserMetadata(): Promise<TUser | null>
+  getUserMetadata?(): Promise<TUser | null>
 
   /**
    * Set "loading" to true while the auth provider is reauthenticating.

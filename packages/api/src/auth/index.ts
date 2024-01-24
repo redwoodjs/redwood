@@ -5,8 +5,6 @@ import { parse as parseCookie } from 'cookie'
 
 import { getEventHeader } from '../event'
 
-import { getEventHeader } from '../event'
-
 import type { Decoded } from './parseJWT'
 export type { Decoded }
 

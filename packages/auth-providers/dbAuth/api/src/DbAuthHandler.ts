@@ -796,12 +796,6 @@ export class DbAuthHandler<
       throw new DbAuthError.WebAuthnError('Missing Id in request')
     }
 
-    const { rawId } = this.normalizedRequest.jsonBody || {}
-
-    if (!rawId) {
-      throw new DbAuthError.WebAuthnError('Missing Id in request')
-    }
-
     if (!webAuthnOptions || !webAuthnOptions.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }

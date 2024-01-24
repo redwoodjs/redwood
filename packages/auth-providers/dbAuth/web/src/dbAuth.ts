@@ -140,7 +140,7 @@ export function createDbAuthClient({
     // it would break all other auth providers. getUserMetadata is a "shortcut" for getting the user
     // without fetching the actual currentUser from the server. With cookie auth, _all_ providers will need
     // to fetch it from the server
-    getUserMetadata: () => true as any,
+    getUserMetadata: null as any,
     // -----
     forgotPassword,
     resetPassword,
