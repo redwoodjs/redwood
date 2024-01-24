@@ -12,9 +12,15 @@ class ContextJar {
   }
 }
 
-interface MiddlewareRequest extends Request {
+class MiddlewareRequest extends Request {
   cookies: CookieJar
   serverAuthContext: ContextJar
+
+  constructor(input: Request) {
+    super(input)
+    this.cookies = new CookieJar(this.headers.get('Cookie'))
+    this.serverAuthContext = new ContextJar()
+  }
 }
 
 /**
@@ -23,11 +29,6 @@ interface MiddlewareRequest extends Request {
  * (assuming that it is a new instance for each request)
  */
 export const createMiddlewareRequest = (req: Request) => {
-  const middlewareRequest: MiddlewareRequest = {
-    ...req,
-    cookies: new CookieJar(req.headers.get('Cookie')),
-    serverAuthContext: new ContextJar(),
-  }
-
+  const middlewareRequest = new MiddlewareRequest(req)
   return middlewareRequest
 }
