@@ -11,7 +11,7 @@ cd $projectPath
 
 set projectDirectory "redwood-app-prompt-ts-test"
 
-spawn yarn create-redwood-app --ts
+spawn yarn create-redwood-app --no-yarn-install --ts
 
 expect "Where would you like to create your Redwood app?"
 send "$projectDirectory\n"

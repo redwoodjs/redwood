@@ -59,7 +59,11 @@ describe('crwa', () => {
   })
 
   test('--yes, -y', async () => {
-    const p = await $`yarn create-redwood-app ./redwood-app --yes`
+    // Running `yarn install` in Jest test times out  and the subsequent step,
+    // generating types, is also flakey since `yarn pack` seems to skip `.yarnrc.yml`
+    // which is necessary for configuring a proper install.
+    const p =
+      await $`yarn create-redwood-app ./redwood-app --no-yarn-install --yes`
 
     // await $`yarn create-redwood-app redwood-app -y`
     // # `yarn pack` seems to ignore `.yarnrc.yml`
@@ -75,10 +79,11 @@ describe('crwa', () => {
       [?25h✔ Creating your Redwood app in ./redwood-app based on command line argument
       ✔ Using TypeScript based on command line flag
       ✔ Will initialize a git repo based on command line flag
-      ✔ Will run yarn install based on command line flag
+      ✔ Will not run yarn install based on command line flag
       [?25l⠋ Creating project files
       [?25h[?25l✔ Project files created
-      [?25h[?25l⠋ Initializing a git repo
+      [?25hℹ Skipped yarn install step
+      [?25l⠋ Initializing a git repo
       [?25h[?25l✔ Initialized a git repo with commit message "Initial commit"
       [?25h
       Thanks for trying out Redwood!
