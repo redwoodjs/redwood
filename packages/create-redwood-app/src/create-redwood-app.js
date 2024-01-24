@@ -717,7 +717,8 @@ async function createRedwoodApp() {
   // TODO: Make all flags have the 'flag' suffix
   const args = parsedFlags._
   const yarnInstallFlag =
-    parsedFlags['yarn-install'] ?? _isYarnBerryOrNewer ? parsedFlags.yes : null
+    parsedFlags['yarn-install'] ??
+    (_isYarnBerryOrNewer ? parsedFlags.yes : null)
   const typescriptFlag = parsedFlags.typescript ?? parsedFlags.yes
   const overwrite = parsedFlags.overwrite
   const gitInitFlag = parsedFlags['git-init'] ?? parsedFlags.yes

@@ -28,12 +28,12 @@ describe('create-redwood-app', () => {
             --git-init, --git   Initialize a git repository  [boolean] [default: null]
         -m, --commit-message    Commit message for the initial commit
                                                               [string] [default: null]
-            --yarn-install      Install node modules. Skip via --no-yarn-install.
-                                                             [boolean] [default: null]
             --telemetry         Enables sending telemetry events for this create
                                 command and all Redwood CLI commands
                                 https://telemetry.redwoodjs.com
                                                              [boolean] [default: true]
+            --yarn-install      Install node modules. Skip via --no-yarn-install.
+                                                             [boolean] [default: null]
 
       Examples:
         create-redwood-app my-redwood-app
