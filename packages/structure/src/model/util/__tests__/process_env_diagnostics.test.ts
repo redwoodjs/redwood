@@ -1,5 +1,7 @@
 import { resolve, join } from 'path'
 
+import { describe, test, expect } from 'vitest'
+
 import { process_env_findInFile, process_env_findAll } from '../process_env'
 
 describe('process_env_findInFile', () => {
