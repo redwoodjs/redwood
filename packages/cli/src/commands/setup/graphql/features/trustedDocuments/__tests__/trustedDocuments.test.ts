@@ -1,8 +1,24 @@
 let mockExecutedTaskTitles: Array<string> = []
 let mockSkippedTaskTitles: Array<string> = []
 
-vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
-vi.mock('node:fs', async () => ({ default: (await import('memfs')).fs }))
+vi.mock('fs', async () => {
+  const memfs = await import('memfs')
+  return {
+    ...memfs.fs,
+    default: {
+      ...memfs.fs,
+    },
+  }
+})
+vi.mock('node:fs', async () => {
+  const memfs = await import('memfs')
+  return {
+    ...memfs.fs,
+    default: {
+      ...memfs.fs,
+    },
+  }
+})
 vi.mock('execa')
 // The jscodeshift parts are tested by another test
 vi.mock('../../fragments/runTransform', () => {
