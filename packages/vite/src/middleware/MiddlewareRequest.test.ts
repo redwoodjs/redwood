@@ -4,7 +4,7 @@ import { describe, expect, test } from 'vitest'
 import { createMiddlewareRequest } from './MiddlewareRequest'
 
 describe('MiddlewareRequest', () => {
-  test('Converts a Request object correctly', () => {
+  test('Converts a Web API Request object correctly', () => {
     const req = new Request('http://redwoodjs.com', {
       method: 'POST',
       body: JSON.stringify({
@@ -13,6 +13,7 @@ describe('MiddlewareRequest', () => {
       headers: {
         'Content-Type': 'application/json',
         Cookie: 'foo=bar',
+        'X-Custom-Header': 'sweet',
       },
     })
     const mReq = createMiddlewareRequest(req)
@@ -20,25 +21,31 @@ describe('MiddlewareRequest', () => {
     expect(mReq.cookies.get('foo')).toStrictEqual({ value: 'bar' })
     expect(mReq.method).toStrictEqual('POST')
     expect(mReq.headers.get('Content-Type')).toStrictEqual('application/json')
-  })
-
-  test('Converts whatwg-node/fetch Request object correctly', () => {
-    const req = new ArdaRequest('https://github.com/ardatan/whatwg-node', {
-      method: 'PUT',
-      body: JSON.stringify({
-        hello: 'world',
-      }),
-      headers: {
-        Cookie: 'everybody=lets-funk',
-        'X-Custom-Header': 'beatdrop',
-      },
-    })
-    const mReq = createMiddlewareRequest(req)
-
-    expect(mReq.cookies.get('everybody')).toStrictEqual({ value: 'lets-funk' })
-    expect(mReq.method).toStrictEqual('PUT')
 
     // note the lower case header name
-    expect(mReq.headers.get('x-customer-header')).toStrictEqual('beatdrop')
+    expect(mReq.headers.get('x-custom-header')).toStrictEqual('sweet')
+  })
+
+  test('Converts whatwg-node/fetch Request correctly', () => {
+    const whatWgRequest = new ArdaRequest(
+      'https://github.com/ardatan/whatwg-node',
+      {
+        method: 'PUT',
+        body: JSON.stringify({
+          hello: 'world',
+        }),
+        headers: {
+          Cookie: 'errybody=lets-funk',
+          'X-Custom-Header': 'beatdrop',
+        },
+      }
+    )
+
+    const mReq = createMiddlewareRequest(whatWgRequest)
+
+    expect(mReq.cookies.get('errybody')).toStrictEqual({ value: 'lets-funk' })
+    expect(mReq.method).toStrictEqual('PUT')
+
+    expect(mReq.headers.get('x-custom-header')).toStrictEqual('beatdrop')
   })
 })

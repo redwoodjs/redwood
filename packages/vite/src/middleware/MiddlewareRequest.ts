@@ -1,3 +1,5 @@
+import { Request as WhatWgRequest } from '@whatwg-node/fetch'
+
 import { CookieJar } from './CookieJar'
 
 class ContextJar {
@@ -12,13 +14,13 @@ class ContextJar {
   }
 }
 
-class MiddlewareRequest extends Request {
+class MiddlewareRequest extends WhatWgRequest {
   cookies: CookieJar
   serverAuthContext: ContextJar
 
   constructor(input: Request) {
     super(input)
-    this.cookies = new CookieJar(this.headers.get('Cookie'))
+    this.cookies = new CookieJar(input.headers.get('Cookie'))
     this.serverAuthContext = new ContextJar()
   }
 }
