@@ -632,6 +632,11 @@ describe('authTasks', () => {
       provider: 'auth0',
       setupMode: 'FORCE',
     }
+
+    // NOTE: The current fs related mocking leaves this file around from previous tests so we
+    // must delete it here. This should be fixed in a future refactoring of the entire test suite
+    fs.rmSync(path.join(getPaths().base, 'templates/web/auth.tsx.template'))
+
     createWebAuth(getPaths().base, false).task(ctx)
 
     expect(
