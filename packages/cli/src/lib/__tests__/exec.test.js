@@ -1,7 +1,9 @@
+import { patchRequire } from 'fs-monkey'
 import { vol, fs as mfs } from 'memfs'
 import {
   vi,
   describe,
+  beforeAll,
   beforeEach,
   afterEach,
   afterAll,
@@ -12,19 +14,18 @@ import {
 import { runScriptFunction } from '../exec'
 
 vi.mock('fs', () => mfs)
+vi.mock('@redwoodjs/internal/dist/files', () => {
+  return {
+    resolveSourcePath: (sourcePath) => sourcePath,
+  }
+})
 
 const redwoodProjectPath = '/redwood-app'
 process.env.RWJS_CWD = redwoodProjectPath
 
 describe('exec.js', () => {
-  beforeEach(() => {
-    vol.reset()
-    vi.clearAllMocks()
-  })
-
-  afterEach(() => {
-    vol.reset()
-    vi.clearAllMocks()
+  beforeAll(() => {
+    patchRequire(vol)
   })
 
   afterAll(() => {
@@ -34,27 +35,65 @@ describe('exec.js', () => {
   describe('runScriptFunction', () => {
     it('resolves and runs script with no extension', async () => {
       const expectedScriptReturn = Math.floor(Math.random() * 1000)
+      // TODO: Figure out if we can use a syntax here that's closer to what a
+      // user might actually write in their script file
       const fooScript = `
-        default async ({ args }) => ${expectedScriptReturn}
-        module.exports = default
+        module.exports = {
+          default: ({ args }) => ${expectedScriptReturn}
+        }
       `
 
-      vol.fromNestedJSON(
+      vol.fromJSON({ 'scripts/foo.js': fooScript }, redwoodProjectPath)
+
+      await expect(
+        runScriptFunction({
+          path: `${redwoodProjectPath}/scripts/foo`,
+          functionName: 'default',
+          args: { args: undefined },
+        })
+      ).resolves.toBe(expectedScriptReturn)
+    })
+
+    it('resolves and runs script with .js extension', async () => {
+      const expectedScriptReturn = Math.floor(Math.random() * 1000)
+      const fooScript = `
+        module.exports = {
+          default: ({ args }) => ${expectedScriptReturn}
+        }
+      `
+
+      vol.fromJSON({ 'scripts/fooExt.js': fooScript }, redwoodProjectPath)
+
+      await expect(
+        runScriptFunction({
+          path: `${redwoodProjectPath}/scripts/fooExt.js`,
+          functionName: 'default',
+          args: { args: undefined },
+        })
+      ).resolves.toBe(expectedScriptReturn)
+    })
+
+    it('Picks .js over .json', async () => {
+      const expectedScriptReturn = Math.floor(Math.random() * 1000)
+      const fooScript = `
+        module.exports = {
+          default: ({ args }) => ${expectedScriptReturn}
+        }
+      `
+
+      vol.fromJSON(
         {
-          'redwood.toml': '',
-          scripts: {
-            'foo.js': fooScript,
-          },
+          'scripts/fooExtJson.js': fooScript,
+          'scripts/fooExtJson.json': '{ "big": "bang" }',
         },
         redwoodProjectPath
       )
 
-      // NOTE: this test currently fails with:
-      // "Error: Cannot find module '/redwood-app/scripts/foo.js' from 'src/lib/exec.js'"
       await expect(
         runScriptFunction({
-          path: '/redwood-app/scripts/foo',
+          path: `${redwoodProjectPath}/scripts/fooExtJson.js`,
           functionName: 'default',
+          args: { args: undefined },
         })
       ).resolves.toBe(expectedScriptReturn)
     })
