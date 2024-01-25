@@ -4,10 +4,7 @@ globalThis.__dirname = __dirname
 
 vi.mock('../../lib/paths', async (importOriginal) => {
   const path = require('path')
-  const originalPaths = await importOriginal<
-    // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-    typeof import('../../lib/paths.js')
-  >()
+  const originalPaths = await importOriginal<typeof LibPaths>()
 
   return {
     ...originalPaths,
@@ -34,6 +31,7 @@ import * as path from 'path'
 import { vi, beforeEach, it, expect } from 'vitest'
 
 import { getPaths } from '../../lib/paths.js'
+import type * as LibPaths from '../../lib/paths.js'
 import { isTypeScriptProject } from '../../lib/project.js'
 import { apiSideFiles, generateUniqueFileNames } from '../authFiles.js'
 

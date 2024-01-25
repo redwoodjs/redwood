@@ -55,6 +55,7 @@ vi.mock('listr2', () => {
   }
 })
 
+import type fs from 'node:fs'
 import path from 'node:path'
 
 import { vol } from 'memfs'
@@ -69,11 +70,7 @@ const APP_PATH = '/redwood-app'
 const tomlFixtures: Record<string, string> = {}
 
 beforeAll(async () => {
-  original_RWJS_CWD = process.env.RWJS_CWD
-  process.env.RWJS_CWD = APP_PATH
-
-  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  const actualFs = await vi.importActual<typeof import('fs')>('fs')
+  const actualFs = await vi.importActual<typeof fs>('fs')
   const tomlFixturesPath = path.join(__dirname, '__fixtures__', 'toml')
 
   tomlFixtures.default = actualFs.readFileSync(
