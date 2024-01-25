@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-dbauth-setup",
-  "version": "6.6.3",
+  "version": "6.6.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.6",
-    "@redwoodjs/cli-helpers": "6.6.3",
+    "@redwoodjs/cli-helpers": "6.6.4",
     "@simplewebauthn/browser": "7.4.0",
     "core-js": "3.34.0",
     "prompts": "2.4.2",
