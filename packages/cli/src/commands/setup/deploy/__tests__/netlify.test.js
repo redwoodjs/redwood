@@ -1,19 +1,18 @@
-// Automock fs using ../..../__mocks__/fs
-jest.mock('fs')
+vi.mock('fs-extra')
 
 import path from 'path'
 
 import fs from 'fs-extra'
+import { vol } from 'memfs'
+import { vi, describe, it, expect, beforeEach } from 'vitest'
 
+import '../../../../lib/test'
 import { getPaths } from '../../../../lib'
 import { updateApiURLTask } from '../helpers'
 // Mock telemetry and other things
-import '../../../../lib/test'
 
-jest.mock('../../../../lib', () => {
-  const path = jest.requireActual('path')
-
-  const { printSetupNotes } = jest.requireActual('../../../../lib')
+vi.mock('../../../../lib', async (importOriginal) => {
+  const { printSetupNotes } = await importOriginal()
 
   return {
     printSetupNotes,
@@ -40,7 +39,9 @@ jest.mock('../../../../lib', () => {
       // interpreted as a new-line. And need to use double backslashes, so
       // that one "survives" into the regexp
       expect(keys[0]).toMatch(new RegExp(`\\${path.sep}netlify.toml$`))
-      expect(fileNameToContentMap[keys[0]]).toMatchSnapshot()
+      for (const key of keys) {
+        fs.writeFileSync(key, fileNameToContentMap[key])
+      }
     },
   }
 })
@@ -48,7 +49,7 @@ jest.mock('../../../../lib', () => {
 const REDWOOD_TOML_PATH = path.join(getPaths().base, 'redwood.toml')
 
 beforeEach(() => {
-  fs.__setMockFiles({
+  vol.fromJSON({
     [REDWOOD_TOML_PATH]: `[web]
   title = "Redwood App"
   port = 8910
@@ -64,8 +65,21 @@ beforeEach(() => {
 
 describe('netlify', () => {
   it('should call the handler without error', async () => {
-    const netlify = require('../providers/netlify')
-    expect(async () => await netlify.handler({ force: true })).not.toThrow()
+    const netlify = await import('../providers/netlify')
+
+    let error = undefined
+    try {
+      await netlify.handler({ force: true })
+    } catch (err) {
+      error = err
+    }
+    expect(error).toBeUndefined()
+    const filesystem = vol.toJSON()
+    const netlifyTomlPath = Object.keys(filesystem).find((path) =>
+      path.endsWith('netlify.toml')
+    )
+    expect(netlifyTomlPath).toBeDefined()
+    expect(filesystem[netlifyTomlPath]).toMatchSnapshot()
   })
 
   it('Should update redwood.toml apiUrl', () => {
@@ -77,8 +91,14 @@ describe('netlify', () => {
   })
 
   it('should add netlify.toml', async () => {
-    const netlify = require('../providers/netlify')
+    const netlify = await import('../providers/netlify')
     await netlify.handler({ force: true })
-    // Will be verified by a snapshot up above in the mocked `writeFilesTask`
+
+    const filesystem = vol.toJSON()
+    const netlifyTomlPath = Object.keys(filesystem).find((path) =>
+      path.endsWith('netlify.toml')
+    )
+    expect(netlifyTomlPath).toBeDefined()
+    expect(filesystem[netlifyTomlPath]).toMatchSnapshot()
   })
 })

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`in javascript (default) mode creates a edit page 1`] = `
+exports[`in javascript (default) mode > creates a edit page 1`] = `
 "import EditPostCell from 'src/components/EditPostCell'
 
 const EditPostPage = ({ id }) => {
@@ -11,7 +11,7 @@ export default EditPostPage
 "
 `;
 
-exports[`in javascript (default) mode creates a form component 1`] = `
+exports[`in javascript (default) mode > creates a form component 1`] = `
 "import {
   Form,
   FormError,
@@ -273,7 +273,7 @@ export default PostForm
 "
 `;
 
-exports[`in javascript (default) mode creates a index page 1`] = `
+exports[`in javascript (default) mode > creates a index page 1`] = `
 "import PostsCell from 'src/components/PostsCell'
 
 const PostsPage = () => {
@@ -284,7 +284,7 @@ export default PostsPage
 "
 `;
 
-exports[`in javascript (default) mode creates a layout 1`] = `
+exports[`in javascript (default) mode > creates a layout 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
@@ -317,9 +317,9 @@ export default ScaffoldLayout
 "
 `;
 
-exports[`in javascript (default) mode creates a new component 1`] = `undefined`;
+exports[`in javascript (default) mode > creates a new component 1`] = `undefined`;
 
-exports[`in javascript (default) mode creates a new component with int foreign keys converted in onSave 1`] = `
+exports[`in javascript (default) mode > creates a new component with int foreign keys converted in onSave 1`] = `
 "import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 
@@ -369,7 +369,7 @@ export default NewUserProfile
 "
 `;
 
-exports[`in javascript (default) mode creates a new page 1`] = `
+exports[`in javascript (default) mode > creates a new page 1`] = `
 "import NewPost from 'src/components/NewPost'
 
 const NewPostPage = () => {
@@ -380,7 +380,7 @@ export default NewPostPage
 "
 `;
 
-exports[`in javascript (default) mode creates a show cell 1`] = `
+exports[`in javascript (default) mode > creates a show cell 1`] = `
 "import Post from 'src/components/Post'
 
 export const QUERY = gql\`
@@ -417,7 +417,7 @@ export const Success = ({ post }) => {
 "
 `;
 
-exports[`in javascript (default) mode creates a show component 1`] = `
+exports[`in javascript (default) mode > creates a show component 1`] = `
 "import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 
@@ -538,7 +538,7 @@ export default Post
 "
 `;
 
-exports[`in javascript (default) mode creates a show page 1`] = `
+exports[`in javascript (default) mode > creates a show page 1`] = `
 "import PostCell from 'src/components/PostCell'
 
 const PostPage = ({ id }) => {
@@ -549,7 +549,7 @@ export default PostPage
 "
 `;
 
-exports[`in javascript (default) mode creates a stylesheet 1`] = `
+exports[`in javascript (default) mode > creates a stylesheet 1`] = `
 "/*
   normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
 */
@@ -950,9 +950,9 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 "
 `;
 
-exports[`in javascript (default) mode creates an edit cell 1`] = `undefined`;
+exports[`in javascript (default) mode > creates an edit cell 1`] = `undefined`;
 
-exports[`in javascript (default) mode creates an edit component with int foreign keys converted in onSave 1`] = `
+exports[`in javascript (default) mode > creates an edit component with int foreign keys converted in onSave 1`] = `
 "import { navigate, routes } from '@redwoodjs/router'
 
 import { useMutation } from '@redwoodjs/web'
@@ -1028,7 +1028,7 @@ export const Success = ({ userProfile }) => {
 "
 `;
 
-exports[`in javascript (default) mode creates an index cell 1`] = `
+exports[`in javascript (default) mode > creates an index cell 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 
 import Posts from 'src/components/Posts'
@@ -1076,7 +1076,7 @@ export const Success = ({ posts }) => {
 "
 `;
 
-exports[`in javascript (default) mode creates an index component 1`] = `
+exports[`in javascript (default) mode > creates an index component 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 
@@ -1194,7 +1194,7 @@ export default PostsList
 "
 `;
 
-exports[`in typescript mode creates a edit page 1`] = `
+exports[`in typescript mode > creates a edit page 1`] = `
 "import EditPostCell from 'src/components/EditPostCell'
 
 type PostPageProps = {
@@ -1209,7 +1209,7 @@ export default EditPostPage
 "
 `;
 
-exports[`in typescript mode creates a form component 1`] = `
+exports[`in typescript mode > creates a form component 1`] = `
 "import type { EditPostById, UpdatePostInput } from 'types/graphql'
 
 import type { RWGqlError } from '@redwoodjs/forms'
@@ -1483,7 +1483,7 @@ export default PostForm
 "
 `;
 
-exports[`in typescript mode creates a index page 1`] = `
+exports[`in typescript mode > creates a index page 1`] = `
 "import PostsCell from 'src/components/PostsCell'
 
 const PostsPage = () => {
@@ -1494,7 +1494,7 @@ export default PostsPage
 "
 `;
 
-exports[`in typescript mode creates a layout 1`] = `
+exports[`in typescript mode > creates a layout 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
@@ -1535,9 +1535,9 @@ export default ScaffoldLayout
 "
 `;
 
-exports[`in typescript mode creates a new component 1`] = `undefined`;
+exports[`in typescript mode > creates a new component 1`] = `undefined`;
 
-exports[`in typescript mode creates a new component with int foreign keys converted in onSave 1`] = `
+exports[`in typescript mode > creates a new component with int foreign keys converted in onSave 1`] = `
 "import type {
   CreateUserProfileMutation,
   CreateUserProfileInput,
@@ -1596,7 +1596,7 @@ export default NewUserProfile
 "
 `;
 
-exports[`in typescript mode creates a new page 1`] = `
+exports[`in typescript mode > creates a new page 1`] = `
 "import NewPost from 'src/components/NewPost'
 
 const NewPostPage = () => {
@@ -1607,7 +1607,7 @@ export default NewPostPage
 "
 `;
 
-exports[`in typescript mode creates a show cell 1`] = `
+exports[`in typescript mode > creates a show cell 1`] = `
 "import type { FindPostById, FindPostByIdVariables } from 'types/graphql'
 
 import type {
@@ -1657,7 +1657,7 @@ export const Success = ({
 "
 `;
 
-exports[`in typescript mode creates a show component 1`] = `
+exports[`in typescript mode > creates a show component 1`] = `
 "import type {
   DeletePostMutation,
   DeletePostMutationVariables,
@@ -1791,7 +1791,7 @@ export default Post
 "
 `;
 
-exports[`in typescript mode creates a show page 1`] = `
+exports[`in typescript mode > creates a show page 1`] = `
 "import PostCell from 'src/components/PostCell'
 
 type PostPageProps = {
@@ -1806,7 +1806,7 @@ export default PostPage
 "
 `;
 
-exports[`in typescript mode creates a stylesheet 1`] = `
+exports[`in typescript mode > creates a stylesheet 1`] = `
 "/*
   normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
 */
@@ -2207,7 +2207,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 "
 `;
 
-exports[`in typescript mode creates an edit cell 1`] = `
+exports[`in typescript mode > creates an edit cell 1`] = `
 "import type {
   EditPostById,
   UpdatePostInput,
@@ -2305,7 +2305,7 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
 "
 `;
 
-exports[`in typescript mode creates an edit component with int foreign keys converted in onSave 1`] = `
+exports[`in typescript mode > creates an edit component with int foreign keys converted in onSave 1`] = `
 "import type {
   EditUserProfileById,
   UpdateUserProfileInput,
@@ -2399,7 +2399,7 @@ export const Success = ({
 "
 `;
 
-exports[`in typescript mode creates an index cell 1`] = `
+exports[`in typescript mode > creates an index cell 1`] = `
 "import type { FindPosts, FindPostsVariables } from 'types/graphql'
 
 import { Link, routes } from '@redwoodjs/router'
@@ -2456,7 +2456,7 @@ export const Success = ({
 "
 `;
 
-exports[`in typescript mode creates an index component 1`] = `
+exports[`in typescript mode > creates an index component 1`] = `
 "import type {
   DeletePostMutation,
   DeletePostMutationVariables,

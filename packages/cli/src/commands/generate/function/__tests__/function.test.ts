@@ -4,7 +4,8 @@ import '../../../../lib/test'
 
 import path from 'path'
 
-import yargs from 'yargs'
+import { describe, it, expect, test } from 'vitest'
+import yargs from 'yargs/yargs'
 
 import * as functionGenerator from '../function'
 
@@ -55,7 +56,7 @@ describe('Single word default files', () => {
 
 test('Keeps Function in name', () => {
   // @ts-expect-error Not sure how to pass generic to yargs here
-  const { name } = yargs
+  const { name } = yargs()
     .command('function <name>', false, functionGenerator.builder)
     .parse('function BazingaFunction')
 

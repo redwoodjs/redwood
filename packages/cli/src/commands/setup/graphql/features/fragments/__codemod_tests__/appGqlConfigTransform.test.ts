@@ -1,6 +1,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
+import { describe, test } from 'vitest'
+
 import { findUp } from '@redwoodjs/project-config'
 
 describe('fragments graphQLClientConfig', () => {

@@ -1,9 +1,16 @@
-jest.mock('fs')
-jest.mock('node:fs')
+vi.mock('fs')
+vi.mock('node:fs', async () => {
+  const memfs = await import('memfs')
+  return {
+    ...memfs.fs,
+    default: memfs.fs,
+  }
+})
 
 import * as fs from 'node:fs'
 
 import * as toml from '@iarna/toml'
+import { vi, describe, beforeEach, afterEach, it, expect } from 'vitest'
 
 import { updateTomlConfig, addEnvVar } from '../project'
 
@@ -23,7 +30,7 @@ const getRedwoodToml = () => {
   return defaultRedwoodToml
 }
 
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', () => {
   return {
     getPaths: () => {
       return {
@@ -47,22 +54,22 @@ describe('addEnvVar', () => {
 
   describe('addEnvVar adds environment variables as part of a setup task', () => {
     beforeEach(() => {
-      jest.spyOn(fs, 'existsSync').mockImplementation(() => {
+      vi.spyOn(fs, 'existsSync').mockImplementation(() => {
         return true
       })
 
-      jest.spyOn(fs, 'readFileSync').mockImplementation(() => {
+      vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
         return envFileContent
       })
 
-      jest.spyOn(fs, 'writeFileSync').mockImplementation((envPath, envFile) => {
+      vi.spyOn(fs, 'writeFileSync').mockImplementation((envPath, envFile) => {
         expect(envPath).toContain('.env')
         return envFile
       })
     })
 
     afterEach(() => {
-      jest.restoreAllMocks()
+      vi.restoreAllMocks()
       envFileContent = ''
     })
 
@@ -121,24 +128,22 @@ describe('addEnvVar', () => {
 describe('updateTomlConfig', () => {
   describe('updateTomlConfig configures a new CLI plugin', () => {
     beforeEach(() => {
-      jest.spyOn(fs, 'existsSync').mockImplementation(() => {
+      vi.spyOn(fs, 'existsSync').mockImplementation(() => {
         return true
       })
 
-      jest.spyOn(fs, 'readFileSync').mockImplementation(() => {
+      vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
         return toml.stringify(defaultRedwoodToml)
       })
 
-      jest
-        .spyOn(fs, 'writeFileSync')
-        .mockImplementation((tomlPath, tomlFile) => {
-          expect(tomlPath).toContain('redwood.toml')
-          return tomlFile
-        })
+      vi.spyOn(fs, 'writeFileSync').mockImplementation((tomlPath, tomlFile) => {
+        expect(tomlPath).toContain('redwood.toml')
+        return tomlFile
+      })
     })
 
     afterEach(() => {
-      jest.restoreAllMocks()
+      vi.restoreAllMocks()
     })
 
     it('adds when experimental cli is not configured', () => {
