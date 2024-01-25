@@ -8,7 +8,7 @@ import {
   waitFor,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { vi, describe, it, expect } from 'vitest'
+import { vi } from 'vitest'
 
 import {
   Form,
