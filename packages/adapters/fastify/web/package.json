@@ -7,7 +7,12 @@
     "directory": "packages/adapters/fastify/web"
   },
   "license": "MIT",
-  "exports": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
