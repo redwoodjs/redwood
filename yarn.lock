@@ -19503,14 +19503,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-monkey@npm:^1.0.4":
-  version: 1.0.4
-  resolution: "fs-monkey@npm:1.0.4"
-  checksum: eeb2457ec50f7202c44273de2a42b50868c8e6b2ab4825d517947143d4e727c028e24f6d0f46e6f3e7a149a1c9e7d8b3ca28243c3b10366d280a08016483e829
-  languageName: node
-  linkType: hard
-
-"fs-monkey@npm:^1.0.5":
+"fs-monkey@npm:^1.0.4, fs-monkey@npm:^1.0.5":
   version: 1.0.5
   resolution: "fs-monkey@npm:1.0.5"
   checksum: 815025e75549fb1ac6c403413b82fd631eded862ae27694a515c0f666069e95874ab34e79c33d1b3b8c87d1e54350d5e4262090d0aa5bd7130143cbc627537e4
