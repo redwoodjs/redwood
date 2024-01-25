@@ -48,4 +48,19 @@ describe('MiddlewareRequest', () => {
 
     expect(mReq.headers.get('x-custom-header')).toStrictEqual('beatdrop')
   })
+
+  test('Can attach and retrieve server auth context', () => {
+    const req = new Request('http://redwoodjs.com')
+    const FAKE_AUTH_CONTEXT = {
+      currentUser: {
+        name: 'Danny',
+      },
+      isAuthenticated: true,
+    }
+    const mReq = createMiddlewareRequest(req)
+
+    mReq.serverAuthContext.set(FAKE_AUTH_CONTEXT)
+
+    expect(mReq.serverAuthContext.get()).toStrictEqual(FAKE_AUTH_CONTEXT)
+  })
 })
