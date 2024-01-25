@@ -44,9 +44,9 @@ import path from 'path'
 import { Listr } from 'listr2'
 import prompts from 'prompts'
 import { vi, describe, afterEach, it, expect } from 'vitest'
+import type { Mock, MockedFunction } from 'vitest'
 
-// import * as auth from '../auth'
-import { standardAuthHandler } from '../setupHelpers'
+import { standardAuthHandler } from '../setupHelpers.js'
 
 describe('Auth generator tests', () => {
   const processExitSpy = vi
@@ -55,7 +55,7 @@ describe('Auth generator tests', () => {
 
   const mockListrRun = vi.fn()
 
-  ;(Listr as vi.MockedFunction<vi.Mock>).mockImplementation(() => {
+  ;(Listr as MockedFunction<Mock>).mockImplementation(() => {
     return {
       run: mockListrRun,
     }
@@ -66,7 +66,7 @@ describe('Auth generator tests', () => {
   afterEach(() => {
     processExitSpy.mockReset()
     fsSpy.mockReset()
-    ;(prompts as unknown as vi.Mock).mockClear()
+    ;(prompts as unknown as Mock).mockClear()
     mockListrRun.mockClear()
   })
 

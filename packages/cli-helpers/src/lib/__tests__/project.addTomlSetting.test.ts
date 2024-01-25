@@ -10,7 +10,7 @@ vi.mock('node:fs', async () => {
 import { vol } from 'memfs'
 import { vi, beforeAll, afterAll, it, expect } from 'vitest'
 
-import { setTomlSetting } from '../project'
+import { setTomlSetting } from '../project.js'
 
 // Set up RWJS_CWD
 let original_RWJS_CWD: string | undefined

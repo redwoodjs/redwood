@@ -1,6 +1,6 @@
 import { vi, test, expect } from 'vitest'
 
-import { prettify } from '../index'
+import { prettify } from '../index.js'
 
 vi.mock('../paths', () => {
   return {
