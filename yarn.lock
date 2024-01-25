@@ -8851,7 +8851,8 @@ __metadata:
     "@types/react": "npm:18.2.37"
     "@types/yargs-parser": "npm:21.0.3"
     "@vitejs/plugin-react": "npm:4.2.1"
-    "@whatwg-node/server": "npm:0.9.18"
+    "@whatwg-node/fetch": "npm:0.9.15"
+    "@whatwg-node/server": "npm:0.9.24"
     acorn-loose: "npm:8.3.0"
     buffer: "npm:6.0.3"
     busboy: "npm:^1.6.0"
@@ -12345,6 +12346,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@whatwg-node/fetch@npm:0.9.15":
+  version: 0.9.15
+  resolution: "@whatwg-node/fetch@npm:0.9.15"
+  dependencies:
+    "@whatwg-node/node-fetch": "npm:^0.5.0"
+    urlpattern-polyfill: "npm:^9.0.0"
+  checksum: 8e3e9692d709b4f379fde83fbb38ca64401e73026bbacca92585c7652170de629fe78303e83a45e83d2e26c5af2a6e754f858e3a0c88f9b392c49ff1b84aa080
+  languageName: node
+  linkType: hard
+
 "@whatwg-node/fetch@npm:^0.8.0, @whatwg-node/fetch@npm:^0.8.1, @whatwg-node/fetch@npm:^0.8.2":
   version: 0.8.8
   resolution: "@whatwg-node/fetch@npm:0.8.8"
@@ -12384,7 +12395,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/server@npm:0.9.18, @whatwg-node/server@npm:^0.9.1":
+"@whatwg-node/server@npm:0.9.24":
+  version: 0.9.24
+  resolution: "@whatwg-node/server@npm:0.9.24"
+  dependencies:
+    "@whatwg-node/fetch": "npm:^0.9.10"
+    tslib: "npm:^2.3.1"
+  checksum: 2979d38de75bb66fe92e8157c3df28e78f4f458827228af23707a37a6ef16b415d3eb052f4431f3496749070620d1578267c729286ff239af31dd20f8ee22ef1
+  languageName: node
+  linkType: hard
+
+"@whatwg-node/server@npm:^0.9.1":
   version: 0.9.18
   resolution: "@whatwg-node/server@npm:0.9.18"
   dependencies:
