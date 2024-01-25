@@ -1,28 +1,25 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
-import * as esbuild from 'esbuild'
+import { build, defaultBuildOptions } from '../../buildDefaults.mjs'
 
 const options = {
-  entryPoints: ['./src/index.ts'],
-  outdir: 'dist',
-
-  platform: 'node',
-  target: ['node20'],
+  ...defaultBuildOptions,
   bundle: true,
+  entryPoints: ['./src/index.ts'],
   packages: 'external',
-
-  logLevel: 'info',
-  metafile: true,
 }
 
-await esbuild.build({
-  ...options,
-  format: 'esm',
-  outExtension: { '.js': '.mjs' },
+// ESM build.
+await build({
+  buildOptions: {
+    ...options,
+    format: 'esm',
+    outExtension: { '.js': '.mjs' },
+  },
 })
 
-await esbuild.build({
-  ...options,
-  format: 'cjs',
-  outExtension: { '.js': '.cjs' },
+// CJS build.
+await build({
+  buildOptions: {
+    ...options,
+    outExtension: { '.js': '.cjs' },
+  },
 })

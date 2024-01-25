@@ -1,6 +1,8 @@
 globalThis.__dirname = __dirname
 import path from 'path'
 
+import { vi, describe, test, expect, beforeAll } from 'vitest'
+
 // Load mocks
 import '../../../../lib/test'
 
@@ -8,7 +10,7 @@ import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../helpers'
 import * as scaffold from '../scaffold'
 
-jest.mock('execa')
+vi.mock('execa')
 
 describe('in javascript (default) mode', () => {
   let files
