@@ -159,11 +159,11 @@ export function resolveOptions(options: RedwoodFastifyWebOptions) {
   //   apiUpstreamUrl: undefined // There's nowhere for requests to '/api' to go
   // }
   // ```
-  if (!apiUrlIsFullyQualifiedUrl && !redwood.apiUpstreamUrl) {
-    throw new Error(
-      `If you don't provide \`apiUpstreamUrl\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '${redwood.apiUrl}'`
-    )
-  }
+  // if (!apiUrlIsFullyQualifiedUrl && !redwood.apiUpstreamUrl) {
+  //   throw new Error(
+  //     `If you don't provide \`apiUpstreamUrl\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '${redwood.apiUrl}'`
+  //   )
+  // }
 
   return { redwood }
 }

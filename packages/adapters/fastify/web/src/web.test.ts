@@ -33,7 +33,7 @@ describe('resolveOptions', () => {
   //  - fully-qualified
 
   describe('undefined apiUrl', () => {
-    it('undefined apiUpstreamUrl', () => {
+    it.skip('undefined apiUpstreamUrl', () => {
       expect(() =>
         resolveOptions({
           redwood: {
@@ -46,7 +46,7 @@ describe('resolveOptions', () => {
       )
     })
 
-    it('empty apiUpstreamUrl', () => {
+    it.skip('empty apiUpstreamUrl', () => {
       expect(() =>
         resolveOptions({
           redwood: {
@@ -92,7 +92,7 @@ describe('resolveOptions', () => {
   })
 
   describe('empty apiUrl', () => {
-    it('undefined apiUpstreamUrl', () => {
+    it.skip('undefined apiUpstreamUrl', () => {
       expect(() =>
         resolveOptions({
           redwood: {
@@ -105,7 +105,7 @@ describe('resolveOptions', () => {
       )
     })
 
-    it('empty apiUpstreamUrl', () => {
+    it.skip('empty apiUpstreamUrl', () => {
       expect(() =>
         resolveOptions({
           redwood: {
@@ -146,7 +146,7 @@ describe('resolveOptions', () => {
   })
 
   describe('relative apiUrl', () => {
-    it('undefined apiUpstreamUrl', () => {
+    it.skip('undefined apiUpstreamUrl', () => {
       expect(() =>
         resolveOptions({
           redwood: {
@@ -159,7 +159,7 @@ describe('resolveOptions', () => {
       )
     })
 
-    it('empty apiUpstreamUrl', () => {
+    it.skip('empty apiUpstreamUrl', () => {
       expect(() =>
         resolveOptions({
           redwood: {

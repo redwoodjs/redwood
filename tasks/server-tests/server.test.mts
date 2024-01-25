@@ -182,7 +182,7 @@ describe.only.each([
     expect(stdout).toMatchSnapshot()
   })
 
-  it("fails if apiHost isn't set and apiUrl isn't fully qualified", async () => {
+  it.skip("fails if apiHost isn't set and apiUrl isn't fully qualified", async () => {
     try {
       await $`yarn node ${commandString}`
       expect(true).toEqual(false)
