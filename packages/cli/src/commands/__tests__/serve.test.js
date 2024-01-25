@@ -1,8 +1,10 @@
 globalThis.__dirname = __dirname
 
 // We mock these to skip the check for web/dist and api/dist
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const originalProjectConfig = await importOriginal()
   return {
+    ...originalProjectConfig,
     getPaths: () => {
       return {
         api: {
@@ -23,40 +25,46 @@ jest.mock('@redwoodjs/project-config', () => {
   }
 })
 
-jest.mock('fs', () => {
+vi.mock('fs-extra', async (importOriginal) => {
+  const originalFsExtra = await importOriginal()
   return {
-    ...jest.requireActual('fs'),
-    existsSync: (p) => {
-      // Don't detect the experimental server file, can't use path.sep here so the replaceAll is used
-      if (p.replaceAll('\\', '/') === '/mocked/project/api/dist/server.js') {
-        return false
-      }
-      return true
+    default: {
+      ...originalFsExtra,
+      existsSync: (p) => {
+        // Don't detect the experimental server file, can't use path.sep here so the replaceAll is used
+        if (p.replaceAll('\\', '/') === '/mocked/project/api/dist/server.js') {
+          return false
+        }
+        return true
+      },
     },
   }
 })
 
-jest.mock('../serveApiHandler', () => {
+vi.mock('../serveApiHandler', async (importOriginal) => {
+  const originalHandler = await importOriginal()
   return {
-    ...jest.requireActual('../serveApiHandler'),
-    apiServerHandler: jest.fn(),
+    ...originalHandler,
+    apiServerHandler: vi.fn(),
   }
 })
-jest.mock('../serveBothHandler', () => {
+vi.mock('../serveBothHandler', async (importOriginal) => {
+  const originalHandler = await importOriginal()
   return {
-    ...jest.requireActual('../serveBothHandler'),
-    bothServerHandler: jest.fn(),
+    ...originalHandler,
+    bothServerHandler: vi.fn(),
   }
 })
-jest.mock('execa', () =>
-  jest.fn((cmd, params) => ({
+vi.mock('execa', () => ({
+  default: vi.fn((cmd, params) => ({
     cmd,
     params,
-  }))
-)
+  })),
+}))
 
 import execa from 'execa'
-import yargs from 'yargs'
+import { vi, describe, afterEach, it, expect } from 'vitest'
+import yargs from 'yargs/yargs'
 
 import { builder } from '../serve'
 import { apiServerHandler } from '../serveApiHandler'
@@ -64,11 +72,11 @@ import { bothServerHandler } from '../serveBothHandler'
 
 describe('yarn rw serve', () => {
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('Should proxy serve api with params to api-server handler', async () => {
-    const parser = yargs.command('serve [side]', false, builder)
+    const parser = yargs().command('serve [side]', false, builder)
 
     await parser.parse('serve api --port 5555 --apiRootPath funkyFunctions')
 
@@ -81,7 +89,7 @@ describe('yarn rw serve', () => {
   })
 
   it('Should proxy serve api with params to api-server handler (alias and slashes in path)', async () => {
-    const parser = yargs.command('serve [side]', false, builder)
+    const parser = yargs().command('serve [side]', false, builder)
 
     await parser.parse(
       'serve api --port 5555 --rootPath funkyFunctions/nested/'
@@ -96,7 +104,7 @@ describe('yarn rw serve', () => {
   })
 
   it('Should proxy serve web with params to web server handler', async () => {
-    const parser = yargs.command('serve [side]', false, builder)
+    const parser = yargs().command('serve [side]', false, builder)
 
     await parser.parse(
       'serve web --port 9898 --socket abc --apiHost https://myapi.redwood/api'
@@ -118,7 +126,7 @@ describe('yarn rw serve', () => {
   })
 
   it('Should proxy rw serve with params to appropriate handler', async () => {
-    const parser = yargs.command('serve [side]', false, builder)
+    const parser = yargs().command('serve [side]', false, builder)
 
     await parser.parse('serve --port 9898 --socket abc')
 

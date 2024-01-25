@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`in javascript mode creates a multi word service file 1`] = `
+exports[`in javascript mode > creates a multi word service file 1`] = `
 "import { db } from 'src/lib/db'
 
 export const userProfiles = () => {
@@ -9,7 +9,7 @@ export const userProfiles = () => {
 "
 `;
 
-exports[`in javascript mode creates a multi word service test file 1`] = `
+exports[`in javascript mode > creates a multi word service test file 1`] = `
 "import { userProfiles } from './userProfiles'
 
 // Generated boilerplate tests do not account for all circumstances
@@ -28,7 +28,7 @@ describe('userProfiles', () => {
 "
 `;
 
-exports[`in javascript mode creates a multi word service test file with crud actions and only foreign as mandatory field 1`] = `
+exports[`in javascript mode > creates a multi word service test file with crud actions and only foreign as mandatory field 1`] = `
 "import {
   transactions,
   transaction,
@@ -88,7 +88,7 @@ describe('transactions', () => {
 "
 `;
 
-exports[`in javascript mode creates a multi word service test file with multiple scalar types 1`] = `
+exports[`in javascript mode > creates a multi word service test file with multiple scalar types 1`] = `
 "import {
   scalarTypes,
   scalarType,
@@ -158,7 +158,7 @@ describe('scalarTypes', () => {
 "
 `;
 
-exports[`in javascript mode creates a single word service file 1`] = `
+exports[`in javascript mode > creates a single word service file 1`] = `
 "import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -192,7 +192,7 @@ export const deleteUser = ({ id }) => {
 "
 `;
 
-exports[`in javascript mode creates a single word service file with CRUD actions 1`] = `
+exports[`in javascript mode > creates a single word service file with CRUD actions 1`] = `
 "import { db } from 'src/lib/db'
 
 export const posts = () => {
@@ -226,7 +226,7 @@ export const deletePost = ({ id }) => {
 "
 `;
 
-exports[`in javascript mode creates a single word service file with a belongsTo relation 1`] = `
+exports[`in javascript mode > creates a single word service file with a belongsTo relation 1`] = `
 "import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -247,7 +247,7 @@ export const User = {
 "
 `;
 
-exports[`in javascript mode creates a single word service file with a hasMany relation 1`] = `
+exports[`in javascript mode > creates a single word service file with a hasMany relation 1`] = `
 "import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -268,7 +268,7 @@ export const User = {
 "
 `;
 
-exports[`in javascript mode creates a single word service file with multiple relations 1`] = `
+exports[`in javascript mode > creates a single word service file with multiple relations 1`] = `
 "import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -292,7 +292,7 @@ export const User = {
 "
 `;
 
-exports[`in javascript mode creates a single word service scenario file 1`] = `
+exports[`in javascript mode > creates a single word service scenario file 1`] = `
 "export const standard = defineScenario({
   user: {
     one: { data: { email: 'String1234567' } },
@@ -302,7 +302,7 @@ exports[`in javascript mode creates a single word service scenario file 1`] = `
 "
 `;
 
-exports[`in javascript mode creates a single word service test file 1`] = `
+exports[`in javascript mode > creates a single word service test file 1`] = `
 "import { users, user, createUser, updateUser, deleteUser } from './users'
 
 // Generated boilerplate tests do not account for all circumstances
@@ -352,7 +352,7 @@ describe('users', () => {
 "
 `;
 
-exports[`in typescript mode creates a multi word service file 1`] = `
+exports[`in typescript mode > creates a multi word service file 1`] = `
 "import type { QueryResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
@@ -363,7 +363,7 @@ export const userProfiles: QueryResolvers['userProfiles'] = () => {
 "
 `;
 
-exports[`in typescript mode creates a multi word service test file 1`] = `
+exports[`in typescript mode > creates a multi word service test file 1`] = `
 "import type { UserProfile } from '@prisma/client'
 
 import { userProfiles } from './userProfiles'
@@ -385,7 +385,7 @@ describe('userProfiles', () => {
 "
 `;
 
-exports[`in typescript mode creates a multi word service test file with crud actions and only foreign as mandatory field 1`] = `
+exports[`in typescript mode > creates a multi word service test file with crud actions and only foreign as mandatory field 1`] = `
 "import type { Transaction } from '@prisma/client'
 
 import {
@@ -451,7 +451,7 @@ describe('transactions', () => {
 "
 `;
 
-exports[`in typescript mode creates a multi word service test file with multiple scalar types 1`] = `
+exports[`in typescript mode > creates a multi word service test file with multiple scalar types 1`] = `
 "import type { ScalarType } from '@prisma/client'
 
 import {
@@ -527,7 +527,7 @@ describe('scalarTypes', () => {
 "
 `;
 
-exports[`in typescript mode creates a single word service file 1`] = `
+exports[`in typescript mode > creates a single word service file 1`] = `
 "import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
@@ -563,7 +563,7 @@ export const deleteUser: MutationResolvers['deleteUser'] = ({ id }) => {
 "
 `;
 
-exports[`in typescript mode creates a single word service file with CRUD actions 1`] = `
+exports[`in typescript mode > creates a single word service file with CRUD actions 1`] = `
 "import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
@@ -599,7 +599,7 @@ export const deletePost: MutationResolvers['deletePost'] = ({ id }) => {
 "
 `;
 
-exports[`in typescript mode creates a single word service file with a belongsTo relation 1`] = `
+exports[`in typescript mode > creates a single word service file with a belongsTo relation 1`] = `
 "import type { QueryResolvers, UserRelationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
@@ -622,7 +622,7 @@ export const User: UserRelationResolvers = {
 "
 `;
 
-exports[`in typescript mode creates a single word service file with a hasMany relation 1`] = `
+exports[`in typescript mode > creates a single word service file with a hasMany relation 1`] = `
 "import type { QueryResolvers, UserRelationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
@@ -645,7 +645,7 @@ export const User: UserRelationResolvers = {
 "
 `;
 
-exports[`in typescript mode creates a single word service file with multiple relations 1`] = `
+exports[`in typescript mode > creates a single word service file with multiple relations 1`] = `
 "import type { QueryResolvers, UserRelationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
@@ -671,7 +671,7 @@ export const User: UserRelationResolvers = {
 "
 `;
 
-exports[`in typescript mode creates a single word service scenario file 1`] = `
+exports[`in typescript mode > creates a single word service scenario file 1`] = `
 "import type { Prisma, User } from '@prisma/client'
 import type { ScenarioData } from '@redwoodjs/testing/api'
 
@@ -686,7 +686,7 @@ export type StandardScenario = ScenarioData<User, 'user'>
 "
 `;
 
-exports[`in typescript mode creates a single word service test file 1`] = `
+exports[`in typescript mode > creates a single word service test file 1`] = `
 "import type { User } from '@prisma/client'
 
 import { users, user, createUser, updateUser, deleteUser } from './users'

@@ -1,4 +1,5 @@
 import prompts from 'prompts'
+import { test, expect } from 'vitest'
 
 import * as helpers from '../pluralHelpers'
 import { pluralize, singularize } from '../rwPluralize'

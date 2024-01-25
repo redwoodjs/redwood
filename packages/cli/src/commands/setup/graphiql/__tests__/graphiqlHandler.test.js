@@ -2,35 +2,34 @@ globalThis.__dirname = __dirname
 
 import '../../../../lib/mockTelemetry'
 
-jest.mock('@redwoodjs/babel-config', () => {
+vi.mock('@redwoodjs/babel-config', () => {
   return {
     registerApiSideBabelHook: () => null,
   }
 })
-jest.mock('../../../../lib', () => ({
+vi.mock('../../../../lib', () => ({
   getPaths: () => ({
     api: { lib: '', functions: '' },
   }),
   existsAnyExtensionSync: () => false,
 }))
-jest.mock('../../../../lib/project', () => ({
+vi.mock('../../../../lib/project', () => ({
   isTypeScriptProject: () => false,
 }))
 
-jest.mock('listr2')
+vi.mock('listr2')
 import chalk from 'chalk'
 import { Listr } from 'listr2'
+import { vi, describe, it, afterEach, expect } from 'vitest'
 
 import * as graphiqlHandler from '../graphiqlHandler'
 import * as graphiqlHelpers from '../graphiqlHelpers'
 
 describe('Graphiql generator tests', () => {
-  const processExitSpy = jest
-    .spyOn(process, 'exit')
-    .mockImplementation(() => {})
-  const cSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+  const processExitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {})
+  const cSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
-  const mockListrRun = jest.fn()
+  const mockListrRun = vi.fn()
   Listr.mockImplementation(() => {
     return {
       run: mockListrRun,
@@ -43,7 +42,7 @@ describe('Graphiql generator tests', () => {
   })
 
   it('throws an error if source path does not exist when viewing headers', async () => {
-    jest.spyOn(graphiqlHelpers, 'getOutputPath').mockImplementation(() => '')
+    vi.spyOn(graphiqlHelpers, 'getOutputPath').mockImplementation(() => '')
     await graphiqlHandler.handler({ view: true, provider: 'dbAuth' })
     expect(console.error).toHaveBeenCalledWith(
       chalk.bold.red(

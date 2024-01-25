@@ -10,8 +10,8 @@ import type {
 import { Listr } from 'listr2'
 import { format } from 'prettier'
 
-import { colors } from './colors'
-import { getPaths } from './paths'
+import { colors } from './colors.js'
+import { getPaths } from './paths.js'
 
 // TODO: Move this into `generateTemplate` when all templates have TS support
 /*

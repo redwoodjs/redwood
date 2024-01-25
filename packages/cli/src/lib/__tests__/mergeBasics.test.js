@@ -1,3 +1,5 @@
+import { expect, it, describe } from 'vitest'
+
 import { merge } from '../merge'
 import { concatUnique } from '../merge/strategy'
 

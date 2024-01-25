@@ -5,10 +5,12 @@ import fs from 'fs-extra'
 
 import { getPaths } from './index'
 
+// Note: Have to add backslash (\) before @ below for intellisense to display
+// the doc comments properly
 /**
- *  Installs a module into a user's project. If the module is already installed,
- *  this function does nothing. If no version is specified, the version will be assumed
- *  to be the same as that of \@redwoodjs/cli.
+ * Installs a module into a user's project. If the module is already installed,
+ * this function does nothing. If no version is specified, the version will be
+ * assumed to be the same as that of \@redwoodjs/cli.
  *
  * @param {string} name The name of the module to install
  * @param {string} version The version of the module to install, otherwise the same as that of \@redwoodjs/cli
@@ -19,21 +21,25 @@ export async function installModule(name, version = undefined) {
   if (isModuleInstalled(name)) {
     return false
   }
+
   if (version === undefined) {
-    return await installRedwoodModule(name)
+    return installRedwoodModule(name)
   } else {
     await execa.command(`yarn add -D ${name}@${version}`, {
       stdio: 'inherit',
       cwd: getPaths().base,
     })
   }
+
   return true
 }
 
 /**
- * Installs a Redwood module into a user's project keeping the version consistent with that of \@redwoodjs/cli.
+ * Installs a Redwood module into a user's project keeping the version
+ * consistent with that of \@redwoodjs/cli.
  * If the module is already installed, this function does nothing.
- * If no remote version can not be found which matches the local cli version then the latest canary version will be used.
+ * If no remote version can not be found which matches the local cli version
+ * then the latest canary version will be used.
  *
  * @param {string} module A redwoodjs module, e.g. \@redwoodjs/web
  * @returns {boolean} Whether the module was installed or not

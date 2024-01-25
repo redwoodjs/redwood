@@ -2,6 +2,8 @@ globalThis.__dirname = __dirname
 // Load mocks
 import '../../../../lib/test'
 
+import { describe, test, expect } from 'vitest'
+
 import * as service from '../service'
 
 describe('the scenario generator', () => {

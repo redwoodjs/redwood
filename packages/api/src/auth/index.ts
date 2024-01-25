@@ -2,18 +2,22 @@ export * from './parseJWT'
 
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
+import { getEventHeader } from '../event'
+
 import type { Decoded } from './parseJWT'
 export type { Decoded }
 
 // This is shared by `@redwoodjs/web`
 const AUTH_PROVIDER_HEADER = 'auth-provider'
 
-export const getAuthProviderHeader = (event: APIGatewayProxyEvent) => {
+export const getAuthProviderHeader = (
+  event: APIGatewayProxyEvent | Request
+) => {
   const authProviderKey = Object.keys(event?.headers ?? {}).find(
     (key) => key.toLowerCase() === AUTH_PROVIDER_HEADER
   )
   if (authProviderKey) {
-    return event?.headers[authProviderKey]
+    return getEventHeader(event, authProviderKey)
   }
   return undefined
 }
@@ -27,11 +31,9 @@ export interface AuthorizationHeader {
  * Split the `Authorization` header into a schema and token part.
  */
 export const parseAuthorizationHeader = (
-  event: APIGatewayProxyEvent
+  event: APIGatewayProxyEvent | Request
 ): AuthorizationHeader => {
-  const parts = (
-    event.headers?.authorization || event.headers?.Authorization
-  )?.split(' ')
+  const parts = getEventHeader(event, 'authorization')?.split(' ')
   if (parts?.length !== 2) {
     throw new Error('The `Authorization` header is not valid.')
   }
@@ -42,16 +44,24 @@ export const parseAuthorizationHeader = (
   return { schema, token }
 }
 
+/** @MARK Note that we do not send LambdaContext when making fetch requests
+ *
+ * This part is incomplete, as we need to decide how we will make the breaking change to
+ * 1. getCurrentUser
+ * 2. authDecoders
+
+ */
+
 export type AuthContextPayload = [
   Decoded,
   { type: string } & AuthorizationHeader,
-  { event: APIGatewayProxyEvent; context: LambdaContext }
+  { event: APIGatewayProxyEvent | Request; context: LambdaContext }
 ]
 
 export type Decoder = (
   token: string,
   type: string,
-  req: { event: APIGatewayProxyEvent; context: LambdaContext }
+  req: { event: APIGatewayProxyEvent | Request; context: LambdaContext }
 ) => Promise<Decoded>
 
 /**
@@ -64,7 +74,7 @@ export const getAuthenticationContext = async ({
   context,
 }: {
   authDecoder?: Decoder | Decoder[]
-  event: APIGatewayProxyEvent
+  event: APIGatewayProxyEvent | Request
   context: LambdaContext
 }): Promise<undefined | AuthContextPayload> => {
   const type = getAuthProviderHeader(event)
@@ -89,7 +99,12 @@ export const getAuthenticationContext = async ({
 
   let i = 0
   while (!decoded && i < authDecoders.length) {
-    decoded = await authDecoders[i](token, type, { event, context })
+    decoded = await authDecoders[i](token, type, {
+      // @TODO: We will need to make a breaking change to support `Request` objects.
+      // We can remove this typecast
+      event: event,
+      context,
+    })
     i++
   }
 

@@ -1,4 +1,4 @@
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', () => {
   return {
     getPaths: () => {
       return {
@@ -7,11 +7,13 @@ jest.mock('@redwoodjs/project-config', () => {
     },
   }
 })
-jest.mock('fs')
+vi.mock('fs')
 
 import fs from 'fs'
 
-import { getCompatibilityData } from '../version'
+import { vi, describe, test, expect, beforeEach } from 'vitest'
+
+import { getCompatibilityData } from '../version.js'
 
 const EXAMPLE_PACKUMENT = {
   _id: '@scope/package-name',
@@ -187,7 +189,7 @@ const EXAMPLE_PACKUMENT = {
 
 describe('version compatibility detection', () => {
   beforeEach(() => {
-    jest.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return {
         json: () => {
           return EXAMPLE_PACKUMENT
@@ -195,7 +197,7 @@ describe('version compatibility detection', () => {
       } as any
     })
 
-    jest.spyOn(fs, 'readFileSync').mockImplementation(() => {
+    vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
       return JSON.stringify({
         devDependencies: {
           '@redwoodjs/core': '^6.0.0',
@@ -206,15 +208,17 @@ describe('version compatibility detection', () => {
 
   test('throws for some fetch related error', async () => {
     // Mock the fetch function to throw an error
-    jest.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       throw new Error('Some fetch related error')
     })
     await expect(
       getCompatibilityData('some-package', 'latest')
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`"Some fetch related error"`)
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: Some fetch related error]`
+    )
 
     // Mock the json parsing to throw an error
-    jest.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return {
         json: () => {
           throw new Error('Some json parsing error')
@@ -224,11 +228,13 @@ describe('version compatibility detection', () => {
 
     await expect(
       getCompatibilityData('some-package', 'latest')
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`"Some json parsing error"`)
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: Some json parsing error]`
+    )
   })
 
   test('throws for some packument related error', async () => {
-    jest.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return {
         json: () => {
           return {
@@ -241,7 +247,7 @@ describe('version compatibility detection', () => {
     await expect(
       getCompatibilityData('some-package', 'latest')
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Some packument related error"`
+      `[Error: Some packument related error]`
     )
   })
 
@@ -249,7 +255,7 @@ describe('version compatibility detection', () => {
     await expect(
       getCompatibilityData('@scope/package-name', '0.0.4')
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"The package '@scope/package-name' does not have a version '0.0.4'"`
+      `[Error: The package '@scope/package-name' does not have a version '0.0.4']`
     )
   })
 
@@ -257,12 +263,12 @@ describe('version compatibility detection', () => {
     await expect(
       getCompatibilityData('@scope/package-name', 'next')
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"The package '@scope/package-name' does not have a tag 'next'"`
+      `[Error: The package '@scope/package-name' does not have a tag 'next']`
     )
   })
 
   test('throws if no latest version could be found', async () => {
-    jest.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return {
         json: () => {
           return {
@@ -276,7 +282,7 @@ describe('version compatibility detection', () => {
     await expect(
       getCompatibilityData('@scope/package-name', 'latest')
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"The package '@scope/package-name' does not have a tag 'latest'"`
+      `[Error: The package '@scope/package-name' does not have a tag 'latest']`
     )
   })
 
@@ -320,7 +326,7 @@ describe('version compatibility detection', () => {
       }
     )
 
-    jest.spyOn(fs, 'readFileSync').mockImplementation(() => {
+    vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
       return JSON.stringify({
         devDependencies: {
           '@redwoodjs/core': '5.2.0',
@@ -343,7 +349,7 @@ describe('version compatibility detection', () => {
   })
 
   test('throws if no compatible version could be found', async () => {
-    jest.spyOn(fs, 'readFileSync').mockImplementation(() => {
+    vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
       return JSON.stringify({
         devDependencies: {
           '@redwoodjs/core': '7.0.0',
@@ -354,7 +360,7 @@ describe('version compatibility detection', () => {
     expect(
       getCompatibilityData('@scope/package-name', 'latest')
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"No compatible version of '@scope/package-name' was found"`
+      `[Error: No compatible version of '@scope/package-name' was found]`
     )
   })
 })

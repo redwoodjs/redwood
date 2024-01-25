@@ -2,6 +2,8 @@ globalThis.__dirname = __dirname
 import path from 'path'
 import '../../../../lib/test'
 
+import { afterEach, test, expect } from 'vitest'
+
 import * as generator from '../dataMigration'
 
 const asyncForEach = async (array, callback) => {

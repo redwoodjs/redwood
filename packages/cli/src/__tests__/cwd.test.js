@@ -1,6 +1,8 @@
 import { spawnSync } from 'child_process'
 import path from 'path'
 
+import { describe, it, expect } from 'vitest'
+
 describe('The CLI sets `cwd` correctly', () => {
   describe('--cwd', () => {
     it('lets the user set the cwd via the `--cwd` option', async () => {

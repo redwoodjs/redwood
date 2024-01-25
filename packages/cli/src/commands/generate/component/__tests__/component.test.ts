@@ -1,7 +1,8 @@
 globalThis.__dirname = __dirname
 import path from 'path'
 
-import yargs from 'yargs'
+import { beforeAll, test, expect } from 'vitest'
+import yargs from 'yargs/yargs'
 
 // Shared mocks for paths, etc.
 import '../../../../lib/test'
@@ -57,7 +58,7 @@ test('returns exactly 3 files', () => {
 })
 
 test('keeps Component in name', () => {
-  const { name } = yargs
+  const { name } = yargs()
     .command('component <name>', false, component.builder)
     .parse('component BazingaComponent')
 

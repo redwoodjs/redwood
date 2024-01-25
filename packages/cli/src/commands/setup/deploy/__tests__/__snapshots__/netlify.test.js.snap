@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`netlify should add netlify.toml 1`] = `
+exports[`netlify > should add netlify.toml 1`] = `
 "[build]
   command = "yarn rw deploy netlify"
   publish = "web/dist"
@@ -30,7 +30,7 @@ exports[`netlify should add netlify.toml 1`] = `
 "
 `;
 
-exports[`netlify should call the handler without error 1`] = `
+exports[`netlify > should call the handler without error 1`] = `
 "[build]
   command = "yarn rw deploy netlify"
   publish = "web/dist"

@@ -22,11 +22,6 @@
     "test": "vitest run src",
     "test:watch": "vitest watch src"
   },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/dist/"
-    ]
-  },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.6",
     "@prisma/client": "5.7.0",

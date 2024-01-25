@@ -1,5 +1,7 @@
 import { resolve } from 'path'
 
+import { describe, it } from 'vitest'
+
 import { DefaultHost } from '../../hosts'
 import { RWProject } from '../../model'
 import { getOutline } from '../outline'

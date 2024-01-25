@@ -1,8 +1,16 @@
+import { vi, test, expect } from 'vitest'
+
 import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
 
 import * as nftPacker from '../packing/nft'
 
-jest.mock('@redwoodjs/internal/dist/files', () => {
+vi.mock('@vercel/nft', () => {
+  return {
+    nodeFileTrace: vi.fn(),
+  }
+})
+
+vi.mock('@redwoodjs/internal/dist/files', () => {
   return {
     findApiDistFunctions: () => {
       return [
@@ -16,7 +24,7 @@ jest.mock('@redwoodjs/internal/dist/files', () => {
   }
 })
 
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', () => {
   return {
     getPaths: () => {
       return {
@@ -30,7 +38,7 @@ jest.mock('@redwoodjs/project-config', () => {
 })
 
 test('Check packager detects all functions', () => {
-  const packageFileMock = jest
+  const packageFileMock = vi
     .spyOn(nftPacker, 'packageSingleFunction')
     .mockResolvedValue(true)
 

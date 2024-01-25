@@ -1,9 +1,16 @@
-jest.mock('fs', () => require('memfs').fs)
-jest.mock('node:fs', () => require('memfs').fs)
+vi.mock('fs')
+vi.mock('node:fs', async () => {
+  const memfs = await import('memfs')
+  return {
+    ...memfs.fs,
+    default: memfs.fs,
+  }
+})
 
 import { vol } from 'memfs'
+import { vi, beforeAll, afterAll, it, expect } from 'vitest'
 
-import { setTomlSetting } from '../project'
+import { setTomlSetting } from '../project.js'
 
 // Set up RWJS_CWD
 let original_RWJS_CWD: string | undefined
@@ -16,8 +23,8 @@ beforeAll(() => {
 
 afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
-  jest.restoreAllMocks()
-  jest.resetModules()
+  vi.restoreAllMocks()
+  vi.resetModules()
 })
 
 it('should add `fragments = true` to empty redwood.toml', () => {

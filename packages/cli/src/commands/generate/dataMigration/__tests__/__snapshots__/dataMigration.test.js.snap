@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`can generate a TS file with expected contents 1`] = `
 "import type { PrismaClient } from '@prisma/client'

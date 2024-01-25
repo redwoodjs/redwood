@@ -1,12 +1,10 @@
+import enq from 'enquirer'
 import execa from 'execa'
 import semver from 'semver'
 
 import { getCompatibilityData } from '@redwoodjs/cli-helpers'
 import { getPaths } from '@redwoodjs/project-config'
 
-const { Select } = require('enquirer')
-
-// TODO: Yarn3 requirement? What do we do, just not run? I'm not sure about this one.
 export async function handler({ npmPackage, force, _: _args }) {
   // Extract package name and version which the user provided
   const isScoped = npmPackage.startsWith('@')
@@ -157,7 +155,7 @@ async function runPackage(packageName, version, options = []) {
 
 async function promptWithChoices(message, choices) {
   try {
-    const prompt = new Select({
+    const prompt = new enq.Select({
       name: message.substring(0, 8).toLowerCase(),
       message,
       choices,

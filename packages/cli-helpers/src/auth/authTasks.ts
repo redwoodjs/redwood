@@ -5,17 +5,17 @@ import type { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
 import { resolveFile } from '@redwoodjs/project-config'
 
-import type { ExistingFiles } from '../lib'
-import { transformTSToJS, writeFilesTask } from '../lib'
-import { colors } from '../lib/colors'
-import { getPaths } from '../lib/paths'
+import { colors } from '../lib/colors.js'
+import type { ExistingFiles } from '../lib/index.js'
+import { transformTSToJS, writeFilesTask } from '../lib/index.js'
+import { getPaths } from '../lib/paths.js'
 import {
   getGraphqlPath,
   graphFunctionDoesExist,
   isTypeScriptProject,
-} from '../lib/project'
+} from '../lib/project.js'
 
-import { apiSideFiles, generateUniqueFileNames } from './authFiles'
+import { apiSideFiles, generateUniqueFileNames } from './authFiles.js'
 
 const AUTH_PROVIDER_HOOK_IMPORT = `import { AuthProvider, useAuth } from './auth'`
 const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`

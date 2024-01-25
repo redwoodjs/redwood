@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Plural word files creates a page component with a plural word for name 1`] = `
+exports[`Plural word files > creates a page component with a plural word for name 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
@@ -25,7 +25,7 @@ export default CatsPage
 "
 `;
 
-exports[`Single world files creates a page component 1`] = `
+exports[`Single world files > creates a page component 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
@@ -50,7 +50,7 @@ export default HomePage
 "
 `;
 
-exports[`Single world files creates a page story 1`] = `
+exports[`Single world files > creates a page story 1`] = `
 "import HomePage from './HomePage'
 
 const meta = {
@@ -63,7 +63,7 @@ export const Primary = {}
 "
 `;
 
-exports[`Single world files creates a page test 1`] = `
+exports[`Single world files > creates a page test 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 
 import HomePage from './HomePage'
@@ -81,7 +81,7 @@ describe('HomePage', () => {
 "
 `;
 
-exports[`TS Files TS Params 1`] = `
+exports[`TS Files > TS Params 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
@@ -112,7 +112,7 @@ export default TsParamFilesPage
 "
 `;
 
-exports[`TS Files TS Params with type 1`] = `
+exports[`TS Files > TS Params with type 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
@@ -149,7 +149,7 @@ export default TsParamTypeFilesPage
 "
 `;
 
-exports[`TS Files generates typescript pages 1`] = `
+exports[`TS Files > generates typescript pages 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
@@ -174,7 +174,7 @@ export default TsFilesPage
 "
 `;
 
-exports[`TS Files generates typescript pages 2`] = `
+exports[`TS Files > generates typescript pages 2`] = `
 "import type { Meta, StoryObj } from '@storybook/react'
 
 import TsFilesPage from './TsFilesPage'
@@ -191,7 +191,7 @@ export const Primary: Story = {}
 "
 `;
 
-exports[`TS Files generates typescript pages 3`] = `
+exports[`TS Files > generates typescript pages 3`] = `
 "import { render } from '@redwoodjs/testing/web'
 
 import TsFilesPage from './TsFilesPage'
@@ -209,7 +209,7 @@ describe('TsFilesPage', () => {
 "
 `;
 
-exports[`handler file generation 1`] = `
+exports[`handler > file generation 1`] = `
 {
   "fileContent": "import HomePage from './HomePage'
 
@@ -225,7 +225,7 @@ export const Primary = {}
 }
 `;
 
-exports[`handler file generation 2`] = `
+exports[`handler > file generation 2`] = `
 {
   "fileContent": "import { render } from '@redwoodjs/testing/web'
 
@@ -246,7 +246,7 @@ describe('HomePage', () => {
 }
 `;
 
-exports[`handler file generation 3`] = `
+exports[`handler > file generation 3`] = `
 {
   "fileContent": "import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
@@ -274,7 +274,7 @@ export default HomePage
 }
 `;
 
-exports[`handler file generation 4`] = `
+exports[`handler > file generation 4`] = `
 {
   "fileContent": "import { Router, Route } from '@redwoodjs/router'
 
@@ -293,7 +293,7 @@ export default Routes",
 }
 `;
 
-exports[`handler file generation with route params 1`] = `
+exports[`handler > file generation with route params 1`] = `
 {
   "fileContent": "import PostPage from './PostPage'
 
@@ -309,7 +309,7 @@ export const Primary = {}
 }
 `;
 
-exports[`handler file generation with route params 2`] = `
+exports[`handler > file generation with route params 2`] = `
 {
   "fileContent": "import { render } from '@redwoodjs/testing/web'
 
@@ -330,7 +330,7 @@ describe('PostPage', () => {
 }
 `;
 
-exports[`handler file generation with route params 3`] = `
+exports[`handler > file generation with route params 3`] = `
 {
   "fileContent": "import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
@@ -359,7 +359,7 @@ export default PostPage
 }
 `;
 
-exports[`handler file generation with route params 4`] = `
+exports[`handler > file generation with route params 4`] = `
 {
   "fileContent": "import { Router, Route } from '@redwoodjs/router'
 
@@ -378,7 +378,7 @@ export default Routes",
 }
 `;
 
-exports[`multiWorldFiles creates a page component 1`] = `
+exports[`multiWorldFiles > creates a page component 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
@@ -403,7 +403,7 @@ export default ContactUsPage
 "
 `;
 
-exports[`multiWorldFiles creates a page story 1`] = `
+exports[`multiWorldFiles > creates a page story 1`] = `
 "import ContactUsPage from './ContactUsPage'
 
 const meta = {
@@ -416,7 +416,7 @@ export const Primary = {}
 "
 `;
 
-exports[`multiWorldFiles creates a test for a component with multiple words for a name 1`] = `
+exports[`multiWorldFiles > creates a test for a component with multiple words for a name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 
 import ContactUsPage from './ContactUsPage'
@@ -434,7 +434,7 @@ describe('ContactUsPage', () => {
 "
 `;
 
-exports[`paramFiles creates a page component with params 1`] = `
+exports[`paramFiles > creates a page component with params 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
@@ -460,7 +460,7 @@ export default PostPage
 "
 `;
 
-exports[`paramFiles creates a test for page component with params 1`] = `
+exports[`paramFiles > creates a test for page component with params 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 
 import PostPage from './PostPage'

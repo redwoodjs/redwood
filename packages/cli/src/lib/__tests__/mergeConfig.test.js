@@ -1,6 +1,7 @@
 import path from 'path'
 
 import fs from 'fs-extra'
+import { expect, it, describe, test } from 'vitest'
 
 import { merge } from '../merge'
 import {

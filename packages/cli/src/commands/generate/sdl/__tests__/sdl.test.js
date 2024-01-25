@@ -1,25 +1,42 @@
 globalThis.__dirname = __dirname
 
 globalThis.mockFs = false
+const mockFiles = {}
 
-jest.mock('fs', () => {
-  const actual = jest.requireActual('fs')
-
+vi.mock('fs-extra', async (importOriginal) => {
+  const originalFsExtra = await importOriginal()
   return {
-    ...actual,
-    mkdirSync: (...args) => {
-      if (globalThis.mockFs) {
-        return
-      }
+    default: {
+      ...originalFsExtra,
+      existsSync: (...args) => {
+        if (!globalThis.mockFs) {
+          return originalFsExtra.existsSync.apply(null, args)
+        }
+        return false
+      },
+      mkdirSync: (...args) => {
+        if (globalThis.mockFs) {
+          return
+        }
 
-      return actual.mkdirSync.apply(null, args)
-    },
-    writeFileSync: (target, contents) => {
-      if (globalThis.mockFs) {
-        return
-      }
+        return originalFsExtra.mkdirSync.apply(null, args)
+      },
+      writeFileSync: (target, contents) => {
+        if (globalThis.mockFs) {
+          return
+        }
 
-      return actual.writeFileSync.call(null, target, contents)
+        return originalFsExtra.writeFileSync.call(null, target, contents)
+      },
+      readFileSync: (path) => {
+        if (!globalThis.mockFs) {
+          return originalFsExtra.readFileSync.call(null, path)
+        }
+
+        const mockedContent = mockFiles[path]
+
+        return mockedContent || originalFsExtra.readFileSync.call(null, path)
+      },
     },
   }
 })
@@ -28,6 +45,7 @@ import path from 'path'
 
 import fs from 'fs-extra'
 import prompts from 'prompts'
+import { vi, afterEach, test, expect, describe } from 'vitest'
 
 // Load mocks
 import '../../../../lib/test'
@@ -38,7 +56,7 @@ import { getDefaultArgs } from '../../../../lib'
 import * as sdl from '../sdl'
 
 afterEach(() => {
-  jest.clearAllMocks()
+  vi.clearAllMocks()
 })
 
 const extensionForBaseArgs = (baseArgs) =>
@@ -294,7 +312,7 @@ describe('with graphql documentations', () => {
 describe('handler', () => {
   const canBeCalledWithGivenModelName = (letterCase, model) => {
     test(`can be called with ${letterCase} model name`, async () => {
-      const spy = jest.spyOn(fs, 'writeFileSync')
+      const spy = vi.spyOn(fs, 'writeFileSync')
 
       globalThis.mockFs = true
 

@@ -1,5 +1,7 @@
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const originalProjectConfig = await importOriginal()
   return {
+    ...originalProjectConfig,
     getPaths: () => {
       return {
         api: {
@@ -22,19 +24,23 @@ jest.mock('@redwoodjs/project-config', () => {
 })
 
 import { Listr } from 'listr2'
-jest.mock('listr2')
+import { vi, afterEach, test, expect } from 'vitest'
+
+vi.mock('listr2')
 
 // Make sure prerender doesn't get triggered
-jest.mock('execa', () =>
-  jest.fn((cmd, params) => ({
+vi.mock('execa', () => ({
+  default: vi.fn((cmd, params) => ({
     cmd,
     params,
-  }))
-)
+  })),
+}))
 
 import { handler } from '../build'
 
-afterEach(() => jest.clearAllMocks())
+afterEach(() => {
+  vi.clearAllMocks()
+})
 
 test('the build tasks are in the correct sequence', async () => {
   await handler({})
@@ -49,12 +55,12 @@ test('the build tasks are in the correct sequence', async () => {
   `)
 })
 
-jest.mock('@redwoodjs/prerender/detection', () => {
+vi.mock('@redwoodjs/prerender/detection', () => {
   return { detectPrerenderRoutes: () => [] }
 })
 
 test('Should run prerender for web', async () => {
-  const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
+  const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
   await handler({ side: ['web'], prerender: true })
   expect(Listr.mock.calls[0][0].map((x) => x.title)).toMatchInlineSnapshot(`

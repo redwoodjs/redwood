@@ -1,11 +1,27 @@
 let mockExecutedTaskTitles: Array<string> = []
 let mockSkippedTaskTitles: Array<string> = []
 
-jest.mock('fs', () => require('memfs').fs)
-jest.mock('node:fs', () => require('memfs').fs)
-jest.mock('execa')
+vi.mock('fs', async () => {
+  const memfs = await import('memfs')
+  return {
+    ...memfs.fs,
+    default: {
+      ...memfs.fs,
+    },
+  }
+})
+vi.mock('node:fs', async () => {
+  const memfs = await import('memfs')
+  return {
+    ...memfs.fs,
+    default: {
+      ...memfs.fs,
+    },
+  }
+})
+vi.mock('execa')
 // The jscodeshift parts are tested by another test
-jest.mock('../runTransform', () => {
+vi.mock('../runTransform', () => {
   return {
     runTransform: () => {
       return {}
@@ -13,10 +29,10 @@ jest.mock('../runTransform', () => {
   }
 })
 
-jest.mock('listr2', () => {
+vi.mock('listr2', () => {
   return {
     // Return a constructor function, since we're calling `new` on Listr
-    Listr: jest.fn().mockImplementation((tasks: Array<any>) => {
+    Listr: vi.fn().mockImplementation((tasks: Array<any>) => {
       return {
         run: async () => {
           mockExecutedTaskTitles = []
@@ -40,6 +56,7 @@ jest.mock('listr2', () => {
 })
 
 import { vol } from 'memfs'
+import { vi, beforeAll, afterAll, test, expect } from 'vitest'
 
 import { handler } from '../fragmentsHandler'
 
@@ -54,8 +71,8 @@ beforeAll(() => {
 
 afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
-  jest.resetAllMocks()
-  jest.resetModules()
+  vi.resetAllMocks()
+  vi.resetModules()
 })
 
 test('all tasks are being called', async () => {

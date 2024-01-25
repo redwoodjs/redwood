@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest'
+
 import { getDevNodeOptions } from '../../commands/devHandler'
 
 describe('getNodeOptions', () => {

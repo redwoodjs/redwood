@@ -4,11 +4,13 @@ import path from 'path'
 // Load mocks
 import '../../../../lib/test'
 
+import { vi, describe, beforeAll, test, expect } from 'vitest'
+
 import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../helpers'
 import * as scaffold from '../scaffold'
 
-jest.mock('execa')
+vi.mock('execa')
 
 describe('editable columns', () => {
   let files

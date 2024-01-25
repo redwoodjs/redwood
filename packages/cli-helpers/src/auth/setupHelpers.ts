@@ -1,18 +1,18 @@
 import type { ListrTask } from 'listr2'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
-import type yargs from 'yargs'
+import type { Argv } from 'yargs'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { colors } from '../lib/colors'
+import { colors } from '../lib/colors.js'
 import {
   addApiPackages,
   addWebPackages,
   installPackages,
-} from '../lib/installHelpers'
+} from '../lib/installHelpers.js'
 
-import type { AuthGeneratorCtx } from './authTasks'
+import type { AuthGeneratorCtx } from './authTasks.js'
 import {
   addAuthConfigToGqlApi,
   addConfigToRoutes,
@@ -20,9 +20,9 @@ import {
   setAuthSetupMode,
   createWebAuth,
   generateAuthApiFiles,
-} from './authTasks'
+} from './authTasks.js'
 
-export const standardAuthBuilder = (yargs: yargs.Argv) => {
+export const standardAuthBuilder = (yargs: Argv) => {
   return yargs
     .option('force', {
       alias: 'f',

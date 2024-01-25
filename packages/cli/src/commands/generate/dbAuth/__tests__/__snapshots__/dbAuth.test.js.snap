@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`dbAuth handler exits when all files are skipped 1`] = `
+exports[`dbAuth > handler > exits when all files are skipped 1`] = `
 [
   "[1m[31m[39m[22m
 [1m[31mNo files to generate.[39m[22m
@@ -8,7 +8,7 @@ exports[`dbAuth handler exits when all files are skipped 1`] = `
 ]
 `;
 
-exports[`dbAuth handler produces the correct files with custom password set via flag 1`] = `
+exports[`dbAuth > handler > produces the correct files with custom password set via flag 1`] = `
 "import { useEffect, useRef } from 'react'
 
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
@@ -102,7 +102,7 @@ export default ForgotPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom password set via flag 2`] = `
+exports[`dbAuth > handler > produces the correct files with custom password set via flag 2`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -240,7 +240,7 @@ export default LoginPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom password set via flag 3`] = `
+exports[`dbAuth > handler > produces the correct files with custom password set via flag 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
 import {
@@ -363,7 +363,7 @@ export default ResetPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom password set via flag 4`] = `
+exports[`dbAuth > handler > produces the correct files with custom password set via flag 4`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -496,7 +496,7 @@ export default SignupPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom password set via prompt 1`] = `
+exports[`dbAuth > handler > produces the correct files with custom password set via prompt 1`] = `
 "import { useEffect, useRef } from 'react'
 
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
@@ -590,7 +590,7 @@ export default ForgotPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom password set via prompt 2`] = `
+exports[`dbAuth > handler > produces the correct files with custom password set via prompt 2`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -728,7 +728,7 @@ export default LoginPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom password set via prompt 3`] = `
+exports[`dbAuth > handler > produces the correct files with custom password set via prompt 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
 import {
@@ -851,7 +851,7 @@ export default ResetPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom password set via prompt 4`] = `
+exports[`dbAuth > handler > produces the correct files with custom password set via prompt 4`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -984,7 +984,7 @@ export default SignupPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via flag 1`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via flag 1`] = `
 "import { useEffect, useRef } from 'react'
 
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
@@ -1078,7 +1078,7 @@ export default ForgotPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via flag 2`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via flag 2`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -1216,7 +1216,7 @@ export default LoginPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via flag 3`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via flag 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
 import {
@@ -1339,7 +1339,7 @@ export default ResetPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via flag 4`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via flag 4`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -1472,7 +1472,7 @@ export default SignupPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via prompt 1`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt 1`] = `
 "import { useEffect, useRef } from 'react'
 
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
@@ -1566,7 +1566,7 @@ export default ForgotPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via prompt 2`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt 2`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -1704,7 +1704,7 @@ export default LoginPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via prompt 3`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
 import {
@@ -1827,7 +1827,7 @@ export default ResetPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via prompt 4`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt 4`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -1960,7 +1960,7 @@ export default SignupPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via prompt and with webauthn enabled via flag 1`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt and with webauthn enabled via flag 1`] = `
 "import { useEffect, useRef } from 'react'
 
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
@@ -2054,7 +2054,7 @@ export default ForgotPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via prompt and with webauthn enabled via flag 2`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt and with webauthn enabled via flag 2`] = `
 "import { useRef, useState } from 'react'
 import { useEffect } from 'react'
 
@@ -2324,7 +2324,7 @@ export default LoginPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via prompt and with webauthn enabled via flag 3`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt and with webauthn enabled via flag 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
 import {
@@ -2447,7 +2447,7 @@ export default ResetPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via prompt and with webauthn enabled via flag 4`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt and with webauthn enabled via flag 4`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -2580,7 +2580,7 @@ export default SignupPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt 1`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt 1`] = `
 "import { useEffect, useRef } from 'react'
 
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
@@ -2674,7 +2674,7 @@ export default ForgotPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt 2`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt 2`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -2812,7 +2812,7 @@ export default LoginPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt 3`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
 import {
@@ -2935,7 +2935,7 @@ export default ResetPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt 4`] = `
+exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt 4`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -3068,7 +3068,7 @@ export default SignupPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username set via flag 1`] = `
+exports[`dbAuth > handler > produces the correct files with custom username set via flag 1`] = `
 "import { useEffect, useRef } from 'react'
 
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
@@ -3166,7 +3166,7 @@ export default ForgotPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username set via flag 2`] = `
+exports[`dbAuth > handler > produces the correct files with custom username set via flag 2`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -3304,7 +3304,7 @@ export default LoginPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username set via flag 3`] = `
+exports[`dbAuth > handler > produces the correct files with custom username set via flag 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
 import {
@@ -3429,7 +3429,7 @@ export default ResetPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username set via flag 4`] = `
+exports[`dbAuth > handler > produces the correct files with custom username set via flag 4`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -3562,7 +3562,7 @@ export default SignupPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username set via prompt 1`] = `
+exports[`dbAuth > handler > produces the correct files with custom username set via prompt 1`] = `
 "import { useEffect, useRef } from 'react'
 
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
@@ -3660,7 +3660,7 @@ export default ForgotPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username set via prompt 2`] = `
+exports[`dbAuth > handler > produces the correct files with custom username set via prompt 2`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -3798,7 +3798,7 @@ export default LoginPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username set via prompt 3`] = `
+exports[`dbAuth > handler > produces the correct files with custom username set via prompt 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
 import {
@@ -3923,7 +3923,7 @@ export default ResetPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with custom username set via prompt 4`] = `
+exports[`dbAuth > handler > produces the correct files with custom username set via prompt 4`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -4056,7 +4056,7 @@ export default SignupPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with default labels 1`] = `
+exports[`dbAuth > handler > produces the correct files with default labels 1`] = `
 "import { useEffect, useRef } from 'react'
 
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
@@ -4154,7 +4154,7 @@ export default ForgotPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with default labels 2`] = `
+exports[`dbAuth > handler > produces the correct files with default labels 2`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -4292,7 +4292,7 @@ export default LoginPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with default labels 3`] = `
+exports[`dbAuth > handler > produces the correct files with default labels 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
 import {
@@ -4417,7 +4417,7 @@ export default ResetPasswordPage
 "
 `;
 
-exports[`dbAuth handler produces the correct files with default labels 4`] = `
+exports[`dbAuth > handler > produces the correct files with default labels 4`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 

@@ -1,14 +1,15 @@
 globalThis.__dirname = __dirname
 
-jest.mock('fs')
-jest.mock('../../../../lib', () => {
+vi.mock('fs-extra')
+vi.mock('../../../../lib', async (importOriginal) => {
+  const originalLib = await importOriginal()
   return {
-    ...jest.requireActual('../../../../lib'),
+    ...originalLib,
     generateTemplate: () => '',
   }
 })
 
-jest.mock('@redwoodjs/structure', () => {
+vi.mock('@redwoodjs/structure', () => {
   return {
     getProject: () => ({
       cells: [{ queryOperationName: undefined }],
@@ -17,6 +18,8 @@ jest.mock('@redwoodjs/structure', () => {
 })
 
 import fs from 'fs-extra'
+import { vol } from 'memfs'
+import { vi, beforeEach, afterEach, test, expect } from 'vitest'
 
 import '../../../../lib/test'
 
@@ -24,20 +27,19 @@ import { files } from '../../../generate/cell/cell'
 import { tasks } from '../cell'
 
 beforeEach(() => {
-  jest.spyOn(console, 'info').mockImplementation(() => {})
-  jest.spyOn(console, 'log').mockImplementation(() => {})
+  vi.spyOn(console, 'info').mockImplementation(() => {})
+  vi.spyOn(console, 'log').mockImplementation(() => {})
 })
 
 afterEach(() => {
-  fs.__setMockFiles({})
-  jest.spyOn(fs, 'unlinkSync').mockClear()
+  vol.reset()
   console.info.mockRestore()
   console.log.mockRestore()
 })
 
 test('destroys cell files', async () => {
-  fs.__setMockFiles(await files({ name: 'User' }))
-  const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+  vol.fromJSON(await files({ name: 'User' }))
+  const unlinkSpy = vi.spyOn(fs, 'unlinkSync')
   const t = tasks({
     componentName: 'cell',
     filesFn: files,
@@ -53,8 +55,8 @@ test('destroys cell files', async () => {
 })
 
 test('destroys cell files with stories and tests', async () => {
-  fs.__setMockFiles(await files({ name: 'User', stories: true, tests: true }))
-  const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+  vol.fromJSON(await files({ name: 'User', stories: true, tests: true }))
+  const unlinkSpy = vi.spyOn(fs, 'unlinkSync')
   const t = tasks({
     componentName: 'cell',
     filesFn: files,

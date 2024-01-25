@@ -1,4 +1,14 @@
-import fs from 'fs-extra'
+import { vol } from 'memfs'
+import {
+  vi,
+  describe,
+  beforeEach,
+  test,
+  expect,
+  beforeAll,
+  afterEach,
+  afterAll,
+} from 'vitest'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
@@ -7,17 +17,19 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 import * as pluginLib from '../lib/plugin'
 import { loadPlugins } from '../plugin'
 
-jest.mock('fs')
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('fs-extra')
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const originalProjectConfig = await importOriginal()
   return {
-    getPaths: jest.fn(),
-    getConfig: jest.fn(),
+    ...originalProjectConfig,
+    getPaths: vi.fn(),
+    getConfig: vi.fn(),
   }
 })
-jest.mock('../lib/packages', () => {
+vi.mock('../lib/packages', () => {
   return {
-    installModule: jest.fn(),
-    isModuleInstalled: jest.fn().mockReturnValue(true),
+    installModule: vi.fn(),
+    isModuleInstalled: vi.fn().mockReturnValue(true),
   }
 })
 
@@ -68,7 +80,7 @@ describe('command information caching', () => {
         },
       },
     }
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
         ...exampleCacheEntry,
         ...anExistingDefaultCacheEntry,
@@ -86,7 +98,7 @@ describe('command information caching', () => {
 
 describe('plugin loading', () => {
   beforeAll(() => {
-    jest.spyOn(console, 'log').mockImplementation(() => {})
+    vi.spyOn(console, 'log').mockImplementation(() => {})
   })
 
   beforeEach(() => {
@@ -96,10 +108,10 @@ describe('plugin loading', () => {
       },
     })
 
-    jest.spyOn(pluginLib, 'loadCommadCache')
-    jest.spyOn(pluginLib, 'loadPluginPackage')
-    jest.spyOn(pluginLib, 'checkPluginListAndWarn')
-    jest.spyOn(pluginLib, 'saveCommandCache')
+    vi.spyOn(pluginLib, 'loadCommadCache')
+    vi.spyOn(pluginLib, 'loadPluginPackage')
+    vi.spyOn(pluginLib, 'checkPluginListAndWarn')
+    vi.spyOn(pluginLib, 'saveCommandCache')
   })
 
   afterEach(() => {
@@ -179,7 +191,7 @@ describe('plugin loading', () => {
           },
         },
       })
-      jest.mock(
+      vi.mock(
         '@redwoodjs/cli-some-package-not-in-cache',
         () => {
           return {
@@ -194,7 +206,7 @@ describe('plugin loading', () => {
         },
         { virtual: true }
       )
-      fs.__setMockFiles({
+      vol.fromJSON({
         ['commandCache.json']: JSON.stringify({
           '@redwoodjs/cli-some-package': {
             'some-command': {
@@ -279,7 +291,7 @@ describe('plugin loading', () => {
           },
         },
       })
-      jest.mock(
+      vi.mock(
         '@redwoodjs/cli-some-package-not-in-cache',
         () => {
           return {
@@ -294,7 +306,7 @@ describe('plugin loading', () => {
         },
         { virtual: true }
       )
-      fs.__setMockFiles({
+      vol.fromJSON({
         ['commandCache.json']: JSON.stringify({
           '@redwoodjs/cli-some-package': {
             'some-command': {
@@ -379,7 +391,7 @@ describe('plugin loading', () => {
           },
         },
       })
-      jest.mock(
+      vi.mock(
         '@redwoodjs/cli-some-package-not-in-cache',
         () => {
           return {
@@ -394,7 +406,7 @@ describe('plugin loading', () => {
         },
         { virtual: true }
       )
-      fs.__setMockFiles({
+      vol.fromJSON({
         ['commandCache.json']: JSON.stringify({
           '@redwoodjs/cli-some-package': {
             'some-command': {
@@ -467,7 +479,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    jest.mock(
+    vi.mock(
       '@redwoodjs/cli-some-package-not-in-cache',
       () => {
         return {
@@ -482,7 +494,7 @@ describe('plugin loading', () => {
       },
       { virtual: true }
     )
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
@@ -563,7 +575,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    jest.mock(
+    vi.mock(
       '@redwoodjs/cli-some-package-not-in-cache',
       () => {
         return {
@@ -578,7 +590,7 @@ describe('plugin loading', () => {
       },
       { virtual: true }
     )
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
@@ -660,7 +672,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    jest.mock(
+    vi.mock(
       '@redwoodjs/cli-some-package-not-in-cache',
       () => {
         return {
@@ -675,7 +687,7 @@ describe('plugin loading', () => {
       },
       { virtual: true }
     )
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
@@ -765,7 +777,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    jest.mock(
+    vi.mock(
       '@redwoodjs/cli-some-package-not-in-cache',
       () => {
         return {
@@ -780,7 +792,7 @@ describe('plugin loading', () => {
       },
       { virtual: true }
     )
-    jest.mock(
+    vi.mock(
       '@redwoodjs/cli-some-package',
       () => {
         return {
@@ -795,7 +807,7 @@ describe('plugin loading', () => {
       },
       { virtual: true }
     )
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({}),
     })
 
@@ -893,7 +905,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    jest.mock(
+    vi.mock(
       '@redwoodjs/cli-some-package-not-in-cache',
       () => {
         return {
@@ -908,7 +920,7 @@ describe('plugin loading', () => {
       },
       { virtual: true }
     )
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
@@ -1029,7 +1041,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    jest.mock(
+    vi.mock(
       '@redwoodjs/cli-some-package-not-in-cache',
       () => {
         return {
@@ -1044,7 +1056,7 @@ describe('plugin loading', () => {
       },
       { virtual: true }
     )
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
@@ -1137,7 +1149,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({}),
     })
 
@@ -1235,7 +1247,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {

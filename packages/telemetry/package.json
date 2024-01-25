@@ -21,11 +21,6 @@
     "test": "vitest run src",
     "test:watch": "vitest watch src"
   },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/dist/"
-    ]
-  },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.6",
     "@redwoodjs/project-config": "6.0.7",

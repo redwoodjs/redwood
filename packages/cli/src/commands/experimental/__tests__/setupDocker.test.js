@@ -1,12 +1,14 @@
+import { vi, test, describe, expect } from 'vitest'
+
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 import { command, description, builder, handler } from '../setupDocker'
 
-jest.mock('../setupDockerHandler.js')
+vi.mock('../setupDockerHandler.js')
 
-jest.mock('@redwoodjs/cli-helpers', () => {
+vi.mock('@redwoodjs/cli-helpers', () => {
   return {
-    recordTelemetryAttributes: jest.fn(),
+    recordTelemetryAttributes: vi.fn(),
   }
 })
 
@@ -23,8 +25,8 @@ describe('setupDocker', () => {
 
   test('builder configures command options force and verbose ', () => {
     const yargs = {
-      option: jest.fn(() => yargs),
-      epilogue: jest.fn(() => yargs),
+      option: vi.fn(() => yargs),
+      epilogue: vi.fn(() => yargs),
     }
 
     builder(yargs)

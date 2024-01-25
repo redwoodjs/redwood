@@ -33,7 +33,6 @@
     "string-env-interpolation": "1.0.1"
   },
   "devDependencies": {
-    "esbuild": "0.19.9",
     "rimraf": "5.0.5",
     "typescript": "5.3.3",
     "vitest": "1.2.1"

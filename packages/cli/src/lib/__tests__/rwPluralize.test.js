@@ -1,3 +1,5 @@
+import { test, expect } from 'vitest'
+
 import {
   pluralize,
   singularize,

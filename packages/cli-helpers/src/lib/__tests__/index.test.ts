@@ -1,6 +1,8 @@
-import { prettify } from '../index'
+import { vi, test, expect } from 'vitest'
 
-jest.mock('../paths', () => {
+import { prettify } from '../index.js'
+
+vi.mock('../paths', () => {
   return {
     getPaths: () => {
       return {

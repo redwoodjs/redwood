@@ -1,7 +1,9 @@
+import { createRequire } from 'node:module'
 import path from 'path'
 
 import fg from 'fast-glob'
 import fse from 'fs-extra'
+import { expect } from 'vitest'
 
 import runTransform from '../testLib/runTransform'
 
@@ -22,6 +24,8 @@ type MatchFolderTransformFunction = (
   fixtureName: string,
   options?: Options
 ) => Promise<void>
+
+const require = createRequire(import.meta.url)
 
 export const matchFolderTransform: MatchFolderTransformFunction = async (
   transformFunctionOrName,
@@ -75,7 +79,7 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
     }
     const transformName = transformFunctionOrName
     const transformPath = require.resolve(
-      path.join(testPath, '../../', transformName)
+      path.join(testPath, '../../', transformName + '.ts')
     )
 
     const targetPaths = fg.sync(targetPathsGlob, {
