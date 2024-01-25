@@ -1,20 +1,29 @@
 import { vol } from 'memfs'
+import {
+  vi,
+  afterAll,
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+} from 'vitest'
 
 import { runScriptFunction as mockRunScriptFunction } from '../../lib/exec'
 import { generatePrismaClient as mockGeneratePrismaClient } from '../../lib/generatePrismaClient'
 import { handler } from '../execHandler'
 
-jest.mock('fs', () => require('memfs').fs)
-jest.mock('../../lib/exec')
-jest.mock('../../lib/generatePrismaClient', () => {
+vi.mock('fs', () => require('memfs').fs)
+vi.mock('../../lib/exec')
+vi.mock('../../lib/generatePrismaClient', () => {
   return {
-    generatePrismaClient: jest.fn().mockResolvedValue(true),
+    generatePrismaClient: vi.fn().mockResolvedValue(true),
   }
 })
-jest.mock('listr2', () => {
+vi.mock('listr2', () => {
   return {
     // Return a constructor function, since we're calling `new` on Listr
-    Listr: jest.fn().mockImplementation((tasks) => {
+    Listr: vi.fn().mockImplementation((tasks) => {
       return {
         run: async () => {
           for (const task of tasks) {
@@ -33,15 +42,13 @@ jest.mock('listr2', () => {
 
 // since process.exit() is used in execHandler for control flow, need to simulate it
 // being called without actually letting it kill the process
-const mockExit = jest.spyOn(process, 'exit').mockImplementation((number) => {
+const mockExit = vi.spyOn(process, 'exit').mockImplementation((number) => {
   throw new Error(`process.exit(${number})`)
 })
-jest.spyOn(console, 'log').mockImplementation(() => {})
-jest.spyOn(console, 'info').mockImplementation(() => {})
-jest.spyOn(console, 'warn').mockImplementation(() => {})
-const mockConsoleError = jest
-  .spyOn(console, 'error')
-  .mockImplementation(() => {})
+vi.spyOn(console, 'log').mockImplementation(() => {})
+vi.spyOn(console, 'info').mockImplementation(() => {})
+vi.spyOn(console, 'warn').mockImplementation(() => {})
+const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
 
 const redwoodProjectPath = '/redwood-app'
 process.env.RWJS_CWD = redwoodProjectPath
@@ -49,16 +56,16 @@ process.env.RWJS_CWD = redwoodProjectPath
 describe('execHandler.js', () => {
   beforeEach(() => {
     vol.reset()
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   afterEach(() => {
     vol.reset()
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   afterAll(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   describe('handler', () => {
@@ -202,7 +209,7 @@ describe('execHandler.js', () => {
       )
 
       for (const ext of ['js', 'jsx', 'ts', 'tsx']) {
-        jest.clearAllMocks()
+        vi.clearAllMocks()
 
         await handler({ name: `foo.${ext}`, prisma: true })
 

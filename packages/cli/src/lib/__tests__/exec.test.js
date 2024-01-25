@@ -1,8 +1,9 @@
-import { vol } from 'memfs'
+import { vol, fs as mfs } from 'memfs'
+import { vi, describe, beforeEach, afterEach, afterAll } from 'vitest'
 
 import { runScriptFunction } from '../exec'
 
-jest.mock('fs', () => require('memfs').fs)
+vi.mock('fs', () => mfs)
 
 const redwoodProjectPath = '/redwood-app'
 process.env.RWJS_CWD = redwoodProjectPath
@@ -10,16 +11,16 @@ process.env.RWJS_CWD = redwoodProjectPath
 describe('exec.js', () => {
   beforeEach(() => {
     vol.reset()
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   afterEach(() => {
     vol.reset()
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   afterAll(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   describe('runScriptFunction', () => {
