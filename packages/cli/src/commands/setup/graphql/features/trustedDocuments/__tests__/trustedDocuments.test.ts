@@ -1,33 +1,11 @@
 let mockExecutedTaskTitles: Array<string> = []
 let mockSkippedTaskTitles: Array<string> = []
 
-vi.mock('fs', async () => {
-  const memfs = await import('memfs')
-  return {
-    ...memfs.fs,
-    default: {
-      ...memfs.fs,
-    },
-  }
-})
-vi.mock('node:fs', async () => {
-  const memfs = await import('memfs')
-  return {
-    ...memfs.fs,
-    default: {
-      ...memfs.fs,
-    },
-  }
-})
+vi.mock('fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
+vi.mock('node:fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('execa')
 // The jscodeshift parts are tested by another test
-vi.mock('../../fragments/runTransform', () => {
-  return {
-    runTransform: () => {
-      return {}
-    },
-  }
-})
+vi.mock('../../fragments/runTransform', () => ({ runTransform: () => ({}) }))
 
 vi.mock('listr2', () => {
   return {
@@ -58,10 +36,10 @@ vi.mock('listr2', () => {
 import type fs from 'node:fs'
 import path from 'node:path'
 
-import { vol } from 'memfs'
+import { vol, fs as memfsFs } from 'memfs'
 import { vi, expect, it, describe, beforeAll, afterAll } from 'vitest'
 
-import { handler } from '../trustedDocumentsHandler'
+import { handler } from '../trustedDocumentsHandler.js'
 
 // Set up RWJS_CWD
 let original_RWJS_CWD: string | undefined
@@ -70,6 +48,9 @@ const APP_PATH = '/redwood-app'
 const tomlFixtures: Record<string, string> = {}
 
 beforeAll(async () => {
+  original_RWJS_CWD = process.env.RWJS_CWD
+  process.env.RWJS_CWD = APP_PATH
+
   const actualFs = await vi.importActual<typeof fs>('fs')
   const tomlFixturesPath = path.join(__dirname, '__fixtures__', 'toml')
 
