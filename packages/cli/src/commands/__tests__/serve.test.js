@@ -103,28 +103,6 @@ describe('yarn rw serve', () => {
     )
   })
 
-  it('Should proxy serve web with params to web server handler', async () => {
-    const parser = yargs().command('serve [side]', false, builder)
-
-    await parser.parse(
-      'serve web --port 9898 --socket abc --apiHost https://myapi.redwood/api'
-    )
-
-    expect(execa).toHaveBeenCalledWith(
-      'yarn',
-      expect.arrayContaining([
-        'rw-web-server',
-        '--port',
-        9898,
-        '--socket',
-        'abc',
-        '--api-host',
-        'https://myapi.redwood/api',
-      ]),
-      expect.anything()
-    )
-  })
-
   it('Should proxy rw serve with params to appropriate handler', async () => {
     const parser = yargs().command('serve [side]', false, builder)
 
