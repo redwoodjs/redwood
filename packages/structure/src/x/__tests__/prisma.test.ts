@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import { Range } from 'vscode-languageserver'
 
 import { prisma_parseEnvExpressions } from '../prisma'
