@@ -33,6 +33,7 @@ declare module 'jscodeshift/dist/testUtils' {
   ): string
 }
 
+// @NOTE: Redefining types, because they get lost when importing from the testUtils file
 type MatchFolderTransformFunction = (
   transformFunctionOrName: (() => any) | string,
   fixtureName: string,
