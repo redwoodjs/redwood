@@ -1,11 +1,15 @@
 import fs from 'fs'
+import { createRequire } from 'node:module'
 import path from 'path'
 
 import tempy from 'tempy'
+import { expect } from 'vitest'
 
 import runTransform from '../testLib/runTransform'
 
 import { formatCode } from './index'
+
+const require = createRequire(import.meta.url)
 
 export const matchInlineTransformSnapshot = async (
   transformName: string,
@@ -23,7 +27,7 @@ export const matchInlineTransformSnapshot = async (
   }
 
   const transformPath = require.resolve(
-    path.join(testPath, '../../', transformName)
+    path.join(testPath, '../../', transformName + '.ts')
   )
 
   // Step 1: Write passed in code to a temp file

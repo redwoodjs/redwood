@@ -1,15 +1,17 @@
 global.__dirname = __dirname
 
-jest.mock('fs')
+vi.mock('fs-extra')
 
 import path from 'path'
 
 // Load mocks
 import '../../../../lib/test'
 
-const realfs = jest.requireActual('fs')
+const realfs = await vi.importActual('fs-extra')
 import Enquirer from 'enquirer'
 import fs from 'fs-extra'
+import { vol } from 'memfs'
+import { vi, describe, it, expect, beforeEach } from 'vitest'
 
 import { getPaths } from '../../../../lib'
 import * as dbAuth from '../dbAuth'
@@ -61,7 +63,8 @@ mockFiles[getPaths().web.app] = realfs
 
 describe('dbAuth', () => {
   beforeEach(() => {
-    fs.__setMockFiles(mockFiles)
+    vol.reset()
+    vol.fromJSON(mockFiles)
   })
 
   it('creates a login page', () => {
@@ -86,8 +89,8 @@ describe('dbAuth', () => {
 
   describe('handler', () => {
     it('exits when all files are skipped', async () => {
-      const mockExit = jest.spyOn(process, 'exit').mockImplementation()
-      const mockConsoleInfo = jest.spyOn(console, 'info').mockImplementation()
+      const mockExit = vi.spyOn(process, 'exit').mockImplementation()
+      const mockConsoleInfo = vi.spyOn(console, 'info').mockImplementation()
 
       await dbAuth.handler({
         listr2: { silentRendererCondition: true },

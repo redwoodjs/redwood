@@ -1,7 +1,8 @@
 globalThis.__dirname = __dirname
 import path from 'path'
 
-import yargs from 'yargs'
+import { vi, beforeAll, afterAll, test, expect, describe, it } from 'vitest'
+import yargs from 'yargs/yargs'
 
 // Load mocks
 import '../../../../lib/test'
@@ -10,12 +11,12 @@ import { getDefaultArgs } from '../../../../lib'
 import * as service from '../service'
 
 beforeAll(() => {
-  jest.useFakeTimers()
-  jest.setSystemTime(new Date('2022-09-30T09:50:00.000Z'))
+  vi.useFakeTimers()
+  vi.setSystemTime(new Date('2022-09-30T09:50:00.000Z'))
 })
 
 afterAll(() => {
-  jest.useRealTimers()
+  vi.useRealTimers()
 })
 
 const extensionForBaseArgs = (baseArgs) =>
@@ -293,7 +294,7 @@ const itCreatesAMultiWordServiceTestFileWithCRUDAndOnlyForeignKeyRequired = (
 }
 
 test('keeps Service in name', () => {
-  const { name } = yargs
+  const { name } = yargs()
     .command('service <name>', false, service.builder)
     .parse('service BazingaService')
 

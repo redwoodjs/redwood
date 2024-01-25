@@ -4,7 +4,8 @@ import '../../../../lib/test'
 
 import path from 'path'
 
-import yargs from 'yargs'
+import { test, expect } from 'vitest'
+import yargs from 'yargs/yargs'
 
 import * as directive from '../directive'
 
@@ -51,7 +52,7 @@ test('creates a TypeScript transformer directive', () => {
 })
 
 test('keeps Directive in name', () => {
-  const { name } = yargs
+  const { name } = yargs()
     .command('directive <name>', false, directive.builder)
     .parse('directive BazingaDirective')
 

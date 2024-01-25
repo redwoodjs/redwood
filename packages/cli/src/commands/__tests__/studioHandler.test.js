@@ -2,34 +2,42 @@
 // eslint-disable-next-line
 var mockedRedwoodVersion = '0.0.0'
 
-jest.mock('@redwoodjs/project-config', () => ({
-  getPaths: () => ({ base: '' }),
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const originalProjectConfig = await importOriginal()
+  return {
+    ...originalProjectConfig,
+    getPaths: () => ({ base: '' }),
+  }
+})
+
+vi.mock('fs-extra', () => ({
+  default: {
+    readJSONSync: () => ({
+      devDependencies: {
+        '@redwoodjs/core': mockedRedwoodVersion,
+      },
+    }),
+  },
 }))
 
-jest.mock('fs-extra', () => ({
-  readJSONSync: () => ({
-    devDependencies: {
-      '@redwoodjs/core': mockedRedwoodVersion,
-    },
-  }),
-}))
+import { vi, describe, it, afterEach, afterAll, expect } from 'vitest'
 
 import { assertRedwoodVersion } from '../studioHandler'
 
 describe('studioHandler', () => {
   describe('assertRedwoodVersion', () => {
-    const exitSpy = jest.spyOn(process, 'exit').mockImplementation((code) => {
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((code) => {
       throw new Error(`process.exit(${code})`)
     })
 
-    jest.spyOn(console, 'error').mockImplementation()
+    vi.spyOn(console, 'error').mockImplementation()
 
     afterEach(() => {
-      jest.clearAllMocks()
+      vi.clearAllMocks()
     })
 
     afterAll(() => {
-      jest.restoreAllMocks()
+      vi.restoreAllMocks()
     })
 
     const minVersions = ['7.0.0-canary.874', '7.x', '8.0.0-0']
