@@ -1,5 +1,13 @@
 import { vol, fs as mfs } from 'memfs'
-import { vi, describe, beforeEach, afterEach, afterAll } from 'vitest'
+import {
+  vi,
+  describe,
+  beforeEach,
+  afterEach,
+  afterAll,
+  it,
+  expect,
+} from 'vitest'
 
 import { runScriptFunction } from '../exec'
 
