@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-// For some reason, testutils types aren't exported.... I just dont...
+// For some reason, testutils types aren't exported.... I just don't...
 // Partially copied from https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/jscodeshift/src/testUtils.d.ts
 declare module 'jscodeshift/dist/testUtils' {
   import type { Transform, Options, Parser } from 'jscodeshift'
@@ -34,12 +34,6 @@ declare module 'jscodeshift/dist/testUtils' {
 }
 
 // @NOTE: Redefining types, because they get lost when importing from the testUtils file
-type MatchTransformSnapshotFunction = (
-  transformName: string,
-  fixtureName?: string,
-  parser?: 'ts' | 'tsx'
-) => Promise<void>
-
 type MatchFolderTransformFunction = (
   transformFunctionOrName: (() => any) | string,
   fixtureName: string,
@@ -61,26 +55,27 @@ type MatchInlineTransformSnapshotFunction = (
   parser: 'ts' | 'tsx' | 'babel' = 'tsx'
 ) => Promise<void>
 
-// These files gets loaded in jest setup, so becomes available globally in tests
+// These files gets loaded in vitest setup, so becomes available globally in tests
 declare global {
-  var matchTransformSnapshot: MatchTransformSnapshotFunction
   var matchInlineTransformSnapshot: MatchInlineTransformSnapshotFunction
   var matchFolderTransform: MatchFolderTransformFunction
-
-  namespace jest {
-    interface Matchers<R> {
-      toMatchFileContents(
-        fixturePath: string,
-        { removeWhitespace }: { removeWhitespace: boolean }
-      ): R
-    }
-  }
 
   namespace NodeJS {
     interface ProcessEnv {
       REDWOOD_DISABLE_TELEMETRY: number
     }
   }
+}
+
+interface CustomMatchers<R = unknown> {
+  toMatchFileContents(
+    fixturePath: string,
+    { removeWhitespace }: { removeWhitespace: boolean }
+  ): R
+}
+
+declare module 'vitest' {
+  interface Assertion<T = any> extends CustomMatchers<T> {}
 }
 
 export {}
