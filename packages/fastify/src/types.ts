@@ -9,9 +9,7 @@ export interface RedwoodFastifyAPIOptions {
 // Types for using server.config.js
 export type FastifySideConfigFnOptions = {
   side: SupportedSides
-} & (
-  | RedwoodFastifyAPIOptions
-)
+} & RedwoodFastifyAPIOptions
 
 export type SupportedSides = 'api' | 'web'
 export type FastifySideConfigFn = (

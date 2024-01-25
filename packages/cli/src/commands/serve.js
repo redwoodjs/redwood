@@ -9,6 +9,8 @@ import * as webServerCLIConfig from '@redwoodjs/web-server/cli-config'
 import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
 
+import { webSsrServerHandler } from './serveWebHandler'
+
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
 
