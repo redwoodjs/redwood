@@ -53,7 +53,10 @@ For a lambda function to be a lambda function, it must export a handler that ret
 > - `./api/src/functions/hello/index.{js,ts}`
 > - `./api/src/functions/something/hello.{js,ts}`
 >
-> Note: other files that are not scenario (`*.scenario.{js,ts}`), fixture (`*.fixture.{js,ts}`), test (`*.test.{js,ts}`), or typings (`*.d.ts`) in the folder will __also__ be exposed as an endpoint
+> Notes:
+>   - Other files that are not scenario (`*.scenario.{js,ts}`), fixture (`*.fixture.{js,ts}`), test (`*.test.{js,ts}`), or typings (`*.d.ts`) in the folder will __also__ be exposed as an endpoint.
+>   - There is no way to define nested functions beyond the root functions path, all functions are exposed through an endpoint named after the file.
+>   - Be careful of naming collisions. If two files share the same name, but are in different directories, only one of the functions will be exposed through an endpoint that matches the file name.
 
 ### Re-using/Sharing code
 
