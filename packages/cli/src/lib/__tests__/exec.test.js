@@ -1,15 +1,6 @@
 import { patchRequire } from 'fs-monkey'
 import { vol, fs as mfs } from 'memfs'
-import {
-  vi,
-  describe,
-  beforeAll,
-  beforeEach,
-  afterEach,
-  afterAll,
-  it,
-  expect,
-} from 'vitest'
+import { vi, describe, beforeAll, afterAll, it, expect } from 'vitest'
 
 import { runScriptFunction } from '../exec'
 
