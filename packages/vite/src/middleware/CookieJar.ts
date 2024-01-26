@@ -46,12 +46,29 @@ export class CookieJar {
     return this.map.has(name)
   }
 
+  /**
+   * Won't delete a cookie from the jar, but will set it to expire
+   * and set an empty value
+   */
   public delete(name: string) {
-    return this.map.delete(name)
+    return this.map.set(name, {
+      value: '',
+      options: {
+        expires: new Date(0),
+      },
+    })
   }
 
-  public clear() {
-    this.map.clear()
+  /**
+   * Clear all cookies, or remove a specific cookie
+   * from the jar.
+   */
+  public clear(name?: string) {
+    if (name) {
+      this.map.delete(name)
+    } else {
+      this.map.clear()
+    }
   }
 
   public entries() {

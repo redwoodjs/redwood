@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* to keep the tests a little cleaner by using ! */
+
 import { describe, expect, test } from 'vitest'
 
 import { CookieJar } from './CookieJar'
@@ -47,6 +50,34 @@ describe('CookieJar', () => {
       expect(finalItem.value).toStrictEqual(['tz', { value: 'Asia/Bangkok' }])
 
       expect(iterator.next().done).toBe(true)
+    })
+
+    // @MARK: API convention worth discussing!
+    // Delete is a little special, it doesn't actually delete the cookie
+    // but sets it to expire and sets an empty value
+    test('delete', () => {
+      const myJar = new CookieJar('auth_provider=kittens; session=woof-124556')
+
+      myJar.delete('auth_provider')
+
+      const { value: authProviderValue, options: authProviderOptions } =
+        myJar.get('auth_provider')!
+
+      expect(authProviderValue).toBeFalsy()
+      expect(authProviderOptions!.expires).toStrictEqual(new Date(0))
+    })
+
+    test('clear All', () => {
+      const myJar = new CookieJar('auth_provider=kittens; session=woof-124556')
+      myJar.clear()
+      expect(myJar.size).toBe(0)
+    })
+
+    test('clear by name', () => {
+      const myJar = new CookieJar('auth_provider=kittens; session=woof-124556')
+      myJar.clear('session')
+      expect(myJar.size).toBe(1)
+      expect(myJar.get('session')).toBeUndefined()
     })
   })
 })
