@@ -1,4 +1,4 @@
-// import { Response as PonyfillResponse } from '@whatwg-node/fetch'
+import { Response as PonyfillResponse } from '@whatwg-node/fetch'
 import { describe, expect, test } from 'vitest'
 
 import { MiddlewareResponse } from './MiddlewareResponse'
@@ -6,7 +6,7 @@ import { MiddlewareResponse } from './MiddlewareResponse'
 describe('MiddlewareResponse', () => {
   test('Can build a Web API Response object', () => {
     const res = new MiddlewareResponse().toResponse()
-    // expect(res instanceof PonyfillResponse).toBe(true)
+    expect(res instanceof PonyfillResponse).toBe(true)
     expect(res.status).toStrictEqual(200)
     expect(res.ok).toStrictEqual(true)
   })
