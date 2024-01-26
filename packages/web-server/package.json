@@ -10,8 +10,8 @@
   "license": "MIT",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "types": "./dist/webServer.d.ts",
+      "default": "./dist/webServer.js"
     },
     "./cli-config": {
       "types": "./dist/cliConfig.d.ts",
