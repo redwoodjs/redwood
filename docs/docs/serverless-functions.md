@@ -51,8 +51,9 @@ For a lambda function to be a lambda function, it must export a handler that ret
 > - `./api/src/functions/hello.{js,ts}`
 > - `./api/src/functions/hello/hello.{js,ts}`
 > - `./api/src/functions/hello/index.{js,ts}`
+> - `./api/src/functions/something/hello.{js,ts}`
 >
-> Other files in the folder will _not_ be exposed as an endpoint
+> Note: other files that are not scenario (`*.scenario.{js,ts}`), fixture (`*.fixture.{js,ts}`), test (`*.test.{js,ts}`), or typings (`*.d.ts`) in the folder will __also__ be exposed as an endpoint
 
 ### Re-using/Sharing code
 
@@ -69,7 +70,7 @@ import { update } from 'src/services/subscriptions'
 import { reportError } from 'src/lib/errorHandling'
 ```
 
-If you just want to move some logic into another file, that's totally fine too!
+If you want to move some logic into another file, you can do so but an endpoint will be created for that file as well
 
 ```bash
 api/src
@@ -79,7 +80,7 @@ api/src
 │       ├── helloWorld.scenarios.ts
 │       ├── helloWorld.test.ts
 │       └── helloWorld.ts     # <-- imports hellWorldLib
-│       └── helloWorldLib.ts  # <-- exports can be used in the helloWorld
+│       └── helloWorldLib.ts  # <-- an endpoint will be created for this file
 ```
 
 ## Developing locally
