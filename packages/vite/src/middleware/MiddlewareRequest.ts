@@ -1,9 +1,15 @@
 import { Request as WhatWgRequest } from '@whatwg-node/fetch'
 
+import type { ServerAuthState } from '@redwoodjs/auth'
+
 import { CookieJar } from './CookieJar'
 
-class ContextJar {
-  private _data = {}
+class ContextJar<T> {
+  private _data: T
+
+  constructor(data?: T) {
+    this._data = data as T
+  }
 
   get() {
     return this._data
@@ -14,9 +20,9 @@ class ContextJar {
   }
 }
 
-class MiddlewareRequest extends WhatWgRequest {
+export class MiddlewareRequest extends WhatWgRequest {
   cookies: CookieJar
-  serverAuthContext: ContextJar
+  serverAuthContext: ContextJar<ServerAuthState>
 
   constructor(input: Request) {
     super(input)

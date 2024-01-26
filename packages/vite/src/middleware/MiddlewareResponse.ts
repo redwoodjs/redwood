@@ -1,3 +1,4 @@
+import { Response } from '@whatwg-node/fetch'
 import cookie from 'cookie'
 
 import { CookieJar } from './CookieJar'
@@ -9,8 +10,14 @@ import { CookieJar } from './CookieJar'
 export class MiddlewareResponse {
   cookies = new CookieJar()
   headers = new Headers()
-  body: BodyInit | undefined
+  body: BodyInit | null | undefined
   status = 200
+
+  constructor(body?: BodyInit | null, init?: ResponseInit) {
+    this.body = body
+    this.headers = new Headers(init?.headers)
+    this.status = init?.status || 200
+  }
 
   static next = () => {
     return new MiddlewareResponse()
@@ -27,7 +34,11 @@ export class MiddlewareResponse {
     return res
   }
 
-  build = () => {
+  isRedirect = () => {
+    return this.status === 301 || this.status === 302
+  }
+
+  toResponse = () => {
     for (const [ckName, ckParams] of this.cookies) {
       this.headers.append(
         'Set-Cookie',
