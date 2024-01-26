@@ -5226,6 +5226,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@kamilkisiela/fast-url-parser@npm:^1.1.4":
+  version: 1.1.4
+  resolution: "@kamilkisiela/fast-url-parser@npm:1.1.4"
+  checksum: 2c85202cb4924720ac812c8bc06967fd5df4db759a68aa3acc2962b8cf9e2b3bc131de863f00473c0b0602df13891b35140f667a87eea04c9b897b6c1ae89c4a
+  languageName: node
+  linkType: hard
+
 "@leichtgewicht/ip-codec@npm:^2.0.1":
   version: 2.0.4
   resolution: "@leichtgewicht/ip-codec@npm:2.0.4"
@@ -8820,7 +8827,7 @@ __metadata:
     "@types/react": "npm:18.2.37"
     "@types/yargs-parser": "npm:21.0.3"
     "@vitejs/plugin-react": "npm:4.2.1"
-    "@whatwg-node/fetch": "npm:0.9.15"
+    "@whatwg-node/fetch": "npm:0.9.16"
     "@whatwg-node/server": "npm:0.9.24"
     acorn-loose: "npm:8.3.0"
     buffer: "npm:6.0.3"
@@ -12315,13 +12322,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:0.9.15":
-  version: 0.9.15
-  resolution: "@whatwg-node/fetch@npm:0.9.15"
+"@whatwg-node/fetch@npm:0.9.16":
+  version: 0.9.16
+  resolution: "@whatwg-node/fetch@npm:0.9.16"
   dependencies:
-    "@whatwg-node/node-fetch": "npm:^0.5.0"
-    urlpattern-polyfill: "npm:^9.0.0"
-  checksum: 8e3e9692d709b4f379fde83fbb38ca64401e73026bbacca92585c7652170de629fe78303e83a45e83d2e26c5af2a6e754f858e3a0c88f9b392c49ff1b84aa080
+    "@whatwg-node/node-fetch": "npm:^0.5.5"
+    urlpattern-polyfill: "npm:^10.0.0"
+  checksum: 757fd8560ee1a9ae404dafc43115eb37c72022c9bd3a30bc1c0028178cdece84d7378244fff4bad28ebbb3f2cc0b0b2ff738612824ed32bbd9dac49f5d0d5b42
   languageName: node
   linkType: hard
 
@@ -12361,6 +12368,19 @@ __metadata:
     fast-url-parser: "npm:^1.1.3"
     tslib: "npm:^2.3.1"
   checksum: 1c1638dc205fb9047a41462f787dd90990973b63c4e47baaf3ad4d1f3e1b2537ef9a02d5a874297997d91d3f48392ab4b3eca68b7b48aab32dedc43c7709f0a9
+  languageName: node
+  linkType: hard
+
+"@whatwg-node/node-fetch@npm:^0.5.5":
+  version: 0.5.5
+  resolution: "@whatwg-node/node-fetch@npm:0.5.5"
+  dependencies:
+    "@kamilkisiela/fast-url-parser": "npm:^1.1.4"
+    "@whatwg-node/events": "npm:^0.1.0"
+    busboy: "npm:^1.6.0"
+    fast-querystring: "npm:^1.1.1"
+    tslib: "npm:^2.3.1"
+  checksum: e40964eb6d74847ff362136d4199a3f0dc4cb6596961b9a12fd5e3635410a28577609fb4879ef02909f7fad42c977d4b9a1f6715c48dc2272558c96d62ac6132
   languageName: node
   linkType: hard
 
@@ -33019,6 +33039,13 @@ __metadata:
     punycode: "npm:^1.4.1"
     qs: "npm:^6.11.0"
   checksum: 9e18c57b854d6a8e0288c4ddf21f9e30273a0ef2efb28a7e3e3d6eac392637dbdecce0d8f616586d58ff43154997150ecc2c9873e6c845d1e742e24c940b6e12
+  languageName: node
+  linkType: hard
+
+"urlpattern-polyfill@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "urlpattern-polyfill@npm:10.0.0"
+  checksum: 43593f2a89bd54f2d5b5105ef4896ac5c5db66aef723759fbd15cd5eb1ea6cdae9d112e257eda9bbc3fb0cd90be6ac6e9689abe4ca69caa33114f42a27363531
   languageName: node
   linkType: hard
 
