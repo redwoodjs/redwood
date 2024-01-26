@@ -29,10 +29,15 @@ describe('MiddlewareResponse', () => {
       httpOnly: true,
     })
 
+    mwRes.cookies.set('monster', 'nomnomnom', {
+      domain: 'redwoodjs.com',
+    })
+
     const builtResponse = mwRes.build()
 
-    expect(builtResponse.headers.get('Set-Cookie')).toStrictEqual(
-      'token=hunter2; Domain=redwoodjs.com; Path=/; HttpOnly'
-    )
+    expect(builtResponse.headers.getSetCookie()).toStrictEqual([
+      'token=hunter2; Domain=redwoodjs.com; Path=/; HttpOnly',
+      'monster=nomnomnom; Domain=redwoodjs.com',
+    ])
   })
 })
