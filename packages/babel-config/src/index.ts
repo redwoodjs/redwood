@@ -30,7 +30,6 @@ export {
   RUNTIME_CORE_JS_VERSION,
   getCommonPlugins,
   getPathsFromTypeScriptConfig as getPathsFromConfig,
-  getRouteHookBabelPlugins,
   parseTypeScriptConfigFiles,
   registerBabel,
 } from './common'

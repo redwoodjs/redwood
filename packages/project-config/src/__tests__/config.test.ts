@@ -63,12 +63,6 @@ describe('getConfig', () => {
           "realtime": {
             "enabled": false,
           },
-          "rsc": {
-            "enabled": false,
-          },
-          "streamingSsr": {
-            "enabled": false,
-          },
           "useSDLCodeGenForGraphQLTypes": false,
         },
         "generate": {

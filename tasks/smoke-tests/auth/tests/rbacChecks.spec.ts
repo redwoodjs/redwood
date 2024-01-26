@@ -5,7 +5,7 @@ import { test, expect } from '@playwright/test'
 import type { PlaywrightTestArgs, Page } from '@playwright/test'
 import execa from 'execa'
 
-import { loginAsTestUser, signUpTestUser } from '../../shared/common'
+import { loginAsTestUser, signUpTestUser } from '../../common'
 
 // This is a special test that does the following
 // Signup a user (admin@bazinga.com), because salt/secrets won't match, we need to do this

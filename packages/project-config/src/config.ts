@@ -110,12 +110,6 @@ export interface Config {
       plugins: CLIPlugin[]
     }
     useSDLCodeGenForGraphQLTypes: boolean
-    streamingSsr: {
-      enabled: boolean
-    }
-    rsc: {
-      enabled: boolean
-    }
     realtime: {
       enabled: boolean
     }
@@ -196,12 +190,6 @@ const DEFAULT_CONFIG: Config = {
       ],
     },
     useSDLCodeGenForGraphQLTypes: false,
-    streamingSsr: {
-      enabled: false,
-    },
-    rsc: {
-      enabled: false,
-    },
     realtime: {
       enabled: false,
     },

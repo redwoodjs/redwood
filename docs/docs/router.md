@@ -698,9 +698,9 @@ Or if the variable passed as a prop to a component can't be found:
 
 ![fatal_error_message_query](/img/router/fatal_error_message_query.png)
 
-And if the page has a Cell, you'll see the Cell's request which may have contributed to the error - but will depend on how your Suspense boundary is setup:
+And if the page has a Cell, you'll see the Cell's request and response which may have contributed to the error:
 
-![cell_error_request](/img/router/cell_req_error.png)
+![fatal_error_message_request](/img/router/fatal_error_request.png)
 
 ### In Production
 

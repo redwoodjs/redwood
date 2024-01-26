@@ -5,10 +5,9 @@
     "rootDir": "src",
     "outDir": "dist"
   },
-  "include": ["src/**/*", "./ambient.d.ts", "./modules.d.ts"],
+  "include": ["src/**/*", "./ambient.d.ts"],
   "references": [
     { "path": "../internal" },
-    { "path": "../project-config" },
-    { "path": "../web" }
+    { "path": "../project-config" }
   ]
 }

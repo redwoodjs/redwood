@@ -203,7 +203,7 @@ async function parseArgs() {
       withFileTypes: true,
     })
   )
-    .filter((dirent) => dirent.isDirectory() && dirent.name !== 'shared')
+    .filter((dirent) => dirent.isDirectory())
     .map((dirent) => dirent.name)
 
   const invalidSmokeTest = smokeTests.find(

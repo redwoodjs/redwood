@@ -160,17 +160,14 @@ export const handler = async ({
           )
         }
 
-        // Streaming SSR does not use the index.html file.
-        if (!getConfig().experimental?.streamingSsr?.enabled) {
-          console.log('Creating 200.html...')
+        console.log('Creating 200.html...')
 
-          const indexHtmlPath = path.join(getPaths().web.dist, 'index.html')
+        const indexHtmlPath = path.join(getPaths().web.dist, 'index.html')
 
-          fs.copyFileSync(
-            indexHtmlPath,
-            path.join(getPaths().web.dist, '200.html')
-          )
-        }
+        fs.copyFileSync(
+          indexHtmlPath,
+          path.join(getPaths().web.dist, '200.html')
+        )
       },
     },
   ].filter(Boolean)

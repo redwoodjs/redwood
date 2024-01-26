@@ -2,8 +2,6 @@ import fs from 'node:fs'
 
 import core from '@actions/core'
 import { hasCodeChanges } from './cases/code_changes.mjs'
-import { rscChanged } from './cases/rsc.mjs'
-import { ssrChanged } from './cases/ssr.mjs'
 
 const getPrNumber = () => {
   // Example GITHUB_REF refs/pull/9544/merge

@@ -41,17 +41,11 @@ vi.mock('fs-extra', async (importOriginal) => {
   }
 })
 
-vi.mock('../serveApiHandler', async (importOriginal) => {
+vi.mock('../serveHandler', async (importOriginal) => {
   const originalHandler = await importOriginal()
   return {
     ...originalHandler,
     apiServerHandler: vi.fn(),
-  }
-})
-vi.mock('../serveBothHandler', async (importOriginal) => {
-  const originalHandler = await importOriginal()
-  return {
-    ...originalHandler,
     bothServerHandler: vi.fn(),
   }
 })
@@ -67,8 +61,7 @@ import { vi, describe, afterEach, it, expect } from 'vitest'
 import yargs from 'yargs/yargs'
 
 import { builder } from '../serve'
-import { apiServerHandler } from '../serveApiHandler'
-import { bothServerHandler } from '../serveBothHandler'
+import { apiServerHandler, bothServerHandler } from '../serveHandler'
 
 describe('yarn rw serve', () => {
   afterEach(() => {

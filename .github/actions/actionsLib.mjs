@@ -1,7 +1,6 @@
 /* eslint-env node */
 // @ts-check
 
-import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -62,9 +61,9 @@ export function projectCopy(redwoodProjectCwd) {
 }
 
 /**
- * @param {{ baseKeyPrefix: string, distKeyPrefix: string, canary: boolean }} options
+ * @param {{ baseKeyPrefix: string, distKeyPrefix: string }} options
  */
-export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix, canary }) {
+export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix }) {
   const baseKey = [
     baseKeyPrefix,
     process.env.RUNNER_OS,
@@ -76,7 +75,7 @@ export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix, canary }) 
     baseKey,
     'dependencies',
     await hashFiles(['yarn.lock', '.yarnrc.yml'].join('\n')),
-  ].join('-') + (canary ? '-canary' : '')
+  ].join('-')
 
   const distKey = [
     dependenciesKey,
@@ -91,73 +90,11 @@ export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix, canary }) 
       'lerna.json',
       'packages',
     ].join('\n'))
-  ].join('-') + (canary ? '-canary' : '')
+  ].join('-')
 
   return {
     baseKey,
     dependenciesKey,
     distKey
   }
-}
-
-/**
- * @callback ExecInProject
- * @param {string} commandLine command to execute (can include additional args). Must be correctly escaped.
- * @param {Omit<ExecOptions, "cwd">=} options exec options.  See ExecOptions
- * @returns {Promise<unknown>} exit code
- */
-
-/**
- * @param {string} testProjectPath
- * @param {string} fixtureName
- * @param {Object} core
- * @param {(key: string, value: string) => void} core.setOutput
- * @param {ExecInProject} execInProject
- * @returns {Promise<void>}
- */
-export async function setUpRscTestProject(
-  testProjectPath,
-  fixtureName,
-  core,
-  execInProject
-) {
-  core.setOutput('test-project-path', testProjectPath)
-
-  console.log('rwPath', REDWOOD_FRAMEWORK_PATH)
-  console.log('testProjectPath', testProjectPath)
-
-  const fixturePath = path.join(
-    REDWOOD_FRAMEWORK_PATH,
-    '__fixtures__',
-    fixtureName
-  )
-  const rwBinPath = path.join(
-    REDWOOD_FRAMEWORK_PATH,
-    'packages/cli/dist/index.js'
-  )
-  const rwfwBinPath = path.join(
-    REDWOOD_FRAMEWORK_PATH,
-    'packages/cli/dist/rwfw.js'
-  )
-
-  console.log(`Creating project at ${testProjectPath}`)
-  console.log()
-  fs.cpSync(fixturePath, testProjectPath, { recursive: true })
-
-  console.log(`Adding framework dependencies to ${testProjectPath}`)
-  await projectDeps(testProjectPath)
-  console.log()
-
-  console.log(`Installing node_modules in ${testProjectPath}`)
-  await execInProject('yarn install')
-
-  console.log(`Copying over framework files to ${testProjectPath}`)
-  await execInProject(`node ${rwfwBinPath} project:copy`, {
-    env: { RWFW_PATH: REDWOOD_FRAMEWORK_PATH },
-  })
-  console.log()
-
-  console.log(`Building project in ${testProjectPath}`)
-  await execInProject(`node ${rwBinPath} build -v`)
-  console.log()
 }

@@ -7,7 +7,6 @@ import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import { getMainDefinition } from '@apollo/client/utilities'
-import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
 
 // Note: Importing directly from `apollo/client` doesn't work properly in Storybook.
@@ -20,9 +19,6 @@ const {
   useQuery,
   useMutation,
   useSubscription,
-  useBackgroundQuery,
-  useReadQuery,
-  useSuspenseQuery,
   setLogVerbosity: apolloSetLogVerbosity,
 } = apolloClient
 
@@ -217,10 +213,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   // A terminating link. Apollo Client uses this to send GraphQL operations to a server over HTTP.
   // See https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link.
-  let httpLink = new HttpLink({ uri, ...httpLinkConfig })
-  if (globalThis.RWJS_EXP_STREAMING_SSR) {
-    httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
-  }
+  const httpLink = new HttpLink({ uri, ...httpLinkConfig })
 
   // Our terminating link needs to be smart enough to handle subscriptions, and if the GraphQL query
   // is subscription it needs to use the SSELink (server sent events link).
@@ -381,9 +374,6 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
           useQuery={useQuery}
           useMutation={useMutation}
           useSubscription={useSubscription}
-          useBackgroundQuery={useBackgroundQuery}
-          useReadQuery={useReadQuery}
-          useSuspenseQuery={useSuspenseQuery}
         >
           {children}
         </GraphQLHooksProvider>

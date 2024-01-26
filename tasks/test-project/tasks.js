@@ -762,44 +762,6 @@ export default DoublePage`
 }
 
 /**
- * Separates the streaming-ssr related steps. These are all web tasks,
- * if we choose to move them later
- * @param {string} outputPath
- */
-async function streamingTasks(outputPath, { verbose }) {
-  OUTPUT_PATH = outputPath
-
-  const tasks = [
-    {
-      title: 'Creating Delayed suspense delayed page',
-      task: async () => {
-        await createPage('delayed')
-
-        await applyCodemod(
-          'delayedPage.js',
-          fullPath('web/src/pages/DelayedPage/DelayedPage')
-        )
-      },
-    },
-    {
-      title: 'Enable streaming-ssr experiment',
-      task: async () => {
-        const setupExperiment = createBuilder(
-          'yarn rw experimental setup-streaming-ssr'
-        )
-        await setupExperiment('--force')
-      },
-    },
-  ]
-
-  return new Listr(tasks, {
-    exitOnError: true,
-    renderer: verbose && 'verbose',
-    renderOptions: { collapseSubtasks: false },
-  })
-}
-
-/**
  * Tasks to add GraphQL Fragments support to the test-project, and some queries
  * to test fragments
  */
@@ -921,6 +883,5 @@ async function fragmentsTasks(outputPath, { verbose }) {
 module.exports = {
   apiTasks,
   webTasks,
-  streamingTasks,
   fragmentsTasks,
 }

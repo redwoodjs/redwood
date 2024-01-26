@@ -1,5 +1,3 @@
-import * as fs from 'node:fs'
-
 import type { PlaywrightTestConfig } from '@playwright/test'
 import { devices } from '@playwright/test'
 
@@ -20,7 +18,6 @@ export const basePlaywrightConfig: PlaywrightTestConfig = {
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-      dependencies: fs.existsSync('./tests/setup.ts') ? ['setup'] : undefined,
     },
 
     // {

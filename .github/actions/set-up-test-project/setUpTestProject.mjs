@@ -25,12 +25,8 @@ core.setOutput('test-project-path', TEST_PROJECT_PATH)
 
 const bundler = core.getInput('bundler')
 
-const canary = core.getInput('canary') === 'true'
-
-
 console.log({
   bundler,
-  canary
 })
 
 console.log()
@@ -38,7 +34,7 @@ console.log()
 const {
   dependenciesKey,
   distKey
-} = await createCacheKeys({ baseKeyPrefix: 'test-project', distKeyPrefix: bundler, canary })
+} = await createCacheKeys({ baseKeyPrefix: 'test-project', distKeyPrefix: bundler })
 
 /**
  * @returns {Promise<void>}
@@ -58,9 +54,7 @@ async function main() {
     await sharedTasks()
   } else {
     console.log(`Cache not found for input keys: ${distKey}, ${dependenciesKey}`)
-    await setUpTestProject({
-      canary: true
-    })
+    await setUpTestProject()
   }
 
   await cache.saveCache([TEST_PROJECT_PATH], distKey)
@@ -68,10 +62,9 @@ async function main() {
 }
 
 /**
- *  *@param {{canary: boolean}} options
  * @returns {Promise<void>}
  */
-async function setUpTestProject({ canary }) {
+async function setUpTestProject() {
   const TEST_PROJECT_FIXTURE_PATH = path.join(
     REDWOOD_FRAMEWORK_PATH,
     '__fixtures__',
@@ -89,12 +82,6 @@ async function setUpTestProject({ canary }) {
   console.log(`Installing node_modules in ${TEST_PROJECT_PATH}`)
   await execInProject('yarn install')
   console.log()
-
-  if (canary) {
-    console.log(`Upgrading project to canary`)
-    await execInProject('yarn rw upgrade -t canary')
-    console.log()
-  }
 
   await cache.saveCache([TEST_PROJECT_PATH], dependenciesKey)
   console.log(`Cache saved with key: ${dependenciesKey}`)

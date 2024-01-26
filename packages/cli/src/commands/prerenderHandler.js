@@ -6,7 +6,7 @@ import { Listr } from 'listr2'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { runPrerender, writePrerenderedHtmlFile } from '@redwoodjs/prerender'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
-import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { getPaths } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
@@ -275,16 +275,6 @@ const diagnosticCheck = () => {
 }
 
 export const handler = async ({ path: routerPath, dryRun, verbose }) => {
-  if (getConfig().experimental?.streamingSsr?.enabled) {
-    console.log(
-      c.warning(
-        'Prerendering is not yet supported with Streaming SSR. Skipping prerender...'
-      )
-    )
-
-    return
-  }
-
   recordTelemetryAttributes({
     command: 'prerender',
     dryRun,

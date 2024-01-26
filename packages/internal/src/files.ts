@@ -107,13 +107,6 @@ export const findApiDistFunctions = (cwd: string = getPaths().api.base) => {
   })
 }
 
-export const findRouteHooksSrc = (cwd: string = getPaths().web.src) => {
-  return fg.sync('**/*.routeHooks.{js,ts,tsx,jsx}', {
-    absolute: true,
-    cwd,
-  })
-}
-
 export const isCellFile = (p: string) => {
   const { dir, name } = path.parse(p)
 

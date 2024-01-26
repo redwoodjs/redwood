@@ -8,8 +8,6 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
 
-import { webServerHandler, webSsrServerHandler } from './serveWebHandler'
-
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
 
@@ -62,27 +60,10 @@ export const builder = async (yargs) => {
 
         // Run the server file, if it exists, with web side also
         if (hasServerFile()) {
-          const { bothServerFileHandler } = await import(
-            './serveBothHandler.js'
-          )
+          const { bothServerFileHandler } = await import('./serveHandler.js')
           await bothServerFileHandler(argv)
-        } else if (
-          getConfig().experimental?.rsc?.enabled ||
-          getConfig().experimental?.streamingSsr?.enabled
-        ) {
-          const { bothSsrRscServerHandler } = await import(
-            './serveBothHandler.js'
-          )
-          await bothSsrRscServerHandler(argv)
         } else {
-          // Wanted to use the new web-server package here, but can't because
-          // of backwards compatibility reasons. With `bothServerHandler` both
-          // the web side and the api side run on the same server with the same
-          // port. If we use a separate fe server and api server we can't run
-          // them on the same port, and so we lose backwards compatibility.
-          // TODO: Use @redwoodjs/web-server when we're ok with breaking
-          // backwards compatibility.
-          const { bothServerHandler } = await import('./serveBothHandler.js')
+          const { bothServerHandler } = await import('./serveHandler.js')
           await bothServerHandler(argv)
         }
       },
@@ -117,10 +98,10 @@ export const builder = async (yargs) => {
 
         // Run the server file, if it exists, api side only
         if (hasServerFile()) {
-          const { apiServerFileHandler } = await import('./serveApiHandler.js')
+          const { apiServerFileHandler } = await import('./serveHandler.js')
           await apiServerFileHandler(argv)
         } else {
-          const { apiServerHandler } = await import('./serveApiHandler.js')
+          const { apiServerHandler } = await import('./serveHandler.js')
           await apiServerHandler(argv)
         }
       },
@@ -151,11 +132,8 @@ export const builder = async (yargs) => {
           apiHost: argv.apiHost,
         })
 
-        if (getConfig().experimental?.streamingSsr?.enabled) {
-          await webSsrServerHandler()
-        } else {
-          await webServerHandler(argv)
-        }
+        const { webServerHandler } = await import('./serveHandler.js')
+        await webServerHandler(argv)
       },
     })
     .middleware((argv) => {
