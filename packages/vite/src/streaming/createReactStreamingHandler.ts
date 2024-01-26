@@ -3,11 +3,15 @@ import path from 'path'
 import isbot from 'isbot'
 import type { ViteDevServer } from 'vite'
 
+import type { ServerAuthState } from '@redwoodjs/auth'
 import { defaultAuthProviderState } from '@redwoodjs/auth'
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
+
+import { createMiddlewareRequest } from '../middleware/MiddlewareRequest'
+import { MiddlewareResponse } from '../middleware/MiddlewareResponse'
 
 import { reactRenderToStreamResponse } from './streamHelpers'
 import { loadAndRunRouteHooks } from './triggerRouteHooks'
@@ -69,8 +73,6 @@ export const createReactStreamingHandler = async (
       })
     }
 
-    const decodedAuthState = defaultAuthProviderState
-
     // Do this inside the handler for **dev-only**.
     // This makes sure that changes to entry-server are picked up on refresh
     if (!isProd) {
@@ -80,22 +82,36 @@ export const createReactStreamingHandler = async (
       fallbackDocumentImport = await viteDevServer.ssrLoadModule(
         rwPaths.web.document
       )
+    }
 
-      const middleware = entryServerImport.middleware
+    // ~~~ Middleware Handling ~~~
+    const { middleware } = entryServerImport
+    let mwResponse: MiddlewareResponse = MiddlewareResponse.next()
+    let decodedAuthState: ServerAuthState = defaultAuthProviderState
 
-      // @TODO (1) construct MWRequest Object here from req
-      // Req.context
+    if (middleware) {
+      try {
+        const mwReq = createMiddlewareRequest(req)
+        const mwOutput = await middleware(mwReq)
 
-      if (middleware) {
-        try {
-          // @TODO (2): Get the MWResponseBuilder and create a response from it
-          // if its a Redirect, you can just respond here.
-          // const mwResponse = await middleware(req)
-        } catch (e) {
-          console.error('Whooopsie, error in middleware', e)
+        // Possible to return nothing from MW
+        if (mwOutput) {
+          mwResponse = mwOutput
         }
+
+        decodedAuthState = mwReq.serverAuthContext.get()
+      } catch (e) {
+        console.error('Whooopsie, error in middleware', e)
       }
     }
+
+    // If mwResponse is a redirect, short-circuit here, and skip react rendering
+    // @TODO should we also check if its a full response object? Next allows this... just to maintain symmetry
+    if (mwResponse.isRedirect()) {
+      return mwResponse.toResponse()
+    }
+
+    // ~~~ Middleware Handling ~~~
 
     const ServerEntry =
       entryServerImport.ServerEntry || entryServerImport.default
@@ -144,6 +160,7 @@ export const createReactStreamingHandler = async (
     const cssLinks = getStylesheetLinks()
 
     const reactResponse = await reactRenderToStreamResponse(
+      mwResponse,
       {
         ServerEntry,
         FallbackDocument,

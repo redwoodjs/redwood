@@ -17,6 +17,8 @@ import {
   createInjector,
 } from '@redwoodjs/web/dist/components/ServerInject'
 
+import type { MiddlewareResponse } from '../middleware/MiddlewareResponse'
+
 import { createBufferedTransformStream } from './transforms/bufferedTransform'
 import { createTimeoutTransform } from './transforms/cancelTimeoutTransform'
 import { createServerInjectionTransform } from './transforms/serverInjectionTransform'
@@ -38,6 +40,7 @@ interface StreamOptions {
 }
 
 export async function reactRenderToStreamResponse(
+  mwRes: MiddlewareResponse,
   renderOptions: RenderToStreamArgs,
   streamOptions: StreamOptions
 ) {
@@ -151,7 +154,6 @@ export async function reactRenderToStreamResponse(
     // @NOTE: very important that we await this before we apply any transforms
     if (waitForAllReady) {
       await reactStream.allReady
-      clearTimeout(timeoutHandle)
     }
 
     const transformsToApply = [
@@ -165,15 +167,14 @@ export async function reactRenderToStreamResponse(
       transformsToApply
     )
 
-    return new Response(outputStream, {
-      status: didErrorOutsideShell ? 500 : 200, // I think better right? Prevents caching a bad page
-      headers: { 'content-type': 'text/html' },
-    })
+    mwRes.status = didErrorOutsideShell ? 500 : 200
+    mwRes.body = outputStream
+    mwRes.headers.set('content-type', 'text/html')
+
+    return mwRes.toResponse()
   } catch (e) {
     console.error('🔻 Failed to render shell')
     streamOptions.onError?.(e as Error)
-
-    clearTimeout(timeoutHandle)
 
     // @TODO Asking for clarification from React team. Their documentation on this is incomplete I think.
     // Having the Document (and bootstrap scripts) here allows client to recover from errors in the shell
@@ -187,10 +188,13 @@ export async function reactRenderToStreamResponse(
       bootstrapOptions
     )
 
-    return new Response(fallbackShell, {
-      status: 500,
-      headers: { 'content-type': 'text/html' },
-    })
+    mwRes.status = 500
+    mwRes.body = fallbackShell
+    mwRes.headers.set('content-type', 'text/html')
+
+    return mwRes.toResponse()
+  } finally {
+    clearTimeout(timeoutHandle)
   }
 }
 function applyStreamTransforms(
