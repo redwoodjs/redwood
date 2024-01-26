@@ -24,7 +24,7 @@ describe('webFallback', () => {
     const fastify = Fastify()
     await fastify.register(redwoodFastifyWeb, {
       redwood: {
-        apiUpstreamUrl: 'http://localhost:8911',
+        apiProxyTarget: 'http://localhost:8911',
       },
     })
     await fastify.ready()

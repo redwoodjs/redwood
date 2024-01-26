@@ -12,10 +12,10 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 export interface RedwoodFastifyWebOptions {
   redwood?: {
     apiUrl?: string
-    apiUpstreamUrl?: string
+    apiProxyTarget?: string
 
     /**
-     * @deprecated Use `apiUpstreamUrl` instead.
+     * @deprecated Use `apiProxyTarget` instead.
      */
     apiHost?: string
   }
@@ -58,14 +58,14 @@ export async function redwoodFastifyWeb(
     root: getPaths().web.dist,
   })
 
-  // If `apiUpstreamUrl` is set, proxy requests from `apiUrl` to `apiUpstreamUrl`.
+  // If `apiProxyTarget` is set, proxy requests from `apiUrl` to `apiProxyTarget`.
   // In this case, `apiUrl` has to be relative; `resolveOptions` above throws if it's not
-  if (options.redwood.apiUpstreamUrl) {
+  if (options.redwood.apiProxyTarget) {
     fastify.log.debug('registering proxy')
 
     fastify.register(httpProxy, {
       prefix: options.redwood.apiUrl,
-      upstream: options.redwood.apiUpstreamUrl,
+      upstream: options.redwood.apiProxyTarget,
       disableCache: true,
     })
   }
@@ -106,62 +106,62 @@ export function resolveOptions(options: RedwoodFastifyWebOptions) {
   redwood.apiUrl ??= getConfig().web.apiUrl
   const apiUrlIsFullyQualifiedUrl = isFullyQualifiedUrl(redwood.apiUrl)
 
-  // `apiHost` is deprecated. If it's set and `apiUpstreamUrl` isn't, we'll use it as `apiUpstreamUrl`.
-  if (redwood.apiHost && !redwood.apiUpstreamUrl) {
-    redwood.apiUpstreamUrl = redwood.apiHost
+  // `apiHost` is deprecated. If it's set and `apiProxyTarget` isn't, we'll use it as `apiProxyTarget`.
+  if (redwood.apiHost && !redwood.apiProxyTarget) {
+    redwood.apiProxyTarget = redwood.apiHost
     delete redwood.apiHost
   }
 
-  if (redwood.apiUpstreamUrl && !isFullyQualifiedUrl(redwood.apiUpstreamUrl)) {
+  if (redwood.apiProxyTarget && !isFullyQualifiedUrl(redwood.apiProxyTarget)) {
     throw new Error(
-      `If you provide \`apiUpstreamUrl\`, it has to be a fully-qualified URL. \`apiUpstreamUrl\` is '${redwood.apiUpstreamUrl}'`
+      `If you provide \`apiProxyTarget\`, it has to be a fully-qualified URL. \`apiProxyTarget\` is '${redwood.apiProxyTarget}'`
     )
   }
 
-  // If users don't supply `apiUrl` but do supply `apiUpstreamUrl`, error.
+  // If users don't supply `apiUrl` but do supply `apiProxyTarget`, error.
   // We don't have a prefix to use as the starting point of a proxy.
   //
   // ```js
   // {
   //   apiUrl: undefined,
-  //   apiUpstreamUrl: 'http://api.bar.com'
+  //   apiProxyTarget: 'http://api.bar.com'
   // }
   // ```
   //
   // This is pretty unlikely because we default `apiUrl` to '/.redwood/functions'
-  if (!redwood.apiUrl && redwood.apiUpstreamUrl) {
+  if (!redwood.apiUrl && redwood.apiProxyTarget) {
     throw new Error(
-      `If you provide \`apiUpstreamUrl\`, \`apiUrl\` has to be a relative URL. \`apiUrl\` is '${redwood.apiUrl}'`
+      `If you provide \`apiProxyTarget\`, \`apiUrl\` has to be a relative URL. \`apiUrl\` is '${redwood.apiUrl}'`
     )
   }
 
-  // If users supply a fully-qualified `apiUrl` and `apiUpstreamUrl`, error.
+  // If users supply a fully-qualified `apiUrl` and `apiProxyTarget`, error.
   // We don't have a prefix to use as the starting point of a proxy.
   //
   // ```js
   // {
   //   apiUrl: 'http://api.foo.com', // This isn't a prefix we can forward requests from
-  //   apiUpstreamUrl: 'http://api.bar.com'
+  //   apiProxyTarget: 'http://api.bar.com'
   // }
   // ```
-  if (apiUrlIsFullyQualifiedUrl && redwood.apiUpstreamUrl) {
+  if (apiUrlIsFullyQualifiedUrl && redwood.apiProxyTarget) {
     throw new Error(
-      `If you provide \`apiUpstreamUrl\`, \`apiUrl\` cannot be a fully-qualified URL. \`apiUrl\` is '${redwood.apiUrl}'`
+      `If you provide \`apiProxyTarget\`, \`apiUrl\` cannot be a fully-qualified URL. \`apiUrl\` is '${redwood.apiUrl}'`
     )
   }
 
-  // If users supply a relative `apiUrl` but don't supply `apiUpstreamUrl`, error.
+  // If users supply a relative `apiUrl` but don't supply `apiProxyTarget`, error.
   // There's nowhere to proxy to.
   //
   // ```js
   // {
   //   apiUrl: '/api',
-  //   apiUpstreamUrl: undefined // There's nowhere for requests to '/api' to go
+  //   apiProxyTarget: undefined // There's nowhere for requests to '/api' to go
   // }
   // ```
-  // if (!apiUrlIsFullyQualifiedUrl && !redwood.apiUpstreamUrl) {
+  // if (!apiUrlIsFullyQualifiedUrl && !redwood.apiProxyTarget) {
   //   throw new Error(
-  //     `If you don't provide \`apiUpstreamUrl\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '${redwood.apiUrl}'`
+  //     `If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '${redwood.apiUrl}'`
   //   )
   // }
 

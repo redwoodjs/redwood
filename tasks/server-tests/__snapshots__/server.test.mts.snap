@@ -17,10 +17,10 @@ Options:
                                             from or fully-qualified URL to the
                                             API server
                                        [string] [default: "/.redwood/functions"]
-      --apiUpstreamUrl, --api-upstream-url  Forward requests from the apiUrl to
+      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
                                             this host. apiUrl must be a relative
                                             URL                         [string]
-      --apiHost, --api-host                 [Deprecated; use apiUpstreamUrl]
+      --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
                                             Forward requests from the apiUrl to
                                             this host. apiUrl must be a relative
                                             URL            [deprecated] [string]
@@ -30,7 +30,7 @@ Unknown arguments: foo, bar, baz
 `;
 
 exports[`serve web (/Users/dom/projects/redwood/redwood/packages/web-server/dist/bin.js) > fails if apiHost isn't set and apiUrl isn't fully qualified 1`] = `
-"Error: If you don't provide \`apiUpstreamUrl\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions'
+"Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions'
 "
 `;
 
@@ -51,10 +51,10 @@ Options:
                                             from or fully-qualified URL to the
                                             API server
                                        [string] [default: "/.redwood/functions"]
-      --apiUpstreamUrl, --api-upstream-url  Forward requests from the apiUrl to
+      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
                                             this host. apiUrl must be a relative
                                             URL                         [string]
-      --apiHost, --api-host                 [Deprecated; use apiUpstreamUrl]
+      --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
                                             Forward requests from the apiUrl to
                                             this host. apiUrl must be a relative
                                             URL            [deprecated] [string]
@@ -78,10 +78,10 @@ Options:
                                             from or fully-qualified URL to the
                                             API server
                                        [string] [default: "/.redwood/functions"]
-      --apiUpstreamUrl, --api-upstream-url  Forward requests from the apiUrl to
+      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
                                             this host. apiUrl must be a relative
                                             URL                         [string]
-      --apiHost, --api-host                 [Deprecated; use apiUpstreamUrl]
+      --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
                                             Forward requests from the apiUrl to
                                             this host. apiUrl must be a relative
                                             URL            [deprecated] [string]
@@ -91,7 +91,7 @@ Unknown arguments: foo, bar, baz
 `;
 
 exports[`serve web ([ '/Users/dom/projects/redwood/redwood/packages/api-server/dist/index.js', 'web' ]) > fails if apiHost isn't set and apiUrl isn't fully qualified 1`] = `
-"Error: If you don't provide \`apiUpstreamUrl\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions'
+"Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions'
 "
 `;
 
@@ -112,10 +112,10 @@ Options:
                                             from or fully-qualified URL to the
                                             API server
                                        [string] [default: "/.redwood/functions"]
-      --apiUpstreamUrl, --api-upstream-url  Forward requests from the apiUrl to
+      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
                                             this host. apiUrl must be a relative
                                             URL                         [string]
-      --apiHost, --api-host                 [Deprecated; use apiUpstreamUrl]
+      --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
                                             Forward requests from the apiUrl to
                                             this host. apiUrl must be a relative
                                             URL            [deprecated] [string]
@@ -143,10 +143,10 @@ Options:
                                             from or fully-qualified URL to the
                                             API server
                                        [string] [default: "/.redwood/functions"]
-      --apiUpstreamUrl, --api-upstream-url  Forward requests from the apiUrl to
+      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
                                             this host. apiUrl must be a relative
                                             URL                         [string]
-      --apiHost, --api-host                 [Deprecated; use apiUpstreamUrl]
+      --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
                                             Forward requests from the apiUrl to
                                             this host. apiUrl must be a relative
                                             URL            [deprecated] [string]
@@ -156,7 +156,7 @@ Unknown arguments: foo, bar, baz
 `;
 
 exports[`serve web ([ '/Users/dom/projects/redwood/redwood/packages/cli/dist/index.js', 'serve', 'web' ]) > fails if apiHost isn't set and apiUrl isn't fully qualified 1`] = `
-"Error: If you don't provide \`apiUpstreamUrl\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions'
+"Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions'
 "
 `;
 
@@ -181,10 +181,10 @@ Options:
                                             from or fully-qualified URL to the
                                             API server
                                        [string] [default: "/.redwood/functions"]
-      --apiUpstreamUrl, --api-upstream-url  Forward requests from the apiUrl to
+      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
                                             this host. apiUrl must be a relative
                                             URL                         [string]
-      --apiHost, --api-host                 [Deprecated; use apiUpstreamUrl]
+      --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
                                             Forward requests from the apiUrl to
                                             this host. apiUrl must be a relative
                                             URL            [deprecated] [string]

@@ -26,16 +26,16 @@ export function builder(yargs: Argv) {
       alias: 'api-url',
       default: getConfig().web.apiUrl,
     },
-    apiUpstreamUrl: {
+    apiProxyTarget: {
       description:
         'Forward requests from the apiUrl to this host. apiUrl must be a relative URL',
       type: 'string',
-      alias: 'api-upstream-url',
+      alias: 'api-proxy-target',
     },
-    // Deprecated alias of `apiUpstreamUrl`
+    // Deprecated alias of `apiProxyTarget`
     apiHost: {
       description:
-        '[Deprecated; use apiUpstreamUrl] Forward requests from the apiUrl to this host. apiUrl must be a relative URL',
+        '[Deprecated; use apiProxyTarget] Forward requests from the apiUrl to this host. apiUrl must be a relative URL',
       type: 'string',
       alias: 'api-host',
       deprecated: true,

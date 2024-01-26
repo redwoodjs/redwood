@@ -20,70 +20,70 @@ afterAll(() => {
 })
 
 describe('resolveOptions', () => {
-  // The possible values we will support for apiUrl and apiUpstreamUrl are:
+  // The possible values we will support for apiUrl and apiProxyTarget are:
   // apiUrl: (aka prefix)
   //  - undefined
   //  - empty
   //  - relative
   //  - fully-qualified
-  // apiUpstreamUrl: (aka upstream)
+  // apiProxyTarget: (aka upstream)
   //  - undefined
   //  - empty
   //  - relative
   //  - fully-qualified
 
   describe('undefined apiUrl', () => {
-    it.skip('undefined apiUpstreamUrl', () => {
+    it.skip('undefined apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
           redwood: {
             apiUrl: undefined,
-            apiUpstreamUrl: undefined,
+            apiProxyTarget: undefined,
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you don't provide \`apiUpstreamUrl\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions']`
+        `[Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions']`
       )
     })
 
-    it.skip('empty apiUpstreamUrl', () => {
+    it.skip('empty apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
           redwood: {
             apiUrl: undefined,
-            apiUpstreamUrl: '',
+            apiProxyTarget: '',
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you don't provide \`apiUpstreamUrl\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions']`
+        `[Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions']`
       )
     })
 
-    it('relative apiUpstreamUrl', () => {
+    it('relative apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
           redwood: {
             apiUrl: undefined,
-            apiUpstreamUrl: '/api',
+            apiProxyTarget: '/api',
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you provide \`apiUpstreamUrl\`, it has to be a fully-qualified URL. \`apiUpstreamUrl\` is '/api']`
+        `[Error: If you provide \`apiProxyTarget\`, it has to be a fully-qualified URL. \`apiProxyTarget\` is '/api']`
       )
     })
 
-    it('fully-qualified apiUpstreamUrl', () => {
+    it('fully-qualified apiProxyTarget', () => {
       expect(
         resolveOptions({
           redwood: {
             apiUrl: undefined,
-            apiUpstreamUrl: 'http://api.foo.com',
+            apiProxyTarget: 'http://api.foo.com',
           },
         })
       ).toMatchInlineSnapshot(`
         {
           "redwood": {
-            "apiUpstreamUrl": "http://api.foo.com",
+            "apiProxyTarget": "http://api.foo.com",
             "apiUrl": "/.redwood/functions",
           },
         }
@@ -92,111 +92,111 @@ describe('resolveOptions', () => {
   })
 
   describe('empty apiUrl', () => {
-    it.skip('undefined apiUpstreamUrl', () => {
+    it.skip('undefined apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
           redwood: {
             apiUrl: '',
-            apiUpstreamUrl: undefined,
+            apiProxyTarget: undefined,
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you don't provide \`apiUpstreamUrl\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '']`
+        `[Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '']`
       )
     })
 
-    it.skip('empty apiUpstreamUrl', () => {
+    it.skip('empty apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
           redwood: {
             apiUrl: '',
-            apiUpstreamUrl: '',
+            apiProxyTarget: '',
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you don't provide \`apiUpstreamUrl\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '']`
+        `[Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '']`
       )
     })
 
-    it('relative apiUpstreamUrl', () => {
+    it('relative apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
           redwood: {
             apiUrl: '',
-            apiUpstreamUrl: '/api',
+            apiProxyTarget: '/api',
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you provide \`apiUpstreamUrl\`, it has to be a fully-qualified URL. \`apiUpstreamUrl\` is '/api']`
+        `[Error: If you provide \`apiProxyTarget\`, it has to be a fully-qualified URL. \`apiProxyTarget\` is '/api']`
       )
     })
 
-    it('fully-qualified apiUpstreamUrl', () => {
+    it('fully-qualified apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
           redwood: {
             apiUrl: '',
-            apiUpstreamUrl: 'http://api.foo.com',
+            apiProxyTarget: 'http://api.foo.com',
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you provide \`apiUpstreamUrl\`, \`apiUrl\` has to be a relative URL. \`apiUrl\` is '']`
+        `[Error: If you provide \`apiProxyTarget\`, \`apiUrl\` has to be a relative URL. \`apiUrl\` is '']`
       )
     })
   })
 
   describe('relative apiUrl', () => {
-    it.skip('undefined apiUpstreamUrl', () => {
+    it.skip('undefined apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
           redwood: {
             apiUrl: '/api',
-            apiUpstreamUrl: undefined,
+            apiProxyTarget: undefined,
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you don't provide \`apiUpstreamUrl\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/api']`
+        `[Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/api']`
       )
     })
 
-    it.skip('empty apiUpstreamUrl', () => {
+    it.skip('empty apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
           redwood: {
             apiUrl: '/api',
-            apiUpstreamUrl: '',
+            apiProxyTarget: '',
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you don't provide \`apiUpstreamUrl\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/api']`
+        `[Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/api']`
       )
     })
 
-    it('relative apiUpstreamUrl', () => {
+    it('relative apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
           redwood: {
             apiUrl: '/api',
-            apiUpstreamUrl: '/api',
+            apiProxyTarget: '/api',
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you provide \`apiUpstreamUrl\`, it has to be a fully-qualified URL. \`apiUpstreamUrl\` is '/api']`
+        `[Error: If you provide \`apiProxyTarget\`, it has to be a fully-qualified URL. \`apiProxyTarget\` is '/api']`
       )
     })
 
-    it('fully-qualified apiUpstreamUrl', () => {
+    it('fully-qualified apiProxyTarget', () => {
       expect(
         resolveOptions({
           redwood: {
             apiUrl: '/api',
-            apiUpstreamUrl: 'http://api.foo.com',
+            apiProxyTarget: 'http://api.foo.com',
           },
         })
       ).toMatchInlineSnapshot(`
         {
           "redwood": {
-            "apiUpstreamUrl": "http://api.foo.com",
+            "apiProxyTarget": "http://api.foo.com",
             "apiUrl": "/api",
           },
         }
@@ -205,71 +205,71 @@ describe('resolveOptions', () => {
   })
 
   describe('fully-qualified apiUrl', () => {
-    it('undefined apiUpstreamUrl', () => {
+    it('undefined apiProxyTarget', () => {
       expect(
         resolveOptions({
           redwood: {
             apiUrl: 'http://api.foo.com',
-            apiUpstreamUrl: undefined,
+            apiProxyTarget: undefined,
           },
         })
       ).toMatchInlineSnapshot(`
         {
           "redwood": {
-            "apiUpstreamUrl": undefined,
+            "apiProxyTarget": undefined,
             "apiUrl": "http://api.foo.com",
           },
         }
       `)
     })
 
-    it('empty apiUpstreamUrl', () => {
+    it('empty apiProxyTarget', () => {
       expect(
         resolveOptions({
           redwood: {
             apiUrl: 'http://api.foo.com',
-            apiUpstreamUrl: '',
+            apiProxyTarget: '',
           },
         })
       ).toMatchInlineSnapshot(`
         {
           "redwood": {
-            "apiUpstreamUrl": "",
+            "apiProxyTarget": "",
             "apiUrl": "http://api.foo.com",
           },
         }
       `)
     })
 
-    it('relative apiUpstreamUrl', () => {
+    it('relative apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
           redwood: {
             apiUrl: 'http://api.foo.com',
-            apiUpstreamUrl: '/api',
+            apiProxyTarget: '/api',
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you provide \`apiUpstreamUrl\`, it has to be a fully-qualified URL. \`apiUpstreamUrl\` is '/api']`
+        `[Error: If you provide \`apiProxyTarget\`, it has to be a fully-qualified URL. \`apiProxyTarget\` is '/api']`
       )
     })
 
-    it('fully-qualified apiUpstreamUrl', () => {
+    it('fully-qualified apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
           redwood: {
             apiUrl: 'http://api.foo.com',
-            apiUpstreamUrl: 'http://api.foo.com',
+            apiProxyTarget: 'http://api.foo.com',
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you provide \`apiUpstreamUrl\`, \`apiUrl\` cannot be a fully-qualified URL. \`apiUrl\` is 'http://api.foo.com']`
+        `[Error: If you provide \`apiProxyTarget\`, \`apiUrl\` cannot be a fully-qualified URL. \`apiUrl\` is 'http://api.foo.com']`
       )
     })
   })
 
   describe('apiHost', () => {
-    it('apiHost is a deprecated alias of apiUpstreamUrl', () => {
+    it('apiHost is a deprecated alias of apiProxyTarget', () => {
       expect(
         resolveOptions({
           redwood: {
@@ -279,7 +279,7 @@ describe('resolveOptions', () => {
       ).toMatchInlineSnapshot(`
         {
           "redwood": {
-            "apiUpstreamUrl": "http://api.foo.com",
+            "apiProxyTarget": "http://api.foo.com",
             "apiUrl": "/.redwood/functions",
           },
         }
@@ -302,7 +302,7 @@ describe('redwoodFastifyWeb', () => {
 
     await fastifyInstance.register(redwoodFastifyWeb, {
       redwood: {
-        apiUpstreamUrl: 'http://localhost:8911',
+        apiProxyTarget: 'http://localhost:8911',
       },
     })
 
