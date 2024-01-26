@@ -5,8 +5,6 @@ import type { AuthProviderState } from './AuthProviderState'
 import { defaultAuthProviderState } from './AuthProviderState'
 
 export type ServerAuthState = AuthProviderState<never> & {
-  // Used by AuthProvider in getToken. We can probably remove this
-  encryptedSession?: string | null
   cookieHeader?: string
 }
 
