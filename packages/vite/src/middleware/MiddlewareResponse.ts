@@ -1,4 +1,4 @@
-import { Response } from '@whatwg-node/fetch'
+import { Response as PonyResponse } from '@whatwg-node/fetch'
 import cookie from 'cookie'
 
 import { CookieJar } from './CookieJar'
@@ -46,7 +46,7 @@ export class MiddlewareResponse {
       )
     }
 
-    return new Response(this.body, {
+    return new PonyResponse(this.body, {
       headers: this.headers,
       status: this.status,
     })

@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { Response } from '@whatwg-node/fetch'
 import isbot from 'isbot'
 import type { ViteDevServer } from 'vite'
 
