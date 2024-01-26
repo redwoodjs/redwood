@@ -4,6 +4,20 @@ import { describe, expect, test } from 'vitest'
 import { MiddlewareResponse } from './MiddlewareResponse'
 
 describe('MiddlewareResponse', () => {
+  test('constructor', () => {
+    const res = new MiddlewareResponse('Bazinga', {
+      headers: {
+        beep: 'boop',
+        computer: 'says no',
+      },
+      status: 418,
+    }).toResponse()
+
+    expect(res.headers.get('beep')).toStrictEqual('boop')
+    expect(res.headers.get('computer')).toStrictEqual('says no')
+    expect(res.status).toStrictEqual(418)
+  })
+
   test('Can build a Web API Response object', () => {
     const res = new MiddlewareResponse().toResponse()
     expect(res instanceof PonyfillResponse).toBe(true)
@@ -23,7 +37,7 @@ describe('MiddlewareResponse', () => {
   })
 
   test('Can attach a cookie with CookieJar', () => {
-    const mwRes = MiddlewareResponse.next()
+    const mwRes = new MiddlewareResponse()
     mwRes.cookies.set('token', 'hunter2', {
       domain: 'redwoodjs.com',
       path: '/',
@@ -42,9 +56,21 @@ describe('MiddlewareResponse', () => {
     ])
   })
 
-  test('Constructs redirects correctly', () => {
+  test('Constructs temporary redirects correctly', () => {
     const tempRedirect = MiddlewareResponse.redirect('/somewhere')
     expect(tempRedirect.isRedirect()).toStrictEqual(true)
     expect(tempRedirect.toResponse().status).toStrictEqual(302)
+    expect(tempRedirect.toResponse().headers.get('location')).toStrictEqual(
+      '/somewhere'
+    )
+  })
+
+  test('Constructs permanent redirects correctly', () => {
+    const permRedirect = MiddlewareResponse.redirect('/bye', 'permanent')
+    expect(permRedirect.isRedirect()).toStrictEqual(true)
+    expect(permRedirect.toResponse().status).toStrictEqual(301)
+    expect(permRedirect.toResponse().headers.get('location')).toStrictEqual(
+      '/bye'
+    )
   })
 })
