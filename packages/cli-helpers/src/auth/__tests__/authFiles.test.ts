@@ -4,11 +4,10 @@ globalThis.__dirname = __dirname
 
 vi.mock('../../lib/paths', async (importOriginal) => {
   const path = require('path')
-  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  const orginalPaths = await importOriginal<typeof import('../../lib/paths')>()
+  const originalPaths = await importOriginal<typeof LibPaths>()
 
   return {
-    ...orginalPaths,
+    ...originalPaths,
     getPaths: () => {
       const base = mockBasePath || '/mock/base/path'
 
@@ -27,13 +26,14 @@ vi.mock('../../lib/project', () => ({
   isTypeScriptProject: vi.fn(),
 }))
 
-import path from 'path'
+import * as path from 'path'
 
 import { vi, beforeEach, it, expect } from 'vitest'
 
-import { getPaths } from '../../lib/paths'
-import { isTypeScriptProject } from '../../lib/project'
-import { apiSideFiles, generateUniqueFileNames } from '../authFiles'
+import { getPaths } from '../../lib/paths.js'
+import type * as LibPaths from '../../lib/paths.js'
+import { isTypeScriptProject } from '../../lib/project.js'
+import { apiSideFiles, generateUniqueFileNames } from '../authFiles.js'
 
 beforeEach(() => {
   vi.mocked(isTypeScriptProject).mockReturnValue(true)

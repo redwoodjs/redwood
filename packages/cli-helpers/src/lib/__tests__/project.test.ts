@@ -12,9 +12,9 @@ import * as fs from 'node:fs'
 import * as toml from '@iarna/toml'
 import { vi, describe, beforeEach, afterEach, it, expect } from 'vitest'
 
-import { updateTomlConfig, addEnvVar } from '../project'
+import { updateTomlConfig, addEnvVar } from '../project.js'
 
-const defaultRedwoodToml = {
+const defaultRedwoodToml: Record<string, any> = {
   web: {
     title: 'Redwood App',
     port: 8910,
@@ -154,7 +154,7 @@ describe('updateTomlConfig', () => {
     })
 
     it('adds when experimental cli has some plugins configured', () => {
-      defaultRedwoodToml['experimental'] = {
+      defaultRedwoodToml.experimental = {
         cli: {
           autoInstall: true,
           plugins: [
@@ -171,7 +171,7 @@ describe('updateTomlConfig', () => {
     })
 
     it('adds when experimental cli is setup but has no plugins configured', () => {
-      defaultRedwoodToml['experimental'] = {
+      defaultRedwoodToml.experimental = {
         cli: {
           autoInstall: true,
         },
@@ -185,7 +185,7 @@ describe('updateTomlConfig', () => {
     })
 
     it('adds package but keeps autoInstall false', () => {
-      defaultRedwoodToml['experimental'] = {
+      defaultRedwoodToml.experimental = {
         cli: {
           autoInstall: false,
         },
@@ -199,7 +199,7 @@ describe('updateTomlConfig', () => {
     })
 
     it('does not add duplicate place when experimental cli has that plugin configured', () => {
-      defaultRedwoodToml['experimental'] = {
+      defaultRedwoodToml.experimental = {
         cli: {
           autoInstall: true,
           plugins: [
