@@ -96,6 +96,7 @@ export const createReactStreamingHandler = async (
         const mwOutput = await middleware(mwReq)
 
         // Possible to return nothing from MW
+        // Leave the default .next() response in place
         if (mwOutput) {
           mwResponse = mwOutput
         }
