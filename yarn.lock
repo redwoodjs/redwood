@@ -7564,7 +7564,7 @@ __metadata:
     "@types/memjs": "npm:1"
     "@types/pascalcase": "npm:1.0.3"
     "@types/split2": "npm:4.2.3"
-    "@whatwg-node/fetch": "npm:0.9.14"
+    "@whatwg-node/fetch": "npm:0.9.16"
     core-js: "npm:3.34.0"
     humanize-string: "npm:2.1.0"
     jsonwebtoken: "npm:9.0.2"
@@ -8235,7 +8235,7 @@ __metadata:
     "@types/prettier": "npm:2.7.3"
     "@types/yargs": "npm:17.0.32"
     "@vscode/ripgrep": "npm:1.15.6"
-    "@whatwg-node/fetch": "npm:0.9.14"
+    "@whatwg-node/fetch": "npm:0.9.16"
     cheerio: "npm:1.0.0-rc.12"
     core-js: "npm:3.34.0"
     deepmerge: "npm:4.3.1"
@@ -8446,7 +8446,7 @@ __metadata:
     "@types/jsonwebtoken": "npm:9.0.5"
     "@types/lodash": "npm:4.14.201"
     "@types/uuid": "npm:9.0.7"
-    "@whatwg-node/fetch": "npm:0.9.14"
+    "@whatwg-node/fetch": "npm:0.9.16"
     aws-lambda: "npm:1.0.7"
     core-js: "npm:3.34.0"
     graphql: "npm:16.8.1"
@@ -8602,7 +8602,7 @@ __metadata:
     "@redwoodjs/structure": "npm:6.0.7"
     "@redwoodjs/web": "npm:6.0.7"
     "@types/mime-types": "npm:2.1.4"
-    "@whatwg-node/fetch": "npm:0.9.14"
+    "@whatwg-node/fetch": "npm:0.9.16"
     babel-plugin-ignore-html-and-css-imports: "npm:0.1.0"
     babel-plugin-tester: "npm:11.0.4"
     cheerio: "npm:1.0.0-rc.12"
@@ -8750,7 +8750,7 @@ __metadata:
     "@types/envinfo": "npm:7.8.3"
     "@types/uuid": "npm:9.0.7"
     "@types/yargs": "npm:17.0.32"
-    "@whatwg-node/fetch": "npm:0.9.14"
+    "@whatwg-node/fetch": "npm:0.9.16"
     ci-info: "npm:4.0.0"
     core-js: "npm:3.34.0"
     envinfo: "npm:7.11.0"
@@ -12312,16 +12312,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:0.9.14, @whatwg-node/fetch@npm:^0.9.10, @whatwg-node/fetch@npm:^0.9.7":
-  version: 0.9.14
-  resolution: "@whatwg-node/fetch@npm:0.9.14"
-  dependencies:
-    "@whatwg-node/node-fetch": "npm:^0.5.0"
-    urlpattern-polyfill: "npm:^9.0.0"
-  checksum: cb91d18c744e0d01c2f8d7982f961258a43b54baa8680ed6291a257f85e5ace1b68fc74105eebebd96b4450648fbaec98d91a434c1142da44acf928c41842d58
-  languageName: node
-  linkType: hard
-
 "@whatwg-node/fetch@npm:0.9.16":
   version: 0.9.16
   resolution: "@whatwg-node/fetch@npm:0.9.16"
@@ -12342,6 +12332,16 @@ __metadata:
     urlpattern-polyfill: "npm:^8.0.0"
     web-streams-polyfill: "npm:^3.2.1"
   checksum: 37d882bf85764aec7541cda1008099ab4d695971608946ec9b9e40326eedfd4c49507fbcc8765ebe3e9241f4dc9d1e970e0b3501a814d721c40c721d313c5d50
+  languageName: node
+  linkType: hard
+
+"@whatwg-node/fetch@npm:^0.9.10, @whatwg-node/fetch@npm:^0.9.7":
+  version: 0.9.14
+  resolution: "@whatwg-node/fetch@npm:0.9.14"
+  dependencies:
+    "@whatwg-node/node-fetch": "npm:^0.5.0"
+    urlpattern-polyfill: "npm:^9.0.0"
+  checksum: cb91d18c744e0d01c2f8d7982f961258a43b54baa8680ed6291a257f85e5ace1b68fc74105eebebd96b4450648fbaec98d91a434c1142da44acf928c41842d58
   languageName: node
   linkType: hard
 
