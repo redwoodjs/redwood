@@ -101,7 +101,7 @@ async function createServer() {
         }
 
         // @TODO: We should check the type of resposne here I guess
-        return out
+        return out.toResponse()
       })
     )
   }
