@@ -136,7 +136,6 @@ export type RedwoodApolloLinks = Array<
   | RedwoodApolloLink<'authMiddleware'>
   | RedwoodApolloLink<'enhanceErrorLink'>
   | RedwoodApolloLink<'httpLink', HttpLink>
-  | null
 >
 
 export type RedwoodApolloLinkFactory = (links: RedwoodApolloLinks) => ApolloLink

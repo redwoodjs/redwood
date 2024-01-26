@@ -154,7 +154,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
       name: 'authMiddleware',
       link: createAuthApolloLink(authProviderType, headers),
     },
-    // ~~~~ @END REMOVE ~~~~±±±±±
+    // ~~~~ @END REMOVE ~~~~
     isDev && { name: 'enhanceErrorLink', link: createUpdateDataLink() },
     {
       name: 'httpLink',
