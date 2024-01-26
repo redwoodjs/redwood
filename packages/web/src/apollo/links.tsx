@@ -16,11 +16,8 @@ export function createHttpLink(
 
   return new HttpLink({
     uri,
-    ...httpLinkConfig,
-    // you can disable result caching here if you want to
-    // @TODO: this is probably NextJS specific. Revisit once we have our own apollo package
-    fetchOptions: { cache: 'no-store' },
     credentials: 'include',
+    ...httpLinkConfig,
     headers,
   })
 }
