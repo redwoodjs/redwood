@@ -14,6 +14,8 @@ export async function handler(options: ParsedOptions) {
       defaults: path.join(getPaths().base, '.env.defaults'),
       multiline: true,
     })
+
+    process.env.REDWOOD_ENV_FILES_LOADED = 'true'
   }
 
   try {

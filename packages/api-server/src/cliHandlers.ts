@@ -1,9 +1,7 @@
-import path from 'path'
-
 import c from 'ansi-colors'
 
 import { redwoodFastifyWeb } from '@redwoodjs/fastify-web'
-import { getPaths, getConfig } from '@redwoodjs/project-config'
+import { getConfig } from '@redwoodjs/project-config'
 
 import createFastifyInstance from './fastify'
 import withFunctions from './plugins/withFunctions'
@@ -35,27 +33,17 @@ export const apiCliOptions = {
     coerce: coerceRootPath,
   },
   loadEnvFiles: {
-    description: 'Load .env and .env.defaults files',
+    description:
+      'Deprecated; env files are always loaded. This flag is a no-op',
     type: 'boolean',
-    // We have to default to `false` for backwards compatibility.
-    default: false,
+    hidden: true,
   },
 } as const
 
 export const apiServerHandler = async (options: ApiServerArgs) => {
-  const { port, socket, apiRootPath, loadEnvFiles } = options
+  const { port, socket, apiRootPath } = options
   const tsApiServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API Server...\n')))
-
-  if (loadEnvFiles) {
-    const { config } = await import('dotenv-defaults')
-
-    config({
-      path: path.join(getPaths().base, '.env'),
-      defaults: path.join(getPaths().base, '.env.defaults'),
-      multiline: true,
-    })
-  }
 
   let fastify = createFastifyInstance()
 
