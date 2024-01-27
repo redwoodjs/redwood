@@ -28,7 +28,8 @@ export const bothServerFileHandler = async (argv) => {
       shell: true,
     })
   } else {
-    const apiHost = `http://0.0.0.0:${argv.apiPort}`
+    const apiHost = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
+    const apiProxyTarget = `http://${apiHost}:${argv.apiPort}`
 
     const { result } = concurrently(
       [
@@ -42,7 +43,7 @@ export const bothServerFileHandler = async (argv) => {
         },
         {
           name: 'web',
-          command: `yarn rw-web-server --port ${argv.webPort} --api-host ${apiHost}`,
+          command: `yarn rw-web-server --port ${argv.webPort} --api-proxy-target ${apiProxyTarget}`,
           cwd: getPaths().base,
           prefixColor: 'blue',
         },
