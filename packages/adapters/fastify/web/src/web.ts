@@ -80,7 +80,7 @@ export async function redwoodFastifyWeb(
     const apiUrlWarningPath = `${prefix}${redwoodOptions.apiUrl}${suffix}`
 
     fastify.all(apiUrlWarningPath, apiUrlHandler)
-    fastify.all(`${apiUrlWarningPath}/*`, apiUrlHandler)
+    fastify.all(`${apiUrlWarningPath}*`, apiUrlHandler)
   }
 
   // If `apiProxyTarget` is set, proxy requests from `apiUrl` to `apiProxyTarget`.

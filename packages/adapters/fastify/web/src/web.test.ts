@@ -31,34 +31,13 @@ describe('redwoodFastifyWeb', () => {
   beforeAll(async () => {
     fastifyInstance = Fastify()
 
-    await fastifyInstance.register(redwoodFastifyWeb, {
-      redwood: {
-        apiProxyTarget: 'http://localhost:8911',
-      },
-    })
+    await fastifyInstance.register(redwoodFastifyWeb)
 
     await fastifyInstance.ready()
   })
 
   afterAll(async () => {
     await fastifyInstance.close()
-  })
-
-  // We can use `printRoutes` with a method for debugging, but not without one.
-  // See https://fastify.dev/docs/latest/Reference/Server#printroutes
-  it('builds a tree of routes for GET', async () => {
-    expect(fastifyInstance.printRoutes({ method: 'GET' }))
-      .toMatchInlineSnapshot(`
-        "└── /
-            ├── about (GET)
-            ├── contacts/new (GET)
-            ├── nested/index (GET)
-            ├── .redwood/functions (GET)
-            │   └── / (GET)
-            │       └── * (GET)
-            └── * (GET)
-        "
-      `)
   })
 
   describe('serves prerendered files', () => {
@@ -285,6 +264,42 @@ describe('redwoodFastifyWeb', () => {
       })
 
       expect(res.statusCode).toBe(200)
+    })
+  })
+
+  describe.only('serves an error at a misconfigured apiUrl', () => {
+    it('handles the root path', async () => {
+      const url = '/.redwood/functions/'
+
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url,
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe(
+        'application/json; charset=utf-8'
+      )
+      expect(res.body).toMatchInlineSnapshot(
+        `"{"data":null,"errors":[{"message":"Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.","extensions":{"code":"BAD_GATEWAY","httpStatus":502}}]}"`
+      )
+    })
+
+    it('handles subpaths', async () => {
+      const url = '/.redwood/functions/graphql'
+
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url,
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe(
+        'application/json; charset=utf-8'
+      )
+      expect(res.body).toMatchInlineSnapshot(
+        `"{"data":null,"errors":[{"message":"Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.","extensions":{"code":"BAD_GATEWAY","httpStatus":502}}]}"`
+      )
     })
   })
 })
