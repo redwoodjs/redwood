@@ -3,20 +3,26 @@ import { getConfig } from '@redwoodjs/project-config'
 import type { RedwoodFastifyWebOptions } from './types'
 
 export function resolveOptions(options: RedwoodFastifyWebOptions) {
-  const redwood = options.redwood ?? {}
-
-  redwood.apiUrl ??= getConfig().web.apiUrl
-  const apiUrlIsFullyQualifiedUrl = isFullyQualifiedUrl(redwood.apiUrl)
-
-  // `apiHost` is deprecated. If it's set and `apiProxyTarget` isn't, we'll use it as `apiProxyTarget`.
-  if (redwood.apiHost && !redwood.apiProxyTarget) {
-    redwood.apiProxyTarget = redwood.apiHost
-    delete redwood.apiHost
+  const redwoodOptions = options.redwood ?? {}
+  const flags = {
+    shouldRegisterApiUrl: false,
   }
 
-  if (redwood.apiProxyTarget && !isFullyQualifiedUrl(redwood.apiProxyTarget)) {
+  redwoodOptions.apiUrl ??= getConfig().web.apiUrl
+  const apiUrlIsFullyQualifiedUrl = isFullyQualifiedUrl(redwoodOptions.apiUrl)
+
+  // `apiHost` is deprecated. If it's set and `apiProxyTarget` isn't, we'll use it as `apiProxyTarget`.
+  if (redwoodOptions.apiHost && !redwoodOptions.apiProxyTarget) {
+    redwoodOptions.apiProxyTarget = redwoodOptions.apiHost
+    delete redwoodOptions.apiHost
+  }
+
+  if (
+    redwoodOptions.apiProxyTarget &&
+    !isFullyQualifiedUrl(redwoodOptions.apiProxyTarget)
+  ) {
     throw new Error(
-      `If you provide \`apiProxyTarget\`, it has to be a fully-qualified URL. \`apiProxyTarget\` is '${redwood.apiProxyTarget}'`
+      `If you provide \`apiProxyTarget\`, it has to be a fully-qualified URL. \`apiProxyTarget\` is '${redwoodOptions.apiProxyTarget}'`
     )
   }
 
@@ -31,9 +37,9 @@ export function resolveOptions(options: RedwoodFastifyWebOptions) {
   // ```
   //
   // This is pretty unlikely because we default `apiUrl` to '/.redwood/functions'
-  if (!redwood.apiUrl && redwood.apiProxyTarget) {
+  if (!redwoodOptions.apiUrl && redwoodOptions.apiProxyTarget) {
     throw new Error(
-      `If you provide \`apiProxyTarget\`, \`apiUrl\` has to be a relative URL. \`apiUrl\` is '${redwood.apiUrl}'`
+      `If you provide \`apiProxyTarget\`, \`apiUrl\` has to be a relative URL. \`apiUrl\` is '${redwoodOptions.apiUrl}'`
     )
   }
 
@@ -46,9 +52,9 @@ export function resolveOptions(options: RedwoodFastifyWebOptions) {
   //   apiProxyTarget: 'http://api.bar.com'
   // }
   // ```
-  if (apiUrlIsFullyQualifiedUrl && redwood.apiProxyTarget) {
+  if (apiUrlIsFullyQualifiedUrl && redwoodOptions.apiProxyTarget) {
     throw new Error(
-      `If you provide \`apiProxyTarget\`, \`apiUrl\` cannot be a fully-qualified URL. \`apiUrl\` is '${redwood.apiUrl}'`
+      `If you provide \`apiProxyTarget\`, \`apiUrl\` cannot be a fully-qualified URL. \`apiUrl\` is '${redwoodOptions.apiUrl}'`
     )
   }
 
@@ -61,13 +67,11 @@ export function resolveOptions(options: RedwoodFastifyWebOptions) {
   //   apiProxyTarget: undefined // There's nowhere for requests to '/api' to go
   // }
   // ```
-  // if (!apiUrlIsFullyQualifiedUrl && !redwood.apiProxyTarget) {
-  //   throw new Error(
-  //     `If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '${redwood.apiUrl}'`
-  //   )
-  // }
+  if (!apiUrlIsFullyQualifiedUrl && !redwoodOptions.apiProxyTarget) {
+    flags.shouldRegisterApiUrl = true
+  }
 
-  return { redwood }
+  return { redwoodOptions, flags }
 }
 
 function isFullyQualifiedUrl(url: string) {

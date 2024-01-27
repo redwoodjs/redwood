@@ -78,7 +78,10 @@ describe('resolveOptions', () => {
         })
       ).toMatchInlineSnapshot(`
         {
-          "redwood": {
+          "flags": {
+            "shouldRegisterApiUrl": false,
+          },
+          "redwoodOptions": {
             "apiProxyTarget": "http://api.foo.com",
             "apiUrl": "/.redwood/functions",
           },
@@ -191,7 +194,10 @@ describe('resolveOptions', () => {
         })
       ).toMatchInlineSnapshot(`
         {
-          "redwood": {
+          "flags": {
+            "shouldRegisterApiUrl": false,
+          },
+          "redwoodOptions": {
             "apiProxyTarget": "http://api.foo.com",
             "apiUrl": "/api",
           },
@@ -211,7 +217,10 @@ describe('resolveOptions', () => {
         })
       ).toMatchInlineSnapshot(`
         {
-          "redwood": {
+          "flags": {
+            "shouldRegisterApiUrl": false,
+          },
+          "redwoodOptions": {
             "apiProxyTarget": undefined,
             "apiUrl": "http://api.foo.com",
           },
@@ -229,7 +238,10 @@ describe('resolveOptions', () => {
         })
       ).toMatchInlineSnapshot(`
         {
-          "redwood": {
+          "flags": {
+            "shouldRegisterApiUrl": false,
+          },
+          "redwoodOptions": {
             "apiProxyTarget": "",
             "apiUrl": "http://api.foo.com",
           },
@@ -274,7 +286,10 @@ describe('resolveOptions', () => {
         })
       ).toMatchInlineSnapshot(`
         {
-          "redwood": {
+          "flags": {
+            "shouldRegisterApiUrl": false,
+          },
+          "redwoodOptions": {
             "apiProxyTarget": "http://api.foo.com",
             "apiUrl": "/.redwood/functions",
           },

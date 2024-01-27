@@ -4,7 +4,7 @@ import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
-import * as webServerCLIConfig from '@redwoodjs/web-server/cli-config'
+import * as webServerCLIConfig from '@redwoodjs/web-server'
 
 import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'

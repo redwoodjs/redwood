@@ -5,7 +5,12 @@ import httpProxy from '@fastify/http-proxy'
 import fastifyStatic from '@fastify/static'
 import fastifyUrlData from '@fastify/url-data'
 import fg from 'fast-glob'
-import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
+import type {
+  FastifyInstance,
+  FastifyReply,
+  FastifyRequest,
+  HookHandlerDoneFunction,
+} from 'fastify'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -19,7 +24,7 @@ export async function redwoodFastifyWeb(
   opts: RedwoodFastifyWebOptions,
   done: HookHandlerDoneFunction
 ) {
-  const options = resolveOptions(opts)
+  const { redwoodOptions, flags } = resolveOptions(opts)
 
   await fastify.register(fastifyUrlData)
 
@@ -43,14 +48,49 @@ export async function redwoodFastifyWeb(
     root: getPaths().web.dist,
   })
 
+  // If `shouldRegisterApiUrl` is true, `apiUrl` has to be defined
+  // but TS doesn't know that so it complains about `apiUrl` being undefined
+  // in `fastify.all(...)` below. So we have to do this check for now
+  if (redwoodOptions.apiUrl && flags.shouldRegisterApiUrl) {
+    fastify.log.warn("apiUrl is relative but there's no proxy target")
+
+    const apiUrlHandler = (_req: FastifyRequest, reply: FastifyReply) => {
+      reply.code(200)
+      reply.send({
+        data: null,
+        errors: [
+          {
+            message: `Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.`,
+            extensions: {
+              code: 'BAD_GATEWAY',
+              httpStatus: 502,
+            },
+          },
+        ],
+      })
+    }
+
+    // Make sure apiUrl starts and ends with a slash
+    const prefix = redwoodOptions.apiUrl.charAt(0) !== '/' ? '/' : ''
+    const suffix =
+      redwoodOptions.apiUrl.charAt(redwoodOptions.apiUrl.length - 1) !== '/'
+        ? '/'
+        : ''
+
+    const apiUrlWarningPath = `${prefix}${redwoodOptions.apiUrl}${suffix}`
+
+    fastify.all(apiUrlWarningPath, apiUrlHandler)
+    fastify.all(`${apiUrlWarningPath}/*`, apiUrlHandler)
+  }
+
   // If `apiProxyTarget` is set, proxy requests from `apiUrl` to `apiProxyTarget`.
   // In this case, `apiUrl` has to be relative; `resolveOptions` above throws if it's not
-  if (options.redwood.apiProxyTarget) {
+  if (redwoodOptions.apiProxyTarget) {
     fastify.log.debug('registering proxy')
 
     fastify.register(httpProxy, {
-      prefix: options.redwood.apiUrl,
-      upstream: options.redwood.apiProxyTarget,
+      prefix: redwoodOptions.apiUrl,
+      upstream: redwoodOptions.apiProxyTarget,
       disableCache: true,
     })
   }

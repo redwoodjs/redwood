@@ -18,7 +18,6 @@ export function builder(yargs: Argv<ParsedOptions>) {
       description:
         "The host to listen on. Defaults to '0.0.0.0' in production, '::' in development",
       type: 'string',
-      default: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
     },
 
     apiUrl: {

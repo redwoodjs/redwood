@@ -6,6 +6,8 @@ import { bin } from '../package.json'
 import { description, builder } from './cliConfig'
 import { handler } from './cliConfigHandler'
 
+process.env.NODE_ENV ??= 'production'
+
 const [scriptName] = Object.keys(bin)
 
 yargs(hideBin(process.argv))

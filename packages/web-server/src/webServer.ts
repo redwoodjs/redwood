@@ -1,38 +1,42 @@
 import path from 'path'
 
 import chalk from 'chalk'
-import { config } from 'dotenv-defaults'
 import Fastify from 'fastify'
+import fs from 'fs-extra'
 
 import { redwoodFastifyWeb } from '@redwoodjs/fastify-web'
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { ServeWebOptions } from './types'
+import type { ParsedOptions } from './types'
 
-export { ServeWebOptions }
-
-export async function serveWeb(options: ServeWebOptions = {}) {
+export async function serveWeb(options: ParsedOptions = {}) {
   const start = Date.now()
   console.log(chalk.italic.dim('Starting Web Server...'))
 
-  if (!process.env.REDWOOD_ENV_FILES_LOADED) {
-    config({
-      path: path.join(getPaths().base, '.env'),
-      defaults: path.join(getPaths().base, '.env.defaults'),
-      multiline: true,
-    })
+  const distIndexExists = await fs.pathExists(
+    path.join(getPaths().web.dist, 'index.html')
+  )
+  if (!distIndexExists) {
+    throw new Error(
+      'no built files to serve; run `yarn rw build web` before serving web'
+    )
   }
 
-  options.logger ??= {
-    level:
-      process.env.LOG_LEVEL ?? process.env.NODE_ENV === 'development'
-        ? 'debug'
-        : 'warn',
+  options.host ??= process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
+  if (process.env.NODE_ENV === 'production' && options.host !== '0.0.0.0') {
+    console.warn(
+      `Warning: host '${options.host}' may need to be '0.0.0.0' in production`
+    )
   }
 
   const fastify = Fastify({
     requestTimeout: 15_000,
-    logger: options.logger,
+    logger: {
+      level:
+        process.env.LOG_LEVEL ?? process.env.NODE_ENV === 'development'
+          ? 'debug'
+          : 'warn',
+    },
   })
 
   await fastify.register(redwoodFastifyWeb, {

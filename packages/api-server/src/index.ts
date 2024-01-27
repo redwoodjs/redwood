@@ -3,8 +3,7 @@
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-// @ts-expect-error TODO
-import * as webServerCLIConfig from '@redwoodjs/web-server/cli-config'
+import * as webServerCLIConfig from '@redwoodjs/web-server'
 
 import {
   apiCliOptions,
@@ -42,6 +41,7 @@ if (require.main === module) {
     .command(
       'web',
       webServerCLIConfig.description,
+      // @ts-expect-error just passing yargs though
       webServerCLIConfig.builder,
       webServerCLIConfig.handler
     )

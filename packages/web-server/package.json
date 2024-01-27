@@ -10,16 +10,12 @@
   "license": "MIT",
   "exports": {
     ".": {
-      "types": "./dist/webServer.d.ts",
-      "default": "./dist/webServer.js"
-    },
-    "./cli-config": {
       "types": "./dist/cliConfig.d.ts",
       "default": "./dist/cliConfig.js"
     },
     "./package.json": "./package.json"
   },
-  "types": "./dist/webServer.d.ts",
+  "types": "./dist/cliConfig.d.ts",
   "bin": {
     "rw-web-server": "./dist/bin.js"
   },
