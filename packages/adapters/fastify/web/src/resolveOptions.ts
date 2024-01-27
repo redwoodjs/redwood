@@ -1,5 +1,7 @@
 import { getConfig } from '@redwoodjs/project-config'
 
+import type { RedwoodFastifyWebOptions } from './types'
+
 export function resolveOptions(options: RedwoodFastifyWebOptions) {
   const redwood = options.redwood ?? {}
 

@@ -2,7 +2,7 @@ import path from 'path'
 
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-import { resolveOptions } from './web'
+import { resolveOptions } from './resolveOptions'
 
 let original_RWJS_CWD
 
