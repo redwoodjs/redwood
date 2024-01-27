@@ -90,8 +90,7 @@ export const bothServerHandler = async (options: BothServerArgs) => {
 
   let fastify = createFastifyInstance()
 
-  // @ts-expect-error TODO
-  await fastify.register(redwoodFastifyWeb, { redwood: options })
+  await fastify.register(redwoodFastifyWeb)
   fastify = await withFunctions(fastify, { ...options, apiRootPath })
 
   startFastifyServer({
