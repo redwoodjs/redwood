@@ -9,11 +9,11 @@
   "license": "MIT",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "types": "./dist/web.d.ts",
+      "default": "./dist/web.js"
     }
   },
-  "types": "./dist/index.d.ts",
+  "types": "./dist/web.d.ts",
   "files": [
     "dist"
   ],
