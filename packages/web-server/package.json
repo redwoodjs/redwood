@@ -16,7 +16,8 @@
     "./cli-config": {
       "types": "./dist/cliConfig.d.ts",
       "default": "./dist/cliConfig.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "types": "./dist/webServer.d.ts",
   "bin": {
