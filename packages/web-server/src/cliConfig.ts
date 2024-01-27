@@ -2,9 +2,11 @@ import type { Argv } from 'yargs'
 
 import { getConfig } from '@redwoodjs/project-config'
 
+import type { ParsedOptions } from './types'
+
 export const description = 'Start a server for serving only the web side'
 
-export function builder(yargs: Argv) {
+export function builder(yargs: Argv<ParsedOptions>) {
   yargs.options({
     port: {
       description: 'The port to listen on',
@@ -43,8 +45,7 @@ export function builder(yargs: Argv) {
   })
 }
 
-// @ts-expect-error TODO
-export async function handler(options) {
+export async function handler(options: ParsedOptions) {
   const { handler } = await import('./cliConfigHandler.js')
   await handler(options)
 }

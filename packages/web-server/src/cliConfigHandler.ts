@@ -5,10 +5,10 @@ import { config } from 'dotenv-defaults'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import type { ParsedOptions } from './types'
 import { serveWeb } from './webServer'
 
-// @ts-expect-error TODO
-export async function handler(options) {
+export async function handler(options: ParsedOptions) {
   if (!process.env.REDWOOD_ENV_FILES_LOADED) {
     config({
       path: path.join(getPaths().base, '.env'),

@@ -7,7 +7,7 @@ import {
 // Build the package
 await build({
   entryPointOptions: {
-    ignore: [...defaultIgnorePatterns, './src/bin.ts'],
+    ignore: [...defaultIgnorePatterns, './src/bin.ts', './src/types.ts'],
   },
 })
 

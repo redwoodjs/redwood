@@ -1,14 +1,10 @@
 import Fastify from 'fastify'
-import type { FastifyServerOptions } from 'fastify'
 
 import { redwoodFastifyWeb } from '@redwoodjs/fastify-web'
-import type { RedwoodFastifyWebOptions } from '@redwoodjs/fastify-web'
 
-type ServeWebOptions = {
-  logger?: FastifyServerOptions['logger']
-  port?: number
-  host?: string
-} & RedwoodFastifyWebOptions['redwood']
+import type { ServeWebOptions } from './types'
+
+export { ServeWebOptions }
 
 export async function serveWeb(options: ServeWebOptions = {}) {
   options.logger ??= {
@@ -25,6 +21,20 @@ export async function serveWeb(options: ServeWebOptions = {}) {
 
   await fastify.register(redwoodFastifyWeb, {
     redwood: options,
+  })
+
+  fastify.addHook('onListen', (done) => {
+    const addressInfo = fastify.server.address()
+
+    if (!addressInfo || typeof addressInfo === 'string') {
+      done()
+      return
+    }
+
+    fastify.log.info(
+      `Listening on http://${addressInfo.address}:${addressInfo.port}`
+    )
+    done()
   })
 
   await fastify.listen({
