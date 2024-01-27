@@ -47,8 +47,8 @@ describe('dist', () => {
             "type": "string",
           },
           "loadEnvFiles": {
-            "default": false,
-            "description": "Load .env and .env.defaults files",
+            "description": "Deprecated; env files are always loaded. This flag is a no-op",
+            "hidden": true,
             "type": "boolean",
           },
           "port": {
