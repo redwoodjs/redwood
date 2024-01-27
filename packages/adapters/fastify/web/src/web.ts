@@ -38,8 +38,6 @@ export async function redwoodFastifyWeb(
     })
   }
 
-  fastify.log.debug(`registering static assets at ${getPaths().web.dist}`)
-  fastify.log.debug(getPaths().web.dist)
   // Serve static assets
   fastify.register(fastifyStatic, {
     root: getPaths().web.dist,
