@@ -1,12 +1,13 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+// @ts-expect-error - The types don't have a `default` export, but the actual
+// module will do at runtime
 import jwt from 'jsonwebtoken'
 import { vi, beforeAll, afterAll, test, expect } from 'vitest'
 
 import { authDecoder } from '../decoder'
 
 vi.mock('jsonwebtoken', async (importOriginal) => {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  const originalJWT = await importOriginal<typeof import('jsonwebtoken')>()
+  const originalJWT = await importOriginal<typeof jwt>()
 
   return {
     ...originalJWT,
@@ -30,7 +31,7 @@ const req = {
   context: {} as LambdaContext,
 }
 
-let consoleError
+let consoleError: typeof console.error
 
 beforeAll(() => {
   consoleError = console.error

@@ -13,7 +13,7 @@ import fs from 'fs'
 
 import { vi, describe, test, expect, beforeEach } from 'vitest'
 
-import { getCompatibilityData } from '../version'
+import { getCompatibilityData } from '../version.js'
 
 const EXAMPLE_PACKUMENT = {
   _id: '@scope/package-name',

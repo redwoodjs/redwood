@@ -8,7 +8,7 @@ import { format } from 'prettier'
 import { prettierOptions, setTomlSetting } from '@redwoodjs/cli-helpers'
 import { getConfig, getPaths, resolveFile } from '@redwoodjs/project-config'
 
-import { runTransform } from '../fragments/runTransform'
+import { runTransform } from '../fragments/runTransform.js'
 
 export async function handler({ force }: { force: boolean }) {
   const tasks = new Listr(
