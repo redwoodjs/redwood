@@ -1,7 +1,10 @@
-import { build, defaultIgnorePatterns } from '../../../../buildDefaults.mjs'
+import { build, defaultBuildOptions } from '../../../../buildDefaults.mjs'
 
 await build({
-  entryPointOptions: {
-    ignore: [...defaultIgnorePatterns, './src/types.ts'],
+  buildOptions: {
+    ...defaultBuildOptions,
+    bundle: true,
+    entryPoints: ['./src/web.ts'],
+    packages: 'external',
   },
 })
