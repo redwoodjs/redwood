@@ -17,6 +17,10 @@ export function resolveOptions(options: RedwoodFastifyWebOptions) {
     delete redwoodOptions.apiHost
   }
 
+  if (redwoodOptions.apiUrl.trim() === '') {
+    throw new Error(`\`apiUrl\` cannot be an empty string`)
+  }
+
   if (
     redwoodOptions.apiProxyTarget &&
     !isFullyQualifiedUrl(redwoodOptions.apiProxyTarget)

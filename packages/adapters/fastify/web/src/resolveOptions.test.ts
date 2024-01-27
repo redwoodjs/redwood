@@ -29,32 +29,6 @@ describe('resolveOptions', () => {
   //  - fully-qualified
 
   describe('undefined apiUrl', () => {
-    it.skip('undefined apiProxyTarget', () => {
-      expect(() =>
-        resolveOptions({
-          redwood: {
-            apiUrl: undefined,
-            apiProxyTarget: undefined,
-          },
-        })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions']`
-      )
-    })
-
-    it.skip('empty apiProxyTarget', () => {
-      expect(() =>
-        resolveOptions({
-          redwood: {
-            apiUrl: undefined,
-            apiProxyTarget: '',
-          },
-        })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions']`
-      )
-    })
-
     it('relative apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
@@ -91,7 +65,7 @@ describe('resolveOptions', () => {
   })
 
   describe('empty apiUrl', () => {
-    it.skip('undefined apiProxyTarget', () => {
+    it('undefined apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
           redwood: {
@@ -100,11 +74,11 @@ describe('resolveOptions', () => {
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '']`
+        `[Error: \`apiUrl\` cannot be an empty string]`
       )
     })
 
-    it.skip('empty apiProxyTarget', () => {
+    it('empty apiProxyTarget', () => {
       expect(() =>
         resolveOptions({
           redwood: {
@@ -113,7 +87,7 @@ describe('resolveOptions', () => {
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '']`
+        `[Error: \`apiUrl\` cannot be an empty string]`
       )
     })
 
@@ -126,7 +100,7 @@ describe('resolveOptions', () => {
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you provide \`apiProxyTarget\`, it has to be a fully-qualified URL. \`apiProxyTarget\` is '/api']`
+        `[Error: \`apiUrl\` cannot be an empty string]`
       )
     })
 
@@ -139,36 +113,52 @@ describe('resolveOptions', () => {
           },
         })
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you provide \`apiProxyTarget\`, \`apiUrl\` has to be a relative URL. \`apiUrl\` is '']`
+        `[Error: \`apiUrl\` cannot be an empty string]`
       )
     })
   })
 
   describe('relative apiUrl', () => {
-    it.skip('undefined apiProxyTarget', () => {
-      expect(() =>
+    it('undefined apiProxyTarget', () => {
+      expect(
         resolveOptions({
           redwood: {
             apiUrl: '/api',
             apiProxyTarget: undefined,
           },
         })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/api']`
-      )
+      ).toMatchInlineSnapshot(`
+        {
+          "flags": {
+            "shouldRegisterApiUrl": true,
+          },
+          "redwoodOptions": {
+            "apiProxyTarget": undefined,
+            "apiUrl": "/api",
+          },
+        }
+      `)
     })
 
-    it.skip('empty apiProxyTarget', () => {
-      expect(() =>
+    it('empty apiProxyTarget', () => {
+      expect(
         resolveOptions({
           redwood: {
             apiUrl: '/api',
             apiProxyTarget: '',
           },
         })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/api']`
-      )
+      ).toMatchInlineSnapshot(`
+        {
+          "flags": {
+            "shouldRegisterApiUrl": true,
+          },
+          "redwoodOptions": {
+            "apiProxyTarget": "",
+            "apiUrl": "/api",
+          },
+        }
+      `)
     })
 
     it('relative apiProxyTarget', () => {
