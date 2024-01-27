@@ -18,7 +18,7 @@
       "default": "./dist/cliConfig.js"
     }
   },
-  "types": "./dist/index.d.ts",
+  "types": "./dist/webServer.d.ts",
   "bin": {
     "rw-web-server": "./dist/bin.js"
   },
