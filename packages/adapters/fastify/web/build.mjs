@@ -1,3 +1,7 @@
-import { build } from '../../../../buildDefaults.mjs'
+import { build, defaultIgnorePatterns } from '../../../../buildDefaults.mjs'
 
-await build()
+await build({
+  entryPointOptions: {
+    ignore: [...defaultIgnorePatterns, './src/types.ts'],
+  },
+})

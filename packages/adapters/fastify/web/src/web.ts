@@ -12,6 +12,8 @@ import { getPaths } from '@redwoodjs/project-config'
 import { resolveOptions } from './resolveOptions'
 import type { RedwoodFastifyWebOptions } from './types'
 
+export { RedwoodFastifyWebOptions }
+
 export async function redwoodFastifyWeb(
   fastify: FastifyInstance,
   opts: RedwoodFastifyWebOptions,
