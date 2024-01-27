@@ -19,13 +19,7 @@ export async function redwoodFastifyWeb(
   opts: RedwoodFastifyWebOptions,
   done: HookHandlerDoneFunction
 ) {
-  fastify.log.debug('opts')
-  fastify.log.debug(opts)
-
   const options = resolveOptions(opts)
-
-  fastify.log.debug('resolving options')
-  fastify.log.debug(options)
 
   await fastify.register(fastifyUrlData)
 
