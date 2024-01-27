@@ -267,7 +267,7 @@ describe('redwoodFastifyWeb', () => {
     })
   })
 
-  describe.only('serves an error at a misconfigured apiUrl', () => {
+  describe('serves an error at a misconfigured apiUrl', () => {
     it('handles the root path', async () => {
       const url = '/.redwood/functions/'
 
