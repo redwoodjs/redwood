@@ -2319,21 +2319,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/filter-operation-type@npm:5.0.3":
-  version: 5.0.3
-  resolution: "@envelop/filter-operation-type@npm:5.0.3"
+"@envelop/filter-operation-type@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@envelop/filter-operation-type@npm:6.0.0"
   dependencies:
     tslib: "npm:^2.5.0"
   peerDependencies:
-    "@envelop/core": ^4.0.3
+    "@envelop/core": ^5.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: c48af3ca4608e703b2825d2e2ee1d615f1b0e07c617f99b3dd76eabe84937970b5e5d9f99c3ccdfb30e05e263b0159f87fa86b763904bc80898a3ab7dde6e6e5
+  checksum: 9d454dd67da800293b6cfde9e49512e0c84261cdd65dc521ae4c472ce0a2b4a4645b4d39596e3d4157bac31b120fae1fc985cb94c5d8d07590f94fdbc36b9c7b
   languageName: node
   linkType: hard
 
-"@envelop/live-query@npm:6.0.3":
-  version: 6.0.3
-  resolution: "@envelop/live-query@npm:6.0.3"
+"@envelop/live-query@npm:7.0.0":
+  version: 7.0.0
+  resolution: "@envelop/live-query@npm:7.0.0"
   dependencies:
     "@graphql-tools/utils": "npm:^10.0.0"
     "@n1ru4l/graphql-live-query": "npm:^0.10.0"
@@ -2341,33 +2341,33 @@ __metadata:
     "@n1ru4l/in-memory-live-query-store": "npm:^0.10.0"
     tslib: "npm:^2.5.0"
   peerDependencies:
-    "@envelop/core": ^4.0.3
+    "@envelop/core": ^5.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: bf8648a68ad43ac90cdf5615601e2973f371e283e35f9e9232837d2948cc9e41e056b731512f4c9341b0c95e3ed37bf26fa7cb83dc94b76b7630c79ff04ad49a
+  checksum: b158af86ffd56fd54306aac39ad541de115f346bbf32ee9ec51e1feb383e45b4bdfd5a91ab3eca8a1fae05ed1d75cad6ceeeb6945e4f72b1bc5ac14a8fdc20c9
   languageName: node
   linkType: hard
 
-"@envelop/on-resolve@npm:3.0.3":
-  version: 3.0.3
-  resolution: "@envelop/on-resolve@npm:3.0.3"
+"@envelop/on-resolve@npm:4.1.0":
+  version: 4.1.0
+  resolution: "@envelop/on-resolve@npm:4.1.0"
   peerDependencies:
-    "@envelop/core": ^4.0.3
+    "@envelop/core": ^5.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 56e791a35b41a21f9f856f33c4d22de15876c1b40f97f50db1880e128ca6495affe1ab35689aa2c4ee30880daa1bde19fabc2a90af4af8d255502d7625ffba8b
+  checksum: 4eb454df4b446303711edd0cd31e707fec06337c2e8327c7987d279fef8785e47e47ffe72c7444b4650a83efbf3234c6b85f550a8044ca181dcd10c05dcb3650
   languageName: node
   linkType: hard
 
-"@envelop/testing@npm:6.0.3":
-  version: 6.0.3
-  resolution: "@envelop/testing@npm:6.0.3"
+"@envelop/testing@npm:7.0.0":
+  version: 7.0.0
+  resolution: "@envelop/testing@npm:7.0.0"
   dependencies:
     "@graphql-tools/utils": "npm:^10.0.0"
     tslib: "npm:^2.5.0"
   peerDependencies:
-    "@envelop/core": ^4.0.3
-    "@envelop/types": ^4.0.1
+    "@envelop/core": ^5.0.0
+    "@envelop/types": ^5.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 7397d0bb734397c9a2962e94440a3502f4772169eb6dc507439d1847cac0f9d4a3d170b0bf337a24a5f735fd796b135303afd485e87e2a3e94f24c6824069501
+  checksum: 1ce29b19f880a926aca1352c72e607bc3017eb46b416fbb523fd189beea033d6584f4ce884bede265aafaf4ca333c12a4e3d04628cf0d3b08ab119eaefcc4061
   languageName: node
   linkType: hard
 
@@ -8442,9 +8442,9 @@ __metadata:
     "@envelop/core": "npm:5.0.0"
     "@envelop/depth-limit": "npm:4.0.0"
     "@envelop/disable-introspection": "npm:6.0.0"
-    "@envelop/filter-operation-type": "npm:5.0.3"
-    "@envelop/on-resolve": "npm:3.0.3"
-    "@envelop/testing": "npm:6.0.3"
+    "@envelop/filter-operation-type": "npm:6.0.0"
+    "@envelop/on-resolve": "npm:4.1.0"
+    "@envelop/testing": "npm:7.0.0"
     "@envelop/types": "npm:5.0.0"
     "@escape.tech/graphql-armor": "npm:2.3.1"
     "@graphql-tools/merge": "npm:9.0.1"
@@ -8649,8 +8649,8 @@ __metadata:
   resolution: "@redwoodjs/realtime@workspace:packages/realtime"
   dependencies:
     "@envelop/core": "npm:5.0.0"
-    "@envelop/live-query": "npm:6.0.3"
-    "@envelop/testing": "npm:6.0.3"
+    "@envelop/live-query": "npm:7.0.0"
+    "@envelop/testing": "npm:7.0.0"
     "@envelop/types": "npm:5.0.0"
     "@graphql-tools/schema": "npm:10.0.2"
     "@graphql-tools/utils": "npm:10.0.11"
