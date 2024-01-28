@@ -8789,7 +8789,7 @@ __metadata:
     "@types/react-dom": "npm:18.2.15"
     core-js: "npm:3.34.0"
     graphql: "npm:16.8.1"
-    graphql-sse: "npm:2.4.0"
+    graphql-sse: "npm:2.5.2"
     graphql-tag: "npm:2.12.6"
     jest: "npm:29.7.0"
     nodemon: "npm:3.0.2"
@@ -20091,12 +20091,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-sse@npm:2.4.0, graphql-sse@npm:^2.0.0":
-  version: 2.4.0
-  resolution: "graphql-sse@npm:2.4.0"
+"graphql-sse@npm:2.5.2, graphql-sse@npm:^2.0.0":
+  version: 2.5.2
+  resolution: "graphql-sse@npm:2.5.2"
   peerDependencies:
     graphql: ">=0.11 <=16"
-  checksum: 8653b334653fe232a1632f3ec3aa1af1fe77369e43fe9fc4e8a1e113af5ea9db673279df671d74ced49bfcd8f61d24ec824e2381eab0eab85232a3a4b611dd48
+  checksum: 0ceb6fd4b858d9a89a3e77e15157b94cc04f8ed0077a1581169f9bd4e6114940a448f5bcc8cc22be0562056b5e0f515960b239cccf1e7907e708ed4da6f12279
   languageName: node
   linkType: hard
 
