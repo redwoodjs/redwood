@@ -70,14 +70,7 @@ export async function redwoodFastifyWeb(
       })
     }
 
-    // Make sure apiUrl starts and ends with a slash
-    const prefix = redwoodOptions.apiUrl.charAt(0) !== '/' ? '/' : ''
-    const suffix =
-      redwoodOptions.apiUrl.charAt(redwoodOptions.apiUrl.length - 1) !== '/'
-        ? '/'
-        : ''
-
-    const apiUrlWarningPath = `${prefix}${redwoodOptions.apiUrl}${suffix}`
+    const apiUrlWarningPath = coerceRootPath(redwoodOptions.apiUrl)
 
     fastify.all(apiUrlWarningPath, apiUrlHandler)
     fastify.all(`${apiUrlWarningPath}*`, apiUrlHandler)
