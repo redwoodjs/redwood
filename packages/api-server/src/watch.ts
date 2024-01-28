@@ -42,9 +42,16 @@ const argv = yargs(hideBin(process.argv))
 
 const rwjsPaths = getPaths()
 
-dotenv.config({
-  path: rwjsPaths.base,
-})
+if (!process.env.REDWOOD_ENV_FILES_LOADED) {
+  dotenv.config({
+    path: path.join(getPaths().base, '.env'),
+    // @ts-expect-error The types for dotenv-defaults are using an outdated version of dotenv
+    defaults: path.join(getPaths().base, '.env.defaults'),
+    multiline: true,
+  })
+
+  process.env.REDWOOD_ENV_FILES_LOADED = 'true'
+}
 
 let httpServerProcess: ChildProcess
 

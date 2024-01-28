@@ -44,6 +44,8 @@ if (process.env.RWJS_CWD && !process.env.REDWOOD_ENV_FILES_LOADED) {
     defaults: path.join(getPaths().base, '.env.defaults'),
     multiline: true,
   })
+
+  process.env.REDWOOD_ENV_FILES_LOADED = 'true'
 }
 
 export interface CreateServerOptions {
