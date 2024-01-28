@@ -1,23 +1,44 @@
-import fs from 'node:fs'
+import fs from 'fs-extra'
 
-import * as esbuild from 'esbuild'
-import fg from 'fast-glob'
+import {
+  build,
+  defaultBuildOptions,
+  defaultIgnorePatterns,
+} from '../../buildDefaults.mjs'
 
-const sourceFiles = fg.sync(['./src/**/*.ts'], { ignore: ['./src/__tests__'] })
+// This package uses the name of the bin as `scriptName` for Yargs to keep things in sync.
+// There should only be one bin entry for this to work.
+// Otherwise we have to rethink the code.
+const { bin } = await fs.readJSON('./package.json')
+const bins = Object.keys(bin).length
 
-const result = await esbuild.build({
-  entryPoints: sourceFiles,
-  outdir: 'dist',
+if (bins !== 1) {
+  console.error(
+    [
+      `Error: Expected exactly one bin entry; found ${bins}`,
+      './packages/web-server/src/bin.ts uses the bin entry as its scriptName',
+    ].join('\n')
+  )
+  process.exit(1)
+}
 
-  format: 'cjs',
-  platform: 'node',
-  target: ['node20'],
-
-  logLevel: 'info',
-
-  // For visualizing dist.
-  // See https://esbuild.github.io/api/#metafile and https://esbuild.github.io/analyze/.
-  metafile: true,
+// Build the package
+await build({
+  entryPointOptions: {
+    ignore: [...defaultIgnorePatterns, './src/bin.ts', './src/types.ts'],
+  },
 })
 
-fs.writeFileSync('meta.json', JSON.stringify(result.metafile, null, 2))
+// Build the bin
+await build({
+  buildOptions: {
+    ...defaultBuildOptions,
+    banner: {
+      js: '#!/usr/bin/env node',
+    },
+    bundle: true,
+    entryPoints: ['./src/bin.ts'],
+    packages: 'external',
+  },
+  metafileName: 'meta.bin.json',
+})

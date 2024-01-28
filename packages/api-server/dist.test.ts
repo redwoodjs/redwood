@@ -37,6 +37,7 @@ describe('dist', () => {
         "apiCliOptions": {
           "apiRootPath": {
             "alias": [
+              "api-root-path",
               "rootPath",
               "root-path",
             ],
@@ -46,8 +47,8 @@ describe('dist', () => {
             "type": "string",
           },
           "loadEnvFiles": {
-            "default": false,
-            "description": "Load .env and .env.defaults files",
+            "description": "Deprecated; env files are always loaded. This flag is a no-op",
+            "hidden": true,
             "type": "boolean",
           },
           "port": {
@@ -71,22 +72,7 @@ describe('dist', () => {
             "type": "string",
           },
         },
-        "webCliOptions": {
-          "apiHost": {
-            "alias": "api-host",
-            "desc": "Forward requests from the apiUrl, defined in redwood.toml to this host",
-            "type": "string",
-          },
-          "port": {
-            "alias": "p",
-            "default": 8910,
-            "type": "number",
-          },
-          "socket": {
-            "type": "string",
-          },
-        },
-        "webServerHandler": [Function],
+        "createServer": [Function],
       }
     `)
 

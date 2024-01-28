@@ -1,5 +1,7 @@
 import { basename, resolve } from 'path'
 
+import { describe, it, expect } from 'vitest'
+
 import { DefaultHost } from '../../hosts'
 import { URL_file } from '../../x/URL'
 import { RWProject } from '../RWProject'

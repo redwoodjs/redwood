@@ -72,9 +72,9 @@ export async function loadPlugins(yargs) {
   }
 
   // Order alphabetically but with @redwoodjs namespace first, orders the help output
-  const namespaces = Array.from(
-    thirdPartyPackages.map((p) => p.split('/')[0])
-  ).sort()
+  const namespaces = Array.from(thirdPartyPackages)
+    .map((p) => p.split('/')[0])
+    .sort()
   if (redwoodPackages.size > 0) {
     namespaces.unshift('@redwoodjs')
   }

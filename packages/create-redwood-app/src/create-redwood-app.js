@@ -38,7 +38,6 @@ const { telemetry } = Parser(hideBin(process.argv), {
 
 const tui = new RedwoodTUI()
 
-// Credit to esbuild: https://github.com/rtsao/esbuild/blob/c35a4cebf037237559213abc684504658966f9d6/lib/install.ts#L190-L199
 function isYarnBerryOrNewer() {
   const { npm_config_user_agent: npmConfigUserAgent } = process.env
 
@@ -173,7 +172,7 @@ async function executeCompatibilityCheck(templateDir) {
       if (response['override-engine-error'] === 'Quit install') {
         recordErrorViaTelemetry('User quit after engine check error')
         await shutdownTelemetry()
-        process.exit(1)
+        process.exit(0)
       }
     } catch (error) {
       recordErrorViaTelemetry('User cancelled install at engine check error')
@@ -250,7 +249,10 @@ async function installNodeModules(newAppDir) {
   })
   tui.startReactive(tuiContent)
 
-  const yarnInstallSubprocess = execa('yarn install', {
+  const oldCwd = process.cwd()
+  process.chdir(newAppDir)
+
+  const yarnInstallSubprocess = execa(`yarn install`, {
     shell: true,
     cwd: newAppDir,
   })
@@ -271,8 +273,11 @@ async function installNodeModules(newAppDir) {
     )
     recordErrorViaTelemetry(error)
     await shutdownTelemetry()
+    process.chdir(oldCwd)
     process.exit(1)
   }
+
+  process.chdir(oldCwd)
 
   tuiContent.update({
     header: '',
@@ -611,6 +616,11 @@ async function handleCommitMessagePreference(commitMessageFlag) {
 async function handleYarnInstallPreference(yarnInstallFlag) {
   // Handle case where flag is set
   if (yarnInstallFlag !== null) {
+    tui.drawText(
+      `${RedwoodStyling.green('✔')} ${
+        yarnInstallFlag ? 'Will' : 'Will not'
+      } run yarn install based on command line flag`
+    )
     return yarnInstallFlag
   }
 
@@ -680,6 +690,17 @@ async function createRedwoodApp() {
         'Enables sending telemetry events for this create command and all Redwood CLI commands https://telemetry.redwoodjs.com',
     })
 
+  const _isYarnBerryOrNewer = isYarnBerryOrNewer()
+
+  // Only add the yarn-install flag if the yarn version is >= 2
+  if (_isYarnBerryOrNewer) {
+    cli.option('yarn-install', {
+      default: null,
+      type: 'boolean',
+      describe: 'Install node modules. Skip via --no-yarn-install.',
+    })
+  }
+
   const parsedFlags = cli.parse()
 
   tui.drawText(
@@ -692,22 +713,12 @@ async function createRedwoodApp() {
     ].join('\n')
   )
 
-  const _isYarnBerryOrNewer = isYarnBerryOrNewer()
-
-  // Only permit the yarn install flag on yarn 1.
-  if (!_isYarnBerryOrNewer) {
-    cli.option('yarn-install', {
-      default: null,
-      type: 'boolean',
-      describe: 'Install node modules. Skip via --no-yarn-install.',
-    })
-  }
-
   // Extract the args as provided by the user in the command line
   // TODO: Make all flags have the 'flag' suffix
   const args = parsedFlags._
   const yarnInstallFlag =
-    parsedFlags['yarn-install'] ?? !_isYarnBerryOrNewer ? parsedFlags.yes : null
+    parsedFlags['yarn-install'] ??
+    (_isYarnBerryOrNewer ? parsedFlags.yes : null)
   const typescriptFlag = parsedFlags.typescript ?? parsedFlags.yes
   const overwrite = parsedFlags.overwrite
   const gitInitFlag = parsedFlags['git-init'] ?? parsedFlags.yes
@@ -747,7 +758,7 @@ async function createRedwoodApp() {
 
   let yarnInstall = false
 
-  if (!_isYarnBerryOrNewer) {
+  if (_isYarnBerryOrNewer) {
     yarnInstall = await handleYarnInstallPreference(yarnInstallFlag)
   }
 
@@ -765,7 +776,7 @@ async function createRedwoodApp() {
       .getActiveSpan()
       ?.setAttribute('yarn-install-time', Date.now() - yarnInstallStart)
   } else {
-    if (!_isYarnBerryOrNewer) {
+    if (_isYarnBerryOrNewer) {
       tui.drawText(`${RedwoodStyling.info('ℹ')} Skipped yarn install step`)
     }
   }

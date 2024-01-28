@@ -1,12 +1,20 @@
-import fs from 'fs'
+vi.mock('fs')
+vi.mock('node:fs', async () => {
+  const memfs = await import('memfs')
+  return {
+    ...memfs.fs,
+    default: memfs.fs,
+  }
+})
 
-import toml from '@iarna/toml'
+import * as fs from 'node:fs'
 
-import { updateTomlConfig, addEnvVar } from '../project' // Replace with the correct path to your module
+import * as toml from '@iarna/toml'
+import { vi, describe, beforeEach, afterEach, it, expect } from 'vitest'
 
-jest.mock('fs')
+import { updateTomlConfig, addEnvVar } from '../project.js'
 
-const defaultRedwoodToml = {
+const defaultRedwoodToml: Record<string, any> = {
   web: {
     title: 'Redwood App',
     port: 8910,
@@ -22,7 +30,7 @@ const getRedwoodToml = () => {
   return defaultRedwoodToml
 }
 
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', () => {
   return {
     getPaths: () => {
       return {
@@ -46,22 +54,22 @@ describe('addEnvVar', () => {
 
   describe('addEnvVar adds environment variables as part of a setup task', () => {
     beforeEach(() => {
-      jest.spyOn(fs, 'existsSync').mockImplementation(() => {
+      vi.spyOn(fs, 'existsSync').mockImplementation(() => {
         return true
       })
 
-      jest.spyOn(fs, 'readFileSync').mockImplementation(() => {
+      vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
         return envFileContent
       })
 
-      jest.spyOn(fs, 'writeFileSync').mockImplementation((envPath, envFile) => {
+      vi.spyOn(fs, 'writeFileSync').mockImplementation((envPath, envFile) => {
         expect(envPath).toContain('.env')
         return envFile
       })
     })
 
     afterEach(() => {
-      jest.restoreAllMocks()
+      vi.restoreAllMocks()
       envFileContent = ''
     })
 
@@ -120,24 +128,22 @@ describe('addEnvVar', () => {
 describe('updateTomlConfig', () => {
   describe('updateTomlConfig configures a new CLI plugin', () => {
     beforeEach(() => {
-      jest.spyOn(fs, 'existsSync').mockImplementation(() => {
+      vi.spyOn(fs, 'existsSync').mockImplementation(() => {
         return true
       })
 
-      jest.spyOn(fs, 'readFileSync').mockImplementation(() => {
+      vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
         return toml.stringify(defaultRedwoodToml)
       })
 
-      jest
-        .spyOn(fs, 'writeFileSync')
-        .mockImplementation((tomlPath, tomlFile) => {
-          expect(tomlPath).toContain('redwood.toml')
-          return tomlFile
-        })
+      vi.spyOn(fs, 'writeFileSync').mockImplementation((tomlPath, tomlFile) => {
+        expect(tomlPath).toContain('redwood.toml')
+        return tomlFile
+      })
     })
 
     afterEach(() => {
-      jest.restoreAllMocks()
+      vi.restoreAllMocks()
     })
 
     it('adds when experimental cli is not configured', () => {
@@ -148,7 +154,7 @@ describe('updateTomlConfig', () => {
     })
 
     it('adds when experimental cli has some plugins configured', () => {
-      defaultRedwoodToml['experimental'] = {
+      defaultRedwoodToml.experimental = {
         cli: {
           autoInstall: true,
           plugins: [
@@ -165,7 +171,7 @@ describe('updateTomlConfig', () => {
     })
 
     it('adds when experimental cli is setup but has no plugins configured', () => {
-      defaultRedwoodToml['experimental'] = {
+      defaultRedwoodToml.experimental = {
         cli: {
           autoInstall: true,
         },
@@ -179,7 +185,7 @@ describe('updateTomlConfig', () => {
     })
 
     it('adds package but keeps autoInstall false', () => {
-      defaultRedwoodToml['experimental'] = {
+      defaultRedwoodToml.experimental = {
         cli: {
           autoInstall: false,
         },
@@ -193,7 +199,7 @@ describe('updateTomlConfig', () => {
     })
 
     it('does not add duplicate place when experimental cli has that plugin configured', () => {
-      defaultRedwoodToml['experimental'] = {
+      defaultRedwoodToml.experimental = {
         cli: {
           autoInstall: true,
           plugins: [
