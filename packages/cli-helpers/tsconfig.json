@@ -5,9 +5,7 @@
     "module": "NodeNext",
     "baseUrl": ".",
     "rootDir": "src",
-    "outDir": "dist",
-    "emitDeclarationOnly": false,
-    "noEmit": true,
+    "outDir": "dist"
   },
   "include": ["src"],
   "references": [
