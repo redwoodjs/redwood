@@ -23,8 +23,8 @@ afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
 })
 
-let consoleWarnSpy: jest.SpyInstance<void, any>
-let consoleLogSpy: jest.SpyInstance<void, any>
+let consoleWarnSpy: jest.SpyInstance
+let consoleLogSpy: jest.SpyInstance
 
 describe('createServer', () => {
   // Create a server for most tests. Some that test initialization create their own

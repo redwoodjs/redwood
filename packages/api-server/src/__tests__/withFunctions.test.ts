@@ -8,7 +8,7 @@ console.log = jest.fn()
 console.warn = jest.fn()
 
 // Set up RWJS_CWD.
-let original_RWJS_CWD
+let original_RWJS_CWD: string | undefined
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
@@ -20,8 +20,8 @@ afterAll(() => {
 })
 
 // Set up and teardown the fastify instance for each test.
-let fastifyInstance
-let returnedFastifyInstance
+let fastifyInstance: ReturnType<typeof createFastifyInstance>
+let returnedFastifyInstance: Awaited<ReturnType<typeof withFunctions>>
 
 beforeAll(async () => {
   fastifyInstance = createFastifyInstance()
