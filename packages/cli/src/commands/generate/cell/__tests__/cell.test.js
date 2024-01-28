@@ -1,11 +1,13 @@
 globalThis.__dirname = __dirname
 import path from 'path'
 
+import { vi, describe, it, expect, test, beforeAll } from 'vitest'
+
 // Load mocks
 import '../../../../lib/test'
 import * as cell from '../cell'
 
-jest.mock('@redwoodjs/structure', () => {
+vi.mock('@redwoodjs/structure', () => {
   return {
     getProject: () => ({
       cells: [{ queryOperationName: 'AlreadyDefinedQueryName' }],

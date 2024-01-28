@@ -47,7 +47,7 @@ async function main() {
 
   const spinner = getFrameworkSpinner({ text: 'building and packing packages' })
 
-  await $`yarn nx run-many -t build:pack`
+  await $`yarn nx run-many -t build:pack --exclude create-redwood-app`
 
   spinner.text = 'moving tarballs'
 
@@ -90,7 +90,10 @@ async function main() {
     projectPackageJsonPath,
     {
       ...projectPackageJson,
-      resolutions,
+      resolutions: {
+        ...projectPackageJson.resolutions,
+        ...resolutions,
+      },
     },
     {
       spaces: 2,

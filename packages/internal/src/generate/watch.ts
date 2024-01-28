@@ -35,7 +35,7 @@ import {
 
 const rwjsPaths = getPaths()
 
-const watcher = chokidar.watch('**/src/**/*.{ts,js,jsx,tsx}', {
+const watcher = chokidar.watch('(web|api)/src/**/*.{ts,js,jsx,tsx}', {
   persistent: true,
   ignored: ['node_modules', '.redwood'],
   ignoreInitial: true,

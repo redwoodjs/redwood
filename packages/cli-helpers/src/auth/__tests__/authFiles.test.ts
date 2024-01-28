@@ -1,13 +1,13 @@
 // Have to use `var` here to avoid "Temporal Dead Zone" issues
 let mockBasePath = ''
-let mockIsTypeScriptProject = true
 globalThis.__dirname = __dirname
 
-jest.mock('../../lib/paths', () => {
+vi.mock('../../lib/paths', async (importOriginal) => {
   const path = require('path')
+  const originalPaths = await importOriginal<typeof LibPaths>()
 
   return {
-    ...jest.requireActual('../../lib/paths'),
+    ...originalPaths,
     getPaths: () => {
       const base = mockBasePath || '/mock/base/path'
 
@@ -22,17 +22,21 @@ jest.mock('../../lib/paths', () => {
   }
 })
 
-jest.mock('../../lib/project', () => ({
-  isTypeScriptProject: () => mockIsTypeScriptProject,
+vi.mock('../../lib/project', () => ({
+  isTypeScriptProject: vi.fn(),
 }))
 
-import path from 'path'
+import * as path from 'path'
 
-import { getPaths } from '../../lib/paths'
-import { apiSideFiles, generateUniqueFileNames } from '../authFiles'
+import { vi, beforeEach, it, expect } from 'vitest'
+
+import { getPaths } from '../../lib/paths.js'
+import type * as LibPaths from '../../lib/paths.js'
+import { isTypeScriptProject } from '../../lib/project.js'
+import { apiSideFiles, generateUniqueFileNames } from '../authFiles.js'
 
 beforeEach(() => {
-  mockIsTypeScriptProject = true
+  vi.mocked(isTypeScriptProject).mockReturnValue(true)
 })
 
 it('generates a record of TS files', () => {
@@ -51,7 +55,7 @@ it('generates a record of TS files', () => {
 })
 
 it('generates a record of JS files', () => {
-  mockIsTypeScriptProject = false
+  vi.mocked(isTypeScriptProject).mockReturnValue(false)
 
   const filePaths = Object.keys(
     apiSideFiles({

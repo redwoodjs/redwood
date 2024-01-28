@@ -1,41 +1,63 @@
 #!/usr/bin/env node
+
+import path from 'path'
+
+import { config } from 'dotenv-defaults'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
+import { getPaths } from '@redwoodjs/project-config'
+import * as webServerCLIConfig from '@redwoodjs/web-server'
+
 import {
   apiCliOptions,
-  webCliOptions,
   commonOptions,
   apiServerHandler,
-  webServerHandler,
   bothServerHandler,
 } from './cliHandlers'
 
 export * from './types'
 
-const positionalArgs = yargs(hideBin(process.argv)).parseSync()._
+if (!process.env.REDWOOD_ENV_FILES_LOADED) {
+  config({
+    path: path.join(getPaths().base, '.env'),
+    defaults: path.join(getPaths().base, '.env.defaults'),
+    multiline: true,
+  })
 
-// "bin": {
-//   "rw-api-server-watch": "./dist/watch.js",
-//   "rw-log-formatter": "./dist/logFormatter/bin.js",
-//   "rw-server": "./dist/index.js"
-// },
+  process.env.REDWOOD_ENV_FILES_LOADED = 'true'
+}
 
 if (require.main === module) {
-  if (positionalArgs.includes('api') && !positionalArgs.includes('web')) {
-    apiServerHandler(
-      yargs(hideBin(process.argv)).options(apiCliOptions).parseSync()
+  yargs(hideBin(process.argv))
+    .scriptName('rw-server')
+    .usage('usage: $0 <side>')
+    .strict()
+
+    .command(
+      '$0',
+      'Run both api and web servers',
+      // @ts-expect-error just passing yargs though
+      (yargs) => {
+        yargs.options(commonOptions)
+      },
+      bothServerHandler
     )
-  } else if (
-    positionalArgs.includes('web') &&
-    !positionalArgs.includes('api')
-  ) {
-    webServerHandler(
-      yargs(hideBin(process.argv)).options(webCliOptions).parseSync()
+    .command(
+      'api',
+      'Start server for serving only the api',
+      // @ts-expect-error just passing yargs though
+      (yargs) => {
+        yargs.options(apiCliOptions)
+      },
+      apiServerHandler
     )
-  } else {
-    bothServerHandler(
-      yargs(hideBin(process.argv)).options(commonOptions).parseSync()
+    .command(
+      'web',
+      webServerCLIConfig.description,
+      // @ts-expect-error just passing yargs though
+      webServerCLIConfig.builder,
+      webServerCLIConfig.handler
     )
-  }
+    .parse()
 }

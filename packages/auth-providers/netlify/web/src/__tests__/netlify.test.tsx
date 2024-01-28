@@ -1,5 +1,6 @@
 import { renderHook, act } from '@testing-library/react'
 import type * as NetlifyIdentityNS from 'netlify-identity-widget'
+import { vi, expect, it, beforeAll, beforeEach, describe } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
@@ -56,7 +57,7 @@ const netlifyIdentityMockClient: Partial<NetlifyIdentity> = {
   currentUser: () => loggedInUser || null,
 }
 
-const fetchMock = jest.fn()
+const fetchMock = vi.fn()
 fetchMock.mockImplementation(async (_url, options) => {
   const body = options?.body ? JSON.parse(options.body) : {}
 

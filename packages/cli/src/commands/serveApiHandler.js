@@ -6,15 +6,22 @@ import execa from 'execa'
 import { createFastifyInstance, redwoodFastifyAPI } from '@redwoodjs/fastify'
 import { getPaths } from '@redwoodjs/project-config'
 
-export const apiExperimentalServerFileHandler = async () => {
-  logExperimentalHeader()
-
-  await execa('yarn', ['node', path.join('dist', 'server.js')], {
-    cwd: getPaths().api.base,
-    stdio: 'inherit',
-    shell: true,
-  })
-  return
+export const apiServerFileHandler = async (argv) => {
+  await execa(
+    'yarn',
+    [
+      'node',
+      path.join('dist', 'server.js'),
+      '--port',
+      argv.port,
+      '--apiRootPath',
+      argv.apiRootPath,
+    ],
+    {
+      cwd: getPaths().api.base,
+      stdio: 'inherit',
+    }
+  )
 }
 
 export const apiServerHandler = async (options) => {
@@ -46,7 +53,7 @@ export const apiServerHandler = async (options) => {
     }
   }
 
-  fastify.listen(listenOptions)
+  const address = await fastify.listen(listenOptions)
 
   fastify.ready(() => {
     fastify.log.trace(
@@ -54,15 +61,14 @@ export const apiServerHandler = async (options) => {
       'Fastify server configuration'
     )
     fastify.log.trace(`Registered plugins \n${fastify.printPlugins()}`)
-    console.log(chalk.italic.dim('Took ' + (Date.now() - tsApiServer) + ' ms'))
 
-    const on = socket
-      ? socket
-      : chalk.magenta(`http://localhost:${port}${apiRootPath}`)
+    console.log(chalk.dim.italic('Took ' + (Date.now() - tsApiServer) + ' ms'))
 
-    console.log(`API listening on ${on}`)
-    const graphqlEnd = chalk.magenta(`${apiRootPath}graphql`)
-    console.log(`GraphQL endpoint at ${graphqlEnd}`)
+    const apiServer = chalk.magenta(`${address}${apiRootPath}`)
+    const graphqlEndpoint = chalk.magenta(`${apiServer}graphql`)
+
+    console.log(`API server listening at ${apiServer}`)
+    console.log(`GraphQL endpoint at ${graphqlEndpoint}`)
 
     sendProcessReady()
   })
@@ -70,20 +76,4 @@ export const apiServerHandler = async (options) => {
 
 function sendProcessReady() {
   return process.send && process.send('ready')
-}
-
-const separator = chalk.hex('#ff845e')(
-  '------------------------------------------------------------------'
-)
-
-function logExperimentalHeader() {
-  console.log(
-    [
-      separator,
-      `🧪 ${chalk.green('Experimental Feature')} 🧪`,
-      separator,
-      'Using the experimental API server file at api/dist/server.js',
-      separator,
-    ].join('\n')
-  )
 }

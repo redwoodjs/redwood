@@ -13,7 +13,7 @@ cd $projectPath
 
 set projectDirectory "redwood-app-prompt-node-greater-test"
 
-spawn yarn create-redwood-app
+spawn yarn create-redwood-app --no-yarn-install
 
 expect "How would you like to proceed?"
 # ❯ Override error and continue install

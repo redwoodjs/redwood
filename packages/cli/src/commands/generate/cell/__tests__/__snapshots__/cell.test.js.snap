@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`"equipment" with list flag 1`] = `
 "export const QUERY = gql\`
@@ -52,7 +52,7 @@ export const Success = ({ equipment }) => {
 "
 `;
 
-exports[`Custom Id Field files List cell creates a cell list component with a custom id field 1`] = `
+exports[`Custom Id Field files > List cell > creates a cell list component with a custom id field 1`] = `
 "export const QUERY = gql\`
   query CustomIdFieldsQuery {
     customIdFields {
@@ -81,7 +81,7 @@ export const Success = ({ customIdFields }) => {
 "
 `;
 
-exports[`Custom Id Field files List cell creates a cell list mock with a custom id field 1`] = `
+exports[`Custom Id Field files > List cell > creates a cell list mock with a custom id field 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   customIdFields: [{ uuid: '42' }, { uuid: '43' }, { uuid: '44' }],
@@ -89,7 +89,7 @@ export const standard = (/* vars, { ctx, req } */) => ({
 "
 `;
 
-exports[`Custom Id Field files List cell creates a cell list stories with a custom id field 1`] = `
+exports[`Custom Id Field files > List cell > creates a cell list stories with a custom id field 1`] = `
 "import { Loading, Empty, Failure, Success } from './CustomIdFieldsCell'
 import { standard } from './CustomIdFieldsCell.mock'
 
@@ -126,7 +126,7 @@ export const success = {
 "
 `;
 
-exports[`Custom Id Field files List cell creates a cell list test with a custom id field 1`] = `
+exports[`Custom Id Field files > List cell > creates a cell list test with a custom id field 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './CustomIdFieldsCell'
 import { standard } from './CustomIdFieldsCell.mock'
@@ -171,7 +171,7 @@ describe('CustomIdFieldsCell', () => {
 "
 `;
 
-exports[`Custom Id Field files Single cell creates a cell component with a custom id field 1`] = `
+exports[`Custom Id Field files > Single cell > creates a cell component with a custom id field 1`] = `
 "export const QUERY = gql\`
   query FindCustomIdFieldQuery($id: String!) {
     customIdField: customIdField(uuid: $id) {
@@ -194,7 +194,7 @@ export const Success = ({ customIdField }) => {
 "
 `;
 
-exports[`Custom Id Field files Single cell creates a cell mock with a custom id field 1`] = `
+exports[`Custom Id Field files > Single cell > creates a cell mock with a custom id field 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   customIdField: {
@@ -204,7 +204,7 @@ export const standard = (/* vars, { ctx, req } */) => ({
 "
 `;
 
-exports[`Custom Id Field files Single cell creates a cell stories with a custom id field 1`] = `
+exports[`Custom Id Field files > Single cell > creates a cell stories with a custom id field 1`] = `
 "import { Loading, Empty, Failure, Success } from './CustomIdFieldCell'
 import { standard } from './CustomIdFieldCell.mock'
 
@@ -241,7 +241,7 @@ export const success = {
 "
 `;
 
-exports[`Custom Id Field files Single cell creates a cell test with a custom id field 1`] = `
+exports[`Custom Id Field files > Single cell > creates a cell test with a custom id field 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './CustomIdFieldCell'
 import { standard } from './CustomIdFieldCell.mock'
@@ -286,7 +286,7 @@ describe('CustomIdFieldCell', () => {
 "
 `;
 
-exports[`Kebab case words creates a cell component with a kebabCase word name 1`] = `
+exports[`Kebab case words > creates a cell component with a kebabCase word name 1`] = `
 "export const QUERY = gql\`
   query FindUserProfileQuery($id: Int!) {
     userProfile: userProfile(id: $id) {
@@ -309,7 +309,7 @@ export const Success = ({ userProfile }) => {
 "
 `;
 
-exports[`Kebab case words creates a cell mock with a kebabCase word name 1`] = `
+exports[`Kebab case words > creates a cell mock with a kebabCase word name 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
@@ -319,7 +319,7 @@ export const standard = (/* vars, { ctx, req } */) => ({
 "
 `;
 
-exports[`Kebab case words creates a cell stories with a kebabCase word name 1`] = `
+exports[`Kebab case words > creates a cell stories with a kebabCase word name 1`] = `
 "import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
@@ -356,7 +356,7 @@ export const success = {
 "
 `;
 
-exports[`Kebab case words creates a cell test with a kebabCase word name 1`] = `
+exports[`Kebab case words > creates a cell test with a kebabCase word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
@@ -401,7 +401,7 @@ describe('UserProfileCell', () => {
 "
 `;
 
-exports[`Multiword files creates a cell component with a multi word name 1`] = `
+exports[`Multiword files > creates a cell component with a multi word name 1`] = `
 "export const QUERY = gql\`
   query FindUserProfileQuery($id: Int!) {
     userProfile: userProfile(id: $id) {
@@ -424,7 +424,7 @@ export const Success = ({ userProfile }) => {
 "
 `;
 
-exports[`Multiword files creates a cell mock with a multi word name 1`] = `
+exports[`Multiword files > creates a cell mock with a multi word name 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
@@ -434,7 +434,7 @@ export const standard = (/* vars, { ctx, req } */) => ({
 "
 `;
 
-exports[`Multiword files creates a cell stories with a multi word name 1`] = `
+exports[`Multiword files > creates a cell stories with a multi word name 1`] = `
 "import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
@@ -471,7 +471,7 @@ export const success = {
 "
 `;
 
-exports[`Multiword files creates a cell test with a multi word name 1`] = `
+exports[`Multiword files > creates a cell test with a multi word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
@@ -516,7 +516,7 @@ describe('UserProfileCell', () => {
 "
 `;
 
-exports[`Single word files creates a cell component with a single word name 1`] = `
+exports[`Single word files > creates a cell component with a single word name 1`] = `
 "export const QUERY = gql\`
   query FindUserQuery($id: Int!) {
     user: user(id: $id) {
@@ -539,7 +539,7 @@ export const Success = ({ user }) => {
 "
 `;
 
-exports[`Single word files creates a cell mock with a single word name 1`] = `
+exports[`Single word files > creates a cell mock with a single word name 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   user: {
@@ -549,7 +549,7 @@ export const standard = (/* vars, { ctx, req } */) => ({
 "
 `;
 
-exports[`Single word files creates a cell stories with a single word name 1`] = `
+exports[`Single word files > creates a cell stories with a single word name 1`] = `
 "import { Loading, Empty, Failure, Success } from './UserCell'
 import { standard } from './UserCell.mock'
 
@@ -586,7 +586,7 @@ export const success = {
 "
 `;
 
-exports[`Single word files creates a cell test with a single word name 1`] = `
+exports[`Single word files > creates a cell test with a single word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserCell'
 import { standard } from './UserCell.mock'
@@ -631,7 +631,7 @@ describe('UserCell', () => {
 "
 `;
 
-exports[`Snake case words creates a cell component with a snakeCase word name 1`] = `
+exports[`Snake case words > creates a cell component with a snakeCase word name 1`] = `
 "export const QUERY = gql\`
   query FindUserProfileQuery($id: Int!) {
     userProfile: userProfile(id: $id) {
@@ -654,7 +654,7 @@ export const Success = ({ userProfile }) => {
 "
 `;
 
-exports[`Snake case words creates a cell mock with a snakeCase word name 1`] = `
+exports[`Snake case words > creates a cell mock with a snakeCase word name 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
@@ -664,7 +664,7 @@ export const standard = (/* vars, { ctx, req } */) => ({
 "
 `;
 
-exports[`Snake case words creates a cell stories with a snakeCase word name 1`] = `
+exports[`Snake case words > creates a cell stories with a snakeCase word name 1`] = `
 "import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
@@ -701,7 +701,7 @@ export const success = {
 "
 `;
 
-exports[`Snake case words creates a cell test with a snakeCase word name 1`] = `
+exports[`Snake case words > creates a cell test with a snakeCase word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
@@ -918,7 +918,7 @@ export const Success = ({ members }: CellSuccessProps<MembersQuery>) => {
 "
 `;
 
-exports[`camelCase words creates a cell component with a camelCase word name 1`] = `
+exports[`camelCase words > creates a cell component with a camelCase word name 1`] = `
 "export const QUERY = gql\`
   query FindUserProfileQuery($id: Int!) {
     userProfile: userProfile(id: $id) {
@@ -941,7 +941,7 @@ export const Success = ({ userProfile }) => {
 "
 `;
 
-exports[`camelCase words creates a cell mock with a camelCase word name 1`] = `
+exports[`camelCase words > creates a cell mock with a camelCase word name 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
@@ -951,7 +951,7 @@ export const standard = (/* vars, { ctx, req } */) => ({
 "
 `;
 
-exports[`camelCase words creates a cell stories with a camelCase word name 1`] = `
+exports[`camelCase words > creates a cell stories with a camelCase word name 1`] = `
 "import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
@@ -988,7 +988,7 @@ export const success = {
 "
 `;
 
-exports[`camelCase words creates a cell test with a camelCase word name 1`] = `
+exports[`camelCase words > creates a cell test with a camelCase word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
