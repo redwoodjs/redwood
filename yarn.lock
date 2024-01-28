@@ -4723,15 +4723,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/redis-event-target@npm:2.0.0":
-  version: 2.0.0
-  resolution: "@graphql-yoga/redis-event-target@npm:2.0.0"
+"@graphql-yoga/redis-event-target@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@graphql-yoga/redis-event-target@npm:3.0.0"
   dependencies:
-    "@graphql-yoga/typed-event-target": "npm:^2.0.0"
+    "@graphql-yoga/typed-event-target": "npm:^3.0.0"
     "@whatwg-node/events": "npm:^0.1.0"
   peerDependencies:
     ioredis: ^5.0.6
-  checksum: e7c015be8eb122648ed17a82d2b87171b91d66673b6fbbf1f5f66ec55ca59ef84efaf739f1d90b4024b2164091475126db16fc1ac8b2316a0e67a91208cc85b2
+  checksum: 16035ed1c10b7f8a582edaa99a3d1fb740ea81e73203a176f9e5115144165a3b8661cdb00d7e7a3572100af65daac0ff3f6d565c897a9244d0e0e7d9d1f9fcdd
   languageName: node
   linkType: hard
 
@@ -4744,16 +4744,6 @@ __metadata:
     "@whatwg-node/events": "npm:^0.1.0"
     tslib: "npm:^2.5.2"
   checksum: 05e2f5cb23ea2b3cfe3737cf13fb98ebb3ded8a6a8239a170a6bd65b443109595e1bf2bbef94e3b18438b63dae18761bce4225eb437420bae651131457ede8b5
-  languageName: node
-  linkType: hard
-
-"@graphql-yoga/typed-event-target@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@graphql-yoga/typed-event-target@npm:2.0.0"
-  dependencies:
-    "@repeaterjs/repeater": "npm:^3.0.4"
-    tslib: "npm:^2.5.2"
-  checksum: 41d9c84f4935151d78a5c07db041d3a96f6ac62c10e71ea77f76b79fc00835dd042b5d91ef6cf67a7e766cd9718fa8ee301ee7b3a39d445c7618b3a23988df77
   languageName: node
   linkType: hard
 
@@ -8630,7 +8620,7 @@ __metadata:
     "@graphql-tools/utils": "npm:10.0.11"
     "@graphql-yoga/plugin-defer-stream": "npm:3.1.1"
     "@graphql-yoga/plugin-graphql-sse": "npm:3.1.1"
-    "@graphql-yoga/redis-event-target": "npm:2.0.0"
+    "@graphql-yoga/redis-event-target": "npm:3.0.0"
     "@graphql-yoga/subscription": "npm:5.0.0"
     "@n1ru4l/graphql-live-query": "npm:0.10.0"
     "@n1ru4l/in-memory-live-query-store": "npm:0.10.0"
