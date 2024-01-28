@@ -58,7 +58,7 @@
     "@types/node": "20.10.4",
     "@types/vscode": "1.79.1",
     "typescript": "5.3.3",
-    "vitest": "1.2.1"
+    "vitest": "1.2.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

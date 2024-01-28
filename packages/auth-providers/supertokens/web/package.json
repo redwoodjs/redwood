@@ -34,7 +34,7 @@
     "react": "0.0.0-experimental-e5205658f-20230913",
     "supertokens-auth-react": "0.34.0",
     "typescript": "5.3.3",
-    "vitest": "1.2.1"
+    "vitest": "1.2.2"
   },
   "peerDependencies": {
     "supertokens-auth-react": "0.34.0"
