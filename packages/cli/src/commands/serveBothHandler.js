@@ -4,12 +4,8 @@ import chalk from 'chalk'
 import concurrently from 'concurrently'
 import execa from 'execa'
 
-import {
-  coerceRootPath,
-  createFastifyInstance,
-  redwoodFastifyAPI,
-} from '@redwoodjs/fastify'
-import { redwoodFastifyWeb } from '@redwoodjs/fastify-web'
+import { createFastifyInstance, redwoodFastifyAPI } from '@redwoodjs/fastify'
+import { redwoodFastifyWeb, coerceRootPath } from '@redwoodjs/fastify-web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 

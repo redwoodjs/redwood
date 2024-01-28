@@ -206,9 +206,9 @@ export const builder = async (yargs) => {
 }
 
 // We'll clean this up later, but for now note that this function is
-// duplicated between this package and @redwoodjs/fastify
-// to avoid importing @redwoodjs/fastify when the CLI starts.
-export function coerceRootPath(path) {
+// duplicated between this package and @redwoodjs/fastify-web
+// to avoid importing @redwoodjs/fastify-web when the CLI starts.
+function coerceRootPath(path) {
   // Make sure that we create a root path that starts and ends with a slash (/)
   const prefix = path.charAt(0) !== '/' ? '/' : ''
   const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
