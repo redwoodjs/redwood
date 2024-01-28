@@ -6,7 +6,7 @@ export interface HttpServerParams {
   fastify: FastifyInstance
 }
 
-export const startServer = ({
+export const startServer = async ({
   port = 8911,
   socket,
   fastify,
@@ -14,7 +14,7 @@ export const startServer = ({
   const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
   const serverPort = socket ? parseInt(socket) : port
 
-  fastify.listen({ port: serverPort, host })
+  await fastify.listen({ port: serverPort, host })
 
   fastify.ready(() => {
     fastify.log.trace(

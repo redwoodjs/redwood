@@ -43,37 +43,35 @@ export const apiCliOptions = {
 export const apiServerHandler = async (options: ApiServerArgs) => {
   const { port, socket, apiRootPath } = options
   const tsApiServer = Date.now()
-  process.stdout.write(c.dim(c.italic('Starting API Server...\n')))
+  process.stdout.write(c.dim.italic('Starting API Server...\n'))
 
   let fastify = createFastifyInstance()
 
   // Import Server Functions.
   fastify = await withFunctions(fastify, options)
 
-  const http = startFastifyServer({
-    port,
-    socket,
-    fastify,
-  }).ready(() => {
-    console.log(c.italic(c.dim('Took ' + (Date.now() - tsApiServer) + ' ms')))
+  fastify = await startFastifyServer({ port, socket, fastify })
 
-    const on = socket
-      ? socket
-      : c.magenta(`http://localhost:${port}${apiRootPath}`)
-    console.log(`API listening on ${on}`)
-    const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
-    console.log(`GraphQL endpoint at ${graphqlEnd}`)
+  fastify.ready(() => {
+    console.log(c.dim.italic('Took ' + (Date.now() - tsApiServer) + ' ms'))
+
+    const apiServer = c.magenta(`${fastify.listeningOrigin}${apiRootPath}`)
+    const graphqlEndpoint = c.magenta(`${apiServer}graphql`)
+
+    console.log(`API server listening at ${apiServer}`)
+    console.log(`GraphQL endpoint at ${graphqlEndpoint}`)
+
     sendProcessReady()
   })
   process.on('exit', () => {
-    http?.close()
+    fastify?.close()
   })
 }
 
 export const bothServerHandler = async (options: BothServerArgs) => {
   const { port, socket } = options
   const tsServer = Date.now()
-  process.stdout.write(c.dim(c.italic('Starting API and Web Servers...\n')))
+  process.stdout.write(c.dim.italic('Starting API and Web Servers...\n'))
   const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
 
   let fastify = createFastifyInstance()
@@ -81,22 +79,19 @@ export const bothServerHandler = async (options: BothServerArgs) => {
   await fastify.register(redwoodFastifyWeb)
   fastify = await withFunctions(fastify, { ...options, apiRootPath })
 
-  startFastifyServer({
-    port,
-    socket,
-    fastify,
-  }).ready(() => {
-    console.log(c.italic(c.dim('Took ' + (Date.now() - tsServer) + ' ms')))
-    const on = socket
-      ? socket
-      : c.magenta(`http://localhost:${port}${apiRootPath}`)
-    const webServer = c.green(`http://localhost:${port}`)
-    const apiServer = c.magenta(`http://localhost:${port}`)
-    console.log(`Web server started on ${webServer}`)
-    console.log(`API serving from ${apiServer}`)
-    console.log(`API listening on ${on}`)
-    const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
-    console.log(`GraphQL endpoint at ${graphqlEnd}`)
+  fastify = await startFastifyServer({ port, socket, fastify })
+
+  fastify.ready(() => {
+    console.log(c.dim.italic('Took ' + (Date.now() - tsServer) + ' ms'))
+
+    const webServer = c.green(fastify.listeningOrigin)
+    const apiServer = c.magenta(`${fastify.listeningOrigin}${apiRootPath}`)
+    const graphqlEndpoint = c.magenta(`${apiServer}graphql`)
+
+    console.log(`Web server listening at ${webServer}`)
+    console.log(`API server listening at ${apiServer}`)
+    console.log(`GraphQL endpoint at ${graphqlEndpoint}`)
+
     sendProcessReady()
   })
 }
