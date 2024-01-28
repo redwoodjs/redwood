@@ -14,10 +14,11 @@ import type {
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import { coerceRootPath } from './helpers'
 import { resolveOptions } from './resolveOptions'
 import type { RedwoodFastifyWebOptions } from './types'
 
-export { RedwoodFastifyWebOptions }
+export { coerceRootPath, RedwoodFastifyWebOptions }
 
 export async function redwoodFastifyWeb(
   fastify: FastifyInstance,
@@ -70,14 +71,7 @@ export async function redwoodFastifyWeb(
       })
     }
 
-    // Make sure apiUrl starts and ends with a slash
-    const prefix = redwoodOptions.apiUrl.charAt(0) !== '/' ? '/' : ''
-    const suffix =
-      redwoodOptions.apiUrl.charAt(redwoodOptions.apiUrl.length - 1) !== '/'
-        ? '/'
-        : ''
-
-    const apiUrlWarningPath = `${prefix}${redwoodOptions.apiUrl}${suffix}`
+    const apiUrlWarningPath = coerceRootPath(redwoodOptions.apiUrl)
 
     fastify.all(apiUrlWarningPath, apiUrlHandler)
     fastify.all(`${apiUrlWarningPath}*`, apiUrlHandler)

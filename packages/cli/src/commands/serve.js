@@ -4,6 +4,7 @@ import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+import { coerceRootPath } from '@redwoodjs/fastify-web/helpers'
 import * as webServerCLIConfig from '@redwoodjs/web-server'
 
 import { getPaths, getConfig } from '../lib'
@@ -180,15 +181,4 @@ export const builder = async (yargs) => {
         'https://redwoodjs.com/docs/cli-commands#serve'
       )}`
     )
-}
-
-// We'll clean this up later, but for now note that this function is
-// duplicated between this package and @redwoodjs/fastify
-// to avoid importing @redwoodjs/fastify when the CLI starts.
-export function coerceRootPath(path) {
-  // Make sure that we create a root path that starts and ends with a slash (/)
-  const prefix = path.charAt(0) !== '/' ? '/' : ''
-  const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
-
-  return `${prefix}${path}${suffix}`
 }

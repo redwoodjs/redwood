@@ -8140,6 +8140,7 @@ __metadata:
     "@redwoodjs/api-server": "npm:6.0.7"
     "@redwoodjs/cli-helpers": "npm:6.0.7"
     "@redwoodjs/fastify": "npm:6.0.7"
+    "@redwoodjs/fastify-web": "npm:6.0.7"
     "@redwoodjs/internal": "npm:6.0.7"
     "@redwoodjs/prerender": "npm:6.0.7"
     "@redwoodjs/project-config": "npm:6.0.7"
