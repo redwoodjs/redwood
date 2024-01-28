@@ -11,6 +11,10 @@
     ".": {
       "types": "./dist/web.d.ts",
       "default": "./dist/web.js"
+    },
+    "./helpers": {
+      "types": "./dist/helpers.d.ts",
+      "default": "./dist/helpers.js"
     }
   },
   "types": "./dist/web.d.ts",
