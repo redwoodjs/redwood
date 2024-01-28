@@ -2357,17 +2357,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/testing@npm:6.0.3":
-  version: 6.0.3
-  resolution: "@envelop/testing@npm:6.0.3"
+"@envelop/testing@npm:7.0.0":
+  version: 7.0.0
+  resolution: "@envelop/testing@npm:7.0.0"
   dependencies:
     "@graphql-tools/utils": "npm:^10.0.0"
     tslib: "npm:^2.5.0"
   peerDependencies:
-    "@envelop/core": ^4.0.3
-    "@envelop/types": ^4.0.1
+    "@envelop/core": ^5.0.0
+    "@envelop/types": ^5.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 7397d0bb734397c9a2962e94440a3502f4772169eb6dc507439d1847cac0f9d4a3d170b0bf337a24a5f735fd796b135303afd485e87e2a3e94f24c6824069501
+  checksum: 1ce29b19f880a926aca1352c72e607bc3017eb46b416fbb523fd189beea033d6584f4ce884bede265aafaf4ca333c12a4e3d04628cf0d3b08ab119eaefcc4061
   languageName: node
   linkType: hard
 
@@ -8444,7 +8444,7 @@ __metadata:
     "@envelop/disable-introspection": "npm:5.0.3"
     "@envelop/filter-operation-type": "npm:5.0.3"
     "@envelop/on-resolve": "npm:3.0.3"
-    "@envelop/testing": "npm:6.0.3"
+    "@envelop/testing": "npm:7.0.0"
     "@envelop/types": "npm:5.0.0"
     "@escape.tech/graphql-armor": "npm:2.3.1"
     "@graphql-tools/merge": "npm:9.0.1"
@@ -8650,7 +8650,7 @@ __metadata:
   dependencies:
     "@envelop/core": "npm:5.0.0"
     "@envelop/live-query": "npm:6.0.3"
-    "@envelop/testing": "npm:6.0.3"
+    "@envelop/testing": "npm:7.0.0"
     "@envelop/types": "npm:5.0.0"
     "@graphql-tools/schema": "npm:10.0.2"
     "@graphql-tools/utils": "npm:10.0.11"
