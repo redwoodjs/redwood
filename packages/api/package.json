@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.6",
-    "@prisma/client": "5.7.0",
+    "@prisma/client": "5.8.1",
     "@whatwg-node/fetch": "0.9.14",
     "core-js": "3.34.0",
     "humanize-string": "2.1.0",
