@@ -6,18 +6,10 @@
     "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist",
-    "emitDeclarationOnly": false,
-    "noEmit": true,
   },
   "include": ["src"],
   "references": [
     { "path": "../telemetry" },
     { "path": "../project-config" }
   ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "**/__mocks__",
-    "**/__tests__/fixtures",
-  ]
 }
