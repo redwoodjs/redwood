@@ -22,21 +22,21 @@ export function builder(yargs: Argv<ParsedOptions>) {
 
     apiUrl: {
       description:
-        'Relative URL for proxying requests from or fully-qualified URL to the API server',
+        'Relative URL for proxying requests from or a fully-qualified URL to the API server',
       type: 'string',
       alias: 'api-url',
       default: getConfig().web.apiUrl,
     },
     apiProxyTarget: {
       description:
-        'Forward requests from the apiUrl to this host. apiUrl must be a relative URL',
+        'Forward requests from the apiUrl to this target. apiUrl must be a relative URL',
       type: 'string',
       alias: 'api-proxy-target',
     },
     // Deprecated alias of `apiProxyTarget`
     apiHost: {
       description:
-        '[Deprecated; use apiProxyTarget] Forward requests from the apiUrl to this host. apiUrl must be a relative URL',
+        '[Deprecated; use apiProxyTarget] Forward requests from the apiUrl to this target. apiUrl must be a relative URL',
       type: 'string',
       alias: 'api-host',
       deprecated: true,

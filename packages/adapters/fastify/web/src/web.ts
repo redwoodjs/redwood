@@ -86,8 +86,6 @@ export async function redwoodFastifyWeb(
   // If `apiProxyTarget` is set, proxy requests from `apiUrl` to `apiProxyTarget`.
   // In this case, `apiUrl` has to be relative; `resolveOptions` above throws if it's not
   if (redwoodOptions.apiProxyTarget) {
-    fastify.log.debug('registering proxy')
-
     fastify.register(httpProxy, {
       prefix: redwoodOptions.apiUrl,
       upstream: redwoodOptions.apiProxyTarget,

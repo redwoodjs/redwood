@@ -124,7 +124,7 @@ ENV NODE_ENV=production \
     API_PROXY_TARGET=http://api:8911
 
 # We use the shell form here for variable expansion.
-CMD "node_modules/.bin/rw-web-server" "--apiProxyTarget" "$API_PROXY_TARGET"
+CMD "node_modules/.bin/rw-web-server" "--api-proxy-target" "$API_PROXY_TARGET"
 
 # console
 # ------------------------------------------------
