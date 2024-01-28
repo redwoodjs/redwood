@@ -35,7 +35,7 @@
     "@redwoodjs/project-config": "6.0.7",
     "chalk": "4.1.2",
     "dotenv-defaults": "5.0.2",
-    "fastify": "4.24.3",
+    "fastify": "4.25.2",
     "yargs": "17.7.2"
   },
   "devDependencies": {
