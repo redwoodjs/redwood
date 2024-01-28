@@ -41,7 +41,7 @@
     "@types/yargs-parser": "21.0.3",
     "glob": "10.3.10",
     "typescript": "5.3.3",
-    "vitest": "1.2.1"
+    "vitest": "1.2.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
