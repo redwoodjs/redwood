@@ -49,7 +49,7 @@
     "@babel/cli": "7.23.4",
     "@babel/core": "^7.22.20",
     "@envelop/testing": "6.0.3",
-    "@envelop/types": "4.0.1",
+    "@envelop/types": "5.0.0",
     "@redwoodjs/project-config": "6.0.7",
     "@redwoodjs/realtime": "6.0.7",
     "@types/jsonwebtoken": "9.0.5",
