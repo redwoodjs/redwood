@@ -35,8 +35,8 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/cli": "7.23.4",
-    "@babel/runtime-corejs3": "7.23.6",
+    "@babel/cli": "7.23.9",
+    "@babel/runtime-corejs3": "7.23.9",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.11",
     "@redwoodjs/cli": "6.0.7",
     "@redwoodjs/eslint-config": "6.0.7",

@@ -23,11 +23,11 @@
     "test:watch": "vitest watch src"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.6",
+    "@babel/runtime-corejs3": "7.23.9",
     "core-js": "3.34.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.4",
+    "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
     "@supabase/supabase-js": "2.39.0",
     "@types/react": "18.2.37",

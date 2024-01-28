@@ -29,7 +29,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.6",
+    "@babel/runtime-corejs3": "7.23.9",
     "@fastify/url-data": "5.4.0",
     "@redwoodjs/context": "6.0.7",
     "@redwoodjs/fastify-web": "6.0.7",
@@ -52,7 +52,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.4",
+    "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
     "@types/aws-lambda": "8.10.126",
     "@types/lodash": "4.14.201",
