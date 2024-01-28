@@ -11,7 +11,7 @@ import type { ParsedOptions } from './types'
 
 export async function serveWeb(options: ParsedOptions = {}) {
   const start = Date.now()
-  console.log(chalk.italic.dim('Starting Web Server...'))
+  console.log(chalk.dim.italic('Starting Web Server...'))
 
   const distIndexExists = await fs.pathExists(
     path.join(getPaths().web.dist, 'index.html')
@@ -49,5 +49,5 @@ export async function serveWeb(options: ParsedOptions = {}) {
   })
 
   console.log(chalk.italic.dim('Took ' + (Date.now() - start) + ' ms'))
-  console.log(`Server listening at ${chalk.green(address)}`)
+  console.log(`Web server listening at ${chalk.green(address)}`)
 }
