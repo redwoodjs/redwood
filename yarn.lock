@@ -2304,15 +2304,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/filter-operation-type@npm:5.0.3":
-  version: 5.0.3
-  resolution: "@envelop/filter-operation-type@npm:5.0.3"
+"@envelop/filter-operation-type@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@envelop/filter-operation-type@npm:6.0.0"
   dependencies:
     tslib: "npm:^2.5.0"
   peerDependencies:
-    "@envelop/core": ^4.0.3
+    "@envelop/core": ^5.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: c48af3ca4608e703b2825d2e2ee1d615f1b0e07c617f99b3dd76eabe84937970b5e5d9f99c3ccdfb30e05e263b0159f87fa86b763904bc80898a3ab7dde6e6e5
+  checksum: 9d454dd67da800293b6cfde9e49512e0c84261cdd65dc521ae4c472ce0a2b4a4645b4d39596e3d4157bac31b120fae1fc985cb94c5d8d07590f94fdbc36b9c7b
   languageName: node
   linkType: hard
 
@@ -8424,7 +8424,7 @@ __metadata:
     "@envelop/core": "npm:5.0.0"
     "@envelop/depth-limit": "npm:3.0.3"
     "@envelop/disable-introspection": "npm:6.0.0"
-    "@envelop/filter-operation-type": "npm:5.0.3"
+    "@envelop/filter-operation-type": "npm:6.0.0"
     "@envelop/on-resolve": "npm:3.0.3"
     "@envelop/testing": "npm:7.0.0"
     "@envelop/types": "npm:5.0.0"
