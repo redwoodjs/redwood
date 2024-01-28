@@ -39,7 +39,7 @@
     "@types/envinfo": "7.8.3",
     "@types/uuid": "9.0.7",
     "@types/yargs": "17.0.32",
-    "vitest": "1.2.1"
+    "vitest": "1.2.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -33,7 +33,7 @@
     "@babel/core": "^7.22.20",
     "@prisma/internals": "5.8.1",
     "esbuild": "0.20.0",
-    "vitest": "1.2.1"
+    "vitest": "1.2.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
