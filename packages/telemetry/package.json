@@ -21,13 +21,8 @@
     "test": "vitest run src",
     "test:watch": "vitest watch src"
   },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/dist/"
-    ]
-  },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.6",
+    "@babel/runtime-corejs3": "7.23.9",
     "@redwoodjs/project-config": "6.0.7",
     "@redwoodjs/structure": "6.0.7",
     "@whatwg-node/fetch": "0.9.14",
@@ -39,7 +34,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.4",
+    "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
     "@types/envinfo": "7.8.3",
     "@types/uuid": "9.0.7",

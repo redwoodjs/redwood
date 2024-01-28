@@ -1,22 +1,16 @@
 let mockExecutedTaskTitles: Array<string> = []
 let mockSkippedTaskTitles: Array<string> = []
 
-jest.mock('fs', () => require('memfs').fs)
-jest.mock('node:fs', () => require('memfs').fs)
-jest.mock('execa')
+vi.mock('fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
+vi.mock('node:fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
+vi.mock('execa')
 // The jscodeshift parts are tested by another test
-jest.mock('../../fragments/runTransform', () => {
-  return {
-    runTransform: () => {
-      return {}
-    },
-  }
-})
+vi.mock('../../fragments/runTransform', () => ({ runTransform: () => ({}) }))
 
-jest.mock('listr2', () => {
+vi.mock('listr2', () => {
   return {
     // Return a constructor function, since we're calling `new` on Listr
-    Listr: jest.fn().mockImplementation((tasks: Array<any>) => {
+    Listr: vi.fn().mockImplementation((tasks: Array<any>) => {
       return {
         run: async () => {
           mockExecutedTaskTitles = []
@@ -39,11 +33,13 @@ jest.mock('listr2', () => {
   }
 })
 
+import type fs from 'node:fs'
 import path from 'node:path'
 
-import { vol } from 'memfs'
+import { vol, fs as memfsFs } from 'memfs'
+import { vi, expect, it, describe, beforeAll, afterAll } from 'vitest'
 
-import { handler } from '../trustedDocumentsHandler'
+import { handler } from '../trustedDocumentsHandler.js'
 
 // Set up RWJS_CWD
 let original_RWJS_CWD: string | undefined
@@ -51,11 +47,11 @@ const APP_PATH = '/redwood-app'
 
 const tomlFixtures: Record<string, string> = {}
 
-beforeAll(() => {
+beforeAll(async () => {
   original_RWJS_CWD = process.env.RWJS_CWD
   process.env.RWJS_CWD = APP_PATH
 
-  const actualFs = jest.requireActual('fs')
+  const actualFs = await vi.importActual<typeof fs>('fs')
   const tomlFixturesPath = path.join(__dirname, '__fixtures__', 'toml')
 
   tomlFixtures.default = actualFs.readFileSync(
@@ -96,12 +92,12 @@ beforeAll(() => {
 
 afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
-  jest.resetAllMocks()
-  jest.resetModules()
+  vi.resetAllMocks()
+  vi.resetModules()
 })
 
 // Silence console.info
-console.info = jest.fn()
+console.info = vi.fn()
 
 describe('Trusted documents setup', () => {
   it('runs all tasks', async () => {

@@ -10,6 +10,7 @@
       "!{projectRoot}/**/*.test.{js,jsx,ts,tsx}",
       "{workspaceRoot}/babel.config.js",
       "{workspaceRoot}/tsconfig.json",
+      "{workspaceRoot}/buildDefaults.mjs",
       {
         "runtime": "node -v"
       },

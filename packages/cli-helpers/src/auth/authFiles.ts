@@ -3,9 +3,9 @@ import path from 'path'
 
 import pascalcase from 'pascalcase'
 
-import { transformTSToJS } from '../lib'
-import { getPaths } from '../lib/paths'
-import { isTypeScriptProject } from '../lib/project'
+import { transformTSToJS } from '../lib/index.js'
+import { getPaths } from '../lib/paths.js'
+import { isTypeScriptProject } from '../lib/project.js'
 
 interface FilesArgs {
   basedir: string

@@ -64,7 +64,7 @@
     "test:watch": "vitest watch src"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.6",
+    "@babel/runtime-corejs3": "7.23.9",
     "@redwoodjs/internal": "6.0.7",
     "@redwoodjs/project-config": "6.0.7",
     "@redwoodjs/web": "6.0.7",
@@ -85,7 +85,7 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.4",
+    "@babel/cli": "7.23.9",
     "@types/busboy": "^1",
     "@types/express": "4",
     "@types/react": "18.2.37",

@@ -1,3 +1,5 @@
+import { describe, test } from 'vitest'
+
 describe('trusted-documents graphql handler transform', () => {
   test('Default handler', async () => {
     await matchFolderTransform('graphqlTransform', 'graphql', {
