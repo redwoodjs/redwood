@@ -21,7 +21,7 @@
     "build": "yarn build:js && yarn build:types",
     "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
     "build:pack": "yarn pack -o redwoodjs-api-server.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose tsconfig.build.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "fix:permissions": "chmod +x dist/index.js; chmod +x dist/watch.js",
     "prepublishOnly": "NODE_ENV=production yarn build",
