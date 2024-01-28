@@ -17,7 +17,7 @@ jest.mock('fastify', () => {
 console.log = jest.fn()
 
 // Set up RWJS_CWD.
-let original_RWJS_CWD
+let original_RWJS_CWD: string | undefined
 const FIXTURE_PATH = '/redwood-app'
 
 beforeAll(() => {
