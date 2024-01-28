@@ -41,6 +41,7 @@
     "@redwoodjs/api-server": "6.0.7",
     "@redwoodjs/cli-helpers": "6.0.7",
     "@redwoodjs/fastify": "6.0.7",
+    "@redwoodjs/fastify-web": "6.0.7",
     "@redwoodjs/internal": "6.0.7",
     "@redwoodjs/prerender": "6.0.7",
     "@redwoodjs/project-config": "6.0.7",

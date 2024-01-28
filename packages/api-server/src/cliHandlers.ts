@@ -1,6 +1,6 @@
 import c from 'ansi-colors'
 
-import { redwoodFastifyWeb } from '@redwoodjs/fastify-web'
+import { redwoodFastifyWeb, coerceRootPath } from '@redwoodjs/fastify-web'
 import { getConfig } from '@redwoodjs/project-config'
 
 import createFastifyInstance from './fastify'
@@ -99,14 +99,6 @@ export const bothServerHandler = async (options: BothServerArgs) => {
     console.log(`GraphQL endpoint at ${graphqlEnd}`)
     sendProcessReady()
   })
-}
-
-function coerceRootPath(path: string) {
-  // Make sure that we create a root path that starts and ends with a slash (/)
-  const prefix = path.charAt(0) !== '/' ? '/' : ''
-  const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
-
-  return `${prefix}${path}${suffix}`
 }
 
 // Temporarily here till we refactor server code
