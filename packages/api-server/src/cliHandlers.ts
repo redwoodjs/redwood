@@ -43,7 +43,7 @@ export const apiCliOptions = {
 export const apiServerHandler = async (options: ApiServerArgs) => {
   const { port, socket, apiRootPath } = options
   const tsApiServer = Date.now()
-  process.stdout.write(c.dim.italic('Starting API Server...\n'))
+  console.log(c.dim.italic('Starting API Server...'))
 
   let fastify = createFastifyInstance()
 
@@ -83,7 +83,7 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
 export const bothServerHandler = async (options: BothServerArgs) => {
   const { port, socket } = options
   const tsServer = Date.now()
-  process.stdout.write(c.dim.italic('Starting API and Web Servers...\n'))
+  console.log(c.dim.italic('Starting API and Web Servers...'))
   const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
 
   let fastify = createFastifyInstance()

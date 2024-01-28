@@ -85,7 +85,7 @@ const buildAndRestart = async ({
     killApiServer()
 
     const buildTs = Date.now()
-    process.stdout.write(c.dim.italic('Building... '))
+    console.log(c.dim.italic('Building...'))
 
     if (clean) {
       await cleanApiBuild()
