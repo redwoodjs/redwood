@@ -71,7 +71,7 @@ if (!apiUrl) {
 ////////////////
 
 // `yarn rw serve` and variants
-describe.skip.each([
+describe.each([
   [[commandStrings['@redwoodjs/cli'], 'serve']],
   [commandStrings['@redwoodjs/api-server']],
 ])('serve both (%s)', (commandString) => {
@@ -120,13 +120,10 @@ describe.skip.each([
     expect(apiRes.status).toEqual(200)
     expect(apiBody).toEqual({ data: 'hello function' })
   })
-
-  it.todo("doesn't respect api.port in redwood.toml")
-  it.todo('respects web.port in redwood.toml')
 })
 
 // `yarn rw serve api` and variants
-describe.skip.each([
+describe.each([
   [[commandStrings['@redwoodjs/cli'], 'serve', 'api']],
   [[commandStrings['@redwoodjs/api-server'], 'api']],
 ])('serve api (%s)', (commandString) => {
@@ -166,13 +163,10 @@ describe.skip.each([
     expect(res.status).toEqual(200)
     expect(body).toEqual({ data: 'hello function' })
   })
-
-  it.todo('respects api.port in redwood.toml')
-  it.todo("apiRootPath isn't affected by apiUrl")
 })
 
 // `yarn rw serve web` and variants
-describe.only.each([
+describe.each([
   [[`${commandStrings['@redwoodjs/cli']}`, 'serve', 'web']],
   [[`${commandStrings['@redwoodjs/api-server']}`, 'web']],
   [commandStrings['@redwoodjs/web-server']],
@@ -182,18 +176,30 @@ describe.only.each([
     expect(stdout).toMatchSnapshot()
   })
 
-  it.skip("fails if apiHost isn't set and apiUrl isn't fully qualified", async () => {
-    try {
-      await $`yarn node ${commandString}`
-      expect(true).toEqual(false)
-    } catch (p) {
-      expect(p.exitCode).not.toEqual(0)
-      expect(p.stdout).toEqual('')
-      expect(p.stderr).toMatchSnapshot()
-    }
+  it("works by default; registers a warning at apiUrl", async () => {
+    p = $`yarn node ${commandString}`
+    await new Promise((r) => setTimeout(r, TIMEOUT))
+
+    // it serves some page
+    const res = await fetch('http://localhost:8910/about')
+    const body = await res.text()
+
+    expect(res.status).toEqual(200)
+    expect(body).toEqual(
+      await fs.readFile(
+        path.join(__dirname, './fixtures/redwood-app/web/dist/about.html'),
+        'utf-8'
+      )
+    )
+
+    const warningRes = await fetch('http://localhost:8910/.redwood/functions/graphql')
+    const warningBody = await warningRes.json()
+
+    expect(warningRes.status).toEqual(200)
+    expect(warningBody).toMatchSnapshot()
   })
 
-  it('--apiHost changes the upstream api url', async () => {
+  it('--api-proxy-target changes the apiUrl proxy target', async () => {
     const apiPort = 8916
     const apiHost = 'localhost'
 
@@ -247,20 +253,10 @@ describe.only.each([
       expect(p.stderr).toMatchSnapshot()
     }
   })
-
-  it.todo('serves static assets')
-  it.todo('serves prerendered files')
-  it.todo('fallback')
-  it.todo('loads dotenv')
-  it.todo('loads server config?')
-
-  it.todo('respects web.port in redwood.toml')
-  it.todo("works if apiHost isn't set and apiUrl is fully qualified")
-  it.todo('fails if apiHost is set and apiUrl is fully qualified')
 })
 
 describe('@redwoodjs/cli', () => {
-  describe.skip('both server CLI', () => {
+  describe('both server CLI', () => {
     it.todo('handles --socket differently')
 
     it('has help configured', async () => {
@@ -273,7 +269,7 @@ describe('@redwoodjs/cli', () => {
         Commands:
           rw serve      Run both api and web servers                           [default]
           rw serve api  Start server for serving only the api
-          rw serve web  Start server for serving only the web side
+          rw serve web  Start a server for serving only the web side
 
         Options:
               --help       Show help                                           [boolean]
@@ -303,7 +299,7 @@ describe('@redwoodjs/cli', () => {
           Commands:
             rw serve      Run both api and web servers                           [default]
             rw serve api  Start server for serving only the api
-            rw serve web  Start server for serving only the web side
+            rw serve web  Start a server for serving only the web side
 
           Options:
                 --help       Show help                                           [boolean]
@@ -324,7 +320,7 @@ describe('@redwoodjs/cli', () => {
     })
   })
 
-  describe.skip('api server CLI', () => {
+  describe('api server CLI', () => {
     it.todo('handles --socket differently')
 
     it('loads dotenv files', async () => {
@@ -396,7 +392,7 @@ describe('@redwoodjs/cli', () => {
 })
 
 describe('@redwoodjs/api-server', () => {
-  describe.skip('both server CLI', () => {
+  describe('both server CLI', () => {
     it('--socket changes the port', async () => {
       const socket = 8921
 
@@ -460,7 +456,7 @@ describe('@redwoodjs/api-server', () => {
         Commands:
           rw-server      Run both api and web servers                          [default]
           rw-server api  Start server for serving only the api
-          rw-server web  Start server for serving only the web side
+          rw-server web  Start a server for serving only the web side
 
         Options:
               --help     Show help                                             [boolean]
@@ -484,7 +480,7 @@ describe('@redwoodjs/api-server', () => {
           Commands:
             rw-server      Run both api and web servers                          [default]
             rw-server api  Start server for serving only the api
-            rw-server web  Start server for serving only the web side
+            rw-server web  Start a server for serving only the web side
 
           Options:
                 --help     Show help                                             [boolean]
@@ -499,7 +495,7 @@ describe('@redwoodjs/api-server', () => {
     })
   })
 
-  describe.skip('api server CLI', () => {
+  describe('api server CLI', () => {
     it('--socket changes the port', async () => {
       const socket = 3001
 
@@ -554,8 +550,6 @@ describe('@redwoodjs/api-server', () => {
               --socket                                                          [string]
               --apiRootPath, --api-root-path,       Root path where your api functions
               --rootPath, --root-path               are served   [string] [default: "/"]
-              --loadEnvFiles                        Load .env and .env.defaults files
-                                                              [boolean] [default: false]
         "
       `)
     })
@@ -579,73 +573,11 @@ describe('@redwoodjs/api-server', () => {
                 --socket                                                          [string]
                 --apiRootPath, --api-root-path,       Root path where your api functions
                 --rootPath, --root-path               are served   [string] [default: "/"]
-                --loadEnvFiles                        Load .env and .env.defaults files
-                                                                [boolean] [default: false]
 
           Unknown arguments: foo, bar, baz
           "
         `)
       }
-    })
-  })
-
-  describe('web server CLI', () => {
-    it('--socket changes the port', async () => {
-      const socket = 8913
-
-      p = $`yarn node ${commandStrings['@redwoodjs/api-server']} web --socket ${socket} --apiHost="http://localhost:8910"`
-
-      await new Promise((r) => setTimeout(r, TIMEOUT))
-
-      const res = await fetch(`http://localhost:${socket}/about`)
-      const body = await res.text()
-
-      expect(res.status).toEqual(200)
-      expect(body).toEqual(
-        fs.readFileSync(
-          path.join(__dirname, './fixtures/redwood-app/web/dist/about.html'),
-          'utf-8'
-        )
-      )
-    })
-
-    it('--socket wins out over --port', async () => {
-      const socket = 8914
-      const port = 8915
-
-      p = $`yarn node ${commandStrings['@redwoodjs/api-server']} web --socket ${socket} --port ${port} --apiHost="http://localhost:8910"`
-      await new Promise((r) => setTimeout(r, TIMEOUT))
-
-      const res = await fetch(`http://localhost:${socket}/about`)
-      const body = await res.text()
-
-      expect(res.status).toEqual(200)
-      expect(body).toEqual(
-        fs.readFileSync(
-          path.join(__dirname, './fixtures/redwood-app/web/dist/about.html'),
-          'utf-8'
-        )
-      )
-    })
-
-    it("doesn't have help configured", async () => {
-      const { stdout } =
-        await $`yarn node ${commandStrings['@redwoodjs/api-server']} web --help`
-
-      expect(stdout).toMatchInlineSnapshot(`
-        "rw-server web
-
-        Start server for serving only the web side
-
-        Options:
-              --help                 Show help                                 [boolean]
-              --version              Show version number                       [boolean]
-          -p, --port                                            [number] [default: 8910]
-              --socket                                                          [string]
-              --apiHost, --api-host  Forward requests from the apiUrl, defined in
-                                     redwood.toml, to this host                 [string]
-        "
-      `)
     })
   })
 })

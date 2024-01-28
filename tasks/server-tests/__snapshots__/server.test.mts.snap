@@ -12,25 +12,29 @@ Options:
                                                         [number] [default: 8910]
       --host                                The host to listen on. Defaults to
                                             '0.0.0.0' in production, '::' in
-                                            development [string] [default: "::"]
+                                            development                 [string]
       --apiUrl, --api-url                   Relative URL for proxying requests
-                                            from or fully-qualified URL to the
+                                            from or a fully-qualified URL to the
                                             API server
                                        [string] [default: "/.redwood/functions"]
       --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
-                                            this host. apiUrl must be a relative
-                                            URL                         [string]
+                                            this target. apiUrl must be a
+                                            relative URL                [string]
       --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
                                             Forward requests from the apiUrl to
-                                            this host. apiUrl must be a relative
-                                            URL            [deprecated] [string]
+                                            this target. apiUrl must be a
+                                            relative URL   [deprecated] [string]
+
+Examples:
+  yarn rw-web-server --api-url=/api --api-  Start the web server and proxy
+  proxy-target=https://api.redwood.horse    requests made to '/api' to
+                                            'https://api.redwood.horse'
+  yarn rw-web-server                        Start the web server send api
+  --api-url=https://api.redwood.horse       requests to
+                                            'https://api.redwood.horse' (make
+                                            sure to configure CORS)
 
 Unknown arguments: foo, bar, baz
-"
-`;
-
-exports[`serve web (/Users/dom/projects/redwood/redwood/packages/web-server/dist/bin.js) > fails if apiHost isn't set and apiUrl isn't fully qualified 1`] = `
-"Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions'
 "
 `;
 
@@ -46,19 +50,43 @@ Options:
                                                         [number] [default: 8910]
       --host                                The host to listen on. Defaults to
                                             '0.0.0.0' in production, '::' in
-                                            development [string] [default: "::"]
+                                            development                 [string]
       --apiUrl, --api-url                   Relative URL for proxying requests
-                                            from or fully-qualified URL to the
+                                            from or a fully-qualified URL to the
                                             API server
                                        [string] [default: "/.redwood/functions"]
       --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
-                                            this host. apiUrl must be a relative
-                                            URL                         [string]
+                                            this target. apiUrl must be a
+                                            relative URL                [string]
       --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
                                             Forward requests from the apiUrl to
-                                            this host. apiUrl must be a relative
-                                            URL            [deprecated] [string]
+                                            this target. apiUrl must be a
+                                            relative URL   [deprecated] [string]
+
+Examples:
+  yarn rw-web-server --api-url=/api --api-  Start the web server and proxy
+  proxy-target=https://api.redwood.horse    requests made to '/api' to
+                                            'https://api.redwood.horse'
+  yarn rw-web-server                        Start the web server send api
+  --api-url=https://api.redwood.horse       requests to
+                                            'https://api.redwood.horse' (make
+                                            sure to configure CORS)
 "
+`;
+
+exports[`serve web (/Users/dom/projects/redwood/redwood/packages/web-server/dist/bin.js) > works by default; registers a warning at apiUrl 1`] = `
+{
+  "data": null,
+  "errors": [
+    {
+      "extensions": {
+        "code": "BAD_GATEWAY",
+        "httpStatus": 502,
+      },
+      "message": "Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.",
+    },
+  ],
+}
 `;
 
 exports[`serve web ([ '/Users/dom/projects/redwood/redwood/packages/api-server/dist/index.js', 'web' ]) > errors out on unknown args 1`] = `
@@ -73,25 +101,20 @@ Options:
                                                         [number] [default: 8910]
       --host                                The host to listen on. Defaults to
                                             '0.0.0.0' in production, '::' in
-                                            development [string] [default: "::"]
+                                            development                 [string]
       --apiUrl, --api-url                   Relative URL for proxying requests
-                                            from or fully-qualified URL to the
+                                            from or a fully-qualified URL to the
                                             API server
                                        [string] [default: "/.redwood/functions"]
       --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
-                                            this host. apiUrl must be a relative
-                                            URL                         [string]
+                                            this target. apiUrl must be a
+                                            relative URL                [string]
       --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
                                             Forward requests from the apiUrl to
-                                            this host. apiUrl must be a relative
-                                            URL            [deprecated] [string]
+                                            this target. apiUrl must be a
+                                            relative URL   [deprecated] [string]
 
 Unknown arguments: foo, bar, baz
-"
-`;
-
-exports[`serve web ([ '/Users/dom/projects/redwood/redwood/packages/api-server/dist/index.js', 'web' ]) > fails if apiHost isn't set and apiUrl isn't fully qualified 1`] = `
-"Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions'
 "
 `;
 
@@ -107,19 +130,34 @@ Options:
                                                         [number] [default: 8910]
       --host                                The host to listen on. Defaults to
                                             '0.0.0.0' in production, '::' in
-                                            development [string] [default: "::"]
+                                            development                 [string]
       --apiUrl, --api-url                   Relative URL for proxying requests
-                                            from or fully-qualified URL to the
+                                            from or a fully-qualified URL to the
                                             API server
                                        [string] [default: "/.redwood/functions"]
       --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
-                                            this host. apiUrl must be a relative
-                                            URL                         [string]
+                                            this target. apiUrl must be a
+                                            relative URL                [string]
       --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
                                             Forward requests from the apiUrl to
-                                            this host. apiUrl must be a relative
-                                            URL            [deprecated] [string]
+                                            this target. apiUrl must be a
+                                            relative URL   [deprecated] [string]
 "
+`;
+
+exports[`serve web ([ '/Users/dom/projects/redwood/redwood/packages/api-server/dist/index.js', 'web' ]) > works by default; registers a warning at apiUrl 1`] = `
+{
+  "data": null,
+  "errors": [
+    {
+      "extensions": {
+        "code": "BAD_GATEWAY",
+        "httpStatus": 502,
+      },
+      "message": "Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.",
+    },
+  ],
+}
 `;
 
 exports[`serve web ([ '/Users/dom/projects/redwood/redwood/packages/cli/dist/index.js', 'serve', 'web' ]) > errors out on unknown args 1`] = `
@@ -138,25 +176,20 @@ Options:
                                                         [number] [default: 8910]
       --host                                The host to listen on. Defaults to
                                             '0.0.0.0' in production, '::' in
-                                            development [string] [default: "::"]
+                                            development                 [string]
       --apiUrl, --api-url                   Relative URL for proxying requests
-                                            from or fully-qualified URL to the
+                                            from or a fully-qualified URL to the
                                             API server
                                        [string] [default: "/.redwood/functions"]
       --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
-                                            this host. apiUrl must be a relative
-                                            URL                         [string]
+                                            this target. apiUrl must be a
+                                            relative URL                [string]
       --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
                                             Forward requests from the apiUrl to
-                                            this host. apiUrl must be a relative
-                                            URL            [deprecated] [string]
+                                            this target. apiUrl must be a
+                                            relative URL   [deprecated] [string]
 
 Unknown arguments: foo, bar, baz
-"
-`;
-
-exports[`serve web ([ '/Users/dom/projects/redwood/redwood/packages/cli/dist/index.js', 'serve', 'web' ]) > fails if apiHost isn't set and apiUrl isn't fully qualified 1`] = `
-"Error: If you don't provide \`apiProxyTarget\`, \`apiUrl\` needs to be a fully-qualified URL. \`apiUrl\` is '/.redwood/functions'
 "
 `;
 
@@ -176,17 +209,32 @@ Options:
                                                         [number] [default: 8910]
       --host                                The host to listen on. Defaults to
                                             '0.0.0.0' in production, '::' in
-                                            development [string] [default: "::"]
+                                            development                 [string]
       --apiUrl, --api-url                   Relative URL for proxying requests
-                                            from or fully-qualified URL to the
+                                            from or a fully-qualified URL to the
                                             API server
                                        [string] [default: "/.redwood/functions"]
       --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
-                                            this host. apiUrl must be a relative
-                                            URL                         [string]
+                                            this target. apiUrl must be a
+                                            relative URL                [string]
       --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
                                             Forward requests from the apiUrl to
-                                            this host. apiUrl must be a relative
-                                            URL            [deprecated] [string]
+                                            this target. apiUrl must be a
+                                            relative URL   [deprecated] [string]
 "
+`;
+
+exports[`serve web ([ '/Users/dom/projects/redwood/redwood/packages/cli/dist/index.js', 'serve', 'web' ]) > works by default; registers a warning at apiUrl 1`] = `
+{
+  "data": null,
+  "errors": [
+    {
+      "extensions": {
+        "code": "BAD_GATEWAY",
+        "httpStatus": 502,
+      },
+      "message": "Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.",
+    },
+  ],
+}
 `;
