@@ -21,19 +21,13 @@
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "prettier": "prettier --write './src/**/*.{ts,tsx}'",
-    "test": "jest src",
-    "test:watch": "yarn test --watch"
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/fixtures/",
-      "/dist/"
-    ]
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.6",
+    "@babel/runtime-corejs3": "7.23.9",
     "@iarna/toml": "2.2.5",
-    "@prisma/internals": "5.7.0",
+    "@prisma/internals": "5.8.1",
     "@redwoodjs/project-config": "6.0.7",
     "@types/line-column": "1.0.0",
     "camelcase": "6.3.0",
@@ -56,15 +50,15 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.4",
+    "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
     "@types/fs-extra": "11.0.4",
     "@types/lodash": "4.14.201",
     "@types/lru-cache": "7.10.10",
     "@types/node": "20.10.4",
     "@types/vscode": "1.79.1",
-    "jest": "29.7.0",
-    "typescript": "5.3.3"
+    "typescript": "5.3.3",
+    "vitest": "1.2.1"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -6,7 +6,7 @@ export interface HttpServerParams {
   fastify: FastifyInstance
 }
 
-export const startServer = ({
+export const startServer = async ({
   port = 8911,
   socket,
   fastify,
@@ -14,7 +14,21 @@ export const startServer = ({
   const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
   const serverPort = socket ? parseInt(socket) : port
 
-  fastify.listen({ port: serverPort, host })
+  await fastify.listen({
+    port: serverPort,
+    host,
+    listenTextResolver: (address) => {
+      // In the past, in development, we've prioritized showing a friendlier
+      // host than the listen-on-all-ipv6-addresses '[::]'. Here we replace it
+      // with 'localhost' only if 1) we're not in production and 2) it's there.
+      // In production it's important to be transparent.
+      if (process.env.NODE_ENV !== 'production') {
+        address = address.replace(/http:\/\/\[::\]/, 'http://localhost')
+      }
+
+      return `Server listening at ${address}`
+    },
+  })
 
   fastify.ready(() => {
     fastify.log.trace(

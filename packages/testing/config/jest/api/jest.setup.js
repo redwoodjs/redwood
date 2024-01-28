@@ -82,8 +82,12 @@ const getProjectDb = () => {
   return db
 }
 
+/**
+ * Wraps "it" or "test", to seed and teardown the scenario after each test
+ * This one passes scenario data to the test function
+ */
 const buildScenario =
-  (it, testPath) =>
+  (itFunc, testPath) =>
   (...args) => {
     let scenarioName, testName, testFunc
 
@@ -96,39 +100,54 @@ const buildScenario =
       throw new Error('scenario() requires 2 or 3 arguments')
     }
 
-    return it(testName, async () => {
-      const path = require('path')
-      const testFileDir = path.parse(testPath)
-      // e.g. ['comments', 'test'] or ['signup', 'state', 'machine', 'test']
-      const testFileNameParts = testFileDir.name.split('.')
-      const testFilePath = `${testFileDir.dir}/${testFileNameParts
-        .slice(0, testFileNameParts.length - 1)
-        .join('.')}.scenarios`
-      let allScenarios, scenario, result
-
-      try {
-        allScenarios = require(testFilePath)
-      } catch (e) {
-        // ignore error if scenario file not found, otherwise re-throw
-        if (e.code !== 'MODULE_NOT_FOUND') {
-          throw e
-        }
-      }
-
-      if (allScenarios) {
-        if (allScenarios[scenarioName]) {
-          scenario = allScenarios[scenarioName]
-        } else {
-          throw new Error(
-            `UndefinedScenario: There is no scenario named "${scenarioName}" in ${testFilePath}.{js,ts}`
-          )
-        }
-      }
+    return itFunc(testName, async () => {
+      let { scenario } = loadScenarios(testPath, scenarioName)
 
       const scenarioData = await seedScenario(scenario)
-      result = await testFunc(scenarioData)
+      const result = await testFunc(scenarioData)
+
+      if (wasDbUsed()) {
+        await teardown()
+      }
 
       return result
+    })
+  }
+
+/**
+ * This creates a describe() block that will seed the scenario ONCE before all tests in the block
+ * Note that you need to use the getScenario() function to get the data.
+ */
+const buildDescribeScenario =
+  (describeFunc, testPath) =>
+  (...args) => {
+    let scenarioName, describeBlockName, describeBlock
+
+    if (args.length === 3) {
+      ;[scenarioName, describeBlockName, describeBlock] = args
+    } else if (args.length === 2) {
+      scenarioName = DEFAULT_SCENARIO
+      ;[describeBlockName, describeBlock] = args
+    } else {
+      throw new Error('describeScenario() requires 2 or 3 arguments')
+    }
+
+    return describeFunc(describeBlockName, () => {
+      let scenarioData
+      beforeAll(async () => {
+        let { scenario } = loadScenarios(testPath, scenarioName)
+        scenarioData = await seedScenario(scenario)
+      })
+
+      afterAll(async () => {
+        if (wasDbUsed()) {
+          await teardown()
+        }
+      })
+
+      const getScenario = () => scenarioData
+
+      describeBlock(getScenario)
     })
   }
 
@@ -189,6 +208,14 @@ const seedScenario = async (scenario) => {
 
 global.scenario = buildScenario(global.it, global.testPath)
 global.scenario.only = buildScenario(global.it.only, global.testPath)
+global.describeScenario = buildDescribeScenario(
+  global.describe,
+  global.testPath
+)
+global.describeScenario.only = buildDescribeScenario(
+  global.describe.only,
+  global.testPath
+)
 
 /**
  *
@@ -261,8 +288,33 @@ afterAll(async () => {
   }
 })
 
-afterEach(async () => {
-  if (wasDbUsed()) {
-    await teardown()
+function loadScenarios(testPath, scenarioName) {
+  const path = require('path')
+  const testFileDir = path.parse(testPath)
+  // e.g. ['comments', 'test'] or ['signup', 'state', 'machine', 'test']
+  const testFileNameParts = testFileDir.name.split('.')
+  const testFilePath = `${testFileDir.dir}/${testFileNameParts
+    .slice(0, testFileNameParts.length - 1)
+    .join('.')}.scenarios`
+  let allScenarios, scenario
+
+  try {
+    allScenarios = require(testFilePath)
+  } catch (e) {
+    // ignore error if scenario file not found, otherwise re-throw
+    if (e.code !== 'MODULE_NOT_FOUND') {
+      throw e
+    }
   }
-})
+
+  if (allScenarios) {
+    if (allScenarios[scenarioName]) {
+      scenario = allScenarios[scenarioName]
+    } else {
+      throw new Error(
+        `UndefinedScenario: There is no scenario named "${scenarioName}" in ${testFilePath}.{js,ts}`
+      )
+    }
+  }
+  return { scenario }
+}

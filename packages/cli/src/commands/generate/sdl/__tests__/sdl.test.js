@@ -1,25 +1,42 @@
 globalThis.__dirname = __dirname
 
 globalThis.mockFs = false
+const mockFiles = {}
 
-jest.mock('fs', () => {
-  const actual = jest.requireActual('fs')
-
+vi.mock('fs-extra', async (importOriginal) => {
+  const originalFsExtra = await importOriginal()
   return {
-    ...actual,
-    mkdirSync: (...args) => {
-      if (globalThis.mockFs) {
-        return
-      }
+    default: {
+      ...originalFsExtra,
+      existsSync: (...args) => {
+        if (!globalThis.mockFs) {
+          return originalFsExtra.existsSync.apply(null, args)
+        }
+        return false
+      },
+      mkdirSync: (...args) => {
+        if (globalThis.mockFs) {
+          return
+        }
 
-      return actual.mkdirSync.apply(null, args)
-    },
-    writeFileSync: (target, contents) => {
-      if (globalThis.mockFs) {
-        return
-      }
+        return originalFsExtra.mkdirSync.apply(null, args)
+      },
+      writeFileSync: (target, contents) => {
+        if (globalThis.mockFs) {
+          return
+        }
 
-      return actual.writeFileSync.call(null, target, contents)
+        return originalFsExtra.writeFileSync.call(null, target, contents)
+      },
+      readFileSync: (path) => {
+        if (!globalThis.mockFs) {
+          return originalFsExtra.readFileSync.call(null, path)
+        }
+
+        const mockedContent = mockFiles[path]
+
+        return mockedContent || originalFsExtra.readFileSync.call(null, path)
+      },
     },
   }
 })
@@ -28,6 +45,7 @@ import path from 'path'
 
 import fs from 'fs-extra'
 import prompts from 'prompts'
+import { vi, afterEach, test, expect, describe } from 'vitest'
 
 // Load mocks
 import '../../../../lib/test'
@@ -38,7 +56,7 @@ import { getDefaultArgs } from '../../../../lib'
 import * as sdl from '../sdl'
 
 afterEach(() => {
-  jest.clearAllMocks()
+  vi.clearAllMocks()
 })
 
 const extensionForBaseArgs = (baseArgs) =>
@@ -203,6 +221,21 @@ const itCreatesAnSDLFileWithJsonDefinitions = (baseArgs = {}) => {
   })
 }
 
+const itCreatesAnSDLFileWithByteDefinitions = (baseArgs = {}) => {
+  test('creates a sdl file with Byte definitions', async () => {
+    const files = await sdl.files({
+      ...baseArgs,
+      name: 'Key',
+      crud: true,
+    })
+    const ext = extensionForBaseArgs(baseArgs)
+
+    expect(
+      files[path.normalize(`/path/to/project/api/src/graphql/keys.sdl.${ext}`)]
+    ).toMatchSnapshot()
+  })
+}
+
 describe('without graphql documentations', () => {
   describe('in javascript mode', () => {
     const baseArgs = { ...getDefaultArgs(sdl.defaults), tests: true }
@@ -215,6 +248,7 @@ describe('without graphql documentations', () => {
     itCreateAMultiWordSDLFileWithCRUD(baseArgs)
     itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
     itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+    itCreatesAnSDLFileWithByteDefinitions(baseArgs)
   })
 
   describe('in typescript mode', () => {
@@ -232,6 +266,7 @@ describe('without graphql documentations', () => {
     itCreateAMultiWordSDLFileWithCRUD(baseArgs)
     itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
     itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+    itCreatesAnSDLFileWithByteDefinitions(baseArgs)
   })
 })
 
@@ -251,6 +286,7 @@ describe('with graphql documentations', () => {
     itCreateAMultiWordSDLFileWithCRUD(baseArgs)
     itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
     itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+    itCreatesAnSDLFileWithByteDefinitions(baseArgs)
   })
 
   describe('in typescript mode', () => {
@@ -269,23 +305,14 @@ describe('with graphql documentations', () => {
     itCreateAMultiWordSDLFileWithCRUD(baseArgs)
     itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
     itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+    itCreatesAnSDLFileWithByteDefinitions(baseArgs)
   })
 })
 
 describe('handler', () => {
-  beforeEach(() => {
-    jest.spyOn(console, 'info').mockImplementation(() => {})
-    jest.spyOn(console, 'log').mockImplementation(() => {})
-  })
-
-  afterEach(() => {
-    console.info.mockRestore()
-    console.log.mockRestore()
-  })
-
   const canBeCalledWithGivenModelName = (letterCase, model) => {
     test(`can be called with ${letterCase} model name`, async () => {
-      const spy = jest.spyOn(fs, 'writeFileSync')
+      const spy = vi.spyOn(fs, 'writeFileSync')
 
       globalThis.mockFs = true
 

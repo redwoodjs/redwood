@@ -1,8 +1,9 @@
 global.__dirname = __dirname
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const originalProjectConfig = await importOriginal()
   const path = require('path')
   return {
-    ...jest.requireActual('@redwoodjs/project-config'),
+    ...originalProjectConfig,
     getPaths: () => {
       const BASE_PATH = path.join(globalThis.__dirname, 'fixtures')
       return {
@@ -18,6 +19,7 @@ jest.mock('@redwoodjs/project-config', () => {
 import path from 'path'
 
 import fs from 'fs-extra'
+import { vi, test, expect, describe } from 'vitest'
 
 import * as index from '../index'
 

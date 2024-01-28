@@ -1,3 +1,4 @@
+import type { Handler } from 'aws-lambda'
 import type { FastifyRequest, FastifyReply } from 'fastify'
 
 import { requestHandler } from '../../requestHandlers/awsLambdaFastify'
@@ -19,12 +20,12 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
   } as unknown as FastifyRequest
 
   const mockedReply = {
-    status: (code) => {
+    status: (code: number) => {
       return { code, send: jest.fn() }
     },
-    headers: (h) => jest.fn(h),
-    header: (h) => jest.fn(h),
-    send: (body) => jest.fn(body),
+    headers: () => jest.fn(),
+    header: () => jest.fn(),
+    send: () => jest.fn(),
     log: console as unknown,
   } as unknown as FastifyReply
 
@@ -32,9 +33,10 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     jest.spyOn(mockedReply, 'send')
     jest.spyOn(mockedReply, 'status')
 
-    const handler = async (req, mockedReply) => {
-      mockedReply = { body: { foo: 'bar' } }
-      return mockedReply
+    const handler: Handler = async () => {
+      return {
+        body: { foo: 'bar' },
+      }
     }
 
     await requestHandler(request, mockedReply, handler)
@@ -47,12 +49,11 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     jest.spyOn(mockedReply, 'send')
     jest.spyOn(mockedReply, 'status')
 
-    const handler = async (req, mockedReply) => {
-      mockedReply = {
+    const handler: Handler = async () => {
+      return {
         body: 'this_is_a_test_of_base64Encoding',
         isBase64Encoded: true,
       }
-      return mockedReply
     }
 
     await requestHandler(request, mockedReply, handler)
@@ -64,7 +65,7 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
   })
 
   describe('error handling', () => {
-    let consoleError
+    let consoleError: typeof console.error
 
     beforeEach(() => {
       consoleError = console.error
@@ -103,15 +104,14 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     jest.spyOn(mockedReply, 'headers')
     jest.spyOn(mockedReply, 'header')
 
-    const handler = async (req, mockedReply) => {
-      mockedReply = {
+    const handler: Handler = async () => {
+      return {
         body: { foo: 'bar' },
         headers: {
           'content-type': 'application/json',
           authorization: 'Bearer token 123',
         },
       }
-      return mockedReply
     }
 
     await requestHandler(headersRequest, mockedReply, handler)
@@ -142,15 +142,14 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     jest.spyOn(mockedReply, 'headers')
     jest.spyOn(mockedReply, 'header')
 
-    const handler = async (_req, mockedReply) => {
-      mockedReply = {
+    const handler: Handler = async () => {
+      return {
         body: {},
         headers: {},
         multiValueHeaders: {
           'content-type': ['application/json', 'text/html'],
         },
       }
-      return mockedReply
     }
 
     await requestHandler(headersRequest, mockedReply, handler)
