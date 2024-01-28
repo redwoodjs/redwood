@@ -12,7 +12,7 @@ import {
 } from '../createServer'
 
 // Set up RWJS_CWD.
-let original_RWJS_CWD
+let original_RWJS_CWD: string | undefined
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
@@ -23,16 +23,27 @@ afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
 })
 
+let consoleWarnSpy: jest.SpyInstance<void, any>
+let consoleLogSpy: jest.SpyInstance<void, any>
+
 describe('createServer', () => {
   // Create a server for most tests. Some that test initialization create their own
-  let server
+  let server: Awaited<ReturnType<typeof createServer>>
 
   beforeAll(async () => {
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
     server = await createServer()
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   afterAll(async () => {
     await server?.close()
+    jest.mocked(console.log).mockRestore()
+    jest.mocked(console.warn).mockRestore()
   })
 
   it('serves functions', async () => {
@@ -44,21 +55,10 @@ describe('createServer', () => {
     expect(res.json()).toEqual({ data: 'hello function' })
   })
 
-  describe('warnings', () => {
-    let consoleWarnSpy
+  it('warns about server.config.js', async () => {
+    await createServer()
 
-    beforeAll(() => {
-      consoleWarnSpy = jest.spyOn(console, 'warn')
-    })
-
-    afterAll(() => {
-      consoleWarnSpy.mockRestore()
-    })
-
-    it('warns about server.config.js', async () => {
-      await createServer()
-
-      expect(consoleWarnSpy.mock.calls[0][0]).toMatchInlineSnapshot(`
+    expect(consoleWarnSpy.mock.calls[0][0]).toMatchInlineSnapshot(`
       "[33m[39m
       [33mIgnoring \`config\` and \`configureServer\` in api/server.config.js.[39m
       [33mMigrate them to api/src/server.{ts,js}:[39m
@@ -74,7 +74,6 @@ describe('createServer', () => {
       [33m\`\`\`[39m
       [33m[39m"
     `)
-    })
   })
 
   it('`apiRootPath` prefixes all routes', async () => {
@@ -95,51 +94,35 @@ describe('createServer', () => {
   // The server's logger also seems to output things out of order.
   //
   // This should be fixed so that all logs go to the same place
-  describe('logs', () => {
-    let consoleLogSpy
-    let consoleWarnSpy
-
-    beforeAll(() => {
-      consoleLogSpy = jest.spyOn(console, 'log').mockImplementation()
-      consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation()
+  it("doesn't handle logs consistently", async () => {
+    // Here we create a logger that outputs to an array.
+    const loggerLogs: string[] = []
+    const stream = build(async (source) => {
+      for await (const obj of source) {
+        loggerLogs.push(obj)
+      }
     })
+    const logger = pino(stream)
 
-    afterAll(() => {
-      consoleLogSpy.mockRestore()
-      consoleWarnSpy.mockRestore()
+    // Generate some logs.
+    const server = await createServer({ logger })
+    const res = await server.inject({
+      method: 'GET',
+      url: '/hello',
     })
+    expect(res.json()).toEqual({ data: 'hello function' })
+    await server.listen({ port: 8910 })
+    await server.close()
 
-    it("doesn't handle logs consistently", async () => {
-      // Here we create a logger that outputs to an array.
-      const loggerLogs: string[] = []
-      const stream = build(async (source) => {
-        for await (const obj of source) {
-          loggerLogs.push(obj)
-        }
-      })
-      const logger = pino(stream)
+    // We expect console log to be called with `withFunctions` logs.
+    expect(consoleLogSpy.mock.calls[0][0]).toMatch(/Importing Server Functions/)
 
-      // Generate some logs.
-      const server = await createServer({ logger })
-      const res = await server.inject({
-        method: 'GET',
-        url: '/hello',
-      })
-      expect(res.json()).toEqual({ data: 'hello function' })
-      await server.listen({ port: 8910 })
-      await server.close()
+    const lastCallIndex = consoleLogSpy.mock.calls.length - 1
 
-      // We expect console log to be called with `withFunctions` logs.
-      expect(consoleLogSpy.mock.calls[0][0]).toMatch(
-        /Importing Server Functions/
-      )
+    expect(consoleLogSpy.mock.calls[lastCallIndex][0]).toMatch(/Listening on/)
 
-      const lastCallIndex = consoleLogSpy.mock.calls.length - 1
-
-      expect(consoleLogSpy.mock.calls[lastCallIndex][0]).toMatch(/Listening on/)
-
-      // `console.warn` will be used if there's a `server.config.js` file.
-      expect(consoleWarnSpy.mock.calls[0][0]).toMatchInlineSnapshot(`
+    // `console.warn` will be used if there's a `server.config.js` file.
+    expect(consoleWarnSpy.mock.calls[0][0]).toMatchInlineSnapshot(`
       "[33m[39m
       [33mIgnoring \`config\` and \`configureServer\` in api/server.config.js.[39m
       [33mMigrate them to api/src/server.{ts,js}:[39m
@@ -156,35 +139,34 @@ describe('createServer', () => {
       [33m[39m"
     `)
 
-      // Finally, the logger. Notice how the request/response logs come before the "server is listening..." logs.
-      expect(loggerLogs[0]).toMatchObject({
-        reqId: 'req-1',
-        level: 30,
-        msg: 'incoming request',
-        req: {
-          hostname: 'localhost:80',
-          method: 'GET',
-          remoteAddress: '127.0.0.1',
-          url: '/hello',
-        },
-      })
-      expect(loggerLogs[1]).toMatchObject({
-        reqId: 'req-1',
-        level: 30,
-        msg: 'request completed',
-        res: {
-          statusCode: 200,
-        },
-      })
+    // Finally, the logger. Notice how the request/response logs come before the "server is listening..." logs.
+    expect(loggerLogs[0]).toMatchObject({
+      reqId: 'req-1',
+      level: 30,
+      msg: 'incoming request',
+      req: {
+        hostname: 'localhost:80',
+        method: 'GET',
+        remoteAddress: '127.0.0.1',
+        url: '/hello',
+      },
+    })
+    expect(loggerLogs[1]).toMatchObject({
+      reqId: 'req-1',
+      level: 30,
+      msg: 'request completed',
+      res: {
+        statusCode: 200,
+      },
+    })
 
-      expect(loggerLogs[2]).toMatchObject({
-        level: 30,
-        msg: 'Server listening at http://[::1]:8910',
-      })
-      expect(loggerLogs[3]).toMatchObject({
-        level: 30,
-        msg: 'Server listening at http://127.0.0.1:8910',
-      })
+    expect(loggerLogs[2]).toMatchObject({
+      level: 30,
+      msg: 'Server listening at http://[::1]:8910',
+    })
+    expect(loggerLogs[3]).toMatchObject({
+      level: 30,
+      msg: 'Server listening at http://127.0.0.1:8910',
     })
   })
 
