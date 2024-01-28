@@ -11,5 +11,11 @@
     { "path": "../project-config" },
     { "path": "../adapters/fastify/web" },
     { "path": "../web-server" }
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/__mocks__",
+    "**/__tests__/fixtures",
   ]
 }
