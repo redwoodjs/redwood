@@ -103,9 +103,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.8.8":
-  version: 3.8.8
-  resolution: "@apollo/client@npm:3.8.8"
+"@apollo/client@npm:3.8.10":
+  version: 3.8.10
+  resolution: "@apollo/client@npm:3.8.10"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/equality": "npm:^0.5.6"
@@ -134,13 +134,13 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: a097fb49d68fa77d59f8d63f73f0335624608102ebe2a30270d679b50f3fc2d697298fde8619571b419c93660a5ba90874d93e3b10efc8d910d752f14df1770b
+  checksum: 983306f61de042aca2f02e414533fbdac0c9c905648a98b42bb79bccb19012306eebb3c55c6d665523addbc1948625d1aae70bdc2dd511775b7a962a40dfc5b1
   languageName: node
   linkType: hard
 
-"@apollo/experimental-nextjs-app-support@npm:0.5.2":
-  version: 0.5.2
-  resolution: "@apollo/experimental-nextjs-app-support@npm:0.5.2"
+"@apollo/experimental-nextjs-app-support@npm:0.6.0":
+  version: 0.6.0
+  resolution: "@apollo/experimental-nextjs-app-support@npm:0.6.0"
   dependencies:
     server-only: "npm:^0.0.1"
     superjson: "npm:^1.12.2"
@@ -149,7 +149,7 @@ __metadata:
     "@apollo/client": ">=3.8.0-rc || ^3.8.0 || >=3.9.0-alpha || >=3.9.0-beta || >=3.9.0-rc"
     next: ^13.4.1 || ^14.0.0
     react: ^18
-  checksum: 3070a5a02dcb4b62cf813379335d1c639371ba36f8d5553af6e45201cdf6efb8fab3fcf68e74567e5110dd5b76047f5aa310b6bfef8f36a660be88de16906c95
+  checksum: cb99c3d14c62a5809db5d6167cdd5ea264beb7ae49cfb59e30f7e45eb05a5ebb00b3cfd45496cc40d10ba2d3af437b0f91fcd6b935a20fd9fe1a7865912b40c6
   languageName: node
   linkType: hard
 
@@ -8850,8 +8850,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": "npm:3.8.8"
-    "@apollo/experimental-nextjs-app-support": "npm:0.5.2"
+    "@apollo/client": "npm:3.8.10"
+    "@apollo/experimental-nextjs-app-support": "npm:0.6.0"
     "@babel/cli": "npm:7.23.9"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.9"
