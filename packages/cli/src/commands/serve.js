@@ -4,6 +4,7 @@ import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+import * as webServerCLIConfig from '@redwoodjs/web-server'
 
 import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
@@ -108,21 +109,8 @@ export const builder = async (yargs) => {
     })
     .command({
       command: 'web',
-      description: 'Start server for serving only the web side',
-      builder: (yargs) =>
-        yargs.options({
-          port: {
-            default: getConfig().web?.port || 8910,
-            type: 'number',
-            alias: 'p',
-          },
-          socket: { type: 'string' },
-          apiHost: {
-            alias: 'api-host',
-            type: 'string',
-            desc: 'Forward requests from the apiUrl, defined in redwood.toml, to this host',
-          },
-        }),
+      description: webServerCLIConfig.description,
+      builder: webServerCLIConfig.builder,
       handler: async (argv) => {
         recordTelemetryAttributes({
           command: 'serve',
@@ -132,8 +120,7 @@ export const builder = async (yargs) => {
           apiHost: argv.apiHost,
         })
 
-        const { webServerHandler } = await import('./serveHandler.js')
-        await webServerHandler(argv)
+        await webServerCLIConfig.handler(argv)
       },
     })
     .middleware((argv) => {

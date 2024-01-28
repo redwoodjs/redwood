@@ -67,7 +67,7 @@ export async function redwoodFastifyGraphQLServer(
     // graphql function.
     //
     // These would be plugins that need a server instance such as Redwood Realtime
-    if (graphqlOptions.realtime) {
+    if (graphqlOptions?.realtime) {
       const { useRedwoodRealtime } = await import('@redwoodjs/realtime')
 
       const originalExtraPlugins: Array<Plugin<any>> =

@@ -21,7 +21,11 @@ export const defaultBuildOptions = {
 }
 
 export const defaultPatterns = ['./src/**/*.{ts,js}']
-export const defaultIgnorePatterns = ['**/__tests__', '**/*.test.{ts,js}']
+export const defaultIgnorePatterns = [
+  '**/__tests__',
+  '**/*.test.{ts,js}',
+  '**/__fixtures__',
+]
 
 /**
  * @typedef {{

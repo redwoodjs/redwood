@@ -56,7 +56,6 @@ vi.mock('execa', () => ({
   })),
 }))
 
-import execa from 'execa'
 import { vi, describe, afterEach, it, expect } from 'vitest'
 import yargs from 'yargs/yargs'
 
@@ -93,28 +92,6 @@ describe('yarn rw serve', () => {
         port: 5555,
         rootPath: expect.stringMatching(/^\/?funkyFunctions\/nested\/$/),
       })
-    )
-  })
-
-  it('Should proxy serve web with params to web server handler', async () => {
-    const parser = yargs().command('serve [side]', false, builder)
-
-    await parser.parse(
-      'serve web --port 9898 --socket abc --apiHost https://myapi.redwood/api'
-    )
-
-    expect(execa).toHaveBeenCalledWith(
-      'yarn',
-      expect.arrayContaining([
-        'rw-web-server',
-        '--port',
-        9898,
-        '--socket',
-        'abc',
-        '--api-host',
-        'https://myapi.redwood/api',
-      ]),
-      expect.anything()
     )
   })
 

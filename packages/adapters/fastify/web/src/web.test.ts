@@ -1,77 +1,43 @@
 import fs from 'fs'
 import path from 'path'
 
+import Fastify from 'fastify'
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
+
 import { getPaths } from '@redwoodjs/project-config'
 
-import { createFastifyInstance } from '../fastify'
-import withWebServer from '../plugins/withWebServer'
+import { redwoodFastifyWeb } from './web'
 
-// Suppress terminal logging.
-console.log = jest.fn()
-
-// Set up RWJS_CWD.
 let original_RWJS_CWD
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
-  process.env.RWJS_CWD = path.join(__dirname, 'fixtures/redwood-app')
+  process.env.RWJS_CWD = path.join(__dirname, '__fixtures__/main')
 })
 
 afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
 })
 
-// Set up and teardown the fastify instance with options.
-let fastifyInstance
-let returnedFastifyInstance
+describe('redwoodFastifyWeb', () => {
+  // Suppress terminal logging.
+  console.log = vi.fn()
 
-const port = 8910
-const message = 'hello from server.config.js'
+  // Set up and teardown the fastify instance with options.
+  let fastifyInstance
 
-beforeAll(async () => {
-  fastifyInstance = createFastifyInstance()
+  const port = 8910
 
-  returnedFastifyInstance = await withWebServer(fastifyInstance, {
-    port,
-    // @ts-expect-error just testing that options can be passed through
-    message,
+  beforeAll(async () => {
+    fastifyInstance = Fastify()
+
+    await fastifyInstance.register(redwoodFastifyWeb)
+
+    await fastifyInstance.ready()
   })
 
-  await fastifyInstance.ready()
-})
-
-afterAll(async () => {
-  await fastifyInstance.close()
-})
-
-describe('withWebServer', () => {
-  // Deliberately using `toBe` here to check for referential equality.
-  it('returns the same fastify instance', async () => {
-    expect(returnedFastifyInstance).toBe(fastifyInstance)
-  })
-
-  it('can be configured by the user', async () => {
-    const res = await fastifyInstance.inject({
-      method: 'GET',
-      url: '/test-route',
-    })
-
-    expect(res.body).toBe(JSON.stringify({ message }))
-  })
-
-  // We can use `printRoutes` with a method for debugging, but not without one.
-  // See https://fastify.dev/docs/latest/Reference/Server#printroutes
-  it('builds a tree of routes for GET', async () => {
-    expect(fastifyInstance.printRoutes({ method: 'GET' }))
-      .toMatchInlineSnapshot(`
-      "└── /
-          ├── about (GET)
-          ├── contacts/new (GET)
-          ├── nested/index (GET)
-          ├── test-route (GET)
-          └── * (GET)
-      "
-    `)
+  afterAll(async () => {
+    await fastifyInstance.close()
   })
 
   describe('serves prerendered files', () => {
@@ -298,6 +264,42 @@ describe('withWebServer', () => {
       })
 
       expect(res.statusCode).toBe(200)
+    })
+  })
+
+  describe('serves an error at a misconfigured apiUrl', () => {
+    it('handles the root path', async () => {
+      const url = '/.redwood/functions/'
+
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url,
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe(
+        'application/json; charset=utf-8'
+      )
+      expect(res.body).toMatchInlineSnapshot(
+        `"{"data":null,"errors":[{"message":"Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.","extensions":{"code":"BAD_GATEWAY","httpStatus":502}}]}"`
+      )
+    })
+
+    it('handles subpaths', async () => {
+      const url = '/.redwood/functions/graphql'
+
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url,
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe(
+        'application/json; charset=utf-8'
+      )
+      expect(res.body).toMatchInlineSnapshot(
+        `"{"data":null,"errors":[{"message":"Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.","extensions":{"code":"BAD_GATEWAY","httpStatus":502}}]}"`
+      )
     })
   })
 })

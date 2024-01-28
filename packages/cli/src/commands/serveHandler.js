@@ -8,15 +8,16 @@ import {
   coerceRootPath,
   createFastifyInstance,
   redwoodFastifyAPI,
-  redwoodFastifyWeb,
 } from '@redwoodjs/fastify'
+import { redwoodFastifyWeb } from '@redwoodjs/fastify-web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { exitWithError } from '../lib/exit'
 
 export const bothServerFileHandler = async (options) => {
-  const apiHost = `http://0.0.0.0:${options.apiPort}`
+  const apiHost = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
+  const apiProxyTarget = `http://${apiHost}:${options.apiPort}`
 
   const { result } = concurrently(
     [
@@ -30,7 +31,7 @@ export const bothServerFileHandler = async (options) => {
       },
       {
         name: 'web',
-        command: `yarn rw-web-server --port ${options.webPort} --api-host ${apiHost}`,
+        command: `yarn rw-web-server --port ${options.webPort} --api-proxy-target ${apiProxyTarget}`,
         cwd: getPaths().base,
         prefixColor: 'blue',
       },
@@ -185,36 +186,4 @@ export const apiServerHandler = async (options) => {
 
     sendProcessReady()
   })
-}
-
-export const webServerHandler = async (options) => {
-  try {
-    await execa(
-      'yarn',
-      [
-        'rw-web-server',
-        '--port',
-        options.port,
-        '--socket',
-        options.socket,
-        '--api-host',
-        options.apiHost,
-      ],
-      {
-        cwd: getPaths().base,
-        stdio: 'inherit',
-      }
-    )
-  } catch (e) {
-    // `@redwoodjs/web-server` uses a custom error exit code to tell this handler that an error has already been handled.
-    // While any other exit code than `0` is considered an error, there seems to be some conventions around some of them
-    // like `127`, etc. We chose 64 because it's in the range where there deliberately aren't any previous conventions.
-    // See https://tldp.org/LDP/abs/html/exitcodes.html.
-    if (e.exitCode === 64) {
-      process.exitCode = 1
-      return
-    }
-
-    exitWithError(e)
-  }
 }
