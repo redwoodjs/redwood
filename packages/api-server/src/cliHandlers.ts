@@ -60,7 +60,7 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
     // with 'localhost' only if 1) we're not in production and 2) it's there.
     // In production it's important to be transparent.
     //
-    // We have this logic for `apiServerHandler` because this it' the only
+    // We have this logic for `apiServerHandler` because this is the only
     // handler called by the watch bin (which is called by `yarn rw dev`).
     let address = fastify.listeningOrigin
     if (process.env.NODE_ENV !== 'production') {
