@@ -55,7 +55,19 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
   fastify.ready(() => {
     console.log(c.dim.italic('Took ' + (Date.now() - tsApiServer) + ' ms'))
 
-    const apiServer = c.magenta(`${fastify.listeningOrigin}${apiRootPath}`)
+    // In the past, in development, we've prioritized showing a friendlier
+    // host than the listen-on-all-ipv6-addresses '[::]'. Here we replace it
+    // with 'localhost' only if 1) we're not in production and 2) it's there.
+    // In production it's important to be transparent.
+    //
+    // We have this logic for `apiServerHandler` because this it' the only
+    // handler called by the watch bin (which is called by `yarn rw dev`).
+    let address = fastify.listeningOrigin
+    if (process.env.NODE_ENV !== 'production') {
+      address = address.replace(/http:\/\/\[::\]/, 'http://localhost')
+    }
+
+    const apiServer = c.magenta(`${address}${apiRootPath}`)
     const graphqlEndpoint = c.magenta(`${apiServer}graphql`)
 
     console.log(`API server listening at ${apiServer}`)
