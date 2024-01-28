@@ -6537,14 +6537,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.40.1":
-  version: 1.40.1
-  resolution: "@playwright/test@npm:1.40.1"
+"@playwright/test@npm:1.41.1":
+  version: 1.41.1
+  resolution: "@playwright/test@npm:1.41.1"
   dependencies:
-    playwright: "npm:1.40.1"
+    playwright: "npm:1.41.1"
   bin:
     playwright: cli.js
-  checksum: 1edbc9659fb6a9c5299cacd9a0c7d3fdc88939036642d8f367e13d267d808ae3f88ca9d00e9981e3bcd5f584ccefba38d24eda6b23d27895908f203dc35f339e
+  checksum: 72bd5bb67c512027d214b9c54c2a22a469bd19d7809771e53a5bfdcc11330591e01579bb22f807d1ebbcdcea35d625e0fc9eb9791cebcc63bf55b82dd1cdefdd
   languageName: node
   linkType: hard
 
@@ -27478,27 +27478,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.40.1":
-  version: 1.40.1
-  resolution: "playwright-core@npm:1.40.1"
+"playwright-core@npm:1.41.1":
+  version: 1.41.1
+  resolution: "playwright-core@npm:1.41.1"
   bin:
     playwright-core: cli.js
-  checksum: 56c283012974982313a6ae583b975ee4af76d52059fb9a25d9cc616a11224685ec64682b391910c795d2b12d2ab5c7eec31124722c75c0b1703a76ac9b6fd1c2
+  checksum: cdd91267ca23e3f65d519100e956859c70e3e9ca29e3fe00e700b457903129e41dfa17752f1ea37ad0a8a7c6330baf9f3be503e4cbfa3e8833e80a037f899aee
   languageName: node
   linkType: hard
 
-"playwright@npm:1.40.1":
-  version: 1.40.1
-  resolution: "playwright@npm:1.40.1"
+"playwright@npm:1.41.1":
+  version: 1.41.1
+  resolution: "playwright@npm:1.41.1"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.40.1"
+    playwright-core: "npm:1.41.1"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 5dae164d1f69162da8d7eee52da651296fb885c76a8b36049f216975c751a0a826ff05795a1c0902dc0bd193fe606ae17d5def655f4cbcccb8d8b71afb74b950
+  checksum: 32d48c1f8ff881770a19c9245fb4191fc36b5e97ab5f48effa0b1cf5e83fa958f6fdd7e4268dd984aa306ac5fe9e4324510211910751fb52cebb9bae819d13ca
   languageName: node
   linkType: hard
 
@@ -29722,7 +29722,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.23.9"
     "@faker-js/faker": "npm:8.0.2"
     "@npmcli/arborist": "npm:7.2.2"
-    "@playwright/test": "npm:1.40.1"
+    "@playwright/test": "npm:1.41.1"
     "@testing-library/jest-dom": "npm:6.1.5"
     "@testing-library/react": "npm:14.1.2"
     "@testing-library/user-event": "npm:14.5.1"
