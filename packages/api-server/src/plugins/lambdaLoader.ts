@@ -22,7 +22,7 @@ export const LAMBDA_FUNCTIONS: Lambdas = {}
 
 export const setLambdaFunctions = async (foundFunctions: string[]) => {
   const tsImport = Date.now()
-  console.log(c.italic(c.dim('Importing Server Functions... ')))
+  console.log(c.dim.italic('Importing Server Functions... '))
 
   const imports = foundFunctions.map((fnPath) => {
     return new Promise((resolve) => {
@@ -42,7 +42,7 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
       // TODO: Use terminal link.
       console.log(
         c.magenta('/' + routeName),
-        c.italic(c.dim(Date.now() - ts + ' ms'))
+        c.dim.italic(Date.now() - ts + ' ms')
       )
       return resolve(true)
     })
@@ -50,7 +50,7 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
 
   Promise.all(imports).then((_results) => {
     console.log(
-      c.italic(c.dim('...Done importing in ' + (Date.now() - tsImport) + ' ms'))
+      c.dim.italic('...Done importing in ' + (Date.now() - tsImport) + ' ms')
     )
   })
 }
