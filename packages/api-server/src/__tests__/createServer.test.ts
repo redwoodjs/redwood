@@ -119,7 +119,9 @@ describe('createServer', () => {
 
     const lastCallIndex = consoleLogSpy.mock.calls.length - 1
 
-    expect(consoleLogSpy.mock.calls[lastCallIndex][0]).toMatch(/Listening on/)
+    expect(consoleLogSpy.mock.calls[lastCallIndex][0]).toMatch(
+      /Server listening at/
+    )
 
     // `console.warn` will be used if there's a `server.config.js` file.
     expect(consoleWarnSpy.mock.calls[0][0]).toMatchInlineSnapshot(`
