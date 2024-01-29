@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import { describe, it, expect } from 'vitest'
+
 const distPath = path.join(__dirname, 'dist')
 const packageConfig = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
 

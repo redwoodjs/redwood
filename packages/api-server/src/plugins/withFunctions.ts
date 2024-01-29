@@ -27,7 +27,7 @@ const withFunctions = async (
     fastify.defaultTextParser
   )
 
-  const { configureFastify } = loadFastifyConfig()
+  const { configureFastify } = await loadFastifyConfig()
 
   if (configureFastify) {
     await configureFastify(fastify, { side: 'api', ...options })

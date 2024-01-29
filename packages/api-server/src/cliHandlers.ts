@@ -45,7 +45,7 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
   const tsApiServer = Date.now()
   console.log(c.dim.italic('Starting API Server...'))
 
-  let fastify = createFastifyInstance()
+  let fastify = await createFastifyInstance()
 
   // Import Server Functions.
   fastify = await withFunctions(fastify, options)
@@ -86,7 +86,7 @@ export const bothServerHandler = async (options: BothServerArgs) => {
   console.log(c.dim.italic('Starting API and Web Servers...'))
   const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
 
-  let fastify = createFastifyInstance()
+  let fastify = await createFastifyInstance()
 
   await fastify.register(redwoodFastifyWeb)
   fastify = await withFunctions(fastify, { ...options, apiRootPath })

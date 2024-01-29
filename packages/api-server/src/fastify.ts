@@ -32,7 +32,7 @@ let serverConfigFile: {
   },
 }
 
-export function loadFastifyConfig() {
+export async function loadFastifyConfig() {
   // @TODO use require.resolve to find the config file
   // do we need to babel first?
   const serverConfigPath = path.join(
@@ -48,17 +48,18 @@ export function loadFastifyConfig() {
 
   if (!isServerConfigLoaded) {
     console.log(`Loading server config from ${serverConfigPath}`)
-    serverConfigFile = { ...require(serverConfigPath) }
+    const config = await import(serverConfigPath)
+    serverConfigFile = { ...config.default }
     isServerConfigLoaded = true
   }
 
   return serverConfigFile
 }
 
-export const createFastifyInstance = (
+export const createFastifyInstance = async (
   options?: FastifyServerOptions
-): FastifyInstance => {
-  const { config } = loadFastifyConfig()
+): Promise<FastifyInstance> => {
+  const { config } = await loadFastifyConfig()
 
   const fastify = Fastify(options || config || DEFAULT_OPTIONS)
 
