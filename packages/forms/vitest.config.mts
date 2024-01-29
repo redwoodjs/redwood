@@ -4,6 +4,5 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['vitest.setup.mts'],
-    globals: true,
   },
 })
