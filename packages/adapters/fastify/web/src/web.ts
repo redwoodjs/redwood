@@ -5,12 +5,7 @@ import httpProxy from '@fastify/http-proxy'
 import fastifyStatic from '@fastify/static'
 import fastifyUrlData from '@fastify/url-data'
 import fg from 'fast-glob'
-import type {
-  FastifyInstance,
-  FastifyReply,
-  FastifyRequest,
-  HookHandlerDoneFunction,
-} from 'fastify'
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -22,8 +17,7 @@ export { coerceRootPath, RedwoodFastifyWebOptions }
 
 export async function redwoodFastifyWeb(
   fastify: FastifyInstance,
-  opts: RedwoodFastifyWebOptions,
-  done: HookHandlerDoneFunction
+  opts: RedwoodFastifyWebOptions
 ) {
   const { redwoodOptions, flags } = resolveOptions(opts)
 
@@ -53,8 +47,6 @@ export async function redwoodFastifyWeb(
   // but TS doesn't know that so it complains about `apiUrl` being undefined
   // in `fastify.all(...)` below. So we have to do this check for now
   if (redwoodOptions.apiUrl && flags.shouldRegisterApiUrl) {
-    fastify.log.warn("apiUrl is relative but there's no proxy target")
-
     const apiUrlHandler = (_req: FastifyRequest, reply: FastifyReply) => {
       reply.code(200)
       reply.send({
@@ -113,6 +105,4 @@ export async function redwoodFastifyWeb(
     reply.code(404)
     return reply.send('Not Found')
   })
-
-  done()
 }
