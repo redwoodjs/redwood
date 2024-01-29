@@ -48,7 +48,7 @@ export async function loadFastifyConfig() {
 
   if (!isServerConfigLoaded) {
     console.log(`Loading server config from ${serverConfigPath}`)
-    const config = await import(serverConfigPath)
+    const config = await import(`file://${serverConfigPath}`)
     serverConfigFile = { ...config.default }
     isServerConfigLoaded = true
   }
