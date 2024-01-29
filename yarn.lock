@@ -2116,12 +2116,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend@npm:0.35.1":
-  version: 0.35.1
-  resolution: "@clerk/backend@npm:0.35.1"
+"@clerk/backend@npm:0.37.3":
+  version: 0.37.3
+  resolution: "@clerk/backend@npm:0.37.3"
   dependencies:
-    "@clerk/shared": "npm:1.1.1"
-    "@clerk/types": "npm:3.59.0"
+    "@clerk/shared": "npm:1.3.1"
+    "@clerk/types": "npm:3.60.0"
     "@peculiar/webcrypto": "npm:1.4.1"
     "@types/node": "npm:16.18.6"
     cookie: "npm:0.5.0"
@@ -2129,7 +2129,7 @@ __metadata:
     node-fetch-native: "npm:1.0.1"
     snakecase-keys: "npm:5.4.4"
     tslib: "npm:2.4.1"
-  checksum: 83d89ab874304a334b9c49884d2194a1c09fe85634e734b5c086f464db433527f19cfea685d1aef3e7705827c5369bc3f61f07eb4b7875b06a574e9441c19ef0
+  checksum: 9a5497b35a23cc12beb91a88823608bf4e59869c367fb794e5c26f01dec81151a53d94f3bf197e09e4cb629797e53fc38cef9671973f62e8834d5b67bf9b85a5
   languageName: node
   linkType: hard
 
@@ -2146,20 +2146,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:4.13.1":
-  version: 4.13.1
-  resolution: "@clerk/clerk-sdk-node@npm:4.13.1"
+"@clerk/clerk-sdk-node@npm:4.13.7":
+  version: 4.13.7
+  resolution: "@clerk/clerk-sdk-node@npm:4.13.7"
   dependencies:
-    "@clerk/backend": "npm:0.35.1"
-    "@clerk/shared": "npm:1.1.1"
-    "@clerk/types": "npm:3.59.0"
+    "@clerk/backend": "npm:0.37.3"
+    "@clerk/shared": "npm:1.3.1"
+    "@clerk/types": "npm:3.60.0"
     "@types/cookies": "npm:0.7.7"
     "@types/express": "npm:4.17.14"
     "@types/node-fetch": "npm:2.6.2"
     camelcase-keys: "npm:6.2.2"
     snakecase-keys: "npm:3.2.1"
     tslib: "npm:2.4.1"
-  checksum: 6ef16ff5edc84563883f141935bc0c34d1c69dfa09a23cda135cd48feb5521d0cbcd6d6f275bb710f10a5dcb322750ddafda408a6ab01903af430104219e6309
+  checksum: 51bf5e0b1a7dbd4733d9a722cb21618f869c52dacd9925f84eccd65b3faea2cf55d16360c68ccca5f5a30d2611ee728a382e7ff2a9396ff93e56a6ffc8a2a01b
   languageName: node
   linkType: hard
 
@@ -2179,21 +2179,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@clerk/shared@npm:1.3.1":
+  version: 1.3.1
+  resolution: "@clerk/shared@npm:1.3.1"
+  dependencies:
+    glob-to-regexp: "npm:0.4.1"
+    js-cookie: "npm:3.0.1"
+    swr: "npm:2.2.0"
+  peerDependencies:
+    react: ">=16"
+  peerDependenciesMeta:
+    react:
+      optional: true
+  checksum: 03a2683fedef91d3a1a5123dffacd2698b13f15327ad22e7908d4e9770fb988cff8faae52d2028285fadbd759612b4afb77128bc5f44f6845adf9d3f7db207f7
+  languageName: node
+  linkType: hard
+
 "@clerk/types@npm:3.58.1":
   version: 3.58.1
   resolution: "@clerk/types@npm:3.58.1"
   dependencies:
     csstype: "npm:3.1.1"
   checksum: 4d87820ab676cc8897e91d4f37ad1074200790c6fe1c866470c786877930e9eda42dea25f778518171a6e56f16f4965fa750bdfc1b32b7ebf1c3f81770ae1055
-  languageName: node
-  linkType: hard
-
-"@clerk/types@npm:3.59.0":
-  version: 3.59.0
-  resolution: "@clerk/types@npm:3.59.0"
-  dependencies:
-    csstype: "npm:3.1.1"
-  checksum: 1ca212fd94ddc22386a5151e51584d96dd62738916b8bf88269c6459bc87d62913f9e80c88a8ea27a4724fe6511fcc9923e68fd54f1467f620a88ce1c345bfe9
   languageName: node
   linkType: hard
 
@@ -7627,7 +7634,7 @@ __metadata:
     "@babel/cli": "npm:7.23.9"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.9"
-    "@clerk/clerk-sdk-node": "npm:4.13.1"
+    "@clerk/clerk-sdk-node": "npm:4.13.7"
     "@redwoodjs/api": "npm:6.0.7"
     "@types/aws-lambda": "npm:8.10.126"
     core-js: "npm:3.35.1"
