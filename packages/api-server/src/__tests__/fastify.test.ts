@@ -52,7 +52,7 @@ const userConfig = {
   requestTimeout: 25_000,
 }
 
-vi.mock('virtual:sever.config.js', () => {
+vi.mock('virtual:server.config.js', () => {
   return {
     default: {
       config: userConfig,
