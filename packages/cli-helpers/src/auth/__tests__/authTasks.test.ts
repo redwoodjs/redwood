@@ -17,7 +17,7 @@ vi.mock('../../lib/paths', () => {
 })
 
 vi.mock('../../lib/project', async () => {
-  const { getPaths } = await import('../../lib/paths')
+  const { getPaths } = await import('../../lib/paths.js')
   return {
     isTypeScriptProject: vi.fn(),
     getGraphqlPath: () => {
@@ -60,9 +60,9 @@ import path from 'path'
 import { vol } from 'memfs'
 import { vi, beforeEach, describe, it, expect, test } from 'vitest'
 
-import { getPaths } from '../../lib/paths'
-import { isTypeScriptProject } from '../../lib/project'
-import type { AuthGeneratorCtx } from '../authTasks'
+import { getPaths } from '../../lib/paths.js'
+import { isTypeScriptProject } from '../../lib/project.js'
+import type { AuthGeneratorCtx } from '../authTasks.js'
 import {
   addApiConfig,
   addConfigToWebApp,
@@ -70,7 +70,7 @@ import {
   createWebAuth,
   hasAuthProvider,
   removeAuthProvider,
-} from '../authTasks'
+} from '../authTasks.js'
 
 import {
   auth0WebAuthTsTemplate,
@@ -86,7 +86,7 @@ import {
   webAppTsx,
   withAuthDecoderGraphqlTs,
   withoutRedwoodApolloAppTsx,
-} from './mockFsFiles'
+} from './mockFsFiles.js'
 
 function platformPath(filePath: string) {
   return filePath.split('/').join(path.sep)

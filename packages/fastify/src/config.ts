@@ -68,7 +68,7 @@ export function loadFastifyConfig() {
   }
 
   if (!isServerConfigLoaded) {
-    console.log(`Loading server config from ${serverConfigPath} \n`)
+    console.log(`Loading server config from ${serverConfigPath}`)
     serverConfigFile = { ...require(serverConfigPath) }
     isServerConfigLoaded = true
   }

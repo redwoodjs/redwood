@@ -105,11 +105,15 @@ process.env.RWJS_CWD = cwd
 //
 // This should be done as early as possible, and the earliest we can do it is after setting `cwd`.
 
-config({
-  path: path.join(getPaths().base, '.env'),
-  defaults: path.join(getPaths().base, '.env.defaults'),
-  multiline: true,
-})
+if (!process.env.REDWOOD_ENV_FILES_LOADED) {
+  config({
+    path: path.join(getPaths().base, '.env'),
+    defaults: path.join(getPaths().base, '.env.defaults'),
+    multiline: true,
+  })
+
+  process.env.REDWOOD_ENV_FILES_LOADED = 'true'
+}
 
 async function main() {
   // Start telemetry if it hasn't been disabled

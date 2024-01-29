@@ -42,9 +42,16 @@ const argv = yargs(hideBin(process.argv))
 
 const rwjsPaths = getPaths()
 
-dotenv.config({
-  path: rwjsPaths.base,
-})
+if (!process.env.REDWOOD_ENV_FILES_LOADED) {
+  dotenv.config({
+    path: path.join(getPaths().base, '.env'),
+    // @ts-expect-error The types for dotenv-defaults are using an outdated version of dotenv
+    defaults: path.join(getPaths().base, '.env.defaults'),
+    multiline: true,
+  })
+
+  process.env.REDWOOD_ENV_FILES_LOADED = 'true'
+}
 
 let httpServerProcess: ChildProcess
 
@@ -78,7 +85,7 @@ const buildAndRestart = async ({
     killApiServer()
 
     const buildTs = Date.now()
-    process.stdout.write(c.dim(c.italic('Building... ')))
+    console.log(c.dim.italic('Building...'))
 
     if (clean) {
       await cleanApiBuild()
@@ -89,7 +96,7 @@ const buildAndRestart = async ({
     } else {
       await buildApi()
     }
-    console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
+    console.log(c.dim.italic('Took ' + (Date.now() - buildTs) + ' ms'))
 
     const forkOpts = {
       execArgv: process.execArgv,
