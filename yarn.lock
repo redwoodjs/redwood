@@ -8334,7 +8334,7 @@ __metadata:
     react-dom: "npm:0.0.0-experimental-e5205658f-20230913"
     react-hook-form: "npm:7.49.3"
     typescript: "npm:5.3.3"
-    vitest: "npm:1.2.1"
+    vitest: "npm:1.2.2"
   peerDependencies:
     graphql: 16.8.1
     react: 0.0.0-experimental-e5205658f-20230913
