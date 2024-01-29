@@ -8,6 +8,7 @@ import {
   waitFor,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { vi, describe, it, expect, afterEach } from 'vitest'
 
 import {
   Form,
@@ -123,7 +124,7 @@ describe('Form', () => {
   })
 
   it('calls onSubmit', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(<TestComponent onSubmit={mockFn} />)
 
@@ -133,7 +134,7 @@ describe('Form', () => {
   })
 
   it('renders and coerces user-supplied values', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(<TestComponent onSubmit={mockFn} />)
 
@@ -170,7 +171,7 @@ describe('Form', () => {
   })
 
   it('finds nested form fields to coerce', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(<TestComponentWithWrappedFormElements onSubmit={mockFn} />)
 
@@ -193,7 +194,7 @@ describe('Form', () => {
   })
 
   it('lets users pass custom coercion functions', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
     const coercionFunctionNumber = (value: string) =>
       parseInt(value.replace('_', ''), 10)
     const coercionFunctionText = (value: string) => value.replace('_', '-')
@@ -227,7 +228,7 @@ describe('Form', () => {
   })
 
   it('sets the value to null for empty string on relational fields', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -253,7 +254,7 @@ describe('Form', () => {
   })
 
   it('ensures required textField is enforced by validation', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -276,7 +277,7 @@ describe('Form', () => {
   })
 
   it('ensures required selectField is enforced by validation', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -304,7 +305,7 @@ describe('Form', () => {
   })
 
   it('handles int and float blank values gracefully', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
     console.log('handles int and float blank values gracefully')
 
     render(
@@ -332,7 +333,7 @@ describe('Form', () => {
 
   // Note the good JSON case is tested in an earlier test
   it('does not call the onSubmit function for a bad entry into a TextAreaField with valueAsJSON', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -355,7 +356,7 @@ describe('Form', () => {
   })
 
   it('displays a FieldError for a bad entry into a TextAreaField with valueAsJSON', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -378,7 +379,7 @@ describe('Form', () => {
   })
 
   it('for a FieldError with name set to path', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -483,7 +484,7 @@ describe('Form', () => {
   })
 
   it('returns appropriate values for fields with emptyAs not defined ', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -530,7 +531,7 @@ describe('Form', () => {
   })
 
   it(`returns appropriate values for non-empty fields with emptyAs={'undefined'}`, async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -586,7 +587,7 @@ describe('Form', () => {
   })
 
   it('returns null for empty fields with emptyAs={null}', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -630,7 +631,7 @@ describe('Form', () => {
   })
 
   it('returns appropriate value empty fields with emptyAs={0}', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -675,7 +676,7 @@ describe('Form', () => {
   })
 
   it(`returns an empty string empty fields with emptyAs={''}`, async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -720,7 +721,7 @@ describe('Form', () => {
   })
 
   it('should have appropriate validation for NumberFields and DateFields with emptyAs={null}', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -748,7 +749,7 @@ describe('Form', () => {
   })
 
   it(`handles invalid emptyAs values with default values`, async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -803,7 +804,7 @@ describe('Form', () => {
   })
 
   it('should return a number for a textfield with valueAsNumber, regardless of emptyAs', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -850,7 +851,7 @@ describe('Form', () => {
   })
 
   it('should return a date for a textfield with valueAsDate, regardless of emptyAs', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -897,7 +898,7 @@ describe('Form', () => {
   })
 
   it('should throw an intelligible error if the name prop is missing', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     const testRender = () =>
       render(
