@@ -11,7 +11,6 @@ import type {
   FastifyListenOptions,
   FastifyServerOptions,
   FastifyInstance,
-  HookHandlerDoneFunction,
 } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 
@@ -312,8 +311,7 @@ export interface RedwoodFastifyAPIOptions {
 
 export async function redwoodFastifyFunctions(
   fastify: FastifyInstance,
-  opts: RedwoodFastifyAPIOptions,
-  done: HookHandlerDoneFunction
+  opts: RedwoodFastifyAPIOptions
 ) {
   fastify.register(fastifyUrlData)
   await fastify.register(fastifyRawBody)
@@ -332,6 +330,4 @@ export async function redwoodFastifyFunctions(
       ignore: ['**/dist/functions/graphql.js'],
     },
   })
-
-  done()
 }
