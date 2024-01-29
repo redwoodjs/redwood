@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Head as HelmetHead } from '../index'
+import { Helmet as HelmetHead } from 'react-helmet-async'
 
 type ValueOrCollection<T> = T | ValueOrCollection<T>[] | Record<string, T>
 type ParentValue = ValueOrCollection<string>
