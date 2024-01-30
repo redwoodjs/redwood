@@ -7,7 +7,7 @@ export type CookieParams = {
 
 /**
  * Specialised cookie map, that lets you set cookies with options
- * */
+ */
 export class CookieJar {
   private map = new Map<string, CookieParams>()
 
@@ -59,10 +59,7 @@ export class CookieJar {
     })
   }
 
-  /**
-   * Clear all cookies, or remove a specific cookie
-   * from the jar.
-   */
+  /** Clear all cookies, or remove a specific cookie from the jar */
   public clear(name?: string) {
     if (name) {
       this.map.delete(name)

@@ -32,8 +32,8 @@ export class MiddlewareRequest extends WhatWgRequest {
 }
 
 /**
- * Converts a Web API Request object to a MiddlewareRequest object
- * also ensures that serverAuthContext is fresh for each request
+ * Converts a Web API Request object to a MiddlewareRequest object.
+ * Also ensures that serverAuthContext is fresh for each request
  * (assuming that it is a new instance for each request)
  */
 export const createMiddlewareRequest = (req: Request) => {

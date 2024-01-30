@@ -164,8 +164,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
         serverAuthState?.cookieHeader
       ),
     },
-    // filter boolean doesn't play nice with TS
-  ].filter((link): link is RedwoodApolloLink<any> => !!link)
+  ].filter((link): link is RedwoodApolloLinks[number] => !!link)
 
   function makeClient() {
     // @MARK use special Apollo client
