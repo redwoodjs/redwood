@@ -107,7 +107,7 @@ export const createReactStreamingHandler = async (
       }
     }
 
-    // If mwResponse is a redirect, short-circuit here, and skip react rendering
+    // If mwResponse is a redirect, short-circuit here, and skip React rendering
     // @TODO should we also check if its a full response object? Next allows this... just to maintain symmetry
     if (mwResponse.isRedirect()) {
       return mwResponse.toResponse()

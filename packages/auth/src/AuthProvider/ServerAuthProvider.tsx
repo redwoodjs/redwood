@@ -33,7 +33,7 @@ export const ServerAuthContext = React.createContext<ServerAuthState>(
   getAuthInitialStateFromServer()
 )
 
-/***
+/**
  * Note: This only gets rendered on the server and serves two purposes:
  * 1) On the server, it sets the auth state
  * 2) On the client, it restores the auth state from the initial server render
