@@ -174,6 +174,16 @@ module.exports = {
         'local-postgres-setup',
         'logger',
         'mailer',
+        {
+          type: 'category',
+          label: 'monitoring',
+          link: {
+            type: 'generated-index',
+            title: 'monitoring',
+            slug: 'monitoring/index',
+          },
+          items: [{ type: 'doc', label: 'Sentry', id: 'monitoring/sentry' }],
+        },
         'prerender',
         'project-configuration-dev-test-build',
         'redwoodrecord',
