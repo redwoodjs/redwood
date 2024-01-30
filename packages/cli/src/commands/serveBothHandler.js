@@ -1,11 +1,15 @@
 import path from 'path'
 
-import chalk from 'chalk'
 import concurrently from 'concurrently'
 import execa from 'execa'
 
-import { createFastifyInstance, redwoodFastifyAPI } from '@redwoodjs/fastify'
-import { redwoodFastifyWeb, coerceRootPath } from '@redwoodjs/fastify-web'
+import { apiServerCLIConfig } from '@redwoodjs/api-server'
+import {
+  getAPIHost,
+  getAPIPort,
+  getWebHost,
+  getWebPort,
+} from '@redwoodjs/api-server/helpers'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -24,8 +28,12 @@ export const bothServerFileHandler = async (argv) => {
       shell: true,
     })
   } else {
-    const apiHost = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
-    const apiProxyTarget = `http://${apiHost}:${argv.apiPort}`
+    argv.apiPort ??= getAPIPort()
+    argv.apiHost ??= getAPIHost()
+    argv.webPort ??= getWebPort()
+    argv.webHost ??= getWebHost()
+
+    const apiProxyTarget = `http://${argv.apiHost}:${argv.apiPort}`
 
     const { result } = concurrently(
       [
@@ -33,13 +41,13 @@ export const bothServerFileHandler = async (argv) => {
           name: 'api',
           command: `yarn node ${path.join('dist', 'server.js')} --port ${
             argv.apiPort
-          }`,
+          } --host ${argv.apiHost}`,
           cwd: getPaths().api.base,
           prefixColor: 'cyan',
         },
         {
           name: 'web',
-          command: `yarn rw-web-server --port ${argv.webPort} --api-proxy-target ${apiProxyTarget}`,
+          command: `yarn rw-web-server --port ${argv.webPort} --host ${argv.webHost} --api-proxy-target ${apiProxyTarget}`,
           cwd: getPaths().base,
           prefixColor: 'blue',
         },
@@ -66,10 +74,8 @@ export const bothServerFileHandler = async (argv) => {
 }
 
 export const bothSsrRscServerHandler = async (argv) => {
-  const { apiServerHandler } = await import('./serveApiHandler.js')
-
   // TODO Allow specifying port, socket and apiRootPath
-  const apiPromise = apiServerHandler({
+  const apiPromise = apiServerCLIConfig.handler({
     ...argv,
     port: 8911,
     apiRootPath: '/',
@@ -84,65 +90,6 @@ export const bothSsrRscServerHandler = async (argv) => {
   })
 
   await Promise.all([apiPromise, fePromise])
-}
-
-export const bothServerHandler = async (options) => {
-  const { port, socket } = options
-  const tsServer = Date.now()
-
-  console.log(chalk.italic.dim('Starting API and Web Servers...'))
-
-  const fastify = createFastifyInstance()
-
-  process.on('exit', () => {
-    fastify?.close()
-  })
-
-  await fastify.register(redwoodFastifyWeb, {
-    redwood: {
-      ...options,
-    },
-  })
-
-  const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
-
-  await fastify.register(redwoodFastifyAPI, {
-    redwood: {
-      ...options,
-      apiRootPath,
-    },
-  })
-
-  let listenOptions
-
-  if (socket) {
-    listenOptions = { path: socket }
-  } else {
-    listenOptions = {
-      port,
-      host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
-    }
-  }
-
-  const address = await fastify.listen(listenOptions)
-
-  fastify.ready(() => {
-    console.log(chalk.dim.italic('Took ' + (Date.now() - tsServer) + ' ms'))
-
-    const webServer = chalk.green(address)
-    const apiServer = chalk.magenta(`${address}${apiRootPath}`)
-    const graphqlEndpoint = chalk.magenta(`${apiServer}graphql`)
-
-    console.log(`Web server listening at ${webServer}`)
-    console.log(`API server listening at ${apiServer}`)
-    console.log(`GraphQL endpoint at ${graphqlEndpoint}`)
-
-    sendProcessReady()
-  })
-}
-
-function sendProcessReady() {
-  return process.send && process.send('ready')
 }
 
 function logSkippingFastifyWebServer() {

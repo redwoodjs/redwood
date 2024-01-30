@@ -48,7 +48,7 @@ const commandStrings = {
   '@redwoodjs/cli': path.resolve(__dirname, '../../packages/cli/dist/index.js'),
   '@redwoodjs/api-server': path.resolve(
     __dirname,
-    '../../packages/api-server/dist/index.js'
+    '../../packages/api-server/dist/bin.js'
   ),
   '@redwoodjs/web-server': path.resolve(
     __dirname,
@@ -264,11 +264,13 @@ describe('@redwoodjs/cli', () => {
         await $`yarn node ${commandStrings['@redwoodjs/cli']} serve --help`
 
       expect(stdout).toMatchInlineSnapshot(`
-        "usage: rw <side>
+        "rw serve [side]
+
+        Start a server for serving both the api and web sides
 
         Commands:
-          rw serve      Run both api and web servers                           [default]
-          rw serve api  Start server for serving only the api
+          rw serve      Start a server for serving both the api and web sides  [default]
+          rw serve api  Start a server for serving only the api side
           rw serve web  Start a server for serving only the web side
 
         Options:
@@ -277,8 +279,9 @@ describe('@redwoodjs/cli', () => {
               --cwd        Working directory to use (where \`redwood.toml\` is located)
               --telemetry  Whether to send anonymous usage telemetry to RedwoodJS
                                                                                [boolean]
-          -p, --port                                            [number] [default: 8910]
-              --socket                                                          [string]
+          -p, --port       The port to listen at                                [number]
+              --host       The host to listen at. Note that you most likely want this to
+                           be '0.0.0.0' in production                           [string]
 
         Also see the Redwood CLI Reference
         (​https://redwoodjs.com/docs/cli-commands#serve​)
@@ -294,11 +297,13 @@ describe('@redwoodjs/cli', () => {
         expect(p.exitCode).toEqual(1)
         expect(p.stdout).toEqual('')
         expect(p.stderr).toMatchInlineSnapshot(`
-          "usage: rw <side>
+          "rw serve [side]
+
+          Start a server for serving both the api and web sides
 
           Commands:
-            rw serve      Run both api and web servers                           [default]
-            rw serve api  Start server for serving only the api
+            rw serve      Start a server for serving both the api and web sides  [default]
+            rw serve api  Start a server for serving only the api side
             rw serve web  Start a server for serving only the web side
 
           Options:
@@ -307,8 +312,9 @@ describe('@redwoodjs/cli', () => {
                 --cwd        Working directory to use (where \`redwood.toml\` is located)
                 --telemetry  Whether to send anonymous usage telemetry to RedwoodJS
                                                                                  [boolean]
-            -p, --port                                            [number] [default: 8910]
-                --socket                                                          [string]
+            -p, --port       The port to listen at                                [number]
+                --host       The host to listen at. Note that you most likely want this to
+                             be '0.0.0.0' in production                           [string]
 
           Also see the Redwood CLI Reference
           (​https://redwoodjs.com/docs/cli-commands#serve​)
@@ -342,7 +348,7 @@ describe('@redwoodjs/cli', () => {
       expect(stdout).toMatchInlineSnapshot(`
         "rw serve api
 
-        Start server for serving only the api
+        Start a server for serving only the api side
 
         Options:
               --help                                Show help                  [boolean]
@@ -351,8 +357,10 @@ describe('@redwoodjs/cli', () => {
                                                     \`redwood.toml\` is located)
               --telemetry                           Whether to send anonymous usage
                                                     telemetry to RedwoodJS     [boolean]
-          -p, --port                                            [number] [default: 8911]
-              --socket                                                          [string]
+          -p, --port                                The port to listen at       [number]
+              --host                                The host to listen at. Note that you
+                                                    most likely want this to be
+                                                    '0.0.0.0' in production     [string]
               --apiRootPath, --api-root-path,       Root path where your api functions
               --rootPath, --root-path               are served   [string] [default: "/"]
         "
@@ -369,7 +377,7 @@ describe('@redwoodjs/cli', () => {
         expect(p.stderr).toMatchInlineSnapshot(`
           "rw serve api
 
-          Start server for serving only the api
+          Start a server for serving only the api side
 
           Options:
                 --help                                Show help                  [boolean]
@@ -378,8 +386,10 @@ describe('@redwoodjs/cli', () => {
                                                       \`redwood.toml\` is located)
                 --telemetry                           Whether to send anonymous usage
                                                       telemetry to RedwoodJS     [boolean]
-            -p, --port                                            [number] [default: 8911]
-                --socket                                                          [string]
+            -p, --port                                The port to listen at       [number]
+                --host                                The host to listen at. Note that you
+                                                      most likely want this to be
+                                                      '0.0.0.0' in production     [string]
                 --apiRootPath, --api-root-path,       Root path where your api functions
                 --rootPath, --root-path               are served   [string] [default: "/"]
 
@@ -393,76 +403,26 @@ describe('@redwoodjs/cli', () => {
 
 describe('@redwoodjs/api-server', () => {
   describe('both server CLI', () => {
-    it('--socket changes the port', async () => {
-      const socket = 8921
-
-      p = $`yarn node ${commandStrings['@redwoodjs/api-server']} --socket ${socket}`
-      await new Promise((r) => setTimeout(r, TIMEOUT))
-
-      const webRes = await fetch(`http://localhost:${socket}/about`)
-      const webBody = await webRes.text()
-
-      expect(webRes.status).toEqual(200)
-      expect(webBody).toEqual(
-        fs.readFileSync(
-          path.join(__dirname, './fixtures/redwood-app/web/dist/about.html'),
-          'utf-8'
-        )
-      )
-
-      const apiRes = await fetch(
-        `http://localhost:${socket}/.redwood/functions/hello`
-      )
-      const apiBody = await apiRes.json()
-
-      expect(apiRes.status).toEqual(200)
-      expect(apiBody).toEqual({ data: 'hello function' })
-    })
-
-    it('--socket wins out over --port', async () => {
-      const socket = 8922
-      const port = 8923
-
-      p = $`yarn node ${commandStrings['@redwoodjs/api-server']} --socket ${socket} --port ${port}`
-      await new Promise((r) => setTimeout(r, TIMEOUT))
-
-      const webRes = await fetch(`http://localhost:${socket}/about`)
-      const webBody = await webRes.text()
-
-      expect(webRes.status).toEqual(200)
-      expect(webBody).toEqual(
-        fs.readFileSync(
-          path.join(__dirname, './fixtures/redwood-app/web/dist/about.html'),
-          'utf-8'
-        )
-      )
-
-      const apiRes = await fetch(
-        `http://localhost:${socket}/.redwood/functions/hello`
-      )
-      const apiBody = await apiRes.json()
-
-      expect(apiRes.status).toEqual(200)
-      expect(apiBody).toEqual({ data: 'hello function' })
-    })
-
     it("doesn't have help configured", async () => {
       const { stdout } =
         await $`yarn node ${commandStrings['@redwoodjs/api-server']} --help`
 
       expect(stdout).toMatchInlineSnapshot(`
-        "usage: rw-server <side>
+        "rw-server
+
+        Start a server for serving both the api and web sides
 
         Commands:
-          rw-server      Run both api and web servers                          [default]
-          rw-server api  Start server for serving only the api
+          rw-server      Start a server for serving both the api and web sides [default]
+          rw-server api  Start a server for serving only the api side
           rw-server web  Start a server for serving only the web side
 
         Options:
               --help     Show help                                             [boolean]
               --version  Show version number                                   [boolean]
-          -p, --port                                            [number] [default: 8910]
-              --socket                                                          [string]
+          -p, --port     The port to listen at                                  [number]
+              --host     The host to listen at. Note that you most likely want this to
+                         be '0.0.0.0' in production                             [string]
         "
       `)
     })
@@ -475,18 +435,21 @@ describe('@redwoodjs/api-server', () => {
         expect(p.exitCode).toEqual(1)
         expect(p.stdout).toEqual('')
         expect(p.stderr).toMatchInlineSnapshot(`
-          "usage: rw-server <side>
+          "rw-server
+
+          Start a server for serving both the api and web sides
 
           Commands:
-            rw-server      Run both api and web servers                          [default]
-            rw-server api  Start server for serving only the api
+            rw-server      Start a server for serving both the api and web sides [default]
+            rw-server api  Start a server for serving only the api side
             rw-server web  Start a server for serving only the web side
 
           Options:
                 --help     Show help                                             [boolean]
                 --version  Show version number                                   [boolean]
-            -p, --port                                            [number] [default: 8910]
-                --socket                                                          [string]
+            -p, --port     The port to listen at                                  [number]
+                --host     The host to listen at. Note that you most likely want this to
+                           be '0.0.0.0' in production                             [string]
 
           Unknown arguments: foo, bar, baz
           "
@@ -496,44 +459,6 @@ describe('@redwoodjs/api-server', () => {
   })
 
   describe('api server CLI', () => {
-    it('--socket changes the port', async () => {
-      const socket = 3001
-
-      p = $`yarn node ${commandStrings['@redwoodjs/api-server']} api --socket ${socket}`
-      await new Promise((r) => setTimeout(r, TIMEOUT))
-
-      const res = await fetch(`http://localhost:${socket}/hello`)
-      const body = await res.json()
-
-      expect(res.status).toEqual(200)
-      expect(body).toEqual({ data: 'hello function' })
-    })
-
-    it('--socket wins out over --port', async () => {
-      const socket = 3002
-      const port = 3003
-
-      p = $`yarn node ${commandStrings['@redwoodjs/api-server']} api  --socket ${socket} --port ${port}`
-      await new Promise((r) => setTimeout(r, TIMEOUT))
-
-      const res = await fetch(`http://localhost:${socket}/hello`)
-      const body = await res.json()
-
-      expect(res.status).toEqual(200)
-      expect(body).toEqual({ data: 'hello function' })
-    })
-
-    it('--loadEnvFiles loads dotenv files', async () => {
-      p = $`yarn node ${commandStrings['@redwoodjs/api-server']} api --loadEnvFiles`
-      await new Promise((r) => setTimeout(r, TIMEOUT))
-
-      const res = await fetch(`http://localhost:8911/env`)
-      const body = await res.json()
-
-      expect(res.status).toEqual(200)
-      expect(body).toEqual({ data: '42' })
-    })
-
     it('has help configured', async () => {
       const { stdout } =
         await $`yarn node ${commandStrings['@redwoodjs/api-server']} api --help`
@@ -541,13 +466,15 @@ describe('@redwoodjs/api-server', () => {
       expect(stdout).toMatchInlineSnapshot(`
         "rw-server api
 
-        Start server for serving only the api
+        Start a server for serving only the api side
 
         Options:
               --help                                Show help                  [boolean]
               --version                             Show version number        [boolean]
-          -p, --port                                            [number] [default: 8911]
-              --socket                                                          [string]
+          -p, --port                                The port to listen at       [number]
+              --host                                The host to listen at. Note that you
+                                                    most likely want this to be
+                                                    '0.0.0.0' in production     [string]
               --apiRootPath, --api-root-path,       Root path where your api functions
               --rootPath, --root-path               are served   [string] [default: "/"]
         "
@@ -564,13 +491,15 @@ describe('@redwoodjs/api-server', () => {
         expect(p.stderr).toMatchInlineSnapshot(`
           "rw-server api
 
-          Start server for serving only the api
+          Start a server for serving only the api side
 
           Options:
                 --help                                Show help                  [boolean]
                 --version                             Show version number        [boolean]
-            -p, --port                                            [number] [default: 8911]
-                --socket                                                          [string]
+            -p, --port                                The port to listen at       [number]
+                --host                                The host to listen at. Note that you
+                                                      most likely want this to be
+                                                      '0.0.0.0' in production     [string]
                 --apiRootPath, --api-root-path,       Root path where your api functions
                 --rootPath, --root-path               are served   [string] [default: "/"]
 

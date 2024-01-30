@@ -1,7 +1,7 @@
 import path from 'path'
 
-import c from 'ansi-colors'
 import type { Handler } from 'aws-lambda'
+import chalk from 'chalk'
 import fg from 'fast-glob'
 import type { Options as FastGlobOptions } from 'fast-glob'
 import type {
@@ -22,7 +22,7 @@ export const LAMBDA_FUNCTIONS: Lambdas = {}
 
 export const setLambdaFunctions = async (foundFunctions: string[]) => {
   const tsImport = Date.now()
-  console.log(c.dim.italic('Importing Server Functions... '))
+  console.log(chalk.dim.italic('Importing Server Functions... '))
 
   const imports = foundFunctions.map((fnPath) => {
     return new Promise((resolve) => {
@@ -40,17 +40,17 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
         )
       }
       // TODO: Use terminal link.
-      console.log(
-        c.magenta('/' + routeName),
-        c.dim.italic(Date.now() - ts + ' ms')
-      )
+      console.log(chalk.magenta('/' + routeName))
+      console.log(chalk.dim.italic(Date.now() - ts + ' ms'))
       return resolve(true)
     })
   })
 
   Promise.all(imports).then((_results) => {
     console.log(
-      c.dim.italic('...Done importing in ' + (Date.now() - tsImport) + ' ms')
+      chalk.dim.italic(
+        '...Done importing in ' + (Date.now() - tsImport) + ' ms'
+      )
     )
   })
 }

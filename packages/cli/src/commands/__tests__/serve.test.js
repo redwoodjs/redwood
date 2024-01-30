@@ -1,3 +1,10 @@
+import { vi, describe, afterEach, it, expect } from 'vitest'
+import yargs from 'yargs/yargs'
+
+import { apiServerCLIConfig, bothServerCLIConfig } from '@redwoodjs/api-server'
+
+import { builder } from '../serve'
+
 globalThis.__dirname = __dirname
 
 // We mock these to skip the check for web/dist and api/dist
@@ -41,18 +48,16 @@ vi.mock('fs-extra', async (importOriginal) => {
   }
 })
 
-vi.mock('../serveApiHandler', async (importOriginal) => {
-  const originalHandler = await importOriginal()
+vi.mock('@redwoodjs/api-server', async (importOriginal) => {
+  const originalCLIConfig = await importOriginal()
   return {
-    ...originalHandler,
-    apiServerHandler: vi.fn(),
-  }
-})
-vi.mock('../serveBothHandler', async (importOriginal) => {
-  const originalHandler = await importOriginal()
-  return {
-    ...originalHandler,
-    bothServerHandler: vi.fn(),
+    apiServerCLIConfig: {
+      handler: vi.fn(),
+    },
+    bothServerCLIConfig: {
+      builder: originalCLIConfig.bothServerCLIConfig.builder,
+      handler: vi.fn(),
+    },
   }
 })
 vi.mock('execa', () => ({
@@ -61,13 +66,6 @@ vi.mock('execa', () => ({
     params,
   })),
 }))
-
-import { vi, describe, afterEach, it, expect } from 'vitest'
-import yargs from 'yargs/yargs'
-
-import { builder } from '../serve'
-import { apiServerHandler } from '../serveApiHandler'
-import { bothServerHandler } from '../serveBothHandler'
 
 describe('yarn rw serve', () => {
   afterEach(() => {
@@ -79,7 +77,7 @@ describe('yarn rw serve', () => {
 
     await parser.parse('serve api --port 5555 --apiRootPath funkyFunctions')
 
-    expect(apiServerHandler).toHaveBeenCalledWith(
+    expect(apiServerCLIConfig.handler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 5555,
         apiRootPath: expect.stringMatching(/^\/?funkyFunctions\/?$/),
@@ -94,7 +92,7 @@ describe('yarn rw serve', () => {
       'serve api --port 5555 --rootPath funkyFunctions/nested/'
     )
 
-    expect(apiServerHandler).toHaveBeenCalledWith(
+    expect(apiServerCLIConfig.handler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 5555,
         rootPath: expect.stringMatching(/^\/?funkyFunctions\/nested\/$/),
@@ -107,7 +105,7 @@ describe('yarn rw serve', () => {
 
     await parser.parse('serve --port 9898 --socket abc')
 
-    expect(bothServerHandler).toHaveBeenCalledWith(
+    expect(bothServerCLIConfig.handler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 9898,
         socket: 'abc',

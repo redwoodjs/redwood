@@ -8,22 +8,19 @@ Start a server for serving only the web side
 Options:
       --help                                Show help                  [boolean]
       --version                             Show version number        [boolean]
-  -p, --port                                The port to listen on
-                                                        [number] [default: 8910]
-      --host                                The host to listen on. Defaults to
-                                            '0.0.0.0' in production, '::' in
-                                            development                 [string]
-      --apiUrl, --api-url                   Relative URL for proxying requests
-                                            from or a fully-qualified URL to the
-                                            API server
-                                       [string] [default: "/.redwood/functions"]
-      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
-                                            this target. apiUrl must be a
-                                            relative URL                [string]
+  -p, --port                                The port to listen on       [number]
+      --host                                The host to listen on. Note that you
+                                            most likely want this to be
+                                            '0.0.0.0' in production     [string]
+      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl (in
+                                            the redwood.toml) to this target.
+                                            apiUrl must be a relative URL
+                                                                        [string]
       --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
-                                            Forward requests from the apiUrl to
-                                            this target. apiUrl must be a
-                                            relative URL   [deprecated] [string]
+                                            Forward requests from the apiUrl (in
+                                            the redwood.toml) to this target.
+                                            apiUrl must be a relative URL
+                                                           [deprecated] [string]
 
 Examples:
   yarn rw-web-server --api-url=/api --api-  Start the web server and proxy
@@ -46,22 +43,19 @@ Start a server for serving only the web side
 Options:
       --help                                Show help                  [boolean]
       --version                             Show version number        [boolean]
-  -p, --port                                The port to listen on
-                                                        [number] [default: 8910]
-      --host                                The host to listen on. Defaults to
-                                            '0.0.0.0' in production, '::' in
-                                            development                 [string]
-      --apiUrl, --api-url                   Relative URL for proxying requests
-                                            from or a fully-qualified URL to the
-                                            API server
-                                       [string] [default: "/.redwood/functions"]
-      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
-                                            this target. apiUrl must be a
-                                            relative URL                [string]
+  -p, --port                                The port to listen on       [number]
+      --host                                The host to listen on. Note that you
+                                            most likely want this to be
+                                            '0.0.0.0' in production     [string]
+      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl (in
+                                            the redwood.toml) to this target.
+                                            apiUrl must be a relative URL
+                                                                        [string]
       --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
-                                            Forward requests from the apiUrl to
-                                            this target. apiUrl must be a
-                                            relative URL   [deprecated] [string]
+                                            Forward requests from the apiUrl (in
+                                            the redwood.toml) to this target.
+                                            apiUrl must be a relative URL
+                                                           [deprecated] [string]
 
 Examples:
   yarn rw-web-server --api-url=/api --api-  Start the web server and proxy
@@ -89,7 +83,7 @@ exports[`serve web (/Users/dom/projects/redwood/redwood/packages/web-server/dist
 }
 `;
 
-exports[`serve web ([ '/Users/dom/projects/redwood/redwood/packages/api-server/dist/index.js', 'web' ]) > errors out on unknown args 1`] = `
+exports[`serve web ([ '/Users/dom/projects/redwood/redwood/packages/api-server/dist/bin.js', 'web' ]) > errors out on unknown args 1`] = `
 "rw-server web
 
 Start a server for serving only the web side
@@ -97,28 +91,25 @@ Start a server for serving only the web side
 Options:
       --help                                Show help                  [boolean]
       --version                             Show version number        [boolean]
-  -p, --port                                The port to listen on
-                                                        [number] [default: 8910]
-      --host                                The host to listen on. Defaults to
-                                            '0.0.0.0' in production, '::' in
-                                            development                 [string]
-      --apiUrl, --api-url                   Relative URL for proxying requests
-                                            from or a fully-qualified URL to the
-                                            API server
-                                       [string] [default: "/.redwood/functions"]
-      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
-                                            this target. apiUrl must be a
-                                            relative URL                [string]
+  -p, --port                                The port to listen on       [number]
+      --host                                The host to listen on. Note that you
+                                            most likely want this to be
+                                            '0.0.0.0' in production     [string]
+      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl (in
+                                            the redwood.toml) to this target.
+                                            apiUrl must be a relative URL
+                                                                        [string]
       --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
-                                            Forward requests from the apiUrl to
-                                            this target. apiUrl must be a
-                                            relative URL   [deprecated] [string]
+                                            Forward requests from the apiUrl (in
+                                            the redwood.toml) to this target.
+                                            apiUrl must be a relative URL
+                                                           [deprecated] [string]
 
 Unknown arguments: foo, bar, baz
 "
 `;
 
-exports[`serve web ([ '/Users/dom/projects/redwood/redwood/packages/api-server/dist/index.js', 'web' ]) > has help configured 1`] = `
+exports[`serve web ([ '/Users/dom/projects/redwood/redwood/packages/api-server/dist/bin.js', 'web' ]) > has help configured 1`] = `
 "rw-server web
 
 Start a server for serving only the web side
@@ -126,26 +117,23 @@ Start a server for serving only the web side
 Options:
       --help                                Show help                  [boolean]
       --version                             Show version number        [boolean]
-  -p, --port                                The port to listen on
-                                                        [number] [default: 8910]
-      --host                                The host to listen on. Defaults to
-                                            '0.0.0.0' in production, '::' in
-                                            development                 [string]
-      --apiUrl, --api-url                   Relative URL for proxying requests
-                                            from or a fully-qualified URL to the
-                                            API server
-                                       [string] [default: "/.redwood/functions"]
-      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
-                                            this target. apiUrl must be a
-                                            relative URL                [string]
+  -p, --port                                The port to listen on       [number]
+      --host                                The host to listen on. Note that you
+                                            most likely want this to be
+                                            '0.0.0.0' in production     [string]
+      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl (in
+                                            the redwood.toml) to this target.
+                                            apiUrl must be a relative URL
+                                                                        [string]
       --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
-                                            Forward requests from the apiUrl to
-                                            this target. apiUrl must be a
-                                            relative URL   [deprecated] [string]
+                                            Forward requests from the apiUrl (in
+                                            the redwood.toml) to this target.
+                                            apiUrl must be a relative URL
+                                                           [deprecated] [string]
 "
 `;
 
-exports[`serve web ([ '/Users/dom/projects/redwood/redwood/packages/api-server/dist/index.js', 'web' ]) > works by default; registers a warning at apiUrl 1`] = `
+exports[`serve web ([ '/Users/dom/projects/redwood/redwood/packages/api-server/dist/bin.js', 'web' ]) > works by default; registers a warning at apiUrl 1`] = `
 {
   "data": null,
   "errors": [
@@ -172,22 +160,19 @@ Options:
                                             \`redwood.toml\` is located)
       --telemetry                           Whether to send anonymous usage
                                             telemetry to RedwoodJS     [boolean]
-  -p, --port                                The port to listen on
-                                                        [number] [default: 8910]
-      --host                                The host to listen on. Defaults to
-                                            '0.0.0.0' in production, '::' in
-                                            development                 [string]
-      --apiUrl, --api-url                   Relative URL for proxying requests
-                                            from or a fully-qualified URL to the
-                                            API server
-                                       [string] [default: "/.redwood/functions"]
-      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
-                                            this target. apiUrl must be a
-                                            relative URL                [string]
+  -p, --port                                The port to listen on       [number]
+      --host                                The host to listen on. Note that you
+                                            most likely want this to be
+                                            '0.0.0.0' in production     [string]
+      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl (in
+                                            the redwood.toml) to this target.
+                                            apiUrl must be a relative URL
+                                                                        [string]
       --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
-                                            Forward requests from the apiUrl to
-                                            this target. apiUrl must be a
-                                            relative URL   [deprecated] [string]
+                                            Forward requests from the apiUrl (in
+                                            the redwood.toml) to this target.
+                                            apiUrl must be a relative URL
+                                                           [deprecated] [string]
 
 Unknown arguments: foo, bar, baz
 "
@@ -205,22 +190,19 @@ Options:
                                             \`redwood.toml\` is located)
       --telemetry                           Whether to send anonymous usage
                                             telemetry to RedwoodJS     [boolean]
-  -p, --port                                The port to listen on
-                                                        [number] [default: 8910]
-      --host                                The host to listen on. Defaults to
-                                            '0.0.0.0' in production, '::' in
-                                            development                 [string]
-      --apiUrl, --api-url                   Relative URL for proxying requests
-                                            from or a fully-qualified URL to the
-                                            API server
-                                       [string] [default: "/.redwood/functions"]
-      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl to
-                                            this target. apiUrl must be a
-                                            relative URL                [string]
+  -p, --port                                The port to listen on       [number]
+      --host                                The host to listen on. Note that you
+                                            most likely want this to be
+                                            '0.0.0.0' in production     [string]
+      --apiProxyTarget, --api-proxy-target  Forward requests from the apiUrl (in
+                                            the redwood.toml) to this target.
+                                            apiUrl must be a relative URL
+                                                                        [string]
       --apiHost, --api-host                 [Deprecated; use apiProxyTarget]
-                                            Forward requests from the apiUrl to
-                                            this target. apiUrl must be a
-                                            relative URL   [deprecated] [string]
+                                            Forward requests from the apiUrl (in
+                                            the redwood.toml) to this target.
+                                            apiUrl must be a relative URL
+                                                           [deprecated] [string]
 "
 `;
 

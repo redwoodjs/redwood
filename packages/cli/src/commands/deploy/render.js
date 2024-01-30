@@ -3,11 +3,11 @@ import path from 'path'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
+import { apiServerCLIConfig } from '@redwoodjs/api-server'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/project-config'
 
 import { getPaths } from '../../lib'
-import { apiServerHandler } from '../serveApiHandler'
 
 export const command = 'render <side>'
 export const description = 'Build, Migrate, and Serve command for Render deploy'
@@ -70,7 +70,7 @@ export const handler = async ({ side, prisma, dm: dataMigrate }) => {
         execaConfig
       )
     dataMigrate && execa.sync('yarn rw dataMigrate up', execaConfig)
-    await apiServerHandler({
+    await apiServerCLIConfig.handler({
       port: getConfig().api?.port || 8911,
       apiRootPath: '/',
     })
