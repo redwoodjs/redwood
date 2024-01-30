@@ -45,7 +45,7 @@ export const ServerAuthProvider = ({
   value: ServerAuthState
   children?: ReactNode[]
 }) => {
-  // @NOTE: we "Sanitize" to remove encryptedSession and cookieHeader
+  // @NOTE: we "Sanitize" to remove cookieHeader
   // not totally necessary, but it's nice to not have them in the DOM
   // @MARK: needs discussion!
   const stringifiedAuthState = `__REDWOOD__SERVER__AUTH_STATE__ = ${JSON.stringify(
