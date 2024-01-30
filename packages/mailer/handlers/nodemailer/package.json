@@ -13,7 +13,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn node ./build.mjs && yarn build:types",
+    "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-mailer-handler-nodemailer.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
@@ -26,6 +26,7 @@
   "devDependencies": {
     "@redwoodjs/framework-tools": "6.0.7",
     "@types/nodemailer": "^6",
+    "tsx": "4.6.2",
     "typescript": "5.3.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

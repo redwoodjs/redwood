@@ -1,25 +1,22 @@
 import { build, defaultBuildOptions } from '@redwoodjs/framework-tools'
 
-const options = {
-  ...defaultBuildOptions,
-  bundle: true,
-  entryPoints: ['./src/index.ts'],
-  packages: 'external',
-}
-
-// ESM build.
 await build({
   buildOptions: {
-    ...options,
+    ...defaultBuildOptions,
+    bundle: true,
+    entryPoints: ['./src/index.ts'],
     format: 'esm',
     outExtension: { '.js': '.mjs' },
+    packages: 'external',
   },
 })
 
-// CJS build.
 await build({
   buildOptions: {
-    ...options,
+    ...defaultBuildOptions,
+    bundle: true,
+    entryPoints: ['./src/index.ts'],
     outExtension: { '.js': '.cjs' },
+    packages: 'external',
   },
 })
