@@ -1,5 +1,5 @@
 import fastifyUrlData from '@fastify/url-data'
-import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 
 import type { GlobalContext } from '@redwoodjs/context'
@@ -11,8 +11,7 @@ import type { RedwoodFastifyAPIOptions } from './types'
 
 export async function redwoodFastifyAPI(
   fastify: FastifyInstance,
-  opts: RedwoodFastifyAPIOptions,
-  done: HookHandlerDoneFunction
+  opts: RedwoodFastifyAPIOptions
 ) {
   if (!fastify.hasPlugin('@fastify/url-data')) {
     await fastify.register(fastifyUrlData)
@@ -41,6 +40,4 @@ export async function redwoodFastifyAPI(
   fastify.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   fastify.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
   await loadFunctionsFromDist()
-
-  done()
 }
