@@ -176,10 +176,10 @@ module.exports = {
         'mailer',
         {
           type: 'category',
-          label: 'monitoring',
+          label: 'Monitoring',
           link: {
             type: 'generated-index',
-            title: 'monitoring',
+            title: 'Monitoring',
             slug: 'monitoring/index',
           },
           items: [{ type: 'doc', label: 'Sentry', id: 'monitoring/sentry' }],
