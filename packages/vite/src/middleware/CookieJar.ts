@@ -50,7 +50,7 @@ export class CookieJar {
    * Won't delete a cookie from the jar, but will set it to expire
    * and set an empty value
    */
-  public delete(name: string) {
+  public unset(name: string) {
     return this.map.set(name, {
       value: '',
       options: {

@@ -53,12 +53,12 @@ describe('CookieJar', () => {
     })
 
     // @MARK: API convention worth discussing!
-    // Delete is a little special, it doesn't actually delete the cookie
+    // Unset is a little special, it doesn't actually delete the cookie
     // but sets it to expire and sets an empty value
-    test('delete', () => {
+    test('unset', () => {
       const myJar = new CookieJar('auth_provider=kittens; session=woof-124556')
 
-      myJar.delete('auth_provider')
+      myJar.unset('auth_provider')
 
       const { value: authProviderValue, options: authProviderOptions } =
         myJar.get('auth_provider')!
