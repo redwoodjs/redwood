@@ -302,12 +302,20 @@ async function loadCommandsFromCacheOrPackage(
     const commands = plugin.commands ?? []
     const cacheUpdate = {}
     for (const command of commands) {
-      cacheUpdate[command.command] = {
+      const info = {
         aliases: command.aliases,
         description: command.description,
       }
+      // If we have any information about the command we'll update the cache
+      if (Object.entries(info).some(([_, v]) => v !== undefined)) {
+        cacheUpdate[command.command] = info
+      }
     }
-    cache[packageName] = cacheUpdate
+
+    // Only update the entry if we got any cache information
+    if (Object.keys(cacheUpdate).length > 0) {
+      cache[packageName] = cacheUpdate
+    }
     return commands
   }
 
