@@ -1,6 +1,6 @@
 import { getConfig } from './lib'
 import {
-  loadCommadCache,
+  loadCommandCache,
   checkPluginListAndWarn,
   saveCommandCache,
   loadPluginPackage,
@@ -30,7 +30,7 @@ export async function loadPlugins(yargs) {
 
   // TODO: We should have some mechanism to fetch the cache from an online or precomputed
   // source this will allow us to have a cache hit on the first run of a command
-  const pluginCommandCache = loadCommadCache()
+  const pluginCommandCache = loadCommandCache()
 
   // Check if the command is built in to the base CLI package
   if (
@@ -238,7 +238,7 @@ export async function loadPlugins(yargs) {
     }
   }
 
-  // We need to nest the commands under the namespace rememebering that the
+  // We need to nest the commands under the namespace remembering that the
   // @redwoodjs namespace is special and doesn't need to be nested
   if (namespaceInUse === '@redwoodjs') {
     yargs.command(commandsToRegister)
