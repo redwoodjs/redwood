@@ -135,12 +135,16 @@ export default SentryLayout
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/layouts/SentryLayout/SentryLayout.tsx"
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { useAuth } from 'src/lib/auth'
 import Sentry from 'src/lib/sentry'
 
-const SentryLayout = ({ children }) => {
+interface Props {
+  children: React.ReactNode
+}
+
+const SentryLayout = ({ children }: Props) => {
   const { currentUser } = useAuth()
 
   useEffect(() => Sentry.setUser(currentUser), [currentUser])
