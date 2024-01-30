@@ -4,15 +4,13 @@ import { Response } from '@whatwg-node/fetch'
 import isbot from 'isbot'
 import type { ViteDevServer } from 'vite'
 
-import type { ServerAuthState } from '@redwoodjs/auth'
 import { defaultAuthProviderState } from '@redwoodjs/auth'
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import { createMiddlewareRequest } from '../middleware/MiddlewareRequest'
-import { MiddlewareResponse } from '../middleware/MiddlewareResponse'
+import { invoke } from 'src/middleware/invokeMiddleware'
 
 import { reactRenderToStreamResponse } from './streamHelpers'
 import { loadAndRunRouteHooks } from './triggerRouteHooks'
@@ -87,28 +85,11 @@ export const createReactStreamingHandler = async (
 
     // ~~~ Middleware Handling ~~~
     const { middleware } = entryServerImport
-    let mwResponse: MiddlewareResponse = MiddlewareResponse.next()
-    let decodedAuthState: ServerAuthState = defaultAuthProviderState
 
-    if (middleware) {
-      try {
-        const mwReq = createMiddlewareRequest(req)
-        const mwOutput = await middleware(mwReq)
-
-        // Possible to return nothing from MW
-        // Leave the default .next() response in place
-        if (mwOutput) {
-          mwResponse = mwOutput
-        }
-
-        decodedAuthState = mwReq.serverAuthContext.get()
-      } catch (e) {
-        console.error('Whooopsie, error in middleware', e)
-      }
-    }
+    const [mwResponse, decodedAuthState = defaultAuthProviderState] =
+      await invoke(req, middleware)
 
     // If mwResponse is a redirect, short-circuit here, and skip React rendering
-    // @TODO should we also check if its a full response object? Next allows this... just to maintain symmetry
     if (mwResponse.isRedirect()) {
       return mwResponse.toResponse()
     }

@@ -8,6 +8,7 @@ import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { invoke } from './middleware/invokeMiddleware'
 import { collectCssPaths, componentsModules } from './streaming/collectCss'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
 import { registerFwGlobals } from './streaming/registerGlobals'
@@ -81,8 +82,8 @@ async function createServer() {
 
     app.get(expressPathDef, createServerAdapter(routeHandler))
 
-    app.all(
-      '/_rw_mw',
+    app.post(
+      '*',
       createServerAdapter(async (req: Request) => {
         const entryServerImport = await vite.ssrLoadModule(
           rwPaths.web.entryServer as string // already validated in dev server
@@ -90,18 +91,9 @@ async function createServer() {
 
         const middleware = entryServerImport.middleware
 
-        let out = null
-        if (middleware) {
-          try {
-            out = await middleware(req)
-          } catch (e) {
-            console.error('Whooopsie, error in middleware POST handler')
-            console.error(e)
-          }
-        }
+        const [mwRes] = await invoke(req, middleware)
 
-        // @TODO: We should check the type of resposne here I guess
-        return out.toResponse()
+        return mwRes.toResponse()
       })
     )
   }

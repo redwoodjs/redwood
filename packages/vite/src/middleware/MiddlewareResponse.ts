@@ -19,6 +19,13 @@ export class MiddlewareResponse {
     this.status = init?.status || 200
   }
 
+  static fromResponse = (res: Response) => {
+    return new MiddlewareResponse(res.body, {
+      headers: res.headers,
+      status: res.status,
+    })
+  }
+
   static next = () => {
     return new MiddlewareResponse()
   }
