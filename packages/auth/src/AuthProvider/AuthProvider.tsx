@@ -135,10 +135,10 @@ export function createAuthProvider<
       async function doRestoreState() {
         await authImplementation.restoreAuthState?.()
 
-        // @MARK(SSR-Auth): Conditionally call reauth, because initial state should come from server (on SSR)
-        // If the inital state didn't come from the server - or was restored already -
-        // reauthenticate will make an call to receive the current user from the server
-        if (!serverAuthState) {
+        // @MARK(SSR-Auth): Conditionally call reauth, because initial state
+        // should come from server (on SSR).
+        // If the initial state didn't come from the server - or was restored already -
+        // reauthenticate will make a call to receive the current user from the server
           reauthenticate()
         }
       }
