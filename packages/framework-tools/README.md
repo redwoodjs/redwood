@@ -1,3 +1,4 @@
 # Framework Tools
 
-Tooling etc used internally by the Redwood framework
+Tooling used internally by the Redwood framework.
+This package isn't published to NPM.
