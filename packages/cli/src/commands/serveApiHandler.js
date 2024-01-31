@@ -53,7 +53,7 @@ export const apiServerHandler = async (options) => {
     }
   }
 
-  fastify.listen(listenOptions)
+  const address = await fastify.listen(listenOptions)
 
   fastify.ready(() => {
     fastify.log.trace(
@@ -61,15 +61,14 @@ export const apiServerHandler = async (options) => {
       'Fastify server configuration'
     )
     fastify.log.trace(`Registered plugins \n${fastify.printPlugins()}`)
-    console.log(chalk.italic.dim('Took ' + (Date.now() - tsApiServer) + ' ms'))
 
-    const on = socket
-      ? socket
-      : chalk.magenta(`http://localhost:${port}${apiRootPath}`)
+    console.log(chalk.dim.italic('Took ' + (Date.now() - tsApiServer) + ' ms'))
 
-    console.log(`API listening on ${on}`)
-    const graphqlEnd = chalk.magenta(`${apiRootPath}graphql`)
-    console.log(`GraphQL endpoint at ${graphqlEnd}`)
+    const apiServer = chalk.magenta(`${address}${apiRootPath}`)
+    const graphqlEndpoint = chalk.magenta(`${apiServer}graphql`)
+
+    console.log(`API server listening at ${apiServer}`)
+    console.log(`GraphQL endpoint at ${graphqlEndpoint}`)
 
     sendProcessReady()
   })

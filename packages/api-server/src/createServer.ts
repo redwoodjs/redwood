@@ -11,7 +11,6 @@ import type {
   FastifyListenOptions,
   FastifyServerOptions,
   FastifyInstance,
-  HookHandlerDoneFunction,
 } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 
@@ -44,6 +43,8 @@ if (process.env.RWJS_CWD && !process.env.REDWOOD_ENV_FILES_LOADED) {
     defaults: path.join(getPaths().base, '.env.defaults'),
     multiline: true,
   })
+
+  process.env.REDWOOD_ENV_FILES_LOADED = 'true'
 }
 
 export interface CreateServerOptions {
@@ -159,20 +160,10 @@ export async function createServer(options: CreateServerOptions = {}) {
     done()
   })
 
-  // Just logging. The conditional here is to appease TS.
-  // `server.server.address()` can return a string, an AddressInfo object, or null.
-  // Note that the logging here ("Listening on...") seems to be duplicated, probably by `@redwoodjs/graphql-server`
   server.addHook('onListen', (done) => {
-    const addressInfo = server.server.address()
-
-    if (!addressInfo || typeof addressInfo === 'string') {
-      done()
-      return
-    }
-
     console.log(
-      `Listening on ${c.magenta(
-        `http://${addressInfo.address}:${addressInfo.port}${apiRootPath}`
+      `Server listening at ${c.magenta(
+        `${server.listeningOrigin}${apiRootPath}`
       )}`
     )
     done()
@@ -320,8 +311,7 @@ export interface RedwoodFastifyAPIOptions {
 
 export async function redwoodFastifyFunctions(
   fastify: FastifyInstance,
-  opts: RedwoodFastifyAPIOptions,
-  done: HookHandlerDoneFunction
+  opts: RedwoodFastifyAPIOptions
 ) {
   fastify.register(fastifyUrlData)
   await fastify.register(fastifyRawBody)
@@ -340,6 +330,4 @@ export async function redwoodFastifyFunctions(
       ignore: ['**/dist/functions/graphql.js'],
     },
   })
-
-  done()
 }

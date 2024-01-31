@@ -23,17 +23,17 @@
     "test:watch": "vitest watch src"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.6",
-    "core-js": "3.34.0"
+    "@babel/runtime-corejs3": "7.23.9",
+    "core-js": "3.35.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.4",
+    "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
     "@supabase/supabase-js": "2.39.0",
     "@types/react": "18.2.37",
     "react": "0.0.0-experimental-e5205658f-20230913",
     "typescript": "5.3.3",
-    "vitest": "1.2.1"
+    "vitest": "1.2.2"
   },
   "peerDependencies": {
     "@supabase/supabase-js": "2.39.0"

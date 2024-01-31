@@ -9,7 +9,7 @@ import {
 console.log = jest.fn()
 
 // Set up RWJS_CWD.
-let original_RWJS_CWD
+let original_RWJS_CWD: string | undefined
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD

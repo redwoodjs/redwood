@@ -8,9 +8,16 @@
     "directory": "packages/web-server"
   },
   "license": "MIT",
-  "main": "./dist/server.js",
+  "exports": {
+    ".": {
+      "types": "./dist/cliConfig.d.ts",
+      "default": "./dist/cliConfig.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/cliConfig.d.ts",
   "bin": {
-    "rw-web-server": "./dist/server.js"
+    "rw-web-server": "./dist/bin.js"
   },
   "files": [
     "dist"
@@ -21,23 +28,17 @@
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "fix:permissions": "chmod +x dist/index.js; chmod +x dist/watch.js",
-    "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "echo \"No tests yet\"",
-    "test:watch": "echo \"No tests yet\""
+    "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@fastify/http-proxy": "9.3.0",
-    "@fastify/static": "6.12.0",
-    "@fastify/url-data": "5.4.0",
+    "@redwoodjs/fastify-web": "6.0.7",
     "@redwoodjs/project-config": "6.0.7",
     "chalk": "4.1.2",
     "dotenv-defaults": "5.0.2",
-    "fast-glob": "3.3.2",
-    "fastify": "4.24.3",
+    "fastify": "4.25.2",
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "esbuild": "0.19.9",
     "typescript": "5.3.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

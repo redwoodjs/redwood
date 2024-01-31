@@ -3,7 +3,6 @@ import fg from 'fast-glob'
 import type {
   FastifyInstance,
   HTTPMethods,
-  HookHandlerDoneFunction,
   FastifyReply,
   FastifyRequest,
 } from 'fastify'
@@ -35,8 +34,7 @@ export interface RedwoodFastifyGraphQLOptions {
  */
 export async function redwoodFastifyGraphQLServer(
   fastify: FastifyInstance,
-  options: RedwoodFastifyGraphQLOptions,
-  done: HookHandlerDoneFunction
+  options: RedwoodFastifyGraphQLOptions
 ) {
   // These two plugins are needed to transform a Fastify Request to a Lambda event
   // which is used by the RedwoodGraphQLContext and mimics the behavior of the
@@ -67,7 +65,7 @@ export async function redwoodFastifyGraphQLServer(
     // graphql function.
     //
     // These would be plugins that need a server instance such as Redwood Realtime
-    if (graphqlOptions.realtime) {
+    if (graphqlOptions?.realtime) {
       const { useRedwoodRealtime } = await import('@redwoodjs/realtime')
 
       const originalExtraPlugins: Array<Plugin<any>> =
@@ -126,8 +124,6 @@ export async function redwoodFastifyGraphQLServer(
 
       done()
     })
-
-    done()
   } catch (e) {
     console.log(e)
   }
