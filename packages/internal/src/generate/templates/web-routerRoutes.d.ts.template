@@ -1,6 +1,4 @@
 import { RouteParams, QueryParams } from '@redwoodjs/router'
-import { A } from 'ts-toolbelt'
-
 
 declare module '@redwoodjs/router' {
   interface AvailableRoutes {
