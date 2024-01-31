@@ -27,7 +27,7 @@
     },
     "./helpers": {
       "types": "./dist/helpers.d.ts",
-      "default": "./dist/helpers"
+      "default": "./dist/helpers.js"
     },
     "./package.json": "./package.json"
   },
