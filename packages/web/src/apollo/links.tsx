@@ -114,12 +114,6 @@ export function createFinalLink({
 
 // ~~~ Types ~~~
 
-export type RedwoodApolloLinkName =
-  | 'withToken'
-  | 'authMiddleware'
-  | 'enhanceErrorLink'
-  | 'httpLink'
-
 export type RedwoodApolloLink<
   Name extends RedwoodApolloLinkName,
   Link extends ApolloLink = ApolloLink
@@ -134,5 +128,13 @@ export type RedwoodApolloLinks = Array<
   | RedwoodApolloLink<'enhanceErrorLink'>
   | RedwoodApolloLink<'httpLink', HttpLink>
 >
+
+// DummyLink is needed to prevent circular dependencies when defining
+// RedwoodApolloLinkName
+// (Just replace DummyLink with RedwoodApolloLink in the InferredLinkName type
+// helper and you'll see what I mean)
+type DummyLink<T extends string> = { name: T }
+type InferredLinkName<T> = T extends Array<DummyLink<infer Name>> ? Name : never
+export type RedwoodApolloLinkName = InferredLinkName<RedwoodApolloLinks>
 
 export type RedwoodApolloLinkFactory = (links: RedwoodApolloLinks) => ApolloLink
