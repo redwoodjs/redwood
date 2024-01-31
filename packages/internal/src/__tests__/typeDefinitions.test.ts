@@ -136,10 +136,8 @@ declare global {
 
 test('generates global page imports source maps', () => {
   const paths = generateTypeDefRouterPages()
-  const sourceMap = fs
-    .readFileSync(paths[0] + '.map', 'utf-8')
-    // Handle Windows paths
-    .replace(/\.\.\\\\/g, '../')
+  const sourceMap = JSON.parse(fs.readFileSync(paths[0] + '.map', 'utf-8'))
+  sourceMap.sources = sourceMap.sources.map((source) => ensurePosixPath(source))
   expect(sourceMap).toMatchSnapshot()
 })
 
@@ -168,10 +166,10 @@ test('generates the router routes', () => {
 
 test('generates source maps for the router routes', () => {
   const paths = generateTypeDefRouterRoutes()
-  const sourceMap = fs
-    .readFileSync(paths[0] + '.map', 'utf-8')
-    // Handle Windows paths
-    .replace(/\.\.\\\\/g, '../')
+  const sourceMap = JSON.parse(fs.readFileSync(paths[0] + '.map', 'utf-8'))
+  sourceMap.sources = sourceMap.sources.map((source: string) =>
+    ensurePosixPath(source)
+  )
   expect(sourceMap).toMatchSnapshot()
 })
 
