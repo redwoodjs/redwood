@@ -130,17 +130,18 @@ export function createAuthProvider<
     const type = authImplementation.type
     const client = authImplementation.client
 
-    // Whenever the authImplementation is ready to go, restore auth and reauthenticate
+    // Whenever the authImplementation is ready to go, restore auth and
+    // reauthenticate
     useEffect(() => {
       async function doRestoreState() {
         await authImplementation.restoreAuthState?.()
 
-        // @MARK(SSR-Auth): Conditionally call reauth, because initial state
-        // should come from server (on SSR).
-        // If the initial state didn't come from the server - or was restored already -
-        // reauthenticate will make a call to receive the current user from the server
-          reauthenticate()
-        }
+        // @MARK(SSR-Auth): Conditionally call reauthenticate, because initial
+        // state should come from server (on SSR).
+        // If the initial state didn't come from the server - or was restored
+        // already - reauthenticate will make a call to receive the current
+        // user from the server
+        reauthenticate()
       }
 
       doRestoreState()
