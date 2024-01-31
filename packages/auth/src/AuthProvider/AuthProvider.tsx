@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import type { AuthContextInterface, CurrentUser } from '../AuthContext'
 import type { AuthImplementation } from '../AuthImplementation'
 
 import type { AuthProviderState } from './AuthProviderState'
 import { defaultAuthProviderState } from './AuthProviderState'
+import { ServerAuthContext } from './ServerAuthProvider'
 import { useCurrentUser } from './useCurrentUser'
 import { useForgotPassword } from './useForgotPassword'
 import { useHasRole } from './useHasRole'
@@ -82,9 +83,11 @@ export function createAuthProvider<
   }: AuthProviderProps) => {
     // const [hasRestoredState, setHasRestoredState] = useState(false)
 
+    const serverAuthState = useContext(ServerAuthContext)
+
     const [authProviderState, setAuthProviderState] = useState<
       AuthProviderState<TUser>
-    >(defaultAuthProviderState)
+    >(serverAuthState || defaultAuthProviderState)
 
     const getToken = useToken(authImplementation)
 
@@ -127,15 +130,22 @@ export function createAuthProvider<
     const type = authImplementation.type
     const client = authImplementation.client
 
-    // Whenever the authImplementation is ready to go, restore auth and reauthenticate
+    // Whenever the authImplementation is ready to go, restore auth and
+    // reauthenticate
     useEffect(() => {
       async function doRestoreState() {
         await authImplementation.restoreAuthState?.()
+
+        // @MARK(SSR-Auth): Conditionally call reauthenticate, because initial
+        // state should come from server (on SSR).
+        // If the initial state didn't come from the server - or was restored
+        // already - reauthenticate will make a call to receive the current
+        // user from the server
         reauthenticate()
       }
 
       doRestoreState()
-    }, [reauthenticate])
+    }, [reauthenticate, serverAuthState])
 
     return (
       <AuthContext.Provider
