@@ -10,7 +10,7 @@ import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import { invoke } from 'src/middleware/invokeMiddleware'
+import { invoke } from '../middleware/invokeMiddleware'
 
 import { reactRenderToStreamResponse } from './streamHelpers'
 import { loadAndRunRouteHooks } from './triggerRouteHooks'
