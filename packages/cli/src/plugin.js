@@ -306,8 +306,9 @@ async function loadCommandsFromCacheOrPackage(
         aliases: command.aliases,
         description: command.description,
       }
+
       // If we have any information about the command we'll update the cache
-      if (Object.entries(info).some(([_, v]) => v !== undefined)) {
+      if (Object.values(info).some((value) => value !== undefined)) {
         cacheUpdate[command.command] = info
       }
     }
