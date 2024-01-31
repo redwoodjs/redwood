@@ -1,5 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`generates global page imports source maps 1`] = `
+"{
+  "version": 3,
+  "sources": [
+    "../../../web/src/pages/BarPage/BarPage.tsx",
+    "../../../web/src/pages/FatalErrorPage/FatalErrorPage.js",
+    "../../../web/src/pages/FooPage/FooPage.tsx",
+    "../../../web/src/pages/HomePage/HomePage.tsx",
+    "../../../web/src/pages/NotFoundPage/NotFoundPage.js",
+    "../../../web/src/pages/PrivatePage/PrivatePage.tsx",
+    "../../../web/src/pages/TypeScriptPage/TypeScriptPage.tsx",
+    "../../../web/src/pages/admin/EditUserPage/EditUserPage.jsx"
+  ],
+  "names": [],
+  "mappings": ";;;;;;;;;;;;AAAA;ACQA;ACRA;ACKA;ACLA;ACAA;ACAA;ACAA",
+  "file": "web-routesPages.d.ts"
+}"
+`;
+
+exports[`generates source maps for the router routes 1`] = `
+"{
+  "version": 3,
+  "sources": [
+    "../../../web/src/Routes.js"
+  ],
+  "names": [],
+  "mappings": ";;;;;;IAiBM;IACA;IACA;IAEE;IACA;IAGA",
+  "file": "web-routerRoutes.d.ts"
+}"
+`;
+
 exports[`mirror path for directory named modules 1`] = `".redwood/types/mirror/web/src/graphql"`;
 
 exports[`mirror path for directory named modules 2`] = `"../../packages/internal/index.d.ts"`;
