@@ -7437,6 +7437,7 @@ __metadata:
     "@fastify/url-data": "npm:5.4.0"
     "@redwoodjs/context": "npm:6.0.7"
     "@redwoodjs/fastify-web": "npm:6.0.7"
+    "@redwoodjs/framework-tools": "npm:6.0.7"
     "@redwoodjs/project-config": "npm:6.0.7"
     "@redwoodjs/web-server": "npm:6.0.7"
     "@types/aws-lambda": "npm:8.10.126"
