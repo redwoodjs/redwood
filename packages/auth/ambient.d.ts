@@ -20,7 +20,11 @@ declare global {
     RWJS_API_URL: string
 
     __REDWOOD__APP_TITLE: string
+
+    RWJS_EXP_STREAMING_SSR: boolean
   }
+
+  var __REDWOOD__SERVER__AUTH_STATE__: AuthProviderState<any>
 
   namespace NodeJS {
     interface Global {
