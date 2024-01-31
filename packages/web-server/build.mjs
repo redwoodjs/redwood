@@ -4,7 +4,7 @@ import {
   build,
   defaultBuildOptions,
   defaultIgnorePatterns,
-} from '../../buildDefaults.mjs'
+} from '@redwoodjs/framework-tools'
 
 // This package uses the name of the bin as `scriptName` for Yargs to keep things in sync.
 // There should only be one bin entry for this to work.

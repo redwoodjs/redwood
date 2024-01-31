@@ -45,6 +45,7 @@
     "typescript": "5.3.3"
   },
   "devDependencies": {
+    "@redwoodjs/framework-tools": "6.0.7",
     "@types/babel-plugin-tester": "9.0.9",
     "@types/babel__core": "7.20.4",
     "@types/node": "20.11.10",

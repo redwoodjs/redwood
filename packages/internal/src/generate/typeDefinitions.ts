@@ -260,8 +260,10 @@ export const generateTypeDefRouterRoutes = () => {
       file: 'web-routerRoutes.d.ts',
     })
 
-    // Start line is based on where in the template the `    ${name}: (params?: RouteParams<"${path}"> & QueryParams) => "${path}"` are defined
-    const startLine = 9
+    // Start line is based on where in the template the
+    // `    ${name}: (params?: RouteParams<"${path}"> & QueryParams) => "${path}"`
+    // line is defined
+    const startLine = 7
 
     // Map the location of the default export for each page
     for (let i = 0; i < routes.length; i++) {
