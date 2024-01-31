@@ -1,5 +1,6 @@
 {
   "name": "@redwoodjs/framework-tools",
+  "private": true,
   "version": "6.0.7",
   "repository": {
     "type": "git",
@@ -8,11 +9,7 @@
   },
   "license": "MIT",
   "type": "module",
-  "exports": {
-    "types": "./dist/buildDefaults.d.ts",
-    "import": "./dist/buildDefaults.mjs",
-    "default": "./dist/buildDefaults.cjs"
-  },
+  "exports": "./dist/buildDefaults.mjs",
   "types": "./dist/buildDefaults.d.ts",
   "files": [
     "dist"

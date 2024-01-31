@@ -15,11 +15,3 @@ await build({
     outExtension: { '.js': '.mjs' },
   },
 })
-
-// CJS build.
-await build({
-  buildOptions: {
-    ...options,
-    outExtension: { '.js': '.cjs' },
-  },
-})
