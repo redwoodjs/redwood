@@ -1,7 +1,10 @@
 import { vi, describe, afterEach, it, expect } from 'vitest'
 import yargs from 'yargs/yargs'
 
-import { apiServerCLIConfig, bothServerCLIConfig } from '@redwoodjs/api-server'
+import {
+  apiServerCLIConfig,
+  bothServerCLIConfig,
+} from '@redwoodjs/api-server/dist/cliConfig'
 
 import { builder } from '../serve'
 
@@ -48,7 +51,7 @@ vi.mock('fs-extra', async (importOriginal) => {
   }
 })
 
-vi.mock('@redwoodjs/api-server', async (importOriginal) => {
+vi.mock('@redwoodjs/api-server/dist/cliConfig', async (importOriginal) => {
   const originalCLIConfig = await importOriginal()
   return {
     apiServerCLIConfig: {

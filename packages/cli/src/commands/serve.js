@@ -3,7 +3,10 @@ import path from 'path'
 import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
-import { apiServerCLIConfig, bothServerCLIConfig } from '@redwoodjs/api-server'
+import {
+  apiServerCLIConfig,
+  bothServerCLIConfig,
+} from '@redwoodjs/api-server/dist/cliConfig.js'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import * as webServerCLIConfig from '@redwoodjs/web-server'
 

@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 
+import { getAPIPort, getAPIHost } from './cliHelpers'
 import createFastifyInstance from './fastify'
-import { getAPIPort, getAPIHost } from './helpers'
 import { redwoodFastifyAPI } from './plugins/api'
 import type { APIParsedOptions } from './types'
 

@@ -3,8 +3,8 @@ import chalk from 'chalk'
 import { redwoodFastifyWeb, coerceRootPath } from '@redwoodjs/fastify-web'
 import { getConfig } from '@redwoodjs/project-config'
 
+import { getWebHost, getWebPort } from './cliHelpers'
 import createFastifyInstance from './fastify'
-import { getWebHost, getWebPort } from './helpers'
 import { redwoodFastifyAPI } from './plugins/api'
 import type { BothParsedOptions } from './types'
 

@@ -41,9 +41,8 @@ export async function serveWeb(options: ParsedOptions = {}) {
     requestTimeout: 15_000,
     logger: {
       level:
-        process.env.LOG_LEVEL ?? process.env.NODE_ENV === 'development'
-          ? 'debug'
-          : 'warn',
+        process.env.LOG_LEVEL ??
+        (process.env.NODE_ENV === 'development' ? 'debug' : 'warn'),
     },
   })
 

@@ -8,30 +8,8 @@
     "directory": "packages/api-server"
   },
   "license": "MIT",
-  "exports": {
-    ".": {
-      "types": "./dist/cliConfig.d.ts",
-      "default": "./dist/cliConfig.js"
-    },
-    "./create-server": {
-      "types": "./dist/createServer.d.ts",
-      "default": "./dist/createServer.js"
-    },
-    "./fastify-api": {
-      "types": "./dist/plugins/api.d.ts",
-      "default": "./dist/plugins/api.js"
-    },
-    "./fastify-graphql": {
-      "types": "./dist/plugins/graphql.d.ts",
-      "default": "./dist/plugins/graphql.js"
-    },
-    "./helpers": {
-      "types": "./dist/helpers.d.ts",
-      "default": "./dist/helpers.js"
-    },
-    "./package.json": "./package.json"
-  },
-  "types": "./dist/cliConfig.d.ts",
+  "main": "./dist/createServer.js",
+  "types": "./dist/createServer.d.ts",
   "bin": {
     "rw-api-server-watch": "./dist/watch.js",
     "rw-log-formatter": "./dist/logFormatter/bin.js",

@@ -5,11 +5,11 @@ import build from 'pino-abstract-transport'
 
 import { getConfig } from '@redwoodjs/project-config'
 
+import { createServer } from '../createServer'
 import {
-  createServer,
   resolveOptions,
   DEFAULT_CREATE_SERVER_OPTIONS,
-} from '../createServer'
+} from '../createServerHelpers'
 
 // Set up RWJS_CWD.
 let original_RWJS_CWD: string | undefined

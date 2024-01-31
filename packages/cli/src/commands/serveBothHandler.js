@@ -3,13 +3,13 @@ import path from 'path'
 import concurrently from 'concurrently'
 import execa from 'execa'
 
-import { apiServerCLIConfig } from '@redwoodjs/api-server'
+import { apiServerCLIConfig } from '@redwoodjs/api-server/dist/cliConfig'
 import {
   getAPIHost,
   getAPIPort,
   getWebHost,
   getWebPort,
-} from '@redwoodjs/api-server/helpers'
+} from '@redwoodjs/api-server/dist/cliHelpers'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 

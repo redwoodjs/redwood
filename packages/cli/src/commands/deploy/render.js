@@ -3,7 +3,7 @@ import path from 'path'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { apiServerCLIConfig } from '@redwoodjs/api-server'
+import { apiServerCLIConfig } from '@redwoodjs/api-server/dist/cliConfig'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/project-config'
 
