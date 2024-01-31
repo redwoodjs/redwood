@@ -25,6 +25,7 @@
     "mjml": "4.14.1"
   },
   "devDependencies": {
+    "@redwoodjs/framework-tools": "6.0.7",
     "@types/mjml": "4",
     "typescript": "5.3.3"
   },

@@ -26,6 +26,7 @@
     "eslint": "8.55.0"
   },
   "devDependencies": {
+    "@redwoodjs/framework-tools": "6.0.7",
     "@types/eslint": "8",
     "@types/estree": "1.0.5",
     "@typescript-eslint/parser": "5.62.0",
