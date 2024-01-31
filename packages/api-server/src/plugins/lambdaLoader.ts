@@ -40,8 +40,12 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
         )
       }
       // TODO: Use terminal link.
-      console.log(chalk.magenta('/' + routeName))
-      console.log(chalk.dim.italic(Date.now() - ts + ' ms'))
+      console.log(
+        `${chalk.magenta('/' + routeName)} ${chalk.dim.italic(
+          Date.now() - ts + ' ms'
+        )}`
+      )
+
       return resolve(true)
     })
   })
