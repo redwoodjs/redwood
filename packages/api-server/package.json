@@ -71,6 +71,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
+    "@redwoodjs/framework-tools": "6.0.7",
     "@types/aws-lambda": "8.10.126",
     "@types/lodash": "4.14.201",
     "@types/qs": "6.9.11",
