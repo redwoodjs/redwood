@@ -2,7 +2,7 @@ import {
   build,
   defaultBuildOptions,
   defaultIgnorePatterns,
-} from '../../buildDefaults.mjs'
+} from '@redwoodjs/framework-tools'
 
 // Build the package
 await build({
