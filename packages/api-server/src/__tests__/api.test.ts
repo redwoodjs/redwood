@@ -39,7 +39,7 @@ afterAll(async () => {
 })
 
 describe('redwoodFastifyAPI', () => {
-  it.only('configures the `@fastify/url-data` and `fastify-raw-body` plugins', async () => {
+  it('configures the `@fastify/url-data` and `fastify-raw-body` plugins', async () => {
     const plugins = fastifyInstance.printPlugins()
 
     expect(plugins.includes('@fastify/url-data')).toEqual(true)
