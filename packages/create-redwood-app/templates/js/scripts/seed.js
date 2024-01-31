@@ -18,7 +18,7 @@ export default async () => {
       // { name: 'bob', email: 'bob@example.com' },
     ]
     console.log(
-      "\nUsing the default './scripts/seed.{js,ts}' template\nEdit the file to add seed data\n"
+      "\nUsing the default './scripts/seed.js' template\nEdit the file to add seed data\n"
     )
 
     if ((await db.userExample.count()) === 0) {
