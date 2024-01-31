@@ -1,10 +1,11 @@
 import path from 'node:path'
 
 import * as esbuild from 'esbuild'
+import type { BuildOptions as ESBuildOptions } from 'esbuild'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 
-export const defaultBuildOptions = {
+export const defaultBuildOptions: ESBuildOptions = {
   outdir: 'dist',
 
   platform: 'node',
@@ -27,25 +28,22 @@ export const defaultIgnorePatterns = [
   '**/__fixtures__',
 ]
 
-/**
- * @typedef {{
- *   cwd?: string
- *   buildOptions?: import('esbuild').BuildOptions
- *   entryPointOptions?: {
- *     patterns?: string[]
- *     ignore?: string[]
- *   }
- *   metafileName?: string
- * }} BuildOptions
- *
- * @param {BuildOptions} options
- */
+interface BuildOptions {
+  cwd?: string
+  buildOptions?: ESBuildOptions
+  entryPointOptions?: {
+    patterns?: string[]
+    ignore?: string[]
+  }
+  metafileName?: string
+}
+
 export async function build({
   cwd,
   buildOptions,
   entryPointOptions,
   metafileName,
-} = {}) {
+}: BuildOptions = {}) {
   // Yarn and Nx both set this to the package's root dir path
   cwd ??= process.cwd()
 
