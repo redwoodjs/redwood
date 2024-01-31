@@ -21,13 +21,13 @@ describe('dist', () => {
 
     expect(mod).toMatchInlineSnapshot(`
       {
-        "api": {
+        "apiServerCLIConfig": {
           "builder": [Function],
           "command": "api",
           "description": "Start a server for serving only the api side",
           "handler": [Function],
         },
-        "both": {
+        "bothServerCLIConfig": {
           "builder": [Function],
           "description": "Start a server for serving both the api and web sides",
           "handler": [Function],
