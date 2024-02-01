@@ -18,7 +18,13 @@ export async function handler(options: BothParsedOptions) {
 
   options.apiRootPath = coerceRootPath(options.apiRootPath ?? '/')
 
-  const apiProxyTarget = `http://${options.apiHost}:${options.apiPort}${options.apiRootPath}`
+  const apiProxyTarget = [
+    'http://',
+    options.apiHost.includes(':') ? `[${options.apiHost}]` : options.apiHost,
+    ':',
+    options.apiPort,
+    options.apiRootPath,
+  ].join('')
 
   const webFastify = createFastifyInstance()
   webFastify.register(redwoodFastifyWeb, {

@@ -33,7 +33,13 @@ export const bothServerFileHandler = async (argv) => {
     argv.webPort ??= getWebPort()
     argv.webHost ??= getWebHost()
 
-    const apiProxyTarget = `http://${argv.apiHost}:${argv.apiPort}`
+    const apiProxyTarget = [
+      'http://',
+      argv.apiHost.includes(':') ? `[${argv.apiHost}]` : argv.apiHost,
+      ':',
+      argv.apiPort,
+      argv.apiRootPath,
+    ].join('')
 
     const { result } = concurrently(
       [
