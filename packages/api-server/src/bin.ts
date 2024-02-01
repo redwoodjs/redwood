@@ -5,11 +5,21 @@ import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
 import { getPaths } from '@redwoodjs/project-config'
-import * as webServerCLIConfig from '@redwoodjs/web-server'
+import {
+  description as webDescription,
+  builder as webBuilder,
+  handler as webHandler,
+} from '@redwoodjs/web-server'
 
-import * as apiServerCLIConfig from './apiCLIConfig'
+import {
+  description as apiDescription,
+  builder as apiBuilder,
+} from './apiCLIConfig'
 import { handler as apiHandler } from './apiCLIConfigHandler'
-import * as bothServerCLIConfig from './bothCLIConfig'
+import {
+  description as bothDescription,
+  builder as bothBuilder,
+} from './bothCLIConfig'
 import { handler as bothHandler } from './bothCLIConfigHandler'
 
 if (!process.env.REDWOOD_ENV_FILES_LOADED) {
@@ -31,23 +41,23 @@ yargs(hideBin(process.argv))
   .alias('v', 'version')
   .command(
     '$0',
-    bothServerCLIConfig.description,
+    bothDescription,
     // @ts-expect-error The yargs types seem wrong; it's ok for builder to be a function
-    bothServerCLIConfig.builder,
+    bothBuilder,
     bothHandler
   )
   .command(
     'api',
-    apiServerCLIConfig.description,
+    apiDescription,
     // @ts-expect-error The yargs types seem wrong; it's ok for builder to be a function
-    apiServerCLIConfig.builder,
+    apiBuilder,
     apiHandler
   )
   .command(
     'web',
-    webServerCLIConfig.description,
+    webDescription,
     // @ts-expect-error The yargs types seem wrong; it's ok for builder to be a function
-    webServerCLIConfig.builder,
-    webServerCLIConfig.handler
+    webBuilder,
+    webHandler
   )
   .parse()
