@@ -21,27 +21,18 @@ export async function redwoodFastifyWeb(
 ) {
   const { redwoodOptions, flags } = resolveOptions(opts)
 
-  await fastify.register(fastifyUrlData)
+  fastify.register(fastifyUrlData)
+  fastify.register(fastifyStatic, { root: getPaths().web.dist })
 
-  // Serve prerendered files directly, instead of the index
-  const prerenderedFiles = await fg('**/*.html', {
-    cwd: getPaths().web.dist,
-    ignore: ['index.html', '200.html', '404.html'],
-  })
-
-  for (const prerenderedFile of prerenderedFiles) {
-    const [pathName] = prerenderedFile.split('.html')
-
-    fastify.get(`/${pathName}`, (_, reply) => {
-      reply.header('Content-Type', 'text/html; charset=UTF-8')
-      reply.sendFile(prerenderedFile)
+  // If `apiProxyTarget` is set, proxy requests from `apiUrl` to `apiProxyTarget`.
+  // In this case, `apiUrl` has to be relative; `resolveOptions` above throws if it's not
+  if (redwoodOptions.apiProxyTarget) {
+    fastify.register(httpProxy, {
+      prefix: redwoodOptions.apiUrl,
+      upstream: redwoodOptions.apiProxyTarget,
+      disableCache: true,
     })
   }
-
-  // Serve static assets
-  fastify.register(fastifyStatic, {
-    root: getPaths().web.dist,
-  })
 
   // If `shouldRegisterApiUrl` is true, `apiUrl` has to be defined
   // but TS doesn't know that so it complains about `apiUrl` being undefined
@@ -69,20 +60,23 @@ export async function redwoodFastifyWeb(
     fastify.all(`${apiUrlWarningPath}*`, apiUrlHandler)
   }
 
-  // If `apiProxyTarget` is set, proxy requests from `apiUrl` to `apiProxyTarget`.
-  // In this case, `apiUrl` has to be relative; `resolveOptions` above throws if it's not
-  if (redwoodOptions.apiProxyTarget) {
-    fastify.register(httpProxy, {
-      prefix: redwoodOptions.apiUrl,
-      upstream: redwoodOptions.apiProxyTarget,
-      disableCache: true,
+  // Serve prerendered files directly, instead of the index
+  const prerenderedFiles = await fg('**/*.html', {
+    cwd: getPaths().web.dist,
+    ignore: ['index.html', '200.html', '404.html'],
+  })
+
+  for (const prerenderedFile of prerenderedFiles) {
+    const [pathName] = prerenderedFile.split('.html')
+    fastify.get(`/${pathName}`, (_, reply) => {
+      reply.header('Content-Type', 'text/html; charset=UTF-8')
+      reply.sendFile(prerenderedFile)
     })
   }
 
   // If `200.html` exists, the project has been prerendered.
   // If it doesn't, fallback to the default (`index.html`)
   const prerenderIndexPath = path.join(getPaths().web.dist, '200.html')
-
   const fallbackIndexPath = fs.existsSync(prerenderIndexPath)
     ? '200.html'
     : 'index.html'

@@ -8,13 +8,7 @@
     "directory": "packages/web-server"
   },
   "license": "MIT",
-  "exports": {
-    ".": {
-      "types": "./dist/cliConfig.d.ts",
-      "default": "./dist/cliConfig.js"
-    },
-    "./package.json": "./package.json"
-  },
+  "main": "./dist/cliConfig.js",
   "types": "./dist/cliConfig.d.ts",
   "bin": {
     "rw-web-server": "./dist/bin.js"

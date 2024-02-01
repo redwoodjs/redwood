@@ -118,6 +118,17 @@ export default function redwoodPluginVite(): PluginOption[] {
       // ---------- End Bundle injection ----------
 
       config: (options: UserConfig, env: ConfigEnv): UserConfig => {
+        let apiHost = process.env.REDWOOD_API_HOST
+        apiHost ??= rwConfig.api.host
+        apiHost ??= process.env.NODE_ENV === 'production' ? '0.0.0.0' : '[::]'
+
+        let apiPort
+        if (process.env.REDWOOD_API_PORT) {
+          apiPort = parseInt(process.env.REDWOOD_API_PORT)
+        } else {
+          apiPort = rwConfig.api.port
+        }
+
         return {
           root: rwPaths.web.src,
           // Disabling for now, let babel handle this for consistency
@@ -188,7 +199,7 @@ export default function redwoodPluginVite(): PluginOption[] {
             host: true, // Listen to all hosts
             proxy: {
               [rwConfig.web.apiUrl]: {
-                target: `http://${rwConfig.api.host}:${rwConfig.api.port}`,
+                target: `http://${apiHost}:${apiPort}`,
                 changeOrigin: false,
                 // Remove the `.redwood/functions` part, but leave the `/graphql`
                 rewrite: (path) => path.replace(rwConfig.web.apiUrl, ''),

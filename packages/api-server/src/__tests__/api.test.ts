@@ -1,7 +1,7 @@
 import path from 'path'
 
 import createFastifyInstance from '../fastify'
-import withFunctions from '../plugins/withFunctions'
+import { redwoodFastifyAPI } from '../plugins/api'
 
 // Suppress terminal logging.
 console.log = jest.fn()
@@ -21,14 +21,14 @@ afterAll(() => {
 
 // Set up and teardown the fastify instance for each test.
 let fastifyInstance: ReturnType<typeof createFastifyInstance>
-let returnedFastifyInstance: Awaited<ReturnType<typeof withFunctions>>
 
 beforeAll(async () => {
   fastifyInstance = createFastifyInstance()
 
-  returnedFastifyInstance = await withFunctions(fastifyInstance, {
-    port: 8911,
-    apiRootPath: '/',
+  fastifyInstance.register(redwoodFastifyAPI, {
+    redwood: {
+      loadUserConfig: true,
+    },
   })
 
   await fastifyInstance.ready()
@@ -38,26 +38,12 @@ afterAll(async () => {
   await fastifyInstance.close()
 })
 
-describe('withFunctions', () => {
-  // Deliberately using `toBe` here to check for referential equality.
-  it('returns the same fastify instance', async () => {
-    expect(returnedFastifyInstance).toBe(fastifyInstance)
-  })
-
+describe('redwoodFastifyAPI', () => {
   it('configures the `@fastify/url-data` and `fastify-raw-body` plugins', async () => {
     const plugins = fastifyInstance.printPlugins()
 
     expect(plugins.includes('@fastify/url-data')).toEqual(true)
     expect(plugins.includes('fastify-raw-body')).toEqual(true)
-  })
-
-  it('configures two additional content type parsers, `application/x-www-form-urlencoded` and `multipart/form-data`', async () => {
-    expect(
-      fastifyInstance.hasContentTypeParser('application/x-www-form-urlencoded')
-    ).toEqual(true)
-    expect(fastifyInstance.hasContentTypeParser('multipart/form-data')).toEqual(
-      true
-    )
   })
 
   it('can be configured by the user', async () => {

@@ -10,7 +10,6 @@
   "references": [
     { "path": "../api-server" },
     { "path": "../cli-helpers" },
-    { "path": "../fastify" },
     { "path": "../internal" },
     { "path": "../prerender" },
     { "path": "../project-config" },
