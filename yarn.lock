@@ -7416,7 +7416,6 @@ __metadata:
     fast-json-parse: "npm:1.0.3"
     fastify: "npm:4.25.2"
     fastify-raw-body: "npm:4.3.0"
-    jest: "npm:29.7.0"
     lodash: "npm:4.17.21"
     pino-abstract-transport: "npm:1.1.0"
     pretty-bytes: "npm:5.6.0"
@@ -7424,6 +7423,7 @@ __metadata:
     qs: "npm:6.11.2"
     split2: "npm:4.2.0"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.2"
     yargs: "npm:17.7.2"
   peerDependencies:
     "@redwoodjs/graphql-server": 6.0.7

@@ -2,6 +2,16 @@ import path from 'path'
 
 import pino from 'pino'
 import build from 'pino-abstract-transport'
+import {
+  vi,
+  beforeAll,
+  afterAll,
+  describe,
+  afterEach,
+  it,
+  expect,
+} from 'vitest'
+import type { MockInstance } from 'vitest'
 
 import { getConfig } from '@redwoodjs/project-config'
 
@@ -23,27 +33,33 @@ afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
 })
 
-let consoleWarnSpy: jest.SpyInstance
-let consoleLogSpy: jest.SpyInstance
+let consoleWarnSpy: MockInstance<
+  Parameters<typeof console.warn>,
+  ReturnType<typeof console.warn>
+>
+let consoleLogSpy: MockInstance<
+  Parameters<typeof console.log>,
+  ReturnType<typeof console.log>
+>
 
 describe('createServer', () => {
   // Create a server for most tests. Some that test initialization create their own
   let server: Awaited<ReturnType<typeof createServer>>
 
   beforeAll(async () => {
-    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
-    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
+    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
     server = await createServer()
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   afterAll(async () => {
     await server?.close()
-    jest.mocked(console.log).mockRestore()
-    jest.mocked(console.warn).mockRestore()
+    vi.mocked(console.log).mockRestore()
+    vi.mocked(console.warn).mockRestore()
   })
 
   it('serves functions', async () => {
@@ -299,7 +315,9 @@ describe('resolveOptions', () => {
   it("throws if `--port` can't be converted to an integer", () => {
     expect(() => {
       resolveOptions({ parseArgs: true }, ['--port', 'eight-nine-ten'])
-    }).toThrowErrorMatchingInlineSnapshot(`"\`port\` must be an integer"`)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`port\` must be an integer]`
+    )
   })
 
   it('parses `--apiRootPath`', () => {

@@ -1,11 +1,12 @@
 import type { Handler } from 'aws-lambda'
 import type { FastifyRequest, FastifyReply } from 'fastify'
+import { vi, describe, beforeEach, test, expect, afterEach } from 'vitest'
 
 import { requestHandler } from '../../requestHandlers/awsLambdaFastify'
 
 describe('Tests AWS Lambda to Fastify request transformation and handling', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   const request = {
@@ -21,17 +22,17 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
 
   const mockedReply = {
     status: (code: number) => {
-      return { code, send: jest.fn() }
+      return { code, send: vi.fn() }
     },
-    headers: () => jest.fn(),
-    header: () => jest.fn(),
-    send: () => jest.fn(),
+    headers: () => vi.fn(),
+    header: () => vi.fn(),
+    send: () => vi.fn(),
     log: console as unknown,
   } as unknown as FastifyReply
 
   test('requestHandler replies with simple body', async () => {
-    jest.spyOn(mockedReply, 'send')
-    jest.spyOn(mockedReply, 'status')
+    vi.spyOn(mockedReply, 'send')
+    vi.spyOn(mockedReply, 'status')
 
     const handler: Handler = async () => {
       return {
@@ -46,8 +47,8 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
   })
 
   test('requestHandler replies with a base64Encoded body', async () => {
-    jest.spyOn(mockedReply, 'send')
-    jest.spyOn(mockedReply, 'status')
+    vi.spyOn(mockedReply, 'send')
+    vi.spyOn(mockedReply, 'status')
 
     const handler: Handler = async () => {
       return {
@@ -77,7 +78,7 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     })
 
     test('requestHandler returns an error status if handler throws an error', async () => {
-      jest.spyOn(mockedReply, 'status')
+      vi.spyOn(mockedReply, 'status')
 
       const handler = async () => {
         throw new Error('error')
@@ -101,8 +102,8 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
       log: console as unknown,
     } as unknown as FastifyRequest
 
-    jest.spyOn(mockedReply, 'headers')
-    jest.spyOn(mockedReply, 'header')
+    vi.spyOn(mockedReply, 'headers')
+    vi.spyOn(mockedReply, 'header')
 
     const handler: Handler = async () => {
       return {
@@ -139,8 +140,8 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
       log: console as unknown,
     } as unknown as FastifyRequest
 
-    jest.spyOn(mockedReply, 'headers')
-    jest.spyOn(mockedReply, 'header')
+    vi.spyOn(mockedReply, 'headers')
+    vi.spyOn(mockedReply, 'header')
 
     const handler: Handler = async () => {
       return {

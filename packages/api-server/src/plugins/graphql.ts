@@ -51,7 +51,10 @@ export async function redwoodFastifyGraphQLServer(
         cwd: getPaths().api.base,
         absolute: true,
       })
-      const { __rw_graphqlOptions } = await import(graphqlFunctionPath)
+
+      const { __rw_graphqlOptions } = await import(
+        `file://${graphqlFunctionPath}`
+      )
       redwoodOptions.graphql = __rw_graphqlOptions as GraphQLYogaOptions
     }
 

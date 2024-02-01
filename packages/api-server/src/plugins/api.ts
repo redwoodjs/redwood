@@ -45,7 +45,7 @@ export async function redwoodFastifyAPI(
   )
 
   if (redwoodOptions.loadUserConfig) {
-    const { configureFastify } = loadFastifyConfig()
+    const { configureFastify } = await loadFastifyConfig()
     if (configureFastify) {
       await configureFastify(fastify, {
         side: 'api',
