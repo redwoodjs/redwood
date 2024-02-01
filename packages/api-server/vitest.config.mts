@@ -5,8 +5,6 @@ export default defineConfig({
     exclude: [
       ...configDefaults.exclude,
       '**/fixtures',
-      // Dist tests are treated differently and not run in the normal test suite
-      './dist.test.ts'
     ],
   },
 })
