@@ -193,6 +193,8 @@ async function runYargs() {
     .demandCommand()
     .strict()
     .exitProcess(false)
+    .alias('h', 'help')
+    .alias('v', 'version')
 
     // Commands (Built in or pre-plugin support)
     .command(buildCommand)

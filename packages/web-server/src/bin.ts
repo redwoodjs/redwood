@@ -27,6 +27,8 @@ const [scriptName] = Object.keys(bin)
 
 yargs(hideBin(process.argv))
   .scriptName(scriptName)
+  .alias('h', 'help')
+  .alias('v', 'version')
   .strict()
   .example(
     'yarn $0 --api-url=/api --api-proxy-target=https://api.redwood.horse',

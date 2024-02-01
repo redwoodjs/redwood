@@ -26,6 +26,8 @@ process.env.NODE_ENV ??= 'production'
 yargs(hideBin(process.argv))
   .scriptName('rw-server')
   .strict()
+  .alias('h', 'help')
+  .alias('v', 'version')
   .command(
     '$0',
     bothServerCLIConfig.description,

@@ -2,7 +2,7 @@ import type { Argv } from 'yargs'
 
 import type { ParsedOptions } from './types'
 
-export const description = 'Start a server for serving only the web side'
+export const description = 'Start a server for serving the web side'
 
 export function builder(yargs: Argv<ParsedOptions>) {
   yargs.options({

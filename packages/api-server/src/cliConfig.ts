@@ -2,7 +2,7 @@ import type { Argv } from 'yargs'
 
 import type { APIParsedOptions, BothParsedOptions } from './types'
 
-const apiDescription = 'Start a server for serving only the api side'
+const apiDescription = 'Start a server for serving the api side'
 
 function apiBuilder(yargs: Argv<APIParsedOptions>) {
   yargs.options({
@@ -43,7 +43,7 @@ export const apiServerCLIConfig = {
   handler: apiHandler,
 }
 
-const bothDescription = 'Start a server for serving both the api and web sides'
+const bothDescription = 'Start a server for serving the api and web sides'
 
 function bothBuilder(yargs: Argv<BothParsedOptions>) {
   yargs.options({
