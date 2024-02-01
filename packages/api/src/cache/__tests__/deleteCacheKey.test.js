@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest'
+
 import InMemoryClient from '../clients/InMemoryClient'
 import { createCache } from '../index'
 

@@ -16,13 +16,51 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - run: yarn install
-        working-directory: ./.github/actions/check_test_project_fixture
 
-      - name: Check test project fixture
-        uses: ./.github/actions/check_test_project_fixture
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          labels: '{ "labels": ${{ toJSON(github.event.pull_request.labels) }} }'
+          node-version: 20
+
+      - name: 🐈 Set up yarn cache
+        if: "!contains(github.event.pull_request.labels.*.name, 'fixture-ok')"
+        uses: ./.github/actions/set-up-yarn-cache
+
+      - name: 🐈 Yarn install
+        if: "!contains(github.event.pull_request.labels.*.name, 'fixture-ok')"
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: 🔨 Build
+        if: "!contains(github.event.pull_request.labels.*.name, 'fixture-ok')"
+        run: yarn build
+
+      - name: Rebuild test-project fixture
+        if: "!contains(github.event.pull_request.labels.*.name, 'fixture-ok')"
+        run: yarn rebuild-test-project-fixture
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+
+      - name: Check for changed files
+        if: "!contains(github.event.pull_request.labels.*.name, 'fixture-ok')"
+        run: |
+          if [ $(git status --porcelain | wc -l) -gt 0 ]; then
+            echo 'Updating the test project fixture caused files to change'
+            echo 'Please run `yarn rebuild-test-project-fixture` locally and commit any changes'
+            echo
+            echo 'Deleted files:'
+            git status --porcelain | grep '^ D ' | awk '{print "        " $2}'
+            echo
+            echo 'Modified files:'
+            git status --porcelain | grep '^ M ' | awk '{print "        " $2}'
+            echo
+            echo 'Untracked files:'
+            git status --porcelain | grep '^?? ' | awk '{print "        " $2}'
+            echo
+            exit 1;
+          fi

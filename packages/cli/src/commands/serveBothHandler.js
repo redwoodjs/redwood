@@ -1,19 +1,21 @@
 import path from 'path'
 
-import chalk from 'chalk'
+import concurrently from 'concurrently'
 import execa from 'execa'
 
+import { handler as apiServerHandler } from '@redwoodjs/api-server/dist/apiCLIConfigHandler'
 import {
-  coerceRootPath,
-  createFastifyInstance,
-  redwoodFastifyAPI,
-  redwoodFastifyWeb,
-} from '@redwoodjs/fastify'
+  getAPIHost,
+  getAPIPort,
+  getWebHost,
+  getWebPort,
+} from '@redwoodjs/api-server/dist/cliHelpers'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
-export const bothExperimentalServerFileHandler = async () => {
-  logExperimentalHeader()
+import { exitWithError } from '../lib/exit'
 
+export const bothServerFileHandler = async (argv) => {
   if (
     getConfig().experimental?.rsc?.enabled ||
     getConfig().experimental?.streamingSsr?.enabled
@@ -26,21 +28,58 @@ export const bothExperimentalServerFileHandler = async () => {
       shell: true,
     })
   } else {
-    await execa(
-      'yarn',
-      ['node', path.join('dist', 'server.js'), '--enable-web'],
+    argv.apiPort ??= getAPIPort()
+    argv.apiHost ??= getAPIHost()
+    argv.webPort ??= getWebPort()
+    argv.webHost ??= getWebHost()
+
+    const apiProxyTarget = [
+      'http://',
+      argv.apiHost.includes(':') ? `[${argv.apiHost}]` : argv.apiHost,
+      ':',
+      argv.apiPort,
+      argv.apiRootPath,
+    ].join('')
+
+    const { result } = concurrently(
+      [
+        {
+          name: 'api',
+          command: `yarn node ${path.join('dist', 'server.js')} --port ${
+            argv.apiPort
+          } --host ${argv.apiHost} --api-root-path ${argv.apiRootPath}`,
+          cwd: getPaths().api.base,
+          prefixColor: 'cyan',
+        },
+        {
+          name: 'web',
+          command: `yarn rw-web-server --port ${argv.webPort} --host ${argv.webHost} --api-proxy-target ${apiProxyTarget}`,
+          cwd: getPaths().base,
+          prefixColor: 'blue',
+        },
+      ],
       {
-        cwd: getPaths().api.base,
-        stdio: 'inherit',
-        shell: true,
+        prefix: '{name} |',
+        timestampFormat: 'HH:mm:ss',
+        handleInput: true,
       }
     )
+
+    try {
+      await result
+    } catch (error) {
+      if (typeof error?.message !== 'undefined') {
+        errorTelemetry(
+          process.argv,
+          `Error concurrently starting sides: ${error.message}`
+        )
+        exitWithError(error)
+      }
+    }
   }
 }
 
 export const bothSsrRscServerHandler = async (argv) => {
-  const { apiServerHandler } = await import('./serveApiHandler.js')
-
   // TODO Allow specifying port, socket and apiRootPath
   const apiPromise = apiServerHandler({
     ...argv,
@@ -57,85 +96,6 @@ export const bothSsrRscServerHandler = async (argv) => {
   })
 
   await Promise.all([apiPromise, fePromise])
-}
-
-export const bothServerHandler = async (options) => {
-  const { port, socket } = options
-  const tsServer = Date.now()
-
-  console.log(chalk.italic.dim('Starting API and Web Servers...'))
-
-  const fastify = createFastifyInstance()
-
-  process.on('exit', () => {
-    fastify?.close()
-  })
-
-  await fastify.register(redwoodFastifyWeb, {
-    redwood: {
-      ...options,
-    },
-  })
-
-  const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
-
-  await fastify.register(redwoodFastifyAPI, {
-    redwood: {
-      ...options,
-      apiRootPath,
-    },
-  })
-
-  let listenOptions
-
-  if (socket) {
-    listenOptions = { path: socket }
-  } else {
-    listenOptions = {
-      port,
-      host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
-    }
-  }
-
-  fastify.listen(listenOptions)
-
-  fastify.ready(() => {
-    console.log(chalk.italic.dim('Took ' + (Date.now() - tsServer) + ' ms'))
-
-    const on = socket
-      ? socket
-      : chalk.magenta(`http://localhost:${port}${apiRootPath}`)
-
-    const webServer = chalk.green(`http://localhost:${port}`)
-    const apiServer = chalk.magenta(`http://localhost:${port}`)
-    console.log(`Web server started on ${webServer}`)
-    console.log(`API serving from ${apiServer}`)
-    console.log(`API listening on ${on}`)
-    const graphqlEnd = chalk.magenta(`${apiRootPath}graphql`)
-    console.log(`GraphQL endpoint at ${graphqlEnd}`)
-
-    sendProcessReady()
-  })
-}
-
-function sendProcessReady() {
-  return process.send && process.send('ready')
-}
-
-const separator = chalk.hex('#ff845e')(
-  '------------------------------------------------------------------'
-)
-
-function logExperimentalHeader() {
-  console.log(
-    [
-      separator,
-      `🧪 ${chalk.green('Experimental Feature')} 🧪`,
-      separator,
-      'Using the experimental API server file at api/dist/server.js',
-      separator,
-    ].join('\n')
-  )
 }
 
 function logSkippingFastifyWebServer() {

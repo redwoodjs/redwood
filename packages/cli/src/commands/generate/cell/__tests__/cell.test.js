@@ -1,11 +1,13 @@
 globalThis.__dirname = __dirname
 import path from 'path'
 
+import { vi, describe, it, expect, test, beforeAll } from 'vitest'
+
 // Load mocks
 import '../../../../lib/test'
 import * as cell from '../cell'
 
-jest.mock('@redwoodjs/structure', () => {
+vi.mock('@redwoodjs/structure', () => {
   return {
     getProject: () => ({
       cells: [{ queryOperationName: 'AlreadyDefinedQueryName' }],
@@ -684,5 +686,120 @@ describe('Custom query names', () => {
     ).rejects.toThrow(
       'Specified query name: "AlreadyDefinedQueryName" is not unique'
     )
+  })
+})
+
+describe('Custom Id Field files', () => {
+  let customIdFieldFiles
+  let customIdFieldListFiles
+
+  describe('Single cell', () => {
+    beforeAll(async () => {
+      customIdFieldFiles = await cell.files({
+        name: 'CustomIdField',
+        tests: true,
+        stories: true,
+        list: false,
+      })
+    })
+
+    it('returns exactly 4 files', () => {
+      expect(Object.keys(customIdFieldFiles).length).toEqual(4)
+    })
+
+    it('creates a cell component with a custom id field', () => {
+      expect(
+        customIdFieldFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldCell/CustomIdFieldCell.jsx'
+          )
+        ]
+      ).toMatchSnapshot()
+    })
+
+    it('creates a cell test with a custom id field', () => {
+      expect(
+        customIdFieldFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldCell/CustomIdFieldCell.test.jsx'
+          )
+        ]
+      ).toMatchSnapshot()
+    })
+
+    it('creates a cell stories with a custom id field', () => {
+      expect(
+        customIdFieldFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldCell/CustomIdFieldCell.stories.jsx'
+          )
+        ]
+      ).toMatchSnapshot()
+    })
+
+    it('creates a cell mock with a custom id field', () => {
+      expect(
+        customIdFieldFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldCell/CustomIdFieldCell.mock.js'
+          )
+        ]
+      ).toMatchSnapshot()
+    })
+  })
+
+  describe('List cell', () => {
+    beforeAll(async () => {
+      customIdFieldListFiles = await cell.files({
+        name: 'CustomIdField',
+        tests: true,
+        stories: true,
+        list: true,
+      })
+    })
+
+    it('returns exactly 4 files', () => {
+      expect(Object.keys(customIdFieldFiles).length).toEqual(4)
+    })
+
+    it('creates a cell list component with a custom id field', () => {
+      expect(
+        customIdFieldListFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldsCell/CustomIdFieldsCell.jsx'
+          )
+        ]
+      ).toMatchSnapshot()
+    })
+
+    it('creates a cell list test with a custom id field', () => {
+      expect(
+        customIdFieldListFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldsCell/CustomIdFieldsCell.test.jsx'
+          )
+        ]
+      ).toMatchSnapshot()
+    })
+
+    it('creates a cell list stories with a custom id field', () => {
+      expect(
+        customIdFieldListFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldsCell/CustomIdFieldsCell.stories.jsx'
+          )
+        ]
+      ).toMatchSnapshot()
+    })
+
+    it('creates a cell list mock with a custom id field', () => {
+      expect(
+        customIdFieldListFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldsCell/CustomIdFieldsCell.mock.js'
+          )
+        ]
+      ).toMatchSnapshot()
+    })
   })
 })

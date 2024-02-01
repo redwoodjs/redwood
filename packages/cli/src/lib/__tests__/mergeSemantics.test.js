@@ -1,4 +1,5 @@
 import { parse, traverse } from '@babel/core'
+import { describe, it, expect } from 'vitest'
 
 import { semanticIdentity } from '../merge/semanticIdentity'
 

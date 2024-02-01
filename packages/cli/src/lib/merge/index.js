@@ -212,7 +212,8 @@ function mergeAST(baseAST, extAST, strategy = {}) {
 export function merge(base, extension, strategy) {
   function parseReact(code) {
     return parse(code, {
-      presets: ['@babel/preset-react'],
+      filename: 'merged.tsx', // required to prevent babel error. The .tsx is relevant
+      presets: ['@babel/preset-typescript'],
     })
   }
 
@@ -224,7 +225,7 @@ export function merge(base, extension, strategy) {
 
   // When testing, use prettier here to produce predictable outputs.
   // Otherwise, leave formatting to the caller.
-  return process.env.JEST_WORKER_ID
+  return process.env.VITEST_POOL_ID
     ? prettier.format(code, {
         parser: 'babel',
         bracketSpacing: true,

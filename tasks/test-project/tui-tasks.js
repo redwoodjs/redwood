@@ -19,6 +19,8 @@ function getExecaOptions(cwd) {
 // and is set when webTasks or apiTasks are called
 let OUTPUT_PATH
 
+const RW_FRAMEWORK_PATH = path.join(__dirname, '../../')
+
 function fullPath(name, { addExtension } = { addExtension: true }) {
   if (addExtension) {
     if (name.startsWith('api')) {
@@ -387,9 +389,9 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
 async function addModel(schema) {
   const path = `${OUTPUT_PATH}/api/db/schema.prisma`
 
-  const current = fs.readFileSync(path)
+  const current = fs.readFileSync(path, 'utf-8')
 
-  fs.writeFileSync(path, `${current}\n\n${schema}`)
+  fs.writeFileSync(path, `${current.trim()}\n\n${schema}\n`)
 }
 
 async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
@@ -406,26 +408,97 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
       },
     })
 
-    const dbAuthSetupPath = path.join(
-      outputPath,
-      'node_modules',
-      '@redwoodjs',
-      'auth-dbauth-setup'
+    // We want to use the latest version of the auth-dbauth-{setup,api,web}
+    // packages. But they're not published yet. So let's package them up as
+    // tarballs and install them using that by setting yarn resolutions
+
+    const setupPkg = path.join(
+      RW_FRAMEWORK_PATH,
+      'packages',
+      'auth-providers',
+      'dbAuth',
+      'setup'
+    )
+    const apiPkg = path.join(
+      RW_FRAMEWORK_PATH,
+      'packages',
+      'auth-providers',
+      'dbAuth',
+      'api'
+    )
+    const webPkg = path.join(
+      RW_FRAMEWORK_PATH,
+      'packages',
+      'auth-providers',
+      'dbAuth',
+      'web'
     )
 
-    // At an earlier step we run `yarn rwfw project:copy` which gives us
-    // auth-dbauth-setup@3.2.0 currently. We need that version to be a canary
-    // version for auth-dbauth-api and auth-dbauth-web package installations
-    // to work. So we remove the current version and add a canary version
-    // instead.
+    await exec('yarn build:pack', [], getExecaOptions(setupPkg))
+    await exec('yarn build:pack', [], getExecaOptions(apiPkg))
+    await exec('yarn build:pack', [], getExecaOptions(webPkg))
 
-    fs.rmSync(dbAuthSetupPath, { recursive: true, force: true })
+    const setupTgz = path.join(setupPkg, 'redwoodjs-auth-dbauth-setup.tgz')
+    const apiTgz = path.join(apiPkg, 'redwoodjs-auth-dbauth-api.tgz')
+    const webTgz = path.join(webPkg, 'redwoodjs-auth-dbauth-web.tgz')
+
+    const setupTgzDest = path.join(
+      outputPath,
+      'redwoodjs-auth-dbauth-setup.tgz'
+    )
+    const apiTgzDest = path.join(outputPath, 'redwoodjs-auth-dbauth-api.tgz')
+    const webTgzDest = path.join(outputPath, 'redwoodjs-auth-dbauth-web.tgz')
+
+    fs.copyFileSync(setupTgz, setupTgzDest)
+    fs.copyFileSync(apiTgz, apiTgzDest)
+    fs.copyFileSync(webTgz, webTgzDest)
+
+    const projectPackageJsonPath = path.join(outputPath, 'package.json')
+    const projectPackageJson = JSON.parse(
+      fs.readFileSync(projectPackageJsonPath, 'utf-8')
+    )
+
+    const existingResolutions = projectPackageJson.resolutions
+      ? { ...projectPackageJson.resolutions }
+      : undefined
+
+    projectPackageJson.resolutions ??= {}
+    projectPackageJson.resolutions = {
+      ...projectPackageJson.resolutions,
+      '@redwoodjs/auth-dbauth-setup': './redwoodjs-auth-dbauth-setup.tgz',
+      '@redwoodjs/auth-dbauth-api': './redwoodjs-auth-dbauth-api.tgz',
+      '@redwoodjs/auth-dbauth-web': './redwoodjs-auth-dbauth-web.tgz',
+    }
+
+    fs.writeFileSync(
+      projectPackageJsonPath,
+      JSON.stringify(projectPackageJson, null, 2)
+    )
+
+    // Run `yarn install` to have the resolutions take effect and install the
+    // tarballs we copied over
+    await exec('yarn install', [], execaOptions)
 
     await exec(
       'yarn rw setup auth dbAuth --force --no-webauthn',
       [],
       execaOptions
     )
+
+    // Restore old resolutions
+    if (existingResolutions) {
+      projectPackageJson.resolutions = existingResolutions
+    }
+
+    fs.writeFileSync(
+      projectPackageJsonPath,
+      JSON.stringify(projectPackageJson, null, 2)
+    )
+
+    // Remove tarballs
+    fs.unlinkSync(setupTgzDest)
+    fs.unlinkSync(apiTgzDest)
+    fs.unlinkSync(webTgzDest)
 
     // Restore postinstall script
     updatePkgJsonScripts({
@@ -524,10 +597,13 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
     // set fullName when signing up
     const pathAuthTs = `${OUTPUT_PATH}/api/src/functions/auth.ts`
     const contentAuthTs = fs.readFileSync(pathAuthTs).toString()
-    const resultsAuthTs = contentAuthTs.replace(
-      '// name: userAttributes.name',
-      "fullName: userAttributes['full-name']"
-    )
+    const resultsAuthTs = contentAuthTs
+      .replace('name: string', "'full-name': string")
+      .replace('userAttributes: _userAttributes', 'userAttributes')
+      .replace(
+        '// name: userAttributes.name',
+        "fullName: userAttributes['full-name']"
+      )
 
     fs.writeFileSync(pathAuthTs, resultsAuthTs)
   }
@@ -544,12 +620,12 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
           const createPage = createBuilder('yarn redwood g page')
           await createPage('double')
 
-          const doublePageContent = `import { MetaTags } from '@redwoodjs/web'
+          const doublePageContent = `import { Metadata } from '@redwoodjs/web'
 
 const DoublePage = () => {
   return (
     <>
-      <MetaTags title="Double" description="Double page" />
+      <Metadata title="Double" description="Double page" og />
 
       <h1 className="mb-1 mt-2 text-xl font-semibold">DoublePage</h1>
       <p>
@@ -771,6 +847,29 @@ export default DoublePage`
       },
     },
     {
+      title: 'Add describeScenario tests',
+      task: () => {
+        // Copy contact.scenarios.ts, because scenario tests look for the same filename
+        fs.copyFileSync(
+          fullPath('api/src/services/contacts/contacts.scenarios'),
+          fullPath('api/src/services/contacts/describeContacts.scenarios')
+        )
+
+        // Create describeContacts.test.ts
+        const describeScenarioFixture = path.join(
+          __dirname,
+          'templates',
+          'api',
+          'contacts.describeScenario.test.ts.template'
+        )
+
+        fs.copyFileSync(
+          describeScenarioFixture,
+          fullPath('api/src/services/contacts/describeContacts.test')
+        )
+      },
+    },
+    {
       // This is probably more of a web side task really, but the scaffolded
       // pages aren't generated until we get here to the api side tasks. So
       // instead of doing some up in the web side tasks, and then the rest
@@ -811,7 +910,125 @@ export default DoublePage`
   return tuiTaskList
 }
 
+/**
+ * Tasks to add GraphQL Fragments support to the test-project, and some queries
+ * to test fragments
+ */
+async function fragmentsTasks(outputPath) {
+  OUTPUT_PATH = outputPath
+
+  /** @type import('./typing').TuiTaskList */
+  const tuiTaskList = [
+    {
+      title: 'Enable fragments',
+      task: async () => {
+        const redwoodTomlPath = path.join(outputPath, 'redwood.toml')
+        const redwoodToml = fs.readFileSync(redwoodTomlPath).toString()
+        const newRedwoodToml = redwoodToml + '\n[graphql]\n  fragments = true\n'
+        fs.writeFileSync(redwoodTomlPath, newRedwoodToml)
+      },
+    },
+    {
+      title: 'Adding produce and stall models to prisma',
+      task: async () => {
+        // Need both here since they have a relation
+        const { produce, stall } = await import('./codemods/models.js')
+
+        addModel(produce)
+        addModel(stall)
+
+        return exec(
+          'yarn rw prisma migrate dev --name create_produce_stall',
+          [],
+          getExecaOptions(outputPath)
+        )
+      },
+    },
+    {
+      title: 'Seed fragments data',
+      task: async () => {
+        await applyCodemod(
+          'seedFragments.ts',
+          fullPath('scripts/seed.ts', { addExtension: false })
+        )
+
+        await exec('yarn rw prisma db seed', [], getExecaOptions(outputPath))
+      },
+    },
+    {
+      title: 'Generate SDLs for produce and stall',
+      task: async () => {
+        const generateSdl = createBuilder('yarn redwood g sdl')
+
+        await generateSdl('stall')
+        await generateSdl('produce')
+
+        await applyCodemod(
+          'producesSdl.ts',
+          fullPath('api/src/graphql/produces.sdl')
+        )
+      },
+    },
+    {
+      title: 'Copy components from templates',
+      task: () => {
+        const templatesPath = path.join(__dirname, 'templates', 'web')
+        const componentsPath = path.join(
+          OUTPUT_PATH,
+          'web',
+          'src',
+          'components'
+        )
+
+        for (const fileName of [
+          'Card.tsx',
+          'FruitInfo.tsx',
+          'ProduceInfo.tsx',
+          'StallInfo.tsx',
+          'VegetableInfo.tsx',
+        ]) {
+          const templatePath = path.join(templatesPath, fileName)
+          const componentPath = path.join(componentsPath, fileName)
+
+          fs.writeFileSync(componentPath, fs.readFileSync(templatePath))
+        }
+      },
+    },
+    {
+      title: 'Copy sdl and service for groceries from templates',
+      task: () => {
+        const templatesPath = path.join(__dirname, 'templates', 'api')
+        const graphqlPath = path.join(OUTPUT_PATH, 'api', 'src', 'graphql')
+        const servicesPath = path.join(OUTPUT_PATH, 'api', 'src', 'services')
+
+        const sdlTemplatePath = path.join(templatesPath, 'groceries.sdl.ts')
+        const sdlPath = path.join(graphqlPath, 'groceries.sdl.ts')
+        const serviceTemplatePath = path.join(templatesPath, 'groceries.ts')
+        const servicePath = path.join(servicesPath, 'groceries.ts')
+
+        fs.writeFileSync(sdlPath, fs.readFileSync(sdlTemplatePath))
+        fs.writeFileSync(servicePath, fs.readFileSync(serviceTemplatePath))
+      },
+    },
+    {
+      title: 'Creating Groceries page',
+      task: async () => {
+        const createPage = createBuilder('yarn redwood g page')
+        await createPage('groceries')
+
+        await applyCodemod(
+          'groceriesPage.ts',
+          fullPath('web/src/pages/GroceriesPage/GroceriesPage')
+        )
+      },
+    },
+  ]
+
+  return tuiTaskList
+}
+
 module.exports = {
   apiTasks,
   webTasks,
+  fragmentsTasks,
 }

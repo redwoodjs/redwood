@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'fs-extra'
 
 /**
  * Convenience function to check if a file includes a particular string.

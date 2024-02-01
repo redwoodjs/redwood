@@ -108,7 +108,7 @@ export async function handler({ force, install }) {
               __dirname,
               '..',
               'templates',
-              'chakra.storybook.preview.js.template'
+              'chakra.storybook.preview.tsx.template'
             )
           ),
       },

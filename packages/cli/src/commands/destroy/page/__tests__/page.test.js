@@ -1,13 +1,16 @@
 globalThis.__dirname = __dirname
-jest.mock('fs')
-jest.mock('../../../../lib', () => {
+vi.mock('fs-extra')
+vi.mock('../../../../lib', async (importOriginal) => {
+  const originalLib = await importOriginal()
   return {
-    ...jest.requireActual('../../../../lib'),
+    ...originalLib,
     generateTemplate: () => '',
   }
 })
 
-import fs from 'fs'
+import fs from 'fs-extra'
+import { vol } from 'memfs'
+import { vi, beforeEach, afterEach, test, expect } from 'vitest'
 
 import '../../../../lib/test'
 
@@ -16,7 +19,7 @@ import { files } from '../../../generate/page/page'
 import { tasks } from '../page'
 
 beforeEach(() => {
-  fs.__setMockFiles({
+  vol.fromJSON({
     ...files({ name: 'About' }),
     [getPaths().web.routes]: [
       '<Routes>',
@@ -29,12 +32,12 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  fs.__setMockFiles({})
-  jest.spyOn(fs, 'unlinkSync').mockClear()
+  vol.reset()
+  vi.spyOn(fs, 'unlinkSync').mockClear()
 })
 
 test('destroys page files', async () => {
-  const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+  const unlinkSpy = vi.spyOn(fs, 'unlinkSync')
   const t = tasks({ name: 'About' })
   t.options.renderer = 'silent'
 
@@ -47,7 +50,7 @@ test('destroys page files', async () => {
 
 test('destroys page files with stories and tests', async () => {
   const fileOptions = { name: 'About', stories: true, tests: true }
-  fs.__setMockFiles({
+  vol.fromJSON({
     ...files(fileOptions),
     [getPaths().web.routes]: [
       '<Routes>',
@@ -58,7 +61,7 @@ test('destroys page files with stories and tests', async () => {
     ].join('\n'),
   })
 
-  const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+  const unlinkSpy = vi.spyOn(fs, 'unlinkSync')
   const t = tasks(fileOptions)
   t.options.renderer = 'silent'
 
@@ -74,7 +77,7 @@ test('cleans up route from Routes.js', async () => {
   t.options.renderer = 'silent'
 
   return t.tasks[1].run().then(() => {
-    const routes = fs.readFileSync(getPaths().web.routes)
+    const routes = fs.readFileSync(getPaths().web.routes, 'utf-8')
     expect(routes).toEqual(
       [
         '<Routes>',
@@ -91,7 +94,7 @@ test('cleans up route with a custom path from Routes.js', async () => {
   t.options.renderer = 'silent'
 
   return t.tasks[1].run().then(() => {
-    const routes = fs.readFileSync(getPaths().web.routes)
+    const routes = fs.readFileSync(getPaths().web.routes, 'utf-8')
     expect(routes).toEqual(
       [
         '<Routes>',

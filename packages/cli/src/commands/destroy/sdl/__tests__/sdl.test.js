@@ -1,6 +1,8 @@
 globalThis.__dirname = __dirname
 
-import fs from 'fs'
+import fs from 'fs-extra'
+import { vol } from 'memfs'
+import { vi, beforeEach, afterEach, test, expect, describe } from 'vitest'
 
 import '../../../../lib/test'
 
@@ -8,19 +10,21 @@ import { getDefaultArgs } from '../../../../lib'
 import { builder, files } from '../../../generate/sdl/sdl'
 import { tasks } from '../sdl'
 
-jest.mock('fs')
+vi.mock('fs-extra')
 
-jest.mock('../../../../lib', () => {
+vi.mock('../../../../lib', async (importOriginal) => {
+  const originalLib = await importOriginal()
   return {
-    ...jest.requireActual('../../../../lib'),
+    ...originalLib,
     generateTemplate: () => '',
   }
 })
 
-jest.mock('../../../../lib/schemaHelpers', () => {
+vi.mock('../../../../lib/schemaHelpers', async (importOriginal) => {
+  const originalSchemaHelpers = await importOriginal()
   const path = require('path')
   return {
-    ...jest.requireActual('../../../../lib/schemaHelpers'),
+    ...originalSchemaHelpers,
     getSchema: () =>
       require(path.join(globalThis.__dirname, 'fixtures', 'post.json')),
   }
@@ -28,19 +32,17 @@ jest.mock('../../../../lib/schemaHelpers', () => {
 
 describe('rw destroy sdl', () => {
   afterEach(() => {
-    fs.__setMockFiles({})
-    jest.spyOn(fs, 'unlinkSync').mockClear()
+    vol.reset()
+    vi.spyOn(fs, 'unlinkSync').mockClear()
   })
 
   describe('for javascript files', () => {
     beforeEach(async () => {
-      fs.__setMockFiles(
-        await files({ ...getDefaultArgs(builder), name: 'Post' })
-      )
+      vol.fromJSON(await files({ ...getDefaultArgs(builder), name: 'Post' }))
     })
 
     test('destroys sdl files', async () => {
-      const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+      const unlinkSpy = vi.spyOn(fs, 'unlinkSync')
       const t = tasks({ model: 'Post' })
       t.options.renderer = 'silent'
 
@@ -56,7 +58,7 @@ describe('rw destroy sdl', () => {
 
   describe('for typescript files', () => {
     beforeEach(async () => {
-      fs.__setMockFiles(
+      vol.fromJSON(
         await files({
           ...getDefaultArgs(builder),
           typescript: true,
@@ -66,7 +68,7 @@ describe('rw destroy sdl', () => {
     })
 
     test('destroys sdl files', async () => {
-      const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+      const unlinkSpy = vi.spyOn(fs, 'unlinkSync')
       const t = tasks({ model: 'Post' })
       t.options.renderer = 'silent'
 

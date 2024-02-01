@@ -52,8 +52,14 @@ export const replaceGqlTagWithTrustedDocumentGraphql = (
   const gqlFile = gqlFileOutput[0]
 
   if (gqlFile && gqlFile.content) {
-    gqlFile.content +=
-      'export function gql(source: string) { return graphql(source); }'
+    gqlFile.content += `\n
+      export function gql(source: string | TemplateStringsArray) {
+        if (typeof source === 'string') {
+          return graphql(source)
+        }
+
+        return graphql(source.join('\\n'))
+      }`
 
     const content = format(gqlFile.content, {
       trailingComma: 'es5',

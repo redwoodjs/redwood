@@ -1,22 +1,10 @@
-import fs from 'node:fs'
+import { build, defaultBuildOptions } from '@redwoodjs/framework-tools'
 
-import * as esbuild from 'esbuild'
-
-const result = await esbuild.build({
-  entryPoints: ['src/index.ts'],
-  outdir: 'dist',
-
-  bundle: true,
-
-  platform: 'node',
-  target: ['node18'],
-  packages: 'external',
-
-  logLevel: 'info',
-
-  // For visualizing the bundle.
-  // See https://esbuild.github.io/api/#metafile and https://esbuild.github.io/analyze/.
-  metafile: true,
+await build({
+  buildOptions: {
+    ...defaultBuildOptions,
+    bundle: true,
+    entryPoints: ['src/index.ts'],
+    packages: 'external',
+  },
 })
-
-fs.writeFileSync('meta.json', JSON.stringify(result.metafile))

@@ -1,7 +1,7 @@
-import fs from 'fs'
 import path from 'path'
 
 import chalk from 'chalk'
+import fs from 'fs-extra'
 
 import { getCompatibilityData } from '@redwoodjs/cli-helpers'
 
@@ -73,7 +73,7 @@ export const PLUGIN_CACHE_BUILTIN = [
   'upgrade',
 ]
 
-export function loadCommadCache() {
+export function loadCommandCache() {
   // Always default to the default cache
   let pluginCommandCache = PLUGIN_CACHE_DEFAULT
   const commandCachePath = path.join(
@@ -214,7 +214,7 @@ export async function loadPluginPackage(
  * @returns True if the plugin was installed successfully, false otherwise
  */
 async function installPluginPackage(packageName, packageVersion) {
-  // We use a simple heuristic here to try and be a little more convienient for the user
+  // We use a simple heuristic here to try and be a little more convenient for the user
   // when no version is specified.
 
   let versionToInstall = packageVersion
