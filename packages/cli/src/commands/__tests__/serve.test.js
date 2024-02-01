@@ -52,7 +52,7 @@ vi.mock('fs-extra', async (importOriginal) => {
 vi.mock('@redwoodjs/api-server/dist/apiCLIConfig', async (importOriginal) => {
   const originalAPICLIConfig = await importOriginal()
   return {
-    description: originalAPICLIConfig.desciption,
+    description: originalAPICLIConfig.description,
     builder: originalAPICLIConfig.builder,
     handler: vi.fn(),
   }
@@ -60,7 +60,7 @@ vi.mock('@redwoodjs/api-server/dist/apiCLIConfig', async (importOriginal) => {
 vi.mock('@redwoodjs/api-server/dist/bothCLIConfig', async (importOriginal) => {
   const originalBothCLIConfig = await importOriginal()
   return {
-    description: originalBothCLIConfig.desciption,
+    description: originalBothCLIConfig.description,
     builder: originalBothCLIConfig.builder,
     handler: vi.fn(),
   }

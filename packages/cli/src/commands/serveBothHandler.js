@@ -47,7 +47,7 @@ export const bothServerFileHandler = async (argv) => {
           name: 'api',
           command: `yarn node ${path.join('dist', 'server.js')} --port ${
             argv.apiPort
-          } --host ${argv.apiHost}`,
+          } --host ${argv.apiHost} --api-root-path ${argv.apiRootPath}`,
           cwd: getPaths().api.base,
           prefixColor: 'cyan',
         },
