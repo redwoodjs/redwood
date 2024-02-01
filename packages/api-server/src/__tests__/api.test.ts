@@ -1,11 +1,13 @@
 import path from 'path'
 
+import { vi, beforeAll, afterAll, describe, it, expect } from 'vitest'
+
 import createFastifyInstance from '../fastify'
 import { redwoodFastifyAPI } from '../plugins/api'
 
 // Suppress terminal logging.
-console.log = jest.fn()
-console.warn = jest.fn()
+console.log = vi.fn()
+console.warn = vi.fn()
 
 // Set up RWJS_CWD.
 let original_RWJS_CWD: string | undefined
@@ -20,10 +22,10 @@ afterAll(() => {
 })
 
 // Set up and teardown the fastify instance for each test.
-let fastifyInstance: ReturnType<typeof createFastifyInstance>
+let fastifyInstance: Awaited<ReturnType<typeof createFastifyInstance>>
 
 beforeAll(async () => {
-  fastifyInstance = createFastifyInstance()
+  fastifyInstance = await createFastifyInstance()
 
   fastifyInstance.register(redwoodFastifyAPI, {
     redwood: {

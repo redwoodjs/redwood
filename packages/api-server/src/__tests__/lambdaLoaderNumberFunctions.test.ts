@@ -1,12 +1,14 @@
 import path from 'path'
 
+import { vi, beforeAll, afterAll, test, expect } from 'vitest'
+
 import {
   LAMBDA_FUNCTIONS,
   loadFunctionsFromDist,
 } from '../plugins/lambdaLoader'
 
 // Suppress terminal logging.
-console.log = jest.fn()
+console.log = vi.fn()
 
 // Set up RWJS_CWD.
 let original_RWJS_CWD: string | undefined

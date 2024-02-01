@@ -9,7 +9,7 @@ export async function handler(options: APIParsedOptions) {
   const timeStart = Date.now()
   console.log(chalk.dim.italic('Starting API Server...'))
 
-  const fastify = createFastifyInstance()
+  const fastify = await createFastifyInstance()
   fastify.register(redwoodFastifyAPI, {
     redwood: {
       ...options,

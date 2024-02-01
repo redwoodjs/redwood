@@ -26,14 +26,14 @@ export async function handler(options: BothParsedOptions) {
     options.apiRootPath,
   ].join('')
 
-  const webFastify = createFastifyInstance()
+  const webFastify = await createFastifyInstance()
   webFastify.register(redwoodFastifyWeb, {
     redwood: {
       apiProxyTarget,
     },
   })
 
-  const apiFastify = createFastifyInstance()
+  const apiFastify = await createFastifyInstance()
   apiFastify.register(redwoodFastifyAPI, {
     redwood: {
       apiRootPath: options.apiRootPath,
