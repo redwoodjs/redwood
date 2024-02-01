@@ -8,13 +8,7 @@
     "directory": "packages/web-server"
   },
   "license": "MIT",
-  "exports": {
-    ".": {
-      "types": "./dist/cliConfig.d.ts",
-      "default": "./dist/cliConfig.js"
-    },
-    "./package.json": "./package.json"
-  },
+  "main": "./dist/cliConfig.js",
   "types": "./dist/cliConfig.d.ts",
   "bin": {
     "rw-web-server": "./dist/bin.js"
@@ -39,6 +33,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
+    "@redwoodjs/framework-tools": "6.0.7",
     "typescript": "5.3.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

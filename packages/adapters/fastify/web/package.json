@@ -7,16 +7,7 @@
     "directory": "packages/adapters/fastify/web"
   },
   "license": "MIT",
-  "exports": {
-    ".": {
-      "types": "./dist/web.d.ts",
-      "default": "./dist/web.js"
-    },
-    "./helpers": {
-      "types": "./dist/helpers.d.ts",
-      "default": "./dist/helpers.js"
-    }
-  },
+  "main": "./dist/web.js",
   "types": "./dist/web.d.ts",
   "files": [
     "dist"
@@ -37,6 +28,7 @@
     "fast-glob": "3.3.2"
   },
   "devDependencies": {
+    "@redwoodjs/framework-tools": "6.0.7",
     "fastify": "4.25.2",
     "typescript": "5.3.3",
     "vitest": "1.2.2"

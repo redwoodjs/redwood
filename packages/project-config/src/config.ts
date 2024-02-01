@@ -21,7 +21,7 @@ export enum BundlerEnum {
 export interface NodeTargetConfig {
   title: string
   name?: string
-  host: string
+  host?: string
   port: number
   path: string
   target: TargetEnum.NODE
@@ -33,7 +33,7 @@ export interface NodeTargetConfig {
 interface BrowserTargetConfig {
   title: string
   name?: string
-  host: string
+  host?: string
   port: number
   path: string
   target: TargetEnum.BROWSER
@@ -132,7 +132,6 @@ export interface CLIPlugin {
 const DEFAULT_CONFIG: Config = {
   web: {
     title: 'Redwood App',
-    host: 'localhost',
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
@@ -145,7 +144,6 @@ const DEFAULT_CONFIG: Config = {
   },
   api: {
     title: 'Redwood App',
-    host: 'localhost',
     port: 8911,
     path: './api',
     target: TargetEnum.NODE,

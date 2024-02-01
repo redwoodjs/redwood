@@ -33,10 +33,21 @@ export const registerFwGlobals = () => {
       if (/^[a-zA-Z][a-zA-Z\d+\-.]*?:/.test(apiPath)) {
         return apiPath
       } else {
+        let webHost = process.env.REDWOOD_WEB_HOST
+        webHost ??= rwConfig.web.host
+        webHost ??= process.env.NODE_ENV === 'production' ? '0.0.0.0' : '[::]'
+
+        let webPort
+        if (process.env.REDWOOD_WEB_PORT) {
+          webPort = parseInt(process.env.REDWOOD_WEB_PORT)
+        } else {
+          webPort = rwConfig.web.port
+        }
+
         // NOTE: rwConfig.web.host defaults to "localhost", which is
         // When running in production, the api server does not listen on localhost
         const proxiedApiUrl = swapLocalhostFor127(
-          'http://' + rwConfig.web.host + ':' + rwConfig.web.port + apiPath
+          'http://' + webHost + ':' + webPort + apiPath
         )
 
         if (

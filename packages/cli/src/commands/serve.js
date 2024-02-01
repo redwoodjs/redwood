@@ -3,8 +3,9 @@ import path from 'path'
 import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
+import * as apiServerCLIConfig from '@redwoodjs/api-server/dist/apiCLIConfig'
+import * as bothServerCLIConfig from '@redwoodjs/api-server/dist/bothCLIConfig'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
-import { coerceRootPath } from '@redwoodjs/fastify-web/helpers'
 import * as webServerCLIConfig from '@redwoodjs/web-server'
 
 import { getPaths, getConfig } from '../lib'
@@ -13,7 +14,8 @@ import c from '../lib/colors'
 import { webSsrServerHandler } from './serveWebHandler'
 
 export const command = 'serve [side]'
-export const description = 'Run server for api or web in production'
+export const description =
+  'Start a server for serving both the api and web sides'
 
 function hasServerFile() {
   const serverFilePath = path.join(getPaths().api.dist, 'server.js')
@@ -22,38 +24,10 @@ function hasServerFile() {
 
 export const builder = async (yargs) => {
   yargs
-    .usage('usage: $0 <side>')
     .command({
       command: '$0',
-      description: 'Run both api and web servers',
-      builder: (yargs) => {
-        if (!hasServerFile()) {
-          yargs.options({
-            port: {
-              default: getConfig().web?.port || 8910,
-              type: 'number',
-              alias: 'p',
-            },
-            socket: { type: 'string' },
-          })
-
-          return
-        }
-
-        yargs
-          .options({
-            webPort: {
-              default: getConfig().web?.port || 8910,
-              type: 'number',
-            },
-          })
-          .options({
-            apiPort: {
-              default: getConfig().api?.port || 8911,
-              type: 'number',
-            },
-          })
-      },
+      description: bothServerCLIConfig.description,
+      builder: bothServerCLIConfig.builder(yargs),
       handler: async (argv) => {
         recordTelemetryAttributes({
           command: 'serve',
@@ -77,37 +51,14 @@ export const builder = async (yargs) => {
           )
           await bothSsrRscServerHandler(argv)
         } else {
-          // Wanted to use the new web-server package here, but can't because
-          // of backwards compatibility reasons. With `bothServerHandler` both
-          // the web side and the api side run on the same server with the same
-          // port. If we use a separate fe server and api server we can't run
-          // them on the same port, and so we lose backwards compatibility.
-          // TODO: Use @redwoodjs/web-server when we're ok with breaking
-          // backwards compatibility.
-          const { bothServerHandler } = await import('./serveBothHandler.js')
-          await bothServerHandler(argv)
+          await bothServerCLIConfig.handler(argv)
         }
       },
     })
     .command({
       command: 'api',
-      description: 'Start server for serving only the api',
-      builder: (yargs) =>
-        yargs.options({
-          port: {
-            default: getConfig().api?.port || 8911,
-            type: 'number',
-            alias: 'p',
-          },
-          socket: { type: 'string' },
-          apiRootPath: {
-            alias: ['api-root-path', 'rootPath', 'root-path'],
-            default: '/',
-            type: 'string',
-            desc: 'Root path where your api functions are served',
-            coerce: coerceRootPath,
-          },
-        }),
+      description: apiServerCLIConfig.description,
+      builder: apiServerCLIConfig.builder,
       handler: async (argv) => {
         recordTelemetryAttributes({
           command: 'serve',
@@ -122,8 +73,7 @@ export const builder = async (yargs) => {
           const { apiServerFileHandler } = await import('./serveApiHandler.js')
           await apiServerFileHandler(argv)
         } else {
-          const { apiServerHandler } = await import('./serveApiHandler.js')
-          await apiServerHandler(argv)
+          await apiServerCLIConfig.handler(argv)
         }
       },
     })

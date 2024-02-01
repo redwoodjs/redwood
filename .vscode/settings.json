@@ -20,5 +20,12 @@
     "files.trimTrailingWhitespace": false
   },
   "typescript.tsdk": "node_modules/typescript/lib",
-  "peacock.color": "#b85833"
+  "peacock.color": "#b85833",
+  "cSpell.words": [
+    "execa",
+    "Fastify",
+    "pino",
+    "redwoodjs",
+    "RWJS"
+  ]
 }

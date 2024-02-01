@@ -134,6 +134,13 @@ declare global {
 }`)
 })
 
+test('generates global page imports source maps', () => {
+  const paths = generateTypeDefRouterPages()
+  const sourceMap = JSON.parse(fs.readFileSync(paths[0] + '.map', 'utf-8'))
+  sourceMap.sources = sourceMap.sources.map((source) => ensurePosixPath(source))
+  expect(sourceMap).toMatchSnapshot()
+})
+
 test('generate current user ', () => {
   const paths = generateTypeDefCurrentUser()
   const p = paths.map(cleanPaths)
@@ -155,6 +162,15 @@ test('generates the router routes', () => {
     barPage: (params?: RouteParams<"/bar"> & QueryParams) => "/bar"
     privatePage: (params?: RouteParams<"/private-page"> & QueryParams) => "/private-page"
 `)
+})
+
+test('generates source maps for the router routes', () => {
+  const paths = generateTypeDefRouterRoutes()
+  const sourceMap = JSON.parse(fs.readFileSync(paths[0] + '.map', 'utf-8'))
+  sourceMap.sources = sourceMap.sources.map((source: string) =>
+    ensurePosixPath(source)
+  )
+  expect(sourceMap).toMatchSnapshot()
 })
 
 test('generate glob imports', () => {

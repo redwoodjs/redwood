@@ -1,11 +1,9 @@
-#!/usr/bin/env node
-
 import type { ChildProcess } from 'child_process'
 import { fork } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
-import c from 'ansi-colors'
+import chalk from 'chalk'
 import chokidar from 'chokidar'
 import dotenv from 'dotenv'
 import { debounce } from 'lodash'
@@ -25,33 +23,31 @@ import {
   resolveFile,
 } from '@redwoodjs/project-config'
 
-const argv = yargs(hideBin(process.argv))
-  .option('debug-port', {
-    alias: 'dp',
-    description: 'Debugging port',
-    type: 'number',
-  })
-  .option('port', {
-    alias: 'p',
-    description: 'Port',
-    type: 'number',
-  })
-  .help()
-  .alias('help', 'h')
-  .parseSync()
-
 const rwjsPaths = getPaths()
 
 if (!process.env.REDWOOD_ENV_FILES_LOADED) {
   dotenv.config({
-    path: path.join(getPaths().base, '.env'),
+    path: path.join(rwjsPaths.base, '.env'),
     // @ts-expect-error The types for dotenv-defaults are using an outdated version of dotenv
-    defaults: path.join(getPaths().base, '.env.defaults'),
+    defaults: path.join(rwjsPaths.base, '.env.defaults'),
     multiline: true,
   })
 
   process.env.REDWOOD_ENV_FILES_LOADED = 'true'
 }
+
+const argv = yargs(hideBin(process.argv))
+  .option('debugPort', {
+    description: 'Port on which to expose API server debugger',
+    type: 'number',
+    alias: ['debug-port', 'dp'],
+  })
+  .option('port', {
+    description: 'The port to listen at',
+    type: 'number',
+    alias: 'p',
+  })
+  .parseSync()
 
 let httpServerProcess: ChildProcess
 
@@ -66,9 +62,11 @@ const validate = async () => {
     return true
   } catch (e: any) {
     killApiServer()
-    console.log(c.redBright(`[GQL Server Error] - Schema validation failed`))
-    console.error(c.red(e?.message))
-    console.log(c.redBright('-'.repeat(40)))
+    console.error(
+      chalk.redBright(`[GQL Server Error] - Schema validation failed`)
+    )
+    console.error(chalk.red(e?.message))
+    console.error(chalk.redBright('-'.repeat(40)))
 
     debouncedBuild.cancel()
     debouncedRebuild.cancel()
@@ -85,7 +83,7 @@ const buildAndRestart = async ({
     killApiServer()
 
     const buildTs = Date.now()
-    console.log(c.dim.italic('Building...'))
+    console.log(chalk.dim.italic('Building...'))
 
     if (clean) {
       await cleanApiBuild()
@@ -96,7 +94,7 @@ const buildAndRestart = async ({
     } else {
       await buildApi()
     }
-    console.log(c.dim.italic('Took ' + (Date.now() - buildTs) + ' ms'))
+    console.log(chalk.dim.italic('Took ' + (Date.now() - buildTs) + ' ms'))
 
     const forkOpts = {
       execArgv: process.execArgv,
@@ -106,11 +104,11 @@ const buildAndRestart = async ({
     if (getConfig().experimental.opentelemetry.enabled) {
       // We expect the OpenTelemetry SDK setup file to be in a specific location
       const opentelemetrySDKScriptPath = path.join(
-        getPaths().api.dist,
+        rwjsPaths.api.dist,
         'opentelemetry.js'
       )
       const opentelemetrySDKScriptPathRelative = path.relative(
-        getPaths().base,
+        rwjsPaths.base,
         opentelemetrySDKScriptPath
       )
       console.log(
@@ -145,7 +143,7 @@ const buildAndRestart = async ({
       )
     } else {
       httpServerProcess = fork(
-        path.join(__dirname, 'index.js'),
+        path.join(__dirname, 'bin.js'),
         ['api', '--port', port.toString()],
         forkOpts
       )
@@ -214,9 +212,10 @@ chokidar
     await validate()
   })
   .on('all', async (eventName, filePath) => {
-    // On sufficiently large projects (500+ files, or >= 2000 ms build times) on older machines, esbuild writing to the api directory
-    // makes chokidar emit an `addDir` event. This starts an infinite loop where the api starts building itself as soon as it's finished.
-    // This could probably be fixed with some sort of build caching.
+    // On sufficiently large projects (500+ files, or >= 2000 ms build times) on older machines,
+    // esbuild writing to the api directory makes chokidar emit an `addDir` event.
+    // This starts an infinite loop where the api starts building itself as soon as it's finished.
+    // This could probably be fixed with some sort of build caching
     if (eventName === 'addDir' && filePath === rwjsPaths.api.base) {
       return
     }
@@ -235,7 +234,7 @@ chokidar
     }
 
     console.log(
-      c.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`)
+      chalk.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`)
     )
 
     if (eventName === 'add' || eventName === 'unlink') {
