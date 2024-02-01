@@ -64,7 +64,8 @@ if (process.env.RWJS_CWD && !process.env.REDWOOD_ENV_FILES_LOADED) {
  * ```
  */
 export async function createServer(options: CreateServerOptions = {}) {
-  const { apiRootPath, fastifyServerOptions, port } = resolveOptions(options)
+  const { apiRootPath, fastifyServerOptions, port, host } =
+    resolveOptions(options)
 
   // Warn about `api/server.config.js`
   const serverConfigPath = path.join(
@@ -162,7 +163,7 @@ export async function createServer(options: CreateServerOptions = {}) {
     return server.listen({
       ...options,
       port,
-      host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+      host,
     })
   }
 

@@ -3,7 +3,7 @@ import path from 'path'
 import concurrently from 'concurrently'
 import execa from 'execa'
 
-import { apiServerCLIConfig } from '@redwoodjs/api-server/dist/cliConfig'
+import { handler as apiServerHandler } from '@redwoodjs/api-server/dist/apiCLIConfigHandler'
 import {
   getAPIHost,
   getAPIPort,
@@ -75,7 +75,7 @@ export const bothServerFileHandler = async (argv) => {
 
 export const bothSsrRscServerHandler = async (argv) => {
   // TODO Allow specifying port, socket and apiRootPath
-  const apiPromise = apiServerCLIConfig.handler({
+  const apiPromise = apiServerHandler({
     ...argv,
     port: 8911,
     apiRootPath: '/',

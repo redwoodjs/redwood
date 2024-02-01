@@ -5,8 +5,7 @@ import fastifyRawBody from 'fastify-raw-body'
 
 import type { GlobalContext } from '@redwoodjs/context'
 import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
-// @ts-expect-error TODO(jtoar)
-import { coerceRootPath } from '@redwoodjs/fastify-web/helpers'
+import { coerceRootPath } from '@redwoodjs/fastify-web/dist/helpers'
 
 import { loadFastifyConfig } from '../fastify'
 

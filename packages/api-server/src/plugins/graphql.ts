@@ -11,8 +11,7 @@ import type { Plugin } from 'graphql-yoga'
 
 import type { GlobalContext } from '@redwoodjs/context'
 import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
-// @ts-expect-error TODO(jtoar)
-import { coerceRootPath } from '@redwoodjs/fastify-web/helpers'
+import { coerceRootPath } from '@redwoodjs/fastify-web/dist/helpers'
 import { createGraphQLYoga } from '@redwoodjs/graphql-server'
 import type { GraphQLYogaOptions } from '@redwoodjs/graphql-server'
 import { getPaths } from '@redwoodjs/project-config'

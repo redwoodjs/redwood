@@ -221,6 +221,7 @@ describe('resolveOptions', () => {
         logger: DEFAULT_CREATE_SERVER_OPTIONS.logger,
       },
       port: 8911,
+      host: '::',
     })
   })
 
@@ -290,25 +291,29 @@ describe('resolveOptions', () => {
   })
 
   it('parses `--port`', () => {
-    expect(resolveOptions({}, ['--port', '8930']).port).toEqual(8930)
+    expect(
+      resolveOptions({ parseArgs: true }, ['--port', '8930']).port
+    ).toEqual(8930)
   })
 
   it("throws if `--port` can't be converted to an integer", () => {
     expect(() => {
-      resolveOptions({}, ['--port', 'eight-nine-ten'])
+      resolveOptions({ parseArgs: true }, ['--port', 'eight-nine-ten'])
     }).toThrowErrorMatchingInlineSnapshot(`"\`port\` must be an integer"`)
   })
 
   it('parses `--apiRootPath`', () => {
-    expect(resolveOptions({}, ['--apiRootPath', 'foo']).apiRootPath).toEqual(
-      '/foo/'
-    )
+    expect(
+      resolveOptions({ parseArgs: true }, ['--apiRootPath', 'foo']).apiRootPath
+    ).toEqual('/foo/')
   })
 
   it('the `--apiRootPath` flag has precedence', () => {
     expect(
-      resolveOptions({ apiRootPath: 'foo' }, ['--apiRootPath', 'bar'])
-        .apiRootPath
+      resolveOptions({ parseArgs: true, apiRootPath: 'foo' }, [
+        '--apiRootPath',
+        'bar',
+      ]).apiRootPath
     ).toEqual('/bar/')
   })
 })

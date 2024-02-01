@@ -7,9 +7,10 @@ import yargs from 'yargs/yargs'
 import { getPaths } from '@redwoodjs/project-config'
 import * as webServerCLIConfig from '@redwoodjs/web-server'
 
+import * as apiServerCLIConfig from './apiCLIConfig'
 import { handler as apiHandler } from './apiCLIConfigHandler'
+import * as bothServerCLIConfig from './bothCLIConfig'
 import { handler as bothHandler } from './bothCLIConfigHandler'
-import { apiServerCLIConfig, bothServerCLIConfig } from './cliConfig'
 
 if (!process.env.REDWOOD_ENV_FILES_LOADED) {
   config({

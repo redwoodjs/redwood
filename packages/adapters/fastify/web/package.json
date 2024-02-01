@@ -7,16 +7,7 @@
     "directory": "packages/adapters/fastify/web"
   },
   "license": "MIT",
-  "exports": {
-    ".": {
-      "types": "./dist/web.d.ts",
-      "default": "./dist/web.js"
-    },
-    "./helpers": {
-      "types": "./dist/helpers.d.ts",
-      "default": "./dist/helpers.js"
-    }
-  },
+  "main": "./dist/web.js",
   "types": "./dist/web.d.ts",
   "files": [
     "dist"

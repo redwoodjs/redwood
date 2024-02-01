@@ -2,7 +2,9 @@ import { parseArgs } from 'util'
 
 import type { FastifyServerOptions } from 'fastify'
 
-import { getConfig } from '@redwoodjs/project-config'
+import { coerceRootPath } from '@redwoodjs/fastify-web/dist/helpers'
+
+import { getAPIHost, getAPIPort } from './cliHelpers'
 
 export interface CreateServerOptions {
   /**
@@ -20,6 +22,11 @@ export interface CreateServerOptions {
    * Omitting logger here because we move it up.
    */
   fastifyServerOptions?: Omit<FastifyServerOptions, 'logger'>
+
+  /**
+   * Whether to parse args or not. Defaults to `true`.
+   */
+  parseArgs?: boolean
 }
 
 type DefaultCreateServerOptions = Required<
@@ -38,12 +45,14 @@ export const DEFAULT_CREATE_SERVER_OPTIONS: DefaultCreateServerOptions = {
   fastifyServerOptions: {
     requestTimeout: 15_000,
   },
+  parseArgs: true,
 }
 
 type ResolvedOptions = Required<
-  Omit<CreateServerOptions, 'logger' | 'fastifyServerOptions'> & {
+  Omit<CreateServerOptions, 'logger' | 'fastifyServerOptions' | 'parseArgs'> & {
     fastifyServerOptions: FastifyServerOptions
     port: number
+    host: string
   }
 >
 
@@ -52,14 +61,6 @@ export function resolveOptions(
   args?: string[]
 ) {
   options.logger ??= DEFAULT_CREATE_SERVER_OPTIONS.logger
-
-  let defaultPort: number | undefined
-
-  if (process.env.REDWOOD_API_PORT === undefined) {
-    defaultPort = getConfig().api.port
-  } else {
-    defaultPort = parseInt(process.env.REDWOOD_API_PORT)
-  }
 
   // Set defaults.
   const resolvedOptions: ResolvedOptions = {
@@ -72,7 +73,8 @@ export function resolveOptions(
       logger: options.logger ?? DEFAULT_CREATE_SERVER_OPTIONS.logger,
     },
 
-    port: defaultPort,
+    port: getAPIPort(),
+    host: getAPIHost(),
   }
 
   // Merge fastifyServerOptions.
@@ -80,61 +82,37 @@ export function resolveOptions(
     DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.requestTimeout
   resolvedOptions.fastifyServerOptions.logger = options.logger
 
-  const { values } = parseArgs({
-    options: {
-      apiRootPath: {
-        type: 'string',
+  if (options.parseArgs) {
+    const { values } = parseArgs({
+      options: {
+        apiRootPath: {
+          type: 'string',
+        },
+        port: {
+          type: 'string',
+          short: 'p',
+        },
       },
-      port: {
-        type: 'string',
-        short: 'p',
-      },
-    },
+      ...(args && { args }),
+    })
 
-    // When running Jest, `process.argv` is...
-    //
-    // ```js
-    // [
-    //    'path/to/node'
-    //    'path/to/jest.js'
-    //    'file/under/test.js'
-    // ]
-    // ```
-    //
-    // `parseArgs` strips the first two, leaving the third, which is interpreted as a positional argument.
-    // Which fails our options. We'd still like to be strict, but can't do it for tests.
-    strict: process.env.NODE_ENV === 'test' ? false : true,
-    ...(args && { args }),
-  })
+    if (values.apiRootPath && typeof values.apiRootPath !== 'string') {
+      throw new Error('`apiRootPath` must be a string')
+    }
+    if (values.apiRootPath) {
+      resolvedOptions.apiRootPath = values.apiRootPath
+    }
 
-  if (values.apiRootPath && typeof values.apiRootPath !== 'string') {
-    throw new Error('`apiRootPath` must be a string')
-  }
+    if (values.port) {
+      resolvedOptions.port = +values.port
 
-  if (values.apiRootPath) {
-    resolvedOptions.apiRootPath = values.apiRootPath
-  }
-
-  // Format `apiRootPath`
-  if (resolvedOptions.apiRootPath.charAt(0) !== '/') {
-    resolvedOptions.apiRootPath = `/${resolvedOptions.apiRootPath}`
-  }
-
-  if (
-    resolvedOptions.apiRootPath.charAt(
-      resolvedOptions.apiRootPath.length - 1
-    ) !== '/'
-  ) {
-    resolvedOptions.apiRootPath = `${resolvedOptions.apiRootPath}/`
-  }
-
-  if (values.port) {
-    resolvedOptions.port = +values.port
-
-    if (isNaN(resolvedOptions.port)) {
-      throw new Error('`port` must be an integer')
+      if (isNaN(resolvedOptions.port)) {
+        throw new Error('`port` must be an integer')
+      }
     }
   }
+
+  resolvedOptions.apiRootPath = coerceRootPath(resolvedOptions.apiRootPath)
 
   return resolvedOptions
 }
