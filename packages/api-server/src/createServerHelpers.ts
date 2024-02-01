@@ -87,7 +87,6 @@ export function resolveOptions(
       options: {
         host: {
           type: 'string',
-          short: 'p',
         },
         port: {
           type: 'string',
