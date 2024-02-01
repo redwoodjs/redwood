@@ -20,6 +20,9 @@ export type APIParsedOptions = {
 } & Omit<RedwoodFastifyAPIOptions['redwood'], 'fastGlobOptions'>
 
 export type BothParsedOptions = {
-  port?: number
-  host?: string
+  webPort?: number
+  webHost?: string
+  apiPort?: number
+  apiHost?: string
+  apiRootPath?: string
 } & Omit<RedwoodFastifyAPIOptions['redwood'], 'fastGlobOptions'>
