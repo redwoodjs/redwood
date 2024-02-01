@@ -316,4 +316,10 @@ describe('resolveOptions', () => {
       ]).apiRootPath
     ).toEqual('/bar/')
   })
+
+  it('parses `--host`', () => {
+    expect(
+      resolveOptions({ parseArgs: true }, ['--host', '127.0.0.1']).host
+    ).toEqual('127.0.0.1')
+  })
 })

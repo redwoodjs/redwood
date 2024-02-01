@@ -73,8 +73,8 @@ export function resolveOptions(
       logger: options.logger ?? DEFAULT_CREATE_SERVER_OPTIONS.logger,
     },
 
-    port: getAPIPort(),
     host: getAPIHost(),
+    port: getAPIPort(),
   }
 
   // Merge fastifyServerOptions.
@@ -85,22 +85,26 @@ export function resolveOptions(
   if (options.parseArgs) {
     const { values } = parseArgs({
       options: {
-        apiRootPath: {
+        host: {
           type: 'string',
+          short: 'p',
         },
         port: {
           type: 'string',
           short: 'p',
         },
+        apiRootPath: {
+          type: 'string',
+        },
       },
       ...(args && { args }),
     })
 
-    if (values.apiRootPath && typeof values.apiRootPath !== 'string') {
-      throw new Error('`apiRootPath` must be a string')
+    if (values.host && typeof values.host !== 'string') {
+      throw new Error('`host` must be a string')
     }
-    if (values.apiRootPath) {
-      resolvedOptions.apiRootPath = values.apiRootPath
+    if (values.host) {
+      resolvedOptions.host = values.host
     }
 
     if (values.port) {
@@ -109,6 +113,13 @@ export function resolveOptions(
       if (isNaN(resolvedOptions.port)) {
         throw new Error('`port` must be an integer')
       }
+    }
+
+    if (values.apiRootPath && typeof values.apiRootPath !== 'string') {
+      throw new Error('`apiRootPath` must be a string')
+    }
+    if (values.apiRootPath) {
+      resolvedOptions.apiRootPath = values.apiRootPath
     }
   }
 
