@@ -70,7 +70,7 @@ export const handler = async ({ side, prisma, dm: dataMigrate }) => {
         execaConfig
       )
     dataMigrate && execa.sync('yarn rw dataMigrate up', execaConfig)
-    await apiServerHandler.handler({
+    await apiServerHandler({
       port: getConfig().api?.port || 8911,
       apiRootPath: '/',
     })

@@ -25,36 +25,7 @@ export const builder = async (yargs) => {
     .command({
       command: '$0',
       description: bothServerCLIConfig.description,
-      builder: (yargs) => {
-        if (hasServerFile()) {
-          yargs.options({
-            webPort: {
-              description: 'The port for the web server to listen on',
-              type: 'number',
-              alias: ['web-port'],
-            },
-            webHost: {
-              description:
-                "The host for the web server to listen on. Note that you most likely want this to be '0.0.0.0' in production",
-              type: 'string',
-              alias: ['web-host'],
-            },
-            apiPort: {
-              description: 'The port for the api server to listen on',
-              type: 'number',
-              alias: ['api-port'],
-            },
-            apiHost: {
-              description:
-                "The host for the api server to listen on. Note that you most likely want this to be '0.0.0.0' in production",
-              type: 'string',
-              alias: ['api-host'],
-            },
-          })
-        }
-
-        bothServerCLIConfig.builder(yargs)
-      },
+      builder: bothServerCLIConfig.builder(yargs),
       handler: async (argv) => {
         recordTelemetryAttributes({
           command: 'serve',
