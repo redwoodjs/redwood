@@ -23,6 +23,8 @@
   "peacock.color": "#b85833",
   "cSpell.words": [
     "Fastify",
-    "redwoodjs"
+    "pino",
+    "redwoodjs",
+    "RWJS"
   ]
 }
