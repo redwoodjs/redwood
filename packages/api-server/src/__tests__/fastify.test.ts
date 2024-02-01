@@ -52,7 +52,14 @@ const userConfig = {
   requestTimeout: 25_000,
 }
 
-vi.mock('virtual:server.config.js', () => {
+vi.mock('/redwood-app/api/server.config.js', () => {
+  return {
+    default: {
+      config: userConfig,
+    },
+  }
+})
+vi.mock('\\redwood-app\\api\\server.config.js', () => {
   return {
     default: {
       config: userConfig,

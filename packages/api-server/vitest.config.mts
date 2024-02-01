@@ -9,13 +9,4 @@ export default defineConfig({
       './dist.test.ts'
     ],
   },
-  plugins: [
-    {
-      name: 'virtual-modules',
-      resolveId(id) {
-        if (id === '/redwood-app/api/server.config.js' || id === '\\redwood-app\\api\\server.config.js')
-          return 'virtual:server.config.js'
-      }
-    }
-  ]
 })
