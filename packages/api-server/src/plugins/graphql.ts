@@ -9,56 +9,53 @@ import type {
 import fastifyRawBody from 'fastify-raw-body'
 import type { Plugin } from 'graphql-yoga'
 
+import type { GlobalContext } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
+import { coerceRootPath } from '@redwoodjs/fastify-web/dist/helpers'
 import { createGraphQLYoga } from '@redwoodjs/graphql-server'
 import type { GraphQLYogaOptions } from '@redwoodjs/graphql-server'
 import { getPaths } from '@redwoodjs/project-config'
 
-/**
- * Transform a Fastify Request to an event compatible with the RedwoodGraphQLContext's event
- * which is based on the AWS Lambda event
- */
 import { lambdaEventForFastifyRequest } from '../requestHandlers/awsLambdaFastify'
 
 export interface RedwoodFastifyGraphQLOptions {
   redwood: {
-    apiRootPath: string
+    apiRootPath?: string
     graphql?: GraphQLYogaOptions
   }
 }
 
-/**
- * Redwood GraphQL Server Fastify plugin based on GraphQL Yoga
- *
- * @param {FastifyInstance} fastify  Encapsulated Fastify Instance
- * @param {GraphQLYogaOptions} options GraphQLYogaOptions options used to configure the GraphQL Yoga Server
- */
 export async function redwoodFastifyGraphQLServer(
   fastify: FastifyInstance,
   options: RedwoodFastifyGraphQLOptions
 ) {
-  // These two plugins are needed to transform a Fastify Request to a Lambda event
-  // which is used by the RedwoodGraphQLContext and mimics the behavior of the
-  // api-server withFunction plugin
-  if (!fastify.hasPlugin('@fastify/url-data')) {
-    await fastify.register(fastifyUrlData)
-  }
+  const redwoodOptions = options.redwood ?? {}
+  redwoodOptions.apiRootPath ??= '/'
+  redwoodOptions.apiRootPath = coerceRootPath(redwoodOptions.apiRootPath)
+
+  fastify.register(fastifyUrlData)
+  // Starting in Fastify v4, we have to await the fastifyRawBody plugin's registration
+  // to ensure it's ready
   await fastify.register(fastifyRawBody)
 
-  try {
-    const method = ['GET', 'POST', 'OPTIONS'] as HTTPMethods[]
+  const method = ['GET', 'POST', 'OPTIONS'] as HTTPMethods[]
 
-    // Load the graphql options from the graphql function if none are explicitly provided
-    if (!options.redwood.graphql) {
+  fastify.addHook('onRequest', (_req, _reply, done) => {
+    getAsyncStoreInstance().run(new Map<string, GlobalContext>(), done)
+  })
+
+  try {
+    // Load the graphql options from the user's graphql function if none are explicitly provided
+    if (!redwoodOptions.graphql) {
       const [graphqlFunctionPath] = await fg('dist/functions/graphql.{ts,js}', {
         cwd: getPaths().api.base,
         absolute: true,
       })
-
       const { __rw_graphqlOptions } = await import(graphqlFunctionPath)
-      options.redwood.graphql = __rw_graphqlOptions as GraphQLYogaOptions
+      redwoodOptions.graphql = __rw_graphqlOptions as GraphQLYogaOptions
     }
 
-    const graphqlOptions = options.redwood.graphql
+    const graphqlOptions = redwoodOptions.graphql
 
     // Here we can add any plugins that we want to use with GraphQL Yoga Server
     // that we do not want to add the the GraphQLHandler in the graphql-server
@@ -69,7 +66,7 @@ export async function redwoodFastifyGraphQLServer(
       const { useRedwoodRealtime } = await import('@redwoodjs/realtime')
 
       const originalExtraPlugins: Array<Plugin<any>> =
-        graphqlOptions.extraPlugins || []
+        graphqlOptions.extraPlugins ?? []
       originalExtraPlugins.push(useRedwoodRealtime(graphqlOptions.realtime))
       graphqlOptions.extraPlugins = originalExtraPlugins
 
@@ -105,11 +102,9 @@ export async function redwoodFastifyGraphQLServer(
     const routePaths = ['', '/health', '/readiness', '/stream']
     for (const routePath of routePaths) {
       fastify.route({
-        url: `${options.redwood.apiRootPath}${formatGraphQLEndpoint(
-          yoga.graphqlEndpoint
-        )}${routePath}`,
+        url: `${redwoodOptions.apiRootPath}${yoga.graphqlEndpoint}${routePath}`,
         method,
-        handler: async (req, reply) => await graphQLYogaHandler(req, reply),
+        handler: (req, reply) => graphQLYogaHandler(req, reply),
       })
     }
 
@@ -127,8 +122,4 @@ export async function redwoodFastifyGraphQLServer(
   } catch (e) {
     console.log(e)
   }
-}
-
-function formatGraphQLEndpoint(endpoint: string) {
-  return endpoint.replace(/^\//, '').replace(/\/$/, '')
 }

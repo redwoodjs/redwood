@@ -33,7 +33,6 @@ describe('getConfig', () => {
       {
         "api": {
           "debugPort": 18911,
-          "host": "localhost",
           "path": "./api",
           "port": 8911,
           "schemaPath": "./api/db/schema.prisma",
@@ -102,7 +101,6 @@ describe('getConfig', () => {
           "apiUrl": "/.redwood/functions",
           "bundler": "vite",
           "fastRefresh": true,
-          "host": "localhost",
           "includeEnvironmentVariables": [],
           "path": "./web",
           "port": 8910,

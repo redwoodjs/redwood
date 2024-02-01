@@ -3,11 +3,11 @@ import path from 'path'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
+import { handler as apiServerHandler } from '@redwoodjs/api-server/dist/apiCLIConfigHandler'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/project-config'
 
 import { getPaths } from '../../lib'
-import { apiServerHandler } from '../serveApiHandler'
 
 export const command = 'flightcontrol <side>'
 export const alias = 'fc'
@@ -65,7 +65,7 @@ export const handler = async ({ side, serve, prisma, dm: dataMigrate }) => {
   async function runApiCommands() {
     if (serve) {
       console.log('\nStarting api...')
-      await apiServerHandler({
+      await apiServerHandler.handler({
         port: getConfig().api?.port || 8911,
         apiRootPath: '/',
       })

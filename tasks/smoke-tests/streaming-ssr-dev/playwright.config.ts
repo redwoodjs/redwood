@@ -14,7 +14,7 @@ export default defineConfig({
   webServer: {
     command: 'yarn redwood dev --no-generate --fwd="--no-open"',
     cwd: process.env.REDWOOD_TEST_PROJECT_PATH,
-    url: 'http://localhost:8910',
+    url: 'http://localhost:8911/graphql?query={redwood{version}}',
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
   },
