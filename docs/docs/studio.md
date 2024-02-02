@@ -104,7 +104,8 @@ All settings for Studio are located in `redwood.toml`, which you can find at
 the root of your Redwood project.
 
 * `[studio.graphiql.authImpersonation].*` - Used to gain access to GraphQL
-  endpoints that require authentication
+  endpoints that require authentication. See section above on auth
+  impersonation for more details.
 * `[studio].basePort` – Studio's web front-end will run on this port (default:
   4318). It is also used to calculate the port for the mailer integration and
   other things. Please choose a port that is not already in use, and that has a
