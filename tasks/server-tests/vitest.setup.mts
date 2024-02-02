@@ -127,4 +127,10 @@ export async function test({
 
   expect(apiRes.status).toEqual(200)
   expect(apiBody).toEqual({ data: 'hello function' })
+
+  const apiProxyRes = await fetch(`http://${webHost}:${webPort}${testContext.projectConfig.web.apiUrl}/hello`)
+  const apiProxyBody = await apiProxyRes.json()
+
+  expect(apiProxyRes.status).toEqual(200)
+  expect(apiProxyBody).toEqual({ data: 'hello function' })
 }
