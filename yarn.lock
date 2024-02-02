@@ -3768,15 +3768,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@google-cloud/firestore@npm:^6.6.0":
-  version: 6.6.1
-  resolution: "@google-cloud/firestore@npm:6.6.1"
+"@google-cloud/firestore@npm:^6.8.0":
+  version: 6.8.0
+  resolution: "@google-cloud/firestore@npm:6.8.0"
   dependencies:
     fast-deep-equal: "npm:^3.1.1"
     functional-red-black-tree: "npm:^1.0.1"
     google-gax: "npm:^3.5.7"
-    protobufjs: "npm:^7.0.0"
-  checksum: 079d562c2488d183f7dd86862b326d00049296985ea6365ab7fe3347de7e1ecb3fd923ab3f005fad272466aac62363310c15f50e3bb59e133534b68bce912816
+    protobufjs: "npm:^7.2.5"
+  checksum: fafc2ad2cf739b9d9588865fbaea436504454707841e0a10e1d9890019d8efc0f43d0103f5edb06ac098cfe7735d93edaf952771518575b0a15cd82238cfe3ce
   languageName: node
   linkType: hard
 
@@ -7752,7 +7752,7 @@ __metadata:
     "@redwoodjs/api": "npm:6.0.7"
     "@types/aws-lambda": "npm:8.10.126"
     core-js: "npm:3.35.1"
-    firebase-admin: "npm:11.11.0"
+    firebase-admin: "npm:11.11.1"
     typescript: "npm:5.3.3"
     vitest: "npm:1.2.2"
   languageName: unknown
@@ -19184,14 +19184,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-admin@npm:11.11.0":
-  version: 11.11.0
-  resolution: "firebase-admin@npm:11.11.0"
+"firebase-admin@npm:11.11.1":
+  version: 11.11.1
+  resolution: "firebase-admin@npm:11.11.1"
   dependencies:
     "@fastify/busboy": "npm:^1.2.1"
     "@firebase/database-compat": "npm:^0.3.4"
     "@firebase/database-types": "npm:^0.10.4"
-    "@google-cloud/firestore": "npm:^6.6.0"
+    "@google-cloud/firestore": "npm:^6.8.0"
     "@google-cloud/storage": "npm:^6.9.5"
     "@types/node": "npm:>=12.12.47"
     jsonwebtoken: "npm:^9.0.0"
@@ -19203,7 +19203,7 @@ __metadata:
       optional: true
     "@google-cloud/storage":
       optional: true
-  checksum: 97bea381dfc9f4bac13e59d22812de8f20627ed30dbeb50a0493b920a0cf7cbc08d425077e88be88af59d16e8f39d7fe88dd5df826870fc75fa660deb126ad67
+  checksum: a8dfd80b841ff989f20986b3447fba5a6a0d664447b5ef041c2f36b3d93d20539e0ecc5d4eb0faaa5cbfe819a1ee820a2560eaea1e3c36eea07b2936d3a642af
   languageName: node
   linkType: hard
 
@@ -20177,8 +20177,8 @@ __metadata:
   linkType: hard
 
 "google-gax@npm:^3.5.7":
-  version: 3.6.0
-  resolution: "google-gax@npm:3.6.0"
+  version: 3.6.1
+  resolution: "google-gax@npm:3.6.1"
   dependencies:
     "@grpc/grpc-js": "npm:~1.8.0"
     "@grpc/proto-loader": "npm:^0.7.0"
@@ -20192,13 +20192,13 @@ __metadata:
     node-fetch: "npm:^2.6.1"
     object-hash: "npm:^3.0.0"
     proto3-json-serializer: "npm:^1.0.0"
-    protobufjs: "npm:7.2.3"
+    protobufjs: "npm:7.2.4"
     protobufjs-cli: "npm:1.1.1"
     retry-request: "npm:^5.0.0"
   bin:
     compileProtos: build/tools/compileProtos.js
     minifyProtoJson: build/tools/minify.js
-  checksum: 438c0ab4c7ef858855d9c66a391f45f3cb2288c64ea320d091bbcc29b349b7f6301faa951728c2a076afe13d22ff773825028b8f7ad8739c21ddc2353a51fb7b
+  checksum: a935b7fac764fbf89b613d0a345ac9e531901fcd0223ec738c3e6ce29e9326603aca473326fe60216e04fc8adb7439dd5715f0f3b6b8200cd5f16c7fb4d7d3e7
   languageName: node
   linkType: hard
 
@@ -28254,9 +28254,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"protobufjs@npm:7.2.3":
-  version: 7.2.3
-  resolution: "protobufjs@npm:7.2.3"
+"protobufjs@npm:7.2.4":
+  version: 7.2.4
+  resolution: "protobufjs@npm:7.2.4"
   dependencies:
     "@protobufjs/aspromise": "npm:^1.1.2"
     "@protobufjs/base64": "npm:^1.1.2"
@@ -28270,13 +28270,13 @@ __metadata:
     "@protobufjs/utf8": "npm:^1.1.0"
     "@types/node": "npm:>=13.7.0"
     long: "npm:^5.0.0"
-  checksum: 8092a67a31d961622322887a2374a63a3509f22d45ed7ada39be5987d590bf3ec46eb17aa64ba08f79b42be44adfce63c2fdedc389aea1423013417b6af2c61f
+  checksum: 7610b4e3b961e7637e8f61099931161af7f47f8b88b4a0d55124158f9b7fbe6e8fdfe551803b0c65fefad9d58d49332f0b5b4aa5826d8dcd8b062c351cbe2ebb
   languageName: node
   linkType: hard
 
-"protobufjs@npm:^7.0.0, protobufjs@npm:^7.2.4":
-  version: 7.2.5
-  resolution: "protobufjs@npm:7.2.5"
+"protobufjs@npm:^7.0.0, protobufjs@npm:^7.2.4, protobufjs@npm:^7.2.5":
+  version: 7.2.6
+  resolution: "protobufjs@npm:7.2.6"
   dependencies:
     "@protobufjs/aspromise": "npm:^1.1.2"
     "@protobufjs/base64": "npm:^1.1.2"
@@ -28290,7 +28290,7 @@ __metadata:
     "@protobufjs/utf8": "npm:^1.1.0"
     "@types/node": "npm:>=13.7.0"
     long: "npm:^5.0.0"
-  checksum: 12bb88965a2291ec717daddb1b7153c0e567586076da7d138c8f04558d3d0a9cad6445a3558f16c1a61f5cd9dec1a107712590daccb71763429d9b1e10d164d3
+  checksum: e164855536a43aa7941c7d95a2342e466f599d2e033ed89c5f5582fb0e3affeec702810091b850f3b700bfd646260b07bb4d8bb94c107cddcecd92de4d1d62fd
   languageName: node
   linkType: hard
 
