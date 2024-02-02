@@ -94,7 +94,6 @@ export async function test({
   for (let i = 0; i < 300; i++) {
     try {
       await fetch(url)
-      return
     } catch {
       await sleep(100)
     }
