@@ -1,7 +1,7 @@
 import { describe, it } from 'vitest'
 import { $ } from 'zx'
 
-import { rw, rwServer, test, testContext, sleep } from './vitest.setup.mjs'
+import { rw, rwServer, test, testContext } from './vitest.setup.mjs'
 
 const TIMEOUT = 2_000
 
@@ -13,7 +13,6 @@ describe.each([
     it("`--apiPort` changes the api server's port", async () => {
       const apiPort = 8920
       testContext.p = $`yarn node ${cmd} --apiPort ${apiPort}`
-      await sleep(TIMEOUT)
       await test({ apiPort })
     })
 
@@ -21,7 +20,6 @@ describe.each([
       process.env.REDWOOD_API_PORT = '8921'
       const apiPort = +process.env.REDWOOD_API_PORT
       testContext.p = $`yarn node ${cmd}`
-      await sleep(TIMEOUT)
       await test({ apiPort })
       delete process.env.REDWOOD_API_PORT
     })
@@ -30,14 +28,12 @@ describe.each([
       const apiPort = 8922
       process.env.REDWOOD_API_PORT = '8923'
       testContext.p = $`yarn node ${cmd} --apiPort ${apiPort}`
-      await sleep(TIMEOUT)
       await test({ apiPort })
       delete process.env.REDWOOD_API_PORT
     })
 
     it('`[api].port` changes the port', async () => {
       testContext.p = $`yarn node ${cmd}`
-      await sleep(TIMEOUT)
       await test({ apiPort: testContext.projectConfig?.api.port })
     })
   })
@@ -46,7 +42,6 @@ describe.each([
     it("`--apiHost` changes the api server's host", async () => {
       const apiHost = '127.0.0.1'
       testContext.p = $`yarn node ${cmd} --apiHost ${apiHost}`
-      await sleep(TIMEOUT)
       await test({ apiHost })
     })
 
@@ -54,7 +49,6 @@ describe.each([
       process.env.REDWOOD_API_HOST = '::1'
       const apiHost = process.env.REDWOOD_API_HOST
       testContext.p = $`yarn node ${cmd}`
-      await sleep(TIMEOUT)
       await test({ apiHost })
       delete process.env.REDWOOD_API_HOST
     })
@@ -63,7 +57,6 @@ describe.each([
       const apiHost = '::'
       process.env.REDWOOD_API_HOST = '0.0.0.0'
       testContext.p = $`yarn node ${cmd} --apiHost ${apiHost}`
-      await sleep(TIMEOUT)
       await test({ apiHost })
       delete process.env.REDWOOD_API_HOST
     })
@@ -72,14 +65,12 @@ describe.each([
       const originalHost = testContext.projectConfig?.api.host
       testContext.projectConfig.api.host = '127.0.0.1'
       testContext.p = $`yarn node ${cmd}`
-      await sleep(TIMEOUT)
       await test()
       testContext.projectConfig.api.host = originalHost
     })
 
     it("defaults to '::' if `NODE_ENV` isn't production", async () => {
       testContext.p = $`yarn node ${cmd}`
-      await sleep(TIMEOUT)
       await test()
     })
 
@@ -87,7 +78,6 @@ describe.each([
       const originalNodeEnv = process.env.NODE_ENV
       process.env.NODE_ENV = 'production'
       testContext.p = $`yarn node ${cmd}`
-      await sleep(TIMEOUT)
       await test({ webHost: '0.0.0.0', apiHost: '0.0.0.0' })
       process.env.NODE_ENV = originalNodeEnv
     })
@@ -97,7 +87,6 @@ describe.each([
     it('`--apiRootPath` changes the api root path', async () => {
       const apiRootPath = '/api'
       testContext.p = $`yarn node ${cmd} --apiRootPath ${apiRootPath}`
-      await sleep(TIMEOUT)
       await test({ apiRootPath })
     })
   })

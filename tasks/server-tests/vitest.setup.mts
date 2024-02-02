@@ -62,7 +62,7 @@ afterEach(async () => {
   }
 })
 
-export function sleep(time = 1_000) {
+function sleep(time = 1_000) {
   return new Promise(resolve => setTimeout(resolve, time));
 }
 
@@ -82,14 +82,24 @@ export async function test({
   apiPort,
   apiRootPath,
 }: TestOptions = {}) {
-
   webHost ??= '::'
   if (webHost.includes(':')) {
     webHost = `[${webHost}]`
   }
   webPort ??= testContext.projectConfig?.web.port
 
-  const webRes = await fetch(`http://${webHost}:${webPort}/about`)
+  const url = `http://${webHost}:${webPort}/about`
+
+  for (let i = 0; i < 300; i++) {
+    try {
+      await fetch(url)
+      return
+    } catch {
+      await sleep(100)
+    }
+  }
+
+  const webRes = await fetch(url)
   const webBody = await webRes.text()
 
   expect(webRes.status).toEqual(200)
