@@ -63,7 +63,7 @@ afterEach(async () => {
   }
 })
 
-function sleep(time = 1_000) {
+export function sleep(time = 1_000) {
   return new Promise(resolve => setTimeout(resolve, time));
 }
 
@@ -91,7 +91,7 @@ export async function test({
 
   const url = `http://${webHost}:${webPort}/about`
 
-  for (let i = 0; i < 300; i++) {
+  for (let i = 0; i < 20; i++) {
     try {
       await fetch(url)
     } catch {
