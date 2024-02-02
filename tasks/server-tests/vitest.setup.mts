@@ -27,23 +27,23 @@ export const rwServer = path.resolve(__dirname, '../../packages/api-server/dist/
 // @redwoodjs/web-server (yarn rw-web-server)
 export const rwWebServer = path.resolve(__dirname, '../../packages/web-server/dist/bin.js')
 
-// When running `yarn vitest run` to run all the test suites, log the bin paths only once.
-if (!globalThis.loggedBinPaths) {
-  console.log([
-    'These tests use the following commands to run the server:',
-    `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rw} serve`,
-    `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rwServer}`,
-    `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rwWebServer}`,
-  ].join('\n'))
-  globalThis.loggedBinPaths = true
-}
-
 let original_RWJS_CWD
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
   const FIXTURE_PATH = fileURLToPath(new URL('./fixtures/redwood-app', import.meta.url))
   process.env.RWJS_CWD = FIXTURE_PATH
   testContext.projectConfig = getConfig()
+
+  // When running `yarn vitest run` to run all the test suites, log the bin paths only once.
+  if (!globalThis.loggedBinPaths) {
+    console.log([
+      'These tests use the following commands to run the server:',
+      `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rw} serve`,
+      `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rwServer}`,
+      `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rwWebServer}`,
+    ].join('\n'))
+    globalThis.loggedBinPaths = true
+  }
 })
 afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
