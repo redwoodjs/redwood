@@ -22,8 +22,11 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "peacock.color": "#b85833",
   "cSpell.words": [
+    "autoplay",
     "execa",
     "Fastify",
+    "graphiql",
+    "opentelemetry",
     "pino",
     "redwoodjs",
     "RWJS"
