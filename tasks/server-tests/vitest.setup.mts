@@ -15,6 +15,7 @@ type TestContext = {
 export const testContext: TestContext = {
   // Casting here because `beforeAll` below sets this and this file runs before all tests.
   // Working around it being possibly undefined muddies the code in the tests.
+  // Also can't just call `getConfig()` because RWJS_CWD hasn't been set yet
   projectConfig: {} as ReturnType<typeof getConfig>
 }
 
