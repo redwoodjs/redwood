@@ -3,7 +3,7 @@ import { $ } from 'zx'
 
 import { rw, rwServer } from './vitest.setup.mjs'
 
-describe('rw', () => {
+describe('rw serve', () => {
   it("has help configured", async () => {
     const { stdout } = await $`yarn node ${rw} serve --help`
     expect(stdout).toMatchInlineSnapshot(`
