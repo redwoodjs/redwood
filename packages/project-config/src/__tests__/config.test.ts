@@ -94,7 +94,6 @@ describe('getConfig', () => {
             },
             "endpoint": "graphql",
           },
-          "inMemory": false,
         },
         "web": {
           "a11y": true,
@@ -116,7 +115,6 @@ describe('getConfig', () => {
     const config = getConfig(path.join(__dirname, './fixtures/redwood.toml'))
     expect(config.web.port).toEqual(8888)
 
-    expect(config.studio.inMemory).toEqual(false)
     expect(config.studio.graphiql?.endpoint).toEqual('graphql')
   })
 
@@ -126,7 +124,6 @@ describe('getConfig', () => {
         path.join(__dirname, './fixtures/redwood.studio.toml')
       )
 
-      expect(config.studio.inMemory).toEqual(false)
       expect(config.studio.graphiql?.endpoint).toEqual('graphql-endpoint')
     })
 
@@ -134,7 +131,6 @@ describe('getConfig', () => {
       const config = getConfig(
         path.join(__dirname, './fixtures/redwood.studio.dbauth.toml')
       )
-      expect(config.studio.inMemory).toEqual(false)
       expect(config.studio.graphiql?.endpoint).toEqual('graphql')
       expect(config.studio.graphiql?.authImpersonation?.authProvider).toEqual(
         'dbAuth'
@@ -150,7 +146,6 @@ describe('getConfig', () => {
         path.join(__dirname, './fixtures/redwood.studio.supabase.toml')
       )
 
-      expect(config.studio.inMemory).toEqual(false)
       expect(config.studio.graphiql?.endpoint).toEqual('graphql')
       expect(config.studio.graphiql?.authImpersonation?.authProvider).toEqual(
         'supabase'
