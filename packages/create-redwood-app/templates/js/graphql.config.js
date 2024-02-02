@@ -1,4 +1,6 @@
-const { getPaths } = require('@redwoodjs/internal')
+// This file is used by the VSCode GraphQL Extension
+
+const { getPaths } = require('@redwoodjs/project-config')
 
 module.exports = {
   schema: getPaths().generated.schema,
