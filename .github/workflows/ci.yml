@@ -904,3 +904,44 @@ jobs:
 
     steps:
       - run: echo "Skipped"
+
+  server-tests:
+    needs: check
+
+    name:  Server tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 🐈 Set up yarn cache
+        uses: ./.github/actions/set-up-yarn-cache
+
+      - name: 🐈 Yarn install
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: 🔨 Build
+        run: yarn build
+
+      - run: yarn vitest run
+        working-directory: ./tasks/server-tests
+
+  server-tests-skip:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.onlydocs == 'true'
+
+    name: Server tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "Skipped"
