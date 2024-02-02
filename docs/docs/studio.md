@@ -103,7 +103,7 @@ Requires a `SUPABASE_JWT_SECRET` environment variable for JWT signing.
 All settings for Studio are located in `redwood.toml`, which you can find at
 the root of your Redwood project.
 
-* `[studio.graphiql.authImpersonation].*` - Used to gain access to GraphQL
+* `[studio.graphiql.authImpersonation].*` – Used to gain access to GraphQL
   endpoints that require authentication. See section above on auth
   impersonation for more details.
 * `[studio].basePort` – Studio's web front-end will run on this port (default:
