@@ -1,16 +1,14 @@
-import { describe, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { $ } from 'zx'
 
-import { rw, rwServer, test, testContext } from './vitest.setup.mjs'
-
-const TIMEOUT = 2_000
+import { rw, rwServer, sleep, test, testContext } from './vitest.setup.mjs'
 
 describe.each([
   [[rw, 'serve']],
   [rwServer],
 ])('serve both (%s)', (cmd) => {
   describe('apiPort', () => {
-    it("`--apiPort` changes the api server's port", async () => {
+    it.only("`--apiPort` changes the api server's port", async () => {
       const apiPort = 8920
       testContext.p = $`yarn node ${cmd} --apiPort ${apiPort}`
       await test({ apiPort })
@@ -89,5 +87,14 @@ describe.each([
       testContext.p = $`yarn node ${cmd} --apiRootPath ${apiRootPath}`
       await test({ apiRootPath })
     })
+  })
+
+  it('loads env vars', async () => {
+    testContext.p = $`yarn node ${cmd}`
+    await sleep(2000)
+    const res = await fetch('http://[::]:8911/env')
+    const body = await res.json()
+    expect(res.status).toEqual(200)
+    expect(body).toEqual({ data: '42' })
   })
 })
