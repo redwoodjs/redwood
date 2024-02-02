@@ -8,7 +8,7 @@ describe.each([
   [rwServer],
 ])('serve both (%s)', (cmd) => {
   describe('apiPort', () => {
-    it.only("`--apiPort` changes the api server's port", async () => {
+    it("`--apiPort` changes the api server's port", async () => {
       const apiPort = 8920
       testContext.p = $`yarn node ${cmd} --apiPort ${apiPort}`
       await test({ apiPort })
