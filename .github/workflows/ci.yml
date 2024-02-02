@@ -908,7 +908,7 @@ jobs:
   server-tests:
     needs: check
 
-    name:  Server tests
+    name: Server tests
     runs-on: ubuntu-latest
 
     steps:
