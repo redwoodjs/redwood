@@ -29,7 +29,7 @@ export const rwWebServer = path.resolve(__dirname, '../../packages/web-server/di
 // When running `yarn vitest run` to run all the test suites, log the bin paths only once.
 if (!globalThis.loggedBinPaths) {
   console.log([
-    'These tests use the following command to run the server:',
+    'These tests use the following commands to run the server:',
     `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rw} serve`,
     `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rwServer}`,
     `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rwWebServer}`,
