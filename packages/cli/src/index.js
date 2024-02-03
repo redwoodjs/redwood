@@ -105,7 +105,7 @@ process.env.RWJS_CWD = cwd
 // # Load .env, .env.defaults
 //
 // This should be done as early as possible, and the earliest we can do it is after setting `cwd`.
-// Further down in  middleware, we allow additional .env files to be loaded based on args.
+// Further down in middleware, we allow additional .env files to be loaded based on args.
 
 if (!process.env.REDWOOD_ENV_FILES_LOADED) {
   config({
@@ -185,7 +185,7 @@ async function runYargs() {
     })
     .option('include-env', {
       describe:
-        'Add include running additional environment files to your command. These are incremental',
+        'Load additional .env files. These are incremental',
       array: true,
     })
     .example(
