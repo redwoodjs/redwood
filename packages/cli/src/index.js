@@ -189,8 +189,8 @@ async function runYargs() {
       array: true,
     })
     .example(
-      'rw exec MigrateUsers --include-env prod --include-env stripe-prod',
-      'run a script, and also include .env.prod and .env.stripe-prod'
+      'yarn rw exec MigrateUsers --include-env prod --include-env stripe-prod',
+      '"Run a script, and also include .env.prod and .env.stripe-prod"'
     )
     .middleware(
       [
