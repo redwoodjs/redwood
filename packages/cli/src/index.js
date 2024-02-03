@@ -35,6 +35,7 @@ import * as upgradeCommand from './commands/upgrade'
 import { getPaths, findUp } from './lib'
 import { exitWithError } from './lib/exit'
 import * as updateCheck from './lib/updateCheck'
+import { addAdditionalEnvFiles } from './middleware/addAdditionalEnvFiles'
 import { loadPlugins } from './plugin'
 import { startTelemetry, shutdownTelemetry } from './telemetry/index'
 
@@ -104,6 +105,7 @@ process.env.RWJS_CWD = cwd
 // # Load .env, .env.defaults
 //
 // This should be done as early as possible, and the earliest we can do it is after setting `cwd`.
+// Further down in  middleware, we allow additional .env files to be loaded based on args.
 
 if (!process.env.REDWOOD_ENV_FILES_LOADED) {
   config({
@@ -181,6 +183,30 @@ async function runYargs() {
     .option('cwd', {
       describe: 'Working directory to use (where `redwood.toml` is located)',
     })
+    .option('include-env', {
+      describe:
+        'Add include running additional environment files to your command. These are incremental',
+      array: true,
+    })
+    .example(
+      'rw exec MigrateUsers --include-env prod --include-env stripe-prod',
+      'run a script, and also include .env.prod and .env.stripe-prod'
+    )
+    .middleware(
+      [
+        // We've already handled `cwd` above, but it may still be in `argv`.
+        // We don't need it anymore so let's get rid of it.
+        // Likewise for `telemetry`.
+        (argv) => {
+          delete argv.cwd
+          delete argv.telemetry
+        },
+        telemetry && telemetryMiddleware,
+        updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
+        addAdditionalEnvFiles(cwd),
+      ].filter(Boolean)
+    )
+
     .option('telemetry', {
       describe: 'Whether to send anonymous usage telemetry to RedwoodJS',
       boolean: true,
