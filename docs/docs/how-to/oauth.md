@@ -390,10 +390,8 @@ Be sure to import `db` at the top of the file if you haven't already!
 :::
 
 ```js title="/api/src/functions/oauth/oauth.js"
-// highlight-start
+// highlight-next-line
 import { db } from 'src/lib/db'
-import { user, createUser } from 'src/services/users'
-// highlight-end
 
 const callback = async (event) => {
   const { code } = event.queryStringParameters
@@ -452,27 +450,29 @@ const findOrCreateUser = async (providerUser) => {
 
   if (identity) {
     // identity exists, return the user
-    const user = await user({ id: identity.userId })
+    const user = await db.user.findUnique({ where: { id: identity.userId }})
     return { user, identity }
   }
 
   // identity not found, need to create it and the user
-  const user = await createUser({
-    input: {
-      email: providerUser.email,
-      fullName: providerUser.name,
-    },
-  })
-
-  const identity = await tx.identity.create({
-    data: {
-      userId: user.id,
-      provider: 'github',
-      uid: providerUser.id.toString()
+  return await db.$transaction(async (tx) => {
+    const user = await tx.user.create({
+      data: {
+        email: providerUser.email,
+        fullName: providerUser.name,
+      },
     }
-  })
 
-  return { user, identity }
+    const identity = await tx.identity.create({
+      data: {
+        userId: user.id,
+        provider: 'github',
+        uid: providerUser.id.toString()
+      }
+    })
+
+    return { user, identity }
+  })
 }
 // highlight-end
 ```
@@ -512,7 +512,7 @@ const findOrCreateUser = async (providerUser) => {
   })
 
   if (identity) {
-    const user = await user({ id: identity.userId })
+    const user = await db.user.findUnique({ where: { id: identity.userId }})
     return { user, identity }
   }
 
@@ -520,32 +520,34 @@ const findOrCreateUser = async (providerUser) => {
 }
 ```
 
-Note we're using the `user()` function defined in our service, re-using any business logic you may have added around looking up a user. If the user already exists, great! Return it, and the attached `identity` so that we can update the details. If the user doesn't exist already:
+If the user already exists, great! Return it, and the attached `identity` so that we can update the details. If the user doesn't exist already:
 
 ```js
 const findOrCreateUser = async (providerUser) => {
   // ...
 
-  const user = await createUser({
-    input: {
-      email: providerUser.email,
-      fullName: providerUser.name,
-    },
-  })
-
-  const identity = await tx.identity.create({
-    data: {
-      userId: user.id,
-      provider: 'github',
-      uid: providerUser.id.toString()
+  return await db.$transaction(async (tx) => {
+    const user = await tx.user.create({
+      data: {
+        email: providerUser.email,
+        fullName: providerUser.name,
+      },
     }
-  })
 
-  return { user, identity }
+    const identity = await tx.identity.create({
+      data: {
+        userId: user.id,
+        provider: 'github',
+        uid: providerUser.id.toString()
+      }
+    })
+
+    return { user, identity }
+  })
 }
 ```
 
-We create the `user` via the existing `createUser()` service, but the `identity` directly in the database. For this particular usecase we have no need of allowing access to the `Identity` data via GraphQL, so there's no reason to create and SDL or underlying service. If you did make them available via GraphQL, it would make sense to replace this create with the `createIdentity()` service. Any error raised during creation would bubble up to the try/catch inside `callback()`. (The Redwood test project has a required `fullName` field that we fill with the `name` attribute from GitHub.)
+We create the `user` and the `identity` records inside a transaction so that if something goes wrong, both records fail to create. The error would bubble up to the try/catch inside `callback()`. (The Redwood test project has a required `fullName` field that we fill with the `name` attribute from GitHub.)
 
 :::info
 Don't forget the `toString()` calls whenever we read or write the `providerUser.id` since we made the `uid` of type `String`.
@@ -571,13 +573,11 @@ In order to let dbAuth do the work of actually considering us logged in (and han
 
 Setting a cookie in the browser is a matter of returning a `Set-Cookie` header in the response from the server. We've been responding with a dump of the user object, but now we'll do a real return, including the cookie and a `Location` header to redirect us back to the site.
 
-Redwood provides the cookie encryption helper as a function that you can use in your own code, as well as the function that returns the cookie name based on what you set in your auth config:
+Don't forget the new `CryptoJS` import at the top!
 
 ```js title="/api/src/functions/oauth/oauth.js"
-// highlight-start
-import { cookieName, encryptSession } from '@redwoodjs/auth-dbauth-api'
-import { cookieName as sessionCookieName } from 'src/lib/auth'
-// highlight-end
+// highlight-next-line
+import CryptoJS from 'crypto-js'
 
 const callback = async (event) => {
   const { code } = event.queryStringParameters
@@ -638,11 +638,13 @@ const secureCookie = (user) => {
     `Secure=${process.env.NODE_ENV !== 'development'}`,
   ]
   const data = JSON.stringify({ id: user.id })
-  const encrypted = encryptSession(data)
 
-  return [`${cookieName(sessionCookieName)}=${encrypted}`, ...cookieAttrs].join(
-    '; '
-  )
+  const encrypted = CryptoJS.AES.encrypt(
+    data,
+    process.env.SESSION_SECRET
+  ).toString()
+
+  return [`session=${encrypted}`, ...cookieAttrs].join('; ')
 }
 // highlight-end
 ```
@@ -658,10 +660,8 @@ Try it out, and as long as you have an indication on your site that a user is lo
 Here's the `oauth` function in its entirety:
 
 ```jsx title="/api/src/functions/oauth/oauth.js"
-import { cookieName, encryptSession } from '@redwoodjs/auth-dbauth-api'
+import CryptoJS from 'crypto-js'
 
-import { cookieName as sessionCookieName } from 'src/lib/auth'
-import { user, createUser } from 'src/services/users'
 import { db } from 'src/lib/db'
 
 export const handler = async (event, _context) => {
@@ -732,11 +732,13 @@ const secureCookie = (user) => {
     `Secure=${process.env.NODE_ENV !== 'development'}`,
   ]
   const data = JSON.stringify({ id: user.id })
-  const encrypted = encryptSession(data)
 
-  return [`${cookieName(sessionCookieName)}=${encrypted}`, ...cookieAttrs].join(
-    '; '
-  )
+  const encrypted = CryptoJS.AES.encrypt(
+    data,
+    process.env.SESSION_SECRET
+  ).toString()
+
+  return [`session=${encrypted}`, ...cookieAttrs].join('; ')
 }
 
 const getProviderUser = async (token) => {
@@ -766,27 +768,29 @@ const findOrCreateUser = async (providerUser) => {
 
   if (identity) {
     // identity exists, return the user
-    const user = await user({ id: identity.userId })
+    const user = await db.user.findUnique({ where: { id: identity.userId } })
     return { user, identity }
   }
 
   // identity not found, need to create it and the user
-  const user = await createUser({
-    input: {
-      email: providerUser.email,
-      fullName: providerUser.name,
-    },
-  })
+  return await db.$transaction(async (tx) => {
+    const user = await tx.user.create({
+      data: {
+        email: providerUser.email,
+        fullName: providerUser.name,
+      },
+    })
 
-  const identity = await tx.identity.create({
-    data: {
-      userId: user.id,
-      provider: 'github',
-      uid: providerUser.id.toString(),
-    },
-  })
+    const identity = await tx.identity.create({
+      data: {
+        userId: user.id,
+        provider: 'github',
+        uid: providerUser.id.toString(),
+      },
+    })
 
-  return { user, identity }
+    return { user, identity }
+  })
 }
 ```
 
