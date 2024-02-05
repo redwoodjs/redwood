@@ -280,6 +280,43 @@
   to = "/docs/3.x/:splat"
   status = 301
 
+# v6.0-v6.6 redirects (to v6.x)
+
+[[redirects]]
+  from = "/docs/6.0/*"
+  to = "/docs/6.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/6.1/*"
+  to = "/docs/6.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/6.2/*"
+  to = "/docs/6.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/6.3/*"
+  to = "/docs/6.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/6.4/*"
+  to = "/docs/6.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/6.5/*"
+  to = "/docs/6.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/6.6/*"
+  to = "/docs/6.x/:splat"
+  status = 301
+
 [[plugins]]
   package = "@algolia/netlify-plugin-crawler"
 
