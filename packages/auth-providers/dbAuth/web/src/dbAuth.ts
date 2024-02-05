@@ -77,6 +77,8 @@ export function createDbAuthClient({
       body: JSON.stringify({ username, password, method: 'login' }),
     })
 
+    // @TODO(Rob) Move setting this to the dbAuthHandler
+    // I can't deal with setting cookies manually, so want Rob's help
     if (typeof window !== undefined) {
       document.cookie = 'auth-provider=dbAuth'
     }
@@ -90,6 +92,9 @@ export function createDbAuthClient({
       method: 'POST',
       body: JSON.stringify({ method: 'logout' }),
     })
+
+    // @TODO(Rob): We need to unset the auth-provider cookie too
+    // otherwise the user will still be considered authenticated
 
     return true
   }
