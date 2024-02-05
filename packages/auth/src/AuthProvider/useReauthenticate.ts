@@ -38,9 +38,10 @@ export const useReauthenticate = <TUser>(
     }
 
     try {
-      const userMetadata = await authImplementation.getUserMetadata()
+      const userMetadata =
+        (await authImplementation.getUserMetadata?.()) || null //?
 
-      if (!userMetadata) {
+      if (authImplementation.getUserMetadata && !userMetadata) {
         let loading = false
 
         if (authImplementation.clientHasLoaded) {
@@ -53,15 +54,16 @@ export const useReauthenticate = <TUser>(
           client: authImplementation.client,
         })
       } else {
+        // This call here is a local check against the auth provider's client.
+        // e.g. if the auth sdk has logged you out, it'll throw an error
         await getToken()
-
         const currentUser = skipFetchCurrentUser ? null : await getCurrentUser()
 
         setAuthProviderState((oldState) => ({
           ...oldState,
           userMetadata,
           currentUser,
-          isAuthenticated: true,
+          isAuthenticated: !!currentUser,
           loading: false,
           client: authImplementation.client,
         }))
@@ -75,9 +77,9 @@ export const useReauthenticate = <TUser>(
     }
   }, [
     authImplementation,
-    getToken,
     setAuthProviderState,
     skipFetchCurrentUser,
+    getToken,
     getCurrentUser,
   ])
 }

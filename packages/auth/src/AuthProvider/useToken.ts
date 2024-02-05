@@ -11,7 +11,7 @@ export const useToken = (authImplementation: AuthImplementation) => {
      * missed or slip through.
      */
     try {
-      const token = await authImplementation.getToken()
+      const token = (await authImplementation.getToken?.()) || null
       return token
     } catch (e) {
       console.error('Caught internal:', e)

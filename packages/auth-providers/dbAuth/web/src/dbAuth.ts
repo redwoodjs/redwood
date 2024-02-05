@@ -15,7 +15,7 @@ export interface ResetPasswordAttributes {
 
 export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
-const TOKEN_CACHE_TIME = 5000
+// const TOKEN_CACHE_TIME = 5000
 
 export function createAuth(
   dbAuthClient: ReturnType<typeof createDbAuthClient>,
@@ -45,27 +45,12 @@ export function createDbAuthClient({
   const credentials = fetchConfig?.credentials || 'same-origin'
   webAuthn?.setAuthApiUrl(dbAuthUrl)
 
-  let getTokenPromise: null | Promise<string | null>
-  let lastTokenCheckAt = new Date('1970-01-01T00:00:00')
-  let cachedToken: string | null
-
   const getApiDbAuthUrl = () => {
     return dbAuthUrl || `${RWJS_API_URL}/auth`
   }
 
   const resetAndFetch = async (...params: Parameters<typeof fetch>) => {
-    resetTokenCache()
     return fetch(...params)
-  }
-
-  const isTokenCacheExpired = () => {
-    const now = new Date()
-    return now.getTime() - lastTokenCheckAt.getTime() > TOKEN_CACHE_TIME
-  }
-
-  const resetTokenCache = () => {
-    lastTokenCheckAt = new Date('1970-01-01T00:00:00')
-    cachedToken = null
   }
 
   const forgotPassword = async (username: string) => {
@@ -80,33 +65,8 @@ export function createDbAuthClient({
   }
 
   const getToken = async () => {
-    // Return the existing fetch promise, so that parallel calls
-    // to getToken only cause a single fetch
-    if (getTokenPromise) {
-      return getTokenPromise
-    }
-
-    if (isTokenCacheExpired()) {
-      getTokenPromise = fetch(`${getApiDbAuthUrl()}?method=getToken`, {
-        credentials,
-      })
-        .then((response) => response.text())
-        .then((tokenText) => {
-          lastTokenCheckAt = new Date()
-          cachedToken = tokenText.length === 0 ? null : tokenText
-          return cachedToken
-        })
-        .catch(() => {
-          return null
-        })
-        .finally(() => {
-          getTokenPromise = null
-        })
-
-      return getTokenPromise
-    }
-
-    return cachedToken
+    // Not really used
+    return null
   }
 
   const login = async ({ username, password }: LoginAttributes) => {
@@ -116,6 +76,10 @@ export function createDbAuthClient({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password, method: 'login' }),
     })
+
+    if (typeof window !== undefined) {
+      document.cookie = 'auth-provider=dbAuth'
+    }
 
     return response.json()
   }
@@ -169,8 +133,15 @@ export function createDbAuthClient({
     login,
     logout,
     signup,
+    // @TODO getToken and getUserMetadata are not required with SSR-cookie auth
+    // Remove these functions
     getToken,
-    getUserMetadata: getToken,
+    // This forces useReauthenticate to call getCurrentUser. If we make the change in useReauthenticate
+    // it would break all other auth providers. getUserMetadata is a "shortcut" for getting the user
+    // without fetching the actual currentUser from the server. With cookie auth, _all_ providers will need
+    // to fetch it from the server
+    getUserMetadata: null as any,
+    // -----
     forgotPassword,
     resetPassword,
     validateResetToken,

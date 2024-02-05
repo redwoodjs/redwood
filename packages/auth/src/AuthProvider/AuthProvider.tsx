@@ -130,18 +130,23 @@ export function createAuthProvider<
     const type = authImplementation.type
     const client = authImplementation.client
 
-    // Whenever the authImplementation is ready to go, restore auth and
-    // reauthenticate
+    // Whenever the authImplementation is ready to go, restore auth and reauthenticate
     useEffect(() => {
       async function doRestoreState() {
+        // @MARK: this is where we fetch currentUser from graphql again
+        // because without SSR, initial state doesn't exist
+        // what we want to do here is to conditionally call reauthenticate
+        // so that the restoreAuthState comes from the injected state
+
+        // the problem is that reauthenticate does both getCurrentUser and udpate the auth state
         await authImplementation.restoreAuthState?.()
 
-        // @MARK(SSR-Auth): Conditionally call reauthenticate, because initial
-        // state should come from server (on SSR).
-        // If the initial state didn't come from the server - or was restored
-        // already - reauthenticate will make a call to receive the current
-        // user from the server
-        reauthenticate()
+        // If the inital state didn't come from the server (or was restored before)
+        // reauthenticate will make an API call to the middleware to receive the current user
+        // (instead of called the graphql endpoint with currentUser)
+        if (!serverAuthState) {
+          reauthenticate()
+        }
       }
 
       doRestoreState()
@@ -154,7 +159,7 @@ export function createAuthProvider<
           signUp,
           logIn,
           logOut,
-          getToken,
+          getToken: getToken,
           getCurrentUser,
           hasRole,
           reauthenticate,
