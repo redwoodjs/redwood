@@ -217,42 +217,42 @@
 # v1.0-v1.5 redirects
 
 [[redirects]]
-  from = "/docs/1.*/*"
+  from = "/docs/1.*/:splat"
   to = "/docs/1.x/:splat"
   status = 301
 
 # v2.0-v2.2 redirects
 
 [[redirects]]
-  from = "/docs/2.*/*"
+  from = "/docs/2.*/:splat"
   to = "/docs/2.x/:splat"
   status = 301
 
 # v3.0-v3.8 redirects
 
 [[redirects]]
-  from = "/docs/3.*/*"
+  from = "/docs/3.*/:splat"
   to = "/docs/3.x/:splat"
   status = 301
 
 # v4.0-v4.5 redirects
 
 [[redirects]]
-  from = "/docs/4.*/*"
+  from = "/docs/4.*/:splat"
   to = "/docs/4.x/:splat"
   status = 301
 
 # v5.0-v5.4 redirects
 
 [[redirects]]
-  from = "/docs/5.*/*"
+  from = "/docs/5.*/:splat"
   to = "/docs/5.x/:splat"
   status = 301
 
 # v6.0-v6.6 redirects
 
 [[redirects]]
-  from = "/docs/6.*/*"
+  from = "/docs/6.*/:splat"
   to = "/docs/:splat"
   status = 301
 
