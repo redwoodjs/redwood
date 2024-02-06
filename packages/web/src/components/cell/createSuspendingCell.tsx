@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import type { QueryReference } from '@apollo/client'
+import type { OperationVariables, QueryReference } from '@apollo/client'
 import { useApolloClient } from '@apollo/client'
 
 import { useBackgroundQuery, useReadQuery } from '../GraphQLHooksProvider'
@@ -112,9 +112,9 @@ export function createSuspendingCell<
 
       const queryResultWithErrorReset = {
         ...suspenseQueryResult,
-        refetch: () => {
+        refetch: (variables: Partial<OperationVariables> | undefined) => {
           resetErrorBoundary()
-          return suspenseQueryResult.refetch?.()
+          return suspenseQueryResult.refetch?.(variables)
         },
       }
 
