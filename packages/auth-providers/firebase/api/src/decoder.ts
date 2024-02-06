@@ -1,3 +1,4 @@
+import { parse as parseCookie } from 'cookie'
 import admin from 'firebase-admin'
 import type { FirebaseError } from 'firebase-admin'
 
@@ -11,7 +12,11 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
   }
 
   try {
-    return admin.auth().verifyIdToken(token)
+    const cookies = parseCookie(token)
+
+    const { session } = cookies
+
+    return admin.auth().verifySessionCookie(session)
   } catch (error) {
     const firebaseError = error as FirebaseError
 
