@@ -368,7 +368,6 @@ yarn redwood destroy <type>
 | `sdl <model>`        | Destroy a GraphQL schema and service component based on a given DB schema Model |
 | `service <name>`     | Destroy a service component                                                     |
 | `directive <name>`   | Destroy a directive                                                             |
-| `graphiql`           | Destroy a generated graphiql file                                               |
 
 ## exec
 
@@ -1793,27 +1792,6 @@ yarn redwood setup auth <provider>
 #### Usage
 
 See [Authentication](authentication.md).
-
-### setup graphiQL headers
-
-Redwood automatically sets up your authentication headers in your GraphiQL playground. Currently supported auth providers include Supabase, dbAuth, and Netlify.
-
-A `generateGraphiQLHeader` file will be created in your `api/lib` folder and included in your gitignore. You can edit this file to customize your header. The function in the file is passed into your `createGraphQLHandler` and only called in dev.
-
-```
-yarn redwood setup graphiql <provider>
-```
-
-If you're using `dbAuth`, make sure the `-i` id you provided is not logged in from the web app.
-
-| Arguments & Options | Description                                                                                                                                           |
-| :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `provider`          | Auth provider to configure. Choices are `dbAuth`, `netlify`, and `supabase`                                                                           |
-| `--id, -i`          | Unique id to identify current user (required only for DBAuth)                                                                                         |
-| `--token, -t`       | Generated JWT token. If not provided, a mock JWT payload is returned in `api/lib/generateGraphiQLHeader` that can be modified and turned into a token |
-| `--expiry, -e`      | Token expiry in minutes. Default is 60                                                                                                                |
-| `--view, -v`        | Print out generated headers to console                                                                                                                |
-
 
 ### setup cache
 
