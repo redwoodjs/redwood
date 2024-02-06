@@ -83,10 +83,8 @@ describe('getConfig', () => {
               "authProvider": undefined,
               "email": undefined,
               "jwtSecret": "secret",
-              "roles": undefined,
               "userId": undefined,
             },
-            "endpoint": "graphql",
           },
         },
         "web": {
@@ -108,24 +106,13 @@ describe('getConfig', () => {
   it('merges configs', () => {
     const config = getConfig(path.join(__dirname, './fixtures/redwood.toml'))
     expect(config.web.port).toEqual(8888)
-
-    expect(config.studio.graphiql?.endpoint).toEqual('graphql')
   })
 
   describe('with studio configs', () => {
-    it('merges studio configs', () => {
-      const config = getConfig(
-        path.join(__dirname, './fixtures/redwood.studio.toml')
-      )
-
-      expect(config.studio.graphiql?.endpoint).toEqual('graphql-endpoint')
-    })
-
     it('merges studio configs with dbAuth impersonation', () => {
       const config = getConfig(
         path.join(__dirname, './fixtures/redwood.studio.dbauth.toml')
       )
-      expect(config.studio.graphiql?.endpoint).toEqual('graphql')
       expect(config.studio.graphiql?.authImpersonation?.authProvider).toEqual(
         'dbAuth'
       )
@@ -140,7 +127,6 @@ describe('getConfig', () => {
         path.join(__dirname, './fixtures/redwood.studio.supabase.toml')
       )
 
-      expect(config.studio.graphiql?.endpoint).toEqual('graphql')
       expect(config.studio.graphiql?.authImpersonation?.authProvider).toEqual(
         'supabase'
       )
