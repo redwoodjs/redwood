@@ -165,12 +165,10 @@ const DEFAULT_CONFIG: Config = {
   studio: {
     basePort: 4318,
     graphiql: {
-      endpoint: 'graphql',
       authImpersonation: {
         authProvider: undefined,
         userId: undefined,
         email: undefined,
-        roles: undefined,
         jwtSecret: 'secret',
       },
     },
