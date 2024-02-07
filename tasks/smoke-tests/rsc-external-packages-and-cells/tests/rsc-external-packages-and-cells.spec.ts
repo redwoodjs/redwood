@@ -18,8 +18,8 @@ test('Client components should work', async ({ page }) => {
 test('Submitting the form should return a response', async ({ page }) => {
   await page.goto('/')
 
-  const h3 = await page.locator('h1').innerHTML()
-  expect(h3).toMatch(/Hello Anonymous!!/)
+  const h1 = await page.locator('h1').innerHTML()
+  expect(h1).toMatch(/Hello Anonymous!!/)
 
   const pageText = await page.locator('#redwood-app > div').innerText()
   expect(pageText).toMatch('This form has been sent 0 times')
@@ -37,6 +37,17 @@ test('Submitting the form should return a response', async ({ page }) => {
   // Expect to get five (random) words back from the server
   const words = await page.locator('p').nth(1).innerText()
   expect(words.split('Hello World: ')[1].split(' ')).toHaveLength(5)
+
+  page.close()
+})
+
+test('Page with Cell', async ({ page }) => {
+  await page.goto('/user-examples')
+
+  const h1 = await page.locator('h1').innerHTML()
+  expect(h1).toMatch(/UserExamples - userExamples/)
+
+  await expect(page.getByText('alice@example.com')).toBeVisible()
 
   page.close()
 })
