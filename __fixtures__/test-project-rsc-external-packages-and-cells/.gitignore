@@ -4,7 +4,6 @@
 .netlify
 .redwood/*
 !.redwood/README.md
-dev.db*
 dist
 dist-babel
 node_modules
