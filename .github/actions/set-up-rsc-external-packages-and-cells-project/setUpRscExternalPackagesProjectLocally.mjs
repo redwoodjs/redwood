@@ -71,7 +71,7 @@ function getExecaOptions(cwd, env = {}) {
   }
 }
 
-const testProjectAndFixtureName = 'test-project-rsc-external-packages'
+const testProjectAndFixtureName = 'test-project-rsc-external-packages-and-cells'
 
 const testProjectPath = path.join(
   os.tmpdir(),
