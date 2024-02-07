@@ -3,8 +3,8 @@
 This action copies a RW project with Streaming SSR and RSC support already set
 up. It's used for RSC smoke tests.
 
-It copies the `__fixtures__/test-project-rsc-external-packages` project, runs
-`yarn install` and `project:copy`. Finally it builds the rw app.
+It copies the `__fixtures__/test-project-rsc-external-packages-and-cells`
+project, runs `yarn install` and `project:copy`. Finally it builds the rw app.
 
 ## Testing/running locally
 
