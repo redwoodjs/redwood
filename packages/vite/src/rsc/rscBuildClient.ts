@@ -30,6 +30,7 @@ export async function rscBuildClient(
     root: rwPaths.web.src,
     envPrefix: 'REDWOOD_ENV_',
     publicDir: path.join(rwPaths.web.base, 'public'),
+    envFile: false,
     define: {
       RWJS_ENV: {
         __REDWOOD__APP_TITLE: rwConfig.web.title || path.basename(rwPaths.base),

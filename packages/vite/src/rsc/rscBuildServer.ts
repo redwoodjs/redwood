@@ -40,6 +40,7 @@ export async function rscBuildServer(
     root: rwPaths.web.base,
     envPrefix: 'REDWOOD_ENV_',
     publicDir: path.join(rwPaths.web.base, 'public'),
+    envFile: false,
     define: {
       RWJS_ENV: {
         // @NOTE we're avoiding process.env here, unlike webpack
