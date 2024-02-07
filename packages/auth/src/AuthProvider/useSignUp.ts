@@ -39,14 +39,12 @@ export const useSignUp = <
   setAuthProviderState: React.Dispatch<
     React.SetStateAction<AuthProviderState<TUser>>
   >,
-  getCurrentUser: ReturnType<typeof useCurrentUser>,
-  skipFetchCurrentUser: boolean | undefined
+  getCurrentUser: ReturnType<typeof useCurrentUser>
 ) => {
   const reauthenticate = useReauthenticate(
     authImplementation,
     setAuthProviderState,
-    getCurrentUser,
-    skipFetchCurrentUser
+    getCurrentUser
   )
 
   return useCallback(

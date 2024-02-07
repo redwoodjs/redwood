@@ -19,7 +19,6 @@ import { useToken } from './useToken'
 import { useValidateResetToken } from './useValidateResetToken'
 
 export interface AuthProviderProps {
-  skipFetchCurrentUser?: boolean
   children: ReactNode
 }
 
@@ -77,10 +76,7 @@ export function createAuthProvider<
     ) => (rolesToCheck: string | string[]) => boolean
   }
 ) {
-  const AuthProvider = ({
-    children,
-    skipFetchCurrentUser,
-  }: AuthProviderProps) => {
+  const AuthProvider = ({ children }: AuthProviderProps) => {
     // const [hasRestoredState, setHasRestoredState] = useState(false)
 
     const serverAuthState = useContext(ServerAuthContext)
@@ -103,8 +99,7 @@ export function createAuthProvider<
     const reauthenticate = useReauthenticate(
       authImplementation,
       setAuthProviderState,
-      getCurrentUser,
-      skipFetchCurrentUser
+      getCurrentUser
     )
 
     const hasRole = customProviderHooks?.useHasRole
@@ -114,14 +109,12 @@ export function createAuthProvider<
     const signUp = useSignUp(
       authImplementation,
       setAuthProviderState,
-      getCurrentUser,
-      skipFetchCurrentUser
+      getCurrentUser
     )
     const logIn = useLogIn(
       authImplementation,
       setAuthProviderState,
-      getCurrentUser,
-      skipFetchCurrentUser
+      getCurrentUser
     )
     const logOut = useLogOut(authImplementation, setAuthProviderState)
     const forgotPassword = useForgotPassword(authImplementation)

@@ -204,40 +204,9 @@ describe('Custom auth provider', () => {
     await waitFor(() => screen.getByText('Log In'))
   })
 
-  test('Fetching the current user can be skipped', async () => {
-    const mockAuthClient = customTestAuth
-
-    render(
-      <AuthProvider skipFetchCurrentUser>
-        <AuthConsumer />
-      </AuthProvider>
-    )
-
-    // We're booting up!
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
-
-    // The user is not authenticated
-    await waitFor(() => screen.getByText('Log In'))
-    expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
-
-    // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
-      return {
-        sub: 'abcdefg|123456',
-        username: 'peterp',
-      }
-    })
-    fireEvent.click(screen.getByText('Log In'))
-
-    // Check that you're logged in!
-    await waitFor(() => screen.getByText('Log Out'))
-    expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
-    expect(screen.getByText(/no current user data/)).toBeInTheDocument()
-
-    // Log out
-    fireEvent.click(screen.getByText('Log Out'))
-    await waitFor(() => screen.getByText('Log In'))
-  })
+  /// @MARK: Breaking change!
+  // skipFetchCurrentUser used to be used for nHost only
+  // and isn't something we want to support anymore
 
   /**
    * This is especially helpful if you want to update the currentUser state.

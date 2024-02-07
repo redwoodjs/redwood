@@ -19,8 +19,7 @@ export const useReauthenticate = <TUser>(
   setAuthProviderState: React.Dispatch<
     React.SetStateAction<AuthProviderState<TUser>>
   >,
-  getCurrentUser: ReturnType<typeof useCurrentUser>,
-  skipFetchCurrentUser: boolean | undefined
+  getCurrentUser: ReturnType<typeof useCurrentUser>
 ) => {
   const getToken = useToken(authImplementation)
 
@@ -57,7 +56,7 @@ export const useReauthenticate = <TUser>(
         // This call here is a local check against the auth provider's client.
         // e.g. if the auth sdk has logged you out, it'll throw an error
         await getToken()
-        const currentUser = skipFetchCurrentUser ? null : await getCurrentUser()
+        const currentUser = await getCurrentUser()
 
         setAuthProviderState((oldState) => ({
           ...oldState,
@@ -75,11 +74,5 @@ export const useReauthenticate = <TUser>(
         error: e as Error,
       })
     }
-  }, [
-    authImplementation,
-    setAuthProviderState,
-    skipFetchCurrentUser,
-    getToken,
-    getCurrentUser,
-  ])
+  }, [authImplementation, setAuthProviderState, getToken, getCurrentUser])
 }
