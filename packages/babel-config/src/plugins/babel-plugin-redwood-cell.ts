@@ -60,10 +60,13 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
       },
       Program: {
         exit(path) {
-          // Validate that this file has exports which are "cell-like":
-          // If the user is not exporting `QUERY` and has a default export then
-          // it's likely not a cell.
-          if (hasDefaultExport && !exportNames.includes('QUERY')) {
+          // If the file already has a default export then
+          //   1. It's likely not a cell, or it's a cell that's already been
+          //      wrapped in `createCell`
+          //   2. If we added another default export we'd be breaking JS module
+          //      rules. There can only be one default export.
+          // If there's no QUERY export it's not a valid cell
+          if (hasDefaultExport || !exportNames.includes('QUERY')) {
             return
           }
 
