@@ -54,7 +54,7 @@ describe('command information caching', () => {
   })
 
   test('returns the correct cache when no local cache exists', () => {
-    const cache = pluginLib.loadCommadCache()
+    const cache = pluginLib.loadCommandCache()
     expect(cache).toEqual({
       ...pluginLib.PLUGIN_CACHE_DEFAULT,
       _builtin: pluginLib.PLUGIN_CACHE_BUILTIN,
@@ -87,7 +87,7 @@ describe('command information caching', () => {
       }),
     })
 
-    const cache = pluginLib.loadCommadCache()
+    const cache = pluginLib.loadCommandCache()
     expect(cache).toEqual({
       ...pluginLib.PLUGIN_CACHE_DEFAULT,
       ...exampleCacheEntry,
@@ -108,14 +108,14 @@ describe('plugin loading', () => {
       },
     })
 
-    vi.spyOn(pluginLib, 'loadCommadCache')
+    vi.spyOn(pluginLib, 'loadCommandCache')
     vi.spyOn(pluginLib, 'loadPluginPackage')
     vi.spyOn(pluginLib, 'checkPluginListAndWarn')
     vi.spyOn(pluginLib, 'saveCommandCache')
   })
 
   afterEach(() => {
-    pluginLib.loadCommadCache.mockRestore()
+    pluginLib.loadCommandCache.mockRestore()
     pluginLib.checkPluginListAndWarn.mockRestore()
     pluginLib.loadPluginPackage.mockRestore()
     pluginLib.saveCommandCache.mockRestore()
@@ -134,7 +134,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(0)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(0)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(0)
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledTimes(0)
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(0)
@@ -158,7 +158,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(0)
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledTimes(0)
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(0)
@@ -226,7 +226,7 @@ describe('plugin loading', () => {
       const yargsInstance = getMockYargsInstance()
       await loadPlugins(yargsInstance)
 
-      expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+      expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
       expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
       // Should have loaded the package when it was not in the cache
@@ -326,7 +326,7 @@ describe('plugin loading', () => {
       const yargsInstance = getMockYargsInstance()
       await loadPlugins(yargsInstance)
 
-      expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+      expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
       expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
       // Should have loaded the package when it was not in the cache
@@ -426,7 +426,7 @@ describe('plugin loading', () => {
       const yargsInstance = getMockYargsInstance()
       await loadPlugins(yargsInstance)
 
-      expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+      expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
       expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
       // Should have NOT loaded the package when it was not in the cache
@@ -514,7 +514,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package when it was not in the cache
@@ -610,7 +610,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package when it was not in the cache
@@ -726,7 +726,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package - only the one we need
@@ -848,7 +848,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package - all in the namespace
@@ -974,7 +974,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package that we couldn't rule out from the cache
@@ -1095,7 +1095,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package - only the one we need
@@ -1190,7 +1190,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package - only the one we need
@@ -1286,7 +1286,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package that we couldn't rule out from the cache

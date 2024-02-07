@@ -8,9 +8,10 @@ import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { registerFwGlobals } from './lib/registerGlobals'
+import { invoke } from './middleware/invokeMiddleware'
 import { collectCssPaths, componentsModules } from './streaming/collectCss'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
-import { registerFwGlobals } from './streaming/registerGlobals'
 import { ensureProcessDirWeb } from './utils'
 
 // TODO (STREAMING) Just so it doesn't error out. Not sure how to handle this.
@@ -80,6 +81,21 @@ async function createServer() {
       : route.pathDefinition
 
     app.get(expressPathDef, createServerAdapter(routeHandler))
+
+    app.post(
+      '*',
+      createServerAdapter(async (req: Request) => {
+        const entryServerImport = await vite.ssrLoadModule(
+          rwPaths.web.entryServer as string // already validated in dev server
+        )
+
+        const middleware = entryServerImport.middleware
+
+        const [mwRes] = await invoke(req, middleware)
+
+        return mwRes.toResponse()
+      })
+    )
   }
 
   const port = getConfig().web.port

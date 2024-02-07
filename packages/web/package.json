@@ -37,12 +37,12 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@apollo/client": "3.8.8",
-    "@babel/runtime-corejs3": "7.23.6",
+    "@apollo/client": "3.8.10",
+    "@babel/runtime-corejs3": "7.23.9",
     "@redwoodjs/auth": "6.0.7",
-    "core-js": "3.34.0",
+    "core-js": "3.35.1",
     "graphql": "16.8.1",
-    "graphql-sse": "2.4.0",
+    "graphql-sse": "2.5.2",
     "graphql-tag": "2.12.6",
     "react-helmet-async": "2.0.3",
     "react-hot-toast": "2.4.1",
@@ -50,10 +50,10 @@
     "ts-toolbelt": "9.6.0"
   },
   "devDependencies": {
-    "@apollo/experimental-nextjs-app-support": "0.5.2",
-    "@babel/cli": "7.23.4",
+    "@apollo/experimental-nextjs-app-support": "0.6.0",
+    "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
-    "@testing-library/jest-dom": "6.1.5",
+    "@testing-library/jest-dom": "6.3.0",
     "@testing-library/react": "14.1.2",
     "@types/react": "18.2.37",
     "@types/react-dom": "18.2.15",

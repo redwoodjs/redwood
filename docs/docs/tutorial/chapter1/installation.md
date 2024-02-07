@@ -24,6 +24,7 @@ You'll have a new directory `redwoodblog` containing several directories and fil
 
 ```bash
 cd redwoodblog
+yarn install
 yarn redwood dev
 ```
 

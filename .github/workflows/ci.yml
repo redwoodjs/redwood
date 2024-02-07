@@ -584,18 +584,18 @@ jobs:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsa-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
-      - name: 🌲 Set up RSC external packages smoke test
-        id: set-up-rsc-external-packages-project
-        uses: ./.github/actions/set-up-rsc-external-packages-project
+      - name: 🌲 Set up RSC external packages and Cells smoke test
+        id: set-up-rsc-external-packages-and-cells-project
+        uses: ./.github/actions/set-up-rsc-external-packages-and-cells-project
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
-      - name: 🐘 Run RSC external packages smoke tests
-        working-directory: tasks/smoke-tests/rsc-external-packages
+      - name: 🐘 Run RSC external packages and cells smoke tests
+        working-directory: tasks/smoke-tests/rsc-external-packages-and-cells
         run: npx playwright test
         env:
-          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-external-packages-project.outputs.test-project-path }}
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-external-packages-and-cells-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
   rsc-smoke-tests-skip:
@@ -900,6 +900,47 @@ jobs:
     if: needs.detect-changes.outputs.onlydocs == 'true'
 
     name: 🌲 Create Redwood App
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "Skipped"
+
+  server-tests:
+    needs: check
+
+    name: Server tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 🐈 Set up yarn cache
+        uses: ./.github/actions/set-up-yarn-cache
+
+      - name: 🐈 Yarn install
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: 🔨 Build
+        run: yarn build
+
+      - run: yarn vitest run
+        working-directory: ./tasks/server-tests
+
+  server-tests-skip:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.onlydocs == 'true'
+
+    name: Server tests
     runs-on: ubuntu-latest
 
     steps:

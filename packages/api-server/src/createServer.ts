@@ -1,28 +1,19 @@
 import fs from 'fs'
 import path from 'path'
-import { parseArgs } from 'util'
 
-import fastifyUrlData from '@fastify/url-data'
-import c from 'ansi-colors'
+import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
 import fg from 'fast-glob'
 import fastify from 'fastify'
-import type {
-  FastifyListenOptions,
-  FastifyServerOptions,
-  FastifyInstance,
-  HookHandlerDoneFunction,
-} from 'fastify'
-import fastifyRawBody from 'fastify-raw-body'
+import type { FastifyListenOptions, FastifyInstance } from 'fastify'
 
 import type { GlobalContext } from '@redwoodjs/context'
 import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import {
-  loadFunctionsFromDist,
-  lambdaRequestHandler,
-} from './plugins/lambdaLoader'
+import { resolveOptions } from './createServerHelpers'
+import type { CreateServerOptions } from './createServerHelpers'
+import { redwoodFastifyAPI } from './plugins/api'
 
 type StartOptions = Omit<FastifyListenOptions, 'port' | 'host'>
 
@@ -44,24 +35,8 @@ if (process.env.RWJS_CWD && !process.env.REDWOOD_ENV_FILES_LOADED) {
     defaults: path.join(getPaths().base, '.env.defaults'),
     multiline: true,
   })
-}
 
-export interface CreateServerOptions {
-  /**
-   * The prefix for all routes. Defaults to `/`.
-   */
-  apiRootPath?: string
-
-  /**
-   * Logger instance or options.
-   */
-  logger?: FastifyServerOptions['logger']
-
-  /**
-   * Options for the fastify server instance.
-   * Omitting logger here because we move it up.
-   */
-  fastifyServerOptions?: Omit<FastifyServerOptions, 'logger'>
+  process.env.REDWOOD_ENV_FILES_LOADED = 'true'
 }
 
 /**
@@ -89,7 +64,8 @@ export interface CreateServerOptions {
  * ```
  */
 export async function createServer(options: CreateServerOptions = {}) {
-  const { apiRootPath, fastifyServerOptions, port } = resolveOptions(options)
+  const { apiRootPath, fastifyServerOptions, port, host } =
+    resolveOptions(options)
 
   // Warn about `api/server.config.js`
   const serverConfigPath = path.join(
@@ -99,7 +75,7 @@ export async function createServer(options: CreateServerOptions = {}) {
 
   if (fs.existsSync(serverConfigPath)) {
     console.warn(
-      c.yellow(
+      chalk.yellow(
         [
           '',
           `Ignoring \`config\` and \`configureServer\` in api/server.config.js.`,
@@ -132,7 +108,14 @@ export async function createServer(options: CreateServerOptions = {}) {
     getAsyncStoreInstance().run(new Map<string, GlobalContext>(), done)
   })
 
-  await server.register(redwoodFastifyFunctions, { redwood: { apiRootPath } })
+  await server.register(redwoodFastifyAPI, {
+    redwood: {
+      apiRootPath,
+      fastGlobOptions: {
+        ignore: ['**/dist/functions/graphql.js'],
+      },
+    },
+  })
 
   // If we can find `api/dist/functions/graphql.js`, register the GraphQL plugin
   const [graphqlFunctionPath] = await fg('dist/functions/graphql.{ts,js}', {
@@ -141,9 +124,11 @@ export async function createServer(options: CreateServerOptions = {}) {
   })
 
   if (graphqlFunctionPath) {
-    const { redwoodFastifyGraphQLServer } = require('./plugins/graphql')
+    const { redwoodFastifyGraphQLServer } = await import('./plugins/graphql')
     // This comes from a babel plugin that's applied to api/dist/functions/graphql.{ts,js} in user projects
-    const { __rw_graphqlOptions } = require(graphqlFunctionPath)
+    const { __rw_graphqlOptions } = await import(
+      `file://${graphqlFunctionPath}`
+    )
 
     await server.register(redwoodFastifyGraphQLServer, {
       redwood: {
@@ -159,20 +144,10 @@ export async function createServer(options: CreateServerOptions = {}) {
     done()
   })
 
-  // Just logging. The conditional here is to appease TS.
-  // `server.server.address()` can return a string, an AddressInfo object, or null.
-  // Note that the logging here ("Listening on...") seems to be duplicated, probably by `@redwoodjs/graphql-server`
   server.addHook('onListen', (done) => {
-    const addressInfo = server.server.address()
-
-    if (!addressInfo || typeof addressInfo === 'string') {
-      done()
-      return
-    }
-
     console.log(
-      `Listening on ${c.magenta(
-        `http://${addressInfo.address}:${addressInfo.port}${apiRootPath}`
+      `Server listening at ${chalk.magenta(
+        `${server.listeningOrigin}${apiRootPath}`
       )}`
     )
     done()
@@ -190,156 +165,9 @@ export async function createServer(options: CreateServerOptions = {}) {
     return server.listen({
       ...options,
       port,
-      host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+      host,
     })
   }
 
   return server
-}
-
-type ResolvedOptions = Required<
-  Omit<CreateServerOptions, 'logger' | 'fastifyServerOptions'> & {
-    fastifyServerOptions: FastifyServerOptions
-    port: number
-  }
->
-
-export function resolveOptions(
-  options: CreateServerOptions = {},
-  args?: string[]
-) {
-  options.logger ??= DEFAULT_CREATE_SERVER_OPTIONS.logger
-
-  let defaultPort: number | undefined
-
-  if (process.env.REDWOOD_API_PORT === undefined) {
-    defaultPort = getConfig().api.port
-  } else {
-    defaultPort = parseInt(process.env.REDWOOD_API_PORT)
-  }
-
-  // Set defaults.
-  const resolvedOptions: ResolvedOptions = {
-    apiRootPath:
-      options.apiRootPath ?? DEFAULT_CREATE_SERVER_OPTIONS.apiRootPath,
-
-    fastifyServerOptions: options.fastifyServerOptions ?? {
-      requestTimeout:
-        DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.requestTimeout,
-      logger: options.logger ?? DEFAULT_CREATE_SERVER_OPTIONS.logger,
-    },
-
-    port: defaultPort,
-  }
-
-  // Merge fastifyServerOptions.
-  resolvedOptions.fastifyServerOptions.requestTimeout ??=
-    DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.requestTimeout
-  resolvedOptions.fastifyServerOptions.logger = options.logger
-
-  const { values } = parseArgs({
-    options: {
-      apiRootPath: {
-        type: 'string',
-      },
-      port: {
-        type: 'string',
-        short: 'p',
-      },
-    },
-
-    // When running Jest, `process.argv` is...
-    //
-    // ```js
-    // [
-    //    'path/to/node'
-    //    'path/to/jest.js'
-    //    'file/under/test.js'
-    // ]
-    // ```
-    //
-    // `parseArgs` strips the first two, leaving the third, which is interpreted as a positional argument.
-    // Which fails our options. We'd still like to be strict, but can't do it for tests.
-    strict: process.env.NODE_ENV === 'test' ? false : true,
-    ...(args && { args }),
-  })
-
-  if (values.apiRootPath && typeof values.apiRootPath !== 'string') {
-    throw new Error('`apiRootPath` must be a string')
-  }
-
-  if (values.apiRootPath) {
-    resolvedOptions.apiRootPath = values.apiRootPath
-  }
-
-  // Format `apiRootPath`
-  if (resolvedOptions.apiRootPath.charAt(0) !== '/') {
-    resolvedOptions.apiRootPath = `/${resolvedOptions.apiRootPath}`
-  }
-
-  if (
-    resolvedOptions.apiRootPath.charAt(
-      resolvedOptions.apiRootPath.length - 1
-    ) !== '/'
-  ) {
-    resolvedOptions.apiRootPath = `${resolvedOptions.apiRootPath}/`
-  }
-
-  if (values.port) {
-    resolvedOptions.port = +values.port
-
-    if (isNaN(resolvedOptions.port)) {
-      throw new Error('`port` must be an integer')
-    }
-  }
-
-  return resolvedOptions
-}
-
-type DefaultCreateServerOptions = Required<
-  Omit<CreateServerOptions, 'fastifyServerOptions'> & {
-    fastifyServerOptions: Pick<FastifyServerOptions, 'requestTimeout'>
-  }
->
-
-export const DEFAULT_CREATE_SERVER_OPTIONS: DefaultCreateServerOptions = {
-  apiRootPath: '/',
-  logger: {
-    level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
-  },
-  fastifyServerOptions: {
-    requestTimeout: 15_000,
-  },
-}
-
-export interface RedwoodFastifyAPIOptions {
-  redwood: {
-    apiRootPath: string
-  }
-}
-
-export async function redwoodFastifyFunctions(
-  fastify: FastifyInstance,
-  opts: RedwoodFastifyAPIOptions,
-  done: HookHandlerDoneFunction
-) {
-  fastify.register(fastifyUrlData)
-  await fastify.register(fastifyRawBody)
-
-  fastify.addContentTypeParser(
-    ['application/x-www-form-urlencoded', 'multipart/form-data'],
-    { parseAs: 'string' },
-    fastify.defaultTextParser
-  )
-
-  fastify.all(`${opts.redwood.apiRootPath}:routeName`, lambdaRequestHandler)
-  fastify.all(`${opts.redwood.apiRootPath}:routeName/*`, lambdaRequestHandler)
-
-  await loadFunctionsFromDist({
-    fastGlobOptions: {
-      ignore: ['**/dist/functions/graphql.js'],
-    },
-  })
-
-  done()
 }

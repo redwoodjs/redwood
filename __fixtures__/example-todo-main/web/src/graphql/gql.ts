@@ -68,6 +68,11 @@ export function graphql(source: string) {
 
 export type DocumentType<TDocumentNode extends DocumentNode<any, any>> =
   TDocumentNode extends DocumentNode<infer TType, any> ? TType : never;
-export function gql(source: string) {
-  return graphql(source);
+
+export function gql(source: string | TemplateStringsArray) {
+  if (typeof source === "string") {
+    return graphql(source);
+  }
+
+  return graphql(source.join("\n"));
 }

@@ -37,6 +37,7 @@ Use `git clone` to get a local copy of the Redwood Framework. If you've already 
 ```terminal
 git clone https://github.com/redwoodjs/redwood.git
 cd redwood
+corepack enable
 yarn install
 ```
 

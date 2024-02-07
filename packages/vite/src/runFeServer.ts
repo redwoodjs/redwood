@@ -17,10 +17,11 @@ import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { registerFwGlobals } from './lib/registerGlobals'
+import { invoke } from './middleware/invokeMiddleware'
 import { createRscRequestHandler } from './rsc/rscRequestHandler'
 import { setClientEntries } from './rsc/rscWorkerCommunication'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
-import { registerFwGlobals } from './streaming/registerGlobals'
 import type { RWRouteManifest } from './types'
 
 /**
@@ -159,6 +160,20 @@ export async function runFeServer() {
 
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
   app.use('/rw-rsc', createRscRequestHandler())
+
+  // @MARK: put this after rw-rsc!
+  app.post(
+    '*',
+    createServerAdapter(async (req: Request) => {
+      const entryServerImport = await import(rwPaths.web.distEntryServer)
+
+      const { middleware } = entryServerImport
+
+      const [mwRes] = await invoke(req, middleware)
+
+      return mwRes.toResponse()
+    })
+  )
 
   app.listen(rwConfig.web.port)
   console.log(

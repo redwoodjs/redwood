@@ -47,27 +47,20 @@ yarn rw studio
 The first time you run this command it will likely install the studio package which may take a small amount of time.
 
 #### OpenTelemetry
-If you want studio to pick up telemetry from you app automatically please ensure you've setup opentelemetry. A guide on this can be found [here](https://community.redwoodjs.com/t/opentelemetry-support-experimental/4772?u=josh-walker-gm)
+If you want studio to pick up telemetry from you app automatically please ensure you've setup opentelemetry. A guide on this can be found [here](https://community.redwoodjs.com/t/opentelemetry-support-experimental/4772)
 
 ### Features
-#### TOML
-The following TOML options are now available which can control the studio behaviour.
-```toml
-[studio.graphiql.authImpersonation]
-  # authProvider = undefined (default value)
-  jwtSecret = 'secret'
-  # userId = undefined (default value)
-  # email = undefined (default value)
-  # roles = undefined (default value)
-```
 
 #### GraphiQL Auth Impersonation
 
+You need to configure Studio using settings inside `redwood.toml` for auth
+impersonation to work. See the sections below for detailed information.
+
 ##### DbAuth
 
-Requires `SESSION_SECRET` envar for cookie encryption.
+Requires a `SESSION_SECRET` environment variable for cookie encryption.
 
-TOML example:
+`redwood.toml` example:
 
 ```toml
 [studio.graphiql.authImpersonation]
@@ -78,9 +71,11 @@ TOML example:
 
 ##### Netlify
 
-Since Netlify does not expose the JWT secret used to sign the token in production, impersonation requires a `jwtSecret` to encode and decode the auth token.
+Since Netlify does not expose the JWT secret used to sign the token in
+production, impersonation requires a `jwtSecret` to encode and decode the auth
+token.
 
-TOML example:
+`redwood.toml` example:
 
 ```toml
 [studio.graphiql.authImpersonation]
@@ -92,9 +87,9 @@ TOML example:
 
 ##### Supabase
 
-Requires `SUPABASE_JWT_SECRET` envar for JWT signing.
+Requires a `SUPABASE_JWT_SECRET` environment variable for JWT signing.
 
-TOML example:
+`redwood.toml` example:
 
 ```toml
 [studio.graphiql.authImpersonation]
@@ -103,8 +98,28 @@ TOML example:
   userId = "1"
 ```
 
-#### Database File 
-Studio stores the ingested telemetry to `studio/prisma.db` within the `.redwood` folder. You should not need to touch this file other than if you wish to delete it to erase any existing telemetry data.
+### Settings
+
+All settings for Studio are located in `redwood.toml`, which you can find at
+the root of your Redwood project.
+
+* `[studio.graphiql.authImpersonation].*` – Used to gain access to GraphQL
+  endpoints that require authentication. See section above on auth
+  impersonation for more details.
+* `[studio].basePort` – Studio's web front-end will run on this port (default:
+  4318). It is also used to calculate the port for the mailer integration and
+  other things. Please choose a port that is not already in use, and that has a
+  few more free ports available next to it.
+
+### Database File 
+Studio stores the ingested telemetry to `studio/prisma.db` within the
+`.redwood` folder. You should not need to touch this file other than if you
+wish to delete it to erase any existing telemetry data.
 
 ## Availability
-The setup command is currently available from the `canary` version of Redwood. You can try this out in a new project by running `yarn rw upgrade --tag canary` and following any general upgrade steps recommend on the [forums](https://community.redwoodjs.com/c/announcements/releases-and-upgrade-guides/18).
+Along the release of Redwood v7, Studio has been rewritten and is available as
+a stable version. Just run `yarn rw studio` to start it! Prior to RW v7 Studio
+was available as an experimental feature. If you're still not using the stable
+version of RW v7, see this forum topic for information on the old experimental
+version of Studio
+https://community.redwoodjs.com/t/redwood-studio-experimental/4771

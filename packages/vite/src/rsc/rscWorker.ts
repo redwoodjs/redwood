@@ -18,6 +18,7 @@ import { createServer, resolveConfig } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 import type { defineEntries } from '../entries'
+import { registerFwGlobals } from '../lib/registerGlobals'
 import { StatusError } from '../lib/StatusError'
 
 import { rscTransformPlugin, rscReloadPlugin } from './rscVitePlugins'
@@ -151,6 +152,14 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
 //   }
 // }
 
+// This is a worker, so it doesn't share the same global variables as the main
+// server. So we have to register them here again.
+registerFwGlobals()
+
+// TODO (RSC): `createServer` is mostly used to create a dev server. Is it OK
+// to use it like a production server like this?
+// TODO (RSC): Do we need to pass `define` here with RWJS_ENV etc? What about
+// `envFile: false`?
 const vitePromise = createServer({
   plugins: [
     rscTransformPlugin(),

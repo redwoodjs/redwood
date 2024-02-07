@@ -20,7 +20,7 @@
   "scripts": {
     "build": "yarn node ./build.js && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-cli-helpers.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose tsconfig.build.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
@@ -47,7 +47,7 @@
     "@types/pascalcase": "1.0.3",
     "@types/yargs": "17.0.32",
     "typescript": "5.3.3",
-    "vitest": "1.2.1"
+    "vitest": "1.2.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

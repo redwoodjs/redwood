@@ -7,6 +7,8 @@
  * Eventually we will have one ApolloProvider, not multiple.
  */
 
+import { useContext } from 'react'
+
 import type {
   ApolloCache,
   ApolloClientOptions,
@@ -31,7 +33,7 @@ import {
 } from '@apollo/experimental-nextjs-app-support/ssr'
 
 import type { UseAuth } from '@redwoodjs/auth'
-import { useNoAuth } from '@redwoodjs/auth'
+import { ServerAuthContext, useNoAuth } from '@redwoodjs/auth'
 import './typeOverride'
 
 import {
@@ -119,15 +121,16 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   useAuth?: UseAuth
   logLevel: ReturnType<typeof setLogVerbosity>
   children: React.ReactNode
-}> = ({ config, children, useAuth = useNoAuth, logLevel }) => {
+}> = ({ config, children, logLevel, useAuth = useNoAuth }) => {
   // Should they run into it, this helps users with the "Cannot render cell; GraphQL success but data is null" error.
   // See https://github.com/redwoodjs/redwood/issues/2473.
   apolloSetLogVerbosity(logLevel)
 
-  // See https://www.apollographql.com/docs/react/api/link/introduction.
+  const { uri, headers } = useFetchConfig()
   const { getToken, type: authProviderType } = useAuth()
+  const isDev = process.env.NODE_ENV === 'development'
 
-  const { headers, uri } = useFetchConfig()
+  const serverAuthState = useContext(ServerAuthContext)
 
   const getGraphqlUrl = () => {
     // @NOTE: This comes from packages/vite/src/streaming/registerGlobals.ts
@@ -145,15 +148,23 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   // We use this object, because that's the shape of what we pass to the config.link factory
   const redwoodApolloLinks: RedwoodApolloLinks = [
+    // @MARK REMOVE: We will not need these for cookie based auth ~~~~
     { name: 'withToken', link: createTokenLink(getToken) },
     {
       name: 'authMiddleware',
       link: createAuthApolloLink(authProviderType, headers),
     },
-    // @REVIEW: Should we take this out for prod?
-    { name: 'enhanceErrorLink', link: createUpdateDataLink() },
-    { name: 'httpLink', link: createHttpLink(getGraphqlUrl(), httpLinkConfig) },
-  ]
+    // ~~~~ @END REMOVE ~~~~
+    isDev && { name: 'enhanceErrorLink', link: createUpdateDataLink() },
+    {
+      name: 'httpLink',
+      link: createHttpLink(
+        getGraphqlUrl(),
+        httpLinkConfig,
+        serverAuthState?.cookieHeader
+      ),
+    },
+  ].filter((link): link is RedwoodApolloLinks[number] => !!link)
 
   function makeClient() {
     // @MARK use special Apollo client

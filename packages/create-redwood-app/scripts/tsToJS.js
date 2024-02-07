@@ -111,3 +111,13 @@ for (const tsConfigFilePath of tsConfigFilePaths) {
 }
 
 console.groupEnd()
+
+console.group('Updating file extension in seed.js')
+
+const seedFilePath = path.join(JS_TEMPLATE_PATH, 'scripts', 'seed.js')
+const seedFile = fs
+  .readFileSync(seedFilePath, 'utf-8')
+  .replace('seed.ts', 'seed.js')
+fs.writeFileSync(seedFilePath, seedFile)
+
+console.groupEnd()

@@ -33,7 +33,6 @@ describe('getConfig', () => {
       {
         "api": {
           "debugPort": 18911,
-          "host": "localhost",
           "path": "./api",
           "port": 8911,
           "schemaPath": "./api/db/schema.prisma",
@@ -90,19 +89,15 @@ describe('getConfig', () => {
               "authProvider": undefined,
               "email": undefined,
               "jwtSecret": "secret",
-              "roles": undefined,
               "userId": undefined,
             },
-            "endpoint": "graphql",
           },
-          "inMemory": false,
         },
         "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
           "bundler": "vite",
           "fastRefresh": true,
-          "host": "localhost",
           "includeEnvironmentVariables": [],
           "path": "./web",
           "port": 8910,
@@ -117,27 +112,13 @@ describe('getConfig', () => {
   it('merges configs', () => {
     const config = getConfig(path.join(__dirname, './fixtures/redwood.toml'))
     expect(config.web.port).toEqual(8888)
-
-    expect(config.studio.inMemory).toEqual(false)
-    expect(config.studio.graphiql?.endpoint).toEqual('graphql')
   })
 
   describe('with studio configs', () => {
-    it('merges studio configs', () => {
-      const config = getConfig(
-        path.join(__dirname, './fixtures/redwood.studio.toml')
-      )
-
-      expect(config.studio.inMemory).toEqual(false)
-      expect(config.studio.graphiql?.endpoint).toEqual('graphql-endpoint')
-    })
-
     it('merges studio configs with dbAuth impersonation', () => {
       const config = getConfig(
         path.join(__dirname, './fixtures/redwood.studio.dbauth.toml')
       )
-      expect(config.studio.inMemory).toEqual(false)
-      expect(config.studio.graphiql?.endpoint).toEqual('graphql')
       expect(config.studio.graphiql?.authImpersonation?.authProvider).toEqual(
         'dbAuth'
       )
@@ -152,8 +133,6 @@ describe('getConfig', () => {
         path.join(__dirname, './fixtures/redwood.studio.supabase.toml')
       )
 
-      expect(config.studio.inMemory).toEqual(false)
-      expect(config.studio.graphiql?.endpoint).toEqual('graphql')
       expect(config.studio.graphiql?.authImpersonation?.authProvider).toEqual(
         'supabase'
       )

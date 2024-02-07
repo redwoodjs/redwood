@@ -10,11 +10,15 @@ import { getPaths } from '@redwoodjs/project-config'
 import { description, builder } from './commands/up'
 import { handler } from './commands/upHandler'
 
-config({
-  path: path.join(getPaths().base, '.env'),
-  defaults: path.join(getPaths().base, '.env.defaults'),
-  multiline: true,
-})
+if (!process.env.REDWOOD_ENV_FILES_LOADED) {
+  config({
+    path: path.join(getPaths().base, '.env'),
+    defaults: path.join(getPaths().base, '.env.defaults'),
+    multiline: true,
+  })
+
+  process.env.REDWOOD_ENV_FILES_LOADED = 'true'
+}
 
 yargs(hideBin(process.argv))
   .scriptName('data-migrate')

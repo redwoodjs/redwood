@@ -7,7 +7,6 @@
     "module": "esnext",
     "moduleResolution": "node",
     "skipLibCheck": false,
-    "baseUrl": "./",
     "rootDirs": [
       "./src",
       "../.redwood/types/mirror/api/src"

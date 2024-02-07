@@ -11,7 +11,7 @@ export const handler = async (options) => {
   try {
     // Check the module is installed
     if (!isModuleInstalled('@redwoodjs/studio')) {
-      const minVersions = ['7.0.0-canary.874', '7.x', '8.0.0-0']
+      const minVersions = ['7.0.0-canary.889', '7.x', '8.0.0-0']
       assertRedwoodVersion(minVersions)
 
       console.log(

@@ -23,22 +23,22 @@
     "test:watch": "vitest watch src"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.6",
+    "@babel/runtime-corejs3": "7.23.9",
     "@redwoodjs/project-config": "6.0.7",
     "base64url": "3.0.1",
-    "core-js": "3.34.0",
+    "core-js": "3.35.1",
     "md5": "2.3.0",
     "uuid": "9.0.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.4",
+    "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
     "@redwoodjs/api": "6.0.7",
     "@simplewebauthn/server": "7.4.0",
     "@types/md5": "2.3.5",
     "@types/uuid": "9.0.7",
     "typescript": "5.3.3",
-    "vitest": "1.2.1"
+    "vitest": "1.2.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -1,3 +1,3 @@
-import { build } from '../../buildDefaults.mjs'
+import { build } from '@redwoodjs/framework-tools'
 
 await build()

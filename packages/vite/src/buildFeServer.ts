@@ -57,7 +57,15 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
 
     // Write a route manifest
     return await buildRouteManifest()
+
+    //
+    // RSC specific code ends here
+    //
   }
+
+  //
+  // SSR Specific code below
+  //
 
   // Step 1A: Generate the client bundle
   await buildWeb({ verbose })

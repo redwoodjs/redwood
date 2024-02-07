@@ -3,6 +3,7 @@ import path from 'node:path'
 import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
+import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn'
@@ -40,6 +41,7 @@ export async function rscBuildServer(
     root: rwPaths.web.base,
     envPrefix: 'REDWOOD_ENV_',
     publicDir: path.join(rwPaths.web.base, 'public'),
+    envFile: false,
     define: {
       RWJS_ENV: {
         // @NOTE we're avoiding process.env here, unlike webpack
@@ -124,7 +126,15 @@ export async function rscBuildServer(
         externalConditions: ['react-server'],
       },
     },
-    plugins: [react()],
+    plugins: [
+      react({
+        babel: {
+          ...getWebSideDefaultBabelConfig({
+            forVite: true,
+          }),
+        },
+      }),
+    ],
     build: {
       ssr: true,
       ssrEmitAssets: true,

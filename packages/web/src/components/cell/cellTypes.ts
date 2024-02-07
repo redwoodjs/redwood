@@ -212,26 +212,6 @@ export interface SuspenseCellQueryResult<
 > extends UseBackgroundQueryResult {
   client: ApolloClient<any>
   // fetchMore & refetch  come from UseBackgroundQueryResult
-
-  // not supplied in Error and Failure
-  // because it's implicit in these components, but the one edgecase is showing a different loader when refetching
   networkStatus?: NetworkStatus
-  called: boolean // can we assume if we have a queryRef its called?
-
-  // Stuff not here compared to useQuery:
-  // observable: ObservableQuery<TData, TVariables> // Lenz: internal implementation detail, should not be required anymore
-  // previousData?: TData,  // emulating suspense, not required in the new Suspense model
-
-  // ObservableQueryFields 👇
-  //  subscribeToMore ~ returned from useSuspenseQuery but not useReadQuery. Apollo team **may** expose from useReadQuery.
-  //  updateQuery <~ May not be necessary in the Suspense model
-  //  refetch ~ <~ refetch signature is different in useQuery vs useSuspenseQuery. Apollo team need an internal discussion.
-  //  reobserve <~ avoid
-  //  variables <~ variables passed to the query, useful if you updated the variables using updateQuery or refetch. Apollo team need an internal discussion.
-
-  // Polling: Apollo team are not ready to expose Polling yet. Unlikely to be shipped in the next few months.
-  // But possible to re-implement this in a different way using setInternal or client.startPolling
-  //  startPolling
-  //  stopPolling
-  // ~~~
+  called: boolean // set if queryRef present
 }

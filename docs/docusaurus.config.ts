@@ -1,8 +1,8 @@
 import type * as PresetClassic from '@docusaurus/preset-classic'
 import type { Config } from '@docusaurus/types'
 
-import autoImportTabs from './src/remark/auto-import-tabs'
-import fileExtSwitcher from './src/remark/file-ext-switcher'
+import autoImportTabs from './src/remark/auto-import-tabs.mjs'
+import fileExtSwitcher from './src/remark/file-ext-switcher.mjs'
 
 const config: Config = {
   customFields: {

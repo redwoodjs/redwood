@@ -19,7 +19,7 @@ type Options = {
 
 type MatchFolderTransformFunction = (
   transformFunctionOrName: (() => any) | string,
-  fixtureName: string,
+  fixtureName?: string,
   options?: Options
 ) => Promise<void>
 
@@ -47,7 +47,7 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
   const fixtureFolder = path.join(
     testPath,
     '../../__testfixtures__',
-    fixtureName
+    fixtureName || ''
   )
 
   const fixtureInputDir = path.join(fixtureFolder, 'input')

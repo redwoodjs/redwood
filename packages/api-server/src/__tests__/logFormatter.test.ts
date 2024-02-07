@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest'
+
 import { LogFormatter } from '../logFormatter/index'
 
 const logFormatter = LogFormatter()
