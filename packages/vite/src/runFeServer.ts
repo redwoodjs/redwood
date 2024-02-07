@@ -17,11 +17,11 @@ import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { registerFwGlobals } from './lib/registerGlobals'
 import { invoke } from './middleware/invokeMiddleware'
 import { createRscRequestHandler } from './rsc/rscRequestHandler'
 import { setClientEntries } from './rsc/rscWorkerCommunication'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
-import { registerFwGlobals } from './streaming/registerGlobals'
 import type { RWRouteManifest } from './types'
 
 /**

@@ -53,6 +53,6 @@ export const buildRscFeServer = async ({
     webDistServerEntries
   )
 
-  // Mappings from server to client asset file names
+  // Make RW specific env vars, like RWJS_ENV, available to server components
   await rscBuildRwEnvVars(webDistServerEntries)
 }
