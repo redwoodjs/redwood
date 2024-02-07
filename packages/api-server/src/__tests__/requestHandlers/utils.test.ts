@@ -71,5 +71,16 @@ describe('Tests AWS Lambda to Fastify utility functions', () => {
         'set-cookie': ['peter=snaplet', 'tom=hammer'],
       })
     })
+
+    test('having empty headers, and multiValueHeaders', () => {
+      const headers = {}
+      const multiValueHeaders = {
+        'set-cookie': ['rob=REALLLY', 'loves=TS'],
+      }
+      const merged = mergeMultiValueHeaders(headers, multiValueHeaders)
+      expect(merged).toEqual({
+        'set-cookie': ['rob=REALLLY', 'loves=TS'],
+      })
+    })
   })
 })

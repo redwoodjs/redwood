@@ -43,9 +43,6 @@ import {
   isLegacySession,
 } from './shared'
 
-type SetCookieHeader = { 'set-cookie': string }
-type CsrfTokenHeader = { 'csrf-token': string }
-
 interface SignupFlowOptions<TUserAttributes = Record<string, unknown>> {
   /**
    * Allow users to sign up. Defaults to true.
@@ -390,15 +387,25 @@ export class DbAuthHandler<
    *
    * @see: https://www.rfc-editor.org/rfc/rfc7540#section-8.1.2
    */
-  get _deleteSessionHeader() {
-    return {
-      'set-cookie': [
+  get _deleteSessionHeader(): Headers {
+    const deleteHeaders = new Headers()
+
+    deleteHeaders.append(
+      'set-cookie',
+      [
         `${cookieName(this.options.cookie?.name)}=`,
         ...this._cookieAttributes({ expires: 'now' }),
-        // `auth-provider=`,
-        // ...this._cookieAttributes({ expires: 'now' }),
-      ].join(';'),
-    }
+      ].join(';')
+    )
+
+    deleteHeaders.append(
+      'set-cookie',
+      [`auth-provider=`, ...this._cookieAttributes({ expires: 'now' })].join(
+        ';'
+      )
+    )
+
+    return deleteHeaders
   }
 
   constructor(
@@ -595,9 +602,7 @@ export class DbAuthHandler<
 
       return [
         response ? JSON.stringify(response) : '',
-        {
-          ...this._deleteSessionHeader,
-        },
+        this._deleteSessionHeader,
       ]
     } else {
       throw new DbAuthError.UsernameNotFoundError(
@@ -773,12 +778,7 @@ export class DbAuthHandler<
 
     const user = await this._findUserByToken(resetToken)
 
-    return [
-      JSON.stringify(this._sanitizeUser(user)),
-      {
-        ...this._deleteSessionHeader,
-      },
-    ]
+    return [JSON.stringify(this._sanitizeUser(user)), this._deleteSessionHeader]
   }
 
   // browser submits WebAuthn credentials
@@ -864,7 +864,7 @@ export class DbAuthHandler<
     const [, loginHeaders] = this._loginResponse(user)
     const cookies = [
       this._webAuthnCookie(rawId, this.webAuthnExpiresDate),
-      loginHeaders['set-cookie'],
+      loginHeaders.getSetCookie(),
     ].flat()
 
     return [verified, { 'set-cookie': cookies }]
@@ -1206,22 +1206,27 @@ export class DbAuthHandler<
     return meta
   }
 
+  _createAuthProviderCookieString(): string {
+    return [
+      `auth-provider=dbAuth`,
+      ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
+    ].join(';')
+  }
+
   // returns the set-cookie header to be returned in the request (effectively
   // creates the session)
-  _createSessionHeader<TIdType = any>(
+  _createSessionCookieString<TIdType = any>(
     data: DbAuthSession<TIdType>,
     csrfToken: string
-  ): SetCookieHeader {
+  ): string {
     const session = JSON.stringify(data) + ';' + csrfToken
     const encrypted = encryptSession(session)
-    const cookie = [
+    const sessionCookieString = [
       `${cookieName(this.options.cookie?.name)}=${encrypted}`,
       ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
-      // 'auth-provider=dbAuth',
-      // ...this._cookieAttributes({ expires: this.sessionExpiresDate }), // TODO need this to be not http-only
     ].join(';')
 
-    return { 'set-cookie': cookie }
+    return sessionCookieString
   }
 
   // checks the CSRF token in the header against the CSRF token in the session
@@ -1490,45 +1495,35 @@ export class DbAuthHandler<
   _loginResponse(
     user: Record<string, any>,
     statusCode = 200
-  ): [
-    { id: string },
-    SetCookieHeader & CsrfTokenHeader,
-    { statusCode: number }
-  ] {
+  ): [{ id: string }, Headers, { statusCode: number }] {
     const sessionData = this._sanitizeUser(user)
 
     // TODO: this needs to go into graphql somewhere so that each request makes a new CSRF token and sets it in both the encrypted session and the csrf-token header
     const csrfToken = DbAuthHandler.CSRF_TOKEN
 
-    return [
-      sessionData,
-      {
-        'csrf-token': csrfToken,
-        // @TODO We need to have multiple Set-Cookie headers
-        // Not sure how to do this yet!
-        ...this._createSessionHeader(sessionData, csrfToken),
-      },
-      { statusCode },
-    ]
+    const headers = new Headers()
+
+    headers.append('csrf-token', csrfToken)
+    headers.append('set-cookie', this._createAuthProviderCookieString())
+    headers.append(
+      'set-cookie',
+      this._createSessionCookieString(sessionData, csrfToken)
+    )
+
+    return [sessionData, headers, { statusCode }]
   }
 
-  _logoutResponse(
-    response?: Record<string, unknown>
-  ): [string, SetCookieHeader] {
-    return [
-      response ? JSON.stringify(response) : '',
-      {
-        ...this._deleteSessionHeader,
-      },
-    ]
+  _logoutResponse(response?: Record<string, unknown>): [string, Headers] {
+    return [response ? JSON.stringify(response) : '', this._deleteSessionHeader]
   }
 
-  _ok(body: string, headers = {}, options = { statusCode: 200 }) {
+  _ok(body: string, headers = new Headers(), options = { statusCode: 200 }) {
+    headers.append('content-type', 'application/json')
+
     return {
       statusCode: options.statusCode,
-      // @TODO should we do a null check in body?!
       body: typeof body === 'string' ? body : JSON.stringify(body),
-      headers: { 'Content-Type': 'application/json', ...headers },
+      headers,
     }
   }
 
@@ -1542,24 +1537,38 @@ export class DbAuthHandler<
     return {
       statusCode: 400,
       body: JSON.stringify({ error: message }),
-      headers: { 'Content-Type': 'application/json' },
+      headers: new Headers({ 'content-type': 'application/json' }),
     }
   }
 
+  /**
+   * Returns a lambda response!
+   */
   _buildResponseWithCorsHeaders(
     response: {
       body?: string
       statusCode: number
-      headers?: Record<string, string>
+      headers?: Headers
     },
     corsHeaders: CorsHeaders
   ) {
+    const setCookieHeaders = response.headers?.getSetCookie() || []
+
     return {
       ...response,
       headers: {
-        ...(response.headers || {}),
+        ...Object.fromEntries(response.headers?.entries() || []),
         ...corsHeaders,
       },
+      // This is a lambda feature, for setting multiple headers with the same name
+      // Also see our packages/api-server/src/__tests__/requestHandlers/utils.test.ts
+      // @TODO double check that multiValueHeaders are supported on both Netlify and Vercel
+      multiValueHeaders:
+        setCookieHeaders.length > 0
+          ? {
+              'set-cookie': response.headers?.getSetCookie(),
+            }
+          : {},
     }
   }
 
