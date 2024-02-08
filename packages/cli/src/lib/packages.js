@@ -49,17 +49,16 @@ export async function installRedwoodModule(module) {
   let { version } = fs.readJSONSync(packageJsonPath)
 
   if (!isModuleInstalled(module)) {
-    const { stdout } = await execa.command(
-      `yarn npm info ${module} --fields versions --json`
-    )
-
     // If the version includes a plus, like '4.0.0-rc.428+dd79f1726'
     // (all @canary, @next, and @rc packages do), get rid of everything after the plus.
     if (version.includes('+')) {
       version = version.split('+')[0]
     }
 
-    const versionIsPublished = JSON.parse(stdout).versions.includes(version)
+    const packumentP = await fetch(`https://registry.npmjs.org/${module}`)
+    const packument = await packumentP.json()
+
+    const versionIsPublished = Object.keys(packument.versions).includes(version)
 
     if (!versionIsPublished) {
       // Fallback to canary. This is most likely because it's a new package
