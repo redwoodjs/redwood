@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.23.9",
-    "@types/react": "18.2.37",
+    "@types/react": "^18.2.55",
     "@types/yargs-parser": "21.0.3",
     "glob": "10.3.10",
     "typescript": "5.3.3",
