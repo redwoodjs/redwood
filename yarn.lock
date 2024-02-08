@@ -7537,7 +7537,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.9"
     "@redwoodjs/auth": "npm:6.0.7"
-    "@types/react": "npm:18.2.37"
+    "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     typescript: "npm:5.3.3"
@@ -7590,7 +7590,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.23.9"
     "@redwoodjs/auth": "npm:6.0.7"
     "@types/netlify-identity-widget": "npm:1.9.6"
-    "@types/react": "npm:18.2.37"
+    "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     typescript: "npm:5.3.3"
@@ -7640,7 +7640,7 @@ __metadata:
     "@clerk/clerk-react": "npm:4.30.3"
     "@clerk/types": "npm:3.60.0"
     "@redwoodjs/auth": "npm:6.0.7"
-    "@types/react": "npm:18.2.37"
+    "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     typescript: "npm:5.3.3"
@@ -7714,7 +7714,7 @@ __metadata:
     "@redwoodjs/auth": "npm:6.0.7"
     "@simplewebauthn/browser": "npm:7.4.0"
     "@simplewebauthn/typescript-types": "npm:7.4.0"
-    "@types/react": "npm:18.2.37"
+    "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
     jest: "npm:29.7.0"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
@@ -7761,7 +7761,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.9"
     "@redwoodjs/auth": "npm:6.0.7"
-    "@types/react": "npm:18.2.37"
+    "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
     firebase: "npm:10.7.0"
     jest: "npm:29.7.0"
@@ -7813,7 +7813,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.23.9"
     "@redwoodjs/auth": "npm:6.0.7"
     "@types/netlify-identity-widget": "npm:1.9.6"
-    "@types/react": "npm:18.2.37"
+    "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     typescript: "npm:5.3.3"
@@ -7862,7 +7862,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.9"
     "@supabase/supabase-js": "npm:2.39.0"
-    "@types/react": "npm:18.2.37"
+    "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     typescript: "npm:5.3.3"
@@ -7915,7 +7915,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.9"
     "@redwoodjs/auth": "npm:6.0.7"
-    "@types/react": "npm:18.2.37"
+    "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
     supertokens-auth-react: "npm:0.34.0"
@@ -8311,8 +8311,8 @@ __metadata:
     "@testing-library/react": "npm:14.1.2"
     "@testing-library/user-event": "npm:14.5.2"
     "@types/pascalcase": "npm:1.0.3"
-    "@types/react": "npm:18.2.37"
-    "@types/react-dom": "npm:18.2.15"
+    "@types/react": "npm:^18.2.55"
+    "@types/react-dom": "npm:^18.2.19"
     core-js: "npm:3.35.1"
     graphql: "npm:16.8.1"
     nodemon: "npm:3.0.2"
@@ -8623,8 +8623,8 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.9"
     "@redwoodjs/auth": "npm:6.0.7"
-    "@types/react": "npm:18.2.37"
-    "@types/react-dom": "npm:18.2.15"
+    "@types/react": "npm:^18.2.55"
+    "@types/react-dom": "npm:^18.2.19"
     core-js: "npm:3.35.1"
     jest: "npm:29.7.0"
     react: "npm:0.0.0-experimental-e5205658f-20230913"
@@ -8720,8 +8720,8 @@ __metadata:
     "@types/babel-core": "npm:6.25.10"
     "@types/jest": "npm:29.5.8"
     "@types/node": "npm:20.11.10"
-    "@types/react": "npm:18.2.37"
-    "@types/react-dom": "npm:18.2.15"
+    "@types/react": "npm:^18.2.55"
+    "@types/react-dom": "npm:^18.2.19"
     "@types/webpack": "npm:5.28.5"
     "@types/webpack-env": "npm:1.18.4"
     babel-jest: "npm:^29.7.0"
@@ -8764,7 +8764,7 @@ __metadata:
     "@types/busboy": "npm:^1"
     "@types/cookie": "npm:^0"
     "@types/express": "npm:4"
-    "@types/react": "npm:18.2.37"
+    "@types/react": "npm:^18.2.55"
     "@types/yargs-parser": "npm:21.0.3"
     "@vitejs/plugin-react": "npm:4.2.1"
     "@whatwg-node/fetch": "npm:0.9.16"
@@ -8826,8 +8826,8 @@ __metadata:
     "@redwoodjs/auth": "npm:6.0.7"
     "@testing-library/jest-dom": "npm:6.3.0"
     "@testing-library/react": "npm:14.1.2"
-    "@types/react": "npm:18.2.37"
-    "@types/react-dom": "npm:18.2.15"
+    "@types/react": "npm:^18.2.55"
+    "@types/react-dom": "npm:^18.2.19"
     core-js: "npm:3.35.1"
     graphql: "npm:16.8.1"
     graphql-sse: "npm:2.5.2"
@@ -11420,23 +11420,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.2.15, @types/react-dom@npm:^18.0.0":
-  version: 18.2.15
-  resolution: "@types/react-dom@npm:18.2.15"
+"@types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.2.19":
+  version: 18.2.19
+  resolution: "@types/react-dom@npm:18.2.19"
   dependencies:
     "@types/react": "npm:*"
-  checksum: 70e86f15f69f89b8f179139ab2e8a8aa9765e742789f5dd5a46fec40d4300ada8fe3349cceda42b9964a018982d7ccb7d791b47f781966c992bfd37da909fbd3
+  checksum: 88d7c6daa4659f661d0c97985d9fca492f24b421a34bb614dcd94c343aed7bea121463149e97fb01ecaa693be17b7d1542cf71ddb1705f3889a81eb2639a88aa
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:18.2.37, @types/react@npm:>=16":
-  version: 18.2.37
-  resolution: "@types/react@npm:18.2.37"
+"@types/react@npm:*, @types/react@npm:>=16, @types/react@npm:^18.2.55":
+  version: 18.2.55
+  resolution: "@types/react@npm:18.2.55"
   dependencies:
     "@types/prop-types": "npm:*"
     "@types/scheduler": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 79dd5d23da05bec54e7423ca17096e345eb8fd80a3bf8dd916bb5cdd60677d27c298523aa5b245d090fcc4ec100cfd58c1af4631fbac709d0a9d8be75f9d78a9
+  checksum: 6b1c73beafbbc582dc54ffd92b3779f6d850e8f6b5ce5d04b31e9498a3d77bfc416bb08f0d8d63ab4f4649ccd6639996472416871c01c74a528b16a55faeaf38
   languageName: node
   linkType: hard
 
