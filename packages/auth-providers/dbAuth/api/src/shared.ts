@@ -2,6 +2,7 @@ import crypto from 'node:crypto'
 
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 
+import { getEventHeader, isFetchApiRequest } from '@redwoodjs/api'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 
 import * as DbAuthError from './errors'
@@ -22,11 +23,6 @@ const DEFAULT_SCRYPT_OPTIONS: ScryptOptions = {
   parallelization: 1,
 }
 
-// Extracts the cookie from an event, handling lower and upper case header names.
-const eventHeadersCookie = (event: APIGatewayProxyEvent) => {
-  return event.headers.cookie || event.headers.Cookie
-}
-
 const getPort = () => {
   let configPath
 
@@ -40,16 +36,30 @@ const getPort = () => {
   return getConfig(configPath).api.port
 }
 
-// When in development environment, check for cookie in the request extension headers
+// When in development environment, check for auth impersonation cookie
 // if user has generated graphiql headers
-const eventGraphiQLHeadersCookie = (event: APIGatewayProxyEvent) => {
+const eventGraphiQLHeadersCookie = (event: APIGatewayProxyEvent | Request) => {
   if (process.env.NODE_ENV === 'development') {
+    const impersationationHeader = getEventHeader(
+      event,
+      'rw-studio-impersonation-cookie'
+    )
+
+    if (impersationationHeader) {
+      return impersationationHeader
+    }
+
+    // TODO: Remove code below when we remove the old way of passing the cookie
+    // from Studio, and decide it's OK to break compatibility with older Studio
+    // versions
     try {
-      const jsonBody = JSON.parse(event.body ?? '{}')
-      return (
-        jsonBody?.extensions?.headers?.cookie ||
-        jsonBody?.extensions?.headers?.Cookie
-      )
+      if (!isFetchApiRequest(event)) {
+        const jsonBody = JSON.parse(event.body ?? '{}')
+        return (
+          jsonBody?.extensions?.headers?.cookie ||
+          jsonBody?.extensions?.headers?.Cookie
+        )
+      }
     } catch {
       // sometimes the event body isn't json
       return
@@ -83,10 +93,9 @@ const legacyDecryptSession = (encryptedText: string) => {
 
 // Extracts the session cookie from an event, handling both
 // development environment GraphiQL headers and production environment headers.
-export const extractCookie = (event: APIGatewayProxyEvent) => {
-  return eventGraphiQLHeadersCookie(event) || eventHeadersCookie(event)
+export const extractCookie = (event: APIGatewayProxyEvent | Request) => {
+  return eventGraphiQLHeadersCookie(event) || getEventHeader(event, 'Cookie')
 }
-
 // whether this encrypted session was made with the old CryptoJS algorithm
 export const isLegacySession = (text: string | undefined) => {
   if (!text) {
@@ -171,12 +180,15 @@ export const getSession = (
 // at once. Accepts the `event` argument from a Lambda function call and the
 // name of the dbAuth session cookie
 export const dbAuthSession = (
-  event: APIGatewayProxyEvent,
+  event: APIGatewayProxyEvent | Request,
   cookieNameOption: string | undefined
 ) => {
-  if (extractCookie(event)) {
+  const sessionCookie = extractCookie(event)
+
+  if (sessionCookie) {
+    // i.e. Browser making a request
     const [session, _csrfToken] = decryptSession(
-      getSession(extractCookie(event), cookieNameOption)
+      getSession(sessionCookie, cookieNameOption)
     )
     return session
   } else {
@@ -184,12 +196,14 @@ export const dbAuthSession = (
   }
 }
 
-export const webAuthnSession = (event: APIGatewayProxyEvent) => {
-  if (!event.headers.cookie) {
+export const webAuthnSession = (event: APIGatewayProxyEvent | Request) => {
+  const cookieHeader = extractCookie(event)
+
+  if (!cookieHeader) {
     return null
   }
 
-  const webAuthnCookie = event.headers.cookie.split(';').find((cook) => {
+  const webAuthnCookie = cookieHeader.split(';').find((cook: string) => {
     return cook.split('=')[0].trim() === 'webAuthn'
   })
 

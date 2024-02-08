@@ -9,23 +9,3 @@ export const webSsrServerHandler = async () => {
     shell: true,
   })
 }
-
-export const webServerHandler = async (argv) => {
-  await execa(
-    'yarn',
-    [
-      'rw-web-server',
-      '--port',
-      argv.port,
-      '--socket',
-      argv.socket,
-      '--api-host',
-      argv.apiHost,
-    ],
-    {
-      cwd: getPaths().base,
-      stdio: 'inherit',
-      shell: true,
-    }
-  )
-}

@@ -1,3 +1,5 @@
+import { expect, it, describe } from 'vitest'
+
 import { merge } from '../merge'
 import { concatUnique } from '../merge/strategy'
 
@@ -31,6 +33,36 @@ describe('the basics', () => {
       const x = 'x'
       const y = 'y'
       const list = [x, y]
+      `,
+      { ArrayExpression: concatUnique }
+    )
+  })
+  it('Merges JSX strings', () => {
+    const componentA = 'const ComponentA = (props) => <div>Hello</div>'
+    const componentB = 'const ComponentB = (props) => <div>Bye</div>'
+    expectTrivialConcat(componentA, componentB)
+  })
+  it('Merges TSX strings', () => {
+    const componentA =
+      'const ComponentA: MyComponent = (props) => <div>Hello</div>'
+    const componentB =
+      'const ComponentB: MyComponent = (props) => <div>Bye</div>'
+    expectTrivialConcat(componentA, componentB)
+  })
+  it('Merges TS strings', () => {
+    expectMerged(
+      `\
+      const x: string = 'x'
+      const list: string[] = [x]
+      `,
+      `\
+       const y: string = 'y'
+       const list: string[] = [y]
+       `,
+      `\
+      const x: string = 'x'
+      const y: string = 'y'
+      const list: string[] = [x, y]
       `,
       { ArrayExpression: concatUnique }
     )

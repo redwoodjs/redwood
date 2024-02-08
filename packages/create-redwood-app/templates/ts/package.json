@@ -7,15 +7,15 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "6.0.7"
+    "@redwoodjs/core": "6.0.7",
+    "@redwoodjs/project-config": "6.0.7"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
     "root": true
   },
   "engines": {
-    "node": "=20.x",
-    "yarn": ">=1.22.21"
+    "node": "=20.x"
   },
   "prisma": {
     "seed": "yarn rw exec seed"

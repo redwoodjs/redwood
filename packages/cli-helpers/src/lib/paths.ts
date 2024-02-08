@@ -1,6 +1,6 @@
 import { getPaths as _getPaths } from '@redwoodjs/project-config'
 
-import { colors } from './colors'
+import { colors } from './colors.js'
 
 function isErrorWithMessage(e: any): e is { message: string } {
   return !!e.message

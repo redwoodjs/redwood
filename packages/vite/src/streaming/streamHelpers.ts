@@ -7,6 +7,8 @@ import type {
   ReactDOMServerReadableStream,
 } from 'react-dom/server'
 
+import type { ServerAuthState } from '@redwoodjs/auth'
+import { ServerAuthProvider } from '@redwoodjs/auth'
 import { LocationProvider } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
@@ -14,6 +16,8 @@ import {
   ServerHtmlProvider,
   createInjector,
 } from '@redwoodjs/web/dist/components/ServerInject'
+
+import type { MiddlewareResponse } from '../middleware/MiddlewareResponse'
 
 import { createBufferedTransformStream } from './transforms/bufferedTransform'
 import { createTimeoutTransform } from './transforms/cancelTimeoutTransform'
@@ -27,6 +31,7 @@ interface RenderToStreamArgs {
   cssLinks: string[]
   isProd: boolean
   jsBundles?: string[]
+  authState: ServerAuthState
 }
 
 interface StreamOptions {
@@ -35,6 +40,7 @@ interface StreamOptions {
 }
 
 export async function reactRenderToStreamResponse(
+  mwRes: MiddlewareResponse,
   renderOptions: RenderToStreamArgs,
   streamOptions: StreamOptions
 ) {
@@ -47,6 +53,7 @@ export async function reactRenderToStreamResponse(
     cssLinks,
     isProd,
     jsBundles = [],
+    authState,
   } = renderOptions
 
   if (!isProd) {
@@ -80,15 +87,15 @@ export async function reactRenderToStreamResponse(
 
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
-  // @ts-expect-error Something in React's packages mean types dont come through
   // Possible that we need to upgrade the @types/* packages
+  // @ts-expect-error Something in React's packages mean types dont come through
   const { renderToReadableStream } = await import('react-dom/server.edge')
 
   const renderRoot = (path: string) => {
     return React.createElement(
-      ServerHtmlProvider,
+      ServerAuthProvider,
       {
-        value: injectToPage,
+        value: authState,
       },
       React.createElement(
         LocationProvider,
@@ -97,11 +104,17 @@ export async function reactRenderToStreamResponse(
             pathname: path,
           },
         },
-        ServerEntry({
-          url: path,
-          css: cssLinks,
-          meta: metaTags,
-        })
+        React.createElement(
+          ServerHtmlProvider,
+          {
+            value: injectToPage,
+          },
+          ServerEntry({
+            url: path,
+            css: cssLinks,
+            meta: metaTags,
+          })
+        )
       )
     )
   }
@@ -133,16 +146,14 @@ export async function reactRenderToStreamResponse(
       },
     }
 
+    const root = renderRoot(currentPathName)
+
     const reactStream: ReactDOMServerReadableStream =
-      await renderToReadableStream(
-        renderRoot(currentPathName),
-        renderToStreamOptions
-      )
+      await renderToReadableStream(root, renderToStreamOptions)
 
     // @NOTE: very important that we await this before we apply any transforms
     if (waitForAllReady) {
       await reactStream.allReady
-      clearTimeout(timeoutHandle)
     }
 
     const transformsToApply = [
@@ -156,15 +167,14 @@ export async function reactRenderToStreamResponse(
       transformsToApply
     )
 
-    return new Response(outputStream, {
-      status: didErrorOutsideShell ? 500 : 200, // I think better right? Prevents caching a bad page
-      headers: { 'content-type': 'text/html' },
-    })
+    mwRes.status = didErrorOutsideShell ? 500 : 200
+    mwRes.body = outputStream
+    mwRes.headers.set('content-type', 'text/html')
+
+    return mwRes.toResponse()
   } catch (e) {
     console.error('🔻 Failed to render shell')
     streamOptions.onError?.(e as Error)
-
-    clearTimeout(timeoutHandle)
 
     // @TODO Asking for clarification from React team. Their documentation on this is incomplete I think.
     // Having the Document (and bootstrap scripts) here allows client to recover from errors in the shell
@@ -178,10 +188,13 @@ export async function reactRenderToStreamResponse(
       bootstrapOptions
     )
 
-    return new Response(fallbackShell, {
-      status: 500,
-      headers: { 'content-type': 'text/html' },
-    })
+    mwRes.status = 500
+    mwRes.body = fallbackShell
+    mwRes.headers.set('content-type', 'text/html')
+
+    return mwRes.toResponse()
+  } finally {
+    clearTimeout(timeoutHandle)
   }
 }
 function applyStreamTransforms(

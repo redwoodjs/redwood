@@ -1,5 +1,4 @@
 import { execSync } from 'child_process'
-import fs from 'fs'
 import https from 'https'
 import path from 'path'
 
@@ -8,6 +7,7 @@ import boxen from 'boxen'
 import camelcase from 'camelcase'
 import decamelize from 'decamelize'
 import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import { memoize, template } from 'lodash'
 import { paramCase } from 'param-case'
@@ -232,6 +232,26 @@ export const prettierOptions = () => {
   try {
     return require(path.join(getPaths().base, 'prettier.config.js'))
   } catch (e) {
+    // If we're in our vitest environment we want to return a consistent set of prettier options
+    // such that snapshots don't change unexpectedly.
+    if (process.env.VITEST_POOL_ID !== undefined) {
+      return {
+        trailingComma: 'es5',
+        bracketSpacing: true,
+        tabWidth: 2,
+        semi: false,
+        singleQuote: true,
+        arrowParens: 'always',
+        overrides: [
+          {
+            files: 'Routes.*',
+            options: {
+              printWidth: 999,
+            },
+          },
+        ],
+      }
+    }
     return undefined
   }
 }

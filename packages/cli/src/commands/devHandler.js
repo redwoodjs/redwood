@@ -1,11 +1,15 @@
-import fs from 'fs'
 import { argv } from 'process'
 
 import concurrently from 'concurrently'
+import fs from 'fs-extra'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { shutdownPort } from '@redwoodjs/internal/dist/dev'
-import { getConfig, getConfigPath } from '@redwoodjs/project-config'
+import {
+  getConfig,
+  getConfigPath,
+  resolveFile,
+} from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
@@ -32,6 +36,9 @@ export const handler = async ({
 
   const rwjsPaths = getPaths()
 
+  // Check if experimental server file exists
+  const serverFile = resolveFile(`${rwjsPaths.api.dist}/server`)
+
   // Starting values of ports from config (redwood.toml)
   let apiPreferredPort = parseInt(getConfig().api.port)
   let webPreferredPort = parseInt(getConfig().web.port)
@@ -42,8 +49,10 @@ export const handler = async ({
   let webAvailablePort = webPreferredPort
   let webPortChangeNeeded = false
 
-  // Check api port
-  if (side.includes('api')) {
+  // Check api port, unless there's a serverFile. If there is a serverFile, we
+  // don't know what port will end up being used in the end. It's up to the
+  // author of the server file to decide and handle that
+  if (side.includes('api') && !serverFile) {
     apiAvailablePort = await getFreePort(apiPreferredPort)
     if (apiAvailablePort === -1) {
       exitWithError(undefined, {
@@ -76,17 +85,23 @@ export const handler = async ({
 
   // Check for port conflict and exit with message if found
   if (apiPortChangeNeeded || webPortChangeNeeded) {
-    let message = `The currently configured ports for the development server are unavailable. Suggested changes to your ports, which can be changed in redwood.toml, are:\n`
-    message += apiPortChangeNeeded
-      ? `  - API to use port ${apiAvailablePort} instead of your currently configured ${apiPreferredPort}\n`
-      : ``
-    message += webPortChangeNeeded
-      ? `  - Web to use port ${webAvailablePort} instead of your currently configured ${webPreferredPort}\n`
-      : ``
-    message += `\nCannot run the development server until your configured ports are changed or become available.`
-    exitWithError(undefined, {
-      message,
-    })
+    const message = [
+      'The currently configured ports for the development server are',
+      'unavailable. Suggested changes to your ports, which can be changed in',
+      'redwood.toml, are:\n',
+      apiPortChangeNeeded && ` - API to use port ${apiAvailablePort} instead`,
+      apiPortChangeNeeded && 'of your currently configured',
+      apiPortChangeNeeded && `${apiPreferredPort}\n`,
+      webPortChangeNeeded && ` - Web to use port ${webAvailablePort} instead`,
+      webPortChangeNeeded && 'of your currently configured',
+      webPortChangeNeeded && `${webPreferredPort}\n`,
+      '\nCannot run the development server until your configured ports are',
+      'changed or become available.',
+    ]
+      .filter(Boolean)
+      .join(' ')
+
+    exitWithError(undefined, { message })
   }
 
   if (side.includes('api')) {
@@ -104,13 +119,17 @@ export const handler = async ({
       console.error(c.error(e.message))
     }
 
-    try {
-      await shutdownPort(apiAvailablePort)
-    } catch (e) {
-      errorTelemetry(process.argv, `Error shutting down "api": ${e.message}`)
-      console.error(
-        `Error whilst shutting down "api" port: ${c.error(e.message)}`
-      )
+    // Again, if a server file is configured, we don't know what port it'll end
+    // up using
+    if (!serverFile) {
+      try {
+        await shutdownPort(apiAvailablePort)
+      } catch (e) {
+        errorTelemetry(process.argv, `Error shutting down "api": ${e.message}`)
+        console.error(
+          `Error whilst shutting down "api" port: ${c.error(e.message)}`
+        )
+      }
     }
   }
 
@@ -142,7 +161,7 @@ export const handler = async ({
       return `--debug-port ${apiDebugPortInToml}`
     }
 
-    // Dont pass in debug port flag, unless configured
+    // Don't pass in debug port flag, unless configured
     return ''
   }
 
@@ -178,7 +197,16 @@ export const handler = async ({
   const jobs = {
     api: {
       name: 'api',
-      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS="${getDevNodeOptions()}" yarn nodemon --quiet --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch --port ${apiAvailablePort} ${getApiDebugFlag()} | rw-log-formatter"`,
+      command: [
+        `yarn cross-env NODE_ENV=development NODE_OPTIONS="${getDevNodeOptions()}"`,
+        '  yarn nodemon',
+        '    --quiet',
+        `    --watch "${redwoodConfigPath}"`,
+        '    --exec "yarn rw-api-server-watch',
+        `      --port ${apiAvailablePort}`,
+        `      ${getApiDebugFlag()}`,
+        '      | rw-log-formatter"',
+      ].join(' '),
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },

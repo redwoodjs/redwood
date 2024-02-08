@@ -1,6 +1,6 @@
-import fs from 'fs'
 import path from 'path'
 
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
@@ -298,7 +298,7 @@ export const mapRouteParamTypeToTsType = (paramType) => {
   return routeParamToTsType[paramType] || 'unknown'
 }
 
-/** @type {(scalarType: 'String' | 'Boolean' | 'Int' | 'BigInt' | 'Float' | 'Decimal' | 'DateTime' ) => string } **/
+/** @type {(scalarType: 'String' | 'Boolean' | 'Int' | 'BigInt' | 'Float' | 'Decimal' | 'DateTime' | 'Bytes' ) => string } **/
 export const mapPrismaScalarToPagePropTsType = (scalarType) => {
   const prismaScalarToTsType = {
     String: 'string',
@@ -308,6 +308,7 @@ export const mapPrismaScalarToPagePropTsType = (scalarType) => {
     Float: 'number',
     Decimal: 'number',
     DateTime: 'string',
+    Bytes: 'Buffer',
   }
   return prismaScalarToTsType[scalarType] || 'unknown'
 }

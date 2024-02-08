@@ -40,14 +40,13 @@ describe('Generate client preset', () => {
 
     const { clientPresetFiles } = await generateClientPreset()
 
-    expect(clientPresetFiles).toHaveLength(6)
+    expect(clientPresetFiles).toHaveLength(5)
     const expectedEndings = [
       '/fragment-masking.ts',
       '/index.ts',
       '/gql.ts',
       '/graphql.ts',
       '/persisted-documents.json',
-      '/types.d.ts',
     ]
 
     const foundEndings = expectedEndings.filter((expectedEnding) =>

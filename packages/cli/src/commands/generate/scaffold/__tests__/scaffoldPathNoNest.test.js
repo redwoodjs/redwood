@@ -1,11 +1,13 @@
 globalThis.__dirname = __dirname
 import path from 'path'
 
+import { vi, describe, beforeAll, test, expect } from 'vitest'
+
 import '../../../../lib/test'
 
 import * as scaffold from '../scaffold'
 
-jest.mock('execa')
+vi.mock('execa')
 
 describe('admin/Post', () => {
   let filesLower

@@ -4,6 +4,8 @@ import path from 'path'
 import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 import Fastify from 'fastify'
 
+import type { GlobalContext } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import type { FastifySideConfigFn } from './types'
@@ -30,7 +32,7 @@ let serverConfigFile: {
   },
 }
 
-export function loadFastifyConfig() {
+export async function loadFastifyConfig() {
   // @TODO use require.resolve to find the config file
   // do we need to babel first?
   const serverConfigPath = path.join(
@@ -45,20 +47,26 @@ export function loadFastifyConfig() {
   }
 
   if (!isServerConfigLoaded) {
-    console.log(`Loading server config from ${serverConfigPath} \n`)
-    serverConfigFile = { ...require(serverConfigPath) }
+    console.log(`Loading server config from ${serverConfigPath}`)
+    const config = await import(`file://${serverConfigPath}`)
+    serverConfigFile = { ...config.default }
     isServerConfigLoaded = true
   }
 
   return serverConfigFile
 }
 
-export const createFastifyInstance = (
+export const createFastifyInstance = async (
   options?: FastifyServerOptions
-): FastifyInstance => {
-  const { config } = loadFastifyConfig()
+): Promise<FastifyInstance> => {
+  const { config } = await loadFastifyConfig()
 
   const fastify = Fastify(options || config || DEFAULT_OPTIONS)
+
+  // Ensure that each request has a unique global context
+  fastify.addHook('onRequest', (_req, _reply, done) => {
+    getAsyncStoreInstance().run(new Map<string, GlobalContext>(), done)
+  })
 
   return fastify
 }

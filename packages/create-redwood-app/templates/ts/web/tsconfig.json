@@ -6,7 +6,6 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "baseUrl": "./",
     "skipLibCheck": false,
     "rootDirs": [
       "./src",
@@ -31,6 +30,7 @@
   },
   "include": [
     "src",
+    "config",
     "../.redwood/types/includes/all-*",
     "../.redwood/types/includes/web-*",
     "../types",

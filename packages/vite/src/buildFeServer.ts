@@ -57,7 +57,15 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
 
     // Write a route manifest
     return await buildRouteManifest()
+
+    //
+    // RSC specific code ends here
+    //
   }
+
+  //
+  // SSR Specific code below
+  //
 
   // Step 1A: Generate the client bundle
   await buildWeb({ verbose })
@@ -80,9 +88,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     name: 'rw-esbuild-babel-transform',
     setup(build: PluginBuild) {
       build.onLoad({ filter: /\.(js|ts|tsx|jsx)$/ }, async (args) => {
-        // Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
-        // TODO (STREAMING) We need the new transformWithBabel function in https://github.com/redwoodjs/redwood/pull/7672/files
-        const transformedCode = transformWithBabel(args.path, [
+        const transformedCode = await transformWithBabel(args.path, [
           ...getRouteHookBabelPlugins(),
         ])
 

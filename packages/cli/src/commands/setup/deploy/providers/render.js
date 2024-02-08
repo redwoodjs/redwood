@@ -1,8 +1,8 @@
 // import terminalLink from 'terminal-link'
-import fs from 'fs'
 import path from 'path'
 
 import { getSchema, getConfig } from '@prisma/internals'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
