@@ -55,8 +55,8 @@ export async function installRedwoodModule(module) {
       version = version.split('+')[0]
     }
 
-    const packumentP = await fetch(`https://registry.npmjs.org/${module}`)
-    const packument = await packumentP.json()
+    const packumentResponse = await fetch(`https://registry.npmjs.org/${module}`)
+    const packument = await packumentResponse.json()
 
     const versionIsPublished = Object.keys(packument.versions).includes(version)
 
