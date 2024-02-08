@@ -1,5 +1,6 @@
 import { build, defaultBuildOptions } from '@redwoodjs/framework-tools'
 
+// Build the main entry point
 await build({
   buildOptions: {
     ...defaultBuildOptions,
