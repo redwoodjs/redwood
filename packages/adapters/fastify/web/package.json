@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@fastify/http-proxy": "9.3.0",
-    "@fastify/static": "6.12.0",
+    "@fastify/static": "7.0.1",
     "@fastify/url-data": "5.4.0",
     "@redwoodjs/project-config": "6.0.7",
     "fast-glob": "3.3.2"

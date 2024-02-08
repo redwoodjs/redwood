@@ -3157,17 +3157,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/static@npm:6.12.0":
-  version: 6.12.0
-  resolution: "@fastify/static@npm:6.12.0"
+"@fastify/static@npm:7.0.1":
+  version: 7.0.1
+  resolution: "@fastify/static@npm:7.0.1"
   dependencies:
     "@fastify/accept-negotiator": "npm:^1.0.0"
     "@fastify/send": "npm:^2.0.0"
     content-disposition: "npm:^0.5.3"
     fastify-plugin: "npm:^4.0.0"
-    glob: "npm:^8.0.1"
-    p-limit: "npm:^3.1.0"
-  checksum: 9248c9851c4bb24965e88eb2f0825fda2b2b08ddb83aa5f08e529b8a522cf20978f81e8e4837e2cb550b39ea433790b0fd82db4b2f0673133325e265c9099fff
+    fastq: "npm:^1.17.0"
+    glob: "npm:^10.3.4"
+  checksum: 39374aabae8e5f1e25eff8c3e149ecb787e9e7750f166feaa397b2476b0e295466c9c147d558c0f93b37db522ea43007d388b4ab64b984d6f6e1a7276704c778
   languageName: node
   linkType: hard
 
@@ -8287,7 +8287,7 @@ __metadata:
   resolution: "@redwoodjs/fastify-web@workspace:packages/adapters/fastify/web"
   dependencies:
     "@fastify/http-proxy": "npm:9.3.0"
-    "@fastify/static": "npm:6.12.0"
+    "@fastify/static": "npm:7.0.1"
     "@fastify/url-data": "npm:5.4.0"
     "@redwoodjs/framework-tools": "npm:6.0.7"
     "@redwoodjs/project-config": "npm:6.0.7"
@@ -18888,12 +18888,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastq@npm:^1.6.0, fastq@npm:^1.6.1":
-  version: 1.15.0
-  resolution: "fastq@npm:1.15.0"
+"fastq@npm:^1.17.0, fastq@npm:^1.6.0, fastq@npm:^1.6.1":
+  version: 1.17.1
+  resolution: "fastq@npm:1.17.1"
   dependencies:
     reusify: "npm:^1.0.4"
-  checksum: 5ce4f83afa5f88c9379e67906b4d31bc7694a30826d6cc8d0f0473c966929017fda65c2174b0ec89f064ede6ace6c67f8a4fe04cef42119b6a55b0d465554c24
+  checksum: 1095f16cea45fb3beff558bb3afa74ca7a9250f5a670b65db7ed585f92b4b48381445cd328b3d87323da81e43232b5d5978a8201bde84e0cd514310f1ea6da34
   languageName: node
   linkType: hard
 
@@ -20008,7 +20008,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:10.3.10, glob@npm:^10.0.0, glob@npm:^10.2.2, glob@npm:^10.3.10, glob@npm:^10.3.7":
+"glob@npm:10.3.10, glob@npm:^10.0.0, glob@npm:^10.2.2, glob@npm:^10.3.10, glob@npm:^10.3.4, glob@npm:^10.3.7":
   version: 10.3.10
   resolution: "glob@npm:10.3.10"
   dependencies:
