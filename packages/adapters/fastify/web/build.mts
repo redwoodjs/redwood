@@ -8,3 +8,11 @@ await build({
     packages: 'external',
   },
 })
+
+// Build the helpers entry point
+await build({
+  buildOptions: {
+    ...defaultBuildOptions,
+    entryPoints: ['./src/helpers.ts'],
+  },
+})
