@@ -1,5 +1,6 @@
 import { build, defaultBuildOptions } from '@redwoodjs/framework-tools'
 
+// ESM build
 await build({
   buildOptions: {
     ...defaultBuildOptions,
@@ -11,6 +12,7 @@ await build({
   },
 })
 
+// CJS build
 await build({
   buildOptions: {
     ...defaultBuildOptions,
