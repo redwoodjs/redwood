@@ -25,7 +25,7 @@ services:
     depends_on:
       - api
     environment:
-      - API_HOST=http://api:8911
+      - API_PROXY_TARGET=http://api:8911
 
   db:
     image: postgres:16-bookworm
