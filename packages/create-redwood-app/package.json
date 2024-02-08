@@ -14,7 +14,7 @@
     "templates"
   ],
   "scripts": {
-    "build": "node ./scripts/build.js",
+    "build": "tsx ./scripts/build.ts",
     "build:pack": "node ./scripts/buildPack.js",
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
@@ -45,6 +45,7 @@
     "semver": "7.5.4",
     "systeminformation": "5.21.20",
     "terminal-link": "2.1.1",
+    "tsx": "4.6.2",
     "untildify": "4.0.0",
     "uuid": "9.0.1",
     "vitest": "1.2.2",

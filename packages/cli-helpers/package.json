@@ -18,7 +18,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn node ./build.js && yarn build:types",
+    "build": "tsx ./build.ts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-cli-helpers.tgz",
     "build:types": "tsc --build --verbose tsconfig.build.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
@@ -46,6 +46,7 @@
     "@types/lodash": "4.14.201",
     "@types/pascalcase": "1.0.3",
     "@types/yargs": "17.0.32",
+    "tsx": "4.6.2",
     "typescript": "5.3.3",
     "vitest": "1.2.2"
   },
