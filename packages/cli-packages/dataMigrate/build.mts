@@ -4,14 +4,14 @@ import {
   defaultIgnorePatterns,
 } from '@redwoodjs/framework-tools'
 
-// Build the package.
+// Build the package
 await build({
   entryPointOptions: {
     ignore: [...defaultIgnorePatterns, './src/types.ts', './src/bin.ts'],
   },
 })
 
-// Build the bin.
+// Build the bin
 await build({
   buildOptions: {
     ...defaultBuildOptions,

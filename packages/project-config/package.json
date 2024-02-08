@@ -18,7 +18,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn node ./build.js && run build:types",
+    "build": "tsx ./build.ts && run build:types",
     "build:pack": "yarn pack -o redwoodjs-project-config.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
@@ -35,6 +35,7 @@
   "devDependencies": {
     "@redwoodjs/framework-tools": "6.0.7",
     "rimraf": "5.0.5",
+    "tsx": "4.6.2",
     "typescript": "5.3.3",
     "vitest": "1.2.2"
   },
