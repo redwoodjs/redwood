@@ -2,7 +2,6 @@
   port = 8888
 [studio]
   [studio.graphiql]
-    endpoint = "graphql"
     [studio.graphiql.authImpersonation]
       authProvider = "supabase"
       email = "supauser@example.com"

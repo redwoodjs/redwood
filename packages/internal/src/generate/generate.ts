@@ -8,7 +8,6 @@ import { generatePossibleTypes } from './possibleTypes'
 import { generateTypeDefs } from './typeDefinitions'
 
 export const generate = async () => {
-  console.log('internal generate')
   const config = getConfig()
   const { schemaPath, errors: generateGraphQLSchemaErrors } =
     await generateGraphQLSchema()

@@ -7329,27 +7329,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reach/polymorphic@npm:0.18.0":
-  version: 0.18.0
-  resolution: "@reach/polymorphic@npm:0.18.0"
-  peerDependencies:
-    react: ^16.8.0 || 17.x
-  checksum: dfde6dc901005f92e16f0e3601f0c659b70ee14d91e612cd68c9a918744fd94de30e8065d73663b72964225d3476f377c650daf2ac1e256de61df9ee386aabdc
-  languageName: node
-  linkType: hard
-
-"@reach/skip-nav@npm:0.18.0":
-  version: 0.18.0
-  resolution: "@reach/skip-nav@npm:0.18.0"
-  dependencies:
-    "@reach/polymorphic": "npm:0.18.0"
-  peerDependencies:
-    react: ^16.8.0 || 17.x
-    react-dom: ^16.8.0 || 17.x
-  checksum: 30e3d4c568093e170b9e80ee42764a080c0a15ab3f9c7edf78dcc6ebd92f156799dba0f544757b84401806765f60fe527c869ef86d5323c0a7a3bdccf1a68f85
-  languageName: node
-  linkType: hard
-
 "@react-email/render@npm:0.0.10":
   version: 0.0.10
   resolution: "@react-email/render@npm:0.0.10"
@@ -7459,6 +7438,7 @@ __metadata:
     pretty-ms: "npm:7.0.1"
     qs: "npm:6.11.2"
     split2: "npm:4.2.0"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
     vitest: "npm:1.2.2"
     yargs: "npm:17.7.2"
@@ -7995,6 +7975,7 @@ __metadata:
     fast-glob: "npm:3.3.2"
     graphql: "npm:16.8.1"
     jest: "npm:29.7.0"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
@@ -8017,6 +7998,7 @@ __metadata:
     listr2: "npm:6.6.1"
     memfs: "npm:4.6.0"
     terminal-link: "npm:2.1.1"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
     yargs: "npm:17.7.2"
   bin:
@@ -8045,6 +8027,7 @@ __metadata:
     prettier: "npm:2.8.8"
     prompts: "npm:2.4.2"
     terminal-link: "npm:2.1.1"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
     vitest: "npm:1.2.2"
   languageName: unknown
@@ -8067,6 +8050,7 @@ __metadata:
     execa: "npm:5.1.1"
     storybook: "npm:7.6.10"
     terminal-link: "npm:2.1.1"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
     yargs: "npm:17.7.2"
   languageName: unknown
@@ -8190,6 +8174,7 @@ __metadata:
   resolution: "@redwoodjs/context@workspace:packages/context"
   dependencies:
     "@redwoodjs/framework-tools": "npm:6.0.7"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
@@ -8310,6 +8295,7 @@ __metadata:
     "@redwoodjs/project-config": "npm:6.0.7"
     fast-glob: "npm:3.3.2"
     fastify: "npm:4.25.2"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
     vitest: "npm:1.2.2"
   languageName: unknown
@@ -8339,7 +8325,6 @@ __metadata:
     typescript: "npm:5.3.3"
     vitest: "npm:1.2.2"
   peerDependencies:
-    graphql: 16.8.1
     react: 0.0.0-experimental-e5205658f-20230913
   languageName: unknown
   linkType: soft
@@ -8459,6 +8444,7 @@ __metadata:
   dependencies:
     "@redwoodjs/api": "npm:6.0.7"
     "@redwoodjs/framework-tools": "npm:6.0.7"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
     vitest: "npm:1.2.2"
   languageName: unknown
@@ -8470,6 +8456,7 @@ __metadata:
   dependencies:
     "@redwoodjs/framework-tools": "npm:6.0.7"
     "@redwoodjs/mailer-core": "npm:6.0.7"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
@@ -8482,6 +8469,7 @@ __metadata:
     "@redwoodjs/mailer-core": "npm:6.0.7"
     "@types/nodemailer": "npm:^6"
     nodemailer: "npm:6.9.9"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
@@ -8493,6 +8481,7 @@ __metadata:
     "@redwoodjs/framework-tools": "npm:6.0.7"
     "@redwoodjs/mailer-core": "npm:6.0.7"
     resend: "npm:1.1.0"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
@@ -8505,6 +8494,7 @@ __metadata:
     "@redwoodjs/mailer-core": "npm:6.0.7"
     "@redwoodjs/mailer-handler-nodemailer": "npm:6.0.7"
     "@types/nodemailer": "npm:^6"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
@@ -8518,6 +8508,7 @@ __metadata:
     "@redwoodjs/mailer-core": "npm:6.0.7"
     "@types/mjml": "npm:4"
     mjml: "npm:4.14.1"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
@@ -8529,6 +8520,7 @@ __metadata:
     "@react-email/render": "npm:0.0.10"
     "@redwoodjs/framework-tools": "npm:6.0.7"
     "@redwoodjs/mailer-core": "npm:6.0.7"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
@@ -8572,6 +8564,7 @@ __metadata:
     fast-glob: "npm:3.3.2"
     rimraf: "npm:5.0.5"
     string-env-interpolation: "npm:1.0.1"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
     vitest: "npm:1.2.2"
   languageName: unknown
@@ -8598,6 +8591,7 @@ __metadata:
     ioredis: "npm:^5.3.2"
     jest: "npm:29.7.0"
     nodemon: "npm:3.0.2"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
   peerDependencies:
     ioredis: ^5.3.2
@@ -8630,7 +8624,6 @@ __metadata:
     "@babel/cli": "npm:7.23.9"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.9"
-    "@reach/skip-nav": "npm:0.18.0"
     "@redwoodjs/auth": "npm:6.0.7"
     "@types/react": "npm:18.2.37"
     "@types/react-dom": "npm:18.2.15"
@@ -8755,6 +8748,7 @@ __metadata:
     chalk: "npm:4.1.2"
     enquirer: "npm:2.4.1"
     stdout-update: "npm:1.6.8"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
@@ -8813,6 +8807,7 @@ __metadata:
     chalk: "npm:4.1.2"
     dotenv-defaults: "npm:5.0.2"
     fastify: "npm:4.25.2"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
     yargs: "npm:17.7.2"
   bin:
@@ -15963,6 +15958,7 @@ __metadata:
     semver: "npm:7.5.4"
     systeminformation: "npm:5.21.20"
     terminal-link: "npm:2.1.1"
+    tsx: "npm:4.6.2"
     untildify: "npm:4.0.0"
     uuid: "npm:9.0.1"
     vitest: "npm:1.2.2"
