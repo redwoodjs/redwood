@@ -158,14 +158,15 @@ export async function handler({ force, install, packages }) {
       },
       {
         title: 'Configure Storybook...',
-        skip: () => fileIncludes(rwPaths.web.storybookConfig, 'withMantine'),
+        skip: () =>
+          fileIncludes(rwPaths.web.storybookPreviewConfig, 'withMantine'),
         task: async () =>
           extendStorybookConfiguration(
             path.join(
               __dirname,
               '..',
               'templates',
-              'mantine.storybook.preview.js.template'
+              'mantine.storybook.preview.tsx.template'
             )
           ),
       },

@@ -368,7 +368,6 @@ yarn redwood destroy <type>
 | `sdl <model>`        | Destroy a GraphQL schema and service component based on a given DB schema Model |
 | `service <name>`     | Destroy a service component                                                     |
 | `directive <name>`   | Destroy a directive                                                             |
-| `graphiql`           | Destroy a generated graphiql file                                               |
 
 ## exec
 
@@ -1794,27 +1793,6 @@ yarn redwood setup auth <provider>
 
 See [Authentication](authentication.md).
 
-### setup graphiQL headers
-
-Redwood automatically sets up your authentication headers in your GraphiQL playground. Currently supported auth providers include Supabase, dbAuth, and Netlify.
-
-A `generateGraphiQLHeader` file will be created in your `api/lib` folder and included in your gitignore. You can edit this file to customize your header. The function in the file is passed into your `createGraphQLHandler` and only called in dev.
-
-```
-yarn redwood setup graphiql <provider>
-```
-
-If you're using `dbAuth`, make sure the `-i` id you provided is not logged in from the web app.
-
-| Arguments & Options | Description                                                                                                                                           |
-| :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `provider`          | Auth provider to configure. Choices are `dbAuth`, `netlify`, and `supabase`                                                                           |
-| `--id, -i`          | Unique id to identify current user (required only for DBAuth)                                                                                         |
-| `--token, -t`       | Generated JWT token. If not provided, a mock JWT payload is returned in `api/lib/generateGraphiQLHeader` that can be modified and turned into a token |
-| `--expiry, -e`      | Token expiry in minutes. Default is 60                                                                                                                |
-| `--view, -v`        | Print out generated headers to console                                                                                                                |
-
-
 ### setup cache
 
 This command creates a setup file in `api/src/lib/cache.{ts|js}` for connecting to a Memcached or Redis server and allows caching in services. See the [**Caching** section of the Services docs](/docs/services#caching) for usage.
@@ -1999,10 +1977,75 @@ We perform a simple compatibility check in an attempt to make you aware of poten
 
 It's the author of the npm package's responsibility to specify the correct compatibility range, so **you should always research the packages you use with this command**. Especially since they will be executing code on your machine!
 
+### setup graphql
+
+This command creates the necessary files to support GraphQL features like fragments and trusted documents.
+
+#### Usage
+
+Run `yarn rw setup graphql <feature>`
+
+#### setup graphql fragments
+
+This command creates the necessary configuration to start using [GraphQL Fragments](./graphql/fragments.md).
+
+```
+yarn redwood setup graphql fragments
+```
+
+| Arguments & Options | Description                              |
+| :------------------ | :--------------------------------------- |
+| `--force, -f`       | Overwrite existing files and skip checks |
+
+#### Usage
+
+Run `yarn rw setup graphql fragments`
+
+#### Example
+
+```bash
+~/redwood-app$ yarn rw setup graphql fragments
+✔ Update Redwood Project Configuration to enable GraphQL Fragments
+✔ Generate possibleTypes.ts
+✔ Import possibleTypes in App.tsx
+✔ Add possibleTypes to the GraphQL cache config
+```
+
+#### setup graphql trusted-documents
+
+This command creates the necessary configuration to start using [GraphQL Trusted Documents](./graphql/trusted-documents.md).
+
+
+```
+yarn redwood setup graphql trusted-documents
+```
+
+#### Usage
+
+Run `yarn rw setup graphql trusted-documents`
+
+#### Example
+
+```bash
+~/redwood-app$ yarn rw setup graphql trusted-documents
+✔ Update Redwood Project Configuration to enable GraphQL Trusted Documents ...
+✔ Generating Trusted Documents store ...
+✔ Configuring the GraphQL Handler to use a Trusted Documents store ...
+```
+
+
+If you have not setup the RedwoodJS server file, it will be setup:
+
+```bash
+✔ Adding the experimental server file...
+✔ Adding config to redwood.toml...
+✔ Adding required api packages...
+```
+
+
 ### setup realtime
 
 This command creates the necessary files, installs the required packages, and provides examples to setup RedwoodJS Realtime from GraphQL live queries and subscriptions. See the Realtime docs for more information.
-
 
 ```
 yarn redwood setup realtime

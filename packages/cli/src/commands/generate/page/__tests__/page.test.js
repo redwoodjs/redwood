@@ -3,41 +3,45 @@ globalThis.__dirname = __dirname
 globalThis.mockFs = false
 let mockFiles = {}
 
-jest.mock('fs', () => {
-  const actual = jest.requireActual('fs')
+vi.mock('fs-extra', async (importOriginal) => {
+  const originalFsExtra = await importOriginal()
 
   return {
-    ...actual,
-    existsSync: (...args) => {
-      if (!globalThis.mockFs) {
-        return actual.existsSync.apply(null, args)
-      }
-      return false
-    },
-    mkdirSync: (...args) => {
-      if (!globalThis.mockFs) {
-        return actual.mkdirSync.apply(null, args)
-      }
-    },
-    writeFileSync: (target, contents) => {
-      if (!globalThis.mockFs) {
-        return actual.writeFileSync.call(null, target, contents)
-      }
-    },
-    readFileSync: (path) => {
-      if (!globalThis.mockFs) {
-        return actual.readFileSync.call(null, path)
-      }
+    default: {
+      ...originalFsExtra,
+      existsSync: (...args) => {
+        if (!globalThis.mockFs) {
+          return originalFsExtra.existsSync.apply(null, args)
+        }
+        return false
+      },
+      mkdirSync: (...args) => {
+        if (!globalThis.mockFs) {
+          return originalFsExtra.mkdirSync.apply(null, args)
+        }
+      },
+      writeFileSync: (target, contents) => {
+        if (!globalThis.mockFs) {
+          return originalFsExtra.writeFileSync.call(null, target, contents)
+        }
+      },
+      readFileSync: (path) => {
+        if (!globalThis.mockFs) {
+          return originalFsExtra.readFileSync.call(null, path)
+        }
 
-      const mockedContent = mockFiles[path]
+        const mockedContent = mockFiles[path]
 
-      return mockedContent || actual.readFileSync.call(null, path)
+        return mockedContent || originalFsExtra.readFileSync.call(null, path)
+      },
     },
   }
 })
 
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
+import { vi, describe, it, test, expect, beforeEach, afterEach } from 'vitest'
 
 // Load mocks
 import '../../../../lib/test'
@@ -338,8 +342,8 @@ test('paramVariants paramType defaults to string', () => {
 
 describe('handler', () => {
   beforeEach(() => {
-    jest.spyOn(console, 'info').mockImplementation(() => {})
-    jest.spyOn(console, 'log').mockImplementation(() => {})
+    vi.spyOn(console, 'info').mockImplementation(() => {})
+    vi.spyOn(console, 'log').mockImplementation(() => {})
   })
 
   afterEach(() => {
@@ -365,7 +369,7 @@ describe('handler', () => {
       ].join('\n'),
     }
 
-    const spy = jest.spyOn(fs, 'writeFileSync')
+    const spy = vi.spyOn(fs, 'writeFileSync')
 
     globalThis.mockFs = true
 
@@ -410,7 +414,7 @@ describe('handler', () => {
       ].join('\n'),
     }
 
-    const spy = jest.spyOn(fs, 'writeFileSync')
+    const spy = vi.spyOn(fs, 'writeFileSync')
     globalThis.mockFs = true
 
     await page.handler({

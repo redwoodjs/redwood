@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { describe, beforeAll, afterAll, it, expect, test } from 'vitest'
+
 import {
   processPagesDir,
   resolveFile,
@@ -131,12 +133,7 @@ describe('paths', () => {
             'config',
             'storybook.config.js'
           ),
-          storybookPreviewConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'storybook.preview.js'
-          ),
+          storybookPreviewConfig: null,
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -231,7 +228,7 @@ describe('paths', () => {
       })
     })
 
-    describe('resolveFile', () => {
+    test('resolveFile', () => {
       const p = resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'App'))
       expect(path.extname(p)).toEqual('.tsx')
 
@@ -411,12 +408,7 @@ describe('paths', () => {
             'config',
             'storybook.config.js'
           ),
-          storybookPreviewConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'storybook.preview.js'
-          ),
+          storybookPreviewConfig: null,
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -557,7 +549,7 @@ describe('paths', () => {
       })
     })
 
-    describe('resolveFile', () => {
+    test('resolveFile', () => {
       const p = resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'App'))
       expect(path.extname(p)).toEqual('.js')
 
@@ -737,12 +729,7 @@ describe('paths', () => {
             'config',
             'storybook.config.js'
           ),
-          storybookPreviewConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'storybook.preview.js'
-          ),
+          storybookPreviewConfig: null,
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -841,7 +828,7 @@ describe('paths', () => {
       })
     })
 
-    describe('resolveFile', () => {
+    test('resolveFile', () => {
       const p = resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'index'))
       expect(path.extname(p)).toEqual('.js')
 
@@ -1020,12 +1007,7 @@ describe('paths', () => {
             'config',
             'storybook.config.js'
           ),
-          storybookPreviewConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'storybook.preview.js'
-          ),
+          storybookPreviewConfig: null,
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -1178,7 +1160,7 @@ describe('paths', () => {
       })
     })
 
-    describe('resolveFile', () => {
+    test('resolveFile', () => {
       const p = resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes'))
       expect(path.extname(p)).toEqual('.tsx')
 

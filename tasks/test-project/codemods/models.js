@@ -10,7 +10,7 @@ const post = `model Post {
 }`
 
 const contact = `model Contact {
-  id        Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
   email     String
   message   String
@@ -29,4 +29,30 @@ const user = `model User {
   posts               Post[]
 }`
 
-module.exports = { post, contact, user }
+const produce = `model Produce {
+  id                 String   @id @default(cuid())
+  name               String   @unique
+  quantity           Int
+  price              Int
+  nutrients          String?
+  region             String
+  /// Available only for fruits
+  isSeedless         Boolean?
+  /// Available only for fruits
+  ripenessIndicators String?
+  /// Available only for vegetables
+  vegetableFamily    String?
+  /// Available only for vegetables
+  isPickled          Boolean?
+  stall              Stall    @relation(fields: [stallId], references: [id], onDelete: Cascade)
+  stallId            String
+}`
+
+const stall = `model Stall {
+  id          String    @id @default(cuid())
+  name        String
+  stallNumber String    @unique
+  produce     Produce[]
+}`
+
+module.exports = { post, contact, user, produce, stall }

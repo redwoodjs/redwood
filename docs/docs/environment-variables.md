@@ -31,7 +31,8 @@ In production, you can get environment variables to the Web Side either by
 1. adding to `redwood.toml` via the `includeEnvironmentVariables` array, or
 2. prefixing with `REDWOOD_ENV_`
 
-Just like for the API Side, you'll also have to set them up with your provider.
+Just like for the API Side, you'll also have to set them up with your provider. Some hosting providers distinguish between build and runtime environments for configuring environment variables.
+Environment variables for the web side should in those cases be configured as build-time variables.
 
 #### Option 1: includeEnvironmentVariables in redwood.toml
 
@@ -115,6 +116,7 @@ Navigating to http://localhost:8911/hello shows that the Function successfully a
 <!-- Deployment system? platform? -->
 
 Whichever platform you deploy to, they'll have some specific way of making environment variables available to the serverless environment where your Functions run. For example, if you deploy to Netlify, you set your environment variables in **Settings** > **Build & Deploy** > **Environment**. You'll just have to read your provider's documentation.
+Some hosting providers distinguish between build and runtime environments for configuring environment variables. Environment variables for the api side should in those cases be configured as runtime variables.
 
 ## Keeping Sensitive Information Safe
 

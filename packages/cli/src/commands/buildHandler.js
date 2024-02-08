@@ -1,13 +1,14 @@
-import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import { rimraf } from 'rimraf'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
-import { buildApi } from '@redwoodjs/internal/dist/build/api'
+import { buildApi, cleanApiBuild } from '@redwoodjs/internal/dist/build/api'
+import { generate } from '@redwoodjs/internal/dist/generate/generate'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { timedTelemetry } from '@redwoodjs/telemetry'
@@ -32,7 +33,11 @@ export const handler = async ({
     prisma,
     prerender,
   })
+
   const rwjsPaths = getPaths()
+  const rwjsConfig = getConfig()
+  const useFragments = rwjsConfig.graphql?.fragments
+  const useTrustedDocuments = rwjsConfig.graphql?.trustedDocuments
 
   if (performance) {
     console.log('Measuring Web Build Performance...')
@@ -75,14 +80,29 @@ export const handler = async ({
         })
       },
     },
+    // If using GraphQL Fragments or Trusted Documents, then we need to use
+    // codegen to generate the types needed for possible types and the
+    // trusted document store hashes
+    (useFragments || useTrustedDocuments) && {
+      title: `Generating types needed for ${[
+        useFragments && 'GraphQL Fragments',
+        useTrustedDocuments && 'Trusted Documents',
+      ]
+        .filter(Boolean)
+        .join(' and ')} support...`,
+      task: async () => {
+        await generate()
+      },
+    },
     side.includes('api') && {
       title: 'Verifying graphql schema...',
       task: loadAndValidateSdls,
     },
     side.includes('api') && {
       title: 'Building API...',
-      task: () => {
-        const { errors, warnings } = buildApi()
+      task: async () => {
+        await cleanApiBuild()
+        const { errors, warnings } = await buildApi()
 
         if (errors.length) {
           console.error(errors)
@@ -164,7 +184,10 @@ export const handler = async ({
           'file://' + rwjsPaths.web.routes
         )}.`
       )
+
+      return
     }
+
     // Running a separate process here, otherwise it wouldn't pick up the
     // generated Prisma Client due to require module caching
     await execa('yarn rw prerender', {

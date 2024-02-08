@@ -1,12 +1,16 @@
 import path from 'path'
 
+import { Response } from '@whatwg-node/fetch'
 import isbot from 'isbot'
 import type { ViteDevServer } from 'vite'
 
+import { defaultAuthProviderState } from '@redwoodjs/auth'
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
+
+import { invoke } from '../middleware/invokeMiddleware'
 
 import { reactRenderToStreamResponse } from './streamHelpers'
 import { loadAndRunRouteHooks } from './triggerRouteHooks'
@@ -79,6 +83,19 @@ export const createReactStreamingHandler = async (
       )
     }
 
+    // ~~~ Middleware Handling ~~~
+    const { middleware } = entryServerImport
+
+    const [mwResponse, decodedAuthState = defaultAuthProviderState] =
+      await invoke(req, middleware)
+
+    // If mwResponse is a redirect, short-circuit here, and skip React rendering
+    if (mwResponse.isRedirect()) {
+      return mwResponse.toResponse()
+    }
+
+    // ~~~ Middleware Handling ~~~
+
     const ServerEntry =
       entryServerImport.ServerEntry || entryServerImport.default
 
@@ -126,6 +143,7 @@ export const createReactStreamingHandler = async (
     const cssLinks = getStylesheetLinks()
 
     const reactResponse = await reactRenderToStreamResponse(
+      mwResponse,
       {
         ServerEntry,
         FallbackDocument,
@@ -134,6 +152,7 @@ export const createReactStreamingHandler = async (
         cssLinks,
         isProd,
         jsBundles,
+        authState: decodedAuthState,
       },
       {
         waitForAllReady: isSeoCrawler,

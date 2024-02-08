@@ -2,25 +2,25 @@ import path from 'path'
 
 import compat from 'core-js-compat'
 
-import { getPaths, getConfig } from '@redwoodjs/project-config'
+import { getConfig } from '@redwoodjs/project-config'
 
 import {
   BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS,
-  getApiSideBabelPlugins,
-  prebuildApiFile,
   TARGETS_NODE,
+  getApiSideBabelPlugins,
+  transformWithBabel,
 } from '../api'
 
 const RWJS_CWD = path.join(__dirname, '__fixtures__/redwood-app')
 process.env.RWJS_CWD = RWJS_CWD
 
-let code
+let code: string
 
 describe('api prebuild ', () => {
   describe('polyfills unsupported functionality', () => {
-    beforeAll(() => {
+    beforeAll(async () => {
       const apiFile = path.join(RWJS_CWD, 'api/src/lib/polyfill.js')
-      code = prebuildApiFileWrapper(apiFile)
+      code = await prebuildApiFileWrapper(apiFile)
     })
 
     describe('ES features', () => {
@@ -371,7 +371,7 @@ describe('api prebuild ', () => {
     })
 
     it('includes source maps', () => {
-      const sourceMaps = code.split('\n').pop()
+      const sourceMaps = code.split('\n').pop() as string
 
       const sourceMapsMatcher =
         '//# sourceMappingURL=data:application/json;charset=utf-8;base64,'
@@ -386,16 +386,16 @@ describe('api prebuild ', () => {
 
       expect(sources).toMatchInlineSnapshot(`
         [
-          "../../../../../api/src/lib/polyfill.js",
+          "polyfill.js",
         ]
       `)
     })
   })
 
   describe('uses core-js3 aliasing', () => {
-    beforeAll(() => {
+    beforeAll(async () => {
       const apiFile = path.join(RWJS_CWD, 'api/src/lib/transform.js')
-      code = prebuildApiFileWrapper(apiFile)
+      code = await prebuildApiFileWrapper(apiFile)
     })
 
     it('works', () => {
@@ -425,9 +425,9 @@ describe('api prebuild ', () => {
   })
 
   describe('typescript', () => {
-    beforeAll(() => {
+    beforeAll(async () => {
       const apiFile = path.join(RWJS_CWD, 'api/src/lib/typescript.ts')
-      code = prebuildApiFileWrapper(apiFile)
+      code = await prebuildApiFileWrapper(apiFile)
     })
 
     it('transpiles ts to js', () => {
@@ -437,15 +437,13 @@ describe('api prebuild ', () => {
   })
 
   describe('auto imports', () => {
-    beforeAll(() => {
+    beforeAll(async () => {
       const apiFile = path.join(RWJS_CWD, 'api/src/lib/autoImports.ts')
-      code = prebuildApiFileWrapper(apiFile)
+      code = await prebuildApiFileWrapper(apiFile)
     })
 
     it('auto imports', () => {
-      expect(code).toContain(
-        'import { context } from "@redwoodjs/graphql-server"'
-      )
+      expect(code).toContain('import { context } from "@redwoodjs/context"')
       expect(code).toContain('import gql from "graphql-tag"')
     })
   })
@@ -453,7 +451,7 @@ describe('api prebuild ', () => {
   test('core-js polyfill list', () => {
     const { list } = compat({
       targets: { node: TARGETS_NODE },
-      version: BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS.corejs.version,
+      version: BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS.corejs.version.toString(),
     })
 
     /**
@@ -465,105 +463,97 @@ describe('api prebuild ', () => {
      * Some "ES Next" polyfills have landed in v12+ Node.js versions.
      */
     expect(list).toMatchInlineSnapshot(`
-    [
-      "esnext.array.last-index",
-      "esnext.array.last-item",
-      "esnext.composite-key",
-      "esnext.composite-symbol",
-      "esnext.map.delete-all",
-      "esnext.map.every",
-      "esnext.map.filter",
-      "esnext.map.find",
-      "esnext.map.find-key",
-      "esnext.map.from",
-      "esnext.map.group-by",
-      "esnext.map.includes",
-      "esnext.map.key-by",
-      "esnext.map.key-of",
-      "esnext.map.map-keys",
-      "esnext.map.map-values",
-      "esnext.map.merge",
-      "esnext.map.of",
-      "esnext.map.reduce",
-      "esnext.map.some",
-      "esnext.map.update",
-      "esnext.math.clamp",
-      "esnext.math.deg-per-rad",
-      "esnext.math.degrees",
-      "esnext.math.fscale",
-      "esnext.math.iaddh",
-      "esnext.math.imulh",
-      "esnext.math.isubh",
-      "esnext.math.rad-per-deg",
-      "esnext.math.radians",
-      "esnext.math.scale",
-      "esnext.math.seeded-prng",
-      "esnext.math.signbit",
-      "esnext.math.umulh",
-      "esnext.number.from-string",
-      "esnext.observable",
-      "esnext.promise.try",
-      "esnext.reflect.define-metadata",
-      "esnext.reflect.delete-metadata",
-      "esnext.reflect.get-metadata",
-      "esnext.reflect.get-metadata-keys",
-      "esnext.reflect.get-own-metadata",
-      "esnext.reflect.get-own-metadata-keys",
-      "esnext.reflect.has-metadata",
-      "esnext.reflect.has-own-metadata",
-      "esnext.reflect.metadata",
-      "esnext.set.add-all",
-      "esnext.set.delete-all",
-      "esnext.set.difference",
-      "esnext.set.every",
-      "esnext.set.filter",
-      "esnext.set.find",
-      "esnext.set.from",
-      "esnext.set.intersection",
-      "esnext.set.is-disjoint-from",
-      "esnext.set.is-subset-of",
-      "esnext.set.is-superset-of",
-      "esnext.set.join",
-      "esnext.set.map",
-      "esnext.set.of",
-      "esnext.set.reduce",
-      "esnext.set.some",
-      "esnext.set.symmetric-difference",
-      "esnext.set.union",
-      "esnext.string.at",
-      "esnext.string.code-points",
-      "esnext.symbol.observable",
-      "esnext.symbol.pattern-match",
-      "esnext.weak-map.delete-all",
-      "esnext.weak-map.from",
-      "esnext.weak-map.of",
-      "esnext.weak-set.add-all",
-      "esnext.weak-set.delete-all",
-      "esnext.weak-set.from",
-      "esnext.weak-set.of",
-    ]
-  `)
+          [
+            "esnext.array.last-index",
+            "esnext.array.last-item",
+            "esnext.composite-key",
+            "esnext.composite-symbol",
+            "esnext.map.delete-all",
+            "esnext.map.every",
+            "esnext.map.filter",
+            "esnext.map.find",
+            "esnext.map.find-key",
+            "esnext.map.from",
+            "esnext.map.group-by",
+            "esnext.map.includes",
+            "esnext.map.key-by",
+            "esnext.map.key-of",
+            "esnext.map.map-keys",
+            "esnext.map.map-values",
+            "esnext.map.merge",
+            "esnext.map.of",
+            "esnext.map.reduce",
+            "esnext.map.some",
+            "esnext.map.update",
+            "esnext.math.clamp",
+            "esnext.math.deg-per-rad",
+            "esnext.math.degrees",
+            "esnext.math.fscale",
+            "esnext.math.iaddh",
+            "esnext.math.imulh",
+            "esnext.math.isubh",
+            "esnext.math.rad-per-deg",
+            "esnext.math.radians",
+            "esnext.math.scale",
+            "esnext.math.seeded-prng",
+            "esnext.math.signbit",
+            "esnext.math.umulh",
+            "esnext.number.from-string",
+            "esnext.observable",
+            "esnext.promise.try",
+            "esnext.reflect.define-metadata",
+            "esnext.reflect.delete-metadata",
+            "esnext.reflect.get-metadata",
+            "esnext.reflect.get-metadata-keys",
+            "esnext.reflect.get-own-metadata",
+            "esnext.reflect.get-own-metadata-keys",
+            "esnext.reflect.has-metadata",
+            "esnext.reflect.has-own-metadata",
+            "esnext.reflect.metadata",
+            "esnext.set.add-all",
+            "esnext.set.delete-all",
+            "esnext.set.difference",
+            "esnext.set.every",
+            "esnext.set.filter",
+            "esnext.set.find",
+            "esnext.set.from",
+            "esnext.set.intersection",
+            "esnext.set.is-disjoint-from",
+            "esnext.set.is-subset-of",
+            "esnext.set.is-superset-of",
+            "esnext.set.join",
+            "esnext.set.map",
+            "esnext.set.of",
+            "esnext.set.reduce",
+            "esnext.set.some",
+            "esnext.set.symmetric-difference",
+            "esnext.set.union",
+            "esnext.string.at",
+            "esnext.string.code-points",
+            "esnext.symbol.observable",
+            "esnext.symbol.pattern-match",
+            "esnext.weak-map.delete-all",
+            "esnext.weak-map.from",
+            "esnext.weak-map.of",
+            "esnext.weak-set.add-all",
+            "esnext.weak-set.delete-all",
+            "esnext.weak-set.from",
+            "esnext.weak-set.of",
+          ]
+      `)
   })
 })
 
 /**
- * A copy of prebuildApiFiles from packages/internal/src/build/api.ts
- * This will be re-architected, but doing so now would introduce breaking changes.
+ * We no longer prebuild files as part of the build process
+ * This is so we can test the babel configuration in isolation
  */
-export const prebuildApiFileWrapper = (srcFile: string) => {
-  const redwoodProjectPaths = getPaths()
-
+export const prebuildApiFileWrapper = async (srcFile: string) => {
   const plugins = getApiSideBabelPlugins({
     openTelemetry: getConfig().experimental.opentelemetry.enabled,
   })
 
-  const relativePathFromSrc = path.relative(redwoodProjectPaths.base, srcFile)
-
-  const dstPath = path
-    .join(redwoodProjectPaths.generated.prebuild, relativePathFromSrc)
-    .replace(/\.(ts)$/, '.js')
-
-  const result = prebuildApiFile(srcFile, dstPath, plugins)
+  const result = await transformWithBabel(srcFile, plugins)
 
   if (!result?.code) {
     throw new Error(`Couldn't prebuild ${srcFile}`)

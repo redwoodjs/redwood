@@ -1,8 +1,8 @@
-import fs from 'fs'
 import path from 'path'
 
 import toml from '@iarna/toml'
 import boxen from 'boxen'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import { env as envInterpolation } from 'string-env-interpolation'
 import terminalLink from 'terminal-link'
@@ -131,8 +131,8 @@ export const builder = (yargs) => {
   )
 }
 
-// Executes a single command via SSH connection. Displays an error and will
-// exit() with the same code returned from the SSH command.
+// Executes a single command via SSH connection. Throws an error and sets
+// the exit code with the same code returned from the SSH command.
 const sshExec = async (ssh, path, command, args) => {
   let sshCommand = command
 
@@ -145,18 +145,11 @@ const sshExec = async (ssh, path, command, args) => {
   })
 
   if (result.code !== 0) {
-    console.error(c.error(`\nDeploy failed!`))
-    console.error(
-      c.error(`Error while running command \`${command} ${args.join(' ')}\`:`)
+    const error = new Error(
+      `Error while running command \`${command} ${args.join(' ')}\``
     )
-    console.error(
-      boxen(result.stderr, {
-        padding: { top: 0, bottom: 0, right: 1, left: 1 },
-        margin: 0,
-        borderColor: 'red',
-      })
-    )
-    process.exit(result.code)
+    error.exitCode = result.code
+    throw error
   }
 
   return result

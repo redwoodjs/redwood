@@ -1,10 +1,12 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist",
   },
   "include": ["src", "ambient.d.ts"],
-  "references": [{ "path": "../project-config" }]
+  "references": [
+    { "path": "../adapters/fastify/web" },
+    { "path": "../project-config" }
+  ]
 }

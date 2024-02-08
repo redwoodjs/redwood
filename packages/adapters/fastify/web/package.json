@@ -1,0 +1,38 @@
+{
+  "name": "@redwoodjs/fastify-web",
+  "version": "6.0.7",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/adapters/fastify/web"
+  },
+  "license": "MIT",
+  "main": "./dist/web.js",
+  "types": "./dist/web.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsx ./build.mts && yarn build:types",
+    "build:pack": "yarn pack -o redwoodjs-fastify-web.tgz",
+    "build:types": "tsc --build --verbose",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "vitest run src",
+    "test:watch": "vitest watch src"
+  },
+  "dependencies": {
+    "@fastify/http-proxy": "9.3.0",
+    "@fastify/static": "6.12.0",
+    "@fastify/url-data": "5.4.0",
+    "@redwoodjs/project-config": "6.0.7",
+    "fast-glob": "3.3.2"
+  },
+  "devDependencies": {
+    "@redwoodjs/framework-tools": "6.0.7",
+    "fastify": "4.25.2",
+    "tsx": "4.6.2",
+    "typescript": "5.3.3",
+    "vitest": "1.2.2"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}
