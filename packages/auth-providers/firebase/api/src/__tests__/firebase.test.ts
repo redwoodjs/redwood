@@ -4,12 +4,12 @@ import { vi, test, expect } from 'vitest'
 
 import { authDecoder } from '../decoder'
 
-const verifyIdToken = vi.fn()
-
+const firebaseAuthMock = {
+  verifyIdToken: vi.fn(),
+  verifySessionCookie: vi.fn(),
+}
 vi.spyOn(admin, 'auth').mockImplementation((() => {
-  return {
-    verifyIdToken,
-  }
+  return firebaseAuthMock
 }) as any)
 
 const req = {
@@ -17,14 +17,20 @@ const req = {
   context: {} as LambdaContext,
 }
 
+const COOKIE_MOCK = 'session=/this-is/a-session/%cookie; auth-provider=firebase'
+
 test('returns null for unsupported type', async () => {
-  const decoded = await authDecoder('token', 'netlify', req)
+  const decoded = await authDecoder(COOKIE_MOCK, 'netlify', req)
 
   expect(decoded).toBe(null)
 })
 
 test('calls verifyIdToken', async () => {
-  authDecoder('token', 'firebase', req)
+  authDecoder(COOKIE_MOCK, 'firebase', req)
 
-  expect(verifyIdToken).toHaveBeenCalledWith('token')
+  // Old implementation used verifyIdToken
+  expect(firebaseAuthMock.verifyIdToken).not.toHaveBeenCalled()
+  expect(firebaseAuthMock.verifySessionCookie).toHaveBeenCalledWith(
+    '/this-is/a-session/%cookie'
+  )
 })
