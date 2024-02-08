@@ -7292,27 +7292,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reach/polymorphic@npm:0.18.0":
-  version: 0.18.0
-  resolution: "@reach/polymorphic@npm:0.18.0"
-  peerDependencies:
-    react: ^16.8.0 || 17.x
-  checksum: dfde6dc901005f92e16f0e3601f0c659b70ee14d91e612cd68c9a918744fd94de30e8065d73663b72964225d3476f377c650daf2ac1e256de61df9ee386aabdc
-  languageName: node
-  linkType: hard
-
-"@reach/skip-nav@npm:0.18.0":
-  version: 0.18.0
-  resolution: "@reach/skip-nav@npm:0.18.0"
-  dependencies:
-    "@reach/polymorphic": "npm:0.18.0"
-  peerDependencies:
-    react: ^16.8.0 || 17.x
-    react-dom: ^16.8.0 || 17.x
-  checksum: 30e3d4c568093e170b9e80ee42764a080c0a15ab3f9c7edf78dcc6ebd92f156799dba0f544757b84401806765f60fe527c869ef86d5323c0a7a3bdccf1a68f85
-  languageName: node
-  linkType: hard
-
 "@react-email/render@npm:0.0.10":
   version: 0.0.10
   resolution: "@react-email/render@npm:0.0.10"
@@ -8304,7 +8283,6 @@ __metadata:
     typescript: "npm:5.3.3"
     vitest: "npm:1.2.2"
   peerDependencies:
-    graphql: 16.8.1
     react: 18.2.0
   languageName: unknown
   linkType: soft
@@ -8604,7 +8582,6 @@ __metadata:
     "@babel/cli": "npm:7.23.9"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.9"
-    "@reach/skip-nav": "npm:0.18.0"
     "@redwoodjs/auth": "npm:6.0.7"
     "@types/react": "npm:18.2.37"
     "@types/react-dom": "npm:18.2.15"
