@@ -24,14 +24,6 @@ const fetchMock = jest.fn()
 fetchMock.mockImplementation(async (url, options) => {
   const body = options?.body ? JSON.parse(options.body) : {}
 
-  if (url?.includes('method=getToken')) {
-    return {
-      ok: true,
-      text: () => (loggedInUser ? 'token' : ''),
-      json: () => ({}),
-    }
-  }
-
   if (body.method === 'login') {
     loggedInUser = {
       username: body.username,
@@ -102,25 +94,6 @@ function getDbAuth(args = defaultArgs) {
 }
 
 describe('dbAuth', () => {
-  it('sets a default credentials value if not included', async () => {
-    const authRef = getDbAuth({ fetchConfig: {} })
-
-    // act is okay here
-    // https://egghead.io/lessons/jest-fix-the-not-wrapped-in-act-warning-when-testing-custom-hooks
-    // plus, we're note rendering anything, so there is nothing to use
-    // `screen.getByText()` etc with to wait for
-    await act(async () => {
-      await authRef.current.getToken()
-    })
-
-    expect(globalThis.fetch).toBeCalledWith(
-      `${globalThis.RWJS_API_URL}/auth?method=getToken`,
-      {
-        credentials: 'same-origin',
-      }
-    )
-  })
-
   it('passes through fetchOptions to forgotPassword calls', async () => {
     const auth = getDbAuth().current
 
@@ -131,23 +104,6 @@ describe('dbAuth', () => {
       expect.objectContaining({
         credentials: 'include',
       })
-    )
-  })
-
-  it('passes through fetchOptions to getToken calls', async () => {
-    const auth = getDbAuth().current
-
-    await act(async () => {
-      await auth.getToken()
-    })
-
-    expect(fetchMock).toHaveBeenCalledTimes(1)
-
-    expect(fetchMock).toBeCalledWith(
-      `${globalThis.RWJS_API_URL}/auth?method=getToken`,
-      {
-        credentials: 'include',
-      }
     )
   })
 
