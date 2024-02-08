@@ -4,7 +4,7 @@ import '@testing-library/jest-dom'
 
 import { render, renderHook as tlrRenderHook } from '@testing-library/react'
 
-import { Link } from '../links'
+import { Link } from '../link'
 import { LocationProvider } from '../location'
 import { useMatch } from '../useMatch'
 import { flattenSearchParams } from '../util'

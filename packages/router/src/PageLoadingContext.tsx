@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 
-import { createNamedContext } from './util'
+import { createNamedContext } from './createNamedContext'
 
 export interface PageLoadingContextInterface {
   loading: boolean
