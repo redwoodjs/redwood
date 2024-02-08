@@ -24,14 +24,14 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.9",
-    "@prisma/client": "5.9.0",
+    "@prisma/client": "5.9.1",
     "@redwoodjs/project-config": "6.0.7",
     "core-js": "3.35.1"
   },
   "devDependencies": {
     "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
-    "@prisma/internals": "5.9.0",
+    "@prisma/internals": "5.9.1",
     "esbuild": "0.20.0",
     "vitest": "1.2.2"
   },
