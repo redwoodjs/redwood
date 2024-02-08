@@ -10,7 +10,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "skip-nav.css"
   ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",
@@ -25,7 +26,6 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.9",
-    "@reach/skip-nav": "0.18.0",
     "@redwoodjs/auth": "6.0.7",
     "core-js": "3.35.1"
   },
