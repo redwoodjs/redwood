@@ -1,5 +1,6 @@
+// These are utils that can be shared between both server- and client components
 import type { ReactElement, ReactNode } from 'react'
-import React, { Children, isValidElement } from 'react'
+import { Children, isValidElement } from 'react'
 
 import {
   isNotFoundRoute,
@@ -9,13 +10,6 @@ import {
 } from './route-validators'
 import type { PageType } from './router'
 import { isPrivateNode, isPrivateSetNode, isSetNode } from './Set'
-
-/** Create a React Context with the given name. */
-export function createNamedContext<T>(name: string, defaultValue?: T) {
-  const Ctx = React.createContext<T | undefined>(defaultValue)
-  Ctx.displayName = name
-  return Ctx
-}
 
 export function flattenAll(children: ReactNode): ReactNode[] {
   const childrenArray = Children.toArray(children)

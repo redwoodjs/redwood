@@ -2,8 +2,8 @@ import React from 'react'
 
 import { render } from '@testing-library/react'
 
-import { NavLink } from '../links'
 import { LocationProvider } from '../location'
+import { NavLink } from '../navLink'
 
 function createDummyLocation(pathname: string, search = '') {
   return {
