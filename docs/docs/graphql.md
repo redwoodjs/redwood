@@ -1110,12 +1110,6 @@ export interface GraphQLHandlerOptions {
    * Defaults to '/graphql' as this value must match the name of the `graphql` function on the api-side.
    */
   graphiQLEndpoint?: string
-  /**
-   * @description Function that returns custom headers (as string) for GraphiQL.
-   *
-   * Headers must set auth-provider, Authorization and (if using dbAuth) the encrypted cookie.
-   */
-  generateGraphiQLHeader?: GenerateGraphiQLHeader
 }
 ```
 
