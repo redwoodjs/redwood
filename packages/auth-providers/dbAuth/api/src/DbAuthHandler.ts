@@ -34,13 +34,13 @@ import {
   decryptSession,
   encryptSession,
   extractCookie,
+  extractHashingOptions,
   getSession,
   hashPassword,
-  legacyHashPassword,
   hashToken,
-  webAuthnSession,
-  extractHashingOptions,
   isLegacySession,
+  legacyHashPassword,
+  webAuthnSession,
 } from './shared'
 
 interface SignupFlowOptions<TUserAttributes = Record<string, unknown>> {
@@ -165,6 +165,12 @@ interface WebAuthnFlowOptions {
 
 export type UserType = Record<string | number, any>
 
+type AuthMethodOutput = [
+  string | Record<string, any> | boolean | undefined, // body
+  Headers?,
+  { statusCode: number }?
+]
+
 export interface DbAuthHandlerOptions<
   TUser = UserType,
   TUserAttributes = Record<string, unknown>
@@ -275,11 +281,11 @@ export type AuthMethodNames =
   | 'logout'
   | 'resetPassword'
   | 'signup'
-  | 'validateResetToken'
+  | 'webAuthnAuthenticate'
+  | 'webAuthnAuthOptions'
   | 'webAuthnRegOptions'
   | 'webAuthnRegister'
-  | 'webAuthnAuthOptions'
-  | 'webAuthnAuthenticate'
+  | 'validateResetToken'
 
 type Params = AuthenticationResponseJSON &
   RegistrationResponseJSON & {
@@ -537,7 +543,7 @@ export class DbAuthHandler<
     }
   }
 
-  async forgotPassword() {
+  async forgotPassword(): Promise<AuthMethodOutput> {
     const { enabled = true } = this.options.forgotPassword
 
     if (!enabled) {
@@ -612,10 +618,10 @@ export class DbAuthHandler<
     }
   }
 
-  async getToken() {
+  async getToken(): Promise<AuthMethodOutput> {
     try {
       const user = await this._getCurrentUser()
-      let headers = {}
+      let headers = new Headers()
 
       // if the session was encrypted with the old algorithm, re-encrypt it
       // with the new one
@@ -633,7 +639,7 @@ export class DbAuthHandler<
     }
   }
 
-  async login() {
+  async login(): Promise<AuthMethodOutput> {
     const { enabled = true } = this.options.login
 
     if (!enabled) {
@@ -659,11 +665,11 @@ export class DbAuthHandler<
     return this._loginResponse(handlerUser)
   }
 
-  logout() {
+  logout(): AuthMethodOutput {
     return this._logoutResponse()
   }
 
-  async resetPassword() {
+  async resetPassword(): Promise<AuthMethodOutput> {
     const { enabled = true } = this.options.resetPassword
     if (!enabled) {
       throw new DbAuthError.FlowNotEnabledError(
@@ -736,7 +742,7 @@ export class DbAuthHandler<
     }
   }
 
-  async signup() {
+  async signup(): Promise<AuthMethodOutput> {
     const { enabled = true } = this.options.signup
     if (!enabled) {
       throw new DbAuthError.FlowNotEnabledError(
@@ -761,11 +767,11 @@ export class DbAuthHandler<
       return this._loginResponse(user, 201)
     } else {
       const message = userOrMessage
-      return [JSON.stringify({ message }), {}, { statusCode: 201 }]
+      return [JSON.stringify({ message }), new Headers(), { statusCode: 201 }]
     }
   }
 
-  async validateResetToken() {
+  async validateResetToken(): Promise<AuthMethodOutput> {
     const { resetToken } = this.normalizedRequest.jsonBody || {}
     // is token present at all?
     if (!resetToken || String(resetToken).trim() === '') {
@@ -782,8 +788,10 @@ export class DbAuthHandler<
   }
 
   // browser submits WebAuthn credentials
-  async webAuthnAuthenticate() {
-    const { verifyAuthenticationResponse } = require('@simplewebauthn/server')
+  async webAuthnAuthenticate(): Promise<AuthMethodOutput> {
+    const { verifyAuthenticationResponse } = await import(
+      '@simplewebauthn/server'
+    )
     const webAuthnOptions = this.options.webAuthn
 
     const { rawId } = this.normalizedRequest.jsonBody || {}
@@ -861,18 +869,22 @@ export class DbAuthHandler<
     }
 
     // get the regular `login` cookies
-    const [, loginHeaders] = this._loginResponse(user)
-    const cookies = [
-      this._webAuthnCookie(rawId, this.webAuthnExpiresDate),
-      loginHeaders.getSetCookie(),
-    ].flat()
+    const [, headers] = this._loginResponse(user)
 
-    return [verified, { 'set-cookie': cookies }]
+    // Now add the webAuthN cookies
+    headers.append(
+      'set-cookie',
+      this._webAuthnCookie(rawId, this.webAuthnExpiresDate)
+    )
+
+    return [verified, headers]
   }
 
   // get options for a WebAuthn authentication
-  async webAuthnAuthOptions() {
-    const { generateAuthenticationOptions } = require('@simplewebauthn/server')
+  async webAuthnAuthOptions(): Promise<AuthMethodOutput> {
+    const { generateAuthenticationOptions } = await import(
+      '@simplewebauthn/server'
+    )
 
     if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
@@ -901,7 +913,7 @@ export class DbAuthHandler<
     if (!user) {
       return [
         { error: 'Log in with username and password to enable WebAuthn' },
-        { 'set-cookie': this._webAuthnCookie('', 'now') },
+        new Headers([['set-cookie', this._webAuthnCookie('', 'now')]]),
         { statusCode: 400 },
       ]
     }
@@ -937,8 +949,10 @@ export class DbAuthHandler<
   }
 
   // get options for WebAuthn registration
-  async webAuthnRegOptions() {
-    const { generateRegistrationOptions } = require('@simplewebauthn/server')
+  async webAuthnRegOptions(): Promise<AuthMethodOutput> {
+    const { generateRegistrationOptions } = await import(
+      '@simplewebauthn/server'
+    )
 
     if (!this.options?.webAuthn?.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
@@ -981,8 +995,10 @@ export class DbAuthHandler<
   }
 
   // browser submits WebAuthn credentials for the first time on a new device
-  async webAuthnRegister() {
-    const { verifyRegistrationResponse } = require('@simplewebauthn/server')
+  async webAuthnRegister(): Promise<AuthMethodOutput> {
+    const { verifyRegistrationResponse } = await import(
+      '@simplewebauthn/server'
+    )
 
     if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
@@ -1042,15 +1058,14 @@ export class DbAuthHandler<
     // clear challenge
     await this._saveChallenge(user[this.options.authFields.id], null)
 
-    return [
-      verified,
-      {
-        'set-cookie': this._webAuthnCookie(
-          plainCredentialId,
-          this.webAuthnExpiresDate
-        ),
-      },
-    ]
+    const headers = new Headers([
+      [
+        'set-cookie',
+        this._webAuthnCookie(plainCredentialId, this.webAuthnExpiresDate),
+      ],
+    ])
+
+    return [verified, headers]
   }
 
   // validates that we have all the ENV and options we need to login/signup
@@ -1513,11 +1528,15 @@ export class DbAuthHandler<
     return [sessionData, headers, { statusCode }]
   }
 
-  _logoutResponse(response?: Record<string, unknown>): [string, Headers] {
+  _logoutResponse(response?: Record<string, unknown>): AuthMethodOutput {
     return [response ? JSON.stringify(response) : '', this._deleteSessionHeader]
   }
 
-  _ok(body: string, headers = new Headers(), options = { statusCode: 200 }) {
+  _ok(
+    body: string | boolean | undefined | Record<string, unknown>,
+    headers = new Headers(),
+    options = { statusCode: 200 }
+  ) {
     headers.append('content-type', 'application/json')
 
     return {
