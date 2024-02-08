@@ -8805,6 +8805,7 @@ __metadata:
     chalk: "npm:4.1.2"
     dotenv-defaults: "npm:5.0.2"
     fastify: "npm:4.25.2"
+    fs-extra: "npm:11.2.0"
     tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
     yargs: "npm:17.7.2"
