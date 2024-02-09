@@ -14,7 +14,7 @@ import type { PluginObj, types } from '@babel/core'
 // To debug the output of the plugin, you can use the following:
 // ```
 // import generate from '@babel/generator'
-// ...
+// // ...
 // console.log(generate(path.node).code)
 // ```
 
@@ -91,27 +91,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         const source = path.node.source.value
         if (source === '@redwoodjs/web') {
           const specifiers = path.node.specifiers
-          // const createCellSpecifierIndex = specifiers.findIndex(
-          //   (specifier) =>
-          //     t.isImportSpecifier(specifier) &&
-          //     t.isIdentifier(specifier.imported) &&
-          //     specifier.imported.name === 'createCell'
-          // )
-
-          // if (createCellSpecifierIndex !== -1) {
-          //   const createServerCellSpecifier = t.importSpecifier(
-          //     t.identifier('createServerCell'),
-          //     t.identifier('createServerCell')
-          //   )
-
-          //   // Replace createCellSpecifier with createServerCellSpecifier
-          //   specifiers.splice(
-          //     createCellSpecifierIndex,
-          //     1,
-          //     createServerCellSpecifier
-          //   )
-          // }
-
           const createCellSpecifier: types.ImportSpecifier | undefined =
             specifiers.find((specifier): specifier is types.ImportSpecifier => {
               return (
@@ -132,16 +111,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
             path.node.source.value =
               '@redwoodjs/web/dist/components/cell/createServerCell.js'
           }
-
-          //   specifiers.some(
-          //     (specifier) =>
-          //       t.isImportSpecifier(specifier) &&
-          //       t.isIdentifier(specifier.imported) &&
-          //       specifier.imported.name === 'createCell'
-          //   )
-          // ) {
-          //   // hasCreateCellImport = true
-          // }
         }
       },
       Program: {
