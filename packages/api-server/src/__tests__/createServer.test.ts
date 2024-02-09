@@ -236,7 +236,7 @@ describe('resolveOptions', () => {
           DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.requestTimeout,
         logger: DEFAULT_CREATE_SERVER_OPTIONS.logger,
       },
-      port: 8911,
+      port: 65501,
       host: '::',
     })
   })
