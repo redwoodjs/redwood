@@ -19,7 +19,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn node ./build.mjs && yarn build:types",
+    "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-api-server.tgz",
     "build:types": "tsc --build --verbose tsconfig.build.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
@@ -57,6 +57,7 @@
     "@types/yargs": "17.0.32",
     "aws-lambda": "1.0.7",
     "pino-abstract-transport": "1.1.0",
+    "tsx": "4.6.2",
     "typescript": "5.3.3",
     "vitest": "1.2.2"
   },

@@ -1,7 +1,8 @@
+'use client'
+
 import { forwardRef } from 'react'
 
-import { navigate } from './history'
-import type { LinkProps } from './link'
+import { Link, type LinkProps } from './link'
 import { useMatch } from './useMatch'
 import type { FlattenSearchParams } from './util'
 import { flattenSearchParams } from './util'
@@ -40,33 +41,12 @@ export const NavLink = forwardRef<
       .join(' ')
 
     return (
-      <a
-        href={to}
+      <Link
         ref={ref}
+        to={to}
+        onClick={onClick}
         className={theClassName}
         {...rest}
-        onClick={(event) => {
-          if (
-            event.button !== 0 ||
-            event.altKey ||
-            event.ctrlKey ||
-            event.metaKey ||
-            event.shiftKey
-          ) {
-            return
-          }
-
-          event.preventDefault()
-
-          if (onClick) {
-            const result = onClick(event)
-            if (typeof result !== 'boolean' || result) {
-              navigate(to)
-            }
-          } else {
-            navigate(to)
-          }
-        }}
       />
     )
   }

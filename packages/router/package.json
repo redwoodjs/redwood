@@ -10,7 +10,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "skip-nav.css"
   ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",
@@ -25,15 +26,14 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.9",
-    "@reach/skip-nav": "0.18.0",
     "@redwoodjs/auth": "6.0.7",
     "core-js": "3.35.1"
   },
   "devDependencies": {
     "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
-    "@types/react": "18.2.37",
-    "@types/react-dom": "18.2.15",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
     "jest": "29.7.0",
     "react": "0.0.0-experimental-e5205658f-20230913",
     "react-dom": "0.0.0-experimental-e5205658f-20230913",

@@ -1,5 +1,5 @@
 # base
-# ------------------------------------------------
+# ----
 FROM node:20-bookworm-slim as base
 
 RUN corepack enable
@@ -22,6 +22,7 @@ COPY --chown=node:node web/package.json web/
 COPY --chown=node:node yarn.lock .
 
 RUN mkdir -p /home/node/.yarn/berry/index
+RUN mkdir -p /home/node/.cache
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
@@ -32,7 +33,7 @@ COPY --chown=node:node graphql.config.js .
 COPY --chown=node:node .env.defaults .env.defaults
 
 # api build
-# ------------------------------------------------
+# ---------
 FROM base as api_build
 
 # If your api side build relies on build-time environment variables,
@@ -41,24 +42,24 @@ FROM base as api_build
 # ARG MY_BUILD_TIME_ENV_VAR
 
 COPY --chown=node:node api api
-RUN yarn redwood build api
+RUN yarn rw build api
 
 # web prerender build
-# ------------------------------------------------
+# -------------------
 FROM api_build as web_build_with_prerender
 
 COPY --chown=node:node web web
-RUN yarn redwood build web
+RUN yarn rw build web
 
 # web build
-# ------------------------------------------------
+# ---------
 FROM base as web_build
 
 COPY --chown=node:node web web
-RUN yarn redwood build web --no-prerender
+RUN yarn rw build web --no-prerender
 
-# serve api
-# ------------------------------------------------
+# api serve
+# ---------
 FROM node:20-bookworm-slim as api_serve
 
 RUN corepack enable
@@ -77,6 +78,7 @@ COPY --chown=node:node api/package.json api/
 COPY --chown=node:node yarn.lock .
 
 RUN mkdir -p /home/node/.yarn/berry/index
+RUN mkdir -p /home/node/.cache
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
@@ -92,10 +94,10 @@ COPY --chown=node:node --from=api_build /home/node/app/node_modules/.prisma /hom
 
 ENV NODE_ENV=production
 
-CMD [ "node_modules/.bin/rw-server", "api", "--load-env-files" ]
+CMD [ "node_modules/.bin/rw-server", "api" ]
 
-# serve web
-# ------------------------------------------------
+# web serve
+# ---------
 FROM node:20-bookworm-slim as web_serve
 
 RUN corepack enable
@@ -109,6 +111,7 @@ COPY --chown=node:node web/package.json web/
 COPY --chown=node:node yarn.lock .
 
 RUN mkdir -p /home/node/.yarn/berry/index
+RUN mkdir -p /home/node/.cache
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
@@ -127,7 +130,7 @@ ENV NODE_ENV=production \
 CMD "node_modules/.bin/rw-web-server" "--api-proxy-target" "$API_PROXY_TARGET"
 
 # console
-# ------------------------------------------------
+# -------
 FROM base as console
 
 # To add more packages:
