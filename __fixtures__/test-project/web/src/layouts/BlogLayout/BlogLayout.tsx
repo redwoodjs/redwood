@@ -2,7 +2,7 @@ type BlogLayoutProps = {
   children?: React.ReactNode
 }
 
-import { Link, routes } from '@redwoodjs/router'
+import { Link, NavLink, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
 
@@ -23,48 +23,53 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
         <nav>
           <ul className="relative flex items-center font-light">
             <li>
-              <Link
+              <NavLink
                 className="rounded px-4 py-2 transition duration-100 hover:bg-blue-600"
+                activeClassName="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded underline underline-offset-4"
                 to={routes.about()}
               >
                 About
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 className="rounded px-4 py-2 transition duration-100 hover:bg-blue-600"
+                activeClassName="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded underline underline-offset-4"
                 to={routes.contactUs()}
               >
                 Contact Us
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 className="rounded px-4 py-2 transition duration-100 hover:bg-blue-600"
+                activeClassName="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded underline underline-offset-4"
                 to={routes.posts()}
               >
                 Admin
-              </Link>
+              </NavLink>
             </li>
             {isAuthenticated && (
               <li>
-                <Link
+                <NavLink
                   className="rounded px-4 py-2 transition duration-100 hover:bg-blue-600"
+                  activeClassName="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded underline underline-offset-4"
                   onClick={logOut}
                   to={''}
                 >
                   Log Out
-                </Link>
+                </NavLink>
               </li>
             )}
             {!isAuthenticated && (
               <li>
-                <Link
+                <NavLink
                   className="rounded px-4 py-2 transition duration-100 hover:bg-blue-600"
+                  activeClassName="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded underline underline-offset-4"
                   to={routes.login()}
                 >
                   Log In
-                </Link>
+                </NavLink>
               </li>
             )}
           </ul>
