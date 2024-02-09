@@ -102,22 +102,24 @@ export async function redwoodFastifyGraphQLServer(
       return reply
     }
 
+    const graphqlEndpoint = trimSlashes(yoga.graphqlEndpoint)
+
     const routePaths = ['', '/health', '/readiness', '/stream']
     for (const routePath of routePaths) {
       fastify.route({
-        url: `${redwoodOptions.apiRootPath}${yoga.graphqlEndpoint}${routePath}`,
+        url: [redwoodOptions.apiRootPath, graphqlEndpoint, routePath].join(''),
         method,
         handler: (req, reply) => graphQLYogaHandler(req, reply),
       })
     }
 
     fastify.addHook('onReady', (done) => {
-      console.info(`GraphQL Yoga Server endpoint at ${yoga.graphqlEndpoint}`)
+      console.info(`GraphQL Yoga Server endpoint at ${graphqlEndpoint}`)
       console.info(
-        `GraphQL Yoga Server Health Check endpoint at ${yoga.graphqlEndpoint}/health`
+        `GraphQL Yoga Server Health Check endpoint at ${graphqlEndpoint}/health`
       )
       console.info(
-        `GraphQL Yoga Server Readiness endpoint at ${yoga.graphqlEndpoint}/readiness`
+        `GraphQL Yoga Server Readiness endpoint at ${graphqlEndpoint}/readiness`
       )
 
       done()
@@ -125,4 +127,8 @@ export async function redwoodFastifyGraphQLServer(
   } catch (e) {
     console.log(e)
   }
+}
+
+function trimSlashes(path: string) {
+  return path.replace(/^\/|\/$/g, '')
 }
