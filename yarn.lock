@@ -400,9 +400,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/eslint-parser@npm:7.23.9":
-  version: 7.23.9
-  resolution: "@babel/eslint-parser@npm:7.23.9"
+"@babel/eslint-parser@npm:7.23.10":
+  version: 7.23.10
+  resolution: "@babel/eslint-parser@npm:7.23.10"
   dependencies:
     "@nicolo-ribaudo/eslint-scope-5-internals": "npm:5.1.1-v1"
     eslint-visitor-keys: "npm:^2.1.0"
@@ -410,7 +410,7 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.11.0
     eslint: ^7.5.0 || ^8.0.0
-  checksum: 8a025e6c2d9ad47e86bfea9011422c8a053382692901607236cd0fba1ee52504d7d2b2c6186c14f15de7553ec0e2786b9a3c3d92542153f2d41c5241fb166745
+  checksum: dfc091d44c86c72658d53abe66c778f7aa436672d66ae99a0b72857c968defed4749c18d2d3a35b1f61c77a193761ae7a71997dbe43c4c7cffcf945bd106bd67
   languageName: node
   linkType: hard
 
@@ -8203,7 +8203,7 @@ __metadata:
   dependencies:
     "@babel/cli": "npm:7.23.9"
     "@babel/core": "npm:^7.22.20"
-    "@babel/eslint-parser": "npm:7.23.9"
+    "@babel/eslint-parser": "npm:7.23.10"
     "@babel/eslint-plugin": "npm:7.23.5"
     "@redwoodjs/eslint-plugin": "npm:6.0.7"
     "@redwoodjs/internal": "npm:6.0.7"
