@@ -41,8 +41,12 @@ import type { DataObject } from './cellTypes'
 function isFieldEmptyArray(field: unknown) {
   return Array.isArray(field) && field.length === 0
 }
-export function isDataEmpty(data: DataObject) {
-  return Object.values(data).every((fieldValue) => {
-    return fieldValue === null || isFieldEmptyArray(fieldValue)
-  })
+
+export function isDataEmpty(data?: DataObject) {
+  return (
+    !data ||
+    Object.values(data).every((fieldValue) => {
+      return fieldValue === null || isFieldEmptyArray(fieldValue)
+    })
+  )
 }
