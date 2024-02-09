@@ -107,7 +107,7 @@ export async function redwoodFastifyGraphQLServer(
     const routePaths = ['', '/health', '/readiness', '/stream']
     for (const routePath of routePaths) {
       fastify.route({
-        url: [redwoodOptions.apiRootPath, graphqlEndpoint, routePath].join(''),
+        url: `${redwoodOptions.apiRootPath}${graphqlEndpoint}${routePath}`,
         method,
         handler: (req, reply) => graphQLYogaHandler(req, reply),
       })
