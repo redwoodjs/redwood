@@ -1,8 +1,8 @@
 import React from 'react'
 
+import { createNamedContext } from './createNamedContext'
 import { gHistory } from './history'
 import type { TrailingSlashesTypes } from './util'
-import { createNamedContext } from './util'
 
 export interface LocationContextType {
   pathname: string

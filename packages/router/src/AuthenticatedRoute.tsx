@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 
-import { Redirect } from './links'
+import { Redirect } from './redirect'
 import { routes } from './router'
 import { useRouterState } from './router-context'
 import type { GeneratedRoutesMap } from './util'
