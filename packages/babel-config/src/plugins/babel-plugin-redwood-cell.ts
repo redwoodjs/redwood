@@ -114,6 +114,12 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         }
       },
       Program: {
+        enter() {
+          // Reset variables as they're still in scope from the previous file
+          // babel transformed in the same process
+          exportNames = []
+          hasDefaultExport = false
+        },
         exit(path) {
           const hasQueryOrDataExport =
             exportNames.includes('QUERY') || exportNames.includes('DATA')
