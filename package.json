@@ -73,6 +73,7 @@
     "@testing-library/react": "14.1.2",
     "@testing-library/user-event": "14.5.2",
     "@types/babel__generator": "7.6.7",
+    "@types/cookie": "^0",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.8",
     "@types/jscodeshift": "0.11.6",
@@ -115,5 +116,9 @@
     "zx": "7.2.3"
   },
   "packageManager": "yarn@4.0.2",
-  "npmClient": "yarn"
+  "npmClient": "yarn",
+  "dependencies": {
+    "@supabase/ssr": "^0.1.0",
+    "cookie": "0.6.0"
+  }
 }

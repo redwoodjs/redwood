@@ -9978,6 +9978,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@supabase/ssr@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@supabase/ssr@npm:0.1.0"
+  dependencies:
+    cookie: "npm:^0.5.0"
+    ramda: "npm:^0.29.0"
+  peerDependencies:
+    "@supabase/supabase-js": ^2.33.1
+  checksum: 1ae3459cbdd06af01475dbeca7375dc2d5ac5e6534244ddfcc1fbdaae90af766a86fdc7ed660b9f205a9802265f0f04baeaab8801fd4d7cf1e74dc5218325bae
+  languageName: node
+  linkType: hard
+
 "@supabase/storage-js@npm:^2.5.4":
   version: 2.5.4
   resolution: "@supabase/storage-js@npm:2.5.4"
@@ -28543,6 +28555,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ramda@npm:^0.29.0":
+  version: 0.29.1
+  resolution: "ramda@npm:0.29.1"
+  checksum: 5de53a07400959c1a704c366ec52b1b8cd9a444dc1f9cdf17d607e0b9eeaa38cbaea309d43e59dbd7f36731ba977a64d40092555c0e7c2d4a41e8e922239c0ba
+  languageName: node
+  linkType: hard
+
 "randombytes@npm:^2.0.0, randombytes@npm:^2.0.1, randombytes@npm:^2.0.5, randombytes@npm:^2.1.0":
   version: 2.1.0
   resolution: "randombytes@npm:2.1.0"
@@ -29769,10 +29788,12 @@ __metadata:
     "@faker-js/faker": "npm:8.0.2"
     "@npmcli/arborist": "npm:7.2.2"
     "@playwright/test": "npm:1.41.1"
+    "@supabase/ssr": "npm:^0.1.0"
     "@testing-library/jest-dom": "npm:6.3.0"
     "@testing-library/react": "npm:14.1.2"
     "@testing-library/user-event": "npm:14.5.2"
     "@types/babel__generator": "npm:7.6.7"
+    "@types/cookie": "npm:^0"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.8"
     "@types/jscodeshift": "npm:0.11.6"
@@ -29783,6 +29804,7 @@ __metadata:
     babel-plugin-auto-import: "npm:1.1.0"
     babel-plugin-remove-code: "npm:0.0.6"
     boxen: "npm:5.1.2"
+    cookie: "npm:0.6.0"
     core-js: "npm:3.35.1"
     cypress: "npm:13.6.1"
     cypress-fail-fast: "npm:7.1.0"
