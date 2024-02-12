@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import cookie from 'cookie'
 
-import type { Decoder } from '@redwoodjs/api'
+import type { Decoded, Decoder } from '@redwoodjs/api'
 
 // MARK!
 // Breaking change to supabase auth decoder
@@ -19,9 +19,6 @@ export const authDecoder: Decoder = async (
   }
 
   try {
-    // const secret = process.env.SUPABASE_JWT_SECRET as string
-    // return Promise.resolve(jwt.verify(token, secret) as Record<string, unknown>)
-
     const parsedCookie = cookie.parse(cookieString)
 
     const supabase = createServerClient(
@@ -36,7 +33,9 @@ export const authDecoder: Decoder = async (
       }
     )
 
-    return supabase.auth.getSession()
+    const user = await supabase.auth.getUser()
+
+    return user.data.user as Decoded
   } catch (error) {
     return Promise.reject(error)
   }

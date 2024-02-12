@@ -59,12 +59,8 @@ const setAuthProviderCookie = (
     '1970-01-01T00:00:00.000+00:00'
   ).getTime()
 ) => {
-  console.log('Definitely calling this guy!..........')
   const expiresString = new Date(expires).toUTCString()
-  console.log(
-    `auth-provider=supabase; path=/; expires=${expiresString}; SameSite=Lax`
-  )
-  document.cookie = `auth-provider=supabase; path=/; expires=${expiresString}; SameSite=Lax`
+  document.cookie = `auth-provider=supabase; expires=${expiresString}; SameSite=Lax`
 }
 
 function createAuthImplementation(supabaseClient: SupabaseClient) {
@@ -160,9 +156,11 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
           }
       }
 
-      // @ts-expect-error shutup for now
-      const expiresIn = result.data?.session?.expires_in
-      const expiresAtTimeString = new Date().getTime() + (expiresIn || 0)
+      /// @MARK:
+      // 2 weeks, not using result.data.session?.expires_in - because this
+      // is the expiry for the access_token === 3600
+      const expiresIn = 12096e5
+      const expiresAtTimeString = new Date().getTime() + expiresIn
       setAuthProviderCookie(expiresAtTimeString)
 
       return result
@@ -233,9 +231,13 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
      */
     restoreAuthState: async () => {
       try {
-        const supabaseAuthRes = await supabaseClient.auth.refreshSession()
-        const expiresIn = supabaseAuthRes.data.session?.expires_in
-        const expiresAtTimeString = new Date().getTime() + (expiresIn || 0)
+        await supabaseClient.auth.refreshSession()
+
+        /// @MARK:
+        // 2 weeks, not using supabaseAuthRes.data.session?.expires_in - because this
+        // is the expiry for the access_token === 3600
+        const expiresIn = 12096e5
+        const expiresAtTimeString = new Date().getTime() + expiresIn
         setAuthProviderCookie(expiresAtTimeString)
 
         // Modify URL state only if there is a session.

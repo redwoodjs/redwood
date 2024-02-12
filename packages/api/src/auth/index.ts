@@ -102,7 +102,7 @@ export const getAuthenticationContext = async ({
   const cookieHeader = parseAuthorizationCookie(event)
   const typeFromHeader = getAuthProviderHeader(event)
 
-  // Shortcircuit - if no auth-provider or cookie header, its
+  // Short-circuit - if no auth-provider or cookie header, its
   // an unauthenticated request
   if (!typeFromHeader && !cookieHeader) {
     return undefined
@@ -126,7 +126,7 @@ export const getAuthenticationContext = async ({
     schema = parsedAuthHeader.schema
   }
 
-  // Unauthenticatd request
+  // Unauthenticated request
   if (!token || !type || !schema) {
     return undefined
   }
@@ -146,14 +146,13 @@ export const getAuthenticationContext = async ({
   while (!decoded && i < authDecoders.length) {
     decoded = await authDecoders[i](token, type, {
       // @TODO: We will need to make a breaking change to support `Request` objects.
-      // We can remove this typecast
-      event: event,
+      event,
       context,
     })
     i++
   }
 
-  // @TODO we need to rename this. It's not actually the token, because
+  // @TODO we need to rename token. It's not actually the token - its the cookie header -because
   // some auth providers will have a cookie where we don't know the key
   return [decoded, { type, schema, token }, { event: event as any, context }]
 }
