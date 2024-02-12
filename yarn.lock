@@ -138,18 +138,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/experimental-nextjs-app-support@npm:0.6.0":
-  version: 0.6.0
-  resolution: "@apollo/experimental-nextjs-app-support@npm:0.6.0"
+"@apollo/experimental-nextjs-app-support@npm:0.0.0-commit-b8a73fe":
+  version: 0.0.0-commit-b8a73fe
+  resolution: "@apollo/experimental-nextjs-app-support@npm:0.0.0-commit-b8a73fe"
   dependencies:
     server-only: "npm:^0.0.1"
     superjson: "npm:^1.12.2"
     ts-invariant: "npm:^0.10.3"
   peerDependencies:
-    "@apollo/client": ">=3.8.0-rc || ^3.8.0 || >=3.9.0-alpha || >=3.9.0-beta || >=3.9.0-rc"
-    next: ^13.4.1 || ^14.0.0
+    "@apollo/client": ">=3.8.0-rc || ^3.8.0"
+    next: ^13.4.1
     react: ^18
-  checksum: cb99c3d14c62a5809db5d6167cdd5ea264beb7ae49cfb59e30f7e45eb05a5ebb00b3cfd45496cc40d10ba2d3af437b0f91fcd6b935a20fd9fe1a7865912b40c6
+  checksum: aca7b04735bafbec41de7c950229de4ffda9f03f4b8e74646eccdde064e9cfc5497559202c1f93ca98322778a382ded04cdf5bc40a6eaa4f005ec985c6973688
   languageName: node
   linkType: hard
 
@@ -8803,7 +8803,7 @@ __metadata:
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
     "@apollo/client": "npm:3.8.10"
-    "@apollo/experimental-nextjs-app-support": "npm:0.6.0"
+    "@apollo/experimental-nextjs-app-support": "npm:0.0.0-commit-b8a73fe"
     "@babel/cli": "npm:7.23.9"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.23.9"
