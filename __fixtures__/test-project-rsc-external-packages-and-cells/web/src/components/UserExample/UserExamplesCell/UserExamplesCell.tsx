@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
 import type { FindUserExamples } from 'types/graphql'
 
-// import { Link, routes } from '@redwoodjs/router'
+import { Link, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import UserExamples from '../UserExamples/UserExamples'
@@ -22,10 +22,10 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => {
   return (
     <div className="rw-text-center">
-      {'No userExamples yet. '}
-      {/* <Link to={routes.newUserExample()} className="rw-link"> */}
-      {'Create one?'}
-      {/* </Link> */}
+      No userExamples yet.{' '}
+      <Link to={routes.newUserExample()} className="rw-link">
+        Create one?
+      </Link>
     </div>
   )
 }
