@@ -1,4 +1,4 @@
-import type {
+${useClientDirective}import type {
   Edit${singularPascalName}By${pascalIdName},
   Update${singularPascalName}Input,
   Update${singularPascalName}MutationVariables
