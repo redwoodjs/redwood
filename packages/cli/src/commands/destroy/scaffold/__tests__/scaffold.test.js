@@ -16,6 +16,7 @@ import {
 import { files } from '../../../generate/scaffold/scaffold'
 import { tasks } from '../scaffold'
 
+vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 vi.mock('fs-extra')
 vi.mock('execa')
 
@@ -32,8 +33,9 @@ vi.mock('../../../../lib/schemaHelpers', async (importOriginal) => {
   const path = require('path')
   return {
     ...originalSchemaHelpers,
-    getSchema: () =>
-      require(path.join(globalThis.__dirname, 'fixtures', 'post.json')),
+    getSchema: () => {
+      return require(path.join(globalThis.__dirname, 'fixtures', 'post.json'))
+    },
   }
 })
 
@@ -64,15 +66,21 @@ templateDirectories.forEach((directory) => {
 describe('rw destroy scaffold', () => {
   describe('destroy scaffold post', () => {
     beforeEach(async () => {
-      vol.fromJSON(scaffoldTemplates)
+      // This fs is needed for the `files` function imported from `generate`
+      vol.fromJSON({ 'redwood.toml': '', ...scaffoldTemplates }, '/')
+
+      const postFiles = await files({
+        ...getDefaultArgs(defaults),
+        model: 'Post',
+        tests: false,
+        nestScaffoldByModel: true,
+      })
+
+      // This fs is needed for all the tests here
       vol.fromJSON({
+        'redwood.toml': '',
         ...scaffoldTemplates,
-        ...(await files({
-          ...getDefaultArgs(defaults),
-          model: 'Post',
-          tests: false,
-          nestScaffoldByModel: true,
-        })),
+        ...postFiles,
         [getPaths().web.routes]: [
           '<Routes>',
           '  <Route path="/posts/new" page={NewPostPage} name="newPost" />',
@@ -118,8 +126,7 @@ describe('rw destroy scaffold', () => {
       beforeEach(async () => {
         // clear filesystem so files call works as expected
         vol.reset()
-        vol.fromJSON(scaffoldTemplates)
-
+        vol.fromJSON({ 'redwood.toml': '', ...scaffoldTemplates }, '/')
         vol.fromJSON({
           ...scaffoldTemplates,
           ...(await files({
@@ -193,8 +200,9 @@ describe('rw destroy scaffold', () => {
 
   describe('destroy namespaced scaffold post', () => {
     beforeEach(async () => {
-      vol.fromJSON(scaffoldTemplates)
+      // vol.fromJSON(scaffoldTemplates)
       vol.fromJSON({
+        'redwood.toml': '',
         ...scaffoldTemplates,
         ...(await files({
           ...getDefaultArgs(defaults),

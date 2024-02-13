@@ -1,6 +1,7 @@
 globalThis.__dirname = __dirname
 import path from 'path'
 
+import { vol } from 'memfs'
 import { vi, describe, test, expect, beforeAll } from 'vitest'
 
 // Load mocks
@@ -10,7 +11,12 @@ import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../helpers'
 import * as scaffold from '../scaffold'
 
+vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 vi.mock('execa')
+
+beforeAll(() => {
+  vol.fromJSON({ 'redwood.toml': '' }, '/')
+})
 
 describe('in javascript (default) mode', () => {
   let files
@@ -740,6 +746,63 @@ describe('tailwind flag', () => {
 
     expect(
       files[path.normalize('/path/to/project/web/src/scaffold.css')]
+    ).toMatchSnapshot()
+  })
+})
+
+describe("'use client' directive", () => {
+  let files
+
+  beforeAll(async () => {
+    vol.fromJSON(
+      { 'redwood.toml': '[experimental.rsc]\n  enabled = true' },
+      '/'
+    )
+
+    files = await scaffold.files({
+      ...getDefaultArgs(defaults),
+      model: 'Post',
+      nestScaffoldByModel: true,
+    })
+  })
+
+  test("creates a new NewPost component with the 'use client' directive", async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/NewPost/NewPost.jsx'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  test("creates a new PostCell cell with the 'use client' directive", async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/PostCell/PostCell.jsx'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  test("creates a new PostsCell cell with the 'use client' directive", async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/PostsCell/PostsCell.jsx'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  test("creates a new EditPostCell cell with the 'use client' directive", async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/EditPostCell/EditPostCell.jsx'
+        )
+      ]
     ).toMatchSnapshot()
   })
 })

@@ -16,6 +16,7 @@ import {
 import { files } from '../../../generate/scaffold/scaffold'
 import { tasks } from '../scaffold'
 
+vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 vi.mock('fs-extra')
 vi.mock('execa')
 
@@ -64,30 +65,38 @@ templateDirectories.forEach(async (directory) => {
 describe('rw destroy scaffold', () => {
   describe('destroy scaffold post', () => {
     beforeEach(async () => {
-      vol.fromJSON(scaffoldTemplates)
-      vol.fromJSON({
-        ...scaffoldTemplates,
-        ...(await files({
-          ...getDefaultArgs(defaults),
-          model: 'Post',
-          tests: false,
-          nestScaffoldByModel: false,
-        })),
-        [getPaths().web.routes]: [
-          '<Routes>',
-          '  <Route path="/posts/new" page={NewPostPage} name="newPost" />',
-          '  <Route path="/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />',
-          '  <Route path="/posts/{id:Int}" page={PostPage} name="post" />',
-          '  <Route path="/posts" page={PostsPage} name="posts" />',
-          '  <Route path="/" page={HomePage} name="home" />',
-          '  <Route notfound page={NotFoundPage} />',
-          '</Routes>',
-        ].join('\n'),
+      // This fs is needed for the `files` function imported from `generate`
+      vol.fromJSON({ 'redwood.toml': '', ...scaffoldTemplates }, '/')
+
+      const postFiles = await files({
+        ...getDefaultArgs(defaults),
+        model: 'Post',
+        tests: false,
+        nestScaffoldByModel: false,
       })
+
+      // This fs is needed for all the tests here
+      vol.fromJSON(
+        {
+          ...scaffoldTemplates,
+          ...postFiles,
+          [getPaths().web.routes]: [
+            '<Routes>',
+            '  <Route path="/posts/new" page={NewPostPage} name="newPost" />',
+            '  <Route path="/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />',
+            '  <Route path="/posts/{id:Int}" page={PostPage} name="post" />',
+            '  <Route path="/posts" page={PostsPage} name="posts" />',
+            '  <Route path="/" page={HomePage} name="home" />',
+            '  <Route notfound page={NotFoundPage} />',
+            '</Routes>',
+          ].join('\n'),
+        },
+        '/'
+      )
     })
 
     afterEach(() => {
-      vol.fromJSON(scaffoldTemplates)
+      vol.fromJSON({ 'redwood.toml': '', ...scaffoldTemplates }, '/')
       vi.spyOn(fs, 'unlinkSync').mockClear()
     })
 
@@ -109,15 +118,15 @@ describe('rw destroy scaffold', () => {
             nestScaffoldByModel: false,
           })
         )
-        expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
         generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
+        expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
       })
     })
 
     describe('for typescript files', () => {
       beforeEach(async () => {
         vol.reset()
-        vol.fromJSON(scaffoldTemplates)
+        vol.fromJSON({ 'redwood.toml': '', ...scaffoldTemplates }, '/')
         vol.fromJSON({
           ...scaffoldTemplates,
           ...(await files({
@@ -191,6 +200,7 @@ describe('rw destroy scaffold', () => {
 
   describe('destroy namespaced scaffold post', () => {
     beforeEach(async () => {
+      vol.fromJSON({ 'redwood.toml': '' }, '/')
       vol.fromJSON({
         ...scaffoldTemplates,
         ...(await files({
@@ -244,6 +254,7 @@ describe('rw destroy scaffold', () => {
 
     describe('for typescript files', () => {
       beforeEach(async () => {
+        vol.fromJSON({ 'redwood.toml': '' }, '/')
         vol.fromJSON({
           ...scaffoldTemplates,
           ...(await files({
