@@ -10,6 +10,7 @@ import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
+import { MiddlewareResponse } from '../middleware'
 import { invoke } from '../middleware/invokeMiddleware'
 
 import { reactRenderToStreamResponse } from './streamHelpers'
@@ -86,8 +87,10 @@ export const createReactStreamingHandler = async (
     // ~~~ Middleware Handling ~~~
     const { middleware } = entryServerImport
 
-    const [mwResponse, decodedAuthState = defaultAuthProviderState] =
-      await invoke(req, middleware)
+    const [
+      mwResponse = MiddlewareResponse.next(), // note default value
+      decodedAuthState = defaultAuthProviderState,
+    ] = await invoke(req, middleware)
 
     // If mwResponse is a redirect, short-circuit here, and skip React rendering
     if (mwResponse.isRedirect()) {

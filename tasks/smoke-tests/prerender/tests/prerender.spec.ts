@@ -46,9 +46,15 @@ test('Check that rehydration works for page not wrapped in Set', async ({
   await page.goto('/double')
 
   // Wait for page to have been rehydrated before getting page content.
-  // We know the page has been rehydrated when it sends an auth request
-  await page.waitForResponse((response) =>
-    response.url().includes('/.redwood/functions/auth')
+  // We know the page has been rehydrated when the RWJS_ENV vars are loaded
+  await page.waitForFunction(
+    () => {
+      return !!globalThis.RWJS_ENV
+    },
+    null,
+    {
+      timeout: 15_000,
+    }
   )
 
   await page.locator('h1').first().waitFor()
@@ -135,9 +141,15 @@ test('Check that rehydration works for page with code split chunks', async ({
   await page.goto('/contacts/new')
 
   // Wait for page to have been rehydrated before getting page content.
-  // We know the page has been rehydrated when it sends an auth request
-  await page.waitForResponse((response) =>
-    response.url().includes('/.redwood/functions/auth')
+  // We know the page has been rehydrated when the RWJS_ENV vars are loaded
+  await page.waitForFunction(
+    () => {
+      return !!globalThis.RWJS_ENV
+    },
+    null,
+    {
+      timeout: 15_000,
+    }
   )
 
   await expect(page.getByLabel('Name')).toBeVisible()

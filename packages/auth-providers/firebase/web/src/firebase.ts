@@ -136,32 +136,54 @@ function createAuthImplementation({
         options = { providerId: options }
       }
 
+      let fbOutput
+
       if (hasPasswordCredentials(options)) {
-        return firebaseAuth.signInWithEmailAndPassword(
+        fbOutput = firebaseAuth.signInWithEmailAndPassword(
           auth,
           options.email,
           options.password
         )
+      } else if (isEmailLinkOptions(options)) {
+        fbOutput = loginWithEmailLink(options)
+      } else if (options.providerId === 'anonymous') {
+        fbOutput = firebaseAuth.signInAnonymously(auth)
+      } else if (options.providerId === 'customToken' && options.customToken) {
+        fbOutput = firebaseAuth.signInWithCustomToken(auth, options.customToken)
+      } else {
+        const provider = getProvider(options.providerId || 'google.com')
+        const providerWithOptions = applyProviderOptions(provider, options)
+        fbOutput = firebaseAuth.signInWithPopup(auth, providerWithOptions)
       }
 
-      if (isEmailLinkOptions(options)) {
-        return loginWithEmailLink(options)
+      const fbUserCreds = await fbOutput
+
+      // Now convert idToken to Cookie
+      // https://firebase.google.com/docs/auth/admin/manage-cookies
+      if (!fbUserCreds?.user) {
+        throw new Error('No user found')
       }
 
-      if (options.providerId === 'anonymous') {
-        return firebaseAuth.signInAnonymously(auth)
-      }
+      const idToken = await fbUserCreds.user.getIdToken()
 
-      if (options.providerId === 'customToken' && options.customToken) {
-        return firebaseAuth.signInWithCustomToken(auth, options.customToken)
-      }
+      // Call middleware to swap
+      await fetch('/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ idToken }),
+      })
 
-      const provider = getProvider(options.providerId || 'google.com')
-      const providerWithOptions = applyProviderOptions(provider, options)
-
-      return firebaseAuth.signInWithPopup(auth, providerWithOptions)
+      return fbUserCreds
     },
-    logout: () => auth.signOut(),
+    logout: async () => {
+      await fetch('/logout', {
+        method: 'POST',
+      })
+
+      return auth.signOut()
+    },
     signup: async (
       options: oAuthProvider | Options = { providerId: 'google.com' }
     ) => {

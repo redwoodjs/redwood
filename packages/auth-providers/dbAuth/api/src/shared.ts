@@ -96,6 +96,13 @@ const legacyDecryptSession = (encryptedText: string) => {
 export const extractCookie = (event: APIGatewayProxyEvent | Request) => {
   return eventGraphiQLHeadersCookie(event) || getEventHeader(event, 'Cookie')
 }
+
+function extractEncryptedSessionFromHeader(
+  event: APIGatewayProxyEvent | Request
+) {
+  return getEventHeader(event, 'Authorization')?.split(' ')[1]
+}
+
 // whether this encrypted session was made with the old CryptoJS algorithm
 export const isLegacySession = (text: string | undefined) => {
   if (!text) {
@@ -184,12 +191,18 @@ export const dbAuthSession = (
   cookieNameOption: string | undefined
 ) => {
   const sessionCookie = extractCookie(event)
+  const bearerToken = extractEncryptedSessionFromHeader(event)
 
   if (sessionCookie) {
     // i.e. Browser making a request
     const [session, _csrfToken] = decryptSession(
       getSession(sessionCookie, cookieNameOption)
     )
+    return session
+  } else if (bearerToken) {
+    // i.e. FE Sever makes the request, and adds encrypted session to the Authorization header
+    const [session, _csrfToken] = decryptSession(bearerToken)
+
     return session
   } else {
     return null
