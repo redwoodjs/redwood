@@ -376,11 +376,8 @@
   to = "/docs/:splat"
   status = 301
 
-# This plugin was to automate updating the aloglia search index
-# but it's not working as expected yet.
-#
-# [[plugins]]
-#   package = "@algolia/netlify-plugin-crawler"
-#
-#   [plugins.inputs]
-#     branches = ['next']
+[[plugins]]
+  package = "@algolia/netlify-plugin-crawler"
+
+  [plugins.inputs]
+    branches = ['next']
