@@ -2156,7 +2156,7 @@ yarn redwood test [side..]
 
 > **Note** all other flags are passed onto the jest cli. So for example if you wanted to update your snapshots you can pass the `-u` flag
 
-## type-check
+## type-check (alias tsc or tc)
 
 Runs a TypeScript compiler check on both the api and the web sides.
 
