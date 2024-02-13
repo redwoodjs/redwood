@@ -153,6 +153,34 @@ export const findScripts = (cwd: string = getPaths().scripts) => {
   })
 }
 
+/**
+ * Resolves a path like `path = /my/dir/foo` to a source if the given path matches exactly one file
+ * with an extension of {.js, .jsx, .ts, .tsx}.
+ *
+ * @param {string} path - The absolute path to the file, with or without extension.
+ * @returns {boolean} - Returns the absolute path to the file including extension if exactly one such matching file exists, or false otherwise.
+ *
+ * @example
+ * resolveSourcePath('/Users/user/myproject/scripts/foo'); // assuming that file `foo.js` exists
+ * // Returns: '/Users/user/myproject/scripts/foo.js'
+
+ * resolveSourcePath('/Users/user/myproject/scripts/foo.js'); // assuming that file `foo.js` exists
+ * // Returns: '/Users/user/myproject/scripts/foo.js'
+ *
+ * resolveSourcePath('/Users/user/myproject/scripts/fooDoesNotExist');
+ * // Returns: false
+ */
+export const resolveSourcePath = (path: string) => {
+  const files = fg.sync([path, `${path}.{js,jsx,ts,tsx}`], {
+    absolute: true,
+    ignore: ['node_modules'],
+  })
+  if (files.length === 1) {
+    return files[0]
+  }
+  return false
+}
+
 export const isPageFile = (p: string) => {
   const { name } = path.parse(p)
 

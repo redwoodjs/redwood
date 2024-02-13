@@ -19,8 +19,8 @@ import { generatePrismaClient } from '../lib/generatePrismaClient'
 const printAvailableScriptsToConsole = () => {
   console.log('Available scripts:')
   findScripts().forEach((scriptPath) => {
-    const { name } = path.parse(scriptPath)
-    console.log(c.info(`- ${name}`))
+    const { base } = path.parse(scriptPath)
+    console.log(c.info(`- ${base}`))
   })
   console.log()
 }
@@ -99,11 +99,30 @@ export const handler = async (args) => {
     ],
   })
 
-  try {
-    require.resolve(scriptPath)
-  } catch {
+  // check the script exists, and that there are no ambiguous conflicts like [foo.js, foo.ts]
+  const targetScriptPath = path.parse(scriptPath)
+  const targetScriptName = targetScriptPath.base
+  const targetMatch = findScripts()
+    .map((p) => path.parse(p))
+    .filter((p) => {
+      // Compares with base when file specified as 'foo.ts', otherwise compares with name
+      // when file specified as 'foo'
+      return (
+        targetScriptName &&
+        (targetScriptPath.ext ? p.base : p.name) === targetScriptName
+      )
+    })
+  if (targetMatch.length !== 1) {
     console.error(
-      c.error(`\nNo script called ${c.underline(name)} in ./scripts folder.\n`)
+      c.error(
+        `\n${
+          targetMatch.length ? 'Multiple scripts' : 'No script'
+        } called ${c.underline(
+          targetScriptPath.ext
+            ? targetScriptPath.base
+            : targetScriptPath.name + '.{js,jsx,ts,tsx}'
+        )} in ./scripts folder.\n`
+      )
     )
 
     printAvailableScriptsToConsole()
