@@ -39,5 +39,6 @@
     "@docusaurus/module-type-aliases": "3.0.1",
     "@docusaurus/tsconfig": "3.0.1",
     "typescript": "5.3.3"
-  }
+  },
+  "packageManager": "yarn@4.1.0"
 }
