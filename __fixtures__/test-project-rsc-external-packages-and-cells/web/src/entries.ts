@@ -14,6 +14,10 @@ export default defineEntries(
         return import(
           './pages/UserExample/NewUserExamplePage/NewUserExamplePage'
         )
+      case 'EmptyUserEmptyUsersPage':
+        return import('./pages/EmptyUser/EmptyUsersPage/EmptyUsersPage')
+      case 'EmptyUserNewEmptyUserPage':
+        return import('./pages/EmptyUser/NewEmptyUserPage/NewEmptyUserPage')
       default:
         return null
     }
