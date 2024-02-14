@@ -80,11 +80,10 @@ export const bothServerFileHandler = async (argv) => {
 }
 
 export const bothSsrRscServerHandler = async (argv) => {
-  // TODO Allow specifying port, socket and apiRootPath
   const apiPromise = apiServerHandler({
-    ...argv,
-    port: 8911,
-    apiRootPath: '/',
+    apiRootPath: argv.apiRootPath,
+    host: argv.apiHost,
+    port: argv.apiPort,
   })
 
   // TODO More gracefully handle Ctrl-C
