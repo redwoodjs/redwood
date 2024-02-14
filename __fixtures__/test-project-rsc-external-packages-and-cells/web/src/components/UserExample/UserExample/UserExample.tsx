@@ -1,3 +1,5 @@
+'use client'
+
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
@@ -65,7 +67,8 @@ const UserExample = ({ userExample }: Props) => {
       </div>
       <nav className="rw-button-group">
         <Link
-          to={routes.editUserExample({ id: userExample.id })}
+          // TODO (RSC): Fix this link
+          to={'routes.editUserExample({ id: userExample.id })'}
           className="rw-button rw-button-blue"
         >
           Edit
