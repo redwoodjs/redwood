@@ -295,15 +295,12 @@ type Params = AuthenticationResponseJSON &
     transports?: string // used by webAuthN for something
   }
 
-interface DbAuthSession<TIdType> {
-  id: TIdType
-}
+type DbAuthSession = Record<string, unknown>
 
 const DEFAULT_ALLOWED_USER_FIELDS = ['id', 'email']
 
 export class DbAuthHandler<
   TUser extends UserType,
-  TIdType = any,
   TUserAttributes = Record<string, unknown>
 > {
   event: Request | APIGatewayProxyEvent
@@ -316,7 +313,7 @@ export class DbAuthHandler<
   dbCredentialAccessor: any
   allowedUserFields: string[]
   hasInvalidSession: boolean
-  session: DbAuthSession<TIdType> | undefined
+  session: DbAuthSession | undefined
   sessionCsrfToken: string | undefined
   corsContext: CorsContext | undefined
   sessionExpiresDate: string
@@ -1208,8 +1205,8 @@ export class DbAuthHandler<
 
   // returns the set-cookie header to be returned in the request (effectively
   // creates the session)
-  _createSessionHeader<TIdType = any>(
-    data: DbAuthSession<TIdType>,
+  _createSessionHeader(
+    data: DbAuthSession,
     csrfToken: string
   ): SetCookieHeader {
     const session = JSON.stringify(data) + ';' + csrfToken
@@ -1384,7 +1381,7 @@ export class DbAuthHandler<
 
   // gets the user from the database and returns only its ID
   async _getCurrentUser() {
-    if (!this.session?.id) {
+    if (!this.session?.[this.options.authFields.id]) {
       throw new DbAuthError.NotLoggedInError()
     }
 
@@ -1401,7 +1398,10 @@ export class DbAuthHandler<
 
     try {
       user = await this.dbAccessor.findUnique({
-        where: { [this.options.authFields.id]: this.session?.id },
+        where: {
+          [this.options.authFields.id]:
+            this.session?.[this.options.authFields.id],
+        },
         select,
       })
     } catch (e: any) {
