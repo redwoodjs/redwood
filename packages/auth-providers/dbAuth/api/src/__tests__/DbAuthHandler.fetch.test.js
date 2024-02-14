@@ -2944,6 +2944,48 @@ describe('dbAuth', () => {
 
       expect(user.id).toEqual(dbUser.id)
     })
+
+    it('returns the user when id field is other than `id`', async () => {
+      const randomId = Math.floor(Math.random() * 1000000)
+      const dbUser = await createDbUser({ userId: randomId })
+      const options = {
+        authFields: {
+          id: 'userId',
+        },
+        authModelAccessor: 'user',
+        db: db,
+        forgotPassword: {
+          handler: () => {},
+        },
+        login: {
+          handler: () => {},
+          expires: 1,
+        },
+        resetPassword: {
+          handler: () => {},
+        },
+        signup: {
+          handler: () => {},
+        },
+      }
+      const headers = {
+        cookie: encryptToCookie(
+          JSON.stringify({ userId: dbUser.userId }) + ';' + 'token'
+        ),
+      }
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers,
+      })
+
+      const dbAuth = new DbAuthHandler(req, context, options)
+      await dbAuth.init()
+
+      const user = await dbAuth._getCurrentUser()
+
+      expect(user.userId).toEqual(dbUser.userId)
+    })
   })
 
   describe('_createUser()', () => {
