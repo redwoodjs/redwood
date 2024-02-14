@@ -176,9 +176,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
               ])
             )
           )
-
-          hasDefaultExport = false
-          exportNames = []
         },
       },
     },
