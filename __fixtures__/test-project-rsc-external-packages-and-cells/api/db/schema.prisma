@@ -22,3 +22,9 @@ model UserExample {
   email String  @unique
   name  String?
 }
+
+model EmptyUser {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
