@@ -10,6 +10,8 @@ export default defineEntries(
         return import('./pages/HomePage/HomePage')
       case 'UserExampleUserExamplesPage':
         return import('./pages/UserExample/UserExamplesPage/UserExamplesPage')
+      case 'UserExampleUserExamplePage':
+        return import('./pages/UserExample/UserExamplePage/UserExamplePage')
       case 'UserExampleNewUserExamplePage':
         return import(
           './pages/UserExample/NewUserExamplePage/NewUserExamplePage'

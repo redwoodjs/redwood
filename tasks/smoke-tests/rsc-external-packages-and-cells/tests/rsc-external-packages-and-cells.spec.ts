@@ -85,3 +85,24 @@ test("'use client' cell navigation", async ({ page }) => {
 
   page.close()
 })
+
+test('Server Cell', async ({ page }) => {
+  await page.goto('/user-examples/1')
+
+  const h1 = await page.locator('h1').innerHTML()
+  expect(h1).toMatch(/UserExamples - userExamples/)
+
+  await expect(page.getByText('Email')).toBeVisible()
+  await expect(page.getByText('jackie@example.com')).toBeVisible()
+
+  await expect(page.locator('tr').nth(2)).toContainText(/Name\s*jackie/)
+})
+
+test('Server Cell - Error component', async ({ page }) => {
+  await page.goto('/user-examples/7')
+
+  const h1 = await page.locator('h1').innerHTML()
+  expect(h1).toMatch(/UserExamples - userExamples/)
+
+  await expect(page.getByText('UserExample not found')).toBeVisible()
+})
