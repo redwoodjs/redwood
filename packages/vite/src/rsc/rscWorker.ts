@@ -192,6 +192,7 @@ const shutdown = async () => {
 
 const loadServerFile = async (fname: string) => {
   const vite = await vitePromise
+  // @MARK: in prod we need to switch to import
   return vite.ssrLoadModule(fname)
 }
 
@@ -283,6 +284,7 @@ async function setClientEntries(
     absoluteClientEntries = value
     return
   }
+  // Vite config
   const config = await configPromise
   const entriesFile = await getEntriesFile(config, false)
   console.log('setClientEntries :: entriesFile', entriesFile)
@@ -292,6 +294,8 @@ async function setClientEntries(
     throw new Error('Failed to load clientEntries')
   }
   const baseDir = path.dirname(entriesFile)
+
+  // Convert it to absolute paths
   absoluteClientEntries = Object.fromEntries(
     Object.entries(clientEntries).map(([key, val]) => {
       let fullKey = path.join(baseDir, key)
@@ -335,6 +339,8 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
       : rwPaths.base
   console.log('config.root', config.root)
   console.log('rwPaths.base', rwPaths.base)
+
+  // @MARK: Why proxy? Remove this and see what breaks.
   const bundlerConfig = new Proxy(
     {},
     {

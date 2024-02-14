@@ -86,9 +86,13 @@ export function shutdown() {
 
 let nextId = 1
 
+/**
+ * Set the client entries to worker for the server build.
+ */
 export function setClientEntries(
   value: 'load' | Record<string, string>
 ): Promise<void> {
+  // Just making this function async instead of callback
   return new Promise((resolve, reject) => {
     const id = nextId++
 
