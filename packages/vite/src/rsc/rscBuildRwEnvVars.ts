@@ -8,6 +8,7 @@ import fs from 'fs/promises'
  * The import of entries.js that we're adding this to is handled by the
  * RSC worker we've got set up
  */
+// TODO(RSC_DC): See if we can inject into bundle as well
 export async function rscBuildRwEnvVars(webDistServerEntries: string) {
   await fs.appendFile(
     webDistServerEntries,

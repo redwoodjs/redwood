@@ -8,6 +8,7 @@ import type { rscBuildServer } from './rscBuildServer'
  * Append a mapping of server asset names to client asset names to the
  * `web/dist/server/entries.js` file.
  */
+// TODO(RSC_DC) : Understand how this gets used, we can probably use a vite plugin to do this
 export function rscBuildClientEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
   serverBuildOutput: Awaited<ReturnType<typeof rscBuildServer>>,

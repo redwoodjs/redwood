@@ -13,6 +13,7 @@ import { onWarn } from '../lib/onWarn'
  * buildFeServer -> buildRscFeServer -> rscBuildClient
  * Generate the client bundle
  */
+// @TODO(RSC_DC): no redwood-vite plugin, add it back in here
 export async function rscBuildServer(
   entriesFile: string,
   clientEntryFiles: Record<string, string>,
@@ -141,7 +142,7 @@ export async function rscBuildServer(
       // TODO (RSC) Change output dir to just dist. We should be "server
       // first". Client components are the "special case" and should be output
       // to dist/client
-      outDir: rwPaths.web.distServer,
+      outDir: rwPaths.web.distServer + '/rsc',
       manifest: 'server-build-manifest.json',
       rollupOptions: {
         onwarn: onWarn,

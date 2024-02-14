@@ -43,6 +43,8 @@ export const buildRscFeServer = async ({
   )
 
   // Copy CSS assets from server to client
+  // TODO(RSC_DC): I think not required, the clientBuild just doesn't
+  // have postcss configured)
   await rscBuildCopyCssAssets(serverBuildOutput, webDist, webDistServer)
 
   // Mappings from server to client asset file names

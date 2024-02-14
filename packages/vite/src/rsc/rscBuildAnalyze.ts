@@ -14,6 +14,8 @@ import { rscAnalyzePlugin } from './rscVitePlugins'
  * Starts building the AST in entries.ts
  * Doesn't output any files, only collects a list of RSCs and RSFs
  */
+// @TODO(RSC_DC): Can we skip actually building here?
+// only needed to trigger the rscAnalyzePlugin
 export async function rscBuildAnalyze(viteConfigPath: string) {
   const rwPaths = getPaths()
   const clientEntryFileSet = new Set<string>()

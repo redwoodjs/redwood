@@ -15,6 +15,8 @@ import { rscIndexPlugin } from './rscVitePlugins'
  * buildFeServer -> buildRscFeServer -> rscBuildClient
  * Generate the client bundle
  */
+// @TODO(RSC_DC): no redwood-vite plugin
+// integrate the rw-v plugin here
 export async function rscBuildClient(
   webHtml: string,
   webDist: string,

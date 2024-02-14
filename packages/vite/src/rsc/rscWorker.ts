@@ -32,6 +32,8 @@ import type {
 // import type { RenderInput, MessageReq, MessageRes } from './rsc-handler'
 // import { transformRsfId, generatePrefetchCode } from './rsc-utils'
 
+// TODO(RSC_DC): Use the sekret renderToReadableStream one
+// so that we can respond with web streams
 const { renderToPipeableStream } = RSDWServer
 
 type Entries = { default: ReturnType<typeof defineEntries> }
