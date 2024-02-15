@@ -29,7 +29,9 @@ export default function redwoodPluginVite(): PluginOption[] {
   }
 
   const relativeEntryPath = path.relative(rwPaths.web.src, clientEntryPath)
-
+  console.log('Definitely using the redwood-vite-plugin')
+  console.log('Definitely using the redwood-vite-plugin')
+  console.log('Definitely using the redwood-vite-plugin')
   return [
     {
       name: 'redwood-plugin-vite-html-env',
@@ -120,6 +122,13 @@ export default function redwoodPluginVite(): PluginOption[] {
       // ---------- End Bundle injection ----------
 
       config: (options: UserConfig, env: ConfigEnv): UserConfig => {
+        console.log('Definite in this config function')
+        console.log('Definite in this config function')
+        console.log('Definite in this config function')
+        console.log('Definite in this config function')
+        console.log('Definite in this config function')
+        console.log('Definite in this config function')
+        console.log('Definite in this config function')
         let apiHost = process.env.REDWOOD_API_HOST
         apiHost ??= rwConfig.api.host
         apiHost ??= process.env.NODE_ENV === 'production' ? '0.0.0.0' : '[::]'
@@ -153,8 +162,7 @@ export default function redwoodPluginVite(): PluginOption[] {
               __REDWOOD__APP_TITLE:
                 rwConfig.web.title || path.basename(rwPaths.base),
               RWJS_EXP_STREAMING_SSR:
-                rwConfig.experimental.streamingSsr &&
-                rwConfig.experimental.streamingSsr.enabled,
+                rwConfig.experimental?.streamingSsr?.enabled,
               RWJS_EXP_RSC: rwConfig.experimental?.rsc?.enabled,
             },
             RWJS_DEBUG_ENV: {

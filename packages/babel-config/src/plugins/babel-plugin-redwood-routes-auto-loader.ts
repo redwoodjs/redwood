@@ -64,6 +64,8 @@ export default function (
     )
   }
 
+  // @MARK @TODO:
+  // we should change this so that it automatically imports "serve" instead of skipping entirely!
   if (getConfig().experimental?.rsc?.enabled) {
     // TODO (RSC): Enable auto-loader for RSC
     return {
@@ -137,6 +139,15 @@ export default function (
       Program: {
         enter() {
           pages = processPagesDir().map(withRelativeImports)
+          console.log('xxxxxxxxx')
+          console.log('xxxxxxxxx')
+          console.log('xxxxxxxxx')
+          console.log('xxxxxxxxx')
+          console.log('xxxxxxxxx')
+          console.log('xxxxxxxxx')
+          console.log('xxxxxxxxx')
+          console.log('xxxxxxxxx')
+          console.log('xxxxxxxxx')
         },
         exit(p) {
           if (pages.length === 0) {

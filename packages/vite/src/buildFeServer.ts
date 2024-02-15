@@ -76,6 +76,8 @@ async function buildForServer(
   rwPaths: Paths,
   verbose: boolean | undefined
 ) {
+  console.log('Starting server build.... \n')
+
   await viteBuild({
     configFile: viteConfigPath,
     build: {
