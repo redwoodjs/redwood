@@ -102,10 +102,10 @@ export const createReactStreamingHandler = async (
     const FallbackDocument =
       fallbackDocumentImport.Document || fallbackDocumentImport.default
 
-    const { pathname: currentPathName } = new URL(req.url)
+    const currentUrl = new URL(req.url)
 
     // @TODO validate this is correct
-    const parsedParams = matchPath(route.pathDefinition, currentPathName)
+    const parsedParams = matchPath(route.pathDefinition, currentUrl.pathname)
 
     let metaTags: TagDescriptor[] = []
 
@@ -147,7 +147,7 @@ export const createReactStreamingHandler = async (
       {
         ServerEntry,
         FallbackDocument,
-        currentPathName,
+        currentUrl,
         metaTags,
         cssLinks,
         isProd,

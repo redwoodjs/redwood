@@ -26,7 +26,7 @@ import { createServerInjectionTransform } from './transforms/serverInjectionTran
 interface RenderToStreamArgs {
   ServerEntry: any
   FallbackDocument: any
-  currentPathName: string
+  currentUrl: URL
   metaTags: TagDescriptor[]
   cssLinks: string[]
   isProd: boolean
@@ -48,7 +48,7 @@ export async function reactRenderToStreamResponse(
   const {
     ServerEntry,
     FallbackDocument,
-    currentPathName,
+    currentUrl,
     metaTags,
     cssLinks,
     isProd,
@@ -91,7 +91,7 @@ export async function reactRenderToStreamResponse(
   // @ts-expect-error Something in React's packages mean types dont come through
   const { renderToReadableStream } = await import('react-dom/server.edge')
 
-  const renderRoot = (path: string) => {
+  const renderRoot = (url: URL) => {
     return React.createElement(
       ServerAuthProvider,
       {
@@ -100,9 +100,7 @@ export async function reactRenderToStreamResponse(
       React.createElement(
         LocationProvider,
         {
-          location: {
-            pathname: path,
-          },
+          location: url,
         },
         React.createElement(
           ServerHtmlProvider,
@@ -110,7 +108,6 @@ export async function reactRenderToStreamResponse(
             value: injectToPage,
           },
           ServerEntry({
-            url: path,
             css: cssLinks,
             meta: metaTags,
           })
@@ -146,7 +143,7 @@ export async function reactRenderToStreamResponse(
       },
     }
 
-    const root = renderRoot(currentPathName)
+    const root = renderRoot(currentUrl)
 
     const reactStream: ReactDOMServerReadableStream =
       await renderToReadableStream(root, renderToStreamOptions)
