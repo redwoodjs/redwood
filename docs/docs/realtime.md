@@ -1,20 +1,22 @@
 # Realtime
 
-One of the most often asked questions of RedwoodJS before and after the launch of V1 was, “When will RedwoodJS support a realtime solution?”
+One of the most often-asked questions of Redwood before and after the launch of V1 was, “When will Redwood support a realtime solution?”
 
 The answer is: **now**.
 
 ## What is Realtime?
 
-RedwoodJS's initial real-time solution leverages GraphQL and relies on a serverful deployment to maintain a long-running connection between the client and server.
+Redwood's initial realtime solution leverages GraphQL and relies on a serverful deployment to maintain a long-running connection between the client and server.
 
-:::note
-This means that your cannot currently use RedwoodJS Realtime when deployed to Netlify or Vercel.
+:::info
 
-**More information about deploying a serverful RedwoodJS application is forthcoming.**
+This means that your cannot use Realtime when deploying to Netlify or Vercel.
+
+See one of Redwood's many [other Deploy providers](./deploy/introduction.md), and the [Docker setup](./docker.md) for good measure.
+
 :::
 
-RedwoodJS's GraphQL Server uses [GraphQL over Server-Sent Events](https://github.com/enisdenjo/graphql-sse/blob/master/PROTOCOL.md#distinct-connections-mode) spec "distinct connections mode" for subscriptions.
+Redwood's GraphQL server uses the [GraphQL over Server-Sent Events](https://github.com/enisdenjo/graphql-sse/blob/master/PROTOCOL.md#distinct-connections-mode) spec's "distinct connections mode" for subscriptions.
 
 Advantages of SSE over WebSockets include:
 
@@ -29,21 +31,21 @@ In GraphQL, there are two options for real-time updates: **live queries** and **
 
 Subscriptions are part of the GraphQL specification, whereas live queries are not.
 
-There are times where subscriptions are well-suited for a realtime problem — and in some cases live queries may be a better fit. Later we’ll explore the pros and cons of each approach and how best to decide that to use and when.
+There are times where subscriptions are well-suited for a realtime problem and in some cases live queries may be a better fit. Later we’ll explore the pros and cons of each approach and how best to decide which to use and when.
 
 ### Defer and Stream
 
-[Stream and defer](https://the-guild.dev/graphql/yoga-server/docs/features/defer-stream) are directives that allow you to improve latency for clients by sending the most important data as soon as it's ready.
+[Defer and stream](https://the-guild.dev/graphql/yoga-server/docs/features/defer-stream) are directives that allow you to improve latency for clients by sending the most important data as soon as it's ready.
 
-As applications grow, the GraphQL operation documents can get bigger. The server will only send the response back once all the data requested in the query is ready. However, not all requested data is of equal importance, and the client may not need all of the data at once.
+As applications grow, the GraphQL operation documents can get bigger. The server will only send the response back once all the data requested in the query is ready. But not all requested data is of equal importance, and the client may not need all of the data at once.
 
 #### Using Defer
 
-The `@defer`` directive allows you to post-pone the delivery of one or more (slow) fields grouped in an inlined or spread fragment.
+The `@defer` directive allows you to postpone the delivery of one or more (slow) fields grouped in an inlined or spread fragment.
 
 #### Using Stream
 
-The '@stream' directive allows you to stream the individual items of a field of the list type as the items are available.
+The `@stream` directive allows you to stream the individual items of a field of the list type as the items are available.
 
 :::info
 The `@stream` directive is currently **not** supported by Apollo GraphQL client.
@@ -51,15 +53,15 @@ The `@stream` directive is currently **not** supported by Apollo GraphQL client.
 
 ## Features
 
-RedwoodJS Realtime handles the hard parts of a GraphQL Realtime implementation by automatically:
+Realtime handles the hard parts of a GraphQL realtime implementation by automatically:
 
 - allowing GraphQL Subscription operations to be handled
-- merging in your subscriptions types and mapping their handler functions (subscribe, and resolve) to your GraphQL schema letting you keep your subscription logic organized and apart from services (your subscription my use a service to respond to an event)
+- merging in your subscriptions types and mapping their handler functions (subscribe and resolve) to your GraphQL schema letting you keep your subscription logic organized and apart from services (your subscription may use a service to respond to an event)
 - authenticating subscription requests using the same `@requireAuth` directives already protecting other queries and mutations (or you can implement your own validator directive)
 - adding in the `@live` query directive to your GraphQL schema and setting up the `useLiveQuery` envelop plugin to handle requests, invalidation, and managing the storage mechanism needed
-- creating and configuring in-memory and persisted Redis stores uses by the PubSub transport for subscriptions and Live Queries (and letting you switch between them in development and production)
+- creating and configuring in-memory and persisted Redis stores used by the PubSub transport for subscriptions and Live Queries (and letting you switch between them in development and production)
 - placing the pubSub transport and stores into the GraphQL context so you can use them in services, subscription resolvers, or elsewhere (like a webhook, function, or job) to publish an event or invalidate data
-- typing you subscription channel event payloads
+- typing your subscription channel event payloads
 - support `@defer` and `@stream` directives
 
 It provides a first-class developer experience for real-time updates with GraphQL so you can easily
@@ -69,36 +71,32 @@ It provides a first-class developer experience for real-time updates with GraphQ
 
 and have the latest data reflected in your app.
 
-Lastly, the Redwood CLI has commands to
+Lastly, the Redwood CLI has commands to generate a boilerplate implementation and sample code needed to create your custom subscriptions and Live Queries.
 
-- generate a boilerplate implementation and sample code needed to create your custom
-  - subscriptions
-  - live Queries
-
-Regardless of the implementation chosen, **a stateful server and store are needed** to track changes, invalidation, or who wants to be informed about the change.
+Regardless of the implementation chosen, **a stateful server and store are needed** to track changes, invalidation, and who wants to be informed about changes.
 
 ### What can I build with Realtime?
 
-- Application Alerts and Messages
-- User Notifications
-- Live Charts
+- Application alerts and messages
+- User notifications
+- Live charts
 - Location updates
 - Auction bid updates
 - Messaging
 - OpenAI streaming responses
 
-## RedwoodJS Realtime Setup
+## Redwood Realtime Setup
 
-To setup Realtime in an existing RedwoodJS project, run the following commands:
+To setup realtime in an existing Redwood project, run the following commands:
 
-* `yarn rw exp setup-server-file`
-* `yarn rw exp setup-realtime`
+* `yarn rw setup server-file`
+* `yarn rw setup realtime`
 
-You will get:
+You'll get:
 
-* `api/server.ts` where you configure your Fastify server and GraphQL
+* `api/server.ts` where you can configure your Fastify server
 * `api/lib/realtime.ts` where you consume your subscriptions and configure realtime with an in-memory or Redis store
-* Usage examples for live queries, subscriptions, defer, and stream. You'll get sdl, services/subscriptions for each.
+* Usage examples for live queries, subscriptions, defer, and stream. You'll get sdl, services/subscriptions for each
 * The [`auction` live query](#auction-live-query-example) example
 * The [`countdown timer` subscription](#countdown-timer-example) example
 * The [`chat` subscription](#chatnew-message-example) examples
@@ -106,49 +104,23 @@ You will get:
 * The [`slow and fast` field defer](#slow-and-fast-field-defer-example) example
 
 :::note
-There is no UI setup for these examples. You can find information on how to try them out using the GraphiQL playground.
+There is no UI set up for these examples. You can find information on how to try them out using the GraphiQL playground.
 :::
 
-### GraphQL Configuration
+Just add the realtime configuration to your GraphQL handler in `api/src/functions/graphql.ts` and you're good to go:
 
-Now that how have a serverful project, you will configure your GraphQL server in the `api/server.ts` file.
+```diff title="api/src/functions/graphql.ts"
++ import { realtime } from 'src/lib/realtime'
 
-:::important
-That means you **must** manually configure your GraphQL server accordingly
-:::
-
-For example, you will have to setup any authentication and the realtime config:
-
-```ts
-  await fastify.register(redwoodFastifyGraphQLServer, {
-    // If authenticating, be sure to import and add in
-    // authDecoder,
-    // getCurrentUser,
-    loggerConfig: {
-      logger: logger,
-      options: {
-        query: true,
-        data: true,
-        operationName: true,
-        requestId: true,
-      },
-    },
-    graphiQLEndpoint: enableWeb ? '/.redwood/functions/graphql' : '/graphql',
-    sdls,
-    services,
-    directives,
-    allowIntrospection: true,
-    allowGraphiQL: true,
-    // Configure if using RedwoodJS Realtime
-    realtime,
+  export const handler = createGraphQLHandler({
+    // ...
++   realtime,
   })
 ```
 
-You can now remove the GraphQL handler function that resides in `api/functions/graphql.ts`.
-
 ### Realtime Configuration
 
-By default, RedwoodJS realtime configures an in-memory store for the Pub Sub client used with subscriptions and live query invalidation.
+By default, Redwood's realtime configures an in-memory store for the Pub Sub client used with subscriptions and live query invalidation.
 
 Realtime supports in-memory and Redis stores:
 
@@ -159,8 +131,7 @@ To enable defer and streaming, set `enableDeferStream` to true.
 
 Configure a Redis store and defer and stream in:
 
-```ts
-// api/lib/realtime.ts
+```ts title="api/lib/realtime.ts"
 import { RedwoodRealtimeOptions } from '@redwoodjs/realtime'
 
 import subscriptions from 'src/subscriptions/**/*.{js,ts}'
@@ -208,7 +179,7 @@ export const realtime: RedwoodRealtimeOptions = {
 
 #### PubSub and LiveQueryStore
 
-By setting up RedwoodJS Realtime, the GraphQL server adds two helpers on the context:
+By setting up realtime, the GraphQL server adds two helpers on the context:
 
 * pubSub
 * liveQueryStory
@@ -229,7 +200,7 @@ When the query is: `auctions: [Auction!]! @requireAuth`:
 
 ## Subscriptions
 
-RedwoodJS has a first-class developer experience for GraphQL subscriptions.
+Redwood has a first-class developer experience for GraphQL subscriptions.
 
 #### Subscribe to Events
 
@@ -264,7 +235,7 @@ This example showcases how a subscription yields its own response.
 
 ## Live Queries
 
-RedwoodJS has made it super easy to add live queries to your GraphQL server! You can push new data to your clients automatically once the data selected by a GraphQL operation becomes stale by annotating your query operation with the `@live` directive.
+Redwood has made it super easy to add live queries to your GraphQL server! You can push new data to your clients automatically once the data selected by a GraphQL operation becomes stale by annotating your query operation with the `@live` directive.
 
 The invalidation mechanism is based on GraphQL ID fields and schema coordinates. Once a query operation has been invalidated, the query is re-executed, and the result is pushed to the client.
 
@@ -305,11 +276,11 @@ mutation MakeBid {
 
 ## Defer Directive
 
-The `@defer` directive allows you to post-pone the delivery of one or more (slow) fields grouped in an inlined or spread fragment.
+The `@defer` directive allows you to postpone the delivery of one or more (slow) fields grouped in an inlined or spread fragment.
 
 ### Slow and Fast Field Defer Example
 
-Here, the GraphQL schema defines two queries for a "fast" and a "slow" (ie, delayed) information.
+Here, the GraphQL schema defines two queries for a "fast" and a "slow" (i.e., delayed) information.
 
 ```graphql
 export const schema = gql`
@@ -451,9 +422,7 @@ curl -g -X POST \
 ```
 
 Here you see the initial response has `[]` for alphabet data.
-
-Then on each push to the Repeater, an incremental update the the list of letters is sent.
-
+Then on each push to the Repeater, an incremental update to the list of letters is sent.
 The stream ends when `hasNext` is false:
 
 ```bash
@@ -525,14 +494,14 @@ Content-Length: 17
 
 ![image](https://github.com/ahaywood/redwoodjs-streaming-realtime-demos/assets/1051633/e3c51908-434c-4396-856a-8bee7329bcdd)
 
-When deciding on how to offer realtime data updates in your RedwoodJS app, you’ll want to consider:
+When deciding on how to offer realtime data updates, you’ll want to consider:
 
 - How frequently do your users require information updates?
     - Determine the value of "real-time" versus "near real-time" to your users. Do they need to know in less than 1-2 seconds, or is 10, 30, or 60 seconds acceptable for them to receive updates?
     - Consider the criticality of the data update. Is it low, such as a change in shipment status, or higher, such as a change in stock price for an investment app?
     - Consider the cost of maintaining connections and tracking updates across your user base. Is the infrastructure cost justifiable?
     - If you don't require "real" real-time, consider polling for data updates on a reasonable interval. According to Apollo, [in most cases](https://www.apollographql.com/docs/react/data/subscriptions/), your client should not use subscriptions to stay up to date with your backend. Instead, you should poll intermittently with queries or re-execute queries on demand when a user performs a relevant action, such as clicking a button.
-- How are you deploying? Serverless or Serverful?
+- How are you deploying? Serverless or serverful?
     - Real-time options depend on your deployment method.
     - If you are using a serverless architecture, your application cannot maintain a stateful connection to your users' applications. Therefore, it's not easy to "push," "publish," or "stream" data updates to the web client.
         - In this case, you may need to look for third-party solutions that manage the infrastructure to maintain such stateful connections to your web client, such as [Supabase Realtime](https://supabase.com/realtime), [SendBird](https://sendbird.com/), [Pusher](https://pusher.com/), or consider creating your own [AWS SNS-based](https://docs.aws.amazon.com/sns/latest/dg/welcome.html) functionality.
@@ -541,7 +510,7 @@ When deciding on how to offer realtime data updates in your RedwoodJS app, you�
 
 ## Showcase Demos
 
-Please see our [showcase RedwoodJS Realtime app](https://realtime-demo.fly.dev) for exampes of subscriptions and live queries. It also demonstrates how you can handle streaming responses, like those used by OpenAI chat completions.
+Please see our [showcase realtime app](https://realtime-demo.fly.dev) for examples of subscriptions and live queries. It also demonstrates how you can handle streaming responses, like those used by OpenAI chat completions.
 
 ### Chat Room (Subscription)
 
