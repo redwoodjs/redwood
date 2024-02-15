@@ -14,7 +14,7 @@ type CreateServerCellProps<CellProps, CellVariables> = Omit<
   CreateCellProps<CellProps, CellVariables>,
   'QUERY' | 'Failure'
 > & {
-  DATA: (variables?: AnyObj) => any
+  data: (variables?: AnyObj) => any
   Failure?: React.ComponentType<{
     error: unknown
     queryResult: { refetch: (variables: CellProps) => AnyObj }
@@ -30,7 +30,7 @@ export function createServerCell<
   createCellProps: CreateServerCellProps<CellProps, CellVariables> // 👈 AnyObj, because using CellProps causes a TS error
 ): React.FC<CellProps> {
   const {
-    DATA,
+    data: dataFn,
     isEmpty = isDataEmpty,
     Loading,
     Failure,
@@ -51,7 +51,7 @@ export function createServerCell<
       const queryResultWithRefetch = {
         refetch: (variables: CellProps | undefined) => {
           // TODO (RSC): How do we refresh the page with new data?
-          return DATA(variables)
+          return dataFn(variables)
         },
       }
 
@@ -59,7 +59,7 @@ export function createServerCell<
     }
 
     try {
-      const data = await DATA(variables)
+      const data = await dataFn(variables)
 
       if (isEmpty(data, { isDataEmpty }) && Empty) {
         return <Empty {...props} {...data} />
