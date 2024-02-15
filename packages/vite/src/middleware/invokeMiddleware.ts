@@ -5,7 +5,8 @@ import { MiddlewareResponse } from './MiddlewareResponse'
 
 type Middleware = (
   req: MiddlewareRequest,
-  res?: MiddlewareResponse
+  res?: MiddlewareResponse,
+  route?: any
 ) => Promise<MiddlewareResponse> | Response | void
 
 /**
@@ -18,7 +19,8 @@ type Middleware = (
  */
 export const invoke = async (
   req: Request,
-  middleware?: Middleware
+  middleware?: Middleware,
+  options?: any
 ): Promise<[MiddlewareResponse, ServerAuthState]> => {
   if (typeof middleware !== 'function') {
     return [MiddlewareResponse.next(), defaultAuthProviderState]
@@ -28,13 +30,19 @@ export const invoke = async (
   let mwRes: MiddlewareResponse = MiddlewareResponse.next()
 
   try {
-    const output = (await middleware(mwReq)) || MiddlewareResponse.next()
+    const output =
+      (await middleware(mwReq, MiddlewareResponse.next(), options)) ||
+      MiddlewareResponse.next()
 
     if (output instanceof MiddlewareResponse) {
       mwRes = output
-    } else {
+    } else if (typeof output === 'object' && output instanceof Response) {
       // If it was a WebAPI Response
       mwRes = MiddlewareResponse.fromResponse(output)
+    } else {
+      throw new Error(
+        'Middleware must return a MiddlewareResponse or a Response'
+      )
     }
   } catch (e) {
     console.error('Error executing middleware > \n')
