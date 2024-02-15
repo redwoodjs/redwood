@@ -151,16 +151,44 @@ const buildDescribeScenario =
     })
   }
 
+/**
+ * Function to read the schema file and extract model schema names
+ * prisma's getDMMF function doesn't return schema with table name
+ */
+const extractModelSchemas = (schemaFilePath) => {
+  const fs = require('fs')
+  const schemaContent = fs.readFileSync(schemaFilePath, { encoding: 'utf8' })
+  const modelSchemaMap = {}
+
+  // Regular expression to match model blocks and their names
+  const modelBlockRegex = /model\s+(\w+)\s+\{[^}]+\}/g
+  // Regular expression to extract the @@schema directive
+  const schemaDirectiveRegex = /@@schema\("([^"]+)"\)/
+
+  let match
+  while ((match = modelBlockRegex.exec(schemaContent)) !== null) {
+    const modelName = match[1]
+    const modelBlock = match[0]
+    const schemaMatch = modelBlock.match(schemaDirectiveRegex)
+    const schemaName = schemaMatch ? schemaMatch[1] : 'public' // Assuming 'public' for default schema
+
+    modelSchemaMap[modelName] = schemaName
+  }
+
+  return modelSchemaMap
+}
+
 const teardown = async () => {
   const fs = require('fs')
 
   const quoteStyle = await getQuoteStyle()
+  const schemaMap = extractModelSchemas(dbSchemaPath)
 
   for (const modelName of teardownOrder) {
     try {
-      await getProjectDb().$executeRawUnsafe(
-        `DELETE FROM ${quoteStyle}${modelName}${quoteStyle}`
-      )
+      const schema = `${quoteStyle}${schemaMap[modelName]}${quoteStyle}`
+      const model = `${quoteStyle}${modelName}${quoteStyle}`
+      await getProjectDb().$executeRawUnsafe(`DELETE FROM ${schema}.${model}`)
     } catch (e) {
       const match = e.message.match(/Code: `(\d+)`/)
       if (match && FOREIGN_KEY_ERRORS.includes(parseInt(match[1]))) {
