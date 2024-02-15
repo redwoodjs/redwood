@@ -53,27 +53,38 @@ const configureTeardown = async () => {
   originalTeardownOrder = deepCopy(teardownOrder)
 }
 
-let quoteStyle
-// determine what kind of quotes are needed around table names in raw SQL
-const getQuoteStyle = async () => {
+let quoteStyle, supportMultiSchema
+// Determine what kind of quotes are needed around table names in raw SQL
+// Also check if the database supports Prisma's multiSchema preview feature
+const getProjectDBInfo = async () => {
+  if (quoteStyle !== undefined && supportMultiSchema !== undefined) {
+    return { quoteStyle, supportMultiSchema };
+  }
+
   const { getConfig: getPrismaConfig } = require('@prisma/internals')
   const fs = require('fs')
 
-  if (!quoteStyle) {
-    const config = await getPrismaConfig({
-      datamodel: fs.readFileSync(dbSchemaPath).toString(),
-    })
+  const config = await getPrismaConfig({
+    datamodel: fs.readFileSync(dbSchemaPath).toString(),
+  })
 
-    switch (config.datasources?.[0]?.provider) {
-      case 'mysql':
-        quoteStyle = '`'
-        break
-      default:
-        quoteStyle = '"'
-    }
+  switch (config.datasources?.[0]?.provider) {
+    case 'mysql':
+      quoteStyle = '`';
+      supportMultiSchema = false;
+      break;
+    case 'postgresql':
+    case 'sqlserver':
+    case 'cockroachdb':
+      quoteStyle = '"';
+      supportMultiSchema = true;
+      break;
+    default:
+      quoteStyle = '"';
+      supportMultiSchema = false;
   }
 
-  return quoteStyle
+  return { quoteStyle, supportMultiSchema }
 }
 
 const getProjectDb = () => {
@@ -178,17 +189,23 @@ const extractModelSchemas = (schemaFilePath) => {
   return modelSchemaMap
 }
 
+function getQualifiedName(modelName, schemaMap, quoteStyle, supportMultiSchema) {
+  return supportMultiSchema
+    ? `${quoteStyle}${schemaMap[modelName]}${quoteStyle}.${quoteStyle}${modelName}${quoteStyle}`
+    : `${quoteStyle}${modelName}${quoteStyle}`;
+}
+
 const teardown = async () => {
   const fs = require('fs')
 
-  const quoteStyle = await getQuoteStyle()
-  const schemaMap = extractModelSchemas(dbSchemaPath)
+  const { quoteStyle, supportMultiSchema } = await getProjectDBInfo()
+  const schemaMap = supportMultiSchema ? extractModelSchemas(dbSchemaPath) : {};
 
   for (const modelName of teardownOrder) {
     try {
-      const schema = `${quoteStyle}${schemaMap[modelName]}${quoteStyle}`
-      const model = `${quoteStyle}${modelName}${quoteStyle}`
-      await getProjectDb().$executeRawUnsafe(`DELETE FROM ${schema}.${model}`)
+      // For database support MultiSchema, add schema prefixing
+      const qualifiedName = getQualifiedName(modelName, schemaMap, quoteStyle, supportMultiSchema)
+      await getProjectDb().$executeRawUnsafe(`DELETE FROM ${qualifiedName}`)
     } catch (e) {
       const match = e.message.match(/Code: `(\d+)`/)
       if (match && FOREIGN_KEY_ERRORS.includes(parseInt(match[1]))) {
