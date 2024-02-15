@@ -2,8 +2,8 @@ import { rscBuildAnalyze } from './rsc/rscBuildAnalyze'
 import { rscBuildClient } from './rsc/rscBuildClient'
 import { rscBuildClientEntriesMappings } from './rsc/rscBuildClientEntriesFile'
 import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets'
+import { rscBuildForWorker } from './rsc/rscBuildForWorker'
 import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars'
-import { rscBuildForWorker } from './rsc/rscBuildServer'
 
 interface Args {
   viteConfigPath: string
