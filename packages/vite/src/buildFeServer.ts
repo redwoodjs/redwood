@@ -1,17 +1,12 @@
-import type { PluginBuild } from 'esbuild'
-import { build as esbuildBuild } from 'esbuild'
 import { build as viteBuild } from 'vite'
 
-import {
-  getRouteHookBabelPlugins,
-  transformWithBabel,
-} from '@redwoodjs/babel-config'
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
-import { findRouteHooksSrc } from '@redwoodjs/internal/dist/files'
+import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { buildRouteHooks } from './buildRouteHooks'
 import { buildRouteManifest } from './buildRouteManifest'
-import { buildRscFeServer } from './buildRscFeServer'
+import { buildRscClientAndWorker } from './buildRscFeServer'
 import { ensureProcessDirWeb } from './utils'
 
 export interface BuildOptions {
@@ -19,12 +14,17 @@ export interface BuildOptions {
   webDir?: string
 }
 
+// const SKIP = true
+
 export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   ensureProcessDirWeb(webDir)
 
   const rwPaths = getPaths()
   const rwConfig = getConfig()
   const viteConfigPath = rwPaths.web.viteConfig
+
+  const rscBuild = rwConfig.experimental?.rsc?.enabled
+  const streamingBuild = rwConfig.experimental?.streamingSsr?.enabled
 
   if (!viteConfigPath) {
     throw new Error(
@@ -41,36 +41,41 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     )
   }
 
-  if (rwConfig.experimental?.rsc?.enabled) {
+  if (rscBuild) {
     if (!rwPaths.web.entries) {
       throw new Error('RSC entries file not found')
     }
 
-    await buildRscFeServer({
+    await buildRscClientAndWorker({
       viteConfigPath,
       webHtml: rwPaths.web.html,
       entries: rwPaths.web.entries,
       webDist: rwPaths.web.dist,
       webDistServer: rwPaths.web.distServer,
-      webDistServerEntries: rwPaths.web.distServerEntries,
+      webDistServerEntries: rwPaths.web.dist + '/rsc/entries.js',
     })
-
-    // Write a route manifest
-    return await buildRouteManifest()
-
-    //
-    // RSC specific code ends here
-    //
   }
 
-  //
-  // SSR Specific code below
-  //
+  // We generate the RSC client bundle in the buildRscFeServer function
+  // Streaming and RSC client bundles are **not** the same
+  if (streamingBuild && !rscBuild) {
+    await buildWeb({ verbose })
+  }
 
-  // Step 1A: Generate the client bundle
-  await buildWeb({ verbose })
+  // Generates the output used for the server (streaming/ssr but NOT rsc)
+  await buildForServer(viteConfigPath, rwPaths, verbose)
 
-  // Step 1B: Generate the server output
+  await buildRouteHooks(verbose, rwPaths)
+
+  // Write a route manifest
+  await buildRouteManifest()
+}
+
+async function buildForServer(
+  viteConfigPath: string,
+  rwPaths: Paths,
+  verbose: boolean | undefined
+) {
   await viteBuild({
     configFile: viteConfigPath,
     build: {
@@ -78,48 +83,10 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
       ssr: true, // use boolean here, instead of string.
       // rollup inputs are defined in the vite plugin
     },
+    legacy: {
+      buildSsrCjsExternalHeuristics: true, // @MARK @TODO: this gets picked up by the RSC build if its in the index.js.....
+    },
     envFile: false,
     logLevel: verbose ? 'info' : 'warn',
   })
-
-  const allRouteHooks = findRouteHooksSrc()
-
-  const runRwBabelTransformsPlugin = {
-    name: 'rw-esbuild-babel-transform',
-    setup(build: PluginBuild) {
-      build.onLoad({ filter: /\.(js|ts|tsx|jsx)$/ }, async (args) => {
-        const transformedCode = await transformWithBabel(args.path, [
-          ...getRouteHookBabelPlugins(),
-        ])
-
-        if (transformedCode?.code) {
-          return {
-            contents: transformedCode.code,
-            loader: 'js',
-          }
-        }
-
-        throw new Error(`Could not transform file: ${args.path}`)
-      })
-    },
-  }
-
-  await esbuildBuild({
-    absWorkingDir: getPaths().web.base,
-    entryPoints: allRouteHooks,
-    platform: 'node',
-    target: 'node16',
-    // @MARK Disable splitting and esm, because Redwood web modules don't support esm yet
-    // outExtension: { '.js': '.mjs' },
-    // format: 'esm',
-    // splitting: true,
-    bundle: true,
-    plugins: [runRwBabelTransformsPlugin],
-    packages: 'external',
-    logLevel: verbose ? 'info' : 'error',
-    outdir: rwPaths.web.distRouteHooks,
-  })
-
-  // Write a route manifest
-  await buildRouteManifest()
 }

@@ -10,11 +10,11 @@ import { onWarn } from '../lib/onWarn'
 
 /**
  * RSC build. Step 3.
- * buildFeServer -> buildRscFeServer -> rscBuildClient
- * Generate the client bundle
+ * buildFeServer -> buildRscFeServer -> rscBuildForWorker
+ * Generate the output to be used on the rsc worker (not the actual server!)
  */
 // @TODO(RSC_DC): no redwood-vite plugin, add it back in here
-export async function rscBuildServer(
+export async function rscBuildForWorker(
   entriesFile: string,
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
@@ -43,6 +43,10 @@ export async function rscBuildServer(
     envPrefix: 'REDWOOD_ENV_',
     publicDir: path.join(rwPaths.web.base, 'public'),
     envFile: false,
+    legacy: {
+      // @MARK: for the worker, we're building ESM! (not CJS)
+      buildSsrCjsExternalHeuristics: false,
+    },
     define: {
       RWJS_ENV: {
         // @NOTE we're avoiding process.env here, unlike webpack
@@ -142,7 +146,7 @@ export async function rscBuildServer(
       // TODO (RSC) Change output dir to just dist. We should be "server
       // first". Client components are the "special case" and should be output
       // to dist/client
-      outDir: rwPaths.web.distServer + '/rsc',
+      outDir: rwPaths.web.dist + '/rsc',
       manifest: 'server-build-manifest.json',
       rollupOptions: {
         onwarn: onWarn,

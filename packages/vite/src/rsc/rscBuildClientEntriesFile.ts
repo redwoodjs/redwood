@@ -1,7 +1,7 @@
 import fs from 'fs/promises'
 
 import type { rscBuildClient } from './rscBuildClient'
-import type { rscBuildServer } from './rscBuildServer'
+import type { rscBuildForWorker } from './rscBuildServer'
 
 /**
  * RSC build. Step 5.
@@ -11,7 +11,7 @@ import type { rscBuildServer } from './rscBuildServer'
 // TODO(RSC_DC) : Understand how this gets used, we can probably use a vite plugin to do this
 export function rscBuildClientEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
-  serverBuildOutput: Awaited<ReturnType<typeof rscBuildServer>>,
+  serverBuildOutput: Awaited<ReturnType<typeof rscBuildForWorker>>,
   clientEntryFiles: Record<string, string>,
   webDistServerEntries: string
 ) {
