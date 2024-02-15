@@ -175,6 +175,9 @@ export async function runFeServer() {
     })
   )
 
+  // Serve static assets that aren't covered by any of the above routes or middleware
+  app.use(express.static(rwPaths.web.dist, { index: false }))
+
   app.listen(rwConfig.web.port)
   console.log(
     `Started production FE server on http://localhost:${rwConfig.web.port}`
