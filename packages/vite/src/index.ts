@@ -248,7 +248,7 @@ export default function redwoodPluginVite(): PluginOption[] {
             },
           },
           build: {
-            outDir: options.build?.outDir || rwPaths.web.dist,
+            outDir: options.build?.outDir || rwPaths.web.dist + '/client',
             emptyOutDir: true,
             manifest: !env.ssrBuild ? 'client-build-manifest.json' : undefined,
             sourcemap: !env.ssrBuild && rwConfig.web.sourceMap, // Note that this can be boolean or 'inline'
@@ -256,11 +256,8 @@ export default function redwoodPluginVite(): PluginOption[] {
               input: getRollupInput(!!env.ssrBuild),
             },
           },
-          legacy: {
-            buildSsrCjsExternalHeuristics: rwConfig.experimental?.rsc?.enabled
-              ? false
-              : env.ssrBuild,
-          },
+          // @MARK: do not set buildSsrCjsExternalHeuristics here
+          // because rsc builds want false, client and server build wants true
           optimizeDeps: {
             esbuildOptions: {
               // @MARK this is because JS projects in Redwood don't have .jsx extensions

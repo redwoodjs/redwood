@@ -85,10 +85,12 @@ export async function rscBuildClient(
           }),
         },
       }),
+
+      // @TODO(RSC_DC): this plugin modifies index.html but in streaming there's not index.html!!
       rscIndexPlugin(),
     ],
     build: {
-      outDir: webDist,
+      outDir: webDist + '/client',
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
       // TODO (RSC) Enable this when we switch to a server-first approach
       // emptyOutDir: false, // Already done when building server

@@ -234,7 +234,7 @@ const getEntriesFile = async (
     return path.join(config.root, config.build.outDir, 'entries.js')
   }
 
-  return rwPaths.web.distServerEntries
+  return rwPaths.web.dist + '/rsc/entries.js'
 }
 
 const getFunctionComponent = async (
@@ -342,7 +342,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
   console.log('config.root', config.root)
   console.log('rwPaths.base', rwPaths.base)
 
-  // @MARK: Why proxy? Remove this and see what breaks.
+  // TODO(RSC_DC): Why proxy? Remove this and see what breaks.
   const bundlerConfig = new Proxy(
     {},
     {

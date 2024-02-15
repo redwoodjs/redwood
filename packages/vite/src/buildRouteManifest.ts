@@ -15,7 +15,7 @@ import type { RWRouteManifest } from './types'
  */
 export async function buildRouteManifest() {
   const buildManifestUrl = url.pathToFileURL(
-    path.join(getPaths().web.dist, 'client-build-manifest.json')
+    path.join(getPaths().web.dist + '/client', 'client-build-manifest.json')
   ).href
   const clientBuildManifest: ViteBuildManifest = (
     await import(buildManifestUrl, { with: { type: 'json' } })

@@ -49,13 +49,11 @@ export async function runFeServer() {
 
   registerFwGlobals()
 
-  try {
-    // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
-    // TODO (RSC) Remove the try/catch, or at least the if-statement in there
-    // once RSC is always enabled
-    await setClientEntries('load')
-  } catch (e) {
-    if (rwConfig.experimental?.rsc?.enabled) {
+  if (rwConfig.experimental?.rsc?.enabled) {
+    try {
+      // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
+      await setClientEntries('load')
+    } catch (e) {
       console.error('Failed to load client entries')
       console.error(e)
       process.exit(1)
@@ -68,7 +66,7 @@ export async function runFeServer() {
   ).default
 
   const buildManifestUrl = url.pathToFileURL(
-    path.join(rwPaths.web.dist, 'client-build-manifest.json')
+    path.join(rwPaths.web.dist + '/client', 'client-build-manifest.json')
   ).href
   const buildManifest: ViteBuildManifest = (
     await import(buildManifestUrl, { with: { type: 'json' } })
@@ -80,8 +78,10 @@ export async function runFeServer() {
     console.log('='.repeat(80))
   }
 
+  // @MARK: @TODO(RSC_DC): Because of the way we pass everything as an input during rsc build
+  // it's hard to determine what the true entry is. Compare with SSR-only build.
   const indexEntry = Object.values(buildManifest).find((manifestItem) => {
-    return manifestItem.isEntry
+    return manifestItem.isEntry && manifestItem.src?.includes('index.html')
   })
 
   if (!indexEntry) {
@@ -92,7 +92,7 @@ export async function runFeServer() {
   // For CF workers, we'd need an equivalent of this
   app.use(
     '/assets',
-    express.static(rwPaths.web.dist + '/assets', { index: false })
+    express.static(rwPaths.web.dist + '/client/assets', { index: false })
   )
 
   // 2. Proxy the api server
@@ -129,33 +129,17 @@ export async function runFeServer() {
       ? route.matchRegexString
       : route.pathDefinition
 
-    if (!getConfig().experimental?.rsc?.enabled) {
-      const routeHandler = await createReactStreamingHandler({
-        route,
-        clientEntryPath: clientEntry,
-        getStylesheetLinks,
-      })
+    // TODO(RSC_DC): RSC is rendering blank page, try using this function for initial render
+    const routeHandler = await createReactStreamingHandler({
+      route,
+      clientEntryPath: clientEntry,
+      getStylesheetLinks,
+    })
 
-      // Wrap with whatg/server adapter. Express handler -> Fetch API handler
-      app.get(expressPathDef, createServerAdapter(routeHandler))
-    } else {
-      console.log('expressPathDef', expressPathDef)
+    console.log('Attatching streaming handler for route', route.pathDefinition)
 
-      // This is for RSC only. And only for now, until we have SSR working we
-      // with RSC. This maps /, /about, etc to index.html
-      app.get(expressPathDef, (req, res, next) => {
-        // Serve index.html for all routes, to let client side routing take
-        // over
-        req.url = '/'
-        // Without this, we get a flash of a url with a trailing slash. Still
-        // works, but doesn't look nice
-        // For example, if we navigate to /about we'll see a flash of /about/
-        // before returning to /about
-        req.originalUrl = '/'
-
-        return express.static(rwPaths.web.dist)(req, res, next)
-      })
-    }
+    // Wrap with whatg/server adapter. Express handler -> Fetch API handler
+    app.get(expressPathDef, createServerAdapter(routeHandler))
   }
 
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
