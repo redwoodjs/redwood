@@ -58,7 +58,7 @@ let quoteStyle, supportMultiSchema
 // Also check if the database supports Prisma's multiSchema preview feature
 const getProjectDBInfo = async () => {
   if (quoteStyle !== undefined && supportMultiSchema !== undefined) {
-    return { quoteStyle, supportMultiSchema };
+    return { quoteStyle, supportMultiSchema }
   }
 
   const { getConfig: getPrismaConfig } = require('@prisma/internals')
@@ -70,18 +70,18 @@ const getProjectDBInfo = async () => {
 
   switch (config.datasources?.[0]?.provider) {
     case 'mysql':
-      quoteStyle = '`';
-      supportMultiSchema = false;
-      break;
+      quoteStyle = '`'
+      supportMultiSchema = false
+      break
     case 'postgresql':
     case 'sqlserver':
     case 'cockroachdb':
-      quoteStyle = '"';
-      supportMultiSchema = true;
-      break;
+      quoteStyle = '"'
+      supportMultiSchema = true
+      break
     default:
-      quoteStyle = '"';
-      supportMultiSchema = false;
+      quoteStyle = '"'
+      supportMultiSchema = false
   }
 
   return { quoteStyle, supportMultiSchema }
@@ -189,22 +189,32 @@ const extractModelSchemas = (schemaFilePath) => {
   return modelSchemaMap
 }
 
-function getQualifiedName(modelName, schemaMap, quoteStyle, supportMultiSchema) {
+function getQualifiedName(
+  modelName,
+  schemaMap,
+  quoteStyle,
+  supportMultiSchema
+) {
   return supportMultiSchema
     ? `${quoteStyle}${schemaMap[modelName]}${quoteStyle}.${quoteStyle}${modelName}${quoteStyle}`
-    : `${quoteStyle}${modelName}${quoteStyle}`;
+    : `${quoteStyle}${modelName}${quoteStyle}`
 }
 
 const teardown = async () => {
   const fs = require('fs')
 
   const { quoteStyle, supportMultiSchema } = await getProjectDBInfo()
-  const schemaMap = supportMultiSchema ? extractModelSchemas(dbSchemaPath) : {};
+  const schemaMap = supportMultiSchema ? extractModelSchemas(dbSchemaPath) : {}
 
   for (const modelName of teardownOrder) {
     try {
       // For database support MultiSchema, add schema prefixing
-      const qualifiedName = getQualifiedName(modelName, schemaMap, quoteStyle, supportMultiSchema)
+      const qualifiedName = getQualifiedName(
+        modelName,
+        schemaMap,
+        quoteStyle,
+        supportMultiSchema
+      )
       await getProjectDb().$executeRawUnsafe(`DELETE FROM ${qualifiedName}`)
     } catch (e) {
       const match = e.message.match(/Code: `(\d+)`/)
