@@ -82,6 +82,21 @@ async function createServer() {
 
     app.get(expressPathDef, createServerAdapter(routeHandler))
 
+    app.get(
+      createPngRouteDef(route.matchRegexString),
+      createServerAdapter(async (req: Request) => {
+        const entryServerImport = await vite.ssrLoadModule(
+          rwPaths.web.entryServer as string // already validated in dev server
+        )
+
+        const middleware = entryServerImport.middleware
+
+        const [mwRes] = await invoke(req, middleware, { route })
+
+        return mwRes.toResponse()
+      })
+    )
+
     app.post(
       '*',
       createServerAdapter(async (req: Request) => {
@@ -101,6 +116,16 @@ async function createServer() {
   const port = getConfig().web.port
   console.log(`Started server on http://localhost:${port}`)
   return await app.listen(port)
+}
+
+function createPngRouteDef(matchRegexString: string): any {
+  if (matchRegexString.endsWith('/$')) {
+    console.log(1)
+    return new RegExp(matchRegexString.replace('$', 'index.png$'))
+  } else if (matchRegexString.endsWith('$')) {
+    console.log(2)
+    return new RegExp(matchRegexString.replace('$', '.png$'))
+  }
 }
 
 let devApp = createServer()
