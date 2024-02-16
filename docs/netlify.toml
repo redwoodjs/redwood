@@ -280,8 +280,19 @@
   to = "/docs/3.x/:splat"
   status = 301
 
-[[plugins]]
-  package = "@algolia/netlify-plugin-crawler"
+# Redirects for "Configuring Fastify" after the server file was released in v7
 
-  [plugins.inputs]
-    branches = ['next']
+[[redirects]]
+  from = "/docs/app-configuration-redwood-toml#configure-fastify"
+  to = "/docs/docker#using-the-server-file"
+  status = 301
+
+[[redirects]]
+  from = "/docs/app-configuration-redwood-toml#register-custom-fastify-plugins"
+  to = "/docs/docker#configuring-the-server"
+  status = 301
+
+[[redirects]]
+  from = "/docs/app-configuration-redwood-toml#how-to-configure-fastify-to-accept-file-uploads"
+  to = "/docs/docker#configuring-the-server"
+  status = 301
