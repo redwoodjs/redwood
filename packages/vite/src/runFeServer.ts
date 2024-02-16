@@ -74,7 +74,7 @@ export async function runFeServer() {
 
   if (rwConfig.experimental?.rsc?.enabled) {
     console.log('='.repeat(80))
-    console.log('buildManifest', buildManifest.default)
+    console.log('buildManifest', buildManifest)
     console.log('='.repeat(80))
   }
 
