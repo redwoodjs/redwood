@@ -29,7 +29,7 @@ interface Server extends FastifyInstance {
 // ```
 //
 // We do it here and not in the function below so that users can access env vars before calling `createServer`
-if (process.env.RWJS_CWD && !process.env.REDWOOD_ENV_FILES_LOADED) {
+if (!process.env.REDWOOD_ENV_FILES_LOADED) {
   config({
     path: path.join(getPaths().base, '.env'),
     defaults: path.join(getPaths().base, '.env.defaults'),
