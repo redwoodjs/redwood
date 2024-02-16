@@ -8680,8 +8680,6 @@ __metadata:
     "@types/babel-core": "npm:6.25.10"
     "@types/jest": "npm:29.5.8"
     "@types/node": "npm:20.11.10"
-    "@types/react": "npm:^18.2.55"
-    "@types/react-dom": "npm:^18.2.19"
     "@types/webpack": "npm:5.28.5"
     "@types/webpack-env": "npm:1.18.4"
     babel-jest: "npm:^29.7.0"
