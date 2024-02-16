@@ -4,6 +4,8 @@ import path from 'path'
 import * as babel from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 
+// Weird import, but just doing this for typesafety. Its just a type, no harm importing from src.
+import type { PluginOptions as RoutesAutoloaderOptions } from '@redwoodjs/babel-config/src/plugins/babel-plugin-redwood-routes-auto-loader'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import type { RegisterHookOptions } from './common'
@@ -99,11 +101,20 @@ export const getWebSideBabelPlugins = (
 }
 
 export const getWebSideOverrides = (
-  { prerender, forVite }: Flags = {
-    prerender: false,
+  { forPrerender, forVite, forRscClient }: Flags = {
+    forPrerender: false,
     forVite: false,
+    forRscClient: false,
   }
 ) => {
+  // Bit of complexity here!
+  // The plugin will modify the Routes file differently based on what context we're building for
+  const routeLoaderOptions: RoutesAutoloaderOptions = {
+    forPrerender,
+    forVite,
+    forRscClient,
+  }
+
   const overrides = [
     {
       test: /.+Cell.(js|tsx|jsx)$/,
@@ -116,10 +127,7 @@ export const getWebSideOverrides = (
       plugins: [
         [
           require('./plugins/babel-plugin-redwood-routes-auto-loader').default,
-          {
-            prerender,
-            vite: forVite,
-          },
+          routeLoaderOptions,
         ],
       ],
     },
@@ -199,8 +207,9 @@ export const getWebSideBabelConfigPath = () => {
 // These flags toggle on/off certain features
 export interface Flags {
   forJest?: boolean // will change the alias for module-resolver plugin
-  prerender?: boolean // changes what babel-plugin-redwood-routes-auto-loader does
+  forPrerender?: boolean // changes what babel-plugin-redwood-routes-auto-loader does
   forVite?: boolean
+  forRscClient?: boolean
 }
 
 export const getWebSideDefaultBabelConfig = (options: Flags = {}) => {
@@ -234,7 +243,7 @@ export const registerWebSideBabelHook = ({
     // We only register for prerender currently
     // Static importing pages makes sense
     overrides: [
-      ...getWebSideOverrides({ prerender: true, forVite }),
+      ...getWebSideOverrides({ forPrerender: true, forVite }),
       ...overrides,
     ],
   })

@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
-import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn'
 
@@ -29,19 +29,11 @@ export async function rscBuildForWorker(
     ...customModules,
   }
 
-  console.log('input', input)
-
   const rwPaths = getPaths()
-  const rwConfig = getConfig()
-
-  console.log(
-    'rscBuildServer.ts RWJS_EXP_RSC',
-    rwConfig.experimental?.rsc?.enabled
-  )
 
   const workerBuildOutput = await viteBuild({
-    // ...configFileConfig,
-    root: rwPaths.web.base, // 👈 @MARK: watch out, this is different from the main build!
+    configFile: false, // @MARK disable loading the original plugin, only use settings in this file. This prevents issues with the routes-auto-loader
+    root: rwPaths.web.src, // @MARK this used to base, not sure if intentional or not!!!
     envFile: false,
     legacy: {
       // @MARK: for the worker, we're building ESM! (not CJS)
@@ -98,9 +90,6 @@ export async function rscBuildForWorker(
     build: {
       ssr: true,
       ssrEmitAssets: true,
-      // TODO (RSC) Change output dir to just dist. We should be "server
-      // first". Client components are the "special case" and should be output
-      // to dist/client
       outDir: rwPaths.web.dist + '/rsc',
       manifest: 'server-build-manifest.json',
       rollupOptions: {

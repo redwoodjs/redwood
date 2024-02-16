@@ -35,7 +35,7 @@ export async function rscBuildClient(
   }
 
   const clientBuildOutput = await viteBuild({
-    // configFile: viteConfigPath,
+    // @MARK  This runs on TOP of the settings in rw-vite-plugin, because we don't set configFile: false
     root: rwPaths.web.src,
     envPrefix: 'REDWOOD_ENV_',
     publicDir: path.join(rwPaths.web.base, 'public'),
@@ -43,10 +43,13 @@ export async function rscBuildClient(
     // @MARK: We need to duplicate the defines here.
     define: getViteDefines(),
     plugins: [
+      // @MARK We need to duplicate the plugins here.... otherwise builds fail I don't understand why
       react({
         babel: {
           ...getWebSideDefaultBabelConfig({
             forVite: true,
+            // @MARK 👇 This flag is different for RSC Client builds
+            forRscClient: true,
           }),
         },
       }),

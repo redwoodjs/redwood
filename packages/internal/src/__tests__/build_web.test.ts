@@ -64,7 +64,7 @@ test('Check routes are imported with require when staticImports flag is enabled'
   const routesFile = getPaths().web.routes
 
   const prerendered = prebuildWebFile(routesFile, {
-    prerender: true,
+    forPrerender: true,
     forJest: true,
   })?.code
 

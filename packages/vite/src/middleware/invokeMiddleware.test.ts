@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 
 import { defaultAuthProviderState } from '@redwoodjs/auth'
 
@@ -33,6 +33,9 @@ describe('Invoke middleware', () => {
   })
 
   test('returns a MiddlewareResponse, even if middleware throws', async () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {})
     const throwingMiddleware = () => {
       throw new Error('I want to break free')
     }
@@ -44,6 +47,7 @@ describe('Invoke middleware', () => {
 
     expect(mwRes).toBeInstanceOf(MiddlewareResponse)
     expect(authState).toEqual(defaultAuthProviderState)
+    consoleErrorSpy.mockRestore()
   })
 
   test('returns a MiddlewareResponse, even if middleware returns a Response', async () => {
