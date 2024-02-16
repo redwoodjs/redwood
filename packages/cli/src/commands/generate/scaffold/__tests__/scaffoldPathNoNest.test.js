@@ -1,13 +1,19 @@
 globalThis.__dirname = __dirname
 import path from 'path'
 
+import { vol } from 'memfs'
 import { vi, describe, beforeAll, test, expect } from 'vitest'
 
 import '../../../../lib/test'
 
 import * as scaffold from '../scaffold'
 
+vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 vi.mock('execa')
+
+beforeAll(() => {
+  vol.fromJSON({ 'redwood.toml': '' }, '/')
+})
 
 describe('admin/Post', () => {
   let filesLower

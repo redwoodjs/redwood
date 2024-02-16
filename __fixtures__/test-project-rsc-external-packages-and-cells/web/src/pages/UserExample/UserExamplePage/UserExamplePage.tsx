@@ -1,11 +1,11 @@
-import UserExampleCell from 'src/components/UserExample/UserExampleCell'
+import UserExampleServerCell from 'src/components/UserExample/UserExampleServerCell'
 
 type UserExamplePageProps = {
   id: number
 }
 
 const UserExamplePage = ({ id }: UserExamplePageProps) => {
-  return <UserExampleCell id={id} />
+  return <UserExampleServerCell id={id} />
 }
 
 export default UserExamplePage

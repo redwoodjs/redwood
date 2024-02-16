@@ -159,6 +159,18 @@ export async function runFeServer() {
     })
   )
 
+  // Serve static assets that aren't covered by any of the above routes or middleware
+  // Note: That the order here is important and that we are explicitly preventing access
+  // to the server dist folder
+  // TODO: In the future, we should explicitly serve `web/dist/client` and `web/dist/rsc`
+  // and simply not serve the `web/dist/server` folder
+  app.use(`/${path.basename(rwPaths.web.distServer)}/*`, (_req, res, _next) => {
+    return res
+      .status(403)
+      .end('403 Forbidden: Access to server dist is forbidden')
+  })
+  app.use(express.static(rwPaths.web.dist, { index: false }))
+
   app.listen(rwConfig.web.port)
   console.log(
     `Started production FE server on http://localhost:${rwConfig.web.port}`

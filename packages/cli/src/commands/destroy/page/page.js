@@ -51,7 +51,7 @@ export const tasks = ({ name, path }) =>
 
 export const handler = async ({ name, path }) => {
   recordTelemetryAttributes({
-    command: 'destory page',
+    command: 'destroy page',
   })
   const t = tasks({ name, path })
   try {

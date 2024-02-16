@@ -15,7 +15,6 @@ import type { MockInstance } from 'vitest'
 
 import { getConfig } from '@redwoodjs/project-config'
 
-import { createServer } from '../createServer'
 import {
   resolveOptions,
   DEFAULT_CREATE_SERVER_OPTIONS,
@@ -24,9 +23,16 @@ import {
 // Set up RWJS_CWD.
 let original_RWJS_CWD: string | undefined
 
-beforeAll(() => {
+// We have to asynchronously import the module because it relies on RWJS_CWD being set.
+// TODO(jtoar): The lint rule below is complaining about the import,
+// but I'm not sure what else to do at the moment. Happy to take suggestions!
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+let createServer: typeof import('../createServer.js').createServer
+
+beforeAll(async () => {
   original_RWJS_CWD = process.env.RWJS_CWD
   process.env.RWJS_CWD = path.join(__dirname, './fixtures/redwood-app')
+  createServer = (await import('../createServer.js')).createServer
 })
 
 afterAll(() => {

@@ -22,7 +22,7 @@ import type { PluginObj, types } from '@babel/core'
 const EXPECTED_EXPORTS_FROM_CELL = [
   'beforeQuery',
   'QUERY',
-  'DATA',
+  'data',
   'isEmpty',
   'afterQuery',
   'Loading',
@@ -114,16 +114,22 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         }
       },
       Program: {
+        enter() {
+          // Reset variables as they're still in scope from the previous file
+          // babel transformed in the same process
+          exportNames = []
+          hasDefaultExport = false
+        },
         exit(path) {
           const hasQueryOrDataExport =
-            exportNames.includes('QUERY') || exportNames.includes('DATA')
+            exportNames.includes('QUERY') || exportNames.includes('data')
 
           // If the file already has a default export then
           //   1. It's likely not a cell, or it's a cell that's already been
           //      wrapped in `createCell`
           //   2. If we added another default export we'd be breaking JS module
           //      rules. There can only be one default export.
-          // If there's no QUERY or DATA export it's not a valid cell
+          // If there's no `QUERY` or `data` export it's not a valid cell
           if (hasDefaultExport || !hasQueryOrDataExport) {
             return
           }
@@ -170,9 +176,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
               ])
             )
           )
-
-          hasDefaultExport = false
-          exportNames = []
         },
       },
     },

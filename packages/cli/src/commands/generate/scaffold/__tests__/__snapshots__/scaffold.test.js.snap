@@ -1,5 +1,230 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`'use client' directive > creates a new EditPostCell cell with the 'use client' directive 1`] = `
+"'use client'
+
+import { navigate, routes } from '@redwoodjs/router'
+
+import { useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
+
+import PostForm from 'src/components/Post/PostForm'
+
+export const QUERY = gql\`
+  query EditPostById($id: Int!) {
+    post: post(id: $id) {
+      id
+      title
+      slug
+      author
+      body
+      image
+      postedAt
+      isPinned
+      readTime
+      rating
+      upvotes
+      metadata
+      hugeNumber
+    }
+  }
+\`
+
+const UPDATE_POST_MUTATION = gql\`
+  mutation UpdatePostMutation($id: Int!, $input: UpdatePostInput!) {
+    updatePost(id: $id, input: $input) {
+      id
+      title
+      slug
+      author
+      body
+      image
+      postedAt
+      isPinned
+      readTime
+      rating
+      upvotes
+      metadata
+      hugeNumber
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Failure = ({ error }) => (
+  <div className="rw-cell-error">{error?.message}</div>
+)
+
+export const Success = ({ post }) => {
+  const [updatePost, { loading, error }] = useMutation(UPDATE_POST_MUTATION, {
+    onCompleted: () => {
+      toast.success('Post updated')
+      navigate(routes.posts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
+
+  const onSave = (input, id) => {
+    updatePost({ variables: { id, input } })
+  }
+
+  return (
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">
+          Edit Post {post?.id}
+        </h2>
+      </header>
+      <div className="rw-segment-main">
+        <PostForm post={post} onSave={onSave} error={error} loading={loading} />
+      </div>
+    </div>
+  )
+}
+"
+`;
+
+exports[`'use client' directive > creates a new NewPost component with the 'use client' directive 1`] = `
+"'use client'
+
+import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
+
+import { toast } from '@redwoodjs/web/toast'
+
+import PostForm from 'src/components/Post/PostForm'
+
+const CREATE_POST_MUTATION = gql\`
+  mutation CreatePostMutation($input: CreatePostInput!) {
+    createPost(input: $input) {
+      id
+    }
+  }
+\`
+
+const NewPost = () => {
+  const [createPost, { loading, error }] = useMutation(CREATE_POST_MUTATION, {
+    onCompleted: () => {
+      toast.success('Post created')
+      navigate(routes.posts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
+
+  const onSave = (input) => {
+    createPost({ variables: { input } })
+  }
+
+  return (
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">New Post</h2>
+      </header>
+      <div className="rw-segment-main">
+        <PostForm onSave={onSave} loading={loading} error={error} />
+      </div>
+    </div>
+  )
+}
+
+export default NewPost
+"
+`;
+
+exports[`'use client' directive > creates a new PostCell cell with the 'use client' directive 1`] = `
+"'use client'
+
+import Post from 'src/components/Post/Post'
+
+export const QUERY = gql\`
+  query FindPostById($id: Int!) {
+    post: post(id: $id) {
+      id
+      title
+      slug
+      author
+      body
+      image
+      postedAt
+      isPinned
+      readTime
+      rating
+      upvotes
+      metadata
+      hugeNumber
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Post not found</div>
+
+export const Failure = ({ error }) => (
+  <div className="rw-cell-error">{error?.message}</div>
+)
+
+export const Success = ({ post }) => {
+  return <Post post={post} />
+}
+"
+`;
+
+exports[`'use client' directive > creates a new PostsCell cell with the 'use client' directive 1`] = `
+"'use client'
+
+import { Link, routes } from '@redwoodjs/router'
+
+import Posts from 'src/components/Post/Posts'
+
+export const QUERY = gql\`
+  query FindPosts {
+    posts {
+      id
+      title
+      slug
+      author
+      body
+      image
+      postedAt
+      isPinned
+      readTime
+      rating
+      upvotes
+      metadata
+      hugeNumber
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => {
+  return (
+    <div className="rw-text-center">
+      {'No posts yet. '}
+      <Link to={routes.newPost()} className="rw-link">
+        {'Create one?'}
+      </Link>
+    </div>
+  )
+}
+
+export const Failure = ({ error }) => (
+  <div className="rw-cell-error">{error?.message}</div>
+)
+
+export const Success = ({ posts }) => {
+  return <Posts posts={posts} />
+}
+"
+`;
+
 exports[`in javascript (default) mode > creates a edit page 1`] = `
 "import EditPostCell from 'src/components/Post/EditPostCell'
 

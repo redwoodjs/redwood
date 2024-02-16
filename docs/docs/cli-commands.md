@@ -149,12 +149,12 @@ yarn run v1.22.4
 > [ { id: 1, email: 'tom@redwoodjs.com', name: 'Tom'  } ]
 ```
 
-## dataMigrate
+## data-migrate
 
 Data migration tools.
 
-```
-yarn redwood dataMigrate <command>
+```bash
+yarn redwood data-migrate <command>
 ```
 
 | Command   | Description                                                                                 |
@@ -162,24 +162,24 @@ yarn redwood dataMigrate <command>
 | `install` | Appends `DataMigration` model to `schema.prisma`, creates `api/db/dataMigrations` directory |
 | `up`      | Executes outstanding data migrations                                                        |
 
-### dataMigrate install
+### data-migrate install
 
 - Appends a `DataMigration` model to `schema.prisma` for tracking which data migrations have already run.
 - Creates a DB migration using `yarn redwood prisma migrate dev --create-only create_data_migrations`.
 - Creates `api/db/dataMigrations` directory to contain data migration scripts
 
 ```bash
-yarn redwood dataMigrate install
+yarn redwood data-migrate install
 ```
 
-### dataMigrate up
+### data-migrate up
 
 Executes outstanding data migrations against the database. Compares the list of files in `api/db/dataMigrations` to the records in the `DataMigration` table in the database and executes any files not present.
 
 If an error occurs during script execution, any remaining scripts are skipped and console output will let you know the error and how many subsequent scripts were skipped.
 
 ```bash
-yarn redwood dataMigrate up
+yarn redwood data-migrate up
 ```
 
 ## dev
@@ -2156,7 +2156,7 @@ yarn redwood test [side..]
 
 > **Note** all other flags are passed onto the jest cli. So for example if you wanted to update your snapshots you can pass the `-u` flag
 
-## type-check
+## type-check (alias tsc or tc)
 
 Runs a TypeScript compiler check on both the api and the web sides.
 

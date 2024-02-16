@@ -51,3 +51,58 @@ test('Page with Cell', async ({ page }) => {
 
   page.close()
 })
+
+test("'use client' cell Empty state", async ({ page }) => {
+  await page.goto('/empty-users')
+
+  const h1 = await page.locator('h1').innerHTML()
+  expect(h1).toMatch(/EmptyUsers - emptyUsers/)
+
+  await expect(page.getByText('No emptyUsers yet.')).toBeVisible()
+
+  const createLink = page.locator('a').getByText('Create one?')
+  await expect(createLink).toBeVisible()
+
+  page.close()
+})
+
+test("'use client' cell navigation", async ({ page }) => {
+  await page.goto('/empty-users')
+
+  await expect(page.getByText('No emptyUsers yet.')).toBeVisible()
+
+  const createLink = page.locator('a').getByText('Create one?')
+  await expect(createLink).toBeVisible()
+
+  await createLink.click()
+
+  page.waitForURL('/empty-users/new')
+
+  await expect(page.getByText('New EmptyUser')).toBeVisible()
+  await expect(page.getByText('Email')).toBeVisible()
+  await expect(page.getByText('Name')).toBeVisible()
+  await expect(page.getByText('Save')).toBeVisible()
+
+  page.close()
+})
+
+test('Server Cell', async ({ page }) => {
+  await page.goto('/user-examples/1')
+
+  const h1 = await page.locator('h1').innerHTML()
+  expect(h1).toMatch(/UserExamples - userExamples/)
+
+  await expect(page.getByText('Email')).toBeVisible()
+  await expect(page.getByText('jackie@example.com')).toBeVisible()
+
+  await expect(page.locator('tr').nth(2)).toContainText(/Name\s*jackie/)
+})
+
+test('Server Cell - Error component', async ({ page }) => {
+  await page.goto('/user-examples/7')
+
+  const h1 = await page.locator('h1').innerHTML()
+  expect(h1).toMatch(/UserExamples - userExamples/)
+
+  await expect(page.getByText('UserExample not found')).toBeVisible()
+})
