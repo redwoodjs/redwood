@@ -8,7 +8,7 @@ Search Engine Optimization is a dark art that some folks dedicate their entire l
 
 ## Adding a Title
 
-You certainly want to change the title of your Redwood app from the default of "Redwood App." You can start by adding or modifing `title` inside of `/redwood.toml`
+You certainly want to change the title of your Redwood app from the default of "Redwood App." You can start by adding or modifying `title` inside of `/redwood.toml`
 
 ```diff title=redwood.toml
 [web]
@@ -227,7 +227,7 @@ If you define _any_ `og` prop, we will copy any `title` and `description` to an 
 <meta property="og:title" content="My Website" />
 ```
 
-You can override this behavior by explictly setting `og:title` or `og:description` to `null`:
+You can override this behavior by explicitly setting `og:title` or `og:description` to `null`:
 
 ```jsx
 <Metadata title="My Website" og={{ title: null }}/>
@@ -272,7 +272,7 @@ If you define a `charSet` prop we will create a `<meta>` tag with the `charset` 
 <meta charset="utf-8" />
 ```
 
-We simplifed some of the examples above by excluding the generated `<title>` and `og:type` tags, so here's the real output if you included `title` and `og` props:
+We simplified some of the examples above by excluding the generated `<title>` and `og:type` tags, so here's the real output if you included `title` and `og` props:
 
 ```jsx
 <Metadata title="My Website" og />
