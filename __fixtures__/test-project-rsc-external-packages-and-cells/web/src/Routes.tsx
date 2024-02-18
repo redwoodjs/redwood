@@ -21,6 +21,7 @@ const UserExampleUserExamplePage = serve('UserExampleUserExamplePage')
 const UserExampleNewUserExamplePage = serve('UserExampleNewUserExamplePage')
 const EmptyUserEmptyUsersPage = serve('EmptyUserEmptyUsersPage')
 const EmptyUserNewEmptyUserPage = serve('EmptyUserNewEmptyUserPage')
+const MultiCellPage = serve('MultiCellPage')
 
 const Routes = () => {
   return (
@@ -28,6 +29,7 @@ const Routes = () => {
       <Set wrap={NavigationLayout}>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />
+        <Route path="/multi-cell" page={MultiCellPage} name="multiCell" />
 
         <Set wrap={ScaffoldLayout} title="EmptyUsers" titleTo="emptyUsers" buttonLabel="New EmptyUser" buttonTo="newEmptyUser">
           <Route path="/empty-users/new" page={EmptyUserNewEmptyUserPage} name="newEmptyUser" />
