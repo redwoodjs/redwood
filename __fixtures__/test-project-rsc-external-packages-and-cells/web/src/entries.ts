@@ -20,6 +20,8 @@ export default defineEntries(
         return import('./pages/EmptyUser/EmptyUsersPage/EmptyUsersPage')
       case 'EmptyUserNewEmptyUserPage':
         return import('./pages/EmptyUser/NewEmptyUserPage/NewEmptyUserPage')
+      case 'MultiCellPage':
+        return import('./pages/MultiCellPage/MultiCellPage')
       default:
         return null
     }

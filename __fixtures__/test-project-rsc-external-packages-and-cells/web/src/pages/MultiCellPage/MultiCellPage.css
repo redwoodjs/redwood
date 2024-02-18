@@ -1,0 +1,9 @@
+.multi-cell-page {
+  padding: 1em;
+}
+
+.multi-cell-page-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em;
+}
