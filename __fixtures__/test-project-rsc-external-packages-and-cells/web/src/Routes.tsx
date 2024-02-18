@@ -25,21 +25,23 @@ const EmptyUserNewEmptyUserPage = serve('EmptyUserNewEmptyUserPage')
 const Routes = () => {
   return (
     <Router>
-      <Set wrap={ScaffoldLayout} title="EmptyUsers" titleTo="emptyUsers" buttonLabel="New EmptyUser" buttonTo="newEmptyUser">
-        <Route path="/empty-users/new" page={EmptyUserNewEmptyUserPage} name="newEmptyUser" />
-        {/* <Route path="/empty-users/{id:Int}/edit" page={EmptyUserEditEmptyUserPage} name="editEmptyUser" />
-        <Route path="/empty-users/{id:Int}" page={EmptyUserEmptyUserPage} name="emptyUser" /> */}
-        <Route path="/empty-users" page={EmptyUserEmptyUsersPage} name="emptyUsers" />
-      </Set>
-      <Set wrap={ScaffoldLayout} title="UserExamples" titleTo="userExamples" buttonLabel="New UserExample" buttonTo="newUserExample">
-        <Route path="/user-examples/new" page={UserExampleNewUserExamplePage} name="newUserExample" />
-        {/* <Route path="/user-examples/{id:Int}/edit" page={UserExampleEditUserExamplePage} name="editUserExample" /> */}
-        <Route path="/user-examples/{id:Int}" page={UserExampleUserExamplePage} name="userExample" />
-        <Route path="/user-examples" page={UserExampleUserExamplesPage} name="userExamples" />
-      </Set>
       <Set wrap={NavigationLayout}>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />
+
+        <Set wrap={ScaffoldLayout} title="EmptyUsers" titleTo="emptyUsers" buttonLabel="New EmptyUser" buttonTo="newEmptyUser">
+          <Route path="/empty-users/new" page={EmptyUserNewEmptyUserPage} name="newEmptyUser" />
+          {/* <Route path="/empty-users/{id:Int}/edit" page={EmptyUserEditEmptyUserPage} name="editEmptyUser" />
+            <Route path="/empty-users/{id:Int}" page={EmptyUserEmptyUserPage} name="emptyUser" /> */}
+          <Route path="/empty-users" page={EmptyUserEmptyUsersPage} name="emptyUsers" />
+        </Set>
+
+        <Set wrap={ScaffoldLayout} title="UserExamples" titleTo="userExamples" buttonLabel="New UserExample" buttonTo="newUserExample">
+          <Route path="/user-examples/new" page={UserExampleNewUserExamplePage} name="newUserExample" />
+          {/* <Route path="/user-examples/{id:Int}/edit" page={UserExampleEditUserExamplePage} name="editUserExample" /> */}
+          <Route path="/user-examples/{id:Int}" page={UserExampleUserExamplePage} name="userExample" />
+          <Route path="/user-examples" page={UserExampleUserExamplesPage} name="userExamples" />
+        </Set>
       </Set>
       <Route notfound page={NotFoundPage} />
     </Router>
