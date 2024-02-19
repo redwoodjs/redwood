@@ -46,6 +46,8 @@ The `path` prop specifies the URL path to match, starting with the beginning sla
 
 Some pages should only be visible to authenticated users.
 
+We support this using private `<PrivateSet>` component. Read more [further down](#private-set).
+
 ## Sets of Routes
 
 You can group Routes into sets using the `Set` component. `Set` allows you to wrap a set of Routes in another component or array of components—usually a Context, a Layout, or both:
@@ -87,7 +89,7 @@ Conceptually, this fits with how we think about Context and Layouts as things th
 There's a lot of flexibility here. You can even nest `Sets` to great effect:
 
 ```jsx title="Routes.js"
-import { Router, Route, Set, Private } from '@redwoodjs/router'
+import { Router, Route, Set } from '@redwoodjs/router'
 import BlogContext from 'src/contexts/BlogContext'
 import BlogLayout from 'src/layouts/BlogLayout'
 import BlogNavLayout from 'src/layouts/BlogNavLayout'
@@ -145,7 +147,7 @@ Here's an example of how you'd use a private set:
 
 For more fine-grained control, you can specify `roles` (which takes a string for a single role or an array of roles), and the router will check to see that the current user is authorized before giving them access to the Route. If they're not, they will be redirected to the page specified in the `unauthenticated` prop, such as a "forbidden" page. Read more about Role-based Access Control in Redwood [here](how-to/role-based-access-control.md).
 
-To protect `Private` routes for access by a single role:
+To protect private routes for access by a single role:
 
 ```jsx title="Routes.js"
 <Router>
@@ -157,7 +159,7 @@ To protect `Private` routes for access by a single role:
 </Router>
 ```
 
-To protect `Private` routes for access by multiple roles:
+To protect private routes for access by multiple roles:
 
 ```jsx title="Routes.js"
 <Router>
@@ -515,7 +517,7 @@ Redwood will detect your explicit import and refrain from splitting that page in
 
 Because lazily-loaded pages can take a non-negligible amount of time to load (depending on bundle size and network connection), you may want to show a loading indicator to signal to the user that something is happening after they click a link.
 
-In order to show a loader as your page chunks are loading, you simply add the `whileLoadingPage` prop to your route, `Set` or `Private` component.
+In order to show a loader as your page chunks are loading, you simply add the `whileLoadingPage` prop to your route, `Set` or `PrivateSet` component.
 
 ```jsx title="Routes.js"
 import SkeletonLoader from 'src/components/SkeletonLoader'
@@ -577,7 +579,7 @@ In order to display a loader while auth details are being retrieved you can add 
     <Route path="/dashboard" page={DashboardHomePage} name="dashboard" />
 
     {/* other routes */}
-  <PrivateSet>
+  </PrivateSet>
 </Router>
 ```
 
