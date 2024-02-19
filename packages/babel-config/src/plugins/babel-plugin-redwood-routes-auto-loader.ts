@@ -64,17 +64,6 @@ export default function (
     )
   }
 
-  // @MARK @TODO:
-  // we should change this so that it automatically imports "serve" instead of skipping entirely!
-  // But we need to configure the plugin
-  // if (getConfig().experimental?.rsc?.enabled) {
-  //   // TODO (RSC): Enable auto-loader for RSC
-  //   return {
-  //     name: 'babel-plugin-redwood-routes-auto-loader',
-  //     visitor: {},
-  //   }
-  // }
-
   return {
     name: 'babel-plugin-redwood-routes-auto-loader',
     visitor: {
@@ -156,14 +145,14 @@ export default function (
           )
 
           // For RSC Client builds add
-          // import { serve } from '@redwoodjs/vite/client'
+          // import { renderFromRscServer } from '@redwoodjs/vite/client'
           if (forRscClient) {
             nodes.unshift(
               t.importDeclaration(
                 [
                   t.importSpecifier(
-                    t.identifier('serve'),
-                    t.identifier('serve')
+                    t.identifier('renderFromRscServer'),
+                    t.identifier('renderFromRscServer')
                   ),
                 ],
                 t.stringLiteral('@redwoodjs/vite/client')
@@ -176,14 +165,14 @@ export default function (
             const importArgument = t.stringLiteral(relativeImport)
 
             if (forRscClient) {
-              // rsc CLIENT want this format
-              // const AboutPage = serve('AboutPage')
+              // rsc CLIENT wants this format
+              // const AboutPage = renderFromRscServer('AboutPage')
               // this basically allows the page to be rendered via flight response
               nodes.push(
                 t.variableDeclaration('const', [
                   t.variableDeclarator(
                     t.identifier(importName),
-                    t.callExpression(t.identifier('serve'), [
+                    t.callExpression(t.identifier('renderFromRscServer'), [
                       t.stringLiteral(importName),
                     ])
                   ),

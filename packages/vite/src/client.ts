@@ -17,7 +17,10 @@ const checkStatus = async (
   return response
 }
 
-export function serve<Props>(rscId: string, basePath = '/rw-rsc/') {
+export function renderFromRscServer<Props>(
+  rscId: string,
+  basePath = '/rw-rsc/'
+) {
   type SetRerender = (
     rerender: (next: [ReactElement, string]) => void
   ) => () => void
