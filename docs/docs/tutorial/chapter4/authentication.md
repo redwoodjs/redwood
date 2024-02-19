@@ -241,7 +241,7 @@ export default Routes
 
 ```jsx title="web/src/Routes.tsx"
 // highlight-next-line
-import { Private, Router, Route, Set } from '@redwoodjs/router'
+import { PrivateSet, Router, Route, Set } from '@redwoodjs/router'
 
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'

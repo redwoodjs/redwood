@@ -117,11 +117,11 @@ Much of what the functions it returns do is self explanatory, but the options th
 
 ### Protecting routes
 
-You can require that a user be authenticated to navigate to a route by wrapping it in the `Private` component or the `Set` component with the `private` prop set to `true`.
+You can require that a user be authenticated to navigate to a route by wrapping it in the `PrivateSet` component.
 An unauthenticated user will be redirected to the route specified in either component's `unauthenticated` prop:
 
 ```tsx title="web/src/Routes.tsx"
-import { Router, Route, Private } from '@redwoodjs/router'
+import { Router, Route, PrivateSet } from '@redwoodjs/router'
 
 const Routes = () => {
   return (
@@ -134,16 +134,16 @@ const Routes = () => {
       // highlight-end
         <Route path="/admin" page={AdminPage} name="admin" />
         <Route path="/secret-page" page={SecretPage} name="secret" />
-      <PrivateSet>
+      </PrivateSet>
     </Router>
   )
 }
 ```
 
-You can also restrict access by role by passing a role or an array of roles to the `Private` or `Set` component's `hasRole` prop:
+You can also restrict access by role by passing a role or an array of roles to the `PrivateSet` component's `hasRole` prop:
 
 ```tsx title="web/src/Routes.tsx"
-import { Router, Route, Private, Set } from '@redwoodjs/router'
+import { Router, Route, PrivateSet, Set } from '@redwoodjs/router'
 
 const Routes = () => {
   return (
@@ -154,7 +154,7 @@ const Routes = () => {
 
       <PrivateSet unauthenticated="login">
         <Route path="/secret-page" page={SecretPage} name="secret" />
-      <PrivateSet>
+      </PrivateSet>
 
       // highlight-next-line
       <Set private unauthenticated="forbidden" hasRole="admin">
@@ -164,7 +164,7 @@ const Routes = () => {
       // highlight-next-line
       <PrivateSet unauthenticated="forbidden" hasRole={['author', 'editor']}>
         <Route path="/posts" page={PostsPage} name="posts" />
-      <PrivateSet>
+      </PrivateSet>
     </Router>
   )
 }
