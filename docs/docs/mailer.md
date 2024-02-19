@@ -274,12 +274,6 @@ You can have a preview of what your mail templates will look like. These will re
 
 When running in development mode, using the default `@redwoodjs/mailer-handler-studio` development handler, your mail will be sent to a local SMTP inbox running inside of Studio. This allows you to use your app and have full emails sent without worrying about setting up a local inbox yourself or using some other online temporary inbox service.
 
-:::warning
-
-Redwood Studio is an experimental feature and is still in development. Some of the UI shown above might look slightly different and the functionality may be tweaked over time to provide you with a better experience.
-
-:::
-
 ## Need a Renderer or Handler?
 
 If the Mailer does not currenly provide a [handler](notion://www.notion.so/redwoodjs/133467eb46b744fd8ae60df2d493d7d0#handlers) or [renderer](notion://www.notion.so/redwoodjs/133467eb46b744fd8ae60df2d493d7d0#renderers) for the service or technology you wish to use, this doesn't prevent you from using the Mailer. Instead, you can create your own handler or renderer which you can then open source to the wider RedwoodJS community.
