@@ -1,4 +1,4 @@
-import { existsSync } from 'fs'
+import fs from 'fs'
 import path from 'path'
 
 import react from '@vitejs/plugin-react'
@@ -30,9 +30,13 @@ export default function redwoodPluginVite(): PluginOption[] {
   }
 
   const relativeEntryPath = path.relative(rwPaths.web.src, clientEntryPath)
-  console.log('Definitely using the redwood-vite-plugin')
-  console.log('Definitely using the redwood-vite-plugin')
-  console.log('Definitely using the redwood-vite-plugin')
+
+  // If realtime is enabled, we want to include the sseLink in the bundle.
+  // Right now the only way we have of telling is if the package is installed on the api side.
+  const realtimeEnabled = fs
+    .readFileSync(path.join(rwPaths.api.base, 'package.json'), 'utf-8')
+    .includes('@redwoodjs/realtime')
+
   return [
     {
       name: 'redwood-plugin-vite-html-env',
@@ -86,7 +90,7 @@ export default function redwoodPluginVite(): PluginOption[] {
           // So we inject the entrypoint with the correct extension .tsx vs .jsx
 
           // And then inject the entry
-          if (existsSync(clientEntryPath)) {
+          if (fs.existsSync(clientEntryPath)) {
             return html.replace(
               '</head>',
               // @NOTE the slash in front, for windows compatibility and for pages in subdirectories
@@ -102,7 +106,7 @@ export default function redwoodPluginVite(): PluginOption[] {
       // but note index.html does not come through as an id during dev
       transform: (code: string, id: string) => {
         if (
-          existsSync(clientEntryPath) &&
+          fs.existsSync(clientEntryPath) &&
           normalizePath(id) === normalizePath(rwPaths.web.html)
         ) {
           return {
@@ -244,7 +248,7 @@ export default function redwoodPluginVite(): PluginOption[] {
         id: /@redwoodjs\/router\/dist\/splash-page/,
       },
     ]),
-    !rwConfig.experimental.realtime.enabled &&
+    !realtimeEnabled &&
       removeFromBundle([
         {
           id: /@redwoodjs\/web\/dist\/apollo\/sseLink/,
