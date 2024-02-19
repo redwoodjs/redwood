@@ -9,19 +9,16 @@ import { getPaths } from '@redwoodjs/project-config'
 import { getViteDefines } from '../lib/getViteDefines'
 import { onWarn } from '../lib/onWarn'
 
-import { rscIndexPlugin } from './rscVitePlugins'
-
 /**
  * RSC build. Step 2.
  * buildFeServer -> buildRscFeServer -> rscBuildClient
  * Generate the client bundle
  */
-// @TODO(RSC_DC): no redwood-vite plugin
 // @MARK: I can't seem to remove the duplicated defines here - while it builds
 // the output doesn't run anymore (RWJS_ENV undefined etc.)
 // why? It's definitely using the vite plugin, but the defines don't come through?
 export async function rscBuildClient(
-  webHtml: string,
+  entryClient: string,
   webDist: string,
   clientEntryFiles: Record<string, string>
 ) {
@@ -36,6 +33,7 @@ export async function rscBuildClient(
 
   const clientBuildOutput = await viteBuild({
     // @MARK  This runs on TOP of the settings in rw-vite-plugin, because we don't set configFile: false
+    // but if you actually set the config file, it runs the transforms twice
     root: rwPaths.web.src,
     envPrefix: 'REDWOOD_ENV_',
     publicDir: path.join(rwPaths.web.base, 'public'),
@@ -53,9 +51,6 @@ export async function rscBuildClient(
           }),
         },
       }),
-
-      // @TODO(RSC_DC): this plugin modifies index.html but in streaming there's not index.html!!
-      rscIndexPlugin(),
     ],
     build: {
       outDir: webDist + '/client',
@@ -65,7 +60,10 @@ export async function rscBuildClient(
       rollupOptions: {
         onwarn: onWarn,
         input: {
-          main: webHtml,
+          // @MARK: temporary hack to find the entry client so we can get the index.css bundle
+          // but we don't actually want this on an rsc page!
+          'rwjs-client-entry': entryClient,
+          // we need this, so that files with "use client" aren't bundled. I **think** RSC wants an unbundled build
           ...clientEntryFiles,
         },
         preserveEntrySignatures: 'exports-only',

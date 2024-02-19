@@ -6,33 +6,6 @@ import type { Plugin } from 'vite'
 import * as RSDWNodeLoader from '../react-server-dom-webpack/node-loader'
 import type { ResolveFunction } from '../react-server-dom-webpack/node-loader'
 
-// Used in Step 2 of the build process, for the client bundle
-export function rscIndexPlugin(): Plugin {
-  const codeToInject = `
-    globalThis.__rw_module_cache__ = new Map();
-
-    globalThis.__webpack_chunk_load__ = (id) => {
-      return import(id).then((m) => globalThis.__rw_module_cache__.set(id, m))
-    };
-
-    globalThis.__webpack_require__ = (id) => {
-      return globalThis.__rw_module_cache__.get(id)
-    };\n  `
-
-  return {
-    name: 'rsc-index-plugin',
-    async transformIndexHtml() {
-      return [
-        {
-          tag: 'script',
-          children: codeToInject,
-          injectTo: 'body',
-        },
-      ]
-    },
-  }
-}
-
 export function rscTransformPlugin(): Plugin {
   return {
     name: 'rsc-transform-plugin',
@@ -160,6 +133,7 @@ export function rscAnalyzePlugin(
     transform(code, id) {
       const ext = path.extname(id)
       if (['.ts', '.tsx', '.js', '.jsx'].includes(ext)) {
+        // @MARK: We're using swc here, that's cool but another dependency!
         const mod = swc.parseSync(code, {
           syntax: ext === '.ts' || ext === '.tsx' ? 'typescript' : 'ecmascript',
           tsx: ext === '.tsx',

@@ -16,6 +16,7 @@ import { rscAnalyzePlugin } from './rscVitePlugins'
  */
 // @TODO(RSC_DC): Can we skip actually building here?
 // only needed to trigger the rscAnalyzePlugin
+
 export async function rscBuildAnalyze(viteConfigPath: string) {
   const rwPaths = getPaths()
   const clientEntryFileSet = new Set<string>()
@@ -30,12 +31,6 @@ export async function rscBuildAnalyze(viteConfigPath: string) {
     root: rwPaths.base,
     plugins: [
       react(),
-      // {
-      //   name: 'rsc-test-plugin',
-      //   transform(_code, id) {
-      //     console.log('rsc-test-plugin id', id)
-      //   },
-      // },
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
         (id) => serverEntryFileSet.add(id)
@@ -58,6 +53,7 @@ export async function rscBuildAnalyze(viteConfigPath: string) {
       rollupOptions: {
         onwarn: onWarn,
         input: {
+          // @TODO(RSC_DC): We could generate this entries file from the analyzedRoutes
           entries: rwPaths.web.entries,
         },
       },

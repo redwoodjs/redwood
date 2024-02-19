@@ -27,7 +27,10 @@ export async function buildRouteManifest() {
     acc[route.pathDefinition] = {
       name: route.name,
       bundle: route.relativeFilePath
-        ? clientBuildManifest[route.relativeFilePath]?.file ?? null
+        ? // @TODO(RSC_DC): this no longer resolves to anything i.e. its always null
+          // Because the clientBuildManifest has no pages, because all pages are Server-components?
+          // This may be a non-issue, because RSC pages don't need a client bundle per page (or atleast not the same bundle)
+          clientBuildManifest[route.relativeFilePath]?.file ?? null
         : null,
       matchRegexString: route.matchRegexString,
       // NOTE this is the path definition, not the actual path

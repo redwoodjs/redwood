@@ -48,7 +48,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
 
     await buildRscClientAndWorker({
       viteConfigPath,
-      webHtml: rwPaths.web.html,
+      entryClient: rwPaths.web.entryClient,
       entries: rwPaths.web.entries,
       webDist: rwPaths.web.dist,
       webDistServer: rwPaths.web.distServer,

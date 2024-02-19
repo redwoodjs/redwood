@@ -6,9 +6,10 @@ import type { rscBuildForWorker } from './rscBuildForWorker'
 /**
  * RSC build. Step 5.
  * Append a mapping of server asset names to client asset names to the
- * `web/dist/server/entries.js` file.
+ * `web/dist/rsc/entries.js` file. Only used by the RSC worker.
  */
-// TODO(RSC_DC) : Understand how this gets used, we can probably use a vite plugin to do this
+// TODO(RSC_DC) : We could probably do this in rscBuildForWorker
+// using the `writeBundle` hook or similar.
 export function rscBuildClientEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
   serverBuildOutput: Awaited<ReturnType<typeof rscBuildForWorker>>,
@@ -18,6 +19,9 @@ export function rscBuildClientEntriesMappings(
   const clientEntries: Record<string, string> = {}
   for (const item of clientBuildOutput) {
     const { name, fileName } = item
+
+    // @MARK: Doesn't refer to Vite entry...
+    // this is file that uses one or more of the clientEntries
     const entryFile =
       name &&
       // TODO (RSC) Can't we just compare the names? `item.name === name`

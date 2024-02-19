@@ -116,6 +116,9 @@ export const createReactStreamingHandler = async (
 
     metaTags = routeHookOutput.meta
 
+    // @MARK @TODO(RSC_DC): the entry path for RSC will be different,
+    // because we don't want to inject a full bundle, just a slice of it
+    // I'm not sure what though....
     const jsBundles = [
       clientEntryPath, // @NOTE: must have slash in front
       bundle && '/' + bundle,

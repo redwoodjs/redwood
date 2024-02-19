@@ -68,24 +68,23 @@ export async function runFeServer() {
   const buildManifestUrl = url.pathToFileURL(
     path.join(rwPaths.web.dist + '/client', 'client-build-manifest.json')
   ).href
-  const buildManifest: ViteBuildManifest = (
+  const clientBuildManifest: ViteBuildManifest = (
     await import(buildManifestUrl, { with: { type: 'json' } })
   ).default
 
   if (rwConfig.experimental?.rsc?.enabled) {
     console.log('='.repeat(80))
-    console.log('buildManifest', buildManifest)
+    console.log('buildManifest', clientBuildManifest)
     console.log('='.repeat(80))
   }
 
-  // @MARK: @TODO(RSC_DC): Because of the way we pass everything as an input during rsc build
-  // it's hard to determine what the true entry is. Compare with SSR-only build.
-  const indexEntry = Object.values(buildManifest).find((manifestItem) => {
-    return manifestItem.isEntry && manifestItem.src?.includes('index.html')
+  // @MARK: Surely there's a better way than this!
+  const indexEntry = Object.values(clientBuildManifest).find((manifestItem) => {
+    return manifestItem.file.includes('rwjs-client-entry-')
   })
 
   if (!indexEntry) {
-    throw new Error('Could not find index.html in build manifest')
+    throw new Error('Could not find client entry in build manifest')
   }
 
   // 1. Use static handler for assets
