@@ -127,13 +127,6 @@ export default function redwoodPluginVite(): PluginOption[] {
       // ---------- End Bundle injection ----------
 
       config: (options: UserConfig, env: ConfigEnv): UserConfig => {
-        console.log('Definite in this config function')
-        console.log('Definite in this config function')
-        console.log('Definite in this config function')
-        console.log('Definite in this config function')
-        console.log('Definite in this config function')
-        console.log('Definite in this config function')
-        console.log('Definite in this config function')
         let apiHost = process.env.REDWOOD_API_HOST
         apiHost ??= rwConfig.api.host
         apiHost ??= process.env.NODE_ENV === 'production' ? '0.0.0.0' : '[::]'
