@@ -239,8 +239,8 @@ describe('resolveOptions', () => {
           DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.requestTimeout,
         logger: DEFAULT_CREATE_SERVER_OPTIONS.logger,
       },
-      port: 65501,
-      host: '::',
+      apiPort: 65501,
+      apiHost: '::',
     })
   })
 
@@ -309,17 +309,17 @@ describe('resolveOptions', () => {
     })
   })
 
-  it('parses `--port`', () => {
+  it('parses `--apiPort`', () => {
     expect(
-      resolveOptions({ parseArgs: true }, ['--port', '8930']).port
+      resolveOptions({ parseArgs: true }, ['--apiPort', '8930']).apiPort
     ).toEqual(8930)
   })
 
-  it("throws if `--port` can't be converted to an integer", () => {
+  it("throws if `--apiPort` can't be converted to an integer", () => {
     expect(() => {
-      resolveOptions({ parseArgs: true }, ['--port', 'eight-nine-ten'])
+      resolveOptions({ parseArgs: true }, ['--apiPort', 'eight-nine-ten'])
     }).toThrowErrorMatchingInlineSnapshot(
-      `[Error: \`port\` must be an integer]`
+      `[Error: \`apiPort\` must be an integer]`
     )
   })
 
@@ -338,9 +338,9 @@ describe('resolveOptions', () => {
     ).toEqual('/bar/')
   })
 
-  it('parses `--host`', () => {
+  it('parses `--apiHost`', () => {
     expect(
-      resolveOptions({ parseArgs: true }, ['--host', '127.0.0.1']).host
+      resolveOptions({ parseArgs: true }, ['--apiHost', '127.0.0.1']).apiHost
     ).toEqual('127.0.0.1')
   })
 })
