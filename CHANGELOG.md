@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v7.0.0
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.0 for the release notes and https://community.redwoodjs.com/t/redwood-v7-0-0-upgrade-guide/5713 for the upgrade guide
+
 ## v6.6.4
 
 - See https://github.com/redwoodjs/redwood/releases/tag/v6.6.4

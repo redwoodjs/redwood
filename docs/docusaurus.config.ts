@@ -34,7 +34,7 @@ const config: Config = {
       indexName: 'learn-redwood',
       contextualSearch: true,
       searchParameters: {},
-      externalUrlRegex: 'https://learn-redwood.netlify.app',
+      // externalUrlRegex: 'https://learn-redwood.netlify.app',
     },
     navbar: {
       title: 'RedwoodJS',
