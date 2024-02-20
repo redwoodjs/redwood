@@ -158,7 +158,7 @@ const Routes = () => {
       // highlight-next-line
       <PrivateSet unauthenticated="forbidden" hasRole="admin">
         <Route path="/admin" page={AdminPage} name="admin" />
-      </Set>
+      </PrivateSet>
 
       // highlight-next-line
       <PrivateSet unauthenticated="forbidden" hasRole={['author', 'editor']}>
