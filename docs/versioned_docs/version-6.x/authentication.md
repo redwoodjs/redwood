@@ -142,7 +142,7 @@ const Routes = () => {
 You can also restrict access by role by passing a role or an array of roles to the `PrivateSet` component's `hasRole` prop:
 
 ```tsx title="web/src/Routes.tsx"
-import { Router, Route, PrivateSet, Set } from '@redwoodjs/router'
+import { Router, Route, PrivateSet } from '@redwoodjs/router'
 
 const Routes = () => {
   return (
