@@ -107,7 +107,7 @@
     "ora": "7.0.1",
     "prompts": "2.4.2",
     "rimraf": "5.0.5",
-    "tstyche": "1.0.0-beta.9",
+    "tstyche": "1.0.0",
     "tsx": "4.6.2",
     "typescript": "5.3.3",
     "vitest": "1.2.2",
