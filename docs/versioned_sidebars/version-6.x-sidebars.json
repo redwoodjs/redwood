@@ -12,9 +12,7 @@
           "id": "tutorial/foreword"
         },
         {
-          "Chapter 0": [
-            "tutorial/chapter0/what-is-redwood"
-          ]
+          "Chapter 0": ["tutorial/chapter0/what-is-redwood"]
         },
         {
           "Chapter 1": [
