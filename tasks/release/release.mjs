@@ -762,8 +762,8 @@ function updateRWJSPkgsVersion(pkgPath, version) {
   }
 
   for (const dep of Object.keys(pkg.peerDependencies ?? {}).filter(isRWJSPkg)) {
-    console.log(` - ${dep}: ${pkg.devDependencies[dep]} => ${version}`)
-    pkg.devDependencies[dep] = `${version}`
+    console.log(` - ${dep}: ${pkg.peerDependencies[dep]} => ${version}`)
+    pkg.peerDependencies[dep] = `${version}`
   }
 
   fs.writeJSONSync(path.join(pkgPath, 'package.json'), pkg, { spaces: 2 })
