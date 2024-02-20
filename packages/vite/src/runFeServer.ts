@@ -46,10 +46,10 @@ export async function runFeServer() {
   const app = express()
   const rwPaths = getPaths()
   const rwConfig = getConfig()
-
+  const rscBuild = rwConfig.experimental?.rsc?.enabled
   registerFwGlobals()
 
-  if (rwConfig.experimental?.rsc?.enabled) {
+  if (rscBuild) {
     try {
       // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
       await setClientEntries('load')
@@ -80,7 +80,10 @@ export async function runFeServer() {
 
   // @MARK: Surely there's a better way than this!
   const indexEntry = Object.values(clientBuildManifest).find((manifestItem) => {
-    return manifestItem.file.includes('rwjs-client-entry-')
+    // For RSC builds, we pass in many Vite entries, so we need to find it differently.
+    return rscBuild
+      ? manifestItem.file.includes('rwjs-client-entry-')
+      : manifestItem.isEntry
   })
 
   if (!indexEntry) {
