@@ -7,7 +7,7 @@ description: Redwood's Dockerfile
 :::note The Dockerfile is experimental
 
 Redwood's Dockerfile is the collective effort of several hard-working community members.
-We've worked hard to optimize the it, but expect changes as we collaborate with users and deploy providers.
+We've worked hard to optimize it, but expect changes as we collaborate with users and deploy providers.
 
 :::
 
@@ -136,6 +136,7 @@ The important thing is that they're all here, before the `yarn install` step:
 
 ```Dockerfile
 RUN mkdir -p /home/node/.yarn/berry/index
+RUN mkdir -p /home/node/.cache
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
@@ -146,7 +147,7 @@ This step installs all your project's dependencies—production and dev.
 Since we use multi-stage builds, your production images won't pay for the dev dependencies installed in this step.
 The build stages need the dev dependencies.
 
-The `mkdir` step is a workaround for a permission error. We're working on removing it, but for now if you remove it the install step will probably fail.
+The `mkdir` steps are a workaround for a permission error. We're working on removing them, but for now if you remove them the install step will probably fail.
 
 This step is a bit more involved than the others.
 It uses a [cache mount](https://docs.docker.com/build/cache/#use-your-package-manager-wisely).
@@ -190,10 +191,10 @@ FROM base as api_build
 # ARG MY_BUILD_TIME_ENV_VAR
 
 COPY --chown=node:node api api
-RUN yarn redwood build api
+RUN yarn rw build api
 ```
 
-After the work we did in the base stage, building the api side amounts to copying in the api directory and running `yarn redwood build api`.
+After the work we did in the base stage, building the api side amounts to copying in the api directory and running `yarn rw build api`.
 
 ### The `api_serve` stage
 
@@ -228,6 +229,7 @@ Like other `COPY` instructions, ordering these files with care enables layering 
 
 ```Dockerfile
 RUN mkdir -p /home/node/.yarn/berry/index
+RUN mkdir -p /home/node/.cache
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
@@ -277,10 +279,10 @@ This `web_build` builds the web side:
 FROM base as web_build
 
 COPY --chown=node:node web web
-RUN yarn redwood build web --no-prerender
+RUN yarn rw build web --no-prerender
 ```
 
-After the work we did in the base stage, building the web side amounts to copying in the web directory and running `yarn redwood build web`.
+After the work we did in the base stage, building the web side amounts to copying in the web directory and running `yarn rw build web`.
 
 This stage is a bit of a simplification.
 It foregoes Redwood's prerendering (SSG) capability.
@@ -297,7 +299,7 @@ The `web_prerender_build` stage builds the web side with prerender.
 FROM api_build as web_build_with_prerender
 
 COPY --chown=node:node web web
-RUN yarn redwood build web
+RUN yarn rw build web
 ```
 
 Building the web side with prerendering poses a challenge.
@@ -320,6 +322,7 @@ COPY --chown=node:node web/package.json web/
 COPY --chown=node:node yarn.lock .
 
 RUN mkdir -p /home/node/.yarn/berry/index
+RUN mkdir -p /home/node/.cache
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
