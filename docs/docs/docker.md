@@ -637,10 +637,10 @@ await server.start()
 `start` is a thin wrapper around [`listen`](https://fastify.dev/docs/latest/Reference/Server/#listen).
 It takes the same arguments as `listen`, except for host and port. It computes those in the following way, in order of precedence:
 
-1. `--host` or `--port` flags:
+1. `--apiHost` or `--apiPort` flags:
 
   ```
-  yarn node api/dist/server.js --host 0.0.0.0 --port 8913
+  yarn node api/dist/server.js --apiHost 0.0.0.0 --apiPort 8913
   ```
 
 2. `REDWOOD_API_HOST` or `REDWOOD_API_PORT` env vars:
