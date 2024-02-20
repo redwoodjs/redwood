@@ -1,5 +1,7 @@
 import chalk from 'chalk'
 
+import { coerceRootPath } from '@redwoodjs/fastify-web'
+
 import { getAPIPort, getAPIHost } from './cliHelpers'
 import createFastifyInstance from './fastify'
 import { redwoodFastifyAPI } from './plugins/api'
@@ -8,6 +10,8 @@ import type { APIParsedOptions } from './types'
 export async function handler(options: APIParsedOptions) {
   const timeStart = Date.now()
   console.log(chalk.dim.italic('Starting API Server...'))
+
+  options.apiRootPath = coerceRootPath(options.apiRootPath ?? '/')
 
   const fastify = await createFastifyInstance()
   fastify.register(redwoodFastifyAPI, {

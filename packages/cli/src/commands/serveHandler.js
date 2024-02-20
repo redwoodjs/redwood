@@ -32,9 +32,9 @@ export const bothServerFileHandler = async (options) => {
     [
       {
         name: 'api',
-        command: `yarn node ${path.join('dist', 'server.js')} --port ${
+        command: `yarn node ${path.join('dist', 'server.js')} --apiPort ${
           options.apiPort
-        } --host ${options.apiHost} --api-root-path ${options.apiRootPath}`,
+        } --apiHost ${options.apiHost} --apiRootPath ${options.apiRootPath}`,
         cwd: getPaths().api.base,
         prefixColor: 'cyan',
       },
@@ -66,19 +66,14 @@ export const bothServerFileHandler = async (options) => {
 }
 
 export const apiServerFileHandler = async (options) => {
-  await execa(
-    'yarn',
-    [
-      'node',
-      'server.js',
-      '--port',
-      options.port,
-      '--apiRootPath',
-      options.apiRootPath,
-    ],
-    {
-      cwd: getPaths().api.dist,
-      stdio: 'inherit',
-    }
-  )
+  const args = ['node', 'server.js', '--apiRootPath', options.apiRootPath]
+
+  if (options.port) {
+    args.push('--apiPort', options.port)
+  }
+
+  await execa('yarn', args, {
+    cwd: getPaths().api.dist,
+    stdio: 'inherit',
+  })
 }
