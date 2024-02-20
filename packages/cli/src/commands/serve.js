@@ -27,7 +27,7 @@ export const builder = async (yargs) => {
     .command({
       command: '$0',
       description: bothServerCLIConfig.description,
-      builder: bothServerCLIConfig.builder(yargs),
+      builder: bothServerCLIConfig.builder,
       handler: async (argv) => {
         recordTelemetryAttributes({
           command: 'serve',
