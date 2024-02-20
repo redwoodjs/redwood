@@ -5,7 +5,7 @@ description: Set up an authentication provider
 # Authentication
 
 Redwood has integrated auth end to end, from the web side to the api side.
-On the web side, the router can protect pages via the `Private` component (or the `Set` component via the `private` prop), and even restrict access at the role-level.
+On the web side, the router can protect pages via the `PrivateSet` component, and even restrict access at the role-level.
 And if you'd prefer to work with the primitives, the `useAuth` hook exposes all the pieces to build the experience you want.
 
 Likewise, the api side is locked down by default: all SDLs are generated with the `@requireAuth` directive, ensuring that making things publicly available is something that you opt in to rather than out of.
@@ -129,9 +129,8 @@ const Routes = () => {
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
 
-      // highlight-start
+      // highlight-next-line
       <PrivateSet unauthenticated="login">
-      // highlight-end
         <Route path="/admin" page={AdminPage} name="admin" />
         <Route path="/secret-page" page={SecretPage} name="secret" />
       </PrivateSet>
@@ -157,7 +156,7 @@ const Routes = () => {
       </PrivateSet>
 
       // highlight-next-line
-      <Set private unauthenticated="forbidden" hasRole="admin">
+      <PrivateSet unauthenticated="forbidden" hasRole="admin">
         <Route path="/admin" page={AdminPage} name="admin" />
       </Set>
 
