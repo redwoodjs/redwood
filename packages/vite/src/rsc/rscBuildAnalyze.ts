@@ -17,7 +17,7 @@ import { rscAnalyzePlugin } from './rscVitePlugins'
 // @TODO(RSC_DC): Can we skip actually building here?
 // only needed to trigger the rscAnalyzePlugin
 
-export async function rscBuildAnalyze(viteConfigPath: string) {
+export async function rscBuildAnalyze() {
   const rwPaths = getPaths()
   const clientEntryFileSet = new Set<string>()
   const serverEntryFileSet = new Set<string>()
@@ -27,7 +27,7 @@ export async function rscBuildAnalyze(viteConfigPath: string) {
   }
 
   await viteBuild({
-    configFile: viteConfigPath,
+    configFile: rwPaths.web.viteConfig as string,
     root: rwPaths.base,
     plugins: [
       react(),

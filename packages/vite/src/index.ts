@@ -214,7 +214,7 @@ export default function redwoodPluginVite(): PluginOption[] {
               options.build?.outDir ||
               // @MARK: For RSC and Streaming, we build to dist/client directory
               (streamingBuild || rscBuild
-                ? rwPaths.web.dist + '/client'
+                ? rwPaths.web.distClient
                 : rwPaths.web.dist),
             emptyOutDir: true,
             manifest: !env.ssrBuild ? 'client-build-manifest.json' : undefined,

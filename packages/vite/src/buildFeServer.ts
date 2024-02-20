@@ -1,7 +1,6 @@
 import { build as viteBuild } from 'vite'
 
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
-import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { buildRouteHooks } from './buildRouteHooks'
@@ -46,25 +45,18 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
       throw new Error('RSC entries file not found')
     }
 
-    await buildRscClientAndWorker({
-      viteConfigPath,
-      entryClient: rwPaths.web.entryClient,
-      entries: rwPaths.web.entries,
-      webDist: rwPaths.web.dist,
-      webDistServer: rwPaths.web.distServer,
-      webDistServerEntries: rwPaths.web.dist + '/rsc/entries.js',
-    })
+    await buildRscClientAndWorker()
   }
 
   // We generate the RSC client bundle in the buildRscFeServer function
   // Streaming and RSC client bundles are **not** the same
   if (streamingBuild && !rscBuild) {
-    console.log('Building client for streaming SSR')
+    console.log('Building client for streaming SSR...\n')
     await buildWeb({ verbose })
   }
 
   // Generates the output used for the server (streaming/ssr but NOT rsc)
-  await buildForServer(viteConfigPath, rwPaths, verbose)
+  await buildForServer({ verbose })
 
   await buildRouteHooks(verbose, rwPaths)
 
@@ -72,15 +64,12 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   await buildRouteManifest()
 }
 
-async function buildForServer(
-  viteConfigPath: string,
-  rwPaths: Paths,
-  verbose: boolean | undefined
-) {
+async function buildForServer({ verbose = false }: { verbose?: boolean }) {
   console.log('Starting server build.... \n')
+  const rwPaths = getPaths()
 
   await viteBuild({
-    configFile: viteConfigPath,
+    configFile: rwPaths.web.viteConfig as string,
     build: {
       outDir: rwPaths.web.distServer,
       ssr: true, // use boolean here, instead of string.

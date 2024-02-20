@@ -17,11 +17,7 @@ import { onWarn } from '../lib/onWarn'
 // @MARK: I can't seem to remove the duplicated defines here - while it builds
 // the output doesn't run anymore (RWJS_ENV undefined etc.)
 // why? It's definitely using the vite plugin, but the defines don't come through?
-export async function rscBuildClient(
-  entryClient: string,
-  webDist: string,
-  clientEntryFiles: Record<string, string>
-) {
+export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
   console.log('Starting RSC client build.... \n')
   const rwPaths = getPaths()
 
@@ -53,7 +49,7 @@ export async function rscBuildClient(
       }),
     ],
     build: {
-      outDir: webDist + '/client',
+      outDir: rwPaths.web.distClient,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
       // TODO (RSC) Enable this when we switch to a server-first approach
       // emptyOutDir: false, // Already done when building server
@@ -62,7 +58,7 @@ export async function rscBuildClient(
         input: {
           // @MARK: temporary hack to find the entry client so we can get the index.css bundle
           // but we don't actually want this on an rsc page!
-          'rwjs-client-entry': entryClient,
+          'rwjs-client-entry': rwPaths.web.entryClient as string,
           // we need this, so that files with "use client" aren't bundled. I **think** RSC wants an unbundled build
           ...clientEntryFiles,
         },

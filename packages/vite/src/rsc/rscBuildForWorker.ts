@@ -15,21 +15,19 @@ import { onWarn } from '../lib/onWarn'
  */
 // @TODO(RSC_DC): no redwood-vite plugin, add it back in here
 export async function rscBuildForWorker(
-  entriesFile: string,
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>
 ) {
   console.log('Starting RSC worker build.... \n')
+  const rwPaths = getPaths()
 
   const input = {
-    entries: entriesFile,
+    entries: rwPaths.web.entries as string,
     ...clientEntryFiles,
     ...serverEntryFiles,
     ...customModules,
   }
-
-  const rwPaths = getPaths()
 
   const workerBuildOutput = await viteBuild({
     configFile: false, // @MARK disable loading the original plugin, only use settings in this file. This prevents issues with the routes-auto-loader
@@ -90,7 +88,7 @@ export async function rscBuildForWorker(
     build: {
       ssr: true,
       ssrEmitAssets: true,
-      outDir: rwPaths.web.dist + '/rsc',
+      outDir: rwPaths.web.distRsc,
       manifest: 'server-build-manifest.json',
       rollupOptions: {
         onwarn: onWarn,
