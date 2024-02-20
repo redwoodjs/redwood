@@ -131,6 +131,10 @@ export default function redwoodPluginVite(): PluginOption[] {
         apiHost ??= rwConfig.api.host
         apiHost ??= process.env.NODE_ENV === 'production' ? '0.0.0.0' : '[::]'
 
+        const streamingBuild = rwConfig.experimental.streamingSsr?.enabled
+        // @MARK: note that most RSC settings sit in their individual build functions
+        const rscBuild = rwConfig.experimental.rsc?.enabled
+
         let apiPort
         if (process.env.REDWOOD_API_PORT) {
           apiPort = parseInt(process.env.REDWOOD_API_PORT)
@@ -206,7 +210,12 @@ export default function redwoodPluginVite(): PluginOption[] {
             },
           },
           build: {
-            outDir: options.build?.outDir || rwPaths.web.dist + '/client',
+            outDir:
+              options.build?.outDir ||
+              // @MARK: For RSC and Streaming, we build to dist/client directory
+              (streamingBuild || rscBuild
+                ? rwPaths.web.dist + '/client'
+                : rwPaths.web.dist),
             emptyOutDir: true,
             manifest: !env.ssrBuild ? 'client-build-manifest.json' : undefined,
             sourcemap: !env.ssrBuild && rwConfig.web.sourceMap, // Note that this can be boolean or 'inline'

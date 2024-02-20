@@ -59,6 +59,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   // We generate the RSC client bundle in the buildRscFeServer function
   // Streaming and RSC client bundles are **not** the same
   if (streamingBuild && !rscBuild) {
+    console.log('Building client for streaming SSR')
     await buildWeb({ verbose })
   }
 
