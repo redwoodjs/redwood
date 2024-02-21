@@ -33,7 +33,9 @@ export function rscIndexPlugin(): Plugin {
   }
 }
 
-export function rscTransformPlugin(): Plugin {
+export function rscTransformPlugin(
+  clientEntryFiles: Record<string, string>
+): Plugin {
   return {
     name: 'rsc-transform-plugin',
     // TODO(RSC): Seems like resolveId() is never called. Can we remove it?

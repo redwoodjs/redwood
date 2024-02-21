@@ -21,7 +21,7 @@ import type { defineEntries } from '../entries'
 import { registerFwGlobals } from '../lib/registerGlobals'
 import { StatusError } from '../lib/StatusError'
 
-import { rscTransformPlugin, rscReloadPlugin } from './rscVitePlugins'
+import { rscReloadPlugin } from './rscVitePlugins'
 import type {
   RenderInput,
   MessageRes,
@@ -162,7 +162,6 @@ registerFwGlobals()
 // `envFile: false`?
 const vitePromise = createServer({
   plugins: [
-    rscTransformPlugin(),
     rscReloadPlugin((type) => {
       if (!parentPort) {
         throw new Error('parentPort is undefined')

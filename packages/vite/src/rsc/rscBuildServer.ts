@@ -8,6 +8,8 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn'
 
+import { rscTransformPlugin } from './rscVitePlugins'
+
 /**
  * RSC build. Step 3.
  * buildFeServer -> buildRscFeServer -> rscBuildClient
@@ -134,6 +136,13 @@ export async function rscBuildServer(
           }),
         },
       }),
+      // The rscTransformPlugin maps paths like
+      // /Users/tobbe/dev/redwood/redwood/__fixtures__/test-project-rsc-external-packages-and-cells/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
+      // to
+      // /Users/tobbe/dev/redwood/redwood/__fixtures__/test-project-rsc-external-packages-and-cells/web/dist/server/assets/rsc0.js
+      // That's why it needs the `clientEntryFiles` data
+      // (It does other things as well, but that's why it needs clientEntryFiles)
+      rscTransformPlugin(clientEntryFiles),
     ],
     build: {
       ssr: true,

@@ -11,7 +11,11 @@
 // Copied from https://github.com/facebook/react/blob/8ec962d825fc948ffda5ab863e639cd4158935ba/packages/react-server-dom-webpack/src/ReactFlightWebpackNodeLoader.js
 // and converted to TypeScript.
 
+import path from 'node:path'
+
 import * as acorn from 'acorn-loose'
+
+import { getPaths } from '@redwoodjs/project-config'
 
 interface ResolveContext {
   parentURL: string | void
@@ -374,12 +378,26 @@ async function parseExportNamesIntoNames(
 async function transformClientModule(
   body: any,
   url: string,
-  loader: LoadFunction
+  loader: LoadFunction,
+  clientEntryFiles?: Record<string, string>
 ): Promise<string> {
   const names: Array<string> = []
 
   // This will insert the names into the `names` array
   await parseExportNamesIntoNames(body, names, url, loader)
+
+  const entryRecord = Object.entries(clientEntryFiles || {}).find(
+    ([_key, value]) => value === url
+  )
+
+  // TODO(RSC): Check if we always find a record. If we do, we should
+  // throw an error if it's undefined
+
+  const loadId = entryRecord
+    ? path.join(getPaths().web.distServer, 'assets', entryRecord[0] + '.js')
+    : url
+
+  console.log('rscTransformPlugin - calling load with id', loadId)
 
   let newSrc =
     "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"
@@ -420,7 +438,7 @@ async function transformClientModule(
 
     newSrc += '},{'
     newSrc += '$$typeof: {value: CLIENT_REFERENCE},'
-    newSrc += '$$id: {value: ' + JSON.stringify(url + '#' + name) + '}'
+    newSrc += '$$id: {value: ' + JSON.stringify(loadId + '#' + name) + '}'
     newSrc += '});\n'
   }
 
@@ -461,7 +479,8 @@ async function loadClientImport(
 async function transformModuleIfNeeded(
   source: string,
   url: string,
-  loader: LoadFunction
+  loader: LoadFunction,
+  clientEntryFile?: Record<string, string>
 ): Promise<string> {
   // Do a quick check for the exact string. If it doesn't exist, don't
   // bother parsing.
@@ -511,7 +530,7 @@ async function transformModuleIfNeeded(
   }
 
   if (useClient) {
-    return transformClientModule(body, url, loader)
+    return transformClientModule(body, url, loader, clientEntryFile)
   }
 
   return transformServerModule(source, body, url)
@@ -552,7 +571,8 @@ export async function transformSource(
 export async function load(
   url: string,
   context: LoadContext | null,
-  defaultLoad: LoadFunction
+  defaultLoad: LoadFunction,
+  clientEntryFiles?: Record<string, string>
 ): Promise<{ format: string; shortCircuit?: boolean; source: Source }> {
   const result = await defaultLoad(url, context, defaultLoad)
 
@@ -564,7 +584,8 @@ export async function load(
     const newSrc = await transformModuleIfNeeded(
       result.source,
       url,
-      defaultLoad
+      defaultLoad,
+      clientEntryFiles
     )
 
     return {
