@@ -387,7 +387,7 @@ async function transformClientModule(
   await parseExportNamesIntoNames(body, names, url, loader)
 
   const entryRecord = Object.entries(clientEntryFiles || {}).find(
-    ([_key, value]) => value === url
+    ([_key, value]) => value === url.replaceAll('\\', '/')
   )
 
   // TODO(RSC): Check if we always find a record. If we do, we should
