@@ -219,6 +219,7 @@ function transformServerModule(
     newSrc += '$$bound: { value: null }'
     newSrc += '});\n'
   })
+
   return newSrc
 }
 
@@ -272,7 +273,6 @@ function resolveClientImport(
   // This resolution algorithm will not necessarily have the same configuration
   // as the actual client loader. It should mostly work and if it doesn't you can
   // always convert to explicit exported names instead.
-  const conditions = ['node', 'import']
 
   if (stashedResolve === null) {
     throw new Error(
@@ -283,14 +283,17 @@ function resolveClientImport(
   return stashedResolve(
     specifier,
     {
-      conditions,
+      conditions: ['node', 'import'],
       parentURL,
     },
     stashedResolve
   )
 }
 
-async function parseExportNamesInto(
+/**
+ * Parses `body` for exports and stores them in `names` (the second argument)
+ */
+async function parseExportNamesIntoNames(
   body: any,
   names: Array<string>,
   parentURL: string,
@@ -305,31 +308,26 @@ async function parseExportNamesInto(
           addExportNames(names, node.exported)
           continue
         } else {
-          const _await$resolveClientI = await resolveClientImport(
-              node.source.value,
-              parentURL
-            ),
-            url = _await$resolveClientI.url
+          const clientImport = await resolveClientImport(
+            node.source.value,
+            parentURL
+          )
+          const url = clientImport.url
+          const loadContext = {
+            format: 'module',
+            conditions: [],
+            importAssertions: {},
+          }
+          const mod = await loader(url, loadContext, loader)
 
-          const _await$loader = await loader(
-              url,
-              {
-                format: 'module',
-                conditions: [],
-                importAssertions: {},
-              },
-              loader
-            ),
-            source = _await$loader.source
-
-          if (typeof source !== 'string') {
+          if (typeof mod.source !== 'string') {
             throw new Error('Expected the transformed source to be a string.')
           }
 
           let childBody
 
           try {
-            childBody = acorn.parse(source, {
+            childBody = acorn.parse(mod.source, {
               ecmaVersion: '2024',
               sourceType: 'module',
             }).body
@@ -338,7 +336,8 @@ async function parseExportNamesInto(
             continue
           }
 
-          await parseExportNamesInto(childBody, names, url, loader)
+          await parseExportNamesIntoNames(childBody, names, url, loader)
+
           continue
         }
 
@@ -378,7 +377,10 @@ async function transformClientModule(
   loader: LoadFunction
 ): Promise<string> {
   const names: Array<string> = []
-  await parseExportNamesInto(body, names, url, loader)
+
+  // This will insert the names into the `names` array
+  await parseExportNamesIntoNames(body, names, url, loader)
+
   let newSrc =
     "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"
 
@@ -433,29 +435,27 @@ async function loadClientImport(
     throw new Error(
       'Expected getSource to have been called before transformSource'
     )
-  } // TODO: Validate that this is another module by calling getFormat.
+  }
 
-  const _await$stashedGetSour = await stashedGetSource(
-      url,
-      {
-        format: 'module',
-      },
-      stashedGetSource
-    ),
-    source = _await$stashedGetSour.source
+  // TODO: Validate that this is another module by calling getFormat.
 
-  const result = await defaultTransformSource(
+  const getSourceContext = { format: 'module' }
+  const { source } = await stashedGetSource(
+    url,
+    getSourceContext,
+    stashedGetSource
+  )
+  const transformContext = {
+    format: 'module',
+    url,
+  }
+  const { source: transformedSource } = await defaultTransformSource(
     source,
-    {
-      format: 'module',
-      url,
-    },
+    transformContext,
     defaultTransformSource
   )
-  return {
-    format: 'module',
-    source: result.source,
-  }
+
+  return { format: 'module', source: transformedSource }
 }
 
 async function transformModuleIfNeeded(
@@ -465,10 +465,7 @@ async function transformModuleIfNeeded(
 ): Promise<string> {
   // Do a quick check for the exact string. If it doesn't exist, don't
   // bother parsing.
-  if (
-    source.indexOf('use client') === -1 &&
-    source.indexOf('use server') === -1
-  ) {
+  if (!source.includes('use client') && !source.includes('use server')) {
     return source
   }
 
@@ -545,9 +542,8 @@ export async function transformSource(
         return loadClientImport(url, defaultTransformSource)
       }
     )
-    return {
-      source: newSrc,
-    }
+
+    return { source: newSrc }
   }
 
   return transformed
@@ -579,5 +575,3 @@ export async function load(
 
   return result
 }
-
-// export { getSource, load, resolve, transformSource }
