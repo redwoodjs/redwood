@@ -117,7 +117,7 @@ export function rscTransformPlugin(
         return { format: 'module', source }
       }
 
-      const mod = await RSDWNodeLoader.load(id, null, load)
+      const mod = await RSDWNodeLoader.load(id, null, load, clientEntryFiles)
 
       return mod.source
     },
