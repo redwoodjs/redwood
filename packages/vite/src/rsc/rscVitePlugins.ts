@@ -116,6 +116,7 @@ export function rscTransformPlugin(): Plugin {
       }
 
       const mod = await RSDWNodeLoader.load(id, null, load)
+
       return mod.source
     },
   }

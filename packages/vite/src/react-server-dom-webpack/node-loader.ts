@@ -290,6 +290,9 @@ function resolveClientImport(
   )
 }
 
+/**
+ * Parses `body` for exports and stores them in `names` (the second argument)
+ */
 async function parseExportNamesIntoNames(
   body: any,
   names: Array<string>,
@@ -334,6 +337,7 @@ async function parseExportNamesIntoNames(
           }
 
           await parseExportNamesIntoNames(childBody, names, url, loader)
+
           continue
         }
 
@@ -431,7 +435,9 @@ async function loadClientImport(
     throw new Error(
       'Expected getSource to have been called before transformSource'
     )
-  } // TODO: Validate that this is another module by calling getFormat.
+  }
+
+  // TODO: Validate that this is another module by calling getFormat.
 
   const getSourceContext = { format: 'module' }
   const { source } = await stashedGetSource(
@@ -537,9 +543,7 @@ export async function transformSource(
       }
     )
 
-    return {
-      source: newSrc,
-    }
+    return { source: newSrc }
   }
 
   return transformed
