@@ -203,12 +203,12 @@ You may have noticed that when trying to view the new single-article page that y
 
 ```diff title="web/src/pages/ArticlePage.js"
 - import { Link, routes } from '@redwoodjs/router'
-  import { MetaTags } from '@redwoodjs/web'
+  import { Metadata } from '@redwoodjs/web'
 
   const ArticlePage = () => {
     return (
       <>
-        <MetaTags title="Article" description="Article page" />
+        <Metadata title="Article" description="Article page" />
 
         <h1>ArticlePage</h1>
         <p>
@@ -230,12 +230,12 @@ You may have noticed that when trying to view the new single-article page that y
 
 ```diff title="web/src/pages/ArticlePage.tsx"
 - import { Link, routes } from '@redwoodjs/router'
-  import { MetaTags } from '@redwoodjs/web'
+  import { Metadata } from '@redwoodjs/web'
 
   const ArticlePage = () => {
     return (
       <>
-        <MetaTags title="Article" description="Article page" />
+        <Metadata title="Article" description="Article page" />
 
         <h1>ArticlePage</h1>
         <p>
@@ -269,14 +269,14 @@ And then we'll use that cell in `ArticlePage`:
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ArticlePage/ArticlePage.jsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 // highlight-next-line
 import ArticleCell from 'src/components/ArticleCell'
 
 const ArticlePage = () => {
   return (
     <>
-      <MetaTags title="Article" description="Article page" />
+      <Metadata title="Article" description="Article page" />
 
       // highlight-next-line
       <ArticleCell />
@@ -291,14 +291,14 @@ export default ArticlePage
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/pages/ArticlePage/ArticlePage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 // highlight-next-line
 import ArticleCell from 'src/components/ArticleCell'
 
 const ArticlePage = () => {
   return (
     <>
-      <MetaTags title="Article" description="Article page" />
+      <Metadata title="Article" description="Article page" />
 
       // highlight-next-line
       <ArticleCell />
@@ -388,14 +388,14 @@ Okay, we're getting closer. Still, where will that `$id` come from? Redwood has 
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ArticlePage/ArticlePage.jsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import ArticleCell from 'src/components/ArticleCell'
 
 // highlight-next-line
 const ArticlePage = ({ id }) => {
   return (
     <>
-      <MetaTags title="Article" description="Article page" />
+      <Metadata title="Article" description="Article page" />
 
       // highlight-next-line
       <ArticleCell id={id} />
@@ -410,7 +410,7 @@ export default ArticlePage
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/pages/ArticlePage/ArticlePage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import ArticleCell from 'src/components/ArticleCell'
 
 // highlight-start
@@ -423,7 +423,7 @@ interface Props {
 const ArticlePage = ({ id }: Props) => {
   return (
     <>
-      <MetaTags title="Article" description="Article page" />
+      <Metadata title="Article" description="Article page" />
 
       // highlight-next-line
       <ArticleCell id={id} />
