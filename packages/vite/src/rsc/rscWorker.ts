@@ -259,17 +259,18 @@ const resolveClientEntry = (
   config: Awaited<ReturnType<typeof resolveConfig>>,
   filePath: string
 ) => {
-  const clientEntry = absoluteClientEntries[filePath]
+  const filePathSlash = filePath.replaceAll('\\', '/')
+  const clientEntry = absoluteClientEntries[filePathSlash]
 
   console.log('absoluteClientEntries', absoluteClientEntries)
-  console.log('filePath', filePath)
+  console.log('filePath', filePathSlash)
 
   if (!clientEntry) {
     if (absoluteClientEntries['*'] === '*') {
-      return config.base + path.relative(config.root, filePath)
+      return config.base + path.relative(config.root, filePathSlash)
     }
 
-    throw new Error('No client entry found for ' + filePath)
+    throw new Error('No client entry found for ' + filePathSlash)
   }
 
   return clientEntry
