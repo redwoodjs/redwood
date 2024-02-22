@@ -386,23 +386,16 @@ async function transformClientModule(
   // This will insert the names into the `names` array
   await parseExportNamesIntoNames(body, names, url, loader)
 
-  console.log('transformClientModule - names', names)
-  console.log('transformClientModule - clientEntryFiles', clientEntryFiles)
-  console.log('transformClientModule - url', url)
-
-  const urlSlash = url.replaceAll('\\', '/')
   const entryRecord = Object.entries(clientEntryFiles || {}).find(
-    ([_key, value]) => value === urlSlash
+    ([_key, value]) => value === url
   )
 
-  // TODO(RSC): Check if we always find a record. If we do, we should
+  // TODO (RSC): Check if we always find a record. If we do, we should
   // throw an error if it's undefined
 
   const loadId = entryRecord
     ? path.join(getPaths().web.distServer, 'assets', entryRecord[0] + '.js')
     : url
-
-  console.log('rscTransformPlugin - calling load with id', loadId)
 
   let newSrc =
     "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"
