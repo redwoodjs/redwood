@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- fix(sentry): move templates to the command's directory
+
+  Fix for https://community.redwoodjs.com/t/redwood-v7-0-0-upgrade-guide/5713/25. The template files for the sentry setup command weren't moved out of experimental (follow up to https://github.com/redwoodjs/redwood/pull/9830).
+
 ## v7.0.0
 
 - See https://github.com/redwoodjs/redwood/releases/tag/v7.0.0 for the release notes and https://community.redwoodjs.com/t/redwood-v7-0-0-upgrade-guide/5713 for the upgrade guide
