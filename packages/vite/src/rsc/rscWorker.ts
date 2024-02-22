@@ -21,7 +21,7 @@ import type { defineEntries } from '../entries'
 import { registerFwGlobals } from '../lib/registerGlobals'
 import { StatusError } from '../lib/StatusError'
 
-import { rscTransformPlugin, rscReloadPlugin } from './rscVitePlugins'
+import { rscReloadPlugin } from './rscVitePlugins'
 import type {
   RenderInput,
   MessageRes,
@@ -162,7 +162,6 @@ registerFwGlobals()
 // `envFile: false`?
 const vitePromise = createServer({
   plugins: [
-    rscTransformPlugin(),
     rscReloadPlugin((type) => {
       if (!parentPort) {
         throw new Error('parentPort is undefined')
@@ -260,17 +259,18 @@ const resolveClientEntry = (
   config: Awaited<ReturnType<typeof resolveConfig>>,
   filePath: string
 ) => {
-  const clientEntry = absoluteClientEntries[filePath]
+  const filePathSlash = filePath.replaceAll('\\', '/')
+  const clientEntry = absoluteClientEntries[filePathSlash]
 
   console.log('absoluteClientEntries', absoluteClientEntries)
-  console.log('filePath', filePath)
+  console.log('filePath', filePathSlash)
 
   if (!clientEntry) {
     if (absoluteClientEntries['*'] === '*') {
-      return config.base + path.relative(config.root, filePath)
+      return config.base + path.relative(config.root, filePathSlash)
     }
 
-    throw new Error('No client entry found for ' + filePath)
+    throw new Error('No client entry found for ' + filePathSlash)
   }
 
   return clientEntry
