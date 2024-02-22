@@ -94,9 +94,9 @@ export async function rscBuildServer(
         },
       }),
       // The rscTransformPlugin maps paths like
-      // /Users/tobbe/dev/redwood/redwood/__fixtures__/test-project-rsc-external-packages-and-cells/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
+      // /Users/tobbe/.../rw-app/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
       // to
-      // /Users/tobbe/dev/redwood/redwood/__fixtures__/test-project-rsc-external-packages-and-cells/web/dist/server/assets/rsc0.js
+      // /Users/tobbe/.../rw-app/web/dist/server/assets/rsc0.js
       // That's why it needs the `clientEntryFiles` data
       // (It does other things as well, but that's why it needs clientEntryFiles)
       rscTransformPlugin(clientEntryFiles),
