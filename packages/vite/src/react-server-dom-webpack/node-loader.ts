@@ -386,6 +386,10 @@ async function transformClientModule(
   // This will insert the names into the `names` array
   await parseExportNamesIntoNames(body, names, url, loader)
 
+  console.log('transformClientModule - names', names)
+  console.log('transformClientModule - clientEntryFiles', clientEntryFiles)
+  console.log('transformClientModule - url', url)
+
   const urlSlash = url.replaceAll('\\', '/')
   const entryRecord = Object.entries(clientEntryFiles || {}).find(
     ([_key, value]) => value === urlSlash
