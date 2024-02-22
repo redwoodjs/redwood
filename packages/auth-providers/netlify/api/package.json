@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-netlify-api",
-  "version": "7.0.1",
+  "version": "7.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -30,7 +30,7 @@
   "devDependencies": {
     "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
-    "@redwoodjs/api": "7.0.1",
+    "@redwoodjs/api": "7.0.2",
     "@types/aws-lambda": "8.10.126",
     "@types/jsonwebtoken": "9.0.5",
     "typescript": "5.3.3",
