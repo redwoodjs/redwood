@@ -122,7 +122,7 @@ describe('page auto loader handles imports for RSC', () => {
     )
   })
 
-  // Not sure about this 👇 - what should the behaviour be?
+  // Not sure about this 👇 - what should the behavior be?
   test('Already imported pages are left alone.', () => {
     expect(result?.code).toContain(`import FooPage from 'src/pages/FooPage'`)
   })

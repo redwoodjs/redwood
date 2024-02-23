@@ -14,7 +14,7 @@ import { rscTransformPlugin } from './rscVitePlugins'
 /**
  * RSC build. Step 3.
  * buildFeServer -> buildRscFeServer -> rscBuildForWorker
- * Generate the output to be used on the rsc worker (not the actual server!)
+ * Generate the output to be used by the rsc worker (not the actual server!)
  */
 // @TODO(RSC_DC): no redwood-vite plugin, add it back in here
 export async function rscBuildForWorker(
@@ -22,7 +22,7 @@ export async function rscBuildForWorker(
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>
 ) {
-  console.log('Starting RSC worker build.... \n')
+  console.log('Starting RSC worker build...\n')
   const rwPaths = getPaths()
 
   const input = {
@@ -34,7 +34,7 @@ export async function rscBuildForWorker(
 
   const workerBuildOutput = await viteBuild({
     configFile: false, // @MARK disable loading the original plugin, only use settings in this file. This prevents issues with the routes-auto-loader
-    root: rwPaths.web.src, // @MARK this used to base, not sure if intentional or not!!!
+    root: rwPaths.web.src, // @MARK this used to be `rwPaths.web.base`, not sure if intentional or not!!!
     envFile: false,
     legacy: {
       // @MARK: for the worker, we're building ESM! (not CJS)

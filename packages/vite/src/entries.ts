@@ -18,7 +18,7 @@ export type GetBuilder = (
 }>
 
 /**
- * Used to look up the component to import when calling `serve('App')` in
+ * Used to look up the component to import when calling `renderFromRscServer('MyPage')` in
  * Routes.tsx
  */
 export function defineEntries(getEntry: GetEntry, getBuilder?: GetBuilder) {
