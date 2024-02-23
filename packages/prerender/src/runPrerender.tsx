@@ -150,7 +150,7 @@ async function recursivelyRender(
 function insertChunkLoadingScript(
   indexHtmlTree: CheerioAPI,
   renderPath: string,
-  vite: boolean
+  forVite: boolean
 ) {
   const prerenderRoutes = detectPrerenderRoutes()
 
@@ -175,7 +175,7 @@ function insertChunkLoadingScript(
 
   const chunkPaths: Array<string> = []
 
-  if (!vite) {
+  if (!forVite) {
     // Webpack
 
     const pageChunkPath = buildManifest[`${route?.pageIdentifier}.js`]
@@ -219,7 +219,7 @@ function insertChunkLoadingScript(
         })
       }
     }
-  } else if (vite && route?.filePath) {
+  } else if (forVite && route?.filePath) {
     const pagesIndex =
       route.filePath.indexOf(path.join('web', 'src', 'pages')) + 8
     const pagePath = ensurePosixPath(route.filePath.slice(pagesIndex))
@@ -245,12 +245,12 @@ function insertChunkLoadingScript(
   chunkPaths.forEach((chunkPath) => {
     indexHtmlTree('head').prepend(
       `<script defer="defer" src="${chunkPath}" ${
-        vite ? 'type="module"' : ''
+        forVite ? 'type="module"' : ''
       }></script>`
     )
   })
 
-  if (!vite) {
+  if (!forVite) {
     return
   }
 
