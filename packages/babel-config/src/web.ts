@@ -103,8 +103,10 @@ export const getWebSideOverrides = (
     prerender: false,
     forVite: false,
   }
-) => {
-  const overrides = [
+): Array<TransformOptions> => {
+  // Have to use a readonly array here because of a limitation in TS
+  // See https://stackoverflow.com/a/70763406/88106
+  const overrides: ReadonlyArray<false | TransformOptions> = [
     {
       test: /.+Cell.(js|tsx|jsx)$/,
       plugins: [require('./plugins/babel-plugin-redwood-cell').default],
@@ -132,9 +134,13 @@ export const getWebSideOverrides = (
         require('./plugins/babel-plugin-redwood-mock-cell-data').default,
       ],
     },
-  ].filter(Boolean)
+  ]
 
-  return overrides as TransformOptions[]
+  return overrides.filter(
+    (override: false | TransformOptions): override is TransformOptions => {
+      return !!override
+    }
+  )
 }
 
 export const getWebSideBabelPresets = (options: Flags) => {

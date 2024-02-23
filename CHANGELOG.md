@@ -18,13 +18,17 @@
 
   Although this PR fixes Render deploy so that it uses the server file if present, realtime features still don't seem to work. We're still investigating; in the meantime, consider using another provider like Coherence if you're just getting started and want to try out realtime features.
 
-- Update MetaTags to be MetaData in Docs (#10053)
+- Update MetaTags to be Metadata in Docs (#10053)
 
   The tutorial still used the `MetaTags` component instead of the newer `Metadata` component that the generator templates use. This PR updates all instances of `MetaTags` with `Metadata`.
 
-- fix(sentry): move templates to the command's directory
+## v7.0.2
 
-  Fix for https://community.redwoodjs.com/t/redwood-v7-0-0-upgrade-guide/5713/25. The template files for the sentry setup command weren't moved out of experimental (follow up to https://github.com/redwoodjs/redwood/pull/9830).
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.2
+
+## v7.0.1
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.1
 
 ## v7.0.0
 
