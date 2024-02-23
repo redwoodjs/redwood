@@ -86,9 +86,7 @@ export function shutdown() {
 
 let nextId = 1
 
-/**
- * Set the client entries to worker for the server build.
- */
+/** Set the client entries to worker for the server build */
 export function setClientEntries(
   value: 'load' | Record<string, string>
 ): Promise<void> {

@@ -41,7 +41,6 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
         babel: {
           ...getWebSideDefaultBabelConfig({
             forVite: true,
-            // @MARK 👇 This flag is important for RSC Client builds
             forRscClient: true,
           }),
         },

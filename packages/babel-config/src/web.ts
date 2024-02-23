@@ -4,7 +4,7 @@ import path from 'path'
 import * as babel from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 
-// Weird import, but just doing this for typesafety. Its just a type, no harm importing from src.
+// This import is for types safety. Its just a type, no harm importing from src.
 import type { PluginOptions as RoutesAutoLoaderOptions } from '@redwoodjs/babel-config/src/plugins/babel-plugin-redwood-routes-auto-loader'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 

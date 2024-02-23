@@ -146,7 +146,7 @@ const shutdown = async () => {
 
 const loadServerFile = async (fname: string) => {
   const vite = await vitePromise
-  // @MARK: in prod we need to switch to import
+  // TODO(RSC): in prod we need to switch to import
   return vite.ssrLoadModule(fname)
 }
 

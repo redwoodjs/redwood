@@ -68,15 +68,20 @@ async function buildForServer({ verbose = false }: { verbose?: boolean }) {
   console.log('Starting server build.... \n')
   const rwPaths = getPaths()
 
+  if (!rwPaths.web.viteConfig) {
+    throw new Error('Vite config not found')
+  }
+
   await viteBuild({
-    configFile: rwPaths.web.viteConfig as string,
+    configFile: rwPaths.web.viteConfig,
     build: {
       outDir: rwPaths.web.distServer,
       ssr: true, // use boolean here, instead of string.
       // rollup inputs are defined in the vite plugin
     },
     legacy: {
-      buildSsrCjsExternalHeuristics: true, // @MARK @TODO: this gets picked up by the RSC build if its in the index.js.....
+      // @MARK @TODO: this gets picked up by the RSC build if its in the index.js...
+      buildSsrCjsExternalHeuristics: true,
     },
     envFile: false,
     logLevel: verbose ? 'info' : 'warn',

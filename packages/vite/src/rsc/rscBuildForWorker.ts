@@ -25,8 +25,12 @@ export async function rscBuildForWorker(
   console.log('Starting RSC worker build...\n')
   const rwPaths = getPaths()
 
+  if (!rwPaths.web.entries) {
+    throw new Error('RSC entries file not found')
+  }
+
   const input = {
-    entries: rwPaths.web.entries as string,
+    entries: rwPaths.web.entries,
     ...clientEntryFiles,
     ...serverEntryFiles,
     ...customModules,

@@ -26,8 +26,12 @@ export async function rscBuildAnalyze() {
     throw new Error('RSC entries file not found')
   }
 
+  if (!rwPaths.web.viteConfig) {
+    throw new Error('Vite config not found')
+  }
+
   await viteBuild({
-    configFile: rwPaths.web.viteConfig as string,
+    configFile: rwPaths.web.viteConfig,
     root: rwPaths.base,
     plugins: [
       react(),
