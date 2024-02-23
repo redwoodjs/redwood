@@ -15,6 +15,13 @@ import {
   getPathsFromTypeScriptConfig,
 } from './common'
 
+// These flags toggle on/off certain features
+export interface Flags {
+  forJest?: boolean // will change the alias for module-resolver plugin
+  forPrerender?: boolean // changes what babel-plugin-redwood-routes-auto-loader does
+  forVite?: boolean
+}
+
 export const getWebSideBabelPlugins = (
   { forJest, forVite }: Flags = { forJest: false, forVite: false }
 ) => {
@@ -98,8 +105,8 @@ export const getWebSideBabelPlugins = (
 }
 
 export const getWebSideOverrides = (
-  { prerender, forVite }: Flags = {
-    prerender: false,
+  { forPrerender, forVite }: Flags = {
+    forPrerender: false,
     forVite: false,
   }
 ): Array<TransformOptions> => {
@@ -118,8 +125,8 @@ export const getWebSideOverrides = (
         [
           require('./plugins/babel-plugin-redwood-routes-auto-loader').default,
           {
-            prerender,
-            vite: forVite,
+            forPrerender,
+            forVite,
           },
         ],
       ],
@@ -201,13 +208,6 @@ export const getWebSideBabelConfigPath = () => {
   }
 }
 
-// These flags toggle on/off certain features
-export interface Flags {
-  forJest?: boolean // will change the alias for module-resolver plugin
-  prerender?: boolean // changes what babel-plugin-redwood-routes-auto-loader does
-  forVite?: boolean
-}
-
 export const getWebSideDefaultBabelConfig = (options: Flags = {}) => {
   // NOTE:
   // Even though we specify the config file, babel will still search for .babelrc
@@ -239,7 +239,7 @@ export const registerWebSideBabelHook = ({
     // We only register for prerender currently
     // Static importing pages makes sense
     overrides: [
-      ...getWebSideOverrides({ prerender: true, forVite }),
+      ...getWebSideOverrides({ forPrerender: true, forVite }),
       ...overrides,
     ],
   })

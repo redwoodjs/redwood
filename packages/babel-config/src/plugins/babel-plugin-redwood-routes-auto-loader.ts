@@ -11,8 +11,8 @@ import {
 } from '@redwoodjs/project-config'
 
 interface PluginOptions {
-  prerender?: boolean
-  vite?: boolean
+  forPrerender?: boolean
+  forVite?: boolean
 }
 
 /**
@@ -38,7 +38,7 @@ const withRelativeImports = (page: PagesDependency) => {
 
 export default function (
   { types: t }: { types: typeof types },
-  { prerender = false, vite = false }: PluginOptions
+  { forPrerender = false, forVite = false }: PluginOptions
 ): PluginObj {
   // @NOTE: This var gets mutated inside the visitors
   let pages = processPagesDir().map(withRelativeImports)
@@ -93,7 +93,7 @@ export default function (
         // This is to make sure that all the imported "Page modules" are normal
         // imports and not asynchronous ones.
         // Note that jest in a user's project does not enter this block, but our tests do
-        if (prerender) {
+        if (forPrerender) {
           // Match import paths, const name could be different
 
           const pageThatUserImported = pages.find((page) => {
@@ -186,7 +186,12 @@ export default function (
                       t.identifier('prerenderLoader'),
                       t.arrowFunctionExpression(
                         [t.identifier('name')],
-                        prerenderLoaderImpl(prerender, vite, relativeImport, t)
+                        prerenderLoaderImpl(
+                          forPrerender,
+                          forVite,
+                          relativeImport,
+                          t
+                        )
                       )
                     ),
                     t.objectProperty(
@@ -215,12 +220,12 @@ export default function (
 }
 
 function prerenderLoaderImpl(
-  prerender: boolean,
-  vite: boolean,
+  forPrerender: boolean,
+  forVite: boolean,
   relativeImport: string,
   t: typeof types
 ) {
-  if (prerender) {
+  if (forPrerender) {
     // This works for both vite and webpack
     return t.callExpression(t.identifier('require'), [
       t.stringLiteral(relativeImport),
@@ -234,7 +239,7 @@ function prerenderLoaderImpl(
   // Manually imported pages will be bundled in the main bundle and will be
   // loaded by the code in `normalizePage` in util.ts
   let implForBuild
-  if (vite) {
+  if (forVite) {
     implForBuild = t.objectExpression([
       t.objectProperty(
         t.identifier('default'),
