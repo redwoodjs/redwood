@@ -13,7 +13,7 @@ import { rscTransformPlugin } from './rscVitePlugins'
 
 /**
  * RSC build. Step 3.
- * buildFeServer -> buildRscFeServer -> rscBuildForWorker
+ * buildFeServer -> buildRscFeServer -> buildForRscServer
  * Generate the output to be used by the rsc worker (not the actual server!)
  */
 // @TODO(RSC_DC): no redwood-vite plugin, add it back in here

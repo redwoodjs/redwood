@@ -8,8 +8,9 @@ import type { rscBuildClient } from './rscBuildClient'
  * Append a mapping of server asset names to client asset names to the
  * `web/dist/rsc/entries.js` file. Only used by the RSC worker.
  */
-// TODO(RSC_DC) : We could probably do this in rscBuildForWorker
-// using the `writeBundle` hook or similar.
+// TODO(RSC_DC): This function should eventually be removed.
+// The dev server will need this implemented as a Vite plugin,
+// so worth waiting till implementation to swap out and just include the plugin for the prod build
 export function rscBuildClientEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
   serverBuildOutput: Awaited<ReturnType<typeof buildForRscServer>>,
