@@ -323,11 +323,12 @@ export const runPrerender = async ({
   })
 
   const gqlHandler = await getGqlHandler()
+  const forVite = getConfig().web.bundler !== 'webpack'
 
   // Prerender specific configuration
   // extends projects web/babelConfig
   registerWebSideBabelHook({
-    forVite: getConfig().web.bundler !== 'webpack',
+    forVite,
     overrides: [
       {
         plugins: [
@@ -399,7 +400,7 @@ export const runPrerender = async ({
   // or possible cache merge conflicts
   prerenderApolloClient.resetStore()
 
-  insertChunkLoadingScript(indexHtmlTree, renderPath, vite)
+  insertChunkLoadingScript(indexHtmlTree, renderPath, forVite)
 
   indexHtmlTree('#redwood-app').append(componentAsHtml)
 
