@@ -218,27 +218,8 @@ parentPort.on('message', (message: MessageReq) => {
 type ConfigType = Omit<ResolvedConfig, 'root'> & { root: string }
 const configPromise: Promise<ConfigType> = resolveConfig({}, 'serve')
 
-const getEntriesFile = async (
-  config: Awaited<ReturnType<typeof resolveConfig>>,
-  isBuild: boolean
-) => {
-  const rwPaths = getPaths()
-
-  if (isBuild) {
-    // TODO (RSC): Should we make this path configurable? Or at least read
-    // from getPaths()?
-    return path.join(config.root, config.build.outDir, 'entries.js')
-  }
-
-  return rwPaths.web.distServerEntries
-}
-
-const getFunctionComponent = async (
-  rscId: string,
-  config: Awaited<ReturnType<typeof resolveConfig>>,
-  isBuild: boolean
-) => {
-  const entriesFile = await getEntriesFile(config, isBuild)
+const getFunctionComponent = async (rscId: string) => {
+  const entriesFile = getPaths().web.distServerEntries
   const {
     default: { getEntry },
   } = await (loadServerFile(entriesFile) as Promise<Entries>)
@@ -284,7 +265,7 @@ async function setClientEntries(
     return
   }
   const config = await configPromise
-  const entriesFile = await getEntriesFile(config, false)
+  const entriesFile = getPaths().web.distServerEntries
   console.log('setClientEntries :: entriesFile', entriesFile)
   const { clientEntries } = await loadServerFile(entriesFile)
   console.log('setClientEntries :: clientEntries', clientEntries)
@@ -383,7 +364,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
   }
 
   if (input.rscId && input.props) {
-    const component = await getFunctionComponent(input.rscId, config, false)
+    const component = await getFunctionComponent(input.rscId)
     return renderToPipeableStream(
       createElement(component, input.props),
       bundlerConfig
