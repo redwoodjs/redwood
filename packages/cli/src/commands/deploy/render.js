@@ -5,7 +5,7 @@ import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
-import { getPaths, getConfig } from '@redwoodjs/project-config'
+import { getPaths } from '@redwoodjs/project-config'
 
 // It's easy for the api side to exceed Render's free-plan limit.
 // Because telemetryMiddleware is added to Yargs as middleware,
@@ -54,16 +54,16 @@ export const handler = async ({ side, prisma, dataMigrate }) => {
   const rwjsPaths = getPaths()
 
   const execaConfig = {
-    stdio: 'inherit',
     cwd: rwjsPaths.base,
+    shell: true,
+    stdio: 'inherit',
   }
 
   async function runApiCommands() {
     if (prisma) {
       console.log('Running database migrations...')
-      execa.sync(
-        'node_modules/.bin/prisma',
-        ['migrate', 'deploy', '--schema', rwjsPaths.api.dbSchema],
+      execa.commandSync(
+        `node_modules/.bin/prisma migrate deploy --schema "${rwjsPaths.api.dbSchema}"`,
         execaConfig
       )
     }
@@ -80,7 +80,8 @@ export const handler = async ({ side, prisma, dataMigrate }) => {
         console.error(
           [
             "Skipping data migrations; your project doesn't have the `@redwoodjs/cli-data-migrate` package as a dev dependency.",
-            "Without it installed, you're likely to run into memory issues during deploy. Add it to your project's root package.json and deploy again:",
+            "Without it installed, you're likely to run into memory issues during deploy.",
+            "If you want to run data migrations, add the package to your project's root package.json and deploy again:",
             '',
             '```',
             'yarn add -D @redwoodjs/cli-data-migrate',
@@ -88,7 +89,7 @@ export const handler = async ({ side, prisma, dataMigrate }) => {
           ].join('\n')
         )
       } else {
-        execa.sync('yarn', ['rw', 'dataMigrate', 'up'], execaConfig)
+        execa.commandSync('yarn rw dataMigrate up', execaConfig)
       }
     }
 
@@ -96,25 +97,18 @@ export const handler = async ({ side, prisma, dataMigrate }) => {
     const hasServerFile = fs.pathExistsSync(serverFilePath)
 
     if (hasServerFile) {
-      execa('yarn', ['node', serverFilePath], execaConfig)
+      execa(`yarn node ${serverFilePath}`, execaConfig)
     } else {
       const { handler } = await import(
-        '@redwoodjs/api-server/dist/apiCLIConfigHandler'
+        '@redwoodjs/api-server/dist/apiCLIConfigHandler.js'
       )
-      handler({
-        port: getConfig().api?.port || 8911,
-        apiRootPath: '/',
-      })
+      handler()
     }
   }
 
   async function runWebCommands() {
-    execa.sync('yarn', ['install'], execaConfig)
-    execa.sync(
-      'yarn',
-      ['rw', 'build', 'web', '--verbose'].filter(Boolean),
-      execaConfig
-    )
+    execa.commandSync('yarn install', execaConfig)
+    execa.commandSync('yarn rw build web --verbose', execaConfig)
   }
 
   if (side === 'api') {
