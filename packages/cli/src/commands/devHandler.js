@@ -5,11 +5,7 @@ import fs from 'fs-extra'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { shutdownPort } from '@redwoodjs/internal/dist/dev'
-import {
-  getConfig,
-  getConfigPath,
-  resolveFile,
-} from '@redwoodjs/project-config'
+import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
@@ -17,6 +13,7 @@ import c from '../lib/colors'
 import { exitWithError } from '../lib/exit'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 import { getFreePort } from '../lib/ports'
+import { serverFileExists } from '../lib/project'
 
 const defaultApiDebugPort = 18911
 
@@ -36,9 +33,6 @@ export const handler = async ({
 
   const rwjsPaths = getPaths()
 
-  // Check if experimental server file exists
-  const serverFile = resolveFile(`${rwjsPaths.api.dist}/server`)
-
   // Starting values of ports from config (redwood.toml)
   let apiPreferredPort = parseInt(getConfig().api.port)
   let webPreferredPort = parseInt(getConfig().web.port)
@@ -52,7 +46,7 @@ export const handler = async ({
   // Check api port, unless there's a serverFile. If there is a serverFile, we
   // don't know what port will end up being used in the end. It's up to the
   // author of the server file to decide and handle that
-  if (side.includes('api') && !serverFile) {
+  if (side.includes('api') && !serverFileExists()) {
     apiAvailablePort = await getFreePort(apiPreferredPort)
     if (apiAvailablePort === -1) {
       exitWithError(undefined, {
@@ -121,7 +115,7 @@ export const handler = async ({
 
     // Again, if a server file is configured, we don't know what port it'll end
     // up using
-    if (!serverFile) {
+    if (!serverFileExists()) {
       try {
         await shutdownPort(apiAvailablePort)
       } catch (e) {

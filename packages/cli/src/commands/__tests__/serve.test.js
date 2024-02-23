@@ -17,6 +17,7 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
       return {
         api: {
           base: '/mocked/project/api',
+          src: '/mocked/project/api/src',
           dist: '/mocked/project/api/dist',
         },
         web: {
@@ -40,7 +41,7 @@ vi.mock('fs-extra', async (importOriginal) => {
       ...originalFsExtra,
       existsSync: (p) => {
         // Don't detect the experimental server file, can't use path.sep here so the replaceAll is used
-        if (p.replaceAll('\\', '/') === '/mocked/project/api/dist/server.js') {
+        if (p.replaceAll('\\', '/') === '/mocked/project/api/src/server.ts') {
           return false
         }
         return true

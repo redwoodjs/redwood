@@ -13,6 +13,7 @@ import {
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { printSetupNotes } from '../../../../lib'
+import { serverFileExists } from '../../../../lib/project'
 import { addFilesTask } from '../helpers'
 
 const redwoodProjectPaths = getPaths()
@@ -106,11 +107,8 @@ async function getCoherenceConfigFileContent() {
     db = 'postgres'
   }
 
-  const hasServerFile = fs.pathExistsSync(
-    path.join(getPaths().api.dist, 'server.js')
-  )
   const apiProdCommand = ['yarn', 'rw', 'build', 'api', '&&']
-  if (!hasServerFile) {
+  if (serverFileExists()) {
     apiProdCommand.push(
       'yarn',
       'node',
