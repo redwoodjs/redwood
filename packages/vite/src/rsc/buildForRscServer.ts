@@ -17,7 +17,7 @@ import { rscTransformPlugin } from './rscVitePlugins'
  * Generate the output to be used by the rsc worker (not the actual server!)
  */
 // @TODO(RSC_DC): no redwood-vite plugin, add it back in here
-export async function rscBuildForWorker(
+export async function buildForRscServer(
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>

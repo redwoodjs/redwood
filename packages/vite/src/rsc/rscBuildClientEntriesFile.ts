@@ -1,7 +1,7 @@
 import fs from 'fs/promises'
 
 import type { rscBuildClient } from './rscBuildClient'
-import type { rscBuildForWorker } from './rscBuildForWorker'
+import type { buildForRscServer } from './buildForRscServer'
 
 /**
  * RSC build. Step 5.
@@ -12,7 +12,7 @@ import type { rscBuildForWorker } from './rscBuildForWorker'
 // using the `writeBundle` hook or similar.
 export function rscBuildClientEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
-  serverBuildOutput: Awaited<ReturnType<typeof rscBuildForWorker>>,
+  serverBuildOutput: Awaited<ReturnType<typeof buildForRscServer>>,
   clientEntryFiles: Record<string, string>,
   webDistServerEntries: string
 ) {

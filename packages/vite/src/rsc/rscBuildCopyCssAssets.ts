@@ -1,14 +1,14 @@
 import fs from 'fs/promises'
 import path from 'path'
 
-import type { rscBuildForWorker } from './rscBuildForWorker'
+import type { buildForRscServer } from './buildForRscServer'
 
 /**
  * RSC build. Step 4.
  * Copy CSS assets from server to client
  */
 export function rscBuildCopyCssAssets(
-  serverBuildOutput: Awaited<ReturnType<typeof rscBuildForWorker>>,
+  serverBuildOutput: Awaited<ReturnType<typeof buildForRscServer>>,
   webDist: string,
   webDistServer: string
 ) {

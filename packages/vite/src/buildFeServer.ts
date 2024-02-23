@@ -1,11 +1,10 @@
-import { build as viteBuild } from 'vite'
-
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { buildRouteHooks } from './buildRouteHooks'
 import { buildRouteManifest } from './buildRouteManifest'
 import { buildRscClientAndWorker } from './buildRscFeServer'
+import { buildForStreamingServer } from './streaming/buildForStreamingServer'
 import { ensureProcessDirWeb } from './utils'
 
 export interface BuildOptions {
@@ -56,34 +55,10 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   }
 
   // Generates the output used for the server (streaming/ssr but NOT rsc)
-  await buildForServer({ verbose })
+  await buildForStreamingServer({ verbose })
 
   await buildRouteHooks(verbose, rwPaths)
 
   // Write a route manifest
   await buildRouteManifest()
-}
-
-async function buildForServer({ verbose = false }: { verbose?: boolean }) {
-  console.log('Starting server build.... \n')
-  const rwPaths = getPaths()
-
-  if (!rwPaths.web.viteConfig) {
-    throw new Error('Vite config not found')
-  }
-
-  await viteBuild({
-    configFile: rwPaths.web.viteConfig,
-    build: {
-      outDir: rwPaths.web.distServer,
-      ssr: true, // use boolean here, instead of string.
-      // rollup inputs are defined in the vite plugin
-    },
-    legacy: {
-      // @MARK @TODO: this gets picked up by the RSC build if its in the index.js...
-      buildSsrCjsExternalHeuristics: true,
-    },
-    envFile: false,
-    logLevel: verbose ? 'info' : 'warn',
-  })
 }

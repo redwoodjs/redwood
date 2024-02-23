@@ -1,10 +1,10 @@
 import { getPaths } from '@redwoodjs/project-config'
 
+import { buildForRscServer } from './rsc/buildForRscServer'
 import { rscBuildAnalyze } from './rsc/rscBuildAnalyze'
 import { rscBuildClient } from './rsc/rscBuildClient'
 import { rscBuildClientEntriesMappings } from './rsc/rscBuildClientEntriesFile'
 import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets'
-import { rscBuildForWorker } from './rsc/rscBuildForWorker'
 import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars'
 
 export const buildRscClientAndWorker = async () => {
@@ -16,7 +16,7 @@ export const buildRscClientAndWorker = async () => {
   const clientBuildOutput = await rscBuildClient(clientEntryFiles)
 
   // Generate the server output
-  const serverBuildOutput = await rscBuildForWorker(
+  const serverBuildOutput = await buildForRscServer(
     clientEntryFiles,
     serverEntryFiles,
     {}
