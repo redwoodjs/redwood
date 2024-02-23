@@ -73,6 +73,7 @@ const getProjectDBInfo = async () => {
       quoteStyle = '`'
       supportMultiSchema = false
       break
+    case 'postgres':
     case 'postgresql':
     case 'sqlserver':
     case 'cockroachdb':
