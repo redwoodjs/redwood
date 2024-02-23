@@ -1,7 +1,7 @@
 import fs from 'fs/promises'
 
-import type { rscBuildClient } from './rscBuildClient'
 import type { buildForRscServer } from './buildForRscServer'
+import type { rscBuildClient } from './rscBuildClient'
 
 /**
  * RSC build. Step 5.
