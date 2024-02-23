@@ -28,10 +28,6 @@ import type {
   MessageReq,
 } from './rscWorkerCommunication'
 
-// import type { unstable_GetCustomModules } from '../waku-server'
-// import type { RenderInput, MessageReq, MessageRes } from './rsc-handler'
-// import { transformRsfId, generatePrefetchCode } from './rsc-utils'
-
 const { renderToPipeableStream } = RSDWServer
 
 type Entries = { default: ReturnType<typeof defineEntries> }
@@ -108,49 +104,6 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
     parentPort.postMessage(message)
   }
 }
-
-// const handleGetCustomModules = async (
-//   mesg: MessageReq & { type: 'getCustomModules' }
-// ) => {
-//   const { id } = mesg
-//   try {
-//     if (!parentPort) {
-//       throw new Error('parentPort is undefined')
-//     }
-
-//     const modules = await getCustomModulesRSC()
-//     const mesg: MessageRes = { id, type: 'customModules', modules }
-//     parentPort.postMessage(mesg)
-//   } catch (err) {
-//     if (!parentPort) {
-//       throw new Error('parentPort is undefined')
-//     }
-
-//     const mesg: MessageRes = { id, type: 'err', err }
-//     parentPort.postMessage(mesg)
-//   }
-// }
-
-// const handleBuild = async (mesg: MessageReq & { type: 'build' }) => {
-//   const { id } = mesg
-//   try {
-//     await buildRSC()
-
-//     if (!parentPort) {
-//       throw new Error('parentPort is undefined')
-//     }
-
-//     const mesg: MessageRes = { id, type: 'end' }
-//     parentPort.postMessage(mesg)
-//   } catch (err) {
-//     if (!parentPort) {
-//       throw new Error('parentPort is undefined')
-//     }
-
-//     const mesg: MessageRes = { id, type: 'err', err }
-//     parentPort.postMessage(mesg)
-//   }
-// }
 
 // This is a worker, so it doesn't share the same global variables as the main
 // server. So we have to register them here again.
