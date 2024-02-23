@@ -9,7 +9,7 @@ import { normalizePath } from 'vite'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { getViteDefines } from './lib/getViteDefines'
+import { getEnvVarDefinitions } from './envVarDefinitions'
 import handleJsAsJsx from './plugins/vite-plugin-jsx-loader'
 import removeFromBundle from './plugins/vite-plugin-remove-from-bundle'
 import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider'
@@ -155,7 +155,7 @@ export default function redwoodPluginVite(): PluginOption[] {
           // },
           envPrefix: 'REDWOOD_ENV_',
           publicDir: path.join(rwPaths.web.base, 'public'),
-          define: getViteDefines(),
+          define: getEnvVarDefinitions(),
           css: {
             // @NOTE config path is relative to where vite.config.js is if you use relative path
             // postcss: './config/',

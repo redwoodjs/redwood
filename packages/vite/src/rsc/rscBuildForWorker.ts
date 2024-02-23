@@ -6,7 +6,10 @@ import { build as viteBuild } from 'vite'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
+import { getEnvVarDefinitions } from '../envVarDefinitions'
 import { onWarn } from '../lib/onWarn'
+
+import { rscTransformPlugin } from './rscVitePlugins'
 
 /**
  * RSC build. Step 3.
@@ -37,6 +40,8 @@ export async function rscBuildForWorker(
       // @MARK: for the worker, we're building ESM! (not CJS)
       buildSsrCjsExternalHeuristics: false,
     },
+    // TODO (RSC) (Tobbe): Can this be removed?
+    define: getEnvVarDefinitions(),
     ssr: {
       // Externalize everything except packages with files that have
       // 'use client' in them (which are the files in `clientEntryFiles`)
@@ -84,6 +89,13 @@ export async function rscBuildForWorker(
           }),
         },
       }),
+      // The rscTransformPlugin maps paths like
+      // /Users/tobbe/.../rw-app/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
+      // to
+      // /Users/tobbe/.../rw-app/web/dist/server/assets/rsc0.js
+      // That's why it needs the `clientEntryFiles` data
+      // (It does other things as well, but that's why it needs clientEntryFiles)
+      rscTransformPlugin(clientEntryFiles),
     ],
     build: {
       ssr: true,

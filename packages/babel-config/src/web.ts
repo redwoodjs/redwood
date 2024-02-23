@@ -5,7 +5,7 @@ import * as babel from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 
 // Weird import, but just doing this for typesafety. Its just a type, no harm importing from src.
-import type { PluginOptions as RoutesAutoloaderOptions } from '@redwoodjs/babel-config/src/plugins/babel-plugin-redwood-routes-auto-loader'
+import type { PluginOptions as RoutesAutoLoaderOptions } from '@redwoodjs/babel-config/src/plugins/babel-plugin-redwood-routes-auto-loader'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import type { RegisterHookOptions } from './common'
@@ -16,6 +16,14 @@ import {
   parseTypeScriptConfigFiles,
   getPathsFromTypeScriptConfig,
 } from './common'
+
+// These flags toggle on/off certain features
+export interface Flags {
+  forJest?: boolean // will change the alias for module-resolver plugin
+  forPrerender?: boolean // changes what babel-plugin-redwood-routes-auto-loader does
+  forVite?: boolean
+  forRscClient?: boolean
+}
 
 export const getWebSideBabelPlugins = (
   { forJest, forVite }: Flags = { forJest: false, forVite: false }
@@ -106,16 +114,10 @@ export const getWebSideOverrides = (
     forVite: false,
     forRscClient: false,
   }
-) => {
-  // Bit of complexity here!
-  // The plugin will modify the Routes file differently based on what context we're building for
-  const routeLoaderOptions: RoutesAutoloaderOptions = {
-    forPrerender,
-    forVite,
-    forRscClient,
-  }
-
-  const overrides = [
+): Array<TransformOptions> => {
+  // Have to use a readonly array here because of a limitation in TS
+  // See https://stackoverflow.com/a/70763406/88106
+  const overrides: ReadonlyArray<false | TransformOptions> = [
     {
       test: /.+Cell.(js|tsx|jsx)$/,
       plugins: [require('./plugins/babel-plugin-redwood-cell').default],
@@ -127,7 +129,13 @@ export const getWebSideOverrides = (
       plugins: [
         [
           require('./plugins/babel-plugin-redwood-routes-auto-loader').default,
-          routeLoaderOptions,
+          // The plugin will modify the Routes file differently based on what
+          // context we're building for
+          {
+            forPrerender,
+            forVite,
+            forRscClient,
+          } satisfies RoutesAutoLoaderOptions,
         ],
       ],
     },
@@ -140,9 +148,13 @@ export const getWebSideOverrides = (
         require('./plugins/babel-plugin-redwood-mock-cell-data').default,
       ],
     },
-  ].filter(Boolean)
+  ]
 
-  return overrides as TransformOptions[]
+  return overrides.filter(
+    (override: false | TransformOptions): override is TransformOptions => {
+      return !!override
+    }
+  )
 }
 
 export const getWebSideBabelPresets = (options: Flags) => {
@@ -202,14 +214,6 @@ export const getWebSideBabelConfigPath = () => {
   } else {
     return undefined
   }
-}
-
-// These flags toggle on/off certain features
-export interface Flags {
-  forJest?: boolean // will change the alias for module-resolver plugin
-  forPrerender?: boolean // changes what babel-plugin-redwood-routes-auto-loader does
-  forVite?: boolean
-  forRscClient?: boolean
 }
 
 export const getWebSideDefaultBabelConfig = (options: Flags = {}) => {

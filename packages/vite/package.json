@@ -76,7 +76,7 @@
     "@vitejs/plugin-react": "4.2.1",
     "@whatwg-node/fetch": "0.9.16",
     "@whatwg-node/server": "0.9.24",
-    "acorn-loose": "8.3.0",
+    "acorn-loose": "8.4.0",
     "buffer": "6.0.3",
     "busboy": "^1.6.0",
     "cookie": "0.6.0",

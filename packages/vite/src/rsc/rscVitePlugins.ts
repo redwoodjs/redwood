@@ -6,10 +6,18 @@ import type { Plugin } from 'vite'
 import * as RSDWNodeLoader from '../react-server-dom-webpack/node-loader'
 import type { ResolveFunction } from '../react-server-dom-webpack/node-loader'
 
-export function rscTransformPlugin(): Plugin {
+export function rscTransformPlugin(
+  clientEntryFiles: Record<string, string>
+): Plugin {
   return {
     name: 'rsc-transform-plugin',
+    // TODO(RSC): Seems like resolveId() is never called. Can we remove it?
     async resolveId(id, importer, options) {
+      console.log(
+        'rscVitePlugins - rscTransformPlugin::resolveId()',
+        id,
+        options
+      )
       if (!id.endsWith('.js')) {
         return id
       }
@@ -53,8 +61,21 @@ export function rscTransformPlugin(): Plugin {
         return { url }
       }
 
+      const context = {
+        conditions: ['react-server'],
+        parentURL: '',
+      }
+
+      // Calling `resolve` here stashes the resolve function for use with
+      // `RSDWNodeLoader.load()` below
+      RSDWNodeLoader.resolve('', context, resolve)
+
       const load = async (url: string) => {
-        let source = url === id ? code : (await this.load({ id: url })).code
+        let source: string | null = code
+
+        if (url !== id) {
+          source = (await this.load({ id: url })).code
+        }
 
         if (!source) {
           throw new Error(`Failed to load ${url}`)
@@ -65,18 +86,13 @@ export function rscTransformPlugin(): Plugin {
           /^(import {.*?} from ".*?";)\s*"use (client|server)";/,
           '"use $2";$1'
         )
+
         return { format: 'module', source }
       }
 
-      RSDWNodeLoader.resolve(
-        '',
-        { conditions: ['react-server'], parentURL: '' },
-        resolve
-      )
+      const mod = await RSDWNodeLoader.load(id, null, load, clientEntryFiles)
 
-      const source = (await RSDWNodeLoader.load(id, null, load)).source
-
-      return source
+      return mod.source
     },
   }
 }

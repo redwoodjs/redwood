@@ -25,12 +25,12 @@ But no one's going to find it by manually changing the URL so let's add a link f
 
 ```jsx title="web/src/pages/HomePage/HomePage.jsx"
 import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const HomePage = () => {
   return (
     <>
-      <MetaTags title="Home" description="Home page" />
+      <Metadata title="Home" description="Home page" />
 
       // highlight-start
       <header>
@@ -57,12 +57,12 @@ export default HomePage
 
 ```jsx title="web/src/pages/HomePage/HomePage.tsx"
 import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const HomePage = () => {
   return (
     <>
-      <MetaTags title="Home" description="Home page" />
+      <Metadata title="Home" description="Home page" />
 
       // highlight-start
       <header>
@@ -105,12 +105,12 @@ Once we get to the About page we don't have any way to get back so let's add a l
 
 ```jsx title="web/src/pages/AboutPage/AboutPage.jsx"
 import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const AboutPage = () => {
   return (
     <>
-      <MetaTags title="About" description="About page" />
+      <Metadata title="About" description="About page" />
 
       // highlight-start
       <header>
@@ -143,12 +143,12 @@ export default AboutPage
 
 ```jsx title="web/src/pages/AboutPage/AboutPage.tsx"
 import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const AboutPage = () => {
   return (
     <>
-      <MetaTags title="About" description="About page" />
+      <Metadata title="About" description="About page" />
 
       // highlight-start
       <header>

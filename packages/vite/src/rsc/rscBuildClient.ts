@@ -6,7 +6,7 @@ import { build as viteBuild } from 'vite'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
-import { getViteDefines } from '../lib/getViteDefines'
+import { getEnvVarDefinitions } from '../envVarDefinitions'
 import { onWarn } from '../lib/onWarn'
 
 /**
@@ -34,8 +34,7 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     envPrefix: 'REDWOOD_ENV_',
     publicDir: path.join(rwPaths.web.base, 'public'),
     envFile: false,
-    // @MARK: We need to duplicate the defines here.
-    define: getViteDefines(),
+    define: getEnvVarDefinitions(),
     plugins: [
       // @MARK We need to duplicate the plugins here.... otherwise builds fail I don't understand why
       react({

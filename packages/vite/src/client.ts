@@ -20,9 +20,12 @@ const checkStatus = async (
 const BASE_PATH = '/rw-rsc/'
 
 export function renderFromRscServer<Props>(rscId: string) {
+  console.log('serve rscId', rscId)
+
   type SetRerender = (
     rerender: (next: [ReactElement, string]) => void
   ) => () => void
+
   const fetchRSC = cache(
     (serializedProps: string): readonly [React.ReactElement, SetRerender] => {
       console.log('fetchRSC serializedProps', serializedProps)
@@ -97,7 +100,7 @@ export function renderFromRscServer<Props>(rscId: string) {
   // Create temporary client component that wraps the ServerComponent returned
   // by the `createFromFetch` call.
   const ServerComponent = (props: Props) => {
-    console.log('ServerComponent props', props)
+    console.log('ServerComponent', rscId, 'props', props)
 
     // FIXME we blindly expect JSON.stringify usage is deterministic
     const serializedProps = JSON.stringify(props || {})
