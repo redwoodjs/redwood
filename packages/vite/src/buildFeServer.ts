@@ -3,7 +3,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { buildRouteHooks } from './buildRouteHooks'
 import { buildRouteManifest } from './buildRouteManifest'
-import { buildRscClientAndWorker } from './buildRscFeServer'
+import { buildRscClientAndServer } from './buildRscClientAndServer'
 import { buildForStreamingServer } from './streaming/buildForStreamingServer'
 import { ensureProcessDirWeb } from './utils'
 
@@ -44,7 +44,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
       throw new Error('RSC entries file not found')
     }
 
-    await buildRscClientAndWorker()
+    await buildRscClientAndServer()
   }
 
   // We generate the RSC client bundle in the buildRscFeServer function

@@ -7,7 +7,7 @@ import { rscBuildClientEntriesMappings } from './rsc/rscBuildClientEntriesFile'
 import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets'
 import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars'
 
-export const buildRscClientAndWorker = async () => {
+export const buildRscClientAndServer = async () => {
   const rwPaths = getPaths()
   // Analyze all files and generate a list of RSCs and RSFs
   const { clientEntryFiles, serverEntryFiles } = await rscBuildAnalyze()
