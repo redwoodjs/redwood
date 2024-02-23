@@ -394,7 +394,7 @@ async function transformClientModule(
   // throw an error if it's undefined
 
   const loadId = entryRecord
-    ? path.join(getPaths().web.distServer, 'assets', entryRecord[0] + '.js')
+    ? path.join(getPaths().web.distRsc, 'assets', entryRecord[0] + '.js')
     : url
 
   let newSrc =
