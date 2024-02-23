@@ -35,10 +35,10 @@ export function rscBuildClientEntriesMappings(
     if (entryFile) {
       console.log('entryFile', entryFile)
       if (process.platform === 'win32') {
-        const entryFileSlash = entryFile.replaceAll('\\', '/')
-        console.log('entryFileSlash', entryFileSlash)
         // Prevent errors on Windows like
         // Error: No client entry found for D:/a/redwood/rsc-project/web/dist/server/assets/rsc0.js
+        const entryFileSlash = entryFile.replaceAll('\\', '/')
+        console.log('entryFileSlash', entryFileSlash)
         clientEntries[entryFileSlash] = fileName
       } else {
         clientEntries[entryFile] = fileName

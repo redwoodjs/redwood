@@ -12,8 +12,6 @@ export interface BuildOptions {
   webDir?: string
 }
 
-// const SKIP = true
-
 export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   ensureProcessDirWeb(webDir)
 
