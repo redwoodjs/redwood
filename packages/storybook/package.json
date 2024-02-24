@@ -41,6 +41,7 @@
     "!src/**/*"
   ],
   "scripts": {
+    "build": "tsc",
     "check": "tsc --noEmit"
   },
   "dependencies": {
