@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test'
 test('Submitting the form should return a response', async ({ page }) => {
   await page.goto('/')
 
-  const h3 = await page.locator('h1').innerHTML()
+  const h3 = await page.locator('h1').innerText()
   expect(h3).toMatch(/Hello Anonymous!!/)
 
   const pageText = await page.locator('#redwood-app > div').innerText()
