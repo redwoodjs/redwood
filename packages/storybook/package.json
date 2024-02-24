@@ -1,0 +1,74 @@
+{
+  "name": "storybook-framework-redwoodjs-vite",
+  "version": "1.0.0",
+  "description": "Storybook for <meta-framework-name> or <renderer> & <builder>",
+  "keywords": [
+    "Storybook",
+    "<meta-framework-name>",
+    "<renderer>",
+    "<builder>",
+    "<anything>",
+    "<else>",
+    "<relevant>"
+  ],
+  "homepage": "<your package's homepage>",
+  "bugs": {
+    "url": "https://github.com/redwoodjs/redwood/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/storybook"
+  },
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./preset": {
+      "types": "./dist/preset.d.ts",
+      "require": "./dist/preset.js",
+      "import": "./dist/preset.mjs"
+    },
+    "./preview.js": {
+      "types": "./dist/preview.d.ts",
+      "require": "./dist/preview.js",
+      "import": "./dist/preview.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": ["dist/**/*", "types/**/*", "README.md", "*.js", "*.d.ts"],
+  "scripts": {
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@storybook/addons": "^7.0.0",
+    "@storybook/core-common": "^7.0.0",
+    "@storybook/node-logger": "^7.0.0",
+    "@storybook/<builder>": "^7.0.0",
+    "@storybook/<renderer>": "^7.0.0"
+  },
+  "devDependencies": {
+    "typescript": "x.x.x",
+    "<meta-framework>": "^x.x.x",
+    "<builder>": "^x.x.x"
+  },
+  "peerDependencies": {
+    "@babel/core": "^x.x.x",
+    "@storybook/addon-actions": "^7.0.0",
+    "<meta-framework>": "^x.x.x || ^x.x.x",
+    "<renderer>": "^x.x.x || ^x.x.x",
+    "<builder>": "^x.x.x"
+  },
+  "engines": {
+    "node": "=20.x"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
