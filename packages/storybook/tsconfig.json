@@ -5,7 +5,6 @@
     "moduleResolution": "node",
     "module": "esnext",
     "declarationMap": true,
-    "emitDeclarationOnly": true,
     "sourceMap": true,
     "composite": true,
     "esModuleInterop": true,
