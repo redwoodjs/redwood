@@ -56,15 +56,13 @@ export async function handler({
     execaOptions
   )
 
+  const redwoodProjectPaths = getPaths()
   const storybookConfigPath = path.dirname(
-    require.resolve('@redwoodjs/testing/config/storybook/main.js')
+    `${redwoodProjectPaths.web.storybook}/main.ts`
   )
 
   let command = ''
-  const flags = [
-    `--config-dir "${storybookConfigPath}"`,
-    '--webpack-stats-json',
-  ]
+  const flags = [`--config-dir "${storybookConfigPath}"`]
 
   if (build) {
     command = `yarn storybook build ${[
