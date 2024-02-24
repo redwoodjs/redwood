@@ -35,6 +35,7 @@ import * as upgradeCommand from './commands/upgrade'
 import { getPaths, findUp } from './lib'
 import { exitWithError } from './lib/exit'
 import * as updateCheck from './lib/updateCheck'
+import { addAdditionalEnvFiles } from './middleware/addAdditionalEnvFiles'
 import { loadPlugins } from './plugin'
 import { startTelemetry, shutdownTelemetry } from './telemetry/index'
 
@@ -104,6 +105,7 @@ process.env.RWJS_CWD = cwd
 // # Load .env, .env.defaults
 //
 // This should be done as early as possible, and the earliest we can do it is after setting `cwd`.
+// Further down in middleware, we allow additional .env files to be loaded based on args.
 
 if (!process.env.REDWOOD_ENV_FILES_LOADED) {
   config({
@@ -181,6 +183,27 @@ async function runYargs() {
     .option('cwd', {
       describe: 'Working directory to use (where `redwood.toml` is located)',
     })
+    .option('include-env-files', {
+      describe: 'Load additional .env files. These are incremental',
+      array: true,
+    })
+    .example(
+      'yarn rw exec MigrateUsers --include-env-files prod stripe-prod',
+      '"Run a script, and also include .env.prod and .env.stripe-prod"'
+    )
+    .middleware([
+      addAdditionalEnvFiles(cwd),
+      // Once we've loaded the additional .env files, remove the option from yargs.
+      // If we leave it in, it and its alias will be passed to scripts run via `yarn rw exec` like...
+      //
+      // ```
+      // { args: { _: [ 'exec' ], 'include-env-files': [ 'prod' ], includeEnvFiles: [ 'prod' ], '$0': 'rw' } }
+      // ```
+      (argv) => {
+        delete argv.includeEnvFiles
+        delete argv['include-env-files']
+      },
+    ])
     .option('telemetry', {
       describe: 'Whether to send anonymous usage telemetry to RedwoodJS',
       boolean: true,
