@@ -8,7 +8,7 @@ import type {
   TypescriptOptions as TypescriptOptionsBase,
 } from '@storybook/types'
 
-type FrameworkName = '@storybook/react-vite'
+type FrameworkName = 'storybook-framework-redwoodjs-vite'
 type BuilderName = '@storybook/builder-vite'
 
 export type FrameworkOptions = {

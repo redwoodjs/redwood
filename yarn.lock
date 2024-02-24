@@ -31137,11 +31137,11 @@ __metadata:
     magic-string: "npm:^0.30.0"
     react-docgen: "npm:^7.0.0"
     typescript: "npm:^5.3.2"
-    vite: "npm:^4.0.0"
+    vite: "npm:4.5.2"
   peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-    vite: ^4.0.0 || ^5.0.0
+    react: 0.0.0-experimental-e5205658f-20230913
+    react-dom: 0.0.0-experimental-e5205658f-20230913
+    storybook: 7.6.10
   languageName: unknown
   linkType: soft
 
@@ -33384,7 +33384,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:4.5.2, vite@npm:^4.0.0":
+"vite@npm:4.5.2":
   version: 4.5.2
   resolution: "vite@npm:4.5.2"
   dependencies:
