@@ -29,7 +29,7 @@
     },
     "./rwRscGlobal": {
       "types": "./dist/fully-react/rwRscGlobal.d.ts",
-      "default": "./dist/fully-react/rwRscGlobal.js"
+      "default": "./dist/fully-react/rwRscGlobal.mjs"
     },
     "./buildFeServer": {
       "types": "./dist/buildFeServer.d.ts",
@@ -37,16 +37,16 @@
     },
     "./node-loader": {
       "types": "./dist/rsc/rscNodeLoader.d.ts",
-      "default": "./dist/rsc/rscNodeLoader.js"
+      "default": "./dist/rsc/rscNodeLoader.mjs"
     },
     "./react-node-loader": {
       "types": "./dist/react-server-dom-webpack/node-loader.d.ts",
-      "default": "./dist/react-server-dom-webpack/node-loader.js"
+      "default": "./dist/react-server-dom-webpack/node-loader.mjs"
     },
     "./bins/rw-vite-build.mjs": "./bins/rw-vite-build.mjs",
     "./middleware": {
       "types": "./dist/middleware/index.d.ts",
-      "default": "./dist/middleware/index.js"
+      "default": "./dist/middleware/index.mjs"
     }
   },
   "bin": {
