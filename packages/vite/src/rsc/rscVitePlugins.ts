@@ -3,8 +3,8 @@ import path from 'node:path'
 import * as swc from '@swc/core'
 import type { Plugin } from 'vite'
 
-import * as RSDWNodeLoader from '../react-server-dom-webpack/node-loader'
-import type { ResolveFunction } from '../react-server-dom-webpack/node-loader'
+import * as RSDWNodeLoader from '../react-server-dom-webpack/node-loader.js'
+import type { ResolveFunction } from '../react-server-dom-webpack/node-loader.js'
 
 // Used in Step 2 of the build process, for the client bundle
 export function rscIndexPlugin(): Plugin {

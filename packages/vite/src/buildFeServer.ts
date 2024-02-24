@@ -10,9 +10,9 @@ import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { findRouteHooksSrc } from '@redwoodjs/internal/dist/files'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { buildRouteManifest } from './buildRouteManifest'
-import { buildRscFeServer } from './buildRscFeServer'
-import { ensureProcessDirWeb } from './utils'
+import { buildRouteManifest } from './buildRouteManifest.js'
+import { buildRscFeServer } from './buildRscFeServer.js'
+import { ensureProcessDirWeb } from './utils.js'
 
 export interface BuildOptions {
   verbose?: boolean

@@ -17,11 +17,11 @@ import {
   createInjector,
 } from '@redwoodjs/web/dist/components/ServerInject'
 
-import type { MiddlewareResponse } from '../middleware/MiddlewareResponse'
+import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 
-import { createBufferedTransformStream } from './transforms/bufferedTransform'
-import { createTimeoutTransform } from './transforms/cancelTimeoutTransform'
-import { createServerInjectionTransform } from './transforms/serverInjectionTransform'
+import { createBufferedTransformStream } from './transforms/bufferedTransform.js'
+import { createTimeoutTransform } from './transforms/cancelTimeoutTransform.js'
+import { createServerInjectionTransform } from './transforms/serverInjectionTransform.js'
 
 interface RenderToStreamArgs {
   ServerEntry: any

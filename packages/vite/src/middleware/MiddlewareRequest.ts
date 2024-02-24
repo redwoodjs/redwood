@@ -2,7 +2,7 @@ import { Request as WhatWgRequest } from '@whatwg-node/fetch'
 
 import { defaultAuthProviderState, type ServerAuthState } from '@redwoodjs/auth'
 
-import { CookieJar } from './CookieJar'
+import { CookieJar } from './CookieJar.js'
 
 class ContextJar<T> {
   private _data: T

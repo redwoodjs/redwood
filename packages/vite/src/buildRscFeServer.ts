@@ -1,9 +1,9 @@
-import { rscBuildAnalyze } from './rsc/rscBuildAnalyze'
-import { rscBuildClient } from './rsc/rscBuildClient'
-import { rscBuildClientEntriesMappings } from './rsc/rscBuildClientEntriesFile'
-import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets'
-import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars'
-import { rscBuildServer } from './rsc/rscBuildServer'
+import { rscBuildAnalyze } from './rsc/rscBuildAnalyze.js'
+import { rscBuildClient } from './rsc/rscBuildClient.js'
+import { rscBuildClientEntriesMappings } from './rsc/rscBuildClientEntriesFile.js'
+import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets.js'
+import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars.js'
+import { rscBuildServer } from './rsc/rscBuildServer.js'
 
 interface Args {
   viteConfigPath: string

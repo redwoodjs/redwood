@@ -5,8 +5,8 @@ import type { Manifest as BuildManifest } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { findAssetsInManifest } from './findAssetsInManifest'
-import { RwRscServerGlobal } from './RwRscServerGlobal'
+import { findAssetsInManifest } from './findAssetsInManifest.js'
+import { RwRscServerGlobal } from './RwRscServerGlobal.js'
 
 function readJSON(path: string) {
   return JSON.parse(readFileSync(path, 'utf-8'))

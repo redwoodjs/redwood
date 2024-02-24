@@ -7,7 +7,7 @@ import type { Manifest as ViteBuildManifest } from 'vite'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
 
-import type { RWRouteManifest } from './types'
+import type { RWRouteManifest } from './types.js'
 
 /**
  * RSC build. Step 6.

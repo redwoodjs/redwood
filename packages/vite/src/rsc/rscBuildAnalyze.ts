@@ -3,9 +3,9 @@ import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { onWarn } from '../lib/onWarn'
+import { onWarn } from '../lib/onWarn.js'
 
-import { rscAnalyzePlugin } from './rscVitePlugins'
+import { rscAnalyzePlugin } from './rscVitePlugins.js'
 
 /**
  * RSC build. Step 1.

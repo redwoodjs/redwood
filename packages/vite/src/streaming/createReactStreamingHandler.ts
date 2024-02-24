@@ -10,10 +10,10 @@ import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import { invoke } from '../middleware/invokeMiddleware'
+import { invoke } from '../middleware/invokeMiddleware.js'
 
-import { reactRenderToStreamResponse } from './streamHelpers'
-import { loadAndRunRouteHooks } from './triggerRouteHooks'
+import { reactRenderToStreamResponse } from './streamHelpers.js'
+import { loadAndRunRouteHooks } from './triggerRouteHooks.js'
 
 interface CreateReactStreamingHandlerOptions {
   route: RWRouteManifestItem

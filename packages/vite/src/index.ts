@@ -9,10 +9,10 @@ import { normalizePath } from 'vite'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { getEnvVarDefinitions } from './envVarDefinitions'
-import handleJsAsJsx from './plugins/vite-plugin-jsx-loader'
-import removeFromBundle from './plugins/vite-plugin-remove-from-bundle'
-import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider'
+import { getEnvVarDefinitions } from './envVarDefinitions.js'
+import handleJsAsJsx from './plugins/vite-plugin-jsx-loader.js'
+import removeFromBundle from './plugins/vite-plugin-remove-from-bundle.js'
+import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider.js'
 
 /**
  * Pre-configured vite plugin, with required config for Redwood apps.
@@ -212,6 +212,9 @@ export default function redwoodPluginVite(): PluginOption[] {
             sourcemap: !env.ssrBuild && rwConfig.web.sourceMap, // Note that this can be boolean or 'inline'
             rollupOptions: {
               input: getRollupInput(!!env.ssrBuild),
+              output: {
+                entryFileNames: '[name].js',
+              },
             },
           },
           legacy: {

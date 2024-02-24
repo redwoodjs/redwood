@@ -1,7 +1,7 @@
 import fs from 'fs/promises'
 import path from 'path'
 
-import type { rscBuildServer } from './rscBuildServer'
+import type { rscBuildServer } from './rscBuildServer.js'
 
 /**
  * RSC build. Step 4.
