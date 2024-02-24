@@ -191,21 +191,7 @@ async function runYargs() {
       'yarn rw exec MigrateUsers --include-env prod --include-env stripe-prod',
       '"Run a script, and also include .env.prod and .env.stripe-prod"'
     )
-    .middleware(
-      [
-        // We've already handled `cwd` above, but it may still be in `argv`.
-        // We don't need it anymore so let's get rid of it.
-        // Likewise for `telemetry`.
-        (argv) => {
-          delete argv.cwd
-          delete argv.telemetry
-        },
-        telemetry && telemetryMiddleware,
-        updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
-        addAdditionalEnvFiles(cwd),
-      ].filter(Boolean)
-    )
-
+    .middleware(addAdditionalEnvFiles(cwd))
     .option('telemetry', {
       describe: 'Whether to send anonymous usage telemetry to RedwoodJS',
       boolean: true,
