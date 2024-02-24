@@ -1,17 +1,13 @@
 {
   "name": "storybook-framework-redwoodjs-vite",
-  "version": "1.0.0",
-  "description": "Storybook for <meta-framework-name> or <renderer> & <builder>",
+  "version": "7.0.0",
+  "description": "Storybook for RedwoodJS with Vite",
   "keywords": [
     "Storybook",
-    "<meta-framework-name>",
-    "<renderer>",
-    "<builder>",
-    "<anything>",
-    "<else>",
-    "<relevant>"
+    "RedwoodJS",
+    "React",
+    "Vite"
   ],
-  "homepage": "<your package's homepage>",
   "bugs": {
     "url": "https://github.com/redwoodjs/redwood/issues"
   },
