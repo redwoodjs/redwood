@@ -184,8 +184,7 @@ async function runYargs() {
       describe: 'Working directory to use (where `redwood.toml` is located)',
     })
     .option('include-env', {
-      describe:
-        'Load additional .env files. These are incremental',
+      describe: 'Load additional .env files. These are incremental',
       array: true,
     })
     .example(
