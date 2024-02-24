@@ -14,7 +14,7 @@ describe('addAdditionalEnvFiles', () => {
   })
 
   it("doesn't load .env files if there are none to load", () => {
-    const fn = addAdditionalEnvFiles()
+    const fn = addAdditionalEnvFiles(__dirname)
     fn({})
 
     expect(process.env).toEqual(originalProcessEnv)

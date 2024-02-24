@@ -23,9 +23,9 @@ export const addAdditionalEnvFiles = (cwd) => (yargs) => {
     }
   }
 
-  // Support automatically matching a .env file based on the NODE_ENV
+  // Support automatically matching a .env file based on NODE_ENV
   if (process.env.NODE_ENV) {
-    const processBasedEnvPath = `${cwd}/.env.${process.env.NODE_ENV}`
+    const processBasedEnvPath = path.join(cwd, `.env.${process.env.NODE_ENV}`)
     if (fs.existsSync(processBasedEnvPath)) {
       config({ path: processBasedEnvPath })
     }
