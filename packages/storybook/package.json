@@ -46,8 +46,8 @@
   "dependencies": {
     "@joshwooding/vite-plugin-react-docgen-typescript": "0.3.0",
     "@rollup/pluginutils": "^5.0.2",
-    "@storybook/builder-vite": "workspace:*",
-    "@storybook/react": "workspace:*",
+    "@storybook/builder-vite": "7.6.10",
+    "@storybook/react": "7.6.10",
     "magic-string": "^0.30.0",
     "react-docgen": "^7.0.0"
   },
