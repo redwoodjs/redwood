@@ -32,15 +32,17 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
   }
 
   const clientBuildOutput = await viteBuild({
-    // @MARK  This runs on TOP of the settings in rw-vite-plugin, because we don't set configFile: false
-    // but if you actually set the config file, it runs the transforms twice
+    // @MARK This runs on TOP of the settings in rw-vite-plugin, because we
+    // don't set configFile: false. But if you actually set the config file,
+    // it runs the transforms twice
     root: rwPaths.web.src,
     envPrefix: 'REDWOOD_ENV_',
     publicDir: path.join(rwPaths.web.base, 'public'),
     envFile: false,
     define: getEnvVarDefinitions(),
     plugins: [
-      // @MARK We need to duplicate the plugins here.... otherwise builds fail I don't understand why
+      // @MARK We need to duplicate the plugins here... otherwise builds fail
+      // and I don't understand why
       react({
         babel: {
           ...getWebSideDefaultBabelConfig({
@@ -53,15 +55,14 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     build: {
       outDir: rwPaths.web.distClient,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
-      // TODO (RSC) Enable this when we switch to a server-first approach
-      // emptyOutDir: false, // Already done when building server
       rollupOptions: {
         onwarn: onWarn,
         input: {
-          // @MARK: temporary hack to find the entry client so we can get the index.css bundle
-          // but we don't actually want this on an rsc page!
+          // @MARK: temporary hack to find the entry client so we can get the
+          // index.css bundle but we don't actually want this on an rsc page!
           'rwjs-client-entry': rwPaths.web.entryClient,
-          // we need this, so that files with "use client" aren't bundled. I **think** RSC wants an unbundled build
+          // we need this, so that files with "use client" aren't bundled. I
+          // **think** RSC wants an unbundled build
           ...clientEntryFiles,
         },
         preserveEntrySignatures: 'exports-only',
