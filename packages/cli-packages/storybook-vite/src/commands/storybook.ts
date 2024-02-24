@@ -68,7 +68,7 @@ export async function handler(options: StorybookYargsOptions): Promise<void> {
   // the perceived performance of the command as there will be delay while we
   // load the handler.
   recordTelemetryAttributes({
-    command: 'storybook',
+    command: 'storybook-vite',
     build: options.build,
     ci: options.ci,
     open: options.open,
