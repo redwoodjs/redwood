@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/forms",
-  "version": "6.0.7",
+  "version": "7.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -25,6 +25,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.9",
     "core-js": "3.35.1",
+    "graphql": "16.8.1",
     "pascalcase": "1.0.0",
     "react-hook-form": "7.49.3"
   },
@@ -36,9 +37,8 @@
     "@testing-library/react": "14.1.2",
     "@testing-library/user-event": "14.5.2",
     "@types/pascalcase": "1.0.3",
-    "@types/react": "18.2.37",
-    "@types/react-dom": "18.2.15",
-    "graphql": "16.8.1",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
     "nodemon": "3.0.2",
     "react": "0.0.0-experimental-e5205658f-20230913",
     "react-dom": "0.0.0-experimental-e5205658f-20230913",
@@ -46,7 +46,6 @@
     "vitest": "1.2.2"
   },
   "peerDependencies": {
-    "graphql": "16.8.1",
     "react": "0.0.0-experimental-e5205658f-20230913"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

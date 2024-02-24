@@ -44,7 +44,7 @@ The `path` prop specifies the URL path to match, starting with the beginning sla
 
 ## Private Routes
 
-Some pages should only be visible to authenticated users.
+Some pages should only be visible to authenticated users. We support this using the `PrivateSet` component. Read more [further down](#privateset).
 
 ## Sets of Routes
 
@@ -87,7 +87,7 @@ Conceptually, this fits with how we think about Context and Layouts as things th
 There's a lot of flexibility here. You can even nest `Sets` to great effect:
 
 ```jsx title="Routes.js"
-import { Router, Route, Set, Private } from '@redwoodjs/router'
+import { Router, Route, Set } from '@redwoodjs/router'
 import BlogContext from 'src/contexts/BlogContext'
 import BlogLayout from 'src/layouts/BlogLayout'
 import BlogNavLayout from 'src/layouts/BlogNavLayout'
@@ -132,7 +132,7 @@ becomes...
 
 A `PrivateSet` makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the `PrivateSet`, they'll be redirected to the Route passed as the `PrivateSet`'s `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
 
-Here's an example of how you'd use a private set:
+Here's an example of how you'd use a `PrivateSet`:
 
 ```jsx title="Routes.js"
 <Router>
@@ -145,7 +145,7 @@ Here's an example of how you'd use a private set:
 
 For more fine-grained control, you can specify `roles` (which takes a string for a single role or an array of roles), and the router will check to see that the current user is authorized before giving them access to the Route. If they're not, they will be redirected to the page specified in the `unauthenticated` prop, such as a "forbidden" page. Read more about Role-based Access Control in Redwood [here](how-to/role-based-access-control.md).
 
-To protect `Private` routes for access by a single role:
+To protect private routes for access by a single role:
 
 ```jsx title="Routes.js"
 <Router>
@@ -157,7 +157,7 @@ To protect `Private` routes for access by a single role:
 </Router>
 ```
 
-To protect `Private` routes for access by multiple roles:
+To protect private routes for access by multiple roles:
 
 ```jsx title="Routes.js"
 <Router>
@@ -613,7 +613,7 @@ Redwood will detect your explicit import and refrain from splitting that page in
 
 Because lazily-loaded pages can take a non-negligible amount of time to load (depending on bundle size and network connection), you may want to show a loading indicator to signal to the user that something is happening after they click a link.
 
-In order to show a loader as your page chunks are loading, you simply add the `whileLoadingPage` prop to your route, `Set` or `Private` component.
+In order to show a loader as your page chunks are loading, you simply add the `whileLoadingPage` prop to your route, `Set` or `PrivateSet` component.
 
 ```jsx title="Routes.js"
 import SkeletonLoader from 'src/components/SkeletonLoader'
@@ -659,7 +659,7 @@ When the lazy-loaded page is loading, `PageLoadingContext.Consumer` will pass `{
 
 Let's say you have a dashboard area on your Redwood app, which can only be accessed after logging in. When Redwood Router renders your private page, it will first fetch the user's details, and only render the page if it determines the user is indeed logged in.
 
-In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your private `<Route>` or `<PrivateSet>` component:
+In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your `PrivateSet` component:
 
 ```jsx
 //Routes.js
@@ -675,7 +675,7 @@ In order to display a loader while auth details are being retrieved you can add 
     <Route path="/dashboard" page={DashboardHomePage} name="dashboard" />
 
     {/* other routes */}
-  <PrivateSet>
+  </PrivateSet>
 </Router>
 ```
 
@@ -762,7 +762,7 @@ Note that if you're copy-pasting this example, it uses [Tailwind CSS](https://ta
 
 :::note Can I customize the development one?
 
-As it's part of the RedwoodJS framework, you can't _change_ the dev fatal error page - but you can always build your own that takes the same props. If there's a feature you want to add to the built-in version, let us know on the [forums](https://community.redwoodjs.com/).
+As it's part of the RedwoodJS framework, you can't _change_ the dev fatal error page, but you can always build your own that takes the same props. If there's a feature you want to add to the built-in version, let us know on the [forums](https://community.redwoodjs.com/).
 
 :::
 

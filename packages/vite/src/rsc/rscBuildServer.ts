@@ -3,9 +3,13 @@ import path from 'node:path'
 import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
+import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { getEnvVarDefinitions } from '../envVarDefinitions'
 import { onWarn } from '../lib/onWarn'
+
+import { rscTransformPlugin } from './rscVitePlugins'
 
 /**
  * RSC build. Step 3.
@@ -40,51 +44,8 @@ export async function rscBuildServer(
     root: rwPaths.web.base,
     envPrefix: 'REDWOOD_ENV_',
     publicDir: path.join(rwPaths.web.base, 'public'),
-    define: {
-      RWJS_ENV: {
-        // @NOTE we're avoiding process.env here, unlike webpack
-        RWJS_API_GRAPHQL_URL:
-          rwConfig.web.apiGraphQLUrl ?? rwConfig.web.apiUrl + '/graphql',
-        RWJS_API_URL: rwConfig.web.apiUrl,
-        __REDWOOD__APP_TITLE: rwConfig.web.title || path.basename(rwPaths.base),
-        RWJS_EXP_STREAMING_SSR: rwConfig.experimental?.streamingSsr?.enabled,
-        RWJS_EXP_RSC: rwConfig.experimental?.rsc?.enabled,
-      },
-      RWJS_DEBUG_ENV: {
-        RWJS_SRC_ROOT: rwPaths.web.src,
-        REDWOOD_ENV_EDITOR: JSON.stringify(process.env.REDWOOD_ENV_EDITOR),
-      },
-      // Vite can automatically expose environment variables, but we
-      // disable that in `buildFeServer.ts` by setting `envFile: false`
-      // because we want to use our own logic for loading .env,
-      // .env.defaults, etc
-      // The two object spreads below will expose all environment
-      // variables listed in redwood.toml and all environment variables
-      // prefixed with REDWOOD_ENV_
-      ...Object.fromEntries(
-        rwConfig.web.includeEnvironmentVariables.flatMap((envName) => [
-          // TODO (RSC): Figure out if/why we need to disable eslint here.
-          // Re-enable if possible
-          // eslint-disable-next-line
-          [`import.meta.env.${envName}`, JSON.stringify(process.env[envName])],
-          // TODO (RSC): Figure out if/why we need to disable eslint here
-          // Re-enable if possible
-          // eslint-disable-next-line
-          [`process.env.${envName}`, JSON.stringify(process.env[envName])],
-        ])
-      ),
-      ...Object.entries(process.env).reduce<Record<string, any>>(
-        (acc, [key, value]) => {
-          if (key.startsWith('REDWOOD_ENV_')) {
-            acc[`import.meta.env.${key}`] = JSON.stringify(value)
-            acc[`process.env.${key}`] = JSON.stringify(value)
-          }
-
-          return acc
-        },
-        {}
-      ),
-    },
+    envFile: false,
+    define: getEnvVarDefinitions(),
     ssr: {
       // Externalize everything except packages with files that have
       // 'use client' in them (which are the files in `clientEntryFiles`)
@@ -124,7 +85,22 @@ export async function rscBuildServer(
         externalConditions: ['react-server'],
       },
     },
-    plugins: [react()],
+    plugins: [
+      react({
+        babel: {
+          ...getWebSideDefaultBabelConfig({
+            forVite: true,
+          }),
+        },
+      }),
+      // The rscTransformPlugin maps paths like
+      // /Users/tobbe/.../rw-app/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
+      // to
+      // /Users/tobbe/.../rw-app/web/dist/server/assets/rsc0.js
+      // That's why it needs the `clientEntryFiles` data
+      // (It does other things as well, but that's why it needs clientEntryFiles)
+      rscTransformPlugin(clientEntryFiles),
+    ],
     build: {
       ssr: true,
       ssrEmitAssets: true,

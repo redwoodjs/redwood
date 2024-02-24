@@ -3,10 +3,10 @@ import React, { useMemo, memo } from 'react'
 
 import { ActiveRouteLoader } from './active-route-loader'
 import { AuthenticatedRoute } from './AuthenticatedRoute'
-import { Redirect } from './links'
 import { LocationProvider, useLocation } from './location'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { ParamsProvider } from './params'
+import { Redirect } from './redirect'
 import type {
   NotFoundRouteProps,
   RedirectRouteProps,

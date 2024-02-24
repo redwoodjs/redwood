@@ -51,8 +51,8 @@ export const DEFAULT_CREATE_SERVER_OPTIONS: DefaultCreateServerOptions = {
 type ResolvedOptions = Required<
   Omit<CreateServerOptions, 'logger' | 'fastifyServerOptions' | 'parseArgs'> & {
     fastifyServerOptions: FastifyServerOptions
-    port: number
-    host: string
+    apiPort: number
+    apiHost: string
   }
 >
 
@@ -60,6 +60,8 @@ export function resolveOptions(
   options: CreateServerOptions = {},
   args?: string[]
 ) {
+  options.parseArgs ??= true
+
   options.logger ??= DEFAULT_CREATE_SERVER_OPTIONS.logger
 
   // Set defaults.
@@ -73,8 +75,8 @@ export function resolveOptions(
       logger: options.logger ?? DEFAULT_CREATE_SERVER_OPTIONS.logger,
     },
 
-    host: getAPIHost(),
-    port: getAPIPort(),
+    apiHost: getAPIHost(),
+    apiPort: getAPIPort(),
   }
 
   // Merge fastifyServerOptions.
@@ -85,10 +87,10 @@ export function resolveOptions(
   if (options.parseArgs) {
     const { values } = parseArgs({
       options: {
-        host: {
+        apiHost: {
           type: 'string',
         },
-        port: {
+        apiPort: {
           type: 'string',
           short: 'p',
         },
@@ -96,21 +98,22 @@ export function resolveOptions(
           type: 'string',
         },
       },
+      strict: false,
       ...(args && { args }),
     })
 
-    if (values.host && typeof values.host !== 'string') {
-      throw new Error('`host` must be a string')
+    if (values.apiHost && typeof values.apiHost !== 'string') {
+      throw new Error('`apiHost` must be a string')
     }
-    if (values.host) {
-      resolvedOptions.host = values.host
+    if (values.apiHost) {
+      resolvedOptions.apiHost = values.apiHost
     }
 
-    if (values.port) {
-      resolvedOptions.port = +values.port
+    if (values.apiPort) {
+      resolvedOptions.apiPort = +values.apiPort
 
-      if (isNaN(resolvedOptions.port)) {
-        throw new Error('`port` must be an integer')
+      if (isNaN(resolvedOptions.apiPort)) {
+        throw new Error('`apiPort` must be an integer')
       }
     }
 

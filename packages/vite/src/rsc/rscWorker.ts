@@ -18,18 +18,15 @@ import { createServer, resolveConfig } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 import type { defineEntries } from '../entries'
+import { registerFwGlobals } from '../lib/registerGlobals'
 import { StatusError } from '../lib/StatusError'
 
-import { rscTransformPlugin, rscReloadPlugin } from './rscVitePlugins'
+import { rscReloadPlugin } from './rscVitePlugins'
 import type {
   RenderInput,
   MessageRes,
   MessageReq,
 } from './rscWorkerCommunication'
-
-// import type { unstable_GetCustomModules } from '../waku-server'
-// import type { RenderInput, MessageReq, MessageRes } from './rsc-handler'
-// import { transformRsfId, generatePrefetchCode } from './rsc-utils'
 
 const { renderToPipeableStream } = RSDWServer
 
@@ -108,52 +105,16 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
   }
 }
 
-// const handleGetCustomModules = async (
-//   mesg: MessageReq & { type: 'getCustomModules' }
-// ) => {
-//   const { id } = mesg
-//   try {
-//     if (!parentPort) {
-//       throw new Error('parentPort is undefined')
-//     }
+// This is a worker, so it doesn't share the same global variables as the main
+// server. So we have to register them here again.
+registerFwGlobals()
 
-//     const modules = await getCustomModulesRSC()
-//     const mesg: MessageRes = { id, type: 'customModules', modules }
-//     parentPort.postMessage(mesg)
-//   } catch (err) {
-//     if (!parentPort) {
-//       throw new Error('parentPort is undefined')
-//     }
-
-//     const mesg: MessageRes = { id, type: 'err', err }
-//     parentPort.postMessage(mesg)
-//   }
-// }
-
-// const handleBuild = async (mesg: MessageReq & { type: 'build' }) => {
-//   const { id } = mesg
-//   try {
-//     await buildRSC()
-
-//     if (!parentPort) {
-//       throw new Error('parentPort is undefined')
-//     }
-
-//     const mesg: MessageRes = { id, type: 'end' }
-//     parentPort.postMessage(mesg)
-//   } catch (err) {
-//     if (!parentPort) {
-//       throw new Error('parentPort is undefined')
-//     }
-
-//     const mesg: MessageRes = { id, type: 'err', err }
-//     parentPort.postMessage(mesg)
-//   }
-// }
-
+// TODO (RSC): `createServer` is mostly used to create a dev server. Is it OK
+// to use it like a production server like this?
+// TODO (RSC): Do we need to pass `define` here with RWJS_ENV etc? What about
+// `envFile: false`?
 const vitePromise = createServer({
   plugins: [
-    rscTransformPlugin(),
     rscReloadPlugin((type) => {
       if (!parentPort) {
         throw new Error('parentPort is undefined')
@@ -210,27 +171,8 @@ parentPort.on('message', (message: MessageReq) => {
 type ConfigType = Omit<ResolvedConfig, 'root'> & { root: string }
 const configPromise: Promise<ConfigType> = resolveConfig({}, 'serve')
 
-const getEntriesFile = async (
-  config: Awaited<ReturnType<typeof resolveConfig>>,
-  isBuild: boolean
-) => {
-  const rwPaths = getPaths()
-
-  if (isBuild) {
-    // TODO (RSC): Should we make this path configurable? Or at least read
-    // from getPaths()?
-    return path.join(config.root, config.build.outDir, 'entries.js')
-  }
-
-  return rwPaths.web.distServerEntries
-}
-
-const getFunctionComponent = async (
-  rscId: string,
-  config: Awaited<ReturnType<typeof resolveConfig>>,
-  isBuild: boolean
-) => {
-  const entriesFile = await getEntriesFile(config, isBuild)
+const getFunctionComponent = async (rscId: string) => {
+  const entriesFile = getPaths().web.distServerEntries
   const {
     default: { getEntry },
   } = await (loadServerFile(entriesFile) as Promise<Entries>)
@@ -251,17 +193,18 @@ const resolveClientEntry = (
   config: Awaited<ReturnType<typeof resolveConfig>>,
   filePath: string
 ) => {
-  const clientEntry = absoluteClientEntries[filePath]
+  const filePathSlash = filePath.replaceAll('\\', '/')
+  const clientEntry = absoluteClientEntries[filePathSlash]
 
   console.log('absoluteClientEntries', absoluteClientEntries)
-  console.log('filePath', filePath)
+  console.log('filePath', filePathSlash)
 
   if (!clientEntry) {
     if (absoluteClientEntries['*'] === '*') {
-      return config.base + path.relative(config.root, filePath)
+      return config.base + path.relative(config.root, filePathSlash)
     }
 
-    throw new Error('No client entry found for ' + filePath)
+    throw new Error('No client entry found for ' + filePathSlash)
   }
 
   return clientEntry
@@ -275,7 +218,7 @@ async function setClientEntries(
     return
   }
   const config = await configPromise
-  const entriesFile = await getEntriesFile(config, false)
+  const entriesFile = getPaths().web.distServerEntries
   console.log('setClientEntries :: entriesFile', entriesFile)
   const { clientEntries } = await loadServerFile(entriesFile)
   console.log('setClientEntries :: clientEntries', clientEntries)
@@ -374,7 +317,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
   }
 
   if (input.rscId && input.props) {
-    const component = await getFunctionComponent(input.rscId, config, false)
+    const component = await getFunctionComponent(input.rscId)
     return renderToPipeableStream(
       createElement(component, input.props),
       bundlerConfig

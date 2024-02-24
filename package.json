@@ -68,7 +68,7 @@
     "@babel/runtime-corejs3": "7.23.9",
     "@faker-js/faker": "8.0.2",
     "@npmcli/arborist": "7.2.2",
-    "@playwright/test": "1.41.1",
+    "@playwright/test": "1.41.2",
     "@testing-library/jest-dom": "6.3.0",
     "@testing-library/react": "14.1.2",
     "@testing-library/user-event": "14.5.2",
@@ -107,13 +107,13 @@
     "ora": "7.0.1",
     "prompts": "2.4.2",
     "rimraf": "5.0.5",
-    "tstyche": "1.0.0-beta.9",
+    "tstyche": "1.0.0",
     "tsx": "4.6.2",
     "typescript": "5.3.3",
     "vitest": "1.2.2",
     "yargs": "17.7.2",
     "zx": "7.2.3"
   },
-  "packageManager": "yarn@4.0.2",
+  "packageManager": "yarn@4.1.0",
   "npmClient": "yarn"
 }

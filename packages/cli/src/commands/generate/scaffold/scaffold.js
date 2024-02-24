@@ -593,6 +593,10 @@ const componentFiles = async (
       outputComponentName
     )
 
+    const useClientDirective = getConfig().experimental?.rsc?.enabled
+      ? "'use client'\n\n"
+      : ''
+
     const template = generateTemplate(
       customOrDefaultTemplatePath({
         side: 'web',
@@ -606,6 +610,7 @@ const componentFiles = async (
         pascalIdName,
         intForeignKeys,
         pascalScaffoldPath,
+        useClientDirective,
         ...templateStrings,
         ...modelRelatedVariables(model),
       }

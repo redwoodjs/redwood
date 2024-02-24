@@ -1,4 +1,4 @@
-import type { Find${pluralPascalName}, Find${pluralPascalName}Variables } from 'types/graphql'
+${useClientDirective}import type { Find${pluralPascalName}, Find${pluralPascalName}Variables } from 'types/graphql'
 
 import { Link, routes } from '@redwoodjs/router'
 import type {

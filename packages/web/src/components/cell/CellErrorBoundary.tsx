@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 
 import type { CellFailureProps } from './cellTypes'
@@ -44,7 +46,7 @@ export class CellErrorBoundary extends React.Component<
 
   render() {
     // The fallback is constructed with all the props required, except error and errorCode
-    // in createSusepndingCell.tsx
+    // in createSuspendingCell.tsx
     const { renderFallback } = this.props
 
     if (this.state.hasError) {

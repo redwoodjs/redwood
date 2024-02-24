@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/mailer-core",
-  "version": "6.0.7",
+  "version": "7.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -13,7 +13,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn node ./build.mjs && yarn build:types",
+    "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-mailer-core.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
@@ -22,8 +22,9 @@
     "test:watch": "vitest watch src"
   },
   "devDependencies": {
-    "@redwoodjs/api": "6.0.7",
-    "@redwoodjs/framework-tools": "6.0.7",
+    "@redwoodjs/api": "7.0.0",
+    "@redwoodjs/framework-tools": "7.0.0",
+    "tsx": "4.6.2",
     "typescript": "5.3.3",
     "vitest": "1.2.2"
   },

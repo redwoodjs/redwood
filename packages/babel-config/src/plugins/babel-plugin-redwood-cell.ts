@@ -10,11 +10,19 @@ import type { PluginObj, types } from '@babel/core'
 // <YOUR CODE>
 // export default createCell({ QUERY, Loading, Success, Failure, isEmpty, Empty, beforeQuery, afterQuery, displayName })
 // ```
+//
+// To debug the output of the plugin, you can use the following:
+// ```
+// import generate from '@babel/generator'
+// // ...
+// console.log(generate(path.node).code)
+// ```
 
 // A cell can export the declarations below.
 const EXPECTED_EXPORTS_FROM_CELL = [
   'beforeQuery',
   'QUERY',
+  'data',
   'isEmpty',
   'afterQuery',
   'Loading',
@@ -31,12 +39,31 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
   let exportNames: string[] = []
   let hasDefaultExport = false
 
+  // TODO (RSC):
+  // This code relies on the fact that all cells first become client side
+  // cells. And then we do a second pass over all cells and transform them to
+  // server cells if applicable
+  // It'd be better if we could only do one pass over all cells. So the real
+  // todo here is to first figure out why we do two passes, and then update
+  // this code to directly generate `createCell` or `createServerCell` HoCs
+
   return {
     name: 'babel-plugin-redwood-cell',
     visitor: {
-      ExportDefaultDeclaration() {
+      ExportDefaultDeclaration(path) {
         hasDefaultExport = true
-        return
+
+        // This is for RSC cells:
+        // Determine if this is `export default createCell(...)`
+        // If it is, then we change it to `export default createServerCell(...)`
+        const declaration = path.node.declaration
+        if (
+          t.isCallExpression(declaration) &&
+          t.isIdentifier(declaration.callee) &&
+          declaration.callee.name === 'createCell'
+        ) {
+          declaration.callee.name = 'createServerCell'
+        }
       },
       ExportNamedDeclaration(path) {
         const declaration = path.node.declaration
@@ -58,12 +85,52 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           exportNames.push(name)
         }
       },
+      ImportDeclaration(path) {
+        // This is for RSC cells:
+        // Change createCell imports to createServerCell
+        const source = path.node.source.value
+        if (source === '@redwoodjs/web') {
+          const specifiers = path.node.specifiers
+          const createCellSpecifier: types.ImportSpecifier | undefined =
+            specifiers.find((specifier): specifier is types.ImportSpecifier => {
+              return (
+                t.isImportSpecifier(specifier) &&
+                t.isIdentifier(specifier.imported) &&
+                specifier.imported.name === 'createCell'
+              )
+            })
+
+          if (
+            createCellSpecifier &&
+            t.isIdentifier(createCellSpecifier.imported)
+          ) {
+            createCellSpecifier.imported.name = 'createServerCell'
+            createCellSpecifier.local.name = 'createServerCell'
+
+            // Also update where we import from
+            path.node.source.value =
+              '@redwoodjs/web/dist/components/cell/createServerCell.js'
+          }
+        }
+      },
       Program: {
+        enter() {
+          // Reset variables as they're still in scope from the previous file
+          // babel transformed in the same process
+          exportNames = []
+          hasDefaultExport = false
+        },
         exit(path) {
-          // Validate that this file has exports which are "cell-like":
-          // If the user is not exporting `QUERY` and has a default export then
-          // it's likely not a cell.
-          if (hasDefaultExport && !exportNames.includes('QUERY')) {
+          const hasQueryOrDataExport =
+            exportNames.includes('QUERY') || exportNames.includes('data')
+
+          // If the file already has a default export then
+          //   1. It's likely not a cell, or it's a cell that's already been
+          //      wrapped in `createCell`
+          //   2. If we added another default export we'd be breaking JS module
+          //      rules. There can only be one default export.
+          // If there's no `QUERY` or `data` export it's not a valid cell
+          if (hasDefaultExport || !hasQueryOrDataExport) {
             return
           }
 
@@ -95,10 +162,8 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                       true
                     )
                   ),
-                  /**
-                   * Add the `displayName` property
-                   * so we can name the Cell after the filename.
-                   */
+                  // Add the `displayName` property so we can name the Cell
+                  // after the filename.
                   t.objectProperty(
                     t.identifier('displayName'),
                     t.stringLiteral(
@@ -111,9 +176,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
               ])
             )
           )
-
-          hasDefaultExport = false
-          exportNames = []
         },
       },
     },

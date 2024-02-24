@@ -45,9 +45,9 @@ export const bothServerFileHandler = async (argv) => {
       [
         {
           name: 'api',
-          command: `yarn node ${path.join('dist', 'server.js')} --port ${
+          command: `yarn node ${path.join('dist', 'server.js')} --apiPort ${
             argv.apiPort
-          } --host ${argv.apiHost} --api-root-path ${argv.apiRootPath}`,
+          } --apiHost ${argv.apiHost} --apiRootPath ${argv.apiRootPath}`,
           cwd: getPaths().api.base,
           prefixColor: 'cyan',
         },
@@ -80,11 +80,10 @@ export const bothServerFileHandler = async (argv) => {
 }
 
 export const bothSsrRscServerHandler = async (argv) => {
-  // TODO Allow specifying port, socket and apiRootPath
   const apiPromise = apiServerHandler({
-    ...argv,
-    port: 8911,
-    apiRootPath: '/',
+    apiRootPath: argv.apiRootPath,
+    host: argv.apiHost,
+    port: argv.apiPort,
   })
 
   // TODO More gracefully handle Ctrl-C

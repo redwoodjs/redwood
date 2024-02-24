@@ -214,7 +214,7 @@
   to = "/docs/authentication#self-hosted-auth-installation-and-setup"
   status = 301
 
-# v1.0-v1.5 redirects (to v1.x)
+# v1.0-v1.5 redirects
 
 [[redirects]]
   from = "/docs/1.0/*"
@@ -246,7 +246,7 @@
   to = "/docs/1.x/:splat"
   status = 301
 
-# v2.0-v2.2 redirects (to v2.x)
+# v2.0-v2.2 redirects
 
 [[redirects]]
   from = "/docs/2.0/*"
@@ -263,7 +263,7 @@
   to = "/docs/2.x/:splat"
   status = 301
 
-# v3.0-v3.2 redirects (to v3.x)
+# v3.0-v3.2 redirects
 
 [[redirects]]
   from = "/docs/3.0/*"
@@ -280,8 +280,122 @@
   to = "/docs/3.x/:splat"
   status = 301
 
-[[plugins]]
-  package = "@algolia/netlify-plugin-crawler"
+# v4 redirects
 
-  [plugins.inputs]
-    branches = ['next']
+[[redirects]]
+  from = "/docs/4.0/*"
+  to = "/docs/4.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/4.1/*"
+  to = "/docs/4.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/4.2/*"
+  to = "/docs/4.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/4.3/*"
+  to = "/docs/4.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/4.4/*"
+  to = "/docs/4.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/4.5/*"
+  to = "/docs/4.x/:splat"
+  status = 301
+
+# v5 redirects
+
+[[redirects]]
+  from = "/docs/5.0/*"
+  to = "/docs/5.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/5.1/*"
+  to = "/docs/5.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/5.2/*"
+  to = "/docs/5.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/5.3/*"
+  to = "/docs/5.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/5.4/*"
+  to = "/docs/5.x/:splat"
+  status = 301
+
+# v6.0-v6.6 redirects
+
+[[redirects]]
+  from = "/docs/6.0/*"
+  to = "/docs/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/6.1/*"
+  to = "/docs/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/6.2/*"
+  to = "/docs/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/6.3/*"
+  to = "/docs/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/6.4/*"
+  to = "/docs/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/6.5/*"
+  to = "/docs/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/6.6/*"
+  to = "/docs/:splat"
+  status = 301
+
+# Redirects for "Configuring Fastify" after the server file was released in v7
+
+[[redirects]]
+  from = "/docs/app-configuration-redwood-toml#configure-fastify"
+  to = "/docs/docker#using-the-server-file"
+  status = 301
+
+[[redirects]]
+  from = "/docs/app-configuration-redwood-toml#register-custom-fastify-plugins"
+  to = "/docs/docker#configuring-the-server"
+  status = 301
+
+[[redirects]]
+  from = "/docs/app-configuration-redwood-toml#how-to-configure-fastify-to-accept-file-uploads"
+  to = "/docs/docker#configuring-the-server"
+  status = 301
+
+# This doc was moved in v7 as a part of https://github.com/redwoodjs/redwood/pull/9416.
+
+[[redirects]]
+  from = "/docs/mocking-graphql-requests"
+  to = "/docs/canary/graphql/mocking-graphql-requests"
+  status = 301

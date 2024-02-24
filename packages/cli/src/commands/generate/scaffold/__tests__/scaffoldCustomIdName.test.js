@@ -1,6 +1,7 @@
 globalThis.__dirname = __dirname
 import path from 'path'
 
+import { vol } from 'memfs'
 import { vi, describe, beforeAll, test, expect } from 'vitest'
 
 // Load mocks
@@ -10,12 +11,15 @@ import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../helpers'
 import * as scaffold from '../scaffold'
 
+vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 vi.mock('execa')
 
 describe('support custom @id name', () => {
   let files
 
   beforeAll(async () => {
+    vol.fromJSON({ 'redwood.toml': '' }, '/')
+
     files = await scaffold.files({
       ...getDefaultArgs(defaults),
       typescript: true,
