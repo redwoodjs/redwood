@@ -191,7 +191,19 @@ async function runYargs() {
       'yarn rw exec MigrateUsers --include-env prod --include-env stripe-prod',
       '"Run a script, and also include .env.prod and .env.stripe-prod"'
     )
-    .middleware(addAdditionalEnvFiles(cwd))
+    .middleware([
+      addAdditionalEnvFiles(cwd),
+      // Once we've loaded the additional .env files, remove the option from yargs.
+      // If we leave it in, it and its alias will be passed to scripts run via `yarn rw exec` like...
+      //
+      // ```
+      // { args: { _: [ 'exec' ], 'include-env': [ 'prod' ], includeEnv: [ 'prod' ], '$0': 'rw' } }
+      // ```
+      (argv) => {
+        delete argv.includeEnv
+        delete argv['include-env']
+      },
+    ])
     .option('telemetry', {
       describe: 'Whether to send anonymous usage telemetry to RedwoodJS',
       boolean: true,
