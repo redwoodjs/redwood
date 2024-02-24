@@ -82,7 +82,7 @@ export async function runFeServer() {
   const indexEntry = Object.values(clientBuildManifest).find((manifestItem) => {
     // For RSC builds, we pass in many Vite entries, so we need to find it differently.
     return rscBuild
-      ? manifestItem.file.includes('rwjs-client-entry-')
+      ? manifestItem.file.startsWith('rwjs-client-entry-')
       : manifestItem.isEntry
   })
 

@@ -27,6 +27,10 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     )
   }
 
+  if (!rwPaths.web.entryClient) {
+    throw new Error('Could not find entry.client file')
+  }
+
   const clientBuildOutput = await viteBuild({
     // @MARK  This runs on TOP of the settings in rw-vite-plugin, because we don't set configFile: false
     // but if you actually set the config file, it runs the transforms twice
@@ -56,7 +60,7 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
         input: {
           // @MARK: temporary hack to find the entry client so we can get the index.css bundle
           // but we don't actually want this on an rsc page!
-          'rwjs-client-entry': rwPaths.web.entryClient as string,
+          'rwjs-client-entry': rwPaths.web.entryClient,
           // we need this, so that files with "use client" aren't bundled. I **think** RSC wants an unbundled build
           ...clientEntryFiles,
         },
