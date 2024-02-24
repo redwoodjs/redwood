@@ -183,12 +183,12 @@ async function runYargs() {
     .option('cwd', {
       describe: 'Working directory to use (where `redwood.toml` is located)',
     })
-    .option('include-env', {
+    .option('include-env-files', {
       describe: 'Load additional .env files. These are incremental',
       array: true,
     })
     .example(
-      'yarn rw exec MigrateUsers --include-env prod --include-env stripe-prod',
+      'yarn rw exec MigrateUsers --include-env-files prod stripe-prod',
       '"Run a script, and also include .env.prod and .env.stripe-prod"'
     )
     .middleware([
@@ -197,11 +197,11 @@ async function runYargs() {
       // If we leave it in, it and its alias will be passed to scripts run via `yarn rw exec` like...
       //
       // ```
-      // { args: { _: [ 'exec' ], 'include-env': [ 'prod' ], includeEnv: [ 'prod' ], '$0': 'rw' } }
+      // { args: { _: [ 'exec' ], 'include-env-files': [ 'prod' ], includeEnvFiles: [ 'prod' ], '$0': 'rw' } }
       // ```
       (argv) => {
-        delete argv.includeEnv
-        delete argv['include-env']
+        delete argv.includeEnvFiles
+        delete argv['include-env-files']
       },
     ])
     .option('telemetry', {

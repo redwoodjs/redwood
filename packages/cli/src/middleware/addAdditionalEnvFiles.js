@@ -10,8 +10,8 @@ import { config } from 'dotenv'
  */
 export const addAdditionalEnvFiles = (cwd) => (yargs) => {
   // Allow for additional .env files to be included via --include-env
-  if ('includeEnv' in yargs && Array.isArray(yargs.includeEnv)) {
-    for (const suffix of yargs.includeEnv) {
+  if ('includeEnvFiles' in yargs && Array.isArray(yargs.includeEnvFiles)) {
+    for (const suffix of yargs.includeEnvFiles) {
       const envPath = path.join(cwd, `.env.${suffix}`)
       if (!fs.existsSync(envPath)) {
         throw new Error(

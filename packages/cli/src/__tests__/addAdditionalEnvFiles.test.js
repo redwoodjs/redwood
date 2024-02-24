@@ -35,7 +35,7 @@ describe('addAdditionalEnvFiles', () => {
     const fn = addAdditionalEnvFiles(
       path.join(__dirname, '__fixtures__/redwood-app-env-prod')
     )
-    fn({ includeEnv: ['prod'] })
+    fn({ includeEnvFiles: ['prod'] })
 
     expect(process.env).toHaveProperty(
       'PROD_DATABASE_URL',
@@ -54,7 +54,7 @@ describe('addAdditionalEnvFiles', () => {
     const fn = addAdditionalEnvFiles(
       path.join(__dirname, '__fixtures__/redwood-app-env-many')
     )
-    fn({ includeEnv: ['dev', 'prod'] })
+    fn({ includeEnvFiles: ['dev', 'prod'] })
 
     expect(process.env).toHaveProperty(
       'DEV_DATABASE_URL',
@@ -74,7 +74,7 @@ describe('addAdditionalEnvFiles', () => {
     const fn = addAdditionalEnvFiles(
       path.join(__dirname, '__fixtures__/redwood-app-env-collision')
     )
-    fn({ includeEnv: ['base', 'collision'] })
+    fn({ includeEnvFiles: ['base', 'collision'] })
 
     expect(process.env).toHaveProperty(
       'DATABASE_URL',
@@ -110,7 +110,7 @@ describe('addAdditionalEnvFiles', () => {
       path.join(__dirname, '__fixtures__/redwood-app-env-node-env')
     )
     fn({
-      includeEnv: ['prod'],
+      includeEnvFiles: ['prod'],
     })
 
     expect(process.env).toHaveProperty(
@@ -127,7 +127,7 @@ describe('addAdditionalEnvFiles', () => {
 
     try {
       fn({
-        includeEnv: ['missing'],
+        includeEnvFiles: ['missing'],
       })
     } catch (error) {
       // Just testing that the error message reports the file it tried to load.
