@@ -1,6 +1,6 @@
 import type { Addon_DecoratorFunction, Addon_Loader } from '@storybook/types'
 
-import { MockingLoader, StorybookProvider } from './__mocks__/StorybookProvider'
+import { MockingLoader, StorybookProvider } from './mocks/StorybookProvider'
 
 export const decorators: Addon_DecoratorFunction<any>[] = [
   (storyFn, { id }) => React.createElement(StorybookProvider, { storyFn, id }),

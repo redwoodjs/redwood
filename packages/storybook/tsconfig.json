@@ -1,24 +1,10 @@
 {
+  "extends": "../../tsconfig.compilerOption.json",
   "compileOnSave": true,
   "compilerOptions": {
-    "target": "esnext",
-    "moduleResolution": "node",
-    "module": "esnext",
-    "declarationMap": true,
-    "sourceMap": true,
-    "composite": true,
-    "esModuleInterop": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "jsx": "preserve",
-    "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": "./src",
     "types": ["node", "vite/client"],
-    "resolveJsonModule": true,
-    "strict": true,
   },
   "include": ["src/**/*"]
 }
