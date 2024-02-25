@@ -23,7 +23,7 @@ export const previewAnnotations: StorybookConfig['previewAnnotations'] = (
   entry,
   _options
 ) => {
-  return [...entry, require.resolve('./preview.jsx')]
+  return [...entry, require.resolve('./preview.js')]
 }
 
 const redwoodProjectPaths = getPaths()

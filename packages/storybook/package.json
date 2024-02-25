@@ -28,7 +28,7 @@
       "types": "./dist/preset.d.ts",
       "require": "./dist/preset.js"
     },
-    "./dist/mocks/MockRouter": "./dist/mocks/MockRouter.jsx",
+    "./dist/mocks/MockRouter": "./dist/mocks/MockRouter.js",
     "./package.json": "./package.json"
   },
   "main": "dist/index.js",
