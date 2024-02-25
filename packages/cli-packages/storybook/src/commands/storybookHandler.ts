@@ -29,6 +29,12 @@ export async function handler({
     { force: true }
   )
 
+  /*
+   * TODO: Check if the user has Storybook installed and if not, install it.
+   * This will mainly involve installing the 'storybook-framework-redwoodjs-vite' package
+   * and initializing the `web/.storybook` directory (along with, at minimum, the `main.ts` file).
+   */
+
   // Check for conflicting options
   if (build && smokeTest) {
     throw new Error('Can not provide both "--build" and "--smoke-test"')
