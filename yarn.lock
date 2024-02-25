@@ -31150,22 +31150,26 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "storybook-framework-redwoodjs-vite@workspace:packages/storybook"
   dependencies:
+    "@babel/cli": "npm:7.23.9"
+    "@babel/core": "npm:^7.22.20"
+    "@babel/runtime-corejs3": "npm:7.23.9"
     "@joshwooding/vite-plugin-react-docgen-typescript": "npm:0.3.0"
     "@rollup/pluginutils": "npm:^5.0.2"
     "@storybook/addon-essentials": "npm:7.6.10"
     "@storybook/builder-vite": "npm:7.6.10"
     "@storybook/react": "npm:7.6.10"
     "@types/node": "npm:^18.0.0"
+    core-js: "npm:3.35.1"
     magic-string: "npm:^0.30.0"
     react-docgen: "npm:^7.0.0"
     typescript: "npm:^5.3.2"
     unplugin-auto-import: "npm:^0.17.5"
     vite: "npm:4.5.2"
   peerDependencies:
-    "@redwoodjs/project-config": 8.0.0-canary.159
-    "@redwoodjs/router": 8.0.0-canary.159
-    react: 0.0.0-experimental-e5205658f-20230913
-    react-dom: 0.0.0-experimental-e5205658f-20230913
+    "@redwoodjs/project-config": 7.0.2
+    "@redwoodjs/router": 7.0.2
+    react: 18.2.0
+    react-dom: 18.2.0
     storybook: 7.6.10
   languageName: unknown
   linkType: soft
