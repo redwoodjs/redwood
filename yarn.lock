@@ -31163,6 +31163,7 @@ __metadata:
     unplugin-auto-import: "npm:^0.17.5"
     vite: "npm:4.5.2"
   peerDependencies:
+    "@redwoodjs/router": 8.0.0-canary.159
     react: 0.0.0-experimental-e5205658f-20230913
     react-dom: 0.0.0-experimental-e5205658f-20230913
     storybook: 7.6.10

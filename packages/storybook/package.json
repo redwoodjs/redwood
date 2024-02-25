@@ -28,6 +28,7 @@
       "types": "./dist/preset.d.ts",
       "require": "./dist/preset.js"
     },
+    "./dist/__mocks__/MockRouter": "./dist/__mocks__/MockRouter.jsx",
     "./package.json": "./package.json"
   },
   "main": "dist/index.js",
@@ -61,6 +62,7 @@
     "vite": "4.5.2"
   },
   "peerDependencies": {
+    "@redwoodjs/router": "8.0.0-canary.159",
     "react": "0.0.0-experimental-e5205658f-20230913",
     "react-dom": "0.0.0-experimental-e5205658f-20230913",
     "storybook": "7.6.10"

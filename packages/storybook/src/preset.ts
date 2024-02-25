@@ -19,6 +19,13 @@ export const core: PresetProperty<'core'> = {
   renderer: getAbsolutePath('@storybook/react'),
 }
 
+export const previewAnnotations: StorybookConfig['previewAnnotations'] = (
+  entry,
+  _options
+) => {
+  return [...entry, require.resolve('./preview.jsx')]
+}
+
 const redwoodProjectPaths = getPaths()
 
 export const viteFinal: StorybookConfig['viteFinal'] = async (config) => {
