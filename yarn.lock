@@ -103,6 +103,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@antfu/utils@npm:^0.7.7":
+  version: 0.7.7
+  resolution: "@antfu/utils@npm:0.7.7"
+  checksum: 10c0/7ca5db419f3cb6ceabf3ea254ce00ff0eab307585838c074eef40b0f948a8eade0cbad21622a62f3dea83e1cf88accf561be82bc2895e47c62cef01537b92be9
+  languageName: node
+  linkType: hard
+
 "@apollo/client@npm:3.8.10":
   version: 3.8.10
   resolution: "@apollo/client@npm:3.8.10"
@@ -8887,7 +8894,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/pluginutils@npm:^5.0.2":
+"@rollup/pluginutils@npm:^5.0.2, @rollup/pluginutils@npm:^5.1.0":
   version: 5.1.0
   resolution: "@rollup/pluginutils@npm:5.1.0"
   dependencies:
@@ -12699,7 +12706,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.0.4, acorn@npm:^8.1.0, acorn@npm:^8.10.0, acorn@npm:^8.11.0, acorn@npm:^8.11.3, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.7.1, acorn@npm:^8.8.1, acorn@npm:^8.8.2, acorn@npm:^8.9.0":
+"acorn@npm:^8.0.4, acorn@npm:^8.1.0, acorn@npm:^8.10.0, acorn@npm:^8.11.0, acorn@npm:^8.11.2, acorn@npm:^8.11.3, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.7.1, acorn@npm:^8.8.1, acorn@npm:^8.8.2, acorn@npm:^8.9.0":
   version: 8.11.3
   resolution: "acorn@npm:8.11.3"
   bin:
@@ -18062,6 +18069,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"escape-string-regexp@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "escape-string-regexp@npm:5.0.0"
+  checksum: 10c0/6366f474c6f37a802800a435232395e04e9885919873e382b157ab7e8f0feb8fed71497f84a6f6a81a49aab41815522f5839112bd38026d203aea0c91622df95
+  languageName: node
+  linkType: hard
+
 "escodegen@npm:^1.13.0":
   version: 1.14.3
   resolution: "escodegen@npm:1.14.3"
@@ -18830,7 +18844,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:3.3.2, fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0":
+"fast-glob@npm:3.3.2, fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0, fast-glob@npm:^3.3.2":
   version: 3.3.2
   resolution: "fast-glob@npm:3.3.2"
   dependencies:
@@ -30163,6 +30177,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"scule@npm:^1.1.1":
+  version: 1.3.0
+  resolution: "scule@npm:1.3.0"
+  checksum: 10c0/5d1736daa10622c420f2aa74e60d3c722e756bfb139fa784ae5c66669fdfe92932d30ed5072e4ce3107f9c3053e35ad73b2461cb18de45b867e1d4dea63f8823
+  languageName: node
+  linkType: hard
+
 "secure-json-parse@npm:^2.4.0, secure-json-parse@npm:^2.7.0":
   version: 2.7.0
   resolution: "secure-json-parse@npm:2.7.0"
@@ -31130,6 +31151,7 @@ __metadata:
   resolution: "storybook-framework-redwoodjs-vite@workspace:packages/storybook"
   dependencies:
     "@joshwooding/vite-plugin-react-docgen-typescript": "npm:0.3.0"
+    "@redwoodjs/project-config": "npm:7.0.0"
     "@rollup/pluginutils": "npm:^5.0.2"
     "@storybook/addon-essentials": "npm:7.6.10"
     "@storybook/builder-vite": "npm:7.6.10"
@@ -31138,6 +31160,7 @@ __metadata:
     magic-string: "npm:^0.30.0"
     react-docgen: "npm:^7.0.0"
     typescript: "npm:^5.3.2"
+    unplugin-auto-import: "npm:^0.17.5"
     vite: "npm:4.5.2"
   peerDependencies:
     react: 0.0.0-experimental-e5205658f-20230913
@@ -32817,6 +32840,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"unimport@npm:^3.7.1":
+  version: 3.7.1
+  resolution: "unimport@npm:3.7.1"
+  dependencies:
+    "@rollup/pluginutils": "npm:^5.1.0"
+    acorn: "npm:^8.11.2"
+    escape-string-regexp: "npm:^5.0.0"
+    estree-walker: "npm:^3.0.3"
+    fast-glob: "npm:^3.3.2"
+    local-pkg: "npm:^0.5.0"
+    magic-string: "npm:^0.30.5"
+    mlly: "npm:^1.4.2"
+    pathe: "npm:^1.1.1"
+    pkg-types: "npm:^1.0.3"
+    scule: "npm:^1.1.1"
+    strip-literal: "npm:^1.3.0"
+    unplugin: "npm:^1.5.1"
+  checksum: 10c0/75c240e3894b960e9155984b8c8739aafdba5d2e5aabac75e136cb00bea2521ac638f6a258b7d4383112ef1293968b8b425425c529ab681f382ecdb187d05b73
+  languageName: node
+  linkType: hard
+
 "union-value@npm:^1.0.0":
   version: 1.0.1
   resolution: "union-value@npm:1.0.1"
@@ -32958,6 +33002,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"unplugin-auto-import@npm:^0.17.5":
+  version: 0.17.5
+  resolution: "unplugin-auto-import@npm:0.17.5"
+  dependencies:
+    "@antfu/utils": "npm:^0.7.7"
+    "@rollup/pluginutils": "npm:^5.1.0"
+    fast-glob: "npm:^3.3.2"
+    local-pkg: "npm:^0.5.0"
+    magic-string: "npm:^0.30.5"
+    minimatch: "npm:^9.0.3"
+    unimport: "npm:^3.7.1"
+    unplugin: "npm:^1.6.0"
+  peerDependencies:
+    "@nuxt/kit": ^3.2.2
+    "@vueuse/core": "*"
+  peerDependenciesMeta:
+    "@nuxt/kit":
+      optional: true
+    "@vueuse/core":
+      optional: true
+  checksum: 10c0/8b111f1658748c0fe27b98d46958d3da2da2cd922add3f9d3731c751df1da96c093e5a6ab3b5167c44f11e42132dba0c17bd53056fd3320beb9b5148e9658ea0
+  languageName: node
+  linkType: hard
+
 "unplugin@npm:^1.3.1":
   version: 1.4.0
   resolution: "unplugin@npm:1.4.0"
@@ -32967,6 +33035,18 @@ __metadata:
     webpack-sources: "npm:^3.2.3"
     webpack-virtual-modules: "npm:^0.5.0"
   checksum: 10c0/d006fe3ddfcd6578e36f2951f6a21419af2ba8812bc16681876a725a0981b339c920e6afb2cd222d74ca5943e0aa41260cff8fb3528dae12e66419369ae616fc
+  languageName: node
+  linkType: hard
+
+"unplugin@npm:^1.5.1, unplugin@npm:^1.6.0":
+  version: 1.7.1
+  resolution: "unplugin@npm:1.7.1"
+  dependencies:
+    acorn: "npm:^8.11.3"
+    chokidar: "npm:^3.5.3"
+    webpack-sources: "npm:^3.2.3"
+    webpack-virtual-modules: "npm:^0.6.1"
+  checksum: 10c0/4e358b4d45aeab6c654943edf63c0f4ad22831386eba414065c4b535c84ec4e295cca145f263f878059ea96e19c904835af25dd5f7f46f3c4a49302e621d3cab
   languageName: node
   linkType: hard
 
@@ -33929,6 +34009,13 @@ __metadata:
   version: 0.5.0
   resolution: "webpack-virtual-modules@npm:0.5.0"
   checksum: 10c0/0742e069cd49d91ccd0b59431b3666903d321582c1b1062fa6bdae005c3538af55ff8787ea5eafbf72662f3496d3a879e2c705d55ca0af8283548a925be18484
+  languageName: node
+  linkType: hard
+
+"webpack-virtual-modules@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "webpack-virtual-modules@npm:0.6.1"
+  checksum: 10c0/696bdc1acf3806374bdeb4b9b9856b79ee70b31e92f325dfab9b8c8c7e14bb6ddffa9f895a214770c4fb8fea45a21f34ca64310f74e877292a90f4a9966c9c2f
   languageName: node
   linkType: hard
 
