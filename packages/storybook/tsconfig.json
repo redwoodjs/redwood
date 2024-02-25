@@ -16,9 +16,9 @@
     "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "types": ["node"],
+    "types": ["node", "vite/client"],
     "resolveJsonModule": true,
-    "strict": true
+    "strict": true,
   },
   "include": ["src/**/*"]
 }
