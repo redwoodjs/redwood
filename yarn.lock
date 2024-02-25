@@ -31151,7 +31151,6 @@ __metadata:
   resolution: "storybook-framework-redwoodjs-vite@workspace:packages/storybook"
   dependencies:
     "@joshwooding/vite-plugin-react-docgen-typescript": "npm:0.3.0"
-    "@redwoodjs/project-config": "npm:7.0.0"
     "@rollup/pluginutils": "npm:^5.0.2"
     "@storybook/addon-essentials": "npm:7.6.10"
     "@storybook/builder-vite": "npm:7.6.10"
@@ -31163,6 +31162,7 @@ __metadata:
     unplugin-auto-import: "npm:^0.17.5"
     vite: "npm:4.5.2"
   peerDependencies:
+    "@redwoodjs/project-config": 8.0.0-canary.159
     "@redwoodjs/router": 8.0.0-canary.159
     react: 0.0.0-experimental-e5205658f-20230913
     react-dom: 0.0.0-experimental-e5205658f-20230913

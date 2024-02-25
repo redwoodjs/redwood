@@ -47,7 +47,6 @@
   },
   "dependencies": {
     "@joshwooding/vite-plugin-react-docgen-typescript": "0.3.0",
-    "@redwoodjs/project-config": "7.0.0",
     "@rollup/pluginutils": "^5.0.2",
     "@storybook/addon-essentials": "7.6.10",
     "@storybook/builder-vite": "7.6.10",
@@ -62,6 +61,7 @@
     "vite": "4.5.2"
   },
   "peerDependencies": {
+    "@redwoodjs/project-config": "8.0.0-canary.159",
     "@redwoodjs/router": "8.0.0-canary.159",
     "react": "0.0.0-experimental-e5205658f-20230913",
     "react-dom": "0.0.0-experimental-e5205658f-20230913",
