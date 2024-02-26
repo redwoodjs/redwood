@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Update jsdoc for ScenarioData type (#29166)
+
+  Fix formatting of JSDocs in `scenario.ts`
+
 - fix(deps): update opentelemetry-js monorepo (#10065)
 
   Updates our opentelemetry packages. This is a breaking change for users of
