@@ -85,12 +85,13 @@ export interface DefineScenario {
  * import { Product } from '@prisma/client'
  *
  * // If you scenario looks like this:
- * * export const standard = defineScenario({
- *    product: {
- *    shirt: {
- *      id: 55,
- *      price: 10
- *    }
+ * export const standard = defineScenario({
+ *   product: {
+ *     shirt: {
+ *       id: 55,
+ *       price: 10,
+ *     },
+ *   },
  * })
  *
  * // Export the StandardScenario type as
