@@ -361,7 +361,7 @@ Our GraphQL mutation is ready to go on the backend so all that's left is to invo
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -388,7 +388,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <Label name="name" errorClassName="error">
@@ -440,7 +440,7 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -474,7 +474,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <Label name="name" errorClassName="error">
@@ -534,7 +534,7 @@ Next we'll call the `useMutation` hook provided by Redwood which will allow us t
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 // highlight-next-line
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -562,7 +562,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <Label name="name" errorClassName="error">
@@ -615,7 +615,7 @@ export default ContactPage
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 // highlight-next-line
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -661,7 +661,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <Label name="name" errorClassName="error">
@@ -748,7 +748,7 @@ That means we can update the `onSubmit` function to invoke the mutation with the
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -776,7 +776,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <Label name="name" errorClassName="error">
@@ -828,7 +828,7 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -871,7 +871,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <Label name="name" errorClassName="error">
@@ -1039,7 +1039,7 @@ Add the `onCompleted` callback to `useMutation` and include the **&lt;Toaster&gt
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 // highlight-next-line
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
@@ -1074,7 +1074,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       // highlight-next-line
       <Toaster />
@@ -1128,7 +1128,7 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 // highlight-next-line
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
@@ -1178,7 +1178,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       // highlight-next-line
       <Toaster />
@@ -1347,7 +1347,7 @@ Add a `<FormError>` component, passing the `error` constant we got from `useMuta
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   FieldError,
@@ -1381,7 +1381,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Toaster />
       // highlight-start
@@ -1434,7 +1434,7 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   FieldError,
@@ -1483,7 +1483,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Toaster />
       // highlight-start
@@ -1807,7 +1807,7 @@ Here's the entire page:
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   FieldError,
@@ -1844,7 +1844,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Toaster />
       <Form
@@ -1904,7 +1904,7 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   FieldError,
@@ -1956,7 +1956,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Toaster />
       <Form

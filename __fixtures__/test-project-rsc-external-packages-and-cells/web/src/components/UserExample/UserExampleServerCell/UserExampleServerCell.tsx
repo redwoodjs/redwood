@@ -1,4 +1,3 @@
-import type Prisma from '@prisma/client'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import { db } from 'api/src/lib/db'
@@ -9,7 +8,7 @@ interface DataArgs {
   id: number
 }
 
-export const DATA = async ({ id }: DataArgs) => {
+export const data = async ({ id }: DataArgs) => {
   const userExample = await db.userExample.findUnique({
     where: { id },
   })
@@ -25,8 +24,8 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error?.message}</div>
 )
 
-export const Success = ({
-  userExample,
-}: CellSuccessProps<{ userExample: Prisma.UserExample }>) => {
+type SuccessProps = CellSuccessProps<Awaited<ReturnType<typeof data>>>
+
+export const Success = ({ userExample }: SuccessProps) => {
   return <UserExample userExample={userExample} />
 }

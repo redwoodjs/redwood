@@ -17,6 +17,15 @@ const NavigationLayout = ({ children }: NavigationLayoutProps) => {
           <li>
             <Link to={routes.about()}>About</Link>
           </li>
+          <li>
+            <Link to={routes.userExamples()}>User Examples</Link>
+          </li>
+          <li>
+            <Link to={routes.emptyUsers()}>Empty Users</Link>
+          </li>
+          <li>
+            <Link to={routes.multiCell()}>Multi Cell</Link>
+          </li>
         </ul>
       </nav>
       <main>{children}</main>
