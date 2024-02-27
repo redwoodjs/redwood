@@ -2,6 +2,37 @@
 
 ## Unreleased
 
+- Update jsdoc for ScenarioData type (#29166)
+
+  Fix formatting of JSDocs in `scenario.ts`
+
+- fix(deps): update opentelemetry-js monorepo (#10065)
+
+  Updates our opentelemetry packages. This is a breaking change for users of
+  our experimental opentelemetry support. This is what their changelog says is
+  breaking:
+
+  * fix(exporter-metrics-otlp-grpc): programmatic headers take precedence over
+    environment variables #2370 @Vunovati
+  * fix(exporter-metrics-otlp-http): programmatic headers take precedence over
+    environment variables #2370 @Vunovati
+  * fix(exporter-metrics-otlp-proto): programmatic headers take precedence over
+    environment variables #2370 @Vunovati
+  * fix(otlp-exporter-base)!: decrease default concurrency limit to 30 #4211
+    @pichlermarc
+    * fixes a memory leak on prolonged collector unavailability
+    * this change is marked as breaking as it changes defaults
+  * fix(instrumentation)!: pin import-in-the-middle@1.7.1 #4441
+    * Fixes a bug where, in some circumstances, ESM instrumentation packages
+      would try to instrument CJS exports on ESM, causing the end-user
+      application to crash.
+    * This breaking change only affects users that are using the experimental
+      @opentelemetry/instrumentation/hook.mjs loader hook AND Node.js 18.19 or
+      later:
+      * This reverts back to an older version of import-in-the-middle due to
+        DataDog/import-in-the-middle#57
+      * This version does not support Node.js 18.19 or later
+
 - Add support for additional env var files (#9961)
 
   Fixes #9877. This PR adds a new middleware step to the CLI that looks for an `--include-env-files` flag and includes `.env.[file]` to the list of dotfiles to load. This PR also introduces functionality so that `.env.[file]` files are loaded based on `NODE_ENV`.
