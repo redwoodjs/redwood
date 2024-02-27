@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Update jsdoc for ScenarioData type (#29166)
+
+  Fix formatting of JSDocs in `scenario.ts`
+
 - fix(render): reduce memory and handle server file
 
   This PR improves Render deploys by reducing memory consumption and fixing it so that it uses the server file if it's present.
