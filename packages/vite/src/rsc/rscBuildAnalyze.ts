@@ -66,10 +66,19 @@ export async function rscBuildAnalyze(viteConfigPath: string) {
   })
 
   const clientEntryFiles = Object.fromEntries(
-    Array.from(clientEntryFileSet).map((filename, i) => [`rsc${i}`, filename])
+    Array.from(clientEntryFileSet).map((filename, i) => {
+      // Need the {i} to make sure the names are unique. Could have two RSCs
+      // with the same name but at different paths. But because we strip away
+      // the path here just the filename is not enough.
+      const rscName = `rsc-${filename.split(/[\/\\]/).at(-1)}-${i}`
+      return [rscName, filename]
+    })
   )
   const serverEntryFiles = Object.fromEntries(
-    Array.from(serverEntryFileSet).map((filename, i) => [`rsf${i}`, filename])
+    Array.from(serverEntryFileSet).map((filename, i) => {
+      const rsaName = `rsa-${filename.split(/[\/\\]/).at(-1)}-${i}`
+      return [rsaName, filename]
+    })
   )
 
   console.log('clientEntryFileSet', Array.from(clientEntryFileSet))
