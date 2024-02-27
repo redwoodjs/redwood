@@ -2,8 +2,25 @@
 
 ## Unreleased
 
+- fix(coherence): update setup command to detect server file
+
+  The `yarn rw setup deploy coherence` command now detects if your project has the server file and configures the api prod command accordingly:
+
+  ```yml
+  # coherence.yml
+
+  api:
+    # ...
+    prod:
+      command: ["yarn", "rw", "build", "api", "&&", "yarn", "node", "api/dist/server.js", "--apiRootPath=/api"]
+  ```
+
+- Update jsdoc for ScenarioData type (#29166)
+
+  Fix formatting of JSDocs in `scenario.ts`
+
 - chore(docs): Add link to SuperTokens auth (#10067)
-  Add a missing link to the SuperTokens auth page in the docs.
+  Add a missing link to the SuperTokens auth page in the docs. @danbtl
 
 - fix(deps): update opentelemetry-js monorepo (#10065)
 
