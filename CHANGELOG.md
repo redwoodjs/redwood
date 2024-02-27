@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- chore(docs): Add link to SuperTokens auth (#10067)
+  Add a missing link to the SuperTokens auth page in the docs.
+
 - fix(deps): update opentelemetry-js monorepo (#10065)
 
   Updates our opentelemetry packages. This is a breaking change for users of
