@@ -130,8 +130,9 @@ const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
 const PATH_WEB_DIR_DIST_RSC = 'web/dist/rsc'
 const PATH_WEB_DIR_DIST_CLIENT = 'web/dist/client'
 
-const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server.js'
-const PATH_WEB_DIR_DIST_DOCUMENT = 'web/dist/server/Document.js'
+// Don't specify extension, handled by resolve file
+const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server'
+const PATH_WEB_DIR_DIST_DOCUMENT = 'web/dist/server/Document'
 
 const PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS = 'web/dist/server/routeHooks'
 const PATH_WEB_DIR_DIST_RSC_ENTRIES = 'web/dist/rsc/entries.js'
@@ -246,11 +247,15 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
       distClient: path.join(BASE_DIR, PATH_WEB_DIR_DIST_CLIENT),
       distRsc: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC),
-      distEntryServer: path.join(
-        BASE_DIR,
-        PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER
-      ),
-      distDocumentServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT),
+      // Allow for the possibility of a .mjs file
+      distEntryServer: resolveFile(
+        path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER),
+        ['.js', '.mjs']
+      ) as string,
+      distDocumentServer: resolveFile(
+        path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT),
+        ['.js', '.mjs']
+      ) as string,
       distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
       distRscEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC_ENTRIES),
       routeManifest: path.join(BASE_DIR, PATH_WEB_DIR_ROUTE_MANIFEST),
