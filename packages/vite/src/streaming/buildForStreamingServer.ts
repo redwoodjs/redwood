@@ -19,7 +19,7 @@ export async function buildForStreamingServer({
     build: {
       outDir: rwPaths.web.distServer,
       ssr: true,
-      // rollup inputs are defined in the vite plugin
+      emptyOutDir: true,
     },
     legacy: {
       // @MARK @TODO: this gets picked up by the RSC build if it's in index.js
