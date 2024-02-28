@@ -13,7 +13,7 @@
   "search.exclude": {
     "**/dist": true,
     "**/node_modules": true,
-    "**/__fixtures__": true,
+    "/packages/**/__fixtures__": true,
     ".yarn-packages-cache": true
   },
   "[markdown][html][mjml]": {
