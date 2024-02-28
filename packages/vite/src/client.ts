@@ -19,7 +19,7 @@ const checkStatus = async (
 
 const BASE_PATH = '/rw-rsc/'
 
-export function serve<Props>(rscId: string) {
+export function renderFromRscServer<Props>(rscId: string) {
   console.log('serve rscId', rscId)
 
   type SetRerender = (
