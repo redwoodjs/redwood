@@ -1,12 +1,9 @@
 import path from 'node:path'
 
-import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
-import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
-import { getEnvVarDefinitions } from '../envVarDefinitions'
 import { onWarn } from '../lib/onWarn'
 
 import { rscTransformPlugin } from './rscVitePlugins'
@@ -37,15 +34,11 @@ export async function buildForRscServer(
   }
 
   const workerBuildOutput = await viteBuild({
-    configFile: false, // @MARK disable loading the original plugin, only use settings in this file. This prevents issues with the routes-auto-loader
-    root: rwPaths.web.src, // @MARK this used to be `rwPaths.web.base`, not sure if intentional or not!!!
     envFile: false,
     legacy: {
       // @MARK: for the worker, we're building ESM! (not CJS)
       buildSsrCjsExternalHeuristics: false,
     },
-    // TODO (RSC) (Tobbe): Can this be removed?
-    define: getEnvVarDefinitions(),
     ssr: {
       // Externalize everything except packages with files that have
       // 'use client' in them (which are the files in `clientEntryFiles`)
@@ -86,13 +79,6 @@ export async function buildForRscServer(
       },
     },
     plugins: [
-      react({
-        babel: {
-          ...getWebSideDefaultBabelConfig({
-            forVite: true,
-          }),
-        },
-      }),
       // The rscTransformPlugin maps paths like
       // /Users/tobbe/.../rw-app/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
       // to

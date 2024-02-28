@@ -49,6 +49,7 @@ export function rscBuildClientEntriesMappings(
   console.log('clientEntries', clientEntries)
 
   return fs.appendFile(
+    // @TODO @MARK: should this be webDistRscEntries?
     webDistServerEntries,
     `export const clientEntries=${JSON.stringify(clientEntries)};`
   )

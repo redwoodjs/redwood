@@ -3,8 +3,8 @@ import path from 'path'
 
 import react from '@vitejs/plugin-react'
 import type { InputOption } from 'rollup'
-import type { ConfigEnv, UserConfig, PluginOption } from 'vite'
-import { normalizePath } from 'vite'
+import type { ConfigEnv, PluginOption, UserConfig } from 'vite'
+import { mergeConfig, normalizePath } from 'vite'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
@@ -126,7 +126,9 @@ export default function redwoodPluginVite(): PluginOption[] {
       },
       // ---------- End Bundle injection ----------
 
-      config: (options: UserConfig, env: ConfigEnv): UserConfig => {
+      // @MARK: Using the config hook here let's us modify the config
+      // but returning plugins will **not** work
+      config: (userConfig: UserConfig, env: ConfigEnv): UserConfig => {
         let apiHost = process.env.REDWOOD_API_HOST
         apiHost ??= rwConfig.api.host
         apiHost ??= process.env.NODE_ENV === 'production' ? '0.0.0.0' : '[::]'
@@ -142,17 +144,16 @@ export default function redwoodPluginVite(): PluginOption[] {
           apiPort = rwConfig.api.port
         }
 
-        return {
+        const defaultRwViteConfig: UserConfig = {
           root: rwPaths.web.src,
-          // Disabling for now, let babel handle this for consistency
-          // resolve: {
-          //   alias: [
-          //     {
-          //       find: 'src',
-          //       replacement: redwoodPaths.web.src,
-          //     },
-          //   ],
-          // },
+          resolve: {
+            alias: [
+              {
+                find: 'src',
+                replacement: rwPaths.web.src,
+              },
+            ],
+          },
           envPrefix: 'REDWOOD_ENV_',
           publicDir: path.join(rwPaths.web.base, 'public'),
           define: getEnvVarDefinitions(),
@@ -210,12 +211,12 @@ export default function redwoodPluginVite(): PluginOption[] {
             },
           },
           build: {
+            // NOTE this gets overridden when build gets called anyway!
             outDir:
-              options.build?.outDir ||
               // @MARK: For RSC and Streaming, we build to dist/client directory
-              (streamingBuild || rscBuild
+              streamingBuild || rscBuild
                 ? rwPaths.web.distClient
-                : rwPaths.web.dist),
+                : rwPaths.web.dist,
             emptyOutDir: true,
             manifest: !env.ssrBuild ? 'client-build-manifest.json' : undefined,
             sourcemap: !env.ssrBuild && rwConfig.web.sourceMap, // Note that this can be boolean or 'inline'
@@ -239,6 +240,7 @@ export default function redwoodPluginVite(): PluginOption[] {
             },
           },
         }
+        return mergeConfig(defaultRwViteConfig, userConfig)
       },
     },
     // We can remove when streaming is stable
@@ -260,6 +262,11 @@ export default function redwoodPluginVite(): PluginOption[] {
       babel: {
         ...getWebSideDefaultBabelConfig({
           forVite: true,
+          // @MARK: Potential issue in the future. We don't want to set react plugins in each build file
+          // because we should be able to trigger the builds from the vite CLI directly.
+          // Right now, we can compile to SPA+SSR OR RSCClient+SSR+RSC - once this experimental flag is removed
+          // we will need to make sure SPA+SSR is still possible
+          forRscClient: rwConfig.experimental.rsc?.enabled,
         }),
       },
     }),

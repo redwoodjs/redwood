@@ -1,4 +1,3 @@
-import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -22,6 +21,8 @@ export async function rscBuildAnalyze() {
   const clientEntryFileSet = new Set<string>()
   const serverEntryFileSet = new Set<string>()
 
+  console.log('Starting rscBuildAnalyze........\n')
+
   if (!rwPaths.web.entries) {
     throw new Error('RSC entries file not found')
   }
@@ -34,7 +35,6 @@ export async function rscBuildAnalyze() {
     configFile: rwPaths.web.viteConfig,
     root: rwPaths.base,
     plugins: [
-      react(),
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
         (id) => serverEntryFileSet.add(id)
