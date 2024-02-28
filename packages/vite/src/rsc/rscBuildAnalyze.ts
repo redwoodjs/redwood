@@ -34,6 +34,8 @@ export async function rscBuildAnalyze() {
   await viteBuild({
     configFile: rwPaths.web.viteConfig,
     root: rwPaths.base,
+    // @MARK: We don't want to see any output from this step. It's just for returning the entry names!
+    logLevel: 'silent',
     plugins: [
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
