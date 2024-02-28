@@ -105,6 +105,7 @@ export async function buildForRscServer(
       ssr: true,
       ssrEmitAssets: true,
       outDir: rwPaths.web.distRsc,
+      emptyOutDir: true, // Needed because `outDir` is not inside `root`
       manifest: 'server-build-manifest.json',
       rollupOptions: {
         onwarn: onWarn,
