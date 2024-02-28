@@ -254,6 +254,10 @@ export default function redwoodPluginVite(): PluginOption[] {
       babel: {
         ...getWebSideDefaultBabelConfig({
           forVite: true,
+          // @MARK: Potential issue in the future. We don't want to set react
+          // plugins in each build file because we should be able to trigger
+          // the builds from the vite CLI directly.
+          forRscClient: rwConfig.experimental.rsc?.enabled,
         }),
       },
     }),
@@ -261,7 +265,6 @@ export default function redwoodPluginVite(): PluginOption[] {
 }
 
 /**
- *
  * This function configures how vite (actually Rollup) will bundle.
  *
  * By default, the entry point is the index.html file - even if you don't specify it in RollupOptions

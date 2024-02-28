@@ -4,6 +4,8 @@ import path from 'path'
 import * as babel from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 
+// This import is for types safety. Its just a type, no harm importing from src.
+import type { PluginOptions as RoutesAutoLoaderOptions } from '@redwoodjs/babel-config/src/plugins/babel-plugin-redwood-routes-auto-loader'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import type { RegisterHookOptions } from './common'
@@ -20,6 +22,7 @@ export interface Flags {
   forJest?: boolean // will change the alias for module-resolver plugin
   forPrerender?: boolean // changes what babel-plugin-redwood-routes-auto-loader does
   forVite?: boolean
+  forRscClient?: boolean
 }
 
 export const getWebSideBabelPlugins = (
@@ -106,9 +109,10 @@ export const getWebSideBabelPlugins = (
 }
 
 export const getWebSideOverrides = (
-  { forPrerender, forVite }: Flags = {
+  { forPrerender, forVite, forRscClient }: Flags = {
     forPrerender: false,
     forVite: false,
+    forRscClient: false,
   }
 ): Array<TransformOptions> => {
   // Have to use a readonly array here because of a limitation in TS
@@ -125,10 +129,13 @@ export const getWebSideOverrides = (
       plugins: [
         [
           require('./plugins/babel-plugin-redwood-routes-auto-loader').default,
+          // The plugin will modify the Routes file differently based on what
+          // context we're building for
           {
             forPrerender,
             forVite,
-          },
+            forRscClient,
+          } satisfies RoutesAutoLoaderOptions,
         ],
       ],
     },
