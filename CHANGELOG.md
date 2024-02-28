@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- chore(docs): Add link to SuperTokens auth (#10067)
+  Add a missing link to the SuperTokens auth page in the docs. @danbtl
+
 - fix(coherence): update setup command to detect server file
 
   The `yarn rw setup deploy coherence` command now detects if your project has the server file and configures the api prod command accordingly:
