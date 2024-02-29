@@ -1,14 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 
-import react from '@vitejs/plugin-react'
 import { removeSync } from 'fs-extra'
 
 import type { Flags } from '@redwoodjs/babel-config'
-import {
-  prebuildWebFile,
-  getWebSideDefaultBabelConfig,
-} from '@redwoodjs/babel-config'
+import { prebuildWebFile } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 // @MARK
