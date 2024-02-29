@@ -71,14 +71,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           // babel transformed in the same process
           exportNames = []
           hasDefaultExport = false
-          console.log()
-          console.log()
-          console.log(
-            'babel-plugin-redwood-cells::enter() ' +
-              parse(this.file.opts.filename as string).name
-          )
-          console.log()
-          console.log()
         },
         exit(path) {
           const hasQueryOrDataExport =
