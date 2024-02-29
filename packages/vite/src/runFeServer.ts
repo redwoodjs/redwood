@@ -9,15 +9,18 @@ import path from 'node:path'
 import url from 'node:url'
 
 import { createServerAdapter } from '@whatwg-node/server'
+
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
+import type { RWRouteManifestItem } from '@redwoodjs/internal/dist/routes'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { registerFwGlobals } from './lib/registerGlobals'
+import { createExtensionRouteDef } from './middleware/extensionRouteDef'
 import { invoke } from './middleware/invokeMiddleware'
 import { createRscRequestHandler } from './rsc/rscRequestHandler'
 import { setClientEntries } from './rsc/rscWorkerCommunication'
@@ -83,6 +86,18 @@ export async function runFeServer() {
   const indexEntry = Object.values(buildManifest).find((manifestItem) => {
     return manifestItem.isEntry
   })
+
+  const handleWithMiddleware = (route?: RWRouteManifestItem) => {
+    return createServerAdapter(async (req: Request) => {
+      const entryServerImport = await import(rwPaths.web.entryServer as string)
+
+      const middleware = entryServerImport.middleware
+
+      const [mwRes] = await invoke(req, middleware, route ? { route } : {})
+
+      return mwRes.toResponse()
+    })
+  }
 
   if (!indexEntry) {
     throw new Error('Could not find index.html in build manifest')
@@ -156,24 +171,20 @@ export async function runFeServer() {
         return express.static(rwPaths.web.dist)(req, res, next)
       })
     }
+
+    // add express routes to capture extension requests and give them to middleware
+    // ie. /about.json, /about.png, etc
+    app.get(
+      createExtensionRouteDef(route.matchRegexString),
+      handleWithMiddleware(route)
+    )
   }
 
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
   app.use('/rw-rsc', createRscRequestHandler())
 
   // @MARK: put this after rw-rsc!
-  app.post(
-    '*',
-    createServerAdapter(async (req: Request) => {
-      const entryServerImport = await import(rwPaths.web.distEntryServer)
-
-      const { middleware } = entryServerImport
-
-      const [mwRes] = await invoke(req, middleware)
-
-      return mwRes.toResponse()
-    })
-  )
+  app.post('*', handleWithMiddleware())
 
   app.listen(rwConfig.web.port)
   console.log(
