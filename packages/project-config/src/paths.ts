@@ -166,6 +166,15 @@ export const resolveFile = (
   return null
 }
 
+/** Default to JS path, but if MJS exists, use it instead **/
+const mjsOrJs = (filePath: string) => {
+  const mjsPath = resolveFile(filePath, ['.mjs'])
+  if (mjsPath) {
+    return mjsPath
+  }
+  return filePath + '.js'
+}
+
 /**
  * Path constants that are relevant to a Redwood project.
  */
@@ -248,14 +257,12 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       distClient: path.join(BASE_DIR, PATH_WEB_DIR_DIST_CLIENT),
       distRsc: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC),
       // Allow for the possibility of a .mjs file
-      distEntryServer: resolveFile(
-        path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER),
-        ['.js', '.mjs']
-      ) as string,
-      distDocumentServer: resolveFile(
-        path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT),
-        ['.js', '.mjs']
-      ) as string,
+      distEntryServer: mjsOrJs(
+        path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER)
+      ),
+      distDocumentServer: mjsOrJs(
+        path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT)
+      ),
       distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
       distRscEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC_ENTRIES),
       routeManifest: path.join(BASE_DIR, PATH_WEB_DIR_ROUTE_MANIFEST),
