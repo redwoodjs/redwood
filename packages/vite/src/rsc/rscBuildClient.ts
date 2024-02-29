@@ -13,7 +13,10 @@ import { ensureProcessDirWeb } from '../utils'
  * Generate the client bundle
  */
 export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
-  console.log('Starting RSC client build.... \n')
+  console.log('\n')
+  console.log('2. rscBuildClient')
+  console.log('=================\n')
+
   const rwPaths = getPaths()
 
   ensureProcessDirWeb()

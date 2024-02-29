@@ -19,11 +19,13 @@ import { rscAnalyzePlugin } from './rscVitePlugins'
 // only needed to trigger the rscAnalyzePlugin
 
 export async function rscBuildAnalyze() {
+  console.log('\n')
+  console.log('1. rscBuildAnalyze')
+  console.log('==================\n')
+
   const rwPaths = getPaths()
   const clientEntryFileSet = new Set<string>()
   const serverEntryFileSet = new Set<string>()
-
-  console.log('Starting rscBuildAnalyze........\n')
 
   if (!rwPaths.web.entries) {
     throw new Error('RSC entries file not found')

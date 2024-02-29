@@ -21,15 +21,15 @@ export async function buildForRscServer(
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>
 ) {
+  console.log('\n')
+  console.log('3. buildForRscServer')
+  console.log('====================\n')
+
   const rwPaths = getPaths()
 
   if (!rwPaths.web.entries) {
     throw new Error('RSC entries file not found')
   }
-
-  console.log('\n')
-  console.log('3. rscBuildServer')
-  console.log('=================\n')
 
   const input = {
     entries: rwPaths.web.entries,
