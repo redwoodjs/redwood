@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+import { build as viteBuild } from 'vite'
+
+>>>>>>> 6e40545cc (chore(refactor): vite - extract into buildRouteHooks.ts (#10080))
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
