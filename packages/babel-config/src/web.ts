@@ -150,6 +150,8 @@ export const getWebSideOverrides = (
     },
   ]
 
+  console.log('babel - How many times does this get called?')
+
   return overrides.filter(
     (override: false | TransformOptions): override is TransformOptions => {
       return !!override
