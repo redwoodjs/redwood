@@ -22,6 +22,10 @@ export async function rscBuildServer(
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>
 ) {
+  console.log('\n')
+  console.log('3. rscBuildServer')
+  console.log('=================\n')
+
   const input = {
     entries: entriesFile,
     ...clientEntryFiles,
