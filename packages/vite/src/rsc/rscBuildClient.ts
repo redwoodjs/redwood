@@ -29,7 +29,7 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
         babel: {
           ...getWebSideDefaultBabelConfig({
             forVite: true,
-            forRscClient: true, // 👈 👈 👈
+            forRscClient: true,
           }),
         },
       }),
