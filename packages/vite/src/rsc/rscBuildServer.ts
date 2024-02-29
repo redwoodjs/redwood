@@ -45,7 +45,7 @@ export async function rscBuildServer(
 
   const serverBuildOutput = await viteBuild({
     // ...configFileConfig,
-    root: rwPaths.web.base,
+    root: rwPaths.web.src,
     envPrefix: 'REDWOOD_ENV_',
     publicDir: path.join(rwPaths.web.base, 'public'),
     envFile: false,
