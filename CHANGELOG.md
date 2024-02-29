@@ -2,10 +2,6 @@
 
 ## Unreleased
 
-- fix(deploy): handle server file (#10061)
-
-  This fixes the CLI commands for Coherence and Flightcontrol. For Coherence, it fixes a bug introduced in the last patch where the logic for detecting the server file in the setup command (`yarn rw setup deploy coherence`) was flipped. For Flightcontrol, it updates the setup command (`yarn rw setup deploy flightcontrol`) so that it handles Corepack and updates the corresponding deploy command (`yarn rw deploy flightcontrol`) so that it detects the server file similar to the Coherence fix.
-
 - fix(deps): update opentelemetry-js monorepo (#10065)
 
   Updates our opentelemetry packages. This is a breaking change for users of
@@ -55,6 +51,10 @@
   These files are loaded in addition to `.env` and `.env.defaults` and more generally are additive. Subsequent dotfiles won't overwrite environment variables defined previous ones. As such, files loaded via NODE_ENV have lower priority than those loaded specifically via `--include-env-files`.
 
   Note that this feature is mainly for local scripting. Most deploy providers don't let you upload dotfiles and usually have their own way of determining environments.
+
+## v7.0.5
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.5
 
 ## v7.0.4
 
