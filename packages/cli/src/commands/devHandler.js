@@ -33,6 +33,8 @@ export const handler = async ({
 
   const rwjsPaths = getPaths()
 
+  const serverFile = serverFileExists()
+
   // Starting values of ports from config (redwood.toml)
   let apiPreferredPort = parseInt(getConfig().api.port)
   let webPreferredPort = parseInt(getConfig().web.port)
@@ -46,7 +48,7 @@ export const handler = async ({
   // Check api port, unless there's a serverFile. If there is a serverFile, we
   // don't know what port will end up being used in the end. It's up to the
   // author of the server file to decide and handle that
-  if (side.includes('api') && !serverFileExists()) {
+  if (side.includes('api') && !serverFile) {
     apiAvailablePort = await getFreePort(apiPreferredPort)
     if (apiAvailablePort === -1) {
       exitWithError(undefined, {
@@ -115,7 +117,7 @@ export const handler = async ({
 
     // Again, if a server file is configured, we don't know what port it'll end
     // up using
-    if (!serverFileExists()) {
+    if (!serverFile) {
       try {
         await shutdownPort(apiAvailablePort)
       } catch (e) {
