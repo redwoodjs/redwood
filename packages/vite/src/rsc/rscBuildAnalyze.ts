@@ -15,6 +15,10 @@ import { rscAnalyzePlugin } from './rscVitePlugins'
  * Doesn't output any files, only collects a list of RSCs and RSFs
  */
 export async function rscBuildAnalyze(viteConfigPath: string) {
+  console.log('\n')
+  console.log('1. rscBuildAnalyze')
+  console.log('==================\n')
+
   const rwPaths = getPaths()
   const clientEntryFileSet = new Set<string>()
   const serverEntryFileSet = new Set<string>()
