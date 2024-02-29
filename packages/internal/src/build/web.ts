@@ -74,16 +74,6 @@ export const buildWeb = async ({ verbose }: BuildOptions) => {
   return build({
     configFile: viteConfig,
     envFile: false,
-    // @MARK Doing this because we need to modify the babel settings per build
-    plugins: [
-      react({
-        babel: {
-          ...getWebSideDefaultBabelConfig({
-            forVite: true,
-          }),
-        },
-      }),
-    ],
     logLevel: verbose ? 'info' : 'warn',
   })
 }
