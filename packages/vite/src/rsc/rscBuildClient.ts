@@ -4,8 +4,9 @@ import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
-import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { getPaths } from '@redwoodjs/project-config'
 
+import { getEnvVarDefinitions } from '../envVarDefinitions'
 import { onWarn } from '../lib/onWarn'
 
 import { rscIndexPlugin } from './rscVitePlugins'
@@ -20,11 +21,11 @@ export async function rscBuildClient(
   webDist: string,
   clientEntryFiles: Record<string, string>
 ) {
-  const rwPaths = getPaths()
-  const rwConfig = getConfig()
+  console.log('\n')
+  console.log('2. rscBuildClient')
+  console.log('=================\n')
 
-  const graphQlUrl =
-    rwConfig.web.apiGraphQLUrl ?? rwConfig.web.apiUrl + '/graphql'
+  const rwPaths = getPaths()
 
   const clientBuildOutput = await viteBuild({
     // configFile: viteConfigPath,
@@ -32,54 +33,13 @@ export async function rscBuildClient(
     envPrefix: 'REDWOOD_ENV_',
     publicDir: path.join(rwPaths.web.base, 'public'),
     envFile: false,
-    define: {
-      RWJS_ENV: {
-        __REDWOOD__APP_TITLE: rwConfig.web.title || path.basename(rwPaths.base),
-        RWJS_API_GRAPHQL_URL: graphQlUrl,
-        RWJS_API_URL: rwConfig.web.apiUrl,
-        RWJS_EXP_STREAMING_SSR: rwConfig.experimental?.streamingSsr?.enabled,
-        RWJS_EXP_RSC: rwConfig.experimental?.rsc?.enabled,
-      },
-      RWJS_DEBUG_ENV: {
-        RWJS_SRC_ROOT: rwPaths.web.src,
-        REDWOOD_ENV_EDITOR: JSON.stringify(process.env.REDWOOD_ENV_EDITOR),
-      },
-      // Vite can automatically expose environment variables, but we
-      // disable that in `buildFeServer.ts` by setting `envFile: false`
-      // because we want to use our own logic for loading .env,
-      // .env.defaults, etc
-      // The two object spreads below will expose all environment
-      // variables listed in redwood.toml and all environment variables
-      // prefixed with REDWOOD_ENV_
-      ...Object.fromEntries(
-        rwConfig.web.includeEnvironmentVariables.flatMap((envName) => [
-          // TODO (RSC): Figure out if/why we need to disable eslint here.
-          // Re-enable if possible
-          // eslint-disable-next-line
-          [`import.meta.env.${envName}`, JSON.stringify(process.env[envName])],
-          // TODO (RSC): Figure out if/why we need to disable eslint here
-          // Re-enable if possible
-          // eslint-disable-next-line
-          [`process.env.${envName}`, JSON.stringify(process.env[envName])],
-        ])
-      ),
-      ...Object.entries(process.env).reduce<Record<string, any>>(
-        (acc, [key, value]) => {
-          if (key.startsWith('REDWOOD_ENV_')) {
-            acc[`import.meta.env.${key}`] = JSON.stringify(value)
-            acc[`process.env.${key}`] = JSON.stringify(value)
-          }
-
-          return acc
-        },
-        {}
-      ),
-    },
+    define: getEnvVarDefinitions(),
     plugins: [
       react({
         babel: {
           ...getWebSideDefaultBabelConfig({
             forVite: true,
+            forRscClient: true,
           }),
         },
       }),

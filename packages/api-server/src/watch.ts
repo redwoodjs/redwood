@@ -138,7 +138,7 @@ const buildAndRestart = async ({
     if (serverFile) {
       httpServerProcess = fork(
         serverFile,
-        ['--port', port.toString()],
+        ['--apiPort', port.toString()],
         forkOpts
       )
     } else {

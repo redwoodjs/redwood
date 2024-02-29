@@ -1,4 +1,4 @@
-import { existsSync } from 'fs'
+import fs from 'fs'
 import path from 'path'
 
 import react from '@vitejs/plugin-react'
@@ -9,6 +9,7 @@ import { normalizePath } from 'vite'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { getEnvVarDefinitions } from './envVarDefinitions'
 import handleJsAsJsx from './plugins/vite-plugin-jsx-loader'
 import removeFromBundle from './plugins/vite-plugin-remove-from-bundle'
 import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider'
@@ -29,6 +30,12 @@ export default function redwoodPluginVite(): PluginOption[] {
   }
 
   const relativeEntryPath = path.relative(rwPaths.web.src, clientEntryPath)
+
+  // If realtime is enabled, we want to include the sseLink in the bundle.
+  // Right now the only way we have of telling is if the package is installed on the api side.
+  const realtimeEnabled = fs
+    .readFileSync(path.join(rwPaths.api.base, 'package.json'), 'utf-8')
+    .includes('@redwoodjs/realtime')
 
   return [
     {
@@ -83,7 +90,7 @@ export default function redwoodPluginVite(): PluginOption[] {
           // So we inject the entrypoint with the correct extension .tsx vs .jsx
 
           // And then inject the entry
-          if (existsSync(clientEntryPath)) {
+          if (fs.existsSync(clientEntryPath)) {
             return html.replace(
               '</head>',
               // @NOTE the slash in front, for windows compatibility and for pages in subdirectories
@@ -99,7 +106,7 @@ export default function redwoodPluginVite(): PluginOption[] {
       // but note index.html does not come through as an id during dev
       transform: (code: string, id: string) => {
         if (
-          existsSync(clientEntryPath) &&
+          fs.existsSync(clientEntryPath) &&
           normalizePath(id) === normalizePath(rwPaths.web.html)
         ) {
           return {
@@ -144,56 +151,7 @@ export default function redwoodPluginVite(): PluginOption[] {
           // },
           envPrefix: 'REDWOOD_ENV_',
           publicDir: path.join(rwPaths.web.base, 'public'),
-          define: {
-            RWJS_ENV: {
-              // @NOTE we're avoiding process.env here, unlike webpack
-              RWJS_API_GRAPHQL_URL:
-                rwConfig.web.apiGraphQLUrl ?? rwConfig.web.apiUrl + '/graphql',
-              RWJS_API_URL: rwConfig.web.apiUrl,
-              __REDWOOD__APP_TITLE:
-                rwConfig.web.title || path.basename(rwPaths.base),
-              RWJS_EXP_STREAMING_SSR:
-                rwConfig.experimental.streamingSsr &&
-                rwConfig.experimental.streamingSsr.enabled,
-              RWJS_EXP_RSC: rwConfig.experimental?.rsc?.enabled,
-            },
-            RWJS_DEBUG_ENV: {
-              RWJS_SRC_ROOT: rwPaths.web.src,
-              REDWOOD_ENV_EDITOR: JSON.stringify(
-                process.env.REDWOOD_ENV_EDITOR
-              ),
-            },
-            // Vite can automatically expose environment variables, but we
-            // disable that in `buildFeServer.ts` by setting `envFile: false`
-            // because we want to use our own logic for loading .env,
-            // .env.defaults, etc
-            // The two object spreads below will expose all environment
-            // variables listed in redwood.toml and all environment variables
-            // prefixed with REDWOOD_ENV_
-            ...Object.fromEntries(
-              rwConfig.web.includeEnvironmentVariables.flatMap((envName) => [
-                [
-                  `import.meta.env.${envName}`,
-                  JSON.stringify(process.env[envName]),
-                ],
-                [
-                  `process.env.${envName}`,
-                  JSON.stringify(process.env[envName]),
-                ],
-              ])
-            ),
-            ...Object.entries(process.env).reduce<Record<string, any>>(
-              (acc, [key, value]) => {
-                if (key.startsWith('REDWOOD_ENV_')) {
-                  acc[`import.meta.env.${key}`] = JSON.stringify(value)
-                  acc[`process.env.${key}`] = JSON.stringify(value)
-                }
-
-                return acc
-              },
-              {}
-            ),
-          },
+          define: getEnvVarDefinitions(),
           css: {
             // @NOTE config path is relative to where vite.config.js is if you use relative path
             // postcss: './config/',
@@ -286,7 +244,7 @@ export default function redwoodPluginVite(): PluginOption[] {
         id: /@redwoodjs\/router\/dist\/splash-page/,
       },
     ]),
-    !rwConfig.experimental.realtime.enabled &&
+    !realtimeEnabled &&
       removeFromBundle([
         {
           id: /@redwoodjs\/web\/dist\/apollo\/sseLink/,
@@ -303,7 +261,6 @@ export default function redwoodPluginVite(): PluginOption[] {
 }
 
 /**
- *
  * This function configures how vite (actually Rollup) will bundle.
  *
  * By default, the entry point is the index.html file - even if you don't specify it in RollupOptions

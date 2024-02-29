@@ -49,7 +49,7 @@ const API_SERVER_COMMANDS = [
     host: 'http://localhost:8911',
   },
   {
-    cmd: `node ${path.resolve(REDWOOD_PROJECT_DIRECTORY, 'node_modules/@redwoodjs/api-server/dist/index.js')} api`,
+    cmd: `node ${path.resolve(REDWOOD_PROJECT_DIRECTORY, 'node_modules/@redwoodjs/api-server/dist/bin.js')} api`,
     host: 'http://localhost:8911'
   },
 ]

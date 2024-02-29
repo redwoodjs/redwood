@@ -17,10 +17,15 @@ const checkStatus = async (
   return response
 }
 
-export function serve<Props>(rscId: string, basePath = '/rw-rsc/') {
+const BASE_PATH = '/rw-rsc/'
+
+export function renderFromRscServer<Props>(rscId: string) {
+  console.log('serve rscId', rscId)
+
   type SetRerender = (
     rerender: (next: [ReactElement, string]) => void
   ) => () => void
+
   const fetchRSC = cache(
     (serializedProps: string): readonly [React.ReactElement, SetRerender] => {
       console.log('fetchRSC serializedProps', serializedProps)
@@ -51,7 +56,7 @@ export function serve<Props>(rscId: string, basePath = '/rw-rsc/') {
             id = '_'
           }
 
-          const response = fetch(basePath + id + '/' + searchParams, {
+          const response = fetch(BASE_PATH + id + '/' + searchParams, {
             method: 'POST',
             body: await encodeReply(args),
             headers: {
@@ -75,12 +80,12 @@ export function serve<Props>(rscId: string, basePath = '/rw-rsc/') {
 
       console.log(
         'fetchRSC before createFromFetch',
-        basePath + rscId + '/' + searchParams
+        BASE_PATH + rscId + '/' + searchParams
       )
 
       const response =
         prefetched ||
-        fetch(basePath + rscId + '/' + searchParams, {
+        fetch(BASE_PATH + rscId + '/' + searchParams, {
           headers: {
             'rw-rsc': '1',
           },
@@ -95,7 +100,7 @@ export function serve<Props>(rscId: string, basePath = '/rw-rsc/') {
   // Create temporary client component that wraps the ServerComponent returned
   // by the `createFromFetch` call.
   const ServerComponent = (props: Props) => {
-    console.log('ServerComponent props', props)
+    console.log('ServerComponent', rscId, 'props', props)
 
     // FIXME we blindly expect JSON.stringify usage is deterministic
     const serializedProps = JSON.stringify(props || {})

@@ -9,9 +9,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
-import { isTypeScriptProject } from '../../../lib/project'
-// Move this check out of experimental when server file is moved as well
-import { serverFileExists } from '../../experimental/util'
+import { isTypeScriptProject, serverFileExists } from '../../../lib/project'
 import { setupServerFileTasks } from '../server-file/serverFileHandler'
 
 const { version } = JSON.parse(

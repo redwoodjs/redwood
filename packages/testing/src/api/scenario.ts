@@ -2,45 +2,51 @@ import type { A } from 'ts-toolbelt'
 
 /**
  * Use this function to define your scenario.
+ *
  * @example
  * export const standard = defineScenario({
- user: {
-   dom: {
-     name: 'Dom Saadi',
-     email: 'dom@redwoodjs.com'
-    }
-  },
-})
-/* @example
-* export const standard = defineScenario<Prisma.CreateUserArgs>({
- user: {
-   dom: {
-     name: 'Dom Saadi',
-     email: 'dom@redwoodjs.com'
-    }
-  },
-})
-*/
+ *   user: {
+ *     dom: {
+ *       name: 'Dom Saadi',
+ *       email: 'dom@redwoodjs.com',
+ *     },
+ *   },
+ * })
+ *
+ * @example
+ * export const standard = defineScenario<Prisma.CreateUserArgs>({
+ *   user: {
+ *     dom: {
+ *       name: 'Dom Saadi',
+ *       email: 'dom@redwoodjs.com',
+ *     },
+ *   },
+ * })
+ */
 export const defineScenario: DefineScenario = (data) => {
   return data
 }
 
 /**
- * @example {
- *  dannyUser: {data :{
- *   id: 1,
- *  name: 'Danny',}
- * }}
+ * @example
+ * {
+ *   dannyUser: {
+ *     data: {
+ *       id: 1,
+ *       name: 'Danny',
+ *     },
+ *   },
+ * }
  *
  * @example
- *  krisUser: (scenario) => {
- *  return {
- *    data: {
- *      id: 2,
- *      name: 'Kris',
- *    }
- *  }
- * }
+ *   krisUser: (scenario) => {
+ *     return {
+ *       data: {
+ *         id: 2,
+ *         name: 'Kris',
+ *       },
+ *     }
+ *   }
  */
 type ScenarioDefinitionMap<
   PrismaCreateType extends { data: any },
@@ -85,12 +91,13 @@ export interface DefineScenario {
  * import { Product } from '@prisma/client'
  *
  * // If you scenario looks like this:
- * * export const standard = defineScenario({
- *    product: {
- *    shirt: {
- *      id: 55,
- *      price: 10
- *    }
+ * export const standard = defineScenario({
+ *   product: {
+ *     shirt: {
+ *       id: 55,
+ *       price: 10,
+ *     },
+ *   },
  * })
  *
  * // Export the StandardScenario type as
@@ -98,7 +105,6 @@ export interface DefineScenario {
  *
  * // You can also define each of the keys in your scenario, so you get stricter type checking
  * export StandardScenario = ScenarioData<Product, 'product', 'shirt'>
- *
  */
 export declare type ScenarioData<
   TModel, // the prisma model, imported from @prisma/client e.g. "Product"
