@@ -2,7 +2,12 @@
 
 ## Unreleased
 
+- fix(deploy): handle server file (#10061)
+
+  This fixes the CLI commands for Coherence and Flightcontrol. For Coherence, it fixes a bug introduced in the last patch where the logic for detecting the server file in the setup command (`yarn rw setup deploy coherence`) was flipped. For Flightcontrol, it updates the setup command (`yarn rw setup deploy flightcontrol`) so that it handles Corepack and updates the corresponding deploy command (`yarn rw deploy flightcontrol`) so that it detects the server file similar to the Coherence fix.
+
 - chore(docs): Add link to SuperTokens auth (#10067)
+
   Add a missing link to the SuperTokens auth page in the docs. @danbtl
 
 - fix(coherence): update setup command to detect server file

@@ -37,9 +37,12 @@ vi.mock('@redwoodjs/project-config', async () => {
     getPaths: () => {
       return {
         api: {
+          base: '/mocked/project/api',
+          src: '/mocked/project/api/src',
           dist: '/mocked/project/api/dist',
         },
         web: {
+          base: '/mocked/project/web',
           dist: '/mocked/project/web/dist',
         },
         generated: {

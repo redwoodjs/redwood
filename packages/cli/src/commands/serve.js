@@ -10,15 +10,11 @@ import * as webServerCLIConfig from '@redwoodjs/web-server'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
+import { serverFileExists } from '../lib/project.js'
 
 export const command = 'serve [side]'
 export const description =
   'Start a server for serving both the api and web sides'
-
-function hasServerFile() {
-  const serverFilePath = path.join(getPaths().api.dist, 'server.js')
-  return fs.existsSync(serverFilePath)
-}
 
 export const builder = async (yargs) => {
   yargs
@@ -35,7 +31,7 @@ export const builder = async (yargs) => {
         })
 
         // Run the server file, if it exists, with web side also
-        if (hasServerFile()) {
+        if (serverFileExists()) {
           const { bothServerFileHandler } = await import('./serveHandler.js')
           await bothServerFileHandler(argv)
         } else {
@@ -57,7 +53,7 @@ export const builder = async (yargs) => {
         })
 
         // Run the server file, if it exists, api side only
-        if (hasServerFile()) {
+        if (serverFileExists()) {
           const { apiServerFileHandler } = await import('./serveHandler.js')
           await apiServerFileHandler(argv)
         } else {
