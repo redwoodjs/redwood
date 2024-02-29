@@ -6,7 +6,7 @@ export type OgImageUrlOptions = {
   height?: number
 }
 
-const OGIMAGE_DEFAULTS = {
+export const OGIMAGE_DEFAULTS = {
   extension: 'png',
   width: 1200,
   height: 630,
@@ -15,6 +15,8 @@ const OGIMAGE_DEFAULTS = {
 export const useOgImageUrl = (options?: OgImageUrlOptions) => {
   const { origin, pathname, searchParams } = useLocation()
   const ext = options?.extension || OGIMAGE_DEFAULTS.extension
+  const width = options?.width
+  const height = options?.height
   const output = [origin, `.${ext}`]
 
   // special case if we're at the root, image is available at /index.ext
@@ -22,11 +24,11 @@ export const useOgImageUrl = (options?: OgImageUrlOptions) => {
     output.splice(1, 0, '/index')
   }
 
-  if (options?.width && options.width !== OGIMAGE_DEFAULTS.width) {
-    searchParams.append('width', options.width.toString())
+  if (width) {
+    searchParams.append('width', width.toString())
   }
-  if (options?.height && options.height !== OGIMAGE_DEFAULTS.height) {
-    searchParams.append('height', options.height.toString())
+  if (height) {
+    searchParams.append('height', height.toString())
   }
 
   // only append search params if there are any, so we don't up with a trailing `?`
@@ -34,5 +36,18 @@ export const useOgImageUrl = (options?: OgImageUrlOptions) => {
     output.push(`?${searchParams}`)
   }
 
-  return output.join('')
+  return {
+    url: output.join(''),
+    width: width || OGIMAGE_DEFAULTS.width,
+    height: height || OGIMAGE_DEFAULTS.height,
+    ogProps: {
+      image: [
+        output.join(''),
+        {
+          width: width || OGIMAGE_DEFAULTS.width,
+          height: height || OGIMAGE_DEFAULTS.height,
+        },
+      ],
+    },
+  }
 }
