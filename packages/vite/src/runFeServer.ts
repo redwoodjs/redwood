@@ -106,8 +106,7 @@ export async function runFeServer() {
     // @WARN! Be careful, between v2 and v3 of http-proxy-middleware
     // the syntax has changed https://github.com/chimurai/http-proxy-middleware
     createProxyMiddleware({
-      // See https://github.com/redwoodjs/redwood/issues/7811
-      changeOrigin: false,
+      changeOrigin: true,
       pathRewrite: {
         [`^${rwConfig.web.apiUrl}`]: '', // remove base path
       },

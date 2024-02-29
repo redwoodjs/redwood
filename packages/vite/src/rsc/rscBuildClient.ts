@@ -1,7 +1,5 @@
-import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
-import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn'
@@ -27,16 +25,6 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
 
   const clientBuildOutput = await viteBuild({
     envFile: false,
-    plugins: [
-      react({
-        babel: {
-          ...getWebSideDefaultBabelConfig({
-            forVite: true,
-            forRscClient: true,
-          }),
-        },
-      }),
-    ],
     build: {
       outDir: rwPaths.web.distClient,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`

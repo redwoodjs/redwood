@@ -1,7 +1,5 @@
-import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
-import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 export async function buildForStreamingServer({
@@ -23,15 +21,6 @@ export async function buildForStreamingServer({
       ssr: true,
       emptyOutDir: true,
     },
-    plugins: [
-      react({
-        babel: {
-          ...getWebSideDefaultBabelConfig({
-            forVite: true,
-          }),
-        },
-      }),
-    ],
     legacy: {
       // @MARK @TODO: this gets picked up by the RSC build if it's in index.js
       buildSsrCjsExternalHeuristics: true,
