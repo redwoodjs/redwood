@@ -32,7 +32,7 @@
     "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
     "@types/react": "^18.2.55",
-    "react": "0.0.0-experimental-e5205658f-20230913",
+    "react": "0.14.10",
     "typescript": "5.3.3",
     "vitest": "1.2.2"
   },

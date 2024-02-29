@@ -40,13 +40,13 @@
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "nodemon": "3.0.2",
-    "react": "0.0.0-experimental-e5205658f-20230913",
-    "react-dom": "0.0.0-experimental-e5205658f-20230913",
+    "react": "0.14.10",
+    "react-dom": "0.14.10",
     "typescript": "5.3.3",
     "vitest": "1.2.2"
   },
   "peerDependencies": {
-    "react": "0.0.0-experimental-e5205658f-20230913"
+    "react": "0.14.10"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

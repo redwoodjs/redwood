@@ -14,8 +14,8 @@
     "@redwoodjs/forms": "7.0.0",
     "@redwoodjs/router": "7.0.0",
     "@redwoodjs/web": "7.0.0",
-    "react": "0.0.0-experimental-e5205658f-20230913",
-    "react-dom": "0.0.0-experimental-e5205658f-20230913"
+    "react": "0.14.10",
+    "react-dom": "0.14.10"
   },
   "devDependencies": {
     "@redwoodjs/vite": "7.0.0",
