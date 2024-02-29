@@ -83,7 +83,7 @@ async function createServer() {
     app.get(expressPathDef, createServerAdapter(routeHandler))
 
     app.get(
-      createPngRouteDef(route.matchRegexString),
+      createExtensionRouteDef(route.matchRegexString),
       createServerAdapter(async (req: Request) => {
         const entryServerImport = await vite.ssrLoadModule(
           rwPaths.web.entryServer as string // already validated in dev server
@@ -118,13 +118,13 @@ async function createServer() {
   return await app.listen(port)
 }
 
-function createPngRouteDef(matchRegexString: string): any {
+function createExtensionRouteDef(matchRegexString: string): any {
   if (matchRegexString.endsWith('/$')) {
-    console.log(1)
-    return new RegExp(matchRegexString.replace('$', 'index.png$'))
+    // url is something like /
+    return new RegExp(matchRegexString.replace('$', 'index.*$'))
   } else if (matchRegexString.endsWith('$')) {
-    console.log(2)
-    return new RegExp(matchRegexString.replace('$', '.png$'))
+    // url is something like /about
+    return new RegExp(matchRegexString.replace('$', '.*$'))
   }
 }
 
