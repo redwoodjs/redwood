@@ -40,7 +40,7 @@ vi.mock('fs-extra', async (importOriginal) => {
     default: {
       ...originalFsExtra,
       existsSync: (p) => {
-        // Don't detect the experimental server file, can't use path.sep here so the replaceAll is used
+        // Don't detect the server file, can't use path.sep here so the replaceAll is used
         if (p.replaceAll('\\', '/') === '/mocked/project/api/src/server.ts') {
           return false
         }
