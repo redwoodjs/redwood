@@ -261,7 +261,6 @@ export default function redwoodPluginVite(): PluginOption[] {
 }
 
 /**
- *
  * This function configures how vite (actually Rollup) will bundle.
  *
  * By default, the entry point is the index.html file - even if you don't specify it in RollupOptions

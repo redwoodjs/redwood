@@ -39,6 +39,7 @@ export async function rscBuildClient(
         babel: {
           ...getWebSideDefaultBabelConfig({
             forVite: true,
+            forRscClient: true,
           }),
         },
       }),
