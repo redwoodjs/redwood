@@ -6,6 +6,8 @@ import { removeSync } from 'fs-extra'
 import type { Flags } from '@redwoodjs/babel-config'
 import { prebuildWebFile } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
+import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
+import react from '@vitejs/plugin-react'
 
 // @MARK
 // This whole file is currently only used in testing
@@ -70,6 +72,16 @@ export const buildWeb = async ({ verbose }: BuildOptions) => {
   return build({
     configFile: viteConfig,
     envFile: false,
+    // @MARK Doing this because we need to modify the babel settings per build
+    plugins: [
+      react({
+        babel: {
+          ...getWebSideDefaultBabelConfig({
+            forVite: true,
+          }),
+        },
+      }),
+    ],
     logLevel: verbose ? 'info' : 'warn',
   })
 }
