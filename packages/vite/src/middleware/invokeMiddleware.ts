@@ -1,4 +1,5 @@
 import { defaultAuthProviderState, type ServerAuthState } from '@redwoodjs/auth'
+import type { RWRouteManifestItem } from '@redwoodjs/internal/dist/routes'
 
 import { MiddlewareRequest } from './MiddlewareRequest'
 import { MiddlewareResponse } from './MiddlewareResponse'
@@ -20,7 +21,7 @@ type Middleware = (
 export const invoke = async (
   req: Request,
   middleware?: Middleware,
-  options?: any
+  options?: { route?: RWRouteManifestItem }
 ): Promise<[MiddlewareResponse, ServerAuthState]> => {
   if (typeof middleware !== 'function') {
     return [MiddlewareResponse.next(), defaultAuthProviderState]
