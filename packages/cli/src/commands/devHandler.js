@@ -5,11 +5,7 @@ import fs from 'fs-extra'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { shutdownPort } from '@redwoodjs/internal/dist/dev'
-import {
-  getConfig,
-  getConfigPath,
-  resolveFile,
-} from '@redwoodjs/project-config'
+import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
@@ -17,6 +13,7 @@ import c from '../lib/colors'
 import { exitWithError } from '../lib/exit'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 import { getFreePort } from '../lib/ports'
+import { serverFileExists } from '../lib/project'
 
 const defaultApiDebugPort = 18911
 
@@ -36,8 +33,7 @@ export const handler = async ({
 
   const rwjsPaths = getPaths()
 
-  // Check if experimental server file exists
-  const serverFile = resolveFile(`${rwjsPaths.api.dist}/server`)
+  const serverFile = serverFileExists()
 
   // Starting values of ports from config (redwood.toml)
   let apiPreferredPort = parseInt(getConfig().api.port)
