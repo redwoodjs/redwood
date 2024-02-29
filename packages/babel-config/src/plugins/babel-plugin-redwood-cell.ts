@@ -93,6 +93,9 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           const createCellHookName = exportNames.includes('data')
             ? 'createServerCell'
             : 'createCell'
+          const importFrom = exportNames.includes('data')
+            ? '@redwoodjs/web/dist/components/cell/createServerCell'
+            : '@redwoodjs/web'
 
           // Insert at the top of the file:
           // + import { createCell } from '@redwoodjs/web'
@@ -104,7 +107,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                   t.identifier(createCellHookName)
                 ),
               ],
-              t.stringLiteral('@redwoodjs/web')
+              t.stringLiteral(importFrom)
             )
           )
 
