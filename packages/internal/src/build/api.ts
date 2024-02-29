@@ -1,6 +1,8 @@
+import path from 'path'
+
 import type { BuildContext, BuildOptions, PluginBuild } from 'esbuild'
 import { build, context } from 'esbuild'
-import { remove } from 'fs-extra'
+import fs from 'fs-extra'
 
 import {
   getApiSideBabelPlugins,
@@ -33,7 +35,7 @@ export const rebuildApi = async () => {
 
 export const cleanApiBuild = async () => {
   const rwjsPaths = getPaths()
-  return remove(rwjsPaths.api.dist)
+  return fs.remove(rwjsPaths.api.dist)
 }
 
 const runRwBabelTransformsPlugin = {
@@ -73,12 +75,17 @@ export const transpileApi = async (files: string[]) => {
 function getEsbuildOptions(files: string[]): BuildOptions {
   const rwjsPaths = getPaths()
 
+  const packageJson = fs.readJsonSync(
+    path.join(rwjsPaths.api.base, 'package.json')
+  )
+  const format = packageJson.type === 'module' ? 'esm' : 'cjs'
+
   return {
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',
     target: 'node20',
-    format: 'cjs',
+    format,
     allowOverwrite: true,
     bundle: false,
     plugins: [runRwBabelTransformsPlugin],

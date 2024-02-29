@@ -89,7 +89,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           return
         }
         path.insertBefore(
-          // import { getAsyncStoreInstance as __rw_getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
+          // import { getAsyncStoreInstance as __rw_getAsyncStoreInstance } from '@redwoodjs/context/dist/store.js'
           t.importDeclaration(
             [
               t.importSpecifier(
@@ -97,7 +97,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                 t.identifier('getAsyncStoreInstance')
               ),
             ],
-            t.stringLiteral('@redwoodjs/context/dist/store')
+            t.stringLiteral('@redwoodjs/context/dist/store.js')
           )
         )
 

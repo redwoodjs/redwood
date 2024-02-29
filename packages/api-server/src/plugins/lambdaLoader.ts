@@ -24,28 +24,25 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
   const tsImport = Date.now()
   console.log(chalk.dim.italic('Importing Server Functions... '))
 
-  const imports = foundFunctions.map((fnPath) => {
-    return new Promise((resolve) => {
-      const ts = Date.now()
-      const routeName = path.basename(fnPath).replace('.js', '')
+  const imports = foundFunctions.map(async (fnPath) => {
+    const ts = Date.now()
+    const routeName = path.basename(fnPath).replace('.js', '')
 
-      const { handler } = require(fnPath)
-      LAMBDA_FUNCTIONS[routeName] = handler
-      if (!handler) {
-        console.warn(
-          routeName,
-          'at',
-          fnPath,
-          'does not have a function called handler defined.'
-        )
-      }
-      // TODO: Use terminal link.
-      console.log(
-        chalk.magenta('/' + routeName),
-        chalk.dim.italic(Date.now() - ts + ' ms')
+    const { handler } = await import(fnPath)
+    LAMBDA_FUNCTIONS[routeName] = handler
+    if (!handler) {
+      console.warn(
+        routeName,
+        'at',
+        fnPath,
+        'does not have a function called handler defined.'
       )
-      return resolve(true)
-    })
+    }
+    // TODO: Use terminal link.
+    console.log(
+      chalk.magenta('/' + routeName),
+      chalk.dim.italic(Date.now() - ts + ' ms')
+    )
   })
 
   Promise.all(imports).then((_results) => {

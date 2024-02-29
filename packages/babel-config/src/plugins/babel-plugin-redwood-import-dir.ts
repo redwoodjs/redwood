@@ -74,7 +74,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                   t.identifier(importName + '_' + fpVarName)
                 ),
               ],
-              t.stringLiteral(filePathWithoutExtension)
+              t.stringLiteral(`${filePathWithoutExtension}.js`)
             )
           )
 
