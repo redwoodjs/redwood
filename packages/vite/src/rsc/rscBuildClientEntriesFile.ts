@@ -17,6 +17,10 @@ export function rscBuildClientEntriesMappings(
   clientEntryFiles: Record<string, string>,
   webDistServerEntries: string
 ) {
+  console.log('\n')
+  console.log('5. rscBuildClientEntriesMapping')
+  console.log('===============================\n')
+
   const clientEntries: Record<string, string> = {}
   for (const item of clientBuildOutput) {
     const { name, fileName } = item

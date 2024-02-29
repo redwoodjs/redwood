@@ -21,12 +21,15 @@ export async function buildForRscServer(
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>
 ) {
-  console.log('Starting RSC worker build...\n')
   const rwPaths = getPaths()
 
   if (!rwPaths.web.entries) {
     throw new Error('RSC entries file not found')
   }
+
+  console.log('\n')
+  console.log('3. rscBuildServer')
+  console.log('=================\n')
 
   const input = {
     entries: rwPaths.web.entries,
@@ -35,7 +38,7 @@ export async function buildForRscServer(
     ...customModules,
   }
 
-  const workerBuildOutput = await viteBuild({
+  const rscServerBuildOutput = await viteBuild({
     envFile: false,
     legacy: {
       // @MARK: for the worker, we're building ESM! (not CJS)
@@ -145,9 +148,9 @@ export async function buildForRscServer(
     },
   })
 
-  if (!('output' in workerBuildOutput)) {
-    throw new Error('Unexpected vite server build output')
+  if (!('output' in rscServerBuildOutput)) {
+    throw new Error('Unexpected rsc server build output')
   }
 
-  return workerBuildOutput.output
+  return rscServerBuildOutput.output
 }

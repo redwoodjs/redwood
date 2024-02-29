@@ -10,6 +10,10 @@ import fs from 'fs/promises'
  */
 // TODO(RSC_DC): See if we can inject into bundle as well
 export async function rscBuildRwEnvVars(webDistServerEntries: string) {
+  console.log('\n')
+  console.log('6. rscBuildRwEnvVars')
+  console.log('====================\n')
+
   await fs.appendFile(
     webDistServerEntries,
     `

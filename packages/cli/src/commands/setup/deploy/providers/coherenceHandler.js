@@ -13,6 +13,7 @@ import {
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { printSetupNotes } from '../../../../lib'
+import { serverFileExists } from '../../../../lib/project'
 import { addFilesTask } from '../helpers'
 
 const redwoodProjectPaths = getPaths()
@@ -106,7 +107,22 @@ async function getCoherenceConfigFileContent() {
     db = 'postgres'
   }
 
-  return coherenceFiles.yamlTemplate(db)
+  const apiProdCommand = ['yarn', 'rw', 'build', 'api', '&&']
+  if (serverFileExists()) {
+    apiProdCommand.push(
+      'yarn',
+      'node',
+      'api/dist/server.js',
+      '--apiRootPath=/api'
+    )
+  } else {
+    apiProdCommand.push('yarn', 'rw', 'serve', 'api', '--apiRootPath=/api')
+  }
+
+  return coherenceFiles.yamlTemplate({
+    db,
+    apiProdCommand: `[${apiProdCommand.map((cmd) => `"${cmd}"`).join(', ')}]`,
+  })
 }
 
 const SUPPORTED_DATABASES = ['mysql', 'postgresql']
@@ -191,13 +207,13 @@ const PORT_REGEXP = /port(\s*)=(\s*)(?<port>\d{4})/g
 // ------------------------
 
 const coherenceFiles = {
-  yamlTemplate(db) {
+  yamlTemplate({ db, apiProdCommand }) {
     return `\
 api:
   type: backend
   url_path: "/api"
   prod:
-    command: ["yarn", "rw", "build", "api", "&&", "yarn", "rw", "serve", "api", "--apiRootPath=/api"]
+    command: ${apiProdCommand}
   dev:
     command: ["yarn", "rw", "build", "api", "&&", "yarn", "rw", "dev", "api", "--apiRootPath=/api"]
   local_packages: ["node_modules"]

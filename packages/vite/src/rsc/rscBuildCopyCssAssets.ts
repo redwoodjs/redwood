@@ -12,6 +12,10 @@ export function rscBuildCopyCssAssets(
   webDist: string,
   webDistServer: string
 ) {
+  console.log('\n')
+  console.log('4. rscBuildCopyCssAssets')
+  console.log('========================\n')
+
   // TODO (RSC) Some css is now duplicated in two files (i.e. for client
   // components). Probably don't want that.
   // Also not sure if this works on "soft" rerenders (i.e. not a full page

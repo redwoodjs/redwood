@@ -16,6 +16,7 @@ export const flightcontrolConfig = {
           buildType: 'nixpacks',
           cpu: 0.5,
           memory: 1,
+          installCommand: 'corepack enable && yarn install',
           buildCommand: 'yarn rw deploy flightcontrol api',
           startCommand: 'yarn rw deploy flightcontrol api --serve',
           port: 8911,
@@ -32,6 +33,7 @@ export const flightcontrolConfig = {
           type: 'static',
           buildType: 'nixpacks',
           singlePageApp: true,
+          installCommand: 'corepack enable && yarn install',
           buildCommand: 'yarn rw deploy flightcontrol web',
           outputDirectory: 'web/dist',
           envVariables: {
