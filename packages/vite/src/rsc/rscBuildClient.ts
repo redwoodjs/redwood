@@ -21,6 +21,10 @@ export async function rscBuildClient(
   webDist: string,
   clientEntryFiles: Record<string, string>
 ) {
+  console.log('\n')
+  console.log('2. rscBuildClient')
+  console.log('=================\n')
+
   const rwPaths = getPaths()
 
   const clientBuildOutput = await viteBuild({
