@@ -1,7 +1,9 @@
 import path from 'node:path'
 
+import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
+import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn'
@@ -86,6 +88,14 @@ export async function buildForRscServer(
       // That's why it needs the `clientEntryFiles` data
       // (It does other things as well, but that's why it needs clientEntryFiles)
       rscTransformPlugin(clientEntryFiles),
+      react({
+        babel: {
+          ...getWebSideDefaultBabelConfig({
+            forVite: true,
+            forRscClient: false,
+          }),
+        },
+      }),
     ],
     build: {
       ssr: true,
