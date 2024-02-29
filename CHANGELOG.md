@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- fix(deploy): handle server file (#10061)
+
+  This fixes the CLI commands for Coherence and Flightcontrol. For Coherence, it fixes a bug introduced in the last patch where the logic for detecting the server file in the setup command (`yarn rw setup deploy coherence`) was flipped. For Flightcontrol, it updates the setup command (`yarn rw setup deploy flightcontrol`) so that it handles Corepack and updates the corresponding deploy command (`yarn rw deploy flightcontrol`) so that it detects the server file similar to the Coherence fix.
+
 - fix(deps): update opentelemetry-js monorepo (#10065)
 
   Updates our opentelemetry packages. This is a breaking change for users of
