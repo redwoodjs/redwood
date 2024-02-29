@@ -25,8 +25,6 @@ export function rscBuildClientEntriesMappings(
   for (const item of clientBuildOutput) {
     const { name, fileName } = item
 
-    // @MARK: Doesn't refer to Vite entry...
-    // this is file that uses one or more of the clientEntries
     const entryFile =
       name &&
       // TODO (RSC) Can't we just compare the names? `item.name === name`
