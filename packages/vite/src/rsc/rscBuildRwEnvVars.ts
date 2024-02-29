@@ -9,6 +9,10 @@ import fs from 'fs/promises'
  * RSC worker we've got set up
  */
 export async function rscBuildRwEnvVars(webDistServerEntries: string) {
+  console.log('\n')
+  console.log('6. rscBuildRwEnvVars')
+  console.log('====================\n')
+
   await fs.appendFile(
     webDistServerEntries,
     `
