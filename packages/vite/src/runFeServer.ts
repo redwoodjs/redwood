@@ -47,6 +47,8 @@ export async function runFeServer() {
   const rwPaths = getPaths()
   const rwConfig = getConfig()
 
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
+
   registerFwGlobals()
 
   try {
@@ -55,7 +57,7 @@ export async function runFeServer() {
     // once RSC is always enabled
     await setClientEntries('load')
   } catch (e) {
-    if (rwConfig.experimental?.rsc?.enabled) {
+    if (rscEnabled) {
       console.error('Failed to load client entries')
       console.error(e)
       process.exit(1)
@@ -68,7 +70,10 @@ export async function runFeServer() {
   ).default
 
   const buildManifestUrl = url.pathToFileURL(
-    path.join(rwPaths.web.dist, 'client-build-manifest.json')
+    path.join(
+      rscEnabled ? rwPaths.web.distClient : rwPaths.web.dist,
+      'client-build-manifest.json'
+    )
   ).href
   const buildManifest: ViteBuildManifest = (
     await import(buildManifestUrl, { with: { type: 'json' } })
