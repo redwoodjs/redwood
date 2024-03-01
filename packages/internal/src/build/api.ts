@@ -1,5 +1,3 @@
-import path from 'path'
-
 import type { BuildContext, BuildOptions, PluginBuild } from 'esbuild'
 import { build, context } from 'esbuild'
 import fs from 'fs-extra'
@@ -8,7 +6,11 @@ import {
   getApiSideBabelPlugins,
   transformWithBabel,
 } from '@redwoodjs/babel-config'
-import { getConfig, getPaths } from '@redwoodjs/project-config'
+import {
+  getConfig,
+  getPaths,
+  projectSideIsEsm,
+} from '@redwoodjs/project-config'
 
 import { findApiFiles } from '../files'
 
@@ -74,11 +76,7 @@ export const transpileApi = async (files: string[]) => {
 
 function getEsbuildOptions(files: string[]): BuildOptions {
   const rwjsPaths = getPaths()
-
-  const packageJson = fs.readJsonSync(
-    path.join(rwjsPaths.api.base, 'package.json')
-  )
-  const format = packageJson.type === 'module' ? 'esm' : 'cjs'
+  const format = projectSideIsEsm('api') ? 'esm' : 'cjs'
 
   return {
     absWorkingDir: rwjsPaths.api.base,

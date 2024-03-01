@@ -6,7 +6,7 @@ import services from 'src/services/**/*.{js,ts}'
 import { getCurrentUser } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
-import { getAsyncStoreInstance as __rw_getAsyncStoreInstance } from '@redwoodjs/context/dist/store.js'
+import { getAsyncStoreInstance as __rw_getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 const __rw_handler = createGraphQLHandler({
   authDecoder,
   getCurrentUser,

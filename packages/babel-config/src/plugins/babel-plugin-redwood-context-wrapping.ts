@@ -64,7 +64,10 @@ function generateWrappedHandler(t: typeof types, isAsync: boolean) {
   )
 }
 
-export default function ({ types: t }: { types: typeof types }): PluginObj {
+export default function (
+  { types: t }: { types: typeof types },
+  { projectIsEsm = false }: { projectIsEsm?: boolean }
+): PluginObj {
   return {
     name: 'babel-plugin-redwood-context-wrapping',
     visitor: {
@@ -89,7 +92,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           return
         }
         path.insertBefore(
-          // import { getAsyncStoreInstance as __rw_getAsyncStoreInstance } from '@redwoodjs/context/dist/store.js'
+          // import { getAsyncStoreInstance as __rw_getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
           t.importDeclaration(
             [
               t.importSpecifier(
@@ -97,7 +100,11 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                 t.identifier('getAsyncStoreInstance')
               ),
             ],
-            t.stringLiteral('@redwoodjs/context/dist/store.js')
+            t.stringLiteral(
+              projectIsEsm
+                ? '@redwoodjs/context/dist/store.js'
+                : '@redwoodjs/context/dist/store'
+            )
           )
         )
 

@@ -21,7 +21,10 @@ import { importStatementPath } from '@redwoodjs/project-config'
  * // services.nested_c = require('src/services/nested/c.js')
  * ```
  */
-export default function ({ types: t }: { types: typeof types }): PluginObj {
+export default function (
+  { types: t }: { types: typeof types },
+  { projectIsEsm = false }: { projectIsEsm?: boolean }
+): PluginObj {
   return {
     name: 'babel-plugin-redwood-import-dir',
     visitor: {
@@ -74,7 +77,11 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                   t.identifier(importName + '_' + fpVarName)
                 ),
               ],
-              t.stringLiteral(`${filePathWithoutExtension}.js`)
+              t.stringLiteral(
+                projectIsEsm
+                  ? `${filePathWithoutExtension}.js`
+                  : filePathWithoutExtension
+              )
             )
           )
 

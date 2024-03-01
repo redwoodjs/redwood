@@ -387,3 +387,37 @@ export const importStatementPath = (path: string) => {
 
   return importPath
 }
+
+// Small collection of ESM helpers.
+
+function packageJsonIsEsm(packageJsonPath: string) {
+  const packageJsonContents = JSON.parse(
+    fs.readFileSync(packageJsonPath, 'utf-8')
+  )
+  return packageJsonContents.type === 'module'
+}
+
+export function projectRootIsEsm() {
+  return packageJsonIsEsm(path.join(getPaths().base, 'package.json'))
+}
+
+export function projectSideIsEsm(side: 'api' | 'web') {
+  const redwoodProjectPaths = getPaths()
+  return packageJsonIsEsm(
+    path.join(redwoodProjectPaths[side].base, 'package.json')
+  )
+}
+
+export function projectIsEsm() {
+  if (!projectRootIsEsm()) {
+    return false
+  }
+
+  for (const side of ['api', 'web'] as const) {
+    if (!projectSideIsEsm(side)) {
+      return false
+    }
+  }
+
+  return true
+}

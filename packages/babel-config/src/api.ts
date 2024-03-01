@@ -5,7 +5,7 @@ import path from 'path'
 import type { PluginOptions, PluginTarget, TransformOptions } from '@babel/core'
 import { transformAsync } from '@babel/core'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getPaths, projectIsEsm } from '@redwoodjs/project-config'
 
 import type { RegisterHookOptions } from './common'
 import {
@@ -74,11 +74,10 @@ type PluginShape =
   | [PluginTarget, PluginOptions, undefined | string]
   | [PluginTarget, PluginOptions]
 
-export const getApiSideBabelPlugins = (
-  { openTelemetry } = {
-    openTelemetry: false,
-  }
-) => {
+export const getApiSideBabelPlugins = ({
+  openTelemetry = false,
+  projectIsEsm = false,
+} = {}) => {
   const tsConfig = parseTypeScriptConfigFiles()
 
   const plugins: Array<PluginShape | boolean> = [
@@ -128,7 +127,9 @@ export const getApiSideBabelPlugins = (
     ['babel-plugin-graphql-tag', undefined, 'rwjs-babel-graphql-tag'],
     [
       require('./plugins/babel-plugin-redwood-import-dir').default,
-      undefined,
+      {
+        projectIsEsm,
+      },
       'rwjs-babel-glob-import-dir',
     ],
     openTelemetry && [
@@ -150,7 +151,7 @@ export const getApiSideBabelConfigPath = () => {
   }
 }
 
-export const getApiSideBabelOverrides = () => {
+export const getApiSideBabelOverrides = ({ projectIsEsm = false } = {}) => {
   const overrides = [
     // Extract graphql options from the graphql function
     // NOTE: this must come before the context wrapping
@@ -167,18 +168,23 @@ export const getApiSideBabelOverrides = () => {
       // match */api/src/functions/*.js|ts
       test: /.+api(?:[\\|/])src(?:[\\|/])functions(?:[\\|/]).+.(?:js|ts)$/,
       plugins: [
-        require('./plugins/babel-plugin-redwood-context-wrapping').default,
+        [
+          require('./plugins/babel-plugin-redwood-context-wrapping').default,
+          {
+            projectIsEsm,
+          },
+        ],
       ],
     },
   ].filter(Boolean)
   return overrides as TransformOptions[]
 }
 
-export const getApiSideDefaultBabelConfig = () => {
+export const getApiSideDefaultBabelConfig = ({ projectIsEsm = false } = {}) => {
   return {
     presets: getApiSideBabelPresets(),
-    plugins: getApiSideBabelPlugins(),
-    overrides: getApiSideBabelOverrides(),
+    plugins: getApiSideBabelPlugins({ projectIsEsm }),
+    overrides: getApiSideBabelOverrides({ projectIsEsm }),
     extends: getApiSideBabelConfigPath(),
     babelrc: false,
     ignore: ['node_modules'],
@@ -190,7 +196,9 @@ export const registerApiSideBabelHook = ({
   plugins = [],
   ...rest
 }: RegisterHookOptions = {}) => {
-  const defaultOptions = getApiSideDefaultBabelConfig()
+  const defaultOptions = getApiSideDefaultBabelConfig({
+    projectIsEsm: projectIsEsm(),
+  })
 
   registerBabel({
     ...defaultOptions,
@@ -209,7 +217,9 @@ export const transformWithBabel = async (
   plugins: TransformOptions['plugins']
 ) => {
   const code = await fs.readFile(srcPath, 'utf-8')
-  const defaultOptions = getApiSideDefaultBabelConfig()
+  const defaultOptions = getApiSideDefaultBabelConfig({
+    projectIsEsm: projectIsEsm(),
+  })
 
   const result = transformAsync(code, {
     ...defaultOptions,
