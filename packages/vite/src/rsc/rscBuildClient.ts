@@ -16,11 +16,7 @@ import { rscIndexPlugin } from './rscVitePlugins'
  * buildFeServer -> buildRscFeServer -> rscBuildClient
  * Generate the client bundle
  */
-export async function rscBuildClient(
-  webHtml: string,
-  webDist: string,
-  clientEntryFiles: Record<string, string>
-) {
+export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
   console.log('\n')
   console.log('2. rscBuildClient')
   console.log('=================\n')
@@ -46,14 +42,14 @@ export async function rscBuildClient(
       rscIndexPlugin(),
     ],
     build: {
-      outDir: webDist,
+      outDir: rwPaths.web.dist,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
       // TODO (RSC) Enable this when we switch to a server-first approach
       // emptyOutDir: false, // Already done when building server
       rollupOptions: {
         onwarn: onWarn,
         input: {
-          main: webHtml,
+          main: rwPaths.web.html,
           ...clientEntryFiles,
         },
         preserveEntrySignatures: 'exports-only',

@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
-import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { getPaths } from '@redwoodjs/project-config'
 
 import { getEnvVarDefinitions } from '../envVarDefinitions'
 import { onWarn } from '../lib/onWarn'
@@ -17,7 +17,6 @@ import { rscTransformPlugin } from './rscVitePlugins'
  * Generate the client bundle
  */
 export async function rscBuildServer(
-  entriesFile: string,
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>
@@ -26,22 +25,18 @@ export async function rscBuildServer(
   console.log('3. rscBuildServer')
   console.log('=================\n')
 
+  const rwPaths = getPaths()
+
+  if (!rwPaths.web.entries) {
+    throw new Error('RSC entries file not found')
+  }
+
   const input = {
-    entries: entriesFile,
+    entries: rwPaths.web.entries,
     ...clientEntryFiles,
     ...serverEntryFiles,
     ...customModules,
   }
-
-  console.log('input', input)
-
-  const rwPaths = getPaths()
-  const rwConfig = getConfig()
-
-  console.log(
-    'rscBuildServer.ts RWJS_EXP_RSC',
-    rwConfig.experimental?.rsc?.enabled
-  )
 
   const serverBuildOutput = await viteBuild({
     // ...configFileConfig,

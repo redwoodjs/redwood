@@ -40,14 +40,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
       throw new Error('RSC entries file not found')
     }
 
-    await buildRscFeServer({
-      viteConfigPath,
-      webHtml: rwPaths.web.html,
-      entries: rwPaths.web.entries,
-      webDist: rwPaths.web.dist,
-      webDistServer: rwPaths.web.distServer,
-      webDistServerEntries: rwPaths.web.distServerEntries,
-    })
+    await buildRscFeServer()
 
     // Write a route manifest
     return await buildRouteManifest()

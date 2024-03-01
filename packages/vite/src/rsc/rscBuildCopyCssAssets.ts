@@ -1,6 +1,8 @@
 import fs from 'fs/promises'
 import path from 'path'
 
+import { getPaths } from '@redwoodjs/project-config'
+
 import type { rscBuildServer } from './rscBuildServer'
 
 /**
@@ -8,13 +10,13 @@ import type { rscBuildServer } from './rscBuildServer'
  * Copy CSS assets from server to client
  */
 export function rscBuildCopyCssAssets(
-  serverBuildOutput: Awaited<ReturnType<typeof rscBuildServer>>,
-  webDist: string,
-  webDistServer: string
+  serverBuildOutput: Awaited<ReturnType<typeof rscBuildServer>>
 ) {
   console.log('\n')
   console.log('4. rscBuildCopyCssAssets')
   console.log('========================\n')
+
+  const rwPaths = getPaths()
 
   // TODO (RSC) Some css is now duplicated in two files (i.e. for client
   // components). Probably don't want that.
@@ -27,8 +29,8 @@ export function rscBuildCopyCssAssets(
       })
       .map((cssAsset) => {
         return fs.copyFile(
-          path.join(webDistServer, cssAsset.fileName),
-          path.join(webDist, cssAsset.fileName)
+          path.join(rwPaths.web.distServer, cssAsset.fileName),
+          path.join(rwPaths.web.dist, cssAsset.fileName)
         )
       })
   )
