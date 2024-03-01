@@ -18,7 +18,7 @@ export async function rscBuildRwEnvVars() {
   const rwPaths = getPaths()
 
   await fs.appendFile(
-    rwPaths.web.distServerEntries,
+    rwPaths.web.distRscEntries,
     `
 
 globalThis.RWJS_API_GRAPHQL_URL = RWJS_ENV.RWJS_API_GRAPHQL_URL

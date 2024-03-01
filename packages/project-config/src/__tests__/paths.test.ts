@@ -165,7 +165,7 @@ describe('paths', () => {
             'server',
             'Document.js'
           ),
-          distServerEntries: path.join(
+          distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
@@ -442,7 +442,7 @@ describe('paths', () => {
           distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
           distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
-          distServerEntries: path.join(
+          distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
@@ -768,7 +768,7 @@ describe('paths', () => {
           distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
           distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
-          distServerEntries: path.join(
+          distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
@@ -1045,7 +1045,7 @@ describe('paths', () => {
           distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
           distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
-          distServerEntries: path.join(
+          distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',

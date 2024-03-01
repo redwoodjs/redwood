@@ -50,7 +50,7 @@ export function rscBuildClientEntriesMappings(
   console.log('clientEntries', clientEntries)
 
   return fs.appendFile(
-    rwPaths.web.distServerEntries,
+    rwPaths.web.distRscEntries,
     `export const clientEntries=${JSON.stringify(clientEntries)};`
   )
 }
