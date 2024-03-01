@@ -45,13 +45,11 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
     )
   })
 
-  Promise.all(imports).then((_results) => {
-    console.log(
-      chalk.dim.italic(
-        '...Done importing in ' + (Date.now() - tsImport) + ' ms'
-      )
-    )
-  })
+  await Promise.all(imports)
+
+  console.log(
+    chalk.dim.italic('...Done importing in ' + (Date.now() - tsImport) + ' ms')
+  )
 }
 
 type LoadFunctionsFromDistOptions = {
