@@ -3101,15 +3101,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/http-proxy@npm:9.3.0":
-  version: 9.3.0
-  resolution: "@fastify/http-proxy@npm:9.3.0"
+"@fastify/http-proxy@npm:9.4.0":
+  version: 9.4.0
+  resolution: "@fastify/http-proxy@npm:9.4.0"
   dependencies:
     "@fastify/reply-from": "npm:^9.0.0"
     fast-querystring: "npm:^1.1.2"
     fastify-plugin: "npm:^4.5.0"
     ws: "npm:^8.4.2"
-  checksum: 10c0/c8f7fe380580f53059f676ca5b2bbdb1eef0a2d3dce28568e8932aeedb992efdc5fc40dae41b6d52f2f0ce14036af182664d0276ea9366e31fd920a119e7a03a
+  checksum: 10c0/d2bb100575622e4544690ae466bb2494362c7ed4bb784be4c275e51169a14214010fba70de8fd99c7d5bab1af5a35748d11317ce78911d9437cdcaa2173fb747
   languageName: node
   linkType: hard
 
@@ -8270,7 +8270,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/fastify-web@workspace:packages/adapters/fastify/web"
   dependencies:
-    "@fastify/http-proxy": "npm:9.3.0"
+    "@fastify/http-proxy": "npm:9.4.0"
     "@fastify/static": "npm:6.12.0"
     "@fastify/url-data": "npm:5.4.0"
     "@redwoodjs/framework-tools": "npm:7.0.0"
