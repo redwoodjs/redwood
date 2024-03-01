@@ -66,7 +66,7 @@ function generateWrappedHandler(t: typeof types, isAsync: boolean) {
 
 export default function (
   { types: t }: { types: typeof types },
-  { projectIsEsm = false }: { projectIsEsm?: boolean }
+  { projectIsEsm = false }: { projectIsEsm?: boolean } = {}
 ): PluginObj {
   return {
     name: 'babel-plugin-redwood-context-wrapping',

@@ -23,7 +23,7 @@ import { importStatementPath } from '@redwoodjs/project-config'
  */
 export default function (
   { types: t }: { types: typeof types },
-  { projectIsEsm = false }: { projectIsEsm?: boolean }
+  { projectIsEsm = false }: { projectIsEsm?: boolean } = {}
 ): PluginObj {
   return {
     name: 'babel-plugin-redwood-import-dir',
