@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/jest-globals'
 
-import { useOgImageUrl, OGIMAGE_DEFAULTS } from '../ogImage'
+import { useOgImage, OGIMAGE_DEFAULTS } from '../ogImage'
 
 const mockLocation = jest.fn()
 
@@ -10,7 +10,7 @@ jest.mock('@redwoodjs/router', () => {
   }
 })
 
-describe('useOgImageUrl', () => {
+describe('useOgImage', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
@@ -22,7 +22,7 @@ describe('useOgImageUrl', () => {
       searchParams: new URLSearchParams(),
     })
 
-    const { url } = useOgImageUrl()
+    const { url } = useOgImage()
 
     expect(url).toBe('http://localhost/user/1.png')
   })
@@ -34,7 +34,7 @@ describe('useOgImageUrl', () => {
       searchParams: new URLSearchParams(),
     })
 
-    const { width } = useOgImageUrl()
+    const { width } = useOgImage()
 
     expect(width).toBe(OGIMAGE_DEFAULTS.width)
   })
@@ -46,9 +46,21 @@ describe('useOgImageUrl', () => {
       searchParams: new URLSearchParams(),
     })
 
-    const { height } = useOgImageUrl()
+    const { height } = useOgImage()
 
     expect(height).toBe(OGIMAGE_DEFAULTS.height)
+  })
+
+  it('returns the default quality of the image', () => {
+    mockLocation.mockReturnValue({
+      origin: 'http://localhost/user/1',
+      pathname: '/user/1',
+      searchParams: new URLSearchParams(),
+    })
+
+    const { quality } = useOgImage()
+
+    expect(quality).toBe(OGIMAGE_DEFAULTS.quality)
   })
 
   it('returns all the props necessary to build the og:image meta tags', () => {
@@ -58,7 +70,7 @@ describe('useOgImageUrl', () => {
       searchParams: new URLSearchParams(),
     })
 
-    const { ogProps } = useOgImageUrl()
+    const { ogProps } = useOgImage()
 
     expect(ogProps).toEqual({
       image: ['http://localhost/user/1.png', { width: 1200, height: 630 }],
@@ -72,7 +84,7 @@ describe('useOgImageUrl', () => {
       searchParams: new URLSearchParams(),
     })
 
-    const { url } = useOgImageUrl()
+    const { url } = useOgImage()
 
     expect(url).toBe('http://localhost/index.png')
   })
@@ -84,7 +96,7 @@ describe('useOgImageUrl', () => {
       searchParams: new URLSearchParams('foo=bar'),
     })
 
-    const { url } = useOgImageUrl()
+    const { url } = useOgImage()
 
     expect(url).toBe('http://localhost/about.png?foo=bar')
   })
@@ -96,7 +108,7 @@ describe('useOgImageUrl', () => {
       searchParams: new URLSearchParams(),
     })
 
-    const { url } = useOgImageUrl({ extension: 'jpg' })
+    const { url } = useOgImage({ extension: 'jpg' })
 
     expect(url).toBe('http://localhost/user/1/edit.jpg')
   })
@@ -108,7 +120,7 @@ describe('useOgImageUrl', () => {
       searchParams: new URLSearchParams(),
     })
 
-    const { url, width, height } = useOgImageUrl({ width: 1000 })
+    const { url, width, height } = useOgImage({ width: 1000 })
 
     expect(url).toBe('http://localhost/user/1.png?width=1000')
     expect(width).toBe(1000)
@@ -122,11 +134,24 @@ describe('useOgImageUrl', () => {
       searchParams: new URLSearchParams(),
     })
 
-    const { url, width, height } = useOgImageUrl({ height: 500 })
+    const { url, width, height } = useOgImage({ height: 500 })
 
     expect(url).toBe('http://localhost/user/1.png?height=500')
     expect(width).toBe(OGIMAGE_DEFAULTS.width)
     expect(height).toBe(500)
+  })
+
+  it('allows setting a custom quality', () => {
+    mockLocation.mockReturnValue({
+      origin: 'http://localhost/user/1',
+      pathname: '/user/1',
+      searchParams: new URLSearchParams(),
+    })
+
+    const { url, quality } = useOgImage({ quality: 50 })
+
+    expect(url).toBe('http://localhost/user/1.png?quality=50')
+    expect(quality).toBe(50)
   })
 
   it('merges existing query variables with custom ones', () => {
@@ -136,16 +161,18 @@ describe('useOgImageUrl', () => {
       searchParams: new URLSearchParams('foo=bar'),
     })
 
-    const { url, width, height } = useOgImageUrl({
-      extension: 'gif',
+    const { url, width, height, quality } = useOgImage({
+      extension: 'png',
       width: 1024,
       height: 768,
+      quality: 75,
     })
 
     expect(url).toBe(
-      'http://localhost/user/1.gif?foo=bar&width=1024&height=768'
+      'http://localhost/user/1.png?foo=bar&width=1024&height=768&quality=75'
     )
     expect(width).toBe(1024)
     expect(height).toBe(768)
+    expect(quality).toBe(75)
   })
 })
