@@ -14,7 +14,7 @@ import { rscAnalyzePlugin } from './rscVitePlugins'
  * Starts building the AST in entries.ts
  * Doesn't output any files, only collects a list of RSCs and RSFs
  */
-export async function rscBuildAnalyze(viteConfigPath: string) {
+export async function rscBuildAnalyze() {
   console.log('\n')
   console.log('1. rscBuildAnalyze')
   console.log('==================\n')
@@ -27,8 +27,12 @@ export async function rscBuildAnalyze(viteConfigPath: string) {
     throw new Error('RSC entries file not found')
   }
 
+  if (!rwPaths.web.viteConfig) {
+    throw new Error('Vite config not found')
+  }
+
   await viteBuild({
-    configFile: viteConfigPath,
+    configFile: rwPaths.web.viteConfig,
     root: rwPaths.base,
     plugins: [
       react(),

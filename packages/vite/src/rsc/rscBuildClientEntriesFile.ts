@@ -1,5 +1,7 @@
 import fs from 'fs/promises'
 
+import { getPaths } from '@redwoodjs/project-config'
+
 import type { rscBuildClient } from './rscBuildClient'
 import type { rscBuildServer } from './rscBuildServer'
 
@@ -11,12 +13,13 @@ import type { rscBuildServer } from './rscBuildServer'
 export function rscBuildClientEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
   serverBuildOutput: Awaited<ReturnType<typeof rscBuildServer>>,
-  clientEntryFiles: Record<string, string>,
-  webDistServerEntries: string
+  clientEntryFiles: Record<string, string>
 ) {
   console.log('\n')
   console.log('5. rscBuildClientEntriesMapping')
   console.log('===============================\n')
+
+  const rwPaths = getPaths()
 
   const clientEntries: Record<string, string> = {}
   for (const item of clientBuildOutput) {
@@ -47,7 +50,7 @@ export function rscBuildClientEntriesMappings(
   console.log('clientEntries', clientEntries)
 
   return fs.appendFile(
-    webDistServerEntries,
+    rwPaths.web.distServerEntries,
     `export const clientEntries=${JSON.stringify(clientEntries)};`
   )
 }
