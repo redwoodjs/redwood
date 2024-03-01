@@ -155,6 +155,7 @@ describe('paths', () => {
             'server',
             'routeHooks'
           ),
+          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
           distDocumentServer: path.join(
             FIXTURE_BASEDIR,
@@ -437,6 +438,7 @@ describe('paths', () => {
             'server',
             'routeHooks'
           ),
+          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
           distServerEntries: path.join(
             FIXTURE_BASEDIR,
@@ -761,6 +763,7 @@ describe('paths', () => {
             'server',
             'routeHooks'
           ),
+          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
           distServerEntries: path.join(
             FIXTURE_BASEDIR,
@@ -1036,6 +1039,7 @@ describe('paths', () => {
             'server',
             'routeHooks'
           ),
+          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
           distServerEntries: path.join(
             FIXTURE_BASEDIR,
