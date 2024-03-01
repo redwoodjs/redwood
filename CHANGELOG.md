@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- fix(deps): update prisma monorepo to v5.10.2 (#10088)
+
+  This release updates Prisma to v5.10.2. Here are quick links to all the release notes since the last version (v5.9.1):
+
+  - https://github.com/prisma/prisma/releases/tag/5.10.0
+  - https://github.com/prisma/prisma/releases/tag/5.10.1
+  - https://github.com/prisma/prisma/releases/tag/5.10.2
+
 - fix(esm): fix initial ESM blockers for Redwood apps (#10083) by @jtoar and @Josh-Walker-GM
 
   This PR makes some initial fixes that were required for making a Redwood app ESM. Redwood apps aren't ready to transition to ESM yet, but we're working towards it and these changes were backwards-compatible.
