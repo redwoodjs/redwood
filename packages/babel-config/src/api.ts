@@ -5,7 +5,7 @@ import path from 'path'
 import type { PluginOptions, PluginTarget, TransformOptions } from '@babel/core'
 import { transformAsync } from '@babel/core'
 
-import { getPaths, projectIsEsm } from '@redwoodjs/project-config'
+import { getPaths, projectSideIsEsm } from '@redwoodjs/project-config'
 
 import type { RegisterHookOptions } from './common'
 import {
@@ -197,7 +197,7 @@ export const registerApiSideBabelHook = ({
   ...rest
 }: RegisterHookOptions = {}) => {
   const defaultOptions = getApiSideDefaultBabelConfig({
-    projectIsEsm: projectIsEsm(),
+    projectIsEsm: projectSideIsEsm('api'),
   })
 
   registerBabel({
@@ -218,7 +218,7 @@ export const transformWithBabel = async (
 ) => {
   const code = await fs.readFile(srcPath, 'utf-8')
   const defaultOptions = getApiSideDefaultBabelConfig({
-    projectIsEsm: projectIsEsm(),
+    projectIsEsm: projectSideIsEsm('api'),
   })
 
   const result = transformAsync(code, {

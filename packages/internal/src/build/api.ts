@@ -55,6 +55,7 @@ const runRwBabelTransformsPlugin = {
           openTelemetry:
             rwjsConfig.experimental.opentelemetry.enabled &&
             rwjsConfig.experimental.opentelemetry.wrapApi,
+          projectIsEsm: projectSideIsEsm('api'),
         })
       )
 
