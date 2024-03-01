@@ -2,16 +2,6 @@
 
 ## Unreleased
 
-- fix(esm): fix initial ESM blockers for Redwood apps (#10083) by @jtoar and @Josh-Walker-GM
-
-  This PR makes some initial fixes that were required for making a Redwood app ESM. Redwood apps aren't ready to transition to ESM yet, but we're working towards it and these changes were backwards-compatible.
-  If you're interested in trying out ESM, there will be an experimental setup command in the future. For now you'd have to make manual changes to your project:
-
-    - dist imports, like `import ... from '@redwoodjs/api/logger'` need to be changed to `import ... from '@redwoodjs/api/logger/index.js'`
-    - The Redwood Vite plugin in `web/vite.config.ts` needs to be changed to `redwood.default` before being invoked
-
-  There are probably many others still depending on your project. Again, we don't recommend actually doing this yet, but are enumerating things just to be transparent about the changes in this release.
-
 - fix(deps): update opentelemetry-js monorepo (#10065)
 
   Updates our opentelemetry packages. This is a breaking change for users of
@@ -61,6 +51,10 @@
   These files are loaded in addition to `.env` and `.env.defaults` and more generally are additive. Subsequent dotfiles won't overwrite environment variables defined previous ones. As such, files loaded via NODE_ENV have lower priority than those loaded specifically via `--include-env-files`.
 
   Note that this feature is mainly for local scripting. Most deploy providers don't let you upload dotfiles and usually have their own way of determining environments.
+
+## v7.0.6
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.6
 
 ## v7.0.5
 
