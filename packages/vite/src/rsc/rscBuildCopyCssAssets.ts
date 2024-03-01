@@ -29,7 +29,8 @@ export function rscBuildCopyCssAssets(
       })
       .map((cssAsset) => {
         return fs.copyFile(
-          path.join(rwPaths.web.distServer, cssAsset.fileName),
+          // TODO (RSC): Should it be distClient here somewhere?
+          path.join(rwPaths.web.distRsc, cssAsset.fileName),
           path.join(rwPaths.web.dist, cssAsset.fileName)
         )
       })

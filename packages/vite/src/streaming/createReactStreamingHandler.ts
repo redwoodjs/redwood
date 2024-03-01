@@ -45,7 +45,7 @@ export const createReactStreamingHandler = async (
     if (getConfig().experimental?.rsc?.enabled) {
       entryServerImport = await import(
         makeFilePath(
-          path.join(rwPaths.web.distServer, 'assets', 'entry.server.js')
+          path.join(rwPaths.web.distRsc, 'assets', 'entry.server.js')
         )
       )
       fallbackDocumentImport = await import(

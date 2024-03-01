@@ -106,7 +106,7 @@ export async function rscBuildServer(
       // TODO (RSC) Change output dir to just dist. We should be "server
       // first". Client components are the "special case" and should be output
       // to dist/client
-      outDir: rwPaths.web.distServer,
+      outDir: rwPaths.web.distRsc,
       manifest: 'server-build-manifest.json',
       rollupOptions: {
         onwarn: onWarn,

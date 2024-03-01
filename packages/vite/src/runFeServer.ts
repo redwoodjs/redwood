@@ -185,7 +185,9 @@ export async function runFeServer() {
       .status(403)
       .end('403 Forbidden: Access to server dist is forbidden')
   })
+  // TODO (RSC): Change to distClient
   app.use(express.static(rwPaths.web.dist, { index: false }))
+  app.use(express.static(rwPaths.web.distRsc, { index: false }))
 
   app.listen(rwConfig.web.port)
   console.log(
