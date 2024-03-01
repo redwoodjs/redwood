@@ -4,7 +4,7 @@
 
 - fix(esm): fix initial ESM blockers for Redwood apps (#10083) by @jtoar and @Josh-Walker-GM
 
-  This PR makes some initial fixes that were required for making a Redwood app ESM. Redwood apps are by no means ready to be ESM, but we're working towards it and these changes were backwards-compatible.
+  This PR makes some initial fixes that were required for making a Redwood app ESM. Redwood apps aren't ready to transition to ESM yet, but we're working towards it and these changes were backwards-compatible.
   If you're interested in trying out ESM, there will be an experimental setup command in the future. For now you'd have to make manual changes to your project:
 
     - dist imports, like `import ... from '@redwoodjs/api/logger'` need to be changed to `import ... from '@redwoodjs/api/logger/index.js'`
