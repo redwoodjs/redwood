@@ -57,7 +57,7 @@ export async function buildRouteManifest() {
   console.log('routeManifest', JSON.stringify(routeManifest, null, 2))
 
   const webRouteManifest = rwPaths.web.routeManifest
-  fs.mkdir(rwPaths.web.distServer, { recursive: true })
+  await fs.mkdir(rwPaths.web.distServer, { recursive: true })
   return fs.writeFile(webRouteManifest, JSON.stringify(routeManifest, null, 2))
 }
 

@@ -132,7 +132,6 @@ const PATH_WEB_DIR_DIST_DOCUMENT = 'web/dist/server/Document.js'
 
 const PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS = 'web/dist/server/routeHooks'
 const PATH_WEB_DIR_DIST_RSC_ENTRIES = 'web/dist/rsc/entries.js'
-// TODO (RSC): Should this be something else?
 const PATH_WEB_DIR_ROUTE_MANIFEST = 'web/dist/server/route-manifest.json'
 
 /**
