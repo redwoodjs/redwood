@@ -28,7 +28,7 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
     const ts = Date.now()
     const routeName = path.basename(fnPath).replace('.js', '')
 
-    const { handler } = await import(fnPath)
+    const { handler } = await import(`file://${fnPath}`)
     LAMBDA_FUNCTIONS[routeName] = handler
     if (!handler) {
       console.warn(
