@@ -240,9 +240,9 @@ describe('upHandler', () => {
 
     vol.fromNestedJSON(
       {
-        'package.json': '{}',
         'redwood.toml': '',
         api: {
+          'package.json': '{}',
           dist: {
             lib: {
               'db.js': '',
