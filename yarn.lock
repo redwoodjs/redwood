@@ -8361,6 +8361,7 @@ __metadata:
     jest: "npm:29.7.0"
     jsonwebtoken: "npm:9.0.2"
     lodash: "npm:4.17.21"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
     uuid: "npm:9.0.1"
   languageName: unknown
