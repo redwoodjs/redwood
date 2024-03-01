@@ -1,28 +1,5 @@
 {
-  "name": "create-redwood-app",
-  "version": "7.0.5",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/create-redwood-app"
-  },
-  "license": "MIT",
-  "type": "module",
   "bin": "./dist/create-redwood-app.js",
-  "files": [
-    "dist",
-    "templates"
-  ],
-  "scripts": {
-    "build": "tsx ./scripts/build.ts",
-    "build:pack": "node ./scripts/buildPack.js",
-    "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
-    "prepublishOnly": "NODE_ENV=production yarn build",
-    "set-up-test-project": "node ./scripts/setUpTestProject.js",
-    "test": "vitest run templates",
-    "test:e2e": "vitest --pool=forks run e2e",
-    "ts-to-js": "yarn node ./scripts/tsToJS.js"
-  },
   "devDependencies": {
     "@babel/core": "^7.22.20",
     "@babel/plugin-transform-typescript": "^7.22.15",
@@ -31,8 +8,8 @@
     "@opentelemetry/resources": "1.21.0",
     "@opentelemetry/sdk-trace-node": "1.21.0",
     "@opentelemetry/semantic-conventions": "1.21.0",
-    "@redwoodjs/framework-tools": "7.0.5",
-    "@redwoodjs/tui": "7.0.5",
+    "@redwoodjs/framework-tools": "7.0.6",
+    "@redwoodjs/tui": "7.0.6",
     "@types/babel__core": "7.20.4",
     "chalk": "4.1.2",
     "check-node-version": "4.2.1",
@@ -51,5 +28,28 @@
     "vitest": "1.2.2",
     "yargs": "17.7.2"
   },
-  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1",
+  "license": "MIT",
+  "name": "create-redwood-app",
+  "repository": {
+    "directory": "packages/create-redwood-app",
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git"
+  },
+  "scripts": {
+    "build": "tsx ./scripts/build.ts",
+    "build:pack": "node ./scripts/buildPack.js",
+    "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "set-up-test-project": "node ./scripts/setUpTestProject.js",
+    "test": "vitest run templates",
+    "test:e2e": "vitest --pool=forks run e2e",
+    "ts-to-js": "yarn node ./scripts/tsToJS.js"
+  },
+  "type": "module",
+  "version": "7.0.6"
 }
