@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- fix(deps): update prisma monorepo to v5.10.2 (#10088)
+
+  This release updates Prisma to v5.10.2. Here are quick links to all the release notes since the last version (v5.9.1):
+
+  - https://github.com/prisma/prisma/releases/tag/5.10.0
+  - https://github.com/prisma/prisma/releases/tag/5.10.1
+  - https://github.com/prisma/prisma/releases/tag/5.10.2
+
 - fix(deps): update opentelemetry-js monorepo (#10065)
 
   Updates our opentelemetry packages. This is a breaking change for users of
