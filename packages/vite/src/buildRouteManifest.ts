@@ -14,7 +14,7 @@ import type { RWRouteManifest } from './types'
  * Generate a route manifest file for the web server side.
  */
 export async function buildRouteManifest() {
-  const rscEnabled = !!getConfig()?.experimental?.rsc
+  const rscEnabled = getConfig()?.experimental?.rsc?.enabled
 
   const rwPaths = getPaths()
 
