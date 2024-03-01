@@ -169,7 +169,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'server',
+            'rsc',
             'entries.js'
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
@@ -446,7 +446,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'server',
+            'rsc',
             'entries.js'
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
@@ -772,7 +772,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'server',
+            'rsc',
             'entries.js'
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
@@ -1049,7 +1049,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'server',
+            'rsc',
             'entries.js'
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
