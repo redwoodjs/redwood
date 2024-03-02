@@ -1,11 +1,10 @@
-import { build as viteBuild } from 'vite'
-
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { buildRouteHooks } from './buildRouteHooks'
 import { buildRouteManifest } from './buildRouteManifest'
 import { buildRscFeServer } from './buildRscFeServer'
+import { buildForStreamingServer } from './streaming/buildForStreamingServer'
 import { ensureProcessDirWeb } from './utils'
 
 export interface BuildOptions {
@@ -19,6 +18,9 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   const rwPaths = getPaths()
   const rwConfig = getConfig()
   const viteConfigPath = rwPaths.web.viteConfig
+
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
+  const streamingSsrEnabled = rwConfig.experimental?.streamingSsr?.enabled
 
   if (!viteConfigPath) {
     throw new Error(
@@ -35,7 +37,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     )
   }
 
-  if (rwConfig.experimental?.rsc?.enabled) {
+  if (rscEnabled) {
     if (!rwPaths.web.entries) {
       throw new Error('RSC entries file not found')
     }
@@ -50,24 +52,14 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     //
   }
 
-  //
-  // SSR Specific code below
-  //
+  // We generate the RSC client bundle in the rscBuildClient function
+  // Streaming and RSC client bundles are **not** the same
+  if (streamingSsrEnabled && !rscEnabled) {
+    console.log('Building client for streaming SSR...\n')
+    await buildWeb({ verbose })
+  }
 
-  // Step 1A: Generate the client bundle
-  await buildWeb({ verbose })
-
-  // Step 1B: Generate the server output
-  await viteBuild({
-    configFile: viteConfigPath,
-    build: {
-      outDir: rwPaths.web.distServer,
-      ssr: true, // use boolean here, instead of string.
-      // rollup inputs are defined in the vite plugin
-    },
-    envFile: false,
-    logLevel: verbose ? 'info' : 'warn',
-  })
+  await buildForStreamingServer({ verbose })
 
   await buildRouteHooks(verbose, rwPaths)
 
