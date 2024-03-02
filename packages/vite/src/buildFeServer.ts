@@ -19,8 +19,8 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   const rwConfig = getConfig()
   const viteConfigPath = rwPaths.web.viteConfig
 
-  const rscBuild = rwConfig.experimental?.rsc?.enabled
-  const streamingBuild = rwConfig.experimental?.streamingSsr?.enabled
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
+  const streamingSsrEnabled = rwConfig.experimental?.streamingSsr?.enabled
 
   if (!viteConfigPath) {
     throw new Error(
@@ -37,7 +37,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     )
   }
 
-  if (rscBuild) {
+  if (rscEnabled) {
     if (!rwPaths.web.entries) {
       throw new Error('RSC entries file not found')
     }
@@ -47,7 +47,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
 
   // We generate the RSC client bundle in the buildRscFeServer function
   // Streaming and RSC client bundles are **not** the same
-  if (streamingBuild && !rscBuild) {
+  if (streamingSsrEnabled && !rscEnabled) {
     console.log('Building client for streaming SSR...\n')
     await buildWeb({ verbose })
   }
