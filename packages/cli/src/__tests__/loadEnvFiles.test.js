@@ -3,9 +3,9 @@ import path from 'path'
 import { afterEach, beforeAll, describe, expect, it, test } from 'vitest'
 
 import {
-  loadBasicEnvFiles,
+  loadDefaultEnvFiles,
   loadNodeEnvDerivedEnvFile,
-  addUserSpecifiedEnvFiles,
+  loadUserSpecifiedEnvFiles,
 } from '../lib/loadEnvFiles'
 
 describe('loadEnvFiles', () => {
@@ -19,18 +19,18 @@ describe('loadEnvFiles', () => {
 
   it("doesn't load .env files if there are none to load", () => {
     const cwd = __dirname
-    loadBasicEnvFiles(cwd)
+    loadDefaultEnvFiles(cwd)
     loadNodeEnvDerivedEnvFile(cwd)
-    addUserSpecifiedEnvFiles(cwd, [])
+    loadUserSpecifiedEnvFiles(cwd, [])
 
     expect(process.env).toEqual(originalProcessEnv)
   })
 
   it("doesn't load .env files if not instructed to", () => {
     const cwd = path.join(__dirname, '__fixtures__/redwood-app-env-prod')
-    loadBasicEnvFiles(cwd)
+    loadDefaultEnvFiles(cwd)
     loadNodeEnvDerivedEnvFile(cwd)
-    addUserSpecifiedEnvFiles(cwd, [])
+    loadUserSpecifiedEnvFiles(cwd, [])
 
     expect(process.env).toEqual(originalProcessEnv)
   })
@@ -39,9 +39,9 @@ describe('loadEnvFiles', () => {
     expect(process.env).not.toHaveProperty('PROD_DATABASE_URL')
 
     const cwd = path.join(__dirname, '__fixtures__/redwood-app-env-prod')
-    loadBasicEnvFiles(cwd)
+    loadDefaultEnvFiles(cwd)
     loadNodeEnvDerivedEnvFile(cwd)
-    addUserSpecifiedEnvFiles(cwd, ['prod'])
+    loadUserSpecifiedEnvFiles(cwd, ['prod'])
 
     expect(process.env).toHaveProperty(
       'PROD_DATABASE_URL',
@@ -58,9 +58,9 @@ describe('loadEnvFiles', () => {
     expect(process.env).not.toHaveProperty('PROD_DATABASE_URL')
 
     const cwd = path.join(__dirname, '__fixtures__/redwood-app-env-many')
-    loadBasicEnvFiles(cwd)
+    loadDefaultEnvFiles(cwd)
     loadNodeEnvDerivedEnvFile(cwd)
-    addUserSpecifiedEnvFiles(cwd, ['dev', 'prod'])
+    loadUserSpecifiedEnvFiles(cwd, ['dev', 'prod'])
 
     expect(process.env).toHaveProperty(
       'DEV_DATABASE_URL',
@@ -78,13 +78,13 @@ describe('loadEnvFiles', () => {
     expect(process.env).not.toHaveProperty('TEST_COLLISION')
 
     const cwd = path.join(__dirname, '__fixtures__/redwood-app-env-collision')
-    loadBasicEnvFiles(cwd)
+    loadDefaultEnvFiles(cwd)
     loadNodeEnvDerivedEnvFile(cwd)
-    addUserSpecifiedEnvFiles(cwd, ['base', 'collision'])
+    loadUserSpecifiedEnvFiles(cwd, ['base', 'collision'])
 
     expect(process.env).toHaveProperty(
       'DATABASE_URL',
-      'postgresql://user:password@localhost:5432/mydb'
+      'postgresql://user:password@localhost:5432/mycollisiondb'
     )
     expect(process.env).toHaveProperty('TEST_BASE', '1')
     expect(process.env).toHaveProperty('TEST_COLLISION', '1')
@@ -96,9 +96,9 @@ describe('loadEnvFiles', () => {
 
     process.env.NODE_ENV = 'bazinga'
     const cwd = path.join(__dirname, '__fixtures__/redwood-app-env-node-env')
-    loadBasicEnvFiles(cwd)
+    loadDefaultEnvFiles(cwd)
     loadNodeEnvDerivedEnvFile(cwd)
-    addUserSpecifiedEnvFiles(cwd, [])
+    loadUserSpecifiedEnvFiles(cwd, [])
 
     expect(process.env).toHaveProperty(
       'PROD_DATABASE_URL',
@@ -113,13 +113,13 @@ describe('loadEnvFiles', () => {
 
     process.env.NODE_ENV = 'bazinga'
     const cwd = path.join(__dirname, '__fixtures__/redwood-app-env-node-env')
-    loadBasicEnvFiles(cwd)
+    loadDefaultEnvFiles(cwd)
     loadNodeEnvDerivedEnvFile(cwd)
-    addUserSpecifiedEnvFiles(cwd, ['prod'])
+    loadUserSpecifiedEnvFiles(cwd, ['prod'])
 
     expect(process.env).toHaveProperty(
       'PROD_DATABASE_URL',
-      'postgresql://user:password@localhost:5432/bazinga'
+      'postgresql://user:password@localhost:5432/myproddb'
     )
     expect(process.env).toHaveProperty('BAZINGA', '1')
   })
@@ -128,9 +128,9 @@ describe('loadEnvFiles', () => {
     const cwd = path.join(__dirname, '__fixtures__/redwood-app-env-node-env')
 
     try {
-      loadBasicEnvFiles(cwd)
+      loadDefaultEnvFiles(cwd)
       loadNodeEnvDerivedEnvFile(cwd)
-      addUserSpecifiedEnvFiles(cwd, ['missing'])
+      loadUserSpecifiedEnvFiles(cwd, ['missing'])
     } catch (error) {
       // Just testing that the error message reports the file it tried to load.
       expect(error.message).toMatch(/\.env\.missing/)

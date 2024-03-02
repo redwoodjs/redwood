@@ -16,14 +16,9 @@ export function loadEnvFiles() {
 
   const { base } = getPaths()
 
-  // These override.
-  loadBasicEnvFiles(base)
+  loadDefaultEnvFiles(base)
   loadNodeEnvDerivedEnvFile(base)
 
-  // These are additive. I.e., They don't override existing env vars.
-  // defined in .env.defaults, .env, or .env.${NODE_ENV}
-  //
-  // Users have to opt-in to loading these files via `--add-env-files`.
   const { addEnvFiles } = Parser(hideBin(process.argv), {
     array: ['add-env-files'],
     default: {
@@ -31,7 +26,7 @@ export function loadEnvFiles() {
     },
   })
   if (addEnvFiles.length > 0) {
-    addUserSpecifiedEnvFiles(base, addEnvFiles)
+    loadUserSpecifiedEnvFiles(base, addEnvFiles)
   }
 
   process.env.REDWOOD_ENV_FILES_LOADED = 'true'
@@ -40,7 +35,7 @@ export function loadEnvFiles() {
 /**
  * @param {string} cwd
  */
-export function loadBasicEnvFiles(cwd) {
+export function loadDefaultEnvFiles(cwd) {
   dotenvDefaultsConfig({
     path: path.join(cwd, '.env'),
     defaults: path.join(cwd, '.env.defaults'),
@@ -70,7 +65,7 @@ export function loadNodeEnvDerivedEnvFile(cwd) {
 /**
  * @param {string} cwd
  */
-export function addUserSpecifiedEnvFiles(cwd, addEnvFiles) {
+export function loadUserSpecifiedEnvFiles(cwd, addEnvFiles) {
   for (const suffix of addEnvFiles) {
     const envPath = path.join(cwd, `.env.${suffix}`)
     if (!fs.pathExistsSync(envPath)) {
@@ -79,6 +74,6 @@ export function addUserSpecifiedEnvFiles(cwd, addEnvFiles) {
       )
     }
 
-    dotenvConfig({ path: envPath })
+    dotenvConfig({ path: envPath, override: true })
   }
 }
