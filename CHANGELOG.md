@@ -37,7 +37,7 @@
         DataDog/import-in-the-middle#57
       * This version does not support Node.js 18.19 or later
 
-- Add support for additional env var files (#9961) and (#TBD)
+- Add support for additional env var files (#9961) and (#10093)
 
   Fixes #9877. This PR adds CLI functionality to load more `.env` files via `NODE_ENV` and an `--add-env-files` flag.
 
