@@ -48,9 +48,9 @@ export interface WebPaths {
   storybookPreviewConfig: string | null
   storybookManagerConfig: string
   dist: string
-  distServer: string
   distClient: string
   distRsc: string
+  distServer: string
   distEntryServer: string
   distDocumentServer: string
   distRouteHooks: string
@@ -126,9 +126,9 @@ const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
 const PATH_WEB_DIR_DIST = 'web/dist'
 
 // Used by Streaming & RSC builds to output to their individual folders
-const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
-const PATH_WEB_DIR_DIST_RSC = 'web/dist/rsc'
 const PATH_WEB_DIR_DIST_CLIENT = 'web/dist/client'
+const PATH_WEB_DIR_DIST_RSC = 'web/dist/rsc'
+const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
 
 // Don't specify extension, handled by resolve file
 const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server'
@@ -253,9 +253,9 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
-      distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
       distClient: path.join(BASE_DIR, PATH_WEB_DIR_DIST_CLIENT),
       distRsc: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC),
+      distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
       // Allow for the possibility of a .mjs file
       distEntryServer: mjsOrJs(
         path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER)
@@ -407,4 +407,38 @@ export const importStatementPath = (path: string) => {
   }
 
   return importPath
+}
+
+// Small collection of ESM helpers.
+
+function packageJsonIsEsm(packageJsonPath: string) {
+  const packageJsonContents = JSON.parse(
+    fs.readFileSync(packageJsonPath, 'utf-8')
+  )
+  return packageJsonContents.type === 'module'
+}
+
+export function projectRootIsEsm() {
+  return packageJsonIsEsm(path.join(getPaths().base, 'package.json'))
+}
+
+export function projectSideIsEsm(side: 'api' | 'web') {
+  const redwoodProjectPaths = getPaths()
+  return packageJsonIsEsm(
+    path.join(redwoodProjectPaths[side].base, 'package.json')
+  )
+}
+
+export function projectIsEsm() {
+  if (!projectRootIsEsm()) {
+    return false
+  }
+
+  for (const side of ['api', 'web'] as const) {
+    if (!projectSideIsEsm(side)) {
+      return false
+    }
+  }
+
+  return true
 }

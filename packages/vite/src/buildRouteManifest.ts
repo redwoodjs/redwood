@@ -14,6 +14,8 @@ import type { RWRouteManifest } from './types'
  * Generate a route manifest file for the web server side.
  */
 export async function buildRouteManifest() {
+  const rwPaths = getPaths()
+
   const buildManifestUrl = url.pathToFileURL(
     path.join(getPaths().web.distClient, 'client-build-manifest.json')
   ).href
@@ -52,7 +54,8 @@ export async function buildRouteManifest() {
 
   console.log('routeManifest', JSON.stringify(routeManifest, null, 2))
 
-  const webRouteManifest = getPaths().web.routeManifest
+  const webRouteManifest = rwPaths.web.routeManifest
+  await fs.mkdir(rwPaths.web.distServer, { recursive: true })
   return fs.writeFile(webRouteManifest, JSON.stringify(routeManifest, null, 2))
 }
 

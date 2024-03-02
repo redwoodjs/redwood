@@ -1,5 +1,7 @@
 import fs from 'fs/promises'
 
+import { getPaths } from '@redwoodjs/project-config'
+
 /**
  * RSC build. Step 6.
  * Make RW specific env vars available to server components.
@@ -9,13 +11,15 @@ import fs from 'fs/promises'
  * RSC worker we've got set up
  */
 // TODO(RSC_DC): See if we can inject into bundle as well
-export async function rscBuildRwEnvVars(webDistServerEntries: string) {
+export async function rscBuildRwEnvVars() {
   console.log('\n')
   console.log('6. rscBuildRwEnvVars')
   console.log('====================\n')
 
+  const rwPaths = getPaths()
+
   await fs.appendFile(
-    webDistServerEntries,
+    rwPaths.web.distRscEntries,
     `
 
 globalThis.RWJS_API_GRAPHQL_URL = RWJS_ENV.RWJS_API_GRAPHQL_URL

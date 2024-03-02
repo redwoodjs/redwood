@@ -242,6 +242,7 @@ describe('upHandler', () => {
       {
         'redwood.toml': '',
         api: {
+          'package.json': '{}',
           dist: {
             lib: {
               'db.js': '',

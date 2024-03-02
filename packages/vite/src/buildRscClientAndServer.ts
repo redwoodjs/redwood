@@ -1,5 +1,3 @@
-import { getPaths } from '@redwoodjs/project-config'
-
 import { buildForRscServer } from './rsc/buildForRscServer'
 import { rscBuildAnalyze } from './rsc/rscBuildAnalyze'
 import { rscBuildClient } from './rsc/rscBuildClient'
@@ -8,7 +6,6 @@ import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets'
 import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars'
 
 export const buildRscClientAndServer = async () => {
-  const rwPaths = getPaths()
   // Analyze all files and generate a list of RSCs and RSFs
   const { clientEntryFiles, serverEntryFiles } = await rscBuildAnalyze()
 
@@ -25,21 +22,16 @@ export const buildRscClientAndServer = async () => {
   // Copy CSS assets from server to client
   // TODO(RSC_DC): Unsure why we're having to do this still.
   // Need to understand the thinking behind this, and how CSS assets get injected
-  await rscBuildCopyCssAssets(
-    serverBuildOutput,
-    rwPaths.web.distClient,
-    rwPaths.web.distRsc
-  )
+  await rscBuildCopyCssAssets(serverBuildOutput)
 
   // Mappings from server to client asset file names
   // Used by the RSC worker
   await rscBuildClientEntriesMappings(
     clientBuildOutput,
     serverBuildOutput,
-    clientEntryFiles,
-    rwPaths.web.distRscEntries
+    clientEntryFiles
   )
 
   // Make RW specific env vars, like RWJS_ENV, available to server components
-  await rscBuildRwEnvVars(rwPaths.web.distRscEntries)
+  await rscBuildRwEnvVars()
 }

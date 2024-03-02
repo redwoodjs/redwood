@@ -46,10 +46,11 @@ export async function runFeServer() {
   const app = express()
   const rwPaths = getPaths()
   const rwConfig = getConfig()
-  const rscBuild = rwConfig.experimental?.rsc?.enabled
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
+
   registerFwGlobals()
 
-  if (rscBuild) {
+  if (rscEnabled) {
     try {
       // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
       await setClientEntries('load')
@@ -81,7 +82,7 @@ export async function runFeServer() {
   // @MARK: Surely there's a better way than this!
   const indexEntry = Object.values(clientBuildManifest).find((manifestItem) => {
     // For RSC builds, we pass in many Vite entries, so we need to find it differently.
-    return rscBuild
+    return rscEnabled
       ? manifestItem.file.includes('rwjs-client-entry-')
       : manifestItem.isEntry
   })
@@ -94,7 +95,7 @@ export async function runFeServer() {
   // For CF workers, we'd need an equivalent of this
   app.use(
     '/assets',
-    express.static(rwPaths.web.dist + '/client/assets', { index: false })
+    express.static(rwPaths.web.distClient + '/assets', { index: false })
   )
 
   // 2. Proxy the api server
@@ -138,7 +139,7 @@ export async function runFeServer() {
       getStylesheetLinks,
     })
 
-    console.log('Attatching streaming handler for route', route.pathDefinition)
+    console.log('Attaching streaming handler for route', route.pathDefinition)
 
     // Wrap with whatg/server adapter. Express handler -> Fetch API handler
     app.get(expressPathDef, createServerAdapter(routeHandler))
