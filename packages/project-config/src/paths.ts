@@ -48,11 +48,13 @@ export interface WebPaths {
   storybookPreviewConfig: string | null
   storybookManagerConfig: string
   dist: string
+  distClient: string
+  distRsc: string
   distServer: string
   distEntryServer: string
   distDocumentServer: string
   distRouteHooks: string
-  distServerEntries: string
+  distRscEntries: string
   routeManifest: string
   types: string
   graphql: string
@@ -122,12 +124,14 @@ const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview' // .js, .tsx
 const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
 const PATH_WEB_DIR_DIST = 'web/dist'
+const PATH_WEB_DIR_DIST_CLIENT = 'web/dist/client'
+const PATH_WEB_DIR_DIST_RSC = 'web/dist/rsc'
 const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
 const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server.js'
 const PATH_WEB_DIR_DIST_DOCUMENT = 'web/dist/server/Document.js'
 
 const PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS = 'web/dist/server/routeHooks'
-const PATH_WEB_DIR_DIST_SERVER_ENTRIES = 'web/dist/server/entries.js'
+const PATH_WEB_DIR_DIST_RSC_ENTRIES = 'web/dist/rsc/entries.js'
 const PATH_WEB_DIR_ROUTE_MANIFEST = 'web/dist/server/route-manifest.json'
 
 /**
@@ -236,6 +240,8 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
+      distClient: path.join(BASE_DIR, PATH_WEB_DIR_DIST_CLIENT),
+      distRsc: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC),
       distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
       distEntryServer: path.join(
         BASE_DIR,
@@ -243,7 +249,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       ),
       distDocumentServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT),
       distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
-      distServerEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ENTRIES),
+      distRscEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC_ENTRIES),
       routeManifest: path.join(BASE_DIR, PATH_WEB_DIR_ROUTE_MANIFEST),
       types: path.join(BASE_DIR, 'web/types'),
       entryClient: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_CLIENT)), // new vite/stream entry point for client

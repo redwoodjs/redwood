@@ -5,7 +5,7 @@ import url from 'node:url'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
-import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
+import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 
 import type { RWRouteManifest } from './types'
 
@@ -14,8 +14,15 @@ import type { RWRouteManifest } from './types'
  * Generate a route manifest file for the web server side.
  */
 export async function buildRouteManifest() {
+  const rscEnabled = getConfig()?.experimental?.rsc?.enabled
+
+  const rwPaths = getPaths()
+
   const buildManifestUrl = url.pathToFileURL(
-    path.join(getPaths().web.dist, 'client-build-manifest.json')
+    path.join(
+      rscEnabled ? rwPaths.web.distClient : rwPaths.web.dist,
+      'client-build-manifest.json'
+    )
   ).href
   const clientBuildManifest: ViteBuildManifest = (
     await import(buildManifestUrl, { with: { type: 'json' } })
@@ -49,7 +56,8 @@ export async function buildRouteManifest() {
 
   console.log('routeManifest', JSON.stringify(routeManifest, null, 2))
 
-  const webRouteManifest = getPaths().web.routeManifest
+  const webRouteManifest = rwPaths.web.routeManifest
+  await fs.mkdir(rwPaths.web.distServer, { recursive: true })
   return fs.writeFile(webRouteManifest, JSON.stringify(routeManifest, null, 2))
 }
 

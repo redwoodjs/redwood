@@ -47,6 +47,8 @@ export async function runFeServer() {
   const rwPaths = getPaths()
   const rwConfig = getConfig()
 
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
+
   registerFwGlobals()
 
   try {
@@ -55,7 +57,7 @@ export async function runFeServer() {
     // once RSC is always enabled
     await setClientEntries('load')
   } catch (e) {
-    if (rwConfig.experimental?.rsc?.enabled) {
+    if (rscEnabled) {
       console.error('Failed to load client entries')
       console.error(e)
       process.exit(1)
@@ -68,7 +70,10 @@ export async function runFeServer() {
   ).default
 
   const buildManifestUrl = url.pathToFileURL(
-    path.join(rwPaths.web.dist, 'client-build-manifest.json')
+    path.join(
+      rscEnabled ? rwPaths.web.distClient : rwPaths.web.dist,
+      'client-build-manifest.json'
+    )
   ).href
   const buildManifest: ViteBuildManifest = (
     await import(buildManifestUrl, { with: { type: 'json' } })
@@ -92,7 +97,10 @@ export async function runFeServer() {
   // For CF workers, we'd need an equivalent of this
   app.use(
     '/assets',
-    express.static(rwPaths.web.dist + '/assets', { index: false })
+    express.static(
+      rscEnabled ? rwPaths.web.distClient : rwPaths.web.dist + '/assets',
+      { index: false }
+    )
   )
 
   // 2. Proxy the api server
@@ -129,7 +137,7 @@ export async function runFeServer() {
       ? route.matchRegexString
       : route.pathDefinition
 
-    if (!getConfig().experimental?.rsc?.enabled) {
+    if (!rscEnabled) {
       const routeHandler = await createReactStreamingHandler({
         route,
         clientEntryPath: clientEntry,
@@ -141,7 +149,7 @@ export async function runFeServer() {
     } else {
       console.log('expressPathDef', expressPathDef)
 
-      // This is for RSC only. And only for now, until we have SSR working we
+      // This is for RSC only. And only for now, until we have SSR working
       // with RSC. This maps /, /about, etc to index.html
       app.get(expressPathDef, (req, res, next) => {
         // Serve index.html for all routes, to let client side routing take
@@ -153,7 +161,7 @@ export async function runFeServer() {
         // before returning to /about
         req.originalUrl = '/'
 
-        return express.static(rwPaths.web.dist)(req, res, next)
+        return express.static(rwPaths.web.distClient)(req, res, next)
       })
     }
   }
@@ -185,7 +193,11 @@ export async function runFeServer() {
       .status(403)
       .end('403 Forbidden: Access to server dist is forbidden')
   })
-  app.use(express.static(rwPaths.web.dist, { index: false }))
+  app.use(
+    express.static(rscEnabled ? rwPaths.web.distClient : rwPaths.web.dist, {
+      index: false,
+    })
+  )
 
   app.listen(rwConfig.web.port)
   console.log(

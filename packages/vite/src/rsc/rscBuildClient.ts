@@ -42,7 +42,7 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
       rscIndexPlugin(),
     ],
     build: {
-      outDir: rwPaths.web.dist,
+      outDir: rwPaths.web.distClient,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
       // TODO (RSC) Enable this when we switch to a server-first approach
       // emptyOutDir: false, // Already done when building server

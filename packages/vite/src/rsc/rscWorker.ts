@@ -172,7 +172,7 @@ type ConfigType = Omit<ResolvedConfig, 'root'> & { root: string }
 const configPromise: Promise<ConfigType> = resolveConfig({}, 'serve')
 
 const getFunctionComponent = async (rscId: string) => {
-  const entriesFile = getPaths().web.distServerEntries
+  const entriesFile = getPaths().web.distRscEntries
   const {
     default: { getEntry },
   } = await (loadServerFile(entriesFile) as Promise<Entries>)
@@ -218,7 +218,7 @@ async function setClientEntries(
     return
   }
   const config = await configPromise
-  const entriesFile = getPaths().web.distServerEntries
+  const entriesFile = getPaths().web.distRscEntries
   console.log('setClientEntries :: entriesFile', entriesFile)
   const { clientEntries } = await loadServerFile(entriesFile)
   console.log('setClientEntries :: clientEntries', clientEntries)
