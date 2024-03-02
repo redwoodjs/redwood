@@ -137,6 +137,7 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
     return mergeConfig(defaultRwViteConfig, userConfig)
   }
 }
+
 /**
  * This function configures how vite (actually Rollup) will bundle.
  *
