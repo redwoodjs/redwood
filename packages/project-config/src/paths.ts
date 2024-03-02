@@ -124,11 +124,15 @@ const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview' // .js, .tsx
 const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
 const PATH_WEB_DIR_DIST = 'web/dist'
+
+// Used by Streaming & RSC builds to output to their individual folders
 const PATH_WEB_DIR_DIST_CLIENT = 'web/dist/client'
 const PATH_WEB_DIR_DIST_RSC = 'web/dist/rsc'
 const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
-const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server.js'
-const PATH_WEB_DIR_DIST_DOCUMENT = 'web/dist/server/Document.js'
+
+// Don't specify extension, handled by resolve file
+const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server'
+const PATH_WEB_DIR_DIST_DOCUMENT = 'web/dist/server/Document'
 
 const PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS = 'web/dist/server/routeHooks'
 const PATH_WEB_DIR_DIST_RSC_ENTRIES = 'web/dist/rsc/entries.js'
@@ -160,6 +164,12 @@ export const resolveFile = (
     }
   }
   return null
+}
+
+/** Default to JS path, but if MJS exists, use it instead */
+const mjsOrJs = (filePath: string) => {
+  const mjsPath = resolveFile(filePath, ['.mjs'])
+  return mjsPath ? mjsPath : filePath + '.js'
 }
 
 /**
@@ -243,11 +253,12 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       distClient: path.join(BASE_DIR, PATH_WEB_DIR_DIST_CLIENT),
       distRsc: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC),
       distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
-      distEntryServer: path.join(
-        BASE_DIR,
-        PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER
+      distEntryServer: mjsOrJs(
+        path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER)
       ),
-      distDocumentServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT),
+      distDocumentServer: mjsOrJs(
+        path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT)
+      ),
       distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
       distRscEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC_ENTRIES),
       routeManifest: path.join(BASE_DIR, PATH_WEB_DIR_ROUTE_MANIFEST),
