@@ -37,28 +37,27 @@
         DataDog/import-in-the-middle#57
       * This version does not support Node.js 18.19 or later
 
-- Add support for additional env var files (#9961)
+- Add support for additional env var files (#9961) and (#10093)
 
-  Fixes #9877. This PR adds a new middleware step to the CLI that looks for an `--include-env-files` flag and includes `.env.[file]` to the list of dotfiles to load. This PR also introduces functionality so that `.env.[file]` files are loaded based on `NODE_ENV`.
+  Fixes #9877. This PR adds CLI functionality to load more `.env` files via `NODE_ENV` and an `--add-env-files` flag.
 
-  Using the `--include-env-files` flag:
-
-  ```bash
-  yarn rw exec myScript --include-env-files prod stripe-prod
-  # Alternatively you can specify the flag twice:
-  yarn rw exec myScript --include-env-files prod --include-env-files stripe-prod
-  ```
-
-  Using `NODE_ENV`:
+  Env vars loaded via `NODE_ENV` override the values in `.env`; if there are conflicts, they win out:
 
   ```
-  # loads .env.production
+  # Loads '.env.production', which overwrites values in '.env'
   NODE_ENV=production yarn rw exec myScript
   ```
 
-  These files are loaded in addition to `.env` and `.env.defaults` and more generally are additive. Subsequent dotfiles won't overwrite environment variables defined previous ones. As such, files loaded via NODE_ENV have lower priority than those loaded specifically via `--include-env-files`.
+  Env vars loaded via `--add-env-files` only add to `process.env`; they will not override anything that was previously there:
 
-  Note that this feature is mainly for local scripting. Most deploy providers don't let you upload dotfiles and usually have their own way of determining environments.
+  ```bash
+  # Add new env vars defined in '.env.stripe' and '.env.nakama'
+  yarn rw exec myScript --add-env-files stripe nakama
+  # Or you can specify the flag twice:
+  yarn rw exec myScript --add-env-files stripe --add-env-files nakama
+  ```
+
+  Note that this feature is mainly for local scripting. Most deploy providers don't let you upload `.env` files (unless you're using baremetal) and usually have their own way of determining environments.
 
 ## v7.0.6
 
