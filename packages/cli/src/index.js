@@ -176,12 +176,13 @@ async function runYargs() {
       describe: 'Working directory to use (where `redwood.toml` is located)',
     })
     .option('add-env-files', {
-      describe: 'Load additional .env files. These are incremental',
+      describe:
+        'Load additional .env files. Values defined in files specified later override earlier ones.',
       array: true,
     })
     .example(
-      'yarn rw exec MigrateUsers --add-env-files prod stripe-prod',
-      '"Run a script, and also include .env.prod and .env.stripe-prod"'
+      'yarn rw exec migrateUsers --add-env-files stripe nakama',
+      "Run a script, also loading env vars from '.env.stripe' and '.env.nakama'"
     )
     .option('telemetry', {
       describe: 'Whether to send anonymous usage telemetry to RedwoodJS',
