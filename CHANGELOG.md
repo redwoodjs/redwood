@@ -100,24 +100,19 @@
         DataDog/import-in-the-middle#57
       * This version does not support Node.js 18.19 or later
 
-- Add support for additional env var files (#9961) and (#10093)
+- Add support for loading more env var files (#9961, #10093, and #10094)
 
   Fixes #9877. This PR adds CLI functionality to load more `.env` files via `NODE_ENV` and an `--add-env-files` flag.
-
-  Env vars loaded via `NODE_ENV` override the values in `.env`; if there are conflicts, they win out:
+  Env vars loaded via either of these methods override the values in `.env`:
 
   ```
-  # Loads '.env.production', which overwrites values in '.env'
+  # Loads '.env.production', which overrides values in '.env'
   NODE_ENV=production yarn rw exec myScript
-  ```
 
-  Env vars loaded via `--add-env-files` only add to `process.env`; they will not override anything that was previously there:
-
-  ```bash
-  # Add new env vars defined in '.env.stripe' and '.env.nakama'
-  yarn rw exec myScript --add-env-files stripe nakama
-  # Or you can specify the flag twice:
+  # Load '.env.stripe' and '.env.nakama', which overrides values
   yarn rw exec myScript --add-env-files stripe --add-env-files nakama
+  # Or you can specify the flag once:
+  yarn rw exec myScript --add-env-files stripe nakama
   ```
 
   Note that this feature is mainly for local scripting. Most deploy providers don't let you upload `.env` files (unless you're using baremetal) and usually have their own way of determining environments.
