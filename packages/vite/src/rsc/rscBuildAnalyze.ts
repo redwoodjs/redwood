@@ -70,6 +70,11 @@ export async function rscBuildAnalyze() {
         input: {
           // TODO (RSC): In the future we want to generate the entries file
           // automatically. Maybe by using `analyzeRoutes()`
+          // For the dev server we might need to generate these entries on the
+          // fly - so we will need something like a plugin or virtual module
+          // to generate these entries, rather than write to actual file.
+          // And so, we might as well use on-the-fly generation for regular
+          // builds too
           entries: rwPaths.web.entries,
         },
       },
