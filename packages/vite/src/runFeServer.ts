@@ -46,18 +46,15 @@ export async function runFeServer() {
   const app = express()
   const rwPaths = getPaths()
   const rwConfig = getConfig()
-
   const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
   registerFwGlobals()
 
-  try {
-    // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
-    // TODO (RSC) Remove the try/catch, or at least the if-statement in there
-    // once RSC is always enabled
-    await setClientEntries('load')
-  } catch (e) {
-    if (rscEnabled) {
+  if (rscEnabled) {
+    try {
+      // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
+      await setClientEntries('load')
+    } catch (e) {
       console.error('Failed to load client entries')
       console.error(e)
       process.exit(1)
