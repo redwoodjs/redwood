@@ -13,17 +13,17 @@ import { rscTransformPlugin } from './rscVitePlugins'
 
 /**
  * RSC build. Step 3.
- * buildFeServer -> buildRscFeServer -> rscBuildClient
- * Generate the client bundle
+ * buildFeServer -> buildRscFeServer -> rscBuildForServer
+ * Generate the output to be used by the rsc worker (not the actual server!)
  */
-export async function rscBuildServer(
+export async function rscBuildForServer(
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>
 ) {
   console.log('\n')
-  console.log('3. rscBuildServer')
-  console.log('=================\n')
+  console.log('3. rscBuildForServer')
+  console.log('====================\n')
 
   const rwPaths = getPaths()
 
@@ -38,7 +38,8 @@ export async function rscBuildServer(
     ...customModules,
   }
 
-  const serverBuildOutput = await viteBuild({
+  // TODO (RSC): No redwood-vite plugin, add it in here
+  const rscServerBuildOutput = await viteBuild({
     // ...configFileConfig,
     root: rwPaths.web.src,
     envPrefix: 'REDWOOD_ENV_',
@@ -103,10 +104,8 @@ export async function rscBuildServer(
     build: {
       ssr: true,
       ssrEmitAssets: true,
-      // TODO (RSC) Change output dir to just dist. We should be "server
-      // first". Client components are the "special case" and should be output
-      // to dist/client
       outDir: rwPaths.web.distRsc,
+      emptyOutDir: true, // Needed because `outDir` is not inside `root`
       manifest: 'server-build-manifest.json',
       rollupOptions: {
         onwarn: onWarn,
@@ -150,9 +149,9 @@ export async function rscBuildServer(
     },
   })
 
-  if (!('output' in serverBuildOutput)) {
+  if (!('output' in rscServerBuildOutput)) {
     throw new Error('Unexpected vite server build output')
   }
 
-  return serverBuildOutput.output
+  return rscServerBuildOutput.output
 }
