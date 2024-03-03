@@ -2,8 +2,8 @@ import fs from 'fs/promises'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { buildForRscServer } from './buildForRscServer'
 import type { rscBuildClient } from './rscBuildClient'
+import type { rscBuildForServer } from './rscBuildForServer'
 
 /**
  * RSC build. Step 5.
@@ -15,7 +15,7 @@ import type { rscBuildClient } from './rscBuildClient'
 // so worth waiting till implementation to swap out and just include the plugin for the prod build
 export function rscBuildClientEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
-  serverBuildOutput: Awaited<ReturnType<typeof buildForRscServer>>,
+  serverBuildOutput: Awaited<ReturnType<typeof rscBuildForServer>>,
   clientEntryFiles: Record<string, string>
 ) {
   console.log('\n')

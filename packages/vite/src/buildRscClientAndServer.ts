@@ -1,8 +1,8 @@
-import { buildForRscServer } from './rsc/buildForRscServer'
 import { rscBuildAnalyze } from './rsc/rscBuildAnalyze'
 import { rscBuildClient } from './rsc/rscBuildClient'
 import { rscBuildClientEntriesMappings } from './rsc/rscBuildClientEntriesFile'
 import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets'
+import { rscBuildForServer } from './rsc/rscBuildForServer'
 import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars'
 
 export const buildRscClientAndServer = async () => {
@@ -13,7 +13,7 @@ export const buildRscClientAndServer = async () => {
   const clientBuildOutput = await rscBuildClient(clientEntryFiles)
 
   // Generate the server output
-  const serverBuildOutput = await buildForRscServer(
+  const serverBuildOutput = await rscBuildForServer(
     clientEntryFiles,
     serverEntryFiles,
     {}
