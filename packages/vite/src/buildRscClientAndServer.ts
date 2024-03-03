@@ -20,8 +20,10 @@ export const buildRscClientAndServer = async () => {
   )
 
   // Copy CSS assets from server to client
-  // TODO(RSC_DC): Unsure why we're having to do this still.
-  // Need to understand the thinking behind this, and how CSS assets get injected
+  //
+  // TODO (RSC): We need to better understand how this work and how it can be
+  // improved.
+  // Can we do this more similar to how it's done for streaming?
   await rscBuildCopyCssAssets(serverBuildOutput)
 
   // Mappings from server to client asset file names
