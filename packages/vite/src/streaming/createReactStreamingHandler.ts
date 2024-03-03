@@ -41,7 +41,6 @@ export const createReactStreamingHandler = async (
   let fallbackDocumentImport: any
 
   if (isProd) {
-    // TODO (RSC) Consolidate paths, so we can have the same code for SSR and RSC
     entryServerImport = await import(makeFilePath(rwPaths.web.distEntryServer))
     fallbackDocumentImport = await import(
       makeFilePath(rwPaths.web.distDocumentServer)
