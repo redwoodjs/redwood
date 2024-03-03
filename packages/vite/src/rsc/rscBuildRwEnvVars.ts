@@ -10,7 +10,6 @@ import { getPaths } from '@redwoodjs/project-config'
  * The import of entries.js that we're adding this to is handled by the
  * RSC worker we've got set up
  */
-// TODO(RSC_DC): See if we can inject into bundle as well
 export async function rscBuildRwEnvVars() {
   console.log('\n')
   console.log('6. rscBuildRwEnvVars')
