@@ -8,7 +8,8 @@ import type { rscBuildForServer } from './rscBuildForServer'
 /**
  * RSC build. Step 5.
  * Append a mapping of server asset names to client asset names to the
- * `web/dist/server/entries.js` file.
+ * `web/dist/rsc/entries.js` file.
+ * Only used by the RSC worker.
  */
 export function rscBuildClientEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
@@ -36,10 +37,10 @@ export function rscBuildClientEntriesMappings(
     if (entryFile) {
       console.log('entryFile', entryFile)
       if (process.platform === 'win32') {
-        const entryFileSlash = entryFile.replaceAll('\\', '/')
-        console.log('entryFileSlash', entryFileSlash)
         // Prevent errors on Windows like
         // Error: No client entry found for D:/a/redwood/rsc-project/web/dist/server/assets/rsc0.js
+        const entryFileSlash = entryFile.replaceAll('\\', '/')
+        console.log('entryFileSlash', entryFileSlash)
         clientEntries[entryFileSlash] = fileName
       } else {
         clientEntries[entryFile] = fileName

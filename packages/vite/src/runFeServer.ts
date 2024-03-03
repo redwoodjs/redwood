@@ -69,28 +69,30 @@ export async function runFeServer() {
     await import(routeManifestUrl, { with: { type: 'json' } })
   ).default
 
-  const buildManifestUrl = url.pathToFileURL(
+  const clientBuildManifestUrl = url.pathToFileURL(
     path.join(
       rscEnabled ? rwPaths.web.distClient : rwPaths.web.dist,
       'client-build-manifest.json'
     )
   ).href
-  const buildManifest: ViteBuildManifest = (
-    await import(buildManifestUrl, { with: { type: 'json' } })
+  const clientBuildManifest: ViteBuildManifest = (
+    await import(clientBuildManifestUrl, { with: { type: 'json' } })
   ).default
 
   if (rwConfig.experimental?.rsc?.enabled) {
     console.log('='.repeat(80))
-    console.log('buildManifest', buildManifest)
+    console.log('buildManifest', clientBuildManifest)
     console.log('='.repeat(80))
   }
 
-  const indexEntry = Object.values(buildManifest).find((manifestItem) => {
-    return manifestItem.isEntry
-  })
+  const clientEntry = Object.values(clientBuildManifest).find(
+    (manifestItem) => {
+      return manifestItem.isEntry
+    }
+  )
 
-  if (!indexEntry) {
-    throw new Error('Could not find index.html in build manifest')
+  if (!clientEntry) {
+    throw new Error('Could not find client entry in build manifest')
   }
 
   // 1. Use static handler for assets
@@ -122,8 +124,8 @@ export async function runFeServer() {
     })
   )
 
-  const getStylesheetLinks = () => indexEntry.css || []
-  const clientEntry = '/' + indexEntry.file
+  const getStylesheetLinks = () => clientEntry.css || []
+  const clientEntryPath = '/' + clientEntry.file
 
   for (const route of Object.values(routeManifest)) {
     // if it is a 404, register it at the end somehow.
@@ -140,7 +142,7 @@ export async function runFeServer() {
     if (!rscEnabled) {
       const routeHandler = await createReactStreamingHandler({
         route,
-        clientEntryPath: clientEntry,
+        clientEntryPath,
         getStylesheetLinks,
       })
 

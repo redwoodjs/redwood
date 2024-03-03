@@ -150,7 +150,7 @@ export async function rscBuildForServer(
   })
 
   if (!('output' in rscServerBuildOutput)) {
-    throw new Error('Unexpected vite server build output')
+    throw new Error('Unexpected rsc server build output')
   }
 
   return rscServerBuildOutput.output
