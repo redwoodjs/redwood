@@ -28,8 +28,9 @@ import type {
   MessageReq,
 } from './rscWorkerCommunication'
 
-// TODO(RSC_DC): Use the sekret renderToReadableStream one so that we can
-// respond with web streams
+// TODO (RSC): We should look into importing renderToReadableStream from
+// 'react-server-dom-webpack/server.browser' so that we can respond with web
+// streams
 const { renderToPipeableStream } = RSDWServer
 
 type Entries = { default: ReturnType<typeof defineEntries> }
@@ -146,7 +147,8 @@ const shutdown = async () => {
 
 const loadServerFile = async (fname: string) => {
   const vite = await vitePromise
-  // TODO(RSC): in prod we need to switch to import
+  // TODO (RSC): In prod we shouldn't need this. We should be able to just
+  // import the built files
   return vite.ssrLoadModule(fname)
 }
 
@@ -220,8 +222,10 @@ async function setClientEntries(
     absoluteClientEntries = value
     return
   }
-  // Vite config
+
+  // This is the Vite config
   const config = await configPromise
+
   const entriesFile = getPaths().web.distRscEntries
   console.log('setClientEntries :: entriesFile', entriesFile)
   const { clientEntries } = await loadServerFile(entriesFile)
@@ -231,7 +235,7 @@ async function setClientEntries(
   }
   const baseDir = path.dirname(entriesFile)
 
-  // Convert it to absolute paths
+  // Convert to absolute paths
   absoluteClientEntries = Object.fromEntries(
     Object.entries(clientEntries).map(([key, val]) => {
       let fullKey = path.join(baseDir, key)
@@ -276,7 +280,9 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
   console.log('config.root', config.root)
   console.log('rwPaths.base', rwPaths.base)
 
-  // TODO(RSC_DC): Why proxy? Remove this and see what breaks.
+  // TODO (RSC): Try removing the proxy here and see if it's really necessary.
+  // Looks like it'd work to just have a regular object with a getter.
+  // Remove the proxy and see what breaks.
   const bundlerConfig = new Proxy(
     {},
     {

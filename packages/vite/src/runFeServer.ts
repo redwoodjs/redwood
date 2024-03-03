@@ -66,11 +66,14 @@ export async function runFeServer() {
     await import(routeManifestUrl, { with: { type: 'json' } })
   ).default
 
-  const buildManifestUrl = url.pathToFileURL(
-    path.join(rwPaths.web.distClient, 'client-build-manifest.json')
+  const clientBuildManifestUrl = url.pathToFileURL(
+    path.join(
+      rscEnabled ? rwPaths.web.distClient : rwPaths.web.dist,
+      'client-build-manifest.json'
+    )
   ).href
   const clientBuildManifest: ViteBuildManifest = (
-    await import(buildManifestUrl, { with: { type: 'json' } })
+    await import(clientBuildManifestUrl, { with: { type: 'json' } })
   ).default
 
   if (rwConfig.experimental?.rsc?.enabled) {
@@ -80,14 +83,16 @@ export async function runFeServer() {
   }
 
   // @MARK: Surely there's a better way than this!
-  const indexEntry = Object.values(clientBuildManifest).find((manifestItem) => {
-    // For RSC builds, we pass in many Vite entries, so we need to find it differently.
-    return rscEnabled
-      ? manifestItem.file.includes('rwjs-client-entry-')
-      : manifestItem.isEntry
-  })
+  const clientEntry = Object.values(clientBuildManifest).find(
+    (manifestItem) => {
+      // For RSC builds, we pass in many Vite entries, so we need to find it differently.
+      return rscEnabled
+        ? manifestItem.file.includes('rwjs-client-entry-')
+        : manifestItem.isEntry
+    }
+  )
 
-  if (!indexEntry) {
+  if (!clientEntry) {
     throw new Error('Could not find client entry in build manifest')
   }
 
@@ -117,8 +122,8 @@ export async function runFeServer() {
     })
   )
 
-  const getStylesheetLinks = () => indexEntry.css || []
-  const clientEntry = '/' + indexEntry.file
+  const getStylesheetLinks = () => clientEntry.css || []
+  const clientEntryPath = '/' + clientEntry.file
 
   for (const route of Object.values(routeManifest)) {
     // if it is a 404, register it at the end somehow.
@@ -135,7 +140,7 @@ export async function runFeServer() {
     // TODO(RSC_DC): RSC is rendering blank page, try using this function for initial render
     const routeHandler = await createReactStreamingHandler({
       route,
-      clientEntryPath: clientEntry,
+      clientEntryPath,
       getStylesheetLinks,
     })
 

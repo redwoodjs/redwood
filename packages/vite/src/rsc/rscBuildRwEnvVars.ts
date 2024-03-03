@@ -30,6 +30,9 @@ globalThis.RWJS_EXP_RSC = RWJS_ENV.RWJS_EXP_RSC
 `
   )
 
+  // TODO (RSC): See if we can inject the code above into the server bundle
+  // while building, instead of having to do it as a manual step after
+
   // TODO (RSC): See if we can just import that config.ts file from
   // @redwoodjs/web/dist/config here
   // Or find some other way to not duplicate the definitions

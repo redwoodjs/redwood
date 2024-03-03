@@ -8,7 +8,8 @@ import type { rscBuildForServer } from './rscBuildForServer'
 /**
  * RSC build. Step 5.
  * Append a mapping of server asset names to client asset names to the
- * `web/dist/rsc/entries.js` file. Only used by the RSC worker.
+ * `web/dist/rsc/entries.js` file.
+ * Only used by the RSC worker.
  */
 // TODO(RSC_DC): This function should eventually be removed.
 // The dev server will need this implemented as a Vite plugin,
