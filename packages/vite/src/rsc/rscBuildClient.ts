@@ -50,6 +50,9 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
         onwarn: onWarn,
         input: {
           main: rwPaths.web.html,
+          // we need this, so that the output contains rsc-specific bundles
+          // for the client-only components. They get loaded once the page is
+          // rendered
           ...clientEntryFiles,
         },
         preserveEntrySignatures: 'exports-only',
