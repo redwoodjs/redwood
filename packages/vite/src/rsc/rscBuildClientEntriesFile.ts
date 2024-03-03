@@ -3,7 +3,7 @@ import fs from 'fs/promises'
 import { getPaths } from '@redwoodjs/project-config'
 
 import type { rscBuildClient } from './rscBuildClient'
-import type { rscBuildServer } from './rscBuildForServer'
+import type { rscBuildForServer } from './rscBuildForServer'
 
 /**
  * RSC build. Step 5.
@@ -12,7 +12,7 @@ import type { rscBuildServer } from './rscBuildForServer'
  */
 export function rscBuildClientEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
-  serverBuildOutput: Awaited<ReturnType<typeof rscBuildServer>>,
+  serverBuildOutput: Awaited<ReturnType<typeof rscBuildForServer>>,
   clientEntryFiles: Record<string, string>
 ) {
   console.log('\n')
