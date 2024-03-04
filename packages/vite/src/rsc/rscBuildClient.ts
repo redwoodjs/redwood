@@ -6,7 +6,7 @@ import { build as viteBuild } from 'vite'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
-import { getEnvVarDefinitions } from '../envVarDefinitions'
+import { getEnvVarDefinitions } from '../lib/envVarDefinitions'
 import { onWarn } from '../lib/onWarn'
 import { ensureProcessDirWeb } from '../utils'
 
