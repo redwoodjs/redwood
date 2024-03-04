@@ -128,7 +128,8 @@ async function main() {
       recordTelemetryAttributes({ command: '--help' })
     }
 
-    // @TODO: BIG RED BOX > FIX MEEEEEEE
+    // @FIXME: BIG RED BOX on exiting feServer
+    // I think yargs OR the RW cli is not passing SigInt to the child process
     try {
       // Run the command via yargs
       await runYargs()

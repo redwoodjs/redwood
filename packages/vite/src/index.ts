@@ -148,10 +148,6 @@ export default function redwoodPluginVite(): PluginOption[] {
       babel: {
         ...getWebSideDefaultBabelConfig({
           forVite: true,
-          // @MARK: Potential issue in the future. We don't want to set react plugins in each build file
-          // because we should be able to trigger the builds from the vite CLI directly.
-          // Right now, we can compile to SPA+SSR OR RSCClient+SSR+RSC - once this experimental flag is removed
-          // we will need to make sure SPA+SSR is still possible
           forRscClient: rwConfig.experimental.rsc?.enabled,
         }),
       },
