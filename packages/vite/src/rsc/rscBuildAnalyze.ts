@@ -36,7 +36,7 @@ export async function rscBuildAnalyze() {
   // the build for something.
   await viteBuild({
     configFile: rwPaths.web.viteConfig,
-    root: rwPaths.base,
+    root: rwPaths.web.src,
     // @MARK: We don't care about the build output from this step. It's just
     // for returning the entry names. Plus, the entire RSC build is chatty
     // enough as it is. You can enable this temporarily if you need to for
