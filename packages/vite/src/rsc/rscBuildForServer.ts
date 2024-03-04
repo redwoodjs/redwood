@@ -1,12 +1,9 @@
 import path from 'node:path'
 
-import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
-import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
-import { getEnvVarDefinitions } from '../lib/envVarDefinitions'
 import { onWarn } from '../lib/onWarn'
 
 import { rscTransformPlugin } from './rscVitePlugins'
@@ -40,12 +37,11 @@ export async function rscBuildForServer(
 
   // TODO (RSC): No redwood-vite plugin, add it in here
   const rscServerBuildOutput = await viteBuild({
-    // ...configFileConfig,
-    root: rwPaths.web.src,
-    envPrefix: 'REDWOOD_ENV_',
-    publicDir: path.join(rwPaths.web.base, 'public'),
     envFile: false,
-    define: getEnvVarDefinitions(),
+    legacy: {
+      // @MARK: for the worker, we're building ESM! (not CJS)
+      buildSsrCjsExternalHeuristics: false,
+    },
     ssr: {
       // Externalize everything except packages with files that have
       // 'use client' in them (which are the files in `clientEntryFiles`)
@@ -86,13 +82,6 @@ export async function rscBuildForServer(
       },
     },
     plugins: [
-      react({
-        babel: {
-          ...getWebSideDefaultBabelConfig({
-            forVite: true,
-          }),
-        },
-      }),
       // The rscTransformPlugin maps paths like
       // /Users/tobbe/.../rw-app/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
       // to

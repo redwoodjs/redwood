@@ -5,7 +5,7 @@ import url from 'node:url'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
-import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
+import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
 
 import type { RWRouteManifest } from './types'
 
@@ -14,15 +14,10 @@ import type { RWRouteManifest } from './types'
  * Generate a route manifest file for the web server side.
  */
 export async function buildRouteManifest() {
-  const rscEnabled = getConfig()?.experimental?.rsc?.enabled
-
   const rwPaths = getPaths()
 
   const buildManifestUrl = url.pathToFileURL(
-    path.join(
-      rscEnabled ? rwPaths.web.distClient : rwPaths.web.dist,
-      'client-build-manifest.json'
-    )
+    path.join(getPaths().web.distClient, 'client-build-manifest.json')
   ).href
   const clientBuildManifest: ViteBuildManifest = (
     await import(buildManifestUrl, { with: { type: 'json' } })
@@ -34,7 +29,10 @@ export async function buildRouteManifest() {
     acc[route.pathDefinition] = {
       name: route.name,
       bundle: route.relativeFilePath
-        ? clientBuildManifest[route.relativeFilePath]?.file ?? null
+        ? // @TODO(RSC_DC): this no longer resolves to anything i.e. its always null
+          // Because the clientBuildManifest has no pages, because all pages are Server-components?
+          // This may be a non-issue, because RSC pages don't need a client bundle per page (or atleast not the same bundle)
+          clientBuildManifest[route.relativeFilePath]?.file ?? null
         : null,
       matchRegexString: route.matchRegexString,
       // NOTE this is the path definition, not the actual path

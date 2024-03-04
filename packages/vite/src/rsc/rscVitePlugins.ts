@@ -6,24 +6,6 @@ import type { Plugin } from 'vite'
 import * as RSDWNodeLoader from '../react-server-dom-webpack/node-loader'
 import type { ResolveFunction } from '../react-server-dom-webpack/node-loader'
 
-import { rscWebpackShims } from './rscWebpackShims'
-
-// Used in Step 2 of the build process, for the client bundle
-export function rscIndexPlugin(): Plugin {
-  return {
-    name: 'rsc-index-plugin',
-    async transformIndexHtml() {
-      return [
-        {
-          tag: 'script',
-          children: rscWebpackShims,
-          injectTo: 'body',
-        },
-      ]
-    },
-  }
-}
-
 export function rscTransformPlugin(
   clientEntryFiles: Record<string, string>
 ): Plugin {

@@ -8,7 +8,7 @@ import { normalizePath } from 'vite'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { getDefaultViteConfig } from './lib/getDefaultViteConfig'
+import { getMergedConfig } from './lib/getMergedConfig'
 import handleJsAsJsx from './plugins/vite-plugin-jsx-loader'
 import removeFromBundle from './plugins/vite-plugin-remove-from-bundle'
 import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider'
@@ -125,7 +125,9 @@ export default function redwoodPluginVite(): PluginOption[] {
       },
       // ---------- End Bundle injection ----------
 
-      config: getDefaultViteConfig(rwConfig, rwPaths),
+      // @MARK: Using the config hook here let's us modify the config
+      // but returning plugins will **not** work
+      config: getMergedConfig(rwConfig, rwPaths),
     },
     // We can remove when streaming is stable
     rwConfig.experimental.streamingSsr.enabled && swapApolloProvider(),
@@ -146,6 +148,7 @@ export default function redwoodPluginVite(): PluginOption[] {
       babel: {
         ...getWebSideDefaultBabelConfig({
           forVite: true,
+          forRscClient: rwConfig.experimental.rsc?.enabled,
         }),
       },
     }),

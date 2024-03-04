@@ -43,9 +43,6 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     }
 
     await buildRscClientAndServer()
-
-    // Write a route manifest
-    return await buildRouteManifest()
   }
 
   // We generate the RSC client bundle in the rscBuildClient function

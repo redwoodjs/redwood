@@ -2,18 +2,28 @@ import path from 'node:path'
 
 import type { InputOption } from 'rollup'
 import type { ConfigEnv, UserConfig } from 'vite'
+import { mergeConfig } from 'vite'
 
 import type { Config, Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { getEnvVarDefinitions } from './envVarDefinitions'
 
-export function getDefaultViteConfig(rwConfig: Config, rwPaths: Paths) {
-  return (options: UserConfig, env: ConfigEnv): UserConfig => {
+/**
+ * This function will merge in the default Redwood Vite config passed into the
+ * build function (or in Vite.config.xxx)
+ *
+ * Note that returning plugins in this function will have no effect on the
+ * build
+ */
+export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
+  return (userConfig: UserConfig, env: ConfigEnv): UserConfig => {
     let apiHost = process.env.REDWOOD_API_HOST
     apiHost ??= rwConfig.api.host
     apiHost ??= process.env.NODE_ENV === 'production' ? '0.0.0.0' : '[::]'
 
+    const streamingSsrEnabled = rwConfig.experimental.streamingSsr?.enabled
+    // @MARK: note that most RSC settings sit in their individual build functions
     const rscEnabled = rwConfig.experimental.rsc?.enabled
 
     let apiPort
@@ -101,7 +111,12 @@ export function getDefaultViteConfig(rwConfig: Config, rwPaths: Paths) {
         },
       },
       build: {
-        outDir: options.build?.outDir || rwPaths.web.dist,
+        // NOTE this gets overridden when build gets called anyway!
+        outDir:
+          // @MARK: For RSC and Streaming, we build to dist/client directory
+          streamingSsrEnabled || rscEnabled
+            ? rwPaths.web.distClient
+            : rwPaths.web.dist,
         emptyOutDir: true,
         manifest: !env.ssrBuild ? 'client-build-manifest.json' : undefined,
         // Note that sourcemap can be boolean or 'inline'
@@ -110,9 +125,8 @@ export function getDefaultViteConfig(rwConfig: Config, rwPaths: Paths) {
           input: getRollupInput(!!env.ssrBuild),
         },
       },
-      legacy: {
-        buildSsrCjsExternalHeuristics: rscEnabled ? false : env.ssrBuild,
-      },
+      // @MARK: do not set buildSsrCjsExternalHeuristics here
+      // because rsc builds want false, client and server build wants true
       optimizeDeps: {
         esbuildOptions: {
           // @MARK this is because JS projects in Redwood don't have .jsx
@@ -130,7 +144,7 @@ export function getDefaultViteConfig(rwConfig: Config, rwPaths: Paths) {
       },
     }
 
-    return defaultRwViteConfig
+    return mergeConfig(defaultRwViteConfig, userConfig)
   }
 }
 

@@ -11,6 +11,9 @@ import type { rscBuildForServer } from './rscBuildForServer'
  * `web/dist/rsc/entries.js` file.
  * Only used by the RSC worker.
  */
+// TODO(RSC_DC): This function should eventually be removed.
+// The dev server will need this implemented as a Vite plugin,
+// so worth waiting till implementation to swap out and just include the plugin for the prod build
 export function rscBuildClientEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
   serverBuildOutput: Awaited<ReturnType<typeof rscBuildForServer>>,
@@ -25,6 +28,7 @@ export function rscBuildClientEntriesMappings(
   const clientEntries: Record<string, string> = {}
   for (const item of clientBuildOutput) {
     const { name, fileName } = item
+
     const entryFile =
       name &&
       // TODO (RSC) Can't we just compare the names? `item.name === name`
