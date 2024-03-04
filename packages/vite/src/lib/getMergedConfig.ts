@@ -35,9 +35,15 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
 
     const defaultRwViteConfig: UserConfig = {
       root: rwPaths.web.src,
-      // @MARK: when we have these aliases, the warnings from the FE server go away
-      // BUT, if you have imports like this: import RandomNumberServerCell from 'src/components/RandomNumberServerCell/RandomNumberServerCell'
-      // they start failing
+      // @MARK: when we have these aliases, the warnings from the FE server go
+      // away BUT, if you have imports like this:
+      // ```
+      // import RandomNumberServerCell from
+      //   'src/components/RandomNumberServerCell/RandomNumberServerCell'
+      // ```
+      // they start failing (can't have the double
+      // `/RandomNumberServerCell/RandomNumberServerCell` at the end)
+      //
       // resolve: {
       //   alias: [
       //     {
@@ -137,6 +143,7 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
         },
       },
     }
+
     return mergeConfig(defaultRwViteConfig, userConfig)
   }
 }
@@ -147,9 +154,9 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
  * By default, the entry point is the index.html file - even if you don't
  * specify it in RollupOptions
  *
- * With streaming SSR, out entrypoint is different - either entry.client.tsx
- * or entry.server.tsx and the html file is not used at all, because it is
- * defined in Document.tsx
+ * With streaming SSR, out entrypoint is different - either entry.client.tsx or
+ * entry.server.tsx and the html file is not used at all, because it is defined
+ * in Document.tsx
  *
  * @param ssr {boolean} Whether to return the SSR inputs or not
  * @returns Rollup input Options
