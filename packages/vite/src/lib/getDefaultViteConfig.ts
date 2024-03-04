@@ -47,7 +47,7 @@ export function getDefaultViteConfig(rwConfig: Config, rwPaths: Paths) {
       define: getEnvVarDefinitions(),
       css: {
         // @NOTE config path is relative to where vite.config.js is if you use
-        // relative path
+        // a relative path
         postcss: rwPaths.web.config,
       },
       server: {
