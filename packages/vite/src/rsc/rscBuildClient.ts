@@ -17,6 +17,11 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
 
   const rwPaths = getPaths()
 
+  // Safe-guard for the future, if someone tries to include this function in
+  // code that gets executed by running `vite build` or some other bin from the
+  // cli
+  // Running the web build in the wrong working directory can lead to
+  // unintended consequences on CSS processing
   ensureProcessDirWeb()
 
   if (!rwPaths.web.entryClient) {
