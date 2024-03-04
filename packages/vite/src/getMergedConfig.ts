@@ -35,14 +35,17 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
 
     const defaultRwViteConfig: UserConfig = {
       root: rwPaths.web.src,
-      resolve: {
-        alias: [
-          {
-            find: 'src',
-            replacement: rwPaths.web.src,
-          },
-        ],
-      },
+      // @MARK: when we have these aliases, the warnings from the FE server go away
+      // BUT, if you have imports like this: import RandomNumberServerCell from 'src/components/RandomNumberServerCell/RandomNumberServerCell'
+      // they start failing
+      // resolve: {
+      //   alias: [
+      //     {
+      //       find: 'src',
+      //       replacement: rwPaths.web.src,
+      //     },
+      //   ],
+      // },
       envPrefix: 'REDWOOD_ENV_',
       publicDir: path.join(rwPaths.web.base, 'public'),
       define: getEnvVarDefinitions(),
