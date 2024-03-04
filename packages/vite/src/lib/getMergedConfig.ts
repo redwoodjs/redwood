@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 import type { InputOption } from 'rollup'
 import type { ConfigEnv, UserConfig } from 'vite'
