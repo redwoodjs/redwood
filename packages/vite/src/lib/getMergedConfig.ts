@@ -22,9 +22,9 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
     apiHost ??= rwConfig.api.host
     apiHost ??= process.env.NODE_ENV === 'production' ? '0.0.0.0' : '[::]'
 
-    const streamingBuild = rwConfig.experimental.streamingSsr?.enabled
+    const streamingSsrEnabled = rwConfig.experimental.streamingSsr?.enabled
     // @MARK: note that most RSC settings sit in their individual build functions
-    const rscBuild = rwConfig.experimental.rsc?.enabled
+    const rscEnabled = rwConfig.experimental.rsc?.enabled
 
     let apiPort
     if (process.env.REDWOOD_API_PORT) {
@@ -108,7 +108,7 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
         // NOTE this gets overridden when build gets called anyway!
         outDir:
           // @MARK: For RSC and Streaming, we build to dist/client directory
-          streamingBuild || rscBuild
+          streamingSsrEnabled || rscEnabled
             ? rwPaths.web.distClient
             : rwPaths.web.dist,
         emptyOutDir: true,
