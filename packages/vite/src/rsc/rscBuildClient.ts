@@ -57,12 +57,6 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     },
   })
 
-  if (process.cwd() !== rwPaths.web.base) {
-    throw new Error(
-      'Looks like you are running the command from the wrong dir, this can lead to unintended consequences on CSS processing'
-    )
-  }
-
   if (!('output' in clientBuildOutput)) {
     throw new Error('Unexpected vite client build output')
   }
