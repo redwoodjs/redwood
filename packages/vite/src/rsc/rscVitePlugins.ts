@@ -6,26 +6,17 @@ import type { Plugin } from 'vite'
 import * as RSDWNodeLoader from '../react-server-dom-webpack/node-loader'
 import type { ResolveFunction } from '../react-server-dom-webpack/node-loader'
 
+import { rscWebpackShims } from './rscWebpackShims'
+
 // Used in Step 2 of the build process, for the client bundle
 export function rscIndexPlugin(): Plugin {
-  const codeToInject = `
-    globalThis.__rw_module_cache__ = new Map();
-
-    globalThis.__webpack_chunk_load__ = (id) => {
-      return import(id).then((m) => globalThis.__rw_module_cache__.set(id, m))
-    };
-
-    globalThis.__webpack_require__ = (id) => {
-      return globalThis.__rw_module_cache__.get(id)
-    };\n  `
-
   return {
     name: 'rsc-index-plugin',
     async transformIndexHtml() {
       return [
         {
           tag: 'script',
-          children: codeToInject,
+          children: rscWebpackShims,
           injectTo: 'body',
         },
       ]
