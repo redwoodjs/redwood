@@ -67,10 +67,7 @@ export async function runFeServer() {
   ).default
 
   const clientBuildManifestUrl = url.pathToFileURL(
-    path.join(
-      rscEnabled ? rwPaths.web.distClient : rwPaths.web.dist,
-      'client-build-manifest.json'
-    )
+    path.join(rwPaths.web.distClient, 'client-build-manifest.json')
   ).href
   const clientBuildManifest: ViteBuildManifest = (
     await import(clientBuildManifestUrl, { with: { type: 'json' } })
