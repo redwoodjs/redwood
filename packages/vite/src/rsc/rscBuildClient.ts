@@ -17,6 +17,11 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
 
   const rwPaths = getPaths()
 
+  // Safe-guard for the future, if someone tries to include this function in
+  // code that gets executed by running `vite build` or some other bin from the
+  // cli
+  // Running the web build in the wrong working directory can lead to
+  // unintended consequences on CSS processing
   ensureProcessDirWeb()
 
   if (!rwPaths.web.entryClient) {
@@ -35,7 +40,8 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
           // index.css bundle but we don't actually want this on an rsc page!
           'rwjs-client-entry': rwPaths.web.entryClient,
           // we need this, so that the output contains rsc-specific bundles
-          // for the client-only components. They get loaded, once the page is rendered
+          // for the client-only components. They get loaded once the page is
+          // rendered
           ...clientEntryFiles,
         },
         preserveEntrySignatures: 'exports-only',
@@ -55,12 +61,6 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
       logLevel: 'debug',
     },
   })
-
-  if (process.cwd() !== rwPaths.web.base) {
-    throw new Error(
-      'Looks like you are running the command from the wrong dir, this can lead to unintended consequences on CSS processing'
-    )
-  }
 
   if (!('output' in clientBuildOutput)) {
     throw new Error('Unexpected vite client build output')

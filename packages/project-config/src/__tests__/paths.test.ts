@@ -141,7 +141,6 @@ describe('paths', () => {
             'storybook.manager.js'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
           distEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -156,6 +155,7 @@ describe('paths', () => {
             'server',
             'routeHooks'
           ),
+          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
           distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
           distDocumentServer: path.join(
@@ -418,7 +418,6 @@ describe('paths', () => {
             'storybook.manager.js'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
           distEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -440,8 +439,9 @@ describe('paths', () => {
             'server',
             'routeHooks'
           ),
-          distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
+          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
           distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
+          distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
           distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -744,7 +744,6 @@ describe('paths', () => {
           entryServer: null,
           entries: null,
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
           distEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -766,8 +765,9 @@ describe('paths', () => {
             'server',
             'routeHooks'
           ),
-          distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
+          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
           distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
+          distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
           distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -1021,7 +1021,6 @@ describe('paths', () => {
             'storybook.manager.js'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
           distEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -1043,8 +1042,9 @@ describe('paths', () => {
             'server',
             'routeHooks'
           ),
-          distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
+          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
           distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
+          distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
           distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',

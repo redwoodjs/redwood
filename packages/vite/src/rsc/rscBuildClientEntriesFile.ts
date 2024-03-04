@@ -1,25 +1,29 @@
 import fs from 'fs/promises'
 
-import type { buildForRscServer } from './buildForRscServer'
+import { getPaths } from '@redwoodjs/project-config'
+
 import type { rscBuildClient } from './rscBuildClient'
+import type { rscBuildForServer } from './rscBuildForServer'
 
 /**
  * RSC build. Step 5.
  * Append a mapping of server asset names to client asset names to the
- * `web/dist/rsc/entries.js` file. Only used by the RSC worker.
+ * `web/dist/rsc/entries.js` file.
+ * Only used by the RSC worker.
  */
 // TODO(RSC_DC): This function should eventually be removed.
 // The dev server will need this implemented as a Vite plugin,
 // so worth waiting till implementation to swap out and just include the plugin for the prod build
 export function rscBuildClientEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
-  serverBuildOutput: Awaited<ReturnType<typeof buildForRscServer>>,
-  clientEntryFiles: Record<string, string>,
-  webDistServerEntries: string
+  serverBuildOutput: Awaited<ReturnType<typeof rscBuildForServer>>,
+  clientEntryFiles: Record<string, string>
 ) {
   console.log('\n')
   console.log('5. rscBuildClientEntriesMapping')
   console.log('===============================\n')
+
+  const rwPaths = getPaths()
 
   const clientEntries: Record<string, string> = {}
   for (const item of clientBuildOutput) {
@@ -51,8 +55,7 @@ export function rscBuildClientEntriesMappings(
   console.log('clientEntries', clientEntries)
 
   return fs.appendFile(
-    // @TODO @MARK: should this be webDistRscEntries?
-    webDistServerEntries,
+    rwPaths.web.distRscEntries,
     `export const clientEntries=${JSON.stringify(clientEntries)};`
   )
 }

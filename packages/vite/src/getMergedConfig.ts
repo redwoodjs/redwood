@@ -10,10 +10,11 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { getEnvVarDefinitions } from './envVarDefinitions'
 
 /**
+ * This function will merge in the default Redwood Vite config passed into the
+ * build function (or in Vite.config.xxx)
  *
- * This function will merge in the default Redwood Vite config passed into the build function (or in Vite.config.xxx)
- *
- * Note that returning plugins in this function will have no effect on the build
+ * Note that returning plugins in this function will have no effect on the
+ * build
  */
 export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
   return (userConfig: UserConfig, env: ConfigEnv): UserConfig => {
@@ -46,8 +47,8 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
       publicDir: path.join(rwPaths.web.base, 'public'),
       define: getEnvVarDefinitions(),
       css: {
-        // @NOTE config path is relative to where vite.config.js is if you use relative path
-        // postcss: './config/',
+        // @NOTE config path is relative to where vite.config.js is if you use
+        // a relative path
         postcss: rwPaths.web.config,
       },
       server: {
@@ -61,8 +62,9 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
             // Remove the `.redwood/functions` part, but leave the `/graphql`
             rewrite: (path) => path.replace(rwConfig.web.apiUrl, ''),
             configure: (proxy) => {
-              // @MARK: this is a hack to prevent showing confusing proxy errors on startup
-              // because Vite launches so much faster than the API server.
+              // @MARK: this is a hack to prevent showing confusing proxy
+              // errors on startup because Vite launches so much faster than
+              // the API server.
               let waitingForApiServer = true
 
               // Wait for 2.5s, then restore regular proxy error logging
@@ -82,7 +84,8 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
                   errors: [
                     {
                       message:
-                        'The RedwoodJS API server is not available or is currently reloading. Please refresh.',
+                        'The RedwoodJS API server is not available or is ' +
+                        'currently reloading. Please refresh.',
                     },
                   ],
                 }
@@ -107,7 +110,8 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
             : rwPaths.web.dist,
         emptyOutDir: true,
         manifest: !env.ssrBuild ? 'client-build-manifest.json' : undefined,
-        sourcemap: !env.ssrBuild && rwConfig.web.sourceMap, // Note that this can be boolean or 'inline'
+        // Note that sourcemap can be boolean or 'inline'
+        sourcemap: !env.ssrBuild && rwConfig.web.sourceMap,
         rollupOptions: {
           input: getRollupInput(!!env.ssrBuild),
         },
@@ -116,12 +120,14 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
       // because rsc builds want false, client and server build wants true
       optimizeDeps: {
         esbuildOptions: {
-          // @MARK this is because JS projects in Redwood don't have .jsx extensions
+          // @MARK this is because JS projects in Redwood don't have .jsx
+          // extensions
           loader: {
             '.js': 'jsx',
           },
           // Node.js global to browser globalThis
-          // @MARK unsure why we need this, but required for DevFatalErrorPage atleast
+          // @MARK unsure why we need this, but required for DevFatalErrorPage
+          // at least
           define: {
             global: 'globalThis',
           },
@@ -131,14 +137,16 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
     return mergeConfig(defaultRwViteConfig, userConfig)
   }
 }
+
 /**
- *
  * This function configures how vite (actually Rollup) will bundle.
  *
- * By default, the entry point is the index.html file - even if you don't specify it in RollupOptions
+ * By default, the entry point is the index.html file - even if you don't
+ * specify it in RollupOptions
  *
- * With streaming SSR, out entrypoint is different - either entry.client.tsx or entry.server.tsx
- * and the html file is not used at all, because it is defined in Document.tsx
+ * With streaming SSR, out entrypoint is different - either entry.client.tsx
+ * or entry.server.tsx and the html file is not used at all, because it is
+ * defined in Document.tsx
  *
  * @param ssr {boolean} Whether to return the SSR inputs or not
  * @returns Rollup input Options
@@ -147,12 +155,14 @@ function getRollupInput(ssr: boolean): InputOption | undefined {
   const rwConfig = getConfig()
   const rwPaths = getPaths()
 
-  // @NOTE once streaming ssr is out of experimental, this will become the default
+  // @NOTE once streaming ssr is out of experimental, this will become the
+  // default
   if (rwConfig.experimental.streamingSsr.enabled) {
     return ssr
       ? {
           'entry.server': rwPaths.web.entryServer as string,
-          Document: rwPaths.web.document, // We need the document for React's fallback
+          // We need the document for React's fallback
+          Document: rwPaths.web.document,
         }
       : (rwPaths.web.entryClient as string)
   }

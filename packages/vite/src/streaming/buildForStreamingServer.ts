@@ -22,7 +22,9 @@ export async function buildForStreamingServer({
       emptyOutDir: true,
     },
     legacy: {
-      // @MARK @TODO: this gets picked up by the RSC build if it's in index.js
+      // @MARK The Streaming SSR build produces CJS output. RSC is ESM
+      // TODO: Remove this config once we can build ESM output for streaming
+      // too
       buildSsrCjsExternalHeuristics: true,
     },
     envFile: false,

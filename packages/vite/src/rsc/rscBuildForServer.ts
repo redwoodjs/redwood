@@ -10,17 +10,16 @@ import { rscTransformPlugin } from './rscVitePlugins'
 
 /**
  * RSC build. Step 3.
- * buildFeServer -> buildRscFeServer -> buildForRscServer
+ * buildFeServer -> buildRscFeServer -> rscBuildForServer
  * Generate the output to be used by the rsc worker (not the actual server!)
  */
-// @TODO(RSC_DC): no redwood-vite plugin, add it back in here
-export async function buildForRscServer(
+export async function rscBuildForServer(
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>
 ) {
   console.log('\n')
-  console.log('3. buildForRscServer')
+  console.log('3. rscBuildForServer')
   console.log('====================\n')
 
   const rwPaths = getPaths()
@@ -36,6 +35,7 @@ export async function buildForRscServer(
     ...customModules,
   }
 
+  // TODO (RSC): No redwood-vite plugin, add it in here
   const rscServerBuildOutput = await viteBuild({
     envFile: false,
     legacy: {

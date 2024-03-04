@@ -46,10 +46,11 @@ export async function runFeServer() {
   const app = express()
   const rwPaths = getPaths()
   const rwConfig = getConfig()
-  const rscBuild = rwConfig.experimental?.rsc?.enabled
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
+
   registerFwGlobals()
 
-  if (rscBuild) {
+  if (rscEnabled) {
     try {
       // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
       await setClientEntries('load')
@@ -65,11 +66,14 @@ export async function runFeServer() {
     await import(routeManifestUrl, { with: { type: 'json' } })
   ).default
 
-  const buildManifestUrl = url.pathToFileURL(
-    path.join(rwPaths.web.distClient, 'client-build-manifest.json')
+  const clientBuildManifestUrl = url.pathToFileURL(
+    path.join(
+      rscEnabled ? rwPaths.web.distClient : rwPaths.web.dist,
+      'client-build-manifest.json'
+    )
   ).href
   const clientBuildManifest: ViteBuildManifest = (
-    await import(buildManifestUrl, { with: { type: 'json' } })
+    await import(clientBuildManifestUrl, { with: { type: 'json' } })
   ).default
 
   if (rwConfig.experimental?.rsc?.enabled) {
@@ -79,14 +83,16 @@ export async function runFeServer() {
   }
 
   // @MARK: Surely there's a better way than this!
-  const indexEntry = Object.values(clientBuildManifest).find((manifestItem) => {
-    // For RSC builds, we pass in many rollUp inputs, so we need to find it differently.
-    return rscBuild
-      ? manifestItem.file.includes('rwjs-client-entry-')
-      : manifestItem.isEntry
-  })
+  const clientEntry = Object.values(clientBuildManifest).find(
+    (manifestItem) => {
+      // For RSC builds, we pass in many Vite entries, so we need to find it differently.
+      return rscEnabled
+        ? manifestItem.file.includes('rwjs-client-entry-')
+        : manifestItem.isEntry
+    }
+  )
 
-  if (!indexEntry) {
+  if (!clientEntry) {
     throw new Error('Could not find client entry in build manifest')
   }
 
@@ -94,7 +100,7 @@ export async function runFeServer() {
   // For CF workers, we'd need an equivalent of this
   app.use(
     '/assets',
-    express.static(rwPaths.web.dist + '/client/assets', { index: false })
+    express.static(rwPaths.web.distClient + '/assets', { index: false })
   )
 
   // 2. Proxy the api server
@@ -116,8 +122,8 @@ export async function runFeServer() {
     })
   )
 
-  const getStylesheetLinks = () => indexEntry.css || []
-  const clientEntry = '/' + indexEntry.file
+  const getStylesheetLinks = () => clientEntry.css || []
+  const clientEntryPath = '/' + clientEntry.file
 
   for (const route of Object.values(routeManifest)) {
     // if it is a 404, register it at the end somehow.
@@ -134,11 +140,11 @@ export async function runFeServer() {
     // TODO(RSC_DC): RSC is rendering blank page, try using this function for initial render
     const routeHandler = await createReactStreamingHandler({
       route,
-      clientEntryPath: clientEntry,
+      clientEntryPath,
       getStylesheetLinks,
     })
 
-    console.log('Attatching streaming handler for route', route.pathDefinition)
+    console.log('Attaching streaming handler for route', route.pathDefinition)
 
     // Wrap with whatg/server adapter. Express handler -> Fetch API handler
     app.get(expressPathDef, createServerAdapter(routeHandler))
