@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- fix(scenario): Make sure to clean up scenarios even if tests fail (#10112)
+  Fixes an issue where a unit test failure would cause the scenario cleanup to be skipped. Thanks @peraltafederico for highlighting this!
+
 - fix(deps): update prisma monorepo to v5.10.2 (#10088)
 
   This release updates Prisma to v5.10.2. Here are quick links to all the release notes since the last version (v5.9.1):
