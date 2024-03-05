@@ -84,7 +84,7 @@ export async function redwoodFastifyWeb(
   // For SPA routing, fallback on unmatched routes and let client-side routing take over
   fastify.setNotFoundHandler({}, (req, reply) => {
     const urlData = req.urlData()
-    const requestedExtension = path.extname(urlData.path ?? '')
+    const requestHasExtension = !!path.extname(urlData.path ?? '')
 
     // Further up in this file we use `fastifyStatic` to serve files from the
     // /web/dist folder. Most often for files like AboutPage-12ab34cd.js or
@@ -100,7 +100,7 @@ export async function redwoodFastifyWeb(
     // See the discussions in https://github.com/redwoodjs/redwood/pull/9272
     // and https://github.com/redwoodjs/redwood/issues/9969
 
-    if (requestedExtension && urlData.path?.startsWith('/assets/')) {
+    if (requestHasExtension && urlData.path?.startsWith('/assets/')) {
       // If we got here, the user is most likely requesting an asset with an
       // extension (like `assets/AboutPage-xyz789.js`) that doesn't exist
       //
