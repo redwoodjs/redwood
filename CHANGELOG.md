@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- fix(serve): Allow periods in most paths (#10114)
+
+  Partial fix for route paths with periods in them.
+
+  It's only "partial" because it doesn't fix it for `yarn rw dev`, as that's a
+  Vite bug
+  ([vitejs/vite#2415 (comment)](https://github.com/vitejs/vite/issues/2415#issuecomment-1720814355)).
+  And there's also an edge case for yarn rw serve where this doesn't fully
+  handle client-side routes that start with /assets/ and that also have a
+  last-segment that accepts a period, like /assets/client-route-image.jpg
+  
+  Fixes #9969
+
 - fix(deps): update prisma monorepo to v5.10.2 (#10088)
 
   This release updates Prisma to v5.10.2. Here are quick links to all the release notes since the last version (v5.9.1):
