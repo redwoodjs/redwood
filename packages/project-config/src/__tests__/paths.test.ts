@@ -155,6 +155,8 @@ describe('paths', () => {
             'server',
             'routeHooks'
           ),
+          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
+          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
           distDocumentServer: path.join(
             FIXTURE_BASEDIR,
@@ -163,11 +165,11 @@ describe('paths', () => {
             'server',
             'Document.js'
           ),
-          distServerEntries: path.join(
+          distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'server',
+            'rsc',
             'entries.js'
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
@@ -437,12 +439,14 @@ describe('paths', () => {
             'server',
             'routeHooks'
           ),
+          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
+          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
-          distServerEntries: path.join(
+          distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'server',
+            'rsc',
             'entries.js'
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
@@ -761,12 +765,14 @@ describe('paths', () => {
             'server',
             'routeHooks'
           ),
+          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
+          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
-          distServerEntries: path.join(
+          distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'server',
+            'rsc',
             'entries.js'
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
@@ -1036,12 +1042,14 @@ describe('paths', () => {
             'server',
             'routeHooks'
           ),
+          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
+          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
-          distServerEntries: path.join(
+          distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'server',
+            'rsc',
             'entries.js'
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),

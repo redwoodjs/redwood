@@ -3,16 +3,20 @@ import fs from 'fs/promises'
 import { getPaths } from '@redwoodjs/project-config'
 
 import type { rscBuildClient } from './rscBuildClient'
-import type { rscBuildServer } from './rscBuildServer'
+import type { rscBuildForServer } from './rscBuildForServer'
 
 /**
  * RSC build. Step 5.
  * Append a mapping of server asset names to client asset names to the
- * `web/dist/server/entries.js` file.
+ * `web/dist/rsc/entries.js` file.
+ * Only used by the RSC worker.
  */
+// TODO(RSC_DC): This function should eventually be removed.
+// The dev server will need this implemented as a Vite plugin,
+// so worth waiting till implementation to swap out and just include the plugin for the prod build
 export function rscBuildClientEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
-  serverBuildOutput: Awaited<ReturnType<typeof rscBuildServer>>,
+  serverBuildOutput: Awaited<ReturnType<typeof rscBuildForServer>>,
   clientEntryFiles: Record<string, string>
 ) {
   console.log('\n')
@@ -24,6 +28,7 @@ export function rscBuildClientEntriesMappings(
   const clientEntries: Record<string, string> = {}
   for (const item of clientBuildOutput) {
     const { name, fileName } = item
+
     const entryFile =
       name &&
       // TODO (RSC) Can't we just compare the names? `item.name === name`
@@ -36,10 +41,10 @@ export function rscBuildClientEntriesMappings(
     if (entryFile) {
       console.log('entryFile', entryFile)
       if (process.platform === 'win32') {
-        const entryFileSlash = entryFile.replaceAll('\\', '/')
-        console.log('entryFileSlash', entryFileSlash)
         // Prevent errors on Windows like
         // Error: No client entry found for D:/a/redwood/rsc-project/web/dist/server/assets/rsc0.js
+        const entryFileSlash = entryFile.replaceAll('\\', '/')
+        console.log('entryFileSlash', entryFileSlash)
         clientEntries[entryFileSlash] = fileName
       } else {
         clientEntries[entryFile] = fileName
@@ -50,7 +55,7 @@ export function rscBuildClientEntriesMappings(
   console.log('clientEntries', clientEntries)
 
   return fs.appendFile(
-    rwPaths.web.distServerEntries,
+    rwPaths.web.distRscEntries,
     `export const clientEntries=${JSON.stringify(clientEntries)};`
   )
 }
