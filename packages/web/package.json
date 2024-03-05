@@ -37,7 +37,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@apollo/client": "3.8.10",
+    "@apollo/client": "3.9.5",
     "@babel/runtime-corejs3": "7.23.9",
     "@redwoodjs/auth": "7.0.6",
     "core-js": "3.35.1",
