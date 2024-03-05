@@ -23,7 +23,7 @@
     "test:watch": "vitest watch src"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.9",
+    "@babel/runtime-corejs3": "7.24.0",
     "@redwoodjs/cli-helpers": "7.0.0",
     "core-js": "3.35.1"
   },
