@@ -9,7 +9,6 @@ import path from 'node:path'
 import url from 'node:url'
 
 import { createServerAdapter } from '@whatwg-node/server'
-
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
