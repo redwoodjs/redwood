@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- fix(context): Re-export context from graphql-server (#10117)
+
+  This change re-exports the `context` and `setContext` properties in
+  `@redwoodjs/graphql-server` from the `@redwoodjs/context` package
+  where they are now (as of v7) located. This is done to retroactively 
+  ease the v7 transition and provide a non-breaking rather than a breaking
+  change.
+
+  See [this forum post](https://community.redwoodjs.com/t/context-imported-from-graphql-server-broken-post-7-0-0/5833)
+  and the links within for more information on this change.
+
 - fix(scenario): Make sure to clean up scenarios even if tests fail (#10112)
   Fixes an issue where a unit test failure would cause the scenario cleanup to be skipped. Thanks @peraltafederico  and @cjreimer for highlighting this!
   
