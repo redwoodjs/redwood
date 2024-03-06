@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- fix(esm): use CJS wrapper for ESM default interop (#10119)
+
+  This PR builds on the work started in https://github.com/redwoodjs/redwood/pull/10083 around ESM. One of the caveats of that PR was that the default export from `@redwoodjs/vite` broke. The workaround was referencing the `default` property on the Redwood Vite plugin, like `redwood.default()`. This fixes the ES module default export interoperability so that no change is necessary in switching between module types.
+
 - fix(deps): update prisma monorepo to v5.10.2 (#10088)
 
   This release updates Prisma to v5.10.2. Here are quick links to all the release notes since the last version (v5.9.1):
