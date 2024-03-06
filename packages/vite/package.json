@@ -69,6 +69,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.0",
+    "@redwoodjs/babel-config": "7.0.0",
     "@redwoodjs/internal": "7.0.0",
     "@redwoodjs/project-config": "7.0.0",
     "@redwoodjs/web": "7.0.0",
