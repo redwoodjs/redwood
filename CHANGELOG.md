@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- fix(context): Re-export context from graphql-server (#10117)
+
+  This change re-exports the `context` and `setContext` properties in
+  `@redwoodjs/graphql-server` from the `@redwoodjs/context` package
+  where they are now (as of v7) located. This is done to retroactively 
+  ease the v7 transition and provide a non-breaking rather than a breaking
+  change.
+
+  See [this forum post](https://community.redwoodjs.com/t/context-imported-from-graphql-server-broken-post-7-0-0/5833)
+  and the links within for more information on this change.
+
 - fix(serve): Allow periods in most paths (#10114)
 
   Partial fix for route paths with periods in them.
