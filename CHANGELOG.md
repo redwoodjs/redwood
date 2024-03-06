@@ -2,33 +2,6 @@
 
 ## Unreleased
 
-- fix(context): Re-export context from graphql-server (#10117)
-
-  This change re-exports the `context` and `setContext` properties in
-  `@redwoodjs/graphql-server` from the `@redwoodjs/context` package
-  where they are now (as of v7) located. This is done to retroactively 
-  ease the v7 transition and provide a non-breaking rather than a breaking
-  change.
-
-  See [this forum post](https://community.redwoodjs.com/t/context-imported-from-graphql-server-broken-post-7-0-0/5833)
-  and the links within for more information on this change.
-
-- fix(scenario): Make sure to clean up scenarios even if tests fail (#10112)
-  Fixes an issue where a unit test failure would cause the scenario cleanup to be skipped. Thanks @peraltafederico  and @cjreimer for highlighting this!
-  
-- fix(serve): Allow periods in most paths (#10114)
-
-  Partial fix for route paths with periods in them.
-
-  It's only "partial" because it doesn't fix it for `yarn rw dev`, as that's a
-  Vite bug
-  ([vitejs/vite#2415 (comment)](https://github.com/vitejs/vite/issues/2415#issuecomment-1720814355)).
-  And there's also an edge case for yarn rw serve where this doesn't fully
-  handle client-side routes that start with /assets/ and that also have a
-  last-segment that accepts a period, like /assets/client-route-image.jpg
-  
-  Fixes #9969
-
 - fix(deps): update prisma monorepo to v5.10.2 (#10088)
 
   This release updates Prisma to v5.10.2. Here are quick links to all the release notes since the last version (v5.9.1):
@@ -80,6 +53,10 @@
   ```
 
   Note that this feature is mainly for local scripting. Most deploy providers don't let you upload `.env` files (unless you're using baremetal) and usually have their own way of determining environments.
+
+## v7.0.7
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.7
 
 ## v7.0.6
 
