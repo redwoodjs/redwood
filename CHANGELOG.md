@@ -13,6 +13,9 @@
   See [this forum post](https://community.redwoodjs.com/t/context-imported-from-graphql-server-broken-post-7-0-0/5833)
   and the links within for more information on this change.
 
+- fix(scenario): Make sure to clean up scenarios even if tests fail (#10112)
+  Fixes an issue where a unit test failure would cause the scenario cleanup to be skipped. Thanks @peraltafederico  and @cjreimer for highlighting this!
+  
 - fix(serve): Allow periods in most paths (#10114)
 
   Partial fix for route paths with periods in them.
