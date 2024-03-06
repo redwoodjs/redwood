@@ -3,7 +3,6 @@
 import path from 'path'
 
 import { trace, SpanStatusCode } from '@opentelemetry/api'
-import { config } from 'dotenv-defaults'
 import fs from 'fs-extra'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
@@ -32,10 +31,10 @@ import * as testCommand from './commands/test'
 import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
 import * as upgradeCommand from './commands/upgrade'
-import { getPaths, findUp } from './lib'
+import { findUp } from './lib'
 import { exitWithError } from './lib/exit'
+import { loadEnvFiles } from './lib/loadEnvFiles'
 import * as updateCheck from './lib/updateCheck'
-import { addAdditionalEnvFiles } from './middleware/addAdditionalEnvFiles'
 import { loadPlugins } from './plugin'
 import { startTelemetry, shutdownTelemetry } from './telemetry/index'
 
@@ -102,20 +101,10 @@ try {
 
 process.env.RWJS_CWD = cwd
 
-// # Load .env, .env.defaults
+// Load .env.* files.
 //
 // This should be done as early as possible, and the earliest we can do it is after setting `cwd`.
-// Further down in middleware, we allow additional .env files to be loaded based on args.
-
-if (!process.env.REDWOOD_ENV_FILES_LOADED) {
-  config({
-    path: path.join(getPaths().base, '.env'),
-    defaults: path.join(getPaths().base, '.env.defaults'),
-    multiline: true,
-  })
-
-  process.env.REDWOOD_ENV_FILES_LOADED = 'true'
-}
+loadEnvFiles()
 
 async function main() {
   // Start telemetry if it hasn't been disabled
@@ -139,6 +128,8 @@ async function main() {
       recordTelemetryAttributes({ command: '--help' })
     }
 
+    // FIXME: There's currently a BIG RED BOX on exiting feServer
+    // Is yargs or the RW cli not passing SigInt on to the child process?
     try {
       // Run the command via yargs
       await runYargs()
@@ -174,6 +165,8 @@ async function runYargs() {
         // Likewise for `telemetry`.
         (argv) => {
           delete argv.cwd
+          delete argv.addEnvFiles
+          delete argv['add-env-files']
           delete argv.telemetry
         },
         telemetry && telemetryMiddleware,
@@ -183,27 +176,15 @@ async function runYargs() {
     .option('cwd', {
       describe: 'Working directory to use (where `redwood.toml` is located)',
     })
-    .option('include-env-files', {
-      describe: 'Load additional .env files. These are incremental',
+    .option('add-env-files', {
+      describe:
+        'Load additional .env files. Values defined in files specified later override earlier ones.',
       array: true,
     })
     .example(
-      'yarn rw exec MigrateUsers --include-env-files prod stripe-prod',
-      '"Run a script, and also include .env.prod and .env.stripe-prod"'
+      'yarn rw exec migrateUsers --add-env-files stripe nakama',
+      "Run a script, also loading env vars from '.env.stripe' and '.env.nakama'"
     )
-    .middleware([
-      addAdditionalEnvFiles(cwd),
-      // Once we've loaded the additional .env files, remove the option from yargs.
-      // If we leave it in, it and its alias will be passed to scripts run via `yarn rw exec` like...
-      //
-      // ```
-      // { args: { _: [ 'exec' ], 'include-env-files': [ 'prod' ], includeEnvFiles: [ 'prod' ], '$0': 'rw' } }
-      // ```
-      (argv) => {
-        delete argv.includeEnvFiles
-        delete argv['include-env-files']
-      },
-    ])
     .option('telemetry', {
       describe: 'Whether to send anonymous usage telemetry to RedwoodJS',
       boolean: true,

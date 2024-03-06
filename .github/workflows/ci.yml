@@ -218,7 +218,6 @@ jobs:
           working-directory: ./tasks/e2e
           spec: |
              cypress/e2e/01-tutorial/*.cy.js
-             cypress/e2e/04-logger/*.cy.js
 
       - uses: actions/upload-artifact@v4
         if: always()

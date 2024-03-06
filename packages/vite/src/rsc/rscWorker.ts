@@ -28,6 +28,9 @@ import type {
   MessageReq,
 } from './rscWorkerCommunication'
 
+// TODO (RSC): We should look into importing renderToReadableStream from
+// 'react-server-dom-webpack/server.browser' so that we can respond with web
+// streams
 const { renderToPipeableStream } = RSDWServer
 
 type Entries = { default: ReturnType<typeof defineEntries> }
@@ -144,6 +147,8 @@ const shutdown = async () => {
 
 const loadServerFile = async (fname: string) => {
   const vite = await vitePromise
+  // TODO (RSC): In prod we shouldn't need this. We should be able to just
+  // import the built files
   return vite.ssrLoadModule(fname)
 }
 
@@ -172,7 +177,7 @@ type ConfigType = Omit<ResolvedConfig, 'root'> & { root: string }
 const configPromise: Promise<ConfigType> = resolveConfig({}, 'serve')
 
 const getFunctionComponent = async (rscId: string) => {
-  const entriesFile = getPaths().web.distServerEntries
+  const entriesFile = getPaths().web.distRscEntries
   const {
     default: { getEntry },
   } = await (loadServerFile(entriesFile) as Promise<Entries>)
@@ -217,8 +222,11 @@ async function setClientEntries(
     absoluteClientEntries = value
     return
   }
+
+  // This is the Vite config
   const config = await configPromise
-  const entriesFile = getPaths().web.distServerEntries
+
+  const entriesFile = getPaths().web.distRscEntries
   console.log('setClientEntries :: entriesFile', entriesFile)
   const { clientEntries } = await loadServerFile(entriesFile)
   console.log('setClientEntries :: clientEntries', clientEntries)
@@ -226,6 +234,8 @@ async function setClientEntries(
     throw new Error('Failed to load clientEntries')
   }
   const baseDir = path.dirname(entriesFile)
+
+  // Convert to absolute paths
   absoluteClientEntries = Object.fromEntries(
     Object.entries(clientEntries).map(([key, val]) => {
       let fullKey = path.join(baseDir, key)
@@ -269,6 +279,10 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
       : rwPaths.base
   console.log('config.root', config.root)
   console.log('rwPaths.base', rwPaths.base)
+
+  // TODO (RSC): Try removing the proxy here and see if it's really necessary.
+  // Looks like it'd work to just have a regular object with a getter.
+  // Remove the proxy and see what breaks.
   const bundlerConfig = new Proxy(
     {},
     {
