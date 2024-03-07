@@ -8817,6 +8817,7 @@ __metadata:
     "@apollo/experimental-nextjs-app-support": "npm:0.0.0-commit-b8a73fe"
     "@babel/cli": "npm:7.23.9"
     "@babel/core": "npm:^7.22.20"
+    "@babel/plugin-transform-runtime": "npm:7.24.0"
     "@babel/runtime": "npm:7.24.0"
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/auth": "npm:7.0.0"
