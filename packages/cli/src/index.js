@@ -192,7 +192,7 @@ async function runYargs() {
     })
     .example(
       'yarn rw g page home /',
-      "\"Create a page component named 'Home' at path '/'\""
+      "Create a page component named 'Home' at path '/'"
     )
     .demandCommand()
     .strict()
