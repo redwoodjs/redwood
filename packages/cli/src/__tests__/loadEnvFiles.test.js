@@ -2,9 +2,13 @@ import path from 'path'
 
 import { afterEach, beforeAll, describe, expect, it, test } from 'vitest'
 
-import { addAdditionalEnvFiles } from '../middleware/addAdditionalEnvFiles'
+import {
+  loadDefaultEnvFiles,
+  loadNodeEnvDerivedEnvFile,
+  loadUserSpecifiedEnvFiles,
+} from '../lib/loadEnvFiles'
 
-describe('addAdditionalEnvFiles', () => {
+describe('loadEnvFiles', () => {
   let originalProcessEnv
   beforeAll(() => {
     originalProcessEnv = { ...process.env }
@@ -14,17 +18,19 @@ describe('addAdditionalEnvFiles', () => {
   })
 
   it("doesn't load .env files if there are none to load", () => {
-    const fn = addAdditionalEnvFiles(__dirname)
-    fn({})
+    const cwd = __dirname
+    loadDefaultEnvFiles(cwd)
+    loadNodeEnvDerivedEnvFile(cwd)
+    loadUserSpecifiedEnvFiles(cwd, [])
 
     expect(process.env).toEqual(originalProcessEnv)
   })
 
   it("doesn't load .env files if not instructed to", () => {
-    const fn = addAdditionalEnvFiles(
-      path.join(__dirname, '__fixtures__/redwood-app-env-prod')
-    )
-    fn({})
+    const cwd = path.join(__dirname, '__fixtures__/redwood-app-env-prod')
+    loadDefaultEnvFiles(cwd)
+    loadNodeEnvDerivedEnvFile(cwd)
+    loadUserSpecifiedEnvFiles(cwd, [])
 
     expect(process.env).toEqual(originalProcessEnv)
   })
@@ -32,10 +38,10 @@ describe('addAdditionalEnvFiles', () => {
   it('loads specified .env files', () => {
     expect(process.env).not.toHaveProperty('PROD_DATABASE_URL')
 
-    const fn = addAdditionalEnvFiles(
-      path.join(__dirname, '__fixtures__/redwood-app-env-prod')
-    )
-    fn({ includeEnvFiles: ['prod'] })
+    const cwd = path.join(__dirname, '__fixtures__/redwood-app-env-prod')
+    loadDefaultEnvFiles(cwd)
+    loadNodeEnvDerivedEnvFile(cwd)
+    loadUserSpecifiedEnvFiles(cwd, ['prod'])
 
     expect(process.env).toHaveProperty(
       'PROD_DATABASE_URL',
@@ -51,10 +57,10 @@ describe('addAdditionalEnvFiles', () => {
     expect(process.env).not.toHaveProperty('DEV_DATABASE_URL')
     expect(process.env).not.toHaveProperty('PROD_DATABASE_URL')
 
-    const fn = addAdditionalEnvFiles(
-      path.join(__dirname, '__fixtures__/redwood-app-env-many')
-    )
-    fn({ includeEnvFiles: ['dev', 'prod'] })
+    const cwd = path.join(__dirname, '__fixtures__/redwood-app-env-many')
+    loadDefaultEnvFiles(cwd)
+    loadNodeEnvDerivedEnvFile(cwd)
+    loadUserSpecifiedEnvFiles(cwd, ['dev', 'prod'])
 
     expect(process.env).toHaveProperty(
       'DEV_DATABASE_URL',
@@ -71,14 +77,14 @@ describe('addAdditionalEnvFiles', () => {
     expect(process.env).not.toHaveProperty('TEST_BASE')
     expect(process.env).not.toHaveProperty('TEST_COLLISION')
 
-    const fn = addAdditionalEnvFiles(
-      path.join(__dirname, '__fixtures__/redwood-app-env-collision')
-    )
-    fn({ includeEnvFiles: ['base', 'collision'] })
+    const cwd = path.join(__dirname, '__fixtures__/redwood-app-env-collision')
+    loadDefaultEnvFiles(cwd)
+    loadNodeEnvDerivedEnvFile(cwd)
+    loadUserSpecifiedEnvFiles(cwd, ['base', 'collision'])
 
     expect(process.env).toHaveProperty(
       'DATABASE_URL',
-      'postgresql://user:password@localhost:5432/mydb'
+      'postgresql://user:password@localhost:5432/mycollisiondb'
     )
     expect(process.env).toHaveProperty('TEST_BASE', '1')
     expect(process.env).toHaveProperty('TEST_COLLISION', '1')
@@ -89,10 +95,10 @@ describe('addAdditionalEnvFiles', () => {
     expect(process.env).not.toHaveProperty('BAZINGA')
 
     process.env.NODE_ENV = 'bazinga'
-    const fn = addAdditionalEnvFiles(
-      path.join(__dirname, '__fixtures__/redwood-app-env-node-env')
-    )
-    fn({})
+    const cwd = path.join(__dirname, '__fixtures__/redwood-app-env-node-env')
+    loadDefaultEnvFiles(cwd)
+    loadNodeEnvDerivedEnvFile(cwd)
+    loadUserSpecifiedEnvFiles(cwd, [])
 
     expect(process.env).toHaveProperty(
       'PROD_DATABASE_URL',
@@ -101,17 +107,15 @@ describe('addAdditionalEnvFiles', () => {
     expect(process.env).toHaveProperty('BAZINGA', '1')
   })
 
-  it('loads .env files based on NODE_ENV last', () => {
+  it('loads .env files based on NODE_ENV before user-specified .env files', () => {
     expect(process.env).not.toHaveProperty('PROD_DATABASE_URL')
     expect(process.env).not.toHaveProperty('BAZINGA')
 
     process.env.NODE_ENV = 'bazinga'
-    const fn = addAdditionalEnvFiles(
-      path.join(__dirname, '__fixtures__/redwood-app-env-node-env')
-    )
-    fn({
-      includeEnvFiles: ['prod'],
-    })
+    const cwd = path.join(__dirname, '__fixtures__/redwood-app-env-node-env')
+    loadDefaultEnvFiles(cwd)
+    loadNodeEnvDerivedEnvFile(cwd)
+    loadUserSpecifiedEnvFiles(cwd, ['prod'])
 
     expect(process.env).toHaveProperty(
       'PROD_DATABASE_URL',
@@ -121,14 +125,12 @@ describe('addAdditionalEnvFiles', () => {
   })
 
   it("throws if it can't find a specified env file", () => {
-    const fn = addAdditionalEnvFiles(
-      path.join(__dirname, '__fixtures__/redwood-app-env-node-env')
-    )
+    const cwd = path.join(__dirname, '__fixtures__/redwood-app-env-node-env')
 
     try {
-      fn({
-        includeEnvFiles: ['missing'],
-      })
+      loadDefaultEnvFiles(cwd)
+      loadNodeEnvDerivedEnvFile(cwd)
+      loadUserSpecifiedEnvFiles(cwd, ['missing'])
     } catch (error) {
       // Just testing that the error message reports the file it tried to load.
       expect(error.message).toMatch(/\.env\.missing/)

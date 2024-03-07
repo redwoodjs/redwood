@@ -1,16 +1,16 @@
 # CHANGELOG
 
 ## Unreleased
+- fix(api-server): Preserve original host header for proxied API requests
+Some apps rely on reading the host header(eg multi-tenant apps served over multiple subdomains).  This change forwards on the original host header on proxied Fastify requests, and the experimental SSR/RSC server
 
-- fix(esm): fix initial ESM blockers for Redwood apps (#10083) by @jtoar and @Josh-Walker-GM
+- fix(deps): update prisma monorepo to v5.10.2 (#10088)
 
-  This PR makes some initial fixes that were required for making a Redwood app ESM. Redwood apps aren't ready to transition to ESM yet, but we're working towards it and these changes were backwards-compatible.
-  If you're interested in trying out ESM, there will be an experimental setup command in the future. For now you'd have to make manual changes to your project:
+  This release updates Prisma to v5.10.2. Here are quick links to all the release notes since the last version (v5.9.1):
 
-    - dist imports, like `import ... from '@redwoodjs/api/logger'` need to be changed to `import ... from '@redwoodjs/api/logger/index.js'`
-    - The Redwood Vite plugin in `web/vite.config.ts` needs to be changed to `redwood.default` before being invoked
-
-  There are probably many others still depending on your project. Again, we don't recommend actually doing this yet, but are enumerating things just to be transparent about the changes in this release.
+  - https://github.com/prisma/prisma/releases/tag/5.10.0
+  - https://github.com/prisma/prisma/releases/tag/5.10.1
+  - https://github.com/prisma/prisma/releases/tag/5.10.2
 
 - fix(deps): update opentelemetry-js monorepo (#10065)
 
@@ -39,28 +39,30 @@
         DataDog/import-in-the-middle#57
       * This version does not support Node.js 18.19 or later
 
-- Add support for additional env var files (#9961)
+- Add support for loading more env var files (#9961, #10093, and #10094)
 
-  Fixes #9877. This PR adds a new middleware step to the CLI that looks for an `--include-env-files` flag and includes `.env.[file]` to the list of dotfiles to load. This PR also introduces functionality so that `.env.[file]` files are loaded based on `NODE_ENV`.
-
-  Using the `--include-env-files` flag:
-
-  ```bash
-  yarn rw exec myScript --include-env-files prod stripe-prod
-  # Alternatively you can specify the flag twice:
-  yarn rw exec myScript --include-env-files prod --include-env-files stripe-prod
-  ```
-
-  Using `NODE_ENV`:
+  Fixes #9877. This PR adds CLI functionality to load more `.env` files via `NODE_ENV` and an `--load-env-files` flag.
+  Env vars loaded via either of these methods override the values in `.env`:
 
   ```
-  # loads .env.production
+  # Loads '.env.production', which overrides values in '.env'
   NODE_ENV=production yarn rw exec myScript
+
+  # Load '.env.stripe' and '.env.nakama', which overrides values
+  yarn rw exec myScript --load-env-files stripe nakama
+  # Or you can specify them individually:
+  yarn rw exec myScript --load-env-files stripe --load-env-files nakama
   ```
 
-  These files are loaded in addition to `.env` and `.env.defaults` and more generally are additive. Subsequent dotfiles won't overwrite environment variables defined previous ones. As such, files loaded via NODE_ENV have lower priority than those loaded specifically via `--include-env-files`.
+  Note that this feature is mainly for local scripting. Most deploy providers don't let you upload `.env` files (unless you're using baremetal) and usually have their own way of determining environments.
 
-  Note that this feature is mainly for local scripting. Most deploy providers don't let you upload dotfiles and usually have their own way of determining environments.
+## v7.0.7
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.7
+
+## v7.0.6
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.6
 
 ## v7.0.5
 

@@ -18,7 +18,7 @@ export async function rscBuildRwEnvVars() {
   const rwPaths = getPaths()
 
   await fs.appendFile(
-    rwPaths.web.distServerEntries,
+    rwPaths.web.distRscEntries,
     `
 
 globalThis.RWJS_API_GRAPHQL_URL = RWJS_ENV.RWJS_API_GRAPHQL_URL
@@ -28,6 +28,9 @@ globalThis.RWJS_EXP_STREAMING_SSR = RWJS_ENV.RWJS_EXP_STREAMING_SSR
 globalThis.RWJS_EXP_RSC = RWJS_ENV.RWJS_EXP_RSC
 `
   )
+
+  // TODO (RSC): See if we can inject the code above into the server bundle
+  // while building, instead of having to do it as a manual step after
 
   // TODO (RSC): See if we can just import that config.ts file from
   // @redwoodjs/web/dist/config here

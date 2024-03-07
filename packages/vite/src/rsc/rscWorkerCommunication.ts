@@ -8,8 +8,6 @@ const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
     '--conditions',
     'react-server',
     '--experimental-loader',
-    '@redwoodjs/vite/node-loader',
-    '--experimental-loader',
     '@redwoodjs/vite/react-node-loader',
   ],
 })
@@ -86,9 +84,11 @@ export function shutdown() {
 
 let nextId = 1
 
+/** Set the client entries in the worker (for the server build) */
 export function setClientEntries(
   value: 'load' | Record<string, string>
 ): Promise<void> {
+  // Just making this function async instead of callback based
   return new Promise((resolve, reject) => {
     const id = nextId++
 

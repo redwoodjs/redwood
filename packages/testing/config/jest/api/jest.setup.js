@@ -104,13 +104,16 @@ const buildScenario =
       let { scenario } = loadScenarios(testPath, scenarioName)
 
       const scenarioData = await seedScenario(scenario)
-      const result = await testFunc(scenarioData)
+      try {
+        const result = await testFunc(scenarioData)
 
-      if (wasDbUsed()) {
-        await teardown()
+        return result
+      } finally {
+        // Make sure to cleanup, even if test fails
+        if (wasDbUsed()) {
+          await teardown()
+        }
       }
-
-      return result
     })
   }
 

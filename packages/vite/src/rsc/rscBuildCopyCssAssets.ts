@@ -3,14 +3,14 @@ import path from 'path'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { rscBuildServer } from './rscBuildServer'
+import type { rscBuildForServer } from './rscBuildForServer'
 
 /**
  * RSC build. Step 4.
  * Copy CSS assets from server to client
  */
 export function rscBuildCopyCssAssets(
-  serverBuildOutput: Awaited<ReturnType<typeof rscBuildServer>>
+  serverBuildOutput: Awaited<ReturnType<typeof rscBuildForServer>>
 ) {
   console.log('\n')
   console.log('4. rscBuildCopyCssAssets')
@@ -29,8 +29,8 @@ export function rscBuildCopyCssAssets(
       })
       .map((cssAsset) => {
         return fs.copyFile(
-          path.join(rwPaths.web.distServer, cssAsset.fileName),
-          path.join(rwPaths.web.dist, cssAsset.fileName)
+          path.join(rwPaths.web.distRsc, cssAsset.fileName),
+          path.join(rwPaths.web.distClient, cssAsset.fileName)
         )
       })
   )
