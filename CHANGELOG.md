@@ -1,7 +1,13 @@
 # CHANGELOG
 
+## Unreleased
+
+- fix(esm): use CJS wrapper for ESM default interop (#10119)
+
+  This PR builds on the work started in https://github.com/redwoodjs/redwood/pull/10083 around ESM. One of the caveats of that PR was that the default export from `@redwoodjs/vite` broke. The workaround was referencing the `default` property on the Redwood Vite plugin, like `redwood.default()`. This fixes the ES module default export interoperability so that no change is necessary in switching between module types.
+
 - feature: Enable [CSS nesting](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting/Using_CSS_nesting) syntax by default when using Tailwind:
-  
+
   ```
   .button {
     @apply p-2 font-semibold bg-gray-500;
@@ -16,8 +22,6 @@
     }
   }
   ```
-
-## Unreleased
 
 ## v7.1.0
 
