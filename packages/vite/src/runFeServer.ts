@@ -46,16 +46,15 @@ export async function runFeServer() {
   const app = express()
   const rwPaths = getPaths()
   const rwConfig = getConfig()
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
   registerFwGlobals()
 
-  try {
-    // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
-    // TODO (RSC) Remove the try/catch, or at least the if-statement in there
-    // once RSC is always enabled
-    await setClientEntries('load')
-  } catch (e) {
-    if (rwConfig.experimental?.rsc?.enabled) {
+  if (rscEnabled) {
+    try {
+      // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
+      await setClientEntries('load')
+    } catch (e) {
       console.error('Failed to load client entries')
       console.error(e)
       process.exit(1)
@@ -67,32 +66,38 @@ export async function runFeServer() {
     await import(routeManifestUrl, { with: { type: 'json' } })
   ).default
 
-  const buildManifestUrl = url.pathToFileURL(
-    path.join(rwPaths.web.dist, 'client-build-manifest.json')
+  const clientBuildManifestUrl = url.pathToFileURL(
+    path.join(rwPaths.web.distClient, 'client-build-manifest.json')
   ).href
-  const buildManifest: ViteBuildManifest = (
-    await import(buildManifestUrl, { with: { type: 'json' } })
+  const clientBuildManifest: ViteBuildManifest = (
+    await import(clientBuildManifestUrl, { with: { type: 'json' } })
   ).default
 
   if (rwConfig.experimental?.rsc?.enabled) {
     console.log('='.repeat(80))
-    console.log('buildManifest', buildManifest)
+    console.log('buildManifest', clientBuildManifest)
     console.log('='.repeat(80))
   }
 
-  const indexEntry = Object.values(buildManifest).find((manifestItem) => {
-    return manifestItem.isEntry
-  })
+  // @MARK: Surely there's a better way than this!
+  const clientEntry = Object.values(clientBuildManifest).find(
+    (manifestItem) => {
+      // For RSC builds, we pass in many Vite entries, so we need to find it differently.
+      return rscEnabled
+        ? manifestItem.file.includes('rwjs-client-entry-')
+        : manifestItem.isEntry
+    }
+  )
 
-  if (!indexEntry) {
-    throw new Error('Could not find index.html in build manifest')
+  if (!clientEntry) {
+    throw new Error('Could not find client entry in build manifest')
   }
 
   // 1. Use static handler for assets
   // For CF workers, we'd need an equivalent of this
   app.use(
     '/assets',
-    express.static(rwPaths.web.dist + '/assets', { index: false })
+    express.static(rwPaths.web.distClient + '/assets', { index: false })
   )
 
   // 2. Proxy the api server
@@ -114,8 +119,8 @@ export async function runFeServer() {
     })
   )
 
-  const getStylesheetLinks = () => indexEntry.css || []
-  const clientEntry = '/' + indexEntry.file
+  const getStylesheetLinks = () => clientEntry.css || []
+  const clientEntryPath = '/' + clientEntry.file
 
   for (const route of Object.values(routeManifest)) {
     // if it is a 404, register it at the end somehow.
@@ -129,33 +134,17 @@ export async function runFeServer() {
       ? route.matchRegexString
       : route.pathDefinition
 
-    if (!getConfig().experimental?.rsc?.enabled) {
-      const routeHandler = await createReactStreamingHandler({
-        route,
-        clientEntryPath: clientEntry,
-        getStylesheetLinks,
-      })
+    // TODO(RSC_DC): RSC is rendering blank page, try using this function for initial render
+    const routeHandler = await createReactStreamingHandler({
+      route,
+      clientEntryPath,
+      getStylesheetLinks,
+    })
 
-      // Wrap with whatg/server adapter. Express handler -> Fetch API handler
-      app.get(expressPathDef, createServerAdapter(routeHandler))
-    } else {
-      console.log('expressPathDef', expressPathDef)
+    console.log('Attaching streaming handler for route', route.pathDefinition)
 
-      // This is for RSC only. And only for now, until we have SSR working we
-      // with RSC. This maps /, /about, etc to index.html
-      app.get(expressPathDef, (req, res, next) => {
-        // Serve index.html for all routes, to let client side routing take
-        // over
-        req.url = '/'
-        // Without this, we get a flash of a url with a trailing slash. Still
-        // works, but doesn't look nice
-        // For example, if we navigate to /about we'll see a flash of /about/
-        // before returning to /about
-        req.originalUrl = '/'
-
-        return express.static(rwPaths.web.dist)(req, res, next)
-      })
-    }
+    // Wrap with whatg/server adapter. Express handler -> Fetch API handler
+    app.get(expressPathDef, createServerAdapter(routeHandler))
   }
 
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
@@ -175,17 +164,7 @@ export async function runFeServer() {
     })
   )
 
-  // Serve static assets that aren't covered by any of the above routes or middleware
-  // Note: That the order here is important and that we are explicitly preventing access
-  // to the server dist folder
-  // TODO: In the future, we should explicitly serve `web/dist/client` and `web/dist/rsc`
-  // and simply not serve the `web/dist/server` folder
-  app.use(`/${path.basename(rwPaths.web.distServer)}/*`, (_req, res, _next) => {
-    return res
-      .status(403)
-      .end('403 Forbidden: Access to server dist is forbidden')
-  })
-  app.use(express.static(rwPaths.web.dist, { index: false }))
+  app.use(express.static(rwPaths.web.distClient, { index: false }))
 
   app.listen(rwConfig.web.port)
   console.log(

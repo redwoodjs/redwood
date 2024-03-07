@@ -343,37 +343,4 @@ yarn rw upgrade --tag rc
 
 ## Publishing New Versions: `@latest`
 
-> **New `yarn release` Publishing Command**
->
-> As of February 2022, there's a new command `yarn release` that covers all the necessary steps:
->
-> 1. starting with creating a release branch
-> 2. to creating a milestone and assigning it to PRs
-> 3. to preparing and publishing packages
-> 4. to creating release notes
->
-> 🚀
-
-To publish a new version of Redwood to NPM, run the following commands:
-
-> NOTE: `<version>` should be formatted like `v0.24.0` (for example)
-
-```bash
-git clean -dfx
-yarn install
-./tasks/update-package-versions <version>
-git commit -am "<version>"
-git tag -am <version> "<version>"
-git push && git push --tags
-yarn build
-yarn lerna publish from-package
-```
-
-This...
-
-  1) changes the version of **all the packages** (even those that haven't changed),
-  2) changes the version of the packages within the CRWA Template
-  3) commits, tags, and pushes to GitHub
-  4) and finally publishes all packages to NPM.
-
-If something went wrong you can use `yarn lerna publish from-package` to publish the packages that aren't already in the registry.
+See https://github.com/redwoodjs/release-tooling.
