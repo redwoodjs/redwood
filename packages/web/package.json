@@ -53,6 +53,7 @@
     "@apollo/experimental-nextjs-app-support": "0.0.0-commit-b8a73fe",
     "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
+    "@babel/runtime": "7.24.0",
     "@rollup/plugin-babel": "6.0.4",
     "@testing-library/jest-dom": "6.3.0",
     "@testing-library/react": "14.1.2",

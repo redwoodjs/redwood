@@ -1978,6 +1978,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:7.24.0":
+  version: 7.24.0
+  resolution: "@babel/runtime@npm:7.24.0"
+  dependencies:
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: 10c0/3495eed727bf4a4f84c35bb51ab53317ae38f4bbc3b1d0a8303751f9dfa0ce6f5fb2afced72b76c3dd0d8bb2ccb84787559a4dee9886291a36b26f02f0f759b4
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.14.6, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.18.9, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2":
   version: 7.23.2
   resolution: "@babel/runtime@npm:7.23.2"
@@ -8808,6 +8817,7 @@ __metadata:
     "@apollo/experimental-nextjs-app-support": "npm:0.0.0-commit-b8a73fe"
     "@babel/cli": "npm:7.23.9"
     "@babel/core": "npm:^7.22.20"
+    "@babel/runtime": "npm:7.24.0"
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/auth": "npm:7.0.0"
     "@rollup/plugin-babel": "npm:6.0.4"
