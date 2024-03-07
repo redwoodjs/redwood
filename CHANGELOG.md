@@ -1,5 +1,22 @@
 # CHANGELOG
 
+- feature: Enable [CSS nesting](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting/Using_CSS_nesting) syntax by default when using Tailwind:
+  
+  ```
+  .button {
+    @apply p-2 font-semibold bg-gray-500;
+    &:hover {
+      @apply bg-red-500;
+    }
+    .icon {
+      @apply w-4 h-4;
+    }
+    span {
+      @apply text-sm;
+    }
+  }
+  ```
+
 ## Unreleased
 - fix(api-server): Preserve original host header for proxied API requests
 Some apps rely on reading the host header(eg multi-tenant apps served over multiple subdomains).  This change forwards on the original host header on proxied Fastify requests, and the experimental SSR/RSC server
