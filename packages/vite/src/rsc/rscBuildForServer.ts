@@ -1,51 +1,47 @@
 import path from 'node:path'
 
-import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
-import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
-import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { getPaths } from '@redwoodjs/project-config'
 
-import { getEnvVarDefinitions } from '../envVarDefinitions.js'
 import { onWarn } from '../lib/onWarn.js'
 
 import { rscTransformPlugin } from './rscVitePlugins.js'
 
 /**
  * RSC build. Step 3.
- * buildFeServer -> buildRscFeServer -> rscBuildClient
- * Generate the client bundle
+ * buildFeServer -> buildRscFeServer -> rscBuildForServer
+ * Generate the output to be used by the rsc worker (not the actual server!)
  */
-export async function rscBuildServer(
-  entriesFile: string,
+export async function rscBuildForServer(
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>
 ) {
+  console.log('\n')
+  console.log('3. rscBuildForServer')
+  console.log('====================\n')
+
+  const rwPaths = getPaths()
+
+  if (!rwPaths.web.entries) {
+    throw new Error('RSC entries file not found')
+  }
+
   const input = {
-    entries: entriesFile,
+    entries: rwPaths.web.entries,
     ...clientEntryFiles,
     ...serverEntryFiles,
     ...customModules,
   }
 
-  console.log('input', input)
-
-  const rwPaths = getPaths()
-  const rwConfig = getConfig()
-
-  console.log(
-    'rscBuildServer.ts RWJS_EXP_RSC',
-    rwConfig.experimental?.rsc?.enabled
-  )
-
-  const serverBuildOutput = await viteBuild({
-    // ...configFileConfig,
-    root: rwPaths.web.base,
-    envPrefix: 'REDWOOD_ENV_',
-    publicDir: path.join(rwPaths.web.base, 'public'),
+  // TODO (RSC): No redwood-vite plugin, add it in here
+  const rscServerBuildOutput = await viteBuild({
     envFile: false,
-    define: getEnvVarDefinitions(),
+    legacy: {
+      // @MARK: for the worker, we're building ESM! (not CJS)
+      buildSsrCjsExternalHeuristics: false,
+    },
     ssr: {
       // Externalize everything except packages with files that have
       // 'use client' in them (which are the files in `clientEntryFiles`)
@@ -86,13 +82,6 @@ export async function rscBuildServer(
       },
     },
     plugins: [
-      react({
-        babel: {
-          ...getWebSideDefaultBabelConfig({
-            forVite: true,
-          }),
-        },
-      }),
       // The rscTransformPlugin maps paths like
       // /Users/tobbe/.../rw-app/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
       // to
@@ -104,10 +93,8 @@ export async function rscBuildServer(
     build: {
       ssr: true,
       ssrEmitAssets: true,
-      // TODO (RSC) Change output dir to just dist. We should be "server
-      // first". Client components are the "special case" and should be output
-      // to dist/client
-      outDir: rwPaths.web.distServer,
+      outDir: rwPaths.web.distRsc,
+      emptyOutDir: true, // Needed because `outDir` is not inside `root`
       manifest: 'server-build-manifest.json',
       rollupOptions: {
         onwarn: onWarn,
@@ -151,9 +138,9 @@ export async function rscBuildServer(
     },
   })
 
-  if (!('output' in serverBuildOutput)) {
-    throw new Error('Unexpected vite server build output')
+  if (!('output' in rscServerBuildOutput)) {
+    throw new Error('Unexpected rsc server build output')
   }
 
-  return serverBuildOutput.output
+  return rscServerBuildOutput.output
 }

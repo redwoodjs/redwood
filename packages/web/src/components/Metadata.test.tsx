@@ -1,6 +1,8 @@
-import { render } from '@testing-library/react'
+import React from 'react'
 
-import '@testing-library/jest-dom'
+import { render } from '@testing-library/react'
+import { describe, beforeAll, it, expect } from 'vitest'
+
 import { Metadata } from './Metadata'
 
 // DOCS: can return a structured object from the database and just give it to `og` and it works

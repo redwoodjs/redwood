@@ -6,39 +6,12 @@ import type { Plugin } from 'vite'
 import * as RSDWNodeLoader from '../react-server-dom-webpack/node-loader.js'
 import type { ResolveFunction } from '../react-server-dom-webpack/node-loader.js'
 
-// Used in Step 2 of the build process, for the client bundle
-export function rscIndexPlugin(): Plugin {
-  const codeToInject = `
-    globalThis.__rw_module_cache__ = new Map();
-
-    globalThis.__webpack_chunk_load__ = (id) => {
-      return import(id).then((m) => globalThis.__rw_module_cache__.set(id, m))
-    };
-
-    globalThis.__webpack_require__ = (id) => {
-      return globalThis.__rw_module_cache__.get(id)
-    };\n  `
-
-  return {
-    name: 'rsc-index-plugin',
-    async transformIndexHtml() {
-      return [
-        {
-          tag: 'script',
-          children: codeToInject,
-          injectTo: 'body',
-        },
-      ]
-    },
-  }
-}
-
 export function rscTransformPlugin(
   clientEntryFiles: Record<string, string>
 ): Plugin {
   return {
     name: 'rsc-transform-plugin',
-    // TODO(RSC): Seems like resolveId() is never called. Can we remove it?
+    // TODO (RSC): Seems like resolveId() is never called. Can we remove it?
     async resolveId(id, importer, options) {
       console.log(
         'rscVitePlugins - rscTransformPlugin::resolveId()',
@@ -129,10 +102,16 @@ export function rscReloadPlugin(fn: (type: 'full-reload') => void): Plugin {
   const isClientEntry = (id: string, code: string) => {
     const ext = path.extname(id)
     if (['.ts', '.tsx', '.js', '.jsx'].includes(ext)) {
+      // @MARK: We're using swc here, because that's what the code that I
+      // copy/pasted used. It works, but it's another dependency, and a
+      // slightly different syntax to get used to compared to babel or other
+      // AST parsing libraries we use. So maybe, in the future, we change this
+      // to something else that we use in other places in this package.
       const mod = swc.parseSync(code, {
         syntax: ext === '.ts' || ext === '.tsx' ? 'typescript' : 'ecmascript',
         tsx: ext === '.tsx',
       })
+
       for (const item of mod.body) {
         if (
           item.type === 'ExpressionStatement' &&
@@ -143,6 +122,7 @@ export function rscReloadPlugin(fn: (type: 'full-reload') => void): Plugin {
         }
       }
     }
+
     return false
   }
 

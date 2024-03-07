@@ -8,20 +8,10 @@
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
 import { Router, Route, Set } from '@redwoodjs/router'
-import { serve } from '@redwoodjs/vite/client'
 
 import NavigationLayout from './layouts/NavigationLayout/NavigationLayout'
 import ScaffoldLayout from './layouts/ScaffoldLayout/ScaffoldLayout'
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage'
-
-const AboutPage = serve('AboutPage')
-const HomePage = serve('HomePage')
-const UserExampleUserExamplesPage = serve('UserExampleUserExamplesPage')
-const UserExampleUserExamplePage = serve('UserExampleUserExamplePage')
-const UserExampleNewUserExamplePage = serve('UserExampleNewUserExamplePage')
-const EmptyUserEmptyUsersPage = serve('EmptyUserEmptyUsersPage')
-const EmptyUserNewEmptyUserPage = serve('EmptyUserNewEmptyUserPage')
-const MultiCellPage = serve('MultiCellPage')
 
 const Routes = () => {
   return (

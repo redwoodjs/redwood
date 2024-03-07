@@ -21,7 +21,7 @@ export class ProdRwRscServerGlobal extends RwRscServerGlobal {
     const rwPaths = getPaths()
 
     this.serverManifest = readJSON(
-      join(rwPaths.web.distServer, 'server-build-manifest.json')
+      join(rwPaths.web.distRsc, 'server-build-manifest.json')
     )
   }
 

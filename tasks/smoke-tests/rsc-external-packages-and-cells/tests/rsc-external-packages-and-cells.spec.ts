@@ -18,7 +18,7 @@ test('Client components should work', async ({ page }) => {
 test('Submitting the form should return a response', async ({ page }) => {
   await page.goto('/')
 
-  const h1 = await page.locator('h1').innerHTML()
+  const h1 = await page.locator('h1').innerText()
   expect(h1).toMatch(/Hello Anonymous!!/)
 
   const pageText = await page.locator('#redwood-app > div').innerText()

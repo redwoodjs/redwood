@@ -6,7 +6,7 @@ import type { ViteDevServer } from 'vite'
 
 import { defaultAuthProviderState } from '@redwoodjs/auth'
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
-import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
+import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
@@ -41,24 +41,10 @@ export const createReactStreamingHandler = async (
   let fallbackDocumentImport: any
 
   if (isProd) {
-    // TODO (RSC) Consolidate paths, so we can have the same code for SSR and RSC
-    if (getConfig().experimental?.rsc?.enabled) {
-      entryServerImport = await import(
-        makeFilePath(
-          path.join(rwPaths.web.distServer, 'assets', 'entry.server.js')
-        )
-      )
-      fallbackDocumentImport = await import(
-        makeFilePath(path.join(rwPaths.web.distServer, 'assets', 'Document.js'))
-      )
-    } else {
-      entryServerImport = await import(
-        makeFilePath(rwPaths.web.distEntryServer)
-      )
-      fallbackDocumentImport = await import(
-        makeFilePath(rwPaths.web.distDocumentServer)
-      )
-    }
+    entryServerImport = await import(makeFilePath(rwPaths.web.distEntryServer))
+    fallbackDocumentImport = await import(
+      makeFilePath(rwPaths.web.distDocumentServer)
+    )
   }
 
   // @NOTE: we are returning a FetchAPI handler
@@ -129,6 +115,9 @@ export const createReactStreamingHandler = async (
 
     metaTags = routeHookOutput.meta
 
+    // @MARK @TODO(RSC_DC): the entry path for RSC will be different,
+    // because we don't want to inject a full bundle, just a slice of it
+    // I'm not sure what though....
     const jsBundles = [
       clientEntryPath, // @NOTE: must have slash in front
       bundle && '/' + bundle,

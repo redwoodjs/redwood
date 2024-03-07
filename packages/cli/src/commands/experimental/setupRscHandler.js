@@ -326,8 +326,6 @@ export const handler = async ({ force, verbose }) => {
           )
         },
       },
-      // TODO (RSC): Remove this once we have a better way to handle routes.
-      // This is a total hack right now
       {
         title: 'Overwriting routes...',
         task: async () => {

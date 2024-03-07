@@ -394,7 +394,7 @@ async function transformClientModule(
   // throw an error if it's undefined
 
   const loadId = entryRecord
-    ? path.join(getPaths().web.distServer, 'assets', entryRecord[0] + '.js')
+    ? path.join(getPaths().web.distRsc, 'assets', entryRecord[0] + '.js')
     : url
 
   let newSrc =
@@ -411,10 +411,9 @@ async function transformClientModule(
         JSON.stringify(
           'Attempted to call the default export of ' +
             url +
-            ' from the server' +
-            "but it's on the client. It's not possible to invoke a client function from " +
-            'the server, it can only be rendered as a Component or passed to props of a' +
-            'Client Component.'
+            " from the server but it's on the client. It's not possible to " +
+            'invoke a client function from the server, it can only be ' +
+            'rendered as a Component or passed to props of a Client Component.'
         ) +
         ');'
     } else {
