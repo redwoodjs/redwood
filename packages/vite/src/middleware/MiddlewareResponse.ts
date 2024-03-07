@@ -1,7 +1,7 @@
 import { Response as PonyResponse } from '@whatwg-node/fetch'
 import cookie from 'cookie'
 
-import { CookieJar } from './CookieJar'
+import { CookieJar } from './CookieJar.js'
 
 /**
  * This is actually a Response builder class

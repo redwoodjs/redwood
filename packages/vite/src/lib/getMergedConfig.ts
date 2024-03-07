@@ -7,7 +7,7 @@ import { mergeConfig } from 'vite'
 import type { Config, Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { getEnvVarDefinitions } from './envVarDefinitions'
+import { getEnvVarDefinitions } from './envVarDefinitions.js'
 
 /**
  * This function will merge in the default Redwood Vite config passed into the

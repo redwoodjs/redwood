@@ -1,7 +1,7 @@
 import { defaultAuthProviderState, type ServerAuthState } from '@redwoodjs/auth'
 
-import { MiddlewareRequest } from './MiddlewareRequest'
-import { MiddlewareResponse } from './MiddlewareResponse'
+import { MiddlewareRequest } from './MiddlewareRequest.js'
+import { MiddlewareResponse } from './MiddlewareResponse.js'
 
 type Middleware = (
   req: MiddlewareRequest,

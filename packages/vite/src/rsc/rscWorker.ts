@@ -17,16 +17,16 @@ import { createServer, resolveConfig } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { defineEntries } from '../entries'
-import { registerFwGlobals } from '../lib/registerGlobals'
-import { StatusError } from '../lib/StatusError'
+import type { defineEntries } from '../entries.js'
+import { registerFwGlobals } from '../lib/registerGlobals.js'
+import { StatusError } from '../lib/StatusError.js'
 
-import { rscReloadPlugin } from './rscVitePlugins'
+import { rscReloadPlugin } from './rscVitePlugins.js'
 import type {
   RenderInput,
   MessageRes,
   MessageReq,
-} from './rscWorkerCommunication'
+} from './rscWorkerCommunication.js'
 
 // TODO (RSC): We should look into importing renderToReadableStream from
 // 'react-server-dom-webpack/server.browser' so that we can respond with web

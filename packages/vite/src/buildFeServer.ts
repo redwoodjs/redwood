@@ -1,11 +1,11 @@
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { buildRouteHooks } from './buildRouteHooks'
-import { buildRouteManifest } from './buildRouteManifest'
-import { buildRscClientAndServer } from './buildRscClientAndServer'
-import { buildForStreamingServer } from './streaming/buildForStreamingServer'
-import { ensureProcessDirWeb } from './utils'
+import { buildRouteHooks } from './buildRouteHooks.js'
+import { buildRouteManifest } from './buildRouteManifest.js'
+import { buildRscClientAndServer } from './buildRscClientAndServer.js'
+import { buildForStreamingServer } from './streaming/buildForStreamingServer.js'
+import { ensureProcessDirWeb } from './utils.js'
 
 export interface BuildOptions {
   verbose?: boolean

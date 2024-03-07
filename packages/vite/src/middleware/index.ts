@@ -1,3 +1,3 @@
-export * from './CookieJar'
-export * from './MiddlewareRequest'
-export * from './MiddlewareResponse'
+export * from './CookieJar.js'
+export * from './MiddlewareRequest.js'
+export * from './MiddlewareResponse.js'
