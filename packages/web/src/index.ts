@@ -39,6 +39,4 @@ export * from './routeHooks.types'
 
 export * from './components/ServerInject'
 
-export * from './components/ogImage'
-
 export type { TypedDocumentNode } from './components/GraphQLHooksProvider'
