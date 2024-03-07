@@ -9,8 +9,8 @@
 
 import { Router, Route, Set } from '@redwoodjs/router'
 
-import NavigationLayout from './layouts/NavigationLayout/NavigationLayout'
-import NotFoundPage from './pages/NotFoundPage/NotFoundPage'
+import NavigationLayout from 'src/layouts/NavigationLayout'
+import NotFoundPage from 'src/pages/NotFoundPage'
 
 const Routes = () => {
   return (
