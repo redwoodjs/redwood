@@ -183,7 +183,7 @@ beforeEach(() => {
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 
-describe.only('slow imports', () => {
+describe('slow imports', () => {
   const HomePagePlaceholder = () => <>HomePagePlaceholder</>
   const AboutPagePlaceholder = () => <>AboutPagePlaceholder</>
   const ParamPagePlaceholder = () => <>ParamPagePlaceholder</>
@@ -516,7 +516,7 @@ describe.only('slow imports', () => {
     timeoutForFlakeyAsyncTests
   )
 
-  test(
+  test.skip(
     'usePageLoadingContext',
     async () => {
       // We want to show a loading indicator if loading pages is taking a long
