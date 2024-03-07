@@ -1,6 +1,7 @@
 import path from 'path'
 
 import pluginTester from 'babel-plugin-tester'
+import { vi, describe, beforeEach, afterAll } from 'vitest'
 
 import { BundlerEnum } from '@redwoodjs/project-config'
 
@@ -9,9 +10,13 @@ import plugin from '../babel-plugin-redwood-prerender-media-imports'
 let mockDistDir
 let mockSrcDir
 
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const originalProjectConfig = await importOriginal<
+    // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+    typeof import('@redwoodjs/project-config')
+  >()
   return {
-    ...jest.requireActual('@redwoodjs/project-config'),
+    ...originalProjectConfig,
     getPaths: () => {
       return {
         web: {
@@ -23,7 +28,7 @@ jest.mock('@redwoodjs/project-config', () => {
   }
 })
 
-jest.mock('../utils', () => {
+vi.mock('../utils', () => {
   return {
     convertToDataUrl: (assetPath) => {
       return `data:image/jpg;base64,xxx-mock-b64-${assetPath}`
@@ -81,7 +86,7 @@ describe('Webpack bundler', () => {
     })
 
     afterAll(() => {
-      jest.clearAllMocks()
+      vi.clearAllMocks()
     })
   })
 
@@ -106,7 +111,7 @@ describe('Webpack bundler', () => {
     })
 
     afterAll(() => {
-      jest.clearAllMocks()
+      vi.clearAllMocks()
     })
   })
 })
@@ -165,7 +170,7 @@ describe('Vite bundler', () => {
     })
 
     afterAll(() => {
-      jest.clearAllMocks()
+      vi.clearAllMocks()
     })
   })
 
@@ -194,7 +199,7 @@ describe('Vite bundler', () => {
     })
 
     afterAll(() => {
-      jest.clearAllMocks()
+      vi.clearAllMocks()
     })
   })
 })
