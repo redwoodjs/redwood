@@ -20,7 +20,7 @@ export function loadEnvFiles() {
   loadNodeEnvDerivedEnvFile(base)
 
   const { addEnvFiles } = Parser(hideBin(process.argv), {
-    array: ['add-env-files'],
+    array: ['load-env-files'],
     default: {
       addEnvFiles: [],
     },
@@ -70,7 +70,7 @@ export function loadUserSpecifiedEnvFiles(cwd, addEnvFiles) {
     const envPath = path.join(cwd, `.env.${suffix}`)
     if (!fs.pathExistsSync(envPath)) {
       throw new Error(
-        `Couldn't find an .env file at '${envPath}' as specified by '--add-env-files'`
+        `Couldn't find an .env file at '${envPath}' as specified by '--load-env-files'`
       )
     }
 

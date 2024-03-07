@@ -41,7 +41,7 @@ Some apps rely on reading the host header(eg multi-tenant apps served over multi
 
 - Add support for loading more env var files (#9961, #10093, and #10094)
 
-  Fixes #9877. This PR adds CLI functionality to load more `.env` files via `NODE_ENV` and an `--add-env-files` flag.
+  Fixes #9877. This PR adds CLI functionality to load more `.env` files via `NODE_ENV` and an `--load-env-files` flag.
   Env vars loaded via either of these methods override the values in `.env`:
 
   ```
@@ -49,9 +49,9 @@ Some apps rely on reading the host header(eg multi-tenant apps served over multi
   NODE_ENV=production yarn rw exec myScript
 
   # Load '.env.stripe' and '.env.nakama', which overrides values
-  yarn rw exec myScript --add-env-files stripe --add-env-files nakama
-  # Or you can specify the flag once:
-  yarn rw exec myScript --add-env-files stripe nakama
+  yarn rw exec myScript --load-env-files stripe nakama
+  # Or you can specify them individually:
+  yarn rw exec myScript --load-env-files stripe --load-env-files nakama
   ```
 
   Note that this feature is mainly for local scripting. Most deploy providers don't let you upload `.env` files (unless you're using baremetal) and usually have their own way of determining environments.
