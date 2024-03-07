@@ -1,6 +1,6 @@
 import { defineConfig, configDefaults } from 'vitest/config'
 
-import { babel } from '@rollup/plugin-babel';
+import { babel } from '@rollup/plugin-babel'
 
 export default defineConfig({
   test: {
@@ -12,6 +12,7 @@ export default defineConfig({
     RWJS_ENV: {},
   },
   plugins: [
+    // @ts-expect-error plugin types do not seem happy with each other
     babel({
       babelHelpers: 'runtime',
       extensions: ['.ts', '.tsx', '.js'],
@@ -30,7 +31,7 @@ export default defineConfig({
           },
         ]
       ]
-    }) as any
+    })
   ]
 })
 
