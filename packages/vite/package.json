@@ -34,10 +34,6 @@
       "types": "./dist/buildFeServer.d.ts",
       "default": "./dist/buildFeServer.js"
     },
-    "./node-loader": {
-      "types": "./dist/rsc/rscNodeLoader.d.ts",
-      "default": "./dist/rsc/rscNodeLoader.js"
-    },
     "./react-node-loader": {
       "types": "./dist/react-server-dom-webpack/node-loader.d.ts",
       "default": "./dist/react-server-dom-webpack/node-loader.js"
@@ -69,6 +65,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.0",
+    "@redwoodjs/babel-config": "7.0.0",
     "@redwoodjs/internal": "7.0.0",
     "@redwoodjs/project-config": "7.0.0",
     "@redwoodjs/web": "7.0.0",

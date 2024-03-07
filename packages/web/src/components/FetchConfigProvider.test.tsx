@@ -1,13 +1,9 @@
-/**
- * @jest-environment jsdom
- */
-
 import React from 'react'
 
 import { render, screen, waitFor } from '@testing-library/react'
+import { describe, test, expect } from 'vitest'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
-import '@testing-library/jest-dom/jest-globals'
 
 globalThis.RWJS_API_GRAPHQL_URL = 'https://api.example.com/graphql'
 

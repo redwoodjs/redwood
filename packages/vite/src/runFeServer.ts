@@ -109,7 +109,7 @@ export async function runFeServer() {
     // @WARN! Be careful, between v2 and v3 of http-proxy-middleware
     // the syntax has changed https://github.com/chimurai/http-proxy-middleware
     createProxyMiddleware({
-      changeOrigin: true,
+      changeOrigin: false,
       pathRewrite: {
         [`^${rwConfig.web.apiUrl}`]: '', // remove base path
       },
