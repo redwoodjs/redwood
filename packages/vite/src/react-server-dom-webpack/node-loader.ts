@@ -574,15 +574,12 @@ export async function load(
   const result = await defaultLoad(url, context, defaultLoad)
 
   if (result.format === 'module') {
-    let source = result.source
-
-    if (typeof source !== 'string') {
-      // TODO (RSC): Get rid of `any`
-      source = (source as any).toString()
+    if (typeof result.source !== 'string') {
+      throw new Error('Expected source to have been loaded into a string.')
     }
 
     const newSrc = await transformModuleIfNeeded(
-      source,
+      result.source,
       url,
       defaultLoad,
       clientEntryFiles
