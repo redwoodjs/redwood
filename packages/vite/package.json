@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.0",
+    "@redwoodjs/babel-config": "7.0.7",
     "@redwoodjs/internal": "7.0.7",
     "@redwoodjs/project-config": "7.0.7",
     "@vitejs/plugin-react": "4.2.1",

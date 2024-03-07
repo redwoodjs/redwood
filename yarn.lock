@@ -8718,6 +8718,7 @@ __metadata:
   dependencies:
     "@babel/cli": "npm:7.23.9"
     "@babel/runtime-corejs3": "npm:7.24.0"
+    "@redwoodjs/babel-config": "npm:7.0.7"
     "@redwoodjs/internal": "npm:7.0.7"
     "@redwoodjs/project-config": "npm:7.0.7"
     "@types/react": "npm:^18.2.55"
