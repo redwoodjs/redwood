@@ -8,8 +8,8 @@ import { normalizePath } from 'vite'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import handleJsAsJsx from './plugins/vite-plugin-jsx-loader'
-import removeFromBundle from './plugins/vite-plugin-remove-from-bundle'
+import handleJsAsJsx from './plugins/vite-plugin-jsx-loader.js'
+import removeFromBundle from './plugins/vite-plugin-remove-from-bundle.js'
 
 /**
  * Pre-configured vite plugin, with required config for Redwood apps.
