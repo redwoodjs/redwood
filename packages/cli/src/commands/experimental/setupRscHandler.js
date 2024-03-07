@@ -290,22 +290,6 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       {
-        title: 'Overwrite App.tsx...',
-        task: async () => {
-          const appTemplate = fs.readFileSync(
-            path.resolve(__dirname, 'templates', 'rsc', 'App.tsx.template'),
-            'utf-8'
-          )
-
-          const appPath =
-            rwPaths.web.app ?? path.join(rwPaths.web.src, 'App.tsx')
-
-          writeFile(appPath, appTemplate, {
-            overwriteExisting: true,
-          })
-        },
-      },
-      {
         title: 'Add React experimental types',
         task: async () => {
           const tsconfigPath = path.join(rwPaths.web.base, 'tsconfig.json')
