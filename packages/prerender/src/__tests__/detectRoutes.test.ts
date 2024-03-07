@@ -1,27 +1,29 @@
+import { vi, describe, it, expect } from 'vitest'
+
 import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
 
 import { detectPrerenderRoutes } from '../detection'
 
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', () => {
   return {
-    getPaths: jest.fn(() => {
+    getPaths: vi.fn(() => {
       return {
         base: '/mock/path',
         web: `/mock/path/web`,
       }
     }),
-    processPagesDir: jest.fn(() => []),
+    processPagesDir: vi.fn(() => []),
   }
 })
 
 // Mock route detection, tested in @redwoodjs/structure separately
 
 let mockedRoutes: Partial<RWRoute>[] = []
-jest.mock('@redwoodjs/structure', () => {
+vi.mock('@redwoodjs/structure', () => {
   return {
-    getProject: jest.fn(() => {
+    getProject: vi.fn(() => {
       return {
-        getRouter: jest.fn(() => {
+        getRouter: vi.fn(() => {
           return {
             routes: mockedRoutes,
           }
