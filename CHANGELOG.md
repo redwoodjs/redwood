@@ -21,11 +21,11 @@
   
 ## v7.1.0
 
-- See <https://github.com/redwoodjs/redwood/releases/tag/v7.1.0>
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.1.0
 
 ## v7.0.7
 
-- See <https://github.com/redwoodjs/redwood/releases/tag/v7.0.7>
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.7
 
 ## v7.0.6
 
