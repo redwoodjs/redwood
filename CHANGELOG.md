@@ -54,6 +54,10 @@
 
   Note that this feature is mainly for local scripting. Most deploy providers don't let you upload `.env` files (unless you're using baremetal) and usually have their own way of determining environments.
 
+## v7.0.7
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.7
+
 ## v7.0.6
 
 - See https://github.com/redwoodjs/redwood/releases/tag/v7.0.6
