@@ -35,7 +35,7 @@ describe('createSuspendingCell', () => {
 
   const mockedQueryHook = () => ({ data: {} })
 
-  test.only('Renders a static Success component', async () => {
+  test('Renders a static Success component', async () => {
     const TestCell = createSuspendingCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -53,7 +53,7 @@ describe('createSuspendingCell', () => {
     screen.getByText(/^Great success!$/)
   })
 
-  test.only('Renders Success with data', async () => {
+  test('Renders Success with data', async () => {
     const TestCell = createSuspendingCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -84,7 +84,7 @@ describe('createSuspendingCell', () => {
     screen.getByText(/^42$/)
   })
 
-  test.only('Renders Success if any of the fields have data (i.e. not just the first)', async () => {
+  test('Renders Success if any of the fields have data (i.e. not just the first)', async () => {
     const TestCell = createSuspendingCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { users { name } posts { title } }',
