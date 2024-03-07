@@ -4,6 +4,7 @@ import pluginTester from 'babel-plugin-tester'
 import { vi, describe, beforeEach, afterAll } from 'vitest'
 
 import { BundlerEnum } from '@redwoodjs/project-config'
+import type projectConfig from '@redwoodjs/project-config'
 
 import plugin from '../babel-plugin-redwood-prerender-media-imports'
 
@@ -11,10 +12,7 @@ let mockDistDir
 let mockSrcDir
 
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {
-  const originalProjectConfig = await importOriginal<
-    // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-    typeof import('@redwoodjs/project-config')
-  >()
+  const originalProjectConfig = await importOriginal<typeof projectConfig>()
   return {
     ...originalProjectConfig,
     getPaths: () => {
