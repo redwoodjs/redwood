@@ -1,5 +1,22 @@
 # CHANGELOG
 
+- feature: Enable [CSS nesting](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting/Using_CSS_nesting) syntax by default when using Tailwind:
+  
+  ```
+  .button {
+    @apply p-2 font-semibold bg-gray-500;
+    &:hover {
+      @apply bg-red-500;
+    }
+    .icon {
+      @apply w-4 h-4;
+    }
+    span {
+      @apply text-sm;
+    }
+  }
+  ```
+
 ## Unreleased
 
 ## v7.1.0
