@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## Unreleased
+- fix(api-server): Preserve original host header for proxied API requests
+Some apps rely on reading the host header(eg multi-tenant apps served over multiple subdomains).  This change forwards on the original host header on proxied Fastify requests, and the experimental SSR/RSC server
 
 - fix(context): Re-export context from graphql-server (#10117)
 
