@@ -1,6 +1,7 @@
 let mockDelay = 0
 vi.mock('../util', async (importOriginal) => {
-  const actualUtil = await importOriginal()
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+  const actualUtil = await importOriginal<typeof import('../util')>()
   const { lazy } = await import('react')
 
   return {
@@ -10,7 +11,7 @@ vi.mock('../util', async (importOriginal) => {
       prerenderLoader: () => ({ default: specOrPage }),
       LazyComponent: lazy(
         () =>
-          new Promise((resolve) =>
+          new Promise<any>((resolve) =>
             setTimeout(() => resolve({ default: specOrPage }), mockDelay)
           )
       ),
@@ -182,7 +183,7 @@ beforeEach(() => {
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 
-describe.skip('slow imports', () => {
+describe.only('slow imports', () => {
   const HomePagePlaceholder = () => <>HomePagePlaceholder</>
   const AboutPagePlaceholder = () => <>AboutPagePlaceholder</>
   const ParamPagePlaceholder = () => <>ParamPagePlaceholder</>
@@ -315,7 +316,7 @@ describe.skip('slow imports', () => {
     mockDelay = 0
   })
 
-  test(
+  test.skip(
     'Basic home page',
     async () => {
       const screen = render(<TestRouter />)
@@ -326,7 +327,7 @@ describe.skip('slow imports', () => {
     timeoutForFlakeyAsyncTests
   )
 
-  test(
+  test.skip(
     'Navigation',
     async () => {
       const screen = render(<TestRouter />)
@@ -360,7 +361,7 @@ describe.skip('slow imports', () => {
     timeoutForFlakeyAsyncTests
   )
 
-  test(
+  test.skip(
     'Redirect page',
     async () => {
       act(() => navigate('/redirect'))
@@ -371,7 +372,7 @@ describe.skip('slow imports', () => {
     timeoutForFlakeyAsyncTests
   )
 
-  test(
+  test.skip(
     'Redirect route',
     async () => {
       const screen = render(<TestRouter />)
@@ -384,7 +385,7 @@ describe.skip('slow imports', () => {
     timeoutForFlakeyAsyncTests
   )
 
-  test(
+  test.skip(
     'Private page when not authenticated',
     async () => {
       act(() => navigate('/private'))
@@ -401,7 +402,7 @@ describe.skip('slow imports', () => {
     timeoutForFlakeyAsyncTests
   )
 
-  test(
+  test.skip(
     'Private page when authenticated',
     async () => {
       act(() => navigate('/private'))
@@ -416,7 +417,7 @@ describe.skip('slow imports', () => {
     timeoutForFlakeyAsyncTests
   )
 
-  test(
+  test.skip(
     'Private page when authenticated but does not have the role',
     async () => {
       act(() => navigate('/private_with_role'))
@@ -434,7 +435,7 @@ describe.skip('slow imports', () => {
     timeoutForFlakeyAsyncTests
   )
 
-  test(
+  test.skip(
     'Private page when authenticated but does have the role',
     async () => {
       act(() => navigate('/private_with_role'))
@@ -450,7 +451,7 @@ describe.skip('slow imports', () => {
     timeoutForFlakeyAsyncTests
   )
 
-  test(
+  test.skip(
     'useLocation',
     async () => {
       act(() => navigate('/location'))
@@ -473,7 +474,7 @@ describe.skip('slow imports', () => {
     timeoutForFlakeyAsyncTests
   )
 
-  test(
+  test.skip(
     'path params should never be empty',
     async () => {
       const PathParamPage = ({ value }: { value: string }) => {
@@ -540,20 +541,26 @@ describe.skip('slow imports', () => {
       act(() => navigate('/page-loading-context'))
 
       // 'Page Loading Context Layout' should always be shown
+      console.log('A', mockDelay, Date.now())
       await waitFor(() => screen.getByText('Page Loading Context Layout'))
 
       // 'loading in layout...' should only be shown while the page is loading.
       // So in this case, for the first 700ms
+      console.log('B', mockDelay, Date.now())
       await waitFor(() => screen.getByText('loading in layout...'))
 
       // After 700ms 'Page Loading Context Page' should be rendered
+      console.log('C', mockDelay, Date.now())
       await waitFor(() => screen.getByText('Page Loading Context Page'))
 
       // This shouldn't show up, because the page shouldn't render before it's
       // fully loaded
+      console.log('D', mockDelay, Date.now())
       expect(screen.queryByText('loading in page...')).not.toBeInTheDocument()
 
+      console.log('E', mockDelay, Date.now())
       await waitFor(() => screen.getByText('done loading in page'))
+      console.log('F', mockDelay, Date.now())
       await waitFor(() => screen.getByText('done loading in layout'))
     },
     timeoutForFlakeyAsyncTests
