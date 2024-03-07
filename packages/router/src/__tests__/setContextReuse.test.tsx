@@ -1,11 +1,10 @@
 import React from 'react'
 
 import { act, render, waitFor } from '@testing-library/react'
+import { test } from 'vitest'
 
 import { Route, Router, navigate } from '../'
 import { Set } from '../Set'
-
-import '@testing-library/jest-dom/jest-globals'
 
 const HomePage = () => {
   return <p>Home Page</p>
