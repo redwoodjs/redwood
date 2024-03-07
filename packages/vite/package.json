@@ -2,7 +2,6 @@
   "name": "@redwoodjs/vite",
   "version": "7.0.0",
   "description": "Vite configuration package for Redwood",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -13,45 +12,41 @@
     "./package.json": "./package.json",
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.mjs"
+      "default": "./dist/index.js"
     },
     "./entries": {
       "types": "./dist/entries.d.ts",
-      "default": "./dist/entries.mjs"
+      "default": "./dist/entries.js"
     },
     "./client": {
       "types": "./dist/client.d.ts",
-      "default": "./dist/client.mjs"
+      "default": "./dist/client.js"
     },
     "./assets": {
       "types": "./dist/fully-react/assets.d.ts",
-      "default": "./dist/fully-react/assets.mjs"
+      "default": "./dist/fully-react/assets.js"
     },
     "./rwRscGlobal": {
       "types": "./dist/fully-react/rwRscGlobal.d.ts",
-      "default": "./dist/fully-react/rwRscGlobal.mjs"
+      "default": "./dist/fully-react/rwRscGlobal.js"
     },
     "./buildFeServer": {
       "types": "./dist/buildFeServer.d.ts",
-      "default": "./dist/buildFeServer.mjs"
-    },
-    "./node-loader": {
-      "types": "./dist/rsc/rscNodeLoader.d.ts",
-      "default": "./dist/rsc/rscNodeLoader.mjs"
+      "default": "./dist/buildFeServer.js"
     },
     "./react-node-loader": {
       "types": "./dist/react-server-dom-webpack/node-loader.d.ts",
-      "default": "./dist/react-server-dom-webpack/node-loader.mjs"
+      "default": "./dist/react-server-dom-webpack/node-loader.js"
     },
     "./bins/rw-vite-build.mjs": "./bins/rw-vite-build.mjs",
     "./middleware": {
       "types": "./dist/middleware/index.d.ts",
-      "default": "./dist/middleware/index.mjs"
+      "default": "./dist/middleware/index.js"
     }
   },
   "bin": {
-    "rw-dev-fe": "./dist/devFeServer.mjs",
-    "rw-serve-fe": "./dist/runFeServer.mjs",
+    "rw-dev-fe": "./dist/devFeServer.js",
+    "rw-serve-fe": "./dist/runFeServer.js",
     "rw-vite-build": "./bins/rw-vite-build.mjs",
     "rw-vite-dev": "./bins/rw-vite-dev.mjs",
     "vite": "./bins/vite.mjs"
@@ -61,18 +56,16 @@
     "inject"
   ],
   "scripts": {
-    "build:cjs": "yarn build:js && yarn build:types",
+    "build": "yarn build:js && yarn build:types",
     "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
-    "build": "tsx ./build.ts && run build:types",
     "build:pack": "yarn pack -o redwoodjs-vite.tgz",
     "build:types": "tsc --build --verbose",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run src",
     "test:watch": "vitest watch src"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.9",
+    "@babel/runtime-corejs3": "7.24.0",
+    "@redwoodjs/babel-config": "7.0.0",
     "@redwoodjs/internal": "7.0.0",
     "@redwoodjs/project-config": "7.0.0",
     "@redwoodjs/web": "7.0.0",
@@ -91,7 +84,6 @@
     "isbot": "3.7.1",
     "react": "0.0.0-experimental-e5205658f-20230913",
     "react-server-dom-webpack": "0.0.0-experimental-e5205658f-20230913",
-    "tsx": "4.6.2",
     "vite": "4.5.2",
     "yargs-parser": "21.1.1"
   },

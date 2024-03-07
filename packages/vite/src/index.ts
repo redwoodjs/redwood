@@ -212,9 +212,6 @@ export default function redwoodPluginVite(): PluginOption[] {
             sourcemap: !env.ssrBuild && rwConfig.web.sourceMap, // Note that this can be boolean or 'inline'
             rollupOptions: {
               input: getRollupInput(!!env.ssrBuild),
-              output: {
-                entryFileNames: '[name].js',
-              },
             },
           },
           legacy: {
