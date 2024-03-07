@@ -20,7 +20,7 @@ describe('rw serve', () => {
             --version                             Show version number        [boolean]
             --cwd                                 Working directory to use (where
                                                   \`redwood.toml\` is located)
-            --add-env-files                       Load additional .env files. Values
+            --load-env-files                      Load additional .env files. Values
                                                   defined in files specified later
                                                   override earlier ones.       [array]
             --telemetry                           Whether to send anonymous usage
@@ -68,7 +68,7 @@ describe('rw serve', () => {
               --version                             Show version number        [boolean]
               --cwd                                 Working directory to use (where
                                                     \`redwood.toml\` is located)
-              --add-env-files                       Load additional .env files. Values
+              --load-env-files                      Load additional .env files. Values
                                                     defined in files specified later
                                                     override earlier ones.       [array]
               --telemetry                           Whether to send anonymous usage

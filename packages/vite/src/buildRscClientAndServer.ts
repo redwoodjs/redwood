@@ -1,9 +1,9 @@
-import { rscBuildAnalyze } from './rsc/rscBuildAnalyze'
-import { rscBuildClient } from './rsc/rscBuildClient'
-import { rscBuildClientEntriesMappings } from './rsc/rscBuildClientEntriesFile'
-import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets'
-import { rscBuildForServer } from './rsc/rscBuildForServer'
-import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars'
+import { rscBuildAnalyze } from './rsc/rscBuildAnalyze.js'
+import { rscBuildClient } from './rsc/rscBuildClient.js'
+import { rscBuildClientEntriesMappings } from './rsc/rscBuildClientEntriesFile.js'
+import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets.js'
+import { rscBuildForServer } from './rsc/rscBuildForServer.js'
+import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars.js'
 
 export const buildRscClientAndServer = async () => {
   // Analyze all files and generate a list of RSCs and RSFs

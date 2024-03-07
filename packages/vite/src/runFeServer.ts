@@ -17,12 +17,12 @@ import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { registerFwGlobals } from './lib/registerGlobals'
-import { invoke } from './middleware/invokeMiddleware'
-import { createRscRequestHandler } from './rsc/rscRequestHandler'
-import { setClientEntries } from './rsc/rscWorkerCommunication'
-import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
-import type { RWRouteManifest } from './types'
+import { registerFwGlobals } from './lib/registerGlobals.js'
+import { invoke } from './middleware/invokeMiddleware.js'
+import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
+import { setClientEntries } from './rsc/rscWorkerCommunication.js'
+import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
+import type { RWRouteManifest } from './types.js'
 
 /**
  * TODO (STREAMING)
@@ -109,7 +109,7 @@ export async function runFeServer() {
     // @WARN! Be careful, between v2 and v3 of http-proxy-middleware
     // the syntax has changed https://github.com/chimurai/http-proxy-middleware
     createProxyMiddleware({
-      changeOrigin: true,
+      changeOrigin: false,
       pathRewrite: {
         [`^${rwConfig.web.apiUrl}`]: '', // remove base path
       },

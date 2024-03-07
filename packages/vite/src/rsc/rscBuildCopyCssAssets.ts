@@ -3,7 +3,7 @@ import path from 'path'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { rscBuildForServer } from './rscBuildForServer'
+import type { rscBuildForServer } from './rscBuildForServer.js'
 
 /**
  * RSC build. Step 4.

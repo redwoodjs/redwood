@@ -8,11 +8,11 @@ import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { registerFwGlobals } from './lib/registerGlobals'
-import { invoke } from './middleware/invokeMiddleware'
-import { collectCssPaths, componentsModules } from './streaming/collectCss'
-import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
-import { ensureProcessDirWeb } from './utils'
+import { registerFwGlobals } from './lib/registerGlobals.js'
+import { invoke } from './middleware/invokeMiddleware.js'
+import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
+import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
+import { ensureProcessDirWeb } from './utils.js'
 
 // TODO (STREAMING) Just so it doesn't error out. Not sure how to handle this.
 globalThis.__REDWOOD__PRERENDER_PAGES = {}

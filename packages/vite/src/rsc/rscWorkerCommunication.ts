@@ -8,8 +8,6 @@ const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
     '--conditions',
     'react-server',
     '--experimental-loader',
-    '@redwoodjs/vite/node-loader',
-    '--experimental-loader',
     '@redwoodjs/vite/react-node-loader',
   ],
 })

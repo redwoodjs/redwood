@@ -3,7 +3,7 @@ import type { ReactElement } from 'react'
 
 import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
 
-import { StatusError } from './lib/StatusError'
+import { StatusError } from './lib/StatusError.js'
 
 const checkStatus = async (
   responsePromise: Promise<Response>

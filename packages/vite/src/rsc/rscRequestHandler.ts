@@ -2,9 +2,9 @@ import busboy from 'busboy'
 import type { Request, Response } from 'express'
 import RSDWServer from 'react-server-dom-webpack/server.node.unbundled'
 
-import { hasStatusCode } from '../lib/StatusError'
+import { hasStatusCode } from '../lib/StatusError.js'
 
-import { renderRsc } from './rscWorkerCommunication'
+import { renderRsc } from './rscWorkerCommunication.js'
 
 const { decodeReply, decodeReplyFromBusboy } = RSDWServer
 

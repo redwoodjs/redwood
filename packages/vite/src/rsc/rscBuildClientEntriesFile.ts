@@ -2,8 +2,8 @@ import fs from 'fs/promises'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { rscBuildClient } from './rscBuildClient'
-import type { rscBuildForServer } from './rscBuildForServer'
+import type { rscBuildClient } from './rscBuildClient.js'
+import type { rscBuildForServer } from './rscBuildForServer.js'
 
 /**
  * RSC build. Step 5.
