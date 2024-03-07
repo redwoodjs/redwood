@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## Unreleased
+- fix(api-server): Preserve original host header for proxied API requests
+Some apps rely on reading the host header(eg multi-tenant apps served over multiple subdomains).  This change forwards on the original host header on proxied Fastify requests, and the experimental SSR/RSC server
 
 - fix(deps): update prisma monorepo to v5.10.2 (#10088)
 
