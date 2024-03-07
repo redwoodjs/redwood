@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { render, screen } from '@testing-library/react'
-import { vi, describe, beforeAll, test, expect } from 'vitest'
+import { vi, describe, test, expect } from 'vitest'
 
 import { createCell } from './createCell'
 import { GraphQLHooksProvider } from './GraphQLHooksProvider'
