@@ -1,5 +1,5 @@
 import { render, waitFor } from '@testing-library/react'
-import '@testing-library/jest-dom/jest-globals'
+import { beforeEach, test, expect } from 'vitest'
 
 import { getFocus } from '../a11yUtils'
 import RouteFocus from '../route-focus'
