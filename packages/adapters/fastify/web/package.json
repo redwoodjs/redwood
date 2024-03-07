@@ -21,7 +21,7 @@
     "test:watch": "vitest watch src"
   },
   "dependencies": {
-    "@fastify/http-proxy": "9.3.0",
+    "@fastify/http-proxy": "9.4.0",
     "@fastify/static": "6.12.0",
     "@fastify/url-data": "5.4.0",
     "@redwoodjs/project-config": "7.0.0",
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "7.0.0",
-    "fastify": "4.25.2",
+    "fastify": "4.26.2",
     "tsx": "4.6.2",
     "typescript": "5.3.3",
     "vitest": "1.2.2"
