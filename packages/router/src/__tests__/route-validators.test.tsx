@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest'
+
 import { isValidRoute } from '../route-validators'
 import { Route } from '../router'
 
