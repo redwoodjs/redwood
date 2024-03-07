@@ -8530,9 +8530,9 @@ __metadata:
     cheerio: "npm:1.0.0-rc.12"
     core-js: "npm:3.35.1"
     graphql: "npm:16.8.1"
-    jest: "npm:29.7.0"
     mime-types: "npm:2.1.35"
     typescript: "npm:5.3.3"
+    vitest: "npm:1.2.2"
   peerDependencies:
     react: 0.0.0-experimental-e5205658f-20230913
     react-dom: 0.0.0-experimental-e5205658f-20230913
