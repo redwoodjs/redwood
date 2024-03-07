@@ -19,14 +19,14 @@ export function loadEnvFiles() {
   loadDefaultEnvFiles(base)
   loadNodeEnvDerivedEnvFile(base)
 
-  const { addEnvFiles } = Parser(hideBin(process.argv), {
+  const { loadEnvFiles } = Parser(hideBin(process.argv), {
     array: ['load-env-files'],
     default: {
-      addEnvFiles: [],
+      loadEnvFiles: [],
     },
   })
-  if (addEnvFiles.length > 0) {
-    loadUserSpecifiedEnvFiles(base, addEnvFiles)
+  if (loadEnvFiles.length > 0) {
+    loadUserSpecifiedEnvFiles(base, loadEnvFiles)
   }
 
   process.env.REDWOOD_ENV_FILES_LOADED = 'true'
@@ -65,8 +65,8 @@ export function loadNodeEnvDerivedEnvFile(cwd) {
 /**
  * @param {string} cwd
  */
-export function loadUserSpecifiedEnvFiles(cwd, addEnvFiles) {
-  for (const suffix of addEnvFiles) {
+export function loadUserSpecifiedEnvFiles(cwd, loadEnvFiles) {
+  for (const suffix of loadEnvFiles) {
     const envPath = path.join(cwd, `.env.${suffix}`)
     if (!fs.pathExistsSync(envPath)) {
       throw new Error(
