@@ -1,60 +1,10 @@
 # CHANGELOG
 
 ## Unreleased
-- fix(api-server): Preserve original host header for proxied API requests
-Some apps rely on reading the host header(eg multi-tenant apps served over multiple subdomains).  This change forwards on the original host header on proxied Fastify requests, and the experimental SSR/RSC server
 
-- fix(deps): update prisma monorepo to v5.10.2 (#10088)
+## v7.1.0
 
-  This release updates Prisma to v5.10.2. Here are quick links to all the release notes since the last version (v5.9.1):
-
-  - https://github.com/prisma/prisma/releases/tag/5.10.0
-  - https://github.com/prisma/prisma/releases/tag/5.10.1
-  - https://github.com/prisma/prisma/releases/tag/5.10.2
-
-- fix(deps): update opentelemetry-js monorepo (#10065)
-
-  Updates our opentelemetry packages. This is a breaking change for users of
-  our experimental opentelemetry support. This is what their changelog says is
-  breaking:
-
-  * fix(exporter-metrics-otlp-grpc): programmatic headers take precedence over
-    environment variables #2370 @Vunovati
-  * fix(exporter-metrics-otlp-http): programmatic headers take precedence over
-    environment variables #2370 @Vunovati
-  * fix(exporter-metrics-otlp-proto): programmatic headers take precedence over
-    environment variables #2370 @Vunovati
-  * fix(otlp-exporter-base)!: decrease default concurrency limit to 30 #4211
-    @pichlermarc
-    * fixes a memory leak on prolonged collector unavailability
-    * this change is marked as breaking as it changes defaults
-  * fix(instrumentation)!: pin import-in-the-middle@1.7.1 #4441
-    * Fixes a bug where, in some circumstances, ESM instrumentation packages
-      would try to instrument CJS exports on ESM, causing the end-user
-      application to crash.
-    * This breaking change only affects users that are using the experimental
-      @opentelemetry/instrumentation/hook.mjs loader hook AND Node.js 18.19 or
-      later:
-      * This reverts back to an older version of import-in-the-middle due to
-        DataDog/import-in-the-middle#57
-      * This version does not support Node.js 18.19 or later
-
-- Add support for loading more env var files (#9961, #10093, and #10094)
-
-  Fixes #9877. This PR adds CLI functionality to load more `.env` files via `NODE_ENV` and an `--load-env-files` flag.
-  Env vars loaded via either of these methods override the values in `.env`:
-
-  ```
-  # Loads '.env.production', which overrides values in '.env'
-  NODE_ENV=production yarn rw exec myScript
-
-  # Load '.env.stripe' and '.env.nakama', which overrides values
-  yarn rw exec myScript --load-env-files stripe nakama
-  # Or you can specify them individually:
-  yarn rw exec myScript --load-env-files stripe --load-env-files nakama
-  ```
-
-  Note that this feature is mainly for local scripting. Most deploy providers don't let you upload `.env` files (unless you're using baremetal) and usually have their own way of determining environments.
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.1.0
 
 ## v7.0.7
 
