@@ -1,9 +1,7 @@
-/**
- * @jest-environment jsdom
- */
+import React from 'react'
 
 import { render, screen } from '@testing-library/react'
-import '@testing-library/jest-dom/jest-globals'
+import { vi, describe, beforeAll, test, expect } from 'vitest'
 
 import { createCell } from './createCell'
 import { GraphQLHooksProvider } from './GraphQLHooksProvider'
@@ -386,7 +384,7 @@ describe('createCell', () => {
 
     // Prevent writing to stderr during this render.
     const err = console.error
-    console.error = jest.fn()
+    console.error = vi.fn()
 
     let error
     try {

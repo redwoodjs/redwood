@@ -1,6 +1,8 @@
-import type { RenderResult } from '@testing-library/react'
+import React from 'react'
+
 import { render, waitFor } from '@testing-library/react'
 import { HelmetProvider } from 'react-helmet-async'
+import { describe, beforeAll, it, expect, beforeEach, afterAll } from 'vitest'
 
 import { Metadata } from './Metadata'
 
