@@ -17,6 +17,7 @@ import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider'
  * Pre-configured vite plugin, with required config for Redwood apps.
  */
 export default function redwoodPluginVite(): PluginOption[] {
+  console.log('redwoodPluginVite')
   const rwPaths = getPaths()
   const rwConfig = getConfig()
 

@@ -165,6 +165,11 @@ function getRollupInput(ssr: boolean): InputOption | undefined {
   const rwConfig = getConfig()
   const rwPaths = getPaths()
 
+  console.log({
+    ssr,
+    client: rwPaths.web.entryClient,
+  })
+
   // @NOTE once streaming ssr is out of experimental, this will become the
   // default
   if (rwConfig.experimental.streamingSsr.enabled) {

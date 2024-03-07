@@ -17,7 +17,7 @@ import { createServer, resolveConfig } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { defineEntries } from '../entries'
+// import type { defineEntries } from '../entries'
 import { registerFwGlobals } from '../lib/registerGlobals'
 import { StatusError } from '../lib/StatusError'
 
@@ -33,7 +33,7 @@ import type {
 // streams
 const { renderToPipeableStream } = RSDWServer
 
-type Entries = { default: ReturnType<typeof defineEntries> }
+// type Entries = { default: ReturnType<typeof defineEntries> }
 type PipeableStream = { pipe<T extends Writable>(destination: T): T }
 
 const handleSetClientEntries = async ({
@@ -129,10 +129,15 @@ const vitePromise = createServer({
   ],
   ssr: {
     resolve: {
-      externalConditions: ['react-server'],
+      // externalConditions: ['react-server'],
     },
   },
   appType: 'custom',
+}).then((vite) => {
+  console.log('moduleGraph', vite.moduleGraph)
+  console.log('idMap', vite.moduleGraph.idToModuleMap.entries())
+  console.log('Vite server started - rscWorker.ts')
+  return vite
 })
 
 const shutdown = async () => {
@@ -146,6 +151,9 @@ const shutdown = async () => {
 }
 
 const loadServerFile = async (fname: string) => {
+  console.log({
+    fname,
+  })
   const vite = await vitePromise
   // TODO (RSC): In prod we shouldn't need this. We should be able to just
   // import the built files
@@ -162,8 +170,10 @@ parentPort.on('message', (message: MessageReq) => {
   if (message.type === 'shutdown') {
     shutdown()
   } else if (message.type === 'setClientEntries') {
+    console.log('handleSetClientEntries')
     handleSetClientEntries(message)
   } else if (message.type === 'render') {
+    console.log('handleRender')
     handleRender(message)
     // } else if (message.type === 'getCustomModules') {
     //   handleGetCustomModules(message)
@@ -177,10 +187,24 @@ type ConfigType = Omit<ResolvedConfig, 'root'> & { root: string }
 const configPromise: Promise<ConfigType> = resolveConfig({}, 'serve')
 
 const getFunctionComponent = async (rscId: string) => {
-  const entriesFile = getPaths().web.distRscEntries
+  // const entriesFile = getPaths().web.distRscEntries
+  const entriesFile = getPaths().web.entries
+  if (!entriesFile) {
+    throw new Error('entries file not found at: ' + entriesFile)
+  }
+  // const {
+  //   default: { getEntry },
+  // } = await (loadServerFile(entriesFile) as Promise<Entries>)
+
+  console.log('error here')
+  console.log(
+    Object.fromEntries((await vitePromise).moduleGraph.idToModuleMap.entries())
+  )
+
   const {
     default: { getEntry },
-  } = await (loadServerFile(entriesFile) as Promise<Entries>)
+  } = await (await vitePromise).ssrLoadModule(entriesFile)
+
   const mod = await getEntry(rscId)
   if (typeof mod === 'function') {
     return mod
@@ -226,14 +250,21 @@ async function setClientEntries(
   // This is the Vite config
   const config = await configPromise
 
-  const entriesFile = getPaths().web.distRscEntries
+  const entriesPath = getPaths().web.entries
+  if (!entriesPath) {
+    throw new Error('entries file not found at: ' + entriesPath)
+  }
+  const entriesFile = await (await vitePromise).ssrLoadModule(entriesPath)
+
+  // const entriesFile = getPaths().web.distRscEntries
   console.log('setClientEntries :: entriesFile', entriesFile)
-  const { clientEntries } = await loadServerFile(entriesFile)
+  // const { clientEntries } = await loadServerFile(entriesFile)
+  const { clientEntries } = entriesFile
   console.log('setClientEntries :: clientEntries', clientEntries)
   if (!clientEntries) {
     throw new Error('Failed to load clientEntries')
   }
-  const baseDir = path.dirname(entriesFile)
+  const baseDir = path.dirname(entriesPath)
 
   // Convert to absolute paths
   absoluteClientEntries = Object.fromEntries(
@@ -332,6 +363,9 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
 
   if (input.rscId && input.props) {
     const component = await getFunctionComponent(input.rscId)
+    console.log({
+      component,
+    })
     return renderToPipeableStream(
       createElement(component, input.props),
       bundlerConfig

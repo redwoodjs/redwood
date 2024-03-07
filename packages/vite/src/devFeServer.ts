@@ -10,6 +10,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { registerFwGlobals } from './lib/registerGlobals'
 import { invoke } from './middleware/invokeMiddleware'
+import { createRscRequestHandler } from './rsc/rscRequestHandler'
 import { collectCssPaths, componentsModules } from './streaming/collectCss'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
 import { ensureProcessDirWeb } from './utils'
@@ -53,10 +54,64 @@ async function createServer() {
     logLevel: 'info',
     clearScreen: false,
     appType: 'custom',
+  }).then((vite) => {
+    console.log('middleware one')
+    setTimeout(() => {
+      // const res = Object.fromEntries(vite.moduleGraph.idToModuleMap.entries())
+      // console.dir(
+      //   res[
+      //     '/Users/jgmw/Development/redwood/rw-test/ssr-example/web/src/pages/HomePage/HomePage.tsx'
+      //   ],
+      //   { depth: null }
+      // )
+
+      function collectCss(
+        mod: any,
+        preloadUrls: Set<string>,
+        visitedModules: Set<string>,
+        skipPageViewFiles: string[]
+      ): void {
+        if (!mod) {
+          return
+        }
+        if (!mod.url) {
+          return
+        }
+        if (
+          skipPageViewFiles.some(
+            (pageViewFile) => mod.id && mod.id.includes(pageViewFile)
+          )
+        ) {
+          return
+        }
+        if (visitedModules.has(mod.url)) {
+          return
+        }
+        console.log('collectCss', mod.url)
+        mod.importedModules.forEach((dep: any) => {
+          collectCss(dep, preloadUrls, visitedModules, skipPageViewFiles)
+        })
+      }
+
+      collectCss(
+        vite.moduleGraph.idToModuleMap.get(
+          '/Users/jgmw/Development/redwood/rw-test/ssr-example/web/src/pages/HomePage/HomePage.tsx'
+        ),
+        new Set(),
+        new Set(),
+        []
+      )
+
+      console.log(vite.moduleGraph.getModuleByUrl('/pages/HomePage/Tobbe.css'))
+    }, 10_000)
+    return vite
   })
 
   // use vite's connect instance as middleware
   app.use(vite.middlewares)
+
+  // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
+  app.use('/rw-rsc', createRscRequestHandler())
 
   const routes = getProjectRoutes()
 
@@ -103,7 +158,9 @@ async function createServer() {
   return await app.listen(port)
 }
 
-let devApp = createServer()
+let devApp = createServer().finally(() => {
+  console.log('Server started - devApp')
+})
 
 process.stdin.on('data', async (data) => {
   const str = data.toString().trim().toLowerCase()
