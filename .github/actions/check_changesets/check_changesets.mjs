@@ -32,7 +32,7 @@ async function main() {
   console.log(
     [
       '',
-      '📝 Consider adding a Changeset',
+      '📝 Consider adding a changeset',
       '==============================',
       '',
       'If this is a user-facing PR (a feature or a fix), it should probably have a changeset.',
