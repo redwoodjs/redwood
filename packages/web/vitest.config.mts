@@ -14,7 +14,7 @@ export default defineConfig({
   plugins: [
     babel({
       babelHelpers: 'runtime',
-      extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs'],
+      extensions: ['.ts', '.tsx', '.js'],
       include: ['src/**/*'],
       plugins: [
         [
