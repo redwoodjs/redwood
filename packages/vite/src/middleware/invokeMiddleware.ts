@@ -10,6 +10,11 @@ type Middleware = (
   route?: any
 ) => Promise<MiddlewareResponse> | Response | void
 
+type MiddlewareInvokeOptions = {
+  route?: RWRouteManifestItem
+  cssPaths?: Array<string>
+}
+
 /**
  *
  * Invokes the middleware function, and guarantees and MWResponse object is returned
@@ -21,7 +26,7 @@ type Middleware = (
 export const invoke = async (
   req: Request,
   middleware?: Middleware,
-  options?: { route?: RWRouteManifestItem }
+  options?: MiddlewareInvokeOptions
 ): Promise<[MiddlewareResponse, ServerAuthState]> => {
   if (typeof middleware !== 'function') {
     return [MiddlewareResponse.next(), defaultAuthProviderState]

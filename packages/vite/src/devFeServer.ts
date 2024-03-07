@@ -66,7 +66,11 @@ async function createServer() {
 
       const middleware = entryServerImport.middleware
 
-      const [mwRes] = await invoke(req, middleware, route ? { route } : {})
+      const [mwRes] = await invoke(
+        req,
+        middleware,
+        route ? { route, cssPaths: getCssLinks(rwPaths, route, vite) } : {}
+      )
 
       return mwRes.toResponse()
     })
