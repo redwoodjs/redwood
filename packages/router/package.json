@@ -32,6 +32,9 @@
   "devDependencies": {
     "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
+    "@babel/plugin-transform-runtime": "7.24.0",
+    "@babel/runtime": "7.24.0",
+    "@rollup/plugin-babel": "6.0.4",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "react": "0.0.0-experimental-e5205658f-20230913",

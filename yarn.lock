@@ -8608,8 +8608,11 @@ __metadata:
   dependencies:
     "@babel/cli": "npm:7.23.9"
     "@babel/core": "npm:^7.22.20"
+    "@babel/plugin-transform-runtime": "npm:7.24.0"
+    "@babel/runtime": "npm:7.24.0"
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/auth": "npm:7.0.0"
+    "@rollup/plugin-babel": "npm:6.0.4"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
     core-js: "npm:3.35.1"
