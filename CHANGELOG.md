@@ -4,7 +4,7 @@
   
   ```
   .button {
-  @apply p-2 font-semibold bg-gray-500;
+    @apply p-2 font-semibold bg-gray-500;
     &:hover {
       @apply bg-red-500;
     }
