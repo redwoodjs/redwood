@@ -12,9 +12,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/cache@npm:3.2.2":
-  version: 3.2.2
-  resolution: "@actions/cache@npm:3.2.2"
+"@actions/cache@npm:3.2.4":
+  version: 3.2.4
+  resolution: "@actions/cache@npm:3.2.4"
   dependencies:
     "@actions/core": "npm:^1.10.0"
     "@actions/exec": "npm:^1.0.1"
@@ -24,9 +24,9 @@ __metadata:
     "@azure/abort-controller": "npm:^1.1.0"
     "@azure/ms-rest-js": "npm:^2.6.0"
     "@azure/storage-blob": "npm:^12.13.0"
-    semver: "npm:^6.1.0"
+    semver: "npm:^6.3.1"
     uuid: "npm:^3.3.3"
-  checksum: 10c0/60ce5ef0ae902ffcf4c20b4940b764df8790decd0846c642f46b44c1497a8d0b47830c78c660b2eab1eb7ddf7008bd9a93f1f2c6ff15341deb58d9ef5c497bdd
+  checksum: 10c0/81bbf9dd1712d44eb92a1b832cd76a10bd17b72a379d0c7a73ae209d152d1e5b0fb310449622c511c48ace72e92572b2927993a4c85ac98eae2f6677c42a6a6a
   languageName: node
   linkType: hard
 
@@ -29822,7 +29822,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@actions/cache": "npm:3.2.2"
+    "@actions/cache": "npm:3.2.4"
     "@actions/core": "npm:1.10.1"
     "@actions/exec": "npm:1.1.1"
     "@actions/glob": "npm:0.4.0"
@@ -30186,7 +30186,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^6.0.0, semver@npm:^6.1.0, semver@npm:^6.2.0, semver@npm:^6.3.0, semver@npm:^6.3.1":
+"semver@npm:^6.0.0, semver@npm:^6.2.0, semver@npm:^6.3.0, semver@npm:^6.3.1":
   version: 6.3.1
   resolution: "semver@npm:6.3.1"
   bin:
