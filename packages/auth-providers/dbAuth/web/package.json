@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-dbauth-web",
-  "version": "7.0.7",
+  "version": "7.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.0",
-    "@redwoodjs/auth": "7.0.7",
+    "@redwoodjs/auth": "7.1.0",
     "@simplewebauthn/browser": "7.4.0",
     "core-js": "3.35.1"
   },
