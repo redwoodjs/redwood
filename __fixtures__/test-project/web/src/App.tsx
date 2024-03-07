@@ -9,12 +9,12 @@ import { AuthProvider, useAuth } from './auth'
 import './scaffold.css'
 import './index.css'
 
-const App = () => (
+const App = ({ children }) => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <AuthProvider>
         <RedwoodApolloProvider useAuth={useAuth}>
-          <Routes />
+          {children ? children : <Routes />}
         </RedwoodApolloProvider>
       </AuthProvider>
     </RedwoodProvider>

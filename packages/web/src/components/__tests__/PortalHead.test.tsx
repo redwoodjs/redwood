@@ -3,8 +3,8 @@ import React from 'react'
 import '@testing-library/jest-dom/jest-globals'
 import { render } from '@testing-library/react'
 
-import PortalHead from './PortalHead'
-import * as ServerInject from './ServerInject'
+import PortalHead from '../PortalHead'
+import * as ServerInject from '../ServerInject'
 
 const serverInsertionHookSpy = jest
   .spyOn(ServerInject, 'useServerInsertedHTML')

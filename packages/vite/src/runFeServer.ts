@@ -15,9 +15,11 @@ import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
+import type { RWRouteManifestItem } from '@redwoodjs/internal/dist/routes'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { registerFwGlobals } from './lib/registerGlobals'
+import { createExtensionRouteDef } from './middleware/extensionRouteDef'
 import { invoke } from './middleware/invokeMiddleware'
 import { createRscRequestHandler } from './rsc/rscRequestHandler'
 import { setClientEntries } from './rsc/rscWorkerCommunication'
@@ -89,6 +91,18 @@ export async function runFeServer() {
     }
   )
 
+  const handleWithMiddleware = (route?: RWRouteManifestItem) => {
+    return createServerAdapter(async (req: Request) => {
+      const entryServerImport = await import(rwPaths.web.entryServer as string)
+
+      const middleware = entryServerImport.middleware
+
+      const [mwRes] = await invoke(req, middleware, route ? { route } : {})
+
+      return mwRes.toResponse()
+    })
+  }
+
   if (!clientEntry) {
     throw new Error('Could not find client entry in build manifest')
   }
@@ -145,24 +159,22 @@ export async function runFeServer() {
 
     // Wrap with whatg/server adapter. Express handler -> Fetch API handler
     app.get(expressPathDef, createServerAdapter(routeHandler))
+
+    // add express routes to capture extension requests and give them to middleware
+    // ie. /about.json, /about.png, etc
+    // Note this happens _after_ the actual route handlers. So if you have a route /file/:fileNameWithExtension
+    // it will still be handled by the route handler, not the middleware
+    app.get(
+      createExtensionRouteDef(route.matchRegexString),
+      handleWithMiddleware(route)
+    )
   }
 
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
   app.use('/rw-rsc', createRscRequestHandler())
 
   // @MARK: put this after rw-rsc!
-  app.post(
-    '*',
-    createServerAdapter(async (req: Request) => {
-      const entryServerImport = await import(rwPaths.web.distEntryServer)
-
-      const { middleware } = entryServerImport
-
-      const [mwRes] = await invoke(req, middleware)
-
-      return mwRes.toResponse()
-    })
-  )
+  app.post('*', handleWithMiddleware())
 
   app.use(express.static(rwPaths.web.distClient, { index: false }))
 

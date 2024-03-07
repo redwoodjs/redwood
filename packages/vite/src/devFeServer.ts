@@ -9,6 +9,7 @@ import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { registerFwGlobals } from './lib/registerGlobals'
+import { createExtensionRouteDef } from './middleware/extensionRouteDef'
 import { invoke } from './middleware/invokeMiddleware'
 import { collectCssPaths, componentsModules } from './streaming/collectCss'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
@@ -17,13 +18,14 @@ import { ensureProcessDirWeb } from './utils'
 // TODO (STREAMING) Just so it doesn't error out. Not sure how to handle this.
 globalThis.__REDWOOD__PRERENDER_PAGES = {}
 
+const rwPaths = getPaths()
+
 async function createServer() {
   ensureProcessDirWeb()
 
   registerFwGlobals()
 
   const app = express()
-  const rwPaths = getPaths()
 
   // ~~~ Dev time validations ~~~~
   // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
@@ -55,6 +57,25 @@ async function createServer() {
     appType: 'custom',
   })
 
+  // create a handler that will invoke middleware with or without a route
+  const handleWithMiddleware = (route?: RouteSpec) => {
+    return createServerAdapter(async (req: Request) => {
+      const entryServerImport = await vite.ssrLoadModule(
+        rwPaths.web.entryServer as string // already validated in dev server
+      )
+
+      const middleware = entryServerImport.middleware
+
+      const [mwRes] = await invoke(
+        req,
+        middleware,
+        route ? { route, cssPaths: getCssLinks(rwPaths, route, vite) } : {}
+      )
+
+      return mwRes.toResponse()
+    })
+  }
+
   // use vite's connect instance as middleware
   app.use(vite.middlewares)
 
@@ -82,21 +103,14 @@ async function createServer() {
 
     app.get(expressPathDef, createServerAdapter(routeHandler))
 
-    app.post(
-      '*',
-      createServerAdapter(async (req: Request) => {
-        const entryServerImport = await vite.ssrLoadModule(
-          rwPaths.web.entryServer as string // already validated in dev server
-        )
-
-        const middleware = entryServerImport.middleware
-
-        const [mwRes] = await invoke(req, middleware)
-
-        return mwRes.toResponse()
-      })
+    app.get(
+      createExtensionRouteDef(route.matchRegexString),
+      handleWithMiddleware(route)
     )
   }
+
+  // invokes middleware for any POST request for auth
+  app.post('*', handleWithMiddleware())
 
   const port = getConfig().web.port
   console.log(`Started server on http://localhost:${port}`)
