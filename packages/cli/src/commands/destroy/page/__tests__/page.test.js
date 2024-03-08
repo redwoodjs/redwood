@@ -19,7 +19,7 @@ import { files } from '../../../generate/page/page'
 import { tasks } from '../page'
 
 beforeEach(async () => {
-  const f = files({ name: 'About' })
+  const f = await files({ name: 'About' })
   vol.fromJSON({
     ...f,
     [getPaths().web.routes]: [

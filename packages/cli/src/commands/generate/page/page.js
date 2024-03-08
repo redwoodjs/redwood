@@ -138,7 +138,9 @@ export const files = async ({ name, tests, stories, typescript, ...rest }) => {
   return files.reduce(async (accP, [outputPath, content]) => {
     const acc = await accP
 
-    const template = typescript ? content : transformTSToJS(outputPath, content)
+    const template = typescript
+      ? content
+      : await transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
