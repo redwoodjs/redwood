@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import { beforeAll, afterAll, test, expect } from 'vitest'
+
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
 import { findCells, findDirectoryNamedModules } from '../files'
