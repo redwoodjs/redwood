@@ -29,7 +29,7 @@ export const apiSideFiles = async ({ basedir, webAuthn }: FilesArgs) => {
   const apiBaseTemplatePath = path.join(basedir, 'templates', 'api')
   const templateDirectories = fs.readdirSync(apiBaseTemplatePath)
 
-  let filesRecord = {}
+  let filesRecord: Record<string, string> = {}
 
   for (const dir of templateDirectories) {
     const templateFiles = fs.readdirSync(path.join(apiBaseTemplatePath, dir))
