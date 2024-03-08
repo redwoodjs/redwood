@@ -16,36 +16,36 @@ let singleWordDefaultFiles,
   withoutTestFiles,
   withoutStoryFiles
 
-beforeAll(() => {
-  singleWordDefaultFiles = component.files({
+beforeAll(async () => {
+  singleWordDefaultFiles = await component.files({
     name: 'User',
     tests: true,
     stories: true,
   })
-  multiWordDefaultFiles = component.files({
+  multiWordDefaultFiles = await component.files({
     name: 'UserProfile',
     tests: true,
     stories: true,
   })
-  javascriptFiles = component.files({
+  javascriptFiles = await component.files({
     name: 'JavascriptUser',
     typescript: false,
     stories: true,
     tests: true,
   })
-  typescriptFiles = component.files({
+  typescriptFiles = await component.files({
     name: 'TypescriptUser',
     typescript: true,
     stories: true,
     tests: true,
   })
-  withoutTestFiles = component.files({
+  withoutTestFiles = await component.files({
     name: 'withoutTests',
     javascript: true,
     stories: true,
     tests: false,
   })
-  withoutStoryFiles = component.files({
+  withoutStoryFiles = await component.files({
     name: 'withoutStories',
     javascript: true,
     tests: true,
