@@ -8,8 +8,8 @@ import '../../../../lib/test'
 
 import * as layout from '../layout'
 
-describe('Single Word default files', () => {
-  const singleWordDefaultFiles = layout.files({
+describe('Single Word default files', async () => {
+  const singleWordDefaultFiles = await layout.files({
     name: 'App',
     tests: true,
     stories: true,
@@ -50,8 +50,8 @@ describe('Single Word default files', () => {
   })
 })
 
-describe('Multi word default files', () => {
-  const multiWordDefaultFiles = layout.files({
+describe('Multi word default files', async () => {
+  const multiWordDefaultFiles = await layout.files({
     name: 'SinglePage',
     tests: true,
     stories: true,
@@ -88,8 +88,8 @@ describe('Multi word default files', () => {
   })
 })
 
-describe('JS Files', () => {
-  const javascriptFiles = layout.files({
+describe('JS Files', async () => {
+  const javascriptFiles = await layout.files({
     name: 'JavascriptPage',
     javascript: true,
     tests: true,
@@ -114,8 +114,8 @@ describe('JS Files', () => {
   })
 })
 
-test('trims Layout from end of name', () => {
-  const files = layout.files({
+test('trims Layout from end of name', async () => {
+  const files = await layout.files({
     name: 'BazingaLayout',
     tests: true,
     stories: true,
@@ -134,8 +134,8 @@ test('trims Layout from end of name', () => {
   ).toBeTruthy()
 })
 
-test('Does not trim Layout from beginning of name', () => {
-  const files = layout.files({
+test('Does not trim Layout from beginning of name', async () => {
+  const files = await layout.files({
     name: 'LayoutForBazinga',
     tests: true,
     stories: true,
@@ -154,8 +154,8 @@ test('Does not trim Layout from beginning of name', () => {
   ).toBeTruthy()
 })
 
-test('Does not trim Layout from middle of name', () => {
-  const files = layout.files({
+test('Does not trim Layout from middle of name', async () => {
+  const files = await layout.files({
     name: 'MyLayoutForBazinga',
     tests: true,
     stories: true,
@@ -174,8 +174,8 @@ test('Does not trim Layout from middle of name', () => {
   ).toBeTruthy()
 })
 
-test('Only trims Layout once', () => {
-  const files = layout.files({
+test('Only trims Layout once', async () => {
+  const files = await layout.files({
     name: 'BazingaLayoutLayout',
     tests: true,
     stories: true,
@@ -194,8 +194,8 @@ test('Only trims Layout once', () => {
   ).toBeTruthy()
 })
 
-describe('TS files', () => {
-  const typescriptFiles = layout.files({
+describe('TS files', async () => {
+  const typescriptFiles = await layout.files({
     name: 'TypescriptPage',
     typescript: true,
     tests: true,
@@ -220,8 +220,8 @@ describe('TS files', () => {
   })
 })
 
-test("doesn't include storybook file when --stories is set to false", () => {
-  const withoutStoryFiles = layout.files({
+test("doesn't include storybook file when --stories is set to false", async () => {
+  const withoutStoryFiles = await layout.files({
     name: 'withoutStories',
     javascript: true,
     tests: true,
@@ -238,8 +238,8 @@ test("doesn't include storybook file when --stories is set to false", () => {
   ])
 })
 
-test("doesn't include test file when --tests is set to false", () => {
-  const withoutTestFiles = layout.files({
+test("doesn't include test file when --tests is set to false", async () => {
+  const withoutTestFiles = await layout.files({
     name: 'withoutTests',
     tests: false,
     stories: true,
@@ -255,8 +255,8 @@ test("doesn't include test file when --tests is set to false", () => {
   ])
 })
 
-test('JavaScript: includes skip link when --skipLink is set to true', () => {
-  const withSkipLinkFilesJS = layout.files({
+test('JavaScript: includes skip link when --skipLink is set to true', async () => {
+  const withSkipLinkFilesJS = await layout.files({
     name: 'A11y',
     skipLink: true,
   })
@@ -270,8 +270,8 @@ test('JavaScript: includes skip link when --skipLink is set to true', () => {
   ).toMatchSnapshot()
 })
 
-test('TypeScript: includes skip link when --skipLink is set to true', () => {
-  const withSkipLinkFilesTS = layout.files({
+test('TypeScript: includes skip link when --skipLink is set to true', async () => {
+  const withSkipLinkFilesTS = await layout.files({
     name: 'A11y',
     skipLink: true,
     typescript: true,
