@@ -7973,7 +7973,7 @@ __metadata:
     "@babel/traverse": "npm:^7.22.20"
     "@redwoodjs/framework-tools": "npm:7.0.0"
     "@redwoodjs/project-config": "npm:7.0.0"
-    "@types/babel-plugin-tester": "npm:9.0.9"
+    "@types/babel-plugin-tester": "npm:9.0.10"
     "@types/babel__core": "npm:7.20.4"
     "@types/node": "npm:20.11.10"
     babel-plugin-auto-import: "npm:1.1.0"
@@ -10677,13 +10677,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel-plugin-tester@npm:9.0.9":
-  version: 9.0.9
-  resolution: "@types/babel-plugin-tester@npm:9.0.9"
+"@types/babel-plugin-tester@npm:9.0.10":
+  version: 9.0.10
+  resolution: "@types/babel-plugin-tester@npm:9.0.10"
   dependencies:
     "@types/babel__core": "npm:*"
     "@types/prettier": "npm:^2.0.0"
-  checksum: 10c0/b05e4d551a98d74a743945fa109cf1866fc6b57303f3daee29276e1e6ca354ff647f946e047747e5104f5d9f26cd09d2c22599b1282454283a59248e6a164fb8
+  checksum: 10c0/5f593868f2ec94dfe1eeaefd787936805f17c2964c1c93d9b28f1b389a75d0d2ed3c2f69b3e4bd119284a8273bf4279f249e4b4c9933507a60db01e16338180a
   languageName: node
   linkType: hard
 

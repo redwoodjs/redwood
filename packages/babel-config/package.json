@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "7.0.0",
-    "@types/babel-plugin-tester": "9.0.9",
+    "@types/babel-plugin-tester": "9.0.10",
     "@types/babel__core": "7.20.4",
     "@types/node": "20.11.10",
     "babel-plugin-tester": "11.0.4",
