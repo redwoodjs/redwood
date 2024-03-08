@@ -47,7 +47,7 @@
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/babel-plugin-tester": "9.0.10",
-    "@types/babel__core": "7.20.4",
+    "@types/babel__core": "7.20.5",
     "@types/node": "20.11.10",
     "babel-plugin-tester": "11.0.4",
     "jest": "29.7.0",
