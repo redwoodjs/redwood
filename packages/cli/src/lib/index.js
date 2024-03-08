@@ -226,7 +226,7 @@ export const getConfig = () => {
  */
 export const getPrettierOptions = async () => {
   try {
-    const prettierOptions = await import(
+    const { default: prettierOptions } = await import(
       path.join(getPaths().base, 'prettier.config.js')
     )
     return prettierOptions

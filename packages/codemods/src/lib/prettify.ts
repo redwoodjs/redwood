@@ -6,7 +6,7 @@ import { getPaths } from '@redwoodjs/project-config'
 
 const getPrettierConfig = async () => {
   try {
-    const prettierConfig = await import(
+    const { default: prettierConfig } = await import(
       path.join(getPaths().base, 'prettier.config.js')
     )
     return prettierConfig
