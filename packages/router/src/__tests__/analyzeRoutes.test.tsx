@@ -1,5 +1,7 @@
 import React, { isValidElement } from 'react'
 
+import { describe, test, expect } from 'vitest'
+
 import { Route, Router } from '../router'
 import { Private, PrivateSet, Set } from '../Set'
 import { analyzeRoutes } from '../util'

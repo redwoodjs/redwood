@@ -1,4 +1,4 @@
-import { afterEach } from 'vitest'
+import { afterEach, vi } from 'vitest'
 import { cleanup } from '@testing-library/react'
 import '@testing-library/jest-dom/vitest'
 
@@ -9,3 +9,6 @@ afterEach(() => {
   // https://testing-library.com/docs/react-testing-library/api/#cleanup
   cleanup()
 })
+
+// @ts-expect-error Fix this type error
+globalThis.scrollTo = vi.fn()

@@ -1,8 +1,7 @@
 import React from 'react'
 
-import '@testing-library/jest-dom'
-
 import { render, renderHook as tlrRenderHook } from '@testing-library/react'
+import { describe, expect, it, afterEach } from 'vitest'
 
 import { Link } from '../link'
 import { LocationProvider } from '../location'
