@@ -576,7 +576,7 @@ const componentFiles = async (
     })
   )
 
-  await asyncForEach(components, (component) => {
+  for (const component of components) {
     const outputComponentName = component
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
@@ -618,8 +618,8 @@ const componentFiles = async (
 
     fileList[outputPath] = generateTypescript
       ? template
-      : transformTSToJS(outputPath, template)
-  })
+      : await transformTSToJS(outputPath, template)
+  }
 
   return fileList
 }
