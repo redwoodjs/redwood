@@ -47,7 +47,7 @@ export const printTaskEpilogue = (command, description, topicId) => {
 export const isServerFileSetup = () => {
   if (!serverFileExists()) {
     throw new Error(
-      'RedwoodJS Realtime requires a serverful environment. Please run `yarn rw exp setup-server-file` first.'
+      'RedwoodJS Realtime requires a serverful environment. Please run `yarn rw setup server-file` first.'
     )
   }
 
