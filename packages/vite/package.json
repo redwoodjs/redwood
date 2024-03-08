@@ -9,6 +9,7 @@
   },
   "license": "MIT",
   "main": "cjsWrapper.js",
+  "types": "./dist/index.d.ts",
   "bin": {
     "rw-vite-build": "./bins/rw-vite-build.mjs",
     "rw-vite-dev": "./bins/rw-vite-dev.mjs",
