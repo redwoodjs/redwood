@@ -8737,7 +8737,7 @@ __metadata:
     babel-jest: "npm:^29.7.0"
     core-js: "npm:3.35.1"
     fast-glob: "npm:3.3.2"
-    jsdom: "npm:^24.0.0"
+    jsdom: "npm:24.0.0"
     msw: "npm:1.3.2"
     ts-toolbelt: "npm:9.6.0"
     typescript: "npm:5.3.3"
@@ -22768,7 +22768,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsdom@npm:^24.0.0":
+"jsdom@npm:24.0.0":
   version: 24.0.0
   resolution: "jsdom@npm:24.0.0"
   dependencies:
@@ -28257,14 +28257,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"punycode@npm:^2.1.0, punycode@npm:^2.1.1":
-  version: 2.3.0
-  resolution: "punycode@npm:2.3.0"
-  checksum: 10c0/8e6f7abdd3a6635820049e3731c623bbef3fedbf63bbc696b0d7237fdba4cefa069bc1fa62f2938b0fbae057550df7b5318f4a6bcece27f1907fc75c54160bee
-  languageName: node
-  linkType: hard
-
-"punycode@npm:^2.3.1":
+"punycode@npm:^2.1.0, punycode@npm:^2.1.1, punycode@npm:^2.3.1":
   version: 2.3.1
   resolution: "punycode@npm:2.3.1"
   checksum: 10c0/14f76a8206bc3464f794fb2e3d3cc665ae416c01893ad7a02b23766eb07159144ee612ad67af5e84fa4479ccfe67678c4feb126b0485651b302babf66f04f9e9
