@@ -193,10 +193,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:2.1.2":
-  version: 2.1.2
-  resolution: "@auth0/auth0-spa-js@npm:2.1.2"
-  checksum: 10c0/fb3a6b2ca2782a2f4aa03afe539a042076d0683c3f08e87a3bf93c6db6ad89f79441cb525f768b8bd3bb0c6b240833390bb2e06055ae30e9edf02575233ed4c7
+"@auth0/auth0-spa-js@npm:2.1.3":
+  version: 2.1.3
+  resolution: "@auth0/auth0-spa-js@npm:2.1.3"
+  checksum: 10c0/781d474564731f96182ff78d85e1d13841e924eba5d2e9a42593db28c66e2a6c59db1755c8c906698f0cd6d33d6e61501f0e0ab57ec981700966246944cccf74
   languageName: node
   linkType: hard
 
@@ -2135,16 +2135,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.30.3":
-  version: 4.30.3
-  resolution: "@clerk/clerk-react@npm:4.30.3"
+"@clerk/clerk-react@npm:4.30.7":
+  version: 4.30.7
+  resolution: "@clerk/clerk-react@npm:4.30.7"
   dependencies:
-    "@clerk/shared": "npm:1.3.1"
-    "@clerk/types": "npm:3.60.0"
+    "@clerk/shared": "npm:1.3.3"
+    "@clerk/types": "npm:3.62.1"
     tslib: "npm:2.4.1"
   peerDependencies:
     react: ">=16"
-  checksum: 10c0/4db23f01d71b4f07f9ac7f76e26b3f7a826c8d72657f9110beb838ba62be6ff1553b7eb4d49415d574b463c261077bde28e17a7b79a9b0d6fd69f2bcad24030f
+  checksum: 10c0/92f7c9fdff16d33ed87915afab01464a193ffddb058bddd9aff7699ecc667b924dfcf333d47fe8ab656f4d78c22e1b2c4c62a7d81e41f6ed9fd9d47dfa5a91ba
   languageName: node
   linkType: hard
 
@@ -2181,12 +2181,37 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@clerk/shared@npm:1.3.3":
+  version: 1.3.3
+  resolution: "@clerk/shared@npm:1.3.3"
+  dependencies:
+    glob-to-regexp: "npm:0.4.1"
+    js-cookie: "npm:3.0.1"
+    swr: "npm:2.2.0"
+  peerDependencies:
+    react: ">=16"
+  peerDependenciesMeta:
+    react:
+      optional: true
+  checksum: 10c0/a26b0f9a69305fd8b2aea57a80161671f466c5f3c6cbf629f3410252b48c3e5fa977c6841d38d834f01f2b76168558d774b8efa8c2eb1e177dfbd7c881ee4ebb
+  languageName: node
+  linkType: hard
+
 "@clerk/types@npm:3.60.0":
   version: 3.60.0
   resolution: "@clerk/types@npm:3.60.0"
   dependencies:
     csstype: "npm:3.1.1"
   checksum: 10c0/46a850320d03d2bc1b91e309ccf90e9f24abae58c51c75b45396aee16d68921661abd70fe9b2eee830404a05f178adfb0ccaddff6262c495a283965e6d0aad28
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:3.62.1":
+  version: 3.62.1
+  resolution: "@clerk/types@npm:3.62.1"
+  dependencies:
+    csstype: "npm:3.1.1"
+  checksum: 10c0/fedaa915402a1288a5fe4a079fc50cccdc9c36542fd07d9d0c88aa5ad234e2ec4e22e6fc3f1327d2f9dd1a20b8dec4498e64173e12d556bd86f9edfe65c223d0
   languageName: node
   linkType: hard
 
@@ -7518,7 +7543,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-auth0-web@workspace:packages/auth-providers/auth0/web"
   dependencies:
-    "@auth0/auth0-spa-js": "npm:2.1.2"
+    "@auth0/auth0-spa-js": "npm:2.1.3"
     "@babel/cli": "npm:7.23.9"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.0"
@@ -7529,7 +7554,7 @@ __metadata:
     typescript: "npm:5.3.3"
     vitest: "npm:1.2.2"
   peerDependencies:
-    "@auth0/auth0-spa-js": 2.1.2
+    "@auth0/auth0-spa-js": 2.1.3
   languageName: unknown
   linkType: soft
 
@@ -7623,7 +7648,7 @@ __metadata:
     "@babel/cli": "npm:7.23.9"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.0"
-    "@clerk/clerk-react": "npm:4.30.3"
+    "@clerk/clerk-react": "npm:4.30.7"
     "@clerk/types": "npm:3.60.0"
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
@@ -7632,7 +7657,7 @@ __metadata:
     typescript: "npm:5.3.3"
     vitest: "npm:1.2.2"
   peerDependencies:
-    "@clerk/clerk-react": 4.30.3
+    "@clerk/clerk-react": 4.30.7
   languageName: unknown
   linkType: soft
 
@@ -7948,7 +7973,7 @@ __metadata:
     "@babel/traverse": "npm:^7.22.20"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
-    "@types/babel-plugin-tester": "npm:9.0.9"
+    "@types/babel-plugin-tester": "npm:9.0.10"
     "@types/babel__core": "npm:7.20.4"
     "@types/node": "npm:20.11.10"
     babel-plugin-auto-import: "npm:1.1.0"
@@ -10652,13 +10677,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel-plugin-tester@npm:9.0.9":
-  version: 9.0.9
-  resolution: "@types/babel-plugin-tester@npm:9.0.9"
+"@types/babel-plugin-tester@npm:9.0.10":
+  version: 9.0.10
+  resolution: "@types/babel-plugin-tester@npm:9.0.10"
   dependencies:
     "@types/babel__core": "npm:*"
     "@types/prettier": "npm:^2.0.0"
-  checksum: 10c0/b05e4d551a98d74a743945fa109cf1866fc6b57303f3daee29276e1e6ca354ff647f946e047747e5104f5d9f26cd09d2c22599b1282454283a59248e6a164fb8
+  checksum: 10c0/5f593868f2ec94dfe1eeaefd787936805f17c2964c1c93d9b28f1b389a75d0d2ed3c2f69b3e4bd119284a8273bf4279f249e4b4c9933507a60db01e16338180a
   languageName: node
   linkType: hard
 
@@ -21008,6 +21033,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"human-id@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "human-id@npm:4.1.1"
+  bin:
+    human-id: dist/cli.js
+  checksum: 10c0/9a9a18130fb7d6bc707054bacc32cb328289be0de47ba5669fd04995435e7e59931b87c644a223d68473c450221d104175a5fefe93d77f3522822ead8945def8
+  languageName: node
+  linkType: hard
+
 "human-signals@npm:^1.1.1":
   version: 1.1.1
   resolution: "human-signals@npm:1.1.1"
@@ -22778,9 +22812,9 @@ __metadata:
   linkType: hard
 
 "jose@npm:^4.11.4, jose@npm:^4.14.6":
-  version: 4.15.4
-  resolution: "jose@npm:4.15.4"
-  checksum: 10c0/ce8b29f84d6172a566b12b599dafa82f3bef0f16278bb76d562490ac1516fcc14017b05a39d20ffad25ed504f4996d4af4c9d3e0273d95b2d5559bf6d1112bc0
+  version: 4.15.5
+  resolution: "jose@npm:4.15.5"
+  checksum: 10c0/9f208492f55ae9c547fd407c36f67ec3385051b5ca390e24f5449740f17359640b3f96fabfd38bc132cc4292b964c31b921bf356253373b1bd3eb6df799b7433
   languageName: node
   linkType: hard
 
@@ -29869,6 +29903,7 @@ __metadata:
     execa: "npm:5.1.1"
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
+    human-id: "npm:^4.1.1"
     jest: "npm:29.7.0"
     jscodeshift: "npm:0.15.0"
     lerna: "npm:8.0.2"
