@@ -17,11 +17,11 @@ import { createServer, resolveConfig } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { defineEntries } from '../entries.js'
+import type { defineEntries, GetEntry } from '../entries.js'
 import { registerFwGlobals } from '../lib/registerGlobals.js'
 import { StatusError } from '../lib/StatusError.js'
 
-import { rscReloadPlugin } from './rscVitePlugins.js'
+import { rscReloadPlugin, rscTransformPlugin } from './rscVitePlugins.js'
 import type {
   RenderInput,
   MessageRes,
@@ -32,6 +32,8 @@ import type {
 // 'react-server-dom-webpack/server.browser' so that we can respond with web
 // streams
 const { renderToPipeableStream } = RSDWServer
+
+let absoluteClientEntries: Record<string, string> = {}
 
 type Entries = { default: ReturnType<typeof defineEntries> }
 type PipeableStream = { pipe<T extends Writable>(destination: T): T }
@@ -126,12 +128,16 @@ const vitePromise = createServer({
       const message: MessageRes = { type }
       parentPort.postMessage(message)
     }),
+    rscTransformPlugin({}),
   ],
   ssr: {
     resolve: {
+      // TODO (RSC): Do we need `conditions` too?
+      // conditions: ['react-server'],
       externalConditions: ['react-server'],
     },
   },
+  server: { middlewareMode: true },
   appType: 'custom',
 })
 
@@ -177,27 +183,53 @@ type ConfigType = Omit<ResolvedConfig, 'root'> & { root: string }
 const configPromise: Promise<ConfigType> = resolveConfig({}, 'serve')
 
 const getFunctionComponent = async (rscId: string) => {
-  const entriesFile = getPaths().web.distRscEntries
-  const {
-    default: { getEntry },
-  } = await (loadServerFile(entriesFile) as Promise<Entries>)
+  let entriesFilePath: string | null
+
+  // TODO (RSC): Get rid of this when we only use the worker in dev mode
+  const isDev = Object.keys(absoluteClientEntries).length === 0
+
+  if (isDev) {
+    entriesFilePath = getPaths().web.entries
+  } else {
+    entriesFilePath = getPaths().web.distRscEntries
+  }
+
+  if (!entriesFilePath) {
+    throw new Error('entries file not found at: ' + entriesFilePath)
+  }
+
+  let getEntry: GetEntry
+
+  if (isDev) {
+    const vite = await vitePromise
+    const entriesFileModule = await vite.ssrLoadModule(entriesFilePath)
+    getEntry = entriesFileModule.default
+  } else {
+    const {
+      default: { getEntry: getEntryProd },
+    } = await (loadServerFile(entriesFilePath) as Promise<Entries>)
+
+    getEntry = getEntryProd
+  }
+
   const mod = await getEntry(rscId)
+
   if (typeof mod === 'function') {
     return mod
   }
+
   if (typeof mod?.default === 'function') {
     return mod?.default
   }
+
   // TODO (RSC): Making this a 404 error is marked as "HACK" in waku's source
   throw new StatusError('No function component found', 404)
 }
 
-let absoluteClientEntries: Record<string, string> = {}
-
-const resolveClientEntry = (
-  config: Awaited<ReturnType<typeof resolveConfig>>,
-  filePath: string
-) => {
+function resolveClientEntry(
+  filePath: string,
+  config: Awaited<ReturnType<typeof resolveConfig>>
+) {
   const filePathSlash = filePath.replaceAll('\\', '/')
   const clientEntry = absoluteClientEntries[filePathSlash]
 
@@ -215,6 +247,32 @@ const resolveClientEntry = (
   return clientEntry
 }
 
+export function fileURLToFilePath(fileURL: string) {
+  if (!fileURL.startsWith('file://')) {
+    throw new Error('Not a file URL')
+  }
+  return decodeURI(fileURL.slice('file://'.length))
+}
+
+const ABSOLUTE_WIN32_PATH_REGEXP = /^\/[a-zA-Z]:\//
+
+export function encodeFilePathToAbsolute(filePath: string) {
+  if (ABSOLUTE_WIN32_PATH_REGEXP.test(filePath)) {
+    throw new Error('Unsupported absolute file path')
+  }
+  if (filePath.startsWith('/')) {
+    return filePath
+  }
+  return '/' + filePath
+}
+
+function resolveClientEntryForDev(id: string, config: { base: string }) {
+  console.log('resolveClientEntryForDev config.base', config.base)
+  const filePath = id.startsWith('file://') ? fileURLToFilePath(id) : id
+  // HACK this relies on Vite's internal implementation detail.
+  return config.base + '@fs' + encodeFilePathToAbsolute(filePath)
+}
+
 async function setClientEntries(
   value: 'load' | Record<string, string>
 ): Promise<void> {
@@ -226,6 +284,11 @@ async function setClientEntries(
   // This is the Vite config
   const config = await configPromise
 
+  const entriesPath = getPaths().web.entries
+  if (!entriesPath) {
+    throw new Error('entries file not found at: ' + entriesPath)
+  }
+
   const entriesFile = getPaths().web.distRscEntries
   console.log('setClientEntries :: entriesFile', entriesFile)
   const { clientEntries } = await loadServerFile(entriesFile)
@@ -233,7 +296,7 @@ async function setClientEntries(
   if (!clientEntries) {
     throw new Error('Failed to load clientEntries')
   }
-  const baseDir = path.dirname(entriesFile)
+  const baseDir = path.dirname(entriesPath)
 
   // Convert to absolute paths
   absoluteClientEntries = Object.fromEntries(
@@ -287,11 +350,21 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
     {},
     {
       get(_target, encodedId: string) {
-        console.log('Proxy get', encodedId)
+        console.log('Proxy get encodedId', encodedId)
         const [filePath, name] = encodedId.split('#') as [string, string]
         // filePath /Users/tobbe/dev/waku/examples/01_counter/dist/assets/rsc0.js
         // name Counter
-        const id = resolveClientEntry(config, filePath)
+
+        // TODO (RSC): Get rid of this when we only use the worker in dev mode
+        const isDev = Object.keys(absoluteClientEntries).length === 0
+
+        let id: string
+        if (isDev) {
+          id = resolveClientEntryForDev(filePath, config)
+        } else {
+          id = resolveClientEntry(filePath, config)
+        }
+
         console.log('Proxy id', id)
         // id /assets/rsc0-beb48afe.js
         return { id, chunks: [id], name, async: true }
@@ -332,6 +405,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
 
   if (input.rscId && input.props) {
     const component = await getFunctionComponent(input.rscId)
+
     return renderToPipeableStream(
       createElement(component, input.props),
       bundlerConfig

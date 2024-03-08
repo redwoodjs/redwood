@@ -10,6 +10,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { registerFwGlobals } from './lib/registerGlobals.js'
 import { invoke } from './middleware/invokeMiddleware.js'
+import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import { ensureProcessDirWeb } from './utils.js'
@@ -57,6 +58,9 @@ async function createServer() {
 
   // use vite's connect instance as middleware
   app.use(vite.middlewares)
+
+  // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
+  app.use('/rw-rsc', createRscRequestHandler())
 
   const routes = getProjectRoutes()
 
