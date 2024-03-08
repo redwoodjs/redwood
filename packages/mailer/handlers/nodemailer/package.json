@@ -20,11 +20,11 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@redwoodjs/mailer-core": "7.0.0",
+    "@redwoodjs/mailer-core": "workspace:*",
     "nodemailer": "6.9.9"
   },
   "devDependencies": {
-    "@redwoodjs/framework-tools": "7.0.0",
+    "@redwoodjs/framework-tools": "workspace:*",
     "@types/nodemailer": "^6",
     "tsx": "4.6.2",
     "typescript": "5.3.3"
