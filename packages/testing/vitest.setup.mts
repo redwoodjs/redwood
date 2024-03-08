@@ -2,7 +2,8 @@ import '@testing-library/jest-dom/vitest'
 
 import { afterEach, beforeAll } from 'vitest'
 import { cleanup } from '@testing-library/react'
-import '@testing-library/jest-dom/vitest'
+
+import { startMSW } from './src/web/mockRequests'
 
 afterEach(() => {
   // If vitest globals are enabled testing-library will clean up after each
@@ -11,8 +12,6 @@ afterEach(() => {
   // https://testing-library.com/docs/react-testing-library/api/#cleanup
   cleanup()
 })
-
-import { startMSW } from './src/web/mockRequests'
 
 beforeAll(async () => {
   await startMSW('node', {
