@@ -1,42 +1,22 @@
 {
+  "name": "@redwoodjs/vite",
+  "version": "7.1.0",
+  "description": "Vite configuration package for Redwood",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/vite"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
   "bin": {
     "rw-vite-build": "./bins/rw-vite-build.mjs",
     "rw-vite-dev": "./bins/rw-vite-dev.mjs",
     "vite": "./bins/vite.mjs"
   },
-  "dependencies": {
-    "@babel/runtime-corejs3": "7.24.0",
-    "@redwoodjs/babel-config": "7.1.0",
-    "@redwoodjs/internal": "7.1.0",
-    "@redwoodjs/project-config": "7.1.0",
-    "@vitejs/plugin-react": "4.2.1",
-    "buffer": "6.0.3",
-    "core-js": "3.35.1",
-    "vite": "4.5.2",
-    "yargs-parser": "21.1.1"
-  },
-  "description": "Vite configuration package for Redwood",
-  "devDependencies": {
-    "@babel/cli": "7.23.9",
-    "@types/react": "^18.2.55",
-    "@types/yargs-parser": "21.0.3",
-    "glob": "10.3.10",
-    "typescript": "5.3.3",
-    "vitest": "1.2.2"
-  },
   "files": [
-    "dist",
-    "cjsWrapper.js"
+    "dist"
   ],
-  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1",
-  "license": "MIT",
-  "main": "cjsWrapper.js",
-  "name": "@redwoodjs/vite",
-  "repository": {
-    "directory": "packages/vite",
-    "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git"
-  },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
@@ -45,5 +25,24 @@
     "test": "vitest run src",
     "test:watch": "vitest watch src"
   },
-  "version": "7.1.0"
+  "dependencies": {
+    "@babel/runtime-corejs3": "7.24.0",
+    "@redwoodjs/babel-config": "workspace:*",
+    "@redwoodjs/internal": "workspace:*",
+    "@redwoodjs/project-config": "workspace:*",
+    "@vitejs/plugin-react": "4.2.1",
+    "buffer": "6.0.3",
+    "core-js": "3.35.1",
+    "vite": "4.5.2",
+    "yargs-parser": "21.1.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.23.9",
+    "@types/react": "^18.2.55",
+    "@types/yargs-parser": "21.0.3",
+    "glob": "10.3.10",
+    "typescript": "5.3.3",
+    "vitest": "1.2.2"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

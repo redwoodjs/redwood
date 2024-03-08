@@ -22,8 +22,8 @@
     "test:watch": "vitest watch src"
   },
   "devDependencies": {
-    "@redwoodjs/api": "7.1.0",
-    "@redwoodjs/framework-tools": "7.1.0",
+    "@redwoodjs/api": "workspace:*",
+    "@redwoodjs/framework-tools": "workspace:*",
     "tsx": "4.6.2",
     "typescript": "5.3.3",
     "vitest": "1.2.2"

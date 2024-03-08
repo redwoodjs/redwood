@@ -21,10 +21,10 @@
   },
   "dependencies": {
     "@react-email/render": "0.0.10",
-    "@redwoodjs/mailer-core": "7.1.0"
+    "@redwoodjs/mailer-core": "workspace:*"
   },
   "devDependencies": {
-    "@redwoodjs/framework-tools": "7.1.0",
+    "@redwoodjs/framework-tools": "workspace:*",
     "tsx": "4.6.2",
     "typescript": "5.3.3"
   },

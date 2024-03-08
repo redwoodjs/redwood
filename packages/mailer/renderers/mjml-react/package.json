@@ -21,11 +21,11 @@
   },
   "dependencies": {
     "@faire/mjml-react": "3.3.0",
-    "@redwoodjs/mailer-core": "7.1.0",
+    "@redwoodjs/mailer-core": "workspace:*",
     "mjml": "4.14.1"
   },
   "devDependencies": {
-    "@redwoodjs/framework-tools": "7.1.0",
+    "@redwoodjs/framework-tools": "workspace:*",
     "@types/mjml": "4",
     "tsx": "4.6.2",
     "typescript": "5.3.3"
