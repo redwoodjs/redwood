@@ -36,7 +36,7 @@ async function main() {
       '==============================',
       '',
       'If this is a user-facing PR (a feature or a fix), it should probably have a changeset.',
-      `Run \`yarn changeset ${pr.number}\` to create a changeset for this PR.`,
+      `Run \`yarn changesets ${pr.number}\` to create a changeset for this PR.`,
       "If it doesn't need one (it's a chore), you can add the 'changesets-ok' label.",
     ].join('\n')
   )
