@@ -1,15 +1,23 @@
-import { argv, chalk, fs } from 'zx'
+import { chalk, fs } from 'zx'
 
-import { showHelp, getChangesetFilePath, getPlaceholder } from './changesetsHelpers.mjs'
+import {
+  getChangesetFilePath,
+  getPlaceholder,
+  resolveArgv,
+  shouldShowHelp,
+  showHelp,
+} from './changesetsHelpers.mjs'
 
 async function main() {
-  if (argv.h || argv.help) {
+  if (shouldShowHelp()) {
     showHelp()
     return
   }
 
-  const changesetFilePath = getChangesetFilePath()
-  const placeholder = await getPlaceholder()
+  const { prNumber } = resolveArgv()
+
+  const changesetFilePath = getChangesetFilePath(prNumber)
+  const placeholder = await getPlaceholder(prNumber)
   await fs.outputFile(changesetFilePath, placeholder)
   console.log(
     [
@@ -35,9 +43,8 @@ try {
 // - should be the title and body of PR 10075
 //   - yarn changesets 10075
 //   - yarn changesets '#10075'
-//   - yarn changesets https://github.com/redwoodjs/redwood/pull/10075
 //
 // - should throw and show help
 //   - yarn changesets abcd
 //   - yarn changesets 10075000
-//   - yarn changesets https://github.com/redwoodjs/redwood/pull/10075000
+//   - yarn changesets https://github.com/redwoodjs/redwood/pull/10075
