@@ -33,7 +33,7 @@
     "@opentelemetry/semantic-conventions": "1.21.0",
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/tui": "workspace:*",
-    "@types/babel__core": "7.20.4",
+    "@types/babel__core": "7.20.5",
     "chalk": "4.1.2",
     "check-node-version": "4.2.1",
     "ci-info": "4.0.0",
