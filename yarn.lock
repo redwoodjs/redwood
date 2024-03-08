@@ -11244,13 +11244,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prompts@npm:2.4.8":
-  version: 2.4.8
-  resolution: "@types/prompts@npm:2.4.8"
+"@types/prompts@npm:2.4.9":
+  version: 2.4.9
+  resolution: "@types/prompts@npm:2.4.9"
   dependencies:
     "@types/node": "npm:*"
     kleur: "npm:^3.0.3"
-  checksum: 10c0/b5940938ab587d3a054919d14b31a7ca5660ce2b4e4a66d6949687a5305e7281a5963b1fe2dd87839ec0876bb01258fbaf89f120d134303853be146f34241f67
+  checksum: 10c0/22fe0da6807681c85e88ba283184f4be4c8a95c744ea12a638865c98c4e0c22e7f733542f6b0f1fbca02245cdc3fe84feacf9c9adf4ddd8bc98a337fd679d8d2
   languageName: node
   linkType: hard
 
@@ -29523,7 +29523,7 @@ __metadata:
     "@types/jest": "npm:29.5.8"
     "@types/jscodeshift": "npm:0.11.6"
     "@types/ncp": "npm:2.0.8"
-    "@types/prompts": "npm:2.4.8"
+    "@types/prompts": "npm:2.4.9"
     all-contributors-cli: "npm:6.26.1"
     babel-jest: "npm:^29.7.0"
     babel-plugin-auto-import: "npm:1.1.0"
