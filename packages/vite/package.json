@@ -25,7 +25,6 @@
     "test:watch": "vitest watch src"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.0",
     "@redwoodjs/babel-config": "workspace:*",
     "@redwoodjs/internal": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
@@ -36,7 +35,6 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.9",
     "@types/react": "^18.2.55",
     "@types/yargs-parser": "21.0.3",
     "glob": "10.3.10",

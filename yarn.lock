@@ -8742,8 +8742,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/vite@workspace:packages/vite"
   dependencies:
-    "@babel/cli": "npm:7.23.9"
-    "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/babel-config": "workspace:*"
     "@redwoodjs/internal": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
