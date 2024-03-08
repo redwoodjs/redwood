@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import { it, expect } from 'vitest'
+
 import { checkAndReplaceDirectUrl, getDefaultDb } from '../directUrlHelpers'
 
 const FIXTURE_DIR_PATH = path.resolve('..', '..', '__fixtures__')

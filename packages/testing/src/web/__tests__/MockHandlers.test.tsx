@@ -2,10 +2,11 @@ import 'whatwg-fetch'
 import React, { useCallback, useState } from 'react'
 
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { vi, describe, it, expect } from 'vitest'
 
 import { mockGraphQLQuery } from '../mockRequests'
 
-jest.setTimeout(6_000)
+vi.setConfig({ testTimeout: 6_000 })
 
 describe('GraphQLMockHandlers', () => {
   it('should allow you to compose mock graphql handlers for more complex tests', async () => {
