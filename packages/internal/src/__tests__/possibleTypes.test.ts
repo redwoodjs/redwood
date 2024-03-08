@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import { afterEach, describe, test, expect, vi } from 'vitest'
+
 import { getPaths } from '@redwoodjs/project-config'
 
 import { generateGraphQLSchema } from '../generate/graphqlSchema'
@@ -8,7 +10,7 @@ import { generatePossibleTypes } from '../generate/possibleTypes'
 
 afterEach(() => {
   delete process.env.RWJS_CWD
-  jest.restoreAllMocks()
+  vi.restoreAllMocks()
 })
 
 describe('Generate gql possible types web from the GraphQL Schema', () => {
@@ -23,16 +25,14 @@ describe('Generate gql possible types web from the GraphQL Schema', () => {
 
       await generateGraphQLSchema()
 
-      jest
-        .spyOn(fs, 'writeFileSync')
-        .mockImplementation(
-          (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
-            expect(file).toMatch(
-              path.join(getPaths().web.graphql, 'possibleTypes.ts')
-            )
-            expect(data).toMatchSnapshot()
-          }
-        )
+      vi.spyOn(fs, 'writeFileSync').mockImplementation(
+        (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
+          expect(file).toMatch(
+            path.join(getPaths().web.graphql, 'possibleTypes.ts')
+          )
+          expect(data).toMatchSnapshot()
+        }
+      )
 
       const { possibleTypesFiles } = await generatePossibleTypes()
 
@@ -50,16 +50,14 @@ describe('Generate gql possible types web from the GraphQL Schema', () => {
       process.env.RWJS_CWD = FIXTURE_PATH
       await generateGraphQLSchema()
 
-      jest
-        .spyOn(fs, 'writeFileSync')
-        .mockImplementation(
-          (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
-            expect(file).toMatch(
-              path.join(getPaths().web.graphql, 'possibleTypes.ts')
-            )
-            expect(data).toMatchSnapshot()
-          }
-        )
+      vi.spyOn(fs, 'writeFileSync').mockImplementation(
+        (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
+          expect(file).toMatch(
+            path.join(getPaths().web.graphql, 'possibleTypes.ts')
+          )
+          expect(data).toMatchSnapshot()
+        }
+      )
 
       const { possibleTypesFiles } = await generatePossibleTypes()
 
