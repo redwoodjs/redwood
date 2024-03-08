@@ -74,7 +74,7 @@
     "@types/jest": "29.5.8",
     "@types/jscodeshift": "0.11.6",
     "@types/ncp": "2.0.8",
-    "@types/prompts": "2.4.8",
+    "@types/prompts": "2.4.9",
     "all-contributors-cli": "6.26.1",
     "babel-jest": "^29.7.0",
     "babel-plugin-auto-import": "1.1.0",
