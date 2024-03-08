@@ -7,8 +7,6 @@ import { getRouteRegexAndParams } from '@redwoodjs/router'
 import { getProject } from '@redwoodjs/structure/dist/index'
 import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
 
-// Circular dependency when trying to use the standard import
-
 export interface RouteInformation {
   name?: string
   path?: string
