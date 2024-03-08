@@ -7974,7 +7974,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@types/babel-plugin-tester": "npm:9.0.10"
-    "@types/babel__core": "npm:7.20.4"
+    "@types/babel__core": "npm:7.20.5"
     "@types/node": "npm:20.11.10"
     babel-plugin-auto-import: "npm:1.1.0"
     babel-plugin-graphql-tag: "npm:3.3.0"
@@ -8150,7 +8150,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     "@svgr/core": "npm:8.0.0"
     "@svgr/plugin-jsx": "npm:8.0.1"
-    "@types/babel__core": "npm:7.20.4"
+    "@types/babel__core": "npm:7.20.5"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.8"
     "@types/jscodeshift": "npm:0.11.6"
@@ -10713,7 +10713,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:*, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14, @types/babel__core@npm:^7.18.0, @types/babel__core@npm:^7.20.5":
+"@types/babel__core@npm:*, @types/babel__core@npm:7.20.5, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14, @types/babel__core@npm:^7.18.0, @types/babel__core@npm:^7.20.5":
   version: 7.20.5
   resolution: "@types/babel__core@npm:7.20.5"
   dependencies:
@@ -10723,19 +10723,6 @@ __metadata:
     "@types/babel__template": "npm:*"
     "@types/babel__traverse": "npm:*"
   checksum: 10c0/bdee3bb69951e833a4b811b8ee9356b69a61ed5b7a23e1a081ec9249769117fa83aaaf023bb06562a038eb5845155ff663e2d5c75dd95c1d5ccc91db012868ff
-  languageName: node
-  linkType: hard
-
-"@types/babel__core@npm:7.20.4":
-  version: 7.20.4
-  resolution: "@types/babel__core@npm:7.20.4"
-  dependencies:
-    "@babel/parser": "npm:^7.20.7"
-    "@babel/types": "npm:^7.20.7"
-    "@types/babel__generator": "npm:*"
-    "@types/babel__template": "npm:*"
-    "@types/babel__traverse": "npm:*"
-  checksum: 10c0/2adc7ec49de5f922271ce087cedee000de468a3e13f92b7b6254016bd8357298cb98e6d2b3c9defc69bb6e38e0c134ffe80776a8ce4e9fb167bbffcb4d7613b7
   languageName: node
   linkType: hard
 
@@ -15955,7 +15942,7 @@ __metadata:
     "@opentelemetry/semantic-conventions": "npm:1.21.0"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/tui": "workspace:*"
-    "@types/babel__core": "npm:7.20.4"
+    "@types/babel__core": "npm:7.20.5"
     chalk: "npm:4.1.2"
     check-node-version: "npm:4.2.1"
     ci-info: "npm:4.0.0"
