@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/mailer-renderer-react-email",
-  "version": "7.1.0",
+  "version": "7.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
