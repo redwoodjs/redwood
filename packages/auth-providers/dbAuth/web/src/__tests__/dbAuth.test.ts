@@ -1,4 +1,5 @@
 import { renderHook, act } from '@testing-library/react'
+import { vi, beforeAll, beforeEach, describe, it, expect } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
@@ -8,7 +9,7 @@ import { createDbAuthClient, createAuth } from '../dbAuth'
 globalThis.RWJS_API_URL = '/.redwood/functions'
 globalThis.RWJS_API_GRAPHQL_URL = '/.redwood/functions/graphql'
 
-jest.mock('@whatwg-node/fetch', () => {
+vi.mock('@whatwg-node/fetch', () => {
   return
 })
 
@@ -20,7 +21,7 @@ interface User {
 
 let loggedInUser: User | undefined
 
-const fetchMock = jest.fn()
+const fetchMock = vi.fn()
 fetchMock.mockImplementation(async (url, options) => {
   const body = options?.body ? JSON.parse(options.body) : {}
 
