@@ -4,8 +4,8 @@ import { lazy } from 'react'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { collectStyles } from './find-styles'
-import { RwRscServerGlobal } from './RwRscServerGlobal'
+import { collectStyles } from './find-styles.js'
+import { RwRscServerGlobal } from './RwRscServerGlobal.js'
 
 // import viteDevServer from '../dev-server'
 const viteDevServer: any = {}

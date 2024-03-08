@@ -2,8 +2,8 @@ import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { onWarn } from '../lib/onWarn'
-import { ensureProcessDirWeb } from '../utils'
+import { onWarn } from '../lib/onWarn.js'
+import { ensureProcessDirWeb } from '../utils.js'
 
 /**
  * RSC build. Step 2.
