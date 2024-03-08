@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { vi, test, expect } from 'vitest'
+
 import {
   getGqlQueries,
   getNamedExports,
@@ -8,8 +10,8 @@ import {
   fileToAst,
 } from '../ast'
 
-jest.mock('@redwoodjs/project-config', () => {
-  const path = require('path')
+vi.mock('@redwoodjs/project-config', async () => {
+  const path = await import('path')
   const baseFixturePath = path.join(__dirname, 'fixtures')
   return {
     getPaths: () => ({
