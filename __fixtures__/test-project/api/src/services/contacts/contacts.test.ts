@@ -39,9 +39,7 @@ describe('contacts', () => {
   })
 
   scenario('updates a contact', async (scenario: StandardScenario) => {
-    const original = (await contact({
-      id: scenario.contact.one.id,
-    })) as Contact
+    const original = (await contact({ id: scenario.contact.one.id })) as Contact
     const result = await updateContact({
       id: original.id,
       input: { name: 'String2' },
