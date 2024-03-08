@@ -8753,6 +8753,7 @@ __metadata:
     buffer: "npm:6.0.3"
     core-js: "npm:3.35.1"
     glob: "npm:10.3.10"
+    tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
     vite: "npm:4.5.2"
     vitest: "npm:1.2.2"

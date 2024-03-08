@@ -18,8 +18,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build": "tsx build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-vite.tgz",
     "build:types": "tsc --build --verbose",
     "test": "vitest run src",
@@ -41,6 +40,7 @@
     "@types/react": "^18.2.55",
     "@types/yargs-parser": "21.0.3",
     "glob": "10.3.10",
+    "tsx": "4.6.2",
     "typescript": "5.3.3",
     "vitest": "1.2.2"
   },
