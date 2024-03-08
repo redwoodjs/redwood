@@ -12,7 +12,7 @@ vi.mock('../paths', () => {
   }
 })
 
-test('prettify formats tsx content', () => {
+test('prettify formats tsx content', async () => {
   const content = `import React from 'react'
 
   interface Props { foo: number, bar: number }
@@ -30,5 +30,7 @@ test('prettify formats tsx content', () => {
 
     return <>{foo}, {bar}</>}`
 
-  expect(prettify('FooBarComponent.template.tsx', content)).toMatchSnapshot()
+  expect(
+    await prettify('FooBarComponent.template.tsx', content)
+  ).toMatchSnapshot()
 })

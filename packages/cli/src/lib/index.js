@@ -81,7 +81,7 @@ export const generateTemplate = (templateFilename, { name, ...rest }) => {
   }
 }
 
-export const prettify = (templateFilename, renderedTemplate) => {
+export const prettify = async (templateFilename, renderedTemplate) => {
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
   // https://prettier.io/docs/en/options.html#parser
@@ -97,8 +97,10 @@ export const prettify = (templateFilename, renderedTemplate) => {
     return renderedTemplate
   }
 
+  const prettierOptions = await getPrettierOptions()
+
   return format(renderedTemplate, {
-    ...prettierOptions(),
+    ...prettierOptions,
     parser,
   })
 }
@@ -228,9 +230,12 @@ export const getConfig = () => {
 /**
  * This returns the config present in `prettier.config.js` of a Redwood project.
  */
-export const prettierOptions = () => {
+export const getPrettierOptions = async () => {
   try {
-    return require(path.join(getPaths().base, 'prettier.config.js'))
+    const prettierOptions = await import(
+      path.join(getPaths().base, 'prettier.config.js')
+    )
+    return prettierOptions
   } catch (e) {
     // If we're in our vitest environment we want to return a consistent set of prettier options
     // such that snapshots don't change unexpectedly.

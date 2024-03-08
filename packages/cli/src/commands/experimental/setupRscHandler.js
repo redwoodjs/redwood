@@ -303,7 +303,7 @@ export const handler = async ({ force, verbose }) => {
 
           writeFile(
             tsconfigPath,
-            prettify('tsconfig.json', JSON.stringify(tsconfig, null, 2)),
+            await prettify('tsconfig.json', JSON.stringify(tsconfig, null, 2)),
             {
               overwriteExisting: true,
             }

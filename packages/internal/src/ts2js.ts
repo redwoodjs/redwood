@@ -33,12 +33,12 @@ export const convertTsScriptsToJs = (cwd = getPaths().base) => {
  * @param {string} cwd - Current directory
  * @param {string[]} files - Collection of files to convert
  */
-export const convertTsFilesToJs = (cwd: string, files: string[]) => {
+export const convertTsFilesToJs = async (cwd: string, files: string[]) => {
   if (files.length === 0) {
     console.log('No TypeScript files found to convert to JS in this project.')
   }
   for (const f of files) {
-    const code = transformTSToJS(f)
+    const code = await transformTSToJS(f)
     if (code) {
       fs.writeFileSync(
         path.join(cwd, f.replace('.tsx', '.jsx').replace('.ts', '.js')),
@@ -117,9 +117,12 @@ export const transformTSToJS = (file: string) => {
   return prettify(result.code, filename.replace(/\.ts$/, '.js'))
 }
 
-export const prettierConfig = () => {
+export const getPrettierConfig = async () => {
   try {
-    return require(path.join(getPaths().base, 'prettier.config.js'))
+    const prettierConfig = await import(
+      path.join(getPaths().base, 'prettier.config.js')
+    )
+    return prettierConfig
   } catch (e) {
     return undefined
   }
@@ -152,15 +155,17 @@ const prettierParser = (filename: string) => {
  * @param {string} code
  * @param {string} filename
  */
-export const prettify = (code: string, filename: string) => {
+export const prettify = async (code: string, filename: string) => {
   const parser = prettierParser(filename)
   // Return unformatted code if we could not determine the parser.
   if (typeof parser === 'undefined') {
     return code
   }
 
+  const prettierConfig = await getPrettierConfig()
+
   return format(code, {
-    ...prettierConfig(),
+    ...prettierConfig,
     parser,
   })
 }

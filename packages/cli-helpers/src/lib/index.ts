@@ -52,9 +52,11 @@ export const transformTSToJS = (filename: string, content: string) => {
 /**
  * This returns the config present in `prettier.config.js` of a Redwood project.
  */
-export const prettierOptions = () => {
+export const getPrettierOptions = async () => {
   try {
-    const options = require(path.join(getPaths().base, 'prettier.config.js'))
+    const options = await import(
+      path.join(getPaths().base, 'prettier.config.js')
+    )
 
     if (options.tailwindConfig?.startsWith('.')) {
       // Make this work with --cwd
@@ -70,10 +72,10 @@ export const prettierOptions = () => {
   }
 }
 
-export const prettify = (
+export const prettify = async (
   templateFilename: string,
   renderedTemplate: string
-): string => {
+): Promise<string> => {
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
   // https://prettier.io/docs/en/options.html#parser
@@ -88,8 +90,10 @@ export const prettify = (
     return renderedTemplate
   }
 
+  const prettierOptions = await getPrettierOptions()
+
   return format(renderedTemplate, {
-    ...prettierOptions(),
+    ...prettierOptions,
     parser,
   })
 }
