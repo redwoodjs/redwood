@@ -21,7 +21,7 @@ import { getPaths } from '@redwoodjs/project-config'
 import { registerFwGlobals } from '../lib/registerGlobals'
 import { StatusError } from '../lib/StatusError'
 
-import { rscReloadPlugin } from './rscVitePlugins'
+import { rscReloadPlugin, rscTransformPlugin } from './rscVitePlugins'
 import type {
   RenderInput,
   MessageRes,
@@ -126,6 +126,7 @@ const vitePromise = createServer({
       const message: MessageRes = { type }
       parentPort.postMessage(message)
     }),
+    rscTransformPlugin({}),
   ],
   ssr: {
     resolve: {
@@ -196,16 +197,19 @@ const getFunctionComponent = async (rscId: string) => {
   //   default: { getEntry },
   // } = await (loadServerFile(entriesFile) as Promise<Entries>)
 
-  console.log('error here')
   console.log(
     Object.fromEntries((await vitePromise).moduleGraph.idToModuleMap.entries())
   )
 
+  console.log('error here')
   const {
     default: { getEntry },
   } = await (await vitePromise).ssrLoadModule(entriesFile)
+  console.log('after "error here"')
 
+  console.log('getEntry', getEntry)
   const mod = await getEntry(rscId)
+  console.log('after getEntry mod', mod)
   if (typeof mod === 'function') {
     return mod
   }
@@ -218,25 +222,51 @@ const getFunctionComponent = async (rscId: string) => {
 
 let absoluteClientEntries: Record<string, string> = {}
 
-const resolveClientEntry = (
-  config: Awaited<ReturnType<typeof resolveConfig>>,
-  filePath: string
-) => {
-  const filePathSlash = filePath.replaceAll('\\', '/')
-  const clientEntry = absoluteClientEntries[filePathSlash]
+// const resolveClientEntry = (
+//   config: Awaited<ReturnType<typeof resolveConfig>>,
+//   filePath: string
+// ) => {
+//   const filePathSlash = filePath.replaceAll('\\', '/')
+//   const clientEntry = absoluteClientEntries[filePathSlash]
 
-  console.log('absoluteClientEntries', absoluteClientEntries)
-  console.log('filePath', filePathSlash)
+//   console.log('absoluteClientEntries', absoluteClientEntries)
+//   console.log('filePath', filePathSlash)
 
-  if (!clientEntry) {
-    if (absoluteClientEntries['*'] === '*') {
-      return config.base + path.relative(config.root, filePathSlash)
-    }
+//   if (!clientEntry) {
+//     if (absoluteClientEntries['*'] === '*') {
+//       return config.base + path.relative(config.root, filePathSlash)
+//     }
 
-    throw new Error('No client entry found for ' + filePathSlash)
+//     throw new Error('No client entry found for ' + filePathSlash)
+//   }
+
+//   return clientEntry
+// }
+
+export function fileURLToFilePath(fileURL: string) {
+  if (!fileURL.startsWith('file://')) {
+    throw new Error('Not a file URL')
   }
+  return decodeURI(fileURL.slice('file://'.length))
+}
 
-  return clientEntry
+const ABSOLUTE_WIN32_PATH_REGEXP = /^\/[a-zA-Z]:\//
+
+export function encodeFilePathToAbsolute(filePath: string) {
+  if (ABSOLUTE_WIN32_PATH_REGEXP.test(filePath)) {
+    throw new Error('Unsupported absolute file path')
+  }
+  if (filePath.startsWith('/')) {
+    return filePath
+  }
+  return '/' + filePath
+}
+
+const resolveClientEntryForDev = (id: string, config: { base: string }) => {
+  console.log('resolveClientEntryForDev config.base', config.base)
+  const filePath = id.startsWith('file://') ? fileURLToFilePath(id) : id
+  // HACK this relies on Vite's internal implementation detail.
+  return config.base + '@fs' + encodeFilePathToAbsolute(filePath)
 }
 
 async function setClientEntries(
@@ -318,11 +348,12 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
     {},
     {
       get(_target, encodedId: string) {
-        console.log('Proxy get', encodedId)
+        console.log('Proxy get encodedId', encodedId)
+        console.log('Proxy get config', config)
         const [filePath, name] = encodedId.split('#') as [string, string]
         // filePath /Users/tobbe/dev/waku/examples/01_counter/dist/assets/rsc0.js
         // name Counter
-        const id = resolveClientEntry(config, filePath)
+        const id = resolveClientEntryForDev(filePath, config)
         console.log('Proxy id', id)
         // id /assets/rsc0-beb48afe.js
         return { id, chunks: [id], name, async: true }
