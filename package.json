@@ -69,7 +69,7 @@
     "@testing-library/jest-dom": "6.3.0",
     "@testing-library/react": "14.1.2",
     "@testing-library/user-event": "14.5.2",
-    "@types/babel__generator": "7.6.7",
+    "@types/babel__generator": "7.6.8",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.8",
     "@types/jscodeshift": "0.11.6",
