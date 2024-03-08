@@ -7453,7 +7453,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@prisma/client": "npm:5.10.2"
     "@types/aws-lambda": "npm:8.10.126"
-    "@types/jsonwebtoken": "npm:9.0.5"
+    "@types/jsonwebtoken": "npm:9.0.6"
     "@types/memjs": "npm:1"
     "@types/pascalcase": "npm:1.0.3"
     "@types/split2": "npm:4.2.3"
@@ -7494,7 +7494,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/api": "workspace:*"
-    "@types/jsonwebtoken": "npm:9.0.5"
+    "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
@@ -7546,7 +7546,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/api": "workspace:*"
     "@types/aws-lambda": "npm:8.10.126"
-    "@types/jsonwebtoken": "npm:9.0.5"
+    "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
@@ -7771,7 +7771,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/api": "workspace:*"
     "@types/aws-lambda": "npm:8.10.126"
-    "@types/jsonwebtoken": "npm:9.0.5"
+    "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
     typescript: "npm:5.3.3"
@@ -7822,7 +7822,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/api": "workspace:*"
     "@types/aws-lambda": "npm:8.10.126"
-    "@types/jsonwebtoken": "npm:9.0.5"
+    "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
     typescript: "npm:5.3.3"
@@ -7870,7 +7870,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/api": "workspace:*"
-    "@types/jsonwebtoken": "npm:9.0.5"
+    "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
@@ -8351,7 +8351,7 @@ __metadata:
     "@redwoodjs/context": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/realtime": "workspace:*"
-    "@types/jsonwebtoken": "npm:9.0.5"
+    "@types/jsonwebtoken": "npm:9.0.6"
     "@types/lodash": "npm:4.14.201"
     "@types/uuid": "npm:9.0.7"
     "@whatwg-node/fetch": "npm:0.9.14"
@@ -10965,12 +10965,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:9.0.5, @types/jsonwebtoken@npm:^9.0.0, @types/jsonwebtoken@npm:^9.0.2":
-  version: 9.0.5
-  resolution: "@types/jsonwebtoken@npm:9.0.5"
+"@types/jsonwebtoken@npm:9.0.6, @types/jsonwebtoken@npm:^9.0.0, @types/jsonwebtoken@npm:^9.0.2":
+  version: 9.0.6
+  resolution: "@types/jsonwebtoken@npm:9.0.6"
   dependencies:
     "@types/node": "npm:*"
-  checksum: 10c0/c582b8420586f3b9550f7e34992cb32be300bc953636f3b087ed9c180ce7ea5c2e4b35090be2d57f0d3168cc3ca1074932907caa2afe09f4e9c84cf5c0daefa8
+  checksum: 10c0/9c29e3896e5fb6056e54d87514643e59e0cfb966ae25171a107776270195bba955f0373e98c8ed6450c145b18984f5df9cf0fcac360f382cec3c7c4d3510b202
   languageName: node
   linkType: hard
 

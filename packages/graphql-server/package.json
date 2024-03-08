@@ -51,7 +51,7 @@
     "@envelop/types": "5.0.0",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/realtime": "workspace:*",
-    "@types/jsonwebtoken": "9.0.5",
+    "@types/jsonwebtoken": "9.0.6",
     "@types/lodash": "4.14.201",
     "@types/uuid": "9.0.7",
     "@whatwg-node/fetch": "0.9.14",
