@@ -137,6 +137,9 @@ const vitePromise = createServer({
       externalConditions: ['react-server'],
     },
   },
+  // Need to run in middlewareMode so that `buildStart` gets called for all
+  // plugins. Specifically vite's own vite:css plugin needs this to initialize
+  // the cssModulesCache WeakMap
   server: { middlewareMode: true },
   appType: 'custom',
 })
