@@ -171,9 +171,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"check_changelog@workspace:.":
+"check_changesets@workspace:.":
   version: 0.0.0-use.local
-  resolution: "check_changelog@workspace:."
+  resolution: "check_changesets@workspace:."
   dependencies:
     "@actions/core": "npm:1.10.1"
     "@actions/exec": "npm:1.1.1"

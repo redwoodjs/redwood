@@ -1,4 +1,4 @@
-name: 📝 Check CHANGELOG.md
+name: 📝 Check changesets
 
 on:
   pull_request:
@@ -11,8 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check-changelog:
-    name: 📝 Check CHANGELOG.md
+  check-changesets:
+    name: 📝 Check changesets
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,9 +25,9 @@ jobs:
           node-version: 20
 
       - run: yarn install
-        working-directory: ./.github/actions/check_changelog
+        working-directory: ./.github/actions/check_changesets
 
-      - name: Check CHANGELOG.md
-        uses: ./.github/actions/check_changelog
+      - name: Check changesets
+        uses: ./.github/actions/check_changesets
         with:
           labels: '{ "labels": ${{ toJSON(github.event.pull_request.labels) }} }'
