@@ -30,7 +30,6 @@ export type MessageReq =
   | {
       id: number
       type: 'setClientEntries'
-      value: 'load' | Record<string, string>
     }
   | {
       id: number
@@ -85,9 +84,7 @@ export function shutdown() {
 let nextId = 1
 
 /** Set the client entries in the worker (for the server build) */
-export function setClientEntries(
-  value: 'load' | Record<string, string>
-): Promise<void> {
+export function setClientEntries(): Promise<void> {
   // Just making this function async instead of callback based
   return new Promise((resolve, reject) => {
     const id = nextId++
@@ -102,7 +99,7 @@ export function setClientEntries(
       }
     })
 
-    const message: MessageReq = { id, type: 'setClientEntries', value }
+    const message: MessageReq = { id, type: 'setClientEntries' }
     worker.postMessage(message)
   })
 }
