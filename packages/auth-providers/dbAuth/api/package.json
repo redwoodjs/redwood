@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.0",
-    "@redwoodjs/project-config": "7.0.0",
+    "@redwoodjs/project-config": "workspace:*",
     "base64url": "3.0.1",
     "core-js": "3.35.1",
     "md5": "2.3.0",
@@ -33,10 +33,10 @@
   "devDependencies": {
     "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
-    "@redwoodjs/api": "7.0.0",
+    "@redwoodjs/api": "workspace:*",
     "@simplewebauthn/server": "7.4.0",
     "@types/md5": "2.3.5",
-    "@types/uuid": "9.0.7",
+    "@types/uuid": "9.0.8",
     "typescript": "5.3.3",
     "vitest": "1.2.2"
   },

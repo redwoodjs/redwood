@@ -30,7 +30,7 @@
     "@babel/runtime-corejs3": "7.24.0",
     "@babel/traverse": "^7.22.20",
     "@iarna/toml": "2.2.5",
-    "@redwoodjs/project-config": "7.0.0",
+    "@redwoodjs/project-config": "workspace:*",
     "@svgr/core": "8.0.0",
     "@svgr/plugin-jsx": "8.0.1",
     "@vscode/ripgrep": "1.15.6",
@@ -50,7 +50,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@types/babel__core": "7.20.4",
+    "@types/babel__core": "7.20.5",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.8",
     "@types/jscodeshift": "0.11.6",

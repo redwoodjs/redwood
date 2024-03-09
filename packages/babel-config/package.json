@@ -35,7 +35,7 @@
     "@babel/register": "^7.22.15",
     "@babel/runtime-corejs3": "7.24.0",
     "@babel/traverse": "^7.22.20",
-    "@redwoodjs/project-config": "7.0.0",
+    "@redwoodjs/project-config": "workspace:*",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-module-resolver": "5.0.0",
@@ -45,10 +45,10 @@
     "typescript": "5.3.3"
   },
   "devDependencies": {
-    "@redwoodjs/framework-tools": "7.0.0",
-    "@types/babel-plugin-tester": "9.0.9",
-    "@types/babel__core": "7.20.4",
-    "@types/node": "20.11.10",
+    "@redwoodjs/framework-tools": "workspace:*",
+    "@types/babel-plugin-tester": "9.0.10",
+    "@types/babel__core": "7.20.5",
+    "@types/node": "20.11.25",
     "babel-plugin-tester": "11.0.4",
     "jest": "29.7.0",
     "tsx": "4.6.2"

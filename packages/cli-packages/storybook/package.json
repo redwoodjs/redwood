@@ -20,9 +20,9 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@redwoodjs/cli-helpers": "7.0.0",
-    "@redwoodjs/project-config": "7.0.0",
-    "@redwoodjs/telemetry": "7.0.0",
+    "@redwoodjs/cli-helpers": "workspace:*",
+    "@redwoodjs/project-config": "workspace:*",
+    "@redwoodjs/telemetry": "workspace:*",
     "@storybook/addon-a11y": "7.6.17",
     "@storybook/addon-docs": "7.6.17",
     "@storybook/addon-essentials": "7.6.17",
@@ -34,7 +34,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@redwoodjs/framework-tools": "7.0.0",
+    "@redwoodjs/framework-tools": "workspace:*",
     "@types/yargs": "17.0.32",
     "tsx": "4.6.2",
     "typescript": "5.3.3"

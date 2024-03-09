@@ -77,9 +77,6 @@ export async function rscBuildAnalyze() {
         },
       },
     },
-    legacy: {
-      buildSsrCjsExternalHeuristics: true,
-    },
   })
 
   const clientEntryFiles = Object.fromEntries(

@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.0",
-    "@redwoodjs/project-config": "7.0.0",
-    "@redwoodjs/structure": "7.0.0",
+    "@redwoodjs/project-config": "workspace:*",
+    "@redwoodjs/structure": "workspace:*",
     "@whatwg-node/fetch": "0.9.16",
     "ci-info": "4.0.0",
     "core-js": "3.35.1",
@@ -37,7 +37,7 @@
     "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
     "@types/envinfo": "7.8.3",
-    "@types/uuid": "9.0.7",
+    "@types/uuid": "9.0.8",
     "@types/yargs": "17.0.32",
     "vitest": "1.2.2"
   },

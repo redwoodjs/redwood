@@ -31,9 +31,9 @@
   "devDependencies": {
     "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
-    "@redwoodjs/api": "7.0.0",
+    "@redwoodjs/api": "workspace:*",
     "@types/aws-lambda": "8.10.126",
-    "@types/jsonwebtoken": "9.0.5",
+    "@types/jsonwebtoken": "9.0.6",
     "typescript": "5.3.3",
     "vitest": "1.2.2"
   },
