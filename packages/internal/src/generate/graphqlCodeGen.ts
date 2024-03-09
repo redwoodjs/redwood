@@ -61,7 +61,7 @@ export const generateTypeDefGraphQLApi = async (): Promise<TypeDefResult> => {
   }
 
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
-  const prismaModels = getPrismaModels()
+  const prismaModels = await getPrismaModels()
   const prismaImports = Object.keys(prismaModels).map((key) => {
     return `${key} as Prisma${key}`
   })
@@ -190,7 +190,7 @@ async function runCodegenGraphQL(
 
   // Merge in user codegen config with the rw built-in one
   const mergedConfig = {
-    ...getPluginConfig(side),
+    ...(await getPluginConfig(side)),
     ...userCodegenConfig?.config?.config,
   }
 
@@ -214,11 +214,12 @@ export function getLoadDocumentsOptions(filename: string) {
   return loadTypedefsConfig
 }
 
-function getPrismaClient(hasGenerated = false): {
+async function getPrismaClient(hasGenerated = false): Promise<{
   ModelName: Record<string, string>
-} {
-  const localPrisma = require('@prisma/client')
+}> {
+  const { default: localPrisma } = await import('@prisma/client')
 
+  // @ts-expect-error I believe this type will only exist if the prisma client has been generated
   if (!localPrisma.ModelName) {
     if (hasGenerated) {
       return { ModelName: {} }
@@ -240,13 +241,15 @@ function getPrismaClient(hasGenerated = false): {
     }
   }
 
+  // @ts-expect-error See above, the generated client should contain a ModelName property that
+  // satisfies Record<string, string>
   return localPrisma
 }
 
-function getPrismaModels() {
+async function getPrismaModels() {
   // Extract the models from the prisma client and use those to
   // set up internal redirects for the return values in resolvers.
-  const localPrisma = getPrismaClient()
+  const localPrisma = await getPrismaClient()
   const prismaModels = localPrisma.ModelName
 
   // This isn't really something you'd put in the GraphQL API, so
@@ -258,8 +261,8 @@ function getPrismaModels() {
   return prismaModels
 }
 
-function getPluginConfig(side: CodegenSide) {
-  const prismaModels: Record<string, string> = getPrismaModels()
+async function getPluginConfig(side: CodegenSide) {
+  const prismaModels: Record<string, string> = await getPrismaModels()
   Object.keys(prismaModels).forEach((key) => {
     /** creates an object like this
      * {

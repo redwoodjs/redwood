@@ -20,8 +20,8 @@ import { getPaths } from '@redwoodjs/project-config'
 import type { defineEntries } from '../entries.js'
 import { registerFwGlobals } from '../lib/registerGlobals.js'
 import { StatusError } from '../lib/StatusError.js'
+import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
 
-import { rscReloadPlugin } from './rscVitePlugins.js'
 import type {
   RenderInput,
   MessageRes,
@@ -38,10 +38,9 @@ type PipeableStream = { pipe<T extends Writable>(destination: T): T }
 
 const handleSetClientEntries = async ({
   id,
-  value,
 }: MessageReq & { type: 'setClientEntries' }) => {
   try {
-    await setClientEntries(value)
+    await setClientEntries()
 
     if (!parentPort) {
       throw new Error('parentPort is undefined')
@@ -215,14 +214,7 @@ const resolveClientEntry = (
   return clientEntry
 }
 
-async function setClientEntries(
-  value: 'load' | Record<string, string>
-): Promise<void> {
-  if (value !== 'load') {
-    absoluteClientEntries = value
-    return
-  }
-
+async function setClientEntries(): Promise<void> {
   // This is the Vite config
   const config = await configPromise
 

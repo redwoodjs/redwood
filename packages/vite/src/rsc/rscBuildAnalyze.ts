@@ -3,8 +3,7 @@ import { build as viteBuild } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
-
-import { rscAnalyzePlugin } from './rscVitePlugins.js'
+import { rscAnalyzePlugin } from '../plugins/vite-plugin-rsc-analyze.js'
 
 /**
  * RSC build. Step 1.
@@ -76,9 +75,6 @@ export async function rscBuildAnalyze() {
           entries: rwPaths.web.entries,
         },
       },
-    },
-    legacy: {
-      buildSsrCjsExternalHeuristics: true,
     },
   })
 

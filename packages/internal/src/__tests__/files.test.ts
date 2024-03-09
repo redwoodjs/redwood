@@ -5,6 +5,8 @@ const FIXTURE_PATH = path.resolve(
   '../../../../__fixtures__/example-todo-main'
 )
 
+import { beforeAll, afterAll, test, expect } from 'vitest'
+
 beforeAll(() => {
   process.env.RWJS_CWD = FIXTURE_PATH
 })
