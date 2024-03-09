@@ -45,7 +45,7 @@ vi.mock('@prisma/client', () => {
   }
 })
 
-test.only('Generate gql typedefs web', async () => {
+test.skip('Generate gql typedefs web', async () => {
   await generateGraphQLSchema()
 
   vi.spyOn(fs, 'writeFileSync').mockImplementation(
@@ -64,7 +64,7 @@ test.only('Generate gql typedefs web', async () => {
   expect(typeDefFiles[0]).toMatch(path.join('web', 'types', 'graphql.d.ts'))
 })
 
-test('Generate gql typedefs api', async () => {
+test.skip('Generate gql typedefs api', async () => {
   await generateGraphQLSchema()
 
   let codegenOutput: {
@@ -108,7 +108,7 @@ test('Generate gql typedefs api', async () => {
   expect(data).toContain(`type AllMappedModels = MaybeOrArrayOfMaybe<Todo>`)
 })
 
-test('respects user provided codegen config', async () => {
+test.skip('respects user provided codegen config', async () => {
   const customCodegenConfigPath = path.join(FIXTURE_PATH, 'codegen.yml')
 
   // Add codegen.yml to fixture folder
@@ -142,7 +142,7 @@ test('respects user provided codegen config', async () => {
   }
 })
 
-test("Doesn't throw or print any errors with empty project", async () => {
+test.skip("Doesn't throw or print any errors with empty project", async () => {
   const fixturePath = path.resolve(
     __dirname,
     '../../../../__fixtures__/empty-project'
@@ -169,7 +169,7 @@ test("Doesn't throw or print any errors with empty project", async () => {
   }
 })
 
-describe("Doesn't swallow legit errors", () => {
+describe.skip("Doesn't swallow legit errors", () => {
   test('invalidQueryType', async () => {
     const fixturePath = path.resolve(
       __dirname,

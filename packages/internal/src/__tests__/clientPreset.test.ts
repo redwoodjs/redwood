@@ -43,8 +43,8 @@ describe('Generate client preset', () => {
     await generateGraphQLSchema()
 
     const { clientPresetFiles, errors } = await generateClientPreset()
-
     expect(errors).toHaveLength(0)
+
     expect(clientPresetFiles).toHaveLength(5)
     const expectedEndings = [
       '/fragment-masking.ts',
@@ -61,18 +61,11 @@ describe('Generate client preset', () => {
     expect(foundEndings).toHaveLength(expectedEndings.length)
   })
 
-  test.only('for api side', async () => {
+  test('for api side', async () => {
     mockedGetConfig.mockReturnValue({ graphql: { trustedDocuments: true } })
     await generateGraphQLSchema()
 
     const { trustedDocumentsStoreFile, errors } = await generateClientPreset()
-    console.dir(
-      {
-        trustedDocumentsStoreFile,
-        errors,
-      },
-      { depth: 10 }
-    )
     expect(errors).toHaveLength(0)
 
     expect(trustedDocumentsStoreFile).toContain('trustedDocumentsStore.ts')
