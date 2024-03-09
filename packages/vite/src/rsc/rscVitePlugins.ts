@@ -13,10 +13,12 @@ export function rscTransformPlugin(
     name: 'rsc-transform-plugin',
     // TODO (RSC): Seems like resolveId() is never called. Can we remove it?
     async resolveId(id, importer, options) {
-      console.log('rscVitePlugins - rscTransformPlugin::resolveId()')
-      console.log('    id', id)
-      console.log('    importer', importer)
-      console.log('    options', options)
+      console.log(
+        'rscVitePlugins - rscTransformPlugin::resolveId()\n\tid',
+        id,
+        '\n\timporter',
+        importer
+      )
 
       if (!id.endsWith('.js')) {
         return id

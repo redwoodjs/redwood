@@ -230,7 +230,7 @@ const getFunctionComponent = async (rscId: string) => {
   throw new StatusError('No function component found', 404)
 }
 
-function resolveClientEntry(
+function resolveClientEntryForProd(
   filePath: string,
   config: Awaited<ReturnType<typeof resolveConfig>>
 ) {
@@ -251,7 +251,7 @@ function resolveClientEntry(
   return clientEntry
 }
 
-export function fileURLToFilePath(fileURL: string) {
+function fileURLToFilePath(fileURL: string) {
   if (!fileURL.startsWith('file://')) {
     throw new Error('Not a file URL')
   }
@@ -260,7 +260,7 @@ export function fileURLToFilePath(fileURL: string) {
 
 const ABSOLUTE_WIN32_PATH_REGEXP = /^\/[a-zA-Z]:\//
 
-export function encodeFilePathToAbsolute(filePath: string) {
+function encodeFilePathToAbsolute(filePath: string) {
   if (ABSOLUTE_WIN32_PATH_REGEXP.test(filePath)) {
     throw new Error('Unsupported absolute file path')
   }
@@ -288,11 +288,6 @@ async function setClientEntries(
   // This is the Vite config
   const config = await configPromise
 
-  const entriesPath = getPaths().web.entries
-  if (!entriesPath) {
-    throw new Error('entries file not found at: ' + entriesPath)
-  }
-
   const entriesFile = getPaths().web.distRscEntries
   console.log('setClientEntries :: entriesFile', entriesFile)
   const { clientEntries } = await loadServerFile(entriesFile)
@@ -300,7 +295,7 @@ async function setClientEntries(
   if (!clientEntries) {
     throw new Error('Failed to load clientEntries')
   }
-  const baseDir = path.dirname(entriesPath)
+  const baseDir = path.dirname(entriesFile)
 
   // Convert to absolute paths
   absoluteClientEntries = Object.fromEntries(
@@ -366,7 +361,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
         if (isDev) {
           id = resolveClientEntryForDev(filePath, config)
         } else {
-          id = resolveClientEntry(filePath, config)
+          id = resolveClientEntryForProd(filePath, config)
         }
 
         console.log('Proxy id', id)
