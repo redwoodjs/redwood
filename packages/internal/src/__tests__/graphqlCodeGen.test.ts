@@ -36,16 +36,18 @@ afterEach(() => {
 
 vi.mock('@prisma/client', () => {
   return {
-    ModelName: {
-      PrismaModelOne: 'PrismaModelOne',
-      PrismaModelTwo: 'PrismaModelTwo',
-      Post: 'Post',
-      Todo: 'Todo',
+    default: {
+      ModelName: {
+        PrismaModelOne: 'PrismaModelOne',
+        PrismaModelTwo: 'PrismaModelTwo',
+        Post: 'Post',
+        Todo: 'Todo',
+      },
     },
   }
 })
 
-test.skip('Generate gql typedefs web', async () => {
+test('Generate gql typedefs web', async () => {
   await generateGraphQLSchema()
 
   vi.spyOn(fs, 'writeFileSync').mockImplementation(
@@ -56,15 +58,13 @@ test.skip('Generate gql typedefs web', async () => {
   )
 
   const { typeDefFiles, errors } = await generateTypeDefGraphQLWeb()
-
-  console.dir(errors, { depth: null })
   expect(errors).toHaveLength(0)
 
   expect(typeDefFiles).toHaveLength(1)
   expect(typeDefFiles[0]).toMatch(path.join('web', 'types', 'graphql.d.ts'))
 })
 
-test.skip('Generate gql typedefs api', async () => {
+test('Generate gql typedefs api', async () => {
   await generateGraphQLSchema()
 
   let codegenOutput: {
@@ -108,7 +108,7 @@ test.skip('Generate gql typedefs api', async () => {
   expect(data).toContain(`type AllMappedModels = MaybeOrArrayOfMaybe<Todo>`)
 })
 
-test.skip('respects user provided codegen config', async () => {
+test('respects user provided codegen config', async () => {
   const customCodegenConfigPath = path.join(FIXTURE_PATH, 'codegen.yml')
 
   // Add codegen.yml to fixture folder
@@ -142,7 +142,7 @@ test.skip('respects user provided codegen config', async () => {
   }
 })
 
-test.skip("Doesn't throw or print any errors with empty project", async () => {
+test("Doesn't throw or print any errors with empty project", async () => {
   const fixturePath = path.resolve(
     __dirname,
     '../../../../__fixtures__/empty-project'
@@ -169,7 +169,7 @@ test.skip("Doesn't throw or print any errors with empty project", async () => {
   }
 })
 
-describe.skip("Doesn't swallow legit errors", () => {
+describe("Doesn't swallow legit errors", () => {
   test('invalidQueryType', async () => {
     const fixturePath = path.resolve(
       __dirname,
