@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/cli",
-  "version": "7.1.1",
+  "version": "7.1.2",
   "description": "The Redwood Command Line",
   "repository": {
     "type": "git",
