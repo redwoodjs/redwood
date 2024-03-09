@@ -38,10 +38,9 @@ type PipeableStream = { pipe<T extends Writable>(destination: T): T }
 
 const handleSetClientEntries = async ({
   id,
-  value,
 }: MessageReq & { type: 'setClientEntries' }) => {
   try {
-    await setClientEntries(value)
+    await setClientEntries()
 
     if (!parentPort) {
       throw new Error('parentPort is undefined')
@@ -215,14 +214,7 @@ const resolveClientEntry = (
   return clientEntry
 }
 
-async function setClientEntries(
-  value: 'load' | Record<string, string>
-): Promise<void> {
-  if (value !== 'load') {
-    absoluteClientEntries = value
-    return
-  }
-
+async function setClientEntries(): Promise<void> {
   // This is the Vite config
   const config = await configPromise
 

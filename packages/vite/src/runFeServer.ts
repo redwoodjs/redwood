@@ -53,7 +53,7 @@ export async function runFeServer() {
   if (rscEnabled) {
     try {
       // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
-      await setClientEntries('load')
+      await setClientEntries()
     } catch (e) {
       console.error('Failed to load client entries')
       console.error(e)
