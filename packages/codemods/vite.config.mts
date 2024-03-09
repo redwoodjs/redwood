@@ -9,7 +9,6 @@ export default defineConfig({
     '**\/__testfixtures__/**',
     '**\/__tests__/utils/**',
     '.d.ts',
-    'dist',
     ],
     setupFiles: ['./vite.setup.mts'],
     pool: 'vmForks'
