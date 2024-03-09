@@ -123,7 +123,7 @@ export const builder = (yargs) => {
   })
 }
 
-export const files = ({
+export const files = async ({
   _tests,
   typescript,
   skipForgot,
@@ -150,7 +150,7 @@ export const files = ({
 
   if (!skipForgot) {
     files.push(
-      templateForComponentFile({
+      await templateForComponentFile({
         name: 'ForgotPassword',
         suffix: 'Page',
         extension: typescript ? '.tsx' : '.jsx',
@@ -164,7 +164,7 @@ export const files = ({
 
   if (!skipLogin) {
     files.push(
-      templateForComponentFile({
+      await templateForComponentFile({
         name: 'Login',
         suffix: 'Page',
         extension: typescript ? '.tsx' : '.jsx',
@@ -180,7 +180,7 @@ export const files = ({
 
   if (!skipReset) {
     files.push(
-      templateForComponentFile({
+      await templateForComponentFile({
         name: 'ResetPassword',
         suffix: 'Page',
         extension: typescript ? '.tsx' : '.jsx',
@@ -194,7 +194,7 @@ export const files = ({
 
   if (!skipSignup) {
     files.push(
-      templateForComponentFile({
+      await templateForComponentFile({
         name: 'Signup',
         suffix: 'Page',
         extension: typescript ? '.tsx' : '.jsx',
@@ -214,7 +214,7 @@ export const files = ({
   // add scaffold CSS file if it doesn't exist already
   const scaffoldOutputPath = path.join(getPaths().web.src, 'scaffold.css')
   if (!fs.existsSync(scaffoldOutputPath)) {
-    const scaffoldTemplate = generateTemplate(
+    const scaffoldTemplate = await generateTemplate(
       path.join(
         __dirname,
         '../scaffold/templates/assets/scaffold.css.template'
@@ -225,18 +225,20 @@ export const files = ({
     files.push([scaffoldOutputPath, scaffoldTemplate])
   }
 
-  return files.reduce((acc, [outputPath, content]) => {
+  return files.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
     let template = content
 
     if (outputPath.match(/\.[jt]sx?/) && !typescript) {
-      template = transformTSToJS(outputPath, content)
+      template = await transformTSToJS(outputPath, content)
     }
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 const tasks = ({
@@ -327,22 +329,21 @@ const tasks = ({
       {
         title: 'Creating pages...',
         task: async () => {
-          return writeFilesTask(
-            files({
-              tests,
-              typescript,
-              skipForgot,
-              skipLogin,
-              skipReset,
-              skipSignup,
-              webauthn,
-              usernameLabel,
-              passwordLabel,
-            }),
-            {
-              overwriteExisting: force,
-            }
-          )
+          const filesObj = await files({
+            tests,
+            typescript,
+            skipForgot,
+            skipLogin,
+            skipReset,
+            skipSignup,
+            webauthn,
+            usernameLabel,
+            passwordLabel,
+          })
+
+          return writeFilesTask(filesObj, {
+            overwriteExisting: force,
+          })
         },
       },
       {

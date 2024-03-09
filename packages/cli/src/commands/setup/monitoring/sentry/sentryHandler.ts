@@ -54,7 +54,7 @@ export const handler = async ({ force }: Args) => {
     },
     {
       title: 'Implementing the Envelop plugin',
-      task: (ctx) => {
+      task: async (ctx) => {
         const graphqlHandlerPath = path.join(
           rwPaths.api.functions,
           `graphql.${extension}`
@@ -95,13 +95,13 @@ export const handler = async ({ force }: Args) => {
 
         fs.writeFileSync(
           graphqlHandlerPath,
-          prettify('graphql.ts', contentLines.join('\n'))
+          await prettify('graphql.ts', contentLines.join('\n'))
         )
       },
     },
     {
       title: "Replacing Redwood's Error boundary",
-      task: () => {
+      task: async () => {
         const contentLines = fs
           .readFileSync(rwPaths.web.app)
           .toString()
@@ -136,7 +136,7 @@ export const handler = async ({ force }: Args) => {
 
         fs.writeFileSync(
           rwPaths.web.app,
-          prettify('App.tsx', contentLines.join('\n'))
+          await prettify('App.tsx', contentLines.join('\n'))
         )
       },
     },

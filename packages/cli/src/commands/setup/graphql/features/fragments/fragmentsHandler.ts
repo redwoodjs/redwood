@@ -5,7 +5,11 @@ import execa from 'execa'
 import { Listr } from 'listr2'
 import { format } from 'prettier'
 
-import { colors, prettierOptions, setTomlSetting } from '@redwoodjs/cli-helpers'
+import {
+  colors,
+  getPrettierOptions,
+  setTomlSetting,
+} from '@redwoodjs/cli-helpers'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import type { Args } from './fragments'
@@ -67,8 +71,10 @@ export async function handler({ force }: Args) {
           const appPath = getPaths().web.app
           const source = fs.readFileSync(appPath, 'utf-8')
 
+          const prettierOptions = await getPrettierOptions()
+
           const prettifiedApp = format(source, {
-            ...prettierOptions(),
+            ...prettierOptions,
             parser: 'babel-ts',
           })
 

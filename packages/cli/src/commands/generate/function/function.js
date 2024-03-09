@@ -13,7 +13,7 @@ import { prepareForRollback } from '../../../lib/rollback'
 import { yargsDefaults } from '../helpers'
 import { validateName, templateForComponentFile } from '../helpers'
 
-export const files = ({
+export const files = async ({
   name,
   typescript: generateTypescript = false,
   tests: generateTests = true,
@@ -25,7 +25,7 @@ export const files = ({
 
   const outputFiles = []
 
-  const functionFiles = templateForComponentFile({
+  const functionFiles = await templateForComponentFile({
     name: functionName,
     componentName: functionName,
     extension,
@@ -43,7 +43,7 @@ export const files = ({
   outputFiles.push(functionFiles)
 
   if (generateTests) {
-    const testFile = templateForComponentFile({
+    const testFile = await templateForComponentFile({
       name: functionName,
       componentName: functionName,
       extension,
@@ -58,7 +58,7 @@ export const files = ({
       ),
     })
 
-    const scenarioFile = templateForComponentFile({
+    const scenarioFile = await templateForComponentFile({
       name: functionName,
       componentName: functionName,
       extension,
@@ -77,16 +77,18 @@ export const files = ({
     outputFiles.push(scenarioFile)
   }
 
-  return outputFiles.reduce((acc, [outputPath, content]) => {
+  return outputFiles.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
     const template = generateTypescript
       ? content
-      : transformTSToJS(outputPath, content)
+      : await transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 export const command = 'function <name>'
@@ -136,7 +138,7 @@ export const handler = async ({ name, force, ...rest }) => {
       {
         title: 'Generating function files...',
         task: async () => {
-          return writeFilesTask(files({ name, ...rest }), {
+          return writeFilesTask(await files({ name, ...rest }), {
             overwriteExisting: force,
           })
         },

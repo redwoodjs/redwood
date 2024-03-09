@@ -21,7 +21,7 @@ import {
   validateName,
 } from '../helpers'
 
-export const files = ({ name, typescript = false, type, tests }) => {
+export const files = async ({ name, typescript = false, type, tests }) => {
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
@@ -34,7 +34,7 @@ export const files = ({ name, typescript = false, type, tests }) => {
 
   const outputFilename = `${camelName}.${typescript ? 'ts' : 'js'}`
 
-  const directiveFile = templateForComponentFile({
+  const directiveFile = await templateForComponentFile({
     name,
     extension: typescript ? '.ts' : '.js',
     generator: 'directive',
@@ -50,7 +50,7 @@ export const files = ({ name, typescript = false, type, tests }) => {
       typescript ? 'ts' : 'js'
     }`
 
-    const testFile = templateForComponentFile({
+    const testFile = await templateForComponentFile({
       name,
       extension: typescript ? '.test.ts' : '.test.js',
       generator: 'directive',
@@ -70,14 +70,18 @@ export const files = ({ name, typescript = false, type, tests }) => {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return files.reduce((acc, [outputPath, content]) => {
-    const template = typescript ? content : transformTSToJS(outputPath, content)
+  return files.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
+    const template = typescript
+      ? content
+      : await transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 const positionalsObj = {

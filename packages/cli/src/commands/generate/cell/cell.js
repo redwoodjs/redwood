@@ -78,7 +78,7 @@ export const files = async ({ name, typescript, ...options }) => {
   }
 
   const extension = typescript ? '.tsx' : '.jsx'
-  const cellFile = templateForComponentFile({
+  const cellFile = await templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
     extension,
@@ -92,7 +92,7 @@ export const files = async ({ name, typescript, ...options }) => {
     },
   })
 
-  const testFile = templateForComponentFile({
+  const testFile = await templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
     extension: `.test${extension}`,
@@ -101,7 +101,7 @@ export const files = async ({ name, typescript, ...options }) => {
     templatePath: 'test.js.template',
   })
 
-  const storiesFile = templateForComponentFile({
+  const storiesFile = await templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
     extension: `.stories${extension}`,
@@ -110,7 +110,7 @@ export const files = async ({ name, typescript, ...options }) => {
     templatePath: 'stories.tsx.template',
   })
 
-  const mockFile = templateForComponentFile({
+  const mockFile = await templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
     extension: typescript ? '.mock.ts' : '.mock.js',
@@ -142,14 +142,18 @@ export const files = async ({ name, typescript, ...options }) => {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return files.reduce((acc, [outputPath, content]) => {
-    const template = typescript ? content : transformTSToJS(outputPath, content)
+  return files.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
+    const template = typescript
+      ? content
+      : await transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 export const { command, description, builder, handler } =

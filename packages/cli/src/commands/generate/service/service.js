@@ -304,7 +304,7 @@ export const files = async ({
   const model = name
   const idName = await getIdName(model)
   const extension = 'ts'
-  const serviceFile = templateForComponentFile({
+  const serviceFile = await templateForComponentFile({
     name,
     componentName: componentName,
     extension: `.${extension}`,
@@ -314,7 +314,7 @@ export const files = async ({
     templateVars: { relations: relations || [], idName, ...rest },
   })
 
-  const testFile = templateForComponentFile({
+  const testFile = await templateForComponentFile({
     name,
     componentName: componentName,
     extension: `.test.${extension}`,
@@ -326,16 +326,16 @@ export const files = async ({
       create: await fieldsToInput(model),
       update: await fieldsToUpdate(model),
       types: await fieldTypes(model),
-      prismaImport: (await parseSchema(model)).scalarFields.some(
-        (field) => field.type === 'Decimal'
-      ),
+      prismaImport: (
+        await parseSchema(model)
+      ).scalarFields.some((field) => field.type === 'Decimal'),
       prismaModel: model,
       idName,
       ...rest,
     },
   })
 
-  const scenariosFile = templateForComponentFile({
+  const scenariosFile = await templateForComponentFile({
     name,
     componentName: componentName,
     extension: `.scenarios.${extension}`,
@@ -362,9 +362,11 @@ export const files = async ({
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return files.reduce((acc, [outputPath, content]) => {
+  return files.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
     if (!typescript) {
-      content = transformTSToJS(outputPath, content)
+      content = await transformTSToJS(outputPath, content)
       outputPath = outputPath.replace('.ts', '.js')
     }
 
@@ -372,7 +374,7 @@ export const files = async ({
       [outputPath]: content,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 export const defaults = {

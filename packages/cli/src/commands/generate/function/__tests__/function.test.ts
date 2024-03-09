@@ -12,8 +12,8 @@ import * as functionGenerator from '../function'
 // Should be refactored as it's repeated
 type WordFilesType = { [key: string]: string }
 
-describe('Single word default files', () => {
-  const singleWordDefaultFiles: WordFilesType = functionGenerator.files({
+describe('Single word default files', async () => {
+  const singleWordDefaultFiles: WordFilesType = await functionGenerator.files({
     name: 'foo',
     tests: true,
   })
@@ -63,8 +63,8 @@ test('Keeps Function in name', () => {
   expect(name).toEqual('BazingaFunction')
 })
 
-test('creates a multi word function file', () => {
-  const multiWordDefaultFiles = functionGenerator.files({
+test('creates a multi word function file', async () => {
+  const multiWordDefaultFiles = await functionGenerator.files({
     name: 'send-mail',
   })
 
@@ -75,8 +75,8 @@ test('creates a multi word function file', () => {
   ).toMatchSnapshot()
 })
 
-test('creates a .js file if --javascript=true', () => {
-  const javascriptFiles = functionGenerator.files({
+test('creates a .js file if --javascript=true', async () => {
+  const javascriptFiles = await functionGenerator.files({
     name: 'javascript-function',
   })
 
@@ -91,8 +91,8 @@ test('creates a .js file if --javascript=true', () => {
   // https://babeljs.io/docs/en/babel-plugin-transform-typescript
 })
 
-test('creates a .ts file if --typescript=true', () => {
-  const typescriptFiles = functionGenerator.files({
+test('creates a .ts file if --typescript=true', async () => {
+  const typescriptFiles = await functionGenerator.files({
     name: 'typescript-function',
     typescript: true,
   })

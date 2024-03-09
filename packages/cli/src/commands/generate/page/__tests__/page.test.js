@@ -52,8 +52,8 @@ import { getPaths } from '../../../../lib'
 import { pathName } from '../../helpers'
 import * as page from '../page'
 
-describe('Single world files', () => {
-  const singleWordFiles = page.files({
+describe('Single world files', async () => {
+  const singleWordFiles = await page.files({
     name: 'Home',
     tests: true,
     stories: true,
@@ -93,8 +93,8 @@ describe('Single world files', () => {
   })
 })
 
-describe('multiWorldFiles', () => {
-  const multiWordFiles = page.files({
+describe('multiWorldFiles', async () => {
+  const multiWordFiles = await page.files({
     name: 'ContactUs',
     tests: true,
     stories: true,
@@ -132,8 +132,8 @@ describe('multiWorldFiles', () => {
   })
 })
 
-describe('Plural word files', () => {
-  const pluralWordFiles = page.files({
+describe('Plural word files', async () => {
+  const pluralWordFiles = await page.files({
     name: 'Cats',
     tests: true,
     stories: true,
@@ -149,8 +149,8 @@ describe('Plural word files', () => {
   })
 })
 
-describe('paramFiles', () => {
-  const paramFiles = page.files({
+describe('paramFiles', async () => {
+  const paramFiles = await page.files({
     name: 'Post',
     tests: true,
     stories: true,
@@ -176,8 +176,8 @@ describe('paramFiles', () => {
   })
 })
 
-describe('No test files', () => {
-  const noTestsFiles = page.files({
+describe('No test files', async () => {
+  const noTestsFiles = await page.files({
     name: 'NoTests',
     tests: false,
     stories: true,
@@ -196,8 +196,8 @@ describe('No test files', () => {
   })
 })
 
-describe('No stories files', () => {
-  const noStoriesFiles = page.files({
+describe('No stories files', async () => {
+  const noStoriesFiles = await page.files({
     name: 'NoStories',
     tests: true,
     stories: false,
@@ -440,8 +440,8 @@ describe('handler', () => {
   })
 })
 
-describe('TS Files', () => {
-  const typescriptFiles = page.files({
+describe('TS Files', async () => {
+  const typescriptFiles = await page.files({
     name: 'TSFiles',
     typescript: true,
     tests: true,
@@ -475,8 +475,8 @@ describe('TS Files', () => {
     ).toMatchSnapshot()
   })
 
-  test('TS Params', () => {
-    const typescriptParamFiles = page.files({
+  test('TS Params', async () => {
+    const typescriptParamFiles = await page.files({
       name: 'TSParamFiles',
       typescript: true,
       tests: true,
@@ -493,8 +493,8 @@ describe('TS Files', () => {
     ).toMatchSnapshot()
   })
 
-  test('TS Params with type', () => {
-    const typescriptParamTypeFiles = page.files({
+  test('TS Params with type', async () => {
+    const typescriptParamTypeFiles = await page.files({
       name: 'TSParamTypeFiles',
       typescript: true,
       tests: false,
