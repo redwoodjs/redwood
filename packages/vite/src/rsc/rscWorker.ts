@@ -206,8 +206,10 @@ const getFunctionComponent = async (rscId: string) => {
 
   if (isDev) {
     const vite = await vitePromise
-    const entriesFileModule = await vite.ssrLoadModule(entriesFilePath)
-    getEntry = entriesFileModule.default
+    const { default: entriesFileModule } = await vite.ssrLoadModule(
+      entriesFilePath
+    )
+    getEntry = entriesFileModule.getEntry
   } else {
     const {
       default: { getEntry: getEntryProd },
