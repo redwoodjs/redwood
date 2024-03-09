@@ -77,7 +77,8 @@ async function setUpRscProject(
   console.log(`Creating project at ${rscProjectPath}`)
   console.log()
   await exec('yarn', [
-    'create redwood-app',
+    'create',
+    'redwood-app',
     '-y',
     '--no-git',
     rscProjectPath,
