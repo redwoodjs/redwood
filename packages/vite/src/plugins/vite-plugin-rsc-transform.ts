@@ -10,18 +10,66 @@ export function rscTransformPlugin(
 ): Plugin {
   return {
     name: 'rsc-transform-plugin',
-    async transform(code, id) {
+    transform: async function (code, id) {
       // Do a quick check for the exact string. If it doesn't exist, don't
       // bother parsing.
       if (!code.includes('use client') && !code.includes('use server')) {
         return code
       }
 
-      const transformedCode = await transformModuleIfNeeded(
-        code,
-        id,
-        clientEntryFiles
-      )
+      let body
+
+      try {
+        body = acorn.parse(code, {
+          ecmaVersion: 2024,
+          sourceType: 'module',
+        }).body
+      } catch (x: any) {
+        console.error('Error parsing %s %s', id, x.message)
+        return code
+      }
+
+      let useClient = false
+      let useServer = false
+
+      for (let i = 0; i < body.length; i++) {
+        const node = body[i]
+
+        if (node.type !== 'ExpressionStatement' || !node.directive) {
+          break
+        }
+
+        if (node.directive === 'use client') {
+          useClient = true
+        }
+
+        if (node.directive === 'use server') {
+          useServer = true
+        }
+      }
+
+      if (!useClient && !useServer) {
+        return code
+      }
+
+      if (useClient && useServer) {
+        throw new Error(
+          'Cannot have both "use client" and "use server" directives in the same file.'
+        )
+      }
+
+      let transformedCode: string
+
+      if (useClient) {
+        transformedCode = await transformClientModule(
+          code,
+          body,
+          id,
+          clientEntryFiles
+        )
+      } else {
+        transformedCode = transformServerModule(code, body, id)
+      }
 
       return transformedCode
     },
@@ -313,57 +361,4 @@ async function transformClientModule(
   }
 
   return newSrc
-}
-
-async function transformModuleIfNeeded(
-  source: string,
-  url: string,
-  clientEntryFile?: Record<string, string>
-): Promise<string> {
-  let body
-
-  try {
-    body = acorn.parse(source, {
-      ecmaVersion: 2024,
-      sourceType: 'module',
-    }).body
-  } catch (x: any) {
-    console.error('Error parsing %s %s', url, x.message)
-    return source
-  }
-
-  let useClient = false
-  let useServer = false
-
-  for (let i = 0; i < body.length; i++) {
-    const node = body[i]
-
-    if (node.type !== 'ExpressionStatement' || !node.directive) {
-      break
-    }
-
-    if (node.directive === 'use client') {
-      useClient = true
-    }
-
-    if (node.directive === 'use server') {
-      useServer = true
-    }
-  }
-
-  if (!useClient && !useServer) {
-    return source
-  }
-
-  if (useClient && useServer) {
-    throw new Error(
-      'Cannot have both "use client" and "use server" directives in the same file.'
-    )
-  }
-
-  if (useClient) {
-    return transformClientModule(source, body, url, clientEntryFile)
-  }
-
-  return transformServerModule(source, body, url)
 }
