@@ -437,5 +437,11 @@ export function projectIsEsm() {
 /** Default to JS path, but if MJS exists, use it instead */
 const mjsOrJs = (filePath: string) => {
   const mjsPath = resolveFile(filePath, ['.mjs'])
+
+  console.log({
+    filePath,
+    mjsPath,
+  })
+
   return mjsPath ? mjsPath : filePath + '.js'
 }
