@@ -136,7 +136,7 @@ export const handler = async ({
           // one in the future as a performance optimization.
           //
           // Disable the new warning in Vite v5 about the CJS build being deprecated.
-          // so that users don't have to see it every time the dev server starts up.
+          // so that users don't have to see it when this command is called with --verbose
           process.env.VITE_CJS_IGNORE_WARNING = 'true'
           await execa(
             `node ${require.resolve(
