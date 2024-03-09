@@ -227,7 +227,7 @@ export function merge(base, extension, strategy) {
   // Otherwise, leave formatting to the caller.
   return process.env.VITEST_POOL_ID
     ? prettier.format(code, {
-        parser: 'babel',
+        parser: 'babel-ts',
         bracketSpacing: true,
         tabWidth: 2,
         semi: false,
