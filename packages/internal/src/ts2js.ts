@@ -120,7 +120,7 @@ export const transformTSToJS = (file: string) => {
 export const getPrettierConfig = async () => {
   try {
     const { default: prettierConfig } = await import(
-      path.join(getPaths().base, 'prettier.config.js')
+      `file://${path.join(getPaths().base, 'prettier.config.js')}`
     )
     return prettierConfig
   } catch (e) {
