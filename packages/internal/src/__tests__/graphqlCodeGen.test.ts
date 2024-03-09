@@ -2,6 +2,16 @@ import fs from 'fs'
 import path from 'path'
 
 import {
+  beforeAll,
+  afterAll,
+  afterEach,
+  vi,
+  test,
+  expect,
+  describe,
+} from 'vitest'
+
+import {
   generateTypeDefGraphQLApi,
   generateTypeDefGraphQLWeb,
 } from '../generate/graphqlCodeGen'
@@ -21,16 +31,18 @@ afterAll(() => {
 })
 
 afterEach(() => {
-  jest.restoreAllMocks()
+  vi.restoreAllMocks()
 })
 
-jest.mock('@prisma/client', () => {
+vi.mock('@prisma/client', () => {
   return {
-    ModelName: {
-      PrismaModelOne: 'PrismaModelOne',
-      PrismaModelTwo: 'PrismaModelTwo',
-      Post: 'Post',
-      Todo: 'Todo',
+    default: {
+      ModelName: {
+        PrismaModelOne: 'PrismaModelOne',
+        PrismaModelTwo: 'PrismaModelTwo',
+        Post: 'Post',
+        Todo: 'Todo',
+      },
     },
   }
 })
@@ -38,16 +50,15 @@ jest.mock('@prisma/client', () => {
 test('Generate gql typedefs web', async () => {
   await generateGraphQLSchema()
 
-  jest
-    .spyOn(fs, 'writeFileSync')
-    .mockImplementation(
-      (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
-        expect(file).toMatch(path.join('web', 'types', 'graphql.d.ts'))
-        expect(data).toMatchSnapshot()
-      }
-    )
+  vi.spyOn(fs, 'writeFileSync').mockImplementation(
+    (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
+      expect(file).toMatch(path.join('web', 'types', 'graphql.d.ts'))
+      expect(data).toMatchSnapshot()
+    }
+  )
 
-  const { typeDefFiles } = await generateTypeDefGraphQLWeb()
+  const { typeDefFiles, errors } = await generateTypeDefGraphQLWeb()
+  expect(errors).toHaveLength(0)
 
   expect(typeDefFiles).toHaveLength(1)
   expect(typeDefFiles[0]).toMatch(path.join('web', 'types', 'graphql.d.ts'))
@@ -61,13 +72,11 @@ test('Generate gql typedefs api', async () => {
     data: string | ArrayBufferView
   } = { file: '', data: '' }
 
-  jest
-    .spyOn(fs, 'writeFileSync')
-    .mockImplementation(
-      (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
-        codegenOutput = { file, data }
-      }
-    )
+  vi.spyOn(fs, 'writeFileSync').mockImplementation(
+    (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
+      codegenOutput = { file, data }
+    }
+  )
 
   const { typeDefFiles } = await generateTypeDefGraphQLApi()
 
@@ -140,7 +149,7 @@ test("Doesn't throw or print any errors with empty project", async () => {
   )
   process.env.RWJS_CWD = fixturePath
   const oldConsoleError = console.error
-  console.error = jest.fn()
+  console.error = vi.fn()
 
   try {
     await generateGraphQLSchema()

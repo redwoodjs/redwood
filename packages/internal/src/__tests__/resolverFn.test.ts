@@ -1,5 +1,15 @@
 import path from 'path'
 
+import {
+  vi,
+  describe,
+  it,
+  expect,
+  beforeAll,
+  afterAll,
+  afterEach,
+} from 'vitest'
+
 import { getResolverFnType } from '../generate/graphqlCodeGen'
 
 const FIXTURE_PATH = path.resolve(
@@ -12,7 +22,7 @@ let mockedTSConfigs = {
   api: null,
   web: null,
 }
-jest.mock('../project', () => {
+vi.mock('../project', () => {
   return {
     getTsConfigs: () => {
       return mockedTSConfigs
@@ -29,7 +39,7 @@ afterAll(() => {
 })
 
 afterEach(() => {
-  jest.restoreAllMocks()
+  vi.restoreAllMocks()
 })
 
 describe('ResovlerFn types', () => {

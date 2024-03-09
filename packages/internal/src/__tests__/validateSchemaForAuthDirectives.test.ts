@@ -4,6 +4,7 @@ import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { loadTypedefs } from '@graphql-tools/load'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import type { DocumentNode } from 'graphql'
+import { describe, beforeAll, afterAll, test, expect } from 'vitest'
 
 import { getPaths } from '@redwoodjs/project-config'
 
