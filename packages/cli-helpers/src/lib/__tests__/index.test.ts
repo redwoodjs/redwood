@@ -1,3 +1,5 @@
+import path from 'path'
+
 import { vi, test, expect } from 'vitest'
 
 import { prettify } from '../index.js'
@@ -6,7 +8,10 @@ vi.mock('../paths', () => {
   return {
     getPaths: () => {
       return {
-        base: '../../../../__fixtures__/example-todo-main',
+        base: path.resolve(
+          __dirname,
+          '../../../../../__fixtures__/example-todo-main'
+        ),
       }
     },
   }
