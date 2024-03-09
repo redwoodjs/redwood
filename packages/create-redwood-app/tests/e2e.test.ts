@@ -47,7 +47,7 @@ describe('create-redwood-app', () => {
 
     expect(p.exitCode).toEqual(0)
     expect(p.stdout).toMatchInlineSnapshot(`
-      "7.0.0
+      "7.1.2
       [?25l[?25h"
     `)
     expect(p.stderr).toMatchInlineSnapshot(`"[?25l[?25h"`)
