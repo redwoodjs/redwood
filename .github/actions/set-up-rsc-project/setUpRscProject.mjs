@@ -83,6 +83,7 @@ async function setUpRscProject(
     '--no-git',
     rscProjectPath,
   ])
+  await exec('yarn', null, { cwd: rscProjectPath })
 
   console.log(`Setting up Streaming/SSR in ${rscProjectPath}`)
   const cmdSetupStreamingSSR = `node ${rwBinPath} experimental setup-streaming-ssr -f`
