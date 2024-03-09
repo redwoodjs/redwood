@@ -11,7 +11,6 @@ import {
 } from '../ast'
 
 vi.mock('@redwoodjs/project-config', async () => {
-  const path = await import('path')
   const baseFixturePath = path.join(__dirname, 'fixtures')
   return {
     getPaths: () => ({
