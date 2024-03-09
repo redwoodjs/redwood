@@ -134,6 +134,10 @@ export const handler = async ({
           // it could affect other things that run in parallel while building.
           // We don't have any parallel tasks right now, but someone might add
           // one in the future as a performance optimization.
+          //
+          // Disable the new warning in Vite v5 about the CJS build being deprecated.
+          // so that users don't have to see it every time the dev server starts up.
+          process.env.VITE_CJS_IGNORE_WARNING = 'true'
           await execa(
             `node ${require.resolve(
               '@redwoodjs/vite/bins/rw-vite-build.mjs'
