@@ -51,7 +51,7 @@ export const removeBabelConfig = async () => {
 
         const newConfig = `module.exports = ${JSON.stringify(otherConfig)}`
 
-        fs.writeFileSync(webBabelConfigPath, prettify(newConfig))
+        fs.writeFileSync(webBabelConfigPath, await prettify(newConfig))
       }
     }
   }

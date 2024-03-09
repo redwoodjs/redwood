@@ -17,7 +17,6 @@ import {
   generateTemplate,
   readFile,
   writeFile,
-  asyncForEach,
   getDefaultArgs,
   getPaths,
   writeFilesTask,
@@ -185,9 +184,9 @@ export const files = async ({
       tests,
       typescript,
     })),
-    ...assetFiles(name, tailwind),
+    ...(await assetFiles(name, tailwind)),
     ...(await formatters(name, typescript)),
-    ...layoutFiles(name, force, typescript, templateStrings),
+    ...(await layoutFiles(name, force, typescript, templateStrings)),
     ...(await pageFiles(
       name,
       pascalScaffoldPath,
@@ -198,7 +197,7 @@ export const files = async ({
   }
 }
 
-const assetFiles = (name, tailwind) => {
+const assetFiles = async (name, tailwind) => {
   let fileList = {}
   const assets = fs.readdirSync(
     customOrDefaultTemplatePath({
@@ -208,7 +207,7 @@ const assetFiles = (name, tailwind) => {
     })
   )
 
-  assets.forEach((asset) => {
+  for (const asset of assets) {
     // check if the asset name matches the Tailwind preference
     if (
       (tailwind && asset.match(/tailwind/)) ||
@@ -224,7 +223,7 @@ const assetFiles = (name, tailwind) => {
         !SKIPPABLE_ASSETS.includes(path.basename(outputPath)) ||
         !fs.existsSync(outputPath)
       ) {
-        const template = generateTemplate(
+        const template = await generateTemplate(
           customOrDefaultTemplatePath({
             side: 'web',
             generator: 'scaffold',
@@ -237,7 +236,7 @@ const assetFiles = (name, tailwind) => {
         fileList[outputPath] = template
       }
     }
-  })
+  }
 
   return fileList
 }
@@ -259,7 +258,7 @@ const formatters = async (name, isTypescript) => {
     return
   }
 
-  const template = generateTemplate(
+  const template = await generateTemplate(
     customOrDefaultTemplatePath({
       side: 'web',
       generator: 'scaffold',
@@ -270,7 +269,7 @@ const formatters = async (name, isTypescript) => {
     }
   )
 
-  const templateTest = generateTemplate(
+  const templateTest = await generateTemplate(
     customOrDefaultTemplatePath({
       side: 'web',
       generator: 'scaffold',
@@ -284,10 +283,10 @@ const formatters = async (name, isTypescript) => {
   return {
     [outputPath]: isTypescript
       ? template
-      : transformTSToJS(outputPath, template),
+      : await transformTSToJS(outputPath, template),
     [outputPathTest]: isTypescript
       ? templateTest
-      : transformTSToJS(outputPathTest, templateTest),
+      : await transformTSToJS(outputPathTest, templateTest),
   }
 }
 
@@ -440,7 +439,12 @@ const modelRelatedVariables = (model) => {
   }
 }
 
-const layoutFiles = (name, force, generateTypescript, templateStrings) => {
+const layoutFiles = async (
+  name,
+  force,
+  generateTypescript,
+  templateStrings
+) => {
   let fileList = {}
 
   const layouts = fs.readdirSync(
@@ -451,7 +455,7 @@ const layoutFiles = (name, force, generateTypescript, templateStrings) => {
     })
   )
 
-  layouts.forEach((layout) => {
+  for (const layout of layouts) {
     const outputLayoutName = layout.replace(
       /\.tsx\.template/,
       generateTypescript ? '.tsx' : '.jsx'
@@ -465,7 +469,7 @@ const layoutFiles = (name, force, generateTypescript, templateStrings) => {
 
     // Since the ScaffoldLayout is shared, don't overwrite by default
     if (!fs.existsSync(outputPath) || force) {
-      const template = generateTemplate(
+      const template = await generateTemplate(
         customOrDefaultTemplatePath({
           side: 'web',
           generator: 'scaffold',
@@ -480,9 +484,9 @@ const layoutFiles = (name, force, generateTypescript, templateStrings) => {
 
       fileList[outputPath] = generateTypescript
         ? template
-        : transformTSToJS(outputPath, template)
+        : await transformTSToJS(outputPath, template)
     }
-  })
+  }
 
   return fileList
 }
@@ -511,7 +515,7 @@ const pageFiles = async (
     })
   )
 
-  pages.forEach((page) => {
+  for (const page of pages) {
     // Sanitize page names
     const outputPageName = page
       .replace(/Names/, pluralName)
@@ -528,7 +532,7 @@ const pageFiles = async (
       finalFolder,
       outputPageName
     )
-    const template = generateTemplate(
+    const template = await generateTemplate(
       customOrDefaultTemplatePath({
         side: 'web',
         generator: 'scaffold',
@@ -546,8 +550,8 @@ const pageFiles = async (
 
     fileList[outputPath] = generateTypescript
       ? template
-      : transformTSToJS(outputPath, template)
-  })
+      : await transformTSToJS(outputPath, template)
+  }
 
   return fileList
 }
@@ -576,7 +580,7 @@ const componentFiles = async (
     })
   )
 
-  await asyncForEach(components, (component) => {
+  for (const component of components) {
     const outputComponentName = component
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
@@ -593,7 +597,7 @@ const componentFiles = async (
       outputComponentName
     )
 
-    const template = generateTemplate(
+    const template = await generateTemplate(
       customOrDefaultTemplatePath({
         side: 'web',
         generator: 'scaffold',
@@ -613,8 +617,8 @@ const componentFiles = async (
 
     fileList[outputPath] = generateTypescript
       ? template
-      : transformTSToJS(outputPath, template)
-  })
+      : await transformTSToJS(outputPath, template)
+  }
 
   return fileList
 }

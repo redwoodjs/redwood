@@ -67,22 +67,22 @@ describe('dbAuth', () => {
     vol.fromJSON(mockFiles)
   })
 
-  it('creates a login page', () => {
-    expect(dbAuth.files(true, false)).toHaveProperty([
+  it('creates a login page', async () => {
+    expect(await dbAuth.files(true, false)).toHaveProperty([
       path.normalize('/path/to/project/web/src/pages/LoginPage/LoginPage.jsx'),
     ])
   })
 
-  it('creates a signup page', () => {
-    expect(dbAuth.files(true, false)).toHaveProperty([
+  it('creates a signup page', async () => {
+    expect(await dbAuth.files(true, false)).toHaveProperty([
       path.normalize(
         '/path/to/project/web/src/pages/SignupPage/SignupPage.jsx'
       ),
     ])
   })
 
-  it('creates a scaffold CSS file', () => {
-    expect(dbAuth.files(true, false)).toHaveProperty([
+  it('creates a scaffold CSS file', async () => {
+    expect(await dbAuth.files(true, false)).toHaveProperty([
       path.normalize('/path/to/project/web/src/scaffold.css'),
     ])
   })

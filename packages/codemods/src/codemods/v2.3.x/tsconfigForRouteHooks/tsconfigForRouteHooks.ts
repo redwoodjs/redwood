@@ -41,7 +41,7 @@ export default async function addApiAliasToTsConfig() {
     ts.sys.writeFile(
       webConfigPath,
       // @NOTE: prettier will remove trailing commas, but whatever
-      prettify(JSON.stringify(updatedConfig), { parser: 'json' })
+      await prettify(JSON.stringify(updatedConfig), { parser: 'json' })
     )
   } else {
     throw new Error(

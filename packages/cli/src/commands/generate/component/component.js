@@ -6,23 +6,23 @@ import {
 
 const REDWOOD_WEB_PATH_NAME = 'components'
 
-export const files = ({ name, typescript = false, ...options }) => {
+export const files = async ({ name, typescript = false, ...options }) => {
   const extension = typescript ? '.tsx' : '.jsx'
-  const componentFile = templateForComponentFile({
+  const componentFile = await templateForComponentFile({
     name,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     extension,
     generator: 'component',
     templatePath: 'component.tsx.template',
   })
-  const testFile = templateForComponentFile({
+  const testFile = await templateForComponentFile({
     name,
     extension: `.test${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'component',
     templatePath: 'test.tsx.template',
   })
-  const storiesFile = templateForComponentFile({
+  const storiesFile = await templateForComponentFile({
     name,
     extension: `.stories${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
@@ -46,14 +46,18 @@ export const files = ({ name, typescript = false, ...options }) => {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return files.reduce((acc, [outputPath, content]) => {
-    const template = typescript ? content : transformTSToJS(outputPath, content)
+  return files.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
+    const template = typescript
+      ? content
+      : await transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 export const description = 'Generate a component'
