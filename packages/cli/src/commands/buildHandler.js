@@ -135,7 +135,7 @@ export const handler = async ({
           // We don't have any parallel tasks right now, but someone might add
           // one in the future as a performance optimization.
           //
-          // Disable the new warning in Vite v5 about the CJS build being deprecated.
+          // Disable the new warning in Vite v5 about the CJS build being deprecated
           // so that users don't have to see it when this command is called with --verbose
           process.env.VITE_CJS_IGNORE_WARNING = 'true'
           await execa(
