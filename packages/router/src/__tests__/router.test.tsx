@@ -1,7 +1,6 @@
 let mockDelay = 0
 vi.mock('../util', async (importOriginal) => {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  const actualUtil = await importOriginal<typeof import('../util')>()
+  const actualUtil = await importOriginal<typeof UtilType>()
   const { lazy } = await import('react')
 
   return {
@@ -56,6 +55,7 @@ import {
 import { useLocation } from '../location'
 import { useParams } from '../params'
 import { Set } from '../Set'
+import type * as UtilType from '../util'
 import type { GeneratedRoutesMap, Spec } from '../util'
 
 /** running into intermittent test timeout behavior in https://github.com/redwoodjs/redwood/pull/4992
