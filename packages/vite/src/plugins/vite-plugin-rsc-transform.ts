@@ -1,90 +1,369 @@
+import path from 'node:path'
+
+import * as acorn from 'acorn-loose'
 import type { Plugin } from 'vite'
 
-import * as RSDWNodeLoader from '../react-server-dom-webpack/node-loader.js'
-import type { ResolveFunction } from '../react-server-dom-webpack/node-loader.js'
+import { getPaths } from '@redwoodjs/project-config'
 
 export function rscTransformPlugin(
   clientEntryFiles: Record<string, string>
 ): Plugin {
   return {
     name: 'rsc-transform-plugin',
-    // TODO (RSC): Seems like resolveId() is never called. Can we remove it?
-    async resolveId(id, importer, options) {
-      console.log(
-        'rscVitePlugins - rscTransformPlugin::resolveId()',
+    async transform(code, id) {
+      // Do a quick check for the exact string. If it doesn't exist, don't
+      // bother parsing.
+      if (!code.includes('use client') && !code.includes('use server')) {
+        return code
+      }
+
+      const transformedCode = await transformModuleIfNeeded(
+        code,
         id,
-        options
+        clientEntryFiles
       )
 
-      if (!id.endsWith('.js')) {
-        return id
-      }
-
-      // FIXME This isn't necessary in production mode
-      for (const ext of ['.js', '.ts', '.tsx', '.jsx']) {
-        const resolved = await this.resolve(id.slice(0, -3) + ext, importer, {
-          ...options,
-          skipSelf: true,
-        })
-
-        if (resolved) {
-          return resolved
-        }
-      }
-
-      return undefined
-    },
-    async transform(code, id) {
-      const resolve: ResolveFunction = async (
-        specifier: string,
-        { parentURL }: { parentURL: string | void; conditions: Array<string> }
-      ) => {
-        if (!specifier) {
-          return { url: '' }
-        }
-
-        let resolved: Awaited<ReturnType<typeof this.resolve>> | undefined
-
-        if (parentURL) {
-          resolved = await this.resolve(specifier, parentURL, {
-            skipSelf: true,
-          })
-        }
-
-        if (!resolved) {
-          throw new Error(`Failed to resolve ${specifier}`)
-        }
-
-        const url = resolved.id
-        return { url }
-      }
-
-      const context = {
-        conditions: ['react-server'],
-        parentURL: '',
-      }
-
-      // Calling `resolve` here stashes the resolve function for use with
-      // `RSDWNodeLoader.load()` below
-      RSDWNodeLoader.resolve('', context, resolve)
-
-      const load = async (url: string) => {
-        let source: string | null = code
-
-        if (url !== id) {
-          source = (await this.load({ id: url })).code
-        }
-
-        if (!source) {
-          throw new Error(`Failed to load ${url}`)
-        }
-
-        return { format: 'module', source }
-      }
-
-      const mod = await RSDWNodeLoader.load(id, null, load, clientEntryFiles)
-
-      return mod.source
+      return transformedCode
     },
   }
+}
+
+function addLocalExportedNames(names: Map<string, string>, node: any) {
+  switch (node.type) {
+    case 'Identifier':
+      names.set(node.name, node.name)
+      return
+
+    case 'ObjectPattern':
+      for (let i = 0; i < node.properties.length; i++) {
+        addLocalExportedNames(names, node.properties[i])
+      }
+
+      return
+
+    case 'ArrayPattern':
+      for (let i = 0; i < node.elements.length; i++) {
+        const element = node.elements[i]
+        if (element) {
+          addLocalExportedNames(names, element)
+        }
+      }
+
+      return
+
+    case 'Property':
+      addLocalExportedNames(names, node.value)
+      return
+
+    case 'AssignmentPattern':
+      addLocalExportedNames(names, node.left)
+      return
+
+    case 'RestElement':
+      addLocalExportedNames(names, node.argument)
+      return
+
+    case 'ParenthesizedExpression':
+      addLocalExportedNames(names, node.expression)
+      return
+  }
+}
+
+function transformServerModule(source: string, body: any, url: string): string {
+  // If the same local name is exported more than once, we only need one of the names.
+  const localNames = new Map()
+  const localTypes = new Map()
+
+  for (let i = 0; i < body.length; i++) {
+    const node = body[i]
+
+    switch (node.type) {
+      case 'ExportAllDeclaration':
+        // If export * is used, the other file needs to explicitly opt into "use server" too.
+        break
+
+      case 'ExportDefaultDeclaration':
+        if (node.declaration.type === 'Identifier') {
+          localNames.set(node.declaration.name, 'default')
+        } else if (node.declaration.type === 'FunctionDeclaration') {
+          if (node.declaration.id) {
+            localNames.set(node.declaration.id.name, 'default')
+            localTypes.set(node.declaration.id.name, 'function')
+          }
+        }
+
+        continue
+
+      case 'ExportNamedDeclaration':
+        if (node.declaration) {
+          if (node.declaration.type === 'VariableDeclaration') {
+            const declarations = node.declaration.declarations
+
+            for (let j = 0; j < declarations.length; j++) {
+              addLocalExportedNames(localNames, declarations[j].id)
+            }
+          } else {
+            const name = node.declaration.id.name
+            localNames.set(name, name)
+
+            if (node.declaration.type === 'FunctionDeclaration') {
+              localTypes.set(name, 'function')
+            }
+          }
+        }
+
+        if (node.specifiers) {
+          const specifiers = node.specifiers
+
+          for (let j = 0; j < specifiers.length; j++) {
+            const specifier = specifiers[j]
+            localNames.set(specifier.local.name, specifier.exported.name)
+          }
+        }
+
+        continue
+    }
+  }
+
+  let newSrc = source + '\n\n;'
+  localNames.forEach(function (exported, local) {
+    if (localTypes.get(local) !== 'function') {
+      // We first check if the export is a function and if so annotate it.
+      newSrc += 'if (typeof ' + local + ' === "function") '
+    }
+
+    newSrc += 'Object.defineProperties(' + local + ',{'
+    newSrc += '$$typeof: {value: Symbol.for("react.server.reference")},'
+    newSrc += '$$id: {value: ' + JSON.stringify(url + '#' + exported) + '},'
+    newSrc += '$$bound: { value: null }'
+    newSrc += '});\n'
+  })
+
+  return newSrc
+}
+
+function addExportNames(names: Array<string>, node: any) {
+  switch (node.type) {
+    case 'Identifier':
+      names.push(node.name)
+      return
+
+    case 'ObjectPattern':
+      for (let i = 0; i < node.properties.length; i++) {
+        addExportNames(names, node.properties[i])
+      }
+
+      return
+
+    case 'ArrayPattern':
+      for (let i = 0; i < node.elements.length; i++) {
+        const element = node.elements[i]
+        if (element) {
+          addExportNames(names, element)
+        }
+      }
+
+      return
+
+    case 'Property':
+      addExportNames(names, node.value)
+      return
+
+    case 'AssignmentPattern':
+      addExportNames(names, node.left)
+      return
+
+    case 'RestElement':
+      addExportNames(names, node.argument)
+      return
+
+    case 'ParenthesizedExpression':
+      addExportNames(names, node.expression)
+      return
+  }
+}
+
+/**
+ * Parses `body` for exports and stores them in `names` (the second argument)
+ */
+async function parseExportNamesIntoNames(
+  code: string,
+  body: any,
+  names: Array<string>
+): Promise<void> {
+  for (let i = 0; i < body.length; i++) {
+    const node = body[i]
+
+    switch (node.type) {
+      case 'ExportAllDeclaration':
+        if (node.exported) {
+          addExportNames(names, node.exported)
+          continue
+        } else {
+          let childBody
+
+          try {
+            childBody = acorn.parse(code, {
+              ecmaVersion: 2024,
+              sourceType: 'module',
+            }).body
+          } catch (x: any) {
+            console.error('Error parsing %s %s', '', x.message)
+            continue
+          }
+
+          await parseExportNamesIntoNames(code, childBody, names)
+
+          continue
+        }
+
+      case 'ExportDefaultDeclaration':
+        names.push('default')
+        continue
+
+      case 'ExportNamedDeclaration':
+        if (node.declaration) {
+          if (node.declaration.type === 'VariableDeclaration') {
+            const declarations = node.declaration.declarations
+
+            for (let j = 0; j < declarations.length; j++) {
+              addExportNames(names, declarations[j].id)
+            }
+          } else {
+            addExportNames(names, node.declaration.id)
+          }
+        }
+
+        if (node.specifiers) {
+          const specifiers = node.specifiers
+
+          for (let j = 0; j < specifiers.length; j++) {
+            addExportNames(names, specifiers[j].exported)
+          }
+        }
+
+        continue
+    }
+  }
+}
+
+async function transformClientModule(
+  code: string,
+  body: any,
+  url: string,
+  clientEntryFiles?: Record<string, string>
+): Promise<string> {
+  const names: Array<string> = []
+
+  // This will insert the names into the `names` array
+  await parseExportNamesIntoNames(code, body, names)
+  console.log('transformClientModule names', names)
+
+  const entryRecord = Object.entries(clientEntryFiles || {}).find(
+    ([_key, value]) => value === url
+  )
+
+  // TODO (RSC): Check if we always find a record. If we do, we should
+  // throw an error if it's undefined
+
+  const loadId = entryRecord
+    ? path.join(getPaths().web.distRsc, 'assets', entryRecord[0] + '.js')
+    : url
+
+  let newSrc =
+    "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"
+
+  for (let i = 0; i < names.length; i++) {
+    const name = names[i]
+
+    if (name === 'default') {
+      newSrc += 'export default '
+      newSrc += 'Object.defineProperties(function() {'
+      newSrc +=
+        'throw new Error(' +
+        JSON.stringify(
+          'Attempted to call the default export of ' +
+            url +
+            " from the server but it's on the client. It's not possible to " +
+            'invoke a client function from the server, it can only be ' +
+            'rendered as a Component or passed to props of a Client Component.'
+        ) +
+        ');'
+    } else {
+      newSrc += 'export const ' + name + ' = '
+      newSrc += 'Object.defineProperties(function() {'
+      newSrc +=
+        'throw new Error(' +
+        JSON.stringify(
+          'Attempted to call ' +
+            name +
+            '() from the server but ' +
+            name +
+            ' is on the client. ' +
+            "It's not possible to invoke a client function from the server, it can " +
+            'only be rendered as a Component or passed to props of a Client Component.'
+        ) +
+        ');'
+    }
+
+    newSrc += '},{'
+    newSrc += '$$typeof: {value: CLIENT_REFERENCE},'
+    newSrc += '$$id: {value: ' + JSON.stringify(loadId + '#' + name) + '}'
+    newSrc += '});\n'
+  }
+
+  return newSrc
+}
+
+async function transformModuleIfNeeded(
+  source: string,
+  url: string,
+  clientEntryFile?: Record<string, string>
+): Promise<string> {
+  let body
+
+  try {
+    body = acorn.parse(source, {
+      ecmaVersion: 2024,
+      sourceType: 'module',
+    }).body
+  } catch (x: any) {
+    console.error('Error parsing %s %s', url, x.message)
+    return source
+  }
+
+  let useClient = false
+  let useServer = false
+
+  for (let i = 0; i < body.length; i++) {
+    const node = body[i]
+
+    if (node.type !== 'ExpressionStatement' || !node.directive) {
+      break
+    }
+
+    if (node.directive === 'use client') {
+      useClient = true
+    }
+
+    if (node.directive === 'use server') {
+      useServer = true
+    }
+  }
+
+  if (!useClient && !useServer) {
+    return source
+  }
+
+  if (useClient && useServer) {
+    throw new Error(
+      'Cannot have both "use client" and "use server" directives in the same file.'
+    )
+  }
+
+  if (useClient) {
+    return transformClientModule(source, body, url, clientEntryFile)
+  }
+
+  return transformServerModule(source, body, url)
 }
