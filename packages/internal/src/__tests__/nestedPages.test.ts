@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { expect } from '@jest/globals'
+import { expect, describe, it, beforeEach, afterAll, beforeAll } from 'vitest'
 
 import { prebuildWebFile } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'

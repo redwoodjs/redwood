@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { describe, afterAll, it, expect } from 'vitest'
+
 import { getTsConfigs } from '../project'
 
 describe('Retrieves TSConfig settings', () => {

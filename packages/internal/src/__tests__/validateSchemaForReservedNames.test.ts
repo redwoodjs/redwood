@@ -2,6 +2,7 @@ import path from 'path'
 
 import type { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
+import { beforeAll, afterAll, describe, test, expect } from 'vitest'
 
 import { validateSchema } from '../validateSchema'
 

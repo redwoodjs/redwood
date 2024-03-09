@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { beforeEach, test, expect, afterAll } from 'vitest'
+
 import { prebuildWebFile } from '@redwoodjs/babel-config'
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
