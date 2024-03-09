@@ -20,8 +20,8 @@ import { getPaths } from '@redwoodjs/project-config'
 import type { defineEntries } from '../entries.js'
 import { registerFwGlobals } from '../lib/registerGlobals.js'
 import { StatusError } from '../lib/StatusError.js'
+import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
 
-import { rscReloadPlugin } from './rscVitePlugins.js'
 import type {
   RenderInput,
   MessageRes,
