@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/testing",
-  "version": "7.1.1",
+  "version": "7.1.2",
   "description": "Tools, wrappers and configuration for testing a Redwood project.",
   "repository": {
     "type": "git",
@@ -29,13 +29,13 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.0",
-    "@redwoodjs/auth": "7.1.1",
-    "@redwoodjs/babel-config": "7.1.1",
-    "@redwoodjs/context": "7.1.1",
-    "@redwoodjs/graphql-server": "7.1.1",
-    "@redwoodjs/project-config": "7.1.1",
-    "@redwoodjs/router": "7.1.1",
-    "@redwoodjs/web": "7.1.1",
+    "@redwoodjs/auth": "7.1.2",
+    "@redwoodjs/babel-config": "7.1.2",
+    "@redwoodjs/context": "7.1.2",
+    "@redwoodjs/graphql-server": "7.1.2",
+    "@redwoodjs/project-config": "7.1.2",
+    "@redwoodjs/router": "7.1.2",
+    "@redwoodjs/web": "7.1.2",
     "@testing-library/jest-dom": "6.3.0",
     "@testing-library/react": "14.1.2",
     "@testing-library/user-event": "14.5.2",
