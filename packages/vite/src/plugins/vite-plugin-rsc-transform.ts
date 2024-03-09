@@ -79,12 +79,6 @@ export function rscTransformPlugin(
           throw new Error(`Failed to load ${url}`)
         }
 
-        // HACK move directives before import statements.
-        source = source.replace(
-          /^(import {.*?} from ".*?";)\s*"use (client|server)";/,
-          '"use $2";$1'
-        )
-
         return { format: 'module', source }
       }
 
