@@ -172,7 +172,7 @@ export const handler = async ({
   //
   // Disable the new warning in Vite v5 about the CJS build being deprecated.
   // so that users don't have to see it every time the dev server starts up.
-  process.env.VITE_CJS_IGNORE_WARNINGS = 'true'
+  process.env.VITE_CJS_IGNORE_WARNING = 'true'
   let webCommand = `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
 
   // 2. Vite with SSR
