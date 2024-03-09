@@ -219,7 +219,7 @@ async function getPrismaClient(hasGenerated = false): Promise<{
 }> {
   const { default: localPrisma } = await import('@prisma/client')
 
-  // @ts-expect-error JGMW
+  // @ts-expect-error I believe this type will only exist if the prisma client has been generated
   if (!localPrisma.ModelName) {
     if (hasGenerated) {
       return { ModelName: {} }
@@ -241,7 +241,8 @@ async function getPrismaClient(hasGenerated = false): Promise<{
     }
   }
 
-  // @ts-expect-error JGMW
+  // @ts-expect-error See above, the generated client should contain a ModelName property that
+  // satisfies Record<string, string>
   return localPrisma
 }
 
