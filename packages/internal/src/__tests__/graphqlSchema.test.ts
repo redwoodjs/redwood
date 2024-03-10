@@ -3,6 +3,7 @@ import path from 'path'
 
 import chalk from 'chalk'
 import terminalLink from 'terminal-link'
+import { vi, beforeAll, afterAll, afterEach, test, expect } from 'vitest'
 
 import { generateGraphQLSchema } from '../generate/graphqlSchema'
 
@@ -20,20 +21,18 @@ afterAll(() => {
 })
 
 afterEach(() => {
-  jest.restoreAllMocks()
+  vi.restoreAllMocks()
 })
 
 test('Generates GraphQL schema', async () => {
   const expectedPath = path.join(FIXTURE_PATH, '.redwood', 'schema.graphql')
 
-  jest
-    .spyOn(fs, 'writeFileSync')
-    .mockImplementation(
-      (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
-        expect(file).toMatch(expectedPath)
-        expect(data).toMatchSnapshot()
-      }
-    )
+  vi.spyOn(fs, 'writeFileSync').mockImplementation(
+    (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
+      expect(file).toMatch(expectedPath)
+      expect(data).toMatchSnapshot()
+    }
+  )
 
   const { schemaPath } = await generateGraphQLSchema()
 
@@ -49,14 +48,12 @@ test('Includes live query directive if serverful and realtime ', async () => {
 
   const expectedPath = path.join(fixturePath, '.redwood', 'schema.graphql')
 
-  jest
-    .spyOn(fs, 'writeFileSync')
-    .mockImplementation(
-      (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
-        expect(file).toMatch(expectedPath)
-        expect(data).toMatchSnapshot()
-      }
-    )
+  vi.spyOn(fs, 'writeFileSync').mockImplementation(
+    (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
+      expect(file).toMatch(expectedPath)
+      expect(data).toMatchSnapshot()
+    }
+  )
 
   await generateGraphQLSchema()
 })

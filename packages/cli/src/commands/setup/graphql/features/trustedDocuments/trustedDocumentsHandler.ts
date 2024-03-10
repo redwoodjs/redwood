@@ -5,7 +5,7 @@ import execa from 'execa'
 import { Listr } from 'listr2'
 import { format } from 'prettier'
 
-import { prettierOptions, setTomlSetting } from '@redwoodjs/cli-helpers'
+import { getPrettierOptions, setTomlSetting } from '@redwoodjs/cli-helpers'
 import { getConfig, getPaths, resolveFile } from '@redwoodjs/project-config'
 
 import { runTransform } from '../fragments/runTransform.js'
@@ -62,8 +62,10 @@ export async function handler({ force }: { force: boolean }) {
 
           const source = fs.readFileSync(graphqlPath, 'utf-8')
 
-          const prettifiedApp = format(source, {
-            ...prettierOptions(),
+          const prettierOptions = await getPrettierOptions()
+
+          const prettifiedApp = await format(source, {
+            ...prettierOptions,
             parser: 'babel-ts',
           })
 

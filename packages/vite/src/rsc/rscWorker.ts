@@ -20,8 +20,9 @@ import { getPaths } from '@redwoodjs/project-config'
 import type { defineEntries, GetEntry } from '../entries.js'
 import { registerFwGlobals } from '../lib/registerGlobals.js'
 import { StatusError } from '../lib/StatusError.js'
+import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
+import { rscTransformPlugin } from '../plugins/vite-plugin-rsc-transform.js'
 
-import { rscReloadPlugin, rscTransformPlugin } from './rscVitePlugins.js'
 import type {
   RenderInput,
   MessageRes,
@@ -40,10 +41,9 @@ type PipeableStream = { pipe<T extends Writable>(destination: T): T }
 
 const handleSetClientEntries = async ({
   id,
-  value,
 }: MessageReq & { type: 'setClientEntries' }) => {
   try {
-    await setClientEntries(value)
+    await setClientEntries()
 
     if (!parentPort) {
       throw new Error('parentPort is undefined')
@@ -118,6 +118,8 @@ registerFwGlobals()
 // to use it like a production server like this?
 // TODO (RSC): Do we need to pass `define` here with RWJS_ENV etc? What about
 // `envFile: false`?
+// TODO (RSC): Do we need to care about index.html as it says in the docs
+// https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#middleware-mode
 const vitePromise = createServer({
   plugins: [
     rscReloadPlugin((type) => {
@@ -279,14 +281,7 @@ function resolveClientEntryForDev(id: string, config: { base: string }) {
   return config.base + '@fs' + encodeFilePathToAbsolute(filePath)
 }
 
-async function setClientEntries(
-  value: 'load' | Record<string, string>
-): Promise<void> {
-  if (value !== 'load') {
-    absoluteClientEntries = value
-    return
-  }
-
+async function setClientEntries(): Promise<void> {
   // This is the Vite config
   const config = await configPromise
 

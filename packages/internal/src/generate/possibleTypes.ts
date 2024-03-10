@@ -89,7 +89,7 @@ export const generatePossibleTypes = async (): Promise<PossibleTypesResult> => {
 
     files.push(filename)
 
-    const output = format(possibleTypes.toString(), {
+    const output = await format(possibleTypes.toString(), {
       trailingComma: 'es5',
       bracketSpacing: true,
       tabWidth: 2,

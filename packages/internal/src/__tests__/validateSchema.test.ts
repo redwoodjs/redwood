@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { beforeAll, afterAll, test, expect } from 'vitest'
+
 import { loadAndValidateSdls } from '../validateSchema'
 
 const FIXTURE_PATH = path.resolve(

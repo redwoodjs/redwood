@@ -644,7 +644,7 @@ describe('authTasks', () => {
     ).toMatchSnapshot()
   })
 
-  it('writes an auth.js file for JS projects', () => {
+  it('writes an auth.js file for JS projects', async () => {
     vi.mocked(isTypeScriptProject).mockReturnValue(false)
 
     vol.fromJSON({
@@ -656,7 +656,7 @@ describe('authTasks', () => {
       provider: 'auth0',
       setupMode: 'FORCE',
     }
-    createWebAuth(getPaths().base, false).task(ctx)
+    await createWebAuth(getPaths().base, false).task(ctx)
 
     expect(
       fs.readFileSync(path.join(getPaths().web.src, 'auth.js'), 'utf-8')

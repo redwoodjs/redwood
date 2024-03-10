@@ -887,16 +887,14 @@ import type {
   TypedDocumentNode,
 } from '@redwoodjs/web'
 
-export const QUERY: TypedDocumentNode<
-  MembersQuery,
-  MembersQueryVariables
-> = gql\`
-  query MembersQuery {
-    members {
-      id
+export const QUERY: TypedDocumentNode<MembersQuery, MembersQueryVariables> =
+  gql\`
+    query MembersQuery {
+      members {
+        id
+      }
     }
-  }
-\`
+  \`
 
 export const Loading = () => <div>Loading...</div>
 

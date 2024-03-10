@@ -39,9 +39,9 @@ beforeEach(() => {
   vi.mocked(isTypeScriptProject).mockReturnValue(true)
 })
 
-it('generates a record of TS files', () => {
+it('generates a record of TS files', async () => {
   const filePaths = Object.keys(
-    apiSideFiles({
+    await apiSideFiles({
       basedir: path.join(__dirname, 'fixtures/supertokensSetup'),
       webAuthn: false,
     })
@@ -54,11 +54,11 @@ it('generates a record of TS files', () => {
   ])
 })
 
-it('generates a record of JS files', () => {
+it('generates a record of JS files', async () => {
   vi.mocked(isTypeScriptProject).mockReturnValue(false)
 
   const filePaths = Object.keys(
-    apiSideFiles({
+    await apiSideFiles({
       basedir: path.join(__dirname, 'fixtures/supertokensSetup'),
       webAuthn: false,
     })
@@ -71,8 +71,8 @@ it('generates a record of JS files', () => {
   ])
 })
 
-it('generates a record of webAuthn files', () => {
-  const filesRecord = apiSideFiles({
+it('generates a record of webAuthn files', async () => {
+  const filesRecord = await apiSideFiles({
     basedir: path.join(__dirname, 'fixtures/dbAuthSetup'),
     webAuthn: true,
   })

@@ -76,8 +76,8 @@ const baseConfig = {
 
     let userPreviewPath = './preview.example.js'
 
-    if (redwoodProjectPaths.storybookPreviewConfig) {
-      userPreviewPath = redwoodProjectPaths.storybookPreviewConfig
+    if (redwoodProjectPaths.web.storybookPreviewConfig) {
+      userPreviewPath = redwoodProjectPaths.web.storybookPreviewConfig
     }
 
     sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_PREVIEW_CONFIG'] =

@@ -212,7 +212,7 @@ export const files = async ({
     templatePath: 'sdl.ts.template',
   })
 
-  let template = generateTemplate(templatePath, {
+  let template = await generateTemplate(templatePath, {
     docs,
     modelName,
     modelDescription,
@@ -233,7 +233,7 @@ export const files = async ({
   )
 
   if (typescript) {
-    template = transformTSToJS(outputPath, template)
+    template = await transformTSToJS(outputPath, template)
   }
 
   return {

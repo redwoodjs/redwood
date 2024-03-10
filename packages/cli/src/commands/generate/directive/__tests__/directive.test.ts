@@ -9,8 +9,8 @@ import yargs from 'yargs/yargs'
 
 import * as directive from '../directive'
 
-test('creates a JavaScript validator directive', () => {
-  const output = directive.files({
+test('creates a JavaScript validator directive', async () => {
+  const output = await directive.files({
     name: 'require-admin', // checking camel casing too!
     typescript: false,
     tests: true,
@@ -30,8 +30,8 @@ test('creates a JavaScript validator directive', () => {
   expect(output[expectedTestOutputPath]).toMatchSnapshot('js directive test')
 })
 
-test('creates a TypeScript transformer directive', () => {
-  const output = directive.files({
+test('creates a TypeScript transformer directive', async () => {
+  const output = await directive.files({
     name: 'bazinga-foo_bar', // checking camel casing too!
     typescript: true,
     tests: true,

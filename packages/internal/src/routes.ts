@@ -4,10 +4,8 @@ import chalk from 'chalk'
 
 import { getPaths, getRouteHookForPage } from '@redwoodjs/project-config'
 import { getRouteRegexAndParams } from '@redwoodjs/router'
-
-// Circular dependency when trying to use the standard import
-const { getProject } = require('@redwoodjs/structure/dist/index')
-const { RWRoute } = require('@redwoodjs/structure/dist/model/RWRoute')
+import { getProject } from '@redwoodjs/structure/dist/index'
+import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
 
 export interface RouteInformation {
   name?: string
@@ -20,8 +18,7 @@ export interface RouteInformation {
  */
 export function getDuplicateRoutes() {
   const duplicateRoutes: RouteInformation[] = []
-  const allRoutes: (typeof RWRoute)[] = getProject(getPaths().base).router
-    .routes
+  const allRoutes: RWRoute[] = getProject(getPaths().base).router.routes
   const uniqueNames = new Set(
     allRoutes
       .filter((route) => route.name !== undefined)
@@ -90,6 +87,7 @@ export const getProjectRoutes = (): RouteSpec[] => {
   const rwProject = getProject(getPaths().base)
   const routes = rwProject.getRouter().routes
 
+  // @ts-expect-error "Bundle" is not found but is in the Spec type?
   return routes.map((route: any) => {
     const { matchRegexString, routeParams } = route.isNotFound
       ? { matchRegexString: null, routeParams: null }

@@ -1,6 +1,7 @@
 import path from 'path'
 
 import gql from 'graphql-tag'
+import { test, expect } from 'vitest'
 
 import { listQueryTypeFieldsInProject, parseDocumentAST } from '../gql'
 

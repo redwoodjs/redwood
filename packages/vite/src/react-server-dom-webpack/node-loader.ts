@@ -332,7 +332,7 @@ async function parseExportNamesIntoNames(
 
           try {
             childBody = acorn.parse(mod.source, {
-              ecmaVersion: '2024',
+              ecmaVersion: 2024,
               sourceType: 'module',
             }).body
           } catch (x: any) {
@@ -498,7 +498,7 @@ async function transformModuleIfNeeded(
 
   try {
     body = acorn.parse(source, {
-      ecmaVersion: '2024',
+      ecmaVersion: 2024,
       sourceType: 'module',
     }).body
   } catch (x: any) {

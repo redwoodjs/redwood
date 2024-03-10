@@ -5,8 +5,7 @@ import { build as viteBuild } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
-
-import { rscTransformPlugin } from './rscVitePlugins.js'
+import { rscTransformPlugin } from '../plugins/vite-plugin-rsc-transform.js'
 
 /**
  * RSC build. Step 3.

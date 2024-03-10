@@ -48,7 +48,7 @@ export const customOrDefaultTemplatePath = ({
  */
 // TODO: Make this read all the files in a template directory instead of
 // manually passing in each file.
-export const templateForComponentFile = ({
+export const templateForComponentFile = async ({
   name,
   suffix = '',
   extension = '.js',
@@ -72,7 +72,7 @@ export const templateForComponentFile = ({
     templatePath,
     side: webPathSection ? 'web' : 'api',
   })
-  const content = generateTemplate(fullTemplatePath, {
+  const content = await generateTemplate(fullTemplatePath, {
     name,
     outputPath: ensurePosixPath(
       `./${path.relative(getPaths().base, componentOutputPath)}`

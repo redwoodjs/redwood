@@ -59,8 +59,8 @@ test('nameVariants returns a multi word cased variables', () => {
   })
 })
 
-test('generateTemplate returns a lodash-templated string', () => {
-  const output = index.generateTemplate(
+test('generateTemplate returns a lodash-templated string', async () => {
+  const output = await index.generateTemplate(
     path.join(__dirname, 'fixtures', 'text.txt'),
     {
       name: 'amet',
@@ -73,8 +73,8 @@ test('generateTemplate returns a lodash-templated string', () => {
 
 // Be careful when editing the code.js fixture as the prettifier.config.js will cause it to get
 // prettified and then it already match the expected output, with no changes
-test('generateTemplate returns prettified JS code', () => {
-  const output = index.generateTemplate(
+test('generateTemplate returns prettified JS code', async () => {
+  const output = await index.generateTemplate(
     path.join(__dirname, 'fixtures', 'code.js'),
     {
       name: 'fox',
