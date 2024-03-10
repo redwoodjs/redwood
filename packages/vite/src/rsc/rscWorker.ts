@@ -115,6 +115,8 @@ registerFwGlobals()
 // to use it like a production server like this?
 // TODO (RSC): Do we need to pass `define` here with RWJS_ENV etc? What about
 // `envFile: false`?
+// TODO (RSC): Do we need to care about index.html as it says in the docs
+// https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#middleware-mode
 const vitePromise = createServer({
   plugins: [
     rscReloadPlugin((type) => {
