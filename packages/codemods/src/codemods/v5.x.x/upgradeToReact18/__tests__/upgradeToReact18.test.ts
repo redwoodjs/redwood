@@ -7,7 +7,7 @@ describe('upgradeToReact18', () => {
   it('Checks and transforms the react root', async () => {
     await matchFolderTransform(
       () => checkAndTransformReactRoot({ setWarning: () => {} }),
-      'default'
+      'default',
     )
   })
 })

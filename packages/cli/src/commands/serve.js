@@ -107,8 +107,8 @@ export const builder = async (yargs) => {
       ) {
         console.error(
           c.error(
-            '\n Please run `yarn rw build web` before trying to serve web. \n'
-          )
+            '\n Please run `yarn rw build web` before trying to serve web. \n',
+          ),
         )
         process.exit(1)
       }
@@ -119,8 +119,8 @@ export const builder = async (yargs) => {
       ) {
         console.error(
           c.error(
-            '\n Please run `yarn rw build api` before trying to serve api. \n'
-          )
+            '\n Please run `yarn rw build api` before trying to serve api. \n',
+          ),
         )
         process.exit(1)
       }
@@ -133,8 +133,8 @@ export const builder = async (yargs) => {
       ) {
         console.error(
           c.error(
-            '\n Please run `yarn rw build` before trying to serve your redwood app. \n'
-          )
+            '\n Please run `yarn rw build` before trying to serve your redwood app. \n',
+          ),
         )
         process.exit(1)
       }
@@ -147,7 +147,7 @@ export const builder = async (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#serve'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#serve',
+      )}`,
     )
 }

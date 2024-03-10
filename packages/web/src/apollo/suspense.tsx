@@ -161,7 +161,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
       link: createHttpLink(
         getGraphqlUrl(),
         httpLinkConfig,
-        serverAuthState?.cookieHeader
+        serverAuthState?.cookieHeader,
       ),
     },
   ].filter((link): link is RedwoodApolloLinks[number] => !!link)
@@ -201,7 +201,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
 
   // @MARK we need this special cache
   const cache = new NextSSRInMemoryCache(cacheConfig).restore(
-    globalThis?.__REDWOOD__APOLLO_STATE ?? {}
+    globalThis?.__REDWOOD__APOLLO_STATE ?? {},
   )
 
   return (

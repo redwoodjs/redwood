@@ -43,8 +43,8 @@ export async function startTelemetry() {
         npmPackages: '@redwoodjs/*',
         IDEs: ['VSCode'],
       },
-      { json: true }
-    )
+      { json: true },
+    ),
   )
 
   // get shell name instead of path
@@ -82,7 +82,7 @@ export async function startTelemetry() {
       'ci.isci': ci.isCI,
       'dev.environment': developmentEnvironment,
       uid: UID,
-    })
+    }),
   )
 
   // Tracing

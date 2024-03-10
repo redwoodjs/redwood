@@ -87,7 +87,7 @@ describe('yarn rw serve', () => {
       expect.objectContaining({
         port: 5555,
         apiRootPath: expect.stringMatching(/^\/?funkyFunctions\/?$/),
-      })
+      }),
     )
   })
 
@@ -95,14 +95,14 @@ describe('yarn rw serve', () => {
     const parser = yargs().command('serve [side]', false, builder)
 
     await parser.parse(
-      'serve api --port 5555 --rootPath funkyFunctions/nested/'
+      'serve api --port 5555 --rootPath funkyFunctions/nested/',
     )
 
     expect(apiServerCLIConfig.handler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 5555,
         rootPath: expect.stringMatching(/^\/?funkyFunctions\/nested\/$/),
-      })
+      }),
     )
   })
 
@@ -115,7 +115,7 @@ describe('yarn rw serve', () => {
       expect.objectContaining({
         port: 9898,
         socket: 'abc',
-      })
+      }),
     )
   })
 })

@@ -14,7 +14,7 @@ export interface Opts {
 }
 
 export function command_builder(
-  opts: Opts
+  opts: Opts,
 ): Promise<RedwoodCommandString | undefined> {
   return new CommandBuilder(opts).buildCommand()
 }
@@ -67,7 +67,7 @@ class CommandBuilder {
     switch (type) {
       case 'page':
         const pageName = await this.prompts.prompt(
-          'Page Name (ex: Home, about, MyPage, contact)'
+          'Page Name (ex: Home, about, MyPage, contact)',
         )
         const defaultPath = '/' + camelcase(pageName)
         const path = await this.prompts.pagePath(defaultPath)
@@ -78,7 +78,7 @@ class CommandBuilder {
         return `generate scaffold ${await this.arg_generate_scaffold_modelName()}`
       case 'component':
         return `generate component ${await this.prompts.prompt(
-          'Component Name'
+          'Component Name',
         )}`
       case 'layout':
         return `generate layout ${await this.prompts.prompt('Layout Name')}`
@@ -147,7 +147,7 @@ class PromptHelper {
   async command() {
     return await this.opts.ui.pickOne(
       ['generate', 'db'], // TODO: add more commands (this could be generated from the redwoods/cli package)
-      'Choose Redwood CLI command'
+      'Choose Redwood CLI command',
     )
   }
   /**
@@ -158,7 +158,7 @@ class PromptHelper {
     const models = await this.opts.project.prismaDMMFModelNames()
     if (models.length === 0) {
       this.opts.ui.info(
-        'You must define at least one model in the "schema.prisma" file'
+        'You must define at least one model in the "schema.prisma" file',
       )
       return
     }
@@ -183,7 +183,7 @@ class PromptHelper {
           picked: false,
         },
       ],
-      'Options...'
+      'Options...',
     )
     if (!opts) {
       return
@@ -194,7 +194,7 @@ class PromptHelper {
   async generate_type() {
     return await this.opts.ui.pickOne(
       generatorTypes,
-      'Choose Redwood component type to generate'
+      'Choose Redwood component type to generate',
     )
   }
 

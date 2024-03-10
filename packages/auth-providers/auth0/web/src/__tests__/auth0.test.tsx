@@ -28,10 +28,10 @@ const adminUser: User = {
 let loggedInUser: User | undefined
 
 async function getTokenSilently(
-  options: GetTokenSilentlyOptions & { detailedResponse: true }
+  options: GetTokenSilentlyOptions & { detailedResponse: true },
 ): Promise<GetTokenSilentlyVerboseResponse>
 async function getTokenSilently(
-  options?: GetTokenSilentlyOptions
+  options?: GetTokenSilentlyOptions,
 ): Promise<string>
 async function getTokenSilently(): Promise<
   string | GetTokenSilentlyVerboseResponse
@@ -83,12 +83,12 @@ beforeEach(() => {
 function getAuth0Auth(customProviderHooks?: {
   useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
-    currentUser: CurrentUser | null
+    currentUser: CurrentUser | null,
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
   const { useAuth, AuthProvider } = createAuth(
     auth0MockClient as Auth0Client,
-    customProviderHooks
+    customProviderHooks,
   )
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,

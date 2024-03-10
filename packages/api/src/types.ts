@@ -17,13 +17,13 @@ type SdlOnlyFields<TPrisma, TSdl> = Omit<TSdl, keyof TPrisma>
 // Object with all the optional keys, so that we can make them nullable
 type PrismaTypeWithOptionalKeysFromSdl<
   TPrisma extends AnyObject,
-  TSdl extends AnyObject
+  TSdl extends AnyObject,
 > = Pick<TPrisma, O.OptionalKeys<TSdl>>
 
 // Make the optional values nullable
 type PrismaTypeWithOptionalKeysAndNullableValues<
   TPrisma extends AnyObject,
-  TSdl extends AnyObject
+  TSdl extends AnyObject,
 > = {
   [k in keyof PrismaTypeWithOptionalKeysFromSdl<TPrisma, TSdl>]?:
     | PrismaTypeWithOptionalKeysFromSdl<TPrisma, TSdl>[k]
@@ -33,13 +33,13 @@ type PrismaTypeWithOptionalKeysAndNullableValues<
 // Object with all the required keys
 type PrismaTypeWithRequiredKeysFromSdl<
   TPrisma extends AnyObject,
-  TSdl extends AnyObject
+  TSdl extends AnyObject,
 > = Pick<TPrisma, O.RequiredKeys<TSdl>>
 
 // To replace the unknowns with types from Sdl on SDL-only fields
 type OptionalsAndSdlOnly<
   TPrisma extends AnyObject,
-  TSdl extends AnyObject
+  TSdl extends AnyObject,
 > = PrismaTypeWithOptionalKeysAndNullableValues<TPrisma, TSdl> &
   SdlOnlyFields<TPrisma, TSdl>
 
@@ -58,7 +58,7 @@ export type MakeRelationsOptional<T, TAllMappedModels> = {
 export type MergePrismaWithSdlTypes<
   TPrisma extends AnyObject,
   TSdl extends AnyObject,
-  TAllMappedModels
+  TAllMappedModels,
 > = A.Compute<
   OptionalsAndSdlOnly<TPrisma, MakeRelationsOptional<TSdl, TAllMappedModels>> &
     PrismaTypeWithRequiredKeysFromSdl<

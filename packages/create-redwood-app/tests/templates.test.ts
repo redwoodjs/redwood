@@ -5,7 +5,7 @@ import klawSync from 'klaw-sync'
 import { describe, it, expect } from 'vitest'
 
 const TS_TEMPLATE_DIR = fileURLToPath(
-  new URL('../templates/ts', import.meta.url)
+  new URL('../templates/ts', import.meta.url),
 )
 
 describe('TS template', () => {
@@ -87,7 +87,7 @@ describe('TS template', () => {
 })
 
 const JS_TEMPLATE_DIR = fileURLToPath(
-  new URL('../templates/js', import.meta.url)
+  new URL('../templates/js', import.meta.url),
 )
 
 describe('JS template', () => {
@@ -197,11 +197,11 @@ function getDirectoryStructure(dir) {
     .filter(
       (file) =>
         !filePathsToIgnore.some((filePathToIgnore) =>
-          file.path.includes(filePathToIgnore)
-        )
+          file.path.includes(filePathToIgnore),
+        ),
     )
     .map((file) =>
-      file.path.replace(dir, '').split(path.sep).join(path.posix.sep)
+      file.path.replace(dir, '').split(path.sep).join(path.posix.sep),
     )
     .sort()
 }

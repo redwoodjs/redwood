@@ -36,9 +36,9 @@ describe('resolveOptions', () => {
             apiUrl: undefined,
             apiProxyTarget: '/api',
           },
-        })
+        }),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you provide \`apiProxyTarget\`, it has to be a fully-qualified URL. \`apiProxyTarget\` is '/api']`
+        `[Error: If you provide \`apiProxyTarget\`, it has to be a fully-qualified URL. \`apiProxyTarget\` is '/api']`,
       )
     })
 
@@ -49,7 +49,7 @@ describe('resolveOptions', () => {
             apiUrl: undefined,
             apiProxyTarget: 'http://api.foo.com',
           },
-        })
+        }),
       ).toMatchInlineSnapshot(`
         {
           "flags": {
@@ -72,9 +72,9 @@ describe('resolveOptions', () => {
             apiUrl: '',
             apiProxyTarget: undefined,
           },
-        })
+        }),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: \`apiUrl\` cannot be an empty string]`
+        `[Error: \`apiUrl\` cannot be an empty string]`,
       )
     })
 
@@ -85,9 +85,9 @@ describe('resolveOptions', () => {
             apiUrl: '',
             apiProxyTarget: '',
           },
-        })
+        }),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: \`apiUrl\` cannot be an empty string]`
+        `[Error: \`apiUrl\` cannot be an empty string]`,
       )
     })
 
@@ -98,9 +98,9 @@ describe('resolveOptions', () => {
             apiUrl: '',
             apiProxyTarget: '/api',
           },
-        })
+        }),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: \`apiUrl\` cannot be an empty string]`
+        `[Error: \`apiUrl\` cannot be an empty string]`,
       )
     })
 
@@ -111,9 +111,9 @@ describe('resolveOptions', () => {
             apiUrl: '',
             apiProxyTarget: 'http://api.foo.com',
           },
-        })
+        }),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: \`apiUrl\` cannot be an empty string]`
+        `[Error: \`apiUrl\` cannot be an empty string]`,
       )
     })
   })
@@ -126,7 +126,7 @@ describe('resolveOptions', () => {
             apiUrl: '/api',
             apiProxyTarget: undefined,
           },
-        })
+        }),
       ).toMatchInlineSnapshot(`
         {
           "flags": {
@@ -147,7 +147,7 @@ describe('resolveOptions', () => {
             apiUrl: '/api',
             apiProxyTarget: '',
           },
-        })
+        }),
       ).toMatchInlineSnapshot(`
         {
           "flags": {
@@ -168,9 +168,9 @@ describe('resolveOptions', () => {
             apiUrl: '/api',
             apiProxyTarget: '/api',
           },
-        })
+        }),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you provide \`apiProxyTarget\`, it has to be a fully-qualified URL. \`apiProxyTarget\` is '/api']`
+        `[Error: If you provide \`apiProxyTarget\`, it has to be a fully-qualified URL. \`apiProxyTarget\` is '/api']`,
       )
     })
 
@@ -181,7 +181,7 @@ describe('resolveOptions', () => {
             apiUrl: '/api',
             apiProxyTarget: 'http://api.foo.com',
           },
-        })
+        }),
       ).toMatchInlineSnapshot(`
         {
           "flags": {
@@ -204,7 +204,7 @@ describe('resolveOptions', () => {
             apiUrl: 'http://api.foo.com',
             apiProxyTarget: undefined,
           },
-        })
+        }),
       ).toMatchInlineSnapshot(`
         {
           "flags": {
@@ -225,7 +225,7 @@ describe('resolveOptions', () => {
             apiUrl: 'http://api.foo.com',
             apiProxyTarget: '',
           },
-        })
+        }),
       ).toMatchInlineSnapshot(`
         {
           "flags": {
@@ -246,9 +246,9 @@ describe('resolveOptions', () => {
             apiUrl: 'http://api.foo.com',
             apiProxyTarget: '/api',
           },
-        })
+        }),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you provide \`apiProxyTarget\`, it has to be a fully-qualified URL. \`apiProxyTarget\` is '/api']`
+        `[Error: If you provide \`apiProxyTarget\`, it has to be a fully-qualified URL. \`apiProxyTarget\` is '/api']`,
       )
     })
 
@@ -259,9 +259,9 @@ describe('resolveOptions', () => {
             apiUrl: 'http://api.foo.com',
             apiProxyTarget: 'http://api.foo.com',
           },
-        })
+        }),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[Error: If you provide \`apiProxyTarget\`, \`apiUrl\` cannot be a fully-qualified URL. \`apiUrl\` is 'http://api.foo.com']`
+        `[Error: If you provide \`apiProxyTarget\`, \`apiUrl\` cannot be a fully-qualified URL. \`apiUrl\` is 'http://api.foo.com']`,
       )
     })
   })
@@ -273,7 +273,7 @@ describe('resolveOptions', () => {
           redwood: {
             apiHost: 'http://api.foo.com',
           },
-        })
+        }),
       ).toMatchInlineSnapshot(`
         {
           "flags": {

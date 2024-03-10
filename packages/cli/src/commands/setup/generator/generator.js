@@ -33,7 +33,7 @@ export const builder = (yargs) => {
     .positional('name', {
       description: 'Name of the generator to copy templates from',
       choices: availableGenerators.filter(
-        (dir) => !EXCLUDE_GENERATORS.includes(dir)
+        (dir) => !EXCLUDE_GENERATORS.includes(dir),
       ),
     })
     .option('force', {
@@ -45,8 +45,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#setup-generator'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#setup-generator',
+      )}`,
     )
 }
 

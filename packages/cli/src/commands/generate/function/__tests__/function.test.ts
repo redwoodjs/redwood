@@ -27,7 +27,7 @@ describe('Single word default files', async () => {
         expect.stringContaining('foo.js'),
         expect.stringContaining('foo.test.js'),
         expect.stringContaining('foo.scenarios.js'),
-      ])
+      ]),
     )
   })
 
@@ -35,21 +35,21 @@ describe('Single word default files', async () => {
     expect(
       singleWordDefaultFiles[
         path.normalize('/path/to/project/api/src/functions/foo/foo.js')
-      ]
+      ],
     ).toMatchSnapshot()
 
     expect(
       singleWordDefaultFiles[
         path.normalize('/path/to/project/api/src/functions/foo/foo.test.js')
-      ]
+      ],
     ).toMatchSnapshot('Test snapshot')
 
     expect(
       singleWordDefaultFiles[
         path.normalize(
-          '/path/to/project/api/src/functions/foo/foo.scenarios.js'
+          '/path/to/project/api/src/functions/foo/foo.scenarios.js',
         )
-      ]
+      ],
     ).toMatchSnapshot('Scenario snapshot')
   })
 })
@@ -71,7 +71,7 @@ test('creates a multi word function file', async () => {
   expect(
     multiWordDefaultFiles[
       path.normalize('/path/to/project/api/src/functions/sendMail/sendMail.js')
-    ]
+    ],
   ).toMatchSnapshot()
 })
 
@@ -83,9 +83,9 @@ test('creates a .js file if --javascript=true', async () => {
   expect(
     javascriptFiles[
       path.normalize(
-        '/path/to/project/api/src/functions/javascriptFunction/javascriptFunction.js'
+        '/path/to/project/api/src/functions/javascriptFunction/javascriptFunction.js',
       )
-    ]
+    ],
   ).toMatchSnapshot()
   // ^ JS-function-args should be stripped of their types and consequently the unused 'aws-lamda' import removed.
   // https://babeljs.io/docs/en/babel-plugin-transform-typescript
@@ -105,15 +105,15 @@ test('creates a .ts file if --typescript=true', async () => {
       expect.stringContaining('typescriptFunction.ts'),
       expect.stringContaining('typescriptFunction.test.ts'),
       expect.stringContaining('typescriptFunction.scenarios.ts'),
-    ])
+    ]),
   )
 
   expect(
     typescriptFiles[
       path.normalize(
-        '/path/to/project/api/src/functions/typescriptFunction/typescriptFunction.ts'
+        '/path/to/project/api/src/functions/typescriptFunction/typescriptFunction.ts',
       )
-    ]
+    ],
   ).toMatchSnapshot()
   // ^ TS-functions, on the other hand, retain the 'aws-lamda' import and type-declartions.
 })

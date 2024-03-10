@@ -20,11 +20,11 @@ describe('MockRouter', () => {
           <Route name="c" path="/c" page={FakePage} />
           <Route name="d" path="/d" page={FakePage} />
         </Private>
-      </Router>
+      </Router>,
     )
 
     expect(Object.keys(routes)).toEqual(
-      expect.arrayContaining(['a', 'b', 'c', 'd'])
+      expect.arrayContaining(['a', 'b', 'c', 'd']),
     )
   })
 })

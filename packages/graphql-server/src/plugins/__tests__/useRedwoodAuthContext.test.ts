@@ -29,7 +29,7 @@ describe('useRedwoodAuthContext', () => {
     expect(spiedPlugin.spies.beforeContextBuilding).toHaveBeenCalledWith(
       expect.objectContaining({
         context: expect.objectContaining(obj),
-      })
+      }),
     )
   }
 
@@ -51,7 +51,7 @@ describe('useRedwoodAuthContext', () => {
         useRedwoodAuthContext(mockedGetCurrentUser, authDecoder),
         spiedPlugin.plugin,
       ],
-      testSchema
+      testSchema,
     )
 
     await testkit.execute(testQuery, {}, { requestContext: {} })
@@ -67,7 +67,7 @@ describe('useRedwoodAuthContext', () => {
         token: 'mocked-undecoded-token',
         type: 'mocked-auth-type',
       },
-      { context: {}, event: {} }
+      { context: {}, event: {} },
     )
   })
 
@@ -81,13 +81,13 @@ describe('useRedwoodAuthContext', () => {
         useEngine(GraphQLJS),
         useRedwoodAuthContext(mockedGetCurrentUser, authDecoder),
       ],
-      testSchema
+      testSchema,
     )
 
     await expect(async () => {
       await testkit.execute(testQuery, {}, { requestContext: {} })
     }).rejects.toEqual(
-      new Error('Exception in getCurrentUser: Could not fetch user from db.')
+      new Error('Exception in getCurrentUser: Could not fetch user from db.'),
     )
     expect(mockedGetCurrentUser).toHaveBeenCalled()
   })

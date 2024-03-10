@@ -44,7 +44,7 @@ export const parseFetchEventBody = async (event: Request) => {
 }
 
 export const isFetchApiRequest = (
-  event: Request | APIGatewayProxyEvent
+  event: Request | APIGatewayProxyEvent,
 ): event is Request => {
   if (
     event.constructor.name === 'Request' ||
@@ -80,7 +80,7 @@ function getQueryStringParams(reqUrl: string) {
  * NOTE: It does NOT return a full Request object!
  */
 export async function normalizeRequest(
-  event: APIGatewayProxyEvent | Request
+  event: APIGatewayProxyEvent | Request,
 ): Promise<PartialRequest> {
   if (isFetchApiRequest(event)) {
     return {

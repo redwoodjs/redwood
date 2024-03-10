@@ -90,7 +90,7 @@ describe('GraphQLMockHandlers', () => {
         }),
       {
         timeout: 2_000,
-      }
+      },
     )
 
     fireEvent.click(button)
@@ -102,7 +102,7 @@ describe('GraphQLMockHandlers', () => {
         }),
       {
         timeout: 2_000,
-      }
+      },
     )
 
     fireEvent.click(button)
@@ -116,7 +116,7 @@ describe('GraphQLMockHandlers', () => {
       },
       {
         timeout: 2_000,
-      }
+      },
     )
   })
 })

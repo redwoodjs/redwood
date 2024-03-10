@@ -25,7 +25,7 @@ interface ResolveContext {
 export type ResolveFunction = (
   specifier: string,
   context: ResolveContext,
-  resolveFunction: ResolveFunction
+  resolveFunction: ResolveFunction,
 ) => { url: string } | Promise<{ url: string }>
 
 interface GetSourceContext {
@@ -35,7 +35,7 @@ interface GetSourceContext {
 type GetSourceFunction = (
   url: string,
   context: GetSourceContext,
-  getSourceFunction: GetSourceFunction
+  getSourceFunction: GetSourceFunction,
 ) => Promise<{ source: Source }>
 
 interface TransformSourceContext {
@@ -46,7 +46,7 @@ interface TransformSourceContext {
 type TransformSourceFunction = (
   source: Source,
   context: TransformSourceContext,
-  transformSourceFunction: TransformSourceFunction
+  transformSourceFunction: TransformSourceFunction,
 ) => Promise<{ source: Source }>
 
 interface LoadContext {
@@ -58,7 +58,7 @@ interface LoadContext {
 type LoadFunction = (
   url: string,
   loadContext: LoadContext | null,
-  loadFunction: LoadFunction
+  loadFunction: LoadFunction,
 ) => Promise<{ format: string; shortCircuit?: boolean; source: Source }>
 
 // This is the official type, but the code below throws if it isn't a string.
@@ -74,7 +74,7 @@ let stashedResolve: null | ResolveFunction = null
 export async function resolve(
   specifier: string,
   context: ResolveContext,
-  defaultResolve: ResolveFunction
+  defaultResolve: ResolveFunction,
 ): Promise<{ url: string }> {
   // We stash this in case we end up needing to resolve export * statements later.
   stashedResolve = defaultResolve
@@ -90,7 +90,7 @@ export async function resolve(
 
       console.warn(
         'You did not run Node.js with the `--conditions react-server` flag. ' +
-          'Any "react-server" override will only work with ESM imports.'
+          'Any "react-server" override will only work with ESM imports.',
       )
     }
   }
@@ -101,7 +101,7 @@ export async function resolve(
 export async function getSource(
   url: string,
   context: GetSourceContext,
-  defaultGetSource: GetSourceFunction
+  defaultGetSource: GetSourceFunction,
 ): Promise<{ source: Source }> {
   // We stash this in case we end up needing to resolve export * statements later.
   stashedGetSource = defaultGetSource
@@ -153,7 +153,7 @@ function transformServerModule(
   source: string,
   body: any,
   url: string,
-  _loader?: LoadFunction
+  _loader?: LoadFunction,
 ): string {
   // If the same local name is exported more than once, we only need one of the names.
   const localNames = new Map()
@@ -270,7 +270,7 @@ function addExportNames(names: Array<string>, node: any) {
 
 function resolveClientImport(
   specifier: string,
-  parentURL: string
+  parentURL: string,
 ): { url: string } | Promise<{ url: string }> {
   // Resolve an import specifier as if it was loaded by the client. This doesn't use
   // the overrides that this loader does but instead reverts to the default.
@@ -280,7 +280,7 @@ function resolveClientImport(
 
   if (stashedResolve === null) {
     throw new Error(
-      'Expected resolve to have been called before transformSource'
+      'Expected resolve to have been called before transformSource',
     )
   }
 
@@ -290,7 +290,7 @@ function resolveClientImport(
       conditions: ['node', 'import'],
       parentURL,
     },
-    stashedResolve
+    stashedResolve,
   )
 }
 
@@ -301,7 +301,7 @@ async function parseExportNamesIntoNames(
   body: any,
   names: Array<string>,
   parentURL: string,
-  loader: LoadFunction
+  loader: LoadFunction,
 ): Promise<void> {
   for (let i = 0; i < body.length; i++) {
     const node = body[i]
@@ -314,7 +314,7 @@ async function parseExportNamesIntoNames(
         } else {
           const clientImport = await resolveClientImport(
             node.source.value,
-            parentURL
+            parentURL,
           )
           const url = clientImport.url
           const loadContext = {
@@ -379,7 +379,7 @@ async function transformClientModule(
   body: any,
   url: string,
   loader: LoadFunction,
-  clientEntryFiles?: Record<string, string>
+  clientEntryFiles?: Record<string, string>,
 ): Promise<string> {
   const names: Array<string> = []
 
@@ -387,7 +387,7 @@ async function transformClientModule(
   await parseExportNamesIntoNames(body, names, url, loader)
 
   const entryRecord = Object.entries(clientEntryFiles || {}).find(
-    ([_key, value]) => value === url
+    ([_key, value]) => value === url,
   )
 
   // TODO (RSC): Check if we always find a record. If we do, we should
@@ -413,7 +413,7 @@ async function transformClientModule(
             url +
             " from the server but it's on the client. It's not possible to " +
             'invoke a client function from the server, it can only be ' +
-            'rendered as a Component or passed to props of a Client Component.'
+            'rendered as a Component or passed to props of a Client Component.',
         ) +
         ');'
     } else {
@@ -428,7 +428,7 @@ async function transformClientModule(
             name +
             ' is on the client. ' +
             "It's not possible to invoke a client function from the server, it can " +
-            'only be rendered as a Component or passed to props of a Client Component.'
+            'only be rendered as a Component or passed to props of a Client Component.',
         ) +
         ');'
     }
@@ -444,11 +444,11 @@ async function transformClientModule(
 
 async function loadClientImport(
   url: string,
-  defaultTransformSource: TransformSourceFunction
+  defaultTransformSource: TransformSourceFunction,
 ): Promise<{ format: string; shortCircuit?: boolean; source: Source }> {
   if (stashedGetSource === null) {
     throw new Error(
-      'Expected getSource to have been called before transformSource'
+      'Expected getSource to have been called before transformSource',
     )
   }
 
@@ -458,7 +458,7 @@ async function loadClientImport(
   const { source } = await stashedGetSource(
     url,
     getSourceContext,
-    stashedGetSource
+    stashedGetSource,
   )
   const transformContext = {
     format: 'module',
@@ -467,7 +467,7 @@ async function loadClientImport(
   const { source: transformedSource } = await defaultTransformSource(
     source,
     transformContext,
-    defaultTransformSource
+    defaultTransformSource,
   )
 
   return { format: 'module', source: transformedSource }
@@ -477,7 +477,7 @@ async function transformModuleIfNeeded(
   source: string,
   url: string,
   loader: LoadFunction,
-  clientEntryFile?: Record<string, string>
+  clientEntryFile?: Record<string, string>,
 ): Promise<string> {
   // Do a quick check for the exact string. If it doesn't exist, don't
   // bother parsing.
@@ -522,7 +522,7 @@ async function transformModuleIfNeeded(
 
   if (useClient && useServer) {
     throw new Error(
-      'Cannot have both "use client" and "use server" directives in the same file.'
+      'Cannot have both "use client" and "use server" directives in the same file.',
     )
   }
 
@@ -536,12 +536,12 @@ async function transformModuleIfNeeded(
 export async function transformSource(
   source: Source,
   context: TransformSourceContext,
-  defaultTransformSource: TransformSourceFunction
+  defaultTransformSource: TransformSourceFunction,
 ): Promise<{ source: Source }> {
   const transformed = await defaultTransformSource(
     source,
     context,
-    defaultTransformSource
+    defaultTransformSource,
   )
 
   if (context.format === 'module') {
@@ -556,7 +556,7 @@ export async function transformSource(
       context.url,
       (url: string) => {
         return loadClientImport(url, defaultTransformSource)
-      }
+      },
     )
 
     return { source: newSrc }
@@ -569,7 +569,7 @@ export async function load(
   url: string,
   context: LoadContext | null,
   defaultLoad: LoadFunction,
-  clientEntryFiles?: Record<string, string>
+  clientEntryFiles?: Record<string, string>,
 ): Promise<{ format: string; shortCircuit?: boolean; source: Source }> {
   const result = await defaultLoad(url, context, defaultLoad)
 
@@ -582,7 +582,7 @@ export async function load(
       result.source,
       url,
       defaultLoad,
-      clientEntryFiles
+      clientEntryFiles,
     )
 
     return {

@@ -195,7 +195,7 @@ let absoluteClientEntries: Record<string, string> = {}
 
 const resolveClientEntry = (
   config: Awaited<ReturnType<typeof resolveConfig>>,
-  filePath: string
+  filePath: string,
 ) => {
   const filePathSlash = filePath.replaceAll('\\', '/')
   const clientEntry = absoluteClientEntries[filePathSlash]
@@ -236,12 +236,12 @@ async function setClientEntries(): Promise<void> {
       }
       console.log('fullKey', fullKey, 'value', config.base + val)
       return [fullKey, config.base + val]
-    })
+    }),
   )
 
   console.log(
     'setClientEntries :: absoluteClientEntries',
-    absoluteClientEntries
+    absoluteClientEntries,
   )
 }
 
@@ -288,7 +288,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
         // id /assets/rsc0-beb48afe.js
         return { id, chunks: [id], name, async: true }
       },
-    }
+    },
   )
 
   console.log('renderRsc input', input)
@@ -326,7 +326,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
     const component = await getFunctionComponent(input.rscId)
     return renderToPipeableStream(
       createElement(component, input.props),
-      bundlerConfig
+      bundlerConfig,
     ).pipe(transformRsfId(config.root))
   }
 
@@ -351,7 +351,7 @@ function transformRsfId(prefixToRemove: string) {
       let changed = false
       for (let i = 0; i < lines.length; ++i) {
         const match = lines[i].match(
-          new RegExp(`^([0-9]+):{"id":"${prefixToRemove}(.*?)"(.*)$`)
+          new RegExp(`^([0-9]+):{"id":"${prefixToRemove}(.*?)"(.*)$`),
         )
         if (match) {
           lines[i] = `${match[1]}:{"id":"${match[2]}"${match[3]}`

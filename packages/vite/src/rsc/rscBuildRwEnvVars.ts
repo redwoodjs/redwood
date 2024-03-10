@@ -26,7 +26,7 @@ globalThis.RWJS_API_URL = RWJS_ENV.RWJS_API_URL
 globalThis.__REDWOOD__APP_TITLE = RWJS_ENV.__REDWOOD__APP_TITLE
 globalThis.RWJS_EXP_STREAMING_SSR = RWJS_ENV.RWJS_EXP_STREAMING_SSR
 globalThis.RWJS_EXP_RSC = RWJS_ENV.RWJS_EXP_RSC
-`
+`,
   )
 
   // TODO (RSC): See if we can inject the code above into the server bundle

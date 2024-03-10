@@ -61,7 +61,7 @@ const watchFileCreated = (filename) => {
 const setupLogger = (
   loggerOptions?: LoggerOptions,
   destination?: string,
-  showConfig?: boolean
+  showConfig?: boolean,
 ): {
   logger: BaseLogger
   logSinkData?: Promise<unknown>
@@ -190,7 +190,7 @@ describe('logger', () => {
 
       expect(logStatement).toHaveProperty('event')
       expect(logStatement['event']['headers']['authorization']).toEqual(
-        '[Redacted]'
+        '[Redacted]',
       )
     })
 
@@ -215,7 +215,7 @@ describe('logger', () => {
         {
           jwt: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
         },
-        'test of a redacted JWT'
+        'test of a redacted JWT',
       )
       const logStatement = await logSinkData
       expect(logStatement['msg']).toEqual('test of a redacted JWT')
@@ -231,7 +231,7 @@ describe('logger', () => {
         {
           password: '123456',
         },
-        'test of a redacted password'
+        'test of a redacted password',
       )
       const logStatement = await logSinkData
       expect(logStatement['msg']).toEqual('test of a redacted password')
@@ -247,7 +247,7 @@ describe('logger', () => {
         {
           hashedPassword: 'c0RnBEEF####',
         },
-        'test of a redacted hashed password'
+        'test of a redacted hashed password',
       )
       const logStatement = await logSinkData
       expect(logStatement['msg']).toEqual('test of a redacted hashed password')
@@ -265,11 +265,11 @@ describe('logger', () => {
             hashedPassword: 'c0RnBEEF####',
           },
         },
-        'test of a redacted data hashed password'
+        'test of a redacted data hashed password',
       )
       const logStatement = await logSinkData
       expect(logStatement['msg']).toEqual(
-        'test of a redacted data hashed password'
+        'test of a redacted data hashed password',
       )
 
       expect(logStatement).toHaveProperty('data.hashedPassword')
@@ -287,16 +287,16 @@ describe('logger', () => {
             },
           },
         },
-        'test of a redacted user data hashed password'
+        'test of a redacted user data hashed password',
       )
       const logStatement = await logSinkData
       expect(logStatement['msg']).toEqual(
-        'test of a redacted user data hashed password'
+        'test of a redacted user data hashed password',
       )
 
       expect(logStatement).toHaveProperty('data.user.hashedPassword')
       expect(logStatement['data']['user']['hashedPassword']).toEqual(
-        '[Redacted]'
+        '[Redacted]',
       )
     })
 
@@ -307,7 +307,7 @@ describe('logger', () => {
         {
           salt: 'npeppa',
         },
-        'test of a redacted salt'
+        'test of a redacted salt',
       )
       const logStatement = await logSinkData
       expect(logStatement['msg']).toEqual('test of a redacted salt')
@@ -325,7 +325,7 @@ describe('logger', () => {
             salt: 'npeppa',
           },
         },
-        'test of a redacted data salt'
+        'test of a redacted data salt',
       )
       const logStatement = await logSinkData
       expect(logStatement['msg']).toEqual('test of a redacted data salt')
@@ -345,7 +345,7 @@ describe('logger', () => {
             },
           },
         },
-        'test of a redacted user data salt'
+        'test of a redacted user data salt',
       )
       const logStatement = await logSinkData
       expect(logStatement['msg']).toEqual('test of a redacted user data salt')
@@ -361,7 +361,7 @@ describe('logger', () => {
         {
           email: 'alice@example.com',
         },
-        'test of a redacted email'
+        'test of a redacted email',
       )
       const logStatement = await logSinkData
       expect(logStatement['msg']).toEqual('test of a redacted email')
@@ -375,7 +375,7 @@ describe('logger', () => {
     test('it creates a log file with a statement', async () => {
       const tmp = join(
         os.tmpdir(),
-        '_' + Math.random().toString(36).substr(2, 9)
+        '_' + Math.random().toString(36).substr(2, 9),
       )
 
       const { logger } = setupLogger({ level: 'trace' }, tmp)

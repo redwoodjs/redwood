@@ -45,7 +45,7 @@ function getVariableName(p: NodePath<types.ImportDeclaration>) {
 
 export default function (
   { types: t }: { types: typeof types },
-  { bundler }: { bundler: BundlerEnum }
+  { bundler }: { bundler: BundlerEnum },
 ): PluginObj {
   const manifestPath = join(getPaths().web.dist, 'client-build-manifest.json')
   const buildManifest = require(manifestPath)
@@ -71,7 +71,7 @@ export default function (
             }
             const absPath = join(dirname(state.filename), p.node.source.value)
             const viteManifestKey = ensurePosixPath(
-              relative(getPaths().web.src, absPath)
+              relative(getPaths().web.src, absPath),
             )
 
             // Note: The entry will not exist if vite has inlined a small asset
@@ -79,7 +79,7 @@ export default function (
               ?.file
           } else if (bundler === BundlerEnum.WEBPACK) {
             const webpackManifestKey = `static/media/${basename(
-              p.node.source.value
+              p.node.source.value,
             )}`
             copiedAssetPath = buildManifest[webpackManifestKey]
           } else {
@@ -92,7 +92,7 @@ export default function (
           const assetSrc =
             copiedAssetPath ??
             convertToDataUrl(
-              join(state.file.opts.sourceRoot || './', importPath)
+              join(state.file.opts.sourceRoot || './', importPath),
             )
 
           if (importConstName) {
@@ -100,9 +100,9 @@ export default function (
               t.variableDeclaration('const', [
                 t.variableDeclarator(
                   t.identifier(importConstName),
-                  t.stringLiteral(assetSrc)
+                  t.stringLiteral(assetSrc),
                 ),
-              ])
+              ]),
             )
           }
         }
