@@ -308,7 +308,7 @@ async function transformClientModule(
   code: string,
   body: any,
   url: string,
-  clientEntryFiles?: Record<string, string>
+  clientEntryFiles: Record<string, string>
 ): Promise<string> {
   const names: Array<string> = []
 
@@ -316,16 +316,19 @@ async function transformClientModule(
   await parseExportNamesIntoNames(code, body, names)
   console.log('transformClientModule names', names)
 
-  const entryRecord = Object.entries(clientEntryFiles || {}).find(
+  const entryRecord = Object.entries(clientEntryFiles).find(
     ([_key, value]) => value === url
   )
 
-  // TODO (RSC): Check if we always find a record. If we do, we should
-  // throw an error if it's undefined
+  if (!entryRecord || !entryRecord[0]) {
+    throw new Error('Entry not found for ' + url)
+  }
 
-  const loadId = entryRecord
-    ? path.join(getPaths().web.distRsc, 'assets', entryRecord[0] + '.js')
-    : url
+  const loadId = path.join(
+    getPaths().web.distRsc,
+    'assets',
+    `${entryRecord[0]}.js`
+  )
 
   let newSrc =
     "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"
