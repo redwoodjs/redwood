@@ -1,12 +1,7 @@
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 
-globalThis.matchTransformSnapshot =
-  require('./src/testUtils/matchTransformSnapshot').matchTransformSnapshot
-globalThis.matchInlineTransformSnapshot =
-  require('./src/testUtils/matchInlineTransformSnapshot').matchInlineTransformSnapshot
-globalThis.matchFolderTransform =
-  require('./src/testUtils/matchFolderTransform').matchFolderTransform
+import { expect } from 'vitest'
 
 // Custom matcher for checking fixtures using paths
 // e.g. expect(transformedPath).toMatchFileContents(expectedPath)

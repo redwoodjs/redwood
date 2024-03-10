@@ -1,3 +1,6 @@
+import { describe, it } from 'vitest'
+
+import { matchFolderTransform } from '../../../../testUtils/matchFolderTransform'
 import addApiAliasToTsConfig from '../tsconfigForRouteHooks'
 
 describe('tsconfigForRouteHooks', () => {
