@@ -17,6 +17,15 @@ export function rscTransformPlugin(
         return code
       }
 
+      // TODO (RSC): Bad bad hack. Don't do this.
+      // At least look for something that's guaranteed to be only present in
+      // transformed modules
+      // Ideally don't even try to transform twice
+      if (code.includes('$$id')) {
+        // Already transformed
+        return code
+      }
+
       let body
 
       try {
