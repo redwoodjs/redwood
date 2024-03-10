@@ -28,27 +28,6 @@ export type ResolveFunction = (
   resolveFunction: ResolveFunction
 ) => { url: string } | Promise<{ url: string }>
 
-interface GetSourceContext {
-  format: string
-}
-
-type GetSourceFunction = (
-  url: string,
-  context: GetSourceContext,
-  getSourceFunction: GetSourceFunction
-) => Promise<{ source: Source }>
-
-interface TransformSourceContext {
-  format: string
-  url: string
-}
-
-type TransformSourceFunction = (
-  source: Source,
-  context: TransformSourceContext,
-  transformSourceFunction: TransformSourceFunction
-) => Promise<{ source: Source }>
-
 interface LoadContext {
   conditions: Array<string>
   format: string | null | void
@@ -68,7 +47,6 @@ type Source = string
 
 let warnedAboutConditionsFlag = false
 
-let stashedGetSource: null | GetSourceFunction = null
 let stashedResolve: null | ResolveFunction = null
 
 export async function resolve(
@@ -96,16 +74,6 @@ export async function resolve(
   }
 
   return await defaultResolve(specifier, context, defaultResolve)
-}
-
-export async function getSource(
-  url: string,
-  context: GetSourceContext,
-  defaultGetSource: GetSourceFunction
-): Promise<{ source: Source }> {
-  // We stash this in case we end up needing to resolve export * statements later.
-  stashedGetSource = defaultGetSource
-  return defaultGetSource(url, context, defaultGetSource)
 }
 
 function addLocalExportedNames(names: Map<string, string>, node: any) {
@@ -379,23 +347,26 @@ async function transformClientModule(
   body: any,
   url: string,
   loader: LoadFunction,
-  clientEntryFiles?: Record<string, string>
+  clientEntryFiles: Record<string, string>
 ): Promise<string> {
   const names: Array<string> = []
 
   // This will insert the names into the `names` array
   await parseExportNamesIntoNames(body, names, url, loader)
 
-  const entryRecord = Object.entries(clientEntryFiles || {}).find(
-    ([_key, value]) => value === url
+  const entryRecord = Object.values(clientEntryFiles).find(
+    (value) => value === url
   )
 
-  // TODO (RSC): Check if we always find a record. If we do, we should
-  // throw an error if it's undefined
+  if (!entryRecord || !entryRecord[0]) {
+    throw new Error('Entry not found for ' + url)
+  }
 
-  const loadId = entryRecord
-    ? path.join(getPaths().web.distRsc, 'assets', entryRecord[0] + '.js')
-    : url
+  const loadId = path.join(
+    getPaths().web.distRsc,
+    'assets',
+    entryRecord[0] + '.js'
+  )
 
   let newSrc =
     "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"
@@ -442,42 +413,11 @@ async function transformClientModule(
   return newSrc
 }
 
-async function loadClientImport(
-  url: string,
-  defaultTransformSource: TransformSourceFunction
-): Promise<{ format: string; shortCircuit?: boolean; source: Source }> {
-  if (stashedGetSource === null) {
-    throw new Error(
-      'Expected getSource to have been called before transformSource'
-    )
-  }
-
-  // TODO: Validate that this is another module by calling getFormat.
-
-  const getSourceContext = { format: 'module' }
-  const { source } = await stashedGetSource(
-    url,
-    getSourceContext,
-    stashedGetSource
-  )
-  const transformContext = {
-    format: 'module',
-    url,
-  }
-  const { source: transformedSource } = await defaultTransformSource(
-    source,
-    transformContext,
-    defaultTransformSource
-  )
-
-  return { format: 'module', source: transformedSource }
-}
-
 async function transformModuleIfNeeded(
   source: string,
   url: string,
   loader: LoadFunction,
-  clientEntryFile?: Record<string, string>
+  clientEntryFiles: Record<string, string>
 ): Promise<string> {
   // Do a quick check for the exact string. If it doesn't exist, don't
   // bother parsing.
@@ -536,49 +476,17 @@ async function transformModuleIfNeeded(
   }
 
   if (useClient) {
-    return transformClientModule(body, url, loader, clientEntryFile)
+    return transformClientModule(body, url, loader, clientEntryFiles)
   }
 
   return transformServerModule(source, body, url)
-}
-
-export async function transformSource(
-  source: Source,
-  context: TransformSourceContext,
-  defaultTransformSource: TransformSourceFunction
-): Promise<{ source: Source }> {
-  const transformed = await defaultTransformSource(
-    source,
-    context,
-    defaultTransformSource
-  )
-
-  if (context.format === 'module') {
-    const transformedSource = transformed.source
-
-    if (typeof transformedSource !== 'string') {
-      throw new Error('Expected source to have been transformed to a string.')
-    }
-
-    const newSrc = await transformModuleIfNeeded(
-      transformedSource,
-      context.url,
-      (url: string) => {
-        return loadClientImport(url, defaultTransformSource)
-      }
-    )
-
-    return { source: newSrc }
-  }
-
-  return transformed
 }
 
 export async function load(
   url: string,
   context: LoadContext | null,
   defaultLoad: LoadFunction,
-  clientEntryFiles?: Record<string, string>
+  clientEntryFiles: Record<string, string>
 ): Promise<{ format: string; shortCircuit?: boolean; source: Source }> {
   const result = await defaultLoad(url, context, defaultLoad)
 
