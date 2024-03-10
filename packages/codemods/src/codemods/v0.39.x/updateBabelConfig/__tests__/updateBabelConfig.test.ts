@@ -1,4 +1,8 @@
+import { expect, test } from 'vitest'
+
+import { matchFolderTransform } from '../../../../testUtils/matchFolderTransform'
 import transform from '../updateBabelConfig'
+
 test('Removes babel config for default setup', async () => {
   await matchFolderTransform(transform, 'default')
 })
