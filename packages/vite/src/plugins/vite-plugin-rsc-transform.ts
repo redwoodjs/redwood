@@ -3,7 +3,7 @@ import path from 'node:path'
 import * as acorn from 'acorn-loose'
 import type { Plugin } from 'vite'
 
-import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
+import { getPaths } from '@redwoodjs/project-config'
 
 export function rscTransformPlugin(
   clientEntryFiles: Record<string, string>
@@ -314,11 +314,9 @@ async function transformClientModule(
   // TODO (RSC): Check if we always find a record. If we do, we should
   // throw an error if it's undefined
 
-  const loadId = ensurePosixPath(
-    entryRecord
-      ? path.join(getPaths().web.distRsc, 'assets', entryRecord[0] + '.js')
-      : url
-  )
+  const loadId = entryRecord
+    ? path.join(getPaths().web.distRsc, 'assets', entryRecord[0] + '.js')
+    : url
 
   let newSrc =
     "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"

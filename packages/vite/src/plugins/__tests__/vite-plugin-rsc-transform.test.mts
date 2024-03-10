@@ -64,7 +64,19 @@ export const Counter = () => {
 
     expect(output).toEqual(
       `const CLIENT_REFERENCE = Symbol.for('react.client.reference');
-export const Counter = Object.defineProperties(function() {throw new Error("Attempted to call Counter() from the server but Counter is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-Counter.tsx-1.js#Counter"}});
+export const Counter = Object.defineProperties(function() {throw new Error("Attempted to call Counter() from the server but Counter is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "${(
+        path.sep +
+        path.join(
+          'Users',
+          'tobbe',
+          'rw-app',
+          'web',
+          'dist',
+          'rsc',
+          'assets',
+          'rsc-Counter.tsx-1.js'
+        )
+      ).replaceAll('\\', '\\\\')}#Counter"}});
 `
     )
   })
