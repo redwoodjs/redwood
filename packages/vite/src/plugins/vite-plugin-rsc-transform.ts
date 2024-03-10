@@ -316,8 +316,8 @@ async function transformClientModule(
   await parseExportNamesIntoNames(code, body, names)
   console.log('transformClientModule names', names)
 
-  const entryRecord = Object.values(clientEntryFiles).find(
-    (value) => value === url
+  const entryRecord = Object.entries(clientEntryFiles).find(
+    ([_key, value]) => value === url
   )
 
   if (!entryRecord || !entryRecord[0]) {
@@ -327,7 +327,7 @@ async function transformClientModule(
   const loadId = path.join(
     getPaths().web.distRsc,
     'assets',
-    entryRecord[0] + '.js'
+    `${entryRecord[0]}.js`
   )
 
   let newSrc =
