@@ -146,7 +146,7 @@ describe('paths', () => {
             'web',
             'dist',
             'server',
-            'entry.server.js',
+            'entry.server.mjs',
           ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
@@ -163,7 +163,7 @@ describe('paths', () => {
             'web',
             'dist',
             'server',
-            'Document.js',
+            'Document.mjs',
           ),
           distRscEntries: path.join(
             FIXTURE_BASEDIR,
@@ -423,14 +423,14 @@ describe('paths', () => {
             'web',
             'dist',
             'server',
-            'entry.server.js',
+            'entry.server.mjs',
           ),
           distDocumentServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'server',
-            'Document.js',
+            'Document.mjs',
           ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
@@ -749,14 +749,14 @@ describe('paths', () => {
             'web',
             'dist',
             'server',
-            'entry.server.js',
+            'entry.server.mjs',
           ),
           distDocumentServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'server',
-            'Document.js',
+            'Document.mjs',
           ), // this is constructed regardless of presence of src/Document
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
@@ -1026,14 +1026,14 @@ describe('paths', () => {
             'web',
             'dist',
             'server',
-            'entry.server.js',
+            'entry.server.mjs',
           ),
           distDocumentServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'server',
-            'Document.js',
+            'Document.mjs',
           ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
