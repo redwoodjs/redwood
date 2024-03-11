@@ -63,7 +63,7 @@ describe('command information caching', () => {
 
   test('returns the correct cache when a local cache exists', () => {
     const anExistingDefaultCacheEntryKey = Object.keys(
-      pluginLib.PLUGIN_CACHE_DEFAULT
+      pluginLib.PLUGIN_CACHE_DEFAULT,
     )[0]
     const anExistingDefaultCacheEntry = {
       [anExistingDefaultCacheEntryKey]: {
@@ -204,7 +204,7 @@ describe('plugin loading', () => {
             ],
           }
         },
-        { virtual: true }
+        { virtual: true },
       )
       vol.fromJSON({
         ['commandCache.json']: JSON.stringify({
@@ -234,17 +234,17 @@ describe('plugin loading', () => {
       expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
         '@redwoodjs/cli-some-package-not-in-cache',
         undefined,
-        true
+        true,
       )
 
       // Should have saved the cache with the new package
       expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
       const knownPlugins =
         getConfig.mock.results[0].value.experimental.cli.plugins.map(
-          (plugin) => plugin.package
+          (plugin) => plugin.package,
         )
       const saveCommandCacheArg = Object.entries(
-        pluginLib.saveCommandCache.mock.calls[0][0]
+        pluginLib.saveCommandCache.mock.calls[0][0],
       ).filter(([key]) => knownPlugins.includes(key))
       expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -264,7 +264,7 @@ describe('plugin loading', () => {
 
       getConfig.mockRestore()
       process.argv = originalArgv
-    }
+    },
   )
 
   test.each([['--help'], ['-h'], ['']])(
@@ -304,7 +304,7 @@ describe('plugin loading', () => {
             ],
           }
         },
-        { virtual: true }
+        { virtual: true },
       )
       vol.fromJSON({
         ['commandCache.json']: JSON.stringify({
@@ -334,17 +334,17 @@ describe('plugin loading', () => {
       expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
         '@redwoodjs/cli-some-package-not-in-cache',
         undefined,
-        true
+        true,
       )
 
       // Should have saved the cache with the new package
       expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
       const knownPlugins =
         getConfig.mock.results[0].value.experimental.cli.plugins.map(
-          (plugin) => plugin.package
+          (plugin) => plugin.package,
         )
       const saveCommandCacheArg = Object.entries(
-        pluginLib.saveCommandCache.mock.calls[0][0]
+        pluginLib.saveCommandCache.mock.calls[0][0],
       ).filter(([key]) => knownPlugins.includes(key))
       expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -364,7 +364,7 @@ describe('plugin loading', () => {
 
       getConfig.mockRestore()
       process.argv = originalArgv
-    }
+    },
   )
 
   test.each([['--help'], ['-h'], ['']])(
@@ -404,7 +404,7 @@ describe('plugin loading', () => {
             ],
           }
         },
-        { virtual: true }
+        { virtual: true },
       )
       vol.fromJSON({
         ['commandCache.json']: JSON.stringify({
@@ -437,10 +437,10 @@ describe('plugin loading', () => {
       expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
       const knownPlugins =
         getConfig.mock.results[0].value.experimental.cli.plugins.map(
-          (plugin) => plugin.package
+          (plugin) => plugin.package,
         )
       const saveCommandCacheArg = Object.entries(
-        pluginLib.saveCommandCache.mock.calls[0][0]
+        pluginLib.saveCommandCache.mock.calls[0][0],
       ).filter(([key]) => knownPlugins.includes(key))
       expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -454,7 +454,7 @@ describe('plugin loading', () => {
 
       getConfig.mockRestore()
       process.argv = originalArgv
-    }
+    },
   )
 
   test('correct loading for unknown namespace (no command)', async () => {
@@ -492,7 +492,7 @@ describe('plugin loading', () => {
           ],
         }
       },
-      { virtual: true }
+      { virtual: true },
     )
     vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
@@ -522,17 +522,17 @@ describe('plugin loading', () => {
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@redwoodjs/cli-some-package-not-in-cache',
       undefined,
-      true
+      true,
     )
 
     // Should have saved the cache with the new package
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -588,7 +588,7 @@ describe('plugin loading', () => {
           ],
         }
       },
-      { virtual: true }
+      { virtual: true },
     )
     vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
@@ -618,17 +618,17 @@ describe('plugin loading', () => {
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@redwoodjs/cli-some-package-not-in-cache',
       undefined,
-      true
+      true,
     )
 
     // Should have saved the cache with the new package
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -685,7 +685,7 @@ describe('plugin loading', () => {
           ],
         }
       },
-      { virtual: true }
+      { virtual: true },
     )
     vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
@@ -734,17 +734,17 @@ describe('plugin loading', () => {
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@redwoodjs/cli-some-package',
       undefined,
-      true
+      true,
     )
 
     // Should have saved the cache with the new package
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -790,7 +790,7 @@ describe('plugin loading', () => {
           ],
         }
       },
-      { virtual: true }
+      { virtual: true },
     )
     vi.mock(
       '@redwoodjs/cli-some-package',
@@ -805,7 +805,7 @@ describe('plugin loading', () => {
           ],
         }
       },
-      { virtual: true }
+      { virtual: true },
     )
     vol.fromJSON({
       ['commandCache.json']: JSON.stringify({}),
@@ -856,22 +856,22 @@ describe('plugin loading', () => {
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@redwoodjs/cli-some-package',
       undefined,
-      true
+      true,
     )
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@redwoodjs/cli-some-package-not-in-cache',
       undefined,
-      true
+      true,
     )
 
     // Should have saved the cache with the new package
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -918,7 +918,7 @@ describe('plugin loading', () => {
           ],
         }
       },
-      { virtual: true }
+      { virtual: true },
     )
     vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
@@ -982,17 +982,17 @@ describe('plugin loading', () => {
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@redwoodjs/cli-some-package-not-in-cache',
       undefined,
-      true
+      true,
     )
 
     // Should have saved the cache with the new package
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -1054,7 +1054,7 @@ describe('plugin loading', () => {
           ],
         }
       },
-      { virtual: true }
+      { virtual: true },
     )
     vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
@@ -1103,17 +1103,17 @@ describe('plugin loading', () => {
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@bluewoodjs/cli-some-package',
       undefined,
-      true
+      true,
     )
 
     // Should have saved the cache with the new package
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -1198,22 +1198,22 @@ describe('plugin loading', () => {
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@bluewoodjs/cli-some-package',
       undefined,
-      true
+      true,
     )
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@bluewoodjs/cli-some-package-second-example',
       undefined,
-      true
+      true,
     )
 
     // Should have saved the cache with the new package
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -1296,10 +1296,10 @@ describe('plugin loading', () => {
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 

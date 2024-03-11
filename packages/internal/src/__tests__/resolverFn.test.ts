@@ -14,7 +14,7 @@ import { getResolverFnType } from '../generate/graphqlCodeGen'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../__fixtures__/example-todo-main'
+  '../../../../__fixtures__/example-todo-main',
 )
 
 // Pretend project is strict-mode

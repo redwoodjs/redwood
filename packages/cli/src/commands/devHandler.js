@@ -110,7 +110,7 @@ export const handler = async ({
     } catch (e) {
       errorTelemetry(
         process.argv,
-        `Error generating prisma client: ${e.message}`
+        `Error generating prisma client: ${e.message}`,
       )
       console.error(c.error(e.message))
     }
@@ -123,7 +123,7 @@ export const handler = async ({
       } catch (e) {
         errorTelemetry(process.argv, `Error shutting down "api": ${e.message}`)
         console.error(
-          `Error whilst shutting down "api" port: ${c.error(e.message)}`
+          `Error whilst shutting down "api" port: ${c.error(e.message)}`,
         )
       }
     }
@@ -135,13 +135,13 @@ export const handler = async ({
     } catch (e) {
       errorTelemetry(process.argv, `Error shutting down "web": ${e.message}`)
       console.error(
-        `Error whilst shutting down "web" port: ${c.error(e.message)}`
+        `Error whilst shutting down "web" port: ${c.error(e.message)}`,
       )
     }
   }
 
   const webpackDevConfig = require.resolve(
-    '@redwoodjs/core/config/webpack.development.js'
+    '@redwoodjs/core/config/webpack.development.js',
   )
 
   const getApiDebugFlag = () => {
@@ -169,6 +169,10 @@ export const handler = async ({
   // Written this way to make it easier to read
 
   // 1. default: Vite (SPA)
+  //
+  // Disable the new warning in Vite v5 about the CJS build being deprecated
+  // so that users don't have to see it every time the dev server starts up.
+  process.env.VITE_CJS_IGNORE_WARNING = 'true'
   let webCommand = `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
 
   // 2. Vite with SSR
@@ -180,7 +184,7 @@ export const handler = async ({
   if (getConfig().web.bundler === 'webpack') {
     if (streamingSsrEnabled) {
       throw new Error(
-        'Webpack does not support SSR. Please switch your bundler to Vite in redwood.toml first'
+        'Webpack does not support SSR. Please switch your bundler to Vite in redwood.toml first',
       )
     } else {
       webCommand = `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
@@ -234,13 +238,13 @@ export const handler = async ({
       prefix: '{name} |',
       timestampFormat: 'HH:mm:ss',
       handleInput: true,
-    }
+    },
   )
   result.catch((e) => {
     if (typeof e?.message !== 'undefined') {
       errorTelemetry(
         process.argv,
-        `Error concurrently starting sides: ${e.message}`
+        `Error concurrently starting sides: ${e.message}`,
       )
       exitWithError(e)
     }

@@ -39,7 +39,7 @@ test('throws if SUPERTOKENS_JWKS_URL env var is not set', async () => {
   delete process.env.SUPERTOKENS_JWKS_URL
 
   await expect(authDecoder('token', 'supertokens', req)).rejects.toThrow(
-    'SUPERTOKENS_JWKS_URL env var is not set'
+    'SUPERTOKENS_JWKS_URL env var is not set',
   )
 })
 

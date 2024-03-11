@@ -53,6 +53,8 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
           // TODO (RSC): Fix when https://github.com/rollup/rollup/issues/5235
           // is resolved
           hoistTransitiveImports: false,
+          entryFileNames: `assets/[name]-[hash].mjs`,
+          chunkFileNames: `assets/[name]-[hash].mjs`,
         },
       },
       manifest: 'client-build-manifest.json',

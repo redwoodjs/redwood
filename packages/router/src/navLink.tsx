@@ -27,7 +27,7 @@ export const NavLink = forwardRef<
       onClick,
       ...rest
     },
-    ref
+    ref,
   ) => {
     // Separate pathname and search parameters, USVString expected
     const [pathname, queryString] = to.split('?')
@@ -49,5 +49,5 @@ export const NavLink = forwardRef<
         {...rest}
       />
     )
-  }
+  },
 )

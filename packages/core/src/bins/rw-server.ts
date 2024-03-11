@@ -2,7 +2,7 @@
 import { createRequire } from 'module'
 
 const requireFromApiServer = createRequire(
-  require.resolve('@redwoodjs/api-server/package.json')
+  require.resolve('@redwoodjs/api-server/package.json'),
 )
 
 const bins = requireFromApiServer('./package.json')['bin']

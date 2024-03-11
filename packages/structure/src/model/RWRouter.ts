@@ -27,7 +27,10 @@ import { RWRoute } from './RWRoute'
  * one per Routes.js
  */
 export class RWRouter extends FileNode {
-  constructor(public filePath: string, public parent: RWProject) {
+  constructor(
+    public filePath: string,
+    public parent: RWProject,
+  ) {
     super()
   }
   // this is used by the live preview
@@ -76,12 +79,12 @@ export class RWRouter extends FileNode {
         })
 
       const prerenderSets = sets.filter((set) =>
-        set.getOpeningElement().getAttribute('prerender')
+        set.getOpeningElement().getAttribute('prerender'),
       )
 
       for (const set of prerenderSets) {
         for (const x of set.getDescendantsOfKind(
-          tsm.SyntaxKind.JsxSelfClosingElement
+          tsm.SyntaxKind.JsxSelfClosingElement,
         )) {
           const tagName = x.getTagNameNode().getText()
           // Add prerender prop from <Set> if not already present
@@ -92,7 +95,7 @@ export class RWRouter extends FileNode {
       }
 
       for (const x of self.sf.getDescendantsOfKind(
-        tsm.SyntaxKind.JsxSelfClosingElement
+        tsm.SyntaxKind.JsxSelfClosingElement,
       )) {
         const tagName = x.getTagNameNode().getText()
         if (tagName === 'Route') {
@@ -115,7 +118,7 @@ export class RWRouter extends FileNode {
           'Create Page...',
           'redwoodjs.cli',
           'generate page...',
-          this.parent.projectRoot
+          this.parent.projectRoot,
         ),
       }
       yield {
@@ -142,7 +145,7 @@ export class RWRouter extends FileNode {
         .getTextEditChange({ uri, version: null })
         .insert(
           Position.create(0, 0),
-          `export default () => <div>Not Found</div>`
+          `export default () => <div>Not Found</div>`,
         )
     }
     // add <Route/>
@@ -156,7 +159,7 @@ export class RWRouter extends FileNode {
     const indent = ' '.repeat(lastRouteLoc.range.start.character)
     textEditChange.insert(
       lastRouteLoc.range.end,
-      `\n${indent}<Route notfound page={NotFoundPage}/>\n`
+      `\n${indent}<Route notfound page={NotFoundPage}/>\n`,
     )
     return {
       title: 'Create default Not Found Page',
@@ -193,7 +196,7 @@ export class RWRouter extends FileNode {
       const e = err(
         this.jsxNode,
         "You must specify exactly one 'notfound' page",
-        RWError.NOTFOUND_PAGE_NOT_DEFINED
+        RWError.NOTFOUND_PAGE_NOT_DEFINED,
       )
       yield e
     }

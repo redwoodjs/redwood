@@ -73,7 +73,7 @@ export const serviceTypeAnnotations: Rule.RuleModule = {
                   if (!importForThisFile) {
                     yield fixer.insertTextBeforeRange(
                       [0, 0],
-                      `import type { ${typeName} } from "${thisFileCorrespondingImport}"\n`
+                      `import type { ${typeName} } from "${thisFileCorrespondingImport}"\n`,
                     )
                   } else {
                     const lastImportSpecifier =
@@ -82,7 +82,7 @@ export const serviceTypeAnnotations: Rule.RuleModule = {
                       ]
                     yield fixer.insertTextAfter(
                       lastImportSpecifier,
-                      `, ${typeName}`
+                      `, ${typeName}`,
                     )
                   }
                 },
@@ -122,7 +122,7 @@ export const serviceTypeAnnotations: Rule.RuleModule = {
                   if (!importForThisFile) {
                     yield fixer.insertTextBeforeRange(
                       [0, 0],
-                      `import type { ${typeName} } from "${thisFileCorrespondingImport}"\n`
+                      `import type { ${typeName} } from "${thisFileCorrespondingImport}"\n`,
                     )
                   } else {
                     const lastImportSpecifier =
@@ -131,7 +131,7 @@ export const serviceTypeAnnotations: Rule.RuleModule = {
                       ]
                     yield fixer.insertTextAfter(
                       lastImportSpecifier,
-                      `, ${typeName}`
+                      `, ${typeName}`,
                     )
                   }
                 },
@@ -161,6 +161,6 @@ const capitalizeFirstLetter = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)
 
 const isVariableDeclaration = (
-  node: Declaration
+  node: Declaration,
 ): node is VariableDeclaration =>
   typeof node !== 'undefined' && 'declarations' in node

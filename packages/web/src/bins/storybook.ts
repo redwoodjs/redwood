@@ -5,7 +5,7 @@ import { createRequire } from 'module'
 // installed before we try to run it.
 try {
   const requireFromStorybook = createRequire(
-    require.resolve('storybook/package.json')
+    require.resolve('storybook/package.json'),
   )
   const bins = requireFromStorybook('./package.json')['bin']
   requireFromStorybook(bins['storybook'])

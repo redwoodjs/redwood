@@ -7,7 +7,7 @@ export class RedwoodGraphQLError extends GraphQLError {
     extensions?: Record<string, any>,
     originalError?: Error & {
       readonly extensions?: unknown
-    }
+    },
   ) {
     super(message, {
       extensions: {

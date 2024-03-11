@@ -18,7 +18,7 @@ interface NetlifyTokenPayload extends Record<string, unknown> {
 export const authDecoder: Decoder = async (
   token: string,
   type: string,
-  req: { context: LambdaContext }
+  req: { context: LambdaContext },
 ) => {
   if (type !== 'netlify') {
     return null
@@ -41,7 +41,7 @@ export const authDecoder: Decoder = async (
     if (nowTimestamp >= decodedToken.exp) {
       throw new TokenExpiredError(
         'jwt expired',
-        new Date(decodedToken.exp * 1000)
+        new Date(decodedToken.exp * 1000),
       )
     }
 

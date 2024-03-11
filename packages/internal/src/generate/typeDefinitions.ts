@@ -72,18 +72,18 @@ export const generateTypeDefs = async () => {
 export const generateMirrorDirectoryNamedModules = () => {
   const rwjsPaths = getPaths()
   return findDirectoryNamedModules().map((p) =>
-    generateMirrorDirectoryNamedModule(p, rwjsPaths)
+    generateMirrorDirectoryNamedModule(p, rwjsPaths),
   )
 }
 
 export const mirrorPathForDirectoryNamedModules = (
   p: string,
-  rwjsPaths = getPaths()
+  rwjsPaths = getPaths(),
 ) => {
   return [
     path.join(
       rwjsPaths.generated.types.mirror,
-      path.relative(rwjsPaths.base, path.dirname(p))
+      path.relative(rwjsPaths.base, path.dirname(p)),
     ),
     'index.d.ts',
   ]
@@ -91,7 +91,7 @@ export const mirrorPathForDirectoryNamedModules = (
 
 export const generateMirrorDirectoryNamedModule = (
   p: string,
-  rwjsPaths = getPaths()
+  rwjsPaths = getPaths(),
 ) => {
   const [mirrorDir, typeDef] = mirrorPathForDirectoryNamedModules(p, rwjsPaths)
   fs.mkdirSync(mirrorDir, { recursive: true })
@@ -102,7 +102,7 @@ export const generateMirrorDirectoryNamedModule = (
   writeTemplate(
     'templates/mirror-directoryNamedModule.d.ts.template',
     typeDefPath,
-    { name }
+    { name },
   )
 
   // We add a source map to allow "go to definition" to avoid ending in the .d.ts file
@@ -131,12 +131,12 @@ export const generateMirrorDirectoryNamedModule = (
 
       fs.writeFileSync(
         `${typeDefPath}.map`,
-        JSON.stringify(map.toJSON(), undefined, 2)
+        JSON.stringify(map.toJSON(), undefined, 2),
       )
     } catch (error) {
       console.error(
         "Couldn't generate a definition map for directory named module at path:",
-        p
+        p,
       )
       console.error(error)
     }
@@ -153,7 +153,7 @@ export const generateMirrorCells = () => {
 export const mirrorPathForCell = (p: string, rwjsPaths = getPaths()) => {
   const mirrorDir = path.join(
     rwjsPaths.generated.types.mirror,
-    path.relative(rwjsPaths.base, path.dirname(p))
+    path.relative(rwjsPaths.base, path.dirname(p)),
   )
 
   fs.mkdirSync(mirrorDir, { recursive: true })
@@ -194,7 +194,7 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
     // Get the location of the Success component
     const exportedComponents = getNamedExports(fileContents)
     const successComponent = exportedComponents.find(
-      (x) => x.name === 'Success'
+      (x) => x.name === 'Success',
     )
     if (successComponent === undefined) {
       throw new Error('No Success component found')
@@ -214,7 +214,7 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
     })
     fs.writeFileSync(
       `${typeDefPath}.map`,
-      JSON.stringify(map.toJSON(), undefined, 2)
+      JSON.stringify(map.toJSON(), undefined, 2),
     )
   } catch (error) {
     console.error("Couldn't generate a definition map for cell at path:", p)
@@ -226,12 +226,12 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
 
 const writeTypeDefIncludeFile = (
   template: string,
-  values: Record<string, unknown> = {}
+  values: Record<string, unknown> = {},
 ) => {
   const rwjsPaths = getPaths()
   const typeDefPath = path.join(
     rwjsPaths.generated.types.includes,
-    template.replace('.template', '')
+    template.replace('.template', ''),
   )
 
   const templateFilename = path.join('templates', template)
@@ -253,7 +253,7 @@ export const generateTypeDefRouterRoutes = () => {
   try {
     const typeDefPath = path.join(
       getPaths().generated.types.includes,
-      'web-routerRoutes.d.ts'
+      'web-routerRoutes.d.ts',
     )
 
     const map = new SourceMapGenerator({
@@ -279,11 +279,11 @@ export const generateTypeDefRouterRoutes = () => {
 
     fs.writeFileSync(
       `${typeDefPath}.map`,
-      JSON.stringify(map.toJSON(), undefined, 2)
+      JSON.stringify(map.toJSON(), undefined, 2),
     )
   } catch (error) {
     console.error(
-      "Couldn't generate a definition map for web-routerRoutes.d.ts:"
+      "Couldn't generate a definition map for web-routerRoutes.d.ts:",
     )
     console.error(error)
   }
@@ -298,7 +298,7 @@ export const generateTypeDefRouterPages = () => {
   try {
     const typeDefPath = path.join(
       getPaths().generated.types.includes,
-      'web-routesPages.d.ts'
+      'web-routesPages.d.ts',
     )
 
     const map = new SourceMapGenerator({
@@ -327,11 +327,11 @@ export const generateTypeDefRouterPages = () => {
 
     fs.writeFileSync(
       `${typeDefPath}.map`,
-      JSON.stringify(map.toJSON(), undefined, 2)
+      JSON.stringify(map.toJSON(), undefined, 2),
     )
   } catch (error) {
     console.error(
-      "Couldn't generate a definition map for web-routesPages.d.ts:"
+      "Couldn't generate a definition map for web-routesPages.d.ts:",
     )
     console.error(error)
   }
@@ -375,12 +375,12 @@ declare module '@storybook/react' {
   const packageJson = JSON.parse(
     fs.readFileSync(
       path.join(redwoodProjectPaths.base, 'package.json'),
-      'utf-8'
-    )
+      'utf-8',
+    ),
   )
 
   const hasCliStorybook = Object.keys(packageJson['devDependencies']).includes(
-    '@redwoodjs/cli-storybook'
+    '@redwoodjs/cli-storybook',
   )
 
   if (hasCliStorybook) {
@@ -389,7 +389,7 @@ declare module '@storybook/react' {
 
   const stubStorybookTypesFilePath = path.join(
     redwoodProjectPaths.generated.types.includes,
-    'web-storybook.d.ts'
+    'web-storybook.d.ts',
   )
   fs.writeFileSync(stubStorybookTypesFilePath, stubStorybookTypesFileContent)
 

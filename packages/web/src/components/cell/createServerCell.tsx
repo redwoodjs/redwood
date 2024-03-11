@@ -25,9 +25,9 @@ type AnyObj = Record<string, unknown>
 
 export function createServerCell<
   CellProps extends AnyObj,
-  CellVariables extends AnyObj
+  CellVariables extends AnyObj,
 >(
-  createCellProps: CreateServerCellProps<CellProps, CellVariables> // 👈 AnyObj, because using CellProps causes a TS error
+  createCellProps: CreateServerCellProps<CellProps, CellVariables>, // 👈 AnyObj, because using CellProps causes a TS error
 ): React.FC<CellProps> {
   const {
     data: dataFn,
@@ -77,7 +77,7 @@ export function createServerCell<
   return (props: CellProps) => {
     const wrapInSuspenseIfLoadingPresent = (
       suspendingSuccessElement: React.ReactNode,
-      LoadingComponent: typeof Loading
+      LoadingComponent: typeof Loading,
     ) => {
       if (!LoadingComponent) {
         return suspendingSuccessElement
@@ -97,7 +97,7 @@ export function createServerCell<
       <>
         {wrapInSuspenseIfLoadingPresent(
           <SuspendingSuccess {...props} />,
-          Loading
+          Loading,
         )}
       </>
       // </CellErrorBoundary>

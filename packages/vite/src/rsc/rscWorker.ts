@@ -5,6 +5,7 @@
 // like `useState` and `createContext`.
 
 import { Buffer } from 'node:buffer'
+import { Server } from 'node:http'
 import path from 'node:path'
 import { Transform, Writable } from 'node:stream'
 import { parentPort } from 'node:worker_threads'
@@ -114,6 +115,10 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
 // server. So we have to register them here again.
 registerFwGlobals()
 
+// TODO: this was copied from waku; they have a todo to remove it.
+// We need this to fix a WebSocket error in dev, `WebSocket server error: Port is already in use`.
+const dummyServer = new Server()
+
 // TODO (RSC): `createServer` is mostly used to create a dev server. Is it OK
 // to use it like a production server like this?
 // TODO (RSC): Do we need to pass `define` here with RWJS_ENV etc? What about
@@ -143,7 +148,7 @@ const vitePromise = createServer({
   // plugins. Specifically vite's own vite:css plugin needs this to initialize
   // the cssModulesCache WeakMap
   // See https://github.com/vitejs/vite/issues/3798#issuecomment-862185554
-  server: { middlewareMode: true },
+  server: { middlewareMode: true, hmr: { server: dummyServer } },
   appType: 'custom',
 })
 
@@ -208,9 +213,8 @@ const getFunctionComponent = async (rscId: string) => {
 
   if (isDev) {
     const vite = await vitePromise
-    const { default: entriesFileModule } = await vite.ssrLoadModule(
-      entriesFilePath
-    )
+    const { default: entriesFileModule } =
+      await vite.ssrLoadModule(entriesFilePath)
     getEntry = entriesFileModule.getEntry
   } else {
     const {
@@ -236,7 +240,7 @@ const getFunctionComponent = async (rscId: string) => {
 
 function resolveClientEntryForProd(
   filePath: string,
-  config: Awaited<ReturnType<typeof resolveConfig>>
+  config: Awaited<ReturnType<typeof resolveConfig>>,
 ) {
   const filePathSlash = filePath.replaceAll('\\', '/')
   const clientEntry = absoluteClientEntries[filePathSlash]
@@ -303,12 +307,12 @@ async function setClientEntries(): Promise<void> {
       }
       console.log('fullKey', fullKey, 'value', config.base + val)
       return [fullKey, config.base + val]
-    })
+    }),
   )
 
   console.log(
     'setClientEntries :: absoluteClientEntries',
-    absoluteClientEntries
+    absoluteClientEntries,
   )
 }
 
@@ -365,7 +369,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
         // id /assets/rsc0-beb48afe.js
         return { id, chunks: [id], name, async: true }
       },
-    }
+    },
   )
 
   console.log('renderRsc input', input)
@@ -404,7 +408,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
 
     return renderToPipeableStream(
       createElement(component, input.props),
-      bundlerConfig
+      bundlerConfig,
     ).pipe(transformRsfId(config.root))
   }
 
@@ -429,7 +433,7 @@ function transformRsfId(prefixToRemove: string) {
       let changed = false
       for (let i = 0; i < lines.length; ++i) {
         const match = lines[i].match(
-          new RegExp(`^([0-9]+):{"id":"${prefixToRemove}(.*?)"(.*)$`)
+          new RegExp(`^([0-9]+):{"id":"${prefixToRemove}(.*?)"(.*)$`),
         )
         if (match) {
           lines[i] = `${match[1]}:{"id":"${match[2]}"${match[3]}`

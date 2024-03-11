@@ -5,7 +5,7 @@ import type { ModuleNode, ViteDevServer } from 'vite'
 async function find_deps(
   vite: ViteDevServer,
   node: ModuleNode,
-  deps: Set<ModuleNode>
+  deps: Set<ModuleNode>,
 ) {
   // since `ssrTransformResult.deps` contains URLs instead of `ModuleNode`s, this process is asynchronous.
   // instead of using `await`, we resolve all branches in parallel.
@@ -29,7 +29,7 @@ async function find_deps(
   if (node.ssrTransformResult) {
     if (node.ssrTransformResult.deps) {
       node.ssrTransformResult.deps.forEach((url) =>
-        branches.push(add_by_url(url))
+        branches.push(add_by_url(url)),
       )
     }
 

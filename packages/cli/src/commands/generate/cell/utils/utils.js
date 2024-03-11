@@ -14,10 +14,10 @@ export const getCellOperationNames = async () => {
 
 export const uniqueOperationName = async (
   name,
-  { index = 1, list = false }
+  { index = 1, list = false },
 ) => {
   let operationName = pascalcase(
-    index <= 1 ? `find_${name}_query` : `find_${name}_query_${index}`
+    index <= 1 ? `find_${name}_query` : `find_${name}_query_${index}`,
   )
 
   if (list) {

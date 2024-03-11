@@ -562,8 +562,18 @@ jobs:
       - name: 🎭 Install playwright dependencies
         run: npx playwright install --with-deps chromium
 
-      - name: 🐘 Run RSC smoke tests
+      - name: 🐘 Run RSC serve smoke tests
         working-directory: tasks/smoke-tests/rsc
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-project.outputs.rsc-project-path }}
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      # TODO(jtoar): This workflow times out on Windows. It looks as if the dev server starts up ok,
+      # but it doesn't seem like the browser is rendering what it should be.
+      - name: 🐘 Run RSC dev smoke tests
+        if: matrix.os == 'ubuntu-latest'
+        working-directory: tasks/smoke-tests/rsc-dev
         run: npx playwright test
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-project.outputs.rsc-project-path }}
@@ -676,7 +686,7 @@ jobs:
 
       - name: Build for production
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
-        run: yarn rw build --no-prerender
+        run: yarn rw build --no-prerender --verbose
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
 

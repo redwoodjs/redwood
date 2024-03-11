@@ -80,17 +80,17 @@ const itCreatesAService = (baseArgs = {}) => {
 
     expect(files).toHaveProperty([
       path.normalize(
-        `/path/to/project/api/src/services/users/users.${extension}`
+        `/path/to/project/api/src/services/users/users.${extension}`,
       ),
     ])
     expect(files).toHaveProperty([
       path.normalize(
-        `/path/to/project/api/src/services/users/users.test.${extension}`
+        `/path/to/project/api/src/services/users/users.test.${extension}`,
       ),
     ])
     expect(files).toHaveProperty([
       path.normalize(
-        `/path/to/project/api/src/services/users/users.scenarios.${extension}`
+        `/path/to/project/api/src/services/users/users.scenarios.${extension}`,
       ),
     ])
   })
@@ -104,9 +104,9 @@ const itCreatesASingleWordSDLFile = (baseArgs = {}) => {
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/graphql/users.sdl.${extension}`
+          `/path/to/project/api/src/graphql/users.sdl.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
@@ -122,9 +122,9 @@ const itCreatesAMultiWordSDLFile = (baseArgs = {}) => {
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/graphql/userProfiles.sdl.${extension}`
+          `/path/to/project/api/src/graphql/userProfiles.sdl.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
@@ -137,9 +137,9 @@ const itCreatesASingleWordSDLFileWithCRUD = (baseArgs = {}) => {
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/graphql/posts.sdl.${extension}`
+          `/path/to/project/api/src/graphql/posts.sdl.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
@@ -156,33 +156,33 @@ const itCreateAMultiWordSDLFileWithCRUD = (baseArgs = {}) => {
     // Service files
     expect(files).toHaveProperty([
       path.normalize(
-        `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`
+        `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`,
       ),
     ])
     expect(files).toHaveProperty([
       path.normalize(
-        `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`
+        `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`,
       ),
     ])
     expect(files).toHaveProperty([
       path.normalize(
-        `/path/to/project/api/src/services/userProfiles/userProfiles.scenarios.${extension}`
+        `/path/to/project/api/src/services/userProfiles/userProfiles.scenarios.${extension}`,
       ),
     ])
 
     //sdl file
     expect(files).toHaveProperty([
       path.normalize(
-        `/path/to/project/api/src/graphql/userProfiles.sdl.${extension}`
+        `/path/to/project/api/src/graphql/userProfiles.sdl.${extension}`,
       ),
     ])
 
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/graphql/userProfiles.sdl.${extension}`
+          `/path/to/project/api/src/graphql/userProfiles.sdl.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
@@ -199,9 +199,9 @@ const itCreatesAnSDLFileWithEnumDefinitions = (baseArgs = {}) => {
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/graphql/shoes.sdl.${extension}`
+          `/path/to/project/api/src/graphql/shoes.sdl.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
@@ -214,9 +214,9 @@ const itCreatesAnSDLFileWithJsonDefinitions = (baseArgs = {}) => {
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/graphql/photos.sdl.${extension}`
+          `/path/to/project/api/src/graphql/photos.sdl.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
@@ -231,7 +231,7 @@ const itCreatesAnSDLFileWithByteDefinitions = (baseArgs = {}) => {
     const ext = extensionForBaseArgs(baseArgs)
 
     expect(
-      files[path.normalize(`/path/to/project/api/src/graphql/keys.sdl.${ext}`)]
+      files[path.normalize(`/path/to/project/api/src/graphql/keys.sdl.${ext}`)],
     ).toMatchSnapshot()
   })
 }

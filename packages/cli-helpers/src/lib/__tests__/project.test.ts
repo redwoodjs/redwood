@@ -92,7 +92,7 @@ describe('addEnvVar', () => {
       const file = addEnvVar(
         'EXISTING_VAR',
         'new_value',
-        'Updated existing variable Comment'
+        'Updated existing variable Comment',
       )
 
       expect(file).toMatchSnapshot()
@@ -117,7 +117,7 @@ describe('addEnvVar', () => {
       const file = addEnvVar(
         'EXISTING_VAR',
         'new_value',
-        'New Variable Comment'
+        'New Variable Comment',
       )
 
       expect(file).toMatchSnapshot()
@@ -148,7 +148,7 @@ describe('updateTomlConfig', () => {
 
     it('adds when experimental cli is not configured', () => {
       const file = updateTomlConfig(
-        '@example/test-package-when-cli-not-configured'
+        '@example/test-package-when-cli-not-configured',
       )
       expect(file).toMatchSnapshot()
     })
@@ -178,7 +178,7 @@ describe('updateTomlConfig', () => {
       }
 
       const file = updateTomlConfig(
-        '@example/test-package-when-no-plugins-configured'
+        '@example/test-package-when-no-plugins-configured',
       )
 
       expect(file).toMatchSnapshot()
@@ -192,7 +192,7 @@ describe('updateTomlConfig', () => {
       }
 
       const file = updateTomlConfig(
-        '@example/test-package-when-autoInstall-false'
+        '@example/test-package-when-autoInstall-false',
       )
 
       expect(file).toMatchSnapshot()
@@ -211,7 +211,7 @@ describe('updateTomlConfig', () => {
       }
 
       const file = updateTomlConfig(
-        '@existing-example/some-package-name-already-exists'
+        '@existing-example/some-package-name-already-exists',
       )
 
       expect(file).toMatchSnapshot()

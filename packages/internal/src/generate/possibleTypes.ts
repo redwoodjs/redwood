@@ -84,7 +84,7 @@ export const generatePossibleTypes = async (): Promise<PossibleTypesResult> => {
       schema,
       documents,
       pluginConfig,
-      info
+      info,
     )
 
     files.push(filename)

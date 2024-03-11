@@ -38,7 +38,7 @@ export class DevRwRscServerGlobal extends RwRscServerGlobal {
     const importPath = `/@fs${id}`
     return lazy(
       async () =>
-        await this.viteServer.ssrLoadModule(/* @vite-ignore */ importPath)
+        await this.viteServer.ssrLoadModule(/* @vite-ignore */ importPath),
     )
   }
 
@@ -50,7 +50,7 @@ export class DevRwRscServerGlobal extends RwRscServerGlobal {
   async findAssetsForModules(modules: string[]) {
     const styles = await collectStyles(
       this.viteServer,
-      modules.filter((i) => !!i)
+      modules.filter((i) => !!i),
     )
 
     return [...Object.entries(styles ?? {}).map(([key, _value]) => key)]

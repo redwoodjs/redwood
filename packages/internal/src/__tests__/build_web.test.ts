@@ -10,7 +10,7 @@ import { findWebFiles } from '../files'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../__fixtures__/example-todo-main'
+  '../../../../__fixtures__/example-todo-main',
 )
 
 const cleanPaths = (p) => {
@@ -86,7 +86,7 @@ test('Check routes are imported with require when staticImports flag is enabled'
     */
   expect(prerendered).toContain(`const FooPage = {`)
   expect(prerendered).not.toContain(
-    `var _FooPage = _interopRequireDefault(require(`
+    `var _FooPage = _interopRequireDefault(require(`,
   )
 })
 
@@ -117,6 +117,6 @@ test('Check routes are imported with "import" when staticImports flag is NOT pas
   */
   expect(withoutStaticImports).not.toContain(`const FooPage = {`)
   expect(withoutStaticImports).toContain(
-    `var _FooPage = _interopRequireDefault(require(`
+    `var _FooPage = _interopRequireDefault(require(`,
   )
 })

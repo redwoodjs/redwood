@@ -15,12 +15,12 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
 
   // export const standard = ${ex}
   const createExportStandard = (
-    ex: types.CallExpression | types.ArrowFunctionExpression
+    ex: types.CallExpression | types.ArrowFunctionExpression,
   ) =>
     t.exportNamedDeclaration(
       t.variableDeclaration('const', [
         t.variableDeclarator(t.identifier('standard'), ex),
-      ])
+      ]),
     )
 
   return {
@@ -81,7 +81,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                 mockFunctionMaybe.type !== 'FunctionExpression'
               ) {
                 throw new Error(
-                  `\n \n Mock Error: You must export your standard mock as a function \n \n`
+                  `\n \n Mock Error: You must export your standard mock as a function \n \n`,
                 )
               }
 
@@ -131,7 +131,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         // mockGraphQLQuery(<operationName>, <mockFunction>)
         const mockGraphQLCall = t.callExpression(
           t.identifier('mockGraphQLQuery'),
-          [t.stringLiteral(cellMetadata.operationName), mockFunction]
+          [t.stringLiteral(cellMetadata.operationName), mockFunction],
         )
 
         // Delete original "export const standard"
@@ -144,10 +144,10 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
             [
               t.importSpecifier(
                 t.identifier('afterQuery'),
-                t.identifier('afterQuery')
+                t.identifier('afterQuery'),
               ),
             ],
-            t.stringLiteral(`./${path.basename(cellPath)}`)
+            t.stringLiteral(`./${path.basename(cellPath)}`),
           )
 
           nodesToInsert = [
@@ -158,8 +158,8 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                 [],
                 t.callExpression(t.identifier('afterQuery'), [
                   t.callExpression(mockGraphQLCall, []),
-                ])
-              )
+                ]),
+              ),
             ),
           ]
         } else {
@@ -239,7 +239,7 @@ export const getCellMetadata = (p: string) => {
 
   const hasQueryExport = namedExports.find(({ name }) => name === 'QUERY')
   const hasAfterQueryExport = namedExports.find(
-    ({ name }) => name === 'afterQuery'
+    ({ name }) => name === 'afterQuery',
   )
 
   let operationName = ''

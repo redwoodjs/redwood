@@ -11,7 +11,7 @@ import { getPaths } from '@redwoodjs/project-config'
 
 export async function buildRouteHooks(
   verbose: boolean | undefined,
-  rwPaths: Paths
+  rwPaths: Paths,
 ) {
   const allRouteHooks = findRouteHooksSrc()
 

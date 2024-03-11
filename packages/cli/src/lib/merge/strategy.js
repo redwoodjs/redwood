@@ -9,7 +9,7 @@ const OPAQUE_UID_TAG =
 function requireSameType(base, ext) {
   if (base.path.type !== ext.path.type) {
     throw new Error(
-      'Attempting to merge nodes with different types. This is not yet supported.'
+      'Attempting to merge nodes with different types. This is not yet supported.',
     )
   }
 }
@@ -17,7 +17,7 @@ function requireSameType(base, ext) {
 function requireStrategyExists(base, _ext, strategy, strategyName) {
   if (!(base.path.type in strategy)) {
     throw new Error(
-      `Attempting to ${strategyName} nodes that do not have an ${strategyName} strategy.`
+      `Attempting to ${strategyName} nodes that do not have an ${strategyName} strategy.`,
     )
   }
 }
@@ -88,7 +88,7 @@ const interleaveStrategy = {
     const uniqueSpecifiersOfType = (type) =>
       _.uniqWith(
         [...baseSpecs, ...extSpecs].filter(nodeIs(type)),
-        importSpecifierEquality
+        importSpecifierEquality,
       )
 
     // Rule 1: If there's exactly 1 import with 0 specifiers, it's a side-effect import and should
@@ -114,13 +114,13 @@ const interleaveStrategy = {
     const [firstSpecifierList, ...rest] = sieve(
       [uniqueSpecifiersOfType('ImportDefaultSpecifier'), defaultPosition],
       [uniqueSpecifiersOfType('ImportNamespaceSpecifier'), namespacePosition],
-      [uniqueSpecifiersOfType('ImportSpecifier'), importPosition]
+      [uniqueSpecifiersOfType('ImportSpecifier'), importPosition],
     )
 
     baseImport.specifiers = firstSpecifierList
     if (rest.length) {
       baseImport.path.insertAfter(
-        rest.map((specs) => t.importDeclaration(specs, baseImport.source))
+        rest.map((specs) => t.importDeclaration(specs, baseImport.source)),
       )
     }
   },

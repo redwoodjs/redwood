@@ -38,7 +38,7 @@ describe('Portal head', () => {
     expect(head.childNodes[2]).toHaveAttribute('name', 'description')
     expect(head.childNodes[2]).toHaveAttribute(
       'content',
-      'Kittens are soft and cuddly'
+      'Kittens are soft and cuddly',
     )
   })
 })

@@ -65,7 +65,7 @@ export default class Core {
         [this.primaryKey]: id,
         ...(options.where || {}),
       },
-      options
+      options,
     )
     if (record === null) {
       throw new Errors.RedwoodRecordNotFoundError(this.name)
@@ -100,7 +100,7 @@ export default class Core {
     return Promise.all(
       records.map(async (record) => {
         return await this.build(record)
-      })
+      }),
     )
   }
 
@@ -241,7 +241,7 @@ export default class Core {
     if (error.message.match(/Record to delete does not exist/)) {
       this._onSaveError(
         'base',
-        `${this.constructor.name} record to destroy not found`
+        `${this.constructor.name} record to destroy not found`,
       )
       if (shouldThrow) {
         throw new Errors.RedwoodRecordNotFoundError()
@@ -249,7 +249,7 @@ export default class Core {
     } else {
       this._onSaveError(
         'base',
-        `${this.constructor.name} record threw uncaught error: ${error.message}`
+        `${this.constructor.name} record threw uncaught error: ${error.message}`,
       )
       if (shouldThrow) {
         throw new Errors.RedwoodRecordUncaughtError(error.message)
@@ -263,7 +263,7 @@ export default class Core {
     if (error.message.match(/Record to update not found/)) {
       this._onSaveError(
         'base',
-        `${this.constructor.name} record to update not found`
+        `${this.constructor.name} record to update not found`,
       )
       if (shouldThrow) {
         throw new Errors.RedwoodRecordNotFoundError(this.constructor.name)

@@ -32,7 +32,7 @@ export const getJsxAttributeValue = (expression: any): any => {
       .sort((elementA, elementB) => elementA.start - elementB.start)
       .reduce(
         (string, element) => `${string}${element.value.cooked.toString()}`,
-        ''
+        '',
       )
   }
 

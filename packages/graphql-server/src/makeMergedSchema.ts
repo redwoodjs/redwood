@@ -34,7 +34,7 @@ const wrapWithOpenTelemetry = async (
   root: any,
   context: any,
   info: any,
-  name: string
+  name: string,
 ) => {
   const tracer = opentelemetry.trace.getTracer('redwoodjs')
   const parentSpan =
@@ -51,7 +51,7 @@ const wrapWithOpenTelemetry = async (
     async (span) => {
       span.setAttribute(
         'graphql.execute.operationName',
-        `${args.operationName || 'Anonymous Operation'}`
+        `${args.operationName || 'Anonymous Operation'}`,
       )
       try {
         const result: any = await func(args, {
@@ -67,7 +67,7 @@ const wrapWithOpenTelemetry = async (
         span.end()
         throw ex
       }
-    }
+    },
   )
 }
 
@@ -82,7 +82,7 @@ const mapFieldsToService = ({
       root: unknown,
       args: unknown,
       context: unknown,
-      info: unknown
+      info: unknown,
     ) => any
   }
   services: Services
@@ -103,7 +103,7 @@ const mapFieldsToService = ({
           root: unknown,
           args: unknown,
           context: unknown,
-          info: unknown
+          info: unknown,
         ) => {
           const captureResolvers =
             // @ts-expect-error context is unknown
@@ -116,7 +116,7 @@ const mapFieldsToService = ({
               root,
               context,
               info,
-              name
+              name,
             )
           }
           return services[name](args, { root, context, info })
@@ -151,7 +151,7 @@ const resolveUnionType = (types: readonly GraphQLObjectType[]) => ({
     for (let i = 0; i < types.length; i++) {
       const type = types[i]
       const fieldIntersection = Object.keys(type.getFields()).filter(
-        (field) => field in obj
+        (field) => field in obj,
       )
       fieldIntersections[i] = fieldIntersection.length
       // update max intersection fields, type and index
@@ -166,11 +166,11 @@ const resolveUnionType = (types: readonly GraphQLObjectType[]) => ({
     if (
       fieldIntersections.indexOf(
         maxIntersectionFields,
-        maxIntersectionIdx + 1
+        maxIntersectionIdx + 1,
       ) !== -1
     ) {
       throw Error(
-        'Unable to resolve correct type for union. Try adding unique fields to each type or __typename to each resolver'
+        'Unable to resolve correct type for union. Try adding unique fields to each type or __typename to each resolver',
       )
     }
 
@@ -194,7 +194,7 @@ const mergeResolversWithServices = ({
 }): IResolvers => {
   const mergedServices = merge(
     {},
-    ...Object.keys(services).map((name) => services[name])
+    ...Object.keys(services).map((name) => services[name]),
   )
 
   // Get a list of types that have fields.
@@ -204,27 +204,27 @@ const mergeResolversWithServices = ({
     .filter(
       (name) =>
         typeof (schema.getType(name) as GraphQLTypeWithFields).getFields !==
-        'undefined'
+        'undefined',
     )
     .map((name) => {
       return schema.getType(name)
     })
     .filter(
       (type): type is GraphQLTypeWithFields =>
-        type !== undefined && type !== null
+        type !== undefined && type !== null,
     )
   // gets union types, which does not have fields but has types. i.e union Media = Book | Movie
   const unionTypes = Object.keys(schema.getTypeMap())
     .filter(
       (name) =>
         typeof (schema.getType(name) as GraphQLUnionType).getTypes !==
-        'undefined'
+        'undefined',
     )
     .map((name) => {
       return schema.getType(name)
     })
     .filter(
-      (type): type is GraphQLUnionType => type !== undefined && type !== null
+      (type): type is GraphQLUnionType => type !== undefined && type !== null,
     )
 
   const mappedResolvers = typesWithFields.reduce((acc, type) => {
@@ -260,7 +260,7 @@ const mergeResolversWithServices = ({
       ...mappedResolvers,
       ...mappedUnionResolvers,
     },
-    (v) => typeof v === 'undefined'
+    (v) => typeof v === 'undefined',
   )
 }
 
@@ -276,9 +276,9 @@ const mergeResolvers = (schemas: {
       ...[
         rootGqlSchema.resolvers,
         ...Object.values(schemas).map(({ resolvers }) => resolvers),
-      ]
+      ],
     ),
-    (v) => typeof v === 'undefined'
+    (v) => typeof v === 'undefined',
   )
 
 /**
@@ -307,7 +307,7 @@ type Config = Parameters<typeof mergeTypeDefs>[1]
 
 const mergeTypes = (
   types: any[],
-  options?: { schemaDefinition?: boolean; all?: boolean } & Partial<Config>
+  options?: { schemaDefinition?: boolean; all?: boolean } & Partial<Config>,
 ) => {
   const schemaDefinition =
     options && typeof options.schemaDefinition === 'boolean'
@@ -381,7 +381,7 @@ export const makeMergedSchema = ({
       ...subscriptions.map((subscription) => subscription.schema), // pick out schemas from subscriptions
       ...sdlSchemas, // pick out the schemas from sdls
     ],
-    { all: true }
+    { all: true },
   )
 
   const { typeDefs: schemaOptionsTypeDefs = [], ...otherSchemaOptions } =

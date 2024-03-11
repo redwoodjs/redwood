@@ -25,7 +25,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   if (!viteConfigPath) {
     throw new Error(
       'Vite config not found. You need to setup your project with Vite ' +
-        'using `yarn rw setup vite`'
+        'using `yarn rw setup vite`',
     )
   }
 
@@ -33,7 +33,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     throw new Error(
       'Vite entry points not found. Please check that your project has an ' +
         'entry.client.{jsx,tsx} and entry.server.{jsx,tsx} file in the ' +
-        'web/src directory.'
+        'web/src directory.',
     )
   }
 

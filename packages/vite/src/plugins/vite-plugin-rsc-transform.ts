@@ -6,7 +6,7 @@ import type { Plugin } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 export function rscTransformPlugin(
-  clientEntryFiles: Record<string, string>
+  clientEntryFiles: Record<string, string>,
 ): Plugin {
   return {
     name: 'rsc-transform-plugin',
@@ -63,7 +63,7 @@ export function rscTransformPlugin(
 
       if (useClient && useServer) {
         throw new Error(
-          'Cannot have both "use client" and "use server" directives in the same file.'
+          'Cannot have both "use client" and "use server" directives in the same file.',
         )
       }
 
@@ -74,7 +74,7 @@ export function rscTransformPlugin(
           code,
           body,
           id,
-          clientEntryFiles
+          clientEntryFiles,
         )
       } else {
         transformedCode = transformServerModule(code, body, id)
@@ -246,7 +246,7 @@ function addExportNames(names: Array<string>, node: any) {
 async function parseExportNamesIntoNames(
   code: string,
   body: any,
-  names: Array<string>
+  names: Array<string>,
 ): Promise<void> {
   for (let i = 0; i < body.length; i++) {
     const node = body[i]
@@ -308,7 +308,7 @@ async function transformClientModule(
   code: string,
   body: any,
   url: string,
-  clientEntryFiles: Record<string, string>
+  clientEntryFiles: Record<string, string>,
 ): Promise<string> {
   const names: Array<string> = []
 
@@ -316,19 +316,15 @@ async function transformClientModule(
   await parseExportNamesIntoNames(code, body, names)
   console.log('transformClientModule names', names)
 
+  // entryRecord will be undefined for dev, because clientEntryFiles will just
+  // be an empty object. See rscWorker.ts, where we do rscTransformPlugin({})
   const entryRecord = Object.entries(clientEntryFiles).find(
-    ([_key, value]) => value === url
+    ([_key, value]) => value === url,
   )
 
-  if (!entryRecord || !entryRecord[0]) {
-    throw new Error('Entry not found for ' + url)
-  }
-
-  const loadId = path.join(
-    getPaths().web.distRsc,
-    'assets',
-    `${entryRecord[0]}.js`
-  )
+  const loadId = entryRecord
+    ? path.join(getPaths().web.distRsc, 'assets', `${entryRecord[0]}.mjs`)
+    : url
 
   let newSrc =
     "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"
@@ -346,7 +342,7 @@ async function transformClientModule(
             url +
             " from the server but it's on the client. It's not possible to " +
             'invoke a client function from the server, it can only be ' +
-            'rendered as a Component or passed to props of a Client Component.'
+            'rendered as a Component or passed to props of a Client Component.',
         ) +
         ');'
     } else {
@@ -361,7 +357,7 @@ async function transformClientModule(
             name +
             ' is on the client. ' +
             "It's not possible to invoke a client function from the server, it can " +
-            'only be rendered as a Component or passed to props of a Client Component.'
+            'only be rendered as a Component or passed to props of a Client Component.',
         ) +
         ');'
     }

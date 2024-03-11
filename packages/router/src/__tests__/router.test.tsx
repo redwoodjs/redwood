@@ -11,8 +11,8 @@ jest.mock('../util', () => {
       LazyComponent: lazy(
         () =>
           new Promise((resolve) =>
-            setTimeout(() => resolve({ default: specOrPage }), mockDelay)
-          )
+            setTimeout(() => resolve({ default: specOrPage }), mockDelay),
+          ),
       ),
     }),
   }
@@ -71,7 +71,7 @@ type UnknownAuthContextInterface = AuthContextInterface<
 const routes = generatedRoutes as GeneratedRoutesMap
 
 function createDummyAuthContextValues(
-  partial: Partial<UnknownAuthContextInterface>
+  partial: Partial<UnknownAuthContextInterface>,
 ) {
   const authContextValues: UnknownAuthContextInterface = {
     loading: true,
@@ -114,7 +114,7 @@ const mockUseAuth =
       isAuthenticated: false,
       loading: false,
       hasRole: false,
-    }
+    },
   ) =>
   () => {
     const [authLoading, setAuthLoading] = useState(loading)
@@ -314,7 +314,7 @@ describe('slow imports', () => {
       await waitFor(() => screen.getByText('HomePagePlaceholder'))
       await waitFor(() => screen.getByText('Home Page'))
     },
-    timeoutForFlakeyAsyncTests
+    timeoutForFlakeyAsyncTests,
   )
 
   test(
@@ -348,7 +348,7 @@ describe('slow imports', () => {
       // ...and then the actual page
       await waitFor(() => screen.getByText('About Page'))
     },
-    timeoutForFlakeyAsyncTests
+    timeoutForFlakeyAsyncTests,
   )
 
   test(
@@ -359,7 +359,7 @@ describe('slow imports', () => {
       await waitFor(() => screen.getByText('RedirectPagePlaceholder'))
       await waitFor(() => screen.getByText('About Page'))
     },
-    timeoutForFlakeyAsyncTests
+    timeoutForFlakeyAsyncTests,
   )
 
   test(
@@ -372,7 +372,7 @@ describe('slow imports', () => {
       await waitFor(() => screen.getByText('ParamPagePlaceholder'))
       await waitFor(() => screen.getByText('param redirectedcue'))
     },
-    timeoutForFlakeyAsyncTests
+    timeoutForFlakeyAsyncTests,
   )
 
   test(
@@ -382,14 +382,14 @@ describe('slow imports', () => {
       const screen = render(<TestRouter />)
       await waitFor(() => {
         expect(
-          screen.queryByText('PrivatePagePlaceholder')
+          screen.queryByText('PrivatePagePlaceholder'),
         ).not.toBeInTheDocument()
         expect(screen.queryByText('Private Page')).not.toBeInTheDocument()
         expect(screen.queryByText('LoginPagePlaceholder')).toBeInTheDocument()
       })
       await waitFor(() => screen.getByText('Login Page'))
     },
-    timeoutForFlakeyAsyncTests
+    timeoutForFlakeyAsyncTests,
   )
 
   test(
@@ -404,7 +404,7 @@ describe('slow imports', () => {
         expect(screen.queryByText('Login Page')).not.toBeInTheDocument()
       })
     },
-    timeoutForFlakeyAsyncTests
+    timeoutForFlakeyAsyncTests,
   )
 
   test(
@@ -415,14 +415,14 @@ describe('slow imports', () => {
 
       await waitFor(() => {
         expect(
-          screen.queryByText('PrivatePagePlaceholder')
+          screen.queryByText('PrivatePagePlaceholder'),
         ).not.toBeInTheDocument()
         expect(screen.queryByText('Private Page')).not.toBeInTheDocument()
         expect(screen.queryByText('LoginPagePlaceholder')).toBeInTheDocument()
       })
       await waitFor(() => screen.getByText('Login Page'))
     },
-    timeoutForFlakeyAsyncTests
+    timeoutForFlakeyAsyncTests,
   )
 
   test(
@@ -433,12 +433,12 @@ describe('slow imports', () => {
 
       await waitFor(() => {
         expect(
-          screen.queryByText('PrivatePagePlaceholder')
+          screen.queryByText('PrivatePagePlaceholder'),
         ).not.toBeInTheDocument()
         expect(screen.queryByText('Private Page')).toBeInTheDocument()
       })
     },
-    timeoutForFlakeyAsyncTests
+    timeoutForFlakeyAsyncTests,
   )
 
   test(
@@ -461,7 +461,7 @@ describe('slow imports', () => {
       // ...followed by the actual page
       await waitFor(() => screen.getByText('About Page'))
     },
-    timeoutForFlakeyAsyncTests
+    timeoutForFlakeyAsyncTests,
   )
 
   test(
@@ -503,7 +503,7 @@ describe('slow imports', () => {
       // ...followed by the actual page
       await waitFor(() => screen.getByText('About Page'))
     },
-    timeoutForFlakeyAsyncTests
+    timeoutForFlakeyAsyncTests,
   )
 
   test(
@@ -547,7 +547,7 @@ describe('slow imports', () => {
       await waitFor(() => screen.getByText('done loading in page'))
       await waitFor(() => screen.getByText('done loading in layout'))
     },
-    timeoutForFlakeyAsyncTests
+    timeoutForFlakeyAsyncTests,
   )
 })
 
@@ -651,14 +651,14 @@ describe('test params escaping', () => {
   test('Params with unreserved characters work in path and query', async () => {
     const screen = getScreen()
     act(() =>
-      navigate(routes.params({ value: 'example.com', q: 'example.com' }))
+      navigate(routes.params({ value: 'example.com', q: 'example.com' })),
     )
     await waitFor(() => {
       expect(
-        screen.queryByText('param example.comexample.com')
+        screen.queryByText('param example.comexample.com'),
       ).toBeInTheDocument()
       expect(
-        screen.queryByText('hookparams example.com?example.com')
+        screen.queryByText('hookparams example.com?example.com'),
       ).toBeInTheDocument()
     })
   })
@@ -666,15 +666,15 @@ describe('test params escaping', () => {
   test('Params with reserved characters work in path and query', async () => {
     const screen = getScreen()
     act(() =>
-      navigate(routes.params({ value: 'example!com', q: 'example!com' }))
+      navigate(routes.params({ value: 'example!com', q: 'example!com' })),
     )
 
     await waitFor(() => {
       expect(
-        screen.queryByText('param example!comexample!com')
+        screen.queryByText('param example!comexample!com'),
       ).toBeInTheDocument()
       expect(
-        screen.queryByText('hookparams example!com?example!com')
+        screen.queryByText('hookparams example!com?example!com'),
       ).toBeInTheDocument()
     })
   })
@@ -682,15 +682,15 @@ describe('test params escaping', () => {
   test('Params with unsafe characters work in query, are escaped in path', async () => {
     const screen = getScreen()
     act(() =>
-      navigate(routes.params({ value: 'example com', q: 'example com' }))
+      navigate(routes.params({ value: 'example com', q: 'example com' })),
     )
 
     await waitFor(() => {
       expect(
-        screen.queryByText('param example%20comexample com')
+        screen.queryByText('param example%20comexample com'),
       ).toBeInTheDocument()
       expect(
-        screen.queryByText('hookparams example%20com?example com')
+        screen.queryByText('hookparams example%20com?example com'),
       ).toBeInTheDocument()
     })
   })
@@ -702,7 +702,7 @@ describe('test params escaping', () => {
     await waitFor(() => {
       expect(screen.queryByText('param exampleexample/com')).toBeInTheDocument()
       expect(
-        screen.queryByText('hookparams example?example/com')
+        screen.queryByText('hookparams example?example/com'),
       ).toBeInTheDocument()
     })
   })
@@ -710,7 +710,7 @@ describe('test params escaping', () => {
   test('Character / is not captured as part of a param in path', async () => {
     const screen = getScreen()
     act(() =>
-      navigate(routes.params({ value: 'example/com', q: 'example/com' }))
+      navigate(routes.params({ value: 'example/com', q: 'example/com' })),
     )
 
     await waitFor(() => screen.getByText('404'))
@@ -814,7 +814,7 @@ test('unauthenticated user is redirected including search params', async () => {
     expect(screen.queryByText(/Private Page/i)).not.toBeInTheDocument()
     expect(window.location.pathname).toBe('/login')
     expect(window.location.search).toBe(
-      `?redirectTo=/private${encodeURIComponent('?bazinga=yeah')}`
+      `?redirectTo=/private${encodeURIComponent('?bazinga=yeah')}`,
     )
     screen.getByText(/Login Page/i)
   })
@@ -1590,7 +1590,7 @@ describe('Unauthorized redirect error messages', () => {
 
     act(() => navigate('/private'))
     expect(() => render(<TestRouter authenticated={false} />)).toThrow(
-      'We could not find a route named does-not-exist'
+      'We could not find a route named does-not-exist',
     )
   })
 
@@ -1608,7 +1608,7 @@ describe('Unauthorized redirect error messages', () => {
     act(() => navigate('/private'))
     expect(() => render(<TestRouter authenticated={false} />)).toThrow(
       'Redirecting to route "params" would require route parameters, which ' +
-        'currently is not supported. Please choose a different route'
+        'currently is not supported. Please choose a different route',
     )
   })
 })
@@ -1671,7 +1671,7 @@ describe('Multiple nested private sets', () => {
           isAuthenticated: true,
           hasRole: false,
         })}
-      />
+      />,
     )
 
     act(() => navigate('/employee'))
@@ -1689,7 +1689,7 @@ describe('Multiple nested private sets', () => {
           isAuthenticated: false,
           hasRole: false,
         })}
-      />
+      />,
     )
 
     act(() => navigate('/employee'))
@@ -1709,7 +1709,7 @@ describe('Multiple nested private sets', () => {
             return role.includes('ADMIN')
           },
         })}
-      />
+      />,
     )
 
     act(() => navigate('/admin'))
@@ -1727,7 +1727,7 @@ describe('Multiple nested private sets', () => {
             return role.includes('ADMIN')
           },
         })}
-      />
+      />,
     )
 
     act(() => navigate('/admin'))

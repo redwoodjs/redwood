@@ -10,7 +10,7 @@ type useCacheType = {
   identify: (object: StoreObject | Reference) => { id: string | undefined }
   modify: (
     object: StoreObject | Reference,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ) => boolean
   resetStore: () => Promise<ApolloQueryResult<any>[] | null>
   clearStore: () => Promise<ApolloQueryResult<any>[] | null>
@@ -42,7 +42,7 @@ export const useCache = (): useCacheType => {
    * @see https://www.apollographql.com/docs/react/caching/cache-interaction#obtaining-an-objects-cache-id
    */
   const identify = (
-    object: StoreObject | Reference
+    object: StoreObject | Reference,
   ): { id: string | undefined } => {
     return { id: cache.identify(object) }
   }
@@ -57,7 +57,7 @@ export const useCache = (): useCacheType => {
    */
   const modify = (
     object: StoreObject | Reference,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): boolean => {
     return cache.modify({ ...identify(object), fields })
   }
