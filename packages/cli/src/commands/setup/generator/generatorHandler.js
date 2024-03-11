@@ -38,12 +38,12 @@ const tasks = ({ name, force }) => {
         task: (ctx, task) => {
           task.title = `  Wrote templates to ${destination.replace(
             getPaths().base,
-            ''
+            '',
           )}`
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false }, errorOnExist: true }
+    { rendererOptions: { collapseSubtasks: false }, errorOnExist: true },
   )
 }
 

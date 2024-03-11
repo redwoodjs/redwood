@@ -73,7 +73,7 @@ describe('createFastifyInstance', () => {
       {
         'redwood.toml': '',
       },
-      FIXTURE_PATH
+      FIXTURE_PATH,
     )
 
     await createFastifyInstance()
@@ -88,7 +88,7 @@ describe('createFastifyInstance', () => {
           'server.config.js': '',
         },
       },
-      FIXTURE_PATH
+      FIXTURE_PATH,
     )
 
     await createFastifyInstance()

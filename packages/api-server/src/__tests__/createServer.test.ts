@@ -139,7 +139,7 @@ describe('createServer', () => {
     const lastCallIndex = consoleLogSpy.mock.calls.length - 1
 
     expect(consoleLogSpy.mock.calls[lastCallIndex][0]).toMatch(
-      /Server listening at/
+      /Server listening at/,
     )
 
     // `console.warn` will be used if there's a `server.config.js` file.
@@ -250,19 +250,19 @@ describe('resolveOptions', () => {
     expect(
       resolveOptions({
         apiRootPath: 'v1',
-      }).apiRootPath
+      }).apiRootPath,
     ).toEqual(expected)
 
     expect(
       resolveOptions({
         apiRootPath: '/v1',
-      }).apiRootPath
+      }).apiRootPath,
     ).toEqual(expected)
 
     expect(
       resolveOptions({
         apiRootPath: 'v1/',
-      }).apiRootPath
+      }).apiRootPath,
     ).toEqual(expected)
   })
 
@@ -311,7 +311,7 @@ describe('resolveOptions', () => {
 
   it('parses `--apiPort`', () => {
     expect(
-      resolveOptions({ parseArgs: true }, ['--apiPort', '8930']).apiPort
+      resolveOptions({ parseArgs: true }, ['--apiPort', '8930']).apiPort,
     ).toEqual(8930)
   })
 
@@ -319,13 +319,13 @@ describe('resolveOptions', () => {
     expect(() => {
       resolveOptions({ parseArgs: true }, ['--apiPort', 'eight-nine-ten'])
     }).toThrowErrorMatchingInlineSnapshot(
-      `[Error: \`apiPort\` must be an integer]`
+      `[Error: \`apiPort\` must be an integer]`,
     )
   })
 
   it('parses `--apiRootPath`', () => {
     expect(
-      resolveOptions({ parseArgs: true }, ['--apiRootPath', 'foo']).apiRootPath
+      resolveOptions({ parseArgs: true }, ['--apiRootPath', 'foo']).apiRootPath,
     ).toEqual('/foo/')
   })
 
@@ -334,13 +334,13 @@ describe('resolveOptions', () => {
       resolveOptions({ parseArgs: true, apiRootPath: 'foo' }, [
         '--apiRootPath',
         'bar',
-      ]).apiRootPath
+      ]).apiRootPath,
     ).toEqual('/bar/')
   })
 
   it('parses `--apiHost`', () => {
     expect(
-      resolveOptions({ parseArgs: true }, ['--apiHost', '127.0.0.1']).apiHost
+      resolveOptions({ parseArgs: true }, ['--apiHost', '127.0.0.1']).apiHost,
     ).toEqual('127.0.0.1')
   })
 })

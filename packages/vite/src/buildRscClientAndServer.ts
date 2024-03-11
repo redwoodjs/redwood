@@ -16,7 +16,7 @@ export const buildRscClientAndServer = async () => {
   const serverBuildOutput = await rscBuildForServer(
     clientEntryFiles,
     serverEntryFiles,
-    {}
+    {},
   )
 
   // Copy CSS assets from server to client
@@ -31,7 +31,7 @@ export const buildRscClientAndServer = async () => {
   await rscBuildClientEntriesMappings(
     clientBuildOutput,
     serverBuildOutput,
-    clientEntryFiles
+    clientEntryFiles,
   )
 
   // Make RW specific env vars, like RWJS_ENV, available to server components

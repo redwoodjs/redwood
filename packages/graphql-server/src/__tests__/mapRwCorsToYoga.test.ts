@@ -68,7 +68,7 @@ describe('mapRwCorsOptionsToYoga', () => {
         allowedHeaders: ['Auth-Provider', 'X-Kittens', 'Authorization'],
         methods: ['DELETE'],
       },
-      'https://myapiside.redwood.com' // <-- this is the Request.headers.origin
+      'https://myapiside.redwood.com', // <-- this is the Request.headers.origin
     )
 
     expect(output).toEqual({
@@ -87,7 +87,7 @@ describe('mapRwCorsOptionsToYoga', () => {
         allowedHeaders: ['Auth-Provider', 'X-Kittens', 'Authorization'],
         methods: ['DELETE'],
       },
-      undefined
+      undefined,
     )
 
     expect(output).toEqual({

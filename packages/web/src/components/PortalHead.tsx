@@ -6,7 +6,7 @@ import { useServerInsertedHTML } from './ServerInject'
 
 function addDataAttributeMarker(
   children: React.ReactNode,
-  marker = 'data-rwjs-head'
+  marker = 'data-rwjs-head',
 ) {
   return React.Children.toArray(children).map((child, i) => {
     return React.cloneElement(child as React.ReactElement, {
@@ -34,7 +34,7 @@ const PortalHead: React.FC<React.PropsWithChildren> = ({ children }) => {
   // Workaround: don't change children, render a new portal head: x ? <PH>aaa</PH> : <PH>bbb</PH>
   // we may want to look at using a callback ref: https://shrtm.nu/gMx
   const shouldPortal = React.useRef(
-    isServerRendering ? false : document.readyState === 'complete'
+    isServerRendering ? false : document.readyState === 'complete',
   )
 
   if (isServerRendering) {

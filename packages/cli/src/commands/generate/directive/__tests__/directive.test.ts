@@ -18,10 +18,10 @@ test('creates a JavaScript validator directive', async () => {
   })
 
   const expectedOutputPath = path.normalize(
-    '/path/to/project/api/src/directives/requireAdmin/requireAdmin.js'
+    '/path/to/project/api/src/directives/requireAdmin/requireAdmin.js',
   )
   const expectedTestOutputPath = path.normalize(
-    '/path/to/project/api/src/directives/requireAdmin/requireAdmin.test.js'
+    '/path/to/project/api/src/directives/requireAdmin/requireAdmin.test.js',
   )
 
   expect(Object.keys(output)).toContainEqual(expectedOutputPath)
@@ -39,10 +39,10 @@ test('creates a TypeScript transformer directive', async () => {
   })
 
   const expectedOutputPath = path.normalize(
-    '/path/to/project/api/src/directives/bazingaFooBar/bazingaFooBar.ts'
+    '/path/to/project/api/src/directives/bazingaFooBar/bazingaFooBar.ts',
   )
   const expectedTestOutputPath = path.normalize(
-    '/path/to/project/api/src/directives/bazingaFooBar/bazingaFooBar.test.ts'
+    '/path/to/project/api/src/directives/bazingaFooBar/bazingaFooBar.test.ts',
   )
 
   expect(Object.keys(output)).toContainEqual(expectedOutputPath)

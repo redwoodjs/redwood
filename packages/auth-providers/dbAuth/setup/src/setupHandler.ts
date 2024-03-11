@@ -15,7 +15,7 @@ import {
 } from './webAuthn.setupData'
 
 const { version } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
+  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'),
 )
 
 export async function handler({ webauthn, force: forceArg }: Args) {
@@ -77,12 +77,12 @@ export const createAuthDecoderFunction = {
     const newContent = content
       .replace(
         'import { getCurrentUser } from',
-        'import { cookieName, getCurrentUser } from'
+        'import { cookieName, getCurrentUser } from',
       )
       .replace(
         'export const handler = createGraphQLHandler({',
         'const authDecoder = createAuthDecoder(cookieName)\n\n' +
-          'export const handler = createGraphQLHandler({'
+          'export const handler = createGraphQLHandler({',
       )
 
     if (!newContent.includes('import { cookieName')) {

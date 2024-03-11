@@ -10,7 +10,7 @@ import type { PluginOptions as RoutesAutoLoaderOptions } from '../babel-plugin-r
 
 const transform = (
   filename: string,
-  pluginOptions?: RoutesAutoLoaderOptions
+  pluginOptions?: RoutesAutoLoaderOptions,
 ) => {
   const code = fs.readFileSync(filename, 'utf-8')
   return babel.transform(code, {
@@ -23,7 +23,7 @@ const transform = (
 describe('mulitiple files ending in Page.{js,jsx,ts,tsx}', () => {
   const FAILURE_FIXTURE_PATH = path.resolve(
     __dirname,
-    './__fixtures__/route-auto-loader/failure'
+    './__fixtures__/route-auto-loader/failure',
   )
 
   beforeAll(() => {
@@ -38,7 +38,7 @@ describe('mulitiple files ending in Page.{js,jsx,ts,tsx}', () => {
     expect(() => {
       transform(getPaths().web.routes)
     }).toThrowError(
-      "Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the follow page directories: 'HomePage"
+      "Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the follow page directories: 'HomePage",
     )
   })
 })
@@ -46,7 +46,7 @@ describe('mulitiple files ending in Page.{js,jsx,ts,tsx}', () => {
 describe('page auto loader correctly imports pages', () => {
   const FIXTURE_PATH = path.resolve(
     __dirname,
-    '../../../../../__fixtures__/example-todo-main/'
+    '../../../../../__fixtures__/example-todo-main/',
   )
 
   let result: babel.BabelFileResult | null
@@ -74,7 +74,7 @@ describe('page auto loader correctly imports pages', () => {
 
   test('RSC specific code should not be added', () => {
     expect(result?.code).not.toContain(
-      'import { renderFromRscServer } from "@redwoodjs/vite/client"'
+      'import { renderFromRscServer } from "@redwoodjs/vite/client"',
     )
   })
 })
@@ -82,7 +82,7 @@ describe('page auto loader correctly imports pages', () => {
 describe('page auto loader handles imports for RSC', () => {
   const FIXTURE_PATH = path.resolve(
     __dirname,
-    '../../../../../__fixtures__/example-todo-main/'
+    '../../../../../__fixtures__/example-todo-main/',
   )
 
   let result: babel.BabelFileResult | null
@@ -105,20 +105,20 @@ describe('page auto loader handles imports for RSC', () => {
 `)
 
     expect(codeOutput).toContain(
-      'import { renderFromRscServer } from "@redwoodjs/vite/client"'
+      'import { renderFromRscServer } from "@redwoodjs/vite/client"',
     )
 
     expect(codeOutput).toContain(
-      'const HomePage = renderFromRscServer("HomePage")'
+      'const HomePage = renderFromRscServer("HomePage")',
     )
 
     // Un-imported pages get added with renderFromRscServer
     // so it calls the RSC worker to get a flight response
     expect(codeOutput).toContain(
-      'const HomePage = renderFromRscServer("HomePage")'
+      'const HomePage = renderFromRscServer("HomePage")',
     )
     expect(codeOutput).toContain(
-      'const BarPage = renderFromRscServer("BarPage")'
+      'const BarPage = renderFromRscServer("BarPage")',
     )
   })
 

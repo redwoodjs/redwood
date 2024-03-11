@@ -71,7 +71,7 @@ export const apiSideFiles = async ({ basedir, webAuthn }: FilesArgs) => {
         const templateFilePath = path.join(
           apiBaseTemplatePath,
           dir,
-          f.templateFileName
+          f.templateFileName,
         )
         const outputFilePath = path.join(apiSrcPath, dir, f.outputFileName)
 
@@ -119,7 +119,7 @@ export const apiSideFiles = async ({ basedir, webAuthn }: FilesArgs) => {
  */
 export function generateUniqueFileNames(
   filesRecord: Record<string, string>,
-  provider: string
+  provider: string,
 ) {
   const newFilesRecord: Record<string, string> = {}
 

@@ -27,7 +27,7 @@ export const handler = async ({ force, skipExamples }) => {
           const templatePath = path.resolve(
             __dirname,
             'templates',
-            'mailer.ts.template'
+            'mailer.ts.template',
           )
           const templateContent = fs.readFileSync(templatePath, {
             encoding: 'utf8',
@@ -36,7 +36,7 @@ export const handler = async ({ force, skipExamples }) => {
 
           const mailerPath = path.join(
             getPaths().api.lib,
-            `mailer.${projectIsTypescript ? 'ts' : 'js'}`
+            `mailer.${projectIsTypescript ? 'ts' : 'js'}`,
           )
           const mailerContent = projectIsTypescript
             ? templateContent
@@ -63,7 +63,7 @@ export const handler = async ({ force, skipExamples }) => {
           const templatePath = path.resolve(
             __dirname,
             'templates',
-            're-example.tsx.template'
+            're-example.tsx.template',
           )
           const templateContent = fs.readFileSync(templatePath, {
             encoding: 'utf8',
@@ -73,7 +73,7 @@ export const handler = async ({ force, skipExamples }) => {
           const exampleTemplatePath = path.join(
             getPaths().api.mail,
             'Example',
-            `Example.${projectIsTypescript ? 'tsx' : 'jsx'}`
+            `Example.${projectIsTypescript ? 'tsx' : 'jsx'}`,
           )
           const exampleTemplateContent = projectIsTypescript
             ? templateContent
@@ -106,7 +106,7 @@ export const handler = async ({ force, skipExamples }) => {
     ],
     {
       rendererOptions: { collapseSubtasks: false },
-    }
+    },
   )
 
   try {

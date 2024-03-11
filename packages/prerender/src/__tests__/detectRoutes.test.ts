@@ -50,7 +50,7 @@ describe('Detecting routes', () => {
     expectPresence(output, { name: 'about', path: '/about' })
 
     expect(output).not.toContainEqual(
-      expect.objectContaining({ name: 'private', path: '/private' })
+      expect.objectContaining({ name: 'private', path: '/private' }),
     )
   })
 

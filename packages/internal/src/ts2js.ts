@@ -43,7 +43,7 @@ export const convertTsFilesToJs = async (cwd: string, files: string[]) => {
       fs.writeFileSync(
         path.join(cwd, f.replace('.tsx', '.jsx').replace('.ts', '.js')),
         code,
-        'utf8'
+        'utf8',
       )
       fs.unlinkSync(path.join(cwd, f))
     }
@@ -52,19 +52,19 @@ export const convertTsFilesToJs = async (cwd: string, files: string[]) => {
   if (fs.existsSync(path.join(cwd, 'api/tsconfig.json'))) {
     fs.renameSync(
       path.join(cwd, 'api/tsconfig.json'),
-      path.join(cwd, 'api/jsconfig.json')
+      path.join(cwd, 'api/jsconfig.json'),
     )
   }
   if (fs.existsSync(path.join(cwd, 'web/tsconfig.json'))) {
     fs.renameSync(
       path.join(cwd, 'web/tsconfig.json'),
-      path.join(cwd, 'web/jsconfig.json')
+      path.join(cwd, 'web/jsconfig.json'),
     )
   }
   if (fs.existsSync(path.join(cwd, 'scripts/tsconfig.json'))) {
     fs.renameSync(
       path.join(cwd, 'scripts/tsconfig.json'),
-      path.join(cwd, 'scripts/jsconfig.json')
+      path.join(cwd, 'scripts/jsconfig.json'),
     )
   }
 }
@@ -74,7 +74,7 @@ export const convertTsFilesToJs = async (cwd: string, files: string[]) => {
  */
 export const typeScriptSourceFiles = (
   cwd: string,
-  globPattern = '{api,web}/src/**/*.{ts,tsx}'
+  globPattern = '{api,web}/src/**/*.{ts,tsx}',
 ) => {
   console.log(globPattern)
   // TODO: When sides are expanded read the `api` and `web` string instead

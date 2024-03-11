@@ -39,7 +39,7 @@ export function getEnvVarDefinitions() {
         // Re-enable if possible
         // eslint-disable-next-line
         [`process.env.${envName}`, JSON.stringify(process.env[envName])],
-      ])
+      ]),
     ),
     ...Object.entries(process.env).reduce<Record<string, any>>(
       (acc, [key, value]) => {
@@ -50,7 +50,7 @@ export function getEnvVarDefinitions() {
 
         return acc
       },
-      {}
+      {},
     ),
   }
 }

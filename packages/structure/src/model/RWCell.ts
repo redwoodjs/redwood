@@ -72,7 +72,7 @@ export class RWCell extends RWComponent {
     if (!this.exportedSymbols.has('QUERY')) {
       yield err(
         this.uri,
-        'Every Cell MUST export a QUERY variable (GraphQL query string)'
+        'Every Cell MUST export a QUERY variable (GraphQL query string)',
       )
     }
 
@@ -104,7 +104,7 @@ export class RWCell extends RWComponent {
     if (!this.exportedSymbols.has('Success')) {
       yield err(
         this.uri,
-        'Every Cell MUST export a Success variable (React Component)'
+        'Every Cell MUST export a Success variable (React Component)',
       )
     }
   }

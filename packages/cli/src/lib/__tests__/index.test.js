@@ -65,7 +65,7 @@ test('generateTemplate returns a lodash-templated string', async () => {
     {
       name: 'amet',
       noun: 'world',
-    }
+    },
   )
 
   expect(output).toEqual(`Lorem ipsum dolar sit amet\nHello, world!\n`)
@@ -79,11 +79,11 @@ test('generateTemplate returns prettified JS code', async () => {
     {
       name: 'fox',
       foo: 'dog',
-    }
+    },
   )
 
   expect(output).toEqual(
-    `const line1 = 'The quick brown foxes jumps over the lazy dog.'\nconst line2 = 'Sphinx of black quartz, judge my vow.'\n`
+    `const line1 = 'The quick brown foxes jumps over the lazy dog.'\nconst line2 = 'Sphinx of black quartz, judge my vow.'\n`,
   )
 })
 

@@ -15,7 +15,7 @@ export interface MatchTransformSnapshotFunction {
 export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
   transformName,
   fixtureName,
-  parser
+  parser,
 ) => {
   const tempFilePath = tempy.file()
 
@@ -31,7 +31,7 @@ export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
   const maybeFixturePath = path.join(
     testPath,
     '../../__testfixtures__',
-    `${fixtureName}.input`
+    `${fixtureName}.input`,
   )
 
   for (const extension of ['ts', 'tsx', 'js', 'jsx']) {
@@ -44,12 +44,12 @@ export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
 
   if (!fixturePath) {
     throw new Error(
-      `Could not find fixture for ${fixtureName} in ${maybeFixturePath}`
+      `Could not find fixture for ${fixtureName} in ${maybeFixturePath}`,
     )
   }
 
   const transformPath = require.resolve(
-    path.join(testPath, '../../', `${transformName}.ts`)
+    path.join(testPath, '../../', `${transformName}.ts`),
   )
 
   // Step 1: Copy fixture to temp file
@@ -71,10 +71,10 @@ export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
 
   const expectedOutput = fs.readFileSync(
     fixturePath.replace('.input.', '.output.'),
-    'utf-8'
+    'utf-8',
   )
 
   expect(await formatCode(transformedContent)).toEqual(
-    await formatCode(expectedOutput)
+    await formatCode(expectedOutput),
   )
 }

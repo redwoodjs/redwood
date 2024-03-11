@@ -4,7 +4,7 @@ import type { CorsConfig } from '@redwoodjs/api'
 
 export const mapRwCorsOptionsToYoga = (
   rwCorsConfig?: CorsConfig,
-  requestOrigin?: string | null
+  requestOrigin?: string | null,
 ) => {
   const yogaCORSOptions: CORSOptions = {}
 

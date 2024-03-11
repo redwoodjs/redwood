@@ -65,9 +65,8 @@ export const files = async ({ name, typescript, ...options }) => {
 
   let operationName = options.query
   if (operationName) {
-    const userSpecifiedOperationNameIsUnique = await operationNameIsUnique(
-      operationName
-    )
+    const userSpecifiedOperationNameIsUnique =
+      await operationNameIsUnique(operationName)
     if (!userSpecifiedOperationNameIsUnique) {
       throw new Error(`Specified query name: "${operationName}" is not unique!`)
     }
@@ -182,11 +181,10 @@ export const { command, description, builder, handler } =
           title: `Generating types ...`,
           task: async (_ctx, task) => {
             const queryFieldName = nameVariants(
-              removeGeneratorName(cellName, 'cell')
+              removeGeneratorName(cellName, 'cell'),
             ).camelName
-            const projectHasSdl = await checkProjectForQueryField(
-              queryFieldName
-            )
+            const projectHasSdl =
+              await checkProjectForQueryField(queryFieldName)
 
             if (projectHasSdl) {
               const { errors } = await generateTypes()
@@ -201,7 +199,7 @@ export const { command, description, builder, handler } =
               addFunctionToRollback(generateTypes, true)
             } else {
               task.skip(
-                `Skipping type generation: no SDL defined for "${queryFieldName}". To generate types, run 'yarn rw g sdl ${queryFieldName}'.`
+                `Skipping type generation: no SDL defined for "${queryFieldName}". To generate types, run 'yarn rw g sdl ${queryFieldName}'.`,
               )
             }
           },

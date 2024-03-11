@@ -6,7 +6,7 @@ import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
 import { StatusError } from './lib/StatusError.js'
 
 const checkStatus = async (
-  responsePromise: Promise<Response>
+  responsePromise: Promise<Response>,
 ): Promise<Response> => {
   const response = await responsePromise
 
@@ -29,7 +29,7 @@ export function renderFromRscServer<Props>(rscId: string) {
   }
 
   type SetRerender = (
-    rerender: (next: [ReactElement, string]) => void
+    rerender: (next: [ReactElement, string]) => void,
   ) => () => void
 
   const fetchRSC = cache(
@@ -86,7 +86,7 @@ export function renderFromRscServer<Props>(rscId: string) {
 
       console.log(
         'fetchRSC before createFromFetch',
-        BASE_PATH + rscId + '/' + searchParams
+        BASE_PATH + rscId + '/' + searchParams,
       )
 
       const response =
@@ -100,7 +100,7 @@ export function renderFromRscServer<Props>(rscId: string) {
       console.log('fetchRSC after createFromFetch. data:', data)
 
       return [data, setRerender]
-    }
+    },
   )
 
   // Create temporary client component that wraps the ServerComponent returned

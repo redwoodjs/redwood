@@ -43,9 +43,9 @@ const itCreatesASingleWordServiceFile = (baseArgs) => {
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/services/users/users.${extension}`
+          `/path/to/project/api/src/services/users/users.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
@@ -60,9 +60,9 @@ const itCreatesASingleWordServiceTestFile = (baseArgs) => {
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/services/users/users.test.${extension}`
+          `/path/to/project/api/src/services/users/users.test.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
@@ -75,7 +75,7 @@ const itCreatesASingleWordServiceScenarioFile = (baseArgs) => {
     })
     const extension = extensionForBaseArgs(baseArgs)
     const filePath = path.normalize(
-      `/path/to/project/api/src/services/users/users.scenarios.${extension}`
+      `/path/to/project/api/src/services/users/users.scenarios.${extension}`,
     )
 
     expect(Object.keys(files)).toContain(filePath)
@@ -95,9 +95,9 @@ const itCreatesAMultiWordServiceFile = (baseArgs) => {
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`
+          `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
@@ -114,9 +114,9 @@ const itCreatesAMultiWordServiceTestFile = (baseArgs) => {
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`
+          `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
@@ -133,9 +133,9 @@ const itCreatesASingleWordServiceFileWithCRUDActions = (baseArgs) => {
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/services/posts/posts.${extension}`
+          `/path/to/project/api/src/services/posts/posts.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
 
     // TODO
@@ -152,7 +152,7 @@ const itCreatesASingleWordServiceTestFileWithCRUDActions = (baseArgs) => {
     })
     const extension = extensionForBaseArgs(baseArgs)
     const filePath = path.normalize(
-      `/path/to/project/api/src/services/posts/posts.test.${extension}`
+      `/path/to/project/api/src/services/posts/posts.test.${extension}`,
     )
 
     expect(Object.keys(files)).toContain(filePath)
@@ -168,7 +168,7 @@ const itCreatesAMultiWordServiceFileWithCRUDActions = (baseArgs) => {
     })
     const extension = extensionForBaseArgs(baseArgs)
     const filePath = path.normalize(
-      `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`
+      `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`,
     )
 
     expect(Object.keys(files)).toContain(filePath)
@@ -184,7 +184,7 @@ const itCreatesAMultiWordServiceTestFileWithCRUDActions = (baseArgs) => {
     })
     const extension = extensionForBaseArgs(baseArgs)
     const filePath = path.normalize(
-      `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`
+      `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`,
     )
 
     expect(Object.keys(files)).toContain(filePath)
@@ -192,7 +192,7 @@ const itCreatesAMultiWordServiceTestFileWithCRUDActions = (baseArgs) => {
 }
 
 const itCreatesAMultiWordServiceTestFileWithMultipleScalarTypes = (
-  baseArgs
+  baseArgs,
 ) => {
   test('creates a multi word service test file with multiple scalar types', async () => {
     const files = await service.files({
@@ -205,9 +205,9 @@ const itCreatesAMultiWordServiceTestFileWithMultipleScalarTypes = (
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/services/scalarTypes/scalarTypes.test.${extension}`
+          `/path/to/project/api/src/services/scalarTypes/scalarTypes.test.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
@@ -225,9 +225,9 @@ const itCreatesASingleWordServiceFileWithAHasManyRelation = (baseArgs) => {
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/services/users/users.${extension}`
+          `/path/to/project/api/src/services/users/users.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
@@ -245,9 +245,9 @@ const itCreatesASingleWordServiceFileWithABelongsToRelation = (baseArgs) => {
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/services/users/users.${extension}`
+          `/path/to/project/api/src/services/users/users.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
@@ -265,15 +265,15 @@ const itCreatesASingleWordServiceFileWithMultipleRelations = (baseArgs) => {
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/services/users/users.${extension}`
+          `/path/to/project/api/src/services/users/users.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
 
 const itCreatesAMultiWordServiceTestFileWithCRUDAndOnlyForeignKeyRequired = (
-  baseArgs
+  baseArgs,
 ) => {
   test('creates a multi word service test file with crud actions and only foreign as mandatory field', async () => {
     const files = await service.files({
@@ -286,9 +286,9 @@ const itCreatesAMultiWordServiceTestFileWithCRUDAndOnlyForeignKeyRequired = (
     expect(
       files[
         path.normalize(
-          `/path/to/project/api/src/services/transactions/transactions.test.${extension}`
+          `/path/to/project/api/src/services/transactions/transactions.test.${extension}`,
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 }
@@ -356,7 +356,7 @@ describe('parseSchema', () => {
     const { scalarFields } = await service.parseSchema('User')
 
     expect(
-      scalarFields.find((field) => field.name === 'email')
+      scalarFields.find((field) => field.name === 'email'),
     ).not.toBeUndefined()
   })
 
@@ -370,7 +370,7 @@ describe('parseSchema', () => {
     const { scalarFields } = await service.parseSchema('User')
 
     expect(
-      scalarFields.find((field) => field.name === 'isAdmin')
+      scalarFields.find((field) => field.name === 'isAdmin'),
     ).toBeUndefined()
   })
 
@@ -378,7 +378,7 @@ describe('parseSchema', () => {
     const { scalarFields } = await service.parseSchema('UserProfile')
 
     expect(
-      scalarFields.find((field) => field.name === 'userId')
+      scalarFields.find((field) => field.name === 'userId'),
     ).not.toBeUndefined()
   })
 
@@ -443,7 +443,7 @@ describe('fieldsToScenario', () => {
         { name: 'boolean', type: 'Boolean' },
       ],
       {},
-      []
+      [],
     )
 
     expect(output.email).toEqual('String')
@@ -469,7 +469,7 @@ describe('fieldsToScenario', () => {
         { name: 'userId', type: 'Integer' },
       ],
       { user: { foreignKey: 'userId', type: 'User' } },
-      ['userId']
+      ['userId'],
     )
 
     expect(Object.keys(output)).toEqual(['title', 'user'])
@@ -486,7 +486,7 @@ describe('fieldsToScenario', () => {
       ],
       // note that relationship name is "author" but datatype is "User"
       { author: { foreignKey: 'authorId', type: 'User' } },
-      ['userId']
+      ['userId'],
     )
 
     expect(Object.keys(output)).toEqual(['title', 'author'])

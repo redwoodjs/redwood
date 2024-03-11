@@ -65,21 +65,21 @@ export default function transform(file: FileInfo, api: API) {
                           usedProperty.value.type !== 'Identifier'
                         ) {
                           throw new Error(
-                            'Unable to process a parameter within the cell function'
+                            'Unable to process a parameter within the cell function',
                           )
                         }
                         const prop = j.property(
                           'init',
                           j.identifier(usedProperty.key.name),
-                          j.identifier(usedProperty.value.name)
+                          j.identifier(usedProperty.value.name),
                         )
                         // Use an alias if one was previously defined by the user
                         prop.shorthand = usedProperty.shorthand
                         return prop
-                      }
-                    )
-                  )
-                )
+                      },
+                    ),
+                  ),
+                ),
               )
               // Remove the existing function parameters corresponding to previously spread variables
               firstParameter.properties = firstParameter.properties.filter(
@@ -88,18 +88,18 @@ export default function transform(file: FileInfo, api: API) {
                     throw new Error('Unable to process a parameter')
                   }
                   return !nonSpreadVariables.includes(property.key.name)
-                }
+                },
               )
             }
           } else {
             console.warn(
-              `The first parameter to '${variableName}' was not an object and we could not process this.`
+              `The first parameter to '${variableName}' was not an object and we could not process this.`,
             )
           }
         }
       } else {
         console.warn(
-          `'${variableName}' is not a function and we could not process this.`
+          `'${variableName}' is not a function and we could not process this.`,
         )
       }
     } else {

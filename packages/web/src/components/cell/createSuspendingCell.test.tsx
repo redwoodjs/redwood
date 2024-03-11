@@ -50,7 +50,7 @@ describe('createSuspendingCell', () => {
         useReadQuery={mockedQueryHook as any}
       >
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     screen.getByText(/^Great success!$/)
   })
@@ -79,7 +79,7 @@ describe('createSuspendingCell', () => {
         useBackgroundQuery={mockedUseBgQuery}
       >
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
 
     screen.getByText(/^What's the meaning of life\?$/)
@@ -134,7 +134,7 @@ describe('createSuspendingCell', () => {
         useBackgroundQuery={mockedUseBgQuery}
       >
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
 
     screen.getByText(/bazinga/)
