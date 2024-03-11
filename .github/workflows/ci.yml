@@ -569,7 +569,10 @@ jobs:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-project.outputs.rsc-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
+      # TODO: This workflow times out on Windows. It looks as if the dev server starts up ok,
+      # but we can't tell what the browser is rendering.
       - name: 🐘 Run RSC dev smoke tests
+        if: matrix.os == 'ubuntu-latest'
         working-directory: tasks/smoke-tests/rsc-dev
         run: npx playwright test
         env:
