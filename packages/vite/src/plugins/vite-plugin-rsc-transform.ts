@@ -327,7 +327,7 @@ async function transformClientModule(
   const loadId = path.join(
     getPaths().web.distRsc,
     'assets',
-    `${entryRecord[0]}.js`
+    `${entryRecord[0]}.mjs`
   )
 
   let newSrc =
