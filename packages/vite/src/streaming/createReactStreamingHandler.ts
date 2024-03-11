@@ -1,6 +1,7 @@
 import path from 'path'
 
 import { Response } from '@whatwg-node/fetch'
+import fs from 'fs-extra'
 import isbot from 'isbot'
 import type { ViteDevServer } from 'vite'
 
@@ -41,9 +42,18 @@ export const createReactStreamingHandler = async (
   let fallbackDocumentImport: any
 
   if (isProd) {
-    entryServerImport = await import(makeFilePath(rwPaths.web.distEntryServer))
+    const files = await fs.readdir(rwPaths.web.dist, { recursive: true })
+
+    console.log({
+      cwd: process.cwd(),
+      distEntryServer: rwPaths.web.distEntryServer,
+      makeFilePathDistEntryServer: makeFilePath(rwPaths.web.distEntryServer),
+      files,
+    })
+
+    entryServerImport = await import(`file://${rwPaths.web.distEntryServer}`)
     fallbackDocumentImport = await import(
-      makeFilePath(rwPaths.web.distDocumentServer)
+      `file://${rwPaths.web.distDocumentServer}`
     )
   }
 
