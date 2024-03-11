@@ -49,7 +49,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         name: 'hello',
         page: FakePage,
         path: '/hello',
-      })
+      }),
     )
 
     expect(pathRouteMap['/world']).toEqual(
@@ -57,7 +57,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         name: 'world',
         page: FakePage,
         path: '/world',
-      })
+      }),
     )
 
     // @NOTE the path here is the path DEFINITION, not that actual path
@@ -66,7 +66,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         name: 'recipeById',
         page: FakePage,
         path: '/recipe/{id}',
-      })
+      }),
     )
 
     expect(hasHomeRoute).toBe(true)
@@ -107,7 +107,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       CheckRoutes.props.children,
       {
         currentPathName: '/',
-      }
+      },
     )
 
     expect(Object.keys(namedRoutesMap).length).toEqual(2)
@@ -175,7 +175,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             },
           },
         ],
-      })
+      }),
     )
 
     expect(pathRouteMap['/b']).toEqual(
@@ -204,7 +204,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             },
           },
         ],
-      })
+      }),
     )
 
     expect(pathRouteMap['/c']).toEqual(
@@ -233,7 +233,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             },
           },
         ],
-      })
+      }),
     )
   })
 
@@ -297,7 +297,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             },
           },
         ],
-      })
+      }),
     )
 
     expect(pathRouteMap['/b']).toEqual(
@@ -326,7 +326,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             },
           },
         ],
-      })
+      }),
     )
 
     expect(pathRouteMap['/c']).toEqual(
@@ -355,7 +355,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
             },
           },
         ],
-      })
+      }),
     )
   })
 
@@ -509,7 +509,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       RedirectedRoutes.props.children,
       {
         currentPathName: '/simple',
-      }
+      },
     )
 
     expect(pathRouteMap['/simple'].redirect).toBe('/rdSimple')
@@ -566,7 +566,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       RedirectedRoutes.props.children,
       {
         currentPathName: '/does-not-exist',
-      }
+      },
     )
 
     // Level 1: wrapped with private

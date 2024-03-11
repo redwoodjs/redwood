@@ -61,7 +61,7 @@ export function createServerInjectionTransform({
     const serverHtmlOutput = renderToString(
       React.createElement(ServerInjectedHtml, {
         injectionState,
-      })
+      }),
     )
 
     const injectedBytes = encodeText(serverHtmlOutput)

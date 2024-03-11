@@ -47,7 +47,7 @@ export const registerFwGlobals = () => {
         // NOTE: rwConfig.web.host defaults to "localhost", which is
         // When running in production, the api server does not listen on localhost
         const proxiedApiUrl = swapLocalhostFor127(
-          'http://' + webHost + ':' + webPort + apiPath
+          'http://' + webHost + ':' + webPort + apiPath,
         )
 
         if (
@@ -64,7 +64,7 @@ export const registerFwGlobals = () => {
           console.warn()
 
           console.warn(
-            'You can override this for SSR by setting RWJS_EXP_SSR_GRAPHQL_ENDPOINT in your environment vars'
+            'You can override this for SSR by setting RWJS_EXP_SSR_GRAPHQL_ENDPOINT in your environment vars',
           )
           console.warn()
 
@@ -74,7 +74,8 @@ export const registerFwGlobals = () => {
         }
 
         return swapLocalhostFor127(
-          (process.env.RWJS_EXP_SSR_GRAPHQL_ENDPOINT as string) ?? proxiedApiUrl
+          (process.env.RWJS_EXP_SSR_GRAPHQL_ENDPOINT as string) ??
+            proxiedApiUrl,
         )
       }
     })(),

@@ -44,7 +44,7 @@ describe('clerkAuthDecoder', () => {
     process.env.CLERK_JWT_KEY = 'jwt-key'
 
     await expect(
-      clerkAuthDecoder('invalid-token', 'clerk', req)
+      clerkAuthDecoder('invalid-token', 'clerk', req),
     ).rejects.toThrow()
   })
 })

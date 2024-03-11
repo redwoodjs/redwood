@@ -28,7 +28,7 @@ export class RWRoute extends BaseNode {
      * the <Route> tag
      */
     public jsxNode: tsm.JsxSelfClosingElement,
-    public parent: RWRouter
+    public parent: RWRouter,
   ) {
     super()
   }
@@ -98,7 +98,7 @@ export class RWRoute extends BaseNode {
       return undefined
     }
     return this.parent.parent.pages.find(
-      (p) => p.const_ === this.page_identifier_str
+      (p) => p.const_ === this.page_identifier_str,
     )
   }
   /**
@@ -183,7 +183,7 @@ export class RWRoute extends BaseNode {
       yield err(
         this.path_literal_node,
         this.path_errorMessage,
-        RWError.INVALID_ROUTE_PATH_SYNTAX
+        RWError.INVALID_ROUTE_PATH_SYNTAX,
       )
     }
     if (this.hasPathCollision) {
@@ -192,19 +192,19 @@ export class RWRoute extends BaseNode {
     if (this.isPrivate && this.isNotFound) {
       yield err(
         this.jsxNode!,
-        "The 'Not Found' page cannot be within a <PrivateSet> or a <Private> tag"
+        "The 'Not Found' page cannot be within a <PrivateSet> or a <Private> tag",
       )
     }
     if (this.isNotFound && this.path) {
       yield err(
         this.path_literal_node!,
-        "The 'Not Found' page cannot have a path"
+        "The 'Not Found' page cannot have a path",
       )
     }
     if (this.hasPreRenderInfo && !this.hasParameters) {
       yield err(
         this.jsxNode!,
-        `Only routes with parameters can have associated prerender information`
+        `Only routes with parameters can have associated prerender information`,
       )
     }
   }

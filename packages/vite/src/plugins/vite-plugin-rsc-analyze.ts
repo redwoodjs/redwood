@@ -5,7 +5,7 @@ import type { Plugin } from 'vite'
 
 export function rscAnalyzePlugin(
   clientEntryCallback: (id: string) => void,
-  serverEntryCallback: (id: string) => void
+  serverEntryCallback: (id: string) => void,
 ): Plugin {
   return {
     name: 'rsc-analyze-plugin',

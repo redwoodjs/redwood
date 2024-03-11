@@ -16,15 +16,15 @@ export interface UI {
   info(msg: string): Promise<void>
   prompt(
     msg: string,
-    opts?: { value?: string; valueSelection?: any; validateInput?: any }
+    opts?: { value?: string; valueSelection?: any; validateInput?: any },
   ): Promise<string | undefined>
   pickOne(
     items: (string | UIPickItem)[],
-    msg: string
+    msg: string,
   ): Promise<string | undefined>
   pickMany(
     items: (string | UIPickItem)[],
-    msg: string
+    msg: string,
   ): Promise<string[] | undefined>
   //confirm(msg: string): Promise<boolean | undefined>;
 }
@@ -41,7 +41,7 @@ export class VSCodeWindowUI implements UI {
 
   async pickOne(
     items: (string | UIPickItem)[],
-    msg: string
+    msg: string,
   ): Promise<string | undefined> {
     const items2 = items.map(UIPickItem_normalize)
     const res = await this.w.showQuickPick(items2, { placeHolder: msg })
@@ -49,7 +49,7 @@ export class VSCodeWindowUI implements UI {
   }
   async pickMany(
     items: (string | UIPickItem)[],
-    msg: string
+    msg: string,
   ): Promise<string[] | undefined> {
     const items2 = items.map(UIPickItem_normalize)
     const res = await this.w.showQuickPick(items2, {
@@ -74,7 +74,7 @@ export class CLIUI implements UI {
   }
   async pickOne(
     items: (string | UIPickItem)[],
-    msg: string
+    msg: string,
   ): Promise<string | undefined> {
     const items2 = items.map(UIPickItem_normalize)
     const res = await enquirer.prompt({
@@ -87,7 +87,7 @@ export class CLIUI implements UI {
   }
   async pickMany(
     items: (string | UIPickItem)[],
-    msg: string
+    msg: string,
   ): Promise<string[] | undefined> {
     const items2 = items.map(UIPickItem_normalize)
     const res = await enquirer.prompt({

@@ -51,9 +51,8 @@ export const generateClientPreset = async () => {
 
     clientPresetFiles = generatedFiles.map((f: GeneratedFile) => f.filename)
 
-    const trustedDocumentsStoreFile = await trustedDocumentsStore(
-      generatedFiles
-    )
+    const trustedDocumentsStoreFile =
+      await trustedDocumentsStore(generatedFiles)
     replaceGqlTagWithTrustedDocumentGraphql(generatedFiles)
 
     return {

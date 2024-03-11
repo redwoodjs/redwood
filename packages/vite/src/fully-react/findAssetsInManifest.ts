@@ -9,7 +9,7 @@ import type { Manifest as BuildManifest } from 'vite'
  */
 export const findAssetsInManifest = (
   manifest: BuildManifest,
-  id: string
+  id: string,
 ): Array<string> => {
   // TODO (RSC) Can we take assetMap as a parameter to reuse it across calls?
   // It's what the original implementation of this function does. But no
@@ -34,7 +34,7 @@ export const findAssetsInManifest = (
     ]
     const imports = chunk.imports?.flatMap(traverse) || []
     const all = [...assets, ...imports].filter(
-      Boolean as unknown as (a: string | undefined) => a is string
+      Boolean as unknown as (a: string | undefined) => a is string,
     )
 
     all.push(chunk.file)

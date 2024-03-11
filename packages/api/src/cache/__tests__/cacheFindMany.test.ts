@@ -42,7 +42,7 @@ describe('cacheFindMany', () => {
 
     expect(spy).toHaveBeenCalled()
     expect(client.storage[`test-1-${now.getTime()}`].value).toEqual(
-      JSON.stringify([user])
+      JSON.stringify([user]),
     )
   })
 
@@ -76,11 +76,11 @@ describe('cacheFindMany', () => {
     expect(spy).toHaveBeenCalled()
     // the `now` cache still exists
     expect(
-      JSON.parse(client.storage[`test-1-${now.getTime()}`].value)[0].id
+      JSON.parse(client.storage[`test-1-${now.getTime()}`].value)[0].id,
     ).toEqual(1)
     // the `future` cache should have been created
     expect(client.storage[`test-1-${future.getTime()}`].value).toEqual(
-      JSON.stringify([user])
+      JSON.stringify([user]),
     )
   })
 

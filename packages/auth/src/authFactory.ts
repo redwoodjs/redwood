@@ -17,7 +17,7 @@ export function createAuthentication<
   TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
-  TClient
+  TClient,
 >(
   authImplementation: AuthImplementation<
     TUser,
@@ -37,9 +37,9 @@ export function createAuthentication<
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null
+      currentUser: CurrentUser | null,
     ) => (rolesToCheck: string | string[]) => boolean
-  }
+  },
 ) {
   const AuthContext = createAuthContext<
     TUser,
@@ -59,7 +59,7 @@ export function createAuthentication<
   const AuthProvider = createAuthProvider(
     AuthContext,
     authImplementation,
-    customProviderHooks
+    customProviderHooks,
   )
 
   return { AuthContext, AuthProvider, useAuth }

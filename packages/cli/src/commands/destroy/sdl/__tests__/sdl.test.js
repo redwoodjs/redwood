@@ -48,7 +48,7 @@ describe('rw destroy sdl', () => {
 
       return t.tasks[0].run().then(async () => {
         const generatedFiles = Object.keys(
-          await files({ ...getDefaultArgs(builder), name: 'Post' })
+          await files({ ...getDefaultArgs(builder), name: 'Post' }),
         )
         expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
         generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
@@ -63,7 +63,7 @@ describe('rw destroy sdl', () => {
           ...getDefaultArgs(builder),
           typescript: true,
           name: 'Post',
-        })
+        }),
       )
     })
 
@@ -78,7 +78,7 @@ describe('rw destroy sdl', () => {
             ...getDefaultArgs(builder),
             typescript: true,
             name: 'Post',
-          })
+          }),
         )
         expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
         generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))

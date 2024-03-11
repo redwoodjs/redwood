@@ -22,7 +22,7 @@ module.exports = async function () {
 
     const prismaSchema = fs.readFileSync(
       path.join(rwjsPaths.api.dbSchema),
-      'utf-8'
+      'utf-8',
     )
 
     const directUrlEnvVar = checkAndReplaceDirectUrl(prismaSchema, defaultDb)

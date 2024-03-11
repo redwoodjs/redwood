@@ -6,7 +6,7 @@ import { loadAndValidateSdls } from '../validateSchema'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../__fixtures__/example-todo-main'
+  '../../../../__fixtures__/example-todo-main',
 )
 
 beforeAll(() => {

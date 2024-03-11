@@ -19,7 +19,7 @@ describe('setupDocker', () => {
 
   test("description didn't change unintentionally", () => {
     expect(description).toMatchInlineSnapshot(
-      `"Setup the experimental Dockerfile"`
+      `"Setup the experimental Dockerfile"`,
     )
   })
 

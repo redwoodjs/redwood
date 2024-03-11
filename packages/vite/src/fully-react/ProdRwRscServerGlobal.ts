@@ -21,7 +21,7 @@ export class ProdRwRscServerGlobal extends RwRscServerGlobal {
     const rwPaths = getPaths()
 
     this.serverManifest = readJSON(
-      join(rwPaths.web.distRsc, 'server-build-manifest.json')
+      join(rwPaths.web.distRsc, 'server-build-manifest.json'),
     )
   }
 
@@ -36,7 +36,7 @@ export class ProdRwRscServerGlobal extends RwRscServerGlobal {
   findAssetsForModule(module: string) {
     return [
       ...findAssetsInManifest(this.serverManifest, module).filter(
-        (asset) => !asset.endsWith('.js') && !asset.endsWith('.mjs')
+        (asset) => !asset.endsWith('.js') && !asset.endsWith('.mjs'),
       ),
     ]
   }
@@ -45,7 +45,7 @@ export class ProdRwRscServerGlobal extends RwRscServerGlobal {
     // TODO (RSC) This is a hack. We need to figure out how to get the
     // dependencies for the current page.
     const deps = Object.keys(this.serverManifest).filter((name) =>
-      /\.(tsx|jsx|js)$/.test(name)
+      /\.(tsx|jsx|js)$/.test(name),
     )
 
     return await this.findAssetsForModules(deps)

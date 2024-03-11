@@ -23,8 +23,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#lint'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#lint',
+      )}`,
     )
 }
 
@@ -50,7 +50,7 @@ export const handler = async ({ path, fix }) => {
         cwd: getPaths().base,
         shell: true,
         stdio: 'inherit',
-      }
+      },
     )
 
     process.exitCode = result.exitCode

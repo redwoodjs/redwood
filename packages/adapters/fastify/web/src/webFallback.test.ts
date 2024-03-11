@@ -39,7 +39,7 @@ describe('webFallback', () => {
     expect(res.statusCode).toBe(200)
     expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
     expect(res.body).toBe(
-      fs.readFileSync(path.join(getPaths().web.dist, url), 'utf-8')
+      fs.readFileSync(path.join(getPaths().web.dist, url), 'utf-8'),
     )
 
     await fastify.close()

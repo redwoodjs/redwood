@@ -26,7 +26,7 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
 beforeEach(() => {
   const FIXTURE_PATH = path.resolve(
     __dirname,
-    '../../../../__fixtures__/example-todo-main'
+    '../../../../__fixtures__/example-todo-main',
   )
 
   process.env.RWJS_CWD = FIXTURE_PATH
@@ -55,7 +55,7 @@ describe('Generate client preset', () => {
     ]
 
     const foundEndings = expectedEndings.filter((expectedEnding) =>
-      clientPresetFiles.some((filename) => filename.endsWith(expectedEnding))
+      clientPresetFiles.some((filename) => filename.endsWith(expectedEnding)),
     )
 
     expect(foundEndings).toHaveLength(expectedEndings.length)
