@@ -13,14 +13,14 @@ export const getTsConfigs = () => {
   const apiTsConfig = fs.existsSync(apiTsConfigPath)
     ? parseConfigFileTextToJson(
         apiTsConfigPath,
-        fs.readFileSync(apiTsConfigPath, 'utf-8')
+        fs.readFileSync(apiTsConfigPath, 'utf-8'),
       )
     : null
 
   const webTsConfig = fs.existsSync(webTsConfigPath)
     ? parseConfigFileTextToJson(
         webTsConfigPath,
-        fs.readFileSync(webTsConfigPath, 'utf-8')
+        fs.readFileSync(webTsConfigPath, 'utf-8'),
       )
     : null
 
@@ -41,7 +41,7 @@ export const isTypeScriptProject = () => {
 export const isServerFileSetup = () => {
   const serverFilePath = path.join(
     getPaths().api.src,
-    `server.${isTypeScriptProject() ? 'ts' : 'js'}`
+    `server.${isTypeScriptProject() ? 'ts' : 'js'}`,
   )
 
   return fs.existsSync(serverFilePath)
@@ -50,7 +50,7 @@ export const isServerFileSetup = () => {
 export const isRealtimeSetup = () => {
   const realtimePath = path.join(
     getPaths().api.lib,
-    `realtime.${isTypeScriptProject() ? 'ts' : 'js'}`
+    `realtime.${isTypeScriptProject() ? 'ts' : 'js'}`,
   )
 
   return fs.existsSync(realtimePath)

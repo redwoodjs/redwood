@@ -3,8 +3,7 @@ import { build as viteBuild } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
-
-import { rscAnalyzePlugin } from './rscVitePlugins.js'
+import { rscAnalyzePlugin } from '../plugins/vite-plugin-rsc-analyze.js'
 
 /**
  * RSC build. Step 1.
@@ -45,7 +44,7 @@ export async function rscBuildAnalyze() {
     plugins: [
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
-        (id) => serverEntryFileSet.add(id)
+        (id) => serverEntryFileSet.add(id),
       ),
     ],
     ssr: {
@@ -86,13 +85,13 @@ export async function rscBuildAnalyze() {
       // the path here just the filename is not enough.
       const rscName = `rsc-${filename.split(/[\/\\]/).at(-1)}-${i}`
       return [rscName, filename]
-    })
+    }),
   )
   const serverEntryFiles = Object.fromEntries(
     Array.from(serverEntryFileSet).map((filename, i) => {
       const rsaName = `rsa-${filename.split(/[\/\\]/).at(-1)}-${i}`
       return [rsaName, filename]
-    })
+    }),
   )
 
   console.log('clientEntryFileSet', Array.from(clientEntryFileSet))

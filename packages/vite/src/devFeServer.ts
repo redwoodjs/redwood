@@ -10,6 +10,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { registerFwGlobals } from './lib/registerGlobals.js'
 import { invoke } from './middleware/invokeMiddleware.js'
+import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import { ensureProcessDirWeb } from './utils.js'
@@ -33,13 +34,13 @@ async function createServer() {
     throw new Error(
       'Vite entry points not found. Please check that your project has ' +
         'an entry.client.{jsx,tsx} and entry.server.{jsx,tsx} file in ' +
-        'the web/src directory.'
+        'the web/src directory.',
     )
   }
 
   if (!rwPaths.web.viteConfig) {
     throw new Error(
-      'Vite config not found. You need to setup your project with Vite using `yarn rw setup vite`'
+      'Vite config not found. You need to setup your project with Vite using `yarn rw setup vite`',
     )
   }
   // ~~~~ Dev time validations ~~~~
@@ -58,6 +59,9 @@ async function createServer() {
   // use vite's connect instance as middleware
   app.use(vite.middlewares)
 
+  // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
+  app.use('/rw-rsc', createRscRequestHandler())
+
   const routes = getProjectRoutes()
 
   for (const route of routes) {
@@ -67,7 +71,7 @@ async function createServer() {
         clientEntryPath: rwPaths.web.entryClient as string,
         getStylesheetLinks: () => getCssLinks(rwPaths, route, vite),
       },
-      vite
+      vite,
     )
 
     // @TODO if it is a 404, hand over to 404 handler
@@ -86,7 +90,7 @@ async function createServer() {
       '*',
       createServerAdapter(async (req: Request) => {
         const entryServerImport = await vite.ssrLoadModule(
-          rwPaths.web.entryServer as string // already validated in dev server
+          rwPaths.web.entryServer as string, // already validated in dev server
         )
 
         const middleware = entryServerImport.middleware
@@ -94,7 +98,7 @@ async function createServer() {
         const [mwRes] = await invoke(req, middleware)
 
         return mwRes.toResponse()
-      })
+      }),
     )
   }
 
@@ -124,7 +128,7 @@ process.stdin.on('data', async (data) => {
 function getCssLinks(rwPaths: Paths, route: RouteSpec, vite: ViteDevServer) {
   const appAndRouteModules = componentsModules(
     [rwPaths.web.app, route.filePath].filter(Boolean) as string[],
-    vite
+    vite,
   )
 
   const collectedCss = collectCssPaths(appAndRouteModules)

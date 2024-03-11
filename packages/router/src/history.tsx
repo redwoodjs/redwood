@@ -16,7 +16,7 @@ const createHistory = () => {
     },
     navigate: (to: string, options?: NavigateOptions) => {
       const { pathname, search, hash } = new URL(
-        globalThis?.location?.origin + to
+        globalThis?.location?.origin + to,
       )
 
       if (
@@ -49,7 +49,7 @@ const createHistory = () => {
         delete listeners[listenerId]
       } else {
         console.warn(
-          'History Listener with ID: ' + listenerId + ' does not exist.'
+          'History Listener with ID: ' + listenerId + ' does not exist.',
         )
       }
     },

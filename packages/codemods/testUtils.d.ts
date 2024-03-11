@@ -9,7 +9,7 @@ declare module 'jscodeshift/dist/testUtils' {
     testFilePrefix?: string | null,
     testOptions?: {
       parser: 'ts' | 'tsx' | 'js' | 'jsx' | Parser
-    }
+    },
   ): () => any
 
   function defineInlineTest(
@@ -17,7 +17,7 @@ declare module 'jscodeshift/dist/testUtils' {
     options: Options,
     inputSource: string,
     expectedOutputSource: string,
-    testName?: string
+    testName?: string,
   ): () => any
 
   function runInlineTest(
@@ -28,7 +28,7 @@ declare module 'jscodeshift/dist/testUtils' {
       source: string
     },
     expectedOutput: string,
-    testOptions?: TestOptions
+    testOptions?: TestOptions,
   ): string
 }
 
@@ -36,7 +36,7 @@ declare module 'jscodeshift/dist/testUtils' {
 type MatchTransformSnapshotFunction = (
   transformName: string,
   fixtureName?: string,
-  parser?: 'ts' | 'tsx'
+  parser?: 'ts' | 'tsx',
 ) => Promise<void>
 
 type MatchFolderTransformFunction = (
@@ -50,14 +50,14 @@ type MatchFolderTransformFunction = (
      * as well as modifies file names. e.g. convertJsToJsx
      */
     useJsCodeshift?: boolean
-  }
+  },
 ) => Promise<void>
 
 type MatchInlineTransformSnapshotFunction = (
   transformName: string,
   fixtureCode: string,
   expectedCode: string,
-  parser: 'ts' | 'tsx' | 'babel' = 'tsx'
+  parser: 'ts' | 'tsx' | 'babel' = 'tsx',
 ) => Promise<void>
 
 // These files gets loaded in jest setup, so becomes available globally in tests
@@ -69,7 +69,7 @@ declare global {
     interface Matchers<R> {
       toMatchFileContents(
         fixturePath: string,
-        { removeWhitespace }: { removeWhitespace: boolean }
+        { removeWhitespace }: { removeWhitespace: boolean },
       ): R
     }
   }

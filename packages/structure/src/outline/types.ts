@@ -93,7 +93,7 @@ export type OutlineItemJSON = Omit<OutlineItem, 'children'> & {
  * @param item
  */
 export async function outlineToJSON(
-  item: OutlineItem
+  item: OutlineItem,
 ): Promise<OutlineItemJSON> {
   if (!item.children) {
     return { ...item, children: undefined }

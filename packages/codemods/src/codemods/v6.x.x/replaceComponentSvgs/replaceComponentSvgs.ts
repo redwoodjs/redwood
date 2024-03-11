@@ -17,7 +17,7 @@ async function convertSvgToReactComponent(
   svgFilePath: string,
   outputPath: string,
   componentName: string,
-  typescript: boolean
+  typescript: boolean,
 ) {
   const svgContents = await fs.readFile(svgFilePath, 'utf-8')
 
@@ -30,7 +30,7 @@ async function convertSvgToReactComponent(
     },
     {
       componentName: componentName,
-    }
+    },
   )
 
   await fs.writeFile(outputPath, jsCode)
@@ -59,7 +59,7 @@ export default async function transform(file: FileInfo, api: API) {
     return Boolean(
       source &&
         typeof source.value === 'string' &&
-        source.value.endsWith('.svg')
+        source.value.endsWith('.svg'),
     )
   })
 
@@ -153,7 +153,7 @@ export default async function transform(file: FileInfo, api: API) {
       svgsToConvert.map(async (svg) => {
         const svgFileNameWithoutExtension = path.basename(
           svg.filePath,
-          path.extname(svg.filePath)
+          path.extname(svg.filePath),
         )
 
         const componentName = pascalcase(svgFileNameWithoutExtension)
@@ -163,7 +163,7 @@ export default async function transform(file: FileInfo, api: API) {
         // The absolute path to the new file
         const outputPath = path.join(
           path.dirname(svg.filePath),
-          `${newFileName}.${isTS ? 'tsx' : 'jsx'}`
+          `${newFileName}.${isTS ? 'tsx' : 'jsx'}`,
         )
 
         try {
@@ -171,11 +171,11 @@ export default async function transform(file: FileInfo, api: API) {
             svg.filePath,
             outputPath,
             componentName,
-            isTS
+            isTS,
           )
         } catch (error: any) {
           console.error(
-            `Error converting ${svg.filePath} to React component: ${error.message}`
+            `Error converting ${svg.filePath} to React component: ${error.message}`,
           )
 
           // Don't proceed if SVGr fails
@@ -187,9 +187,9 @@ export default async function transform(file: FileInfo, api: API) {
         // Use extname, incase ext casing does not match
         svg.importSourcePath.value = svg.importSourcePath.value.replace(
           `${svgFileNameWithoutExtension}${path.extname(svg.filePath)}`,
-          newFileName
+          newFileName,
         )
-      })
+      }),
     )
   }
 

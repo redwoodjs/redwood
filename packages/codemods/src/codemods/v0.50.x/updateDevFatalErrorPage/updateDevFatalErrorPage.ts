@@ -28,7 +28,7 @@ export const updateDevFatalErrorPage = async () => {
    */
   for (const [_dir, filenamesToUrls] of Object.entries(dirs)) {
     const isTSPage = fs.existsSync(
-      path.join(webFatalErrorPagesDir, 'FatalErrorPage.tsx')
+      path.join(webFatalErrorPagesDir, 'FatalErrorPage.tsx'),
     )
 
     for (const [filename, url] of Object.entries(filenamesToUrls)) {

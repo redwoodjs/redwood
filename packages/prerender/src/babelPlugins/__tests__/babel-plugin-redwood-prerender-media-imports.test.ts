@@ -129,7 +129,7 @@ describe('Vite bundler', () => {
       },
       filepath: path.resolve(
         __dirname,
-        './__fixtures__/viteSrcDir/pages/HomePage/HomePage.js'
+        './__fixtures__/viteSrcDir/pages/HomePage/HomePage.js',
       ),
       tests: [
         {
@@ -185,7 +185,7 @@ describe('Vite bundler', () => {
       },
       filepath: path.resolve(
         __dirname,
-        './__fixtures__/viteSrcDir/pages/HomePage/HomePage.js'
+        './__fixtures__/viteSrcDir/pages/HomePage/HomePage.js',
       ),
       tests: [
         {

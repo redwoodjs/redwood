@@ -2458,28 +2458,26 @@ import type {
 
 import Post from 'src/components/Post/Post'
 
-export const QUERY: TypedDocumentNode<
-  FindPostById,
-  FindPostByIdVariables
-> = gql\`
-  query FindPostById($id: Int!) {
-    post: post(id: $id) {
-      id
-      title
-      slug
-      author
-      body
-      image
-      postedAt
-      isPinned
-      readTime
-      rating
-      upvotes
-      metadata
-      hugeNumber
+export const QUERY: TypedDocumentNode<FindPostById, FindPostByIdVariables> =
+  gql\`
+    query FindPostById($id: Int!) {
+      post: post(id: $id) {
+        id
+        title
+        slug
+        author
+        body
+        image
+        postedAt
+        isPinned
+        readTime
+        rating
+        upvotes
+        metadata
+        hugeNumber
+      }
     }
-  }
-\`
+  \`
 
 export const Loading = () => <div>Loading...</div>
 

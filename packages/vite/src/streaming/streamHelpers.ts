@@ -43,7 +43,7 @@ interface StreamOptions {
 export async function reactRenderToStreamResponse(
   mwRes: MiddlewareResponse,
   renderOptions: RenderToStreamArgs,
-  streamOptions: StreamOptions
+  streamOptions: StreamOptions,
 ) {
   const { waitForAllReady = false } = streamOptions
   const {
@@ -114,9 +114,9 @@ export async function reactRenderToStreamResponse(
             url: path,
             css: cssLinks,
             meta: metaTags,
-          })
-        )
-      )
+          }),
+        ),
+      ),
     )
   }
 
@@ -165,7 +165,7 @@ export async function reactRenderToStreamResponse(
 
     const outputStream: ReadableStream<Uint8Array> = applyStreamTransforms(
       reactStream,
-      transformsToApply
+      transformsToApply,
     )
 
     mwRes.status = didErrorOutsideShell ? 500 : 200
@@ -186,7 +186,7 @@ export async function reactRenderToStreamResponse(
         css: cssLinks,
         meta: metaTags,
       }),
-      bootstrapOptions
+      bootstrapOptions,
     )
 
     mwRes.status = 500
@@ -200,7 +200,7 @@ export async function reactRenderToStreamResponse(
 }
 function applyStreamTransforms(
   reactStream: ReactDOMServerReadableStream,
-  transformsToApply: (TransformStream | false)[]
+  transformsToApply: (TransformStream | false)[],
 ) {
   let outputStream: ReadableStream<Uint8Array> = reactStream
 

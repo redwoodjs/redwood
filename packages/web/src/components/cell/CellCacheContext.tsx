@@ -34,7 +34,7 @@ export function useCellCacheContext() {
 
   if (!context) {
     throw new Error(
-      'useCellCacheContext must be used within a CellCacheContextProvider'
+      'useCellCacheContext must be used within a CellCacheContextProvider',
     )
   }
 

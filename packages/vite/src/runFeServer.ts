@@ -67,7 +67,7 @@ export async function runFeServer() {
   ).default
 
   const clientBuildManifestUrl = url.pathToFileURL(
-    path.join(rwPaths.web.distClient, 'client-build-manifest.json')
+    path.join(rwPaths.web.distClient, 'client-build-manifest.json'),
   ).href
   const clientBuildManifest: ViteBuildManifest = (
     await import(clientBuildManifestUrl, { with: { type: 'json' } })
@@ -86,7 +86,7 @@ export async function runFeServer() {
       return rscEnabled
         ? manifestItem.file.includes('rwjs-client-entry-')
         : manifestItem.isEntry
-    }
+    },
   )
 
   if (!clientEntry) {
@@ -97,7 +97,7 @@ export async function runFeServer() {
   // For CF workers, we'd need an equivalent of this
   app.use(
     '/assets',
-    express.static(rwPaths.web.distClient + '/assets', { index: false })
+    express.static(rwPaths.web.distClient + '/assets', { index: false }),
   )
 
   // 2. Proxy the api server
@@ -116,7 +116,7 @@ export async function runFeServer() {
       // Using 127.0.0.1 to force ipv4. With `localhost` you don't really know
       // if it's going to be ipv4 or ipv6
       target: `http://127.0.0.1:${rwConfig.api.port}`,
-    })
+    }),
   )
 
   const getStylesheetLinks = () => clientEntry.css || []
@@ -161,14 +161,14 @@ export async function runFeServer() {
       const [mwRes] = await invoke(req, middleware)
 
       return mwRes.toResponse()
-    })
+    }),
   )
 
   app.use(express.static(rwPaths.web.distClient, { index: false }))
 
   app.listen(rwConfig.web.port)
   console.log(
-    `Started production FE server on http://localhost:${rwConfig.web.port}`
+    `Started production FE server on http://localhost:${rwConfig.web.port}`,
   )
 }
 

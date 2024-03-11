@@ -5,8 +5,7 @@ import { build as viteBuild } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
-
-import { rscTransformPlugin } from './rscVitePlugins.js'
+import { rscTransformPlugin } from '../plugins/vite-plugin-rsc-transform.js'
 
 /**
  * RSC build. Step 3.
@@ -16,7 +15,7 @@ import { rscTransformPlugin } from './rscVitePlugins.js'
 export async function rscBuildForServer(
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
-  customModules: Record<string, string>
+  customModules: Record<string, string>,
 ) {
   console.log('\n')
   console.log('3. rscBuildForServer')
@@ -51,7 +50,7 @@ export async function rscBuildForServer(
         // D:/a/redwood/test-project-rsc-external-packages/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
         const relativePath = path.relative(
           path.join(rwPaths.base, 'node_modules'),
-          fullPath
+          fullPath,
         )
         // On Windows `relativePath` will be something like
         // @tobbe.dev\rsc-test\dist\rsc-test.es.js
@@ -118,10 +117,11 @@ export async function rscBuildForServer(
           entryFileNames: (chunkInfo) => {
             // TODO (RSC) Probably don't want 'entries'. And definitely don't want it hardcoded
             if (chunkInfo.name === 'entries' || customModules[chunkInfo.name]) {
-              return '[name].js'
+              return '[name].mjs'
             }
-            return 'assets/[name].js'
+            return 'assets/[name].mjs'
           },
+          chunkFileNames: `assets/[name]-[hash].mjs`,
           // This is not ideal. See
           // https://rollupjs.org/faqs/#why-do-additional-imports-turn-up-in-my-entry-chunks-when-code-splitting
           // But we need it to prevent `import 'client-only'` from being

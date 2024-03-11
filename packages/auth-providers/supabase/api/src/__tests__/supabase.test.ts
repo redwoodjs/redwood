@@ -43,7 +43,7 @@ test('throws if SUPABASE_JWT_SECRET env var is not set', async () => {
   delete process.env.SUPABASE_JWT_SECRET
 
   await expect(authDecoder('token', 'supabase', req)).rejects.toThrow(
-    'SUPABASE_JWT_SECRET env var is not set'
+    'SUPABASE_JWT_SECRET env var is not set',
   )
 })
 

@@ -275,7 +275,7 @@ describe('User subclass', () => {
         const user = User.build({ id: 99999999 })
 
         await expect(user.destroy({ throw: true })).rejects.toThrow(
-          Errors.RedwoodRecordNotFoundError
+          Errors.RedwoodRecordNotFoundError,
         )
       })
     })
@@ -321,7 +321,7 @@ describe('User subclass', () => {
             await user.save({ throw: true })
           } catch (e) {
             expect(
-              e instanceof Errors.RedwoodRecordMissingAttributeError
+              e instanceof Errors.RedwoodRecordMissingAttributeError,
             ).toEqual(true)
           }
           expect.assertions(1)
@@ -337,7 +337,7 @@ describe('User subclass', () => {
             await user.save({ throw: true })
           } catch (e) {
             expect(e instanceof Errors.RedwoodRecordNullAttributeError).toEqual(
-              true
+              true,
             )
           }
           expect.assertions(1)
@@ -431,7 +431,7 @@ describe('User subclass', () => {
             await user.save({ throw: true })
           } catch (e) {
             expect(e instanceof Errors.RedwoodRecordNullAttributeError).toEqual(
-              true
+              true,
             )
           }
 

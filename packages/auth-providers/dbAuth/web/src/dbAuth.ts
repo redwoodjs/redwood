@@ -22,9 +22,9 @@ export function createAuth(
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null
+      currentUser: CurrentUser | null,
     ) => (rolesToCheck: string | string[]) => boolean
-  }
+  },
 ) {
   return createAuthentication(dbAuthClient, customProviderHooks)
 }

@@ -27,7 +27,7 @@ const tarball = 'create-redwood-app.tgz'
 await fs.move(
   path.join(packagePath, tarball),
   path.join(projectPath, tarball),
-  { overwrite: true }
+  { overwrite: true },
 )
 
 cd(projectPath)

@@ -1,3 +1,7 @@
+import { describe, test } from 'vitest'
+
+import { matchTransformSnapshot } from '../../../../testUtils/matchTransformSnapshot'
+
 describe('cellQueryResult', () => {
   test('No query result properties used', async () => {
     await matchTransformSnapshot('cellQueryResult', 'default')

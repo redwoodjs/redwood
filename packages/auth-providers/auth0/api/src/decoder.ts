@@ -25,13 +25,13 @@ import type { Decoder } from '@redwoodjs/api'
  *
  */
 export const verifyAuth0Token = (
-  bearerToken: string
+  bearerToken: string,
 ): Promise<null | Record<string, unknown>> => {
   return new Promise((resolve, reject) => {
     const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = process.env
     if (!AUTH0_DOMAIN || !AUTH0_AUDIENCE) {
       throw new Error(
-        '`AUTH0_DOMAIN` or `AUTH0_AUDIENCE` env vars are not set.'
+        '`AUTH0_DOMAIN` or `AUTH0_AUDIENCE` env vars are not set.',
       )
     }
 
@@ -58,9 +58,9 @@ export const verifyAuth0Token = (
         resolve(
           typeof decoded === 'undefined'
             ? null
-            : (decoded as Record<string, unknown>)
+            : (decoded as Record<string, unknown>),
         )
-      }
+      },
     )
   })
 }

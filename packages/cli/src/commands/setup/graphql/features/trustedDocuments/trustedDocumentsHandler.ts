@@ -5,7 +5,7 @@ import execa from 'execa'
 import { Listr } from 'listr2'
 import { format } from 'prettier'
 
-import { prettierOptions, setTomlSetting } from '@redwoodjs/cli-helpers'
+import { getPrettierOptions, setTomlSetting } from '@redwoodjs/cli-helpers'
 import { getConfig, getPaths, resolveFile } from '@redwoodjs/project-config'
 
 import { runTransform } from '../fragments/runTransform.js'
@@ -44,7 +44,7 @@ export async function handler({ force }: { force: boolean }) {
           'Configuring the GraphQL Handler to use a Trusted Documents store ...',
         task: async () => {
           const graphqlPath = resolveFile(
-            path.join(getPaths().api.functions, 'graphql')
+            path.join(getPaths().api.functions, 'graphql'),
           )
 
           if (!graphqlPath) {
@@ -62,8 +62,10 @@ export async function handler({ force }: { force: boolean }) {
 
           const source = fs.readFileSync(graphqlPath, 'utf-8')
 
-          const prettifiedApp = format(source, {
-            ...prettierOptions(),
+          const prettierOptions = await getPrettierOptions()
+
+          const prettifiedApp = await format(source, {
+            ...prettierOptions,
             parser: 'babel-ts',
           })
 
@@ -71,7 +73,7 @@ export async function handler({ force }: { force: boolean }) {
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

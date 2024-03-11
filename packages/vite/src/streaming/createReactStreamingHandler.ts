@@ -30,7 +30,7 @@ export const createReactStreamingHandler = async (
     clientEntryPath,
     getStylesheetLinks,
   }: CreateReactStreamingHandlerOptions,
-  viteDevServer?: ViteDevServer
+  viteDevServer?: ViteDevServer,
 ) => {
   const { redirect, routeHooks, bundle } = route
   const rwPaths = getPaths()
@@ -62,10 +62,10 @@ export const createReactStreamingHandler = async (
     // This makes sure that changes to entry-server are picked up on refresh
     if (!isProd) {
       entryServerImport = await viteDevServer.ssrLoadModule(
-        rwPaths.web.entryServer as string // already validated in dev server
+        rwPaths.web.entryServer as string, // already validated in dev server
       )
       fallbackDocumentImport = await viteDevServer.ssrLoadModule(
-        rwPaths.web.document
+        rwPaths.web.document,
       )
     }
 
@@ -124,7 +124,7 @@ export const createReactStreamingHandler = async (
     ].filter(Boolean) as string[]
 
     const isSeoCrawler = checkUaForSeoCrawler(
-      req.headers.get('user-agent') || ''
+      req.headers.get('user-agent') || '',
     )
 
     // Using a function to get the CSS links because we need to wait for the
@@ -152,7 +152,7 @@ export const createReactStreamingHandler = async (
 
           console.error(err)
         },
-      }
+      },
     )
 
     return reactResponse

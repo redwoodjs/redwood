@@ -75,7 +75,7 @@ describe('packageHandler', () => {
     })
 
     expect(console.log).toHaveBeenCalledWith(
-      'No compatibility check will be performed because you used the --force flag.'
+      'No compatibility check will be performed because you used the --force flag.',
     )
     expect(getCompatibilityData).not.toHaveBeenCalled()
   })
@@ -92,7 +92,7 @@ describe('packageHandler', () => {
       _: ['setup', 'package'],
     })
     expect(console.log).not.toHaveBeenCalledWith(
-      'Be aware that this package is under version 1.0.0 and so should be considered experimental.'
+      'Be aware that this package is under version 1.0.0 and so should be considered experimental.',
     )
 
     await handler({
@@ -101,7 +101,7 @@ describe('packageHandler', () => {
       _: ['setup', 'package'],
     })
     expect(console.log).toHaveBeenCalledWith(
-      'Be aware that this package is under version 1.0.0 and so should be considered experimental.'
+      'Be aware that this package is under version 1.0.0 and so should be considered experimental.',
     )
   })
 
@@ -193,7 +193,7 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       1,
       'some-package',
-      'latest'
+      'latest',
     )
     expect(enq.Select).toHaveBeenCalledTimes(1)
     expect(execa).toHaveBeenNthCalledWith(
@@ -203,7 +203,7 @@ describe('packageHandler', () => {
       {
         stdio: 'inherit',
         cwd: path.join('mocked', 'project'),
-      }
+      },
     )
 
     enq.Select.mockImplementation(() => {
@@ -219,7 +219,7 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       2,
       'some-package',
-      'latest'
+      'latest',
     )
     expect(enq.Select).toHaveBeenCalledTimes(2)
     expect(execa).toHaveBeenNthCalledWith(
@@ -229,7 +229,7 @@ describe('packageHandler', () => {
       {
         stdio: 'inherit',
         cwd: path.join('mocked', 'project'),
-      }
+      },
     )
 
     enq.Select.mockImplementation(() => {
@@ -245,7 +245,7 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       3,
       'some-package',
-      'latest'
+      'latest',
     )
     expect(enq.Select).toHaveBeenCalledTimes(3)
     expect(execa).toBeCalledTimes(2) // Only called for the previous two select options
@@ -305,7 +305,7 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       1,
       'some-package',
-      'stable'
+      'stable',
     )
     expect(enq.Select).toHaveBeenCalledTimes(1)
     expect(execa).toHaveBeenNthCalledWith(
@@ -315,7 +315,7 @@ describe('packageHandler', () => {
       {
         stdio: 'inherit',
         cwd: path.join('mocked', 'project'),
-      }
+      },
     )
 
     enq.Select.mockImplementation(() => {
@@ -331,7 +331,7 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       2,
       'some-package',
-      'stable'
+      'stable',
     )
     expect(enq.Select).toHaveBeenCalledTimes(2)
     expect(execa).toHaveBeenNthCalledWith(
@@ -341,7 +341,7 @@ describe('packageHandler', () => {
       {
         stdio: 'inherit',
         cwd: path.join('mocked', 'project'),
-      }
+      },
     )
 
     enq.Select.mockImplementation(() => {
@@ -357,7 +357,7 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       3,
       'some-package',
-      'stable'
+      'stable',
     )
     expect(enq.Select).toHaveBeenCalledTimes(3)
     expect(execa).toBeCalledTimes(2) // Only called for the previous two select options
@@ -416,7 +416,7 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       1,
       'some-package',
-      '1.0.0'
+      '1.0.0',
     )
     expect(enq.Select).toHaveBeenCalledTimes(1)
     expect(execa).toHaveBeenNthCalledWith(
@@ -426,7 +426,7 @@ describe('packageHandler', () => {
       {
         stdio: 'inherit',
         cwd: path.join('mocked', 'project'),
-      }
+      },
     )
 
     enq.Select.mockImplementation(() => {
@@ -442,7 +442,7 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       2,
       'some-package',
-      '1.0.0'
+      '1.0.0',
     )
     expect(enq.Select).toHaveBeenCalledTimes(2)
     expect(execa).toHaveBeenNthCalledWith(
@@ -452,7 +452,7 @@ describe('packageHandler', () => {
       {
         stdio: 'inherit',
         cwd: path.join('mocked', 'project'),
-      }
+      },
     )
 
     enq.Select.mockImplementation(() => {
@@ -468,7 +468,7 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       3,
       'some-package',
-      '1.0.0'
+      '1.0.0',
     )
     expect(enq.Select).toHaveBeenCalledTimes(3)
     expect(execa).toBeCalledTimes(2) // Only called for the previous two select options
@@ -495,7 +495,7 @@ describe('packageHandler', () => {
       _: ['setup', 'package'],
     })
     expect(console.log).toHaveBeenCalledWith(
-      'Be aware that this package is under version 1.0.0 and so should be considered experimental.'
+      'Be aware that this package is under version 1.0.0 and so should be considered experimental.',
     )
 
     // No force should prompt
@@ -512,7 +512,7 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       1,
       'some-package',
-      '0.0.1'
+      '0.0.1',
     )
     expect(enq.Select).toHaveBeenCalledTimes(1)
     expect(execa).toHaveBeenNthCalledWith(
@@ -522,7 +522,7 @@ describe('packageHandler', () => {
       {
         stdio: 'inherit',
         cwd: path.join('mocked', 'project'),
-      }
+      },
     )
   })
 })
