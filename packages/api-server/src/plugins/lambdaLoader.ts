@@ -35,20 +35,20 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
         routeName,
         'at',
         fnPath,
-        'does not have a function called handler defined.'
+        'does not have a function called handler defined.',
       )
     }
     // TODO: Use terminal link.
     console.log(
       chalk.magenta('/' + routeName),
-      chalk.dim.italic(Date.now() - ts + ' ms')
+      chalk.dim.italic(Date.now() - ts + ' ms'),
     )
   })
 
   await Promise.all(imports)
 
   console.log(
-    chalk.dim.italic('...Done importing in ' + (Date.now() - tsImport) + ' ms')
+    chalk.dim.italic('...Done importing in ' + (Date.now() - tsImport) + ' ms'),
   )
 }
 
@@ -58,11 +58,11 @@ type LoadFunctionsFromDistOptions = {
 
 // TODO: Use v8 caching to load these crazy fast.
 export const loadFunctionsFromDist = async (
-  options: LoadFunctionsFromDistOptions = {}
+  options: LoadFunctionsFromDistOptions = {},
 ) => {
   const serverFunctions = findApiDistFunctions(
     getPaths().api.base,
-    options?.fastGlobOptions
+    options?.fastGlobOptions,
   )
 
   // Place `GraphQL` serverless function at the start.
@@ -78,7 +78,7 @@ export const loadFunctionsFromDist = async (
 // import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
 function findApiDistFunctions(
   cwd: string = getPaths().api.base,
-  options: FastGlobOptions = {}
+  options: FastGlobOptions = {},
 ) {
   return fg.sync('dist/functions/**/*.{ts,js}', {
     cwd,
@@ -101,7 +101,7 @@ interface LambdaHandlerRequest extends RequestGenericInterface {
  **/
 export const lambdaRequestHandler = async (
   req: FastifyRequest<LambdaHandlerRequest>,
-  reply: FastifyReply
+  reply: FastifyReply,
 ) => {
   const { routeName } = req.params
 

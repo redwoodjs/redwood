@@ -8,8 +8,8 @@ export function builder(yargs: Argv): Argv {
   return yargs.epilogue(
     `Also see the ${terminalLink(
       'Redwood CLI Reference',
-      'https://redwoodjs.com/docs/cli-commands#datamigrate-install'
-    )}`
+      'https://redwoodjs.com/docs/cli-commands#datamigrate-install',
+    )}`,
   )
 }
 

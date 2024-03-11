@@ -104,11 +104,11 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
               [
                 t.importSpecifier(
                   t.identifier(createCellHookName),
-                  t.identifier(createCellHookName)
+                  t.identifier(createCellHookName),
                 ),
               ],
-              t.stringLiteral(importFrom)
-            )
+              t.stringLiteral(importFrom),
+            ),
           )
 
           // Insert at the bottom of the file:
@@ -122,22 +122,22 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                       t.identifier(name),
                       t.identifier(name),
                       false,
-                      true
-                    )
+                      true,
+                    ),
                   ),
                   // Add the `displayName` property so we can name the Cell
                   // after the filename.
                   t.objectProperty(
                     t.identifier('displayName'),
                     t.stringLiteral(
-                      parse(this.file.opts.filename as string).name
+                      parse(this.file.opts.filename as string).name,
                     ),
                     false,
-                    true
+                    true,
                   ),
                 ]),
-              ])
-            )
+              ]),
+            ),
           )
         },
       },

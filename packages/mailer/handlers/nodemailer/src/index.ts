@@ -23,7 +23,7 @@ export class NodemailerMailHandler extends AbstractMailHandler {
 
     this.transporter = nodemailer.createTransport(
       config.transport,
-      config.defaults
+      config.defaults,
     )
   }
 
@@ -31,7 +31,7 @@ export class NodemailerMailHandler extends AbstractMailHandler {
   async send(
     renderedContent: MailRenderedContent,
     sendOptions: MailSendOptionsComplete,
-    handlerOptions?: HandlerOptions
+    handlerOptions?: HandlerOptions,
   ): Promise<MailResult> {
     const result = await this.transporter.sendMail({
       to: sendOptions.to,

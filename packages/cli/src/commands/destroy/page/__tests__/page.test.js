@@ -86,7 +86,7 @@ test('cleans up route from Routes.js', async () => {
         '  <Route path="/" page={HomePage} name="home" />',
         '  <Route notfound page={NotFoundPage} />',
         '</Routes>',
-      ].join('\n')
+      ].join('\n'),
     )
   })
 })
@@ -103,7 +103,7 @@ test('cleans up route with a custom path from Routes.js', async () => {
         '  <Route path="/" page={HomePage} name="home" />',
         '  <Route notfound page={NotFoundPage} />',
         '</Routes>',
-      ].join('\n')
+      ].join('\n'),
     )
   })
 })

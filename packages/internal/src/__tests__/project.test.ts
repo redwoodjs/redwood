@@ -44,7 +44,7 @@ function getFixtureDir(
     | 'example-todo-main-with-errors'
     | 'example-todo-main'
     | 'empty-project'
-    | 'test-project'
+    | 'test-project',
 ) {
   return path.resolve(__dirname, `../../../../__fixtures__/${name}`)
 }

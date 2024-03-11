@@ -58,7 +58,7 @@ export const files = async ({ name, typescript = false, type, tests }) => {
       outputPath: path.join(
         getPaths().api.directives,
         camelName,
-        testOutputFilename
+        testOutputFilename,
       ),
       templateVars: { camelName },
     })
@@ -115,7 +115,7 @@ export const handler = async (args) => {
   })
 
   const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
-    'After modifying your directive, you can add it to your SDLs e.g.:'
+    'After modifying your directive, you can add it to your SDLs e.g.:',
   )}
     ${c.info('// example todo.sdl.js')}
     ${c.info('# Option A: Add it to a field')}
@@ -191,7 +191,7 @@ export const handler = async (args) => {
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

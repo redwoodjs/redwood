@@ -7,7 +7,7 @@ import { getPaths } from '@redwoodjs/project-config'
 
 function getCorrespondingTag(
   version: string,
-  distTags: Record<string, string>
+  distTags: Record<string, string>,
 ) {
   return Object.entries(distTags).find(([_, v]) => v === version)?.[0]
 }
@@ -22,13 +22,13 @@ function getCorrespondingTag(
  */
 export async function getCompatibilityData(
   packageName: string,
-  preferredVersionOrTag: string
+  preferredVersionOrTag: string,
 ) {
   // Get the project's version of RedwoodJS from the root package.json's @redwoodjs/core dev dependency
   const projectPackageJson = JSON.parse(
     fs.readFileSync(path.join(getPaths().base, 'package.json'), {
       encoding: 'utf8',
-    })
+    }),
   )
   const projectRedwoodVersion =
     projectPackageJson.devDependencies['@redwoodjs/core']
@@ -51,13 +51,13 @@ export async function getCompatibilityData(
   if (isUsingTag) {
     if (packument['dist-tags'][preferredVersionOrTag] === undefined) {
       throw new Error(
-        `The package '${packageName}' does not have a tag '${preferredVersionOrTag}'`
+        `The package '${packageName}' does not have a tag '${preferredVersionOrTag}'`,
       )
     }
   } else {
     if (packument.versions[preferredVersionOrTag] === undefined) {
       throw new Error(
-        `The package '${packageName}' does not have a version '${preferredVersionOrTag}'`
+        `The package '${packageName}' does not have a version '${preferredVersionOrTag}'`,
       )
     }
   }

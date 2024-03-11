@@ -15,7 +15,7 @@ import { rscTransformPlugin } from '../plugins/vite-plugin-rsc-transform.js'
 export async function rscBuildForServer(
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
-  customModules: Record<string, string>
+  customModules: Record<string, string>,
 ) {
   console.log('\n')
   console.log('3. rscBuildForServer')
@@ -54,7 +54,7 @@ export async function rscBuildForServer(
         // D:/a/redwood/test-project-rsc-external-packages/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
         const relativePath = path.relative(
           path.join(rwPaths.base, 'node_modules'),
-          fullPath
+          fullPath,
         )
         // On Windows `relativePath` will be something like
         // @tobbe.dev\rsc-test\dist\rsc-test.es.js

@@ -12,7 +12,7 @@ export const trustedDocumentsStore = async (generatedFiles: any) => {
   let trustedDocumentsStoreFile = ''
 
   const output = generatedFiles.filter((f: GeneratedFile) =>
-    f.filename.endsWith('persisted-documents.json')
+    f.filename.endsWith('persisted-documents.json'),
   )
 
   const storeFile = output[0]
@@ -30,7 +30,7 @@ export const trustedDocumentsStore = async (generatedFiles: any) => {
 
     trustedDocumentsStoreFile = path.join(
       getPaths().api.lib,
-      'trustedDocumentsStore.ts'
+      'trustedDocumentsStore.ts',
     )
 
     fs.mkdirSync(path.dirname(trustedDocumentsStoreFile), { recursive: true })
@@ -43,10 +43,10 @@ export const trustedDocumentsStore = async (generatedFiles: any) => {
 // Add the gql function to the generated graphql.ts file
 // that is used by trusted documents
 export const replaceGqlTagWithTrustedDocumentGraphql = async (
-  generatedFiles: any
+  generatedFiles: any,
 ) => {
   const gqlFileOutput = generatedFiles.filter((f: GeneratedFile) =>
-    f.filename.endsWith('gql.ts')
+    f.filename.endsWith('gql.ts'),
   )
 
   const gqlFile = gqlFileOutput[0]

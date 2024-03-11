@@ -19,7 +19,7 @@ function addSlashIfNeeded(path: string): string {
 /** CSS is a specialised metatag */
 export const Css = ({ css }: { css: string[] }) => {
   const cssLinks = (css || extractFromAssetMap('css') || []).map(
-    addSlashIfNeeded
+    addSlashIfNeeded,
   )
 
   return (

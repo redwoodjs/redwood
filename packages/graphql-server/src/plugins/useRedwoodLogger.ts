@@ -142,7 +142,7 @@ const logResult =
 
             `'${error?.extensions?.code || 'authentication'}' error '${
               error.message
-            }' occurred in ${operationName}`
+            }' occurred in ${operationName}`,
           )
         } else {
           envelopLogger.error(
@@ -150,7 +150,7 @@ const logResult =
 
             error?.originalError?.message ||
               error.message ||
-              `Error in GraphQL execution: ${operationName}`
+              `Error in GraphQL execution: ${operationName}`,
           )
         }
       })
@@ -173,7 +173,7 @@ const logResult =
         {
           ...options,
         },
-        `GraphQL execution completed: ${operationName}`
+        `GraphQL execution completed: ${operationName}`,
       )
     }
   }
@@ -193,7 +193,7 @@ const logResult =
  * @returns
  */
 export const useRedwoodLogger = (
-  loggerConfig: LoggerConfig
+  loggerConfig: LoggerConfig,
 ): Plugin<RedwoodGraphQLContext> => {
   const logger = loggerConfig.logger
   const level = loggerConfig.options?.level || logger.level || 'warn'
@@ -247,7 +247,7 @@ export const useRedwoodLogger = (
     onExecute({ args }) {
       const options = {} as any
       const rootOperation = args.document.definitions.find(
-        (o: DefinitionNode) => o.kind === Kind.OPERATION_DEFINITION
+        (o: DefinitionNode) => o.kind === Kind.OPERATION_DEFINITION,
       ) as OperationDefinitionNode
 
       const operationName =

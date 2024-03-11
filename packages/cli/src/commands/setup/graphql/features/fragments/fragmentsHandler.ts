@@ -82,7 +82,7 @@ export async function handler({ force }: Args) {
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

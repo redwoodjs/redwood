@@ -38,8 +38,8 @@ export const builder = (yargs) => {
     .epilogue(
       `For more commands, options, and examples, see ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#deploy'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#deploy',
+      )}`,
     )
 }
 
@@ -68,7 +68,7 @@ export const handler = async ({ side, serve, prisma, dm: dataMigrate }) => {
         console.log('Running database migrations...')
         execa.commandSync(
           `node_modules/.bin/prisma migrate deploy --schema "${rwjsPaths.api.dbSchema}"`,
-          execaConfig
+          execaConfig,
         )
       }
 

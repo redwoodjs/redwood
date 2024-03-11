@@ -34,7 +34,7 @@ async function detectEmptyCells(taskContext: TaskInnerAPI) {
 
   if (susceptibleCells.length === 0 && warnings.length === 0) {
     taskContext.setOutput(
-      "None of your project's Cells are susceptible to the new `isDataEmpty` behavior."
+      "None of your project's Cells are susceptible to the new `isDataEmpty` behavior.",
     )
     return
   }
@@ -48,7 +48,7 @@ async function detectEmptyCells(taskContext: TaskInnerAPI) {
         '',
         susceptibleCells.map((c) => `• ${c}`).join('\n'),
         '',
-      ].join('\n')
+      ].join('\n'),
     )
   }
 
@@ -66,7 +66,7 @@ async function detectEmptyCells(taskContext: TaskInnerAPI) {
         '',
         "You'll have to audit them manually.",
         '',
-      ].join('\n')
+      ].join('\n'),
     )
   }
 
@@ -75,7 +75,7 @@ async function detectEmptyCells(taskContext: TaskInnerAPI) {
       'The new behavior is documented in detail on the forums: https://community.redwoodjs.com/t/redwood-v5-0-0-rc-is-now-available/4715.',
       "It's most likely what you want, but consider whether it affects you.",
       "If you'd like to revert to the old behavior, you can override the `isDataEmpty` function.",
-    ].join('\n')
+    ].join('\n'),
   )
 
   const taskContextMethod = warnings.length > 0 ? 'setWarning' : 'setOutput'

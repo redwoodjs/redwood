@@ -12,7 +12,7 @@ function optionsConstNode(
     | types.JSXNamespacedName
     | types.SpreadElement
     | types.Expression,
-  state: PluginPass
+  state: PluginPass,
 ) {
   if (
     t.isIdentifier(value) ||
@@ -23,11 +23,11 @@ function optionsConstNode(
     return t.exportNamedDeclaration(
       t.variableDeclaration('const', [
         t.variableDeclarator(t.identifier(exportVariableName), value),
-      ])
+      ]),
     )
   } else {
     throw new Error(
-      `Unable to parse graphql function options in '${state.file.opts.filename}'`
+      `Unable to parse graphql function options in '${state.file.opts.filename}'`,
     )
   }
 }

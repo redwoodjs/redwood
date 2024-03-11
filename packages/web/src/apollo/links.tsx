@@ -6,7 +6,7 @@ import { print } from 'graphql/language/printer'
 export function createHttpLink(
   uri: string,
   httpLinkConfig: HttpOptions | undefined,
-  cookieHeader?: string
+  cookieHeader?: string,
 ) {
   const headers: Record<string, string> = {}
 
@@ -62,7 +62,7 @@ export function createAuthApolloLink(
         'auth-provider'?: string | undefined
         authorization?: string | undefined
       }
-    | undefined
+    | undefined,
 ) {
   return new ApolloLink((operation, forward) => {
     const { token } = operation.getContext()
@@ -116,7 +116,7 @@ export function createFinalLink({
 
 export type RedwoodApolloLink<
   Name extends RedwoodApolloLinkName,
-  Link extends ApolloLink = ApolloLink
+  Link extends ApolloLink = ApolloLink,
 > = {
   name: Name
   link: Link

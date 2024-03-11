@@ -5,7 +5,7 @@ import { MiddlewareResponse } from './MiddlewareResponse.js'
 
 type Middleware = (
   req: MiddlewareRequest,
-  res?: MiddlewareResponse
+  res?: MiddlewareResponse,
 ) => Promise<MiddlewareResponse> | Response | void
 
 /**
@@ -18,7 +18,7 @@ type Middleware = (
  */
 export const invoke = async (
   req: Request,
-  middleware?: Middleware
+  middleware?: Middleware,
 ): Promise<[MiddlewareResponse, ServerAuthState]> => {
   if (typeof middleware !== 'function') {
     return [MiddlewareResponse.next(), defaultAuthProviderState]

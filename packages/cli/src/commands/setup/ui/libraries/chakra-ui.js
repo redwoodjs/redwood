@@ -66,7 +66,7 @@ export async function handler({ force, install }) {
                 },
               },
             ],
-            { rendererOptions: { collapseSubtasks: false } }
+            { rendererOptions: { collapseSubtasks: false } },
           )
         },
       },
@@ -94,7 +94,7 @@ export async function handler({ force, install }) {
           writeFile(
             path.join(rwPaths.web.config, 'chakra.config.js'),
             CHAKRA_THEME_AND_COMMENTS,
-            { overwriteExisting: force }
+            { overwriteExisting: force },
           )
         },
       },
@@ -108,12 +108,12 @@ export async function handler({ force, install }) {
               __dirname,
               '..',
               'templates',
-              'chakra.storybook.preview.tsx.template'
-            )
+              'chakra.storybook.preview.tsx.template',
+            ),
           ),
       },
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

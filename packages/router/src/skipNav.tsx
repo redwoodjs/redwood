@@ -21,7 +21,7 @@ type ForwardRefExoticComponent<E, OwnProps> = React.ForwardRefExoticComponent<
 
 interface ForwardRefComponent<
   IntrinsicElementString,
-  OwnProps = {}
+  OwnProps = {},
   /*
    * Extends original type to ensure built in React types play nice with
    * polymorphic components still e.g. `React.ElementRef` etc.
@@ -39,10 +39,10 @@ interface ForwardRefComponent<
     props: As extends ''
       ? { as: keyof JSX.IntrinsicElements }
       : As extends React.ComponentType<infer P>
-      ? Merge<P, OwnProps & { as: As }>
-      : As extends keyof JSX.IntrinsicElements
-      ? Merge<JSX.IntrinsicElements[As], OwnProps & { as: As }>
-      : never
+        ? Merge<P, OwnProps & { as: As }>
+        : As extends keyof JSX.IntrinsicElements
+          ? Merge<JSX.IntrinsicElements[As], OwnProps & { as: As }>
+          : never,
   ): React.ReactElement | null
 }
 
@@ -64,7 +64,7 @@ const defaultId = 'reach-skip-nav'
  */
 const SkipNavLink = React.forwardRef(function SkipNavLink(
   { as: Comp = 'a', children = 'Skip to content', contentId, ...props },
-  forwardedRef
+  forwardedRef,
 ) {
   const id = contentId || defaultId
   return (
@@ -113,7 +113,7 @@ SkipNavLink.displayName = 'SkipNavLink'
  */
 const SkipNavContent = React.forwardRef(function SkipNavContent(
   { as: Comp = 'div', id: idProp, ...props },
-  forwardedRef
+  forwardedRef,
 ) {
   const id = idProp || defaultId
   return (

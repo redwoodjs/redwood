@@ -6,7 +6,7 @@ export function getDefaultDb(rwjsCwd: string) {
 
 export function checkAndReplaceDirectUrl(
   prismaSchema: string,
-  defaultDb: string
+  defaultDb: string,
 ) {
   // Check the schema.prisma for a directUrl.
   const directUrl = prismaSchema.match(PRISMA_DIRECT_URL_REGEXP)
@@ -22,7 +22,7 @@ export function checkAndReplaceDirectUrl(
   // This is mostly to please TS. But it's good to be safe because in this case we want to be 100% correct.
   if (!directUrlEnvMatch) {
     throw new Error(
-      'Error parsing `directUrl` from schema.prisma. Proceeding with this env var could be dangerous. Please check your schema.prisma file; if everything looks ok, file an issue.'
+      'Error parsing `directUrl` from schema.prisma. Proceeding with this env var could be dangerous. Please check your schema.prisma file; if everything looks ok, file an issue.',
     )
   }
 

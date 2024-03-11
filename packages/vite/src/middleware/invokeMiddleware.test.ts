@@ -24,7 +24,7 @@ describe('Invoke middleware', () => {
 
     const [mwRes, authState] = await invoke(
       new Request('https://example.com'),
-      fakeMiddleware
+      fakeMiddleware,
     )
 
     expect(mwRes).toBeInstanceOf(MiddlewareResponse)
@@ -51,7 +51,7 @@ describe('Invoke middleware', () => {
 
       const [mwRes, authState] = await invoke(
         new Request('https://example.com'),
-        throwingMiddleware
+        throwingMiddleware,
       )
 
       expect(mwRes).toBeInstanceOf(MiddlewareResponse)
@@ -65,7 +65,7 @@ describe('Invoke middleware', () => {
 
     const [mwRes] = await invoke(
       new Request('https://example.com'),
-      respondingMiddleware
+      respondingMiddleware,
     )
 
     expect(mwRes).toBeInstanceOf(MiddlewareResponse)

@@ -63,7 +63,7 @@ const validate = async () => {
   } catch (e: any) {
     killApiServer()
     console.error(
-      chalk.redBright(`[GQL Server Error] - Schema validation failed`)
+      chalk.redBright(`[GQL Server Error] - Schema validation failed`),
     )
     console.error(chalk.red(e?.message))
     console.error(chalk.redBright('-'.repeat(40)))
@@ -105,14 +105,14 @@ const buildAndRestart = async ({
       // We expect the OpenTelemetry SDK setup file to be in a specific location
       const opentelemetrySDKScriptPath = path.join(
         rwjsPaths.api.dist,
-        'opentelemetry.js'
+        'opentelemetry.js',
       )
       const opentelemetrySDKScriptPathRelative = path.relative(
         rwjsPaths.base,
-        opentelemetrySDKScriptPath
+        opentelemetrySDKScriptPath,
       )
       console.log(
-        `Setting up OpenTelemetry using the setup file: ${opentelemetrySDKScriptPathRelative}`
+        `Setting up OpenTelemetry using the setup file: ${opentelemetrySDKScriptPathRelative}`,
       )
       if (fs.existsSync(opentelemetrySDKScriptPath)) {
         forkOpts.execArgv = forkOpts.execArgv.concat([
@@ -120,7 +120,7 @@ const buildAndRestart = async ({
         ])
       } else {
         console.error(
-          `OpenTelemetry setup file does not exist at ${opentelemetrySDKScriptPathRelative}`
+          `OpenTelemetry setup file does not exist at ${opentelemetrySDKScriptPathRelative}`,
         )
       }
     }
@@ -139,13 +139,13 @@ const buildAndRestart = async ({
       httpServerProcess = fork(
         serverFile,
         ['--apiPort', port.toString()],
-        forkOpts
+        forkOpts,
       )
     } else {
       httpServerProcess = fork(
         path.join(__dirname, 'bin.js'),
         ['api', '--port', port.toString()],
-        forkOpts
+        forkOpts,
       )
     }
   } catch (e) {
@@ -161,14 +161,14 @@ const debouncedRebuild = debounce(
   () => buildAndRestart({ rebuild: true }),
   process.env.RWJS_DELAY_RESTART
     ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
-    : 500
+    : 500,
 )
 
 const debouncedBuild = debounce(
   () => buildAndRestart({ rebuild: false }),
   process.env.RWJS_DELAY_RESTART
     ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
-    : 500
+    : 500,
 )
 
 // NOTE: the file comes through as a unix path, even on windows
@@ -234,7 +234,7 @@ chokidar
     }
 
     console.log(
-      chalk.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`)
+      chalk.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`),
     )
 
     if (eventName === 'add' || eventName === 'unlink') {

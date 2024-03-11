@@ -48,7 +48,7 @@ export const CORE_JS_VERSION = pkgJson.dependencies['core-js']
 
 if (!CORE_JS_VERSION) {
   throw new Error(
-    'RedwoodJS Project Babel: Could not determine core-js version.'
+    'RedwoodJS Project Babel: Could not determine core-js version.',
   )
 }
 
@@ -57,7 +57,7 @@ export const RUNTIME_CORE_JS_VERSION =
 
 if (!RUNTIME_CORE_JS_VERSION) {
   throw new Error(
-    'RedwoodJS Project Babel: Could not determine core-js runtime version'
+    'RedwoodJS Project Babel: Could not determine core-js runtime version',
   )
 }
 
@@ -111,7 +111,7 @@ export const parseTypeScriptConfigFiles = () => {
     }
     return parseConfigFileTextToJson(
       configPath,
-      fs.readFileSync(configPath, 'utf-8')
+      fs.readFileSync(configPath, 'utf-8'),
     )
   }
   const apiConfig = parseConfigFile(rwPaths.api.base)
@@ -134,7 +134,7 @@ type CompilerOptionsForPaths = {
  */
 export const getPathsFromTypeScriptConfig = (
   config: CompilerOptionsForPaths,
-  rootDir: string
+  rootDir: string,
 ): Record<string, string> => {
   if (!config) {
     return {}
@@ -164,7 +164,7 @@ export const getPathsFromTypeScriptConfig = (
     const aliasKey = key.replace('/*', '')
     const aliasValue = path.join(
       absoluteBase,
-      (value as string)[0].replace('/*', '')
+      (value as string)[0].replace('/*', ''),
     )
 
     pathsObj[aliasKey] = aliasValue

@@ -20,7 +20,7 @@ export const defaultOptions: StorybookYargsOptions = {
 }
 
 export function builder(
-  yargs: Argv<StorybookYargsOptions>
+  yargs: Argv<StorybookYargsOptions>,
 ): Argv<StorybookYargsOptions> {
   return yargs
     .option('build', {
@@ -58,8 +58,8 @@ export function builder(
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#storybook'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#storybook',
+      )}`,
     )
 }
 
