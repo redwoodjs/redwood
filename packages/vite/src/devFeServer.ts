@@ -2,6 +2,7 @@ import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
 import type { ViteDevServer } from 'vite'
 import { createServer as createViteServer } from 'vite'
+import { cjsInterop } from 'vite-plugin-cjs-interop'
 
 import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
@@ -50,6 +51,11 @@ async function createServer() {
   // can take control
   const vite = await createViteServer({
     configFile: rwPaths.web.viteConfig,
+    plugins: [
+      cjsInterop({
+        dependencies: ['@redwoodjs/**'],
+      }),
+    ],
     server: { middlewareMode: true },
     logLevel: 'info',
     clearScreen: false,
