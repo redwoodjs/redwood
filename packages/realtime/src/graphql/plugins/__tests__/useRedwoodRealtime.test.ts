@@ -3,6 +3,7 @@ import {
   createSpiedPlugin,
   assertStreamExecutionValue,
 } from '@envelop/testing'
+import { describe, it, expect } from 'vitest'
 
 import { testQuery, testLiveQuery, testSchema } from '../__fixtures__/common'
 import {
