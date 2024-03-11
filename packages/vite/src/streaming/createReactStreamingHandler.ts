@@ -161,5 +161,5 @@ export const createReactStreamingHandler = async (
 
 function makeFilePath(path: string): string {
   // Without this, absolute paths can't be imported on Windows
-  return 'file://' + path
+  return 'file:///' + path
 }
