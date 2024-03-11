@@ -103,9 +103,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.9.5":
-  version: 3.9.5
-  resolution: "@apollo/client@npm:3.9.5"
+"@apollo/client@npm:3.9.6":
+  version: 3.9.6
+  resolution: "@apollo/client@npm:3.9.6"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/caches": "npm:^1.0.0"
@@ -115,7 +115,7 @@ __metadata:
     hoist-non-react-statics: "npm:^3.3.2"
     optimism: "npm:^0.18.0"
     prop-types: "npm:^15.7.2"
-    rehackt: "npm:0.0.5"
+    rehackt: "npm:0.0.6"
     response-iterator: "npm:^0.2.6"
     symbol-observable: "npm:^4.0.0"
     ts-invariant: "npm:^0.10.3"
@@ -136,7 +136,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10c0/ede8ea975ba12cbf11d1b88074808ff7c8677321b5780c952c4b7d7672a4bdda24f27a6a1fed79cc6e6d9787b083f12afed0033c2fee06a2d226faadf3f44aec
+  checksum: 10c0/566cbb82e5272c260f04c647a150068a328800bd2f0d492a594d6ab2a2a616e84b8e6a494d8207483a26af50552ed09a3361e52713f9b75407bca0cfd4123724
   languageName: node
   linkType: hard
 
@@ -8835,7 +8835,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": "npm:3.9.5"
+    "@apollo/client": "npm:3.9.6"
     "@apollo/experimental-nextjs-app-support": "npm:0.0.0-commit-b8a73fe"
     "@babel/cli": "npm:7.23.9"
     "@babel/core": "npm:^7.22.20"
@@ -29251,9 +29251,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rehackt@npm:0.0.5":
-  version: 0.0.5
-  resolution: "rehackt@npm:0.0.5"
+"rehackt@npm:0.0.6":
+  version: 0.0.6
+  resolution: "rehackt@npm:0.0.6"
   peerDependencies:
     "@types/react": "*"
     react: "*"
@@ -29262,7 +29262,7 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 10c0/6123188b6cae82441e2e670ec1dbd741a11874958479b44a69323429bc038398a0b431ffd845c69fc60cc0c0939252ffd2cb37255c314eda38f6a4072bf81b56
+  checksum: 10c0/814c9b80b2680dc0572639ecad1ed1961b23b606e53a00976ee4c4876f6ed736ea702381235ac40ed2a5c826fb55641b46ae23343e4ddd6378ced1da3d51ada7
   languageName: node
   linkType: hard
 

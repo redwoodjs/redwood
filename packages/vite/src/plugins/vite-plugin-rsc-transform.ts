@@ -10,18 +10,75 @@ export function rscTransformPlugin(
 ): Plugin {
   return {
     name: 'rsc-transform-plugin',
-    async transform(code, id) {
+    transform: async function (code, id) {
       // Do a quick check for the exact string. If it doesn't exist, don't
       // bother parsing.
       if (!code.includes('use client') && !code.includes('use server')) {
         return code
       }
 
-      const transformedCode = await transformModuleIfNeeded(
-        code,
-        id,
-        clientEntryFiles
-      )
+      // TODO (RSC): Bad bad hack. Don't do this.
+      // At least look for something that's guaranteed to be only present in
+      // transformed modules
+      // Ideally don't even try to transform twice
+      if (code.includes('$$id')) {
+        // Already transformed
+        return code
+      }
+
+      let body
+
+      try {
+        body = acorn.parse(code, {
+          ecmaVersion: 2024,
+          sourceType: 'module',
+        }).body
+      } catch (x: any) {
+        console.error('Error parsing %s %s', id, x.message)
+        return code
+      }
+
+      let useClient = false
+      let useServer = false
+
+      for (let i = 0; i < body.length; i++) {
+        const node = body[i]
+
+        if (node.type !== 'ExpressionStatement' || !node.directive) {
+          break
+        }
+
+        if (node.directive === 'use client') {
+          useClient = true
+        }
+
+        if (node.directive === 'use server') {
+          useServer = true
+        }
+      }
+
+      if (!useClient && !useServer) {
+        return code
+      }
+
+      if (useClient && useServer) {
+        throw new Error(
+          'Cannot have both "use client" and "use server" directives in the same file.'
+        )
+      }
+
+      let transformedCode: string
+
+      if (useClient) {
+        transformedCode = await transformClientModule(
+          code,
+          body,
+          id,
+          clientEntryFiles
+        )
+      } else {
+        transformedCode = transformServerModule(code, body, id)
+      }
 
       return transformedCode
     },
@@ -251,7 +308,7 @@ async function transformClientModule(
   code: string,
   body: any,
   url: string,
-  clientEntryFiles?: Record<string, string>
+  clientEntryFiles: Record<string, string>
 ): Promise<string> {
   const names: Array<string> = []
 
@@ -259,16 +316,19 @@ async function transformClientModule(
   await parseExportNamesIntoNames(code, body, names)
   console.log('transformClientModule names', names)
 
-  const entryRecord = Object.entries(clientEntryFiles || {}).find(
+  const entryRecord = Object.entries(clientEntryFiles).find(
     ([_key, value]) => value === url
   )
 
-  // TODO (RSC): Check if we always find a record. If we do, we should
-  // throw an error if it's undefined
+  if (!entryRecord || !entryRecord[0]) {
+    throw new Error('Entry not found for ' + url)
+  }
 
-  const loadId = entryRecord
-    ? path.join(getPaths().web.distRsc, 'assets', entryRecord[0] + '.js')
-    : url
+  const loadId = path.join(
+    getPaths().web.distRsc,
+    'assets',
+    `${entryRecord[0]}.js`
+  )
 
   let newSrc =
     "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"
@@ -313,57 +373,4 @@ async function transformClientModule(
   }
 
   return newSrc
-}
-
-async function transformModuleIfNeeded(
-  source: string,
-  url: string,
-  clientEntryFile?: Record<string, string>
-): Promise<string> {
-  let body
-
-  try {
-    body = acorn.parse(source, {
-      ecmaVersion: 2024,
-      sourceType: 'module',
-    }).body
-  } catch (x: any) {
-    console.error('Error parsing %s %s', url, x.message)
-    return source
-  }
-
-  let useClient = false
-  let useServer = false
-
-  for (let i = 0; i < body.length; i++) {
-    const node = body[i]
-
-    if (node.type !== 'ExpressionStatement' || !node.directive) {
-      break
-    }
-
-    if (node.directive === 'use client') {
-      useClient = true
-    }
-
-    if (node.directive === 'use server') {
-      useServer = true
-    }
-  }
-
-  if (!useClient && !useServer) {
-    return source
-  }
-
-  if (useClient && useServer) {
-    throw new Error(
-      'Cannot have both "use client" and "use server" directives in the same file.'
-    )
-  }
-
-  if (useClient) {
-    return transformClientModule(source, body, url, clientEntryFile)
-  }
-
-  return transformServerModule(source, body, url)
 }
