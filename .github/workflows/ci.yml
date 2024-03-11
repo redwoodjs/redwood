@@ -697,6 +697,10 @@ jobs:
           REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
           REDWOOD_DISABLE_TELEMETRY: 1
 
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+
   ssr-smoke-tests-skip:
     needs: detect-changes
     if: needs.detect-changes.outputs.ssr == 'false'
