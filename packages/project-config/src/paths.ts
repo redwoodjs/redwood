@@ -130,9 +130,8 @@ const PATH_WEB_DIR_DIST_CLIENT = 'web/dist/client'
 const PATH_WEB_DIR_DIST_RSC = 'web/dist/rsc'
 const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
 
-// Don't specify extension, handled by resolve file
-const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server'
-const PATH_WEB_DIR_DIST_DOCUMENT = 'web/dist/server/Document'
+const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server.mjs'
+const PATH_WEB_DIR_DIST_DOCUMENT = 'web/dist/server/Document.mjs'
 
 const PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS = 'web/dist/server/routeHooks'
 const PATH_WEB_DIR_DIST_RSC_ENTRIES = 'web/dist/rsc/entries.mjs'
@@ -248,12 +247,11 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       distRsc: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC),
       distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
       // Allow for the possibility of a .mjs file
-      distEntryServer: mjsOrJs(
-        path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER),
+      distEntryServer: path.join(
+        BASE_DIR,
+        PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER,
       ),
-      distDocumentServer: mjsOrJs(
-        path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT),
-      ),
+      distDocumentServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT),
       distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
       distRscEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC_ENTRIES),
       routeManifest: path.join(BASE_DIR, PATH_WEB_DIR_ROUTE_MANIFEST),
@@ -432,10 +430,4 @@ export function projectIsEsm() {
   }
 
   return true
-}
-
-/** Default to JS path, but if MJS exists, use it instead */
-const mjsOrJs = (filePath: string) => {
-  const mjsPath = resolveFile(filePath, ['.mjs'])
-  return mjsPath ? mjsPath : filePath + '.js'
 }
