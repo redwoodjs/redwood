@@ -5,6 +5,7 @@
 // like `useState` and `createContext`.
 
 import { Buffer } from 'node:buffer'
+import { Server } from 'node:http'
 import path from 'node:path'
 import { Transform, Writable } from 'node:stream'
 import { parentPort } from 'node:worker_threads'
@@ -114,6 +115,10 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
 // server. So we have to register them here again.
 registerFwGlobals()
 
+// TODO: this was copied from waku; they have a todo to remove it.
+// We need this to fix a WebSocket error in dev, `WebSocket server error: Port is already in use`.
+const dummyServer = new Server()
+
 // TODO (RSC): `createServer` is mostly used to create a dev server. Is it OK
 // to use it like a production server like this?
 // TODO (RSC): Do we need to pass `define` here with RWJS_ENV etc? What about
@@ -143,7 +148,7 @@ const vitePromise = createServer({
   // plugins. Specifically vite's own vite:css plugin needs this to initialize
   // the cssModulesCache WeakMap
   // See https://github.com/vitejs/vite/issues/3798#issuecomment-862185554
-  server: { middlewareMode: true },
+  server: { middlewareMode: true, hmr: { server: dummyServer } },
   appType: 'custom',
 })
 
