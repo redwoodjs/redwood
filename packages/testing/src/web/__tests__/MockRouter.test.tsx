@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { render } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
 
 // Private is deprecated, but we still want to test it so we don't break
 // people's projects that still use it.
