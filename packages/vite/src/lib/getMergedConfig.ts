@@ -118,11 +118,11 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
             ? rwPaths.web.distClient
             : rwPaths.web.dist,
         emptyOutDir: true,
-        manifest: !env.ssrBuild ? 'client-build-manifest.json' : undefined,
+        manifest: !env.isSsrBuild ? 'client-build-manifest.json' : undefined,
         // Note that sourcemap can be boolean or 'inline'
-        sourcemap: !env.ssrBuild && rwConfig.web.sourceMap,
+        sourcemap: !env.isSsrBuild && rwConfig.web.sourceMap,
         rollupOptions: {
-          input: getRollupInput(!!env.ssrBuild),
+          input: getRollupInput(!!env.isSsrBuild),
         },
       },
       // @MARK: do not set buildSsrCjsExternalHeuristics here
