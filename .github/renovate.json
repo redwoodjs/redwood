@@ -69,10 +69,7 @@
       "enabled": false,
 
       "matchPackageNames": [
-        "@apollo/experimental-nextjs-app-support",
-        "react",
-        "react-dom",
-        "react-server-dom-webpack"
+        "@apollo/experimental-nextjs-app-support"
       ]
     }
   ]
