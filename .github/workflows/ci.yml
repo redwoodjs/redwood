@@ -562,8 +562,15 @@ jobs:
       - name: 🎭 Install playwright dependencies
         run: npx playwright install --with-deps chromium
 
-      - name: 🐘 Run RSC smoke tests
+      - name: 🐘 Run RSC serve smoke tests
         working-directory: tasks/smoke-tests/rsc
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-project.outputs.rsc-project-path }}
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: 🐘 Run RSC dev smoke tests
+        working-directory: tasks/smoke-tests/rsc-dev
         run: npx playwright test
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-project.outputs.rsc-project-path }}
