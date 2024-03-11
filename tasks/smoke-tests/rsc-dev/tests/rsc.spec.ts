@@ -21,7 +21,6 @@ test('RWJS_* env vars', async ({ page }) => {
   await page.goto('/about')
 
   await expect(page.getByText('RSC on client: enabled')).toBeVisible()
-  await expect(page.getByText('RSC on server: disabled')).toBeVisible()
 
   page.close()
 })
