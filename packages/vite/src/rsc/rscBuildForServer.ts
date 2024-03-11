@@ -37,10 +37,6 @@ export async function rscBuildForServer(
   // TODO (RSC): No redwood-vite plugin, add it in here
   const rscServerBuildOutput = await viteBuild({
     envFile: false,
-    legacy: {
-      // @MARK: for the worker, we're building ESM! (not CJS)
-      buildSsrCjsExternalHeuristics: false,
-    },
     ssr: {
       // Externalize everything except packages with files that have
       // 'use client' in them (which are the files in `clientEntryFiles`)
