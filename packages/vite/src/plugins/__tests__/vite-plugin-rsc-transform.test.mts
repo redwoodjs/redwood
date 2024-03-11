@@ -74,7 +74,7 @@ export const Counter = Object.defineProperties(function() {throw new Error("Atte
           'dist',
           'rsc',
           'assets',
-          'rsc-Counter.tsx-1.js'
+          'rsc-Counter.tsx-1.mjs'
         )
       ).replaceAll('\\', '\\\\')}#Counter"}});
 `

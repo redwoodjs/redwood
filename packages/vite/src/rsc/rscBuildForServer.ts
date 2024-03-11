@@ -121,10 +121,11 @@ export async function rscBuildForServer(
           entryFileNames: (chunkInfo) => {
             // TODO (RSC) Probably don't want 'entries'. And definitely don't want it hardcoded
             if (chunkInfo.name === 'entries' || customModules[chunkInfo.name]) {
-              return '[name].js'
+              return '[name].mjs'
             }
-            return 'assets/[name].js'
+            return 'assets/[name].mjs'
           },
+          chunkFileNames: `assets/[name]-[hash].mjs`,
           // This is not ideal. See
           // https://rollupjs.org/faqs/#why-do-additional-imports-turn-up-in-my-entry-chunks-when-code-splitting
           // But we need it to prevent `import 'client-only'` from being
