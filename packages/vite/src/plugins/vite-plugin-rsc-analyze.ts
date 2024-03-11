@@ -3,10 +3,20 @@ import path from 'node:path'
 import * as swc from '@swc/core'
 import type { Plugin } from 'vite'
 
+import { getPaths } from '@redwoodjs/project-config'
+
 export function rscAnalyzePlugin(
   clientEntryCallback: (id: string) => void,
   serverEntryCallback: (id: string) => void,
+  clientEntryCssCallback: (id: string, cssId: string) => void,
+  serverComponentImportsCallback: (
+    id: string,
+    importId: readonly string[],
+  ) => void,
 ): Plugin {
+  const clientEntryIdSet = new Set<string>()
+  const webSrcPath = getPaths().web.src
+
   return {
     name: 'rsc-analyze-plugin',
     transform(code, id) {
@@ -25,6 +35,7 @@ export function rscAnalyzePlugin(
           ) {
             if (item.expression.value === 'use client') {
               clientEntryCallback(id)
+              clientEntryIdSet.add(id)
             } else if (item.expression.value === 'use server') {
               serverEntryCallback(id)
             }
@@ -33,6 +44,26 @@ export function rscAnalyzePlugin(
       }
 
       return code
+    },
+    moduleParsed(moduleInfo) {
+      const moduleId = moduleInfo.id
+      // TODO: Maybe this is not needed but added it for now to keep my life sane
+      if (!moduleId.startsWith(webSrcPath)) {
+        return
+      }
+      if (moduleId.endsWith('.css')) {
+        return
+      }
+      if (clientEntryIdSet.has(moduleId)) {
+        const cssImports = moduleInfo.importedIds.filter((id) =>
+          id.endsWith('.css'),
+        )
+        for (const cssImport of cssImports) {
+          clientEntryCssCallback(moduleId, cssImport)
+        }
+      } else {
+        serverComponentImportsCallback(moduleId, moduleInfo.importedIds)
+      }
     },
   }
 }

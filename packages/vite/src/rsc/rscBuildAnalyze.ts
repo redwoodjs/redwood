@@ -20,6 +20,8 @@ export async function rscBuildAnalyze() {
   const rwPaths = getPaths()
   const clientEntryFileSet = new Set<string>()
   const serverEntryFileSet = new Set<string>()
+  const ccsImportMap = new Map<string, string[]>()
+  const componentImportMap = new Map<string, string[]>()
 
   if (!rwPaths.web.entries) {
     throw new Error('RSC entries file not found')
@@ -45,6 +47,14 @@ export async function rscBuildAnalyze() {
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
         (id) => serverEntryFileSet.add(id),
+        (id, cssId) => {
+          const existingCssIds = ccsImportMap.get(id) ?? []
+          ccsImportMap.set(id, [...existingCssIds, cssId])
+        },
+        (id, imports) => {
+          const existingImports = componentImportMap.get(id) ?? []
+          componentImportMap.set(id, [...existingImports, ...imports])
+        },
       ),
     ],
     ssr: {
@@ -99,5 +109,10 @@ export async function rscBuildAnalyze() {
   console.log('clientEntryFiles', clientEntryFiles)
   console.log('serverEntryFiles', serverEntryFiles)
 
-  return { clientEntryFiles, serverEntryFiles }
+  return {
+    clientEntryFiles,
+    serverEntryFiles,
+    ccsImportMap,
+    componentImportMap,
+  }
 }

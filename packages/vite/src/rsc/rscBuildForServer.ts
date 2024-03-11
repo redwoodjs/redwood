@@ -5,6 +5,7 @@ import { build as viteBuild } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
+import { rscCssPreinitPlugin } from '../plugins/vite-plugin-rsc-css-preinit.js'
 import { rscTransformPlugin } from '../plugins/vite-plugin-rsc-transform.js'
 
 /**
@@ -16,6 +17,8 @@ export async function rscBuildForServer(
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>,
+  cssImportMap: Map<string, string[]>,
+  componentImportMap: Map<string, string[]>,
 ) {
   console.log('\n')
   console.log('3. rscBuildForServer')
@@ -88,6 +91,7 @@ export async function rscBuildForServer(
       // That's why it needs the `clientEntryFiles` data
       // (It does other things as well, but that's why it needs clientEntryFiles)
       rscTransformPlugin(clientEntryFiles),
+      rscCssPreinitPlugin(cssImportMap, componentImportMap),
     ],
     build: {
       ssr: true,
