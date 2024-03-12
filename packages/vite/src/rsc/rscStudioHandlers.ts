@@ -63,6 +63,6 @@ export const createStudioFlightHandler = (pipeable: PassThrough) => {
       postFlightToStudio(payload)
     })
     .catch((error) => {
-      console.error('An error occurred getting RSD Rendered steam:', error)
+      console.error('An error occurred getting RSC Rendered steam:', error)
     })
 }
