@@ -1455,7 +1455,7 @@ export class DbAuthHandler<
   // figure out which auth method we're trying to call
   async _getAuthMethod() {
     // try getting it from the query string, /.redwood/functions/auth?method=[methodName]
-    let methodName = this.normalizedRequest.query.method as AuthMethodNames
+    let methodName = this.normalizedRequest.query?.method as AuthMethodNames
 
     if (
       !DbAuthHandler.METHODS.includes(methodName) &&
