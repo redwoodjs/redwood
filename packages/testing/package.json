@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/testing",
-  "version": "7.1.2",
+  "version": "7.1.3",
   "description": "Tools, wrappers and configuration for testing a Redwood project.",
   "repository": {
     "type": "git",
