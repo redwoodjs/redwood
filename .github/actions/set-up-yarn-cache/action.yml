@@ -17,7 +17,7 @@ runs:
     # If the primary key doesn't match, the cache will probably be stale or incomplete,
     # but still worth restoring for the yarn install step.
     - name: ♻️ Restore yarn cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{ steps.get-yarn-cache-directory.outputs.CACHE_DIRECTORY }}
         key: yarn-cache-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
@@ -25,13 +25,13 @@ runs:
 
     # We avoid restore-keys for these steps because it's important to just start from scratch for new PRs.
     - name: ♻️ Restore yarn install state
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: .yarn/install-state.gz
         key: yarn-install-state-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
 
     - name: ♻️ Restore node_modules
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: '**/node_modules'
         key: yarn-node-modules-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
