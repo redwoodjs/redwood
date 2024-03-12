@@ -58,10 +58,6 @@ async function setUpTestProject({ canary }) {
 
   await execInFramework('yarn project:tarsync --verbose', { env: { RWJS_CWD: TEST_PROJECT_PATH } })
 
-  console.log(`Installing node_modules in ${TEST_PROJECT_PATH}`)
-  await execInProject('yarn install')
-  console.log()
-
   if (canary) {
     console.log(`Upgrading project to canary`)
     await execInProject('yarn rw upgrade -t canary')
