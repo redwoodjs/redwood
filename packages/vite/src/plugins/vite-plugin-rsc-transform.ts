@@ -316,19 +316,15 @@ async function transformClientModule(
   await parseExportNamesIntoNames(code, body, names)
   console.log('transformClientModule names', names)
 
+  // entryRecord will be undefined for dev, because clientEntryFiles will just
+  // be an empty object. See rscWorker.ts, where we do rscTransformPlugin({})
   const entryRecord = Object.entries(clientEntryFiles).find(
     ([_key, value]) => value === url,
   )
 
-  if (!entryRecord || !entryRecord[0]) {
-    throw new Error('Entry not found for ' + url)
-  }
-
-  const loadId = path.join(
-    getPaths().web.distRsc,
-    'assets',
-    `${entryRecord[0]}.js`,
-  )
+  const loadId = entryRecord
+    ? path.join(getPaths().web.distRsc, 'assets', `${entryRecord[0]}.mjs`)
+    : url
 
   let newSrc =
     "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"
