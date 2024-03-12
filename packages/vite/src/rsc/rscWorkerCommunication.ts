@@ -13,7 +13,7 @@ const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
 })
 
 export type RenderInput<
-  Props extends Record<string, unknown> = Record<string, unknown>,
+  Props extends Record<string, unknown> = Record<string, unknown>
 > = {
   rscId?: string | undefined
   props?: Props | undefined
@@ -121,7 +121,7 @@ export function renderRsc(input: RenderInput): Readable {
       passthrough.destroy(
         message.err instanceof Error
           ? message.err
-          : new Error(String(message.err)),
+          : new Error(String(message.err))
       )
       messageCallbacks.delete(id)
     }

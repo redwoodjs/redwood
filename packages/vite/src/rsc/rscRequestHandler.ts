@@ -1,3 +1,6 @@
+import http from 'node:http'
+import type { PassThrough } from 'node:stream'
+
 import busboy from 'busboy'
 import type { Request, Response } from 'express'
 import RSDWServer from 'react-server-dom-webpack/server.node.unbundled'
@@ -7,6 +10,80 @@ import { hasStatusCode } from '../lib/StatusError.js'
 import { renderRsc } from './rscWorkerCommunication.js'
 
 const { decodeReply, decodeReplyFromBusboy } = RSDWServer
+
+async function consumeRenderRsc(pipeable: PassThrough): Promise<string> {
+  // Use a promise to handle async flow
+  return new Promise((resolve, reject) => {
+    const chunks = [] as any
+
+    // Listen for 'data' events
+    pipeable.on('data', (chunk: any) => {
+      chunks.push(chunk)
+    })
+
+    // Listen for 'end' event to know when the stream is finished
+    pipeable.on('end', () => {
+      // Combine all chunks into a single Buffer
+      const resultBuffer = Buffer.concat(chunks)
+      // Convert the Buffer to a string to view its contents
+      // Assuming the content is UTF-8 encoded; adjust encoding as necessary
+      const resultString = resultBuffer.toString('utf-8') as string
+      resolve(resultString)
+    })
+
+    // Listen for 'error' events in case something goes wrong
+    pipeable.on('error', (error) => {
+      reject(error)
+    })
+  })
+}
+
+function postResultToStudio(result: string) {
+  // Create a JSON object with the encoded result
+  const jsonBody = JSON.stringify({
+    data: result,
+  })
+
+  // Options to configure the HTTP POST request
+  const options = {
+    hostname: 'localhost',
+    port: 4318,
+    path: '/.redwood/functions/rsc-flight',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json', // Sending JSON data
+      'Content-Length': Buffer.byteLength(jsonBody),
+    },
+  }
+
+  // Create the request object
+  const req = http.request(options, (res) => {
+    console.log(`STATUS: ${res.statusCode}`)
+    console.log(`HEADERS: ${JSON.stringify(res.headers)}`)
+    res.setEncoding('utf8')
+
+    // Listen for response data (if needed)
+    res.on('data', (chunk: any) => {
+      console.log(`BODY: ${chunk}`)
+    })
+
+    // Listen for the end of the response
+    res.on('end', () => {
+      console.log('No more data in response.')
+    })
+  })
+
+  // Listen for request errors
+  req.on('error', (e: Error) => {
+    console.error(`problem with request: ${e.message}`)
+  })
+
+  // Write the JSON body to request body
+  req.write(jsonBody)
+
+  // End the request
+  req.end()
+}
 
 export function createRscRequestHandler() {
   // This is mounted at /rw-rsc, so will have /rw-rsc stripped from req.url
@@ -126,6 +203,19 @@ export function createRscRequestHandler() {
         const pipeable = await renderRsc({ rscId, props, rsfId, args })
         // TODO (RSC): See if we can/need to do more error handling here
         // pipeable.on(handleError)
+
+        // SEND TO STUDIO SOMEHOW
+        // todo: only send when in dev mode
+        // Use the function and log the result or error
+        consumeRenderRsc(pipeable as PassThrough)
+          .then((result) => {
+            console.log('Stream contents:', result)
+            postResultToStudio(result)
+          })
+          .catch((error) => {
+            console.error('Error consuming stream:', error)
+          })
+
         pipeable.pipe(res)
       } catch (e) {
         handleError(e)
