@@ -28,7 +28,7 @@ const prismaBinaryTargetAdditions = () => {
   if (!content.includes('rhel-openssl-1.0.x')) {
     const result = content.replace(
       /binaryTargets =.*\n/,
-      `binaryTargets = ["native", "rhel-openssl-1.0.x"]\n`
+      `binaryTargets = ["native", "rhel-openssl-1.0.x"]\n`,
     )
 
     fs.writeFileSync(getPaths().api.dbSchema, result)
@@ -63,7 +63,7 @@ export const handler = async () => {
       },
       printSetupNotes(notes),
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
   try {
     await tasks.run()

@@ -13,7 +13,7 @@ import type {
 declare global {
   interface QueryOperationResult<
     TData = any,
-    TVariables extends OperationVariables = OperationVariables
+    TVariables extends OperationVariables = OperationVariables,
   > extends QueryResult<TData, TVariables> {}
 
   interface MutationOperationResult<TData, TVariables>
@@ -21,12 +21,12 @@ declare global {
 
   interface SubscriptionOperationResult<
     TData = any,
-    TVariables extends OperationVariables = OperationVariables
+    TVariables extends OperationVariables = OperationVariables,
   > extends SubscriptionResult<TData, TVariables> {}
 
   interface GraphQLQueryHookOptions<
     TData,
-    TVariables extends OperationVariables
+    TVariables extends OperationVariables,
   > extends QueryHookOptions<TData, TVariables> {}
 
   interface GraphQLMutationHookOptions<TData, TVariables>
@@ -34,7 +34,7 @@ declare global {
 
   interface GraphQLSubscriptionHookOptions<
     TData,
-    TVariables extends OperationVariables
+    TVariables extends OperationVariables,
   > extends SubscriptionHookOptions<TData, TVariables> {}
 }
 

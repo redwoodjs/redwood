@@ -45,7 +45,7 @@ describe('loadEnvFiles', () => {
 
     expect(process.env).toHaveProperty(
       'PROD_DATABASE_URL',
-      'postgresql://user:password@localhost:5432/myproddb'
+      'postgresql://user:password@localhost:5432/myproddb',
     )
   })
 
@@ -64,11 +64,11 @@ describe('loadEnvFiles', () => {
 
     expect(process.env).toHaveProperty(
       'DEV_DATABASE_URL',
-      'postgresql://user:password@localhost:5432/mydevdb'
+      'postgresql://user:password@localhost:5432/mydevdb',
     )
     expect(process.env).toHaveProperty(
       'PROD_DATABASE_URL',
-      'postgresql://user:password@localhost:5432/myproddb'
+      'postgresql://user:password@localhost:5432/myproddb',
     )
   })
 
@@ -84,7 +84,7 @@ describe('loadEnvFiles', () => {
 
     expect(process.env).toHaveProperty(
       'DATABASE_URL',
-      'postgresql://user:password@localhost:5432/mycollisiondb'
+      'postgresql://user:password@localhost:5432/mycollisiondb',
     )
     expect(process.env).toHaveProperty('TEST_BASE', '1')
     expect(process.env).toHaveProperty('TEST_COLLISION', '1')
@@ -102,7 +102,7 @@ describe('loadEnvFiles', () => {
 
     expect(process.env).toHaveProperty(
       'PROD_DATABASE_URL',
-      'postgresql://user:password@localhost:5432/bazinga'
+      'postgresql://user:password@localhost:5432/bazinga',
     )
     expect(process.env).toHaveProperty('BAZINGA', '1')
   })
@@ -119,7 +119,7 @@ describe('loadEnvFiles', () => {
 
     expect(process.env).toHaveProperty(
       'PROD_DATABASE_URL',
-      'postgresql://user:password@localhost:5432/myproddb'
+      'postgresql://user:password@localhost:5432/myproddb',
     )
     expect(process.env).toHaveProperty('BAZINGA', '1')
   })

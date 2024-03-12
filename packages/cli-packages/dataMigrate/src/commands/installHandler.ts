@@ -18,7 +18,7 @@ export async function handler() {
         task() {
           fs.outputFileSync(
             path.join(redwoodProjectPaths.api.dataMigrations, '.keep'),
-            ''
+            '',
           )
         },
       },
@@ -31,8 +31,8 @@ export async function handler() {
           fs.writeFileSync(
             dbSchemaFilePath,
             [dbSchemaFileContent.trim(), '', RW_DATA_MIGRATION_MODEL, ''].join(
-              '\n'
-            )
+              '\n',
+            ),
           )
         },
       },
@@ -49,7 +49,7 @@ export async function handler() {
     // is the only one I've found to work. So we set it just during testing.
     {
       renderer: process.env.NODE_ENV === 'test' ? 'verbose' : 'default',
-    }
+    },
   )
 
   try {

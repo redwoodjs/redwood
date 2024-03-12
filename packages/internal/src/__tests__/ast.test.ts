@@ -91,15 +91,15 @@ test('extracts named exports', () => {
 
 test('tests default exports', () => {
   expect(
-    hasDefaultExport(fileToAst(getFixturePath('/defaultExports/multiLine.js')))
+    hasDefaultExport(fileToAst(getFixturePath('/defaultExports/multiLine.js'))),
   ).toEqual(true)
 
   expect(
-    hasDefaultExport(fileToAst(getFixturePath('defaultExports/singleLine.js')))
+    hasDefaultExport(fileToAst(getFixturePath('defaultExports/singleLine.js'))),
   ).toEqual(true)
 
   expect(
-    hasDefaultExport(fileToAst(getFixturePath('defaultExports/none.js')))
+    hasDefaultExport(fileToAst(getFixturePath('defaultExports/none.js'))),
   ).toEqual(false)
 })
 

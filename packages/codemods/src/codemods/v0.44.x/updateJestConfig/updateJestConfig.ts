@@ -28,7 +28,7 @@ export default async function updateJestConfig() {
   if (!fs.existsSync(rootJestConfigPath)) {
     const rootJestConfigTemplate = await fetchFileFromTemplate(
       tag,
-      'jest.config.js'
+      'jest.config.js',
     )
     fs.writeFileSync(rootJestConfigPath, rootJestConfigTemplate)
   }

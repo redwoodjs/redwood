@@ -42,8 +42,8 @@ test('customOrDefaultTemplatePath returns the default path if no custom template
 
   expect(output).toMatch(
     path.normalize(
-      '/packages/cli/src/commands/generate/page/templates/page.tsx.template'
-    )
+      '/packages/cli/src/commands/generate/page/templates/page.tsx.template',
+    ),
   )
 })
 
@@ -58,7 +58,7 @@ test('customOrDefaultTemplatePath returns the app path if a custom template exis
   })
 
   expect(output).toEqual(
-    path.normalize('/path/to/project/web/generators/page/page.tsx.template')
+    path.normalize('/path/to/project/web/generators/page/page.tsx.template'),
   )
 })
 
@@ -74,8 +74,8 @@ test('customOrDefaultTemplatePath returns the app path with proper side, generat
 
   expect(output).toEqual(
     path.normalize(
-      '/path/to/project/api/generators/cell/component.tsx.template'
-    )
+      '/path/to/project/api/generators/cell/component.tsx.template',
+    ),
   )
 })
 
@@ -93,7 +93,7 @@ test('templateForComponentFile creates a proper output path for files', async ()
     })
 
     expect(output[0]).toEqual(
-      path.normalize('/path/to/project/web/src/pages/FooBarPage/FooBarPage.js')
+      path.normalize('/path/to/project/web/src/pages/FooBarPage/FooBarPage.js'),
     )
   }
 })
@@ -112,7 +112,7 @@ test('templateForComponentFile creates a proper output path for files with all c
     })
 
     expect(output[0]).toEqual(
-      path.normalize('/path/to/project/web/src/pages/FOOBARPage/FOOBARPage.js')
+      path.normalize('/path/to/project/web/src/pages/FOOBARPage/FOOBARPage.js'),
     )
   }
 })
@@ -131,7 +131,7 @@ test('templateForComponentFile creates a proper output path for files for starti
     })
 
     expect(output[0]).toEqual(
-      path.normalize('/path/to/project/web/src/pages/FOOBarPage/FOOBarPage.js')
+      path.normalize('/path/to/project/web/src/pages/FOOBarPage/FOOBarPage.js'),
     )
   }
 })
@@ -150,7 +150,7 @@ test('templateForComponentFile creates a proper output path for files with upper
     })
 
     expect(output[0]).toEqual(
-      path.normalize('/path/to/project/web/src/pages/ABtestPage/ABtestPage.js')
+      path.normalize('/path/to/project/web/src/pages/ABtestPage/ABtestPage.js'),
     )
   }
 })
@@ -166,7 +166,7 @@ test('templateForComponentFile can create a path in /web', async () => {
   })
 
   expect(output[0]).toEqual(
-    path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.js')
+    path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.js'),
   )
 })
 
@@ -181,7 +181,7 @@ test('templateForComponentFile can create a path in /api', async () => {
   })
 
   expect(output[0]).toEqual(
-    path.normalize('/path/to/project/api/src/services/HomePage/HomePage.js')
+    path.normalize('/path/to/project/api/src/services/HomePage/HomePage.js'),
   )
 })
 
@@ -196,7 +196,7 @@ test('templateForComponentFile can override generated component name', async () 
   })
 
   expect(output[0]).toEqual(
-    path.normalize('/path/to/project/web/src/pages/Hobbiton/Hobbiton.js')
+    path.normalize('/path/to/project/web/src/pages/Hobbiton/Hobbiton.js'),
   )
 })
 
@@ -212,7 +212,7 @@ test('templateForComponentFile can override file extension', async () => {
   })
 
   expect(output[0]).toEqual(
-    path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.txt')
+    path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.txt'),
   )
 })
 
@@ -227,7 +227,7 @@ test('templateForComponentFile can override output path', async () => {
   })
 
   expect(output[0]).toEqual(
-    path.normalize('/path/to/project/api/src/functions/func.ts')
+    path.normalize('/path/to/project/api/src/functions/func.ts'),
   )
 })
 
@@ -267,7 +267,7 @@ test('pathName creates path based on name if path is just a route parameter', ()
 
 test('pathName supports paths with route params', () => {
   expect(helpers.pathName('/post/{id:Int}/edit', 'EditPost')).toEqual(
-    '/post/{id:Int}/edit'
+    '/post/{id:Int}/edit',
   )
 })
 

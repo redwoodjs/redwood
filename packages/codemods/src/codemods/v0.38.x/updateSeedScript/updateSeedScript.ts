@@ -27,7 +27,7 @@ export const updateSeedScript = async () => {
 
   fs.writeFileSync(
     rootPackageJSONPath,
-    JSON.stringify(rootPackageJSON, null, 2) + '\n'
+    JSON.stringify(rootPackageJSON, null, 2) + '\n',
   )
 
   /**
@@ -42,7 +42,7 @@ export const updateSeedScript = async () => {
   }
 
   const res = await fetch(
-    'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/template/scripts/seed.ts'
+    'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/template/scripts/seed.ts',
   )
 
   let text: string | null = await res.text()
@@ -53,6 +53,6 @@ export const updateSeedScript = async () => {
 
   fs.writeFileSync(
     path.join(rwPaths.scripts, `seed.${isTSProject ? 'ts' : 'js'}`),
-    text ? text : ''
+    text ? text : '',
   )
 }

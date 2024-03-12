@@ -24,7 +24,7 @@ describe('fragments graphQLClientConfig', () => {
       'existingPropVariable',
       {
         useJsCodeshift: true,
-      }
+      },
     )
   })
 
@@ -34,7 +34,7 @@ describe('fragments graphQLClientConfig', () => {
       'existingPropVariableNoCacheConfig',
       {
         useJsCodeshift: true,
-      }
+      },
     )
   })
 
@@ -44,7 +44,7 @@ describe('fragments graphQLClientConfig', () => {
       'existingPropVariableCustomName',
       {
         useJsCodeshift: true,
-      }
+      },
     )
   })
 
@@ -57,9 +57,9 @@ describe('fragments graphQLClientConfig', () => {
         'test-project',
         'web',
         'src',
-        'App.tsx'
+        'App.tsx',
       ),
-      'utf-8'
+      'utf-8',
     )
     await matchInlineTransformSnapshot(
       'appGqlConfigTransform',
@@ -97,7 +97,7 @@ describe('fragments graphQLClientConfig', () => {
       );
 
       export default App;
-      `
+      `,
     )
   })
 })

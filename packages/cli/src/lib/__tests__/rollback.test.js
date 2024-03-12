@@ -46,16 +46,16 @@ it('removes empty folders after removing files', async () => {
     [path.join('fake_dir', 'mock_dir', 'test_dir')]: undefined,
   })
   rollback.addFileToRollback(
-    path.join('fake_dir', 'mock_dir', 'test_dir', 'fake-file')
+    path.join('fake_dir', 'mock_dir', 'test_dir', 'fake-file'),
   )
   fs.writeFileSync(
     path.join('fake_dir', 'mock_dir', 'test_dir', 'fake-file'),
-    'fake-content'
+    'fake-content',
   )
 
   await rollback.executeRollback()
   expect(
-    fs.existsSync(path.join('fake_dir', 'mock_dir', 'test_dir', 'fake-file'))
+    fs.existsSync(path.join('fake_dir', 'mock_dir', 'test_dir', 'fake-file')),
   ).toBe(false)
   expect(fs.readdirSync('fake_dir')).toStrictEqual([])
 })
@@ -187,7 +187,7 @@ it('prepare sets listr2 rollback functions and rollback executes correctly', asy
         },
       },
     ],
-    { silentRendererCondition: true }
+    { silentRendererCondition: true },
   )
 
   rollback.prepareForRollback(tasks)

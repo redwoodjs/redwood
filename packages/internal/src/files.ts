@@ -87,7 +87,7 @@ export const findWebFiles = (cwd: string = getPaths().web.src) => {
 }
 
 export const findApiServerFunctions = (
-  cwd: string = getPaths().api.functions
+  cwd: string = getPaths().api.functions,
 ) => {
   const files = fg.sync('**/*.{js,ts}', {
     cwd,

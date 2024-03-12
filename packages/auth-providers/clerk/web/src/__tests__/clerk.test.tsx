@@ -104,7 +104,7 @@ beforeEach(() => {
 function getClerkAuth(customProviderHooks?: {
   useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
-    currentUser: CurrentUser | null
+    currentUser: CurrentUser | null,
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
   const { useAuth, AuthProvider } = createAuth(customProviderHooks)
@@ -191,7 +191,7 @@ describe('Clerk', () => {
         if (
           rolesToCheck === 'admin' &&
           (currentUser.emailAddresses as any).some(
-            (email) => email.emailAddress === 'admin@example.com'
+            (email) => email.emailAddress === 'admin@example.com',
           )
         ) {
           return true

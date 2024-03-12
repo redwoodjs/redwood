@@ -53,7 +53,7 @@ describe('redwoodFastifyWeb', () => {
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
       expect(res.body).toBe(
-        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8')
+        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8'),
       )
     })
 
@@ -68,7 +68,7 @@ describe('redwoodFastifyWeb', () => {
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
       expect(res.body).toBe(
-        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8')
+        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8'),
       )
     })
 
@@ -85,7 +85,7 @@ describe('redwoodFastifyWeb', () => {
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
       expect(res.body).toBe(
-        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8')
+        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8'),
       )
     })
 
@@ -124,7 +124,7 @@ describe('redwoodFastifyWeb', () => {
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
       expect(res.body).toBe(
-        fs.readFileSync(path.join(getPaths().web.dist, url), 'utf-8')
+        fs.readFileSync(path.join(getPaths().web.dist, url), 'utf-8'),
       )
     })
 
@@ -137,7 +137,7 @@ describe('redwoodFastifyWeb', () => {
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
       expect(res.body).toBe(
-        fs.readFileSync(path.join(getPaths().web.dist, '200.html'), 'utf-8')
+        fs.readFileSync(path.join(getPaths().web.dist, '200.html'), 'utf-8'),
       )
     })
   })
@@ -153,13 +153,13 @@ describe('redwoodFastifyWeb', () => {
 
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe(
-        'application/javascript; charset=UTF-8'
+        'application/javascript; charset=UTF-8',
       )
       expect(res.body).toBe(
         fs.readFileSync(
           path.join(getPaths().web.dist, relativeFilePath),
-          'utf-8'
-        )
+          'utf-8',
+        ),
       )
     })
 
@@ -176,8 +176,8 @@ describe('redwoodFastifyWeb', () => {
       expect(res.body).toBe(
         fs.readFileSync(
           path.join(getPaths().web.dist, relativeFilePath),
-          'utf-8'
-        )
+          'utf-8',
+        ),
       )
     })
 
@@ -191,13 +191,13 @@ describe('redwoodFastifyWeb', () => {
 
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe(
-        'application/json; charset=UTF-8'
+        'application/json; charset=UTF-8',
       )
       expect(res.body).toBe(
         fs.readFileSync(
           path.join(getPaths().web.dist, relativeFilePath),
-          'utf-8'
-        )
+          'utf-8',
+        ),
       )
     })
 
@@ -224,8 +224,8 @@ describe('redwoodFastifyWeb', () => {
       expect(res.body).toBe(
         fs.readFileSync(
           path.join(getPaths().web.dist, relativeFilePath),
-          'utf-8'
-        )
+          'utf-8',
+        ),
       )
     })
 
@@ -242,8 +242,8 @@ describe('redwoodFastifyWeb', () => {
       expect(res.body).toBe(
         fs.readFileSync(
           path.join(getPaths().web.dist, relativeFilePath),
-          'utf-8'
-        )
+          'utf-8',
+        ),
       )
     })
   })
@@ -319,10 +319,10 @@ describe('redwoodFastifyWeb', () => {
 
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe(
-        'application/json; charset=utf-8'
+        'application/json; charset=utf-8',
       )
       expect(res.body).toMatchInlineSnapshot(
-        `"{"data":null,"errors":[{"message":"Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.","extensions":{"code":"BAD_GATEWAY","httpStatus":502}}]}"`
+        `"{"data":null,"errors":[{"message":"Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.","extensions":{"code":"BAD_GATEWAY","httpStatus":502}}]}"`,
       )
     })
 
@@ -336,10 +336,10 @@ describe('redwoodFastifyWeb', () => {
 
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe(
-        'application/json; charset=utf-8'
+        'application/json; charset=utf-8',
       )
       expect(res.body).toMatchInlineSnapshot(
-        `"{"data":null,"errors":[{"message":"Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.","extensions":{"code":"BAD_GATEWAY","httpStatus":502}}]}"`
+        `"{"data":null,"errors":[{"message":"Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.","extensions":{"code":"BAD_GATEWAY","httpStatus":502}}]}"`,
       )
     })
   })

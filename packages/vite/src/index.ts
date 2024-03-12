@@ -22,7 +22,7 @@ export default function redwoodPluginVite(): PluginOption[] {
 
   if (!clientEntryPath) {
     throw new Error(
-      'Vite client entry point not found. Please check that your project has an entry.client.{jsx,tsx} file in the web/src directory.'
+      'Vite client entry point not found. Please check that your project has an entry.client.{jsx,tsx} file in the web/src directory.',
     )
   }
 
@@ -62,7 +62,7 @@ export default function redwoodPluginVite(): PluginOption[] {
           rwConfig.web.includeEnvironmentVariables.map((envName) => {
             newHtml = newHtml.replaceAll(
               `%${envName}%`,
-              process.env[envName] || ''
+              process.env[envName] || '',
             )
           })
 
@@ -92,7 +92,7 @@ export default function redwoodPluginVite(): PluginOption[] {
               '</head>',
               // @NOTE the slash in front, for windows compatibility and for pages in subdirectories
               `<script type="module" src="/${relativeEntryPath}"></script>
-        </head>`
+        </head>`,
             )
           } else {
             return html
@@ -110,7 +110,7 @@ export default function redwoodPluginVite(): PluginOption[] {
             code: code.replace(
               '</head>',
               `<script type="module" src="/${relativeEntryPath}"></script>
-        </head>`
+        </head>`,
             ),
             map: null,
           }
@@ -160,7 +160,7 @@ export default function redwoodPluginVite(): PluginOption[] {
             RWJS_DEBUG_ENV: {
               RWJS_SRC_ROOT: rwPaths.web.src,
               REDWOOD_ENV_EDITOR: JSON.stringify(
-                process.env.REDWOOD_ENV_EDITOR
+                process.env.REDWOOD_ENV_EDITOR,
               ),
             },
             // Vite can automatically expose environment variables, but we
@@ -180,7 +180,7 @@ export default function redwoodPluginVite(): PluginOption[] {
                   `process.env.${envName}`,
                   JSON.stringify(process.env[envName]),
                 ],
-              ])
+              ]),
             ),
             ...Object.entries(process.env).reduce<Record<string, any>>(
               (acc, [key, value]) => {
@@ -191,7 +191,7 @@ export default function redwoodPluginVite(): PluginOption[] {
 
                 return acc
               },
-              {}
+              {},
             ),
           },
           css: {

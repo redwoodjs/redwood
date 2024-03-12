@@ -32,7 +32,7 @@ describe('<NavLink />', () => {
         <NavLink activeClassName="activeTest" to="/dunder-mifflin">
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -41,7 +41,7 @@ describe('<NavLink />', () => {
   it('receives active class on the same pathname with search parameters', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
-      '?tab=main&page=1'
+      '?tab=main&page=1',
     )
 
     const { getByText } = render(
@@ -52,7 +52,7 @@ describe('<NavLink />', () => {
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -66,7 +66,7 @@ describe('<NavLink />', () => {
         <NavLink activeClassName="activeTest" matchSubPaths to="/users">
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -80,7 +80,7 @@ describe('<NavLink />', () => {
         <NavLink activeClassName="activeTest" matchSubPaths to="/users/1">
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -98,7 +98,7 @@ describe('<NavLink />', () => {
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -107,7 +107,7 @@ describe('<NavLink />', () => {
   it('receives active class on the same pathname with a matched param key', () => {
     const mockLocation = createDummyLocation(
       '/pathname-params',
-      '?tab=main&page=1'
+      '?tab=main&page=1',
     )
 
     const { getByText } = render(
@@ -119,7 +119,7 @@ describe('<NavLink />', () => {
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -128,7 +128,7 @@ describe('<NavLink />', () => {
   it('receives active class on the same pathname with a matched key-value param', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
-      '?tab=main&page=1'
+      '?tab=main&page=1',
     )
 
     const { getByText } = render(
@@ -140,7 +140,7 @@ describe('<NavLink />', () => {
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -149,7 +149,7 @@ describe('<NavLink />', () => {
   it('receives active class on the same pathname with a matched param key and a matched key-value param', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
-      '?tab=main&page=1&category=book'
+      '?tab=main&page=1&category=book',
     )
 
     const { getByText } = render(
@@ -161,7 +161,7 @@ describe('<NavLink />', () => {
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -170,7 +170,7 @@ describe('<NavLink />', () => {
   it('receives active class on the same pathname with a matched param key and multiple matched key-value param', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
-      '?tab=about&page=3&category=magazine'
+      '?tab=about&page=3&category=magazine',
     )
 
     const { getByText } = render(
@@ -182,7 +182,7 @@ describe('<NavLink />', () => {
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -191,7 +191,7 @@ describe('<NavLink />', () => {
   it('receives active class on the same pathname with a matched param key and multiple matched key-value param in separated', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
-      '?tab=about&page=3&category=magazine'
+      '?tab=about&page=3&category=magazine',
     )
 
     const { getByText } = render(
@@ -203,7 +203,7 @@ describe('<NavLink />', () => {
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -217,7 +217,7 @@ describe('<NavLink />', () => {
         <NavLink activeClassName="activeTest" matchSubPaths to="/users">
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).not.toHaveClass('activeTest')
@@ -231,7 +231,7 @@ describe('<NavLink />', () => {
         <NavLink activeClassName="activeTest" to="/dunder-mifflin">
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).not.toHaveClass('activeTest')
@@ -240,7 +240,7 @@ describe('<NavLink />', () => {
   it('does NOT receive active class on the same pathname with different search params', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
-      '?tab=main&page=1'
+      '?tab=main&page=1',
     )
 
     const { getByText } = render(
@@ -251,7 +251,7 @@ describe('<NavLink />', () => {
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).not.toHaveClass('activeTest')
@@ -260,7 +260,7 @@ describe('<NavLink />', () => {
   it('does NOT receive active class on the same pathname with a different search param key', () => {
     const mockLocation = createDummyLocation(
       '/pathname-params',
-      '?category=car&page=1'
+      '?category=car&page=1',
     )
 
     const { getByText } = render(
@@ -272,7 +272,7 @@ describe('<NavLink />', () => {
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).not.toHaveClass('activeTest')

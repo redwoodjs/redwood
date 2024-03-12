@@ -10,7 +10,7 @@ export type FastifySideConfigFnOptions = {
 export type FastifySideConfigFn = (
   fastify: FastifyInstance,
   options?: FastifySideConfigFnOptions &
-    Pick<RedwoodFastifyAPIOptions['redwood'], 'apiRootPath'>
+    Pick<RedwoodFastifyAPIOptions['redwood'], 'apiRootPath'>,
 ) => Promise<FastifyInstance> | void
 
 export type APIParsedOptions = {

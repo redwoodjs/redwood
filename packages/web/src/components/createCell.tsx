@@ -32,8 +32,8 @@ type CellPropsVariables<Cell, GQLVariables> = Cell extends {
     ? Record<string, unknown>
     : Parameters<Cell['beforeQuery']>[0]
   : GQLVariables extends Record<string, never>
-  ? unknown
-  : GQLVariables
+    ? unknown
+    : GQLVariables
 
 /**
  * Cell component props which is the combination of query variables and Success props.
@@ -42,7 +42,7 @@ export type CellProps<
   CellSuccess extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>,
   GQLResult,
   CellType,
-  GQLVariables
+  GQLVariables,
 > = A.Compute<
   Omit<
     ComponentProps<CellSuccess>,
@@ -87,9 +87,8 @@ type KeyCount<T extends object> = L.Length<U.ListOf<O.SelectKeys<T, any>>>
 // NOTE: This only holds true for Cells as Redwood generates them. If the user
 // removes the <Empty> component, or provides their own isEmpty implementation
 // there's no way for us to know what the data will look like.
-type ConditionallyGuaranteed<T extends object> = KeyCount<T> extends 1
-  ? Guaranteed<T>
-  : T
+type ConditionallyGuaranteed<T extends object> =
+  KeyCount<T> extends 1 ? Guaranteed<T> : T
 
 /**
  * @params TData = Type of data based on your graphql query. This can be imported from 'types/graphql'
@@ -110,7 +109,7 @@ export type CellSuccessData<TData = any> = ConditionallyGuaranteed<
  */
 export type CellSuccessProps<
   TData = any,
-  TVariables extends OperationVariables = any
+  TVariables extends OperationVariables = any,
 > = {
   queryResult?: Partial<
     Omit<QueryOperationResult<TData, TVariables>, 'loading' | 'error' | 'data'>
@@ -173,7 +172,7 @@ export interface CreateCellProps<CellProps, CellVariables> {
     response: DataObject,
     options: {
       isDataEmpty: (data: DataObject) => boolean
-    }
+    },
   ) => boolean
   /**
    * If the query's in flight and there's no stale data, render this.
@@ -250,7 +249,7 @@ function isDataEmpty(data: DataObject) {
  */
 export function createCell<
   CellProps extends Record<string, unknown>,
-  CellVariables extends Record<string, unknown>
+  CellVariables extends Record<string, unknown>,
 >({
   QUERY,
   beforeQuery = (props) => ({
@@ -310,7 +309,7 @@ export function createCell<
         throw new Error(
           `The gql query in ${cellName} is missing an operation name. ` +
             'Something like FindBlogPostQuery in ' +
-            '`query FindBlogPostQuery($id: Int!)`'
+            '`query FindBlogPostQuery($id: Int!)`',
         )
       }
 
@@ -395,10 +394,10 @@ export function createCell<
        * @see {@link https://github.com/redwoodjs/redwood/issues/2473#issuecomment-971864604}
        */
       console.warn(
-        `If you're using Apollo Client, check for its debug logs here in the console, which may help explain the error.`
+        `If you're using Apollo Client, check for its debug logs here in the console, which may help explain the error.`,
       )
       throw new Error(
-        'Cannot render Cell: reached an unexpected state where the query succeeded but `data` is `null`. If this happened in Storybook, your query could be missing fields; otherwise this is most likely a GraphQL caching bug. Note that adding an `id` field to all the fields on your query may fix the issue.'
+        'Cannot render Cell: reached an unexpected state where the query succeeded but `data` is `null`. If this happened in Storybook, your query could be missing fields; otherwise this is most likely a GraphQL caching bug. Note that adding an `id` field to all the fields on your query may fix the issue.',
       )
     }
   }

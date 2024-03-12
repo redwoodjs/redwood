@@ -134,7 +134,7 @@ export function matchPath(
   } = {
     userParamTypes: {},
     matchSubPaths: false,
-  }
+  },
 ) {
   // Get the names and the transform types for the given route.
   const allParamTypes = { ...coreParamTypes, ...userParamTypes }
@@ -172,7 +172,7 @@ export function matchPath(
           [name]: transformedValue,
         }
       },
-      {}
+      {},
     )
     return { match: true, params }
   }
@@ -196,7 +196,7 @@ export function getRouteRegexAndParams(
   {
     matchSubPaths = false,
     allParamTypes = coreParamTypes,
-  }: GetRouteRegexOptions | undefined = {}
+  }: GetRouteRegexOptions | undefined = {},
 ) {
   let typeMatchingRoute = route
   const routeParams = paramsForRoute(route)
@@ -247,7 +247,7 @@ export function parseSearch(
     | string[][]
     | Record<string, string>
     | URLSearchParams
-    | undefined
+    | undefined,
 ) {
   const searchParams = new URLSearchParams(search)
 
@@ -256,7 +256,7 @@ export function parseSearch(
       ...params,
       [key]: searchParams.get(key),
     }),
-    {}
+    {},
   )
 }
 
@@ -269,7 +269,7 @@ export function validatePath(path: string, routeName: string) {
   // Check that path begins with a slash.
   if (!path.startsWith('/')) {
     throw new Error(
-      `Route path for ${routeName} does not begin with a slash: "${path}"`
+      `Route path for ${routeName} does not begin with a slash: "${path}"`,
     )
   }
 
@@ -283,7 +283,7 @@ export function validatePath(path: string, routeName: string) {
         `Route for ${routeName} contains ref or key as a path parameter: "${path}"`,
         "`ref` and `key` shouldn't be used as path parameters because they're special React props.",
         'You can fix this by renaming the path parameter.',
-      ].join('\n')
+      ].join('\n'),
     )
   }
 
@@ -313,7 +313,7 @@ export function validatePath(path: string, routeName: string) {
  */
 export function replaceParams(
   route: string,
-  args: Record<string, unknown> = {}
+  args: Record<string, unknown> = {},
 ) {
   const params = paramsForRoute(route)
   let path = route
@@ -326,7 +326,7 @@ export function replaceParams(
       path = path.replace(match, value as string)
     } else {
       throw new Error(
-        `Missing parameter '${name}' for route '${route}' when generating a navigation URL.`
+        `Missing parameter '${name}' for route '${route}' when generating a navigation URL.`,
       )
     }
   })
@@ -343,7 +343,7 @@ export function replaceParams(
   // Append any unnamed params as search params.
   if (extraArgKeys.length) {
     const extraArgs = Object.fromEntries(
-      extraArgKeys.map((key) => [key, `${args[key]}`])
+      extraArgKeys.map((key) => [key, `${args[key]}`]),
     )
     path += `?${new URLSearchParams(extraArgs).toString()}`
   }
@@ -368,7 +368,7 @@ export type FlattenSearchParams = ReturnType<typeof flattenSearchParams>
  * => [ { key1: 'val1' }, { key2: 'val2' } ]
  */
 export function flattenSearchParams(
-  queryString: string
+  queryString: string,
 ): Array<string | Record<string, any>> {
   const searchParams = []
 
@@ -388,7 +388,7 @@ export interface Spec {
 }
 
 export function isSpec(
-  specOrPage: Spec | React.ComponentType
+  specOrPage: Spec | React.ComponentType,
 ): specOrPage is Spec {
   return (specOrPage as Spec).LazyComponent !== undefined
 }
@@ -411,7 +411,7 @@ export function isSpec(
  * imported version into a spec.
  */
 export function normalizePage(
-  specOrPage: Spec | React.ComponentType<unknown>
+  specOrPage: Spec | React.ComponentType<unknown>,
 ): Spec {
   if (isSpec(specOrPage)) {
     // Already a spec, just return it.
@@ -454,7 +454,7 @@ type WhileLoadingPage = () => ReactElement | null
 // We can't index it correctly in the framework
 export type GeneratedRoutesMap = {
   [key: string]: (
-    args?: Record<string | number, string | number | boolean>
+    args?: Record<string | number, string | number | boolean>,
   ) => string
 }
 
@@ -481,7 +481,7 @@ interface AnalyzedRoute {
 
 export function analyzeRoutes(
   children: ReactNode,
-  { currentPathName, userParamTypes }: AnalyzeRoutesOptions
+  { currentPathName, userParamTypes }: AnalyzeRoutesOptions,
 ) {
   const pathRouteMap: Record<RoutePath, AnalyzedRoute> = {}
   const namedRoutesMap: GeneratedRoutesMap = {}

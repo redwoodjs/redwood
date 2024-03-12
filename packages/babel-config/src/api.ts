@@ -20,7 +20,7 @@ import {
 export const TARGETS_NODE = '20.10'
 
 export const getApiSideBabelPresets = (
-  { presetEnv } = { presetEnv: false }
+  { presetEnv } = { presetEnv: false },
 ) => {
   return [
     [
@@ -214,7 +214,7 @@ export const registerApiSideBabelHook = ({
 
 export const transformWithBabel = async (
   srcPath: string,
-  plugins: TransformOptions['plugins']
+  plugins: TransformOptions['plugins'],
 ) => {
   const code = await fs.readFile(srcPath, 'utf-8')
   const defaultOptions = getApiSideDefaultBabelConfig({

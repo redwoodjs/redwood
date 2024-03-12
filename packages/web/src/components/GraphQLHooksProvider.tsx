@@ -6,31 +6,31 @@ export type { TypedDocumentNode }
 
 type DefaultUseQueryType = <
   TData = any,
-  TVariables extends OperationVariables = GraphQLOperationVariables
+  TVariables extends OperationVariables = GraphQLOperationVariables,
 >(
   query: DocumentNode | TypedDocumentNode<TData, TVariables>,
-  options?: GraphQLQueryHookOptions<TData, TVariables>
+  options?: GraphQLQueryHookOptions<TData, TVariables>,
 ) => QueryOperationResult<TData, TVariables>
 
 type DefaultUseMutationType = <
   TData = any,
-  TVariables = GraphQLOperationVariables
+  TVariables = GraphQLOperationVariables,
 >(
   mutation: DocumentNode | TypedDocumentNode<TData, TVariables>,
-  options?: GraphQLMutationHookOptions<TData, TVariables>
+  options?: GraphQLMutationHookOptions<TData, TVariables>,
 ) => MutationOperationResult<TData, TVariables>
 
 type DefaultUseSubscriptionType = <
   TData = any,
-  TVariables extends OperationVariables = GraphQLOperationVariables
+  TVariables extends OperationVariables = GraphQLOperationVariables,
 >(
   subscription: DocumentNode | TypedDocumentNode<TData, TVariables>,
-  options?: GraphQLSubscriptionHookOptions<TData, TVariables>
+  options?: GraphQLSubscriptionHookOptions<TData, TVariables>,
 ) => SubscriptionOperationResult<TData, TVariables>
 export interface GraphQLHooks<
   TuseQuery = DefaultUseQueryType,
   TuseMutation = DefaultUseMutationType,
-  TuseSubscription = DefaultUseSubscriptionType
+  TuseSubscription = DefaultUseSubscriptionType,
 > {
   useQuery: TuseQuery
   useMutation: TuseMutation
@@ -40,17 +40,17 @@ export interface GraphQLHooks<
 export const GraphQLHooksContext = React.createContext<GraphQLHooks>({
   useQuery: () => {
     throw new Error(
-      'You must register a useQuery hook via the `GraphQLHooksProvider`'
+      'You must register a useQuery hook via the `GraphQLHooksProvider`',
     )
   },
   useMutation: () => {
     throw new Error(
-      'You must register a useMutation hook via the `GraphQLHooksProvider`'
+      'You must register a useMutation hook via the `GraphQLHooksProvider`',
     )
   },
   useSubscription: () => {
     throw new Error(
-      'You must register a useSubscription hook via the `GraphQLHooksProvider`'
+      'You must register a useSubscription hook via the `GraphQLHooksProvider`',
     )
   },
 })
@@ -58,7 +58,7 @@ export const GraphQLHooksContext = React.createContext<GraphQLHooks>({
 interface GraphQlHooksProviderProps<
   TuseQuery = DefaultUseQueryType,
   TuseMutation = DefaultUseMutationType,
-  TuseSubscription = DefaultUseSubscriptionType
+  TuseSubscription = DefaultUseSubscriptionType,
 > extends GraphQLHooks<TuseQuery, TuseMutation, TuseSubscription> {
   children: React.ReactNode
 }
@@ -72,7 +72,7 @@ interface GraphQlHooksProviderProps<
  */
 export const GraphQLHooksProvider = <
   TuseQuery extends DefaultUseQueryType,
-  TuseMutation extends DefaultUseMutationType
+  TuseMutation extends DefaultUseMutationType,
 >({
   useQuery,
   useMutation,
@@ -94,36 +94,36 @@ export const GraphQLHooksProvider = <
 
 export function useQuery<
   TData = any,
-  TVariables extends OperationVariables = GraphQLOperationVariables
+  TVariables extends OperationVariables = GraphQLOperationVariables,
 >(
   query: DocumentNode | TypedDocumentNode<TData, TVariables>,
-  options?: GraphQLQueryHookOptions<TData, TVariables>
+  options?: GraphQLQueryHookOptions<TData, TVariables>,
 ): QueryOperationResult<TData, TVariables> {
   return React.useContext(GraphQLHooksContext).useQuery<TData, TVariables>(
     query,
-    options
+    options,
   )
 }
 
 export function useMutation<
   TData = any,
-  TVariables = GraphQLOperationVariables
+  TVariables = GraphQLOperationVariables,
 >(
   mutation: DocumentNode | TypedDocumentNode<TData, TVariables>,
-  options?: GraphQLMutationHookOptions<TData, TVariables>
+  options?: GraphQLMutationHookOptions<TData, TVariables>,
 ): MutationOperationResult<TData, TVariables> {
   return React.useContext(GraphQLHooksContext).useMutation<TData, TVariables>(
     mutation,
-    options
+    options,
   )
 }
 
 export function useSubscription<
   TData = any,
-  TVariables extends OperationVariables = GraphQLOperationVariables
+  TVariables extends OperationVariables = GraphQLOperationVariables,
 >(
   query: DocumentNode | TypedDocumentNode<TData, TVariables>,
-  options?: GraphQLSubscriptionHookOptions<TData, TVariables>
+  options?: GraphQLSubscriptionHookOptions<TData, TVariables>,
 ): SubscriptionOperationResult<TData, TVariables> {
   return React.useContext(GraphQLHooksContext).useSubscription<
     TData,

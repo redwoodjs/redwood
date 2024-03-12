@@ -17,7 +17,7 @@ export const handler = () => {
     })
 
     setOutput(
-      'Updates to your cells are complete! Please run `yarn rw lint --fix` to prettify your code'
+      'Updates to your cells are complete! Please run `yarn rw lint --fix` to prettify your code',
     )
   })
 }

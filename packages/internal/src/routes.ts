@@ -19,7 +19,7 @@ export function getDuplicateRoutes() {
   const uniqueNames = new Set(
     allRoutes
       .filter((route) => route.name !== undefined)
-      .map((route) => route.name)
+      .map((route) => route.name),
   )
   uniqueNames.forEach((name) => {
     const routesWithName = allRoutes.filter((route) => {
@@ -33,7 +33,7 @@ export function getDuplicateRoutes() {
             page: route.page_identifier_str,
             path: route.path,
           }
-        })
+        }),
       )
     }
   })
@@ -50,7 +50,7 @@ export function warningForDuplicateRoutes() {
   let message = ''
   if (duplicatedRoutes.length > 0) {
     message += chalk.keyword('orange')(
-      `Warning: ${duplicatedRoutes.length} duplicate routes have been detected, only the route(s) closest to the top of the file will be used.\n`
+      `Warning: ${duplicatedRoutes.length} duplicate routes have been detected, only the route(s) closest to the top of the file will be used.\n`,
     )
     duplicatedRoutes.forEach((route) => {
       message += ` ${chalk.keyword('orange')('->')} Name: "${

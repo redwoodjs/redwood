@@ -8,7 +8,7 @@ import { validateSchema } from '../validateSchema'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../__fixtures__/example-todo-main'
+  '../../../../__fixtures__/example-todo-main',
 )
 
 beforeAll(() => {
@@ -114,7 +114,7 @@ describe('SDL with no reserved names used', () => {
         }
       `
       await expect(
-        validateSdlFile(document)
+        validateSdlFile(document),
       ).rejects.toThrowErrorMatchingSnapshot()
     })
   })
@@ -141,7 +141,7 @@ describe('SDL with no reserved names used', () => {
       }
     `
     await expect(
-      validateSdlFile(document)
+      validateSdlFile(document),
     ).rejects.toThrowErrorMatchingSnapshot()
   })
 
@@ -172,7 +172,7 @@ describe('SDL with no reserved names used', () => {
       }
     `
     await expect(
-      validateSdlFile(document)
+      validateSdlFile(document),
     ).rejects.toThrowErrorMatchingSnapshot()
   })
 })

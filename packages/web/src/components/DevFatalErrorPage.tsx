@@ -55,7 +55,7 @@ export const DevFatalErrorPage = (props: { error?: ErrorWithRequestMeta }) => {
   const typeName = String(
     (err as any)['type'] ||
       (err.constructor && err.constructor.name) ||
-      typeof err
+      typeof err,
   )
   const msg = String(err && err.message)
 
@@ -238,7 +238,7 @@ function ResponseRequest(props: { error: ErrorWithRequestMeta }) {
                 {JSON.stringify(
                   props.error.mostRecentRequest.variables,
                   null,
-                  '  '
+                  '  ',
                 )}
               </pre>
             </code>

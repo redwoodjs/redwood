@@ -38,7 +38,7 @@ const withRelativeImports = (page: PagesDependency) => {
 
 export default function (
   { types: t }: { types: typeof types },
-  { forPrerender = false, forVite = false }: PluginOptions
+  { forPrerender = false, forVite = false }: PluginOptions,
 ): PluginObj {
   // @NOTE: This var gets mutated inside the visitors
   let pages = processPagesDir().map(withRelativeImports)
@@ -56,10 +56,10 @@ export default function (
   if (duplicatePageImportNames.size > 0) {
     throw new Error(
       `Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the follow page directories: ${Array.from(
-        duplicatePageImportNames
+        duplicatePageImportNames,
       )
         .map((name) => `'${name}'`)
-        .join(', ')}`
+        .join(', ')}`,
     )
   }
 
@@ -75,11 +75,11 @@ export default function (
         }
 
         const userImportRelativePath = getPathRelativeToSrc(
-          importStatementPath(p.node.source?.value)
+          importStatementPath(p.node.source?.value),
         )
 
         const defaultSpecifier = p.node.specifiers.filter((specifiers) =>
-          t.isImportDefaultSpecifier(specifiers)
+          t.isImportDefaultSpecifier(specifiers),
         )[0]
 
         // Remove Page imports in prerender mode (see babel-preset)
@@ -109,7 +109,7 @@ export default function (
 
             // Remove the default import for the page and leave all the others
             p.node.specifiers = p.node.specifiers.filter(
-              (specifier) => !t.isImportDefaultSpecifier(specifier)
+              (specifier) => !t.isImportDefaultSpecifier(specifier),
             )
           }
 
@@ -121,7 +121,9 @@ export default function (
           // We use the path & defaultSpecifier because the const name could be anything
           pages = pages.filter(
             (page) =>
-              !(page.relativeImport === ensurePosixPath(userImportRelativePath))
+              !(
+                page.relativeImport === ensurePosixPath(userImportRelativePath)
+              ),
           )
         }
       },
@@ -139,8 +141,8 @@ export default function (
           nodes.unshift(
             t.importDeclaration(
               [t.importSpecifier(t.identifier('lazy'), t.identifier('lazy'))],
-              t.stringLiteral('react')
-            )
+              t.stringLiteral('react'),
+            ),
           )
 
           // Prepend all imports to the top of the file
@@ -177,7 +179,7 @@ export default function (
                   t.objectExpression([
                     t.objectProperty(
                       t.identifier('name'),
-                      t.stringLiteral(importName)
+                      t.stringLiteral(importName),
                     ),
                     // prerenderLoader for ssr/prerender and first load of
                     // prerendered pages in browser (csr)
@@ -190,9 +192,9 @@ export default function (
                           forPrerender,
                           forVite,
                           relativeImport,
-                          t
-                        )
-                      )
+                          t,
+                        ),
+                      ),
                     ),
                     t.objectProperty(
                       t.identifier('LazyComponent'),
@@ -201,13 +203,13 @@ export default function (
                           [],
                           t.callExpression(t.identifier('import'), [
                             importArgument,
-                          ])
+                          ]),
                         ),
-                      ])
+                      ]),
                     ),
-                  ])
+                  ]),
                 ),
-              ])
+              ]),
             )
           }
 
@@ -223,7 +225,7 @@ function prerenderLoaderImpl(
   forPrerender: boolean,
   forVite: boolean,
   relativeImport: string,
-  t: typeof types
+  t: typeof types,
 ) {
   if (forPrerender) {
     // This works for both vite and webpack
@@ -246,8 +248,8 @@ function prerenderLoaderImpl(
         t.memberExpression(
           t.identifier('globalThis.__REDWOOD__PRERENDER_PAGES'),
           t.identifier('name'),
-          true
-        )
+          true,
+        ),
       ),
     ])
   } else {

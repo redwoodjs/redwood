@@ -21,7 +21,7 @@ export const createAuthDecoder = (cookieNameOption: string): Decoder => {
 export const authDecoder: Decoder = async (
   _authHeaderValue: string,
   type: string,
-  req: { event: APIGatewayProxyEvent | Request }
+  req: { event: APIGatewayProxyEvent | Request },
 ) => {
   if (type !== 'dbAuth') {
     return null

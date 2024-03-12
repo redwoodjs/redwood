@@ -15,29 +15,29 @@ export async function handler({ force }) {
 
   let dockerfileTemplateContent = fs.readFileSync(
     path.resolve(TEMPLATE_DIR, 'Dockerfile'),
-    'utf-8'
+    'utf-8',
   )
   const dockerComposeDevTemplateContent = fs.readFileSync(
     path.resolve(TEMPLATE_DIR, 'docker-compose.dev.yml'),
-    'utf-8'
+    'utf-8',
   )
   const dockerComposeProdTemplateContent = fs.readFileSync(
     path.resolve(TEMPLATE_DIR, 'docker-compose.prod.yml'),
-    'utf-8'
+    'utf-8',
   )
   const dockerignoreTemplateContent = fs.readFileSync(
     path.resolve(TEMPLATE_DIR, 'dockerignore'),
-    'utf-8'
+    'utf-8',
   )
 
   const dockerfilePath = path.join(getPaths().base, 'Dockerfile')
   const dockerComposeDevFilePath = path.join(
     getPaths().base,
-    'docker-compose.dev.yml'
+    'docker-compose.dev.yml',
   )
   const dockerComposeProdFilePath = path.join(
     getPaths().base,
-    'docker-compose.prod.yml'
+    'docker-compose.prod.yml',
   )
   const dockerignoreFilePath = path.join(getPaths().base, '.dockerignore')
 
@@ -73,7 +73,7 @@ export async function handler({ force }) {
 
           if (hasWorkspaceToolsPlugin) {
             task.skip(
-              'The official yarn workspace-tools plugin is already installed'
+              'The official yarn workspace-tools plugin is already installed',
             )
             return
           }
@@ -89,21 +89,21 @@ export async function handler({ force }) {
         task: async (_ctx, task) => {
           const apiServerPackageName = '@redwoodjs/api-server'
           const { dependencies: apiDependencies } = fs.readJSONSync(
-            path.join(getPaths().api.base, 'package.json')
+            path.join(getPaths().api.base, 'package.json'),
           )
           const hasApiServerPackage =
             Object.keys(apiDependencies).includes(apiServerPackageName)
 
           const webServerPackageName = '@redwoodjs/web-server'
           const { dependencies: webDependencies } = fs.readJSONSync(
-            path.join(getPaths().web.base, 'package.json')
+            path.join(getPaths().web.base, 'package.json'),
           )
           const hasWebServerPackage =
             Object.keys(webDependencies).includes(webServerPackageName)
 
           if (hasApiServerPackage && hasWebServerPackage) {
             task.skip(
-              `${apiServerPackageName} and ${webServerPackageName} are already installed`
+              `${apiServerPackageName} and ${webServerPackageName} are already installed`,
             )
             return
           }
@@ -116,7 +116,7 @@ export async function handler({ force }) {
               `yarn workspace api add ${apiServerPackageName}@${apiServerPackageVersion}`,
               {
                 cwd: getPaths().base,
-              }
+              },
             )
           }
 
@@ -128,7 +128,7 @@ export async function handler({ force }) {
               `yarn workspace web add ${webServerPackageName}@${webServerPackageVersion}`,
               {
                 cwd: getPaths().base,
-              }
+              },
             )
           }
 
@@ -165,12 +165,12 @@ export async function handler({ force }) {
               beforeWebBuildWithPrerenderStageDelimeter,
               afterWebBuildWithPrerenderStageDelimeter,
             ] = dockerfileTemplateContent.split(
-              webBuildWithPrerenderStageDelimeter
+              webBuildWithPrerenderStageDelimeter,
             )
 
             const [beforeWebBuildStageDelimeter, afterWebBuildStageDelimeter] =
               afterWebBuildWithPrerenderStageDelimeter.split(
-                webBuildStageDelimeter
+                webBuildStageDelimeter,
               )
 
             dockerfileTemplateContent = [
@@ -191,7 +191,7 @@ export async function handler({ force }) {
             {
               existingFiles: force ? 'OVERWRITE' : 'SKIP',
             },
-            task
+            task,
           )
           writeFile(
             dockerComposeDevFilePath,
@@ -199,13 +199,13 @@ export async function handler({ force }) {
             {
               existingFiles: force ? 'OVERWRITE' : 'SKIP',
             },
-            task
+            task,
           )
           writeFile(
             dockerComposeProdFilePath,
             dockerComposeProdTemplateContent,
             { existingFiles: force ? 'OVERWRITE' : 'SKIP' },
-            task
+            task,
           )
           writeFile(
             dockerignoreFilePath,
@@ -213,7 +213,7 @@ export async function handler({ force }) {
             {
               existingFiles: force ? 'OVERWRITE' : 'SKIP',
             },
-            task
+            task,
           )
         },
       },
@@ -224,7 +224,7 @@ export async function handler({ force }) {
           const gitignoreFilePath = path.join(getPaths().base, '.gitignore')
           const gitignoreFileContent = fs.readFileSync(
             gitignoreFilePath,
-            'utf-8'
+            'utf-8',
           )
 
           if (gitignoreFileContent.includes('postgres')) {
@@ -235,7 +235,7 @@ export async function handler({ force }) {
           writeFile(
             gitignoreFilePath,
             gitignoreFileContent.concat('\npostgres\n'),
-            { existingFiles: 'OVERWRITE' }
+            { existingFiles: 'OVERWRITE' },
           )
         },
       },
@@ -250,12 +250,12 @@ export async function handler({ force }) {
 
           const hasOpenSetToTrue = browserOpenRegExp.test(configContent)
           const hasExperimentalDockerfileConfig = configContent.includes(
-            '[experimental.dockerfile]'
+            '[experimental.dockerfile]',
           )
 
           if (!hasOpenSetToTrue && hasExperimentalDockerfileConfig) {
             task.skip(
-              `The [experimental.dockerfile] config block already exists in your 'redwood.toml' file`
+              `The [experimental.dockerfile] config block already exists in your 'redwood.toml' file`,
             )
             return
           }
@@ -263,13 +263,13 @@ export async function handler({ force }) {
           if (hasOpenSetToTrue) {
             configContent = configContent.replace(
               /open\s*=\s*true/,
-              'open = false'
+              'open = false',
             )
           }
 
           if (!hasExperimentalDockerfileConfig) {
             configContent = configContent.concat(
-              `\n[experimental.dockerfile]\n\tenabled = true\n`
+              `\n[experimental.dockerfile]\n\tenabled = true\n`,
             )
           }
 
@@ -283,7 +283,7 @@ export async function handler({ force }) {
 
     {
       renderer: process.env.NODE_ENV === 'test' ? 'verbose' : 'default',
-    }
+    },
   )
 
   try {
@@ -312,7 +312,7 @@ export async function handler({ force }) {
         '',
         "There's a lot in the Dockerfile and there's a reason for every line.",
         'Be sure to check out the docs: https://redwoodjs.com/docs/docker',
-      ].join('\n')
+      ].join('\n'),
     )
   } catch (e) {
     errorTelemetry(process.argv, e.message)

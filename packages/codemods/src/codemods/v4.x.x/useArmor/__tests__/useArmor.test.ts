@@ -63,7 +63,7 @@ describe('useArmor', () => {
           // Disconnect from your database with an unhandled exception.
           db.$disconnect()
         },
-      })`
+      })`,
       )
     })
   })

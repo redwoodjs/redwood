@@ -18,7 +18,7 @@ vi.mock('../../lib/paths', () => {
         src: path.join(__dirname, '../create-redwood-app/template/api/src'),
         functions: path.join(
           __dirname,
-          '../create-redwood-app/template/api/src/functions'
+          '../create-redwood-app/template/api/src/functions',
         ),
         lib: path.join(__dirname, '../create-redwood-app/template/api/src/lib'),
       },

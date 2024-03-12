@@ -86,7 +86,7 @@ interface FieldProps<
   Element extends
     | HTMLTextAreaElement
     | HTMLSelectElement
-    | HTMLInputElement = HTMLInputElement
+    | HTMLInputElement = HTMLInputElement,
 > {
   name: string
   id?: string
@@ -270,7 +270,7 @@ const getSetValueAsFn = (
   type: ValueAsType,
   emptyAs: EmptyAsValue | undefined,
   required: boolean,
-  isId: boolean
+  isId: boolean,
 ) => {
   const typeObj = SET_VALUE_AS_FUNCTIONS[type]
   if (typeObj === undefined) {
@@ -361,7 +361,7 @@ interface SetCoersionProps {
 
 const setCoercion = (
   validation: RedwoodRegisterOptions,
-  { type, name, emptyAs }: SetCoersionProps
+  { type, name, emptyAs }: SetCoersionProps,
 ) => {
   if (validation.setValueAs) {
     // Note, this case could override other props
@@ -400,7 +400,7 @@ const setCoercion = (
     valueAs, // type
     emptyAs, // emptyAs
     validation.required !== undefined && validation.required !== false, // required
-    /Id$/.test(name || '') // isId
+    /Id$/.test(name || ''), // isId
   )
 }
 
@@ -408,7 +408,7 @@ export type UseRegisterProps<
   Element extends
     | HTMLTextAreaElement
     | HTMLSelectElement
-    | HTMLInputElement = HTMLInputElement
+    | HTMLInputElement = HTMLInputElement,
 > = Pick<
   FieldProps<Element>,
   'name' | 'validation' | 'type' | 'onBlur' | 'onChange'
@@ -431,11 +431,11 @@ const useRegister = <
   Element extends
     | HTMLTextAreaElement
     | HTMLSelectElement
-    | HTMLInputElement = HTMLInputElement
+    | HTMLInputElement = HTMLInputElement,
 >(
   props: UseRegisterProps<Element> & { element?: string },
   ref?: React.ForwardedRef<T>,
-  emptyAs?: EmptyAsValue
+  emptyAs?: EmptyAsValue,
 ) => {
   const { register } = useFormContext()
   const { name } = props
@@ -544,7 +544,7 @@ function FormInner<TFieldValues extends FieldValues>(
     children,
     ...rest
   }: FormProps<TFieldValues>,
-  ref: ForwardedRef<HTMLFormElement>
+  ref: ForwardedRef<HTMLFormElement>,
 ) {
   const hookFormMethods = useForm<TFieldValues>(config)
   const formMethods = propFormMethods || hookFormMethods
@@ -554,7 +554,7 @@ function FormInner<TFieldValues extends FieldValues>(
       ref={ref}
       {...rest}
       onSubmit={formMethods.handleSubmit((data, event) =>
-        onSubmit?.(data, event)
+        onSubmit?.(data, event),
       )}
     >
       <ServerErrorsContext.Provider
@@ -579,7 +579,7 @@ function FormInner<TFieldValues extends FieldValues>(
 // > that you cast the type
 // https://github.com/chakra-ui/chakra-ui/issues/4528#issuecomment-902566185
 const Form = forwardRef(FormInner) as <TFieldValues extends FieldValues>(
-  props: FormProps<TFieldValues> & React.RefAttributes<HTMLFormElement>
+  props: FormProps<TFieldValues> & React.RefAttributes<HTMLFormElement>,
 ) => React.ReactElement | null
 
 export interface LabelProps
@@ -711,7 +711,7 @@ const TextAreaField = forwardRef(
 
       ...rest
     }: TextAreaFieldProps,
-    ref: ForwardedRef<HTMLTextAreaElement>
+    ref: ForwardedRef<HTMLTextAreaElement>,
   ) => {
     const styles = useErrorStyles({
       name,
@@ -729,13 +729,13 @@ const TextAreaField = forwardRef(
         onChange,
       },
       ref,
-      emptyAs
+      emptyAs,
     )
 
     return (
       <textarea id={id || name} {...rest} {...styles} {...useRegisterReturn} />
     )
-  }
+  },
 )
 
 export interface SelectFieldProps
@@ -763,7 +763,7 @@ const SelectField = forwardRef(
       onChange,
       ...rest
     }: SelectFieldProps,
-    ref: ForwardedRef<HTMLSelectElement>
+    ref: ForwardedRef<HTMLSelectElement>,
   ) => {
     const styles = useErrorStyles({
       name,
@@ -781,13 +781,13 @@ const SelectField = forwardRef(
         onChange,
       },
       ref,
-      emptyAs
+      emptyAs,
     )
 
     return (
       <select id={id || name} {...rest} {...styles} {...useRegisterReturn} />
     )
-  }
+  },
 )
 
 export interface CheckboxFieldProps
@@ -813,7 +813,7 @@ export const CheckboxField = forwardRef(
       onChange,
       ...rest
     }: CheckboxFieldProps,
-    ref: ForwardedRef<HTMLInputElement>
+    ref: ForwardedRef<HTMLInputElement>,
   ) => {
     const styles = useErrorStyles({
       name,
@@ -833,7 +833,7 @@ export const CheckboxField = forwardRef(
         onChange,
         type,
       },
-      ref
+      ref,
     )
 
     return (
@@ -846,7 +846,7 @@ export const CheckboxField = forwardRef(
         {...useRegisterReturn}
       />
     )
-  }
+  },
 )
 
 /**
@@ -934,7 +934,7 @@ const InputField = forwardRef(
       type,
       ...rest
     }: InputFieldProps,
-    ref: ForwardedRef<HTMLInputElement>
+    ref: ForwardedRef<HTMLInputElement>,
   ) => {
     const styles = useErrorStyles({
       name,
@@ -953,7 +953,7 @@ const InputField = forwardRef(
         type,
       },
       ref,
-      emptyAs
+      emptyAs,
     )
 
     return (
@@ -965,7 +965,7 @@ const InputField = forwardRef(
         {...useRegisterReturn}
       />
     )
-  }
+  },
 )
 
 /**

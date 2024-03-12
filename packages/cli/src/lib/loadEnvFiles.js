@@ -53,7 +53,7 @@ export function loadNodeEnvDerivedEnvFile(cwd) {
 
   const nodeEnvDerivedEnvFilePath = path.join(
     cwd,
-    `.env.${process.env.NODE_ENV}`
+    `.env.${process.env.NODE_ENV}`,
   )
   if (!fs.existsSync(nodeEnvDerivedEnvFilePath)) {
     return
@@ -70,7 +70,7 @@ export function loadUserSpecifiedEnvFiles(cwd, loadEnvFiles) {
     const envPath = path.join(cwd, `.env.${suffix}`)
     if (!fs.pathExistsSync(envPath)) {
       throw new Error(
-        `Couldn't find an .env file at '${envPath}' as specified by '--load-env-files'`
+        `Couldn't find an .env file at '${envPath}' as specified by '--load-env-files'`,
       )
     }
 

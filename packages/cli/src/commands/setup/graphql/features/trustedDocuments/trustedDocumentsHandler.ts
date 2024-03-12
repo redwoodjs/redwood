@@ -44,7 +44,7 @@ export async function handler({ force }: { force: boolean }) {
           'Configuring the GraphQL Handler to use a Trusted Documents store ...',
         task: async () => {
           const graphqlPath = resolveFile(
-            path.join(getPaths().api.functions, 'graphql')
+            path.join(getPaths().api.functions, 'graphql'),
           )
 
           if (!graphqlPath) {
@@ -73,7 +73,7 @@ export async function handler({ force }: { force: boolean }) {
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {
