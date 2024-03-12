@@ -40,8 +40,10 @@ async function consumeRenderRsc(pipeable: PassThrough): Promise<string> {
 
 function postResultToStudio(result: string) {
   // Create a JSON object with the encoded result
+  const base64Payload = Buffer.from(result).toString('base64')
+
   const jsonBody = JSON.stringify({
-    data: result,
+    flight: { encodedPayload: base64Payload, encoding: 'base64' },
   })
 
   // Options to configure the HTTP POST request
