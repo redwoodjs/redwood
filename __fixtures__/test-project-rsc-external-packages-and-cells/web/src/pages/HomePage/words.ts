@@ -1,3 +1,4 @@
+// Could also have used `import 'server-only'
 import '@jtoar/throw-on-client'
 
 const RANDOM_WORDS = [
