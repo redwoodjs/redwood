@@ -170,7 +170,7 @@ export type UserType = Record<string | number, any>
 
 export interface DbAuthHandlerOptions<
   TUser = UserType,
-  TUserAttributes = Record<string, unknown>
+  TUserAttributes = Record<string, unknown>,
 > {
   /**
    * Provide prisma db client
@@ -301,7 +301,7 @@ const DEFAULT_ALLOWED_USER_FIELDS = ['id', 'email']
 
 export class DbAuthHandler<
   TUser extends UserType,
-  TUserAttributes = Record<string, unknown>
+  TUserAttributes = Record<string, unknown>,
 > {
   event: Request | APIGatewayProxyEvent
   _normalizedRequest: PartialRequest<Params> | undefined
@@ -324,7 +324,7 @@ export class DbAuthHandler<
     if (!this._normalizedRequest) {
       // This is a dev time error, no need to throw a specialized error
       throw new Error(
-        'dbAuthHandler has not been initialised. Either await dbAuthHandler.invoke() or call await dbAuth.init()'
+        'dbAuthHandler has not been initialised. Either await dbAuthHandler.invoke() or call await dbAuth.init()',
       )
     }
     return this._normalizedRequest
@@ -401,7 +401,7 @@ export class DbAuthHandler<
   constructor(
     event: APIGatewayProxyEvent | Request,
     _context: LambdaContext, // @TODO:
-    options: DbAuthHandlerOptions<TUser, TUserAttributes>
+    options: DbAuthHandlerOptions<TUser, TUserAttributes>,
   ) {
     this.options = options
     this.event = event
@@ -423,14 +423,14 @@ export class DbAuthHandler<
     const sessionExpiresAt = new Date()
     sessionExpiresAt.setSeconds(
       sessionExpiresAt.getSeconds() +
-        (this.options.login as LoginFlowOptions).expires
+        (this.options.login as LoginFlowOptions).expires,
     )
     this.sessionExpiresDate = sessionExpiresAt.toUTCString()
 
     const webAuthnExpiresAt = new Date()
     webAuthnExpiresAt.setSeconds(
       webAuthnExpiresAt.getSeconds() +
-        ((this.options?.webAuthn as WebAuthnFlowOptions)?.expires || 0)
+        ((this.options?.webAuthn as WebAuthnFlowOptions)?.expires || 0),
     )
     this.webAuthnExpiresDate = webAuthnExpiresAt.toUTCString()
 
@@ -463,7 +463,7 @@ export class DbAuthHandler<
   async init() {
     if (!this._normalizedRequest) {
       this._normalizedRequest = (await normalizeRequest(
-        this.event
+        this.event,
       )) as PartialRequest<Params>
     }
   }
@@ -479,7 +479,7 @@ export class DbAuthHandler<
       if (this.corsContext.shouldHandleCors(this.normalizedRequest)) {
         return this._buildResponseWithCorsHeaders(
           { body: '', statusCode: 200 },
-          corsHeaders
+          corsHeaders,
         )
       }
     }
@@ -489,7 +489,7 @@ export class DbAuthHandler<
     if (this.hasInvalidSession) {
       return this._buildResponseWithCorsHeaders(
         this._ok(...this._logoutResponse()),
-        corsHeaders
+        corsHeaders,
       )
     }
 
@@ -507,13 +507,12 @@ export class DbAuthHandler<
       }
 
       // call whatever auth method was requested and return the body and headers
-      const [body, headers, options = { statusCode: 200 }] = await this[
-        method
-      ]()
+      const [body, headers, options = { statusCode: 200 }] =
+        await this[method]()
 
       return this._buildResponseWithCorsHeaders(
         this._ok(body, headers, options),
-        corsHeaders
+        corsHeaders,
       )
     } catch (e: any) {
       if (e instanceof DbAuthError.WrongVerbError) {
@@ -521,7 +520,7 @@ export class DbAuthHandler<
       } else {
         return this._buildResponseWithCorsHeaders(
           this._badRequest(e.message || e),
-          corsHeaders
+          corsHeaders,
         )
       }
     }
@@ -533,7 +532,7 @@ export class DbAuthHandler<
     if (!enabled) {
       throw new DbAuthError.FlowNotEnabledError(
         (this.options.forgotPassword as ForgotPasswordFlowOptions)?.errors
-          ?.flowNotEnabled || `Forgot password flow is not enabled`
+          ?.flowNotEnabled || `Forgot password flow is not enabled`,
       )
     }
 
@@ -542,7 +541,7 @@ export class DbAuthHandler<
     if (!username || username.trim() === '') {
       throw new DbAuthError.UsernameRequiredError(
         (this.options.forgotPassword as ForgotPasswordFlowOptions)?.errors
-          ?.usernameRequired || `Username is required`
+          ?.usernameRequired || `Username is required`,
       )
     }
     let user
@@ -559,7 +558,7 @@ export class DbAuthHandler<
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
         tokenExpires.getSeconds() +
-          (this.options.forgotPassword as ForgotPasswordFlowOptions).expires
+          (this.options.forgotPassword as ForgotPasswordFlowOptions).expires,
       )
 
       // generate a token
@@ -599,7 +598,7 @@ export class DbAuthHandler<
     } else {
       throw new DbAuthError.UsernameNotFoundError(
         (this.options.forgotPassword as ForgotPasswordFlowOptions)?.errors
-          ?.usernameNotFound || `Username '${username} not found`
+          ?.usernameNotFound || `Username '${username} not found`,
       )
     }
   }
@@ -631,14 +630,14 @@ export class DbAuthHandler<
     if (!enabled) {
       throw new DbAuthError.FlowNotEnabledError(
         (this.options.login as LoginFlowOptions)?.errors?.flowNotEnabled ||
-          `Login flow is not enabled`
+          `Login flow is not enabled`,
       )
     }
 
     const { username, password } = this.normalizedRequest.jsonBody || {}
     const dbUser = await this._verifyUser(username, password)
     const handlerUser = await (this.options.login as LoginFlowOptions).handler(
-      dbUser
+      dbUser,
     )
 
     if (
@@ -660,7 +659,7 @@ export class DbAuthHandler<
     if (!enabled) {
       throw new DbAuthError.FlowNotEnabledError(
         (this.options.resetPassword as ResetPasswordFlowOptions)?.errors
-          ?.flowNotEnabled || `Reset password flow is not enabled`
+          ?.flowNotEnabled || `Reset password flow is not enabled`,
       )
     }
 
@@ -671,7 +670,7 @@ export class DbAuthHandler<
       throw new DbAuthError.ResetTokenRequiredError(
         (
           this.options.resetPassword as ResetPasswordFlowOptions
-        )?.errors?.resetTokenRequired
+        )?.errors?.resetTokenRequired,
       )
     }
 
@@ -695,7 +694,7 @@ export class DbAuthHandler<
       throw new DbAuthError.ReusedPasswordError(
         (
           this.options.resetPassword as ResetPasswordFlowOptions
-        )?.errors?.reusedPassword
+        )?.errors?.reusedPassword,
       )
     }
 
@@ -733,14 +732,14 @@ export class DbAuthHandler<
     if (!enabled) {
       throw new DbAuthError.FlowNotEnabledError(
         (this.options.signup as SignupFlowOptions)?.errors?.flowNotEnabled ||
-          `Signup flow is not enabled`
+          `Signup flow is not enabled`,
       )
     }
 
     // check if password is valid
     const { password } = this.normalizedRequest.jsonBody || {}
     ;(this.options.signup as SignupFlowOptions).passwordValidation?.(
-      password as string
+      password as string,
     )
 
     const userOrMessage = await this._createUser()
@@ -764,7 +763,7 @@ export class DbAuthHandler<
       throw new DbAuthError.ResetTokenRequiredError(
         (
           this.options.resetPassword as ResetPasswordFlowOptions
-        )?.errors?.resetTokenRequired
+        )?.errors?.resetTokenRequired,
       )
     }
 
@@ -818,14 +817,14 @@ export class DbAuthHandler<
         expectedRPID: webAuthnOptions.domain,
         authenticator: {
           credentialID: base64url.toBuffer(
-            credential[webAuthnOptions.credentialFields.id]
+            credential[webAuthnOptions.credentialFields.id],
           ),
           credentialPublicKey:
             credential[webAuthnOptions.credentialFields.publicKey],
           counter: credential[webAuthnOptions.credentialFields.counter],
           transports: credential[webAuthnOptions.credentialFields.transports]
             ? JSON.parse(
-                credential[webAuthnOptions.credentialFields.transports]
+                credential[webAuthnOptions.credentialFields.transports],
               )
             : DbAuthHandler.AVAILABLE_WEBAUTHN_TRANSPORTS,
         },
@@ -927,7 +926,7 @@ export class DbAuthHandler<
 
     await this._saveChallenge(
       user[this.options.authFields.id],
-      authOptions.challenge
+      authOptions.challenge,
     )
 
     return [authOptions]
@@ -963,7 +962,7 @@ export class DbAuthHandler<
     if (webAuthnOptions.type && webAuthnOptions.type !== 'any') {
       options.authenticatorSelection = Object.assign(
         options.authenticatorSelection || {},
-        { authenticatorAttachment: webAuthnOptions.type }
+        { authenticatorAttachment: webAuthnOptions.type },
       )
     }
 
@@ -971,7 +970,7 @@ export class DbAuthHandler<
 
     await this._saveChallenge(
       user[this.options.authFields.id],
-      regOptions.challenge
+      regOptions.challenge,
     )
 
     return [regOptions]
@@ -1044,7 +1043,7 @@ export class DbAuthHandler<
       {
         'set-cookie': this._webAuthnCookie(
           plainCredentialId,
-          this.webAuthnExpiresDate
+          this.webAuthnExpiresDate,
         ),
       },
     ]
@@ -1207,7 +1206,7 @@ export class DbAuthHandler<
   // creates the session)
   _createSessionHeader(
     data: DbAuthSession,
-    csrfToken: string
+    csrfToken: string,
   ): SetCookieHeader {
     const session = JSON.stringify(data) + ';' + csrfToken
     const encrypted = encryptSession(session)
@@ -1236,7 +1235,7 @@ export class DbAuthHandler<
     const tokenExpires = new Date()
     tokenExpires.setSeconds(
       tokenExpires.getSeconds() -
-        (this.options.forgotPassword as ForgotPasswordFlowOptions).expires
+        (this.options.forgotPassword as ForgotPasswordFlowOptions).expires,
     )
 
     const tokenHash = hashToken(token)
@@ -1252,7 +1251,7 @@ export class DbAuthHandler<
       throw new DbAuthError.ResetTokenInvalidError(
         (
           this.options.resetPassword as ResetPasswordFlowOptions
-        )?.errors?.resetTokenInvalid
+        )?.errors?.resetTokenInvalid,
       )
     }
 
@@ -1262,7 +1261,7 @@ export class DbAuthHandler<
       throw new DbAuthError.ResetTokenExpiredError(
         (
           this.options.resetPassword as ResetPasswordFlowOptions
-        )?.errors?.resetTokenExpired
+        )?.errors?.resetTokenExpired,
       )
     }
 
@@ -1289,7 +1288,7 @@ export class DbAuthHandler<
   // verifies that a username and password are correct, and returns the user if so
   async _verifyUser(
     username: string | undefined,
-    password: string | undefined
+    password: string | undefined,
   ) {
     // do we have all the query params we need to check the user?
     if (
@@ -1301,7 +1300,7 @@ export class DbAuthHandler<
       throw new DbAuthError.UsernameAndPasswordRequiredError(
         (
           this.options.login as LoginFlowOptions
-        )?.errors?.usernameOrPasswordMissing
+        )?.errors?.usernameOrPasswordMissing,
       )
     }
 
@@ -1323,7 +1322,7 @@ export class DbAuthHandler<
     if (!user) {
       throw new DbAuthError.UserNotFoundError(
         username,
-        (this.options.login as LoginFlowOptions)?.errors?.usernameNotFound
+        (this.options.login as LoginFlowOptions)?.errors?.usernameNotFound,
       )
     }
 
@@ -1337,7 +1336,7 @@ export class DbAuthHandler<
   // if no options are present.
   async _verifyPassword(user: Record<string, unknown>, password: string) {
     const options = extractHashingOptions(
-      user[this.options.authFields.hashedPassword] as string
+      user[this.options.authFields.hashedPassword] as string,
     )
 
     if (Object.keys(options).length) {
@@ -1354,7 +1353,7 @@ export class DbAuthHandler<
       // fallback to old CryptoJS hashing
       const [legacyHashedPassword] = legacyHashPassword(
         password,
-        user[this.options.authFields.salt] as string
+        user[this.options.authFields.salt] as string,
       )
 
       if (
@@ -1375,7 +1374,7 @@ export class DbAuthHandler<
 
     throw new DbAuthError.IncorrectPasswordError(
       user[this.options.authFields.username] as string,
-      (this.options.login as LoginFlowOptions)?.errors?.incorrectPassword
+      (this.options.login as LoginFlowOptions)?.errors?.incorrectPassword,
     )
   }
 
@@ -1436,7 +1435,7 @@ export class DbAuthHandler<
       if (user) {
         throw new DbAuthError.DuplicateUsernameError(
           username,
-          (this.options.signup as SignupFlowOptions)?.errors?.usernameTaken
+          (this.options.signup as SignupFlowOptions)?.errors?.usernameTaken,
         )
       }
 
@@ -1480,7 +1479,7 @@ export class DbAuthHandler<
     if (!value || value.trim() === '') {
       throw new DbAuthError.FieldRequiredError(
         name,
-        (this.options.signup as SignupFlowOptions)?.errors?.fieldMissing
+        (this.options.signup as SignupFlowOptions)?.errors?.fieldMissing,
       )
     } else {
       return true
@@ -1489,11 +1488,11 @@ export class DbAuthHandler<
 
   _loginResponse(
     user: Record<string, any>,
-    statusCode = 200
+    statusCode = 200,
   ): [
     { id: string },
     SetCookieHeader & CsrfTokenHeader,
-    { statusCode: number }
+    { statusCode: number },
   ] {
     const sessionData = this._sanitizeUser(user)
 
@@ -1513,7 +1512,7 @@ export class DbAuthHandler<
   }
 
   _logoutResponse(
-    response?: Record<string, unknown>
+    response?: Record<string, unknown>,
   ): [string, SetCookieHeader] {
     return [
       response ? JSON.stringify(response) : '',
@@ -1552,7 +1551,7 @@ export class DbAuthHandler<
       statusCode: number
       headers?: Record<string, string>
     },
-    corsHeaders: CorsHeaders
+    corsHeaders: CorsHeaders,
   ) {
     return {
       ...response,
@@ -1565,7 +1564,7 @@ export class DbAuthHandler<
 
   _getUserMatchCriteriaOptions(
     username: string,
-    usernameMatchFlowOption: string | undefined
+    usernameMatchFlowOption: string | undefined,
   ) {
     // Each db provider has it owns rules for case insensitive comparison.
     // We are checking if you have defined one for your db choice here
