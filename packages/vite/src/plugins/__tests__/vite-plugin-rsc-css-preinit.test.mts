@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { vol } from 'memfs'
 
 import { rscCssPreinitPlugin } from '../vite-plugin-rsc-css-preinit'
@@ -18,7 +19,7 @@ beforeAll(() => {
   process.env.RWJS_CWD = '/Users/mojombo/rw-app/'
   vol.fromJSON({
     'redwood.toml': '',
-    '/Users/mojombo/rw-app/web/dist/client/client-build-manifest.json': JSON.stringify(clientBuildManifest),
+    [path.join('web', 'dist', 'client', 'client-build-manifest.json')]: JSON.stringify(clientBuildManifest),
   }, process.env.RWJS_CWD)
   consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 })
