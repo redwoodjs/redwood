@@ -70,7 +70,7 @@ describe('rscCssPreinitPlugin', () => {
         ] });
       };
       export default HomePage;`,
-      '/Users/mojombo/rw-app/web/src/pages/HomePage/HomePage.tsx'
+      path.join(process.env.RWJS_CWD!, 'web', 'src', 'pages', 'HomePage', 'HomePage.tsx')
     )
 
     // You will see that this snapshot contains:
