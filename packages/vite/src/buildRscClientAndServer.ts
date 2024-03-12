@@ -7,25 +7,17 @@ import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars.js'
 
 export const buildRscClientAndServer = async () => {
   // Analyze all files and generate a list of RSCs and RSFs
-  const {
-    clientEntryFiles,
-    serverEntryFiles,
-    ccsImportMap,
-    componentImportMap,
-  } = await rscBuildAnalyze()
+  const { clientEntryFiles, serverEntryFiles, componentImportMap } =
+    await rscBuildAnalyze()
 
   // Generate the client bundle
   const clientBuildOutput = await rscBuildClient(clientEntryFiles)
 
   // Generate the server output
-  console.log({
-    clientEntryFiles,
-  })
   const serverBuildOutput = await rscBuildForServer(
     clientEntryFiles,
     serverEntryFiles,
     {},
-    ccsImportMap,
     componentImportMap,
   )
 

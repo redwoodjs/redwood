@@ -8,7 +8,6 @@ import { getPaths } from '@redwoodjs/project-config'
 export function rscAnalyzePlugin(
   clientEntryCallback: (id: string) => void,
   serverEntryCallback: (id: string) => void,
-  clientEntryCssCallback: (id: string, cssId: string) => void,
   componentImportsCallback: (id: string, importId: readonly string[]) => void,
 ): Plugin {
   const clientEntryIdSet = new Set<string>()
@@ -43,23 +42,10 @@ export function rscAnalyzePlugin(
       return code
     },
     moduleParsed(moduleInfo) {
-      const moduleId = moduleInfo.id
-      // TODO: Maybe this is not needed but added it for now to keep my life sane
-      if (!moduleId.startsWith(webSrcPath)) {
-        return
+      // TODO: Maybe this is not needed?
+      if (moduleInfo.id.startsWith(webSrcPath)) {
+        componentImportsCallback(moduleInfo.id, moduleInfo.importedIds)
       }
-      if (moduleId.endsWith('.css')) {
-        return
-      }
-      if (clientEntryIdSet.has(moduleId)) {
-        const cssImports = moduleInfo.importedIds.filter((id) =>
-          id.endsWith('.css'),
-        )
-        for (const cssImport of cssImports) {
-          clientEntryCssCallback(moduleId, cssImport)
-        }
-      }
-      componentImportsCallback(moduleId, moduleInfo.importedIds)
     },
   }
 }

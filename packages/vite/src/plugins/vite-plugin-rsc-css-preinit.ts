@@ -11,12 +11,13 @@ import type { Plugin } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 export function rscCssPreinitPlugin(
-  cssImportMap: Map<string, string[]>,
+  clientEntryFiles: Record<string, string>,
   componentImportMap: Map<string, string[]>,
 ): Plugin {
   const webSrc = getPaths().web.src
 
-  // TODO: How will we do this in dev?
+  // This plugin is build only and we expect the client build manifest to be
+  // available at this point. We use it to find the correct css assets names
   const clientBuildManifest = JSON.parse(
     fs.readFileSync(
       path.join(getPaths().web.distClient, 'client-build-manifest.json'),
@@ -24,20 +25,44 @@ export function rscCssPreinitPlugin(
     ),
   )
 
-  // Filter to server components and client components
+  // We generate a mapping of all the css assets that a client build manifest
+  // entry contains (looking deep into the tree of entries)
+  const clientBuildManifestCss = new Map<string, string[]>()
+  const lookupCssAssets = (id: string): string[] => {
+    const assets: string[] = []
+    const asset = clientBuildManifest[id]
+    if (!asset) {
+      return assets
+    }
+    if (asset.css) {
+      assets.push(...asset.css)
+    }
+    if (asset.imports) {
+      for (const importId of asset.imports) {
+        assets.push(...lookupCssAssets(importId))
+      }
+    }
+    return assets
+  }
+  for (const key of Object.keys(clientBuildManifest)) {
+    clientBuildManifestCss.set(key, lookupCssAssets(key))
+  }
+
+  // We filter to have individual maps for server components and client
+  // components
   const serverComponentImports = new Map<string, string[]>()
   const clientComponentImports = new Map<string, string[]>()
+  const clientComponentIds = Object.values(clientEntryFiles)
   for (const [key, value] of componentImportMap.entries()) {
-    const shortName = path.basename(key)
-    const longName = key.substring(webSrc.length + 1)
-    if (clientBuildManifest[shortName] || clientBuildManifest[longName]) {
+    if (clientComponentIds.includes(key)) {
       clientComponentImports.set(key, value)
     } else {
       serverComponentImports.set(key, value)
     }
   }
 
-  // Map server component to complete client import list
+  // We generate a mapping of server components to all the client components
+  // that they import (directly or indirectly)
   const serverComponentClientImportIds = new Map<string, string[]>()
   const gatherClientImports = (
     id: string,
@@ -56,6 +81,9 @@ export function rscCssPreinitPlugin(
     const topLevelClientImports =
       serverComponentImports.get(serverComponentId) ?? []
     for (const importId of topLevelClientImports) {
+      if (clientComponentImports.has(importId)) {
+        clientImports.add(importId)
+      }
       gatherClientImports(importId, clientImports)
     }
     serverComponentClientImportIds.set(
@@ -78,47 +106,34 @@ export function rscCssPreinitPlugin(
         return null
       }
 
-      // Filter to only client components
+      // Get the client components this server component imports (directly or
+      //  indirectly)
       const clientImportIds = serverComponentClientImportIds.get(id) ?? []
       if (clientImportIds.length === 0) {
         return null
       }
 
-      // Map from full vite ID to asset name from client build manifest
-      // TODO: assetNames had to be a set because we were getting duplicates but this is because
-      // i'm being an idiot somewhere before this
+      // Extract all the CSS asset names from all the client components that
+      // this server component imports
       const assetNames = new Set<string>()
       for (const clientImportId of clientImportIds) {
-        const cssImports = cssImportMap.get(clientImportId) ?? []
-        if (clientImportId.endsWith('.css')) {
-          cssImports.push(clientImportId)
-        }
-
-        if (cssImports.length === 0) {
-          continue
-        }
-
-        for (const cssImport of cssImports) {
-          const shortName = path.basename(cssImport)
-          const longName = cssImport.substring(webSrc.length + 1)
-
-          const assetName =
-            clientBuildManifest[shortName] || clientBuildManifest[longName]
-          if (!assetName) {
-            throw new Error(`Could not find asset name for ${cssImport}`)
-          }
-
-          assetNames.add(assetName.file)
+        const shortName = path.basename(clientImportId)
+        const longName = clientImportId.substring(webSrc.length + 1)
+        const entries =
+          clientBuildManifestCss.get(shortName) ??
+          clientBuildManifestCss.get(longName) ??
+          []
+        for (const entry of entries) {
+          assetNames.add(entry)
         }
       }
 
-      // If no child components have CSS, we don't need to do anything
       if (assetNames.size === 0) {
         return null
       }
 
-      // Analyse the AST to get all the components that we have to insert preinit calls into
-      // Note: This AST part is likely not covering every possible case
+      // Analyse the AST to get all the components that we have to insert preinit
+      // calls into
       const ext = path.extname(id)
 
       const plugins = []
@@ -150,6 +165,7 @@ export function rscCssPreinitPlugin(
         ),
       )
 
+      // TODO: Confirm this is a react component by looking for `jsxs` in the AST
       // For each named export, insert a preinit call for each asset that it will
       // eventually need for all it's child client components
       traverse(ast, {

@@ -17,7 +17,6 @@ export async function rscBuildForServer(
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>,
-  cssImportMap: Map<string, string[]>,
   componentImportMap: Map<string, string[]>,
 ) {
   console.log('\n')
@@ -87,7 +86,7 @@ export async function rscBuildForServer(
       // That's why it needs the `clientEntryFiles` data
       // (It does other things as well, but that's why it needs clientEntryFiles)
       rscTransformPlugin(clientEntryFiles),
-      rscCssPreinitPlugin(cssImportMap, componentImportMap),
+      rscCssPreinitPlugin(clientEntryFiles, componentImportMap),
     ],
     build: {
       ssr: true,

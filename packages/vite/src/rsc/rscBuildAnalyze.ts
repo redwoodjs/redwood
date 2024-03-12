@@ -20,7 +20,6 @@ export async function rscBuildAnalyze() {
   const rwPaths = getPaths()
   const clientEntryFileSet = new Set<string>()
   const serverEntryFileSet = new Set<string>()
-  const ccsImportMap = new Map<string, string[]>()
   const componentImportMap = new Map<string, string[]>()
 
   if (!rwPaths.web.entries) {
@@ -47,10 +46,6 @@ export async function rscBuildAnalyze() {
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
         (id) => serverEntryFileSet.add(id),
-        (id, cssId) => {
-          const existingCssIds = ccsImportMap.get(id) ?? []
-          ccsImportMap.set(id, [...existingCssIds, cssId])
-        },
         (id, imports) => {
           const existingImports = componentImportMap.get(id) ?? []
           componentImportMap.set(id, [...existingImports, ...imports])
@@ -112,7 +107,6 @@ export async function rscBuildAnalyze() {
   return {
     clientEntryFiles,
     serverEntryFiles,
-    ccsImportMap,
     componentImportMap,
   }
 }
