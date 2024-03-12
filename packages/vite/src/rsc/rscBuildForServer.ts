@@ -5,7 +5,8 @@ import { build as viteBuild } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
-import { rscTransformPlugin } from '../plugins/vite-plugin-rsc-transform.js'
+import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
+import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
 
 /**
  * RSC build. Step 3.
@@ -83,7 +84,8 @@ export async function rscBuildForServer(
       // /Users/tobbe/.../rw-app/web/dist/server/assets/rsc0.js
       // That's why it needs the `clientEntryFiles` data
       // (It does other things as well, but that's why it needs clientEntryFiles)
-      rscTransformPlugin(clientEntryFiles),
+      rscTransformUseClientPlugin(clientEntryFiles),
+      rscTransformUseServerPlugin(),
     ],
     build: {
       ssr: true,
