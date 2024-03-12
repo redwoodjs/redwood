@@ -9,10 +9,7 @@ export function rscAnalyzePlugin(
   clientEntryCallback: (id: string) => void,
   serverEntryCallback: (id: string) => void,
   clientEntryCssCallback: (id: string, cssId: string) => void,
-  serverComponentImportsCallback: (
-    id: string,
-    importId: readonly string[],
-  ) => void,
+  componentImportsCallback: (id: string, importId: readonly string[]) => void,
 ): Plugin {
   const clientEntryIdSet = new Set<string>()
   const webSrcPath = getPaths().web.src
@@ -61,9 +58,8 @@ export function rscAnalyzePlugin(
         for (const cssImport of cssImports) {
           clientEntryCssCallback(moduleId, cssImport)
         }
-      } else {
-        serverComponentImportsCallback(moduleId, moduleInfo.importedIds)
       }
+      componentImportsCallback(moduleId, moduleInfo.importedIds)
     },
   }
 }
