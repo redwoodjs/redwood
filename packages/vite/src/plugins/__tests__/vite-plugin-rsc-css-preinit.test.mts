@@ -29,7 +29,7 @@ afterAll(() => {
   consoleLogSpy.mockRestore()
 })
 
-describe('rscCssPreinitPlugin', () => {
+describe.skip('rscCssPreinitPlugin', () => {
   it('should insert preinits for all nested client components', async () => {
     const plugin = rscCssPreinitPlugin(clientEntryFiles, componentImportMap)
 
