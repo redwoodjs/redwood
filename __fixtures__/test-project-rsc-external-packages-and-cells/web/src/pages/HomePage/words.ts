@@ -1,4 +1,4 @@
-import 'server-only'
+import '@jtoar/throw-on-client'
 
 const RANDOM_WORDS = [
   'retarders',
