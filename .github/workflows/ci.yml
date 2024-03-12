@@ -339,59 +339,109 @@ jobs:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
+  smoke-tests-skip:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.onlydocs == 'true'
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        bundler: [vite, webpack]
+
+    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - run: echo "Skipped"
+
+  cli-smoke-tests:
+    needs: check
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    name: 🔄 CLI smoke tests / ${{ matrix.os }} / node 20 latest
+    runs-on: ${{ matrix.os }}
+
+    env:
+      REDWOOD_CI: 1
+      REDWOOD_VERBOSE_TELEMETRY: 1
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: 🐈 Set up yarn cache
+        uses: ./.github/actions/set-up-yarn-cache
+
+      - name: 🐈 Yarn install
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: 🔨 Build
+        run: yarn build
+
+      - name: 🌲 Set up test project
+        id: set-up-test-project
+        uses: ./.github/actions/set-up-test-project
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+
       - name: Run `rw info`
-        run: |
-          yarn rw info
+        run: yarn rw info
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run `rw lint`
-        run: |
-          yarn rw lint ./api/src --fix
+        run: yarn rw lint ./api/src --fix
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw test api"
-        run: |
-          yarn rw test api --no-watch
+        run: yarn rw test api --no-watch
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw test web"
-        run: |
-          yarn rw test web --no-watch
+        run: yarn rw test web --no-watch
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw check"
-        run: |
-          yarn rw check
+        run: yarn rw check
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw storybook"
-        run: |
-          yarn rw sb --smoke-test
+        run: yarn rw sb --smoke-test
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw exec"
-        run: |
-          yarn rw g script testScript && yarn rw exec testScript
+        run: yarn rw g script testScript && yarn rw exec testScript
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "prisma generate"
-        run: |
-          yarn rw prisma generate
+        run: yarn rw prisma generate
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw data-migrate"
-        run: |
-          yarn rw dataMigrate up
+        run: yarn rw data-migrate up
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "data-migrate install"
-        run: |
-          yarn rw data-migrate install
+        run: yarn rw data-migrate install
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "prisma migrate"
-        run: |
-          yarn rw prisma migrate dev --name ci-test
+        run: yarn rw prisma migrate dev --name ci-test
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run `rw deploy --help`
@@ -403,51 +453,31 @@ jobs:
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "g page"
-        run: |
-          yarn rw g page ciTest
+        run: yarn rw g page ciTest
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "g sdl"
-        run: |
-          yarn rw g sdl userExample
+        run: yarn rw g sdl userExample
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw type-check"
-        run: |
-          yarn rw type-check
+        run: yarn rw type-check
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Throw Error | Run `rw g sdl <model>`
-        run: |
-          yarn rw g sdl DoesNotExist
+        run: yarn rw g sdl DoesNotExist
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
         continue-on-error: true
 
-      # We've disabled Replay for now but may add it back. When we do,
-      # we need to add this to all the smoke tests steps' env:
-      #
-      # ```
-      # env:
-      #   RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄  Smoke tests / ${{ matrix.os }} / node 20 latest
-      #   RECORD_REPLAY_TEST_METRICS: 1
-      # ```
-      #
-      # - name: Upload Replays
-      #   if: always()
-      #   uses: replayio/action-upload@v0.5.0
-      #   with:
-      #     api-key: rwk_cZn4WLe8106j6tC5ygNQxDpxAwCLpFo5oLQftiRN7OP
-
-  smoke-tests-skip:
+  cli-smoke-tests-skip:
     needs: detect-changes
     if: needs.detect-changes.outputs.onlydocs == 'true'
 
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        bundler: [vite, webpack]
 
-    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
+    name: 🔄 CLI smoke tests / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     steps:
