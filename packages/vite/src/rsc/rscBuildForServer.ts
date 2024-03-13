@@ -43,7 +43,9 @@ export async function rscBuildForServer(
       // it's likely way less efficient because we have to do so many files.
       noExternal: /^(?!node:)/,
       resolve: {
-        externalConditions: ['react-server'],
+        // These conditions are used in the plugin pipeline, and only affect non-externalized
+        // dependencies during the SSR build. Which because of `noExternal: /^(?!node:)/` means
+        // all dependencies apart from node built-ins.
         conditions: ['react-server'],
       },
     },
