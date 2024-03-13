@@ -5,15 +5,15 @@ import type { Plugin } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-export function rscTransformPlugin(
+export function rscTransformUseClientPlugin(
   clientEntryFiles: Record<string, string>,
 ): Plugin {
   return {
-    name: 'rsc-transform-plugin',
+    name: 'rsc-transform-use-client-plugin',
     transform: async function (code, id) {
       // Do a quick check for the exact string. If it doesn't exist, don't
       // bother parsing.
-      if (!code.includes('use client') && !code.includes('use server')) {
+      if (!code.includes('use client')) {
         return code
       }
 
@@ -57,7 +57,7 @@ export function rscTransformPlugin(
         }
       }
 
-      if (!useClient && !useServer) {
+      if (!useClient) {
         return code
       }
 
@@ -67,136 +67,16 @@ export function rscTransformPlugin(
         )
       }
 
-      let transformedCode: string
-
-      if (useClient) {
-        transformedCode = await transformClientModule(
-          code,
-          body,
-          id,
-          clientEntryFiles,
-        )
-      } else {
-        transformedCode = transformServerModule(code, body, id)
-      }
+      const transformedCode = await transformClientModule(
+        code,
+        body,
+        id,
+        clientEntryFiles,
+      )
 
       return transformedCode
     },
   }
-}
-
-function addLocalExportedNames(names: Map<string, string>, node: any) {
-  switch (node.type) {
-    case 'Identifier':
-      names.set(node.name, node.name)
-      return
-
-    case 'ObjectPattern':
-      for (let i = 0; i < node.properties.length; i++) {
-        addLocalExportedNames(names, node.properties[i])
-      }
-
-      return
-
-    case 'ArrayPattern':
-      for (let i = 0; i < node.elements.length; i++) {
-        const element = node.elements[i]
-        if (element) {
-          addLocalExportedNames(names, element)
-        }
-      }
-
-      return
-
-    case 'Property':
-      addLocalExportedNames(names, node.value)
-      return
-
-    case 'AssignmentPattern':
-      addLocalExportedNames(names, node.left)
-      return
-
-    case 'RestElement':
-      addLocalExportedNames(names, node.argument)
-      return
-
-    case 'ParenthesizedExpression':
-      addLocalExportedNames(names, node.expression)
-      return
-  }
-}
-
-function transformServerModule(source: string, body: any, url: string): string {
-  // If the same local name is exported more than once, we only need one of the names.
-  const localNames = new Map()
-  const localTypes = new Map()
-
-  for (let i = 0; i < body.length; i++) {
-    const node = body[i]
-
-    switch (node.type) {
-      case 'ExportAllDeclaration':
-        // If export * is used, the other file needs to explicitly opt into "use server" too.
-        break
-
-      case 'ExportDefaultDeclaration':
-        if (node.declaration.type === 'Identifier') {
-          localNames.set(node.declaration.name, 'default')
-        } else if (node.declaration.type === 'FunctionDeclaration') {
-          if (node.declaration.id) {
-            localNames.set(node.declaration.id.name, 'default')
-            localTypes.set(node.declaration.id.name, 'function')
-          }
-        }
-
-        continue
-
-      case 'ExportNamedDeclaration':
-        if (node.declaration) {
-          if (node.declaration.type === 'VariableDeclaration') {
-            const declarations = node.declaration.declarations
-
-            for (let j = 0; j < declarations.length; j++) {
-              addLocalExportedNames(localNames, declarations[j].id)
-            }
-          } else {
-            const name = node.declaration.id.name
-            localNames.set(name, name)
-
-            if (node.declaration.type === 'FunctionDeclaration') {
-              localTypes.set(name, 'function')
-            }
-          }
-        }
-
-        if (node.specifiers) {
-          const specifiers = node.specifiers
-
-          for (let j = 0; j < specifiers.length; j++) {
-            const specifier = specifiers[j]
-            localNames.set(specifier.local.name, specifier.exported.name)
-          }
-        }
-
-        continue
-    }
-  }
-
-  let newSrc = source + '\n\n;'
-  localNames.forEach(function (exported, local) {
-    if (localTypes.get(local) !== 'function') {
-      // We first check if the export is a function and if so annotate it.
-      newSrc += 'if (typeof ' + local + ' === "function") '
-    }
-
-    newSrc += 'Object.defineProperties(' + local + ',{'
-    newSrc += '$$typeof: {value: Symbol.for("react.server.reference")},'
-    newSrc += '$$id: {value: ' + JSON.stringify(url + '#' + exported) + '},'
-    newSrc += '$$bound: { value: null }'
-    newSrc += '});\n'
-  })
-
-  return newSrc
 }
 
 function addExportNames(names: Array<string>, node: any) {
