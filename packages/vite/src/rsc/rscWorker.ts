@@ -23,7 +23,7 @@ import { registerFwGlobals } from '../lib/registerGlobals.js'
 import { StatusError } from '../lib/StatusError.js'
 import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
 import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
-import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
+// import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
 
 import type {
   RenderInput,
@@ -138,7 +138,7 @@ const vitePromise = createServer({
       parentPort.postMessage(message)
     }),
     rscTransformUseClientPlugin({}),
-    rscTransformUseServerPlugin(),
+    // rscTransformUseServerPlugin(),
   ],
   ssr: {
     resolve: {
