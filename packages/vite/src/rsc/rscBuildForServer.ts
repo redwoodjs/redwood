@@ -1,5 +1,3 @@
-import path from 'node:path'
-
 import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -38,42 +36,15 @@ export async function rscBuildForServer(
   const rscServerBuildOutput = await viteBuild({
     envFile: false,
     ssr: {
-      // Externalize everything except packages with files that have
-      // 'use client' in them (which are the files in `clientEntryFiles`)
-      // Files included in `noExternal` are files we want Vite to analyze
-      // The values in the array here are compared to npm package names, like
-      // 'react', 'core-js', @anthropic-ai/sdk', @redwoodjs/vite', etc
-      // The map function below will return '..' for local files. That's not
-      // very pretty, but it works. It just won't match anything.
-      noExternal: Object.values(clientEntryFiles).map((fullPath) => {
-        // On Windows `fullPath` will be something like
-        // D:/a/redwood/test-project-rsc-external-packages/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
-        const relativePath = path.relative(
-          path.join(rwPaths.base, 'node_modules'),
-          fullPath,
-        )
-        // On Windows `relativePath` will be something like
-        // @tobbe.dev\rsc-test\dist\rsc-test.es.js
-        // So `splitPath` will in this case become
-        // ['@tobbe.dev', 'rsc-test', 'dist', 'rsc-test.es.js']
-        const splitPath = relativePath.split(path.sep)
-
-        // Packages without scope. Full package name looks like: package_name
-        let packageName = splitPath[0]
-
-        // Handle scoped packages. Full package name looks like:
-        // @org_name/package_name
-        if (splitPath[0].startsWith('@')) {
-          // join @org_name with package_name
-          packageName = path.join(splitPath[0], splitPath[1])
-        }
-
-        console.log('noExternal fullPath', fullPath, 'packageName', packageName)
-
-        return packageName
-      }),
+      // Externalize every file apart from node built-ins. We want vite/rollup to inline
+      // dependencies in the server bundle. This gets round runtime importing of "server-only".
+      // We have to do all imports because we can't rely on "server-only" being the name of the
+      // package. This is also actually more efficient because less files. Although, at build time
+      // it's likely way less efficient because we have to do so many files.
+      noExternal: /^(?!node:)/,
       resolve: {
         externalConditions: ['react-server'],
+        conditions: ['react-server'],
       },
     },
     plugins: [
