@@ -126,13 +126,40 @@ export function createRscRequestHandler() {
       }
 
       try {
+        // surround by performance
+        const startedAt = performance.now()
         const pipeable = await renderRsc({ rscId, props, rsfId, args })
+        const endedAt = performance.now()
+        const duration = endedAt - startedAt
+
         // TODO (RSC): See if we can/need to do more error handling here
         // pipeable.on(handleError)
 
         // Send to Studio
         // TODO (RSC): Will only want to do this in dev mode
-        createStudioFlightHandler(pipeable as PassThrough)
+
+        // collect render request metadata
+        const metadata = {
+          rsc: {
+            rscId,
+            rsfId,
+            props,
+            args,
+          },
+          request: {
+            basePath,
+            originalUrl: req.originalUrl,
+            url: req.url,
+            headers: req.headers,
+          },
+          performance: {
+            startedAt,
+            endedAt,
+            duration,
+          },
+        }
+
+        createStudioFlightHandler(pipeable as PassThrough, metadata)
 
         pipeable.pipe(res)
       } catch (e) {

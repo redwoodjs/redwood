@@ -23,11 +23,20 @@ export const processRenderRscStream = async (
   })
 }
 
-export const postFlightToStudio = (payload: string) => {
+export const postFlightToStudio = (
+  payload: string,
+  metadata: Record<string, any>
+) => {
   const base64Payload = Buffer.from(payload).toString('base64')
-
+  const encodedMetadata = Buffer.from(JSON.stringify(metadata)).toString(
+    'base64'
+  )
   const jsonBody = JSON.stringify({
-    flight: { encodedPayload: base64Payload, encoding: 'base64' },
+    flight: {
+      encodedPayload: base64Payload,
+      encoding: 'base64',
+      encodedMetadata,
+    },
   })
 
   // Options to configure the HTTP POST request
@@ -57,10 +66,13 @@ export const postFlightToStudio = (payload: string) => {
   req.end()
 }
 
-export const createStudioFlightHandler = (pipeable: PassThrough) => {
+export const createStudioFlightHandler = (
+  pipeable: PassThrough,
+  metadata: Record<string, any>
+) => {
   processRenderRscStream(pipeable)
     .then((payload) => {
-      postFlightToStudio(payload)
+      postFlightToStudio(payload, metadata)
     })
     .catch((error) => {
       console.error('An error occurred getting RSC Rendered steam:', error)
