@@ -127,10 +127,12 @@ export function createRscRequestHandler() {
 
       try {
         // surround by performance
-        const startedAt = performance.now()
+        const startedAt = Date.now()
+        const start = performance.now()
         const pipeable = await renderRsc({ rscId, props, rsfId, args })
-        const endedAt = performance.now()
-        const duration = endedAt - startedAt
+        const endedAt = Date.now()
+        const end = performance.now()
+        const duration = end - start
 
         // TODO (RSC): See if we can/need to do more error handling here
         // pipeable.on(handleError)
