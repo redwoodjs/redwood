@@ -61,7 +61,7 @@ export function rscTransformUseServerPlugin(): Plugin {
         )
       }
 
-      const transformedCode = transformServerModule(body, id)
+      const transformedCode = transformServerModule(body, id, code)
 
       return transformedCode
     },
@@ -109,7 +109,7 @@ function addLocalExportedNames(names: Map<string, string>, node: any) {
   }
 }
 
-function transformServerModule(body: any, url: string): string {
+function transformServerModule(body: any, url: string, code: string): string {
   // If the same local name is exported more than once, we only need one of the names.
   const localNames = new Map()
   const localTypes = new Map()
@@ -165,7 +165,7 @@ function transformServerModule(body: any, url: string): string {
     }
   }
 
-  let newSrc = '"use server"\n\n'
+  let newSrc = '"use server"\n' + code + '\n\n'
   localNames.forEach(function (exported, local) {
     if (localTypes.get(local) !== 'function') {
       // We first check if the export is a function and if so annotate it.
