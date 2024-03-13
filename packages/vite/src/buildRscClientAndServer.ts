@@ -12,6 +12,11 @@ export const buildRscClientAndServer = async () => {
   // Generate the client bundle
   const clientBuildOutput = await rscBuildClient(clientEntryFiles)
 
+  console.log({
+    clientEntryFiles,
+    serverEntryFiles,
+  })
+
   // Generate the server output
   const serverBuildOutput = await rscBuildForServer(
     clientEntryFiles,
