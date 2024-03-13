@@ -48,6 +48,7 @@ export async function rscBuildAnalyze() {
       ),
     ],
     ssr: {
+      external: ['react'],
       resolve: {
         externalConditions: ['react-server'],
       },
