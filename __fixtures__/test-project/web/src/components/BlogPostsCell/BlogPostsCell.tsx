@@ -8,21 +8,23 @@ import type {
 
 import BlogPost from 'src/components/BlogPost'
 
-export const QUERY: TypedDocumentNode<BlogPostsQuery, BlogPostsQueryVariables> =
-  gql`
-    query BlogPostsQuery {
-      blogPosts: posts {
-        id
-        title
-        body
-        author {
-          email
-          fullName
-        }
-        createdAt
+export const QUERY: TypedDocumentNode<
+  BlogPostsQuery,
+  BlogPostsQueryVariables
+> = gql`
+  query BlogPostsQuery {
+    blogPosts: posts {
+      id
+      title
+      body
+      author {
+        email
+        fullName
       }
+      createdAt
     }
-  `
+  }
+`
 
 export const Loading = () => <div>Loading...</div>
 
