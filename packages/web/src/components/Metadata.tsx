@@ -10,7 +10,7 @@ const EXCLUDE_PROPS = ['charSet']
 const propToMetaTag = (
   parentKey: string,
   parentValue: ParentValue,
-  options: { attr: 'name' | 'property' },
+  options: { attr: 'name' | 'property' }
 ): JSX.Element | JSX.Element[] => {
   if (Array.isArray(parentValue)) {
     // array of attributes
@@ -50,7 +50,7 @@ export const Metadata = (props: Record<string, any>) => {
       ([key, value]) =>
         !EXCLUDE_PROPS.includes(key) &&
         value !== null &&
-        (key !== 'og' || value !== true),
+        (key !== 'og' || value !== true)
     )
     .flatMap(([key, value]) => {
       return propToMetaTag(key, value, { attr: 'name' })
@@ -84,7 +84,7 @@ export const Metadata = (props: Record<string, any>) => {
       metaProps.og.description !== null
     ) {
       tags.push(
-        <meta property="og:description" content={metaProps.description} />,
+        <meta property="og:description" content={metaProps.description} />
       )
     }
 

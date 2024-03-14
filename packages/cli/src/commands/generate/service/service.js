@@ -79,7 +79,7 @@ export const scenarioFieldValue = (field) => {
 export const fieldsToScenario = async (
   scalarFields,
   relations,
-  foreignKeys,
+  foreignKeys
 ) => {
   const data = {}
 
@@ -103,7 +103,7 @@ export const fieldsToScenario = async (
       create: await fieldsToScenario(
         relScalarFields,
         relRelations,
-        relForeignKeys,
+        relForeignKeys
       ),
     }
   }
@@ -126,7 +126,7 @@ export const buildScenario = async (model) => {
     const scenarioData = await fieldsToScenario(
       scalarFields,
       relations,
-      foreignKeys,
+      foreignKeys
     )
 
     Object.keys(scenarioData).forEach((key) => {
@@ -326,9 +326,9 @@ export const files = async ({
       create: await fieldsToInput(model),
       update: await fieldsToUpdate(model),
       types: await fieldTypes(model),
-      prismaImport: (await parseSchema(model)).scalarFields.some(
-        (field) => field.type === 'Decimal',
-      ),
+      prismaImport: (
+        await parseSchema(model)
+      ).scalarFields.some((field) => field.type === 'Decimal'),
       prismaModel: model,
       idName,
       ...rest,
@@ -404,8 +404,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#generate-service',
-      )}`,
+        'https://redwoodjs.com/docs/cli-commands#generate-service'
+      )}`
     )
   Object.entries(defaults).forEach(([option, config]) => {
     yargs.option(option, config)

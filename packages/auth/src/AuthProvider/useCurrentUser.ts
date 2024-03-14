@@ -29,7 +29,7 @@ export const useCurrentUser = (authImplementation: AuthImplementation) => {
       return data?.redwood?.currentUser
     } else {
       throw new Error(
-        `Could not fetch current user: ${response.statusText} (${response.status})`,
+        `Could not fetch current user: ${response.statusText} (${response.status})`
       )
     }
   }, [authImplementation, getToken])

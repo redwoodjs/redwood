@@ -39,9 +39,9 @@ const server = setupServer(
         redwood: {
           currentUser: CURRENT_USER_DATA,
         },
-      }),
+      })
     )
-  }),
+  })
 )
 
 const consoleError = console.error
@@ -165,7 +165,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     )
 
     // We're booting up!
@@ -189,13 +189,13 @@ describe('Custom auth provider', () => {
     expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
     expect(
       screen.getByText(
-        'userMetadata: {"sub":"abcdefg|123456","username":"peterp"}',
-      ),
+        'userMetadata: {"sub":"abcdefg|123456","username":"peterp"}'
+      )
     ).toBeInTheDocument()
     expect(
       screen.getByText(
-        'currentUser: {"name":"Peter Pistorius","email":"nospam@example.net"}',
-      ),
+        'currentUser: {"name":"Peter Pistorius","email":"nospam@example.net"}'
+      )
     ).toBeInTheDocument()
     expect(screen.getByText('authToken: hunter2')).toBeInTheDocument()
 
@@ -210,7 +210,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider skipFetchCurrentUser>
         <AuthConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     )
 
     // We're booting up!
@@ -248,7 +248,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     )
 
     // The user is not authenticated
@@ -271,8 +271,8 @@ describe('Custom auth provider', () => {
     // The original current user data is fetched.
     expect(
       screen.getByText(
-        'currentUser: {"name":"Peter Pistorius","email":"nospam@example.net"}',
-      ),
+        'currentUser: {"name":"Peter Pistorius","email":"nospam@example.net"}'
+      )
     ).toBeInTheDocument()
 
     CURRENT_USER_DATA = { ...CURRENT_USER_DATA, name: 'Rambo' }
@@ -280,8 +280,8 @@ describe('Custom auth provider', () => {
 
     await waitFor(() =>
       screen.getByText(
-        'currentUser: {"name":"Rambo","email":"nospam@example.net"}',
-      ),
+        'currentUser: {"name":"Rambo","email":"nospam@example.net"}'
+      )
     )
   })
 
@@ -289,7 +289,7 @@ describe('Custom auth provider', () => {
     server.use(
       graphql.query('__REDWOOD__AUTH_GET_CURRENT_USER', (_req, res, ctx) => {
         return res(ctx.status(404))
-      }),
+      })
     )
 
     const mockAuthClient = customTestAuth
@@ -303,14 +303,14 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     )
 
     // We're booting up!
     expect(screen.getByText('Loading...')).toBeInTheDocument()
 
     await waitFor(() =>
-      screen.getByText('Could not fetch current user: Not Found (404)'),
+      screen.getByText('Could not fetch current user: Not Found (404)')
     )
   })
 
@@ -329,7 +329,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     )
 
     // We're booting up!
@@ -376,7 +376,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     )
 
     // We're booting up!
@@ -423,7 +423,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     )
 
     // We're booting up!
@@ -470,7 +470,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     )
 
     // We're booting up!
@@ -516,7 +516,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     )
 
     // We're booting up!
@@ -559,7 +559,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     )
 
     // We're booting up!
@@ -606,7 +606,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     )
 
     // We're booting up!
@@ -652,7 +652,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     )
 
     // We're booting up!
@@ -706,7 +706,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <TestAuthConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     )
 
     await waitFor(() => expect(mockedForgotPassword).toBeCalledWith('username'))

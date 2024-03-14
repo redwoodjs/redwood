@@ -20,7 +20,7 @@ export const useReauthenticate = <TUser>(
     React.SetStateAction<AuthProviderState<TUser>>
   >,
   getCurrentUser: ReturnType<typeof useCurrentUser>,
-  skipFetchCurrentUser: boolean | undefined,
+  skipFetchCurrentUser: boolean | undefined
 ) => {
   const getToken = useToken(authImplementation)
 

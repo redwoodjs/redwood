@@ -49,7 +49,7 @@ describe('QueryHooksProvider', () => {
       const myUseQueryHook = (query, options) => {
         expect(query).toEqual('query TestQuery { answer }')
         expect(options.variables.question).toEqual(
-          'What is the answer to life, the universe and everything?',
+          'What is the answer to life, the universe and everything?'
         )
         done()
         return { loading: false, data: { answer: 42 } }
@@ -61,7 +61,7 @@ describe('QueryHooksProvider', () => {
           useSubscription={null}
         >
           <TestUseQueryHook />
-        </GraphQLHooksProvider>,
+        </GraphQLHooksProvider>
       )
     }))
 
@@ -70,7 +70,7 @@ describe('QueryHooksProvider', () => {
       const myUseMutationHook = (query, options) => {
         expect(query).toEqual('mutation UpdateThing(input: "x") { answer }')
         expect(options.variables.question).toEqual(
-          'What is the answer to life, the universe and everything?',
+          'What is the answer to life, the universe and everything?'
         )
         done()
         return { loading: false, data: { answer: 42 } }
@@ -82,7 +82,7 @@ describe('QueryHooksProvider', () => {
           useSubscription={null}
         >
           <TestUseMutationHook />
-        </GraphQLHooksProvider>,
+        </GraphQLHooksProvider>
       )
     }))
 
@@ -93,10 +93,10 @@ describe('QueryHooksProvider', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestUseQueryHook />
-      </GraphQLHooksProvider>,
+      </GraphQLHooksProvider>
     )
     await waitFor(() =>
-      screen.getByText('{"loading":false,"data":{"answer":42}}'),
+      screen.getByText('{"loading":false,"data":{"answer":42}}')
     )
   })
 
@@ -107,10 +107,10 @@ describe('QueryHooksProvider', () => {
     render(
       <GraphQLHooksProvider useQuery={null} useMutation={myUseMutationHook}>
         <TestUseMutationHook />
-      </GraphQLHooksProvider>,
+      </GraphQLHooksProvider>
     )
     await waitFor(() =>
-      screen.getByText('{"loading":false,"data":{"answer":42}}'),
+      screen.getByText('{"loading":false,"data":{"answer":42}}')
     )
   })
 
@@ -125,10 +125,10 @@ describe('QueryHooksProvider', () => {
         useSubscription={myUseSubscriptionHook}
       >
         <TestUseSubscriptionHook />
-      </GraphQLHooksProvider>,
+      </GraphQLHooksProvider>
     )
     await waitFor(() =>
-      screen.getByText('{"loading":false,"data":{"answer":42}}'),
+      screen.getByText('{"loading":false,"data":{"answer":42}}')
     )
   })
 })

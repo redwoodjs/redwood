@@ -152,7 +152,7 @@ export const files = async ({ name, tests, stories, typescript, ...rest }) => {
 export const routes = ({ name, path }) => {
   return [
     `<Route path="${path}" page={${pascalcase(name)}Page} name="${camelcase(
-      name,
+      name
     )}" />`,
   ]
 }
@@ -245,7 +245,7 @@ export const handler = async ({
         title: 'Updating routes file...',
         task: async () => {
           addRoutesToRouterTask(
-            routes({ name: pageName, path: pathName(path, pageName) }),
+            routes({ name: pageName, path: pathName(path, pageName) })
           )
         },
       },
@@ -276,7 +276,7 @@ export const handler = async ({
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapseSubtasks: false } },
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {

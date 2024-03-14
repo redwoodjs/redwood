@@ -97,7 +97,7 @@ export const generateTypeDefGraphQLApi = async (): Promise<TypeDefResult> => {
         [],
         extraPlugins,
         filename,
-        CodegenSide.API,
+        CodegenSide.API
       ),
       errors,
     }
@@ -155,7 +155,7 @@ export const generateTypeDefGraphQLWeb = async (): Promise<TypeDefResult> => {
         documents,
         extraPlugins,
         filename,
-        CodegenSide.WEB,
+        CodegenSide.WEB
       ),
       errors,
     }
@@ -182,7 +182,7 @@ async function runCodegenGraphQL(
   documents: CodegenTypes.DocumentFile[],
   extraPlugins: CombinedPluginConfig[],
   filename: string,
-  side: CodegenSide,
+  side: CodegenSide
 ) {
   const userCodegenConfig = await loadCodegenConfig({
     configFilePath: getPaths().base,
@@ -270,8 +270,9 @@ async function getPluginConfig(side: CodegenSide) {
      *  ...
      * }
      */
-    prismaModels[key] =
-      `MergePrismaWithSdlTypes<Prisma${key}, MakeRelationsOptional<${key}, AllMappedModels>, AllMappedModels>`
+    prismaModels[
+      key
+    ] = `MergePrismaWithSdlTypes<Prisma${key}, MakeRelationsOptional<${key}, AllMappedModels>, AllMappedModels>`
   })
 
   const pluginConfig: CodegenTypes.PluginConfig &
@@ -357,7 +358,7 @@ const printMappedModelsPlugin: CodegenPlugin = {
       .map((objectDefType) => objectDefType.astNode?.name.value)
 
     return `type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];\ntype AllMappedModels = MaybeOrArrayOfMaybe<${sdlTypesWhichAreMapped.join(
-      ' | ',
+      ' | '
     )}>`
   },
 }
@@ -365,7 +366,7 @@ const printMappedModelsPlugin: CodegenPlugin = {
 function getCodegenOptions(
   documents: CodegenTypes.DocumentFile[],
   config: CodegenTypes.PluginConfig,
-  extraPlugins: CombinedPluginConfig[],
+  extraPlugins: CombinedPluginConfig[]
 ) {
   const plugins = [
     { typescript: { enumsAsTypes: true } },
@@ -376,7 +377,7 @@ function getCodegenOptions(
     typescript: typescriptPlugin,
     ...extraPlugins.reduce(
       (acc, cur) => ({ ...acc, [cur.name]: cur.codegenPlugin }),
-      {},
+      {}
     ),
   }
 

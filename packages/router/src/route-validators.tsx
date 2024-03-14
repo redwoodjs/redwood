@@ -36,7 +36,7 @@ export type InternalRouteProps = Partial<
 >
 
 const isNodeTypeRoute = (
-  node: ReactNode,
+  node: ReactNode
 ): node is ReactElement<InternalRouteProps> => {
   return isValidElement(node) && node.type === Route
 }
@@ -50,7 +50,7 @@ const isNodeTypeRoute = (
  */
 
 export function isStandardRoute(
-  node: ReactElement<InternalRouteProps>,
+  node: ReactElement<InternalRouteProps>
 ): node is ReactElement<RouteProps> {
   return !node.props.notfound && !node.props.redirect
 }
@@ -63,7 +63,7 @@ export function isStandardRoute(
  */
 
 export function isRedirectRoute(
-  node: ReactElement<InternalRouteProps>,
+  node: ReactElement<InternalRouteProps>
 ): node is ReactElement<RedirectRouteProps> {
   return !!node.props.redirect
 }
@@ -76,7 +76,7 @@ export function isRedirectRoute(
  */
 
 export function isNotFoundRoute(
-  node: ReactElement<InternalRouteProps>,
+  node: ReactElement<InternalRouteProps>
 ): node is ReactElement<NotFoundRouteProps> {
   return !!node.props.notfound
 }
@@ -92,7 +92,7 @@ export function isNotFoundRoute(
  */
 
 export function isValidRoute(
-  node: ReactNode,
+  node: ReactNode
 ): node is ReactElement<InternalRouteProps> {
   const isValidRouteElement = isNodeTypeRoute(node)
 
@@ -114,8 +114,8 @@ export function isValidRoute(
           : ''
       throw new Error(
         `Route element ${stringToHelpIdentify}is missing required props: ${missingKeys.join(
-          ', ',
-        )}`,
+          ', '
+        )}`
       )
     }
   }

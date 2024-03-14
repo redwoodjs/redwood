@@ -113,8 +113,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/authentication#self-hosted-auth-installation-and-setup',
-      )}`,
+        'https://redwoodjs.com/docs/authentication#self-hosted-auth-installation-and-setup'
+      )}`
     )
 
   // Merge generator defaults in
@@ -158,7 +158,7 @@ export const files = async ({
         generator: 'dbAuth',
         templatePath: 'forgotPassword.tsx.template',
         templateVars,
-      }),
+      })
     )
   }
 
@@ -174,7 +174,7 @@ export const files = async ({
           ? 'login.webAuthn.tsx.template'
           : 'login.tsx.template',
         templateVars,
-      }),
+      })
     )
   }
 
@@ -188,7 +188,7 @@ export const files = async ({
         generator: 'dbAuth',
         templatePath: 'resetPassword.tsx.template',
         templateVars,
-      }),
+      })
     )
   }
 
@@ -202,7 +202,7 @@ export const files = async ({
         generator: 'dbAuth',
         templatePath: 'signup.tsx.template',
         templateVars,
-      }),
+      })
     )
   }
 
@@ -217,9 +217,9 @@ export const files = async ({
     const scaffoldTemplate = await generateTemplate(
       path.join(
         __dirname,
-        '../scaffold/templates/assets/scaffold.css.template',
+        '../scaffold/templates/assets/scaffold.css.template'
       ),
-      { name: 'scaffold' },
+      { name: 'scaffold' }
     )
 
     files.push([scaffoldOutputPath, scaffoldTemplate])
@@ -269,7 +269,7 @@ const tasks = ({
               task: async (subctx, subtask) => {
                 if (usernameLabel) {
                   subtask.skip(
-                    `Argument username-label is set, using: "${usernameLabel}"`,
+                    `Argument username-label is set, using: "${usernameLabel}"`
                   )
                   return
                 }
@@ -287,7 +287,7 @@ const tasks = ({
               task: async (subctx, subtask) => {
                 if (passwordLabel) {
                   subtask.skip(
-                    `Argument password-label passed, using: "${passwordLabel}"`,
+                    `Argument password-label passed, using: "${passwordLabel}"`
                   )
                   return
                 }
@@ -310,7 +310,7 @@ const tasks = ({
             task.skip(
               `Querying WebAuthn addition: argument webauthn passed, WebAuthn ${
                 webauthn ? '' : 'not'
-              } included`,
+              } included`
             )
             return
           }
@@ -370,7 +370,7 @@ const tasks = ({
       rendererOptions: { collapseSubtasks: false },
       injectWrapper: { enquirer: enquirer || new Enquirer() },
       exitOnError: true,
-    },
+    }
   )
 }
 

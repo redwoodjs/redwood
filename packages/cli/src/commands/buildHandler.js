@@ -43,9 +43,9 @@ export const handler = async ({
     console.log('Measuring Web Build Performance...')
     execa.sync(
       `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-        '@redwoodjs/core/config/webpack.perf.js',
+        '@redwoodjs/core/config/webpack.perf.js'
       )}`,
-      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base },
+      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base }
     )
     // We do not want to continue building...
     return
@@ -55,9 +55,9 @@ export const handler = async ({
     console.log('Building Web Stats...')
     execa.sync(
       `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-        '@redwoodjs/core/config/webpack.stats.js',
+        '@redwoodjs/core/config/webpack.stats.js'
       )}`,
-      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base },
+      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base }
     )
     // We do not want to continue building...
     return
@@ -136,7 +136,7 @@ export const handler = async ({
           // one in the future as a performance optimization.
           await execa(
             `node ${require.resolve(
-              '@redwoodjs/vite/bins/rw-vite-build.mjs',
+              '@redwoodjs/vite/bins/rw-vite-build.mjs'
             )} --webDir="${rwjsPaths.web.base}" --verbose=${verbose}`,
             {
               stdio: verbose ? 'inherit' : 'pipe',
@@ -145,18 +145,18 @@ export const handler = async ({
               // It won't change process.cwd for anything else here, in this
               // process
               cwd: rwjsPaths.web.base,
-            },
+            }
           )
         } else {
           await execa(
             `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-              '@redwoodjs/core/config/webpack.production.js',
+              '@redwoodjs/core/config/webpack.production.js'
             )}`,
             {
               stdio: verbose ? 'inherit' : 'pipe',
               shell: true,
               cwd: rwjsPaths.web.base,
-            },
+            }
           )
         }
 
@@ -166,7 +166,7 @@ export const handler = async ({
 
         fs.copyFileSync(
           indexHtmlPath,
-          path.join(getPaths().web.dist, '200.html'),
+          path.join(getPaths().web.dist, '200.html')
         )
       },
     },
@@ -178,8 +178,8 @@ export const handler = async ({
       console.log(
         `You have not marked any routes to "prerender" in your ${terminalLink(
           'Routes',
-          'file://' + rwjsPaths.web.routes,
-        )}.`,
+          'file://' + rwjsPaths.web.routes
+        )}.`
       )
 
       return

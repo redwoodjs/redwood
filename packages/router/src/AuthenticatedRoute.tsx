@@ -55,12 +55,12 @@ export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
           throw new Error(
             `Redirecting to route "${unauthenticated}" would require route ` +
               'parameters, which currently is not supported. Please choose ' +
-              'a different route',
+              'a different route'
           )
         }
 
         throw new Error(
-          `Could not redirect to the route named ${unauthenticated}`,
+          `Could not redirect to the route named ${unauthenticated}`
         )
       }
 

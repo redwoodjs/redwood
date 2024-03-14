@@ -12,7 +12,7 @@ export const matchInlineTransformSnapshot = async (
   transformName: string,
   fixtureCode: string,
   expectedCode: string,
-  parser: 'ts' | 'tsx' | 'babel' = 'tsx',
+  parser: 'ts' | 'tsx' | 'babel' = 'tsx'
 ) => {
   const tempFilePath = tempy.file()
 
@@ -24,7 +24,7 @@ export const matchInlineTransformSnapshot = async (
   }
 
   const transformPath = require.resolve(
-    path.join(testPath, '../../', `${transformName}.ts`),
+    path.join(testPath, '../../', `${transformName}.ts`)
   )
 
   // Step 1: Write passed in code to a temp file
@@ -44,6 +44,6 @@ export const matchInlineTransformSnapshot = async (
   const transformedContent = fs.readFileSync(tempFilePath, 'utf-8')
 
   expect(await formatCode(transformedContent)).toEqual(
-    await formatCode(expectedCode),
+    await formatCode(expectedCode)
   )
 }

@@ -23,7 +23,7 @@ import { importStatementPath } from '@redwoodjs/project-config'
  */
 export default function (
   { types: t }: { types: typeof types },
-  { projectIsEsm = false }: { projectIsEsm?: boolean } = {},
+  { projectIsEsm = false }: { projectIsEsm?: boolean } = {}
 ): PluginObj {
   return {
     name: 'babel-plugin-redwood-import-dir',
@@ -42,9 +42,9 @@ export default function (
           t.variableDeclaration('let', [
             t.variableDeclarator(
               t.identifier(importName),
-              t.objectExpression([]),
+              t.objectExpression([])
             ),
-          ]),
+          ])
         )
 
         const importGlob = importStatementPath(p.node.source.value)
@@ -74,15 +74,15 @@ export default function (
             t.importDeclaration(
               [
                 t.importNamespaceSpecifier(
-                  t.identifier(importName + '_' + fpVarName),
+                  t.identifier(importName + '_' + fpVarName)
                 ),
               ],
               t.stringLiteral(
                 projectIsEsm
                   ? `${filePathWithoutExtension}.js`
-                  : filePathWithoutExtension,
-              ),
-            ),
+                  : filePathWithoutExtension
+              )
+            )
           )
 
           // + <importName>.<fpVarName> = <importName_fpVarName>
@@ -93,11 +93,11 @@ export default function (
                 '=',
                 t.memberExpression(
                   t.identifier(importName),
-                  t.identifier(fpVarName),
+                  t.identifier(fpVarName)
                 ),
-                t.identifier(importName + '_' + fpVarName),
-              ),
-            ),
+                t.identifier(importName + '_' + fpVarName)
+              )
+            )
           )
         }
 

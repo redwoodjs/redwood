@@ -56,7 +56,7 @@ test('destroys component files including stories and tests', async () => {
 
   return t.run().then(async () => {
     const generatedFiles = Object.keys(
-      await files({ name: 'About', stories: true, tests: true }),
+      await files({ name: 'About', stories: true, tests: true })
     )
     expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
     generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))

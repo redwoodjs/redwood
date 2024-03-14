@@ -60,7 +60,7 @@ class LocationProvider extends React.Component<
             window.history.replaceState(
               {},
               '',
-              pathname.substr(0, pathname.length - 1),
+              pathname.substr(0, pathname.length - 1)
             )
           }
           break

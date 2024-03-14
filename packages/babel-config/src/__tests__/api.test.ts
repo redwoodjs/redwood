@@ -84,12 +84,12 @@ describe('api', () => {
             'babel.config.js': '',
           },
         },
-        redwoodProjectPath,
+        redwoodProjectPath
       )
 
       const apiSideBabelConfigPath = getApiSideBabelConfigPath()
       expect(ensurePosixPath(apiSideBabelConfigPath || '')).toMatch(
-        '/redwood-app/api/babel.config.js',
+        '/redwood-app/api/babel.config.js'
       )
     })
 
@@ -99,7 +99,7 @@ describe('api', () => {
           'redwood.toml': '',
           api: {},
         },
-        redwoodProjectPath,
+        redwoodProjectPath
       )
 
       const apiSideBabelConfigPath = getApiSideBabelConfigPath()
@@ -114,7 +114,7 @@ describe('api', () => {
           'redwood.toml': '',
           api: {},
         },
-        redwoodProjectPath,
+        redwoodProjectPath
       )
 
       const apiSideBabelPlugins = getApiSideBabelPlugins()
@@ -195,7 +195,7 @@ describe('api', () => {
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const [_, babelPluginModuleResolverConfig] = apiSideBabelPlugins.find(
-        (plugin) => plugin[0] === 'babel-plugin-module-resolver',
+        (plugin) => plugin[0] === 'babel-plugin-module-resolver'
       )! as [any, ModuleResolverConfig, any]
 
       expect(babelPluginModuleResolverConfig).toMatchObject({
@@ -208,7 +208,7 @@ describe('api', () => {
       })
 
       expect(babelPluginModuleResolverConfig.root[0]).toMatch(
-        getPaths().api.base,
+        getPaths().api.base
       )
 
       expect(apiSideBabelPlugins).toContainEqual([
@@ -235,7 +235,7 @@ describe('api', () => {
           'redwood.toml': '',
           api: {},
         },
-        redwoodProjectPath,
+        redwoodProjectPath
       )
 
       const apiSideBabelPlugins = getApiSideBabelPlugins({

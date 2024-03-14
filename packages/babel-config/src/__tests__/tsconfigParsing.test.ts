@@ -24,7 +24,7 @@ describe('TypeScript config file parsing', () => {
         api: {},
         web: {},
       },
-      redwoodProjectPath,
+      redwoodProjectPath
     )
 
     const typeScriptConfig = parseTypeScriptConfigFiles()
@@ -46,7 +46,7 @@ describe('TypeScript config file parsing', () => {
           'tsconfig.json': webTSConfig,
         },
       },
-      redwoodProjectPath,
+      redwoodProjectPath
     )
 
     const typeScriptConfig = parseTypeScriptConfigFiles()
@@ -68,7 +68,7 @@ describe('TypeScript config file parsing', () => {
           'jsconfig.json': webJSConfig,
         },
       },
-      redwoodProjectPath,
+      redwoodProjectPath
     )
 
     const typeScriptConfig = parseTypeScriptConfigFiles()
@@ -92,7 +92,7 @@ describe('TypeScript config file parsing', () => {
           'tsconfig.json': webTSConfig,
         },
       },
-      redwoodProjectPath,
+      redwoodProjectPath
     )
 
     expect(parseTypeScriptConfigFiles).not.toThrow()
@@ -112,20 +112,20 @@ describe('getPathsFromTypeScriptConfig', () => {
         api: {},
         web: {},
       },
-      redwoodProjectPath,
+      redwoodProjectPath
     )
 
     const typeScriptConfig = parseTypeScriptConfigFiles()
 
     const apiPaths = getPathsFromTypeScriptConfig(
       typeScriptConfig.api,
-      FAKE_API_ROOT,
+      FAKE_API_ROOT
     )
     expect(apiPaths).toMatchObject({})
 
     const webPaths = getPathsFromTypeScriptConfig(
       typeScriptConfig.web,
-      FAKE_WEB_ROOT,
+      FAKE_WEB_ROOT
     )
     expect(webPaths).toMatchObject({})
   })
@@ -144,20 +144,20 @@ describe('getPathsFromTypeScriptConfig', () => {
           'tsconfig.json': webTSConfig,
         },
       },
-      redwoodProjectPath,
+      redwoodProjectPath
     )
 
     const typeScriptConfig = parseTypeScriptConfigFiles()
 
     const apiPaths = getPathsFromTypeScriptConfig(
       typeScriptConfig.api,
-      FAKE_API_ROOT,
+      FAKE_API_ROOT
     )
     expect(apiPaths).toMatchInlineSnapshot(`{}`)
 
     const webPaths = getPathsFromTypeScriptConfig(
       typeScriptConfig.web,
-      FAKE_WEB_ROOT,
+      FAKE_WEB_ROOT
     )
     expect(webPaths).toMatchInlineSnapshot(`{}`)
   })
@@ -178,20 +178,20 @@ describe('getPathsFromTypeScriptConfig', () => {
           'tsconfig.json': webTSConfig,
         },
       },
-      redwoodProjectPath,
+      redwoodProjectPath
     )
 
     const typeScriptConfig = parseTypeScriptConfigFiles()
 
     const apiPaths = getPathsFromTypeScriptConfig(
       typeScriptConfig.api,
-      FAKE_API_ROOT,
+      FAKE_API_ROOT
     )
     expect(apiPaths).toMatchInlineSnapshot(`{}`)
 
     const webPaths = getPathsFromTypeScriptConfig(
       typeScriptConfig.web,
-      FAKE_WEB_ROOT,
+      FAKE_WEB_ROOT
     )
     expect(webPaths).toMatchInlineSnapshot(`{}`)
   })
@@ -212,26 +212,26 @@ describe('getPathsFromTypeScriptConfig', () => {
           'tsconfig.json': webTSConfig,
         },
       },
-      redwoodProjectPath,
+      redwoodProjectPath
     )
 
     const typeScriptConfig = parseTypeScriptConfigFiles()
 
     const apiPaths = getPathsFromTypeScriptConfig(
       typeScriptConfig.api,
-      FAKE_API_ROOT,
+      FAKE_API_ROOT
     )
 
     expect(ensurePosixPath(apiPaths['@services'])).toEqual(
-      ensurePosixPath(`${FAKE_API_ROOT}/src/services`),
+      ensurePosixPath(`${FAKE_API_ROOT}/src/services`)
     )
 
     const webPaths = getPathsFromTypeScriptConfig(
       typeScriptConfig.web,
-      FAKE_WEB_ROOT,
+      FAKE_WEB_ROOT
     )
     expect(ensurePosixPath(webPaths['@ui'])).toEqual(
-      ensurePosixPath(`${FAKE_WEB_ROOT}/src/ui`),
+      ensurePosixPath(`${FAKE_WEB_ROOT}/src/ui`)
     )
   })
 })

@@ -7,7 +7,7 @@ import { getConfigPath } from '@redwoodjs/project-config'
 describe('getConfigPath', () => {
   it('throws an error when not in a project', () => {
     expect(getConfigPath).toThrowErrorMatchingInlineSnapshot(
-      `[Error: Could not find a "redwood.toml" file, are you sure you're in a Redwood project?]`,
+      `[Error: Could not find a "redwood.toml" file, are you sure you're in a Redwood project?]`
     )
   })
 
@@ -20,7 +20,7 @@ describe('getConfigPath', () => {
       '..',
       '..',
       '__fixtures__',
-      'test-project',
+      'test-project'
     )
     afterAll(() => {
       process.env.RWJS_CWD = RWJS_CWD
@@ -37,7 +37,7 @@ describe('getConfigPath', () => {
         'web',
         'src',
         'pages',
-        'AboutPage',
+        'AboutPage'
       )
       expect(getConfigPath()).toBe(path.join(FIXTURE_BASEDIR, 'redwood.toml'))
     })
@@ -52,7 +52,7 @@ describe('getConfigPath', () => {
       '..',
       '..',
       '__fixtures__',
-      'test-project',
+      'test-project'
     )
     beforeAll(() => {
       delete process.env.RWJS_CWD
@@ -71,7 +71,7 @@ describe('getConfigPath', () => {
     it('finds the correct config path when inside a project directory', () => {
       const spy = vi.spyOn(process, 'cwd')
       spy.mockReturnValue(
-        path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages', 'AboutPage'),
+        path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages', 'AboutPage')
       )
       expect(getConfigPath()).toBe(path.join(FIXTURE_BASEDIR, 'redwood.toml'))
     })

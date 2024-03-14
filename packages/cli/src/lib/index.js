@@ -135,7 +135,7 @@ export const writeFile = (
   target,
   contents,
   { overwriteExisting = false } = {},
-  task = {},
+  task = {}
 ) => {
   const { base } = getPaths()
   task.title = `Writing \`./${path.relative(base, target)}\``
@@ -155,7 +155,7 @@ export const writeFile = (
 export const saveRemoteFileToDisk = (
   url,
   localPath,
-  { overwriteExisting = false } = {},
+  { overwriteExisting = false } = {}
 ) => {
   if (!overwriteExisting && fs.existsSync(localPath)) {
     throw new Error(`${localPath} already exists.`)
@@ -168,10 +168,10 @@ export const saveRemoteFileToDisk = (
         resolve()
       } else {
         reject(
-          new Error(`${url} responded with status code ${response.statusCode}`),
+          new Error(`${url} responded with status code ${response.statusCode}`)
         )
       }
-    }),
+    })
   )
 
   return downloadPromise
@@ -295,7 +295,7 @@ export const writeFilesTask = (files, options) => {
         title: `...waiting to write file \`./${path.relative(base, file)}\`...`,
         task: (ctx, task) => writeFile(file, contents, options, task),
       }
-    }),
+    })
   )
 }
 
@@ -360,7 +360,7 @@ export const cleanupEmptyDirsTask = (files) => {
           return false
         },
       }
-    }),
+    })
   )
 }
 
@@ -369,10 +369,10 @@ const wrapWithSet = (
   layout,
   routes,
   newLineAndIndent,
-  props = {},
+  props = {}
 ) => {
   const [_, indentOne, indentTwo] = routesContent.match(
-    /([ \t]*)<Router.*?>[^<]*[\r\n]+([ \t]+)/,
+    /([ \t]*)<Router.*?>[^<]*[\r\n]+([ \t]+)/
   ) || ['', 0, 2]
   const oneLevelIndent = indentTwo.slice(0, indentTwo.length - indentOne.length)
   const newRoutesWithExtraIndent = routes.map((route) => oneLevelIndent + route)
@@ -399,7 +399,7 @@ export const addRoutesToRouterTask = (routes, layout, setProps = {}) => {
 
   if (newRoutes.length) {
     const [routerStart, routerParams, newLineAndIndent] = routesContent.match(
-      /\s*<Router(.*?)>(\s*)/s,
+      /\s*<Router(.*?)>(\s*)/s
     )
 
     if (/trailingSlashes={?(["'])always\1}?/.test(routerParams)) {
@@ -407,7 +407,7 @@ export const addRoutesToRouterTask = (routes, layout, setProps = {}) => {
       // ['<Route path="/foo" page={FooPage} name="foo"/>']
       // and we need to replace `path="/foo"` with `path="/foo/"`
       newRoutes = newRoutes.map((route) =>
-        route.replace(/ path="(.+?)" /, ' path="$1/" '),
+        route.replace(/ path="(.+?)" /, ' path="$1/" ')
       )
     }
 
@@ -417,13 +417,13 @@ export const addRoutesToRouterTask = (routes, layout, setProps = {}) => {
           layout,
           newRoutes,
           newLineAndIndent,
-          setProps,
+          setProps
         )
       : newRoutes.join(newLineAndIndent)
 
     const newRoutesContent = routesContent.replace(
       routerStart,
-      `${routerStart + routesBatch + newLineAndIndent}`,
+      `${routerStart + routesBatch + newLineAndIndent}`
     )
 
     writeFile(redwoodPaths.web.routes, newRoutesContent, {
@@ -442,7 +442,7 @@ export const addScaffoldImport = () => {
 
   appJsContents = appJsContents.replace(
     "import Routes from 'src/Routes'\n",
-    "import Routes from 'src/Routes'\n\nimport './scaffold.css'",
+    "import Routes from 'src/Routes'\n\nimport './scaffold.css'"
   )
   writeFile(appJsPath, appJsContents, { overwriteExisting: true })
 
@@ -451,7 +451,7 @@ export const addScaffoldImport = () => {
 
 const removeEmtpySet = (routesContent, layout) => {
   const setWithLayoutReg = new RegExp(
-    `\\s*<Set[^>]*wrap={${layout}}[^<]*>([^<]*)<\/Set>`,
+    `\\s*<Set[^>]*wrap={${layout}}[^<]*>([^<]*)<\/Set>`
   )
   const [matchedSet, childContent] = routesContent.match(setWithLayoutReg) || []
   if (!matchedSet) {
@@ -565,7 +565,7 @@ export const runCommandTask = async (commands, { verbose }) => {
     {
       renderer: verbose && 'verbose',
       rendererOptions: { collapseSubtasks: false, dateFormat: false },
-    },
+    }
   )
 
   try {
@@ -585,7 +585,7 @@ export const getDefaultArgs = (builder) => {
       options[optionName] = optionConfig.default
       return options
     },
-    {},
+    {}
   )
 }
 

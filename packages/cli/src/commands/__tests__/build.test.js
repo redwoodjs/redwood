@@ -74,6 +74,6 @@ test('Should run prerender for web', async () => {
   // because `detectPrerenderRoutes` is empty.
   expect(consoleSpy.mock.calls[0][0]).toBe('Starting prerendering...')
   expect(consoleSpy.mock.calls[1][0]).toMatch(
-    /You have not marked any routes to "prerender"/,
+    /You have not marked any routes to "prerender"/
   )
 })

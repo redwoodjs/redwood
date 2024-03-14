@@ -37,8 +37,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'RedwoodRecord Reference',
-        'https://redwoodjs.com/docs/redwoodrecord',
-      )}`,
+        'https://redwoodjs.com/docs/redwoodrecord'
+      )}`
     )
 
   Object.entries(yargsDefaults).forEach(([option, config]) => {
@@ -71,7 +71,7 @@ export const handler = async ({ force, ...args }) => {
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapseSubtasks: false } },
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {

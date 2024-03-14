@@ -27,7 +27,7 @@ function mergeConfig(base, ext) {
 
 const expectMerged = async (base, ext, merged) => {
   expect(await mergeConfig(unindented(base), unindented(ext))).toBe(
-    unindented(merged),
+    unindented(merged)
   )
 }
 
@@ -36,7 +36,7 @@ describe('Import behavior', () => {
     await expectMerged(
       "import * as React from 'react'",
       "import * as React from 'react'",
-      "import * as React from 'react'\n",
+      "import * as React from 'react'\n"
     )
   })
 
@@ -44,7 +44,7 @@ describe('Import behavior', () => {
     await expectMerged(
       "import { foo } from 'source'",
       "import { foo } from 'source'",
-      "import { foo } from 'source'\n",
+      "import { foo } from 'source'\n"
     )
   })
 
@@ -52,7 +52,7 @@ describe('Import behavior', () => {
     await expectMerged(
       "import { bar } from 'source'",
       "import { foo } from 'source'",
-      "import { bar, foo } from 'source'\n",
+      "import { bar, foo } from 'source'\n"
     )
   })
 
@@ -60,7 +60,7 @@ describe('Import behavior', () => {
     await expectMerged(
       "import { foo, bar } from 'source'",
       "import { bar, baz } from 'source'",
-      "import { foo, bar, baz } from 'source'\n",
+      "import { foo, bar, baz } from 'source'\n"
     )
   })
 
@@ -68,7 +68,7 @@ describe('Import behavior', () => {
     await expectMerged(
       "import def from 'source'",
       "import { foo } from 'source'",
-      "import def, { foo } from 'source'\n",
+      "import def, { foo } from 'source'\n"
     )
   })
 
@@ -76,7 +76,7 @@ describe('Import behavior', () => {
     await expectMerged(
       "import def, { foo } from 'source'",
       "import { bar } from 'source'",
-      "import def, { foo, bar } from 'source'\n",
+      "import def, { foo, bar } from 'source'\n"
     )
   })
 
@@ -84,7 +84,7 @@ describe('Import behavior', () => {
     await expectMerged(
       "import { foo } from 'source'",
       "import def from 'source'",
-      "import def, { foo } from 'source'\n",
+      "import def, { foo } from 'source'\n"
     )
   })
 
@@ -92,7 +92,7 @@ describe('Import behavior', () => {
     await expectMerged(
       "import * as One from 'source'",
       "import * as Two from 'source'",
-      "import * as One from 'source'\nimport * as Two from 'source'\n",
+      "import * as One from 'source'\nimport * as Two from 'source'\n"
     )
   })
 
@@ -100,7 +100,7 @@ describe('Import behavior', () => {
     await expectMerged(
       "import One from 'source'",
       "import Two from 'source'",
-      "import One from 'source'\nimport Two from 'source'\n",
+      "import One from 'source'\nimport Two from 'source'\n"
     )
   })
 
@@ -111,7 +111,7 @@ describe('Import behavior', () => {
       `\
       import 'source'
       import Def from 'source'
-      `,
+      `
     )
   })
 
@@ -122,7 +122,7 @@ describe('Import behavior', () => {
       `\
       import 'source'
       import * as Name from 'source'
-      `,
+      `
     )
   })
 
@@ -133,7 +133,7 @@ describe('Import behavior', () => {
       `\
       import 'source'
       import { foo, bar } from 'source'
-      `,
+      `
     )
   })
 
@@ -144,7 +144,7 @@ describe('Import behavior', () => {
       `\
       import def, { foo, bar } from 'source'
       import 'source'
-      `,
+      `
     )
   })
 
@@ -152,7 +152,7 @@ describe('Import behavior', () => {
     await expectMerged(
       "import src from 'source'",
       "import * as Source from 'source'",
-      "import src, * as Source from 'source'\n",
+      "import src, * as Source from 'source'\n"
     )
   })
 
@@ -160,7 +160,7 @@ describe('Import behavior', () => {
     await expectMerged(
       "import * as Source from 'source'",
       "import src from 'source'",
-      "import src, * as Source from 'source'\n",
+      "import src, * as Source from 'source'\n"
     )
   })
 
@@ -171,7 +171,7 @@ describe('Import behavior', () => {
       import { bar } from 'source'
       import { baz } from 'source'
       `,
-      "import { foo, bar, baz } from 'source'\n",
+      "import { foo, bar, baz } from 'source'\n"
     )
   })
 
@@ -185,7 +185,7 @@ describe('Import behavior', () => {
       `\
       import default1, { foo } from 'source'
       import default2 from 'source'
-      `,
+      `
     )
   })
 
@@ -203,7 +203,7 @@ describe('Import behavior', () => {
       import default1, { foo } from 'source'
       import default2 from 'source'
       import * as namespace from 'source'
-      `,
+      `
     )
   })
 })
@@ -218,7 +218,7 @@ describe('Object behavior', () => {
         foo: 'foo',
         bar: 'bar',
       }
-      `,
+      `
     )
   })
 
@@ -232,7 +232,7 @@ describe('Object behavior', () => {
         bar: 'bar',
         baz: 'baz',
       }
-      `,
+      `
     )
   })
 
@@ -247,7 +247,7 @@ describe('Object behavior', () => {
           bird: 'bird',
         },
       }
-      `,
+      `
     )
   })
 
@@ -262,7 +262,7 @@ describe('Object behavior', () => {
           bird: 'bird',
         },
       }
-      `,
+      `
     )
   })
 
@@ -276,7 +276,7 @@ describe('Object behavior', () => {
           arr: [1, 2, 3, 4, 5],
         },
       }
-      `,
+      `
     )
   })
   it('merges deeply nested objects', async () => {
@@ -293,7 +293,7 @@ describe('Object behavior', () => {
           },
         },
       }
-      `,
+      `
     )
   })
 })
@@ -303,7 +303,7 @@ describe('Array behavior', () => {
     await expectMerged(
       'const x = [1, 2, 3]',
       'const x = [4, 5, 6]',
-      'const x = [1, 2, 3, 4, 5, 6]\n',
+      'const x = [1, 2, 3, 4, 5, 6]\n'
     )
   })
 
@@ -314,7 +314,7 @@ describe('Array behavior', () => {
       `\
       const x = [1, 2, 3]
       const y = [4, 5, 6]
-      `,
+      `
     )
   })
 
@@ -322,7 +322,7 @@ describe('Array behavior', () => {
     await expectMerged(
       'const x = [1, 2, 3]',
       'const x = [3, 4, 5]',
-      'const x = [1, 2, 3, 4, 5]\n',
+      'const x = [1, 2, 3, 4, 5]\n'
     )
   })
 
@@ -335,7 +335,7 @@ describe('Array behavior', () => {
       const x = {
         foo: 'foo',
       }
-      `,
+      `
     )
   })
 
@@ -344,7 +344,7 @@ describe('Array behavior', () => {
       "const x = [1, 2, 3, ['a', 'b', 'c']]",
       "const x = [1, 5, ['c', 'd', 'e']]",
       // We might also want [1, 2, 3, 5, ['a', 'b', 'c', 'd', 'e']], but that seems tricky to implement.
-      "const x = [1, 2, 3, ['a', 'b', 'c', 'd', 'e'], 5]\n",
+      "const x = [1, 2, 3, ['a', 'b', 'c', 'd', 'e'], 5]\n"
     )
   })
 })
@@ -357,7 +357,7 @@ describe('opaque function behavior', () => {
       `\
       const x = (a) => ['a', 'b', 'c'].contains(a)
       const x = (a) => ['d', 'e', 'f'].contains(a)
-      `,
+      `
     )
   })
 
@@ -384,7 +384,7 @@ describe('opaque function behavior', () => {
         const array = ['a', 'b', 'c']
         return array.contains(a)
       }
-      `,
+      `
     )
   })
 })
@@ -394,7 +394,7 @@ describe('nop behavior', () => {
     await expectMerged(
       'const x = "foo"',
       'const x = "bar"',
-      "const x = 'foo'\nconst x = 'bar'\n",
+      "const x = 'foo'\nconst x = 'bar'\n"
     )
   })
 
@@ -408,7 +408,7 @@ describe('nop behavior', () => {
           bar: 'baz',
         },
       }
-      `,
+      `
     )
   })
 
@@ -419,7 +419,7 @@ describe('nop behavior', () => {
       `\
       const x = (x, y) => x + y
       const x = (x, y) => x - y
-      `,
+      `
     )
   })
 
@@ -427,7 +427,7 @@ describe('nop behavior', () => {
     await expectMerged(
       'export const x = [1, 2, 3]',
       'const x = [3, 4, 5]',
-      'export const x = [1, 2, 3]\nconst x = [3, 4, 5]\n',
+      'export const x = [1, 2, 3]\nconst x = [3, 4, 5]\n'
     )
   })
 })
@@ -446,7 +446,7 @@ describe('Comment behavior', () => {
       `\
       // This is a test
       const x = [1, 2, 3, 4, 5, 6]
-      `,
+      `
     )
   })
 
@@ -463,7 +463,7 @@ describe('Comment behavior', () => {
       `\
       // This is a test
       const x = [1, 2, 3, 4, 5, 6]
-      `,
+      `
     )
   })
 
@@ -483,7 +483,7 @@ describe('Comment behavior', () => {
       import { foo, bar } from 'source'
       // This is a test
       const x = [1, 2, 3, 4, 5, 6]
-      `,
+      `
     )
   })
 })
@@ -498,7 +498,7 @@ describe('Integration tests', () => {
   const baseDir = './src/lib/__tests__/fixtures/merge'
   const tests = fs.readdirSync(baseDir).map((caseDir) => {
     return ['it.txt', 'base.jsx', 'ext.jsx', 'expected.jsx'].map((file) =>
-      fs.readFileSync(path.join(baseDir, caseDir, file), { encoding: 'utf-8' }),
+      fs.readFileSync(path.join(baseDir, caseDir, file), { encoding: 'utf-8' })
     )
   })
   test.each(tests)('%s', async (_it, base, ext, expected) => {

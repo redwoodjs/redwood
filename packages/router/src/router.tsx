@@ -246,7 +246,7 @@ const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
       return React.createElement(
         Wrapper,
         { ...set.props, key: set.id + '-' + index },
-        acc,
+        acc
       )
     }, acc)
 
@@ -255,7 +255,7 @@ const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
       const unauthenticated = set.props.unauthenticated
       if (!unauthenticated || typeof unauthenticated !== 'string') {
         throw new Error(
-          'You must specify an `unauthenticated` route when using PrivateSet',
+          'You must specify an `unauthenticated` route when using PrivateSet'
         )
       }
 

@@ -19,7 +19,7 @@ const transform = (filename: string) => {
 describe('mulitiple files ending in Page.{js,jsx,ts,tsx}', () => {
   const FAILURE_FIXTURE_PATH = path.resolve(
     __dirname,
-    './__fixtures__/route-auto-loader/failure',
+    './__fixtures__/route-auto-loader/failure'
   )
 
   beforeAll(() => {
@@ -34,7 +34,7 @@ describe('mulitiple files ending in Page.{js,jsx,ts,tsx}', () => {
     expect(() => {
       transform(getPaths().web.routes)
     }).toThrowError(
-      "Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the follow page directories: 'HomePage",
+      "Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the follow page directories: 'HomePage"
     )
   })
 })
@@ -42,7 +42,7 @@ describe('mulitiple files ending in Page.{js,jsx,ts,tsx}', () => {
 describe('page auto loader correctly imports pages', () => {
   const FIXTURE_PATH = path.resolve(
     __dirname,
-    '../../../../../__fixtures__/example-todo-main/',
+    '../../../../../__fixtures__/example-todo-main/'
   )
 
   let result: babel.BabelFileResult | null

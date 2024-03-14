@@ -82,7 +82,7 @@ beforeEach(() => {
 const defaultArgs: DbAuthClientArgs & {
   useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
-    currentUser: CurrentUser | null,
+    currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 } = {
   fetchConfig: { credentials: 'include' },
@@ -117,7 +117,7 @@ describe('dbAuth', () => {
       `${globalThis.RWJS_API_URL}/auth?method=getToken`,
       {
         credentials: 'same-origin',
-      },
+      }
     )
   })
 
@@ -130,7 +130,7 @@ describe('dbAuth', () => {
       `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
-      }),
+      })
     )
   })
 
@@ -147,7 +147,7 @@ describe('dbAuth', () => {
       `${globalThis.RWJS_API_URL}/auth?method=getToken`,
       {
         credentials: 'include',
-      },
+      }
     )
   })
 
@@ -156,21 +156,21 @@ describe('dbAuth', () => {
 
     await act(
       async () =>
-        await auth.logIn({ username: 'username', password: 'password' }),
+        await auth.logIn({ username: 'username', password: 'password' })
     )
 
     expect(globalThis.fetch).toBeCalledWith(
       `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
-      }),
+      })
     )
 
     expect(globalThis.fetch).toBeCalledWith(
       `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
-      }),
+      })
     )
   })
 
@@ -184,7 +184,7 @@ describe('dbAuth', () => {
       `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
-      }),
+      })
     )
   })
 
@@ -195,14 +195,14 @@ describe('dbAuth', () => {
         await auth.resetPassword({
           resetToken: 'reset-token',
           password: 'password',
-        }),
+        })
     )
 
     expect(globalThis.fetch).toBeCalledWith(
       `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
-      }),
+      })
     )
   })
 
@@ -213,14 +213,14 @@ describe('dbAuth', () => {
         await auth.signUp({
           username: 'username',
           password: 'password',
-        }),
+        })
     )
 
     expect(globalThis.fetch).toBeCalledWith(
       `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
-      }),
+      })
     )
   })
 
@@ -232,7 +232,7 @@ describe('dbAuth', () => {
       `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
-      }),
+      })
     )
   })
 
@@ -245,7 +245,7 @@ describe('dbAuth', () => {
       '/.redwood/functions/dbauth',
       expect.objectContaining({
         credentials: 'same-origin',
-      }),
+      })
     )
   })
 

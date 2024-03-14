@@ -38,8 +38,8 @@ export const builder = (yargs) => {
     .epilogue(
       `For more commands, options, and examples, see ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#deploy',
-      )}`,
+        'https://redwoodjs.com/docs/cli-commands#deploy'
+      )}`
     )
 }
 
@@ -64,14 +64,14 @@ export const handler = async ({ side, prisma, dataMigrate }) => {
       console.log('Running database migrations...')
       execa.commandSync(
         `node_modules/.bin/prisma migrate deploy --schema "${rwjsPaths.api.dbSchema}"`,
-        execaConfig,
+        execaConfig
       )
     }
 
     if (dataMigrate) {
       console.log('Running data migrations...')
       const packageJson = fs.readJsonSync(
-        path.join(rwjsPaths.base, 'package.json'),
+        path.join(rwjsPaths.base, 'package.json')
       )
       const hasDataMigratePackage =
         !!packageJson.devDependencies['@redwoodjs/cli-data-migrate']
@@ -86,7 +86,7 @@ export const handler = async ({ side, prisma, dataMigrate }) => {
             '```',
             'yarn add -D @redwoodjs/cli-data-migrate',
             '```',
-          ].join('\n'),
+          ].join('\n')
         )
       } else {
         execa.commandSync('yarn rw dataMigrate up', execaConfig)

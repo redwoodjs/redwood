@@ -10,10 +10,7 @@ import type { RWSDL } from './RWSDL'
 import { RWServiceFunction } from './RWServiceFunction'
 
 export class RWService extends FileNode {
-  constructor(
-    public filePath: string,
-    public parent: RWProject,
-  ) {
+  constructor(public filePath: string, public parent: RWProject) {
     super()
   }
   /**

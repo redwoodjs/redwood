@@ -162,7 +162,7 @@ const teardown = async () => {
   for (const modelName of teardownOrder) {
     try {
       await getProjectDb().$executeRawUnsafe(
-        `DELETE FROM ${quoteStyle}${modelName}${quoteStyle}`,
+        `DELETE FROM ${quoteStyle}${modelName}${quoteStyle}`
       )
     } catch (e) {
       const match = e.message.match(/Code: `(\d+)`/)
@@ -194,11 +194,12 @@ const seedScenario = async (scenario) => {
       for (const [name, createArgs] of Object.entries(namedFixtures)) {
         if (typeof createArgs === 'function') {
           scenarios[model][name] = await getProjectDb()[model].create(
-            createArgs(scenarios),
+            createArgs(scenarios)
           )
         } else {
-          scenarios[model][name] =
-            await getProjectDb()[model].create(createArgs)
+          scenarios[model][name] = await getProjectDb()[model].create(
+            createArgs
+          )
         }
       }
     }
@@ -212,11 +213,11 @@ global.scenario = buildScenario(global.it, global.testPath)
 global.scenario.only = buildScenario(global.it.only, global.testPath)
 global.describeScenario = buildDescribeScenario(
   global.describe,
-  global.testPath,
+  global.testPath
 )
 global.describeScenario.only = buildDescribeScenario(
   global.describe.only,
-  global.testPath,
+  global.testPath
 )
 
 /**
@@ -261,7 +262,7 @@ const mockContext = new Proxy(
       ctx[prop] = value
       return true
     },
-  },
+  }
 )
 jest.mock('@redwoodjs/context', () => {
   return {
@@ -314,7 +315,7 @@ function loadScenarios(testPath, scenarioName) {
       scenario = allScenarios[scenarioName]
     } else {
       throw new Error(
-        `UndefinedScenario: There is no scenario named "${scenarioName}" in ${testFilePath}.{js,ts}`,
+        `UndefinedScenario: There is no scenario named "${scenarioName}" in ${testFilePath}.{js,ts}`
       )
     }
   }

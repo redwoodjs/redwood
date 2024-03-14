@@ -56,7 +56,7 @@ const runRwBabelTransformsPlugin = {
             rwjsConfig.experimental.opentelemetry.enabled &&
             rwjsConfig.experimental.opentelemetry.wrapApi,
           projectIsEsm: projectSideIsEsm('api'),
-        }),
+        })
       )
 
       if (transformedCode?.code) {

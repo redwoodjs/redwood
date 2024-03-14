@@ -59,7 +59,7 @@ const TableMock = class {
     let matchingRecords = this.records
     keys.forEach((key) => {
       matchingRecords = matchingRecords.filter(
-        (record) => record[key] === where[key],
+        (record) => record[key] === where[key]
       )
     })
     return matchingRecords[0]
@@ -97,7 +97,7 @@ const LOGOUT_COOKIE = 'session=;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
 const SESSION_SECRET = '540d03ebb00b441f8f7442cbc39958ad'
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../../../__fixtures__/example-todo-main',
+  '../../../../../../__fixtures__/example-todo-main'
 )
 
 beforeAll(() => {
@@ -134,7 +134,7 @@ const encryptToCookie = (data) => {
   const cipher = crypto.createCipheriv(
     'aes-256-cbc',
     SESSION_SECRET.substring(0, 32),
-    iv,
+    iv
   )
   let encryptedSession = cipher.update(data, 'utf-8', 'base64')
   encryptedSession += cipher.final('base64')
@@ -255,7 +255,7 @@ describe('dbAuth', () => {
   describe('PAST_EXPIRES_DATE', () => {
     it('returns the start of epoch as a UTCString', () => {
       expect(DbAuthHandler.PAST_EXPIRES_DATE).toEqual(
-        new Date('1970-01-01T00:00:00.000+00:00').toUTCString(),
+        new Date('1970-01-01T00:00:00.000+00:00').toUTCString()
       )
     })
   })
@@ -351,7 +351,7 @@ describe('dbAuth', () => {
             signup: {
               handler: () => {},
             },
-          }),
+          })
       ).toThrow(dbAuthError.NoForgotPasswordHandler)
 
       expect(
@@ -368,7 +368,7 @@ describe('dbAuth', () => {
             signup: {
               handler: () => {},
             },
-          }),
+          })
       ).toThrow(dbAuthError.NoForgotPasswordHandler)
     })
 
@@ -390,7 +390,7 @@ describe('dbAuth', () => {
             forgotPassword: {
               enabled: false,
             },
-          }),
+          })
       ).not.toThrow(dbAuthError.NoForgotPasswordHandler)
     })
 
@@ -408,7 +408,7 @@ describe('dbAuth', () => {
             signup: {
               handler: () => {},
             },
-          }),
+          })
       ).toThrow(dbAuthError.NoSessionExpirationError)
       // login object exists, but not `expires` key
       expect(
@@ -426,7 +426,7 @@ describe('dbAuth', () => {
             signup: {
               handler: () => {},
             },
-          }),
+          })
       ).toThrow(dbAuthError.NoSessionExpirationError)
     })
 
@@ -446,7 +446,7 @@ describe('dbAuth', () => {
             signup: {
               handler: () => {},
             },
-          }),
+          })
       ).toThrow(dbAuthError.NoLoginHandlerError)
     })
 
@@ -466,7 +466,7 @@ describe('dbAuth', () => {
             forgotPassword: {
               handler: () => {},
             },
-          }),
+          })
       ).not.toThrow(dbAuthError.NoLoginHandlerError)
     })
 
@@ -484,7 +484,7 @@ describe('dbAuth', () => {
             resetPassword: {
               handler: () => {},
             },
-          }),
+          })
       ).toThrow(dbAuthError.NoSignupHandler)
 
       expect(
@@ -501,7 +501,7 @@ describe('dbAuth', () => {
               handler: () => {},
             },
             signup: {},
-          }),
+          })
       ).toThrow(dbAuthError.NoSignupHandler)
     })
 
@@ -523,7 +523,7 @@ describe('dbAuth', () => {
             forgotPassword: {
               handler: () => {},
             },
-          }),
+          })
       ).not.toThrow(dbAuthError.NoSignupHandler)
     })
 
@@ -574,7 +574,7 @@ describe('dbAuth', () => {
       await dbAuth.init()
       await dbAuth.init()
       expect(dbAuth.normalizedRequest.headers.get('csrf-token')).toEqual(
-        'qwerty',
+        'qwerty'
       )
     })
 
@@ -605,7 +605,7 @@ describe('dbAuth', () => {
       delete process.env.SESSION_SECRET
 
       expect(() => new DbAuthHandler(req, context, options)).toThrow(
-        dbAuthError.NoSessionSecretError,
+        dbAuthError.NoSessionSecretError
       )
     })
   })
@@ -706,7 +706,7 @@ describe('dbAuth', () => {
       expect(response.statusCode).toEqual(200)
       expect(response.headers['access-control-allow-credentials']).toBe('true')
       expect(response.headers['access-control-allow-origin']).toBe(
-        'https://www.myRedwoodWebSide.com',
+        'https://www.myRedwoodWebSide.com'
       )
     })
 
@@ -1468,7 +1468,7 @@ describe('dbAuth', () => {
     it('throws an error if resetToken is expired', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires - 1,
+        tokenExpires.getSeconds() - options.forgotPassword.expires - 1
       )
       await createDbUser({
         resetToken: hashToken('1234'),
@@ -1495,7 +1495,7 @@ describe('dbAuth', () => {
     it('clears out resetToken and resetTokenExpiresAt if expired', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires - 1,
+        tokenExpires.getSeconds() - options.forgotPassword.expires - 1
       )
       const user = await createDbUser({
         resetToken: hashToken('1234'),
@@ -1529,7 +1529,7 @@ describe('dbAuth', () => {
     it('throws allowReusedPassword is false and new password is same as old', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
         resetToken: hashToken('1234'),
@@ -1550,14 +1550,14 @@ describe('dbAuth', () => {
       await dbAuth.init()
 
       await expect(dbAuth.resetPassword()).rejects.toThrow(
-        dbAuthError.ReusedPasswordError,
+        dbAuthError.ReusedPasswordError
       )
     })
 
     it('does not throw if allowReusedPassword is true and new password is same as old', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
         resetToken: hashToken('1234'),
@@ -1583,7 +1583,7 @@ describe('dbAuth', () => {
     it('updates the users password', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       const user = await createDbUser({
         resetToken: hashToken('1234'),
@@ -1615,7 +1615,7 @@ describe('dbAuth', () => {
     it('clears resetToken and resetTokenExpiresAt', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       const user = await createDbUser({
         resetToken: hashToken('1234'),
@@ -1646,7 +1646,7 @@ describe('dbAuth', () => {
     it('invokes resetPassword.handler() with the user', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       const user = await createDbUser({
         resetToken: hashToken('1234'),
@@ -1674,7 +1674,7 @@ describe('dbAuth', () => {
     it('returns a logout response if handler returns falsy', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
         resetToken: hashToken('1234'),
@@ -1701,7 +1701,7 @@ describe('dbAuth', () => {
     it('returns a login response if handler returns falsy', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
         resetToken: hashToken('1234'),
@@ -1923,7 +1923,7 @@ describe('dbAuth', () => {
     it('returns the ID of the logged in user', async () => {
       const user = await createDbUser()
       const cookie = encryptToCookie(
-        JSON.stringify({ id: user.id }) + ';' + 'token',
+        JSON.stringify({ id: user.id }) + ';' + 'token'
       )
 
       const headers = {
@@ -1955,7 +1955,7 @@ describe('dbAuth', () => {
       req = {
         headers: {
           cookie: encryptToCookie(
-            JSON.stringify({ id: 9999999999 }) + ';' + 'token',
+            JSON.stringify({ id: 9999999999 }) + ';' + 'token'
           ),
         },
       }
@@ -2011,7 +2011,7 @@ describe('dbAuth', () => {
         const headers = {
           'auth-provider': 'dbAuth',
           'rw-studio-impersonation-cookie': encryptToCookie(
-            JSON.stringify({ id: dbUser.id }),
+            JSON.stringify({ id: dbUser.id })
           ),
         }
 
@@ -2039,7 +2039,7 @@ describe('dbAuth', () => {
             cookie: encryptToCookie(JSON.stringify({ id: 9999999999 })), // The "real" cookie with an invalid userId
             // 👇 The impersonated header takes precendence
             'rw-studio-impersonation-cookie': encryptToCookie(
-              JSON.stringify({ id: dbUser.id }),
+              JSON.stringify({ id: dbUser.id })
             ),
           },
         })
@@ -2062,7 +2062,7 @@ describe('dbAuth', () => {
           headers: {
             'auth-provider': 'dbAuth',
             'rw-studio-impersonation-cookie': encryptToCookie(
-              JSON.stringify({ id: dbUserId }),
+              JSON.stringify({ id: dbUserId })
             ),
             authorization: 'Bearer ' + dbUserId,
           },
@@ -2074,7 +2074,7 @@ describe('dbAuth', () => {
           await dbAuth._getCurrentUser()
         } catch (e) {
           expect(e.message).toEqual(
-            'Cannot retrieve user details without being logged in',
+            'Cannot retrieve user details without being logged in'
           )
         }
       })
@@ -2108,7 +2108,7 @@ describe('dbAuth', () => {
 
       expect.assertions(1)
       await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
-        dbAuthError.WebAuthnError,
+        dbAuthError.WebAuthnError
       )
     })
 
@@ -2127,7 +2127,7 @@ describe('dbAuth', () => {
 
       expect.assertions(1)
       await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
-        'Credentials not found',
+        'Credentials not found'
       )
     })
 
@@ -2155,7 +2155,7 @@ describe('dbAuth', () => {
 
       expect.assertions(1)
       await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
-        'Unexpected authentication response challenge',
+        'Unexpected authentication response challenge'
       )
     })
 
@@ -2224,7 +2224,7 @@ describe('dbAuth', () => {
 
       expect(body).toEqual(false)
       expect(headers['set-cookie'][0]).toMatch(
-        'webAuthn=CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA',
+        'webAuthn=CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA'
       )
     })
   })
@@ -2267,7 +2267,7 @@ describe('dbAuth', () => {
       req = {
         headers: {
           cookie: encryptToCookie(
-            JSON.stringify({ id: user.id }) + ';' + 'token',
+            JSON.stringify({ id: user.id }) + ';' + 'token'
           ),
         },
       }
@@ -2295,7 +2295,7 @@ describe('dbAuth', () => {
       req = {
         headers: {
           cookie: encryptToCookie(
-            JSON.stringify({ id: user.id }) + ';' + 'token',
+            JSON.stringify({ id: user.id }) + ';' + 'token'
           ),
         },
       }
@@ -2354,7 +2354,7 @@ describe('dbAuth', () => {
       const user = await createDbUser()
       const headers = {
         cookie: encryptToCookie(
-          JSON.stringify({ id: user.id }) + ';' + 'token',
+          JSON.stringify({ id: user.id }) + ';' + 'token'
         ),
       }
 
@@ -2370,7 +2370,7 @@ describe('dbAuth', () => {
 
       expect(regOptions.attestation).toEqual('none')
       expect(regOptions.authenticatorSelection.authenticatorAttachment).toEqual(
-        options.webAuthn.type,
+        options.webAuthn.type
       )
       expect(regOptions.excludeCredentials).toEqual([])
       expect(regOptions.rp.name).toEqual(options.webAuthn.name)
@@ -2385,7 +2385,7 @@ describe('dbAuth', () => {
       const user = await createDbUser()
       const headers = {
         cookie: encryptToCookie(
-          JSON.stringify({ id: user.id }) + ';' + 'token',
+          JSON.stringify({ id: user.id }) + ';' + 'token'
         ),
       }
 
@@ -2406,7 +2406,7 @@ describe('dbAuth', () => {
       let user = await createDbUser()
       const headers = {
         cookie: encryptToCookie(
-          JSON.stringify({ id: user.id }) + ';' + 'token',
+          JSON.stringify({ id: user.id }) + ';' + 'token'
         ),
       }
 
@@ -2433,7 +2433,7 @@ describe('dbAuth', () => {
         headers: {
           'Content-Type': 'application/json',
           cookie: encryptToCookie(
-            JSON.stringify({ id: user.id }) + ';' + 'token',
+            JSON.stringify({ id: user.id }) + ';' + 'token'
           ),
         },
         body: '{"method":"webAuthnRegister","id":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","rawId":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","response":{"attestationObject":"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVisSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAK3OAAI1vMYKZIsLJfHwVQMAKBqo2TrmGKaTmwQ3lZJ263AS5GmvYpkuRCScLQle-NGrFM9uLHQJhhalAQIDJiABIVggGIipTQt-gcoDPOpW6Zje_Av9C0-jWb2R2PBmXJJL-c8iWCC76wxo3uzG8cPqb0A8Vij-dqMbrEytEHjuFOtiQ2dt8A","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiSHVHUHJRcUs3ZjUzTkx3TVpNc3RfREw5RGlnMkJCaXZEWVdXcGF3SVBWTSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9"},"type":"public-key","clientExtensionResults":{},"transports":["internal"]}',
@@ -2448,7 +2448,7 @@ describe('dbAuth', () => {
       })
 
       expect(credential.id).toEqual(
-        'GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg',
+        'GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg'
       )
       expect(credential.transports).toEqual('["internal"]')
       expect(credential.counter).toEqual(0)
@@ -2462,12 +2462,12 @@ describe('dbAuth', () => {
         headers: {
           'Content-Type': 'application/json',
           cookie: encryptToCookie(
-            JSON.stringify({ id: user.id }) + ';' + 'token',
+            JSON.stringify({ id: user.id }) + ';' + 'token'
           ),
         },
         body: Buffer.from(
           `{"method":"webAuthnRegister","id":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","rawId":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","response":{"attestationObject":"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVisSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAK3OAAI1vMYKZIsLJfHwVQMAKBqo2TrmGKaTmwQ3lZJ263AS5GmvYpkuRCScLQle-NGrFM9uLHQJhhalAQIDJiABIVggGIipTQt-gcoDPOpW6Zje_Av9C0-jWb2R2PBmXJJL-c8iWCC76wxo3uzG8cPqb0A8Vij-dqMbrEytEHjuFOtiQ2dt8A","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiSHVHUHJRcUs3ZjUzTkx3TVpNc3RfREw5RGlnMkJCaXZEWVdXcGF3SVBWTSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9"},"type":"public-key","clientExtensionResults":{},"transports":["internal"]}`,
-          'utf8',
+          'utf8'
         ),
       }
       const dbAuth = new DbAuthHandler(req, context, options)
@@ -2480,7 +2480,7 @@ describe('dbAuth', () => {
       })
 
       expect(credential.id).toEqual(
-        'GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg',
+        'GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg'
       )
     })
   })
@@ -2518,7 +2518,7 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler({ headers: {} }, context, options)
 
       expect(dbAuth._webAuthnCookie('1234', 'now')).toMatch(
-        'webAuthn=1234;Expires=Thu, 01 Jan 1970 00:00:00 GMT',
+        'webAuthn=1234;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
       )
     })
   })
@@ -2539,7 +2539,7 @@ describe('dbAuth', () => {
               Domain: 'example.com',
             },
           },
-        },
+        }
       )
       const attributes = dbAuth._cookieAttributes({})
 
@@ -2612,7 +2612,7 @@ describe('dbAuth', () => {
 
       expect(Object.keys(headers).length).toEqual(1)
       expect(headers['set-cookie']).toMatch(
-        `Expires=${dbAuth.sessionExpiresDate}`,
+        `Expires=${dbAuth.sessionExpiresDate}`
       )
       // can't really match on the session value since it will change on every render,
       // due to CSRF token generation but we can check that it contains only the
@@ -2854,7 +2854,7 @@ describe('dbAuth', () => {
 
       // password now hashed by node:crypto
       expect(user.hashedPassword).toEqual(
-        'f20d69d478fa1afc85057384e21bd457a76b23b23e2a94f5bd982976f700a552|16384|8|1',
+        'f20d69d478fa1afc85057384e21bd457a76b23b23e2a94f5bd982976f700a552|16384|8|1'
       )
       // salt should remain the same
       expect(user.salt).toEqual('2ef27f4073c603ba8b7807c6de6d6a89')
@@ -2902,7 +2902,7 @@ describe('dbAuth', () => {
       const dbUser = await createDbUser()
       const headers = {
         cookie: encryptToCookie(
-          JSON.stringify({ id: dbUser.id }) + ';' + 'token',
+          JSON.stringify({ id: dbUser.id }) + ';' + 'token'
         ),
       }
 
@@ -2929,7 +2929,7 @@ describe('dbAuth', () => {
       const dbUser = await createDbUser()
       const headers = {
         cookie: encryptToCookie(
-          JSON.stringify({ id: dbUser.id }) + ';' + 'token',
+          JSON.stringify({ id: dbUser.id }) + ';' + 'token'
         ),
       }
 
@@ -2970,7 +2970,7 @@ describe('dbAuth', () => {
       }
       const headers = {
         cookie: encryptToCookie(
-          JSON.stringify({ userId: dbUser.userId }) + ';' + 'token',
+          JSON.stringify({ userId: dbUser.userId }) + ';' + 'token'
         ),
       }
 
@@ -3012,7 +3012,7 @@ describe('dbAuth', () => {
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
         expect(e.message).toEqual(
-          defaultMessage.replace(/\$\{username\}/, dbUser.email),
+          defaultMessage.replace(/\$\{username\}/, dbUser.email)
         )
       }
 
@@ -3096,7 +3096,7 @@ describe('dbAuth', () => {
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
         expect(e.message).toEqual(
-          defaultMessage.replace(/\$\{username\}/, dbUser.email),
+          defaultMessage.replace(/\$\{username\}/, dbUser.email)
         )
       }
 
@@ -3128,7 +3128,7 @@ describe('dbAuth', () => {
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
         expect(e.message).toEqual(
-          defaultMessage.replace(/\$\{field\}/, 'username'),
+          defaultMessage.replace(/\$\{field\}/, 'username')
         )
       }
 
@@ -3178,7 +3178,7 @@ describe('dbAuth', () => {
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
         expect(e.message).toEqual(
-          defaultMessage.replace(/\$\{field\}/, 'password'),
+          defaultMessage.replace(/\$\{field\}/, 'password')
         )
       }
 

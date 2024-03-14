@@ -23,9 +23,9 @@ describe('Single Word default files', async () => {
     expect(
       singleWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/AppLayout/AppLayout.jsx',
+          '/path/to/project/web/src/layouts/AppLayout/AppLayout.jsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 
@@ -33,9 +33,9 @@ describe('Single Word default files', async () => {
     expect(
       singleWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/AppLayout/AppLayout.test.jsx',
+          '/path/to/project/web/src/layouts/AppLayout/AppLayout.test.jsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 
@@ -43,9 +43,9 @@ describe('Single Word default files', async () => {
     expect(
       singleWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/AppLayout/AppLayout.stories.jsx',
+          '/path/to/project/web/src/layouts/AppLayout/AppLayout.stories.jsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 })
@@ -61,9 +61,9 @@ describe('Multi word default files', async () => {
     expect(
       multiWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.jsx',
+          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.jsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 
@@ -71,9 +71,9 @@ describe('Multi word default files', async () => {
     expect(
       multiWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.test.jsx',
+          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.test.jsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 
@@ -81,9 +81,9 @@ describe('Multi word default files', async () => {
     expect(
       multiWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.stories.jsx',
+          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.stories.jsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 })
@@ -100,16 +100,16 @@ describe('JS Files', async () => {
     expect(
       javascriptFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/JavascriptPageLayout/JavascriptPageLayout.jsx',
+          '/path/to/project/web/src/layouts/JavascriptPageLayout/JavascriptPageLayout.jsx'
         )
-      ],
+      ]
     ).not.toBeUndefined()
     expect(
       javascriptFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/JavascriptPageLayout/JavascriptPageLayout.test.jsx',
+          '/path/to/project/web/src/layouts/JavascriptPageLayout/JavascriptPageLayout.test.jsx'
         )
-      ],
+      ]
     ).not.toBeUndefined()
   })
 })
@@ -124,13 +124,13 @@ test('trims Layout from end of name', async () => {
   const layoutCode =
     files[
       path.normalize(
-        '/path/to/project/web/src/layouts/BazingaLayout/BazingaLayout.jsx',
+        '/path/to/project/web/src/layouts/BazingaLayout/BazingaLayout.jsx'
       )
     ]
 
   expect(layoutCode).not.toBeUndefined()
   expect(
-    layoutCode.split('\n').includes('export default BazingaLayout'),
+    layoutCode.split('\n').includes('export default BazingaLayout')
   ).toBeTruthy()
 })
 
@@ -144,13 +144,13 @@ test('Does not trim Layout from beginning of name', async () => {
   const layoutCode =
     files[
       path.normalize(
-        '/path/to/project/web/src/layouts/LayoutForBazingaLayout/LayoutForBazingaLayout.jsx',
+        '/path/to/project/web/src/layouts/LayoutForBazingaLayout/LayoutForBazingaLayout.jsx'
       )
     ]
 
   expect(layoutCode).not.toBeUndefined()
   expect(
-    layoutCode.split('\n').includes('export default LayoutForBazingaLayout'),
+    layoutCode.split('\n').includes('export default LayoutForBazingaLayout')
   ).toBeTruthy()
 })
 
@@ -164,13 +164,13 @@ test('Does not trim Layout from middle of name', async () => {
   const layoutCode =
     files[
       path.normalize(
-        '/path/to/project/web/src/layouts/MyLayoutForBazingaLayout/MyLayoutForBazingaLayout.jsx',
+        '/path/to/project/web/src/layouts/MyLayoutForBazingaLayout/MyLayoutForBazingaLayout.jsx'
       )
     ]
 
   expect(layoutCode).not.toBeUndefined()
   expect(
-    layoutCode.split('\n').includes('export default MyLayoutForBazingaLayout'),
+    layoutCode.split('\n').includes('export default MyLayoutForBazingaLayout')
   ).toBeTruthy()
 })
 
@@ -184,13 +184,13 @@ test('Only trims Layout once', async () => {
   const layoutCode =
     files[
       path.normalize(
-        '/path/to/project/web/src/layouts/BazingaLayoutLayout/BazingaLayoutLayout.jsx',
+        '/path/to/project/web/src/layouts/BazingaLayoutLayout/BazingaLayoutLayout.jsx'
       )
     ]
 
   expect(layoutCode).not.toBeUndefined()
   expect(
-    layoutCode.split('\n').includes('export default BazingaLayoutLayout'),
+    layoutCode.split('\n').includes('export default BazingaLayoutLayout')
   ).toBeTruthy()
 })
 
@@ -206,16 +206,16 @@ describe('TS files', async () => {
     expect(
       typescriptFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/TypescriptPageLayout/TypescriptPageLayout.tsx',
+          '/path/to/project/web/src/layouts/TypescriptPageLayout/TypescriptPageLayout.tsx'
         )
-      ],
+      ]
     ).not.toBeUndefined()
     expect(
       typescriptFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/TypescriptPageLayout/TypescriptPageLayout.test.tsx',
+          '/path/to/project/web/src/layouts/TypescriptPageLayout/TypescriptPageLayout.test.tsx'
         )
-      ],
+      ]
     ).not.toBeUndefined()
   })
 })
@@ -230,10 +230,10 @@ test("doesn't include storybook file when --stories is set to false", async () =
 
   expect(Object.keys(withoutStoryFiles)).toEqual([
     path.normalize(
-      '/path/to/project/web/src/layouts/WithoutStoriesLayout/WithoutStoriesLayout.test.jsx',
+      '/path/to/project/web/src/layouts/WithoutStoriesLayout/WithoutStoriesLayout.test.jsx'
     ),
     path.normalize(
-      '/path/to/project/web/src/layouts/WithoutStoriesLayout/WithoutStoriesLayout.jsx',
+      '/path/to/project/web/src/layouts/WithoutStoriesLayout/WithoutStoriesLayout.jsx'
     ),
   ])
 })
@@ -247,10 +247,10 @@ test("doesn't include test file when --tests is set to false", async () => {
 
   expect(Object.keys(withoutTestFiles)).toEqual([
     path.normalize(
-      '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.stories.jsx',
+      '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.stories.jsx'
     ),
     path.normalize(
-      '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.jsx',
+      '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.jsx'
     ),
   ])
 })
@@ -264,9 +264,9 @@ test('JavaScript: includes skip link when --skipLink is set to true', async () =
   expect(
     withSkipLinkFilesJS[
       path.normalize(
-        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.jsx',
+        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.jsx'
       )
-    ],
+    ]
   ).toMatchSnapshot()
 })
 
@@ -280,8 +280,8 @@ test('TypeScript: includes skip link when --skipLink is set to true', async () =
   expect(
     withSkipLinkFilesTS[
       path.normalize(
-        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.tsx',
+        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.tsx'
       )
-    ],
+    ]
   ).toMatchSnapshot()
 })

@@ -11,10 +11,10 @@ export type { Decoded }
 const AUTH_PROVIDER_HEADER = 'auth-provider'
 
 export const getAuthProviderHeader = (
-  event: APIGatewayProxyEvent | Request,
+  event: APIGatewayProxyEvent | Request
 ) => {
   const authProviderKey = Object.keys(event?.headers ?? {}).find(
-    (key) => key.toLowerCase() === AUTH_PROVIDER_HEADER,
+    (key) => key.toLowerCase() === AUTH_PROVIDER_HEADER
   )
   if (authProviderKey) {
     return getEventHeader(event, authProviderKey)
@@ -31,7 +31,7 @@ export interface AuthorizationHeader {
  * Split the `Authorization` header into a schema and token part.
  */
 export const parseAuthorizationHeader = (
-  event: APIGatewayProxyEvent | Request,
+  event: APIGatewayProxyEvent | Request
 ): AuthorizationHeader => {
   const parts = getEventHeader(event, 'authorization')?.split(' ')
   if (parts?.length !== 2) {
@@ -55,13 +55,13 @@ export const parseAuthorizationHeader = (
 export type AuthContextPayload = [
   Decoded,
   { type: string } & AuthorizationHeader,
-  { event: APIGatewayProxyEvent | Request; context: LambdaContext },
+  { event: APIGatewayProxyEvent | Request; context: LambdaContext }
 ]
 
 export type Decoder = (
   token: string,
   type: string,
-  req: { event: APIGatewayProxyEvent | Request; context: LambdaContext },
+  req: { event: APIGatewayProxyEvent | Request; context: LambdaContext }
 ) => Promise<Decoded>
 
 /**

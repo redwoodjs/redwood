@@ -42,7 +42,7 @@ export async function handler(options: APIParsedOptions = {}) {
 
   fastify.log.trace(
     { custom: { ...fastify.initialConfig } },
-    'Fastify server configuration',
+    'Fastify server configuration'
   )
   fastify.log.trace(`Registered plugins\n${fastify.printPlugins()}`)
 

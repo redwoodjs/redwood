@@ -10,7 +10,7 @@ vi.mock('../paths', () => {
       return {
         base: path.resolve(
           __dirname,
-          '../../../../../__fixtures__/example-todo-main',
+          '../../../../../__fixtures__/example-todo-main'
         ),
       }
     },
@@ -36,6 +36,6 @@ test('prettify formats tsx content', async () => {
     return <>{foo}, {bar}</>}`
 
   expect(
-    await prettify('FooBarComponent.template.tsx', content),
+    await prettify('FooBarComponent.template.tsx', content)
   ).toMatchSnapshot()
 })

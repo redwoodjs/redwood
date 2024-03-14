@@ -68,7 +68,7 @@ describe('Single world files', async () => {
     expect(
       singleWordFiles[
         path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.jsx')
-      ],
+      ]
     ).toMatchSnapshot()
   })
 
@@ -76,9 +76,9 @@ describe('Single world files', async () => {
     expect(
       singleWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/HomePage/HomePage.test.jsx',
+          '/path/to/project/web/src/pages/HomePage/HomePage.test.jsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 
@@ -86,9 +86,9 @@ describe('Single world files', async () => {
     expect(
       singleWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/HomePage/HomePage.stories.jsx',
+          '/path/to/project/web/src/pages/HomePage/HomePage.stories.jsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 })
@@ -105,9 +105,9 @@ describe('multiWorldFiles', async () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.jsx',
+          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.jsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 
@@ -115,9 +115,9 @@ describe('multiWorldFiles', async () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.test.jsx',
+          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.test.jsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 
@@ -125,9 +125,9 @@ describe('multiWorldFiles', async () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.stories.jsx',
+          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.stories.jsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 })
@@ -144,7 +144,7 @@ describe('Plural word files', async () => {
     expect(
       pluralWordFiles[
         path.normalize('/path/to/project/web/src/pages/CatsPage/CatsPage.jsx')
-      ],
+      ]
     ).toMatchSnapshot()
   })
 })
@@ -161,7 +161,7 @@ describe('paramFiles', async () => {
     expect(
       paramFiles[
         path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.jsx')
-      ],
+      ]
     ).toMatchSnapshot()
   })
 
@@ -169,9 +169,9 @@ describe('paramFiles', async () => {
     expect(
       paramFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/PostPage/PostPage.test.jsx',
+          '/path/to/project/web/src/pages/PostPage/PostPage.test.jsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 })
@@ -187,10 +187,10 @@ describe('No test files', async () => {
   it('doesnt create a test for page component when tests=false', () => {
     expect(Object.keys(noTestsFiles)).toEqual([
       path.normalize(
-        '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.stories.jsx',
+        '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.stories.jsx'
       ),
       path.normalize(
-        '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.jsx',
+        '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.jsx'
       ),
     ])
   })
@@ -207,10 +207,10 @@ describe('No stories files', async () => {
   it('doesnt create a story for page component when stories=false', () => {
     expect(Object.keys(noStoriesFiles)).toEqual([
       path.normalize(
-        '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.test.jsx',
+        '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.test.jsx'
       ),
       path.normalize(
-        '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.jsx',
+        '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.jsx'
       ),
     ])
   })
@@ -453,25 +453,25 @@ describe('TS Files', async () => {
     expect(
       typescriptFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.tsx',
+          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.tsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
 
     expect(
       typescriptFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.stories.tsx',
+          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.stories.tsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
 
     expect(
       typescriptFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.test.tsx',
+          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.test.tsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 
@@ -487,9 +487,9 @@ describe('TS Files', async () => {
     expect(
       typescriptParamFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx',
+          '/path/to/project/web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 
@@ -500,16 +500,16 @@ describe('TS Files', async () => {
       tests: false,
       stories: false,
       ...page.paramVariants(
-        pathName('/bazinga-ts/{id:Int}', 'typescript-param-with-type'),
+        pathName('/bazinga-ts/{id:Int}', 'typescript-param-with-type')
       ),
     })
 
     expect(
       typescriptParamTypeFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx',
+          '/path/to/project/web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx'
         )
-      ],
+      ]
     ).toMatchSnapshot()
   })
 })

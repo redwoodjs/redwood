@@ -36,7 +36,7 @@ export const files = async ({
     outputPath: path.join(
       getPaths().api.functions,
       functionName,
-      `${functionName}${extension}`,
+      `${functionName}${extension}`
     ),
   })
 
@@ -54,7 +54,7 @@ export const files = async ({
       outputPath: path.join(
         getPaths().api.functions,
         functionName,
-        `${functionName}.test${extension}`,
+        `${functionName}.test${extension}`
       ),
     })
 
@@ -69,7 +69,7 @@ export const files = async ({
       outputPath: path.join(
         getPaths().api.functions,
         functionName,
-        `${functionName}.scenarios${extension}`,
+        `${functionName}.scenarios${extension}`
       ),
     })
 
@@ -112,8 +112,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#generate-function',
-      )}`,
+        'https://redwoodjs.com/docs/cli-commands#generate-function'
+      )}`
     )
 
   // Add default options, includes '--typescript', '--javascript', '--force', ...
@@ -144,7 +144,7 @@ export const handler = async ({ name, force, ...rest }) => {
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false }, exitOnError: true },
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
   )
 
   try {
@@ -160,16 +160,16 @@ export const handler = async ({ name, force, ...rest }) => {
     console.info(
       c.bold(
         'When deployed, a custom serverless function is an open API endpoint and ' +
-          'is your responsibility to secure appropriately.',
-      ),
+          'is your responsibility to secure appropriately.'
+      )
     )
 
     console.info('')
     console.info(
       `Please consult the ${terminalLink(
         'Serverless Function Considerations',
-        'https://redwoodjs.com/docs/serverless-functions#security-considerations',
-      )} in the RedwoodJS documentation for more information.`,
+        'https://redwoodjs.com/docs/serverless-functions#security-considerations'
+      )} in the RedwoodJS documentation for more information.`
     )
     console.info('')
   } catch (e) {

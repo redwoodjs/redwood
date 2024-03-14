@@ -18,7 +18,7 @@ describe('Generate gql possible types web from the GraphQL Schema', () => {
     test('when there are *no* union types', async () => {
       const FIXTURE_PATH = path.resolve(
         __dirname,
-        '../../../../__fixtures__/example-todo-main',
+        '../../../../__fixtures__/example-todo-main'
       )
 
       process.env.RWJS_CWD = FIXTURE_PATH
@@ -28,10 +28,10 @@ describe('Generate gql possible types web from the GraphQL Schema', () => {
       vi.spyOn(fs, 'writeFileSync').mockImplementation(
         (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
           expect(file).toMatch(
-            path.join(getPaths().web.graphql, 'possibleTypes.ts'),
+            path.join(getPaths().web.graphql, 'possibleTypes.ts')
           )
           expect(data).toMatchSnapshot()
-        },
+        }
       )
 
       const { possibleTypesFiles } = await generatePossibleTypes()
@@ -44,7 +44,7 @@ describe('Generate gql possible types web from the GraphQL Schema', () => {
     test('when there are union types ', async () => {
       const FIXTURE_PATH = path.resolve(
         __dirname,
-        '../../../../__fixtures__/fragment-test-project',
+        '../../../../__fixtures__/fragment-test-project'
       )
 
       process.env.RWJS_CWD = FIXTURE_PATH
@@ -53,17 +53,17 @@ describe('Generate gql possible types web from the GraphQL Schema', () => {
       vi.spyOn(fs, 'writeFileSync').mockImplementation(
         (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
           expect(file).toMatch(
-            path.join(getPaths().web.graphql, 'possibleTypes.ts'),
+            path.join(getPaths().web.graphql, 'possibleTypes.ts')
           )
           expect(data).toMatchSnapshot()
-        },
+        }
       )
 
       const { possibleTypesFiles } = await generatePossibleTypes()
 
       expect(possibleTypesFiles).toHaveLength(1)
       expect(possibleTypesFiles[0]).toMatch(
-        path.join(getPaths().web.graphql, 'possibleTypes.ts'),
+        path.join(getPaths().web.graphql, 'possibleTypes.ts')
       )
     })
   })

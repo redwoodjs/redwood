@@ -237,14 +237,14 @@ module.exports = (webpackEnv) => {
         'styled-components': path.resolve(
           redwoodPaths.base,
           'node_modules',
-          'styled-components',
+          'styled-components'
         ),
         '~redwood-app-root': path.resolve(redwoodPaths.web.app),
         react: path.resolve(redwoodPaths.base, 'node_modules', 'react'),
         'react-hook-form': path.resolve(
           redwoodPaths.base,
           'node_modules',
-          'react-hook-form',
+          'react-hook-form'
         ),
       },
     },

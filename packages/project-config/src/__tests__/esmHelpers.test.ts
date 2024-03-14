@@ -35,7 +35,7 @@ describe('esm helpers', () => {
     const ESM_API_ONLY_FIXTURE = path.join(
       __dirname,
       'fixtures',
-      'esm-api-only',
+      'esm-api-only'
     )
 
     beforeAll(() => {

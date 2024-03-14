@@ -99,7 +99,7 @@ function expressionUses(exp, ...ids) {
 function insertBeforeFirstUsage(expression, program) {
   const body = program.get('body')
   const pos = body.findIndex((exp) =>
-    expressionUses(exp, ...Object.keys(expression.getBindingIdentifiers())),
+    expressionUses(exp, ...Object.keys(expression.getBindingIdentifiers()))
   )
   return pos !== -1
     ? body[pos].insertBefore(expression.node)
@@ -194,7 +194,7 @@ function mergeAST(baseAST, extAST, strategy = {}) {
   const baseProgram = getProgramPath(baseAST)
   const [imports, others] = partition(
     getProgramPath(extAST).get('body'),
-    nodeIs('ImportDeclaration'),
+    nodeIs('ImportDeclaration')
   )
 
   imports.forEach((exp) => insertAfterLastImport(exp, baseProgram))

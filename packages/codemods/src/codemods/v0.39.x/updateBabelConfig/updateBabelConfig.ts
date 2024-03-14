@@ -26,7 +26,7 @@ export const removeBabelConfig = async () => {
       // Fail and ask them to move config manually
       console.warn('Detected custom config in your root babel.config.js')
       throw new Error(
-        'Cannot automatically codemod your project. Please move your root babel.config.js settings manually',
+        'Cannot automatically codemod your project. Please move your root babel.config.js settings manually'
       )
     }
   }

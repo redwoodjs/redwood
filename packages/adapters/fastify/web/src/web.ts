@@ -17,7 +17,7 @@ export { coerceRootPath, RedwoodFastifyWebOptions }
 
 export async function redwoodFastifyWeb(
   fastify: FastifyInstance,
-  opts: RedwoodFastifyWebOptions,
+  opts: RedwoodFastifyWebOptions
 ) {
   const { redwoodOptions, flags } = resolveOptions(opts)
 

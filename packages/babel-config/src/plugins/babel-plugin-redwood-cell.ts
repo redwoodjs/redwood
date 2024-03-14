@@ -74,11 +74,11 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
               [
                 t.importSpecifier(
                   t.identifier('createCell'),
-                  t.identifier('createCell'),
+                  t.identifier('createCell')
                 ),
               ],
-              t.stringLiteral('@redwoodjs/web'),
-            ),
+              t.stringLiteral('@redwoodjs/web')
+            )
           )
 
           // Insert at the bottom of the file:
@@ -92,8 +92,8 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                       t.identifier(name),
                       t.identifier(name),
                       false,
-                      true,
-                    ),
+                      true
+                    )
                   ),
                   /**
                    * Add the `displayName` property
@@ -102,14 +102,14 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                   t.objectProperty(
                     t.identifier('displayName'),
                     t.stringLiteral(
-                      parse(this.file.opts.filename as string).name,
+                      parse(this.file.opts.filename as string).name
                     ),
                     false,
-                    true,
+                    true
                   ),
                 ]),
-              ]),
-            ),
+              ])
+            )
           )
 
           hasDefaultExport = false

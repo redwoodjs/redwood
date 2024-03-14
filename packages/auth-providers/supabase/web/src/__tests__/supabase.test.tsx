@@ -66,7 +66,7 @@ let loggedInUser: User | undefined
 
 const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
   signInWithPassword: async (
-    credentials: SignInWithPasswordCredentials,
+    credentials: SignInWithPasswordCredentials
   ): Promise<AuthResponse> => {
     const { email } = credentials as { email: string }
 
@@ -83,7 +83,7 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
     }
   },
   signInWithOAuth: async (
-    credentials: SignInWithOAuthCredentials,
+    credentials: SignInWithOAuthCredentials
   ): Promise<OAuthResponse> => {
     loggedInUser = oAuthUser
 
@@ -96,7 +96,7 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
     }
   },
   signInWithOtp: async (
-    credentials: SignInWithPasswordlessCredentials,
+    credentials: SignInWithPasswordlessCredentials
   ): Promise<AuthResponse> => {
     loggedInUser = user
     loggedInUser.email = credentials['email']
@@ -111,7 +111,7 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
   },
 
   signInWithIdToken: async (
-    credentials: SignInWithIdTokenCredentials,
+    credentials: SignInWithIdTokenCredentials
   ): Promise<AuthResponse> => {
     loggedInUser = user
 
@@ -158,7 +158,7 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
     return { error: null }
   },
   signUp: async (
-    credentials: SignUpWithPasswordCredentials,
+    credentials: SignUpWithPasswordCredentials
   ): Promise<AuthResponse> => {
     const { email } = credentials as {
       email: string
@@ -290,12 +290,12 @@ beforeEach(() => {
 function getSupabaseAuth(customProviderHooks?: {
   useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
-    currentUser: CurrentUser | null,
+    currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
   const { useAuth, AuthProvider } = createAuth(
     supabaseMockClient as SupabaseClient,
-    customProviderHooks,
+    customProviderHooks
   )
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,

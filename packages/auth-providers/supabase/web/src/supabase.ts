@@ -41,9 +41,9 @@ export function createAuth(
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null,
+      currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
-  },
+  }
 ) {
   const authImplementation = createAuthImplementation(supabaseClient)
 
@@ -63,7 +63,7 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
         | SignInWithOAuthOptions
         | SignInWithIdTokenOptions
         | SignInWithPasswordlessOptions
-        | SignInWithSSOOptions,
+        | SignInWithSSOOptions
     ): Promise<AuthResponse | OAuthResponse | SSOResponse> => {
       /**
        * Log in an existing user with an email and password or phone and password.
@@ -163,7 +163,7 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
      * @returns A user if the server has "autoconfirm" OFF
      */
     signup: async (
-      credentials: SignUpWithPasswordCredentials,
+      credentials: SignUpWithPasswordCredentials
     ): Promise<AuthResponse> => {
       return await supabaseClient.auth.signUp(credentials)
     },
@@ -208,7 +208,7 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
         window.history.replaceState(
           {},
           document.title,
-          window.location.pathname,
+          window.location.pathname
         )
       } catch (error) {
         console.error(error)

@@ -62,7 +62,7 @@ export const getPrettierOptions = async () => {
       // Make this work with --cwd
       options.tailwindConfig = path.join(
         process.env.RWJS_CWD ?? process.cwd(),
-        options.tailwindConfig,
+        options.tailwindConfig
       )
     }
 
@@ -74,7 +74,7 @@ export const getPrettierOptions = async () => {
 
 export const prettify = async (
   templateFilename: string,
-  renderedTemplate: string,
+  renderedTemplate: string
 ): Promise<string> => {
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
@@ -109,7 +109,7 @@ export const writeFile = <Renderer extends typeof ListrRenderer>(
   task: ListrTaskWrapper<never, Renderer> = {} as ListrTaskWrapper<
     never,
     Renderer
-  >,
+  >
 ) => {
   const { base } = getPaths()
   task.title = `Writing \`./${path.relative(base, target)}\``
@@ -138,7 +138,7 @@ export const writeFile = <Renderer extends typeof ListrRenderer>(
  */
 export const writeFilesTask = <Renderer extends typeof ListrRenderer>(
   files: Record<string, string>,
-  options: { existingFiles: ExistingFiles },
+  options: { existingFiles: ExistingFiles }
 ) => {
   const { base } = getPaths()
 
@@ -153,11 +153,11 @@ export const writeFilesTask = <Renderer extends typeof ListrRenderer>(
           task: ListrTaskWrapper<
             never,
             ListrGetRendererClassFromValue<Renderer>
-          >,
+          >
         ) => {
           return writeFile(file, contents, options, task)
         },
       }
-    }),
+    })
   )
 }

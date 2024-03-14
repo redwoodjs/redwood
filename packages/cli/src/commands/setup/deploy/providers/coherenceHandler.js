@@ -35,7 +35,7 @@ export async function handler({ force }) {
           "Reach out to redwood@withcoherence.com with any questions! We're here to support you.",
         ]),
       ],
-      { rendererOptions: { collapse: false } },
+      { rendererOptions: { collapse: false } }
     )
 
     await tasks.run()
@@ -97,9 +97,9 @@ async function getCoherenceConfigFileContent() {
       [
         `Coherence doesn't support the "${db}" provider in your Prisma schema.`,
         `To proceed, switch to one of the following: ${SUPPORTED_DATABASES.join(
-          ', ',
+          ', '
         )}.`,
-      ].join('\n'),
+      ].join('\n')
     )
   }
 
@@ -113,7 +113,7 @@ async function getCoherenceConfigFileContent() {
       'yarn',
       'node',
       'api/dist/server.js',
-      '--apiRootPath=/api',
+      '--apiRootPath=/api'
     )
   } else {
     apiProdCommand.push('yarn', 'rw', 'serve', 'api', '--apiRootPath=/api')
@@ -138,7 +138,7 @@ function updateRedwoodTOMLTask() {
     task: () => {
       const redwoodTOMLPath = path.join(
         redwoodProjectPaths.base,
-        'redwood.toml',
+        'redwood.toml'
       )
       let redwoodTOMLContent = fs.readFileSync(redwoodTOMLPath, 'utf-8')
       const redwoodTOMLObject = toml.parse(redwoodTOMLContent)
@@ -167,8 +167,8 @@ function updateRedwoodTOMLTask() {
         HOST_REGEXP,
         (match, spaceBeforeAssign, spaceAfterAssign) =>
           ['host', spaceBeforeAssign, '=', spaceAfterAssign, '"0.0.0.0"'].join(
-            '',
-          ),
+            ''
+          )
       )
 
       // Replace the apiUrl
@@ -176,8 +176,8 @@ function updateRedwoodTOMLTask() {
         API_URL_REGEXP,
         (match, spaceBeforeAssign, spaceAfterAssign) =>
           ['apiUrl', spaceBeforeAssign, '=', spaceAfterAssign, '"/api"'].join(
-            '',
-          ),
+            ''
+          )
       )
 
       // Replace the web and api ports.
@@ -190,7 +190,7 @@ function updateRedwoodTOMLTask() {
             '=',
             spaceAfterAssign,
             `"\${PORT:${port}}"`,
-          ].join(''),
+          ].join('')
       )
 
       fs.writeFileSync(redwoodTOMLPath, redwoodTOMLContent)

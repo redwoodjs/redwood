@@ -90,9 +90,7 @@ describe('create-redwood-app', () => {
       [?25l✔ Initialized a git repo with commit message "Initial commit"
       [?25h"
     `)
-    expect(p.stderr).toMatchInlineSnapshot(
-      `"[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h"`,
-    )
+    expect(p.stderr).toMatchInlineSnapshot(`"[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h"`)
 
     await fs.rm('./redwood-app', { recursive: true, force: true })
   })

@@ -15,7 +15,7 @@ describe('useRedwoodRealtime', () => {
   it('should support a @live query directive', async () => {
     const testkit = createTestkit(
       [useRedwoodRealtime({ liveQueries: { store: 'in-memory' } })],
-      testSchema,
+      testSchema
     )
 
     const result = await testkit.execute(testLiveQuery, {}, {})
@@ -46,7 +46,7 @@ describe('useRedwoodRealtime', () => {
         useRedwoodRealtime({ liveQueries: { store: 'in-memory' } }),
         spiedPlugin.plugin,
       ],
-      testSchema,
+      testSchema
     )
 
     // the replaced schema should have the live directive afterwards
@@ -67,7 +67,7 @@ describe('useRedwoodRealtime', () => {
         useRedwoodRealtime({ liveQueries: { store: 'in-memory' } }),
         spiedPlugin.plugin,
       ],
-      testSchema,
+      testSchema
     )
 
     await testkit.execute(testQuery)
@@ -98,7 +98,7 @@ describe('useRedwoodRealtime', () => {
         }),
         spiedPlugin.plugin,
       ],
-      testSchema,
+      testSchema
     )
 
     await testkit.execute(testQuery)

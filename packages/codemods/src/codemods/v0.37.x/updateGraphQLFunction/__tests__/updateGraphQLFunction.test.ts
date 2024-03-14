@@ -18,7 +18,7 @@ describe('Update GraphQL Function', () => {
         createGraphQLHandler,
         makeMergedSchema,
       } from '@redwoodjs/api'`,
-      `import { createGraphQLHandler } from '@redwoodjs/graphql-server'`,
+      `import { createGraphQLHandler } from '@redwoodjs/graphql-server'`
     )
   })
 })

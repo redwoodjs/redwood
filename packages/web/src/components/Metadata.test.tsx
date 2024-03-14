@@ -85,7 +85,7 @@ describe('Metadata', () => {
             // In SSR mode react-helmet-async renders to `context` synchronously
             <HelmetProvider context={context}>{children}</HelmetProvider>
           ),
-        },
+        }
       )
 
       expect(context.helmet.meta.toString()).not.toContain('"og:description"')
@@ -452,7 +452,7 @@ async function expectToContain(input: JSX.Element, output: JSX.Element) {
 
   const inputHtml = inputScreen.container.innerHTML.replace(
     / data-rh="true"/g,
-    '',
+    ''
   )
 
   // Had to create a new element for the second render, or I got duplicate

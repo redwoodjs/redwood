@@ -11,7 +11,7 @@ export interface AuthImplementation<
   TResetPasswordOptions = unknown,
   TResetPassword = unknown,
   TValidateResetToken = unknown,
-  TClient = unknown,
+  TClient = unknown
 > {
   type: string
   client?: TClient
