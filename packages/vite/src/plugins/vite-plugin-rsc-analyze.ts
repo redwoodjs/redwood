@@ -8,7 +8,7 @@ export function rscAnalyzePlugin(
   serverEntryCallback: (id: string) => void,
 ): Plugin {
   return {
-    name: 'rsc-analyze-plugin',
+    name: 'redwood-rsc-analyze-plugin',
     transform(code, id) {
       const ext = path.extname(id)
 
