@@ -36,12 +36,14 @@ export async function rscBuildForServer(
   const rscServerBuildOutput = await viteBuild({
     envFile: false,
     ssr: {
-      // Externalize every file apart from node built-ins. We want vite/rollup to inline
-      // dependencies in the server bundle. This gets round runtime importing of "server-only".
-      // We have to do all imports because we can't rely on "server-only" being the name of the
-      // package. This is also actually more efficient because less files. Although, at build time
+      // Externalize every file apart from node built-ins. We want vite/rollup
+      // to inline dependencies in the server bundle. This gets round runtime
+      // importing of "server-only". We have to do all imports because we can't
+      // rely on "server-only" being the name of the package. This is also
+      // actually more efficient because less files. Although, at build time
       // it's likely way less efficient because we have to do so many files.
-      noExternal: /^(?!node:)/,
+      // Files included in `noExternal` are files we want Vite to analyze
+      noExternal: [/^(?!node:)/, /^(?!\.prisma\/client)/],
       resolve: {
         // These conditions are used in the plugin pipeline, and only affect non-externalized
         // dependencies during the SSR build. Which because of `noExternal: /^(?!node:)/` means
