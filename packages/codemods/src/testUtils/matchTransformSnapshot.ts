@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 
 import tempy from 'tempy'
-import { expect } from 'vitest'
 
 import runTransform from '../lib/runTransform'
 
@@ -26,30 +25,13 @@ export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
     throw new Error('Could not find test path')
   }
 
-  let fixturePath
-
-  const maybeFixturePath = path.join(
-    testPath,
-    '../../__testfixtures__',
-    `${fixtureName}.input`
+  // Use require.resolve, so we can pass in ts/js/tsx/jsx without specifying
+  const fixturePath = require.resolve(
+    path.join(testPath, '../../__testfixtures__', `${fixtureName}.input`)
   )
 
-  for (const extension of ['ts', 'tsx', 'js', 'jsx']) {
-    try {
-      fixturePath = require.resolve(`${maybeFixturePath}.${extension}`)
-    } catch (e) {
-      continue
-    }
-  }
-
-  if (!fixturePath) {
-    throw new Error(
-      `Could not find fixture for ${fixtureName} in ${maybeFixturePath}`
-    )
-  }
-
   const transformPath = require.resolve(
-    path.join(testPath, '../../', `${transformName}.ts`)
+    path.join(testPath, '../../', transformName)
   )
 
   // Step 1: Copy fixture to temp file
@@ -74,7 +56,5 @@ export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
     'utf-8'
   )
 
-  expect(await formatCode(transformedContent)).toEqual(
-    await formatCode(expectedOutput)
-  )
+  expect(formatCode(transformedContent)).toEqual(formatCode(expectedOutput))
 }

@@ -1,7 +1,3 @@
-import { describe, test } from 'vitest'
-
-import { matchTransformSnapshot } from '../../../../testUtils/matchTransformSnapshot'
-
 describe('Update cell mocks', () => {
   test('Converts object mock to a function that returns the object', async () => {
     await matchTransformSnapshot('updateCellMocks', 'objectCellMock')

@@ -1,7 +1,3 @@
-import { describe, it } from 'vitest'
-
-import { matchFolderTransform } from '../../../../testUtils/matchFolderTransform'
-
 describe('replaceComponentSvgs', () => {
   it('Handles simple Svgs as components', async () => {
     await matchFolderTransform('replaceComponentSvgs', 'simple', {

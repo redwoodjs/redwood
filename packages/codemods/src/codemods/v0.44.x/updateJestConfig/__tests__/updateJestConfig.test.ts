@@ -1,38 +1,36 @@
-import { describe, it, vi } from 'vitest'
-
 import updateJestConfig from '../updateJestConfig'
 
-vi.mock('../../../../lib/fetchFileFromTemplate', () => {
-  return {
-    default: vi.fn((_tag, file) => {
-      if (file === 'jest.config.js') {
-        return [
-          '// This the Redwood root jest config',
-          '// Each side, e.g. ./web/ and ./api/ has specific config that references this root',
-          '// More info at https://redwoodjs.com/docs/project-configuration-dev-test-build',
-          '',
-          'module.exports = {',
-          "  rootDir: '.',",
-          "  projects: ['<rootDir>/{*,!(node_modules)/**/}/jest.config.js'],",
-          '}',
-        ].join('\n')
-      }
-
+jest.mock('../../../../lib/fetchFileFromTemplate', () =>
+  jest.fn((_tag, file) => {
+    if (file === 'jest.config.js') {
       return [
+        '// This the Redwood root jest config',
+        '// Each side, e.g. ./web/ and ./api/ has specific config that references this root',
         '// More info at https://redwoodjs.com/docs/project-configuration-dev-test-build',
         '',
-        'const config = {',
-        "  rootDir: '../',",
-        `  preset: '@redwoodjs/testing/config/jest/${
-          file.match(/(?<side>api|web)/).groups.side
-        }',`,
+        'module.exports = {',
+        "  rootDir: '.',",
+        "  projects: ['<rootDir>/{*,!(node_modules)/**/}/jest.config.js'],",
         '}',
-        '',
-        'module.exports = config',
       ].join('\n')
-    }),
-  }
-})
+    }
+
+    return [
+      '// More info at https://redwoodjs.com/docs/project-configuration-dev-test-build',
+      '',
+      'const config = {',
+      "  rootDir: '../',",
+      `  preset: '@redwoodjs/testing/config/jest/${
+        file.match(/(?<side>api|web)/).groups.side
+      }',`,
+      '}',
+      '',
+      'module.exports = config',
+    ].join('\n')
+  })
+)
+
+jest.setTimeout(25_000)
 
 // Skip these tests as these are old codemods
 // and the tests seem flakey

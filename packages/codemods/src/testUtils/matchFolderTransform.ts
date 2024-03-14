@@ -2,7 +2,6 @@ import path from 'path'
 
 import fg from 'fast-glob'
 import fse from 'fs-extra'
-import { expect } from 'vitest'
 
 import runTransform from '../lib/runTransform'
 
@@ -74,7 +73,7 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
     }
     const transformName = transformFunctionOrName
     const transformPath = require.resolve(
-      path.join(testPath, '../../', `${transformName}.ts`)
+      path.join(testPath, '../../', transformName)
     )
 
     const targetPaths = fg.sync(targetPathsGlob, {

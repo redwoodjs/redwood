@@ -1,7 +1,3 @@
-import { describe, it } from 'vitest'
-
-import { matchTransformSnapshot } from '../../../../testUtils/matchTransformSnapshot'
-
 describe('entryClientNullCheck', () => {
   it('Handles the default case', async () => {
     await matchTransformSnapshot('entryClientNullCheck', 'default')

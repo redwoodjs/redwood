@@ -1,6 +1,3 @@
-import { describe, it } from 'vitest'
-
-import { matchFolderTransform } from '../../../../testUtils/matchFolderTransform'
 import { checkAndTransformReactRoot } from '../upgradeToReact18'
 
 describe('upgradeToReact18', () => {
