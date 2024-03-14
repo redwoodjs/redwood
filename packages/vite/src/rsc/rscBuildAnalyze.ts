@@ -52,8 +52,8 @@ export async function rscBuildAnalyze() {
       // going to be RSCs
       noExternal: /^(?!node:)/,
       // TODO (RSC): Figure out what the `external` list should be. Right
-      // now it's just copied from waku
-      external: ['react', 'minimatch'],
+      // now it's just copied from waku, plus we added prisma
+      external: ['react', 'minimatch', '@prisma/client'],
       resolve: {
         externalConditions: ['react-server'],
       },
