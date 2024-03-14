@@ -10,23 +10,7 @@ import type { Plugin } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-export function rscCssPreinitPlugin(
-  clientEntryFiles: Record<string, string>,
-  componentImportMap: Map<string, string[]>,
-): Plugin {
-  const webSrc = getPaths().web.src
-
-  // This plugin is build only and we expect the client build manifest to be
-  // available at this point. We use it to find the correct css assets names
-  const clientBuildManifest = JSON.parse(
-    fs.readFileSync(
-      path.join(getPaths().web.distClient, 'client-build-manifest.json'),
-      'utf-8',
-    ),
-  )
-
-  // We generate a mapping of all the css assets that a client build manifest
-  // entry contains (looking deep into the tree of entries)
+export function generateCssMapping(clientBuildManifest: any) {
   const clientBuildManifestCss = new Map<string, string[]>()
   const lookupCssAssets = (id: string): string[] => {
     const assets: string[] = []
@@ -47,9 +31,13 @@ export function rscCssPreinitPlugin(
   for (const key of Object.keys(clientBuildManifest)) {
     clientBuildManifestCss.set(key, lookupCssAssets(key))
   }
+  return clientBuildManifestCss
+}
 
-  // We filter to have individual maps for server components and client
-  // components
+export function splitClientAndServerComponents(
+  clientEntryFiles: Record<string, string>,
+  componentImportMap: Map<string, string[]>,
+) {
   const serverComponentImports = new Map<string, string[]>()
   const clientComponentImports = new Map<string, string[]>()
   const clientComponentIds = Object.values(clientEntryFiles)
@@ -60,9 +48,13 @@ export function rscCssPreinitPlugin(
       serverComponentImports.set(key, value)
     }
   }
+  return { serverComponentImports, clientComponentImports }
+}
 
-  // We generate a mapping of server components to all the client components
-  // that they import (directly or indirectly)
+export function generateServerComponentClientComponentMapping(
+  serverComponentImports: Map<string, string[]>,
+  clientComponentImports: Map<string, string[]>,
+) {
   const serverComponentClientImportIds = new Map<string, string[]>()
   const gatherClientImports = (
     id: string,
@@ -91,6 +83,40 @@ export function rscCssPreinitPlugin(
       Array.from(clientImports),
     )
   }
+  return serverComponentClientImportIds
+}
+
+export function rscCssPreinitPlugin(
+  clientEntryFiles: Record<string, string>,
+  componentImportMap: Map<string, string[]>,
+): Plugin {
+  const webSrc = getPaths().web.src
+
+  // This plugin is build only and we expect the client build manifest to be
+  // available at this point. We use it to find the correct css assets names
+  const clientBuildManifest = JSON.parse(
+    fs.readFileSync(
+      path.join(getPaths().web.distClient, 'client-build-manifest.json'),
+      'utf-8',
+    ),
+  )
+
+  // We generate a mapping of all the css assets that a client build manifest
+  // entry contains (looking deep into the tree of entries)
+  const clientBuildManifestCss = generateCssMapping(clientBuildManifest)
+
+  // We filter to have individual maps for server components and client
+  // components
+  const { serverComponentImports, clientComponentImports } =
+    splitClientAndServerComponents(clientEntryFiles, componentImportMap)
+
+  // We generate a mapping of server components to all the client components
+  // that they import (directly or indirectly)
+  const serverComponentClientImportIds =
+    generateServerComponentClientComponentMapping(
+      serverComponentImports,
+      clientComponentImports,
+    )
 
   return {
     name: 'rsc-css-preinit',
