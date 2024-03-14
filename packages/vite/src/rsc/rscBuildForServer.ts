@@ -1,3 +1,5 @@
+// import path from 'node:path'
+
 import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -43,7 +45,9 @@ export async function rscBuildForServer(
       // actually more efficient because less files. Although, at build time
       // it's likely way less efficient because we have to do so many files.
       // Files included in `noExternal` are files we want Vite to analyze
-      noExternal: [/^(?!node:)/, /^(?!\.prisma\/client)/],
+      noExternal: /^(?!node:)/,
+      // Can't inline prisma client
+      external: ['@prisma/client'],
       resolve: {
         // These conditions are used in the plugin pipeline, and only affect non-externalized
         // dependencies during the SSR build. Which because of `noExternal: /^(?!node:)/` means
