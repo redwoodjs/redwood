@@ -1,5 +1,6 @@
 import path from 'node:path'
 import { vol } from 'memfs'
+import { normalizePath } from 'vite'
 
 import { generateCssMapping, rscCssPreinitPlugin, generateServerComponentClientComponentMapping, splitClientAndServerComponents } from '../vite-plugin-rsc-css-preinit'
 import { afterAll, beforeAll, describe, it, expect, vi } from 'vitest'
@@ -27,8 +28,7 @@ beforeAll(() => {
   const manifestPath = path.join(
     getPaths().web.distClient,
     'client-build-manifest.json',
-  )
-  console.error('JGMW: mocking: manifestPath:', manifestPath)
+  ).substring(process.env.RWJS_CWD.length)
   vol.fromJSON({
     'redwood.toml': '',
     [manifestPath]: JSON.stringify(clientBuildManifest),
@@ -52,6 +52,7 @@ describe('rscCssPreinitPlugin', () => {
 
     // Calling `bind` to please TS
     // See https://stackoverflow.com/a/70463512/88106
+    const id = path.join(process.env.RWJS_CWD!, 'web', 'src', 'pages', 'HomePage', 'HomePage.tsx')
     const output = await plugin.transform.bind({})(
       `import { jsx, jsxs } from "react/jsx-runtime";
       import { RscForm } from "@tobbe.dev/rsc-test";
@@ -83,7 +84,7 @@ describe('rscCssPreinitPlugin', () => {
         ] });
       };
       export default HomePage;`,
-      path.join(process.env.RWJS_CWD!, 'web', 'src', 'pages', 'HomePage', 'HomePage.tsx')
+      normalizePath(id)
     )
 
     // You will see that this snapshot contains:

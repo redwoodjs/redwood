@@ -7,6 +7,7 @@ import type { NodePath } from '@babel/traverse'
 import traverse from '@babel/traverse'
 import * as t from '@babel/types'
 import type { Plugin } from 'vite'
+import { normalizePath } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -98,7 +99,6 @@ export function rscCssPreinitPlugin(
     getPaths().web.distClient,
     'client-build-manifest.json',
   )
-  console.error('JGMW: plugin: manifestPath:', manifestPath)
   const clientBuildManifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'))
 
   // We generate a mapping of all the css assets that a client build manifest
@@ -123,7 +123,7 @@ export function rscCssPreinitPlugin(
     apply: 'build',
     transform: async function (code, id) {
       // We only care about code in the project itself
-      if (!id.startsWith(webSrc)) {
+      if (!id.startsWith(normalizePath(webSrc))) {
         return null
       }
 
