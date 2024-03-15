@@ -42,7 +42,7 @@ export function rscAnalyzePlugin(
       return code
     },
     moduleParsed(moduleInfo) {
-      // TODO: Maybe this is not needed?
+      // Note we are not actually checking that it's a component!
       if (moduleInfo.id.startsWith(webSrcPath)) {
         componentImportsCallback(moduleInfo.id, moduleInfo.importedIds)
       }
