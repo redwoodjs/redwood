@@ -2,4 +2,4 @@
 
 This PR sends the rendered RSC payload (aka "flight") to Studio to be ingested, persisted, and fetched.
 
-Performance and metdata enrchments are performed in order to visualize in Studio
+Performance and metadata enrchments are performed in order to visualize in Studio
