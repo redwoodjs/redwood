@@ -14,7 +14,7 @@ export function rscAnalyzePlugin(
   const webSrcPath = getPaths().web.src
 
   return {
-    name: 'rsc-analyze-plugin',
+    name: 'redwood-rsc-analyze-plugin',
     transform(code, id) {
       const ext = path.extname(id)
 
