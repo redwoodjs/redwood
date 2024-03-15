@@ -126,7 +126,8 @@ export function createRscRequestHandler() {
       }
 
       try {
-        // surround by performance
+        // surround by performance, but also
+        // TODO (RSC): Add a way to turn this off in production
         const startedAt = Date.now()
         const start = performance.now()
         const pipeable = await renderRsc({ rscId, props, rsfId, args })
