@@ -98,6 +98,7 @@ export function rscCssPreinitPlugin(
     getPaths().web.distClient,
     'client-build-manifest.json',
   )
+  console.error('JGMW: plugin: manifestPath:', manifestPath)
   const clientBuildManifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'))
 
   // We generate a mapping of all the css assets that a client build manifest

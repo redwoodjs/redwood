@@ -28,6 +28,7 @@ beforeAll(() => {
     getPaths().web.distClient,
     'client-build-manifest.json',
   )
+  console.error('JGMW: mocking: manifestPath:', manifestPath)
   vol.fromJSON({
     'redwood.toml': '',
     [manifestPath]: JSON.stringify(clientBuildManifest),
