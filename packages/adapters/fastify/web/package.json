@@ -17,8 +17,8 @@
     "build:pack": "yarn pack -o redwoodjs-fastify-web.tgz",
     "build:types": "tsc --build --verbose",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "vitest run src",
-    "test:watch": "vitest watch src"
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
     "@fastify/http-proxy": "9.4.0",
