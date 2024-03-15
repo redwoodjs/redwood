@@ -34,6 +34,11 @@ export function generateCssMapping(clientBuildManifest: any) {
   return clientBuildManifestCss
 }
 
+/**
+ *
+ * Returns a map of server component imports and client component imports
+ * where all the keys have been normalized to unix style paths
+ */
 export function splitClientAndServerComponents(
   clientEntryFiles: Record<string, string>,
   componentImportMap: Map<string, string[]>,
@@ -43,9 +48,9 @@ export function splitClientAndServerComponents(
   const clientComponentIds = Object.values(clientEntryFiles)
   for (const [key, value] of componentImportMap.entries()) {
     if (clientComponentIds.includes(key)) {
-      clientComponentImports.set(key, value)
+      clientComponentImports.set(normalizePath(key), value)
     } else {
-      serverComponentImports.set(key, value)
+      serverComponentImports.set(normalizePath(key), value)
     }
   }
   return { serverComponentImports, clientComponentImports }
@@ -100,13 +105,6 @@ export function rscCssPreinitPlugin(
       path.join(rwPaths.web.distClient, 'client-build-manifest.json'),
       'utf-8',
     ),
-  )
-
-  console.log(`👉 \n ~ clientBuildManifest:`, clientBuildManifest)
-  console.log(
-    `👉 \n ~       path.join(rwPaths.web.distClient, 'client-build-manifest.json'),
-  :`,
-    path.join(rwPaths.web.distClient, 'client-build-manifest.json'),
   )
 
   // We generate a mapping of all the css assets that a client build manifest
