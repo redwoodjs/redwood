@@ -15,6 +15,23 @@ test('Client components should work', async ({ page }) => {
   page.close()
 })
 
+test('CSS has been loaded', async ({ page }) => {
+  await page.goto('/')
+
+  // Check color of client component h3
+  const clientH3 = page.getByText('This is a client component.')
+  await expect(clientH3).toBeVisible()
+  expect(clientH3).toHaveCSS('color', 'rgb(255, 165, 0)') // rgb(255, 165, 0) is orange
+
+  // Check font style of client component h3
+  const clientH3Font = await clientH3.evaluate((el) => {
+    return window.getComputedStyle(el).getPropertyValue('font-style')
+  })
+  expect(clientH3Font).toBe('italic')
+
+  page.close()
+})
+
 test('Submitting the form should return a response', async ({ page }) => {
   await page.goto('/')
 
