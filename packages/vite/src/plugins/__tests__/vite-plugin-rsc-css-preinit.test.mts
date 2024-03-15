@@ -91,7 +91,6 @@ test('generateCssMapping: correctly generates css mapping', () => {
 })
 
 test('rscCssPreinitPlugin: should insert preinits for all nested client components', async () => {
-  vi.
   const plugin = rscCssPreinitPlugin(clientEntryFiles, componentImportMap)
 
   if (typeof plugin.transform !== 'function') {
