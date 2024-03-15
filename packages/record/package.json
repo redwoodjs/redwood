@@ -19,8 +19,8 @@
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "datamodel:parse": "node src/scripts/parse.js",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "vitest run src",
-    "test:watch": "vitest watch src"
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.0",
