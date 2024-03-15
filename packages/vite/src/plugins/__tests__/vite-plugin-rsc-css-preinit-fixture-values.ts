@@ -1,3 +1,6 @@
+/**
+ * This gets generated from the analyze step
+ */
 export const clientEntryFiles = {
   'rsc-EmptyUsersCell.tsx-0':
     '/Users/mojombo/rw-app/web/src/components/EmptyUser/EmptyUsersCell/EmptyUsersCell.tsx',
@@ -39,6 +42,10 @@ export const clientEntryFiles = {
     '/Users/mojombo/rw-app/node_modules/react-hot-toast/dist/index.js',
 }
 
+/**
+ * Also generated from the analyze step
+ * And contains a mapping of what _components_ import in their respective files
+ */
 export const componentImportMap = new Map([
   [
     '/Users/mojombo/rw-app/web/src/entry.server.tsx',
@@ -380,42 +387,11 @@ export const componentImportMap = new Map([
 ])
 
 export const clientBuildManifest = {
-  '../../node_modules/@apollo/experimental-nextjs-app-support/dist/ssr/ApolloNextAppProvider.js?commonjs-entry':
-    {
-      file: 'assets/rsc-ApolloNextAppProvider.js-15-BjjNQa7m.mjs',
-      src: '../../node_modules/@apollo/experimental-nextjs-app-support/dist/ssr/ApolloNextAppProvider.js?commonjs-entry',
-      isEntry: true,
-      imports: ['_ApolloNextAppProvider-5bPKKKc8.mjs'],
-    },
-  '../../node_modules/@apollo/experimental-nextjs-app-support/dist/ssr/hooks.js?commonjs-entry':
-    {
-      file: 'assets/rsc-hooks.js-16-B-wbhCo5.mjs',
-      src: '../../node_modules/@apollo/experimental-nextjs-app-support/dist/ssr/hooks.js?commonjs-entry',
-      isEntry: true,
-      imports: [
-        '_index-g0M7Bzdc.mjs',
-        '../../node_modules/@apollo/experimental-nextjs-app-support/dist/ssr/useTransportValue.js?commonjs-entry',
-        '_RehydrationContext-Dl2W9Kr7.mjs',
-      ],
-    },
-  '../../node_modules/@apollo/experimental-nextjs-app-support/dist/ssr/useTransportValue.js?commonjs-entry':
-    {
-      file: 'assets/rsc-useTransportValue.js-17-DPe60dHv.mjs',
-      src: '../../node_modules/@apollo/experimental-nextjs-app-support/dist/ssr/useTransportValue.js?commonjs-entry',
-      isEntry: true,
-      imports: ['_index-XIvlupAM.mjs', '_RehydrationContext-Dl2W9Kr7.mjs'],
-    },
   '../../node_modules/@redwoodjs/router/dist/link.js?commonjs-entry': {
     file: 'assets/rsc-link.js-11-LeguEpQ6.mjs',
     src: '../../node_modules/@redwoodjs/router/dist/link.js?commonjs-entry',
     isEntry: true,
     imports: ['_link-AMDPp6FV.mjs'],
-  },
-  '../../node_modules/@redwoodjs/router/dist/navLink.js?commonjs-entry': {
-    file: 'assets/rsc-navLink.js-12-D-x4cO0F.mjs',
-    src: '../../node_modules/@redwoodjs/router/dist/navLink.js?commonjs-entry',
-    isEntry: true,
-    imports: ['_navLink-DO_92T9r.mjs'],
   },
   '../../node_modules/@redwoodjs/web/dist/components/cell/CellErrorBoundary.js?commonjs-entry':
     {
@@ -430,20 +406,6 @@ export const clientBuildManifest = {
     isEntry: true,
     imports: ['_jsx-runtime-CumG5p_V.mjs', '_index-XIvlupAM.mjs'],
   },
-  '../../node_modules/react-hot-toast/dist/index.js?commonjs-entry': {
-    file: 'assets/rsc-index.js-18-DAWxXOEp.mjs',
-    src: '../../node_modules/react-hot-toast/dist/index.js?commonjs-entry',
-    isEntry: true,
-    imports: ['_index-tlgoshdH.mjs'],
-  },
-  '_ApolloNextAppProvider-5bPKKKc8.mjs': {
-    file: 'assets/ApolloNextAppProvider-5bPKKKc8.mjs',
-    imports: [
-      '_index-XIvlupAM.mjs',
-      '_index-g0M7Bzdc.mjs',
-      '_RehydrationContext-Dl2W9Kr7.mjs',
-    ],
-  },
   '_CellErrorBoundary-DMFDzi5M.mjs': {
     file: 'assets/CellErrorBoundary-DMFDzi5M.mjs',
     imports: ['_index-XIvlupAM.mjs', '_interopRequireDefault-eg4KyS4X.mjs'],
@@ -452,21 +414,9 @@ export const clientBuildManifest = {
     file: 'assets/Counter-BZpJq_HD.css',
     src: '_Counter-!~{00n}~.mjs',
   },
-  '_Counter-Bq0ieMbL.mjs': {
-    file: 'assets/Counter-Bq0ieMbL.mjs',
+  '_Counter-IM_HERE_BECAUSE_OF_CSS_MODULES.mjs': {
+    file: 'assets/Counter-IM_HERE_BECAUSE_OF_CSS_MODULES.mjs',
     css: ['assets/Counter-BZpJq_HD.css'],
-  },
-  '_RehydrationContext-Dl2W9Kr7.mjs': {
-    file: 'assets/RehydrationContext-Dl2W9Kr7.mjs',
-    imports: [
-      '_index-XIvlupAM.mjs',
-      '_index-g0M7Bzdc.mjs',
-      '_index-CCoFRA3G.mjs',
-    ],
-  },
-  '_formatters-CUUSZ_T1.mjs': {
-    file: 'assets/formatters-CUUSZ_T1.mjs',
-    imports: ['_jsx-runtime-CumG5p_V.mjs', '_index-Bweuhc7G.mjs'],
   },
   '_index--S8VRXEP.mjs': {
     file: 'assets/index--S8VRXEP.mjs',
@@ -553,30 +503,6 @@ export const clientBuildManifest = {
       '_jsx-runtime-Bx74Uukx.mjs',
     ],
   },
-  '_navLink-DO_92T9r.mjs': {
-    file: 'assets/navLink-DO_92T9r.mjs',
-    imports: [
-      '_index-XIvlupAM.mjs',
-      '_interopRequireDefault-eg4KyS4X.mjs',
-      '_starts-with-4Ylsn4Ru.mjs',
-      '_link-AMDPp6FV.mjs',
-      '_values-COtCHOJX.mjs',
-      '_jsx-runtime-Bx74Uukx.mjs',
-    ],
-  },
-  '_starts-with-4Ylsn4Ru.mjs': {
-    file: 'assets/starts-with-4Ylsn4Ru.mjs',
-    imports: [
-      '_interopRequireDefault-eg4KyS4X.mjs',
-      '_values-COtCHOJX.mjs',
-      '_index-XIvlupAM.mjs',
-      '_jsx-runtime-Bx74Uukx.mjs',
-    ],
-  },
-  '_values-COtCHOJX.mjs': {
-    file: 'assets/values-COtCHOJX.mjs',
-    imports: ['_interopRequireDefault-eg4KyS4X.mjs'],
-  },
   'components/Counter/AboutCounter.tsx': {
     file: 'assets/rsc-AboutCounter.tsx-1-D7GRRRfU.mjs',
     src: 'components/Counter/AboutCounter.tsx',
@@ -585,7 +511,7 @@ export const clientBuildManifest = {
       '_jsx-runtime-CumG5p_V.mjs',
       '_index-XIvlupAM.mjs',
       'components/DeepSubCounter/DeepSubCounter.tsx',
-      '_Counter-Bq0ieMbL.mjs',
+      '_Counter-IM_HERE_BECAUSE_OF_CSS_MODULES.mjs',
     ],
   },
   'components/Counter/Counter.tsx': {
@@ -596,7 +522,7 @@ export const clientBuildManifest = {
       '_jsx-runtime-CumG5p_V.mjs',
       '_index-XIvlupAM.mjs',
       'components/SubCounter/SubCounter.tsx',
-      '_Counter-Bq0ieMbL.mjs',
+      '_Counter-IM_HERE_BECAUSE_OF_CSS_MODULES.mjs',
     ],
   },
   'components/DeepSubCounter/DeepSubCounter.tsx': {
@@ -648,56 +574,6 @@ export const clientBuildManifest = {
       'components/DeepSubCounter/DeepSubCounter.tsx',
     ],
     css: ['assets/rsc-SubCounter-Bc4odF6o.css'],
-  },
-  'components/UserExample/NewUserExample/NewUserExample.tsx': {
-    file: 'assets/rsc-NewUserExample.tsx-6-D27m-VY-.mjs',
-    src: 'components/UserExample/NewUserExample/NewUserExample.tsx',
-    isEntry: true,
-    imports: [
-      '_jsx-runtime-CumG5p_V.mjs',
-      '_index-CCoFRA3G.mjs',
-      '_index-CdhfsYOK.mjs',
-      '_index--S8VRXEP.mjs',
-      '_index-CaDi1HgM.mjs',
-      '_index-Bd_2BODu.mjs',
-    ],
-  },
-  'components/UserExample/UserExample/UserExample.tsx': {
-    file: 'assets/rsc-UserExample.tsx-14-CiDZqyWK.mjs',
-    src: 'components/UserExample/UserExample/UserExample.tsx',
-    isEntry: true,
-    imports: [
-      '_jsx-runtime-CumG5p_V.mjs',
-      '_index-CCoFRA3G.mjs',
-      '_index-CdhfsYOK.mjs',
-      '_index--S8VRXEP.mjs',
-      '_index-CaDi1HgM.mjs',
-      '_index-Bweuhc7G.mjs',
-    ],
-  },
-  'components/UserExample/UserExamples/UserExamples.tsx': {
-    file: 'assets/rsc-UserExamples.tsx-13-B55kMTY0.mjs',
-    src: 'components/UserExample/UserExamples/UserExamples.tsx',
-    isEntry: true,
-    imports: [
-      '_jsx-runtime-CumG5p_V.mjs',
-      '_index-CCoFRA3G.mjs',
-      '_index-CdhfsYOK.mjs',
-      '_index-CaDi1HgM.mjs',
-      '_formatters-CUUSZ_T1.mjs',
-    ],
-  },
-  'components/UserExample/UserExamplesCell/UserExamplesCell.tsx': {
-    file: 'assets/rsc-UserExamplesCell.tsx-7-DlCGhOAY.mjs',
-    src: 'components/UserExample/UserExamplesCell/UserExamplesCell.tsx',
-    isEntry: true,
-    imports: [
-      '_jsx-runtime-CumG5p_V.mjs',
-      '_index--S8VRXEP.mjs',
-      '_index-CCoFRA3G.mjs',
-      '_index-CdhfsYOK.mjs',
-      'components/UserExample/UserExamples/UserExamples.tsx',
-    ],
   },
   'entry.client.tsx': {
     file: 'assets/rwjs-client-entry-B1o165l4.mjs',
