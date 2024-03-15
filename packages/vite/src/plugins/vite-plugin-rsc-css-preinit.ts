@@ -94,12 +94,11 @@ export function rscCssPreinitPlugin(
 
   // This plugin is build only and we expect the client build manifest to be
   // available at this point. We use it to find the correct css assets names
-  const clientBuildManifest = JSON.parse(
-    fs.readFileSync(
-      path.join(getPaths().web.distClient, 'client-build-manifest.json'),
-      'utf-8',
-    ),
+  const manifestPath = path.join(
+    getPaths().web.distClient,
+    'client-build-manifest.json',
   )
+  const clientBuildManifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'))
 
   // We generate a mapping of all the css assets that a client build manifest
   // entry contains (looking deep into the tree of entries)

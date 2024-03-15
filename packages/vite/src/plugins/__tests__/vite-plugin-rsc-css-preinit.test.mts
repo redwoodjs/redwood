@@ -9,6 +9,7 @@ import {
   clientEntryFiles,
   componentImportMap,
 } from './vite-plugin-rsc-css-preinit-fixture-values'
+import { getPaths } from '@redwoodjs/project-config'
 
 vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 
@@ -16,11 +17,22 @@ const RWJS_CWD = process.env.RWJS_CWD
 
 let consoleLogSpy
 beforeAll(() => {
+  // Add the toml so that getPaths will work
   process.env.RWJS_CWD = '/Users/mojombo/rw-app/'
   vol.fromJSON({
     'redwood.toml': '',
-    [path.join('web', 'dist', 'client', 'client-build-manifest.json')]: JSON.stringify(clientBuildManifest),
   }, process.env.RWJS_CWD)
+
+  // Add the client build manifest
+  const manifestPath = path.join(
+    getPaths().web.distClient,
+    'client-build-manifest.json',
+  )
+  vol.fromJSON({
+    'redwood.toml': '',
+    [manifestPath]: JSON.stringify(clientBuildManifest),
+  }, process.env.RWJS_CWD)
+
   consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 })
 
@@ -29,7 +41,7 @@ afterAll(() => {
   consoleLogSpy.mockRestore()
 })
 
-describe.skip('rscCssPreinitPlugin', () => {
+describe('rscCssPreinitPlugin', () => {
   it('should insert preinits for all nested client components', async () => {
     const plugin = rscCssPreinitPlugin(clientEntryFiles, componentImportMap)
 
