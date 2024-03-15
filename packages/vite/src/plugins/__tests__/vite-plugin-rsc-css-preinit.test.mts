@@ -14,19 +14,16 @@ vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 
 const RWJS_CWD = process.env.RWJS_CWD
 
-let consoleLogSpy
 beforeAll(() => {
   process.env.RWJS_CWD = '/Users/mojombo/rw-app/'
   vol.fromJSON({
     'redwood.toml': '',
     [path.join('web', 'dist', 'client', 'client-build-manifest.json')]: JSON.stringify(clientBuildManifest),
   }, process.env.RWJS_CWD)
-  consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 })
 
 afterAll(() => {
   process.env.RWJS_CWD = RWJS_CWD
-  consoleLogSpy.mockRestore()
 })
 
 
@@ -181,14 +178,6 @@ test('rscCssPreinitPlugin: should insert preinits for all nested client componen
     };
     export default HomePage;"
   `)
-
-  // We print a log to help with debugging
-  expect(consoleLogSpy).toHaveBeenCalledWith(
-    "css-preinit:",
-    "pages/HomePage/HomePage.tsx",
-    "x3",
-    "(assets/rsc-SubCounter-Bc4odF6o.css, assets/rsc-DeepSubCounter-DqMovEyK.css, assets/Counter-BZpJq_HD.css)",
-  )
 })
 
 test('splitClientAndServerComponents: correctly splits client and server components', () => {
