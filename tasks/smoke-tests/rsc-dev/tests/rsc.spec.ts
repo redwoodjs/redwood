@@ -17,6 +17,26 @@ test('Setting up RSC should give you a test project with a client side counter c
   page.close()
 })
 
+test('CSS has been loaded', async ({ page }) => {
+  await page.goto('/')
+
+  // Check color of server component h3
+  const serverH3 = page.getByText('This is a server component.')
+  expect(serverH3).toHaveCSS('color', 'rgb(255, 165, 0)') // rgb(255, 165, 0) is orange
+
+  // Check color of client component h3
+  const clientH3 = page.getByText('This is a client component.')
+  expect(clientH3).toHaveCSS('color', 'rgb(255, 165, 0)') // rgb(255, 165, 0) is orange
+
+  // Check font style of client component h3
+  const clientH3Font = await clientH3.evaluate((el) => {
+    return window.getComputedStyle(el).getPropertyValue('font-style')
+  })
+  expect(clientH3Font).toBe('italic')
+
+  page.close()
+})
+
 test('RWJS_* env vars', async ({ page }) => {
   await page.goto('/about')
 
