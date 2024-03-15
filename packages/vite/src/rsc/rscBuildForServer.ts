@@ -3,7 +3,9 @@ import { build as viteBuild } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
-import { rscTransformPlugin } from '../plugins/vite-plugin-rsc-transform.js'
+import { rscCssPreinitPlugin } from '../plugins/vite-plugin-rsc-css-preinit.js'
+import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
+import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
 
 /**
  * RSC build. Step 3.
@@ -14,6 +16,7 @@ export async function rscBuildForServer(
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>,
+  componentImportMap: Map<string, string[]>,
 ) {
   console.log('\n')
   console.log('3. rscBuildForServer')
@@ -36,12 +39,16 @@ export async function rscBuildForServer(
   const rscServerBuildOutput = await viteBuild({
     envFile: false,
     ssr: {
-      // Externalize every file apart from node built-ins. We want vite/rollup to inline
-      // dependencies in the server bundle. This gets round runtime importing of "server-only".
-      // We have to do all imports because we can't rely on "server-only" being the name of the
-      // package. This is also actually more efficient because less files. Although, at build time
+      // Externalize every file apart from node built-ins. We want vite/rollup
+      // to inline dependencies in the server bundle. This gets round runtime
+      // importing of "server-only". We have to do all imports because we can't
+      // rely on "server-only" being the name of the package. This is also
+      // actually more efficient because less files. Although, at build time
       // it's likely way less efficient because we have to do so many files.
+      // Files included in `noExternal` are files we want Vite to analyze
       noExternal: /^(?!node:)/,
+      // Can't inline prisma client
+      external: ['@prisma/client'],
       resolve: {
         // These conditions are used in the plugin pipeline, and only affect non-externalized
         // dependencies during the SSR build. Which because of `noExternal: /^(?!node:)/` means
@@ -56,7 +63,9 @@ export async function rscBuildForServer(
       // /Users/tobbe/.../rw-app/web/dist/server/assets/rsc0.js
       // That's why it needs the `clientEntryFiles` data
       // (It does other things as well, but that's why it needs clientEntryFiles)
-      rscTransformPlugin(clientEntryFiles),
+      rscTransformUseClientPlugin(clientEntryFiles),
+      rscTransformUseServerPlugin(),
+      rscCssPreinitPlugin(clientEntryFiles, componentImportMap),
     ],
     build: {
       ssr: true,

@@ -22,7 +22,8 @@ import type { defineEntries, GetEntry } from '../entries.js'
 import { registerFwGlobals } from '../lib/registerGlobals.js'
 import { StatusError } from '../lib/StatusError.js'
 import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
-import { rscTransformPlugin } from '../plugins/vite-plugin-rsc-transform.js'
+import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
+import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
 
 import type {
   RenderInput,
@@ -115,8 +116,9 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
 // server. So we have to register them here again.
 registerFwGlobals()
 
-// TODO: this was copied from waku; they have a todo to remove it.
-// We need this to fix a WebSocket error in dev, `WebSocket server error: Port is already in use`.
+// TODO (RSC): this was copied from waku; they have a todo to remove it.
+// We need this to fix a WebSocket error in dev, `WebSocket server error: Port
+// is already in use`.
 const dummyServer = new Server()
 
 // TODO (RSC): `createServer` is mostly used to create a dev server. Is it OK
@@ -135,7 +137,8 @@ const vitePromise = createServer({
       const message: MessageRes = { type }
       parentPort.postMessage(message)
     }),
-    rscTransformPlugin({}),
+    rscTransformUseClientPlugin({}),
+    rscTransformUseServerPlugin(),
   ],
   ssr: {
     resolve: {
