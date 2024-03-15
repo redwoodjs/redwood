@@ -60,8 +60,8 @@
     "build": "tsx build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-vite.tgz",
     "build:types": "tsc --build --verbose",
-    "test": "vitest run src",
-    "test:watch": "vitest watch src"
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
     "@babel/generator": "7.23.6",
