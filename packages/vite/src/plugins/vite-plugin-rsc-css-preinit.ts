@@ -138,6 +138,10 @@ export function rscCssPreinitPlugin(
 
       // We only care about server components
       if (!serverComponentImports.has(id)) {
+        console.log('scciid', serverComponentClientImportIds)
+        console.log(id)
+        throw new Error(`Faliing in serverComponentImports  has id: ${id}`)
+
         return null
       }
 
