@@ -90,15 +90,23 @@ export function rscCssPreinitPlugin(
   clientEntryFiles: Record<string, string>,
   componentImportMap: Map<string, string[]>,
 ): Plugin {
+  const rwPaths = getPaths()
   const webSrc = getPaths().web.src
 
   // This plugin is build only and we expect the client build manifest to be
   // available at this point. We use it to find the correct css assets names
   const clientBuildManifest = JSON.parse(
     fs.readFileSync(
-      path.join(getPaths().web.distClient, 'client-build-manifest.json'),
+      path.join(rwPaths.web.distClient, 'client-build-manifest.json'),
       'utf-8',
     ),
+  )
+
+  console.log(`👉 \n ~ clientBuildManifest:`, clientBuildManifest)
+  console.log(
+    `👉 \n ~       path.join(rwPaths.web.distClient, 'client-build-manifest.json'),
+  :`,
+    path.join(rwPaths.web.distClient, 'client-build-manifest.json'),
   )
 
   // We generate a mapping of all the css assets that a client build manifest
@@ -119,11 +127,12 @@ export function rscCssPreinitPlugin(
     )
 
   return {
-    name: 'rsc-css-preinit',
+    name: 'rw-rsc-css-preinit',
     apply: 'build',
     transform: async function (code, id) {
       // We only care about code in the project itself
       if (!id.startsWith(webSrc)) {
+        throw new Error(`Faliing in startsWith webSrc with id: ${id}`)
         return null
       }
 
@@ -136,6 +145,7 @@ export function rscCssPreinitPlugin(
       //  indirectly)
       const clientImportIds = serverComponentClientImportIds.get(id) ?? []
       if (clientImportIds.length === 0) {
+        throw new Error('Not client import ids found.')
         return null
       }
 

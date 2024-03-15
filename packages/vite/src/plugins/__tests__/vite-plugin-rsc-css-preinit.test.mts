@@ -2,7 +2,7 @@ import path from 'node:path'
 import { vol } from 'memfs'
 
 import { generateCssMapping, rscCssPreinitPlugin, generateServerComponentClientComponentMapping, splitClientAndServerComponents } from '../vite-plugin-rsc-css-preinit'
-import { afterAll, beforeAll, test, expect, vi } from 'vitest'
+import { afterAll, beforeAll, test, expect, vi, vitest } from 'vitest'
 
 import {
   clientBuildManifest,
@@ -91,6 +91,7 @@ test('generateCssMapping: correctly generates css mapping', () => {
 })
 
 test('rscCssPreinitPlugin: should insert preinits for all nested client components', async () => {
+  vi.
   const plugin = rscCssPreinitPlugin(clientEntryFiles, componentImportMap)
 
   if (typeof plugin.transform !== 'function') {
@@ -190,8 +191,6 @@ test('rscCssPreinitPlugin: should insert preinits for all nested client componen
     "(assets/rsc-SubCounter-Bc4odF6o.css, assets/rsc-DeepSubCounter-DqMovEyK.css, assets/Counter-BZpJq_HD.css)",
   )
 })
-
-
 
 test('splitClientAndServerComponents: correctly splits client and server components', () => {
   const { serverComponentImports, clientComponentImports } =
