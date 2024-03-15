@@ -70,6 +70,7 @@ export async function rscBuildForServer(
       rscCssPreinitPlugin(clientEntryFiles, componentImportMap),
     ],
     build: {
+      minify: false,
       ssr: true,
       ssrEmitAssets: true,
       outDir: rwPaths.web.distRsc,

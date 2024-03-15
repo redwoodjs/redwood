@@ -64,6 +64,7 @@ export async function rscBuildAnalyze() {
       },
     },
     build: {
+      minify: false,
       manifest: 'rsc-build-manifest.json',
       write: false,
       // TODO (RSC): In the future we want to generate the entries file

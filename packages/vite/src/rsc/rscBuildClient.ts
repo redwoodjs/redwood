@@ -31,6 +31,7 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
   const clientBuildOutput = await viteBuild({
     envFile: false,
     build: {
+      minify: false,
       outDir: rwPaths.web.distClient,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
       rollupOptions: {

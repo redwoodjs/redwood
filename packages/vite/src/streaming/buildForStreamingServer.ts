@@ -23,6 +23,7 @@ export async function buildForStreamingServer({
       }),
     ],
     build: {
+      minify: false,
       outDir: rwPaths.web.distServer,
       ssr: true,
       emptyOutDir: true,

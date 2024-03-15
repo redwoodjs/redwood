@@ -111,6 +111,7 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
         },
       },
       build: {
+        minify: false,
         // NOTE this gets overridden when build gets called anyway!
         outDir:
           // @MARK: For RSC and Streaming, we build to dist/client directory
