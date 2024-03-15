@@ -1,11 +1,13 @@
-import path from 'node:path'
+// import path from 'node:path'
 
 import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
-import { rscTransformPlugin } from '../plugins/vite-plugin-rsc-transform.js'
+import { rscCssPreinitPlugin } from '../plugins/vite-plugin-rsc-css-preinit.js'
+import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
+import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
 
 /**
  * RSC build. Step 3.
@@ -16,6 +18,7 @@ export async function rscBuildForServer(
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>,
+  componentImportMap: Map<string, string[]>,
 ) {
   console.log('\n')
   console.log('3. rscBuildForServer')
@@ -38,42 +41,21 @@ export async function rscBuildForServer(
   const rscServerBuildOutput = await viteBuild({
     envFile: false,
     ssr: {
-      // Externalize everything except packages with files that have
-      // 'use client' in them (which are the files in `clientEntryFiles`)
+      // Externalize every file apart from node built-ins. We want vite/rollup
+      // to inline dependencies in the server bundle. This gets round runtime
+      // importing of "server-only". We have to do all imports because we can't
+      // rely on "server-only" being the name of the package. This is also
+      // actually more efficient because less files. Although, at build time
+      // it's likely way less efficient because we have to do so many files.
       // Files included in `noExternal` are files we want Vite to analyze
-      // The values in the array here are compared to npm package names, like
-      // 'react', 'core-js', @anthropic-ai/sdk', @redwoodjs/vite', etc
-      // The map function below will return '..' for local files. That's not
-      // very pretty, but it works. It just won't match anything.
-      noExternal: Object.values(clientEntryFiles).map((fullPath) => {
-        // On Windows `fullPath` will be something like
-        // D:/a/redwood/test-project-rsc-external-packages/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
-        const relativePath = path.relative(
-          path.join(rwPaths.base, 'node_modules'),
-          fullPath,
-        )
-        // On Windows `relativePath` will be something like
-        // @tobbe.dev\rsc-test\dist\rsc-test.es.js
-        // So `splitPath` will in this case become
-        // ['@tobbe.dev', 'rsc-test', 'dist', 'rsc-test.es.js']
-        const splitPath = relativePath.split(path.sep)
-
-        // Packages without scope. Full package name looks like: package_name
-        let packageName = splitPath[0]
-
-        // Handle scoped packages. Full package name looks like:
-        // @org_name/package_name
-        if (splitPath[0].startsWith('@')) {
-          // join @org_name with package_name
-          packageName = path.join(splitPath[0], splitPath[1])
-        }
-
-        console.log('noExternal fullPath', fullPath, 'packageName', packageName)
-
-        return packageName
-      }),
+      noExternal: /^(?!node:)/,
+      // Can't inline prisma client
+      external: ['@prisma/client'],
       resolve: {
-        externalConditions: ['react-server'],
+        // These conditions are used in the plugin pipeline, and only affect non-externalized
+        // dependencies during the SSR build. Which because of `noExternal: /^(?!node:)/` means
+        // all dependencies apart from node built-ins.
+        conditions: ['react-server'],
       },
     },
     plugins: [
@@ -83,7 +65,9 @@ export async function rscBuildForServer(
       // /Users/tobbe/.../rw-app/web/dist/server/assets/rsc0.js
       // That's why it needs the `clientEntryFiles` data
       // (It does other things as well, but that's why it needs clientEntryFiles)
-      rscTransformPlugin(clientEntryFiles),
+      rscTransformUseClientPlugin(clientEntryFiles),
+      rscTransformUseServerPlugin(),
+      rscCssPreinitPlugin(clientEntryFiles, componentImportMap),
     ],
     build: {
       ssr: true,
