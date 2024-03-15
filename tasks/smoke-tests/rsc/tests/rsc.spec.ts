@@ -23,12 +23,14 @@ test('CSS has been loaded', async ({ page }) => {
   // Check color of server component h3
   const serverH3 = page.getByText('This is a server component.')
   await expect(serverH3).toBeVisible()
-  expect(serverH3).toHaveCSS('color', 'rgb(255, 165, 0)') // rgb(255, 165, 0) is orange
+  // rgb(255, 165, 0) is orange
+  expect(serverH3).toHaveCSS('color', 'rgb(255, 165, 0)')
 
   // Check color of client component h3
   const clientH3 = page.getByText('This is a client component.')
   await expect(clientH3).toBeVisible()
-  expect(clientH3).toHaveCSS('color', 'rgb(255, 165, 0)') // rgb(255, 165, 0) is orange
+  // rgb(255, 165, 0) is orange
+  expect(clientH3).toHaveCSS('color', 'rgb(255, 165, 0)')
 
   // Check font style of client component h3
   const clientH3Font = await clientH3.evaluate((el) => {
