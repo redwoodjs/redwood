@@ -1,8 +1,8 @@
-import path from 'node:path'
 import { vol } from 'memfs'
+import path from 'node:path'
 
-import { generateCssMapping, rscCssPreinitPlugin, generateServerComponentClientComponentMapping, splitClientAndServerComponents } from '../vite-plugin-rsc-css-preinit'
-import { afterAll, beforeAll, test, expect, vi, vitest } from 'vitest'
+import { afterAll, beforeAll, expect, test, vi } from 'vitest'
+import { generateCssMapping, generateServerComponentClientComponentMapping, rscCssPreinitPlugin, splitClientAndServerComponents } from '../vite-plugin-rsc-css-preinit'
 
 import {
   clientBuildManifest,

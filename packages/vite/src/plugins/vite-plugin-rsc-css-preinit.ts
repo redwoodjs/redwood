@@ -6,7 +6,7 @@ import { parse as babelParse } from '@babel/parser'
 import type { NodePath } from '@babel/traverse'
 import traverse from '@babel/traverse'
 import * as t from '@babel/types'
-import type { Plugin } from 'vite'
+import { normalizePath, type Plugin } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -132,17 +132,12 @@ export function rscCssPreinitPlugin(
     transform: async function (code, id) {
       // We only care about code in the project itself
       if (!id.startsWith(webSrc)) {
-        throw new Error(`Faliing in startsWith webSrc with id: ${id}`)
         return null
       }
 
       // We only care about server components
-      if (!serverComponentImports.has(id)) {
-        console.log('CurrentId', id)
-        console.log('serverComponentImports', serverComponentImports)
-        console.log('sccid', serverComponentClientImportIds)
-        throw new Error(`Faliing in serverComponentImports  has id: ${id}`)
-
+      // Note that the analyse step returns unix style paths, so we need to do a conversion
+      if (!serverComponentImports.has(normalizePath(id))) {
         return null
       }
 
@@ -150,7 +145,6 @@ export function rscCssPreinitPlugin(
       //  indirectly)
       const clientImportIds = serverComponentClientImportIds.get(id) ?? []
       if (clientImportIds.length === 0) {
-        throw new Error('Not client import ids found.')
         return null
       }
 
