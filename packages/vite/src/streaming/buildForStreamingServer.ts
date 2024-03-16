@@ -5,6 +5,8 @@ import { cjsInterop } from 'vite-plugin-cjs-interop'
 import { RedwoodRoutesAutoLoaderRscServerPlugin } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
+import { rscTransformEntryPlugin } from '../plugins/vite-plugin-rsc-transform-entry'
+
 export async function buildForStreamingServer({
   verbose = false,
 }: {
@@ -23,6 +25,7 @@ export async function buildForStreamingServer({
       cjsInterop({
         dependencies: ['@redwoodjs/**'],
       }),
+      rscTransformEntryPlugin(),
       react({
         babel: {
           only: [/Routes.(js|tsx|jsx)$/],

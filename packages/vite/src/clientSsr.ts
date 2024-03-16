@@ -1,18 +1,7 @@
-// HACK for react-server-dom-webpack without webpack
-;(globalThis as any).__webpack_module_loading__ ||= new Map()
-;(globalThis as any).__webpack_module_cache__ ||= new Map()
-;(globalThis as any).__webpack_chunk_load__ ||= async (id: string) => {
-  console.log('clientSsr top __webpack_chunk_load__ id', id)
-  return (globalThis as any).__webpack_module_loading__.get(id)
-}
-;(globalThis as any).__webpack_require__ ||= (id: string) => {
-  console.log('clientSsr top __webpack_require__ id', id)
-  return (globalThis as any).__webpack_module_cache__.get(id)
-}
-
 import path from 'node:path'
 
-import { use, createElement } from 'react'
+// import { use, createElement } from 'react'
+import { createElement } from 'react'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -269,7 +258,8 @@ export function renderFromDist<TProps>(rscId: string) {
       ssrManifest: { moduleMap, moduleLoading: null },
     })
 
-    return use(data)
+    // return use(data)
+    return data
   }
 
   return SsrComponent
