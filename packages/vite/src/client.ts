@@ -23,9 +23,10 @@ const BASE_PATH = '/rw-rsc/'
 export function renderFromRscServer<TProps>(rscId: string) {
   console.log('serve rscId', rscId)
 
-  // Temporarily skip rendering this component during SSR
-  // I don't know what we actually should do during SSR yet
+  // TODO (RSC): Remove this when we have a babel plugin to call another
+  // function during SSR
   if (typeof window === 'undefined') {
+    // Temporarily skip rendering this component during SSR
     return null
   }
 
