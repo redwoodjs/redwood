@@ -34,3 +34,6 @@ export {
   parseTypeScriptConfigFiles,
   registerBabel,
 } from './common'
+
+export { RedwoodRSCRoutesAutoLoaderPlugin } from './plugins/babel-plugin-redwood-rsc-routes-auto-loader'
+export type { PluginOptions as RedwoodRSCRoutesAutoLoaderPluginOptions } from './plugins/babel-plugin-redwood-rsc-routes-auto-loader'

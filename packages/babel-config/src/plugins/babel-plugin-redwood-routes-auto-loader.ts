@@ -13,7 +13,6 @@ import {
 export interface PluginOptions {
   forPrerender?: boolean
   forVite?: boolean
-  forRscClient?: boolean
 }
 
 /**
@@ -39,11 +38,7 @@ const withRelativeImports = (page: PagesDependency) => {
 
 export default function (
   { types: t }: { types: typeof types },
-  {
-    forPrerender = false,
-    forVite = false,
-    forRscClient = false,
-  }: PluginOptions,
+  { forPrerender = false, forVite = false }: PluginOptions,
 ): PluginObj {
   // @NOTE: This var gets mutated inside the visitors
   let pages = processPagesDir().map(withRelativeImports)
@@ -152,101 +147,101 @@ export default function (
 
           // For RSC Client builds add
           // import { renderFromRscServer } from '@redwoodjs/vite/client'
-          if (forRscClient) {
-            nodes.unshift(
-              t.importDeclaration(
-                [
-                  t.importSpecifier(
-                    t.identifier('renderFromRscServer'),
-                    t.identifier('renderFromRscServer'),
-                  ),
-                ],
-                t.stringLiteral('@redwoodjs/vite/client'),
-              ),
-            )
-          }
+          // if (forRscClient) {
+          //   nodes.unshift(
+          //     t.importDeclaration(
+          //       [
+          //         t.importSpecifier(
+          //           t.identifier('renderFromRscServer'),
+          //           t.identifier('renderFromRscServer'),
+          //         ),
+          //       ],
+          //       t.stringLiteral('@redwoodjs/vite/client'),
+          //     ),
+          //   )
+          // }
 
           // Prepend all imports to the top of the file
           for (const { importName, relativeImport } of pages) {
             const importArgument = t.stringLiteral(relativeImport)
 
-            if (forRscClient) {
-              // rsc CLIENT wants this format
-              // const AboutPage = renderFromRscServer('AboutPage')
-              // this basically allows the page to be rendered via flight response
-              nodes.push(
-                t.variableDeclaration('const', [
-                  t.variableDeclarator(
-                    t.identifier(importName),
-                    t.callExpression(t.identifier('renderFromRscServer'), [
+            // if (forRscClient) {
+            //   // rsc CLIENT wants this format
+            //   // const AboutPage = renderFromRscServer('AboutPage')
+            //   // this basically allows the page to be rendered via flight response
+            //   nodes.push(
+            //     t.variableDeclaration('const', [
+            //       t.variableDeclarator(
+            //         t.identifier(importName),
+            //         t.callExpression(t.identifier('renderFromRscServer'), [
+            //           t.stringLiteral(importName),
+            //         ]),
+            //       ),
+            //     ]),
+            //   )
+            // } else {
+            //  const <importName> = {
+            //     name: <importName>,
+            //     prerenderLoader: (name) => prerenderLoaderImpl
+            //     LazyComponent: lazy(() => import(/* webpackChunkName: "..." */ <relativeImportPath>)
+            //   }
+
+            //
+            // Real example
+            // const LoginPage = {
+            //   name: "LoginPage",
+            //   prerenderLoader: () => __webpack_require__(require.resolveWeak("./pages/LoginPage/LoginPage")),
+            //   LazyComponent: lazy(() => import("/* webpackChunkName: "LoginPage" *//pages/LoginPage/LoginPage.tsx"))
+            // }
+            //
+            importArgument.leadingComments = [
+              {
+                type: 'CommentBlock',
+                value: ` webpackChunkName: "${importName}" `,
+              },
+            ]
+
+            nodes.push(
+              t.variableDeclaration('const', [
+                t.variableDeclarator(
+                  t.identifier(importName),
+                  t.objectExpression([
+                    t.objectProperty(
+                      t.identifier('name'),
                       t.stringLiteral(importName),
-                    ]),
-                  ),
-                ]),
-              )
-            } else {
-              //  const <importName> = {
-              //     name: <importName>,
-              //     prerenderLoader: (name) => prerenderLoaderImpl
-              //     LazyComponent: lazy(() => import(/* webpackChunkName: "..." */ <relativeImportPath>)
-              //   }
-
-              //
-              // Real example
-              // const LoginPage = {
-              //   name: "LoginPage",
-              //   prerenderLoader: () => __webpack_require__(require.resolveWeak("./pages/LoginPage/LoginPage")),
-              //   LazyComponent: lazy(() => import("/* webpackChunkName: "LoginPage" *//pages/LoginPage/LoginPage.tsx"))
-              // }
-              //
-              importArgument.leadingComments = [
-                {
-                  type: 'CommentBlock',
-                  value: ` webpackChunkName: "${importName}" `,
-                },
-              ]
-
-              nodes.push(
-                t.variableDeclaration('const', [
-                  t.variableDeclarator(
-                    t.identifier(importName),
-                    t.objectExpression([
-                      t.objectProperty(
-                        t.identifier('name'),
-                        t.stringLiteral(importName),
-                      ),
-                      // prerenderLoader for ssr/prerender and first load of
-                      // prerendered pages in browser (csr)
-                      // prerenderLoader: (name) => { prerenderLoaderImpl }
-                      t.objectProperty(
-                        t.identifier('prerenderLoader'),
-                        t.arrowFunctionExpression(
-                          [t.identifier('name')],
-                          prerenderLoaderImpl(
-                            forPrerender,
-                            forVite,
-                            relativeImport,
-                            t,
-                          ),
+                    ),
+                    // prerenderLoader for ssr/prerender and first load of
+                    // prerendered pages in browser (csr)
+                    // prerenderLoader: (name) => { prerenderLoaderImpl }
+                    t.objectProperty(
+                      t.identifier('prerenderLoader'),
+                      t.arrowFunctionExpression(
+                        [t.identifier('name')],
+                        prerenderLoaderImpl(
+                          forPrerender,
+                          forVite,
+                          relativeImport,
+                          t,
                         ),
                       ),
-                      t.objectProperty(
-                        t.identifier('LazyComponent'),
-                        t.callExpression(t.identifier('lazy'), [
-                          t.arrowFunctionExpression(
-                            [],
-                            t.callExpression(t.identifier('import'), [
-                              importArgument,
-                            ]),
-                          ),
-                        ]),
-                      ),
-                    ]),
-                  ),
-                ]),
-              )
-            }
+                    ),
+                    t.objectProperty(
+                      t.identifier('LazyComponent'),
+                      t.callExpression(t.identifier('lazy'), [
+                        t.arrowFunctionExpression(
+                          [],
+                          t.callExpression(t.identifier('import'), [
+                            importArgument,
+                          ]),
+                        ),
+                      ]),
+                    ),
+                  ]),
+                ),
+              ]),
+            )
           }
+          // }
 
           // Insert at the top of the file
           p.node.body.unshift(...nodes)

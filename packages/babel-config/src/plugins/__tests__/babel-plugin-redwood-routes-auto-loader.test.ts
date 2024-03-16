@@ -79,7 +79,7 @@ describe('page auto loader correctly imports pages', () => {
   })
 })
 
-describe('page auto loader handles imports for RSC', () => {
+describe.skip('page auto loader handles imports for RSC', () => {
   const FIXTURE_PATH = path.resolve(
     __dirname,
     '../../../../../__fixtures__/example-todo-main/',
@@ -89,7 +89,7 @@ describe('page auto loader handles imports for RSC', () => {
 
   beforeAll(() => {
     process.env.RWJS_CWD = FIXTURE_PATH
-    result = transform(getPaths().web.routes, { forRscClient: true })
+    // result = transform(getPaths().web.routes, { forRscClient: true })
   })
 
   afterAll(() => {
