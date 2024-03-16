@@ -30,6 +30,7 @@ module.exports = {
     'packages/cli/**/__testfixtures__/**/*',
     'packages/core/config/storybook/**/*',
     'packages/studio/dist-*/**/*',
+    'packages/vite/compiled',
   ],
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',

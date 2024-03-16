@@ -1,0 +1,2 @@
+bundled/*
+!bundled/*.d.ts
