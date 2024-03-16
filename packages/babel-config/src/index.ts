@@ -35,5 +35,5 @@ export {
   registerBabel,
 } from './common'
 
-export { RedwoodRscClientRoutesAutoLoaderPlugin } from './plugins/babel-plugin-redwood-rsc-client-routes-auto-loader'
-export { RedwoodRscServerRoutesAutoLoaderPlugin } from './plugins/babel-plugin-redwood-rsc-server-routes-auto-loader'
+export { RedwoodRoutesAutoLoaderRscClientPlugin } from './plugins/babel-plugin-redwood-routes-auto-loader-rsc-client'
+export { RedwoodRoutesAutoLoaderRscServerPlugin } from './plugins/babel-plugin-redwood-routes-auto-loader-rsc-server'

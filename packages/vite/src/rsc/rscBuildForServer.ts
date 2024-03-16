@@ -1,7 +1,5 @@
-import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
-import { RedwoodRscServerRoutesAutoLoaderPlugin } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
@@ -69,14 +67,6 @@ export async function rscBuildForServer(
       rscTransformUseClientPlugin(clientEntryFiles),
       rscTransformUseServerPlugin(),
       rscCssPreinitPlugin(clientEntryFiles, componentImportMap),
-      react({
-        babel: {
-          only: [/Routes.(js|tsx|jsx)$/],
-          plugins: [[RedwoodRscServerRoutesAutoLoaderPlugin, {}]],
-          babelrc: false,
-          ignore: ['node_modules'],
-        },
-      }),
     ],
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often

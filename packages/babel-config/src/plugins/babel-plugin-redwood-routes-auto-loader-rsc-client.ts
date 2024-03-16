@@ -1,37 +1,17 @@
-import path from 'path'
-
 import type { PluginObj, types } from '@babel/core'
 
-import type { PagesDependency } from '@redwoodjs/project-config'
 import {
   ensurePosixPath,
-  getPaths,
   importStatementPath,
   processPagesDir,
 } from '@redwoodjs/project-config'
 
-/**
- * When running from the CLI: Babel-plugin-module-resolver will convert
- * For dev/build/prerender (forJest == false): 'src/pages/ExamplePage' -> './pages/ExamplePage'
- * For test (forJest == true): 'src/pages/ExamplePage' -> '/Users/blah/pathToProject/web/src/pages/ExamplePage'
- */
-const getPathRelativeToSrc = (maybeAbsolutePath: string) => {
-  // If the path is already relative
-  if (!path.isAbsolute(maybeAbsolutePath)) {
-    return maybeAbsolutePath
-  }
+import {
+  getPathRelativeToSrc,
+  withRelativeImports,
+} from './babel-plugin-redwood-routes-auto-loader'
 
-  return `./${path.relative(getPaths().web.src, maybeAbsolutePath)}`
-}
-
-const withRelativeImports = (page: PagesDependency) => {
-  return {
-    ...page,
-    relativeImport: ensurePosixPath(getPathRelativeToSrc(page.importPath)),
-  }
-}
-
-export function RedwoodRscClientRoutesAutoLoaderPlugin({
+export function RedwoodRoutesAutoLoaderRscClientPlugin({
   types: t,
 }: {
   types: typeof types

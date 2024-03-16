@@ -20,7 +20,7 @@ export interface PluginOptions {
  * For dev/build/prerender (forJest == false): 'src/pages/ExamplePage' -> './pages/ExamplePage'
  * For test (forJest == true): 'src/pages/ExamplePage' -> '/Users/blah/pathToProject/web/src/pages/ExamplePage'
  */
-const getPathRelativeToSrc = (maybeAbsolutePath: string) => {
+export const getPathRelativeToSrc = (maybeAbsolutePath: string) => {
   // If the path is already relative
   if (!path.isAbsolute(maybeAbsolutePath)) {
     return maybeAbsolutePath
@@ -29,7 +29,7 @@ const getPathRelativeToSrc = (maybeAbsolutePath: string) => {
   return `./${path.relative(getPaths().web.src, maybeAbsolutePath)}`
 }
 
-const withRelativeImports = (page: PagesDependency) => {
+export const withRelativeImports = (page: PagesDependency) => {
   return {
     ...page,
     relativeImport: ensurePosixPath(getPathRelativeToSrc(page.importPath)),
