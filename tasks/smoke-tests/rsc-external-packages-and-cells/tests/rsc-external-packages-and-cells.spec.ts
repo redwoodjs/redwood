@@ -27,12 +27,11 @@ test('CSS has been loaded', async ({ page }) => {
   // rgb(255, 165, 0) is orange
   expect(clientH3Color).toBe('rgb(255, 165, 0)')
 
-  // TODO: Reenable this test once we can easily debug windows behavior
   // Check font style of client component h3
-  // const clientH3Font = await clientH3.evaluate((el) => {
-  //   return window.getComputedStyle(el).getPropertyValue('font-style')
-  // })
-  // expect(clientH3Font).toBe('italic')
+  const clientH3Font = await clientH3.evaluate((el) => {
+    return window.getComputedStyle(el).getPropertyValue('font-style')
+  })
+  expect(clientH3Font).toBe('italic')
 
   page.close()
 })
