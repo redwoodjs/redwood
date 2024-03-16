@@ -33,17 +33,15 @@ export function createRscRequestHandler() {
     console.log('url.pathname', url.pathname)
 
     if (url.pathname.startsWith(basePath)) {
-      const index = url.pathname.lastIndexOf('/')
-      const params = new URLSearchParams(url.pathname.slice(index + 1))
-      rscId = url.pathname.slice(basePath.length, index)
-      rsfId = params.get('action_id') || undefined
+      rscId = url.pathname.split('/').pop()
+      rsfId = url.searchParams.get('action_id') || undefined
 
       console.log('rscId', rscId)
       console.log('rsfId', rsfId)
 
       if (rscId && rscId !== '_') {
         res.setHeader('Content-Type', 'text/x-component')
-        props = JSON.parse(params.get('props') || '{}')
+        props = JSON.parse(url.searchParams.get('props') || '{}')
       } else {
         rscId = undefined
       }
