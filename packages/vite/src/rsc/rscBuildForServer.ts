@@ -70,6 +70,7 @@ export async function rscBuildForServer(
       rscCssPreinitPlugin(clientEntryFiles, componentImportMap),
     ],
     build: {
+      // TODO (RSC): Remove `minify: false` when we don't need to debug as often
       minify: false,
       ssr: true,
       ssrEmitAssets: true,
