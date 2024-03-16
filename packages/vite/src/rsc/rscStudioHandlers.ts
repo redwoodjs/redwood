@@ -2,7 +2,7 @@ import http from 'node:http'
 import type { PassThrough } from 'node:stream'
 
 export const processRenderRscStream = async (
-  pipeable: PassThrough
+  pipeable: PassThrough,
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
     const chunks = [] as any
@@ -25,11 +25,11 @@ export const processRenderRscStream = async (
 
 export const postFlightToStudio = (
   payload: string,
-  metadata: Record<string, any>
+  metadata: Record<string, any>,
 ) => {
   const base64Payload = Buffer.from(payload).toString('base64')
   const encodedMetadata = Buffer.from(JSON.stringify(metadata)).toString(
-    'base64'
+    'base64',
   )
   const jsonBody = JSON.stringify({
     flight: {
@@ -58,7 +58,7 @@ export const postFlightToStudio = (
 
   req.on('error', (e: Error) => {
     console.error(
-      `An error occurred sending the Flight Payload to Studio: ${e.message}`
+      `An error occurred sending the Flight Payload to Studio: ${e.message}`,
     )
   })
 
@@ -68,7 +68,7 @@ export const postFlightToStudio = (
 
 export const createStudioFlightHandler = (
   pipeable: PassThrough,
-  metadata: Record<string, any>
+  metadata: Record<string, any>,
 ) => {
   processRenderRscStream(pipeable)
     .then((payload) => {
