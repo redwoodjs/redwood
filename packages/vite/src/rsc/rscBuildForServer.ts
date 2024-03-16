@@ -49,8 +49,9 @@ export async function rscBuildForServer(
       // it's likely way less efficient because we have to do so many files.
       // Files included in `noExternal` are files we want Vite to analyze
       noExternal: /^(?!node:)/,
-      // Can't inline prisma client
-      external: ['@prisma/client'],
+      // Can't inline prisma client (db calls fail at runtime) or react-dom
+      // (css preinit failure)
+      external: ['@prisma/client', 'react-dom'],
       resolve: {
         // These conditions are used in the plugin pipeline, and only affect non-externalized
         // dependencies during the SSR build. Which because of `noExternal: /^(?!node:)/` means
