@@ -12,22 +12,20 @@ const isTest = () => {
   return process.env.NODE_ENV === 'test'
 }
 
-// TODO (RSC): This should be !== 'production'
-// but since RSC apps currently run in production mode
-// we need to check for 'production' instead of 'development'
-// for now when sending to Studio
 const isDevelopment = () => {
-  // return process.env.NODE_ENV !== 'production' && !isTest()
-  return process.env.NODE_ENV === 'production' && !isTest()
+  return process.env.NODE_ENV !== 'production' && !isTest()
 }
 
 const isStudioEnabled = () => {
   return getRawConfig()['studio'] !== undefined
 }
 
-// TODO (RSC): This should be m
 const shouldSendToStudio = () => {
-  return isStudioEnabled() && isDevelopment()
+  // TODO (RSC): This should be just isDevelopment()
+  // but since RSC apps currently run in production mode
+  // we need to check for 'production' (aka not 'development')
+  // for now when sending to Studio
+  return isStudioEnabled() && !isDevelopment()
 }
 
 const getStudioPort = () => {
