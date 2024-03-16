@@ -20,7 +20,7 @@ const checkStatus = async (
 
 const BASE_PATH = '/rw-rsc/'
 
-export function renderFromRscServer<Props>(rscId: string) {
+export function renderFromRscServer<TProps>(rscId: string) {
   console.log('serve rscId', rscId)
 
   // Temporarily skip rendering this component during SSR
@@ -58,6 +58,7 @@ export function renderFromRscServer<Props>(rscId: string) {
         // and that element will be FormData
         callServer: async function (rsfId: string, args: unknown[]) {
           console.log('client.ts :: callServer rsfId', rsfId, 'args', args)
+
           const isMutating = !!mutationMode
           const searchParams = new URLSearchParams()
           searchParams.set('action_id', rsfId)
@@ -113,7 +114,7 @@ export function renderFromRscServer<Props>(rscId: string) {
 
   // Create temporary client component that wraps the ServerComponent returned
   // by the `createFromFetch` call.
-  const ServerComponent = (props: Props) => {
+  const ServerComponent = (props: TProps) => {
     console.log('ServerComponent', rscId, 'props', props)
 
     // FIXME we blindly expect JSON.stringify usage is deterministic
