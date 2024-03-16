@@ -14,7 +14,6 @@ console.log('__webpack_require__', __webpack_require__)
 console.log("__webpack_require__('FooBar')", __webpack_require__('FooBar'))
 
 import path from 'node:path'
-// import url from 'node:url'
 
 import { use, createElement } from 'react'
 
@@ -51,34 +50,6 @@ async function getFunctionComponent<Props>(
   // TODO (RSC): Making this a 404 error is marked as "HACK" in waku's source
   throw new StatusError('No function component found', 404)
 }
-
-// async function loadModule<T>(moduleId: string): Promise<T> {
-//   console.log('moduleId', moduleId)
-//   const clientBuildManifestUrl = url.pathToFileURL(
-//     path.join(getPaths().web.distClient, 'client-build-manifest.json'),
-//   ).href
-//   const clientBuildManifest = (
-//     await import(clientBuildManifestUrl, { with: { type: 'json' } })
-//   ).default
-//   const rsdwClientKey = Object.keys(clientBuildManifest).find((key) =>
-//     key.startsWith('_client.edge-'),
-//   )
-//   console.log('rsdwClientKey', rsdwClientKey)
-//   const clientEdgeFileName = clientBuildManifest[rsdwClientKey || ''].file
-//   console.log('clientEdgeFileName', clientEdgeFileName)
-//   const modFullPath =
-//     '/Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/client/'
-
-//   const mod = (await import(modFullPath + clientEdgeFileName)).c
-//   console.log('mod', mod)
-
-//   if (mod) {
-//     return mod
-//   }
-
-//   // TODO (RSC): Making this a 404 error is marked as "HACK" in waku's source
-//   throw new StatusError('No module found', 404)
-// }
 
 // This gets executed in a RSC server "world" and should return the path to
 // the chunk on in the client/browser "world"
@@ -306,7 +277,6 @@ export function renderFromDist<TProps>(rscId: string) {
     const { createFromReadableStream } = await import(
       'react-server-dom-webpack/client.edge'
     )
-    // const { createFromReadableStream } = await loadModule<any>('RSDW-client')
 
     // Like `createFromFetch`
     const data = createFromReadableStream(stream, {
