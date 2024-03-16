@@ -72,7 +72,7 @@ export function renderFromRscServer<TProps>(rscId: string) {
             id = '_'
           }
 
-          const response = fetch(BASE_PATH + id + '/' + searchParams, {
+          const response = fetch(BASE_PATH + id + '?' + searchParams, {
             method: 'POST',
             body: await encodeReply(args),
             headers: {
@@ -96,12 +96,12 @@ export function renderFromRscServer<TProps>(rscId: string) {
 
       console.log(
         'fetchRSC before createFromFetch',
-        BASE_PATH + rscId + '/' + searchParams,
+        BASE_PATH + rscId + '?' + searchParams,
       )
 
       const response =
         prefetched ||
-        fetch(BASE_PATH + rscId + '/' + searchParams, {
+        fetch(BASE_PATH + rscId + '?' + searchParams, {
           headers: {
             'rw-rsc': '1',
           },
