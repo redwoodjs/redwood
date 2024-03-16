@@ -32,7 +32,7 @@ import type {
 } from './rscWorkerCommunication.js'
 
 // TODO (RSC): We should look into importing renderToReadableStream from
-// 'react-server-dom-webpack/server.browser' so that we can respond with web
+// 'react-server-dom-webpack/server.edge' so that we can respond with web
 // streams
 const { renderToPipeableStream } = RSDWServer
 
