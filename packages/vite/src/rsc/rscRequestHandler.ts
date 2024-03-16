@@ -1,12 +1,10 @@
-import type { PassThrough } from 'node:stream'
-
 import busboy from 'busboy'
 import type { Request, Response } from 'express'
 import RSDWServer from 'react-server-dom-webpack/server.node.unbundled'
 
 import { hasStatusCode } from '../lib/StatusError.js'
 
-import { createStudioFlightHandler } from './rscStudioHandlers.js'
+import { sendRscFlightToStudio } from './rscStudioHandlers.js'
 import { renderRsc } from './rscWorkerCommunication.js'
 
 const { decodeReply, decodeReplyFromBusboy } = RSDWServer
@@ -126,43 +124,20 @@ export function createRscRequestHandler() {
       }
 
       try {
-        // surround by performance, but also
-        // TODO (RSC): Add a way to turn this off in production
-        const startedAt = Date.now()
-        const start = performance.now()
         const pipeable = await renderRsc({ rscId, props, rsfId, args })
-        const endedAt = Date.now()
-        const end = performance.now()
-        const duration = end - start
+
+        await sendRscFlightToStudio({
+          rscId,
+          props,
+          rsfId,
+          args,
+          basePath,
+          req,
+          handleError,
+        })
 
         // TODO (RSC): See if we can/need to do more error handling here
         // pipeable.on(handleError)
-
-        // Send to Studio
-        // TODO (RSC): Will only want to do this in dev mode
-
-        // collect render request metadata
-        const metadata = {
-          rsc: {
-            rscId,
-            rsfId,
-            props,
-            args,
-          },
-          request: {
-            basePath,
-            originalUrl: req.originalUrl,
-            url: req.url,
-            headers: req.headers,
-          },
-          performance: {
-            startedAt,
-            endedAt,
-            duration,
-          },
-        }
-
-        createStudioFlightHandler(pipeable as PassThrough, metadata)
 
         pipeable.pipe(res)
       } catch (e) {

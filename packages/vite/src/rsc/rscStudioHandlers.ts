@@ -1,7 +1,40 @@
 import http from 'node:http'
 import type { PassThrough } from 'node:stream'
 
-export const processRenderRscStream = async (
+import type { Request } from 'express'
+
+import { getRawConfig, getConfig } from '@redwoodjs/project-config'
+
+import { renderRsc } from './rscWorkerCommunication.js'
+import type { RenderInput } from './rscWorkerCommunication.js'
+
+const isTest = () => {
+  return process.env.NODE_ENV === 'test'
+}
+
+// TODO (RSC): This should be !== 'production'
+// but since RSC apps currently run in production mode
+// we need to check for 'production' instead of 'development'
+// for now when sending to Studio
+const isDevelopment = () => {
+  // return process.env.NODE_ENV !== 'production' && !isTest()
+  return process.env.NODE_ENV === 'production' && !isTest()
+}
+
+const isStudioEnabled = () => {
+  return getRawConfig()['studio'] !== undefined
+}
+
+// TODO (RSC): This should be m
+const shouldSendToStudio = () => {
+  return isStudioEnabled() && isDevelopment()
+}
+
+const getStudioPort = () => {
+  return getConfig().studio.basePort
+}
+
+const processRenderRscStream = async (
   pipeable: PassThrough,
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -23,58 +56,116 @@ export const processRenderRscStream = async (
   })
 }
 
-export const postFlightToStudio = (
-  payload: string,
-  metadata: Record<string, any>,
-) => {
-  const base64Payload = Buffer.from(payload).toString('base64')
-  const encodedMetadata = Buffer.from(JSON.stringify(metadata)).toString(
-    'base64',
-  )
-  const jsonBody = JSON.stringify({
-    flight: {
-      encodedPayload: base64Payload,
-      encoding: 'base64',
-      encodedMetadata,
-    },
-  })
-
-  // Options to configure the HTTP POST request
-  // TODO (RSC): Get these from the toml and Studio config
-  const options = {
-    hostname: 'localhost',
-    port: 4318,
-    path: '/.redwood/functions/rsc-flight', // maybe make a config option
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': Buffer.byteLength(jsonBody),
-    },
-  }
-
-  const req = http.request(options, (res) => {
-    res.setEncoding('utf8')
-  })
-
-  req.on('error', (e: Error) => {
-    console.error(
-      `An error occurred sending the Flight Payload to Studio: ${e.message}`,
+const postFlightToStudio = (payload: string, metadata: Record<string, any>) => {
+  if (shouldSendToStudio()) {
+    const base64Payload = Buffer.from(payload).toString('base64')
+    const encodedMetadata = Buffer.from(JSON.stringify(metadata)).toString(
+      'base64',
     )
-  })
+    const jsonBody = JSON.stringify({
+      flight: {
+        encodedPayload: base64Payload,
+        encoding: 'base64',
+        encodedMetadata,
+      },
+    })
 
-  req.write(jsonBody)
-  req.end()
+    // Options to configure the HTTP POST request
+    // TODO (RSC): Get these from the toml and Studio config
+    const options = {
+      hostname: 'localhost',
+      port: getStudioPort(),
+      path: '/.redwood/functions/rsc-flight',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(jsonBody),
+      },
+    }
+
+    const req = http.request(options, (res) => {
+      res.setEncoding('utf8')
+    })
+
+    req.on('error', (e: Error) => {
+      console.error(
+        `An error occurred sending the Flight Payload to Studio: ${e.message}`,
+      )
+    })
+
+    req.write(jsonBody)
+    req.end()
+  }
 }
 
-export const createStudioFlightHandler = (
+const createStudioFlightHandler = (
   pipeable: PassThrough,
   metadata: Record<string, any>,
 ) => {
-  processRenderRscStream(pipeable)
-    .then((payload) => {
-      postFlightToStudio(payload, metadata)
-    })
-    .catch((error) => {
-      console.error('An error occurred getting RSC Rendered steam:', error)
-    })
+  if (shouldSendToStudio()) {
+    processRenderRscStream(pipeable)
+      .then((payload) => {
+        console.debug('Sending RSC Rendered stream to Studio')
+        postFlightToStudio(payload, metadata)
+        console.debug('Sent RSC Rendered stream to Studio', payload, metadata)
+      })
+      .catch((error) => {
+        console.error('An error occurred getting RSC Rendered steam:', error)
+      })
+  } else {
+    console.debug('Studio is not enabled')
+  }
+}
+
+interface StudioRenderInput extends RenderInput {
+  basePath: string
+  req: Request
+  handleError: (e: Error) => void
+}
+
+export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
+  if (!shouldSendToStudio()) {
+    console.debug('Studio is not enabled')
+    return
+  }
+  const { rscId, props, rsfId, args, basePath, req, handleError } = input
+
+  try {
+    // surround renderRsc with performance metrics
+    const startedAt = Date.now()
+    const start = performance.now()
+    const pipeable = await renderRsc({ rscId, props, rsfId, args })
+    const endedAt = Date.now()
+    const end = performance.now()
+    const duration = end - start
+
+    // collect render request metadata
+    const metadata = {
+      rsc: {
+        rscId,
+        rsfId,
+        props,
+        args,
+      },
+      request: {
+        basePath,
+        originalUrl: req.originalUrl,
+        url: req.url,
+        headers: req.headers,
+      },
+      performance: {
+        startedAt,
+        endedAt,
+        duration,
+      },
+    }
+
+    // send rendered request to Studio
+    createStudioFlightHandler(pipeable as PassThrough, metadata)
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error('An error occurred rendering RSC and sending to Studio:', e)
+      handleError(e)
+    }
+  }
 }
