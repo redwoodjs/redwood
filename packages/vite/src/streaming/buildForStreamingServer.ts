@@ -1,6 +1,8 @@
+import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 import { cjsInterop } from 'vite-plugin-cjs-interop'
 
+import { RedwoodRoutesAutoLoaderRscServerPlugin } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 export async function buildForStreamingServer({
@@ -20,6 +22,14 @@ export async function buildForStreamingServer({
     plugins: [
       cjsInterop({
         dependencies: ['@redwoodjs/**'],
+      }),
+      react({
+        babel: {
+          only: [/Routes.(js|tsx|jsx)$/],
+          plugins: [[RedwoodRoutesAutoLoaderRscServerPlugin, {}]],
+          babelrc: false,
+          ignore: ['node_modules'],
+        },
       }),
     ],
     build: {

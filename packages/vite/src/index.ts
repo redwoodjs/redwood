@@ -148,7 +148,7 @@ export default function redwoodPluginVite(): PluginOption[] {
       babel: {
         ...getWebSideDefaultBabelConfig({
           forVite: true,
-          forRscClient: rwConfig.experimental.rsc?.enabled,
+          forRSC: rwConfig.experimental.rsc?.enabled,
         }),
       },
     }),

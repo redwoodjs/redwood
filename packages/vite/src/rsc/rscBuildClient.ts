@@ -1,5 +1,7 @@
+import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
+import { RedwoodRoutesAutoLoaderRscClientPlugin } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
@@ -64,6 +66,16 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     esbuild: {
       logLevel: 'debug',
     },
+    plugins: [
+      react({
+        babel: {
+          only: [/Routes.(js|tsx|jsx)$/],
+          plugins: [[RedwoodRoutesAutoLoaderRscClientPlugin, {}]],
+          babelrc: false,
+          ignore: ['node_modules'],
+        },
+      }),
+    ],
   })
 
   if (!('output' in clientBuildOutput)) {
