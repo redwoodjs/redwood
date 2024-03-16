@@ -1,8 +1,7 @@
 import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
-import { RedwoodRSCRoutesAutoLoaderPlugin } from '@redwoodjs/babel-config'
-import type { RedwoodRSCRoutesAutoLoaderPluginOptions } from '@redwoodjs/babel-config'
+import { RedwoodRscServerRoutesAutoLoaderPlugin } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
@@ -73,14 +72,7 @@ export async function rscBuildForServer(
       react({
         babel: {
           only: [/Routes.(js|tsx|jsx)$/],
-          plugins: [
-            [
-              RedwoodRSCRoutesAutoLoaderPlugin,
-              {
-                forServer: true,
-              } satisfies RedwoodRSCRoutesAutoLoaderPluginOptions,
-            ],
-          ],
+          plugins: [[RedwoodRscServerRoutesAutoLoaderPlugin, {}]],
           babelrc: false,
           ignore: ['node_modules'],
         },
