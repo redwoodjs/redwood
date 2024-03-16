@@ -1,5 +1,3 @@
-// import path from 'node:path'
-
 import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
