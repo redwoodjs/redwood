@@ -40,7 +40,7 @@ export const postFlightToStudio = (
   })
 
   // Options to configure the HTTP POST request
-  // TODO (RSC): Get these fro. the toml and Studio config
+  // TODO (RSC): Get these from the toml and Studio config
   const options = {
     hostname: 'localhost',
     port: 4318,
