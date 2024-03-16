@@ -2,16 +2,13 @@
 ;(globalThis as any).__webpack_module_loading__ ||= new Map()
 ;(globalThis as any).__webpack_module_cache__ ||= new Map()
 ;(globalThis as any).__webpack_chunk_load__ ||= async (id: string) => {
-  console.log('__webpack_chunk_load__ id', id)
+  console.log('clientSsr top __webpack_chunk_load__ id', id)
   return (globalThis as any).__webpack_module_loading__.get(id)
 }
 ;(globalThis as any).__webpack_require__ ||= (id: string) => {
-  console.log('__webpack_require__ id', id)
+  console.log('clientSsr top __webpack_require__ id', id)
   return (globalThis as any).__webpack_module_cache__.get(id)
 }
-
-console.log('__webpack_require__', __webpack_require__)
-console.log("__webpack_require__('FooBar')", __webpack_require__('FooBar'))
 
 import path from 'node:path'
 
@@ -51,7 +48,7 @@ async function getFunctionComponent<Props>(
   throw new StatusError('No function component found', 404)
 }
 
-// This gets executed in a RSC server "world" and should return the path to
+// This gets executed in an RSC server "world" and should return the path to
 // the chunk on in the client/browser "world"
 function resolveClientEntryForProd(
   filePath: string,
@@ -177,20 +174,6 @@ export function renderFromDist<TProps>(rscId: string) {
 
     const component = await getFunctionComponent(rscId)
     const clientEntries = (await getEntries()).clientEntries
-
-    ;(globalThis as any).__webpack_module_loading__ ||= new Map()
-    ;(globalThis as any).__webpack_module_cache__ ||= new Map()
-    ;(globalThis as any).__webpack_chunk_load__ ||= async (id: string) => {
-      console.log('__webpack_chunk_load__ id', id)
-      return (globalThis as any).__webpack_module_loading__.get(id)
-    }
-    ;(globalThis as any).__webpack_require__ ||= (id: string) => {
-      console.log('__webpack_require__ id', id)
-      return (globalThis as any).__webpack_module_cache__.get(id)
-    }
-
-    console.log('__webpack_require__', __webpack_require__)
-    console.log("__webpack_require__('FooBar')", __webpack_require__('FooBar'))
 
     // TODO (RSC): Try removing the proxy here and see if it's really necessary.
     // Looks like it'd work to just have a regular object with a getter.
