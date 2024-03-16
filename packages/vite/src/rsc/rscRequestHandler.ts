@@ -4,6 +4,7 @@ import RSDWServer from 'react-server-dom-webpack/server.node.unbundled'
 
 import { hasStatusCode } from '../lib/StatusError.js'
 
+import { sendRscFlightToStudio } from './rscStudioHandlers.js'
 import { renderRsc } from './rscWorkerCommunication.js'
 
 const { decodeReply, decodeReplyFromBusboy } = RSDWServer
@@ -124,8 +125,20 @@ export function createRscRequestHandler() {
 
       try {
         const pipeable = await renderRsc({ rscId, props, rsfId, args })
+
+        await sendRscFlightToStudio({
+          rscId,
+          props,
+          rsfId,
+          args,
+          basePath,
+          req,
+          handleError,
+        })
+
         // TODO (RSC): See if we can/need to do more error handling here
         // pipeable.on(handleError)
+
         pipeable.pipe(res)
       } catch (e) {
         handleError(e)
