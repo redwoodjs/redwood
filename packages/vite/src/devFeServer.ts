@@ -5,7 +5,10 @@ import type { ViteDevServer } from 'vite'
 import { createServer as createViteServer } from 'vite'
 import { cjsInterop } from 'vite-plugin-cjs-interop'
 
-import { RedwoodRoutesAutoLoaderRscClientPlugin } from '@redwoodjs/babel-config'
+import {
+  RedwoodRoutesAutoLoaderRscClientPlugin,
+  getWebSideDefaultBabelConfig,
+} from '@redwoodjs/babel-config'
 import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import type { Paths } from '@redwoodjs/project-config'
@@ -50,6 +53,19 @@ async function createServer() {
   }
   // ~~~~ Dev time validations ~~~~
 
+  const reactBabelConfig = getWebSideDefaultBabelConfig({
+    forVite: true,
+    forRSC: rscEnabled,
+  })
+  if (rscEnabled) {
+    reactBabelConfig.overrides.push({
+      test: /Routes.(js|tsx|jsx)$/,
+      plugins: [[RedwoodRoutesAutoLoaderRscClientPlugin, {}]],
+      babelrc: false,
+      ignore: ['node_modules'],
+    })
+  }
+
   // Create Vite server in middleware mode and configure the app type as
   // 'custom', disabling Vite's own HTML serving logic so parent server
   // can take control
@@ -61,12 +77,7 @@ async function createServer() {
       }),
       rscEnabled &&
         react({
-          babel: {
-            only: [/Routes.(js|tsx|jsx)$/],
-            plugins: [[RedwoodRoutesAutoLoaderRscClientPlugin, {}]],
-            babelrc: false,
-            ignore: ['node_modules'],
-          },
+          babel: reactBabelConfig,
         }),
     ],
     server: { middlewareMode: true },
