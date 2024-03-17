@@ -9,7 +9,7 @@ import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { registerFwGlobals } from './lib/registerGlobals.js'
+import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
@@ -22,7 +22,7 @@ globalThis.__REDWOOD__PRERENDER_PAGES = {}
 async function createServer() {
   ensureProcessDirWeb()
 
-  registerFwGlobals()
+  registerFwGlobalsAndShims()
 
   const app = express()
   const rwPaths = getPaths()
