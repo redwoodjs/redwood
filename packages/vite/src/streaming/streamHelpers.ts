@@ -94,7 +94,9 @@ export async function reactRenderToStreamResponse(
   const renderRoot = (path: string) => {
     return React.createElement(
       ServerAuthProvider,
-      { value: authState },
+      {
+        value: authState,
+      },
       React.createElement(
         LocationProvider,
         {
