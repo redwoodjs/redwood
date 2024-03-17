@@ -139,8 +139,7 @@ const vitePromise = createServer({
     }),
     rscTransformUseClientPlugin({}),
     rscTransformUseServerPlugin(),
-    // TODO: Does the worker need this plugin?
-    rscRoutesAutoLoader({ mode: 'dynamic' }),
+    rscRoutesAutoLoader(),
   ],
   ssr: {
     resolve: {

@@ -65,7 +65,7 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     esbuild: {
       logLevel: 'debug',
     },
-    plugins: [rscRoutesAutoLoader({ mode: 'fetch' })],
+    plugins: [rscRoutesAutoLoader()],
   })
 
   if (!('output' in clientBuildOutput)) {

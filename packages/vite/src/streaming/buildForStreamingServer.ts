@@ -25,7 +25,7 @@ export async function buildForStreamingServer({
       cjsInterop({
         dependencies: ['@redwoodjs/**'],
       }),
-      rscEnabled && rscRoutesAutoLoader({ mode: 'local' }),
+      rscEnabled && rscRoutesAutoLoader(),
     ],
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often

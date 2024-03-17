@@ -68,7 +68,7 @@ export async function rscBuildForServer(
       rscTransformUseClientPlugin(clientEntryFiles),
       rscTransformUseServerPlugin(),
       rscCssPreinitPlugin(clientEntryFiles, componentImportMap),
-      rscRoutesAutoLoader({ mode: 'local' }),
+      rscRoutesAutoLoader(),
     ],
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often

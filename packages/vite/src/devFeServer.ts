@@ -58,7 +58,7 @@ async function createServer() {
       cjsInterop({
         dependencies: ['@redwoodjs/**'],
       }),
-      rscEnabled && rscRoutesAutoLoader({ mode: 'dynamic' }),
+      rscEnabled && rscRoutesAutoLoader(),
     ],
     server: { middlewareMode: true },
     logLevel: 'info',

@@ -36,11 +36,7 @@ const withRelativeImports = (page: PagesDependency) => {
   }
 }
 
-export function rscRoutesAutoLoader({
-  mode = 'dynamic',
-}: {
-  mode: 'local' | 'fetch' | 'dynamic'
-}): Plugin {
+export function rscRoutesAutoLoader(): Plugin {
   // Vite IDs are always normalized and so we avoid windows path issues
   // by normalizing the path here.
   const routesFileId = normalizePath(getPaths().web.routes)
@@ -85,15 +81,12 @@ export function rscRoutesAutoLoader({
       // We have to handle the loading of routes in two different ways depending on if
       // we are doing SSR or not. During SSR we want to load files directly whereas on
       // the client we have to fetch things over the network.
-      const isSSR = options?.ssr ?? false
-      const fromLocal = mode === 'local' || (mode === 'dynamic' && isSSR)
+      const isSsr = options?.ssr ?? false
 
-      const loadFunctionModule = fromLocal
+      const loadFunctionModule = isSsr
         ? '@redwoodjs/vite/clientSsr'
         : '@redwoodjs/vite/client'
-      const loadFunctionName = fromLocal
-        ? 'renderFromDist'
-        : 'renderFromRscServer'
+      const loadFunctionName = isSsr ? 'renderFromDist' : 'renderFromRscServer'
 
       // Parse the code as AST
       const ext = path.extname(id)
