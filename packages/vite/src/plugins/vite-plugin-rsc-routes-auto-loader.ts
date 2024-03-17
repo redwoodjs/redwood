@@ -1,0 +1,166 @@
+import path from 'path'
+
+import generate from '@babel/generator'
+import { parse as babelParse } from '@babel/parser'
+import traverse from '@babel/traverse'
+import * as t from '@babel/types'
+import type { Plugin } from 'vite'
+import { normalizePath } from 'vite'
+
+import type { PagesDependency } from '@redwoodjs/project-config'
+import {
+  ensurePosixPath,
+  getPaths,
+  importStatementPath,
+  processPagesDir,
+} from '@redwoodjs/project-config'
+
+/**
+ * When running from the CLI: Babel-plugin-module-resolver will convert
+ * For dev/build/prerender (forJest == false): 'src/pages/ExamplePage' -> './pages/ExamplePage'
+ * For test (forJest == true): 'src/pages/ExamplePage' -> '/Users/blah/pathToProject/web/src/pages/ExamplePage'
+ */
+const getPathRelativeToSrc = (maybeAbsolutePath: string) => {
+  // If the path is already relative
+  if (!path.isAbsolute(maybeAbsolutePath)) {
+    return maybeAbsolutePath
+  }
+
+  return `./${path.relative(getPaths().web.src, maybeAbsolutePath)}`
+}
+
+const withRelativeImports = (page: PagesDependency) => {
+  return {
+    ...page,
+    relativeImport: ensurePosixPath(getPathRelativeToSrc(page.importPath)),
+  }
+}
+
+export function rscRoutesAutoLoader({
+  mode = 'dynamic',
+}: {
+  mode: 'local' | 'fetch' | 'dynamic'
+}): Plugin {
+  // Vite IDs are always normalized and so we avoid windows path issues
+  // by normalizing the path here.
+  const routesFileId = normalizePath(getPaths().web.routes)
+
+  // Get the current pages
+  // @NOTE: This var gets mutated inside the visitors
+  const pages = processPagesDir().map(withRelativeImports)
+
+  // Currently processPagesDir() can return duplicate entries when there are multiple files
+  // ending in Page in the individual page directories. This will cause an error upstream.
+  // Here we check for duplicates and throw a more helpful error message.
+  const duplicatePageImportNames = new Set<string>()
+  const sortedPageImportNames = pages.map((page) => page.importName).sort()
+  for (let i = 0; i < sortedPageImportNames.length - 1; i++) {
+    if (sortedPageImportNames[i + 1] === sortedPageImportNames[i]) {
+      duplicatePageImportNames.add(sortedPageImportNames[i])
+    }
+  }
+  if (duplicatePageImportNames.size > 0) {
+    throw new Error(
+      `Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the follow page directories: ${Array.from(
+        duplicatePageImportNames,
+      )
+        .map((name) => `'${name}'`)
+        .join(', ')}`,
+    )
+  }
+
+  return {
+    name: 'rsc-routes-auto-loader-dev',
+    transform: async function (code, id, options) {
+      // We only care about the routes file
+      if (id !== routesFileId) {
+        return null
+      }
+
+      // If we have no pages then we have no reason to do anything here
+      if (pages.length === 0) {
+        return null
+      }
+
+      // We have to handle the loading of routes in two different ways depending on if
+      // we are doing SSR or not. During SSR we want to load files directly whereas on
+      // the client we have to fetch things over the network.
+      const isSSR = options?.ssr ?? false
+      const fromLocal = mode === 'local' || (mode === 'dynamic' && isSSR)
+
+      const loadFunctionModule = fromLocal
+        ? '@redwoodjs/vite/clientSsr'
+        : '@redwoodjs/vite/client'
+      const loadFunctionName = fromLocal
+        ? 'renderFromDist'
+        : 'renderFromRscServer'
+
+      // Parse the code as AST
+      const ext = path.extname(id)
+      const plugins: any[] = []
+      if (ext === '.jsx') {
+        plugins.push('jsx')
+      }
+      const ast = babelParse(code, {
+        sourceType: 'unambiguous',
+        plugins,
+      })
+
+      // We have to filter out any pages which the user has already explicitly imported
+      // in the routes file otherwise there would be conflicts.
+      const importedNames = new Set<string>()
+      traverse(ast, {
+        ImportDeclaration(p) {
+          const importPath = p.node.source.value
+          if (importPath === null) {
+            return
+          }
+
+          const userImportRelativePath = getPathRelativeToSrc(
+            importStatementPath(p.node.source?.value),
+          )
+
+          const defaultSpecifier = p.node.specifiers.filter((specifiers) =>
+            t.isImportDefaultSpecifier(specifiers),
+          )[0]
+
+          if (userImportRelativePath && defaultSpecifier) {
+            importedNames.add(defaultSpecifier.local.name)
+          }
+        },
+      })
+      const nonImportedPages = pages.filter(
+        (page) => !importedNames.has(page.importName),
+      )
+
+      // Insert the page loading into the code
+      for (const page of nonImportedPages) {
+        ast.program.body.unshift(
+          t.variableDeclaration('const', [
+            t.variableDeclarator(
+              t.identifier(page.const),
+              t.callExpression(t.identifier(loadFunctionName), [
+                t.stringLiteral(page.const),
+              ]),
+            ),
+          ]),
+        )
+      }
+
+      // Insert an import for the load function we need
+      ast.program.body.unshift(
+        t.importDeclaration(
+          [
+            t.importSpecifier(
+              t.identifier(loadFunctionName),
+              t.identifier(loadFunctionName),
+            ),
+          ],
+          t.stringLiteral(loadFunctionModule),
+        ),
+      )
+
+      return generate(ast).code
+    },
+  }
+}

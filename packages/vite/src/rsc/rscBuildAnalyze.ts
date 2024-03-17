@@ -1,7 +1,5 @@
-import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
-import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
@@ -45,12 +43,6 @@ export async function rscBuildAnalyze() {
     // debugging, but we're keeping it silent by default.
     logLevel: 'silent',
     plugins: [
-      react({
-        babel: getWebSideDefaultBabelConfig({
-          forVite: true,
-          forRSC: true,
-        }),
-      }),
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
         (id) => serverEntryFileSet.add(id),
