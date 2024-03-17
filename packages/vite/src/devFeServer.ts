@@ -72,13 +72,13 @@ async function createServer() {
   const vite = await createViteServer({
     configFile: rwPaths.web.viteConfig,
     plugins: [
-      cjsInterop({
-        dependencies: ['@redwoodjs/**'],
-      }),
       rscEnabled &&
         react({
           babel: reactBabelConfig,
         }),
+      cjsInterop({
+        dependencies: ['@redwoodjs/**'],
+      }),
     ],
     server: { middlewareMode: true },
     logLevel: 'info',

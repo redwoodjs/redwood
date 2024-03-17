@@ -16,7 +16,10 @@ import RSDWServer from 'react-server-dom-webpack/server'
 import type { ResolvedConfig } from 'vite'
 import { createServer, resolveConfig } from 'vite'
 
-import { RedwoodRoutesAutoLoaderRscServerPlugin } from '@redwoodjs/babel-config'
+import {
+  getWebSideDefaultBabelConfig,
+  RedwoodRoutesAutoLoaderRscServerPlugin,
+} from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import type { defineEntries, GetEntry } from '../entries.js'
@@ -122,6 +125,17 @@ registerFwGlobals()
 // is already in use`.
 const dummyServer = new Server()
 
+const reactBabelConfig = getWebSideDefaultBabelConfig({
+  forVite: true,
+  forRSC: true,
+})
+reactBabelConfig.overrides.push({
+  test: /Routes.(js|tsx|jsx)$/,
+  plugins: [[RedwoodRoutesAutoLoaderRscServerPlugin, {}]],
+  babelrc: false,
+  ignore: ['node_modules'],
+})
+
 // TODO (RSC): `createServer` is mostly used to create a dev server. Is it OK
 // to use it like a production server like this?
 // TODO (RSC): Do we need to pass `define` here with RWJS_ENV etc? What about
@@ -131,12 +145,7 @@ const dummyServer = new Server()
 const vitePromise = createServer({
   plugins: [
     react({
-      babel: {
-        only: [/Routes.(js|tsx|jsx)$/],
-        plugins: [[RedwoodRoutesAutoLoaderRscServerPlugin, {}]],
-        babelrc: false,
-        ignore: ['node_modules'],
-      },
+      babel: reactBabelConfig,
     }),
     rscReloadPlugin((type) => {
       if (!parentPort) {
