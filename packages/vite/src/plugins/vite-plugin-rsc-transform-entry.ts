@@ -23,8 +23,6 @@ globalThis.__webpack_require__ ||= (id) => {
     name: 'rsc-transform-entry',
     transform: async function (code, id) {
       if (id === entryServerPath || id === entryClientPath) {
-        console.log('rsc-transform-entry id', id)
-
         return code + rscWebpackShims
       }
 
