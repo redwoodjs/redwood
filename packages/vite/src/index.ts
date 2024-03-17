@@ -11,6 +11,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { getMergedConfig } from './lib/getMergedConfig.js'
 import handleJsAsJsx from './plugins/vite-plugin-jsx-loader.js'
 import removeFromBundle from './plugins/vite-plugin-remove-from-bundle.js'
+import { rscTransformEntryPlugin } from './plugins/vite-plugin-rsc-transform-entry.js'
 import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider.js'
 
 /**
@@ -36,7 +37,11 @@ export default function redwoodPluginVite(): PluginOption[] {
     .readFileSync(path.join(rwPaths.api.base, 'package.json'), 'utf-8')
     .includes('@redwoodjs/realtime')
 
+  const streamingEnabled = rwConfig.experimental.streamingSsr.enabled
+  const rscEnabled = rwConfig.experimental.rsc.enabled
+
   return [
+    rscEnabled && rscTransformEntryPlugin(),
     {
       name: 'redwood-plugin-vite-html-env',
 
@@ -130,7 +135,7 @@ export default function redwoodPluginVite(): PluginOption[] {
       config: getMergedConfig(rwConfig, rwPaths),
     },
     // We can remove when streaming is stable
-    rwConfig.experimental.streamingSsr.enabled && swapApolloProvider(),
+    streamingEnabled && swapApolloProvider(),
     handleJsAsJsx(),
     // Remove the splash-page from the bundle.
     removeFromBundle([

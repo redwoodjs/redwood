@@ -26,14 +26,6 @@
       "types": "./dist/clientSsr.d.ts",
       "default": "./dist/clientSsr.js"
     },
-    "./assets": {
-      "types": "./dist/fully-react/assets.d.ts",
-      "default": "./dist/fully-react/assets.js"
-    },
-    "./rwRscGlobal": {
-      "types": "./dist/fully-react/rwRscGlobal.d.ts",
-      "default": "./dist/fully-react/rwRscGlobal.js"
-    },
     "./buildFeServer": {
       "types": "./dist/buildFeServer.d.ts",
       "default": "./dist/buildFeServer.js"
