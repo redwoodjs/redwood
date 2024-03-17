@@ -80,8 +80,8 @@
     "express": "4.18.2",
     "http-proxy-middleware": "2.0.6",
     "isbot": "3.7.1",
-    "react": "0.0.0-experimental-e5205658f-20230913",
-    "react-server-dom-webpack": "0.0.0-experimental-e5205658f-20230913",
+    "react": "18.3.0-canary-a870b2d54-20240314",
+    "react-server-dom-webpack": "18.3.0-canary-a870b2d54-20240314",
     "vite": "5.1.6",
     "vite-plugin-cjs-interop": "2.1.0",
     "yargs-parser": "21.1.1"

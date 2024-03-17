@@ -39,6 +39,20 @@ interface StreamOptions {
   onError?: (err: Error) => void
 }
 
+const rscWebpackShims = `\
+globalThis.__rw_module_cache__ ||= new Map();
+
+globalThis.__webpack_chunk_load__ ||= (id) => {
+  console.log('rscWebpackShims chunk load id', id)
+  return import(id).then((m) => globalThis.__rw_module_cache__.set(id, m))
+};
+
+globalThis.__webpack_require__ ||= (id) => {
+  console.log('rscWebpackShims require id', id)
+  return globalThis.__rw_module_cache__.get(id)
+};
+`
+
 export async function reactRenderToStreamResponse(
   mwRes: MiddlewareResponse,
   renderOptions: RenderToStreamArgs,
@@ -126,7 +140,7 @@ export async function reactRenderToStreamResponse(
     bootstrapScriptContent:
       // Only insert assetMap if client side JS will be loaded
       jsBundles.length > 0
-        ? `window.__REDWOOD__ASSET_MAP = ${assetMap};`
+        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}; ${rscWebpackShims}`
         : undefined,
     bootstrapModules: jsBundles,
   }

@@ -11,7 +11,6 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { getMergedConfig } from './lib/getMergedConfig.js'
 import handleJsAsJsx from './plugins/vite-plugin-jsx-loader.js'
 import removeFromBundle from './plugins/vite-plugin-remove-from-bundle.js'
-import { rscTransformEntryPlugin } from './plugins/vite-plugin-rsc-transform-entry.js'
 import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider.js'
 
 /**
@@ -41,7 +40,6 @@ export default function redwoodPluginVite(): PluginOption[] {
   const rscEnabled = rwConfig.experimental.rsc.enabled
 
   return [
-    rscEnabled && rscTransformEntryPlugin(),
     {
       name: 'redwood-plugin-vite-html-env',
 
