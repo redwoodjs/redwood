@@ -21,12 +21,14 @@ globalThis.__webpack_require__ ||= (id) => {
 
   return {
     name: 'rsc-transform-entry',
-    transform: async function (code, id) {
-      if (id === entryServerPath || id === entryClientPath) {
-        return code + rscWebpackShims
+    banner: (chunk) => {
+      if (
+        chunk.facadeModuleId === entryServerPath ||
+        chunk.facadeModuleId === entryClientPath
+      ) {
+        return rscWebpackShims
       }
-
-      return code
+      return ''
     },
   }
 }
