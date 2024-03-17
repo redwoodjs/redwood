@@ -5,7 +5,6 @@ import { RedwoodRoutesAutoLoaderRscClientPlugin } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
-import { rscTransformEntryPlugin } from '../plugins/vite-plugin-rsc-transform-entry.js'
 import { ensureProcessDirWeb } from '../utils.js'
 
 /**
@@ -68,7 +67,6 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
       logLevel: 'debug',
     },
     plugins: [
-      rscTransformEntryPlugin(),
       react({
         babel: {
           only: [/Routes.(js|tsx|jsx)$/],
