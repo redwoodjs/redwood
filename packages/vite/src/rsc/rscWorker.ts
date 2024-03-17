@@ -3,7 +3,6 @@
 // `--condition react-server`. If we did try to do that the main process
 // couldn't do SSR because it would be missing client-side React functions
 // like `useState` and `createContext`.
-
 import { Buffer } from 'node:buffer'
 import { Server } from 'node:http'
 import path from 'node:path'
@@ -12,10 +11,15 @@ import { parentPort } from 'node:worker_threads'
 
 import { createElement } from 'react'
 
+import react from '@vitejs/plugin-react'
 import RSDWServer from 'react-server-dom-webpack/server'
 import type { ResolvedConfig } from 'vite'
 import { createServer, resolveConfig } from 'vite'
 
+import {
+  getWebSideDefaultBabelConfig,
+  redwoodRoutesAutoLoaderRscServerPlugin,
+} from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import type { defineEntries, GetEntry } from '../entries.js'
@@ -121,6 +125,17 @@ registerFwGlobalsAndShims()
 // is already in use`.
 const dummyServer = new Server()
 
+const reactBabelConfig = getWebSideDefaultBabelConfig({
+  forVite: true,
+  forRSC: true,
+})
+reactBabelConfig.overrides.push({
+  test: /Routes.(js|tsx|jsx)$/,
+  plugins: [[redwoodRoutesAutoLoaderRscServerPlugin, {}]],
+  babelrc: false,
+  ignore: ['node_modules'],
+})
+
 // TODO (RSC): `createServer` is mostly used to create a dev server. Is it OK
 // to use it like a production server like this?
 // TODO (RSC): Do we need to pass `define` here with RWJS_ENV etc? What about
@@ -129,6 +144,9 @@ const dummyServer = new Server()
 // https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#middleware-mode
 const vitePromise = createServer({
   plugins: [
+    react({
+      babel: reactBabelConfig,
+    }),
     rscReloadPlugin((type) => {
       if (!parentPort) {
         throw new Error('parentPort is undefined')

@@ -1,5 +1,10 @@
+import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
+import {
+  redwoodRoutesAutoLoaderRscClientPlugin,
+  getWebSideDefaultBabelConfig,
+} from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
@@ -27,6 +32,17 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
   if (!rwPaths.web.entryClient) {
     throw new Error('Missing web/src/entry.client')
   }
+
+  const reactBabelConfig = getWebSideDefaultBabelConfig({
+    forVite: true,
+    forRSC: true,
+  })
+  reactBabelConfig.overrides.push({
+    test: /Routes.(js|tsx|jsx)$/,
+    plugins: [[redwoodRoutesAutoLoaderRscClientPlugin, {}]],
+    babelrc: false,
+    ignore: ['node_modules'],
+  })
 
   const clientBuildOutput = await viteBuild({
     envFile: false,
@@ -64,6 +80,11 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     esbuild: {
       logLevel: 'debug',
     },
+    plugins: [
+      react({
+        babel: reactBabelConfig,
+      }),
+    ],
   })
 
   if (!('output' in clientBuildOutput)) {
