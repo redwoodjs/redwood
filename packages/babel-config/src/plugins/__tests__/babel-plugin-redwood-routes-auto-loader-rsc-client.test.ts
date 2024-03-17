@@ -5,14 +5,14 @@ import * as babel from '@babel/core'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { RedwoodRoutesAutoLoaderRscClientPlugin } from '../babel-plugin-redwood-routes-auto-loader-rsc-client'
+import { redwoodRoutesAutoLoaderRscClientPlugin } from '../babel-plugin-redwood-routes-auto-loader-rsc-client'
 
 const transform = (filename: string) => {
   const code = fs.readFileSync(filename, 'utf-8')
   return babel.transform(code, {
     filename,
     presets: ['@babel/preset-react'],
-    plugins: [[RedwoodRoutesAutoLoaderRscClientPlugin, {}]],
+    plugins: [[redwoodRoutesAutoLoaderRscClientPlugin, {}]],
   })
 }
 

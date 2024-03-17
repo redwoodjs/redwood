@@ -11,7 +11,7 @@ import {
   withRelativeImports,
 } from './babel-plugin-redwood-routes-auto-loader'
 
-export function RedwoodRoutesAutoLoaderRscServerPlugin({
+export function redwoodRoutesAutoLoaderRscServerPlugin({
   types: t,
 }: {
   types: typeof types

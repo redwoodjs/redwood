@@ -6,7 +6,7 @@ import { createServer as createViteServer } from 'vite'
 import { cjsInterop } from 'vite-plugin-cjs-interop'
 
 import {
-  RedwoodRoutesAutoLoaderRscClientPlugin,
+  redwoodRoutesAutoLoaderRscClientPlugin,
   getWebSideDefaultBabelConfig,
 } from '@redwoodjs/babel-config'
 import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
@@ -60,7 +60,7 @@ async function createServer() {
   if (rscEnabled) {
     reactBabelConfig.overrides.push({
       test: /Routes.(js|tsx|jsx)$/,
-      plugins: [[RedwoodRoutesAutoLoaderRscClientPlugin, {}]],
+      plugins: [[redwoodRoutesAutoLoaderRscClientPlugin, {}]],
       babelrc: false,
       ignore: ['node_modules'],
     })

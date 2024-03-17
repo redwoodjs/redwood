@@ -3,7 +3,7 @@ import { build as viteBuild } from 'vite'
 import { cjsInterop } from 'vite-plugin-cjs-interop'
 
 import {
-  RedwoodRoutesAutoLoaderRscServerPlugin,
+  redwoodRoutesAutoLoaderRscServerPlugin,
   getWebSideDefaultBabelConfig,
 } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
@@ -29,7 +29,7 @@ export async function buildForStreamingServer({
   if (rscEnabled) {
     reactBabelConfig.overrides.push({
       test: /Routes.(js|tsx|jsx)$/,
-      plugins: [[RedwoodRoutesAutoLoaderRscServerPlugin, {}]],
+      plugins: [[redwoodRoutesAutoLoaderRscServerPlugin, {}]],
       babelrc: false,
       ignore: ['node_modules'],
     })

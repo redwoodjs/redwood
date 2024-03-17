@@ -18,7 +18,7 @@ import { createServer, resolveConfig } from 'vite'
 
 import {
   getWebSideDefaultBabelConfig,
-  RedwoodRoutesAutoLoaderRscServerPlugin,
+  redwoodRoutesAutoLoaderRscServerPlugin,
 } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -131,7 +131,7 @@ const reactBabelConfig = getWebSideDefaultBabelConfig({
 })
 reactBabelConfig.overrides.push({
   test: /Routes.(js|tsx|jsx)$/,
-  plugins: [[RedwoodRoutesAutoLoaderRscServerPlugin, {}]],
+  plugins: [[redwoodRoutesAutoLoaderRscServerPlugin, {}]],
   babelrc: false,
   ignore: ['node_modules'],
 })
