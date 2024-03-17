@@ -17,7 +17,6 @@ import {
   createInjector,
 } from '@redwoodjs/web/dist/components/ServerInject'
 
-import { rscWebpackShims } from '../lib/rscWebpackShims.js'
 import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 
 import { createBufferedTransformStream } from './transforms/bufferedTransform.js'
@@ -39,6 +38,20 @@ interface StreamOptions {
   waitForAllReady?: boolean
   onError?: (err: Error) => void
 }
+
+const rscWebpackShims = `\
+globalThis.__rw_module_cache__ ||= new Map();
+
+globalThis.__webpack_chunk_load__ ||= (id) => {
+  console.log('rscWebpackShims chunk load id', id)
+  return import(id).then((m) => globalThis.__rw_module_cache__.set(id, m))
+};
+
+globalThis.__webpack_require__ ||= (id) => {
+  console.log('rscWebpackShims require id', id)
+  return globalThis.__rw_module_cache__.get(id)
+};
+`
 
 export async function reactRenderToStreamResponse(
   mwRes: MiddlewareResponse,
