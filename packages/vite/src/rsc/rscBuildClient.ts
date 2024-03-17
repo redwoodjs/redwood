@@ -3,7 +3,6 @@ import { build as viteBuild } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
-import { rscTransformEntryPlugin } from '../plugins/vite-plugin-rsc-transform-entry.js'
 import { ensureProcessDirWeb } from '../utils.js'
 
 /**
