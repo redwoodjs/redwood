@@ -85,6 +85,19 @@ export const registerFwGlobals = () => {
     RWJS_SRC_ROOT: rwPaths.web.src,
     REDWOOD_ENV_EDITOR: JSON.stringify(process.env.REDWOOD_ENV_EDITOR),
   }
+
+  globalThis.__rw_module_cache__ ||= new Map()
+
+  globalThis.__webpack_chunk_load__ ||= (id) => {
+    console.log('rscWebpackShims chunk load id', id)
+    return import(id).then((m) => globalThis.__rw_module_cache__.set(id, m))
+  }
+
+  // @ts-expect-error This is a webpack shim typed as any by @types/webpack
+  globalThis.__webpack_require__ ||= (id) => {
+    console.log('rscWebpackShims require id', id)
+    return globalThis.__rw_module_cache__.get(id)
+  }
 }
 
 function swapLocalhostFor127(hostString: string) {

@@ -17,6 +17,7 @@ import {
   createInjector,
 } from '@redwoodjs/web/dist/components/ServerInject'
 
+import { rscWebpackShims } from '../lib/rscWebpackShims.js'
 import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 
 import { createBufferedTransformStream } from './transforms/bufferedTransform.js'
@@ -126,7 +127,7 @@ export async function reactRenderToStreamResponse(
     bootstrapScriptContent:
       // Only insert assetMap if client side JS will be loaded
       jsBundles.length > 0
-        ? `window.__REDWOOD__ASSET_MAP = ${assetMap};`
+        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}; ${rscWebpackShims}`
         : undefined,
     bootstrapModules: jsBundles,
   }

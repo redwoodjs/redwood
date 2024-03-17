@@ -10,7 +10,6 @@ import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { registerFwGlobals } from './lib/registerGlobals.js'
-import { rscWebpackShims } from './lib/rscWebpackShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
@@ -61,16 +60,6 @@ async function createServer() {
     logLevel: 'info',
     clearScreen: false,
     appType: 'custom',
-    esbuild: {
-      banner: rscWebpackShims,
-    },
-    optimizeDeps: {
-      esbuildOptions: {
-        banner: {
-          js: rscWebpackShims,
-        },
-      },
-    },
   })
 
   // use vite's connect instance as middleware
