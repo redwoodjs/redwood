@@ -31,7 +31,6 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
 
   const clientBuildOutput = await viteBuild({
     envFile: false,
-    plugins: [rscTransformEntryPlugin()],
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often
       minify: false,
