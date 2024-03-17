@@ -6,7 +6,8 @@ export function rscTransformEntryPlugin(): Plugin {
   const entryServerPath = normalizePath(getPaths().web.entryServer || '')
   const entryClientPath = normalizePath(getPaths().web.entryClient || '')
 
-  const rscWebpackShims = `globalThis.__rw_module_cache__ ||= new Map();
+  const rscWebpackShims = `
+globalThis.__rw_module_cache__ ||= new Map();
 
 globalThis.__webpack_chunk_load__ ||= (id) => {
   console.log('rscWebpackShims chunk load id', id)
