@@ -18,7 +18,6 @@ import {
 } from '@redwoodjs/web/dist/components/ServerInject'
 
 import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
-import { rscWebpackShims } from '../rsc/rscWebpackShims.js'
 
 import { createBufferedTransformStream } from './transforms/bufferedTransform.js'
 import { createTimeoutTransform } from './transforms/cancelTimeoutTransform.js'
@@ -89,7 +88,7 @@ export async function reactRenderToStreamResponse(
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
   // Possible that we need to upgrade the @types/* packages
-  // @ts-expect-error Something in React's packages mean types dont come through
+  // @ts-expect-error Something in React's packages mean types don't come through
   const { renderToReadableStream } = await import('react-dom/server.edge')
 
   const renderRoot = (path: string) => {
@@ -125,9 +124,9 @@ export async function reactRenderToStreamResponse(
    */
   const bootstrapOptions = {
     bootstrapScriptContent:
-      // Only insert assetMap if clientside JS will be loaded
+      // Only insert assetMap if client side JS will be loaded
       jsBundles.length > 0
-        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}; ${rscWebpackShims}`
+        ? `window.__REDWOOD__ASSET_MAP = ${assetMap};`
         : undefined,
     bootstrapModules: jsBundles,
   }
