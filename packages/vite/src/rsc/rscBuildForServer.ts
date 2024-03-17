@@ -1,5 +1,10 @@
+import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
+import {
+  RedwoodRoutesAutoLoaderRscServerPlugin,
+  getWebSideDefaultBabelConfig,
+} from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
@@ -35,6 +40,17 @@ export async function rscBuildForServer(
     ...customModules,
   }
 
+  const reactBabelConfig = getWebSideDefaultBabelConfig({
+    forVite: true,
+    forRSC: true,
+  })
+  reactBabelConfig.overrides.push({
+    test: /Routes.(js|tsx|jsx)$/,
+    plugins: [[RedwoodRoutesAutoLoaderRscServerPlugin, {}]],
+    babelrc: false,
+    ignore: ['node_modules'],
+  })
+
   // TODO (RSC): No redwood-vite plugin, add it in here
   const rscServerBuildOutput = await viteBuild({
     envFile: false,
@@ -58,6 +74,9 @@ export async function rscBuildForServer(
       },
     },
     plugins: [
+      react({
+        babel: reactBabelConfig,
+      }),
       // The rscTransformPlugin maps paths like
       // /Users/tobbe/.../rw-app/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
       // to

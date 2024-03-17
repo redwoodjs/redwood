@@ -3,7 +3,6 @@
 // `--condition react-server`. If we did try to do that the main process
 // couldn't do SSR because it would be missing client-side React functions
 // like `useState` and `createContext`.
-
 import { Buffer } from 'node:buffer'
 import { Server } from 'node:http'
 import path from 'node:path'
@@ -12,10 +11,12 @@ import { parentPort } from 'node:worker_threads'
 
 import { createElement } from 'react'
 
+import react from '@vitejs/plugin-react'
 import RSDWServer from 'react-server-dom-webpack/server'
 import type { ResolvedConfig } from 'vite'
 import { createServer, resolveConfig } from 'vite'
 
+import { RedwoodRoutesAutoLoaderRscServerPlugin } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import type { defineEntries, GetEntry } from '../entries.js'
@@ -129,6 +130,14 @@ const dummyServer = new Server()
 // https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#middleware-mode
 const vitePromise = createServer({
   plugins: [
+    react({
+      babel: {
+        only: [/Routes.(js|tsx|jsx)$/],
+        plugins: [[RedwoodRoutesAutoLoaderRscServerPlugin, {}]],
+        babelrc: false,
+        ignore: ['node_modules'],
+      },
+    }),
     rscReloadPlugin((type) => {
       if (!parentPort) {
         throw new Error('parentPort is undefined')

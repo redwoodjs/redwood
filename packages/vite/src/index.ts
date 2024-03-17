@@ -149,13 +149,14 @@ export default function redwoodPluginVite(): PluginOption[] {
           id: /@redwoodjs\/web\/dist\/apollo\/sseLink/,
         },
       ]),
-    react({
-      babel: {
-        ...getWebSideDefaultBabelConfig({
-          forVite: true,
-          forRSC: rwConfig.experimental.rsc?.enabled,
-        }),
-      },
-    }),
+    !rscEnabled &&
+      react({
+        babel: {
+          ...getWebSideDefaultBabelConfig({
+            forVite: true,
+            forRSC: rscEnabled,
+          }),
+        },
+      }),
   ]
 }
