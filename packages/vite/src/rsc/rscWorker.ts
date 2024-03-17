@@ -11,21 +11,17 @@ import { parentPort } from 'node:worker_threads'
 
 import { createElement } from 'react'
 
-import react from '@vitejs/plugin-react'
 import RSDWServer from 'react-server-dom-webpack/server'
 import type { ResolvedConfig } from 'vite'
 import { createServer, resolveConfig } from 'vite'
 
-import {
-  getWebSideDefaultBabelConfig,
-  redwoodRoutesAutoLoaderRscServerPlugin,
-} from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import type { defineEntries, GetEntry } from '../entries.js'
 import { registerFwGlobalsAndShims } from '../lib/registerFwGlobalsAndShims.js'
 import { StatusError } from '../lib/StatusError.js'
 import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
+import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
 
@@ -125,17 +121,6 @@ registerFwGlobalsAndShims()
 // is already in use`.
 const dummyServer = new Server()
 
-const reactBabelConfig = getWebSideDefaultBabelConfig({
-  forVite: true,
-  forRSC: true,
-})
-reactBabelConfig.overrides.push({
-  test: /Routes.(js|tsx|jsx)$/,
-  plugins: [[redwoodRoutesAutoLoaderRscServerPlugin, {}]],
-  babelrc: false,
-  ignore: ['node_modules'],
-})
-
 // TODO (RSC): `createServer` is mostly used to create a dev server. Is it OK
 // to use it like a production server like this?
 // TODO (RSC): Do we need to pass `define` here with RWJS_ENV etc? What about
@@ -144,9 +129,6 @@ reactBabelConfig.overrides.push({
 // https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#middleware-mode
 const vitePromise = createServer({
   plugins: [
-    react({
-      babel: reactBabelConfig,
-    }),
     rscReloadPlugin((type) => {
       if (!parentPort) {
         throw new Error('parentPort is undefined')
@@ -157,6 +139,7 @@ const vitePromise = createServer({
     }),
     rscTransformUseClientPlugin({}),
     rscTransformUseServerPlugin(),
+    rscRoutesAutoLoader(),
   ],
   ssr: {
     resolve: {

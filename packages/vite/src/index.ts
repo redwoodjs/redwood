@@ -37,7 +37,6 @@ export default function redwoodPluginVite(): PluginOption[] {
     .includes('@redwoodjs/realtime')
 
   const streamingEnabled = rwConfig.experimental.streamingSsr.enabled
-  const rscEnabled = rwConfig.experimental.rsc.enabled
 
   return [
     {
@@ -147,14 +146,13 @@ export default function redwoodPluginVite(): PluginOption[] {
           id: /@redwoodjs\/web\/dist\/apollo\/sseLink/,
         },
       ]),
-    !rscEnabled &&
-      react({
-        babel: {
-          ...getWebSideDefaultBabelConfig({
-            forVite: true,
-            forRSC: rscEnabled,
-          }),
-        },
-      }),
+    react({
+      babel: {
+        ...getWebSideDefaultBabelConfig({
+          forVite: true,
+          forRSC: rwConfig.experimental?.rsc?.enabled,
+        }),
+      },
+    }),
   ]
 }

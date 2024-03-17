@@ -1,14 +1,9 @@
-import react from '@vitejs/plugin-react'
 import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
 import type { ViteDevServer } from 'vite'
 import { createServer as createViteServer } from 'vite'
 import { cjsInterop } from 'vite-plugin-cjs-interop'
 
-import {
-  redwoodRoutesAutoLoaderRscClientPlugin,
-  getWebSideDefaultBabelConfig,
-} from '@redwoodjs/babel-config'
 import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import type { Paths } from '@redwoodjs/project-config'
@@ -16,6 +11,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
+import { rscRoutesAutoLoader } from './plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
@@ -53,32 +49,16 @@ async function createServer() {
   }
   // ~~~~ Dev time validations ~~~~
 
-  const reactBabelConfig = getWebSideDefaultBabelConfig({
-    forVite: true,
-    forRSC: rscEnabled,
-  })
-  if (rscEnabled) {
-    reactBabelConfig.overrides.push({
-      test: /Routes.(js|tsx|jsx)$/,
-      plugins: [[redwoodRoutesAutoLoaderRscClientPlugin, {}]],
-      babelrc: false,
-      ignore: ['node_modules'],
-    })
-  }
-
   // Create Vite server in middleware mode and configure the app type as
   // 'custom', disabling Vite's own HTML serving logic so parent server
   // can take control
   const vite = await createViteServer({
     configFile: rwPaths.web.viteConfig,
     plugins: [
-      rscEnabled &&
-        react({
-          babel: reactBabelConfig,
-        }),
       cjsInterop({
         dependencies: ['@redwoodjs/**'],
       }),
+      rscEnabled && rscRoutesAutoLoader(),
     ],
     server: { middlewareMode: true },
     logLevel: 'info',
