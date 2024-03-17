@@ -2,7 +2,10 @@ import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 import { cjsInterop } from 'vite-plugin-cjs-interop'
 
-import { RedwoodRoutesAutoLoaderRscServerPlugin } from '@redwoodjs/babel-config'
+import {
+  RedwoodRoutesAutoLoaderRscServerPlugin,
+  getWebSideDefaultBabelConfig,
+} from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 export async function buildForStreamingServer({
@@ -19,6 +22,19 @@ export async function buildForStreamingServer({
     throw new Error('Vite config not found')
   }
 
+  const reactBabelConfig = getWebSideDefaultBabelConfig({
+    forVite: true,
+    forRSC: true,
+  })
+  if (rscEnabled) {
+    reactBabelConfig.overrides.push({
+      test: /Routes.(js|tsx|jsx)$/,
+      plugins: [[RedwoodRoutesAutoLoaderRscServerPlugin, {}]],
+      babelrc: false,
+      ignore: ['node_modules'],
+    })
+  }
+
   await viteBuild({
     configFile: rwPaths.web.viteConfig,
     plugins: [
@@ -27,12 +43,7 @@ export async function buildForStreamingServer({
       }),
       rscEnabled &&
         react({
-          babel: {
-            only: [/Routes.(js|tsx|jsx)$/],
-            plugins: [[RedwoodRoutesAutoLoaderRscServerPlugin, {}]],
-            babelrc: false,
-            ignore: ['node_modules'],
-          },
+          babel: reactBabelConfig,
         }),
     ],
     build: {
