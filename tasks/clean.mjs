@@ -16,8 +16,3 @@ await rimraf('packages/**/dist', {
 await rimraf('packages/**/tsconfig.tsbuildinfo', {
   glob: true,
 })
-
-// `@redwoodjs/vite` bundles some react packages at build time.
-await rimraf('packages/vite/bundled/*.js', {
-  glob: true,
-})
