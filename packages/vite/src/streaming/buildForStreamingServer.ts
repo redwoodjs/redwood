@@ -3,6 +3,8 @@ import { cjsInterop } from 'vite-plugin-cjs-interop'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import { rscTransformEntryPlugin } from '../plugins/vite-plugin-rsc-transform-entry'
+
 export async function buildForStreamingServer({
   verbose = false,
 }: {
@@ -21,6 +23,7 @@ export async function buildForStreamingServer({
       cjsInterop({
         dependencies: ['@redwoodjs/**'],
       }),
+      rscTransformEntryPlugin(),
     ],
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often
