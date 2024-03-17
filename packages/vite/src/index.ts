@@ -146,13 +146,17 @@ export default function redwoodPluginVite(): PluginOption[] {
           id: /@redwoodjs\/web\/dist\/apollo\/sseLink/,
         },
       ]),
-    react({
-      babel: {
-        ...getWebSideDefaultBabelConfig({
-          forVite: true,
-          forRSC: rwConfig.experimental?.rsc?.enabled,
-        }),
-      },
-    }),
+    // Disabling during RSC because we need to use the react plugin in multiple
+    // different vite instances and it's not possible to use the plugin twice as
+    // it'll start doing things like injecting react-refresh runtime multiple times
+    !rwConfig.experimental.rsc?.enabled &&
+      react({
+        babel: {
+          ...getWebSideDefaultBabelConfig({
+            forVite: true,
+            forRSC: rwConfig.experimental.rsc?.enabled,
+          }),
+        },
+      }),
   ]
 }

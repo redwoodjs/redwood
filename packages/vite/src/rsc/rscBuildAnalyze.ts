@@ -1,5 +1,7 @@
+import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
+import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
@@ -34,6 +36,12 @@ export async function rscBuildAnalyze() {
   // the files, we don't use the generated built files for anything. Maybe we
   // can integrate this with building for the client, where we actually need
   // the build for something.
+
+  const reactBabelConfig = getWebSideDefaultBabelConfig({
+    forVite: true,
+    forRSC: true,
+  })
+
   await viteBuild({
     configFile: rwPaths.web.viteConfig,
     root: rwPaths.web.src,
@@ -43,6 +51,9 @@ export async function rscBuildAnalyze() {
     // debugging, but we're keeping it silent by default.
     logLevel: 'silent',
     plugins: [
+      react({
+        babel: reactBabelConfig,
+      }),
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
         (id) => serverEntryFileSet.add(id),

@@ -1,9 +1,11 @@
+import react from '@vitejs/plugin-react'
 import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
 import type { ViteDevServer } from 'vite'
 import { createServer as createViteServer } from 'vite'
 import { cjsInterop } from 'vite-plugin-cjs-interop'
 
+import { RedwoodRoutesAutoLoaderRscClientPlugin } from '@redwoodjs/babel-config'
 import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import type { Paths } from '@redwoodjs/project-config'
@@ -59,6 +61,15 @@ async function createServer() {
         dependencies: ['@redwoodjs/**'],
       }),
       rscEnabled && rscRoutesAutoLoader(),
+      rscEnabled &&
+        react({
+          babel: {
+            only: [/Routes.(js|tsx|jsx)$/],
+            plugins: [[RedwoodRoutesAutoLoaderRscClientPlugin, {}]],
+            babelrc: false,
+            ignore: ['node_modules'],
+          },
+        }),
     ],
     server: { middlewareMode: true },
     logLevel: 'info',
