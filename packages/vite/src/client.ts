@@ -27,6 +27,7 @@ export function renderFromRscServer<TProps>(rscId: string) {
   // function during SSR
   if (typeof window === 'undefined') {
     // Temporarily skip rendering this component during SSR
+    // return null
     return null
   }
 
