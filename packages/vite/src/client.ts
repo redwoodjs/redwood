@@ -23,13 +23,6 @@ const BASE_PATH = '/rw-rsc/'
 export function renderFromRscServer<TProps>(rscId: string) {
   console.log('serve rscId', rscId)
 
-  // TODO (RSC): Remove this when we have a babel plugin to call another
-  // function during SSR
-  if (typeof window === 'undefined') {
-    // Temporarily skip rendering this component during SSR
-    return null
-  }
-
   type SetRerender = (
     rerender: (next: [Thenable<ReactElement>, string]) => void,
   ) => () => void
