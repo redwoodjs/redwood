@@ -7,6 +7,8 @@ import { mergeConfig } from 'vite'
 import type { Config, Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { rscWebpackShims } from '../lib/rscWebpackShims.js'
+
 import { getEnvVarDefinitions } from './envVarDefinitions.js'
 
 /**
@@ -127,6 +129,11 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
           input: getRollupInput(!!env.isSsrBuild),
         },
       },
+      ...(rscEnabled && {
+        esbuild: {
+          banner: rscWebpackShims,
+        },
+      }),
       // @MARK: do not set buildSsrCjsExternalHeuristics here
       // because rsc builds want false, client and server build wants true
       optimizeDeps: {
@@ -142,6 +149,11 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
           define: {
             global: 'globalThis',
           },
+          ...(rscEnabled && {
+            banner: {
+              js: rscWebpackShims,
+            },
+          }),
         },
       },
     }
