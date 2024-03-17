@@ -319,7 +319,7 @@ See below for more info on route parameters.
 To match variable data in a path, you can use route parameters, which are specified by a parameter name surrounded by curly braces:
 
 ```jsx title="Routes.js"
-<Route path="/user/{id}>" page={UserPage} name="user" />
+<Route path="/user/{id}" page={UserPage} name="user" />
 ```
 
 This route will match URLs like `/user/7` or `/user/mojombo`. You can have as many route parameters as you like:
