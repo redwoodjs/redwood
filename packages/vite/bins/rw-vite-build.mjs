@@ -42,7 +42,9 @@ const buildWebSide = async (webDir) => {
     throw new Error('Could not locate your web/vite.config.{js,ts} file')
   }
 
-  process.env.NODE_ENV = 'production'
+  if (!process.env.NODE_ENV) {
+    process.env.NODE_ENV = 'production'
+  }
 
   if (getConfig().experimental?.streamingSsr?.enabled) {
     // Webdir checks handled in the rwjs/vite package in new build system

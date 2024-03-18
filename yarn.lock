@@ -7639,7 +7639,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
-    react: "npm:0.0.0-experimental-e5205658f-20230913"
+    react: "npm:18.3.0-canary-a870b2d54-20240314"
     typescript: "npm:5.3.3"
     vitest: "npm:1.3.1"
   peerDependencies:
@@ -7692,7 +7692,7 @@ __metadata:
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
-    react: "npm:0.0.0-experimental-e5205658f-20230913"
+    react: "npm:18.3.0-canary-a870b2d54-20240314"
     typescript: "npm:5.3.3"
     vitest: "npm:1.3.1"
   peerDependencies:
@@ -7742,7 +7742,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
-    react: "npm:0.0.0-experimental-e5205658f-20230913"
+    react: "npm:18.3.0-canary-a870b2d54-20240314"
     typescript: "npm:5.3.3"
     vitest: "npm:1.3.1"
   peerDependencies:
@@ -7818,7 +7818,7 @@ __metadata:
     core-js: "npm:3.35.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:0.0.0-experimental-e5205658f-20230913"
+    react: "npm:18.3.0-canary-a870b2d54-20240314"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
@@ -7867,7 +7867,7 @@ __metadata:
     firebase: "npm:10.7.0"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:0.0.0-experimental-e5205658f-20230913"
+    react: "npm:18.3.0-canary-a870b2d54-20240314"
     typescript: "npm:5.3.3"
   peerDependencies:
     firebase: 10.7.0
@@ -7917,7 +7917,7 @@ __metadata:
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
-    react: "npm:0.0.0-experimental-e5205658f-20230913"
+    react: "npm:18.3.0-canary-a870b2d54-20240314"
     typescript: "npm:5.3.3"
     vitest: "npm:1.3.1"
   peerDependencies:
@@ -7966,7 +7966,7 @@ __metadata:
     "@supabase/supabase-js": "npm:2.39.7"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
-    react: "npm:0.0.0-experimental-e5205658f-20230913"
+    react: "npm:18.3.0-canary-a870b2d54-20240314"
     typescript: "npm:5.3.3"
     vitest: "npm:1.3.1"
   peerDependencies:
@@ -8019,7 +8019,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
-    react: "npm:0.0.0-experimental-e5205658f-20230913"
+    react: "npm:18.3.0-canary-a870b2d54-20240314"
     supertokens-auth-react: "npm:0.34.0"
     typescript: "npm:5.3.3"
     vitest: "npm:1.3.1"
@@ -8041,7 +8041,7 @@ __metadata:
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     msw: "npm:1.3.2"
-    react: "npm:0.0.0-experimental-e5205658f-20230913"
+    react: "npm:18.3.0-canary-a870b2d54-20240314"
     typescript: "npm:5.3.3"
   languageName: unknown
   linkType: soft
@@ -8418,13 +8418,13 @@ __metadata:
     graphql: "npm:16.8.1"
     nodemon: "npm:3.0.2"
     pascalcase: "npm:1.0.0"
-    react: "npm:0.0.0-experimental-e5205658f-20230913"
-    react-dom: "npm:0.0.0-experimental-e5205658f-20230913"
+    react: "npm:18.3.0-canary-a870b2d54-20240314"
+    react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
     react-hook-form: "npm:7.49.3"
     typescript: "npm:5.3.3"
     vitest: "npm:1.3.1"
   peerDependencies:
-    react: 0.0.0-experimental-e5205658f-20230913
+    react: 18.3.0-canary-a870b2d54-20240314
   languageName: unknown
   linkType: soft
 
@@ -8649,8 +8649,8 @@ __metadata:
     typescript: "npm:5.3.3"
     vitest: "npm:1.3.1"
   peerDependencies:
-    react: 0.0.0-experimental-e5205658f-20230913
-    react-dom: 0.0.0-experimental-e5205658f-20230913
+    react: 18.3.0-canary-a870b2d54-20240314
+    react-dom: 18.3.0-canary-a870b2d54-20240314
   languageName: unknown
   linkType: soft
 
@@ -8730,13 +8730,13 @@ __metadata:
     core-js: "npm:3.35.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:0.0.0-experimental-e5205658f-20230913"
-    react-dom: "npm:0.0.0-experimental-e5205658f-20230913"
+    react: "npm:18.3.0-canary-a870b2d54-20240314"
+    react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
     tstyche: "npm:1.0.0"
     typescript: "npm:5.3.3"
   peerDependencies:
-    react: 0.0.0-experimental-e5205658f-20230913
-    react-dom: 0.0.0-experimental-e5205658f-20230913
+    react: 18.3.0-canary-a870b2d54-20240314
+    react-dom: 18.3.0-canary-a870b2d54-20240314
   languageName: unknown
   linkType: soft
 
@@ -8885,8 +8885,8 @@ __metadata:
     glob: "npm:10.3.10"
     http-proxy-middleware: "npm:2.0.6"
     isbot: "npm:3.7.1"
-    react: "npm:0.0.0-experimental-e5205658f-20230913"
-    react-server-dom-webpack: "npm:0.0.0-experimental-e5205658f-20230913"
+    react: "npm:18.3.0-canary-a870b2d54-20240314"
+    react-server-dom-webpack: "npm:18.3.0-canary-a870b2d54-20240314"
     rollup: "npm:4.12.1"
     tsx: "npm:4.6.2"
     typescript: "npm:5.3.3"
@@ -8944,8 +8944,8 @@ __metadata:
     graphql-sse: "npm:2.5.2"
     graphql-tag: "npm:2.12.6"
     nodemon: "npm:3.0.2"
-    react: "npm:0.0.0-experimental-e5205658f-20230913"
-    react-dom: "npm:0.0.0-experimental-e5205658f-20230913"
+    react: "npm:18.3.0-canary-a870b2d54-20240314"
+    react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
     react-helmet-async: "npm:2.0.3"
     react-hot-toast: "npm:2.4.1"
     stacktracey: "npm:2.1.8"
@@ -8954,8 +8954,8 @@ __metadata:
     typescript: "npm:5.3.3"
     vitest: "npm:1.3.1"
   peerDependencies:
-    react: 0.0.0-experimental-e5205658f-20230913
-    react-dom: 0.0.0-experimental-e5205658f-20230913
+    react: 18.3.0-canary-a870b2d54-20240314
+    react-dom: 18.3.0-canary-a870b2d54-20240314
   bin:
     cross-env: ./dist/bins/cross-env.js
     msw: ./dist/bins/msw.js
@@ -11554,11 +11554,11 @@ __metadata:
   linkType: hard
 
 "@types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.2.19":
-  version: 18.2.19
-  resolution: "@types/react-dom@npm:18.2.19"
+  version: 18.2.21
+  resolution: "@types/react-dom@npm:18.2.21"
   dependencies:
     "@types/react": "npm:*"
-  checksum: 10c0/88d7c6daa4659f661d0c97985d9fca492f24b421a34bb614dcd94c343aed7bea121463149e97fb01ecaa693be17b7d1542cf71ddb1705f3889a81eb2639a88aa
+  checksum: 10c0/a887b4b647071df48173f054854713b68fdacfceeba7fa14f64ba26688d7d43574d7dc88a2a346e28f2e667eeab1b9bdbcad8a54353869835e52638607f61ff5
   languageName: node
   linkType: hard
 
@@ -28863,18 +28863,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:0.0.0-experimental-e5205658f-20230913":
-  version: 0.0.0-experimental-e5205658f-20230913
-  resolution: "react-dom@npm:0.0.0-experimental-e5205658f-20230913"
-  dependencies:
-    loose-envify: "npm:^1.1.0"
-    scheduler: "npm:0.0.0-experimental-e5205658f-20230913"
-  peerDependencies:
-    react: 0.0.0-experimental-e5205658f-20230913
-  checksum: 10c0/b8e0e0edf05161a39cd8495ac11dbebccda0e69245d1f33d07697122e65649a1f0539ff8ad7277d833aabc9cbee8da9d80de14d0766262412da5bf824d5eb823
-  languageName: node
-  linkType: hard
-
 "react-dom@npm:18.2.0":
   version: 18.2.0
   resolution: "react-dom@npm:18.2.0"
@@ -28884,6 +28872,17 @@ __metadata:
   peerDependencies:
     react: ^18.2.0
   checksum: 10c0/66dfc5f93e13d0674e78ef41f92ed21dfb80f9c4ac4ac25a4b51046d41d4d2186abc915b897f69d3d0ebbffe6184e7c5876f2af26bfa956f179225d921be713a
+  languageName: node
+  linkType: hard
+
+"react-dom@npm:18.3.0-canary-a870b2d54-20240314":
+  version: 18.3.0-canary-a870b2d54-20240314
+  resolution: "react-dom@npm:18.3.0-canary-a870b2d54-20240314"
+  dependencies:
+    scheduler: "npm:0.24.0-canary-a870b2d54-20240314"
+  peerDependencies:
+    react: 18.3.0-canary-a870b2d54-20240314
+  checksum: 10c0/6896473a3a7ed802f6b85c9601c64b0f1fe58ffbf3829ee5ac819a503fa16f5ec4d39b4b3f188cb2bf9ba9fb74cbdc28844c03cc2a4208303595220e5877d1b5
   languageName: node
   linkType: hard
 
@@ -29013,18 +29012,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-server-dom-webpack@npm:0.0.0-experimental-e5205658f-20230913":
-  version: 0.0.0-experimental-e5205658f-20230913
-  resolution: "react-server-dom-webpack@npm:0.0.0-experimental-e5205658f-20230913"
+"react-server-dom-webpack@npm:18.3.0-canary-a870b2d54-20240314":
+  version: 18.3.0-canary-a870b2d54-20240314
+  resolution: "react-server-dom-webpack@npm:18.3.0-canary-a870b2d54-20240314"
   dependencies:
     acorn-loose: "npm:^8.3.0"
-    loose-envify: "npm:^1.1.0"
     neo-async: "npm:^2.6.1"
   peerDependencies:
-    react: 0.0.0-experimental-e5205658f-20230913
-    react-dom: 0.0.0-experimental-e5205658f-20230913
+    react: 18.3.0-canary-a870b2d54-20240314
+    react-dom: 18.3.0-canary-a870b2d54-20240314
     webpack: ^5.59.0
-  checksum: 10c0/94c29f986209c3d174a3b200526a8f1e8e10c9c831d29e9938e5f6e08146020a37a5ec19410af73d21e32906c35c7c1f68b044c720ef5d785d4de6cbb0438a88
+  checksum: 10c0/9040df3d8549898dbf4afd7bc86a01948e47b6eda998bda0e663a69fefa6922fa5977aaec0d0795938aac62c97d1da9307636051d0d12ec429c3c416cad23ffb
   languageName: node
   linkType: hard
 
@@ -29045,21 +29043,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:0.0.0-experimental-e5205658f-20230913":
-  version: 0.0.0-experimental-e5205658f-20230913
-  resolution: "react@npm:0.0.0-experimental-e5205658f-20230913"
-  dependencies:
-    loose-envify: "npm:^1.1.0"
-  checksum: 10c0/69f384cd192d6fc83bd77457b539c171cd89b44fd105c67c77a2c57b237c1068c598470ddf524084bdb7d9b0bc16362918493dbc3fbcb909af8edd92c6be9759
-  languageName: node
-  linkType: hard
-
 "react@npm:18.2.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
   dependencies:
     loose-envify: "npm:^1.1.0"
   checksum: 10c0/b562d9b569b0cb315e44b48099f7712283d93df36b19a39a67c254c6686479d3980b7f013dc931f4a5a3ae7645eae6386b4aa5eea933baa54ecd0f9acb0902b8
+  languageName: node
+  linkType: hard
+
+"react@npm:18.3.0-canary-a870b2d54-20240314":
+  version: 18.3.0-canary-a870b2d54-20240314
+  resolution: "react@npm:18.3.0-canary-a870b2d54-20240314"
+  checksum: 10c0/f89b119c6fefc0956c815ad99e39ba83bc44485c4187143003a01906ef1d750a02f0018210eb192d1d0bdcd28a280139bf399bc59c972fc9e8f9938ee8c63387
   languageName: node
   linkType: hard
 
@@ -30188,12 +30184,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:0.0.0-experimental-e5205658f-20230913":
-  version: 0.0.0-experimental-e5205658f-20230913
-  resolution: "scheduler@npm:0.0.0-experimental-e5205658f-20230913"
-  dependencies:
-    loose-envify: "npm:^1.1.0"
-  checksum: 10c0/20475be7524bb89002818cfc0f54af122c0e2c07c07ddb92275e10c0e8d1a51a9c7ca3b4b95e9b27017da4e22f1510c478afe08becc1073decfd03ae5823f452
+"scheduler@npm:0.24.0-canary-a870b2d54-20240314":
+  version: 0.24.0-canary-a870b2d54-20240314
+  resolution: "scheduler@npm:0.24.0-canary-a870b2d54-20240314"
+  checksum: 10c0/ac70f95c1d0cbf6de8bf0d1b2f1c8bb063d0ea0ce9410de720b9eeb17d85dc18bc9bc3c2ab89332cb0d7e746b68f7599ccc4915bcf3ea3a4541797bb1f2ec587
   languageName: node
   linkType: hard
 
