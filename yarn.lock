@@ -4476,15 +4476,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/merge@npm:9.0.1, @graphql-tools/merge@npm:^9.0.1":
-  version: 9.0.1
-  resolution: "@graphql-tools/merge@npm:9.0.1"
+"@graphql-tools/merge@npm:9.0.3, @graphql-tools/merge@npm:^9.0.3":
+  version: 9.0.3
+  resolution: "@graphql-tools/merge@npm:9.0.3"
   dependencies:
-    "@graphql-tools/utils": "npm:^10.0.10"
+    "@graphql-tools/utils": "npm:^10.0.13"
     tslib: "npm:^2.4.0"
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/cbfcb2c10490a11417991e8b61b8df2eba73a2c576e57cbf2d928902030d4391122536b9442bf042609ec24376b79b8bc6d9117e137dd8db2255ed90613acbc7
+  checksum: 10c0/ce2a6763488dbeeb778824780037ce5a00fd8c4a6337078d52c4fb4bcac28759b801ede280014d281472ee92416114e4c0eca621c618db617cb351df7d751570
   languageName: node
   linkType: hard
 
@@ -4576,17 +4576,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/schema@npm:10.0.2, @graphql-tools/schema@npm:^10.0.0":
-  version: 10.0.2
-  resolution: "@graphql-tools/schema@npm:10.0.2"
+"@graphql-tools/schema@npm:10.0.3, @graphql-tools/schema@npm:^10.0.0":
+  version: 10.0.3
+  resolution: "@graphql-tools/schema@npm:10.0.3"
   dependencies:
-    "@graphql-tools/merge": "npm:^9.0.1"
-    "@graphql-tools/utils": "npm:^10.0.10"
+    "@graphql-tools/merge": "npm:^9.0.3"
+    "@graphql-tools/utils": "npm:^10.0.13"
     tslib: "npm:^2.4.0"
     value-or-promise: "npm:^1.0.12"
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/3d71117c8d8ed491aa5b988bcdfcc1a7ca8cea8638b37083af2665a0dbb95e1255961a8a43658538ad33b83d621812886a4626ad7a5333d7d9e6c62304b52cb2
+  checksum: 10c0/420bfa29d00927da085a3e521d7d6de5694f3abcdf5ba18655cc2a6b6145816d74503b13ba3ea15c7c65411023c9d81cfb73e7d49aa35ccfb91943f16ab9db8f
   languageName: node
   linkType: hard
 
@@ -4627,9 +4627,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:10.0.11, @graphql-tools/utils@npm:^10.0.0, @graphql-tools/utils@npm:^10.0.10":
-  version: 10.0.11
-  resolution: "@graphql-tools/utils@npm:10.0.11"
+"@graphql-tools/utils@npm:10.1.2, @graphql-tools/utils@npm:^10.0.0, @graphql-tools/utils@npm:^10.0.13":
+  version: 10.1.2
+  resolution: "@graphql-tools/utils@npm:10.1.2"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     cross-inspect: "npm:1.0.0"
@@ -4637,7 +4637,7 @@ __metadata:
     tslib: "npm:^2.4.0"
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/61c464541fe0b17d26cec83f93b5f4a3af352e10c22878c5449fbea5f22c68f1e0c78ddc0a93f480da42dba80fb41ebfe99920915c389ac132a0217ef808d2bc
+  checksum: 10c0/ae78ef4f6c8e58e0ca4023b66229ddd1263caee58ca8353cc4dca8ded5c751f4f2711ff9fbe830dbd84f05ae850db96c6098012644d47142b34ad2d4e96731ae
   languageName: node
   linkType: hard
 
@@ -8456,9 +8456,9 @@ __metadata:
     "@envelop/testing": "npm:7.0.0"
     "@envelop/types": "npm:5.0.0"
     "@escape.tech/graphql-armor": "npm:2.3.1"
-    "@graphql-tools/merge": "npm:9.0.1"
-    "@graphql-tools/schema": "npm:10.0.2"
-    "@graphql-tools/utils": "npm:10.0.11"
+    "@graphql-tools/merge": "npm:9.0.3"
+    "@graphql-tools/schema": "npm:10.0.3"
+    "@graphql-tools/utils": "npm:10.1.2"
     "@graphql-yoga/plugin-persisted-operations": "npm:3.1.1"
     "@opentelemetry/api": "npm:1.7.0"
     "@redwoodjs/api": "workspace:*"
@@ -8678,8 +8678,8 @@ __metadata:
     "@envelop/live-query": "npm:7.0.0"
     "@envelop/testing": "npm:7.0.0"
     "@envelop/types": "npm:5.0.0"
-    "@graphql-tools/schema": "npm:10.0.2"
-    "@graphql-tools/utils": "npm:10.0.11"
+    "@graphql-tools/schema": "npm:10.0.3"
+    "@graphql-tools/utils": "npm:10.1.2"
     "@graphql-yoga/plugin-defer-stream": "npm:3.1.1"
     "@graphql-yoga/plugin-graphql-sse": "npm:3.1.1"
     "@graphql-yoga/redis-event-target": "npm:3.0.0"
