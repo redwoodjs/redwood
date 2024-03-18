@@ -7963,14 +7963,14 @@ __metadata:
     "@babel/cli": "npm:7.23.9"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.0"
-    "@supabase/supabase-js": "npm:2.39.7"
+    "@supabase/supabase-js": "npm:2.39.8"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
     typescript: "npm:5.3.3"
     vitest: "npm:1.3.1"
   peerDependencies:
-    "@supabase/supabase-js": 2.39.7
+    "@supabase/supabase-js": 2.39.8
   languageName: unknown
   linkType: soft
 
@@ -10147,9 +10147,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:2.39.7":
-  version: 2.39.7
-  resolution: "@supabase/supabase-js@npm:2.39.7"
+"@supabase/supabase-js@npm:2.39.8":
+  version: 2.39.8
+  resolution: "@supabase/supabase-js@npm:2.39.8"
   dependencies:
     "@supabase/functions-js": "npm:2.1.5"
     "@supabase/gotrue-js": "npm:2.62.2"
@@ -10157,7 +10157,7 @@ __metadata:
     "@supabase/postgrest-js": "npm:1.9.2"
     "@supabase/realtime-js": "npm:2.9.3"
     "@supabase/storage-js": "npm:2.5.5"
-  checksum: 10c0/dfa931bba8e30ac8541783c6e527fda3df5c86b4ad5b5f5a9b02b459a21dca2bf4eab8c18648f3c7f409cf98a03f0479a96cac299420e221b7c63f7566ed2301
+  checksum: 10c0/7bb80941fddc434eebd87b2feb3e8e8477692eab70f7ad0b4640d5a39e71255569e9d88bb29557a5607cb248473a54a3c7b35368a3e85ab107aed9d195857ac3
   languageName: node
   linkType: hard
 
