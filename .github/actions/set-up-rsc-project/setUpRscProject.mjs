@@ -69,10 +69,6 @@ async function setUpRscProject(
     REDWOOD_FRAMEWORK_PATH,
     'packages/cli/dist/index.js'
   )
-  const rwfwBinPath = path.join(
-    REDWOOD_FRAMEWORK_PATH,
-    'packages/cli/dist/rwfw.js'
-  )
 
   console.log(`Creating project at ${rscProjectPath}`)
   console.log()
@@ -95,14 +91,10 @@ async function setUpRscProject(
   await execInProject(`node ${rwBinPath} experimental setup-rsc`)
   console.log()
 
-  console.log(`Copying over framework files to ${rscProjectPath}`)
-  await execInProject(`node ${rwfwBinPath} project:copy`, {
+  console.log('Syncing framework')
+  await execInProject('yarn rwfw project:tarsync --verbose', {
     env: { RWFW_PATH: REDWOOD_FRAMEWORK_PATH },
   })
-  console.log()
-
-  console.log('Installing dependencies')
-  await execInProject('yarn install')
   console.log()
 
   console.log(`Building project in ${rscProjectPath}`)

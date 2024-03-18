@@ -111,6 +111,8 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
         },
       },
       build: {
+        // TODO (RSC): Remove `minify: false` when we don't need to debug as often
+        minify: false,
         // NOTE this gets overridden when build gets called anyway!
         outDir:
           // @MARK: For RSC and Streaming, we build to dist/client directory
