@@ -36,6 +36,8 @@ export default function redwoodPluginVite(): PluginOption[] {
     .readFileSync(path.join(rwPaths.api.base, 'package.json'), 'utf-8')
     .includes('@redwoodjs/realtime')
 
+  const streamingEnabled = rwConfig.experimental.streamingSsr.enabled
+
   return [
     {
       name: 'redwood-plugin-vite-html-env',
@@ -130,7 +132,7 @@ export default function redwoodPluginVite(): PluginOption[] {
       config: getMergedConfig(rwConfig, rwPaths),
     },
     // We can remove when streaming is stable
-    rwConfig.experimental.streamingSsr.enabled && swapApolloProvider(),
+    streamingEnabled && swapApolloProvider(),
     handleJsAsJsx(),
     // Remove the splash-page from the bundle.
     removeFromBundle([
@@ -148,7 +150,7 @@ export default function redwoodPluginVite(): PluginOption[] {
       babel: {
         ...getWebSideDefaultBabelConfig({
           forVite: true,
-          forRscClient: rwConfig.experimental.rsc?.enabled,
+          forRSC: rwConfig.experimental?.rsc?.enabled,
         }),
       },
     }),

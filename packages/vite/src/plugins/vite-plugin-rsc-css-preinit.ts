@@ -7,6 +7,7 @@ import type { NodePath } from '@babel/traverse'
 import traverse from '@babel/traverse'
 import * as t from '@babel/types'
 import type { Plugin } from 'vite'
+import { normalizePath } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -94,12 +95,11 @@ export function rscCssPreinitPlugin(
 
   // This plugin is build only and we expect the client build manifest to be
   // available at this point. We use it to find the correct css assets names
-  const clientBuildManifest = JSON.parse(
-    fs.readFileSync(
-      path.join(getPaths().web.distClient, 'client-build-manifest.json'),
-      'utf-8',
-    ),
+  const manifestPath = path.join(
+    getPaths().web.distClient,
+    'client-build-manifest.json',
   )
+  const clientBuildManifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'))
 
   // We generate a mapping of all the css assets that a client build manifest
   // entry contains (looking deep into the tree of entries)
@@ -123,7 +123,7 @@ export function rscCssPreinitPlugin(
     apply: 'build',
     transform: async function (code, id) {
       // We only care about code in the project itself
-      if (!id.startsWith(webSrc)) {
+      if (!id.startsWith(normalizePath(webSrc))) {
         return null
       }
 

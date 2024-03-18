@@ -1,11 +1,10 @@
-// import path from 'node:path'
-
 import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
 import { rscCssPreinitPlugin } from '../plugins/vite-plugin-rsc-css-preinit.js'
+import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
 
@@ -49,8 +48,9 @@ export async function rscBuildForServer(
       // it's likely way less efficient because we have to do so many files.
       // Files included in `noExternal` are files we want Vite to analyze
       noExternal: /^(?!node:)/,
-      // Can't inline prisma client
-      external: ['@prisma/client'],
+      // Can't inline prisma client (db calls fail at runtime) or react-dom
+      // (css preinit failure)
+      external: ['@prisma/client', 'react-dom'],
       resolve: {
         // These conditions are used in the plugin pipeline, and only affect non-externalized
         // dependencies during the SSR build. Which because of `noExternal: /^(?!node:)/` means
@@ -68,8 +68,11 @@ export async function rscBuildForServer(
       rscTransformUseClientPlugin(clientEntryFiles),
       rscTransformUseServerPlugin(),
       rscCssPreinitPlugin(clientEntryFiles, componentImportMap),
+      rscRoutesAutoLoader(),
     ],
     build: {
+      // TODO (RSC): Remove `minify: false` when we don't need to debug as often
+      minify: false,
       ssr: true,
       ssrEmitAssets: true,
       outDir: rwPaths.web.distRsc,
