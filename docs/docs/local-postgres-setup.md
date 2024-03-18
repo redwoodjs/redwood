@@ -21,7 +21,7 @@ brew install postgresql@14
 > Obviously, warning! This resource will teach you how to wipe the various Postgres installs off your machine. Please only do it if you know you can!
 
 ### Windows and Other Platforms
-If you're using another platform, see Prisma's [Data Guide](https://www.prisma.io/docs/guides/database-workflows/setting-up-a-database/postgresql) for detailed instructions on how to get up and running.
+If you're using another platform, see Prisma's [Data Guide](https://www.prisma.io/dataguide/postgresql/setting-up-a-local-postgresql-database) for detailed instructions on how to get up and running.
 
 ## Creating a database
 
