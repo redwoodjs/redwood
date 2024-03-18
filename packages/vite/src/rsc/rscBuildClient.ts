@@ -3,6 +3,7 @@ import { build as viteBuild } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
+import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { ensureProcessDirWeb } from '../utils.js'
 
 /**
@@ -31,6 +32,8 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
   const clientBuildOutput = await viteBuild({
     envFile: false,
     build: {
+      // TODO (RSC): Remove `minify: false` when we don't need to debug as often
+      minify: false,
       outDir: rwPaths.web.distClient,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
       rollupOptions: {
@@ -62,6 +65,7 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     esbuild: {
       logLevel: 'debug',
     },
+    plugins: [rscRoutesAutoLoader()],
   })
 
   if (!('output' in clientBuildOutput)) {

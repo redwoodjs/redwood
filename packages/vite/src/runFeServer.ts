@@ -17,7 +17,7 @@ import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { registerFwGlobals } from './lib/registerGlobals.js'
+import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { setClientEntries } from './rsc/rscWorkerCommunication.js'
@@ -48,7 +48,7 @@ export async function runFeServer() {
   const rwConfig = getConfig()
   const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
-  registerFwGlobals()
+  registerFwGlobalsAndShims()
 
   if (rscEnabled) {
     try {

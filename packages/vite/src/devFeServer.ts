@@ -2,14 +2,16 @@ import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
 import type { ViteDevServer } from 'vite'
 import { createServer as createViteServer } from 'vite'
+import { cjsInterop } from 'vite-plugin-cjs-interop'
 
 import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { registerFwGlobals } from './lib/registerGlobals.js'
+import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
+import { rscRoutesAutoLoader } from './plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
@@ -21,10 +23,12 @@ globalThis.__REDWOOD__PRERENDER_PAGES = {}
 async function createServer() {
   ensureProcessDirWeb()
 
-  registerFwGlobals()
+  registerFwGlobalsAndShims()
 
   const app = express()
   const rwPaths = getPaths()
+
+  const rscEnabled = getConfig().experimental.rsc?.enabled ?? false
 
   // ~~~ Dev time validations ~~~~
   // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
@@ -50,6 +54,12 @@ async function createServer() {
   // can take control
   const vite = await createViteServer({
     configFile: rwPaths.web.viteConfig,
+    plugins: [
+      cjsInterop({
+        dependencies: ['@redwoodjs/**'],
+      }),
+      rscEnabled && rscRoutesAutoLoader(),
+    ],
     server: { middlewareMode: true },
     logLevel: 'info',
     clearScreen: false,
