@@ -1,16 +1,9 @@
-import { describe, it } from 'node:test'
-
-import { RuleTester } from 'eslint'
+import { RuleTester } from '@typescript-eslint/rule-tester'
 
 import { serviceTypeAnnotations } from '../service-type-annotations.js'
 
-// @ts-expect-error - Types are wrong
-RuleTester.describe = describe
-// @ts-expect-error - Types are wrong
-RuleTester.it = it
-
 const ruleTester = new RuleTester({
-  parser: require.resolve('@typescript-eslint/parser'),
+  parser: '@typescript-eslint/parser',
 })
 
 ruleTester.run('service-type-annotations', serviceTypeAnnotations, {
