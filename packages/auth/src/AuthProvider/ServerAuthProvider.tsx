@@ -52,6 +52,8 @@ export const ServerAuthProvider = ({
     sanitizeServerAuthState(value),
   )};`
 
+  console.log('render ServerAuthProvider', React)
+
   return (
     <>
       <script

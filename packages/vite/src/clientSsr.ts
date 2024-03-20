@@ -154,7 +154,7 @@ const transformRsfId = (prefixToRemove: string) => {
 // const moduleCache = (globalThis as any).__webpack_module_cache__
 
 export function renderFromDist<TProps>(rscId: string) {
-  console.log('serve rscId', rscId)
+  console.log('renderFromDist rscId', rscId)
 
   // Create temporary client component that wraps the component (Page, most
   // likely) returned by the `createFromReadableStream` call.
@@ -217,49 +217,50 @@ export function renderFromDist<TProps>(rscId: string) {
     // const streamString = await new Response(stream).text()
     // console.log('streamString', streamString)
 
-    const moduleMap = new Proxy(
-      {},
-      {
-        get(_target, filePath: string) {
-          return new Proxy(
-            {},
-            {
-              get(_target, name: string) {
-                console.log('nested proxy filePath', filePath)
-                // const file = filePath.slice(config.basePath.length)
-                // // TODO too long, we need to refactor this logic
-                // const id = file
-                // if (!moduleLoading.has(id)) {
-                //   moduleLoading.set(
-                //     id,
-                //     opts
-                //       .loadModule(joinPath(config.ssrDir, id))
-                //       .then((m: any) => {
-                //         moduleCache.set(id, m)
-                //       }),
-                //   )
-                // }
-                const id = filePath.split('/').at(-1)
-                console.log('nested proxy id', id)
-                return { id, chunks: [id], name }
-              },
-            },
-          )
-        },
-      },
-    )
+    // const moduleMap = new Proxy(
+    //   {},
+    //   {
+    //     get(_target, filePath: string) {
+    //       return new Proxy(
+    //         {},
+    //         {
+    //           get(_target, name: string) {
+    //             console.log('nested proxy filePath', filePath)
+    //             // const file = filePath.slice(config.basePath.length)
+    //             // // TODO too long, we need to refactor this logic
+    //             // const id = file
+    //             // if (!moduleLoading.has(id)) {
+    //             //   moduleLoading.set(
+    //             //     id,
+    //             //     opts
+    //             //       .loadModule(joinPath(config.ssrDir, id))
+    //             //       .then((m: any) => {
+    //             //         moduleCache.set(id, m)
+    //             //       }),
+    //             //   )
+    //             // }
+    //             const id = filePath.split('/').at(-1)
+    //             console.log('nested proxy id', id)
+    //             return { id, chunks: [id], name }
+    //           },
+    //         },
+    //       )
+    //     },
+    //   },
+    // )
 
-    const { createFromReadableStream } = await import(
-      'react-server-dom-webpack/client.edge'
-    )
+    // const { createFromReadableStream } = await import(
+    //   'react-server-dom-webpack/client.edge'
+    // )
 
-    // Like `createFromFetch`
-    const data = createFromReadableStream(stream, {
-      ssrManifest: { moduleMap, moduleLoading: null },
-    })
+    // // Like `createFromFetch`
+    // const data = createFromReadableStream(stream, {
+    //   ssrManifest: { moduleMap, moduleLoading: null },
+    // })
 
     // return use(data)
-    return data
+    // return data
+    return 'Loading...'
   }
 
   return SsrComponent
