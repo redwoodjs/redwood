@@ -19,6 +19,11 @@ export async function buildForStreamingServer({
     throw new Error('Vite config not found')
   }
 
+  // TODO (RSC): Remove this when SSR+RSC is the default
+  if (!rwPaths.web.entryServer) {
+    throw new Error('Server entry point not found')
+  }
+
   await viteBuild({
     configFile: rwPaths.web.viteConfig,
     plugins: [
@@ -35,12 +40,33 @@ export async function buildForStreamingServer({
           },
         }),
     ],
+    ssr: {
+      // noExternal: 'react-dom/server.edge',
+      noExternal: /^(?!node:)/,
+    },
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often
       minify: false,
       outDir: rwPaths.web.distServer,
       ssr: true,
       emptyOutDir: true,
+      rollupOptions: {
+        input: {
+          'rd-server': 'react-dom/server.edge',
+          'entry.server': rwPaths.web.entryServer,
+          // We need the document for React's fallback
+          Document: rwPaths.web.document,
+        },
+        // output: {
+        //   entryFileNames: (chunkInfo) => {
+        //     if (chunkInfo.name === 'rd-server') {
+        //       return 'rd-server.mjs'
+        //     } else {
+        //       return '[name].mjs'
+        //     }
+        //   },
+        // },
+      },
     },
     envFile: false,
     logLevel: verbose ? 'info' : 'warn',
