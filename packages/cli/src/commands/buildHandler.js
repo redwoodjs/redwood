@@ -63,10 +63,13 @@ export const handler = async ({
     return
   }
 
+  const prismaSchemaExists = fs.existsSync(rwjsPaths.api.dbSchema)
   const prerenderRoutes =
     prerender && side.includes('web') ? detectPrerenderRoutes() : []
   const shouldGeneratePrismaClient =
-    prisma && (side.includes('api') || prerenderRoutes.length > 0)
+    prisma &&
+    prismaSchemaExists &&
+    (side.includes('api') || prerenderRoutes.length > 0)
 
   const tasks = [
     shouldGeneratePrismaClient && {
@@ -201,7 +204,7 @@ export const handler = async ({
   await timedTelemetry(process.argv, { type: 'build' }, async () => {
     await jobs.run()
 
-    if (side.includes('web') && prerender) {
+    if (side.includes('web') && prerender && prismaSchemaExists) {
       // This step is outside Listr so that it prints clearer, complete messages
       await triggerPrerender()
     }
