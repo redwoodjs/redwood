@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 
 import { Helmet as HelmetHead } from 'react-helmet-async'
