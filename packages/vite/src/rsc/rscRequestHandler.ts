@@ -1,13 +1,14 @@
 import busboy from 'busboy'
 import type { Request, Response } from 'express'
-import RSDWServer from 'react-server-dom-webpack/server.node.unbundled'
 
+import {
+  decodeReply,
+  decodeReplyFromBusboy,
+} from '../bundled/react-server-dom-webpack.server'
 import { hasStatusCode } from '../lib/StatusError.js'
 
 import { sendRscFlightToStudio } from './rscStudioHandlers.js'
 import { renderRsc } from './rscWorkerCommunication.js'
-
-const { decodeReply, decodeReplyFromBusboy } = RSDWServer
 
 export function createRscRequestHandler() {
   // This is mounted at /rw-rsc, so will have /rw-rsc stripped from req.url
@@ -53,7 +54,8 @@ export function createRscRequestHandler() {
         if (req.headers['content-type']?.startsWith('multipart/form-data')) {
           console.log('RSA: multipart/form-data')
           const bb = busboy({ headers: req.headers })
-          const reply = decodeReplyFromBusboy(bb)
+          // TODO (RSC): The generic here could be typed better
+          const reply = decodeReplyFromBusboy<unknown[]>(bb)
 
           req.pipe(bb)
           args = await reply

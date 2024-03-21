@@ -3,7 +3,6 @@
 // `--condition react-server`. If we did try to do that the main process
 // couldn't do SSR because it would be missing client-side React functions
 // like `useState` and `createContext`.
-
 import { Buffer } from 'node:buffer'
 import { Server } from 'node:http'
 import path from 'node:path'
@@ -19,9 +18,10 @@ import { createServer, resolveConfig } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 import type { defineEntries, GetEntry } from '../entries.js'
-import { registerFwGlobals } from '../lib/registerGlobals.js'
+import { registerFwGlobalsAndShims } from '../lib/registerFwGlobalsAndShims.js'
 import { StatusError } from '../lib/StatusError.js'
 import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
+import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
 
@@ -114,7 +114,7 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
 
 // This is a worker, so it doesn't share the same global variables as the main
 // server. So we have to register them here again.
-registerFwGlobals()
+registerFwGlobalsAndShims()
 
 // TODO (RSC): this was copied from waku; they have a todo to remove it.
 // We need this to fix a WebSocket error in dev, `WebSocket server error: Port
@@ -139,6 +139,7 @@ const vitePromise = createServer({
     }),
     rscTransformUseClientPlugin({}),
     rscTransformUseServerPlugin(),
+    rscRoutesAutoLoader(),
   ],
   ssr: {
     resolve: {
