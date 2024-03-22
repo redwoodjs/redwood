@@ -145,7 +145,7 @@ export const builder = async (yargs) => {
           process.exit(1)
         }
 
-        // We need the web side (any api side, if it exists) to have been built
+        // We need the web side (and api side, if it exists) to have been built
         if (
           (fs.existsSync(path.join(getPaths().api.base)) &&
             !fs.existsSync(path.join(getPaths().api.dist))) ||
