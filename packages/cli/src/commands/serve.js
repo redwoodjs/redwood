@@ -136,7 +136,7 @@ export const builder = async (yargs) => {
 
       // serve both
       if (positionalArgs.length === 1) {
-        if (!apiSideExists) {
+        if (!apiSideExists && !getConfig().experimental?.rsc?.enabled) {
           console.error(
             c.error(
               '\n Unable to serve the both sides as no `api` folder exists. Please use `yarn rw serve web` instead. \n',
@@ -145,9 +145,10 @@ export const builder = async (yargs) => {
           process.exit(1)
         }
 
-        // We need the web side to have been built
+        // We need the web side (and api side, if it exists) to have been built
         if (
-          !fs.existsSync(path.join(getPaths().api.dist)) ||
+          (fs.existsSync(path.join(getPaths().api.base)) &&
+            !fs.existsSync(path.join(getPaths().api.dist))) ||
           !fs.existsSync(path.join(getPaths().web.dist), 'index.html')
         ) {
           console.error(
