@@ -331,7 +331,7 @@ describe('rscRoutesAutoLoader', () => {
     }
 
     expect(getOutput).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the follow page directories: 'AboutPage']`
+      "[Error: Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the following page directories: 'AboutPage']"
     )
   })
 
