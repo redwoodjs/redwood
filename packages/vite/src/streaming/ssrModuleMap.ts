@@ -30,8 +30,6 @@ export const moduleMap: SSRModuleMap = new Proxy(
               name,
             }
 
-            console.log('manifestEntry', manifestEntry)
-
             return manifestEntry
           },
         },
