@@ -39,7 +39,7 @@ describe('mulitiple files ending in Page.{js,jsx,ts,tsx}', () => {
       transform(getPaths().web.routes)
     }).toThrowError(
       "Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' " +
-        "in the follow page directories: 'HomePage'",
+        "in the following page directories: 'HomePage'",
     )
   })
 })
