@@ -22,7 +22,7 @@ export interface Flags {
   forJest?: boolean // will change the alias for module-resolver plugin
   forPrerender?: boolean // changes what babel-plugin-redwood-routes-auto-loader does
   forVite?: boolean
-  forRSC?: boolean
+  forRsc?: boolean
 }
 
 export const getWebSideBabelPlugins = (
@@ -109,10 +109,10 @@ export const getWebSideBabelPlugins = (
 }
 
 export const getWebSideOverrides = (
-  { forPrerender, forVite, forRSC }: Flags = {
+  { forPrerender, forVite, forRsc }: Flags = {
     forPrerender: false,
     forVite: false,
-    forRSC: false,
+    forRsc: false,
   },
 ): Array<TransformOptions> => {
   // Have to use a readonly array here because of a limitation in TS
@@ -126,7 +126,7 @@ export const getWebSideOverrides = (
     // the `./web/src/Routes.[ts|jsx]` file.
     // We do not do this for RSC because there are differences between server and client
     // so each specific build stage handles the auto-importing of routes
-    !forRSC && {
+    !forRsc && {
       test: /Routes.(js|tsx|jsx)$/,
       plugins: [
         [
