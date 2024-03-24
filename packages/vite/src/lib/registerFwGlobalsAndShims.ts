@@ -5,11 +5,12 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 /**
  * Use this function on the web server
  *
- * Because although this is defined in vite/index.ts
- * They are only available in the user's code (and not in FW code)
- * because define STATICALLY replaces it in user's code, not in node_modules
+ * Because although globals are defined in vite/index.ts they are only
+ * available in the user's code (and not in FW code) because define STATICALLY
+ * replaces it in user's code, not in node_modules
  *
- * It's still available on the client side though, probably because its processed by Vite
+ * It's still available on the client side though, probably because it's
+ * processed by Vite
  */
 export const registerFwGlobalsAndShims = () => {
   registerFwGlobals()
@@ -93,23 +94,28 @@ function registerFwGlobals() {
 }
 
 /**
- * This function is used to register shims for react-server-dom-webpack in a Vite
- * (or at least non-Webpack) environment.
+ * This function is used to register shims for react-server-dom-webpack in a
+ * Vite (or at least non-Webpack) environment.
  *
- * We have to call it early in the app's lifecycle, before code that depends on it runs
- * and do so at the server start in (src/devFeServer.ts and src/runFeServer.ts).
+ * We have to call it early in the app's lifecycle, before code that depends on
+ * it runs and do so at the server start in (src/devFeServer.ts and
+ * src/runFeServer.ts).
  */
 function registerFwShims() {
+  if (!getConfig().experimental?.rsc?.enabled) {
+    // Only shim if RSC support is enabled
+    return
+  }
+
   globalThis.__rw_module_cache__ ||= new Map()
 
-  globalThis.__webpack_chunk_load__ ||= (id) => {
-    console.log('rscWebpackShims chunk load id', id)
+  globalThis.__webpack_chunk_load__ ||= async (id: string) => {
+    console.log('registerFwShims chunk load id', id)
     return import(id).then((m) => globalThis.__rw_module_cache__.set(id, m))
   }
 
-  // @ts-expect-error This is a webpack shim typed as any by @types/webpack
-  globalThis.__webpack_require__ ||= (id) => {
-    console.log('rscWebpackShims require id', id)
+  globalThis.__webpack_require__ ||= (id: string) => {
+    console.log('registerFwShims require id', id)
     return globalThis.__rw_module_cache__.get(id)
   }
 }
