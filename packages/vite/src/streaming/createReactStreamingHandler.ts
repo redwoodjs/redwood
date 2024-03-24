@@ -145,7 +145,7 @@ export const createReactStreamingHandler = async (
       },
       {
         waitForAllReady: isSeoCrawler,
-        onError: (err: Error) => {
+        onError: (err) => {
           if (!isProd && viteDevServer) {
             viteDevServer.ssrFixStacktrace(err)
           }
