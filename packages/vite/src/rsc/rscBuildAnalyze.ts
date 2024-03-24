@@ -34,7 +34,6 @@ export async function rscBuildAnalyze() {
   // the files, we don't use the generated built files for anything. Maybe we
   // can integrate this with building for the client, where we actually need
   // the build for something.
-
   await viteBuild({
     configFile: rwPaths.web.viteConfig,
     root: rwPaths.web.src,
