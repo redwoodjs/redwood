@@ -5,10 +5,8 @@ import React from 'react'
 import type {
   RenderToReadableStreamOptions,
   ReactDOMServerReadableStream,
-  renderToReadableStream as renderAsReadableStreamTypeImport,
 } from 'react-dom/server'
-// @ts-expect-error - TODO (RSC): See if we can type this as RenderToReadableStream in modules.d.ts
-import { renderToReadableStream as rdseRenderToReadableStream } from 'react-dom/server.edge'
+import { renderToReadableStream } from 'react-dom/server.edge'
 
 import type { ServerAuthState } from '@redwoodjs/auth'
 import { ServerAuthProvider } from '@redwoodjs/auth'
@@ -27,9 +25,6 @@ import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 import { createBufferedTransformStream } from './transforms/bufferedTransform.js'
 import { createTimeoutTransform } from './transforms/cancelTimeoutTransform.js'
 import { createServerInjectionTransform } from './transforms/serverInjectionTransform.js'
-
-const renderToReadableStream: typeof renderAsReadableStreamTypeImport =
-  rdseRenderToReadableStream
 
 interface RenderToStreamArgs {
   ServerEntry: any
@@ -169,10 +164,11 @@ export async function reactRenderToStreamResponse(
     console.log('root')
     console.log('root')
 
-    const Rot = root({})
-
     const reactStream: ReactDOMServerReadableStream =
-      await renderToReadableStream(Rot, renderToStreamOptions)
+      await renderToReadableStream(
+        React.createElement(root),
+        renderToStreamOptions,
+      )
 
     // @NOTE: very important that we await this before we apply any transforms
     if (waitForAllReady) {
