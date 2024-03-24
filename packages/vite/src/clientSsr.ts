@@ -3,9 +3,12 @@ import path from 'node:path'
 // import { use, createElement } from 'react'
 import { createElement } from 'react'
 
+import { createFromReadableStream } from 'react-server-dom-webpack/client.edge'
+
 import { getPaths } from '@redwoodjs/project-config'
 
 import { StatusError } from './lib/StatusError.js'
+import { moduleMap } from './streaming/ssrModuleMap.js'
 
 async function getEntries() {
   const entriesPath = getPaths().web.distRscEntries
@@ -79,7 +82,7 @@ function resolveClientEntryForProd(
 // const moduleLoading = (globalThis as any).__webpack_module_loading__
 // const moduleCache = (globalThis as any).__webpack_module_cache__
 
-export function renderFromDist<TProps>(rscId: string) {
+export function _renderFromDist<TProps>(rscId: string) {
   console.log('renderFromDist rscId', rscId)
 
   // Create temporary client component that wraps the component (Page, most
@@ -143,38 +146,6 @@ export function renderFromDist<TProps>(rscId: string) {
     // const streamString = await new Response(stream).text()
     // console.log('streamString', streamString)
 
-    // const moduleMap = new Proxy(
-    //   {},
-    //   {
-    //     get(_target, filePath: string) {
-    //       return new Proxy(
-    //         {},
-    //         {
-    //           get(_target, name: string) {
-    //             console.log('nested proxy filePath', filePath)
-    //             // const file = filePath.slice(config.basePath.length)
-    //             // // TODO too long, we need to refactor this logic
-    //             // const id = file
-    //             // if (!moduleLoading.has(id)) {
-    //             //   moduleLoading.set(
-    //             //     id,
-    //             //     opts
-    //             //       .loadModule(joinPath(config.ssrDir, id))
-    //             //       .then((m: any) => {
-    //             //         moduleCache.set(id, m)
-    //             //       }),
-    //             //   )
-    //             // }
-    //             const id = filePath.split('/').at(-1)
-    //             console.log('nested proxy id', id)
-    //             return { id, chunks: [id], name }
-    //           },
-    //         },
-    //       )
-    //     },
-    //   },
-    // )
-
     // const { createFromReadableStream } = await import(
     //   'react-server-dom-webpack/client.edge'
     // )
@@ -191,3 +162,22 @@ export function renderFromDist<TProps>(rscId: string) {
 
   return SsrComponent
 }
+
+export function renderFromDist() {
+  const SsrComponent = () => {
+    const flightStream = new Response(flightText).body
+
+    const data = createFromReadableStream(flightStream, {
+      ssrManifest: { moduleMap, moduleLoading: null },
+    })
+
+    return data
+  }
+
+  return SsrComponent
+}
+
+const flightText = `\
+2:I["/Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/client/assets/rsc-AboutCounter.tsx-2-ChTgbQz5.mjs",["/Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/client/assets/rsc-AboutCounter.tsx-2-ChTgbQz5.mjs"],"AboutCounter"]
+0:["$","div",null,{"className":"about-page","children":["$","div",null,{"style":{"border":"3px red dashed","margin":"1em","padding":"1em"},"children":[["$","h1",null,{"children":"About Page"}],["$","$L2",null,{}]]}]}]
+1:]`
