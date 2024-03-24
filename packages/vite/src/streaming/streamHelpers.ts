@@ -158,7 +158,7 @@ export async function reactRenderToStreamResponse(
       },
     }
 
-    let root = renderRoot(currentPathName)
+    let root: React.ReactElement = renderRoot(currentPathName)
     root = React.createElement(renderFromDist('AboutPage'))
 
     const reactStream: ReactDOMServerReadableStream =

@@ -82,7 +82,7 @@ function resolveClientEntryForProd(
 // const moduleLoading = (globalThis as any).__webpack_module_loading__
 // const moduleCache = (globalThis as any).__webpack_module_cache__
 
-export function _renderFromDist<TProps>(rscId: string) {
+export function renderFromDist<TProps>(rscId: string) {
   console.log('renderFromDist rscId', rscId)
 
   // Create temporary client component that wraps the component (Page, most
@@ -102,24 +102,21 @@ export function _renderFromDist<TProps>(rscId: string) {
         get(_target, encodedId: string) {
           console.log('Proxy get encodedId', encodedId)
           const [filePath, name] = encodedId.split('#') as [string, string]
-          // filePath /Users/tobbe/dev/waku/examples/01_counter/dist/assets/rsc0.js
-          // name Counter
+          // filePath /Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/rsc/assets/rsc-AboutCounter.tsx-1.mjs
+          // name AboutCounter
 
           const id = resolveClientEntryForProd(filePath, clientEntries)
 
           console.log('Proxy id', id)
-          // id /assets/rsc0-beb48afe.js
+          // id /Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/client/assets/rsc-AboutCounter.tsx-1-4kTKU8GC.mjs
           return { id, chunks: [id], name, async: true }
         },
       },
     )
 
-    // TODO (RSC): We should look into importing renderToReadableStream from
-    // 'react-server-dom-webpack/server.browser' so that we can respond with web
-    // streams
-    const { renderToReadableStream } = await import(
-      'react-server-dom-webpack/server.edge'
-    )
+    const rsdwServerPath = path.join(getPaths().web.distRsc, 'rsdw-server.mjs')
+    // TODO (RSC): We need to type this
+    const { renderToReadableStream } = (await import(rsdwServerPath)).default
 
     // We're in client.ts, but we're supposed to be pretending we're in the
     // RSC server "world" and that `stream` comes from `fetch`
@@ -129,45 +126,7 @@ export function _renderFromDist<TProps>(rscId: string) {
       bundlerConfig,
     )
 
-    console.log('renderToReadableStream', stream)
-
-    // This is an example of what the stream could look like
-    // 2:I{"id":"/Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/client/assets/rsc-AboutCounter.tsx-5-xrVOoNc0.mjs",
-    //     "chunks":["/Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/client/assets/rsc-AboutCounter.tsx-5-xrVOoNc0.mjs"],
-    //     "name":"AboutCounter","async":false}
-    // 0:["$","div",null,{"className":"about-page","children":
-    //     ["$L1",["$","div",null,{"style":{"border":"3px red dashed","margin":"1em","padding":"1em"},"children":[["$","h1",null,{"children":"About Redwood"}],
-    //       ["$","$L2",null,{}],["$","p",null,{"children":["RSC on server: ","enabled"]}]]}]]}]
-    // 1:[["$","link",null,{"href":"assets/entry-Cqdoy8Az.css","rel":"stylesheet","precedence":"high"}],
-    //    ["$","link",null,{"href":"assets/AboutPage-Dbp45Pwn.css","rel":"stylesheet","precedence":"high"}],
-    //    "$","link",null,{"href":"assets/HomePage-CqgNLg45.css","rel":"stylesheet","precedence":"high"}],
-    //    ["$","link",null,{"href":"assets/MultiCellPage-sUDc6C8M.css","rel":"stylesheet","precedence":"high"}]]
-    // If you want to look at the stream you can do this:
-    // const streamString = await new Response(stream).text()
-    // console.log('streamString', streamString)
-
-    // const { createFromReadableStream } = await import(
-    //   'react-server-dom-webpack/client.edge'
-    // )
-
-    // // Like `createFromFetch`
-    // const data = createFromReadableStream(stream, {
-    //   ssrManifest: { moduleMap, moduleLoading: null },
-    // })
-
-    // return use(data)
-    // return data
-    return 'Loading...'
-  }
-
-  return SsrComponent
-}
-
-export function renderFromDist(_rscId: string) {
-  const SsrComponent = () => {
-    const flightStream = new Response(flightText).body
-
-    const data = createFromReadableStream(flightStream, {
+    const data = createFromReadableStream(stream, {
       ssrManifest: { moduleMap, moduleLoading: null },
     })
 
@@ -176,8 +135,3 @@ export function renderFromDist(_rscId: string) {
 
   return SsrComponent
 }
-
-const flightText = `\
-2:I["/Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/client/assets/rsc-AboutCounter.tsx-2-ChTgbQz5.mjs",["/Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/client/assets/rsc-AboutCounter.tsx-2-ChTgbQz5.mjs"],"AboutCounter"]
-0:["$","div",null,{"className":"about-page","children":["$","div",null,{"style":{"border":"3px red dashed","margin":"1em","padding":"1em"},"children":[["$","h1",null,{"children":"About Page"}],["$","$L2",null,{}]]}]}]
-1:]`
