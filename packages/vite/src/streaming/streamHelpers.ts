@@ -158,15 +158,11 @@ export async function reactRenderToStreamResponse(
       },
     }
 
-    console.log('streamHelpers - currentPathName', currentPathName)
-    const root = renderRoot(currentPathName)
-    if (Math.random() > 5) {
-      console.log('root', root)
-    }
-    const rootFromDist = React.createElement(renderFromDist('AboutPage'))
+    let root = renderRoot(currentPathName)
+    root = React.createElement(renderFromDist('AboutPage'))
 
     const reactStream: ReactDOMServerReadableStream =
-      await renderToReadableStream(rootFromDist, renderToStreamOptions)
+      await renderToReadableStream(root, renderToStreamOptions)
 
     // @NOTE: very important that we await this before we apply any transforms
     if (waitForAllReady) {
