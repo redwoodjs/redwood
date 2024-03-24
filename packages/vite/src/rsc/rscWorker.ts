@@ -11,12 +11,10 @@ import { parentPort } from 'node:worker_threads'
 
 import { createElement } from 'react'
 
-import react from '@vitejs/plugin-react'
 import RSDWServer from 'react-server-dom-webpack/server'
 import type { ResolvedConfig } from 'vite'
 import { createServer, resolveConfig } from 'vite'
 
-import { RedwoodRoutesAutoLoaderRscServerPlugin } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import type { defineEntries, GetEntry } from '../entries.js'
@@ -142,14 +140,6 @@ const vitePromise = createServer({
     rscTransformUseClientPlugin({}),
     rscTransformUseServerPlugin(),
     rscRoutesAutoLoader(),
-    react({
-      babel: {
-        only: [/Routes.(js|tsx|jsx)$/],
-        plugins: [[RedwoodRoutesAutoLoaderRscServerPlugin, {}]],
-        babelrc: false,
-        ignore: ['node_modules'],
-      },
-    }),
   ],
   ssr: {
     resolve: {
