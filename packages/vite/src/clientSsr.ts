@@ -163,7 +163,7 @@ export function _renderFromDist<TProps>(rscId: string) {
   return SsrComponent
 }
 
-export function renderFromDist() {
+export function renderFromDist(_rscId: string) {
   const SsrComponent = () => {
     const flightStream = new Response(flightText).body
 
