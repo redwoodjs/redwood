@@ -74,80 +74,6 @@ function resolveClientEntryForProd(
   return clientEntry
 }
 
-// HACK Patching stream is very fragile.
-// TODO (RSC): Sanitize prefixToRemove to make sure it's safe to use in a
-// RegExp (CodeQL is complaining on GitHub)
-const transformRsfId = (prefixToRemove: string) => {
-  // Should be something like /home/runner/work/redwood/test-project-rsa
-  console.log('prefixToRemove', prefixToRemove)
-
-  const encoder = new TextEncoder()
-  const decoder = new TextDecoder()
-  let data = ''
-  return new TransformStream({
-    transform(chunk, controller) {
-      if (!(chunk instanceof Uint8Array)) {
-        throw new Error('Unknown chunk type')
-      }
-
-      data += decoder.decode(chunk)
-      if (!data.endsWith('\n')) {
-        return
-      }
-
-      const lines = data.split('\n')
-
-      data = ''
-      for (let i = 0; i < lines.length; ++i) {
-        const match = lines[i].match(
-          new RegExp(
-            `^([0-9]+):{"id":"(?:file:///?)?${prefixToRemove}(.*?)"(.*)$`,
-          ),
-        )
-        if (match) {
-          lines[i] = `${match[1]}:{"id":"${match[2]}"${match[3]}`
-        }
-      }
-
-      controller.enqueue(encoder.encode(lines.join('\n')))
-    },
-  })
-}
-
-// ChatGPT version
-//
-// function transformRsfId(prefixToRemove: string) {
-//   // Should be something like /home/runner/work/redwood/test-project-rsa
-//   console.log('prefixToRemove', prefixToRemove)
-
-//   return new TransformStream({
-//     transform(chunk, controller) {
-//       const decoder = new TextDecoder()
-//       const encoder = new TextEncoder()
-//       const data = decoder.decode(chunk)
-//       const lines = data.split('\n')
-
-//       console.log('lines', lines)
-
-//       let changed = false
-
-//       for (let i = 0; i < lines.length; ++i) {
-//         const match = lines[i].match(
-//           new RegExp(`^([0-9]+):{"id":"${prefixToRemove}(.*?)"(.*)$`),
-//         )
-
-//         if (match) {
-//           lines[i] = `${match[1]}:{"id":"${match[2]}"${match[3]}`
-//           changed = true
-//         }
-//       }
-
-//       const transformedChunk = changed ? lines.join('\n') : data
-//       controller.enqueue(encoder.encode(transformedChunk))
-//     },
-//   })
-// }
-
 // TODO (RSC): Make our own module loading use the same cache as the webpack
 // shim for performance
 // const moduleLoading = (globalThis as any).__webpack_module_loading__
@@ -198,7 +124,7 @@ export function renderFromDist<TProps>(rscId: string) {
       // @ts-expect-error - props
       createElement(component, props),
       bundlerConfig,
-    ).pipeThrough(transformRsfId(getPaths().base))
+    )
 
     console.log('renderToReadableStream', stream)
 
