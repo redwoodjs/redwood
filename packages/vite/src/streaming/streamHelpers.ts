@@ -131,10 +131,6 @@ export async function reactRenderToStreamResponse(
     )
   }
 
-  if (Math.random() > 5) {
-    console.log('renderRoot', renderRoot)
-  }
-
   /**
    * These are the opts that inject the bundles, and Assets into html
    */
@@ -162,6 +158,9 @@ export async function reactRenderToStreamResponse(
       },
     }
 
+    if (Math.random() > 5) {
+      console.log('renderRoot', renderRoot)
+    }
     console.log('streamHelpers - currentPathName', currentPathName)
     // const root = renderRoot(currentPathName)
     const root = React.createElement(renderFromDist('AboutPage'))
