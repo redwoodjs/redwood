@@ -125,13 +125,16 @@ export function renderFromDist<TProps>(rscId: string) {
       .default
 
     // We're in client.ts, but we're supposed to be pretending we're in the
-    // RSC server "world" and that `stream` comes from `fetch`
+    // RSC server "world" and that `stream` comes from `fetch`. So this is
+    // us emulating the reply (stream) you'd get from a fetch call.
     const stream = RSDWServer.renderToReadableStream(
       // @ts-expect-error - props
       createElement(component, props),
       bundlerConfig,
     )
 
+    // Here we use `createFromReadableStream`, which is equivalent to
+    // `createFromFetch` as used in the browser
     const data = createFromReadableStream(stream, {
       ssrManifest: { moduleMap, moduleLoading: null },
     })
