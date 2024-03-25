@@ -4,6 +4,7 @@ import path from 'node:path'
 import { createElement } from 'react'
 
 import { createFromReadableStream } from 'react-server-dom-webpack/client.edge'
+import type { default as RSDWServerType } from 'react-server-dom-webpack/server.edge'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -114,13 +115,18 @@ export function renderFromDist<TProps>(rscId: string) {
       },
     )
 
+    // We need to do this weird import dance because we need to import a version
+    // of react-server-dom-webpack/server.edge that has been built with the
+    // `react-server` condition. If we just did a regular import, we'd get the
+    // generic version in node_modules, and it'd throw an error about not being
+    // run in an environment with the `react-server` condition.
     const rsdwServerPath = path.join(getPaths().web.distRsc, 'rsdw-server.mjs')
-    // TODO (RSC): We need to type this
-    const { renderToReadableStream } = (await import(rsdwServerPath)).default
+    const RSDWServer: typeof RSDWServerType = (await import(rsdwServerPath))
+      .default
 
     // We're in client.ts, but we're supposed to be pretending we're in the
     // RSC server "world" and that `stream` comes from `fetch`
-    const stream = renderToReadableStream(
+    const stream = RSDWServer.renderToReadableStream(
       // @ts-expect-error - props
       createElement(component, props),
       bundlerConfig,
