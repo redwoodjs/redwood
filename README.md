@@ -96,11 +96,18 @@ development experience you can fall in love with!
 Here's a quick taste of the technologies a standard Redwood application will
 use:
 
-- [React](https://reactjs.org/)
+- [React](https://react.dev/)
 - [Prisma](https://www.prisma.io/)
 - [Jest](https://jestjs.io/)
 - [Storybook](https://storybook.js.org/)
 - [Pino](https://getpino.io)
+
+If you'd like to use our optional built-in GraphQL API support, here's our stack:
+
+- [GraphQL](https://graphql.org/)
+- [GraphQL Yoga](https://www.graphql-yoga.com)
+- [Envelop](https://www.envelop.dev)
+- [Apollo Client](https://www.apollographql.com/docs/react))
 
 ## Roadmap
 

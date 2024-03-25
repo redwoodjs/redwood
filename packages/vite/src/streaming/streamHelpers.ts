@@ -6,6 +6,7 @@ import type {
   RenderToReadableStreamOptions,
   ReactDOMServerReadableStream,
 } from 'react-dom/server'
+import { renderToReadableStream } from 'react-dom/server.edge'
 
 import type { ServerAuthState } from '@redwoodjs/auth'
 import { ServerAuthProvider } from '@redwoodjs/auth'
@@ -100,10 +101,6 @@ export async function reactRenderToStreamResponse(
   }, 10000)
 
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
-
-  // Possible that we need to upgrade the @types/* packages
-  // @ts-expect-error Something in React's packages mean types don't come through
-  const { renderToReadableStream } = await import('react-dom/server.edge')
 
   const renderRoot = (path: string) => {
     return React.createElement(

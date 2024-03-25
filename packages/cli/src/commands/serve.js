@@ -19,6 +19,9 @@ export const description =
   'Start a server for serving both the api and web sides'
 
 export const builder = async (yargs) => {
+  const rscEnabled = getConfig().experimental?.rsc?.enabled
+  const streamingEnabled = getConfig().experimental?.streamingSsr?.enabled
+
   yargs
     .command({
       command: '$0',
@@ -38,10 +41,7 @@ export const builder = async (yargs) => {
             './serveBothHandler.js'
           )
           await bothServerFileHandler(argv)
-        } else if (
-          getConfig().experimental?.rsc?.enabled ||
-          getConfig().experimental?.streamingSsr?.enabled
-        ) {
+        } else if (rscEnabled || streamingEnabled) {
           const { bothSsrRscServerHandler } = await import(
             './serveBothHandler.js'
           )
@@ -86,7 +86,7 @@ export const builder = async (yargs) => {
           apiHost: argv.apiHost,
         })
 
-        if (getConfig().experimental?.streamingSsr?.enabled) {
+        if (streamingEnabled) {
           await webSsrServerHandler()
         } else {
           await webServerCLIConfig.handler(argv)
@@ -113,30 +113,51 @@ export const builder = async (yargs) => {
         process.exit(1)
       }
 
-      if (
-        positionalArgs.includes('api') &&
-        !fs.existsSync(path.join(getPaths().api.dist))
-      ) {
-        console.error(
-          c.error(
-            '\n Please run `yarn rw build api` before trying to serve api. \n',
-          ),
-        )
-        process.exit(1)
+      const apiSideExists = fs.existsSync(getPaths().api.base)
+      if (positionalArgs.includes('api')) {
+        if (!apiSideExists) {
+          console.error(
+            c.error(
+              '\n Unable to serve the api side as no `api` folder exists. \n',
+            ),
+          )
+          process.exit(1)
+        }
+
+        if (!fs.existsSync(path.join(getPaths().api.dist))) {
+          console.error(
+            c.error(
+              '\n Please run `yarn rw build api` before trying to serve api. \n',
+            ),
+          )
+          process.exit(1)
+        }
       }
 
-      if (
-        // serve both
-        positionalArgs.length === 1 &&
-        (!fs.existsSync(path.join(getPaths().api.dist)) ||
-          !fs.existsSync(path.join(getPaths().web.dist), 'index.html'))
-      ) {
-        console.error(
-          c.error(
-            '\n Please run `yarn rw build` before trying to serve your redwood app. \n',
-          ),
-        )
-        process.exit(1)
+      // serve both
+      if (positionalArgs.length === 1) {
+        if (!apiSideExists && !rscEnabled) {
+          console.error(
+            c.error(
+              '\n Unable to serve the both sides as no `api` folder exists. Please use `yarn rw serve web` instead. \n',
+            ),
+          )
+          process.exit(1)
+        }
+
+        // We need the web side (and api side, if it exists) to have been built
+        if (
+          (fs.existsSync(path.join(getPaths().api.base)) &&
+            !fs.existsSync(path.join(getPaths().api.dist))) ||
+          !fs.existsSync(path.join(getPaths().web.dist), 'index.html')
+        ) {
+          console.error(
+            c.error(
+              '\n Please run `yarn rw build` before trying to serve your redwood app. \n',
+            ),
+          )
+          process.exit(1)
+        }
       }
 
       // Set NODE_ENV to production, if not set
