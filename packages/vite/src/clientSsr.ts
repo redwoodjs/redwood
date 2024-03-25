@@ -1,6 +1,5 @@
 import path from 'node:path'
 
-// import { use, createElement } from 'react'
 import { createElement } from 'react'
 
 import type { default as RSDWClientModule } from 'react-server-dom-webpack/client.edge'
