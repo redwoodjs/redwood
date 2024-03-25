@@ -22,9 +22,9 @@ async function getEntries() {
   return entries
 }
 
-async function getFunctionComponent<Props>(
+async function getFunctionComponent<TProps>(
   rscId: string,
-): Promise<React.FunctionComponent<Props>> {
+): Promise<React.FunctionComponent<TProps>> {
   const {
     default: { getEntry },
   } = await getEntries()
@@ -86,7 +86,9 @@ function resolveClientEntryForProd(
 // const moduleLoading = (globalThis as any).__webpack_module_loading__
 // const moduleCache = (globalThis as any).__webpack_module_cache__
 
-export function renderFromDist<TProps>(rscId: string) {
+export function renderFromDist<TProps extends Record<string, any>>(
+  rscId: string,
+) {
   console.log('renderFromDist rscId', rscId)
 
   // Create temporary client component that wraps the component (Page, most
@@ -94,7 +96,7 @@ export function renderFromDist<TProps>(rscId: string) {
   const SsrComponent = async (props: TProps) => {
     console.log('SsrComponent', rscId, 'props', props)
 
-    const component = await getFunctionComponent(rscId)
+    const component = await getFunctionComponent<TProps>(rscId)
     const clientEntries = (await getEntries()).clientEntries
 
     // TODO (RSC): Try removing the proxy here and see if it's really necessary.
@@ -130,7 +132,6 @@ export function renderFromDist<TProps>(rscId: string) {
     // RSC server "world" and that `stream` comes from `fetch`. So this is
     // us emulating the reply (stream) you'd get from a fetch call.
     const stream = renderToReadableStream(
-      // @ts-expect-error - props
       createElement(component, props),
       bundlerConfig,
     )
