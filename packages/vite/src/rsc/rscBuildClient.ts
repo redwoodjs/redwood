@@ -46,6 +46,8 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
           // for the client-only components. They get loaded once the page is
           // rendered
           ...clientEntryFiles,
+          'rd-server': 'react-dom/server.edge',
+          'rsdw-client': 'react-server-dom-webpack/client.edge',
         },
         preserveEntrySignatures: 'exports-only',
         output: {
@@ -56,7 +58,15 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
           // TODO (RSC): Fix when https://github.com/rollup/rollup/issues/5235
           // is resolved
           hoistTransitiveImports: false,
-          entryFileNames: `assets/[name]-[hash].mjs`,
+          entryFileNames: (chunkInfo) => {
+            if (
+              chunkInfo.name === 'rd-server' ||
+              chunkInfo.name === 'rsdw-client'
+            ) {
+              return '[name].mjs'
+            }
+            return 'assets/[name]-[hash].mjs'
+          },
           chunkFileNames: `assets/[name]-[hash].mjs`,
         },
       },

@@ -3,13 +3,17 @@ import path from 'node:path'
 // import { use, createElement } from 'react'
 import { createElement } from 'react'
 
-import { createFromReadableStream } from 'react-server-dom-webpack/client.edge'
-import type { default as RSDWServerType } from 'react-server-dom-webpack/server.edge'
+import type { default as RSDWClientModule } from 'react-server-dom-webpack/client.edge'
+import type { default as RSDWServerModule } from 'react-server-dom-webpack/server.edge'
 
 import { getPaths } from '@redwoodjs/project-config'
 
 import { StatusError } from './lib/StatusError.js'
 import { moduleMap } from './streaming/ssrModuleMap.js'
+import { importModule } from './streaming/streamHelpers.js'
+
+type RSDWClientType = typeof RSDWClientModule
+type RSDWServerType = typeof RSDWServerModule
 
 async function getEntries() {
   const entriesPath = getPaths().web.distRscEntries
@@ -120,18 +124,24 @@ export function renderFromDist<TProps>(rscId: string) {
     // `react-server` condition. If we just did a regular import, we'd get the
     // generic version in node_modules, and it'd throw an error about not being
     // run in an environment with the `react-server` condition.
-    const rsdwServerPath = path.join(getPaths().web.distRsc, 'rsdw-server.mjs')
-    const RSDWServer: typeof RSDWServerType = (await import(rsdwServerPath))
-      .default
+    const { renderToReadableStream }: RSDWServerType =
+      await importModule('rsdw-server')
 
     // We're in client.ts, but we're supposed to be pretending we're in the
     // RSC server "world" and that `stream` comes from `fetch`. So this is
     // us emulating the reply (stream) you'd get from a fetch call.
-    const stream = RSDWServer.renderToReadableStream(
+    const stream = renderToReadableStream(
       // @ts-expect-error - props
       createElement(component, props),
       bundlerConfig,
     )
+
+    // We have to do this weird import thing because we need a version of
+    // react-server-dom-webpack/client.edge that uses the same bundled version
+    // of React as all the client components. Also see comment in
+    // streamHelpers.ts about the rd-server import for some more context
+    const { createFromReadableStream }: RSDWClientType =
+      await importModule('rsdw-client')
 
     // Here we use `createFromReadableStream`, which is equivalent to
     // `createFromFetch` as used in the browser
