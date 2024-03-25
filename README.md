@@ -97,6 +97,7 @@ Here's a quick taste of the technologies a standard Redwood application will
 use:
 
 - [React](https://react.dev/)
+- [Vite](https://vitejs.dev/)
 - [Prisma](https://www.prisma.io/)
 - [Jest](https://jestjs.io/)
 - [Storybook](https://storybook.js.org/)
