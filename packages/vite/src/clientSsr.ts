@@ -45,7 +45,7 @@ async function getFunctionComponent<Props>(
 }
 
 // This gets executed in an RSC server "world" and should return the path to
-// the chunk on in the client/browser "world"
+// the chunk in the client/browser "world"
 function resolveClientEntryForProd(
   filePath: string,
   clientEntries: Record<string, string>,
