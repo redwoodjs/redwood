@@ -30,7 +30,7 @@
   "devDependencies": {
     "@babel/cli": "7.23.9",
     "@babel/core": "^7.22.20",
-    "@testing-library/jest-dom": "6.3.0",
+    "@testing-library/jest-dom": "6.4.2",
     "@testing-library/react": "14.1.2",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
