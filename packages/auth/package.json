@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.0",
-    "core-js": "3.35.1",
+    "core-js": "3.36.1",
     "react": "18.3.0-canary-a870b2d54-20240314"
   },
   "devDependencies": {
