@@ -53,7 +53,7 @@
     "core-js": "3.35.1",
     "css-loader": "6.8.1",
     "css-minimizer-webpack-plugin": "5.0.1",
-    "dotenv-webpack": "8.0.1",
+    "dotenv-webpack": "8.1.0",
     "graphql-tag": "2.12.6",
     "html-webpack-plugin": "5.5.4",
     "lodash": "4.17.21",

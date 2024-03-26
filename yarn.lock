@@ -8282,7 +8282,7 @@ __metadata:
     core-js: "npm:3.35.1"
     css-loader: "npm:6.8.1"
     css-minimizer-webpack-plugin: "npm:5.0.1"
-    dotenv-webpack: "npm:8.0.1"
+    dotenv-webpack: "npm:8.1.0"
     graphql-tag: "npm:2.12.6"
     html-webpack-plugin: "npm:5.5.4"
     jest: "npm:29.7.0"
@@ -17244,14 +17244,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv-webpack@npm:8.0.1":
-  version: 8.0.1
-  resolution: "dotenv-webpack@npm:8.0.1"
+"dotenv-webpack@npm:8.1.0":
+  version: 8.1.0
+  resolution: "dotenv-webpack@npm:8.1.0"
   dependencies:
     dotenv-defaults: "npm:^2.0.2"
   peerDependencies:
     webpack: ^4 || ^5
-  checksum: 10c0/ddd12406e7b27a9f324110d34ddf6efdf386f8f6dbbf903cb74b63ed582c28262197eadca4e20cdee55d1e427cc4acd47c9dadd38bfc49219ae215d0b688c2e8
+  checksum: 10c0/7a64587fc96eba8e4ffccf56d6af09606611a32bc5cf04a37057b8c2881bcd11bf43c3395404581be734ae7fd2788471ceac76cb3d0ba1283e675223f98e5816
   languageName: node
   linkType: hard
 
