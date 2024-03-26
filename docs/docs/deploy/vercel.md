@@ -12,7 +12,8 @@ If you simply want to experience the Vercel deployment process without a databas
 1. create a new redwood project: `yarn create redwood-app ./vercel-deploy`
 2. after your "vercel-deploy" project installation is complete, init git, commit, and add it as a new repo to GitHub, BitBucket, or GitLab
 3. run the command `yarn rw setup deploy vercel` and commit and push changes
-4. use the Vercel [Quick Start](https://vercel.com/#get-started) to deploy
+4. within the environmental variables section of your project's Vercel dashboard, add `ENABLE_EXPERIMENTAL_COREPACK=1`
+5. use the Vercel [Quick Start](https://vercel.com/#get-started) to deploy
 
 _If you choose this quick deploy experience, the following steps do not apply._
 
@@ -88,3 +89,11 @@ By default, API requests in Vercel have a timeout limit of 15 seconds. To extend
   }
 }
 ```
+
+## Environmental Variables
+Within the Environmental Variables section of your project's Vercel dashboard, add:
+
+```
+ENABLE_EXPERIMENTAL_COREPACK=1
+```
+
