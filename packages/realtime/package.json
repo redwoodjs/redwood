@@ -40,7 +40,7 @@
     "@envelop/types": "5.0.0",
     "@redwoodjs/framework-tools": "workspace:*",
     "nodemon": "3.0.2",
-    "tsx": "4.6.2",
+    "tsx": "4.7.1",
     "typescript": "5.3.3",
     "vitest": "1.3.1"
   },
