@@ -16,21 +16,15 @@ type RSDWServerType = typeof RSDWServerModule
 
 async function getEntries() {
   const entriesPath = getPaths().web.distRscEntries
-  console.log('entriesPath', entriesPath)
   const entries = await import(entriesPath)
-  console.log('entries', entries)
   return entries
 }
 
 async function getFunctionComponent<TProps>(
   rscId: string,
 ): Promise<React.FunctionComponent<TProps>> {
-  const {
-    default: { getEntry },
-  } = await getEntries()
-  console.log('getEntry', getEntry)
+  const { getEntry } = (await getEntries()).default
   const mod = await getEntry(rscId)
-  console.log('mod', mod)
 
   if (typeof mod === 'function') {
     return mod
