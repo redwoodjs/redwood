@@ -7523,7 +7523,7 @@ __metadata:
     qs: "npm:6.11.2"
     split2: "npm:4.2.0"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
     yargs: "npm:17.7.2"
   peerDependencies:
@@ -7562,7 +7562,7 @@ __metadata:
     split2: "npm:4.2.0"
     title-case: "npm:3.0.3"
     ts-toolbelt: "npm:9.6.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     memjs: 1.3.2
@@ -7592,7 +7592,7 @@ __metadata:
     core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7607,7 +7607,7 @@ __metadata:
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.35.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7624,7 +7624,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     "@auth0/auth0-spa-js": 2.1.3
@@ -7644,7 +7644,7 @@ __metadata:
     core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7659,7 +7659,7 @@ __metadata:
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.35.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7677,7 +7677,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     "@azure/msal-browser": 2.38.3
@@ -7695,7 +7695,7 @@ __metadata:
     "@redwoodjs/api": "workspace:*"
     "@types/aws-lambda": "npm:8.10.126"
     core-js: "npm:3.35.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7710,7 +7710,7 @@ __metadata:
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.35.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -7727,7 +7727,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     "@clerk/clerk-react": 4.30.7
@@ -7744,7 +7744,7 @@ __metadata:
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.35.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7764,7 +7764,7 @@ __metadata:
     base64url: "npm:3.0.1"
     core-js: "npm:3.35.1"
     md5: "npm:2.3.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     uuid: "npm:9.0.1"
     vitest: "npm:1.3.1"
   languageName: unknown
@@ -7784,7 +7784,7 @@ __metadata:
     core-js: "npm:3.35.1"
     prompts: "npm:2.4.2"
     terminal-link: "npm:2.1.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -7803,7 +7803,7 @@ __metadata:
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -7818,7 +7818,7 @@ __metadata:
     "@types/aws-lambda": "npm:8.10.126"
     core-js: "npm:3.35.1"
     firebase-admin: "npm:11.11.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7833,7 +7833,7 @@ __metadata:
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.35.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7852,7 +7852,7 @@ __metadata:
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   peerDependencies:
     firebase: 10.7.0
   languageName: unknown
@@ -7870,7 +7870,7 @@ __metadata:
     "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7885,7 +7885,7 @@ __metadata:
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.35.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7902,7 +7902,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     netlify-identity-widget: 1.9.2
@@ -7921,7 +7921,7 @@ __metadata:
     "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7936,7 +7936,7 @@ __metadata:
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.35.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -7951,7 +7951,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.35.1"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     "@supabase/supabase-js": 2.39.8
@@ -7970,7 +7970,7 @@ __metadata:
     core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     supertokens-node: 15.2.1
@@ -7988,7 +7988,7 @@ __metadata:
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.35.1"
     memfs: "npm:4.6.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -8005,7 +8005,7 @@ __metadata:
     core-js: "npm:3.35.1"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
     supertokens-auth-react: "npm:0.34.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     supertokens-auth-react: 0.34.0
@@ -8026,7 +8026,7 @@ __metadata:
     jest-environment-jsdom: "npm:29.7.0"
     msw: "npm:1.3.2"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8061,7 +8061,7 @@ __metadata:
     graphql: "npm:16.8.1"
     jest: "npm:29.7.0"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8084,7 +8084,7 @@ __metadata:
     memfs: "npm:4.6.0"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     yargs: "npm:17.7.2"
   bin:
     up: ./dist/bin.js
@@ -8113,7 +8113,7 @@ __metadata:
     prompts: "npm:2.4.2"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -8136,7 +8136,7 @@ __metadata:
     storybook: "npm:7.6.17"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     yargs: "npm:17.7.2"
   languageName: unknown
   linkType: soft
@@ -8201,7 +8201,7 @@ __metadata:
     systeminformation: "npm:5.21.20"
     terminal-link: "npm:2.1.1"
     title-case: "npm:3.0.3"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     uuid: "npm:9.0.1"
     vitest: "npm:1.3.1"
     yargs: "npm:17.7.2"
@@ -8244,7 +8244,7 @@ __metadata:
     prettier: "npm:3.2.5"
     tasuku: "npm:2.0.1"
     tempy: "npm:1.0.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
     yargs: "npm:17.7.2"
   bin:
@@ -8258,7 +8258,7 @@ __metadata:
   dependencies:
     "@redwoodjs/framework-tools": "workspace:*"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8294,7 +8294,7 @@ __metadata:
     resolve-url-loader: "npm:5.0.0"
     rimraf: "npm:5.0.5"
     style-loader: "npm:3.3.3"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     url-loader: "npm:4.1.1"
     webpack: "npm:5.90.3"
     webpack-bundle-analyzer: "npm:4.9.1"
@@ -8347,7 +8347,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:4.6.0"
     jest: "npm:29.7.0"
     prettier: "npm:3.2.5"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8363,7 +8363,7 @@ __metadata:
     eslint: "npm:8.55.0"
     glob: "npm:10.3.10"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8379,7 +8379,7 @@ __metadata:
     fast-glob: "npm:3.3.2"
     fastify: "npm:4.26.2"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -8405,7 +8405,7 @@ __metadata:
     react: "npm:18.3.0-canary-a870b2d54-20240314"
     react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
     react-hook-form: "npm:7.51.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     react: 18.3.0-canary-a870b2d54-20240314
@@ -8421,7 +8421,7 @@ __metadata:
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8463,7 +8463,7 @@ __metadata:
     jsonwebtoken: "npm:9.0.2"
     lodash: "npm:4.17.21"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     uuid: "npm:9.0.1"
   languageName: unknown
   linkType: soft
@@ -8514,7 +8514,7 @@ __metadata:
     terminal-link: "npm:2.1.1"
     ts-node: "npm:10.9.1"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   bin:
     rw-gen: ./dist/generate/generate.js
@@ -8529,7 +8529,7 @@ __metadata:
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -8541,7 +8541,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/mailer-core": "workspace:*"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8554,7 +8554,7 @@ __metadata:
     "@types/nodemailer": "npm:^6"
     nodemailer: "npm:6.9.9"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8566,7 +8566,7 @@ __metadata:
     "@redwoodjs/mailer-core": "workspace:*"
     resend: "npm:1.1.0"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8579,7 +8579,7 @@ __metadata:
     "@redwoodjs/mailer-handler-nodemailer": "workspace:*"
     "@types/nodemailer": "npm:^6"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8593,7 +8593,7 @@ __metadata:
     "@types/mjml": "npm:4"
     mjml: "npm:4.14.1"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8605,7 +8605,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/mailer-core": "workspace:*"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8630,7 +8630,7 @@ __metadata:
     core-js: "npm:3.35.1"
     graphql: "npm:16.8.1"
     mime-types: "npm:2.1.35"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     react: 18.3.0-canary-a870b2d54-20240314
@@ -8649,7 +8649,7 @@ __metadata:
     rimraf: "npm:5.0.5"
     string-env-interpolation: "npm:1.0.1"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -8675,7 +8675,7 @@ __metadata:
     ioredis: "npm:^5.3.2"
     nodemon: "npm:3.0.2"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     ioredis: ^5.3.2
@@ -8717,7 +8717,7 @@ __metadata:
     react: "npm:18.3.0-canary-a870b2d54-20240314"
     react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
     tstyche: "npm:1.0.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   peerDependencies:
     react: 18.3.0-canary-a870b2d54-20240314
     react-dom: 18.3.0-canary-a870b2d54-20240314
@@ -8755,7 +8755,7 @@ __metadata:
     lru-cache: "npm:7.18.3"
     proxyquire: "npm:2.1.3"
     ts-morph: "npm:15.1.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
     vscode-languageserver: "npm:6.1.1"
     vscode-languageserver-textdocument: "npm:1.0.8"
@@ -8819,7 +8819,7 @@ __metadata:
     jsdom: "npm:24.0.0"
     msw: "npm:1.3.2"
     ts-toolbelt: "npm:9.6.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
     whatwg-fetch: "npm:3.6.19"
   languageName: unknown
@@ -8835,7 +8835,7 @@ __metadata:
     enquirer: "npm:2.4.1"
     stdout-update: "npm:1.6.8"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8873,7 +8873,7 @@ __metadata:
     react-server-dom-webpack: "npm:18.3.0-canary-a870b2d54-20240314"
     rollup: "npm:4.12.1"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vite: "npm:5.1.6"
     vite-plugin-cjs-interop: "npm:2.1.0"
     vitest: "npm:1.3.1"
@@ -8899,7 +8899,7 @@ __metadata:
     fastify: "npm:4.26.2"
     fs-extra: "npm:11.2.0"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     yargs: "npm:17.7.2"
   bin:
     rw-web-server: ./dist/bin.js
@@ -8935,7 +8935,7 @@ __metadata:
     stacktracey: "npm:2.1.8"
     ts-toolbelt: "npm:9.6.0"
     tstyche: "npm:1.0.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     react: 18.3.0-canary-a870b2d54-20240314
@@ -29977,7 +29977,7 @@ __metadata:
     rimraf: "npm:5.0.5"
     tstyche: "npm:1.0.0"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
     yargs: "npm:17.7.2"
     zx: "npm:7.2.3"
@@ -32704,23 +32704,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.3.3, typescript@npm:>=3 < 6":
-  version: 5.3.3
-  resolution: "typescript@npm:5.3.3"
+"typescript@npm:5.4.3, typescript@npm:>=3 < 6":
+  version: 5.4.3
+  resolution: "typescript@npm:5.4.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/e33cef99d82573624fc0f854a2980322714986bc35b9cb4d1ce736ed182aeab78e2cb32b385efa493b2a976ef52c53e20d6c6918312353a91850e2b76f1ea44f
+  checksum: 10c0/22443a8760c3668e256c0b34b6b45c359ef6cecc10c42558806177a7d500ab1a7d7aac1f976d712e26989ddf6731d2fbdd3212b7c73290a45127c1c43ba2005a
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A>=3 < 6#optional!builtin<compat/typescript>":
-  version: 5.3.3
-  resolution: "typescript@patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"
+"typescript@patch:typescript@npm%3A5.4.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A>=3 < 6#optional!builtin<compat/typescript>":
+  version: 5.4.3
+  resolution: "typescript@patch:typescript@npm%3A5.4.3#optional!builtin<compat/typescript>::version=5.4.3&hash=5adc0c"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/1d0a5f4ce496c42caa9a30e659c467c5686eae15d54b027ee7866744952547f1be1262f2d40de911618c242b510029d51d43ff605dba8fb740ec85ca2d3f9500
+  checksum: 10c0/6e51f8b7e6ec55b897b9e56b67e864fe8f44e30f4a14357aad5dc0f7432db2f01efc0522df0b6c36d361c51f2dc3dcac5c832efd96a404cfabf884e915d38828
   languageName: node
   linkType: hard
 
