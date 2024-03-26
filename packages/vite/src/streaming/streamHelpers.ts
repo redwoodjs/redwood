@@ -29,8 +29,8 @@ import { createServerInjectionTransform } from './transforms/serverInjectionTran
 type RDServerType = typeof RDServerModule
 
 interface RenderToStreamArgs {
-  ServerEntry: any
-  FallbackDocument: any
+  ServerEntry: React.FunctionComponent
+  FallbackDocument: React.FunctionComponent
   currentPathName: string
   metaTags: TagDescriptor[]
   cssLinks: string[]
