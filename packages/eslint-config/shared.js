@@ -151,34 +151,24 @@ module.exports = {
       parser: '@typescript-eslint/parser',
       extends: ['plugin:@typescript-eslint/recommended', 'prettier'],
       rules: {
-        // The following are disabled to maintain consistency with previous
-        // versions of redwoodjs, eslint, @typescript-eslint
-        'valid-typeof': 'off',
         // 'recommended' rules we alter
         '@typescript-eslint/no-explicit-any': 'warn',
         '@typescript-eslint/no-duplicate-enum-values': 'off',
         '@typescript-eslint/no-unsafe-declaration-merging': 'off',
-        // Specific 'stylistic' rules we enable
-        '@typescript-eslint/adjacent-overload-signatures': 'error',
-        '@typescript-eslint/no-inferrable-types': 'error',
-        '@typescript-eslint/no-non-null-assertion': 'warn',
-
         '@typescript-eslint/no-var-requires': 'off',
-        '@typescript-eslint/explicit-function-return-type': 'off',
-        '@typescript-eslint/no-empty-interface': 'off',
-        '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/ban-types': 'warn',
-        'no-empty-function': 'off',
-        '@typescript-eslint/no-empty-function': 'off',
-        camelcase: 'off',
-        '@typescript-eslint/camelcase': 'off',
-        'no-use-before-define': 'off',
-        '@typescript-eslint/no-use-before-define': 'off',
-        '@typescript-eslint/prefer-namespace-keyword': 'off',
         '@typescript-eslint/no-unused-vars': [
           'error',
           { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
         ],
+        // Specific 'stylistic' rules we enable
+        '@typescript-eslint/adjacent-overload-signatures': 'error',
+        '@typescript-eslint/no-inferrable-types': 'error',
+        '@typescript-eslint/no-non-null-assertion': 'warn',
+        // Other non-grouped rules we alter
+        'valid-typeof': 'off',
+        camelcase: 'off',
+        '@typescript-eslint/camelcase': 'off',
       },
     },
     {
