@@ -1,7 +1,9 @@
 import { fileURLToPath } from 'node:url'
 
 import { humanId } from 'human-id'
-import { argv, path, fs } from 'zx'
+import { $, argv, path, fs, ProcessPromise } from 'zx'
+
+$.verbose = false
 
 const ROOT_DIR_PATH = fileURLToPath(new URL('../../', import.meta.url))
 const DIRNAME = path.dirname(fileURLToPath(new URL(import.meta.url)))
@@ -79,27 +81,54 @@ function getDefaultPlaceholder() {
   return fs.readFile(path.join(DIRNAME, 'placeholder.md'))
 }
 
-async function fetchFromGitHub({ query, variables }: { query: string; variables: Record<string, any> }) {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  }
-  if (process.env.GITHUB_TOKEN) {
-    headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`
-  }
-  if (process.env.REDWOOD_GITHUB_TOKEN) {
-    headers.Authorization = `Bearer ${process.env.REDWOOD_GITHUB_TOKEN}`
+async function fetchFromGitHub({
+  query,
+  variables,
+}: {
+  query: string
+  variables: Record<string, any>
+}) {
+  if (hasGhToken()) {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    }
+    if (process.env.GITHUB_TOKEN) {
+      headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`
+    }
+    if (process.env.REDWOOD_GITHUB_TOKEN) {
+      headers.Authorization = `Bearer ${process.env.REDWOOD_GITHUB_TOKEN}`
+    }
+
+    const res = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        query,
+        variables,
+      }),
+    })
+
+    return res.json()
   }
 
-  const res = await fetch('https://api.github.com/graphql', {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
-  })
+  if (await hasGhCli()) {
+    const gqlVariableArgs = Object.entries(variables).flatMap(
+      ([variable, value]) => ['-F', `${variable}=${value}`],
+    )
+    const json = await getJson(
+      $`gh api graphql ${gqlVariableArgs} -f query=${query}`,
+    )
+    console.log('json', json)
 
-  return res.json()
+    return json
+  }
+
+  throw new Error(
+    '\nNo GitHub token found. Please set GITHUB_TOKEN or ' +
+      'REDWOOD_GITHUB_TOKEN.\n' +
+      'Alternatively you can install the GitHub CLI: ' +
+      'https://cli.github.com/',
+  )
 }
 
 type PR = {
@@ -139,10 +168,28 @@ function getPlaceholderForPr(pr: PR) {
   return [
     "(Delete this help paragraph when you're done.) Thanks for writing a changeset! Here's a place to start.",
     "Don't edit the title, but in editing the body, try to explain what this PR means for Redwood users.",
-    "The more detail the better. E.g., is it a new feature? How do they use it? Code examples go a long way!",
+    'The more detail the better. E.g., is it a new feature? How do they use it? Code examples go a long way!',
     '',
     `- ${pr.title} (#${pr.number}) by @${pr.author.login}`,
     '',
     pr.body,
   ].join('\n')
+}
+
+async function getJson(cmd: ProcessPromise) {
+  const res = await cmd
+  if (res.exitCode !== 0) {
+    throw new Error(`Command failed (${res.exitCode}): ${res.stderr}`)
+  }
+
+  return JSON.parse(res.stdout)
+}
+
+async function hasGhCli() {
+  const gh = await $`gh --version`
+  return gh.exitCode === 9
+}
+
+function hasGhToken() {
+  return !!process.env.GITHUB_TOKEN || !!process.env.REDWOOD_GITHUB_TOKEN
 }
