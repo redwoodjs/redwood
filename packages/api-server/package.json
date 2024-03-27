@@ -57,7 +57,7 @@
     "@types/yargs": "17.0.32",
     "aws-lambda": "1.0.7",
     "pino-abstract-transport": "1.1.0",
-    "tsx": "4.6.2",
+    "tsx": "4.7.1",
     "typescript": "5.4.3",
     "vitest": "1.3.1"
   },
