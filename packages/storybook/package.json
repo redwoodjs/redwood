@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.23.9",
-    "@joshwooding/vite-plugin-react-docgen-typescript": "0.3.0",
+    "@joshwooding/vite-plugin-react-docgen-typescript": "0.3.1",
     "@rollup/pluginutils": "^5.0.2",
     "@storybook/addon-essentials": "7.6.10",
     "@storybook/builder-vite": "7.6.10",
