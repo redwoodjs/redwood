@@ -1,6 +1,7 @@
 import fs from 'fs/promises'
 
 import type { OutputChunk } from 'rollup'
+import { normalizePath } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -68,7 +69,7 @@ export async function rscBuildEntriesMappings(
   const serverEntries: Record<string, string> = {}
   for (const [name, sourceFile] of Object.entries(entries)) {
     const buildOutputItem = serverBuildOutput.find((item) => {
-      return (item as OutputChunk).facadeModuleId === sourceFile
+      return (item as OutputChunk).facadeModuleId === normalizePath(sourceFile)
     })
     if (buildOutputItem) {
       serverEntries[name] = buildOutputItem.fileName
