@@ -348,23 +348,21 @@ export function replaceParams(
 export type FlattenSearchParams = ReturnType<typeof flattenSearchParams>
 
 /**
- * @param {string} queryString
- * @returns {Array<string | Record<string, any>>} A flat array of search params
+ * Returns a flat array of search params
  *
- * useMatch hook options searchParams requires a flat array
+ * `useMatch` hook options `searchParams` requires a flat array
  *
- * Examples:
+ * Example:
+ * ```
+ *   parseSearch('?key1=val1&key2=val2')
+ *   => { key1: 'val1', key2: 'val2' }
  *
- *  parseSearch('?key1=val1&key2=val2')
- *  => { key1: 'val1', key2: 'val2' }
- *
- * flattenSearchParams(parseSearch('?key1=val1&key2=val2'))
- * => [ { key1: 'val1' }, { key2: 'val2' } ]
+ *   flattenSearchParams(parseSearch('?key1=val1&key2=val2'))
+ *   => [ { key1: 'val1' }, { key2: 'val2' } ]
+ * ```
  */
-export function flattenSearchParams(
-  queryString: string,
-): Array<string | Record<string, any>> {
-  const searchParams = []
+export function flattenSearchParams(queryString: string) {
+  const searchParams: Array<Record<string, unknown>> = []
 
   for (const [key, value] of Object.entries(parseSearch(queryString))) {
     searchParams.push({ [key]: value })
