@@ -51,11 +51,11 @@
     "@redwoodjs/graphql-server": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/router": "workspace:*",
-    "@sdl-codegen/node": "0.0.10",
+    "@sdl-codegen/node": "0.0.13",
     "chalk": "4.1.2",
     "core-js": "3.35.1",
     "deepmerge": "4.3.1",
-    "esbuild": "0.20.1",
+    "esbuild": "0.20.2",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
     "graphql": "16.8.1",
@@ -67,7 +67,7 @@
     "systeminformation": "5.21.20",
     "terminal-link": "2.1.1",
     "ts-node": "10.9.1",
-    "typescript": "5.3.3"
+    "typescript": "5.4.3"
   },
   "devDependencies": {
     "@babel/cli": "7.23.9",
