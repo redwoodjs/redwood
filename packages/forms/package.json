@@ -27,7 +27,7 @@
     "core-js": "3.35.1",
     "graphql": "16.8.1",
     "pascalcase": "1.0.0",
-    "react-hook-form": "7.49.3"
+    "react-hook-form": "7.51.1"
   },
   "devDependencies": {
     "@babel/cli": "7.23.9",

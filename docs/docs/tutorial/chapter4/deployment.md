@@ -37,9 +37,9 @@ And then Provision PostgreSQL:
 
 ![image](https://user-images.githubusercontent.com/300/152593907-1f8b599e-b4fb-4930-a841-866505e3b79d.png)
 
-And believe it or not, we're done! Now we just need the connection URL. Click on **PostgreSQL** at the left, and then the **Connect** tab. Copy the **Postgres Connection URL**, the one that starts with `postgresql://`:
+And believe it or not, we're done! Now we just need the connection URL. Click on the **Postgres** card toward the left, and then the **Variables** tab. Copy the **DATABASE_URL**, which starts with `postgresql://`:
 
-![image](https://user-images.githubusercontent.com/300/107562577-da7eb180-6b94-11eb-8731-e86a1c7127af.png)
+![Screenshot_2024-03-19_225953_dkf](https://github.com/redwoodjs/redwood/assets/158021342/69cc2cb1-e973-4234-abe1-ca591ba214bb)
 
 ### Change Database Provider
 
@@ -108,12 +108,14 @@ Netlify will start building your app and it will eventually say the deployment f
 
 #### Environment Variables
 
-Go back to the main site page and then to **Site settings** at the top, and then **Environment variables**. Click **Add a Variable** and this is where we'll paste the database connection URI we got from Railway (note the **Key** is "DATABASE_URL"). After pasting the value, append `?connection_limit=1` to the end. The URI will have the following format: `postgresql://<user>:<pass>@<url>/<db>?connection_limit=1`. The default values for Scopes and Values can be left as is. Click **Create variable** to proceed.
+Go back to the main site page and then to **Site configuration** on the left, and then **Environment variables**. Click the **Add a variable** button, then choose **Add a single variable** from the drop-down. This is where we'll paste the database connection URI we got from Railway (note the **Key** is "DATABASE_URL"). After pasting the value, append `?connection_limit=1` to the end. The URI will have the following format: `postgresql://<user>:<pass>@<url>/<db>?connection_limit=1`. The default values for Scopes and Values can be left as is. Click **Create variable** to proceed.
 
 :::tip
 
 This connection limit setting is [recommended by Prisma](https://www.prisma.io/docs/guides/performance-and-optimization/connection-management#recommended-connection-pool-size-1) when working with relational databases in a Serverless context.
 :::
+
+![Screenshot_2024-03-19_231931_dkf](https://github.com/redwoodjs/redwood/assets/158021342/973c827f-1098-4952-b720-d982bc668853)
 
 We'll need to add one more environment variable, `SESSION_SECRET` which contains a big long string that's used to encrypt the session cookies for dbAuth. This was included in development when you installed dbAuth, but now we need to tell Netlify about it. If you look in your `.env` file you'll see it at the bottom, but we want to create a unique one for every environment we deploy to (each developer should have a unique one as well). We've got a CLI command to create a new one:
 
