@@ -33,6 +33,13 @@
     "@vitejs/plugin-react": "4.2.1",
     "buffer": "6.0.3",
     "core-js": "3.35.1",
+    "dotenv-defaults": "5.0.2",
+    "express": "4.19.2",
+    "http-proxy-middleware": "2.0.6",
+    "isbot": "3.7.1",
+    "react": "18.3.0-canary-a870b2d54-20240314",
+    "react-server-dom-webpack": "18.3.0-canary-a870b2d54-20240314",
+    "vite-plugin-cjs-interop": "2.1.0",
     "vite": "4.5.2",
     "yargs-parser": "21.1.1"
   },
