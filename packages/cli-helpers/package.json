@@ -33,7 +33,7 @@
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/telemetry": "workspace:*",
     "chalk": "4.1.2",
-    "dotenv": "16.3.1",
+    "dotenv": "16.4.5",
     "execa": "5.1.1",
     "listr2": "6.6.1",
     "lodash": "4.17.21",
@@ -46,8 +46,8 @@
     "@types/lodash": "4.14.202",
     "@types/pascalcase": "1.0.3",
     "@types/yargs": "17.0.32",
-    "tsx": "4.6.2",
-    "typescript": "5.3.3",
+    "tsx": "4.7.1",
+    "typescript": "5.4.3",
     "vitest": "1.4.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
