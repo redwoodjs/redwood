@@ -42,7 +42,6 @@ export interface WebPaths {
   viteConfig: string | null // because vite is opt-in only
   entryClient: string | null
   entryServer: string | null
-  entries: string | null
   postcss: string
   storybookConfig: string
   storybookPreviewConfig: string | null
@@ -116,7 +115,6 @@ const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_VITE = 'web/vite.config' // .js,.ts
 const PATH_WEB_DIR_ENTRY_CLIENT = 'web/src/entry.client' // .jsx,.tsx
 const PATH_WEB_DIR_ENTRY_SERVER = 'web/src/entry.server' // .jsx,.tsx
-const PATH_WEB_DIR_ENTRIES = 'web/src/entries' // .js,.ts
 const PATH_WEB_DIR_GRAPHQL = 'web/src/graphql' // .js,.ts
 
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
@@ -258,7 +256,6 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       types: path.join(BASE_DIR, 'web/types'),
       entryClient: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_CLIENT)), // new vite/stream entry point for client
       entryServer: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_SERVER)),
-      entries: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRIES)),
       graphql: path.join(BASE_DIR, PATH_WEB_DIR_GRAPHQL),
     },
   }

@@ -38,10 +38,6 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   }
 
   if (rscEnabled) {
-    if (!rwPaths.web.entries) {
-      throw new Error('RSC entries file not found')
-    }
-
     await buildRscClientAndServer()
   }
 

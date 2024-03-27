@@ -14,10 +14,6 @@
       "types": "./dist/index.d.ts",
       "default": "./cjsWrapper.js"
     },
-    "./entries": {
-      "types": "./dist/entries.d.ts",
-      "default": "./dist/entries.js"
-    },
     "./client": {
       "types": "./dist/client.d.ts",
       "default": "./dist/client.js"
