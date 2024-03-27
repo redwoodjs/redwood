@@ -8020,7 +8020,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@testing-library/jest-dom": "npm:6.3.0"
-    "@testing-library/react": "npm:14.1.2"
+    "@testing-library/react": "npm:14.2.2"
     core-js: "npm:3.35.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
@@ -8393,7 +8393,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@testing-library/dom": "npm:9.3.4"
     "@testing-library/jest-dom": "npm:6.3.0"
-    "@testing-library/react": "npm:14.1.2"
+    "@testing-library/react": "npm:14.2.2"
     "@testing-library/user-event": "npm:14.5.2"
     "@types/pascalcase": "npm:1.0.3"
     "@types/react": "npm:^18.2.55"
@@ -8802,7 +8802,7 @@ __metadata:
     "@redwoodjs/router": "workspace:*"
     "@redwoodjs/web": "workspace:*"
     "@testing-library/jest-dom": "npm:6.3.0"
-    "@testing-library/react": "npm:14.1.2"
+    "@testing-library/react": "npm:14.2.2"
     "@testing-library/user-event": "npm:14.5.2"
     "@types/aws-lambda": "npm:8.10.126"
     "@types/babel-core": "npm:6.25.10"
@@ -8920,7 +8920,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@rollup/plugin-babel": "npm:6.0.4"
     "@testing-library/jest-dom": "npm:6.3.0"
-    "@testing-library/react": "npm:14.1.2"
+    "@testing-library/react": "npm:14.2.2"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
     core-js: "npm:3.35.1"
@@ -10590,9 +10590,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:14.1.2":
-  version: 14.1.2
-  resolution: "@testing-library/react@npm:14.1.2"
+"@testing-library/react@npm:14.2.2":
+  version: 14.2.2
+  resolution: "@testing-library/react@npm:14.2.2"
   dependencies:
     "@babel/runtime": "npm:^7.12.5"
     "@testing-library/dom": "npm:^9.0.0"
@@ -10600,7 +10600,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 10c0/b5b0990d3aa0ea8b37c55804e0d5d584fc638a5c7d4df90da9a0fdb00bc981b27b6991468b2dc719982a5d0b0107a41596063ce51ad519eeab47b22bc04d6779
+  checksum: 10c0/ab36707f6701a4a56dd217e16e00d6326e0f760bb2e716245422c7500a0b94efcd351d0aa89c4fab2916e6ebc68c983cec6b3ae0804de813cafc913a612668f6
   languageName: node
   linkType: hard
 
@@ -29930,7 +29930,7 @@ __metadata:
     "@npmcli/arborist": "npm:7.2.2"
     "@playwright/test": "npm:1.41.2"
     "@testing-library/jest-dom": "npm:6.3.0"
-    "@testing-library/react": "npm:14.1.2"
+    "@testing-library/react": "npm:14.2.2"
     "@testing-library/user-event": "npm:14.5.2"
     "@types/babel__generator": "npm:7.6.8"
     "@types/fs-extra": "npm:11.0.4"
