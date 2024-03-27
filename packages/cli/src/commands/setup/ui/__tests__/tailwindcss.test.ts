@@ -4,6 +4,7 @@ let mockSkipValues: Array<string> = []
 let mockPrompt: (() => boolean) | undefined
 
 vi.mock('fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
+vi.mock('node:fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('fs-extra', async () => {
   function outputFileSync(filePath: string, data: string, options?: any) {
     memfsFs.mkdirSync(path.dirname(filePath), { recursive: true })
@@ -19,7 +20,6 @@ vi.mock('fs-extra', async () => {
     },
   }
 })
-vi.mock('node:fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('execa', () => ({
   default: (...args: Array<any>) => {
     // Create an empty config file when `tailwindcss init` is called.
@@ -79,6 +79,7 @@ import {
   it,
   describe,
   beforeAll,
+  beforeEach,
   afterAll,
   afterEach,
 } from 'vitest'
@@ -95,8 +96,16 @@ beforeAll(() => {
   process.env.RWJS_CWD = APP_PATH
 })
 
+beforeEach(() => {
+  // The `recommendExtensionsToInstall` function uses `console.log` to output
+  // the list of recommended extensions. We mock it to keep the output clean
+  // during tests
+  vi.spyOn(console, 'log').mockImplementation(() => {})
+})
+
 afterEach(() => {
   mockPrompt = undefined
+  vi.mocked(console).log.mockRestore()
   vol.reset()
 })
 
@@ -180,6 +189,7 @@ describe('tasks that should be skipped', () => {
 
   it('should skip adding recommended VS Code extensions to project settings if the user is not using VS Code', async () => {
     setupDefaultProjectStructure()
+    // Delete the .vscode directory to simulate not using VS Code
     memfsFs.rmSync(path.join(APP_PATH, '.vscode'), { recursive: true })
 
     await handler({})

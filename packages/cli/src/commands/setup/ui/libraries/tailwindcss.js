@@ -293,13 +293,16 @@ export const handler = async ({ force, install }) => {
           )
 
           let originalExtensionsJson = { recommendations: [] }
+
           if (fs.existsSync(VS_CODE_EXTENSIONS_PATH)) {
             const originalExtensionsFile = fs.readFileSync(
               VS_CODE_EXTENSIONS_PATH,
               'utf-8',
             )
+
             originalExtensionsJson = JSON.parse(originalExtensionsFile)
           }
+
           const newExtensionsJson = {
             ...originalExtensionsJson,
             recommendations: [
@@ -307,6 +310,7 @@ export const handler = async ({ force, install }) => {
               ...recommendedVSCodeExtensions,
             ],
           }
+
           fs.writeFileSync(
             VS_CODE_EXTENSIONS_PATH,
             JSON.stringify(newExtensionsJson, null, 2),
