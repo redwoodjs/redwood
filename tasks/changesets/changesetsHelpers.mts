@@ -79,20 +79,28 @@ function getDefaultPlaceholder() {
   return fs.readFile(path.join(DIRNAME, 'placeholder.md'))
 }
 
-async function fetchFromGitHub({ query, variables }: { query: string; variables: Record<string, any> }) {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  }
-  if (process.env.GITHUB_TOKEN) {
-    headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`
-  }
-  if (process.env.REDWOOD_GITHUB_TOKEN) {
-    headers.Authorization = `Bearer ${process.env.REDWOOD_GITHUB_TOKEN}`
+async function fetchFromGitHub({
+  query,
+  variables,
+}: {
+  query: string
+  variables: Record<string, any>
+}) {
+  const token = process.env.GITHUB_TOKEN || process.env.REDWOOD_GITHUB_TOKEN
+
+  if (!token) {
+    throw new Error(
+      '\nNo GitHub token found. Please set GITHUB_TOKEN or ' +
+        'REDWOOD_GITHUB_TOKEN',
+    )
   }
 
   const res = await fetch('https://api.github.com/graphql', {
     method: 'POST',
-    headers,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify({
       query,
       variables,
@@ -139,7 +147,7 @@ function getPlaceholderForPr(pr: PR) {
   return [
     "(Delete this help paragraph when you're done.) Thanks for writing a changeset! Here's a place to start.",
     "Don't edit the title, but in editing the body, try to explain what this PR means for Redwood users.",
-    "The more detail the better. E.g., is it a new feature? How do they use it? Code examples go a long way!",
+    'The more detail the better. E.g., is it a new feature? How do they use it? Code examples go a long way!',
     '',
     `- ${pr.title} (#${pr.number}) by @${pr.author.login}`,
     '',
