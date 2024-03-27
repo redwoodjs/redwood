@@ -3112,15 +3112,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/http-proxy@npm:9.4.0":
-  version: 9.4.0
-  resolution: "@fastify/http-proxy@npm:9.4.0"
+"@fastify/http-proxy@npm:9.5.0":
+  version: 9.5.0
+  resolution: "@fastify/http-proxy@npm:9.5.0"
   dependencies:
     "@fastify/reply-from": "npm:^9.0.0"
     fast-querystring: "npm:^1.1.2"
     fastify-plugin: "npm:^4.5.0"
     ws: "npm:^8.4.2"
-  checksum: 10c0/d2bb100575622e4544690ae466bb2494362c7ed4bb784be4c275e51169a14214010fba70de8fd99c7d5bab1af5a35748d11317ce78911d9437cdcaa2173fb747
+  checksum: 10c0/601f8b1553e515a7a8e937bea10f290ab4298fd938047c94398aeda9d9213d77e67b37aafce648f4f34ea702ea234dd03f2680f97794f8489b2c8b044bf47c34
   languageName: node
   linkType: hard
 
@@ -4693,26 +4693,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/plugin-graphql-sse@npm:3.1.1":
-  version: 3.1.1
-  resolution: "@graphql-yoga/plugin-graphql-sse@npm:3.1.1"
+"@graphql-yoga/plugin-graphql-sse@npm:3.2.0":
+  version: 3.2.0
+  resolution: "@graphql-yoga/plugin-graphql-sse@npm:3.2.0"
   dependencies:
     graphql-sse: "npm:^2.0.0"
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-    graphql-yoga: ^5.1.1
-  checksum: 10c0/e4adfbce8b0c50be9f384df5477a285615e2a54c602b57cbc4448d4b0874d2052892b6cddd6a96d85a75820683ebdfb22b56db08ce61a34e080e0e7f39c63297
+    graphql-yoga: ^5.2.0
+  checksum: 10c0/7ebe4e7d8ba5d5259eb7ff34118ec667b8ea2d89590ac76f74238feedddec2acdce5fe97b0172fbb4ff381449d6aed914c3757d5d05d6ddfd507d5d8463266fd
   languageName: node
   linkType: hard
 
-"@graphql-yoga/plugin-persisted-operations@npm:3.1.1":
-  version: 3.1.1
-  resolution: "@graphql-yoga/plugin-persisted-operations@npm:3.1.1"
+"@graphql-yoga/plugin-persisted-operations@npm:3.2.0":
+  version: 3.2.0
+  resolution: "@graphql-yoga/plugin-persisted-operations@npm:3.2.0"
   peerDependencies:
     "@graphql-tools/utils": ^10.0.0
     graphql: ^15.2.0 || ^16.0.0
-    graphql-yoga: ^5.1.1
-  checksum: 10c0/19c00017f75df4aed065d30e67da5728a1ef6ee852dd7f30c052628b465e8d3e1a24c4ed70995d6ca2018b750649cea5e5902eadf0c75a2c65c7e487dd295169
+    graphql-yoga: ^5.2.0
+  checksum: 10c0/57afc915826e75e5b1f94c2fbc5451f40ff7a484ef302ed17fb0f55d301d43c94facd1853e123fd8e9ef5a500c65bfe82884ab6edf24891e781815fa9064211c
   languageName: node
   linkType: hard
 
@@ -7523,7 +7523,7 @@ __metadata:
     qs: "npm:6.11.2"
     split2: "npm:4.2.0"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
     yargs: "npm:17.7.2"
   peerDependencies:
@@ -7552,7 +7552,7 @@ __metadata:
     "@types/pascalcase": "npm:1.0.3"
     "@types/split2": "npm:4.2.3"
     "@whatwg-node/fetch": "npm:0.9.16"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     humanize-string: "npm:2.1.0"
     jsonwebtoken: "npm:9.0.2"
     memjs: "npm:1.3.2"
@@ -7562,7 +7562,7 @@ __metadata:
     split2: "npm:4.2.0"
     title-case: "npm:3.0.3"
     ts-toolbelt: "npm:9.6.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     memjs: 1.3.2
@@ -7589,10 +7589,10 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/api": "workspace:*"
     "@types/jsonwebtoken": "npm:9.0.6"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7606,8 +7606,8 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
-    core-js: "npm:3.36.1"
-    typescript: "npm:5.3.3"
+    core-js: "npm:3.35.1"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7622,9 +7622,9 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     "@auth0/auth0-spa-js": 2.1.3
@@ -7641,10 +7641,10 @@ __metadata:
     "@redwoodjs/api": "workspace:*"
     "@types/aws-lambda": "npm:8.10.126"
     "@types/jsonwebtoken": "npm:9.0.6"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7658,8 +7658,8 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
-    core-js: "npm:3.36.1"
-    typescript: "npm:5.3.3"
+    core-js: "npm:3.35.1"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7675,9 +7675,9 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:^18.2.55"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     "@azure/msal-browser": 2.38.3
@@ -7694,8 +7694,8 @@ __metadata:
     "@clerk/clerk-sdk-node": "npm:4.13.11"
     "@redwoodjs/api": "workspace:*"
     "@types/aws-lambda": "npm:8.10.126"
-    core-js: "npm:3.36.1"
-    typescript: "npm:5.3.3"
+    core-js: "npm:3.35.1"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7709,8 +7709,8 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
-    core-js: "npm:3.36.1"
-    typescript: "npm:5.3.3"
+    core-js: "npm:3.35.1"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -7725,9 +7725,9 @@ __metadata:
     "@clerk/types": "npm:3.60.0"
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     "@clerk/clerk-react": 4.30.7
@@ -7743,8 +7743,8 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
-    core-js: "npm:3.36.1"
-    typescript: "npm:5.3.3"
+    core-js: "npm:3.35.1"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7762,9 +7762,9 @@ __metadata:
     "@types/md5": "npm:2.3.5"
     "@types/uuid": "npm:9.0.8"
     base64url: "npm:3.0.1"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     md5: "npm:2.3.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     uuid: "npm:9.0.1"
     vitest: "npm:1.3.1"
   languageName: unknown
@@ -7781,10 +7781,10 @@ __metadata:
     "@simplewebauthn/browser": "npm:7.4.0"
     "@simplewebauthn/typescript-types": "npm:7.4.0"
     "@types/yargs": "npm:17.0.32"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     prompts: "npm:2.4.2"
     terminal-link: "npm:2.1.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -7799,11 +7799,11 @@ __metadata:
     "@simplewebauthn/browser": "npm:7.4.0"
     "@simplewebauthn/typescript-types": "npm:7.4.0"
     "@types/react": "npm:^18.2.55"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -7816,9 +7816,9 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/api": "workspace:*"
     "@types/aws-lambda": "npm:8.10.126"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     firebase-admin: "npm:11.11.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7832,8 +7832,8 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
-    core-js: "npm:3.36.1"
-    typescript: "npm:5.3.3"
+    core-js: "npm:3.35.1"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7847,12 +7847,12 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     firebase: "npm:10.7.0"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   peerDependencies:
     firebase: 10.7.0
   languageName: unknown
@@ -7868,9 +7868,9 @@ __metadata:
     "@redwoodjs/api": "workspace:*"
     "@types/aws-lambda": "npm:8.10.126"
     "@types/jsonwebtoken": "npm:9.0.6"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7884,8 +7884,8 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
-    core-js: "npm:3.36.1"
-    typescript: "npm:5.3.3"
+    core-js: "npm:3.35.1"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7900,9 +7900,9 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:^18.2.55"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     netlify-identity-widget: 1.9.2
@@ -7919,9 +7919,9 @@ __metadata:
     "@redwoodjs/api": "workspace:*"
     "@types/aws-lambda": "npm:8.10.126"
     "@types/jsonwebtoken": "npm:9.0.6"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -7935,8 +7935,8 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
-    core-js: "npm:3.36.1"
-    typescript: "npm:5.3.3"
+    core-js: "npm:3.35.1"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -7949,9 +7949,9 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@supabase/supabase-js": "npm:2.39.8"
     "@types/react": "npm:^18.2.55"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     "@supabase/supabase-js": 2.39.8
@@ -7967,10 +7967,10 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/api": "workspace:*"
     "@types/jsonwebtoken": "npm:9.0.6"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     supertokens-node: 15.2.1
@@ -7986,9 +7986,9 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     memfs: "npm:4.6.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -8002,10 +8002,10 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
     supertokens-auth-react: "npm:0.34.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     supertokens-auth-react: 0.34.0
@@ -8021,12 +8021,12 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.0"
     "@testing-library/jest-dom": "npm:6.3.0"
     "@testing-library/react": "npm:14.1.2"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     msw: "npm:1.3.2"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8056,12 +8056,12 @@ __metadata:
     babel-plugin-graphql-tag: "npm:3.3.0"
     babel-plugin-module-resolver: "npm:5.0.0"
     babel-plugin-tester: "npm:11.0.4"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     fast-glob: "npm:3.3.2"
     graphql: "npm:16.8.1"
     jest: "npm:29.7.0"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8084,7 +8084,7 @@ __metadata:
     memfs: "npm:4.6.0"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     yargs: "npm:17.7.2"
   bin:
     up: ./dist/bin.js
@@ -8104,7 +8104,7 @@ __metadata:
     "@types/pascalcase": "npm:1.0.3"
     "@types/yargs": "npm:17.0.32"
     chalk: "npm:4.1.2"
-    dotenv: "npm:16.3.1"
+    dotenv: "npm:16.4.5"
     execa: "npm:5.1.1"
     listr2: "npm:6.6.1"
     lodash: "npm:4.17.21"
@@ -8113,7 +8113,7 @@ __metadata:
     prompts: "npm:2.4.2"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -8136,7 +8136,7 @@ __metadata:
     storybook: "npm:7.6.17"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     yargs: "npm:17.7.2"
   languageName: unknown
   linkType: soft
@@ -8173,7 +8173,7 @@ __metadata:
     ci-info: "npm:4.0.0"
     concurrently: "npm:8.2.2"
     configstore: "npm:3.1.5"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     cross-env: "npm:7.0.3"
     decamelize: "npm:5.0.1"
     dotenv-defaults: "npm:5.0.2"
@@ -8201,7 +8201,7 @@ __metadata:
     systeminformation: "npm:5.21.20"
     terminal-link: "npm:2.1.1"
     title-case: "npm:3.0.3"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     uuid: "npm:9.0.1"
     vitest: "npm:1.3.1"
     yargs: "npm:17.7.2"
@@ -8233,7 +8233,7 @@ __metadata:
     "@vscode/ripgrep": "npm:1.15.6"
     "@whatwg-node/fetch": "npm:0.9.16"
     cheerio: "npm:1.0.0-rc.12"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     deepmerge: "npm:4.3.1"
     execa: "npm:5.1.1"
     fast-glob: "npm:3.3.2"
@@ -8244,7 +8244,7 @@ __metadata:
     prettier: "npm:3.2.5"
     tasuku: "npm:2.0.1"
     tempy: "npm:1.0.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
     yargs: "npm:17.7.2"
   bin:
@@ -8258,7 +8258,7 @@ __metadata:
   dependencies:
     "@redwoodjs/framework-tools": "workspace:*"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8279,24 +8279,24 @@ __metadata:
     babel-loader: "npm:^9.1.3"
     babel-timing: "npm:0.9.1"
     copy-webpack-plugin: "npm:11.0.0"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     css-loader: "npm:6.8.1"
     css-minimizer-webpack-plugin: "npm:5.0.1"
-    dotenv-webpack: "npm:8.0.1"
+    dotenv-webpack: "npm:8.1.0"
     graphql-tag: "npm:2.12.6"
     html-webpack-plugin: "npm:5.5.4"
     jest: "npm:29.7.0"
     lodash: "npm:4.17.21"
     mini-css-extract-plugin: "npm:2.7.6"
-    nodemon: "npm:3.0.2"
+    nodemon: "npm:3.1.0"
     null-loader: "npm:4.0.1"
     react-refresh: "npm:0.14.0"
     resolve-url-loader: "npm:5.0.0"
     rimraf: "npm:5.0.5"
     style-loader: "npm:3.3.3"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     url-loader: "npm:4.1.1"
-    webpack: "npm:5.90.3"
+    webpack: "npm:5.91.0"
     webpack-bundle-analyzer: "npm:4.10.1"
     webpack-cli: "npm:5.1.4"
     webpack-dev-server: "npm:4.15.1"
@@ -8347,7 +8347,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:4.6.0"
     jest: "npm:29.7.0"
     prettier: "npm:3.2.5"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8363,7 +8363,7 @@ __metadata:
     eslint: "npm:8.55.0"
     glob: "npm:10.3.10"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8371,7 +8371,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/fastify-web@workspace:packages/adapters/fastify/web"
   dependencies:
-    "@fastify/http-proxy": "npm:9.4.0"
+    "@fastify/http-proxy": "npm:9.5.0"
     "@fastify/static": "npm:6.12.0"
     "@fastify/url-data": "npm:5.4.0"
     "@redwoodjs/framework-tools": "workspace:*"
@@ -8379,7 +8379,7 @@ __metadata:
     fast-glob: "npm:3.3.2"
     fastify: "npm:4.26.2"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -8398,14 +8398,14 @@ __metadata:
     "@types/pascalcase": "npm:1.0.3"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     graphql: "npm:16.8.1"
-    nodemon: "npm:3.0.2"
+    nodemon: "npm:3.1.0"
     pascalcase: "npm:1.0.0"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
     react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
     react-hook-form: "npm:7.51.1"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     react: 18.3.0-canary-a870b2d54-20240314
@@ -8421,7 +8421,7 @@ __metadata:
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8443,7 +8443,7 @@ __metadata:
     "@graphql-tools/merge": "npm:9.0.3"
     "@graphql-tools/schema": "npm:10.0.3"
     "@graphql-tools/utils": "npm:10.1.2"
-    "@graphql-yoga/plugin-persisted-operations": "npm:3.1.1"
+    "@graphql-yoga/plugin-persisted-operations": "npm:3.2.0"
     "@opentelemetry/api": "npm:1.7.0"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/context": "workspace:*"
@@ -8454,7 +8454,7 @@ __metadata:
     "@types/uuid": "npm:9.0.8"
     "@whatwg-node/fetch": "npm:0.9.16"
     aws-lambda: "npm:1.0.7"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     graphql: "npm:16.8.1"
     graphql-scalars: "npm:1.22.4"
     graphql-tag: "npm:2.12.6"
@@ -8463,7 +8463,7 @@ __metadata:
     jsonwebtoken: "npm:9.0.2"
     lodash: "npm:4.17.21"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     uuid: "npm:9.0.1"
   languageName: unknown
   linkType: soft
@@ -8498,7 +8498,7 @@ __metadata:
     "@sdl-codegen/node": "npm:0.0.10"
     "@types/fs-extra": "npm:11.0.4"
     chalk: "npm:4.1.2"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     deepmerge: "npm:4.3.1"
     esbuild: "npm:0.20.2"
     fast-glob: "npm:3.3.2"
@@ -8514,7 +8514,7 @@ __metadata:
     terminal-link: "npm:2.1.1"
     ts-node: "npm:10.9.1"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   bin:
     rw-gen: ./dist/generate/generate.js
@@ -8529,7 +8529,7 @@ __metadata:
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -8541,7 +8541,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/mailer-core": "workspace:*"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8554,7 +8554,7 @@ __metadata:
     "@types/nodemailer": "npm:^6"
     nodemailer: "npm:6.9.9"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8566,7 +8566,7 @@ __metadata:
     "@redwoodjs/mailer-core": "workspace:*"
     resend: "npm:1.1.0"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8579,7 +8579,7 @@ __metadata:
     "@redwoodjs/mailer-handler-nodemailer": "workspace:*"
     "@types/nodemailer": "npm:^6"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8593,7 +8593,7 @@ __metadata:
     "@types/mjml": "npm:4"
     mjml: "npm:4.14.1"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8605,7 +8605,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/mailer-core": "workspace:*"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8627,10 +8627,10 @@ __metadata:
     babel-plugin-ignore-html-and-css-imports: "npm:0.1.0"
     babel-plugin-tester: "npm:11.0.4"
     cheerio: "npm:1.0.0-rc.12"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     graphql: "npm:16.8.1"
     mime-types: "npm:2.1.35"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     react: 18.3.0-canary-a870b2d54-20240314
@@ -8649,7 +8649,7 @@ __metadata:
     rimraf: "npm:5.0.5"
     string-env-interpolation: "npm:1.0.1"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   languageName: unknown
   linkType: soft
@@ -8665,7 +8665,7 @@ __metadata:
     "@graphql-tools/schema": "npm:10.0.3"
     "@graphql-tools/utils": "npm:10.1.2"
     "@graphql-yoga/plugin-defer-stream": "npm:3.1.1"
-    "@graphql-yoga/plugin-graphql-sse": "npm:3.1.1"
+    "@graphql-yoga/plugin-graphql-sse": "npm:3.2.0"
     "@graphql-yoga/redis-event-target": "npm:3.0.0"
     "@graphql-yoga/subscription": "npm:5.0.0"
     "@n1ru4l/graphql-live-query": "npm:0.10.0"
@@ -8673,9 +8673,9 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     graphql: "npm:16.8.1"
     ioredis: "npm:^5.3.2"
-    nodemon: "npm:3.0.2"
+    nodemon: "npm:3.1.0"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     ioredis: ^5.3.2
@@ -8695,7 +8695,7 @@ __metadata:
     "@prisma/client": "npm:5.11.0"
     "@prisma/internals": "npm:5.11.0"
     "@redwoodjs/project-config": "workspace:*"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     esbuild: "npm:0.20.2"
     vitest: "npm:1.3.1"
   languageName: unknown
@@ -8711,13 +8711,13 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
     react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
     tstyche: "npm:1.0.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   peerDependencies:
     react: 18.3.0-canary-a870b2d54-20240314
     react-dom: 18.3.0-canary-a870b2d54-20240314
@@ -8741,7 +8741,7 @@ __metadata:
     "@types/node": "npm:20.11.25"
     "@types/vscode": "npm:1.79.1"
     camelcase: "npm:6.3.0"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     deepmerge: "npm:4.3.1"
     dotenv-defaults: "npm:5.0.2"
     enquirer: "npm:2.4.1"
@@ -8755,7 +8755,7 @@ __metadata:
     lru-cache: "npm:7.18.3"
     proxyquire: "npm:2.1.3"
     ts-morph: "npm:15.1.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
     vscode-languageserver: "npm:6.1.1"
     vscode-languageserver-textdocument: "npm:1.0.8"
@@ -8778,7 +8778,7 @@ __metadata:
     "@types/yargs": "npm:17.0.32"
     "@whatwg-node/fetch": "npm:0.9.16"
     ci-info: "npm:4.0.0"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     envinfo: "npm:7.11.0"
     systeminformation: "npm:5.21.20"
     uuid: "npm:9.0.1"
@@ -8811,7 +8811,7 @@ __metadata:
     "@types/webpack": "npm:5.28.5"
     "@types/webpack-env": "npm:1.18.4"
     babel-jest: "npm:^29.7.0"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     fast-glob: "npm:3.3.2"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
@@ -8819,7 +8819,7 @@ __metadata:
     jsdom: "npm:24.0.0"
     msw: "npm:1.3.2"
     ts-toolbelt: "npm:9.6.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
     whatwg-fetch: "npm:3.6.19"
   languageName: unknown
@@ -8835,7 +8835,7 @@ __metadata:
     enquirer: "npm:2.4.1"
     stdout-update: "npm:1.6.8"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -8863,7 +8863,7 @@ __metadata:
     buffer: "npm:6.0.3"
     busboy: "npm:^1.6.0"
     cookie: "npm:0.6.0"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     dotenv-defaults: "npm:5.0.2"
     express: "npm:4.19.2"
     glob: "npm:10.3.10"
@@ -8873,7 +8873,7 @@ __metadata:
     react-server-dom-webpack: "npm:18.3.0-canary-a870b2d54-20240314"
     rollup: "npm:4.12.1"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vite: "npm:5.1.6"
     vite-plugin-cjs-interop: "npm:2.1.0"
     vitest: "npm:1.3.1"
@@ -8899,7 +8899,7 @@ __metadata:
     fastify: "npm:4.26.2"
     fs-extra: "npm:11.2.0"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     yargs: "npm:17.7.2"
   bin:
     rw-web-server: ./dist/bin.js
@@ -8923,11 +8923,11 @@ __metadata:
     "@testing-library/react": "npm:14.1.2"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     graphql: "npm:16.8.1"
     graphql-sse: "npm:2.5.2"
     graphql-tag: "npm:2.12.6"
-    nodemon: "npm:3.0.2"
+    nodemon: "npm:3.1.0"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
     react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
     react-helmet-async: "npm:2.0.3"
@@ -8935,7 +8935,7 @@ __metadata:
     stacktracey: "npm:2.1.8"
     ts-toolbelt: "npm:9.6.0"
     tstyche: "npm:1.0.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
   peerDependencies:
     react: 18.3.0-canary-a870b2d54-20240314
@@ -12001,13 +12001,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webassemblyjs/ast@npm:1.11.6, @webassemblyjs/ast@npm:^1.11.5":
-  version: 1.11.6
-  resolution: "@webassemblyjs/ast@npm:1.11.6"
+"@webassemblyjs/ast@npm:1.12.1, @webassemblyjs/ast@npm:^1.12.1":
+  version: 1.12.1
+  resolution: "@webassemblyjs/ast@npm:1.12.1"
   dependencies:
     "@webassemblyjs/helper-numbers": "npm:1.11.6"
     "@webassemblyjs/helper-wasm-bytecode": "npm:1.11.6"
-  checksum: 10c0/e28476a183c8a1787adcf0e5df1d36ec4589467ab712c674fe4f6769c7fb19d1217bfb5856b3edd0f3e0a148ebae9e4bbb84110cee96664966dfef204d9c31fb
+  checksum: 10c0/ba7f2b96c6e67e249df6156d02c69eb5f1bd18d5005303cdc42accb053bebbbde673826e54db0437c9748e97abd218366a1d13fa46859b23cde611b6b409998c
   languageName: node
   linkType: hard
 
@@ -12050,10 +12050,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webassemblyjs/helper-buffer@npm:1.11.6":
-  version: 1.11.6
-  resolution: "@webassemblyjs/helper-buffer@npm:1.11.6"
-  checksum: 10c0/55b5d67db95369cdb2a505ae7ebdf47194d49dfc1aecb0f5403277dcc899c7d3e1f07e8d279646adf8eafd89959272db62ca66fbe803321661ab184176ddfd3a
+"@webassemblyjs/helper-buffer@npm:1.12.1":
+  version: 1.12.1
+  resolution: "@webassemblyjs/helper-buffer@npm:1.12.1"
+  checksum: 10c0/0270724afb4601237410f7fd845ab58ccda1d5456a8783aadfb16eaaf3f2c9610c28e4a5bcb6ad880cde5183c82f7f116d5ccfc2310502439d33f14b6888b48a
   languageName: node
   linkType: hard
 
@@ -12114,15 +12114,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webassemblyjs/helper-wasm-section@npm:1.11.6":
-  version: 1.11.6
-  resolution: "@webassemblyjs/helper-wasm-section@npm:1.11.6"
+"@webassemblyjs/helper-wasm-section@npm:1.12.1":
+  version: 1.12.1
+  resolution: "@webassemblyjs/helper-wasm-section@npm:1.12.1"
   dependencies:
-    "@webassemblyjs/ast": "npm:1.11.6"
-    "@webassemblyjs/helper-buffer": "npm:1.11.6"
+    "@webassemblyjs/ast": "npm:1.12.1"
+    "@webassemblyjs/helper-buffer": "npm:1.12.1"
     "@webassemblyjs/helper-wasm-bytecode": "npm:1.11.6"
-    "@webassemblyjs/wasm-gen": "npm:1.11.6"
-  checksum: 10c0/b79b19a63181f32e5ee0e786fa8264535ea5360276033911fae597d2de15e1776f028091d08c5a813a3901fd2228e74cd8c7e958fded064df734f00546bef8ce
+    "@webassemblyjs/wasm-gen": "npm:1.12.1"
+  checksum: 10c0/0546350724d285ae3c26e6fc444be4c3b5fb824f3be0ec8ceb474179dc3f4430336dd2e36a44b3e3a1a6815960e5eec98cd9b3a8ec66dc53d86daedd3296a6a2
   languageName: node
   linkType: hard
 
@@ -12204,32 +12204,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webassemblyjs/wasm-edit@npm:^1.11.5":
-  version: 1.11.6
-  resolution: "@webassemblyjs/wasm-edit@npm:1.11.6"
+"@webassemblyjs/wasm-edit@npm:^1.12.1":
+  version: 1.12.1
+  resolution: "@webassemblyjs/wasm-edit@npm:1.12.1"
   dependencies:
-    "@webassemblyjs/ast": "npm:1.11.6"
-    "@webassemblyjs/helper-buffer": "npm:1.11.6"
+    "@webassemblyjs/ast": "npm:1.12.1"
+    "@webassemblyjs/helper-buffer": "npm:1.12.1"
     "@webassemblyjs/helper-wasm-bytecode": "npm:1.11.6"
-    "@webassemblyjs/helper-wasm-section": "npm:1.11.6"
-    "@webassemblyjs/wasm-gen": "npm:1.11.6"
-    "@webassemblyjs/wasm-opt": "npm:1.11.6"
-    "@webassemblyjs/wasm-parser": "npm:1.11.6"
-    "@webassemblyjs/wast-printer": "npm:1.11.6"
-  checksum: 10c0/9a56b6bf635cf7aa5d6e926eaddf44c12fba050170e452a8e17ab4e1b937708678c03f5817120fb9de1e27167667ce693d16ce718d41e5a16393996a6017ab73
+    "@webassemblyjs/helper-wasm-section": "npm:1.12.1"
+    "@webassemblyjs/wasm-gen": "npm:1.12.1"
+    "@webassemblyjs/wasm-opt": "npm:1.12.1"
+    "@webassemblyjs/wasm-parser": "npm:1.12.1"
+    "@webassemblyjs/wast-printer": "npm:1.12.1"
+  checksum: 10c0/972f5e6c522890743999e0ed45260aae728098801c6128856b310dd21f1ee63435fc7b518e30e0ba1cdafd0d1e38275829c1e4451c3536a1d9e726e07a5bba0b
   languageName: node
   linkType: hard
 
-"@webassemblyjs/wasm-gen@npm:1.11.6":
-  version: 1.11.6
-  resolution: "@webassemblyjs/wasm-gen@npm:1.11.6"
+"@webassemblyjs/wasm-gen@npm:1.12.1":
+  version: 1.12.1
+  resolution: "@webassemblyjs/wasm-gen@npm:1.12.1"
   dependencies:
-    "@webassemblyjs/ast": "npm:1.11.6"
+    "@webassemblyjs/ast": "npm:1.12.1"
     "@webassemblyjs/helper-wasm-bytecode": "npm:1.11.6"
     "@webassemblyjs/ieee754": "npm:1.11.6"
     "@webassemblyjs/leb128": "npm:1.11.6"
     "@webassemblyjs/utf8": "npm:1.11.6"
-  checksum: 10c0/ce9a39d3dab2eb4a5df991bc9f3609960daa4671d25d700f4617152f9f79da768547359f817bee10cd88532c3e0a8a1714d383438e0a54217eba53cb822bd5ad
+  checksum: 10c0/1e257288177af9fa34c69cab94f4d9036ebed611f77f3897c988874e75182eeeec759c79b89a7a49dd24624fc2d3d48d5580b62b67c4a1c9bfbdcd266b281c16
   languageName: node
   linkType: hard
 
@@ -12246,15 +12246,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webassemblyjs/wasm-opt@npm:1.11.6":
-  version: 1.11.6
-  resolution: "@webassemblyjs/wasm-opt@npm:1.11.6"
+"@webassemblyjs/wasm-opt@npm:1.12.1":
+  version: 1.12.1
+  resolution: "@webassemblyjs/wasm-opt@npm:1.12.1"
   dependencies:
-    "@webassemblyjs/ast": "npm:1.11.6"
-    "@webassemblyjs/helper-buffer": "npm:1.11.6"
-    "@webassemblyjs/wasm-gen": "npm:1.11.6"
-    "@webassemblyjs/wasm-parser": "npm:1.11.6"
-  checksum: 10c0/82788408054171688e9f12883b693777219366d6867003e34dccc21b4a0950ef53edc9d2b4d54cabdb6ee869cf37c8718401b4baa4f70a7f7dd3867c75637298
+    "@webassemblyjs/ast": "npm:1.12.1"
+    "@webassemblyjs/helper-buffer": "npm:1.12.1"
+    "@webassemblyjs/wasm-gen": "npm:1.12.1"
+    "@webassemblyjs/wasm-parser": "npm:1.12.1"
+  checksum: 10c0/992a45e1f1871033c36987459436ab4e6430642ca49328e6e32a13de9106fe69ae6c0ac27d7050efd76851e502d11cd1ac0e06b55655dfa889ad82f11a2712fb
   languageName: node
   linkType: hard
 
@@ -12270,17 +12270,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webassemblyjs/wasm-parser@npm:1.11.6, @webassemblyjs/wasm-parser@npm:^1.11.5":
-  version: 1.11.6
-  resolution: "@webassemblyjs/wasm-parser@npm:1.11.6"
+"@webassemblyjs/wasm-parser@npm:1.12.1, @webassemblyjs/wasm-parser@npm:^1.12.1":
+  version: 1.12.1
+  resolution: "@webassemblyjs/wasm-parser@npm:1.12.1"
   dependencies:
-    "@webassemblyjs/ast": "npm:1.11.6"
+    "@webassemblyjs/ast": "npm:1.12.1"
     "@webassemblyjs/helper-api-error": "npm:1.11.6"
     "@webassemblyjs/helper-wasm-bytecode": "npm:1.11.6"
     "@webassemblyjs/ieee754": "npm:1.11.6"
     "@webassemblyjs/leb128": "npm:1.11.6"
     "@webassemblyjs/utf8": "npm:1.11.6"
-  checksum: 10c0/7a97a5f34f98bdcfd812157845a06d53f3d3f67dbd4ae5d6bf66e234e17dc4a76b2b5e74e5dd70b4cab9778fc130194d50bbd6f9a1d23e15ed1ed666233d6f5f
+  checksum: 10c0/e85cec1acad07e5eb65b92d37c8e6ca09c6ca50d7ca58803a1532b452c7321050a0328c49810c337cc2dfd100c5326a54d5ebd1aa5c339ebe6ef10c250323a0e
   languageName: node
   linkType: hard
 
@@ -12312,13 +12312,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webassemblyjs/wast-printer@npm:1.11.6":
-  version: 1.11.6
-  resolution: "@webassemblyjs/wast-printer@npm:1.11.6"
+"@webassemblyjs/wast-printer@npm:1.12.1":
+  version: 1.12.1
+  resolution: "@webassemblyjs/wast-printer@npm:1.12.1"
   dependencies:
-    "@webassemblyjs/ast": "npm:1.11.6"
+    "@webassemblyjs/ast": "npm:1.12.1"
     "@xtuc/long": "npm:4.2.2"
-  checksum: 10c0/916b90fa3a8aadd95ca41c21d4316d0a7582cf6d0dcf6d9db86ab0de823914df513919fba60ac1edd227ff00e93a66b927b15cbddd36b69d8a34c8815752633c
+  checksum: 10c0/39bf746eb7a79aa69953f194943bbc43bebae98bd7cadd4d8bc8c0df470ca6bf9d2b789effaa180e900fab4e2691983c1f7d41571458bd2a26267f2f0c73705a
   languageName: node
   linkType: hard
 
@@ -15863,10 +15863,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.36.1, core-js@npm:^3.27.2, core-js@npm:^3.30.2":
-  version: 3.36.1
-  resolution: "core-js@npm:3.36.1"
-  checksum: 10c0/4f0ad2464535d809ba659226feca15bff14b9b5452518bddff8d81b9c94b0227b3027d9838f22f1dce664958acb4107b935cc0037695ae545edc2a303bca98bf
+"core-js@npm:3.35.1, core-js@npm:^3.27.2, core-js@npm:^3.30.2":
+  version: 3.35.1
+  resolution: "core-js@npm:3.35.1"
+  checksum: 10c0/ebc8e22c36d13bcf2140cbc1d8ad65d1b08192bff4c43ade70c72eac103cb4dcfbc521f2b1ad1c74881b0a4353e64986537893ae4f07888e49228340efa13ae6
   languageName: node
   linkType: hard
 
@@ -17244,21 +17244,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv-webpack@npm:8.0.1":
-  version: 8.0.1
-  resolution: "dotenv-webpack@npm:8.0.1"
+"dotenv-webpack@npm:8.1.0":
+  version: 8.1.0
+  resolution: "dotenv-webpack@npm:8.1.0"
   dependencies:
     dotenv-defaults: "npm:^2.0.2"
   peerDependencies:
     webpack: ^4 || ^5
-  checksum: 10c0/ddd12406e7b27a9f324110d34ddf6efdf386f8f6dbbf903cb74b63ed582c28262197eadca4e20cdee55d1e427cc4acd47c9dadd38bfc49219ae215d0b688c2e8
+  checksum: 10c0/7a64587fc96eba8e4ffccf56d6af09606611a32bc5cf04a37057b8c2881bcd11bf43c3395404581be734ae7fd2788471ceac76cb3d0ba1283e675223f98e5816
   languageName: node
   linkType: hard
 
-"dotenv@npm:16.3.1, dotenv@npm:^16.0.0, dotenv@npm:~16.3.1":
-  version: 16.3.1
-  resolution: "dotenv@npm:16.3.1"
-  checksum: 10c0/b95ff1bbe624ead85a3cd70dbd827e8e06d5f05f716f2d0cbc476532d54c7c9469c3bc4dd93ea519f6ad711cb522c00ac9a62b6eb340d5affae8008facc3fbd7
+"dotenv@npm:16.4.5, dotenv@npm:^16.0.0":
+  version: 16.4.5
+  resolution: "dotenv@npm:16.4.5"
+  checksum: 10c0/48d92870076832af0418b13acd6e5a5a3e83bb00df690d9812e94b24aff62b88ade955ac99a05501305b8dc8f1b0ee7638b18493deb6fe93d680e5220936292f
   languageName: node
   linkType: hard
 
@@ -17273,6 +17273,13 @@ __metadata:
   version: 8.6.0
   resolution: "dotenv@npm:8.6.0"
   checksum: 10c0/6750431dea8efbd54b9f2d9681b04e1ccc7989486461dcf058bb708d9e3d63b04115fcdf8840e38ad1e24a4a2e1e7c1560626c5e3ac7bc09371b127c49e2d45f
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:~16.3.1":
+  version: 16.3.1
+  resolution: "dotenv@npm:16.3.1"
+  checksum: 10c0/b95ff1bbe624ead85a3cd70dbd827e8e06d5f05f716f2d0cbc476532d54c7c9469c3bc4dd93ea519f6ad711cb522c00ac9a62b6eb340d5affae8008facc3fbd7
   languageName: node
   linkType: hard
 
@@ -17472,7 +17479,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:5.15.1, enhanced-resolve@npm:^5.15.0, enhanced-resolve@npm:^5.7.0":
+"enhanced-resolve@npm:5.15.1":
   version: 5.15.1
   resolution: "enhanced-resolve@npm:5.15.1"
   dependencies:
@@ -17490,6 +17497,16 @@ __metadata:
     memory-fs: "npm:^0.5.0"
     tapable: "npm:^1.0.0"
   checksum: 10c0/d95fc630606ea35bed21c4a029bbb1681919571a2d1d2011c7fc42a26a9e48ed3d74a89949ce331e1fd3229850a303e3218b887b92951330f16bdfbb93a10e64
+  languageName: node
+  linkType: hard
+
+"enhanced-resolve@npm:^5.16.0, enhanced-resolve@npm:^5.7.0":
+  version: 5.16.0
+  resolution: "enhanced-resolve@npm:5.16.0"
+  dependencies:
+    graceful-fs: "npm:^4.2.4"
+    tapable: "npm:^2.2.0"
+  checksum: 10c0/dd69669cbb638ccacefd03e04d5e195ee6a99b7f5f8012f86d2df7781834de357923e06064ea621137c4ce0b37cc12b872b4e6d1ac6ab15fe98e7f1dfbbb08c4
   languageName: node
   linkType: hard
 
@@ -20265,7 +20282,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graceful-fs@npm:4.2.11, graceful-fs@npm:^4.1.11, graceful-fs@npm:^4.1.15, graceful-fs@npm:^4.1.2, graceful-fs@npm:^4.1.6, graceful-fs@npm:^4.1.9, graceful-fs@npm:^4.2.0, graceful-fs@npm:^4.2.4, graceful-fs@npm:^4.2.6, graceful-fs@npm:^4.2.9":
+"graceful-fs@npm:4.2.11, graceful-fs@npm:^4.1.11, graceful-fs@npm:^4.1.15, graceful-fs@npm:^4.1.2, graceful-fs@npm:^4.1.6, graceful-fs@npm:^4.1.9, graceful-fs@npm:^4.2.0, graceful-fs@npm:^4.2.11, graceful-fs@npm:^4.2.4, graceful-fs@npm:^4.2.6, graceful-fs@npm:^4.2.9":
   version: 4.2.11
   resolution: "graceful-fs@npm:4.2.11"
   checksum: 10c0/386d011a553e02bc594ac2ca0bd6d9e4c22d7fa8cfbfc448a6d148c59ea881b092db9dbe3547ae4b88e55f1b01f7c4a2ecc53b310c042793e63aa44cf6c257f2
@@ -25973,9 +25990,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemon@npm:3.0.2":
-  version: 3.0.2
-  resolution: "nodemon@npm:3.0.2"
+"nodemon@npm:3.1.0":
+  version: 3.1.0
+  resolution: "nodemon@npm:3.1.0"
   dependencies:
     chokidar: "npm:^3.5.2"
     debug: "npm:^4"
@@ -25989,7 +26006,7 @@ __metadata:
     undefsafe: "npm:^2.0.5"
   bin:
     nodemon: bin/nodemon.js
-  checksum: 10c0/65837603fa790d723f8d59e1f098342ed5a5517c3a38ea3b52ca3d532ed21924ecd43fbaceadb458472ae0a8ae6b8395bda22ccd062709ad50c5c4537a625c9d
+  checksum: 10c0/3aeb50105ecae31ce4d0a5cd464011d4aa0dc15419e39ac0fd203d784e38940e1436f4ed96adbaa0f9614ee0644f91e3cf38f2afae8d3918ae7afc51c7e2116b
   languageName: node
   linkType: hard
 
@@ -29926,12 +29943,12 @@ __metadata:
     babel-plugin-auto-import: "npm:1.1.0"
     babel-plugin-remove-code: "npm:0.0.6"
     boxen: "npm:5.1.2"
-    core-js: "npm:3.36.1"
+    core-js: "npm:3.35.1"
     cypress: "npm:13.6.6"
     cypress-fail-fast: "npm:7.1.0"
     cypress-wait-until: "npm:3.0.1"
     dependency-cruiser: "npm:16.2.3"
-    dotenv: "npm:16.3.1"
+    dotenv: "npm:16.4.5"
     eslint: "npm:8.55.0"
     execa: "npm:5.1.1"
     fast-glob: "npm:3.3.2"
@@ -29944,7 +29961,7 @@ __metadata:
     make-dir-cli: "npm:3.0.0"
     msw: "npm:1.3.2"
     ncp: "npm:2.0.0"
-    nodemon: "npm:3.0.2"
+    nodemon: "npm:3.1.0"
     npm-packlist: "npm:8.0.2"
     nx: "npm:18.0.8"
     octokit: "npm:3.1.2"
@@ -29953,7 +29970,7 @@ __metadata:
     rimraf: "npm:5.0.5"
     tstyche: "npm:1.0.0"
     tsx: "npm:4.6.2"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.3.1"
     yargs: "npm:17.7.2"
     zx: "npm:7.2.3"
@@ -32680,23 +32697,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.3.3, typescript@npm:>=3 < 6":
-  version: 5.3.3
-  resolution: "typescript@npm:5.3.3"
+"typescript@npm:5.4.3, typescript@npm:>=3 < 6":
+  version: 5.4.3
+  resolution: "typescript@npm:5.4.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/e33cef99d82573624fc0f854a2980322714986bc35b9cb4d1ce736ed182aeab78e2cb32b385efa493b2a976ef52c53e20d6c6918312353a91850e2b76f1ea44f
+  checksum: 10c0/22443a8760c3668e256c0b34b6b45c359ef6cecc10c42558806177a7d500ab1a7d7aac1f976d712e26989ddf6731d2fbdd3212b7c73290a45127c1c43ba2005a
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A>=3 < 6#optional!builtin<compat/typescript>":
-  version: 5.3.3
-  resolution: "typescript@patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"
+"typescript@patch:typescript@npm%3A5.4.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A>=3 < 6#optional!builtin<compat/typescript>":
+  version: 5.4.3
+  resolution: "typescript@patch:typescript@npm%3A5.4.3#optional!builtin<compat/typescript>::version=5.4.3&hash=5adc0c"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/1d0a5f4ce496c42caa9a30e659c467c5686eae15d54b027ee7866744952547f1be1262f2d40de911618c242b510029d51d43ff605dba8fb740ec85ca2d3f9500
+  checksum: 10c0/6e51f8b7e6ec55b897b9e56b67e864fe8f44e30f4a14357aad5dc0f7432db2f01efc0522df0b6c36d361c51f2dc3dcac5c832efd96a404cfabf884e915d38828
   languageName: node
   linkType: hard
 
@@ -33589,13 +33606,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"watchpack@npm:^2.0.0-beta.10, watchpack@npm:^2.2.0, watchpack@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "watchpack@npm:2.4.0"
+"watchpack@npm:^2.0.0-beta.10, watchpack@npm:^2.2.0, watchpack@npm:^2.4.1":
+  version: 2.4.1
+  resolution: "watchpack@npm:2.4.1"
   dependencies:
     glob-to-regexp: "npm:^0.4.1"
     graceful-fs: "npm:^4.1.2"
-  checksum: 10c0/c5e35f9fb9338d31d2141d9835643c0f49b5f9c521440bb648181059e5940d93dd8ed856aa8a33fbcdd4e121dad63c7e8c15c063cf485429cd9d427be197fe62
+  checksum: 10c0/c694de0a61004e587a8a0fdc9cfec20ee692c52032d9ab2c2e99969a37fdab9e6e1bd3164ed506f9a13f7c83e65563d563e0d6b87358470cdb7309b83db78683
   languageName: node
   linkType: hard
 
@@ -33901,25 +33918,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5, webpack@npm:5.90.3, webpack@npm:^5":
-  version: 5.90.3
-  resolution: "webpack@npm:5.90.3"
+"webpack@npm:5, webpack@npm:5.91.0, webpack@npm:^5":
+  version: 5.91.0
+  resolution: "webpack@npm:5.91.0"
   dependencies:
     "@types/eslint-scope": "npm:^3.7.3"
     "@types/estree": "npm:^1.0.5"
-    "@webassemblyjs/ast": "npm:^1.11.5"
-    "@webassemblyjs/wasm-edit": "npm:^1.11.5"
-    "@webassemblyjs/wasm-parser": "npm:^1.11.5"
+    "@webassemblyjs/ast": "npm:^1.12.1"
+    "@webassemblyjs/wasm-edit": "npm:^1.12.1"
+    "@webassemblyjs/wasm-parser": "npm:^1.12.1"
     acorn: "npm:^8.7.1"
     acorn-import-assertions: "npm:^1.9.0"
     browserslist: "npm:^4.21.10"
     chrome-trace-event: "npm:^1.0.2"
-    enhanced-resolve: "npm:^5.15.0"
+    enhanced-resolve: "npm:^5.16.0"
     es-module-lexer: "npm:^1.2.1"
     eslint-scope: "npm:5.1.1"
     events: "npm:^3.2.0"
     glob-to-regexp: "npm:^0.4.1"
-    graceful-fs: "npm:^4.2.9"
+    graceful-fs: "npm:^4.2.11"
     json-parse-even-better-errors: "npm:^2.3.1"
     loader-runner: "npm:^4.2.0"
     mime-types: "npm:^2.1.27"
@@ -33927,14 +33944,14 @@ __metadata:
     schema-utils: "npm:^3.2.0"
     tapable: "npm:^2.1.1"
     terser-webpack-plugin: "npm:^5.3.10"
-    watchpack: "npm:^2.4.0"
+    watchpack: "npm:^2.4.1"
     webpack-sources: "npm:^3.2.3"
   peerDependenciesMeta:
     webpack-cli:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 10c0/f737aa871cadbbae89833eb85387f1bf9ee0768f039100a3c8134f2fdcc78c3230ca775c373b1aa467b272f74c6831e119f7a8a1c14dcac97327212be9c93eeb
+  checksum: 10c0/74a3e0ea1c9a492accf035317f31769ffeaaab415811524b9f17bc7bf7012c5b6e1a9860df5ca6903f3ae2618727b801eb47d9351a2595dfffb25941d368b88c
   languageName: node
   linkType: hard
 
