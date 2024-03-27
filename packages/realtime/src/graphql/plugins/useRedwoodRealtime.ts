@@ -2,6 +2,7 @@ import type { Plugin } from '@envelop/core'
 import { useLiveQuery } from '@envelop/live-query'
 import { mergeSchemas } from '@graphql-tools/schema'
 import { astFromDirective } from '@graphql-tools/utils'
+import { useDeferStream } from '@graphql-yoga/plugin-defer-stream'
 import { useGraphQLSSE } from '@graphql-yoga/plugin-graphql-sse'
 import { createRedisEventTarget } from '@graphql-yoga/redis-event-target'
 import type { CreateRedisEventTargetArgs } from '@graphql-yoga/redis-event-target'
@@ -11,6 +12,8 @@ import { GraphQLLiveDirective } from '@n1ru4l/graphql-live-query'
 import { InMemoryLiveQueryStore } from '@n1ru4l/in-memory-live-query-store'
 import type { execute as defaultExecute } from 'graphql'
 import { print } from 'graphql'
+
+export { Repeater } from 'graphql-yoga'
 
 /**
  * We want SubscriptionsGlobs type to be an object with this shape:
@@ -31,7 +34,7 @@ export type { PubSub }
 export { createPubSub, InMemoryLiveQueryStore }
 
 export const liveDirectiveTypeDefs = print(
-  astFromDirective(GraphQLLiveDirective)
+  astFromDirective(GraphQLLiveDirective),
 )
 
 export type LiveQueryStorageMechanism =
@@ -60,6 +63,7 @@ export type SubscribeClientType = CreateRedisEventTargetArgs['subscribeClient']
  *
  */
 export type RedwoodRealtimeOptions = {
+  enableDeferStream?: boolean
   liveQueries?: {
     /**
      * @description Redwood Realtime supports in-memory and Redis stores.
@@ -110,7 +114,7 @@ export class RedisLiveQueryStore {
     pub: PublishClientType,
     sub: SubscribeClientType,
     channel: string,
-    liveQueryStore: InMemoryLiveQueryStore
+    liveQueryStore: InMemoryLiveQueryStore,
   ) {
     this.pub = pub
     this.sub = sub
@@ -178,7 +182,7 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
         options.liveQueries.store.redis.publishClient,
         options.liveQueries.store.redis.subscribeClient,
         options.liveQueries.store.redis.channel || 'live-query-invalidations',
-        inMemoryLiveQueryStore
+        inMemoryLiveQueryStore,
       ) as unknown as InMemoryLiveQueryStore
       liveQueryPlugin = useLiveQuery({
         liveQueryStore,
@@ -231,6 +235,9 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
       }
       if (subscriptionsEnabled) {
         addPlugin(useGraphQLSSE() as Plugin<object>)
+      }
+      if (options.enableDeferStream) {
+        addPlugin(useDeferStream() as Plugin<object>)
       }
     },
     onContextBuilding() {

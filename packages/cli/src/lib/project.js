@@ -1,5 +1,6 @@
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
 
 import { getPaths } from '.'
 
@@ -22,4 +23,13 @@ export const sides = () => {
     sides = [...sides, 'api']
   }
   return sides
+}
+
+export const serverFileExists = () => {
+  const serverFilePath = path.join(
+    getPaths().api.src,
+    `server.${isTypeScriptProject() ? 'ts' : 'js'}`,
+  )
+
+  return fs.existsSync(serverFilePath)
 }

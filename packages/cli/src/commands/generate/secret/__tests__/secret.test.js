@@ -1,18 +1,28 @@
-import yargs from 'yargs'
+import { describe, it, expect } from 'vitest'
+import yargs from 'yargs/yargs'
 
-import { generateSecret, handler, builder } from './../secret.js'
+import {
+  DEFAULT_LENGTH,
+  generateSecret,
+  handler,
+  builder,
+} from './../secret.js'
 
 describe('generateSecret', () => {
-  it('contains only uppercase letters, lowercase letters, and digits', () => {
+  it('contains base64-encoded string', () => {
     const secret = generateSecret()
+    const buffer = Buffer.alloc(DEFAULT_LENGTH)
+    const stringLength = buffer.toString('base64').length
 
-    expect(secret).toMatch(/^[A-Za-z0-9]{64}$/)
+    expect(secret).toMatch(new RegExp(`^[A-Za-z0-9+/=]{${stringLength}}$`))
   })
 
   it('can optionally accept a length', () => {
     const secret = generateSecret(16)
+    const buffer = Buffer.alloc(16)
 
-    expect(secret.length).toEqual(16)
+    // however long a 16-byte buffer is when base64-encoded (24 characters)
+    expect(secret.length).toEqual(buffer.toString('base64').length)
   })
 
   it('prints nothing but the secret when setting the --raw flag', () => {
@@ -26,7 +36,7 @@ describe('generateSecret', () => {
     console.info = (...args) => (output += args.join(' ') + '\n')
     process.stdout.write = (str) => (output += str)
 
-    const { raw, length } = yargs
+    const { raw } = yargs()
       .command('secret', false, builder, handler)
       .parse('secret --raw')
 
@@ -35,6 +45,6 @@ describe('generateSecret', () => {
     process.stdout.write = realWrite
 
     expect(raw).toBeTruthy()
-    expect(output).toMatch(new RegExp(`^[A-Za-z0-9]{${length}}\n$`))
+    expect(output).toMatch(new RegExp(`^[A-Za-z0-9+/=]+\n$`))
   })
 })

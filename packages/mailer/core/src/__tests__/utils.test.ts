@@ -1,3 +1,5 @@
+import { describe, test, expect } from 'vitest'
+
 import type { MailerDefaults } from '../types'
 import {
   constructCompleteSendOptions,
@@ -63,7 +65,7 @@ describe('extractDefaults', () => {
             content: 'test',
           },
         ],
-      })
+      }),
     ).toStrictEqual({
       attachments: [
         {
@@ -97,8 +99,8 @@ describe('constructCompleteSendOptions', () => {
           to: 'to@example.com',
           from: 'from@example.com',
         },
-        blankDefaults
-      )
+        blankDefaults,
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [],
@@ -118,9 +120,9 @@ describe('constructCompleteSendOptions', () => {
           subject: 'Test Subject',
           to: 'to@example.com',
         },
-        blankDefaults
+        blankDefaults,
       )
-    }).toThrowErrorMatchingInlineSnapshot(`"Missing from address"`)
+    }).toThrowErrorMatchingInlineSnapshot(`[Error: Missing from address]`)
 
     expect(() => {
       constructCompleteSendOptions(
@@ -129,7 +131,7 @@ describe('constructCompleteSendOptions', () => {
           to: 'to@example.com',
           from: 'from@example.com',
         },
-        blankDefaults
+        blankDefaults,
       )
     }).not.toThrow()
 
@@ -139,7 +141,7 @@ describe('constructCompleteSendOptions', () => {
           subject: 'Test Subject',
           to: 'to@example.com',
         },
-        { ...blankDefaults, from: 'from@example.com' }
+        { ...blankDefaults, from: 'from@example.com' },
       )
     }).not.toThrow()
   })
@@ -151,9 +153,9 @@ describe('constructCompleteSendOptions', () => {
           subject: 'Test Subject',
           from: 'from@example.com',
         },
-        blankDefaults
+        blankDefaults,
       )
-    }).toThrowErrorMatchingInlineSnapshot(`"Missing to address"`)
+    }).toThrowErrorMatchingInlineSnapshot(`[Error: Missing to address]`)
 
     expect(() => {
       constructCompleteSendOptions(
@@ -162,7 +164,7 @@ describe('constructCompleteSendOptions', () => {
           to: 'to@example.com',
           from: 'from@example.com',
         },
-        blankDefaults
+        blankDefaults,
       )
     }).not.toThrow()
   })
@@ -174,9 +176,9 @@ describe('constructCompleteSendOptions', () => {
           to: 'to@example.com',
           from: 'from@example.com',
         },
-        blankDefaults
+        blankDefaults,
       )
-    }).toThrowErrorMatchingInlineSnapshot(`"Missing subject"`)
+    }).toThrowErrorMatchingInlineSnapshot(`[Error: Missing subject]`)
 
     expect(() => {
       constructCompleteSendOptions(
@@ -185,7 +187,7 @@ describe('constructCompleteSendOptions', () => {
           to: 'to@example.com',
           from: 'from@example.com',
         },
-        blankDefaults
+        blankDefaults,
       )
     }).not.toThrow()
   })
@@ -213,8 +215,8 @@ describe('constructCompleteSendOptions', () => {
             { name: 'bccName2', address: 'bccAddress2@example.com' },
           ],
         },
-        blankDefaults
-      )
+        blankDefaults,
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [
@@ -241,8 +243,8 @@ describe('constructCompleteSendOptions', () => {
           to: 'to@example.com',
           from: 'from@example.com',
         },
-        blankDefaults
-      )
+        blankDefaults,
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [],
@@ -262,8 +264,8 @@ describe('constructCompleteSendOptions', () => {
         {
           ...blankDefaults,
           from: 'from@example.com',
-        }
-      )
+        },
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [],
@@ -284,8 +286,8 @@ describe('constructCompleteSendOptions', () => {
         {
           ...blankDefaults,
           from: 'from@example.com',
-        }
-      )
+        },
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [],
@@ -306,8 +308,8 @@ describe('constructCompleteSendOptions', () => {
           to: 'to@example.com',
           from: 'from@example.com',
         },
-        blankDefaults
-      )
+        blankDefaults,
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [],
@@ -329,8 +331,8 @@ describe('constructCompleteSendOptions', () => {
           from: 'from@example.com',
           cc: 'cc@example.com',
         },
-        blankDefaults
-      )
+        blankDefaults,
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [],
@@ -351,8 +353,8 @@ describe('constructCompleteSendOptions', () => {
         {
           ...blankDefaults,
           cc: ['cc@example.com'],
-        }
-      )
+        },
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [],
@@ -374,8 +376,8 @@ describe('constructCompleteSendOptions', () => {
         {
           ...blankDefaults,
           cc: ['cc@example.com'],
-        }
-      )
+        },
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [],
@@ -397,8 +399,8 @@ describe('constructCompleteSendOptions', () => {
           from: 'from@example.com',
           bcc: 'bcc@example.com',
         },
-        blankDefaults
-      )
+        blankDefaults,
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: ['bcc@example.com'],
@@ -419,8 +421,8 @@ describe('constructCompleteSendOptions', () => {
         {
           ...blankDefaults,
           bcc: ['bcc@example.com'],
-        }
-      )
+        },
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: ['bcc@example.com'],
@@ -442,8 +444,8 @@ describe('constructCompleteSendOptions', () => {
         {
           ...blankDefaults,
           bcc: ['bcc@example.com'],
-        }
-      )
+        },
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: ['bccOverride@example.com'],
@@ -465,8 +467,8 @@ describe('constructCompleteSendOptions', () => {
           from: 'from@example.com',
           replyTo: 'replyTo@example.com',
         },
-        blankDefaults
-      )
+        blankDefaults,
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [],
@@ -487,8 +489,8 @@ describe('constructCompleteSendOptions', () => {
         {
           ...blankDefaults,
           replyTo: 'replyTo@example.com',
-        }
-      )
+        },
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [],
@@ -510,8 +512,8 @@ describe('constructCompleteSendOptions', () => {
         {
           ...blankDefaults,
           replyTo: 'replyTo@example.com',
-        }
-      )
+        },
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [],
@@ -535,8 +537,8 @@ describe('constructCompleteSendOptions', () => {
             'X-Test-Header': 'test',
           },
         },
-        blankDefaults
-      )
+        blankDefaults,
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [],
@@ -561,8 +563,8 @@ describe('constructCompleteSendOptions', () => {
           headers: {
             'X-Test-Header': 'test',
           },
-        }
-      )
+        },
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [],
@@ -590,8 +592,8 @@ describe('constructCompleteSendOptions', () => {
           headers: {
             'X-Test-Header': 'test',
           },
-        }
-      )
+        },
+      ),
     ).toStrictEqual({
       attachments: [],
       bcc: [],
@@ -620,8 +622,8 @@ describe('constructCompleteSendOptions', () => {
             },
           ],
         },
-        blankDefaults
-      )
+        blankDefaults,
+      ),
     ).toStrictEqual({
       attachments: [
         {
@@ -652,8 +654,8 @@ describe('constructCompleteSendOptions', () => {
               content: 'test',
             },
           ],
-        }
-      )
+        },
+      ),
     ).toStrictEqual({
       attachments: [
         {
@@ -690,8 +692,8 @@ describe('constructCompleteSendOptions', () => {
               content: 'test',
             },
           ],
-        }
-      )
+        },
+      ),
     ).toStrictEqual({
       attachments: [
         {

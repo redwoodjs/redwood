@@ -12,7 +12,7 @@ import envinfo from 'envinfo'
 import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
-import { name as packageName, version as packageVersion } from '../package'
+import { name as packageName, version as packageVersion } from '../package.json'
 
 /**
  * @type NodeTracerProvider
@@ -43,8 +43,8 @@ export async function startTelemetry() {
         npmPackages: '@redwoodjs/*',
         IDEs: ['VSCode'],
       },
-      { json: true }
-    )
+      { json: true },
+    ),
   )
 
   // get shell name instead of path
@@ -56,6 +56,13 @@ export async function startTelemetry() {
   }
   const cpu = await system.cpu()
   const mem = await system.mem()
+
+  // Record any specific development environment
+  let developmentEnvironment = undefined
+  // Gitpod
+  if (Object.keys(process.env).some((key) => key.startsWith('GITPOD_'))) {
+    developmentEnvironment = 'gitpod'
+  }
 
   const resource = Resource.default().merge(
     new Resource({
@@ -73,8 +80,9 @@ export async function startTelemetry() {
       'env.node_env': process.env.NODE_ENV || null,
       'ci.redwood': !!process.env.REDWOOD_CI,
       'ci.isci': ci.isCI,
+      'dev.environment': developmentEnvironment,
       uid: UID,
-    })
+    }),
   )
 
   // Tracing

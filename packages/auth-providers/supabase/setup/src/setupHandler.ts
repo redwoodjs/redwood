@@ -6,7 +6,7 @@ import { standardAuthHandler } from '@redwoodjs/cli-helpers'
 import type { Args } from './setup'
 
 const { version } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
+  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'),
 )
 
 export const handler = async ({ force: forceArg }: Args) => {
@@ -34,8 +34,8 @@ export const handler = async ({ force: forceArg }: Args) => {
       '',
       '```toml title="redwood.toml"',
       'includeEnvironmentVariables = [',
-      '  "SUPABASE_URL"',
-      '  "SUPABASE_KEY"',
+      '  "SUPABASE_URL",',
+      '  "SUPABASE_KEY",',
       ']',
       '```',
       '',

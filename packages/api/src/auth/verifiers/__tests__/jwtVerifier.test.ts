@@ -1,3 +1,5 @@
+import { describe, test, expect } from 'vitest'
+
 import {
   createVerifier,
   WebhookSignError,
@@ -13,7 +15,7 @@ describe('jwtVerifier verifier', () => {
       const { sign } = createVerifier('jwtVerifier')
       const signature = sign({ payload, secret })
       expect(signature).toMatch(
-        /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
+        /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/,
       )
     })
   })

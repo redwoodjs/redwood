@@ -6,16 +6,15 @@ import {
   DateTimeResolver,
   JSONResolver,
   JSONObjectResolver,
+  ByteResolver,
 } from 'graphql-scalars'
 import gql from 'graphql-tag'
+
+import type { GlobalContext } from '@redwoodjs/context'
 
 // @TODO move prismaVersion & redwoodVersion to internal?
 // We don't want a circular dependency here..
 const { prismaVersion, redwoodVersion } = require('@redwoodjs/api')
-
-// We duplicate this here, because we don't want circular dependency with graphql-server
-// This type doesn't have any real impact outside this file
-interface GlobalContext extends Record<string, unknown> {}
 
 /**
  * This adds scalar types for dealing with Date, Time, DateTime, and JSON.
@@ -31,6 +30,7 @@ export const schema = gql`
   scalar DateTime
   scalar JSON
   scalar JSONObject
+  scalar Byte
 
   """
   The RedwoodJS Root Schema
@@ -63,6 +63,7 @@ export interface Resolvers {
   JSON: typeof JSONResolver
   JSONObject: typeof JSONObjectResolver
   Query: Record<string, unknown>
+  Byte: typeof ByteResolver
 }
 
 export const resolvers: Resolvers = {
@@ -81,4 +82,5 @@ export const resolvers: Resolvers = {
       },
     }),
   },
+  Byte: ByteResolver,
 }

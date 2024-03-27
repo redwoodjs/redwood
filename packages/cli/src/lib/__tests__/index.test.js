@@ -1,8 +1,9 @@
 global.__dirname = __dirname
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const originalProjectConfig = await importOriginal()
   const path = require('path')
   return {
-    ...jest.requireActual('@redwoodjs/project-config'),
+    ...originalProjectConfig,
     getPaths: () => {
       const BASE_PATH = path.join(globalThis.__dirname, 'fixtures')
       return {
@@ -15,8 +16,10 @@ jest.mock('@redwoodjs/project-config', () => {
   }
 })
 
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
+import { vi, test, expect, describe } from 'vitest'
 
 import * as index from '../index'
 
@@ -56,13 +59,13 @@ test('nameVariants returns a multi word cased variables', () => {
   })
 })
 
-test('generateTemplate returns a lodash-templated string', () => {
-  const output = index.generateTemplate(
+test('generateTemplate returns a lodash-templated string', async () => {
+  const output = await index.generateTemplate(
     path.join(__dirname, 'fixtures', 'text.txt'),
     {
       name: 'amet',
       noun: 'world',
-    }
+    },
   )
 
   expect(output).toEqual(`Lorem ipsum dolar sit amet\nHello, world!\n`)
@@ -70,17 +73,17 @@ test('generateTemplate returns a lodash-templated string', () => {
 
 // Be careful when editing the code.js fixture as the prettifier.config.js will cause it to get
 // prettified and then it already match the expected output, with no changes
-test('generateTemplate returns prettified JS code', () => {
-  const output = index.generateTemplate(
+test('generateTemplate returns prettified JS code', async () => {
+  const output = await index.generateTemplate(
     path.join(__dirname, 'fixtures', 'code.js'),
     {
       name: 'fox',
       foo: 'dog',
-    }
+    },
   )
 
   expect(output).toEqual(
-    `const line1 = 'The quick brown foxes jumps over the lazy dog.'\nconst line2 = 'Sphinx of black quartz, judge my vow.'\n`
+    `const line1 = 'The quick brown foxes jumps over the lazy dog.'\nconst line2 = 'Sphinx of black quartz, judge my vow.'\n`,
   )
 })
 

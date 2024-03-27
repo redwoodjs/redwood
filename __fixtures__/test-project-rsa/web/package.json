@@ -1,0 +1,26 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "private": true,
+  "browserslist": {
+    "development": [
+      "last 1 version"
+    ],
+    "production": [
+      "defaults"
+    ]
+  },
+  "dependencies": {
+    "@apollo/experimental-nextjs-app-support": "0.0.0-commit-b8a73fe",
+    "@redwoodjs/forms": "8.0.0-canary.144",
+    "@redwoodjs/router": "8.0.0-canary.144",
+    "@redwoodjs/web": "8.0.0-canary.144",
+    "react": "18.3.0-canary-a870b2d54-20240314",
+    "react-dom": "18.3.0-canary-a870b2d54-20240314"
+  },
+  "devDependencies": {
+    "@redwoodjs/vite": "8.0.0-canary.144",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19"
+  }
+}

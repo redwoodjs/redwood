@@ -1,7 +1,7 @@
-import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { getPaths, writeFilesTask } from '../../../../lib'
@@ -18,12 +18,12 @@ export const updateApiURLTask = (apiUrl) => {
       if (redwoodToml.match(/apiUrl/)) {
         newRedwoodToml = newRedwoodToml.replace(
           /apiUrl.*/g,
-          `apiUrl = "${apiUrl}"`
+          `apiUrl = "${apiUrl}"`,
         )
       } else if (redwoodToml.match(/\[web\]/)) {
         newRedwoodToml = newRedwoodToml.replace(
           /\[web\]/,
-          `[web]\n  apiUrl = "${apiUrl}"`
+          `[web]\n  apiUrl = "${apiUrl}"`,
         )
       } else {
         newRedwoodToml += `[web]\n  apiUrl = "${apiUrl}"`
@@ -66,7 +66,7 @@ export const preRequisiteCheckTask = (preRequisites) => {
               }
             },
           }
-        })
+        }),
       ),
   }
 }

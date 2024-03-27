@@ -4,9 +4,10 @@ import type {
   Context as LambdaContext,
 } from 'aws-lambda'
 
+import type { GlobalContext } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
+
 import { createGraphQLYoga } from '../createGraphQLYoga'
-import type { GlobalContext } from '../globalContext'
-import { getAsyncStoreInstance } from '../globalContextStore'
 import type { GraphQLHandlerOptions } from '../types'
 
 /**
@@ -41,6 +42,7 @@ export const createGraphQLHandler = ({
   graphiQLEndpoint = '/graphql',
   schemaOptions,
   openTelemetryOptions,
+  trustedDocuments,
 }: GraphQLHandlerOptions) => {
   const { yoga, logger } = createGraphQLYoga({
     healthCheckId,
@@ -63,11 +65,12 @@ export const createGraphQLHandler = ({
     graphiQLEndpoint,
     schemaOptions,
     openTelemetryOptions,
+    trustedDocuments,
   })
 
   const handlerFn = async (
     event: APIGatewayProxyEvent,
-    requestContext: LambdaContext
+    requestContext: LambdaContext,
   ): Promise<APIGatewayProxyResult> => {
     // In the future, this could be part of a specific handler for AWS lambdas
     requestContext.callbackWaitsForEmptyEventLoop = false
@@ -99,7 +102,7 @@ export const createGraphQLHandler = ({
         {
           event,
           requestContext,
-        }
+        },
       )
 
       // @WARN - multivalue headers aren't supported on all deployment targets correctly
@@ -150,7 +153,7 @@ export const createGraphQLHandler = ({
 
   return (
     event: APIGatewayProxyEvent,
-    context: LambdaContext
+    context: LambdaContext,
   ): Promise<any> => {
     const execFn = async () => {
       try {

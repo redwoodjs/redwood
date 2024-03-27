@@ -2,10 +2,13 @@
 // well in naming with @redwoodjs/api-server)
 // Only things used during dev can be in @redwoodjs/vite. Everything else has
 // to go in fe-server
+// UPDATE: We decided to name the package @redwoodjs/web-server instead of
+// fe-server. And it's already created, but this hasn't been moved over yet.
 
-import fs from 'fs/promises'
-import path from 'path'
+import path from 'node:path'
+import url from 'node:url'
 
+import { createServerAdapter } from '@whatwg-node/server'
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
@@ -14,9 +17,12 @@ import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
-import { registerFwGlobals } from './streaming/registerGlobals'
-import type { RWRouteManifest } from './types'
+import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
+import { invoke } from './middleware/invokeMiddleware.js'
+import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
+import { setClientEntries } from './rsc/rscWorkerCommunication.js'
+import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
+import type { RWRouteManifest } from './types.js'
 
 /**
  * TODO (STREAMING)
@@ -34,51 +40,67 @@ loadDotEnv({
   defaults: path.join(getPaths().base, '.env.defaults'),
   multiline: true,
 })
-//------------------------------------------------
+// ------------------------------------------------
 
 export async function runFeServer() {
   const app = express()
   const rwPaths = getPaths()
   const rwConfig = getConfig()
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
-  registerFwGlobals()
+  registerFwGlobalsAndShims()
 
-  // TODO When https://github.com/tc39/proposal-import-attributes and
-  // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
-  // should try to do this instead:
-  // const routeManifest: RWRouteManifest = await import(
-  //   rwPaths.web.routeManifest, { with: { type: 'json' } }
-  // )
-  // NOTES:
-  //  * There's a related babel plugin here
-  //    https://babeljs.io/docs/babel-plugin-syntax-import-attributes
-  //     * Included in `preset-env` if you set `shippedProposals: true`
-  //  * We had this before, but with `assert` instead of `with`. We really
-  //    should be using `with`. See motivation in issues linked above.
-  //  * With `assert` and `@babel/plugin-syntax-import-assertions` the
-  //    code compiled and ran properly, but Jest tests failed, complaining
-  //    about the syntax.
-  const routeManifestStr = await fs.readFile(rwPaths.web.routeManifest, 'utf-8')
-  const routeManifest: RWRouteManifest = JSON.parse(routeManifestStr)
-
-  // TODO See above about using `import { with: { type: 'json' } }` instead
-  const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
-  const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
-  const buildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
-
-  const indexEntry = Object.values(buildManifest).find((manifestItem) => {
-    return manifestItem.isEntry
-  })
-
-  if (!indexEntry) {
-    throw new Error('Could not find index.html in build manifest')
+  if (rscEnabled) {
+    try {
+      // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
+      await setClientEntries()
+    } catch (e) {
+      console.error('Failed to load client entries')
+      console.error(e)
+      process.exit(1)
+    }
   }
 
-  // 👉 1. Use static handler for assets
-  // For CF workers, we'd need an equivalent of this
-  app.use('/', express.static(rwPaths.web.dist, { index: false }))
+  const routeManifestUrl = url.pathToFileURL(rwPaths.web.routeManifest).href
+  const routeManifest: RWRouteManifest = (
+    await import(routeManifestUrl, { with: { type: 'json' } })
+  ).default
 
-  // 👉 2. Proxy the api server
+  const clientBuildManifestUrl = url.pathToFileURL(
+    path.join(rwPaths.web.distClient, 'client-build-manifest.json'),
+  ).href
+  const clientBuildManifest: ViteBuildManifest = (
+    await import(clientBuildManifestUrl, { with: { type: 'json' } })
+  ).default
+
+  if (rwConfig.experimental?.rsc?.enabled) {
+    console.log('='.repeat(80))
+    console.log('buildManifest', clientBuildManifest)
+    console.log('='.repeat(80))
+  }
+
+  // @MARK: Surely there's a better way than this!
+  const clientEntry = Object.values(clientBuildManifest).find(
+    (manifestItem) => {
+      // For RSC builds, we pass in many Vite entries, so we need to find it differently.
+      return rscEnabled
+        ? manifestItem.file.includes('rwjs-client-entry-')
+        : manifestItem.isEntry
+    },
+  )
+
+  if (!clientEntry) {
+    throw new Error('Could not find client entry in build manifest')
+  }
+
+  // 1. Use static handler for assets
+  // For CF workers, we'd need an equivalent of this
+  app.use(
+    '/assets',
+    express.static(rwPaths.web.distClient + '/assets', { index: false }),
+  )
+
+  // 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
   // e.g. deploying to Netlify, we don't need to proxy but configure it in Netlify
   // Also be careful of differences between v2 and v3 of the server
@@ -87,57 +109,67 @@ export async function runFeServer() {
     // @WARN! Be careful, between v2 and v3 of http-proxy-middleware
     // the syntax has changed https://github.com/chimurai/http-proxy-middleware
     createProxyMiddleware({
-      changeOrigin: true,
+      changeOrigin: false,
       pathRewrite: {
         [`^${rwConfig.web.apiUrl}`]: '', // remove base path
       },
       // Using 127.0.0.1 to force ipv4. With `localhost` you don't really know
       // if it's going to be ipv4 or ipv6
       target: `http://127.0.0.1:${rwConfig.api.port}`,
-    })
+    }),
   )
 
-  const collectedCss = indexEntry.css || []
-  const clientEntry = '/' + indexEntry.file
+  const getStylesheetLinks = () => clientEntry.css || []
+  const clientEntryPath = '/' + clientEntry.file
 
   for (const route of Object.values(routeManifest)) {
-    const routeHandler = await createReactStreamingHandler({
-      route,
-      clientEntryPath: clientEntry,
-      cssLinks: collectedCss,
-    })
-
     // if it is a 404, register it at the end somehow.
     if (!route.matchRegexString) {
       continue
     }
 
+    // @TODO: we don't need regexes here
+    // Param matching, etc. all handled within the route handler now
     const expressPathDef = route.hasParams
       ? route.matchRegexString
       : route.pathDefinition
 
-    app.get(expressPathDef, routeHandler)
+    // TODO(RSC_DC): RSC is rendering blank page, try using this function for initial render
+    const routeHandler = await createReactStreamingHandler({
+      route,
+      clientEntryPath,
+      getStylesheetLinks,
+    })
+
+    console.log('Attaching streaming handler for route', route.pathDefinition)
+
+    // Wrap with whatg/server adapter. Express handler -> Fetch API handler
+    app.get(expressPathDef, createServerAdapter(routeHandler))
   }
 
-  const server = app.listen(
-    rwConfig.web.port,
-    process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
+  // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
+  app.use('/rw-rsc', createRscRequestHandler())
+
+  // @MARK: put this after rw-rsc!
+  app.post(
+    '*',
+    createServerAdapter(async (req: Request) => {
+      const entryServerImport = await import(rwPaths.web.distEntryServer)
+
+      const { middleware } = entryServerImport
+
+      const [mwRes] = await invoke(req, middleware)
+
+      return mwRes.toResponse()
+    }),
   )
 
-  server.on('listening', () => {
-    let addressDetails = ''
-    const address = server.address()
+  app.use(express.static(rwPaths.web.distClient, { index: false }))
 
-    if (typeof address === 'string') {
-      addressDetails = `(${address})`
-    } else if (address && typeof address === 'object') {
-      addressDetails = `(${address.address}:${address.port})`
-    }
-
-    console.log(
-      `Started production FE server on http://localhost:${rwConfig.web.port} ${addressDetails}`
-    )
-  })
+  app.listen(rwConfig.web.port)
+  console.log(
+    `Started production FE server on http://localhost:${rwConfig.web.port}`,
+  )
 }
 
 runFeServer()

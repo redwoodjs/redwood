@@ -6,7 +6,7 @@ import { standardAuthHandler } from '@redwoodjs/cli-helpers'
 import type { Args } from './setup'
 
 const { version } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
+  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'),
 )
 
 export const handler = async ({ force: forceArg }: Args) => {
@@ -33,7 +33,7 @@ export const handler = async ({ force: forceArg }: Args) => {
       '',
       '```toml title="redwood.toml"',
       'includeEnvironmentVariables = [',
-      '  "CLERK_PUBLISHABLE_KEY,"',
+      '  "CLERK_PUBLISHABLE_KEY"',
       ']',
       '```',
       '',

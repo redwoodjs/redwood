@@ -15,48 +15,53 @@ return (
       <nav>
         <ul className="relative flex items-center font-light">
           <li>
-            <Link
+            <NavLink
               className="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded"
+              activeClassName="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded underline underline-offset-4"
               to={routes.about()}
             >
               About
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
               className="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded"
+              activeClassName="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded underline underline-offset-4"
               to={routes.contactUs()}
             >
               Contact Us
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
               className="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded"
+              activeClassName="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded underline underline-offset-4"
               to={routes.posts()}
             >
               Admin
-            </Link>
+            </NavLink>
           </li>
           {isAuthenticated && (
             <li>
-              <Link
+              <NavLink
                 className="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded"
+                activeClassName="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded underline underline-offset-4"
                 onClick={logOut}
                 to={''}
               >
                 Log Out
-              </Link>
+              </NavLink>
             </li>
           )}
           {!isAuthenticated && (
             <li>
-              <Link
+              <NavLink
                 className="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded"
+                activeClassName="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded underline underline-offset-4"
                 to={routes.login()}
               >
                 Log In
-              </Link>
+              </NavLink>
             </li>
           )}
         </ul>
@@ -76,6 +81,7 @@ export default (file, api) => {
   const routerImport = j.importDeclaration(
     [
       j.importSpecifier(j.identifier('Link'), j.identifier('Link')),
+      j.importSpecifier(j.identifier('NavLink'), j.identifier('NavLink')),
       j.importSpecifier(j.identifier('routes'), j.identifier('routes')),
     ],
     j.stringLiteral('@redwoodjs/router')

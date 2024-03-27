@@ -1,10 +1,13 @@
 import jwt from 'jsonwebtoken'
+import { vi, test, expect } from 'vitest'
 
 import { verifyAuth0Token } from '../decoder'
 
-jest.mock('jsonwebtoken', () => ({
-  verify: jest.fn(),
-  decode: jest.fn(),
+vi.mock('jsonwebtoken', () => ({
+  default: {
+    verify: vi.fn(),
+    decode: vi.fn(),
+  },
 }))
 
 test('verify, and not decode, should be called in production', () => {

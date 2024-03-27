@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import type { TransformOptions, PluginItem } from '@babel/core'
+import type { PluginItem, PluginOptions, TransformOptions } from '@babel/core'
 import { parseConfigFileTextToJson } from 'typescript'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -48,7 +48,7 @@ export const CORE_JS_VERSION = pkgJson.dependencies['core-js']
 
 if (!CORE_JS_VERSION) {
   throw new Error(
-    'RedwoodJS Project Babel: Could not determine core-js version.'
+    'RedwoodJS Project Babel: Could not determine core-js version.',
   )
 }
 
@@ -57,11 +57,11 @@ export const RUNTIME_CORE_JS_VERSION =
 
 if (!RUNTIME_CORE_JS_VERSION) {
   throw new Error(
-    'RedwoodJS Project Babel: Could not determine core-js runtime version'
+    'RedwoodJS Project Babel: Could not determine core-js runtime version',
   )
 }
 
-export const getCommonPlugins = () => {
+export const getCommonPlugins = (): Array<[string, PluginOptions]> => {
   return [
     ['@babel/plugin-transform-class-properties', { loose: true }],
     // Note: The private method loose mode configuration setting must be the
@@ -111,7 +111,7 @@ export const parseTypeScriptConfigFiles = () => {
     }
     return parseConfigFileTextToJson(
       configPath,
-      fs.readFileSync(configPath, 'utf-8')
+      fs.readFileSync(configPath, 'utf-8'),
     )
   }
   const apiConfig = parseConfigFile(rwPaths.api.base)
@@ -123,14 +123,19 @@ export const parseTypeScriptConfigFiles = () => {
   }
 }
 
+type CompilerOptionsForPaths = {
+  compilerOptions: { baseUrl: string; paths: string }
+}
 /**
  * Extracts and formats the paths from the [ts|js]config.json file
  * @param config The config object
+ * @param rootDir {string} Where the jsconfig/tsconfig is loaded from
  * @returns {Record<string, string>} The paths object
  */
-export const getPathsFromTypeScriptConfig = (config: {
-  compilerOptions: { baseUrl: string; paths: string }
-}): Record<string, string> => {
+export const getPathsFromTypeScriptConfig = (
+  config: CompilerOptionsForPaths,
+  rootDir: string,
+): Record<string, string> => {
   if (!config) {
     return {}
   }
@@ -140,6 +145,12 @@ export const getPathsFromTypeScriptConfig = (config: {
   }
 
   const { baseUrl, paths } = config.compilerOptions
+
+  // Convert it to absolute path - on windows the baseUrl is already absolute
+  const absoluteBase = path.isAbsolute(baseUrl)
+    ? baseUrl
+    : path.join(rootDir, baseUrl)
+
   const pathsObj: Record<string, string> = {}
   for (const [key, value] of Object.entries(paths)) {
     // exclude the default paths that are included in the tsconfig.json file
@@ -152,9 +163,10 @@ export const getPathsFromTypeScriptConfig = (config: {
     }
     const aliasKey = key.replace('/*', '')
     const aliasValue = path.join(
-      baseUrl,
-      (value as string)[0].replace('/*', '')
+      absoluteBase,
+      (value as string)[0].replace('/*', ''),
     )
+
     pathsObj[aliasKey] = aliasValue
   }
   return pathsObj

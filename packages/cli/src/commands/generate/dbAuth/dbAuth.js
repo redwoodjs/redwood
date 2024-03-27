@@ -1,8 +1,8 @@
-import fs from 'fs'
 import path from 'path'
 
 import { camelCase } from 'camel-case'
 import Enquirer from 'enquirer'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 import { titleCase } from 'title-case'
@@ -30,7 +30,6 @@ const ROUTES = [
 ]
 
 const POST_INSTALL =
-  `One more thing...\n\n` +
   `   ${c.warning("Pages created! But you're not done yet:")}\n\n` +
   `   You'll need to tell your pages where to redirect after a user has logged in,\n` +
   `   signed up, or reset their password. Look in LoginPage, SignupPage,\n` +
@@ -48,7 +47,6 @@ const POST_INSTALL =
   `   Happy authenticating!\n`
 
 const WEBAUTHN_POST_INSTALL =
-  `One more thing...\n\n` +
   `   ${c.warning("Pages created! But you're not done yet:")}\n\n` +
   "   You'll need to tell your pages where to redirect after a user has logged in,\n" +
   '   signed up, or reset their password. In LoginPage, look for the `REDIRECT`\n' +
@@ -115,8 +113,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/authentication#self-hosted-auth-installation-and-setup'
-      )}`
+        'https://redwoodjs.com/docs/authentication#self-hosted-auth-installation-and-setup',
+      )}`,
     )
 
   // Merge generator defaults in
@@ -125,7 +123,7 @@ export const builder = (yargs) => {
   })
 }
 
-export const files = ({
+export const files = async ({
   _tests,
   typescript,
   skipForgot,
@@ -152,7 +150,7 @@ export const files = ({
 
   if (!skipForgot) {
     files.push(
-      templateForComponentFile({
+      await templateForComponentFile({
         name: 'ForgotPassword',
         suffix: 'Page',
         extension: typescript ? '.tsx' : '.jsx',
@@ -160,13 +158,13 @@ export const files = ({
         generator: 'dbAuth',
         templatePath: 'forgotPassword.tsx.template',
         templateVars,
-      })
+      }),
     )
   }
 
   if (!skipLogin) {
     files.push(
-      templateForComponentFile({
+      await templateForComponentFile({
         name: 'Login',
         suffix: 'Page',
         extension: typescript ? '.tsx' : '.jsx',
@@ -176,13 +174,13 @@ export const files = ({
           ? 'login.webAuthn.tsx.template'
           : 'login.tsx.template',
         templateVars,
-      })
+      }),
     )
   }
 
   if (!skipReset) {
     files.push(
-      templateForComponentFile({
+      await templateForComponentFile({
         name: 'ResetPassword',
         suffix: 'Page',
         extension: typescript ? '.tsx' : '.jsx',
@@ -190,13 +188,13 @@ export const files = ({
         generator: 'dbAuth',
         templatePath: 'resetPassword.tsx.template',
         templateVars,
-      })
+      }),
     )
   }
 
   if (!skipSignup) {
     files.push(
-      templateForComponentFile({
+      await templateForComponentFile({
         name: 'Signup',
         suffix: 'Page',
         extension: typescript ? '.tsx' : '.jsx',
@@ -204,7 +202,7 @@ export const files = ({
         generator: 'dbAuth',
         templatePath: 'signup.tsx.template',
         templateVars,
-      })
+      }),
     )
   }
 
@@ -216,29 +214,31 @@ export const files = ({
   // add scaffold CSS file if it doesn't exist already
   const scaffoldOutputPath = path.join(getPaths().web.src, 'scaffold.css')
   if (!fs.existsSync(scaffoldOutputPath)) {
-    const scaffoldTemplate = generateTemplate(
+    const scaffoldTemplate = await generateTemplate(
       path.join(
         __dirname,
-        '../scaffold/templates/assets/scaffold.css.template'
+        '../scaffold/templates/assets/scaffold.css.template',
       ),
-      { name: 'scaffold' }
+      { name: 'scaffold' },
     )
 
     files.push([scaffoldOutputPath, scaffoldTemplate])
   }
 
-  return files.reduce((acc, [outputPath, content]) => {
+  return files.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
     let template = content
 
     if (outputPath.match(/\.[jt]sx?/) && !typescript) {
-      template = transformTSToJS(outputPath, content)
+      template = await transformTSToJS(outputPath, content)
     }
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 const tasks = ({
@@ -269,7 +269,7 @@ const tasks = ({
               task: async (subctx, subtask) => {
                 if (usernameLabel) {
                   subtask.skip(
-                    `Argument username-label is set, using: "${usernameLabel}"`
+                    `Argument username-label is set, using: "${usernameLabel}"`,
                   )
                   return
                 }
@@ -287,7 +287,7 @@ const tasks = ({
               task: async (subctx, subtask) => {
                 if (passwordLabel) {
                   subtask.skip(
-                    `Argument password-label passed, using: "${passwordLabel}"`
+                    `Argument password-label passed, using: "${passwordLabel}"`,
                   )
                   return
                 }
@@ -310,7 +310,7 @@ const tasks = ({
             task.skip(
               `Querying WebAuthn addition: argument webauthn passed, WebAuthn ${
                 webauthn ? '' : 'not'
-              } included`
+              } included`,
             )
             return
           }
@@ -329,22 +329,21 @@ const tasks = ({
       {
         title: 'Creating pages...',
         task: async () => {
-          return writeFilesTask(
-            files({
-              tests,
-              typescript,
-              skipForgot,
-              skipLogin,
-              skipReset,
-              skipSignup,
-              webauthn,
-              usernameLabel,
-              passwordLabel,
-            }),
-            {
-              overwriteExisting: force,
-            }
-          )
+          const filesObj = await files({
+            tests,
+            typescript,
+            skipForgot,
+            skipLogin,
+            skipReset,
+            skipSignup,
+            webauthn,
+            usernameLabel,
+            passwordLabel,
+          })
+
+          return writeFilesTask(filesObj, {
+            overwriteExisting: force,
+          })
         },
       },
       {
@@ -359,8 +358,10 @@ const tasks = ({
       },
       {
         title: 'One more thing...',
-        task: (ctx, task) => {
-          task.title = webauthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL
+        task: () => {
+          // This doesn't preserve formatting, so it's been moved to regular
+          // console.log()s after the tasks have all finished running
+          // task.title = webauthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL
         },
       },
     ],
@@ -369,7 +370,7 @@ const tasks = ({
       rendererOptions: { collapseSubtasks: false },
       injectWrapper: { enquirer: enquirer || new Enquirer() },
       exitOnError: true,
-    }
+    },
   )
 }
 
@@ -391,6 +392,8 @@ export const handler = async (yargs) => {
       prepareForRollback(t)
     }
     await t.run()
+    console.log('')
+    console.log(yargs.webauthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL)
   } catch (e) {
     console.log(c.error(e.message))
   }

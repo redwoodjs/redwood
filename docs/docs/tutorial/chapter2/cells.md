@@ -342,7 +342,7 @@ Let's plug this cell into our `HomePage` and see what happens:
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/HomePage/HomePage.jsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 // highlight-next-line
 import ArticlesCell from 'src/components/ArticlesCell'
@@ -350,7 +350,7 @@ import ArticlesCell from 'src/components/ArticlesCell'
 const HomePage = () => {
   return (
     <>
-      <MetaTags title="Home" description="Home page" />
+      <Metadata title="Home" description="Home page" />
       // highlight-next-line
       <ArticlesCell />
     </>
@@ -364,7 +364,7 @@ export default HomePage
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/pages/HomePage/HomePage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 // highlight-next-line
 import ArticlesCell from 'src/components/ArticlesCell'
@@ -372,7 +372,7 @@ import ArticlesCell from 'src/components/ArticlesCell'
 const HomePage = () => {
   return (
     <>
-      <MetaTags title="Home" description="Home page" />
+      <Metadata title="Home" description="Home page" />
       // highlight-next-line
       <ArticlesCell />
     </>

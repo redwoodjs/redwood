@@ -1,35 +1,57 @@
-import type { HttpOptions } from '@apollo/client'
-import { ApolloLink, HttpLink } from '@apollo/client'
+import type { HttpOptions, Operation } from '@apollo/client'
+import { ApolloLink, HttpLink, Observable } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { print } from 'graphql/language/printer'
 
 export function createHttpLink(
   uri: string,
-  httpLinkConfig: HttpOptions | undefined
+  httpLinkConfig: HttpOptions | undefined,
+  cookieHeader?: string,
 ) {
+  const headers: Record<string, string> = {}
+
+  if (cookieHeader) {
+    headers.cookie = cookieHeader
+  }
+
   return new HttpLink({
-    // @MARK: we have to construct the absoltue url for SSR
     uri,
+    credentials: 'include',
     ...httpLinkConfig,
-    // you can disable result caching here if you want to
-    // (this does not work if you are rendering your page with `export const dynamic = "force-static"`)
-    fetchOptions: { cache: 'no-store' },
+    headers,
   })
 }
-export function createUpdateDataLink(data: any) {
+
+function enhanceError(operation: Operation, error: any) {
+  const { operationName, query, variables } = operation
+
+  error.__RedwoodEnhancedError = {
+    operationName,
+    operationKind: query?.kind.toString(),
+    variables,
+    query: query && print(query),
+  }
+
+  return error
+}
+
+export function createUpdateDataLink() {
   return new ApolloLink((operation, forward) => {
-    const { operationName, query, variables } = operation
-
-    data.mostRecentRequest = {}
-    data.mostRecentRequest.operationName = operationName
-    data.mostRecentRequest.operationKind = query?.kind.toString()
-    data.mostRecentRequest.variables = variables
-    data.mostRecentRequest.query = query && print(operation.query)
-
-    return forward(operation).map((result) => {
-      data.mostRecentResponse = result
-
-      return result
+    return new Observable((observer) => {
+      forward(operation).subscribe({
+        next(result) {
+          if (result.errors) {
+            result.errors.forEach((error) => {
+              enhanceError(operation, error)
+            })
+          }
+          observer.next(result)
+        },
+        error(error: any) {
+          observer.error(enhanceError(operation, error))
+        },
+        complete: observer.complete.bind(observer),
+      })
     })
   })
 }
@@ -40,11 +62,10 @@ export function createAuthApolloLink(
         'auth-provider'?: string | undefined
         authorization?: string | undefined
       }
-    | undefined
+    | undefined,
 ) {
   return new ApolloLink((operation, forward) => {
     const { token } = operation.getContext()
-
     // Only add auth headers when there's a token. `token` is `null` when `!isAuthenticated`.
     const authHeaders = token
       ? {
@@ -93,25 +114,27 @@ export function createFinalLink({
 
 // ~~~ Types ~~~
 
-export type RedwoodApolloLinkName =
-  | 'withToken'
-  | 'authMiddleware'
-  | 'updateDataApolloLink'
-  | 'httpLink'
-
 export type RedwoodApolloLink<
   Name extends RedwoodApolloLinkName,
-  Link extends ApolloLink = ApolloLink
+  Link extends ApolloLink = ApolloLink,
 > = {
   name: Name
   link: Link
 }
 
-export type RedwoodApolloLinks = [
-  RedwoodApolloLink<'withToken'>,
-  RedwoodApolloLink<'authMiddleware'>,
-  RedwoodApolloLink<'updateDataApolloLink'>,
-  RedwoodApolloLink<'httpLink', HttpLink>
-]
+export type RedwoodApolloLinks = Array<
+  | RedwoodApolloLink<'withToken'>
+  | RedwoodApolloLink<'authMiddleware'>
+  | RedwoodApolloLink<'enhanceErrorLink'>
+  | RedwoodApolloLink<'httpLink', HttpLink>
+>
+
+// DummyLink is needed to prevent circular dependencies when defining
+// RedwoodApolloLinkName
+// (Just replace DummyLink with RedwoodApolloLink in the InferredLinkName type
+// helper and you'll see what I mean)
+type DummyLink<T extends string> = { name: T }
+type InferredLinkName<T> = T extends Array<DummyLink<infer Name>> ? Name : never
+export type RedwoodApolloLinkName = InferredLinkName<RedwoodApolloLinks>
 
 export type RedwoodApolloLinkFactory = (links: RedwoodApolloLinks) => ApolloLink

@@ -86,12 +86,14 @@ class ExecaError extends Error {
   }
 }
 
-function exec(...args) {
+async function exec(...args) {
   return execa(...args)
     .then(({ stdout, stderr, exitCode }) => {
       if (exitCode !== 0) {
         throw new ExecaError({ stdout, stderr, exitCode })
       }
+
+      return { stdout, stderr, exitCode }
     })
     .catch((error) => {
       if (error instanceof ExecaError) {

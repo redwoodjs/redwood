@@ -1,15 +1,12 @@
 import type { A } from 'ts-toolbelt'
 
+import { setContext, context as globalContext } from '@redwoodjs/context'
 import type {
   DirectiveParams,
   ValidatorDirective,
   TransformerDirective,
 } from '@redwoodjs/graphql-server'
-import {
-  DirectiveType,
-  setContext,
-  context as globalContext,
-} from '@redwoodjs/graphql-server'
+import { DirectiveType } from '@redwoodjs/graphql-server'
 
 export { getDirectiveName } from '@redwoodjs/graphql-server'
 
@@ -17,7 +14,7 @@ export { getDirectiveName } from '@redwoodjs/graphql-server'
 interface DirectiveMocker {
   (
     directive: ValidatorDirective,
-    executionMock: A.Compute<Omit<Partial<DirectiveParams>, 'resolvedValue'>>
+    executionMock: A.Compute<Omit<Partial<DirectiveParams>, 'resolvedValue'>>,
   ): any
 }
 
@@ -71,7 +68,7 @@ interface DirectiveMocker {
  */
 export const mockRedwoodDirective: DirectiveMocker = (
   directive,
-  executionMock
+  executionMock,
 ) => {
   const { directiveArgs, context, ...others } = executionMock
 

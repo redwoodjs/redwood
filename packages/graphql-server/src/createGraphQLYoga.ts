@@ -20,6 +20,7 @@ import {
   useRedwoodOpenTelemetry,
   useRedwoodLogger,
   useRedwoodPopulateContext,
+  useRedwoodTrustedDocuments,
 } from './plugins'
 import type {
   useRedwoodDirectiveReturn,
@@ -50,6 +51,7 @@ export const createGraphQLYoga = ({
   graphiQLEndpoint = '/graphql',
   schemaOptions,
   realtime,
+  trustedDocuments,
   openTelemetryOptions,
 }: GraphQLYogaOptions) => {
   let schema: GraphQLSchema
@@ -65,7 +67,7 @@ export const createGraphQLYoga = ({
     if (projectDirectives.length > 0) {
       ;(redwoodDirectivePlugins as useRedwoodDirectiveReturn[]) =
         projectDirectives.map((directive) =>
-          useRedwoodDirective(directive as DirectivePluginOptions)
+          useRedwoodDirective(directive as DirectivePluginOptions),
         )
     }
 
@@ -74,7 +76,7 @@ export const createGraphQLYoga = ({
 
     if (realtime?.subscriptions?.subscriptions) {
       projectSubscriptions = makeSubscriptions(
-        realtime.subscriptions.subscriptions
+        realtime.subscriptions.subscriptions,
       )
     }
 
@@ -139,8 +141,12 @@ export const createGraphQLYoga = ({
     }
 
     plugins.push(
-      useFilterAllowedOperations(allowedOperations || defaultAllowedOperations)
+      useFilterAllowedOperations(allowedOperations || defaultAllowedOperations),
     )
+
+    if (trustedDocuments && !trustedDocuments.disabled) {
+      plugins.push(useRedwoodTrustedDocuments(trustedDocuments))
+    }
 
     // App-defined plugins
     if (extraPlugins && extraPlugins.length > 0) {
@@ -156,7 +162,7 @@ export const createGraphQLYoga = ({
           try {
             // if we can reach the health check endpoint ...
             const response = await yoga.fetch(
-              new URL(graphiQLEndpoint + '/health', request.url)
+              new URL(graphiQLEndpoint + '/health', request.url),
             )
 
             const expectedHealthCheckId = healthCheckId || 'yoga'
@@ -173,7 +179,7 @@ export const createGraphQLYoga = ({
             return false
           }
         },
-      })
+      }),
     )
 
     // Must be "last" in plugin chain, but before error masking

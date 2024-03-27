@@ -1,5 +1,4 @@
-import fs from 'fs'
-
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
@@ -29,7 +28,7 @@ const prismaBinaryTargetAdditions = () => {
   if (!content.includes('rhel-openssl-1.0.x')) {
     const result = content.replace(
       /binaryTargets =.*\n/,
-      `binaryTargets = ["native", "rhel-openssl-1.0.x"]\n`
+      `binaryTargets = ["native", "rhel-openssl-1.0.x"]\n`,
     )
 
     fs.writeFileSync(getPaths().api.dbSchema, result)
@@ -64,7 +63,7 @@ export const handler = async () => {
       },
       printSetupNotes(notes),
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
   try {
     await tasks.run()

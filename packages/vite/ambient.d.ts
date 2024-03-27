@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-/// <reference types="react/canary" />
+/// <reference types="react/experimental" />
 import type { HelmetServerState } from 'react-helmet-async'
 
 declare global {
@@ -25,6 +25,8 @@ declare global {
   var __REDWOOD__PRERENDER_PAGES: any
 
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
+
+  var __rw_module_cache__: Map<string, unknown>
 }
 
 export {}

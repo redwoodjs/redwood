@@ -1,23 +1,26 @@
 import { PrismaClient } from '@prisma/client'
+import { describe, afterEach, it, vi, expect } from 'vitest'
 
 import InMemoryClient from '../clients/InMemoryClient'
 import { createCache } from '../index'
 
-const mockFindFirst = jest.fn()
-const mockFindMany = jest.fn()
+const mockFindFirst = vi.fn()
+const mockFindMany = vi.fn()
 
-jest.mock('@prisma/client', () => ({
-  PrismaClient: jest.fn(() => ({
+vi.mock('@prisma/client', () => ({
+  PrismaClient: vi.fn(() => ({
     user: {
       findFirst: mockFindFirst,
       findMany: mockFindMany,
     },
   })),
+  // NOTE: This is only available after `prisma generate` has been run
+  PrismaClientValidationError: new Error('PrismaClientValidationError'),
 }))
 
 describe('cacheFindMany', () => {
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('adds the collection to the cache based on latest updated user', async () => {
@@ -33,13 +36,13 @@ describe('cacheFindMany', () => {
 
     const client = new InMemoryClient()
     const { cacheFindMany } = createCache(client)
-    const spy = jest.spyOn(client, 'set')
+    const spy = vi.spyOn(client, 'set')
 
     await cacheFindMany('test', PrismaClient().user)
 
     expect(spy).toHaveBeenCalled()
     expect(client.storage[`test-1-${now.getTime()}`].value).toEqual(
-      JSON.stringify([user])
+      JSON.stringify([user]),
     )
   })
 
@@ -66,18 +69,18 @@ describe('cacheFindMany', () => {
     mockFindMany.mockImplementation(() => [user])
 
     const { cacheFindMany } = createCache(client)
-    const spy = jest.spyOn(client, 'set')
+    const spy = vi.spyOn(client, 'set')
 
     await cacheFindMany('test', PrismaClient().user)
 
     expect(spy).toHaveBeenCalled()
     // the `now` cache still exists
     expect(
-      JSON.parse(client.storage[`test-1-${now.getTime()}`].value)[0].id
+      JSON.parse(client.storage[`test-1-${now.getTime()}`].value)[0].id,
     ).toEqual(1)
     // the `future` cache should have been created
     expect(client.storage[`test-1-${future.getTime()}`].value).toEqual(
-      JSON.stringify([user])
+      JSON.stringify([user]),
     )
   })
 
@@ -86,8 +89,8 @@ describe('cacheFindMany', () => {
     mockFindFirst.mockImplementation(() => null)
     mockFindMany.mockImplementation(() => [])
     const { cacheFindMany } = createCache(client)
-    const getSpy = jest.spyOn(client, 'get')
-    const setSpy = jest.spyOn(client, 'set')
+    const getSpy = vi.spyOn(client, 'get')
+    const setSpy = vi.spyOn(client, 'set')
 
     const result = await cacheFindMany('test', PrismaClient().user)
 

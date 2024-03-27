@@ -1,5 +1,7 @@
 import { resolve } from 'path'
 
+import { describe, it } from 'vitest'
+
 import { DefaultHost } from '../../hosts'
 import { RWProject } from '../../model'
 import { getOutline } from '../outline'
@@ -15,7 +17,7 @@ describe('Redwood Project Outline', () => {
   })
 })
 function getFixtureDir(
-  name: 'example-todo-main-with-errors' | 'example-todo-main'
+  name: 'example-todo-main-with-errors' | 'example-todo-main',
 ) {
   return resolve(__dirname, `../../../../../__fixtures__/${name}`)
 }

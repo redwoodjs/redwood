@@ -1,7 +1,10 @@
 import React from 'react'
 
 import { render } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
 
+// Private is deprecated, but we still want to test it so we don't break
+// people's projects that still use it.
 import { Route, Private } from '@redwoodjs/router'
 
 import { routes, Router } from '../MockRouter'
@@ -18,11 +21,11 @@ describe('MockRouter', () => {
           <Route name="c" path="/c" page={FakePage} />
           <Route name="d" path="/d" page={FakePage} />
         </Private>
-      </Router>
+      </Router>,
     )
 
     expect(Object.keys(routes)).toEqual(
-      expect.arrayContaining(['a', 'b', 'c', 'd'])
+      expect.arrayContaining(['a', 'b', 'c', 'd']),
     )
   })
 })

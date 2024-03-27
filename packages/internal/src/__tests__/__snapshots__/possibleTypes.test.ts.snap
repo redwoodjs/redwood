@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Generate gql possible types web from the GraphQL Schema > when toml has graphql possible types turned om > when there are union types  1`] = `
+"export interface PossibleTypesResultData {
+  possibleTypes: {
+    [key: string]: string[]
+  }
+}
+const result: PossibleTypesResultData = {
+  possibleTypes: {
+    Groceries: ['Fruit', 'Vegetable'],
+    Grocery: ['Fruit', 'Vegetable'],
+  },
+}
+export default result
+"
+`;

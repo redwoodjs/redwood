@@ -8,6 +8,25 @@ import { handler, NO_PENDING_MIGRATIONS_MESSAGE } from '../commands/upHandler'
 
 const redwoodProjectPath = '/redwood-app'
 
+let consoleLogMock: jest.SpyInstance
+let consoleInfoMock: jest.SpyInstance
+let consoleErrorMock: jest.SpyInstance
+let consoleWarnMock: jest.SpyInstance
+
+beforeEach(() => {
+  consoleLogMock = jest.spyOn(console, 'log').mockImplementation()
+  consoleInfoMock = jest.spyOn(console, 'info').mockImplementation()
+  consoleErrorMock = jest.spyOn(console, 'error').mockImplementation()
+  consoleWarnMock = jest.spyOn(console, 'warn').mockImplementation()
+})
+
+afterEach(() => {
+  consoleLogMock.mockRestore()
+  consoleInfoMock.mockRestore()
+  consoleErrorMock.mockRestore()
+  consoleWarnMock.mockRestore()
+})
+
 jest.mock('fs', () => require('memfs').fs)
 
 const mockDataMigrations: { current: any[] } = { current: [] }
@@ -29,7 +48,7 @@ jest.mock(
       },
     }
   },
-  { virtual: true }
+  { virtual: true },
 )
 
 jest.mock(
@@ -49,7 +68,7 @@ jest.mock(
       },
     }
   },
-  { virtual: true }
+  { virtual: true },
 )
 
 jest.mock(
@@ -59,7 +78,7 @@ jest.mock(
   },
   {
     virtual: true,
-  }
+  },
 )
 
 jest.mock(
@@ -69,7 +88,7 @@ jest.mock(
   },
   {
     virtual: true,
-  }
+  },
 )
 
 jest.mock(
@@ -83,7 +102,7 @@ jest.mock(
   },
   {
     virtual: true,
-  }
+  },
 )
 
 jest.mock(
@@ -97,7 +116,7 @@ jest.mock(
   },
   {
     virtual: true,
-  }
+  },
 )
 
 jest.mock(
@@ -107,7 +126,7 @@ jest.mock(
   },
   {
     virtual: true,
-  }
+  },
 )
 
 jest.mock(
@@ -117,7 +136,7 @@ jest.mock(
   },
   {
     virtual: true,
-  }
+  },
 )
 
 const RWJS_CWD = process.env.RWJS_CWD
@@ -146,8 +165,6 @@ const ranDataMigration = {
 
 describe('upHandler', () => {
   it("noops if there's no data migrations directory", async () => {
-    console.info = jest.fn()
-
     vol.fromNestedJSON(
       {
         'redwood.toml': '',
@@ -166,7 +183,7 @@ describe('upHandler', () => {
           },
         },
       },
-      redwoodProjectPath
+      redwoodProjectPath,
     )
 
     await handler({
@@ -174,7 +191,9 @@ describe('upHandler', () => {
       distPath: getPaths().api.dist,
     })
 
-    expect(console.info.mock.calls[0][0]).toMatch(NO_PENDING_MIGRATIONS_MESSAGE)
+    expect(consoleInfoMock.mock.calls[0][0]).toMatch(
+      NO_PENDING_MIGRATIONS_MESSAGE,
+    )
   })
 
   it("noops if there's no pending migrations", async () => {
@@ -196,24 +215,20 @@ describe('upHandler', () => {
           },
         },
       },
-      redwoodProjectPath
+      redwoodProjectPath,
     )
-
-    console.info = jest.fn()
 
     await handler({
       importDbClientFromDist: true,
       distPath: getPaths().api.dist,
     })
 
-    expect(console.info.mock.calls[0][0]).toMatch(NO_PENDING_MIGRATIONS_MESSAGE)
+    expect(consoleInfoMock.mock.calls[0][0]).toMatch(
+      NO_PENDING_MIGRATIONS_MESSAGE,
+    )
   })
 
   it('runs pending migrations', async () => {
-    console.info = jest.fn()
-    console.error = jest.fn()
-    console.warn = jest.fn()
-
     mockDataMigrations.current = [
       {
         version: '20230822075441',
@@ -227,6 +242,7 @@ describe('upHandler', () => {
       {
         'redwood.toml': '',
         api: {
+          'package.json': '{}',
           dist: {
             lib: {
               'db.js': '',
@@ -241,7 +257,7 @@ describe('upHandler', () => {
           },
         },
       },
-      redwoodProjectPath
+      redwoodProjectPath,
     )
 
     await handler({
@@ -249,14 +265,18 @@ describe('upHandler', () => {
       distPath: getPaths().api.dist,
     })
 
-    expect(console.info.mock.calls[0][0]).toMatch(
-      '1 data migration(s) completed successfully.'
+    // The handler will error and set the exit code to 1, we must revert that
+    // or test suite itself will fail.
+    process.exitCode = 0
+
+    expect(consoleInfoMock.mock.calls[0][0]).toMatch(
+      '1 data migration(s) completed successfully.',
     )
-    expect(console.error.mock.calls[1][0]).toMatch(
-      '1 data migration(s) exited with errors.'
+    expect(consoleErrorMock.mock.calls[1][0]).toMatch(
+      '1 data migration(s) exited with errors.',
     )
-    expect(console.warn.mock.calls[0][0]).toMatch(
-      '1 data migration(s) skipped due to previous error'
+    expect(consoleWarnMock.mock.calls[0][0]).toMatch(
+      '1 data migration(s) skipped due to previous error',
     )
   })
 })

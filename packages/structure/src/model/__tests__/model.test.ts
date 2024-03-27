@@ -1,5 +1,7 @@
 import { basename, resolve } from 'path'
 
+import { describe, it, expect } from 'vitest'
+
 import { DefaultHost } from '../../hosts'
 import { URL_file } from '../../x/URL'
 import { RWProject } from '../RWProject'
@@ -20,14 +22,14 @@ describe('Redwood Project Model', () => {
         'EditUserPage',
         'FooPage',
         'BarPage',
-      ])
+      ]),
     )
     for (const page of project.pages) {
       page.basenameNoExt
       page.route?.id
     }
     expect(
-      project.sdls.map((s) => s.name).sort((a, b) => (a < b ? -1 : 1))
+      project.sdls.map((s) => s.name).sort((a, b) => (a < b ? -1 : 1)),
     ).toEqual(['currentUser', 'todos'])
 
     for (const c of project.components) {
@@ -72,7 +74,7 @@ describe('Cells', () => {
     const cells = project.cells
     expect(cells).toHaveLength(1)
     expect(cells.map((cell) => basename(cell.filePath))).not.toContain(
-      'TableCell.js'
+      'TableCell.js',
     )
   })
 
@@ -91,7 +93,7 @@ describe('Cells', () => {
     const x = await cell?.collectDiagnostics()
     expect(x).not.toBeUndefined()
     expect(x?.map((e) => e.diagnostic.message)).toContain(
-      'We recommend that you name your query operation'
+      'We recommend that you name your query operation',
     )
   })
 })
@@ -145,7 +147,7 @@ function getFixtureDir(
     | 'example-todo-main-with-errors'
     | 'example-todo-main'
     | 'empty-project'
-    | 'test-project'
+    | 'test-project',
 ) {
   return resolve(__dirname, `../../../../../__fixtures__/${name}`)
 }

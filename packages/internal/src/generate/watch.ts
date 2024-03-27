@@ -3,7 +3,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import c from 'ansi-colors'
+import chalk from 'chalk'
 import chokidar from 'chokidar'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -17,6 +17,7 @@ import {
 } from '../files'
 import { warningForDuplicateRoutes } from '../routes'
 
+import { generateClientPreset } from './clientPreset'
 import { generate } from './generate'
 import {
   generateTypeDefGraphQLApi,
@@ -34,7 +35,7 @@ import {
 
 const rwjsPaths = getPaths()
 
-const watcher = chokidar.watch('**/src/**/*.{ts,js,jsx,tsx}', {
+const watcher = chokidar.watch('(web|api)/src/**/*.{ts,js,jsx,tsx}', {
   persistent: true,
   ignored: ['node_modules', '.redwood'],
   ignoreInitial: true,
@@ -81,7 +82,9 @@ watcher
     }
   })
   .on('all', async (eventName, p) => {
-    cliLogger.trace(`File system change: ${c.magenta(eventName)} ${c.dim(p)}`)
+    cliLogger.trace(
+      `File system change: ${chalk.magenta(eventName)} ${chalk.dim(p)}`,
+    )
     if (!['add', 'change', 'unlink'].includes(eventName)) {
       return
     }
@@ -94,12 +97,13 @@ watcher
       cliLogger.debug(
         action[eventTigger],
         type + ':',
-        c.dim(p),
-        c.italic(c.dim(Date.now() - start + ' ms'))
+        chalk.dim(p),
+        chalk.dim.italic(Date.now() - start + ' ms'),
       )
 
     if (absPath.indexOf('Cell') !== -1 && isCellFile(absPath)) {
       await generateTypeDefGraphQLWeb()
+      await generateClientPreset()
       if (eventName === 'unlink') {
         fs.unlinkSync(mirrorPathForCell(absPath, rwjsPaths)[0])
       } else {

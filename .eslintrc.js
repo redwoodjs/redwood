@@ -27,6 +27,7 @@ module.exports = {
     'packages/babel-config/src/__tests__/__fixtures__/**/*',
     'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
+    'packages/cli/**/__testfixtures__/**/*',
     'packages/core/config/storybook/**/*',
     'packages/studio/dist-*/**/*',
   ],
@@ -182,6 +183,24 @@ module.exports = {
       ],
       rules: {
         '@redwoodjs/process-env-computed': 'off',
+      },
+    },
+    {
+      files: ['packages/project-config/**'],
+      excludedFiles: [
+        '**/__tests__/**',
+        '**/*.test.ts?(x)',
+        '**/*.spec.ts?(x)',
+      ],
+      rules: {
+        'import/no-extraneous-dependencies': [
+          'error',
+          {
+            devDependencies: false,
+            optionalDependencies: false,
+            peerDependencies: true,
+          },
+        ],
       },
     },
   ],

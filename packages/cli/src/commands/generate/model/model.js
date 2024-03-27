@@ -37,8 +37,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'RedwoodRecord Reference',
-        'https://redwoodjs.com/docs/redwoodrecord'
-      )}`
+        'https://redwoodjs.com/docs/redwoodrecord',
+      )}`,
     )
 
   Object.entries(yargsDefaults).forEach(([option, config]) => {
@@ -66,12 +66,12 @@ export const handler = async ({ force, ...args }) => {
       {
         title: 'Parsing datamodel, generating api/src/models/index.js...',
         task: async () => {
-          const { parseDatamodel } = await import('@redwoodjs/record')
-          await parseDatamodel()
+          const redwoodRecordModule = await import('@redwoodjs/record')
+          await redwoodRecordModule.default.parseDatamodel()
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

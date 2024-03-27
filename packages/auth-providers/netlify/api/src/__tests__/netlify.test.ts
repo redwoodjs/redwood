@@ -1,22 +1,28 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+// @ts-expect-error - The types don't have a `default` export, but the actual
+// module will do at runtime
 import jwt from 'jsonwebtoken'
+import { vi, beforeAll, afterAll, test, expect } from 'vitest'
 
 import { authDecoder } from '../decoder'
 
-jest.mock('jsonwebtoken', () => {
-  const jsonwebtoken = jest.requireActual('jsonwebtoken')
+vi.mock('jsonwebtoken', async (importOriginal) => {
+  const originalJWT = await importOriginal<typeof jwt>()
 
   return {
-    ...jsonwebtoken,
-    verify: jest.fn(),
-    decode: jest.fn((token: string) => {
-      const exp =
-        token === 'expired-token'
-          ? Math.floor(Date.now() / 1000) - 3600
-          : Math.floor(Date.now() / 1000) + 3600
+    ...originalJWT,
+    default: {
+      verify: vi.fn(),
+      decode: vi.fn((token: string) => {
+        const exp =
+          token === 'expired-token'
+            ? Math.floor(Date.now() / 1000) - 3600
+            : Math.floor(Date.now() / 1000) + 3600
 
-      return { exp, sub: 'abc123' }
-    }),
+        return { exp, sub: 'abc123' }
+      }),
+    },
+    TokenExpiredError: originalJWT.TokenExpiredError,
   }
 })
 
@@ -25,7 +31,7 @@ const req = {
   context: {} as LambdaContext,
 }
 
-let consoleError
+let consoleError: typeof console.error
 
 beforeAll(() => {
   consoleError = console.error
@@ -74,6 +80,6 @@ test('throws on expired token', async () => {
     authDecoder('expired-token', 'netlify', {
       ...req.event,
       context: { clientContext: { user: { sub: 'abc123' } } },
-    } as any)
+    } as any),
   ).rejects.toThrow('jwt expired')
 })

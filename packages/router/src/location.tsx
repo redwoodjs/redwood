@@ -1,8 +1,8 @@
 import React from 'react'
 
+import { createNamedContext } from './createNamedContext'
 import { gHistory } from './history'
 import type { TrailingSlashesTypes } from './util'
-import { createNamedContext } from './util'
 
 export interface LocationContextType {
   pathname: string
@@ -60,7 +60,7 @@ class LocationProvider extends React.Component<
             window.history.replaceState(
               {},
               '',
-              pathname.substr(0, pathname.length - 1)
+              pathname.substr(0, pathname.length - 1),
             )
           }
           break

@@ -1,0 +1,29 @@
+name: 📝 Check changesets
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+# Cancel in-progress runs of this workflow.
+# See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-changesets:
+    name: 📝 Check changesets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up job
+        uses: ./.github/actions/set-up-job
+        with:
+          set-up-yarn-cache: false
+          yarn-install-directory: ./.github/actions/check_changesets
+          build: false
+
+      - name: Check changesets
+        uses: ./.github/actions/check_changesets
+        with:
+          labels: '{ "labels": ${{ toJSON(github.event.pull_request.labels) }} }'

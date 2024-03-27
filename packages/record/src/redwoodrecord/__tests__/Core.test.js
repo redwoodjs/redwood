@@ -1,9 +1,11 @@
+import { vi, afterEach, describe, it, expect } from 'vitest'
+
 import * as Errors from '../../errors'
 import datamodel from '../__fixtures__/datamodel.js'
 import Core from '../Core'
 
 // Mock Prisma
-const db = { user: jest.fn() }
+const db = { user: vi.fn() }
 
 // Setup Core
 Core.schema = datamodel
@@ -98,7 +100,7 @@ describe('User subclass', () => {
 
     describe('where', () => {
       it('returns an array of User records', async () => {
-        db.user.findMany = jest.fn(() => [
+        db.user.findMany = vi.fn(() => [
           {
             id: 1,
             email: 'rob@redwoodjs.com',
@@ -114,7 +116,7 @@ describe('User subclass', () => {
 
     describe('all', () => {
       it('calls where with an empty first argument', async () => {
-        db.user.findMany = jest.fn(() => [])
+        db.user.findMany = vi.fn(() => [])
         await User.all()
 
         expect(db.user.findMany).toHaveBeenCalledWith({
@@ -123,7 +125,7 @@ describe('User subclass', () => {
       })
 
       it('is an alias for where', async () => {
-        db.user.findMany = jest.fn(() => [
+        db.user.findMany = vi.fn(() => [
           {
             id: 1,
             email: 'rob@redwoodjs.com',
@@ -142,7 +144,7 @@ describe('User subclass', () => {
           hashedPassword: 'abc',
           salt: 'abc',
         }
-        db.user.create = jest.fn(() => ({ id: 1, ...attributes }))
+        db.user.create = vi.fn(() => ({ id: 1, ...attributes }))
 
         const user = await User.create(attributes)
 
@@ -157,7 +159,7 @@ describe('User subclass', () => {
     describe('find', () => {
       it('finds a user by ID', async () => {
         const id = 1
-        db.user.findFirst = jest.fn(() => ({
+        db.user.findFirst = vi.fn(() => ({
           id,
           email: 'rob@redwoodjs.com',
         }))
@@ -168,7 +170,7 @@ describe('User subclass', () => {
       })
 
       it('throws RedwoodRecordNotFound if ID is not found', async () => {
-        db.user.findFirst = jest.fn(() => null)
+        db.user.findFirst = vi.fn(() => null)
 
         try {
           await User.find(999999999)
@@ -183,7 +185,7 @@ describe('User subclass', () => {
     describe('findBy', () => {
       it('returns the first record if no arguments', async () => {
         const id = 1
-        db.user.findFirst = jest.fn(() => ({
+        db.user.findFirst = vi.fn(() => ({
           id,
           email: 'rob@redwoodjs.com',
         }))
@@ -196,7 +198,7 @@ describe('User subclass', () => {
 
       it('returns the first record that matches the given attributes', async () => {
         const id = 1
-        db.user.findFirst = jest.fn(() => ({
+        db.user.findFirst = vi.fn(() => ({
           id,
           email: 'tom@redwoodjs.com',
         }))
@@ -210,7 +212,7 @@ describe('User subclass', () => {
       })
 
       it('returns null if no records', async () => {
-        db.user.findFirst = jest.fn(() => null)
+        db.user.findFirst = vi.fn(() => null)
 
         expect(await User.findBy()).toEqual(null)
       })
@@ -219,7 +221,7 @@ describe('User subclass', () => {
     describe('first', () => {
       it('is an alias for findBy', async () => {
         const id = 1
-        db.user.findFirst = jest.fn(() => ({
+        db.user.findFirst = vi.fn(() => ({
           id,
           email: 'tom@redwoodjs.com',
         }))
@@ -238,7 +240,7 @@ describe('User subclass', () => {
     describe('destroy', () => {
       it('deletes a record', async () => {
         const data = { id: 1, email: 'tom@redwoodjs.com' }
-        db.user.delete = jest.fn(() => data)
+        db.user.delete = vi.fn(() => data)
         const user = User.build(data)
 
         await user.destroy()
@@ -250,7 +252,7 @@ describe('User subclass', () => {
 
       it('returns the record that was deleted', async () => {
         const data = { id: 1, email: 'tom@redwoodjs.com' }
-        db.user.delete = jest.fn(() => data)
+        db.user.delete = vi.fn(() => data)
         const user = User.build(data)
         const result = await user.destroy()
 
@@ -258,7 +260,7 @@ describe('User subclass', () => {
       })
 
       it('returns false if record not found', async () => {
-        db.user.delete = jest.fn(() => {
+        db.user.delete = vi.fn(() => {
           throw new Error('Record to delete does not exist')
         })
         const user = User.build({ id: 99999999 })
@@ -267,13 +269,13 @@ describe('User subclass', () => {
       })
 
       it('throws an error if record not found', async () => {
-        db.user.delete = jest.fn(() => {
+        db.user.delete = vi.fn(() => {
           throw new Error('Record to delete does not exist')
         })
         const user = User.build({ id: 99999999 })
 
         await expect(user.destroy({ throw: true })).rejects.toThrow(
-          Errors.RedwoodRecordNotFoundError
+          Errors.RedwoodRecordNotFoundError,
         )
       })
     })
@@ -287,7 +289,7 @@ describe('User subclass', () => {
             hashedPassword: 'abc',
             salt: 'abc',
           }
-          db.user.create = jest.fn(() => ({ id: 1, ...attributes }))
+          db.user.create = vi.fn(() => ({ id: 1, ...attributes }))
           const user = await User.build(attributes)
 
           const result = await user.save()
@@ -297,7 +299,7 @@ describe('User subclass', () => {
         })
 
         it('returns false if create fails', async () => {
-          db.user.create = jest.fn(() => {
+          db.user.create = vi.fn(() => {
             throw new Error()
           })
           const user = await User.build({ email: 'foo@bar.com' })
@@ -310,7 +312,7 @@ describe('User subclass', () => {
         })
 
         it('throws error for missing attribute', async () => {
-          db.user.create = jest.fn(() => {
+          db.user.create = vi.fn(() => {
             throw new Error('Argument email is missing')
           })
           const user = await User.build({})
@@ -319,14 +321,14 @@ describe('User subclass', () => {
             await user.save({ throw: true })
           } catch (e) {
             expect(
-              e instanceof Errors.RedwoodRecordMissingAttributeError
+              e instanceof Errors.RedwoodRecordMissingAttributeError,
             ).toEqual(true)
           }
           expect.assertions(1)
         })
 
         it('throws error for null attribute', async () => {
-          db.user.create = jest.fn(() => {
+          db.user.create = vi.fn(() => {
             throw new Error('Argument email must not be null')
           })
           const user = await User.build({ email: null })
@@ -335,14 +337,14 @@ describe('User subclass', () => {
             await user.save({ throw: true })
           } catch (e) {
             expect(e instanceof Errors.RedwoodRecordNullAttributeError).toEqual(
-              true
+              true,
             )
           }
           expect.assertions(1)
         })
 
         it('throws for otherwise uncaught error', async () => {
-          db.user.create = jest.fn(() => {
+          db.user.create = vi.fn(() => {
             throw new Error('Something bad happened')
           })
           const user = await User.build({ email: null })
@@ -364,7 +366,7 @@ describe('User subclass', () => {
             hashedPassword: 'abc',
             salt: 'abc',
           }
-          db.user.update = jest.fn(() => attributes)
+          db.user.update = vi.fn(() => attributes)
           const user = await User.build({ id: 1, ...attributes })
           const result = await user.save()
 
@@ -383,7 +385,7 @@ describe('User subclass', () => {
             hashedPassword: 'abc',
             salt: 'abc',
           }
-          db.user.update = jest.fn(() => attributes)
+          db.user.update = vi.fn(() => attributes)
           const user = await User.build({ userId: 1, ...attributes })
           await user.save()
 
@@ -394,7 +396,7 @@ describe('User subclass', () => {
         })
 
         it('returns false if update fails', async () => {
-          db.user.update = jest.fn(() => {
+          db.user.update = vi.fn(() => {
             throw new Error('Record to update not found')
           })
           const user = await User.build({ id: 99999999 })
@@ -404,7 +406,7 @@ describe('User subclass', () => {
         })
 
         it('throws if record not found', async () => {
-          db.user.update = jest.fn(() => {
+          db.user.update = vi.fn(() => {
             throw new Error('Record to update not found')
           })
           const user = await User.build({ id: 99999999 })
@@ -419,7 +421,7 @@ describe('User subclass', () => {
         })
 
         it('throws on null required field if given the option', async () => {
-          db.user.update = jest.fn(() => {
+          db.user.update = vi.fn(() => {
             throw new Error('Argument email must not be null')
           })
           const user = await User.build({ id: 99999999 })
@@ -429,7 +431,7 @@ describe('User subclass', () => {
             await user.save({ throw: true })
           } catch (e) {
             expect(e instanceof Errors.RedwoodRecordNullAttributeError).toEqual(
-              true
+              true,
             )
           }
 
@@ -446,7 +448,7 @@ describe('User subclass', () => {
           hashedPassword: 'abc',
           salt: 'abc',
         }
-        db.user.update = jest.fn(() => attributes)
+        db.user.update = vi.fn(() => attributes)
         const user = await User.build({ id: 1, ...attributes })
         const _result = await user.update({ name: 'Robert Cameron' })
 

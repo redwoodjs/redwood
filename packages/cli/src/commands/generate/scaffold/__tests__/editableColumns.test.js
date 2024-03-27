@@ -4,17 +4,23 @@ import path from 'path'
 // Load mocks
 import '../../../../lib/test'
 
+import { vol } from 'memfs'
+import { vi, describe, beforeAll, test, expect } from 'vitest'
+
 import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../helpers'
 import * as scaffold from '../scaffold'
 
-jest.mock('execa')
+vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
+vi.mock('execa')
 
 describe('editable columns', () => {
   let files
   let form
 
   beforeAll(async () => {
+    vol.fromJSON({ 'redwood.toml': '' }, '/')
+
     files = await scaffold.files({
       ...getDefaultArgs(defaults),
       model: 'ExcludeDefault',
@@ -24,7 +30,7 @@ describe('editable columns', () => {
     form =
       files[
         path.normalize(
-          '/path/to/project/web/src/components/ExcludeDefault/ExcludeDefaultForm/ExcludeDefaultForm.jsx'
+          '/path/to/project/web/src/components/ExcludeDefault/ExcludeDefaultForm/ExcludeDefaultForm.jsx',
         )
       ]
   })

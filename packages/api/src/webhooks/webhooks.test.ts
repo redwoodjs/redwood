@@ -1,4 +1,5 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda'
+import { beforeEach, afterEach, describe, test, expect, vi } from 'vitest'
 
 import {
   signPayload,
@@ -44,11 +45,11 @@ const buildEvent = ({
 }
 
 beforeEach(() => {
-  jest.spyOn(console, 'warn').mockImplementation(jest.fn())
+  vi.spyOn(console, 'warn').mockImplementation(vi.fn())
 })
 
 afterEach(() => {
-  jest.spyOn(console, 'warn').mockRestore()
+  vi.spyOn(console, 'warn').mockRestore()
 })
 
 describe('webhooks', () => {
@@ -74,7 +75,7 @@ describe('webhooks', () => {
             payload,
             secret,
             signature,
-          })
+          }),
         ).toBeTruthy()
       })
     })
@@ -102,7 +103,7 @@ describe('webhooks', () => {
             payload,
             secret,
             signature,
-          })
+          }),
         ).toBeTruthy()
       })
     })
@@ -130,7 +131,7 @@ describe('webhooks', () => {
             payload,
             secret,
             signature,
-          })
+          }),
         ).toBeTruthy()
       })
     })
@@ -158,7 +159,7 @@ describe('webhooks', () => {
             payload,
             secret,
             signature,
-          })
+          }),
         ).toBeTruthy()
       })
     })
@@ -173,7 +174,7 @@ describe('webhooks', () => {
         })
 
         expect(signature).toEqual(
-          'eyJhbGciOiJIUzI1NiJ9.Tm8gbW9yZSBzZWNyZXRzLCBNYXJ0eS4.LBqlEwDa4bWxzrv_Y1_Y7S6_7czhzLZuF17d5c6YjXI'
+          'eyJhbGciOiJIUzI1NiJ9.Tm8gbW9yZSBzZWNyZXRzLCBNYXJ0eS4.LBqlEwDa4bWxzrv_Y1_Y7S6_7czhzLZuF17d5c6YjXI',
         )
       })
 
@@ -188,7 +189,7 @@ describe('webhooks', () => {
             payload,
             secret,
             signature,
-          })
+          }),
         ).toBeTruthy()
       })
     })
@@ -207,7 +208,7 @@ describe('webhooks', () => {
             payload,
             secret,
             signature,
-          })
+          }),
         ).toBeTruthy()
       })
     })
@@ -234,7 +235,7 @@ describe('webhooks', () => {
         })
 
         expect(signature).toMatch(
-          'AaP4EgcpPC5oE3eppI/s6EMtQCZ4Ap34wNHPoxBoikI='
+          'AaP4EgcpPC5oE3eppI/s6EMtQCZ4Ap34wNHPoxBoikI=',
         )
       })
 
@@ -249,7 +250,7 @@ describe('webhooks', () => {
             payload,
             secret,
             signature,
-          })
+          }),
         ).toBeTruthy()
       })
     })
@@ -270,7 +271,7 @@ describe('webhooks', () => {
         })
 
         expect(
-          verifyEvent('timestampSchemeVerifier', { event, secret })
+          verifyEvent('timestampSchemeVerifier', { event, secret }),
         ).toBeTruthy()
       })
 
@@ -288,7 +289,7 @@ describe('webhooks', () => {
         })
 
         expect(
-          verifyEvent('timestampSchemeVerifier', { event, secret })
+          verifyEvent('timestampSchemeVerifier', { event, secret }),
         ).toBeTruthy()
       })
 
@@ -309,7 +310,7 @@ describe('webhooks', () => {
             event,
             payload,
             secret,
-          })
+          }),
         ).toBeTruthy()
       })
 
@@ -452,7 +453,7 @@ describe('webhooks', () => {
               currentTimestampOverride:
                 parseInt(svix_timestamp, 10) * 1000 - ONE_MINUTE,
             },
-          })
+          }),
         ).toBeTruthy()
       })
     })

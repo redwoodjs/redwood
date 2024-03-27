@@ -1,3 +1,5 @@
+import { vi, describe, it, expect } from 'vitest'
+
 import * as ValidationErrors from '@redwoodjs/api'
 
 import datamodel from '../__fixtures__/datamodel.js'
@@ -5,7 +7,7 @@ import RedwoodRecord from '../RedwoodRecord'
 import Reflection from '../Reflection'
 import RelationProxy from '../RelationProxy'
 
-const db = { user: jest.fn() }
+const db = { user: vi.fn() }
 
 describe('reflect()', () => {
   it('returns instance of Reflection', () => {
@@ -50,7 +52,7 @@ describe('save()', () => {
     const user = new User()
 
     expect(user.save({ throw: true })).rejects.toThrow(
-      ValidationErrors.PresenceValidationError
+      ValidationErrors.PresenceValidationError,
     )
   })
 
@@ -87,7 +89,7 @@ describe('_onSaveError()', () => {
   User.db = db
 
   it('returns false if save fails', async () => {
-    db.user.update = jest.fn(() => {
+    db.user.update = vi.fn(() => {
       throw new Error('Argument email must not be null')
     })
     const user = User.build({ id: 1, email: null })
@@ -96,7 +98,7 @@ describe('_onSaveError()', () => {
   })
 
   it('adds an error if save fails', async () => {
-    db.user.update = jest.fn(() => {
+    db.user.update = vi.fn(() => {
       throw new Error('Argument email must not be null')
     })
     const user = User.build({ id: 1, email: null })

@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { beforeEach, test, expect, afterAll } from 'vitest'
+
 import { prebuildWebFile } from '@redwoodjs/babel-config'
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
@@ -8,7 +10,7 @@ import { findWebFiles } from '../files'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../__fixtures__/example-todo-main'
+  '../../../../__fixtures__/example-todo-main',
 )
 
 const cleanPaths = (p) => {
@@ -35,6 +37,10 @@ test('web files are prebuilt (no prerender)', async () => {
     [
       ".redwood/prebuild/web/src/App.js",
       ".redwood/prebuild/web/src/Routes.js",
+      ".redwood/prebuild/web/src/graphql/fragment-masking.js",
+      ".redwood/prebuild/web/src/graphql/gql.js",
+      ".redwood/prebuild/web/src/graphql/graphql.js",
+      ".redwood/prebuild/web/src/graphql/index.js",
       ".redwood/prebuild/web/src/components/AddTodo/AddTodo.js",
       ".redwood/prebuild/web/src/components/AddTodoControl/AddTodoControl.js",
       ".redwood/prebuild/web/src/components/Check/Check.js",
@@ -60,7 +66,7 @@ test('Check routes are imported with require when staticImports flag is enabled'
   const routesFile = getPaths().web.routes
 
   const prerendered = prebuildWebFile(routesFile, {
-    prerender: true,
+    forPrerender: true,
     forJest: true,
   })?.code
 
@@ -80,7 +86,7 @@ test('Check routes are imported with require when staticImports flag is enabled'
     */
   expect(prerendered).toContain(`const FooPage = {`)
   expect(prerendered).not.toContain(
-    `var _FooPage = _interopRequireDefault(require(`
+    `var _FooPage = _interopRequireDefault(require(`,
   )
 })
 
@@ -111,6 +117,6 @@ test('Check routes are imported with "import" when staticImports flag is NOT pas
   */
   expect(withoutStaticImports).not.toContain(`const FooPage = {`)
   expect(withoutStaticImports).toContain(
-    `var _FooPage = _interopRequireDefault(require(`
+    `var _FooPage = _interopRequireDefault(require(`,
   )
 })

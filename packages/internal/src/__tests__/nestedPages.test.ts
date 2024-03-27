@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { expect } from '@jest/globals'
+import { expect, describe, it, beforeEach, afterAll, beforeAll } from 'vitest'
 
 import { prebuildWebFile } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
@@ -35,7 +35,7 @@ describe('User specified imports, with static imports', () => {
     const routesFile = getPaths().web.routes
 
     outputWithStaticImports = prebuildWebFile(routesFile, {
-      prerender: true,
+      forPrerender: true,
       forJest: true,
     })?.code
     outputWithStaticImports &&= normalizeStr(outputWithStaticImports)
@@ -49,17 +49,17 @@ describe('User specified imports, with static imports', () => {
   it('Imports layouts correctly', () => {
     // Note avoid checking the full require path because windows paths have unusual slashes
     expect(outputWithStaticImports).toContain(
-      `var _AdminLayout = _interopRequireDefault(require("`
+      `var _AdminLayout = _interopRequireDefault(require("`,
     )
     expect(outputWithStaticImports).toContain(
-      `var _MainLayout = _interopRequireDefault(require("`
+      `var _MainLayout = _interopRequireDefault(require("`,
     )
 
     expect(outputNoStaticImports).toContain(
-      `var _AdminLayout = _interopRequireDefault(require("`
+      `var _AdminLayout = _interopRequireDefault(require("`,
     )
     expect(outputNoStaticImports).toContain(
-      `var _MainLayout = _interopRequireDefault(require("`
+      `var _MainLayout = _interopRequireDefault(require("`,
     )
   })
 
@@ -72,8 +72,8 @@ describe('User specified imports, with static imports', () => {
               name: "LoginPage",
               prerenderLoader: name => require("./pages/LoginPage/LoginPage"),
               LazyComponent: (0, _react.lazy)(() => import( /* webpackChunkName: "LoginPage" */"./pages/LoginPage/LoginPage"))
-            }`
-          )
+            }`,
+          ),
         )
 
         expect(outputWithStaticImports).toContain(
@@ -82,8 +82,8 @@ describe('User specified imports, with static imports', () => {
               name: "HomePage",
               prerenderLoader: name => require("./pages/HomePage/HomePage"),
               LazyComponent: (0, _react.lazy)(() => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"))
-            };`
-          )
+            };`,
+          ),
         )
       })
     })
@@ -96,8 +96,8 @@ describe('User specified imports, with static imports', () => {
               name: "LoginPage",
               prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/LoginPage/LoginPage")),
               LazyComponent: (0, _react.lazy)(() => import( /* webpackChunkName: "LoginPage" */"./pages/LoginPage/LoginPage"))
-            }`
-          )
+            }`,
+          ),
         )
 
         expect(outputNoStaticImports).toContain(
@@ -106,8 +106,8 @@ describe('User specified imports, with static imports', () => {
               name: "HomePage",
               prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage")),
               LazyComponent: (0, _react.lazy)(() => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"))
-            }`
-          )
+            }`,
+          ),
         )
       })
     })
@@ -123,8 +123,8 @@ describe('User specified imports, with static imports', () => {
               name: "NewJobPage",
               prerenderLoader: name => require("./pages/Jobs/NewJobPage/NewJobPage"),
               LazyComponent: (0, _react.lazy)(() => import( /* webpackChunkName: "NewJobPage" */"./pages/Jobs/NewJobPage/NewJobPage"))
-            }`
-          )
+            }`,
+          ),
         )
       })
 
@@ -136,18 +136,18 @@ describe('User specified imports, with static imports', () => {
               name: "BazingaJobProfilePageWithFunnyName",
               prerenderLoader: name => require("./pages/Jobs/JobProfilePage/JobProfilePage"),
               LazyComponent: (0, _react.lazy)(() => import( /* webpackChunkName: "BazingaJobProfilePageWithFunnyName" */"./pages/Jobs/JobProfilePage/JobProfilePage"))
-            }`
-          )
+            }`,
+          ),
         )
       })
 
       it('Removes explicit imports when prerendering', () => {
         expect(outputWithStaticImports).not.toContain(
-          `var _NewJobPage = _interopRequireDefault`
+          `var _NewJobPage = _interopRequireDefault`,
         )
 
         expect(outputWithStaticImports).not.toContain(
-          `var _JobProfilePage = _interopRequireDefault`
+          `var _JobProfilePage = _interopRequireDefault`,
         )
       })
 
@@ -158,8 +158,8 @@ describe('User specified imports, with static imports', () => {
             `}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_router.Route, {
               path: "/job-profiles/{id:Int}",
               page: BazingaJobProfilePageWithFunnyName,
-              name: "jobProfile"`
-          )
+              name: "jobProfile"`,
+          ),
         )
       })
     })
@@ -175,8 +175,8 @@ describe('User specified imports, with static imports', () => {
               path: "/job-profiles/{id:Int}",
               page: _JobProfilePage["default"],
               name: "jobProfile"
-            })`
-          )
+            })`,
+          ),
         )
       })
 
@@ -187,8 +187,8 @@ describe('User specified imports, with static imports', () => {
               name: "HomePage",
               prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage")),
               LazyComponent: (0, _react.lazy)(() => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"))
-            }`
-          )
+            }`,
+          ),
         )
 
         expect(outputNoStaticImports).toContain(
@@ -197,8 +197,8 @@ describe('User specified imports, with static imports', () => {
               path: "/",
               page: HomePage,
               name: "home"
-            })`
-          )
+            })`,
+          ),
         )
       })
 
@@ -206,15 +206,15 @@ describe('User specified imports, with static imports', () => {
         expect(outputNoStaticImports).not.toContain(
           normalizeStr(
             `const JobsJobPage = {
-              name: "JobsJobPage"`
-          )
+              name: "JobsJobPage"`,
+          ),
         )
 
         expect(outputNoStaticImports).not.toContain(
           normalizeStr(
             `const JobsNewJobPage = {
-              name: "JobsNewJobPage"`
-          )
+              name: "JobsNewJobPage"`,
+          ),
         )
 
         expect(outputNoStaticImports).toContain(
@@ -223,8 +223,8 @@ describe('User specified imports, with static imports', () => {
               path: "/jobs",
               page: _JobsPage["default"],
               name: "jobs"
-            })`
-          )
+            })`,
+          ),
         )
       })
     })
@@ -241,12 +241,12 @@ describe('User specified imports, with static imports', () => {
           name: "EditJobPage",
           prerenderLoader: name => require("./pages/Jobs/EditJobPage/EditJobPage"),
           LazyComponent: (0, _react.lazy)(() => import( /* webpackChunkName: "EditJobPage" */"./pages/Jobs/EditJobPage/EditJobPage"))
-        }`
-      )
+        }`,
+      ),
     )
 
     expect(outputNoStaticImports).toContain(
-      'var _EditJobPage = _interopRequireWildcard('
+      'var _EditJobPage = _interopRequireWildcard(',
     )
 
     expect(outputNoStaticImports).toContain(
@@ -254,13 +254,13 @@ describe('User specified imports, with static imports', () => {
         `}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_router.Route, {
         path: "/jobs/{id:Int}/edit",
         page: _EditJobPage["default"],
-        name: "editJob"`
-      )
+        name: "editJob"`,
+      ),
     )
 
     // Should not generate a loader, because page was explicitly imported
     expect(outputNoStaticImports).not.toMatch(
-      /import\(.*"\.\/pages\/Jobs\/EditJobPage\/EditJobPage"\)/
+      /import\(.*"\.\/pages\/Jobs\/EditJobPage\/EditJobPage"\)/,
     )
   })
 })

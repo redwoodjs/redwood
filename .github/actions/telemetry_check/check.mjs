@@ -37,7 +37,7 @@ try {
   switch (mode) {
     case 'crwa':
       exitCode = await exec(
-        `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ../project-for-telemetry --typescript true --git false`
+        `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ../project-for-telemetry --typescript true --git false --no-yarn-install`
       )
       if (exitCode) {
         process.exit(1)

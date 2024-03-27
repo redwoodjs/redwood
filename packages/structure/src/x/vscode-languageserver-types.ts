@@ -33,7 +33,7 @@ export function Range_contains(range: Range, pos: Position): boolean {
 export function Range_overlaps(
   range1: Range,
   range2: Range,
-  consider0000: boolean
+  consider0000: boolean,
 ): boolean {
   if (consider0000) {
     if (Range_is0000(range1) || Range_is0000(range2)) {
@@ -57,7 +57,7 @@ export function Range_overlaps(
  */
 export function Position_compare(
   p1: Position,
-  p2: Position
+  p2: Position,
 ): 'greater' | 'smaller' | 'equal' {
   if (p1.line > p2.line) {
     return 'greater'
@@ -85,7 +85,7 @@ export function Position_compare(
 export function Position_translate(
   pos: Position,
   lineDelta = 0,
-  characterDelta = 0
+  characterDelta = 0,
 ): Position {
   return {
     line: pos.line + lineDelta,
@@ -96,7 +96,7 @@ export function Position_translate(
 export function Range_fromNode(node: tsm.Node): Range {
   const start = Position_fromTSMorphOffset(
     node.getStart(false),
-    node.getSourceFile()
+    node.getSourceFile(),
   )
   const end = Position_fromTSMorphOffset(node.getEnd(), node.getSourceFile())
   return { start, end }
@@ -166,7 +166,7 @@ export function LocationLike_toLocation(x: LocationLike): Location {
 export function Location_overlaps(
   loc1: Location,
   loc2: Location,
-  consider0000 = false
+  consider0000 = false,
 ) {
   if (loc1.uri !== loc2.uri) {
     return false
@@ -216,7 +216,7 @@ export function ExtendedDiagnostic_groupByUri(ds: ExtendedDiagnostic[]): {
 
 export async function ExtendedDiagnostic_findRelevantQuickFixes(
   xd: ExtendedDiagnostic,
-  context: CodeActionContext
+  context: CodeActionContext,
 ): Promise<CodeAction[]> {
   // check context to see if any of the context.diagnostics are equivalent
   for (const ctx_d of context.diagnostics) {
@@ -237,7 +237,7 @@ export async function ExtendedDiagnostic_findRelevantQuickFixes(
 
 export function Position_fromTSMorphOffset(
   offset: number,
-  sf: tsm.SourceFile
+  sf: tsm.SourceFile,
 ): Position {
   const { line, column } = sf.getLineAndColumnAtPos(offset)
   return { character: column - 1, line: line - 1 }
@@ -245,7 +245,7 @@ export function Position_fromTSMorphOffset(
 
 export function Position_fromOffset(
   offset: number,
-  text: string
+  text: string,
 ): Position | undefined {
   const res = lc(text).fromIndex(offset)
   if (!res) {
@@ -257,7 +257,7 @@ export function Position_fromOffset(
 
 export function Position_fromOffsetOrFail(
   offset: number,
-  text: string
+  text: string,
 ): Position {
   const p = Position_fromOffset(offset, text)
   if (!p) {
@@ -288,7 +288,7 @@ export interface ExtendedDiagnostic {
 export function err(
   loc: LocationLike,
   message: string,
-  code?: number | string
+  code?: number | string,
 ): ExtendedDiagnostic {
   const { uri, range } = LocationLike_toLocation(loc)
   return {
@@ -348,7 +348,7 @@ interface ExtendedDiagnosticFormatOpts {
  */
 export function ExtendedDiagnostic_format(
   d: ExtendedDiagnostic,
-  opts?: ExtendedDiagnosticFormatOpts
+  opts?: ExtendedDiagnosticFormatOpts,
 ) {
   const {
     diagnostic: { severity, message, code },
@@ -379,7 +379,7 @@ export function ExtendedDiagnostic_format(
 export type FileSet = { [fileURI: string]: string | null }
 
 export function FileSet_fromTextDocuments(
-  documents: TextDocuments<TextDocument>
+  documents: TextDocuments<TextDocument>,
 ) {
   const files: FileSet = {}
   for (const uri of documents.keys()) {
@@ -390,7 +390,7 @@ export function FileSet_fromTextDocuments(
 
 export function WorkspaceEdit_fromFileSet(
   files: FileSet,
-  getExistingFileText?: (fileURI: string) => string | undefined
+  getExistingFileText?: (fileURI: string) => string | undefined,
 ): WorkspaceEdit {
   const change = new WorkspaceChange({ documentChanges: [] })
   for (const uri of Object.keys(files)) {

@@ -1,5 +1,6 @@
+// These are utils that can be shared between both server- and client components
 import type { ReactElement, ReactNode } from 'react'
-import React, { Children, isValidElement } from 'react'
+import { Children, isValidElement } from 'react'
 
 import {
   isNotFoundRoute,
@@ -8,14 +9,7 @@ import {
   isValidRoute,
 } from './route-validators'
 import type { PageType } from './router'
-import { isPrivateNode, isSetNode } from './Set'
-
-/** Create a React Context with the given name. */
-export function createNamedContext<T>(name: string, defaultValue?: T) {
-  const Ctx = React.createContext<T | undefined>(defaultValue)
-  Ctx.displayName = name
-  return Ctx
-}
+import { isPrivateNode, isPrivateSetNode, isSetNode } from './Set'
 
 export function flattenAll(children: ReactNode): ReactNode[] {
   const childrenArray = Children.toArray(children)
@@ -134,7 +128,7 @@ export function matchPath(
   } = {
     userParamTypes: {},
     matchSubPaths: false,
-  }
+  },
 ) {
   // Get the names and the transform types for the given route.
   const allParamTypes = { ...coreParamTypes, ...userParamTypes }
@@ -154,7 +148,7 @@ export function matchPath(
   // Map extracted values to their param name, casting the value if needed
   const providedParams = matches[0].slice(1)
 
-  // @NOTE: refers to definiton e.g. '/page/{id}', not the actual params
+  // @NOTE: refers to definition e.g. '/page/{id}', not the actual params
   if (routeParamsDefinition.length > 0) {
     const params = providedParams.reduce<Record<string, unknown>>(
       (acc, value, index) => {
@@ -172,7 +166,7 @@ export function matchPath(
           [name]: transformedValue,
         }
       },
-      {}
+      {},
     )
     return { match: true, params }
   }
@@ -196,7 +190,7 @@ export function getRouteRegexAndParams(
   {
     matchSubPaths = false,
     allParamTypes = coreParamTypes,
-  }: GetRouteRegexOptions | undefined = {}
+  }: GetRouteRegexOptions | undefined = {},
 ) {
   let typeMatchingRoute = route
   const routeParams = paramsForRoute(route)
@@ -247,7 +241,7 @@ export function parseSearch(
     | string[][]
     | Record<string, string>
     | URLSearchParams
-    | undefined
+    | undefined,
 ) {
   const searchParams = new URLSearchParams(search)
 
@@ -256,7 +250,7 @@ export function parseSearch(
       ...params,
       [key]: searchParams.get(key),
     }),
-    {}
+    {},
   )
 }
 
@@ -269,7 +263,7 @@ export function validatePath(path: string, routeName: string) {
   // Check that path begins with a slash.
   if (!path.startsWith('/')) {
     throw new Error(
-      `Route path for ${routeName} does not begin with a slash: "${path}"`
+      `Route path for ${routeName} does not begin with a slash: "${path}"`,
     )
   }
 
@@ -283,7 +277,7 @@ export function validatePath(path: string, routeName: string) {
         `Route for ${routeName} contains ref or key as a path parameter: "${path}"`,
         "`ref` and `key` shouldn't be used as path parameters because they're special React props.",
         'You can fix this by renaming the path parameter.',
-      ].join('\n')
+      ].join('\n'),
     )
   }
 
@@ -313,7 +307,7 @@ export function validatePath(path: string, routeName: string) {
  */
 export function replaceParams(
   route: string,
-  args: Record<string, unknown> = {}
+  args: Record<string, unknown> = {},
 ) {
   const params = paramsForRoute(route)
   let path = route
@@ -326,7 +320,7 @@ export function replaceParams(
       path = path.replace(match, value as string)
     } else {
       throw new Error(
-        `Missing parameter '${name}' for route '${route}' when generating a navigation URL.`
+        `Missing parameter '${name}' for route '${route}' when generating a navigation URL.`,
       )
     }
   })
@@ -341,15 +335,19 @@ export function replaceParams(
   })
 
   // Append any unnamed params as search params.
-  if (queryParams.length) {
-    path += `?${queryParams.join('&')}`
+  if (extraArgKeys.length) {
+    const extraArgs = Object.fromEntries(
+      extraArgKeys.map((key) => [key, `${args[key]}`]),
+    )
+    path += `?${new URLSearchParams(extraArgs).toString()}`
   }
 
   return path
 }
 
+export type FlattenSearchParams = ReturnType<typeof flattenSearchParams>
+
 /**
- *
  * @param {string} queryString
  * @returns {Array<string | Record<string, any>>} A flat array of search params
  *
@@ -362,10 +360,9 @@ export function replaceParams(
  *
  * flattenSearchParams(parseSearch('?key1=val1&key2=val2'))
  * => [ { key1: 'val1' }, { key2: 'val2' } ]
- *
  */
 export function flattenSearchParams(
-  queryString: string
+  queryString: string,
 ): Array<string | Record<string, any>> {
   const searchParams = []
 
@@ -385,7 +382,7 @@ export interface Spec {
 }
 
 export function isSpec(
-  specOrPage: Spec | React.ComponentType
+  specOrPage: Spec | React.ComponentType,
 ): specOrPage is Spec {
   return (specOrPage as Spec).LazyComponent !== undefined
 }
@@ -408,7 +405,7 @@ export function isSpec(
  * imported version into a spec.
  */
 export function normalizePage(
-  specOrPage: Spec | React.ComponentType<unknown>
+  specOrPage: Spec | React.ComponentType<unknown>,
 ): Spec {
   if (isSpec(specOrPage)) {
     // Already a spec, just return it.
@@ -436,7 +433,7 @@ export function inIframe() {
     return true
   }
 }
-interface AnayzeRoutesOptions {
+interface AnalyzeRoutesOptions {
   currentPathName: string
   userParamTypes?: Record<string, ParamType>
 }
@@ -451,8 +448,18 @@ type WhileLoadingPage = () => ReactElement | null
 // We can't index it correctly in the framework
 export type GeneratedRoutesMap = {
   [key: string]: (
-    args?: Record<string | number, string | number | boolean>
+    args?: Record<string | number, string | number | boolean>,
   ) => string
+}
+
+interface Set {
+  id: string
+  wrappers: Wrappers
+  isPrivate: boolean
+  props: {
+    private?: boolean
+    [key: string]: unknown
+  }
 }
 
 type RoutePath = string
@@ -463,14 +470,12 @@ interface AnalyzedRoute {
   whileLoadingPage?: WhileLoadingPage
   page: PageType | null
   redirect: string | null
-  wrappers: Wrappers
-  setProps: Record<any, any>
-  setId: number
+  sets: Array<Set>
 }
 
 export function analyzeRoutes(
   children: ReactNode,
-  { currentPathName, userParamTypes }: AnayzeRoutesOptions
+  { currentPathName, userParamTypes }: AnalyzeRoutesOptions,
 ) {
   const pathRouteMap: Record<RoutePath, AnalyzedRoute> = {}
   const namedRoutesMap: GeneratedRoutesMap = {}
@@ -481,43 +486,44 @@ export function analyzeRoutes(
   interface RecurseParams {
     nodes: ReturnType<typeof Children.toArray>
     whileLoadingPageFromSet?: WhileLoadingPage
-    wrappersFromSet?: Wrappers
-    // we don't know, or care about, what props users are passing down
-    propsFromSet?: Record<string, unknown>
-    setId?: number
+    sets?: Array<Set>
   }
 
-  // Track the number of sets found.
-  // Because Sets are virtually rendered we can use this setId as a key to properly manage re-rendering
-  // When using the same wrapper Component for different Sets
+  // Assign ids to all sets found.
+  // Because Sets are virtually rendered we can use this id as a key to
+  // properly manage re-rendering when using the same wrapper Component for
+  // different Sets
+  //
   // Example:
-  //   <Router>
-  //   <Set wrap={SetContextProvider}>
+  // <Router>
+  //   <Set wrap={SetContextProvider}> // id: '1'
   //     <Route path="/" page={HomePage} name="home" />
   //     <Route path="/ctx-1-page" page={Ctx1Page} name="ctx1" />
-  //     <Route path="/ctx-2-page" page={Ctx2Page} name="ctx2" />
+  //     <Set wrap={Ctx2Layout}> // id: '1.1'
+  //       <Route path="/ctx-2-page" page={Ctx2Page} name="ctx2" />
+  //     </Set>
   //   </Set>
-  //   <Set wrap={SetContextProvider}>
+  //   <Set wrap={SetContextProvider}> // id: '2'
   //     <Route path="/ctx-3-page" page={Ctx3Page} name="ctx3" />
   //   </Set>
   // </Router>
-  let setId = 0
 
   const recurseThroughRouter = ({
     nodes,
     whileLoadingPageFromSet,
-    wrappersFromSet = [],
-    propsFromSet: previousSetProps = {},
+    sets: previousSets = [],
   }: RecurseParams) => {
+    let nextSetId = 0
+
     nodes.forEach((node) => {
       if (isValidRoute(node)) {
-        // Just for readability
+        // Rename for readability
         const route = node
 
         // We don't add not found pages to our list of named routes
         if (isNotFoundRoute(route)) {
           NotFoundPage = route.props.page
-          // Dont add notFound routes to the maps, and exit early
+          // Don't add notFound routes to the maps, and exit early
           // @TODO: We may need to add it to the map, because you can in
           // theory wrap a notfound page in a Set wrapper
           return
@@ -549,9 +555,7 @@ export function analyzeRoutes(
             name: name || null,
             path,
             page: null, // Redirects don't need pages. We set this to null for consistency
-            wrappers: wrappersFromSet,
-            setProps: previousSetProps,
-            setId,
+            sets: previousSets,
           }
 
           if (name) {
@@ -581,10 +585,8 @@ export function analyzeRoutes(
             path,
             whileLoadingPage:
               route.props.whileLoadingPage || whileLoadingPageFromSet,
-            page: page,
-            wrappers: wrappersFromSet,
-            setProps: previousSetProps,
-            setId,
+            page,
+            sets: previousSets,
           }
 
           // e.g. namedRoutesMap.homePage = () => '/home'
@@ -592,9 +594,8 @@ export function analyzeRoutes(
         }
       }
 
-      // @NOTE: A <Private> is also a Set
+      // @NOTE: A <PrivateSet> is also a Set
       if (isSetNode(node)) {
-        setId = setId + 1 // increase the Set id for each Set found
         const {
           children,
           whileLoadingPage: whileLoadingPageFromCurrentSet,
@@ -609,33 +610,30 @@ export function analyzeRoutes(
             : [wrapFromCurrentSet]
         }
 
-        // @MARK note unintuitive, but intentional
-        // You cannot make a nested set public if the parent is private
-        // i.e. the private prop cannot be overriden by a child Set
-        const privateProps =
-          isPrivateNode(node) || previousSetProps.private
-            ? { private: true }
-            : {}
+        nextSetId = nextSetId + 1
 
-        if (children) {
-          recurseThroughRouter({
-            nodes: Children.toArray(children),
-            // When there's a whileLoadingPage prop on a Set, we pass it down to all its children
-            // If the parent node was also a Set with whileLoadingPage, we pass it down. The child's whileLoadingPage
-            // will always take precedence over the parent's
-            whileLoadingPageFromSet:
-              whileLoadingPageFromCurrentSet || whileLoadingPageFromSet,
-            setId,
-            wrappersFromSet: [...wrappersFromSet, ...wrapperComponentsArray],
-            propsFromSet: {
-              ...previousSetProps,
-              // Current one takes precedence
-              ...otherPropsFromCurrentSet,
-              // See comment at definiion, intenionally at the end
-              ...privateProps,
+        recurseThroughRouter({
+          nodes: Children.toArray(children),
+          // When there's a whileLoadingPage prop on a Set, we pass it down to all its children
+          // If the parent node was also a Set with whileLoadingPage, we pass it down. The child's whileLoadingPage
+          // will always take precedence over the parent's
+          whileLoadingPageFromSet:
+            whileLoadingPageFromCurrentSet || whileLoadingPageFromSet,
+          sets: [
+            ...previousSets,
+            {
+              id: createSetId(nextSetId, previousSets),
+              wrappers: wrapperComponentsArray,
+              isPrivate:
+                isPrivateSetNode(node) ||
+                // The following two conditions can be removed when we remove
+                // the deprecated private prop
+                isPrivateNode(node) ||
+                !!otherPropsFromCurrentSet.private,
+              props: otherPropsFromCurrentSet,
             },
-          })
-        }
+          ],
+        })
       }
     })
   }
@@ -649,4 +647,16 @@ export function analyzeRoutes(
     NotFoundPage,
     activeRoutePath,
   }
+}
+
+function createSetId(nextSetId: number, previousSets: Array<Set>) {
+  const firstLevel = previousSets.length === 0
+
+  if (firstLevel) {
+    // For the first level we don't want to add any dots ('.') to the id like
+    // we do for all other levels
+    return nextSetId.toString()
+  }
+
+  return previousSets.at(-1)?.id + '.' + nextSetId
 }

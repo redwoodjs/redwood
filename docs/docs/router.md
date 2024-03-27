@@ -44,9 +44,7 @@ The `path` prop specifies the URL path to match, starting with the beginning sla
 
 ## Private Routes
 
-Some pages should only be visible to authenticated users.
-
-We support this using private `<Set>`s or the `<Private>` component. Read more [further down](#private-set).
+Some pages should only be visible to authenticated users. We support this using the `PrivateSet` component. Read more [further down](#privateset).
 
 ## Sets of Routes
 
@@ -89,7 +87,7 @@ Conceptually, this fits with how we think about Context and Layouts as things th
 There's a lot of flexibility here. You can even nest `Sets` to great effect:
 
 ```jsx title="Routes.js"
-import { Router, Route, Set, Private } from '@redwoodjs/router'
+import { Router, Route, Set } from '@redwoodjs/router'
 import BlogContext from 'src/contexts/BlogContext'
 import BlogLayout from 'src/layouts/BlogLayout'
 import BlogNavLayout from 'src/layouts/BlogNavLayout'
@@ -130,55 +128,42 @@ becomes...
 </MainLayout>
 ```
 
-### `private` Set
+### `PrivateSet`
 
-Sets can take a `private` prop which makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the private Set, they'll be redirected to the Route passed as the Set's `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
+A `PrivateSet` makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the `PrivateSet`, they'll be redirected to the Route passed as the `PrivateSet`'s `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
 
-Here's an example of how you'd use a private set:
-
-```jsx title="Routes.js"
-<Router>
-  <Route path="/" page={HomePage} name="home" />
-  <Set private unauthenticated="home">
-    <Route path="/admin" page={AdminPage} name="admin" />
-  </Set>
-</Router>
-```
-
-Private routes are important and should be easy to spot in your Routes file. The larger your Routes file gets, the more difficult it will probably become to find `<Set private /*...*/>` among your other Sets. So we also provide a `<Private>` component that's just an alias for `<Set private /*...*/>`. Most of our documentation uses `<Private>`.
-
-Here's the same example again, but now using `<Private>`
+Here's an example of how you'd use a `PrivateSet`:
 
 ```jsx title="Routes.js"
 <Router>
   <Route path="/" page={HomePage} name="home" />
-  <Private unauthenticated="home">
+  <PrivateSet unauthenticated="home">
     <Route path="/admin" page={AdminPage} name="admin" />
-  </Private>
+  </PrivateSet>
 </Router>
 ```
 
 For more fine-grained control, you can specify `roles` (which takes a string for a single role or an array of roles), and the router will check to see that the current user is authorized before giving them access to the Route. If they're not, they will be redirected to the page specified in the `unauthenticated` prop, such as a "forbidden" page. Read more about Role-based Access Control in Redwood [here](how-to/role-based-access-control.md).
 
-To protect `Private` routes for access by a single role:
+To protect private routes for access by a single role:
 
 ```jsx title="Routes.js"
 <Router>
-  <Private unauthenticated="forbidden" roles="admin">
+  <PrivateSet unauthenticated="forbidden" roles="admin">
     <Route path="/admin/users" page={UsersPage} name="users" />
-  </Private>
+  </PrivateSet>
 
   <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />
 </Router>
 ```
 
-To protect `Private` routes for access by multiple roles:
+To protect private routes for access by multiple roles:
 
 ```jsx title="Routes.js"
 <Router>
-  <Private unauthenticated="forbidden" roles={['admin', 'editor', 'publisher']}>
+  <PrivateSet unauthenticated="forbidden" roles={['admin', 'editor', 'publisher']}>
     <Route path="/admin/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />
-  </Private>
+  </PrivateSet>
 
   <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />
 </Router>
@@ -261,7 +246,9 @@ More granular match, `page` key only and `tab=tutorial`
 activeMatchParams={[{ tab: 'tutorial' }, 'page' ]}
 ```
 
-You can `useMatch` to create your own component with active styles.
+### useMatch
+
+You can use `useMatch` to create your own component with active styles.
 
 > `NavLink` uses it internally!
 
@@ -291,12 +278,48 @@ const CustomLink = ({ to, ...rest }) => {
 }
 ```
 
+Passing in `routeParams` you can make it match only on specific route parameter
+values.
+
+```jsx
+const match = useMatch('/product/{category}/{id}', {
+  routeParams: { category: 'shirts' }
+})
+```
+
+The above example will match /product/shirts/213, but not /product/pants/213
+(whereas not specifying `routeParams` at all would match both).
+
+To get the path you need to pass to `useMatch` you can use
+[`useRoutePaths`](#useroutepaths) or [`useRoutePath`](#useroutepath)
+
+Here's an example:
+
+```jsx
+<Route path="/{animal}/{name}" page={AnimalPage} name="animal" />
+
+const animalRoutePath = useRoutePath('animal')
+// => '/{animal}/{name}'
+
+const matchOnlyDog = useMatch(animalRoutePath, { routeParams: { animal: 'dog' }})
+const matchFullyDynamic = useMatch(animalRoutePath)
+```
+
+In the above example, if the current page url was
+`https://example.org/dog/fido` then both `matchOnlyDog` and `matchFullyDynamic`
+would have `match: true`.
+
+If the current page instead was `https://example.org/cat/garfield` then only
+`matchFullyDynamic` would match
+
+See below for more info on route parameters.
+
 ## Route parameters
 
 To match variable data in a path, you can use route parameters, which are specified by a parameter name surrounded by curly braces:
 
 ```jsx title="Routes.js"
-<Route path="/user/{id}>" page={UserPage} name="user" />
+<Route path="/user/{id}" page={UserPage} name="user" />
 ```
 
 This route will match URLs like `/user/7` or `/user/mojombo`. You can have as many route parameters as you like:
@@ -460,6 +483,68 @@ const App = () => {
 }
 ```
 
+## useRoutePaths
+
+`useRoutePaths()` is a React hook you can use to get a map of all routes mapped to their literal paths, as they're defined in your routes file.
+
+Example usage:
+
+```jsx
+const routePaths = useRoutePaths()
+
+return <pre><code>{JSON.stringify(routePaths, undefined, 2)}</code></pre>
+```
+
+Example output:
+
+```
+{
+  "home": "/"
+  "about": "/about",
+  "login": "/login",
+  "signup": "/signup",
+  "forgotPassword": "/forgot-password",
+  "resetPassword": "/reset-password",
+  "newContact": "/contacts/new",
+  "editContact": "/contacts/{id:Int}/edit",
+  "contact": "/contacts/{id:Int}",
+  "contacts": "/contacts",
+}
+```
+
+## useRoutePath
+
+Use this hook when you only want the path for a single route. By default it
+will give you the path for the current route
+```jsx
+// returns "/about" if you're currently on https://example.org/about
+const aboutPath = useRoutePath() 
+```
+
+You can also pass in the name of a route and get the path for that route
+```jsx
+// returns "/about"
+const aboutPath = useRoutePath('about')
+```
+
+Note that the above is the same as
+```jsx
+const routePaths = useRoutePaths()
+// returns "/about"
+const aboutPath = routePaths.about
+```
+
+## useRouteName
+
+Use the `useRouteName()` hook to get the name of the current route (the page
+the user is currently visiting). The name can then also be used with `routes`
+if you need to dynamically get the url to the current page:
+
+```jsx
+const routeName = useRouteName()
+const routeUrl = routeName ? routes[routeName]() : undefined
+```
+
 ## Navigation
 
 ### navigate
@@ -528,7 +613,7 @@ Redwood will detect your explicit import and refrain from splitting that page in
 
 Because lazily-loaded pages can take a non-negligible amount of time to load (depending on bundle size and network connection), you may want to show a loading indicator to signal to the user that something is happening after they click a link.
 
-In order to show a loader as your page chunks are loading, you simply add the `whileLoadingPage` prop to your route, `Set` or `Private` component.
+In order to show a loader as your page chunks are loading, you simply add the `whileLoadingPage` prop to your route, `Set` or `PrivateSet` component.
 
 ```jsx title="Routes.js"
 import SkeletonLoader from 'src/components/SkeletonLoader'
@@ -574,13 +659,13 @@ When the lazy-loaded page is loading, `PageLoadingContext.Consumer` will pass `{
 
 Let's say you have a dashboard area on your Redwood app, which can only be accessed after logging in. When Redwood Router renders your private page, it will first fetch the user's details, and only render the page if it determines the user is indeed logged in.
 
-In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your private `<Route>`, `<Set private>` or the `<Private>` component:
+In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your `PrivateSet` component:
 
 ```jsx
 //Routes.js
 
 <Router>
-  <Private
+  <PrivateSet
     wrap={DashboardLayout}
     unauthenticated="login"
     whileLoadingAuth={SkeletonLoader} //<-- auth loader
@@ -590,7 +675,7 @@ In order to display a loader while auth details are being retrieved you can add 
     <Route path="/dashboard" page={DashboardHomePage} name="dashboard" />
 
     {/* other routes */}
-  </Private>
+  </PrivateSet>
 </Router>
 ```
 
@@ -613,9 +698,9 @@ Or if the variable passed as a prop to a component can't be found:
 
 ![fatal_error_message_query](/img/router/fatal_error_message_query.png)
 
-And if the page has a Cell, you'll see the Cell's request and response which may have contributed to the error:
+And if the page has a Cell, you'll see the Cell's request which may have contributed to the error - but will depend on how your Suspense boundary is setup:
 
-![fatal_error_message_request](/img/router/fatal_error_request.png)
+![cell_error_request](/img/router/cell_req_error.png)
 
 ### In Production
 
@@ -677,7 +762,7 @@ Note that if you're copy-pasting this example, it uses [Tailwind CSS](https://ta
 
 :::note Can I customize the development one?
 
-As it's part of the RedwoodJS framework, you can't. But if there's a feature you want to add, let us know on the [forums](https://community.redwoodjs.com/).
+As it's part of the RedwoodJS framework, you can't _change_ the dev fatal error page, but you can always build your own that takes the same props. If there's a feature you want to add to the built-in version, let us know on the [forums](https://community.redwoodjs.com/).
 
 :::
 

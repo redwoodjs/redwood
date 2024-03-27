@@ -1,18 +1,19 @@
 globalThis.__dirname = __dirname
 import '../../lib/test'
 
-jest.mock('execa', () =>
-  jest.fn((cmd, params) => ({
+vi.mock('execa', () => ({
+  default: vi.fn((cmd, params) => ({
     cmd,
     params,
-  }))
-)
+  })),
+}))
 
 import execa from 'execa'
+import { vi, afterEach, test, expect } from 'vitest'
 
 import { handler } from '../test'
 
-jest.mock('@redwoodjs/structure', () => {
+vi.mock('@redwoodjs/structure', () => {
   return {
     getProject: () => ({
       sides: ['web', 'api'],
@@ -21,15 +22,18 @@ jest.mock('@redwoodjs/structure', () => {
 })
 
 // Before rw tests run, api/ and web/ `jest.config.js` is confirmed via existsSync()
-jest.mock('fs', () => {
+vi.mock('fs-extra', async (importOriginal) => {
+  const originalFsExtra = await importOriginal()
   return {
-    ...jest.requireActual('fs'),
-    existsSync: () => true,
+    default: {
+      ...originalFsExtra,
+      existsSync: () => true,
+    },
   }
 })
 
 afterEach(() => {
-  jest.clearAllMocks()
+  vi.clearAllMocks()
 })
 
 test('Runs tests for all available sides if no filter passed', async () => {
@@ -128,10 +132,10 @@ test('Passes values of other flags to jest', async () => {
   // Note that these below tests aren't the best, since they don't check for order
   // But I'm making sure only 2 extra params get passed
   expect(execa.mock.results[0].value.params).toEqual(
-    expect.arrayContaining(['--bazinga', false])
+    expect.arrayContaining(['--bazinga', false]),
   )
 
   expect(execa.mock.results[0].value.params).toEqual(
-    expect.arrayContaining(['--hello', 'world'])
+    expect.arrayContaining(['--hello', 'world']),
   )
 })

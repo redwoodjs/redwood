@@ -1,13 +1,13 @@
 // Have to use `var` here to avoid "Temporal Dead Zone" issues
 let mockBasePath = ''
-let mockIsTypeScriptProject = true
 globalThis.__dirname = __dirname
 
-jest.mock('../../lib/paths', () => {
+vi.mock('../../lib/paths', async (importOriginal) => {
   const path = require('path')
+  const originalPaths = await importOriginal<typeof LibPaths>()
 
   return {
-    ...jest.requireActual('../../lib/paths'),
+    ...originalPaths,
     getPaths: () => {
       const base = mockBasePath || '/mock/base/path'
 
@@ -22,25 +22,29 @@ jest.mock('../../lib/paths', () => {
   }
 })
 
-jest.mock('../../lib/project', () => ({
-  isTypeScriptProject: () => mockIsTypeScriptProject,
+vi.mock('../../lib/project', () => ({
+  isTypeScriptProject: vi.fn(),
 }))
 
-import path from 'path'
+import * as path from 'path'
 
-import { getPaths } from '../../lib/paths'
-import { apiSideFiles, generateUniqueFileNames } from '../authFiles'
+import { vi, beforeEach, it, expect } from 'vitest'
+
+import { getPaths } from '../../lib/paths.js'
+import type * as LibPaths from '../../lib/paths.js'
+import { isTypeScriptProject } from '../../lib/project.js'
+import { apiSideFiles, generateUniqueFileNames } from '../authFiles.js'
 
 beforeEach(() => {
-  mockIsTypeScriptProject = true
+  vi.mocked(isTypeScriptProject).mockReturnValue(true)
 })
 
-it('generates a record of TS files', () => {
+it('generates a record of TS files', async () => {
   const filePaths = Object.keys(
-    apiSideFiles({
+    await apiSideFiles({
       basedir: path.join(__dirname, 'fixtures/supertokensSetup'),
       webAuthn: false,
-    })
+    }),
   ).sort()
 
   expect(filePaths).toEqual([
@@ -50,14 +54,14 @@ it('generates a record of TS files', () => {
   ])
 })
 
-it('generates a record of JS files', () => {
-  mockIsTypeScriptProject = false
+it('generates a record of JS files', async () => {
+  vi.mocked(isTypeScriptProject).mockReturnValue(false)
 
   const filePaths = Object.keys(
-    apiSideFiles({
+    await apiSideFiles({
       basedir: path.join(__dirname, 'fixtures/supertokensSetup'),
       webAuthn: false,
-    })
+    }),
   ).sort()
 
   expect(filePaths).toEqual([
@@ -67,8 +71,8 @@ it('generates a record of JS files', () => {
   ])
 })
 
-it('generates a record of webAuthn files', () => {
-  const filesRecord = apiSideFiles({
+it('generates a record of webAuthn files', async () => {
+  const filesRecord = await apiSideFiles({
     basedir: path.join(__dirname, 'fixtures/dbAuthSetup'),
     webAuthn: true,
   })
@@ -76,13 +80,13 @@ it('generates a record of webAuthn files', () => {
   expect(Object.keys(filesRecord)).toHaveLength(2)
   expect(
     Object.values(filesRecord).some((content) =>
-      content.toLowerCase().includes('webauthn')
-    )
+      content.toLowerCase().includes('webauthn'),
+    ),
   ).toBeTruthy()
   expect(
     Object.values(filesRecord).some(
-      (content) => !content.toLowerCase().includes('webauthn')
-    )
+      (content) => !content.toLowerCase().includes('webauthn'),
+    ),
   ).toBeTruthy()
 })
 
@@ -100,7 +104,7 @@ it('generates new filenames to avoid overwriting existing files', () => {
 
   const filesRecord = generateUniqueFileNames(
     conflictingFilesRecord,
-    'supertokens'
+    'supertokens',
   )
 
   const filePaths = Object.keys(filesRecord).sort()

@@ -1,4 +1,5 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+import { beforeAll, afterAll, describe, test, expect } from 'vitest'
 
 import { authDecoder, clerkAuthDecoder } from '../decoder'
 
@@ -43,7 +44,7 @@ describe('clerkAuthDecoder', () => {
     process.env.CLERK_JWT_KEY = 'jwt-key'
 
     await expect(
-      clerkAuthDecoder('invalid-token', 'clerk', req)
+      clerkAuthDecoder('invalid-token', 'clerk', req),
     ).rejects.toThrow()
   })
 })

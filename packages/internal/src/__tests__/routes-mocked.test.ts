@@ -1,14 +1,16 @@
-jest.mock('@redwoodjs/project-config', () => ({
+import { vi, describe, it, expect } from 'vitest'
+
+vi.mock('@redwoodjs/project-config', () => ({
   getPaths: () => ({
     base: '',
   }),
 }))
 
-jest.mock('@redwoodjs/structure/dist/model/RWRoute', () => ({
+vi.mock('@redwoodjs/structure/dist/model/RWRoute', () => ({
   RWRoute: {},
 }))
 
-jest.mock('@redwoodjs/structure', () => {
+vi.mock('@redwoodjs/structure', () => {
   return {
     getProject: () => {
       return {

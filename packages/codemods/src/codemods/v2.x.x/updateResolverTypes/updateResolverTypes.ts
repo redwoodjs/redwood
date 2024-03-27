@@ -2,7 +2,7 @@ import type { API, FileInfo, TSTypeAnnotation } from 'jscodeshift'
 import { Identifier, TSTypeReference } from 'jscodeshift'
 
 const isTypeReference = (
-  typeAnnotation: TSTypeAnnotation['typeAnnotation']
+  typeAnnotation: TSTypeAnnotation['typeAnnotation'],
 ): typeAnnotation is TSTypeReference => TSTypeReference.check(typeAnnotation)
 
 const getTypeName = (node: TSTypeReference) => {
@@ -36,7 +36,7 @@ export default function transform(file: FileInfo, api: API) {
       })
       .forEach((importStatement) => {
         importStatement.node.specifiers?.push(
-          j.importSpecifier(j.identifier(importName))
+          j.importSpecifier(j.identifier(importName)),
         )
       })
   }
@@ -69,13 +69,13 @@ export default function transform(file: FileInfo, api: API) {
 
       const newTypeName = originalTypeName.replace(
         'Resolvers',
-        'RelationResolvers'
+        'RelationResolvers',
       )
 
       console.log(`Converting ${originalTypeName} to ${newTypeName}....`)
 
       path.replace(
-        j.tsTypeAnnotation(j.tsTypeReference(j.identifier(newTypeName)))
+        j.tsTypeAnnotation(j.tsTypeReference(j.identifier(newTypeName))),
       )
 
       findImportFromGqlTypes(originalTypeName)?.remove()

@@ -45,8 +45,8 @@ export async function getResources() {
         npmPackages: '@redwoodjs/*',
         IDEs: ['VSCode'],
       },
-      { json: true }
-    )
+      { json: true },
+    ),
   )
 
   // get shell name instead of path
@@ -58,6 +58,13 @@ export async function getResources() {
   }
   const cpu = await system.cpu()
   const mem = await system.mem()
+
+  // Record any specific development environment
+  let developmentEnvironment = undefined
+  // Gitpod
+  if (Object.keys(process.env).some((key) => key.startsWith('GITPOD_'))) {
+    developmentEnvironment = 'gitpod'
+  }
 
   // Must only call getConfig() once the project is setup - so not within telemetry for CRWA
   // Default to 'webpack' for new projects
@@ -104,6 +111,7 @@ export async function getResources() {
     'env.node_env': process.env.NODE_ENV || null,
     'ci.redwood': !!process.env.REDWOOD_CI,
     'ci.isci': ci.isCI,
+    'dev.environment': developmentEnvironment,
     complexity,
     sides,
     experiments: JSON.stringify(experiments),

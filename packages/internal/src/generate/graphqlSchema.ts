@@ -24,13 +24,16 @@ export const generateGraphQLSchema = async () => {
     'subscriptions/**/*.{js,ts}': {},
   }
 
-  // If we are serverful and the user is using realtime, we need to include the live directive for realtime support.
+  // If we're serverful and the user is using realtime, we need to include the live directive for realtime support.
+  // Note the `ERR_  prefix in`ERR_MODULE_NOT_FOUND`. Since we're using `await import`,
+  // if the package (here, `@redwoodjs/realtime`) can't be found, it throws this error, with the prefix.
+  // Whereas `require('@redwoodjs/realtime')` would throw `MODULE_NOT_FOUND`.
   if (resolveFile(`${getPaths().api.src}/server`)) {
     try {
       const { liveDirectiveTypeDefs } = await import('@redwoodjs/realtime')
       schemaPointerMap[liveDirectiveTypeDefs] = {}
     } catch (error) {
-      if ((error as { code: string }).code !== 'MODULE_NOT_FOUND') {
+      if ((error as { code: string }).code !== 'ERR_MODULE_NOT_FOUND') {
         throw error
       }
     }
@@ -82,20 +85,20 @@ export const generateGraphQLSchema = async () => {
           `  ${chalk.bgYellow(` ${chalk.black.bold('Heads up')} `)}`,
           '',
           chalk.yellow(
-            `  It looks like you have a ${name} model in your Prisma schema.`
+            `  It looks like you have a ${name} model in your Prisma schema.`,
           ),
           chalk.yellow(
-            `  If it's part of a relation, you may have to generate SDL or scaffolding for ${name} too.`
+            `  If it's part of a relation, you may have to generate SDL or scaffolding for ${name} too.`,
           ),
           chalk.yellow(
-            `  So, if you haven't done that yet, ignore this error message and run the SDL or scaffold generator for ${name} now.`
+            `  So, if you haven't done that yet, ignore this error message and run the SDL or scaffold generator for ${name} now.`,
           ),
           '',
           chalk.yellow(
             `  See the ${terminalLink(
               'Troubleshooting Generators',
-              'https://redwoodjs.com/docs/schema-relations#troubleshooting-generators'
-            )} section in our docs for more help.`
+              'https://redwoodjs.com/docs/schema-relations#troubleshooting-generators',
+            )} section in our docs for more help.`,
           ),
         ].join('\n')
       }

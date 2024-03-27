@@ -208,7 +208,7 @@ When trying to find the *full* text of the body, it should *not* be present.
 ```javascript
 expect(matchedBody).toBeInTheDocument()
 ```
-Assert that the truncated text is .
+Assert that the truncated text is present.
 
 ```javascript
 expect(ellipsis).toBeInTheDocument()
@@ -227,7 +227,7 @@ To double check that we're testing what we think we're testing, open up `Article
 
 ### What's the Deal with Mocks?
 
-Did you wonder where the articles were coming from in our test? Was it the development database? Nope: that data came from a **Mock**. That's the `ArticlesCell.mock.js` file that lives next to your component, test and stories files. Mocks are used when you want to define the data that would normally be returned by GraphQL in your Storybook stories or tests. In cells, a GraphQL call goes out (the query defined by the variable `QUERY` at the top of the file) and returned to the `Success` component. We don't want to have to run the api-side server and have real data in the database just for Storybook or our tests, so Redwood intercepts those GraphQL calls and returns the data from the mock instead.
+Did you wonder where the articles were coming from in our test? Was it the development database? Nope: that data came from a **Mock**. That's the `ArticlesCell.mock.js` file that lives next to your component, test and stories files. Mocks are used when you want to define the data that would normally be returned by GraphQL in your Storybook stories or tests. In cells, a GraphQL call goes out (the query defined by the variable `QUERY` at the top of the file) and is returned to the `Success` component. We don't want to have to run the api-side server and have real data in the database just for Storybook or our tests, so Redwood intercepts those GraphQL calls and returns the data from the mock instead.
 
 :::info If the server is being mocked, how do we test the api-side code?
 
@@ -320,7 +320,7 @@ So we can just spread the result of `standard()` in a story or test when using t
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title=web/src/components/ArticlesCell/ArticlesCell.stories.jsx
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.stories.jsx"
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -335,7 +335,7 @@ export default { title: 'Cells/ArticlesCell' }
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```tsx title=web/src/components/ArticlesCell/ArticlesCell.stories.tsx
+```tsx title="web/src/components/ArticlesCell/ArticlesCell.stories.tsx"
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -355,7 +355,7 @@ Some folks find this syntax a little *too* succinct and would rather see the `<S
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title=web/src/components/ArticlesCell/ArticlesCell.stories.jsx
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.stories.jsx"
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -370,7 +370,7 @@ export default { title: 'Cells/ArticlesCell' }
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```tsx title=web/src/components/ArticlesCell/ArticlesCell.stories.tsx
+```tsx title="web/src/components/ArticlesCell/ArticlesCell.stories.tsx"
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 

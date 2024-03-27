@@ -5,6 +5,7 @@ import type {
   ActiveSessionResource,
 } from '@clerk/types'
 import { renderHook, act } from '@testing-library/react'
+import { vi, expect, describe, it, beforeAll, beforeEach } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
@@ -63,7 +64,7 @@ const clerkMockClient: Partial<ClerkClient> = {
   },
 }
 
-const fetchMock = jest.fn()
+const fetchMock = vi.fn()
 fetchMock.mockImplementation(async (_url, options) => {
   const body = options?.body ? JSON.parse(options.body) : {}
 
@@ -103,7 +104,7 @@ beforeEach(() => {
 function getClerkAuth(customProviderHooks?: {
   useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
-    currentUser: CurrentUser | null
+    currentUser: CurrentUser | null,
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
   const { useAuth, AuthProvider } = createAuth(customProviderHooks)
@@ -190,7 +191,7 @@ describe('Clerk', () => {
         if (
           rolesToCheck === 'admin' &&
           (currentUser.emailAddresses as any).some(
-            (email) => email.emailAddress === 'admin@example.com'
+            (email) => email.emailAddress === 'admin@example.com',
           )
         ) {
           return true

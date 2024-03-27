@@ -1,13 +1,13 @@
 import type { FunctionComponent } from 'react'
 
 export type GetEntry = (
-  rscId: string
+  rscId: string,
 ) => Promise<FunctionComponent | { default: FunctionComponent } | null>
 
 export type GetBuilder = (
   // FIXME (from original waku code) can we somehow avoid leaking internal
   // implementation?
-  unstable_decodeId: (encodedId: string) => [id: string, name: string]
+  unstable_decodeId: (encodedId: string) => [id: string, name: string],
 ) => Promise<{
   [pathStr: string]: {
     elements?: Iterable<
@@ -18,8 +18,8 @@ export type GetBuilder = (
 }>
 
 /**
- * Used to look up the component to import when calling `serve('App')` in
- * entry.client.tsx
+ * Used to look up the component to import when calling
+ * `renderFromRscServer('MyPage')` in Routes.tsx
  */
 export function defineEntries(getEntry: GetEntry, getBuilder?: GetBuilder) {
   return { getEntry, getBuilder }

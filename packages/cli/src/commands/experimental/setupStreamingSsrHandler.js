@@ -1,8 +1,9 @@
-import fs from 'fs'
 import path from 'path'
 
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
+import { addWebPackages } from '@redwoodjs/cli-helpers'
 import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -31,7 +32,7 @@ export const handler = async ({ force, verbose }) => {
         task: () => {
           if (!rwPaths.web.entryClient || !rwPaths.web.viteConfig) {
             throw new Error(
-              'Vite needs to be setup before you can enable Streaming SSR'
+              'Vite needs to be setup before you can enable Streaming SSR',
             )
           }
         },
@@ -43,11 +44,11 @@ export const handler = async ({ force, verbose }) => {
             writeFile(
               redwoodTomlPath,
               configContent.concat(
-                `\n[experimental.streamingSsr]\n  enabled = true\n`
+                `\n[experimental.streamingSsr]\n  enabled = true\n`,
               ),
               {
                 overwriteExisting: true, // redwood.toml always exists
-              }
+              },
             )
           } else {
             if (force) {
@@ -58,15 +59,15 @@ export const handler = async ({ force, verbose }) => {
                 configContent.replace(
                   // Enable if it's currently disabled
                   `\n[experimental.streamingSsr]\n  enabled = false\n`,
-                  `\n[experimental.streamingSsr]\n  enabled = true\n`
+                  `\n[experimental.streamingSsr]\n  enabled = true\n`,
                 ),
                 {
                   overwriteExisting: true, // redwood.toml always exists
-                }
+                },
               )
             } else {
               task.skip(
-                `The [experimental.streamingSsr] config block already exists in your 'redwood.toml' file.`
+                `The [experimental.streamingSsr] config block already exists in your 'redwood.toml' file.`,
               )
             }
           }
@@ -81,9 +82,9 @@ export const handler = async ({ force, verbose }) => {
               __dirname,
               'templates',
               'streamingSsr',
-              'entry.client.tsx.template'
+              'entry.client.tsx.template',
             ),
-            'utf-8'
+            'utf-8',
           )
           let entryClientPath = rwPaths.web.entryClient
           const entryClientContent = ts
@@ -118,14 +119,14 @@ export const handler = async ({ force, verbose }) => {
               __dirname,
               'templates',
               'streamingSsr',
-              'entry.server.tsx.template'
+              'entry.server.tsx.template',
             ),
-            'utf-8'
+            'utf-8',
           )
           // Can't use rwPaths.web.entryServer because it might not be not created yet
           const entryServerPath = path.join(
             rwPaths.web.src,
-            `entry.server${ext}`
+            `entry.server${ext}`,
           )
           const entryServerContent = ts
             ? entryServerTemplate
@@ -144,9 +145,9 @@ export const handler = async ({ force, verbose }) => {
               __dirname,
               'templates',
               'streamingSsr',
-              'Document.tsx.template'
+              'Document.tsx.template',
             ),
-            'utf-8'
+            'utf-8',
           )
           const documentPath = path.join(rwPaths.web.src, `Document${ext}`)
           const documentContent = ts
@@ -158,6 +159,9 @@ export const handler = async ({ force, verbose }) => {
           })
         },
       },
+      addWebPackages([
+        '@apollo/experimental-nextjs-app-support@0.0.0-commit-b8a73fe',
+      ]),
       {
         task: () => {
           printTaskEpilogue(command, description, EXPERIMENTAL_TOPIC_ID)
@@ -167,7 +171,7 @@ export const handler = async ({ force, verbose }) => {
     {
       rendererOptions: { collapseSubtasks: false, persistentOutput: true },
       renderer: verbose ? 'verbose' : 'default',
-    }
+    },
   )
 
   try {

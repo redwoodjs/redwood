@@ -1,8 +1,6 @@
 import './global.api-auto-imports'
 
 export * from './global.api-auto-imports'
-export * from './globalContext'
-export * from './globalContextStore'
 
 export * from './errors'
 export * from './functions/graphql'
@@ -33,3 +31,6 @@ export {
 } from './plugins/useRedwoodDirective'
 
 export * as rootSchema from './rootSchema'
+
+// Note: We re-export here for convenience and backwards compatibility
+export { context, setContext } from '@redwoodjs/context'

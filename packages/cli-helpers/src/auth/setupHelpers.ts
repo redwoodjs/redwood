@@ -1,18 +1,18 @@
 import type { ListrTask } from 'listr2'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
-import type yargs from 'yargs'
+import type { Argv } from 'yargs'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { colors } from '../lib/colors'
+import { colors } from '../lib/colors.js'
 import {
   addApiPackages,
   addWebPackages,
   installPackages,
-} from '../lib/installHelpers'
+} from '../lib/installHelpers.js'
 
-import type { AuthGeneratorCtx } from './authTasks'
+import type { AuthGeneratorCtx } from './authTasks.js'
 import {
   addAuthConfigToGqlApi,
   addConfigToRoutes,
@@ -20,9 +20,9 @@ import {
   setAuthSetupMode,
   createWebAuth,
   generateAuthApiFiles,
-} from './authTasks'
+} from './authTasks.js'
 
-export const standardAuthBuilder = (yargs: yargs.Argv) => {
+export const standardAuthBuilder = (yargs: Argv) => {
   return yargs
     .option('force', {
       alias: 'f',
@@ -39,8 +39,8 @@ export const standardAuthBuilder = (yargs: yargs.Argv) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#setup-auth'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#setup-auth',
+      )}`,
     )
 }
 
@@ -52,7 +52,7 @@ interface Args {
   webAuthn?: boolean
   webPackages?: string[]
   apiPackages?: string[]
-  extraTask?: ListrTask<AuthGeneratorCtx>
+  extraTasks?: ListrTask<AuthGeneratorCtx>[]
   notes?: string[]
   verbose?: boolean
 }
@@ -65,8 +65,8 @@ function truthy<T>(value: T): value is Truthy<T> {
 }
 
 /**
- *  basedir assumes that you must have a templates folder in that directory.
- *  See folder structure of auth providers in packages/auth-providers/<provider>/setup/src
+ * basedir assumes that you must have a templates folder in that directory.
+ * See folder structure of auth providers in packages/auth-providers/<provider>/setup/src
  */
 export const standardAuthHandler = async ({
   basedir,
@@ -76,7 +76,7 @@ export const standardAuthHandler = async ({
   webAuthn = false,
   webPackages = [],
   apiPackages = [],
-  extraTask,
+  extraTasks,
   notes,
   verbose,
 }: Args) => {
@@ -98,7 +98,7 @@ export const standardAuthHandler = async ({
       webPackages.length && addWebPackages(webPackages),
       apiPackages.length && addApiPackages(apiPackages),
       (webPackages.length || apiPackages.length) && installPackages,
-      extraTask,
+      ...(extraTasks || []),
       notes && {
         title: 'One more thing...',
         task: (ctx: AuthGeneratorCtx) => {
@@ -110,11 +110,11 @@ export const standardAuthHandler = async ({
               ...[
                 '',
                 `${colors.warning(
-                  'Your existing auth provider has been replaced!'
+                  'Your existing auth provider has been replaced!',
                 )}`,
                 "You'll still need to manually remove your old auth provider's config,",
                 "functions, and dependencies (in your web and api package.json's).",
-              ]
+              ],
             )
           }
 
@@ -125,8 +125,8 @@ export const standardAuthHandler = async ({
                   'names for the newly generated files. This probably means ' +
                   `${ctx.provider} auth doesn't work out of the box. You'll most ` +
                   'likely have to manually merge some of the generated files ' +
-                  'with your existing auth files'
-              )
+                  'with your existing auth files',
+              ),
             )
           }
         },
@@ -139,7 +139,7 @@ export const standardAuthHandler = async ({
         setupMode: 'UNKNOWN',
         provider, // provider name passed from CLI
       },
-    }
+    },
   )
 
   try {

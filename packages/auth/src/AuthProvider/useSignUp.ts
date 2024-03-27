@@ -19,7 +19,7 @@ export const useSignUp = <
   TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
-  TClient
+  TClient,
 >(
   authImplementation: AuthImplementation<
     TUser,
@@ -40,13 +40,13 @@ export const useSignUp = <
     React.SetStateAction<AuthProviderState<TUser>>
   >,
   getCurrentUser: ReturnType<typeof useCurrentUser>,
-  skipFetchCurrentUser: boolean | undefined
+  skipFetchCurrentUser: boolean | undefined,
 ) => {
   const reauthenticate = useReauthenticate(
     authImplementation,
     setAuthProviderState,
     getCurrentUser,
-    skipFetchCurrentUser
+    skipFetchCurrentUser,
   )
 
   return useCallback(
@@ -55,6 +55,6 @@ export const useSignUp = <
       await reauthenticate()
       return signupOutput
     },
-    [authImplementation, reauthenticate]
+    [authImplementation, reauthenticate],
   )
 }

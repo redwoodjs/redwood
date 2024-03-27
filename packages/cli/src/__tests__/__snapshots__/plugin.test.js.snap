@@ -1,0 +1,602 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`plugin loading > correct loading for @redwoodjs namespace help ('') 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+  [
+    "@redwoodjs/cli-some-package-not-in-cache",
+    {
+      "some-other-command": {
+        "aliases": [
+          "soc",
+          "someOtherCommand",
+        ],
+        "description": "Some example other command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for @redwoodjs namespace help ('--help') 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+  [
+    "@redwoodjs/cli-some-package-not-in-cache",
+    {
+      "some-other-command": {
+        "aliases": [
+          "soc",
+          "someOtherCommand",
+        ],
+        "description": "Some example other command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for @redwoodjs namespace help ('-h') 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+  [
+    "@redwoodjs/cli-some-package-not-in-cache",
+    {
+      "some-other-command": {
+        "aliases": [
+          "soc",
+          "someOtherCommand",
+        ],
+        "description": "Some example other command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for known redwood command (with cache) 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for known redwood command (without cache) 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@redwoodjs/cli-some-package-not-in-cache",
+    {
+      "some-other-command": {
+        "aliases": [
+          "soc",
+          "someOtherCommand",
+        ],
+        "description": "Some example other command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for known third party command (with cache) 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for known third party command (without cache) 1`] = `
+[
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package-second-example",
+    {
+      "third-party-other": {
+        "aliases": [
+          "tpo",
+          "thirdPartyOther",
+        ],
+        "description": "Some other third party command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for root help ('') 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+  [
+    "@redwoodjs/cli-some-package-not-in-cache",
+    {
+      "some-other-command": {
+        "aliases": [
+          "soc",
+          "someOtherCommand",
+        ],
+        "description": "Some example other command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for root help ('--help') 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+  [
+    "@redwoodjs/cli-some-package-not-in-cache",
+    {
+      "some-other-command": {
+        "aliases": [
+          "soc",
+          "someOtherCommand",
+        ],
+        "description": "Some example other command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for root help ('-h') 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+  [
+    "@redwoodjs/cli-some-package-not-in-cache",
+    {
+      "some-other-command": {
+        "aliases": [
+          "soc",
+          "someOtherCommand",
+        ],
+        "description": "Some example other command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for third party namespace help ('') 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for third party namespace help ('--help') 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for third party namespace help ('-h') 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for unknown namespace (no command) 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+  [
+    "@redwoodjs/cli-some-package-not-in-cache",
+    {
+      "some-other-command": {
+        "aliases": [
+          "soc",
+          "someOtherCommand",
+        ],
+        "description": "Some example other command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for unknown namespace (with command) 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+  [
+    "@redwoodjs/cli-some-package-not-in-cache",
+    {
+      "some-other-command": {
+        "aliases": [
+          "soc",
+          "someOtherCommand",
+        ],
+        "description": "Some example other command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for unknown redwood command 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+  [
+    "@redwoodjs/cli-some-package-not-in-cache",
+    {
+      "some-other-command": {
+        "aliases": [
+          "soc",
+          "someOtherCommand",
+        ],
+        "description": "Some example other command",
+      },
+    },
+  ],
+]
+`;
+
+exports[`plugin loading > correct loading for unknown third party command 1`] = `
+[
+  [
+    "@redwoodjs/cli-some-package",
+    {
+      "some-command": {
+        "aliases": [
+          "sc",
+          "someCommand",
+        ],
+        "description": "Some example command",
+      },
+    },
+  ],
+  [
+    "@bluewoodjs/cli-some-package",
+    {
+      "third-party": {
+        "aliases": [
+          "tp",
+          "thirdParty",
+        ],
+        "description": "Some third party command",
+      },
+    },
+  ],
+]
+`;

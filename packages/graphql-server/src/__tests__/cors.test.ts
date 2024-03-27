@@ -109,7 +109,7 @@ describe('CORS', () => {
     expect(response.statusCode).toBe(200)
 
     expect(response.headers['access-control-allow-origin']).toEqual(
-      'https://web.redwoodjs.com'
+      'https://web.redwoodjs.com',
     )
   })
 
@@ -139,7 +139,7 @@ describe('CORS', () => {
     expect(response.statusCode).toBe(200)
 
     expect(response.headers['access-control-allow-origin']).toEqual(
-      'https://someothersite.newjsframework.com'
+      'https://someothersite.newjsframework.com',
     )
   })
 
@@ -168,7 +168,7 @@ describe('CORS', () => {
     expect(response.statusCode).toBe(204)
 
     expect(response.headers['access-control-allow-origin']).toEqual(
-      'https://mycrossdomainsite.co.uk'
+      'https://mycrossdomainsite.co.uk',
     )
   })
 
@@ -225,7 +225,7 @@ describe('CORS', () => {
 
     // Note: no multiValueHeaders in request, so we expect response to be in headers too
     expect(response.headers['access-control-allow-origin']).toEqual(
-      'https://site2.two'
+      'https://site2.two',
     )
   })
 
@@ -259,7 +259,7 @@ describe('CORS', () => {
     expect(response.statusCode).toBe(200)
 
     expect(response.headers['access-control-allow-origin']).toEqual(
-      'https://site2.two'
+      'https://site2.two',
     )
   })
 })

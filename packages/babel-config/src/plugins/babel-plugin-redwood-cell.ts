@@ -10,11 +10,19 @@ import type { PluginObj, types } from '@babel/core'
 // <YOUR CODE>
 // export default createCell({ QUERY, Loading, Success, Failure, isEmpty, Empty, beforeQuery, afterQuery, displayName })
 // ```
+//
+// To debug the output of the plugin, you can use the following:
+// ```
+// import generate from '@babel/generator'
+// // ...
+// console.log(generate(path.node).code)
+// ```
 
 // A cell can export the declarations below.
 const EXPECTED_EXPORTS_FROM_CELL = [
   'beforeQuery',
   'QUERY',
+  'data',
   'isEmpty',
   'afterQuery',
   'Loading',
@@ -24,10 +32,10 @@ const EXPECTED_EXPORTS_FROM_CELL = [
 ]
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
-  // This array will
-  // - collect exports from the Cell file during ExportNamedDeclaration
+  // This array will collect exports from the Cell file during
+  // ExportNamedDeclaration
   // - collected exports will then be passed to `createCell`
-  // - be cleared after Program exit to prepare for the next file
+  // - The array is reset every time we `enter` a new Program
   let exportNames: string[] = []
   let hasDefaultExport = false
 
@@ -36,7 +44,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
     visitor: {
       ExportDefaultDeclaration() {
         hasDefaultExport = true
-        return
       },
       ExportNamedDeclaration(path) {
         const declaration = path.node.declaration
@@ -59,13 +66,36 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         }
       },
       Program: {
+        enter() {
+          // Reset variables as they're still in scope from the previous file
+          // babel transformed in the same process
+          exportNames = []
+          hasDefaultExport = false
+        },
         exit(path) {
-          // Validate that this file has exports which are "cell-like":
-          // If the user is not exporting `QUERY` and has a default export then
-          // it's likely not a cell.
-          if (hasDefaultExport && !exportNames.includes('QUERY')) {
+          const hasQueryOrDataExport =
+            exportNames.includes('QUERY') || exportNames.includes('data')
+
+          // If the file already has a default export then
+          //   1. It's likely not a cell, or it's a cell that's already been
+          //      wrapped in `createCell`
+          //   2. If we added another default export we'd be breaking JS module
+          //      rules. There can only be one default export.
+          // If there's no `QUERY` or `data` export it's not a valid cell
+          if (hasDefaultExport || !hasQueryOrDataExport) {
             return
           }
+
+          // TODO (RSC): When we want to support `data = async () => {}` in
+          // client cells as well, we'll need a different heuristic here
+          // If we want to support `QUERY` (gql) cells on the server we'll
+          // also need a different heuristic
+          const createCellHookName = exportNames.includes('data')
+            ? 'createServerCell'
+            : 'createCell'
+          const importFrom = exportNames.includes('data')
+            ? '@redwoodjs/web/dist/components/cell/createServerCell'
+            : '@redwoodjs/web'
 
           // Insert at the top of the file:
           // + import { createCell } from '@redwoodjs/web'
@@ -73,47 +103,42 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
             t.importDeclaration(
               [
                 t.importSpecifier(
-                  t.identifier('createCell'),
-                  t.identifier('createCell')
+                  t.identifier(createCellHookName),
+                  t.identifier(createCellHookName),
                 ),
               ],
-              t.stringLiteral('@redwoodjs/web')
-            )
+              t.stringLiteral(importFrom),
+            ),
           )
 
           // Insert at the bottom of the file:
           // + export default createCell({ QUERY?, Loading?, Success?, Failure?, Empty?, beforeQuery?, isEmpty, afterQuery?, displayName? })
           path.node.body.push(
             t.exportDefaultDeclaration(
-              t.callExpression(t.identifier('createCell'), [
+              t.callExpression(t.identifier(createCellHookName), [
                 t.objectExpression([
                   ...exportNames.map((name) =>
                     t.objectProperty(
                       t.identifier(name),
                       t.identifier(name),
                       false,
-                      true
-                    )
+                      true,
+                    ),
                   ),
-                  /**
-                   * Add the `displayName` property
-                   * so we can name the Cell after the filename.
-                   */
+                  // Add the `displayName` property so we can name the Cell
+                  // after the filename.
                   t.objectProperty(
                     t.identifier('displayName'),
                     t.stringLiteral(
-                      parse(this.file.opts.filename as string).name
+                      parse(this.file.opts.filename as string).name,
                     ),
                     false,
-                    true
+                    true,
                   ),
                 ]),
-              ])
-            )
+              ]),
+            ),
           )
-
-          hasDefaultExport = false
-          exportNames = []
         },
       },
     },

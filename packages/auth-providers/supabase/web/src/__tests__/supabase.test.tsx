@@ -14,6 +14,7 @@ import type {
 } from '@supabase/supabase-js'
 import { AuthError } from '@supabase/supabase-js'
 import { renderHook, act } from '@testing-library/react'
+import { vi, it, describe, beforeAll, beforeEach, expect } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
@@ -65,7 +66,7 @@ let loggedInUser: User | undefined
 
 const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
   signInWithPassword: async (
-    credentials: SignInWithPasswordCredentials
+    credentials: SignInWithPasswordCredentials,
   ): Promise<AuthResponse> => {
     const { email } = credentials as { email: string }
 
@@ -82,7 +83,7 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
     }
   },
   signInWithOAuth: async (
-    credentials: SignInWithOAuthCredentials
+    credentials: SignInWithOAuthCredentials,
   ): Promise<OAuthResponse> => {
     loggedInUser = oAuthUser
 
@@ -95,7 +96,7 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
     }
   },
   signInWithOtp: async (
-    credentials: SignInWithPasswordlessCredentials
+    credentials: SignInWithPasswordlessCredentials,
   ): Promise<AuthResponse> => {
     loggedInUser = user
     loggedInUser.email = credentials['email']
@@ -110,7 +111,7 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
   },
 
   signInWithIdToken: async (
-    credentials: SignInWithIdTokenCredentials
+    credentials: SignInWithIdTokenCredentials,
   ): Promise<AuthResponse> => {
     loggedInUser = user
 
@@ -157,7 +158,7 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
     return { error: null }
   },
   signUp: async (
-    credentials: SignUpWithPasswordCredentials
+    credentials: SignUpWithPasswordCredentials,
   ): Promise<AuthResponse> => {
     const { email } = credentials as {
       email: string
@@ -250,7 +251,7 @@ const supabaseMockClient: Partial<SupabaseClient> = {
   auth: mockSupabaseAuthClient as SupabaseClient['auth'],
 }
 
-const fetchMock = jest.fn()
+const fetchMock = vi.fn()
 fetchMock.mockImplementation(async (_url, options) => {
   const body = options?.body ? JSON.parse(options.body) : {}
 
@@ -289,12 +290,12 @@ beforeEach(() => {
 function getSupabaseAuth(customProviderHooks?: {
   useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
-    currentUser: CurrentUser | null
+    currentUser: CurrentUser | null,
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
   const { useAuth, AuthProvider } = createAuth(
     supabaseMockClient as SupabaseClient,
-    customProviderHooks
+    customProviderHooks,
   )
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,

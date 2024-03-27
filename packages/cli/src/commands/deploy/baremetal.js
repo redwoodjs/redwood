@@ -1,8 +1,8 @@
-import fs from 'fs'
 import path from 'path'
 
 import toml from '@iarna/toml'
 import boxen from 'boxen'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import { env as envInterpolation } from 'string-env-interpolation'
 import terminalLink from 'terminal-link'
@@ -126,13 +126,13 @@ export const builder = (yargs) => {
   yargs.epilogue(
     `Also see the ${terminalLink(
       'Redwood Baremetal Deploy Reference',
-      'https://redwoodjs.com/docs/cli-commands#deploy'
-    )}\n`
+      'https://redwoodjs.com/docs/cli-commands#deploy',
+    )}\n`,
   )
 }
 
-// Executes a single command via SSH connection. Displays an error and will
-// exit() with the same code returned from the SSH command.
+// Executes a single command via SSH connection. Throws an error and sets
+// the exit code with the same code returned from the SSH command.
 const sshExec = async (ssh, path, command, args) => {
   let sshCommand = command
 
@@ -145,18 +145,11 @@ const sshExec = async (ssh, path, command, args) => {
   })
 
   if (result.code !== 0) {
-    console.error(c.error(`\nDeploy failed!`))
-    console.error(
-      c.error(`Error while running command \`${command} ${args.join(' ')}\`:`)
+    const error = new Error(
+      `Error while running command \`${command} ${args.join(' ')}\``,
     )
-    console.error(
-      boxen(result.stderr, {
-        padding: { top: 0, bottom: 0, right: 1, left: 1 },
-        margin: 0,
-        borderColor: 'red',
-      })
-    )
-    process.exit(result.code)
+    error.exitCode = result.code
+    throw error
   }
 
   return result
@@ -164,14 +157,14 @@ const sshExec = async (ssh, path, command, args) => {
 
 export const throwMissingConfig = (name) => {
   throw new Error(
-    `"${name}" config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml`
+    `"${name}" config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml`,
   )
 }
 
 export const verifyConfig = (config, yargs) => {
   if (!yargs.environment) {
     throw new Error(
-      'Must specify an environment to deploy to, ex: `yarn rw deploy baremetal production`'
+      'Must specify an environment to deploy to, ex: `yarn rw deploy baremetal production`',
     )
   }
 
@@ -312,13 +305,13 @@ export const rollbackTasks = (count, ssh, serverConfig) => {
           await symlinkCurrentCommand(
             dirs[rollbackIndex],
             ssh,
-            serverConfig.path
+            serverConfig.path,
           )
         } else {
           throw new Error(
             `Cannot rollback ${rollbackCount} release(s): ${
               dirs.length - dirs.indexOf(currentLink) - 1
-            } previous release(s) available`
+            } previous release(s) available`,
           )
         }
       },
@@ -334,7 +327,7 @@ export const rollbackTasks = (count, ssh, serverConfig) => {
             processName,
             ssh,
             serverConfig,
-            serverConfig.path
+            serverConfig.path,
           )
         },
       })
@@ -348,7 +341,7 @@ export const lifecycleTask = (
   lifecycle,
   task,
   skip,
-  { serverLifecycle, ssh, cmdPath }
+  { serverLifecycle, ssh, cmdPath },
 ) => {
   if (serverLifecycle[lifecycle]?.[task]) {
     const tasks = []
@@ -400,7 +393,7 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
           ])
         },
       },
-    })
+    }),
   )
 
   tasks.push(
@@ -414,7 +407,7 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
           await sshExec(ssh, cmdPath, 'ln', [SYMLINK_FLAGS, '../.env', '.env'])
         },
       },
-    })
+    }),
   )
 
   tasks.push(
@@ -430,7 +423,7 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
           ])
         },
       },
-    })
+    }),
   )
 
   tasks.push(
@@ -459,7 +452,7 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
           ])
         },
       },
-    })
+    }),
   )
 
   for (const side of serverConfig.sides) {
@@ -478,7 +471,7 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
             ])
           },
         },
-      })
+      }),
     )
   }
 
@@ -494,7 +487,7 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
         },
         skip: () => !yargs.update,
       },
-    })
+    }),
   )
 
   if (serverConfig.processNames) {
@@ -516,15 +509,15 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
                     'start',
                     pathJoin(
                       CURRENT_RELEASE_SYMLINK_NAME,
-                      'ecosystem.config.js'
+                      'ecosystem.config.js',
                     ),
                     '--only',
                     processName,
-                  ]
+                  ],
                 )
               },
             },
-          })
+          }),
         )
         tasks.push({
           title: `Saving ${processName} state for future startup...`,
@@ -548,11 +541,11 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
                   processName,
                   ssh,
                   serverConfig,
-                  serverConfig.path
+                  serverConfig.path,
                 )
               },
             },
-          })
+          }),
         )
       }
     }
@@ -572,11 +565,11 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
           await sshExec(
             ssh,
             serverConfig.path,
-            `ls -t | tail -n +${fileStartIndex} | xargs rm -rf`
+            `ls -t | tail -n +${fileStartIndex} | xargs rm -rf`,
           )
         },
       },
-    })
+    }),
   )
 
   return tasks.flat().filter((e) => e)
@@ -589,7 +582,7 @@ const mergeLifecycleEvents = (lifecycle, other) => {
   for (const hook of LIFECYCLE_HOOKS) {
     for (const key in other[hook]) {
       lifecycleCopy[hook][key] = (lifecycleCopy[hook][key] || []).concat(
-        other[hook][key]
+        other[hook][key],
       )
     }
   }
@@ -657,13 +650,13 @@ export const commands = (yargs, ssh) => {
 
     if (yargs.maintenance) {
       tasks = tasks.concat(
-        maintenanceTasks(yargs.maintenance, ssh, serverConfig)
+        maintenanceTasks(yargs.maintenance, ssh, serverConfig),
       )
     } else if (yargs.rollback) {
       tasks = tasks.concat(rollbackTasks(yargs.rollback, ssh, serverConfig))
     } else {
       tasks = tasks.concat(
-        deployTasks(yargs, ssh, serverConfig, serverLifecycle)
+        deployTasks(yargs, ssh, serverConfig, serverLifecycle),
       )
     }
 
@@ -717,7 +710,7 @@ export const handler = async (yargs) => {
         padding: { top: 0, bottom: 0, right: 1, left: 1 },
         margin: 0,
         borderColor: 'red',
-      })
+      }),
     )
 
     process.exit(e?.exitCode || 1)

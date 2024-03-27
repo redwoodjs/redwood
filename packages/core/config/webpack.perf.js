@@ -12,7 +12,7 @@ config.plugins.push(
     output: 'console',
     expandPackages: true,
     aggregateBy: 'plugins',
-  })
+  }),
 )
 
 /** Note: Only matches regex */
@@ -24,7 +24,7 @@ const indexOfRulesTest = (regex) => {
 
 const babel = indexOfRulesTest(/\.(js|mjs|jsx|ts|tsx)$/)
 config.module.rules[0].oneOf[babel].use[0].options.customize = require.resolve(
-  'babel-timing/webpack/babel-loader-customize'
+  'babel-timing/webpack/babel-loader-customize',
 )
 
 module.exports = config

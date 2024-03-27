@@ -15,7 +15,7 @@ const tasks = ({ componentName, filesFn, name }) =>
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true },
   )
 
 export const createYargsForComponentDestroy = ({
@@ -34,7 +34,7 @@ export const createYargsForComponentDestroy = ({
     },
     handler: async (options) => {
       recordTelemetryAttributes({
-        command: `destory ${componentName}`,
+        command: `destroy ${componentName}`,
       })
       options = await preTasksFn({ ...options, isDestroyer: true })
       await tasks({ componentName, filesFn, name: options.name }).run()

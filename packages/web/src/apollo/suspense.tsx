@@ -7,13 +7,15 @@
  * Eventually we will have one ApolloProvider, not multiple.
  */
 
+import { useContext } from 'react'
+
 import type {
   ApolloCache,
   ApolloClientOptions,
+  ApolloLink,
   HttpOptions,
   InMemoryCacheConfig,
   setLogVerbosity,
-  ApolloLink,
 } from '@apollo/client'
 import {
   setLogVerbosity as apolloSetLogVerbosity,
@@ -24,14 +26,14 @@ import {
   ApolloNextAppProvider,
   NextSSRApolloClient,
   NextSSRInMemoryCache,
-  useSuspenseQuery,
   useBackgroundQuery,
-  useReadQuery,
   useQuery,
+  useReadQuery,
+  useSuspenseQuery,
 } from '@apollo/experimental-nextjs-app-support/ssr'
 
 import type { UseAuth } from '@redwoodjs/auth'
-import { useNoAuth } from '@redwoodjs/auth'
+import { ServerAuthContext, useNoAuth } from '@redwoodjs/auth'
 import './typeOverride'
 
 import {
@@ -119,22 +121,16 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   useAuth?: UseAuth
   logLevel: ReturnType<typeof setLogVerbosity>
   children: React.ReactNode
-}> = ({ config, children, useAuth = useNoAuth, logLevel }) => {
+}> = ({ config, children, logLevel, useAuth = useNoAuth }) => {
   // Should they run into it, this helps users with the "Cannot render cell; GraphQL success but data is null" error.
   // See https://github.com/redwoodjs/redwood/issues/2473.
   apolloSetLogVerbosity(logLevel)
 
-  // See https://www.apollographql.com/docs/react/api/link/introduction.
+  const { uri, headers } = useFetchConfig()
   const { getToken, type: authProviderType } = useAuth()
+  const isDev = process.env.NODE_ENV === 'development'
 
-  // `updateDataApolloLink` keeps track of the most recent req/res data so they can be passed to
-  // any errors passed up to an error boundary.
-  const data = {
-    mostRecentRequest: undefined,
-    mostRecentResponse: undefined,
-  } as any
-
-  const { headers, uri } = useFetchConfig()
+  const serverAuthState = useContext(ServerAuthContext)
 
   const getGraphqlUrl = () => {
     // @NOTE: This comes from packages/vite/src/streaming/registerGlobals.ts
@@ -152,21 +148,23 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   // We use this object, because that's the shape of what we pass to the config.link factory
   const redwoodApolloLinks: RedwoodApolloLinks = [
+    // @MARK REMOVE: We will not need these for cookie based auth ~~~~
     { name: 'withToken', link: createTokenLink(getToken) },
     {
       name: 'authMiddleware',
       link: createAuthApolloLink(authProviderType, headers),
     },
-    // @TODO: do we need this in prod? I think it's only for dev errors
-    { name: 'updateDataApolloLink', link: createUpdateDataLink(data) },
-    { name: 'httpLink', link: createHttpLink(getGraphqlUrl(), httpLinkConfig) },
-  ]
-
-  const extendErrorAndRethrow = (error: any, _errorInfo: React.ErrorInfo) => {
-    error['mostRecentRequest'] = data.mostRecentRequest
-    error['mostRecentResponse'] = data.mostRecentResponse
-    throw error
-  }
+    // ~~~~ @END REMOVE ~~~~
+    isDev && { name: 'enhanceErrorLink', link: createUpdateDataLink() },
+    {
+      name: 'httpLink',
+      link: createHttpLink(
+        getGraphqlUrl(),
+        httpLinkConfig,
+        serverAuthState?.cookieHeader,
+      ),
+    },
+  ].filter((link): link is RedwoodApolloLinks[number] => !!link)
 
   function makeClient() {
     // @MARK use special Apollo client
@@ -181,28 +179,9 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   return (
     <ApolloNextAppProvider makeClient={makeClient}>
-      <ErrorBoundary onError={extendErrorAndRethrow}>{children}</ErrorBoundary>
+      {children}
     </ApolloNextAppProvider>
   )
-}
-
-type ComponentDidCatch = React.ComponentLifecycle<any, any>['componentDidCatch']
-
-interface ErrorBoundaryProps {
-  error?: unknown
-  onError: NonNullable<ComponentDidCatch>
-  children: React.ReactNode
-}
-
-class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
-  componentDidCatch(...args: Parameters<NonNullable<ComponentDidCatch>>) {
-    this.setState({})
-    this.props.onError(...args)
-  }
-
-  render() {
-    return this.props.children
-  }
 }
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
@@ -222,7 +201,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
 
   // @MARK we need this special cache
   const cache = new NextSSRInMemoryCache(cacheConfig).restore(
-    globalThis?.__REDWOOD__APOLLO_STATE ?? {}
+    globalThis?.__REDWOOD__APOLLO_STATE ?? {},
   )
 
   return (

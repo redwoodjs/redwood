@@ -1,5 +1,7 @@
 import { resolve, join } from 'path'
 
+import { describe, test, expect } from 'vitest'
+
 import { process_env_findInFile, process_env_findAll } from '../process_env'
 
 describe('process_env_findInFile', () => {
@@ -44,7 +46,7 @@ describe('process_env_findInFile', () => {
 })
 
 function getFixtureDir(
-  name: 'example-todo-main-with-errors' | 'example-todo-main'
+  name: 'example-todo-main-with-errors' | 'example-todo-main',
 ) {
   return resolve(__dirname, `../../../../../../__fixtures__/${name}`)
 }

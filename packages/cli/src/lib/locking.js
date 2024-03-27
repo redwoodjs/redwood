@@ -1,5 +1,6 @@
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
 
 import { getPaths } from './index'
 
@@ -28,7 +29,7 @@ export function setLock(identifier) {
 
   fs.writeFileSync(
     path.join(getPaths().generated.base, 'locks', identifier),
-    ''
+    '',
   )
 }
 

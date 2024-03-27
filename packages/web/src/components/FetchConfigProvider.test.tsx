@@ -1,13 +1,9 @@
-/**
- * @jest-environment jsdom
- */
-
 import React from 'react'
 
 import { render, screen, waitFor } from '@testing-library/react'
+import { describe, test, expect } from 'vitest'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
-import '@testing-library/jest-dom/extend-expect'
 
 globalThis.RWJS_API_GRAPHQL_URL = 'https://api.example.com/graphql'
 
@@ -26,7 +22,7 @@ describe('FetchConfigProvider', () => {
           ({
             loading: false,
             isAuthenticated: false,
-          } as AuthContextInterface<
+          }) as AuthContextInterface<
             unknown,
             unknown,
             unknown,
@@ -35,15 +31,15 @@ describe('FetchConfigProvider', () => {
             unknown,
             unknown,
             unknown
-          >)
+          >
         }
       >
         <FetchConfigToString />
-      </FetchConfigProvider>
+      </FetchConfigProvider>,
     )
 
     expect(
-      screen.getByText('{"uri":"https://api.example.com/graphql"}')
+      screen.getByText('{"uri":"https://api.example.com/graphql"}'),
     ).toBeInTheDocument()
   })
 
@@ -55,7 +51,7 @@ describe('FetchConfigProvider', () => {
             loading: false,
             isAuthenticated: true,
             type: 'custom',
-          } as AuthContextInterface<
+          }) as AuthContextInterface<
             unknown,
             unknown,
             unknown,
@@ -64,16 +60,16 @@ describe('FetchConfigProvider', () => {
             unknown,
             unknown,
             unknown
-          >)
+          >
         }
       >
         <FetchConfigToString />
-      </FetchConfigProvider>
+      </FetchConfigProvider>,
     )
     await waitFor(() =>
       screen.getByText(
-        '{"uri":"https://api.example.com/graphql","headers":{"auth-provider":"custom"}}'
-      )
+        '{"uri":"https://api.example.com/graphql","headers":{"auth-provider":"custom"}}',
+      ),
     )
   })
 })

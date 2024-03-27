@@ -34,7 +34,7 @@ Depending on the credentials provided:
 - A user can sign up via email and password. For OAuth simply sign in and the user account will be created if it does not exist.
 - Note: You must enable and configure the OAuth provider appropriately. To enable and configure a provider, please navigate to Users -> Login settings, from your app's dashboard.
 
-For the docs on Authentication, see: <https://docs.nhost.io/platform/authentication>
+For the docs on Authentication, see: [https://docs.nhost.io/platform/authentication](https://docs.nhost.io/platform/authentication)
 
 If you are also **using Nhost as your GraphQL API server**, you will need to pass `skipFetchCurrentUser` as a prop to `AuthProvider` , as follows:
 

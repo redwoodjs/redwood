@@ -1,3 +1,4 @@
+import { fragmentRegistry } from '../../apollo'
 import { getOperationName } from '../../graphql'
 /**
  * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
@@ -19,7 +20,7 @@ export const createCell = RWJS_ENV.RWJS_EXP_STREAMING_SSR
  */
 function createNonSuspendingCell<
   CellProps extends Record<string, unknown>,
-  CellVariables extends Record<string, unknown>
+  CellVariables extends Record<string, unknown>,
 >({
   QUERY,
   beforeQuery = (props) => ({
@@ -67,6 +68,7 @@ function createNonSuspendingCell<
       /* eslint-disable-next-line react-hooks/rules-of-hooks */
       const { queryCache } = useCellCacheContext()
       const operationName = getOperationName(query)
+      const transformedQuery = fragmentRegistry.transform(query)
 
       let cacheKey
 
@@ -78,7 +80,7 @@ function createNonSuspendingCell<
         throw new Error(
           `The gql query in ${cellName} is missing an operation name. ` +
             'Something like FindBlogPostQuery in ' +
-            '`query FindBlogPostQuery($id: Int!)`'
+            '`query FindBlogPostQuery($id: Int!)`',
         )
       }
 
@@ -99,7 +101,7 @@ function createNonSuspendingCell<
         } else {
           queryCache[cacheKey] ||
             (queryCache[cacheKey] = {
-              query,
+              query: transformedQuery,
               variables: options.variables,
               hasProcessed: false,
             })
@@ -163,10 +165,10 @@ function createNonSuspendingCell<
        * @see {@link https://github.com/redwoodjs/redwood/issues/2473#issuecomment-971864604}
        */
       console.warn(
-        `If you're using Apollo Client, check for its debug logs here in the console, which may help explain the error.`
+        `If you're using Apollo Client, check for its debug logs here in the console, which may help explain the error.`,
       )
       throw new Error(
-        'Cannot render Cell: reached an unexpected state where the query succeeded but `data` is `null`. If this happened in Storybook, your query could be missing fields; otherwise this is most likely a GraphQL caching bug. Note that adding an `id` field to all the fields on your query may fix the issue.'
+        'Cannot render Cell: reached an unexpected state where the query succeeded but `data` is `null`. If this happened in Storybook, your query could be missing fields; otherwise this is most likely a GraphQL caching bug. Note that adding an `id` field to all the fields on your query may fix the issue.',
       )
     }
   }

@@ -7,7 +7,7 @@ import type { Args } from './setup'
 
 export async function handler({ force: forceArg }: Args) {
   const { version } = JSON.parse(
-    fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
+    fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'),
   )
 
   standardAuthHandler({
@@ -25,7 +25,7 @@ export async function handler({ force: forceArg }: Args) {
       'supertokens-auth-react@~0.34.0',
       'supertokens-web-js@~0.7.0',
     ],
-    extraTask,
+    extraTasks: [addRoutingLogic],
     notes: [
       "We've implemented SuperToken's EmailPassword with Social / Enterprise (OAuth 2.0, SAML) login recipe,",
       'but feel free to switch to something that better fits your needs. See https://supertokens.com/docs/guides.',
@@ -37,7 +37,7 @@ export async function handler({ force: forceArg }: Args) {
 }
 
 // Exported for testing.
-export const extraTask = {
+export const addRoutingLogic = {
   title: `Adding SuperTokens routing logic to Routes.{jsx,tsx}...`,
   task: () => {
     const routesPath = getPaths().web.routes
@@ -62,7 +62,7 @@ export const extraTask = {
             line.includes('@redwoodjs')
           ) {
             acc.push(
-              "import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'"
+              "import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'",
             )
             acc.push('')
 
@@ -76,7 +76,7 @@ export const extraTask = {
         .join('\n')
       content = content.replace(
         "import { useAuth } from './auth'",
-        "import { useAuth, PreBuiltUI } from './auth'"
+        "import { useAuth, PreBuiltUI } from './auth'",
       )
 
       content = content.replace(
@@ -84,7 +84,7 @@ export const extraTask = {
         'const Routes = () => {\n' +
           '  if (canHandleRoute(PreBuiltUI)) {\n' +
           '    return getRoutingComponent(PreBuiltUI)\n' +
-          '  }\n\n'
+          '  }\n\n',
       )
 
       fs.writeFileSync(routesPath, content)
