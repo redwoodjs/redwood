@@ -51,12 +51,13 @@ export function rscRoutesAutoLoader(): Plugin {
     }
   }
   if (duplicatePageImportNames.size > 0) {
+    const pageNames = Array.from(duplicatePageImportNames)
+      .map((name) => `'${name}'`)
+      .join(', ')
+
     throw new Error(
-      `Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the follow page directories: ${Array.from(
-        duplicatePageImportNames,
-      )
-        .map((name) => `'${name}'`)
-        .join(', ')}`,
+      "Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in " +
+        `the following page directories: ${pageNames}`,
     )
   }
 
