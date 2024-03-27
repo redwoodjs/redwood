@@ -33,7 +33,7 @@
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/telemetry": "workspace:*",
     "chalk": "4.1.2",
-    "dotenv": "16.3.1",
+    "dotenv": "16.4.5",
     "execa": "5.1.1",
     "listr2": "6.6.1",
     "lodash": "4.17.21",
