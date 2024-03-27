@@ -8205,7 +8205,7 @@ __metadata:
     "@redwoodjs/telemetry": "workspace:*"
     "@redwoodjs/web-server": "workspace:*"
     "@types/archiver": "npm:^6"
-    archiver: "npm:6.0.1"
+    archiver: "npm:7.0.1"
     boxen: "npm:5.1.2"
     camelcase: "npm:6.3.0"
     chalk: "npm:4.1.2"
@@ -13081,32 +13081,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"archiver-utils@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "archiver-utils@npm:4.0.1"
+"archiver-utils@npm:^5.0.0, archiver-utils@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "archiver-utils@npm:5.0.2"
   dependencies:
-    glob: "npm:^8.0.0"
+    glob: "npm:^10.0.0"
     graceful-fs: "npm:^4.2.0"
+    is-stream: "npm:^2.0.1"
     lazystream: "npm:^1.0.0"
     lodash: "npm:^4.17.15"
     normalize-path: "npm:^3.0.0"
-    readable-stream: "npm:^3.6.0"
-  checksum: 10c0/fc646fe1f8e3650383b6f79384e1c8f69caf7685c705221e23393a674ee1d67331e246250a72b03ec2fbdb2cfe30adc2d4287f6357684d6843d604738bf2c870
+    readable-stream: "npm:^4.0.0"
+  checksum: 10c0/3782c5fa9922186aa1a8e41ed0c2867569faa5f15c8e5e6418ea4c1b730b476e21bd68270b3ea457daf459ae23aaea070b2b9f90cf90a59def8dc79b9e4ef538
   languageName: node
   linkType: hard
 
-"archiver@npm:6.0.1":
-  version: 6.0.1
-  resolution: "archiver@npm:6.0.1"
+"archiver@npm:7.0.1":
+  version: 7.0.1
+  resolution: "archiver@npm:7.0.1"
   dependencies:
-    archiver-utils: "npm:^4.0.1"
+    archiver-utils: "npm:^5.0.2"
     async: "npm:^3.2.4"
-    buffer-crc32: "npm:^0.2.1"
-    readable-stream: "npm:^3.6.0"
+    buffer-crc32: "npm:^1.0.0"
+    readable-stream: "npm:^4.0.0"
     readdir-glob: "npm:^1.1.2"
     tar-stream: "npm:^3.0.0"
-    zip-stream: "npm:^5.0.1"
-  checksum: 10c0/54c5a634b39691114e727d4b4f360439fa7cd40b414c9d909606fbfd7048037f7dccefa49337f9ed19b1f5c209e021ce5e1ff9c6b547907257bc71f1af6f8cf3
+    zip-stream: "npm:^6.0.1"
+  checksum: 10c0/02afd87ca16f6184f752db8e26884e6eff911c476812a0e7f7b26c4beb09f06119807f388a8e26ed2558aa8ba9db28646ebd147a4f99e46813b8b43158e1438e
   languageName: node
   linkType: hard
 
@@ -14433,7 +14434,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer-crc32@npm:^0.2.1, buffer-crc32@npm:~0.2.3":
+"buffer-crc32@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "buffer-crc32@npm:1.0.0"
+  checksum: 10c0/8b86e161cee4bb48d5fa622cbae4c18f25e4857e5203b89e23de59e627ab26beb82d9d7999f2b8de02580165f61f83f997beaf02980cdf06affd175b651921ab
+  languageName: node
+  linkType: hard
+
+"buffer-crc32@npm:~0.2.3":
   version: 0.2.13
   resolution: "buffer-crc32@npm:0.2.13"
   checksum: 10c0/cb0a8ddf5cf4f766466db63279e47761eb825693eeba6a5a95ee4ec8cb8f81ede70aa7f9d8aeec083e781d47154290eb5d4d26b3f7a465ec57fb9e7d59c47150
@@ -15551,15 +15559,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compress-commons@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "compress-commons@npm:5.0.1"
+"compress-commons@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "compress-commons@npm:6.0.2"
   dependencies:
     crc-32: "npm:^1.2.0"
-    crc32-stream: "npm:^5.0.0"
+    crc32-stream: "npm:^6.0.0"
+    is-stream: "npm:^2.0.1"
     normalize-path: "npm:^3.0.0"
-    readable-stream: "npm:^3.6.0"
-  checksum: 10c0/1c604ac753b4ec643a807f3db545bf497d1e9c6f81e9132280c98d972b02bbeba087e7fb2d53f3043f9643a64a6140e9e39b94329040695d404b83a0c7f38fa2
+    readable-stream: "npm:^4.0.0"
+  checksum: 10c0/2347031b7c92c8ed5011b07b93ec53b298fa2cd1800897532ac4d4d1aeae06567883f481b6e35f13b65fc31b190c751df6635434d525562f0203fde76f1f0814
   languageName: node
   linkType: hard
 
@@ -15992,13 +16001,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crc32-stream@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "crc32-stream@npm:5.0.0"
+"crc32-stream@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "crc32-stream@npm:6.0.0"
   dependencies:
     crc-32: "npm:^1.2.0"
-    readable-stream: "npm:^3.4.0"
-  checksum: 10c0/bd6e6d49b76fd562eef3a4b7b64b1e551fb5dfca0a3b54fb7e59765c57468295b60755f85d3450fd61eee01dcca0974600157717cad8f356d513c28bac726a41
+    readable-stream: "npm:^4.0.0"
+  checksum: 10c0/bf9c84571ede2d119c2b4f3a9ef5eeb9ff94b588493c0d3862259af86d3679dcce1c8569dd2b0a6eff2f35f5e2081cc1263b846d2538d4054da78cf34f262a3d
   languageName: node
   linkType: hard
 
@@ -22054,7 +22063,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-stream@npm:^2.0.0":
+"is-stream@npm:^2.0.0, is-stream@npm:^2.0.1":
   version: 2.0.1
   resolution: "is-stream@npm:2.0.1"
   checksum: 10c0/7c284241313fc6efc329b8d7f08e16c0efeb6baab1b4cd0ba579eb78e5af1aa5da11e68559896a2067cd6c526bd29241dda4eb1225e627d5aa1a89a76d4635a5
@@ -34716,14 +34725,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zip-stream@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "zip-stream@npm:5.0.1"
+"zip-stream@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "zip-stream@npm:6.0.1"
   dependencies:
-    archiver-utils: "npm:^4.0.1"
-    compress-commons: "npm:^5.0.1"
-    readable-stream: "npm:^3.6.0"
-  checksum: 10c0/18b4ecf28824bd165709de5056d53cf611f07e0b7578508fa94c497f17164722dc19a0739ea8b2c1a296de7d3f70f7ad558e7a3a4929240fb2730afc5fd60679
+    archiver-utils: "npm:^5.0.0"
+    compress-commons: "npm:^6.0.2"
+    readable-stream: "npm:^4.0.0"
+  checksum: 10c0/50f2fb30327fb9d09879abf7ae2493705313adf403e794b030151aaae00009162419d60d0519e807673ec04d442e140c8879ca14314df0a0192de3b233e8f28b
   languageName: node
   linkType: hard
 
