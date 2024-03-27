@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@redwoodjs/mailer-core": "workspace:*",
-    "nodemailer": "6.9.9"
+    "nodemailer": "6.9.13"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
