@@ -363,7 +363,7 @@ export type FlattenSearchParams = ReturnType<typeof flattenSearchParams>
  */
 export function flattenSearchParams(
   queryString: string,
-): Array<string | Record<string, any>> {
+): Array<Record<string, unknown>> {
   const searchParams = []
 
   for (const [key, value] of Object.entries(parseSearch(queryString))) {
