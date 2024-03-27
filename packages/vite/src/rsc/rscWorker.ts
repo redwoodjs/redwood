@@ -38,7 +38,6 @@ const { renderToPipeableStream } = RSDWServer
 
 let absoluteClientEntries: Record<string, string> = {}
 
-// type Entries = { default: ReturnType<typeof defineEntries> }
 type PipeableStream = { pipe<T extends Writable>(destination: T): T }
 
 const handleSetClientEntries = async ({
