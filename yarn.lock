@@ -8104,7 +8104,7 @@ __metadata:
     "@types/pascalcase": "npm:1.0.3"
     "@types/yargs": "npm:17.0.32"
     chalk: "npm:4.1.2"
-    dotenv: "npm:16.3.1"
+    dotenv: "npm:16.4.5"
     execa: "npm:5.1.1"
     listr2: "npm:6.6.1"
     lodash: "npm:4.17.21"
@@ -17255,10 +17255,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:16.3.1, dotenv@npm:^16.0.0, dotenv@npm:~16.3.1":
-  version: 16.3.1
-  resolution: "dotenv@npm:16.3.1"
-  checksum: 10c0/b95ff1bbe624ead85a3cd70dbd827e8e06d5f05f716f2d0cbc476532d54c7c9469c3bc4dd93ea519f6ad711cb522c00ac9a62b6eb340d5affae8008facc3fbd7
+"dotenv@npm:16.4.5, dotenv@npm:^16.0.0":
+  version: 16.4.5
+  resolution: "dotenv@npm:16.4.5"
+  checksum: 10c0/48d92870076832af0418b13acd6e5a5a3e83bb00df690d9812e94b24aff62b88ade955ac99a05501305b8dc8f1b0ee7638b18493deb6fe93d680e5220936292f
   languageName: node
   linkType: hard
 
@@ -17273,6 +17273,13 @@ __metadata:
   version: 8.6.0
   resolution: "dotenv@npm:8.6.0"
   checksum: 10c0/6750431dea8efbd54b9f2d9681b04e1ccc7989486461dcf058bb708d9e3d63b04115fcdf8840e38ad1e24a4a2e1e7c1560626c5e3ac7bc09371b127c49e2d45f
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:~16.3.1":
+  version: 16.3.1
+  resolution: "dotenv@npm:16.3.1"
+  checksum: 10c0/b95ff1bbe624ead85a3cd70dbd827e8e06d5f05f716f2d0cbc476532d54c7c9469c3bc4dd93ea519f6ad711cb522c00ac9a62b6eb340d5affae8008facc3fbd7
   languageName: node
   linkType: hard
 
@@ -29941,7 +29948,7 @@ __metadata:
     cypress-fail-fast: "npm:7.1.0"
     cypress-wait-until: "npm:3.0.1"
     dependency-cruiser: "npm:16.2.3"
-    dotenv: "npm:16.3.1"
+    dotenv: "npm:16.4.5"
     eslint: "npm:8.55.0"
     execa: "npm:5.1.1"
     fast-glob: "npm:3.3.2"
