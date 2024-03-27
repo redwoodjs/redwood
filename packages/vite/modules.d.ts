@@ -1,5 +1,11 @@
 declare module 'react-server-dom-webpack/node-loader'
 
+// Should be able to use just react-dom/server, but right now we can't
+// See https://github.com/facebook/react/issues/26906
+declare module 'react-dom/server.edge' {
+  export * from 'react-dom/server'
+}
+
 declare module 'react-server-dom-webpack/client' {
   // https://github.com/facebook/react/blob/dfaed5582550f11b27aae967a8e7084202dd2d90/packages/react-server-dom-webpack/src/ReactFlightDOMClientBrowser.js#L31
   export type Options<A, T> = {
