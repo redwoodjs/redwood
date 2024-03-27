@@ -17,7 +17,6 @@ import { createServer, resolveConfig } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-// import type { defineEntries } from '../entries.js'
 import { getEntries, getEntriesFromDist } from '../lib/entries.js'
 import { registerFwGlobalsAndShims } from '../lib/registerFwGlobalsAndShims.js'
 import { StatusError } from '../lib/StatusError.js'
@@ -213,14 +212,7 @@ const getFunctionComponent = async (rscId: string) => {
     throw new StatusError('No entry found for ' + rscId, 404)
   }
 
-  let mod
-  try {
-    mod = await loadServerFile(entryModule)
-  } catch (error) {
-    console.error('Failed to import', entryModule)
-    console.error(error)
-    throw error
-  }
+  const mod = await loadServerFile(entryModule)
 
   if (typeof mod === 'function') {
     return mod

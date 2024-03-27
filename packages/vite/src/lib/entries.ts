@@ -35,7 +35,7 @@ export function getEntries() {
     )
 }
 
-export async function getEntriesFromDist() {
+export async function getEntriesFromDist(): Promise<Record<string, string>> {
   const entriesDist = getPaths().web.distRscEntries
   const { serverEntries } = await import(`file://${entriesDist}`)
   return serverEntries
