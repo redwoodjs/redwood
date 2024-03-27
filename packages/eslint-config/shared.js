@@ -169,6 +169,9 @@ module.exports = {
         'valid-typeof': 'off',
         camelcase: 'off',
         '@typescript-eslint/camelcase': 'off',
+        'no-empty-function': 'off',
+        'no-use-before-define': 'off',
+        '@typescript-eslint/no-use-before-define': 'off',
       },
     },
     {
