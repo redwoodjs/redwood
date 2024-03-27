@@ -97,6 +97,9 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
+  // The `recommendExtensionsToInstall` function uses `console.log` to output
+  // the list of recommended extensions. We mock it to keep the output clean
+  // during tests
   vi.spyOn(console, 'log').mockImplementation(() => {})
 })
 
