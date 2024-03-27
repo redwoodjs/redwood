@@ -36,7 +36,7 @@ export default defineWorkspace([
         '.d.ts',
         'dist',
       ],
-      setupFiles: ['./src/vitest.codemods.setup.ts'],
+      setupFiles: ['./vitest.codemods.setup.ts'],
       pool: 'forks',
     },
   },

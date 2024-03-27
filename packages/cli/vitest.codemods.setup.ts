@@ -8,13 +8,13 @@ import path from 'path'
 
 import { expect } from 'vitest'
 
-import { formatCode } from './testUtils'
+import { formatCode } from './src/testUtils'
 
 globalThis.matchInlineTransformSnapshot = (
-  await import('./testUtils/matchInlineTransformSnapshot')
+  await import('./src/testUtils/matchInlineTransformSnapshot')
 ).matchInlineTransformSnapshot
 globalThis.matchFolderTransform = (
-  await import('./testUtils/matchFolderTransform')
+  await import('./src/testUtils/matchFolderTransform')
 ).matchFolderTransform
 
 // Custom matcher for checking fixtures using paths
