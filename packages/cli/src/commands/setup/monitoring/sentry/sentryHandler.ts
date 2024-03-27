@@ -30,7 +30,7 @@ export const handler = async ({ force }: Args) => {
     addEnvVarTask(
       'SENTRY_DSN',
       '',
-      'https://docs.sentry.io/product/sentry-basics/dsn-explainer/'
+      'https://docs.sentry.io/product/sentry-basics/dsn-explainer/',
     ),
     {
       title: 'Setting up Sentry on the API and web sides',
@@ -39,25 +39,25 @@ export const handler = async ({ force }: Args) => {
           {
             [path.join(rwPaths.api.lib, `sentry.${extension}`)]: fs
               .readFileSync(
-                path.join(__dirname, 'templates/sentryApi.ts.template')
+                path.join(__dirname, 'templates/sentryApi.ts.template'),
               )
               .toString(),
             [path.join(rwPaths.web.src, 'lib', `sentry.${extension}`)]: fs
               .readFileSync(
-                path.join(__dirname, 'templates/sentryWeb.ts.template')
+                path.join(__dirname, 'templates/sentryWeb.ts.template'),
               )
               .toString(),
           },
-          { existingFiles: force ? 'OVERWRITE' : 'SKIP' }
+          { existingFiles: force ? 'OVERWRITE' : 'SKIP' },
         )
       },
     },
     {
       title: 'Implementing the Envelop plugin',
-      task: (ctx) => {
+      task: async (ctx) => {
         const graphqlHandlerPath = path.join(
           rwPaths.api.functions,
-          `graphql.${extension}`
+          `graphql.${extension}`,
         )
 
         const contentLines = fs
@@ -66,11 +66,11 @@ export const handler = async ({ force }: Args) => {
           .split('\n')
 
         const handlerIndex = contentLines.findLastIndex((line) =>
-          /^export const handler = createGraphQLHandler\({/.test(line)
+          /^export const handler = createGraphQLHandler\({/.test(line),
         )
 
         const pluginsIndex = contentLines.findLastIndex((line) =>
-          /extraPlugins:/.test(line)
+          /extraPlugins:/.test(line),
         )
 
         if (handlerIndex === -1 || pluginsIndex !== -1) {
@@ -88,20 +88,20 @@ export const handler = async ({ force }: Args) => {
           '  includeRawResult: true,',
           '  includeResolverArgs: true,',
           '  includeExecuteVariables: true,',
-          '})],'
+          '})],',
         )
 
         contentLines.splice(0, 0, "import { useSentry } from '@envelop/sentry'")
 
         fs.writeFileSync(
           graphqlHandlerPath,
-          prettify('graphql.ts', contentLines.join('\n'))
+          await prettify('graphql.ts', contentLines.join('\n')),
         )
       },
     },
     {
       title: "Replacing Redwood's Error boundary",
-      task: () => {
+      task: async () => {
         const contentLines = fs
           .readFileSync(rwPaths.web.app)
           .toString()
@@ -109,26 +109,26 @@ export const handler = async ({ force }: Args) => {
 
         const webImportIndex = contentLines.findLastIndex((line) =>
           /^import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs\/web'$/.test(
-            line
-          )
+            line,
+          ),
         )
         contentLines.splice(
           webImportIndex,
           1,
-          "import { RedwoodProvider } from '@redwoodjs/web'"
+          "import { RedwoodProvider } from '@redwoodjs/web'",
         )
 
         const boundaryOpenIndex = contentLines.findLastIndex((line) =>
-          /<FatalErrorBoundary page={FatalErrorPage}>/.test(line)
+          /<FatalErrorBoundary page={FatalErrorPage}>/.test(line),
         )
         contentLines.splice(
           boundaryOpenIndex,
           1,
-          '<Sentry.ErrorBoundary fallback={FatalErrorPage}>'
+          '<Sentry.ErrorBoundary fallback={FatalErrorPage}>',
         )
 
         const boundaryCloseIndex = contentLines.findLastIndex((line) =>
-          /<\/FatalErrorBoundary>/.test(line)
+          /<\/FatalErrorBoundary>/.test(line),
         )
         contentLines.splice(boundaryCloseIndex, 1, '</Sentry.ErrorBoundary>')
 
@@ -136,7 +136,7 @@ export const handler = async ({ force }: Args) => {
 
         fs.writeFileSync(
           rwPaths.web.app,
-          prettify('App.tsx', contentLines.join('\n'))
+          await prettify('App.tsx', contentLines.join('\n')),
         )
       },
     },
@@ -145,19 +145,19 @@ export const handler = async ({ force }: Args) => {
       task: (ctx) => {
         notes.push(
           colors.green(
-            'You will need to add `SENTRY_DSN` to `includeEnvironmentVariables` in redwood.toml.'
-          )
+            'You will need to add `SENTRY_DSN` to `includeEnvironmentVariables` in redwood.toml.',
+          ),
         )
 
         if (ctx.addEnvelopPluginSkipped) {
           notes.push(
             `${colors.underline(
-              'Make sure you implement the Sentry Envelop plugin:'
-            )} https://redwoodjs.com/docs/cli-commands#sentry-envelop-plugin`
+              'Make sure you implement the Sentry Envelop plugin:',
+            )} https://redwoodjs.com/docs/cli-commands#sentry-envelop-plugin`,
           )
         } else {
           notes.push(
-            'Check out the RedwoodJS forums for more: https://community.redwoodjs.com/t/sentry-error-and-performance-monitoring-experimental/4880'
+            'Check out the RedwoodJS forums for more: https://community.redwoodjs.com/t/sentry-error-and-performance-monitoring-experimental/4880',
           )
         }
       },

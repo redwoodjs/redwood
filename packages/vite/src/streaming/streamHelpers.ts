@@ -6,6 +6,7 @@ import type {
   RenderToReadableStreamOptions,
   ReactDOMServerReadableStream,
 } from 'react-dom/server'
+import { renderToReadableStream } from 'react-dom/server.edge'
 
 import type { ServerAuthState } from '@redwoodjs/auth'
 import { ServerAuthProvider } from '@redwoodjs/auth'
@@ -17,11 +18,11 @@ import {
   createInjector,
 } from '@redwoodjs/web/dist/components/ServerInject'
 
-import type { MiddlewareResponse } from '../middleware/MiddlewareResponse'
+import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 
-import { createBufferedTransformStream } from './transforms/bufferedTransform'
-import { createTimeoutTransform } from './transforms/cancelTimeoutTransform'
-import { createServerInjectionTransform } from './transforms/serverInjectionTransform'
+import { createBufferedTransformStream } from './transforms/bufferedTransform.js'
+import { createTimeoutTransform } from './transforms/cancelTimeoutTransform.js'
+import { createServerInjectionTransform } from './transforms/serverInjectionTransform.js'
 
 interface RenderToStreamArgs {
   ServerEntry: any
@@ -39,10 +40,24 @@ interface StreamOptions {
   onError?: (err: Error) => void
 }
 
+const rscWebpackShims = `\
+globalThis.__rw_module_cache__ ||= new Map();
+
+globalThis.__webpack_chunk_load__ ||= (id) => {
+  console.log('rscWebpackShims chunk load id', id)
+  return import(id).then((m) => globalThis.__rw_module_cache__.set(id, m))
+};
+
+globalThis.__webpack_require__ ||= (id) => {
+  console.log('rscWebpackShims require id', id)
+  return globalThis.__rw_module_cache__.get(id)
+};
+`
+
 export async function reactRenderToStreamResponse(
   mwRes: MiddlewareResponse,
   renderOptions: RenderToStreamArgs,
-  streamOptions: StreamOptions
+  streamOptions: StreamOptions,
 ) {
   const { waitForAllReady = false } = streamOptions
   const {
@@ -87,10 +102,6 @@ export async function reactRenderToStreamResponse(
 
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
-  // Possible that we need to upgrade the @types/* packages
-  // @ts-expect-error Something in React's packages mean types dont come through
-  const { renderToReadableStream } = await import('react-dom/server.edge')
-
   const renderRoot = (path: string) => {
     return React.createElement(
       ServerAuthProvider,
@@ -113,9 +124,9 @@ export async function reactRenderToStreamResponse(
             url: path,
             css: cssLinks,
             meta: metaTags,
-          })
-        )
-      )
+          }),
+        ),
+      ),
     )
   }
 
@@ -124,9 +135,9 @@ export async function reactRenderToStreamResponse(
    */
   const bootstrapOptions = {
     bootstrapScriptContent:
-      // Only insert assetMap if clientside JS will be loaded
+      // Only insert assetMap if client side JS will be loaded
       jsBundles.length > 0
-        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}`
+        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}; ${rscWebpackShims}`
         : undefined,
     bootstrapModules: jsBundles,
   }
@@ -164,7 +175,7 @@ export async function reactRenderToStreamResponse(
 
     const outputStream: ReadableStream<Uint8Array> = applyStreamTransforms(
       reactStream,
-      transformsToApply
+      transformsToApply,
     )
 
     mwRes.status = didErrorOutsideShell ? 500 : 200
@@ -185,7 +196,7 @@ export async function reactRenderToStreamResponse(
         css: cssLinks,
         meta: metaTags,
       }),
-      bootstrapOptions
+      bootstrapOptions,
     )
 
     mwRes.status = 500
@@ -199,7 +210,7 @@ export async function reactRenderToStreamResponse(
 }
 function applyStreamTransforms(
   reactStream: ReactDOMServerReadableStream,
-  transformsToApply: (TransformStream | false)[]
+  transformsToApply: (TransformStream | false)[],
 ) {
   let outputStream: ReadableStream<Uint8Array> = reactStream
 

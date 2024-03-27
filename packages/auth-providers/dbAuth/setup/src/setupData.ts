@@ -6,7 +6,7 @@ import { getPaths, colors, addEnvVarTask } from '@redwoodjs/cli-helpers'
 export const libPath = getPaths().api.lib.replace(getPaths().base, '')
 export const functionsPath = getPaths().api.functions.replace(
   getPaths().base,
-  ''
+  '',
 )
 
 const secret = crypto.randomBytes(32).toString('base64')
@@ -14,7 +14,7 @@ const secret = crypto.randomBytes(32).toString('base64')
 export const extraTask = addEnvVarTask(
   'SESSION_SECRET',
   secret,
-  'Used to encrypt/decrypt session cookies. Change this value and re-deploy to log out all users of your app at once.'
+  'Used to encrypt/decrypt session cookies. Change this value and re-deploy to log out all users of your app at once.',
 )
 
 // any notes to print out when the job is done

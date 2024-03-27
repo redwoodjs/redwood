@@ -32,7 +32,7 @@ export const customOrDefaultTemplatePath = ({
   const customPath = path.join(
     getPaths()[side].generators,
     generator,
-    templatePath
+    templatePath,
   )
 
   if (fs.existsSync(customPath)) {
@@ -48,7 +48,7 @@ export const customOrDefaultTemplatePath = ({
  */
 // TODO: Make this read all the files in a template directory instead of
 // manually passing in each file.
-export const templateForComponentFile = ({
+export const templateForComponentFile = async ({
   name,
   suffix = '',
   extension = '.js',
@@ -72,10 +72,10 @@ export const templateForComponentFile = ({
     templatePath,
     side: webPathSection ? 'web' : 'api',
   })
-  const content = generateTemplate(fullTemplatePath, {
+  const content = await generateTemplate(fullTemplatePath, {
     name,
     outputPath: ensurePosixPath(
-      `./${path.relative(getPaths().base, componentOutputPath)}`
+      `./${path.relative(getPaths().base, componentOutputPath)}`,
     ),
     ...templateVars,
   })
@@ -144,7 +144,7 @@ export const yargsDefaults = {
 export const validateName = (name) => {
   if (name.match(/^\W/)) {
     throw new Error(
-      'The <name> argument must start with a letter, number or underscore.'
+      'The <name> argument must start with a letter, number or underscore.',
     )
   }
 }
@@ -175,8 +175,8 @@ export const createYargsForComponentGeneration = ({
         .epilogue(
           `Also see the ${terminalLink(
             'Redwood CLI Reference',
-            `https://redwoodjs.com/docs/cli-commands#generate-${componentName}`
-          )}`
+            `https://redwoodjs.com/docs/cli-commands#generate-${componentName}`,
+          )}`,
         )
         .option('tests', {
           description: 'Generate test files',
@@ -243,7 +243,7 @@ export const createYargsForComponentGeneration = ({
             rendererOptions: { collapseSubtasks: false },
             exitOnError: true,
             renderer: options.verbose && 'verbose',
-          }
+          },
         )
 
         if (options.rollback && !options.force) {

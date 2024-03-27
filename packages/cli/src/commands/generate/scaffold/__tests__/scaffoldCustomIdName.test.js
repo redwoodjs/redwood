@@ -42,55 +42,55 @@ describe('support custom @id name', () => {
     ])
   })
 
-  test('creates a cell with the custom id name', () => {
+  test('creates a cell with the custom id name', async () => {
     const customIdFieldCellPath =
       '/path/to/project/web/src/components/CustomIdField/CustomIdFieldCell/CustomIdFieldCell.tsx'
 
-    const cell = files[path.normalize(customIdFieldCellPath)]
+    const cell = await files[path.normalize(customIdFieldCellPath)]
     expect(cell).toContain('FindCustomIdFieldByUuid($uuid: String!)')
     expect(cell).toContain('customIdField: customIdField(uuid: $uuid)')
   })
 
-  test('creates an edit cell with the custom id name', () => {
+  test('creates an edit cell with the custom id name', async () => {
     const customIdFieldEditCellPath =
       '/path/to/project/web/src/components/CustomIdField/EditCustomIdFieldCell/EditCustomIdFieldCell.tsx'
 
-    const cell = files[path.normalize(customIdFieldEditCellPath)]
+    const cell = await files[path.normalize(customIdFieldEditCellPath)]
     expect(cell).toContain('query EditCustomIdFieldByUuid($uuid: String!)')
   })
 
-  test('creates a component with the custom id name', () => {
+  test('creates a component with the custom id name', async () => {
     const customIdFieldComponentPath =
       '/path/to/project/web/src/components/CustomIdField/CustomIdField/CustomIdField.tsx'
 
-    const cell = files[path.normalize(customIdFieldComponentPath)]
+    const cell = await files[path.normalize(customIdFieldComponentPath)]
     expect(cell).toContain('DeleteCustomIdFieldMutation($uuid: String!)')
     expect(cell).toContain('deleteCustomIdField(uuid: $uuid)')
     expect(cell).toContain('deleteCustomIdField({ variables: { uuid } })')
   })
 
-  test('creates a form with the custom id name', () => {
+  test('creates a form with the custom id name', async () => {
     const customIdFieldFormPath =
       '/path/to/project/web/src/components/CustomIdField/CustomIdFieldForm/CustomIdFieldForm.tsx'
 
-    const cell = files[path.normalize(customIdFieldFormPath)]
+    const cell = await files[path.normalize(customIdFieldFormPath)]
     expect(cell).toContain('props.onSave(data, props?.customIdField?.uuid)')
   })
 
-  test('creates a sdl with the custom id name', () => {
+  test('creates a sdl with the custom id name', async () => {
     const customIdFieldSdlPath =
       '/path/to/project/api/src/graphql/customIdFields.sdl.ts'
 
-    const sdl = files[path.normalize(customIdFieldSdlPath)]
+    const sdl = await files[path.normalize(customIdFieldSdlPath)]
     const match = sdl.match(/uuid: String!/g)
     expect(match).toHaveLength(4)
   })
 
-  test('creates a service with the custom id name', () => {
+  test('creates a service with the custom id name', async () => {
     const customIdFieldServicePath =
       '/path/to/project/api/src/graphql/customIdFields.sdl.ts'
 
-    const sdl = files[path.normalize(customIdFieldServicePath)]
+    const sdl = await files[path.normalize(customIdFieldServicePath)]
     const match = sdl.match(/uuid: String!/g)
     expect(match).toHaveLength(4)
   })

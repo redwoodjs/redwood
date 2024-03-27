@@ -6,7 +6,7 @@ import * as tsm from 'ts-morph'
 
 export function createTSMSourceFile(
   filePath: string,
-  src: string
+  src: string,
 ): tsm.SourceFile
 export function createTSMSourceFile(src: string): tsm.SourceFile
 /**
@@ -41,7 +41,7 @@ const getCache = memoize(() => new LRU<string, tsm.SourceFile>({ max: 200 }))
  */
 export function createTSMSourceFile_cached(
   filePath: string,
-  text: string
+  text: string,
 ): tsm.SourceFile {
   const key = filePath + '\n' + text
   const cache = getCache()

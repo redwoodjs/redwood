@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { vi, test, expect } from 'vitest'
+
 import {
   getGqlQueries,
   getNamedExports,
@@ -8,8 +10,7 @@ import {
   fileToAst,
 } from '../ast'
 
-jest.mock('@redwoodjs/project-config', () => {
-  const path = require('path')
+vi.mock('@redwoodjs/project-config', async () => {
   const baseFixturePath = path.join(__dirname, 'fixtures')
   return {
     getPaths: () => ({
@@ -90,15 +91,15 @@ test('extracts named exports', () => {
 
 test('tests default exports', () => {
   expect(
-    hasDefaultExport(fileToAst(getFixturePath('/defaultExports/multiLine.js')))
+    hasDefaultExport(fileToAst(getFixturePath('/defaultExports/multiLine.js'))),
   ).toEqual(true)
 
   expect(
-    hasDefaultExport(fileToAst(getFixturePath('defaultExports/singleLine.js')))
+    hasDefaultExport(fileToAst(getFixturePath('defaultExports/singleLine.js'))),
   ).toEqual(true)
 
   expect(
-    hasDefaultExport(fileToAst(getFixturePath('defaultExports/none.js')))
+    hasDefaultExport(fileToAst(getFixturePath('defaultExports/none.js'))),
   ).toEqual(false)
 })
 

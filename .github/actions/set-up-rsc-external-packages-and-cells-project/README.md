@@ -9,10 +9,10 @@ project, runs `yarn install` and `project:copy`. Finally it builds the rw app.
 ## Testing/running locally
 
 Go into the github actions folder
-`cd .github/actions`
+`cd .github/actions/set-up-rsc-external-packages-and-cells-project`
 
 Then run the following command to execute the action
-`node set-up-rsc-external-packages-project/setUpRscExternalPackagesProjectLocally.mjs`
+`node setUpRscExternalPackagesProjectLocally.mjs`
 
 ## Design
 

@@ -2,10 +2,11 @@
 
 import { forwardRef } from 'react'
 
-import { Link, type LinkProps } from './link'
+import { Link } from './link'
+import type { LinkProps } from './link'
 import { useMatch } from './useMatch'
-import type { FlattenSearchParams } from './util'
 import { flattenSearchParams } from './util'
+import type { FlattenSearchParams } from './util'
 
 interface NavLinkProps extends LinkProps {
   activeClassName: string
@@ -27,7 +28,7 @@ export const NavLink = forwardRef<
       onClick,
       ...rest
     },
-    ref
+    ref,
   ) => {
     // Separate pathname and search parameters, USVString expected
     const [pathname, queryString] = to.split('?')
@@ -36,18 +37,15 @@ export const NavLink = forwardRef<
       searchParams,
       matchSubPaths,
     })
-    const theClassName = [className, matchInfo.match && activeClassName]
-      .filter(Boolean)
-      .join(' ')
 
     return (
       <Link
         ref={ref}
         to={to}
         onClick={onClick}
-        className={theClassName}
+        className={matchInfo.match ? activeClassName : className}
         {...rest}
       />
     )
-  }
+  },
 )

@@ -35,7 +35,7 @@ export const parseDatamodel = () => {
       esbuild.transformSync(JSON.stringify(datamodel, null, 2), {
         loader: 'json',
         format: 'cjs',
-      }).code
+      }).code,
     )
     console.info(`\n  Wrote ${DATAMODEL_PATH}`)
 
@@ -58,7 +58,7 @@ export const parseDatamodel = () => {
 
       // requireModel declarations
       const schemaModel = datamodel.models.find(
-        (model) => model.name === modelName
+        (model) => model.name === modelName,
       )
 
       if (schemaModel) {

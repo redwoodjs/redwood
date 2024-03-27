@@ -2,8 +2,10 @@ import path from 'path'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../__fixtures__/example-todo-main'
+  '../../../../__fixtures__/example-todo-main',
 )
+
+import { beforeAll, afterAll, test, expect } from 'vitest'
 
 beforeAll(() => {
   process.env.RWJS_CWD = FIXTURE_PATH
@@ -115,43 +117,43 @@ test('isFileInsideFolder works correctly (esp on windows)', () => {
   expect(
     isFileInsideFolder(
       path.join(FIXTURE_PATH, 'web/src/components/TableCell/TableCell.js'),
-      getPaths().web.base
-    )
+      getPaths().web.base,
+    ),
   ).toBe(true)
 
   expect(
     isFileInsideFolder(
       path.join(FIXTURE_PATH, 'web/src/pages/NotFoundPage/NotFoundPage.js'),
-      getPaths().web.pages
-    )
+      getPaths().web.pages,
+    ),
   ).toBe(true)
 
   expect(
     isFileInsideFolder(
       path.join(FIXTURE_PATH, 'web/src/pages/NotFoundPage/NotFoundPage.js'),
-      getPaths().api.base
-    )
+      getPaths().api.base,
+    ),
   ).toBe(false)
 
   expect(
     isFileInsideFolder(
       path.join(FIXTURE_PATH, 'api/src/functions/healthz/healthz.js'),
-      getPaths().api.functions
-    )
+      getPaths().api.functions,
+    ),
   ).toBe(true)
 })
 
 test('isCellFile detects cells correctly', () => {
   const invalidCell = isCellFile(
-    path.join(FIXTURE_PATH, 'web/src/components/TableCell/TableCell.js')
+    path.join(FIXTURE_PATH, 'web/src/components/TableCell/TableCell.js'),
   )
 
   const validCell = isCellFile(
-    path.join(FIXTURE_PATH, 'web/src/components/TodoListCell/TodoListCell.tsx')
+    path.join(FIXTURE_PATH, 'web/src/components/TodoListCell/TodoListCell.tsx'),
   )
 
   const notACell = isCellFile(
-    path.join(FIXTURE_PATH, 'api/src/services/todos/DoesNotExist.js')
+    path.join(FIXTURE_PATH, 'api/src/services/todos/DoesNotExist.js'),
   )
 
   expect(invalidCell).toBe(false)

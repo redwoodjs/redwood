@@ -574,7 +574,7 @@ const useVersion = () => {
             body: JSON.stringify({
               query: 'query RedwoodVersion { redwood { version } }',
             }),
-          }
+          },
         )
 
         const versionData = await response.json()

@@ -14,19 +14,19 @@ export function createAuth(
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null
+      currentUser: CurrentUser | null,
     ) => (rolesToCheck: string | string[]) => boolean
-  }
+  },
 ) {
   const authImplementation = createAuthImplementation(
-    azureActiveDirectoryClient
+    azureActiveDirectoryClient,
   )
 
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
 function createAuthImplementation(
-  azureActiveDirectoryClient: AzureActiveDirectoryClient
+  azureActiveDirectoryClient: AzureActiveDirectoryClient,
 ) {
   return {
     type: 'azureActiveDirectory',
@@ -48,9 +48,8 @@ function createAuthImplementation(
       // InteractionRequiredAuthError, call acquireTokenRedirect
       // https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/acquire-token.md
       try {
-        const token = await azureActiveDirectoryClient.acquireTokenSilent(
-          request
-        )
+        const token =
+          await azureActiveDirectoryClient.acquireTokenSilent(request)
         return token.idToken
       } catch (error) {
         if (error instanceof InteractionRequiredAuthError) {

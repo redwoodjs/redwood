@@ -9,6 +9,6 @@ export const builder = (yargs) =>
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#deploy'
-      )}\n`
+        'https://redwoodjs.com/docs/cli-commands#deploy',
+      )}\n`,
     )

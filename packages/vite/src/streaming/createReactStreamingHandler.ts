@@ -6,14 +6,14 @@ import type { ViteDevServer } from 'vite'
 
 import { defaultAuthProviderState } from '@redwoodjs/auth'
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
-import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
+import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import { invoke } from '../middleware/invokeMiddleware'
+import { invoke } from '../middleware/invokeMiddleware.js'
 
-import { reactRenderToStreamResponse } from './streamHelpers'
-import { loadAndRunRouteHooks } from './triggerRouteHooks'
+import { reactRenderToStreamResponse } from './streamHelpers.js'
+import { loadAndRunRouteHooks } from './triggerRouteHooks.js'
 
 interface CreateReactStreamingHandlerOptions {
   route: RWRouteManifestItem
@@ -30,7 +30,7 @@ export const createReactStreamingHandler = async (
     clientEntryPath,
     getStylesheetLinks,
   }: CreateReactStreamingHandlerOptions,
-  viteDevServer?: ViteDevServer
+  viteDevServer?: ViteDevServer,
 ) => {
   const { redirect, routeHooks, bundle } = route
   const rwPaths = getPaths()
@@ -41,24 +41,10 @@ export const createReactStreamingHandler = async (
   let fallbackDocumentImport: any
 
   if (isProd) {
-    // TODO (RSC) Consolidate paths, so we can have the same code for SSR and RSC
-    if (getConfig().experimental?.rsc?.enabled) {
-      entryServerImport = await import(
-        makeFilePath(
-          path.join(rwPaths.web.distServer, 'assets', 'entry.server.js')
-        )
-      )
-      fallbackDocumentImport = await import(
-        makeFilePath(path.join(rwPaths.web.distServer, 'assets', 'Document.js'))
-      )
-    } else {
-      entryServerImport = await import(
-        makeFilePath(rwPaths.web.distEntryServer)
-      )
-      fallbackDocumentImport = await import(
-        makeFilePath(rwPaths.web.distDocumentServer)
-      )
-    }
+    entryServerImport = await import(makeFilePath(rwPaths.web.distEntryServer))
+    fallbackDocumentImport = await import(
+      makeFilePath(rwPaths.web.distDocumentServer)
+    )
   }
 
   // @NOTE: we are returning a FetchAPI handler
@@ -76,10 +62,10 @@ export const createReactStreamingHandler = async (
     // This makes sure that changes to entry-server are picked up on refresh
     if (!isProd) {
       entryServerImport = await viteDevServer.ssrLoadModule(
-        rwPaths.web.entryServer as string // already validated in dev server
+        rwPaths.web.entryServer as string, // already validated in dev server
       )
       fallbackDocumentImport = await viteDevServer.ssrLoadModule(
-        rwPaths.web.document
+        rwPaths.web.document,
       )
     }
 
@@ -129,13 +115,16 @@ export const createReactStreamingHandler = async (
 
     metaTags = routeHookOutput.meta
 
+    // @MARK @TODO(RSC_DC): the entry path for RSC will be different,
+    // because we don't want to inject a full bundle, just a slice of it
+    // I'm not sure what though....
     const jsBundles = [
       clientEntryPath, // @NOTE: must have slash in front
       bundle && '/' + bundle,
     ].filter(Boolean) as string[]
 
     const isSeoCrawler = checkUaForSeoCrawler(
-      req.headers.get('user-agent') || ''
+      req.headers.get('user-agent') || '',
     )
 
     // Using a function to get the CSS links because we need to wait for the
@@ -163,7 +152,7 @@ export const createReactStreamingHandler = async (
 
           console.error(err)
         },
-      }
+      },
     )
 
     return reactResponse

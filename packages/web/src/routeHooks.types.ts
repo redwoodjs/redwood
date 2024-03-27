@@ -13,5 +13,5 @@ export interface RouteHookEvent {
 }
 
 export type MetaHook = (
-  event: RouteHookEvent
+  event: RouteHookEvent,
 ) => Promise<TagDescriptor[] | TagDescriptor> | TagDescriptor[] | TagDescriptor

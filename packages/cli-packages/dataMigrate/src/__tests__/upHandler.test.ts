@@ -48,7 +48,7 @@ jest.mock(
       },
     }
   },
-  { virtual: true }
+  { virtual: true },
 )
 
 jest.mock(
@@ -68,7 +68,7 @@ jest.mock(
       },
     }
   },
-  { virtual: true }
+  { virtual: true },
 )
 
 jest.mock(
@@ -78,7 +78,7 @@ jest.mock(
   },
   {
     virtual: true,
-  }
+  },
 )
 
 jest.mock(
@@ -88,7 +88,7 @@ jest.mock(
   },
   {
     virtual: true,
-  }
+  },
 )
 
 jest.mock(
@@ -102,7 +102,7 @@ jest.mock(
   },
   {
     virtual: true,
-  }
+  },
 )
 
 jest.mock(
@@ -116,7 +116,7 @@ jest.mock(
   },
   {
     virtual: true,
-  }
+  },
 )
 
 jest.mock(
@@ -126,7 +126,7 @@ jest.mock(
   },
   {
     virtual: true,
-  }
+  },
 )
 
 jest.mock(
@@ -136,7 +136,7 @@ jest.mock(
   },
   {
     virtual: true,
-  }
+  },
 )
 
 const RWJS_CWD = process.env.RWJS_CWD
@@ -183,7 +183,7 @@ describe('upHandler', () => {
           },
         },
       },
-      redwoodProjectPath
+      redwoodProjectPath,
     )
 
     await handler({
@@ -192,7 +192,7 @@ describe('upHandler', () => {
     })
 
     expect(consoleInfoMock.mock.calls[0][0]).toMatch(
-      NO_PENDING_MIGRATIONS_MESSAGE
+      NO_PENDING_MIGRATIONS_MESSAGE,
     )
   })
 
@@ -215,7 +215,7 @@ describe('upHandler', () => {
           },
         },
       },
-      redwoodProjectPath
+      redwoodProjectPath,
     )
 
     await handler({
@@ -224,7 +224,7 @@ describe('upHandler', () => {
     })
 
     expect(consoleInfoMock.mock.calls[0][0]).toMatch(
-      NO_PENDING_MIGRATIONS_MESSAGE
+      NO_PENDING_MIGRATIONS_MESSAGE,
     )
   })
 
@@ -242,6 +242,7 @@ describe('upHandler', () => {
       {
         'redwood.toml': '',
         api: {
+          'package.json': '{}',
           dist: {
             lib: {
               'db.js': '',
@@ -256,7 +257,7 @@ describe('upHandler', () => {
           },
         },
       },
-      redwoodProjectPath
+      redwoodProjectPath,
     )
 
     await handler({
@@ -269,13 +270,13 @@ describe('upHandler', () => {
     process.exitCode = 0
 
     expect(consoleInfoMock.mock.calls[0][0]).toMatch(
-      '1 data migration(s) completed successfully.'
+      '1 data migration(s) completed successfully.',
     )
     expect(consoleErrorMock.mock.calls[1][0]).toMatch(
-      '1 data migration(s) exited with errors.'
+      '1 data migration(s) exited with errors.',
     )
     expect(consoleWarnMock.mock.calls[0][0]).toMatch(
-      '1 data migration(s) skipped due to previous error'
+      '1 data migration(s) skipped due to previous error',
     )
   })
 })

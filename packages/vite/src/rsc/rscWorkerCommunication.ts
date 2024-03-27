@@ -8,14 +8,12 @@ const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
     '--conditions',
     'react-server',
     '--experimental-loader',
-    '@redwoodjs/vite/node-loader',
-    '--experimental-loader',
     '@redwoodjs/vite/react-node-loader',
   ],
 })
 
 export type RenderInput<
-  Props extends Record<string, unknown> = Record<string, unknown>
+  Props extends Record<string, unknown> = Record<string, unknown>,
 > = {
   rscId?: string | undefined
   props?: Props | undefined
@@ -32,7 +30,6 @@ export type MessageReq =
   | {
       id: number
       type: 'setClientEntries'
-      value: 'load' | Record<string, string>
     }
   | {
       id: number
@@ -86,9 +83,9 @@ export function shutdown() {
 
 let nextId = 1
 
-export function setClientEntries(
-  value: 'load' | Record<string, string>
-): Promise<void> {
+/** Set the client entries in the worker (for the server build) */
+export function setClientEntries(): Promise<void> {
+  // Just making this function async instead of callback based
   return new Promise((resolve, reject) => {
     const id = nextId++
 
@@ -102,7 +99,7 @@ export function setClientEntries(
       }
     })
 
-    const message: MessageReq = { id, type: 'setClientEntries', value }
+    const message: MessageReq = { id, type: 'setClientEntries' }
     worker.postMessage(message)
   })
 }
@@ -124,7 +121,7 @@ export function renderRsc(input: RenderInput): Readable {
       passthrough.destroy(
         message.err instanceof Error
           ? message.err
-          : new Error(String(message.err))
+          : new Error(String(message.err)),
       )
       messageCallbacks.delete(id)
     }

@@ -7,7 +7,7 @@ import { normalizeRequest } from '../transforms'
 export const createMockedLambdaEvent = (
   httpMethod = 'POST',
   body: any = undefined,
-  isBase64Encoded = false
+  isBase64Encoded = false,
 ): APIGatewayProxyEvent => {
   return {
     body,
@@ -59,9 +59,9 @@ describe('Lambda Request', () => {
     const corsEventB64 = createMockedLambdaEvent(
       'POST',
       Buffer.from(JSON.stringify({ bazinga: 'hello_world' }), 'utf8').toString(
-        'base64'
+        'base64',
       ),
-      true
+      true,
     )
 
     expect(await normalizeRequest(corsEventB64)).toEqual({
@@ -87,7 +87,7 @@ describe('Lambda Request', () => {
     const corsEventWithoutB64 = createMockedLambdaEvent(
       'OPTIONS',
       undefined,
-      false
+      false,
     )
 
     expect(await normalizeRequest(corsEventWithoutB64)).toEqual({
@@ -109,7 +109,7 @@ describe('Fetch API Request', () => {
           'content-type': 'application/json',
         },
         body: JSON.stringify({ bazinga: 'kittens_purr_purr' }),
-      }
+      },
     )
 
     const partial = await normalizeRequest(fetchEvent)
@@ -141,7 +141,7 @@ describe('Fetch API Request', () => {
         method: 'PUT',
         headers,
         body: '',
-      }
+      },
     )
 
     const partial = await normalizeRequest(fetchEvent)

@@ -39,12 +39,12 @@ const removeSetImport = () => {
   }
 
   const [redwoodRouterImport] = routesContent.match(
-    /import {[^]*} from '@redwoodjs\/router'/
+    /import {[^]*} from '@redwoodjs\/router'/,
   )
   const removedSetImport = redwoodRouterImport.replace(/,*\s*Set,*/, '')
   const newRoutesContent = routesContent.replace(
     redwoodRouterImport,
-    removedSetImport
+    removedSetImport,
   )
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
@@ -64,7 +64,7 @@ const removeLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
 
   const newRoutesContent = routesContent.replace(
     new RegExp(`\\s*${importLayout}`),
-    ''
+    '',
   )
 
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
@@ -109,7 +109,7 @@ export const tasks = ({ model, path, tests, nestScaffoldByModel }) =>
         task: () => removeLayoutImport({ model, path }),
       },
     ],
-    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true },
   )
 
 export const handler = async ({ model: modelArg }) => {

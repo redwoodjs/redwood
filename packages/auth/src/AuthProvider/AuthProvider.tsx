@@ -36,7 +36,7 @@ export function createAuthProvider<
   TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
-  TClient
+  TClient,
 >(
   AuthContext: React.Context<
     | AuthContextInterface<
@@ -73,9 +73,9 @@ export function createAuthProvider<
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null
+      currentUser: CurrentUser | null,
     ) => (rolesToCheck: string | string[]) => boolean
-  }
+  },
 ) {
   const AuthProvider = ({
     children,
@@ -104,7 +104,7 @@ export function createAuthProvider<
       authImplementation,
       setAuthProviderState,
       getCurrentUser,
-      skipFetchCurrentUser
+      skipFetchCurrentUser,
     )
 
     const hasRole = customProviderHooks?.useHasRole
@@ -115,13 +115,13 @@ export function createAuthProvider<
       authImplementation,
       setAuthProviderState,
       getCurrentUser,
-      skipFetchCurrentUser
+      skipFetchCurrentUser,
     )
     const logIn = useLogIn(
       authImplementation,
       setAuthProviderState,
       getCurrentUser,
-      skipFetchCurrentUser
+      skipFetchCurrentUser,
     )
     const logOut = useLogOut(authImplementation, setAuthProviderState)
     const forgotPassword = useForgotPassword(authImplementation)

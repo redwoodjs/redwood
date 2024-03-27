@@ -17,7 +17,7 @@ export { coerceRootPath, RedwoodFastifyWebOptions }
 
 export async function redwoodFastifyWeb(
   fastify: FastifyInstance,
-  opts: RedwoodFastifyWebOptions
+  opts: RedwoodFastifyWebOptions,
 ) {
   const { redwoodOptions, flags } = resolveOptions(opts)
 
@@ -31,6 +31,13 @@ export async function redwoodFastifyWeb(
       prefix: redwoodOptions.apiUrl,
       upstream: redwoodOptions.apiProxyTarget,
       disableCache: true,
+      replyOptions: {
+        rewriteRequestHeaders: (req, headers) => ({
+          ...headers,
+          // preserve the original host header, instead of letting it be overwritten by the proxy
+          host: req.headers.host,
+        }),
+      },
     })
   }
 
@@ -84,19 +91,36 @@ export async function redwoodFastifyWeb(
   // For SPA routing, fallback on unmatched routes and let client-side routing take over
   fastify.setNotFoundHandler({}, (req, reply) => {
     const urlData = req.urlData()
-    const requestedExtension = path.extname(urlData.path ?? '')
+    const requestHasExtension = !!path.extname(urlData.path ?? '')
 
-    // Paths with no extension (`/about`) or an .html extension (`/about.html`)
-    // should be handled by the client side router.
-    // See the discussion in https://github.com/redwoodjs/redwood/pull/9272.
-    if (requestedExtension === '' || requestedExtension === '.html') {
-      reply.header('Content-Type', 'text/html; charset=UTF-8')
-      return reply.sendFile(fallbackIndexPath)
+    // Further up in this file we use `fastifyStatic` to serve files from the
+    // /web/dist folder. Most often for files like AboutPage-12ab34cd.js or
+    // some css file.
+    // Requests for other paths should most often be handled by client side
+    // routing. Like requests /about or /about.html.
+    // One exception for this is requests for assets that don't exist anymore.
+    // Like AboutPage-old_hash.js. These requests should return 404.
+    // The problem is we don't know what those assets are. So the best we can
+    // do is to return 404 for all requests for files in /assets that have an
+    // extension.
+    //
+    // See the discussions in https://github.com/redwoodjs/redwood/pull/9272
+    // and https://github.com/redwoodjs/redwood/issues/9969
+
+    if (requestHasExtension && urlData.path?.startsWith('/assets/')) {
+      // If we got here, the user is most likely requesting an asset with an
+      // extension (like `assets/AboutPage-xyz789.js`) that doesn't exist
+      //
+      // NOTE: This is a best guess, and could be wrong. The user could have
+      // a client-side route setup for /assets/client-side/{...} and in that
+      // case we really should pass this on to the client-side router instead
+      // of returning 404.
+      reply.code(404)
+      return reply.send('Not Found')
     }
 
-    // If we got here, the user is requesting an asset with an extension
-    // (like `profile.png`) that doesn't exist
-    reply.code(404)
-    return reply.send('Not Found')
+    // Let client-side routing take over
+    reply.header('Content-Type', 'text/html; charset=UTF-8')
+    return reply.sendFile(fallbackIndexPath)
   })
 }
