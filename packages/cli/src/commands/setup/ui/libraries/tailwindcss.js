@@ -210,7 +210,7 @@ export const handler = async ({ force, install }) => {
               fs.unlinkSync(tailwindConfigPath)
             } else {
               throw new Error(
-                'Tailwindcss config already exists.\nUse --force to override existing config.',
+                'Tailwind CSS config already exists.\nUse --force to override existing config.',
               )
             }
           }
@@ -243,10 +243,13 @@ export const handler = async ({ force, install }) => {
         },
       },
       {
-        title: "Updating tailwind 'scaffold.css'...",
+        title: "Updating 'scaffold.css' to use tailwind classes...",
         skip: () => {
-          // Skip this step if the 'scaffold.css' file does not exist
-          return !fs.existsSync(path.join(rwPaths.web.src, 'scaffold.css'))
+          // Skip this step if the 'scaffold.css' file doesn't exist
+          return (
+            !fs.existsSync(path.join(rwPaths.web.src, 'scaffold.css')) &&
+            "No 'scaffold.css' file to update"
+          )
         },
         task: async (_ctx, task) => {
           const overrideScaffoldCss =
@@ -254,63 +257,129 @@ export const handler = async ({ force, install }) => {
             (await task.prompt({
               type: 'Confirm',
               message:
-                "Do you want to override your 'scaffold.css' to use tailwind too?",
+                "Do you want to override your 'scaffold.css' to use tailwind classes?",
             }))
 
-          if (overrideScaffoldCss) {
-            const tailwindScaffoldTemplate = fs.readFileSync(
-              path.join(
-                __dirname,
-                '..',
-                '..',
-                '..',
-                'generate',
-                'scaffold',
-                'templates',
-                'assets',
-                'scaffold.tailwind.css.template',
-              ),
-            )
-            fs.writeFileSync(
-              path.join(rwPaths.web.src, 'scaffold.css'),
-              tailwindScaffoldTemplate,
-            )
-          } else {
-            task.skip('Skipping scaffold.css override')
+          if (!overrideScaffoldCss) {
+            return task.skip("Skipping 'scaffold.css' update")
           }
+
+          const tailwindScaffoldTemplate = fs.readFileSync(
+            path.join(
+              __dirname,
+              '..',
+              '..',
+              '..',
+              'generate',
+              'scaffold',
+              'templates',
+              'assets',
+              'scaffold.tailwind.css.template',
+            ),
+          )
+          fs.writeFileSync(
+            path.join(rwPaths.web.src, 'scaffold.css'),
+            tailwindScaffoldTemplate,
+          )
         },
       },
       {
         title: 'Adding recommended VS Code extensions to project settings...',
-        task: (_ctx, task) => {
+        skip: () => !usingVSCode() && "Looks like you're not using VS Code",
+        task: () => {
           const VS_CODE_EXTENSIONS_PATH = path.join(
             rwPaths.base,
             '.vscode/extensions.json',
           )
 
-          if (!usingVSCode()) {
-            task.skip("Looks like your're not using VS Code")
-          } else {
-            let originalExtensionsJson = { recommendations: [] }
-            if (fs.existsSync(VS_CODE_EXTENSIONS_PATH)) {
-              const originalExtensionsFile = fs.readFileSync(
-                VS_CODE_EXTENSIONS_PATH,
-                'utf-8',
-              )
-              originalExtensionsJson = JSON.parse(originalExtensionsFile)
-            }
-            const newExtensionsJson = {
-              ...originalExtensionsJson,
-              recommendations: [
-                ...originalExtensionsJson.recommendations,
-                ...recommendedVSCodeExtensions,
-              ],
-            }
-            fs.writeFileSync(
+          let originalExtensionsJson = { recommendations: [] }
+          if (fs.existsSync(VS_CODE_EXTENSIONS_PATH)) {
+            const originalExtensionsFile = fs.readFileSync(
               VS_CODE_EXTENSIONS_PATH,
-              JSON.stringify(newExtensionsJson, null, 2),
+              'utf-8',
             )
+            originalExtensionsJson = JSON.parse(originalExtensionsFile)
           }
+          const newExtensionsJson = {
+            ...originalExtensionsJson,
+            recommendations: [
+              ...originalExtensionsJson.recommendations,
+              ...recommendedVSCodeExtensions,
+            ],
+          }
+          fs.writeFileSync(
+            VS_CODE_EXTENSIONS_PATH,
+            JSON.stringify(newExtensionsJson, null, 2),
+          )
+        },
+      },
+      {
+        title:
+          'Adding tailwind intellisense plugin configuration to VS Code settings...',
+        skip: () => !usingVSCode() && "Looks like you're not using VS Code",
+        task: () => {
+          // Adds support for Redwood specific className props to tailwind intellisense
+          //   "tailwindCSS": {
+          //     "classAttributes": ["class", "className", "activeClassName", "errorClassName"]
+          //   }
+          // The default value for this setting is:
+          //   ["class", "className", "ngClass", "class:list"]
+
+          const VS_CODE_SETTINGS_PATH = path.join(
+            rwPaths.base,
+            '.vscode/settings.json',
+          )
+
+          const newTwSettingsJson = {
+            classAttributes: [
+              'class',
+              'className',
+              'activeClassName',
+              'errorClassName',
+            ],
+          }
+
+          let newSettingsJson = { tailwindCSS: { ...newTwSettingsJson } }
+
+          if (fs.existsSync(VS_CODE_SETTINGS_PATH)) {
+            const originalSettingsFile = fs.readFileSync(
+              VS_CODE_SETTINGS_PATH,
+              'utf-8',
+            )
+            const originalSettingsJson = JSON.parse(
+              originalSettingsFile || '{}',
+            )
+            const originalTwSettingsJson = originalSettingsJson['tailwindCSS']
+
+            if (originalTwSettingsJson) {
+              const mergedClassAttributes = Array.from(
+                new Set([
+                  ...newTwSettingsJson.classAttributes,
+                  ...(originalTwSettingsJson.classAttributes || []),
+                ]),
+              )
+
+              newSettingsJson = {
+                ...originalSettingsJson,
+                tailwindCSS: {
+                  ...originalTwSettingsJson,
+                  classAttributes: mergedClassAttributes,
+                },
+              }
+            } else {
+              newSettingsJson = {
+                ...originalSettingsJson,
+                tailwindCSS: {
+                  ...newTwSettingsJson,
+                },
+              }
+            }
+          }
+
+          fs.writeFileSync(
+            VS_CODE_SETTINGS_PATH,
+            JSON.stringify(newSettingsJson, null, 2),
+          )
         },
       },
       {
