@@ -24279,19 +24279,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-dir-cli@npm:3.0.0":
-  version: 3.0.0
-  resolution: "make-dir-cli@npm:3.0.0"
+"make-dir-cli@npm:3.1.0":
+  version: 3.1.0
+  resolution: "make-dir-cli@npm:3.1.0"
   dependencies:
-    make-dir: "npm:^3.1.0"
+    make-dir: "npm:^4.0.0"
     meow: "npm:^10.0.0"
   bin:
     make-dir: cli.js
-  checksum: 10c0/cc5e80aae516eda06eae8a4f0976a4e20125cee4c828b193f1eee05d925aa6c6abb5a233427ecfe4216881f58c65b9fa4c7deff9dd4de9c259098de0acdd7279
+  checksum: 10c0/f8eadb779662e860882ccf7d3cc20430cc86bc92180b1b966eff29c30488b09c0fb9620a435b7c3d82fa8c54d8e440e18358cf7eba763c59b032c79fec04eb0a
   languageName: node
   linkType: hard
 
-"make-dir@npm:4.0.0":
+"make-dir@npm:4.0.0, make-dir@npm:^4.0.0":
   version: 4.0.0
   resolution: "make-dir@npm:4.0.0"
   dependencies:
@@ -29976,7 +29976,7 @@ __metadata:
     jscodeshift: "npm:0.15.0"
     lerna: "npm:8.0.2"
     listr2: "npm:6.6.1"
-    make-dir-cli: "npm:3.0.0"
+    make-dir-cli: "npm:3.1.0"
     msw: "npm:1.3.3"
     ncp: "npm:2.0.0"
     nodemon: "npm:3.1.0"
