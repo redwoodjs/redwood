@@ -22,7 +22,7 @@
     "build:types": "tsc --build --verbose"
   },
   "dependencies": {
-    "esbuild": "0.20.1",
+    "esbuild": "0.20.2",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0"
   },
