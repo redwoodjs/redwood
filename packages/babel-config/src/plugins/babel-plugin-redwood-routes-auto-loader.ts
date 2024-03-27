@@ -55,7 +55,7 @@ export default function (
   }
   if (duplicatePageImportNames.size > 0) {
     throw new Error(
-      `Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the follow page directories: ${Array.from(
+      `Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the following page directories: ${Array.from(
         duplicatePageImportNames,
       )
         .map((name) => `'${name}'`)
