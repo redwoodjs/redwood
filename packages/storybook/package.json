@@ -47,30 +47,30 @@
     "build:types": "tsc --build --verbose"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.9",
+    "@babel/runtime-corejs3": "7.24.1",
     "@joshwooding/vite-plugin-react-docgen-typescript": "0.3.1",
     "@rollup/pluginutils": "^5.0.2",
-    "@storybook/addon-essentials": "7.6.10",
-    "@storybook/builder-vite": "7.6.10",
-    "@storybook/react": "7.6.10",
-    "core-js": "3.35.1",
+    "@storybook/addon-essentials": "7.6.17",
+    "@storybook/builder-vite": "7.6.17",
+    "@storybook/react": "7.6.17",
+    "core-js": "3.36.1",
     "magic-string": "^0.30.0",
     "react-docgen": "^7.0.0",
     "unplugin-auto-import": "^0.17.5"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.9",
+    "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
-    "@types/node": "^18.0.0",
-    "typescript": "^5.3.2",
-    "vite": "4.5.2"
+    "@types/node": "20.11.25",
+    "typescript": "5.4.3",
+    "vite": "5.1.6"
   },
   "peerDependencies": {
-    "@redwoodjs/project-config": "7.0.2",
-    "@redwoodjs/router": "7.0.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "storybook": "7.6.10"
+    "@redwoodjs/project-config": "workspace:*",
+    "@redwoodjs/router": "workspace:*",
+    "react": "18.3.0-canary-a870b2d54-20240314",
+    "react-dom": "18.3.0-canary-a870b2d54-20240314",
+    "storybook": "7.6.17"
   },
   "engines": {
     "node": "=20.x"
