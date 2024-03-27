@@ -8868,7 +8868,7 @@ __metadata:
     express: "npm:4.19.2"
     glob: "npm:10.3.10"
     http-proxy-middleware: "npm:2.0.6"
-    isbot: "npm:3.7.1"
+    isbot: "npm:5.1.2"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
     react-server-dom-webpack: "npm:18.3.0-canary-a870b2d54-20240314"
     rollup: "npm:4.13.0"
@@ -22165,10 +22165,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isbot@npm:3.7.1":
-  version: 3.7.1
-  resolution: "isbot@npm:3.7.1"
-  checksum: 10c0/7c4733f6bf0cd98d6801ee24d4664edde0f0fabc329ff9858d41744dc0d6143701e8e7dfc7962bcdc46b7670911d716392cdd0a4a4bc9f5c98e03125d675f6c5
+"isbot@npm:5.1.2":
+  version: 5.1.2
+  resolution: "isbot@npm:5.1.2"
+  checksum: 10c0/12fb449de89b9efd32d599abc0d021e8ad0b648a9c442e632840273bdcc7180ff8317952956333b3253dcbaf9b00d603bbe7e0bbd4f2c11ce9cfd6ef0d7fa640
   languageName: node
   linkType: hard
 
