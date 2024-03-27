@@ -98,13 +98,14 @@ async function main() {
 
   // Write the output to files for later analysis
   console.log("Writing results to files...")
-  await fs.writeJSON(path.join(import.meta.dirname, 'differences.json'), Object.fromEntries(differences), { spaces: 2 })
-  await fs.writeFile(path.join(import.meta.dirname, 'log.txt'), logs.join("\n"))
+  const __dirname = import.meta.dirname ?? '.'
+  await fs.writeJSON(path.join(__dirname, 'differences.json'), Object.fromEntries(differences), { spaces: 2 })
+  await fs.writeFile(path.join(__dirname, 'log.txt'), logs.join("\n"))
 
   // Output the differences
   if (differences.size > 0) {
     console.log(`Found ${differences.size} files with different configs`)
-    console.log(`Output written to: ${import.meta.dirname}"`)
+    console.log(`Output written to: ${__dirname}"`)
   } else {
     console.log("No differences found")
   }
