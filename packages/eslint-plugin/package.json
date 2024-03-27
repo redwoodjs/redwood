@@ -23,11 +23,11 @@
   },
   "dependencies": {
     "@typescript-eslint/utils": "5.62.0",
-    "eslint": "8.55.0"
+    "eslint": "8.57.0"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/eslint": "8",
+    "@types/eslint": "8.56.6",
     "@types/estree": "1.0.5",
     "@typescript-eslint/parser": "5.62.0",
     "glob": "10.3.10",
