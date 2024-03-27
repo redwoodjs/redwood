@@ -41,7 +41,7 @@
     "execa": "5.1.1",
     "fast-glob": "3.3.2",
     "graphql": "16.8.1",
-    "jscodeshift": "0.15.0",
+    "jscodeshift": "0.15.2",
     "pascalcase": "1.0.0",
     "prettier": "3.2.5",
     "tasuku": "2.0.1",
@@ -51,7 +51,7 @@
   "devDependencies": {
     "@types/babel__core": "7.20.5",
     "@types/fs-extra": "11.0.4",
-    "@types/jscodeshift": "0.11.6",
+    "@types/jscodeshift": "0.11.11",
     "@types/yargs": "17.0.32",
     "fs-extra": "11.2.0",
     "tempy": "1.0.1",
