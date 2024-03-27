@@ -189,6 +189,7 @@ describe('tasks that should be skipped', () => {
 
   it('should skip adding recommended VS Code extensions to project settings if the user is not using VS Code', async () => {
     setupDefaultProjectStructure()
+    // Delete the .vscode directory to simulate not using VS Code
     memfsFs.rmSync(path.join(APP_PATH, '.vscode'), { recursive: true })
 
     await handler({})
