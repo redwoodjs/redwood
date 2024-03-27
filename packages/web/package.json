@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.9.9",
-    "@babel/runtime-corejs3": "7.24.0",
+    "@babel/runtime-corejs3": "7.24.1",
     "@redwoodjs/auth": "workspace:*",
     "core-js": "3.36.1",
     "graphql": "16.8.1",
@@ -51,10 +51,10 @@
   },
   "devDependencies": {
     "@apollo/experimental-nextjs-app-support": "0.0.0-commit-b8a73fe",
-    "@babel/cli": "7.23.9",
+    "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
-    "@babel/plugin-transform-runtime": "7.24.0",
-    "@babel/runtime": "7.24.0",
+    "@babel/plugin-transform-runtime": "7.24.3",
+    "@babel/runtime": "7.24.1",
     "@rollup/plugin-babel": "6.0.4",
     "@testing-library/jest-dom": "6.4.2",
     "@testing-library/react": "14.2.2",
