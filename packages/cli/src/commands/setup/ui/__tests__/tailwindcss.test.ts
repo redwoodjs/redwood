@@ -4,6 +4,7 @@ let mockSkipValues: Array<string> = []
 let mockPrompt: (() => boolean) | undefined
 
 vi.mock('fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
+vi.mock('node:fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('fs-extra', async () => {
   function outputFileSync(filePath: string, data: string, options?: any) {
     memfsFs.mkdirSync(path.dirname(filePath), { recursive: true })
@@ -19,7 +20,6 @@ vi.mock('fs-extra', async () => {
     },
   }
 })
-vi.mock('node:fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('execa', () => ({
   default: (...args: Array<any>) => {
     // Create an empty config file when `tailwindcss init` is called.
