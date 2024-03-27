@@ -21,8 +21,8 @@ vi.mock('../../../../lib', async (importOriginal) => {
         base: path.resolve(
           path.join(
             __dirname,
-            '../../../../../../../__fixtures__/example-todo-main',
-          ),
+            '../../../../../../../__fixtures__/example-todo-main'
+          )
         ),
       }
     },
@@ -76,7 +76,7 @@ describe('netlify', () => {
     expect(error).toBeUndefined()
     const filesystem = vol.toJSON()
     const netlifyTomlPath = Object.keys(filesystem).find((path) =>
-      path.endsWith('netlify.toml'),
+      path.endsWith('netlify.toml')
     )
     expect(netlifyTomlPath).toBeDefined()
     expect(filesystem[netlifyTomlPath]).toMatchSnapshot()
@@ -86,7 +86,7 @@ describe('netlify', () => {
     updateApiURLTask('/.netlify/functions').task()
 
     expect(fs.readFileSync(REDWOOD_TOML_PATH, 'utf8')).toMatch(
-      /apiUrl = "\/.netlify\/functions"/,
+      /apiUrl = "\/.netlify\/functions"/
     )
   })
 
@@ -96,7 +96,7 @@ describe('netlify', () => {
 
     const filesystem = vol.toJSON()
     const netlifyTomlPath = Object.keys(filesystem).find((path) =>
-      path.endsWith('netlify.toml'),
+      path.endsWith('netlify.toml')
     )
     expect(netlifyTomlPath).toBeDefined()
     expect(filesystem[netlifyTomlPath]).toMatchSnapshot()

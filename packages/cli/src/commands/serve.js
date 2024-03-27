@@ -91,8 +91,8 @@ export const builder = async (yargs) => {
       ) {
         console.error(
           c.error(
-            '\n Please run `yarn rw build web` before trying to serve web. \n',
-          ),
+            '\n Please run `yarn rw build web` before trying to serve web. \n'
+          )
         )
         process.exit(1)
       }
@@ -102,8 +102,8 @@ export const builder = async (yargs) => {
         if (!apiSideExists) {
           console.error(
             c.error(
-              '\n Unable to serve the api side as no `api` folder exists. \n',
-            ),
+              '\n Unable to serve the api side as no `api` folder exists. \n'
+            )
           )
           process.exit(1)
         }
@@ -111,8 +111,8 @@ export const builder = async (yargs) => {
         if (!fs.existsSync(path.join(getPaths().api.dist))) {
           console.error(
             c.error(
-              '\n Please run `yarn rw build api` before trying to serve api. \n',
-            ),
+              '\n Please run `yarn rw build api` before trying to serve api. \n'
+            )
           )
           process.exit(1)
         }
@@ -123,8 +123,8 @@ export const builder = async (yargs) => {
         if (!apiSideExists) {
           console.error(
             c.error(
-              '\n Unable to serve the both sides as no `api` folder exists. Please use `yarn rw serve web` instead. \n',
-            ),
+              '\n Unable to serve the both sides as no `api` folder exists. Please use `yarn rw serve web` instead. \n'
+            )
           )
           process.exit(1)
         }
@@ -136,8 +136,8 @@ export const builder = async (yargs) => {
         ) {
           console.error(
             c.error(
-              '\n Please run `yarn rw build` before trying to serve your redwood app. \n',
-            ),
+              '\n Please run `yarn rw build` before trying to serve your redwood app. \n'
+            )
           )
           process.exit(1)
         }
@@ -151,7 +151,7 @@ export const builder = async (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#serve',
-      )}`,
+        'https://redwoodjs.com/docs/cli-commands#serve'
+      )}`
     )
 }
