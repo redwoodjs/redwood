@@ -18,6 +18,7 @@ import {
   createInjector,
 } from '@redwoodjs/web/dist/components/ServerInject'
 
+import { renderFromDist } from '../clientSsr.js'
 import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 
 import { createBufferedTransformStream } from './transforms/bufferedTransform.js'
@@ -157,7 +158,8 @@ export async function reactRenderToStreamResponse(
       },
     }
 
-    const root = renderRoot(currentPathName)
+    let root = renderRoot(currentPathName)
+    root = React.createElement(renderFromDist(''))
 
     const reactStream: ReactDOMServerReadableStream =
       await renderToReadableStream(root, renderToStreamOptions)

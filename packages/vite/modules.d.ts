@@ -1,4 +1,6 @@
 declare module 'react-server-dom-webpack/node-loader'
+declare module 'react-server-dom-webpack/client.edge'
+declare module 'react-server-dom-webpack/server.edge'
 
 // Should be able to use just react-dom/server, but right now we can't
 // See https://github.com/facebook/react/issues/26906
