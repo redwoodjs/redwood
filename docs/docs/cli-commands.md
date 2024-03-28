@@ -1897,7 +1897,7 @@ yarn redwood setup deploy <provider>
 
 | Arguments & Options | Description                                                                                           |
 | :------------------ | :---------------------------------------------------------------------------------------------------- |
-| `provider`          | Deploy provider to configure. Choices are `baremetal`, `coherence`, `edgio`, `flightcontrol`, `netlify`, `render`, `vercel`, or `aws-serverless [deprecated]`,          |
+| `provider`          | Deploy provider to configure. Choices are `baremetal`, `coherence`, `flightcontrol`, `netlify`, `render`, `vercel`, or `aws-serverless [deprecated]`,          |
 | `--database, -d`    | Database deployment for Render only [choices: "none", "postgresql", "sqlite"] [default: "postgresql"] |
 | `--force, -f`       | Overwrite existing configuration [default: false]                                                     |
 
