@@ -621,6 +621,11 @@ If you'd rather create your own, you might want to start from the generated
 pages anyway as they'll contain the other code you need to actually submit the
 log in credentials or sign up fields to the server for processing.
 
+:::important
+This `generate dbAuth` command simply adds the pages. You must add the necessary dbAuth functions and
+app setup by running `yarn rw setup auth dbAuth` to fully use dbAuth.
+:::
+
 ### generate directive
 
 Generate a directive.
