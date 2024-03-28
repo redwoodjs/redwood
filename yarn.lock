@@ -8181,7 +8181,7 @@ __metadata:
     pascalcase: "npm:1.0.0"
     pluralize: "npm:8.0.0"
     portfinder: "npm:1.0.32"
-    prettier: "npm:3.2.5"
+    prettier: "npm:2.8.8"
     prisma: "npm:5.11.0"
     prompts: "npm:2.4.2"
     rimraf: "npm:5.0.5"
@@ -8217,7 +8217,7 @@ __metadata:
     "@svgr/plugin-jsx": "npm:8.1.0"
     "@types/babel__core": "npm:7.20.5"
     "@types/fs-extra": "npm:11.0.4"
-    "@types/jest": "npm:29.5.8"
+    "@types/jest": "npm:29.5.12"
     "@types/jscodeshift": "npm:0.11.6"
     "@types/prettier": "npm:2.7.3"
     "@types/yargs": "npm:17.0.32"
@@ -8237,7 +8237,6 @@ __metadata:
     tasuku: "npm:2.0.1"
     tempy: "npm:1.0.1"
     typescript: "npm:5.4.3"
-    vitest: "npm:1.4.0"
     yargs: "npm:17.7.2"
   bin:
     codemods: ./dist/codemods.js
@@ -8840,17 +8839,10 @@ __metadata:
     "@vitejs/plugin-react": "npm:4.2.1"
     buffer: "npm:6.0.3"
     core-js: "npm:3.36.1"
-    dotenv-defaults: "npm:5.0.2"
-    express: "npm:4.19.2"
     glob: "npm:10.3.10"
-    http-proxy-middleware: "npm:2.0.6"
-    isbot: "npm:3.7.1"
-    react: "npm:18.3.0-canary-a870b2d54-20240314"
-    react-server-dom-webpack: "npm:18.3.0-canary-a870b2d54-20240314"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.3"
     vite: "npm:4.5.2"
-    vite-plugin-cjs-interop: "npm:2.1.0"
     vitest: "npm:1.4.0"
     yargs-parser: "npm:21.1.1"
   bin:
@@ -10997,16 +10989,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:29.5.8":
-  version: 29.5.8
-  resolution: "@types/jest@npm:29.5.8"
-  dependencies:
-    expect: "npm:^29.0.0"
-    pretty-format: "npm:^29.0.0"
-  checksum: 10c0/a28e7827ea7e1a2aace6a386868fa6b8402c162d6c71570aed2c29d3745ddc22ceef6899a20643071817905d3c57b670a7992fc8760bff65939351fd4dc481cf
-  languageName: node
-  linkType: hard
-
 "@types/js-levenshtein@npm:^1.1.1":
   version: 1.1.1
   resolution: "@types/js-levenshtein@npm:1.1.1"
@@ -12518,7 +12500,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn-loose@npm:8.4.0, acorn-loose@npm:^8.3.0":
+"acorn-loose@npm:8.4.0":
   version: 8.4.0
   resolution: "acorn-loose@npm:8.4.0"
   dependencies:
@@ -18567,7 +18549,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express@npm:4.19.2, express@npm:^4.17.3":
+"express@npm:^4.17.3":
   version: 4.19.2
   resolution: "express@npm:4.19.2"
   dependencies:
@@ -20906,7 +20888,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"http-proxy-middleware@npm:2.0.6, http-proxy-middleware@npm:^2.0.3":
+"http-proxy-middleware@npm:^2.0.3":
   version: 2.0.6
   resolution: "http-proxy-middleware@npm:2.0.6"
   dependencies:
@@ -22084,13 +22066,6 @@ __metadata:
   version: 2.0.5
   resolution: "isarray@npm:2.0.5"
   checksum: 10c0/4199f14a7a13da2177c66c31080008b7124331956f47bca57dd0b6ea9f11687aa25e565a2c7a2b519bc86988d10398e3049a1f5df13c9f6b7664154690ae79fd
-  languageName: node
-  linkType: hard
-
-"isbot@npm:3.7.1":
-  version: 3.7.1
-  resolution: "isbot@npm:3.7.1"
-  checksum: 10c0/7c4733f6bf0cd98d6801ee24d4664edde0f0fabc329ff9858d41744dc0d6143701e8e7dfc7962bcdc46b7670911d716392cdd0a4a4bc9f5c98e03125d675f6c5
   languageName: node
   linkType: hard
 
@@ -24213,7 +24188,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-string@npm:^0.30.5, magic-string@npm:^0.30.8":
+"magic-string@npm:^0.30.5":
   version: 0.30.8
   resolution: "magic-string@npm:0.30.8"
   dependencies:
@@ -28077,15 +28052,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:3.2.5":
-  version: 3.2.5
-  resolution: "prettier@npm:3.2.5"
-  bin:
-    prettier: bin/prettier.cjs
-  checksum: 10c0/ea327f37a7d46f2324a34ad35292af2ad4c4c3c3355da07313339d7e554320f66f65f91e856add8530157a733c6c4a897dc41b577056be5c24c40f739f5ee8c6
-  languageName: node
-  linkType: hard
-
 "pretty-bytes@npm:5.6.0, pretty-bytes@npm:^5.6.0":
   version: 5.6.0
   resolution: "pretty-bytes@npm:5.6.0"
@@ -28889,20 +28855,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-server-dom-webpack@npm:18.3.0-canary-a870b2d54-20240314":
-  version: 18.3.0-canary-a870b2d54-20240314
-  resolution: "react-server-dom-webpack@npm:18.3.0-canary-a870b2d54-20240314"
-  dependencies:
-    acorn-loose: "npm:^8.3.0"
-    neo-async: "npm:^2.6.1"
-  peerDependencies:
-    react: 18.3.0-canary-a870b2d54-20240314
-    react-dom: 18.3.0-canary-a870b2d54-20240314
-    webpack: ^5.59.0
-  checksum: 10c0/9040df3d8549898dbf4afd7bc86a01948e47b6eda998bda0e663a69fefa6922fa5977aaec0d0795938aac62c97d1da9307636051d0d12ec429c3c416cad23ffb
-  languageName: node
-  linkType: hard
-
 "react-style-singleton@npm:^2.2.1":
   version: 2.2.1
   resolution: "react-style-singleton@npm:2.2.1"
@@ -28926,13 +28878,6 @@ __metadata:
   dependencies:
     loose-envify: "npm:^1.1.0"
   checksum: 10c0/b562d9b569b0cb315e44b48099f7712283d93df36b19a39a67c254c6686479d3980b7f013dc931f4a5a3ae7645eae6386b4aa5eea933baa54ecd0f9acb0902b8
-  languageName: node
-  linkType: hard
-
-"react@npm:18.3.0-canary-a870b2d54-20240314":
-  version: 18.3.0-canary-a870b2d54-20240314
-  resolution: "react@npm:18.3.0-canary-a870b2d54-20240314"
-  checksum: 10c0/f89b119c6fefc0956c815ad99e39ba83bc44485c4187143003a01906ef1d750a02f0018210eb192d1d0bdcd28a280139bf399bc59c972fc9e8f9938ee8c63387
   languageName: node
   linkType: hard
 
@@ -33292,19 +33237,6 @@ __metadata:
   bin:
     vite-node: vite-node.mjs
   checksum: 10c0/bc8eb01dd03c2cc306be2bf35efe789d6a3e8ca1d89d635d3154a9af0213f7609c94ef849f30a01f04535b31e729aee49468275e267693a42c32845fbd2a6721
-  languageName: node
-  linkType: hard
-
-"vite-plugin-cjs-interop@npm:2.1.0":
-  version: 2.1.0
-  resolution: "vite-plugin-cjs-interop@npm:2.1.0"
-  dependencies:
-    acorn: "npm:^8.11.3"
-    acorn-import-assertions: "npm:^1.9.0"
-    estree-walker: "npm:^3.0.3"
-    magic-string: "npm:^0.30.8"
-    minimatch: "npm:^9.0.3"
-  checksum: 10c0/0481d21e4a95977ca899c076d0d03b7d2fe207d69303344d4c7a8e12cf7cb547e18c446d1b71fb2d1f0bf6fdad4bcd35129cace162814eade756fbf90c64d95f
   languageName: node
   linkType: hard
 
