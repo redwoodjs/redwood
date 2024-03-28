@@ -1,5 +1,6 @@
 import terminalLink from 'terminal-link'
 
+import { getConfig } from '../lib'
 import c from '../lib/colors'
 import { checkNodeVersion } from '../middleware/checkNodeVersion'
 
@@ -14,20 +15,10 @@ export const builder = (yargs) => {
       description: 'Which dev server(s) to start',
       type: 'array',
     })
-    .option('forward', {
-      alias: 'fwd',
-      description:
-        'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --no-open"`',
-      type: 'string',
-    })
     .option('generate', {
       type: 'boolean',
       default: true,
       description: 'Generate artifacts',
-    })
-    .option('watchNodeModules', {
-      type: 'boolean',
-      description: 'Reload on changes to node_modules',
     })
     .option('apiDebugPort', {
       type: 'number',
@@ -49,6 +40,22 @@ export const builder = (yargs) => {
         'https://redwoodjs.com/docs/cli-commands#dev',
       )}`,
     )
+
+  // Note that `watchNodeModules` is webpack specific, but `forward` isn't.
+  // The reason it's here is that it's been broken with Vite and it's not clear how to fix it.
+  if (getConfig().web.bundler === 'webpack') {
+    yargs
+      .option('forward', {
+        alias: 'fwd',
+        description:
+          'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --no-open"`',
+        type: 'string',
+      })
+      .option('watchNodeModules', {
+        type: 'boolean',
+        description: 'Reload on changes to node_modules',
+      })
+  }
 }
 
 export const handler = async (options) => {
