@@ -28,6 +28,7 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
   const originalProjectConfig = await importOriginal()
   return {
     ...originalProjectConfig,
+    getConfig: vi.fn().mockReturnValue({}),
     getPaths: () => {
       const BASE_PATH = '/path/to/project'
       return {
