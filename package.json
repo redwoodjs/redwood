@@ -39,7 +39,7 @@
   },
   "resolutions": {
     "vscode-languageserver": "6.1.1",
-    "vscode-languageserver-protocol": "3.15.3",
+    "vscode-languageserver-protocol": "3.17.5",
     "vscode-languageserver-textdocument": "1.0.11",
     "vscode-languageserver-types": "3.17.5"
   },
