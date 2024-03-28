@@ -14,8 +14,8 @@
     "@redwoodjs/forms": "7.0.0",
     "@redwoodjs/router": "7.0.0",
     "@redwoodjs/web": "7.0.0",
-    "react": "18.3.0-canary-a870b2d54-20240314",
-    "react-dom": "18.3.0-canary-a870b2d54-20240314"
+    "react": "18.3.0-next-fecc288b7-20221025",
+    "react-dom": "18.3.0-next-fecc288b7-20221025"
   },
   "devDependencies": {
     "@redwoodjs/vite": "7.0.0",
