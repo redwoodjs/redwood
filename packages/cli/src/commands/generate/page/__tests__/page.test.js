@@ -41,12 +41,22 @@ vi.mock('fs-extra', async (importOriginal) => {
 import path from 'path'
 
 import fs from 'fs-extra'
-import { vi, describe, it, test, expect, beforeEach, afterEach } from 'vitest'
+import {
+  vi,
+  describe,
+  it,
+  test,
+  expect,
+  beforeEach,
+  afterEach,
+  beforeAll,
+  afterAll,
+} from 'vitest'
 
 // Load mocks
 import '../../../../lib/test'
 
-import { ensurePosixPath } from '@redwoodjs/project-config'
+import { ensurePosixPath, getConfig } from '@redwoodjs/project-config'
 
 import { getPaths } from '../../../../lib'
 import { pathName } from '../../helpers'
@@ -511,5 +521,226 @@ describe('TS Files', async () => {
         )
       ],
     ).toMatchSnapshot()
+  })
+})
+
+describe('RSC specific output', async () => {
+  beforeAll(() => {
+    getConfig.mockReturnValue({
+      experimental: {
+        rsc: {
+          enabled: true,
+        },
+      },
+    })
+  })
+
+  afterAll(() => {
+    getConfig.mockReturnValue({})
+  })
+
+  describe('Single word files', async () => {
+    const singleWordFiles = await page.files({
+      name: 'Test',
+      tests: true,
+      stories: true,
+      rscEnabled: true,
+      ...page.paramVariants(pathName(undefined, 'test')),
+    })
+
+    it('returns exactly 1 file', () => {
+      expect(Object.keys(singleWordFiles).length).toEqual(1)
+    })
+
+    it('creates a page component', () => {
+      expect(
+        singleWordFiles[
+          path.normalize('/path/to/project/web/src/pages/TestPage/TestPage.jsx')
+        ],
+      ).toMatchSnapshot()
+    })
+  })
+
+  describe('paramFiles', async () => {
+    const paramFiles = await page.files({
+      name: 'Test',
+      tests: true,
+      stories: true,
+      rscEnabled: true,
+      ...page.paramVariants(pathName('{id}', 'test')),
+    })
+
+    it('returns exactly 1 file', () => {
+      expect(Object.keys(paramFiles).length).toEqual(1)
+    })
+
+    it('creates a page component with params', () => {
+      expect(
+        paramFiles[
+          path.normalize('/path/to/project/web/src/pages/TestPage/TestPage.jsx')
+        ],
+      ).toMatchSnapshot()
+    })
+  })
+
+  describe('TS Files', async () => {
+    const typescriptFiles = await page.files({
+      name: 'TSFiles',
+      typescript: true,
+      tests: true,
+      stories: true,
+      rscEnabled: true,
+      ...page.paramVariants(pathName(undefined, 'typescript')),
+    }) //?
+
+    it('generates typescript pages', () => {
+      expect(
+        typescriptFiles[
+          path.normalize(
+            '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.tsx',
+          )
+        ],
+      ).toMatchSnapshot()
+    })
+
+    test('TS Params', async () => {
+      const typescriptParamFiles = await page.files({
+        name: 'TSParamFiles',
+        typescript: true,
+        tests: true,
+        stories: true,
+        rscEnabled: true,
+        ...page.paramVariants(pathName('{id}', 'typescript-param')),
+      })
+
+      expect(
+        typescriptParamFiles[
+          path.normalize(
+            '/path/to/project/web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx',
+          )
+        ],
+      ).toMatchSnapshot()
+    })
+
+    test('TS Params with type', async () => {
+      const typescriptParamTypeFiles = await page.files({
+        name: 'TSParamTypeFiles',
+        typescript: true,
+        tests: false,
+        stories: false,
+        rscEnabled: true,
+        ...page.paramVariants(
+          pathName('/bazinga-ts/{id:Int}', 'typescript-param-with-type'),
+        ),
+      })
+
+      expect(
+        typescriptParamTypeFiles[
+          path.normalize(
+            '/path/to/project/web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx',
+          )
+        ],
+      ).toMatchSnapshot()
+    })
+  })
+
+  describe('handler', () => {
+    beforeEach(() => {
+      vi.spyOn(console, 'info').mockImplementation(() => {})
+      vi.spyOn(console, 'log').mockImplementation(() => {})
+    })
+
+    afterEach(() => {
+      console.info.mockRestore()
+      console.log.mockRestore()
+    })
+
+    test('file generation', async () => {
+      mockFiles = {
+        [getPaths().web.routes]: [
+          "import { Router, Route } from '@redwoodjs/router'",
+          '',
+          'const Routes = () => {',
+          '  return (',
+          '    <Router>',
+          '      <Route path="/about" page={AboutPage} name="about" />',
+          '      <Route notfound page={NotFoundPage} />',
+          '    </Router>',
+          '  )',
+          '}',
+          '',
+          'export default Routes',
+        ].join('\n'),
+      }
+
+      const spy = vi.spyOn(fs, 'writeFileSync')
+
+      globalThis.mockFs = true
+
+      await page.handler({
+        name: 'HomePage', // 'Page' should be trimmed from name
+        path: '',
+        force: false,
+        tests: true,
+        stories: true,
+      })
+
+      expect(spy).toHaveBeenCalled()
+
+      spy.mock.calls.forEach((calls) => {
+        const testOutput = {
+          // Because windows paths are different, we need to normalise before snapshotting
+          filePath: ensurePosixPath(calls[0]),
+          fileContent: calls[1],
+        }
+        expect(testOutput).toMatchSnapshot()
+      })
+
+      globalThis.mockFs = false
+      spy.mockRestore()
+    })
+
+    test('file generation with route params', async () => {
+      mockFiles = {
+        [getPaths().web.routes]: [
+          "import { Router, Route } from '@redwoodjs/router'",
+          '',
+          'const Routes = () => {',
+          '  return (',
+          '    <Router>',
+          '      <Route path="/about" page={AboutPage} name="about" />',
+          '      <Route notfound page={NotFoundPage} />',
+          '    </Router>',
+          '  )',
+          '}',
+          '',
+          'export default Routes',
+        ].join('\n'),
+      }
+
+      const spy = vi.spyOn(fs, 'writeFileSync')
+      globalThis.mockFs = true
+
+      await page.handler({
+        name: 'post',
+        path: '{id}',
+        force: false,
+        tests: true,
+        stories: true,
+      })
+
+      expect(spy).toHaveBeenCalled()
+
+      spy.mock.calls.forEach((calls) => {
+        const testOutput = {
+          filePath: ensurePosixPath(calls[0]),
+          fileContent: calls[1],
+        }
+        expect(testOutput).toMatchSnapshot()
+      })
+
+      globalThis.mockFs = false
+      spy.mockRestore()
+    })
   })
 })

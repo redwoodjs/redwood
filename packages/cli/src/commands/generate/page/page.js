@@ -133,11 +133,11 @@ export const files = async ({
 
   const files = [pageFile]
 
-  if (tests) {
+  if (tests && !rscEnabled) {
     files.push(testFile)
   }
 
-  if (stories) {
+  if (stories && !rscEnabled) {
     files.push(storiesFile)
   }
 

@@ -25,6 +25,198 @@ export default CatsPage
 "
 `;
 
+exports[`RSC specific output > Single word files > creates a page component 1`] = `
+"const TestPage = () => {
+  return (
+    <>
+      <h1>TestPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TestPage/TestPage.jsx</code>
+      </p>
+      <p>
+        My default route is named <code>test</code>
+      </p>
+    </>
+  )
+}
+
+export default TestPage
+"
+`;
+
+exports[`RSC specific output > TS Files > TS Params 1`] = `
+"
+type TsParamFilesPageProps = {
+  id: string
+}
+
+const TsParamFilesPage = ({ id }: TsParamFilesPageProps) => {
+  return (
+    <>
+      <h1>TsParamFilesPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx</code>
+      </p>
+      <p>
+        My default route is named <code>tsParamFiles</code>
+      </p>
+      <p>The parameter passed to me is {id}</p>
+    </>
+  )
+}
+
+export default TsParamFilesPage
+"
+`;
+
+exports[`RSC specific output > TS Files > TS Params with type 1`] = `
+"
+type TsParamTypeFilesPageProps = {
+  id: number
+}
+
+const TsParamTypeFilesPage = ({ id }: TsParamTypeFilesPageProps) => {
+  return (
+    <>
+      <h1>TsParamTypeFilesPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx</code>
+      </p>
+      <p>
+        My default route is named <code>tsParamTypeFiles</code>
+      </p>
+      <p>The parameter passed to me is {id}</p>
+    </>
+  )
+}
+
+export default TsParamTypeFilesPage
+"
+`;
+
+exports[`RSC specific output > TS Files > generates typescript pages 1`] = `
+"
+const TsFilesPage = () => {
+  return (
+    <>
+      <h1>TsFilesPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TSFilesPage/TSFilesPage.tsx</code>
+      </p>
+      <p>
+        My default route is named <code>tsFiles</code>
+      </p>
+    </>
+  )
+}
+
+export default TsFilesPage
+"
+`;
+
+exports[`RSC specific output > handler > file generation 1`] = `
+{
+  "fileContent": "const HomePage = () => {
+  return (
+    <>
+      <h1>HomePage</h1>
+      <p>
+        Find me in <code>./web/src/pages/HomePage/HomePage.jsx</code>
+      </p>
+      <p>
+        My default route is named <code>home</code>
+      </p>
+    </>
+  )
+}
+
+export default HomePage
+",
+  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.jsx",
+}
+`;
+
+exports[`RSC specific output > handler > file generation 2`] = `
+{
+  "fileContent": "import { Router, Route } from '@redwoodjs/router'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Route path="/home" page={HomePage} name="home" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes",
+  "filePath": "/path/to/project/web/src/Routes.js",
+}
+`;
+
+exports[`RSC specific output > handler > file generation with route params 1`] = `
+{
+  "fileContent": "const PostPage = ({ id }) => {
+  return (
+    <>
+      <h1>PostPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/PostPage/PostPage.jsx</code>
+      </p>
+      <p>
+        My default route is named <code>post</code>
+      </p>
+      <p>The parameter passed to me is {id}</p>
+    </>
+  )
+}
+
+export default PostPage
+",
+  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.jsx",
+}
+`;
+
+exports[`RSC specific output > handler > file generation with route params 2`] = `
+{
+  "fileContent": "import { Router, Route } from '@redwoodjs/router'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Route path="/post/{id}" page={PostPage} name="post" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes",
+  "filePath": "/path/to/project/web/src/Routes.js",
+}
+`;
+
+exports[`RSC specific output > paramFiles > creates a page component with params 1`] = `
+"const TestPage = ({ id }) => {
+  return (
+    <>
+      <h1>TestPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TestPage/TestPage.jsx</code>
+      </p>
+      <p>
+        My default route is named <code>test</code>
+      </p>
+      <p>The parameter passed to me is {id}</p>
+    </>
+  )
+}
+
+export default TestPage
+"
+`;
+
 exports[`Single world files > creates a page component 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
