@@ -34,7 +34,7 @@
     "firebase": "10.9.0",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
-    "react": "18.3.0-canary-a870b2d54-20240314",
+    "react": "18.3.0-next-fecc288b7-20221025",
     "typescript": "5.4.3"
   },
   "peerDependencies": {
