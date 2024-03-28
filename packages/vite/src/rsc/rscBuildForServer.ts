@@ -1,7 +1,9 @@
+import type { InputOption } from 'rollup'
 import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import { getEntries } from '../lib/entries.js'
 import { onWarn } from '../lib/onWarn.js'
 import { rscCssPreinitPlugin } from '../plugins/vite-plugin-rsc-css-preinit.js'
 import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
@@ -25,12 +27,11 @@ export async function rscBuildForServer(
 
   const rwPaths = getPaths()
 
-  if (!rwPaths.web.entries) {
-    throw new Error('RSC entries file not found')
-  }
+  const entries = getEntries()
+  const entriesKeys = Object.keys(entries)
 
-  const input = {
-    entries: rwPaths.web.entries,
+  const input: InputOption = {
+    ...entries,
     ...clientEntryFiles,
     ...serverEntryFiles,
     ...customModules,
@@ -102,10 +103,11 @@ export async function rscBuildForServer(
             return code
           },
           entryFileNames: (chunkInfo) => {
-            // TODO (RSC) Probably don't want 'entries'. And definitely don't want it hardcoded
-            if (chunkInfo.name === 'entries' || customModules[chunkInfo.name]) {
-              return '[name].mjs'
+            // Entries such as pages should be named like the other assets
+            if (entriesKeys.includes(chunkInfo.name)) {
+              return 'assets/[name]-[hash].mjs'
             }
+
             return 'assets/[name].mjs'
           },
           chunkFileNames: `assets/[name]-[hash].mjs`,
