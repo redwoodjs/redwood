@@ -5,6 +5,11 @@ import { getPaths } from '../../../../lib'
 export const PROJECT_NAME = path.basename(getPaths().base)
 
 export const RENDER_YAML = (database) => {
+  let apiPlan = 'free'
+  let databaseIsSqlite = database.startsWith('file:')
+  if (databaseIsSqlite) {
+    apiPlan = 'starter'
+  }
   return `# Quick links to the docs:
 # - Redwood on Render: https://render.com/docs/deploy-redwood
 # - Render's Blueprint spec: https://render.com/docs/yaml-spec
@@ -35,7 +40,7 @@ services:
 
 - name: ${PROJECT_NAME}-api
   type: web
-  plan: free
+  plan: ${apiPlan}
   env: node
   region: oregon
   buildCommand: corepack enable && yarn install && yarn rw build api
