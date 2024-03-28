@@ -8797,9 +8797,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/telemetry@workspace:packages/telemetry"
   dependencies:
-    "@babel/cli": "npm:7.24.1"
-    "@babel/core": "npm:^7.22.20"
-    "@babel/runtime-corejs3": "npm:7.24.1"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/structure": "workspace:*"
     "@types/envinfo": "npm:7.8.3"
@@ -8807,9 +8804,10 @@ __metadata:
     "@types/yargs": "npm:17.0.32"
     "@whatwg-node/fetch": "npm:0.9.17"
     ci-info: "npm:4.0.0"
-    core-js: "npm:3.36.1"
     envinfo: "npm:7.11.1"
     systeminformation: "npm:5.22.6"
+    tsx: "npm:4.7.1"
+    typescript: "npm:5.4.3"
     uuid: "npm:9.0.1"
     vitest: "npm:1.4.0"
     yargs: "npm:17.7.2"
