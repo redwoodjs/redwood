@@ -85,7 +85,18 @@ export const paramVariants = (path) => {
   }
 }
 
-export const files = async ({ name, tests, stories, typescript, ...rest }) => {
+export const files = async ({
+  name,
+  tests,
+  stories,
+  typescript,
+  rscEnabled,
+  ...rest
+}) => {
+  const pageTemplate = rscEnabled
+    ? 'page.tsx.rsc.template'
+    : 'page.tsx.template'
+
   const extension = typescript ? '.tsx' : '.jsx'
   const pageFile = await templateForComponentFile({
     name,
@@ -93,7 +104,7 @@ export const files = async ({ name, tests, stories, typescript, ...rest }) => {
     extension,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
-    templatePath: 'page.tsx.template',
+    templatePath: pageTemplate,
     templateVars: rest,
   })
 
@@ -224,6 +235,8 @@ export const handler = async ({
     }
   }
 
+  const rscEnabled = getConfig().experimental?.rsc?.enabled ?? false
+
   const tasks = new Listr(
     [
       {
@@ -237,6 +250,7 @@ export const handler = async ({
             stories,
             typescript,
             ...paramVariants(path),
+            rscEnabled,
           })
           return writeFilesTask(f, { overwriteExisting: force })
         },
@@ -265,6 +279,7 @@ export const handler = async ({
       },
       {
         title: 'One more thing...',
+        enabled: () => !rscEnabled,
         task: (ctx, task) => {
           task.title =
             `One more thing...\n\n` +

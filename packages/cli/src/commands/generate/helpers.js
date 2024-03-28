@@ -163,6 +163,7 @@ export const createYargsForComponentGeneration = ({
   /** function that takes the options object and returns an array of listr tasks */
   includeAdditionalTasks = () => [],
 }) => {
+  const rscEnabled = getConfig().experimental?.rsc?.enabled ?? false
   return {
     command: appendPositionalsToCmd(`${componentName} <name>`, positionalsObj),
     description: `Generate a ${componentName} component`,
@@ -181,10 +182,14 @@ export const createYargsForComponentGeneration = ({
         .option('tests', {
           description: 'Generate test files',
           type: 'boolean',
+          hidden: rscEnabled,
+          default: rscEnabled ? false : undefined,
         })
         .option('stories', {
           description: 'Generate storybook files',
           type: 'boolean',
+          hidden: rscEnabled,
+          default: rscEnabled ? false : undefined,
         })
         .option('verbose', {
           description: 'Print all logs',
