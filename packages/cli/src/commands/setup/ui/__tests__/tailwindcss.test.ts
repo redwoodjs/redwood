@@ -199,6 +199,151 @@ describe('tasks that should be skipped', () => {
     )
     expect(mockSkipValues).toContain("Looks like you're not using VS Code")
   })
+
+  it('should skip adding tailwind intellisense plugin config to VS Code settings if the user is not using VS Code', async () => {
+    setupDefaultProjectStructure()
+    memfsFs.rmSync(path.join(APP_PATH, '.vscode'), { recursive: true })
+
+    await handler({})
+
+    expect(mockSkippedTaskTitles).toContain(
+      'Adding tailwind intellisense plugin configuration to VS Code settings...',
+    )
+    expect(mockSkipValues).toContain("Looks like you're not using VS Code")
+  })
+})
+
+describe('tailwindcss intellisense settings', () => {
+  it('creates a new settings file when none exists', async () => {
+    setupDefaultProjectStructure({
+      '.vscode/': null, // empty directory
+    })
+
+    await handler({})
+
+    const settingsJson = JSON.parse(readVsCodeSettings())
+    const tailwindCSS = settingsJson['tailwindCSS']
+
+    expect(Array.isArray(tailwindCSS.classAttributes)).toBe(true)
+    expect(tailwindCSS.classAttributes).toContain('class')
+    expect(tailwindCSS.classAttributes).toContain('className')
+    expect(tailwindCSS.classAttributes).toContain('activeClassName')
+    expect(tailwindCSS.classAttributes).toContain('errorClassName')
+    expect(tailwindCSS.classAttributes.length).toBe(4)
+  })
+
+  it('adds to existing empty settings file', async () => {
+    setupDefaultProjectStructure({
+      '.vscode/settings.json': '',
+    })
+
+    await handler({})
+
+    const settingsJson = JSON.parse(readVsCodeSettings())
+    const tailwindCSS = settingsJson['tailwindCSS']
+
+    expect(Object.keys(settingsJson).length).toBe(1)
+    expect(Object.keys(tailwindCSS).length).toBe(1)
+    expect(Array.isArray(tailwindCSS.classAttributes)).toBe(true)
+    expect(tailwindCSS.classAttributes).toContain('class')
+    expect(tailwindCSS.classAttributes).toContain('className')
+    expect(tailwindCSS.classAttributes).toContain('activeClassName')
+    expect(tailwindCSS.classAttributes).toContain('errorClassName')
+    expect(tailwindCSS.classAttributes.length).toBe(4)
+  })
+
+  it('adds to existing settings file without any tailwindCSS settings', async () => {
+    setupDefaultProjectStructure({
+      '.vscode/settings.json': [
+        '{',
+        '  "editor.tabSize": 2,',
+        '  "editor.codeActionsOnSave": {',
+        '    "source.fixAll.eslint": "explicit"',
+        '  }',
+        '}',
+      ].join('\n'),
+    })
+
+    await handler({})
+
+    const settingsJson = JSON.parse(readVsCodeSettings())
+    const tailwindCSS = settingsJson['tailwindCSS']
+
+    expect(Object.keys(settingsJson).length).toBe(3)
+    expect(Object.keys(tailwindCSS).length).toBe(1)
+    expect(Array.isArray(tailwindCSS.classAttributes)).toBe(true)
+    expect(tailwindCSS.classAttributes).toContain('class')
+    expect(tailwindCSS.classAttributes).toContain('className')
+    expect(tailwindCSS.classAttributes).toContain('activeClassName')
+    expect(tailwindCSS.classAttributes).toContain('errorClassName')
+    expect(tailwindCSS.classAttributes.length).toBe(4)
+  })
+
+  it('adds to existing settings file with existing tailwindCSS settings', async () => {
+    setupDefaultProjectStructure({
+      '.vscode/settings.json': [
+        '{',
+        '  "editor.tabSize": 2,',
+        '  "editor.codeActionsOnSave": {',
+        '    "source.fixAll.eslint": "explicit"',
+        '  },',
+        '  "tailwindCSS": {',
+        '    "emmetCompletions": true',
+        '  }',
+        '}',
+      ].join('\n'),
+    })
+
+    await handler({})
+
+    const settingsJson = JSON.parse(readVsCodeSettings())
+    const tailwindCSS = settingsJson['tailwindCSS']
+
+    expect(Object.keys(settingsJson).length).toBe(3)
+    expect(Object.keys(tailwindCSS).length).toBe(2)
+    expect(tailwindCSS.emmetCompletions).toBeTruthy()
+    expect(Array.isArray(tailwindCSS.classAttributes)).toBe(true)
+    expect(tailwindCSS.classAttributes).toContain('class')
+    expect(tailwindCSS.classAttributes).toContain('className')
+    expect(tailwindCSS.classAttributes).toContain('activeClassName')
+    expect(tailwindCSS.classAttributes).toContain('errorClassName')
+    expect(tailwindCSS.classAttributes.length).toBe(4)
+  })
+
+  // This is what I decided to do now. If good arguments are made to change
+  // the behavior, feel free to just update the test
+  it('adds to existing tailwindCSS classAttributes', async () => {
+    setupDefaultProjectStructure({
+      '.vscode/settings.json': [
+        '{',
+        '  "editor.tabSize": 2,',
+        '  "editor.codeActionsOnSave": {',
+        '    "source.fixAll.eslint": "explicit"',
+        '  },',
+        '  "tailwindCSS": {',
+        '    "emmetCompletions": true,',
+        '    "classAttributes": ["class", "className", "ngClass"]',
+        '  }',
+        '}',
+      ].join('\n'),
+    })
+
+    await handler({})
+
+    const settingsJson = JSON.parse(readVsCodeSettings())
+    const tailwindCSS = settingsJson['tailwindCSS']
+
+    expect(Object.keys(settingsJson).length).toBe(3)
+    expect(Object.keys(tailwindCSS).length).toBe(2)
+    expect(tailwindCSS.emmetCompletions).toBeTruthy()
+    expect(Array.isArray(tailwindCSS.classAttributes)).toBe(true)
+    expect(tailwindCSS.classAttributes).toContain('class')
+    expect(tailwindCSS.classAttributes).toContain('className')
+    expect(tailwindCSS.classAttributes).toContain('ngClass')
+    expect(tailwindCSS.classAttributes).toContain('activeClassName')
+    expect(tailwindCSS.classAttributes).toContain('errorClassName')
+    expect(tailwindCSS.classAttributes.length).toBe(5)
+  })
 })
 
 function setupDefaultProjectStructure(
@@ -226,4 +371,13 @@ function setupDefaultProjectStructure(
   if (volOverride) {
     vol.fromJSON(volOverride, APP_PATH)
   }
+}
+
+function readVsCodeSettings() {
+  return memfsFs.readFileSync(
+    '/redwood-app/.vscode/settings.json',
+    'utf-8',
+    // The types are wrong for memfs.fs.readFileSync, so we cast it to string
+    // See https://github.com/streamich/memfs/issues/702
+  ) as string
 }
