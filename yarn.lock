@@ -8295,7 +8295,7 @@ __metadata:
     css-minimizer-webpack-plugin: "npm:5.0.1"
     dotenv-webpack: "npm:8.1.0"
     graphql-tag: "npm:2.12.6"
-    html-webpack-plugin: "npm:5.5.4"
+    html-webpack-plugin: "npm:5.6.0"
     jest: "npm:29.7.0"
     lodash: "npm:4.17.21"
     mini-css-extract-plugin: "npm:2.8.1"
@@ -20816,9 +20816,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-webpack-plugin@npm:5.5.4, html-webpack-plugin@npm:^5.5.0":
-  version: 5.5.4
-  resolution: "html-webpack-plugin@npm:5.5.4"
+"html-webpack-plugin@npm:5.6.0, html-webpack-plugin@npm:^5.5.0":
+  version: 5.6.0
+  resolution: "html-webpack-plugin@npm:5.6.0"
   dependencies:
     "@types/html-minifier-terser": "npm:^6.0.0"
     html-minifier-terser: "npm:^6.0.2"
@@ -20826,8 +20826,14 @@ __metadata:
     pretty-error: "npm:^4.0.0"
     tapable: "npm:^2.0.0"
   peerDependencies:
+    "@rspack/core": 0.x || 1.x
     webpack: ^5.20.0
-  checksum: 10c0/fd7b9882a7b44b78711d3489fd571308372a915924c2e619ad8a08d9100a17ae8899a3d3bb1934c326d45bf942330a693206088ba80f292dd6574d9e33c67a43
+  peerDependenciesMeta:
+    "@rspack/core":
+      optional: true
+    webpack:
+      optional: true
+  checksum: 10c0/50d1a0f90d512463ea8d798985d91a7ccc9d5e461713dedb240125b2ff0671f58135dd9355f7969af341ff4725e73b2defbc0984cfdce930887a48506d970002
   languageName: node
   linkType: hard
 
