@@ -6,10 +6,11 @@ import type {
   RenderToReadableStreamOptions,
   ReactDOMServerReadableStream,
 } from 'react-dom/server'
-import { renderToReadableStream } from 'react-dom/server.edge'
+import type { default as RDServerModule } from 'react-dom/server.edge'
 
 import type { ServerAuthState } from '@redwoodjs/auth'
 import { ServerAuthProvider } from '@redwoodjs/auth'
+import { getPaths } from '@redwoodjs/project-config'
 import { LocationProvider } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
@@ -18,15 +19,18 @@ import {
   createInjector,
 } from '@redwoodjs/web/dist/components/ServerInject'
 
+import { renderFromDist } from '../clientSsr.js'
 import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 
 import { createBufferedTransformStream } from './transforms/bufferedTransform.js'
 import { createTimeoutTransform } from './transforms/cancelTimeoutTransform.js'
 import { createServerInjectionTransform } from './transforms/serverInjectionTransform.js'
 
+type RDServerType = typeof RDServerModule
+
 interface RenderToStreamArgs {
-  ServerEntry: any
-  FallbackDocument: any
+  ServerEntry: React.FunctionComponent
+  FallbackDocument: React.FunctionComponent
   currentPathName: string
   metaTags: TagDescriptor[]
   cssLinks: string[]
@@ -142,6 +146,18 @@ export async function reactRenderToStreamResponse(
     bootstrapModules: jsBundles,
   }
 
+  // We'll use `renderToReadableStream` to start the whole React rendering
+  // process. This will internally initialize React and its hooks. It's
+  // important that this initializes the same React instance that all client
+  // modules (components) will later use when they render. Had we just imported
+  // `react-dom/server.edge` normally we would have gotten an instance based on
+  // react and react-dom in node_modules. All client components however uses a
+  // bundled version of React (so that it can be sent to the browser for normal
+  // browsing of the site). Importing it like this we make sure that SSR uses
+  // that same bundled version of react and react-dom.
+  const { renderToReadableStream }: RDServerType =
+    await importModule('rd-server')
+
   try {
     // This gets set if there are errors inside Suspense boundaries
     let didErrorOutsideShell = false
@@ -157,7 +173,8 @@ export async function reactRenderToStreamResponse(
       },
     }
 
-    const root = renderRoot(currentPathName)
+    let root: React.ReactElement = renderRoot(currentPathName)
+    root = React.createElement(renderFromDist('AboutPage'))
 
     const reactStream: ReactDOMServerReadableStream =
       await renderToReadableStream(root, renderToStreamOptions)
@@ -223,4 +240,22 @@ function applyStreamTransforms(
   }
 
   return outputStream
+}
+
+export async function importModule(
+  mod: 'rsdw-server' | 'rsdw-client' | 'rd-server',
+) {
+  const webPath = getPaths().web
+
+  if (mod === 'rsdw-server') {
+    return (await import(path.join(webPath.distRsc, 'rsdw-server.mjs'))).default
+  } else if (mod === 'rsdw-client') {
+    return (await import(path.join(webPath.distClient, 'rsdw-client.mjs')))
+      .default
+  } else if (mod === 'rd-server') {
+    return (await import(path.join(webPath.distClient, 'rd-server.mjs')))
+      .default
+  }
+
+  throw new Error('Unknown module ' + mod)
 }

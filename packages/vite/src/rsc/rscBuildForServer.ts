@@ -34,6 +34,7 @@ export async function rscBuildForServer(
     ...clientEntryFiles,
     ...serverEntryFiles,
     ...customModules,
+    'rsdw-server': 'react-server-dom-webpack/server.edge',
   }
 
   // TODO (RSC): No redwood-vite plugin, add it in here
@@ -103,7 +104,11 @@ export async function rscBuildForServer(
           },
           entryFileNames: (chunkInfo) => {
             // TODO (RSC) Probably don't want 'entries'. And definitely don't want it hardcoded
-            if (chunkInfo.name === 'entries' || customModules[chunkInfo.name]) {
+            if (
+              chunkInfo.name === 'entries' ||
+              chunkInfo.name === 'rsdw-server' ||
+              customModules[chunkInfo.name]
+            ) {
               return '[name].mjs'
             }
             return 'assets/[name].mjs'
