@@ -3909,9 +3909,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/client-preset@npm:4.2.4":
-  version: 4.2.4
-  resolution: "@graphql-codegen/client-preset@npm:4.2.4"
+"@graphql-codegen/client-preset@npm:4.2.5":
+  version: 4.2.5
+  resolution: "@graphql-codegen/client-preset@npm:4.2.5"
   dependencies:
     "@babel/helper-plugin-utils": "npm:^7.20.2"
     "@babel/template": "npm:^7.20.7"
@@ -3928,7 +3928,7 @@ __metadata:
     tslib: "npm:~2.6.0"
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 10c0/7e6a9ad92d2503f20b5c6abba0f50b46170b7692234bc6d1cc0656a63915de7a2190f260124107e8ba5780a0a5b6f26358e5590070d29738dc73c829958ffcc5
+  checksum: 10c0/9b14edf422503d947839fa0818333c4ea4e368f7781b6ae409226747a5e7a159bfcc2f375d69aed18fe91ac72d554e93164c3c3e3d115e702e58c436b7da6c6e
   languageName: node
   linkType: hard
 
@@ -8492,7 +8492,7 @@ __metadata:
     "@babel/traverse": "npm:^7.22.20"
     "@graphql-codegen/add": "npm:4.0.1"
     "@graphql-codegen/cli": "npm:3.3.1"
-    "@graphql-codegen/client-preset": "npm:4.2.4"
+    "@graphql-codegen/client-preset": "npm:4.2.5"
     "@graphql-codegen/core": "npm:3.1.0"
     "@graphql-codegen/fragment-matcher": "npm:5.0.2"
     "@graphql-codegen/schema-ast": "npm:3.0.1"
