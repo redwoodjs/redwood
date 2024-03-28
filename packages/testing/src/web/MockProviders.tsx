@@ -15,9 +15,14 @@ import { MockParamsProvider } from './MockParamsProvider'
 // Import the user's Router from `./web/src/Router.{tsx,jsx}`,
 // we pass the `children` from the user's Router to `./MockRouter.Router`
 // so that we can populate the `routes object` in Storybook and tests.
-const {
-  default: UserRouterWithRoutes,
-} = require('~__REDWOOD__USER_ROUTES_FOR_MOCK')
+let UserRouterWithRoutes: React.FC
+
+try {
+  const userRoutesModule = require('~__REDWOOD__USER_ROUTES_FOR_MOCK')
+  UserRouterWithRoutes = userRoutesModule.default
+} catch (error) {
+  UserRouterWithRoutes = () => <></>
+}
 
 // TODO(pc): see if there are props we want to allow to be passed into our mock provider (e.g. AuthProviderProps)
 export const MockProviders: React.FunctionComponent<{

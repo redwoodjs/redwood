@@ -29,6 +29,7 @@
       "require": "./dist/preset.js"
     },
     "./dist/mocks/MockRouter": "./dist/mocks/MockRouter.js",
+    "./dist/preview.js": "./dist/preview.js",
     "./package.json": "./package.json"
   },
   "main": "dist/index.js",
@@ -44,7 +45,8 @@
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
-    "build:types": "tsc --build --verbose"
+    "build:types": "tsc --build --verbose",
+    "build:pack": "yarn pack -o storybook-framework-redwoodjs-vite.tgz"
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.1",
