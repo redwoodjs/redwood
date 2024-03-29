@@ -1,3 +1,7 @@
+import { describe, it } from 'vitest'
+
+import { matchTransformSnapshot } from '../../../../testUtils/matchTransformSnapshot'
+
 describe('Update Scenarios', () => {
   it('Modifies simple Scenarios', async () => {
     await matchTransformSnapshot('updateScenarios', 'simple')

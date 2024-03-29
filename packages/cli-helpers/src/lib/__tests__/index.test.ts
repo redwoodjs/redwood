@@ -1,3 +1,5 @@
+import path from 'path'
+
 import { vi, test, expect } from 'vitest'
 
 import { prettify } from '../index.js'
@@ -6,13 +8,16 @@ vi.mock('../paths', () => {
   return {
     getPaths: () => {
       return {
-        base: '../../../../__fixtures__/example-todo-main',
+        base: path.resolve(
+          __dirname,
+          '../../../../../__fixtures__/example-todo-main',
+        ),
       }
     },
   }
 })
 
-test('prettify formats tsx content', () => {
+test('prettify formats tsx content', async () => {
   const content = `import React from 'react'
 
   interface Props { foo: number, bar: number }
@@ -30,5 +35,7 @@ test('prettify formats tsx content', () => {
 
     return <>{foo}, {bar}</>}`
 
-  expect(prettify('FooBarComponent.template.tsx', content)).toMatchSnapshot()
+  expect(
+    await prettify('FooBarComponent.template.tsx', content),
+  ).toMatchSnapshot()
 })

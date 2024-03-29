@@ -8,10 +8,10 @@ import { normalizePath } from 'vite'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { getMergedConfig } from './lib/getMergedConfig'
-import handleJsAsJsx from './plugins/vite-plugin-jsx-loader'
-import removeFromBundle from './plugins/vite-plugin-remove-from-bundle'
-import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider'
+import { getMergedConfig } from './lib/getMergedConfig.js'
+import handleJsAsJsx from './plugins/vite-plugin-jsx-loader.js'
+import removeFromBundle from './plugins/vite-plugin-remove-from-bundle.js'
+import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider.js'
 
 /**
  * Pre-configured vite plugin, with required config for Redwood apps.
@@ -24,7 +24,7 @@ export default function redwoodPluginVite(): PluginOption[] {
 
   if (!clientEntryPath) {
     throw new Error(
-      'Vite client entry point not found. Please check that your project has an entry.client.{jsx,tsx} file in the web/src directory.'
+      'Vite client entry point not found. Please check that your project has an entry.client.{jsx,tsx} file in the web/src directory.',
     )
   }
 
@@ -32,9 +32,13 @@ export default function redwoodPluginVite(): PluginOption[] {
 
   // If realtime is enabled, we want to include the sseLink in the bundle.
   // Right now the only way we have of telling is if the package is installed on the api side.
-  const realtimeEnabled = fs
-    .readFileSync(path.join(rwPaths.api.base, 'package.json'), 'utf-8')
-    .includes('@redwoodjs/realtime')
+  const apiPackageJsonPath = path.join(rwPaths.api.base, 'package.json')
+  const realtimeEnabled =
+    fs.existsSync(apiPackageJsonPath) &&
+    fs.readFileSync(apiPackageJsonPath, 'utf-8').includes('@redwoodjs/realtime')
+
+  const streamingEnabled = rwConfig.experimental.streamingSsr.enabled
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
   return [
     {
@@ -64,7 +68,7 @@ export default function redwoodPluginVite(): PluginOption[] {
           rwConfig.web.includeEnvironmentVariables.map((envName) => {
             newHtml = newHtml.replaceAll(
               `%${envName}%`,
-              process.env[envName] || ''
+              process.env[envName] || '',
             )
           })
 
@@ -94,7 +98,7 @@ export default function redwoodPluginVite(): PluginOption[] {
               '</head>',
               // @NOTE the slash in front, for windows compatibility and for pages in subdirectories
               `<script type="module" src="/${relativeEntryPath}"></script>
-        </head>`
+        </head>`,
             )
           } else {
             return html
@@ -112,7 +116,7 @@ export default function redwoodPluginVite(): PluginOption[] {
             code: code.replace(
               '</head>',
               `<script type="module" src="/${relativeEntryPath}"></script>
-        </head>`
+        </head>`,
             ),
             map: null,
           }
@@ -130,7 +134,7 @@ export default function redwoodPluginVite(): PluginOption[] {
       config: getMergedConfig(rwConfig, rwPaths),
     },
     // We can remove when streaming is stable
-    rwConfig.experimental.streamingSsr.enabled && swapApolloProvider(),
+    streamingEnabled && swapApolloProvider(),
     handleJsAsJsx(),
     // Remove the splash-page from the bundle.
     removeFromBundle([
@@ -148,7 +152,7 @@ export default function redwoodPluginVite(): PluginOption[] {
       babel: {
         ...getWebSideDefaultBabelConfig({
           forVite: true,
-          forRscClient: rwConfig.experimental.rsc?.enabled,
+          forRsc: rscEnabled,
         }),
       },
     }),

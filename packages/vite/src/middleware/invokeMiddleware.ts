@@ -1,13 +1,13 @@
 import { defaultAuthProviderState, type ServerAuthState } from '@redwoodjs/auth'
 import type { RWRouteManifestItem } from '@redwoodjs/internal/dist/routes'
 
-import { MiddlewareRequest } from './MiddlewareRequest'
-import { MiddlewareResponse } from './MiddlewareResponse'
+import { MiddlewareRequest } from './MiddlewareRequest.js'
+import { MiddlewareResponse } from './MiddlewareResponse.js'
 
 type Middleware = (
   req: MiddlewareRequest,
   res?: MiddlewareResponse,
-  route?: any
+  options?: MiddlewareInvokeOptions,
 ) => Promise<MiddlewareResponse> | Response | void
 
 type MiddlewareInvokeOptions = {
@@ -26,7 +26,7 @@ type MiddlewareInvokeOptions = {
 export const invoke = async (
   req: Request,
   middleware?: Middleware,
-  options?: MiddlewareInvokeOptions
+  options?: MiddlewareInvokeOptions,
 ): Promise<[MiddlewareResponse, ServerAuthState]> => {
   if (typeof middleware !== 'function') {
     return [MiddlewareResponse.next(), defaultAuthProviderState]
@@ -51,7 +51,7 @@ export const invoke = async (
       console.error('Return from middleware >> ', output)
       console.error('\n----\n')
       throw new Error(
-        'Invalid return type from middleware. You must return a MiddlewareResponse or a Response object, or nothing at all'
+        'Invalid return type from middleware. You must return a MiddlewareResponse or a Response object, or nothing at all',
       )
     }
   } catch (e) {

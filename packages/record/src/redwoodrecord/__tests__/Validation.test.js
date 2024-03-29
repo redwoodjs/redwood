@@ -183,7 +183,7 @@ describe('validate', () => {
     record.email = null
 
     expect(() => record.validate({ throw: true })).toThrow(
-      PresenceValidationError
+      PresenceValidationError,
     )
   })
 })

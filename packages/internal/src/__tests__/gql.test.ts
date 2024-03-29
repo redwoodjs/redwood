@@ -1,6 +1,7 @@
 import path from 'path'
 
 import gql from 'graphql-tag'
+import { test, expect } from 'vitest'
 
 import { listQueryTypeFieldsInProject, parseDocumentAST } from '../gql'
 
@@ -100,7 +101,7 @@ test('handles fragments', () => {
 test('listQueryTypeFieldsInProject', async () => {
   const FIXTURE_PATH = path.resolve(
     __dirname,
-    '../../../../__fixtures__/example-todo-main'
+    '../../../../__fixtures__/example-todo-main',
   )
   // Set fixture path so it reads the sdls from example-todo-main
   process.env.RWJS_CWD = FIXTURE_PATH

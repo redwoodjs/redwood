@@ -38,7 +38,7 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
           dbSchema: path.join(
             globalThis.__dirname,
             'fixtures',
-            'schema.prisma'
+            'schema.prisma',
           ), // this folder
           generators: path.join(BASE_PATH, './api/generators'),
           src: path.join(BASE_PATH, './api/src'),
@@ -78,7 +78,7 @@ vi.mock('./project', () => ({
 
 globalThis.__prettierPath = path.resolve(
   __dirname,
-  './__tests__/fixtures/prettier.config.js'
+  './__tests__/fixtures/prettier.config.js',
 )
 
 vi.spyOn(Math, 'random').mockReturnValue(0.123456789)
@@ -87,7 +87,7 @@ export const generatorsRootPath = path.join(
   __dirname,
   '..',
   'commands',
-  'generate'
+  'generate',
 )
 
 /**
@@ -110,8 +110,8 @@ export const loadGeneratorFixture = (generator, name) => {
       generator,
       '__tests__',
       'fixtures',
-      name
-    )
+      name,
+    ),
   )
 }
 

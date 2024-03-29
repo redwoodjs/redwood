@@ -1,4 +1,7 @@
+import React from 'react'
+
 import { render } from '@testing-library/react'
+import { describe, beforeAll, it, expect } from 'vitest'
 
 import '@testing-library/jest-dom'
 import { Metadata } from '../Metadata'
@@ -19,7 +22,7 @@ describe('Metadata', () => {
     const output = <></>
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 
@@ -32,9 +35,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -51,9 +54,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -71,9 +74,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -86,9 +89,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -107,9 +110,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -122,9 +125,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -145,9 +148,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -161,9 +164,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -183,9 +186,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -217,9 +220,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -232,9 +235,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -248,9 +251,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -264,9 +267,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -280,9 +283,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -295,9 +298,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).not.toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -311,9 +314,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -332,9 +335,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -349,9 +352,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).not.toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -364,9 +367,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -379,9 +382,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -394,9 +397,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).not.toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -409,9 +412,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).not.toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -424,9 +427,9 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toContain(
-      render(output, { container: document.head }).container.innerHTML
+      render(output, { container: document.head }).container.innerHTML,
     )
   })
 
@@ -465,7 +468,7 @@ describe('Metadata', () => {
     )
 
     expect(
-      render(input, { container: document.head }).container.innerHTML
+      render(input, { container: document.head }).container.innerHTML,
     ).toEqual(render(output, { container: document.head }).container.innerHTML)
   })
 })

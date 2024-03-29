@@ -1,13 +1,14 @@
-import { rscBuildAnalyze } from './rsc/rscBuildAnalyze'
-import { rscBuildClient } from './rsc/rscBuildClient'
-import { rscBuildClientEntriesMappings } from './rsc/rscBuildClientEntriesFile'
-import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets'
-import { rscBuildForServer } from './rsc/rscBuildForServer'
-import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars'
+import { rscBuildAnalyze } from './rsc/rscBuildAnalyze.js'
+import { rscBuildClient } from './rsc/rscBuildClient.js'
+import { rscBuildClientEntriesMappings } from './rsc/rscBuildClientEntriesFile.js'
+import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets.js'
+import { rscBuildForServer } from './rsc/rscBuildForServer.js'
+import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars.js'
 
 export const buildRscClientAndServer = async () => {
   // Analyze all files and generate a list of RSCs and RSFs
-  const { clientEntryFiles, serverEntryFiles } = await rscBuildAnalyze()
+  const { clientEntryFiles, serverEntryFiles, componentImportMap } =
+    await rscBuildAnalyze()
 
   // Generate the client bundle
   const clientBuildOutput = await rscBuildClient(clientEntryFiles)
@@ -16,7 +17,8 @@ export const buildRscClientAndServer = async () => {
   const serverBuildOutput = await rscBuildForServer(
     clientEntryFiles,
     serverEntryFiles,
-    {}
+    {},
+    componentImportMap,
   )
 
   // Copy CSS assets from server to client
@@ -31,7 +33,7 @@ export const buildRscClientAndServer = async () => {
   await rscBuildClientEntriesMappings(
     clientBuildOutput,
     serverBuildOutput,
-    clientEntryFiles
+    clientEntryFiles,
   )
 
   // Make RW specific env vars, like RWJS_ENV, available to server components

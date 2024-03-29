@@ -23,7 +23,7 @@ const baseConfig = {
 
   stories: [
     `${importStatementPath(
-      redwoodProjectPaths.web.src
+      redwoodProjectPaths.web.src,
     )}/**/*.stories.@(js|jsx|ts|tsx|mdx)`,
   ],
 
@@ -48,12 +48,12 @@ const baseConfig = {
 
     // We replace imports to "@redwoodjs/router" with our own implementation in "@redwoodjs/testing"
     sbConfig.resolve.alias['@redwoodjs/router$'] = require.resolve(
-      '@redwoodjs/testing/dist/web/MockRouter.js'
+      '@redwoodjs/testing/dist/web/MockRouter.js',
     )
     // This allows us to mock `createAuthentication` which is used by auth
     // clients, which in turn lets us mock `useAuth` in tests
     sbConfig.resolve.alias['@redwoodjs/auth$'] = require.resolve(
-      '@redwoodjs/testing/dist/web/mockAuth.js'
+      '@redwoodjs/testing/dist/web/mockAuth.js',
     )
     sbConfig.resolve.alias['~__REDWOOD__USER_ROUTES_FOR_MOCK'] =
       redwoodProjectPaths.web.routes
@@ -76,8 +76,8 @@ const baseConfig = {
 
     let userPreviewPath = './preview.example.js'
 
-    if (redwoodProjectPaths.storybookPreviewConfig) {
-      userPreviewPath = redwoodProjectPaths.storybookPreviewConfig
+    if (redwoodProjectPaths.web.storybookPreviewConfig) {
+      userPreviewPath = redwoodProjectPaths.web.storybookPreviewConfig
     }
 
     sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_PREVIEW_CONFIG'] =
@@ -107,11 +107,11 @@ const baseConfig = {
 
     // ** LOADERS **
     const sbMdxRule = sbConfig.module.rules.find(
-      (rule) => rule.test.toString() === /(stories|story)\.mdx$/.toString()
+      (rule) => rule.test.toString() === /(stories|story)\.mdx$/.toString(),
     )
     console.assert(sbMdxRule, 'Storybook MDX rule not found')
     sbConfig.module.rules = [...rwConfig.module.rules, sbMdxRule].filter(
-      Boolean
+      Boolean,
     )
 
     // See https://community.redwoodjs.com/t/mocking-node-modules-on-the-web-side-with-webpack-config-in-storybook/1392.

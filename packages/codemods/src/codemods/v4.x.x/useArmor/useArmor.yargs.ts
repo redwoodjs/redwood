@@ -22,7 +22,7 @@ export const handler = () => {
     })
 
     setOutput(
-      'Updating createGraphQLHandler for useArmor config is done! Run `yarn rw lint --fix` to prettify your code'
+      'Updating createGraphQLHandler for useArmor config is done! Run `yarn rw lint --fix` to prettify your code',
     )
   })
 }

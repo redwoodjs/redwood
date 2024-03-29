@@ -17,27 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: ⬢ Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: 🐈 Set up yarn cache
+      - name: Set up job
         if: "!contains(github.event.pull_request.labels.*.name, 'fixture-ok')"
-        uses: ./.github/actions/set-up-yarn-cache
-
-      - name: 🐈 Yarn install
-        if: "!contains(github.event.pull_request.labels.*.name, 'fixture-ok')"
-        run: yarn install --inline-builds
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: 🔨 Build
-        if: "!contains(github.event.pull_request.labels.*.name, 'fixture-ok')"
-        run: yarn build
+        uses: ./.github/actions/set-up-job
 
       - name: Rebuild test-project fixture
         if: "!contains(github.event.pull_request.labels.*.name, 'fixture-ok')"

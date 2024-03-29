@@ -37,7 +37,7 @@ export class RWLanguageServer {
     const { connection, documents } = this
     connection.onInitialize((params) => {
       connection.console.log(
-        `Redwood Language Server onInitialize(), PID=${process.pid}`
+        `Redwood Language Server onInitialize(), PID=${process.pid}`,
       )
       this.initializeParams = params
       return {
@@ -108,7 +108,7 @@ export class RWLanguageServer {
         for (const xd of xds) {
           const as = await ExtendedDiagnostic_findRelevantQuickFixes(
             xd,
-            context
+            context,
           )
           for (const a of as) {
             actions.push(a)
@@ -166,10 +166,10 @@ export class RWLanguageServer {
   }
   async info<T extends IDEInfo['kind']>(
     uri: string,
-    kind: T
+    kind: T,
   ): Promise<(IDEInfo & { kind: T })[]> {
     return (await this.collectIDEInfo(uri)).filter(
-      (i) => i.kind === kind
+      (i) => i.kind === kind,
     ) as any
   }
 

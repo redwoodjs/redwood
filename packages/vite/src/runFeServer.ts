@@ -18,13 +18,13 @@ import type { Manifest as ViteBuildManifest } from 'vite'
 import type { RWRouteManifestItem } from '@redwoodjs/internal/dist/routes'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { registerFwGlobals } from './lib/registerGlobals'
-import { createExtensionRouteDef } from './middleware/extensionRouteDef'
-import { invoke } from './middleware/invokeMiddleware'
-import { createRscRequestHandler } from './rsc/rscRequestHandler'
-import { setClientEntries } from './rsc/rscWorkerCommunication'
-import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
-import type { RWRouteManifest } from './types'
+import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
+import { createExtensionRouteDef } from './middleware/extensionRouteDef.js'
+import { invoke } from './middleware/invokeMiddleware.js'
+import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
+import { setClientEntries } from './rsc/rscWorkerCommunication.js'
+import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
+import type { RWRouteManifest } from './types.js'
 
 /**
  * TODO (STREAMING)
@@ -50,12 +50,12 @@ export async function runFeServer() {
   const rwConfig = getConfig()
   const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
-  registerFwGlobals()
+  registerFwGlobalsAndShims()
 
   if (rscEnabled) {
     try {
       // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
-      await setClientEntries('load')
+      await setClientEntries()
     } catch (e) {
       console.error('Failed to load client entries')
       console.error(e)
@@ -69,7 +69,7 @@ export async function runFeServer() {
   ).default
 
   const clientBuildManifestUrl = url.pathToFileURL(
-    path.join(rwPaths.web.distClient, 'client-build-manifest.json')
+    path.join(rwPaths.web.distClient, 'client-build-manifest.json'),
   ).href
   const clientBuildManifest: ViteBuildManifest = (
     await import(clientBuildManifestUrl, { with: { type: 'json' } })
@@ -88,7 +88,7 @@ export async function runFeServer() {
       return rscEnabled
         ? manifestItem.file.includes('rwjs-client-entry-')
         : manifestItem.isEntry
-    }
+    },
   )
 
   const handleWithMiddleware = (route?: RWRouteManifestItem) => {
@@ -111,7 +111,7 @@ export async function runFeServer() {
   // For CF workers, we'd need an equivalent of this
   app.use(
     '/assets',
-    express.static(rwPaths.web.distClient + '/assets', { index: false })
+    express.static(rwPaths.web.distClient + '/assets', { index: false }),
   )
 
   // 2. Proxy the api server
@@ -123,14 +123,14 @@ export async function runFeServer() {
     // @WARN! Be careful, between v2 and v3 of http-proxy-middleware
     // the syntax has changed https://github.com/chimurai/http-proxy-middleware
     createProxyMiddleware({
-      changeOrigin: true,
+      changeOrigin: false,
       pathRewrite: {
         [`^${rwConfig.web.apiUrl}`]: '', // remove base path
       },
       // Using 127.0.0.1 to force ipv4. With `localhost` you don't really know
       // if it's going to be ipv4 or ipv6
       target: `http://127.0.0.1:${rwConfig.api.port}`,
-    })
+    }),
   )
 
   const getStylesheetLinks = () => clientEntry.css || []
@@ -166,7 +166,7 @@ export async function runFeServer() {
     // it will still be handled by the route handler, not the middleware
     app.get(
       createExtensionRouteDef(route.matchRegexString),
-      handleWithMiddleware(route)
+      handleWithMiddleware(route),
     )
   }
 
@@ -180,7 +180,7 @@ export async function runFeServer() {
 
   app.listen(rwConfig.web.port)
   console.log(
-    `Started production FE server on http://localhost:${rwConfig.web.port}`
+    `Started production FE server on http://localhost:${rwConfig.web.port}`,
   )
 }
 

@@ -36,25 +36,25 @@ export const handler = () => {
       // They don't show up in tests cause we run prettier. Let's do the same here.
       fs.writeFileSync(
         API_SERVER_CONFIG_PATH,
-        prettify(fs.readFileSync(API_SERVER_CONFIG_PATH, 'utf-8'))
+        await prettify(fs.readFileSync(API_SERVER_CONFIG_PATH, 'utf-8')),
       )
 
       setOutput('All done!')
     } else {
       const res = await fetch(
-        'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/template/api/server.config.js'
+        'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/template/api/server.config.js',
       )
       const text = await res.text()
 
       const NEW_API_SERVER_CONFIG_PATH = path.join(
         getPaths().api.base,
-        'server.config.js'
+        'server.config.js',
       )
 
-      fs.writeFileSync(NEW_API_SERVER_CONFIG_PATH, prettify(text))
+      fs.writeFileSync(NEW_API_SERVER_CONFIG_PATH, await prettify(text))
 
       setOutput(
-        'Done! No server.config.js found, so we updated your project to use the latest version.'
+        'Done! No server.config.js found, so we updated your project to use the latest version.',
       )
     }
   })

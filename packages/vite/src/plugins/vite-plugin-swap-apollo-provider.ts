@@ -16,7 +16,7 @@ export default function swapApolloProvider(): PluginOption {
       if (/web\/src\/App\.(ts|tsx|js|jsx)$/.test(id)) {
         return code.replace(
           '@redwoodjs/web/apollo',
-          '@redwoodjs/web/dist/apollo/suspense'
+          '@redwoodjs/web/dist/apollo/suspense',
         )
       }
 

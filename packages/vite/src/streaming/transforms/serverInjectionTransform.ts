@@ -6,7 +6,7 @@ import type { RenderCallback } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
 import { ServerInjectedHtml } from '@redwoodjs/web/dist/components/ServerInject'
 
-import { encodeText } from './encode-decode'
+import { encodeText } from './encode-decode.js'
 
 type CreateServerInjectionArgs = {
   injectionState: Set<RenderCallback>
@@ -61,7 +61,7 @@ export function createServerInjectionTransform({
     const serverHtmlOutput = renderToString(
       React.createElement(ServerInjectedHtml, {
         injectionState,
-      })
+      }),
     )
 
     const injectedBytes = encodeText(serverHtmlOutput)

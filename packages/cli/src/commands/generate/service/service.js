@@ -79,7 +79,7 @@ export const scenarioFieldValue = (field) => {
 export const fieldsToScenario = async (
   scalarFields,
   relations,
-  foreignKeys
+  foreignKeys,
 ) => {
   const data = {}
 
@@ -103,7 +103,7 @@ export const fieldsToScenario = async (
       create: await fieldsToScenario(
         relScalarFields,
         relRelations,
-        relForeignKeys
+        relForeignKeys,
       ),
     }
   }
@@ -126,7 +126,7 @@ export const buildScenario = async (model) => {
     const scenarioData = await fieldsToScenario(
       scalarFields,
       relations,
-      foreignKeys
+      foreignKeys,
     )
 
     Object.keys(scenarioData).forEach((key) => {
@@ -304,7 +304,7 @@ export const files = async ({
   const model = name
   const idName = await getIdName(model)
   const extension = 'ts'
-  const serviceFile = templateForComponentFile({
+  const serviceFile = await templateForComponentFile({
     name,
     componentName: componentName,
     extension: `.${extension}`,
@@ -314,7 +314,7 @@ export const files = async ({
     templateVars: { relations: relations || [], idName, ...rest },
   })
 
-  const testFile = templateForComponentFile({
+  const testFile = await templateForComponentFile({
     name,
     componentName: componentName,
     extension: `.test.${extension}`,
@@ -327,7 +327,7 @@ export const files = async ({
       update: await fieldsToUpdate(model),
       types: await fieldTypes(model),
       prismaImport: (await parseSchema(model)).scalarFields.some(
-        (field) => field.type === 'Decimal'
+        (field) => field.type === 'Decimal',
       ),
       prismaModel: model,
       idName,
@@ -335,7 +335,7 @@ export const files = async ({
     },
   })
 
-  const scenariosFile = templateForComponentFile({
+  const scenariosFile = await templateForComponentFile({
     name,
     componentName: componentName,
     extension: `.scenarios.${extension}`,
@@ -362,9 +362,11 @@ export const files = async ({
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return files.reduce((acc, [outputPath, content]) => {
+  return files.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
     if (!typescript) {
-      content = transformTSToJS(outputPath, content)
+      content = await transformTSToJS(outputPath, content)
       outputPath = outputPath.replace('.ts', '.js')
     }
 
@@ -372,7 +374,7 @@ export const files = async ({
       [outputPath]: content,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 export const defaults = {
@@ -402,8 +404,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#generate-service'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#generate-service',
+      )}`,
     )
   Object.entries(defaults).forEach(([option, config]) => {
     yargs.option(option, config)

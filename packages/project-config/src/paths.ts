@@ -130,12 +130,11 @@ const PATH_WEB_DIR_DIST_CLIENT = 'web/dist/client'
 const PATH_WEB_DIR_DIST_RSC = 'web/dist/rsc'
 const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
 
-// Don't specify extension, handled by resolve file
-const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server'
-const PATH_WEB_DIR_DIST_DOCUMENT = 'web/dist/server/Document'
+const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server.mjs'
+const PATH_WEB_DIR_DIST_DOCUMENT = 'web/dist/server/Document.mjs'
 
 const PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS = 'web/dist/server/routeHooks'
-const PATH_WEB_DIR_DIST_RSC_ENTRIES = 'web/dist/rsc/entries.js'
+const PATH_WEB_DIR_DIST_RSC_ENTRIES = 'web/dist/rsc/entries.mjs'
 const PATH_WEB_DIR_ROUTE_MANIFEST = 'web/dist/server/route-manifest.json'
 
 /**
@@ -155,7 +154,7 @@ export const getBaseDirFromFile = (file: string) => {
  */
 export const resolveFile = (
   filePath: string,
-  extensions: string[] = ['.js', '.tsx', '.ts', '.jsx']
+  extensions: string[] = ['.js', '.tsx', '.ts', '.jsx'],
 ): string | null => {
   for (const extension of extensions) {
     const p = `${filePath}${extension}`
@@ -224,7 +223,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       generators: path.join(BASE_DIR, PATH_WEB_DIR_GENERATORS),
       app: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_APP)) as string,
       document: resolveFile(
-        path.join(BASE_DIR, PATH_WEB_DIR_SRC_DOCUMENT)
+        path.join(BASE_DIR, PATH_WEB_DIR_SRC_DOCUMENT),
       ) as string,
       index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)), // old webpack entry point
       html: path.join(BASE_DIR, PATH_WEB_INDEX_HTML),
@@ -234,26 +233,25 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       postcss: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_POSTCSS),
       storybookConfig: path.join(
         BASE_DIR,
-        PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG
+        PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG,
       ),
       storybookPreviewConfig: resolveFile(
-        path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW)
+        path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW),
       ),
       storybookManagerConfig: path.join(
         BASE_DIR,
-        PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER
+        PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER,
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
       distClient: path.join(BASE_DIR, PATH_WEB_DIR_DIST_CLIENT),
       distRsc: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC),
       distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
       // Allow for the possibility of a .mjs file
-      distEntryServer: mjsOrJs(
-        path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER)
+      distEntryServer: path.join(
+        BASE_DIR,
+        PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER,
       ),
-      distDocumentServer: mjsOrJs(
-        path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT)
-      ),
+      distDocumentServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT),
       distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
       distRscEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC_ENTRIES),
       routeManifest: path.join(BASE_DIR, PATH_WEB_DIR_ROUTE_MANIFEST),
@@ -310,7 +308,7 @@ export const getAppRouteHook = (forProd = false) => {
   if (forProd) {
     const distAppRouteHook = path.join(
       rwPaths.web.distRouteHooks,
-      'App.routeHooks.js'
+      'App.routeHooks.js',
     )
 
     try {
@@ -333,7 +331,7 @@ export const getAppRouteHook = (forProd = false) => {
  * is used by structure, babel auto-importer and the eslint plugin.
  */
 export const processPagesDir = (
-  webPagesDir: string = getPaths().web.pages
+  webPagesDir: string = getPaths().web.pages,
 ): Array<PagesDependency> => {
   const pagePaths = fg.sync('**/*Page.{js,jsx,ts,tsx}', {
     cwd: webPagesDir,
@@ -344,7 +342,7 @@ export const processPagesDir = (
 
     const importName = p.dir.replace(/\//g, '')
     const importPath = importStatementPath(
-      path.join(webPagesDir, p.dir, p.name)
+      path.join(webPagesDir, p.dir, p.name),
     )
 
     const importStatement = `const ${importName} = { name: '${importName}', loader: import('${importPath}') }`
@@ -404,7 +402,7 @@ export const importStatementPath = (path: string) => {
 
 function packageJsonIsEsm(packageJsonPath: string) {
   const packageJsonContents = JSON.parse(
-    fs.readFileSync(packageJsonPath, 'utf-8')
+    fs.readFileSync(packageJsonPath, 'utf-8'),
   )
   return packageJsonContents.type === 'module'
 }
@@ -416,7 +414,7 @@ export function projectRootIsEsm() {
 export function projectSideIsEsm(side: 'api' | 'web') {
   const redwoodProjectPaths = getPaths()
   return packageJsonIsEsm(
-    path.join(redwoodProjectPaths[side].base, 'package.json')
+    path.join(redwoodProjectPaths[side].base, 'package.json'),
   )
 }
 
@@ -432,10 +430,4 @@ export function projectIsEsm() {
   }
 
   return true
-}
-
-/** Default to JS path, but if MJS exists, use it instead */
-const mjsOrJs = (filePath: string) => {
-  const mjsPath = resolveFile(filePath, ['.mjs'])
-  return mjsPath ? mjsPath : filePath + '.js'
 }

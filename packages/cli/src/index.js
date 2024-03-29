@@ -88,7 +88,7 @@ try {
 
     if (!redwoodTOMLPath) {
       throw new Error(
-        `Couldn't find up a "redwood.toml" file from ${process.cwd()}`
+        `Couldn't find up a "redwood.toml" file from ${process.cwd()}`,
       )
     }
 
@@ -166,24 +166,24 @@ async function runYargs() {
         (argv) => {
           delete argv.cwd
           delete argv.addEnvFiles
-          delete argv['add-env-files']
+          delete argv['load-env-files']
           delete argv.telemetry
         },
         telemetry && telemetryMiddleware,
         updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
-      ].filter(Boolean)
+      ].filter(Boolean),
     )
     .option('cwd', {
       describe: 'Working directory to use (where `redwood.toml` is located)',
     })
-    .option('add-env-files', {
+    .option('load-env-files', {
       describe:
         'Load additional .env files. Values defined in files specified later override earlier ones.',
       array: true,
     })
     .example(
-      'yarn rw exec migrateUsers --add-env-files stripe nakama',
-      "Run a script, also loading env vars from '.env.stripe' and '.env.nakama'"
+      'yarn rw exec migrateUsers --load-env-files stripe nakama',
+      "Run a script, also loading env vars from '.env.stripe' and '.env.nakama'",
     )
     .option('telemetry', {
       describe: 'Whether to send anonymous usage telemetry to RedwoodJS',
@@ -192,7 +192,7 @@ async function runYargs() {
     })
     .example(
       'yarn rw g page home /',
-      "\"Create a page component named 'Home' at path '/'\""
+      "Create a page component named 'Home' at path '/'",
     )
     .demandCommand()
     .strict()

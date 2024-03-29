@@ -7,7 +7,7 @@ import type { Args } from './setup'
 
 export async function handler({ force: forceArg }: Args) {
   const { version } = JSON.parse(
-    fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
+    fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'),
   )
 
   standardAuthHandler({
@@ -62,7 +62,7 @@ export const addRoutingLogic = {
             line.includes('@redwoodjs')
           ) {
             acc.push(
-              "import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'"
+              "import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'",
             )
             acc.push('')
 
@@ -76,7 +76,7 @@ export const addRoutingLogic = {
         .join('\n')
       content = content.replace(
         "import { useAuth } from './auth'",
-        "import { useAuth, PreBuiltUI } from './auth'"
+        "import { useAuth, PreBuiltUI } from './auth'",
       )
 
       content = content.replace(
@@ -84,7 +84,7 @@ export const addRoutingLogic = {
         'const Routes = () => {\n' +
           '  if (canHandleRoute(PreBuiltUI)) {\n' +
           '    return getRoutingComponent(PreBuiltUI)\n' +
-          '  }\n\n'
+          '  }\n\n',
       )
 
       fs.writeFileSync(routesPath, content)

@@ -25,7 +25,7 @@ import type { RedwoodGraphQLContext } from '../types'
  * @returns ExecutionResult
  */
 export const useRedwoodError = (
-  logger: Logger
+  logger: Logger,
 ): Plugin<RedwoodGraphQLContext> => {
   return {
     async onExecute() {
@@ -41,7 +41,7 @@ export const useRedwoodError = (
                 ) {
                   logger.debug(
                     { custom: { name: error.originalError.name } },
-                    'Converting RedwoodError to GraphQLError'
+                    'Converting RedwoodError to GraphQLError',
                   )
                   return createGraphQLError(error.message, {
                     extensions: error.extensions,
@@ -61,7 +61,7 @@ export const useRedwoodError = (
                 errors,
                 extensions: result.extensions || {},
               })
-            }
+            },
           )
         },
       }

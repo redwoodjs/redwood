@@ -46,7 +46,7 @@ export const tasks = ({ name, path }) =>
         task: async () => removeRoutesFromRouterTask([camelcase(name)]),
       },
     ],
-    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true },
   )
 
 export const handler = async ({ name, path }) => {

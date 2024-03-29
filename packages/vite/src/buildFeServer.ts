@@ -1,11 +1,11 @@
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { buildRouteHooks } from './buildRouteHooks'
-import { buildRouteManifest } from './buildRouteManifest'
-import { buildRscClientAndServer } from './buildRscClientAndServer'
-import { buildForStreamingServer } from './streaming/buildForStreamingServer'
-import { ensureProcessDirWeb } from './utils'
+import { buildRouteHooks } from './buildRouteHooks.js'
+import { buildRouteManifest } from './buildRouteManifest.js'
+import { buildRscClientAndServer } from './buildRscClientAndServer.js'
+import { buildForStreamingServer } from './streaming/buildForStreamingServer.js'
+import { ensureProcessDirWeb } from './utils.js'
 
 export interface BuildOptions {
   verbose?: boolean
@@ -25,7 +25,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   if (!viteConfigPath) {
     throw new Error(
       'Vite config not found. You need to setup your project with Vite ' +
-        'using `yarn rw setup vite`'
+        'using `yarn rw setup vite`',
     )
   }
 
@@ -33,7 +33,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     throw new Error(
       'Vite entry points not found. Please check that your project has an ' +
         'entry.client.{jsx,tsx} and entry.server.{jsx,tsx} file in the ' +
-        'web/src directory.'
+        'web/src directory.',
     )
   }
 
@@ -52,7 +52,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     await buildWeb({ verbose })
   }
 
-  await buildForStreamingServer({ verbose })
+  await buildForStreamingServer({ verbose, rscEnabled })
 
   await buildRouteHooks(verbose, rwPaths)
 

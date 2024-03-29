@@ -38,7 +38,7 @@ describe('MiddlewareRequest', () => {
           Cookie: 'errybody=lets-funk',
           'X-Custom-Header': 'beatdrop',
         },
-      }
+      },
     )
 
     const mReq = createMiddlewareRequest(whatWgRequest)

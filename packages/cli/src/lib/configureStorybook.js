@@ -19,7 +19,7 @@ import { getPaths, transformTSToJS, writeFile } from '.'
  * @param {string} newConfigPath - The path to the new configuration file
  */
 export default async function extendStorybookConfiguration(
-  newConfigPath = undefined
+  newConfigPath = undefined,
 ) {
   const webPaths = getPaths().web
   const ts = isTypeScriptProject()
@@ -31,7 +31,7 @@ export default async function extendStorybookConfiguration(
   if (!fse.existsSync(sbPreviewConfigPath)) {
     // If the Storybook preview config file doesn't exist, create it from the template
     const templateContent = read(
-      path.resolve(__dirname, 'templates', 'storybook.preview.tsx.template')
+      path.resolve(__dirname, 'templates', 'storybook.preview.tsx.template'),
     )
     const storybookPreviewContent = ts
       ? templateContent

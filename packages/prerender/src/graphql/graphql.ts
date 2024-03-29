@@ -28,7 +28,7 @@ interface GqlOperation {
 export async function executeQuery(
   gqlHandler: (args: any) => Promise<any>,
   query: DocumentNode,
-  variables?: Record<string, unknown>
+  variables?: Record<string, unknown>,
 ) {
   const config = getConfig()
   const operationName = getOperationName(query)
@@ -82,7 +82,7 @@ export async function getGqlHandler() {
   } catch (e) {
     return () => {
       throw new GqlHandlerImportError(
-        `Unable to import GraphQL handler at ${gqlPath}`
+        `Unable to import GraphQL handler at ${gqlPath}`,
       )
     }
   }

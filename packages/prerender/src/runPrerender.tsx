@@ -41,7 +41,7 @@ async function recursivelyRender(
   App: React.ElementType,
   renderPath: string,
   gqlHandler: any,
-  queryCache: Record<string, QueryInfo>
+  queryCache: Record<string, QueryInfo>,
 ): Promise<string> {
   // Load this async, to prevent rwjs/web being loaded before shims
   const {
@@ -62,7 +62,7 @@ async function recursivelyRender(
         const resultString = await executeQuery(
           gqlHandler,
           value.query,
-          value.variables
+          value.variables,
         )
 
         let result
@@ -86,8 +86,8 @@ async function recursivelyRender(
           if (result.errors[0]?.extensions?.code === 'UNAUTHENTICATED') {
             console.error(
               `\n \n 🛑  Cannot prerender the query ${getOperationName(
-                value.query
-              )} as it requires auth. \n`
+                value.query,
+              )} as it requires auth. \n`,
             )
           }
 
@@ -121,7 +121,7 @@ async function recursivelyRender(
           throw e
         }
       }
-    })
+    }),
   )
 
   // `renderPath` is *just* a path, but the LocationProvider needs a full URL
@@ -137,7 +137,7 @@ async function recursivelyRender(
       <CellCacheContextProvider queryCache={queryCache}>
         <App />
       </CellCacheContextProvider>
-    </LocationProvider>
+    </LocationProvider>,
   )
 
   if (Object.values(queryCache).some((value) => !value.hasProcessed)) {
@@ -147,7 +147,7 @@ async function recursivelyRender(
   } else {
     if (shouldShowGraphqlHandlerNotFoundWarn) {
       console.warn(
-        '\n  ⚠️  Could not load your GraphQL handler. \n Your Cells have been prerendered in the "Loading" state. \n'
+        '\n  ⚠️  Could not load your GraphQL handler. \n Your Cells have been prerendered in the "Loading" state. \n',
       )
     }
 
@@ -158,7 +158,7 @@ async function recursivelyRender(
 function insertChunkLoadingScript(
   indexHtmlTree: CheerioAPI,
   renderPath: string,
-  forVite: boolean
+  forVite: boolean,
 ) {
   const prerenderRoutes = detectPrerenderRoutes()
 
@@ -177,8 +177,8 @@ function insertChunkLoadingScript(
   const buildManifest = JSON.parse(
     fs.readFileSync(
       path.join(getPaths().web.dist, 'client-build-manifest.json'),
-      'utf-8'
-    )
+      'utf-8',
+    ),
   )
 
   const chunkPaths: Array<string> = []
@@ -194,8 +194,8 @@ function insertChunkLoadingScript(
       const chunkReferencesJson: Array<ChunkReference> = JSON.parse(
         fs.readFileSync(
           path.join(getPaths().web.dist, 'chunk-references.json'),
-          'utf-8'
-        )
+          'utf-8',
+        ),
       )
 
       const chunkReferences = chunkReferencesJson.find((chunkRef) => {
@@ -254,7 +254,7 @@ function insertChunkLoadingScript(
     indexHtmlTree('head').prepend(
       `<script defer="defer" src="${chunkPath}" ${
         forVite ? 'type="module"' : ''
-      }></script>`
+      }></script>`,
     )
   })
 
@@ -281,7 +281,7 @@ function insertChunkLoadingScript(
       fullChunkPath,
       jsChunk +
         'globalThis.__REDWOOD__PRERENDER_PAGES = globalThis.__REDWOOD__PRERENDER_PAGES || {};\n' +
-        `globalThis.__REDWOOD__PRERENDER_PAGES.${route?.pageIdentifier}=${varNameMatch?.[1]};\n`
+        `globalThis.__REDWOOD__PRERENDER_PAGES.${route?.pageIdentifier}=${varNameMatch?.[1]};\n`,
     )
   })
 }
@@ -354,7 +354,7 @@ export const runPrerender = async ({
     App,
     renderPath,
     gqlHandler,
-    queryCache
+    queryCache,
   )
 
   const { helmet } = globalThis.__REDWOOD__HELMET_CONTEXT
@@ -399,8 +399,8 @@ export const runPrerender = async ({
 
   indexHtmlTree('head').append(
     `<script> globalThis.__REDWOOD__APOLLO_STATE = ${JSON.stringify(
-      prerenderApolloClient.extract()
-    )}</script>`
+      prerenderApolloClient.extract(),
+    )}</script>`,
   )
 
   // Reset the cache after the apollo state is appended into the head
@@ -420,7 +420,7 @@ export const runPrerender = async ({
 // Used by cli at build time
 export const writePrerenderedHtmlFile = (
   outputHtmlPath: string,
-  content: string
+  content: string,
 ) => {
   const outputHtmlAbsPath = path.join(getPaths().base, outputHtmlPath)
   // Copy default (unprerendered) index.html to 200.html first

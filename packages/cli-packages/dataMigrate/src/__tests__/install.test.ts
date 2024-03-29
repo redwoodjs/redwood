@@ -8,7 +8,7 @@ jest.mock(
   () => ({
     handler: jest.fn(),
   }),
-  { virtual: true }
+  { virtual: true },
 )
 
 describe('install', () => {
@@ -21,7 +21,7 @@ describe('install', () => {
   it("`command` and `description` haven't unintentionally changed", () => {
     expect(installCommand.command).toMatchInlineSnapshot(`"install"`)
     expect(installCommand.description).toMatchInlineSnapshot(
-      `"Add the RW_DataMigration model to your schema"`
+      `"Add the RW_DataMigration model to your schema"`,
     )
   })
 
@@ -38,12 +38,12 @@ describe('install', () => {
     // to avoid having to match control characters that might not even always
     // be there
     expect(yargs.epilogue).toHaveBeenCalledWith(
-      expect.stringMatching(/Also see the .*Redwood CLI Reference.*/)
+      expect.stringMatching(/Also see the .*Redwood CLI Reference.*/),
     )
     expect(yargs.epilogue).toHaveBeenCalledWith(
       expect.stringMatching(
-        /https:\/\/redwoodjs\.com\/docs\/cli-commands#datamigrate-install/
-      )
+        /https:\/\/redwoodjs\.com\/docs\/cli-commands#datamigrate-install/,
+      ),
     )
   })
 

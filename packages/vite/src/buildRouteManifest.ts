@@ -7,7 +7,7 @@ import type { Manifest as ViteBuildManifest } from 'vite'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
 
-import type { RWRouteManifest } from './types'
+import type { RWRouteManifest } from './types.js'
 
 /**
  * RSC build. Step 6.
@@ -17,7 +17,7 @@ export async function buildRouteManifest() {
   const rwPaths = getPaths()
 
   const buildManifestUrl = url.pathToFileURL(
-    path.join(getPaths().web.distClient, 'client-build-manifest.json')
+    path.join(getPaths().web.distClient, 'client-build-manifest.json'),
   ).href
   const clientBuildManifest: ViteBuildManifest = (
     await import(buildManifestUrl, { with: { type: 'json' } })
@@ -63,7 +63,7 @@ export async function buildRouteManifest() {
 // the pages folder in the dist/server/routeHooks directory.
 // @MARK need to change to .mjs here if we use esm
 const FIXME_constructRouteHookPath = (
-  routeHookSrcPath: string | null | undefined
+  routeHookSrcPath: string | null | undefined,
 ) => {
   const rwPaths = getPaths()
   if (!routeHookSrcPath) {

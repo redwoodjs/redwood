@@ -2,9 +2,8 @@ import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { onWarn } from '../lib/onWarn'
-
-import { rscAnalyzePlugin } from './rscVitePlugins'
+import { onWarn } from '../lib/onWarn.js'
+import { rscAnalyzePlugin } from '../plugins/vite-plugin-rsc-analyze.js'
 
 /**
  * RSC build. Step 1.
@@ -21,6 +20,7 @@ export async function rscBuildAnalyze() {
   const rwPaths = getPaths()
   const clientEntryFileSet = new Set<string>()
   const serverEntryFileSet = new Set<string>()
+  const componentImportMap = new Map<string, string[]>()
 
   if (!rwPaths.web.entries) {
     throw new Error('RSC entries file not found')
@@ -45,7 +45,11 @@ export async function rscBuildAnalyze() {
     plugins: [
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
-        (id) => serverEntryFileSet.add(id)
+        (id) => serverEntryFileSet.add(id),
+        (id, imports) => {
+          const existingImports = componentImportMap.get(id) ?? []
+          componentImportMap.set(id, [...existingImports, ...imports])
+        },
       ),
     ],
     ssr: {
@@ -53,32 +57,28 @@ export async function rscBuildAnalyze() {
       // going to be RSCs
       noExternal: /^(?!node:)/,
       // TODO (RSC): Figure out what the `external` list should be. Right
-      // now it's just copied from waku
-      external: ['react', 'minimatch'],
+      // now it's just copied from waku, plus we added prisma
+      external: ['react', 'minimatch', '@prisma/client'],
       resolve: {
         externalConditions: ['react-server'],
       },
     },
     build: {
+      // TODO (RSC): Remove `minify: false` when we don't need to debug as often
+      minify: false,
       manifest: 'rsc-build-manifest.json',
       write: false,
-      ssr: true,
+      // TODO (RSC): In the future we want to generate the entries file
+      // automatically. Maybe by using `analyzeRoutes()`
+      // For the dev server we might need to generate these entries on the
+      // fly - so we will need something like a plugin or virtual module
+      // to generate these entries, rather than write to actual file.
+      // And so, we might as well use on-the-fly generation for regular
+      // builds too
+      ssr: rwPaths.web.entries,
       rollupOptions: {
         onwarn: onWarn,
-        input: {
-          // TODO (RSC): In the future we want to generate the entries file
-          // automatically. Maybe by using `analyzeRoutes()`
-          // For the dev server we might need to generate these entries on the
-          // fly - so we will need something like a plugin or virtual module
-          // to generate these entries, rather than write to actual file.
-          // And so, we might as well use on-the-fly generation for regular
-          // builds too
-          entries: rwPaths.web.entries,
-        },
       },
-    },
-    legacy: {
-      buildSsrCjsExternalHeuristics: true,
     },
   })
 
@@ -89,13 +89,13 @@ export async function rscBuildAnalyze() {
       // the path here just the filename is not enough.
       const rscName = `rsc-${filename.split(/[\/\\]/).at(-1)}-${i}`
       return [rscName, filename]
-    })
+    }),
   )
   const serverEntryFiles = Object.fromEntries(
     Array.from(serverEntryFileSet).map((filename, i) => {
       const rsaName = `rsa-${filename.split(/[\/\\]/).at(-1)}-${i}`
       return [rsaName, filename]
-    })
+    }),
   )
 
   console.log('clientEntryFileSet', Array.from(clientEntryFileSet))
@@ -103,5 +103,9 @@ export async function rscBuildAnalyze() {
   console.log('clientEntryFiles', clientEntryFiles)
   console.log('serverEntryFiles', serverEntryFiles)
 
-  return { clientEntryFiles, serverEntryFiles }
+  return {
+    clientEntryFiles,
+    serverEntryFiles,
+    componentImportMap,
+  }
 }

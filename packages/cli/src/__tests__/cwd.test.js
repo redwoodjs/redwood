@@ -27,7 +27,7 @@ describe('The CLI sets `cwd` correctly', () => {
       expect(status).toBe(1)
       expect(stdout).toBe('')
       expect(stderr).toMatchInlineSnapshot(
-        `"Couldn't find a "redwood.toml" file in __fixtures__"`
+        `"Couldn't find a "redwood.toml" file in __fixtures__"`,
       )
     })
   })
@@ -57,7 +57,7 @@ describe('The CLI sets `cwd` correctly', () => {
       expect(status).toBe(1)
       expect(stdout).toBe('')
       expect(stderr).toMatchInlineSnapshot(
-        `"Couldn't find a "redwood.toml" file in __fixtures__"`
+        `"Couldn't find a "redwood.toml" file in __fixtures__"`,
       )
     })
   })
@@ -71,7 +71,7 @@ describe('The CLI sets `cwd` correctly', () => {
             ...process.env,
             RWJS_CWD: '/ignored/path',
           },
-        }
+        },
       )
 
       expect(status).toBe(0)
@@ -87,13 +87,13 @@ describe('The CLI sets `cwd` correctly', () => {
             ...process.env,
             RWJS_CWD: path.join('__fixtures__', 'test-project'),
           },
-        }
+        },
       )
 
       expect(status).toBe(1)
       expect(stdout).toBe('')
       expect(stderr).toMatchInlineSnapshot(
-        `"Couldn't find a "redwood.toml" file in __fixtures__"`
+        `"Couldn't find a "redwood.toml" file in __fixtures__"`,
       )
     })
   })

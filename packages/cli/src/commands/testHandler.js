@@ -42,8 +42,8 @@ function isJestConfigFile(sides) {
           console.error(
             c.error(
               `\nError: Missing Jest config file ${side}/jest.config.js` +
-                '\nTo add this file, run `npx @redwoodjs/codemods update-jest-config`\n'
-            )
+                '\nTo add this file, run `npx @redwoodjs/codemods update-jest-config`\n',
+            ),
           )
           throw new Error(`Error: Jest config file not found in ${side} side`)
         }
@@ -96,13 +96,13 @@ export const handler = async ({
 
   // Only the side params
   const sides = filterParams.filter((filterString) =>
-    project.sides().includes(filterString)
+    project.sides().includes(filterString),
   )
 
   // All the other params, apart from sides
   const jestFilterArgs = [
     ...filterParams.filter(
-      (filterString) => !project.sides().includes(filterString)
+      (filterString) => !project.sides().includes(filterString),
     ),
   ]
 
@@ -134,7 +134,7 @@ export const handler = async ({
 
   try {
     const cacheDirDb = `file:${ensurePosixPath(
-      rwjsPaths.generated.base
+      rwjsPaths.generated.base,
     )}/test.db`
     const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
 

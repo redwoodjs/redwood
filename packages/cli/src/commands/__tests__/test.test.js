@@ -132,10 +132,10 @@ test('Passes values of other flags to jest', async () => {
   // Note that these below tests aren't the best, since they don't check for order
   // But I'm making sure only 2 extra params get passed
   expect(execa.mock.results[0].value.params).toEqual(
-    expect.arrayContaining(['--bazinga', false])
+    expect.arrayContaining(['--bazinga', false]),
   )
 
   expect(execa.mock.results[0].value.params).toEqual(
-    expect.arrayContaining(['--hello', 'world'])
+    expect.arrayContaining(['--hello', 'world']),
   )
 })

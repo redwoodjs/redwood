@@ -17,7 +17,7 @@ export { coerceRootPath, RedwoodFastifyWebOptions }
 
 export async function redwoodFastifyWeb(
   fastify: FastifyInstance,
-  opts: RedwoodFastifyWebOptions
+  opts: RedwoodFastifyWebOptions,
 ) {
   const { redwoodOptions, flags } = resolveOptions(opts)
 
@@ -31,6 +31,13 @@ export async function redwoodFastifyWeb(
       prefix: redwoodOptions.apiUrl,
       upstream: redwoodOptions.apiProxyTarget,
       disableCache: true,
+      replyOptions: {
+        rewriteRequestHeaders: (req, headers) => ({
+          ...headers,
+          // preserve the original host header, instead of letting it be overwritten by the proxy
+          host: req.headers.host,
+        }),
+      },
     })
   }
 

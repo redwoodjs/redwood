@@ -12,14 +12,14 @@
   },
   "dependencies": {
     "@apollo/experimental-nextjs-app-support": "0.0.0-commit-b8a73fe",
+    "@jtoar/throw-on-client": "0.0.1",
     "@redwoodjs/forms": "7.0.0-canary.1011",
     "@redwoodjs/router": "7.0.0-canary.1011",
     "@redwoodjs/web": "7.0.0-canary.1011",
     "@tobbe.dev/rsc-test": "0.0.5",
     "client-only": "0.0.1",
-    "react": "0.0.0-experimental-e5205658f-20230913",
-    "react-dom": "0.0.0-experimental-e5205658f-20230913",
-    "server-only": "0.0.1"
+    "react": "18.3.0-canary-a870b2d54-20240314",
+    "react-dom": "18.3.0-canary-a870b2d54-20240314"
   },
   "devDependencies": {
     "@redwoodjs/vite": "7.0.0-canary.1011",

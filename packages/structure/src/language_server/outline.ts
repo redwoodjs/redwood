@@ -27,7 +27,7 @@ export class OutlineManager {
     RemoteTreeDataProvider_publishOverLSPConnection(
       tdp,
       this.server.connection,
-      methodPrefix
+      methodPrefix,
     )
   }
 }

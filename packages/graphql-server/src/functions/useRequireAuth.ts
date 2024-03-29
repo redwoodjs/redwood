@@ -20,7 +20,7 @@ interface Args {
 
 // Used for type safety in our tests
 export type UseRequireAuth = (
-  args: Args
+  args: Args,
 ) => (
   event: APIGatewayEvent,
   context: LambdaContext,
@@ -50,7 +50,7 @@ export const useRequireAuth: UseRequireAuth = ({
             ? await getCurrentUser(
                 authContext[0],
                 authContext[1],
-                authContext[2]
+                authContext[2],
               )
             : null
 
@@ -62,7 +62,7 @@ export const useRequireAuth: UseRequireAuth = ({
         if (process.env.NODE_ENV === 'development') {
           console.warn('This warning is only printed in development mode.')
           console.warn(
-            "Always make sure to have `requireAuth('role')` inside your own handler function."
+            "Always make sure to have `requireAuth('role')` inside your own handler function.",
           )
           console.warn('')
           console.warn(e)
@@ -75,7 +75,7 @@ export const useRequireAuth: UseRequireAuth = ({
     // This ensures context is scoped to the lifetime of the request
     return getAsyncStoreInstance().run(
       new Map<string, GlobalContext>(),
-      authEnrichedFunction
+      authEnrichedFunction,
     )
   }
 }

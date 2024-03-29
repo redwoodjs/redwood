@@ -30,6 +30,6 @@ export const handler = () => {
           targetPaths: files,
         })
       }
-    }
+    },
   )
 }
