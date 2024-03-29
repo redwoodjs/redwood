@@ -30,8 +30,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build": "tsx build.mts",
     "build:pack": "yarn pack -o redwoodjs-core.tgz",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
@@ -76,6 +75,7 @@
   },
   "devDependencies": {
     "@types/lodash": "4.17.0",
+    "tsx": "4.7.1",
     "vitest": "1.4.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

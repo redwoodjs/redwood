@@ -8321,6 +8321,7 @@ __metadata:
     resolve-url-loader: "npm:5.0.0"
     rimraf: "npm:5.0.5"
     style-loader: "npm:3.3.4"
+    tsx: "npm:4.7.1"
     typescript: "npm:5.4.3"
     url-loader: "npm:4.1.1"
     vitest: "npm:1.4.0"
