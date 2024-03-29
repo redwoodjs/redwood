@@ -33,6 +33,7 @@ const getEnvVars = () => {
       next.startsWith(redwoodEnvPrefix) ||
       (includeEnvKeys && includeEnvKeys.includes(next))
     ) {
+      // eslint-disable-next-line @redwoodjs/process-env-computed
       prev[`process.env.${next}`] = JSON.stringify(process.env[next])
     }
     return prev
