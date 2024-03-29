@@ -8628,7 +8628,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/project-config@npm:7.3.0, @redwoodjs/project-config@workspace:*, @redwoodjs/project-config@workspace:packages/project-config":
+"@redwoodjs/project-config@npm:7.3.0, @redwoodjs/project-config@workspace:packages/project-config":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/project-config@workspace:packages/project-config"
   dependencies:
@@ -8714,7 +8714,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/structure@npm:7.3.0, @redwoodjs/structure@workspace:*, @redwoodjs/structure@workspace:packages/structure":
+"@redwoodjs/structure@npm:7.3.0, @redwoodjs/structure@workspace:packages/structure":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/structure@workspace:packages/structure"
   dependencies:
@@ -8758,8 +8758,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/telemetry@workspace:packages/telemetry"
   dependencies:
-    "@redwoodjs/project-config": "workspace:*"
-    "@redwoodjs/structure": "workspace:*"
+    "@redwoodjs/project-config": "npm:7.3.0"
+    "@redwoodjs/structure": "npm:7.3.0"
     "@types/envinfo": "npm:7.8.3"
     "@types/uuid": "npm:9.0.8"
     "@types/yargs": "npm:17.0.32"

@@ -21,8 +21,8 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@redwoodjs/project-config": "workspace:*",
-    "@redwoodjs/structure": "workspace:*",
+    "@redwoodjs/project-config": "7.3.0",
+    "@redwoodjs/structure": "7.3.0",
     "@whatwg-node/fetch": "0.9.17",
     "ci-info": "4.0.0",
     "envinfo": "7.11.1",
