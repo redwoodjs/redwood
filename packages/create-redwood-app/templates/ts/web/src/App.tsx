@@ -5,8 +5,12 @@ import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
 import './index.css'
+import { ReactNode } from 'react'
+interface AppProps {
+  children?: ReactNode
+}
 
-const App = ({ children }) => (
+const App = ({ children }: AppProps) => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <RedwoodApolloProvider>
