@@ -1,3 +1,5 @@
+import { getConfig, getPaths } from '@redwoodjs/project-config'
+
 const fs = require('fs')
 const path = require('path')
 
@@ -16,7 +18,6 @@ const { getWebSideDefaultBabelConfig } = require('@redwoodjs/babel-config')
 const {
   ChunkReferencesPlugin,
 } = require('@redwoodjs/internal/dist/webpackPlugins/ChunkReferencesPlugin')
-const { getConfig, getPaths } = require('@redwoodjs/project-config')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
