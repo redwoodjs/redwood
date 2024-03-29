@@ -79,7 +79,7 @@
     "dotenv-defaults": "5.0.2",
     "express": "4.19.2",
     "http-proxy-middleware": "2.0.6",
-    "isbot": "3.7.1",
+    "isbot": "3.8.0",
     "react": "18.3.0-canary-a870b2d54-20240314",
     "react-server-dom-webpack": "18.3.0-canary-a870b2d54-20240314",
     "vite": "5.1.6",
