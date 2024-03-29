@@ -4129,17 +4129,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:2.0.0, clsx@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "clsx@npm:2.0.0"
-  checksum: 10c0/c09f43b3144a0b7826b6b11b6a111b2c7440831004eecc02d333533c5e58ef0aa5f2dce071d3b25fbb8c8ea97b45df96c74bcc1d51c8c2027eb981931107b0cd
+"clsx@npm:2.1.0":
+  version: 2.1.0
+  resolution: "clsx@npm:2.1.0"
+  checksum: 10c0/c09c00ad14f638366ca814097e6cab533dfa1972a358da5b557be487168acbb25b4c1395e89ffa842a8a61ba87a462d2b4885bc9d4f8410b598f3cb339599cdb
   languageName: node
   linkType: hard
 
-"clsx@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "clsx@npm:1.2.1"
-  checksum: 10c0/34dead8bee24f5e96f6e7937d711978380647e936a22e76380290e35486afd8634966ce300fc4b74a32f3762c7d4c0303f442c3e259f4ce02374eb0c82834f27
+"clsx@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "clsx@npm:2.0.0"
+  checksum: 10c0/c09f43b3144a0b7826b6b11b6a111b2c7440831004eecc02d333533c5e58ef0aa5f2dce071d3b25fbb8c8ea97b45df96c74bcc1d51c8c2027eb981931107b0cd
   languageName: node
   linkType: hard
 
@@ -4925,11 +4925,11 @@ __metadata:
     "@docusaurus/theme-common": "npm:3.0.1"
     "@docusaurus/tsconfig": "npm:3.0.1"
     "@mdx-js/react": "npm:3.0.1"
-    clsx: "npm:2.0.0"
-    prism-react-renderer: "npm:2.2.0"
+    clsx: "npm:2.1.0"
+    prism-react-renderer: "npm:2.3.1"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
-    react-player: "npm:2.13.0"
+    react-player: "npm:2.15.1"
     typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
@@ -9360,15 +9360,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prism-react-renderer@npm:2.2.0":
-  version: 2.2.0
-  resolution: "prism-react-renderer@npm:2.2.0"
+"prism-react-renderer@npm:2.3.1":
+  version: 2.3.1
+  resolution: "prism-react-renderer@npm:2.3.1"
   dependencies:
     "@types/prismjs": "npm:^1.26.0"
-    clsx: "npm:^1.2.1"
+    clsx: "npm:^2.0.0"
   peerDependencies:
     react: ">=16.0.0"
-  checksum: 10c0/3ba1dbde06a146471ebe5880fc1136e375ef29d4ff3691263b4141bc064e481bb1a603f08d6af676231cc5570bb78e4b67d38ec7f8ad0e6b2a6ba2e1d28ac851
+  checksum: 10c0/566932127ca18049a651aa038a8f8c7c1ca15950d21b659c2ce71fd95bd03bef2b5d40c489e7aa3453eaf15d984deef542a609d7842e423e6a13427dd90bd371
   languageName: node
   linkType: hard
 
@@ -9666,9 +9666,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-player@npm:2.13.0":
-  version: 2.13.0
-  resolution: "react-player@npm:2.13.0"
+"react-player@npm:2.15.1":
+  version: 2.15.1
+  resolution: "react-player@npm:2.15.1"
   dependencies:
     deepmerge: "npm:^4.0.0"
     load-script: "npm:^1.0.0"
@@ -9677,7 +9677,7 @@ __metadata:
     react-fast-compare: "npm:^3.0.1"
   peerDependencies:
     react: ">=16.6.0"
-  checksum: 10c0/3dc15908ffdab7c48788714ff806559b53bb80753024118ed2e31f8d0c857d83c04f9630bf1d195d4b0f621e3ce757f4dab9a51883fcc8c285250724edb0d9d9
+  checksum: 10c0/0d17002c08b333cfc9844d762e6cb064c992f4b58088895af6a445a6850f48a318fb39c54a5e0e3bc5c5d7027c76a8d8ed796a0fa723c011450634ba2ff881ca
   languageName: node
   linkType: hard
 
