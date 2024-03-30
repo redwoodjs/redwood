@@ -46,6 +46,27 @@ The `path` prop specifies the URL path to match, starting with the beginning sla
 
 Some pages should only be visible to authenticated users. We support this using the `PrivateSet` component. Read more [further down](#privateset).
 
+## Redirect Routes
+
+If you move a page you might still want to keep the old route around, so that
+old links to your site keeps working. To this RedwoodJS supports the `redirect`
+prop on routes.
+
+```jsx title="Routes.js"
+<Route path="/blog/{id}" redirect="/post" />
+<Route path="/posts/{id}" page="PostPage" name="post" />
+```
+
+When doing redirects the original path parameters are also passed to the page
+the user is redirected to. So, in the example above, if the user goes to
+`/blog/5` she will be redirected to `/posts/5`.
+
+For redirect routes the `name` prop is optional. If you want to be able to keep
+using old route names in your code you can keep the name around. If you want to
+update them all you can remove the name prop and you'll get Typescript errors
+everywhere it's used. You can also decide to reuse the name for your new route,
+and all existing links in your code will continue to just work.
+
 ## Sets of Routes
 
 You can group Routes into sets using the `Set` component. `Set` allows you to wrap a set of Routes in another component or array of components—usually a Context, a Layout, or both:
