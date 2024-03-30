@@ -58,8 +58,8 @@ prop on routes.
 ```
 
 When doing redirects the original path parameters are also passed to the page
-the user is redirected to. So, in the example above, if the user goes to
-`/blog/5` she will be redirected to `/posts/5`.
+the user is redirected to. So, in the example above, if a user goes to
+`/blog/5` the user will be redirected to `/posts/5`.
 
 For redirect routes the `name` prop is optional. If you want to be able to keep
 using old route names in your code you can keep the name around. If you want to
