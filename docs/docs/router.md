@@ -52,7 +52,7 @@ If you move a page you might still want to keep the old route around, so that
 old links to your site keeps working. To this RedwoodJS supports the `redirect`
 prop on routes.
 
-```jsx title="Routes.js"
+```jsx title="Routes.jsx"
 <Route path="/blog/{id}" redirect="/post" />
 <Route path="/posts/{id}" page="PostPage" name="post" />
 ```
