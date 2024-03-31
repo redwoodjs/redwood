@@ -132,9 +132,6 @@ async function getChangedFilesInPr(page = 1) {
   // Query the GitHub API to get the changed files in the PR
   const url = `${BASE_URL}/pulls/${prNumber}/files?per_page=100&page=${page}`
   const { json, res } = await fetchJson(url)
-
-  console.log('getChangedFilesInPr json', json)
-
   let changedFiles = json?.map((file) => file.filename) || []
 
   // Look at the headers to see if the result is paginated
