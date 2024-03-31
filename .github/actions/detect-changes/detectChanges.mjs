@@ -2,6 +2,7 @@ import fs from 'node:fs'
 
 import core from '@actions/core'
 import { onlyDocsChanges } from './cases/docs_changes.mjs'
+import { onlyChangesetsChanges } from './cases/changesets_changes.mjs'
 import { rscChanged } from './cases/rsc.mjs'
 import { ssrChanged } from './cases/ssr.mjs'
 
@@ -113,6 +114,7 @@ async function main() {
         'to running all tests.'
     )
     core.setOutput('docs_only', false)
+    core.setOutput('changesets_only', false)
     core.setOutput('rsc', true)
     core.setOutput('ssr', true)
     return
@@ -121,12 +123,23 @@ async function main() {
   if (onlyDocsChanges(changedFiles)) {
     console.log('Only docs changes detected')
     core.setOutput('docs_only', true)
+    core.setOutput('changesets_only', false)
+    core.setOutput('rsc', false)
+    core.setOutput('ssr', false)
+    return
+  }
+
+  if (onlyChangesetsChanges(changedFiles)) {
+    console.log('Only changesets changes detected')
+    core.setOutput('docs_only', false)
+    core.setOutput('changesets_only', true)
     core.setOutput('rsc', false)
     core.setOutput('ssr', false)
     return
   }
 
   core.setOutput('docs_only', false)
+  core.setOutput('changesets_only', false)
   core.setOutput('rsc', rscChanged(changedFiles))
   core.setOutput('ssr', ssrChanged(changedFiles))
 }

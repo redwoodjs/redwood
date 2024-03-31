@@ -23,6 +23,7 @@ jobs:
 
     outputs:
       docs_only: ${{ steps.detect-changes.outputs.docs_only }}
+      changesets_only: ${{ steps.detect-changes.outputs.changesets_only }}
       rsc: ${{ steps.detect-changes.outputs.rsc }}
       ssr: ${{ steps.detect-changes.outputs.ssr }}
 
@@ -49,7 +50,7 @@ jobs:
 
   check:
     needs: detect-changes
-    if: needs.detect-changes.outputs.docs_only == 'false'
+    if: needs.detect-changes.outputs.docs_only == 'false' && needs.detect-changes.outputs.changesets_only == 'false'
 
     name: ✅ Check constraints, dependencies, and package.json's
     runs-on: ubuntu-latest
@@ -76,7 +77,7 @@ jobs:
 
   check-skip:
     needs: detect-changes
-    if: needs.detect-changes.outputs.docs_only == 'true'
+    if: needs.detect-changes.outputs.docs_only == 'true' || needs.detect-changes.outputs.changesets_only == 'true'
 
     name: ✅ Check constraints, dependencies, and package.json's
     runs-on: ubuntu-latest
