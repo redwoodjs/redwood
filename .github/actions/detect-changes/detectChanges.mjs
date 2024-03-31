@@ -36,14 +36,10 @@ async function getChangedFiles(page = 1) {
 
   console.log(`Getting changed files for PR ${prNumber} (page ${page})`)
 
-  let changedFiles = []
-
   // Query the GitHub API to get the changed files in the PR
   const url = `https://api.github.com/repos/redwoodjs/redwood/pulls/${prNumber}/files?per_page=100&page=${page}`
   const { json, res } = await fetchJson(url)
-  const files = json?.map((file) => file.filename) || []
-
-  changedFiles = changedFiles.concat(files)
+  let changedFiles = json?.map((file) => file.filename) || []
 
   // Look at the headers to see if the result is paginated
   const linkHeader = res?.headers?.get('link')
