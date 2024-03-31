@@ -5,8 +5,7 @@ import fs from 'node:fs'
 
 // @ts-expect-error types
 import core from '@actions/core'
-import { onlyDocsChanges } from './cases/docs_changes.mjs'
-import { onlyChangesetsChanges } from './cases/changesets_changes.mjs'
+import { codeChanges } from './cases/code_changes.mjs'
 import { rscChanged } from './cases/rsc.mjs'
 import { ssrChanged } from './cases/ssr.mjs'
 
@@ -250,33 +249,21 @@ async function main() {
       'No changed files found. Something must have gone wrong. Falling back ' +
         'to running all tests.',
     )
-    core.setOutput('docs_only', false)
-    core.setOutput('changesets_only', false)
+    core.setOutput('code', false)
     core.setOutput('rsc', true)
     core.setOutput('ssr', true)
     return
   }
 
-  if (onlyDocsChanges(changedFiles)) {
-    console.log('Only docs changes detected')
-    core.setOutput('docs_only', true)
-    core.setOutput('changesets_only', false)
+  if (!codeChanges(changedFiles)) {
+    console.log('Only docs and/or changesets changes detected')
+    core.setOutput('code', false)
     core.setOutput('rsc', false)
     core.setOutput('ssr', false)
     return
   }
 
-  if (onlyChangesetsChanges(changedFiles)) {
-    console.log('Only changesets changes detected')
-    core.setOutput('docs_only', false)
-    core.setOutput('changesets_only', true)
-    core.setOutput('rsc', false)
-    core.setOutput('ssr', false)
-    return
-  }
-
-  core.setOutput('docs_only', false)
-  core.setOutput('changesets_only', false)
+  core.setOutput('code', true)
   core.setOutput('rsc', rscChanged(changedFiles))
   core.setOutput('ssr', ssrChanged(changedFiles))
 }
