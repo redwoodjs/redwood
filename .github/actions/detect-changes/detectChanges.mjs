@@ -1,7 +1,8 @@
 import fs from 'node:fs'
 
 import core from '@actions/core'
-import { hasCodeChanges } from './cases/code_changes.mjs'
+import { onlyDocsChanges } from './cases/docs_changes.mjs'
+import { onlyChangesetsChanges } from './cases/changesets_changes.mjs'
 import { rscChanged } from './cases/rsc.mjs'
 import { ssrChanged } from './cases/ssr.mjs'
 
@@ -98,7 +99,7 @@ async function main() {
 
   // If there's no branch, we're not in a pull request.
   if (!branch) {
-    core.setOutput('onlydocs', false)
+    core.setOutput('docs_only', false)
     core.setOutput('rsc', false)
     core.setOutput('ssr', false)
     return
@@ -112,21 +113,33 @@ async function main() {
       'No changed files found. Something must have gone wrong. Falling back ' +
         'to running all tests.'
     )
-    core.setOutput('onlydocs', false)
+    core.setOutput('docs_only', false)
+    core.setOutput('changesets_only', false)
     core.setOutput('rsc', true)
     core.setOutput('ssr', true)
     return
   }
 
-  if (!hasCodeChanges(changedFiles)) {
-    console.log('No code changes detected, only docs')
-    core.setOutput('onlydocs', true)
+  if (onlyDocsChanges(changedFiles)) {
+    console.log('Only docs changes detected')
+    core.setOutput('docs_only', true)
+    core.setOutput('changesets_only', false)
     core.setOutput('rsc', false)
     core.setOutput('ssr', false)
     return
   }
 
-  core.setOutput('onlydocs', false)
+  if (onlyChangesetsChanges(changedFiles)) {
+    console.log('Only changesets changes detected')
+    core.setOutput('docs_only', false)
+    core.setOutput('changesets_only', true)
+    core.setOutput('rsc', false)
+    core.setOutput('ssr', false)
+    return
+  }
+
+  core.setOutput('docs_only', false)
+  core.setOutput('changesets_only', false)
   core.setOutput('rsc', rscChanged(changedFiles))
   core.setOutput('ssr', ssrChanged(changedFiles))
 }
