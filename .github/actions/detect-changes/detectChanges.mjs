@@ -98,7 +98,7 @@ async function main() {
 
   // If there's no branch, we're not in a pull request.
   if (!branch) {
-    core.setOutput('docs-only', false)
+    core.setOutput('docs_only', false)
     core.setOutput('rsc', false)
     core.setOutput('ssr', false)
     return
@@ -112,7 +112,7 @@ async function main() {
       'No changed files found. Something must have gone wrong. Falling back ' +
         'to running all tests.'
     )
-    core.setOutput('docs-only', false)
+    core.setOutput('docs_only', false)
     core.setOutput('rsc', true)
     core.setOutput('ssr', true)
     return
@@ -120,13 +120,13 @@ async function main() {
 
   if (!hasCodeChanges(changedFiles)) {
     console.log('No code changes detected, only docs')
-    core.setOutput('docs-only', true)
+    core.setOutput('docs_only', true)
     core.setOutput('rsc', false)
     core.setOutput('ssr', false)
     return
   }
 
-  core.setOutput('docs-only', false)
+  core.setOutput('docs_only', false)
   core.setOutput('rsc', rscChanged(changedFiles))
   core.setOutput('ssr', ssrChanged(changedFiles))
 }
