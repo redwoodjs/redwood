@@ -152,7 +152,9 @@ async function fetchJson(url, retries = 0) {
   }
 
   const githubToken =
-    process.env.GITHUB_TOKEN || process.env.REDWOOD_GITHUB_TOKEN
+    process.env.GH_TOKEN ||
+    process.env.GITHUB_TOKEN ||
+    process.env.REDWOOD_GITHUB_TOKEN
 
   try {
     const res = await fetch(url, {
