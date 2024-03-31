@@ -32,27 +32,35 @@ const getPrNumber = () => {
   return prNumber
 }
 
-async function getChangedFiles(page = 1, retries = 0) {
+async function getChangedFiles(page = 1) {
   const prNumber = getPrNumber()
 
-  if (retries) {
-    console.log(
-      `Retry ${retries}: Getting changed files for PR ${prNumber} (page ${page})`
-    )
-  } else {
-    console.log(`Getting changed files for PR ${prNumber} (page ${page})`)
-  }
-
-  let changedFiles = []
+  console.log(`Getting changed files for PR ${prNumber} (page ${page})`)
 
   // Query the GitHub API to get the changed files in the PR
-  const githubToken = process.env.GITHUB_TOKEN
   const url = `https://api.github.com/repos/redwoodjs/redwood/pulls/${prNumber}/files?per_page=100&page=${page}`
-  let resp
-  let files = []
+  const { json, res } = await fetchJson(url)
+  let changedFiles = json?.map((file) => file.filename) || []
+
+  // Look at the headers to see if the result is paginated
+  const linkHeader = res?.headers?.get('link')
+  if (linkHeader && linkHeader.includes('rel="next"')) {
+    const files = await getChangedFiles(page + 1)
+    changedFiles = changedFiles.concat(files)
+  }
+
+  return changedFiles
+}
+
+async function fetchJson(url, retries = 0) {
+  if (retries) {
+    console.log(`Retry ${retries}: ${url}`)
+  }
+
+  const githubToken = process.env.GITHUB_TOKEN || process.env.REDWOOD_GITHUB_TOKEN
 
   try {
-    resp = await fetch(url, {
+    const res = await fetch(url, {
       headers: {
         Authorization: githubToken ? `Bearer ${githubToken}` : undefined,
         ['X-GitHub-Api-Version']: '2022-11-28',
@@ -60,14 +68,15 @@ async function getChangedFiles(page = 1, retries = 0) {
       },
     })
 
-    if (!resp.ok) {
+    if (!res.ok) {
       console.log()
       console.error('Response not ok')
-      console.log('resp', resp)
+      console.log('res', res)
     }
 
-    const json = await resp.json()
-    files = json.map((file) => file.filename) || []
+    const json = await res.json()
+
+    return { json, res }
   } catch (e) {
     if (retries >= 3) {
       console.error(e)
@@ -75,23 +84,14 @@ async function getChangedFiles(page = 1, retries = 0) {
       console.log()
       console.log('Too many retries, giving up.')
 
-      return []
+      return {}
     } else {
       await new Promise((resolve) => setTimeout(resolve, 3000 * retries))
-      files = await getChangedFiles(page, ++retries)
+
+      const fetchJsonRes = await fetchJson(url, ++retries)
+      return fetchJsonRes
     }
   }
-
-  changedFiles = changedFiles.concat(files)
-
-  // Look at the headers to see if the result is paginated
-  const linkHeader = resp.headers.get('link')
-  if (linkHeader && linkHeader.includes('rel="next"')) {
-    const files = await getChangedFiles(page + 1)
-    changedFiles = changedFiles.concat(files)
-  }
-
-  return changedFiles
 }
 
 async function main() {
