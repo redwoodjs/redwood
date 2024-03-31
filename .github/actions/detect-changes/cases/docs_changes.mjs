@@ -1,7 +1,4 @@
-/**
- * Detects if the given file path points to a code file (as apposed to a docs
- * file)
- */
+/** Detects if the given file path points to a docs file */
 function isDocsFile(filePath) {
   if (filePath.startsWith('docs')) {
     return true
@@ -24,10 +21,7 @@ function isDocsFile(filePath) {
   return false
 }
 
-/**
- * Checks if the given array of file paths contains any files with potential
- * code changes
- */
+/** Checks if the given array of file paths contains only docs files */
 export function onlyDocsChanges(changedFiles) {
   return changedFiles.every((file) => {
     if (isDocsFile(file)) {
