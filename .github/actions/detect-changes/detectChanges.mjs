@@ -95,10 +95,6 @@ async function getCommitsNewerThan(timestamp) {
 
   const comparisonDate = new Date(timestamp)
 
-  // TODO: Remove debug code
-  comparisonDate.setHours(comparisonDate.getHours() - 10)
-  console.log('comparisonDate', comparisonDate)
-
   return json?.filter((/** @type Commit */ commit) => {
     return new Date(commit.commit.author.date) > comparisonDate
   })
