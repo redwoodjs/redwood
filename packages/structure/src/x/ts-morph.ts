@@ -1,7 +1,7 @@
 import * as crypto from 'crypto'
 
 import { memoize } from 'lodash'
-import LRUCache from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 import * as tsm from 'ts-morph'
 
 export function createTSMSourceFile(
