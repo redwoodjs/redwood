@@ -51,7 +51,7 @@ async function getPrBranchName() {
 
 /**
  * @typedef {Object} Workflow
- * @property {string} created_at
+ * @property {string} updated_at
  *
  * @typedef {Object} Commit
  * @property {string} sha
@@ -199,15 +199,15 @@ async function fetchJson(url, retries = 0) {
 // only gives you the full list of commits, there's no way of knowing what
 // "push" they belong to.
 // But every time a "push" happens to a PR branch a new CI run starts. So by
-// looking at when the last CI run started, and comparing that to the
-// timestamps of all commits we can figure out what commits are new, and what
+// looking at when the last completed CI run ended, and comparing that to the
+// timestamps of all commits, we can figure out what commits are new, and what
 // commits we've already run CI for
 //
 // 1. Get the PR branch name
 //    https://api.github.com/repos/redwoodjs/redwood/pulls/10374  .head.ref
 // 2. Get CI workflow runs for that branch
 //    https://api.github.com/repos/redwoodjs/redwood/actions/workflows/24294187/runs?branch=tobbe-redirect-docs
-// 3. Get the `created_at` timestamp for the newest completed run (`status` === 'completed')
+// 3. Get the `updated_at` timestamp for the newest completed run (`status` === 'completed')
 // 4. Get all commits for the PR
 //      https://api.github.com/repos/redwoodjs/redwood/pulls/10374/commits
 // 5. Filter out all commits that are newer than the timestamp from step 3
@@ -228,7 +228,7 @@ async function main() {
 
   const branchName = await getPrBranchName()
   const workflowRun = await getLatestCompletedWorkflowRun(branchName)
-  const prCommits = await getCommitsNewerThan(workflowRun?.created_at)
+  const prCommits = await getCommitsNewerThan(workflowRun?.updated_at)
   let changedFiles = await getFilesInCommits(prCommits)
 
   if (changedFiles.length === 0) {
