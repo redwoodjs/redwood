@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 
 import core from '@actions/core'
-import { hasCodeChanges } from './cases/code_changes.mjs'
+import { onlyDocsChanges } from './cases/docs_changes.mjs'
 import { rscChanged } from './cases/rsc.mjs'
 import { ssrChanged } from './cases/ssr.mjs'
 
@@ -118,8 +118,8 @@ async function main() {
     return
   }
 
-  if (!hasCodeChanges(changedFiles)) {
-    console.log('No code changes detected, only docs')
+  if (onlyDocsChanges(changedFiles)) {
+    console.log('Only docs changes detected')
     core.setOutput('docs_only', true)
     core.setOutput('rsc', false)
     core.setOutput('ssr', false)

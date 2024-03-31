@@ -2,9 +2,9 @@
  * Detects if the given file path points to a code file (as apposed to a docs
  * file)
  */
-function isCodeFile(filePath) {
+function isDocsFile(filePath) {
   if (filePath.startsWith('docs')) {
-    return false
+    return true
   }
 
   if (
@@ -18,23 +18,23 @@ function isCodeFile(filePath) {
       'SECURITY.md',
     ].includes(filePath)
   ) {
-    return false
+    return true
   }
 
-  return true
+  return false
 }
 
 /**
  * Checks if the given array of file paths contains any files with potential
  * code changes
  */
-export function hasCodeChanges(changedFiles) {
-  return changedFiles.some((file) => {
-    if (isCodeFile(file)) {
-      console.log(`Found code file: ${file}`)
+export function onlyDocsChanges(changedFiles) {
+  return changedFiles.every((file) => {
+    if (isDocsFile(file)) {
       return true
     }
 
+    console.log(`Found non-docs file: ${file}`)
     return false
   })
 }
