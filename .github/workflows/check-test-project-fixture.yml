@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      onlydocs: ${{ steps.detect-changes.outputs.onlydocs }}
+      docs_only: ${{ steps.detect-changes.outputs.docs_only }}
       rsc: ${{ steps.detect-changes.outputs.rsc }}
       ssr: ${{ steps.detect-changes.outputs.ssr }}
 
@@ -36,7 +36,7 @@ jobs:
 
   check-test-project-fixture:
     needs: detect-changes
-    if: needs.detect-changes.outputs.onlydocs == 'false'
+    if: needs.detect-changes.outputs.docs_only == 'false'
     name: Check test project fixture
     runs-on: ubuntu-latest
     steps:
@@ -92,7 +92,7 @@ jobs:
 
   check-test-project-fixture-skip:
     needs: detect-changes
-    if: needs.detect-changes.outputs.onlydocs == 'true'
+    if: needs.detect-changes.outputs.docs_only == 'true'
     name: Check test project fixture
     runs-on: ubuntu-latest
     steps:

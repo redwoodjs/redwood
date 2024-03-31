@@ -5,7 +5,7 @@ on:
     branches: [main, next]
     # We don't want this to run when we publish a release.
     tags-ignore: ['v**']
-    # No need to run on docs-only changes
+    # No need to run on docs_only changes
     paths-ignore: ['docs/**']
 
 # Cancel in-progress runs of this workflow.

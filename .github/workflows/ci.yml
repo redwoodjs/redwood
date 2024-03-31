@@ -22,7 +22,9 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      onlydocs: ${{ steps.detect-changes.outputs.onlydocs }}
+      docs_only: ${{ steps.detect-changes.outputs.docs_only }}
+      rsc: ${{ steps.detect-changes.outputs.rsc }}
+      ssr: ${{ steps.detect-changes.outputs.ssr }}
 
     steps:
       - uses: actions/checkout@v4
@@ -47,7 +49,7 @@ jobs:
 
   check:
     needs: detect-changes
-    if: needs.detect-changes.outputs.onlydocs == 'false'
+    if: needs.detect-changes.outputs.docs_only == 'false'
 
     name: ✅ Check constraints, dependencies, and package.json's
     runs-on: ubuntu-latest
@@ -74,7 +76,7 @@ jobs:
 
   check-skip:
     needs: detect-changes
-    if: needs.detect-changes.outputs.onlydocs == 'true'
+    if: needs.detect-changes.outputs.docs_only == 'true'
 
     name: ✅ Check constraints, dependencies, and package.json's
     runs-on: ubuntu-latest
@@ -137,7 +139,7 @@ jobs:
 
   build-lint-test-skip:
     needs: detect-changes
-    if: needs.detect-changes.outputs.onlydocs == 'true'
+    if: needs.detect-changes.outputs.docs_only == 'true'
 
     strategy:
       matrix:
@@ -228,7 +230,7 @@ jobs:
 
   tutorial-e2e-skip:
     needs: detect-changes
-    if: needs.detect-changes.outputs.onlydocs == 'true'
+    if: needs.detect-changes.outputs.docs_only == 'true'
 
     strategy:
       matrix:
@@ -339,7 +341,7 @@ jobs:
 
   smoke-tests-skip:
     needs: detect-changes
-    if: needs.detect-changes.outputs.onlydocs == 'true'
+    if: needs.detect-changes.outputs.docs_only == 'true'
 
     strategy:
       matrix:
@@ -469,7 +471,7 @@ jobs:
 
   cli-smoke-tests-skip:
     needs: detect-changes
-    if: needs.detect-changes.outputs.onlydocs == 'true'
+    if: needs.detect-changes.outputs.docs_only == 'true'
 
     strategy:
       matrix:
@@ -529,7 +531,7 @@ jobs:
 
   telemetry-check-skip:
     needs: detect-changes
-    if: needs.detect-changes.outputs.onlydocs == 'true'
+    if: needs.detect-changes.outputs.docs_only == 'true'
 
     strategy:
       matrix:
@@ -734,7 +736,7 @@ jobs:
 
   crwa-skip:
     needs: detect-changes
-    if: needs.detect-changes.outputs.onlydocs == 'true'
+    if: needs.detect-changes.outputs.docs_only == 'true'
 
     name: 🌲 Create Redwood App
     runs-on: ubuntu-latest
@@ -775,7 +777,7 @@ jobs:
 
   server-tests-skip:
     needs: detect-changes
-    if: needs.detect-changes.outputs.onlydocs == 'true'
+    if: needs.detect-changes.outputs.docs_only == 'true'
 
     name: Server tests
     runs-on: ubuntu-latest
