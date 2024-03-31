@@ -49,8 +49,8 @@ Some pages should only be visible to authenticated users. We support this using 
 ## Redirect Routes
 
 If you move a page you might still want to keep the old route around, so that
-old links to your site keeps working. To this RedwoodJS supports the `redirect`
-prop on routes.
+old links to your site keeps working. To this end RedwoodJS supports the
+`redirect` prop on routes.
 
 ```jsx title="Routes.jsx"
 <Route path="/blog/{id}" redirect="/post" />
