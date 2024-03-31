@@ -46,7 +46,7 @@ async function getChangedFiles(page = 1) {
   changedFiles = changedFiles.concat(files)
 
   // Look at the headers to see if the result is paginated
-  const linkHeader = res.headers.get('link')
+  const linkHeader = res?.headers?.get('link')
   if (linkHeader && linkHeader.includes('rel="next"')) {
     const files = await getChangedFiles(page + 1)
     changedFiles = changedFiles.concat(files)
@@ -87,7 +87,7 @@ async function fetchJson(url, retries = 0) {
       console.log()
       console.log('Too many retries, giving up.')
 
-      return { res }
+      return {}
     } else {
       await new Promise((resolve) => setTimeout(resolve, 3000 * retries))
 
