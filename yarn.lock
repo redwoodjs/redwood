@@ -8669,7 +8669,6 @@ __metadata:
     "@types/fs-extra": "npm:11.0.4"
     "@types/line-column": "npm:1.0.2"
     "@types/lodash": "npm:4.17.0"
-    "@types/lru-cache": "npm:7.10.10"
     "@types/node": "npm:20.11.25"
     "@types/vscode": "npm:1.87.0"
     camelcase: "npm:6.3.0"
@@ -8684,7 +8683,7 @@ __metadata:
     line-column: "npm:1.0.2"
     lodash: "npm:4.17.21"
     lodash-decorators: "npm:6.0.1"
-    lru-cache: "npm:7.18.3"
+    lru-cache: "npm:8.0.0"
     proxyquire: "npm:2.1.3"
     ts-morph: "npm:15.1.0"
     typescript: "npm:5.4.3"
@@ -11086,15 +11085,6 @@ __metadata:
   version: 4.0.2
   resolution: "@types/long@npm:4.0.2"
   checksum: 10c0/42ec66ade1f72ff9d143c5a519a65efc7c1c77be7b1ac5455c530ae9acd87baba065542f8847522af2e3ace2cc999f3ad464ef86e6b7352eece34daf88f8c924
-  languageName: node
-  linkType: hard
-
-"@types/lru-cache@npm:7.10.10":
-  version: 7.10.10
-  resolution: "@types/lru-cache@npm:7.10.10"
-  dependencies:
-    lru-cache: "npm:*"
-  checksum: 10c0/ab85558867cb059bebd42074c1cd517eb41efb1db22b9d26dfdc58df01c83ff9c212a562b4ec3d5936418ffb03e626a0f30463026aa5fb5ced41e3b4b4af057f
   languageName: node
   linkType: hard
 
@@ -24151,17 +24141,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-cache@npm:*, lru-cache@npm:^10.0.0, lru-cache@npm:^10.0.1, lru-cache@npm:^9.1.1 || ^10.0.0":
-  version: 10.1.0
-  resolution: "lru-cache@npm:10.1.0"
-  checksum: 10c0/778bc8b2626daccd75f24c4b4d10632496e21ba064b126f526c626fbdbc5b28c472013fccd45d7646b9e1ef052444824854aed617b59cd570d01a8b7d651fc1e
+"lru-cache@npm:8.0.0":
+  version: 8.0.0
+  resolution: "lru-cache@npm:8.0.0"
+  checksum: 10c0/f326033bb6aec9acd4731a0664c0e1e690f7b1451f90bcfdbb0ece66d688cadb5b033378770fc7b65c58aab0197cf3e0e746de6e8fc07339b37643c5d7ccc367
   languageName: node
   linkType: hard
 
-"lru-cache@npm:7.18.3, lru-cache@npm:^7.5.1, lru-cache@npm:^7.7.1":
-  version: 7.18.3
-  resolution: "lru-cache@npm:7.18.3"
-  checksum: 10c0/b3a452b491433db885beed95041eb104c157ef7794b9c9b4d647be503be91769d11206bb573849a16b4cc0d03cbd15ffd22df7960997788b74c1d399ac7a4fed
+"lru-cache@npm:^10.0.0, lru-cache@npm:^10.0.1, lru-cache@npm:^9.1.1 || ^10.0.0":
+  version: 10.1.0
+  resolution: "lru-cache@npm:10.1.0"
+  checksum: 10c0/778bc8b2626daccd75f24c4b4d10632496e21ba064b126f526c626fbdbc5b28c472013fccd45d7646b9e1ef052444824854aed617b59cd570d01a8b7d651fc1e
   languageName: node
   linkType: hard
 
@@ -24180,6 +24170,13 @@ __metadata:
   dependencies:
     yallist: "npm:^4.0.0"
   checksum: 10c0/cb53e582785c48187d7a188d3379c181b5ca2a9c78d2bce3e7dee36f32761d1c42983da3fe12b55cb74e1779fa94cdc2e5367c028a9b35317184ede0c07a30a9
+  languageName: node
+  linkType: hard
+
+"lru-cache@npm:^7.5.1, lru-cache@npm:^7.7.1":
+  version: 7.18.3
+  resolution: "lru-cache@npm:7.18.3"
+  checksum: 10c0/b3a452b491433db885beed95041eb104c157ef7794b9c9b4d647be503be91769d11206bb573849a16b4cc0d03cbd15ffd22df7960997788b74c1d399ac7a4fed
   languageName: node
   linkType: hard
 
