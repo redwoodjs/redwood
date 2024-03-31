@@ -6,6 +6,8 @@ import { onlyChangesetsChanges } from './cases/changesets_changes.mjs'
 import { rscChanged } from './cases/rsc.mjs'
 import { ssrChanged } from './cases/ssr.mjs'
 
+const BASE_URL = 'https://api.github.com/repos/redwoodjs/redwood'
+
 const getPrNumber = () => {
   // Example GITHUB_REF refs/pull/9544/merge
   const result = /refs\/pull\/(\d+)\/merge/g.exec(process.env.GITHUB_REF)
@@ -17,7 +19,7 @@ const getPrNumber = () => {
       // Example GITHUB_EVENT_PATH
       // /home/runner/work/_temp/_github_workflow/event.json
       const ev = JSON.parse(
-        fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8')
+        fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'),
       )
       prNumber = ev.pull_request?.number
     } catch {
@@ -35,8 +37,7 @@ const getPrNumber = () => {
 async function getPrBranchName() {
   const prNumber = getPrNumber()
 
-  const url = `https://api.github.com/repos/redwoodjs/redwood/pulls/${prNumber}`
-  const { json } = await fetchJson(url)
+  const { json } = await fetchJson(`${BASE_URL}/pulls/${prNumber}`)
 
   return json?.head?.ref
 }
@@ -44,20 +45,19 @@ async function getPrBranchName() {
 async function getLatestCompletedWorkflowRun(branchName) {
   // 24294187 is the ID of the CI workflow (ci.yml). If it changes, or you want
   // to use a different workflow, go to
-  // https://api.github.com/repos/redwoodjs/redwood/actions/workflows to ge a
+  // https://api.github.com/repos/redwoodjs/redwood/actions/workflows to get a
   // list of all workflows and their IDs
   const workflowId = '24294187'
-  const url = `https://api.github.com/repos/redwoodjs/redwood/actions/workflows/${workflowId}/runs?branch=${branchName}`
+  const url = `${BASE_URL}/actions/workflows/${workflowId}/runs?branch=${branchName}`
   const { json } = await fetchJson(url)
 
-  return json?.workflow_runs?.find(run => run.status === 'completed')
+  return json?.workflow_runs?.find((run) => run.status === 'completed')
 }
 
 async function getCommitsNewerThan(timestamp) {
   const prNumber = getPrNumber()
 
-  const url = `https://api.github.com/repos/redwoodjs/redwood/pulls/${prNumber}/commits`
-  const { json } = await fetchJson(url)
+  const { json } = await fetchJson(`${BASE_URL}/pulls/${prNumber}/commits`)
 
   const comparisonDate = new Date(timestamp)
 
@@ -65,20 +65,19 @@ async function getCommitsNewerThan(timestamp) {
   comparisonDate.setHours(comparisonDate.getHours() - 10)
   console.log('comparisonDate', comparisonDate)
 
-  return json?.filter(commit => {
+  return json?.filter((commit) => {
     const commitDate = new Date(commit.commit.author.date)
 
     return commitDate > comparisonDate
-      // Debug
-      // && !commit.commit.message.startsWith('Merge')
+    // Debug
+    // && !commit.commit.message.startsWith('Merge')
   })
 }
 
 async function getChangedFilesInCommit(commitSha) {
   console.log(`Getting changed files for commit ${commitSha}`)
 
-  const url = `https://api.github.com/repos/redwoodjs/redwood/commits/${commitSha}`
-  const { json } = await fetchJson(url)
+  const { json } = await fetchJson(`${BASE_URL}/commits/${commitSha}`)
   const changedFiles = json?.files?.map((file) => file.filename) || []
 
   console.log('changed files in commit', commitSha.slice(0, 6), changedFiles)
@@ -102,7 +101,7 @@ async function getChangedFilesInPr(page = 1) {
   console.log(`Getting changed files for PR ${prNumber} (page ${page})`)
 
   // Query the GitHub API to get the changed files in the PR
-  const url = `https://api.github.com/repos/redwoodjs/redwood/pulls/${prNumber}/files?per_page=100&page=${page}`
+  const url = `${BASE_URL}/pulls/${prNumber}/files?per_page=100&page=${page}`
   const { json, res } = await fetchJson(url)
   let changedFiles = json?.map((file) => file.filename) || []
 
@@ -123,7 +122,8 @@ async function fetchJson(url, retries = 0) {
     console.log('Fetching', url)
   }
 
-  const githubToken = process.env.GITHUB_TOKEN || process.env.REDWOOD_GITHUB_TOKEN
+  const githubToken =
+    process.env.GITHUB_TOKEN || process.env.REDWOOD_GITHUB_TOKEN
 
   try {
     const res = await fetch(url, {
@@ -204,7 +204,9 @@ async function main() {
     // them
     const changedFilesInPr = await getChangedFilesInPr()
 
-    changedFiles = changedFiles.filter(file => changedFilesInPr.includes(file))
+    changedFiles = changedFiles.filter((file) =>
+      changedFilesInPr.includes(file),
+    )
     console.log('changedFiles', changedFiles)
   }
 
@@ -213,7 +215,7 @@ async function main() {
   if (changedFiles.length === 0) {
     console.log(
       'No changed files found. Something must have gone wrong. Falling back ' +
-        'to running all tests.'
+        'to running all tests.',
     )
     core.setOutput('docs_only', false)
     core.setOutput('changesets_only', false)
