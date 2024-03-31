@@ -1,5 +1,9 @@
+// @ts-check
+
+// @ts-expect-error types
 import fs from 'node:fs'
 
+// @ts-expect-error types
 import core from '@actions/core'
 import { onlyDocsChanges } from './cases/docs_changes.mjs'
 import { onlyChangesetsChanges } from './cases/changesets_changes.mjs'
@@ -34,6 +38,9 @@ const getPrNumber = () => {
   return prNumber
 }
 
+/**
+ * @returns {Promise<string | undefined>} the branch name for the current PR
+ */
 async function getPrBranchName() {
   const prNumber = getPrNumber()
 
@@ -42,7 +49,23 @@ async function getPrBranchName() {
   return json?.head?.ref
 }
 
+/**
+ * @typedef {Object} Workflow
+ * @property {string} created_at
+ *
+ * @typedef {Object} Commit
+ * @property {string} sha
+ */
+
+/**
+ * @param {string | undefined} branchName
+ * @returns {Promise<Workflow | undefined>}
+ */
 async function getLatestCompletedWorkflowRun(branchName) {
+  if (!branchName) {
+    return
+  }
+
   // 24294187 is the ID of the CI workflow (ci.yml). If it changes, or you want
   // to use a different workflow, go to
   // https://api.github.com/repos/redwoodjs/redwood/actions/workflows to get a
@@ -54,7 +77,15 @@ async function getLatestCompletedWorkflowRun(branchName) {
   return json?.workflow_runs?.find((run) => run.status === 'completed')
 }
 
+/**
+ * @param {string | undefined} timestamp
+ * @return {Promise<Commit[] | undefined>}
+ */
 async function getCommitsNewerThan(timestamp) {
+  if (!timestamp) {
+    return
+  }
+
   const prNumber = getPrNumber()
 
   const { json } = await fetchJson(`${BASE_URL}/pulls/${prNumber}/commits`)
@@ -74,20 +105,24 @@ async function getCommitsNewerThan(timestamp) {
   })
 }
 
+/**
+ * @param {string} commitSha
+ * @return {Promise<string[]>}
+ */
 async function getChangedFilesInCommit(commitSha) {
-  console.log(`Getting changed files for commit ${commitSha}`)
-
   const { json } = await fetchJson(`${BASE_URL}/commits/${commitSha}`)
   const changedFiles = json?.files?.map((file) => file.filename) || []
-
-  console.log('changed files in commit', commitSha.slice(0, 6), changedFiles)
 
   return changedFiles
 }
 
+/**
+ * @param {Commit[] | undefined} commits
+ * @return {Promise<string[]>}
+ */
 async function getFilesInCommits(commits) {
   let changedFiles = []
-  for (let commit of commits) {
+  for (let commit of commits || []) {
     const files = await getChangedFilesInCommit(commit.sha)
     changedFiles = changedFiles.concat(files)
   }
@@ -160,11 +195,20 @@ async function fetchJson(url, retries = 0) {
   }
 }
 
+// We want to get the list of changed files since the last "git push" to this
+// PR. But there is no good way to know when that last "push" happened. GitHub
+// only gives you the full list of commits, there's no way of knowing what
+// "push" they belong to.
+// But every time a "push" happens to a PR branch a new CI run starts. So by
+// looking at when the last CI run started, and comparing that to the
+// timestamps of all commits we can figure out what commits are new, and what
+// commits we've already run CI for
+//
 // 1. Get the PR branch name
 //    https://api.github.com/repos/redwoodjs/redwood/pulls/10374  .head.ref
 // 2. Get CI workflow runs for that branch
 //    https://api.github.com/repos/redwoodjs/redwood/actions/workflows/24294187/runs?branch=tobbe-redirect-docs
-// 3. Get the `updated_at` timestamp for the newest completed run (`status` === 'completed')
+// 3. Get the `created_at` timestamp for the newest completed run (`status` === 'completed')
 // 4. Get all commits for the PR
 //      https://api.github.com/repos/redwoodjs/redwood/pulls/10374/commits
 // 5. Filter out all commits that are newer than the timestamp from step 3
@@ -177,26 +221,21 @@ async function main() {
   // If there's no branch, we're not in a pull request.
   if (!branch) {
     core.setOutput('docs_only', false)
+    core.setOutput('changesets_only', false)
     core.setOutput('rsc', false)
     core.setOutput('ssr', false)
     return
   }
 
   const branchName = await getPrBranchName()
-  console.log('branchName', branchName)
-
   const workflowRun = await getLatestCompletedWorkflowRun(branchName)
-
-  const latestCompletionTime = workflowRun.updated_at
-
-  const prCommits = await getCommitsNewerThan(latestCompletionTime)
-  console.log('prCommits', prCommits)
-
+  const prCommits = await getCommitsNewerThan(workflowRun?.created_at)
   let changedFiles = await getFilesInCommits(prCommits)
-  console.log('changedFiles', changedFiles)
 
-  if (!changedFiles || changedFiles.length === 0) {
-    // Probably the first commit/push to this PR, get all files
+  if (changedFiles.length === 0) {
+    // Probably the first commit/push to this PR - get all files
+    // (Or something went wrong, in which case we also want to just get all
+    // files)
     changedFiles = await getChangedFilesInPr()
   } else {
     // `changedFiles` includes any files changed by merge commits. But if those
@@ -207,7 +246,6 @@ async function main() {
     changedFiles = changedFiles.filter((file) =>
       changedFilesInPr.includes(file),
     )
-    console.log('changedFiles', changedFiles)
   }
 
   console.log(`${changedFiles.length} changed files`)
