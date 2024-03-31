@@ -167,6 +167,8 @@ async function fetchJson(url, retries = 0) {
       console.log()
       console.error('Response not ok')
       console.log('res', res)
+
+      throw new Error('status: ' + res.status)
     }
 
     const json = await res.json()
