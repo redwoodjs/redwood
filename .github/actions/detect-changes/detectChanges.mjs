@@ -55,6 +55,9 @@ async function getPrBranchName() {
  *
  * @typedef {Object} Commit
  * @property {string} sha
+ * @property {Object} commit
+ * @property {Object} commit.author
+ * @property {string} commit.author.date
  */
 
 /**
@@ -92,16 +95,12 @@ async function getCommitsNewerThan(timestamp) {
 
   const comparisonDate = new Date(timestamp)
 
-  // Debug
+  // TODO: Remove debug code
   comparisonDate.setHours(comparisonDate.getHours() - 10)
   console.log('comparisonDate', comparisonDate)
 
-  return json?.filter((commit) => {
-    const commitDate = new Date(commit.commit.author.date)
-
-    return commitDate > comparisonDate
-    // Debug
-    // && !commit.commit.message.startsWith('Merge')
+  return json?.filter((/** @type Commit */ commit) => {
+    return new Date(commit.commit.author.date) > comparisonDate
   })
 }
 
