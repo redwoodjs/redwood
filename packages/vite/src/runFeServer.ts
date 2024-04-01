@@ -15,6 +15,7 @@ import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
+import type { RWRouteManifestItem } from '@redwoodjs/internal/dist/routes'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
@@ -89,6 +90,18 @@ export async function runFeServer() {
     },
   )
 
+  const handleWithMiddleware = (route?: RWRouteManifestItem) => {
+    return createServerAdapter(async (req: Request) => {
+      const entryServerImport = await import(rwPaths.web.entryServer as string)
+
+      const middleware = entryServerImport.middleware
+
+      const [mwRes] = await invoke(req, middleware, route ? { route } : {})
+
+      return mwRes.toResponse()
+    })
+  }
+
   if (!clientEntry) {
     throw new Error('Could not find client entry in build manifest')
   }
@@ -151,18 +164,7 @@ export async function runFeServer() {
   app.use('/rw-rsc', createRscRequestHandler())
 
   // @MARK: put this after rw-rsc!
-  app.post(
-    '*',
-    createServerAdapter(async (req: Request) => {
-      const entryServerImport = await import(rwPaths.web.distEntryServer)
-
-      const { middleware } = entryServerImport
-
-      const [mwRes] = await invoke(req, middleware)
-
-      return mwRes.toResponse()
-    }),
-  )
+  app.post('*', handleWithMiddleware())
 
   app.use(express.static(rwPaths.web.distClient, { index: false }))
 

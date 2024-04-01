@@ -20,13 +20,14 @@ import { ensureProcessDirWeb } from './utils.js'
 // TODO (STREAMING) Just so it doesn't error out. Not sure how to handle this.
 globalThis.__REDWOOD__PRERENDER_PAGES = {}
 
+const rwPaths = getPaths()
+
 async function createServer() {
   ensureProcessDirWeb()
 
   registerFwGlobalsAndShims()
 
   const app = express()
-  const rwPaths = getPaths()
 
   const rscEnabled = getConfig().experimental.rsc?.enabled ?? false
 
@@ -66,6 +67,25 @@ async function createServer() {
     appType: 'custom',
   })
 
+  // create a handler that will invoke middleware with or without a route
+  const handleWithMiddleware = (route?: RouteSpec) => {
+    return createServerAdapter(async (req: Request) => {
+      const entryServerImport = await vite.ssrLoadModule(
+        rwPaths.web.entryServer as string, // already validated in dev server
+      )
+
+      const middleware = entryServerImport.middleware
+
+      const [mwRes] = await invoke(
+        req,
+        middleware,
+        route ? { route, cssPaths: getCssLinks(rwPaths, route, vite) } : {},
+      )
+
+      return mwRes.toResponse()
+    })
+  }
+
   // use vite's connect instance as middleware
   app.use(vite.middlewares)
 
@@ -95,22 +115,10 @@ async function createServer() {
       : route.pathDefinition
 
     app.get(expressPathDef, createServerAdapter(routeHandler))
-
-    app.post(
-      '*',
-      createServerAdapter(async (req: Request) => {
-        const entryServerImport = await vite.ssrLoadModule(
-          rwPaths.web.entryServer as string, // already validated in dev server
-        )
-
-        const middleware = entryServerImport.middleware
-
-        const [mwRes] = await invoke(req, middleware)
-
-        return mwRes.toResponse()
-      }),
-    )
   }
+
+  // invokes middleware for any POST request for auth
+  app.post('*', handleWithMiddleware())
 
   const port = getConfig().web.port
   console.log(`Started server on http://localhost:${port}`)
