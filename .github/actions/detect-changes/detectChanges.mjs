@@ -235,31 +235,33 @@ async function main() {
   const branchName = await getPrBranchName()
   const workflowRun = await getLatestCompletedWorkflowRun(branchName)
   const prCommits = await getCommitsNewerThan(workflowRun?.updated_at)
-  const changedFilesInCommits = await getFilesInCommits(prCommits)
+  let changedFiles = await getFilesInCommits(prCommits)
 
-  let changedFiles = []
-
-  if (changedFilesInCommits.length === 0) {
-    console.log(
-      'No changed files found since last CI run. Falling back to running' +
-        'all tests.',
-    )
-    // Possible causes:
-    //  - This is the first commit/push to this PR
-    //  - Just a merge commit (like if someone pressed the "Update branch"
-    //    button on GitHub)
-    //  - Something went wrong
-    // In all these cases we want to fall back to getting all files in the PR
+  if (changedFiles.length === 0) {
+    // Probably the first commit/push to this PR - get all files
+    // (Or something went wrong, in which case we also want to just get all
+    // files)
     changedFiles = await getChangedFilesInPr()
   } else {
-    // `changedFiles` includes any files changed by merge commits. But if those
-    // files are not part of the files this PR changes as a whole we can ignore
-    // them
     const changedFilesInPr = await getChangedFilesInPr()
 
+    // `changedFiles` includes any files changed by merge commits. But if those
+    // files are not part of the files this PR changes as a whole we can ignore
+    // them. (This isn't 100% safe, but it's the same as we do when we allow
+    // merging PRs even if main has updated as long as there are no merge
+    // conflicts)
     changedFiles = changedFiles.filter((file) =>
       changedFilesInPr.includes(file),
     )
+
+    if (changedFiles.length === 0) {
+      // If all changed files were filtered out above this was most likely
+      // just a merge commit (like if someone pressed the "Update branch"
+      // button on GitHub). We could just skip running CI (see comment above
+      // about not being 100% safe), but let's instead consider all files
+      // changed by this PR when deciding what tests to run.
+      changedFiles = changedFilesInPr
+    }
   }
 
   console.log(`${changedFiles.length} changed files`)
