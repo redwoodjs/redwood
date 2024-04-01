@@ -130,8 +130,11 @@ export async function runFeServer() {
 
     // @TODO: we don't need regexes here
     // Param matching, etc. all handled within the route handler now
+    // Note: express has it's own particular regex syntax and so we can't simply pass
+    // a string containing standard regex. Instead pass a RegExp object and this results
+    //  in the expected matching behavior.
     const expressPathDef = route.hasParams
-      ? route.matchRegexString
+      ? new RegExp(route.matchRegexString)
       : route.pathDefinition
 
     // TODO(RSC_DC): RSC is rendering blank page, try using this function for initial render
