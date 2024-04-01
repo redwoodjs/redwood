@@ -142,10 +142,12 @@ export async function runFeServer() {
     }),
   )
 
+  // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
+  app.use('/rw-rsc', createRscRequestHandler())
+
   const getStylesheetLinks = () => clientEntry.css || []
   const clientEntryPath = '/' + clientEntry.file
 
-  // TODO(RSC_DC): RSC is rendering blank page, try using this function for initial render
   const routeHandler = await createReactStreamingHandler({
     routes: Object.values(routeManifest),
     clientEntryPath,
@@ -156,10 +158,8 @@ export async function runFeServer() {
   // Wrap with whatg/server adapter. Express handler -> Fetch API handler
   app.get('*', createServerAdapter(routeHandler))
 
-  // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
-  app.use('/rw-rsc', createRscRequestHandler())
-
-  // @MARK: put this after rw-rsc!
+  // @MARK: put this after rw-rsc to avoid confusion.
+  // We will likely move it up when we implement RSC Auth
   app.post('*', handleWithMiddleware())
 
   app.use(express.static(rwPaths.web.distClient, { index: false }))
