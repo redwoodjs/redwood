@@ -71,7 +71,7 @@ const prismaBinaryTargetAdditions = () => {
   if (!content.includes('rhel-openssl-1.0.x')) {
     const result = content.replace(
       /binaryTargets =.*\n/,
-      `binaryTargets = ["native", "rhel-openssl-1.0.x"]\n`
+      `binaryTargets = ["native", "rhel-openssl-1.0.x"]\n`,
     )
 
     fs.writeFileSync(getPaths().api.dbSchema, result)
@@ -88,7 +88,7 @@ const updateRedwoodTomlTask = () => {
 
       const newContent = content.replace(
         /apiUrl.*?\n/m,
-        'apiUrl = "${API_URL:/api}"       # Set API_URL in production to the Serverless deploy endpoint of your api service, see https://redwoodjs.com/docs/deploy/serverless-deploy\n'
+        'apiUrl = "${API_URL:/api}"       # Set API_URL in production to the Serverless deploy endpoint of your api service, see https://redwoodjs.com/docs/deploy/serverless-deploy\n',
       )
       fs.writeFileSync(configPath, newContent)
     },
@@ -141,7 +141,7 @@ export const handler = async ({ force }) => {
     {
       exitOnError: true,
       rendererOptions: { collapseSubtasks: false },
-    }
+    },
   )
   try {
     await tasks.run()

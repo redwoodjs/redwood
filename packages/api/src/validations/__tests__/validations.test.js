@@ -11,19 +11,19 @@ import {
 describe('validate absence', () => {
   it('checks if value is null or undefined', () => {
     expect(() =>
-      validate('rob@redwoodjs.com', 'email', { absence: true })
+      validate('rob@redwoodjs.com', 'email', { absence: true }),
     ).toThrow(ValidationErrors.AbsenceValidationError)
     expect(() => validate('', 'email', { absence: true })).toThrow(
-      ValidationErrors.AbsenceValidationError
+      ValidationErrors.AbsenceValidationError,
     )
     expect(() =>
-      validate('', 'email', { absence: { allowEmptyString: false } })
+      validate('', 'email', { absence: { allowEmptyString: false } }),
     ).toThrow(ValidationErrors.AbsenceValidationError)
 
     expect(() => validate(null, 'email', { absence: true })).not.toThrow()
     expect(() => validate(undefined, 'email', { absence: true })).not.toThrow()
     expect(() =>
-      validate('', 'email', { absence: { allowEmptyString: true } })
+      validate('', 'email', { absence: { allowEmptyString: true } }),
     ).not.toThrow()
   })
 
@@ -70,22 +70,22 @@ describe('validate acceptance', () => {
   it('checks for truthiness', () => {
     ;[null, undefined, 0, 1, '1', 'true'].forEach((val) => {
       expect(() => validate(val, 'terms', { acceptance: true })).toThrow(
-        ValidationErrors.AcceptanceValidationError
+        ValidationErrors.AcceptanceValidationError,
       )
     })
     expect(() =>
-      validate('terms', 'true', { acceptance: { in: ['1'] } })
+      validate('terms', 'true', { acceptance: { in: ['1'] } }),
     ).toThrow(ValidationErrors.AcceptanceValidationError)
     expect(() => validate(1, 'terms', { acceptance: { in: ['1'] } })).toThrow(
-      ValidationErrors.AcceptanceValidationError
+      ValidationErrors.AcceptanceValidationError,
     )
 
     expect(() => validate(true, 'terms', { acceptance: true })).not.toThrow()
     expect(() =>
-      validate('true', 'terms', { acceptance: { in: ['true'] } })
+      validate('true', 'terms', { acceptance: { in: ['true'] } }),
     ).not.toThrow()
     expect(() =>
-      validate(1, 'terms', { acceptance: { in: [1] } })
+      validate(1, 'terms', { acceptance: { in: [1] } }),
     ).not.toThrow()
   })
 
@@ -139,7 +139,7 @@ describe('validate email', () => {
       ' dt@redwoodjs.com',
     ].forEach((val) => {
       expect(() => validate(val, 'email', { email: true })).toThrow(
-        ValidationErrors.EmailValidationError
+        ValidationErrors.EmailValidationError,
       )
     })
     ;[
@@ -150,7 +150,7 @@ describe('validate email', () => {
       expect(() =>
         validate(val, 'email', {
           email: true,
-        })
+        }),
       ).not.toThrow()
     })
   })
@@ -179,27 +179,27 @@ describe('validate email', () => {
 describe('validate exclusion', () => {
   it('checks for exclusion', () => {
     expect(() =>
-      validate('foo', 'selection', { exclusion: ['foo', 'bar'] })
+      validate('foo', 'selection', { exclusion: ['foo', 'bar'] }),
     ).toThrow(ValidationErrors.ExclusionValidationError)
     expect(() =>
-      validate('bar', 'selection', { exclusion: { in: ['foo', 'bar'] } })
+      validate('bar', 'selection', { exclusion: { in: ['foo', 'bar'] } }),
     ).toThrow(ValidationErrors.ExclusionValidationError)
     expect(() =>
       validate('bar', 'selection', {
         exclusion: { in: ['foo', 'bar'], caseSensitive: true },
-      })
+      }),
     ).toThrow(ValidationErrors.ExclusionValidationError)
 
     expect(() =>
-      validate('qux', 'selection', { exclusion: ['foo', 'bar'] })
+      validate('qux', 'selection', { exclusion: ['foo', 'bar'] }),
     ).not.toThrow()
     expect(() =>
-      validate('qux', 'selection', { exclusion: { in: ['foo', 'bar'] } })
+      validate('qux', 'selection', { exclusion: { in: ['foo', 'bar'] } }),
     ).not.toThrow()
     expect(() =>
       validate('qux', 'selection', {
         exclusion: { in: ['foo', 'bar'], caseSensitive: true },
-      })
+      }),
     ).not.toThrow()
   })
 
@@ -207,18 +207,18 @@ describe('validate exclusion', () => {
     expect(() =>
       validate('Bar', 'selection', {
         exclusion: { in: ['foo', 'bar'], caseSensitive: false },
-      })
+      }),
     ).toThrow(ValidationErrors.ExclusionValidationError)
     expect(() =>
       validate('bar', 'selection', {
         exclusion: { in: ['foo', 'Bar'], caseSensitive: false },
-      })
+      }),
     ).toThrow(ValidationErrors.ExclusionValidationError)
 
     expect(() =>
       validate('qux', 'selection', {
         exclusion: { in: ['foo', 'bar'], caseSensitive: false },
-      })
+      }),
     ).not.toThrow()
   })
 
@@ -272,21 +272,21 @@ describe('validate exclusion', () => {
 describe('validate format', () => {
   it('checks for valid format', () => {
     expect(() => validate('foobar', 'text', { format: /baz/ })).toThrow(
-      ValidationErrors.FormatValidationError
+      ValidationErrors.FormatValidationError,
     )
     expect(() => validate('foobar', 'text', { format: /baz/ })).toThrow(
-      ValidationErrors.FormatValidationError
+      ValidationErrors.FormatValidationError,
     )
     // inline regex
     ;[/foo/, /^foo/].forEach((pattern) => {
       expect(() =>
-        validate('foobar', 'text', { format: pattern })
+        validate('foobar', 'text', { format: pattern }),
       ).not.toThrow()
     })
     // options format
     ;[/foo/, /^foo/].forEach((pattern) => {
       expect(() =>
-        validate('foobar', 'text', { format: { pattern } })
+        validate('foobar', 'text', { format: { pattern } }),
       ).not.toThrow()
     })
   })
@@ -356,27 +356,27 @@ describe('validate format', () => {
 describe('validate inclusion', () => {
   it('checks for inclusion', () => {
     expect(() =>
-      validate('qux', 'selection', { inclusion: ['foo', 'bar'] })
+      validate('qux', 'selection', { inclusion: ['foo', 'bar'] }),
     ).toThrow(ValidationErrors.InclusionValidationError)
     expect(() =>
-      validate('quux', 'selection', { inclusion: { in: ['foo', 'bar'] } })
+      validate('quux', 'selection', { inclusion: { in: ['foo', 'bar'] } }),
     ).toThrow(ValidationErrors.InclusionValidationError)
     expect(() =>
       validate('QUUX', 'selection', {
         inclusion: { in: ['foo', 'bar'], caseSensitive: true },
-      })
+      }),
     ).toThrow(ValidationErrors.InclusionValidationError)
 
     expect(() =>
-      validate('foo', 'selection', { inclusion: ['foo', 'bar'] })
+      validate('foo', 'selection', { inclusion: ['foo', 'bar'] }),
     ).not.toThrow()
     expect(() =>
-      validate('foo', 'selection', { inclusion: { in: ['foo', 'bar'] } })
+      validate('foo', 'selection', { inclusion: { in: ['foo', 'bar'] } }),
     ).not.toThrow()
     expect(() =>
       validate('foo', 'selection', {
         inclusion: { in: ['foo', 'bar'], caseSensitive: true },
-      })
+      }),
     ).not.toThrow()
   })
 
@@ -384,18 +384,18 @@ describe('validate inclusion', () => {
     expect(() =>
       validate('quux', 'selection', {
         inclusion: { in: ['foo', 'bar'], caseSensitive: false },
-      })
+      }),
     ).toThrow(ValidationErrors.InclusionValidationError)
 
     expect(() =>
       validate('Foo', 'selection', {
         inclusion: { in: ['foo', 'bar'], caseSensitive: false },
-      })
+      }),
     ).not.toThrow()
     expect(() =>
       validate('foo', 'selection', {
         inclusion: { in: ['FOO', 'bar'], caseSensitive: false },
-      })
+      }),
     ).not.toThrow()
   })
 
@@ -425,7 +425,7 @@ describe('validate inclusion', () => {
 describe('validate length', () => {
   it('checks for minimum length', () => {
     expect(() => validate('a', 'username', { length: { min: 2 } })).toThrow(
-      ValidationErrors.MinLengthValidationError
+      ValidationErrors.MinLengthValidationError,
     )
 
     // default error
@@ -444,16 +444,16 @@ describe('validate length', () => {
 
     // valid
     expect(() =>
-      validate('foobar', 'username', { length: { min: 4 } })
+      validate('foobar', 'username', { length: { min: 4 } }),
     ).not.toThrow()
     expect(() =>
-      validate('foobar', 'username', { length: { min: 4, max: 8 } })
+      validate('foobar', 'username', { length: { min: 4, max: 8 } }),
     ).not.toThrow()
   })
 
   it('checks for maximum length', () => {
     expect(() =>
-      validate('johndoeesquirethethird', 'username', { length: { max: 10 } })
+      validate('johndoeesquirethethird', 'username', { length: { max: 10 } }),
     ).toThrow(ValidationErrors.MaxLengthValidationError)
 
     // default error
@@ -474,19 +474,19 @@ describe('validate length', () => {
 
     // valid
     expect(() =>
-      validate('foobar', 'username', { length: { max: 8 } })
+      validate('foobar', 'username', { length: { max: 8 } }),
     ).not.toThrow()
   })
 
   it('throws an error if the field does not equal a given number', () => {
     // too short
     expect(() =>
-      validate('foobar', 'username', { length: { equal: 7 } })
+      validate('foobar', 'username', { length: { equal: 7 } }),
     ).toThrow(ValidationErrors.EqualLengthValidationError)
 
     // too long
     expect(() =>
-      validate('foobarbaz', 'username', { length: { equal: 7 } })
+      validate('foobarbaz', 'username', { length: { equal: 7 } }),
     ).toThrow(ValidationErrors.EqualLengthValidationError)
 
     // default error
@@ -507,19 +507,19 @@ describe('validate length', () => {
 
     // valid
     expect(() =>
-      validate('foobar', 'username', { length: { equal: 6 } })
+      validate('foobar', 'username', { length: { equal: 6 } }),
     ).not.toThrow()
   })
 
   it('throws an error if the field is not within a range', () => {
     // too short
     expect(() =>
-      validate('foobar', 'username', { length: { between: [10, 20] } })
+      validate('foobar', 'username', { length: { between: [10, 20] } }),
     ).toThrow(ValidationErrors.BetweenLengthValidationError)
 
     // too long
     expect(() =>
-      validate('foobar', 'username', { length: { between: [2, 4] } })
+      validate('foobar', 'username', { length: { between: [2, 4] } }),
     ).toThrow(ValidationErrors.BetweenLengthValidationError)
 
     // default error
@@ -540,7 +540,7 @@ describe('validate length', () => {
 
     // valid
     expect(() =>
-      validate('foobar', 'username', { length: { between: [2, 10] } })
+      validate('foobar', 'username', { length: { between: [2, 10] } }),
     ).not.toThrow()
   })
 
@@ -552,13 +552,13 @@ describe('validate length', () => {
 describe('validate numericality', () => {
   it('checks if value is a number', () => {
     expect(() => validate('a', 'number', { numericality: true })).toThrow(
-      ValidationErrors.TypeNumericalityValidationError
+      ValidationErrors.TypeNumericalityValidationError,
     )
     expect(() => validate([1], 'number', { numericality: true })).toThrow(
-      ValidationErrors.TypeNumericalityValidationError
+      ValidationErrors.TypeNumericalityValidationError,
     )
     expect(() =>
-      validate({ foo: 1 }, 'number', { numericality: true })
+      validate({ foo: 1 }, 'number', { numericality: true }),
     ).toThrow(ValidationErrors.TypeNumericalityValidationError)
 
     expect(() => validate(42, 'number', { numericality: true })).not.toThrow()
@@ -567,11 +567,11 @@ describe('validate numericality', () => {
 
   it('checks if value is an integer', () => {
     expect(() =>
-      validate(1.2, 'number', { numericality: { integer: true } })
+      validate(1.2, 'number', { numericality: { integer: true } }),
     ).toThrow(ValidationErrors.IntegerNumericalityValidationError)
 
     expect(() =>
-      validate(3, 'number', { numericality: { integer: true } })
+      validate(3, 'number', { numericality: { integer: true } }),
     ).not.toThrow(ValidationErrors.IntegerNumericalityValidationError)
 
     // default error
@@ -584,26 +584,26 @@ describe('validate numericality', () => {
 
   it('checks if value is less than required number', () => {
     expect(() =>
-      validate(2, 'number', { numericality: { lessThan: 1 } })
+      validate(2, 'number', { numericality: { lessThan: 1 } }),
     ).toThrow(ValidationErrors.LessThanNumericalityValidationError)
     expect(() =>
-      validate(2, 'number', { numericality: { lessThan: 2 } })
+      validate(2, 'number', { numericality: { lessThan: 2 } }),
     ).toThrow(ValidationErrors.LessThanNumericalityValidationError)
     expect(() =>
-      validate(2.1, 'number', { numericality: { lessThan: 2.1 } })
+      validate(2.1, 'number', { numericality: { lessThan: 2.1 } }),
     ).toThrow(ValidationErrors.LessThanNumericalityValidationError)
     expect(() =>
-      validate(2.2, 'number', { numericality: { lessThan: 2.1 } })
+      validate(2.2, 'number', { numericality: { lessThan: 2.1 } }),
     ).toThrow(ValidationErrors.LessThanNumericalityValidationError)
     expect(() =>
-      validate(2, 'number', { numericality: { lessThan: 0 } })
+      validate(2, 'number', { numericality: { lessThan: 0 } }),
     ).toThrow(ValidationErrors.LessThanNumericalityValidationError)
 
     expect(() =>
-      validate(2, 'number', { numericality: { lessThan: 3 } })
+      validate(2, 'number', { numericality: { lessThan: 3 } }),
     ).not.toThrow(ValidationErrors.LessThanNumericalityValidationError)
     expect(() =>
-      validate(3.1, 'number', { numericality: { lessThan: 3.2 } })
+      validate(3.1, 'number', { numericality: { lessThan: 3.2 } }),
     ).not.toThrow(ValidationErrors.LessThanNumericalityValidationError)
 
     // default error
@@ -617,26 +617,26 @@ describe('validate numericality', () => {
 
   it('checks if value is less than or equal to required number', () => {
     expect(() =>
-      validate(2, 'number', { numericality: { lessThanOrEqual: 1 } })
+      validate(2, 'number', { numericality: { lessThanOrEqual: 1 } }),
     ).toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
     expect(() =>
-      validate(2, 'number', { numericality: { lessThanOrEqual: 1.5 } })
+      validate(2, 'number', { numericality: { lessThanOrEqual: 1.5 } }),
     ).toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
     expect(() =>
-      validate(2.2, 'number', { numericality: { lessThanOrEqual: 2.1 } })
+      validate(2.2, 'number', { numericality: { lessThanOrEqual: 2.1 } }),
     ).toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
     expect(() =>
-      validate(2.2, 'number', { numericality: { lessThanOrEqual: 2 } })
+      validate(2.2, 'number', { numericality: { lessThanOrEqual: 2 } }),
     ).toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
     expect(() =>
-      validate(2, 'number', { numericality: { lessThanOrEqual: 0 } })
+      validate(2, 'number', { numericality: { lessThanOrEqual: 0 } }),
     ).toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
 
     expect(() =>
-      validate(2.2, 'number', { numericality: { lessThanOrEqual: 2.3 } })
+      validate(2.2, 'number', { numericality: { lessThanOrEqual: 2.3 } }),
     ).not.toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
     expect(() =>
-      validate(2.2, 'number', { numericality: { lessThanOrEqual: 2.2 } })
+      validate(2.2, 'number', { numericality: { lessThanOrEqual: 2.2 } }),
     ).not.toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
 
     // default error
@@ -650,29 +650,29 @@ describe('validate numericality', () => {
 
   it('checks if value is greater than required number', () => {
     expect(() =>
-      validate(2, 'number', { numericality: { greaterThan: 3 } })
+      validate(2, 'number', { numericality: { greaterThan: 3 } }),
     ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
     expect(() =>
-      validate(2, 'number', { numericality: { greaterThan: 2 } })
+      validate(2, 'number', { numericality: { greaterThan: 2 } }),
     ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
     expect(() =>
-      validate(2.1, 'number', { numericality: { greaterThan: 3 } })
+      validate(2.1, 'number', { numericality: { greaterThan: 3 } }),
     ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
     expect(() =>
-      validate(3.0, 'number', { numericality: { greaterThan: 3.1 } })
+      validate(3.0, 'number', { numericality: { greaterThan: 3.1 } }),
     ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
     expect(() =>
-      validate(3.0, 'number', { numericality: { greaterThan: 3 } })
+      validate(3.0, 'number', { numericality: { greaterThan: 3 } }),
     ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
     expect(() =>
-      validate(-1, 'number', { numericality: { greaterThan: 0 } })
+      validate(-1, 'number', { numericality: { greaterThan: 0 } }),
     ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
 
     expect(() =>
-      validate(3, 'number', { numericality: { greaterThan: 2 } })
+      validate(3, 'number', { numericality: { greaterThan: 2 } }),
     ).not.toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
     expect(() =>
-      validate(3.1, 'number', { numericality: { greaterThan: 3.0 } })
+      validate(3.1, 'number', { numericality: { greaterThan: 3.0 } }),
     ).not.toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
 
     // default error
@@ -686,30 +686,30 @@ describe('validate numericality', () => {
 
   it('checks if value is greater than or equal to required number', () => {
     expect(() =>
-      validate(2, 'number', { numericality: { greaterThanOrEqual: 3 } })
+      validate(2, 'number', { numericality: { greaterThanOrEqual: 3 } }),
     ).toThrow(ValidationErrors.GreaterThanOrEqualNumericalityValidationError)
     expect(() =>
-      validate(3.0, 'number', { numericality: { greaterThanOrEqual: 3.1 } })
+      validate(3.0, 'number', { numericality: { greaterThanOrEqual: 3.1 } }),
     ).toThrow(ValidationErrors.GreaterThanOrEqualNumericalityValidationError)
     expect(() =>
-      validate(-1, 'number', { numericality: { greaterThanOrEqual: 0 } })
+      validate(-1, 'number', { numericality: { greaterThanOrEqual: 0 } }),
     ).toThrow(ValidationErrors.GreaterThanOrEqualNumericalityValidationError)
 
     expect(() =>
-      validate(3, 'number', { numericality: { greaterThan: 2 } })
+      validate(3, 'number', { numericality: { greaterThan: 2 } }),
     ).not.toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
     expect(() =>
-      validate(3.1, 'number', { numericality: { greaterThan: 3.0 } })
+      validate(3.1, 'number', { numericality: { greaterThan: 3.0 } }),
     ).not.toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
     expect(() =>
-      validate(2, 'number', { numericality: { greaterThanOrEqual: 2 } })
+      validate(2, 'number', { numericality: { greaterThanOrEqual: 2 } }),
     ).not.toThrow(
-      ValidationErrors.GreaterThanOrEqualNumericalityValidationError
+      ValidationErrors.GreaterThanOrEqualNumericalityValidationError,
     )
     expect(() =>
-      validate(2.5, 'number', { numericality: { greaterThanOrEqual: 2.5 } })
+      validate(2.5, 'number', { numericality: { greaterThanOrEqual: 2.5 } }),
     ).not.toThrow(
-      ValidationErrors.GreaterThanOrEqualNumericalityValidationError
+      ValidationErrors.GreaterThanOrEqualNumericalityValidationError,
     )
 
     // default error
@@ -723,32 +723,32 @@ describe('validate numericality', () => {
 
   it('checks if value is not equal to required number', () => {
     expect(() => validate(2, 'number', { numericality: { equal: 3 } })).toThrow(
-      ValidationErrors.EqualNumericalityValidationError
+      ValidationErrors.EqualNumericalityValidationError,
     )
     expect(() =>
-      validate(2.0, 'number', { numericality: { equal: 3 } })
+      validate(2.0, 'number', { numericality: { equal: 3 } }),
     ).toThrow(ValidationErrors.EqualNumericalityValidationError)
     expect(() =>
-      validate(2.9, 'number', { numericality: { equal: 3.1 } })
+      validate(2.9, 'number', { numericality: { equal: 3.1 } }),
     ).toThrow(ValidationErrors.EqualNumericalityValidationError)
     expect(() =>
-      validate(2.9, 'number', { numericality: { equal: 3 } })
+      validate(2.9, 'number', { numericality: { equal: 3 } }),
     ).toThrow(ValidationErrors.EqualNumericalityValidationError)
     expect(() => validate(2, 'number', { numericality: { equal: 0 } })).toThrow(
-      ValidationErrors.EqualNumericalityValidationError
+      ValidationErrors.EqualNumericalityValidationError,
     )
 
     expect(() =>
-      validate(2, 'number', { numericality: { equal: 2 } })
+      validate(2, 'number', { numericality: { equal: 2 } }),
     ).not.toThrow(ValidationErrors.EqualNumericalityValidationError)
     expect(() =>
-      validate(2.0, 'number', { numericality: { equal: 2.0 } })
+      validate(2.0, 'number', { numericality: { equal: 2.0 } }),
     ).not.toThrow(ValidationErrors.EqualNumericalityValidationError)
     expect(() =>
-      validate(2, 'number', { numericality: { equal: 2.0 } })
+      validate(2, 'number', { numericality: { equal: 2.0 } }),
     ).not.toThrow(ValidationErrors.EqualNumericalityValidationError)
     expect(() =>
-      validate(2.0, 'number', { numericality: { equal: 2 } })
+      validate(2.0, 'number', { numericality: { equal: 2 } }),
     ).not.toThrow(ValidationErrors.EqualNumericalityValidationError)
 
     // default error
@@ -762,26 +762,26 @@ describe('validate numericality', () => {
 
   it('checks if not equal to required number', () => {
     expect(() =>
-      validate(3, 'number', { numericality: { otherThan: 3 } })
+      validate(3, 'number', { numericality: { otherThan: 3 } }),
     ).toThrow(ValidationErrors.OtherThanNumericalityValidationError)
     expect(() =>
-      validate(2.9, 'number', { numericality: { otherThan: 2.9 } })
+      validate(2.9, 'number', { numericality: { otherThan: 2.9 } }),
     ).toThrow(ValidationErrors.OtherThanNumericalityValidationError)
     expect(() =>
-      validate(3.0, 'number', { numericality: { otherThan: 3 } })
+      validate(3.0, 'number', { numericality: { otherThan: 3 } }),
     ).toThrow(ValidationErrors.OtherThanNumericalityValidationError)
     expect(() =>
-      validate(0, 'number', { numericality: { otherThan: 0 } })
+      validate(0, 'number', { numericality: { otherThan: 0 } }),
     ).toThrow(ValidationErrors.OtherThanNumericalityValidationError)
 
     expect(() =>
-      validate(2, 'number', { numericality: { otherThan: 3 } })
+      validate(2, 'number', { numericality: { otherThan: 3 } }),
     ).not.toThrow(ValidationErrors.OtherThanNumericalityValidationError)
     expect(() =>
-      validate(2.1, 'number', { numericality: { otherThan: 3.1 } })
+      validate(2.1, 'number', { numericality: { otherThan: 3.1 } }),
     ).not.toThrow(ValidationErrors.OtherThanNumericalityValidationError)
     expect(() =>
-      validate(3.0, 'number', { numericality: { otherThan: 4 } })
+      validate(3.0, 'number', { numericality: { otherThan: 4 } }),
     ).not.toThrow(ValidationErrors.OtherThanNumericalityValidationError)
 
     // default error
@@ -795,17 +795,17 @@ describe('validate numericality', () => {
 
   it('checks for a value being even', () => {
     expect(() =>
-      validate(3, 'number', { numericality: { even: true } })
+      validate(3, 'number', { numericality: { even: true } }),
     ).toThrow(ValidationErrors.EvenNumericalityValidationError)
     expect(() =>
-      validate(3.0, 'number', { numericality: { even: true } })
+      validate(3.0, 'number', { numericality: { even: true } }),
     ).toThrow(ValidationErrors.EvenNumericalityValidationError)
 
     expect(() =>
-      validate(2, 'number', { numericality: { even: true } })
+      validate(2, 'number', { numericality: { even: true } }),
     ).not.toThrow(ValidationErrors.EvenNumericalityValidationError)
     expect(() =>
-      validate(2.0, 'number', { numericality: { even: true } })
+      validate(2.0, 'number', { numericality: { even: true } }),
     ).not.toThrow(ValidationErrors.EvenNumericalityValidationError)
 
     // default error
@@ -819,17 +819,17 @@ describe('validate numericality', () => {
 
   it('checks for a value being odd', () => {
     expect(() =>
-      validate(2, 'number', { numericality: { odd: true } })
+      validate(2, 'number', { numericality: { odd: true } }),
     ).toThrow(ValidationErrors.OddNumericalityValidationError)
     expect(() =>
-      validate(2.0, 'number', { numericality: { odd: true } })
+      validate(2.0, 'number', { numericality: { odd: true } }),
     ).toThrow(ValidationErrors.OddNumericalityValidationError)
 
     expect(() =>
-      validate(3, 'number', { numericality: { odd: true } })
+      validate(3, 'number', { numericality: { odd: true } }),
     ).not.toThrow(ValidationErrors.OddNumericalityValidationError)
     expect(() =>
-      validate(3.0, 'number', { numericality: { odd: true } })
+      validate(3.0, 'number', { numericality: { odd: true } }),
     ).not.toThrow(ValidationErrors.OddNumericalityValidationError)
 
     // default error
@@ -843,20 +843,20 @@ describe('validate numericality', () => {
 
   it('checks for a value being positive', () => {
     expect(() =>
-      validate(-1, 'number', { numericality: { positive: true } })
+      validate(-1, 'number', { numericality: { positive: true } }),
     ).toThrow(ValidationErrors.PositiveNumericalityValidationError)
     expect(() =>
-      validate(-2.0, 'number', { numericality: { positive: true } })
+      validate(-2.0, 'number', { numericality: { positive: true } }),
     ).toThrow(ValidationErrors.PositiveNumericalityValidationError)
     expect(() =>
-      validate(0, 'number', { numericality: { positive: true } })
+      validate(0, 'number', { numericality: { positive: true } }),
     ).toThrow(ValidationErrors.PositiveNumericalityValidationError)
 
     expect(() =>
-      validate(3, 'number', { numericality: { positive: true } })
+      validate(3, 'number', { numericality: { positive: true } }),
     ).not.toThrow(ValidationErrors.PositiveNumericalityValidationError)
     expect(() =>
-      validate(3.0, 'number', { numericality: { positive: true } })
+      validate(3.0, 'number', { numericality: { positive: true } }),
     ).not.toThrow(ValidationErrors.PositiveNumericalityValidationError)
 
     // default error
@@ -870,20 +870,20 @@ describe('validate numericality', () => {
 
   it('checks for a value being negative', () => {
     expect(() =>
-      validate(1, 'number', { numericality: { negative: true } })
+      validate(1, 'number', { numericality: { negative: true } }),
     ).toThrow(ValidationErrors.NegativeNumericalityValidationError)
     expect(() =>
-      validate(2.0, 'number', { numericality: { negative: true } })
+      validate(2.0, 'number', { numericality: { negative: true } }),
     ).toThrow(ValidationErrors.NegativeNumericalityValidationError)
     expect(() =>
-      validate(0, 'number', { numericality: { negative: true } })
+      validate(0, 'number', { numericality: { negative: true } }),
     ).toThrow(ValidationErrors.NegativeNumericalityValidationError)
 
     expect(() =>
-      validate(-3, 'number', { numericality: { negative: true } })
+      validate(-3, 'number', { numericality: { negative: true } }),
     ).not.toThrow(ValidationErrors.NegativeNumericalityValidationError)
     expect(() =>
-      validate(-3.0, 'number', { numericality: { negative: true } })
+      validate(-3.0, 'number', { numericality: { negative: true } }),
     ).not.toThrow(ValidationErrors.NegativeNumericalityValidationError)
 
     // default error
@@ -903,47 +903,47 @@ describe('validate numericality', () => {
 describe('validate presence', () => {
   it('checks for a field being null', () => {
     expect(() => validate(null, 'email', { presence: true })).toThrow(
-      ValidationErrors.PresenceValidationError
+      ValidationErrors.PresenceValidationError,
     )
     expect(() =>
-      validate(null, 'email', { presence: { allowNull: false } })
+      validate(null, 'email', { presence: { allowNull: false } }),
     ).toThrow(ValidationErrors.PresenceValidationError)
 
     expect(() =>
-      validate(undefined, 'email', { presence: { allowUndefined: true } })
+      validate(undefined, 'email', { presence: { allowUndefined: true } }),
     ).not.toThrow()
     expect(() =>
-      validate(null, 'email', { presence: { allowNull: true } })
+      validate(null, 'email', { presence: { allowNull: true } }),
     ).not.toThrow()
     expect(() => validate('', 'email', { presence: true })).not.toThrow()
   })
 
   it('checks for a field being undefined', () => {
     expect(() => validate(undefined, 'email', { presence: true })).toThrow(
-      ValidationErrors.PresenceValidationError
+      ValidationErrors.PresenceValidationError,
     )
     expect(() =>
-      validate(undefined, 'email', { presence: { allowUndefined: false } })
+      validate(undefined, 'email', { presence: { allowUndefined: false } }),
     ).toThrow(ValidationErrors.PresenceValidationError)
 
     expect(() =>
-      validate(null, 'email', { presence: { allowNull: true } })
+      validate(null, 'email', { presence: { allowNull: true } }),
     ).not.toThrow()
     expect(() =>
-      validate(undefined, 'email', { presence: { allowUndefined: true } })
+      validate(undefined, 'email', { presence: { allowUndefined: true } }),
     ).not.toThrow()
   })
 
   it('checks for a field being an empty string', () => {
     expect(() =>
-      validate('', 'email', { presence: { allowEmptyString: false } })
+      validate('', 'email', { presence: { allowEmptyString: false } }),
     ).toThrow(ValidationErrors.PresenceValidationError)
 
     expect(() => validate('', 'email', { presence: true })).not.toThrow()
     expect(() =>
       validate('', 'email', {
         presence: { allowNull: true, allowUndefined: true },
-      })
+      }),
     ).not.toThrow()
   })
 
@@ -993,7 +993,7 @@ describe('validate custom', () => {
             throw new Error('foo')
           },
         },
-      })
+      }),
     ).toThrow(ValidationErrors.CustomValidationError)
 
     expect(() =>
@@ -1001,7 +1001,7 @@ describe('validate custom', () => {
         custom: {
           with: () => {},
         },
-      })
+      }),
     ).not.toThrow(ValidationErrors.CustomValidationError)
   })
 
@@ -1126,7 +1126,7 @@ describe('validate', () => {
       validate(null, 'email', {
         presence: true,
         format: /^\d+$/,
-      })
+      }),
     ).toThrow(ValidationErrors.PresenceValidationError)
 
     // fails second validator
@@ -1134,7 +1134,7 @@ describe('validate', () => {
       validate('rob@redwoodjs.com', 'email', {
         presence: true,
         format: /^\d+$/,
-      })
+      }),
     ).toThrow(ValidationErrors.FormatValidationError)
 
     // passes all validators
@@ -1142,7 +1142,7 @@ describe('validate', () => {
       validate(12345, 'number', {
         presence: true,
         format: /^\d+$/,
-      })
+      }),
     ).not.toThrow()
   })
 
@@ -1281,7 +1281,7 @@ describe('validateUniqueness', () => {
       await validateUniqueness(
         'user',
         { name: 'Rob', email: 'rob@redwoodjs.com' },
-        () => {}
+        () => {},
       )
     } catch (e) {
       expect(e.message).toEqual('name, email must be unique')
@@ -1302,7 +1302,7 @@ describe('validateUniqueness', () => {
         {
           message: 'Email already taken',
         },
-        () => {}
+        () => {},
       )
     } catch (e) {
       expect(e.message).toEqual('Email already taken')
@@ -1332,8 +1332,8 @@ describe('validateUniqueness', () => {
         'user',
         { email: 'rob@redwoodjs.com' },
         { db: mockPrismaClient },
-        () => {}
-      )
+        () => {},
+      ),
     ).rejects.toThrowError('email must be unique')
 
     expect(mockFindFirstOther).toBeCalled()

@@ -47,7 +47,7 @@ export function extendJSXFile(
     },
     imports = [],
     moduleScopeLines = [],
-  }
+  },
 ) {
   const content = fs.readFileSync(path).toString().split('\n')
 
@@ -56,7 +56,7 @@ export function extendJSXFile(
       content.findLastIndex((l) => l.trimStart().startsWith('import')) + 1,
       0,
       '', // Empty string to add a newline when we .join('\n') below.
-      ...moduleScopeLines
+      ...moduleScopeLines,
     )
   }
 
@@ -65,7 +65,7 @@ export function extendJSXFile(
       content.findLastIndex((l) => l.includes('@redwoodjs')) + 1,
       0,
       '', // Empty string to add a newline when we .join('\n') below.
-      ...imports
+      ...imports,
     )
   }
 
@@ -100,11 +100,11 @@ export function extendJSXFile(
  */
 function insertComponent(
   content,
-  { component, props, around, within, insertBefore, insertAfter }
+  { component, props, around, within, insertBefore, insertAfter },
 ) {
   if ((around && within) || !(around || within)) {
     throw new Error(
-      'Exactly one of (around | within) must be defined. Choose one.'
+      'Exactly one of (around | within) must be defined. Choose one.',
     )
   }
 
@@ -134,7 +134,7 @@ function insertComponent(
     // Increase indent of each now-nested tag by one tab (two spaces)
     ...content.slice(open, close).map((line) => '  ' + line),
     componentDepth + `</${component}>`,
-    insertAfter && componentDepth + insertAfter
+    insertAfter && componentDepth + insertAfter,
   )
 }
 
@@ -155,7 +155,7 @@ function buildOpeningTag(componentName, props) {
         return props
       default:
         throw new Error(
-          `Illegal argument passed for 'props'. Required: {Object | string | undefined}, got ${typeof props}`
+          `Illegal argument passed for 'props'. Required: {Object | string | undefined}, got ${typeof props}`,
         )
     }
   })()
@@ -173,7 +173,7 @@ function buildOpeningTag(componentName, props) {
  */
 export function objectToComponentProps(
   obj,
-  options = { exclude: [], raw: false }
+  options = { exclude: [], raw: false },
 ) {
   const props = []
 

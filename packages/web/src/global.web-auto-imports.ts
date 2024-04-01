@@ -31,7 +31,7 @@ declare global {
   // Overridable graphQL hook return types
   interface QueryOperationResult<
     TData = any,
-    TVariables = GraphQLOperationVariables
+    TVariables = GraphQLOperationVariables,
   > {
     data: TData | undefined
     loading: boolean

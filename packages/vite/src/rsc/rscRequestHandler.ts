@@ -1,12 +1,14 @@
 import busboy from 'busboy'
 import type { Request, Response } from 'express'
-import RSDWServer from 'react-server-dom-webpack/server.node.unbundled'
 
-import { hasStatusCode } from '../lib/StatusError'
+import {
+  decodeReply,
+  decodeReplyFromBusboy,
+} from '../bundled/react-server-dom-webpack.server'
+import { hasStatusCode } from '../lib/StatusError.js'
 
-import { renderRsc } from './rscWorkerCommunication'
-
-const { decodeReply, decodeReplyFromBusboy } = RSDWServer
+import { sendRscFlightToStudio } from './rscStudioHandlers.js'
+import { renderRsc } from './rscWorkerCommunication.js'
 
 export function createRscRequestHandler() {
   // This is mounted at /rw-rsc, so will have /rw-rsc stripped from req.url
@@ -32,17 +34,15 @@ export function createRscRequestHandler() {
     console.log('url.pathname', url.pathname)
 
     if (url.pathname.startsWith(basePath)) {
-      const index = url.pathname.lastIndexOf('/')
-      const params = new URLSearchParams(url.pathname.slice(index + 1))
-      rscId = url.pathname.slice(basePath.length, index)
-      rsfId = params.get('action_id') || undefined
+      rscId = url.pathname.split('/').pop()
+      rsfId = url.searchParams.get('action_id') || undefined
 
       console.log('rscId', rscId)
       console.log('rsfId', rsfId)
 
       if (rscId && rscId !== '_') {
         res.setHeader('Content-Type', 'text/x-component')
-        props = JSON.parse(params.get('props') || '{}')
+        props = JSON.parse(url.searchParams.get('props') || '{}')
       } else {
         rscId = undefined
       }
@@ -54,7 +54,8 @@ export function createRscRequestHandler() {
         if (req.headers['content-type']?.startsWith('multipart/form-data')) {
           console.log('RSA: multipart/form-data')
           const bb = busboy({ headers: req.headers })
-          const reply = decodeReplyFromBusboy(bb)
+          // TODO (RSC): The generic here could be typed better
+          const reply = decodeReplyFromBusboy<unknown[]>(bb)
 
           req.pipe(bb)
           args = await reply
@@ -124,8 +125,20 @@ export function createRscRequestHandler() {
 
       try {
         const pipeable = await renderRsc({ rscId, props, rsfId, args })
+
+        await sendRscFlightToStudio({
+          rscId,
+          props,
+          rsfId,
+          args,
+          basePath,
+          req,
+          handleError,
+        })
+
         // TODO (RSC): See if we can/need to do more error handling here
         // pipeable.on(handleError)
+
         pipeable.pipe(res)
       } catch (e) {
         handleError(e)

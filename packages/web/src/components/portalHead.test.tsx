@@ -1,14 +1,14 @@
 import React from 'react'
 
-import '@testing-library/jest-dom/jest-globals'
 import { render } from '@testing-library/react'
+import { vi, describe, it, expect } from 'vitest'
 
 import PortalHead from './PortalHead'
 import * as ServerInject from './ServerInject'
 
-const serverInsertionHookSpy = jest
+const serverInsertionHookSpy = vi
   .spyOn(ServerInject, 'useServerInsertedHTML')
-  .mockImplementation(jest.fn())
+  .mockImplementation(vi.fn())
 
 describe('Portal head', () => {
   const TestUsage = () => {
@@ -38,7 +38,7 @@ describe('Portal head', () => {
     expect(head.childNodes[2]).toHaveAttribute('name', 'description')
     expect(head.childNodes[2]).toHaveAttribute(
       'content',
-      'Kittens are soft and cuddly'
+      'Kittens are soft and cuddly',
     )
   })
 })

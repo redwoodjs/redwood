@@ -9,13 +9,11 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
-import { isTypeScriptProject } from '../../../lib/project'
-// Move this check out of experimental when server file is moved as well
-import { serverFileExists } from '../../experimental/util'
+import { isTypeScriptProject, serverFileExists } from '../../../lib/project'
 import { setupServerFileTasks } from '../server-file/serverFileHandler'
 
 const { version } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8')
+  fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8'),
 )
 
 export async function handler({ force, includeExamples, verbose }) {
@@ -24,7 +22,7 @@ export async function handler({ force, includeExamples, verbose }) {
 
   const realtimeLibFilePath = path.join(
     redwoodPaths.api.lib,
-    `realtime.${isTypeScriptProject() ? 'ts' : 'js'}`
+    `realtime.${isTypeScriptProject() ? 'ts' : 'js'}`,
   )
 
   const tasks = new Listr(
@@ -35,7 +33,7 @@ export async function handler({ force, includeExamples, verbose }) {
         task: () => {
           const serverFileTemplateContent = fs.readFileSync(
             path.resolve(__dirname, 'templates', 'realtime.ts.template'),
-            'utf-8'
+            'utf-8',
           )
 
           const setupScriptContent = ts
@@ -59,15 +57,15 @@ export async function handler({ force, includeExamples, verbose }) {
               'templates',
               'subscriptions',
               'countdown',
-              `countdown.ts.template`
+              `countdown.ts.template`,
             ),
-            'utf-8'
+            'utf-8',
           )
 
           const exampleFile = path.join(
             redwoodPaths.api.subscriptions,
             'countdown',
-            `countdown.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `countdown.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
 
           const setupScriptContent = ts
@@ -93,14 +91,14 @@ export async function handler({ force, includeExamples, verbose }) {
               'templates',
               'subscriptions',
               'newMessage',
-              `rooms.sdl.ts.template`
+              `rooms.sdl.ts.template`,
             ),
-            'utf-8'
+            'utf-8',
           )
 
           const sdlFile = path.join(
             redwoodPaths.api.graphql,
-            `rooms.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `rooms.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
 
           const sdlContent = ts
@@ -115,14 +113,14 @@ export async function handler({ force, includeExamples, verbose }) {
               'templates',
               'subscriptions',
               'newMessage',
-              `rooms.ts.template`
+              `rooms.ts.template`,
             ),
-            'utf-8'
+            'utf-8',
           )
           const serviceFile = path.join(
             redwoodPaths.api.services,
             'rooms',
-            `rooms.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `rooms.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
 
           const serviceContent = ts
@@ -137,15 +135,15 @@ export async function handler({ force, includeExamples, verbose }) {
               'templates',
               'subscriptions',
               'newMessage',
-              `newMessage.ts.template`
+              `newMessage.ts.template`,
             ),
-            'utf-8'
+            'utf-8',
           )
 
           const exampleFile = path.join(
             redwoodPaths.api.subscriptions,
             'newMessage',
-            `newMessage.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `newMessage.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
 
           const setupScriptContent = ts
@@ -178,14 +176,14 @@ export async function handler({ force, includeExamples, verbose }) {
               'templates',
               'liveQueries',
               'auctions',
-              `auctions.sdl.ts.template`
+              `auctions.sdl.ts.template`,
             ),
-            'utf-8'
+            'utf-8',
           )
 
           const sdlFile = path.join(
             redwoodPaths.api.graphql,
-            `auctions.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `auctions.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
 
           const sdlContent = ts
@@ -200,14 +198,14 @@ export async function handler({ force, includeExamples, verbose }) {
               'templates',
               'liveQueries',
               'auctions',
-              `auctions.ts.template`
+              `auctions.ts.template`,
             ),
-            'utf-8'
+            'utf-8',
           )
           const serviceFile = path.join(
             redwoodPaths.api.services,
             'auctions',
-            `auctions.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `auctions.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
 
           const serviceContent = ts
@@ -238,14 +236,14 @@ export async function handler({ force, includeExamples, verbose }) {
               'templates',
               'defer',
               'fastAndSlowFields',
-              `fastAndSlowFields.sdl.template`
+              `fastAndSlowFields.sdl.template`,
             ),
-            'utf-8'
+            'utf-8',
           )
 
           const sdlFile = path.join(
             redwoodPaths.api.graphql,
-            `fastAndSlowFields.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `fastAndSlowFields.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
 
           const sdlContent = ts
@@ -260,14 +258,14 @@ export async function handler({ force, includeExamples, verbose }) {
               'templates',
               'defer',
               'fastAndSlowFields',
-              `fastAndSlowFields.ts.template`
+              `fastAndSlowFields.ts.template`,
             ),
-            'utf-8'
+            'utf-8',
           )
           const serviceFile = path.join(
             redwoodPaths.api.services,
             'fastAndSlowFields',
-            `fastAndSlowFields.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `fastAndSlowFields.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
 
           const serviceContent = ts
@@ -298,14 +296,14 @@ export async function handler({ force, includeExamples, verbose }) {
               'templates',
               'stream',
               'alphabet',
-              `alphabet.sdl.template`
+              `alphabet.sdl.template`,
             ),
-            'utf-8'
+            'utf-8',
           )
 
           const sdlFile = path.join(
             redwoodPaths.api.graphql,
-            `alphabet.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `alphabet.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
 
           const sdlContent = ts
@@ -320,14 +318,14 @@ export async function handler({ force, includeExamples, verbose }) {
               'templates',
               'stream',
               'alphabet',
-              `alphabet.ts.template`
+              `alphabet.ts.template`,
             ),
-            'utf-8'
+            'utf-8',
           )
           const serviceFile = path.join(
             redwoodPaths.api.services,
             'alphabet',
-            `alphabet.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `alphabet.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
 
           const serviceContent = ts
@@ -350,7 +348,7 @@ export async function handler({ force, includeExamples, verbose }) {
         task: async () => {
           await generateTypes()
           console.log(
-            'Note: You may need to manually restart GraphQL in VSCode to see the new types take effect.\n\n'
+            'Note: You may need to manually restart GraphQL in VSCode to see the new types take effect.\n\n',
           )
         },
       },
@@ -358,7 +356,7 @@ export async function handler({ force, includeExamples, verbose }) {
     {
       rendererOptions: { collapseSubtasks: false, persistentOutput: true },
       renderer: verbose ? 'verbose' : 'default',
-    }
+    },
   )
 
   try {

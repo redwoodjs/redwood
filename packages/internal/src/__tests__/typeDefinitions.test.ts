@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import { beforeAll, afterAll, test, expect } from 'vitest'
+
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
 import { findCells, findDirectoryNamedModules } from '../files'
@@ -19,7 +21,7 @@ import {
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../__fixtures__/example-todo-main'
+  '../../../../__fixtures__/example-todo-main',
 )
 
 beforeAll(() => {
@@ -168,7 +170,7 @@ test('generates source maps for the router routes', () => {
   const paths = generateTypeDefRouterRoutes()
   const sourceMap = JSON.parse(fs.readFileSync(paths[0] + '.map', 'utf-8'))
   sourceMap.sources = sourceMap.sources.map((source: string) =>
-    ensurePosixPath(source)
+    ensurePosixPath(source),
   )
   expect(sourceMap).toMatchSnapshot()
 })
@@ -204,6 +206,6 @@ test('mirror path for dir cells', () => {
   const p = mirrorPathForCell(c[0])
 
   expect(cleanPaths(p[0])).toMatchInlineSnapshot(
-    `".redwood/types/mirror/web/src/components/NumTodosCell"`
+    `".redwood/types/mirror/web/src/components/NumTodosCell"`,
   )
 })

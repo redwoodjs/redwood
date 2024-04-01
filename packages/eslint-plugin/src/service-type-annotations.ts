@@ -1,20 +1,34 @@
-import { basename } from 'path'
+import { basename } from 'node:path'
 
-import type { Identifier } from '@typescript-eslint/types/dist/generated/ast-spec'
-import type { Rule } from 'eslint'
-import type {
-  Declaration,
-  ImportDeclaration,
-  VariableDeclaration,
-} from 'estree'
+import type { TSESTree } from '@typescript-eslint/utils'
+import { ESLintUtils, AST_NODE_TYPES } from '@typescript-eslint/utils'
 
-export const serviceTypeAnnotations: Rule.RuleModule = {
+const createRule = ESLintUtils.RuleCreator.withoutDocs
+
+const capitalizeFirstLetter = (str: string) =>
+  str.charAt(0).toUpperCase() + str.slice(1)
+
+export const serviceTypeAnnotations = createRule({
+  meta: {
+    docs: {
+      description:
+        'Sets the types on a query/mutation resolver function to the correct type',
+    },
+    messages: {
+      needsType:
+        'The query/mutation function ({{name}}) needs a type annotation of {{typeName}}.',
+    },
+    fixable: 'code',
+    type: 'suggestion',
+    schema: [],
+  },
+  defaultOptions: [],
   create(context) {
     const thisFilename = basename(context.filename)
     const sansTS = thisFilename.replace('.ts', '')
     const thisFileCorrespondingImport = `types/${sansTS}`
 
-    let importForThisFile: ImportDeclaration | null = null
+    let importForThisFile: TSESTree.ImportDeclaration | null = null
     return {
       // Make sure we have a reference to the import for the relative file
       // which includes definitions for this service
@@ -25,7 +39,10 @@ export const serviceTypeAnnotations: Rule.RuleModule = {
 
       // Then start looking at every exported fn/const
       ExportNamedDeclaration(node) {
-        if (!node.declaration || !isVariableDeclaration(node.declaration)) {
+        if (
+          !node.declaration ||
+          node.declaration.type !== AST_NODE_TYPES.VariableDeclaration
+        ) {
           return
         }
 
@@ -54,7 +71,7 @@ export const serviceTypeAnnotations: Rule.RuleModule = {
             }
 
             // Switch from the estree type to the typescript-eslint type
-            const tsID = vd.id as Identifier
+            const tsID = vd.id as TSESTree.Identifier
 
             // If there's no type annotation, then we should add one
             if (!tsID.typeAnnotation) {
@@ -73,7 +90,7 @@ export const serviceTypeAnnotations: Rule.RuleModule = {
                   if (!importForThisFile) {
                     yield fixer.insertTextBeforeRange(
                       [0, 0],
-                      `import type { ${typeName} } from "${thisFileCorrespondingImport}"\n`
+                      `import type { ${typeName} } from "${thisFileCorrespondingImport}"\n`,
                     )
                   } else {
                     const lastImportSpecifier =
@@ -82,7 +99,7 @@ export const serviceTypeAnnotations: Rule.RuleModule = {
                       ]
                     yield fixer.insertTextAfter(
                       lastImportSpecifier,
-                      `, ${typeName}`
+                      `, ${typeName}`,
                     )
                   }
                 },
@@ -122,7 +139,7 @@ export const serviceTypeAnnotations: Rule.RuleModule = {
                   if (!importForThisFile) {
                     yield fixer.insertTextBeforeRange(
                       [0, 0],
-                      `import type { ${typeName} } from "${thisFileCorrespondingImport}"\n`
+                      `import type { ${typeName} } from "${thisFileCorrespondingImport}"\n`,
                     )
                   } else {
                     const lastImportSpecifier =
@@ -131,7 +148,7 @@ export const serviceTypeAnnotations: Rule.RuleModule = {
                       ]
                     yield fixer.insertTextAfter(
                       lastImportSpecifier,
-                      `, ${typeName}`
+                      `, ${typeName}`,
                     )
                   }
                 },
@@ -142,25 +159,4 @@ export const serviceTypeAnnotations: Rule.RuleModule = {
       },
     }
   },
-  meta: {
-    docs: {
-      description:
-        'Sets the types on a query/mutation resolver function to the correct type',
-      recommended: false,
-    },
-    messages: {
-      needsType:
-        'The query/mutation function ({{name}}) needs a type annotation of {{typeName}}.',
-    },
-    fixable: 'code',
-    type: 'suggestion',
-  },
-}
-
-const capitalizeFirstLetter = (str: string) =>
-  str.charAt(0).toUpperCase() + str.slice(1)
-
-const isVariableDeclaration = (
-  node: Declaration
-): node is VariableDeclaration =>
-  typeof node !== 'undefined' && 'declarations' in node
+})

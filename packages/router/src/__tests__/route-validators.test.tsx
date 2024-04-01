@@ -7,7 +7,7 @@ describe('isValidRoute', () => {
     const RouteCheck = <Route name="noPath" page={() => <h1>Hello</h1>} />
 
     expect(() => isValidRoute(RouteCheck)).toThrowError(
-      'Route element for "noPath" is missing required props: path'
+      'Route element for "noPath" is missing required props: path',
     )
   })
 
@@ -16,7 +16,7 @@ describe('isValidRoute', () => {
     const RouteCheck = <Route path="/hello" page={() => <h1>Hello</h1>} />
 
     expect(() => isValidRoute(RouteCheck)).toThrowError(
-      'Route element for "/hello" is missing required props: name'
+      'Route element for "/hello" is missing required props: name',
     )
   })
 
@@ -25,7 +25,7 @@ describe('isValidRoute', () => {
     const RouteCheck = <Route name="noPage" />
 
     expect(() => isValidRoute(RouteCheck)).toThrowError(
-      'Route element for "noPage" is missing required props: path, page'
+      'Route element for "noPage" is missing required props: path, page',
     )
   })
 
@@ -34,7 +34,7 @@ describe('isValidRoute', () => {
     const RouteToCheck = <Route redirect="/dash" />
 
     expect(() => isValidRoute(RouteToCheck)).toThrowError(
-      'Route element is missing required props: path'
+      'Route element is missing required props: path',
     )
   })
 
@@ -43,7 +43,7 @@ describe('isValidRoute', () => {
     const RouteToCheck = <Route notfound name="bazinga" />
 
     expect(() => isValidRoute(RouteToCheck)).toThrowError(
-      'Route element for "bazinga" is missing required props: page'
+      'Route element for "bazinga" is missing required props: page',
     )
   })
 

@@ -16,8 +16,8 @@ export default function transform(file: FileInfo, api: API) {
       .insertAfter(
         j.importDeclaration(
           [j.importSpecifier(j.identifier('store'))],
-          j.literal('src/lib/trustedDocumentsStore')
-        )
+          j.literal('src/lib/trustedDocumentsStore'),
+        ),
       )
   }
 
@@ -30,7 +30,7 @@ export default function transform(file: FileInfo, api: API) {
   if (createGraphQLHandlerCalls.length === 0) {
     throw new Error(
       "Error updating your graphql handler function. You'll have to do it manually. " +
-        "(Couldn't find a call to `createGraphQLHandler`)"
+        "(Couldn't find a call to `createGraphQLHandler`)",
     )
   }
 
@@ -40,13 +40,13 @@ export default function transform(file: FileInfo, api: API) {
       key: {
         name: 'trustedDocuments',
       },
-    }
+    },
   )
 
   if (existingTrustedDocumentsProperty.length === 0) {
     const storeProperty = j.objectProperty(
       j.identifier('store'),
-      j.identifier('store')
+      j.identifier('store'),
     )
     storeProperty.shorthand = true
 
@@ -55,8 +55,8 @@ export default function transform(file: FileInfo, api: API) {
       .node.arguments[0].properties.push(
         j.objectProperty(
           j.identifier('trustedDocuments'),
-          j.objectExpression([storeProperty])
-        )
+          j.objectExpression([storeProperty]),
+        ),
       )
   }
 

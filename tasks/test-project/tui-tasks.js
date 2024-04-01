@@ -349,7 +349,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
       // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
       task: async () => {
         await exec(
-          'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss@0.4.1',
+          'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss@^0.5.12',
           [],
           getExecaOptions(outputPath)
         )

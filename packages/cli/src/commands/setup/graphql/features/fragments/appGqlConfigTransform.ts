@@ -43,7 +43,7 @@ export default function transform(file: FileInfo, api: API) {
     j.JSXAttribute,
     {
       name: { name: 'graphQLClientConfig' },
-    }
+    },
   )
 
   let graphQLClientConfig: ReturnType<typeof j.jsxAttribute>
@@ -53,7 +53,7 @@ export default function transform(file: FileInfo, api: API) {
     // Creating `graphQLClientConfig={{}}`
     graphQLClientConfig = j.jsxAttribute(
       j.jsxIdentifier('graphQLClientConfig'),
-      j.jsxExpressionContainer(j.objectExpression([]))
+      j.jsxExpressionContainer(j.objectExpression([])),
     )
   } else {
     graphQLClientConfig = graphQLClientConfigCollection.get(0).node
@@ -68,7 +68,7 @@ export default function transform(file: FileInfo, api: API) {
   // graphQLClientConfig={graphQLClientConfig}
 
   const graphQLClientConfigExpression = isJsxExpressionContainer(
-    graphQLClientConfig.value
+    graphQLClientConfig.value,
   )
     ? graphQLClientConfig.value.expression
     : j.jsxEmptyExpression()
@@ -90,7 +90,7 @@ export default function transform(file: FileInfo, api: API) {
       "Error configuring possibleTypes. You'll have to do it manually. " +
         "(Could not find a graphQLClientConfigExpression of the correct type, it's a " +
         graphQLClientConfigExpression.type +
-        ')'
+        ')',
     )
   }
 
@@ -119,9 +119,9 @@ export default function transform(file: FileInfo, api: API) {
         j.variableDeclaration('const', [
           j.variableDeclarator(
             j.identifier(graphQLClientConfigVariableName),
-            graphQLClientConfigExpression
+            graphQLClientConfigExpression,
           ),
-        ])
+        ]),
       )
   }
 
@@ -129,7 +129,7 @@ export default function transform(file: FileInfo, api: API) {
   // one we just created above, or the one the user already had, with the name
   // we found in the `graphQLClientConfig prop expression.
   const configVariableDeclarators = root.findVariableDeclarators(
-    graphQLClientConfigVariableName
+    graphQLClientConfigVariableName,
   )
 
   const configExpression = configVariableDeclarators.get(0)?.node.init
@@ -137,7 +137,7 @@ export default function transform(file: FileInfo, api: API) {
   if (!isObjectExpression(configExpression)) {
     throw new Error(
       "Error configuring possibleTypes. You'll have to do it manually. " +
-        '(Could not find a graphQLClientConfig variable ObjectExpression)'
+        '(Could not find a graphQLClientConfig variable ObjectExpression)',
     )
   }
 
@@ -145,14 +145,14 @@ export default function transform(file: FileInfo, api: API) {
   // an object. Let's see if the object has a `cacheConfig` property.
 
   let cacheConfig = configExpression.properties.find((prop) =>
-    isPropertyWithName(prop, 'cacheConfig')
+    isPropertyWithName(prop, 'cacheConfig'),
   )
 
   if (!cacheConfig) {
     // No `cacheConfig` property. Let's insert one!
     cacheConfig = j.objectProperty(
       j.identifier('cacheConfig'),
-      j.objectExpression([])
+      j.objectExpression([]),
     )
     configExpression.properties.push(cacheConfig)
   }
@@ -160,7 +160,7 @@ export default function transform(file: FileInfo, api: API) {
   if (!isObjectProperty(cacheConfig)) {
     throw new Error(
       "Error configuring possibleTypes. You'll have to do it manually. " +
-        '(cacheConfig is not an ObjectProperty)'
+        '(cacheConfig is not an ObjectProperty)',
     )
   }
 
@@ -169,7 +169,7 @@ export default function transform(file: FileInfo, api: API) {
   if (!isObjectExpression(cacheConfigValue)) {
     throw new Error(
       "Error configuring possibleTypes. You'll have to do it manually. " +
-        '(cacheConfigValue is not an ObjectExpression)'
+        '(cacheConfigValue is not an ObjectExpression)',
     )
   }
 
@@ -178,14 +178,14 @@ export default function transform(file: FileInfo, api: API) {
   // If it doesn't we'll insert one, with the correct value
 
   const possibleTypes = cacheConfigValue.properties.find((prop) =>
-    isPropertyWithName(prop, 'possibleTypes')
+    isPropertyWithName(prop, 'possibleTypes'),
   )
 
   if (!possibleTypes) {
     const property = j.property(
       'init',
       j.identifier('possibleTypes'),
-      j.identifier('possibleTypes.possibleTypes')
+      j.identifier('possibleTypes.possibleTypes'),
     )
     // property.shorthand = true
     cacheConfigValue.properties.push(property)
@@ -203,8 +203,8 @@ export default function transform(file: FileInfo, api: API) {
     .node.openingElement.attributes.push(
       j.jsxAttribute(
         j.jsxIdentifier('graphQLClientConfig'),
-        j.jsxExpressionContainer(j.identifier(graphQLClientConfigVariableName))
-      )
+        j.jsxExpressionContainer(j.identifier(graphQLClientConfigVariableName)),
+      ),
     )
 
   return root.toSource()

@@ -46,7 +46,7 @@ export async function loadPlugins(yargs) {
 
   // Plugins are enabled unless explicitly disabled
   const enabledPlugins = plugins.filter(
-    (p) => p.package !== undefined && (p.enabled ?? true)
+    (p) => p.package !== undefined && (p.enabled ?? true),
   )
 
   // Print warnings about any invalid plugins
@@ -101,7 +101,7 @@ export async function loadPlugins(yargs) {
             redwoodPluginPackage,
             pluginCommandCache,
             autoInstall,
-            true
+            true,
           )
           yargs.command(commands)
         }
@@ -137,13 +137,13 @@ export async function loadPlugins(yargs) {
           redwoodPluginPackage,
           pluginCommandCache,
           autoInstall,
-          true
+          true,
         )
         yargs.command(commands)
       }
     } else {
       const packagesForNamespace = Array.from(thirdPartyPackages).filter((p) =>
-        p.startsWith(namespaceInUse)
+        p.startsWith(namespaceInUse),
       )
       for (const packageForNamespace of packagesForNamespace) {
         // We'll load the plugin information from the cache if there is a cache entry
@@ -151,7 +151,7 @@ export async function loadPlugins(yargs) {
           packageForNamespace,
           pluginCommandCache,
           autoInstall,
-          true
+          true,
         )
         yargs.command({
           command: `${namespaceInUse} <command>`,
@@ -187,7 +187,7 @@ export async function loadPlugins(yargs) {
     for (const [command, info] of Object.entries(cacheEntry)) {
       commandFirstWords.push(command.split(' ')[0])
       commandFirstWords.push(
-        ...(info.aliases?.map((a) => a.split(' ')[0]) ?? [])
+        ...(info.aliases?.map((a) => a.split(' ')[0]) ?? []),
       )
     }
     if (
@@ -220,7 +220,7 @@ export async function loadPlugins(yargs) {
       packageToLoad,
       pluginCommandCache,
       autoInstall,
-      false
+      false,
     )
     commandsToRegister.push(...commands)
   } else {
@@ -232,7 +232,7 @@ export async function loadPlugins(yargs) {
         packageToLoad,
         pluginCommandCache,
         autoInstall,
-        true
+        true,
       )
       commandsToRegister.push(...commands)
     }
@@ -279,7 +279,7 @@ async function loadCommandsFromCacheOrPackage(
   packageName,
   cache,
   autoInstall,
-  readFromCache
+  readFromCache,
 ) {
   let cacheEntry = undefined
   if (readFromCache) {

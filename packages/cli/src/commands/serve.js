@@ -10,6 +10,7 @@ import * as webServerCLIConfig from '@redwoodjs/web-server'
 
 import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
+import { serverFileExists } from '../lib/project.js'
 
 import { webSsrServerHandler } from './serveWebHandler'
 
@@ -17,12 +18,10 @@ export const command = 'serve [side]'
 export const description =
   'Start a server for serving both the api and web sides'
 
-function hasServerFile() {
-  const serverFilePath = path.join(getPaths().api.dist, 'server.js')
-  return fs.existsSync(serverFilePath)
-}
-
 export const builder = async (yargs) => {
+  const rscEnabled = getConfig().experimental?.rsc?.enabled
+  const streamingEnabled = getConfig().experimental?.streamingSsr?.enabled
+
   yargs
     .command({
       command: '$0',
@@ -37,15 +36,12 @@ export const builder = async (yargs) => {
         })
 
         // Run the server file, if it exists, with web side also
-        if (hasServerFile()) {
+        if (serverFileExists()) {
           const { bothServerFileHandler } = await import(
             './serveBothHandler.js'
           )
           await bothServerFileHandler(argv)
-        } else if (
-          getConfig().experimental?.rsc?.enabled ||
-          getConfig().experimental?.streamingSsr?.enabled
-        ) {
+        } else if (rscEnabled || streamingEnabled) {
           const { bothSsrRscServerHandler } = await import(
             './serveBothHandler.js'
           )
@@ -69,7 +65,7 @@ export const builder = async (yargs) => {
         })
 
         // Run the server file, if it exists, api side only
-        if (hasServerFile()) {
+        if (serverFileExists()) {
           const { apiServerFileHandler } = await import('./serveApiHandler.js')
           await apiServerFileHandler(argv)
         } else {
@@ -90,7 +86,7 @@ export const builder = async (yargs) => {
           apiHost: argv.apiHost,
         })
 
-        if (getConfig().experimental?.streamingSsr?.enabled) {
+        if (streamingEnabled) {
           await webSsrServerHandler()
         } else {
           await webServerCLIConfig.handler(argv)
@@ -111,36 +107,57 @@ export const builder = async (yargs) => {
       ) {
         console.error(
           c.error(
-            '\n Please run `yarn rw build web` before trying to serve web. \n'
-          )
+            '\n Please run `yarn rw build web` before trying to serve web. \n',
+          ),
         )
         process.exit(1)
       }
 
-      if (
-        positionalArgs.includes('api') &&
-        !fs.existsSync(path.join(getPaths().api.dist))
-      ) {
-        console.error(
-          c.error(
-            '\n Please run `yarn rw build api` before trying to serve api. \n'
+      const apiSideExists = fs.existsSync(getPaths().api.base)
+      if (positionalArgs.includes('api')) {
+        if (!apiSideExists) {
+          console.error(
+            c.error(
+              '\n Unable to serve the api side as no `api` folder exists. \n',
+            ),
           )
-        )
-        process.exit(1)
+          process.exit(1)
+        }
+
+        if (!fs.existsSync(path.join(getPaths().api.dist))) {
+          console.error(
+            c.error(
+              '\n Please run `yarn rw build api` before trying to serve api. \n',
+            ),
+          )
+          process.exit(1)
+        }
       }
 
-      if (
-        // serve both
-        positionalArgs.length === 1 &&
-        (!fs.existsSync(path.join(getPaths().api.dist)) ||
-          !fs.existsSync(path.join(getPaths().web.dist), 'index.html'))
-      ) {
-        console.error(
-          c.error(
-            '\n Please run `yarn rw build` before trying to serve your redwood app. \n'
+      // serve both
+      if (positionalArgs.length === 1) {
+        if (!apiSideExists && !rscEnabled) {
+          console.error(
+            c.error(
+              '\n Unable to serve the both sides as no `api` folder exists. Please use `yarn rw serve web` instead. \n',
+            ),
           )
-        )
-        process.exit(1)
+          process.exit(1)
+        }
+
+        // We need the web side (and api side, if it exists) to have been built
+        if (
+          (fs.existsSync(path.join(getPaths().api.base)) &&
+            !fs.existsSync(path.join(getPaths().api.dist))) ||
+          !fs.existsSync(path.join(getPaths().web.dist), 'index.html')
+        ) {
+          console.error(
+            c.error(
+              '\n Please run `yarn rw build` before trying to serve your redwood app. \n',
+            ),
+          )
+          process.exit(1)
+        }
       }
 
       // Set NODE_ENV to production, if not set
@@ -151,7 +168,7 @@ export const builder = async (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#serve'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#serve',
+      )}`,
     )
 }

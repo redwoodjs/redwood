@@ -26,13 +26,13 @@ describe('useLocation', () => {
     const { getByText, getByTestId } = render(
       <LocationProvider location={mockLocation}>
         <TestComponent />
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(
       getByText(
-        '{"pathname":"/dunder-mifflin","search":"?facts=bears","hash":"#woof"}'
-      )
+        '{"pathname":"/dunder-mifflin","search":"?facts=bears","hash":"#woof"}',
+      ),
     ).toBeInTheDocument()
     expect(getByTestId('pathname')).toHaveValue('/dunder-mifflin')
     expect(getByTestId('search')).toHaveValue('?facts=bears')

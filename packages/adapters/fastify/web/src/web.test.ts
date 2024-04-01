@@ -1,6 +1,7 @@
-import fs from 'fs'
-import path from 'path'
+import * as fs from 'fs'
+import * as path from 'path'
 
+import type { FastifyInstance } from 'fastify'
 import Fastify from 'fastify'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
@@ -8,7 +9,7 @@ import { getPaths } from '@redwoodjs/project-config'
 
 import { redwoodFastifyWeb } from './web'
 
-let original_RWJS_CWD
+let original_RWJS_CWD: string
 
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
@@ -24,7 +25,7 @@ describe('redwoodFastifyWeb', () => {
   console.log = vi.fn()
 
   // Set up and teardown the fastify instance with options.
-  let fastifyInstance
+  let fastifyInstance: FastifyInstance
 
   const port = 8910
 
@@ -52,7 +53,7 @@ describe('redwoodFastifyWeb', () => {
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
       expect(res.body).toBe(
-        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8')
+        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8'),
       )
     })
 
@@ -67,7 +68,7 @@ describe('redwoodFastifyWeb', () => {
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
       expect(res.body).toBe(
-        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8')
+        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8'),
       )
     })
 
@@ -84,7 +85,7 @@ describe('redwoodFastifyWeb', () => {
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
       expect(res.body).toBe(
-        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8')
+        fs.readFileSync(path.join(getPaths().web.dist, `${url}.html`), 'utf-8'),
       )
     })
 
@@ -123,7 +124,7 @@ describe('redwoodFastifyWeb', () => {
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
       expect(res.body).toBe(
-        fs.readFileSync(path.join(getPaths().web.dist, url), 'utf-8')
+        fs.readFileSync(path.join(getPaths().web.dist, url), 'utf-8'),
       )
     })
 
@@ -136,7 +137,7 @@ describe('redwoodFastifyWeb', () => {
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe('text/html; charset=UTF-8')
       expect(res.body).toBe(
-        fs.readFileSync(path.join(getPaths().web.dist, '200.html'), 'utf-8')
+        fs.readFileSync(path.join(getPaths().web.dist, '200.html'), 'utf-8'),
       )
     })
   })
@@ -152,13 +153,13 @@ describe('redwoodFastifyWeb', () => {
 
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe(
-        'application/javascript; charset=UTF-8'
+        'application/javascript; charset=UTF-8',
       )
       expect(res.body).toBe(
         fs.readFileSync(
           path.join(getPaths().web.dist, relativeFilePath),
-          'utf-8'
-        )
+          'utf-8',
+        ),
       )
     })
 
@@ -175,8 +176,8 @@ describe('redwoodFastifyWeb', () => {
       expect(res.body).toBe(
         fs.readFileSync(
           path.join(getPaths().web.dist, relativeFilePath),
-          'utf-8'
-        )
+          'utf-8',
+        ),
       )
     })
 
@@ -190,13 +191,13 @@ describe('redwoodFastifyWeb', () => {
 
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe(
-        'application/json; charset=UTF-8'
+        'application/json; charset=UTF-8',
       )
       expect(res.body).toBe(
         fs.readFileSync(
           path.join(getPaths().web.dist, relativeFilePath),
-          'utf-8'
-        )
+          'utf-8',
+        ),
       )
     })
 
@@ -223,8 +224,8 @@ describe('redwoodFastifyWeb', () => {
       expect(res.body).toBe(
         fs.readFileSync(
           path.join(getPaths().web.dist, relativeFilePath),
-          'utf-8'
-        )
+          'utf-8',
+        ),
       )
     })
 
@@ -241,23 +242,63 @@ describe('redwoodFastifyWeb', () => {
       expect(res.body).toBe(
         fs.readFileSync(
           path.join(getPaths().web.dist, relativeFilePath),
-          'utf-8'
-        )
+          'utf-8',
+        ),
       )
     })
   })
 
   describe("returns a 404 for assets that can't be found", () => {
-    it("returns a 404 for non-html assets that can't be found", async () => {
+    it("returns a 404 for assets that can't be found", async () => {
       const res = await fastifyInstance.inject({
         method: 'GET',
-        url: '/kittens.png',
+        url: '/assets/kittens.png',
       })
 
       expect(res.statusCode).toBe(404)
     })
 
-    it('handles "."s in routes', async () => {
+    // This is testing current behavior - not ideal behavior. Feel free to
+    // update this test if you change the behavior.
+    // It's for the (hopefully rare) case where someone has a client-side
+    // route for /assets
+    it('returns a 200 for plain files, even in /assets/', async () => {
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: '/assets/kittens',
+      })
+
+      expect(res.statusCode).toBe(200)
+    })
+
+    it('handles "."s in route segments', async () => {
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: '/my.page/foo',
+      })
+
+      expect(res.statusCode).toBe(200)
+    })
+
+    it('handles "."s in last route segment', async () => {
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: '/foo/my.page',
+      })
+
+      expect(res.statusCode).toBe(200)
+    })
+
+    it('handles filenames in route segments', async () => {
+      const res = await fastifyInstance.inject({
+        method: 'GET',
+        url: '/file-route/fake.js',
+      })
+
+      expect(res.statusCode).toBe(200)
+    })
+
+    it('handles "."s in query params', async () => {
       const res = await fastifyInstance.inject({
         method: 'GET',
         url: '/my-page?loading=spinner.blue',
@@ -278,10 +319,10 @@ describe('redwoodFastifyWeb', () => {
 
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe(
-        'application/json; charset=utf-8'
+        'application/json; charset=utf-8',
       )
       expect(res.body).toMatchInlineSnapshot(
-        `"{"data":null,"errors":[{"message":"Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.","extensions":{"code":"BAD_GATEWAY","httpStatus":502}}]}"`
+        `"{"data":null,"errors":[{"message":"Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.","extensions":{"code":"BAD_GATEWAY","httpStatus":502}}]}"`,
       )
     })
 
@@ -295,10 +336,10 @@ describe('redwoodFastifyWeb', () => {
 
       expect(res.statusCode).toBe(200)
       expect(res.headers['content-type']).toBe(
-        'application/json; charset=utf-8'
+        'application/json; charset=utf-8',
       )
       expect(res.body).toMatchInlineSnapshot(
-        `"{"data":null,"errors":[{"message":"Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.","extensions":{"code":"BAD_GATEWAY","httpStatus":502}}]}"`
+        `"{"data":null,"errors":[{"message":"Bad Gateway: you may have misconfigured apiUrl and apiProxyTarget. If apiUrl is a relative URL, you must provide apiProxyTarget.","extensions":{"code":"BAD_GATEWAY","httpStatus":502}}]}"`,
       )
     })
   })

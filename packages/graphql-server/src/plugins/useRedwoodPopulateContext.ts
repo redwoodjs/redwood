@@ -8,7 +8,7 @@ import type { RedwoodGraphQLContext, GraphQLHandlerOptions } from '../types'
  * @returns
  */
 export const useRedwoodPopulateContext = (
-  populateContextBuilder: NonNullable<GraphQLHandlerOptions['context']>
+  populateContextBuilder: NonNullable<GraphQLHandlerOptions['context']>,
 ): Plugin<RedwoodGraphQLContext> => {
   return {
     async onContextBuilding({ context, extendContext }) {

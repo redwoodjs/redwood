@@ -1,7 +1,7 @@
 import { Response as PonyResponse } from '@whatwg-node/fetch'
 import cookie from 'cookie'
 
-import { CookieJar } from './CookieJar'
+import { CookieJar } from './CookieJar.js'
 
 /**
  * This is actually a Response builder class
@@ -32,7 +32,7 @@ export class MiddlewareResponse {
 
   static redirect = (
     location: string,
-    type: 'permanent' | 'temporary' = 'temporary'
+    type: 'permanent' | 'temporary' = 'temporary',
   ) => {
     const res = new MiddlewareResponse()
     res.headers.set('Location', location)
@@ -49,7 +49,7 @@ export class MiddlewareResponse {
     for (const [ckName, ckParams] of this.cookies) {
       this.headers.append(
         'Set-Cookie',
-        cookie.serialize(ckName, ckParams.value, ckParams.options)
+        cookie.serialize(ckName, ckParams.value, ckParams.options),
       )
     }
 

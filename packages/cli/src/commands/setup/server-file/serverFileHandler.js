@@ -11,7 +11,7 @@ import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 
 const { version } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8')
+  fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8'),
 )
 
 export function setupServerFileTasks({ force = false } = {}) {
@@ -23,12 +23,12 @@ export function setupServerFileTasks({ force = false } = {}) {
 
         const serverFilePath = path.join(
           getPaths().api.src,
-          `server.${ts ? 'ts' : 'js'}`
+          `server.${ts ? 'ts' : 'js'}`,
         )
 
         const serverFileTemplateContent = fs.readFileSync(
           path.join(__dirname, 'templates', 'server.ts.template'),
-          'utf-8'
+          'utf-8',
         )
 
         const setupScriptContent = ts

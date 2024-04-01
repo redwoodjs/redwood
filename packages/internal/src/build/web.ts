@@ -59,7 +59,7 @@ export const buildWeb = async ({ verbose }: BuildOptions) => {
 
   if (process.cwd() !== getPaths().web.base) {
     throw new Error(
-      'Looks like you are running the command from the wrong dir, this can lead to unintended consequences on CSS processing'
+      'Looks like you are running the command from the wrong dir, this can lead to unintended consequences on CSS processing',
     )
   }
 

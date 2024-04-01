@@ -1,9 +1,7 @@
-/**
- * @jest-environment jsdom
- */
+import React from 'react'
 
 import { render, screen, waitFor } from '@testing-library/react'
-import '@testing-library/jest-dom/jest-globals'
+import { describe, test, expect } from 'vitest'
 
 import {
   GraphQLHooksProvider,
@@ -46,45 +44,47 @@ const TestUseSubscriptionHook: React.FunctionComponent = () => {
 }
 
 describe('QueryHooksProvider', () => {
-  test('useQueryHook is called with the correct query and arguments', (done) => {
-    const myUseQueryHook = (query, options) => {
-      expect(query).toEqual('query TestQuery { answer }')
-      expect(options.variables.question).toEqual(
-        'What is the answer to life, the universe and everything?'
+  test('useQueryHook is called with the correct query and arguments', () =>
+    new Promise<void>((done) => {
+      const myUseQueryHook = (query, options) => {
+        expect(query).toEqual('query TestQuery { answer }')
+        expect(options.variables.question).toEqual(
+          'What is the answer to life, the universe and everything?',
+        )
+        done()
+        return { loading: false, data: { answer: 42 } }
+      }
+      render(
+        <GraphQLHooksProvider
+          useQuery={myUseQueryHook}
+          useMutation={null}
+          useSubscription={null}
+        >
+          <TestUseQueryHook />
+        </GraphQLHooksProvider>,
       )
-      done()
-      return { loading: false, data: { answer: 42 } }
-    }
-    render(
-      <GraphQLHooksProvider
-        useQuery={myUseQueryHook}
-        useMutation={null}
-        useSubscription={null}
-      >
-        <TestUseQueryHook />
-      </GraphQLHooksProvider>
-    )
-  })
+    }))
 
-  test('useMutationHook is called with the correct query and arguments', (done) => {
-    const myUseMutationHook = (query, options) => {
-      expect(query).toEqual('mutation UpdateThing(input: "x") { answer }')
-      expect(options.variables.question).toEqual(
-        'What is the answer to life, the universe and everything?'
+  test('useMutationHook is called with the correct query and arguments', () =>
+    new Promise<void>((done) => {
+      const myUseMutationHook = (query, options) => {
+        expect(query).toEqual('mutation UpdateThing(input: "x") { answer }')
+        expect(options.variables.question).toEqual(
+          'What is the answer to life, the universe and everything?',
+        )
+        done()
+        return { loading: false, data: { answer: 42 } }
+      }
+      render(
+        <GraphQLHooksProvider
+          useQuery={null}
+          useMutation={myUseMutationHook}
+          useSubscription={null}
+        >
+          <TestUseMutationHook />
+        </GraphQLHooksProvider>,
       )
-      done()
-      return { loading: false, data: { answer: 42 } }
-    }
-    render(
-      <GraphQLHooksProvider
-        useQuery={null}
-        useMutation={myUseMutationHook}
-        useSubscription={null}
-      >
-        <TestUseMutationHook />
-      </GraphQLHooksProvider>
-    )
-  })
+    }))
 
   test('useQueryHook returns the correct result', async () => {
     const myUseQueryHook = () => {
@@ -93,10 +93,10 @@ describe('QueryHooksProvider', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestUseQueryHook />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     await waitFor(() =>
-      screen.getByText('{"loading":false,"data":{"answer":42}}')
+      screen.getByText('{"loading":false,"data":{"answer":42}}'),
     )
   })
 
@@ -107,10 +107,10 @@ describe('QueryHooksProvider', () => {
     render(
       <GraphQLHooksProvider useQuery={null} useMutation={myUseMutationHook}>
         <TestUseMutationHook />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     await waitFor(() =>
-      screen.getByText('{"loading":false,"data":{"answer":42}}')
+      screen.getByText('{"loading":false,"data":{"answer":42}}'),
     )
   })
 
@@ -125,10 +125,10 @@ describe('QueryHooksProvider', () => {
         useSubscription={myUseSubscriptionHook}
       >
         <TestUseSubscriptionHook />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     await waitFor(() =>
-      screen.getByText('{"loading":false,"data":{"answer":42}}')
+      screen.getByText('{"loading":false,"data":{"answer":42}}'),
     )
   })
 })

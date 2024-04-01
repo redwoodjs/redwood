@@ -40,7 +40,7 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
 
 export const clerkAuthDecoder: Decoder = async (
   token: string,
-  type: string
+  type: string,
 ) => {
   if (type !== 'clerk') {
     return null

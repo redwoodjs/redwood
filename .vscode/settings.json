@@ -13,7 +13,7 @@
   "search.exclude": {
     "**/dist": true,
     "**/node_modules": true,
-    "**/__fixtures__": true,
+    "/packages/**/__fixtures__": true,
     ".yarn-packages-cache": true
   },
   "[markdown][html][mjml]": {
@@ -23,12 +23,17 @@
   "peacock.color": "#b85833",
   "cSpell.words": [
     "autoplay",
+    "corepack",
     "execa",
     "Fastify",
+    "Flightcontrol",
     "graphiql",
+    "memfs",
     "opentelemetry",
     "pino",
     "redwoodjs",
-    "RWJS"
+    "RWJS",
+    "tailwindcss",
+    "waku"
   ]
 }

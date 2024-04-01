@@ -33,7 +33,7 @@ export class CustomFileExporter {
     this.#storageFilePath = path.join(
       getPaths().generated.base,
       'telemetry',
-      this.#storageFileName
+      this.#storageFileName,
     )
     fs.ensureDirSync(path.dirname(this.#storageFilePath))
 
@@ -51,7 +51,7 @@ export class CustomFileExporter {
       delete span['_spanProcessor'] // This is a circular reference and will cause issues with JSON.stringify
       fs.appendFileSync(
         this.#storageFilePath,
-        JSON.stringify(span, undefined, 2)
+        JSON.stringify(span, undefined, 2),
       )
       fs.appendFileSync(this.#storageFilePath, ',')
     }
@@ -65,7 +65,7 @@ export class CustomFileExporter {
       // Remove the trailing comma
       fs.truncateSync(
         this.#storageFilePath,
-        fs.statSync(this.#storageFilePath).size - 1
+        fs.statSync(this.#storageFilePath).size - 1,
       )
       fs.appendFileSync(this.#storageFilePath, ']')
       this.#isShutdown = true

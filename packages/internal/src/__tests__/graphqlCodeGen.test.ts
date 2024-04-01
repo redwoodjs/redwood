@@ -2,6 +2,16 @@ import fs from 'fs'
 import path from 'path'
 
 import {
+  beforeAll,
+  afterAll,
+  afterEach,
+  vi,
+  test,
+  expect,
+  describe,
+} from 'vitest'
+
+import {
   generateTypeDefGraphQLApi,
   generateTypeDefGraphQLWeb,
 } from '../generate/graphqlCodeGen'
@@ -9,7 +19,7 @@ import { generateGraphQLSchema } from '../generate/graphqlSchema'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../__fixtures__/example-todo-main'
+  '../../../../__fixtures__/example-todo-main',
 )
 
 beforeAll(() => {
@@ -21,16 +31,18 @@ afterAll(() => {
 })
 
 afterEach(() => {
-  jest.restoreAllMocks()
+  vi.restoreAllMocks()
 })
 
-jest.mock('@prisma/client', () => {
+vi.mock('@prisma/client', () => {
   return {
-    ModelName: {
-      PrismaModelOne: 'PrismaModelOne',
-      PrismaModelTwo: 'PrismaModelTwo',
-      Post: 'Post',
-      Todo: 'Todo',
+    default: {
+      ModelName: {
+        PrismaModelOne: 'PrismaModelOne',
+        PrismaModelTwo: 'PrismaModelTwo',
+        Post: 'Post',
+        Todo: 'Todo',
+      },
     },
   }
 })
@@ -38,16 +50,15 @@ jest.mock('@prisma/client', () => {
 test('Generate gql typedefs web', async () => {
   await generateGraphQLSchema()
 
-  jest
-    .spyOn(fs, 'writeFileSync')
-    .mockImplementation(
-      (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
-        expect(file).toMatch(path.join('web', 'types', 'graphql.d.ts'))
-        expect(data).toMatchSnapshot()
-      }
-    )
+  vi.spyOn(fs, 'writeFileSync').mockImplementation(
+    (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
+      expect(file).toMatch(path.join('web', 'types', 'graphql.d.ts'))
+      expect(data).toMatchSnapshot()
+    },
+  )
 
-  const { typeDefFiles } = await generateTypeDefGraphQLWeb()
+  const { typeDefFiles, errors } = await generateTypeDefGraphQLWeb()
+  expect(errors).toHaveLength(0)
 
   expect(typeDefFiles).toHaveLength(1)
   expect(typeDefFiles[0]).toMatch(path.join('web', 'types', 'graphql.d.ts'))
@@ -61,13 +72,11 @@ test('Generate gql typedefs api', async () => {
     data: string | ArrayBufferView
   } = { file: '', data: '' }
 
-  jest
-    .spyOn(fs, 'writeFileSync')
-    .mockImplementation(
-      (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
-        codegenOutput = { file, data }
-      }
-    )
+  vi.spyOn(fs, 'writeFileSync').mockImplementation(
+    (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
+      codegenOutput = { file, data }
+    },
+  )
 
   const { typeDefFiles } = await generateTypeDefGraphQLApi()
 
@@ -87,12 +96,12 @@ test('Generate gql typedefs api', async () => {
 
   // Check that prisma model imports are added to the top of the file
   expect(data).toContain(
-    "import { PrismaModelOne as PrismaPrismaModelOne, PrismaModelTwo as PrismaPrismaModelTwo, Post as PrismaPost, Todo as PrismaTodo } from '@prisma/client'"
+    "import { PrismaModelOne as PrismaPrismaModelOne, PrismaModelTwo as PrismaPrismaModelTwo, Post as PrismaPost, Todo as PrismaTodo } from '@prisma/client'",
   )
 
   // Check printMappedModelsPlugin works correctly
   expect(data).toContain(
-    `type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[]`
+    `type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[]`,
   )
 
   // Should only contain the SDL models that are also in Prisma
@@ -108,7 +117,7 @@ test('respects user provided codegen config', async () => {
     `config:
   omitOperationSuffix: false
   namingConvention:
-    typeNames: change-case-all#upperCase`
+    typeNames: change-case-all#upperCase`,
   )
 
   // Wrapping in `try` to make sure codegen.yml is always deleted, even if the
@@ -136,11 +145,11 @@ test('respects user provided codegen config', async () => {
 test("Doesn't throw or print any errors with empty project", async () => {
   const fixturePath = path.resolve(
     __dirname,
-    '../../../../__fixtures__/empty-project'
+    '../../../../__fixtures__/empty-project',
   )
   process.env.RWJS_CWD = fixturePath
   const oldConsoleError = console.error
-  console.error = jest.fn()
+  console.error = vi.fn()
 
   try {
     await generateGraphQLSchema()
@@ -164,13 +173,13 @@ describe("Doesn't swallow legit errors", () => {
   test('invalidQueryType', async () => {
     const fixturePath = path.resolve(
       __dirname,
-      './fixtures/graphqlCodeGen/invalidQueryType'
+      './fixtures/graphqlCodeGen/invalidQueryType',
     )
     process.env.RWJS_CWD = fixturePath
 
     const { errors } = await generateTypeDefGraphQLWeb()
     expect((errors[0].error as Error).toString()).toMatch(
-      /field.*softKitten.*Query/
+      /field.*softKitten.*Query/,
     )
 
     delete process.env.RWJS_CWD
@@ -179,7 +188,7 @@ describe("Doesn't swallow legit errors", () => {
   test('missingType', async () => {
     const fixturePath = path.resolve(
       __dirname,
-      './fixtures/graphqlCodeGen/missingType'
+      './fixtures/graphqlCodeGen/missingType',
     )
     process.env.RWJS_CWD = fixturePath
 
@@ -192,7 +201,7 @@ describe("Doesn't swallow legit errors", () => {
   test('nonExistingField', async () => {
     const fixturePath = path.resolve(
       __dirname,
-      './fixtures/graphqlCodeGen/nonExistingField'
+      './fixtures/graphqlCodeGen/nonExistingField',
     )
     process.env.RWJS_CWD = fixturePath
 

@@ -20,7 +20,7 @@ export class CookieJar {
       this.map = new Map(
         Object.entries(parsedCookies).map(([key, value]) => {
           return [key, { value }]
-        })
+        }),
       )
     }
   }
@@ -28,7 +28,7 @@ export class CookieJar {
   public set(
     name: string,
     value: string,
-    options?: cookie.CookieSerializeOptions
+    options?: cookie.CookieSerializeOptions,
   ) {
     this.map.set(name, {
       value,

@@ -19,7 +19,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           const variableDeclaration = t.variableDeclaration('const', [
             t.variableDeclarator(
               t.identifier('DevFatalErrorPage'),
-              t.identifier('undefined')
+              t.identifier('undefined'),
             ),
           ])
 
