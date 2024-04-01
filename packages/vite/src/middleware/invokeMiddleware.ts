@@ -48,7 +48,7 @@ export const invoke = async (
       console.error('Return from middleware >> ', output)
       console.error('\n----\n')
       throw new Error(
-        'Invalid return type from middleware. You must return a MiddlewareResponse or a Response object, or nothing at all',
+        'Invalid return type from middleware. You must return a MiddlewareResponse or nothing at all',
       )
     }
   } catch (e) {

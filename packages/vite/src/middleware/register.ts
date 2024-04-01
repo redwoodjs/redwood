@@ -1,4 +1,7 @@
 import fmw from 'find-my-way'
+import type { ViteDevServer } from 'vite'
+
+import { getPaths } from '@redwoodjs/project-config'
 
 import type { Middleware, MiddlewareInvokeOptions } from './invokeMiddleware'
 import type { MiddlewareRequest } from './MiddlewareRequest'
@@ -21,6 +24,12 @@ export const groupByRoutePatterns = (mwRegList: MiddlewareReg) => {
 
       grouped[pattern].push(mw)
     } else {
+      if (typeof mwReg !== 'function') {
+        console.error('Received as middleware: ', mwReg)
+        throw new Error(
+          'Please check the return on registerMiddleware. Must be a Middleware function or tuple of [Middleware, string]',
+        )
+      }
       grouped['*'] = [...(grouped['*'] || []), mwReg]
     }
   })
@@ -48,7 +57,12 @@ export const chain = (mwList: Middleware[]) => {
   }
 }
 
-export const createMiddlewareRouter = (groupedMw: GroupedMw) => {
+export const addMiddlewareHandlers = (mwRegList: MiddlewareReg | undefined) => {
+  if (!mwRegList) {
+    return undefined
+  }
+
+  const groupedMw = groupByRoutePatterns(mwRegList)
   const mwRouter = fmw()
 
   for (const pattern in groupedMw) {
@@ -61,4 +75,29 @@ export const createMiddlewareRouter = (groupedMw: GroupedMw) => {
   }
 
   return mwRouter
+}
+
+/**
+ * If you pass in the vite dev server, we're running in development
+ * @param vite
+ * @returns Middleware find-my-way Router
+ */
+export const createMiddlewareRouter = async (vite?: ViteDevServer) => {
+  const rwPaths = getPaths()
+
+  const entryServerPath = rwPaths.web.entryServer
+
+  if (!entryServerPath) {
+    throw new Error('Entry server not found. Could not load middleware')
+  }
+
+  let entryServerImport: Record<'registerMiddleware', () => MiddlewareReg>
+  if (vite) {
+    entryServerImport = await vite.ssrLoadModule(entryServerPath)
+  } else {
+    entryServerImport = await import(entryServerPath)
+  }
+
+  const { registerMiddleware } = entryServerImport
+  return addMiddlewareHandlers(registerMiddleware?.())
 }

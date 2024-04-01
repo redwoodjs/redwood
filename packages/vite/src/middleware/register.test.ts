@@ -1,8 +1,8 @@
 import { describe, expect, it, vitest } from 'vitest'
 
 import type { Middleware } from './invokeMiddleware'
-import type { MiddlewareReg } from './registerMIddleware'
-import { groupByRoutePatterns } from './registerMIddleware'
+import type { MiddlewareReg } from './register'
+import { groupByRoutePatterns } from './register'
 
 const fakeMiddleware: Middleware = vitest.fn()
 
@@ -40,5 +40,11 @@ describe('groupByRoutePatterns', () => {
 
     expect(output['*'].length).toBe(2)
     expect(output['/*.png'].length).toBe(3)
+  })
+
+  it('Throws if not a function or tuple', () => {
+    const badInput: MiddlewareReg = ['/badinput']
+
+    expect(() => groupByRoutePatterns(badInput)).toThrow()
   })
 })
