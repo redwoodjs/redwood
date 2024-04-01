@@ -8796,6 +8796,7 @@ __metadata:
     core-js: "npm:3.36.1"
     dotenv-defaults: "npm:5.0.2"
     express: "npm:4.19.2"
+    find-my-way: "npm:^8.1.0"
     glob: "npm:10.3.10"
     http-proxy-middleware: "npm:2.0.6"
     isbot: "npm:3.8.0"
@@ -19102,7 +19103,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-my-way@npm:^8.0.0":
+"find-my-way@npm:^8.0.0, find-my-way@npm:^8.1.0":
   version: 8.1.0
   resolution: "find-my-way@npm:8.1.0"
   dependencies:
