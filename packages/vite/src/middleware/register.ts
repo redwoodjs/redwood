@@ -1,4 +1,5 @@
 import fmw from 'find-my-way'
+import type Router from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -57,11 +58,7 @@ export const chain = (mwList: Middleware[]) => {
   }
 }
 
-export const addMiddlewareHandlers = (mwRegList: MiddlewareReg | undefined) => {
-  if (!mwRegList) {
-    return undefined
-  }
-
+export const addMiddlewareHandlers = (mwRegList: MiddlewareReg) => {
   const groupedMw = groupByRoutePatterns(mwRegList)
   const mwRouter = fmw()
 
@@ -82,7 +79,9 @@ export const addMiddlewareHandlers = (mwRegList: MiddlewareReg | undefined) => {
  * @param vite
  * @returns Middleware find-my-way Router
  */
-export const createMiddlewareRouter = async (vite?: ViteDevServer) => {
+export const createMiddlewareRouter = async (
+  vite?: ViteDevServer,
+): Promise<Router.Instance<any>> => {
   const rwPaths = getPaths()
 
   const entryServerPath = rwPaths.web.entryServer
@@ -95,9 +94,15 @@ export const createMiddlewareRouter = async (vite?: ViteDevServer) => {
   if (vite) {
     entryServerImport = await vite.ssrLoadModule(entryServerPath)
   } else {
-    entryServerImport = await import(entryServerPath)
+    // This imports from dist!
+    entryServerImport = await import(rwPaths.web.distEntryServer)
   }
 
   const { registerMiddleware } = entryServerImport
-  return addMiddlewareHandlers(registerMiddleware?.())
+  if (!registerMiddleware) {
+    // Empty router
+    return fmw()
+  }
+
+  return addMiddlewareHandlers(registerMiddleware())
 }

@@ -22,8 +22,8 @@ import { loadAndRunRouteHooks } from './triggerRouteHooks.js'
 interface CreateReactStreamingHandlerOptions {
   routes: RWRouteManifestItem[]
   clientEntryPath: string
-  getStylesheetLinks: (route: RWRouteManifestItem) => string[]
-  getMiddlewareRouter: () => Router.Instance<any>
+  getStylesheetLinks: (route: RWRouteManifestItem | RouteSpec) => string[]
+  getMiddlewareRouter: () => Promise<Router.Instance<any>>
 }
 
 const checkUaForSeoCrawler = isbot.spawn()
@@ -41,7 +41,7 @@ export const createReactStreamingHandler = async (
   const rwPaths = getPaths()
 
   const isProd = !viteDevServer
-  let middlewareRouter: Router.Instance<any> = getMiddlewareRouter()
+  let middlewareRouter: Router.Instance<any> = await getMiddlewareRouter()
   let entryServerImport: any
   let fallbackDocumentImport: any
 
@@ -77,15 +77,6 @@ export const createReactStreamingHandler = async (
       }
     }
 
-    if (!currentRoute) {
-      throw new Error('404 handling not implemented')
-    }
-
-    if (!isProd) {
-      // Reload middleware router on each request in dev
-      middlewareRouter = getMiddlewareRouter()
-    }
-
     // ~~~ Middleware Handling ~~~
     if (middlewareRouter) {
       const middleware = middlewareRouter.find(
@@ -104,6 +95,15 @@ export const createReactStreamingHandler = async (
       if (mwResponse.isRedirect()) {
         return mwResponse.toResponse()
       }
+    }
+
+    if (!currentRoute) {
+      throw new Error('404 handling not implemented')
+    }
+
+    if (!isProd) {
+      // Reload middleware router on each request in dev
+      middlewareRouter = await getMiddlewareRouter()
     }
 
     // ~~~ Middleware Handling ~~~

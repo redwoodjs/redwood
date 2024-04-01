@@ -1,6 +1,5 @@
 import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
-import type Router from 'find-my-way'
 import type { HTTPMethod } from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 import { createServer as createViteServer } from 'vite'
@@ -14,10 +13,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import type { Middleware } from './middleware/invokeMiddleware.js'
 import { invoke } from './middleware/invokeMiddleware.js'
-import {
-  addMiddlewareHandlers,
-  createMiddlewareRouter,
-} from './middleware/register.js'
+import { createMiddlewareRouter } from './middleware/register.js'
 import { rscRoutesAutoLoader } from './plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
@@ -74,11 +70,13 @@ async function createServer() {
     appType: 'custom',
   })
 
-  let middlewareRouter: Router.Instance<any> | undefined
-
   // create a handler that will invoke middleware with or without a route
+  // The DEV one will create a new middleware router on each request
   const handleWithMiddleware = (route?: RouteSpec) => {
     return createServerAdapter(async (req: Request) => {
+      // Recreate middleware router on each request in dev
+      const middlewareRouter = await createMiddlewareRouter(vite)
+
       if (!middlewareRouter) {
         return new Response('No middleware found', { status: 404 })
       }
@@ -88,11 +86,7 @@ async function createServer() {
         req.url,
       )?.handler as Middleware | undefined
 
-      const [mwRes] = await invoke(
-        req,
-        middleware,
-        route ? { route, cssPaths: getCssLinks(rwPaths, route, vite) } : {},
-      )
+      const [mwRes] = await invoke(req, middleware, route ? { route } : {})
 
       return mwRes.toResponse()
     })
@@ -106,7 +100,6 @@ async function createServer() {
 
   const routes = getProjectRoutes()
 
-  middlewareRouter = await createMiddlewareRouter(vite)
   const routeHandler = await createReactStreamingHandler(
     {
       routes,
@@ -115,9 +108,11 @@ async function createServer() {
         if (!route) {
           return []
         }
-        return getCssLinks(rwPaths, route, vite)
+        // In dev route is a RouteSpec, with additional properties
+        return getCssLinks(rwPaths, route as RouteSpec, vite)
       },
-      getMiddlewareRouter: middlewareRouter,
+      // Recreate middleware router on each request in dev
+      getMiddlewareRouter: async () => createMiddlewareRouter(vite),
     },
     vite,
   )
