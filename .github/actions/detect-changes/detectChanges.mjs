@@ -57,6 +57,7 @@ async function getPrBranchName() {
  * @property {Object} commit
  * @property {Object} commit.author
  * @property {string} commit.author.date
+ * @property {string} commit.message
  */
 
 /**
@@ -94,9 +95,16 @@ async function getCommitsNewerThan(timestamp) {
 
   const comparisonDate = new Date(timestamp)
 
-  return json?.filter((/** @type Commit */ commit) => {
+  const newCommits = json?.filter((/** @type Commit */ commit) => {
     return new Date(commit.commit.author.date) > comparisonDate
   })
+
+  console.log(
+    'New commits since last CI run',
+    newCommits.map((/** @type Commit */ commit) => commit.commit.message),
+  )
+
+  return newCommits
 }
 
 /**
@@ -218,8 +226,7 @@ async function main() {
 
   // If there's no branch, we're not in a pull request.
   if (!branch) {
-    core.setOutput('docs_only', false)
-    core.setOutput('changesets_only', false)
+    core.setOutput('code', false)
     core.setOutput('rsc', false)
     core.setOutput('ssr', false)
     return
@@ -236,14 +243,25 @@ async function main() {
     // files)
     changedFiles = await getChangedFilesInPr()
   } else {
-    // `changedFiles` includes any files changed by merge commits. But if those
-    // files are not part of the files this PR changes as a whole we can ignore
-    // them
     const changedFilesInPr = await getChangedFilesInPr()
 
+    // `changedFiles` includes any files changed by merge commits. But if those
+    // files are not part of the files this PR changes as a whole we can ignore
+    // them. (This isn't 100% safe, but it's the same as we do when we allow
+    // merging PRs even if main has updated as long as there are no merge
+    // conflicts)
     changedFiles = changedFiles.filter((file) =>
       changedFilesInPr.includes(file),
     )
+
+    if (changedFiles.length === 0) {
+      // If all changed files were filtered out above this was most likely
+      // just a merge commit (like if someone pressed the "Update branch"
+      // button on GitHub). We could just skip running CI (see comment above
+      // about not being 100% safe), but let's instead consider all files
+      // changed by this PR when deciding what tests to run.
+      changedFiles = changedFilesInPr
+    }
   }
 
   console.log(`${changedFiles.length} changed files`)
@@ -253,7 +271,7 @@ async function main() {
       'No changed files found. Something must have gone wrong. Falling back ' +
         'to running all tests.',
     )
-    core.setOutput('code', false)
+    core.setOutput('code', true)
     core.setOutput('rsc', true)
     core.setOutput('ssr', true)
     return
