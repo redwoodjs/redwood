@@ -57,6 +57,7 @@ async function getPrBranchName() {
  * @property {Object} commit
  * @property {Object} commit.author
  * @property {string} commit.author.date
+ * @property {string} commit.message
  */
 
 /**
@@ -94,9 +95,16 @@ async function getCommitsNewerThan(timestamp) {
 
   const comparisonDate = new Date(timestamp)
 
-  return json?.filter((/** @type Commit */ commit) => {
+  const newCommits = json?.filter((/** @type Commit */ commit) => {
     return new Date(commit.commit.author.date) > comparisonDate
   })
+
+  console.log(
+    'New commits since last CI run',
+    newCommits.map((/** @type Commit */ commit) => commit.commit.message),
+  )
+
+  return newCommits
 }
 
 /**
@@ -218,8 +226,7 @@ async function main() {
 
   // If there's no branch, we're not in a pull request.
   if (!branch) {
-    core.setOutput('docs_only', false)
-    core.setOutput('changesets_only', false)
+    core.setOutput('code', false)
     core.setOutput('rsc', false)
     core.setOutput('ssr', false)
     return
@@ -228,12 +235,21 @@ async function main() {
   const branchName = await getPrBranchName()
   const workflowRun = await getLatestCompletedWorkflowRun(branchName)
   const prCommits = await getCommitsNewerThan(workflowRun?.updated_at)
-  let changedFiles = await getFilesInCommits(prCommits)
+  const changedFilesInCommits = await getFilesInCommits(prCommits)
 
-  if (changedFiles.length === 0) {
-    // Probably the first commit/push to this PR - get all files
-    // (Or something went wrong, in which case we also want to just get all
-    // files)
+  let changedFiles = []
+
+  if (changedFilesInCommits.length === 0) {
+    console.log(
+      'No changed files found since last CI run. Falling back to running' +
+        'all tests.',
+    )
+    // Possible causes:
+    //  - This is the first commit/push to this PR
+    //  - Just a merge commit (like if someone pressed the "Update branch"
+    //    button on GitHub)
+    //  - Something went wrong
+    // In all these cases we want to fall back to getting all files in the PR
     changedFiles = await getChangedFilesInPr()
   } else {
     // `changedFiles` includes any files changed by merge commits. But if those
@@ -253,7 +269,7 @@ async function main() {
       'No changed files found. Something must have gone wrong. Falling back ' +
         'to running all tests.',
     )
-    core.setOutput('code', false)
+    core.setOutput('code', true)
     core.setOutput('rsc', true)
     core.setOutput('ssr', true)
     return
