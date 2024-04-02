@@ -12,9 +12,9 @@ import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import type { Middleware } from '../middleware/invokeMiddleware.js'
 import { invoke } from '../middleware/invokeMiddleware.js'
 import { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
+import type { Middleware } from '../middleware/types.js'
 
 import { reactRenderToStreamResponse } from './streamHelpers.js'
 import { loadAndRunRouteHooks } from './triggerRouteHooks.js'
@@ -80,7 +80,6 @@ export const createReactStreamingHandler = async (
     // ~~~ Middleware Handling ~~~
     if (middlewareRouter) {
       const matchedMw = middlewareRouter.find(req.method as HTTPMethod, req.url)
-      console.log(`👉 \n ~ matchedMw:`, matchedMw)
       ;[mwResponse, decodedAuthState = defaultAuthProviderState] = await invoke(
         req,
         matchedMw?.handler as Middleware | undefined,

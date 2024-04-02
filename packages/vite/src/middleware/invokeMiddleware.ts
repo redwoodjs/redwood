@@ -1,20 +1,8 @@
 import { defaultAuthProviderState, type ServerAuthState } from '@redwoodjs/auth'
-import type { RWRouteManifestItem } from '@redwoodjs/internal/dist/routes'
 
 import { MiddlewareRequest } from './MiddlewareRequest.js'
 import { MiddlewareResponse } from './MiddlewareResponse.js'
-
-export type Middleware = (
-  req: MiddlewareRequest,
-  res?: MiddlewareResponse,
-  options?: MiddlewareInvokeOptions,
-) => Promise<MiddlewareResponse> | MiddlewareResponse | void
-
-export type MiddlewareInvokeOptions = {
-  route?: RWRouteManifestItem
-  cssPaths?: Array<string>
-  params?: Record<string, unknown>
-}
+import type { Middleware, MiddlewareInvokeOptions } from './types.js'
 
 /**
  *

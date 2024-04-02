@@ -1,8 +1,10 @@
 import { describe, expect, it, vitest } from 'vitest'
 
-import type { Middleware } from './invokeMiddleware'
+import { MiddlewareRequest } from './MiddlewareRequest'
+import { MiddlewareResponse } from './MiddlewareResponse'
 import type { MiddlewareReg } from './register'
 import { groupByRoutePatterns } from './register'
+import type { Middleware, MiddlewareClass } from './types'
 
 const fakeMiddleware: Middleware = vitest.fn()
 
@@ -42,9 +44,38 @@ describe('groupByRoutePatterns', () => {
     expect(output['/*.png'].length).toBe(3)
   })
 
-  it('Throws if not a function or tuple', () => {
-    const badInput: MiddlewareReg = ['/badinput']
+  it('Throws if not a function, instance or tuple', () => {
+    const badInput: MiddlewareReg = ['/badinput'] as any
 
     expect(() => groupByRoutePatterns(badInput)).toThrow()
+  })
+
+  it('Handles class based middleware', async () => {
+    class FakeMiddleware implements MiddlewareClass {
+      value: number
+      constructor(value: number) {
+        this.value = value
+      }
+      async invoke() {
+        return new MiddlewareResponse('MW initialized with ' + this.value)
+      }
+    }
+
+    const classBased: MiddlewareReg = [
+      new FakeMiddleware(1),
+      [new FakeMiddleware(2), '/second-path'],
+    ]
+
+    const output = groupByRoutePatterns(classBased)
+
+    const exampleRequest = new MiddlewareRequest(
+      new Request('https://example.com'),
+    )
+
+    const firstOutput = await output['*'][0]?.(exampleRequest)
+    expect(firstOutput?.body).toBe('MW initialized with 1')
+
+    const secondOutput = await output['/second-path'][0]?.(exampleRequest)
+    expect(secondOutput?.body).toBe('MW initialized with 2')
   })
 })

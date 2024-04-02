@@ -4,14 +4,34 @@ import type { ViteDevServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { Middleware, MiddlewareInvokeOptions } from './invokeMiddleware'
 import type { MiddlewareRequest } from './MiddlewareRequest'
 import { MiddlewareResponse } from './MiddlewareResponse'
+import type {
+  Middleware,
+  MiddlewareClass,
+  MiddlewareInvokeOptions,
+} from './types'
 
 // Tuple of [mw, '*.{extension}']
-export type MiddlewareReg = Array<[Middleware, string] | Middleware>
+export type MiddlewareReg = Array<
+  [Middleware | MiddlewareClass, string] | Middleware | MiddlewareClass
+>
 
 type GroupedMw = Record<string, Middleware[]>
+
+const validateMw = (mw: MiddlewareClass | Middleware): Middleware => {
+  if (typeof mw === 'function') {
+    return mw
+  }
+  if (typeof mw === 'object' && typeof mw.invoke === 'function') {
+    return mw.invoke.bind(mw)
+  } else {
+    console.error('Received as middleware: ', mw)
+    throw new Error(
+      'Please check the return on registerMiddleware. Must be a Middleware function, Class or tuple of [Middleware, string]',
+    )
+  }
+}
 
 export const groupByRoutePatterns = (mwRegList: MiddlewareReg) => {
   const grouped: GroupedMw = {}
@@ -19,19 +39,16 @@ export const groupByRoutePatterns = (mwRegList: MiddlewareReg) => {
   mwRegList.forEach((mwReg) => {
     if (Array.isArray(mwReg)) {
       const [mw, pattern = '*'] = mwReg
+
+      const mwFunction = validateMw(mw)
       if (!grouped[pattern]) {
         grouped[pattern] = []
       }
 
-      grouped[pattern].push(mw)
+      grouped[pattern].push(mwFunction)
     } else {
-      if (typeof mwReg !== 'function') {
-        console.error('Received as middleware: ', mwReg)
-        throw new Error(
-          'Please check the return on registerMiddleware. Must be a Middleware function or tuple of [Middleware, string]',
-        )
-      }
-      grouped['*'] = [...(grouped['*'] || []), mwReg]
+      // When not using tuple syntax
+      grouped['*'] = [...(grouped['*'] || []), validateMw(mwReg)]
     }
   })
 
