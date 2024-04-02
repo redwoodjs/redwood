@@ -5,7 +5,7 @@ import type { MiddlewareResponse } from './MiddlewareResponse.js'
 
 export type Middleware = (
   req: MiddlewareRequest,
-  res?: MiddlewareResponse,
+  res: MiddlewareResponse,
   options?: MiddlewareInvokeOptions,
 ) => Promise<MiddlewareResponse> | MiddlewareResponse | void
 

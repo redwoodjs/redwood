@@ -63,12 +63,17 @@ export const groupByRoutePatterns = (mwRegList: MiddlewareReg) => {
 export const chain = (mwList: Middleware[]) => {
   return async (
     req: MiddlewareRequest,
-    res: MiddlewareResponse,
-    options: MiddlewareInvokeOptions,
+    res: MiddlewareResponse = MiddlewareResponse.next(),
+    options?: MiddlewareInvokeOptions,
   ) => {
     let response = res
     for (const mw of mwList) {
-      response = (await mw(req, response, options)) || MiddlewareResponse.next()
+      const mwOutput = await mw(req, response, options)
+
+      // Possible for middleware to return nothing
+      if (mwOutput) {
+        response = mwOutput
+      }
     }
 
     return response
