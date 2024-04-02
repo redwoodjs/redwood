@@ -238,7 +238,7 @@ const MainMenu = () =>
   </ul>
 ```
 
-The `activeMatchParams` prop can be used to control how query params are matched
+The `activeMatchParams` prop can be used to control how query params are matched:
 
 ```jsx
 import { NavLink, routes } from '@redwoodjs/router'
@@ -260,7 +260,7 @@ const MainMenu = () => (
 
 > Note `activeMatchParams` is an array of `string` _(key only)_ or `Record<string, any>` _(key and value)_
 
-More granular match; needs to be on the tutorial tab (`tab=tutorial`) and have the `page` key specified
+More granular match; needs to be on the tutorial tab (`tab=tutorial`) and have the `page` key specified:
 
 ```jsx
 // Match /?tab=tutorial&page=*
