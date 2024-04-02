@@ -197,7 +197,7 @@ function getQualifiedName(
   modelName,
   schemaMap,
   quoteStyle,
-  supportMultiSchema
+  supportMultiSchema,
 ) {
   return supportMultiSchema
     ? `${quoteStyle}${schemaMap[modelName]}${quoteStyle}.${quoteStyle}${modelName}${quoteStyle}`
@@ -217,11 +217,9 @@ const teardown = async () => {
         modelName,
         schemaMap,
         quoteStyle,
-        supportMultiSchema
+        supportMultiSchema,
       )
-      await getProjectDb().$executeRawUnsafe(
-        `DELETE FROM ${quoteStyle}${modelName}${quoteStyle}`,
-      )
+      await getProjectDb().$executeRawUnsafe(`DELETE FROM ${qualifiedName}`)
     } catch (e) {
       const match = e.message.match(/Code: `(\d+)`/)
       if (match && FOREIGN_KEY_ERRORS.includes(parseInt(match[1]))) {
