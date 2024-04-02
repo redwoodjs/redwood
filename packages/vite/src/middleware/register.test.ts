@@ -1,4 +1,3 @@
-import fmw from 'find-my-way'
 import { describe, expect, it, vitest } from 'vitest'
 
 import { MiddlewareRequest } from './MiddlewareRequest'
