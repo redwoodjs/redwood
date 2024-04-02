@@ -50,10 +50,11 @@ Some pages should only be visible to authenticated users. We support this using 
 
 If you move a page you might still want to keep the old route around, so that
 old links to your site keep working. To this end RedwoodJS supports the
-`redirect` prop on routes:
+`redirect` prop on routes, which allows you to specify the name of the route
+you want to redirect to:
 
 ```jsx title="Routes.jsx"
-<Route path="/blog/{id}" redirect="/post" />
+<Route path="/blog/{id}" redirect="post" />
 <Route path="/posts/{id}" page="PostPage" name="post" />
 ```
 
@@ -66,6 +67,14 @@ using old route names in your code you can keep the name around. If you want to
 update them all you can remove the name prop and you'll get TypeScript errors
 everywhere it's used. You can also decide to reuse the name for your new route,
 and all existing links in your code will continue to just work.
+
+If you prefer, you can also specify the path of the route you want to redirect
+to:
+
+```jsx title="Routes.jsx"
+<Route path="/blog/{id}" redirect="/posts/{id}" />
+<Route path="/posts/{id}" page="PostPage" name="post" />
+```
 
 ## Sets of Routes
 

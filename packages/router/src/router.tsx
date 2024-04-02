@@ -170,6 +170,26 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   const searchParams = parseSearch(location.search)
   const allParams = { ...searchParams, ...pathParams }
 
+  let redirectPath: string | undefined = undefined
+
+  if (redirect) {
+    if (redirect[0] === '/') {
+      redirectPath = replaceParams(redirect, allParams)
+    } else {
+      const redirectRouteObject = Object.values(pathRouteMap).find(
+        (route) => route.name === redirect,
+      )
+
+      if (!redirectRouteObject) {
+        throw new Error(
+          `Redirect target route "${redirect}" does not exist for route "${name}"`,
+        )
+      }
+
+      redirectPath = replaceParams(redirectRouteObject.path, allParams)
+    }
+  }
+
   // Level 2/3 (LocationAwareRouter)
   return (
     <RouterContextProvider
@@ -180,8 +200,8 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     >
       <ParamsProvider allParams={allParams}>
         <PageLoadingContextProvider delay={pageLoadingDelay}>
-          {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
-          {!redirect && page && (
+          {redirectPath && <Redirect to={redirectPath} />}
+          {!redirectPath && page && (
             <WrappedPage
               sets={sets}
               routeLoaderElement={
