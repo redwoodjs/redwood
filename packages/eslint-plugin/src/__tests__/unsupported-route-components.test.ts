@@ -1,13 +1,8 @@
-import { describe, it } from 'node:test'
-
-import { ESLintUtils } from '@typescript-eslint/utils'
+import { RuleTester } from '@typescript-eslint/rule-tester'
 
 import { unsupportedRouteComponents } from '../unsupported-route-components.js'
 
-ESLintUtils.RuleTester.describe = describe
-ESLintUtils.RuleTester.it = it
-
-const ruleTester = new ESLintUtils.RuleTester({
+const ruleTester = new RuleTester({
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',

@@ -12,7 +12,7 @@ export const unsupportedRouteComponents = createRule({
     type: 'problem',
     docs: {
       description: 'Find unsupported route components',
-      recommended: 'error',
+      recommended: 'recommended',
     },
     messages: {
       unexpected:

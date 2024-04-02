@@ -28,11 +28,13 @@
     "Fastify",
     "Flightcontrol",
     "graphiql",
+    "memfs",
     "opentelemetry",
     "pino",
     "redwoodjs",
     "rsdw",
     "RWJS",
+    "tailwindcss",
     "waku"
   ]
 }
