@@ -218,7 +218,7 @@ import { NavLink, routes } from '@redwoodjs/router'
 const MainMenu = () =>
   <ul>
     <li>
-      <!-- Will match "/" -->
+      <!-- Adds "activeLink" when the URL matches "/" -->
       <NavLink
         className="link"
         activeClassName="activeLink"
@@ -227,7 +227,8 @@ const MainMenu = () =>
       </NavLink>
     </li>
     <li>
-      <!-- Will match "/?tab=tutorial" (params order insensitive) -->
+      <!-- Adds "activeLink" when the URL matches "/?tab=tutorial" -->
+      <!-- (params order insensitive) -->
       <NavLink
         className="link"
         activeClassName="activeLink"
