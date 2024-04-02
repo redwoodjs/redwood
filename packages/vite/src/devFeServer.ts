@@ -91,7 +91,7 @@ async function createServer() {
 
     // @TODO we no longer need to use the regex
     const expressPathDef = route.hasParams
-      ? route.matchRegexString
+      ? new RegExp(route.matchRegexString)
       : route.pathDefinition
 
     app.get(expressPathDef, createServerAdapter(routeHandler))
