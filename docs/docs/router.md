@@ -229,22 +229,18 @@ const MainMenu = () =>
   <ul>
     <li>
       <!--
-        Normally renders as `<a className="link" ...>`, but when the URL
-        matches "/" it'll switch to render `<a className="activeLink" ...>`
+        Normally renders as `<a className="link homeLink" ...>`, but when the
+        URL matches "/" it'll switch to render
+        `<a className="activeLink homeLink" ...>`
       -->
       <NavLink
-        className="link"
-        activeClassName="activeLink"
+        className="link homeLink"
+        activeClassName="activeLink homeLink"
         to={routes.home()}>
         Home
       </NavLink>
     </li>
     <li>
-      <!--
-        Renders `<a className="activeLink" ...>` when the URL matches
-        "/?tab=tutorial" , otherwise it'll render
-        `<a className="link" ...>`
-      -->
       <!--
         Normally renders as `<a className="link" ...>`, but when the URL
         matches "/?tab=tutorial" (params order insensitive) it'll switch to
