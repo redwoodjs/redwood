@@ -7989,9 +7989,9 @@ __metadata:
     core-js: "npm:3.36.1"
     fast-glob: "npm:3.3.2"
     graphql: "npm:16.8.1"
-    jest: "npm:29.7.0"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.3"
+    vitest: "npm:1.4.0"
   languageName: unknown
   linkType: soft
 
