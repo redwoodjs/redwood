@@ -1,4 +1,5 @@
-import { vol } from 'memfs'
+import { vol, fs as memfs } from 'memfs'
+import { vi } from 'vitest'
 
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
@@ -10,7 +11,7 @@ import {
   TARGETS_NODE,
 } from '../api'
 
-jest.mock('fs', () => require('memfs').fs)
+vi.mock('fs', async () => ({ ...memfs, default: { ...memfs } }))
 
 const redwoodProjectPath = '/redwood-app'
 process.env.RWJS_CWD = redwoodProjectPath
