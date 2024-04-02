@@ -41,7 +41,7 @@ export const createReactStreamingHandler = async (
   const rwPaths = getPaths()
 
   const isProd = !viteDevServer
-  let middlewareRouter: Router.Instance<any> = await getMiddlewareRouter()
+  const middlewareRouter: Router.Instance<any> = await getMiddlewareRouter()
   let entryServerImport: any
   let fallbackDocumentImport: any
 
@@ -79,34 +79,32 @@ export const createReactStreamingHandler = async (
 
     // ~~~ Middleware Handling ~~~
     if (middlewareRouter) {
-      const middleware = middlewareRouter.find(
-        req.method as HTTPMethod,
-        req.url,
-      )?.handler as Middleware | undefined
+      const matchedMw = middlewareRouter.find(req.method as HTTPMethod, req.url)
+      console.log(`👉 \n ~ matchedMw:`, matchedMw)
       ;[mwResponse, decodedAuthState = defaultAuthProviderState] = await invoke(
         req,
-        middleware,
+        matchedMw?.handler as Middleware | undefined,
         currentRoute
-          ? { route: currentRoute, cssPaths: getStylesheetLinks(currentRoute) }
+          ? {
+              route: currentRoute,
+              cssPaths: getStylesheetLinks(currentRoute),
+              params: matchedMw?.params,
+            }
           : {},
       )
 
       // If mwResponse is a redirect, short-circuit here, and skip React rendering
-      if (mwResponse.isRedirect()) {
+      // If the response has a body, no need to render react.
+      if (mwResponse.isRedirect() || mwResponse.body) {
         return mwResponse.toResponse()
       }
     }
 
+    // ~~~ Middleware Handling ~~~
+
     if (!currentRoute) {
       throw new Error('404 handling not implemented')
     }
-
-    if (!isProd) {
-      // Reload middleware router on each request in dev
-      middlewareRouter = await getMiddlewareRouter()
-    }
-
-    // ~~~ Middleware Handling ~~~
 
     if (currentRoute.redirect) {
       return new Response(null, {

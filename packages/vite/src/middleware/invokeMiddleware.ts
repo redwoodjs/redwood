@@ -13,6 +13,7 @@ export type Middleware = (
 export type MiddlewareInvokeOptions = {
   route?: RWRouteManifestItem
   cssPaths?: Array<string>
+  params?: Record<string, unknown>
 }
 
 /**
