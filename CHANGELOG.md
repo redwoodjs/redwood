@@ -1,17 +1,6 @@
 # CHANGELOG
 
 ## Unreleased
-- feat(middleware): Implements using route patterns with middleware, and register middleware
-  Implements the new syntax of using Middleware after discussion. This sets us up for doing Auth better, but also for implementations like OG Image generation. 
-
-  ```js
-  export const registerMiddleware = async () => {
-  	return [
-  		dbAuthMiddleware(),
-  		[new OgMiddleware({ rootFilename: 'index' }), [ '/:route.:extension']]
-  	]
-  }
-  ```
 
 - fix(esm): use CJS wrapper for ESM default interop (#10119)
 
