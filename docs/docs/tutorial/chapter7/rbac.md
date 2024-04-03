@@ -164,7 +164,7 @@ The easiest way to prevent access to an entire URL is via the Router. The `<Priv
 ```jsx title="web/src/Routes.jsx"
 // highlight-next-line
 <PrivateSet unauthenticated="home" roles="admin">
-  <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
+  <Set wrap={PostsLayout}>
     <Route path="/admin/posts/new" page={PostNewPostPage} name="newPost" />
     <Route path="/admin/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
     <Route path="/admin/posts/{id:Int}" page={PostPostPage} name="post" />
