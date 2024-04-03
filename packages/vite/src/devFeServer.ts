@@ -23,14 +23,13 @@ import { ensureProcessDirWeb } from './utils.js'
 // TODO (STREAMING) Just so it doesn't error out. Not sure how to handle this.
 globalThis.__REDWOOD__PRERENDER_PAGES = {}
 
-const rwPaths = getPaths()
-
 async function createServer() {
   ensureProcessDirWeb()
 
   registerFwGlobalsAndShims()
 
   const app = express()
+  const rwPaths = getPaths()
 
   const rscEnabled = getConfig().experimental.rsc?.enabled ?? false
 
