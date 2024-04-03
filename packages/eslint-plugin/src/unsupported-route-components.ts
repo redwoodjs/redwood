@@ -1,5 +1,6 @@
 import type { TSESTree } from '@typescript-eslint/utils'
 import { ESLintUtils } from '@typescript-eslint/utils'
+import type { RuleContext } from '@typescript-eslint/utils/ts-eslint'
 
 const createRule = ESLintUtils.RuleCreator.withoutDocs
 
@@ -10,7 +11,7 @@ function isAllowedElement(name: string) {
 
 function checkNodes(
   nodesToCheck: TSESTree.JSXElement | TSESTree.JSXChild,
-  context: any,
+  context: RuleContext<'unexpected', []>,
 ) {
   if (nodesToCheck.type === 'JSXElement') {
     const name =
