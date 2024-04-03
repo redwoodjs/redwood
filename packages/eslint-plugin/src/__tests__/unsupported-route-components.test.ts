@@ -44,9 +44,7 @@ ruleTester.run('unsupported-route-components', unsupportedRouteComponents, {
         const Routes = () => {
           return (
             <Router>
-              <PrivateSet
-              whileLoadingAuth={AnotherThing}
-              >
+              <PrivateSet whileLoadingAuth={AnotherThing}>
                 <Route path="/contacts" page={ContactsPage} name="contacts" />
               </PrivateSet>
             </Router>
