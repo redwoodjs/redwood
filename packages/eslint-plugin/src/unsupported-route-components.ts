@@ -1,3 +1,4 @@
+import type { TSESTree } from '@typescript-eslint/utils'
 import { ESLintUtils } from '@typescript-eslint/utils'
 
 const createRule = ESLintUtils.RuleCreator.withoutDocs
@@ -5,6 +6,29 @@ const createRule = ESLintUtils.RuleCreator.withoutDocs
 function isAllowedElement(name: string) {
   const allowedElements = ['Router', 'Route', 'Set', 'PrivateSet', 'Private']
   return allowedElements.includes(name)
+}
+
+function checkNodes(
+  nodesToCheck: TSESTree.JSXElement | TSESTree.JSXChild,
+  context: any,
+) {
+  if (nodesToCheck.type === 'JSXElement') {
+    const name =
+      nodesToCheck.openingElement.name.type === 'JSXIdentifier'
+        ? nodesToCheck.openingElement.name.name
+        : null
+    if (name && !isAllowedElement(name)) {
+      context.report({
+        node: nodesToCheck,
+        messageId: 'unexpected',
+        data: { name },
+      })
+    }
+
+    if (nodesToCheck.children) {
+      nodesToCheck.children.forEach((node) => checkNodes(node, context))
+    }
+  }
 }
 
 export const unsupportedRouteComponents = createRule({
@@ -18,28 +42,42 @@ export const unsupportedRouteComponents = createRule({
       unexpected:
         'Unexpected JSX element <{{name}}>. Only <Router>, <Route>, <Set>, <PrivateSet> and <Private> are allowed in the Routes file.',
     },
-    schema: [], // No additional configuration needed
+    schema: [],
   },
   defaultOptions: [],
   create(context) {
     return {
-      JSXOpeningElement: function (node) {
-        let name = ''
+      VariableDeclaration(node) {
+        if (isRoutesRenderBlock(node.declarations[0])) {
+          const routesDeclaration = node.declarations[0].init
 
-        if (node.name.type === 'JSXIdentifier') {
-          name = node.name.name
-        } else {
-          return
-        }
+          if (routesDeclaration?.type === 'ArrowFunctionExpression') {
+            if (routesDeclaration.body.type === 'JSXElement') {
+              // For when outes = () => <Router>...</Router>
+              checkNodes(routesDeclaration.body, context)
+            } else if (routesDeclaration.body.type === 'BlockStatement') {
+              // For when  Routes = () => { return (<Router>...</Router>) }
+              if (
+                routesDeclaration.body.body[0].type === 'ReturnStatement' &&
+                routesDeclaration.body.body[0].argument?.type === 'JSXElement'
+              ) {
+                const routesReturnStatement =
+                  routesDeclaration.body.body[0].argument
 
-        if (!isAllowedElement(name)) {
-          context.report({
-            node,
-            messageId: 'unexpected',
-            data: { name },
-          })
+                checkNodes(routesReturnStatement, context)
+              }
+            }
+          }
         }
       },
     }
   },
 })
+
+function isRoutesRenderBlock(node?: TSESTree.VariableDeclarator) {
+  return (
+    node?.type === 'VariableDeclarator' &&
+    node?.id.type === 'Identifier' &&
+    node?.id.name === 'Routes'
+  )
+}

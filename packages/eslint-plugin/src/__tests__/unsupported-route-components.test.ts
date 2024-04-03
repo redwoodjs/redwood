@@ -38,10 +38,30 @@ ruleTester.run('unsupported-route-components', unsupportedRouteComponents, {
           )
         }`.replace(/ +/g, ' '),
     },
+    {
+      code: `
+        const AnotherThing = <Bazinga><p>Hello</p></Bazinga>
+        const Routes = () => {
+          return (
+            <Router>
+              <PrivateSet
+              whileLoadingAuth={AnotherThing}
+              >
+                <Route path="/contacts" page={ContactsPage} name="contacts" />
+              </PrivateSet>
+            </Router>
+          )
+        }`.replace(/ +/g, ' '),
+    },
   ],
   invalid: [
     {
       code: 'const Routes = () => <Router><div><Route path="/" page={HomePage} name="home" /></div></Router>',
+      errors: [{ messageId: 'unexpected' }],
+    },
+    // block statement style
+    {
+      code: 'const Routes = () => { return (<Router><div><Route path="/" page={HomePage} name="home" /></div></Router>) }',
       errors: [{ messageId: 'unexpected' }],
     },
     {
