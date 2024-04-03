@@ -2,11 +2,7 @@ import { defaultAuthProviderState, type ServerAuthState } from '@redwoodjs/auth'
 
 import { MiddlewareRequest } from './MiddlewareRequest.js'
 import { MiddlewareResponse } from './MiddlewareResponse.js'
-
-type Middleware = (
-  req: MiddlewareRequest,
-  res?: MiddlewareResponse,
-) => Promise<MiddlewareResponse> | Response | void
+import type { Middleware, MiddlewareInvokeOptions } from './types.js'
 
 /**
  *
@@ -19,6 +15,7 @@ type Middleware = (
 export const invoke = async (
   req: Request,
   middleware?: Middleware,
+  options?: MiddlewareInvokeOptions,
 ): Promise<[MiddlewareResponse, ServerAuthState]> => {
   if (typeof middleware !== 'function') {
     return [MiddlewareResponse.next(), defaultAuthProviderState]
@@ -28,13 +25,20 @@ export const invoke = async (
   let mwRes: MiddlewareResponse = MiddlewareResponse.next()
 
   try {
-    const output = (await middleware(mwReq)) || MiddlewareResponse.next()
+    const output =
+      (await middleware(mwReq, MiddlewareResponse.next(), options)) ||
+      MiddlewareResponse.next()
 
+    // Error out early, incase user returns something else from the middleware
+    // returning nothing is still fine!
     if (output instanceof MiddlewareResponse) {
       mwRes = output
     } else {
-      // If it was a WebAPI Response
-      mwRes = MiddlewareResponse.fromResponse(output)
+      console.error('Return from middleware >> ', output)
+      console.error('\n----\n')
+      throw new Error(
+        'Invalid return type from middleware. You must return a MiddlewareResponse or nothing at all',
+      )
     }
   } catch (e) {
     console.error('Error executing middleware > \n')
