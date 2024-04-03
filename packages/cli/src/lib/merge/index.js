@@ -4,9 +4,9 @@ import { VISITOR_KEYS } from '@babel/types'
 import { partition, forEachRight } from 'lodash'
 import prettier from 'prettier'
 
-import { forEachFunctionOn, nodeIs } from './algorithms'
-import { semanticIdentity } from './semanticIdentity'
-import { isOpaque } from './strategy'
+import { forEachFunctionOn, nodeIs } from './algorithms.js'
+import { semanticIdentity } from './semanticIdentity.js'
+import { isOpaque } from './strategy.js'
 
 function extractProperty(property, fromObject) {
   if (property === undefined) {

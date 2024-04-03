@@ -5,9 +5,9 @@ import { beforeAll, test, expect } from 'vitest'
 import yargs from 'yargs/yargs'
 
 // Shared mocks for paths, etc.
-import '../../../../lib/test'
+import '../../../../lib/test.js'
 
-import * as component from '../component'
+import * as component from '../component.js'
 
 let singleWordDefaultFiles,
   multiWordDefaultFiles,

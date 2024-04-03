@@ -13,7 +13,7 @@ import path from 'path'
 import fs from 'fs-extra'
 import { vi } from 'vitest'
 
-import './mockTelemetry'
+import './mockTelemetry.js'
 
 vi.mock('@redwoodjs/internal/dist/generate/generate', () => {
   return {

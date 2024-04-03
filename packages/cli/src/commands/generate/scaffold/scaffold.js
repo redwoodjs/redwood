@@ -10,7 +10,7 @@ import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
-import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
+import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate.js'
 import { getConfig } from '@redwoodjs/project-config'
 
 import {
@@ -25,21 +25,21 @@ import {
   transformTSToJS,
   nameVariants,
 } from '../../../lib'
-import c from '../../../lib/colors'
+import c from '../../../lib/colors.js'
 import {
   prepareForRollback,
   addFunctionToRollback,
 } from '../../../lib/rollback'
-import { pluralize, singularize } from '../../../lib/rwPluralize'
-import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../helpers'
+import { pluralize, singularize } from '../../../lib/rwPluralize.js'
+import { getSchema, verifyModelName } from '../../../lib/schemaHelpers.js'
 import {
   customOrDefaultTemplatePath,
   relationsForModel,
   intForeignKeysForModel,
   mapPrismaScalarToPagePropTsType,
 } from '../helpers'
-import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
+import { yargsDefaults } from '../helpers.js'
+import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl.js'
 import {
   files as serviceFiles,
   builder as serviceBuilder,

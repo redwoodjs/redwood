@@ -1,6 +1,6 @@
 import terminalLink from 'terminal-link'
 
-import detectRwVersion from '../middleware/detectProjectRwVersion'
+import detectRwVersion from '../middleware/detectProjectRwVersion.js'
 
 export const command = 'setup <command>'
 export const description = 'Initialize project config and install packages'

@@ -2,7 +2,7 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import {
   convertTsProjectToJs,
   convertTsScriptsToJs,
-} from '@redwoodjs/internal/dist/ts2js'
+} from '@redwoodjs/internal/dist/ts2js.js'
 import { getPaths } from '@redwoodjs/project-config'
 
 export const command = 'ts-to-js'

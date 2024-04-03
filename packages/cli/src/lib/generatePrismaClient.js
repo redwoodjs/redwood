@@ -1,10 +1,9 @@
-// helper used in Dev and Build commands
-
+import { createRequire } from 'module'
 import path from 'path'
 
 import fs from 'fs-extra'
 
-import { runCommandTask, getPaths } from '../lib'
+import { runCommandTask, getPaths } from '../lib/index.js'
 
 const skipTask = (schema = getPaths().api.dbSchema) => {
   if (!fs.existsSync(schema)) {
@@ -20,6 +19,8 @@ export const generatePrismaCommand = (schema) => {
   if (skipTask(schema)) {
     return {}
   }
+
+  const require = createRequire(path.join(getPaths().base, 'node_modules'))
 
   return {
     cmd: `node "${require.resolve('prisma/build/index.js')}"`,
@@ -43,6 +44,7 @@ export const generatePrismaClient = async ({
   if (!force) {
     // The Prisma client throws if it is not generated.
     try {
+      const require = createRequire(path.join(getPaths().base, 'node_modules'))
       // Import the client from the redwood apps node_modules path.
       const { PrismaClient } = require(
         path.join(getPaths().base, 'node_modules/.prisma/client'),

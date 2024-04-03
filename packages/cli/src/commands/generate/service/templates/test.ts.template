@@ -33,8 +33,8 @@
   } %>
 <% if (prismaImport) { %>import { Prisma, ${prismaModel} } from '@prisma/client'<% } else { %>import type { ${prismaModel} } from '@prisma/client'<% } %>
 
-import { ${pluralCamelName}<% if (crud) { %>,${singularCamelName}, create${singularPascalName}, update${singularPascalName}, delete${singularPascalName}<% } %> } from './${pluralCamelName}'
-import type { StandardScenario } from './${pluralCamelName}.scenarios'
+import { ${pluralCamelName}<% if (crud) { %>,${singularCamelName}, create${singularPascalName}, update${singularPascalName}, delete${singularPascalName}<% } %> } from './${pluralCamelName}.js'
+import type { StandardScenario } from './${pluralCamelName}.scenarios.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.

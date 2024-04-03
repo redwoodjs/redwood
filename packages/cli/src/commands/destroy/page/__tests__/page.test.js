@@ -12,11 +12,11 @@ import fs from 'fs-extra'
 import { vol } from 'memfs'
 import { vi, beforeEach, afterEach, test, expect } from 'vitest'
 
-import '../../../../lib/test'
+import '../../../../lib/test.js'
 
-import { getPaths } from '../../../../lib'
-import { files } from '../../../generate/page/page'
-import { tasks } from '../page'
+import { getPaths } from '../../../../lib/index.js'
+import { files } from '../../../generate/page/page.js'
+import { tasks } from '../page.js'
 
 beforeEach(async () => {
   const f = await files({ name: 'About' })

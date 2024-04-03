@@ -1,6 +1,6 @@
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { deployBuilder, deployHandler } from './helpers/helpers'
+import { deployBuilder, deployHandler } from './helpers/helpers.js'
 
 export const command = 'netlify [...commands]'
 export const description = 'Build command for Netlify deploy'

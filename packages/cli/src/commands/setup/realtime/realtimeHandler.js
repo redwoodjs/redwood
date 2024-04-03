@@ -4,13 +4,13 @@ import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { addApiPackages } from '@redwoodjs/cli-helpers'
-import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
+import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate.js'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, transformTSToJS, writeFile } from '../../../lib'
-import c from '../../../lib/colors'
-import { isTypeScriptProject, serverFileExists } from '../../../lib/project'
-import { setupServerFileTasks } from '../server-file/serverFileHandler'
+import c from '../../../lib/colors.js'
+import { getPaths, transformTSToJS, writeFile } from '../../../lib/index.js'
+import { isTypeScriptProject, serverFileExists } from '../../../lib/project.js'
+import { setupServerFileTasks } from '../server-file/serverFileHandler.js'
 
 const { version } = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8'),

@@ -2,14 +2,14 @@ globalThis.__dirname = __dirname
 import path from 'path'
 
 // Load mocks
-import '../../../../lib/test'
+import '../../../../lib/test.js'
 
 import { vol } from 'memfs'
 import { vi, describe, beforeAll, test, expect } from 'vitest'
 
-import { getDefaultArgs } from '../../../../lib'
-import { yargsDefaults as defaults } from '../../helpers'
-import * as scaffold from '../scaffold'
+import { getDefaultArgs } from '../../../../lib/index.js'
+import { yargsDefaults as defaults } from '../../helpers.js'
+import * as scaffold from '../scaffold.js'
 
 vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 vi.mock('execa')

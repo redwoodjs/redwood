@@ -1,10 +1,9 @@
 import { getConfig, getDMMF } from '@prisma/internals'
 import fs from 'fs-extra'
 
-import { ensureUniquePlural } from './pluralHelpers'
-import { singularize, isPlural } from './rwPluralize'
-
-import { getPaths } from './'
+import { getPaths } from './.js'
+import { ensureUniquePlural } from './pluralHelpers.js'
+import { singularize, isPlural } from './rwPluralize.js'
 
 /**
  * Used to memoize results from `getSchema` so we don't have to go through

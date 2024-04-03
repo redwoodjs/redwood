@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import ${pascalName}Page from './${pascalName}Page'
+import ${pascalName}Page from './${pascalName}Page.js'
 
 const meta: Meta<typeof ${pascalName}Page> = {
   component: ${pascalName}Page,

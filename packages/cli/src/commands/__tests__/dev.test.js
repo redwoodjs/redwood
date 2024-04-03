@@ -1,4 +1,4 @@
-import '../../lib/mockTelemetry'
+import '../../lib/mockTelemetry.js'
 
 vi.mock('concurrently', () => ({
   __esModule: true, // this property makes it work
@@ -74,8 +74,8 @@ import { vi, describe, afterEach, it, expect } from 'vitest'
 
 import { getConfig } from '@redwoodjs/project-config'
 
-import { generatePrismaClient } from '../../lib/generatePrismaClient'
-import { handler } from '../dev'
+import { generatePrismaClient } from '../../lib/generatePrismaClient.js'
+import { handler } from '../dev.js'
 
 describe('yarn rw dev', () => {
   afterEach(() => {

@@ -1,4 +1,4 @@
-import { transformTSToJS } from '../../../lib'
+import { transformTSToJS } from '../../../lib/index.js'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,

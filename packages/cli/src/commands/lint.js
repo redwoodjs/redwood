@@ -4,7 +4,7 @@ import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { getPaths } from '../lib'
+import { getPaths } from '../lib/index.js'
 
 export const command = 'lint [path..]'
 export const description = 'Lint your files'

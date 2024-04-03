@@ -10,7 +10,7 @@ import {
   getPaths,
   saveRemoteFileToDisk,
 } from '../../../lib'
-import c from '../../../lib/colors'
+import c from '../../../lib/colors.js'
 
 export const handler = async ({ force }) => {
   const installedRwVersion = getInstalledRedwoodVersion()

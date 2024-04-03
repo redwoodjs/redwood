@@ -5,10 +5,10 @@ import { vi, test, expect, describe, it } from 'vitest'
 
 // Setup test mocks
 globalThis.__dirname = __dirname
-import '../../../lib/test'
+import '../../../lib/test.js'
 
-import * as helpers from '../helpers'
-import * as page from '../page/page'
+import * as helpers from '../helpers.js'
+import * as page from '../page/page.js'
 
 const PAGE_TEMPLATE_OUTPUT = `import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'

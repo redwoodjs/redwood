@@ -4,7 +4,7 @@ import { nodeFileTrace } from '@vercel/nft'
 import archiver from 'archiver'
 import fse from 'fs-extra'
 
-import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
+import { findApiDistFunctions } from '@redwoodjs/internal/dist/files.js'
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
 const ZIPBALL_DIR = './api/dist/zipball'

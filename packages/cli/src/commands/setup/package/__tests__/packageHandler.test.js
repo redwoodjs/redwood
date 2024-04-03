@@ -46,7 +46,7 @@ import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 
 import { getCompatibilityData } from '@redwoodjs/cli-helpers'
 
-import { handler } from '../packageHandler'
+import { handler } from '../packageHandler.js'
 
 describe('packageHandler', () => {
   beforeEach(() => {

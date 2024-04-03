@@ -1,6 +1,6 @@
 import { Counter } from 'src/components/Counter'
 // @ts-expect-error no types
-import styles from './HomePage.module.css'
+import styles from './HomePage.module.css.js'
 
 import './HomePage.css'
 

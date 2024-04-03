@@ -9,9 +9,9 @@ import {
 } from '@opentelemetry/sdk-trace-node'
 import { hideBin } from 'yargs/helpers'
 
-import { spawnBackgroundProcess } from '../lib/background'
+import { spawnBackgroundProcess } from '../lib/background.js'
 
-import { CustomFileExporter } from './exporter'
+import { CustomFileExporter } from './exporter.js'
 
 /**
  * @type NodeTracerProvider

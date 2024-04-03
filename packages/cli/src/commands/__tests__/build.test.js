@@ -53,7 +53,7 @@ vi.mock('execa', () => ({
   })),
 }))
 
-import { handler } from '../build'
+import { handler } from '../build.js'
 
 afterEach(() => {
   vi.clearAllMocks()

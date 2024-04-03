@@ -10,7 +10,7 @@ export const userProfiles = () => {
 `;
 
 exports[`in javascript mode > creates a multi word service test file 1`] = `
-"import { userProfiles } from './userProfiles'
+"import { userProfiles } from './userProfiles.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -303,7 +303,7 @@ exports[`in javascript mode > creates a single word service scenario file 1`] = 
 `;
 
 exports[`in javascript mode > creates a single word service test file 1`] = `
-"import { users, user, createUser, updateUser, deleteUser } from './users'
+"import { users, user, createUser, updateUser, deleteUser } from './users.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -366,8 +366,8 @@ export const userProfiles: QueryResolvers['userProfiles'] = () => {
 exports[`in typescript mode > creates a multi word service test file 1`] = `
 "import type { UserProfile } from '@prisma/client'
 
-import { userProfiles } from './userProfiles'
-import type { StandardScenario } from './userProfiles.scenarios'
+import { userProfiles } from './userProfiles.js'
+import type { StandardScenario } from './userProfiles.scenarios.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -395,7 +395,7 @@ import {
   updateTransaction,
   deleteTransaction,
 } from './transactions'
-import type { StandardScenario } from './transactions.scenarios'
+import type { StandardScenario } from './transactions.scenarios.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -461,7 +461,7 @@ import {
   updateScalarType,
   deleteScalarType,
 } from './scalarTypes'
-import type { StandardScenario } from './scalarTypes.scenarios'
+import type { StandardScenario } from './scalarTypes.scenarios.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -689,8 +689,8 @@ export type StandardScenario = ScenarioData<User, 'user'>
 exports[`in typescript mode > creates a single word service test file 1`] = `
 "import type { User } from '@prisma/client'
 
-import { users, user, createUser, updateUser, deleteUser } from './users'
-import type { StandardScenario } from './users.scenarios'
+import { users, user, createUser, updateUser, deleteUser } from './users.js'
+import type { StandardScenario } from './users.scenarios.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.

@@ -6,8 +6,8 @@ import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFile } from '../../../lib'
-import c from '../../../lib/colors'
+import c from '../../../lib/colors.js'
+import { getPaths, writeFile } from '../../../lib/index.js'
 
 export const handler = async ({ force }) => {
   const tasks = new Listr(

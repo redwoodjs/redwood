@@ -6,7 +6,7 @@ import fs from 'fs-extra'
 import { registerApiSideBabelHook } from '@redwoodjs/babel-config'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { getPaths } from '../lib'
+import { getPaths } from '../lib/index.js'
 
 const paths = getPaths()
 

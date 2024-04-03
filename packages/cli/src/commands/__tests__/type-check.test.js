@@ -55,8 +55,8 @@ import concurrently from 'concurrently'
 import execa from 'execa'
 import { vi, beforeEach, afterEach, test, expect } from 'vitest'
 
-import { runCommandTask } from '../../lib'
-import { handler } from '../type-check'
+import { runCommandTask } from '../../lib/index.js'
+import { handler } from '../type-check.js'
 
 beforeEach(() => {
   vi.spyOn(console, 'info').mockImplementation(() => {})

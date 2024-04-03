@@ -90,8 +90,8 @@ export const standard = (/* vars, { ctx, req } */) => ({
 `;
 
 exports[`Custom Id Field files > List cell > creates a cell list stories with a custom id field 1`] = `
-"import { Loading, Empty, Failure, Success } from './CustomIdFieldsCell'
-import { standard } from './CustomIdFieldsCell.mock'
+"import { Loading, Empty, Failure, Success } from './CustomIdFieldsCell.js'
+import { standard } from './CustomIdFieldsCell.mock.js'
 
 const meta = {
   title: 'Cells/CustomIdFieldsCell',
@@ -128,8 +128,8 @@ export const success = {
 
 exports[`Custom Id Field files > List cell > creates a cell list test with a custom id field 1`] = `
 "import { render } from '@redwoodjs/testing/web'
-import { Loading, Empty, Failure, Success } from './CustomIdFieldsCell'
-import { standard } from './CustomIdFieldsCell.mock'
+import { Loading, Empty, Failure, Success } from './CustomIdFieldsCell.js'
+import { standard } from './CustomIdFieldsCell.mock.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -205,8 +205,8 @@ export const standard = (/* vars, { ctx, req } */) => ({
 `;
 
 exports[`Custom Id Field files > Single cell > creates a cell stories with a custom id field 1`] = `
-"import { Loading, Empty, Failure, Success } from './CustomIdFieldCell'
-import { standard } from './CustomIdFieldCell.mock'
+"import { Loading, Empty, Failure, Success } from './CustomIdFieldCell.js'
+import { standard } from './CustomIdFieldCell.mock.js'
 
 const meta = {
   title: 'Cells/CustomIdFieldCell',
@@ -243,8 +243,8 @@ export const success = {
 
 exports[`Custom Id Field files > Single cell > creates a cell test with a custom id field 1`] = `
 "import { render } from '@redwoodjs/testing/web'
-import { Loading, Empty, Failure, Success } from './CustomIdFieldCell'
-import { standard } from './CustomIdFieldCell.mock'
+import { Loading, Empty, Failure, Success } from './CustomIdFieldCell.js'
+import { standard } from './CustomIdFieldCell.mock.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -320,8 +320,8 @@ export const standard = (/* vars, { ctx, req } */) => ({
 `;
 
 exports[`Kebab case words > creates a cell stories with a kebabCase word name 1`] = `
-"import { Loading, Empty, Failure, Success } from './UserProfileCell'
-import { standard } from './UserProfileCell.mock'
+"import { Loading, Empty, Failure, Success } from './UserProfileCell.js'
+import { standard } from './UserProfileCell.mock.js'
 
 const meta = {
   title: 'Cells/UserProfileCell',
@@ -358,8 +358,8 @@ export const success = {
 
 exports[`Kebab case words > creates a cell test with a kebabCase word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
-import { Loading, Empty, Failure, Success } from './UserProfileCell'
-import { standard } from './UserProfileCell.mock'
+import { Loading, Empty, Failure, Success } from './UserProfileCell.js'
+import { standard } from './UserProfileCell.mock.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -435,8 +435,8 @@ export const standard = (/* vars, { ctx, req } */) => ({
 `;
 
 exports[`Multiword files > creates a cell stories with a multi word name 1`] = `
-"import { Loading, Empty, Failure, Success } from './UserProfileCell'
-import { standard } from './UserProfileCell.mock'
+"import { Loading, Empty, Failure, Success } from './UserProfileCell.js'
+import { standard } from './UserProfileCell.mock.js'
 
 const meta = {
   title: 'Cells/UserProfileCell',
@@ -473,8 +473,8 @@ export const success = {
 
 exports[`Multiword files > creates a cell test with a multi word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
-import { Loading, Empty, Failure, Success } from './UserProfileCell'
-import { standard } from './UserProfileCell.mock'
+import { Loading, Empty, Failure, Success } from './UserProfileCell.js'
+import { standard } from './UserProfileCell.mock.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -550,8 +550,8 @@ export const standard = (/* vars, { ctx, req } */) => ({
 `;
 
 exports[`Single word files > creates a cell stories with a single word name 1`] = `
-"import { Loading, Empty, Failure, Success } from './UserCell'
-import { standard } from './UserCell.mock'
+"import { Loading, Empty, Failure, Success } from './UserCell.js'
+import { standard } from './UserCell.mock.js'
 
 const meta = {
   title: 'Cells/UserCell',
@@ -588,8 +588,8 @@ export const success = {
 
 exports[`Single word files > creates a cell test with a single word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
-import { Loading, Empty, Failure, Success } from './UserCell'
-import { standard } from './UserCell.mock'
+import { Loading, Empty, Failure, Success } from './UserCell.js'
+import { standard } from './UserCell.mock.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -665,8 +665,8 @@ export const standard = (/* vars, { ctx, req } */) => ({
 `;
 
 exports[`Snake case words > creates a cell stories with a snakeCase word name 1`] = `
-"import { Loading, Empty, Failure, Success } from './UserProfileCell'
-import { standard } from './UserProfileCell.mock'
+"import { Loading, Empty, Failure, Success } from './UserProfileCell.js'
+import { standard } from './UserProfileCell.mock.js'
 
 const meta = {
   title: 'Cells/UserProfileCell',
@@ -703,8 +703,8 @@ export const success = {
 
 exports[`Snake case words > creates a cell test with a snakeCase word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
-import { Loading, Empty, Failure, Success } from './UserProfileCell'
-import { standard } from './UserProfileCell.mock'
+import { Loading, Empty, Failure, Success } from './UserProfileCell.js'
+import { standard } from './UserProfileCell.mock.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -786,8 +786,8 @@ export const Success = ({
 
 exports[`TypeScript: generates list cells if list flag passed in 2`] = `
 "import { render } from '@redwoodjs/testing/web'
-import { Loading, Empty, Failure, Success } from './BazingaCell'
-import { standard } from './BazingaCell.mock'
+import { Loading, Empty, Failure, Success } from './BazingaCell.js'
+import { standard } from './BazingaCell.mock.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -832,8 +832,8 @@ describe('BazingaCell', () => {
 exports[`TypeScript: generates list cells if list flag passed in 3`] = `
 "import type { Meta, StoryObj } from '@storybook/react'
 
-import { Loading, Empty, Failure, Success } from './BazingaCell'
-import { standard } from './BazingaCell.mock'
+import { Loading, Empty, Failure, Success } from './BazingaCell.js'
+import { standard } from './BazingaCell.mock.js'
 
 const meta: Meta = {
   title: 'Cells/BazingaCell',
@@ -950,8 +950,8 @@ export const standard = (/* vars, { ctx, req } */) => ({
 `;
 
 exports[`camelCase words > creates a cell stories with a camelCase word name 1`] = `
-"import { Loading, Empty, Failure, Success } from './UserProfileCell'
-import { standard } from './UserProfileCell.mock'
+"import { Loading, Empty, Failure, Success } from './UserProfileCell.js'
+import { standard } from './UserProfileCell.mock.js'
 
 const meta = {
   title: 'Cells/UserProfileCell',
@@ -988,8 +988,8 @@ export const success = {
 
 exports[`camelCase words > creates a cell test with a camelCase word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
-import { Loading, Empty, Failure, Success } from './UserProfileCell'
-import { standard } from './UserProfileCell.mock'
+import { Loading, Empty, Failure, Success } from './UserProfileCell.js'
+import { standard } from './UserProfileCell.mock.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -1056,8 +1056,8 @@ export const Success = ({ address }) => {
 
 exports[`generates a cell with a string primary id key 2`] = `
 "import { render } from '@redwoodjs/testing/web'
-import { Loading, Empty, Failure, Success } from './AddressCell'
-import { standard } from './AddressCell.mock'
+import { Loading, Empty, Failure, Success } from './AddressCell.js'
+import { standard } from './AddressCell.mock.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -1100,8 +1100,8 @@ describe('AddressCell', () => {
 `;
 
 exports[`generates a cell with a string primary id key 3`] = `
-"import { Loading, Empty, Failure, Success } from './AddressCell'
-import { standard } from './AddressCell.mock'
+"import { Loading, Empty, Failure, Success } from './AddressCell.js'
+import { standard } from './AddressCell.mock.js'
 
 const meta = {
   title: 'Cells/AddressCell',
@@ -1177,8 +1177,8 @@ export const Success = ({ addresses }) => {
 
 exports[`generates list a cell with a string primary id keys 2`] = `
 "import { render } from '@redwoodjs/testing/web'
-import { Loading, Empty, Failure, Success } from './AddressesCell'
-import { standard } from './AddressesCell.mock'
+import { Loading, Empty, Failure, Success } from './AddressesCell.js'
+import { standard } from './AddressesCell.mock.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -1221,8 +1221,8 @@ describe('AddressesCell', () => {
 `;
 
 exports[`generates list a cell with a string primary id keys 3`] = `
-"import { Loading, Empty, Failure, Success } from './AddressesCell'
-import { standard } from './AddressesCell.mock'
+"import { Loading, Empty, Failure, Success } from './AddressesCell.js'
+import { standard } from './AddressesCell.mock.js'
 
 const meta = {
   title: 'Cells/AddressesCell',
@@ -1296,8 +1296,8 @@ export const Success = ({ members }) => {
 
 exports[`generates list cells if list flag passed in 2`] = `
 "import { render } from '@redwoodjs/testing/web'
-import { Loading, Empty, Failure, Success } from './MembersCell'
-import { standard } from './MembersCell.mock'
+import { Loading, Empty, Failure, Success } from './MembersCell.js'
+import { standard } from './MembersCell.mock.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -1340,8 +1340,8 @@ describe('MembersCell', () => {
 `;
 
 exports[`generates list cells if list flag passed in 3`] = `
-"import { Loading, Empty, Failure, Success } from './MembersCell'
-import { standard } from './MembersCell.mock'
+"import { Loading, Empty, Failure, Success } from './MembersCell.js'
+import { standard } from './MembersCell.mock.js'
 
 const meta = {
   title: 'Cells/MembersCell',

@@ -6,7 +6,7 @@ import pascalcase from 'pascalcase'
 import pluralize, { singular } from 'pluralize'
 import prompts from 'prompts'
 
-import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
+import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate.js'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 // Move this check out of experimental when server file is moved as well
@@ -16,9 +16,12 @@ import {
   transformTSToJS,
   writeFile,
 } from '../../../lib'
-import c from '../../../lib/colors'
-import { isTypeScriptProject } from '../../../lib/project'
-import { isRealtimeSetup, isServerFileSetup } from '../../experimental/util.js'
+import c from '../../../lib/colors.js'
+import { isTypeScriptProject } from '../../../lib/project.js'
+import {
+  isRealtimeSetup,
+  isServerFileSetup,
+} from '../../experimental/util.js.js'
 
 const templateVariables = (name) => {
   name = singular(name.toLowerCase())

@@ -6,9 +6,9 @@ import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { getCmdMajorVersion } from '../commands/upgrade'
-import { getPaths } from '../lib'
-import { generatePrismaClient } from '../lib/generatePrismaClient'
+import { getCmdMajorVersion } from '../commands/upgrade.js'
+import { generatePrismaClient } from '../lib/generatePrismaClient.js'
+import { getPaths } from '../lib/index.js'
 
 export const handler = async ({ sides, verbose, prisma, generate }) => {
   recordTelemetryAttributes({

@@ -7,7 +7,7 @@ import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
-import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
+import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate.js'
 import { getConfig } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -17,16 +17,20 @@ import {
   getPaths,
   writeFilesTask,
 } from '../../../lib'
-import c from '../../../lib/colors'
+import c from '../../../lib/colors.js'
 import {
   prepareForRollback,
   addFunctionToRollback,
 } from '../../../lib/rollback'
-import { pluralize } from '../../../lib/rwPluralize'
-import { getSchema, getEnum, verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../helpers'
-import { customOrDefaultTemplatePath, relationsForModel } from '../helpers'
-import { files as serviceFiles } from '../service/service'
+import { pluralize } from '../../../lib/rwPluralize.js'
+import {
+  getSchema,
+  getEnum,
+  verifyModelName,
+} from '../../../lib/schemaHelpers.js'
+import { yargsDefaults } from '../helpers.js'
+import { customOrDefaultTemplatePath, relationsForModel } from '../helpers.js'
+import { files as serviceFiles } from '../service/service.js'
 
 const DEFAULT_IGNORE_FIELDS_FOR_INPUT = ['createdAt', 'updatedAt']
 

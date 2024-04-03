@@ -8,7 +8,7 @@ import path from 'path'
 
 import { expect } from 'vitest'
 
-import { formatCode } from './src/testUtils'
+import { formatCode } from './src/testUtils.js'
 
 globalThis.matchInlineTransformSnapshot = (
   await import('./src/testUtils/matchInlineTransformSnapshot')

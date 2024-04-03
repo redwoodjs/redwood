@@ -9,9 +9,9 @@ import terminalLink from 'terminal-link'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/project-config'
 
-import { getPaths } from '../lib'
-import c from '../lib/colors'
-import { generatePrismaClient } from '../lib/generatePrismaClient'
+import c from '../lib/colors.js'
+import { generatePrismaClient } from '../lib/generatePrismaClient.js'
+import { getPaths } from '../lib/index.js'
 
 export const command = 'upgrade'
 export const description = 'Upgrade all @redwoodjs packages via interactive CLI'

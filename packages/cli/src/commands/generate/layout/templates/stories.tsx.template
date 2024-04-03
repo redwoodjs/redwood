@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import ${singularPascalName}Layout from './${pascalName}Layout'
+import ${singularPascalName}Layout from './${pascalName}Layout.js'
 
 const meta: Meta<typeof ${singularPascalName}Layout> = {
   component: ${singularPascalName}Layout,

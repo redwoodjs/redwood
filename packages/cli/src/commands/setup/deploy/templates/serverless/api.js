@@ -2,7 +2,7 @@ import path from 'path'
 
 import fs from 'fs-extra'
 
-import { getPaths } from '../../../../../lib'
+import { getPaths } from '../../../../../lib/index.js'
 
 export const PROJECT_NAME = path.basename(getPaths().base)
 

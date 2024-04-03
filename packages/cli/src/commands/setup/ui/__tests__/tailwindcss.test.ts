@@ -85,7 +85,7 @@ import {
 } from 'vitest'
 
 // @ts-expect-error - no types
-import { handler } from '../libraries/tailwindcss.js'
+import { handler } from '../libraries/tailwindcss.js.js'
 
 // Set up RWJS_CWD
 let original_RWJS_CWD: string | undefined

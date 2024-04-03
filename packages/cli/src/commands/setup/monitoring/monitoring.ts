@@ -1,7 +1,7 @@
 import terminalLink from 'terminal-link'
 import type { Argv } from 'yargs'
 
-import * as sentryCommand from './sentry/sentry.js'
+import * as sentryCommand from './sentry/sentry.js.js'
 
 export const command = 'monitoring <provider>'
 export const description = 'Set up monitoring in your Redwood app'

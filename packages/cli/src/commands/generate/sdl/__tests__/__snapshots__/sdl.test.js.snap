@@ -54,7 +54,7 @@ exports[`handler > can be called with PascalCase model name 2`] = `
 
 exports[`handler > can be called with PascalCase model name 3`] = `
 {
-  "fileContent": "import { users, user, createUser, updateUser, deleteUser } from './users'
+  "fileContent": "import { users, user, createUser, updateUser, deleteUser } from './users.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -348,7 +348,7 @@ exports[`handler > can be called with camelCase model name 2`] = `
 
 exports[`handler > can be called with camelCase model name 3`] = `
 {
-  "fileContent": "import { users, user, createUser, updateUser, deleteUser } from './users'
+  "fileContent": "import { users, user, createUser, updateUser, deleteUser } from './users.js'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.

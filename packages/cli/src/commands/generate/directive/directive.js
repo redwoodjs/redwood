@@ -8,18 +8,22 @@ import prompts from 'prompts'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/project-config'
 
-import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
-import c from '../../../lib/colors'
+import c from '../../../lib/colors.js'
+import {
+  getPaths,
+  writeFilesTask,
+  transformTSToJS,
+} from '../../../lib/index.js'
 import {
   prepareForRollback,
   addFunctionToRollback,
 } from '../../../lib/rollback'
-import { yargsDefaults } from '../helpers'
 import {
   createYargsForComponentGeneration,
   templateForComponentFile,
   validateName,
 } from '../helpers'
+import { yargsDefaults } from '../helpers.js'
 
 export const files = async ({ name, typescript = false, type, tests }) => {
   if (tests === undefined) {

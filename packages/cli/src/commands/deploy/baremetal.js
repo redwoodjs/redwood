@@ -10,8 +10,8 @@ import { titleCase } from 'title-case'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { getPaths } from '../../lib'
-import c from '../../lib/colors'
+import c from '../../lib/colors.js'
+import { getPaths } from '../../lib/index.js'
 
 const CONFIG_FILENAME = 'deploy.toml'
 const SYMLINK_FLAGS = '-nsf'
@@ -693,7 +693,7 @@ export const handler = async (yargs) => {
     verbose: yargs.verbose,
   })
 
-  const { NodeSSH } = require('node-ssh')
+  const { NodeSSH } = await import('node-ssh')
   const ssh = new NodeSSH()
 
   try {

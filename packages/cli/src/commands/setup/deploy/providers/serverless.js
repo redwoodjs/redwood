@@ -7,11 +7,19 @@ import { Listr } from 'listr2'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { addPackagesTask, getPaths, printSetupNotes } from '../../../../lib'
-import c from '../../../../lib/colors'
-import { addToGitIgnoreTask, addToDotEnvTask, addFilesTask } from '../helpers'
-import { SERVERLESS_API_YML } from '../templates/serverless/api'
-import { SERVERLESS_WEB_YML } from '../templates/serverless/web'
+import c from '../../../../lib/colors.js'
+import {
+  addPackagesTask,
+  getPaths,
+  printSetupNotes,
+} from '../../../../lib/index.js'
+import {
+  addToGitIgnoreTask,
+  addToDotEnvTask,
+  addFilesTask,
+} from '../helpers.js'
+import { SERVERLESS_API_YML } from '../templates/serverless/api.js'
+import { SERVERLESS_WEB_YML } from '../templates/serverless/web.js'
 
 export const command = 'serverless'
 export const description =

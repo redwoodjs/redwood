@@ -39,7 +39,7 @@ import path from 'node:path'
 import { vol, fs as memfsFs } from 'memfs'
 import { vi, expect, it, describe, beforeAll, afterAll } from 'vitest'
 
-import { handler } from '../trustedDocumentsHandler.js'
+import { handler } from '../trustedDocumentsHandler.js.js'
 
 // Set up RWJS_CWD
 let original_RWJS_CWD: string | undefined

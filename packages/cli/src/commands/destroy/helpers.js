@@ -2,7 +2,7 @@ import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { deleteFilesTask } from '../../lib'
+import { deleteFilesTask } from '../../lib/index.js'
 
 const tasks = ({ componentName, filesFn, name }) =>
   new Listr(

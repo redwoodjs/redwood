@@ -5,12 +5,12 @@ import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { runPrerender, writePrerenderedHtmlFile } from '@redwoodjs/prerender'
-import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
+import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection/index.js'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import c from '../lib/colors'
-import { configureBabel, runScriptFunction } from '../lib/exec'
+import c from '../lib/colors.js'
+import { configureBabel, runScriptFunction } from '../lib/exec.js'
 
 class PathParamError extends Error {}
 

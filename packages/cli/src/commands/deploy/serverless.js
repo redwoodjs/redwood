@@ -11,8 +11,8 @@ import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { getPaths } from '../../lib'
-import c from '../../lib/colors'
+import c from '../../lib/colors.js'
+import { getPaths } from '../../lib/index.js'
 
 export const command = 'serverless'
 export const aliases = ['aws serverless', 'sls']

@@ -5,7 +5,7 @@ import { Listr } from 'listr2'
 import pascalcase from 'pascalcase'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
-import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
+import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate.js'
 import { getConfig } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -14,7 +14,7 @@ import {
   transformTSToJS,
   writeFilesTask,
 } from '../../../lib'
-import c from '../../../lib/colors'
+import c from '../../../lib/colors.js'
 import {
   prepareForRollback,
   addFunctionToRollback,

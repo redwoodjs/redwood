@@ -39,7 +39,7 @@ export default SinglePageLayout
 exports[`Multi word default files > creates a multi word layout test 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 
-import SinglePageLayout from './SinglePageLayout'
+import SinglePageLayout from './SinglePageLayout.js'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
@@ -55,7 +55,7 @@ describe('SinglePageLayout', () => {
 `;
 
 exports[`Multi word default files > creates a multi word layout test 2`] = `
-"import SinglePageLayout from './SinglePageLayout'
+"import SinglePageLayout from './SinglePageLayout.js'
 
 const meta = {
   component: SinglePageLayout,
@@ -77,7 +77,7 @@ export default AppLayout
 `;
 
 exports[`Single Word default files > creates a single word layout stories 1`] = `
-"import AppLayout from './AppLayout'
+"import AppLayout from './AppLayout.js'
 
 const meta = {
   component: AppLayout,
@@ -92,7 +92,7 @@ export const Primary = {}
 exports[`Single Word default files > creates a single word layout test 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 
-import AppLayout from './AppLayout'
+import AppLayout from './AppLayout.js'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts

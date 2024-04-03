@@ -39,7 +39,7 @@ vi.mock('fs-extra', async (importOriginal) => {
 import execa from 'execa'
 import { vi, beforeEach, afterEach, test, expect } from 'vitest'
 
-import { handler } from '../prisma'
+import { handler } from '../prisma.js'
 
 beforeEach(() => {
   vi.spyOn(console, 'info').mockImplementation(() => {})

@@ -7,10 +7,10 @@ import terminalLink from 'terminal-link'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFilesTask } from '../../../lib'
-import c from '../../../lib/colors'
-import { prepareForRollback } from '../../../lib/rollback'
-import { validateName, yargsDefaults } from '../helpers'
+import c from '../../../lib/colors.js'
+import { getPaths, writeFilesTask } from '../../../lib/index.js'
+import { prepareForRollback } from '../../../lib/rollback.js'
+import { validateName, yargsDefaults } from '../helpers.js'
 
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')
 const TSCONFIG_TEMPLATE = path.resolve(

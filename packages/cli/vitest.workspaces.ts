@@ -2,7 +2,7 @@ import { defineWorkspace, configDefaults } from 'vitest/config'
 
 export default defineWorkspace([
   {
-    extends: './vitest.config.mts',
+    extends: './vitest.config.ts',
     test: {
       name: 'root',
       include: ['**/__tests__/**/*.[jt]s?(x)', '**/*.test.[jt]s?(x)'],
@@ -19,11 +19,11 @@ export default defineWorkspace([
       alias: {
         '^src/(.*)': '<rootDir>/src/$1',
       },
-      setupFiles: ['./vitest.setup.mts'],
+      setupFiles: ['./vitest.setup.ts'],
     },
   },
   {
-    extends: './vitest.config.mts',
+    extends: './vitest.config.ts',
     test: {
       name: 'setup codemods',
       include: ['**/commands/setup/**/__codemod_tests__/*.ts'],

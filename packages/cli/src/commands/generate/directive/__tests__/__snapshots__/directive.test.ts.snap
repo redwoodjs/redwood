@@ -45,7 +45,7 @@ export default requireAdmin
 exports[`creates a JavaScript validator directive > js directive test 1`] = `
 "import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
 
-import requireAdmin from './requireAdmin'
+import requireAdmin from './requireAdmin.js'
 
 describe('requireAdmin directive', () => {
   it('declares the directive sdl as schema, with the correct name', () => {
@@ -112,7 +112,7 @@ export default bazingaFooBar
 exports[`creates a TypeScript transformer directive > ts directive test 1`] = `
 "import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
 
-import bazingaFooBar from './bazingaFooBar'
+import bazingaFooBar from './bazingaFooBar.js'
 
 describe('bazingaFooBar directive', () => {
   it('declares the directive sdl as schema, with the correct name', () => {

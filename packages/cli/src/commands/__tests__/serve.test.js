@@ -1,10 +1,10 @@
 import { vi, describe, afterEach, it, expect } from 'vitest'
 import yargs from 'yargs/yargs'
 
-import * as apiServerCLIConfig from '@redwoodjs/api-server/dist/apiCLIConfig'
-import * as bothServerCLIConfig from '@redwoodjs/api-server/dist/bothCLIConfig'
+import * as apiServerCLIConfig from '@redwoodjs/api-server/dist/apiCLIConfig.js'
+import * as bothServerCLIConfig from '@redwoodjs/api-server/dist/bothCLIConfig.js'
 
-import { builder } from '../serve'
+import { builder } from '../serve.js'
 
 globalThis.__dirname = __dirname
 

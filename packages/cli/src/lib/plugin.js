@@ -1,15 +1,16 @@
 import path from 'path'
 
 import chalk from 'chalk'
+import pkg from 'enquirer'
 import fs from 'fs-extra'
+
+const { Select } = pkg
 
 import { getCompatibilityData } from '@redwoodjs/cli-helpers'
 
-import { installModule, isModuleInstalled } from './packages'
+import { installModule, isModuleInstalled } from './packages.js'
 
-import { getPaths } from './index'
-
-const { Select } = require('enquirer')
+import { getPaths } from './index.js'
 
 /**
  * The file inside .redwood which will contain cached plugin command mappings

@@ -1,7 +1,7 @@
 import terminalLink from 'terminal-link'
 
-import c from '../lib/colors'
-import { sides } from '../lib/project'
+import c from '../lib/colors.js'
+import { sides } from '../lib/project.js'
 
 export const command = 'test [filter..]'
 export const description = 'Run Jest tests. Defaults to watch mode'

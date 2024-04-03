@@ -15,7 +15,7 @@ import {
 } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import type { Args } from './sentry'
+import type { Args } from './sentry.js'
 
 const rwPaths = getPaths()
 
