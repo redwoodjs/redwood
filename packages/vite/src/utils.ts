@@ -19,3 +19,7 @@ export function ensureProcessDirWeb(webDir: string = getPaths().web.base) {
     process.chdir(webDir)
   }
 }
+export function makeFilePath(path: string): string {
+  // Without this, absolute paths can't be imported on Windows
+  return 'file:///' + path
+}
