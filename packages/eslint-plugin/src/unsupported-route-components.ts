@@ -53,7 +53,7 @@ export const unsupportedRouteComponents = createRule({
 
           if (routesDeclaration?.type === 'ArrowFunctionExpression') {
             if (routesDeclaration.body.type === 'JSXElement') {
-              // For when outes = () => <Router>...</Router>
+              // Routes = () => <Router>...</Router>
               checkNodes(routesDeclaration.body, context)
             } else if (routesDeclaration.body.type === 'BlockStatement') {
               // For when  Routes = () => { return (<Router>...</Router>) }
