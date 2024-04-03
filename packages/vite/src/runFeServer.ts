@@ -93,6 +93,7 @@ export async function runFeServer() {
     },
   )
 
+  // @MARK: In prod, we create it once up front!
   const middlewareRouter = await createMiddlewareRouter()
 
   const handleWithMiddleware = (route?: RWRouteManifestItem) => {

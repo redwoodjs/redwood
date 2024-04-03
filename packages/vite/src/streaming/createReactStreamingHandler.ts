@@ -15,6 +15,7 @@ import type { TagDescriptor } from '@redwoodjs/web'
 import { invoke } from '../middleware/invokeMiddleware.js'
 import { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 import type { Middleware } from '../middleware/types.js'
+import { makeFilePath } from '../utils.js'
 
 import { reactRenderToStreamResponse } from './streamHelpers.js'
 import { loadAndRunRouteHooks } from './triggerRouteHooks.js'
@@ -195,9 +196,4 @@ export const createReactStreamingHandler = async (
 
     return reactResponse
   }
-}
-
-function makeFilePath(path: string): string {
-  // Without this, absolute paths can't be imported on Windows
-  return 'file:///' + path
 }

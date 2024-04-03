@@ -4,6 +4,8 @@ import type { ViteDevServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import { makeFilePath } from '../utils'
+
 import type { MiddlewareRequest } from './MiddlewareRequest'
 import { MiddlewareResponse } from './MiddlewareResponse'
 import type {
@@ -117,7 +119,7 @@ export const createMiddlewareRouter = async (
     entryServerImport = await vite.ssrLoadModule(entryServerPath)
   } else {
     // This imports from dist!
-    entryServerImport = await import(rwPaths.web.distEntryServer)
+    entryServerImport = await import(makeFilePath(rwPaths.web.distEntryServer))
   }
 
   const { registerMiddleware } = entryServerImport
