@@ -21,6 +21,7 @@ import {
 
 import { renderFromDist } from '../clientSsr.js'
 import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
+import type { ServerEntryType } from '../types.js'
 
 import { createBufferedTransformStream } from './transforms/bufferedTransform.js'
 import { createTimeoutTransform } from './transforms/cancelTimeoutTransform.js'
@@ -29,7 +30,7 @@ import { createServerInjectionTransform } from './transforms/serverInjectionTran
 type RDServerType = typeof RDServerModule
 
 interface RenderToStreamArgs {
-  ServerEntry: React.FunctionComponent
+  ServerEntry: ServerEntryType
   FallbackDocument: React.FunctionComponent
   currentPathName: string
   metaTags: TagDescriptor[]
@@ -124,8 +125,7 @@ export async function reactRenderToStreamResponse(
           {
             value: injectToPage,
           },
-          ServerEntry({
-            url: path,
+          React.createElement(ServerEntry, {
             css: cssLinks,
             meta: metaTags,
           }),
