@@ -7,14 +7,19 @@
     "directory": "packages/auth"
   },
   "license": "MIT",
-  "main": "./dist/index.js",
+  "type": "module",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.mjs",
+    "default": "./dist/index.cjs"
+  },
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build": "tsx ./build.ts && yarn build:types",
+    "__build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
     "build:pack": "yarn pack -o redwoodjs-auth.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
@@ -25,7 +30,8 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.1",
     "core-js": "3.36.1",
-    "react": "18.3.0-canary-a870b2d54-20240314"
+    "react": "18.3.0-canary-a870b2d54-20240314",
+    "tsx": "4.7.1"
   },
   "devDependencies": {
     "@babel/cli": "7.24.1",

@@ -14,8 +14,8 @@ import '@testing-library/jest-dom/jest-globals'
 import { graphql } from 'msw'
 import { setupServer } from 'msw/node'
 
-import type { CustomTestAuthClient } from './fixtures/customTestAuth'
-import { createCustomTestAuth } from './fixtures/customTestAuth'
+import type { CustomTestAuthClient } from './fixtures/customTestAuth.js'
+import { createCustomTestAuth } from './fixtures/customTestAuth.js'
 
 configure({
   asyncUtilTimeout: 5_000,

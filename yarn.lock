@@ -7956,6 +7956,7 @@ __metadata:
     jest-environment-jsdom: "npm:29.7.0"
     msw: "npm:1.3.3"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
+    tsx: "npm:4.7.1"
     typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
