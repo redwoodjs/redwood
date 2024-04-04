@@ -56,7 +56,6 @@ export const createReactStreamingHandler = async (
 
   const isProd = !viteDevServer
   const middlewareRouter: Router.Instance<any> = await getMiddlewareRouter()
-
   let entryServerImport: EntryServer
   let fallbackDocumentImport: Record<string, any>
 
