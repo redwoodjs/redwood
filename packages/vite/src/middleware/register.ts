@@ -4,7 +4,8 @@ import type { ViteDevServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { makeFilePath } from '../utils'
+import type { EntryServer } from '../types'
+import { makeFilePath, ssrLoadEntryServer } from '../utils'
 
 import type { MiddlewareRequest } from './MiddlewareRequest'
 import { MiddlewareResponse } from './MiddlewareResponse'
@@ -12,12 +13,8 @@ import type {
   Middleware,
   MiddlewareClass,
   MiddlewareInvokeOptions,
+  MiddlewareReg,
 } from './types'
-
-// Tuple of [mw, '*.{extension}']
-export type MiddlewareReg = Array<
-  [Middleware | MiddlewareClass, string] | Middleware | MiddlewareClass
->
 
 type GroupedMw = Record<string, Middleware[]>
 
@@ -108,15 +105,10 @@ export const createMiddlewareRouter = async (
 ): Promise<Router.Instance<any>> => {
   const rwPaths = getPaths()
 
-  const entryServerPath = rwPaths.web.entryServer
+  let entryServerImport: EntryServer
 
-  if (!entryServerPath) {
-    throw new Error('Entry server not found. Could not load middleware')
-  }
-
-  let entryServerImport: Record<'registerMiddleware', () => MiddlewareReg>
   if (vite) {
-    entryServerImport = await vite.ssrLoadModule(entryServerPath)
+    entryServerImport = await ssrLoadEntryServer(vite)
   } else {
     // This imports from dist!
     entryServerImport = await import(makeFilePath(rwPaths.web.distEntryServer))

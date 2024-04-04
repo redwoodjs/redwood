@@ -15,23 +15,11 @@ import type { TagDescriptor } from '@redwoodjs/web'
 import { invoke } from '../middleware/invokeMiddleware.js'
 import { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 import type { Middleware } from '../middleware/types.js'
+import type { EntryServer } from '../types.js'
 import { makeFilePath } from '../utils.js'
 
-import type { ServerEntryType } from './streamHelpers.js'
 import { reactRenderToStreamResponse } from './streamHelpers.js'
 import { loadAndRunRouteHooks } from './triggerRouteHooks.js'
-
-export type EntryServer =
-  | {
-      middleware?: Middleware
-      ServerEntry: ServerEntryType
-      default: never
-    }
-  | {
-      middleware?: Middleware
-      ServerEntry: never
-      default: ServerEntryType
-    }
 
 interface CreateReactStreamingHandlerOptions {
   routes: RWRouteManifestItem[]

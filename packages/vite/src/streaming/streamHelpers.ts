@@ -19,15 +19,11 @@ import {
 } from '@redwoodjs/web/dist/components/ServerInject'
 
 import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
+import type { ServerEntryType } from '../types.js'
 
 import { createBufferedTransformStream } from './transforms/bufferedTransform.js'
 import { createTimeoutTransform } from './transforms/cancelTimeoutTransform.js'
 import { createServerInjectionTransform } from './transforms/serverInjectionTransform.js'
-
-export type ServerEntryType = React.FunctionComponent<{
-  css: string[]
-  meta: TagDescriptor[]
-}>
 
 interface RenderToStreamArgs {
   ServerEntry: ServerEntryType
