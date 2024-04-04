@@ -47,7 +47,6 @@ describe('createMiddlewareRouter', () => {
   })
 
   it('Should load import from distEntryServer for prod', async () => {
-    distRegisterMwMock.mockReturnValue([])
     await createMiddlewareRouter()
     expect(distRegisterMwMock).toHaveBeenCalled()
   })
