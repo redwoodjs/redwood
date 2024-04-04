@@ -2,6 +2,8 @@
 import type { NormalizedCacheObject } from '@apollo/client'
 import type { HelmetServerState } from 'react-helmet-async'
 
+import type { TagDescriptor } from '@redwoodjs/web'
+
 declare global {
   var __REDWOOD__PRERENDERING: boolean
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
