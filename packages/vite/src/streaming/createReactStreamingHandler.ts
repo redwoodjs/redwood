@@ -17,8 +17,21 @@ import { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 import type { Middleware } from '../middleware/types.js'
 import { makeFilePath } from '../utils.js'
 
+import type { ServerEntryType } from './streamHelpers.js'
 import { reactRenderToStreamResponse } from './streamHelpers.js'
 import { loadAndRunRouteHooks } from './triggerRouteHooks.js'
+
+export type EntryServer =
+  | {
+      middleware?: Middleware
+      ServerEntry: ServerEntryType
+      default: never
+    }
+  | {
+      middleware?: Middleware
+      ServerEntry: never
+      default: ServerEntryType
+    }
 
 interface CreateReactStreamingHandlerOptions {
   routes: RWRouteManifestItem[]
@@ -43,8 +56,9 @@ export const createReactStreamingHandler = async (
 
   const isProd = !viteDevServer
   const middlewareRouter: Router.Instance<any> = await getMiddlewareRouter()
-  let entryServerImport: any
-  let fallbackDocumentImport: any
+
+  let entryServerImport: EntryServer
+  let fallbackDocumentImport: Record<string, any>
 
   // Load the entries for prod only once, not in each handler invocation
   // Dev is the opposite, we load it everytime to pick up changes
@@ -118,9 +132,15 @@ export const createReactStreamingHandler = async (
     // Do this inside the handler for **dev-only**.
     // This makes sure that changes to entry-server are picked up on refresh
     if (!isProd) {
-      entryServerImport = await viteDevServer.ssrLoadModule(
-        rwPaths.web.entryServer as string, // already validated in dev server
-      )
+      if (!rwPaths.web.entryServer) {
+        throw new Error('entryServer not defined')
+      }
+
+      entryServerImport = (await viteDevServer.ssrLoadModule(
+        rwPaths.web.entryServer,
+        // Have to type cast here because ssrLoadModule just returns a generic
+        // Record<string, any> type
+      )) as EntryServer
       fallbackDocumentImport = await viteDevServer.ssrLoadModule(
         rwPaths.web.document,
       )

@@ -24,9 +24,15 @@ import { createBufferedTransformStream } from './transforms/bufferedTransform.js
 import { createTimeoutTransform } from './transforms/cancelTimeoutTransform.js'
 import { createServerInjectionTransform } from './transforms/serverInjectionTransform.js'
 
+export type ServerEntryType = React.FunctionComponent<{
+  url?: string
+  css: string[]
+  meta: TagDescriptor[]
+}>
+
 interface RenderToStreamArgs {
-  ServerEntry: any
-  FallbackDocument: any
+  ServerEntry: ServerEntryType
+  FallbackDocument: React.FunctionComponent
   currentPathName: string
   metaTags: TagDescriptor[]
   cssLinks: string[]
