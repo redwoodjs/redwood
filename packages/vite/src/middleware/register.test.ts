@@ -85,7 +85,7 @@ describe('groupByRoutePatterns', () => {
       exampleRequest,
       new MiddlewareResponse(),
     )
-    expect(secondOutput?.body).toBe('MW initialized with 2')
+    expect((secondOutput || {})?.body).toBe('MW initialized with 2')
   })
 })
 
@@ -127,7 +127,8 @@ describe('chain', () => {
   it('Routing with find-my-way', async () => {
     const mwRouter = addMiddlewareHandlers(registerList)
     const match = mwRouter.find('GET', '/bazinga')
-    // @ts-expect-error No way of customizing find-my-way route type
+
+    // No way of customizing find-my-way route type
     const output = await match?.handler(
       exampleRequest,
       new MiddlewareResponse(),
