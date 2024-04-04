@@ -25,12 +25,12 @@ export type ServerEntryType = React.FunctionComponent<{
 
 export type EntryServer =
   | {
-      registerMiddleware?: () => MiddlewareReg
+      registerMiddleware?: () => Promise<MiddlewareReg> | MiddlewareReg
       ServerEntry: ServerEntryType
       default: never
     }
   | {
-      registerMiddleware?: () => MiddlewareReg
+      registerMiddleware?: () => Promise<MiddlewareReg> | MiddlewareReg
       ServerEntry: never
       default: ServerEntryType
     }
