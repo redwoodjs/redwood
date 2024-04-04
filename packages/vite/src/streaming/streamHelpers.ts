@@ -25,7 +25,6 @@ import { createTimeoutTransform } from './transforms/cancelTimeoutTransform.js'
 import { createServerInjectionTransform } from './transforms/serverInjectionTransform.js'
 
 export type ServerEntryType = React.FunctionComponent<{
-  url?: string
   css: string[]
   meta: TagDescriptor[]
 }>
@@ -126,8 +125,7 @@ export async function reactRenderToStreamResponse(
           {
             value: injectToPage,
           },
-          ServerEntry({
-            url: path,
+          React.createElement(ServerEntry, {
             css: cssLinks,
             meta: metaTags,
           }),
