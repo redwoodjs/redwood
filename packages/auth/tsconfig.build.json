@@ -3,14 +3,9 @@
   "compilerOptions": {
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
+    "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist",
   },
-  "include": ["src", "ambient.d.ts", "./vitest.setup.ts", "__tests__"],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "**/__mocks__",
-    "**/__fixtures__",
-  ]
+  "include": ["src", "ambient.d.ts"],
 }

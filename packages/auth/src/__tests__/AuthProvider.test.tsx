@@ -1,15 +1,14 @@
-require('whatwg-fetch')
-
 import React, { useEffect, useState } from 'react'
 
 import {
+  act,
   render,
+  renderHook,
   screen,
   fireEvent,
   waitFor,
   configure,
 } from '@testing-library/react'
-import { renderHook, act } from '@testing-library/react'
 import { graphql } from 'msw'
 import { setupServer } from 'msw/node'
 import {
@@ -38,7 +37,8 @@ let CURRENT_USER_DATA: {
   email: 'nospam@example.net',
 }
 
-globalThis.RWJS_API_GRAPHQL_URL = '/.netlify/functions/graphql'
+globalThis.RWJS_API_GRAPHQL_URL =
+  'https://example.com/api/.netlify/functions/graphql'
 
 const server = setupServer(
   graphql.query('__REDWOOD__AUTH_GET_CURRENT_USER', (_req, res, ctx) => {
