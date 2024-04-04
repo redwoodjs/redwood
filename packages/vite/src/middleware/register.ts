@@ -82,7 +82,7 @@ export const chain = (mwList: Middleware[]) => {
   }
 }
 
-export const addMiddlewareHandlers = (mwRegList: MiddlewareReg) => {
+export const addMiddlewareHandlers = (mwRegList: MiddlewareReg = []) => {
   const groupedMw = groupByRoutePatterns(mwRegList)
   const mwRouter = fmw()
 
@@ -128,5 +128,5 @@ export const createMiddlewareRouter = async (
     return fmw()
   }
 
-  return addMiddlewareHandlers(registerMiddleware())
+  return addMiddlewareHandlers(await registerMiddleware())
 }
