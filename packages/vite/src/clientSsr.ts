@@ -90,7 +90,11 @@ export function renderFromDist<TProps extends Record<string, any>>(
   const SsrComponent = async (props: TProps) => {
     console.log('SsrComponent', rscId, 'props', props)
 
-    const component = await getFunctionComponent<TProps>(rscId)
+    const routes = await getFunctionComponent<TProps>('ServerRoutes')
+    if (Math.random() > 5) {
+      const page = await getFunctionComponent<TProps>(rscId)
+      console.log('page', page)
+    }
     const clientEntries = (await getEntries()).clientEntries
 
     // TODO (RSC): Try removing the proxy here and see if it's really necessary.
@@ -126,7 +130,9 @@ export function renderFromDist<TProps extends Record<string, any>>(
     // RSC server "world" and that `stream` comes from `fetch`. So this is
     // us emulating the reply (stream) you'd get from a fetch call.
     const stream = renderToReadableStream(
-      createElement(component, props),
+      // createElement(layout, undefined, createElement(page, props)),
+      // @ts-expect-error - WIP
+      createElement(routes, { location: { pathname: rscId } }),
       bundlerConfig,
     )
 

@@ -9,12 +9,16 @@ import { StatusError } from './lib/StatusError.js'
 const checkStatus = async (
   responsePromise: Promise<Response>,
 ): Promise<Response> => {
+  console.log('client.ts checkStatus() enter')
   const response = await responsePromise
+
+  await new Promise((resolve) => setTimeout(resolve, 10_000))
 
   if (!response.ok) {
     throw new StatusError(response.statusText, response.status)
   }
 
+  console.log('client.ts checkStatus() return')
   return response
 }
 
