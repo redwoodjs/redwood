@@ -28,14 +28,8 @@ import {
 } from 'whatwg-fetch'
 
 globalThis.fetch = fetchPolyfill
-// @ts-expect-error - The types don't match, but the polyfill works for the
-// tests
 globalThis.Headers = HeadersPolyfill
-// @ts-expect-error - The types don't match, but the polyfill works for the
-// tests
 globalThis.Request = RequestPolyfill
-// @ts-expect-error - The types don't match, but the polyfill works for the
-// tests
 globalThis.Response = ResponsePolyfill
 
 import type { CustomTestAuthClient } from './fixtures/customTestAuth'

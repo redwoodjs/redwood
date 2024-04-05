@@ -36,4 +36,6 @@ declare global {
   }
 }
 
+declare module 'whatwg-fetch'
+
 export {}
