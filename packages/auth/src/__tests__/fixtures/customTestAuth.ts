@@ -1,4 +1,4 @@
-import { CurrentUser, createAuthentication } from '../../index'
+import { CurrentUser, createAuthentication } from '../../index.js'
 
 interface User {
   sub: string
