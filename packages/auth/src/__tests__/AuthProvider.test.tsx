@@ -20,6 +20,17 @@ import {
   test,
   vi,
 } from 'vitest'
+import {
+  fetch as fetchPolyfill,
+  Headers as HeadersPolyfill,
+  Request as RequestPolyfill,
+  Response as ResponsePolyfill,
+} from 'whatwg-fetch'
+
+globalThis.fetch = fetchPolyfill
+globalThis.Headers = HeadersPolyfill
+globalThis.Request = RequestPolyfill
+globalThis.Response = ResponsePolyfill
 
 import type { CustomTestAuthClient } from './fixtures/customTestAuth.js'
 import { createCustomTestAuth } from './fixtures/customTestAuth.js'
@@ -37,8 +48,7 @@ let CURRENT_USER_DATA: {
   email: 'nospam@example.net',
 }
 
-globalThis.RWJS_API_GRAPHQL_URL =
-  'https://example.com/api/.netlify/functions/graphql'
+globalThis.RWJS_API_GRAPHQL_URL = '/.netlify/functions/graphql'
 
 const server = setupServer(
   graphql.query('__REDWOOD__AUTH_GET_CURRENT_USER', (_req, res, ctx) => {
