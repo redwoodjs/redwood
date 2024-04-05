@@ -1,4 +1,4 @@
-require('whatwg-fetch')
+// require('whatwg-fetch')
 
 import React, { useEffect, useState } from 'react'
 
@@ -13,6 +13,7 @@ import { renderHook, act } from '@testing-library/react'
 import '@testing-library/jest-dom/jest-globals'
 import { graphql } from 'msw'
 import { setupServer } from 'msw/node'
+import 'whatwg-fetch'
 
 import type { CustomTestAuthClient } from './fixtures/customTestAuth'
 import { createCustomTestAuth } from './fixtures/customTestAuth'
