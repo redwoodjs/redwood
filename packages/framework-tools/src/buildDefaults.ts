@@ -71,16 +71,16 @@ export async function build({
     ...buildOptions,
   })
 
-  if (!result.metafile) {
-    console.warn(
-      'No metafile found in esbuild result\n\n' +
-        'This is unexpected and probably means something is wrong with the ' +
-        'build\n\n' +
-        '---\n\n',
-    )
-  } else {
+  if (result.metafile) {
     await fs.writeJSON(path.join(cwd, metafileName), result.metafile, {
       spaces: 2,
     })
+  } else {
+    console.warn(
+      'No metafile found in esbuild result.\n\n' +
+        'This is unexpected and probably means something is wrong with the ' +
+        'build.\n\n' +
+        '---\n\n',
+    )
   }
 }
