@@ -76,11 +76,10 @@ export async function build({
       spaces: 2,
     })
   } else {
+    console.warn("No metafile found in esbuild's result.")
     console.warn(
-      'No metafile found in esbuild result.\n\n' +
-        'This is unexpected and probably means something is wrong with the ' +
-        'build.\n\n' +
-        '---\n\n',
+      'This is unexpected and probably means something is wrong with the ' +
+        'build.',
     )
   }
 }
