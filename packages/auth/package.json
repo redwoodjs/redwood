@@ -14,6 +14,7 @@
     "default": "./dist/index.cjs"
   },
   "types": "./dist/index.d.ts",
+  "main": "./dist/index.cjs",
   "files": [
     "dist"
   ],
