@@ -5,4 +5,7 @@
     "outDir": "dist",
   },
   "include": ["src", "ambient.d.ts"],
+  "references": [
+    { "path": "../framework-tools" }
+  ]
 }
