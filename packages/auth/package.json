@@ -10,11 +10,10 @@
   "type": "module",
   "exports": {
     "types": "./dist/index.d.ts",
-    "import": "./dist/index.mjs",
+    "import": "./dist/esm/index.js",
     "default": "./dist/index.cjs"
   },
   "types": "./dist/index.d.ts",
-  "main": "./dist/index.cjs",
   "files": [
     "dist"
   ],

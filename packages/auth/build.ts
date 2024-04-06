@@ -1,3 +1,5 @@
+import { renameSync, writeFileSync } from 'node:fs'
+
 import { build, defaultBuildOptions } from '@redwoodjs/framework-tools'
 
 // ESM build
@@ -6,7 +8,7 @@ await build({
     ...defaultBuildOptions,
     tsconfig: 'tsconfig.build.json',
     format: 'esm',
-    outExtension: { '.js': '.mjs' },
+    outdir: 'dist/esm',
     packages: 'external',
   },
 })
@@ -16,7 +18,10 @@ await build({
   buildOptions: {
     ...defaultBuildOptions,
     tsconfig: 'tsconfig.build.json',
-    outExtension: { '.js': '.cjs' },
     packages: 'external',
   },
 })
+
+renameSync('dist/index.js', 'dist/index.cjs')
+writeFileSync('dist/package.json', JSON.stringify({ type: 'commonjs' }))
+writeFileSync('dist/esm/package.json', JSON.stringify({ type: 'module' }))
