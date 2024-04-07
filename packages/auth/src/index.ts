@@ -1,5 +1,6 @@
-export { AuthContextInterface, CurrentUser } from './AuthContext.js'
-export { useNoAuth, UseAuth } from './useAuth.js'
+export type { AuthContextInterface, CurrentUser } from './AuthContext.js'
+export { useNoAuth } from './useAuth.js'
+export type { UseAuth } from './useAuth.js'
 export { createAuthentication } from './authFactory.js'
 export type { AuthImplementation } from './AuthImplementation.js'
 
