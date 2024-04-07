@@ -1,29 +1,18 @@
-import type { Rule } from 'eslint'
-import type { Identifier, MemberExpression } from 'estree'
+import type { TSESTree } from '@typescript-eslint/utils'
+import { ESLintUtils, AST_NODE_TYPES } from '@typescript-eslint/utils'
 
-function isProcessEnv(node: unknown) {
+const createRule = ESLintUtils.RuleCreator.withoutDocs
+
+function isProcessEnv(node: TSESTree.Node) {
   return (
-    isMemberExpression(node) &&
+    node.type === AST_NODE_TYPES.MemberExpression &&
     hasName(node.object, 'process') &&
     hasName(node.property, 'env')
   )
 }
 
-function isIdentifier(node: unknown): node is Identifier {
-  return (
-    typeof node !== 'undefined' && (node as Identifier).type === 'Identifier'
-  )
-}
-
-function isMemberExpression(node: unknown): node is MemberExpression {
-  return (
-    typeof node !== 'undefined' &&
-    (node as MemberExpression).type === 'MemberExpression'
-  )
-}
-
-function hasName(node: unknown, name: string) {
-  return isIdentifier(node) && node.name === name
+function hasName(node: TSESTree.Node, name: string) {
+  return node.type === AST_NODE_TYPES.Identifier && node.name === name
 }
 
 function isTestFile(filename: string) {
@@ -46,31 +35,34 @@ function isTestFile(filename: string) {
   )
 }
 
-export const processEnvComputedRule: Rule.RuleModule = {
+export const processEnvComputedRule = createRule({
   meta: {
     type: 'problem',
     docs: {
       description: 'Find computed member access on process.env',
     },
-    // fixable: 'code',
+    messages: {
+      unexpected:
+        'Accessing process.env via array syntax will break in production. Use dot notation e.g. process.env.MY_ENV_VAR instead',
+    },
     schema: [], // No additional configuration needed
   },
+  defaultOptions: [],
   create(context) {
     return {
       MemberExpression: function (node) {
-        if (
+        const matches =
           isProcessEnv(node.object) &&
           node.computed &&
           !isTestFile(context.filename)
-        ) {
+
+        if (matches) {
           context.report({
-            message:
-              'Accessing process.env via array syntax will break in production. Use dot notation e.g. process.env.MY_ENV_VAR instead',
+            messageId: 'unexpected',
             node,
-            // fix(fixer) {},
           })
         }
       },
     }
   },
-}
+})

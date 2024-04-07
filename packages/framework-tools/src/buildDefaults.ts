@@ -26,6 +26,8 @@ export const defaultIgnorePatterns = [
   '**/__tests__',
   '**/*.test.{ts,js}',
   '**/__fixtures__',
+  '**/testUtils',
+  '**/__testfixtures__',
 ]
 
 interface BuildOptions {
@@ -69,7 +71,15 @@ export async function build({
     ...buildOptions,
   })
 
-  await fs.writeJSON(path.join(cwd, metafileName), result.metafile, {
-    spaces: 2,
-  })
+  if (result.metafile) {
+    await fs.writeJSON(path.join(cwd, metafileName), result.metafile, {
+      spaces: 2,
+    })
+  } else {
+    console.warn("No metafile found in esbuild's result.")
+    console.warn(
+      'This is unexpected and probably means something is wrong with the ' +
+        'build.',
+    )
+  }
 }

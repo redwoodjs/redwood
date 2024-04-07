@@ -32,9 +32,13 @@ export default function redwoodPluginVite(): PluginOption[] {
 
   // If realtime is enabled, we want to include the sseLink in the bundle.
   // Right now the only way we have of telling is if the package is installed on the api side.
-  const realtimeEnabled = fs
-    .readFileSync(path.join(rwPaths.api.base, 'package.json'), 'utf-8')
-    .includes('@redwoodjs/realtime')
+  const apiPackageJsonPath = path.join(rwPaths.api.base, 'package.json')
+  const realtimeEnabled =
+    fs.existsSync(apiPackageJsonPath) &&
+    fs.readFileSync(apiPackageJsonPath, 'utf-8').includes('@redwoodjs/realtime')
+
+  const streamingEnabled = rwConfig.experimental.streamingSsr.enabled
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
   return [
     {
@@ -130,7 +134,7 @@ export default function redwoodPluginVite(): PluginOption[] {
       config: getMergedConfig(rwConfig, rwPaths),
     },
     // We can remove when streaming is stable
-    rwConfig.experimental.streamingSsr.enabled && swapApolloProvider(),
+    streamingEnabled && swapApolloProvider(),
     handleJsAsJsx(),
     // Remove the splash-page from the bundle.
     removeFromBundle([
@@ -148,7 +152,7 @@ export default function redwoodPluginVite(): PluginOption[] {
       babel: {
         ...getWebSideDefaultBabelConfig({
           forVite: true,
-          forRscClient: rwConfig.experimental.rsc?.enabled,
+          forRsc: rscEnabled,
         }),
       },
     }),

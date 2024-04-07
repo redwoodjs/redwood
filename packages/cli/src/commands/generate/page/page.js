@@ -115,7 +115,7 @@ export const files = async ({ name, tests, stories, typescript, ...rest }) => {
     generator: 'page',
     templatePath:
       rest.paramName !== ''
-        ? 'stories.tsx.parametersTemplate'
+        ? 'stories.tsx.parameters.template'
         : 'stories.tsx.template',
     templateVars: rest,
   })
