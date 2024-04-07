@@ -7553,7 +7553,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:18.3.0-canary-a870b2d54-20240314"
+    react: "npm:18.3.0-next-fecc288b7-20221025"
     typescript: "npm:5.4.3"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7606,7 +7606,7 @@ __metadata:
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:18.3.0-canary-a870b2d54-20240314"
+    react: "npm:18.3.0-next-fecc288b7-20221025"
     typescript: "npm:5.4.3"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7656,7 +7656,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:18.3.0-canary-a870b2d54-20240314"
+    react: "npm:18.3.0-next-fecc288b7-20221025"
     typescript: "npm:5.4.3"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7732,7 +7732,7 @@ __metadata:
     core-js: "npm:3.36.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:18.3.0-canary-a870b2d54-20240314"
+    react: "npm:18.3.0-next-fecc288b7-20221025"
     typescript: "npm:5.4.3"
   languageName: unknown
   linkType: soft
@@ -7781,7 +7781,7 @@ __metadata:
     firebase: "npm:10.9.0"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:18.3.0-canary-a870b2d54-20240314"
+    react: "npm:18.3.0-next-fecc288b7-20221025"
     typescript: "npm:5.4.3"
   peerDependencies:
     firebase: 10.9.0
@@ -7831,7 +7831,7 @@ __metadata:
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:18.3.0-canary-a870b2d54-20240314"
+    react: "npm:18.3.0-next-fecc288b7-20221025"
     typescript: "npm:5.4.3"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7881,7 +7881,7 @@ __metadata:
     "@supabase/supabase-js": "npm:2.40.0"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:18.3.0-canary-a870b2d54-20240314"
+    react: "npm:18.3.0-next-fecc288b7-20221025"
     typescript: "npm:5.4.3"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7934,7 +7934,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:18.3.0-canary-a870b2d54-20240314"
+    react: "npm:18.3.0-next-fecc288b7-20221025"
     supertokens-auth-react: "npm:0.39.1"
     typescript: "npm:5.4.3"
     vitest: "npm:1.4.0"
@@ -7952,7 +7952,7 @@ __metadata:
     "@testing-library/react": "npm:14.2.2"
     core-js: "npm:3.36.1"
     msw: "npm:1.3.3"
-    react: "npm:18.3.0-canary-a870b2d54-20240314"
+    react: "npm:18.3.0-next-fecc288b7-20221025"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.3"
     vitest: "npm:1.4.0"
@@ -8333,13 +8333,13 @@ __metadata:
     graphql: "npm:16.8.1"
     nodemon: "npm:3.1.0"
     pascalcase: "npm:1.0.0"
-    react: "npm:18.3.0-canary-a870b2d54-20240314"
-    react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
+    react: "npm:18.3.0-next-fecc288b7-20221025"
+    react-dom: "npm:18.3.0-next-fecc288b7-20221025"
     react-hook-form: "npm:7.51.2"
     typescript: "npm:5.4.3"
     vitest: "npm:1.4.0"
   peerDependencies:
-    react: 18.3.0-canary-a870b2d54-20240314
+    react: 18.3.0-next-fecc288b7-20221025
   languageName: unknown
   linkType: soft
 
@@ -8564,8 +8564,8 @@ __metadata:
     typescript: "npm:5.4.3"
     vitest: "npm:1.4.0"
   peerDependencies:
-    react: 18.3.0-canary-a870b2d54-20240314
-    react-dom: 18.3.0-canary-a870b2d54-20240314
+    react: 18.3.0-next-fecc288b7-20221025
+    react-dom: 18.3.0-next-fecc288b7-20221025
   languageName: unknown
   linkType: soft
 
@@ -8645,13 +8645,13 @@ __metadata:
     core-js: "npm:3.36.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:18.3.0-canary-a870b2d54-20240314"
-    react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
+    react: "npm:18.3.0-next-fecc288b7-20221025"
+    react-dom: "npm:18.3.0-next-fecc288b7-20221025"
     tstyche: "npm:1.1.0"
     typescript: "npm:5.4.3"
   peerDependencies:
-    react: 18.3.0-canary-a870b2d54-20240314
-    react-dom: 18.3.0-canary-a870b2d54-20240314
+    react: 18.3.0-next-fecc288b7-20221025
+    react-dom: 18.3.0-next-fecc288b7-20221025
   languageName: unknown
   linkType: soft
 
@@ -8798,8 +8798,8 @@ __metadata:
     glob: "npm:10.3.10"
     http-proxy-middleware: "npm:2.0.6"
     isbot: "npm:3.8.0"
-    react: "npm:18.3.0-canary-a870b2d54-20240314"
-    react-server-dom-webpack: "npm:18.3.0-canary-a870b2d54-20240314"
+    react: "npm:18.3.0-next-fecc288b7-20221025"
+    react-server-dom-webpack: "npm:18.3.0-next-fecc288b7-20221025"
     rollup: "npm:4.13.0"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.3"
@@ -8857,8 +8857,8 @@ __metadata:
     graphql-sse: "npm:2.5.2"
     graphql-tag: "npm:2.12.6"
     nodemon: "npm:3.1.0"
-    react: "npm:18.3.0-canary-a870b2d54-20240314"
-    react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
+    react: "npm:18.3.0-next-fecc288b7-20221025"
+    react-dom: "npm:18.3.0-next-fecc288b7-20221025"
     react-helmet-async: "npm:2.0.4"
     react-hot-toast: "npm:2.4.1"
     stacktracey: "npm:2.1.8"
@@ -8867,8 +8867,8 @@ __metadata:
     typescript: "npm:5.4.3"
     vitest: "npm:1.4.0"
   peerDependencies:
-    react: 18.3.0-canary-a870b2d54-20240314
-    react-dom: 18.3.0-canary-a870b2d54-20240314
+    react: 18.3.0-next-fecc288b7-20221025
+    react-dom: 18.3.0-next-fecc288b7-20221025
   bin:
     cross-env: ./dist/bins/cross-env.js
     msw: ./dist/bins/msw.js
@@ -11449,22 +11449,21 @@ __metadata:
   linkType: hard
 
 "@types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.2.19":
-  version: 18.2.21
-  resolution: "@types/react-dom@npm:18.2.21"
+  version: 18.2.24
+  resolution: "@types/react-dom@npm:18.2.24"
   dependencies:
     "@types/react": "npm:*"
-  checksum: 10c0/a887b4b647071df48173f054854713b68fdacfceeba7fa14f64ba26688d7d43574d7dc88a2a346e28f2e667eeab1b9bdbcad8a54353869835e52638607f61ff5
+  checksum: 10c0/9ec38e5ab4727c56ef17bd8e938ead88748ba19db314b8d9807714a5cae430f5b799514667b221b4f2dc8d9b4ca17dd1c3da8c41c083c2de9eddcc31bec6b8ff
   languageName: node
   linkType: hard
 
 "@types/react@npm:*, @types/react@npm:>=16, @types/react@npm:^18.2.55":
-  version: 18.2.55
-  resolution: "@types/react@npm:18.2.55"
+  version: 18.2.74
+  resolution: "@types/react@npm:18.2.74"
   dependencies:
     "@types/prop-types": "npm:*"
-    "@types/scheduler": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 10c0/6b1c73beafbbc582dc54ffd92b3779f6d850e8f6b5ce5d04b31e9498a3d77bfc416bb08f0d8d63ab4f4649ccd6639996472416871c01c74a528b16a55faeaf38
+  checksum: 10c0/347e38b4c5dc20d50ff71bf04b7caaef490e5ff695e74a0088a13fbb2a0c5d125a5ecfd142adfa30f0176da0e2734942c91ba61d95ce269c43b3265bd7379361
   languageName: node
   linkType: hard
 
@@ -11507,13 +11506,6 @@ __metadata:
     "@types/glob": "npm:*"
     "@types/node": "npm:*"
   checksum: 10c0/08beaf5d5ac6d6ecb76df74e3f873453feab079b5993f7cdd00bf2789bc2dea6917d5d24e75a5346fe201f396fa8a6eccb1291f97695997e34733f9663228a86
-  languageName: node
-  linkType: hard
-
-"@types/scheduler@npm:*":
-  version: 0.16.3
-  resolution: "@types/scheduler@npm:0.16.3"
-  checksum: 10c0/c249d4b96fa05165ac22c214f94a045ee0af8beedefdbc54b769febd0044cab3a874e55419841a0dcc76439e379a63e257f3253c87168e3261e7bc783d623302
   languageName: node
   linkType: hard
 
@@ -12595,7 +12587,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn-loose@npm:8.4.0, acorn-loose@npm:^8.3.0":
+"acorn-loose@npm:8.4.0":
   version: 8.4.0
   resolution: "acorn-loose@npm:8.4.0"
   dependencies:
@@ -12627,7 +12619,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^6.4.1":
+"acorn@npm:^6.2.1, acorn@npm:^6.4.1":
   version: 6.4.2
   resolution: "acorn@npm:6.4.2"
   bin:
@@ -28766,14 +28758,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:18.3.0-canary-a870b2d54-20240314":
-  version: 18.3.0-canary-a870b2d54-20240314
-  resolution: "react-dom@npm:18.3.0-canary-a870b2d54-20240314"
+"react-dom@npm:18.3.0-next-fecc288b7-20221025":
+  version: 18.3.0-next-fecc288b7-20221025
+  resolution: "react-dom@npm:18.3.0-next-fecc288b7-20221025"
   dependencies:
-    scheduler: "npm:0.24.0-canary-a870b2d54-20240314"
+    loose-envify: "npm:^1.1.0"
+    scheduler: "npm:0.24.0-next-fecc288b7-20221025"
   peerDependencies:
-    react: 18.3.0-canary-a870b2d54-20240314
-  checksum: 10c0/6896473a3a7ed802f6b85c9601c64b0f1fe58ffbf3829ee5ac819a503fa16f5ec4d39b4b3f188cb2bf9ba9fb74cbdc28844c03cc2a4208303595220e5877d1b5
+    react: 18.3.0-next-fecc288b7-20221025
+  checksum: 10c0/7f7a42ff39613009f531ecb95e4b821588a79cb1f33e942048efdbce866aa73a72c393c472eb99cce3de7dcebf2c0fc88bf10c8c8dde6b444b001b3ce00e39a0
   languageName: node
   linkType: hard
 
@@ -28919,17 +28912,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-server-dom-webpack@npm:18.3.0-canary-a870b2d54-20240314":
-  version: 18.3.0-canary-a870b2d54-20240314
-  resolution: "react-server-dom-webpack@npm:18.3.0-canary-a870b2d54-20240314"
+"react-server-dom-webpack@npm:18.3.0-next-fecc288b7-20221025":
+  version: 18.3.0-next-fecc288b7-20221025
+  resolution: "react-server-dom-webpack@npm:18.3.0-next-fecc288b7-20221025"
   dependencies:
-    acorn-loose: "npm:^8.3.0"
+    acorn: "npm:^6.2.1"
+    loose-envify: "npm:^1.1.0"
     neo-async: "npm:^2.6.1"
   peerDependencies:
-    react: 18.3.0-canary-a870b2d54-20240314
-    react-dom: 18.3.0-canary-a870b2d54-20240314
+    react: 18.3.0-next-fecc288b7-20221025
+    react-dom: 18.3.0-next-fecc288b7-20221025
     webpack: ^5.59.0
-  checksum: 10c0/9040df3d8549898dbf4afd7bc86a01948e47b6eda998bda0e663a69fefa6922fa5977aaec0d0795938aac62c97d1da9307636051d0d12ec429c3c416cad23ffb
+  checksum: 10c0/2bc8eb0f27c8f241e8c3666c3f4782a59c8889c6b1a1005746f1de520ef77f69024aede0e579716e8e26167f51de41af841481aca0d6e357666e1d10bd3ca59d
   languageName: node
   linkType: hard
 
@@ -28959,10 +28953,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:18.3.0-canary-a870b2d54-20240314":
-  version: 18.3.0-canary-a870b2d54-20240314
-  resolution: "react@npm:18.3.0-canary-a870b2d54-20240314"
-  checksum: 10c0/f89b119c6fefc0956c815ad99e39ba83bc44485c4187143003a01906ef1d750a02f0018210eb192d1d0bdcd28a280139bf399bc59c972fc9e8f9938ee8c63387
+"react@npm:18.3.0-next-fecc288b7-20221025":
+  version: 18.3.0-next-fecc288b7-20221025
+  resolution: "react@npm:18.3.0-next-fecc288b7-20221025"
+  dependencies:
+    loose-envify: "npm:^1.1.0"
+  checksum: 10c0/fe9fdbb64d95d4da4c0ea98061e2413d5d427d616851105bad158fdcd5e694b75eb1a2d9609a8b8dc77a8d813c0ec4a261d488cf4929f43d372b41296f4177e5
   languageName: node
   linkType: hard
 
@@ -30152,10 +30148,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:0.24.0-canary-a870b2d54-20240314":
-  version: 0.24.0-canary-a870b2d54-20240314
-  resolution: "scheduler@npm:0.24.0-canary-a870b2d54-20240314"
-  checksum: 10c0/ac70f95c1d0cbf6de8bf0d1b2f1c8bb063d0ea0ce9410de720b9eeb17d85dc18bc9bc3c2ab89332cb0d7e746b68f7599ccc4915bcf3ea3a4541797bb1f2ec587
+"scheduler@npm:0.24.0-next-fecc288b7-20221025":
+  version: 0.24.0-next-fecc288b7-20221025
+  resolution: "scheduler@npm:0.24.0-next-fecc288b7-20221025"
+  dependencies:
+    loose-envify: "npm:^1.1.0"
+  checksum: 10c0/de25d91e743e5246af255723e2c3c723b4c500d6248db490c020889a109dc30f77196eec2c12a4f6836a3ce12325819182ecde619bc7e18a8f7382dbac83b767
   languageName: node
   linkType: hard
 
