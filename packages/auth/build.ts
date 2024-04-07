@@ -6,7 +6,7 @@ import { build, defaultBuildOptions } from '@redwoodjs/framework-tools'
 await build({
   buildOptions: {
     ...defaultBuildOptions,
-    tsconfig: 'tsconfig.build.json',
+    tsconfig: 'tsconfig.build-esm.json',
     format: 'esm',
     outdir: 'dist/esm',
     packages: 'external',
