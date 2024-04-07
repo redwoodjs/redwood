@@ -1017,6 +1017,8 @@ export const {
   WeekField,
 } = InputComponents
 
+export * from 'react-hook-form'
+
 export {
   Form,
   ServerErrorsContext,
@@ -1032,5 +1034,3 @@ export {
 }
 
 export type { ServerError, RWGqlError, ServerParseError } from './FormError'
-
-export * from 'react-hook-form'
