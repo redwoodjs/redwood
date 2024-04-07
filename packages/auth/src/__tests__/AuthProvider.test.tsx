@@ -32,8 +32,8 @@ globalThis.Headers = HeadersPolyfill
 globalThis.Request = RequestPolyfill
 globalThis.Response = ResponsePolyfill
 
-import type { CustomTestAuthClient } from './fixtures/customTestAuth'
-import { createCustomTestAuth } from './fixtures/customTestAuth'
+import type { CustomTestAuthClient } from './fixtures/customTestAuth.js'
+import { createCustomTestAuth } from './fixtures/customTestAuth.js'
 
 configure({
   asyncUtilTimeout: 5_000,

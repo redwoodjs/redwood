@@ -1,8 +1,8 @@
-import type { CurrentUser } from './AuthContext'
-import { createAuthContext } from './AuthContext'
-import type { AuthImplementation } from './AuthImplementation'
-import { createAuthProvider } from './AuthProvider/AuthProvider'
-import { createUseAuth } from './useAuth'
+import type { CurrentUser } from './AuthContext.js'
+import { createAuthContext } from './AuthContext.js'
+import type { AuthImplementation } from './AuthImplementation.js'
+import { createAuthProvider } from './AuthProvider/AuthProvider.js'
+import { createUseAuth } from './useAuth.js'
 
 export function createAuthentication<
   TUser,

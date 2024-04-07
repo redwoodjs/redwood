@@ -2,7 +2,7 @@ import React from 'react'
 
 // Exporting everything here, but exports further down in this file will
 // override exports with the same name
-export * from '@redwoodjs/auth/dist/index'
+export * from '@redwoodjs/auth'
 
 import { mockedUserMeta } from './mockRequests'
 

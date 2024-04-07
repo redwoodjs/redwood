@@ -1,21 +1,21 @@
 import type { ReactNode } from 'react'
 import React, { useEffect, useState } from 'react'
 
-import type { AuthContextInterface, CurrentUser } from '../AuthContext'
-import type { AuthImplementation } from '../AuthImplementation'
+import type { AuthContextInterface, CurrentUser } from '../AuthContext.js'
+import type { AuthImplementation } from '../AuthImplementation.js'
 
-import type { AuthProviderState } from './AuthProviderState'
-import { defaultAuthProviderState } from './AuthProviderState'
-import { useCurrentUser } from './useCurrentUser'
-import { useForgotPassword } from './useForgotPassword'
-import { useHasRole } from './useHasRole'
-import { useLogIn } from './useLogIn'
-import { useLogOut } from './useLogOut'
-import { useReauthenticate } from './useReauthenticate'
-import { useResetPassword } from './useResetPassword'
-import { useSignUp } from './useSignUp'
-import { useToken } from './useToken'
-import { useValidateResetToken } from './useValidateResetToken'
+import type { AuthProviderState } from './AuthProviderState.js'
+import { defaultAuthProviderState } from './AuthProviderState.js'
+import { useCurrentUser } from './useCurrentUser.js'
+import { useForgotPassword } from './useForgotPassword.js'
+import { useHasRole } from './useHasRole.js'
+import { useLogIn } from './useLogIn.js'
+import { useLogOut } from './useLogOut.js'
+import { useReauthenticate } from './useReauthenticate.js'
+import { useResetPassword } from './useResetPassword.js'
+import { useSignUp } from './useSignUp.js'
+import { useToken } from './useToken.js'
+import { useValidateResetToken } from './useValidateResetToken.js'
 
 export interface AuthProviderProps {
   skipFetchCurrentUser?: boolean
@@ -35,7 +35,7 @@ export function createAuthProvider<
   TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
-  TClient
+  TClient,
 >(
   AuthContext: React.Context<
     | AuthContextInterface<
@@ -72,9 +72,9 @@ export function createAuthProvider<
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null
+      currentUser: CurrentUser | null,
     ) => (rolesToCheck: string | string[]) => boolean
-  }
+  },
 ) {
   const AuthProvider = ({
     children,
@@ -101,7 +101,7 @@ export function createAuthProvider<
       authImplementation,
       setAuthProviderState,
       getCurrentUser,
-      skipFetchCurrentUser
+      skipFetchCurrentUser,
     )
 
     const hasRole = customProviderHooks?.useHasRole
@@ -112,13 +112,13 @@ export function createAuthProvider<
       authImplementation,
       setAuthProviderState,
       getCurrentUser,
-      skipFetchCurrentUser
+      skipFetchCurrentUser,
     )
     const logIn = useLogIn(
       authImplementation,
       setAuthProviderState,
       getCurrentUser,
-      skipFetchCurrentUser
+      skipFetchCurrentUser,
     )
     const logOut = useLogOut(authImplementation, setAuthProviderState)
     const forgotPassword = useForgotPassword(authImplementation)
