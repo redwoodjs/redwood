@@ -33,22 +33,22 @@ import './typeOverride'
 import {
   FetchConfigProvider,
   useFetchConfig,
-} from '../components/FetchConfigProvider'
-import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
+} from '../components/FetchConfigProvider.js'
+import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider.js'
 
 import {
   fragmentRegistry,
   registerFragment,
   registerFragments,
-} from './fragmentRegistry'
-import { SSELink } from './sseLink'
-import { useCache } from './useCache'
+} from './fragmentRegistry.js'
+import { SSELink } from './sseLink.js'
+import { useCache } from './useCache.js'
 
 export type {
   CacheKey,
   FragmentIdentifier,
   RegisterFragmentResult,
-} from './fragmentRegistry'
+} from './fragmentRegistry.js'
 
 export { useCache }
 
