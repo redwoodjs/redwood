@@ -4,7 +4,7 @@ import { render, waitFor } from '@testing-library/react'
 import { HelmetProvider } from 'react-helmet-async'
 import { describe, beforeAll, it, expect, beforeEach, afterAll } from 'vitest'
 
-import { Metadata } from './Metadata'
+import { Metadata } from './Metadata.js'
 
 // DOCS: can return a structured object from the database and just give it to `og` and it works
 

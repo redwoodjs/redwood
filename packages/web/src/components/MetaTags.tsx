@@ -1,4 +1,4 @@
-import { Head } from '../index'
+import { Helmet as Head } from 'react-helmet-async'
 
 type RobotsParams =
   | 'noindex'
