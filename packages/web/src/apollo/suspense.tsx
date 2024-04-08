@@ -40,7 +40,7 @@ import {
   FetchConfigProvider,
   useFetchConfig,
 } from '../components/FetchConfigProvider'
-import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
+import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider.js'
 
 import type {
   RedwoodApolloLink,

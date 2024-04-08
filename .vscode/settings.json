@@ -32,6 +32,7 @@
     "memfs",
     "opentelemetry",
     "pino",
+    "Pistorius",
     "redwoodjs",
     "rsdw",
     "RWJS",
