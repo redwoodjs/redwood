@@ -226,7 +226,7 @@ async function main() {
 
   // If there's no branch, we're not in a pull request.
   if (!branch) {
-    core.setOutput('code', false)
+    core.setOutput('code', true)
     core.setOutput('rsc', false)
     core.setOutput('ssr', false)
     return
