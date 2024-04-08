@@ -6,8 +6,6 @@ import fs from 'node:fs'
 // @ts-expect-error types
 import core from '@actions/core'
 import { codeChanges } from './cases/code_changes.mjs'
-import { rscChanged } from './cases/rsc.mjs'
-import { ssrChanged } from './cases/ssr.mjs'
 
 const BASE_URL = 'https://api.github.com/repos/redwoodjs/redwood'
 
