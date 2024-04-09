@@ -1,6 +1,6 @@
 /* eslint-disable no-undef, camelcase */
 /// <reference types="cypress" />
-import path from 'path'
+// import path from 'path'
 
 import 'cypress-wait-until'
 
@@ -17,10 +17,10 @@ import {
   // test_auth_cell_failure,
 } from '../01-tutorial/sharedTests'
 
-import Step0_1_RedwoodToml from './codemods/Step0_1_RedwoodToml'
-import Step0_2_GraphQL from './codemods/Step0_2_GraphQL'
-import Step1_1_Routes from './codemods/Step1_1_Routes'
-import Step9_3_DisableAuth from './codemods/Step9_3_DisableAuth'
+// import Step0_1_RedwoodToml from './codemods/Step0_1_RedwoodToml'
+// import Step0_2_GraphQL from './codemods/Step0_2_GraphQL'
+// import Step1_1_Routes from './codemods/Step1_1_Routes'
+// import Step9_3_DisableAuth from './codemods/Step9_3_DisableAuth'
 
 const BASE_DIR = Cypress.env('RW_PATH')
 
@@ -32,7 +32,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       `cd ${BASE_DIR}; git add . && git commit -a --message=01-tutorial`,
       {
         failOnNonZeroExit: true,
-      }
+      },
     )
   })
   it('0. Starting Development', () => {

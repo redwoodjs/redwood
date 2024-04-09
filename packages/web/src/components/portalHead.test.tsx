@@ -3,8 +3,8 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import { vi, describe, it, expect } from 'vitest'
 
-import PortalHead from './PortalHead'
-import * as ServerInject from './ServerInject'
+import PortalHead from './PortalHead.js'
+import * as ServerInject from './ServerInject.js'
 
 const serverInsertionHookSpy = vi
   .spyOn(ServerInject, 'useServerInsertedHTML')
