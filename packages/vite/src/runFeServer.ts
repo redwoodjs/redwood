@@ -98,14 +98,14 @@ export async function runFeServer() {
 
   const handleWithMiddleware = (route?: RWRouteManifestItem) => {
     return createServerAdapter(async (req: Request) => {
-      if (!middlewareRouter) {
-        return new Response('No middleware found', { status: 404 })
-      }
-
       const middleware = middlewareRouter.find(
         req.method as HTTPMethod,
         req.url,
       )?.handler as Middleware | undefined
+
+      if (!middleware) {
+        return new Response('No middleware found', { status: 404 })
+      }
 
       const [mwRes] = await invoke(req, middleware, route ? { route } : {})
 
