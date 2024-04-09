@@ -10,6 +10,7 @@ import { PageLoadingContextProvider } from './PageLoadingContext'
 import { ParamsProvider } from './params'
 import { Redirect } from './redirect'
 import { Route } from './Route'
+import type { RouteProps } from './Route'
 import { isValidRoute } from './route-validators'
 import type { RouterContextProviderProps } from './router-context'
 import { RouterContextProvider } from './router-context'
@@ -274,4 +275,5 @@ export {
   namedRoutes as routes,
   isValidRoute as isRoute,
   PageType,
+  RouteProps,
 }
