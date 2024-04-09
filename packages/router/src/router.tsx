@@ -5,6 +5,7 @@ import { ActiveRouteLoader } from './active-route-loader'
 import { AuthenticatedRoute } from './AuthenticatedRoute'
 import { LocationProvider, useLocation } from './location'
 import { normalizePage } from './page'
+import type { PageType } from './page'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { ParamsProvider } from './params'
 import { Redirect } from './redirect'
@@ -267,4 +268,10 @@ const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
   }, routeLoaderElement)
 })
 
-export { Router, Route, namedRoutes as routes, isValidRoute as isRoute }
+export {
+  Router,
+  Route,
+  namedRoutes as routes,
+  isValidRoute as isRoute,
+  PageType,
+}
