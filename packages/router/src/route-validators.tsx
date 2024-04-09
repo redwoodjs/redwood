@@ -7,7 +7,7 @@ import type {
   RedirectRouteProps,
   RouteProps,
 } from './Route'
-import { Route } from './router'
+import { Route } from './Route'
 
 const isNodeTypeRoute = (
   node: ReactNode,
