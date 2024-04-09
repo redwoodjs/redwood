@@ -2,18 +2,11 @@
 import type { NormalizedCacheObject } from '@apollo/client'
 import type { HelmetServerState } from 'react-helmet-async'
 
-import type { TagDescriptor } from '@redwoodjs/web'
-
 declare global {
   var __REDWOOD__PRERENDERING: boolean
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
   var __REDWOOD__APP_TITLE: string
   var __REDWOOD__APOLLO_STATE: NormalizedCacheObject
-
-  var __REDWOOD__ASSET_MAP: {
-    css?: string[]
-    meta?: TagDescriptor[]
-  }
 
   // Provided by Vite.config, or Webpack in the user's project
   var RWJS_ENV: {

@@ -64,9 +64,9 @@ describe('createMiddlewareRouter', () => {
     expect(result.prettyPrint()).toMatchInlineSnapshot(`
       "└── (empty root node)
           ├── /
-          │   ├── bazinga (GET)
-          │   └── kittens (GET)
-          └── * (GET)
+          │   ├── bazinga (GET, POST)
+          │   └── kittens (GET, POST)
+          └── * (GET, POST)
       "
     `)
     expect(distRegisterMwMock).toHaveBeenCalled()
@@ -85,9 +85,9 @@ describe('createMiddlewareRouter', () => {
     expect(result.prettyPrint()).toMatchInlineSnapshot(`
       "└── (empty root node)
           ├── /
-          │   ├── bazinga (GET)
-          │   └── kittens (GET)
-          └── * (GET)
+          │   ├── bazinga (GET, POST)
+          │   └── kittens (GET, POST)
+          └── * (GET, POST)
       "
     `)
     expect(distRegisterMwMock).toHaveBeenCalled()

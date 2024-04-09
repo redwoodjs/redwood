@@ -7,7 +7,7 @@ import type { AuthContextInterface } from '@redwoodjs/auth'
 
 globalThis.RWJS_API_GRAPHQL_URL = 'https://api.example.com/graphql'
 
-import { FetchConfigProvider, useFetchConfig } from './FetchConfigProvider'
+import { FetchConfigProvider, useFetchConfig } from './FetchConfigProvider.js'
 
 const FetchConfigToString: React.FunctionComponent = () => {
   const c = useFetchConfig()

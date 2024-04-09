@@ -88,8 +88,8 @@ export const addMiddlewareHandlers = (mwRegList: MiddlewareReg = []) => {
     const chainedMw = chain(mwList)
 
     // @NOTE: as any, because we don't actually use the fmw router to invoke the mw
-    // we use it just for matching. FMW doesn't seem to have a way of customising the handler signature
-    mwRouter.on('GET', pattern, chainedMw as any)
+    // we use it just for matching. FMW doesn't seem to have a way of customizing the handler type
+    mwRouter.on(['GET', 'POST'], pattern, chainedMw as any)
   }
 
   return mwRouter

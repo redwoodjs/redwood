@@ -75,15 +75,14 @@ async function createServer() {
     return createServerAdapter(async (req: Request) => {
       // Recreate middleware router on each request in dev
       const middlewareRouter = await createMiddlewareRouter(vite)
-
-      if (!middlewareRouter) {
-        return new Response('No middleware found', { status: 404 })
-      }
-
       const middleware = middlewareRouter.find(
         req.method as HTTPMethod,
         req.url,
       )?.handler as Middleware | undefined
+
+      if (!middleware) {
+        return new Response('No middleware found', { status: 404 })
+      }
 
       const [mwRes] = await invoke(req, middleware, route ? { route } : {})
 

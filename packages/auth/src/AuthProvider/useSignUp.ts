@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 
-import type { AuthImplementation } from '../AuthImplementation'
+import type { AuthImplementation } from '../AuthImplementation.js'
 
-import type { AuthProviderState } from './AuthProviderState'
-import type { useCurrentUser } from './useCurrentUser'
-import { useReauthenticate } from './useReauthenticate'
+import type { AuthProviderState } from './AuthProviderState.js'
+import type { useCurrentUser } from './useCurrentUser.js'
+import { useReauthenticate } from './useReauthenticate.js'
 
 export const useSignUp = <
   TUser,
