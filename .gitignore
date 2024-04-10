@@ -22,6 +22,7 @@ blog-test-project/*
 *.code-workspace
 .nova
 packages/**/redwoodjs-*.tgz
+packages/**/storybook-*.tgz
 packages/create-redwood-app/create-redwood-app.tgz
 
 # For esbuild.
