@@ -39,6 +39,16 @@ This updates your `redwood.toml` file, setting `apiUrl = "/api"`:
 
 Follow the steps in the [Prisma and Database](./introduction#3-prisma-and-database) section above. _(Skip this step if your project does not require a database.)_
 
+:::info
+
+If you're using Vercel Postgres, you may want to limit certain Prisma operations when you deploy. For example, if you're on the Hobby plan, there are some storage and write limits that you can mitigate by turning the Prisma and data migration steps off during deploy and only enabling them on a case-by-case basis when needed:
+
+```
+yarn rw deploy vercel --prisma=false --data-migrate=false
+```
+
+:::
+
 ### Vercel Initial Setup and Configuration
 Either [login](https://vercel.com/login) to your Vercel account and select "Import Project" or use the Vercel [quick start](https://vercel.com/#get-started).
 

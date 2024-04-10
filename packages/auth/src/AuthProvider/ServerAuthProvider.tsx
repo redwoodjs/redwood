@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import React from 'react'
 
-import type { AuthProviderState } from './AuthProviderState'
-import { defaultAuthProviderState } from './AuthProviderState'
+import type { AuthProviderState } from './AuthProviderState.js'
+import { defaultAuthProviderState } from './AuthProviderState.js'
 
 export type ServerAuthState = AuthProviderState<never> & {
   cookieHeader?: string

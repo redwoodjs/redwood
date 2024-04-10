@@ -1,21 +1,39 @@
-require('whatwg-fetch')
-
 import React, { useEffect, useState } from 'react'
 
 import {
+  act,
   render,
+  renderHook,
   screen,
   fireEvent,
   waitFor,
   configure,
 } from '@testing-library/react'
-import { renderHook, act } from '@testing-library/react'
-import '@testing-library/jest-dom/jest-globals'
 import { graphql } from 'msw'
 import { setupServer } from 'msw/node'
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  test,
+  vi,
+} from 'vitest'
+import {
+  fetch as fetchPolyfill,
+  Headers as HeadersPolyfill,
+  Request as RequestPolyfill,
+  Response as ResponsePolyfill,
+} from 'whatwg-fetch'
 
-import type { CustomTestAuthClient } from './fixtures/customTestAuth'
-import { createCustomTestAuth } from './fixtures/customTestAuth'
+globalThis.fetch = fetchPolyfill
+globalThis.Headers = HeadersPolyfill
+globalThis.Request = RequestPolyfill
+globalThis.Response = ResponsePolyfill
+
+import type { CustomTestAuthClient } from './fixtures/customTestAuth.js'
+import { createCustomTestAuth } from './fixtures/customTestAuth.js'
 
 configure({
   asyncUtilTimeout: 5_000,
@@ -61,7 +79,7 @@ const customTestAuth: CustomTestAuthClient = {
   signup: () => {},
   logout: () => {},
   getToken: () => 'hunter2',
-  getUserMetadata: jest.fn(() => null),
+  getUserMetadata: vi.fn(() => null),
   forgotPassword: () => {},
   resetPassword: () => true,
   validateResetToken: () => ({}),
@@ -82,7 +100,7 @@ beforeEach(() => {
     name: 'Peter Pistorius',
     email: 'nospam@example.net',
   }
-  customTestAuth.getUserMetadata = jest.fn(() => null)
+  customTestAuth.getUserMetadata = vi.fn(() => null)
 })
 
 describe('Custom auth provider', () => {
@@ -176,7 +194,7 @@ describe('Custom auth provider', () => {
     expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
 
     // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
+    mockAuthClient.getUserMetadata = vi.fn(() => {
       return {
         sub: 'abcdefg|123456',
         username: 'peterp',
@@ -204,40 +222,9 @@ describe('Custom auth provider', () => {
     await waitFor(() => screen.getByText('Log In'))
   })
 
-  test('Fetching the current user can be skipped', async () => {
-    const mockAuthClient = customTestAuth
-
-    render(
-      <AuthProvider skipFetchCurrentUser>
-        <AuthConsumer />
-      </AuthProvider>,
-    )
-
-    // We're booting up!
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
-
-    // The user is not authenticated
-    await waitFor(() => screen.getByText('Log In'))
-    expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
-
-    // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
-      return {
-        sub: 'abcdefg|123456',
-        username: 'peterp',
-      }
-    })
-    fireEvent.click(screen.getByText('Log In'))
-
-    // Check that you're logged in!
-    await waitFor(() => screen.getByText('Log Out'))
-    expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
-    expect(screen.getByText(/no current user data/)).toBeInTheDocument()
-
-    // Log out
-    fireEvent.click(screen.getByText('Log Out'))
-    await waitFor(() => screen.getByText('Log In'))
-  })
+  /// @MARK: Technically a breaking change.
+  // skipFetchCurrentUser used to be used for nHost only
+  // and isn't something we need to support anymore
 
   /**
    * This is especially helpful if you want to update the currentUser state.
@@ -256,7 +243,7 @@ describe('Custom auth provider', () => {
     expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
 
     // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
+    mockAuthClient.getUserMetadata = vi.fn(() => {
       return {
         sub: 'abcdefg|123456',
         username: 'peterp',
@@ -293,7 +280,7 @@ describe('Custom auth provider', () => {
     )
 
     const mockAuthClient = customTestAuth
-    mockAuthClient.getUserMetadata = jest.fn(() => {
+    mockAuthClient.getUserMetadata = vi.fn(() => {
       return {
         sub: 'abcdefg|123456',
         username: 'peterp',
@@ -342,7 +329,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
     // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
+    mockAuthClient.getUserMetadata = vi.fn(() => {
       return {
         sub: 'abcdefg|123456',
         username: 'peterp',
@@ -389,7 +376,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
     // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
+    mockAuthClient.getUserMetadata = vi.fn(() => {
       return {
         sub: 'abcdefg|123456',
         username: 'peterp',
@@ -436,7 +423,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
     // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
+    mockAuthClient.getUserMetadata = vi.fn(() => {
       return {
         sub: 'abcdefg|123456',
         username: 'peterp',
@@ -483,7 +470,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
     // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
+    mockAuthClient.getUserMetadata = vi.fn(() => {
       return {
         sub: 'abcdefg|123456',
         username: 'peterp',
@@ -529,7 +516,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
     // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
+    mockAuthClient.getUserMetadata = vi.fn(() => {
       return {
         sub: 'abcdefg|123456',
         username: 'peterp',
@@ -572,7 +559,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
     // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
+    mockAuthClient.getUserMetadata = vi.fn(() => {
       return {
         sub: 'abcdefg|123456',
         username: 'peterp',
@@ -619,7 +606,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
     // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
+    mockAuthClient.getUserMetadata = vi.fn(() => {
       return {
         sub: 'abcdefg|123456',
         username: 'peterp',
@@ -665,7 +652,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
     // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
+    mockAuthClient.getUserMetadata = vi.fn(() => {
       return {
         sub: 'abcdefg|123456',
         username: 'peterp',
@@ -686,7 +673,7 @@ describe('Custom auth provider', () => {
   })
 
   test('proxies forgotPassword() calls to client', async () => {
-    const mockedForgotPassword = jest.spyOn(customTestAuth, 'forgotPassword')
+    const mockedForgotPassword = vi.spyOn(customTestAuth, 'forgotPassword')
     mockedForgotPassword.mockImplementation((username: string) => {
       expect(username).toEqual('username')
     })
@@ -749,7 +736,7 @@ describe('Custom auth provider', () => {
   })
 
   test("getToken doesn't fail if client throws an error", async () => {
-    customTestAuth.getToken = jest.fn(() => {
+    customTestAuth.getToken = vi.fn(() => {
       throw 'Login Required'
     })
 

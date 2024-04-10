@@ -46,7 +46,7 @@ export async function buildRouteManifest() {
             permanent: false,
           }
         : null,
-      renderMode: route.renderMode,
+      relativeFilePath: route.relativeFilePath,
     }
 
     return acc

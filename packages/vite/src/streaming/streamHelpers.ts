@@ -19,14 +19,15 @@ import {
 } from '@redwoodjs/web/dist/components/ServerInject'
 
 import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
+import type { ServerEntryType } from '../types.js'
 
 import { createBufferedTransformStream } from './transforms/bufferedTransform.js'
 import { createTimeoutTransform } from './transforms/cancelTimeoutTransform.js'
 import { createServerInjectionTransform } from './transforms/serverInjectionTransform.js'
 
 interface RenderToStreamArgs {
-  ServerEntry: any
-  FallbackDocument: any
+  ServerEntry: ServerEntryType
+  FallbackDocument: React.FunctionComponent
   currentPathName: string
   metaTags: TagDescriptor[]
   cssLinks: string[]
@@ -120,8 +121,7 @@ export async function reactRenderToStreamResponse(
           {
             value: injectToPage,
           },
-          ServerEntry({
-            url: path,
+          React.createElement(ServerEntry, {
             css: cssLinks,
             meta: metaTags,
           }),
