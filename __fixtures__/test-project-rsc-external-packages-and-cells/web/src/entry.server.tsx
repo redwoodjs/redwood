@@ -1,9 +1,11 @@
+import type { TagDescriptor } from '@redwoodjs/web'
+
 import App from './App'
 import { Document } from './Document'
 
 interface Props {
   css: string[]
-  meta?: any[]
+  meta?: TagDescriptor[]
 }
 
 export const ServerEntry: React.FC<Props> = ({ css, meta }) => {

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import type { AuthImplementation } from '../AuthImplementation'
+import type { AuthImplementation } from '../AuthImplementation.js'
 
 export const useValidateResetToken = <
   TUser,

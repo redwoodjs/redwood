@@ -1,5 +1,6 @@
 import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
+import type { HTTPMethod } from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 import { createServer as createViteServer } from 'vite'
 import { cjsInterop } from 'vite-plugin-cjs-interop'
@@ -11,6 +12,8 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
+import { createMiddlewareRouter } from './middleware/register.js'
+import type { Middleware } from './middleware/types.js'
 import { rscRoutesAutoLoader } from './plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
@@ -66,6 +69,27 @@ async function createServer() {
     appType: 'custom',
   })
 
+  // create a handler that will invoke middleware with or without a route
+  // The DEV one will create a new middleware router on each request
+  const handleWithMiddleware = (route?: RouteSpec) => {
+    return createServerAdapter(async (req: Request) => {
+      // Recreate middleware router on each request in dev
+      const middlewareRouter = await createMiddlewareRouter(vite)
+      const middleware = middlewareRouter.find(
+        req.method as HTTPMethod,
+        req.url,
+      )?.handler as Middleware | undefined
+
+      if (!middleware) {
+        return new Response('No middleware found', { status: 404 })
+      }
+
+      const [mwRes] = await invoke(req, middleware, route ? { route } : {})
+
+      return mwRes.toResponse()
+    })
+  }
+
   // use vite's connect instance as middleware
   app.use(vite.middlewares)
 
@@ -74,43 +98,27 @@ async function createServer() {
 
   const routes = getProjectRoutes()
 
-  for (const route of routes) {
-    const routeHandler = await createReactStreamingHandler(
-      {
-        route,
-        clientEntryPath: rwPaths.web.entryClient as string,
-        getStylesheetLinks: () => getCssLinks(rwPaths, route, vite),
+  const routeHandler = await createReactStreamingHandler(
+    {
+      routes,
+      clientEntryPath: rwPaths.web.entryClient as string,
+      getStylesheetLinks: (route) => {
+        if (!route) {
+          return []
+        }
+        // In dev route is a RouteSpec, with additional properties
+        return getCssLinks(rwPaths, route as RouteSpec, vite)
       },
-      vite,
-    )
+      // Recreate middleware router on each request in dev
+      getMiddlewareRouter: async () => createMiddlewareRouter(vite),
+    },
+    vite,
+  )
 
-    // @TODO if it is a 404, hand over to 404 handler
-    if (!route.matchRegexString) {
-      continue
-    }
+  app.get('*', createServerAdapter(routeHandler))
 
-    // @TODO we no longer need to use the regex
-    const expressPathDef = route.hasParams
-      ? route.matchRegexString
-      : route.pathDefinition
-
-    app.get(expressPathDef, createServerAdapter(routeHandler))
-
-    app.post(
-      '*',
-      createServerAdapter(async (req: Request) => {
-        const entryServerImport = await vite.ssrLoadModule(
-          rwPaths.web.entryServer as string, // already validated in dev server
-        )
-
-        const middleware = entryServerImport.middleware
-
-        const [mwRes] = await invoke(req, middleware)
-
-        return mwRes.toResponse()
-      }),
-    )
-  }
+  // invokes middleware for any POST request for auth
+  app.post('*', handleWithMiddleware())
 
   const port = getConfig().web.port
   console.log(`Started server on http://localhost:${port}`)
