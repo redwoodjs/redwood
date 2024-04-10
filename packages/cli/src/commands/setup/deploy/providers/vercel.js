@@ -54,7 +54,7 @@ function writeVercelConfigTask({ overwriteExisting = false } = {}) {
 const vercelConfig = {
   build: {
     env: {
-      ENABLE_EXPERIMENTAL_COREPACK: 1,
+      ENABLE_EXPERIMENTAL_COREPACK: '1',
     },
   },
 }
