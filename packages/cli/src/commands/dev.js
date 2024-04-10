@@ -8,6 +8,12 @@ export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'
 
 export const builder = (yargs) => {
+  // We hide some options based on the bundler being used.
+  // Note that `watchNodeModules` is webpack specific, but `forward` isn't.
+  // The reason it's also hidden is that it's been broken with Vite
+  // and it's not clear how to fix it.
+  const isUsingWebpack = getConfig().web.bundler === 'webpack'
+
   yargs
     .positional('side', {
       choices: ['api', 'web'],
@@ -15,10 +21,22 @@ export const builder = (yargs) => {
       description: 'Which dev server(s) to start',
       type: 'array',
     })
+    .option('forward', {
+      alias: 'fwd',
+      description:
+        'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --no-open"`',
+      type: 'string',
+      hidden: !isUsingWebpack,
+    })
     .option('generate', {
       type: 'boolean',
       default: true,
       description: 'Generate artifacts',
+    })
+    .option('watchNodeModules', {
+      type: 'boolean',
+      description: 'Reload on changes to node_modules',
+      hidden: !isUsingWebpack,
     })
     .option('apiDebugPort', {
       type: 'number',
@@ -40,22 +58,6 @@ export const builder = (yargs) => {
         'https://redwoodjs.com/docs/cli-commands#dev',
       )}`,
     )
-
-  // Note that `watchNodeModules` is webpack specific, but `forward` isn't.
-  // The reason it's here is that it's been broken with Vite and it's not clear how to fix it.
-  if (getConfig().web.bundler === 'webpack') {
-    yargs
-      .option('forward', {
-        alias: 'fwd',
-        description:
-          'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --no-open"`',
-        type: 'string',
-      })
-      .option('watchNodeModules', {
-        type: 'boolean',
-        description: 'Reload on changes to node_modules',
-      })
-  }
 }
 
 export const handler = async (options) => {
