@@ -12,7 +12,7 @@ export function mockAuth(): PluginOption {
          */
         code = code.replace(
           /(import\s*{\s*[^}]*)(\bcreateAuth\b)([^}]*})/,
-          '$1$3'
+          '$1$3',
         )
         // Add import to mocked `createAuth` at the top of the file.
         code =

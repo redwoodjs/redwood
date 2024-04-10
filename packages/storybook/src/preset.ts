@@ -21,9 +21,12 @@ export const core: PresetProperty<'core'> = {
 
 export const previewAnnotations: StorybookConfig['previewAnnotations'] = (
   entry,
-  _options
+  _options,
 ) => {
-  return [...entry, require.resolve('./preview.js')]
+  console.log('In preview annotations, entry: ', entry)
+  const newEntry = [...entry, require.resolve('./preview.js')]
+  console.log('New entry: ', newEntry)
+  return entry
 }
 
 const redwoodProjectPaths = getPaths()
@@ -35,7 +38,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config) => {
   plugins.unshift(
     reactDocgen({
       include: /\.(mjs|tsx?|jsx?)$/,
-    })
+    }),
   )
 
   return mergeConfig(config, {

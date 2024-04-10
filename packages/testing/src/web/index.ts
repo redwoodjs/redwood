@@ -9,6 +9,8 @@ export {
 
 export { MockProviders } from './MockProviders'
 
+export { useAuth } from './mockAuth'
+
 export * from './mockRequests'
 
 // @NOTE Intentionally not exporting findCellMocks here

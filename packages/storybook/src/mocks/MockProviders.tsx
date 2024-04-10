@@ -4,9 +4,8 @@
  */
 import React from 'react'
 
-// @ts-expect-error - We inject useAuth when testing, so it will be available
-import { useAuth } from '@redwoodjs/auth'
 import { LocationProvider } from '@redwoodjs/router'
+import { useAuth } from '@redwoodjs/testing/web'
 import { RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -29,6 +28,7 @@ try {
 export const MockProviders: React.FunctionComponent<{
   children: React.ReactNode
 }> = ({ children }) => {
+  console.log('In MockProviders')
   return (
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <RedwoodApolloProvider useAuth={useAuth}>
