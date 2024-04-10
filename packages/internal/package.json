@@ -16,6 +16,10 @@
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./routes": "./dist/routes.js"
+  },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "build:clean-dist": "rimraf 'dist/**/*/__tests__' --glob",
