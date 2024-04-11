@@ -113,5 +113,8 @@
     "zx": "7.2.3"
   },
   "packageManager": "yarn@4.1.1",
-  "npmClient": "yarn"
+  "npmClient": "yarn",
+  "dependencies": {
+    "@redwoodjs/vite": "workspace:^"
+  }
 }

@@ -7679,7 +7679,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth-dbauth-api@workspace:packages/auth-providers/dbAuth/api":
+"@redwoodjs/auth-dbauth-api@workspace:*, @redwoodjs/auth-dbauth-api@workspace:packages/auth-providers/dbAuth/api":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-dbauth-api@workspace:packages/auth-providers/dbAuth/api"
   dependencies:
@@ -7696,6 +7696,22 @@ __metadata:
     md5: "npm:2.3.0"
     typescript: "npm:5.4.3"
     uuid: "npm:9.0.1"
+    vitest: "npm:1.4.0"
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/auth-dbauth-middleware@workspace:packages/auth-providers/dbAuth/middleware":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth-dbauth-middleware@workspace:packages/auth-providers/dbAuth/middleware"
+  dependencies:
+    "@babel/cli": "npm:7.24.1"
+    "@babel/core": "npm:^7.22.20"
+    "@babel/runtime-corejs3": "npm:7.24.1"
+    "@redwoodjs/api": "workspace:*"
+    "@redwoodjs/auth-dbauth-api": "workspace:*"
+    "@redwoodjs/project-config": "workspace:*"
+    "@redwoodjs/vite": "workspace:*"
+    typescript: "npm:5.4.3"
     vitest: "npm:1.4.0"
   languageName: unknown
   linkType: soft
@@ -8767,7 +8783,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/vite@workspace:packages/vite":
+"@redwoodjs/vite@workspace:*, @redwoodjs/vite@workspace:^, @redwoodjs/vite@workspace:packages/vite":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/vite@workspace:packages/vite"
   dependencies:
@@ -29953,6 +29969,7 @@ __metadata:
     "@faker-js/faker": "npm:8.4.1"
     "@npmcli/arborist": "npm:7.4.0"
     "@playwright/test": "npm:1.42.1"
+    "@redwoodjs/vite": "workspace:^"
     "@testing-library/jest-dom": "npm:6.4.2"
     "@testing-library/react": "npm:14.2.2"
     "@testing-library/user-event": "npm:14.5.2"
