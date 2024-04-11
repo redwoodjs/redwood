@@ -26,7 +26,7 @@ export const previewAnnotations: StorybookConfig['previewAnnotations'] = (
   console.log('In preview annotations, entry: ', entry)
   const newEntry = [...entry, require.resolve('./preview.js')]
   console.log('New entry: ', newEntry)
-  return entry
+  return newEntry
 }
 
 const redwoodProjectPaths = getPaths()
