@@ -19,7 +19,6 @@ import { useToken } from './useToken.js'
 import { useValidateResetToken } from './useValidateResetToken.js'
 
 export interface AuthProviderProps {
-  skipFetchCurrentUser?: boolean
   children: ReactNode
 }
 
@@ -77,10 +76,7 @@ export function createAuthProvider<
     ) => (rolesToCheck: string | string[]) => boolean
   },
 ) {
-  const AuthProvider = ({
-    children,
-    skipFetchCurrentUser,
-  }: AuthProviderProps) => {
+  const AuthProvider = ({ children }: AuthProviderProps) => {
     // const [hasRestoredState, setHasRestoredState] = useState(false)
 
     const serverAuthState = useContext(ServerAuthContext)
@@ -104,7 +100,6 @@ export function createAuthProvider<
       authImplementation,
       setAuthProviderState,
       getCurrentUser,
-      skipFetchCurrentUser,
     )
 
     const hasRole = customProviderHooks?.useHasRole
@@ -115,13 +110,11 @@ export function createAuthProvider<
       authImplementation,
       setAuthProviderState,
       getCurrentUser,
-      skipFetchCurrentUser,
     )
     const logIn = useLogIn(
       authImplementation,
       setAuthProviderState,
       getCurrentUser,
-      skipFetchCurrentUser,
     )
     const logOut = useLogOut(authImplementation, setAuthProviderState)
     const forgotPassword = useForgotPassword(authImplementation)
@@ -130,18 +123,22 @@ export function createAuthProvider<
     const type = authImplementation.type
     const client = authImplementation.client
 
-    // Whenever the authImplementation is ready to go, restore auth and
-    // reauthenticate
+    // Whenever the authImplementation is ready to go, restore auth and reauthenticate
     useEffect(() => {
       async function doRestoreState() {
+        // @MARK: this is where we fetch currentUser from graphql again
+        // because without SSR, initial state doesn't exist
+        // what we want to do here is to conditionally call reauthenticate
+        // so that the restoreAuthState comes from the injected state
+
         await authImplementation.restoreAuthState?.()
 
-        // @MARK(SSR-Auth): Conditionally call reauthenticate, because initial
-        // state should come from server (on SSR).
-        // If the initial state didn't come from the server - or was restored
-        // already - reauthenticate will make a call to receive the current
-        // user from the server
-        reauthenticate()
+        // If the inital state didn't come from the server (or was restored before)
+        // reauthenticate will make an API call to the middleware to receive the current user
+        // (instead of called the graphql endpoint with currentUser)
+        if (!serverAuthState) {
+          reauthenticate()
+        }
       }
 
       doRestoreState()
