@@ -24,8 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.1",
-    "@redwoodjs/auth-dbauth-api": "workspace:*",
-    "@redwoodjs/project-config": "workspace:*"
+    "@redwoodjs/auth-dbauth-api": "workspace:*"
   },
   "devDependencies": {
     "@babel/cli": "7.24.1",

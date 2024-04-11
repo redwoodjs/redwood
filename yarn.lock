@@ -7709,7 +7709,6 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.1"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/auth-dbauth-api": "workspace:*"
-    "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/vite": "workspace:*"
     typescript: "npm:5.4.3"
     vitest: "npm:1.4.0"
