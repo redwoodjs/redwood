@@ -29,7 +29,7 @@ export function createMiddlewareAuth(
 ) {
   return createAuthentication(dbAuthClient, {
     useCurrentUser: () =>
-      getCurrentUserFromMiddleware(dbAuthClient.getDbAuthUrl()),
+      getCurrentUserFromMiddleware(dbAuthClient.getAuthUrl()),
     ...customProviderHooks,
   })
 }
@@ -213,6 +213,10 @@ export function createDbAuthClient({
     forgotPassword,
     resetPassword,
     validateResetToken,
-    getDbAuthUrl,
+    // 👇 New methods for middleware auth
+    // so we can get the dbAuthUrl in getCurrentUserFromMiddleware
+    getAuthUrl: getDbAuthUrl,
+    // This is so that we can skip fetching getCurrentUser in reauthenticate
+    useMiddlewareAuth: middleware,
   }
 }
