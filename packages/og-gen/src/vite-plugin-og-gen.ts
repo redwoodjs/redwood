@@ -1,10 +1,11 @@
+import fs from 'fs'
 import path from 'node:path'
 
 import fg from 'fast-glob'
 import type { O } from 'ts-toolbelt'
 import type { Plugin as VitePlugin } from 'vite'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
 type ConfigPlugin = O.Required<VitePlugin, 'config'>
 
@@ -19,6 +20,8 @@ function vitePluginOgGen(): ConfigPlugin {
   const allOgComponents = fg.sync('pages/**/*.{png,jpg}.{jsx,tsx}', {
     cwd: rwPaths.web.src,
     absolute: true,
+    // @MARK This allows us to mock the fs module in tests
+    fs,
   })
 
   // Generates the rollup inputs for all OG components, in their subpaths
@@ -30,7 +33,9 @@ function vitePluginOgGen(): ConfigPlugin {
     const pathKey = path
       .relative(rwPaths.web.src, ogComponentPath)
       .replace(/\.[jt]sx?$/, '')
-    ogComponentInput[`ogGen/${pathKey}`] = ogComponentPath
+
+    // The rollup input takes '/' to create folders.
+    ogComponentInput[`ogGen/${ensurePosixPath(pathKey)}`] = ogComponentPath
   })
 
   return {
