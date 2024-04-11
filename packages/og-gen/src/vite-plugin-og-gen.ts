@@ -1,20 +1,22 @@
 import path from 'node:path'
 
 import fg from 'fast-glob'
+import type { O } from 'ts-toolbelt'
 import type { Plugin as VitePlugin } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
+
+type ConfigPlugin = O.Required<VitePlugin, 'config'>
 
 /**
  * This plugin updates the rollup inputs to include all OG components.
  *
  * Internally, Redwood's vite settings will merge this with the default vite config, and any user config
  */
-
-async function vitePluginOgGen(): Promise<VitePlugin> {
+function vitePluginOgGen(): ConfigPlugin {
   const rwPaths = getPaths()
 
-  const allOgComponents = await fg.glob('pages/**/*.{png,jpg}.{jsx,tsx}', {
+  const allOgComponents = fg.sync('pages/**/*.{png,jpg}.{jsx,tsx}', {
     cwd: rwPaths.web.src,
     absolute: true,
   })
