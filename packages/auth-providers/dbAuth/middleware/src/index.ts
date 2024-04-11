@@ -6,7 +6,7 @@ import {
 import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
 import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
 
-interface DbAuthMiddlewareOptions {
+export interface DbAuthMiddlewareOptions {
   cookieName: string
   dbAuthHandler: (req: MiddlewareRequest) => Promise<typeof MiddlewareResponse> // this isn't right
   getCurrentUser: any
