@@ -8552,6 +8552,7 @@ __metadata:
     fast-glob: "npm:3.3.2"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
     react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
+    ts-toolbelt: "npm:9.6.0"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.3"
     vite: "npm:5.2.8"
