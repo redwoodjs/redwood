@@ -1,14 +1,14 @@
-import { fragmentRegistry } from '../../apollo'
-import { getOperationName } from '../../graphql'
+import { fragmentRegistry } from '../../apollo/fragmentRegistry.js'
+import { getOperationName } from '../../graphql.js'
 /**
  * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
  */
-import { useQuery } from '../GraphQLHooksProvider'
+import { useQuery } from '../GraphQLHooksProvider.js'
 
-import { useCellCacheContext } from './CellCacheContext'
-import type { CreateCellProps } from './cellTypes'
-import { createSuspendingCell } from './createSuspendingCell'
-import { isDataEmpty } from './isCellEmpty'
+import { useCellCacheContext } from './CellCacheContext.js'
+import type { CreateCellProps } from './cellTypes.js'
+import { createSuspendingCell } from './createSuspendingCell.js'
+import { isDataEmpty } from './isCellEmpty.js'
 
 // 👇 Note how we switch which cell factory to use!
 export const createCell = RWJS_ENV.RWJS_EXP_STREAMING_SSR
