@@ -19,15 +19,16 @@ import {
 } from '@redwoodjs/web/dist/components/ServerInject'
 
 import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
+import type { ServerEntryType } from '../types.js'
 
 import { createBufferedTransformStream } from './transforms/bufferedTransform.js'
 import { createTimeoutTransform } from './transforms/cancelTimeoutTransform.js'
 import { createServerInjectionTransform } from './transforms/serverInjectionTransform.js'
 
 interface RenderToStreamArgs {
-  ServerEntry: any
-  FallbackDocument: any
-  currentUrl: URL
+  ServerEntry: ServerEntryType
+  FallbackDocument: React.FunctionComponent
+  currentPathName: string
   metaTags: TagDescriptor[]
   cssLinks: string[]
   isProd: boolean
@@ -63,7 +64,7 @@ export async function reactRenderToStreamResponse(
   const {
     ServerEntry,
     FallbackDocument,
-    currentUrl,
+    currentPathName,
     metaTags,
     cssLinks,
     isProd,
@@ -102,7 +103,7 @@ export async function reactRenderToStreamResponse(
 
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
-  const renderRoot = (url: URL) => {
+  const renderRoot = (path: string) => {
     return React.createElement(
       ServerAuthProvider,
       {
@@ -111,14 +112,16 @@ export async function reactRenderToStreamResponse(
       React.createElement(
         LocationProvider,
         {
-          location: url,
+          location: {
+            pathname: path,
+          },
         },
         React.createElement(
           ServerHtmlProvider,
           {
             value: injectToPage,
           },
-          ServerEntry({
+          React.createElement(ServerEntry, {
             css: cssLinks,
             meta: metaTags,
           }),
@@ -154,7 +157,7 @@ export async function reactRenderToStreamResponse(
       },
     }
 
-    const root = renderRoot(currentUrl)
+    const root = renderRoot(currentPathName)
 
     const reactStream: ReactDOMServerReadableStream =
       await renderToReadableStream(root, renderToStreamOptions)

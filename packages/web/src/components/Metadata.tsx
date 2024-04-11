@@ -4,7 +4,7 @@ import { Helmet as HelmetHead } from 'react-helmet-async'
 
 // Ideally we wouldn't include this for non experiment builds
 // But.... not worth the effort to remove it from bundle atm
-import PortalHead from './PortalHead'
+import PortalHead from './PortalHead.js'
 
 type ValueOrCollection<T> = T | ValueOrCollection<T>[] | Record<string, T>
 type ParentValue = ValueOrCollection<string>
