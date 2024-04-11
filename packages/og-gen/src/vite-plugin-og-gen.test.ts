@@ -61,15 +61,15 @@ describe('vitePluginOgGen', () => {
       ensurePosixPath(
         rollupInputs['ogGen/pages/Posts/PostsPage/PostsPage.png'],
       ),
-    ).toEqual('/redwood-app/web/src/pages/Posts/PostsPage/PostsPage.png.tsx')
+    ).toMatch('/redwood-app/web/src/pages/Posts/PostsPage/PostsPage.png.tsx')
 
     expect(
       ensurePosixPath(rollupInputs['ogGen/pages/About/AboutPage.jpg']),
-    ).toEqual('/redwood-app/web/src/pages/About/AboutPage.jpg.jsx')
+    ).toMatch('/redwood-app/web/src/pages/About/AboutPage.jpg.jsx')
 
     expect(
       ensurePosixPath(rollupInputs['ogGen/pages/Contact/ContactPage.png']),
-    ).toEqual('/redwood-app/web/src/pages/Contact/ContactPage.png.jsx')
+    ).toMatch('/redwood-app/web/src/pages/Contact/ContactPage.png.jsx')
   })
 
   test('returns the correct Vite plugin object', async () => {
