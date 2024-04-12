@@ -8540,9 +8540,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/og-gen@workspace:packages/og-gen":
+"@redwoodjs/ogimage-gen@workspace:packages/ogimage-gen":
   version: 0.0.0-use.local
-  resolution: "@redwoodjs/og-gen@workspace:packages/og-gen"
+  resolution: "@redwoodjs/ogimage-gen@workspace:packages/ogimage-gen"
   dependencies:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/internal": "workspace:*"

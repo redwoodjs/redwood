@@ -1,11 +1,11 @@
 {
-  "name": "@redwoodjs/og-gen",
+  "name": "@redwoodjs/ogimage-gen",
   "version": "7.0.0",
   "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/og-gen"
+    "directory": "packages/ogimage-gen"
   },
   "license": "MIT",
   "exports": {
