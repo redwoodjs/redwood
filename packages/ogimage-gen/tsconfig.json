@@ -3,8 +3,6 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-    "moduleResolution": "Node16", // uses the exports field in @redwoodjs/vite, @redwoodjs/internal
-    "module": "Node16"
   },
   "include": [
     "src"
