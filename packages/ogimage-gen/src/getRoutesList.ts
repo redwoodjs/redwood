@@ -7,7 +7,9 @@ export const getRoutesList = async () => {
   const rwPaths = getPaths()
 
   if (process.env.NODE_ENV === 'development') {
-    const { getProjectRoutes } = await import('@redwoodjs/internal/dist/routes')
+    const { getProjectRoutes } = await import(
+      '@redwoodjs/internal/dist/routes.js'
+    )
     return getProjectRoutes()
   } else {
     const routeManifestUrl = url.pathToFileURL(rwPaths.web.routeManifest).href

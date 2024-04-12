@@ -148,16 +148,9 @@ export default class OgImageMiddleware {
       },
     }
 
-    const { chromium } = await import('playwright')
-    const browser = await chromium.launch()
-    const page = await browser.newPage({ viewport: screenshotOptions.viewport })
-
-    // Bail if the relativeFilePath is unknown. Not sure how this could happen
-    // if (!currentRoute.relativeFilePath) {
-    //   console.error('og-middleware: No relativeFilePath found in route')
-    //   return mwResponse
-    // }
-
+    // @TODO
+    // I think it doesn't work with jsx paths in my project at the moment
+    // Try renaming AboutPage.png.jsx -> AboutPage.png.tsx
     const ogImgFilePath = path.join(
       getPaths().web.src,
       currentRoute.relativeFilePath.replace(/\.([jt]sx)/, `.${extension}.$1`),
@@ -166,6 +159,15 @@ export default class OgImageMiddleware {
     const { data, Component } = await this.importComponent(ogImgFilePath)
 
     const dataOut = await data(mergedParams)
+
+    // @TODO @TODO @TODO @TODO @TODO
+    // Should we add playwright as a dependency to ogimage-gen? Or should we make it a peer dependency?
+    // Trouble is, even when you have it as a dependency you need to run yarn playwright install
+    // before you can use it. So it's not really a "just works" thing.
+    // Does this mean when you deploy you need to add a post install script or something?
+    const { chromium } = await import('playwright')
+    const browser = await chromium.launch()
+    const page = await browser.newPage({ viewport: screenshotOptions.viewport })
 
     // If the user overrides the cssPaths, use them. Otherwise use the default css list
     // That gets passed from createReactStreamingHandler
