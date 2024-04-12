@@ -30,6 +30,7 @@
     "Flightcontrol",
     "graphiql",
     "memfs",
+    "OGIMAGE",
     "opentelemetry",
     "pino",
     "Pistorius",

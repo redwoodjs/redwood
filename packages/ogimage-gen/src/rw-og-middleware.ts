@@ -39,6 +39,13 @@ interface ScreenshotOptions {
   }
 }
 
+interface ComponentElementProps {
+  Component: React.FC<{ data: unknown }>
+  data: unknown
+  routeParams: Record<string, unknown>
+  debug: boolean
+}
+
 export default class OgImageMiddleware {
   options: MwOptions
   App: React.FC
@@ -97,14 +104,19 @@ export default class OgImageMiddleware {
     }
 
     // Combine search params and params from route pattern
+    // /user/{id:Int} => /user/1?background=red => { id: 1, background: 'red'}
     const mergedParams = {
       ...Object.fromEntries(url.searchParams.entries()),
       ...(parsedParams.params || {}),
     }
 
     this.imageProps = {
-      width: parseInt(mergedParams.width || OGIMAGE_DEFAULTS.width),
-      height: parseInt(mergedParams.height || OGIMAGE_DEFAULTS.height),
+      width: mergedParams.width
+        ? parseInt(mergedParams.width as string)
+        : OGIMAGE_DEFAULTS.width,
+      height: mergedParams.height
+        ? parseInt(mergedParams.height as string)
+        : OGIMAGE_DEFAULTS.height,
       quality: mergedParams.quality
         ? parseInt(mergedParams.quality as string)
         : OGIMAGE_DEFAULTS.quality,
@@ -130,9 +142,15 @@ export default class OgImageMiddleware {
     const browser = await chromium.launch()
     const page = await browser.newPage({ viewport: screenshotOptions.viewport })
 
+    // Bail if the relativeFilePath is unknown. Not sure how this could happen
+    // if (!currentRoute.relativeFilePath) {
+    //   console.error('og-middleware: No relativeFilePath found in route')
+    //   return mwResponse
+    // }
+
     const ogImgFilePath = path.join(
       getPaths().web.src,
-      currentRoute.relativeFilePath!.replace(/\.([jt]sx)/, `.${extension}.$1`),
+      currentRoute.relativeFilePath.replace(/\.([jt]sx)/, `.${extension}.$1`),
     )
 
     const { data, Component } = await this.importComponent(ogImgFilePath)
@@ -154,7 +172,12 @@ export default class OgImageMiddleware {
           createElement(
             this.App,
             {},
-            this.componentElements({ Component, data: dataOut }),
+            this.componentElements({
+              Component,
+              data: dataOut,
+              routeParams: mergedParams,
+              debug,
+            }),
           ),
         ),
       ),
@@ -182,17 +205,6 @@ export default class OgImageMiddleware {
 
     return mwResponse
   }
-
-  // @TODO implement this again
-  // get routeWithExtension() {
-  //   if (this.route.pathDefinition === '/') {
-  //     // Because /.{extension} not possible
-  //     return '/index.{extension}'
-  //   } else {
-  //     // /user/{id}.{extension}
-  //     return this.route.pathDefinition + '.{extension}'
-  //   }
-  // }
 
   get debugElement() {
     return createElement(
@@ -226,7 +238,12 @@ export default class OgImageMiddleware {
     )
   }
 
-  componentElements({ Component, data }) {
+  componentElements({
+    Component,
+    data,
+    routeParams,
+    debug,
+  }: ComponentElementProps) {
     const element = createElement(Component, {
       data,
       ...routeParams,
@@ -241,7 +258,7 @@ export default class OgImageMiddleware {
           },
           element,
         ),
-        debugElement,
+        this.debugElement,
       ]
     } else {
       return element
