@@ -6,11 +6,11 @@ import Routes from 'src/Routes'
 
 import './index.css'
 
-const App = () => (
+const App = ({ children }) => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <RedwoodApolloProvider>
-        <Routes />
+        {children ? children : <Routes />}
       </RedwoodApolloProvider>
     </RedwoodProvider>
   </FatalErrorBoundary>
