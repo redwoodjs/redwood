@@ -5,7 +5,7 @@
     "rootDir": "src",
     "outDir": "dist"
   },
-  "include": ["src/**/*", "./ambient.d.ts", "./modules.d.ts"],
+  "include": ["src/**/*", "./modules.d.ts"],
   "references": [
     { "path": "../../../auth" },
     { "path": "../../../vite" }

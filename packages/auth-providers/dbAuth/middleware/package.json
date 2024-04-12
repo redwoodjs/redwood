@@ -23,12 +23,9 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.1",
     "@redwoodjs/auth-dbauth-api": "workspace:*"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.1",
-    "@babel/core": "^7.22.20",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/vite": "workspace:*",
     "typescript": "5.4.3",
