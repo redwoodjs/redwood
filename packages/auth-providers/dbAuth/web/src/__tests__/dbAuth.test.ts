@@ -20,7 +20,7 @@ interface User {
 
 let loggedInUser: User | undefined
 
-const fetchMock = jest.fn()
+export const fetchMock = jest.fn()
 fetchMock.mockImplementation(async (url, options) => {
   const body = options?.body ? JSON.parse(options.body) : {}
 
@@ -66,22 +66,22 @@ fetchMock.mockImplementation(async (url, options) => {
       json: () => ({
         data: {
           redwood: {
-            currentUser: {
-              username: 'user@middleware.auth',
-              id: 'middleware-user-1',
-            },
+            currentUser: loggedInUser,
           },
         },
       }),
     }
   }
 
-  if (url.includes('/middleware/dbauth/currentUser')) {
+  if (url.includes('middleware/dbauth/currentUser')) {
     return {
       ok: true,
       text: () => '',
       json: () => ({
-        currentUser: loggedInUser,
+        currentUser: {
+          id: 'middleware-user-555',
+          username: 'user@middleware.auth',
+        },
       }),
     }
   }
@@ -107,7 +107,7 @@ const defaultArgs: DbAuthClientArgs & {
   fetchConfig: { credentials: 'include' },
 }
 
-function getDbAuth(args = defaultArgs) {
+export function getDbAuth(args = defaultArgs) {
   const dbAuthClient = createDbAuthClient(args)
   const { useAuth, AuthProvider } = createAuth(dbAuthClient, {
     useHasRole: args.useHasRole,
@@ -171,7 +171,7 @@ describe('dbAuth web ~ token auth edition', () => {
   })
 
   it('passes through fetchOptions to login calls', async () => {
-    const auth = (await getDbAuth()).current
+    const auth = getDbAuth().current
 
     await act(
       async () =>
@@ -345,7 +345,7 @@ describe('dbAuth web ~ token auth edition', () => {
     expect(authRef.current.hasRole('user')).toBeFalsy()
 
     await act(async () => {
-      authRef.current.logIn({
+      await authRef.current.logIn({
         username: 'auth-test',
         password: 'ThereIsNoSpoon',
       })
@@ -425,129 +425,5 @@ describe('dbAuth web ~ token auth edition', () => {
       expect(authRef.current.hasRole('user')).toBeFalsy()
       expect(authRef.current.hasRole('custom-current-user')).toBeTruthy()
     })
-  })
-})
-
-describe('dbAuth web ~ cookie/middleware auth edition', () => {
-  beforeEach(() => {
-    fetchMock.mockClear()
-  })
-
-  it('will create a middleware version of the auth client', async () => {
-    const { current: dbAuthInstance } = getDbAuth({
-      middleware: true,
-    })
-
-    // Middleware auth clients should not return tokens
-    expect(await dbAuthInstance.getToken()).toBeNull()
-
-    let currentUser
-    await act(async () => {
-      currentUser = await dbAuthInstance.getCurrentUser()
-    })
-
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      // Doesn't speak to graphql!
-      '/middleware/dbauth/currentUser',
-      expect.objectContaining({
-        credentials: 'include',
-        method: 'GET', // in mw auth, we use GET for currentUser
-      }),
-    )
-
-    expect(currentUser).toEqual({
-      id: 'middleware-user-1',
-      username: 'user@middleware.auth',
-    })
-  })
-
-  it('allows you to override the middleware endpoint', async () => {
-    const auth = getDbAuth({
-      dbAuthUrl: '/hello/handsome',
-      middleware: true,
-    }).current
-
-    await act(async () => await auth.forgotPassword('username'))
-
-    expect(fetchMock).toHaveBeenCalledWith(
-      '/hello/handsome',
-      expect.any(Object),
-    )
-  })
-
-  it('calls login at the middleware endpoint', async () => {
-    const auth = (
-      await getDbAuth({
-        middleware: true,
-      })
-    ).current
-
-    await act(
-      async () =>
-        await auth.logIn({ username: 'username', password: 'password' }),
-    )
-
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      '/middleware/dbauth',
-      expect.any(Object),
-    )
-  })
-
-  it('calls middleware endpoint for logout', async () => {
-    const auth = getDbAuth({
-      middleware: true,
-    }).current
-    await act(async () => {
-      await auth.logOut()
-    })
-
-    expect(globalThis.fetch).toHaveBeenCalledWith('/middleware/dbauth', {
-      body: '{"method":"logout"}',
-      credentials: 'same-origin',
-      method: 'POST',
-    })
-  })
-
-  it('calls reset password at the correct endpoint', async () => {
-    const auth = getDbAuth({
-      middleware: true,
-    }).current
-
-    await act(
-      async () =>
-        await auth.resetPassword({
-          resetToken: 'reset-token',
-          password: 'password',
-        }),
-    )
-
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      '/middleware/dbauth',
-      expect.objectContaining({
-        body: '{"resetToken":"reset-token","password":"password","method":"resetPassword"}',
-      }),
-    )
-  })
-
-  it('passes through fetchOptions to signup calls', async () => {
-    const auth = getDbAuth({
-      middleware: true,
-    }).current
-
-    await act(
-      async () =>
-        await auth.signUp({
-          username: 'username',
-          password: 'password',
-        }),
-    )
-
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      '/middleware/dbauth',
-      expect.objectContaining({
-        method: 'POST',
-        body: '{"username":"username","password":"password","method":"signup"}',
-      }),
-    )
   })
 })

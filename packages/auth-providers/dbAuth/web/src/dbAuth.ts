@@ -28,9 +28,12 @@ export function createMiddlewareAuth(
   },
 ) {
   return createAuthentication(dbAuthClient, {
-    useCurrentUser: () =>
-      getCurrentUserFromMiddleware(dbAuthClient.getAuthUrl()),
+    // @MARK This is key! 👇
+    // Override the default getCurrentUser to fetch it from middleware instead
     ...customProviderHooks,
+    useCurrentUser: customProviderHooks?.useCurrentUser
+      ? customProviderHooks?.useCurrentUser
+      : () => getCurrentUserFromMiddleware(dbAuthClient.getAuthUrl()),
   })
 }
 
@@ -59,7 +62,7 @@ export function createDbAuthClient({
   webAuthn,
   dbAuthUrl,
   fetchConfig,
-  middleware,
+  middleware = false,
 }: DbAuthClientArgs = {}) {
   const credentials = fetchConfig?.credentials || 'same-origin'
   webAuthn?.setAuthApiUrl(dbAuthUrl)
