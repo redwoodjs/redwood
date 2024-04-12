@@ -58,8 +58,6 @@ export default class OgImageMiddleware {
   Document: React.FC<{ css: string[]; meta: string[] }>
 
   // Initialized in invoke() 👇
-  route?: RWRouteManifestItem
-  url?: URL
   imageProps?: {
     width: number
     height: number
@@ -67,9 +65,7 @@ export default class OgImageMiddleware {
   }
 
   constructor(options: MwOptions) {
-    // this.req = req
     this.options = options
-    // this.url = new URL(req.url)
 
     this.App = options.App
     this.Document = options.Document
@@ -81,6 +77,9 @@ export default class OgImageMiddleware {
     invokeOptions: MiddlewareInvokeOptions,
   ) {
     const url = new URL(req.url)
+    // @TODO notice here that favicon.ico comes through as a request
+    // is this something we need to fix in middleware routing or just handle in this middleware?
+    console.log(`👉 \n ~ OgImageMiddleware ~ url:`, url)
     const { pathname, origin } = url
     const routes = await getRoutesList()
 
@@ -151,14 +150,15 @@ export default class OgImageMiddleware {
     // @TODO
     // I think it doesn't work with jsx paths in my project at the moment
     // Try renaming AboutPage.png.jsx -> AboutPage.png.tsx
-    const ogImgFilePath = path.join(
-      getPaths().web.src,
-      currentRoute.relativeFilePath.replace(/\.([jt]sx)/, `.${extension}.$1`),
-    )
+    const ogImgFilePath = this.getOgComponentPath(currentRoute, extension)
+    console.log(`👉 \n ~ OgImageMiddleware ~ ogImgFilePath:`, ogImgFilePath)
 
     const { data, Component } = await this.importComponent(ogImgFilePath)
 
-    const dataOut = await data(mergedParams)
+    let dataOut
+    if (data && typeof data === 'function') {
+      dataOut = await data(mergedParams)
+    }
 
     // @TODO @TODO @TODO @TODO @TODO
     // Should we add playwright as a dependency to ogimage-gen? Or should we make it a peer dependency?
@@ -177,7 +177,7 @@ export default class OgImageMiddleware {
       createElement(
         LocationProvider,
         {
-          location: this.url,
+          location: url,
         },
         createElement(
           this.Document,
@@ -220,6 +220,24 @@ export default class OgImageMiddleware {
     }
 
     return mwResponse
+  }
+
+  private getOgComponentPath(
+    currentRoute: RWRouteManifestItem,
+    extension: SUPPORTED_EXT,
+  ) {
+    if (process.env.NODE_ENV === 'development') {
+      return path.join(
+        getPaths().web.src,
+        currentRoute.relativeFilePath.replace(/\.([jt]sx)/, `.${extension}.$1`),
+      )
+    } else {
+      return `${path.join(
+        getPaths().web.distServer,
+        'ogImage',
+        currentRoute.relativeFilePath.replace(/\.([jt]sx)/, ''),
+      )}.${extension}.mjs` // @MARK: Hardcoded mjs!
+    }
   }
 
   get debugElement() {
