@@ -18,22 +18,24 @@ export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
 const TOKEN_CACHE_TIME = 5000
 
+export type CustomProviderHooks = {
+  useCurrentUser?: () => Promise<CurrentUser>
+  useHasRole?: (
+    currentUser: CurrentUser | null,
+  ) => (rolesToCheck: string | string[]) => boolean
+}
+
 export function createMiddlewareAuth(
   dbAuthClient: ReturnType<typeof createDbAuthClient>,
-  customProviderHooks?: {
-    useCurrentUser: () => Promise<CurrentUser>
-    useHasRole?: (
-      currentUser: CurrentUser | null,
-    ) => (rolesToCheck: string | string[]) => boolean
-  },
+  customProviderHooks?: CustomProviderHooks,
 ) {
   return createAuthentication(dbAuthClient, {
     // @MARK This is key! 👇
     // Override the default getCurrentUser to fetch it from middleware instead
     ...customProviderHooks,
-    useCurrentUser: customProviderHooks?.useCurrentUser
-      ? customProviderHooks?.useCurrentUser
-      : () => getCurrentUserFromMiddleware(dbAuthClient.getAuthUrl()),
+    useCurrentUser:
+      customProviderHooks?.useCurrentUser ??
+      (() => getCurrentUserFromMiddleware(dbAuthClient.getAuthUrl())),
   })
 }
 

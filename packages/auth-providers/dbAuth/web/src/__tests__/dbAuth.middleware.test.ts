@@ -1,14 +1,26 @@
 import { act, renderHook } from '@testing-library/react'
 
+import type { CurrentUser } from '@redwoodjs/auth'
+
+import type { CustomProviderHooks, DbAuthClientArgs } from '../dbAuth'
 import { createMiddlewareAuth, createDbAuthClient } from '../dbAuth'
 
 import { fetchMock } from './dbAuth.test'
 
-export function getMwDbAuth(args = defaultArgs) {
-  const dbAuthClient = createDbAuthClient(args)
+const defaultArgs = {
+  fetchConfig: {
+    credentials: 'include' as const,
+  },
+}
+
+export function getMwDbAuth(
+  args: DbAuthClientArgs & CustomProviderHooks = defaultArgs,
+) {
+  // We have to create a special createDbAuthClient with middleware = true
+  const dbAuthClient = createDbAuthClient({ ...args, middleware: true })
   const { useAuth, AuthProvider } = createMiddlewareAuth(dbAuthClient, {
-    useHasRole: args.useHasRole,
     useCurrentUser: args.useCurrentUser,
+    useHasRole: args.useHasRole,
   })
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,
@@ -20,11 +32,9 @@ export function getMwDbAuth(args = defaultArgs) {
 // These tests are on top of the other tests in dbAuth.test.ts
 // They test the middleware specific things about the dbAuth client
 
-describe('dbAuth web ~ cookie/middleware auth edition', () => {
+describe('dbAuth web ~ cookie/middleware auth', () => {
   it('will create a middleware version of the auth client', async () => {
-    const { current: dbAuthInstance } = getMwDbAuth({
-      middleware: true,
-    })
+    const { current: dbAuthInstance } = getMwDbAuth()
 
     // Middleware auth clients should not return tokens
     expect(await dbAuthInstance.getToken()).toBeNull()
@@ -47,6 +57,18 @@ describe('dbAuth web ~ cookie/middleware auth edition', () => {
       id: 'middleware-user-555',
       username: 'user@middleware.auth',
     })
+  })
+
+  it('can still override getCurrentUser', async () => {
+    const mockedCustomCurrentUser = jest.fn()
+    const { current: dbAuthInstance } = getMwDbAuth({
+      useCurrentUser: mockedCustomCurrentUser,
+    })
+    await act(async () => {
+      await dbAuthInstance.getCurrentUser()
+    })
+
+    expect(mockedCustomCurrentUser).toHaveBeenCalled()
   })
 
   it('allows you to override the middleware endpoint', async () => {

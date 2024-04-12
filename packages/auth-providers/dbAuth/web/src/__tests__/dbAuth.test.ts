@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
-import type { DbAuthClientArgs } from '../dbAuth'
+import type { CustomProviderHooks, DbAuthClientArgs } from '../dbAuth'
 import { createDbAuthClient, createAuth } from '../dbAuth'
 
 globalThis.RWJS_API_URL = '/.redwood/functions'
@@ -98,12 +98,7 @@ beforeEach(() => {
   loggedInUser = undefined
 })
 
-const defaultArgs: DbAuthClientArgs & {
-  useCurrentUser?: () => Promise<CurrentUser>
-  useHasRole?: (
-    currentUser: CurrentUser | null,
-  ) => (rolesToCheck: string | string[]) => boolean
-} = {
+const defaultArgs: DbAuthClientArgs & CustomProviderHooks = {
   fetchConfig: { credentials: 'include' },
 }
 
@@ -120,7 +115,7 @@ export function getDbAuth(args = defaultArgs) {
   return result
 }
 
-describe('dbAuth web ~ token auth edition', () => {
+describe('dbAuth web client', () => {
   it('sets a default credentials value if not included', async () => {
     const authRef = getDbAuth({ fetchConfig: {} })
 
