@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@redwoodjs/api": "workspace:*",
+    "@redwoodjs/graphql-server": "workspace:*",
     "@redwoodjs/vite": "workspace:*",
     "typescript": "5.4.3",
     "vitest": "1.4.0"

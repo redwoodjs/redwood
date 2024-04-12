@@ -168,6 +168,14 @@ interface WebAuthnFlowOptions {
 
 export type UserType = Record<string | number, any>
 
+export type DbAuthResponse = Promise<{
+  headers: {
+    [x: string]: string | string[]
+  }
+  body?: string | undefined
+  statusCode: number
+}>
+
 export interface DbAuthHandlerOptions<
   TUser = UserType,
   TUserAttributes = Record<string, unknown>,

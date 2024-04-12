@@ -3,46 +3,44 @@ import {
   getSession,
   cookieName as cookieNameCreator,
 } from '@redwoodjs/auth-dbauth-api'
+import type { DbAuthResponse } from '@redwoodjs/auth-dbauth-api'
+import type { GetCurrentUser } from '@redwoodjs/graphql-server'
 import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
 import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
-
 export interface DbAuthMiddlewareOptions {
   cookieName: string
-  dbAuthHandler: (req: MiddlewareRequest) => Promise<typeof MiddlewareResponse> // this isn't right
-  getCurrentUser: any
+  dbAuthUrl?: string
+  dbAuthHandler: (req: Request) => DbAuthResponse
+  getCurrentUser: GetCurrentUser
 }
 
 export const createDbAuthMiddleware = ({
   cookieName,
   dbAuthHandler,
   getCurrentUser,
+  dbAuthUrl = '/middleware/dbauth',
 }: DbAuthMiddlewareOptions) => {
   return async (req: MiddlewareRequest) => {
     const res = MiddlewareResponse.next()
 
-    // If it's a POST request, handoff the request to the dbAuthHandler
-    // But.... we still need to convert tha Lambda style headers (because of multiValueHeaders)
-    // Note: The check of the POST method is for login, logout and signup
-    // Question: Should we check for the those specific middleware auth requests
-    // or any and every POST request? -- for Server Actions aka mutations
+    // Handoff POST requests to the dbAuthHandler. The url is configurable on the dbAuth client side.
+    // This is where we handle login, logout, and signup, etc., but we don't want to intercept
     if (req.method === 'POST') {
-      // output is any, should this be a proper type from the dbAuthHandler that knows
-      // about the multiValueHeaders and headers?
+      if (!req.url.includes(dbAuthUrl)) {
+        // Bail if the POST request is not for the dbAuthHandler
+        return res
+      }
+
       const output = await dbAuthHandler(req)
-
       const finalHeaders = new Headers()
+
       Object.entries(output.headers).forEach(([key, value]) => {
-        finalHeaders.append(key, String(value)) // hack cast to string
+        if (Array.isArray(value)) {
+          value.forEach((mvhHeader) => finalHeaders.append(key, mvhHeader))
+        } else {
+          finalHeaders.append(key, value)
+        }
       })
-
-      Object.entries(output.multiValueHeaders).forEach(([key, values]) => {
-        const mvhValues = values as string[] // hack cast as string[]
-        mvhValues.forEach((value) => finalHeaders.append(key, value))
-      })
-
-      // Don't we need to get and verify the cookie here?
-      // or do we want to allow login, logout and signup not not need the cookie and thus
-      // only check these endpoints in line 30?
 
       return new MiddlewareResponse(output.body, {
         headers: finalHeaders,
@@ -57,16 +55,17 @@ export const createDbAuthMiddleware = ({
       return res
     }
 
+    // 👇 Authenticated request
     const session = getSession(cookieHeader, cookieNameCreator(cookieName))
 
     try {
       const [decryptedSession] = decryptSession(session)
 
-      const currentUser = await getCurrentUser(decryptedSession)
+      const currentUser = await getCurrentUser(decryptedSession, req)
 
       // Short circuit here ...
       // if the call came from packages/auth-providers/dbAuth/web/src/getCurrentUserFromMiddleware.ts
-      if (req.url.includes('currentUser')) {
+      if (req.url.includes(`${dbAuthUrl}/currentUser`)) {
         return new MiddlewareResponse(JSON.stringify({ currentUser }))
       }
 
@@ -82,8 +81,9 @@ export const createDbAuthMiddleware = ({
       // Clear server auth context
       req.serverAuthContext.set(null)
 
-      // @TODO(Rob): Clear the cookie
-      // We currently do not expose a way of removing cookies in dbAuth
+      // Clear the cookies, because decryption was invalid
+      res.cookies.delete(cookieNameCreator(cookieName))
+      res.cookies.delete('auth-provider')
     }
 
     return res

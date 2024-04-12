@@ -19,6 +19,16 @@ afterAll(() => {
   delete process.env.RWJS_CWD
 })
 
+// login
+// logout
+// signup
+// currentUser
+// POST that isn't one of the above
+// GET request with correct cookies
+// GET request with no cookies
+// GET request with incorrect cookies (bad decrypt)
+// GET request with no cookies and currentUser
+// GET request with expired cookies
 describe('createDbAuthMiddleware()', () => {
   it('creates middleware for dbAuth cookie auth', async () => {
     const options: DbAuthMiddlewareOptions = {
