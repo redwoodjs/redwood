@@ -72,7 +72,6 @@ describe('dbAuth web ~ cookie/middleware auth', () => {
   it('allows you to override the middleware endpoint', async () => {
     const auth = getMwDbAuth({
       dbAuthUrl: '/hello/handsome',
-      middleware: true,
     }).current
 
     await act(async () => await auth.forgotPassword('username'))
@@ -84,11 +83,7 @@ describe('dbAuth web ~ cookie/middleware auth', () => {
   })
 
   it('calls login at the middleware endpoint', async () => {
-    const auth = (
-      await getMwDbAuth({
-        middleware: true,
-      })
-    ).current
+    const auth = getMwDbAuth().current
 
     await act(
       async () =>
@@ -102,24 +97,20 @@ describe('dbAuth web ~ cookie/middleware auth', () => {
   })
 
   it('calls middleware endpoint for logout', async () => {
-    const auth = getMwDbAuth({
-      middleware: true,
-    }).current
+    const auth = getMwDbAuth().current
     await act(async () => {
       await auth.logOut()
     })
 
     expect(globalThis.fetch).toHaveBeenCalledWith('/middleware/dbauth', {
       body: '{"method":"logout"}',
-      credentials: 'same-origin',
+      credentials: 'include',
       method: 'POST',
     })
   })
 
   it('calls reset password at the correct endpoint', async () => {
-    const auth = getMwDbAuth({
-      middleware: true,
-    }).current
+    const auth = getMwDbAuth().current
 
     await act(
       async () =>
@@ -138,9 +129,7 @@ describe('dbAuth web ~ cookie/middleware auth', () => {
   })
 
   it('passes through fetchOptions to signup calls', async () => {
-    const auth = getMwDbAuth({
-      middleware: true,
-    }).current
+    const auth = getMwDbAuth().current
 
     await act(
       async () =>
