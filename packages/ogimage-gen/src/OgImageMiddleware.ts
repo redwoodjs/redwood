@@ -10,16 +10,22 @@ import { getPaths } from '@redwoodjs/project-config'
 import { LocationProvider, matchPath } from '@redwoodjs/router'
 // @TODO HELP ESM-CJS ISSUE HERE >>>
 // We have to set tsconfig.moduleResolution >= "Node16", but if we do that project-config imports have an error
-import type { MiddlewareRequest } from '@redwoodjs/vite/dist/middleware'
-import type { MiddlewareResponse } from '@redwoodjs/vite/dist/middleware'
+import type {
+  MiddlewareRequest,
+  MiddlewareResponse,
+  MiddlewareInvokeOptions,
+} from '@redwoodjs/vite/dist/middleware'
 
 import { getRoutesList } from './getRoutesList.js'
-import { OGIMAGE_DEFAULTS } from './hooks'
+import { OGIMAGE_DEFAULTS } from './hooks.js'
 
 interface MwOptions {
   App: React.FC
   Document: React.FC
-  cssPaths: string[]
+  /**
+   * Override the css paths that'll be included
+   */
+  cssPaths?: string[]
 }
 
 const supportedExtensions = ['jpg', 'png']
@@ -69,7 +75,11 @@ export default class OgImageMiddleware {
     this.Document = options.Document
   }
 
-  async invoke(req: MiddlewareRequest, mwResponse: MiddlewareResponse) {
+  async invoke(
+    req: MiddlewareRequest,
+    mwResponse: MiddlewareResponse,
+    invokeOptions: MiddlewareInvokeOptions,
+  ) {
     const url = new URL(req.url)
     const { pathname, origin } = url
     const routes = await getRoutesList()
@@ -157,6 +167,10 @@ export default class OgImageMiddleware {
 
     const dataOut = await data(mergedParams)
 
+    // If the user overrides the cssPaths, use them. Otherwise use the default css list
+    // That gets passed from createReactStreamingHandler
+    const cssPathsToUse = this.options.cssPaths || invokeOptions.cssPaths || []
+
     const htmlOutput = renderToString(
       createElement(
         LocationProvider,
@@ -166,7 +180,7 @@ export default class OgImageMiddleware {
         createElement(
           this.Document,
           {
-            css: this.options.cssPaths.map((file) => `${origin}${file}`),
+            css: cssPathsToUse.map((file) => `${origin}${file}`),
             meta: [],
           },
           createElement(
