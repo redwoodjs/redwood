@@ -8563,6 +8563,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/ogimage-gen@workspace:packages/ogimage-gen":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/ogimage-gen@workspace:packages/ogimage-gen"
+  dependencies:
+    "@redwoodjs/framework-tools": "workspace:*"
+    "@redwoodjs/internal": "workspace:*"
+    "@redwoodjs/project-config": "workspace:*"
+    "@redwoodjs/router": "workspace:*"
+    "@redwoodjs/vite": "workspace:*"
+    fast-glob: "npm:3.3.2"
+    react: "npm:18.3.0-canary-a870b2d54-20240314"
+    react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
+    ts-toolbelt: "npm:9.6.0"
+    tsx: "npm:4.7.1"
+    typescript: "npm:5.4.3"
+    vite: "npm:5.2.8"
+    vitest: "npm:1.4.0"
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/prerender@workspace:*, @redwoodjs/prerender@workspace:packages/prerender":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/prerender@workspace:packages/prerender"
@@ -8790,7 +8810,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/vite@workspace:packages/vite":
+"@redwoodjs/vite@workspace:*, @redwoodjs/vite@workspace:packages/vite":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/vite@workspace:packages/vite"
   dependencies:
