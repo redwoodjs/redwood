@@ -153,7 +153,10 @@ export default class OgImageMiddleware {
     const ogImgFilePath = this.getOgComponentPath(currentRoute, extension)
     console.log(`👉 \n ~ OgImageMiddleware ~ ogImgFilePath:`, ogImgFilePath)
 
-    const { data, Component } = await this.importComponent(ogImgFilePath)
+    const { data, Component } = await this.importComponent(
+      ogImgFilePath,
+      invokeOptions,
+    )
 
     let dataOut
     if (data && typeof data === 'function') {
@@ -299,15 +302,25 @@ export default class OgImageMiddleware {
     }
   }
 
-  async importComponent(filePath: string) {
+  async importComponent(
+    filePath: string,
+    invokeOptions: MiddlewareInvokeOptions,
+  ) {
     console.info(filePath)
 
     try {
-      const { data, output } = await import(
-        /* @vite-ignore */
-        filePath
-      )
-      return { data, Component: output }
+      // @TODO In dev, once the code moves inside the framework
+      // we can't import the file directly... we have to use viteDevServer.ssrLoadModule
+      if (invokeOptions.viteDevServer) {
+        const { data, output } =
+          await invokeOptions.viteDevServer.ssrLoadModule(filePath)
+        console.log(`👉 \n ~ OgImageMiddleware ~ all:`, { data, output })
+
+        return { data, Component: output }
+      } else {
+        const { data, output } = await import(filePath)
+        return { data, Component: output }
+      }
     } catch (e) {
       console.error(`OG Image component import failed: ${filePath}`)
       console.error(e)

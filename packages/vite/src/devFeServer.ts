@@ -84,7 +84,10 @@ async function createServer() {
         return new Response('No middleware found', { status: 404 })
       }
 
-      const [mwRes] = await invoke(req, middleware, route ? { route } : {})
+      const [mwRes] = await invoke(req, middleware, {
+        route,
+        viteDevServer: vite,
+      })
 
       return mwRes.toResponse()
     })

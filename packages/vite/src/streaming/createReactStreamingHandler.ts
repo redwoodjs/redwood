@@ -85,13 +85,12 @@ export const createReactStreamingHandler = async (
       ;[mwResponse, decodedAuthState = defaultAuthProviderState] = await invoke(
         req,
         matchedMw?.handler as Middleware | undefined,
-        currentRoute
-          ? {
-              route: currentRoute,
-              cssPaths: getStylesheetLinks(currentRoute),
-              params: matchedMw?.params,
-            }
-          : {},
+        {
+          route: currentRoute,
+          cssPaths: currentRoute ? getStylesheetLinks(currentRoute) : [],
+          params: matchedMw?.params,
+          viteDevServer,
+        },
       )
 
       // If mwResponse is a redirect, short-circuit here, and skip React rendering
