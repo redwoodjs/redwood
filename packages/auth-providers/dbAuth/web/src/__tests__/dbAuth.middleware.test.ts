@@ -1,9 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 
-import type { CurrentUser } from '@redwoodjs/auth'
-
 import type { CustomProviderHooks, DbAuthClientArgs } from '../dbAuth'
-import { createMiddlewareAuth, createDbAuthClient } from '../dbAuth'
+import { createDbAuthClient, createMiddlewareAuth } from '../dbAuth'
 
 import { fetchMock } from './dbAuth.test'
 
