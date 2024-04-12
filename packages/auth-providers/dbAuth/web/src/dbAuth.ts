@@ -69,9 +69,11 @@ export function createDbAuthClient({
   let cachedToken: string | null
 
   const getDbAuthUrl = () => {
-    return dbAuthUrl || middleware
-      ? `/middleware/dbauth`
-      : `${RWJS_API_URL}/auth`
+    if (dbAuthUrl) {
+      return dbAuthUrl
+    }
+
+    return middleware ? `/middleware/dbauth` : `${RWJS_API_URL}/auth`
   }
 
   const resetAndFetch = async (...params: Parameters<typeof fetch>) => {
