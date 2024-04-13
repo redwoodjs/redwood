@@ -37,7 +37,7 @@
     "@simplewebauthn/server": "7.4.0",
     "@types/md5": "2.3.5",
     "@types/uuid": "9.0.8",
-    "typescript": "5.4.3",
+    "typescript": "5.4.5",
     "vitest": "1.4.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
