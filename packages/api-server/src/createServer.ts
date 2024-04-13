@@ -51,6 +51,17 @@ if (!process.env.REDWOOD_ENV_FILES_LOADED) {
  *   const server = await createServer({
  *     logger,
  *     apiRootPath: 'api'
+ *     fastifyContentTypeParsers: [
+ *      [
+ *        'text/csv',
+ *         { parseAs: 'string' },
+ *         (request, body, done) => {
+ *           // Custom parsing logic for text/csv content type for api plugin
+ *           const csvData = body.split('\n').map((row) => row.split(','))
+ *           done(null, csvData)
+ *         },
+ *       ],
+ *     ],
  *   })
  *
  *   // Configure the returned fastify instance:
@@ -64,8 +75,13 @@ if (!process.env.REDWOOD_ENV_FILES_LOADED) {
  * ```
  */
 export async function createServer(options: CreateServerOptions = {}) {
-  const { apiRootPath, fastifyServerOptions, apiPort, apiHost } =
-    resolveOptions(options)
+  const {
+    apiRootPath,
+    fastifyServerOptions,
+    fastifyContentTypeParsers,
+    apiPort,
+    apiHost,
+  } = resolveOptions(options)
 
   // Warn about `api/server.config.js`
   const serverConfigPath = path.join(
@@ -107,6 +123,10 @@ export async function createServer(options: CreateServerOptions = {}) {
   server.addHook('onRequest', (_req, _reply, done) => {
     getAsyncStoreInstance().run(new Map<string, GlobalContext>(), done)
   })
+
+  fastifyContentTypeParsers.forEach((contentTypeParserOption) =>
+    server.addContentTypeParser(...contentTypeParserOption)
+  )
 
   await server.register(redwoodFastifyAPI, {
     redwood: {

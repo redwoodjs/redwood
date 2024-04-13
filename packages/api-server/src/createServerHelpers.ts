@@ -1,6 +1,6 @@
 import { parseArgs } from 'util'
 
-import type { FastifyServerOptions } from 'fastify'
+import type { FastifyServerOptions, AddContentTypeParser } from 'fastify'
 
 import { coerceRootPath } from '@redwoodjs/fastify-web/dist/helpers'
 
@@ -24,6 +24,11 @@ export interface CreateServerOptions {
   fastifyServerOptions?: Omit<FastifyServerOptions, 'logger'>
 
   /**
+   * Add customized contentTypeParser for Fastify plugin
+   */
+  fastifyContentTypeParsers?: Array<Parameters<AddContentTypeParser>>
+
+  /**
    * Whether to parse args or not. Defaults to `true`.
    */
   parseArgs?: boolean
@@ -45,6 +50,7 @@ export const DEFAULT_CREATE_SERVER_OPTIONS: DefaultCreateServerOptions = {
   fastifyServerOptions: {
     requestTimeout: 15_000,
   },
+  fastifyContentTypeParsers: [],
   parseArgs: true,
 }
 
@@ -74,6 +80,10 @@ export function resolveOptions(
         DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.requestTimeout,
       logger: options.logger ?? DEFAULT_CREATE_SERVER_OPTIONS.logger,
     },
+
+    fastifyContentTypeParsers:
+      options.fastifyContentTypeParsers ??
+      DEFAULT_CREATE_SERVER_OPTIONS.fastifyContentTypeParsers,
 
     apiHost: getAPIHost(),
     apiPort: getAPIPort(),
