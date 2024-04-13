@@ -42,7 +42,7 @@
     "core-js": "3.36.1",
     "fast-glob": "3.3.2",
     "graphql": "16.8.1",
-    "typescript": "5.4.3"
+    "typescript": "5.4.5"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
