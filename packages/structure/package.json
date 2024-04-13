@@ -57,7 +57,7 @@
     "@types/lodash": "4.17.0",
     "@types/node": "20.11.25",
     "@types/vscode": "1.87.0",
-    "typescript": "5.4.3",
+    "typescript": "5.4.5",
     "vitest": "1.4.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

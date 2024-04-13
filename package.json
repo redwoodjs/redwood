@@ -107,7 +107,7 @@
     "rimraf": "5.0.5",
     "tstyche": "1.1.0",
     "tsx": "4.7.1",
-    "typescript": "5.4.3",
+    "typescript": "5.4.5",
     "vitest": "1.4.0",
     "yargs": "17.7.2",
     "zx": "7.2.3"
