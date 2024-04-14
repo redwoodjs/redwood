@@ -10,8 +10,20 @@ import {
 import { MockProviders } from './MockProviders'
 
 export const MockingLoader = async () => {
-  /** Need to figure out how to dynamically do this, but also it doesn't seem totally necessary */
-  // import.meta.glob('../../src/**/*.mock.{js,ts}', { eager: true })
+  /**
+   * Without this, the mock files are only loaded directly when
+   * rendering the corresponding cell.
+   * What that means is that without this, any component
+   * that uses a cell will not have the mock data.
+   *
+   * Additionally, because we want to load the mock files eagerly,
+   * we need to pass the `eager: true` option.
+   *
+   * More info on Glob Import here: https://vitejs.dev/guide/features#glob-import
+   */
+  import.meta.glob('~__REDWOOD__USER_WEB_SRC/**/*.+(mock).(js|ts)', {
+    eager: true,
+  })
 
   await startMSW('browsers')
   setupRequestHandlers()

@@ -45,6 +45,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config) => {
     resolve: {
       alias: {
         '~__REDWOOD__USER_ROUTES_FOR_MOCK': redwoodProjectPaths.web.routes,
+        '~__REDWOOD__USER_WEB_SRC': redwoodProjectPaths.web.src,
       },
     },
   })
