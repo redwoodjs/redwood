@@ -1,9 +1,7 @@
 import { test } from '@playwright/test'
 
-import { staticAssetTests } from '../../shared/staticAssets'
+import { runTestCases } from '../../shared/staticAssets'
 
-for (const [name, testFn] of staticAssetTests) {
-  test(name, async ({ page }) => {
-    await testFn(page)
-  })
-}
+test.describe('Static assets', async () => {
+  await runTestCases()
+})

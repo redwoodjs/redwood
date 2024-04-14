@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test'
-import { expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 async function checkRobotsTxt(page: Page) {
   const response = await page.goto('/robots.txt')
@@ -19,8 +19,16 @@ async function checkFaviconPng(page: Page) {
   expect(content).toContain('PNG')
 }
 
-export type StaticAssetTestCase = [string, (page: Page) => Promise<void>]
-export const staticAssetTests: StaticAssetTestCase[] = [
+type StaticAssetTestCase = [string, (page: Page) => Promise<void>]
+const staticAssetTests: StaticAssetTestCase[] = [
   ['check robots.txt', checkRobotsTxt],
   ['check favicon.png', checkFaviconPng],
 ]
+
+export async function runTestCases() {
+  for (const [name, testFn] of staticAssetTests) {
+    test(name, async ({ page }) => {
+      await testFn(page)
+    })
+  }
+}
