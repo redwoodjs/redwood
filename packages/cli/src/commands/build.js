@@ -43,12 +43,6 @@ export const builder = (yargs) => {
       default: true,
       description: 'Generate the Prisma client',
     })
-    .option('performance', {
-      alias: 'perf',
-      type: 'boolean',
-      default: false,
-      description: 'Measure build performance',
-    })
     .middleware(() => {
       const check = checkNodeVersion()
 

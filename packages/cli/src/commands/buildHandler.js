@@ -19,7 +19,6 @@ import { generatePrismaCommand } from '../lib/generatePrismaClient'
 export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
-  performance = false,
   stats = false,
   prisma = true,
   prerender,
@@ -28,7 +27,6 @@ export const handler = async ({
     command: 'build',
     side: JSON.stringify(side),
     verbose,
-    performance,
     stats,
     prisma,
     prerender,
@@ -38,18 +36,6 @@ export const handler = async ({
   const rwjsConfig = getConfig()
   const useFragments = rwjsConfig.graphql?.fragments
   const useTrustedDocuments = rwjsConfig.graphql?.trustedDocuments
-
-  if (performance) {
-    console.log('Measuring Web Build Performance...')
-    execa.sync(
-      `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-        '@redwoodjs/core/config/webpack.perf.js',
-      )}`,
-      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base },
-    )
-    // We do not want to continue building...
-    return
-  }
 
   if (stats) {
     console.log('Building Web Stats...')
