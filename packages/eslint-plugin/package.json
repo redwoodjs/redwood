@@ -30,7 +30,7 @@
     "@types/eslint": "8.56.6",
     "@types/estree": "1.0.5",
     "@typescript-eslint/parser": "5.62.0",
-    "glob": "10.3.10",
+    "glob": "10.3.12",
     "tsx": "4.7.1",
     "typescript": "5.4.5"
   },
