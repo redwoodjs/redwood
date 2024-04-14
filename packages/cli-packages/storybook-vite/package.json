@@ -23,10 +23,10 @@
     "@redwoodjs/cli-helpers": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/telemetry": "workspace:*",
-    "storybook-framework-redwoodjs-vite": "workspace:*",
     "chalk": "4.1.2",
     "execa": "5.1.1",
     "storybook": "7.6.17",
+    "storybook-framework-redwoodjs-vite": "workspace:*",
     "terminal-link": "2.1.1",
     "yargs": "17.7.2"
   },

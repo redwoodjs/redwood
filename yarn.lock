@@ -8100,6 +8100,7 @@ __metadata:
     chalk: "npm:4.1.2"
     execa: "npm:5.1.1"
     storybook: "npm:7.6.17"
+    storybook-framework-redwoodjs-vite: "workspace:*"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.3"
@@ -11216,14 +11217,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.5, @types/json-schema@npm:^7.0.8, @types/json-schema@npm:^7.0.9":
-  version: 7.0.12
-  resolution: "@types/json-schema@npm:7.0.12"
-  checksum: 10c0/2c39946ae321fe42d085c61a85872a81bbee70f9b2054ad344e8811dfc478fdbaf1ebf5f2989bb87c895ba2dfc3b1dcba85db11e467bbcdc023708814207791c
-  languageName: node
-  linkType: hard
-
-"@types/json-schema@npm:^7.0.12":
+"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.12, @types/json-schema@npm:^7.0.5, @types/json-schema@npm:^7.0.8, @types/json-schema@npm:^7.0.9":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
   checksum: 10c0/a996a745e6c5d60292f36731dd41341339d4eeed8180bb09226e5c8d23759067692b1d88e5d91d72ee83dfc00d3aca8e7bd43ea120516c17922cbcb7c3e252db
@@ -18082,7 +18076,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.19.3, esbuild@npm:~0.19.10":
+"esbuild@npm:~0.19.10":
   version: 0.19.12
   resolution: "esbuild@npm:0.19.12"
   dependencies:
@@ -28216,7 +28210,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.14, postcss@npm:^8.4.24, postcss@npm:^8.4.33, postcss@npm:^8.4.35, postcss@npm:^8.4.38":
+"postcss@npm:^8.2.14, postcss@npm:^8.4.24, postcss@npm:^8.4.33, postcss@npm:^8.4.38":
   version: 8.4.38
   resolution: "postcss@npm:8.4.38"
   dependencies:
@@ -29983,7 +29977,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:4.13.0, rollup@npm:^4.2.0":
+"rollup@npm:4.13.0":
   version: 4.13.0
   resolution: "rollup@npm:4.13.0"
   dependencies:
@@ -31366,7 +31360,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook-framework-redwoodjs-vite@workspace:packages/storybook":
+"storybook-framework-redwoodjs-vite@workspace:*, storybook-framework-redwoodjs-vite@workspace:packages/storybook":
   version: 0.0.0-use.local
   resolution: "storybook-framework-redwoodjs-vite@workspace:packages/storybook"
   dependencies:
@@ -31382,7 +31376,7 @@ __metadata:
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.3"
     unplugin-auto-import: "npm:^0.17.5"
-    vite: "npm:5.1.6"
+    vite: "npm:5.2.8"
   peerDependencies:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/router": "workspace:*"
@@ -33672,46 +33666,6 @@ __metadata:
     magic-string: "npm:^0.30.8"
     minimatch: "npm:^9.0.3"
   checksum: 10c0/0481d21e4a95977ca899c076d0d03b7d2fe207d69303344d4c7a8e12cf7cb547e18c446d1b71fb2d1f0bf6fdad4bcd35129cace162814eade756fbf90c64d95f
-  languageName: node
-  linkType: hard
-
-"vite@npm:5.1.6":
-  version: 5.1.6
-  resolution: "vite@npm:5.1.6"
-  dependencies:
-    esbuild: "npm:^0.19.3"
-    fsevents: "npm:~2.3.3"
-    postcss: "npm:^8.4.35"
-    rollup: "npm:^4.2.0"
-  peerDependencies:
-    "@types/node": ^18.0.0 || >=20.0.0
-    less: "*"
-    lightningcss: ^1.21.0
-    sass: "*"
-    stylus: "*"
-    sugarss: "*"
-    terser: ^5.4.0
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  peerDependenciesMeta:
-    "@types/node":
-      optional: true
-    less:
-      optional: true
-    lightningcss:
-      optional: true
-    sass:
-      optional: true
-    stylus:
-      optional: true
-    sugarss:
-      optional: true
-    terser:
-      optional: true
-  bin:
-    vite: bin/vite.js
-  checksum: 10c0/b935527544741d9313143a77f811d97b8b094757e42f9c02b7aca6294a4912674dbad5379e4759629b6ba895c93b5020cc7594f74b37846715336837fdce850a
   languageName: node
   linkType: hard
 
