@@ -34,7 +34,6 @@
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "rimraf": "5.0.5",
     "tsx": "4.7.1",
     "typescript": "5.4.5",
     "vitest": "1.4.0"
