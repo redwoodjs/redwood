@@ -10,7 +10,7 @@ import {
 import { MockProviders } from './MockProviders'
 
 export const MockingLoader = async () => {
-  /** Need to figure out how to dynamically do this */
+  /** Need to figure out how to dynamically do this, but also it doesn't seem totally necessary */
   // import.meta.glob('../../src/**/*.mock.{js,ts}', { eager: true })
 
   await startMSW('browsers')

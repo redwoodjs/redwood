@@ -26,7 +26,7 @@ export async function handler({
   // they install Storybook so that the real types come through.
   fs.rmSync(
     path.join(getPaths().generated.types.includes, 'web-storybook.d.ts'),
-    { force: true }
+    { force: true },
   )
 
   /*
@@ -43,8 +43,8 @@ export async function handler({
   if (build && open) {
     console.warn(
       c.warning(
-        'Warning: --open option has no effect when running Storybook build'
-      )
+        'Warning: --open option has no effect when running Storybook build',
+      ),
     )
   }
 
@@ -59,12 +59,12 @@ export async function handler({
   // Create the `MockServiceWorker.js` file. See https://mswjs.io/docs/cli/init.
   await execa.command(
     `yarn msw init "${staticAssetsFolder}" --no-save`,
-    execaOptions
+    execaOptions,
   )
 
   const redwoodProjectPaths = getPaths()
   const storybookConfigPath = path.dirname(
-    `${redwoodProjectPaths.web.storybook}/main.ts`
+    `${redwoodProjectPaths.web.storybook}/main.ts`,
   )
 
   let command = ''
