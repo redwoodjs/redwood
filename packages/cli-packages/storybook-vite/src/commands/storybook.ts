@@ -5,7 +5,7 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 import type { StorybookYargsOptions } from '../types'
 
-export const command = 'storybookVite'
+export const command = 'storybook-vite'
 export const aliases = ['sbv']
 export const description =
   'Launch Storybook: a tool for building UI components and pages in isolation (now, with Vite)!'

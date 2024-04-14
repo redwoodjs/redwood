@@ -33,7 +33,7 @@ export const PLUGIN_CACHE_DEFAULT = {
   },
   '@redwoodjs/cli-storybook-vite': {
     'storybook-vite': {
-      aliases: ['storybookVite', 'sbv'],
+      aliases: ['storybook-vite', 'sbv'],
       description:
         'Launch Storybook: a tool for building UI components and pages in isolation (now, with Vite!)',
     },
