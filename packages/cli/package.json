@@ -85,6 +85,7 @@
   "devDependencies": {
     "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
+    "@redwoodjs/framework-tools": "workspace:*",
     "@types/archiver": "^6",
     "memfs": "4.8.0",
     "tsx": "4.7.1",
