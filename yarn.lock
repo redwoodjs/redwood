@@ -8574,6 +8574,7 @@ __metadata:
     "@redwoodjs/router": "workspace:*"
     "@redwoodjs/vite": "workspace:*"
     fast-glob: "npm:3.3.2"
+    memfs: "npm:4.8.0"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
     react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
     ts-toolbelt: "npm:9.6.0"

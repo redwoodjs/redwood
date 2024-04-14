@@ -29,16 +29,12 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@redwoodjs/internal": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
-    "@redwoodjs/router": "workspace:*",
-    "@redwoodjs/vite": "workspace:*",
-    "fast-glob": "3.3.2",
-    "react": "18.3.0-canary-a870b2d54-20240314",
-    "react-dom": "18.3.0-canary-a870b2d54-20240314"
+    "fast-glob": "3.3.2"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
+    "memfs": "4.8.0",
     "ts-toolbelt": "9.6.0",
     "tsx": "4.7.1",
     "typescript": "5.4.5",
