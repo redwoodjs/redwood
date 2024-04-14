@@ -1,4 +1,4 @@
-import { getConfig } from '../../../../lib'
+import { getConfig } from '../../../../lib/index.js'
 
 const config = getConfig()
 

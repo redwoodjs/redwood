@@ -12,10 +12,10 @@ import fs from 'fs-extra'
 import { vol } from 'memfs'
 import { vi, beforeEach, afterEach, test, expect } from 'vitest'
 
-import '../../../../lib/test'
+import '../../../../lib/test.js'
 
-import { files } from '../../../generate/function/function'
-import { tasks } from '../function'
+import { files } from '../../../generate/function/function.js'
+import { tasks } from '../function.js'
 
 beforeEach(async () => {
   vol.fromJSON(files({ name: 'sendMail' }))

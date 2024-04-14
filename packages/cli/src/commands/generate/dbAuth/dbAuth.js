@@ -17,10 +17,10 @@ import {
   transformTSToJS,
   writeFilesTask,
 } from '../../../lib'
-import c from '../../../lib/colors'
-import { prepareForRollback } from '../../../lib/rollback'
-import { yargsDefaults } from '../helpers'
-import { templateForComponentFile } from '../helpers'
+import c from '../../../lib/colors.js'
+import { prepareForRollback } from '../../../lib/rollback.js'
+import { yargsDefaults } from '../helpers.js'
+import { templateForComponentFile } from '../helpers.js'
 
 const ROUTES = [
   `<Route path="/login" page={LoginPage} name="login" />`,

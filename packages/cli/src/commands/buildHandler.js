@@ -1,3 +1,4 @@
+import { createRequire } from 'module'
 import path from 'path'
 
 import execa from 'execa'
@@ -7,14 +8,14 @@ import { rimraf } from 'rimraf'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
-import { buildApi, cleanApiBuild } from '@redwoodjs/internal/dist/build/api'
-import { generate } from '@redwoodjs/internal/dist/generate/generate'
-import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
-import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
+import { buildApi, cleanApiBuild } from '@redwoodjs/internal/dist/build/api.js'
+import { generate } from '@redwoodjs/internal/dist/generate/generate.js'
+import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema.js'
+import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection/index.js'
 import { timedTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, getConfig } from '../lib'
-import { generatePrismaCommand } from '../lib/generatePrismaClient'
+import { generatePrismaCommand } from '../lib/generatePrismaClient.js'
+import { getPaths, getConfig } from '../lib/index.js'
 
 export const handler = async ({
   side = ['api', 'web'],
@@ -38,6 +39,8 @@ export const handler = async ({
   const rwjsConfig = getConfig()
   const useFragments = rwjsConfig.graphql?.fragments
   const useTrustedDocuments = rwjsConfig.graphql?.trustedDocuments
+
+  const require = createRequire(path.join(getPaths().base, 'node_modules'))
 
   if (performance) {
     console.log('Measuring Web Build Performance...')

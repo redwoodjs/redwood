@@ -1,6 +1,6 @@
 import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
 
-import  ${camelName} from './${camelName}'
+import  ${camelName} from './${camelName}.js'
 
 describe('${camelName} directive', () => {
   it('declares the directive sdl as schema, with the correct name', () => {

@@ -8,10 +8,10 @@ import semver from 'semver'
 
 import { getConfig } from '@redwoodjs/project-config'
 
-import { spawnBackgroundProcess } from './background'
-import { isLockSet, setLock, unsetLock } from './locking'
+import { spawnBackgroundProcess } from './background.js'
+import { isLockSet, setLock, unsetLock } from './locking.js'
 
-import { getPaths } from './index'
+import { getPaths } from './index.js'
 
 /**
  * @typedef {{

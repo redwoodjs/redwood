@@ -1,5 +1,5 @@
-import { files as functionFiles } from '../../generate/function/function'
-import { createYargsForComponentDestroy } from '../helpers'
+import { files as functionFiles } from '../../generate/function/function.js'
+import { createYargsForComponentDestroy } from '../helpers.js'
 
 export const description = 'Destroy a Function'
 

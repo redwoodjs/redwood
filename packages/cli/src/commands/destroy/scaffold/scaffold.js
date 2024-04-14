@@ -10,9 +10,9 @@ import {
   removeRoutesFromRouterTask,
   writeFile,
 } from '../../../lib'
-import c from '../../../lib/colors'
-import { pluralize } from '../../../lib/rwPluralize'
-import { verifyModelName } from '../../../lib/schemaHelpers'
+import c from '../../../lib/colors.js'
+import { pluralize } from '../../../lib/rwPluralize.js'
+import { verifyModelName } from '../../../lib/schemaHelpers.js'
 import {
   files,
   routes as scaffoldRoutes,

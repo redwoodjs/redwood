@@ -12,9 +12,9 @@ import {
 } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { printSetupNotes } from '../../../../lib'
-import { serverFileExists } from '../../../../lib/project'
-import { addFilesTask } from '../helpers'
+import { printSetupNotes } from '../../../../lib/index.js'
+import { serverFileExists } from '../../../../lib/project.js'
+import { addFilesTask } from '../helpers.js'
 
 const redwoodProjectPaths = getPaths()
 

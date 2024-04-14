@@ -1,8 +1,8 @@
 import prompts from 'prompts'
 import { test, expect } from 'vitest'
 
-import * as helpers from '../pluralHelpers'
-import { pluralize, singularize } from '../rwPluralize'
+import * as helpers from '../pluralHelpers.js'
+import { pluralize, singularize } from '../rwPluralize.js'
 
 test('validatePlural returns true if plural is single word and unique from singular', () => {
   const result = helpers.validatePlural('plural', 'singular')

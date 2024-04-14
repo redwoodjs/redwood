@@ -4,7 +4,7 @@ import execa from 'execa'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
-import { getPaths, writeFilesTask } from '../../../../lib'
+import { getPaths, writeFilesTask } from '../../../../lib/index.js'
 
 const REDWOOD_TOML_PATH = path.join(getPaths().base, 'redwood.toml')
 

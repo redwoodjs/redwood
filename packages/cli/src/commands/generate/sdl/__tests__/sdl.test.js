@@ -48,12 +48,12 @@ import prompts from 'prompts'
 import { vi, afterEach, test, expect, describe } from 'vitest'
 
 // Load mocks
-import '../../../../lib/test'
+import '../../../../lib/test.js'
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
-import { getDefaultArgs } from '../../../../lib'
-import * as sdl from '../sdl'
+import { getDefaultArgs } from '../../../../lib/index.js'
+import * as sdl from '../sdl.js'
 
 afterEach(() => {
   vi.clearAllMocks()

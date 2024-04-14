@@ -8,6 +8,7 @@
     "directory": "packages/cli"
   },
   "license": "MIT",
+  "type": "module",
   "bin": {
     "redwood": "./dist/index.js",
     "rw": "./dist/index.js",
@@ -17,7 +18,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsx ./build.mts",
+    "build": "tsx ./build.ts",
     "build:pack": "yarn pack -o redwoodjs-cli.tgz",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "dev": "RWJS_CWD=../../__fixtures__/example-todo-main node dist/index.js",
@@ -51,10 +52,10 @@
     "chalk": "4.1.2",
     "ci-info": "4.0.0",
     "concurrently": "8.2.2",
-    "configstore": "3.1.5",
+    "configstore": "6.0.0",
     "core-js": "3.36.1",
     "cross-env": "7.0.3",
-    "decamelize": "5.0.1",
+    "decamelize": "6.0.0",
     "dotenv-defaults": "5.0.2",
     "enquirer": "2.4.1",
     "envinfo": "7.11.1",
@@ -63,7 +64,7 @@
     "fs-extra": "11.2.0",
     "humanize-string": "2.1.0",
     "jscodeshift": "0.15.0",
-    "latest-version": "5.1.0",
+    "latest-version": "9.0.0",
     "listr2": "6.6.1",
     "lodash": "4.17.21",
     "param-case": "3.0.4",

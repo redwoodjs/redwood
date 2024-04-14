@@ -58,7 +58,7 @@ vi.mock('listr2', () => {
 import { vol } from 'memfs'
 import { vi, beforeAll, afterAll, test, expect } from 'vitest'
 
-import { handler } from '../fragmentsHandler'
+import { handler } from '../fragmentsHandler.js'
 
 // Set up RWJS_CWD
 let original_RWJS_CWD: string | undefined

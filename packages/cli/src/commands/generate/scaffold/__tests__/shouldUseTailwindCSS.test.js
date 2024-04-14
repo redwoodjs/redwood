@@ -3,8 +3,8 @@ globalThis.__dirname = __dirname
 import fs from 'fs-extra'
 import { vi, describe, expect, test, afterEach } from 'vitest'
 
-import '../../../../lib/test'
-import { shouldUseTailwindCSS } from '../scaffold'
+import '../../../../lib/test.js'
+import { shouldUseTailwindCSS } from '../scaffold.js'
 
 vi.mock('fs-extra')
 

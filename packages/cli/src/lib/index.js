@@ -9,7 +9,7 @@ import decamelize from 'decamelize'
 import execa from 'execa'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
-import { memoize, template } from 'lodash'
+import pkg from 'lodash'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import { format } from 'prettier'
@@ -21,11 +21,13 @@ import {
   findUp,
 } from '@redwoodjs/project-config'
 
-import c from './colors'
-import { addFileToRollback } from './rollback'
-import { pluralize, singularize } from './rwPluralize'
+import c from './colors.js'
+import { addFileToRollback } from './rollback.js'
+import { pluralize, singularize } from './rwPluralize.js'
 
 export { findUp }
+
+const { memoize, template } = pkg
 
 /**
  * Returns variants of the passed `name` for usage in templates. If the given

@@ -3,16 +3,16 @@ import path from 'path'
 import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
-import * as apiServerCLIConfig from '@redwoodjs/api-server/dist/apiCLIConfig'
-import * as bothServerCLIConfig from '@redwoodjs/api-server/dist/bothCLIConfig'
+import * as apiServerCLIConfig from '@redwoodjs/api-server/dist/apiCLIConfig.js'
+import * as bothServerCLIConfig from '@redwoodjs/api-server/dist/bothCLIConfig.js'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import * as webServerCLIConfig from '@redwoodjs/web-server'
 
-import { getPaths, getConfig } from '../lib'
-import c from '../lib/colors'
+import c from '../lib/colors.js'
+import { getPaths, getConfig } from '../lib/index.js'
 import { serverFileExists } from '../lib/project.js'
 
-import { webSsrServerHandler } from './serveWebHandler'
+import { webSsrServerHandler } from './serveWebHandler.js'
 
 export const command = 'serve [side]'
 export const description =

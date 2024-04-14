@@ -1,19 +1,21 @@
+import { createRequire } from 'module'
+import path from 'path'
 import { argv } from 'process'
 
 import concurrently from 'concurrently'
 import fs from 'fs-extra'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
-import { shutdownPort } from '@redwoodjs/internal/dist/dev'
+import { shutdownPort } from '@redwoodjs/internal/dist/dev.js'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../lib'
-import c from '../lib/colors'
-import { exitWithError } from '../lib/exit'
-import { generatePrismaClient } from '../lib/generatePrismaClient'
-import { getFreePort } from '../lib/ports'
-import { serverFileExists } from '../lib/project'
+import c from '../lib/colors.js'
+import { exitWithError } from '../lib/exit.js'
+import { generatePrismaClient } from '../lib/generatePrismaClient.js'
+import { getPaths } from '../lib/index.js'
+import { getFreePort } from '../lib/ports.js'
+import { serverFileExists } from '../lib/project.js'
 
 const defaultApiDebugPort = 18911
 
@@ -139,6 +141,8 @@ export const handler = async ({
       )
     }
   }
+
+  const require = createRequire(path.join(getPaths().base, 'node_modules'))
 
   const webpackDevConfig = require.resolve(
     '@redwoodjs/core/config/webpack.development.js',

@@ -1,8 +1,8 @@
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '../lib'
-import c from '../lib/colors'
-import { checkNodeVersion } from '../middleware/checkNodeVersion'
+import c from '../lib/colors.js'
+import { getConfig } from '../lib/index.js'
+import { checkNodeVersion } from '../middleware/checkNodeVersion.js'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'
@@ -55,8 +55,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#dev',
-      )}`,
+        'https://redwoodjs.com/docs/cli-commands#dev'
+      )}`
     )
 }
 

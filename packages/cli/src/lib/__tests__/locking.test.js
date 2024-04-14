@@ -20,7 +20,7 @@ import fs from 'fs-extra'
 import { vol } from 'memfs'
 import { vi, it, expect, beforeEach } from 'vitest'
 
-import { setLock, unsetLock, isLockSet, clearLocks } from '../locking'
+import { setLock, unsetLock, isLockSet, clearLocks } from '../locking.js'
 
 beforeEach(() => {
   // Start with no files

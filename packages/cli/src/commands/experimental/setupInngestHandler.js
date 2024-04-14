@@ -3,11 +3,11 @@ import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../lib'
-import c from '../../lib/colors'
+import c from '../../lib/colors.js'
+import { getPaths } from '../../lib/index.js'
 
-import { command, description, EXPERIMENTAL_TOPIC_ID } from './setupInngest'
-import { printTaskEpilogue } from './util'
+import { command, description, EXPERIMENTAL_TOPIC_ID } from './setupInngest.js'
+import { printTaskEpilogue } from './util.js'
 
 export const handler = async ({ force }) => {
   const tasks = new Listr([

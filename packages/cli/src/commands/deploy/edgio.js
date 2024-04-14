@@ -8,9 +8,9 @@ import terminalLink from 'terminal-link'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getPaths } from '@redwoodjs/project-config'
 
-import c from '../../lib/colors'
+import c from '../../lib/colors.js'
 
-import { deployBuilder, deployHandler } from './helpers/helpers'
+import { deployBuilder, deployHandler } from './helpers/helpers.js'
 
 export const command = 'edgio [...commands]'
 export const description = 'Build command for Edgio deploy'

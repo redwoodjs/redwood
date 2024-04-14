@@ -2,10 +2,10 @@ import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { deleteFilesTask } from '../../../lib'
-import c from '../../../lib/colors'
-import { verifyModelName } from '../../../lib/schemaHelpers'
-import { files } from '../../generate/sdl/sdl'
+import c from '../../../lib/colors.js'
+import { deleteFilesTask } from '../../../lib/index.js'
+import { verifyModelName } from '../../../lib/schemaHelpers.js'
+import { files } from '../../generate/sdl/sdl.js'
 
 export const command = 'sdl <model>'
 export const description =

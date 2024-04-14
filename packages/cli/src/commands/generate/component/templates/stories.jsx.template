@@ -10,7 +10,7 @@
 //
 // See https://storybook.js.org/docs/react/writing-stories/args.
 
-import ${pascalName} from './${pascalName}'
+import ${pascalName} from './${pascalName}.js'
 
 export default { component: ${pascalName} }
 

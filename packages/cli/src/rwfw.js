@@ -2,7 +2,7 @@
 
 import path from 'path'
 
-import Configstore from 'configstore/index'
+import Configstore from 'configstore'
 import execa from 'execa'
 import fs from 'fs-extra'
 import TerminalLink from 'terminal-link'

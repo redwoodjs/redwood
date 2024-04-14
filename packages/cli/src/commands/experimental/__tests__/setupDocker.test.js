@@ -2,7 +2,7 @@ import { vi, test, describe, expect } from 'vitest'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { command, description, builder, handler } from '../setupDocker'
+import { command, description, builder, handler } from '../setupDocker.js'
 
 vi.mock('../setupDockerHandler.js')
 

@@ -3,7 +3,9 @@
   "compilerOptions": {
     "rootDir": "src",
     "emitDeclarationOnly": false,
-    "noEmit": true
+    "noEmit": true,
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext"
   },
   "include": ["src", "./testUtils.d.ts"],
   "exclude": ["**/__testfixtures__"],

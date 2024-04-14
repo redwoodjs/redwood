@@ -5,10 +5,10 @@ import { vi, beforeAll, afterAll, test, expect, describe, it } from 'vitest'
 import yargs from 'yargs/yargs'
 
 // Load mocks
-import '../../../../lib/test'
+import '../../../../lib/test.js'
 
-import { getDefaultArgs } from '../../../../lib'
-import * as service from '../service'
+import { getDefaultArgs } from '../../../../lib/index.js'
+import * as service from '../service.js'
 
 beforeAll(() => {
   vi.useFakeTimers()

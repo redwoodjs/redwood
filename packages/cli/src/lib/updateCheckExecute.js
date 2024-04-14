@@ -1,3 +1,3 @@
-import { check } from './updateCheck'
+import { check } from './updateCheck.js'
 
 check()

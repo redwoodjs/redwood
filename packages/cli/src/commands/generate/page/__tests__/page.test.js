@@ -44,13 +44,13 @@ import fs from 'fs-extra'
 import { vi, describe, it, test, expect, beforeEach, afterEach } from 'vitest'
 
 // Load mocks
-import '../../../../lib/test'
+import '../../../../lib/test.js'
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
-import { getPaths } from '../../../../lib'
-import { pathName } from '../../helpers'
-import * as page from '../page'
+import { getPaths } from '../../../../lib/index.js'
+import { pathName } from '../../helpers.js'
+import * as page from '../page.js'
 
 describe('Single world files', async () => {
   const singleWordFiles = await page.files({

@@ -4,8 +4,8 @@ import chalk from 'chalk'
 import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from '../../lib'
-import { isTypeScriptProject, serverFileExists } from '../../lib/project'
+import { getPaths } from '../../lib/index.js'
+import { isTypeScriptProject, serverFileExists } from '../../lib/project.js'
 
 const link = (topicId, isTerminal = false) => {
   const communityLink = `https://community.redwoodjs.com/t/${topicId}`

@@ -5,7 +5,7 @@ vi.mock('fs-extra')
 import path from 'path'
 
 // Load mocks
-import '../../../../lib/test'
+import '../../../../lib/test.js'
 
 const realfs = await vi.importActual('fs-extra')
 import Enquirer from 'enquirer'
@@ -13,8 +13,8 @@ import fs from 'fs-extra'
 import { vol } from 'memfs'
 import { vi, describe, it, expect, beforeEach } from 'vitest'
 
-import { getPaths } from '../../../../lib'
-import * as dbAuth from '../dbAuth'
+import { getPaths } from '../../../../lib/index.js'
+import * as dbAuth from '../dbAuth.js'
 
 // Mock files needed for each test
 const mockFiles = {}

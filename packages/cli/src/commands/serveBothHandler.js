@@ -3,17 +3,17 @@ import path from 'path'
 import concurrently from 'concurrently'
 import execa from 'execa'
 
-import { handler as apiServerHandler } from '@redwoodjs/api-server/dist/apiCLIConfigHandler'
+import { handler as apiServerHandler } from '@redwoodjs/api-server/dist/apiCLIConfigHandler.js'
 import {
   getAPIHost,
   getAPIPort,
   getWebHost,
   getWebPort,
-} from '@redwoodjs/api-server/dist/cliHelpers'
+} from '@redwoodjs/api-server/dist/cliHelpers.js'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { exitWithError } from '../lib/exit'
+import { exitWithError } from '../lib/exit.js'
 
 export const bothServerFileHandler = async (argv) => {
   if (

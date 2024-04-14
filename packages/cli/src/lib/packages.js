@@ -3,7 +3,7 @@ import path from 'path'
 import execa from 'execa'
 import fs from 'fs-extra'
 
-import { getPaths } from './index'
+import { getPaths } from './index.js'
 
 // Note: Have to add backslash (\) before @ below for intellisense to display
 // the doc comments properly

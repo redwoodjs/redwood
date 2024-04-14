@@ -4,9 +4,9 @@ import path from 'path'
 import { describe, test, it, expect } from 'vitest'
 
 // Load shared mocks
-import '../../../../lib/test'
+import '../../../../lib/test.js'
 
-import * as layout from '../layout'
+import * as layout from '../layout.js'
 
 describe('Single Word default files', async () => {
   const singleWordDefaultFiles = await layout.files({

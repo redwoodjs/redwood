@@ -1,13 +1,13 @@
 globalThis.__dirname = __dirname
 // Load shared mocks
-import '../../../../lib/test'
+import '../../../../lib/test.js'
 
 import path from 'path'
 
 import { test, expect } from 'vitest'
 import yargs from 'yargs'
 
-import * as script from '../script'
+import * as script from '../script.js'
 
 test('creates a JavaScript function to execute', () => {
   const output = script.files({

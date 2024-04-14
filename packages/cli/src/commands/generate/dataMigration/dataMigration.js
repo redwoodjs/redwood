@@ -7,10 +7,10 @@ import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { getPaths, writeFilesTask } from '../../../lib'
-import c from '../../../lib/colors'
-import { prepareForRollback } from '../../../lib/rollback'
-import { validateName, yargsDefaults } from '../helpers'
+import c from '../../../lib/colors.js'
+import { getPaths, writeFilesTask } from '../../../lib/index.js'
+import { prepareForRollback } from '../../../lib/rollback.js'
+import { validateName, yargsDefaults } from '../helpers.js'
 
 const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
   'After writing your migration, you can run it with:',

@@ -3,14 +3,14 @@ import path from 'path'
 import fse from 'fs-extra'
 import prettier from 'prettier'
 
-import { merge } from './merge'
 import {
   interleave,
   concatUnique,
   keepBoth,
   keepBothStatementParents,
 } from './merge/strategy'
-import { isTypeScriptProject } from './project'
+import { merge } from './merge.js'
+import { isTypeScriptProject } from './project.js'
 
 import { getPaths, transformTSToJS, writeFile } from '.'
 

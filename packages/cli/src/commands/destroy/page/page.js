@@ -3,9 +3,12 @@ import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { deleteFilesTask, removeRoutesFromRouterTask } from '../../../lib'
-import c from '../../../lib/colors'
-import { pathName } from '../../generate/helpers'
+import c from '../../../lib/colors.js'
+import {
+  deleteFilesTask,
+  removeRoutesFromRouterTask,
+} from '../../../lib/index.js'
+import { pathName } from '../../generate/helpers.js'
 import {
   files as pageFiles,
   paramVariants as templateVars,

@@ -4,7 +4,7 @@ import {
   MemcachedClient,
 } from '@redwoodjs/api/cache'
 
-import { logger } from './logger'
+import { logger } from './logger.js'
 
 const memJsFormattedLogger = {
   log: (msg: string) => logger.error(msg),

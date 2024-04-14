@@ -22,7 +22,7 @@ vi.mock('fs-extra', () => ({
 
 import { vi, describe, it, afterEach, afterAll, expect } from 'vitest'
 
-import { assertRedwoodVersion } from '../studioHandler'
+import { assertRedwoodVersion } from '../studioHandler.js'
 
 describe('studioHandler', () => {
   describe('assertRedwoodVersion', () => {

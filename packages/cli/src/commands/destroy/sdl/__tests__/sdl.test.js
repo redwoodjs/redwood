@@ -4,11 +4,11 @@ import fs from 'fs-extra'
 import { vol } from 'memfs'
 import { vi, beforeEach, afterEach, test, expect, describe } from 'vitest'
 
-import '../../../../lib/test'
+import '../../../../lib/test.js'
 
-import { getDefaultArgs } from '../../../../lib'
-import { builder, files } from '../../../generate/sdl/sdl'
-import { tasks } from '../sdl'
+import { getDefaultArgs } from '../../../../lib/index.js'
+import { builder, files } from '../../../generate/sdl/sdl.js'
+import { tasks } from '../sdl.js'
 
 vi.mock('fs-extra')
 

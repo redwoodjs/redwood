@@ -4,7 +4,7 @@ import {
   RedisClient,
 } from '@redwoodjs/api/cache'
 
-import { logger } from './logger'
+import { logger } from './logger.js'
 
 export let client: InMemoryClient | RedisClient
 

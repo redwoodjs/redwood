@@ -12,7 +12,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react'
 
-import ${pascalName} from './${pascalName}'
+import ${pascalName} from './${pascalName}.js'
 
 const meta: Meta<typeof ${pascalName}> = {
   component: ${pascalName},

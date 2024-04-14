@@ -6,10 +6,14 @@ import { Listr } from 'listr2'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { addPackagesTask, getPaths, printSetupNotes } from '../../../../lib'
-import c from '../../../../lib/colors'
-import { addFilesTask } from '../helpers'
-import { DEPLOY, ECOSYSTEM, MAINTENANCE } from '../templates/baremetal'
+import c from '../../../../lib/colors.js'
+import {
+  addPackagesTask,
+  getPaths,
+  printSetupNotes,
+} from '../../../../lib/index.js'
+import { addFilesTask } from '../helpers.js'
+import { DEPLOY, ECOSYSTEM, MAINTENANCE } from '../templates/baremetal.js'
 
 export const command = 'baremetal'
 export const description = 'Setup Baremetal deploy'

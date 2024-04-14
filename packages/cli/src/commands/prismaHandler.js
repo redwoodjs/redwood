@@ -7,8 +7,8 @@ import fs from 'fs-extra'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import c from '../lib/colors'
-import { getPaths } from '../lib/index'
+import c from '../lib/colors.js'
+import { getPaths } from '../lib/index.js'
 
 // eslint-disable-next-line no-unused-vars
 export const handler = async ({ _, $0, commands = [], ...options }) => {
