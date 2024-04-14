@@ -10,8 +10,8 @@ import {
 import { MockProviders } from './MockProviders'
 
 export const MockingLoader = async () => {
-  console.log('In MockingLoader')
-  import.meta.glob('../../src/**/*.mock.{js,ts}', { eager: true })
+  /** Need to figure out how to dynamically do this */
+  // import.meta.glob('../../src/**/*.mock.{js,ts}', { eager: true })
 
   await startMSW('browsers')
   setupRequestHandlers()

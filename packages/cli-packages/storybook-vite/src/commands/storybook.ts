@@ -5,10 +5,10 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 import type { StorybookYargsOptions } from '../types'
 
-export const command = 'storybook'
-export const aliases = ['sb']
+export const command = 'storybookVite'
+export const aliases = ['sbv']
 export const description =
-  'Launch Storybook: a tool for building UI components and pages in isolation'
+  'Launch Storybook: a tool for building UI components and pages in isolation (now, with Vite)!'
 
 export const defaultOptions: StorybookYargsOptions = {
   open: true,
@@ -20,7 +20,7 @@ export const defaultOptions: StorybookYargsOptions = {
 }
 
 export function builder(
-  yargs: Argv<StorybookYargsOptions>
+  yargs: Argv<StorybookYargsOptions>,
 ): Argv<StorybookYargsOptions> {
   return yargs
     .option('build', {
@@ -58,8 +58,8 @@ export function builder(
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#storybook'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#storybook',
+      )}`,
     )
 }
 
