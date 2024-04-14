@@ -25,7 +25,6 @@
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/nodemailer": "^6",
     "tsx": "4.7.1",
     "typescript": "5.4.5"
   },
