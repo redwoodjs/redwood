@@ -25,7 +25,9 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.1",
     "@prisma/client": "5.11.0",
+    "@redwoodjs/api": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
+    "camelcase": "6.3.0",
     "core-js": "3.36.1"
   },
   "devDependencies": {
