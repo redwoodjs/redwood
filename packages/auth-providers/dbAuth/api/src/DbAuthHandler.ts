@@ -16,12 +16,7 @@ import base64url from 'base64url'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 
-import type {
-  CorsConfig,
-  CorsContext,
-  CorsHeaders,
-  PartialRequest,
-} from '@redwoodjs/api'
+import type { CorsConfig, CorsContext, PartialRequest } from '@redwoodjs/api'
 import {
   createCorsContext,
   isFetchApiRequest,
@@ -30,6 +25,7 @@ import {
 
 import * as DbAuthError from './errors'
 import {
+  buildDbAuthResponse,
   cookieName,
   decryptSession,
   encryptSession,
@@ -490,17 +486,14 @@ export class DbAuthHandler<
       corsHeaders = this.corsContext.getRequestHeaders(this.normalizedRequest)
       // Return CORS headers for OPTIONS requests
       if (this.corsContext.shouldHandleCors(this.normalizedRequest)) {
-        return this._buildResponseWithCorsHeaders(
-          { body: '', statusCode: 200 },
-          corsHeaders,
-        )
+        return buildDbAuthResponse({ body: '', statusCode: 200 }, corsHeaders)
       }
     }
 
     // if there was a problem decryption the session, just return the logout
     // response immediately
     if (this.hasInvalidSession) {
-      return this._buildResponseWithCorsHeaders(
+      return buildDbAuthResponse(
         this._ok(...this._logoutResponse()),
         corsHeaders,
       )
@@ -511,27 +504,24 @@ export class DbAuthHandler<
 
       // get the auth method the incoming request is trying to call
       if (!DbAuthHandler.METHODS.includes(method)) {
-        return this._buildResponseWithCorsHeaders(this._notFound(), corsHeaders)
+        return buildDbAuthResponse(this._notFound(), corsHeaders)
       }
 
       // make sure it's using the correct verb, GET vs POST
       if (this.httpMethod !== DbAuthHandler.VERBS[method]) {
-        return this._buildResponseWithCorsHeaders(this._notFound(), corsHeaders)
+        return buildDbAuthResponse(this._notFound(), corsHeaders)
       }
 
       // call whatever auth method was requested and return the body and headers
       const [body, headers, options = { statusCode: 200 }] =
         await this[method]()
 
-      return this._buildResponseWithCorsHeaders(
-        this._ok(body, headers, options),
-        corsHeaders,
-      )
+      return buildDbAuthResponse(this._ok(body, headers, options), corsHeaders)
     } catch (e: any) {
       if (e instanceof DbAuthError.WrongVerbError) {
-        return this._buildResponseWithCorsHeaders(this._notFound(), corsHeaders)
+        return buildDbAuthResponse(this._notFound(), corsHeaders)
       } else {
-        return this._buildResponseWithCorsHeaders(
+        return buildDbAuthResponse(
           this._badRequest(e.message || e),
           corsHeaders,
         )
@@ -1556,37 +1546,6 @@ export class DbAuthHandler<
       statusCode: 400,
       body: JSON.stringify({ error: message }),
       headers: new Headers({ 'content-type': 'application/json' }),
-    }
-  }
-
-  /**
-   * Returns a lambda response!
-   */
-  _buildResponseWithCorsHeaders(
-    response: {
-      body?: string
-      statusCode: number
-      headers?: Headers
-    },
-    corsHeaders: CorsHeaders,
-  ) {
-    const setCookieHeaders = response.headers?.getSetCookie() || []
-
-    return {
-      ...response,
-      headers: {
-        ...Object.fromEntries(response.headers?.entries() || []),
-        ...corsHeaders,
-      },
-      // This is a lambda feature, for setting multiple headers with the same name
-      // Also see our packages/api-server/src/__tests__/requestHandlers/utils.test.ts
-      // @TODO double check that multiValueHeaders are supported on both Netlify and Vercel
-      multiValueHeaders:
-        setCookieHeaders.length > 0
-          ? {
-              'set-cookie': response.headers?.getSetCookie(),
-            }
-          : {},
     }
   }
 

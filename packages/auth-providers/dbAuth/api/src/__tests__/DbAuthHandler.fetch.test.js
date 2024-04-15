@@ -656,8 +656,8 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(myEvent, context, options)
       const response = await dbAuth.invoke()
 
-      expect(response.multiValueHeaders['set-cookie']).toContain(LOGOUT_COOKIE)
-      expect(response.multiValueHeaders['set-cookie']).toContain(
+      expect(response.headers['set-cookie']).toContain(LOGOUT_COOKIE)
+      expect(response.headers['set-cookie']).toContain(
         'auth-provider=;Expires=Thu, 01 Jan 1970 00:00:00 GMT',
       )
     })
