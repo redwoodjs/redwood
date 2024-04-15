@@ -79,6 +79,7 @@ export default class OgImageMiddleware {
     const url = new URL(req.url)
     // @TODO notice here that favicon.ico comes through as a request
     // is this something we need to fix in middleware routing or just handle in this middleware?
+    // This is because static assets isn't higher on the list
     console.log(`👉 \n ~ OgImageMiddleware ~ url:`, url)
     const { pathname, origin } = url
     const routes = await getRoutesList()
@@ -309,13 +310,9 @@ export default class OgImageMiddleware {
     console.info(filePath)
 
     try {
-      // @TODO In dev, once the code moves inside the framework
-      // we can't import the file directly... we have to use viteDevServer.ssrLoadModule
       if (invokeOptions.viteDevServer) {
         const { data, output } =
           await invokeOptions.viteDevServer.ssrLoadModule(filePath)
-        console.log(`👉 \n ~ OgImageMiddleware ~ all:`, { data, output })
-
         return { data, Component: output }
       } else {
         const { data, output } = await import(filePath)
