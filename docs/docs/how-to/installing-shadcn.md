@@ -1,4 +1,6 @@
-# Installing ShadCN
+# ShadCN
+
+## Installing ShadCN
 
 [ShadCN](https://ui.shadcn.com/) is an open source component library. 
 
@@ -10,12 +12,12 @@ To install ShadCN, there are a few things you need to keep in mind regarding the
 If you want to install a package to use in the frontend, you'll need to run:
 
 ```sh
-yarn workspace web add <PACKAGE_NAME>
+yarn workspace web add <package>
 ```
 
 You can refer to the [Manual Installation documentation on ShadCN](https://ui.shadcn.com/docs/installation/manual), but you'll need to adapt the instructions to the Redwood structure.
 
-1. Add [Tailwind CSS](https://tailwindcss.com/)
+### 1. Add [Tailwind CSS](https://tailwindcss.com/)
 
 ```sh
 yarn rw setup ui tailwindcss
@@ -23,13 +25,13 @@ yarn rw setup ui tailwindcss
 
 This command will install Tailwind CSS and set up the necessary configuration files.
 
-2. Add the dependencies
+### 2. Add the dependencies
 
 ```sh
 yarn workspace web add tailwindcss-animate class-variance-authority clsx tailwind-merge
 ```
 
-3. Add the icon library
+### 3. Add the icon library
 
 If you're using the `default` style, install `lucide-react`:
 
@@ -43,7 +45,7 @@ If you're using the `new-york` style, install `@radix-ui/react-icons`:
 yarn workspace web add @radix-ui/react-icons
 ```
 
-4. Configure path aliases
+### 4. Configure path aliases
 
 Vite doesn't understand TypeScript's path mappings out of the box. You'll need to install a plugin to help Vite understand the path mappings.
 
@@ -76,8 +78,7 @@ Within your `web/tsconfig.json` file, you'll need to add the path aliases:
 
 After doing this, you may need to restart your server: `yarn rw dev` and/or restart TypeScript within your VS Code project `Cmd + Shift + P` and look for "Restart TS Server"
 
-
-5. Configure tailwind.config.js
+### 5. Configure tailwind.config.js
 
 Replace your config/tailwind.config.js with this:
 
@@ -157,11 +158,11 @@ module.exports = {
 
 :::note
 If you're comparing this file against the tailwind.config.js file in [ShadCN's documentation](https://ui.shadcn.com/docs/installation/manual), there are a few key differences:
-- I removed the references to `fontFamily`.
-- the `content` path is different. I've updated it specifically for Redwood.
+- Removed the references to `fontFamily`. We're using the default Tailwind fonts.
+- The `content` path is different. It's updated specifically for Redwood.
 :::
 
-6. Configure styles
+### 6. Configure styles
 
 Redwood already set up a CSS file for Tailwind: `web/src/index.css`.
 
@@ -265,7 +266,7 @@ Add the following below the Tailwind setup:
 }
 ```
 
-7. Add a cn helper
+### 7. Add a cn helper
 
 Shad uses a `cn` helper to make it easier to conditionally add Tailwind CSS classes.
 
@@ -282,7 +283,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
-8. That's it! ... Kind of. If you want to use ShadCN's command line interface (CLI) keep reading.
+### 8. That's it! ... Kind of. If you want to use ShadCN's command line interface (CLI) keep reading.
 
 If you look at [ShadCN's documentation for their CLI tool](https://ui.shadcn.com/docs/cli), you're supposed to run 
 
@@ -325,7 +326,7 @@ A few things worth noting:
 - Set `tsx` to `true` if you're using TypeScript, `false` if you're using JavaScript.
 :::
 
-9. Add a script to your `package.json`
+### 9. Add a script to your `package.json`
 
 Within the `package.json` file, in the root of your project, add a `scripts` section:
 
@@ -338,7 +339,7 @@ Within the `package.json` file, in the root of your project, add a `scripts` sec
 Now, when you want to add a new ShadCN component from the CLI, you can run:
 
 ```sh
-yarn shad <NAME-OF-COMPONENT>
+yarn shad <component name>
 ```
 
 :::note
