@@ -5,7 +5,7 @@
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "dist/cjs",
   },
   "include": ["src", "ambient.d.ts"],
   "references": [

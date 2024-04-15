@@ -5,7 +5,7 @@
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
     "rootDir": "src",
-    "outDir": "dist/esm",
+    "outDir": "dist",
   },
   "include": ["src", "ambient.d.ts"],
   "references": [
