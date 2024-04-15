@@ -41,13 +41,11 @@ export const useLogIn = <
     React.SetStateAction<AuthProviderState<TUser>>
   >,
   getCurrentUser: ReturnType<typeof useCurrentUser>,
-  skipFetchCurrentUser: boolean | undefined,
 ) => {
   const reauthenticate = useReauthenticate(
     authImplementation,
     setAuthProviderState,
     getCurrentUser,
-    skipFetchCurrentUser,
   )
 
   return useCallback(
