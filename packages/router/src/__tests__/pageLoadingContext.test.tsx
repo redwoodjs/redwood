@@ -307,10 +307,11 @@ test(
   'Navigation',
   async () => {
     const screen = render(<TestRouter />)
+    // TODO: implement pageLoadDelay (potentially not needed with preloading
+    // features)
+    // Above TODO added in https://github.com/redwoodjs/redwood/pull/8392
     // First we should render an empty page while waiting for pageLoadDelay to
     // pass
-
-    //TODO: implement pageLoadDelay potentially don't need with preloading features
     // expect(screen.container).toBeEmptyDOMElement()
 
     // Then we should render whileLoadingPage
@@ -439,8 +440,20 @@ test(
     // After navigating we will keep rendering the previous page for 100 ms,
     // (which is our configured delay) before rendering the "whileLoading"
     // page.
-    // TODO: We don't currently implement page loading delay anymore
+    // TODO: We don't currently implement page loading delay anymore as of
+    // https://github.com/redwoodjs/redwood/pull/8392. See if we should add
+    // that back in.
     // await waitFor(() => screen.getByText('Location Page'))
+
+    // Because we're still rendering the LocationPage, the pathname returned
+    // by useLocation should still be /location
+    // But because of a limitation in our implementation, that's currently
+    // not the case.
+    // TODO: Update this test when #3779 is fixed. (It'll start failing).
+    // Should get rid of the waitFor below and use the one that's currently
+    // commented out.
+    await waitFor(() => screen.getByText('/about'))
+    // await waitFor(() => screen.getByText('/location'))
 
     // And then we'll render the placeholder...
     await waitFor(() => screen.getByText('AboutPagePlaceholder'))
