@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import { buildDbAuthResponse } from '/Users/dac09/Code/redwood/packages/auth-providers/dbAuth/api/src/shared'
+import { buildDbAuthResponse } from '../shared'
 
 describe('buildDbAuthResponse', () => {
   it('should add cors headers and set-cookie as array to the response', () => {
