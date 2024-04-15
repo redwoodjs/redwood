@@ -24,7 +24,7 @@ export interface CreateServerOptions {
   fastifyServerOptions?: Omit<FastifyServerOptions, 'logger'>
 
   /**
-   * Add customized contentTypeParser for Fastify plugin
+   * Add customized setting for the fastify server instance.
    */
   beforeApiConfig?: (server: FastifyInstance) => void
 
