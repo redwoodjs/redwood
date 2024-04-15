@@ -55,10 +55,9 @@
     "@types/qs": "6.9.14",
     "@types/split2": "4.2.3",
     "@types/yargs": "17.0.32",
-    "aws-lambda": "1.0.7",
     "pino-abstract-transport": "1.1.0",
     "tsx": "4.7.1",
-    "typescript": "5.4.3",
+    "typescript": "5.4.5",
     "vitest": "1.4.0"
   },
   "peerDependencies": {

@@ -32,7 +32,7 @@ type RDServerType = typeof RDServerModule
 interface RenderToStreamArgs {
   ServerEntry: ServerEntryType
   FallbackDocument: React.FunctionComponent
-  currentPathName: string
+  currentUrl: URL
   metaTags: TagDescriptor[]
   cssLinks: string[]
   isProd: boolean
@@ -68,7 +68,7 @@ export async function reactRenderToStreamResponse(
   const {
     ServerEntry,
     FallbackDocument,
-    currentPathName,
+    currentUrl,
     metaTags,
     cssLinks,
     isProd,
@@ -107,7 +107,7 @@ export async function reactRenderToStreamResponse(
 
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
-  const renderRoot = (path: string) => {
+  const renderRoot = (url: URL) => {
     return React.createElement(
       ServerAuthProvider,
       {
@@ -116,9 +116,7 @@ export async function reactRenderToStreamResponse(
       React.createElement(
         LocationProvider,
         {
-          location: {
-            pathname: path,
-          },
+          location: url,
         },
         React.createElement(
           ServerHtmlProvider,
@@ -173,7 +171,7 @@ export async function reactRenderToStreamResponse(
       },
     }
 
-    let root: React.ReactElement = renderRoot(currentPathName)
+    let root: React.ReactElement = renderRoot(currentUrl)
     root = React.createElement(renderFromDist('AboutPage'))
 
     const reactStream: ReactDOMServerReadableStream =

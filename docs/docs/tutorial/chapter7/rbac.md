@@ -72,6 +72,10 @@ Before we do that, we'll need to make sure that the web side has access to the r
 
 ```javascript title="api/src/lib/auth.js"
 export const getCurrentUser = async (session) => {
+  if (!session || typeof session.id !== 'number') {
+    throw new Error('Invalid session')
+  }
+
   return await db.user.findUnique({
     where: { id: session.id },
     // highlight-next-line

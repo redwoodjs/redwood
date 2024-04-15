@@ -3,7 +3,7 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import { describe, beforeAll, it, expect } from 'vitest'
 
-import { Metadata } from './Metadata.js'
+import { Metadata } from '../Metadata.js'
 
 // DOCS: can return a structured object from the database and just give it to `og` and it works
 
