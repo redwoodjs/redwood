@@ -274,7 +274,6 @@ export const buildDbAuthResponse = (
   corsHeaders: CorsHeaders,
 ) => {
   const setCookieHeaders = response.headers?.getSetCookie() || []
-  console.log(`👉 \n ~ setCookieHeaders:`, setCookieHeaders)
 
   return {
     ...response,
