@@ -1,33 +1,13 @@
 import type { ReactNode, ReactElement } from 'react'
 import { isValidElement } from 'react'
 
-import type { RouteProps } from './router'
-import { Route } from './router'
-import type { Spec } from './util'
-
-export type RenderMode = 'stream' | 'html'
-
-export type PageType =
-  | Spec
-  | React.ComponentType<any>
-  | ((props: any) => JSX.Element)
-
-export interface RedirectRouteProps {
-  redirect: string
-  path: string
-  name?: string
-}
-
-export interface NotFoundRouteProps {
-  notfound: boolean
-  page: PageType
-  prerender?: boolean
-  renderMode?: RenderMode
-}
-
-export type InternalRouteProps = Partial<
-  RouteProps & RedirectRouteProps & NotFoundRouteProps
->
+import type {
+  InternalRouteProps,
+  NotFoundRouteProps,
+  RedirectRouteProps,
+  RouteProps,
+} from './Route'
+import { Route } from './Route'
 
 const isNodeTypeRoute = (
   node: ReactNode,
@@ -77,7 +57,7 @@ export function isNotFoundRoute(
 /**
  * Check that the Route element is ok
  * and that it could be one of the following:
- * <Route redirect .../>  (ridirect Route)
+ * <Route redirect .../>  (redirect Route)
  * <Route notfound .../>  (notfound Route)
  * <Route .../> (standard Route)
  *
