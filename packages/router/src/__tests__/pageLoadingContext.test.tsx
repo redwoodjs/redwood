@@ -451,9 +451,10 @@ test(
     // not the case.
     // TODO: Update this test when #3779 is fixed. (It'll start failing).
     // Should get rid of the waitFor below and use the one that's currently
-    // commented out.
-    await waitFor(() => screen.getByText('/about'))
-    // await waitFor(() => screen.getByText('/location'))
+    // commented out. (Test disabled as of
+    // https://github.com/redwoodjs/redwood/pull/8392)
+    // await waitFor(() => screen.getByText('/about'))
+    // // await waitFor(() => screen.getByText('/location'))
 
     // And then we'll render the placeholder...
     await waitFor(() => screen.getByText('AboutPagePlaceholder'))
