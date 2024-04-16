@@ -90,11 +90,18 @@ export function renderFromDist<TProps extends Record<string, any>>(
   const SsrComponent = async (props: TProps) => {
     console.log('SsrComponent', rscId, 'props', props)
 
-    const routes = await getFunctionComponent<TProps>('ServerRoutes')
-    if (Math.random() > 5) {
-      const page = await getFunctionComponent<TProps>(rscId)
-      console.log('page', page)
+    let routes: React.FunctionComponent<TProps>
+
+    try {
+      routes = await getFunctionComponent<TProps>('ServerRoutes')
+    } catch (error) {
+      // For now we'll just swallow this error because not all projects will
+      // have a ServerRoutes component
+      // TODO (RSC): Remove the try/catch and let the error bubble up when
+      // we've added server routers to our test projects
+      routes = () => createElement('div', {}, 'Loading')
     }
+
     const clientEntries = (await getEntries()).clientEntries
 
     // TODO (RSC): Try removing the proxy here and see if it's really necessary.
