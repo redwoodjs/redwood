@@ -1,3 +1,5 @@
+import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
+
 import type { DbAuthResponse } from '@redwoodjs/auth-dbauth-api'
 import {
   cookieName as cookieNameCreator,
@@ -6,10 +8,16 @@ import {
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
 import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
 import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
+
 export interface DbAuthMiddlewareOptions {
   cookieName: string
   dbAuthUrl?: string
-  dbAuthHandler: (req: Request) => DbAuthResponse
+  // @NOTE: we never pass lambda event or contexts, when using middleware
+  // this is because in existing projects have it typed api/src/functions/auth.ts
+  dbAuthHandler: (
+    req: Request | APIGatewayProxyEvent,
+    context?: Context,
+  ) => DbAuthResponse
   getCurrentUser: GetCurrentUser
 }
 
