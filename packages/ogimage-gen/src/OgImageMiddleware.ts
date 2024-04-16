@@ -8,13 +8,11 @@ import { renderToString } from 'react-dom/server'
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
 import { getPaths } from '@redwoodjs/project-config'
 import { LocationProvider, matchPath } from '@redwoodjs/router'
-// @TODO HELP ESM-CJS ISSUE HERE >>>
-// We have to set tsconfig.moduleResolution >= "Node16", but if we do that project-config imports have an error
 import type {
   MiddlewareRequest,
   MiddlewareResponse,
   MiddlewareInvokeOptions,
-} from '@redwoodjs/vite/dist/middleware'
+} from '@redwoodjs/vite/middleware'
 
 import { getRoutesList } from './getRoutesList.js'
 import { OGIMAGE_DEFAULTS } from './hooks.js'
