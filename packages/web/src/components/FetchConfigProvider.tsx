@@ -27,10 +27,7 @@ interface Props {
  * Note that the auth bearer token is now passed in packages/web/src/apollo/index.tsx
  * as the token is retrieved async
  */
-export const FetchConfigProvider: React.FC<Props> = ({
-  useAuth = useNoAuth,
-  ...rest
-}) => {
+export const FetchConfigProvider: React.FC<Props> = ({ ...rest }) => {
   return (
     <FetchConfigContext.Provider
       value={{ uri: getApiGraphQLUrl() }}
