@@ -145,14 +145,14 @@ export const getAuthenticationContext = async ({
   let i = 0
   while (!decoded && i < authDecoders.length) {
     decoded = await authDecoders[i](token, type, {
-      // @TODO: We will need to make a breaking change to support `Request` objects.
+      // @MARK: When called from middleware, the decoder will pass Request, not Lambda event
       event,
       context,
     })
     i++
   }
 
-  // @TODO we need to rename token. It's not actually the token - its the cookie header -because
+  // @TODO should we rename token? It's not actually the token - its the cookie header -because
   // some auth providers will have a cookie where we don't know the key
-  return [decoded, { type, schema, token }, { event: event, context }]
+  return [decoded, { type, schema, token }, { event, context }]
 }
