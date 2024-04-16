@@ -10,7 +10,7 @@ import type { default as RDServerModule } from 'react-dom/server.edge'
 
 import type { ServerAuthState } from '@redwoodjs/auth'
 import { ServerAuthProvider } from '@redwoodjs/auth'
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { LocationProvider } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
@@ -123,8 +123,10 @@ export async function reactRenderToStreamResponse(
           {
             value: injectToPage,
           },
-          // React.createElement(React.Fragment, undefined, 'Joy! 🥳'),
-          React.createElement(ServerEntry, { css: cssLinks, meta: metaTags }),
+          React.createElement(ServerEntry, {
+            css: cssLinks,
+            meta: metaTags,
+          }),
         ),
       ),
     )
@@ -169,11 +171,12 @@ export async function reactRenderToStreamResponse(
       },
     }
 
-    console.log('currentPathName', urlPath)
-    let root: React.ReactNode = React.createElement(renderFromDist(urlPath))
-    if (Math.random() > 5) {
-      root = renderRoot(urlPath)
-      root = ServerEntry({ css: cssLinks, meta: metaTags })
+    const rscEnabled = getConfig().experimental?.rsc?.enabled
+
+    let root: React.ReactNode = renderRoot(urlPath)
+
+    if (rscEnabled) {
+      root = React.createElement(renderFromDist(urlPath))
     }
 
     const reactStream: ReactDOMServerReadableStream =
