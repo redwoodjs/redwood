@@ -1,9 +1,8 @@
-import {
-  decryptSession,
-  getSession,
-  cookieName as cookieNameCreator,
-} from '@redwoodjs/auth-dbauth-api'
 import type { DbAuthResponse } from '@redwoodjs/auth-dbauth-api'
+import {
+  cookieName as cookieNameCreator,
+  dbAuthSession,
+} from '@redwoodjs/auth-dbauth-api'
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
 import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
 import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
@@ -45,7 +44,7 @@ export const createDbAuthMiddleware = ({
       return new MiddlewareResponse(output.body, {
         headers: finalHeaders,
         status: output.statusCode,
-      }) // ?
+      })
     }
 
     const cookieHeader = req.headers.get('Cookie')
@@ -56,12 +55,24 @@ export const createDbAuthMiddleware = ({
     }
 
     // 👇 Authenticated request
-    const session = getSession(cookieHeader, cookieNameCreator(cookieName))
-
     try {
-      const [decryptedSession] = decryptSession(session)
+      // Call the dbAuth auth decoder. For dbAuth we have direct access to the `dbAuthSession` function.
+      // Other providers may be slightly different.
+      const decryptedSession = dbAuthSession(req as Request, cookieName)
 
-      const currentUser = await getCurrentUser(decryptedSession, req)
+      const currentUser = await getCurrentUser(
+        decryptedSession,
+        {
+          type: 'dbAuth',
+          schema: 'cookie',
+          // @MARK: We pass the entire cookie header as a token. This isn't actually the token!
+          token: cookieHeader,
+        },
+        {
+          // MWRequest is a superset of Request
+          event: req as Request,
+        },
+      )
 
       // Short circuit here ...
       // if the call came from packages/auth-providers/dbAuth/web/src/getCurrentUserFromMiddleware.ts
@@ -82,8 +93,8 @@ export const createDbAuthMiddleware = ({
       req.serverAuthContext.set(null)
 
       // Clear the cookies, because decryption was invalid
-      res.cookies.delete(cookieNameCreator(cookieName))
-      res.cookies.delete('auth-provider')
+      res.cookies.clear(cookieNameCreator(cookieName))
+      res.cookies.clear('auth-provider')
     }
 
     return res
