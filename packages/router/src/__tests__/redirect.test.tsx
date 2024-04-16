@@ -3,7 +3,8 @@ import React from 'react'
 import { act, render, waitFor } from '@testing-library/react'
 
 import { navigate } from '../history'
-import { Route, Router } from '../router'
+import { Route } from '../Route'
+import { Router } from '../router'
 
 const RedirectedRoutes = () => {
   const SimplePage = () => <h1>FindMeSimple</h1>
