@@ -34,8 +34,12 @@ async function getFunctionComponent<TProps>(
     return mod?.default
   }
 
+  if (typeof mod?.[rscId] === 'function') {
+    return mod?.[rscId]
+  }
+
   // TODO (RSC): Making this a 404 error is marked as "HACK" in waku's source
-  throw new StatusError('No function component found', 404)
+  throw new StatusError('No function component found for ' + rscId, 404)
 }
 
 // This gets executed in an RSC server "world" and should return the path to
@@ -90,16 +94,17 @@ export function renderFromDist<TProps extends Record<string, any>>(
   const SsrComponent = async (props: TProps) => {
     console.log('SsrComponent', rscId, 'props', props)
 
-    let routes: React.FunctionComponent<TProps>
+    let ServerEntry: React.FunctionComponent<TProps>
 
     try {
-      routes = await getFunctionComponent<TProps>('ServerRoutes')
+      ServerEntry = await getFunctionComponent<TProps>('ServerEntry')
     } catch (error) {
+      console.log('SsrComponent error', error)
       // For now we'll just swallow this error because not all projects will
       // have a ServerRoutes component
       // TODO (RSC): Remove the try/catch and let the error bubble up when
       // we've added server routers to our test projects
-      routes = () => createElement('div', {}, 'Loading')
+      ServerEntry = () => createElement('div', {}, 'Loading')
     }
 
     const clientEntries = (await getEntries()).clientEntries
@@ -139,7 +144,7 @@ export function renderFromDist<TProps extends Record<string, any>>(
     const stream = renderToReadableStream(
       // createElement(layout, undefined, createElement(page, props)),
       // @ts-expect-error - WIP
-      createElement(routes, { location: { pathname: rscId } }),
+      createElement(ServerEntry, { location: { pathname: rscId } }),
       bundlerConfig,
     )
 

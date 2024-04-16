@@ -173,10 +173,12 @@ export async function reactRenderToStreamResponse(
 
     const rscEnabled = getConfig().experimental?.rsc?.enabled
 
-    let root: React.ReactNode = renderRoot(urlPath)
+    let root: React.ReactNode
 
     if (rscEnabled) {
       root = React.createElement(renderFromDist(urlPath))
+    } else {
+      root = renderRoot(urlPath)
     }
 
     const reactStream: ReactDOMServerReadableStream =
