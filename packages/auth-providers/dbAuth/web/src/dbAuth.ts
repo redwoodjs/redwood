@@ -25,13 +25,14 @@ export type CustomProviderHooks = {
   ) => (rolesToCheck: string | string[]) => boolean
 }
 
-export function createMiddlewareAuth(
+// This is the middleware-edition auth function
+// Overrides the default getCurrentUser to fetch it from middleware instead
+function createMiddlewareAuth(
   dbAuthClient: ReturnType<typeof createDbAuthClient>,
   customProviderHooks?: CustomProviderHooks,
 ) {
   return createAuthentication(dbAuthClient, {
     // @MARK This is key! 👇
-    // Override the default getCurrentUser to fetch it from middleware instead
     ...customProviderHooks,
     useCurrentUser:
       customProviderHooks?.useCurrentUser ??
@@ -48,6 +49,10 @@ export function createAuth(
     ) => (rolesToCheck: string | string[]) => boolean
   },
 ) {
+  if (dbAuthClient.useMiddlewareAuth) {
+    return createMiddlewareAuth(dbAuthClient, customProviderHooks)
+  }
+
   return createAuthentication(dbAuthClient, customProviderHooks)
 }
 
