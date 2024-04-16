@@ -31,25 +31,9 @@ export const FetchConfigProvider: React.FC<Props> = ({
   useAuth = useNoAuth,
   ...rest
 }) => {
-  const { isAuthenticated, type } = useAuth()
-
-  if (!isAuthenticated) {
-    return (
-      <FetchConfigContext.Provider
-        value={{ uri: getApiGraphQLUrl() }}
-        {...rest}
-      />
-    )
-  }
-
   return (
     <FetchConfigContext.Provider
-      value={{
-        uri: getApiGraphQLUrl(),
-        headers: {
-          'auth-provider': type,
-        },
-      }}
+      value={{ uri: getApiGraphQLUrl() }}
       {...rest}
     />
   )
