@@ -3,6 +3,10 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
+    // @TODO: Help, cannot set moduleResolution and module to NodeNext
+    // because project-config complains!
+    // "module": "NodeNext",
+    // "moduleResolution": "NodeNext"
   },
   "include": [
     "src"

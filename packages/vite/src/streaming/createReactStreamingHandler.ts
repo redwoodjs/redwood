@@ -24,7 +24,7 @@ import { loadAndRunRouteHooks } from './triggerRouteHooks.js'
 interface CreateReactStreamingHandlerOptions {
   routes: RWRouteManifestItem[]
   clientEntryPath: string
-  getStylesheetLinks: (route: RWRouteManifestItem | RouteSpec) => string[]
+  getStylesheetLinks: (route?: RWRouteManifestItem | RouteSpec) => string[]
   getMiddlewareRouter: () => Promise<Router.Instance<any>>
 }
 
@@ -87,7 +87,7 @@ export const createReactStreamingHandler = async (
         matchedMw?.handler as Middleware | undefined,
         {
           route: currentRoute,
-          cssPaths: currentRoute ? getStylesheetLinks(currentRoute) : [],
+          cssPaths: getStylesheetLinks(currentRoute),
           params: matchedMw?.params,
           viteDevServer,
         },

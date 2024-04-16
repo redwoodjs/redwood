@@ -77,11 +77,7 @@ export default class OgImageMiddleware {
     invokeOptions: MiddlewareInvokeOptions,
   ) {
     const url = new URL(req.url)
-    // @TODO notice here that favicon.ico comes through as a request
-    // is this something we need to fix in middleware routing or just handle in this middleware?
-    // This is because static assets isn't higher on the list
-    console.log(`👉 \n ~ OgImageMiddleware ~ url:`, url)
-    const { pathname, origin } = url
+    const { pathname } = url
     const routes = await getRoutesList()
 
     let currentRoute: RWRouteManifestItem | undefined = undefined
@@ -152,7 +148,6 @@ export default class OgImageMiddleware {
     // I think it doesn't work with jsx paths in my project at the moment
     // Try renaming AboutPage.png.jsx -> AboutPage.png.tsx
     const ogImgFilePath = this.getOgComponentPath(currentRoute, extension)
-    console.log(`👉 \n ~ OgImageMiddleware ~ ogImgFilePath:`, ogImgFilePath)
 
     const { data, Component } = await this.importComponent(
       ogImgFilePath,
@@ -186,7 +181,7 @@ export default class OgImageMiddleware {
         createElement(
           this.Document,
           {
-            css: cssPathsToUse.map((file) => `${origin}${file}`),
+            css: cssPathsToUse,
             meta: [],
           },
           createElement(
@@ -207,6 +202,14 @@ export default class OgImageMiddleware {
       mwResponse.headers.append('Content-Type', 'text/html')
       mwResponse.body = htmlOutput
     } else {
+      // This is a very important step! We set the page URL to the origin (root of your website)
+      // This allows assets like CSS, Images, etc. to be loaded with just relative paths
+      const baseUrl = url.origin
+
+      // @TODO can we use something other than page.goto? Because we just need the url to be set
+      // Maybe this is OK, but just slows things down a bit
+      await page.goto(baseUrl)
+
       await page.setContent(htmlOutput)
       const image = await page.screenshot(
         // @TODO TYPESCRIPT 😡
