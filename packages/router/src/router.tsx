@@ -6,13 +6,9 @@ import { AuthenticatedRoute } from './AuthenticatedRoute'
 import { LocationProvider, useLocation } from './location'
 import { namedRoutes } from './namedRoutes'
 import { normalizePage } from './page'
-import type { PageType } from './page'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { ParamsProvider } from './params'
 import { Redirect } from './redirect'
-import { Route } from './Route'
-import type { RouteProps } from './Route'
-import { isValidRoute } from './route-validators'
 import type { RouterContextProviderProps } from './router-context'
 import { RouterContextProvider } from './router-context'
 import { SplashPage } from './splash-page'
@@ -32,7 +28,7 @@ export interface RouterProps
   children: ReactNode
 }
 
-const Router: React.FC<RouterProps> = ({
+export const Router: React.FC<RouterProps> = ({
   useAuth,
   paramTypes,
   pageLoadingDelay,
@@ -261,17 +257,3 @@ const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
     return wrapped
   }, routeLoaderElement)
 })
-
-export {
-  Router,
-  // TODO: Remove this export in the next major version
-  Route,
-  // TODO: Remove this export in the next major version
-  namedRoutes as routes,
-  // TODO: Remove this export in the next major version
-  isValidRoute as isRoute,
-  // TODO: Remove this export in the next major version
-  PageType,
-  // TODO: Remove this export in the next major version
-  RouteProps,
-}
