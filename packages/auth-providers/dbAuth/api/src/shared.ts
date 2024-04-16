@@ -2,6 +2,7 @@ import crypto from 'node:crypto'
 
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 
+import type { CorsHeaders } from '@redwoodjs/api'
 import { getEventHeader, isFetchApiRequest } from '@redwoodjs/api'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 
@@ -255,6 +256,37 @@ export const cookieName = (name: string | undefined) => {
   const cookieName = name?.replace('%port%', '' + port) ?? 'session'
 
   return cookieName
+}
+
+/**
+ * Returns a lambda response!
+ *
+ * This is used as the final call to return a response from the handler.
+ *
+ * Converts "Set-Cookie" headers to an array of strings.
+ */
+export const buildDbAuthResponse = (
+  response: {
+    body?: string
+    statusCode: number
+    headers?: Headers
+  },
+  corsHeaders: CorsHeaders,
+) => {
+  const setCookieHeaders = response.headers?.getSetCookie() || []
+
+  return {
+    ...response,
+    headers: {
+      ...Object.fromEntries(response.headers?.entries() || []),
+      ...(setCookieHeaders.length > 0
+        ? {
+            'set-cookie': setCookieHeaders,
+          }
+        : {}),
+      ...corsHeaders,
+    },
+  }
 }
 
 export const extractHashingOptions = (text: string): ScryptOptions => {
