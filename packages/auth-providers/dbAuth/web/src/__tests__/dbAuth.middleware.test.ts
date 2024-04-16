@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 
 import type { CustomProviderHooks, DbAuthClientArgs } from '../dbAuth'
-import { createDbAuthClient, createMiddlewareAuth } from '../dbAuth'
+import { createDbAuthClient, createAuth } from '../dbAuth'
 
 import { fetchMock } from './dbAuth.test'
 
@@ -16,7 +16,7 @@ export function getMwDbAuth(
 ) {
   // We have to create a special createDbAuthClient with middleware = true
   const dbAuthClient = createDbAuthClient({ ...args, middleware: true })
-  const { useAuth, AuthProvider } = createMiddlewareAuth(dbAuthClient, {
+  const { useAuth, AuthProvider } = createAuth(dbAuthClient, {
     useCurrentUser: args.useCurrentUser,
     useHasRole: args.useHasRole,
   })
