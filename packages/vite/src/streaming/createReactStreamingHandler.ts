@@ -166,8 +166,6 @@ export const createReactStreamingHandler = async (
     // vite dev server to analyze the module graph
     const cssLinks = getStylesheetLinks(currentRoute)
 
-    console.log('currentRoute', currentRoute)
-
     const reactResponse = await reactRenderToStreamResponse(
       mwResponse,
       {
