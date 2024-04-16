@@ -28,7 +28,7 @@ import { createServerInjectionTransform } from './transforms/serverInjectionTran
 interface RenderToStreamArgs {
   ServerEntry: ServerEntryType
   FallbackDocument: React.FunctionComponent
-  currentUrl: URL
+  urlPath: string
   metaTags: TagDescriptor[]
   cssLinks: string[]
   isProd: boolean
@@ -64,7 +64,7 @@ export async function reactRenderToStreamResponse(
   const {
     ServerEntry,
     FallbackDocument,
-    currentUrl,
+    urlPath,
     metaTags,
     cssLinks,
     isProd,
@@ -103,7 +103,7 @@ export async function reactRenderToStreamResponse(
 
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
-  const renderRoot = (url: URL) => {
+  const renderRoot = (urlPath: string) => {
     return React.createElement(
       ServerAuthProvider,
       {
@@ -112,7 +112,7 @@ export async function reactRenderToStreamResponse(
       React.createElement(
         LocationProvider,
         {
-          location: url,
+          location: { pathname: urlPath },
         },
         React.createElement(
           ServerHtmlProvider,
@@ -155,7 +155,7 @@ export async function reactRenderToStreamResponse(
       },
     }
 
-    const root = renderRoot(currentUrl)
+    const root = renderRoot(urlPath)
 
     const reactStream: ReactDOMServerReadableStream =
       await renderToReadableStream(root, renderToStreamOptions)
