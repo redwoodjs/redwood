@@ -30,8 +30,6 @@ export async function rscBuildAnalyze() {
     throw new Error('Vite config not found')
   }
 
-  console.log('entries', rwPaths.web.entries)
-
   // TODO (RSC): Can we skip actually building here? We only need to analyze
   // the files, we don't use the generated built files for anything. Maybe we
   // can integrate this with building for the client, where we actually need
@@ -43,7 +41,7 @@ export async function rscBuildAnalyze() {
     // for returning the entry names. Plus, the entire RSC build is chatty
     // enough as it is. You can enable this temporarily if you need to for
     // debugging, but we're keeping it silent by default.
-    logLevel: 'info',
+    logLevel: 'silent',
     plugins: [
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
