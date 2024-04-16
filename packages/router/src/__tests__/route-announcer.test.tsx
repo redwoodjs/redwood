@@ -5,8 +5,10 @@ import '@testing-library/jest-dom/jest-globals'
 
 import { getAnnouncement } from '../a11yUtils'
 import { navigate } from '../history'
+import { namedRoutes as routes } from '../namedRoutes'
+import { Route } from '../Route'
 import RouteAnnouncement from '../route-announcement'
-import { Router, Route, routes } from '../router'
+import { Router } from '../router'
 
 // SETUP
 const HomePage = () => <h1>Home Page</h1>
@@ -51,7 +53,6 @@ const EmptyH1Page = () => (
 
 beforeEach(() => {
   window.history.pushState({}, '', '/')
-  // @ts-expect-error - No type gen here for routes like there is in a real app
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 
