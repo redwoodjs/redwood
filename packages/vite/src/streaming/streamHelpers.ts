@@ -9,13 +9,13 @@ import type {
 import type { default as RDServerModule } from 'react-dom/server.edge'
 
 import type { ServerAuthState } from '@redwoodjs/auth'
-// import { ServerAuthProvider } from '@redwoodjs/auth'
+import { ServerAuthProvider } from '@redwoodjs/auth'
 import { getPaths } from '@redwoodjs/project-config'
-// import { LocationProvider } from '@redwoodjs/router'
+import { LocationProvider } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
 import {
-  // ServerHtmlProvider,
+  ServerHtmlProvider,
   createInjector,
 } from '@redwoodjs/web/dist/components/ServerInject'
 
@@ -73,7 +73,7 @@ export async function reactRenderToStreamResponse(
     cssLinks,
     isProd,
     jsBundles = [],
-    authState: _authState,
+    authState,
   } = renderOptions
 
   if (!isProd) {
@@ -87,7 +87,7 @@ export async function reactRenderToStreamResponse(
   })
 
   // This ensures an isolated state for each request
-  const { injectionState, injectToPage: _injectToPage } = createInjector()
+  const { injectionState, injectToPage } = createInjector()
 
   // This makes it safe for us to inject at any point in the stream
   const bufferTransform = createBufferedTransformStream()
@@ -107,28 +107,28 @@ export async function reactRenderToStreamResponse(
 
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
-  // const renderRoot = (urlPath: string) => {
-  //   return React.createElement(
-  //     ServerAuthProvider,
-  //     {
-  //       value: authState,
-  //     },
-  //     React.createElement(
-  //       LocationProvider,
-  //       {
-  //         location: { pathname: urlPath },
-  //       },
-  //       React.createElement(
-  //         ServerHtmlProvider,
-  //         {
-  //           value: injectToPage,
-  //         },
-  //         // React.createElement(React.Fragment, undefined, 'Joy! 🥳'),
-  //         React.createElement(ServerEntry, { css: cssLinks, meta: metaTags }),
-  //       ),
-  //     ),
-  //   )
-  // }
+  const renderRoot = (urlPath: string) => {
+    return React.createElement(
+      ServerAuthProvider,
+      {
+        value: authState,
+      },
+      React.createElement(
+        LocationProvider,
+        {
+          location: { pathname: urlPath },
+        },
+        React.createElement(
+          ServerHtmlProvider,
+          {
+            value: injectToPage,
+          },
+          // React.createElement(React.Fragment, undefined, 'Joy! 🥳'),
+          React.createElement(ServerEntry, { css: cssLinks, meta: metaTags }),
+        ),
+      ),
+    )
+  }
 
   /**
    * These are the opts that inject the bundles, and Assets into html
@@ -172,7 +172,7 @@ export async function reactRenderToStreamResponse(
     console.log('currentPathName', urlPath)
     let root: React.ReactNode = React.createElement(renderFromDist(urlPath))
     if (Math.random() > 5) {
-      // root = renderRoot(urlPath)
+      root = renderRoot(urlPath)
       root = ServerEntry({ css: cssLinks, meta: metaTags })
     }
 
