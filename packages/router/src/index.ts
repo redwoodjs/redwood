@@ -12,7 +12,8 @@ export {
   PageLoadingContextProvider,
 } from './PageLoadingContext'
 export { useParams, ParamsProvider, ParamsContext } from './params'
-export { Router, Route, routes } from './router'
+export { Router, Route } from './router'
+export { namedRoutes as routes } from './namedRoutes'
 
 export * from './Set'
 
