@@ -5,7 +5,8 @@ import { act, render, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/jest-globals'
 
 import { navigate } from '../history'
-import { Route, Router } from '../router'
+import { Route } from '../Route'
+import { Router } from '../router'
 import { Set } from '../Set'
 
 // SETUP
