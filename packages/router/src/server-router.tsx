@@ -2,8 +2,8 @@ import type { ReactNode } from 'react'
 import React, { useMemo, memo } from 'react'
 
 import type { LocationContextType } from './location'
+import { namedRoutes } from './namedRoutes'
 import { normalizePage } from './page'
-import { isValidRoute } from './route-validators'
 import type { RouterContextProviderProps } from './router-context'
 import { ActiveRouteLoader } from './server-route-loader'
 import { SplashPage } from './splash-page'
@@ -16,14 +16,6 @@ import {
 } from './util'
 import type { Wrappers, TrailingSlashesTypes } from './util'
 
-import type { AvailableRoutes } from './index'
-
-// namedRoutes is populated at run-time by iterating over the `<Route />`
-// components, and appending them to this object.
-// Has to be `const`, or there'll be a race condition with imports in users'
-// projects
-const namedRoutes: AvailableRoutes = {}
-
 export interface RouterProps
   extends Omit<RouterContextProviderProps, 'routes' | 'activeRouteName'> {
   trailingSlashes?: TrailingSlashesTypes
@@ -32,7 +24,7 @@ export interface RouterProps
   location: LocationContextType
 }
 
-const Router: React.FC<RouterProps> = ({
+export const Router: React.FC<RouterProps> = ({
   useAuth,
   paramTypes,
   pageLoadingDelay,
@@ -262,5 +254,3 @@ const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
     return wrapped
   }, routeLoaderElement)
 })
-
-export { Router, namedRoutes as routes, isValidRoute as isRoute }
