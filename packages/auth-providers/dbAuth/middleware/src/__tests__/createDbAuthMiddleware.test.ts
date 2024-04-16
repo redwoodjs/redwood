@@ -130,7 +130,7 @@ describe('createDbAuthMiddleware()', () => {
     }
     const middleware = createDbAuthMiddleware(options)
 
-    const res = await middleware(req) // ?
+    const res = await middleware(req)
 
     expect(res).toBeDefined()
     expect(res).toHaveProperty(

@@ -45,7 +45,7 @@ export const createDbAuthMiddleware = ({
       return new MiddlewareResponse(output.body, {
         headers: finalHeaders,
         status: output.statusCode,
-      })
+      }) // ?
     }
 
     const cookieHeader = req.headers.get('Cookie')
