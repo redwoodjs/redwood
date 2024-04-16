@@ -31,7 +31,7 @@ export interface AuthorizationHeader {
 export const parseAuthorizationCookie = (
   event: APIGatewayProxyEvent | Request,
 ) => {
-  const cookie = getEventHeader(event, 'cookie')
+  const cookie = getEventHeader(event, 'Cookie')
 
   // Unauthenticated request
   if (!cookie) {
@@ -113,7 +113,6 @@ export const getAuthenticationContext = async ({
   let schema: string | undefined
 
   // The actual session parsing is done by the auth decoder
-  // Priority given to cookie
   if (cookieHeader) {
     token = cookieHeader.rawCookie
     type = cookieHeader.type
