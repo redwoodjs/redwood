@@ -12,7 +12,7 @@ import type { ServerAuthState } from '@redwoodjs/auth'
 // import { ServerAuthProvider } from '@redwoodjs/auth'
 import { getPaths } from '@redwoodjs/project-config'
 // import { LocationProvider } from '@redwoodjs/router'
-// import type { TagDescriptor } from '@redwoodjs/web'
+import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
 import {
   // ServerHtmlProvider,
@@ -33,7 +33,7 @@ interface RenderToStreamArgs {
   ServerEntry: ServerEntryType
   FallbackDocument: React.FunctionComponent
   urlPath: string
-  metaTags: any // TagDescriptor[]
+  metaTags: TagDescriptor[]
   cssLinks: string[]
   isProd: boolean
   jsBundles?: string[]

@@ -12,7 +12,7 @@ export interface LocationContextType {
 
 const LocationContext = createNamedContext<LocationContextType>('Location')
 
-interface Location extends LocationContextType {}
+type Location = LocationContextType
 
 interface LocationProviderProps {
   location?: Location
