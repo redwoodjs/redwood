@@ -1,5 +1,5 @@
+import { Route } from '../Route'
 import { isValidRoute } from '../route-validators'
-import { Route } from '../router'
 
 describe('isValidRoute', () => {
   it('throws if Route does not have a path', () => {
@@ -38,7 +38,7 @@ describe('isValidRoute', () => {
     )
   })
 
-  it('throws if notFoundPage doesnt have page prop', () => {
+  it("throws if notFoundPage doesn't have page prop", () => {
     // @ts-expect-error Its ok mate, we're checking the validator
     const RouteToCheck = <Route notfound name="bazinga" />
 
@@ -47,7 +47,7 @@ describe('isValidRoute', () => {
     )
   })
 
-  it('does not throws if notFoundPage doesnt have a path', () => {
+  it("does not throws if notFoundPage doesn't have a path", () => {
     // @ts-expect-error Its ok mate, we're checking the validator
     const RouteToCheck = <Route name="bazinga" notfound page={() => <></>} />
 
