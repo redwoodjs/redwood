@@ -52,11 +52,12 @@ describe('createDbAuthMiddleware()', () => {
     expect(res).toHaveProperty('status', 200)
   })
   it('handles a login request', async () => {
+    const user = { id: 2, email: 'user-login@example.com' }
     const request = new Request(
       'http://localhost:8911/middleware/dbauth/login',
       {
         method: 'POST',
-        body: JSON.stringify({ username: ' ' }),
+        body: JSON.stringify({ username: user.email, password: 'password' }),
       },
     )
 
@@ -69,7 +70,7 @@ describe('createDbAuthMiddleware()', () => {
       },
       dbAuthHandler: async () => {
         return {
-          body: JSON.stringify({ id: 1, email: 'user-1@example.com' }),
+          body: JSON.stringify(user),
           headers: {
             Cookie:
               'session=cookie-value; Path=/; HttpOnly; SameSite=Lax; Secure',
@@ -83,14 +84,65 @@ describe('createDbAuthMiddleware()', () => {
     const res = await middleware(req)
 
     expect(res).toBeDefined()
-    expect(res).toHaveProperty(
-      'body',
-      JSON.stringify({ id: 1, email: 'user-1@example.com' }),
-    )
+    expect(res).toHaveProperty('body', JSON.stringify(user))
     expect(res).toHaveProperty('status', 200)
   })
   it('handles a logout request', async () => {})
-  it('handles a signup request', async () => {})
+  it('handles a signup request', async () => {
+    const user = {
+      id: 2,
+      email: 'user-signup@example.com',
+      name: 'user-signup',
+    }
+    const request = new Request(
+      'http://localhost:8911/middleware/dbauth/signup',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          username: user.email,
+          name: user.name,
+          password: 'password',
+        }),
+      },
+    )
+
+    const req = new MWRequest(request)
+
+    const options: DbAuthMiddlewareOptions = {
+      cookieName: 'session_8911',
+      getCurrentUser: async () => {
+        return {}
+      },
+      dbAuthHandler: async () => {
+        return {
+          body: JSON.stringify({
+            id: user.id,
+            email: user.email,
+            name: user.name,
+          }),
+          headers: {
+            ['set-cookie']:
+              'session=cookie-value; Path=/; HttpOnly; SameSite=Lax; Secure',
+          },
+          statusCode: 200,
+        }
+      },
+    }
+    const middleware = createDbAuthMiddleware(options)
+
+    const res = await middleware(req) // ?
+
+    expect(res).toBeDefined()
+    expect(res).toHaveProperty(
+      'body',
+      JSON.stringify({ id: user.id, email: user.email, name: user.name }),
+    )
+
+    expect(res).toHaveProperty('status', 200)
+    // expect(res).toHaveProperty('cookies', [
+    //   'session=cookie-value; Path=/; HttpOnly; SameSite=Lax; Secure',
+    // ])
+  })
   it('handles a currentUser request', async () => {})
   it('handles a POST that is not one of the above', async () => {})
   it('handles a GET request with correct cookies', async () => {})
