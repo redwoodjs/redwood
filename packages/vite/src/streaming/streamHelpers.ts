@@ -247,6 +247,14 @@ function applyStreamTransforms(
   return outputStream
 }
 
+// We have to do this to ensure we're only using one version of the library
+// we're importing, and one that's built with the right conditions. rsdw will
+// import React, so it's important that it imports the same version of React as
+// we are. If we're pulling rsdw from node_modules (which we would if we didn't
+// get it from the dist folder) we'd also get the node_modules version of
+// React. But the app itself already uses the bundled version of React, so we
+// can't do that, because then we'd have to different Reacts where one isn't
+// initialized properly
 export async function importModule(
   mod: 'rsdw-server' | 'rsdw-client' | 'rd-server',
 ) {
