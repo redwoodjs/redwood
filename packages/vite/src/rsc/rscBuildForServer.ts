@@ -29,14 +29,6 @@ export async function rscBuildForServer(
     throw new Error('RSC entries file not found')
   }
 
-  const input = {
-    entries: rwPaths.web.entries,
-    ...clientEntryFiles,
-    ...serverEntryFiles,
-    ...customModules,
-    'rsdw-server': 'react-server-dom-webpack/server.edge',
-  }
-
   // TODO (RSC): No redwood-vite plugin, add it in here
   const rscServerBuildOutput = await viteBuild({
     envFile: false,
@@ -82,7 +74,12 @@ export async function rscBuildForServer(
       manifest: 'server-build-manifest.json',
       rollupOptions: {
         onwarn: onWarn,
-        input,
+        input: {
+          entries: rwPaths.web.entries,
+          ...clientEntryFiles,
+          ...serverEntryFiles,
+          ...customModules,
+        },
         output: {
           banner: (chunk) => {
             // HACK to bring directives to the front
