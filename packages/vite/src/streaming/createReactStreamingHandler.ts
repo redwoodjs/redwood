@@ -8,7 +8,7 @@ import type { ViteDevServer } from 'vite'
 
 import { defaultAuthProviderState } from '@redwoodjs/auth'
 import type { RouteSpec, RWRouteManifestItem } from '@redwoodjs/internal'
-import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
+import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
@@ -41,16 +41,26 @@ export const createReactStreamingHandler = async (
   viteDevServer?: ViteDevServer,
 ) => {
   const rwPaths = getPaths()
-
+  const rwConfig = getConfig()
   const isProd = !viteDevServer
   const middlewareRouter: Router.Instance<any> = await getMiddlewareRouter()
   let entryServerImport: EntryServer
   let fallbackDocumentImport: Record<string, any>
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
   // Load the entries for prod only once, not in each handler invocation
-  // Dev is the opposite, we load it everytime to pick up changes
+  // Dev is the opposite, we load it every time to pick up changes
   if (isProd) {
-    entryServerImport = await import(makeFilePath(rwPaths.web.distEntryServer))
+    if (rscEnabled) {
+      entryServerImport = await import(
+        makeFilePath(rwPaths.web.distRscEntryServer)
+      )
+    } else {
+      entryServerImport = await import(
+        makeFilePath(rwPaths.web.distEntryServer)
+      )
+    }
+
     fallbackDocumentImport = await import(
       makeFilePath(rwPaths.web.distDocumentServer)
     )

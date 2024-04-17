@@ -148,6 +148,13 @@ describe('paths', () => {
             'server',
             'entry.server.mjs',
           ),
+          distRscEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'rsc',
+            'entry.server.mjs',
+          ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -423,6 +430,13 @@ describe('paths', () => {
             'web',
             'dist',
             'server',
+            'entry.server.mjs',
+          ),
+          distRscEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'rsc',
             'entry.server.mjs',
           ),
           distDocumentServer: path.join(
@@ -751,6 +765,13 @@ describe('paths', () => {
             'server',
             'entry.server.mjs',
           ),
+          distRscEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'rsc',
+            'entry.server.mjs',
+          ),
           distDocumentServer: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -1026,6 +1047,13 @@ describe('paths', () => {
             'web',
             'dist',
             'server',
+            'entry.server.mjs',
+          ),
+          distRscEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'rsc',
             'entry.server.mjs',
           ),
           distDocumentServer: path.join(

@@ -2,7 +2,7 @@ import fmw from 'find-my-way'
 import type Router from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import type { EntryServer } from '../types'
 import { makeFilePath, ssrLoadEntryServer } from '../utils'
@@ -104,6 +104,8 @@ export const createMiddlewareRouter = async (
   vite?: ViteDevServer,
 ): Promise<Router.Instance<any>> => {
   const rwPaths = getPaths()
+  const rwConfig = getConfig()
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
   let entryServerImport: EntryServer
 
@@ -111,7 +113,16 @@ export const createMiddlewareRouter = async (
     entryServerImport = await ssrLoadEntryServer(vite)
   } else {
     // This imports from dist!
-    entryServerImport = await import(makeFilePath(rwPaths.web.distEntryServer))
+
+    if (rscEnabled) {
+      entryServerImport = await import(
+        makeFilePath(rwPaths.web.distRscEntryServer)
+      )
+    } else {
+      entryServerImport = await import(
+        makeFilePath(rwPaths.web.distEntryServer)
+      )
+    }
   }
 
   const { registerMiddleware } = entryServerImport
