@@ -80,7 +80,6 @@ export async function rscBuildForServer(
           ...serverEntryFiles,
           ...customModules,
         },
-
         output: {
           banner: (chunk) => {
             // HACK to bring directives to the front
