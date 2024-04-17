@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { describe, test, expect } from 'vitest'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
@@ -30,7 +30,7 @@ type UnknownAuthContext = AuthContextInterface<
 >
 
 describe('FetchConfigProvider', () => {
-  test('Uri gets passed via fetch config provider', () => {
+  test('Unauthenticated user does not receive headers', () => {
     render(
       <FetchConfigProvider
         useAuth={() =>
@@ -47,5 +47,48 @@ describe('FetchConfigProvider', () => {
     expect(
       screen.getByText('{"uri":"https://api.example.com/graphql"}'),
     ).toBeInTheDocument()
+  })
+
+  test('Authenticated user does receive headers', async () => {
+    render(
+      <FetchConfigProvider
+        useAuth={() =>
+          ({
+            loading: false,
+            isAuthenticated: true,
+            type: 'custom',
+          }) as UnknownAuthContext
+        }
+      >
+        <FetchConfigToString />
+      </FetchConfigProvider>,
+    )
+    await waitFor(() =>
+      screen.getByText(
+        '{"uri":"https://api.example.com/graphql","headers":{"auth-provider":"custom"}}',
+      ),
+    )
+  })
+
+  test('Headers are NOT set when middleware auth is being used', async () => {
+    render(
+      <FetchConfigProvider
+        useAuth={() =>
+          ({
+            loading: false,
+            isAuthenticated: true,
+            type: 'custom',
+            useMiddlewareAuth: true,
+          }) as UnknownAuthContext
+        }
+      >
+        <FetchConfigToString />
+      </FetchConfigProvider>,
+    )
+    await waitFor(() =>
+      screen.getByText(
+        '{"uri":"https://api.example.com/graphql","headers":{}}',
+      ),
+    )
   })
 })
