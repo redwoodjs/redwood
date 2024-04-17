@@ -14,7 +14,7 @@ const FetchConfigToString: React.FunctionComponent = () => {
   return <>{JSON.stringify(c)}</>
 }
 
-type UnkownAuthContext = AuthContextInterface<
+type UnknownAuthContext = AuthContextInterface<
   unknown,
   unknown,
   unknown,
@@ -37,7 +37,7 @@ describe('FetchConfigProvider', () => {
           ({
             loading: false,
             isAuthenticated: false,
-          }) as UnkownAuthContext
+          }) as UnknownAuthContext
         }
       >
         <FetchConfigToString />
