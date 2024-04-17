@@ -15,6 +15,15 @@ vi.mock('@redwoodjs/project-config', async () => {
         },
       }
     },
+    getConfig: function () {
+      return {
+        experimental: {
+          rsc: {
+            enabled: false,
+          },
+        },
+      }
+    },
   }
 })
 
