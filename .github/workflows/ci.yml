@@ -475,7 +475,7 @@ jobs:
       #   React on the server while using a production version on the client.
       #   Always use matching versions on the server and the client.
       - name: 🐘 Run RSC dev smoke tests
-        if: matrix.os == 'disabled__ubuntu-latest'
+        if: matrix.os == 'false__ubuntu-latest'
         working-directory: tasks/smoke-tests/rsc-dev
         run: npx playwright test
         env:
