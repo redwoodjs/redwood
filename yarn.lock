@@ -7504,6 +7504,7 @@ __metadata:
     "@types/pascalcase": "npm:1.0.3"
     "@types/split2": "npm:4.2.3"
     "@whatwg-node/fetch": "npm:0.9.17"
+    cookie: "npm:0.6.0"
     core-js: "npm:3.36.1"
     humanize-string: "npm:2.1.0"
     jsonwebtoken: "npm:9.0.2"
