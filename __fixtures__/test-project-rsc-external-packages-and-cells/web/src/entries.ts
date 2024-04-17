@@ -22,6 +22,8 @@ export default defineEntries(
         return import('./pages/EmptyUser/NewEmptyUserPage/NewEmptyUserPage')
       case 'MultiCellPage':
         return import('./pages/MultiCellPage/MultiCellPage')
+      case 'ServerEntry':
+        return import('./entry.server')
       default:
         return null
     }
