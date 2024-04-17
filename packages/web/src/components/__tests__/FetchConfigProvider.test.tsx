@@ -14,6 +14,21 @@ const FetchConfigToString: React.FunctionComponent = () => {
   return <>{JSON.stringify(c)}</>
 }
 
+type UnknownAuthContext = AuthContextInterface<
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown
+>
+
 describe('FetchConfigProvider', () => {
   test('Unauthenticated user does not receive headers', () => {
     render(
@@ -22,16 +37,7 @@ describe('FetchConfigProvider', () => {
           ({
             loading: false,
             isAuthenticated: false,
-          }) as AuthContextInterface<
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown
-          >
+          }) as UnknownAuthContext
         }
       >
         <FetchConfigToString />
@@ -51,16 +57,7 @@ describe('FetchConfigProvider', () => {
             loading: false,
             isAuthenticated: true,
             type: 'custom',
-          }) as AuthContextInterface<
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown
-          >
+          }) as UnknownAuthContext
         }
       >
         <FetchConfigToString />
