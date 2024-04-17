@@ -144,6 +144,8 @@ export async function reactRenderToStreamResponse(
     bootstrapModules: jsBundles,
   }
 
+  const rscEnabled = getConfig().experimental?.rsc?.enabled
+
   // We'll use `renderToReadableStream` to start the whole React rendering
   // process. This will internally initialize React and its hooks. It's
   // important that this initializes the same React instance that all client
@@ -153,8 +155,10 @@ export async function reactRenderToStreamResponse(
   // bundled version of React (so that it can be sent to the browser for normal
   // browsing of the site). Importing it like this we make sure that SSR uses
   // that same bundled version of react and react-dom.
-  const { renderToReadableStream }: RDServerType =
-    await importModule('rd-server')
+  // TODO (RSC): Always import using importModule when RSC is on by default
+  const { renderToReadableStream }: RDServerType = rscEnabled
+    ? await importModule('rd-server')
+    : await import('react-dom/server.edge')
 
   try {
     // This gets set if there are errors inside Suspense boundaries
