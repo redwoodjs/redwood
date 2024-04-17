@@ -57,7 +57,7 @@ export function createUpdateDataLink() {
 }
 export function createAuthApolloLink(
   authProviderType: string,
-  headers:
+  headersFromFetchProvider:
     | {
         'auth-provider'?: string | undefined
         authorization?: string | undefined
@@ -74,10 +74,16 @@ export function createAuthApolloLink(
         }
       : {}
 
+    if (!token) {
+      // If there's no token i.e. it's using middleware auth
+      // remove the auth-provider header
+      delete headersFromFetchProvider?.['auth-provider']
+    }
+
     operation.setContext(() => ({
       headers: {
         ...operation.getContext().headers,
-        ...headers,
+        ...headersFromFetchProvider,
         // Duped auth headers, because we may remove the `FetchConfigProvider` at a later date.
         ...authHeaders,
       },
