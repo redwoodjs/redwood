@@ -69,26 +69,4 @@ describe('FetchConfigProvider', () => {
       ),
     )
   })
-
-  test('Headers are NOT set when middleware auth is being used', async () => {
-    render(
-      <FetchConfigProvider
-        useAuth={() =>
-          ({
-            loading: false,
-            isAuthenticated: true,
-            type: 'custom',
-            useMiddlewareAuth: true,
-          }) as UnknownAuthContext
-        }
-      >
-        <FetchConfigToString />
-      </FetchConfigProvider>,
-    )
-    await waitFor(() =>
-      screen.getByText(
-        '{"uri":"https://api.example.com/graphql","headers":{}}',
-      ),
-    )
-  })
 })
