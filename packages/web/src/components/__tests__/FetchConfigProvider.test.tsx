@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { describe, test, expect } from 'vitest'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
@@ -14,24 +14,30 @@ const FetchConfigToString: React.FunctionComponent = () => {
   return <>{JSON.stringify(c)}</>
 }
 
+type UnkownAuthContext = AuthContextInterface<
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown
+>
+
 describe('FetchConfigProvider', () => {
-  test('Unauthenticated user does not receive headers', () => {
+  test('Uri gets passed via fetch config provider', () => {
     render(
       <FetchConfigProvider
         useAuth={() =>
           ({
             loading: false,
             isAuthenticated: false,
-          }) as AuthContextInterface<
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown
-          >
+          }) as UnkownAuthContext
         }
       >
         <FetchConfigToString />
@@ -41,35 +47,5 @@ describe('FetchConfigProvider', () => {
     expect(
       screen.getByText('{"uri":"https://api.example.com/graphql"}'),
     ).toBeInTheDocument()
-  })
-
-  test('Authenticated user does receive headers', async () => {
-    render(
-      <FetchConfigProvider
-        useAuth={() =>
-          ({
-            loading: false,
-            isAuthenticated: true,
-            type: 'custom',
-          }) as AuthContextInterface<
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown,
-            unknown
-          >
-        }
-      >
-        <FetchConfigToString />
-      </FetchConfigProvider>,
-    )
-    await waitFor(() =>
-      screen.getByText(
-        '{"uri":"https://api.example.com/graphql","headers":{"auth-provider":"custom"}}',
-      ),
-    )
   })
 })
