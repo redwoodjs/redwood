@@ -113,7 +113,7 @@ export const handler = async ({ force, verbose }) => {
             : transformTSToJS(entryServerPath, entryServerTemplate)
 
           writeFile(entryServerPath, entryServerContent, {
-            overwriteExisting: force,
+            overwriteExisting: true,
           })
         },
       },
@@ -135,7 +135,7 @@ export const handler = async ({ force, verbose }) => {
             : transformTSToJS(documentPath, documentTemplate)
 
           writeFile(documentPath, documentContent, {
-            overwriteExisting: force,
+            overwriteExisting: true,
           })
         },
       },
