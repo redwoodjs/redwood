@@ -7731,7 +7731,7 @@ __metadata:
     "@redwoodjs/auth-dbauth-api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/graphql-server": "workspace:*"
-    "@redwoodjs/vite": "workspace:^"
+    "@redwoodjs/vite": "workspace:*"
     "@types/aws-lambda": "npm:8.10.136"
     ts-toolbelt: "npm:9.6.0"
     tsx: "npm:4.7.1"
@@ -8827,7 +8827,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/vite@workspace:*, @redwoodjs/vite@workspace:^, @redwoodjs/vite@workspace:packages/vite":
+"@redwoodjs/vite@workspace:*, @redwoodjs/vite@workspace:packages/vite":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/vite@workspace:packages/vite"
   dependencies:
@@ -29940,7 +29940,6 @@ __metadata:
     "@faker-js/faker": "npm:8.4.1"
     "@npmcli/arborist": "npm:7.4.0"
     "@playwright/test": "npm:1.42.1"
-    "@redwoodjs/vite": "workspace:^"
     "@testing-library/jest-dom": "npm:6.4.2"
     "@testing-library/react": "npm:14.2.2"
     "@testing-library/user-event": "npm:14.5.2"

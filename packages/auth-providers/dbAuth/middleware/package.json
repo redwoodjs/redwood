@@ -37,7 +37,7 @@
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
-    "@redwoodjs/vite": "workspace:^",
+    "@redwoodjs/vite": "workspace:*",
     "@types/aws-lambda": "8.10.136",
     "ts-toolbelt": "9.6.0",
     "tsx": "4.7.1",
