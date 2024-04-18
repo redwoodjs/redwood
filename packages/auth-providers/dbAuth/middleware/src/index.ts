@@ -98,6 +98,7 @@ export const createDbAuthMiddleware = ({
       })
     } catch (e) {
       // Clear server auth context
+      console.error(e, 'Error decrypting dbAuth cookie')
       req.serverAuthContext.set(null)
 
       // Clear the cookies, because decryption was invalid
