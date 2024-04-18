@@ -267,7 +267,7 @@ export async function importModule(
 
   if (mod === 'rsdw-server') {
     const rsdwServerPath = makeFilePath(
-      path.join(webPath.distServer, 'rsdw-server.mjs'),
+      path.join(webPath.distRsc, 'rsdw-server.mjs'),
     )
     return (await import(rsdwServerPath)).default
   } else if (mod === 'rsdw-client') {
