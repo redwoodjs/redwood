@@ -16,6 +16,8 @@ const mockUnixPaths = {
   },
 }
 
+import * as process from 'node:process'
+
 import type { ViteDevServer } from 'vite'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -72,7 +74,12 @@ describe('createMiddlewareRouter', () => {
     expect(distRegisterMwMock).toHaveBeenCalled()
   })
 
-  it('Should load import from distEntryServer for prod on Windows', async () => {
+  /** This test only works on Windows */
+  it('Should load import from distEntryServer for prod on Windows', async (context) => {
+    if (process.platform !== 'win32') {
+      context.skip()
+    }
+
     mockPlatform = 'win32'
     await createMiddlewareRouter()
     expect(distRegisterMwMock).toHaveBeenCalled()
