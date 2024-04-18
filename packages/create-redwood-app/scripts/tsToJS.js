@@ -67,7 +67,7 @@ for (const filePath of filePaths) {
     throw new Error(`Error: Couldn't transform ${filePath}`)
   }
 
-  const formattedCode = format(result.code, {
+  const formattedCode = await format(result.code, {
     ...prettierConfig,
     parser: 'babel',
   })
