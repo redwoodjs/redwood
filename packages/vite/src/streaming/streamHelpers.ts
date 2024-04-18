@@ -33,7 +33,7 @@ type RDServerType = typeof RDServerModule
 interface RenderToStreamArgs {
   ServerEntry: ServerEntryType
   FallbackDocument: React.FunctionComponent
-  urlPath: string
+  currentUrl: URL
   metaTags: TagDescriptor[]
   cssLinks: string[]
   isProd: boolean
@@ -69,7 +69,7 @@ export async function reactRenderToStreamResponse(
   const {
     ServerEntry,
     FallbackDocument,
-    urlPath,
+    currentUrl,
     metaTags,
     cssLinks,
     isProd,
@@ -108,7 +108,7 @@ export async function reactRenderToStreamResponse(
 
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
-  const renderRoot = (urlPath: string) => {
+  const renderRoot = (url: URL) => {
     return React.createElement(
       ServerAuthProvider,
       {
@@ -117,7 +117,7 @@ export async function reactRenderToStreamResponse(
       React.createElement(
         LocationProvider,
         {
-          location: { pathname: urlPath },
+          location: url,
         },
         React.createElement(
           ServerHtmlProvider,
@@ -181,9 +181,9 @@ export async function reactRenderToStreamResponse(
     let root: React.ReactNode
 
     if (rscEnabled) {
-      root = React.createElement(renderFromDist(urlPath))
+      root = React.createElement(renderFromDist(currentUrl.pathname))
     } else {
-      root = renderRoot(urlPath)
+      root = renderRoot(currentUrl)
     }
 
     const reactStream: ReactDOMServerReadableStream =
