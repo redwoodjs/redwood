@@ -10,13 +10,14 @@ import { getPaths } from '@redwoodjs/project-config'
 import { StatusError } from './lib/StatusError.js'
 import { moduleMap } from './streaming/ssrModuleMap.js'
 import { importModule } from './streaming/streamHelpers.js'
+import { makeFilePath } from './utils.js'
 
 type RSDWClientType = typeof RSDWClientModule
 type RSDWServerType = typeof RSDWServerModule
 
 async function getEntries() {
   const entriesPath = getPaths().web.distRscEntries
-  const entries = await import(entriesPath)
+  const entries = await import(makeFilePath(entriesPath))
   return entries
 }
 
