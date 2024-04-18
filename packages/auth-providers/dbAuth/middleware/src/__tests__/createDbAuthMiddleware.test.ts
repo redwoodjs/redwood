@@ -346,15 +346,16 @@ describe('createDbAuthMiddleware()', () => {
       // but get requests need a cookie to be set?
       // expect(res.body).toBeDefined()
     })
-    it('handles a webAuthnRegister', async () => {
-      //: 'POST',
-    })
-    it('handles a webAuthnAuthOptions', async () => {
-      //: 'GET',
-    })
-    it('handles a webAuthnAuthenticate', async () => {
-      //: 'POST',
-    })
+    // @todo: implement the following tests when try out webAuth
+    //   it('handles a webAuthnRegister', async () => {
+    //     //: 'POST',
+    //   })
+    //   it('handles a webAuthnAuthOptions', async () => {
+    //     //: 'GET',
+    //   })
+    //   it('handles a webAuthnAuthenticate', async () => {
+    //     //: 'POST',
+    //   })
   })
   it('handles a currentUser request', async () => {
     // encrypted session taken fom dbAuth tests
