@@ -25,11 +25,19 @@ vi.mock('@redwoodjs/project-config', async () => {
     getPaths: () => {
       return process.platform === 'win32' ? mockWin32Paths : mockUnixPaths
     },
+    getConfig: () => ({}),
   }
 })
 
 const distRegisterMwMock = vi.fn()
 vi.mock('/proj/web/dist/entry-server.mjs', () => {
+  console.log('using unix mock')
+  return {
+    registerMiddleware: distRegisterMwMock,
+  }
+})
+vi.mock('/C:/proj/web/dist/entry-server.mjs', () => {
+  console.log('using win32 mock')
   return {
     registerMiddleware: distRegisterMwMock,
   }
