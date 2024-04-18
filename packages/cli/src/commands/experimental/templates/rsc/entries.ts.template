@@ -8,6 +8,8 @@ export default defineEntries(
         return import('./pages/AboutPage/AboutPage')
       case 'HomePage':
         return import('./pages/HomePage/HomePage')
+      case 'ServerEntry':
+        return import('./entry.server')
       default:
         return null
     }

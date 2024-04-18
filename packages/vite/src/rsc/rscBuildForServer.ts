@@ -29,6 +29,10 @@ export async function rscBuildForServer(
     throw new Error('RSC entries file not found')
   }
 
+  if (!rwPaths.web.entryServer) {
+    throw new Error('Server Entry file not found')
+  }
+
   // TODO (RSC): No redwood-vite plugin, add it in here
   const rscServerBuildOutput = await viteBuild({
     envFile: false,
@@ -79,6 +83,8 @@ export async function rscBuildForServer(
           ...clientEntryFiles,
           ...serverEntryFiles,
           ...customModules,
+          'rsdw-server': 'react-server-dom-webpack/server.edge',
+          'entry.server': rwPaths.web.entryServer,
         },
         output: {
           banner: (chunk) => {
@@ -102,7 +108,12 @@ export async function rscBuildForServer(
           },
           entryFileNames: (chunkInfo) => {
             // TODO (RSC) Probably don't want 'entries'. And definitely don't want it hardcoded
-            if (chunkInfo.name === 'entries' || customModules[chunkInfo.name]) {
+            if (
+              chunkInfo.name === 'entries' ||
+              chunkInfo.name === 'entry.server' ||
+              chunkInfo.name === 'rsdw-server' ||
+              customModules[chunkInfo.name]
+            ) {
               return '[name].mjs'
             }
             return 'assets/[name].mjs'
