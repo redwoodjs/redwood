@@ -263,22 +263,16 @@ function applyStreamTransforms(
 export async function importModule(
   mod: 'rsdw-server' | 'rsdw-client' | 'rd-server',
 ) {
-  const webPath = getPaths().web
+  const { distRsc, distClient } = getPaths().web
+  const rsdwServerPath = makeFilePath(path.join(distRsc, 'rsdw-server.mjs'))
+  const rsdwClientPath = makeFilePath(path.join(distClient, 'rsdw-client.mjs'))
+  const rdServerPath = makeFilePath(path.join(distClient, 'rd-server.mjs'))
 
   if (mod === 'rsdw-server') {
-    const rsdwServerPath = makeFilePath(
-      path.join(webPath.distRsc, 'rsdw-server.mjs'),
-    )
     return (await import(rsdwServerPath)).default
   } else if (mod === 'rsdw-client') {
-    const rsdwClientPath = makeFilePath(
-      path.join(webPath.distClient, 'rsdw-client.mjs'),
-    )
     return (await import(rsdwClientPath)).default
   } else if (mod === 'rd-server') {
-    const rdServerPath = makeFilePath(
-      path.join(webPath.distClient, 'rd-server.mjs'),
-    )
     return (await import(rdServerPath)).default
   }
 
