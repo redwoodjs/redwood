@@ -1,12 +1,17 @@
-import { Link, routes } from '@redwoodjs/router'
+import { namedRoutes as routes } from '@redwoodjs/router/dist/namedRoutes'
 
 import './NavigationLayout.css'
 
 type NavigationLayoutProps = {
   children?: React.ReactNode
+  rnd?: number
 }
 
-const NavigationLayout = ({ children }: NavigationLayoutProps) => {
+const Link = (props: any) => {
+  return <a href={props.to}>{props.children}</a>
+}
+
+const NavigationLayout = ({ children, rnd }: NavigationLayoutProps) => {
   return (
     <div className="navigation-layout">
       <nav>
@@ -28,6 +33,7 @@ const NavigationLayout = ({ children }: NavigationLayoutProps) => {
           </li>
         </ul>
       </nav>
+      <div id="rnd">{Math.round(rnd * 100)}</div>
       <main>{children}</main>
     </div>
   )

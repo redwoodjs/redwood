@@ -65,7 +65,7 @@ export async function rscBuildForServer(
       // (It does other things as well, but that's why it needs clientEntryFiles)
       rscTransformUseClientPlugin(clientEntryFiles),
       rscTransformUseServerPlugin(),
-      rscCssPreinitPlugin(clientEntryFiles, componentImportMap),
+      false && rscCssPreinitPlugin(clientEntryFiles, componentImportMap),
       rscRoutesAutoLoader(),
     ],
     build: {
