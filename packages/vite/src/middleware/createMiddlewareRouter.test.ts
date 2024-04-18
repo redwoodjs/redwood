@@ -42,6 +42,11 @@ vi.mock('/C:/proj/web/dist/entry-server.mjs', () => {
     registerMiddleware: distRegisterMwMock,
   }
 })
+vi.mock('/C:/proj/web/dist/entry-server.mjs', () => {
+  return {
+    registerMiddleware: distRegisterMwMock,
+  }
+})
 
 describe('createMiddlewareRouter', () => {
   beforeEach(() => {
