@@ -1,3 +1,5 @@
+import { pathToFileURL } from 'node:url'
+
 import type { ViteDevServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -26,7 +28,8 @@ export function ensureProcessDirWeb(webDir: string = getPaths().web.base) {
 
 export function makeFilePath(path: string): string {
   // Without this, absolute paths can't be imported on Windows
-  return 'file:///' + path
+  // https://nodejs.org/api/url.html#urlpathtofileurlpath
+  return pathToFileURL(path).href
 }
 
 export async function ssrLoadEntryServer(viteDevServer: ViteDevServer) {
