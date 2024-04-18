@@ -227,7 +227,7 @@ export default class OgImageMiddleware {
     return mwResponse
   }
 
-  static getOgComponentPath(
+  public getOgComponentPath(
     currentRoute: RWRouteManifestItem,
     extension: SUPPORTED_EXT,
   ) {
@@ -304,7 +304,7 @@ export default class OgImageMiddleware {
     }
   }
 
-  static async importComponent(
+  public async importComponent(
     filePath: string,
     invokeOptions: MiddlewareInvokeOptions,
   ) {

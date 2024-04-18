@@ -105,8 +105,8 @@ describe('OgImageMiddleware', () => {
     const expectedFilePath =
       '/redwood-app/web/dist/server/ogImage/pages/Contact/ContactPage/ContactPage.png.mjs'
 
-    const tsxResult = OgImageMiddleware.getOgComponentPath(tsxRoute, extension)
-    const jsxResult = OgImageMiddleware.getOgComponentPath(jsxRoute, extension)
+    const tsxResult = middleware.getOgComponentPath(tsxRoute, extension)
+    const jsxResult = middleware.getOgComponentPath(jsxRoute, extension)
 
     expect(tsxResult).toBe(expectedFilePath)
     expect(jsxResult).toBe(expectedFilePath)
@@ -123,10 +123,7 @@ describe('OgImageMiddleware', () => {
       },
     }
 
-    const result = await OgImageMiddleware.importComponent(
-      filePath,
-      invokeOptions,
-    )
+    const result = await middleware.importComponent(filePath, invokeOptions)
 
     expect(result).toEqual({
       data: 'some data',
@@ -146,10 +143,7 @@ describe('OgImageMiddleware', () => {
       output: () => 'Mocked component render',
     }))
 
-    const result = await OgImageMiddleware.importComponent(
-      filePath,
-      invokeOptions,
-    )
+    const result = await middleware.importComponent(filePath, invokeOptions)
 
     expect(result.data()).toBe('mocked data function')
     expect(result.Component()).toBe('Mocked component render')
