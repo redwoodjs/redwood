@@ -1,3 +1,21 @@
+let mockPlatform = 'unix'
+const mockWin32Paths = {
+  web: {
+    base: 'C:\\proj\\web',
+    dist: 'C:\\proj\\web\\dist',
+    distEntryServer: 'C:\\proj\\web\\dist\\entry-server.mjs',
+    entryServer: 'C:\\proj\\web\\entry-server.tsx',
+  },
+}
+const mockUnixPaths = {
+  web: {
+    base: '/proj/web',
+    dist: '/proj/web/dist',
+    distEntryServer: '/proj/web/dist/entry-server.mjs',
+    entryServer: '/proj/web/entry-server.tsx',
+  },
+}
+
 import type { ViteDevServer } from 'vite'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -6,29 +24,21 @@ import { createMiddlewareRouter } from './register'
 vi.mock('@redwoodjs/project-config', async () => {
   return {
     getPaths: () => {
-      return {
-        web: {
-          base: '/proj/web',
-          dist: '/proj/web/dist',
-          distEntryServer: '/proj/web/dist/entry-server.mjs',
-          entryServer: '/proj/web/entry-server.tsx',
-        },
-      }
+      return mockPlatform === 'win32' ? mockWin32Paths : mockUnixPaths
     },
-    getConfig: function () {
-      return {
-        experimental: {
-          rsc: {
-            enabled: false,
-          },
-        },
-      }
-    },
+    getConfig: () => ({}),
   }
 })
 
 const distRegisterMwMock = vi.fn()
 vi.mock('/proj/web/dist/entry-server.mjs', () => {
+  console.log('using unix mock')
+  return {
+    registerMiddleware: distRegisterMwMock,
+  }
+})
+vi.mock('/C:/proj/web/dist/entry-server.mjs', () => {
+  console.log('using win32 mock')
   return {
     registerMiddleware: distRegisterMwMock,
   }
@@ -36,6 +46,7 @@ vi.mock('/proj/web/dist/entry-server.mjs', () => {
 
 describe('createMiddlewareRouter', () => {
   beforeEach(() => {
+    mockPlatform = 'unix'
     vi.resetAllMocks()
   })
 
@@ -55,7 +66,14 @@ describe('createMiddlewareRouter', () => {
     )
   })
 
-  it('Should load import from distEntryServer for prod', async () => {
+  it('Should load import from distEntryServer for prod on Unix', async () => {
+    mockPlatform = 'unix'
+    await createMiddlewareRouter()
+    expect(distRegisterMwMock).toHaveBeenCalled()
+  })
+
+  it('Should load import from distEntryServer for prod on Windows', async () => {
+    mockPlatform = 'win32'
     await createMiddlewareRouter()
     expect(distRegisterMwMock).toHaveBeenCalled()
   })
