@@ -5,9 +5,9 @@ import { Suspense } from 'react'
 // Class components are not supported on the server
 // https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#when-to-use-server-and-client-components
 // Consider https://github.com/bvaughn/react-error-boundary
-// import { CellErrorBoundary } from './CellErrorBoundary'
-import type { CreateCellProps } from './cellTypes'
-import { isDataEmpty } from './isCellEmpty'
+// import { CellErrorBoundary } from './CellErrorBoundary.js'
+import type { CreateCellProps } from './cellTypes.js'
+import { isDataEmpty } from './isCellEmpty.js'
 
 // TODO(RSC): Clean this type up and consider moving to cellTypes
 type CreateServerCellProps<CellProps, CellVariables> = Omit<

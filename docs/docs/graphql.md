@@ -868,7 +868,7 @@ In order to use Union types web-side with your Apollo GraphQL client, you will n
 
 :::
 
-### useCache
+## useCache
 
 Apollo Client stores the results of your GraphQL queries in a local, normalized, in-memory cache. This enables the client to respond almost immediately to queries for already-cached data, without even sending a network request.
 
@@ -878,14 +878,14 @@ useCache is a custom hook that returns the cache object and some useful methods 
 * [extract](#extract)
 * [identify](#identify)
 * [modify](#modify)
-* [resetStore](#resetStore)
-* [clearStore](#clearStore)
+* [resetStore](#resetstore)
+* [clearStore](#clearstore)
 
 ```ts
 import { useCache } from '@redwoodjs/web/apollo'
 ```
 
-#### cache
+### cache
 
 Returns the normalized, in-memory cache.
 
@@ -895,7 +895,7 @@ import { useCache } from '@redwoodjs/web/apollo'
 const { cache } = useCache()
 ```
 
-#### evict
+### evict
 
 Either removes a normalized object from the cache or removes a specific field from a normalized object in the cache.
 
@@ -911,7 +911,7 @@ const Fruit = ({ id }: { id: FragmentIdentifier }) => {
 }
 ```
 
-#### extract
+### extract
 
 Returns a serialized representation of the cache's current contents
 
@@ -926,7 +926,7 @@ const Fruit = ({ id }: { id: FragmentIdentifier }) => {
 
 ```
 
-#### identify
+### identify
 
 ```ts
 import { useCache } from '@redwoodjs/web/apollo'
@@ -940,7 +940,7 @@ const Fruit = ({ id }: { id: FragmentIdentifier }) => {
 }
 ```
 
-#### modify
+### modify
 
 Modifies one or more field values of a cached object. Must provide a modifier function for each field to modify. A modifier function takes a cached field's current value and returns the value that should replace it.
 
@@ -966,7 +966,7 @@ const Fruit = ({ id }: { id: FragmentIdentifier }) => {
 }
 ```
 
-#### clearStore
+### clearStore
 
 To reset the cache without refetching active queries, use the clearStore method.
 
@@ -981,7 +981,7 @@ const Fruit = ({ id }: { id: FragmentIdentifier }) => {
 }
 ```
 
-#### resetStore
+### resetStore
 
 Reset the cache entirely, such as when a user logs out.
 

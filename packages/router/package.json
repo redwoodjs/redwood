@@ -25,12 +25,12 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.0",
+    "@babel/runtime-corejs3": "7.24.1",
     "@redwoodjs/auth": "workspace:*",
-    "core-js": "3.35.1"
+    "core-js": "3.36.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.9",
+    "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
@@ -38,8 +38,8 @@
     "jest-environment-jsdom": "29.7.0",
     "react": "18.3.0-canary-a870b2d54-20240314",
     "react-dom": "18.3.0-canary-a870b2d54-20240314",
-    "tstyche": "1.0.0",
-    "typescript": "5.3.3"
+    "tstyche": "1.1.0",
+    "typescript": "5.4.5"
   },
   "peerDependencies": {
     "react": "18.3.0-canary-a870b2d54-20240314",

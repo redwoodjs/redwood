@@ -102,7 +102,7 @@ export class TreeItem2Wrapper {
   constructor(
     public item: TreeItem2,
     public parent?: TreeItem2Wrapper,
-    public indexInParent: number = 0,
+    public indexInParent = 0,
   ) {}
   @lazy() get keys(): string[] {
     if (!this.parent) {

@@ -4,7 +4,9 @@ import '@testing-library/jest-dom/jest-globals'
 import { act, cleanup, render, screen } from '@testing-library/react'
 
 import { navigate } from '../history'
-import { Route, Router, routes } from '../router'
+import { namedRoutes as routes } from '../namedRoutes'
+import { Route } from '../Route'
+import { Router } from '../router'
 
 describe('Router scroll reset', () => {
   const Page1 = () => <div>Page 1</div>

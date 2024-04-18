@@ -29,32 +29,30 @@ export async function rscBuildForServer(
     throw new Error('RSC entries file not found')
   }
 
-  const input = {
-    entries: rwPaths.web.entries,
-    ...clientEntryFiles,
-    ...serverEntryFiles,
-    ...customModules,
+  if (!rwPaths.web.entryServer) {
+    throw new Error('Server Entry file not found')
   }
 
   // TODO (RSC): No redwood-vite plugin, add it in here
   const rscServerBuildOutput = await viteBuild({
     envFile: false,
     ssr: {
-      // Externalize every file apart from node built-ins. We want vite/rollup
-      // to inline dependencies in the server bundle. This gets round runtime
+      // Inline every file apart from node built-ins. We want vite/rollup to
+      // inline dependencies in the server bundle. This gets round runtime
       // importing of "server-only". We have to do all imports because we can't
       // rely on "server-only" being the name of the package. This is also
       // actually more efficient because less files. Although, at build time
       // it's likely way less efficient because we have to do so many files.
       // Files included in `noExternal` are files we want Vite to analyze
-      noExternal: /^(?!node:)/,
+      // As of vite 5.2 `true` here means "all except node built-ins"
+      noExternal: true,
       // Can't inline prisma client (db calls fail at runtime) or react-dom
-      // (css preinit failure)
+      // (css pre-init failure)
       external: ['@prisma/client', 'react-dom'],
       resolve: {
         // These conditions are used in the plugin pipeline, and only affect non-externalized
-        // dependencies during the SSR build. Which because of `noExternal: /^(?!node:)/` means
-        // all dependencies apart from node built-ins.
+        // dependencies during the SSR build. Which because of `noExternal: true` means all
+        // dependencies apart from node built-ins.
         conditions: ['react-server'],
       },
     },
@@ -80,7 +78,14 @@ export async function rscBuildForServer(
       manifest: 'server-build-manifest.json',
       rollupOptions: {
         onwarn: onWarn,
-        input,
+        input: {
+          entries: rwPaths.web.entries,
+          ...clientEntryFiles,
+          ...serverEntryFiles,
+          ...customModules,
+          'rsdw-server': 'react-server-dom-webpack/server.edge',
+          'entry.server': rwPaths.web.entryServer,
+        },
         output: {
           banner: (chunk) => {
             // HACK to bring directives to the front
@@ -103,7 +108,12 @@ export async function rscBuildForServer(
           },
           entryFileNames: (chunkInfo) => {
             // TODO (RSC) Probably don't want 'entries'. And definitely don't want it hardcoded
-            if (chunkInfo.name === 'entries' || customModules[chunkInfo.name]) {
+            if (
+              chunkInfo.name === 'entries' ||
+              chunkInfo.name === 'entry.server' ||
+              chunkInfo.name === 'rsdw-server' ||
+              customModules[chunkInfo.name]
+            ) {
               return '[name].mjs'
             }
             return 'assets/[name].mjs'

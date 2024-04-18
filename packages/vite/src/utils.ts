@@ -1,4 +1,10 @@
+import { pathToFileURL } from 'node:url'
+
+import type { ViteDevServer } from 'vite'
+
 import { getPaths } from '@redwoodjs/project-config'
+
+import type { EntryServer } from './types'
 
 export function stripQueryStringAndHashFromPath(url: string) {
   return url.split('?')[0].split('#')[0]
@@ -18,4 +24,26 @@ export function ensureProcessDirWeb(webDir: string = getPaths().web.base) {
 
     process.chdir(webDir)
   }
+}
+
+/**
+ * Converts a file path to a URL path (file://...)
+ * Without this, absolute paths can't be imported on Windows
+ */
+export function makeFilePath(path: string) {
+  return pathToFileURL(path).href
+}
+
+export async function ssrLoadEntryServer(viteDevServer: ViteDevServer) {
+  const rwPaths = getPaths()
+
+  if (!rwPaths.web.entryServer) {
+    throw new Error('entryServer not defined')
+  }
+
+  return viteDevServer.ssrLoadModule(
+    rwPaths.web.entryServer,
+    // Have to type cast here because ssrLoadModule just returns a generic
+    // Record<string, any> type
+  ) as Promise<EntryServer>
 }

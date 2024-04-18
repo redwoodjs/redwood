@@ -18,21 +18,22 @@
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "glob './src/**/__tests__/*.test.ts' --cmd='tsx --no-warnings --test' && echo",
-    "test:watch": "glob './src/**/__tests__/*.test.ts' --cmd='tsx --no-warnings --test --watch'"
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@typescript-eslint/utils": "5.62.0",
-    "eslint": "8.55.0"
+    "@typescript-eslint/utils": "7.3.1",
+    "eslint": "8.57.0"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/eslint": "8",
+    "@types/eslint": "8.56.6",
     "@types/estree": "1.0.5",
-    "@typescript-eslint/parser": "5.62.0",
-    "glob": "10.3.10",
-    "tsx": "4.6.2",
-    "typescript": "5.3.3"
+    "@typescript-eslint/parser": "7.3.1",
+    "@typescript-eslint/rule-tester": "7.3.1",
+    "tsx": "4.7.1",
+    "typescript": "5.4.5",
+    "vitest": "1.4.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

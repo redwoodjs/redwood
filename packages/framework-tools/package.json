@@ -22,14 +22,14 @@
     "build:types": "tsc --build --verbose"
   },
   "dependencies": {
-    "esbuild": "0.20.1",
+    "esbuild": "0.20.2",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0"
   },
   "devDependencies": {
     "@types/fs-extra": "11.0.4",
-    "tsx": "4.6.2",
-    "typescript": "5.3.3"
+    "tsx": "4.7.1",
+    "typescript": "5.4.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

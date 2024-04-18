@@ -23,15 +23,20 @@
   "peacock.color": "#b85833",
   "cSpell.words": [
     "autoplay",
+    "bazinga",
     "corepack",
     "execa",
     "Fastify",
     "Flightcontrol",
     "graphiql",
+    "memfs",
     "opentelemetry",
     "pino",
+    "Pistorius",
     "redwoodjs",
+    "rsdw",
     "RWJS",
+    "tailwindcss",
     "waku"
   ]
 }

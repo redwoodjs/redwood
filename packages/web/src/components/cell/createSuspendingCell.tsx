@@ -3,20 +3,20 @@ import { Suspense } from 'react'
 import type { OperationVariables, QueryReference } from '@apollo/client'
 import { useApolloClient } from '@apollo/client'
 
-import { useBackgroundQuery, useReadQuery } from '../GraphQLHooksProvider'
+import { useBackgroundQuery, useReadQuery } from '../GraphQLHooksProvider.js'
 
 /**
  * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
  */
-import type { FallbackProps } from './CellErrorBoundary'
-import { CellErrorBoundary } from './CellErrorBoundary'
+import type { FallbackProps } from './CellErrorBoundary.js'
+import { CellErrorBoundary } from './CellErrorBoundary.js'
 import type {
   CreateCellProps,
   DataObject,
   SuspendingSuccessProps,
   SuspenseCellQueryResult,
 } from './cellTypes'
-import { isDataEmpty } from './isCellEmpty'
+import { isDataEmpty } from './isCellEmpty.js'
 
 type AnyObj = Record<string, unknown>
 /**

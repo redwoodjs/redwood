@@ -2,7 +2,7 @@ import React from 'react'
 
 import { createPortal } from 'react-dom'
 
-import { useServerInsertedHTML } from './ServerInject'
+import { useServerInsertedHTML } from './ServerInject.js'
 
 function addDataAttributeMarker(
   children: React.ReactNode,

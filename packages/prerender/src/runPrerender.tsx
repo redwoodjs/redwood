@@ -124,8 +124,16 @@ async function recursivelyRender(
     }),
   )
 
+  // `renderPath` is *just* a path, but the LocationProvider needs a full URL
+  // object so if you need the domain to be something specific when
+  // pre-rendering (because you're showing it in HTML output or the og:image
+  // uses useLocation().host) you can set the RWJS_PRERENDER_ORIGIN env variable
+  // so that it doesn't just default to localhost
+  const prerenderUrl =
+    process.env.RWJS_PRERENDER_ORIGIN || 'http://localhost' + renderPath
+
   const componentAsHtml = ReactDOMServer.renderToString(
-    <LocationProvider location={{ pathname: renderPath }}>
+    <LocationProvider location={new URL(prerenderUrl)}>
       <CellCacheContextProvider queryCache={queryCache}>
         <App />
       </CellCacheContextProvider>

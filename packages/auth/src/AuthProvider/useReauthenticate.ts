@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 
-import type { AuthImplementation } from '../AuthImplementation'
+import type { AuthImplementation } from '../AuthImplementation.js'
 
-import type { AuthProviderState } from './AuthProviderState'
-import type { useCurrentUser } from './useCurrentUser'
-import { useToken } from './useToken'
+import type { AuthProviderState } from './AuthProviderState.js'
+import type { useCurrentUser } from './useCurrentUser.js'
+import { useToken } from './useToken.js'
 
 const notAuthenticatedState = {
   isAuthenticated: false,
@@ -20,7 +20,6 @@ export const useReauthenticate = <TUser>(
     React.SetStateAction<AuthProviderState<TUser>>
   >,
   getCurrentUser: ReturnType<typeof useCurrentUser>,
-  skipFetchCurrentUser: boolean | undefined,
 ) => {
   const getToken = useToken(authImplementation)
 
@@ -53,15 +52,23 @@ export const useReauthenticate = <TUser>(
           client: authImplementation.client,
         })
       } else {
-        await getToken()
-
-        const currentUser = skipFetchCurrentUser ? null : await getCurrentUser()
+        // Prevent a double fetch of the current user if the auth provider is using middleware
+        let currentUser
+        if (authImplementation.useMiddlewareAuth) {
+          // userMetadata === currentUser in middleware-auth
+          currentUser = userMetadata
+        } else {
+          // This call here is a local check against the auth provider's client.
+          // e.g. if the auth sdk has logged you out, it'll throw an error
+          await getToken()
+          currentUser = await getCurrentUser()
+        }
 
         setAuthProviderState((oldState) => ({
           ...oldState,
           userMetadata,
           currentUser,
-          isAuthenticated: true,
+          isAuthenticated: !!currentUser,
           loading: false,
           client: authImplementation.client,
         }))
@@ -73,11 +80,5 @@ export const useReauthenticate = <TUser>(
         error: e as Error,
       })
     }
-  }, [
-    authImplementation,
-    getToken,
-    setAuthProviderState,
-    skipFetchCurrentUser,
-    getCurrentUser,
-  ])
+  }, [authImplementation, setAuthProviderState, getToken, getCurrentUser])
 }

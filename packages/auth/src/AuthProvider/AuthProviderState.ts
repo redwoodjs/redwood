@@ -1,4 +1,4 @@
-import type { CurrentUser } from '../AuthContext'
+import type { CurrentUser } from '../AuthContext.js'
 
 export type AuthProviderState<TUser, TClient = unknown> = {
   loading: boolean

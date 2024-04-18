@@ -19,7 +19,7 @@ export const files = async ({ name, typescript = false, ...options }) => {
     extension,
     generator: 'layout',
     templatePath: options.skipLink
-      ? 'layout.tsx.a11yTemplate'
+      ? 'layout.tsx.a11y.template'
       : 'layout.tsx.template',
   })
   const testFile = await templateForComponentFile({

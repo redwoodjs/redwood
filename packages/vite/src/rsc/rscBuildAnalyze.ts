@@ -55,7 +55,8 @@ export async function rscBuildAnalyze() {
     ssr: {
       // We can ignore everything that starts with `node:` because it's not
       // going to be RSCs
-      noExternal: /^(?!node:)/,
+      // As of vite 5.2 `true` here means "all except node built-ins"
+      noExternal: true,
       // TODO (RSC): Figure out what the `external` list should be. Right
       // now it's just copied from waku, plus we added prisma
       external: ['react', 'minimatch', '@prisma/client'],

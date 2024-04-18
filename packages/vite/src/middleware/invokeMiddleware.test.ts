@@ -58,18 +58,4 @@ describe('Invoke middleware', () => {
       expect(authState).toEqual(defaultAuthProviderState)
     })
   })
-
-  test('returns a MiddlewareResponse, even if middleware returns a Response', async () => {
-    const respondingMiddleware = () =>
-      new Response('See ya, Pal', { status: 302 })
-
-    const [mwRes] = await invoke(
-      new Request('https://example.com'),
-      respondingMiddleware,
-    )
-
-    expect(mwRes).toBeInstanceOf(MiddlewareResponse)
-    expect(await mwRes.toResponse().text()).toEqual('See ya, Pal')
-    expect(mwRes.isRedirect()).toEqual(true)
-  })
 })

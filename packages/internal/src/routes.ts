@@ -71,8 +71,8 @@ export interface RWRouteManifestItem {
   routeHooks: string | null
   bundle: string | null
   hasParams: boolean
+  relativeFilePath: string | undefined
   redirect: { to: string; permanent: boolean } | null
-  renderMode: 'html' | 'stream'
   // Probably want isNotFound here, so we can attach a separate 404 handler
 }
 

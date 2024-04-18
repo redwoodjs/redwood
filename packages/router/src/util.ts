@@ -2,13 +2,13 @@
 import type { ReactElement, ReactNode } from 'react'
 import { Children, isValidElement } from 'react'
 
+import type { PageType } from './page'
 import {
   isNotFoundRoute,
   isRedirectRoute,
   isStandardRoute,
   isValidRoute,
 } from './route-validators'
-import type { PageType } from './router'
 import { isPrivateNode, isPrivateSetNode, isSetNode } from './Set'
 
 export function flattenAll(children: ReactNode): ReactNode[] {
@@ -348,77 +348,27 @@ export function replaceParams(
 export type FlattenSearchParams = ReturnType<typeof flattenSearchParams>
 
 /**
- * @param {string} queryString
- * @returns {Array<string | Record<string, any>>} A flat array of search params
+ * Returns a flat array of search params
  *
- * useMatch hook options searchParams requires a flat array
+ * `useMatch` hook options `searchParams` requires a flat array
  *
- * Examples:
+ * Example:
+ * ```
+ *   parseSearch('?key1=val1&key2=val2')
+ *   => { key1: 'val1', key2: 'val2' }
  *
- *  parseSearch('?key1=val1&key2=val2')
- *  => { key1: 'val1', key2: 'val2' }
- *
- * flattenSearchParams(parseSearch('?key1=val1&key2=val2'))
- * => [ { key1: 'val1' }, { key2: 'val2' } ]
+ *   flattenSearchParams(parseSearch('?key1=val1&key2=val2'))
+ *   => [ { key1: 'val1' }, { key2: 'val2' } ]
+ * ```
  */
-export function flattenSearchParams(
-  queryString: string,
-): Array<string | Record<string, any>> {
-  const searchParams = []
+export function flattenSearchParams(queryString: string) {
+  const searchParams: Array<Record<string, unknown>> = []
 
   for (const [key, value] of Object.entries(parseSearch(queryString))) {
     searchParams.push({ [key]: value })
   }
 
   return searchParams
-}
-
-export interface Spec {
-  name: string
-  prerenderLoader: (name?: string) => { default: React.ComponentType<unknown> }
-  LazyComponent:
-    | React.LazyExoticComponent<React.ComponentType<unknown>>
-    | React.ComponentType<unknown>
-}
-
-export function isSpec(
-  specOrPage: Spec | React.ComponentType,
-): specOrPage is Spec {
-  return (specOrPage as Spec).LazyComponent !== undefined
-}
-
-/**
- * Pages can be imported automatically or manually. Automatic imports are actually
- * objects and take the following form (which we call a 'spec'):
- *
- *   const WhateverPage = {
- *     name: 'WhateverPage',
- *     LazyComponent: lazy(() => import('src/pages/WhateverPage'))
- *     prerenderLoader: ...
- *   }
- *
- * Manual imports simply load the page:
- *
- *   import WhateverPage from 'src/pages/WhateverPage'
- *
- * Before passing a "page" to the PageLoader, we will normalize the manually
- * imported version into a spec.
- */
-export function normalizePage(
-  specOrPage: Spec | React.ComponentType<unknown>,
-): Spec {
-  if (isSpec(specOrPage)) {
-    // Already a spec, just return it.
-    return specOrPage
-  }
-
-  // Wrap the Page in a fresh spec, and put it in a promise to emulate
-  // an async module import.
-  return {
-    name: specOrPage.name,
-    prerenderLoader: () => ({ default: specOrPage }),
-    LazyComponent: specOrPage,
-  }
 }
 
 /**

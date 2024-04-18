@@ -23,17 +23,17 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.0",
-    "core-js": "3.35.1",
+    "@babel/runtime-corejs3": "7.24.1",
+    "core-js": "3.36.1",
     "firebase-admin": "11.11.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.9",
+    "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
     "@redwoodjs/api": "workspace:*",
-    "@types/aws-lambda": "8.10.126",
-    "typescript": "5.3.3",
-    "vitest": "1.3.1"
+    "@types/aws-lambda": "8.10.136",
+    "typescript": "5.4.5",
+    "vitest": "1.4.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
