@@ -22,6 +22,7 @@ import {
 import { renderFromDist } from '../clientSsr.js'
 import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 import type { ServerEntryType } from '../types.js'
+import { makeFilePath } from '../utils.js'
 
 import { createBufferedTransformStream } from './transforms/bufferedTransform.js'
 import { createTimeoutTransform } from './transforms/cancelTimeoutTransform.js'
@@ -265,13 +266,20 @@ export async function importModule(
   const webPath = getPaths().web
 
   if (mod === 'rsdw-server') {
-    return (await import(path.join(webPath.distRsc, 'rsdw-server.mjs'))).default
+    const rsdwServerPath = makeFilePath(
+      path.join(webPath.distServer, 'rsdw-server.mjs'),
+    )
+    return (await import(rsdwServerPath)).default
   } else if (mod === 'rsdw-client') {
-    return (await import(path.join(webPath.distClient, 'rsdw-client.mjs')))
-      .default
+    const rsdwClientPath = makeFilePath(
+      path.join(webPath.distClient, 'rsdw-client.mjs'),
+    )
+    return (await import(rsdwClientPath)).default
   } else if (mod === 'rd-server') {
-    return (await import(path.join(webPath.distClient, 'rd-server.mjs')))
-      .default
+    const rdServerPath = makeFilePath(
+      path.join(webPath.distClient, 'rd-server.mjs'),
+    )
+    return (await import(rdServerPath)).default
   }
 
   throw new Error('Unknown module ' + mod)
