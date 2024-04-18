@@ -119,9 +119,6 @@ export const createMiddlewareRouter = async (
         makeFilePath(rwPaths.web.distRscEntryServer)
       )
     } else {
-      console.log('rwPaths.web.distEntryServer', rwPaths.web.distEntryServer)
-      console.log('filePath', makeFilePath(rwPaths.web.distEntryServer))
-
       entryServerImport = await import(
         makeFilePath(rwPaths.web.distEntryServer)
       )
