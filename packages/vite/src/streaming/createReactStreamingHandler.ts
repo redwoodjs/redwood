@@ -64,11 +64,14 @@ export const createReactStreamingHandler = async (
     let currentRoute: RWRouteManifestItem | undefined
     let parsedParams: any = {}
 
-    const urlPath = new URL(req.url).pathname
+    const currentUrl = new URL(req.url)
 
     // @TODO validate this is correct
     for (const route of routes) {
-      const { match, ...rest } = matchPath(route.pathDefinition, urlPath)
+      const { match, ...rest } = matchPath(
+        route.pathDefinition,
+        currentUrl.pathname,
+      )
       if (match) {
         currentRoute = route
         parsedParams = rest
@@ -170,7 +173,7 @@ export const createReactStreamingHandler = async (
       {
         ServerEntry,
         FallbackDocument,
-        urlPath,
+        currentUrl,
         metaTags,
         cssLinks,
         isProd,
