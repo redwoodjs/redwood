@@ -26,9 +26,11 @@ export function ensureProcessDirWeb(webDir: string = getPaths().web.base) {
   }
 }
 
-export function makeFilePath(path: string): string {
-  // Without this, absolute paths can't be imported on Windows
-  // https://nodejs.org/api/url.html#urlpathtofileurlpath
+/**
+ * Converts a file path to a URL path (file://...)
+ * Without this, absolute paths can't be imported on Windows
+ */
+export function makeFilePath(path: string) {
   return pathToFileURL(path).href
 }
 
