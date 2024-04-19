@@ -4,22 +4,45 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createMiddlewareRouter } from './register'
 
 vi.mock('@redwoodjs/project-config', async () => {
+  const mockWin32Paths = {
+    web: {
+      base: 'C:\\proj\\web',
+      dist: 'C:\\proj\\web\\dist',
+      distEntryServer: 'C:\\proj\\web\\dist\\entry-server.mjs',
+      entryServer: 'C:\\proj\\web\\entry-server.tsx',
+    },
+  }
+  const mockUnixPaths = {
+    web: {
+      base: '/proj/web',
+      dist: '/proj/web/dist',
+      distEntryServer: '/proj/web/dist/entry-server.mjs',
+      entryServer: '/proj/web/entry-server.tsx',
+    },
+  }
+
   return {
     getPaths: () => {
-      return {
-        web: {
-          base: '/proj/web',
-          dist: '/proj/web/dist',
-          distEntryServer: '/proj/web/dist/entry-server.mjs',
-          entryServer: '/proj/web/entry-server.tsx',
-        },
-      }
+      return process.platform === 'win32' ? mockWin32Paths : mockUnixPaths
     },
+    getConfig: () => ({}),
   }
 })
 
 const distRegisterMwMock = vi.fn()
 vi.mock('/proj/web/dist/entry-server.mjs', () => {
+  console.log('using unix mock')
+  return {
+    registerMiddleware: distRegisterMwMock,
+  }
+})
+vi.mock('/C:/proj/web/dist/entry-server.mjs', () => {
+  console.log('using win32 mock')
+  return {
+    registerMiddleware: distRegisterMwMock,
+  }
+})
+vi.mock('/C:/proj/web/dist/entry-server.mjs', () => {
   return {
     registerMiddleware: distRegisterMwMock,
   }
@@ -42,7 +65,9 @@ describe('createMiddlewareRouter', () => {
     await createMiddlewareRouter(mockVite)
 
     expect(mockVite.ssrLoadModule).toHaveBeenCalledWith(
-      '/proj/web/entry-server.tsx',
+      // '/proj/web/entry-server.tsx'
+      // 'C:\proj\web\entry-server.tsx'
+      expect.stringMatching(/^.?.?[/\\]proj[/\\]web[/\\]entry-server.tsx$/),
     )
   })
 

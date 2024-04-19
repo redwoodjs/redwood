@@ -71,7 +71,7 @@ interface CustomMatchers<R = unknown> {
   toMatchFileContents(
     fixturePath: string,
     { removeWhitespace }: { removeWhitespace: boolean },
-  ): R
+  ): Promise<R>
 }
 
 declare module 'vitest' {
