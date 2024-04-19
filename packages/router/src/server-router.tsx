@@ -31,13 +31,6 @@ export const Router: React.FC<RouterProps> = ({
   children,
   location,
 }) => {
-  console.log('rendering server router', {
-    useAuth,
-    paramTypes,
-    pageLoadingDelay,
-    children,
-    location,
-  })
   return (
     // Level 1/3 (outer-most)
     <LocationAwareRouter
@@ -63,8 +56,6 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
       // May need a babel plugin to extract userParamTypes from Routes.tsx
       userParamTypes: paramTypes,
     })
-
-    console.log('server-router analyzedRoutes', analyzedRoutes)
 
     return analyzedRoutes
   }, [location.pathname, children, paramTypes])
