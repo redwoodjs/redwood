@@ -58,7 +58,7 @@ export const nameVariants = (name) => {
   }
 }
 
-export const generateTemplate = (templateFilename, { name, ...rest }) => {
+export const generateTemplate = async (templateFilename, { name, ...rest }) => {
   try {
     const templateFn = template(readFile(templateFilename).toString())
 

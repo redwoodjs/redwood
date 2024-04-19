@@ -148,21 +148,24 @@ export async function handler({ name, type, force, verbose }) {
           return [
             writeFile(
               sdlFile,
-              generateTemplate(sdlContent, templateVariables(name)),
+              await generateTemplate(sdlContent, templateVariables(name)),
               {
                 overwriteExisting: force,
               },
             ),
             writeFile(
               serviceFile,
-              generateTemplate(serviceContent, templateVariables(name)),
+              await generateTemplate(serviceContent, templateVariables(name)),
               {
                 overwriteExisting: force,
               },
             ),
             writeFile(
               exampleFile,
-              generateTemplate(setupScriptContent, templateVariables(name)),
+              await generateTemplate(
+                setupScriptContent,
+                templateVariables(name),
+              ),
               {
                 overwriteExisting: force,
               },
@@ -212,14 +215,14 @@ export async function handler({ name, type, force, verbose }) {
           return [
             writeFile(
               sdlFile,
-              generateTemplate(sdlContent, templateVariables(name)),
+              await generateTemplate(sdlContent, templateVariables(name)),
               {
                 overwriteExisting: force,
               },
             ),
             writeFile(
               serviceFile,
-              generateTemplate(serviceContent, templateVariables(name)),
+              await generateTemplate(serviceContent, templateVariables(name)),
               {
                 overwriteExisting: force,
               },
