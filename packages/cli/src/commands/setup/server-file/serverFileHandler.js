@@ -18,7 +18,7 @@ export function setupServerFileTasks({ force = false } = {}) {
   return [
     {
       title: 'Adding the server file...',
-      task: () => {
+      task: async () => {
         const ts = isTypeScriptProject()
 
         const serverFilePath = path.join(
@@ -33,7 +33,7 @@ export function setupServerFileTasks({ force = false } = {}) {
 
         const setupScriptContent = ts
           ? serverFileTemplateContent
-          : transformTSToJS(serverFilePath, serverFileTemplateContent)
+          : await transformTSToJS(serverFilePath, serverFileTemplateContent)
 
         return [
           writeFile(serverFilePath, setupScriptContent, {

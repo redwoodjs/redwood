@@ -64,7 +64,9 @@ describe('fragments graphQLClientConfig', () => {
     await matchInlineTransformSnapshot(
       'appGqlConfigTransform',
       testProjectAppTsx,
-      `import { FatalErrorBoundary, RedwoodProvider } from \"@redwoodjs/web\";
+      `import type { ReactNode } from 'react'
+
+      import { FatalErrorBoundary, RedwoodProvider } from \"@redwoodjs/web\";
       import { RedwoodApolloProvider } from \"@redwoodjs/web/apollo\";
 
       import FatalErrorPage from \"src/pages/FatalErrorPage\";
@@ -74,6 +76,9 @@ describe('fragments graphQLClientConfig', () => {
 
       import \"./scaffold.css\";
       import \"./index.css\";
+      interface AppProps {
+        children?: ReactNode;
+      }
 
       const graphQLClientConfig = {
         cacheConfig: {
@@ -81,7 +86,7 @@ describe('fragments graphQLClientConfig', () => {
         },
       };
 
-      const App = () => (
+      const App = ({ children }: AppProps) => (
         <FatalErrorBoundary page={FatalErrorPage}>
           <RedwoodProvider titleTemplate=\"%PageTitle | %AppTitle\">
             <AuthProvider>
@@ -89,7 +94,7 @@ describe('fragments graphQLClientConfig', () => {
                 useAuth={useAuth}
                 graphQLClientConfig={graphQLClientConfig}
               >
-                <Routes />
+                {children ? children : <Routes />}
               </RedwoodApolloProvider>
             </AuthProvider>
           </RedwoodProvider>
