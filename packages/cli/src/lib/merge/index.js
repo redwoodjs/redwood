@@ -209,7 +209,7 @@ function mergeAST(baseAST, extAST, strategy = {}) {
  * @param {Object} strategy - Mapping of AST node name to reducer functions.
  * @returns
  */
-export function merge(base, extension, strategy) {
+export async function merge(base, extension, strategy) {
   function parseReact(code) {
     return parse(code, {
       filename: 'merged.tsx', // required to prevent babel error. The .tsx is relevant
@@ -226,7 +226,7 @@ export function merge(base, extension, strategy) {
   // When testing, use prettier here to produce predictable outputs.
   // Otherwise, leave formatting to the caller.
   return process.env.VITEST_POOL_ID
-    ? prettier.format(code, {
+    ? await prettier.format(code, {
         parser: 'babel-ts',
         bracketSpacing: true,
         tabWidth: 2,

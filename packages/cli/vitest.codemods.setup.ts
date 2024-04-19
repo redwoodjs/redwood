@@ -21,7 +21,7 @@ globalThis.matchFolderTransform = (
 // e.g. expect(transformedPath).toMatchFileContents(expectedPath)
 // Mainly so we throw more helpful errors
 expect.extend({
-  toMatchFileContents(
+  async toMatchFileContents(
     receivedPath,
     expectedPath,
     { removeWhitespace } = { removeWhitespace: false },
@@ -37,7 +37,9 @@ expect.extend({
         expectedOutput = expectedOutput.replace(/\s/g, '')
       }
 
-      expect(formatCode(actualOutput)).toEqual(formatCode(expectedOutput))
+      expect(await formatCode(actualOutput)).toEqual(
+        await formatCode(expectedOutput),
+      )
     } catch (e) {
       const relativePath = path.relative(
         path.join(__dirname, 'src/commands/setup'),
