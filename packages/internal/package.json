@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "7.4.1",
+  "version": "7.4.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -47,10 +47,10 @@
     "@graphql-codegen/typescript-react-apollo": "3.3.7",
     "@graphql-codegen/typescript-resolvers": "3.2.1",
     "@graphql-tools/documents": "1.0.0",
-    "@redwoodjs/babel-config": "7.4.1",
-    "@redwoodjs/graphql-server": "7.4.1",
-    "@redwoodjs/project-config": "7.4.1",
-    "@redwoodjs/router": "7.4.1",
+    "@redwoodjs/babel-config": "7.4.2",
+    "@redwoodjs/graphql-server": "7.4.2",
+    "@redwoodjs/project-config": "7.4.2",
+    "@redwoodjs/router": "7.4.2",
     "@sdl-codegen/node": "0.0.13",
     "chalk": "4.1.2",
     "core-js": "3.36.1",
