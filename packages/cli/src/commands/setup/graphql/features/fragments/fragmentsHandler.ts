@@ -73,7 +73,7 @@ export async function handler({ force }: Args) {
 
           const prettierOptions = await getPrettierOptions()
 
-          const prettifiedApp = format(source, {
+          const prettifiedApp = await format(source, {
             ...prettierOptions,
             parser: 'babel-ts',
           })
