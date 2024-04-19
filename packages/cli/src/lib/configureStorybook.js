@@ -57,9 +57,10 @@ export default async function extendStorybookConfiguration(
       FunctionDeclaration: keepBoth,
     })
 
+    const pConfig = await prettier.resolveConfig(sbPreviewConfigPath)
     const formatted = await prettier.format(merged, {
-      parser: 'babel',
-      ...(await prettier.resolveConfig(sbPreviewConfigPath)),
+      parser: ts ? 'babel-ts' : 'babel',
+      ...pConfig,
     })
 
     writeFile(sbPreviewConfigPath, formatted, { overwriteExisting: true })
