@@ -82,7 +82,7 @@ export async function handler({ name, type, force, verbose }) {
       {
         title: `Adding ${name} example subscription ...`,
         enabled: () => functionType === 'subscription',
-        task: () => {
+        task: async () => {
           // sdl
 
           const exampleSdlTemplateContent = path.resolve(
@@ -100,7 +100,7 @@ export async function handler({ name, type, force, verbose }) {
 
           const sdlContent = ts
             ? exampleSdlTemplateContent
-            : transformTSToJS(sdlFile, exampleSdlTemplateContent)
+            : await transformTSToJS(sdlFile, exampleSdlTemplateContent)
 
           // service
 
@@ -119,7 +119,7 @@ export async function handler({ name, type, force, verbose }) {
 
           const serviceContent = ts
             ? exampleServiceTemplateContent
-            : transformTSToJS(serviceFile, exampleServiceTemplateContent)
+            : await transformTSToJS(serviceFile, exampleServiceTemplateContent)
 
           // subscription
 
@@ -139,7 +139,10 @@ export async function handler({ name, type, force, verbose }) {
 
           const setupScriptContent = ts
             ? exampleSubscriptionTemplateContent
-            : transformTSToJS(exampleFile, exampleSubscriptionTemplateContent)
+            : await transformTSToJS(
+                exampleFile,
+                exampleSubscriptionTemplateContent,
+              )
 
           // write all files
           return [
@@ -170,7 +173,7 @@ export async function handler({ name, type, force, verbose }) {
       {
         title: `Adding ${name} example live query ...`,
         enabled: () => functionType === 'liveQuery',
-        task: () => {
+        task: async () => {
           // sdl
           const exampleSdlTemplateContent = path.resolve(
             __dirname,
@@ -185,7 +188,7 @@ export async function handler({ name, type, force, verbose }) {
           )
           const sdlContent = ts
             ? exampleSdlTemplateContent
-            : transformTSToJS(sdlFile, exampleSdlTemplateContent)
+            : await transformTSToJS(sdlFile, exampleSdlTemplateContent)
 
           // service
           const exampleServiceTemplateContent = path.resolve(
@@ -203,7 +206,7 @@ export async function handler({ name, type, force, verbose }) {
           )
           const serviceContent = ts
             ? exampleServiceTemplateContent
-            : transformTSToJS(serviceFile, exampleServiceTemplateContent)
+            : await transformTSToJS(serviceFile, exampleServiceTemplateContent)
 
           // write all files
           return [

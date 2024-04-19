@@ -259,7 +259,7 @@ export const getPrettierOptions = async () => {
 /*
  * Convert a generated TS template file into JS.
  */
-export const transformTSToJS = (filename, content) => {
+export const transformTSToJS = async (filename, content) => {
   const { code } = babel.transform(content, {
     filename,
     // If you ran `yarn rw generate` in `./web` transformSync would import the `.babelrc.js` file,

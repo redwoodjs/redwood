@@ -35,9 +35,9 @@ export default async function extendStorybookConfiguration(
     )
     const storybookPreviewContent = ts
       ? templateContent
-      : transformTSToJS(sbPreviewConfigPath, templateContent)
+      : await transformTSToJS(sbPreviewConfigPath, templateContent)
 
-    await writeFile(sbPreviewConfigPath, storybookPreviewContent)
+    writeFile(sbPreviewConfigPath, storybookPreviewContent)
   }
 
   const storybookPreviewContent = read(sbPreviewConfigPath)
@@ -47,7 +47,7 @@ export default async function extendStorybookConfiguration(
     const newConfigTemplate = read(newConfigPath)
     const newConfigContent = ts
       ? newConfigTemplate
-      : transformTSToJS(newConfigPath, newConfigTemplate)
+      : await transformTSToJS(newConfigPath, newConfigTemplate)
 
     const merged = await merge(storybookPreviewContent, newConfigContent, {
       ImportDeclaration: interleave,
