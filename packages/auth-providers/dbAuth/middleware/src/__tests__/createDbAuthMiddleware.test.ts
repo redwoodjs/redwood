@@ -1,6 +1,6 @@
 import path from 'node:path'
 
-import { describe, it, expect, beforeAll, afterAll } from 'vitest'
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest'
 
 import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
 import { MiddlewareRequest as MWRequest } from '@redwoodjs/vite/middleware'
@@ -82,7 +82,7 @@ describe('createDbAuthMiddleware()', () => {
         getCurrentUser: async () => {
           return {}
         },
-        dbAuthHandler: async () => {
+        dbAuthHandler: vi.fn(async () => {
           return {
             body: JSON.stringify(user),
             headers: {
@@ -91,16 +91,20 @@ describe('createDbAuthMiddleware()', () => {
             },
             statusCode: 200,
           }
-        },
+        }),
       }
       const middleware = createDbAuthMiddleware(options)
 
       const res = await middleware(req)
 
+      // Forwards the request on
+      expect(options.dbAuthHandler).toHaveBeenCalledWith(req)
+
       expect(res).toBeDefined()
       expect(res).toHaveProperty('body', JSON.stringify(user))
       expect(res).toHaveProperty('status', 200)
     })
+
     it('handles a logout request', async () => {
       const request = new Request(
         'http://localhost:8911/middleware/dbauth/auth?method=logout',
@@ -138,6 +142,7 @@ describe('createDbAuthMiddleware()', () => {
         'session=cookie-value; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; HttpOnly; SameSite=Lax; Secure',
       )
     })
+
     it('handles a signup request', async () => {
       const user = {
         id: 2,
