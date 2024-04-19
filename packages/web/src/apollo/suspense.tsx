@@ -21,16 +21,17 @@ import {
   setLogVerbosity as apolloSetLogVerbosity,
   useMutation,
   useSubscription,
-} from '@apollo/client'
-import {
-  ApolloNextAppProvider,
-  NextSSRApolloClient,
-  NextSSRInMemoryCache,
   useBackgroundQuery,
   useQuery,
   useReadQuery,
   useSuspenseQuery,
-} from '@apollo/experimental-nextjs-app-support/ssr'
+} from '@apollo/client'
+import {
+  ApolloClient,
+  InMemoryCache,
+  WrapApolloProvider,
+} from '@apollo/client-react-streaming'
+import { buildManualDataTransport } from '@apollo/client-react-streaming/manual-transport'
 
 import type { UseAuth } from '@redwoodjs/auth'
 import { ServerAuthContext, useNoAuth } from '@redwoodjs/auth'
@@ -41,6 +42,7 @@ import {
   useFetchConfig,
 } from '../components/FetchConfigProvider'
 import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider.js'
+import { ServerHtmlContext } from '../components/ServerInject'
 
 import type {
   RedwoodApolloLink,
@@ -168,7 +170,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   function makeClient() {
     // @MARK use special Apollo client
-    return new NextSSRApolloClient({
+    return new ApolloClient({
       link: createFinalLink({
         userConfiguredLink: userPassedLink,
         defaultLinks: redwoodApolloLinks,
@@ -177,10 +179,18 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     })
   }
 
+  const WrappedApolloProvider = WrapApolloProvider(
+    buildManualDataTransport({
+      useInsertHtml() {
+        return React.useContext(ServerHtmlContext)
+      },
+    }),
+  )
+
   return (
-    <ApolloNextAppProvider makeClient={makeClient}>
+    <WrappedApolloProvider makeClient={makeClient}>
       {children}
-    </ApolloNextAppProvider>
+    </WrappedApolloProvider>
   )
 }
 
@@ -200,7 +210,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   const { cacheConfig, ...config } = graphQLClientConfig ?? {}
 
   // @MARK we need this special cache
-  const cache = new NextSSRInMemoryCache(cacheConfig).restore(
+  const cache = new InMemoryCache(cacheConfig).restore(
     globalThis?.__REDWOOD__APOLLO_STATE ?? {},
   )
 

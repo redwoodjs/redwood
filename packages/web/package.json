@@ -50,7 +50,7 @@
     "ts-toolbelt": "9.6.0"
   },
   "devDependencies": {
-    "@apollo/experimental-nextjs-app-support": "0.0.0-commit-b8a73fe",
+    "@apollo/client-react-streaming": "0.10.0",
     "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
     "@babel/plugin-transform-runtime": "7.24.3",

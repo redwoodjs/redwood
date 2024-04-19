@@ -103,6 +103,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@apollo/client-react-streaming@npm:0.10.0":
+  version: 0.10.0
+  resolution: "@apollo/client-react-streaming@npm:0.10.0"
+  dependencies:
+    superjson: "npm:^1.12.2 || ^2.0.0"
+    ts-invariant: "npm:^0.10.3"
+  peerDependencies:
+    "@apollo/client": ^3.9.6
+    react: ^18
+  checksum: 10c0/b960665331cf52c05e033c91635df41ee311cd910d84b9f41b59be2496760f72591610c3eb746a46f57416f29bea7e2ee47e84e81fc3f0099db5087284f00905
+  languageName: node
+  linkType: hard
+
 "@apollo/client@npm:3.9.9":
   version: 3.9.9
   resolution: "@apollo/client@npm:3.9.9"
@@ -137,21 +150,6 @@ __metadata:
     subscriptions-transport-ws:
       optional: true
   checksum: 10c0/133e866eeebaceeb8f059d9bde3884f6c362f78d0aa9f4c1c51034af39259b0db154ec77c96fdad28fd7bc3b82ba920586d29aed1920933fabd2c5188b51a2b9
-  languageName: node
-  linkType: hard
-
-"@apollo/experimental-nextjs-app-support@npm:0.0.0-commit-b8a73fe":
-  version: 0.0.0-commit-b8a73fe
-  resolution: "@apollo/experimental-nextjs-app-support@npm:0.0.0-commit-b8a73fe"
-  dependencies:
-    server-only: "npm:^0.0.1"
-    superjson: "npm:^1.12.2"
-    ts-invariant: "npm:^0.10.3"
-  peerDependencies:
-    "@apollo/client": ">=3.8.0-rc || ^3.8.0"
-    next: ^13.4.1
-    react: ^18
-  checksum: 10c0/aca7b04735bafbec41de7c950229de4ffda9f03f4b8e74646eccdde064e9cfc5497559202c1f93ca98322778a382ded04cdf5bc40a6eaa4f005ec985c6973688
   languageName: node
   linkType: hard
 
@@ -8899,7 +8897,7 @@ __metadata:
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
     "@apollo/client": "npm:3.9.9"
-    "@apollo/experimental-nextjs-app-support": "npm:0.0.0-commit-b8a73fe"
+    "@apollo/client-react-streaming": "npm:0.10.0"
     "@babel/cli": "npm:7.24.1"
     "@babel/core": "npm:^7.22.20"
     "@babel/plugin-transform-runtime": "npm:7.24.3"
@@ -28644,13 +28642,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"server-only@npm:^0.0.1":
-  version: 0.0.1
-  resolution: "server-only@npm:0.0.1"
-  checksum: 10c0/4704f0ef85da0be981af6d4ed8e739d39bcfd265b9c246a684060acda5642d0fdc6daffc2308e71e2682c5f508090978802eae0a77623c9b90a49f9ae68048d6
-  languageName: node
-  linkType: hard
-
 "set-blocking@npm:^2.0.0":
   version: 2.0.0
   resolution: "set-blocking@npm:2.0.0"
@@ -29669,12 +29660,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"superjson@npm:^1.12.2":
-  version: 1.13.1
-  resolution: "superjson@npm:1.13.1"
+"superjson@npm:^1.12.2 || ^2.0.0":
+  version: 2.2.1
+  resolution: "superjson@npm:2.2.1"
   dependencies:
     copy-anything: "npm:^3.0.2"
-  checksum: 10c0/596edde148df1f05f09236b0715ad97bcf803514e65a271d4f945557e35652b838e65c96520946b7ee7a62cb96f26a565749dc14897de2bcf9ac12371f1a4f8c
+  checksum: 10c0/5d8202c955170bd98ef2647f712754ac54d2d007923cfdb53a4b035304d8964b8c41d5eff41ee277896e2ac32e06abb009b571f1589416b729fe40216320cc7a
   languageName: node
   linkType: hard
 
