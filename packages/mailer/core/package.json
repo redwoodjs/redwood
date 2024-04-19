@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/mailer-core",
-  "version": "7.4.1",
+  "version": "7.4.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -22,8 +22,8 @@
     "test:watch": "vitest watch"
   },
   "devDependencies": {
-    "@redwoodjs/api": "7.4.1",
-    "@redwoodjs/framework-tools": "7.4.1",
+    "@redwoodjs/api": "7.4.2",
+    "@redwoodjs/framework-tools": "7.4.2",
     "tsx": "4.7.1",
     "typescript": "5.4.5",
     "vitest": "1.4.0"

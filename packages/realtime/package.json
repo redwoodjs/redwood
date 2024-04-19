@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/realtime",
-  "version": "7.4.1",
+  "version": "7.4.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -38,7 +38,7 @@
     "@envelop/core": "5.0.0",
     "@envelop/testing": "7.0.0",
     "@envelop/types": "5.0.0",
-    "@redwoodjs/framework-tools": "7.4.1",
+    "@redwoodjs/framework-tools": "7.4.2",
     "nodemon": "3.1.0",
     "tsx": "4.7.1",
     "typescript": "5.4.5",
