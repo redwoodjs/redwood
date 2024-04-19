@@ -1,4 +1,3 @@
-import fs from 'node:fs'
 import path from 'node:path'
 
 import { createElement } from 'react'
@@ -11,9 +10,9 @@ import type { RWRouteManifestItem } from '@redwoodjs/internal'
 import { getPaths } from '@redwoodjs/project-config'
 import { LocationProvider, matchPath } from '@redwoodjs/router'
 import type {
+  MiddlewareInvokeOptions,
   MiddlewareRequest,
   MiddlewareResponse,
-  MiddlewareInvokeOptions,
 } from '@redwoodjs/vite/dist/middleware'
 
 import { getRoutesList } from './getRoutesList.js'
