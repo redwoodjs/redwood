@@ -7702,7 +7702,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth-dbauth-api@workspace:packages/auth-providers/dbAuth/api":
+"@redwoodjs/auth-dbauth-api@workspace:*, @redwoodjs/auth-dbauth-api@workspace:packages/auth-providers/dbAuth/api":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-dbauth-api@workspace:packages/auth-providers/dbAuth/api"
   dependencies:
@@ -7719,6 +7719,23 @@ __metadata:
     md5: "npm:2.3.0"
     typescript: "npm:5.4.5"
     uuid: "npm:9.0.1"
+    vitest: "npm:1.4.0"
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/auth-dbauth-middleware@workspace:packages/auth-providers/dbAuth/middleware":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth-dbauth-middleware@workspace:packages/auth-providers/dbAuth/middleware"
+  dependencies:
+    "@redwoodjs/api": "workspace:*"
+    "@redwoodjs/auth-dbauth-api": "workspace:*"
+    "@redwoodjs/framework-tools": "workspace:*"
+    "@redwoodjs/graphql-server": "workspace:*"
+    "@redwoodjs/vite": "workspace:*"
+    "@types/aws-lambda": "npm:8.10.136"
+    ts-toolbelt: "npm:9.6.0"
+    tsx: "npm:4.7.1"
+    typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   languageName: unknown
   linkType: soft
