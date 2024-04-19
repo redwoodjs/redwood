@@ -49,7 +49,7 @@ export default async function extendStorybookConfiguration(
       ? newConfigTemplate
       : transformTSToJS(newConfigPath, newConfigTemplate)
 
-    const merged = merge(storybookPreviewContent, newConfigContent, {
+    const merged = await merge(storybookPreviewContent, newConfigContent, {
       ImportDeclaration: interleave,
       ArrayExpression: concatUnique,
       ObjectExpression: concatUnique,
@@ -57,7 +57,7 @@ export default async function extendStorybookConfiguration(
       FunctionDeclaration: keepBoth,
     })
 
-    const formatted = prettier.format(merged, {
+    const formatted = await prettier.format(merged, {
       parser: 'babel',
       ...(await prettier.resolveConfig(sbPreviewConfigPath)),
     })
