@@ -9,9 +9,9 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    "types": "./dist/esm/index.d.ts",
-    "import": "./dist/esm/index.js",
-    "default": "./dist/index.cjs"
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js",
+    "default": "./dist/cjs/index.js"
   },
   "types": "./dist/index.d.ts",
   "files": [
@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsx ./build.ts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-auth.tgz",
-    "build:types": "tsc --build --verbose tsconfig.build.json && tsc --build --verbose tsconfig.build-esm.json",
+    "build:types": "tsc --build --verbose tsconfig.build.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",

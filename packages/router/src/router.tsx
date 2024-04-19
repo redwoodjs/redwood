@@ -1,59 +1,25 @@
-import type { ReactNode, ReactElement } from 'react'
+import type { ReactNode } from 'react'
 import React, { useMemo, memo } from 'react'
 
 import { ActiveRouteLoader } from './active-route-loader'
 import { AuthenticatedRoute } from './AuthenticatedRoute'
 import { LocationProvider, useLocation } from './location'
+import { namedRoutes } from './namedRoutes'
+import { normalizePage } from './page'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { ParamsProvider } from './params'
 import { Redirect } from './redirect'
-import type {
-  NotFoundRouteProps,
-  RedirectRouteProps,
-  RenderMode,
-} from './route-validators'
-import { isValidRoute, PageType } from './route-validators'
 import type { RouterContextProviderProps } from './router-context'
 import { RouterContextProvider } from './router-context'
 import { SplashPage } from './splash-page'
 import {
   analyzeRoutes,
   matchPath,
-  normalizePage,
   parseSearch,
   replaceParams,
   validatePath,
 } from './util'
 import type { Wrappers, TrailingSlashesTypes } from './util'
-
-import type { AvailableRoutes } from './index'
-
-// namedRoutes is populated at run-time by iterating over the `<Route />`
-// components, and appending them to this object.
-// Has to be `const`, or there'll be a race condition with imports in users'
-// projects
-const namedRoutes: AvailableRoutes = {}
-
-export interface RouteProps {
-  path: string
-  page: PageType
-  name: string
-  prerender?: boolean
-  renderMode?: RenderMode
-  whileLoadingPage?: () => ReactElement | null
-}
-
-/**
- * Route is now a "virtual" component
- * it is actually never rendered. All the page loading logic happens in active-route-loader
- * and all the validation happens within utility functions called from the Router
- */
-function Route(props: RouteProps): JSX.Element
-function Route(props: RedirectRouteProps): JSX.Element
-function Route(props: NotFoundRouteProps): JSX.Element
-function Route(_props: RouteProps | RedirectRouteProps | NotFoundRouteProps) {
-  return <></>
-}
 
 export interface RouterProps
   extends Omit<RouterContextProviderProps, 'routes' | 'activeRouteName'> {
@@ -62,7 +28,7 @@ export interface RouterProps
   children: ReactNode
 }
 
-const Router: React.FC<RouterProps> = ({
+export const Router: React.FC<RouterProps> = ({
   useAuth,
   paramTypes,
   pageLoadingDelay,
@@ -291,11 +257,3 @@ const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
     return wrapped
   }, routeLoaderElement)
 })
-
-export {
-  Router,
-  Route,
-  namedRoutes as routes,
-  isValidRoute as isRoute,
-  PageType,
-}

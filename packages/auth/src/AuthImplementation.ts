@@ -52,4 +52,9 @@ export interface AuthImplementation<
    * Set "loading" to true while the auth provider is reauthenticating.
    */
   loadWhileReauthenticating?: boolean
+
+  // 👇 @TODO: Naming! Middleware-auth only
+  useMiddlewareAuth?: boolean
+  // This is the endpoint on the middleware we are going to hit for POST requests
+  getAuthUrl?: () => string
 }

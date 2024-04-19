@@ -52,10 +52,17 @@ export const useReauthenticate = <TUser>(
           client: authImplementation.client,
         })
       } else {
-        // This call here is a local check against the auth provider's client.
-        // e.g. if the auth sdk has logged you out, it'll throw an error
-        await getToken()
-        const currentUser = await getCurrentUser()
+        // Prevent a double fetch of the current user if the auth provider is using middleware
+        let currentUser
+        if (authImplementation.useMiddlewareAuth) {
+          // userMetadata === currentUser in middleware-auth
+          currentUser = userMetadata
+        } else {
+          // This call here is a local check against the auth provider's client.
+          // e.g. if the auth sdk has logged you out, it'll throw an error
+          await getToken()
+          currentUser = await getCurrentUser()
+        }
 
         setAuthProviderState((oldState) => ({
           ...oldState,

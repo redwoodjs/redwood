@@ -5,7 +5,8 @@ import { render } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
 
 import { navigate } from '../history'
-import { Route, Router } from '../router'
+import { Route } from '../Route'
+import { Router } from '../router'
 import { Set } from '../Set'
 import { useRoutePaths, useRoutePath } from '../useRoutePaths'
 

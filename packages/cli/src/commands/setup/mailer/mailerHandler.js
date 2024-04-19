@@ -23,7 +23,7 @@ export const handler = async ({ force, skipExamples }) => {
         title: `Adding api/src/lib/mailer.${
           projectIsTypescript ? 'ts' : 'js'
         }...`,
-        task: () => {
+        task: async () => {
           const templatePath = path.resolve(
             __dirname,
             'templates',
@@ -40,7 +40,7 @@ export const handler = async ({ force, skipExamples }) => {
           )
           const mailerContent = projectIsTypescript
             ? templateContent
-            : transformTSToJS(mailerPath, templateContent)
+            : await transformTSToJS(mailerPath, templateContent)
 
           return writeFile(mailerPath, mailerContent, {
             overwriteExisting: force,
@@ -59,7 +59,7 @@ export const handler = async ({ force, skipExamples }) => {
       {
         title: `Adding example ReactEmail mail template`,
         skip: () => skipExamples,
-        task: () => {
+        task: async () => {
           const templatePath = path.resolve(
             __dirname,
             'templates',
@@ -77,7 +77,7 @@ export const handler = async ({ force, skipExamples }) => {
           )
           const exampleTemplateContent = projectIsTypescript
             ? templateContent
-            : transformTSToJS(exampleTemplatePath, templateContent)
+            : await transformTSToJS(exampleTemplatePath, templateContent)
 
           return writeFile(exampleTemplatePath, exampleTemplateContent, {
             overwriteExisting: force,

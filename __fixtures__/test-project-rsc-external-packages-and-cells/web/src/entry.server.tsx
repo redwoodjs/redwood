@@ -1,6 +1,5 @@
-import type { TagDescriptor } from '@redwoodjs/web'
+import type { TagDescriptor } from '@redwoodjs/web/dist/components/htmlTags'
 
-import App from './App'
 import { Document } from './Document'
 
 interface Props {
@@ -11,7 +10,7 @@ interface Props {
 export const ServerEntry: React.FC<Props> = ({ css, meta }) => {
   return (
     <Document css={css} meta={meta}>
-      <App />
+      <div>App</div>
     </Document>
   )
 }

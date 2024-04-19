@@ -146,6 +146,12 @@ export async function runFeServer() {
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
   app.use('/rw-rsc', createRscRequestHandler())
 
+  // Static asset handling MUST be defined before our catch all routing handler below
+  // otherwise it will catch all requests for static assets and return a 404.
+  // Placing this here defines our precedence for static asset handling - that we favor
+  // the static assets over any application routing.
+  app.use(express.static(rwPaths.web.distClient, { index: false }))
+
   const getStylesheetLinks = () => clientEntry.css || []
   const clientEntryPath = '/' + clientEntry.file
 
@@ -162,8 +168,6 @@ export async function runFeServer() {
   // @MARK: put this after rw-rsc to avoid confusion.
   // We will likely move it up when we implement RSC Auth
   app.post('*', handleWithMiddleware())
-
-  app.use(express.static(rwPaths.web.distClient, { index: false }))
 
   app.listen(rwConfig.web.port)
   console.log(

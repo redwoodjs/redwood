@@ -218,26 +218,34 @@ Named route functions simply return a string, so you can still pass in hardcoded
 
 ## Active links
 
-`NavLink` is a special version of `Link` that will add an `activeClassName` to the rendered element when it matches the current URL.
+`NavLink` is a special version of `Link` that will switch to the
+`activeClassName` classes for the rendered element when it matches the current
+URL.
 
 ```jsx title="MainMenu.jsx"
 import { NavLink, routes } from '@redwoodjs/router'
 
-// Will render <a className="link activeLink" {...rest}> respectively when on the page
 const MainMenu = () =>
   <ul>
     <li>
-      <!-- Adds "activeLink" when the URL matches "/" -->
+      <!--
+        Normally renders as `<a className="link homeLink" ...>`, but when the
+        URL matches "/" it'll switch to render
+        `<a className="activeLink homeLink" ...>`
+      -->
       <NavLink
-        className="link"
-        activeClassName="activeLink"
+        className="link homeLink"
+        activeClassName="activeLink homeLink"
         to={routes.home()}>
         Home
       </NavLink>
     </li>
     <li>
-      <!-- Adds "activeLink" when the URL matches "/?tab=tutorial" -->
-      <!-- (params order insensitive) -->
+      <!--
+        Normally renders as `<a className="link" ...>`, but when the URL
+        matches "/?tab=tutorial" (params order insensitive) it'll switch to
+        render `<a className="activeLink" ...>`
+      -->
       <NavLink
         className="link"
         activeClassName="activeLink"
@@ -248,12 +256,14 @@ const MainMenu = () =>
   </ul>
 ```
 
-The `activeMatchParams` prop can be used to control how query params are matched:
+The `activeMatchParams` prop can be used to control how query params are
+matched:
 
 ```jsx
 import { NavLink, routes } from '@redwoodjs/router'
 
-// Will render <a href="/?tab=tutorial&page=2" className="link activeLink"> when on any Home tutorial page
+// Will render <a href="/?tab=tutorial&page=2" className="activeLink"> when on
+// any Home tutorial page
 const MainMenu = () => (
   <li>
     <NavLink
@@ -268,9 +278,11 @@ const MainMenu = () => (
 )
 ```
 
-> Note `activeMatchParams` is an array of `string` _(key only)_ or `Record<string, any>` _(key and value)_
+> Note `activeMatchParams` is an array of `string` _(key only)_ or
+> `Record<string, any>` _(key and value)_
 
-More granular match; needs to be on the tutorial tab (`tab=tutorial`) and have the `page` key specified:
+More granular match; needs to be on the tutorial tab (`tab=tutorial`) and have
+the `page` key specified:
 
 ```jsx
 // Match /?tab=tutorial&page=*

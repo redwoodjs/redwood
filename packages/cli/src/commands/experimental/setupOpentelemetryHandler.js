@@ -43,14 +43,14 @@ export const handler = async ({ force, verbose }) => {
   const opentelemetryTasks = [
     {
       title: `Adding OpenTelemetry setup files...`,
-      task: () => {
+      task: async () => {
         const setupTemplateContent = fs.readFileSync(
           path.resolve(__dirname, 'templates', 'opentelemetry.ts.template'),
           'utf-8',
         )
         const setupScriptContent = ts
           ? setupTemplateContent
-          : transformTSToJS(opentelemetryScriptPath, setupTemplateContent)
+          : await transformTSToJS(opentelemetryScriptPath, setupTemplateContent)
 
         return [
           writeFile(opentelemetryScriptPath, setupScriptContent, {
