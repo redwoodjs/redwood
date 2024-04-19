@@ -110,7 +110,7 @@ export const handler = async ({ force, verbose }) => {
           )
           const entryServerContent = isTypeScriptProject()
             ? entryServerTemplate
-            : transformTSToJS(entryServerPath, entryServerTemplate)
+            : await transformTSToJS(entryServerPath, entryServerTemplate)
 
           writeFile(entryServerPath, entryServerContent, {
             overwriteExisting: true,
@@ -132,7 +132,7 @@ export const handler = async ({ force, verbose }) => {
           const documentPath = path.join(rwPaths.web.src, `Document${ext}`)
           const documentContent = isTypeScriptProject()
             ? documentTemplate
-            : transformTSToJS(documentPath, documentTemplate)
+            : await transformTSToJS(documentPath, documentTemplate)
 
           writeFile(documentPath, documentContent, {
             overwriteExisting: true,

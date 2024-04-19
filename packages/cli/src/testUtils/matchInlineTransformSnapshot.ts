@@ -46,5 +46,7 @@ export const matchInlineTransformSnapshot = async (
   // Step 3: Read modified file and snapshot
   const transformedContent = fs.readFileSync(tempFilePath, 'utf-8')
 
-  expect(formatCode(transformedContent)).toEqual(formatCode(expectedCode))
+  expect(await formatCode(transformedContent)).toEqual(
+    await formatCode(expectedCode),
+  )
 }
