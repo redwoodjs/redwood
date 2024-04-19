@@ -1,7 +1,9 @@
+import fs from 'node:fs'
 import path from 'node:path'
 
 import { createElement } from 'react'
 
+import memoize from 'lodash/memoize.js'
 import mime from 'mime-types'
 import { renderToString } from 'react-dom/server'
 
@@ -76,7 +78,6 @@ export default class OgImageMiddleware {
   ) {
     const url = new URL(req.url)
     const { pathname } = url
-    const routes = await getRoutesList()
 
     let currentRoute: RWRouteManifestItem | undefined = undefined
     let parsedParams: {
@@ -91,19 +92,18 @@ export default class OgImageMiddleware {
     // Remove the extension for the match
     const [routePathname, extension] = pathname.split('.')
 
-    // @TODO can we make this a function and share it with `createStreamingHandler`?
-    // We could potentially memoize it too
-    for (const route of routes) {
-      const { match, ...rest } = matchPath(route.pathDefinition, routePathname)
-      if (match) {
-        currentRoute = route
-        parsedParams = rest
-        break
-      }
-    }
+    ;({ currentRoute, parsedParams } = await this.matchRoute(
+      // This is a special case for the index route
+      // because they can't go to mywebsite.com/.png -> mywebsite.com/index.png instead
+      routePathname === '/index' ? '/' : routePathname,
+      parsedParams,
+    ))
 
     // If no match with the router, or not a supported extension bail
     if (!currentRoute || !supportedExtensions.includes(extension)) {
+      console.log(
+        'OGMiddleware: No match with the Routes, or not a supported extension',
+      )
       return mwResponse
     }
 
@@ -142,9 +142,9 @@ export default class OgImageMiddleware {
       },
     }
 
-    // @TODO
-    // I think it doesn't work with jsx paths in my project at the moment
-    // Try renaming AboutPage.png.jsx -> AboutPage.png.tsx
+    // @TODO (ROB!)
+    // I think it doesn't work with jsx paths in my project IN DEV at the moment
+    // Try renaming AboutPage.png.tsx -> AboutPage.png.jsx
     const ogImgFilePath = this.getOgComponentPath(currentRoute, extension)
 
     const { data, Component } = await this.importComponent(
@@ -157,11 +157,8 @@ export default class OgImageMiddleware {
       dataOut = await data(mergedParams)
     }
 
-    // @TODO @TODO @TODO @TODO @TODO
-    // Should we add playwright as a dependency to ogimage-gen? Or should we make it a peer dependency?
-    // Trouble is, even when you have it as a dependency you need to run yarn playwright install
-    // before you can use it. So it's not really a "just works" thing.
-    // Does this mean when you deploy you need to add a post install script or something?
+    // @TODO (ROB): We could pass in playwright as an option to the middleware.
+    // What do you think?
     const { chromium } = await import('playwright')
     const browser = await chromium.launch()
     const page = await browser.newPage({ viewport: screenshotOptions.viewport })
@@ -204,8 +201,6 @@ export default class OgImageMiddleware {
       // This allows assets like CSS, Images, etc. to be loaded with just relative paths
       const baseUrl = url.origin
 
-      // @TODO can we use something other than page.goto? Because we just need the url to be set
-      // Maybe this is OK, but just slows things down a bit
       await page.goto(baseUrl)
 
       await page.setContent(htmlOutput)
@@ -226,6 +221,28 @@ export default class OgImageMiddleware {
 
     return mwResponse
   }
+
+  private matchRoute = memoize(
+    async (
+      routePathname: string,
+      parsedParams: { params?: Record<string, unknown> | undefined },
+    ) => {
+      let currentRoute: RWRouteManifestItem | undefined
+      const routes = await getRoutesList()
+      for (const route of routes) {
+        const { match, ...rest } = matchPath(
+          route.pathDefinition,
+          routePathname,
+        )
+        if (match) {
+          currentRoute = route
+          parsedParams = rest
+          break
+        }
+      }
+      return { currentRoute, parsedParams }
+    },
+  )
 
   public getOgComponentPath(
     currentRoute: RWRouteManifestItem,
@@ -308,8 +325,6 @@ export default class OgImageMiddleware {
     filePath: string,
     invokeOptions: MiddlewareInvokeOptions,
   ) {
-    console.info(filePath)
-
     try {
       if (invokeOptions.viteDevServer) {
         const { data, output } =
@@ -320,7 +335,9 @@ export default class OgImageMiddleware {
         return { data, Component: output }
       }
     } catch (e) {
-      console.error(`OG Image component import failed: ${filePath}`)
+      console.error(
+        `OGMiddleware: OG Image component import failed: ${filePath}`,
+      )
       console.error(e)
       throw e
     }
