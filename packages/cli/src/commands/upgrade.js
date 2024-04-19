@@ -404,7 +404,7 @@ const dedupeDeps = async (task, { verbose }) => {
       // Although we could (and previous did) automatically run `npx yarn-deduplicate` here, that would require
       // the user to have `npx` installed, which is not guaranteed and we do not wish to enforce that.
       task.skip(
-        "Yarn 1.x doesn't support dedupe directly. Please use `npx` and run `npx yarn-deduplicate` manually.",
+        "Yarn 1.x doesn't support dedupe directly. Please upgrade yarn or use npx with `npx yarn-deduplicate` manually.",
       )
     }
   } catch (e) {
