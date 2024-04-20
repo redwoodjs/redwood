@@ -215,6 +215,10 @@ export function rscCssPreinitPlugin(
                             t.identifier('as'),
                             t.stringLiteral('style'),
                           ),
+                          t.objectProperty(
+                            t.identifier('precedence'),
+                            t.stringLiteral('medium'),
+                          ),
                         ]),
                       ]),
                     ),
