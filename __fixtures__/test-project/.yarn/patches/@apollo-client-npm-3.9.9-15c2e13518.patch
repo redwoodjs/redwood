@@ -7,7 +7,7 @@ index 15551e6e2de4dcc585e9426f80c67cb136ecd2a7..bf7ee0216f2b18b1613454b46b620adb
  function getRenderDispatcher() {
 -    var _a, _b;
 -    return (_b = (_a = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED) === null || _a === void 0 ? void 0 : _a.ReactCurrentDispatcher) === null || _b === void 0 ? void 0 : _b.current;
-+    var r18 = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED || {};
++    var r18 = {};
 +    var r19 = React.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE || {};
 +    var _b = r18.ReactCurrentDispatcher || r19.ReactCurrentDispatcher;
 +    return _b === null || _b === void 0 ? void 0 : _b.current;
