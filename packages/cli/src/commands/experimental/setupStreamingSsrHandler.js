@@ -163,6 +163,9 @@ export const handler = async ({ force, verbose }) => {
         title:
           'Adding resolution for "@apollo/client-react-streaming/superjson"',
         task: () => {
+          // We need this to make sure we get a version of superjson that works
+          // with CommonJS.
+          // TODO: Remove this when Redwood switches to ESM
           const pkgJsonPath = path.join(rwPaths.base, 'package.json')
           const pkgJson = fs.readJsonSync(pkgJsonPath)
           const resolutions = pkgJson.resolutions || {}
