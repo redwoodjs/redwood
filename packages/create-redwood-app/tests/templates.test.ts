@@ -21,6 +21,8 @@ describe('TS template', () => {
         "/.vscode/launch.json",
         "/.vscode/settings.json",
         "/.vscode/tasks.json",
+        "/.yarn",
+        "/.yarn/patches",
         "/.yarn/patches/@apollo-client-npm-3.9.9-15c2e13518.patch",
         "/.yarnrc.yml",
         "/README.md",
