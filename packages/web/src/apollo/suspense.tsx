@@ -116,6 +116,16 @@ export type GraphQLClientConfigProp = Omit<
   link?: ApolloLink | RedwoodApolloLinkFactory
 }
 
+// Based on the code from here:
+// https://github.com/apollographql/apollo-client-nextjs/blob/0aca8251409de7b729f7caa9c14492b0044e0d21/integration-test/vite-streaming/src/Transport.tsx#L19
+const WrappedApolloProvider = WrapApolloProvider(
+  buildManualDataTransport({
+    useInsertHtml() {
+      return React.useContext(ServerHtmlContext)
+    },
+  }),
+)
+
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   config: Omit<GraphQLClientConfigProp, 'cacheConfig' | 'cache'> & {
     cache: ApolloCache<unknown>
@@ -178,14 +188,6 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
       ...otherConfig,
     })
   }
-
-  const WrappedApolloProvider = WrapApolloProvider(
-    buildManualDataTransport({
-      useInsertHtml() {
-        return React.useContext(ServerHtmlContext)
-      },
-    }),
-  )
 
   return (
     <WrappedApolloProvider makeClient={makeClient}>

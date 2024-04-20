@@ -15,7 +15,7 @@ import React, { Fragment, useContext, useId } from 'react'
 export type RenderCallback = () => ReactNode
 
 export const ServerHtmlContext = React.createContext<
-  (things: RenderCallback) => void
+  (callback: RenderCallback) => void
 >(() => {})
 
 /**
@@ -34,7 +34,7 @@ export const createInjector = () => {
   return { injectToPage, injectionState }
 }
 
-// @NOTE do not instatiate the provider value here, so that we can ensure
+// @NOTE do not instantiate the provider value here, so that we can ensure
 // context isolation. This is done in streamHelpers currently,
 // using the createInjector factory, once per request
 export const ServerHtmlProvider = ServerHtmlContext.Provider
