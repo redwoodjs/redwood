@@ -56,7 +56,7 @@ const OUTPUT_PROJECT_PATH = resumePath
       os.tmpdir(),
       'redwood-test-project',
       // ":" is problematic with paths
-      new Date().toISOString().split(':').join('-')
+      new Date().toISOString().split(':').join('-'),
     )
 
 let startStep = resumeStep || ''
@@ -66,7 +66,7 @@ if (!startStep) {
   try {
     const stepTxt = fs.readFileSync(
       path.join(OUTPUT_PROJECT_PATH, 'step.txt'),
-      'utf-8'
+      'utf-8',
     )
 
     if (stepTxt) {
@@ -137,12 +137,12 @@ async function tuiTask({ step, title, content, task, parent }: TuiTaskDef) {
     if (e instanceof ExecaError) {
       tui.displayError(
         'Failed ' + title.toLowerCase().replace('...', ''),
-        'stdout:\n' + e.stdout + '\n\n' + 'stderr:\n' + e.stderr
+        'stdout:\n' + e.stdout + '\n\n' + 'stderr:\n' + e.stderr,
       )
     } else {
       tui.displayError(
         'Failed ' + title.toLowerCase().replace('...', ''),
-        e.message
+        e.message,
       )
     }
 
@@ -158,12 +158,12 @@ async function tuiTask({ step, title, content, task, parent }: TuiTaskDef) {
       if (e instanceof ExecaError) {
         tui.displayError(
           'Failed ' + title.toLowerCase().replace('...', ''),
-          'stdout:\n' + e.stdout + '\n\n' + 'stderr:\n' + e.stderr
+          'stdout:\n' + e.stdout + '\n\n' + 'stderr:\n' + e.stderr,
         )
       } else {
         tui.displayError(
           'Failed ' + title.toLowerCase().replace('...', ''),
-          e.message
+          e.message,
         )
       }
 
@@ -218,8 +218,8 @@ if (resume) {
   console.error(
     chalk.red.bold(
       '\n`resume` option is not supported yet. ' +
-        'Please use `resumePath` instead.\n'
-    )
+        'Please use `resumePath` instead.\n',
+    ),
   )
 
   process.exit(1)
@@ -230,23 +230,30 @@ if (resumePath && !fs.existsSync(path.join(resumePath, 'redwood.toml'))) {
     chalk.red.bold(
       `
       No redwood.toml file found at the given path: ${resumePath}
-      `
-    )
+      `,
+    ),
   )
   process.exit(1)
 }
 
-const createProject = () => {
+async function createProject() {
   const cmd = `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
 
-  const subprocess = exec(
+  await exec(
     cmd,
     // We create a ts project and convert using ts-to-js at the end if typescript flag is false
     ['--no-yarn-install', '--typescript', '--overwrite', '--no-git'],
-    getExecaOptions(RW_FRAMEWORK_PATH)
+    getExecaOptions(RW_FRAMEWORK_PATH),
   )
 
-  return subprocess
+  // Copy over yarn patch files
+  const fixturePath = path.join(RW_FRAMEWORK_PATH, '__fixtures__/test-project')
+  const yarnPath = path.join(fixturePath, '.yarn')
+  const outputYarnPath = path.join(OUTPUT_PROJECT_PATH, '.yarn')
+  await fse.mkdir(outputYarnPath)
+  await fse.copy(yarnPath, outputYarnPath)
+
+  return
 }
 
 const copyProject = async () => {
@@ -287,7 +294,7 @@ async function runCommand() {
       return exec(
         'yarn build:clean && yarn build',
         [],
-        getExecaOptions(RW_FRAMEWORK_PATH)
+        getExecaOptions(RW_FRAMEWORK_PATH),
       )
     },
   })
@@ -300,7 +307,7 @@ async function runCommand() {
       return addFrameworkDepsToProject(
         RW_FRAMEWORK_PATH,
         OUTPUT_PROJECT_PATH,
-        'pipe' // TODO: Remove this when everything is using @rwjs/tui
+        'pipe', // TODO: Remove this when everything is using @rwjs/tui
       )
     },
   })
@@ -328,12 +335,12 @@ async function runCommand() {
 
       newRedwoodToml = newRedwoodToml.replace(
         /\port = 8910/,
-        'port = "${WEB_DEV_PORT:8910}"'
+        'port = "${WEB_DEV_PORT:8910}"',
       )
 
       newRedwoodToml = newRedwoodToml.replace(
         /\port = 8911/,
-        'port = "${API_DEV_PORT:8911}"'
+        'port = "${API_DEV_PORT:8911}"',
       )
 
       fs.writeFileSync(REDWOOD_TOML_PATH, newRedwoodToml)
@@ -347,7 +354,7 @@ async function runCommand() {
       return copyFrameworkPackages(
         RW_FRAMEWORK_PATH,
         OUTPUT_PROJECT_PATH,
-        'pipe'
+        'pipe',
       )
     },
   })
@@ -393,7 +400,7 @@ async function runCommand() {
       return exec(
         'yarn rw prisma migrate reset',
         ['--force'],
-        getExecaOptions(OUTPUT_PROJECT_PATH)
+        getExecaOptions(OUTPUT_PROJECT_PATH),
       )
     },
   })
@@ -456,9 +463,9 @@ async function runCommand() {
       fs.copyFileSync(
         path.join(
           __dirname,
-          '../../packages/create-redwood-app/templates/ts/package.json'
+          '../../packages/create-redwood-app/templates/ts/package.json',
         ),
-        path.join(OUTPUT_PROJECT_PATH, 'package.json')
+        path.join(OUTPUT_PROJECT_PATH, 'package.json'),
       )
 
       // removes existing Fixture and replaces with newly built project,
