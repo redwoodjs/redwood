@@ -57,7 +57,7 @@ export async function rscBuildForServer(
       },
     },
     plugins: [
-      // The rscTransformPlugin maps paths like
+      // The rscTransformUseClientPlugin maps paths like
       // /Users/tobbe/.../rw-app/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
       // to
       // /Users/tobbe/.../rw-app/web/dist/server/assets/rsc0.js

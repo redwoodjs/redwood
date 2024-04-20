@@ -133,7 +133,7 @@ export function rscCssPreinitPlugin(
       }
 
       // Get the client components this server component imports (directly or
-      //  indirectly)
+      // indirectly)
       const clientImportIds = serverComponentClientImportIds.get(id) ?? []
       if (clientImportIds.length === 0) {
         return null
@@ -158,7 +158,7 @@ export function rscCssPreinitPlugin(
         return null
       }
 
-      // Analyse the AST to get all the components that we have to insert preinit
+      // Analyze the AST to get all the components that we have to insert pre-init
       // calls into
       const ext = path.extname(id)
 
@@ -214,6 +214,10 @@ export function rscCssPreinitPlugin(
                           t.objectProperty(
                             t.identifier('as'),
                             t.stringLiteral('style'),
+                          ),
+                          t.objectProperty(
+                            t.identifier('precedence'),
+                            t.stringLiteral('medium'),
                           ),
                         ]),
                       ]),

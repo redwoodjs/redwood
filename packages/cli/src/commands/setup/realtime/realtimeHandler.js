@@ -30,7 +30,7 @@ export async function handler({ force, includeExamples, verbose }) {
       addApiPackages(['ioredis@^5', `@redwoodjs/realtime@${version}`]),
       {
         title: 'Adding the realtime api lib ...',
-        task: () => {
+        task: async () => {
           const serverFileTemplateContent = fs.readFileSync(
             path.resolve(__dirname, 'templates', 'realtime.ts.template'),
             'utf-8',
@@ -38,7 +38,10 @@ export async function handler({ force, includeExamples, verbose }) {
 
           const setupScriptContent = ts
             ? serverFileTemplateContent
-            : transformTSToJS(realtimeLibFilePath, serverFileTemplateContent)
+            : await transformTSToJS(
+                realtimeLibFilePath,
+                serverFileTemplateContent,
+              )
 
           return [
             writeFile(realtimeLibFilePath, setupScriptContent, {
@@ -50,7 +53,7 @@ export async function handler({ force, includeExamples, verbose }) {
       {
         title: 'Adding Countdown example subscription ...',
         enabled: () => includeExamples,
-        task: () => {
+        task: async () => {
           const exampleSubscriptionTemplateContent = fs.readFileSync(
             path.resolve(
               __dirname,
@@ -70,7 +73,10 @@ export async function handler({ force, includeExamples, verbose }) {
 
           const setupScriptContent = ts
             ? exampleSubscriptionTemplateContent
-            : transformTSToJS(exampleFile, exampleSubscriptionTemplateContent)
+            : await transformTSToJS(
+                exampleFile,
+                exampleSubscriptionTemplateContent,
+              )
 
           return [
             writeFile(exampleFile, setupScriptContent, {
@@ -82,7 +88,7 @@ export async function handler({ force, includeExamples, verbose }) {
       {
         title: 'Adding NewMessage example subscription ...',
         enabled: () => includeExamples,
-        task: () => {
+        task: async () => {
           // sdl
 
           const exampleSdlTemplateContent = fs.readFileSync(
@@ -103,7 +109,7 @@ export async function handler({ force, includeExamples, verbose }) {
 
           const sdlContent = ts
             ? exampleSdlTemplateContent
-            : transformTSToJS(sdlFile, exampleSdlTemplateContent)
+            : await transformTSToJS(sdlFile, exampleSdlTemplateContent)
 
           // service
 
@@ -125,7 +131,7 @@ export async function handler({ force, includeExamples, verbose }) {
 
           const serviceContent = ts
             ? exampleServiceTemplateContent
-            : transformTSToJS(serviceFile, exampleServiceTemplateContent)
+            : await transformTSToJS(serviceFile, exampleServiceTemplateContent)
 
           // subscription
 
@@ -148,7 +154,10 @@ export async function handler({ force, includeExamples, verbose }) {
 
           const setupScriptContent = ts
             ? exampleSubscriptionTemplateContent
-            : transformTSToJS(exampleFile, exampleSubscriptionTemplateContent)
+            : await transformTSToJS(
+                exampleFile,
+                exampleSubscriptionTemplateContent,
+              )
 
           // write all files
           return [
@@ -167,7 +176,7 @@ export async function handler({ force, includeExamples, verbose }) {
       {
         title: 'Adding Auctions example live query ...',
         enabled: () => includeExamples,
-        task: () => {
+        task: async () => {
           // sdl
 
           const exampleSdlTemplateContent = fs.readFileSync(
@@ -188,7 +197,7 @@ export async function handler({ force, includeExamples, verbose }) {
 
           const sdlContent = ts
             ? exampleSdlTemplateContent
-            : transformTSToJS(sdlFile, exampleSdlTemplateContent)
+            : await transformTSToJS(sdlFile, exampleSdlTemplateContent)
 
           // service
 
@@ -210,7 +219,7 @@ export async function handler({ force, includeExamples, verbose }) {
 
           const serviceContent = ts
             ? exampleServiceTemplateContent
-            : transformTSToJS(serviceFile, exampleServiceTemplateContent)
+            : await transformTSToJS(serviceFile, exampleServiceTemplateContent)
 
           // write all files
           return [
@@ -227,7 +236,7 @@ export async function handler({ force, includeExamples, verbose }) {
       {
         title: 'Adding Defer example queries ...',
         enabled: () => includeExamples,
-        task: () => {
+        task: async () => {
           // sdl
 
           const exampleSdlTemplateContent = fs.readFileSync(
@@ -248,7 +257,7 @@ export async function handler({ force, includeExamples, verbose }) {
 
           const sdlContent = ts
             ? exampleSdlTemplateContent
-            : transformTSToJS(sdlFile, exampleSdlTemplateContent)
+            : await transformTSToJS(sdlFile, exampleSdlTemplateContent)
 
           // service
 
@@ -270,7 +279,7 @@ export async function handler({ force, includeExamples, verbose }) {
 
           const serviceContent = ts
             ? exampleServiceTemplateContent
-            : transformTSToJS(serviceFile, exampleServiceTemplateContent)
+            : await transformTSToJS(serviceFile, exampleServiceTemplateContent)
 
           // write all files
           return [
@@ -287,7 +296,7 @@ export async function handler({ force, includeExamples, verbose }) {
       {
         title: 'Adding Stream example queries ...',
         enabled: () => includeExamples,
-        task: () => {
+        task: async () => {
           // sdl
 
           const exampleSdlTemplateContent = fs.readFileSync(
@@ -308,7 +317,7 @@ export async function handler({ force, includeExamples, verbose }) {
 
           const sdlContent = ts
             ? exampleSdlTemplateContent
-            : transformTSToJS(sdlFile, exampleSdlTemplateContent)
+            : await transformTSToJS(sdlFile, exampleSdlTemplateContent)
 
           // service
 
@@ -330,7 +339,7 @@ export async function handler({ force, includeExamples, verbose }) {
 
           const serviceContent = ts
             ? exampleServiceTemplateContent
-            : transformTSToJS(serviceFile, exampleServiceTemplateContent)
+            : await transformTSToJS(serviceFile, exampleServiceTemplateContent)
 
           // write all files
           return [
