@@ -1,0 +1,13 @@
+diff --git a/react/hooks/internal/useRenderGuard.js b/react/hooks/internal/useRenderGuard.js
+index 15551e6e2de4dcc585e9426f80c67cb136ecd2a7..459da48cff93e7ead22c8c10ead8ba53294b24ad 100644
+--- a/react/hooks/internal/useRenderGuard.js
++++ b/react/hooks/internal/useRenderGuard.js
+@@ -1,7 +1,7 @@
+ import * as React from "rehackt";
+ function getRenderDispatcher() {
+     var _a, _b;
+-    return (_b = (_a = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED) === null || _a === void 0 ? void 0 : _a.ReactCurrentDispatcher) === null || _b === void 0 ? void 0 : _b.current;
++    return (_b = (_a = (React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED || React.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE) === null || _a === void 0 ? void 0 : _a.ReactCurrentDispatcher) === null || _b === void 0 ? void 0 : _b.current;
+ }
+ var RenderDispatcher = null;
+ /*
