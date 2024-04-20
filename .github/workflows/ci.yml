@@ -239,6 +239,7 @@ jobs:
         run: |
           yarn why @apollo/client
           tree .yarn
+          tree node_modules/@apollo/client/react/hooks/internal
           cat node_modules/@apollo/client/react/hooks/internal/useRenderGuard.js
           yarn rw build --no-prerender
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
