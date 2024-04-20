@@ -112,6 +112,11 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         enabled: (ctx) => ctx.versionToUpgradeTo?.includes('canary'),
       },
       {
+        title: 'Downloading yarn patches',
+        task: (ctx) => downloadYarnPatches(ctx, { dryRun, verbose }),
+        enabled: (ctx) => ctx.versionToUpgradeTo?.includes('canary'),
+      },
+      {
         title: 'Running yarn install',
         task: (ctx) => yarnInstall(ctx, { dryRun, verbose }),
         skip: () => dryRun,
@@ -350,6 +355,52 @@ async function updatePackageVersionsFromTemplate(ctx, { dryRun, verbose }) {
           }
         },
         skip: () => !fs.existsSync(pkgJsonPath),
+      }
+    }),
+  )
+}
+
+async function downloadYarnPatches(ctx, { dryRun, verbose }) {
+  if (!ctx.versionToUpgradeTo) {
+    throw new Error('Failed to upgrade')
+  }
+
+  const res = await fetch(
+    'https://api.github.com/repos/redwoodjs/redwood/git/trees/main?recursive=1',
+  )
+  const json = await res.json()
+  const patches = json.tree.filter((patchInfo) =>
+    patchInfo.path.startsWith(
+      'packages/create-redwood-app/templates/ts/.yarn/patches/',
+    ),
+  )
+
+  fs.mkdirSync(path.join(getPaths().web.base, '.yarn', 'patches'), {
+    recursive: true,
+  })
+
+  return new Listr(
+    patches.map(async (patch) => {
+      return {
+        title: `Downloading ${patch.path}`,
+        task: async () => {
+          const res = await fetch(patch.url)
+          const patchText = await res.text()
+          const patchPath = path.join(
+            getPaths().web.base,
+            '.yarn',
+            'patches',
+            path.basename(patch.path),
+          )
+
+          if (verbose) {
+            console.log('writing patch', patchPath)
+          }
+
+          if (!dryRun) {
+            await fs.writeFile(patchPath, patchText)
+          }
+        },
       }
     }),
   )
