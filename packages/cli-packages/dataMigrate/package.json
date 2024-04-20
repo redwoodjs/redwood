@@ -4,7 +4,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/cli-packages/storybook"
+    "directory": "packages/cli-packages/dataMigrate"
   },
   "license": "MIT",
   "exports": "./dist/index.js",
