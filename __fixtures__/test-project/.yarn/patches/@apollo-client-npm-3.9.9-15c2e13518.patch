@@ -1,10 +1,10 @@
 diff --git a/react/hooks/internal/useRenderGuard.js b/react/hooks/internal/useRenderGuard.js
-index 15551e6e2de4dcc585e9426f80c67cb136ecd2a7..bf7ee0216f2b18b1613454b46b620adbf204cffa 100644
+index 15551e6e2de4dcc585e9426f80c67cb136ecd2a7..bfa4d11b176ab8d80b9c30ddd2c1d439ee1dd824 100644
 --- a/react/hooks/internal/useRenderGuard.js
 +++ b/react/hooks/internal/useRenderGuard.js
 @@ -1,7 +1,9 @@
-- import * as React from "rehackt";
-+ const React = require("rehackt");
+-import * as react from "rehackt";
++const react = require("rehackt");
  function getRenderDispatcher() {
 -    var _a, _b;
 -    return (_b = (_a = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED) === null || _a === void 0 ? void 0 : _a.ReactCurrentDispatcher) === null || _b === void 0 ? void 0 : _b.current;
@@ -16,7 +16,7 @@ index 15551e6e2de4dcc585e9426f80c67cb136ecd2a7..bf7ee0216f2b18b1613454b46b620adb
  var RenderDispatcher = null;
  /*
 diff --git a/testing/internal/profile/profile.js b/testing/internal/profile/profile.js
-index bcb709e4a7f6a72b381632e6da6a5c7d9ab5d8f1..953121f90df66e2dd5a6276a710d9ff874719660 100644
+index bcb709e4a7f6a72b381632e6da6a5c7d9ab5d8f1..362dcd3e577beb62f14bdb61a72debebaaf212ff 100644
 --- a/testing/internal/profile/profile.js
 +++ b/testing/internal/profile/profile.js
 @@ -276,8 +276,11 @@ export function profileHook(renderCallback) {
