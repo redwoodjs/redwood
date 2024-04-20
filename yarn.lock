@@ -155,7 +155,7 @@ __metadata:
 
 "@apollo/client@patch:@apollo/client@npm%3A3.9.9#~/.yarn/patches/@apollo-client-npm-3.9.9-15c2e13518.patch":
   version: 3.9.9
-  resolution: "@apollo/client@patch:@apollo/client@npm%3A3.9.9#~/.yarn/patches/@apollo-client-npm-3.9.9-15c2e13518.patch::version=3.9.9&hash=2c1d3c"
+  resolution: "@apollo/client@patch:@apollo/client@npm%3A3.9.9#~/.yarn/patches/@apollo-client-npm-3.9.9-15c2e13518.patch::version=3.9.9&hash=e74fea"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/caches": "npm:^1.0.0"
@@ -186,7 +186,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10c0/b5aaad7eed59dc35ec0fdd447bf8a7d97a3c5aa69ce67d8e10ab0a73d03823f9edd4ea4a90ea2a9c593c5b0c91458c5343e992c9f93229383e5733e97d8f863f
+  checksum: 10c0/0fc02d4dad1e7612b8ee608f050be23da2d8bb37798096e33a06ea7c464e389a28ab7e430dc627baab4259710e9d9e208f776d383eeef82a745b8658f493a929
   languageName: node
   linkType: hard
 
