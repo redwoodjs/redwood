@@ -390,11 +390,6 @@ export const getCmdMajorVersion = async (command) => {
 const dedupeDeps = async (task, { verbose }) => {
   try {
     const yarnVersion = await getCmdMajorVersion('yarn')
-    const npxVersion = await getCmdMajorVersion('npx')
-    let npxArgs = []
-    if (npxVersion > 6) {
-      npxArgs = ['--yes']
-    }
 
     const baseExecaArgsForDedupe = {
       shell: true,
@@ -404,10 +399,12 @@ const dedupeDeps = async (task, { verbose }) => {
     if (yarnVersion > 1) {
       await execa('yarn', ['dedupe'], baseExecaArgsForDedupe)
     } else {
-      await execa(
-        'npx',
-        [...npxArgs, 'yarn-deduplicate'],
-        baseExecaArgsForDedupe,
+      // Redwood projects should not be using yarn 1.x as we specify a version of yarn in the package.json
+      // with "packageManager": "yarn@4.1.1" or similar.
+      // Although we could (and previous did) automatically run `npx yarn-deduplicate` here, that would require
+      // the user to have `npx` installed, which is not guaranteed and we do not wish to enforce that.
+      task.skip(
+        "Yarn 1.x doesn't support dedupe directly. Please upgrade yarn or use npx with `npx yarn-deduplicate` manually.",
       )
     }
   } catch (e) {
