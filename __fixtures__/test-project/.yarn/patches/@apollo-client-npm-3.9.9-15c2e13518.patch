@@ -3,7 +3,8 @@ index 15551e6e2de4dcc585e9426f80c67cb136ecd2a7..bf7ee0216f2b18b1613454b46b620adb
 --- a/react/hooks/internal/useRenderGuard.js
 +++ b/react/hooks/internal/useRenderGuard.js
 @@ -1,7 +1,9 @@
- import * as React from "rehackt";
+- import * as React from "rehackt";
++ const React = require("rehackt");
  function getRenderDispatcher() {
 -    var _a, _b;
 -    return (_b = (_a = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED) === null || _a === void 0 ? void 0 : _a.ReactCurrentDispatcher) === null || _b === void 0 ? void 0 : _b.current;
