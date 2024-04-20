@@ -1,5 +1,5 @@
 diff --git a/react/hooks/internal/useRenderGuard.js b/react/hooks/internal/useRenderGuard.js
-index 15551e6e2de4dcc585e9426f80c67cb136ecd2a7..3f3ba7b5ee6aa83f76916875da03b268f3fa6f44 100644
+index 15551e6e2de4dcc585e9426f80c67cb136ecd2a7..181e74a378c59779e83b698cb1923602cf845813 100644
 --- a/react/hooks/internal/useRenderGuard.js
 +++ b/react/hooks/internal/useRenderGuard.js
 @@ -1,7 +1,9 @@
