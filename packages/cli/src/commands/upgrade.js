@@ -375,30 +375,36 @@ async function downloadYarnPatches(ctx, { dryRun, verbose }) {
     ),
   )
 
-  fs.mkdirSync(path.join(getPaths().web.base, '.yarn', 'patches'), {
-    recursive: true,
-  })
+  const patchDir = path.join(getPaths().base, '.yarn', 'patches')
+
+  if (verbose) {
+    console.log('Creating patch directory', patchDir)
+  }
+
+  if (!dryRun) {
+    fs.mkdirSync(patchDir, { recursive: true })
+  }
 
   return new Listr(
-    patches.map(async (patch) => {
+    patches.map((patch) => {
       return {
         title: `Downloading ${patch.path}`,
         task: async () => {
           const res = await fetch(patch.url)
-          const patchText = await res.text()
+          const patchMeta = await res.json()
           const patchPath = path.join(
-            getPaths().web.base,
+            getPaths().base,
             '.yarn',
             'patches',
             path.basename(patch.path),
           )
 
           if (verbose) {
-            console.log('writing patch', patchPath)
+            console.log('Writing patch', patchPath)
           }
 
           if (!dryRun) {
-            await fs.writeFile(patchPath, patchText)
+            await fs.writeFile(patchPath, patchMeta.content, 'base64')
           }
         },
       }
