@@ -11,7 +11,7 @@
     ]
   },
   "dependencies": {
-    "@apollo/experimental-nextjs-app-support": "0.0.0-commit-b8a73fe",
+    "@apollo/client-react-streaming": "0.10.0",
     "@jtoar/throw-on-client": "0.0.1",
     "@redwoodjs/forms": "7.0.0-canary.1011",
     "@redwoodjs/router": "7.0.0-canary.1011",
