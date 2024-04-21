@@ -35,9 +35,9 @@ export default async function extendStorybookConfiguration(
     )
     const storybookPreviewContent = ts
       ? templateContent
-      : transformTSToJS(sbPreviewConfigPath, templateContent)
+      : await transformTSToJS(sbPreviewConfigPath, templateContent)
 
-    await writeFile(sbPreviewConfigPath, storybookPreviewContent)
+    writeFile(sbPreviewConfigPath, storybookPreviewContent)
   }
 
   const storybookPreviewContent = read(sbPreviewConfigPath)
@@ -47,9 +47,9 @@ export default async function extendStorybookConfiguration(
     const newConfigTemplate = read(newConfigPath)
     const newConfigContent = ts
       ? newConfigTemplate
-      : transformTSToJS(newConfigPath, newConfigTemplate)
+      : await transformTSToJS(newConfigPath, newConfigTemplate)
 
-    const merged = merge(storybookPreviewContent, newConfigContent, {
+    const merged = await merge(storybookPreviewContent, newConfigContent, {
       ImportDeclaration: interleave,
       ArrayExpression: concatUnique,
       ObjectExpression: concatUnique,
@@ -57,9 +57,10 @@ export default async function extendStorybookConfiguration(
       FunctionDeclaration: keepBoth,
     })
 
-    const formatted = prettier.format(merged, {
-      parser: 'babel',
-      ...(await prettier.resolveConfig(sbPreviewConfigPath)),
+    const pConfig = await prettier.resolveConfig(sbPreviewConfigPath)
+    const formatted = await prettier.format(merged, {
+      parser: ts ? 'babel-ts' : 'babel',
+      ...pConfig,
     })
 
     writeFile(sbPreviewConfigPath, formatted, { overwriteExisting: true })

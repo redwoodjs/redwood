@@ -161,6 +161,14 @@ interface WebAuthnFlowOptions {
 
 export type UserType = Record<string | number, any>
 
+export type DbAuthResponse = Promise<{
+  headers: {
+    [x: string]: string | string[]
+  }
+  body?: string | undefined
+  statusCode: number
+}>
+
 type AuthMethodOutput = [
   string | Record<string, any> | boolean | undefined, // body
   Headers?,

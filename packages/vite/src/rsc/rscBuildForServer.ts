@@ -29,11 +29,8 @@ export async function rscBuildForServer(
     throw new Error('RSC entries file not found')
   }
 
-  const input = {
-    entries: rwPaths.web.entries,
-    ...clientEntryFiles,
-    ...serverEntryFiles,
-    ...customModules,
+  if (!rwPaths.web.entryServer) {
+    throw new Error('Server Entry file not found')
   }
 
   // TODO (RSC): No redwood-vite plugin, add it in here
@@ -60,7 +57,7 @@ export async function rscBuildForServer(
       },
     },
     plugins: [
-      // The rscTransformPlugin maps paths like
+      // The rscTransformUseClientPlugin maps paths like
       // /Users/tobbe/.../rw-app/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
       // to
       // /Users/tobbe/.../rw-app/web/dist/server/assets/rsc0.js
@@ -81,7 +78,14 @@ export async function rscBuildForServer(
       manifest: 'server-build-manifest.json',
       rollupOptions: {
         onwarn: onWarn,
-        input,
+        input: {
+          entries: rwPaths.web.entries,
+          ...clientEntryFiles,
+          ...serverEntryFiles,
+          ...customModules,
+          'rsdw-server': 'react-server-dom-webpack/server.edge',
+          'entry.server': rwPaths.web.entryServer,
+        },
         output: {
           banner: (chunk) => {
             // HACK to bring directives to the front
@@ -104,7 +108,12 @@ export async function rscBuildForServer(
           },
           entryFileNames: (chunkInfo) => {
             // TODO (RSC) Probably don't want 'entries'. And definitely don't want it hardcoded
-            if (chunkInfo.name === 'entries' || customModules[chunkInfo.name]) {
+            if (
+              chunkInfo.name === 'entries' ||
+              chunkInfo.name === 'entry.server' ||
+              chunkInfo.name === 'rsdw-server' ||
+              customModules[chunkInfo.name]
+            ) {
               return '[name].mjs'
             }
             return 'assets/[name].mjs'

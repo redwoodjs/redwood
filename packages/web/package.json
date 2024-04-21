@@ -37,7 +37,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@apollo/client": "3.9.9",
+    "@apollo/client": "patch:@apollo/client@npm%3A3.9.9#~/.yarn/patches/@apollo-client-npm-3.9.9-15c2e13518.patch",
     "@babel/runtime-corejs3": "7.24.1",
     "@redwoodjs/auth": "workspace:*",
     "core-js": "3.36.1",
@@ -50,7 +50,7 @@
     "ts-toolbelt": "9.6.0"
   },
   "devDependencies": {
-    "@apollo/experimental-nextjs-app-support": "0.0.0-commit-b8a73fe",
+    "@apollo/client-react-streaming": "0.10.0",
     "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
     "@babel/plugin-transform-runtime": "7.24.3",
@@ -61,15 +61,15 @@
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "nodemon": "3.1.0",
-    "react": "18.3.0-canary-a870b2d54-20240314",
-    "react-dom": "18.3.0-canary-a870b2d54-20240314",
+    "react": "19.0.0-canary-36e62c603-20240418",
+    "react-dom": "19.0.0-canary-36e62c603-20240418",
     "tstyche": "1.1.0",
     "typescript": "5.4.5",
     "vitest": "1.4.0"
   },
   "peerDependencies": {
-    "react": "18.3.0-canary-a870b2d54-20240314",
-    "react-dom": "18.3.0-canary-a870b2d54-20240314"
+    "react": "19.0.0-canary-36e62c603-20240418",
+    "react-dom": "19.0.0-canary-36e62c603-20240418"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
