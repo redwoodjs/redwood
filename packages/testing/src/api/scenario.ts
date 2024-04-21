@@ -51,12 +51,12 @@ export const defineScenario: DefineScenario = (data) => {
 type ScenarioDefinitionMap<
   PrismaCreateType extends { data: any },
   ModelName extends string | number | symbol = string | number | symbol,
-  TKeys extends string | number | symbol = string | number | symbol
+  TKeys extends string | number | symbol = string | number | symbol,
 > = Record<
   TKeys,
   | A.Compute<PrismaCreateType>
   | ((
-      scenario: Record<ModelName, Record<TKeys, any>>
+      scenario: Record<ModelName, Record<TKeys, any>>,
     ) => A.Compute<PrismaCreateType>)
 >
 
@@ -75,12 +75,12 @@ export interface DefineScenario {
   <
     PrismaCreateType extends { data: any },
     ModelName extends string | number | symbol = string | number | symbol,
-    TKeys extends string | number | symbol = string | number | symbol
+    TKeys extends string | number | symbol = string | number | symbol,
   >(
     scenarioMap: Record<
       ModelName,
       ScenarioDefinitionMap<PrismaCreateType, ModelName, TKeys>
-    >
+    >,
   ): Record<ModelName, Record<TKeys, any>>
 }
 
@@ -109,7 +109,7 @@ export interface DefineScenario {
 export declare type ScenarioData<
   TModel, // the prisma model, imported from @prisma/client e.g. "Product"
   TName extends string | number = string | number, // (optional) name of the prisma model e.g. "product"
-  TKeys extends string | number = string | number // (optional) name of each of the seeded scenarios e.g. "shirt"
+  TKeys extends string | number = string | number, // (optional) name of each of the seeded scenarios e.g. "shirt"
 > = Record<TName, Record<TKeys, TModel>>
 
 interface TestFunctionWithScenario<TData> {
@@ -129,7 +129,7 @@ export interface Scenario {
   (
     namedScenario: string,
     title: string,
-    testFunction: TestFunctionWithScenario<any>
+    testFunction: TestFunctionWithScenario<any>,
   ): void
 }
 
@@ -140,14 +140,14 @@ export interface Scenario {
 export interface DescribeScenario {
   <TData = any>(
     title: string,
-    describeBlock: DescribeBlockWithGetScenario<TData>
+    describeBlock: DescribeBlockWithGetScenario<TData>,
   ): void
 }
 
 export interface DescribeScenario {
   <TData>(
     title: string,
-    describeBlock: DescribeBlockWithGetScenario<TData>
+    describeBlock: DescribeBlockWithGetScenario<TData>,
   ): void
 }
 
@@ -156,7 +156,7 @@ export interface DescribeScenario {
   <TData>(
     namedScenario: string,
     title: string,
-    describeBlock: DescribeBlockWithGetScenario<TData>
+    describeBlock: DescribeBlockWithGetScenario<TData>,
   ): void
 }
 
