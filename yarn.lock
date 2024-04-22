@@ -8566,12 +8566,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/ogimage-gen@workspace:packages/ogimage-gen"
   dependencies:
+    "@playwright/test": "npm:1.42.1"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/internal": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/router": "workspace:*"
     "@redwoodjs/vite": "workspace:*"
     fast-glob: "npm:3.3.2"
+    lodash: "npm:4.17.21"
     react: "npm:18.3.0-canary-a870b2d54-20240314"
     react-dom: "npm:18.3.0-canary-a870b2d54-20240314"
     ts-toolbelt: "npm:9.6.0"

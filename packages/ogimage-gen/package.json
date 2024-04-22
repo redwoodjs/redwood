@@ -42,10 +42,12 @@
     "@redwoodjs/router": "workspace:*",
     "@redwoodjs/vite": "workspace:*",
     "fast-glob": "3.3.2",
+    "lodash": "4.17.21",
     "react": "18.3.0-canary-a870b2d54-20240314",
     "react-dom": "18.3.0-canary-a870b2d54-20240314"
   },
   "devDependencies": {
+    "@playwright/test": "1.42.1",
     "@redwoodjs/framework-tools": "workspace:*",
     "ts-toolbelt": "9.6.0",
     "tsx": "4.7.1",
