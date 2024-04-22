@@ -1,0 +1,48 @@
+{
+  "name": "@redwoodjs/auth-supabase-middleware",
+  "version": "7.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/auth-providers/supabase/middleware"
+  },
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js"
+    },
+    "./plugin": {
+      "import": "./dist/vite-plugin-auth-supabase-middleware.js",
+      "default": "./cjsWrappers/plugin.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "cjsWrappers"
+  ],
+  "scripts": {
+    "build": "tsx ./build.mts && yarn build:types",
+    "build:pack": "yarn pack -o redwoodjs-auth-supabase-middleware.tgz",
+    "build:types": "tsc --build --verbose",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@redwoodjs/auth-supabase-api": "workspace:*"
+  },
+  "devDependencies": {
+    "@redwoodjs/api": "workspace:*",
+    "@redwoodjs/framework-tools": "workspace:*",
+    "@redwoodjs/graphql-server": "workspace:*",
+    "@redwoodjs/vite": "workspace:*",
+    "@types/aws-lambda": "8.10.136",
+    "ts-toolbelt": "9.6.0",
+    "tsx": "4.7.1",
+    "typescript": "5.4.5",
+    "vitest": "1.4.0"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}
