@@ -8,6 +8,8 @@ import FatalErrorPage from 'src/pages/FatalErrorPage'
 import { AuthProvider, useAuth } from './auth'
 
 import './index.css'
+import './scaffold.css'
+
 interface AppProps {
   children?: ReactNode
 }
