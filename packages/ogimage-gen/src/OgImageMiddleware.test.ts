@@ -174,7 +174,7 @@ describe('OgImageMiddleware', () => {
     const jsxResult = middleware.getOgComponentPath(jsxRoute, extension)
 
     expect(ensurePosixPath(tsxResult)).toBe(expectedFilePath)
-    expect(jsxResult).toBe(expectedFilePath)
+    expect(ensurePosixPath(jsxResult)).toBe(expectedFilePath)
   })
 
   test('importComponent should import the component using viteDevServer', async () => {
