@@ -1,5 +1,4 @@
-// import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
-
+import { authDecoder } from '@redwoodjs/auth-supabase-api'
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
 import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
 import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
@@ -13,78 +12,47 @@ export const createSupabaseAuthMiddleware = ({
 }: SupabaseAuthMiddlewareOptions) => {
   return async (req: MiddlewareRequest) => {
     const res = MiddlewareResponse.next()
-    console.log(getCurrentUser, 'getCurrentUser')
 
-    // // Handoff POST requests to the dbAuthHandler. The url is configurable on the dbAuth client side.
-    // // This is where we handle login, logout, and signup, etc., but we don't want to intercept
-    // if (req.method === 'POST') {
-    //   if (!req.url.includes(dbAuthUrl)) {
-    //     // Bail if the POST request is not for the dbAuthHandler
-    //     return res
-    //   }
+    const cookieHeader = req.headers.get('Cookie')
 
-    //   const output = await dbAuthHandler(req)
-    //   const finalHeaders = new Headers()
+    // Unauthenticated request
+    if (!cookieHeader) {
+      return null
+    }
 
-    //   Object.entries(output.headers).forEach(([key, value]) => {
-    //     if (Array.isArray(value)) {
-    //       value.forEach((mvhHeader) => finalHeaders.append(key, mvhHeader))
-    //     } else {
-    //       finalHeaders.append(key, value)
-    //     }
-    //   })
-
-    //   return new MiddlewareResponse(output.body, {
-    //     headers: finalHeaders,
-    //     status: output.statusCode,
-    //   })
-    // }
-
-    // const cookieHeader = req.headers.get('Cookie')
-
-    // if (!cookieHeader) {
-    //   // Let the AuthContext fallback to its default value
-    //   return res
-    // }
-
-    // 👇 Authenticated request
+    // @WARN: Authdecoders still take event and context
+    // @TODO: is the decodedSession the same as jwt.decode?
     try {
-      //   // Call the dbAuth auth decoder. For dbAuth we have direct access to the `dbAuthSession` function.
-      //   // Other providers may be slightly different.
-      //   const decryptedSession = dbAuthSession(req as Request, cookieName)
-      //   const currentUser = await getCurrentUser(
-      //     decryptedSession,
-      //     {
-      //       type: 'dbAuth',
-      //       schema: 'cookie',
-      //       // @MARK: We pass the entire cookie header as a token. This isn't actually the token!
-      //       token: cookieHeader,
-      //     },
-      //     {
-      //       // MWRequest is a superset of Request
-      //       event: req as Request,
-      //     },
-      //   )
-      //   // Short circuit here ...
-      //   // if the call came from packages/auth-providers/dbAuth/web/src/getCurrentUserFromMiddleware.ts
-      //   if (req.url.includes(`${dbAuthUrl}/currentUser`)) {
-      //     return new MiddlewareResponse(JSON.stringify({ currentUser }))
-      //   }
-      // req.serverAuthContext.set({
-      //   // currentUser,
-      //   loading: false,
-      //   isAuthenticated: !!currentUser,
-      //   hasError: false,
-      //   userMetadata: currentUser, // Not sure!
-      //   cookieHeader,
-      // })
+      const decodedSession = await authDecoder(cookieHeader, 'supabase', {
+        event: {} as any,
+        context: {} as any,
+      })
+
+      const currentUser = await getCurrentUser(decodedSession, {
+        schema: 'cookie',
+        // @MARK: We pass the entire cookie header as a token. This isn't actually the token!
+        token: cookieHeader,
+        type: 'supabase',
+      })
+
+      req.serverAuthContext.set({
+        currentUser,
+        loading: false,
+        isAuthenticated: !!currentUser,
+        hasError: false,
+        userMetadata: currentUser, //should this be from supabase and not just currentUser?
+        cookieHeader: cookieHeader,
+      })
+
+      return res
     } catch (e) {
       // Clear server auth context
-      console.error(e, 'Error decrypting dbAuth cookie')
+      console.error(e, 'Error decoding session')
       req.serverAuthContext.set(null)
 
-      // Clear the cookies, because decryption was invalid
-      // res.cookies.clear(cookieNameCreator(cookieName))
+      // Clear the supabase cookie?
+      // todo: check if this is necessary
+      // Clear the provider cookie
       res.cookies.clear('auth-provider')
     }
 
