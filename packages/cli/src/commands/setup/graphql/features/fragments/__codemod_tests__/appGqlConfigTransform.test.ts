@@ -73,8 +73,9 @@ describe('fragments graphQLClientConfig', () => {
 
       import { AuthProvider, useAuth } from \"./auth\";
 
-      import \"./scaffold.css\";
       import \"./index.css\";
+      import \"./scaffold.css\";
+
       interface AppProps {
         children?: ReactNode;
       }
