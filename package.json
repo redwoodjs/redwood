@@ -41,8 +41,7 @@
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-protocol": "3.15.3",
     "vscode-languageserver-textdocument": "1.0.11",
-    "vscode-languageserver-types": "3.17.5",
-    "@storybook/react-dom-shim@npm:7.6.17": "patch:@storybook/react-dom-shim@npm%3A7.6.17#~/.yarn/patches/@storybook-react-dom-shim-npm-7.6.17-789bc900f0.patch"
+    "vscode-languageserver-types": "3.17.5"
   },
   "devDependencies": {
     "@actions/cache": "3.2.4",
