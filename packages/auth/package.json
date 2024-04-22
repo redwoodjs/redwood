@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "core-js": "3.36.1",
-    "react": "19.0.0-canary-36e62c603-20240418"
+    "react": "18.3.0-canary-a870b2d54-20240314"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
