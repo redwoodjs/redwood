@@ -31,7 +31,7 @@
     "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
     "@types/react": "^18.2.55",
-    "react": "18.3.0-canary-a870b2d54-20240314",
+    "react": "19.0.0-canary-36e62c603-20240418",
     "supertokens-auth-react": "0.39.1",
     "typescript": "5.4.5",
     "vitest": "1.4.0"
