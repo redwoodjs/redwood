@@ -10043,23 +10043,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react-dom-shim@npm:7.6.17":
-  version: 7.6.17
-  resolution: "@storybook/react-dom-shim@npm:7.6.17"
+"@storybook/react-dom-shim@https://verdaccio.tobbe.dev/@storybook/react-dom-shim/-/react-dom-shim-8.0.8.tgz":
+  version: 8.0.8
+  resolution: "@storybook/react-dom-shim@https://verdaccio.tobbe.dev/@storybook/react-dom-shim/-/react-dom-shim-8.0.8.tgz"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/20558c58f9f0a3a00c5a1bbf2aa3517e3d318e6528f503129c99fb9ee4b604a225e79725f67e01e6e99d5d8c7db0614575dcc89af7768381afe59c976cb7cfc0
-  languageName: node
-  linkType: hard
-
-"@storybook/react-dom-shim@patch:@storybook/react-dom-shim@npm%3A7.6.17#~/.yarn/patches/@storybook-react-dom-shim-npm-7.6.17-789bc900f0.patch":
-  version: 7.6.17
-  resolution: "@storybook/react-dom-shim@patch:@storybook/react-dom-shim@npm%3A7.6.17#~/.yarn/patches/@storybook-react-dom-shim-npm-7.6.17-789bc900f0.patch::version=7.6.17&hash=5d9d27"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/3a16df94b6c0ebd363fa76e6bc90fc70a3638ef6a5ce7f820524ebe222ac541e962a2b0879f59da31920cd798ecaa3fd668ed9b590bda5505670b3da69f9927c
+  checksum: 10c0/993d7e5032d82a496ddff82eefd4a097c743554def5d44aa7dcd43e80e1b619f07bc6f19d3876fb76663b7116f443fb614800786bc49c054f91af0d7bee0c197
   languageName: node
   linkType: hard
 
