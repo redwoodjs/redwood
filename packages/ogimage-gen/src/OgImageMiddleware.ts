@@ -4,6 +4,7 @@ import { createElement } from 'react'
 
 import memoize from 'lodash/memoize.js'
 import mime from 'mime-types'
+import type { PageScreenshotOptions } from 'playwright'
 import { renderToString } from 'react-dom/server'
 
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
@@ -30,19 +31,6 @@ interface MwOptions {
 const supportedExtensions = ['jpg', 'png']
 
 type SUPPORTED_EXT = (typeof supportedExtensions)[number]
-
-interface ScreenshotOptions {
-  viewport: {
-    width: number
-    height: number
-  }
-  format: {
-    [key in SUPPORTED_EXT]: {
-      type: string
-      quality?: number
-    }
-  }
-}
 
 interface ComponentElementProps {
   Component: React.FC<{ data: unknown }>
@@ -127,23 +115,22 @@ export default class OgImageMiddleware {
 
     const debug = !!mergedParams.debug
 
-    const screenshotOptions: ScreenshotOptions = {
-      viewport: {
-        width: this.imageProps.width,
-        height: this.imageProps.height,
-      },
-      format: {
-        png: { type: 'png' },
-        jpg: {
-          type: 'jpeg',
-          quality: this.imageProps.quality,
-        },
+    const screenshotOptionsByFormat: Record<
+      SUPPORTED_EXT,
+      PageScreenshotOptions
+    > = {
+      png: { type: 'png' },
+      jpg: {
+        type: 'jpeg',
+        quality: this.imageProps.quality,
       },
     }
 
-    // @TODO (ROB!)
-    // I think it doesn't work with jsx paths in my project IN DEV at the moment
-    // Try renaming AboutPage.png.tsx -> AboutPage.png.jsx
+    const pageViewPort = {
+      width: this.imageProps.width,
+      height: this.imageProps.height,
+    }
+
     const ogImgFilePath = this.getOgComponentPath(currentRoute, extension)
 
     const { data, Component } = await this.importComponent(
@@ -156,11 +143,9 @@ export default class OgImageMiddleware {
       dataOut = await data(mergedParams)
     }
 
-    // @TODO (ROB): We could pass in playwright as an option to the middleware.
-    // What do you think?
     const { chromium } = await import('playwright')
     const browser = await chromium.launch()
-    const page = await browser.newPage({ viewport: screenshotOptions.viewport })
+    const page = await browser.newPage({ viewport: pageViewPort })
 
     // If the user overrides the cssPaths, use them. Otherwise use the default css list
     // That gets passed from createReactStreamingHandler
@@ -203,10 +188,7 @@ export default class OgImageMiddleware {
       await page.goto(baseUrl)
 
       await page.setContent(htmlOutput)
-      const image = await page.screenshot(
-        // @TODO TYPESCRIPT 😡
-        screenshotOptions.format[extension as SUPPORTED_EXT] as any,
-      )
+      const image = await page.screenshot(screenshotOptionsByFormat[extension])
       await browser.close()
 
       mwResponse.headers.append(
