@@ -5,7 +5,7 @@ import type { AuthContextInterface, CurrentUser } from '../AuthContext.js'
 import type { AuthImplementation } from '../AuthImplementation.js'
 
 import type { AuthProviderState } from './AuthProviderState.js'
-import { defaultAuthProviderState } from './AuthProviderState.js'
+import { spaDefaultAuthProviderState } from './AuthProviderState.js'
 import { ServerAuthContext } from './ServerAuthProvider.js'
 import { useCurrentUser } from './useCurrentUser.js'
 import { useForgotPassword } from './useForgotPassword.js'
@@ -83,7 +83,7 @@ export function createAuthProvider<
 
     const [authProviderState, setAuthProviderState] = useState<
       AuthProviderState<TUser>
-    >(serverAuthState || defaultAuthProviderState)
+    >(serverAuthState || spaDefaultAuthProviderState)
 
     const getToken = useToken(authImplementation)
 

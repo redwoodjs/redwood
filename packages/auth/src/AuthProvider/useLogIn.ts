@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import type { AuthImplementation } from '../AuthImplementation.js'
 
 import type { AuthProviderState } from './AuthProviderState.js'
-import { defaultAuthProviderState } from './AuthProviderState.js'
+import { spaDefaultAuthProviderState } from './AuthProviderState.js'
 import type { useCurrentUser } from './useCurrentUser.js'
 import { useReauthenticate } from './useReauthenticate.js'
 
@@ -50,7 +50,7 @@ export const useLogIn = <
 
   return useCallback(
     async (options?: TLogInOptions) => {
-      setAuthProviderState(defaultAuthProviderState)
+      setAuthProviderState(spaDefaultAuthProviderState)
       const loginResult = await authImplementation.login(options)
       await reauthenticate()
 
