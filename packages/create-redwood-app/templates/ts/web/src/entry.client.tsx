@@ -18,8 +18,17 @@ if (!redwoodAppElement) {
 }
 
 if (redwoodAppElement.children?.length > 0) {
-  hydrateRoot(redwoodAppElement, <App><Routes /></App>)
+  hydrateRoot(
+    redwoodAppElement,
+    <App>
+      <Routes />
+    </App>
+  )
 } else {
   const root = createRoot(redwoodAppElement)
-  root.render(<App><Routes /></App>)
+  root.render(
+    <App>
+      <Routes />
+    </App>
+  )
 }
