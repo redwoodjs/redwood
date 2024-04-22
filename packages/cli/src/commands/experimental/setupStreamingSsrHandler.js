@@ -159,9 +159,22 @@ export const handler = async ({ force, verbose }) => {
           })
         },
       },
-      addWebPackages([
-        '@apollo/experimental-nextjs-app-support@0.0.0-commit-b8a73fe',
-      ]),
+      {
+        title:
+          'Adding resolution for "@apollo/client-react-streaming/superjson"',
+        task: () => {
+          // We need this to make sure we get a version of superjson that works
+          // with CommonJS.
+          // TODO: Remove this when Redwood switches to ESM
+          const pkgJsonPath = path.join(rwPaths.base, 'package.json')
+          const pkgJson = fs.readJsonSync(pkgJsonPath)
+          const resolutions = pkgJson.resolutions || {}
+          resolutions['@apollo/client-react-streaming/superjson'] = '^1.12.2'
+          pkgJson.resolutions = resolutions
+          fs.writeJsonSync(pkgJsonPath, pkgJson, { spaces: 2 })
+        },
+      },
+      addWebPackages(['@apollo/client-react-streaming@0.10.0']),
       {
         task: () => {
           printTaskEpilogue(command, description, EXPERIMENTAL_TOPIC_ID)

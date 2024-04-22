@@ -77,7 +77,8 @@ export const parseAuthorizationHeader = (
 export type AuthContextPayload = [
   Decoded,
   { type: string } & AuthorizationHeader,
-  { event: APIGatewayProxyEvent | Request; context: LambdaContext },
+  // @MARK: Context is not passed when using middleware auth
+  { event: APIGatewayProxyEvent | Request; context?: LambdaContext },
 ]
 
 export type Decoder = (

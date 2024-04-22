@@ -11,15 +11,15 @@
     ]
   },
   "dependencies": {
-    "@apollo/experimental-nextjs-app-support": "0.0.0-commit-b8a73fe",
+    "@apollo/client-react-streaming": "0.10.0",
     "@jtoar/throw-on-client": "0.0.1",
     "@redwoodjs/forms": "7.0.0-canary.1011",
     "@redwoodjs/router": "7.0.0-canary.1011",
     "@redwoodjs/web": "7.0.0-canary.1011",
     "@tobbe.dev/rsc-test": "0.0.5",
     "client-only": "0.0.1",
-    "react": "18.3.0-canary-a870b2d54-20240314",
-    "react-dom": "18.3.0-canary-a870b2d54-20240314"
+    "react": "19.0.0-canary-36e62c603-20240418",
+    "react-dom": "19.0.0-canary-36e62c603-20240418"
   },
   "devDependencies": {
     "@redwoodjs/vite": "7.0.0-canary.1011",

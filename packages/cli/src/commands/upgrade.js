@@ -112,6 +112,11 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         enabled: (ctx) => ctx.versionToUpgradeTo?.includes('canary'),
       },
       {
+        title: 'Downloading yarn patches',
+        task: (ctx) => downloadYarnPatches(ctx, { dryRun, verbose }),
+        enabled: (ctx) => ctx.versionToUpgradeTo?.includes('canary'),
+      },
+      {
         title: 'Running yarn install',
         task: (ctx) => yarnInstall(ctx, { dryRun, verbose }),
         skip: () => dryRun,
@@ -355,6 +360,58 @@ async function updatePackageVersionsFromTemplate(ctx, { dryRun, verbose }) {
   )
 }
 
+async function downloadYarnPatches(ctx, { dryRun, verbose }) {
+  if (!ctx.versionToUpgradeTo) {
+    throw new Error('Failed to upgrade')
+  }
+
+  const res = await fetch(
+    'https://api.github.com/repos/redwoodjs/redwood/git/trees/main?recursive=1',
+  )
+  const json = await res.json()
+  const patches = json.tree.filter((patchInfo) =>
+    patchInfo.path.startsWith(
+      'packages/create-redwood-app/templates/ts/.yarn/patches/',
+    ),
+  )
+
+  const patchDir = path.join(getPaths().base, '.yarn', 'patches')
+
+  if (verbose) {
+    console.log('Creating patch directory', patchDir)
+  }
+
+  if (!dryRun) {
+    fs.mkdirSync(patchDir, { recursive: true })
+  }
+
+  return new Listr(
+    patches.map((patch) => {
+      return {
+        title: `Downloading ${patch.path}`,
+        task: async () => {
+          const res = await fetch(patch.url)
+          const patchMeta = await res.json()
+          const patchPath = path.join(
+            getPaths().base,
+            '.yarn',
+            'patches',
+            path.basename(patch.path),
+          )
+
+          if (verbose) {
+            console.log('Writing patch', patchPath)
+          }
+
+          if (!dryRun) {
+            await fs.writeFile(patchPath, patchMeta.content, 'base64')
+          }
+        },
+      }
+    }),
+  )
+}
+
 async function refreshPrismaClient(task, { verbose }) {
   /** Relates to prisma/client issue, @see: https://github.com/redwoodjs/redwood/issues/1083 */
   try {
@@ -390,11 +447,6 @@ export const getCmdMajorVersion = async (command) => {
 const dedupeDeps = async (task, { verbose }) => {
   try {
     const yarnVersion = await getCmdMajorVersion('yarn')
-    const npxVersion = await getCmdMajorVersion('npx')
-    let npxArgs = []
-    if (npxVersion > 6) {
-      npxArgs = ['--yes']
-    }
 
     const baseExecaArgsForDedupe = {
       shell: true,
@@ -404,10 +456,12 @@ const dedupeDeps = async (task, { verbose }) => {
     if (yarnVersion > 1) {
       await execa('yarn', ['dedupe'], baseExecaArgsForDedupe)
     } else {
-      await execa(
-        'npx',
-        [...npxArgs, 'yarn-deduplicate'],
-        baseExecaArgsForDedupe,
+      // Redwood projects should not be using yarn 1.x as we specify a version of yarn in the package.json
+      // with "packageManager": "yarn@4.1.1" or similar.
+      // Although we could (and previous did) automatically run `npx yarn-deduplicate` here, that would require
+      // the user to have `npx` installed, which is not guaranteed and we do not wish to enforce that.
+      task.skip(
+        "Yarn 1.x doesn't support dedupe directly. Please upgrade yarn or use npx with `npx yarn-deduplicate` manually.",
       )
     }
   } catch (e) {
