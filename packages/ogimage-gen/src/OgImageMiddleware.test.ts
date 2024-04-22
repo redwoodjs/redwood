@@ -1,9 +1,12 @@
+import path from 'node:path'
+
 import React from 'react'
 
 import { vol, fs as memfs } from 'memfs'
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
+import { ensurePosixPath } from '@redwoodjs/project-config'
 import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
 
 import OgImageMiddleware from './OgImageMiddleware'
@@ -145,12 +148,22 @@ describe('OgImageMiddleware', () => {
 
     const tsxRoute: RWRouteManifestItem = {
       ...commonRouteInfo,
-      relativeFilePath: 'pages/Contact/ContactPage/ContactPage.tsx',
+      relativeFilePath: path.join(
+        'pages',
+        'Contact',
+        'ContactPage',
+        'ContactPage.tsx',
+      ),
     }
 
     const jsxRoute: RWRouteManifestItem = {
       ...commonRouteInfo,
-      relativeFilePath: 'pages/Contact/ContactPage/ContactPage.jsx',
+      relativeFilePath: path.join(
+        'pages',
+        'Contact',
+        'ContactPage',
+        'ContactPage.jsx',
+      ),
     }
 
     const extension = 'png'
@@ -160,7 +173,7 @@ describe('OgImageMiddleware', () => {
     const tsxResult = middleware.getOgComponentPath(tsxRoute, extension)
     const jsxResult = middleware.getOgComponentPath(jsxRoute, extension)
 
-    expect(tsxResult).toBe(expectedFilePath)
+    expect(ensurePosixPath(tsxResult)).toBe(expectedFilePath)
     expect(jsxResult).toBe(expectedFilePath)
   })
 
