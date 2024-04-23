@@ -1,47 +1,35 @@
-import fs from 'node:fs'
 import path from 'node:path'
 
-import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import { format } from 'prettier'
 
-import { getPrettierOptions, setTomlSetting } from '@redwoodjs/cli-helpers'
+import { addWebPackages, getPrettierOptions } from '@redwoodjs/cli-helpers'
 import { getConfig, getPaths, resolveFile } from '@redwoodjs/project-config'
 
-import { runTransform } from '../../../../../lib/runTransform'
+import { runTransform } from '../../../../lib/runTransform'
 
 export async function handler({ force }: { force: boolean }) {
+  const rwPaths = getPaths()
+  const rootPkgJson = fs.readJSONSync(path.join(rwPaths.base, 'package.json'))
+  const currentProjectVersion = rootPkgJson.devDependencies['@redwoodjs/core']
+
   const tasks = new Listr(
     [
       {
-        title:
-          'Update Redwood Project Configuration to enable GraphQL Trusted Documents ...',
-        skip: () => {
-          if (force) {
-            // Never skip when --force is used
-            return false
-          }
-
-          const config = getConfig()
-          if (config.graphql.trustedDocuments) {
-            return 'GraphQL Trusted Documents are already enabled in your Redwood project.'
-          }
-
-          return false
-        },
+        title: 'Check prerequisites',
+        skip: force,
         task: () => {
-          setTomlSetting('graphql', 'trustedDocuments', true)
+          if (!getConfig().experimental?.streamingSsr?.enabled) {
+            throw new Error(
+              'The Streaming SSR experimental feature must be enabled before you can setup middleware',
+            )
+          }
         },
       },
+      addWebPackages([`@redwoodjs/ogimage-gen@${currentProjectVersion}`]),
       {
-        title: 'Generating Trusted Documents store ...',
-        task: () => {
-          execa.commandSync('yarn redwood generate types', { stdio: 'ignore' })
-        },
-      },
-      {
-        title:
-          'Configuring the GraphQL Handler to use a Trusted Documents store ...',
+        title: 'Add OG Image middleware ...',
         task: async () => {
           const graphqlPath = resolveFile(
             path.join(getPaths().api.functions, 'graphql'),
@@ -52,7 +40,7 @@ export async function handler({ force }: { force: boolean }) {
           }
 
           const transformResult = await runTransform({
-            transformPath: path.join(__dirname, 'graphqlTransform.js'),
+            transformPath: path.join(__dirname, 'codemod.js'),
             targetPaths: [graphqlPath],
           })
 
