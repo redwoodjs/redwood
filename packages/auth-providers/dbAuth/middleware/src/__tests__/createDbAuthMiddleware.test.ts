@@ -522,6 +522,7 @@ describe('createDbAuthMiddleware()', () => {
 
       const serverAuthContext = req.serverAuthContext.get()
       expect(serverAuthContext).toBeNull()
+      expect(res.cookies.entries()).toBe('bazinga')
     })
     it('handles a GET request with no cookies', async () => {
       const request = new Request('http://localhost:8911/functions/no-cookie', {
