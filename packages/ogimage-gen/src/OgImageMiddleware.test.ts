@@ -42,16 +42,20 @@ vi.mock('./getRoutesList', () => ({
 
 const setContentMock = vi.fn()
 const goToMock = vi.fn()
+const screenshotMock = vi.fn().mockResolvedValue('FAKE_IMAGE_CONTENT')
+
+const newPageMock = vi.fn().mockResolvedValue({
+  goto: goToMock,
+  setContent: setContentMock,
+  screenshot: screenshotMock,
+})
+
 vi.mock('playwright', () => {
   return {
     chromium: {
       launch: vi.fn().mockResolvedValue({
         close: vi.fn(),
-        newPage: vi.fn().mockResolvedValue({
-          goto: goToMock,
-          setContent: setContentMock,
-          screenshot: vi.fn().mockResolvedValue('FAKE_IMAGE_CONTENT'),
-        }),
+        newPage: newPageMock,
       }),
     },
   }
@@ -291,5 +295,44 @@ describe('OgImageMiddleware', () => {
       `"<div id="document"><div id="app"><div style="width:1200px">Mocked component render</div><div style="position:absolute;top:0;left:0;border:1px dashed red;pointer-events:none;width:1200px;height:630px"><div style="position:absolute;left:0;right:0;bottom:-1.5rem;text-align:center;color:red;font-weight:normal">1200 x 630</div></div></div></div>"`,
     )
     expect(mwResponse.headers.get('Content-Type')).toBe('text/html')
+  })
+
+  test('middleware implementation should pass on image size query parameters (useful for twitter)', async () => {
+    const req = {
+      url: 'https://example.com/contacts/555.png?bazinga=kittens&width=4545&height=9898',
+    }
+    const mwResponse = MiddlewareResponse.next()
+    const invokeOptions = {}
+
+    // The memfs mocks don't seem to work for this file
+
+    vi.mock(
+      '/redwood-app/web/dist/server/ogImage/pages/Contact/ContactPage/ContactPage.png.mjs',
+      () => ({
+        data: () => 'mocked data function',
+        output: () => 'Mocked component render',
+      }),
+    )
+
+    await middleware.invoke(req, mwResponse, invokeOptions)
+
+    expect(goToMock).toHaveBeenCalledWith('https://example.com')
+    expect(newPageMock).toHaveBeenCalledWith({
+      viewport: {
+        height: 9898,
+        width: 4545,
+      },
+    })
+    expect(screenshotMock).toHaveBeenCalledWith({
+      type: 'png',
+    })
+    // Notice the nesting here! Wrapping everything in Document and App
+    // allows us to reuse the project's CSS setup!
+    expect(setContentMock).toHaveBeenCalledWith(
+      '<div id="document"><div id="app">Mocked component render</div></div>',
+    )
+
+    expect(mwResponse.body).toBe('FAKE_IMAGE_CONTENT')
+    expect(mwResponse.headers.get('Content-Type')).toBe('image/png')
   })
 })
