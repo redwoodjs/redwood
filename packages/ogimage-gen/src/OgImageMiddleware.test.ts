@@ -238,6 +238,14 @@ describe('OgImageMiddleware', () => {
     await middleware.invoke(req, mwResponse, invokeOptions)
 
     expect(goToMock).toHaveBeenCalledWith('https://example.com')
+
+    // Default recommended og:image size
+    expect(newPageMock).toHaveBeenCalledWith({
+      viewport: {
+        height: 630,
+        width: 1200,
+      },
+    })
     // Notice the nesting here! Wrapping everything in Document and App
     // allows us to reuse the project's CSS setup!
     expect(setContentMock).toHaveBeenCalledWith(
