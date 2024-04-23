@@ -1,4 +1,7 @@
-import { defaultAuthProviderState, type ServerAuthState } from '@redwoodjs/auth'
+import {
+  middlewareDefaultAuthProviderState,
+  type ServerAuthState,
+} from '@redwoodjs/auth'
 
 import { MiddlewareRequest } from './MiddlewareRequest.js'
 import { MiddlewareResponse } from './MiddlewareResponse.js'
@@ -18,7 +21,7 @@ export const invoke = async (
   options?: MiddlewareInvokeOptions,
 ): Promise<[MiddlewareResponse, ServerAuthState]> => {
   if (typeof middleware !== 'function') {
-    return [MiddlewareResponse.next(), defaultAuthProviderState]
+    return [MiddlewareResponse.next(), middlewareDefaultAuthProviderState]
   }
 
   const mwReq = new MiddlewareRequest(req)

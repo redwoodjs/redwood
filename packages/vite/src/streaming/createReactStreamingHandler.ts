@@ -6,7 +6,7 @@ import type { HTTPMethod } from 'find-my-way'
 import isbot from 'isbot'
 import type { ViteDevServer } from 'vite'
 
-import { defaultAuthProviderState } from '@redwoodjs/auth'
+import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
 import type { RouteSpec, RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
@@ -69,7 +69,7 @@ export const createReactStreamingHandler = async (
   // @NOTE: we are returning a FetchAPI handler
   return async (req: Request) => {
     let mwResponse = MiddlewareResponse.next()
-    let decodedAuthState = defaultAuthProviderState
+    let decodedAuthState = middlewareDefaultAuthProviderState
     // @TODO: Make the currentRoute 404?
     let currentRoute: RWRouteManifestItem | undefined
     let parsedParams: any = {}
@@ -92,16 +92,13 @@ export const createReactStreamingHandler = async (
     // ~~~ Middleware Handling ~~~
     if (middlewareRouter) {
       const matchedMw = middlewareRouter.find(req.method as HTTPMethod, req.url)
-      ;[mwResponse, decodedAuthState = defaultAuthProviderState] = await invoke(
-        req,
-        matchedMw?.handler as Middleware | undefined,
-        {
+      ;[mwResponse, decodedAuthState = middlewareDefaultAuthProviderState] =
+        await invoke(req, matchedMw?.handler as Middleware | undefined, {
           route: currentRoute,
           cssPaths: getStylesheetLinks(currentRoute),
           params: matchedMw?.params,
           viteDevServer,
-        },
-      )
+        })
 
       // If mwResponse is a redirect, short-circuit here, and skip React rendering
       // If the response has a body, no need to render react.

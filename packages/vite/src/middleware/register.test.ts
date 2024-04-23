@@ -139,7 +139,7 @@ describe('chain', () => {
     expect(output.headers.get('class-mw-value')).toBe('999')
 
     // The other one still gets chained
-    expect(output.cookies.get('add-cookie-mw').value).toBe('added')
+    expect(output.cookies.get('add-cookie-mw')).toBe('added')
 
     // Because /bazinga is more specific, the '*' handlers won't be executed
     expect(output.headers.get('add-header-mw')).toBeFalsy()
