@@ -1,9 +1,3 @@
-import {
-  startRegistration,
-  startAuthentication,
-  browserSupportsWebAuthn,
-} from '@simplewebauthn/browser'
-
 class WebAuthnRegistrationError extends Error {
   constructor(message: string) {
     super(message)
@@ -55,10 +49,15 @@ export default class WebAuthnClient {
   }
 
   async isSupported() {
+    const { browserSupportsWebAuthn } = await import('@simplewebauthn/browser')
     return await browserSupportsWebAuthn()
   }
 
   isEnabled() {
+    if (typeof window === 'undefined') {
+      return false
+    }
+
     return !!/\bwebAuthn\b/.test(document.cookie)
   }
 
@@ -99,6 +98,7 @@ export default class WebAuthnClient {
 
   async authenticate() {
     const authOptions = await this.authenticationOptions()
+    const { startAuthentication } = await import('@simplewebauthn/browser')
 
     try {
       const browserResponse = await startAuthentication(authOptions)
@@ -172,6 +172,8 @@ export default class WebAuthnClient {
   async register() {
     const options = await this.registrationOptions()
     let regResponse
+
+    const { startRegistration } = await import('@simplewebauthn/browser')
 
     try {
       regResponse = await startRegistration(options)
