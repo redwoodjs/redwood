@@ -17,7 +17,7 @@ export async function rscBuildForServer(
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>,
-  _componentImportMap: Map<string, string[]>
+  _componentImportMap: Map<string, string[]>,
 ) {
   console.log('\n')
   console.log('3. rscBuildForServer')
