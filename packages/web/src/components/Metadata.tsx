@@ -39,7 +39,7 @@ const propToMetaTag = (
 }
 
 /**
- * Add commonly used <meta> tags for unfurling/seo purposes
+ * Add commonly used `<meta>` tags for unfurling/seo purposes
  * using the open graph protocol https://ogp.me/
  * @example
  * <Metadata title="About Page" og={{ image: "/static/about-og.png" }} />
