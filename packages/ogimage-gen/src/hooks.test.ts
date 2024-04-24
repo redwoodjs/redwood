@@ -17,7 +17,7 @@ describe('useOgImage', () => {
 
   test('returns a plain URL with a default extension', () => {
     mockLocation.mockReturnValue({
-      origin: 'http://localhost/user/1',
+      origin: 'http://localhost',
       pathname: '/user/1',
       searchParams: new URLSearchParams(),
     })
@@ -29,7 +29,7 @@ describe('useOgImage', () => {
 
   test('returns the default width of the image', () => {
     mockLocation.mockReturnValue({
-      origin: 'http://localhost/user/1',
+      origin: 'http://localhost',
       pathname: '/user/1',
       searchParams: new URLSearchParams(),
     })
@@ -41,7 +41,7 @@ describe('useOgImage', () => {
 
   test('returns the default height of the image', () => {
     mockLocation.mockReturnValue({
-      origin: 'http://localhost/user/1',
+      origin: 'http://localhost',
       pathname: '/user/1',
       searchParams: new URLSearchParams(),
     })
@@ -53,7 +53,7 @@ describe('useOgImage', () => {
 
   test('returns the default quality of the image', () => {
     mockLocation.mockReturnValue({
-      origin: 'http://localhost/user/1',
+      origin: 'http://localhost',
       pathname: '/user/1',
       searchParams: new URLSearchParams(),
     })
@@ -65,7 +65,7 @@ describe('useOgImage', () => {
 
   test('returns all the props necessary to build the og:image meta tags', () => {
     mockLocation.mockReturnValue({
-      origin: 'http://localhost/user/1',
+      origin: 'http://localhost',
       pathname: '/user/1',
       searchParams: new URLSearchParams(),
     })
@@ -91,7 +91,7 @@ describe('useOgImage', () => {
 
   test('preserves existing query variables', () => {
     mockLocation.mockReturnValue({
-      origin: 'http://localhost/about',
+      origin: 'http://localhost',
       pathname: '/about',
       searchParams: new URLSearchParams('foo=bar'),
     })
@@ -103,7 +103,7 @@ describe('useOgImage', () => {
 
   test('allows setting a custom extension', () => {
     mockLocation.mockReturnValue({
-      origin: 'http://localhost/user/1/edit',
+      origin: 'http://localhost',
       pathname: '/user/1/edit',
       searchParams: new URLSearchParams(),
     })
@@ -115,7 +115,7 @@ describe('useOgImage', () => {
 
   test('allows setting a custom width', () => {
     mockLocation.mockReturnValue({
-      origin: 'http://localhost/user/1',
+      origin: 'http://localhost',
       pathname: '/user/1',
       searchParams: new URLSearchParams(),
     })
@@ -129,7 +129,7 @@ describe('useOgImage', () => {
 
   test('allows setting a custom height', () => {
     mockLocation.mockReturnValue({
-      origin: 'http://localhost/user/1',
+      origin: 'http://localhost',
       pathname: '/user/1',
       searchParams: new URLSearchParams(),
     })
@@ -143,7 +143,7 @@ describe('useOgImage', () => {
 
   test('allows setting a custom quality', () => {
     mockLocation.mockReturnValue({
-      origin: 'http://localhost/user/1',
+      origin: 'http://localhost',
       pathname: '/user/1',
       searchParams: new URLSearchParams(),
     })
@@ -156,7 +156,7 @@ describe('useOgImage', () => {
 
   test('merges existing query variables with custom ones', () => {
     mockLocation.mockReturnValue({
-      origin: 'http://localhost/user/1',
+      origin: 'http://localhost',
       pathname: '/user/1',
       searchParams: new URLSearchParams('foo=bar'),
     })

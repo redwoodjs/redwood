@@ -20,12 +20,16 @@ export const useOgImage = (options?: OgImageUrlOptions) => {
   const width = options?.width
   const height = options?.height
   const quality = options?.quality
-  const output = [origin, `.${ext}`]
+  const output = [origin]
 
   // special case if we're at the root, image is available at /index.ext
   if (pathname === '/') {
-    output.splice(1, 0, '/index')
+    output.push('/index')
+  } else {
+    output.push(pathname)
   }
+
+  output.push(`.${ext}`)
 
   if (width) {
     searchParams.append('width', width.toString())
@@ -56,6 +60,7 @@ export const useOgImage = (options?: OgImageUrlOptions) => {
           height: height || OGIMAGE_DEFAULTS.height,
         },
       ],
+      // twitter: { image: { src: output.join('') } },
     },
   }
 }
