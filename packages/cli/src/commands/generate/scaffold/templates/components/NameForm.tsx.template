@@ -68,7 +68,7 @@ const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
               ${idName}="${singularCamelName}-${column.name}-none"
               name="${column.name}"
               defaultValue=""
-              ${column.defaultProp}={!props.spot?.spotType}
+              ${column.defaultProp}={!props.${singularCamelName}?.${column.name}}
               className="rw-input"
               errorClassName="rw-input rw-input-error"
             />
