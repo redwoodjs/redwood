@@ -68,7 +68,7 @@
     "@npmcli/arborist": "7.4.0",
     "@playwright/test": "1.42.1",
     "@testing-library/jest-dom": "6.4.2",
-    "@testing-library/react": "14.2.2",
+    "@testing-library/react": "14.3.1",
     "@testing-library/user-event": "14.5.2",
     "@types/babel__generator": "7.6.8",
     "@types/fs-extra": "11.0.4",
