@@ -27,13 +27,13 @@ test('Check that homepage has content fully rendered from the server, without JS
   expect(rnd).toMatch(/\s*\d+\s*/)
 
   // expect there to only be one h1 heading element on the page
-  expect(page.locator('h1').count()).toBe(1)
-  expect(page.locator('h1').first()).toHaveText('Hello Anonymous!!')
+  await expect(page.locator('h1')).toHaveCount(1)
+  await expect(page.locator('h1').first()).toHaveText('Hello Anonymous!!')
 
   // There should be a link to the about page
-  expect(page.locator('a').getByText('About')).toBeVisible()
+  await expect(page.locator('a').getByText('About')).toBeVisible()
 
-  await page.close()
+  await botContext.close()
 })
 
 test('Make sure navigation works even without JS', async ({ browser }) => {
@@ -55,11 +55,12 @@ test('Make sure navigation works even without JS', async ({ browser }) => {
 
   // Clicking on the about link should take us to the about page
   await aboutLink.click()
+
   expect(page.url()).toMatch(/\/about$/)
 
   // expect there to only be one h1 heading element on the page
-  expect(page.locator('h1').count()).toBe(1)
-  expect(page.locator('h1').first()).toHaveText('About Redwood')
+  await expect(page.locator('h1')).toHaveCount(1)
+  await expect(page.locator('h1').first()).toHaveText('About Redwood')
 
   await page.close()
 })
@@ -79,18 +80,19 @@ test('The page should have a form button, but it should be non-interactive', asy
 
   await page.goto('/about')
 
-  // Expect the count to be 0 when the page is first loaded
-  expect(page.locator('p').getByText('Count: 0')).toBeVisible()
+  const paragraphs = page.locator('p')
 
-  const incrementButton = page.locator('button').getByText('Increment')
-  await incrementButton.click()
+  // Expect the count to be 0 when the page is first loaded
+  expect(paragraphs.getByText('Count: 0')).toBeVisible()
+
+  await page.getByRole('button', { name: 'Increment' }).click()
 
   // The count should stay at 0, because the page should not be interactive
   // (This is the SSRed version of the page, with no JS)
-  expect(page.locator('p').getByText('Count: 0')).toBeVisible()
+  await expect(paragraphs.getByText('Count: 0')).toBeVisible()
 
-  expect(page.locator('p').getByText('RSC on client: enabled')).toBeVisible()
-  expect(page.locator('p').getByText('RSC on server: enabled')).toBeVisible()
+  await expect(paragraphs.getByText('RSC on client: enabled')).toBeVisible()
+  await expect(paragraphs.getByText('RSC on server: enabled')).toBeVisible()
 
   await page.close()
 })
