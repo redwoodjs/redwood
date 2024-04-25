@@ -23,15 +23,26 @@ export const createSupabaseAuthMiddleware = ({
       {
         cookies: {
           get(name: string) {
-            return request.cookies.get(name)?.value || ''
+            return request.cookies.get(name)?.valueOf() || ''
           },
           set(name: string, value: string, options: CookieOptions) {
             request.cookies.set(name, value, options)
             res.cookies.set(name, value, options)
+
+            request.cookies.set('auth-provider', 'supabase', {
+              path: '/',
+              ...options,
+            })
+            res.cookies.set('auth-provider', 'supabase', {
+              path: '/',
+              ...options,
+            })
           },
           remove(name: string, _options: CookieOptions) {
             request.cookies.unset(name)
             res.cookies.unset(name)
+            request.cookies.unset('auth-provider')
+            res.cookies.unset('auth-provider')
           },
         },
       },
@@ -39,13 +50,22 @@ export const createSupabaseAuthMiddleware = ({
 
     try {
       let currentUser, userMetadata
-      // so still call lib currentUser because shape might be different
+
+      // The project getCurrentUser may change the shape of currentUser vs the supabase.currentUser
+      // Therefore, if getCurrentUser is provided, use the authDecoder
+      // then with the decoded token or cookie, get the current user
+      // if (getCurrentUser) {
+      // currentUser = await getCurrentUser(...)
+      // userMetadata = currentUser?.user_metadata
+      // }
+      // but, if getCurrentUser is not provided, use the supabase server client to authenticate
       if (!getCurrentUser) {
-        currentUser = await supabase.auth.getUser()
-        userMetadata = currentUser.data.user?.user_metadata
+        const { data, error } = await supabase.auth.getUser()
+        if (!error) {
+          currentUser = data.user
+          userMetadata = currentUser?.user_metadata
+        }
       }
-      // odd place, probably set in the web auth provider?
-      res.cookies.set('auth-provider', 'supabase', {})
 
       request.serverAuthContext.set({
         currentUser,
