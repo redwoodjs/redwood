@@ -12,21 +12,17 @@ describe('CookieJar', () => {
   )
 
   test('instatitates cookie jar from a cookie string', () => {
-    expect(cookieJar.get('color_mode')).toStrictEqual({
-      value: JSON.stringify({
+    expect(cookieJar.get('color_mode')).toStrictEqual(
+      JSON.stringify({
         color_mode: 'light',
         light_theme: { name: 'light', color_mode: 'light' },
         dark_theme: { name: 'dark_dimmed', color_mode: 'dark' },
       }),
-    })
+    )
 
-    expect(cookieJar.get('preferred_color_mode')).toStrictEqual({
-      value: 'dark',
-    })
+    expect(cookieJar.get('preferred_color_mode')).toStrictEqual('dark')
 
-    expect(cookieJar.get('tz')).toStrictEqual({
-      value: 'Asia/Bangkok',
-    })
+    expect(cookieJar.get('tz')).toStrictEqual('Asia/Bangkok')
   })
 
   describe('Helper methods like JS Map', () => {
@@ -60,11 +56,9 @@ describe('CookieJar', () => {
 
       myJar.unset('auth_provider')
 
-      const { value: authProviderValue, options: authProviderOptions } =
-        myJar.get('auth_provider')!
+      const authProviderValue = myJar.get('auth_provider')
 
       expect(authProviderValue).toBeFalsy()
-      expect(authProviderOptions!.expires).toStrictEqual(new Date(0))
     })
 
     test('clear All', () => {
