@@ -62,7 +62,7 @@ test('Make sure navigation works even without JS', async ({ browser }) => {
   await expect(page.locator('h1')).toHaveCount(1)
   await expect(page.locator('h1').first()).toHaveText('About Redwood')
 
-  await page.close()
+  await botContext.close()
 })
 
 test('The page should have a form button, but it should be non-interactive', async ({
@@ -94,5 +94,5 @@ test('The page should have a form button, but it should be non-interactive', asy
   await expect(paragraphs.getByText('RSC on client: enabled')).toBeVisible()
   await expect(paragraphs.getByText('RSC on server: enabled')).toBeVisible()
 
-  await page.close()
+  await botContext.close()
 })
