@@ -1,59 +1,68 @@
-import { authDecoder } from '@redwoodjs/auth-supabase-api'
+// import { authDecoder } from '@redwoodjs/auth-supabase-api'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
+
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
-import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
-import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
+import type {
+  MiddlewareRequest,
+  MiddlewareResponse,
+} from '@redwoodjs/vite/middleware'
 
 export interface SupabaseAuthMiddlewareOptions {
-  getCurrentUser: GetCurrentUser
+  getCurrentUser?: GetCurrentUser
 }
 
 export const createSupabaseAuthMiddleware = ({
   getCurrentUser,
 }: SupabaseAuthMiddlewareOptions) => {
-  return async (req: MiddlewareRequest) => {
-    const res = MiddlewareResponse.next()
+  return async (request: MiddlewareRequest, res: MiddlewareResponse) => {
+    // if streaming enabled, then return the cookie decoder
 
-    const cookieHeader = req.headers.get('Cookie')
+    const supabase = createServerClient(
+      process.env.SUPABASE_URL || '',
+      process.env.SUPABASE_KEY || '',
+      {
+        cookies: {
+          get(name: string) {
+            return request.cookies.get(name)?.value || ''
+          },
+          set(name: string, value: string, options: CookieOptions) {
+            request.cookies.set(name, value, options)
+            res.cookies.set(name, value, options)
+          },
+          remove(name: string, _options: CookieOptions) {
+            request.cookies.unset(name)
+            res.cookies.unset(name)
+          },
+        },
+      },
+    )
 
-    // Unauthenticated request
-    if (!cookieHeader) {
-      return null
-    }
-
-    // @WARN: Authdecoders still take event and context
-    // @TODO: is the decodedSession the same as jwt.decode?
     try {
-      const decodedSession = await authDecoder(cookieHeader, 'supabase', {
-        event: {} as any,
-        context: {} as any,
-      })
+      let currentUser, userMetadata
+      // so still call lib currentUser because shape might be different
+      if (!getCurrentUser) {
+        currentUser = await supabase.auth.getUser()
+        userMetadata = currentUser.data.user?.user_metadata
+      }
+      // odd place, probably set in the web auth provider?
+      res.cookies.set('auth-provider', 'supabase', {})
 
-      const currentUser = await getCurrentUser(decodedSession, {
-        schema: 'cookie',
-        // @MARK: We pass the entire cookie header as a token. This isn't actually the token!
-        token: cookieHeader,
-        type: 'supabase',
-      })
-
-      req.serverAuthContext.set({
+      request.serverAuthContext.set({
         currentUser,
         loading: false,
         isAuthenticated: !!currentUser,
         hasError: false,
-        userMetadata: currentUser, //should this be from supabase and not just currentUser?
-        cookieHeader: cookieHeader,
+        userMetadata,
       })
-
-      return res
     } catch (e) {
       // Clear server auth context
-      console.error(e, 'Error decoding session')
-      req.serverAuthContext.set(null)
+      console.error(e, 'Error in Supabase Auth Middleware')
+      request.serverAuthContext.set(null)
 
       // Clear the supabase cookie?
-      // todo: check if this is necessary
+      // supabase.auth.signOut() ??
       // Clear the provider cookie
-      res.cookies.clear('auth-provider')
+      res.cookies.unset('auth-provider')
     }
 
     return res

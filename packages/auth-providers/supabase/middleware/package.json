@@ -31,7 +31,8 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@redwoodjs/auth-supabase-api": "workspace:*"
+    "@redwoodjs/auth-supabase-api": "workspace:*",
+    "@supabase/ssr": "0.3.0"
   },
   "devDependencies": {
     "@redwoodjs/api": "workspace:*",
