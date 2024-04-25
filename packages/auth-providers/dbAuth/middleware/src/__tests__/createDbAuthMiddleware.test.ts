@@ -523,10 +523,8 @@ describe('createDbAuthMiddleware()', () => {
       const serverAuthContext = req.serverAuthContext.get()
       expect(serverAuthContext).toBeNull()
 
-      // mwResponse gets converted to a response eventually.
-      const finalResponse = res.toResponse()
-      expect(finalResponse.headers.getSetCookie()).toEqual([
-        // Expired cookies here!
+      expect(res.toResponse().headers.getSetCookie()).toEqual([
+        // Expired cookies, will be removed by browser
         'session_8911=; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
         'auth-provider=; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
       ])
