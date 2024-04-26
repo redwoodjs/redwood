@@ -23,26 +23,7 @@ afterAll(() => {
 })
 
 describe('createDbAuthMiddleware()', () => {
-  // beforeAll(() => {
-  //   vi.mock('@redwoodjs/auth-dbauth-api', async (importOriginal) => {
-  //     const actual = await importOriginal<object>()
-  //     return {
-  //       ...actual,
-  //       dbAuthSession: vi.fn().mockResolvedValue({
-  //         user: {
-  //           id: 'fake-user',
-  //           email: 'fakeuser@bazinga.com',
-  //         },
-  //       }),
-  //     }
-  //   })
-  // })
-
-  // afterAll(() => {
-  //   vi.resetAllMocks()
-  // })
-
-  it('When no cookie headers, pass through', async () => {
+  it('When no cookie headers, pass through the response', async () => {
     const options: DbAuthMiddlewareOptions = {
       cookieName: '8911',
       getCurrentUser: async () => {
@@ -63,7 +44,7 @@ describe('createDbAuthMiddleware()', () => {
       url: 'http://localhost:8911',
     } as MiddlewareRequest
 
-    // Intentionally overriding the res value to be something else
+    // Typecase for the test
     const res = await middleware(req, { passthrough: true } as any)
 
     expect(res).toEqual({ passthrough: true })
@@ -109,7 +90,7 @@ describe('createDbAuthMiddleware()', () => {
       },
     })
 
-    // Allow react render
+    // Allow react render, because body is not defined, and status code not redirect
     expect(res).toHaveProperty('body', undefined)
     expect(res).toHaveProperty('status', 200)
   })
