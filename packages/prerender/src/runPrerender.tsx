@@ -39,6 +39,7 @@ const prerenderApolloClient = new ApolloClient({ cache: new InMemoryCache() })
 
 async function recursivelyRender(
   App: React.ElementType,
+  Routes: React.ElementType,
   renderPath: string,
   gqlHandler: any,
   queryCache: Record<string, QueryInfo>,
@@ -135,7 +136,9 @@ async function recursivelyRender(
   const componentAsHtml = ReactDOMServer.renderToString(
     <LocationProvider location={new URL(prerenderUrl)}>
       <CellCacheContextProvider queryCache={queryCache}>
-        <App />
+        <App>
+          <Routes />
+        </App>
       </CellCacheContextProvider>
     </LocationProvider>,
   )
@@ -143,7 +146,7 @@ async function recursivelyRender(
   if (Object.values(queryCache).some((value) => !value.hasProcessed)) {
     // We found new queries that we haven't fetched yet. Execute all new
     // queries and render again
-    return recursivelyRender(App, renderPath, gqlHandler, queryCache)
+    return recursivelyRender(App, Routes, renderPath, gqlHandler, queryCache)
   } else {
     if (shouldShowGraphqlHandlerNotFoundWarn) {
       console.warn(
@@ -349,9 +352,11 @@ export const runPrerender = async ({
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
   const { default: App } = require(getPaths().web.app)
+  const { default: Routes } = require(getPaths().web.routes)
 
   const componentAsHtml = await recursivelyRender(
     App,
+    Routes,
     renderPath,
     gqlHandler,
     queryCache,

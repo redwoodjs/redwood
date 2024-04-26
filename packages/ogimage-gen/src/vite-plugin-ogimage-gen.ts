@@ -41,13 +41,17 @@ function vitePluginOgImageGen(): ConfigPlugin {
   return {
     name: 'rw-vite-plugin-ogimage-gen',
     apply: 'build', // We only need to update rollup inputs for build
-    config: () => {
-      return {
-        build: {
-          rollupOptions: {
-            input: ogComponentInput,
+    config: (_config, env) => {
+      if (env.isSsrBuild) {
+        return {
+          build: {
+            rollupOptions: {
+              input: ogComponentInput,
+            },
           },
-        },
+        }
+      } else {
+        return
       }
     },
   }

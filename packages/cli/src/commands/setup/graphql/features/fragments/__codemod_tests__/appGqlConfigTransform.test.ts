@@ -70,12 +70,12 @@ describe('fragments graphQLClientConfig', () => {
       import { RedwoodApolloProvider } from \"@redwoodjs/web/apollo\";
 
       import FatalErrorPage from \"src/pages/FatalErrorPage\";
-      import Routes from \"src/Routes\";
 
       import { AuthProvider, useAuth } from \"./auth\";
 
-      import \"./scaffold.css\";
       import \"./index.css\";
+      import \"./scaffold.css\";
+
       interface AppProps {
         children?: ReactNode;
       }
@@ -94,7 +94,7 @@ describe('fragments graphQLClientConfig', () => {
                 useAuth={useAuth}
                 graphQLClientConfig={graphQLClientConfig}
               >
-                {children ? children : <Routes />}
+                {children}
               </RedwoodApolloProvider>
             </AuthProvider>
           </RedwoodProvider>

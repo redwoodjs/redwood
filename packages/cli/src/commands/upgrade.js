@@ -365,11 +365,24 @@ async function downloadYarnPatches(ctx, { dryRun, verbose }) {
     throw new Error('Failed to upgrade')
   }
 
+  const githubToken =
+    process.env.GH_TOKEN ||
+    process.env.GITHUB_TOKEN ||
+    process.env.REDWOOD_GITHUB_TOKEN
+
   const res = await fetch(
     'https://api.github.com/repos/redwoodjs/redwood/git/trees/main?recursive=1',
+    {
+      headers: {
+        Authorization: githubToken ? `Bearer ${githubToken}` : undefined,
+        ['X-GitHub-Api-Version']: '2022-11-28',
+        Accept: 'application/vnd.github+json',
+      },
+    },
   )
+
   const json = await res.json()
-  const patches = json.tree.filter((patchInfo) =>
+  const patches = json.tree?.filter((patchInfo) =>
     patchInfo.path.startsWith(
       'packages/create-redwood-app/templates/ts/.yarn/patches/',
     ),
@@ -386,7 +399,7 @@ async function downloadYarnPatches(ctx, { dryRun, verbose }) {
   }
 
   return new Listr(
-    patches.map((patch) => {
+    (patches || []).map((patch) => {
       return {
         title: `Downloading ${patch.path}`,
         task: async () => {

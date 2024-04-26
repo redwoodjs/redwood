@@ -1,3 +1,5 @@
+import { makeFilePath } from '../utils'
+
 type SSRModuleMap = null | {
   [clientId: string]: {
     [clientExportName: string]: ClientReferenceManifestEntry
@@ -24,6 +26,8 @@ export const moduleMap: SSRModuleMap = new Proxy(
         {},
         {
           get(_target, name: string) {
+            filePath = makeFilePath(filePath)
+
             const manifestEntry: ClientReferenceManifestEntry = {
               id: filePath,
               chunks: [filePath],

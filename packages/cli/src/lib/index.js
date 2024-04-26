@@ -441,8 +441,8 @@ export const addScaffoldImport = () => {
   }
 
   appJsContents = appJsContents.replace(
-    "import Routes from 'src/Routes'\n",
-    "import Routes from 'src/Routes'\n\nimport './scaffold.css'",
+    "import './index.css'",
+    "import './index.css'\nimport './scaffold.css'\n",
   )
   writeFile(appJsPath, appJsContents, { overwriteExisting: true })
 

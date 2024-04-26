@@ -7,7 +7,7 @@ import core from '@actions/core'
 
 import { createExecWithEnvInCwd, setUpRscTestProject } from '../actionsLib.mjs'
 
-const testProjectAndFixtureName = 'test-project-rsc-external-packages-and-cells'
+const testProjectAndFixtureName = 'test-project-rsc-kitchen-sink'
 const testProjectPath = path.join(
   path.dirname(process.cwd()),
   testProjectAndFixtureName

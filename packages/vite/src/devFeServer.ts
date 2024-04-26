@@ -84,7 +84,10 @@ async function createServer() {
         return new Response('No middleware found', { status: 404 })
       }
 
-      const [mwRes] = await invoke(req, middleware, route ? { route } : {})
+      const [mwRes] = await invoke(req, middleware, {
+        route,
+        viteDevServer: vite,
+      })
 
       return mwRes.toResponse()
     })
@@ -103,11 +106,8 @@ async function createServer() {
       routes,
       clientEntryPath: rwPaths.web.entryClient as string,
       getStylesheetLinks: (route) => {
-        if (!route) {
-          return []
-        }
         // In dev route is a RouteSpec, with additional properties
-        return getCssLinks(rwPaths, route as RouteSpec, vite)
+        return getCssLinks({ rwPaths, route: route as RouteSpec, vite })
       },
       // Recreate middleware router on each request in dev
       getMiddlewareRouter: async () => createMiddlewareRouter(vite),
@@ -143,9 +143,17 @@ process.stdin.on('data', async (data) => {
  * Passed as a getter to the createReactStreamingHandler function, because
  * at the time of creating the handler, the ViteDevServer hasn't analysed the module graph yet
  */
-function getCssLinks(rwPaths: Paths, route: RouteSpec, vite: ViteDevServer) {
+function getCssLinks({
+  rwPaths,
+  route,
+  vite,
+}: {
+  rwPaths: Paths
+  route?: RouteSpec
+  vite: ViteDevServer
+}) {
   const appAndRouteModules = componentsModules(
-    [rwPaths.web.app, route.filePath].filter(Boolean) as string[],
+    [rwPaths.web.app, route && route.filePath].filter(Boolean) as string[],
     vite,
   )
 

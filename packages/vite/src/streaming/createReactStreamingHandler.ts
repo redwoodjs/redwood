@@ -24,7 +24,7 @@ import { loadAndRunRouteHooks } from './triggerRouteHooks.js'
 interface CreateReactStreamingHandlerOptions {
   routes: RWRouteManifestItem[]
   clientEntryPath: string
-  getStylesheetLinks: (route: RWRouteManifestItem | RouteSpec) => string[]
+  getStylesheetLinks: (route?: RWRouteManifestItem | RouteSpec) => string[]
   getMiddlewareRouter: () => Promise<Router.Instance<any>>
 }
 
@@ -93,17 +93,12 @@ export const createReactStreamingHandler = async (
     if (middlewareRouter) {
       const matchedMw = middlewareRouter.find(req.method as HTTPMethod, req.url)
       ;[mwResponse, decodedAuthState = middlewareDefaultAuthProviderState] =
-        await invoke(
-          req,
-          matchedMw?.handler as Middleware | undefined,
-          currentRoute
-            ? {
-                route: currentRoute,
-                cssPaths: getStylesheetLinks(currentRoute),
-                params: matchedMw?.params,
-              }
-            : {},
-        )
+        await invoke(req, matchedMw?.handler as Middleware | undefined, {
+          route: currentRoute,
+          cssPaths: getStylesheetLinks(currentRoute),
+          params: matchedMw?.params,
+          viteDevServer,
+        })
 
       // If mwResponse is a redirect, short-circuit here, and skip React rendering
       // If the response has a body, no need to render react.
