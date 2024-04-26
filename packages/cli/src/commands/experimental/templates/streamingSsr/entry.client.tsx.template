@@ -2,6 +2,7 @@ import { hydrateRoot, createRoot } from 'react-dom/client'
 
 import App from './App'
 import { Document } from './Document'
+import Routes from './Routes'
 
 /**
  * When `#redwood-app` isn't empty then it's very likely that you're using
@@ -15,14 +16,18 @@ if (redwoodAppElement.children?.length > 0) {
   hydrateRoot(
     document,
     <Document css={window.__assetMap?.()?.css}>
-      <App />
+      <App>
+        <Routes />
+      </App>
     </Document>
   )
 } else {
   const root = createRoot(document)
   root.render(
     <Document css={window.__assetMap?.()?.css}>
-      <App />
+      <App>
+        <Routes />
+      </App>
     </Document>
   )
 }
