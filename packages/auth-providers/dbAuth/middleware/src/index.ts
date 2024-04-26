@@ -27,9 +27,10 @@ export const createDbAuthMiddleware = ({
   getCurrentUser,
   dbAuthUrl = '/middleware/dbauth',
 }: DbAuthMiddlewareOptions) => {
-  return async (req: MiddlewareRequest) => {
-    const res = MiddlewareResponse.next()
-
+  return async (
+    req: MiddlewareRequest,
+    res: MiddlewareResponse = MiddlewareResponse.next(),
+  ) => {
     // Handoff POST requests to the dbAuthHandler. The url is configurable on the dbAuth client side.
     // This is where we handle login, logout, and signup, etc., but we don't want to intercept
     if (req.method === 'POST') {

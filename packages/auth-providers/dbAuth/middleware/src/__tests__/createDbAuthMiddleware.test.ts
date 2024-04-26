@@ -1,12 +1,14 @@
 import path from 'node:path'
 
-import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
-import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
-import { MiddlewareRequest as MWRequest } from '@redwoodjs/vite/middleware'
+import {
+  MiddlewareRequest as MWRequest,
+  MiddlewareRequest,
+} from '@redwoodjs/vite/middleware'
 
-import { createDbAuthMiddleware } from '../index'
 import type { DbAuthMiddlewareOptions } from '../index'
+import { createDbAuthMiddleware } from '../index'
 const FIXTURE_PATH = path.resolve(
   __dirname,
   '../../../../../../__fixtures__/example-todo-main',
@@ -21,7 +23,26 @@ afterAll(() => {
 })
 
 describe('createDbAuthMiddleware()', () => {
-  it('creates middleware for dbAuth cookie auth', async () => {
+  // beforeAll(() => {
+  //   vi.mock('@redwoodjs/auth-dbauth-api', async (importOriginal) => {
+  //     const actual = await importOriginal<object>()
+  //     return {
+  //       ...actual,
+  //       dbAuthSession: vi.fn().mockResolvedValue({
+  //         user: {
+  //           id: 'fake-user',
+  //           email: 'fakeuser@bazinga.com',
+  //         },
+  //       }),
+  //     }
+  //   })
+  // })
+
+  // afterAll(() => {
+  //   vi.resetAllMocks()
+  // })
+
+  it('When no cookie headers, pass through', async () => {
     const options: DbAuthMiddlewareOptions = {
       cookieName: '8911',
       getCurrentUser: async () => {
@@ -42,12 +63,57 @@ describe('createDbAuthMiddleware()', () => {
       url: 'http://localhost:8911',
     } as MiddlewareRequest
 
-    const res = await middleware(req)
+    // Intentionally overriding the res value to be something else
+    const res = await middleware(req, { passthrough: true } as any)
 
-    expect(res).toBeDefined()
+    expect(res).toEqual({ passthrough: true })
+  })
+
+  it('When it has a cookie header, decrypts and sets server auth context', async () => {
+    const cookieHeader =
+      'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
+
+    const options: DbAuthMiddlewareOptions = {
+      cookieName: '8911',
+      getCurrentUser: vi.fn(async () => {
+        return { id: 'mocked-current-user-1', email: 'user-1@example.com' }
+      }),
+      dbAuthHandler: vi.fn(),
+    }
+    const middleware = createDbAuthMiddleware(options)
+
+    const mwReq = new MiddlewareRequest(
+      new Request('http://localhost:8911', {
+        method: 'GET',
+        headers: {
+          Cookie: cookieHeader,
+        },
+      }),
+    )
+
+    const res = await middleware(mwReq)
+
+    expect(mwReq.serverAuthContext.get()).toEqual({
+      cookieHeader:
+        'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w==',
+      currentUser: {
+        email: 'user-1@example.com',
+        id: 'mocked-current-user-1',
+      },
+      hasError: false,
+      isAuthenticated: true,
+      loading: false,
+      userMetadata: {
+        email: 'user-1@example.com',
+        id: 'mocked-current-user-1',
+      },
+    })
+
+    // Allow react render
     expect(res).toHaveProperty('body', undefined)
     expect(res).toHaveProperty('status', 200)
   })
+
   describe('handle all supported dbAuth verbs (aka methods) and their HTTP methods', async () => {
     /**
      * Supported verbs and their corresponding HTTP methods:
@@ -405,6 +471,7 @@ describe('createDbAuthMiddleware()', () => {
     expect(res).toBeDefined()
     expect(res.body).toBe(JSON.stringify({ currentUser }))
   })
+
   describe('handle exception cases', async () => {
     it('handles a POST that is not one of the supported dbAuth verbs and still build headers when passing along the request', async () => {
       const request = new Request(
@@ -487,7 +554,7 @@ describe('createDbAuthMiddleware()', () => {
         user: { id: 100, email: 'hello@example.com' },
       })
     })
-    it('handles a GET request with no cookies', async () => {})
+
     it('handles a GET request with incorrect cookies (bad decrypt)', async () => {
       const request = new Request(
         'http://localhost:8911/functions/bad-cookie',
@@ -500,7 +567,7 @@ describe('createDbAuthMiddleware()', () => {
         },
       )
 
-      const req = new MWRequest(request)
+      const mwReq = new MWRequest(request)
 
       const options: DbAuthMiddlewareOptions = {
         cookieName: 'session_8911',
@@ -517,12 +584,13 @@ describe('createDbAuthMiddleware()', () => {
       }
       const middleware = createDbAuthMiddleware(options)
 
-      const res = await middleware(req)
+      const res = await middleware(mwReq)
       expect(res).toBeDefined()
 
-      const serverAuthContext = req.serverAuthContext.get()
+      const serverAuthContext = mwReq.serverAuthContext.get()
       expect(serverAuthContext).toBeNull()
     })
+
     it('handles a GET request with no cookies', async () => {
       const request = new Request('http://localhost:8911/functions/no-cookie', {
         method: 'GET',
