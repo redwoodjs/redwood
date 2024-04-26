@@ -122,7 +122,9 @@ export function renderFromDist<TProps extends Record<string, any>>(
           // filePath /Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/rsc/assets/rsc-AboutCounter.tsx-1.mjs
           // name AboutCounter
 
-          const id = resolveClientEntryForProd(filePath, clientEntries)
+          const id = makeFilePath(
+            resolveClientEntryForProd(filePath, clientEntries),
+          )
 
           console.log('Proxy id', id)
           // id /Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/client/assets/rsc-AboutCounter.tsx-1-4kTKU8GC.mjs

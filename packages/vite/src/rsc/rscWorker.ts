@@ -24,6 +24,7 @@ import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
 import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
+import { makeFilePath } from '../utils.js'
 
 import type {
   RenderInput,
@@ -368,6 +369,8 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
         } else {
           id = resolveClientEntryForProd(filePath, config)
         }
+
+        id = makeFilePath(id)
 
         console.log('Proxy id', id)
         // id /assets/rsc0-beb48afe.js
