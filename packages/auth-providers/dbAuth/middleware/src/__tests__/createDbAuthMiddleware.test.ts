@@ -522,6 +522,12 @@ describe('createDbAuthMiddleware()', () => {
 
       const serverAuthContext = req.serverAuthContext.get()
       expect(serverAuthContext).toBeNull()
+
+      expect(res.toResponse().headers.getSetCookie()).toEqual([
+        // Expired cookies, will be removed by browser
+        'session_8911=; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
+        'auth-provider=; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
+      ])
     })
     it('handles a GET request with no cookies', async () => {
       const request = new Request('http://localhost:8911/functions/no-cookie', {

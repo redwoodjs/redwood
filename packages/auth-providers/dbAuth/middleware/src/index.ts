@@ -101,9 +101,10 @@ export const createDbAuthMiddleware = ({
       console.error(e, 'Error decrypting dbAuth cookie')
       req.serverAuthContext.set(null)
 
-      // Clear the cookies, because decryption was invalid
-      res.cookies.clear(cookieNameCreator(cookieName))
-      res.cookies.clear('auth-provider')
+      // Note we have to use ".unset" and not ".clear"
+      // because we want to remove these cookies from the browser
+      res.cookies.unset(cookieNameCreator(cookieName))
+      res.cookies.unset('auth-provider')
     }
 
     return res
