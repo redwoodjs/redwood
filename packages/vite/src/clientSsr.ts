@@ -124,7 +124,7 @@ export function renderFromDist<TProps extends Record<string, any>>(
 
           const id = resolveClientEntryForProd(filePath, clientEntries)
 
-          console.log('Proxy id', id)
+          console.log('clientSsr.ts::Proxy id', id)
           // id /Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/client/assets/rsc-AboutCounter.tsx-1-4kTKU8GC.mjs
           return { id, chunks: [id], name, async: true }
         },
