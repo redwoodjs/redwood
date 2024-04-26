@@ -3,24 +3,24 @@
 This action copies a RW project with Streaming SSR and RSC support already set
 up. It's used for RSC smoke tests.
 
-It copies the `__fixtures__/test-project-rsc-external-packages-and-cells`
+It copies the `__fixtures__/test-project-rsc-kitchen-sink`
 project, runs `yarn install` and `project:copy`. Finally it builds the rw app.
 
 ## Testing/running locally
 
 Go into the github actions folder
-`cd .github/actions/set-up-rsc-external-packages-and-cells-project`
+`cd .github/actions/set-up-rsc-kitchen-sink-project`
 
 Then run the following command to execute the action
-`node setUpRscExternalPackagesProjectLocally.mjs`
+`node setUpRscKitchenSinkProjectLocally.mjs`
 
 ## Design
 
 The main logic of the action is in the `../actionsLib.mjs` file. To be able to
 run that code both on GitHub and locally it uses dependency injection. The
-injection is done by `setupRscExternalPackagesProjectLocally.mjs` for when you
+injection is done by `setupRscKitchenSinkProjectLocally.mjs` for when you
 want to run the action on your own machine and by
-`setupRscExternalPackagesProjectGitHib.mjs` when it's triggered by GitHub CI.
+`setupRscKitchenSinkProjectGitHib.mjs` when it's triggered by GitHub CI.
 
 When doing further changes to the code here it's very important to keep the
 DI scripts as light on logic as possible. Ideally all logic is kept to
