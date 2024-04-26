@@ -7574,7 +7574,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:19.0.0-canary-36e62c603-20240418"
+    react: "npm:19.0.0-canary-cb151849e1-20240424"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7627,7 +7627,7 @@ __metadata:
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:19.0.0-canary-36e62c603-20240418"
+    react: "npm:19.0.0-canary-cb151849e1-20240424"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7677,7 +7677,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:19.0.0-canary-36e62c603-20240418"
+    react: "npm:19.0.0-canary-cb151849e1-20240424"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7770,7 +7770,7 @@ __metadata:
     core-js: "npm:3.36.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:19.0.0-canary-36e62c603-20240418"
+    react: "npm:19.0.0-canary-cb151849e1-20240424"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -7819,7 +7819,7 @@ __metadata:
     firebase: "npm:10.11.0"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:19.0.0-canary-36e62c603-20240418"
+    react: "npm:19.0.0-canary-cb151849e1-20240424"
     typescript: "npm:5.4.5"
   peerDependencies:
     firebase: 10.11.0
@@ -7869,7 +7869,7 @@ __metadata:
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:19.0.0-canary-36e62c603-20240418"
+    react: "npm:19.0.0-canary-cb151849e1-20240424"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7919,7 +7919,7 @@ __metadata:
     "@supabase/supabase-js": "npm:2.40.0"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:19.0.0-canary-36e62c603-20240418"
+    react: "npm:19.0.0-canary-cb151849e1-20240424"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7972,7 +7972,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:19.0.0-canary-36e62c603-20240418"
+    react: "npm:19.0.0-canary-cb151849e1-20240424"
     supertokens-auth-react: "npm:0.39.1"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
@@ -7987,10 +7987,10 @@ __metadata:
   dependencies:
     "@redwoodjs/framework-tools": "workspace:*"
     "@testing-library/jest-dom": "npm:6.4.2"
-    "@testing-library/react": "npm:14.2.2"
+    "@testing-library/react": "npm:14.3.1"
     core-js: "npm:3.36.1"
     msw: "npm:1.3.3"
-    react: "npm:19.0.0-canary-36e62c603-20240418"
+    react: "npm:19.0.0-canary-cb151849e1-20240424"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
@@ -8361,7 +8361,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.1"
     "@testing-library/dom": "npm:9.3.4"
     "@testing-library/jest-dom": "npm:6.4.2"
-    "@testing-library/react": "npm:14.2.2"
+    "@testing-library/react": "npm:14.3.1"
     "@testing-library/user-event": "npm:14.5.2"
     "@types/pascalcase": "npm:1.0.3"
     "@types/react": "npm:^18.2.55"
@@ -8370,13 +8370,13 @@ __metadata:
     graphql: "npm:16.8.1"
     nodemon: "npm:3.1.0"
     pascalcase: "npm:1.0.0"
-    react: "npm:19.0.0-canary-36e62c603-20240418"
-    react-dom: "npm:19.0.0-canary-36e62c603-20240418"
+    react: "npm:19.0.0-canary-cb151849e1-20240424"
+    react-dom: "npm:19.0.0-canary-cb151849e1-20240424"
     react-hook-form: "npm:7.51.2"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
-    react: 19.0.0-canary-36e62c603-20240418
+    react: 19.0.0-canary-cb151849e1-20240424
   languageName: unknown
   linkType: soft
 
@@ -8589,8 +8589,8 @@ __metadata:
     "@redwoodjs/vite": "workspace:*"
     fast-glob: "npm:3.3.2"
     lodash: "npm:4.17.21"
-    react: "npm:19.0.0-canary-36e62c603-20240418"
-    react-dom: "npm:19.0.0-canary-36e62c603-20240418"
+    react: "npm:19.0.0-canary-cb151849e1-20240424"
+    react-dom: "npm:19.0.0-canary-cb151849e1-20240424"
     ts-toolbelt: "npm:9.6.0"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.5"
@@ -8623,8 +8623,8 @@ __metadata:
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
-    react: 19.0.0-canary-36e62c603-20240418
-    react-dom: 19.0.0-canary-36e62c603-20240418
+    react: 19.0.0-canary-cb151849e1-20240424
+    react-dom: 19.0.0-canary-cb151849e1-20240424
   languageName: unknown
   linkType: soft
 
@@ -8704,13 +8704,13 @@ __metadata:
     core-js: "npm:3.36.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:19.0.0-canary-36e62c603-20240418"
-    react-dom: "npm:19.0.0-canary-36e62c603-20240418"
+    react: "npm:19.0.0-canary-cb151849e1-20240424"
+    react-dom: "npm:19.0.0-canary-cb151849e1-20240424"
     tstyche: "npm:1.1.0"
     typescript: "npm:5.4.5"
   peerDependencies:
-    react: 19.0.0-canary-36e62c603-20240418
-    react-dom: 19.0.0-canary-36e62c603-20240418
+    react: 19.0.0-canary-cb151849e1-20240424
+    react-dom: 19.0.0-canary-cb151849e1-20240424
   languageName: unknown
   linkType: soft
 
@@ -8789,7 +8789,7 @@ __metadata:
     "@redwoodjs/router": "workspace:*"
     "@redwoodjs/web": "workspace:*"
     "@testing-library/jest-dom": "npm:6.4.2"
-    "@testing-library/react": "npm:14.2.2"
+    "@testing-library/react": "npm:14.3.1"
     "@testing-library/user-event": "npm:14.5.2"
     "@types/aws-lambda": "npm:8.10.136"
     "@types/babel-core": "npm:6.25.10"
@@ -8857,8 +8857,8 @@ __metadata:
     glob: "npm:10.3.12"
     http-proxy-middleware: "npm:2.0.6"
     isbot: "npm:3.8.0"
-    react: "npm:19.0.0-canary-36e62c603-20240418"
-    react-server-dom-webpack: "npm:19.0.0-canary-36e62c603-20240418"
+    react: "npm:19.0.0-canary-cb151849e1-20240424"
+    react-server-dom-webpack: "npm:19.0.0-canary-cb151849e1-20240424"
     rollup: "npm:4.13.0"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.5"
@@ -8908,7 +8908,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@rollup/plugin-babel": "npm:6.0.4"
     "@testing-library/jest-dom": "npm:6.4.2"
-    "@testing-library/react": "npm:14.2.2"
+    "@testing-library/react": "npm:14.3.1"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
     core-js: "npm:3.36.1"
@@ -8916,8 +8916,8 @@ __metadata:
     graphql-sse: "npm:2.5.2"
     graphql-tag: "npm:2.12.6"
     nodemon: "npm:3.1.0"
-    react: "npm:19.0.0-canary-36e62c603-20240418"
-    react-dom: "npm:19.0.0-canary-36e62c603-20240418"
+    react: "npm:19.0.0-canary-cb151849e1-20240424"
+    react-dom: "npm:19.0.0-canary-cb151849e1-20240424"
     react-helmet-async: "npm:2.0.4"
     react-hot-toast: "npm:2.4.1"
     stacktracey: "npm:2.1.8"
@@ -8926,8 +8926,8 @@ __metadata:
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
-    react: 19.0.0-canary-36e62c603-20240418
-    react-dom: 19.0.0-canary-36e62c603-20240418
+    react: 19.0.0-canary-cb151849e1-20240424
+    react-dom: 19.0.0-canary-cb151849e1-20240424
   bin:
     cross-env: ./dist/bins/cross-env.js
     msw: ./dist/bins/msw.js
@@ -10569,9 +10569,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:14.2.2":
-  version: 14.2.2
-  resolution: "@testing-library/react@npm:14.2.2"
+"@testing-library/react@npm:14.3.1":
+  version: 14.3.1
+  resolution: "@testing-library/react@npm:14.3.1"
   dependencies:
     "@babel/runtime": "npm:^7.12.5"
     "@testing-library/dom": "npm:^9.0.0"
@@ -10579,7 +10579,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 10c0/ab36707f6701a4a56dd217e16e00d6326e0f760bb2e716245422c7500a0b94efcd351d0aa89c4fab2916e6ebc68c983cec6b3ae0804de813cafc913a612668f6
+  checksum: 10c0/1ccf4eb1510500cc20a805cb0244c9098dca28a8745173a8f71ea1274d63774f0b7898a35c878b43c797b89c13621548909ff37843b835c1a27ee1efbbdd098c
   languageName: node
   linkType: hard
 
@@ -27149,14 +27149,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:19.0.0-canary-36e62c603-20240418":
-  version: 19.0.0-canary-36e62c603-20240418
-  resolution: "react-dom@npm:19.0.0-canary-36e62c603-20240418"
+"react-dom@npm:19.0.0-canary-cb151849e1-20240424":
+  version: 19.0.0-canary-cb151849e1-20240424
+  resolution: "react-dom@npm:19.0.0-canary-cb151849e1-20240424"
   dependencies:
-    scheduler: "npm:0.25.0-canary-36e62c603-20240418"
+    scheduler: "npm:0.25.0-canary-cb151849e1-20240424"
   peerDependencies:
-    react: 19.0.0-canary-36e62c603-20240418
-  checksum: 10c0/e793e44af18b02d7e684a9e1dfbeb51e24ebcf17295303813b4a9e91962c51c6d1857a10d06aaeb390d5b503251225a93ef7d8e8a6e696a21a2148812575870c
+    react: 19.0.0-canary-cb151849e1-20240424
+  checksum: 10c0/d42a6f0f587df43d889aac7fbfac26d5a1cc91bd7d93a8bfecf26a77196aba4fc0878dc75c3e5a13449cb531417876b6b0ea8483d414bba4e93008d3f8b52405
   languageName: node
   linkType: hard
 
@@ -27302,17 +27302,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-server-dom-webpack@npm:19.0.0-canary-36e62c603-20240418":
-  version: 19.0.0-canary-36e62c603-20240418
-  resolution: "react-server-dom-webpack@npm:19.0.0-canary-36e62c603-20240418"
+"react-server-dom-webpack@npm:19.0.0-canary-cb151849e1-20240424":
+  version: 19.0.0-canary-cb151849e1-20240424
+  resolution: "react-server-dom-webpack@npm:19.0.0-canary-cb151849e1-20240424"
   dependencies:
     acorn-loose: "npm:^8.3.0"
     neo-async: "npm:^2.6.1"
   peerDependencies:
-    react: 19.0.0-canary-36e62c603-20240418
-    react-dom: 19.0.0-canary-36e62c603-20240418
+    react: 19.0.0-canary-cb151849e1-20240424
+    react-dom: 19.0.0-canary-cb151849e1-20240424
     webpack: ^5.59.0
-  checksum: 10c0/cea48503f3e5b45d8ceb6103a809eac7715917373a352a6f5bfa969378f2bbe0aeec05522b4e1819770cc2f40315e42bf4b5a3a06cffb1c9adf12d1dfc980bb4
+  checksum: 10c0/910f07dca3f074b34159e14734adfd2d50b78c49e4a5ef55f407fd67ba9f6f6c56aa819263d3050966d84014271abc30ea6936246e244e0aa7fdd858b22a40c9
   languageName: node
   linkType: hard
 
@@ -27342,10 +27342,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:19.0.0-canary-36e62c603-20240418":
-  version: 19.0.0-canary-36e62c603-20240418
-  resolution: "react@npm:19.0.0-canary-36e62c603-20240418"
-  checksum: 10c0/c9e48c9a21cd21736d6e0523bdf72f0b3d88b3581b70ccc0aba761927eaae823d1c8c2b047678827737792a92c01d40b977d422cd7195760e4f88879cca15446
+"react@npm:19.0.0-canary-cb151849e1-20240424":
+  version: 19.0.0-canary-cb151849e1-20240424
+  resolution: "react@npm:19.0.0-canary-cb151849e1-20240424"
+  checksum: 10c0/dcf99a3fd550aee018c61c8b28aafacaf50fa8fbf2321c27bf56a0109ed78d01dd3ec38829f01cb6729cef3377c5401c09723738d3e95acce7a915f16328056b
   languageName: node
   linkType: hard
 
@@ -28278,7 +28278,7 @@ __metadata:
     "@npmcli/arborist": "npm:7.4.0"
     "@playwright/test": "npm:1.42.1"
     "@testing-library/jest-dom": "npm:6.4.2"
-    "@testing-library/react": "npm:14.2.2"
+    "@testing-library/react": "npm:14.3.1"
     "@testing-library/user-event": "npm:14.5.2"
     "@types/babel__generator": "npm:7.6.8"
     "@types/fs-extra": "npm:11.0.4"
@@ -28451,10 +28451,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:0.25.0-canary-36e62c603-20240418":
-  version: 0.25.0-canary-36e62c603-20240418
-  resolution: "scheduler@npm:0.25.0-canary-36e62c603-20240418"
-  checksum: 10c0/bf7adcdd9c3d786405dd3f8c9a107cc7fd8e8b62dd491f308c68a07cbd62da4caa73a20431b42d47cd0bd7f97e809ec1e3f5e2d35a9eedf9f827d3eb4789c299
+"scheduler@npm:0.25.0-canary-cb151849e1-20240424":
+  version: 0.25.0-canary-cb151849e1-20240424
+  resolution: "scheduler@npm:0.25.0-canary-cb151849e1-20240424"
+  checksum: 10c0/5530d5541e5c7292e51c10d9f1607d7605fbb5f18a1d5d798db7094e1563df45f1a42af39561c999a743eabe3320b1c44b739b437a21a3ca9e84c98e8a09c473
   languageName: node
   linkType: hard
 

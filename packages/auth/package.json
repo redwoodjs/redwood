@@ -28,12 +28,12 @@
   },
   "dependencies": {
     "core-js": "3.36.1",
-    "react": "19.0.0-canary-36e62c603-20240418"
+    "react": "19.0.0-canary-cb151849e1-20240424"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "@testing-library/jest-dom": "6.4.2",
-    "@testing-library/react": "14.2.2",
+    "@testing-library/react": "14.3.1",
     "msw": "1.3.3",
     "tsx": "4.7.1",
     "typescript": "5.4.5",
