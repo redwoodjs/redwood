@@ -22,6 +22,7 @@
   "packageManager": "yarn@4.1.1",
   "resolutions": {
     "@apollo/client-react-streaming/superjson": "^1.12.2",
-    "@apollo/client/rehackt": "0.0.0-pr.10.0"
+    "@apollo/client/rehackt": "0.0.0-pr.10.0",
+    "react-is": "19.0.0-canary-cb151849e1-20240424"
   }
 }
