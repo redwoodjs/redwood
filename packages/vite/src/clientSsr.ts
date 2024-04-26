@@ -119,13 +119,13 @@ export function renderFromDist<TProps extends Record<string, any>>(
         get(_target, encodedId: string) {
           console.log('Proxy get encodedId', encodedId)
           const [filePath, name] = encodedId.split('#') as [string, string]
-          // filePath /Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/rsc/assets/rsc-AboutCounter.tsx-1.mjs
+          // filePath /Users/tobbe/tmp/test-project-rsc-kitchen-sink/web/dist/rsc/assets/rsc-AboutCounter.tsx-1.mjs
           // name AboutCounter
 
           const id = resolveClientEntryForProd(filePath, clientEntries)
 
           console.log('clientSsr.ts::Proxy id', id)
-          // id /Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/client/assets/rsc-AboutCounter.tsx-1-4kTKU8GC.mjs
+          // id /Users/tobbe/tmp/test-project-rsc-kitchen-sink/web/dist/client/assets/rsc-AboutCounter.tsx-1-4kTKU8GC.mjs
           return { id, chunks: [id], name, async: true }
         },
       },
