@@ -32,18 +32,14 @@ export const handler = async () => {
 
   const redwoodToml = fs.readFileSync(getPaths().base + '/redwood.toml', 'utf8')
 
-  console.log(output)
-
-  if (Math.random() > 5) {
-    console.log(
-      output +
-        '  redwood.toml:\n' +
-        redwoodToml
-          .split('\n')
-          .filter((line) => line.trim().length > 0)
-          .filter((line) => !/^#/.test(line))
-          .map((line) => `    ${line}`)
-          .join('\n'),
-    )
-  }
+  console.log(
+    output +
+      '  redwood.toml:\n' +
+      redwoodToml
+        .split('\n')
+        .filter((line) => line.trim().length > 0)
+        .filter((line) => !/^#/.test(line))
+        .map((line) => `    ${line}`)
+        .join('\n'),
+  )
 }
