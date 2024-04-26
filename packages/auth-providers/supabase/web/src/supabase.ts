@@ -38,14 +38,27 @@ export type SignInWithSSOOptions = SignInWithSSO & {
   authMethod: 'sso'
 }
 
+// function createMiddlewareAuth(
+//   supabaseClient: SupabaseClient,
+//   customProviderHooks?: CustomProviderHooks,
+// ) {
+//   return createAuthentication(dbAuthClient, {
+//     // @MARK This is key! 👇
+//     ...customProviderHooks,
+//     useCurrentUser:
+//       customProviderHooks?.useCurrentUser ??
+//       (() => getCurrentUserFromMiddleware(dbAuthClient.getAuthUrl())),
+//   })
+// }
+
 export function createAuth(
   supabaseClient: SupabaseClient,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null
+      currentUser: CurrentUser | null,
     ) => (rolesToCheck: string | string[]) => boolean
-  }
+  },
 ) {
   const authImplementation = createAuthImplementation(supabaseClient)
 
@@ -56,8 +69,8 @@ export function createAuth(
 // If no expires is supplied, it will expire the cookie immediately
 const setAuthProviderCookie = (
   expires: number | undefined = new Date(
-    '1970-01-01T00:00:00.000+00:00'
-  ).getTime()
+    '1970-01-01T00:00:00.000+00:00',
+  ).getTime(),
 ) => {
   const expiresString = new Date(expires).toUTCString()
   document.cookie = `auth-provider=supabase; expires=${expiresString}; SameSite=Lax`
@@ -76,7 +89,7 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
         | SignInWithOAuthOptions
         | SignInWithIdTokenOptions
         | SignInWithPasswordlessOptions
-        | SignInWithSSOOptions
+        | SignInWithSSOOptions,
     ): Promise<AuthResponse | OAuthResponse | SSOResponse> => {
       let result:
         | AuthTokenResponse
@@ -193,7 +206,7 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
      * @returns A user if the server has "autoconfirm" OFF
      */
     signup: async (
-      credentials: SignUpWithPasswordCredentials
+      credentials: SignUpWithPasswordCredentials,
     ): Promise<AuthResponse> => {
       return await supabaseClient.auth.signUp(credentials)
     },
@@ -245,7 +258,7 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
         window.history.replaceState(
           {},
           document.title,
-          window.location.pathname
+          window.location.pathname,
         )
       } catch (error) {
         console.error(error)

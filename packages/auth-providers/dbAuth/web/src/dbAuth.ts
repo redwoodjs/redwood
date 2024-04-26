@@ -1,7 +1,9 @@
-import type { CurrentUser } from '@redwoodjs/auth'
-import { createAuthentication } from '@redwoodjs/auth'
+import type { CurrentUser, CustomProviderHooks } from '@redwoodjs/auth'
+import {
+  createAuthentication,
+  getCurrentUserFromMiddleware,
+} from '@redwoodjs/auth'
 
-import { getCurrentUserFromMiddleware } from './getCurrentUserFromMiddleware'
 import type { WebAuthnClientType } from './webAuthn'
 
 export interface LoginAttributes {
@@ -17,13 +19,6 @@ export interface ResetPasswordAttributes {
 export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
 const TOKEN_CACHE_TIME = 5000
-
-export type CustomProviderHooks = {
-  useCurrentUser?: () => Promise<CurrentUser>
-  useHasRole?: (
-    currentUser: CurrentUser | null,
-  ) => (rolesToCheck: string | string[]) => boolean
-}
 
 // This is the middleware-edition auth function
 // Overrides the default getCurrentUser to fetch it from middleware instead
