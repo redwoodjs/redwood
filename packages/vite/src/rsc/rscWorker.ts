@@ -24,7 +24,6 @@ import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
 import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
-import { makeFilePath } from '../utils.js'
 
 import type {
   RenderInput,
