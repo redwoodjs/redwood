@@ -370,9 +370,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
           id = resolveClientEntryForProd(filePath, config)
         }
 
-        id = makeFilePath(id)
-
-        console.log('Proxy id', id)
+        console.log('rscWorker proxy id', id)
         // id /assets/rsc0-beb48afe.js
         return { id, chunks: [id], name, async: true }
       },
