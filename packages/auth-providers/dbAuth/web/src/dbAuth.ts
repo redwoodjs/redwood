@@ -27,8 +27,8 @@ function createMiddlewareAuth(
   customProviderHooks?: CustomProviderHooks,
 ) {
   return createAuthentication(dbAuthClient, {
-    // @MARK This is key! 👇
     ...customProviderHooks,
+    // @MARK This is key! 👇
     useCurrentUser:
       customProviderHooks?.useCurrentUser ??
       (() => getCurrentUserFromMiddleware(dbAuthClient.getAuthUrl())),
@@ -44,7 +44,7 @@ export function createAuth(
     ) => (rolesToCheck: string | string[]) => boolean
   },
 ) {
-  if (dbAuthClient.useMiddlewareAuth) {
+  if (dbAuthClient.middlewareAuthEnabled) {
     return createMiddlewareAuth(dbAuthClient, customProviderHooks)
   }
 
@@ -224,6 +224,6 @@ export function createDbAuthClient({
     // so we can get the dbAuthUrl in getCurrentUserFromMiddleware
     getAuthUrl: getDbAuthUrl,
     // This is so that we can skip fetching getCurrentUser in reauthenticate
-    useMiddlewareAuth: middleware,
+    middlewareAuthEnabled: middleware,
   }
 }

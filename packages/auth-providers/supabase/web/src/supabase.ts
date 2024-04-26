@@ -14,8 +14,11 @@ import type {
 } from '@supabase/supabase-js'
 import { AuthError } from '@supabase/supabase-js'
 
-import type { CurrentUser } from '@redwoodjs/auth'
-import { createAuthentication } from '@redwoodjs/auth'
+import type { CurrentUser, CustomProviderHooks } from '@redwoodjs/auth'
+import {
+  createAuthentication,
+  getCurrentUserFromMiddleware,
+} from '@redwoodjs/auth'
 
 export type SignInWithOAuthOptions = SignInWithOAuthCredentials & {
   authMethod: 'oauth'
@@ -38,18 +41,23 @@ export type SignInWithSSOOptions = SignInWithSSO & {
   authMethod: 'sso'
 }
 
-// function createMiddlewareAuth(
-//   supabaseClient: SupabaseClient,
-//   customProviderHooks?: CustomProviderHooks,
-// ) {
-//   return createAuthentication(dbAuthClient, {
-//     // @MARK This is key! 👇
-//     ...customProviderHooks,
-//     useCurrentUser:
-//       customProviderHooks?.useCurrentUser ??
-//       (() => getCurrentUserFromMiddleware(dbAuthClient.getAuthUrl())),
-//   })
-// }
+function createMiddlewareAuth(
+  supabaseClient: SupabaseClient,
+  customProviderHooks?: CustomProviderHooks,
+) {
+  const authImplementation = createAuthImplementation({
+    supabaseClient,
+    middleware: true,
+  })
+
+  return createAuthentication(authImplementation, {
+    // @MARK This is key! 👇 Fetch currentUser from middleware instead of GQL
+    ...customProviderHooks,
+    useCurrentUser:
+      customProviderHooks?.useCurrentUser ??
+      (() => getCurrentUserFromMiddleware('/middleware/supabase')),
+  })
+}
 
 export function createAuth(
   supabaseClient: SupabaseClient,
@@ -60,7 +68,11 @@ export function createAuth(
     ) => (rolesToCheck: string | string[]) => boolean
   },
 ) {
-  const authImplementation = createAuthImplementation(supabaseClient)
+  if (RWJS_ENV.RWJS_EXP_STREAMING_SSR) {
+    return createMiddlewareAuth(supabaseClient, customProviderHooks)
+  }
+
+  const authImplementation = createAuthImplementation({ supabaseClient })
 
   return createAuthentication(authImplementation, customProviderHooks)
 }
@@ -76,7 +88,13 @@ const setAuthProviderCookie = (
   document.cookie = `auth-provider=supabase; expires=${expiresString}; SameSite=Lax`
 }
 
-function createAuthImplementation(supabaseClient: SupabaseClient) {
+function createAuthImplementation({
+  supabaseClient,
+  middleware = false,
+}: {
+  supabaseClient: SupabaseClient
+  middleware?: boolean
+}) {
   return {
     type: 'supabase',
     client: supabaseClient,
@@ -211,6 +229,10 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
       return await supabaseClient.auth.signUp(credentials)
     },
     getToken: async (): Promise<string | null> => {
+      if (middleware) {
+        return null
+      }
+
       const { data, error } = await supabaseClient.auth.getSession()
 
       if (error) {
@@ -224,6 +246,10 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
      * Gets the current user metadata if there is an existing session.
      */
     getUserMetadata: async () => {
+      if (middleware) {
+        // @TODO should we make the url configurable?
+        return getCurrentUserFromMiddleware('/middleware/supabase')
+      }
       const { data, error } = await supabaseClient.auth.getSession()
 
       if (error) {
@@ -265,5 +291,7 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
       }
       return
     },
+    // This is important, so we can skip fetching getCurrentUser
+    useMiddlewareAuth: middleware,
   }
 }

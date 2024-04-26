@@ -53,8 +53,7 @@ export interface AuthImplementation<
    */
   loadWhileReauthenticating?: boolean
 
-  // 👇 @TODO: Naming! Middleware-auth only
-  useMiddlewareAuth?: boolean
+  middlewareAuthEnabled?: boolean
   // This is the endpoint on the middleware we are going to hit for POST requests
   getAuthUrl?: () => string
 }
