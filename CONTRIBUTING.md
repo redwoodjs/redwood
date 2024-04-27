@@ -66,7 +66,7 @@ yarn install
 You'll almost always want to test the functionality of your changes to the Redwood Framework in a Redwood Project. When it comes to getting a Redwood Project to test your changes out in, you have several options:
 
 - [***Recommended for 90% of cases***] Create a functional test project. See section below for steps.
-- Run `yarn create redwood-app ./redwood-project`
+- Run `yarn create redwood-app <project directory>`
 - `git clone` the [RedwoodJS Tutorial Blog](https://github.com/redwoodjs/redwood-tutorial)
 - Use a project you've already created
 
@@ -74,7 +74,7 @@ You'll almost always want to test the functionality of your changes to the Redwo
 
 #### Redwood Functional Test Project
 
-Run `yarn run build:test-project <project directory>` from the root of your local copy of the Redwood Framework to create a functional test project. In just a few minutes, this will create a Redwood Project on the current canary (optional: `latest` stable) that contains a lot of functionality. For example, here's a brief overview of all the things `yarn run build:test-project <project directory>` does:
+Run `yarn run build:test-project ../redwood-project` from the root of your local copy of the Redwood Framework to create a functional test project. In just a few minutes, this will create a Redwood Project on the current canary (optional: `latest` stable) that contains a lot of functionality. For example, here's a brief overview of all the things `yarn run build:test-project <project directory>` does:
 
 1. It installs using the `create-redwood-app` template in the current branch of your Redwood Framework
 2. It uses the current `canary` version of Redwood Packages (with the option to use the `latest` stable version)
