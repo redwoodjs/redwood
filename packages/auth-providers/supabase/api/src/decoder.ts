@@ -18,8 +18,8 @@ export const authDecoder: Decoder = async (
     return null
   }
 
-  // TODO: Check if streaming is setup, not if type is set
-  if (type) {
+  // If SSR, then use the Supabase client to verify the cookie
+  if (process.env.RWJS_EXP_STREAMING_SSR) {
     const req = event as MiddlewareRequest
     const supabase = createServerClient(
       process.env.SUPABASE_URL || '',
@@ -54,6 +54,7 @@ export const authDecoder: Decoder = async (
       throw new Error(error.message)
     }
   } else {
+    // If not SSR, then use the JWT secret to verify the Bearer token
     if (!process.env.SUPABASE_JWT_SECRET) {
       console.error('SUPABASE_JWT_SECRET env var is not set.')
       throw new Error('SUPABASE_JWT_SECRET env var is not set.')

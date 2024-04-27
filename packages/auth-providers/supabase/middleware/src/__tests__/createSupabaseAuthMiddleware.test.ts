@@ -2,8 +2,10 @@ import path from 'node:path'
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 
-import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
-// import { MiddlewareRequest as MWRequest } from '@redwoodjs/vite/middleware'
+import {
+  MiddlewareRequest,
+  MiddlewareResponse,
+} from '@redwoodjs/vite/middleware'
 
 import { createSupabaseAuthMiddleware } from '../index'
 import type { SupabaseAuthMiddlewareOptions } from '../index'
@@ -28,16 +30,17 @@ describe('createSupabaseAuthMiddleware()', () => {
       },
     }
     const middleware = createSupabaseAuthMiddleware(options)
-    const req = {
+    const request = new Request('http://localhost:8911', {
       method: 'GET',
       headers: new Headers(),
-      url: 'http://localhost:8911',
-    } as MiddlewareRequest
+    })
+    const req = new MiddlewareRequest(request)
+    const res = new MiddlewareResponse()
 
-    const res = await middleware(req)
+    const result = await middleware(req, res)
 
-    expect(res).toBeDefined()
-    expect(res).toHaveProperty('body', undefined)
-    expect(res).toHaveProperty('status', 200)
+    expect(result).toBeDefined()
+    expect(result).toHaveProperty('body', undefined)
+    expect(result).toHaveProperty('status', 200)
   })
 })
