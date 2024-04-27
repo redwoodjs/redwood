@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.1",
+    "@redwoodjs/vite": "workspace:*",
     "core-js": "3.36.1",
     "jsonwebtoken": "9.0.2"
   },
@@ -31,6 +32,7 @@
     "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
     "@redwoodjs/api": "workspace:*",
+    "@redwoodjs/vite": "workspace:*",
     "@types/aws-lambda": "8.10.136",
     "@types/jsonwebtoken": "9.0.6",
     "typescript": "5.4.5",

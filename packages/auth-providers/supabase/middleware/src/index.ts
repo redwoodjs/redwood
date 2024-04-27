@@ -1,88 +1,84 @@
-// import { authDecoder } from '@redwoodjs/auth-supabase-api'
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+// import type { CookieOptions } from '@supabase/ssr'
 
+import { authDecoder } from '@redwoodjs/auth-supabase-api'
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
-import type {
-  MiddlewareRequest,
-  MiddlewareResponse,
-} from '@redwoodjs/vite/middleware'
+import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
+import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
 
 export interface SupabaseAuthMiddlewareOptions {
-  getCurrentUser?: GetCurrentUser
+  getCurrentUser: GetCurrentUser
+}
+
+const clearCookies = (
+  req: MiddlewareRequest,
+  res: MiddlewareResponse,
+  name: string,
+) => {
+  req.cookies.unset(name)
+  res.cookies.unset(name)
+}
+
+const clearAuthProviderCookie = (
+  req: MiddlewareRequest,
+  res: MiddlewareResponse,
+) => {
+  clearCookies(req, res, 'auth-provider')
 }
 
 export const createSupabaseAuthMiddleware = ({
   getCurrentUser,
 }: SupabaseAuthMiddlewareOptions) => {
-  return async (request: MiddlewareRequest, res: MiddlewareResponse) => {
-    // if streaming enabled, then return the cookie decoder
-
-    const supabase = createServerClient(
-      process.env.SUPABASE_URL || '',
-      process.env.SUPABASE_KEY || '',
-      {
-        cookies: {
-          get(name: string) {
-            return request.cookies.get(name)?.valueOf() || ''
-          },
-          set(name: string, value: string, options: CookieOptions) {
-            request.cookies.set(name, value, options)
-            res.cookies.set(name, value, options)
-
-            request.cookies.set('auth-provider', 'supabase', {
-              path: '/',
-              ...options,
-            })
-            res.cookies.set('auth-provider', 'supabase', {
-              path: '/',
-              ...options,
-            })
-          },
-          remove(name: string, _options: CookieOptions) {
-            request.cookies.unset(name)
-            res.cookies.unset(name)
-            request.cookies.unset('auth-provider')
-            res.cookies.unset('auth-provider')
-          },
-        },
-      },
-    )
+  return async (req: MiddlewareRequest, res: MiddlewareResponse) => {
+    const type = 'supabase'
+    const token = ''
 
     try {
-      let currentUser, userMetadata
-
-      // The project getCurrentUser may change the shape of currentUser vs the supabase.currentUser
-      // Therefore, if getCurrentUser is provided, use the authDecoder
-      // then with the decoded token or cookie, get the current user
-      // if (getCurrentUser) {
-      // currentUser = await getCurrentUser(...)
-      // userMetadata = currentUser?.user_metadata
-      // }
-      // but, if getCurrentUser is not provided, use the supabase server client to authenticate
-      if (!getCurrentUser) {
-        const { data, error } = await supabase.auth.getUser()
-        if (!error) {
-          currentUser = data.user
-          userMetadata = currentUser?.user_metadata
-        }
+      const authProviderCookie = req.cookies.get('auth-provider')
+      // if there is no auth-provider cookie, or it is for supabase
+      // then we don't need to do anything
+      if (!authProviderCookie || authProviderCookie !== type) {
+        return res
       }
 
-      request.serverAuthContext.set({
+      // Since the Supabase authDecoder will know if it should use the cookie or the JWT,
+      // there is no need to pass a token here
+      const decoded = await authDecoder(token, type, {
+        event: req as Request,
+        context: {},
+      })
+
+      const currentUser = await getCurrentUser(
+        decoded,
+        { type: type, token, schema: 'cookie' },
+        { event: req as Request, context: {} },
+      )
+
+      const userMetadata =
+        typeof currentUser === 'string' ? null : currentUser?.['user_metadata']
+
+      if (req.url.includes(`/middleware/supabase/currentUser`)) {
+        if (typeof currentUser === 'string') {
+          return new MiddlewareResponse(currentUser)
+        }
+        return new MiddlewareResponse(JSON.stringify({ currentUser }))
+      }
+
+      req.serverAuthContext.set({
         currentUser,
         loading: false,
         isAuthenticated: !!currentUser,
         hasError: false,
-        userMetadata,
+        userMetadata: userMetadata || currentUser,
       })
     } catch (e) {
       // Clear server auth context
       console.error(e, 'Error in Supabase Auth Middleware')
-      request.serverAuthContext.set(null)
+      req.serverAuthContext.set(null)
 
       // Clear the supabase cookie?
       // supabase.auth.signOut() ??
-      // Clear the provider cookie
-      res.cookies.unset('auth-provider')
+
+      clearAuthProviderCookie(req, res)
     }
 
     return res
