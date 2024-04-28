@@ -1,7 +1,8 @@
 export class SshExecutor {
-  constructor() {
+  constructor(verbose) {
     const { NodeSSH } = require('node-ssh')
     this.ssh = new NodeSSH()
+    this.verbose = verbose
   }
 
   /**
@@ -20,9 +21,14 @@ export class SshExecutor {
     })
 
     if (result.code !== 0) {
-      const error = new Error(
-        `Error while running command \`${command} ${args.join(' ')}\``,
-      )
+      const error = this.verbose
+        ? new Error(
+            `Error while running command \`${command} ${args.join(' ')}\` in ${path}\n` +
+              result.stderr,
+          )
+        : new Error(
+            `Error while running command \`${command} ${args.join(' ')}\``,
+          )
       error.exitCode = result.code
       throw error
     }
