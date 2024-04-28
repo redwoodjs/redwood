@@ -13,6 +13,8 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
 
+import { SshExecutor } from './baremetal/SshExecutor'
+
 const CONFIG_FILENAME = 'deploy.toml'
 const SYMLINK_FLAGS = '-nsf'
 const CURRENT_RELEASE_SYMLINK_NAME = 'current'
@@ -653,47 +655,6 @@ export const commands = (yargs, ssh) => {
   }
 
   return servers
-}
-
-class SshExecutor {
-  constructor() {
-    const { NodeSSH } = require('node-ssh')
-    this.ssh = new NodeSSH()
-  }
-
-  /**
-   * Executes a single command via SSH connection. Throws an error and sets
-   * the exit code with the same code returned from the SSH command.
-   */
-  async exec(path, command, args) {
-    let sshCommand = command
-
-    if (args) {
-      sshCommand += ` ${args.join(' ')}`
-    }
-
-    const result = await this.ssh.execCommand(sshCommand, {
-      cwd: path,
-    })
-
-    if (result.code !== 0) {
-      const error = new Error(
-        `Error while running command \`${command} ${args.join(' ')}\``,
-      )
-      error.exitCode = result.code
-      throw error
-    }
-
-    return result
-  }
-
-  connect(options) {
-    return this.ssh.connect(options)
-  }
-
-  dispose() {
-    return this.ssh.dispose()
-  }
 }
 
 export const handler = async (yargs) => {
