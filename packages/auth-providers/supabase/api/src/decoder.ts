@@ -71,7 +71,7 @@ export const authDecoder: Decoder = async (
   }
   const secret = process.env.SUPABASE_JWT_SECRET as string
 
-  if (type !== 'supabase' || !event) {
+  if (type !== 'supabase') {
     return null
   }
 
