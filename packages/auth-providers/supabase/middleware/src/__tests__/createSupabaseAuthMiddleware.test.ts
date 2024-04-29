@@ -63,7 +63,6 @@ const options: SupabaseAuthMiddlewareOptions = {
     return {
       id: 1,
       email: 'user-1@example.com',
-      user_metadata: { favoriteColor: 'yellow' },
     }
   },
 }
@@ -168,7 +167,7 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(serverAuthContext).toEqual(middlewareDefaultAuthProviderState)
   })
 
-  it('authenticated request set currentUser', async () => {
+  it('authenticated request sets currentUser', async () => {
     const middleware = createSupabaseAuthMiddleware(options)
     const request = new Request('http://localhost:8911/authenticated-request', {
       method: 'GET',
@@ -193,8 +192,18 @@ describe('createSupabaseAuthMiddleware()', () => {
     })
   })
 
-  it('authenticated request set userMetadata', async () => {
-    const middleware = createSupabaseAuthMiddleware(options)
+  it('authenticated request sets userMetadata', async () => {
+    const optionsWithUserMetadata: SupabaseAuthMiddlewareOptions = {
+      getCurrentUser: async () => {
+        return {
+          id: 1,
+          email: 'user-1@example.com',
+          user_metadata: { favoriteColor: 'yellow' },
+        }
+      },
+    }
+
+    const middleware = createSupabaseAuthMiddleware(optionsWithUserMetadata)
     const request = new Request('http://localhost:8911/authenticated-request', {
       method: 'GET',
       headers: new Headers({
