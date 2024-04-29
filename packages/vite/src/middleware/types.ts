@@ -1,3 +1,5 @@
+import type { ViteDevServer } from 'vite'
+
 import type { RWRouteManifestItem } from '@redwoodjs/internal/dist/routes'
 
 import type { MiddlewareRequest } from './MiddlewareRequest.js'
@@ -17,6 +19,7 @@ export type MiddlewareInvokeOptions = {
   route?: RWRouteManifestItem
   cssPaths?: Array<string>
   params?: Record<string, unknown>
+  viteDevServer?: ViteDevServer
 }
 
 // Tuple of [mw, '*.{extension}']
