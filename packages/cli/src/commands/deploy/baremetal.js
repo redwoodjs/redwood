@@ -672,7 +672,7 @@ export const handler = async (yargs) => {
     verbose: yargs.verbose,
   })
 
-  const ssh = new SshExecutor()
+  const ssh = new SshExecutor(yargs.verbose)
 
   try {
     const tasks = new Listr(commands(yargs, ssh), {
