@@ -225,4 +225,32 @@ describe('createSupabaseAuthMiddleware()', () => {
       favoriteColor: 'yellow',
     })
   })
+
+  it('an exception when getting the currentUser clears out serverAuthContext and cookies', async () => {
+    const optionsWithUserMetadata: SupabaseAuthMiddlewareOptions = {
+      getCurrentUser: async () => {
+        // this simulates a decoding error or some other issue like tampering with the cookie so the Supabase session is invalid
+        // or an error in the getCurrentUser function
+        throw new Error('Error getting current user')
+      },
+    }
+
+    const middleware = createSupabaseAuthMiddleware(optionsWithUserMetadata)
+    const request = new Request('http://localhost:8911/authenticated-request', {
+      method: 'GET',
+      headers: new Headers({
+        cookie: 'auth-provider=supabase;sb_access_token=dummy_access_token',
+      }),
+    })
+    const req = new MiddlewareRequest(request)
+    const res = new MiddlewareResponse()
+
+    const result = await middleware(req, res)
+    expect(result).toBeDefined()
+    expect(req).toBeDefined()
+    expect(req.cookies.get('auth-provider')).toEqual('')
+
+    const serverAuthContext = req.serverAuthContext.get()
+    expect(serverAuthContext).toBeNull()
+  })
 })

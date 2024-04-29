@@ -9,21 +9,21 @@ export interface SupabaseAuthMiddlewareOptions {
   getCurrentUser: GetCurrentUser
 }
 
-const clearCookies = (
-  req: MiddlewareRequest,
-  res: MiddlewareResponse,
-  name: string,
-) => {
-  req.cookies.unset(name)
-  res.cookies.unset(name)
-}
+// const clearCookies = (
+//   req: MiddlewareRequest,
+//   res: MiddlewareResponse,
+//   name: string,
+// ) => {
+//   req.cookies.unset(name)
+//   res.cookies.unset(name)
+// }
 
-const clearAuthProviderCookie = (
-  req: MiddlewareRequest,
-  res: MiddlewareResponse,
-) => {
-  clearCookies(req, res, 'auth-provider')
-}
+// const clearAuthProviderCookie = (
+//   req: MiddlewareRequest,
+//   res: MiddlewareResponse,
+// ) => {
+//   clearCookies(req, res, 'auth-provider')
+// }
 
 /**
  * Create Supabase Auth Middleware that sets the `serverAuthContext` based on the Supabase cookie.
@@ -87,8 +87,8 @@ export const createSupabaseAuthMiddleware = ({
       // Clear the supabase cookie?
       // supabase.auth.signOut() ??
       // TODO: Ask Supabase how to get cookie name
-
-      clearAuthProviderCookie(req, res)
+      req.cookies.unset('auth-provider')
+      res.cookies.unset('auth-provider')
     }
 
     return res
