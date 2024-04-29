@@ -16,19 +16,20 @@ export class SshExecutor {
       sshCommand += ` ${args.join(' ')}`
     }
 
+    if (this.verbose) {
+      console.log(
+        `SshExecutor::exec running command \`${command} ${args.join(' ')}\` in ${path}`,
+      )
+    }
+
     const result = await this.ssh.execCommand(sshCommand, {
       cwd: path,
     })
 
     if (result.code !== 0) {
-      const error = this.verbose
-        ? new Error(
-            `Error while running command \`${command} ${args.join(' ')}\` in ${path}\n` +
-              result.stderr,
-          )
-        : new Error(
-            `Error while running command \`${command} ${args.join(' ')}\``,
-          )
+      const error = new Error(
+        `Error while running command \`${command} ${args.join(' ')}\``,
+      )
       error.exitCode = result.code
       throw error
     }
