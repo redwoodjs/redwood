@@ -1,8 +1,12 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import jwt from 'jsonwebtoken'
 
-import type { Decoded, Decoder } from '@redwoodjs/api'
-import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
+import {
+  parseAuthorizationCookie,
+  type Decoded,
+  type Decoder,
+} from '@redwoodjs/api'
+
 /**
  * Decodes a Supabase JWT with Bearer token or
  * uses createServerClient verify an authenticated cookie header request
@@ -20,13 +24,15 @@ export const authDecoder: Decoder = async (
   }
   const secret = process.env.SUPABASE_JWT_SECRET as string
 
-  console.log('Supabase authDecoder', process.env)
   if (type !== 'supabase') {
     return null
   }
 
-  // If SSR, then use the Supabase client to verify the cookie
-  if (process.env.RWJS_EXP_STREAMING_SSR) {
+  const authCookies = parseAuthorizationCookie(event)
+
+  // This tells the decoder that we're using server-auth
+  // It comes from the auth-provider cookie
+  if (authCookies?.type === 'supabase') {
     if (!process.env.SUPABASE_URL) {
       console.error('SUPABASE_URL env var is not set.')
       throw new Error('SUPABASE_URL env var is not set.')
@@ -36,36 +42,24 @@ export const authDecoder: Decoder = async (
       console.error('SUPABASE_KEY env var is not set.')
       throw new Error('SUPABASE_KEY env var is not set.')
     }
-    const req = event as MiddlewareRequest
     const supabase = createServerClient(
       process.env.SUPABASE_URL || '',
       process.env.SUPABASE_KEY || '',
       {
         cookies: {
           get(name: string) {
-            return req.cookies.get(name)?.valueOf() || ''
-          },
-          set(name: string, value: string, options: CookieOptions) {
-            req.cookies.set(name, value, options)
-          },
-          remove(name: string, _options: CookieOptions) {
-            req.cookies.unset(name)
-            req.cookies.unset('auth-provider')
+            // We cannot directly access req.cookies in the decoder
+            // Because graphql passes lambda event, while middleware passes a mwRequest
+            return authCookies?.parsedCookie?.[name]
           },
         },
       },
     )
 
-    console.log('Supabase authDecoder', token)
-
     const { data, error } = await supabase.auth.getSession()
-
-    console.log('Supabase getSession', data, error)
 
     if (!error) {
       const { session } = data
-      console.log('Supabase session', session)
-
       if (session) {
         const token = await session.access_token
         return (await jwt.verify(token, secret)) as Decoded
@@ -73,7 +67,7 @@ export const authDecoder: Decoder = async (
       throw new Error('No Supabase session found')
     } else {
       console.error(error)
-      throw new Error(error.message)
+      throw error
     }
   } else {
     // If not SSR, then use the JWT secret to verify the Bearer token

@@ -45,8 +45,8 @@ export const createSupabaseAuthMiddleware = ({
         return res
       }
 
-      // Since the Supabase authDecoder will know if it should use the cookie or the JWT,
-      // there is no need to pass a token here
+      // Supabase actually doesn't care about the token/cookieHeader
+      // We just pass it in for consistency with other auth providers
       const decoded = await authDecoder(cookieHeader, type, {
         event: req as Request,
       })
