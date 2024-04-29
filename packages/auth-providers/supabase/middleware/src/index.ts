@@ -25,6 +25,9 @@ const clearAuthProviderCookie = (
   clearCookies(req, res, 'auth-provider')
 }
 
+/**
+ * Create Supabase Auth Middleware that sets the `serverAuthContext` based on the Supabase cookie.
+ */
 export const createSupabaseAuthMiddleware = ({
   getCurrentUser,
 }: SupabaseAuthMiddlewareOptions) => {
@@ -51,18 +54,11 @@ export const createSupabaseAuthMiddleware = ({
         event: req as Request,
       })
 
-      console.log('Supabase authMiddleware decoded', decoded)
-
       const currentUser = await getCurrentUser(
         decoded,
         { type: type, token: cookieHeader, schema: 'cookie' },
         { event: req as Request },
       )
-
-      console.log('Supabase authMiddleware currentUser', currentUser)
-
-      const userMetadata = null
-      // typeof currentUser === 'string' ? null : currentUser?.['user_metadata']
 
       if (req.url.includes(`/middleware/supabase/currentUser`)) {
         if (typeof currentUser === 'string') {
@@ -70,6 +66,9 @@ export const createSupabaseAuthMiddleware = ({
         }
         return new MiddlewareResponse(JSON.stringify({ currentUser }))
       }
+
+      const userMetadata =
+        typeof currentUser === 'string' ? null : currentUser?.['user_metadata']
 
       console.log('Supabase authMiddleware userMetadata', userMetadata)
       req.serverAuthContext.set({

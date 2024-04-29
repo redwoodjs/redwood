@@ -28,9 +28,15 @@ export interface AuthorizationHeader {
   token: string
 }
 
+export type AuthorizationCookies = {
+  parsedCookie: Record<string, string>
+  rawCookie: string
+  type: string
+} | null
+
 export const parseAuthorizationCookie = (
   event: APIGatewayProxyEvent | Request,
-) => {
+): AuthorizationCookies => {
   const cookie = getEventHeader(event, 'Cookie')
 
   // Unauthenticated request

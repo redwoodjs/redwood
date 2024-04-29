@@ -16,10 +16,16 @@ const FIXTURE_PATH = path.resolve(
 
 beforeAll(() => {
   process.env.RWJS_CWD = FIXTURE_PATH
+  process.env.SUPABASE_URL = 'https://example.supabase.co'
+  process.env.SUPABASE_KEY = 'fake-key'
+  process.env.SUPABASE_JWT_SECRET = 'fake-jwt-secret'
 })
 
 afterAll(() => {
   delete process.env.RWJS_CWD
+  delete process.env.SUPABASE_URL
+  delete process.env.SUPABASE_KEY
+  delete process.env.SUPABASE_JWT_SECRET
 })
 
 describe('createSupabaseAuthMiddleware()', () => {

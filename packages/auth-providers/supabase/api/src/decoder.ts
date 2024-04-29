@@ -6,12 +6,60 @@ import {
   type Decoded,
   type Decoder,
 } from '@redwoodjs/api'
+import type { AuthorizationCookies } from '@redwoodjs/api'
+
+const ERROR_MESSAGE = `Your project's URL, Key and Secret are required to create a Supabase client!\n\nCheck your Supabase project's API settings to find these values\n\nhttps://supabase.com/dashboard/project/_/settings/api`
+
+export const messageForSupabaseSettingsError = (envar: string) => {
+  return `Your project's ${envar} envar is not set. ${ERROR_MESSAGE.replace(/\n/g, ' ')}`
+}
+
+export const throwSupabaseSettingsError = (envar: string) => {
+  throw new Error(messageForSupabaseSettingsError(envar))
+}
 
 /**
- * Decodes a Supabase JWT with Bearer token or
- * uses createServerClient verify an authenticated cookie header request
- *
- * Note: the event is as Middleware Request for cookie-based middleware auth
+ * Get the Supabase access token from the cookie using the Supabase SDK and session
+ */
+const getSupabaseAccessTokenFromCookie = async (
+  authCookies: AuthorizationCookies,
+) => {
+  if (!process.env.SUPABASE_URL) {
+    throwSupabaseSettingsError('SUPABASE_URL')
+  }
+
+  if (!process.env.SUPABASE_KEY) {
+    throwSupabaseSettingsError('SUPABASE_KEY')
+  }
+
+  const supabase = createServerClient(
+    process.env.SUPABASE_URL || '',
+    process.env.SUPABASE_KEY || '',
+    {
+      cookies: {
+        get(name: string) {
+          return authCookies?.parsedCookie?.[name]
+        },
+      },
+    },
+  )
+
+  const { data, error } = await supabase.auth.getSession()
+
+  if (!error) {
+    const { session } = data
+    if (session) {
+      return await session.access_token
+    }
+    throw new Error('No Supabase session found')
+  } else {
+    console.error(error)
+    throw error
+  }
+}
+
+/**
+ * Decodes a Supabase JWT with Bearer token or uses createServerClient verify an authenticated cookie header request
  */
 export const authDecoder: Decoder = async (
   token: string,
@@ -19,63 +67,26 @@ export const authDecoder: Decoder = async (
   { event },
 ) => {
   if (!process.env.SUPABASE_JWT_SECRET) {
-    console.error('SUPABASE_JWT_SECRET env var is not set.')
-    throw new Error('SUPABASE_JWT_SECRET env var is not set.')
+    throwSupabaseSettingsError('SUPABASE_JWT_SECRET')
   }
   const secret = process.env.SUPABASE_JWT_SECRET as string
 
-  if (type !== 'supabase') {
+  if (type !== 'supabase' || !event) {
     return null
   }
 
   const authCookies = parseAuthorizationCookie(event)
 
-  // This tells the decoder that we're using server-auth
-  // It comes from the auth-provider cookie
+  // If we have a Supabase auth-provider cookie, then use the SDK to get the access token
+  // Otherwise, use the Bearer token provided in the Authorization header
   if (authCookies?.type === 'supabase') {
-    if (!process.env.SUPABASE_URL) {
-      console.error('SUPABASE_URL env var is not set.')
-      throw new Error('SUPABASE_URL env var is not set.')
-    }
+    token = await getSupabaseAccessTokenFromCookie(authCookies)
+  }
 
-    if (!process.env.SUPABASE_KEY) {
-      console.error('SUPABASE_KEY env var is not set.')
-      throw new Error('SUPABASE_KEY env var is not set.')
-    }
-    const supabase = createServerClient(
-      process.env.SUPABASE_URL || '',
-      process.env.SUPABASE_KEY || '',
-      {
-        cookies: {
-          get(name: string) {
-            // We cannot directly access req.cookies in the decoder
-            // Because graphql passes lambda event, while middleware passes a mwRequest
-            return authCookies?.parsedCookie?.[name]
-          },
-        },
-      },
-    )
-
-    const { data, error } = await supabase.auth.getSession()
-
-    if (!error) {
-      const { session } = data
-      if (session) {
-        const token = await session.access_token
-        return (await jwt.verify(token, secret)) as Decoded
-      }
-      throw new Error('No Supabase session found')
-    } else {
-      console.error(error)
-      throw error
-    }
-  } else {
-    // If not SSR, then use the JWT secret to verify the Bearer token
-    try {
-      return jwt.verify(token, secret) as Decoded
-    } catch (error) {
-      console.error(error)
-      throw error
-    }
+  try {
+    return jwt.verify(token, secret) as Decoded
+  } catch (error) {
+    console.error(error)
+    throw error
   }
 }

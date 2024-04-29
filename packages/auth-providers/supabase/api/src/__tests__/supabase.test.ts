@@ -2,7 +2,19 @@ import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import jwt from 'jsonwebtoken'
 import { vi, beforeAll, afterAll, test, expect } from 'vitest'
 
-import { authDecoder } from '../decoder'
+import { authDecoder, messageForSupabaseSettingsError } from '../decoder'
+
+beforeAll(() => {
+  process.env.SUPABASE_URL = 'https://example.supabase.co'
+  process.env.SUPABASE_KEY = 'fake-key'
+  process.env.SUPABASE_JWT_SECRET = 'fake-jwt-secret'
+})
+
+afterAll(() => {
+  delete process.env.SUPABASE_URL
+  delete process.env.SUPABASE_KEY
+  delete process.env.SUPABASE_JWT_SECRET
+})
 
 vi.mock('jsonwebtoken', () => {
   return {
@@ -17,8 +29,28 @@ vi.mock('jsonwebtoken', () => {
   }
 })
 
+vi.mock('@supabase/ssr', () => {
+  return {
+    createServerClient: vi.fn(() => {
+      return {
+        auth: {
+          getSession: vi.fn(() => {
+            return {
+              data: {
+                session: {
+                  access_token: 'access-token',
+                },
+              },
+            }
+          }),
+        },
+      }
+    }),
+  }
+})
+
 const req = {
-  event: {} as APIGatewayProxyEvent,
+  event: { headers: {} } as APIGatewayProxyEvent,
   context: {} as LambdaContext,
 }
 
@@ -41,9 +73,10 @@ test('returns null for unsupported type', async () => {
 
 test('throws if SUPABASE_JWT_SECRET env var is not set', async () => {
   delete process.env.SUPABASE_JWT_SECRET
+  const errorMessage = messageForSupabaseSettingsError('SUPABASE_JWT_SECRET')
 
   await expect(authDecoder('token', 'supabase', req)).rejects.toThrow(
-    'SUPABASE_JWT_SECRET env var is not set',
+    errorMessage,
   )
 })
 
