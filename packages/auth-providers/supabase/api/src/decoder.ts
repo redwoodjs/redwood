@@ -14,12 +14,28 @@ export const authDecoder: Decoder = async (
   type: string,
   { event },
 ) => {
+  if (!process.env.SUPABASE_JWT_SECRET) {
+    console.error('SUPABASE_JWT_SECRET env var is not set.')
+    throw new Error('SUPABASE_JWT_SECRET env var is not set.')
+  }
+  const secret = process.env.SUPABASE_JWT_SECRET as string
+
+  console.log('Supabase authDecoder', process.env)
   if (type !== 'supabase') {
     return null
   }
 
   // If SSR, then use the Supabase client to verify the cookie
   if (process.env.RWJS_EXP_STREAMING_SSR) {
+    if (!process.env.SUPABASE_URL) {
+      console.error('SUPABASE_URL env var is not set.')
+      throw new Error('SUPABASE_URL env var is not set.')
+    }
+
+    if (!process.env.SUPABASE_KEY) {
+      console.error('SUPABASE_KEY env var is not set.')
+      throw new Error('SUPABASE_KEY env var is not set.')
+    }
     const req = event as MiddlewareRequest
     const supabase = createServerClient(
       process.env.SUPABASE_URL || '',
@@ -40,13 +56,19 @@ export const authDecoder: Decoder = async (
       },
     )
 
+    console.log('Supabase authDecoder', token)
+
     const { data, error } = await supabase.auth.getSession()
+
+    console.log('Supabase getSession', data, error)
 
     if (!error) {
       const { session } = data
+      console.log('Supabase session', session)
+
       if (session) {
         const token = await session.access_token
-        return JSON.parse(token) as Decoded
+        return (await jwt.verify(token, secret)) as Decoded
       }
       throw new Error('No Supabase session found')
     } else {
@@ -55,18 +77,11 @@ export const authDecoder: Decoder = async (
     }
   } else {
     // If not SSR, then use the JWT secret to verify the Bearer token
-    if (!process.env.SUPABASE_JWT_SECRET) {
-      console.error('SUPABASE_JWT_SECRET env var is not set.')
-      throw new Error('SUPABASE_JWT_SECRET env var is not set.')
-    }
-
     try {
-      const secret = process.env.SUPABASE_JWT_SECRET as string
-      return Promise.resolve(
-        jwt.verify(token, secret) as Record<string, unknown>,
-      )
+      return jwt.verify(token, secret) as Decoded
     } catch (error) {
-      return Promise.reject(error)
+      console.error(error)
+      throw error
     }
   }
 }

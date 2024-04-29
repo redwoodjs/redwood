@@ -30,7 +30,12 @@ export const createSupabaseAuthMiddleware = ({
 }: SupabaseAuthMiddlewareOptions) => {
   return async (req: MiddlewareRequest, res: MiddlewareResponse) => {
     const type = 'supabase'
-    const token = ''
+    const cookieHeader = req.headers.get('cookie')
+
+    // Not an authenticated request, pass through
+    if (!cookieHeader) {
+      return res
+    }
 
     try {
       const authProviderCookie = req.cookies.get('auth-provider')
@@ -42,19 +47,22 @@ export const createSupabaseAuthMiddleware = ({
 
       // Since the Supabase authDecoder will know if it should use the cookie or the JWT,
       // there is no need to pass a token here
-      const decoded = await authDecoder(token, type, {
+      const decoded = await authDecoder(cookieHeader, type, {
         event: req as Request,
-        context: {},
       })
+
+      console.log('Supabase authMiddleware decoded', decoded)
 
       const currentUser = await getCurrentUser(
         decoded,
-        { type: type, token, schema: 'cookie' },
-        { event: req as Request, context: {} },
+        { type: type, token: cookieHeader, schema: 'cookie' },
+        { event: req as Request },
       )
 
-      const userMetadata =
-        typeof currentUser === 'string' ? null : currentUser?.['user_metadata']
+      console.log('Supabase authMiddleware currentUser', currentUser)
+
+      const userMetadata = null
+      // typeof currentUser === 'string' ? null : currentUser?.['user_metadata']
 
       if (req.url.includes(`/middleware/supabase/currentUser`)) {
         if (typeof currentUser === 'string') {
@@ -63,6 +71,7 @@ export const createSupabaseAuthMiddleware = ({
         return new MiddlewareResponse(JSON.stringify({ currentUser }))
       }
 
+      console.log('Supabase authMiddleware userMetadata', userMetadata)
       req.serverAuthContext.set({
         currentUser,
         loading: false,
@@ -77,6 +86,7 @@ export const createSupabaseAuthMiddleware = ({
 
       // Clear the supabase cookie?
       // supabase.auth.signOut() ??
+      // TODO: Ask Supabase how to get cookie name
 
       clearAuthProviderCookie(req, res)
     }

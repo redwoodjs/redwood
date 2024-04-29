@@ -80,7 +80,7 @@ export type AuthContextPayload = [
   // @MARK: Context is not passed when using middleware auth
   {
     event: APIGatewayProxyEvent | Request
-    context: LambdaContext | Record<string, never>
+    context?: LambdaContext
   },
 ]
 
@@ -89,7 +89,7 @@ export type Decoder = (
   type: string,
   req: {
     event: APIGatewayProxyEvent | Request
-    context: LambdaContext | Record<string, never>
+    context?: LambdaContext
   },
 ) => Promise<Decoded>
 
@@ -104,7 +104,7 @@ export const getAuthenticationContext = async ({
 }: {
   authDecoder?: Decoder | Decoder[]
   event: APIGatewayProxyEvent | Request
-  context: LambdaContext | Record<string, never>
+  context: LambdaContext
 }): Promise<undefined | AuthContextPayload> => {
   const cookieHeader = parseAuthorizationCookie(event)
   const typeFromHeader = getAuthProviderHeader(event)
