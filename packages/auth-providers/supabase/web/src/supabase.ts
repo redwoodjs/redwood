@@ -270,14 +270,23 @@ function createAuthImplementation({
      */
     restoreAuthState: async () => {
       try {
-        await supabaseClient.auth.refreshSession()
+        console.log('In restore auth state!')
+        const { data } = await supabaseClient.auth.refreshSession()
 
         /// @MARK:
         // 2 weeks, not using supabaseAuthRes.data.session?.expires_in - because this
-        // is the expiry for the access_token === 3600
-        const expiresIn = 12096e5
-        const expiresAtTimeString = new Date().getTime() + expiresIn
-        setAuthProviderCookie(expiresAtTimeString)
+        // is the expiry for the access_token, which is one hour. Not the session.
+        if (data.session) {
+          // expires_at: 1714411276
+          // expires_in: 3600
+          const expiresIn = 12096e5
+
+          const expiresAtTimeString = new Date().getTime() + expiresIn
+          setAuthProviderCookie(expiresAtTimeString)
+        } else {
+          //Remove auth-provider cookie
+          setAuthProviderCookie()
+        }
 
         // Modify URL state only if there is a session.
         // Prevents resetting URL state (like query params) for all other cases.
