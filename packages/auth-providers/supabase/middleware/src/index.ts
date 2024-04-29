@@ -42,7 +42,8 @@ export const createSupabaseAuthMiddleware = ({
 
     try {
       const authProviderCookie = req.cookies.get('auth-provider')
-      // if there is no auth-provider cookie, or it is for supabase
+
+      // if there is no auth-provider cookie, or it is not for supabase
       // then we don't need to do anything
       if (!authProviderCookie || authProviderCookie !== type) {
         return res
@@ -52,7 +53,7 @@ export const createSupabaseAuthMiddleware = ({
       // We just pass it in for consistency with other auth providers
       const decoded = await authDecoder(cookieHeader, type, {
         event: req as Request,
-      })
+      }) //
 
       const currentUser = await getCurrentUser(
         decoded,
@@ -64,13 +65,13 @@ export const createSupabaseAuthMiddleware = ({
         if (typeof currentUser === 'string') {
           return new MiddlewareResponse(currentUser)
         }
+
         return new MiddlewareResponse(JSON.stringify({ currentUser }))
       }
 
       const userMetadata =
         typeof currentUser === 'string' ? null : currentUser?.['user_metadata']
 
-      console.log('Supabase authMiddleware userMetadata', userMetadata)
       req.serverAuthContext.set({
         currentUser,
         loading: false,

@@ -1,7 +1,12 @@
 import path from 'node:path'
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
+import { vi } from 'vitest'
 
+import {
+  middlewareDefaultAuthProviderState,
+  // type ServerAuthState,
+} from '@redwoodjs/auth'
 import {
   MiddlewareRequest,
   MiddlewareResponse,
@@ -13,6 +18,31 @@ const FIXTURE_PATH = path.resolve(
   __dirname,
   '../../../../../../__fixtures__/example-todo-main',
 )
+
+vi.mock('jsonwebtoken', () => {
+  return {
+    default: {
+      verify: vi.fn(() => {
+        return {
+          sub: 'abc123',
+        }
+      }),
+      decode: vi.fn(),
+    },
+  }
+})
+
+// })
+
+vi.mock('@redwoodjs/auth-supabase-api', () => {
+  return {
+    authDecoder: vi.fn(() => {
+      return {
+        sub: 'abc123',
+      }
+    }),
+  }
+})
 
 beforeAll(() => {
   process.env.RWJS_CWD = FIXTURE_PATH
@@ -28,13 +58,18 @@ afterAll(() => {
   delete process.env.SUPABASE_JWT_SECRET
 })
 
+const options: SupabaseAuthMiddlewareOptions = {
+  getCurrentUser: async () => {
+    return {
+      id: 1,
+      email: 'user-1@example.com',
+      user_metadata: { favoriteColor: 'yellow' },
+    }
+  },
+}
+
 describe('createSupabaseAuthMiddleware()', () => {
   it('creates middleware for Supabase SSR auth', async () => {
-    const options: SupabaseAuthMiddlewareOptions = {
-      getCurrentUser: async () => {
-        return { id: 1, email: 'user-1@example.com' }
-      },
-    }
     const middleware = createSupabaseAuthMiddleware(options)
     const request = new Request('http://localhost:8911', {
       method: 'GET',
@@ -48,5 +83,137 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(result).toBeDefined()
     expect(result).toHaveProperty('body', undefined)
     expect(result).toHaveProperty('status', 200)
+
+    const serverAuthContext = req.serverAuthContext.get()
+    expect(serverAuthContext).toEqual(middlewareDefaultAuthProviderState)
+  })
+  it('passes through non-authenticated requests', async () => {
+    const middleware = createSupabaseAuthMiddleware(options)
+    const request = new Request('http://localhost:8911', {
+      method: 'GET',
+      headers: new Headers(),
+    })
+    const req = new MiddlewareRequest(request)
+    const res = new MiddlewareResponse('original response body')
+
+    const result = await middleware(req, res)
+    expect(result).toEqual(res)
+    expect(result.body).toEqual('original response body')
+
+    const serverAuthContext = req.serverAuthContext.get()
+    expect(serverAuthContext).toEqual(middlewareDefaultAuthProviderState)
+  })
+  it('passes through when no auth-provider cookie', async () => {
+    const middleware = createSupabaseAuthMiddleware(options)
+    const request = new Request('http://localhost:8911', {
+      method: 'GET',
+      headers: new Headers({
+        cookie: 'missing-the-auth-provider-cookie-header-name=supabase',
+      }),
+    })
+    const req = new MiddlewareRequest(request)
+    const res = new MiddlewareResponse(
+      'original response body when no auth provider',
+    )
+
+    const result = await middleware(req, res)
+    expect(result).toEqual(res)
+    expect(result.body).toEqual('original response body when no auth provider')
+
+    const serverAuthContext = req.serverAuthContext.get()
+    expect(serverAuthContext).toEqual(middlewareDefaultAuthProviderState)
+  })
+
+  it('passes through when unsupported auth-provider', async () => {
+    const middleware = createSupabaseAuthMiddleware(options)
+    const request = new Request('http://localhost:8911', {
+      method: 'GET',
+      headers: new Headers({ cookie: 'auth-provider=unsupported' }),
+    })
+    const req = new MiddlewareRequest(request)
+    const res = new MiddlewareResponse(
+      'original response body for unsupported provider',
+    )
+
+    const result = await middleware(req, res)
+    expect(result).toEqual(res)
+    expect(result.body).toEqual(
+      'original response body for unsupported provider',
+    )
+    const serverAuthContext = req.serverAuthContext.get()
+    expect(serverAuthContext).toEqual(middlewareDefaultAuthProviderState)
+  })
+
+  it('currentUser path', async () => {
+    const middleware = createSupabaseAuthMiddleware(options)
+    const request = new Request(
+      'http://localhost:8911/middleware/supabase/currentUser',
+      {
+        method: 'GET',
+        headers: new Headers({ cookie: 'auth-provider=supabase' }),
+      },
+    )
+    const req = new MiddlewareRequest(request)
+    const res = new MiddlewareResponse()
+
+    const result = await middleware(req, res)
+    expect(result.body).toEqual(
+      JSON.stringify({
+        currentUser: { id: 1, email: 'user-1@example.com' },
+      }),
+    )
+
+    expect(req.url).toContain('/middleware/supabase/currentUser')
+    const serverAuthContext = req.serverAuthContext.get()
+    expect(serverAuthContext).toEqual(middlewareDefaultAuthProviderState)
+  })
+
+  it('authenticated request set currentUser', async () => {
+    const middleware = createSupabaseAuthMiddleware(options)
+    const request = new Request('http://localhost:8911/authenticated-request', {
+      method: 'GET',
+      headers: new Headers({
+        cookie: 'auth-provider=supabase;sb_access_token=dummy_access_token',
+      }),
+    })
+    const req = new MiddlewareRequest(request)
+    const res = new MiddlewareResponse()
+
+    const result = await middleware(req, res)
+    expect(result).toBeDefined()
+    expect(req).toBeDefined()
+
+    const serverAuthContext = req.serverAuthContext.get()
+    expect(serverAuthContext).toBeDefined()
+    expect(serverAuthContext).toHaveProperty('currentUser')
+    expect(serverAuthContext.isAuthenticated).toEqual(true)
+    expect(serverAuthContext.currentUser).toEqual({
+      id: 1,
+      email: 'user-1@example.com',
+    })
+  })
+
+  it('authenticated request set userMetadata', async () => {
+    const middleware = createSupabaseAuthMiddleware(options)
+    const request = new Request('http://localhost:8911/authenticated-request', {
+      method: 'GET',
+      headers: new Headers({
+        cookie: 'auth-provider=supabase;sb_access_token=dummy_access_token',
+      }),
+    })
+    const req = new MiddlewareRequest(request)
+    const res = new MiddlewareResponse()
+
+    const result = await middleware(req, res)
+    expect(result).toBeDefined()
+    expect(req).toBeDefined()
+
+    const serverAuthContext = req.serverAuthContext.get()
+    expect(serverAuthContext).toBeDefined()
+    expect(serverAuthContext).toHaveProperty('currentUser')
+    expect(serverAuthContext.isAuthenticated).toEqual(true)
+    expect(serverAuthContext.userMetadata).toEqual({
+      favoriteColor: 'yellow',
+    })
   })
 })

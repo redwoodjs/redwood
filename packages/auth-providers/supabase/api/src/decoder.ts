@@ -75,6 +75,8 @@ export const authDecoder: Decoder = async (
     return null
   }
 
+  console.log('Supabase authDecoder', token, type)
+
   const authCookies = parseAuthorizationCookie(event)
 
   // If we have a Supabase auth-provider cookie, then use the SDK to get the access token
