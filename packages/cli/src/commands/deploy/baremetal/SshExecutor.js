@@ -28,7 +28,8 @@ export class SshExecutor {
 
     if (result.code !== 0) {
       const error = new Error(
-        `Error while running command \`${command} ${args.join(' ')}\``,
+        `Error while running command \`${command} ${args.join(' ')}\` in ${path}\n` +
+          result.stderr,
       )
       error.exitCode = result.code
       throw error
