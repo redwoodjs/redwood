@@ -11,7 +11,7 @@ import type {
  * Creates Supabase Server Client used to get the session cookie (only)
  * from a given collection of auth cookies
  */
-const createSupabaseServerClient = (
+export const createSupabaseServerClient = (
   req: MiddlewareRequest,
   res: MiddlewareResponse,
 ) => {
@@ -53,12 +53,15 @@ export const clearSupabaseCookies = (
 ) => {
   // clear supabase cookies
   const supabase = createSupabaseServerClient(req, res)
+  console.log('>> clearSupabaseCookies - signOut')
   supabase.auth.signOut()
 
   // Clear server auth context
+  console.log('>> clearSupabaseCookies - clear server auth context')
   req.serverAuthContext.set(null)
 
   // clear auth-provider cookies
+  console.log('>> clearSupabaseCookies - clear auth-provider`')
   req.cookies.unset('auth-provider')
   res.cookies.unset('auth-provider')
 }

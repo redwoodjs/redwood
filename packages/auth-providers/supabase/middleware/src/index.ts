@@ -66,6 +66,7 @@ const createSupabaseAuthMiddleware = ({
     } catch (e) {
       console.error(e, 'Error in Supabase Auth Middleware')
       clearSupabaseCookies(req, res)
+      return res
     }
 
     return res
