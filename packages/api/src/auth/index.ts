@@ -8,8 +8,8 @@ import { getEventHeader } from '../event'
 import type { Decoded } from './parseJWT'
 export type { Decoded }
 
-// This is shared by `@redwoodjs/web`
-const AUTH_PROVIDER_HEADER = 'auth-provider'
+// This is shared by `@redwoodjs/web` as well as used on auth middleware
+export const AUTH_PROVIDER_HEADER = 'auth-provider'
 
 export const getAuthProviderHeader = (
   event: APIGatewayProxyEvent | Request,
@@ -51,7 +51,7 @@ export const parseAuthorizationCookie = (
     rawCookie: cookie,
     // When not unauthenticated, this will be null/undefined
     // Remember that the cookie header could contain other (unrelated) values!
-    type: parsedCookie['auth-provider'],
+    type: parsedCookie[AUTH_PROVIDER_HEADER],
   }
 }
 

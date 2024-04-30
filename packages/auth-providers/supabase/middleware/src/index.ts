@@ -1,3 +1,4 @@
+import { AUTH_PROVIDER_HEADER } from '@redwoodjs/api'
 import { authDecoder } from '@redwoodjs/auth-supabase-api'
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
 import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
@@ -25,7 +26,7 @@ const createSupabaseAuthMiddleware = ({
     }
 
     try {
-      const authProviderCookie = req.cookies.get('auth-provider')
+      const authProviderCookie = req.cookies.get(AUTH_PROVIDER_HEADER)
 
       // if there is no auth-provider cookie, or it is not for supabase
       // then we don't need to do anything
