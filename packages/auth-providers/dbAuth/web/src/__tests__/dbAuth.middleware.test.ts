@@ -14,8 +14,7 @@ const defaultArgs = {
 export function getMwDbAuth(
   args: DbAuthClientArgs & CustomProviderHooks = defaultArgs,
 ) {
-  // We have to create a special createDbAuthClient with middleware = true
-  const dbAuthClient = createDbAuthClient({ ...args, middleware: true })
+  const dbAuthClient = createDbAuthClient({ ...args })
   const { useAuth, AuthProvider } = createAuth(dbAuthClient, {
     useCurrentUser: args.useCurrentUser,
     useHasRole: args.useHasRole,
@@ -31,6 +30,20 @@ export function getMwDbAuth(
 // They test the middleware specific things about the dbAuth client
 
 describe('dbAuth web ~ cookie/middleware auth', () => {
+  let originalEnv
+
+  // This tells the dbAuth client to setup in middleware mode
+  beforeAll(() => {
+    originalEnv = globalThis.RWJS_ENV
+    globalThis.RWJS_ENV = {
+      RWJS_EXP_STREAMING_SSR: true,
+    }
+  })
+
+  afterAll(() => {
+    globalThis.RWJS_ENV = originalEnv
+  })
+
   it('will create a middleware version of the auth client', async () => {
     const { current: dbAuthInstance } = getMwDbAuth()
 

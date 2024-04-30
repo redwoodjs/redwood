@@ -91,6 +91,7 @@ fetchMock.mockImplementation(async (url, options) => {
 
 beforeAll(() => {
   globalThis.fetch = fetchMock
+  globalThis.RWJS_ENV = {}
 })
 
 beforeEach(() => {
