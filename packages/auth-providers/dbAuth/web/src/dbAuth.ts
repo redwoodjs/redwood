@@ -49,7 +49,7 @@ export function createAuth(
     ) => (rolesToCheck: string | string[]) => boolean
   },
 ) {
-  if (dbAuthClient.useMiddlewareAuth) {
+  if (dbAuthClient.middlewareAuthEnabled) {
     return createMiddlewareAuth(dbAuthClient, customProviderHooks)
   }
 
@@ -69,7 +69,7 @@ export function createDbAuthClient({
   webAuthn,
   dbAuthUrl,
   fetchConfig,
-  middleware = false,
+  middleware = RWJS_ENV.RWJS_EXP_STREAMING_SSR,
 }: DbAuthClientArgs = {}) {
   const credentials = fetchConfig?.credentials || 'same-origin'
   webAuthn?.setAuthApiUrl(dbAuthUrl)
@@ -229,6 +229,6 @@ export function createDbAuthClient({
     // so we can get the dbAuthUrl in getCurrentUserFromMiddleware
     getAuthUrl: getDbAuthUrl,
     // This is so that we can skip fetching getCurrentUser in reauthenticate
-    useMiddlewareAuth: middleware,
+    middlewareAuthEnabled: middleware,
   }
 }

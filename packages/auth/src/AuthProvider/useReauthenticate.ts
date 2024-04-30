@@ -54,7 +54,7 @@ export const useReauthenticate = <TUser>(
       } else {
         // Prevent a double fetch of the current user if the auth provider is using middleware
         let currentUser
-        if (authImplementation.useMiddlewareAuth) {
+        if (authImplementation.middlewareAuthEnabled) {
           // userMetadata === currentUser in middleware-auth
           currentUser = userMetadata
         } else {
