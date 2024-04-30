@@ -1,34 +1,18 @@
-// import type { CookieOptions } from '@supabase/ssr'
-
 import { authDecoder } from '@redwoodjs/auth-supabase-api'
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
 import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
 import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
 
+import { clearSupabaseCookies } from './util'
+
 export interface SupabaseAuthMiddlewareOptions {
   getCurrentUser: GetCurrentUser
 }
 
-// const clearCookies = (
-//   req: MiddlewareRequest,
-//   res: MiddlewareResponse,
-//   name: string,
-// ) => {
-//   req.cookies.unset(name)
-//   res.cookies.unset(name)
-// }
-
-// const clearAuthProviderCookie = (
-//   req: MiddlewareRequest,
-//   res: MiddlewareResponse,
-// ) => {
-//   clearCookies(req, res, 'auth-provider')
-// }
-
 /**
  * Create Supabase Auth Middleware that sets the `serverAuthContext` based on the Supabase cookie.
  */
-export const createSupabaseAuthMiddleware = ({
+const createSupabaseAuthMiddleware = ({
   getCurrentUser,
 }: SupabaseAuthMiddlewareOptions) => {
   return async (req: MiddlewareRequest, res: MiddlewareResponse) => {
@@ -80,17 +64,11 @@ export const createSupabaseAuthMiddleware = ({
         userMetadata: userMetadata || currentUser,
       })
     } catch (e) {
-      // Clear server auth context
       console.error(e, 'Error in Supabase Auth Middleware')
-      req.serverAuthContext.set(null)
-
-      // Clear the supabase cookie?
-      // supabase.auth.signOut() ??
-      // TODO: Ask Supabase how to get cookie name
-      req.cookies.unset('auth-provider')
-      res.cookies.unset('auth-provider')
+      clearSupabaseCookies(req, res)
     }
 
     return res
   }
 }
+export default createSupabaseAuthMiddleware

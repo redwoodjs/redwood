@@ -12,7 +12,7 @@ import {
   MiddlewareResponse,
 } from '@redwoodjs/vite/middleware'
 
-import { createSupabaseAuthMiddleware } from '../index'
+import createSupabaseAuthMiddleware from '../index'
 import type { SupabaseAuthMiddlewareOptions } from '../index'
 const FIXTURE_PATH = path.resolve(
   __dirname,

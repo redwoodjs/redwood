@@ -19,11 +19,10 @@ export const throwSupabaseSettingsError = (envar: string) => {
 }
 
 /**
- * Get the Supabase access token from the cookie using the Supabase SDK and session
+ * Creates Supabase Server Client used to get the session cookie (only)
+ * from a given collection of auth cookies
  */
-const getSupabaseAccessTokenFromCookie = async (
-  authCookies: AuthorizationCookies,
-) => {
+const createSupabaseServerClient = (authCookies: AuthorizationCookies) => {
   if (!process.env.SUPABASE_URL) {
     throwSupabaseSettingsError('SUPABASE_URL')
   }
@@ -32,7 +31,7 @@ const getSupabaseAccessTokenFromCookie = async (
     throwSupabaseSettingsError('SUPABASE_KEY')
   }
 
-  const supabase = createServerClient(
+  return createServerClient(
     process.env.SUPABASE_URL || '',
     process.env.SUPABASE_KEY || '',
     {
@@ -43,6 +42,15 @@ const getSupabaseAccessTokenFromCookie = async (
       },
     },
   )
+}
+
+/**
+ * Get the Supabase access token from the cookie using the Supabase SDK and session
+ */
+const getSupabaseAccessTokenFromCookie = async (
+  authCookies: AuthorizationCookies,
+) => {
+  const supabase = createSupabaseServerClient(authCookies)
 
   const { data, error } = await supabase.auth.getSession()
 
@@ -74,8 +82,6 @@ export const authDecoder: Decoder = async (
   if (type !== 'supabase') {
     return null
   }
-
-  console.log('Supabase authDecoder', token, type)
 
   const authCookies = parseAuthorizationCookie(event)
 

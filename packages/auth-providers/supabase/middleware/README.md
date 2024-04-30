@@ -1,11 +1,16 @@
 # Supabase Middleware
 
+---
+
+NOTE: This README needs to be updated when the Supabase Web Auth will create a client and register the middleware
+
+----
 
 ```tsx filename='entry.server.tsx'
 import type { TagDescriptor } from '@redwoodjs/web'
 
 import App from './App'
-import { createSupabaseAuthMiddleware } from '@redwoodjs/auth-supabase-middleware'
+import  createSupabaseAuthMiddleware from '@redwoodjs/auth-supabase-middleware'
 import { Document } from './Document'
 
 // eslint-disable-next-line no-restricted-imports
