@@ -7877,7 +7877,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth-supabase-api@workspace:packages/auth-providers/supabase/api":
+"@redwoodjs/auth-supabase-api@workspace:*, @redwoodjs/auth-supabase-api@workspace:packages/auth-providers/supabase/api":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-supabase-api@workspace:packages/auth-providers/supabase/api"
   dependencies:
@@ -7885,10 +7885,29 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.1"
     "@redwoodjs/api": "workspace:*"
+    "@supabase/ssr": "npm:0.3.0"
     "@types/aws-lambda": "npm:8.10.136"
     "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.36.1"
     jsonwebtoken: "npm:9.0.2"
+    typescript: "npm:5.4.5"
+    vitest: "npm:1.4.0"
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/auth-supabase-middleware@workspace:packages/auth-providers/supabase/middleware":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth-supabase-middleware@workspace:packages/auth-providers/supabase/middleware"
+  dependencies:
+    "@redwoodjs/api": "workspace:*"
+    "@redwoodjs/auth-supabase-api": "workspace:*"
+    "@redwoodjs/framework-tools": "workspace:*"
+    "@redwoodjs/graphql-server": "workspace:*"
+    "@redwoodjs/vite": "workspace:*"
+    "@supabase/ssr": "npm:0.3.0"
+    "@types/aws-lambda": "npm:8.10.136"
+    ts-toolbelt: "npm:9.6.0"
+    tsx: "npm:4.7.1"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   languageName: unknown

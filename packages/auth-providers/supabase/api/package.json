@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.1",
+    "@supabase/ssr": "0.3.0",
     "core-js": "3.36.1",
     "jsonwebtoken": "9.0.2"
   },
