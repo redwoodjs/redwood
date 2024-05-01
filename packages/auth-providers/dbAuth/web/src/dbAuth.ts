@@ -201,17 +201,10 @@ export function createDbAuthClient({
   }
 
   /*
-  Cookie+Middleware based auth providers cannot retrieve current user from localStorage, etc.
-  It either has to retrieve it from serverAuthState (e.g. on first render)
-  or has to retrieve it from the middleware, where the cookie gets validated first.
-
-  getUserMetadata is used in reauthenticate. So when you login in, the currentUser get's fetched
-  from the server, so that it will redirect
-  */
+   * dbAuth doesn't implement the concept of userMetadata. We used to return the token (i.e. userId) as the userMetadata.
+   */
   const getUserMetadata = async () => {
-    return middleware
-      ? getCurrentUserFromMiddleware(getDbAuthUrl())
-      : getToken()
+    return middleware ? () => {} : getToken()
   }
 
   return {
