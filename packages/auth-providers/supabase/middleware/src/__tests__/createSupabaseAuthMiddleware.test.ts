@@ -46,6 +46,11 @@ vi.mock('@redwoodjs/auth-supabase-api', () => {
 
 beforeAll(() => {
   process.env.RWJS_CWD = FIXTURE_PATH
+  // the default cookie name in the Supabase client is based on the url
+  // will always be in the format:
+  // sb-<project_ref>-auth-token (e.g. sb-example-auth-token )
+  // so, the cookie name is based on the project ref and will be
+  // sb-example-auth-token
   process.env.SUPABASE_URL = 'https://example.supabase.co'
   process.env.SUPABASE_KEY = 'fake-key'
   process.env.SUPABASE_JWT_SECRET = 'fake-jwt-secret'
@@ -236,10 +241,13 @@ describe('createSupabaseAuthMiddleware()', () => {
     }
 
     const middleware = createSupabaseAuthMiddleware(optionsWithUserMetadata)
+
+    // the default cookie name will always be sb-<project_ref>-auth-token (e.g. sb-example-auth-token )
     const request = new Request('http://localhost:8911/authenticated-request', {
       method: 'GET',
       headers: new Headers({
-        cookie: 'auth-provider=supabase;sb_access_token=dummy_access_token',
+        cookie:
+          'auth-provider=supabase;sb-example-auth-token=dummy_access_token',
       }),
     })
     const req = new MiddlewareRequest(request)
@@ -248,9 +256,33 @@ describe('createSupabaseAuthMiddleware()', () => {
     const result = await middleware(req, res)
     expect(result).toBeDefined()
     expect(req).toBeDefined()
-    expect(req.cookies.get('auth-provider')).toEqual('')
 
+    // when an exception is thrown, such as when tampering with the cookie,
+    //the serverAuthContext should be cleared
     const serverAuthContext = req.serverAuthContext.get()
     expect(serverAuthContext).toBeNull()
+
+    // the auth-provider cookie should be cleared
+    const authProviderCookie = req.cookies.get('auth-provider')
+    const authProviderCookieDetails = req.cookies.getDetails('auth-provider')
+    expect(authProviderCookie).toEqual('')
+    expect(authProviderCookieDetails).toHaveProperty('options')
+    expect(authProviderCookieDetails?.options).toHaveProperty(
+      'expires',
+      new Date(0),
+    )
+
+    // and the Supabase cookie should be cleared
+    // const supabaseCookie = req.cookies.getDetails('sb-example-auth-token')
+    const supabaseCookie = req.cookies.get('sb-example-auth-token')
+    const supabaseCookieDetails = req.cookies.getDetails(
+      'sb-example-auth-token',
+    )
+    expect(supabaseCookie).toEqual('')
+    expect(supabaseCookieDetails).toHaveProperty('options')
+    expect(supabaseCookieDetails?.options).toHaveProperty(
+      'expires',
+      new Date(0),
+    )
   })
 })
