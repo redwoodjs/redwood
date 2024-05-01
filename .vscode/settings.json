@@ -23,6 +23,7 @@
   "peacock.color": "#b85833",
   "cSpell.words": [
     "autoplay",
+    "baremetal",
     "bazinga",
     "corepack",
     "envinfo",
@@ -31,6 +32,7 @@
     "Flightcontrol",
     "graphiql",
     "memfs",
+    "OGIMAGE",
     "opentelemetry",
     "pino",
     "Pistorius",

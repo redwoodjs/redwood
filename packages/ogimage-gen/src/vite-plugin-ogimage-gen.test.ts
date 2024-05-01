@@ -1,4 +1,5 @@
 import { vol, fs as memfs } from 'memfs'
+import type { ConfigEnv } from 'vite'
 import { describe, expect, test, vi, beforeAll, afterAll } from 'vitest'
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
@@ -41,10 +42,17 @@ describe('vitePluginOgGen', () => {
     // Type cast so TS doesn't complain calling config below
     // because config can be of many types!
     const plugin = (await vitePluginOgGen()) as {
-      config: (...args: any) => any
+      config: (config: any, env: ConfigEnv) => any
     }
 
-    const rollupInputs = plugin.config().build?.rollupOptions?.input
+    const rollupInputs = plugin.config(
+      {},
+      {
+        isSsrBuild: true,
+        command: 'build',
+        mode: 'production',
+      },
+    ).build?.rollupOptions?.input
 
     const inputKeys = Object.keys(rollupInputs)
 
