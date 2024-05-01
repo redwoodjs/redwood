@@ -1,3 +1,5 @@
+import { DEFAULT_COOKIE_OPTIONS as DEFAULT_SUPABASE_COOKIE_OPTIONS } from '@supabase/ssr'
+import { serialize } from '@supabase/ssr'
 import type {
   SupabaseClient,
   AuthResponse,
@@ -77,9 +79,14 @@ export function createAuth(
 }
 
 // Used to set the auth-provider cookie
-const setAuthProviderCookie = (expires: number) => {
-  const expiresString = new Date(expires).toUTCString()
-  document.cookie = `auth-provider=supabase; expires=${expiresString}; SameSite=Lax`
+const setAuthProviderCookie = () => {
+  const authProviderCookieString = serialize(
+    'auth-provider',
+    'supabase',
+    DEFAULT_SUPABASE_COOKIE_OPTIONS,
+  )
+
+  document.cookie = authProviderCookieString
 }
 
 const expireAuthProviderCookie = () => {
@@ -274,18 +281,9 @@ function createAuthImplementation({
       try {
         const { data } = await supabaseClient.auth.refreshSession()
 
-        /// @MARK:
-        // 2 weeks, not using supabaseAuthRes.data.session?.expires_in - because this
-        // is the expiry for the access_token, which is one hour. Not the session.
         if (data.session) {
-          // expires_at: 1714411276
-          // expires_in: 3600
-          const expiresIn = 12096e5
-
-          const expiresAtTimeString = new Date().getTime() + expiresIn
-          setAuthProviderCookie(expiresAtTimeString)
+          setAuthProviderCookie()
         } else {
-          //Remove auth-provider cookie
           expireAuthProviderCookie()
         }
 
