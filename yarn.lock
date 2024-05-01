@@ -7916,6 +7916,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.1"
     "@redwoodjs/auth": "workspace:*"
+    "@supabase/ssr": "npm:0.3.0"
     "@supabase/supabase-js": "npm:2.40.0"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
@@ -10212,6 +10213,18 @@ __metadata:
     "@types/ws": "npm:^8.5.10"
     ws: "npm:^8.14.2"
   checksum: 10c0/321c98237e3255cad221ed16b54739ce327d395b80faba1416ba81577f043681ae0dde10e0ac1b7e3427412d1dbb35cb4b66d8466c21239932aa3dca6b9cc87c
+  languageName: node
+  linkType: hard
+
+"@supabase/ssr@npm:0.3.0":
+  version: 0.3.0
+  resolution: "@supabase/ssr@npm:0.3.0"
+  dependencies:
+    cookie: "npm:^0.5.0"
+    ramda: "npm:^0.29.0"
+  peerDependencies:
+    "@supabase/supabase-js": ^2.33.1
+  checksum: 10c0/c2e1df6b98b3cbb57c663771ea26b9afe2cf9037fde33d142d7552b740dcafe3110b5be8d15fc0c6612b8803176606fbab867235d745ee47d63d038511768dc6
   languageName: node
   linkType: hard
 
@@ -27055,6 +27068,13 @@ __metadata:
   version: 0.29.0
   resolution: "ramda@npm:0.29.0"
   checksum: 10c0/b00eaaf1c62b06a99affa1d583e256bd65ad27ab9d0ef512f55d7d93b842e7cd244a4a09179f61fdd8548362e409323867a2b0477cbd0626b5644eb6ac7c53da
+  languageName: node
+  linkType: hard
+
+"ramda@npm:^0.29.0":
+  version: 0.29.1
+  resolution: "ramda@npm:0.29.1"
+  checksum: 10c0/5de53a07400959c1a704c366ec52b1b8cd9a444dc1f9cdf17d607e0b9eeaa38cbaea309d43e59dbd7f36731ba977a64d40092555c0e7c2d4a41e8e922239c0ba
   languageName: node
   linkType: hard
 

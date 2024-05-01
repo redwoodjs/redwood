@@ -51,7 +51,6 @@ function createMiddlewareAuth(
   })
 
   return createAuthentication(authImplementation, {
-    // @MARK This is key! 👇 Fetch currentUser from middleware instead of GQL
     ...customProviderHooks,
     useCurrentUser:
       customProviderHooks?.useCurrentUser ??
@@ -77,15 +76,16 @@ export function createAuth(
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
-// Used to set or expire the auth-provider cookie
-// If no expires is supplied, it will expire the cookie immediately
-const setAuthProviderCookie = (
-  expires: number | undefined = new Date(
-    '1970-01-01T00:00:00.000+00:00',
-  ).getTime(),
-) => {
+// Used to set the auth-provider cookie
+const setAuthProviderCookie = (expires: number) => {
   const expiresString = new Date(expires).toUTCString()
   document.cookie = `auth-provider=supabase; expires=${expiresString}; SameSite=Lax`
+}
+
+const expireAuthProviderCookie = () => {
+  const expiryTime = new Date('1970-01-01T00:00:00.000+00:00').getTime()
+
+  setAuthProviderCookie(expiryTime)
 }
 
 function createAuthImplementation({
@@ -187,12 +187,13 @@ function createAuthImplementation({
           }
       }
 
-      /// @MARK:
-      // 2 weeks, not using result.data.session?.expires_in - because this
-      // is the expiry for the access_token === 3600
-      const expiresIn = 12096e5
-      const expiresAtTimeString = new Date().getTime() + expiresIn
-      setAuthProviderCookie(expiresAtTimeString)
+      if (middleware) {
+        // 2 weeks, not using result.data.session?.expires_in - because this
+        // is the expiry for the access_token === 3600, and of not the session.
+        const expiresIn = 12096e5
+        const expiresAtTimeString = new Date().getTime() + expiresIn
+        setAuthProviderCookie(expiresAtTimeString)
+      }
 
       return result
     },
@@ -209,8 +210,9 @@ function createAuthImplementation({
         console.error(error)
       }
 
-      // Expire the auth provider-cookie
-      setAuthProviderCookie()
+      if (middleware) {
+        expireAuthProviderCookie()
+      }
 
       return
     },
@@ -284,7 +286,7 @@ function createAuthImplementation({
           setAuthProviderCookie(expiresAtTimeString)
         } else {
           //Remove auth-provider cookie
-          setAuthProviderCookie()
+          expireAuthProviderCookie()
         }
 
         // Modify URL state only if there is a session.
