@@ -121,12 +121,17 @@ export const getAuthenticationContext = async ({
     return undefined
   }
 
+  // The actual session parsing is done by the auth decoder
+
   let token: string | undefined
   let type: string | undefined
   let schema: string | undefined
 
-  // The actual session parsing is done by the auth decoder
-  if (cookieHeader) {
+  // If there is a cookie header and the auth type is set in the cookie, use that
+  // There can be cases, such as with Supabase where its auth client sets the cookie and Bearer token
+  // but the project is not using cookie auth with an auth-provider cookie set
+  // So, cookie/ssr auth needs both the token and the auth-provider in cookies
+  if (cookieHeader && cookieHeader.type) {
     token = cookieHeader.rawCookie
     type = cookieHeader.type
     schema = 'cookie'
