@@ -3,9 +3,7 @@
   "compilerOptions": {
     "strict": true,
     "rootDir": "src",
-    "outDir": "dist",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext"
+    "outDir": "dist"
   },
   "include": ["src"],
   "references": [{ "path": "../../../auth" }, { "path": "../../../vite" }]
