@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.1",
-    "@redwoodjs/vite": "workspace:*",
     "core-js": "3.36.1",
     "jsonwebtoken": "9.0.2"
   },

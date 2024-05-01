@@ -1,8 +1,10 @@
 import { AUTH_PROVIDER_HEADER } from '@redwoodjs/api'
 import { authDecoder } from '@redwoodjs/auth-supabase-api'
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
-import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
-import type { MiddlewareResponse } from '@redwoodjs/vite/middleware'
+import type {
+  MiddlewareRequest,
+  MiddlewareResponse,
+} from '@redwoodjs/vite/middleware'
 
 import { clearSupabaseCookies } from './util'
 
