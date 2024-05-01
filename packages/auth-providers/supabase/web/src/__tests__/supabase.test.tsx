@@ -280,6 +280,7 @@ fetchMock.mockImplementation(async (_url, options) => {
 
 beforeAll(() => {
   globalThis.fetch = fetchMock
+  globalThis.RWJS_ENV = {}
 })
 
 beforeEach(() => {
