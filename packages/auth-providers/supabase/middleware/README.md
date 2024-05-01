@@ -13,7 +13,6 @@ import App from './App'
 import  createSupabaseAuthMiddleware from '@redwoodjs/auth-supabase-middleware'
 import { Document } from './Document'
 
-// eslint-disable-next-line no-restricted-imports
 import { getCurrentUser } from '$api/src/lib/auth'
 
 interface Props {
