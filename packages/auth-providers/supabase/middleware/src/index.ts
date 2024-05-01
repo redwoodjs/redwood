@@ -6,7 +6,7 @@ import type {
   MiddlewareResponse,
 } from '@redwoodjs/vite/middleware'
 
-import { clearSupabaseCookies } from './util'
+import { clearAuthState } from './util'
 
 export interface SupabaseAuthMiddlewareOptions {
   getCurrentUser: GetCurrentUser
@@ -71,7 +71,7 @@ const createSupabaseAuthMiddleware = ({
       })
     } catch (e) {
       console.error(e, 'Error in Supabase Auth Middleware')
-      clearSupabaseCookies(req, res)
+      clearAuthState(req, res)
       return res
     }
 

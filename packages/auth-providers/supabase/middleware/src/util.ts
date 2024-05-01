@@ -54,8 +54,9 @@ export const createSupabaseServerClient = (
 
 /**
  * Clear the Supabase and auth cookies from the request and response
+ * and clear the auth context
  */
-export const clearSupabaseCookies = (
+export const clearAuthState = (
   req: MiddlewareRequest,
   res: MiddlewareResponse,
 ) => {
@@ -63,14 +64,14 @@ export const clearSupabaseCookies = (
   req.serverAuthContext.set(null)
 
   // clear supabase cookies
+  // We can't call .signOut() because that revokes all refresh tokens,
+  // and needs the session JWT, which may be invalid
   const { cookieName } = createSupabaseServerClient(req, res)
 
   if (cookieName) {
-    req.cookies.unset(cookieName)
     res.cookies.unset(cookieName)
   }
 
   // clear auth-provider cookies
-  req.cookies.unset(AUTH_PROVIDER_HEADER)
   res.cookies.unset(AUTH_PROVIDER_HEADER)
 }
