@@ -90,9 +90,12 @@ const setAuthProviderCookie = () => {
 }
 
 const expireAuthProviderCookie = () => {
-  const expiryTime = new Date('1970-01-01T00:00:00.000+00:00').getTime()
+  const authProviderCookieString = serialize('auth-provider', 'supabase', {
+    ...DEFAULT_SUPABASE_COOKIE_OPTIONS,
+    maxAge: -1,
+  })
 
-  setAuthProviderCookie(expiryTime)
+  document.cookie = authProviderCookieString
 }
 
 function createAuthImplementation({
@@ -195,11 +198,7 @@ function createAuthImplementation({
       }
 
       if (middleware) {
-        // 2 weeks, not using result.data.session?.expires_in - because this
-        // is the expiry for the access_token === 3600, and of not the session.
-        const expiresIn = 12096e5
-        const expiresAtTimeString = new Date().getTime() + expiresIn
-        setAuthProviderCookie(expiresAtTimeString)
+        setAuthProviderCookie()
       }
 
       return result
@@ -238,10 +237,6 @@ function createAuthImplementation({
       return await supabaseClient.auth.signUp(credentials)
     },
     getToken: async (): Promise<string | null> => {
-      if (middleware) {
-        return null
-      }
-
       const { data, error } = await supabaseClient.auth.getSession()
 
       if (error) {
@@ -255,10 +250,6 @@ function createAuthImplementation({
      * Gets the current user metadata if there is an existing session.
      */
     getUserMetadata: async () => {
-      if (middleware) {
-        // For now the URL is not configurable
-        return getCurrentUserFromMiddleware('/middleware/supabase')
-      }
       const { data, error } = await supabaseClient.auth.getSession()
 
       if (error) {
@@ -281,10 +272,12 @@ function createAuthImplementation({
       try {
         const { data } = await supabaseClient.auth.refreshSession()
 
-        if (data.session) {
-          setAuthProviderCookie()
-        } else {
-          expireAuthProviderCookie()
+        if (middleware) {
+          if (data.session) {
+            setAuthProviderCookie()
+          } else {
+            expireAuthProviderCookie()
+          }
         }
 
         // Modify URL state only if there is a session.
