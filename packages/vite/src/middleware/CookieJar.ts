@@ -40,7 +40,7 @@ export class CookieJar {
     return this.map.get(name)?.value
   }
 
-  public getDetails(name: string) {
+  public getWithOptions(name: string) {
     return this.map.get(name)
   }
 

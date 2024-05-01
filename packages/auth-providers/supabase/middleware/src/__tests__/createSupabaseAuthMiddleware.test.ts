@@ -262,9 +262,10 @@ describe('createSupabaseAuthMiddleware()', () => {
     const serverAuthContext = req.serverAuthContext.get()
     expect(serverAuthContext).toBeNull()
 
-    // the auth-provider cookie should be cleared
-    const authProviderCookie = req.cookies.get('auth-provider')
-    const authProviderCookieDetails = req.cookies.getDetails('auth-provider')
+    // the auth-provider cookie should be cleared from the response
+    const authProviderCookie = res.cookies.get('auth-provider')
+    const authProviderCookieDetails =
+      res.cookies.getWithOptions('auth-provider')
     expect(authProviderCookie).toEqual('')
     expect(authProviderCookieDetails).toHaveProperty('options')
     expect(authProviderCookieDetails?.options).toHaveProperty(
@@ -273,9 +274,8 @@ describe('createSupabaseAuthMiddleware()', () => {
     )
 
     // and the Supabase cookie should be cleared
-    // const supabaseCookie = req.cookies.getDetails('sb-example-auth-token')
-    const supabaseCookie = req.cookies.get('sb-example-auth-token')
-    const supabaseCookieDetails = req.cookies.getDetails(
+    const supabaseCookie = res.cookies.get('sb-example-auth-token')
+    const supabaseCookieDetails = res.cookies.getWithOptions(
       'sb-example-auth-token',
     )
     expect(supabaseCookie).toEqual('')
