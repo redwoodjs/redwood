@@ -2,7 +2,7 @@ import { AUTH_PROVIDER_HEADER } from '@redwoodjs/api'
 import { authDecoder } from '@redwoodjs/auth-supabase-api'
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
 import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
-import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
+import type { MiddlewareResponse } from '@redwoodjs/vite/middleware'
 
 import { clearSupabaseCookies } from './util'
 
@@ -34,11 +34,11 @@ const createSupabaseAuthMiddleware = ({
         return res
       }
 
-      // Supabase actually doesn't care about the token/cookieHeader
+      // Supabase decoder actually doesn't care about the token/cookieHeader
       // We just pass it in for consistency with other auth providers
       const decoded = await authDecoder(cookieHeader, type, {
         event: req as Request,
-      }) //
+      })
 
       const currentUser = await getCurrentUser(
         decoded,
@@ -47,11 +47,14 @@ const createSupabaseAuthMiddleware = ({
       )
 
       if (req.url.includes(`/middleware/supabase/currentUser`)) {
-        if (typeof currentUser === 'string') {
-          return new MiddlewareResponse(currentUser)
-        }
+        // Reuse the response object, so this middleware can be chained
+        res.body =
+          // Not sure how currentUser can be string.... but types say so
+          typeof currentUser === 'string'
+            ? currentUser
+            : JSON.stringify({ currentUser })
 
-        return new MiddlewareResponse(JSON.stringify({ currentUser }))
+        return res
       }
 
       const userMetadata =
