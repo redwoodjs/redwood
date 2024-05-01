@@ -25,16 +25,16 @@ afterEach(() => {
   delete process.env.SUPABASE_JWT_SECRET
 })
 
+const jwtMocks = vi.hoisted(() => {
+  return {
+    verify: vi.fn(),
+    decode: vi.fn(),
+  }
+})
+
 vi.mock('jsonwebtoken', () => {
   return {
-    default: {
-      verify: vi.fn(() => {
-        return {
-          sub: 'abc123',
-        }
-      }),
-      decode: vi.fn(),
-    },
+    default: jwtMocks,
   }
 })
 
@@ -100,9 +100,10 @@ describe('Supabase Decoder', () => {
     })
 
     test('returns verified data', async () => {
+      jwtMocks.verify.mockReturnValueOnce({ sub: 'sub-57595' })
       const decoded = await authDecoder('token', 'supabase', req)
 
-      expect(decoded?.sub).toEqual('abc123')
+      expect(decoded?.sub).toEqual('sub-57595')
     })
   })
 
@@ -148,19 +149,40 @@ describe('Supabase Decoder', () => {
           authDecoder('token', 'supabase', { event: cookieRequest }),
         ).rejects.toThrow(errorMessage)
       })
-      describe('with valid Session Cookie', async () => {
-        test('returns decoded access_token from Cookie', async () => {
-          const cookieRequest = new Request('http://localhost', {
-            headers: new Headers({
-              cookie: 'auth-provider=supabase;sb_access_token=foo',
-            }),
-          })
-          const decoded = await authDecoder('token', 'supabase', {
-            event: cookieRequest,
-          })
 
-          expect(decoded).toEqual({ sub: 'abc123' })
+      test('returns decoded access_token from Cookie', async () => {
+        const MOCK_VERIFY_RESULT = {
+          sub: 'abc123',
+          iat: 123,
+          exp: 456,
+        }
+        jwtMocks.verify.mockReturnValueOnce(MOCK_VERIFY_RESULT)
+        const cookieRequest = new Request('http://localhost', {
+          headers: new Headers({
+            cookie: 'auth-provider=supabase;sb_access_token=foo',
+          }),
         })
+        const decoded = await authDecoder('token', 'supabase', {
+          event: cookieRequest,
+        })
+
+        expect(decoded).toEqual(MOCK_VERIFY_RESULT)
+      })
+
+      test('throws if access_token verify fails', async () => {
+        jwtMocks.verify.mockImplementationOnce(() => {
+          throw new Error('Invalid token')
+        })
+
+        const cookieRequest = new Request('http://localhost', {
+          headers: new Headers({
+            cookie: 'auth-provider=supabase;sb_access_token=foo',
+          }),
+        })
+
+        await expect(
+          authDecoder('token', 'supabase', { event: cookieRequest }),
+        ).rejects.toThrow('Invalid token')
       })
     })
   })
