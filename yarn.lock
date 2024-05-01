@@ -7885,6 +7885,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.1"
     "@redwoodjs/api": "workspace:*"
+    "@supabase/ssr": "npm:0.3.0"
     "@types/aws-lambda": "npm:8.10.136"
     "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.36.1"
