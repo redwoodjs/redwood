@@ -247,7 +247,7 @@ function createAuthImplementation({
      */
     getUserMetadata: async () => {
       if (middleware) {
-        // @TODO should we make the url configurable?
+        // For now the URL is not configurable
         return getCurrentUserFromMiddleware('/middleware/supabase')
       }
       const { data, error } = await supabaseClient.auth.getSession()
@@ -270,7 +270,6 @@ function createAuthImplementation({
      */
     restoreAuthState: async () => {
       try {
-        console.log('In restore auth state!')
         const { data } = await supabaseClient.auth.refreshSession()
 
         /// @MARK:

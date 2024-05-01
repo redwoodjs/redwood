@@ -172,7 +172,6 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
       loggedInUser.user_metadata = credentials.options
     }
 
-    console.log('signUp', loggedInUser)
     return {
       data: {
         user: loggedInUser,
