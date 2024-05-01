@@ -7,6 +7,7 @@ import {
   middlewareDefaultAuthProviderState,
   // type ServerAuthState,
 } from '@redwoodjs/auth'
+import { authDecoder } from '@redwoodjs/auth-supabase-api'
 import {
   MiddlewareRequest,
   MiddlewareResponse,
@@ -91,6 +92,7 @@ describe('createSupabaseAuthMiddleware()', () => {
     const serverAuthContext = req.serverAuthContext.get()
     expect(serverAuthContext).toEqual(middlewareDefaultAuthProviderState)
   })
+
   it('passes through non-authenticated requests', async () => {
     const middleware = createSupabaseAuthMiddleware(options)
     const request = new Request('http://localhost:8911', {
@@ -148,7 +150,7 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(serverAuthContext).toEqual(middlewareDefaultAuthProviderState)
   })
 
-  it('currentUser path', async () => {
+  it('handles current user GETs', async () => {
     const middleware = createSupabaseAuthMiddleware(options)
     const request = new Request(
       'http://localhost:8911/middleware/supabase/currentUser',
@@ -221,6 +223,12 @@ describe('createSupabaseAuthMiddleware()', () => {
     const result = await middleware(req, res)
     expect(result).toBeDefined()
     expect(req).toBeDefined()
+
+    expect(authDecoder).toHaveBeenCalledWith(
+      'auth-provider=supabase;sb_access_token=dummy_access_token',
+      'supabase',
+      expect.anything(),
+    )
 
     const serverAuthContext = req.serverAuthContext.get()
     expect(serverAuthContext).toBeDefined()
