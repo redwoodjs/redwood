@@ -574,6 +574,8 @@ describe('Custom auth provider', () => {
       mockedTestAuthClient,
       'forgotPassword',
     )
+
+    // @ts-expect-error We're testing this
     mockedForgotPassword.mockImplementation((username: string) => {
       expect(username).toEqual('username')
     })
