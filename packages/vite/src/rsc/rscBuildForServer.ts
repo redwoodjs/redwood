@@ -108,13 +108,11 @@ export async function rscBuildForServer(
             return code
           },
           entryFileNames: (chunkInfo) => {
-            // TODO (RSC) Probably don't want 'entries'. And definitely don't want it hardcoded
             // Entries such as pages should be named like the other assets
             if (entryFilesKeys.includes(chunkInfo.name)) {
               return 'assets/[name]-[hash].mjs'
             }
             if (
-              chunkInfo.name === 'entries' ||
               chunkInfo.name === 'entry.server' ||
               chunkInfo.name === 'rsdw-server' ||
               customModules[chunkInfo.name]
