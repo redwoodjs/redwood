@@ -207,6 +207,9 @@ describe('Custom auth provider', () => {
     // Check that you're logged in!
     await waitFor(() => screen.getByText('Log Out'))
     expect(mockedTestAuthClient.getUserMetadata).toBeCalledTimes(1)
+    expect(mockedTestAuthClient.getToken).toHaveBeenCalled()
+    expect(mockedTestAuthClient.getToken()).toEqual('hunter2')
+
     expect(
       screen.getByText(
         'userMetadata: {"sub":"abcdefg|123456","username":"peterp"}',
