@@ -11,6 +11,10 @@ import type {
   SignInWithPasswordCredentials,
   SignUpWithPasswordCredentials,
   Session,
+  AuthOtpResponse,
+  AuthTokenResponse,
+  AuthSession,
+  AuthTokenResponsePassword,
 } from '@supabase/supabase-js'
 import { AuthError } from '@supabase/supabase-js'
 import { renderHook, act } from '@testing-library/react'
@@ -62,22 +66,29 @@ const oAuthUser: User = {
   created_at: new Date().toUTCString(),
 }
 
-let loggedInUser: User | undefined
+let loggedInUser: User
 
 const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
   signInWithPassword: async (
     credentials: SignInWithPasswordCredentials,
-  ): Promise<AuthResponse> => {
+  ): Promise<AuthTokenResponsePassword> => {
     const { email } = credentials as { email: string }
 
     loggedInUser = email === 'admin@example.com' ? adminUser : user
 
     loggedInUser.email = email
+    const session: AuthSession = {
+      access_token: `token ${credentials.token}`,
+      refresh_token: 'refresh_token_1234567890',
+      token_type: `Bearer ${credentials.provider}`,
+      expires_in: 999,
+      user: loggedInUser,
+    }
 
     return {
       data: {
         user: loggedInUser,
-        session: null,
+        session,
       },
       error: null,
     }
@@ -97,13 +108,13 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
   },
   signInWithOtp: async (
     credentials: SignInWithPasswordlessCredentials,
-  ): Promise<AuthResponse> => {
+  ): Promise<AuthOtpResponse> => {
     loggedInUser = user
     loggedInUser.email = credentials['email']
 
     return {
       data: {
-        user: loggedInUser,
+        user: null,
         session: null,
       },
       error: null,
@@ -112,24 +123,22 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
 
   signInWithIdToken: async (
     credentials: SignInWithIdTokenCredentials,
-  ): Promise<AuthResponse> => {
+  ): Promise<AuthTokenResponse> => {
     loggedInUser = user
 
-    const session = {
+    const session: AuthSession = {
       access_token: `token ${credentials.token}`,
       refresh_token: 'refresh_token_1234567890',
       token_type: `Bearer ${credentials.provider}`,
       expires_in: 999,
+      user: loggedInUser,
     }
     loggedInUser.app_metadata = session
 
     return {
       data: {
-        user: null,
-        session: {
-          user: loggedInUser,
-          ...session,
-        },
+        user: loggedInUser,
+        session,
       },
       error: null,
     }
@@ -153,6 +162,7 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
     }
   },
   signOut: async () => {
+    // @ts-expect-error Resetting the mocked loggedInUser here
     loggedInUser = undefined
 
     return { error: null }
@@ -284,6 +294,9 @@ beforeAll(() => {
 
 beforeEach(() => {
   fetchMock.mockClear()
+  // @ts-expect-error Resetting the mocked loggedInUser here
+  // Supabase won't accept null or undefined as a user, but we want to do this
+  // to make sure it actually DOES log in
   loggedInUser = undefined
 })
 
