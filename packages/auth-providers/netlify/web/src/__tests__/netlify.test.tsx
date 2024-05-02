@@ -9,6 +9,8 @@ import { createAuth } from '../netlify'
 type NetlifyIdentity = typeof NetlifyIdentityNS
 type User = NetlifyIdentityNS.User
 
+// return user?.token?.access_token || null
+
 const user: Partial<User> = {
   id: 'unique_user_id',
   user_metadata: {
@@ -18,6 +20,13 @@ const user: Partial<User> = {
   app_metadata: {
     provider: 'netlify',
     roles: ['user'],
+  },
+  token: {
+    access_token: 'mock_access_token',
+    refresh_token: 'mock_refresh_token',
+    expires_in: 3600,
+    token_type: 'Bearer',
+    expires_at: 1234567890,
   },
 }
 
@@ -30,6 +39,13 @@ const adminUser: Partial<User> = {
   app_metadata: {
     provider: 'netlify',
     roles: ['user', 'admin'],
+  },
+  token: {
+    access_token: 'mock_access_token',
+    refresh_token: 'mock_refresh_token',
+    expires_in: 3600,
+    token_type: 'Bearer',
+    expires_at: 1234567890,
   },
 }
 
