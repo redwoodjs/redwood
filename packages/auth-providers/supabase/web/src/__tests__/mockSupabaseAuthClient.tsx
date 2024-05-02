@@ -176,10 +176,18 @@ export const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> & {
       loggedInUser.user_metadata = credentials.options
     }
 
+    const session: AuthSession = {
+      access_token: `token ${credentials.token}`,
+      refresh_token: 'refresh_token_1234567890',
+      token_type: `Bearer ${credentials.provider}`,
+      expires_in: 999,
+      user: loggedInUser,
+    }
+
     return {
       data: {
         user: loggedInUser,
-        session: null,
+        session: session,
       },
       error: null,
     }

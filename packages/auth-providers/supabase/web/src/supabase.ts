@@ -234,7 +234,11 @@ function createAuthImplementation({
     signup: async (
       credentials: SignUpWithPasswordCredentials,
     ): Promise<AuthResponse> => {
-      return await supabaseClient.auth.signUp(credentials)
+      const result = await supabaseClient.auth.signUp(credentials)
+      if (result.data?.session) {
+        setAuthProviderCookie()
+      }
+      return result
     },
     getToken: async (): Promise<string | null> => {
       const { data, error } = await supabaseClient.auth.getSession()
