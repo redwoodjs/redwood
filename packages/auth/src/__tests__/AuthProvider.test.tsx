@@ -655,6 +655,7 @@ describe('Custom auth provider', () => {
     expect.assertions(1)
   })
 })
+
 function pretendWeLoggedIn() {
   mockedIsAuthenticatedStatus = true
   mockedTestAuthClient.getUserMetadata.mockImplementation(() => {
