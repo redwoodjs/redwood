@@ -16,7 +16,6 @@ import {
   generateTypeDefGraphQLWeb,
 } from '../generate/graphqlCodeGen'
 import { generateGraphQLSchema } from '../generate/graphqlSchema'
-
 const FIXTURE_PATH = path.resolve(
   __dirname,
   '../../../../__fixtures__/example-todo-main',
@@ -209,5 +208,21 @@ describe("Doesn't swallow legit errors", () => {
     expect((errors[0].error as Error).toString()).toMatch(/field.*done.*Todo/)
 
     delete process.env.RWJS_CWD
+  })
+})
+
+describe('disabling type-gen', () => {
+  test('generateTypeDefGraphQLWeb NOOPs if typegen.graphql does not include web', async () => {
+    const files = await generateTypeDefGraphQLWeb({
+      typegen: { graphql: ['api'] },
+    })
+    expect(files.typeDefFiles).toHaveLength(0)
+  })
+
+  test('generateTypeDefGraphQLApi NOOPs if typegen.graphql does not include api', async () => {
+    const files = await generateTypeDefGraphQLApi({
+      typegen: { graphql: ['api'] },
+    })
+    expect(files.typeDefFiles).toHaveLength(0)
   })
 })

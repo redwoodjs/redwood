@@ -119,6 +119,9 @@ export interface Config {
       enabled: boolean
     }
   }
+  typegen: {
+    graphql: Array<'web' | 'api'>
+  }
 }
 
 export interface CLIPlugin {
@@ -199,6 +202,9 @@ const DEFAULT_CONFIG: Config = {
     realtime: {
       enabled: false,
     },
+  },
+  typegen: {
+    graphql: ['web', 'api'],
   },
 }
 
