@@ -15,7 +15,7 @@ export interface CustomTestAuthClient {
   login: () => boolean
   logout: () => void
   signup: () => void
-  getToken: () => string
+  getToken: () => string | null
   getUserMetadata: () => User | null
   forgotPassword: (username: string) => void
   resetPassword: (password: string) => boolean
