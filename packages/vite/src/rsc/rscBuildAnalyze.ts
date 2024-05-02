@@ -66,13 +66,10 @@ export async function rscBuildAnalyze() {
       minify: false,
       manifest: 'rsc-build-manifest.json',
       write: false,
-      // TODO (RSC): In the future we want to generate the entries file
-      // automatically. Maybe by using `analyzeRoutes()`
-      // For the dev server we might need to generate these entries on the
-      // fly - so we will need something like a plugin or virtual module
-      // to generate these entries, rather than write to actual file.
-      // And so, we might as well use on-the-fly generation for regular
-      // builds too
+      // We generate the entries from the simple `getEntries` function that analyses
+      // the various pages plus the ServerEntry file. This may need revisited when we
+      // spend time on improving dev support or expand the scope of the components
+      // that are looked up via the entries mappings.
       ssr: true,
       rollupOptions: {
         onwarn: onWarn,
