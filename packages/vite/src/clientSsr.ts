@@ -36,6 +36,11 @@ async function getFunctionComponent<TProps>(
     return mod?.default
   }
 
+  // We remove any potential "__rwjs__" prefix as these only exist in the mapping
+  // not in the built files. E.g. "__rwjs__ServerEntry" -> "ServerEntry" as we don't
+  // export "__rwjs__ServerEntry" in the built file we simply export "ServerEntry"
+  rscId = rscId.replace(/^__rwjs__/, '')
+
   if (typeof mod?.[rscId] === 'function') {
     return mod?.[rscId]
   }
@@ -99,7 +104,7 @@ export function renderFromDist<TProps extends Record<string, any>>(
     let ServerEntry: React.FunctionComponent<TProps>
 
     try {
-      ServerEntry = await getFunctionComponent<TProps>('ServerEntry')
+      ServerEntry = await getFunctionComponent<TProps>('__rwjs__ServerEntry')
     } catch (error) {
       console.log('SsrComponent error', error)
       // For now we'll just swallow this error because not all projects will
