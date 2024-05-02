@@ -24,8 +24,9 @@ async function getEntries() {
 async function getFunctionComponent<TProps>(
   rscId: string,
 ): Promise<React.FunctionComponent<TProps>> {
-  const { getEntry } = (await getEntries()).default
-  const mod = await getEntry(rscId)
+  const { serverEntries } = await getEntries()
+  const entryPath = path.join(getPaths().web.distRsc, serverEntries[rscId])
+  const mod = await import(makeFilePath(entryPath))
 
   if (typeof mod === 'function') {
     return mod
@@ -108,6 +109,7 @@ export function renderFromDist<TProps extends Record<string, any>>(
       ServerEntry = () => createElement('div', {}, 'Loading')
     }
 
+    console.log('getEntries', getEntries())
     const clientEntries = (await getEntries()).clientEntries
 
     // TODO (RSC): Try removing the proxy here and see if it's really necessary.
