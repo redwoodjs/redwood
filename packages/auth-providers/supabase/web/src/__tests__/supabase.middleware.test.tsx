@@ -415,7 +415,7 @@ function checkAuthProviderCookieDeleted() {
   )
 
   // We don't care about the values, just that it's using
-  // 'auth-provider=supabase; Max-Age=31536000000; Path=/; SameSite=Lax',
+  // Max-Age=-1 to delete the cookie
   expect(cookieSetSpy).toHaveBeenCalledWith(
     expect.stringContaining('Max-Age=-1'),
   )
