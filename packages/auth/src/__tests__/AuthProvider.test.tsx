@@ -658,6 +658,7 @@ describe('Custom auth provider', () => {
 
 function pretendWeLoggedIn() {
   mockedIsAuthenticatedStatus = true
+  mockedTestAuthClient.getToken.mockReturnValue('hunter2')
   mockedTestAuthClient.getUserMetadata.mockImplementation(() => {
     return mockedIsAuthenticatedStatus
       ? {
@@ -666,5 +667,4 @@ function pretendWeLoggedIn() {
         }
       : null
   })
-  mockedTestAuthClient.getToken.mockReturnValue('hunter2')
 }
