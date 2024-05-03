@@ -59,7 +59,8 @@ export async function rscBuildEntriesMappings(
   console.log('clientEntries', clientEntries)
   await fs.appendFile(
     rwPaths.web.distRscEntries,
-    `// client component mapping (dist/rsc -> dist/client)\nexport const clientEntries = ${JSON.stringify(clientEntries, undefined, 2)};\n\n`,
+    '// client component mapping (dist/rsc -> dist/client)\n' +
+      `export const clientEntries = ${JSON.stringify(clientEntries, undefined, 2)};\n\n`,
   )
 
   // Server component names to RSC server asset mapping
@@ -78,6 +79,7 @@ export async function rscBuildEntriesMappings(
   console.log('serverEntries', serverEntries)
   await fs.appendFile(
     rwPaths.web.distRscEntries,
-    `// server component mapping (src -> dist/rsc)\nexport const serverEntries = ${JSON.stringify(serverEntries, undefined, 2)};\n\n`,
+    '// server component mapping (src -> dist/rsc)\n' +
+      `export const serverEntries = ${JSON.stringify(serverEntries, undefined, 2)};\n\n`,
   )
 }
