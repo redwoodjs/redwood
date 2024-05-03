@@ -1,20 +1,16 @@
 import type { ReactNode } from 'react'
 import React, { useMemo, memo } from 'react'
 
+import { analyzeRoutes } from './analyzeRoutes'
+import type { Wrappers } from './analyzeRoutes'
 import type { LocationContextType } from './location'
 import { namedRoutes } from './namedRoutes'
 import { normalizePage } from './page'
 import type { RouterContextProviderProps } from './router-context'
 import { ActiveRouteLoader } from './server-route-loader'
 import { SplashPage } from './splash-page'
-import {
-  analyzeRoutes,
-  matchPath,
-  parseSearch,
-  replaceParams,
-  validatePath,
-} from './util'
-import type { Wrappers, TrailingSlashesTypes } from './util'
+import { matchPath, parseSearch, replaceParams, validatePath } from './util'
+import type { TrailingSlashesTypes } from './util'
 
 export interface RouterProps
   extends Omit<RouterContextProviderProps, 'routes' | 'activeRouteName'> {

@@ -1,6 +1,6 @@
+import type { GeneratedRoutesMap } from './analyzeRoutes'
 import { useRouterState } from './router-context'
 import { useRouteName } from './useRouteName'
-import type { GeneratedRoutesMap } from './util'
 
 import type { AvailableRoutes } from '.'
 

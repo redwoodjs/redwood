@@ -2,6 +2,8 @@ import type { ReactNode } from 'react'
 import React, { useMemo, memo } from 'react'
 
 import { ActiveRouteLoader } from './active-route-loader'
+import { analyzeRoutes } from './analyzeRoutes'
+import type { Wrappers } from './analyzeRoutes'
 import { AuthenticatedRoute } from './AuthenticatedRoute'
 import { LocationProvider, useLocation } from './location'
 import { namedRoutes } from './namedRoutes'
@@ -12,14 +14,8 @@ import { Redirect } from './redirect'
 import type { RouterContextProviderProps } from './router-context'
 import { RouterContextProvider } from './router-context'
 import { SplashPage } from './splash-page'
-import {
-  analyzeRoutes,
-  matchPath,
-  parseSearch,
-  replaceParams,
-  validatePath,
-} from './util'
-import type { Wrappers, TrailingSlashesTypes } from './util'
+import { matchPath, parseSearch, replaceParams, validatePath } from './util'
+import type { TrailingSlashesTypes } from './util'
 
 export interface RouterProps
   extends Omit<RouterContextProviderProps, 'routes' | 'activeRouteName'> {

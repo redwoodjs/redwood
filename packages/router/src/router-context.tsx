@@ -3,7 +3,8 @@ import React, { createContext, useContext, useMemo } from 'react'
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import { useNoAuth } from '@redwoodjs/auth'
 
-import type { ParamType, analyzeRoutes } from './util'
+import type { analyzeRoutes } from './analyzeRoutes'
+import type { ParamType } from './util'
 
 type UseAuth = () => AuthContextInterface<
   unknown,
