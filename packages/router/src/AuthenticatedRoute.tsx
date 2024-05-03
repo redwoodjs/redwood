@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
 
+import type { GeneratedRoutesMap } from './analyzeRoutes'
 import { namedRoutes } from './namedRoutes'
 import { Redirect } from './redirect'
 import { useRouterState } from './router-context'
-import type { GeneratedRoutesMap } from './util'
 
 interface AuthenticatedRouteProps {
   children: React.ReactNode
