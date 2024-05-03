@@ -1,9 +1,9 @@
 import React, { isValidElement } from 'react'
 
+import { analyzeRoutes } from '../analyzeRoutes'
 import { Route } from '../Route'
 import { Router } from '../router'
 import { Private, PrivateSet, Set } from '../Set'
-import { analyzeRoutes } from '../util'
 
 const FakePage = () => <h1>Fake Page</h1>
 
