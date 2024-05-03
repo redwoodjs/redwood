@@ -1,6 +1,5 @@
 import type { MockInstance } from 'vitest'
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
-import { M } from 'vitest/dist/reporters-P7C2ytIv.js'
 
 import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
 
