@@ -21,26 +21,6 @@ export interface RouterProps
 }
 
 export const Router: React.FC<RouterProps> = ({
-  useAuth,
-  paramTypes,
-  pageLoadingDelay,
-  children,
-  location,
-}) => {
-  return (
-    // Level 1/3 (outer-most)
-    <LocationAwareRouter
-      useAuth={useAuth}
-      paramTypes={paramTypes}
-      pageLoadingDelay={pageLoadingDelay}
-      location={location}
-    >
-      {children}
-    </LocationAwareRouter>
-  )
-}
-
-const LocationAwareRouter: React.FC<RouterProps> = ({
   paramTypes,
   children,
   location,
@@ -135,7 +115,6 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     }
   }
 
-  // Level 2/3 (LocationAwareRouter)
   return (
     <>
       {!redirectPath && page && (
