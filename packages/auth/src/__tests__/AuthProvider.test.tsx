@@ -202,8 +202,9 @@ describe('Custom auth provider', () => {
     })
     fireEvent.click(screen.getByText('Log In'))
 
-    // Check that you're logged in!
-    await waitFor(() => screen.getByText('Log Out'))
+    // We wait for the token, because it's updated by the useEffect
+    // if we just wait for "Log Out" button, tests sometimes fail on windows
+    await waitFor(() => screen.getByText('authToken: hunter2'))
     expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
     expect(
       screen.getByText(
@@ -215,7 +216,7 @@ describe('Custom auth provider', () => {
         'currentUser: {"name":"Peter Pistorius","email":"nospam@example.net"}',
       ),
     ).toBeInTheDocument()
-    expect(screen.getByText('authToken: hunter2')).toBeInTheDocument()
+    expect(screen.getByText('Log Out')).toBeInTheDocument()
 
     // Log out
     fireEvent.click(screen.getByText('Log Out'))
