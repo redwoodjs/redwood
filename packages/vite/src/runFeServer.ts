@@ -162,7 +162,7 @@ export async function runFeServer() {
     getMiddlewareRouter: async () => middlewareRouter,
   })
 
-  // Wrap with whatg/server adapter. Express handler -> Fetch API handler
+  // Wrap with whatwg/server adapter. Express handler -> Fetch API handler
   app.get('*', createServerAdapter(routeHandler))
 
   // @MARK: put this after rw-rsc to avoid confusion.
