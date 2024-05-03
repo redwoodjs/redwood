@@ -204,9 +204,13 @@ describe('Custom auth provider', () => {
 
     fireEvent.click(screen.getByText('Log In'))
 
-    // Check that you're logged in!
-    await waitFor(() => screen.getByText('Log Out'))
+    // We wait for the token, because it's updated by the useEffect
+    // if we just wait for "Log Out" button, tests sometimes fail on windows
+    await waitFor(() => screen.getByText('authToken: hunter2'))
     expect(mockedTestAuthClient.getUserMetadata).toBeCalledTimes(1)
+    expect(mockedTestAuthClient.getToken).toHaveBeenCalled()
+    expect(mockedTestAuthClient.getToken()).toEqual('hunter2')
+
     expect(
       screen.getByText(
         'userMetadata: {"sub":"abcdefg|123456","username":"peterp"}',
@@ -217,7 +221,7 @@ describe('Custom auth provider', () => {
         'currentUser: {"name":"Peter Pistorius","email":"nospam@example.net"}',
       ),
     ).toBeInTheDocument()
-    expect(screen.getByText('authToken: hunter2')).toBeInTheDocument()
+    expect(screen.getByText('Log Out')).toBeInTheDocument()
 
     // Log out
     fireEvent.click(screen.getByText('Log Out'))
@@ -658,6 +662,7 @@ describe('Custom auth provider', () => {
 
 function pretendWeLoggedIn() {
   mockedIsAuthenticatedStatus = true
+  mockedTestAuthClient.getToken.mockReturnValue('hunter2')
   mockedTestAuthClient.getUserMetadata.mockImplementation(() => {
     return mockedIsAuthenticatedStatus
       ? {
@@ -666,5 +671,4 @@ function pretendWeLoggedIn() {
         }
       : null
   })
-  mockedTestAuthClient.getToken.mockReturnValue('hunter2')
 }
