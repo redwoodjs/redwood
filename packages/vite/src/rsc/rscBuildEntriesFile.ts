@@ -1,6 +1,11 @@
 import fs from 'fs/promises'
 
+import type { OutputChunk } from 'rollup'
+import { normalizePath } from 'vite'
+
 import { getPaths } from '@redwoodjs/project-config'
+
+import { getEntries } from '../lib/entries.js'
 
 import type { rscBuildClient } from './rscBuildClient.js'
 import type { rscBuildForServer } from './rscBuildForServer.js'
@@ -14,17 +19,18 @@ import type { rscBuildForServer } from './rscBuildForServer.js'
 // TODO(RSC_DC): This function should eventually be removed.
 // The dev server will need this implemented as a Vite plugin,
 // so worth waiting till implementation to swap out and just include the plugin for the prod build
-export function rscBuildClientEntriesMappings(
+export async function rscBuildEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
   serverBuildOutput: Awaited<ReturnType<typeof rscBuildForServer>>,
   clientEntryFiles: Record<string, string>,
 ) {
   console.log('\n')
-  console.log('5. rscBuildClientEntriesMapping')
-  console.log('===============================\n')
+  console.log('5. rscBuildEntriesMapping')
+  console.log('=========================\n')
 
   const rwPaths = getPaths()
 
+  // RSC client component to client dist asset mapping
   const clientEntries: Record<string, string> = {}
   for (const item of clientBuildOutput) {
     const { name, fileName } = item
@@ -53,9 +59,27 @@ export function rscBuildClientEntriesMappings(
   }
 
   console.log('clientEntries', clientEntries)
-
-  return fs.appendFile(
+  await fs.appendFile(
     rwPaths.web.distRscEntries,
-    `export const clientEntries=${JSON.stringify(clientEntries)};`,
+    `// client component mapping (dist/rsc -> dist/client)\nexport const clientEntries = ${JSON.stringify(clientEntries, undefined, 2)};\n\n`,
+  )
+
+  // Server component names to RSC server asset mapping
+  const entries = getEntries()
+  const serverEntries: Record<string, string> = {}
+  for (const [name, sourceFile] of Object.entries(entries)) {
+    const buildOutputItem = serverBuildOutput.find((item) => {
+      return (item as OutputChunk).facadeModuleId === normalizePath(sourceFile)
+    })
+
+    if (buildOutputItem) {
+      serverEntries[name] = buildOutputItem.fileName
+    }
+  }
+
+  console.log('serverEntries', serverEntries)
+  await fs.appendFile(
+    rwPaths.web.distRscEntries,
+    `// server component mapping (src -> dist/rsc)\nexport const serverEntries = ${JSON.stringify(serverEntries, undefined, 2)};\n\n`,
   )
 }
