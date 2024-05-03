@@ -61,10 +61,11 @@ function resolveClientEntryForProd(
   const absoluteClientEntries = Object.fromEntries(
     Object.entries(clientEntries).map(([key, val]) => {
       let fullKey = path.join(baseDir, key)
+
       if (process.platform === 'win32') {
         fullKey = fullKey.replaceAll('\\', '/')
       }
-      console.log('fullKey', fullKey, 'value', basePath + path.sep + val)
+
       return [fullKey, basePath + path.sep + val]
     }),
   )

@@ -94,8 +94,6 @@ export async function rscBuildAnalyze() {
     }),
   )
 
-  console.log('clientEntryFileSet', Array.from(clientEntryFileSet))
-  console.log('serverEntryFileSet', Array.from(serverEntryFileSet))
   console.log('clientEntryFiles', clientEntryFiles)
   console.log('serverEntryFiles', serverEntryFiles)
 
