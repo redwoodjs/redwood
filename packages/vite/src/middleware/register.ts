@@ -63,7 +63,7 @@ export const chain = (mwList: Middleware[]) => {
   return async (
     req: MiddlewareRequest,
     res: MiddlewareResponse = MiddlewareResponse.next(),
-    options?: MiddlewareInvokeOptions,
+    options: MiddlewareInvokeOptions,
   ) => {
     let response = res
     for (const mw of mwList) {

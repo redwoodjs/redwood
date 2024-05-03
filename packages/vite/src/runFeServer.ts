@@ -107,7 +107,11 @@ export async function runFeServer() {
         return new Response('No middleware found', { status: 404 })
       }
 
-      const [mwRes] = await invoke(req, middleware, route ? { route } : {})
+      const [mwRes] = await invoke({
+        req,
+        middleware,
+        options: route ? { route } : {},
+      })
 
       return mwRes.toResponse()
     })

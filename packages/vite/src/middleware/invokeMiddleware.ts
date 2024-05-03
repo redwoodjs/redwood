@@ -15,11 +15,15 @@ import type { Middleware, MiddlewareInvokeOptions } from './types.js'
  * Returns Tuple<MiddlewareResponse, ServerAuthState>
  *
  */
-export const invoke = async (
-  req: Request,
-  middleware?: Middleware,
-  options?: MiddlewareInvokeOptions,
-): Promise<[MiddlewareResponse, ServerAuthState]> => {
+export const invoke = async ({
+  req,
+  middleware,
+  options,
+}: {
+  req: Request
+  options: MiddlewareInvokeOptions
+  middleware?: Middleware
+}): Promise<[MiddlewareResponse, ServerAuthState]> => {
   if (typeof middleware !== 'function') {
     return [MiddlewareResponse.next(), middlewareDefaultAuthProviderState]
   }
