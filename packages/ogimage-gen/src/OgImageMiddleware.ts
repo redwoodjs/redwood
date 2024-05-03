@@ -11,6 +11,7 @@ import type { RWRouteManifestItem } from '@redwoodjs/internal'
 import { getPaths } from '@redwoodjs/project-config'
 import { LocationProvider, matchPath } from '@redwoodjs/router'
 import type {
+  MiddlewareClass,
   MiddlewareInvokeOptions,
   MiddlewareRequest,
   MiddlewareResponse,
@@ -39,7 +40,7 @@ interface ComponentElementProps {
   debug: boolean
 }
 
-export default class OgImageMiddleware {
+export default class OgImageMiddleware implements MiddlewareClass {
   options: MwOptions
   App: React.FC
   Document: React.FC<{ css: string[]; meta: string[] }>
