@@ -26,7 +26,7 @@ export async function rscBuildEntriesMappings(
 ) {
   console.log('\n')
   console.log('5. rscBuildEntriesMapping')
-  console.log('===============================\n')
+  console.log('=========================\n')
 
   const rwPaths = getPaths()
 
@@ -71,6 +71,7 @@ export async function rscBuildEntriesMappings(
     const buildOutputItem = serverBuildOutput.find((item) => {
       return (item as OutputChunk).facadeModuleId === normalizePath(sourceFile)
     })
+
     if (buildOutputItem) {
       serverEntries[name] = buildOutputItem.fileName
     }

@@ -67,7 +67,7 @@ export async function rscBuildAnalyze() {
       manifest: 'rsc-build-manifest.json',
       write: false,
       // We generate the entries from the simple `getEntries` function that analyses
-      // the various pages plus the ServerEntry file. This may need revisited when we
+      // the various pages plus the ServerEntry file. This may need revisiting when we
       // spend time on improving dev support or expand the scope of the components
       // that are looked up via the entries mappings.
       ssr: true,
