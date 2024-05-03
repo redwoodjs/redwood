@@ -1,5 +1,6 @@
 import type { MockInstance } from 'vitest'
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
+import { M } from 'vitest/dist/reporters-P7C2ytIv.js'
 
 import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
 
@@ -9,7 +10,11 @@ import { MiddlewareResponse } from './MiddlewareResponse'
 
 describe('Invoke middleware', () => {
   test('returns a MiddlewareResponse, even if no middleware defined', async () => {
-    const [mwRes, authState] = await invoke(new Request('https://example.com'))
+    const [mwRes, authState] = await invoke({
+      req: new Request('https://example.com'),
+      middleware: undefined,
+      options: {},
+    })
     expect(mwRes).toBeInstanceOf(MiddlewareResponse)
     expect(authState).toEqual(middlewareDefaultAuthProviderState)
   })
@@ -22,10 +27,11 @@ describe('Invoke middleware', () => {
       })
     }
 
-    const [mwRes, authState] = await invoke(
-      new Request('https://example.com'),
-      fakeMiddleware,
-    )
+    const [mwRes, authState] = await invoke({
+      req: new Request('https://example.com'),
+      middleware: fakeMiddleware,
+      options: {},
+    })
 
     expect(mwRes).toBeInstanceOf(MiddlewareResponse)
     expect(authState).toEqual({
@@ -49,10 +55,11 @@ describe('Invoke middleware', () => {
         throw new Error('I want to break free')
       }
 
-      const [mwRes, authState] = await invoke(
-        new Request('https://example.com'),
-        throwingMiddleware,
-      )
+      const [mwRes, authState] = await invoke({
+        req: new Request('https://example.com'),
+        middleware: throwingMiddleware,
+        options: {},
+      })
 
       expect(mwRes).toBeInstanceOf(MiddlewareResponse)
       expect(authState).toEqual(middlewareDefaultAuthProviderState)
