@@ -115,7 +115,7 @@ export function renderFromDist<TProps extends Record<string, any>>(
       ServerEntry = () => createElement('div', {}, 'Loading')
     }
 
-    console.log('clientSsr.ts getEntries()', getEntries())
+    console.log('clientSsr.ts getEntries()', await getEntries())
     const clientEntries = (await getEntries()).clientEntries
 
     // TODO (RSC): Try removing the proxy here and see if it's really necessary.
