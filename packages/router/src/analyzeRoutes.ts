@@ -40,7 +40,7 @@ type RoutePath = string
  * but it allows for page and redirect to be null or undefined
  * Keeping the shape consistent makes it easier to use
  */
-interface AnalyzedRoute {
+export interface AnalyzedRoute {
   path: RoutePath
   name: string | null
   whileLoadingPage?: WhileLoadingPage
@@ -170,7 +170,8 @@ export function analyzeRoutes(
             sets: previousSets,
           }
 
-          // e.g. namedRoutesMap.homePage = () => '/home'
+          // Example: namedRoutesMap.home = () => '/home'
+          // Example: namedRoutesMap.userExample = (args) => `/user-examples/${args.id}`
           namedRoutesMap[name] = (args = {}) => replaceParams(path, args)
         }
       }

@@ -65,6 +65,7 @@ export async function rscBuildEntriesMappings(
 
   // Server component names to RSC server asset mapping
   const entries = getEntries()
+  console.log('rscBuildEntriesMappings entries before remapping', entries)
   const serverEntries: Record<string, string> = {}
   for (const [name, sourceFile] of Object.entries(entries)) {
     const buildOutputItem = serverBuildOutput.find((item) => {

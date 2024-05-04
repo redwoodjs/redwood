@@ -1,82 +1,94 @@
 import type { ReactNode } from 'react'
-import React, { useMemo, memo } from 'react'
+import React, { memo } from 'react'
 
-import { analyzeRoutes } from './analyzeRoutes'
+import { ActiveRouteLoader } from './active-route-loader'
+import type {
+  AnalyzedRoute,
+  analyzeRoutes,
+  GeneratedRoutesMap,
+} from './analyzeRoutes'
 import type { Wrappers } from './analyzeRoutes'
-import type { LocationContextType } from './location'
+import { AuthenticatedRoute } from './AuthenticatedRoute'
+import { LocationProvider, useLocation } from './location'
 import { namedRoutes } from './namedRoutes'
 import { normalizePage } from './page'
+import { PageLoadingContextProvider } from './PageLoadingContext'
+import { ParamsProvider } from './params'
+import { Redirect } from './redirect'
 import type { RouterContextProviderProps } from './router-context'
-import { ActiveRouteLoader } from './server-route-loader'
+import { RouterContextProvider } from './router-context'
 import { SplashPage } from './splash-page'
 import { matchPath, parseSearch, replaceParams, validatePath } from './util'
 import type { TrailingSlashesTypes } from './util'
 
+type AnalyzedRouteWithName = AnalyzedRoute & { name: string }
+
 export interface RouterProps
-  extends Omit<RouterContextProviderProps, 'routes' | 'activeRouteName'> {
+  extends Omit<
+    RouterContextProviderProps,
+    'routes' | 'activeRouteName' | 'children'
+  > {
   trailingSlashes?: TrailingSlashesTypes
   pageLoadingDelay?: number
-  children: ReactNode
-  location: LocationContextType
+  analyzedRoutes: Omit<
+    ReturnType<typeof analyzeRoutes>,
+    'activeRoutePath' | 'namedRoutesMap'
+  >
 }
 
-export const Router: React.FC<RouterProps> = ({
+export const VirtualClientRouter: React.FC<RouterProps> = ({
+  useAuth,
   paramTypes,
-  children,
-  location,
+  pageLoadingDelay,
+  trailingSlashes = 'never',
+  analyzedRoutes,
 }) => {
-  const analyzeRoutesResult = useMemo(() => {
-    const analyzedRoutes = analyzeRoutes(children, {
-      currentPathName: location.pathname,
-      // @TODO We haven't handled this with SSR/Streaming yet.
-      // May need a babel plugin to extract userParamTypes from Routes.tsx
-      userParamTypes: paramTypes,
-    })
+  console.log('client-router.tsx Level 1/3 (outer-most)')
+  return (
+    // Level 1/3 (outer-most)
+    // Wrap it in the provider so that useLocation can be used
+    <LocationProvider trailingSlashes={trailingSlashes}>
+      <LocationAwareRouter
+        useAuth={useAuth}
+        paramTypes={paramTypes}
+        pageLoadingDelay={pageLoadingDelay}
+        analyzedRoutes={analyzedRoutes}
+      ></LocationAwareRouter>
+    </LocationProvider>
+  )
+}
 
-    return analyzedRoutes
-  }, [location.pathname, children, paramTypes])
+const LocationAwareRouter: React.FC<RouterProps> = ({
+  useAuth,
+  paramTypes,
+  pageLoadingDelay,
+  analyzedRoutes,
+}) => {
+  const location = useLocation()
+  console.log('client-router.tsx location.href', location.href)
 
-  const {
-    pathRouteMap,
-    hasHomeRoute,
-    namedRoutesMap,
-    NotFoundPage,
-    activeRoutePath,
-  } = analyzeRoutesResult
+  const { pathRouteMap, hasHomeRoute, NotFoundPage } = analyzedRoutes
 
-  console.log('analyzeRoutesResult')
-  console.log('-------------------')
-  console.log('namedRoutesMap', namedRoutesMap)
-  console.log('namedRoutesMap.home', namedRoutesMap['home']())
-  console.log('namedRoutesMap.userExample', namedRoutesMap['userExample']({ id: 0 }))
-
-  const serializedPathRouteMap = Object.keys(pathRouteMap).reduce<
-    Record<string, any>
-  >((prev, curr) => {
-    const route = pathRouteMap[curr]
-
-    prev[curr] = {
-      ...route,
-      page: route.page?.name,
-      sets: route.sets.map((set) => {
-        return { ...set, wrappers: set.wrappers.map((w) => w.name) }
+  const namedRoutesMap: GeneratedRoutesMap = Object.fromEntries(
+    Object.values(analyzedRoutes.pathRouteMap)
+      .filter((route): route is AnalyzedRouteWithName => !!route.name)
+      .map((route) => {
+        return [route.name, (args = {}) => replaceParams(route.path, args)]
       }),
-    }
-    return prev
-  }, {})
+  )
 
-  const serializedRoutes = {
-    pathRouteMap: serializedPathRouteMap,
-    // TODO: Implement namedRoutesMap serialization
-    // namedRoutesMap,
-    hasHomeRoute,
-    NotFoundPage: NotFoundPage ? NotFoundPage.name : undefined,
-    activeRoutePath,
-  }
+  console.log('pathRouteMap', pathRouteMap)
+  console.log('location.pathname', location.pathname)
+  console.log('namedRoutesMap', namedRoutesMap)
 
-  console.log(JSON.stringify(serializedRoutes, null, 2))
-
-  console.log('-------------------')
+  // TODO (RSC): Loop through all routes in pathRouteMap and find the one that
+  // matches location.pathname. Just have to make sure we loop through them in
+  // the correct order. Has to match the order they're defined in the user's
+  // Routes file so that the first match is the one that gets rendered.
+  // FOR NOW: Just grab the one that matches location.pathname. This won't work
+  // for param routes.
+  const activeRoutePath = pathRouteMap[location.pathname].path
+  console.log('activeRoutePath', activeRoutePath)
 
   // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
   // Note that the value changes at runtime
@@ -102,10 +114,20 @@ export const Router: React.FC<RouterProps> = ({
   if (!activeRoutePath) {
     if (NotFoundPage) {
       return (
-        <ActiveRouteLoader
-          spec={normalizePage(NotFoundPage)}
-          path={location.pathname}
-        />
+        <RouterContextProvider
+          useAuth={useAuth}
+          paramTypes={paramTypes}
+          routes={{ ...analyzedRoutes, activeRoutePath, namedRoutesMap }}
+        >
+          <ParamsProvider>
+            <PageLoadingContextProvider delay={pageLoadingDelay}>
+              <ActiveRouteLoader
+                spec={normalizePage(NotFoundPage)}
+                path={location.pathname}
+              />
+            </PageLoadingContextProvider>
+          </ParamsProvider>
+        </RouterContextProvider>
       )
     }
 
@@ -149,42 +171,39 @@ export const Router: React.FC<RouterProps> = ({
     }
   }
 
+  console.log('client-router.tsx Level 2/3 (LocationAwareRouter)')
+  console.log('redirectPath', redirectPath)
+  console.log('page', page)
+  // Level 2/3 (LocationAwareRouter)
   return (
-    <>
-      {!redirectPath && page && (
-        <WrappedPage
-          sets={sets}
-          routeLoaderElement={
-            <ActiveRouteLoader
-              path={path}
-              spec={normalizePage(page)}
-              params={allParams}
-              whileLoadingPage={whileLoadingPage}
-            />
-          }
-        />
-      )}
-    </>
+    <RouterContextProvider
+      useAuth={useAuth}
+      paramTypes={paramTypes}
+      routes={{ ...analyzedRoutes, activeRoutePath, namedRoutesMap }}
+      activeRouteName={name}
+    >
+      <ParamsProvider allParams={allParams}>
+        <PageLoadingContextProvider delay={pageLoadingDelay}>
+          {redirectPath && <Redirect to={redirectPath} />}
+          {!redirectPath && page && (
+            <WrappedPage sets={sets}>
+              {/* Level 3/3 is inside ActiveRouteLoader */}
+              <ActiveRouteLoader
+                path={path}
+                spec={normalizePage(page as any)}
+                params={allParams}
+                whileLoadingPage={whileLoadingPage as any}
+              />
+            </WrappedPage>
+          )}
+        </PageLoadingContextProvider>
+      </ParamsProvider>
+    </RouterContextProvider>
   )
 }
 
-// Dummy component for server-router. We don't support Auth in server-router
-// yet, so we just render the children for now
-interface AuthenticatedRouteProps {
-  children: React.ReactNode
-  roles?: string | string[]
-  unauthenticated: string
-  whileLoadingAuth?: () => React.ReactElement | null
-}
-
-const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
-  children,
-}) => {
-  return <>{children}</>
-}
-
 interface WrappedPageProps {
-  routeLoaderElement: ReactNode
+  children: ReactNode
   sets: Array<{
     id: string
     wrappers: Wrappers
@@ -206,12 +225,18 @@ interface WrappedPageProps {
  * This is so that we can have all the information up front in the routes-manifest
  * for SSR, but also so that we only do one loop of all the Routes.
  */
-const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
+const WrappedPage = memo(({ sets, children }: WrappedPageProps) => {
   // @NOTE: don't mutate the wrappers array, it causes full page re-renders
   // Instead just create a new array with the AuthenticatedRoute wrapper
 
+  console.log('client-router.tsx WrappedPage sets', sets)
+
+  // if (Math.random() < 5) {
+  //   return <>{children}</>
+  // }
+
   if (!sets || sets.length === 0) {
-    return routeLoaderElement
+    return children
   }
 
   return sets.reduceRight<ReactNode | undefined>((acc, set) => {
@@ -233,6 +258,8 @@ const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
       )
     }, acc)
 
+    console.log('client-router.tsx WrappedPage wrapped', wrapped)
+
     // If set is private, wrap it in AuthenticatedRoute
     if (set.isPrivate) {
       const unauthenticated = set.props.unauthenticated
@@ -252,5 +279,5 @@ const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
     }
 
     return wrapped
-  }, routeLoaderElement)
+  }, children)
 })

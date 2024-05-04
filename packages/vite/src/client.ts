@@ -23,6 +23,8 @@ const BASE_PATH = '/rw-rsc/'
 export function renderFromRscServer<TProps>(rscId: string) {
   console.log('serve rscId (renderFromRscServer)', rscId)
 
+  console.log('window', typeof window)
+
   // TODO (RSC): Remove this when we have a babel plugin to call another
   // function during SSR
   if (typeof window === 'undefined') {
@@ -153,6 +155,7 @@ export function renderFromRscServer<TProps>(rscId: string) {
     // if this is the right way to do things
   }
 
+  console.log('return ServerComponent', ServerComponent)
   return ServerComponent
 }
 

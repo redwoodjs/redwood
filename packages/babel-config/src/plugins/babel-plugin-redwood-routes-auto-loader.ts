@@ -43,6 +43,12 @@ export default function (
   // @NOTE: This var gets mutated inside the visitors
   let pages = processPagesDir().map(withRelativeImports)
 
+  console.log('•••••••••••••••••••••••••••••••••••••••••••••••••••')
+  console.log('•••••••••••••••••••••••••••••••••••••••••••••••••••')
+  console.log('•••••      babel plugin routes auto loader     ••••')
+  console.log('•••••••••••••••••••••••••••••••••••••••••••••••••••')
+  console.log('•••••••••••••••••••••••••••••••••••••••••••••••••••')
+
   // Currently processPagesDir() can return duplicate entries when there are multiple files
   // ending in Page in the individual page directories. This will cause an error upstream.
   // Here we check for duplicates and throw a more helpful error message.
