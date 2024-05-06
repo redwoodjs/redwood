@@ -14,6 +14,7 @@ export async function handler({ force }: { force: boolean }) {
   const rootPkgJson = fs.readJSONSync(path.join(rwPaths.base, 'package.json'))
   const currentProjectVersion = rootPkgJson.devDependencies['@redwoodjs/core']
 
+  const notes: string[] = ['']
   const tasks = new Listr(
     [
       {
@@ -93,12 +94,30 @@ export async function handler({ force }: { force: boolean }) {
           }
         },
       },
+      {
+        title: 'One more thing...',
+        task: () => {
+          // Note: We avoid logging in the task because it can mess up the formatting of the text and we are often looking to maintain some basic indentation and such.
+          notes.push(
+            "og:image generation is almost ready to go! You'll need to add playwright as a dependency to the api side and then install the headless browser packages:",
+          )
+          notes.push('')
+          notes.push('  yarn workspace api add playwright')
+          notes.push('  cd api')
+          notes.push('  yarn playwright install')
+          notes.push('')
+          notes.push(
+            'Depending on how your host is configured you may need to install additional dependencies first. If so, the `playwright install` step will error out and give you the command to run to install those deps.',
+          )
+        },
+      },
     ],
     { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {
     await tasks.run()
+    console.log(notes.join('\n'))
   } catch (e: any) {
     console.error(e.message)
     process.exit(e?.exitCode || 1)
