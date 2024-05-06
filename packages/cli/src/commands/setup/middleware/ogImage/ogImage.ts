@@ -3,6 +3,7 @@ import type { Argv } from 'yargs'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 export const command = 'og-image'
+export const aliases = ['ogImage']
 export const description = 'Set up OG Image generation middleware'
 
 export function builder(yargs: Argv) {
