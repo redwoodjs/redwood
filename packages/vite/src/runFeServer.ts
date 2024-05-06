@@ -77,12 +77,6 @@ export async function runFeServer() {
     await import(clientBuildManifestUrl, { with: { type: 'json' } })
   ).default
 
-  if (rwConfig.experimental?.rsc?.enabled) {
-    console.log('='.repeat(80))
-    console.log('buildManifest', clientBuildManifest)
-    console.log('='.repeat(80))
-  }
-
   // @MARK: Surely there's a better way than this!
   const clientEntry = Object.values(clientBuildManifest).find(
     (manifestItem) => {
@@ -162,7 +156,7 @@ export async function runFeServer() {
     getMiddlewareRouter: async () => middlewareRouter,
   })
 
-  // Wrap with whatg/server adapter. Express handler -> Fetch API handler
+  // Wrap with whatwg/server adapter. Express handler -> Fetch API handler
   app.get('*', createServerAdapter(routeHandler))
 
   // @MARK: put this after rw-rsc to avoid confusion.

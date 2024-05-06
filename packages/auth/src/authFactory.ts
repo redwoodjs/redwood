@@ -4,6 +4,13 @@ import type { AuthImplementation } from './AuthImplementation.js'
 import { createAuthProvider } from './AuthProvider/AuthProvider.js'
 import { createUseAuth } from './useAuth.js'
 
+export type CustomProviderHooks = {
+  useCurrentUser?: () => Promise<CurrentUser>
+  useHasRole?: (
+    currentUser: CurrentUser | null,
+  ) => (rolesToCheck: string | string[]) => boolean
+}
+
 export function createAuthentication<
   TUser,
   TRestoreAuth,

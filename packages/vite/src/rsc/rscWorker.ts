@@ -17,7 +17,7 @@ import { createServer, resolveConfig } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { defineEntries, GetEntry } from '../entries.js'
+import { getEntries, getEntriesFromDist } from '../lib/entries.js'
 import { registerFwGlobalsAndShims } from '../lib/registerFwGlobalsAndShims.js'
 import { StatusError } from '../lib/StatusError.js'
 import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
@@ -38,7 +38,6 @@ const { renderToPipeableStream } = RSDWServer
 
 let absoluteClientEntries: Record<string, string> = {}
 
-type Entries = { default: ReturnType<typeof defineEntries> }
 type PipeableStream = { pipe<T extends Writable>(destination: T): T }
 
 const handleSetClientEntries = async ({
@@ -198,37 +197,22 @@ type ConfigType = Omit<ResolvedConfig, 'root'> & { root: string }
 const configPromise: Promise<ConfigType> = resolveConfig({}, 'serve')
 
 const getFunctionComponent = async (rscId: string) => {
-  let entriesFilePath: string | null
-
   // TODO (RSC): Get rid of this when we only use the worker in dev mode
   const isDev = Object.keys(absoluteClientEntries).length === 0
 
+  let entryModule: string | undefined
   if (isDev) {
-    entriesFilePath = getPaths().web.entries
+    entryModule = getEntries()[rscId]
   } else {
-    entriesFilePath = getPaths().web.distRscEntries
+    const serverEntries = await getEntriesFromDist()
+    entryModule = path.join(getPaths().web.distRsc, serverEntries[rscId])
   }
 
-  if (!entriesFilePath) {
-    throw new Error('entries file not found at: ' + entriesFilePath)
+  if (!entryModule) {
+    throw new StatusError('No entry found for ' + rscId, 404)
   }
 
-  let getEntry: GetEntry
-
-  if (isDev) {
-    const vite = await vitePromise
-    const { default: entriesFileModule } =
-      await vite.ssrLoadModule(entriesFilePath)
-    getEntry = entriesFileModule.getEntry
-  } else {
-    const {
-      default: { getEntry: getEntryProd },
-    } = await (loadServerFile(entriesFilePath) as Promise<Entries>)
-
-    getEntry = getEntryProd
-  }
-
-  const mod = await getEntry(rscId)
+  const mod = await loadServerFile(entryModule)
 
   if (typeof mod === 'function') {
     return mod
@@ -306,10 +290,11 @@ async function setClientEntries(): Promise<void> {
   absoluteClientEntries = Object.fromEntries(
     Object.entries(clientEntries).map(([key, val]) => {
       let fullKey = path.join(baseDir, key)
+
       if (process.platform === 'win32') {
         fullKey = fullKey.replaceAll('\\', '/')
       }
-      console.log('fullKey', fullKey, 'value', config.base + val)
+
       return [fullKey, config.base + val]
     }),
   )

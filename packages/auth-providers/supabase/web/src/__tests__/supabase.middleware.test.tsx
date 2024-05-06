@@ -1,3 +1,4 @@
+import { DEFAULT_COOKIE_OPTIONS as DEFAULT_SUPABASE_COOKIE_OPTIONS } from '@supabase/ssr'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
 import { renderHook, act } from '@testing-library/react'
 import { vi, it, describe, beforeAll, beforeEach, expect } from 'vitest'
@@ -17,40 +18,39 @@ const supabaseMockClient = {
 }
 
 const fetchMock = vi.fn()
-fetchMock.mockImplementation(async (_url, options) => {
-  const body = options?.body ? JSON.parse(options.body) : {}
-
-  if (
-    body.query ===
-    'query __REDWOOD__AUTH_GET_CURRENT_USER { redwood { currentUser } }'
-  ) {
+fetchMock.mockImplementation(async (url) => {
+  if (url.includes('/middleware/supabase/currentUser')) {
     return {
       ok: true,
       text: () => '',
+      // Notice the nesting here is different from graphQL
       json: () => ({
-        data: {
-          redwood: {
-            currentUser: {
-              ...loggedInUser,
-              roles: loggedInUser?.app_metadata?.roles,
-            },
-          },
+        currentUser: {
+          ...loggedInUser,
+          roles: loggedInUser?.app_metadata?.roles,
         },
       }),
     }
   }
 
-  return { ok: true, text: () => '', json: () => ({}) }
+  throw new Error(`Unhandled fetch: ${url}`)
 })
 
 beforeAll(() => {
   globalThis.fetch = fetchMock
-  globalThis.RWJS_ENV = {}
+  // The client will automatically use middleware mode now!
+  globalThis.RWJS_ENV = {
+    RWJS_EXP_STREAMING_SSR: true,
+  }
 })
+
+const cookieSetSpy = vi.spyOn(document, 'cookie', 'set')
 
 beforeEach(() => {
   fetchMock.mockClear()
   mockSupabaseAuthClient.__testOnly__setMockUser(null)
+  cookieSetSpy.mockClear()
+  document.cookie = ''
 })
 
 function getSupabaseAuth(customProviderHooks?: {
@@ -70,8 +70,11 @@ function getSupabaseAuth(customProviderHooks?: {
 
   return result
 }
-
-describe('Supabase Authentication', () => {
+/**
+ * These tests build on top of supabase.test.tsx
+ * and mainly check the extra functionality that gets used in middleware mode.
+ */
+describe('Supabase Authentication: Middleware edition', () => {
   it('is not authenticated before logging in', async () => {
     const authRef = getSupabaseAuth()
 
@@ -79,6 +82,14 @@ describe('Supabase Authentication', () => {
       expect(authRef.current.isAuthenticated).toBeFalsy()
     })
   })
+  // getCurrentUser fetches from middleware
+  // Authprovider cookie set in signup
+  // Authprovider cookie set in login - in all 5 cases
+  // Authprovider cookie expired in logout
+  // Authprovider cookie set OR expired in restoreAuthState
+  // Check that useMiddlewareAuth is true somewhere
+  // Set authprovider cookie uses the supabase default cookie options
+  // Expiring the cookie sets maxage
 
   describe('Password Authentication', () => {
     describe('Sign up', () => {
@@ -95,6 +106,11 @@ describe('Supabase Authentication', () => {
         const currentUser = authRef.current.currentUser
 
         expect(authRef.current.isAuthenticated).toBeTruthy()
+
+        mwCurrentUserToHaveBeenCalled()
+
+        // Sets the auth-provider cookie
+        expect(document.cookie).toEqual('auth-provider=supabase')
         expect(currentUser?.email).toEqual('jane.doe@example.com')
       })
 
@@ -121,25 +137,9 @@ describe('Supabase Authentication', () => {
         expect(currentUser?.email).toEqual('jane.doe@example.com')
         expect(userMetadata?.data?.first_name).toEqual('Jane')
         expect(userMetadata?.data?.age).toEqual(27)
-      })
 
-      it('is authenticated after signing up with username and password and a redirect URL', async () => {
-        const authRef = getSupabaseAuth()
-
-        await act(async () => {
-          authRef.current.signUp({
-            email: 'example@email.com',
-            password: 'example-password',
-            options: {
-              emailRedirectTo: 'https://example.com/welcome',
-            },
-          })
-        })
-
-        const currentUser = authRef.current.currentUser
-
-        expect(authRef.current.isAuthenticated).toBeTruthy()
-        expect(currentUser?.email).toEqual('example@email.com')
+        // Sets the auth-provider cookie
+        checkAuthProviderCookieSet()
       })
     })
 
@@ -155,6 +155,9 @@ describe('Supabase Authentication', () => {
       })
 
       const currentUser = authRef.current.currentUser
+
+      checkAuthProviderCookieSet()
+      mwCurrentUserToHaveBeenCalled()
 
       expect(authRef.current.isAuthenticated).toBeTruthy()
       expect(currentUser?.email).toEqual('john.doe@example.com')
@@ -177,23 +180,8 @@ describe('Supabase Authentication', () => {
         await authRef.current.logOut()
       })
 
+      checkAuthProviderCookieDeleted()
       expect(authRef.current.isAuthenticated).toBeFalsy()
-    })
-
-    it('has role "user"', async () => {
-      const authRef = getSupabaseAuth()
-
-      expect(authRef.current.hasRole('user')).toBeFalsy()
-
-      await act(async () => {
-        authRef.current.logIn({
-          authMethod: 'password',
-          email: 'john.doe@example.com',
-          password: 'ThereIsNoSpoon',
-        })
-      })
-
-      expect(authRef.current.hasRole('user')).toBeTruthy()
     })
 
     it('has role "admin"', async () => {
@@ -307,6 +295,9 @@ describe('Supabase Authentication', () => {
       // cast it to the correct type
       const currentUser = authRef.current.currentUser as User | null
 
+      checkAuthProviderCookieSet()
+      mwCurrentUserToHaveBeenCalled()
+
       expect(authRef.current.isAuthenticated).toBeTruthy()
       expect(currentUser?.app_metadata?.provider).toEqual('github')
     })
@@ -327,6 +318,9 @@ describe('Supabase Authentication', () => {
       // return type of getCurrentUser in api/lib/auth. Here we have to
       // cast it to the correct type
       const currentUser = authRef.current.currentUser as User | null
+
+      checkAuthProviderCookieSet()
+      mwCurrentUserToHaveBeenCalled()
 
       expect(authRef.current.isAuthenticated).toBeTruthy()
       expect(currentUser?.email).toEqual('les@example.com')
@@ -351,6 +345,8 @@ describe('Supabase Authentication', () => {
       const currentUser = authRef.current.currentUser as User | null
       const appMetadata = currentUser?.app_metadata
 
+      checkAuthProviderCookieSet()
+      mwCurrentUserToHaveBeenCalled()
       expect(authRef.current.isAuthenticated).toBeTruthy()
       expect(appMetadata?.access_token).toEqual('token cortland-apple-id-token')
       expect(appMetadata?.token_type).toEqual('Bearer apple')
@@ -375,9 +371,52 @@ describe('Supabase Authentication', () => {
       const currentUser = authRef.current.currentUser as User | null
       const appMetadata = currentUser?.app_metadata
 
+      checkAuthProviderCookieSet()
+      mwCurrentUserToHaveBeenCalled()
       expect(authRef.current.isAuthenticated).toBeTruthy()
       expect(appMetadata?.domain).toEqual('example.com')
       expect(appMetadata?.providerId).toEqual('sso-provider-identity-uuid')
     })
   })
 })
+
+function mwCurrentUserToHaveBeenCalled() {
+  expect(fetchMock).toHaveBeenCalledWith(
+    '/middleware/supabase/currentUser',
+    expect.objectContaining({
+      method: 'GET',
+    }),
+  )
+}
+
+function checkAuthProviderCookieSet() {
+  expect(document.cookie).toEqual('auth-provider=supabase')
+
+  expect(cookieSetSpy).toHaveBeenCalledWith(
+    expect.stringContaining(`auth-provider=supabase`),
+  )
+
+  // We don't care about the values, just that it's using
+  // 'auth-provider=supabase; Max-Age=31536000000; Path=/; SameSite=Lax',
+  expect(cookieSetSpy).toHaveBeenCalledWith(
+    expect.stringContaining(
+      `Max-Age=${DEFAULT_SUPABASE_COOKIE_OPTIONS.maxAge}`,
+    ),
+  )
+
+  expect(cookieSetSpy).toHaveBeenCalledWith(
+    expect.stringContaining(`Path=${DEFAULT_SUPABASE_COOKIE_OPTIONS.path}`),
+  )
+}
+
+function checkAuthProviderCookieDeleted() {
+  expect(cookieSetSpy).toHaveBeenCalledWith(
+    expect.stringContaining(`auth-provider=supabase`),
+  )
+
+  // We don't care about the values, just that it's using
+  // Max-Age=-1 to delete the cookie
+  expect(cookieSetSpy).toHaveBeenCalledWith(
+    expect.stringContaining('Max-Age=-1'),
+  )
+}

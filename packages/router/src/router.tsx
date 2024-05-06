@@ -2,6 +2,8 @@ import type { ReactNode } from 'react'
 import React, { useMemo, memo } from 'react'
 
 import { ActiveRouteLoader } from './active-route-loader'
+import { analyzeRoutes } from './analyzeRoutes'
+import type { Wrappers } from './analyzeRoutes'
 import { AuthenticatedRoute } from './AuthenticatedRoute'
 import { LocationProvider, useLocation } from './location'
 import { namedRoutes } from './namedRoutes'
@@ -12,14 +14,8 @@ import { Redirect } from './redirect'
 import type { RouterContextProviderProps } from './router-context'
 import { RouterContextProvider } from './router-context'
 import { SplashPage } from './splash-page'
-import {
-  analyzeRoutes,
-  matchPath,
-  parseSearch,
-  replaceParams,
-  validatePath,
-} from './util'
-import type { Wrappers, TrailingSlashesTypes } from './util'
+import { matchPath, parseSearch, replaceParams, validatePath } from './util'
+import type { TrailingSlashesTypes } from './util'
 
 export interface RouterProps
   extends Omit<RouterContextProviderProps, 'routes' | 'activeRouteName'> {
@@ -168,17 +164,15 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
         <PageLoadingContextProvider delay={pageLoadingDelay}>
           {redirectPath && <Redirect to={redirectPath} />}
           {!redirectPath && page && (
-            <WrappedPage
-              sets={sets}
-              routeLoaderElement={
-                <ActiveRouteLoader
-                  path={path}
-                  spec={normalizePage(page as any)}
-                  params={allParams}
-                  whileLoadingPage={whileLoadingPage as any}
-                />
-              }
-            />
+            <WrappedPage sets={sets}>
+              {/* Level 3/3 is inside ActiveRouteLoader */}
+              <ActiveRouteLoader
+                path={path}
+                spec={normalizePage(page as any)}
+                params={allParams}
+                whileLoadingPage={whileLoadingPage as any}
+              />
+            </WrappedPage>
           )}
         </PageLoadingContextProvider>
       </ParamsProvider>
@@ -187,7 +181,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 }
 
 interface WrappedPageProps {
-  routeLoaderElement: ReactNode
+  children: ReactNode
   sets: Array<{
     id: string
     wrappers: Wrappers
@@ -209,12 +203,12 @@ interface WrappedPageProps {
  * This is so that we can have all the information up front in the routes-manifest
  * for SSR, but also so that we only do one loop of all the Routes.
  */
-const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
+const WrappedPage = memo(({ sets, children }: WrappedPageProps) => {
   // @NOTE: don't mutate the wrappers array, it causes full page re-renders
   // Instead just create a new array with the AuthenticatedRoute wrapper
 
   if (!sets || sets.length === 0) {
-    return routeLoaderElement
+    return children
   }
 
   return sets.reduceRight<ReactNode | undefined>((acc, set) => {
@@ -255,5 +249,5 @@ const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
     }
 
     return wrapped
-  }, routeLoaderElement)
+  }, children)
 })
