@@ -39,8 +39,26 @@ export async function handler({ force }: { force: boolean }) {
           }
 
           const transformResult = await runTransform({
-            transformPath: path.join(__dirname, 'codemod.js'),
+            transformPath: path.join(__dirname, 'codemodMiddleware.js'),
             targetPaths: [serverEntryPath],
+          })
+
+          if (transformResult.error) {
+            throw new Error(transformResult.error)
+          }
+        },
+      },
+      {
+        title: 'Add OG Image vite plugin ...',
+        task: async () => {
+          const viteConfigPath = rwPaths.web.viteConfig
+          if (viteConfigPath === null) {
+            throw new Error('Could not find the Vite config file')
+          }
+
+          const transformResult = await runTransform({
+            transformPath: path.join(__dirname, 'codemodVitePlugin.js'),
+            targetPaths: [viteConfigPath],
           })
 
           if (transformResult.error) {
@@ -51,25 +69,27 @@ export async function handler({ force }: { force: boolean }) {
       {
         title: 'Prettifying changes files',
         task: async (_ctx, task) => {
-          const serverEntryPath = rwPaths.web.entryServer
-          if (serverEntryPath === null) {
-            throw new Error(
-              'Could not find the server entry file. Is your project using the default structure?',
-            )
-          }
+          const prettifyPaths = [
+            rwPaths.web.entryServer,
+            rwPaths.web.viteConfig,
+          ]
+          for (const prettifyPath of prettifyPaths) {
+            if (prettifyPath === null) {
+              throw new Error('Could not find the file to be prettified')
+            }
+            try {
+              const source = fs.readFileSync(prettifyPath, 'utf-8')
+              const prettierOptions = await getPrettierOptions()
+              const prettifiedApp = await format(source, {
+                ...prettierOptions,
+                parser: 'babel-ts',
+              })
 
-          try {
-            const source = fs.readFileSync(serverEntryPath, 'utf-8')
-            const prettierOptions = await getPrettierOptions()
-            const prettifiedApp = await format(source, {
-              ...prettierOptions,
-              parser: 'babel-ts',
-            })
-
-            fs.writeFileSync(serverEntryPath, prettifiedApp, 'utf-8')
-          } catch (error) {
-            task.output =
-              "Couldn't prettify the changes. Please reformat the files manually if needed."
+              fs.writeFileSync(prettifyPath, prettifiedApp, 'utf-8')
+            } catch (error) {
+              task.output =
+                "Couldn't prettify the changes. Please reformat the files manually if needed."
+            }
           }
         },
       },
