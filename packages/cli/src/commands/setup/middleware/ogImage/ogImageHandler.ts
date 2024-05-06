@@ -67,7 +67,7 @@ export async function handler({ force }: { force: boolean }) {
         },
       },
       {
-        title: 'Prettifying changes files',
+        title: 'Prettifying changed files',
         task: async (_ctx, task) => {
           const prettifyPaths = [
             rwPaths.web.entryServer,
