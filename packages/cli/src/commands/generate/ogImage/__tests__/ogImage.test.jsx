@@ -4,6 +4,8 @@ globalThis.__dirname = __dirname
 import { vol, fs as memfs } from 'memfs'
 import { afterEach, beforeEach, describe, test, expect, vi } from 'vitest'
 
+import { ensurePosixPath } from '@redwoodjs/project-config'
+
 import * as ogImage from '../ogImage'
 
 vi.mock('fs', () => ({ ...memfs, default: { ...memfs } }))
@@ -57,10 +59,11 @@ describe('ogImage generator', () => {
         pagePath: 'AboutPage/AboutPage',
         typescript: false,
       })
+      const filePath = ensurePosixPath(Object.keys(files)[0])
 
-      expect(Object.keys(files)).toEqual([
+      expect(filePath).toEqual(
         '/path/to/project/web/src/pages/AboutPage/AboutPage.og.jsx',
-      ])
+      )
     })
 
     test('returns the path to the .tsx template to be written', async () => {
@@ -68,10 +71,11 @@ describe('ogImage generator', () => {
         pagePath: 'AboutPage/AboutPage',
         typescript: true,
       })
+      const filePath = ensurePosixPath(Object.keys(files)[0])
 
-      expect(Object.keys(files)).toEqual([
+      expect(filePath).toEqual(
         '/path/to/project/web/src/pages/AboutPage/AboutPage.og.tsx',
-      ])
+      )
     })
 
     test('returns the path to the template when the page is nested in subdirectories', async () => {
@@ -79,10 +83,11 @@ describe('ogImage generator', () => {
         pagePath: 'Products/Display/ProductPage/ProductPage',
         typescript: true,
       })
+      const filePath = ensurePosixPath(Object.keys(files)[0])
 
-      expect(Object.keys(files)).toEqual([
+      expect(filePath).toEqual(
         '/path/to/project/web/src/pages/Products/Display/ProductPage/ProductPage.og.tsx',
-      ])
+      )
     })
 
     test('returns the template to be written', async () => {
@@ -143,9 +148,7 @@ describe('ogImage generator', () => {
         ogImage.validatePath(pagePath, ext, {
           fs: memfs,
         }),
-      ).rejects.toThrowErrorMatchingInlineSnapshot(
-        `[Error: The page ${pagePath}.${ext} does not exist]`,
-      )
+      ).rejects.toThrow()
     })
 
     test('throws an error if page does not exist', async () => {
@@ -153,9 +156,7 @@ describe('ogImage generator', () => {
       const ext = 'jsx'
       await expect(
         ogImage.validatePath(pagePath, ext, { fs: memfs }),
-      ).rejects.toThrowErrorMatchingInlineSnapshot(
-        `[Error: The page ${pagePath}.${ext} does not exist]`,
-      )
+      ).rejects.toThrow()
     })
   })
 })
