@@ -11,6 +11,7 @@ export function getRscStylesheetLinkGenerator(existingLinks: string[]) {
   const clientBuildManifest = JSON.parse(
     fs.readFileSync(clientBuildManifestPath, 'utf-8'),
   )
+  const clientCss = extractCssMappingFromManifest(clientBuildManifest)
 
   const serverBuildManifestPath = path.join(
     getPaths().web.distRsc,
@@ -19,32 +20,25 @@ export function getRscStylesheetLinkGenerator(existingLinks: string[]) {
   const serverBuildManifest = JSON.parse(
     fs.readFileSync(serverBuildManifestPath, 'utf-8'),
   )
-
-  const clientCss = generateCssMapping(clientBuildManifest)
-  const serverCss = generateCssMapping(serverBuildManifest)
+  const serverCss = extractCssMappingFromManifest(serverBuildManifest)
 
   const allCss = new Set<string>()
-  for (const [_, value] of clientCss) {
-    if (value.length > 0) {
-      for (const css of value) {
-        allCss.add(css)
-      }
+  for (const cssList of clientCss.values()) {
+    for (const css of cssList) {
+      allCss.add(css)
     }
   }
-  for (const [_, value] of serverCss) {
-    if (value.length > 0) {
-      for (const css of value) {
-        allCss.add(css)
-      }
+  for (const cssList of serverCss.values()) {
+    for (const css of cssList) {
+      allCss.add(css)
     }
   }
 
   const cssLinks = Array.from(allCss)
-
   return () => [...existingLinks, ...cssLinks]
 }
 
-function generateCssMapping(manifest: any) {
+function extractCssMappingFromManifest(manifest: Record<string, any>) {
   const manifestCss = new Map<string, string[]>()
   const lookupCssAssets = (id: string): string[] => {
     const assets: string[] = []
