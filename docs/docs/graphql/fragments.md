@@ -217,7 +217,7 @@ The useFragment hook represents a lightweight live binding into the Apollo Clien
 
 This means that once the Apollo Client Cache has loaded the data needed for the fragment, one can simply render the data for the fragment component with its id reference.
 
-Also, anywhere the fragment component is rendered will be updated with teh latest data if any of `useQuery` with uses the fragment received new data.
+Also, anywhere the fragment component is rendered will be updated with the latest data if any of `useQuery` with uses the fragment received new data.
 
 ```ts
 import type { Book } from 'types/graphql'
