@@ -23,6 +23,7 @@ import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createMiddlewareRouter } from './middleware/register.js'
 import type { Middleware } from './middleware/types.js'
+import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { setClientEntries } from './rsc/rscWorkerCommunication.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
@@ -146,8 +147,11 @@ export async function runFeServer() {
   // the static assets over any application routing.
   app.use(express.static(rwPaths.web.distClient, { index: false }))
 
-  const getStylesheetLinks = () => clientEntry.css || []
   const clientEntryPath = '/' + clientEntry.file
+
+  const getStylesheetLinks = rscEnabled
+    ? getRscStylesheetLinkGenerator(clientEntry.css ?? [])
+    : () => clientEntry.css || []
 
   const routeHandler = await createReactStreamingHandler({
     routes: Object.values(routeManifest),
