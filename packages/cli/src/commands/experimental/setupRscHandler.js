@@ -78,20 +78,6 @@ export const handler = async ({ force, verbose }) => {
         options: { persistentOutput: true },
       },
       {
-        title: 'Adding entries.ts...',
-        task: async () => {
-          const entriesTemplate = fs.readFileSync(
-            path.resolve(__dirname, 'templates', 'rsc', 'entries.ts.template'),
-            'utf-8',
-          )
-
-          // Can't use rwPaths.web.entries because it's not created yet
-          writeFile(path.join(rwPaths.web.src, 'entries.ts'), entriesTemplate, {
-            overwriteExisting: force,
-          })
-        },
-      },
-      {
         title: `Overwriting entry.server${ext}...`,
         task: async () => {
           const entryServerTemplate = fs.readFileSync(

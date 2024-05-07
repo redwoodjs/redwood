@@ -131,7 +131,7 @@ export default class OgImageMiddleware {
       height: this.imageProps.height,
     }
 
-    const ogImgFilePath = this.getOgComponentPath(currentRoute, extension)
+    const ogImgFilePath = this.getOgComponentPath(currentRoute)
 
     const { data, Component } = await this.importComponent(
       ogImgFilePath,
@@ -225,21 +225,18 @@ export default class OgImageMiddleware {
     },
   )
 
-  public getOgComponentPath(
-    currentRoute: RWRouteManifestItem,
-    extension: SUPPORTED_EXT,
-  ) {
+  public getOgComponentPath(currentRoute: RWRouteManifestItem) {
     if (process.env.NODE_ENV === 'development') {
       return path.join(
         getPaths().web.src,
-        currentRoute.relativeFilePath.replace(/\.([jt]sx)/, `.${extension}.$1`),
+        currentRoute.relativeFilePath.replace(/\.([jt]sx)/, `.og.$1`),
       )
     } else {
       return `${path.join(
         getPaths().web.distServer,
         'ogImage',
         currentRoute.relativeFilePath.replace(/\.([jt]sx)/, ''),
-      )}.${extension}.mjs` // @MARK: Hardcoded mjs!
+      )}.og.mjs` // @MARK: Hardcoded mjs!
     }
   }
 
