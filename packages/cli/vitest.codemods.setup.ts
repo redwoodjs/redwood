@@ -13,6 +13,9 @@ import { formatCode } from './src/testUtils'
 globalThis.matchInlineTransformSnapshot = (
   await import('./src/testUtils/matchInlineTransformSnapshot')
 ).matchInlineTransformSnapshot
+globalThis.matchTransformSnapshot = (
+  await import('./src/testUtils/matchTransformSnapshot')
+).matchTransformSnapshot
 globalThis.matchFolderTransform = (
   await import('./src/testUtils/matchFolderTransform')
 ).matchFolderTransform

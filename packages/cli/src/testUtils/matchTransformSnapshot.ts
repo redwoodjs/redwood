@@ -1,12 +1,15 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import { createRequire } from 'node:module'
+import path from 'node:path'
 
 import tempy from 'tempy'
 import { expect } from 'vitest'
 
-import runTransform from '../lib/runTransform'
+import runTransform from '../testLib/runTransform'
 
 import { formatCode } from './index'
+
+const require = createRequire(import.meta.url)
 
 export interface MatchTransformSnapshotFunction {
   (

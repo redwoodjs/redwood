@@ -21,7 +21,7 @@ vi.mock('node:fs', async () => {
 })
 vi.mock('execa')
 // The jscodeshift parts are tested by another test
-vi.mock('../runTransform', () => {
+vi.mock('../../../../../../lib/runTransform', () => {
   return {
     runTransform: () => {
       return {}
