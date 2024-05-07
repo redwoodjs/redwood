@@ -5,7 +5,7 @@
 import type { TagDescriptor } from '@redwoodjs/web'
 
 import App from './App'
-import { createDbAuthMiddleware } from '@redwoodjs/auth-dbauth-middleware'
+import createDbAuthMiddleware from '@redwoodjs/auth-dbauth-middleware'
 import { Document } from './Document'
 
 // eslint-disable-next-line no-restricted-imports
@@ -22,7 +22,7 @@ export const registerMiddleware = () => {
     cookieName,
     dbAuthHandler,
     getCurrentUser,
-    // dbAuthUrl? optional
+   // dbAuthUrl? optional
   })
   return [dbAuthMiddleware]
 }
