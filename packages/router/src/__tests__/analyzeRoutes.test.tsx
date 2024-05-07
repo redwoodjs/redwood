@@ -138,9 +138,9 @@ describe('setWrapper', () => {
     </Router>
   )
 
-    const { pathRouteMap } = analyzeRoutes(Simple.props.children, {
-      currentPathName: '/',
-    })
+  const { pathRouteMap } = analyzeRoutes(Simple.props.children, {
+    currentPathName: '/',
+  })
 
   test('Creates setWrapper map', () => {
     expect(pathRouteMap['/a']).toEqual(
