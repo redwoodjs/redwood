@@ -60,6 +60,7 @@ export const useOgImage = (options?: OgImageUrlOptions) => {
           height: height || OGIMAGE_DEFAULTS.height,
         },
       ],
+      // TODO: Haven't determined if this is required for Twitter to pick up the og:image. Needs some testing.
       // twitter: { image: { src: output.join('') } },
     },
   }
