@@ -176,8 +176,6 @@ fragment BookInfo on Book {
 the `typename` is `Book`.
 
 
-## useCache!!!
-
 ## getCacheKey
 
 A helper function to create the cache key for the data associated with the fragment in Apollo cache.
@@ -199,6 +197,10 @@ fragment BookInfo on Book {
 ```
 
 the `getCacheKey` is a function where `getCacheKey(42)` would return `Book:42`.
+
+:::tip
+We describe how [cache keys and identifiers](./caching.md#identify) are used in more depth in the our [Apollo client cache](./caching.md#client-caching) documentation.
+:::
 
 ### useRegisteredFragment
 
