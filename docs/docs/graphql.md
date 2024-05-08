@@ -864,7 +864,7 @@ Redwood will automatically detect your union types in your `sdl` files and resol
 
 :::note
 
-In order to use Union types web-side with your Apollo GraphQL client, you will need to [generate possible types from fragments and union types](#generate-possible-types).
+In order to use Union types web-side with your Apollo GraphQL client, you will need to [generate possible types from fragments and union types](./graphql/fragments#possible-types-for-unions).
 
 :::
 
