@@ -153,6 +153,7 @@ module.exports = {
           },
           items: [
             { type: 'doc', label: 'About', id: 'graphql' },
+            { type: 'doc', label: 'Caching', id: 'graphql/caching' },
             { type: 'doc', label: 'Fragments', id: 'graphql/fragments' },
             {
               type: 'doc',
