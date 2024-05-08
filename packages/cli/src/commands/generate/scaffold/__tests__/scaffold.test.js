@@ -410,6 +410,23 @@ describe('in javascript (default) mode', () => {
       files[path.normalize('/path/to/project/web/src/lib/formatters.test.jsx')]
     ).toMatchSnapshot()
   })
+
+  // Enums in forms
+
+  test('generated form matches expectations', async () => {
+    const files = await scaffold.files({
+      ...getDefaultArgs(defaults),
+      model: 'Pixel',
+      nestScaffoldByModel: true,
+    })
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Pixel/PixelForm/PixelForm.jsx',
+        )
+      ],
+    ).toMatchSnapshot()
+  })
 })
 
 describe('in typescript mode', () => {
@@ -712,6 +729,24 @@ describe('in typescript mode', () => {
       tsFiles[
         path.normalize('/path/to/project/web/src/lib/formatters.test.tsx')
       ]
+    ).toMatchSnapshot()
+  })
+
+  // Enums in forms
+
+  test('generated form matches expectations', async () => {
+    const files = await scaffold.files({
+      ...getDefaultArgs(defaults),
+      model: 'Pixel',
+      nestScaffoldByModel: true,
+      typescript: true,
+    })
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Pixel/PixelForm/PixelForm.tsx',
+        )
+      ],
     ).toMatchSnapshot()
   })
 })

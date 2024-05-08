@@ -1497,6 +1497,160 @@ export default PostsList
 "
 `;
 
+exports[`in javascript (default) mode > generated form matches expectations 1`] = `
+"import {
+  Form,
+  FormError,
+  FieldError,
+  Label,
+  RadioField,
+  Submit,
+} from '@redwoodjs/forms'
+
+const PixelForm = (props) => {
+  const onSubmit = (data) => {
+    if (data.geometry === '') {
+      data.geometry = null
+    }
+
+    props.onSave(data, props?.pixel?.id)
+  }
+
+  return (
+    <div className="rw-form-wrapper">
+      <Form onSubmit={onSubmit} error={props.error}>
+        <FormError
+          error={props.error}
+          wrapperClassName="rw-form-error-wrapper"
+          titleClassName="rw-form-error-title"
+          listClassName="rw-form-error-list"
+        />
+
+        <Label
+          name="color"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Color
+        </Label>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-color-0"
+            name="color"
+            defaultValue="RED"
+            defaultChecked={props.pixel?.color?.includes('RED')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+
+          <div>Red</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-color-1"
+            name="color"
+            defaultValue="GREEN"
+            defaultChecked={props.pixel?.color?.includes('GREEN')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+
+          <div>Green</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-color-2"
+            name="color"
+            defaultValue="BLUE"
+            defaultChecked={props.pixel?.color?.includes('BLUE')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+
+          <div>Blue</div>
+        </div>
+
+        <FieldError name="color" className="rw-field-error" />
+
+        <Label
+          name="geometry"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Geometry
+        </Label>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-none"
+            name="geometry"
+            defaultValue=""
+            defaultChecked={!props.pixel?.geometry}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+
+          <div className="rw-check-radio-item-none">None</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-0"
+            name="geometry"
+            defaultValue="TRIANGULAR"
+            defaultChecked={props.pixel?.geometry?.includes('TRIANGULAR')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+
+          <div>Triangular</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-1"
+            name="geometry"
+            defaultValue="STRIPES"
+            defaultChecked={props.pixel?.geometry?.includes('STRIPES')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+
+          <div>Stripes</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-2"
+            name="geometry"
+            defaultValue="DIAGONAL"
+            defaultChecked={props.pixel?.geometry?.includes('DIAGONAL')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+
+          <div>Diagonal</div>
+        </div>
+
+        <FieldError name="geometry" className="rw-field-error" />
+
+        <div className="rw-button-group">
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
+            Save
+          </Submit>
+        </div>
+      </Form>
+    </div>
+  )
+}
+
+export default PixelForm
+"
+`;
+
 exports[`in typescript mode > creates a edit page 1`] = `
 "import EditPostCell from 'src/components/Post/EditPostCell'
 
@@ -3195,6 +3349,165 @@ const PostsList = ({ posts }: FindPosts) => {
 }
 
 export default PostsList
+"
+`;
+
+exports[`in typescript mode > generated form matches expectations 1`] = `
+"import type { EditPixelById, UpdatePixelInput } from 'types/graphql'
+
+import type { RWGqlError } from '@redwoodjs/forms'
+import {
+  Form,
+  FormError,
+  FieldError,
+  Label,
+  RadioField,
+  Submit,
+} from '@redwoodjs/forms'
+
+type FormPixel = NonNullable<EditPixelById['pixel']>
+
+interface PixelFormProps {
+  pixel?: EditPixelById['pixel']
+  onSave: (data: UpdatePixelInput, id?: FormPixel['id']) => void
+  error: RWGqlError
+  loading: boolean
+}
+
+const PixelForm = (props: PixelFormProps) => {
+  const onSubmit = (data: FormPixel) => {
+    if (data.geometry === '') {
+      data.geometry = null
+    }
+
+    props.onSave(data, props?.pixel?.id)
+  }
+
+  return (
+    <div className="rw-form-wrapper">
+      <Form<FormPixel> onSubmit={onSubmit} error={props.error}>
+        <FormError
+          error={props.error}
+          wrapperClassName="rw-form-error-wrapper"
+          titleClassName="rw-form-error-title"
+          listClassName="rw-form-error-list"
+        />
+
+        <Label
+          name="color"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Color
+        </Label>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-color-0"
+            name="color"
+            defaultValue="RED"
+            defaultChecked={props.pixel?.color?.includes('RED')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>Red</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-color-1"
+            name="color"
+            defaultValue="GREEN"
+            defaultChecked={props.pixel?.color?.includes('GREEN')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>Green</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-color-2"
+            name="color"
+            defaultValue="BLUE"
+            defaultChecked={props.pixel?.color?.includes('BLUE')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>Blue</div>
+        </div>
+
+        <FieldError name="color" className="rw-field-error" />
+
+        <Label
+          name="geometry"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Geometry
+        </Label>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-none"
+            name="geometry"
+            defaultValue=""
+            defaultChecked={!props.pixel?.geometry}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div className="rw-check-radio-item-none">None</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-0"
+            name="geometry"
+            defaultValue="TRIANGULAR"
+            defaultChecked={props.pixel?.geometry?.includes('TRIANGULAR')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>Triangular</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-1"
+            name="geometry"
+            defaultValue="STRIPES"
+            defaultChecked={props.pixel?.geometry?.includes('STRIPES')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>Stripes</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-2"
+            name="geometry"
+            defaultValue="DIAGONAL"
+            defaultChecked={props.pixel?.geometry?.includes('DIAGONAL')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>Diagonal</div>
+        </div>
+
+        <FieldError name="geometry" className="rw-field-error" />
+
+        <div className="rw-button-group">
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
+            Save
+          </Submit>
+        </div>
+      </Form>
+    </div>
+  )
+}
+
+export default PixelForm
 "
 `;
 
