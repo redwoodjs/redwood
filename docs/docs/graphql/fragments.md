@@ -252,9 +252,9 @@ export default Book
 ```
 
 :::note
-In order to use [fragments](#fragments) with [unions](#unions) and interfaces in Apollo Client, you need to tell the client how to discriminate between the different types that implement or belong to a supertype.
+In order to use [fragments](#what-are-fragments) with [unions](./../graphql#unions) and interfaces in Apollo Client, you need to tell the client how to discriminate between the different types that implement or belong to a supertype.
 
-Please see how to [generate possible types from fragments and union types](#generate-possible-types).
+Please see how to [generate possible types from fragments and union types](#possible-types-for-unions).
 :::
 
 
