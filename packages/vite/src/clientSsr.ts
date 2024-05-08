@@ -24,8 +24,9 @@ async function getEntries() {
 async function getFunctionComponent<TProps>(
   rscId: string,
 ): Promise<React.FunctionComponent<TProps>> {
-  const { getEntry } = (await getEntries()).default
-  const mod = await getEntry(rscId)
+  const { serverEntries } = await getEntries()
+  const entryPath = path.join(getPaths().web.distRsc, serverEntries[rscId])
+  const mod = await import(makeFilePath(entryPath))
 
   if (typeof mod === 'function') {
     return mod
@@ -34,6 +35,11 @@ async function getFunctionComponent<TProps>(
   if (typeof mod?.default === 'function') {
     return mod?.default
   }
+
+  // We remove any potential "__rwjs__" prefix as these only exist in the mapping
+  // not in the built files. E.g. "__rwjs__ServerEntry" -> "ServerEntry" as we don't
+  // export "__rwjs__ServerEntry" in the built file we simply export "ServerEntry"
+  rscId = rscId.replace(/^__rwjs__/, '')
 
   if (typeof mod?.[rscId] === 'function') {
     return mod?.[rscId]
@@ -55,10 +61,11 @@ function resolveClientEntryForProd(
   const absoluteClientEntries = Object.fromEntries(
     Object.entries(clientEntries).map(([key, val]) => {
       let fullKey = path.join(baseDir, key)
+
       if (process.platform === 'win32') {
         fullKey = fullKey.replaceAll('\\', '/')
       }
-      console.log('fullKey', fullKey, 'value', basePath + path.sep + val)
+
       return [fullKey, basePath + path.sep + val]
     }),
   )
@@ -98,7 +105,7 @@ export function renderFromDist<TProps extends Record<string, any>>(
     let ServerEntry: React.FunctionComponent<TProps>
 
     try {
-      ServerEntry = await getFunctionComponent<TProps>('ServerEntry')
+      ServerEntry = await getFunctionComponent<TProps>('__rwjs__ServerEntry')
     } catch (error) {
       console.log('SsrComponent error', error)
       // For now we'll just swallow this error because not all projects will
@@ -108,6 +115,7 @@ export function renderFromDist<TProps extends Record<string, any>>(
       ServerEntry = () => createElement('div', {}, 'Loading')
     }
 
+    console.log('clientSsr.ts getEntries()', await getEntries())
     const clientEntries = (await getEntries()).clientEntries
 
     // TODO (RSC): Try removing the proxy here and see if it's really necessary.
@@ -119,13 +127,13 @@ export function renderFromDist<TProps extends Record<string, any>>(
         get(_target, encodedId: string) {
           console.log('Proxy get encodedId', encodedId)
           const [filePath, name] = encodedId.split('#') as [string, string]
-          // filePath /Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/rsc/assets/rsc-AboutCounter.tsx-1.mjs
+          // filePath /Users/tobbe/tmp/test-project-rsc-kitchen-sink/web/dist/rsc/assets/rsc-AboutCounter.tsx-1.mjs
           // name AboutCounter
 
           const id = resolveClientEntryForProd(filePath, clientEntries)
 
-          console.log('Proxy id', id)
-          // id /Users/tobbe/tmp/test-project-rsc-external-packages-and-cells/web/dist/client/assets/rsc-AboutCounter.tsx-1-4kTKU8GC.mjs
+          console.log('clientSsr.ts::Proxy id', id)
+          // id /Users/tobbe/tmp/test-project-rsc-kitchen-sink/web/dist/client/assets/rsc-AboutCounter.tsx-1-4kTKU8GC.mjs
           return { id, chunks: [id], name, async: true }
         },
       },

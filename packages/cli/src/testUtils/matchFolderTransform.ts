@@ -1,5 +1,5 @@
 import { createRequire } from 'node:module'
-import path from 'path'
+import path from 'node:path'
 
 import fg from 'fast-glob'
 import fse from 'fs-extra'

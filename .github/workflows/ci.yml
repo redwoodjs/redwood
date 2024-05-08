@@ -496,18 +496,18 @@ jobs:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsa-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
-      - name: 🌲 Set up RSC external packages and Cells smoke test
-        id: set-up-rsc-external-packages-and-cells-project
-        uses: ./.github/actions/set-up-rsc-external-packages-and-cells-project
+      - name: 🌲 Set up RSC Kitchen Sink smoke test
+        id: set-up-rsc-kitchen-sink-project
+        uses: ./.github/actions/set-up-rsc-kitchen-sink-project
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
-      - name: 🐘 Run RSC external packages and cells smoke tests
-        working-directory: tasks/smoke-tests/rsc-external-packages-and-cells
+      - name: 🐘 Run RSC Kitchen Sink smoke tests
+        working-directory: tasks/smoke-tests/rsc-kitchen-sink
         run: npx playwright test
         env:
-          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-external-packages-and-cells-project.outputs.test-project-path }}
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-kitchen-sink-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
   rsc-smoke-tests-skip:

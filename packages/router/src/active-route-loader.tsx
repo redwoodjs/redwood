@@ -89,6 +89,9 @@ export const ActiveRouteLoader = ({
     delete params['key']
   }
 
+  // Level 3/3 (ActiveRouteLoader)
+  // This is where we actually render the page component. Either using a
+  // prerender loader or the lazy component
   return (
     <Suspense fallback={<Fallback>{whileLoadingPage?.()}</Fallback>}>
       <LazyRouteComponent {...params} />

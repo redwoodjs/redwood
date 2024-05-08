@@ -40,6 +40,10 @@ export class CookieJar {
     return this.map.get(name)?.value
   }
 
+  public getWithOptions(name: string) {
+    return this.map.get(name)
+  }
+
   public has(name: string) {
     return this.map.has(name)
   }

@@ -1,7 +1,9 @@
-import type { CurrentUser } from '@redwoodjs/auth'
-import { createAuthentication } from '@redwoodjs/auth'
+import type { CurrentUser, CustomProviderHooks } from '@redwoodjs/auth'
+import {
+  createAuthentication,
+  getCurrentUserFromMiddleware,
+} from '@redwoodjs/auth'
 
-import { getCurrentUserFromMiddleware } from './getCurrentUserFromMiddleware'
 import type { WebAuthnClientType } from './webAuthn'
 
 export interface LoginAttributes {
@@ -18,13 +20,6 @@ export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
 const TOKEN_CACHE_TIME = 5000
 
-export type CustomProviderHooks = {
-  useCurrentUser?: () => Promise<CurrentUser>
-  useHasRole?: (
-    currentUser: CurrentUser | null,
-  ) => (rolesToCheck: string | string[]) => boolean
-}
-
 // This is the middleware-edition auth function
 // Overrides the default getCurrentUser to fetch it from middleware instead
 function createMiddlewareAuth(
@@ -32,8 +27,8 @@ function createMiddlewareAuth(
   customProviderHooks?: CustomProviderHooks,
 ) {
   return createAuthentication(dbAuthClient, {
-    // @MARK This is key! 👇
     ...customProviderHooks,
+    // @MARK This is key! 👇
     useCurrentUser:
       customProviderHooks?.useCurrentUser ??
       (() => getCurrentUserFromMiddleware(dbAuthClient.getAuthUrl())),
@@ -49,7 +44,7 @@ export function createAuth(
     ) => (rolesToCheck: string | string[]) => boolean
   },
 ) {
-  if (dbAuthClient.useMiddlewareAuth) {
+  if (dbAuthClient.middlewareAuthEnabled) {
     return createMiddlewareAuth(dbAuthClient, customProviderHooks)
   }
 
@@ -69,7 +64,7 @@ export function createDbAuthClient({
   webAuthn,
   dbAuthUrl,
   fetchConfig,
-  middleware = false,
+  middleware = RWJS_ENV.RWJS_EXP_STREAMING_SSR,
 }: DbAuthClientArgs = {}) {
   const credentials = fetchConfig?.credentials || 'same-origin'
   webAuthn?.setAuthApiUrl(dbAuthUrl)
@@ -201,17 +196,10 @@ export function createDbAuthClient({
   }
 
   /*
-  Cookie+Middleware based auth providers cannot retrieve current user from localStorage, etc.
-  It either has to retrieve it from serverAuthState (e.g. on first render)
-  or has to retrieve it from the middleware, where the cookie gets validated first.
-
-  getUserMetadata is used in reauthenticate. So when you login in, the currentUser get's fetched
-  from the server, so that it will redirect
-  */
+   * dbAuth doesn't implement the concept of userMetadata. We used to return the token (i.e. userId) as the userMetadata.
+   */
   const getUserMetadata = async () => {
-    return middleware
-      ? getCurrentUserFromMiddleware(getDbAuthUrl())
-      : getToken()
+    return middleware ? () => {} : getToken()
   }
 
   return {
@@ -229,6 +217,6 @@ export function createDbAuthClient({
     // so we can get the dbAuthUrl in getCurrentUserFromMiddleware
     getAuthUrl: getDbAuthUrl,
     // This is so that we can skip fetching getCurrentUser in reauthenticate
-    useMiddlewareAuth: middleware,
+    middlewareAuthEnabled: middleware,
   }
 }

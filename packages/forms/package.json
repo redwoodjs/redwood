@@ -34,19 +34,19 @@
     "@babel/core": "^7.22.20",
     "@testing-library/dom": "9.3.4",
     "@testing-library/jest-dom": "6.4.2",
-    "@testing-library/react": "14.2.2",
+    "@testing-library/react": "14.3.1",
     "@testing-library/user-event": "14.5.2",
     "@types/pascalcase": "1.0.3",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "nodemon": "3.1.0",
-    "react": "19.0.0-canary-36e62c603-20240418",
-    "react-dom": "19.0.0-canary-36e62c603-20240418",
+    "react": "19.0.0-canary-cb151849e1-20240424",
+    "react-dom": "19.0.0-canary-cb151849e1-20240424",
     "typescript": "5.4.5",
     "vitest": "1.4.0"
   },
   "peerDependencies": {
-    "react": "19.0.0-canary-36e62c603-20240418"
+    "react": "19.0.0-canary-cb151849e1-20240424"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

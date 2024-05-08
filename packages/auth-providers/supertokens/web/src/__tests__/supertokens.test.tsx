@@ -27,6 +27,7 @@ const superTokensSessionRecipe: SessionRecipe = {
     loggedInUser = undefined
   },
   doesSessionExist: async () => true,
+  getAccessToken: async () => 'mock_supertokens_access_token',
   getAccessTokenPayloadSecurely: async () => {
     return {
       _jwtPName: 'token',
