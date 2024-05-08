@@ -199,7 +199,7 @@ fragment BookInfo on Book {
 the `getCacheKey` is a function where `getCacheKey(42)` would return `Book:42`.
 
 :::tip
-We describe how how [cache keys and identifiers](./caching.md#identify) are used in more depth in the our [Apollo client cache](caching.md#client-caching) documentation.
+We describe how [cache keys and identifiers](./caching.md#identify) are used in more depth in the our [Apollo client cache](./caching.md#client-caching) documentation.
 :::
 
 ### useRegisteredFragment
