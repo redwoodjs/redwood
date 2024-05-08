@@ -52,7 +52,7 @@ describe('useMatch', () => {
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
         <MyLink to="/dunder-mifflin">Dunder Mifflin</MyLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: green')
@@ -61,13 +61,13 @@ describe('useMatch', () => {
   it('returns a match on the same pathname with search parameters', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
-      '?page=1&tab=main'
+      '?page=1&tab=main',
     )
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
         <MyLink to={`/search-params?tab=main&page=1`}>Dunder Mifflin</MyLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: green')
@@ -79,7 +79,7 @@ describe('useMatch', () => {
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
         <MyLink to="/dunder-mifflin">Dunder Mifflin</MyLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: red')
@@ -88,13 +88,13 @@ describe('useMatch', () => {
   it('does NOT receive active class on the same pathname with different parameters', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
-      '?tab=main&page=1'
+      '?tab=main&page=1',
     )
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
         <MyLink to={`/search-params?page=2&tab=main`}>Dunder Mifflin</MyLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: red')
@@ -135,7 +135,7 @@ describe('useMatch', () => {
       setLocation('/posts/uuid-string')
 
       const { result } = renderHook(() =>
-        useMatch('/posts/{id}', { routeParams: { id: 'uuid-string' } })
+        useMatch('/posts/{id}', { routeParams: { id: 'uuid-string' } }),
       )
 
       expect(result.current.match).toBeTruthy()
@@ -145,7 +145,7 @@ describe('useMatch', () => {
       setLocation('/posts/uuid-string')
 
       const { result } = renderHook(() =>
-        useMatch('/posts/{id}', { routeParams: { id: 'other-uuid-string' } })
+        useMatch('/posts/{id}', { routeParams: { id: 'other-uuid-string' } }),
       )
 
       expect(result.current.match).toBeFalsy()
@@ -155,7 +155,7 @@ describe('useMatch', () => {
       setLocation('/posts/123')
 
       const { result } = renderHook(() =>
-        useMatch('/posts/{id}', { routeParams: { id: '123' } })
+        useMatch('/posts/{id}', { routeParams: { id: '123' } }),
       )
 
       expect(result.current.match).toBeTruthy()
@@ -165,7 +165,7 @@ describe('useMatch', () => {
       setLocation('/posts/123')
 
       const { result } = renderHook(() =>
-        useMatch('/posts/{id:Int}', { routeParams: { id: 123 } })
+        useMatch('/posts/{id:Int}', { routeParams: { id: 123 } }),
       )
 
       expect(result.current.match).toBeTruthy()
@@ -175,7 +175,7 @@ describe('useMatch', () => {
       setLocation('/posts/123')
 
       const { result } = renderHook(() =>
-        useMatch('/posts/{id:Int}', { routeParams: { id: '123' } })
+        useMatch('/posts/{id:Int}', { routeParams: { id: '123' } }),
       )
 
       expect(result.current.match).toBeFalsy()
@@ -187,7 +187,7 @@ describe('useMatch', () => {
       const { result } = renderHook(() =>
         useMatch('/year/{year}/month/{month}/day/{day}', {
           routeParams: { year: '1970', month: '08' },
-        })
+        }),
       )
 
       expect(result.current.match).toBeTruthy()
@@ -199,7 +199,7 @@ describe('useMatch', () => {
       const { result } = renderHook(() =>
         useMatch('/year/{year}/month/{month}/day/{day}', {
           routeParams: { month: '08' },
-        })
+        }),
       )
 
       expect(result.current.match).toBeTruthy()
@@ -230,7 +230,7 @@ describe('useMatch', () => {
       const { result } = renderHook(() =>
         useMatch('/year/{year}/month/{month}/day/{day}', {
           routeParams: { month: '01' },
-        })
+        }),
       )
 
       expect(result.current.match).toBeFalsy()
@@ -242,7 +242,7 @@ describe('useMatch', () => {
       const { result } = renderHook(() =>
         useMatch('/year/{year}/month/{month}/day/{day}', {
           routeParams: { day: '31' },
-        })
+        }),
       )
 
       expect(result.current.match).toBeFalsy()
@@ -286,7 +286,7 @@ describe('useMatch', () => {
       const { result } = renderHook(() =>
         useMatch('/test-path/{param}', {
           searchParams: [{ s1: 'one' }],
-        })
+        }),
       )
 
       expect(result.current.match).toBeTruthy()
@@ -299,7 +299,7 @@ describe('useMatch', () => {
         useMatch('/test-path/{param}', {
           routeParams: { param: 'wrong' },
           searchParams: [{ s1: 'one' }],
-        })
+        }),
       )
 
       expect(result.current.match).toBeFalsy()
@@ -313,7 +313,7 @@ describe('useMatch', () => {
           routeParams: { ['param-two']: 'fizz' },
           searchParams: [{ s1: 'one' }],
           matchSubPaths: true,
-        })
+        }),
       )
 
       expect(result.current.match).toBeTruthy()

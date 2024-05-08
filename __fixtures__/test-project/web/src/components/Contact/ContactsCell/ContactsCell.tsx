@@ -9,20 +9,18 @@ import type {
 
 import Contacts from 'src/components/Contact/Contacts'
 
-export const QUERY: TypedDocumentNode<
-  FindContacts,
-  FindContactsVariables
-> = gql`
-  query FindContacts {
-    contacts {
-      id
-      name
-      email
-      message
-      createdAt
+export const QUERY: TypedDocumentNode<FindContacts, FindContactsVariables> =
+  gql`
+    query FindContacts {
+      contacts {
+        id
+        name
+        email
+        message
+        createdAt
+      }
     }
-  }
-`
+  `
 
 export const Loading = () => <div>Loading...</div>
 

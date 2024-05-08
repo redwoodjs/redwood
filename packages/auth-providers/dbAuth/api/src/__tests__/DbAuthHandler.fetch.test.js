@@ -59,7 +59,7 @@ const TableMock = class {
     let matchingRecords = this.records
     keys.forEach((key) => {
       matchingRecords = matchingRecords.filter(
-        (record) => record[key] === where[key]
+        (record) => record[key] === where[key],
       )
     })
     return matchingRecords[0]
@@ -97,7 +97,7 @@ const LOGOUT_COOKIE = 'session=;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
 const SESSION_SECRET = '540d03ebb00b441f8f7442cbc39958ad'
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../../../__fixtures__/example-todo-main'
+  '../../../../../../__fixtures__/example-todo-main',
 )
 
 beforeAll(() => {
@@ -122,11 +122,33 @@ const createDbUser = async (attributes = {}) => {
 }
 
 const expectLoggedOutResponse = (response) => {
-  expect(response[1]['set-cookie']).toEqual(LOGOUT_COOKIE)
+  const setCookie = response[1].getSetCookie()
+
+  const deleteSession = setCookie.some((cookie) => {
+    return cookie === LOGOUT_COOKIE
+  })
+
+  const authProviderPresent = setCookie.some((cookie) => {
+    return cookie.match('auth-provider=')
+  })
+
+  expect(deleteSession).toBe(true)
+  expect(authProviderPresent).toBe(true)
 }
 
 const expectLoggedInResponse = (response) => {
-  expect(response[1]['set-cookie']).toMatch(SET_SESSION_REGEX)
+  const setCookie = response[1].getSetCookie()
+
+  const sessionPresent = setCookie.some((cookie) => {
+    return cookie.match(SET_SESSION_REGEX)
+  })
+
+  const authProviderPresent = setCookie.some((cookie) => {
+    return cookie.match('auth-provider=')
+  })
+
+  expect(sessionPresent).toBe(true)
+  expect(authProviderPresent).toBe(true)
 }
 
 const encryptToCookie = (data) => {
@@ -134,7 +156,7 @@ const encryptToCookie = (data) => {
   const cipher = crypto.createCipheriv(
     'aes-256-cbc',
     SESSION_SECRET.substring(0, 32),
-    iv
+    iv,
   )
   let encryptedSession = cipher.update(data, 'utf-8', 'base64')
   encryptedSession += cipher.final('base64')
@@ -255,7 +277,7 @@ describe('dbAuth', () => {
   describe('PAST_EXPIRES_DATE', () => {
     it('returns the start of epoch as a UTCString', () => {
       expect(DbAuthHandler.PAST_EXPIRES_DATE).toEqual(
-        new Date('1970-01-01T00:00:00.000+00:00').toUTCString()
+        new Date('1970-01-01T00:00:00.000+00:00').toUTCString(),
       )
     })
   })
@@ -303,10 +325,17 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
       const headers = dbAuth._deleteSessionHeader
+      const headersObj = Object.fromEntries(
+        dbAuth._deleteSessionHeader.entries(),
+      )
 
-      expect(Object.keys(headers).length).toEqual(1)
-      expect(Object.keys(headers)).toContain('set-cookie')
-      expect(headers['set-cookie']).toEqual(LOGOUT_COOKIE)
+      expect(Object.keys(headersObj).length).toEqual(1)
+
+      // Get setSetCookie returns an array of set-cookie headers
+      expect(headers.getSetCookie()).toContainEqual(LOGOUT_COOKIE)
+      expect(headers.getSetCookie()).toContainEqual(
+        'auth-provider=;Expires=Thu, 01 Jan 1970 00:00:00 GMT',
+      )
     })
   })
 
@@ -351,7 +380,7 @@ describe('dbAuth', () => {
             signup: {
               handler: () => {},
             },
-          })
+          }),
       ).toThrow(dbAuthError.NoForgotPasswordHandler)
 
       expect(
@@ -368,7 +397,7 @@ describe('dbAuth', () => {
             signup: {
               handler: () => {},
             },
-          })
+          }),
       ).toThrow(dbAuthError.NoForgotPasswordHandler)
     })
 
@@ -390,7 +419,7 @@ describe('dbAuth', () => {
             forgotPassword: {
               enabled: false,
             },
-          })
+          }),
       ).not.toThrow(dbAuthError.NoForgotPasswordHandler)
     })
 
@@ -408,7 +437,7 @@ describe('dbAuth', () => {
             signup: {
               handler: () => {},
             },
-          })
+          }),
       ).toThrow(dbAuthError.NoSessionExpirationError)
       // login object exists, but not `expires` key
       expect(
@@ -426,7 +455,7 @@ describe('dbAuth', () => {
             signup: {
               handler: () => {},
             },
-          })
+          }),
       ).toThrow(dbAuthError.NoSessionExpirationError)
     })
 
@@ -446,7 +475,7 @@ describe('dbAuth', () => {
             signup: {
               handler: () => {},
             },
-          })
+          }),
       ).toThrow(dbAuthError.NoLoginHandlerError)
     })
 
@@ -466,7 +495,7 @@ describe('dbAuth', () => {
             forgotPassword: {
               handler: () => {},
             },
-          })
+          }),
       ).not.toThrow(dbAuthError.NoLoginHandlerError)
     })
 
@@ -484,7 +513,7 @@ describe('dbAuth', () => {
             resetPassword: {
               handler: () => {},
             },
-          })
+          }),
       ).toThrow(dbAuthError.NoSignupHandler)
 
       expect(
@@ -501,7 +530,7 @@ describe('dbAuth', () => {
               handler: () => {},
             },
             signup: {},
-          })
+          }),
       ).toThrow(dbAuthError.NoSignupHandler)
     })
 
@@ -523,7 +552,7 @@ describe('dbAuth', () => {
             forgotPassword: {
               handler: () => {},
             },
-          })
+          }),
       ).not.toThrow(dbAuthError.NoSignupHandler)
     })
 
@@ -574,7 +603,7 @@ describe('dbAuth', () => {
       await dbAuth.init()
       await dbAuth.init()
       expect(dbAuth.normalizedRequest.headers.get('csrf-token')).toEqual(
-        'qwerty'
+        'qwerty',
       )
     })
 
@@ -605,7 +634,7 @@ describe('dbAuth', () => {
       delete process.env.SESSION_SECRET
 
       expect(() => new DbAuthHandler(req, context, options)).toThrow(
-        dbAuthError.NoSessionSecretError
+        dbAuthError.NoSessionSecretError,
       )
     })
   })
@@ -627,7 +656,10 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(myEvent, context, options)
       const response = await dbAuth.invoke()
 
-      expect(response.headers['set-cookie']).toEqual(LOGOUT_COOKIE)
+      expect(response.headers['set-cookie']).toContain(LOGOUT_COOKIE)
+      expect(response.headers['set-cookie']).toContain(
+        'auth-provider=;Expires=Thu, 01 Jan 1970 00:00:00 GMT',
+      )
     })
 
     it('returns a 404 if using the wrong HTTP verb', async () => {
@@ -706,7 +738,7 @@ describe('dbAuth', () => {
       expect(response.statusCode).toEqual(200)
       expect(response.headers['access-control-allow-credentials']).toBe('true')
       expect(response.headers['access-control-allow-origin']).toBe(
-        'https://www.myRedwoodWebSide.com'
+        'https://www.myRedwoodWebSide.com',
       )
     })
 
@@ -722,14 +754,14 @@ describe('dbAuth', () => {
 
       const dbAuth = new DbAuthHandler(fetchEvent, context, options)
       await dbAuth.init()
-      dbAuth.logout = vi.fn(() => ['body', { foo: 'bar' }])
+      dbAuth.logout = vi.fn(() => ['body', new Headers([['foo', 'bar']])])
       const response = await dbAuth.invoke()
 
       expect(dbAuth.logout).toHaveBeenCalled()
       expect(response.statusCode).toEqual(200)
       expect(response.body).toEqual('body')
       expect(response.headers).toEqual({
-        'Content-Type': 'application/json',
+        'content-type': 'application/json',
         foo: 'bar',
       })
     })
@@ -1215,8 +1247,9 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
 
-      const response = await dbAuth.login()
-      expect(response[1]['csrf-token']).toMatch(UUID_REGEX)
+      const [_, headers] = await dbAuth.login()
+      const csrfHeader = headers.get('csrf-token')
+      expect(csrfHeader).toMatch(UUID_REGEX)
     })
 
     it('returns a set-cookie header to create session', async () => {
@@ -1232,9 +1265,9 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
 
-      const response = await dbAuth.login()
+      const [_, headers] = await dbAuth.login()
 
-      expect(response[1]['csrf-token']).toMatch(UUID_REGEX)
+      expect(headers.get('csrf-token')).toMatch(UUID_REGEX)
     })
 
     it('returns a CSRF token in the header', async () => {
@@ -1468,7 +1501,7 @@ describe('dbAuth', () => {
     it('throws an error if resetToken is expired', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires - 1
+        tokenExpires.getSeconds() - options.forgotPassword.expires - 1,
       )
       await createDbUser({
         resetToken: hashToken('1234'),
@@ -1495,7 +1528,7 @@ describe('dbAuth', () => {
     it('clears out resetToken and resetTokenExpiresAt if expired', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires - 1
+        tokenExpires.getSeconds() - options.forgotPassword.expires - 1,
       )
       const user = await createDbUser({
         resetToken: hashToken('1234'),
@@ -1529,7 +1562,7 @@ describe('dbAuth', () => {
     it('throws allowReusedPassword is false and new password is same as old', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires + 1
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
       )
       await createDbUser({
         resetToken: hashToken('1234'),
@@ -1550,14 +1583,14 @@ describe('dbAuth', () => {
       await dbAuth.init()
 
       await expect(dbAuth.resetPassword()).rejects.toThrow(
-        dbAuthError.ReusedPasswordError
+        dbAuthError.ReusedPasswordError,
       )
     })
 
     it('does not throw if allowReusedPassword is true and new password is same as old', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires + 1
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
       )
       await createDbUser({
         resetToken: hashToken('1234'),
@@ -1583,7 +1616,7 @@ describe('dbAuth', () => {
     it('updates the users password', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires + 1
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
       )
       const user = await createDbUser({
         resetToken: hashToken('1234'),
@@ -1615,7 +1648,7 @@ describe('dbAuth', () => {
     it('clears resetToken and resetTokenExpiresAt', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires + 1
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
       )
       const user = await createDbUser({
         resetToken: hashToken('1234'),
@@ -1646,7 +1679,7 @@ describe('dbAuth', () => {
     it('invokes resetPassword.handler() with the user', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires + 1
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
       )
       const user = await createDbUser({
         resetToken: hashToken('1234'),
@@ -1674,7 +1707,7 @@ describe('dbAuth', () => {
     it('returns a logout response if handler returns falsy', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires + 1
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
       )
       await createDbUser({
         resetToken: hashToken('1234'),
@@ -1701,7 +1734,7 @@ describe('dbAuth', () => {
     it('returns a login response if handler returns falsy', async () => {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() - options.forgotPassword.expires + 1
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
       )
       await createDbUser({
         resetToken: hashToken('1234'),
@@ -1892,7 +1925,7 @@ describe('dbAuth', () => {
     })
 
     it('returns a message if a string is returned and does not log in', async () => {
-      const body = JSON.stringify({
+      const reqBody = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
@@ -1902,20 +1935,22 @@ describe('dbAuth', () => {
       }
       const req = new Request('http://localhost:8910/_rw_mw', {
         method: 'POST',
-        body,
+        body: reqBody,
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
 
-      const response = await dbAuth.signup()
+      const [body, headers, other] = await dbAuth.signup()
 
       // returns message
-      expect(response[0]).toEqual('{"message":"Hello, world"}')
-      // does not log them in
-      expect(response[1]['set-cookie']).toBeUndefined()
+      expect(body).toEqual('{"message":"Hello, world"}')
+
+      const headersValues = Object.fromEntries(headers.values())
+      // no login headers
+      expect(headersValues).toEqual({})
       // 201 Created
-      expect(response[2].statusCode).toEqual(201)
+      expect(other.statusCode).toEqual(201)
     })
   })
 
@@ -1923,7 +1958,7 @@ describe('dbAuth', () => {
     it('returns the ID of the logged in user', async () => {
       const user = await createDbUser()
       const cookie = encryptToCookie(
-        JSON.stringify({ id: user.id }) + ';' + 'token'
+        JSON.stringify({ id: user.id }) + ';' + 'token',
       )
 
       const headers = {
@@ -1933,8 +1968,6 @@ describe('dbAuth', () => {
         method: 'POST',
         headers,
       })
-
-      req.headers.get('cookie')
 
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
@@ -1955,7 +1988,7 @@ describe('dbAuth', () => {
       req = {
         headers: {
           cookie: encryptToCookie(
-            JSON.stringify({ id: 9999999999 }) + ';' + 'token'
+            JSON.stringify({ id: 9999999999 }) + ';' + 'token',
           ),
         },
       }
@@ -1983,7 +2016,7 @@ describe('dbAuth', () => {
       const [userId, headers] = await dbAuth.getToken()
 
       expect(userId).toEqual(7)
-      expect(headers['set-cookie']).toMatch(SET_SESSION_REGEX)
+      expect(headers.get('set-cookie')).toMatch(SET_SESSION_REGEX)
 
       // set session back to default
       process.env.SESSION_SECRET = SESSION_SECRET
@@ -2011,7 +2044,7 @@ describe('dbAuth', () => {
         const headers = {
           'auth-provider': 'dbAuth',
           'rw-studio-impersonation-cookie': encryptToCookie(
-            JSON.stringify({ id: dbUser.id })
+            JSON.stringify({ id: dbUser.id }),
           ),
         }
 
@@ -2039,7 +2072,7 @@ describe('dbAuth', () => {
             cookie: encryptToCookie(JSON.stringify({ id: 9999999999 })), // The "real" cookie with an invalid userId
             // 👇 The impersonated header takes precendence
             'rw-studio-impersonation-cookie': encryptToCookie(
-              JSON.stringify({ id: dbUser.id })
+              JSON.stringify({ id: dbUser.id }),
             ),
           },
         })
@@ -2062,7 +2095,7 @@ describe('dbAuth', () => {
           headers: {
             'auth-provider': 'dbAuth',
             'rw-studio-impersonation-cookie': encryptToCookie(
-              JSON.stringify({ id: dbUserId })
+              JSON.stringify({ id: dbUserId }),
             ),
             authorization: 'Bearer ' + dbUserId,
           },
@@ -2074,7 +2107,7 @@ describe('dbAuth', () => {
           await dbAuth._getCurrentUser()
         } catch (e) {
           expect(e.message).toEqual(
-            'Cannot retrieve user details without being logged in'
+            'Cannot retrieve user details without being logged in',
           )
         }
       })
@@ -2108,7 +2141,7 @@ describe('dbAuth', () => {
 
       expect.assertions(1)
       await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
-        dbAuthError.WebAuthnError
+        dbAuthError.WebAuthnError,
       )
     })
 
@@ -2127,7 +2160,7 @@ describe('dbAuth', () => {
 
       expect.assertions(1)
       await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
-        'Credentials not found'
+        'Credentials not found',
       )
     })
 
@@ -2155,7 +2188,7 @@ describe('dbAuth', () => {
 
       expect.assertions(1)
       await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
-        'Unexpected authentication response challenge'
+        'Unexpected authentication response challenge',
       )
     })
 
@@ -2223,8 +2256,9 @@ describe('dbAuth', () => {
       const [body, headers] = await dbAuth.webAuthnAuthenticate()
 
       expect(body).toEqual(false)
-      expect(headers['set-cookie'][0]).toMatch(
-        'webAuthn=CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA'
+
+      expect(headers.get('set-cookie')).toMatch(
+        'webAuthn=CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA',
       )
     })
   })
@@ -2267,7 +2301,7 @@ describe('dbAuth', () => {
       req = {
         headers: {
           cookie: encryptToCookie(
-            JSON.stringify({ id: user.id }) + ';' + 'token'
+            JSON.stringify({ id: user.id }) + ';' + 'token',
           ),
         },
       }
@@ -2295,7 +2329,7 @@ describe('dbAuth', () => {
       req = {
         headers: {
           cookie: encryptToCookie(
-            JSON.stringify({ id: user.id }) + ';' + 'token'
+            JSON.stringify({ id: user.id }) + ';' + 'token',
           ),
         },
       }
@@ -2354,7 +2388,7 @@ describe('dbAuth', () => {
       const user = await createDbUser()
       const headers = {
         cookie: encryptToCookie(
-          JSON.stringify({ id: user.id }) + ';' + 'token'
+          JSON.stringify({ id: user.id }) + ';' + 'token',
         ),
       }
 
@@ -2370,7 +2404,7 @@ describe('dbAuth', () => {
 
       expect(regOptions.attestation).toEqual('none')
       expect(regOptions.authenticatorSelection.authenticatorAttachment).toEqual(
-        options.webAuthn.type
+        options.webAuthn.type,
       )
       expect(regOptions.excludeCredentials).toEqual([])
       expect(regOptions.rp.name).toEqual(options.webAuthn.name)
@@ -2385,7 +2419,7 @@ describe('dbAuth', () => {
       const user = await createDbUser()
       const headers = {
         cookie: encryptToCookie(
-          JSON.stringify({ id: user.id }) + ';' + 'token'
+          JSON.stringify({ id: user.id }) + ';' + 'token',
         ),
       }
 
@@ -2406,7 +2440,7 @@ describe('dbAuth', () => {
       let user = await createDbUser()
       const headers = {
         cookie: encryptToCookie(
-          JSON.stringify({ id: user.id }) + ';' + 'token'
+          JSON.stringify({ id: user.id }) + ';' + 'token',
         ),
       }
 
@@ -2433,7 +2467,7 @@ describe('dbAuth', () => {
         headers: {
           'Content-Type': 'application/json',
           cookie: encryptToCookie(
-            JSON.stringify({ id: user.id }) + ';' + 'token'
+            JSON.stringify({ id: user.id }) + ';' + 'token',
           ),
         },
         body: '{"method":"webAuthnRegister","id":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","rawId":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","response":{"attestationObject":"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVisSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAK3OAAI1vMYKZIsLJfHwVQMAKBqo2TrmGKaTmwQ3lZJ263AS5GmvYpkuRCScLQle-NGrFM9uLHQJhhalAQIDJiABIVggGIipTQt-gcoDPOpW6Zje_Av9C0-jWb2R2PBmXJJL-c8iWCC76wxo3uzG8cPqb0A8Vij-dqMbrEytEHjuFOtiQ2dt8A","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiSHVHUHJRcUs3ZjUzTkx3TVpNc3RfREw5RGlnMkJCaXZEWVdXcGF3SVBWTSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9"},"type":"public-key","clientExtensionResults":{},"transports":["internal"]}',
@@ -2448,7 +2482,7 @@ describe('dbAuth', () => {
       })
 
       expect(credential.id).toEqual(
-        'GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg'
+        'GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg',
       )
       expect(credential.transports).toEqual('["internal"]')
       expect(credential.counter).toEqual(0)
@@ -2462,12 +2496,12 @@ describe('dbAuth', () => {
         headers: {
           'Content-Type': 'application/json',
           cookie: encryptToCookie(
-            JSON.stringify({ id: user.id }) + ';' + 'token'
+            JSON.stringify({ id: user.id }) + ';' + 'token',
           ),
         },
         body: Buffer.from(
           `{"method":"webAuthnRegister","id":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","rawId":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","response":{"attestationObject":"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVisSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAK3OAAI1vMYKZIsLJfHwVQMAKBqo2TrmGKaTmwQ3lZJ263AS5GmvYpkuRCScLQle-NGrFM9uLHQJhhalAQIDJiABIVggGIipTQt-gcoDPOpW6Zje_Av9C0-jWb2R2PBmXJJL-c8iWCC76wxo3uzG8cPqb0A8Vij-dqMbrEytEHjuFOtiQ2dt8A","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiSHVHUHJRcUs3ZjUzTkx3TVpNc3RfREw5RGlnMkJCaXZEWVdXcGF3SVBWTSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9"},"type":"public-key","clientExtensionResults":{},"transports":["internal"]}`,
-          'utf8'
+          'utf8',
         ),
       }
       const dbAuth = new DbAuthHandler(req, context, options)
@@ -2480,7 +2514,7 @@ describe('dbAuth', () => {
       })
 
       expect(credential.id).toEqual(
-        'GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg'
+        'GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg',
       )
     })
   })
@@ -2518,7 +2552,7 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler({ headers: {} }, context, options)
 
       expect(dbAuth._webAuthnCookie('1234', 'now')).toMatch(
-        'webAuthn=1234;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
+        'webAuthn=1234;Expires=Thu, 01 Jan 1970 00:00:00 GMT',
       )
     })
   })
@@ -2539,7 +2573,7 @@ describe('dbAuth', () => {
               Domain: 'example.com',
             },
           },
-        }
+        },
       )
       const attributes = dbAuth._cookieAttributes({})
 
@@ -2604,22 +2638,23 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('_createSessionHeader()', () => {
+  describe('_createSessionCookieString()', () => {
     it('returns a Set-Cookie header', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
-      const headers = dbAuth._createSessionHeader({ foo: 'bar' }, 'abcd')
 
-      expect(Object.keys(headers).length).toEqual(1)
-      expect(headers['set-cookie']).toMatch(
-        `Expires=${dbAuth.sessionExpiresDate}`
+      const cookieString = dbAuth._createSessionCookieString(
+        { foo: 'bar' },
+        'abcd',
       )
+
+      expect(cookieString).toMatch(`Expires=${dbAuth.sessionExpiresDate}`)
       // can't really match on the session value since it will change on every render,
       // due to CSRF token generation but we can check that it contains only the
       // characters that would be returned by the encrypt function
-      expect(headers['set-cookie']).toMatch(SET_SESSION_REGEX)
+      expect(cookieString).toMatch(SET_SESSION_REGEX)
       // and we can check that it's a certain number of characters
-      expect(headers['set-cookie'].split(';')[0].length).toEqual(77)
+      expect(cookieString.split(';')[0].length).toEqual(77)
     })
   })
 
@@ -2854,7 +2889,7 @@ describe('dbAuth', () => {
 
       // password now hashed by node:crypto
       expect(user.hashedPassword).toEqual(
-        'f20d69d478fa1afc85057384e21bd457a76b23b23e2a94f5bd982976f700a552|16384|8|1'
+        'f20d69d478fa1afc85057384e21bd457a76b23b23e2a94f5bd982976f700a552|16384|8|1',
       )
       // salt should remain the same
       expect(user.salt).toEqual('2ef27f4073c603ba8b7807c6de6d6a89')
@@ -2902,7 +2937,7 @@ describe('dbAuth', () => {
       const dbUser = await createDbUser()
       const headers = {
         cookie: encryptToCookie(
-          JSON.stringify({ id: dbUser.id }) + ';' + 'token'
+          JSON.stringify({ id: dbUser.id }) + ';' + 'token',
         ),
       }
 
@@ -2929,7 +2964,7 @@ describe('dbAuth', () => {
       const dbUser = await createDbUser()
       const headers = {
         cookie: encryptToCookie(
-          JSON.stringify({ id: dbUser.id }) + ';' + 'token'
+          JSON.stringify({ id: dbUser.id }) + ';' + 'token',
         ),
       }
 
@@ -2970,7 +3005,7 @@ describe('dbAuth', () => {
       }
       const headers = {
         cookie: encryptToCookie(
-          JSON.stringify({ userId: dbUser.userId }) + ';' + 'token'
+          JSON.stringify({ userId: dbUser.userId }) + ';' + 'token',
         ),
       }
 
@@ -3012,7 +3047,7 @@ describe('dbAuth', () => {
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
         expect(e.message).toEqual(
-          defaultMessage.replace(/\$\{username\}/, dbUser.email)
+          defaultMessage.replace(/\$\{username\}/, dbUser.email),
         )
       }
 
@@ -3096,7 +3131,7 @@ describe('dbAuth', () => {
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
         expect(e.message).toEqual(
-          defaultMessage.replace(/\$\{username\}/, dbUser.email)
+          defaultMessage.replace(/\$\{username\}/, dbUser.email),
         )
       }
 
@@ -3128,7 +3163,7 @@ describe('dbAuth', () => {
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
         expect(e.message).toEqual(
-          defaultMessage.replace(/\$\{field\}/, 'username')
+          defaultMessage.replace(/\$\{field\}/, 'username'),
         )
       }
 
@@ -3178,7 +3213,7 @@ describe('dbAuth', () => {
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
         expect(e.message).toEqual(
-          defaultMessage.replace(/\$\{field\}/, 'password')
+          defaultMessage.replace(/\$\{field\}/, 'password'),
         )
       }
 
@@ -3304,10 +3339,10 @@ describe('dbAuth', () => {
     it('returns the response array necessary to log user out', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
-      const [body, headers] = dbAuth._logoutResponse()
+      const response = dbAuth._logoutResponse()
 
-      expect(body).toEqual('')
-      expect(headers['set-cookie']).toMatch(/^session=;/)
+      expect(response[0]).toEqual('')
+      expectLoggedOutResponse(response)
     })
 
     it('can accept an object to return in the body', async () => {
@@ -3325,7 +3360,7 @@ describe('dbAuth', () => {
     it('returns a 200 response by default', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
-      const response = dbAuth._ok('', {})
+      const response = dbAuth._ok('')
 
       expect(response.statusCode).toEqual(200)
     })
@@ -3333,7 +3368,7 @@ describe('dbAuth', () => {
     it('can return other status codes', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
-      const response = dbAuth._ok('', {}, { statusCode: 201 })
+      const response = dbAuth._ok('', new Headers(), { statusCode: 201 })
 
       expect(response.statusCode).toEqual(201)
     })
@@ -3341,7 +3376,9 @@ describe('dbAuth', () => {
     it('stringifies a JSON body', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
-      const response = dbAuth._ok({ foo: 'bar' }, {}, { statusCode: 201 })
+      const response = dbAuth._ok({ foo: 'bar' }, new Headers(), {
+        statusCode: 201,
+      })
 
       expect(response.body).toEqual('{"foo":"bar"}')
     })
@@ -3349,7 +3386,9 @@ describe('dbAuth', () => {
     it('does not stringify a body that is a string already', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
-      const response = dbAuth._ok('{"foo":"bar"}', {}, { statusCode: 201 })
+      const response = dbAuth._ok('{"foo":"bar"}', new Headers(), {
+        statusCode: 201,
+      })
 
       expect(response.body).toEqual('{"foo":"bar"}')
     })

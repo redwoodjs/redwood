@@ -6,7 +6,7 @@ import { print } from 'graphql/language/printer'
 export function createHttpLink(
   uri: string,
   httpLinkConfig: HttpOptions | undefined,
-  cookieHeader?: string
+  cookieHeader?: string,
 ) {
   const headers: Record<string, string> = {}
 
@@ -57,12 +57,12 @@ export function createUpdateDataLink() {
 }
 export function createAuthApolloLink(
   authProviderType: string,
-  headers:
+  headersFromFetchProvider:
     | {
         'auth-provider'?: string | undefined
         authorization?: string | undefined
       }
-    | undefined
+    | undefined,
 ) {
   return new ApolloLink((operation, forward) => {
     const { token } = operation.getContext()
@@ -74,10 +74,16 @@ export function createAuthApolloLink(
         }
       : {}
 
+    if (!token) {
+      // If there's no token i.e. it's using middleware auth
+      // remove the auth-provider header
+      delete headersFromFetchProvider?.['auth-provider']
+    }
+
     operation.setContext(() => ({
       headers: {
         ...operation.getContext().headers,
-        ...headers,
+        ...headersFromFetchProvider,
         // Duped auth headers, because we may remove the `FetchConfigProvider` at a later date.
         ...authHeaders,
       },
@@ -116,7 +122,7 @@ export function createFinalLink({
 
 export type RedwoodApolloLink<
   Name extends RedwoodApolloLinkName,
-  Link extends ApolloLink = ApolloLink
+  Link extends ApolloLink = ApolloLink,
 > = {
   name: Name
   link: Link

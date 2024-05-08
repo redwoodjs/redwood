@@ -52,15 +52,17 @@ export const transformTSToJS = (filename: string, content: string) => {
 /**
  * This returns the config present in `prettier.config.js` of a Redwood project.
  */
-export const prettierOptions = () => {
+export const getPrettierOptions = async () => {
   try {
-    const options = require(path.join(getPaths().base, 'prettier.config.js'))
+    const { default: options } = await import(
+      `file://${path.join(getPaths().base, 'prettier.config.js')}`
+    )
 
     if (options.tailwindConfig?.startsWith('.')) {
       // Make this work with --cwd
       options.tailwindConfig = path.join(
         process.env.RWJS_CWD ?? process.cwd(),
-        options.tailwindConfig
+        options.tailwindConfig,
       )
     }
 
@@ -70,10 +72,10 @@ export const prettierOptions = () => {
   }
 }
 
-export const prettify = (
+export const prettify = async (
   templateFilename: string,
-  renderedTemplate: string
-): string => {
+  renderedTemplate: string,
+): Promise<string> => {
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
   // https://prettier.io/docs/en/options.html#parser
@@ -88,8 +90,10 @@ export const prettify = (
     return renderedTemplate
   }
 
+  const prettierOptions = await getPrettierOptions()
+
   return format(renderedTemplate, {
-    ...prettierOptions(),
+    ...prettierOptions,
     parser,
   })
 }
@@ -105,7 +109,7 @@ export const writeFile = <Renderer extends typeof ListrRenderer>(
   task: ListrTaskWrapper<never, Renderer> = {} as ListrTaskWrapper<
     never,
     Renderer
-  >
+  >,
 ) => {
   const { base } = getPaths()
   task.title = `Writing \`./${path.relative(base, target)}\``
@@ -134,7 +138,7 @@ export const writeFile = <Renderer extends typeof ListrRenderer>(
  */
 export const writeFilesTask = <Renderer extends typeof ListrRenderer>(
   files: Record<string, string>,
-  options: { existingFiles: ExistingFiles }
+  options: { existingFiles: ExistingFiles },
 ) => {
   const { base } = getPaths()
 
@@ -149,11 +153,11 @@ export const writeFilesTask = <Renderer extends typeof ListrRenderer>(
           task: ListrTaskWrapper<
             never,
             ListrGetRendererClassFromValue<Renderer>
-          >
+          >,
         ) => {
           return writeFile(file, contents, options, task)
         },
       }
-    })
+    }),
   )
 }

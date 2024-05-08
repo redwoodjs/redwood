@@ -22,7 +22,7 @@ const persistConsoleHistory = (r) => {
   fs.appendFileSync(
     consoleHistoryFile,
     r.lines.filter((line) => line.trim()).join('\n') + '\n',
-    'utf8'
+    'utf8',
   )
 }
 

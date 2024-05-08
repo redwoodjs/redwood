@@ -101,7 +101,7 @@ export async function handler({ force, install, packages }) {
                 },
               },
             ],
-            { rendererOptions: { collapseSubtasks: false } }
+            { rendererOptions: { collapseSubtasks: false } },
           )
         },
       },
@@ -133,15 +133,15 @@ export async function handler({ force, install, packages }) {
 
           if (!force && fse.existsSync(postCSSConfigPath)) {
             throw new Error(
-              'PostCSS config already exists.\nUse --force to override existing config.'
+              'PostCSS config already exists.\nUse --force to override existing config.',
             )
           } else {
             const postCSSConfig = fse.readFileSync(
               path.join(
                 __dirname,
-                '../templates/mantine-postcss.config.js.template'
+                '../templates/mantine-postcss.config.js.template',
               ),
-              'utf-8'
+              'utf-8',
             )
 
             return fse.outputFileSync(postCSSConfigPath, postCSSConfig)
@@ -161,17 +161,17 @@ export async function handler({ force, install, packages }) {
         skip: () =>
           fileIncludes(rwPaths.web.storybookPreviewConfig, 'withMantine'),
         task: async () =>
-          extendStorybookConfiguration(
+          await extendStorybookConfiguration(
             path.join(
               __dirname,
               '..',
               'templates',
-              'mantine.storybook.preview.tsx.template'
-            )
+              'mantine.storybook.preview.tsx.template',
+            ),
           ),
       },
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

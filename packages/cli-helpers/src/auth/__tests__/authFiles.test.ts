@@ -39,12 +39,12 @@ beforeEach(() => {
   vi.mocked(isTypeScriptProject).mockReturnValue(true)
 })
 
-it('generates a record of TS files', () => {
+it('generates a record of TS files', async () => {
   const filePaths = Object.keys(
-    apiSideFiles({
+    await apiSideFiles({
       basedir: path.join(__dirname, 'fixtures/supertokensSetup'),
       webAuthn: false,
-    })
+    }),
   ).sort()
 
   expect(filePaths).toEqual([
@@ -54,14 +54,14 @@ it('generates a record of TS files', () => {
   ])
 })
 
-it('generates a record of JS files', () => {
+it('generates a record of JS files', async () => {
   vi.mocked(isTypeScriptProject).mockReturnValue(false)
 
   const filePaths = Object.keys(
-    apiSideFiles({
+    await apiSideFiles({
       basedir: path.join(__dirname, 'fixtures/supertokensSetup'),
       webAuthn: false,
-    })
+    }),
   ).sort()
 
   expect(filePaths).toEqual([
@@ -71,8 +71,8 @@ it('generates a record of JS files', () => {
   ])
 })
 
-it('generates a record of webAuthn files', () => {
-  const filesRecord = apiSideFiles({
+it('generates a record of webAuthn files', async () => {
+  const filesRecord = await apiSideFiles({
     basedir: path.join(__dirname, 'fixtures/dbAuthSetup'),
     webAuthn: true,
   })
@@ -80,13 +80,13 @@ it('generates a record of webAuthn files', () => {
   expect(Object.keys(filesRecord)).toHaveLength(2)
   expect(
     Object.values(filesRecord).some((content) =>
-      content.toLowerCase().includes('webauthn')
-    )
+      content.toLowerCase().includes('webauthn'),
+    ),
   ).toBeTruthy()
   expect(
     Object.values(filesRecord).some(
-      (content) => !content.toLowerCase().includes('webauthn')
-    )
+      (content) => !content.toLowerCase().includes('webauthn'),
+    ),
   ).toBeTruthy()
 })
 
@@ -104,7 +104,7 @@ it('generates new filenames to avoid overwriting existing files', () => {
 
   const filesRecord = generateUniqueFileNames(
     conflictingFilesRecord,
-    'supertokens'
+    'supertokens',
   )
 
   const filePaths = Object.keys(filesRecord).sort()

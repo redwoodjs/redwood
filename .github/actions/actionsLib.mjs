@@ -144,15 +144,8 @@ export async function setUpRscTestProject(
   console.log()
   fs.cpSync(fixturePath, testProjectPath, { recursive: true })
 
-  console.log(`Adding framework dependencies to ${testProjectPath}`)
-  await projectDeps(testProjectPath)
-  console.log()
-
-  console.log(`Installing node_modules in ${testProjectPath}`)
-  await execInProject('yarn install')
-
-  console.log(`Copying over framework files to ${testProjectPath}`)
-  await execInProject(`node ${rwfwBinPath} project:copy`, {
+  console.log('Syncing framework')
+  await execInProject(`node ${rwfwBinPath} project:tarsync --verbose`, {
     env: { RWFW_PATH: REDWOOD_FRAMEWORK_PATH },
   })
   console.log()

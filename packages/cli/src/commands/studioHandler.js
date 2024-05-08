@@ -15,7 +15,7 @@ export const handler = async (options) => {
       assertRedwoodVersion(minVersions)
 
       console.log(
-        'The studio package is not installed, installing it for you, this may take a moment...'
+        'The studio package is not installed, installing it for you, this may take a moment...',
       )
       await installModule('@redwoodjs/studio', '11')
       console.log('Studio package installed successfully.')
@@ -23,14 +23,14 @@ export const handler = async (options) => {
       const installedRealtime = await installModule('@redwoodjs/realtime')
       if (installedRealtime) {
         console.log(
-          "Added @redwoodjs/realtime to your project, as it's used by Studio"
+          "Added @redwoodjs/realtime to your project, as it's used by Studio",
         )
       }
 
       const installedApiServer = await installModule('@redwoodjs/api-server')
       if (installedApiServer) {
         console.log(
-          "Added @redwoodjs/api-server to your project, as it's used by Studio"
+          "Added @redwoodjs/api-server to your project, as it's used by Studio",
         )
       }
     }
@@ -79,7 +79,7 @@ export function assertRedwoodVersion(minVersions) {
 
   console.error(
     `The studio command requires Redwood version ${minVersions[0]} or ` +
-      `greater, you are using ${rwVersion}.`
+      `greater, you are using ${rwVersion}.`,
   )
 
   process.exit(1)
@@ -87,7 +87,7 @@ export function assertRedwoodVersion(minVersions) {
 
 function getProjectRedwoodVersion() {
   const { devDependencies } = fs.readJSONSync(
-    path.join(getPaths().base, 'package.json')
+    path.join(getPaths().base, 'package.json'),
   )
 
   return devDependencies['@redwoodjs/core']

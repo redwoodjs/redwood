@@ -10,13 +10,13 @@ export default async function transform(file, api) {
   const match = file.source
     .trim()
     .match(
-      /module.exports = require\('@redwoodjs\/testing\/config\/jest\/(?<side>api|web)'\)/
+      /module.exports = require\('@redwoodjs\/testing\/config\/jest\/(?<side>api|web)'\)/,
     )
 
   if (match?.length) {
     file.source = await fetchFileFromTemplate(
       'main',
-      `${match.groups?.side}/jest.config.js`
+      `${match.groups?.side}/jest.config.js`,
     )
 
     return file.source
@@ -38,8 +38,8 @@ export default async function transform(file, api) {
 
   oldConfig.replaceWith(
     ["rootDir: '../'", "preset: '@redwoodjs/testing/config/jest/web'"].join(
-      ',\n'
-    )
+      ',\n',
+    ),
   )
 
   return ast.toSource({ trailingComma: true })

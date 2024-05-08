@@ -21,7 +21,7 @@ vi.mock('node:fs', async () => {
 })
 vi.mock('execa')
 // The jscodeshift parts are tested by another test
-vi.mock('../runTransform', () => {
+vi.mock('../../../../../../lib/runTransform', () => {
   return {
     runTransform: () => {
       return {}
@@ -96,7 +96,7 @@ test('redwood.toml update is skipped if fragments are already enabled', async ()
       'redwood.toml': '[graphql]\nfragments = true',
       'web/src/App.tsx': '',
     },
-    FIXTURE_PATH
+    FIXTURE_PATH,
   )
 
   await handler({ force: false })
@@ -145,7 +145,7 @@ test('redwood.toml is updated even if `fragments = true` exists for other sectio
   await handler({ force: false })
 
   expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toEqual(
-    toml + '\n[graphql]\n  fragments = true'
+    toml + '\n[graphql]\n  fragments = true',
   )
 })
 
@@ -205,6 +205,6 @@ test('[graphql] is last section in redwood.toml', async () => {
   await handler({ force: false })
 
   expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toEqual(
-    toml + '\n  fragments = true'
+    toml + '\n  fragments = true',
   )
 })

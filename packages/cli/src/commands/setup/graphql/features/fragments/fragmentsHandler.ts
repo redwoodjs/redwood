@@ -5,11 +5,16 @@ import execa from 'execa'
 import { Listr } from 'listr2'
 import { format } from 'prettier'
 
-import { colors, prettierOptions, setTomlSetting } from '@redwoodjs/cli-helpers'
+import {
+  colors,
+  getPrettierOptions,
+  setTomlSetting,
+} from '@redwoodjs/cli-helpers'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { runTransform } from '../../../../../lib/runTransform'
+
 import type { Args } from './fragments'
-import { runTransform } from './runTransform'
 
 export const command = 'fragments'
 export const description = 'Set up Fragments for GraphQL'
@@ -67,8 +72,10 @@ export async function handler({ force }: Args) {
           const appPath = getPaths().web.app
           const source = fs.readFileSync(appPath, 'utf-8')
 
-          const prettifiedApp = format(source, {
-            ...prettierOptions(),
+          const prettierOptions = await getPrettierOptions()
+
+          const prettifiedApp = await format(source, {
+            ...prettierOptions,
             parser: 'babel-ts',
           })
 
@@ -76,7 +83,7 @@ export async function handler({ force }: Args) {
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

@@ -59,7 +59,7 @@ export async function installRedwoodModule(module) {
 
     try {
       const packumentResponse = await fetch(
-        `https://registry.npmjs.org/${module}`
+        `https://registry.npmjs.org/${module}`,
       )
 
       packument = await packumentResponse.json()
@@ -69,7 +69,7 @@ export async function installRedwoodModule(module) {
       }
     } catch (error) {
       throw new Error(
-        `Couldn't fetch packument for ${module}: ${error.message}`
+        `Couldn't fetch packument for ${module}: ${error.message}`,
       )
     }
 
@@ -103,7 +103,7 @@ export async function installRedwoodModule(module) {
  */
 export function isModuleInstalled(module) {
   const { dependencies, devDependencies } = fs.readJSONSync(
-    path.join(getPaths().base, 'package.json')
+    path.join(getPaths().base, 'package.json'),
   )
 
   const deps = {

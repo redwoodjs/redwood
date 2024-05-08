@@ -58,7 +58,7 @@ type Decoder = (
   req: {
     event: APIGatewayProxyEvent
     context: Context
-  }
+  },
 ) => Promise<Decoded>
 
 interface MockLambdaParams {

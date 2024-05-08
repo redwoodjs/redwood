@@ -27,12 +27,6 @@ import { pluralize, singularize } from './rwPluralize'
 
 export { findUp }
 
-export const asyncForEach = async (array, callback) => {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array)
-  }
-}
-
 /**
  * Returns variants of the passed `name` for usage in templates. If the given
  * name was "fooBar" then these would be:
@@ -64,7 +58,7 @@ export const nameVariants = (name) => {
   }
 }
 
-export const generateTemplate = (templateFilename, { name, ...rest }) => {
+export const generateTemplate = async (templateFilename, { name, ...rest }) => {
   try {
     const templateFn = template(readFile(templateFilename).toString())
 
@@ -81,7 +75,7 @@ export const generateTemplate = (templateFilename, { name, ...rest }) => {
   }
 }
 
-export const prettify = (templateFilename, renderedTemplate) => {
+export const prettify = async (templateFilename, renderedTemplate) => {
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
   // https://prettier.io/docs/en/options.html#parser
@@ -97,8 +91,10 @@ export const prettify = (templateFilename, renderedTemplate) => {
     return renderedTemplate
   }
 
+  const prettierOptions = await getPrettierOptions()
+
   return format(renderedTemplate, {
-    ...prettierOptions(),
+    ...prettierOptions,
     parser,
   })
 }
@@ -139,7 +135,7 @@ export const writeFile = (
   target,
   contents,
   { overwriteExisting = false } = {},
-  task = {}
+  task = {},
 ) => {
   const { base } = getPaths()
   task.title = `Writing \`./${path.relative(base, target)}\``
@@ -159,7 +155,7 @@ export const writeFile = (
 export const saveRemoteFileToDisk = (
   url,
   localPath,
-  { overwriteExisting = false } = {}
+  { overwriteExisting = false } = {},
 ) => {
   if (!overwriteExisting && fs.existsSync(localPath)) {
     throw new Error(`${localPath} already exists.`)
@@ -172,10 +168,10 @@ export const saveRemoteFileToDisk = (
         resolve()
       } else {
         reject(
-          new Error(`${url} responded with status code ${response.statusCode}`)
+          new Error(`${url} responded with status code ${response.statusCode}`),
         )
       }
-    })
+    }),
   )
 
   return downloadPromise
@@ -228,9 +224,12 @@ export const getConfig = () => {
 /**
  * This returns the config present in `prettier.config.js` of a Redwood project.
  */
-export const prettierOptions = () => {
+export const getPrettierOptions = async () => {
   try {
-    return require(path.join(getPaths().base, 'prettier.config.js'))
+    const { default: prettierOptions } = await import(
+      `file://${path.join(getPaths().base, 'prettier.config.js')}`
+    )
+    return prettierOptions
   } catch (e) {
     // If we're in our vitest environment we want to return a consistent set of prettier options
     // such that snapshots don't change unexpectedly.
@@ -260,7 +259,7 @@ export const prettierOptions = () => {
 /*
  * Convert a generated TS template file into JS.
  */
-export const transformTSToJS = (filename, content) => {
+export const transformTSToJS = async (filename, content) => {
   const { code } = babel.transform(content, {
     filename,
     // If you ran `yarn rw generate` in `./web` transformSync would import the `.babelrc.js` file,
@@ -296,7 +295,7 @@ export const writeFilesTask = (files, options) => {
         title: `...waiting to write file \`./${path.relative(base, file)}\`...`,
         task: (ctx, task) => writeFile(file, contents, options, task),
       }
-    })
+    }),
   )
 }
 
@@ -361,7 +360,7 @@ export const cleanupEmptyDirsTask = (files) => {
           return false
         },
       }
-    })
+    }),
   )
 }
 
@@ -370,10 +369,10 @@ const wrapWithSet = (
   layout,
   routes,
   newLineAndIndent,
-  props = {}
+  props = {},
 ) => {
   const [_, indentOne, indentTwo] = routesContent.match(
-    /([ \t]*)<Router.*?>[^<]*[\r\n]+([ \t]+)/
+    /([ \t]*)<Router.*?>[^<]*[\r\n]+([ \t]+)/,
   ) || ['', 0, 2]
   const oneLevelIndent = indentTwo.slice(0, indentTwo.length - indentOne.length)
   const newRoutesWithExtraIndent = routes.map((route) => oneLevelIndent + route)
@@ -400,7 +399,7 @@ export const addRoutesToRouterTask = (routes, layout, setProps = {}) => {
 
   if (newRoutes.length) {
     const [routerStart, routerParams, newLineAndIndent] = routesContent.match(
-      /\s*<Router(.*?)>(\s*)/s
+      /\s*<Router(.*?)>(\s*)/s,
     )
 
     if (/trailingSlashes={?(["'])always\1}?/.test(routerParams)) {
@@ -408,7 +407,7 @@ export const addRoutesToRouterTask = (routes, layout, setProps = {}) => {
       // ['<Route path="/foo" page={FooPage} name="foo"/>']
       // and we need to replace `path="/foo"` with `path="/foo/"`
       newRoutes = newRoutes.map((route) =>
-        route.replace(/ path="(.+?)" /, ' path="$1/" ')
+        route.replace(/ path="(.+?)" /, ' path="$1/" '),
       )
     }
 
@@ -418,13 +417,13 @@ export const addRoutesToRouterTask = (routes, layout, setProps = {}) => {
           layout,
           newRoutes,
           newLineAndIndent,
-          setProps
+          setProps,
         )
       : newRoutes.join(newLineAndIndent)
 
     const newRoutesContent = routesContent.replace(
       routerStart,
-      `${routerStart + routesBatch + newLineAndIndent}`
+      `${routerStart + routesBatch + newLineAndIndent}`,
     )
 
     writeFile(redwoodPaths.web.routes, newRoutesContent, {
@@ -442,8 +441,8 @@ export const addScaffoldImport = () => {
   }
 
   appJsContents = appJsContents.replace(
-    "import Routes from 'src/Routes'\n",
-    "import Routes from 'src/Routes'\n\nimport './scaffold.css'"
+    "import './index.css'",
+    "import './index.css'\nimport './scaffold.css'\n",
   )
   writeFile(appJsPath, appJsContents, { overwriteExisting: true })
 
@@ -452,7 +451,7 @@ export const addScaffoldImport = () => {
 
 const removeEmtpySet = (routesContent, layout) => {
   const setWithLayoutReg = new RegExp(
-    `\\s*<Set[^>]*wrap={${layout}}[^<]*>([^<]*)<\/Set>`
+    `\\s*<Set[^>]*wrap={${layout}}[^<]*>([^<]*)<\/Set>`,
   )
   const [matchedSet, childContent] = routesContent.match(setWithLayoutReg) || []
   if (!matchedSet) {
@@ -566,7 +565,7 @@ export const runCommandTask = async (commands, { verbose }) => {
     {
       renderer: verbose && 'verbose',
       rendererOptions: { collapseSubtasks: false, dateFormat: false },
-    }
+    },
   )
 
   try {
@@ -586,7 +585,7 @@ export const getDefaultArgs = (builder) => {
       options[optionName] = optionConfig.default
       return options
     },
-    {}
+    {},
   )
 }
 

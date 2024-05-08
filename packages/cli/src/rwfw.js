@@ -22,7 +22,7 @@ if (!RWFW_PATH) {
 
 if (!fs.existsSync(RWFW_PATH)) {
   console.error(
-    `Error: The specified path to Redwood Framework (${RWFW_PATH}) does not exist.`
+    `Error: The specified path to Redwood Framework (${RWFW_PATH}) does not exist.`,
   )
   console.error('Usage: `RWFW_PATH=~/gh/redwoodjs/redwood yarn rwfw <command>')
   process.exit(1)
@@ -33,11 +33,11 @@ config.set('RWFW_PATH', absRwFwPath)
 
 // Execute the commands in the Redwood Framework Tools package.
 const projectPath = path.dirname(
-  getConfigPath(process.env.RWJS_CWD ?? process.cwd())
+  getConfigPath(process.env.RWJS_CWD ?? process.cwd()),
 )
 console.log(
   'Redwood Framework Tools Path:',
-  TerminalLink(absRwFwPath, absRwFwPath)
+  TerminalLink(absRwFwPath, absRwFwPath),
 )
 
 let command = process.argv.slice(2)

@@ -83,7 +83,7 @@ watcher
   })
   .on('all', async (eventName, p) => {
     cliLogger.trace(
-      `File system change: ${chalk.magenta(eventName)} ${chalk.dim(p)}`
+      `File system change: ${chalk.magenta(eventName)} ${chalk.dim(p)}`,
     )
     if (!['add', 'change', 'unlink'].includes(eventName)) {
       return
@@ -98,7 +98,7 @@ watcher
         action[eventTigger],
         type + ':',
         chalk.dim(p),
-        chalk.dim.italic(Date.now() - start + ' ms')
+        chalk.dim.italic(Date.now() - start + ' ms'),
       )
 
     if (absPath.indexOf('Cell') !== -1 && isCellFile(absPath)) {

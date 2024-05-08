@@ -5,7 +5,7 @@ import path from 'path'
 import type { PluginOptions, PluginTarget, TransformOptions } from '@babel/core'
 import { transformAsync } from '@babel/core'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getPaths, projectSideIsEsm } from '@redwoodjs/project-config'
 
 import type { RegisterHookOptions } from './common'
 import {
@@ -16,11 +16,16 @@ import {
   parseTypeScriptConfigFiles,
   registerBabel,
 } from './common'
+import pluginRedwoodContextWrapping from './plugins/babel-plugin-redwood-context-wrapping'
+import pluginRedwoodDirectoryNamedImport from './plugins/babel-plugin-redwood-directory-named-import'
+import pluginRedwoodGraphqlOptionsExtract from './plugins/babel-plugin-redwood-graphql-options-extract'
+import pluginRedwoodImportDir from './plugins/babel-plugin-redwood-import-dir'
+import pluginRedwoodOTelWrapping from './plugins/babel-plugin-redwood-otel-wrapping'
 
 export const TARGETS_NODE = '20.10'
 
 export const getApiSideBabelPresets = (
-  { presetEnv } = { presetEnv: false }
+  { presetEnv } = { presetEnv: false },
 ) => {
   return [
     [
@@ -74,11 +79,10 @@ type PluginShape =
   | [PluginTarget, PluginOptions, undefined | string]
   | [PluginTarget, PluginOptions]
 
-export const getApiSideBabelPlugins = (
-  { openTelemetry } = {
-    openTelemetry: false,
-  }
-) => {
+export const getApiSideBabelPlugins = ({
+  openTelemetry = false,
+  projectIsEsm = false,
+} = {}) => {
   const tsConfig = parseTypeScriptConfigFiles()
 
   const plugins: Array<PluginShape | boolean> = [
@@ -102,7 +106,7 @@ export const getApiSideBabelPlugins = (
       'rwjs-api-module-resolver',
     ],
     [
-      require('./plugins/babel-plugin-redwood-directory-named-import').default,
+      pluginRedwoodDirectoryNamedImport,
       undefined,
       'rwjs-babel-directory-named-modules',
     ],
@@ -127,12 +131,14 @@ export const getApiSideBabelPlugins = (
     // FIXME: `graphql-tag` is not working: https://github.com/redwoodjs/redwood/pull/3193
     ['babel-plugin-graphql-tag', undefined, 'rwjs-babel-graphql-tag'],
     [
-      require('./plugins/babel-plugin-redwood-import-dir').default,
-      undefined,
+      pluginRedwoodImportDir,
+      {
+        projectIsEsm,
+      },
       'rwjs-babel-glob-import-dir',
     ],
     openTelemetry && [
-      require('./plugins/babel-plugin-redwood-otel-wrapping').default,
+      pluginRedwoodOTelWrapping,
       undefined,
       'rwjs-babel-otel-wrapping',
     ],
@@ -150,35 +156,37 @@ export const getApiSideBabelConfigPath = () => {
   }
 }
 
-export const getApiSideBabelOverrides = () => {
+export const getApiSideBabelOverrides = ({ projectIsEsm = false } = {}) => {
   const overrides = [
     // Extract graphql options from the graphql function
     // NOTE: this must come before the context wrapping
     {
       // match */api/src/functions/graphql.js|ts
       test: /.+api(?:[\\|/])src(?:[\\|/])functions(?:[\\|/])graphql\.(?:js|ts)$/,
-      plugins: [
-        require('./plugins/babel-plugin-redwood-graphql-options-extract')
-          .default,
-      ],
+      plugins: [pluginRedwoodGraphqlOptionsExtract],
     },
     // Apply context wrapping to all functions
     {
       // match */api/src/functions/*.js|ts
       test: /.+api(?:[\\|/])src(?:[\\|/])functions(?:[\\|/]).+.(?:js|ts)$/,
       plugins: [
-        require('./plugins/babel-plugin-redwood-context-wrapping').default,
+        [
+          pluginRedwoodContextWrapping,
+          {
+            projectIsEsm,
+          },
+        ],
       ],
     },
   ].filter(Boolean)
   return overrides as TransformOptions[]
 }
 
-export const getApiSideDefaultBabelConfig = () => {
+export const getApiSideDefaultBabelConfig = ({ projectIsEsm = false } = {}) => {
   return {
     presets: getApiSideBabelPresets(),
-    plugins: getApiSideBabelPlugins(),
-    overrides: getApiSideBabelOverrides(),
+    plugins: getApiSideBabelPlugins({ projectIsEsm }),
+    overrides: getApiSideBabelOverrides({ projectIsEsm }),
     extends: getApiSideBabelConfigPath(),
     babelrc: false,
     ignore: ['node_modules'],
@@ -190,7 +198,9 @@ export const registerApiSideBabelHook = ({
   plugins = [],
   ...rest
 }: RegisterHookOptions = {}) => {
-  const defaultOptions = getApiSideDefaultBabelConfig()
+  const defaultOptions = getApiSideDefaultBabelConfig({
+    projectIsEsm: projectSideIsEsm('api'),
+  })
 
   registerBabel({
     ...defaultOptions,
@@ -206,10 +216,12 @@ export const registerApiSideBabelHook = ({
 
 export const transformWithBabel = async (
   srcPath: string,
-  plugins: TransformOptions['plugins']
+  plugins: TransformOptions['plugins'],
 ) => {
   const code = await fs.readFile(srcPath, 'utf-8')
-  const defaultOptions = getApiSideDefaultBabelConfig()
+  const defaultOptions = getApiSideDefaultBabelConfig({
+    projectIsEsm: projectSideIsEsm('api'),
+  })
 
   const result = transformAsync(code, {
     ...defaultOptions,

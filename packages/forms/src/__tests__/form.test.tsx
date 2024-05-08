@@ -166,7 +166,7 @@ describe('Form', () => {
         datetimeLocal: new Date('2021-04-16T12:34'),
         date: new Date('2021-04-16'),
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
@@ -180,7 +180,7 @@ describe('Form', () => {
     await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
     expect(mockFn).toBeCalledWith(
       { 'wrapped-ff': 3.14, 'wrapped-nf-1': 101, 'wrapped-nf-2': 102 },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
@@ -215,7 +215,7 @@ describe('Form', () => {
           <option>Option_2</option>
         </SelectField>
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -223,7 +223,7 @@ describe('Form', () => {
     await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
     expect(mockFn).toBeCalledWith(
       { tf: 123456, select: 'Option-2' },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
@@ -241,7 +241,7 @@ describe('Form', () => {
           <option value={2}>Group 2</option>
         </SelectField>
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -249,7 +249,7 @@ describe('Form', () => {
     await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
     expect(mockFn).toBeCalledWith(
       { userId: null, groupId: null },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
@@ -265,12 +265,12 @@ describe('Form', () => {
         />
         <FieldError name="userId2" data-testid="fieldError" />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.submit(screen.getByText('Save'))
     await waitFor(() =>
-      expect(screen.getByTestId('fieldError')).toBeInTheDocument()
+      expect(screen.getByTestId('fieldError')).toBeInTheDocument(),
     )
     // The validation should catch and prevent the onSubmit from being called
     expect(mockFn).not.toHaveBeenCalled()
@@ -292,12 +292,12 @@ describe('Form', () => {
         </SelectField>
         <FieldError name="groupId2" data-testid="fieldError" />{' '}
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.submit(screen.getByText('Save'))
     await waitFor(() =>
-      expect(screen.getByTestId('fieldError')).toBeInTheDocument()
+      expect(screen.getByTestId('fieldError')).toBeInTheDocument(),
     )
 
     // The validation should catch and prevent the onSubmit from being called
@@ -317,7 +317,7 @@ describe('Form', () => {
           validation={{ valueAsNumber: true }}
         />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
     fireEvent.click(screen.getByText('Save'))
 
@@ -327,7 +327,7 @@ describe('Form', () => {
         int: NaN,
         float: NaN,
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
@@ -344,11 +344,11 @@ describe('Form', () => {
         />
         <FieldError name="jsonField" data-testid="fieldError" />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
     fireEvent.submit(screen.getByText('Save'))
     await waitFor(() =>
-      expect(screen.getByTestId('fieldError')).toBeInTheDocument()
+      expect(screen.getByTestId('fieldError')).toBeInTheDocument(),
     )
 
     // The validation should catch and prevent the onSubmit from being called
@@ -367,11 +367,11 @@ describe('Form', () => {
         />
         <FieldError name="jsonField" data-testid="fieldError" />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
     fireEvent.submit(screen.getByText('Save'))
     await waitFor(() =>
-      expect(screen.getByTestId('fieldError')).toBeInTheDocument()
+      expect(screen.getByTestId('fieldError')).toBeInTheDocument(),
     )
 
     // The validation should catch and prevent the onSubmit from being called
@@ -398,12 +398,12 @@ describe('Form', () => {
         />
         <FieldError name="address.street" data-testid="streetFieldError" />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
     fireEvent.submit(screen.getByText('Save'))
 
     await waitFor(() =>
-      expect(screen.getByTestId('phoneFieldError')).toBeInTheDocument()
+      expect(screen.getByTestId('phoneFieldError')).toBeInTheDocument(),
     )
     // The validation should catch and prevent the onSubmit from being called
     expect(mockFn).not.toHaveBeenCalled()
@@ -429,13 +429,13 @@ describe('Form', () => {
         />
         <FieldError name="phone" data-testid="phoneFieldError" />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
 
     const phoneError = await waitFor(
-      () => screen.getByTestId('phoneFieldError').textContent
+      () => screen.getByTestId('phoneFieldError').textContent,
     )
     expect(phoneError).toEqual('phone is not formatted correctly')
   })
@@ -451,13 +451,13 @@ describe('Form', () => {
         />
         <FieldError name="false" data-testid="phoneFieldError" />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
 
     const phoneError = await waitFor(
-      () => screen.getByTestId('phoneFieldError').textContent
+      () => screen.getByTestId('phoneFieldError').textContent,
     )
     expect(phoneError).toEqual('false is not formatted correctly')
   })
@@ -472,13 +472,13 @@ describe('Form', () => {
         />
         <FieldError name="0" data-testid="phoneFieldError" />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
 
     const phoneError = await waitFor(
-      () => screen.getByTestId('phoneFieldError').textContent
+      () => screen.getByTestId('phoneFieldError').textContent,
     )
     expect(phoneError).toEqual('0 is not formatted correctly')
   })
@@ -508,7 +508,7 @@ describe('Form', () => {
         <TextField name="fieldId" defaultValue="" />
 
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -526,7 +526,7 @@ describe('Form', () => {
         jsonField: null,
         fieldId: null,
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
@@ -565,7 +565,7 @@ describe('Form', () => {
         <TextField name="fieldId" defaultValue="" emptyAs={'undefined'} />
 
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -582,7 +582,7 @@ describe('Form', () => {
         jsonField: undefined,
         fieldId: undefined,
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
@@ -610,7 +610,7 @@ describe('Form', () => {
         <TextField name="fieldId" defaultValue="" emptyAs={null} />
 
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -626,7 +626,7 @@ describe('Form', () => {
         jsonField: null,
         fieldId: null,
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
@@ -654,7 +654,7 @@ describe('Form', () => {
         <TextField name="fieldId" defaultValue="" emptyAs={0} />
 
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -671,7 +671,7 @@ describe('Form', () => {
         jsonField: 0,
         fieldId: 0,
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
@@ -699,7 +699,7 @@ describe('Form', () => {
         <TextField name="fieldId" defaultValue="" emptyAs={''} />
 
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -716,7 +716,7 @@ describe('Form', () => {
         jsonField: '',
         fieldId: '',
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
@@ -734,14 +734,14 @@ describe('Form', () => {
         <FieldError name="numberField" data-testid="numberFieldError" />
         <DateField name="dateField" emptyAs={null} />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
     fireEvent.change(screen.getByTestId('numberField'), {
       target: { value: 2 },
     })
     fireEvent.submit(screen.getByText('Save'))
     await waitFor(() =>
-      expect(screen.getByTestId('numberFieldError')).toBeInTheDocument()
+      expect(screen.getByTestId('numberFieldError')).toBeInTheDocument(),
     )
 
     // The validation should catch and prevent the onSubmit from being called
@@ -783,7 +783,7 @@ describe('Form', () => {
         <TextField name="fieldId" defaultValue="" emptyAs={'badEmptyAsValue'} />
 
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -799,7 +799,7 @@ describe('Form', () => {
         jsonField: null,
         fieldId: null,
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
@@ -832,7 +832,7 @@ describe('Form', () => {
           emptyAs={0}
         />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -846,7 +846,7 @@ describe('Form', () => {
         tf3: 42,
         tf4: 42,
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
@@ -879,7 +879,7 @@ describe('Form', () => {
           emptyAs={0}
         />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -893,7 +893,7 @@ describe('Form', () => {
         tf3: new Date('2022-02-01'),
         tf4: new Date('2022-02-01'),
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
@@ -906,7 +906,7 @@ describe('Form', () => {
           {/* @ts-expect-error - Testing a JS scenario */}
           <TextField />
           <Submit>Save</Submit>
-        </Form>
+        </Form>,
       )
 
     expect(testRender).toThrow('`name` prop must be provided')

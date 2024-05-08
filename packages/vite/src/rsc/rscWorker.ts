@@ -3,8 +3,8 @@
 // `--condition react-server`. If we did try to do that the main process
 // couldn't do SSR because it would be missing client-side React functions
 // like `useState` and `createContext`.
-
 import { Buffer } from 'node:buffer'
+import { Server } from 'node:http'
 import path from 'node:path'
 import { Transform, Writable } from 'node:stream'
 import { parentPort } from 'node:worker_threads'
@@ -17,32 +17,34 @@ import { createServer, resolveConfig } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { defineEntries } from '../entries'
-import { registerFwGlobals } from '../lib/registerGlobals'
-import { StatusError } from '../lib/StatusError'
+import { getEntries, getEntriesFromDist } from '../lib/entries.js'
+import { registerFwGlobalsAndShims } from '../lib/registerFwGlobalsAndShims.js'
+import { StatusError } from '../lib/StatusError.js'
+import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
+import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
+import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
+import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
 
-import { rscReloadPlugin } from './rscVitePlugins'
 import type {
   RenderInput,
   MessageRes,
   MessageReq,
-} from './rscWorkerCommunication'
+} from './rscWorkerCommunication.js'
 
-// import type { unstable_GetCustomModules } from '../waku-server'
-// import type { RenderInput, MessageReq, MessageRes } from './rsc-handler'
-// import { transformRsfId, generatePrefetchCode } from './rsc-utils'
-
+// TODO (RSC): We should look into importing renderToReadableStream from
+// 'react-server-dom-webpack/server.browser' so that we can respond with web
+// streams
 const { renderToPipeableStream } = RSDWServer
 
-type Entries = { default: ReturnType<typeof defineEntries> }
+let absoluteClientEntries: Record<string, string> = {}
+
 type PipeableStream = { pipe<T extends Writable>(destination: T): T }
 
 const handleSetClientEntries = async ({
   id,
-  value,
 }: MessageReq & { type: 'setClientEntries' }) => {
   try {
-    await setClientEntries(value)
+    await setClientEntries()
 
     if (!parentPort) {
       throw new Error('parentPort is undefined')
@@ -109,57 +111,21 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
   }
 }
 
-// const handleGetCustomModules = async (
-//   mesg: MessageReq & { type: 'getCustomModules' }
-// ) => {
-//   const { id } = mesg
-//   try {
-//     if (!parentPort) {
-//       throw new Error('parentPort is undefined')
-//     }
-
-//     const modules = await getCustomModulesRSC()
-//     const mesg: MessageRes = { id, type: 'customModules', modules }
-//     parentPort.postMessage(mesg)
-//   } catch (err) {
-//     if (!parentPort) {
-//       throw new Error('parentPort is undefined')
-//     }
-
-//     const mesg: MessageRes = { id, type: 'err', err }
-//     parentPort.postMessage(mesg)
-//   }
-// }
-
-// const handleBuild = async (mesg: MessageReq & { type: 'build' }) => {
-//   const { id } = mesg
-//   try {
-//     await buildRSC()
-
-//     if (!parentPort) {
-//       throw new Error('parentPort is undefined')
-//     }
-
-//     const mesg: MessageRes = { id, type: 'end' }
-//     parentPort.postMessage(mesg)
-//   } catch (err) {
-//     if (!parentPort) {
-//       throw new Error('parentPort is undefined')
-//     }
-
-//     const mesg: MessageRes = { id, type: 'err', err }
-//     parentPort.postMessage(mesg)
-//   }
-// }
-
 // This is a worker, so it doesn't share the same global variables as the main
 // server. So we have to register them here again.
-registerFwGlobals()
+registerFwGlobalsAndShims()
+
+// TODO (RSC): this was copied from waku; they have a todo to remove it.
+// We need this to fix a WebSocket error in dev, `WebSocket server error: Port
+// is already in use`.
+const dummyServer = new Server()
 
 // TODO (RSC): `createServer` is mostly used to create a dev server. Is it OK
 // to use it like a production server like this?
 // TODO (RSC): Do we need to pass `define` here with RWJS_ENV etc? What about
 // `envFile: false`?
+// TODO (RSC): Do we need to care about index.html as it says in the docs
+// https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#middleware-mode
 const vitePromise = createServer({
   plugins: [
     rscReloadPlugin((type) => {
@@ -170,12 +136,22 @@ const vitePromise = createServer({
       const message: MessageRes = { type }
       parentPort.postMessage(message)
     }),
+    rscTransformUseClientPlugin({}),
+    rscTransformUseServerPlugin(),
+    rscRoutesAutoLoader(),
   ],
   ssr: {
     resolve: {
+      // TODO (RSC): Do we need `conditions` too?
+      // conditions: ['react-server'],
       externalConditions: ['react-server'],
     },
   },
+  // Need to run in middlewareMode so that `buildStart` gets called for all
+  // plugins. Specifically vite's own vite:css plugin needs this to initialize
+  // the cssModulesCache WeakMap
+  // See https://github.com/vitejs/vite/issues/3798#issuecomment-862185554
+  server: { middlewareMode: true, hmr: { server: dummyServer } },
   appType: 'custom',
 })
 
@@ -191,6 +167,8 @@ const shutdown = async () => {
 
 const loadServerFile = async (fname: string) => {
   const vite = await vitePromise
+  // TODO (RSC): In prod we shouldn't need this. We should be able to just
+  // import the built files
   return vite.ssrLoadModule(fname)
 }
 
@@ -218,47 +196,40 @@ parentPort.on('message', (message: MessageReq) => {
 type ConfigType = Omit<ResolvedConfig, 'root'> & { root: string }
 const configPromise: Promise<ConfigType> = resolveConfig({}, 'serve')
 
-const getEntriesFile = async (
-  config: Awaited<ReturnType<typeof resolveConfig>>,
-  isBuild: boolean
-) => {
-  const rwPaths = getPaths()
+const getFunctionComponent = async (rscId: string) => {
+  // TODO (RSC): Get rid of this when we only use the worker in dev mode
+  const isDev = Object.keys(absoluteClientEntries).length === 0
 
-  if (isBuild) {
-    // TODO (RSC): Should we make this path configurable? Or at least read
-    // from getPaths()?
-    return path.join(config.root, config.build.outDir, 'entries.js')
+  let entryModule: string | undefined
+  if (isDev) {
+    entryModule = getEntries()[rscId]
+  } else {
+    const serverEntries = await getEntriesFromDist()
+    entryModule = path.join(getPaths().web.distRsc, serverEntries[rscId])
   }
 
-  return rwPaths.web.distServerEntries
-}
+  if (!entryModule) {
+    throw new StatusError('No entry found for ' + rscId, 404)
+  }
 
-const getFunctionComponent = async (
-  rscId: string,
-  config: Awaited<ReturnType<typeof resolveConfig>>,
-  isBuild: boolean
-) => {
-  const entriesFile = await getEntriesFile(config, isBuild)
-  const {
-    default: { getEntry },
-  } = await (loadServerFile(entriesFile) as Promise<Entries>)
-  const mod = await getEntry(rscId)
+  const mod = await loadServerFile(entryModule)
+
   if (typeof mod === 'function') {
     return mod
   }
+
   if (typeof mod?.default === 'function') {
     return mod?.default
   }
+
   // TODO (RSC): Making this a 404 error is marked as "HACK" in waku's source
   throw new StatusError('No function component found', 404)
 }
 
-let absoluteClientEntries: Record<string, string> = {}
-
-const resolveClientEntry = (
+function resolveClientEntryForProd(
+  filePath: string,
   config: Awaited<ReturnType<typeof resolveConfig>>,
-  filePath: string
-) => {
+) {
   const filePathSlash = filePath.replaceAll('\\', '/')
   const clientEntry = absoluteClientEntries[filePathSlash]
 
@@ -276,15 +247,37 @@ const resolveClientEntry = (
   return clientEntry
 }
 
-async function setClientEntries(
-  value: 'load' | Record<string, string>
-): Promise<void> {
-  if (value !== 'load') {
-    absoluteClientEntries = value
-    return
+function fileURLToFilePath(fileURL: string) {
+  if (!fileURL.startsWith('file://')) {
+    throw new Error('Not a file URL')
   }
+  return decodeURI(fileURL.slice('file://'.length))
+}
+
+const ABSOLUTE_WIN32_PATH_REGEXP = /^\/[a-zA-Z]:\//
+
+function encodeFilePathToAbsolute(filePath: string) {
+  if (ABSOLUTE_WIN32_PATH_REGEXP.test(filePath)) {
+    throw new Error('Unsupported absolute file path')
+  }
+  if (filePath.startsWith('/')) {
+    return filePath
+  }
+  return '/' + filePath
+}
+
+function resolveClientEntryForDev(id: string, config: { base: string }) {
+  console.log('resolveClientEntryForDev config.base', config.base)
+  const filePath = id.startsWith('file://') ? fileURLToFilePath(id) : id
+  // HACK this relies on Vite's internal implementation detail.
+  return config.base + '@fs' + encodeFilePathToAbsolute(filePath)
+}
+
+async function setClientEntries(): Promise<void> {
+  // This is the Vite config
   const config = await configPromise
-  const entriesFile = await getEntriesFile(config, false)
+
+  const entriesFile = getPaths().web.distRscEntries
   console.log('setClientEntries :: entriesFile', entriesFile)
   const { clientEntries } = await loadServerFile(entriesFile)
   console.log('setClientEntries :: clientEntries', clientEntries)
@@ -292,20 +285,23 @@ async function setClientEntries(
     throw new Error('Failed to load clientEntries')
   }
   const baseDir = path.dirname(entriesFile)
+
+  // Convert to absolute paths
   absoluteClientEntries = Object.fromEntries(
     Object.entries(clientEntries).map(([key, val]) => {
       let fullKey = path.join(baseDir, key)
+
       if (process.platform === 'win32') {
         fullKey = fullKey.replaceAll('\\', '/')
       }
-      console.log('fullKey', fullKey, 'value', config.base + val)
+
       return [fullKey, config.base + val]
-    })
+    }),
   )
 
   console.log(
     'setClientEntries :: absoluteClientEntries',
-    absoluteClientEntries
+    absoluteClientEntries,
   )
 }
 
@@ -335,20 +331,34 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
       : rwPaths.base
   console.log('config.root', config.root)
   console.log('rwPaths.base', rwPaths.base)
+
+  // TODO (RSC): Try removing the proxy here and see if it's really necessary.
+  // Looks like it'd work to just have a regular object with a getter.
+  // Remove the proxy and see what breaks.
   const bundlerConfig = new Proxy(
     {},
     {
       get(_target, encodedId: string) {
-        console.log('Proxy get', encodedId)
+        console.log('Proxy get encodedId', encodedId)
         const [filePath, name] = encodedId.split('#') as [string, string]
         // filePath /Users/tobbe/dev/waku/examples/01_counter/dist/assets/rsc0.js
         // name Counter
-        const id = resolveClientEntry(config, filePath)
-        console.log('Proxy id', id)
+
+        // TODO (RSC): Get rid of this when we only use the worker in dev mode
+        const isDev = Object.keys(absoluteClientEntries).length === 0
+
+        let id: string
+        if (isDev) {
+          id = resolveClientEntryForDev(filePath, config)
+        } else {
+          id = resolveClientEntryForProd(filePath, config)
+        }
+
+        console.log('rscWorker proxy id', id)
         // id /assets/rsc0-beb48afe.js
         return { id, chunks: [id], name, async: true }
       },
-    }
+    },
   )
 
   console.log('renderRsc input', input)
@@ -383,10 +393,11 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
   }
 
   if (input.rscId && input.props) {
-    const component = await getFunctionComponent(input.rscId, config, false)
+    const component = await getFunctionComponent(input.rscId)
+
     return renderToPipeableStream(
       createElement(component, input.props),
-      bundlerConfig
+      bundlerConfig,
     ).pipe(transformRsfId(config.root))
   }
 
@@ -411,7 +422,7 @@ function transformRsfId(prefixToRemove: string) {
       let changed = false
       for (let i = 0; i < lines.length; ++i) {
         const match = lines[i].match(
-          new RegExp(`^([0-9]+):{"id":"${prefixToRemove}(.*?)"(.*)$`)
+          new RegExp(`^([0-9]+):{"id":"${prefixToRemove}(.*?)"(.*)$`),
         )
         if (match) {
           lines[i] = `${match[1]}:{"id":"${match[2]}"${match[3]}`

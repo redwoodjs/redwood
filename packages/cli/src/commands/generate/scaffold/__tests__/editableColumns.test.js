@@ -30,7 +30,7 @@ describe('editable columns', () => {
     form =
       files[
         path.normalize(
-          '/path/to/project/web/src/components/ExcludeDefault/ExcludeDefaultForm/ExcludeDefaultForm.jsx'
+          '/path/to/project/web/src/components/ExcludeDefault/ExcludeDefaultForm/ExcludeDefaultForm.jsx',
         )
       ]
   })

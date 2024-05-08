@@ -42,8 +42,8 @@ test('customOrDefaultTemplatePath returns the default path if no custom template
 
   expect(output).toMatch(
     path.normalize(
-      '/packages/cli/src/commands/generate/page/templates/page.tsx.template'
-    )
+      '/packages/cli/src/commands/generate/page/templates/page.tsx.template',
+    ),
   )
 })
 
@@ -58,7 +58,7 @@ test('customOrDefaultTemplatePath returns the app path if a custom template exis
   })
 
   expect(output).toEqual(
-    path.normalize('/path/to/project/web/generators/page/page.tsx.template')
+    path.normalize('/path/to/project/web/generators/page/page.tsx.template'),
   )
 })
 
@@ -74,16 +74,16 @@ test('customOrDefaultTemplatePath returns the app path with proper side, generat
 
   expect(output).toEqual(
     path.normalize(
-      '/path/to/project/api/generators/cell/component.tsx.template'
-    )
+      '/path/to/project/api/generators/cell/component.tsx.template',
+    ),
   )
 })
 
-test('templateForComponentFile creates a proper output path for files', () => {
+test('templateForComponentFile creates a proper output path for files', async () => {
   const names = ['FooBar', 'fooBar', 'foo-bar', 'foo_bar']
 
-  names.forEach((name) => {
-    const output = helpers.templateForComponentFile({
+  for (const name of names) {
+    const output = await helpers.templateForComponentFile({
       name: name,
       suffix: 'Page',
       webPathSection: 'pages',
@@ -93,16 +93,16 @@ test('templateForComponentFile creates a proper output path for files', () => {
     })
 
     expect(output[0]).toEqual(
-      path.normalize('/path/to/project/web/src/pages/FooBarPage/FooBarPage.js')
+      path.normalize('/path/to/project/web/src/pages/FooBarPage/FooBarPage.js'),
     )
-  })
+  }
 })
 
-test('templateForComponentFile creates a proper output path for files with all caps in component name', () => {
+test('templateForComponentFile creates a proper output path for files with all caps in component name', async () => {
   const names = ['FOO_BAR', 'FOO-BAR', 'FOOBAR']
 
-  names.forEach((name) => {
-    const output = helpers.templateForComponentFile({
+  for (const name of names) {
+    const output = await helpers.templateForComponentFile({
       name: name,
       suffix: 'Page',
       webPathSection: 'pages',
@@ -112,16 +112,16 @@ test('templateForComponentFile creates a proper output path for files with all c
     })
 
     expect(output[0]).toEqual(
-      path.normalize('/path/to/project/web/src/pages/FOOBARPage/FOOBARPage.js')
+      path.normalize('/path/to/project/web/src/pages/FOOBARPage/FOOBARPage.js'),
     )
-  })
+  }
 })
 
-test('templateForComponentFile creates a proper output path for files for starting with uppercase and ending with lowercase', () => {
+test('templateForComponentFile creates a proper output path for files for starting with uppercase and ending with lowercase', async () => {
   const names = ['FOOBar', 'FOO-Bar', 'FOO_Bar']
 
-  names.forEach((name) => {
-    const output = helpers.templateForComponentFile({
+  for (const name of names) {
+    const output = await helpers.templateForComponentFile({
       name: name,
       suffix: 'Page',
       webPathSection: 'pages',
@@ -131,16 +131,16 @@ test('templateForComponentFile creates a proper output path for files for starti
     })
 
     expect(output[0]).toEqual(
-      path.normalize('/path/to/project/web/src/pages/FOOBarPage/FOOBarPage.js')
+      path.normalize('/path/to/project/web/src/pages/FOOBarPage/FOOBarPage.js'),
     )
-  })
+  }
 })
 
-test('templateForComponentFile creates a proper output path for files with uppercase after special characters in component name', () => {
+test('templateForComponentFile creates a proper output path for files with uppercase after special characters in component name', async () => {
   const names = ['ABtest', 'aBtest', 'a-Btest', 'a_Btest']
 
-  names.forEach((name) => {
-    const output = helpers.templateForComponentFile({
+  for (const name of names) {
+    const output = await helpers.templateForComponentFile({
       name: name,
       suffix: 'Page',
       webPathSection: 'pages',
@@ -150,13 +150,13 @@ test('templateForComponentFile creates a proper output path for files with upper
     })
 
     expect(output[0]).toEqual(
-      path.normalize('/path/to/project/web/src/pages/ABtestPage/ABtestPage.js')
+      path.normalize('/path/to/project/web/src/pages/ABtestPage/ABtestPage.js'),
     )
-  })
+  }
 })
 
-test('templateForComponentFile can create a path in /web', () => {
-  const output = helpers.templateForComponentFile({
+test('templateForComponentFile can create a path in /web', async () => {
+  const output = await helpers.templateForComponentFile({
     name: 'Home',
     suffix: 'Page',
     webPathSection: 'pages',
@@ -166,12 +166,12 @@ test('templateForComponentFile can create a path in /web', () => {
   })
 
   expect(output[0]).toEqual(
-    path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.js')
+    path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.js'),
   )
 })
 
-test('templateForComponentFile can create a path in /api', () => {
-  const output = helpers.templateForComponentFile({
+test('templateForComponentFile can create a path in /api', async () => {
+  const output = await helpers.templateForComponentFile({
     name: 'Home',
     suffix: 'Page',
     apiPathSection: 'services',
@@ -181,12 +181,12 @@ test('templateForComponentFile can create a path in /api', () => {
   })
 
   expect(output[0]).toEqual(
-    path.normalize('/path/to/project/api/src/services/HomePage/HomePage.js')
+    path.normalize('/path/to/project/api/src/services/HomePage/HomePage.js'),
   )
 })
 
-test('templateForComponentFile can override generated component name', () => {
-  const output = helpers.templateForComponentFile({
+test('templateForComponentFile can override generated component name', async () => {
+  const output = await helpers.templateForComponentFile({
     name: 'Home',
     componentName: 'Hobbiton',
     webPathSection: 'pages',
@@ -196,12 +196,12 @@ test('templateForComponentFile can override generated component name', () => {
   })
 
   expect(output[0]).toEqual(
-    path.normalize('/path/to/project/web/src/pages/Hobbiton/Hobbiton.js')
+    path.normalize('/path/to/project/web/src/pages/Hobbiton/Hobbiton.js'),
   )
 })
 
-test('templateForComponentFile can override file extension', () => {
-  const output = helpers.templateForComponentFile({
+test('templateForComponentFile can override file extension', async () => {
+  const output = await helpers.templateForComponentFile({
     name: 'Home',
     suffix: 'Page',
     extension: '.txt',
@@ -212,12 +212,12 @@ test('templateForComponentFile can override file extension', () => {
   })
 
   expect(output[0]).toEqual(
-    path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.txt')
+    path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.txt'),
   )
 })
 
-test('templateForComponentFile can override output path', () => {
-  const output = helpers.templateForComponentFile({
+test('templateForComponentFile can override output path', async () => {
+  const output = await helpers.templateForComponentFile({
     name: 'func',
     apiPathSection: 'functions',
     generator: 'function',
@@ -227,12 +227,12 @@ test('templateForComponentFile can override output path', () => {
   })
 
   expect(output[0]).toEqual(
-    path.normalize('/path/to/project/api/src/functions/func.ts')
+    path.normalize('/path/to/project/api/src/functions/func.ts'),
   )
 })
 
-test('templateForComponentFile creates a template', () => {
-  const output = helpers.templateForComponentFile({
+test('templateForComponentFile creates a template', async () => {
+  const output = await helpers.templateForComponentFile({
     name: 'FooBar',
     suffix: 'Page',
     webPathSection: 'pages',
@@ -267,7 +267,7 @@ test('pathName creates path based on name if path is just a route parameter', ()
 
 test('pathName supports paths with route params', () => {
   expect(helpers.pathName('/post/{id:Int}/edit', 'EditPost')).toEqual(
-    '/post/{id:Int}/edit'
+    '/post/{id:Int}/edit',
   )
 })
 

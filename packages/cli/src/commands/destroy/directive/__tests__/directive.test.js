@@ -42,7 +42,7 @@ test('destroys directive files', async () => {
 
   return t.run().then(() => {
     const generatedFiles = Object.keys(
-      files({ name: 'require-admin', type: 'validator', tests: true })
+      files({ name: 'require-admin', type: 'validator', tests: true }),
     )
     expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
     generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))

@@ -38,7 +38,7 @@ test('throws if AZURE_ACTIVE_DIRECTORY_AUTHORITY env var is not set', async () =
   process.env.AZURE_ACTIVE_DIRECTORY_JTW_ISSUER = 'jwt-issuer'
 
   await expect(
-    authDecoder('token', 'azureActiveDirectory', req)
+    authDecoder('token', 'azureActiveDirectory', req),
   ).rejects.toThrow('AZURE_ACTIVE_DIRECTORY_AUTHORITY env var is not set')
 })
 

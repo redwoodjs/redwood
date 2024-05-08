@@ -7,15 +7,17 @@ import type { Manifest as ViteBuildManifest } from 'vite'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
 
-import type { RWRouteManifest } from './types'
+import type { RWRouteManifest } from './types.js'
 
 /**
  * RSC build. Step 6.
  * Generate a route manifest file for the web server side.
  */
 export async function buildRouteManifest() {
+  const rwPaths = getPaths()
+
   const buildManifestUrl = url.pathToFileURL(
-    path.join(getPaths().web.dist, 'client-build-manifest.json')
+    path.join(getPaths().web.distClient, 'client-build-manifest.json'),
   ).href
   const clientBuildManifest: ViteBuildManifest = (
     await import(buildManifestUrl, { with: { type: 'json' } })
@@ -27,7 +29,10 @@ export async function buildRouteManifest() {
     acc[route.pathDefinition] = {
       name: route.name,
       bundle: route.relativeFilePath
-        ? clientBuildManifest[route.relativeFilePath]?.file ?? null
+        ? // @TODO(RSC_DC): this no longer resolves to anything i.e. its always null
+          // Because the clientBuildManifest has no pages, because all pages are Server-components?
+          // This may be a non-issue, because RSC pages don't need a client bundle per page (or atleast not the same bundle)
+          clientBuildManifest[route.relativeFilePath]?.file ?? null
         : null,
       matchRegexString: route.matchRegexString,
       // NOTE this is the path definition, not the actual path
@@ -41,7 +46,7 @@ export async function buildRouteManifest() {
             permanent: false,
           }
         : null,
-      renderMode: route.renderMode,
+      relativeFilePath: route.relativeFilePath,
     }
 
     return acc
@@ -49,7 +54,8 @@ export async function buildRouteManifest() {
 
   console.log('routeManifest', JSON.stringify(routeManifest, null, 2))
 
-  const webRouteManifest = getPaths().web.routeManifest
+  const webRouteManifest = rwPaths.web.routeManifest
+  await fs.mkdir(rwPaths.web.distServer, { recursive: true })
   return fs.writeFile(webRouteManifest, JSON.stringify(routeManifest, null, 2))
 }
 
@@ -57,7 +63,7 @@ export async function buildRouteManifest() {
 // the pages folder in the dist/server/routeHooks directory.
 // @MARK need to change to .mjs here if we use esm
 const FIXME_constructRouteHookPath = (
-  routeHookSrcPath: string | null | undefined
+  routeHookSrcPath: string | null | undefined,
 ) => {
   const rwPaths = getPaths()
   if (!routeHookSrcPath) {

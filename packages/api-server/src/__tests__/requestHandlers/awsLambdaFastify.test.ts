@@ -60,7 +60,7 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     await requestHandler(request, mockedReply, handler)
 
     expect(mockedReply.send).toHaveBeenCalledWith(
-      Buffer.from('this_is_a_test_of_base64Encoding', 'base64')
+      Buffer.from('this_is_a_test_of_base64Encoding', 'base64'),
     )
     expect(mockedReply.status).toHaveBeenCalledWith(200)
   })
@@ -120,11 +120,11 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     expect(mockedReply.headers).not.toHaveBeenCalled()
     expect(mockedReply.header).toHaveBeenCalledWith(
       'content-type',
-      'application/json'
+      'application/json',
     )
     expect(mockedReply.header).toHaveBeenCalledWith(
       'authorization',
-      'Bearer token 123'
+      'Bearer token 123',
     )
   })
 
@@ -158,7 +158,7 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     expect(mockedReply.headers).not.toHaveBeenCalled()
     expect(mockedReply.header).toHaveBeenCalledWith(
       'content-type',
-      'application/json; text/html'
+      'application/json; text/html',
     )
   })
 })

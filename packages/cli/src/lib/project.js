@@ -24,3 +24,12 @@ export const sides = () => {
   }
   return sides
 }
+
+export const serverFileExists = () => {
+  const serverFilePath = path.join(
+    getPaths().api.src,
+    `server.${isTypeScriptProject() ? 'ts' : 'js'}`,
+  )
+
+  return fs.existsSync(serverFilePath)
+}

@@ -19,7 +19,6 @@ import { generatePrismaCommand } from '../lib/generatePrismaClient'
 export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
-  performance = false,
   stats = false,
   prisma = true,
   prerender,
@@ -28,7 +27,6 @@ export const handler = async ({
     command: 'build',
     side: JSON.stringify(side),
     verbose,
-    performance,
     stats,
     prisma,
     prerender,
@@ -39,34 +37,25 @@ export const handler = async ({
   const useFragments = rwjsConfig.graphql?.fragments
   const useTrustedDocuments = rwjsConfig.graphql?.trustedDocuments
 
-  if (performance) {
-    console.log('Measuring Web Build Performance...')
-    execa.sync(
-      `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-        '@redwoodjs/core/config/webpack.perf.js'
-      )}`,
-      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base }
-    )
-    // We do not want to continue building...
-    return
-  }
-
   if (stats) {
     console.log('Building Web Stats...')
     execa.sync(
       `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-        '@redwoodjs/core/config/webpack.stats.js'
+        '@redwoodjs/core/config/webpack.stats.js',
       )}`,
-      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base }
+      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base },
     )
     // We do not want to continue building...
     return
   }
 
+  const prismaSchemaExists = fs.existsSync(rwjsPaths.api.dbSchema)
   const prerenderRoutes =
     prerender && side.includes('web') ? detectPrerenderRoutes() : []
   const shouldGeneratePrismaClient =
-    prisma && (side.includes('api') || prerenderRoutes.length > 0)
+    prisma &&
+    prismaSchemaExists &&
+    (side.includes('api') || prerenderRoutes.length > 0)
 
   const tasks = [
     shouldGeneratePrismaClient && {
@@ -134,9 +123,13 @@ export const handler = async ({
           // it could affect other things that run in parallel while building.
           // We don't have any parallel tasks right now, but someone might add
           // one in the future as a performance optimization.
+          //
+          // Disable the new warning in Vite v5 about the CJS build being deprecated
+          // so that users don't have to see it when this command is called with --verbose
+          process.env.VITE_CJS_IGNORE_WARNING = 'true'
           await execa(
             `node ${require.resolve(
-              '@redwoodjs/vite/bins/rw-vite-build.mjs'
+              '@redwoodjs/vite/bins/rw-vite-build.mjs',
             )} --webDir="${rwjsPaths.web.base}" --verbose=${verbose}`,
             {
               stdio: verbose ? 'inherit' : 'pipe',
@@ -145,18 +138,18 @@ export const handler = async ({
               // It won't change process.cwd for anything else here, in this
               // process
               cwd: rwjsPaths.web.base,
-            }
+            },
           )
         } else {
           await execa(
             `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-              '@redwoodjs/core/config/webpack.production.js'
+              '@redwoodjs/core/config/webpack.production.js',
             )}`,
             {
               stdio: verbose ? 'inherit' : 'pipe',
               shell: true,
               cwd: rwjsPaths.web.base,
-            }
+            },
           )
         }
 
@@ -168,7 +161,7 @@ export const handler = async ({
 
           fs.copyFileSync(
             indexHtmlPath,
-            path.join(getPaths().web.dist, '200.html')
+            path.join(getPaths().web.dist, '200.html'),
           )
         }
       },
@@ -181,8 +174,8 @@ export const handler = async ({
       console.log(
         `You have not marked any routes to "prerender" in your ${terminalLink(
           'Routes',
-          'file://' + rwjsPaths.web.routes
-        )}.`
+          'file://' + rwjsPaths.web.routes,
+        )}.`,
       )
 
       return
@@ -204,7 +197,7 @@ export const handler = async ({
   await timedTelemetry(process.argv, { type: 'build' }, async () => {
     await jobs.run()
 
-    if (side.includes('web') && prerender) {
+    if (side.includes('web') && prerender && prismaSchemaExists) {
       // This step is outside Listr so that it prints clearer, complete messages
       await triggerPrerender()
     }

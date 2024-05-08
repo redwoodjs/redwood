@@ -25,7 +25,7 @@ const mapRouterPathToHtml = (routerPath) => {
 function getRouteHooksFilePath(routeFilePath) {
   const routeHooksFilePathTs = routeFilePath.replace(
     /\.[jt]sx?$/,
-    '.routeHooks.ts'
+    '.routeHooks.ts',
   )
 
   if (fs.existsSync(routeHooksFilePathTs)) {
@@ -34,7 +34,7 @@ function getRouteHooksFilePath(routeFilePath) {
 
   const routeHooksFilePathJs = routeFilePath.replace(
     /\.[jt]sx?$/,
-    '.routeHooks.js'
+    '.routeHooks.js',
   )
 
   if (fs.existsSync(routeHooksFilePathJs)) {
@@ -101,7 +101,7 @@ async function expandRouteParameters(route) {
         Object.entries(pathParamValues).forEach(([paramName, paramValue]) => {
           newPath = newPath.replace(
             new RegExp(`{${paramName}:?[^}]*}`),
-            paramValue
+            paramValue,
           )
         })
 
@@ -124,8 +124,8 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     console.log('\nSkipping prerender...')
     console.log(
       c.warning(
-        'You have not marked any routes with a path as `prerender` in `Routes.{jsx,tsx}` \n'
-      )
+        'You have not marked any routes with a path as `prerender` in `Routes.{jsx,tsx}` \n',
+      ),
     )
 
     // Don't error out
@@ -134,7 +134,7 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
 
   if (!fs.existsSync(indexHtmlPath)) {
     console.error(
-      'You must run `yarn rw build web` before trying to prerender.'
+      'You must run `yarn rw build web` before trying to prerender.',
     )
     process.exit(1)
     // TODO: Run this automatically at this point.
@@ -143,7 +143,7 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
   configureBabel()
 
   const expandedRouteParameters = await Promise.all(
-    prerenderRoutes.map((route) => expandRouteParameters(route))
+    prerenderRoutes.map((route) => expandRouteParameters(route)),
   )
 
   const listrTasks = expandedRouteParameters
@@ -172,7 +172,7 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
             // Check if route param templates in e.g. /path/{param1} have been replaced
             if (/\{.*}/.test(routeToPrerender.path)) {
               throw new PathParamError(
-                `Could not retrieve route parameters for ${routeToPrerender.path}`
+                `Could not retrieve route parameters for ${routeToPrerender.path}`,
               )
             }
 
@@ -188,14 +188,14 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
             } catch (e) {
               console.log()
               console.log(
-                c.warning('You can use `yarn rw prerender --dry-run` to debug')
+                c.warning('You can use `yarn rw prerender --dry-run` to debug'),
               )
               console.log()
 
               console.log(
                 `${c.info('-'.repeat(10))} Error rendering path "${
                   routeToPrerender.path
-                }" ${c.info('-'.repeat(10))}`
+                }" ${c.info('-'.repeat(10))}`,
               )
 
               errorTelemetry(process.argv, `Error prerendering: ${e.message}`)
@@ -218,25 +218,25 @@ const diagnosticCheck = () => {
     {
       message: 'Duplicate React version found in web/node_modules',
       failure: fs.existsSync(
-        path.join(getPaths().web.base, 'node_modules/react')
+        path.join(getPaths().web.base, 'node_modules/react'),
       ),
     },
     {
       message: 'Duplicate react-dom version found in web/node_modules',
       failure: fs.existsSync(
-        path.join(getPaths().web.base, 'node_modules/react-dom')
+        path.join(getPaths().web.base, 'node_modules/react-dom'),
       ),
     },
     {
       message: 'Duplicate core-js version found in web/node_modules',
       failure: fs.existsSync(
-        path.join(getPaths().web.base, 'node_modules/core-js')
+        path.join(getPaths().web.base, 'node_modules/core-js'),
       ),
     },
     {
       message: 'Duplicate @redwoodjs/web version found in web/node_modules',
       failure: fs.existsSync(
-        path.join(getPaths().web.base, 'node_modules/@redwoodjs/web')
+        path.join(getPaths().web.base, 'node_modules/@redwoodjs/web'),
       ),
     },
   ]
@@ -256,13 +256,13 @@ const diagnosticCheck = () => {
     console.log('-'.repeat(50))
 
     console.log(
-      'Diagnostic check found issues. See the Redwood Forum link below for help:'
+      'Diagnostic check found issues. See the Redwood Forum link below for help:',
     )
 
     console.log(
       c.underline(
-        'https://community.redwoodjs.com/search?q=duplicate%20package%20found'
-      )
+        'https://community.redwoodjs.com/search?q=duplicate%20package%20found',
+      ),
     )
 
     console.log()
@@ -278,8 +278,8 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
   if (getConfig().experimental?.streamingSsr?.enabled) {
     console.log(
       c.warning(
-        'Prerendering is not yet supported with Streaming SSR. Skipping prerender...'
-      )
+        'Prerendering is not yet supported with Streaming SSR. Skipping prerender...',
+      ),
     )
 
     return
@@ -314,25 +314,25 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
     if (e instanceof PathParamError) {
       console.log(
         c.info(
-          "- You most likely need to add or update a *.routeHooks.{js,ts} file next to the Page you're trying to prerender"
-        )
+          "- You most likely need to add or update a *.routeHooks.{js,ts} file next to the Page you're trying to prerender",
+        ),
       )
     } else {
       console.log(
         c.info(
-          `- This could mean that a library you're using does not support SSR.`
-        )
+          `- This could mean that a library you're using does not support SSR.`,
+        ),
       )
       console.log(
         c.info(
-          '- Avoid using `window` in the initial render path through your React components without checks. \n  See https://redwoodjs.com/docs/prerender#prerender-utils'
-        )
+          '- Avoid using `window` in the initial render path through your React components without checks. \n  See https://redwoodjs.com/docs/prerender#prerender-utils',
+        ),
       )
 
       console.log(
         c.info(
-          '- Avoid prerendering Cells with authenticated queries, by conditionally rendering them.\n  See https://redwoodjs.com/docs/prerender#common-warnings--errors'
-        )
+          '- Avoid prerendering Cells with authenticated queries, by conditionally rendering them.\n  See https://redwoodjs.com/docs/prerender#common-warnings--errors',
+        ),
       )
     }
 

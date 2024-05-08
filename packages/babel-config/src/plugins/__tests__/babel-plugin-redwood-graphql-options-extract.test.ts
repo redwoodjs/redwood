@@ -1,10 +1,11 @@
 import path from 'path'
 
 import pluginTester from 'babel-plugin-tester'
+import { vi } from 'vitest'
 
 import redwoodGraphqlOptionsExtract from '../babel-plugin-redwood-graphql-options-extract'
 
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', () => {
   return {
     getBaseDirFromFile: () => {
       return ''

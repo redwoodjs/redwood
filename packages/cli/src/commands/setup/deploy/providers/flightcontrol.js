@@ -35,7 +35,7 @@ export const getFlightcontrolJson = async (database) => {
   }
 
   const schema = await getSchema(
-    path.join(getPaths().base, 'api/db/schema.prisma')
+    path.join(getPaths().base, 'api/db/schema.prisma'),
   )
   const config = await getConfig({ datamodel: schema })
   const detectedDatabase = config.datasources[0].activeProvider
@@ -96,11 +96,11 @@ const updateGraphQLFunction = () => {
     task: (_ctx) => {
       const graphqlTsPath = path.join(
         getPaths().base,
-        'api/src/functions/graphql.ts'
+        'api/src/functions/graphql.ts',
       )
       const graphqlJsPath = path.join(
         getPaths().base,
-        'api/src/functions/graphql.js'
+        'api/src/functions/graphql.js',
       )
 
       let graphqlFunctionsPath
@@ -122,7 +122,7 @@ const updateGraphQLFunction = () => {
         .readFileSync(graphqlFunctionsPath, 'utf8')
         .split(EOL)
       const graphqlHanderIndex = graphqlContent.findIndex((line) =>
-        line.includes('createGraphQLHandler({')
+        line.includes('createGraphQLHandler({'),
       )
 
       if (graphqlHanderIndex === -1) {
@@ -138,7 +138,7 @@ const updateGraphQLFunction = () => {
       graphqlContent.splice(
         graphqlHanderIndex + 1,
         0,
-        '  cors: { origin: process.env.REDWOOD_WEB_URL, credentials: true },'
+        '  cors: { origin: process.env.REDWOOD_WEB_URL, credentials: true },',
       )
 
       fs.writeFileSync(graphqlFunctionsPath, graphqlContent.join(EOL))
@@ -165,7 +165,7 @@ const updateDbAuth = () => {
 
       const authContent = fs.readFileSync(authFnPath, 'utf8').split(EOL)
       const sameSiteLineIndex = authContent.findIndex((line) =>
-        line.match(/SameSite:.*,/)
+        line.match(/SameSite:.*,/),
       )
       if (sameSiteLineIndex === -1) {
         console.log(`
@@ -175,12 +175,11 @@ const updateDbAuth = () => {
     `)
         return
       }
-      authContent[
-        sameSiteLineIndex
-      ] = `      SameSite: process.env.NODE_ENV === 'development' ? 'Strict' : 'None',`
+      authContent[sameSiteLineIndex] =
+        `      SameSite: process.env.NODE_ENV === 'development' ? 'Strict' : 'None',`
 
       const dbHandlerIndex = authContent.findIndex((line) =>
-        line.includes('new DbAuthHandler(')
+        line.includes('new DbAuthHandler('),
       )
       if (dbHandlerIndex === -1) {
         console.log(`
@@ -194,7 +193,7 @@ const updateDbAuth = () => {
       authContent.splice(
         dbHandlerIndex + 1,
         0,
-        '  cors: { origin: process.env.REDWOOD_WEB_URL, credentials: true },'
+        '  cors: { origin: process.env.REDWOOD_WEB_URL, credentials: true },',
       )
 
       fs.writeFileSync(authFnPath, authContent.join(EOL))
@@ -223,7 +222,7 @@ const updateApp = () => {
 
       const appContent = fs.readFileSync(appPath, 'utf8').split(EOL)
       const authLineIndex = appContent.findIndex((line) =>
-        line.includes('<AuthProvider')
+        line.includes('<AuthProvider'),
       )
       if (authLineIndex === -1) {
         console.log(`
@@ -234,14 +233,13 @@ const updateApp = () => {
     `)
         // This is CORS config for cookies, which is currently only dbAuth Currently only dbAuth uses cookies and would require this config
       } else if (appContent.toString().match(/dbAuth/)) {
-        appContent[
-          authLineIndex
-        ] = `      <AuthProvider type="dbAuth" config={{ fetchConfig: { credentials: 'include' } }}>
+        appContent[authLineIndex] =
+          `      <AuthProvider type="dbAuth" config={{ fetchConfig: { credentials: 'include' } }}>
 `
       }
 
       const gqlLineIndex = appContent.findIndex((line) =>
-        line.includes('<RedwoodApolloProvider')
+        line.includes('<RedwoodApolloProvider'),
       )
       if (gqlLineIndex === -1) {
         console.log(`
@@ -252,9 +250,8 @@ const updateApp = () => {
     `)
         // This is CORS config for cookies, which is currently only dbAuth Currently only dbAuth uses cookies and would require this config
       } else if (appContent.toString().match(/dbAuth/)) {
-        appContent[
-          gqlLineIndex
-        ] = `        <RedwoodApolloProvider graphQLClientConfig={{ httpLinkConfig: { credentials: 'include' }}} >
+        appContent[gqlLineIndex] =
+          `        <RedwoodApolloProvider graphQLClientConfig={{ httpLinkConfig: { credentials: 'include' }}} >
 `
       }
 
@@ -328,7 +325,7 @@ export const handler = async ({ force, database }) => {
       addToDotEnvDefaultTask(),
       printSetupNotes(notes),
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

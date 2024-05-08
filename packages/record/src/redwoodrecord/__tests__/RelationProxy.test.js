@@ -53,7 +53,7 @@ describe('belongsTo', () => {
 
   it('created method returns a belongsTo a record', async () => {
     vi.spyOn(User, 'findBy').mockImplementation(() =>
-      User.build({ id: 1, name: 'Rob' })
+      User.build({ id: 1, name: 'Rob' }),
     )
     const record = new Post()
     record.userId = 1
@@ -99,7 +99,7 @@ describe('hasMany', () => {
   it('create hasMany record linked by foreign key', async () => {
     vi.spyOn(User, 'find').mockImplementation(() => User.build({ id: 1 }))
     vi.spyOn(Post, 'create').mockImplementation(() =>
-      User.build({ id: 1, userId: 1 })
+      User.build({ id: 1, userId: 1 }),
     )
 
     const user = await User.find(1)
@@ -112,7 +112,7 @@ describe('hasMany', () => {
         userId: 1,
         title: 'My second post',
       },
-      {}
+      {},
     )
     expect(newPost.userId).toEqual(user.id)
   })
@@ -131,7 +131,7 @@ describe('hasMany', () => {
   it('fetches related records with findBy()', async () => {
     vi.spyOn(User, 'find').mockImplementation(() => User.build({ id: 1 }))
     vi.spyOn(Post, 'findBy').mockImplementation(() =>
-      Post.build({ id: 2, title: 'New' })
+      Post.build({ id: 2, title: 'New' }),
     )
 
     const record = await User.find(1)
@@ -173,7 +173,7 @@ describe('implicit many-to-many', () => {
   it('create connects manyToMany record', async () => {
     vi.spyOn(Post, 'find').mockImplementation(() => Post.build({ id: 1 }))
     vi.spyOn(Category, 'create').mockImplementation(() =>
-      Category.build({ id: 2, name: 'Sample' })
+      Category.build({ id: 2, name: 'Sample' }),
     )
 
     const post = await Post.find(1)
@@ -186,7 +186,7 @@ describe('implicit many-to-many', () => {
           connect: [{ id: 1 }],
         },
       },
-      {}
+      {},
     )
 
     expect(newCategory.id).toEqual(2)
@@ -195,7 +195,7 @@ describe('implicit many-to-many', () => {
   it('fetches related records with find()', async () => {
     vi.spyOn(Post, 'find').mockImplementation(() => Post.build({ id: 1 }))
     vi.spyOn(Category, 'findBy').mockImplementation(() =>
-      Category.build({ id: 2, name: 'Cat' })
+      Category.build({ id: 2, name: 'Cat' }),
     )
 
     const record = await Post.find(1)
@@ -208,7 +208,7 @@ describe('implicit many-to-many', () => {
           some: { id: 1 },
         },
       },
-      {}
+      {},
     )
     expect(category.id).toEqual(2)
   })
@@ -228,7 +228,7 @@ describe('implicit many-to-many', () => {
           some: { id: 1 },
         },
       },
-      {}
+      {},
     )
     expect(categories.length).toEqual(1)
     expect(categories[0].id).toEqual(2)

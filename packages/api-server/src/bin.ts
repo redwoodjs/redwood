@@ -44,20 +44,20 @@ yargs(hideBin(process.argv))
     bothDescription,
     // @ts-expect-error The yargs types seem wrong; it's ok for builder to be a function
     bothBuilder,
-    bothHandler
+    bothHandler,
   )
   .command(
     'api',
     apiDescription,
     // @ts-expect-error The yargs types seem wrong; it's ok for builder to be a function
     apiBuilder,
-    apiHandler
+    apiHandler,
   )
   .command(
     'web',
     webDescription,
     // @ts-expect-error The yargs types seem wrong; it's ok for builder to be a function
     webBuilder,
-    webHandler
+    webHandler,
   )
   .parse()

@@ -33,22 +33,22 @@ import './typeOverride'
 import {
   FetchConfigProvider,
   useFetchConfig,
-} from '../components/FetchConfigProvider'
-import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
+} from '../components/FetchConfigProvider.js'
+import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider.js'
 
 import {
   fragmentRegistry,
   registerFragment,
   registerFragments,
-} from './fragmentRegistry'
-import { SSELink } from './sseLink'
-import { useCache } from './useCache'
+} from './fragmentRegistry.js'
+import { SSELink } from './sseLink.js'
+import { useCache } from './useCache.js'
 
 export type {
   CacheKey,
   FragmentIdentifier,
   RegisterFragmentResult,
-} from './fragmentRegistry'
+} from './fragmentRegistry.js'
 
 export { useCache }
 
@@ -64,7 +64,7 @@ export type RedwoodApolloLinkName =
 
 export type RedwoodApolloLink<
   Name extends RedwoodApolloLinkName,
-  Link extends apolloClient.ApolloLink = apolloClient.ApolloLink
+  Link extends apolloClient.ApolloLink = apolloClient.ApolloLink,
 > = {
   name: Name
   link: Link
@@ -74,11 +74,14 @@ export type RedwoodApolloLinks = [
   RedwoodApolloLink<'withToken'>,
   RedwoodApolloLink<'authMiddleware'>,
   RedwoodApolloLink<'updateDataApolloLink'>,
-  RedwoodApolloLink<'httpLink', apolloClient.ApolloLink | apolloClient.HttpLink>
+  RedwoodApolloLink<
+    'httpLink',
+    apolloClient.ApolloLink | apolloClient.HttpLink
+  >,
 ]
 
 export type RedwoodApolloLinkFactory = (
-  links: RedwoodApolloLinks
+  links: RedwoodApolloLinks,
 ) => apolloClient.ApolloLink
 
 export type GraphQLClientConfigProp = Omit<
@@ -241,7 +244,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
             httpLinkConfig,
             headers,
           }),
-          httpLink
+          httpLink,
         )
       : httpLink
 
@@ -269,7 +272,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     createPersistedQueryLink({
       generateHash: (document: any) => document['__meta__']['hash'],
     }).concat(httpOrSSELink),
-    httpOrSSELink
+    httpOrSSELink,
   )
 
   // The order here is important. The last link *must* be a terminating link like HttpLink, SSELink, or the PersistedQueryLink.

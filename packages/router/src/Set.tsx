@@ -4,7 +4,7 @@ import React from 'react'
 export type WrapperType<WTProps> = (
   props: Omit<WTProps, 'wrap' | 'children'> & {
     children: ReactNode
-  }
+  },
 ) => ReactElement | null
 
 type SetProps<P> = P & {
@@ -77,7 +77,7 @@ export function PrivateSet<WrapperProps>(props: PrivateSetProps<WrapperProps>) {
 }
 
 export const isSetNode = (
-  node: ReactNode
+  node: ReactNode,
 ): node is ReactElement<SetProps<any>> => {
   return (
     React.isValidElement(node) &&
@@ -88,14 +88,14 @@ export const isSetNode = (
 }
 
 export const isPrivateSetNode = (
-  node: ReactNode
+  node: ReactNode,
 ): node is ReactElement<PrivateSetProps<unknown>> => {
   return React.isValidElement(node) && node.type === PrivateSet
 }
 
 // Only identifies <Private> nodes, not <Set private> nodes
 export const isPrivateNode = (
-  node: ReactNode
+  node: ReactNode,
 ): node is ReactElement<SetProps<any>> => {
   return React.isValidElement(node) && node.type === Private
 }

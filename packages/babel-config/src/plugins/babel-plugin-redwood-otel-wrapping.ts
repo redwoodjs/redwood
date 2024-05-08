@@ -8,7 +8,7 @@ import { getBaseDirFromFile } from '@redwoodjs/project-config'
 
 function addOpenTelemetryImport(
   path: NodePath<types.Program>,
-  t: typeof types
+  t: typeof types,
 ) {
   // We need to have access to the `trace` from `@opentelemetry/api` in order to add the
   // automatic instrumentation. We will import it and alias it to something highly specific
@@ -18,11 +18,11 @@ function addOpenTelemetryImport(
       [
         t.importSpecifier(
           t.identifier('RW_OTEL_WRAPPER_TRACE'),
-          t.identifier('trace')
+          t.identifier('trace'),
         ),
       ],
-      t.stringLiteral('@opentelemetry/api')
-    )
+      t.stringLiteral('@opentelemetry/api'),
+    ),
   )
 }
 
@@ -47,7 +47,7 @@ function getRedwoodPaths(state: PluginPass): {
     ? filename.substring(
         filenameOffset,
         filename.substring(filenameOffset).indexOf(nodejsPath.sep) +
-          filenameOffset
+          filenameOffset,
       )
     : '?'
 
@@ -60,7 +60,7 @@ function getRedwoodPaths(state: PluginPass): {
 function wrapExportNamedDeclaration(
   path: NodePath<types.ExportNamedDeclaration>,
   state: PluginPass,
-  t: typeof types
+  t: typeof types,
 ) {
   const declaration = path.node.declaration
   const declarationIsSupported =
@@ -101,7 +101,7 @@ function wrapExportNamedDeclaration(
 
     if (param.type === 'ObjectPattern') {
       const objectProperties = param.properties.filter(
-        (p) => p.type === 'ObjectProperty'
+        (p) => p.type === 'ObjectProperty',
       ) as types.ObjectProperty[]
       originalFunctionArgumentsWithoutDefaults.push(
         t.objectExpression(
@@ -110,8 +110,8 @@ function wrapExportNamedDeclaration(
               return t.objectProperty(p.key, p.value.left)
             }
             return p
-          })
-        )
+          }),
+        ),
       )
 
       continue
@@ -122,7 +122,7 @@ function wrapExportNamedDeclaration(
         originalFunctionArgumentsWithoutDefaults.push(param.left)
       } else if (param.left.type === 'ObjectPattern') {
         const objectProperties = param.left.properties.filter(
-          (p) => p.type === 'ObjectProperty'
+          (p) => p.type === 'ObjectProperty',
         ) as types.ObjectProperty[]
         originalFunctionArgumentsWithoutDefaults.push(
           t.objectExpression(
@@ -131,8 +131,8 @@ function wrapExportNamedDeclaration(
                 return t.objectProperty(p.key, p.value.left)
               }
               return p
-            })
-          )
+            }),
+          ),
         )
       } else {
         // TODO: Implement others, bail out for now
@@ -151,7 +151,7 @@ function wrapExportNamedDeclaration(
   const activeSpanBlock = t.callExpression(
     t.memberExpression(
       t.identifier('RW_OTEL_WRAPPER_TRACER'),
-      t.identifier('startActiveSpan')
+      t.identifier('startActiveSpan'),
     ),
     [
       t.stringLiteral(`redwoodjs:api:${apiFolder}:${originalFunctionName}`),
@@ -162,25 +162,25 @@ function wrapExportNamedDeclaration(
             t.callExpression(
               t.memberExpression(
                 t.identifier('span'),
-                t.identifier('setAttribute')
+                t.identifier('setAttribute'),
               ),
               [
                 t.stringLiteral('code.function'),
                 t.stringLiteral(originalFunctionName),
-              ]
-            )
+              ],
+            ),
           ),
           t.expressionStatement(
             t.callExpression(
               t.memberExpression(
                 t.identifier('span'),
-                t.identifier('setAttribute')
+                t.identifier('setAttribute'),
               ),
               [
                 t.stringLiteral('code.filepath'),
                 t.stringLiteral(filename || '?'),
-              ]
-            )
+              ],
+            ),
           ),
           t.tryStatement(
             t.blockStatement([
@@ -191,20 +191,20 @@ function wrapExportNamedDeclaration(
                     ? t.awaitExpression(
                         t.callExpression(
                           t.identifier(wrappedFunctionName),
-                          originalFunctionArgumentsWithoutDefaults
-                        )
+                          originalFunctionArgumentsWithoutDefaults,
+                        ),
                       )
                     : t.callExpression(
                         t.identifier(wrappedFunctionName),
-                        originalFunctionArgumentsWithoutDefaults
-                      )
+                        originalFunctionArgumentsWithoutDefaults,
+                      ),
                 ),
               ]),
               t.expressionStatement(
                 t.callExpression(
                   t.memberExpression(t.identifier('span'), t.identifier('end')),
-                  []
-                )
+                  [],
+                ),
               ),
               t.returnStatement(t.identifier('RW_OTEL_WRAPPER_INNER_RESULT')),
             ]),
@@ -215,22 +215,22 @@ function wrapExportNamedDeclaration(
                   t.callExpression(
                     t.memberExpression(
                       t.identifier('span'),
-                      t.identifier('recordException')
+                      t.identifier('recordException'),
                     ),
-                    [t.identifier('error')]
-                  )
+                    [t.identifier('error')],
+                  ),
                 ),
                 t.expressionStatement(
                   t.callExpression(
                     t.memberExpression(
                       t.identifier('span'),
-                      t.identifier('setStatus')
+                      t.identifier('setStatus'),
                     ),
                     [
                       t.objectExpression([
                         t.objectProperty(
                           t.identifier('code'),
-                          t.numericLiteral(2)
+                          t.numericLiteral(2),
                         ),
                         t.objectProperty(
                           t.identifier('message'),
@@ -243,18 +243,18 @@ function wrapExportNamedDeclaration(
                                     t.identifier('error'),
                                     t.identifier('message'),
                                     false,
-                                    true
+                                    true,
                                   ),
                                   t.identifier('split'),
                                   false,
-                                  true
+                                  true,
                                 ),
                                 [t.stringLiteral('\n')],
-                                false
+                                false,
                               ),
                               t.numericLiteral(0),
                               true,
-                              false
+                              false,
                             ),
                             t.optionalMemberExpression(
                               t.optionalCallExpression(
@@ -264,45 +264,45 @@ function wrapExportNamedDeclaration(
                                       t.identifier('error'),
                                       t.identifier('toString'),
                                       false,
-                                      true
+                                      true,
                                     ),
                                     [],
-                                    false
+                                    false,
                                   ),
                                   t.identifier('split'),
                                   false,
-                                  true
+                                  true,
                                 ),
                                 [t.stringLiteral('\n')],
-                                false
+                                false,
                               ),
                               t.numericLiteral(0),
                               true,
-                              false
-                            )
-                          )
+                              false,
+                            ),
+                          ),
                         ),
                       ]),
-                    ]
-                  )
+                    ],
+                  ),
                 ),
                 t.expressionStatement(
                   t.callExpression(
                     t.memberExpression(
                       t.identifier('span'),
-                      t.identifier('end')
+                      t.identifier('end'),
                     ),
-                    []
-                  )
+                    [],
+                  ),
                 ),
                 t.throwStatement(t.identifier('error')),
-              ])
-            )
+              ]),
+            ),
           ),
         ]),
-        originalFunction.async
+        originalFunction.async,
       ),
-    ]
+    ],
   )
 
   const wrapper = t.arrowFunctionExpression(
@@ -312,7 +312,7 @@ function wrapExportNamedDeclaration(
         t.variableDeclaration('const', [
           t.variableDeclarator(
             t.identifier(wrappedFunctionName),
-            originalFunction
+            originalFunction,
           ),
         ]),
         t.variableDeclaration('const', [
@@ -321,10 +321,10 @@ function wrapExportNamedDeclaration(
             t.callExpression(
               t.memberExpression(
                 t.identifier('RW_OTEL_WRAPPER_TRACE'),
-                t.identifier('getTracer')
+                t.identifier('getTracer'),
               ),
-              [t.stringLiteral('redwoodjs')]
-            )
+              [t.stringLiteral('redwoodjs')],
+            ),
           ),
         ]),
         t.variableDeclaration('const', [
@@ -332,16 +332,16 @@ function wrapExportNamedDeclaration(
             t.identifier('RW_OTEL_WRAPPER_RESULT'),
             originalFunction.async
               ? t.awaitExpression(activeSpanBlock)
-              : activeSpanBlock
+              : activeSpanBlock,
           ),
         ]),
         t.returnStatement(t.identifier('RW_OTEL_WRAPPER_RESULT')),
       ],
       originalFunction.body.type === 'BlockStatement'
         ? originalFunction.body.directives
-        : undefined
+        : undefined,
     ),
-    originalFunction.async
+    originalFunction.async,
   )
 
   // Replace the original function with the wrapped version

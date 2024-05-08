@@ -35,7 +35,7 @@ export default function transform(file: FileInfo, api: API) {
           } else {
             graphqlServerSpecifiers.add(name)
           }
-        }
+        },
       )
 
       j(importDeclaration).remove()
@@ -47,7 +47,7 @@ export default function transform(file: FileInfo, api: API) {
       .find(j.Program)
       .get('body', 0)
       .insertBefore(
-        `import { ${[...apiSpecifiers].join(', ')} } from '@redwoodjs/api'`
+        `import { ${[...apiSpecifiers].join(', ')} } from '@redwoodjs/api'`,
       )
   }
 
@@ -57,8 +57,8 @@ export default function transform(file: FileInfo, api: API) {
       .get('body', 0)
       .insertBefore(
         `import { ${[...graphqlServerSpecifiers].join(
-          ', '
-        )} } from '@redwoodjs/graphql-server'`
+          ', ',
+        )} } from '@redwoodjs/graphql-server'`,
       )
   }
 

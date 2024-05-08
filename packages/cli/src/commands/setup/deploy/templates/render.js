@@ -38,7 +38,7 @@ services:
   plan: free
   env: node
   region: oregon
-  buildCommand: corepack enable && yarn && yarn rw build api
+  buildCommand: corepack enable && yarn install && yarn rw build api
   startCommand: yarn rw deploy render api
 
   envVars:

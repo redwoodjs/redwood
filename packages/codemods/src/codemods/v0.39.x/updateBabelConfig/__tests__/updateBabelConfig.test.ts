@@ -1,4 +1,8 @@
+import { expect, test } from 'vitest'
+
+import { matchFolderTransform } from '../../../../testUtils/matchFolderTransform'
 import transform from '../updateBabelConfig'
+
 test('Removes babel config for default setup', async () => {
   await matchFolderTransform(transform, 'default')
 })
@@ -12,8 +16,8 @@ test('Should preserve custom web config', async () => {
 
 test('Should throw if root babel.config.js has custom config', async () => {
   expect(async () =>
-    matchFolderTransform(transform, 'rootCustom')
+    matchFolderTransform(transform, 'rootCustom'),
   ).rejects.toThrowError(
-    'Cannot automatically codemod your project. Please move your root babel.config.js settings manually'
+    'Cannot automatically codemod your project. Please move your root babel.config.js settings manually',
   )
 })

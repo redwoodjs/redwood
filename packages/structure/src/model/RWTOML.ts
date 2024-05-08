@@ -9,7 +9,10 @@ import { err } from '../x/vscode-languageserver-types'
 import type { RWProject } from './RWProject'
 
 export class RWTOML extends FileNode {
-  constructor(public filePath: string, public parent: RWProject) {
+  constructor(
+    public filePath: string,
+    public parent: RWProject,
+  ) {
     super()
   }
   // @lazy() get content(): TOML.JsonMap {

@@ -78,7 +78,7 @@ export function loadCommandCache() {
   let pluginCommandCache = PLUGIN_CACHE_DEFAULT
   const commandCachePath = path.join(
     getPaths().generated.base,
-    PLUGIN_CACHE_FILENAME
+    PLUGIN_CACHE_FILENAME,
   )
   try {
     const localCommandCache = JSON.parse(fs.readFileSync(commandCachePath))
@@ -115,12 +115,12 @@ export function loadCommandCache() {
 export function saveCommandCache(pluginCommandCache) {
   const commandCachePath = path.join(
     getPaths().generated.base,
-    PLUGIN_CACHE_FILENAME
+    PLUGIN_CACHE_FILENAME,
   )
   try {
     fs.writeFileSync(
       commandCachePath,
-      JSON.stringify(pluginCommandCache, undefined, 2)
+      JSON.stringify(pluginCommandCache, undefined, 2),
     )
   } catch (error) {
     console.error(`Error saving plugin command cache at ${commandCachePath}`)
@@ -138,7 +138,7 @@ export function checkPluginListAndWarn(plugins) {
   for (const plugin of plugins) {
     if (!plugin.package) {
       console.warn(
-        chalk.yellow(`⚠️  A plugin is missing a package, it cannot be loaded.`)
+        chalk.yellow(`⚠️  A plugin is missing a package, it cannot be loaded.`),
       )
     }
   }
@@ -150,8 +150,8 @@ export function checkPluginListAndWarn(plugins) {
   if (pluginPackages.length !== new Set(pluginPackages).size) {
     console.warn(
       chalk.yellow(
-        '⚠️  Duplicate plugin packages found in redwood.toml, duplicates will be ignored.'
-      )
+        '⚠️  Duplicate plugin packages found in redwood.toml, duplicates will be ignored.',
+      ),
     )
   }
 
@@ -161,8 +161,8 @@ export function checkPluginListAndWarn(plugins) {
     if (ns !== undefined && !ns.startsWith('@')) {
       console.warn(
         chalk.yellow(
-          `⚠️  Plugin "${ns}" is missing a scope/namespace, it will not be loaded.`
-        )
+          `⚠️  Plugin "${ns}" is missing a scope/namespace, it will not be loaded.`,
+        ),
       )
     }
   })
@@ -180,7 +180,7 @@ export function checkPluginListAndWarn(plugins) {
 export async function loadPluginPackage(
   packageName,
   packageVersion,
-  autoInstall
+  autoInstall,
 ) {
   // NOTE: This likely does not handle mismatch versions between what is installed and what is requested
   if (isModuleInstalled(packageName)) {
@@ -190,8 +190,8 @@ export async function loadPluginPackage(
   if (!autoInstall) {
     console.warn(
       chalk.yellow(
-        `⚠️  Plugin "${packageName}" cannot be loaded because it is not installed and "autoInstall" is disabled.`
-      )
+        `⚠️  Plugin "${packageName}" cannot be loaded because it is not installed and "autoInstall" is disabled.`,
+      ),
     )
     return null
   }
@@ -224,17 +224,17 @@ async function installPluginPackage(packageName, packageVersion) {
     try {
       const compatibilityData = await getCompatibilityData(
         packageName,
-        versionToInstall
+        versionToInstall,
       )
       versionToInstall = compatibilityData.compatible.version
       console.log(
         chalk.green(
-          `Installing the latest compatible version: ${versionToInstall}`
-        )
+          `Installing the latest compatible version: ${versionToInstall}`,
+        ),
       )
     } catch (error) {
       console.log(
-        'The following error occurred while checking plugin compatibility for automatic installation:'
+        'The following error occurred while checking plugin compatibility for automatic installation:',
       )
       const errorMessage = error.message ?? error
       console.log(errorMessage)

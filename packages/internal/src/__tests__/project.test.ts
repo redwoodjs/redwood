@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { describe, afterAll, it, expect } from 'vitest'
+
 import { getTsConfigs } from '../project'
 
 describe('Retrieves TSConfig settings', () => {
@@ -42,7 +44,7 @@ function getFixtureDir(
     | 'example-todo-main-with-errors'
     | 'example-todo-main'
     | 'empty-project'
-    | 'test-project'
+    | 'test-project',
 ) {
   return path.resolve(__dirname, `../../../../__fixtures__/${name}`)
 }

@@ -7,10 +7,10 @@ export default function transform(file: FileInfo, api: API) {
   const exportDeclarations = ast.find(j.ExportNamedDeclaration)
 
   const createStandardMockFunction = (
-    originalMockObject: ASTPath<ObjectExpression>
+    originalMockObject: ASTPath<ObjectExpression>,
   ) => {
     const newMockedObject = j.objectExpression(
-      originalMockObject.value.properties
+      originalMockObject.value.properties,
     )
     const returnStatement = j.returnStatement(newMockedObject)
 
@@ -18,7 +18,7 @@ export default function transform(file: FileInfo, api: API) {
     return j.variableDeclarator(
       //@MARK cheating... not sure how to add const
       j.identifier('const standard'),
-      j.arrowFunctionExpression([], j.blockStatement([returnStatement]))
+      j.arrowFunctionExpression([], j.blockStatement([returnStatement])),
     )
   }
 

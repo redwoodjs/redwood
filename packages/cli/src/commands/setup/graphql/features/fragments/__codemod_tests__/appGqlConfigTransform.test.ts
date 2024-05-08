@@ -24,7 +24,7 @@ describe('fragments graphQLClientConfig', () => {
       'existingPropVariable',
       {
         useJsCodeshift: true,
-      }
+      },
     )
   })
 
@@ -34,7 +34,7 @@ describe('fragments graphQLClientConfig', () => {
       'existingPropVariableNoCacheConfig',
       {
         useJsCodeshift: true,
-      }
+      },
     )
   })
 
@@ -44,7 +44,7 @@ describe('fragments graphQLClientConfig', () => {
       'existingPropVariableCustomName',
       {
         useJsCodeshift: true,
-      }
+      },
     )
   })
 
@@ -57,23 +57,28 @@ describe('fragments graphQLClientConfig', () => {
         'test-project',
         'web',
         'src',
-        'App.tsx'
+        'App.tsx',
       ),
-      'utf-8'
+      'utf-8',
     )
     await matchInlineTransformSnapshot(
       'appGqlConfigTransform',
       testProjectAppTsx,
-      `import { FatalErrorBoundary, RedwoodProvider } from \"@redwoodjs/web\";
+      `import type { ReactNode } from 'react'
+
+      import { FatalErrorBoundary, RedwoodProvider } from \"@redwoodjs/web\";
       import { RedwoodApolloProvider } from \"@redwoodjs/web/apollo\";
 
       import FatalErrorPage from \"src/pages/FatalErrorPage\";
-      import Routes from \"src/Routes\";
 
       import { AuthProvider, useAuth } from \"./auth\";
 
-      import \"./scaffold.css\";
       import \"./index.css\";
+      import \"./scaffold.css\";
+
+      interface AppProps {
+        children?: ReactNode;
+      }
 
       const graphQLClientConfig = {
         cacheConfig: {
@@ -81,7 +86,7 @@ describe('fragments graphQLClientConfig', () => {
         },
       };
 
-      const App = () => (
+      const App = ({ children }: AppProps) => (
         <FatalErrorBoundary page={FatalErrorPage}>
           <RedwoodProvider titleTemplate=\"%PageTitle | %AppTitle\">
             <AuthProvider>
@@ -89,7 +94,7 @@ describe('fragments graphQLClientConfig', () => {
                 useAuth={useAuth}
                 graphQLClientConfig={graphQLClientConfig}
               >
-                <Routes />
+                {children}
               </RedwoodApolloProvider>
             </AuthProvider>
           </RedwoodProvider>
@@ -97,7 +102,7 @@ describe('fragments graphQLClientConfig', () => {
       );
 
       export default App;
-      `
+      `,
     )
   })
 })

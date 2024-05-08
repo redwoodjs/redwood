@@ -1,12 +1,16 @@
 import type { BuildContext, BuildOptions, PluginBuild } from 'esbuild'
 import { build, context } from 'esbuild'
-import { remove } from 'fs-extra'
+import fs from 'fs-extra'
 
 import {
   getApiSideBabelPlugins,
   transformWithBabel,
 } from '@redwoodjs/babel-config'
-import { getConfig, getPaths } from '@redwoodjs/project-config'
+import {
+  getConfig,
+  getPaths,
+  projectSideIsEsm,
+} from '@redwoodjs/project-config'
 
 import { findApiFiles } from '../files'
 
@@ -33,7 +37,7 @@ export const rebuildApi = async () => {
 
 export const cleanApiBuild = async () => {
   const rwjsPaths = getPaths()
-  return remove(rwjsPaths.api.dist)
+  return fs.remove(rwjsPaths.api.dist)
 }
 
 const runRwBabelTransformsPlugin = {
@@ -51,7 +55,8 @@ const runRwBabelTransformsPlugin = {
           openTelemetry:
             rwjsConfig.experimental.opentelemetry.enabled &&
             rwjsConfig.experimental.opentelemetry.wrapApi,
-        })
+          projectIsEsm: projectSideIsEsm('api'),
+        }),
       )
 
       if (transformedCode?.code) {
@@ -72,13 +77,14 @@ export const transpileApi = async (files: string[]) => {
 
 function getEsbuildOptions(files: string[]): BuildOptions {
   const rwjsPaths = getPaths()
+  const format = projectSideIsEsm('api') ? 'esm' : 'cjs'
 
   return {
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',
     target: 'node20',
-    format: 'cjs',
+    format,
     allowOverwrite: true,
     bundle: false,
     plugins: [runRwBabelTransformsPlugin],

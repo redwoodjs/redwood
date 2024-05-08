@@ -1,12 +1,14 @@
 import path from 'path'
 
+import { test, expect } from 'vitest'
+
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
 import { findCellMocks } from '../findCellMocks'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../../__fixtures__/example-todo-main'
+  '../../../../../__fixtures__/example-todo-main',
 )
 
 const cleanPaths = (p) => {

@@ -6,7 +6,10 @@ import { lazy } from '../x/decorators'
 import type { RWProject } from './RWProject'
 
 export class RWComponent extends FileNode {
-  constructor(public filePath: string, public parent: RWProject) {
+  constructor(
+    public filePath: string,
+    public parent: RWProject,
+  ) {
     super()
   }
 
@@ -27,7 +30,7 @@ export class RWComponent extends FileNode {
     // KLUDGE!
     const ss = new Set<string>()
     for (const d of this.sf.getDescendantsOfKind(
-      tsm.SyntaxKind.VariableDeclaration
+      tsm.SyntaxKind.VariableDeclaration,
     )) {
       if (d.isExported()) {
         ss.add(d.getName())

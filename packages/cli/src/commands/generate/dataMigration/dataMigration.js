@@ -13,7 +13,7 @@ import { prepareForRollback } from '../../../lib/rollback'
 import { validateName, yargsDefaults } from '../helpers'
 
 const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
-  'After writing your migration, you can run it with:'
+  'After writing your migration, you can run it with:',
 )}
 
      yarn rw dataMigrate up
@@ -54,8 +54,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#generate-datamigration'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#generate-datamigration',
+      )}`,
     )
 
   // Merge generator defaults in
@@ -88,7 +88,7 @@ export const handler = async (args) => {
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

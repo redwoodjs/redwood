@@ -66,7 +66,7 @@ describe('Basic behavior', () => {
     expId(
       'ImportDeclaration',
       (i) => i.node.source.value === 'src',
-      'Program.ImportDeclaration.source.src'
+      'Program.ImportDeclaration.source.src',
     )
   })
 
@@ -74,7 +74,7 @@ describe('Basic behavior', () => {
     expId(
       'VariableDeclarator',
       (e) => e.node.id.name === 'globalTypes',
-      'Program.ExportNamedDeclaration.VariableDeclaration.globalTypes'
+      'Program.ExportNamedDeclaration.VariableDeclaration.globalTypes',
     )
   })
 
@@ -82,7 +82,7 @@ describe('Basic behavior', () => {
     expId(
       'ObjectProperty',
       (p) => p.node.key.name === 'locale',
-      'Program.ExportNamedDeclaration.VariableDeclaration.globalTypes.ObjectExpression.locale'
+      'Program.ExportNamedDeclaration.VariableDeclaration.globalTypes.ObjectExpression.locale',
     )
   })
 
@@ -90,7 +90,7 @@ describe('Basic behavior', () => {
     expId(
       'ObjectProperty',
       (p) => p.node.key.name === 'items',
-      'Program.ExportNamedDeclaration.VariableDeclaration.globalTypes.ObjectExpression.locale.ObjectExpression.toolbar.ObjectExpression.items'
+      'Program.ExportNamedDeclaration.VariableDeclaration.globalTypes.ObjectExpression.locale.ObjectExpression.toolbar.ObjectExpression.items',
     )
   })
 
@@ -98,7 +98,7 @@ describe('Basic behavior', () => {
     expId(
       'ArrayExpression',
       (p) => p.node.elements[0].value === 7,
-      'Program.VariableDeclaration.nestedArray.ArrayExpression.ArrayExpression.ArrayExpression'
+      'Program.VariableDeclaration.nestedArray.ArrayExpression.ArrayExpression.ArrayExpression',
     )
   })
 
@@ -106,7 +106,7 @@ describe('Basic behavior', () => {
     expId(
       'ArrowFunctionExpression',
       (p) => p.parentPath.node.id.name === 'func',
-      'Program.VariableDeclaration.func.ArrowFunctionExpression'
+      'Program.VariableDeclaration.func.ArrowFunctionExpression',
     )
   })
 
@@ -114,7 +114,7 @@ describe('Basic behavior', () => {
     expId(
       'VariableDeclarator',
       (p) => p.node.id.name === 'hello',
-      'Program.VariableDeclaration.func.ArrowFunctionExpression.BlockStatement.VariableDeclaration.hello'
+      'Program.VariableDeclaration.func.ArrowFunctionExpression.BlockStatement.VariableDeclaration.hello',
     )
   })
 
@@ -124,7 +124,7 @@ describe('Basic behavior', () => {
       (p) =>
         p.node.properties[0].key.name === 'value' &&
         p.node.properties[0].value.value === 'en',
-      'Program.ExportNamedDeclaration.VariableDeclaration.globalTypes.ObjectExpression.locale.ObjectExpression.toolbar.ObjectExpression.items.ArrayExpression.ObjectExpression'
+      'Program.ExportNamedDeclaration.VariableDeclaration.globalTypes.ObjectExpression.locale.ObjectExpression.toolbar.ObjectExpression.items.ArrayExpression.ObjectExpression',
     )
   })
 })

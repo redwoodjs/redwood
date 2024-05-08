@@ -14,11 +14,11 @@ export async function serveWeb(options: ParsedOptions = {}) {
   console.log(chalk.dim.italic('Starting Web Server...'))
 
   const distIndexExists = await fs.pathExists(
-    path.join(getPaths().web.dist, 'index.html')
+    path.join(getPaths().web.dist, 'index.html'),
   )
   if (!distIndexExists) {
     throw new Error(
-      'no built files to serve; run `yarn rw build web` before serving the web side'
+      'no built files to serve; run `yarn rw build web` before serving the web side',
     )
   }
 
@@ -33,7 +33,7 @@ export async function serveWeb(options: ParsedOptions = {}) {
 
   if (process.env.NODE_ENV === 'production' && options.host !== '0.0.0.0') {
     console.warn(
-      `Warning: host '${options.host}' may need to be '0.0.0.0' in production for containerized deployments`
+      `Warning: host '${options.host}' may need to be '0.0.0.0' in production for containerized deployments`,
     )
   }
 

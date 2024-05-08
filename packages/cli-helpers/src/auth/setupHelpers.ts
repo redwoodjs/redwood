@@ -39,8 +39,8 @@ export const standardAuthBuilder = (yargs: Argv) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#setup-auth'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#setup-auth',
+      )}`,
     )
 }
 
@@ -110,11 +110,11 @@ export const standardAuthHandler = async ({
               ...[
                 '',
                 `${colors.warning(
-                  'Your existing auth provider has been replaced!'
+                  'Your existing auth provider has been replaced!',
                 )}`,
                 "You'll still need to manually remove your old auth provider's config,",
                 "functions, and dependencies (in your web and api package.json's).",
-              ]
+              ],
             )
           }
 
@@ -125,8 +125,8 @@ export const standardAuthHandler = async ({
                   'names for the newly generated files. This probably means ' +
                   `${ctx.provider} auth doesn't work out of the box. You'll most ` +
                   'likely have to manually merge some of the generated files ' +
-                  'with your existing auth files'
-              )
+                  'with your existing auth files',
+              ),
             )
           }
         },
@@ -139,7 +139,7 @@ export const standardAuthHandler = async ({
         setupMode: 'UNKNOWN',
         provider, // provider name passed from CLI
       },
-    }
+    },
   )
 
   try {

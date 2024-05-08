@@ -27,7 +27,7 @@ export class RWSDLField extends BaseNode {
   constructor(
     public objectTypeDef: ObjectTypeDefinitionNode,
     public field: FieldDefinitionNode,
-    public parent: RWSDL
+    public parent: RWSDL,
   ) {
     super()
   }

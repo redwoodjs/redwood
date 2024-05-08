@@ -26,7 +26,7 @@ Redwood has a simple API to integrate any auth provider you can think of. But to
 - [Firebase](./auth/firebase.md)
 - [Netlify](./auth/netlify.md)
 - [Supabase](./auth/supabase.md)
-- SuperTokens
+- [SuperTokens](./auth/supertokens.md)
 
 :::tip how to tell if an integration is official
 

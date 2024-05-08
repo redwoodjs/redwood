@@ -5,10 +5,10 @@ import { fileURLToPath } from 'node:url'
 import { cd, path, within, $ } from 'zx'
 
 const tsTemplatePath = fileURLToPath(
-  new URL('../templates/ts', import.meta.url)
+  new URL('../templates/ts', import.meta.url),
 )
 const jsTemplatePath = fileURLToPath(
-  new URL('../templates/js', import.meta.url)
+  new URL('../templates/js', import.meta.url),
 )
 
 await within(async () => {

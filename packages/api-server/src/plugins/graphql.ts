@@ -27,7 +27,7 @@ export interface RedwoodFastifyGraphQLOptions {
 
 export async function redwoodFastifyGraphQLServer(
   fastify: FastifyInstance,
-  options: RedwoodFastifyGraphQLOptions
+  options: RedwoodFastifyGraphQLOptions,
 ) {
   const redwoodOptions = options.redwood ?? {}
   redwoodOptions.apiRootPath ??= '/'
@@ -83,7 +83,7 @@ export async function redwoodFastifyGraphQLServer(
 
     const graphQLYogaHandler = async (
       req: FastifyRequest,
-      reply: FastifyReply
+      reply: FastifyReply,
     ) => {
       const response = await yoga.handleNodeRequest(req, {
         req,
@@ -116,10 +116,10 @@ export async function redwoodFastifyGraphQLServer(
     fastify.addHook('onReady', (done) => {
       console.info(`GraphQL Yoga Server endpoint at ${graphqlEndpoint}`)
       console.info(
-        `GraphQL Yoga Server Health Check endpoint at ${graphqlEndpoint}/health`
+        `GraphQL Yoga Server Health Check endpoint at ${graphqlEndpoint}/health`,
       )
       console.info(
-        `GraphQL Yoga Server Readiness endpoint at ${graphqlEndpoint}/readiness`
+        `GraphQL Yoga Server Readiness endpoint at ${graphqlEndpoint}/readiness`,
       )
 
       done()

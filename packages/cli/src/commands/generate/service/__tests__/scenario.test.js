@@ -213,14 +213,13 @@ describe('the scenario generator', () => {
   })
 
   test('fieldsToScenario returns scenario data for nested relations', async () => {
-    const { scalarFields, relations, foreignKeys } = await service.parseSchema(
-      'UserProfile'
-    )
+    const { scalarFields, relations, foreignKeys } =
+      await service.parseSchema('UserProfile')
 
     const scenario = await service.fieldsToScenario(
       scalarFields,
       relations,
-      foreignKeys
+      foreignKeys,
     )
 
     expect(scenario.user).toEqual(
@@ -228,7 +227,7 @@ describe('the scenario generator', () => {
         create: expect.objectContaining({
           email: expect.any(String),
         }),
-      })
+      }),
     )
   })
 })

@@ -1,6 +1,7 @@
-import { describe, expect, test } from 'vitest'
+import type { MockInstance } from 'vitest'
+import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
 
-import { defaultAuthProviderState } from '@redwoodjs/auth'
+import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
 
 import { invoke } from './invokeMiddleware'
 import type { MiddlewareRequest } from './MiddlewareRequest'
@@ -10,7 +11,7 @@ describe('Invoke middleware', () => {
   test('returns a MiddlewareResponse, even if no middleware defined', async () => {
     const [mwRes, authState] = await invoke(new Request('https://example.com'))
     expect(mwRes).toBeInstanceOf(MiddlewareResponse)
-    expect(authState).toEqual(defaultAuthProviderState)
+    expect(authState).toEqual(middlewareDefaultAuthProviderState)
   })
 
   test('extracts auth state correctly, and always returns a MWResponse', async () => {
@@ -23,7 +24,7 @@ describe('Invoke middleware', () => {
 
     const [mwRes, authState] = await invoke(
       new Request('https://example.com'),
-      fakeMiddleware
+      fakeMiddleware,
     )
 
     expect(mwRes).toBeInstanceOf(MiddlewareResponse)
@@ -32,31 +33,29 @@ describe('Invoke middleware', () => {
     })
   })
 
-  test('returns a MiddlewareResponse, even if middleware throws', async () => {
-    const throwingMiddleware = () => {
-      throw new Error('I want to break free')
-    }
+  describe('throwing middleware behavior', () => {
+    let consoleErrorSpy: MockInstance
 
-    const [mwRes, authState] = await invoke(
-      new Request('https://example.com'),
-      throwingMiddleware
-    )
+    beforeAll(() => {
+      consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    })
 
-    expect(mwRes).toBeInstanceOf(MiddlewareResponse)
-    expect(authState).toEqual(defaultAuthProviderState)
-  })
+    afterAll(() => {
+      consoleErrorSpy.mockRestore()
+    })
 
-  test('returns a MiddlewareResponse, even if middleware returns a Response', async () => {
-    const respondingMiddleware = () =>
-      new Response('See ya, Pal', { status: 302 })
+    test('returns a MiddlewareResponse, even if middleware throws', async () => {
+      const throwingMiddleware = () => {
+        throw new Error('I want to break free')
+      }
 
-    const [mwRes] = await invoke(
-      new Request('https://example.com'),
-      respondingMiddleware
-    )
+      const [mwRes, authState] = await invoke(
+        new Request('https://example.com'),
+        throwingMiddleware,
+      )
 
-    expect(mwRes).toBeInstanceOf(MiddlewareResponse)
-    expect(await mwRes.toResponse().text()).toEqual('See ya, Pal')
-    expect(mwRes.isRedirect()).toEqual(true)
+      expect(mwRes).toBeInstanceOf(MiddlewareResponse)
+      expect(authState).toEqual(middlewareDefaultAuthProviderState)
+    })
   })
 })

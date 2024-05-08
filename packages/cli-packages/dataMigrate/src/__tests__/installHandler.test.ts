@@ -38,7 +38,7 @@ describe('installHandler', () => {
 
   it("the `createDatabaseMigrationCommand` hasn't unintentionally changed", () => {
     expect(createDatabaseMigrationCommand).toMatchInlineSnapshot(
-      `"yarn rw prisma migrate dev --name create_data_migrations --create-only"`
+      `"yarn rw prisma migrate dev --name create_data_migrations --create-only"`,
     )
   })
 
@@ -55,7 +55,7 @@ describe('installHandler', () => {
           },
         },
       },
-      redwoodProjectPath
+      redwoodProjectPath,
     )
 
     console.log = jest.fn()
@@ -66,7 +66,7 @@ describe('installHandler', () => {
 
     expect(fs.readdirSync(dataMigrationsPath)).toEqual(['.keep'])
     expect(fs.readFileSync(getPaths().api.dbSchema, 'utf-8')).toMatch(
-      RW_DATA_MIGRATION_MODEL
+      RW_DATA_MIGRATION_MODEL,
     )
     expect(execa.command).toHaveBeenCalledWith(createDatabaseMigrationCommand, {
       cwd: getPaths().base,

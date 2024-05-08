@@ -63,7 +63,7 @@ export const handler = async ({ force }) => {
                 },
               },
             ],
-            { rendererOptions: { collapseSubtasks: false } }
+            { rendererOptions: { collapseSubtasks: false } },
           )
         },
       },
@@ -78,17 +78,17 @@ export const handler = async ({ force }) => {
            */
           if (!force && i18nConfigExists()) {
             throw new Error(
-              'i18n config already exists.\nUse --force to override existing config.'
+              'i18n config already exists.\nUse --force to override existing config.',
             )
           } else {
             return writeFile(
               path.join(getPaths().web.src, 'i18n.js'),
               fs
                 .readFileSync(
-                  path.resolve(__dirname, 'templates', 'i18n.js.template')
+                  path.resolve(__dirname, 'templates', 'i18n.js.template'),
                 )
                 .toString(),
-              { overwriteExisting: force }
+              { overwriteExisting: force },
             )
           }
         },
@@ -106,17 +106,17 @@ export const handler = async ({ force }) => {
 
           if (!force && localesExists('fr')) {
             throw new Error(
-              'fr.json config already exists.\nUse --force to override existing config.'
+              'fr.json config already exists.\nUse --force to override existing config.',
             )
           } else {
             return writeFile(
               path.join(getPaths().web.src, '/locales/fr.json'),
               fs
                 .readFileSync(
-                  path.resolve(__dirname, 'templates', 'fr.json.template')
+                  path.resolve(__dirname, 'templates', 'fr.json.template'),
                 )
                 .toString(),
-              { overwriteExisting: force }
+              { overwriteExisting: force },
             )
           }
         },
@@ -133,17 +133,17 @@ export const handler = async ({ force }) => {
            */
           if (!force && localesExists('en')) {
             throw new Error(
-              'en.json already exists.\nUse --force to override existing config.'
+              'en.json already exists.\nUse --force to override existing config.',
             )
           } else {
             return writeFile(
               path.join(getPaths().web.src, '/locales/en.json'),
               fs
                 .readFileSync(
-                  path.resolve(__dirname, 'templates', 'en.json.template')
+                  path.resolve(__dirname, 'templates', 'en.json.template'),
                 )
                 .toString(),
-              { overwriteExisting: force }
+              { overwriteExisting: force },
             )
           }
         },
@@ -171,7 +171,7 @@ export const handler = async ({ force }) => {
         skip: () => fileIncludes(rwPaths.web.storybookConfig, 'withI18n'),
         task: async () =>
           extendStorybookConfiguration(
-            path.join(__dirname, 'templates', 'storybook.preview.tsx.template')
+            path.join(__dirname, 'templates', 'storybook.preview.tsx.template'),
           ),
       },
       {
@@ -180,13 +180,13 @@ export const handler = async ({ force }) => {
           task.title = `One more thing...\n
           ${c.green('Quick link to the docs:')}\n
           ${chalk.hex('#e8e8e8')(
-            'https://react.i18next.com/guides/quick-start/'
+            'https://react.i18next.com/guides/quick-start/',
           )}
         `
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

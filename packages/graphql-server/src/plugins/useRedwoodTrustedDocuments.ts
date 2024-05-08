@@ -11,7 +11,7 @@ export type RedwoodTrustedDocumentOptions = {
 }
 
 export const useRedwoodTrustedDocuments = (
-  options: RedwoodTrustedDocumentOptions
+  options: RedwoodTrustedDocumentOptions,
 ): Plugin<RedwoodGraphQLContext> => {
   return usePersistedOperations({
     customErrors: {

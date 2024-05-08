@@ -6,7 +6,7 @@ export function createBufferedTransformStream() {
   let pendingFlush: Promise<void> | null = null
 
   const flushBuffer = (
-    controller: TransformStreamDefaultController<Uint8Array>
+    controller: TransformStreamDefaultController<Uint8Array>,
   ) => {
     if (!pendingFlush) {
       pendingFlush = new Promise<void>((resolve) => {
@@ -23,7 +23,7 @@ export function createBufferedTransformStream() {
   return new TransformStream({
     transform(chunk, controller) {
       const newBufferedBytes = new Uint8Array(
-        bufferedBytes.length + chunk.length
+        bufferedBytes.length + chunk.length,
       )
 
       newBufferedBytes.set(bufferedBytes)

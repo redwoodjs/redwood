@@ -12,7 +12,7 @@ jest.mock(
   () => ({
     handler: jest.fn(),
   }),
-  { virtual: true }
+  { virtual: true },
 )
 
 describe('up', () => {
@@ -20,7 +20,7 @@ describe('up', () => {
     expect(upCommand).toHaveProperty('command', 'up')
     expect(upCommand).toHaveProperty(
       'description',
-      'Run any outstanding Data Migrations against the database'
+      'Run any outstanding Data Migrations against the database',
     )
     expect(upCommand).toHaveProperty('builder')
     expect(upCommand).toHaveProperty('handler')
@@ -34,7 +34,7 @@ describe('up', () => {
           dist: {},
         },
       },
-      '/redwood-app'
+      '/redwood-app',
     )
 
     process.env.RWJS_CWD = '/redwood-app'

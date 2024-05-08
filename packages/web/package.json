@@ -32,41 +32,44 @@
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "jest",
+    "test": "vitest run",
     "test:types": "tstyche",
-    "test:watch": "yarn test --watch"
+    "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@apollo/client": "3.8.10",
-    "@babel/runtime-corejs3": "7.23.9",
-    "@redwoodjs/auth": "7.0.0",
-    "core-js": "3.35.1",
+    "@apollo/client": "3.9.9",
+    "@babel/runtime-corejs3": "7.24.1",
+    "@redwoodjs/auth": "workspace:*",
+    "core-js": "3.36.1",
     "graphql": "16.8.1",
     "graphql-sse": "2.5.2",
     "graphql-tag": "2.12.6",
-    "react-helmet-async": "2.0.3",
+    "react-helmet-async": "2.0.4",
     "react-hot-toast": "2.4.1",
     "stacktracey": "2.1.8",
     "ts-toolbelt": "9.6.0"
   },
   "devDependencies": {
-    "@apollo/experimental-nextjs-app-support": "0.0.0-commit-b8a73fe",
-    "@babel/cli": "7.23.9",
+    "@apollo/client-react-streaming": "0.10.0",
+    "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
-    "@testing-library/jest-dom": "6.3.0",
-    "@testing-library/react": "14.1.2",
+    "@babel/plugin-transform-runtime": "7.24.3",
+    "@babel/runtime": "7.24.1",
+    "@rollup/plugin-babel": "6.0.4",
+    "@testing-library/jest-dom": "6.4.2",
+    "@testing-library/react": "14.3.1",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
-    "jest": "29.7.0",
-    "nodemon": "3.0.2",
-    "react": "0.0.0-experimental-e5205658f-20230913",
-    "react-dom": "0.0.0-experimental-e5205658f-20230913",
-    "tstyche": "1.0.0",
-    "typescript": "5.3.3"
+    "nodemon": "3.1.0",
+    "react": "19.0.0-canary-cb151849e1-20240424",
+    "react-dom": "19.0.0-canary-cb151849e1-20240424",
+    "tstyche": "1.1.0",
+    "typescript": "5.4.5",
+    "vitest": "1.4.0"
   },
   "peerDependencies": {
-    "react": "0.0.0-experimental-e5205658f-20230913",
-    "react-dom": "0.0.0-experimental-e5205658f-20230913"
+    "react": "19.0.0-canary-cb151849e1-20240424",
+    "react-dom": "19.0.0-canary-cb151849e1-20240424"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

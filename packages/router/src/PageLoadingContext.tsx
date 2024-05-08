@@ -36,7 +36,7 @@ export const usePageLoadingContext = () => {
 
   if (!pageLoadingContext) {
     throw new Error(
-      'usePageLoadingContext must be used within a PageLoadingContext provider'
+      'usePageLoadingContext must be used within a PageLoadingContext provider',
     )
   }
 

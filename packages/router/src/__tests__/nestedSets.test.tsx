@@ -113,7 +113,7 @@ test('Sets nested in `<Set private>` should not error out if no authenticated pr
 
   // But still throws if you try to navigate to a private route without an unauthenticated prop
   expect(() => act(() => navigate('/four'))).toThrowError(
-    'You must specify an `unauthenticated` route'
+    'You must specify an `unauthenticated` route',
   )
 })
 

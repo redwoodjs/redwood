@@ -90,8 +90,8 @@ const getInfo = async (presets: Args = {}) => {
         npmPackages: '@redwoodjs/*',
         IDEs: ['VSCode'],
       },
-      { json: true }
-    )
+      { json: true },
+    ),
   )
 
   // get shell name instead of path
@@ -138,7 +138,7 @@ const getInfo = async (presets: Args = {}) => {
 
 // removes potentially sensitive information from an array of argv strings
 export const sanitizeArgv = (
-  argv: [string, string, keyof SensitiveArgPositions, ...string[]]
+  argv: [string, string, keyof SensitiveArgPositions, ...string[]],
 ) => {
   const name = argv[2]
   const sensitiveCommand = SENSITIVE_ARG_POSITIONS[name]
@@ -259,7 +259,7 @@ const uniqueId = (rootDir: string | null) => {
   const telemetryCachePath = path.join(
     rootDir || '/tmp',
     '.redwood',
-    'telemetry.txt'
+    'telemetry.txt',
   )
   const now = Date.now()
   const expires = now - 24 * 60 * 60 * 1000 // one day

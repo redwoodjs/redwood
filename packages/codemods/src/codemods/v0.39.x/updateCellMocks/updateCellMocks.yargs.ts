@@ -33,6 +33,6 @@ export const handler = () => {
       }
 
       setOutput('All done! Run `yarn rw lint --fix` to prettify your code')
-    }
+    },
   )
 }

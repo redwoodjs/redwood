@@ -25,24 +25,25 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.9",
-    "@redwoodjs/auth": "7.0.0",
-    "core-js": "3.35.1"
+    "@babel/runtime-corejs3": "7.24.1",
+    "@redwoodjs/auth": "workspace:*",
+    "core-js": "3.36.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.9",
+    "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "jest": "29.7.0",
-    "react": "0.0.0-experimental-e5205658f-20230913",
-    "react-dom": "0.0.0-experimental-e5205658f-20230913",
-    "tstyche": "1.0.0",
-    "typescript": "5.3.3"
+    "jest-environment-jsdom": "29.7.0",
+    "react": "19.0.0-canary-cb151849e1-20240424",
+    "react-dom": "19.0.0-canary-cb151849e1-20240424",
+    "tstyche": "1.1.0",
+    "typescript": "5.4.5"
   },
   "peerDependencies": {
-    "react": "0.0.0-experimental-e5205658f-20230913",
-    "react-dom": "0.0.0-experimental-e5205658f-20230913"
+    "react": "19.0.0-canary-cb151849e1-20240424",
+    "react-dom": "19.0.0-canary-cb151849e1-20240424"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

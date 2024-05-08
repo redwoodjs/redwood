@@ -29,26 +29,26 @@
   "dependencies": {
     "@babel/core": "^7.22.20",
     "@iarna/toml": "2.2.5",
-    "@opentelemetry/api": "1.7.0",
-    "@redwoodjs/project-config": "7.0.0",
-    "@redwoodjs/telemetry": "7.0.0",
+    "@opentelemetry/api": "1.8.0",
+    "@redwoodjs/project-config": "workspace:*",
+    "@redwoodjs/telemetry": "workspace:*",
     "chalk": "4.1.2",
-    "dotenv": "16.3.1",
+    "dotenv": "16.4.5",
     "execa": "5.1.1",
     "listr2": "6.6.1",
     "lodash": "4.17.21",
     "pascalcase": "1.0.0",
-    "prettier": "2.8.8",
+    "prettier": "3.2.5",
     "prompts": "2.4.2",
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
-    "@types/lodash": "4.14.201",
+    "@types/lodash": "4.17.0",
     "@types/pascalcase": "1.0.3",
     "@types/yargs": "17.0.32",
-    "tsx": "4.6.2",
-    "typescript": "5.3.3",
-    "vitest": "1.2.2"
+    "tsx": "4.7.1",
+    "typescript": "5.4.5",
+    "vitest": "1.4.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

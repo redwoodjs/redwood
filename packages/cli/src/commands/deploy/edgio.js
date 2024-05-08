@@ -34,7 +34,7 @@ export const builder = async (yargs) => {
     .options(edgioBuilder)
     .group(
       Object.keys(omit(edgioBuilder, ['skip-init'])),
-      'Edgio deploy options:'
+      'Edgio deploy options:',
     )
 }
 
@@ -114,7 +114,7 @@ export const ERR_MESSAGE_MISSING_CLI = buildErrorMessage(
     'It looks like Edgio is not configured for your project.',
     'Run the following to add Edgio to your project:',
     `  ${c.info('yarn add -D @edgio/cli')}`,
-  ].join('\n')
+  ].join('\n'),
 )
 
 export const ERR_MESSAGE_NOT_INITIALIZED = buildErrorMessage(
@@ -123,7 +123,7 @@ export const ERR_MESSAGE_NOT_INITIALIZED = buildErrorMessage(
     'It looks like Edgio is not configured for your project.',
     'Run the following to initialize Edgio on your project:',
     `  ${c.info('yarn edgio init')}`,
-  ].join('\n')
+  ].join('\n'),
 )
 
 export function buildErrorMessage(title, message) {
@@ -134,7 +134,7 @@ export function buildErrorMessage(title, message) {
     '',
     `Also see the ${terminalLink(
       'RedwoodJS on Edgio Guide',
-      'https://docs.edg.io/guides/redwoodjs'
+      'https://docs.edg.io/guides/redwoodjs',
     )} for additional resources.`,
     '',
   ].join('\n')

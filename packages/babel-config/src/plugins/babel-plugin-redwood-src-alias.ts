@@ -7,7 +7,7 @@ export default function (
   options: {
     /** absolute path to the `src` directory */
     srcAbsPath: string
-  }
+  },
 ): PluginObj {
   return {
     name: 'babel-plugin-redwood-src-alias',

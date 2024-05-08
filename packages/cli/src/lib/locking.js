@@ -29,7 +29,7 @@ export function setLock(identifier) {
 
   fs.writeFileSync(
     path.join(getPaths().generated.base, 'locks', identifier),
-    ''
+    '',
   )
 }
 

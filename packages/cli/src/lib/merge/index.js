@@ -99,7 +99,7 @@ function expressionUses(exp, ...ids) {
 function insertBeforeFirstUsage(expression, program) {
   const body = program.get('body')
   const pos = body.findIndex((exp) =>
-    expressionUses(exp, ...Object.keys(expression.getBindingIdentifiers()))
+    expressionUses(exp, ...Object.keys(expression.getBindingIdentifiers())),
   )
   return pos !== -1
     ? body[pos].insertBefore(expression.node)
@@ -194,7 +194,7 @@ function mergeAST(baseAST, extAST, strategy = {}) {
   const baseProgram = getProgramPath(baseAST)
   const [imports, others] = partition(
     getProgramPath(extAST).get('body'),
-    nodeIs('ImportDeclaration')
+    nodeIs('ImportDeclaration'),
   )
 
   imports.forEach((exp) => insertAfterLastImport(exp, baseProgram))
@@ -209,7 +209,7 @@ function mergeAST(baseAST, extAST, strategy = {}) {
  * @param {Object} strategy - Mapping of AST node name to reducer functions.
  * @returns
  */
-export function merge(base, extension, strategy) {
+export async function merge(base, extension, strategy) {
   function parseReact(code) {
     return parse(code, {
       filename: 'merged.tsx', // required to prevent babel error. The .tsx is relevant
@@ -226,8 +226,8 @@ export function merge(base, extension, strategy) {
   // When testing, use prettier here to produce predictable outputs.
   // Otherwise, leave formatting to the caller.
   return process.env.VITEST_POOL_ID
-    ? prettier.format(code, {
-        parser: 'babel',
+    ? await prettier.format(code, {
+        parser: 'babel-ts',
         bracketSpacing: true,
         tabWidth: 2,
         semi: false,

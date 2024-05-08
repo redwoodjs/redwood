@@ -14,7 +14,7 @@ export default function transform(file: FileInfo, api: API) {
   if (containsJSX) {
     fs.renameSync(
       file.path,
-      file.path.substring(0, file.path.lastIndexOf('.')) + '.jsx'
+      file.path.substring(0, file.path.lastIndexOf('.')) + '.jsx',
     )
   }
 

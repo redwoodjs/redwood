@@ -28,7 +28,7 @@ export const useActivePageContext = () => {
 
   if (!activePageContext) {
     throw new Error(
-      'useActivePageContext must be used within a ActivePageContext provider'
+      'useActivePageContext must be used within a ActivePageContext provider',
     )
   }
 

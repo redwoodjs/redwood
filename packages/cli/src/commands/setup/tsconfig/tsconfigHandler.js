@@ -56,7 +56,7 @@ export const handler = async ({ force }) => {
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

@@ -11,17 +11,17 @@ const DEFAULT_ERROR_EPILOGUE = [
   'Need help?',
   ` - Not sure about something or need advice? Reach out on our ${terminalLink(
     'Forum',
-    'https://community.redwoodjs.com/'
+    'https://community.redwoodjs.com/',
   )}`,
   ` - Think you've found a bug? Open an issue on our ${terminalLink(
     'GitHub',
-    'https://github.com/redwoodjs/redwood'
+    'https://github.com/redwoodjs/redwood',
   )}`,
 ].join('\n')
 
 export function exitWithError(
   error,
-  { exitCode, message, epilogue, includeEpilogue, includeReferenceCode } = {}
+  { exitCode, message, epilogue, includeEpilogue, includeReferenceCode } = {},
 ) {
   // Set the default values
   exitCode ??= error?.exitCode ?? 1

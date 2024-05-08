@@ -2,13 +2,58 @@
 
 ## Unreleased
 
-- Update MetaTags to be MetaData in Docs (#10053)
+- fix(esm): use CJS wrapper for ESM default interop (#10119)
 
-  The tutorial still used the `MetaTags` component instead of the newer `Metadata` component that the generator templates use. This PR updates all instances of `MetaTags` with `Metadata`.
+  This PR builds on the work started in https://github.com/redwoodjs/redwood/pull/10083 around ESM. One of the caveats of that PR was that the default export from `@redwoodjs/vite` broke. The workaround was referencing the `default` property on the Redwood Vite plugin, like `redwood.default()`. This fixes the ES module default export interoperability so that no change is necessary in switching between module types.
 
-- fix(sentry): move templates to the command's directory
+- feature: Enable [CSS nesting](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting/Using_CSS_nesting) syntax by default when using Tailwind:
 
-  Fix for https://community.redwoodjs.com/t/redwood-v7-0-0-upgrade-guide/5713/25. The template files for the sentry setup command weren't moved out of experimental (follow up to https://github.com/redwoodjs/redwood/pull/9830).
+  ```
+  .button {
+    @apply p-2 font-semibold bg-gray-500;
+    &:hover {
+      @apply bg-red-500;
+    }
+    .icon {
+      @apply w-4 h-4;
+    }
+    span {
+      @apply text-sm;
+    }
+  }
+  ```
+
+## v7.1.0
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.1.0
+
+## v7.0.7
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.7
+
+## v7.0.6
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.6
+
+## v7.0.5
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.5
+
+## v7.0.4
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.4
+
+## v7.0.3
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.3
+
+## v7.0.2
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.2
+
+## v7.0.1
+
+- See https://github.com/redwoodjs/redwood/releases/tag/v7.0.1
 
 - docs: Documents GraphQL Caching for client-side `useCache` hook and server-sid response caching
 

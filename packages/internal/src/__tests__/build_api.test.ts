@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import * as babel from '@babel/core'
+import { beforeAll, test, expect, afterAll } from 'vitest'
 
 import {
   getApiSideBabelPlugins,
@@ -15,7 +16,7 @@ import { findApiFiles } from '../files'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../__fixtures__/example-todo-main'
+  '../../../../__fixtures__/example-todo-main',
 )
 
 // @NOTE: we no longer prebuild files into the .redwood/prebuild folder
@@ -41,7 +42,7 @@ export const prebuildApiFiles = async (srcFiles: string[]) => {
       fs.writeFileSync(dstPath, result.code)
 
       return dstPath
-    })
+    }),
   )
 }
 
@@ -71,17 +72,17 @@ afterAll(() => {
 test('api files are prebuilt', () => {
   // Builds non-nested functions
   expect(relativePaths).toContain(
-    '.redwood/prebuild/api/src/functions/graphql.js'
+    '.redwood/prebuild/api/src/functions/graphql.js',
   )
 
   // Builds graphql folder
   expect(relativePaths).toContain(
-    '.redwood/prebuild/api/src/graphql/todos.sdl.js'
+    '.redwood/prebuild/api/src/graphql/todos.sdl.js',
   )
 
   // Builds nested function
   expect(relativePaths).toContain(
-    '.redwood/prebuild/api/src/functions/nested/nested.js'
+    '.redwood/prebuild/api/src/functions/nested/nested.js',
   )
 })
 

@@ -219,7 +219,7 @@ The useFragment hook represents a lightweight live binding into the Apollo Clien
 
 This means that once the Apollo Client Cache has loaded the data needed for the fragment, one can simply render the data for the fragment component with its id reference.
 
-Also, anywhere the fragment component is rendered will be updated with teh latest data if any of `useQuery` with uses the fragment received new data.
+Also, anywhere the fragment component is rendered will be updated with the latest data if any of `useQuery` with uses the fragment received new data.
 
 ```ts
 import type { Book } from 'types/graphql'
@@ -254,9 +254,9 @@ export default Book
 ```
 
 :::note
-In order to use [fragments](#fragments) with [unions](#unions) and interfaces in Apollo Client, you need to tell the client how to discriminate between the different types that implement or belong to a supertype.
+In order to use [fragments](#what-are-fragments) with [unions](./../graphql#unions) and interfaces in Apollo Client, you need to tell the client how to discriminate between the different types that implement or belong to a supertype.
 
-Please see how to [generate possible types from fragments and union types](#generate-possible-types).
+Please see how to [generate possible types from fragments and union types](#possible-types-for-unions).
 :::
 
 

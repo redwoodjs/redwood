@@ -1,8 +1,8 @@
-import { Head as HelmetHead } from '../index'
+import { Helmet as HelmetHead } from 'react-helmet-async'
 
 // Ideally we wouldn't include this for non experiment builds
 // But.... not worth the effort to remove it from bundle atm
-import PortalHead from './PortalHead'
+import PortalHead from './PortalHead.js'
 
 type RobotsParams =
   | 'noindex'
@@ -61,11 +61,11 @@ interface MetaTagsProps {
 }
 
 /**
- * Add commonly used <meta> tags for unfurling/seo purposes
+ * Add commonly used `<meta>` tags for unfurling/seo purposes
  * using the open graph protocol https://ogp.me/
  * @example
  * <MetaTags title="About Page" ogContentUrl="/static/about-og.png"/>
- * @deprecated Please use <Metadata> instead
+ * @deprecated Please use `<Metadata>` instead
  */
 export const MetaTags = (props: MetaTagsProps) => {
   const {

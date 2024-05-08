@@ -66,7 +66,7 @@ export const verifySignature = ({
     throw new WebhookVerificationError()
   } catch (error: any) {
     throw new WebhookVerificationError(
-      `${VERIFICATION_ERROR_MESSAGE}: ${error.message}`
+      `${VERIFICATION_ERROR_MESSAGE}: ${error.message}`,
     )
   }
 }

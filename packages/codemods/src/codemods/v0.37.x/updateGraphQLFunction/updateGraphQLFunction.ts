@@ -13,8 +13,8 @@ export default function transform(file: FileInfo, api: API) {
       j(path).replaceWith(
         j.importDeclaration(
           [j.importSpecifier(j.identifier('createGraphQLHandler'))],
-          j.literal('@redwoodjs/graphql-server')
-        )
+          j.literal('@redwoodjs/graphql-server'),
+        ),
       )
     }
 
@@ -25,11 +25,11 @@ export default function transform(file: FileInfo, api: API) {
       j(path).replaceWith([
         j.importDeclaration(
           [j.importDefaultSpecifier(j.identifier('directives'))],
-          j.literal('src/directives/**/*.{js,ts}')
+          j.literal('src/directives/**/*.{js,ts}'),
         ),
         j.importDeclaration(
           [j.importDefaultSpecifier(j.identifier('sdls'))],
-          j.literal('src/graphql/**/*.sdl.{js,ts}')
+          j.literal('src/graphql/**/*.sdl.{js,ts}'),
         ),
       ])
     }

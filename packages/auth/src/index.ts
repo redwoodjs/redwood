@@ -1,7 +1,11 @@
-export { AuthContextInterface, CurrentUser } from './AuthContext'
-export { useNoAuth, UseAuth } from './useAuth'
-export { createAuthentication } from './authFactory'
-export type { AuthImplementation } from './AuthImplementation'
+export type { AuthContextInterface, CurrentUser } from './AuthContext.js'
+export { useNoAuth } from './useAuth.js'
+export type { UseAuth } from './useAuth.js'
+export { createAuthentication } from './authFactory.js'
+export type { CustomProviderHooks } from './authFactory.js'
+export type { AuthImplementation } from './AuthImplementation.js'
 
-export * from './AuthProvider/AuthProviderState'
-export * from './AuthProvider/ServerAuthProvider'
+export * from './AuthProvider/AuthProviderState.js'
+export * from './AuthProvider/ServerAuthProvider.js'
+
+export * from './getCurrentUserFromMiddleware.js'

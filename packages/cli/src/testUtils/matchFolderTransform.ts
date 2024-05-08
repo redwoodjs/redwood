@@ -1,5 +1,5 @@
 import { createRequire } from 'node:module'
-import path from 'path'
+import path from 'node:path'
 
 import fg from 'fast-glob'
 import fse from 'fs-extra'
@@ -22,7 +22,7 @@ type Options = {
 type MatchFolderTransformFunction = (
   transformFunctionOrName: (() => any) | string,
   fixtureName?: string,
-  options?: Options
+  options?: Options,
 ) => Promise<void>
 
 const require = createRequire(import.meta.url)
@@ -34,7 +34,7 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
     removeWhitespace = false,
     targetPathsGlob = '**/*',
     useJsCodeshift = false,
-  } = {}
+  } = {},
 ) => {
   const tempDir = createProjectMock()
 
@@ -53,7 +53,7 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
   const fixtureFolder = path.join(
     testPath,
     '../../__testfixtures__',
-    fixtureName || ''
+    fixtureName || '',
   )
 
   const fixtureInputDir = path.join(fixtureFolder, 'input')
@@ -74,12 +74,12 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
   if (useJsCodeshift) {
     if (typeof transformFunctionOrName !== 'string') {
       throw new Error(
-        'When running matchFolderTransform with useJsCodeshift, transformFunction must be a string (file name of jscodeshift transform)'
+        'When running matchFolderTransform with useJsCodeshift, transformFunction must be a string (file name of jscodeshift transform)',
       )
     }
     const transformName = transformFunctionOrName
     const transformPath = require.resolve(
-      path.join(testPath, '../../', transformName + '.ts')
+      path.join(testPath, '../../', transformName + '.ts'),
     )
 
     const targetPaths = fg.sync(targetPathsGlob, {
@@ -98,7 +98,7 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
   } else {
     if (typeof transformFunctionOrName !== 'function') {
       throw new Error(
-        'transformFunction must be a function, if useJsCodeshift set to false'
+        'transformFunction must be a function, if useJsCodeshift set to false',
       )
     }
     const transformFunction = transformFunctionOrName
@@ -119,12 +119,14 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
   expect(transformedPaths).toEqual(expectedPaths)
 
   // Step 4: Check contents of each file
-  transformedPaths.forEach((transformedFile) => {
+  for (const transformedFile of transformedPaths) {
     const actualPath = path.join(tempDir, transformedFile)
     const expectedPath = path.join(fixtureOutputDir, transformedFile)
 
-    expect(actualPath).toMatchFileContents(expectedPath, { removeWhitespace })
-  })
+    await expect(actualPath).toMatchFileContents(expectedPath, {
+      removeWhitespace,
+    })
+  }
 
   if (original_RWJS_CWD) {
     process.env.RWJS_CWD = original_RWJS_CWD

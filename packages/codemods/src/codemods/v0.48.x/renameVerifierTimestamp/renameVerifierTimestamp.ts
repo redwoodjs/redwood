@@ -3,7 +3,7 @@ import type core from 'jscodeshift'
 
 function renameTimestamp(
   j: core.JSCodeshift,
-  optionsObject: ASTNode | ASTNode[] | ASTPath | ASTPath[]
+  optionsObject: ASTNode | ASTNode[] | ASTPath | ASTPath[],
 ) {
   j(optionsObject)
     .find(j.ObjectProperty, { key: { name: 'timestamp' } })

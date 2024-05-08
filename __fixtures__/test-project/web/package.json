@@ -16,17 +16,17 @@
     "@redwoodjs/router": "7.0.0",
     "@redwoodjs/web": "7.0.0",
     "humanize-string": "2.1.0",
-    "react": "0.0.0-experimental-e5205658f-20230913",
-    "react-dom": "0.0.0-experimental-e5205658f-20230913"
+    "react": "19.0.0-canary-cb151849e1-20240424",
+    "react-dom": "19.0.0-canary-cb151849e1-20240424"
   },
   "devDependencies": {
     "@redwoodjs/vite": "7.0.0",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
-    "autoprefixer": "^10.4.17",
-    "postcss": "^8.4.35",
-    "postcss-loader": "^8.1.0",
-    "prettier-plugin-tailwindcss": "0.4.1",
-    "tailwindcss": "^3.4.1"
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "postcss-loader": "^8.1.1",
+    "prettier-plugin-tailwindcss": "^0.5.12",
+    "tailwindcss": "^3.4.3"
   }
 }

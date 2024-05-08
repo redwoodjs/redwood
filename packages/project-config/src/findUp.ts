@@ -6,7 +6,7 @@ import path from 'path'
  */
 export function findUp(
   file: string,
-  startingDirectory: string = process.cwd()
+  startingDirectory: string = process.cwd(),
 ): string | null {
   const possibleFilepath = path.join(startingDirectory, file)
 

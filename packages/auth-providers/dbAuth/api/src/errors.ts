@@ -1,7 +1,7 @@
 export class NoSessionSecretError extends Error {
   constructor() {
     super(
-      'dbAuth requires a SESSION_SECRET environment variable that is used to encrypt session cookies. Use `yarn rw g secret` to create one, then add to your `.env` file. DO NOT check this variable in your version control system!!'
+      'dbAuth requires a SESSION_SECRET environment variable that is used to encrypt session cookies. Use `yarn rw g secret` to create one, then add to your `.env` file. DO NOT check this variable in your version control system!!',
     )
     this.name = 'NoSessionSecretError'
   }
@@ -45,7 +45,7 @@ export class NoResetPasswordHandlerError extends Error {
 export class NoWebAuthnConfigError extends Error {
   constructor() {
     super(
-      'To use Webauthn you need both `webauthn` and `credentialModelAccessor` config options, see https://redwoodjs.com/docs/auth/dbAuth#webauthn'
+      'To use Webauthn you need both `webauthn` and `credentialModelAccessor` config options, see https://redwoodjs.com/docs/auth/dbAuth#webauthn',
     )
     this.name = 'NoWebAuthnConfigError'
   }
@@ -54,7 +54,7 @@ export class NoWebAuthnConfigError extends Error {
 export class MissingWebAuthnConfigError extends Error {
   constructor() {
     super(
-      'You are missing one or more WebAuthn config options, see https://redwoodjs.com/docs/auth/dbAuth#webauthn'
+      'You are missing one or more WebAuthn config options, see https://redwoodjs.com/docs/auth/dbAuth#webauthn',
     )
     this.name = 'MissingWebAuthnConfigError'
   }
@@ -84,7 +84,7 @@ export class NotLoggedInError extends Error {
 export class UserNotFoundError extends Error {
   constructor(
     username: string | undefined = undefined,
-    message: string | undefined = 'Username ${username} not found'
+    message: string | undefined = 'Username ${username} not found',
   ) {
     if (username) {
       super(message.replace(/\$\{username\}/g, username))
@@ -98,7 +98,7 @@ export class UserNotFoundError extends Error {
 
 export class UsernameAndPasswordRequiredError extends Error {
   constructor(
-    message: string | undefined = 'Both username and password are required'
+    message: string | undefined = 'Both username and password are required',
   ) {
     super(message)
     this.name = 'UsernameAndPasswordRequiredError'
@@ -108,7 +108,7 @@ export class UsernameAndPasswordRequiredError extends Error {
 export class NoUserIdError extends Error {
   constructor() {
     super(
-      'loginHandler() must return an object with an `id` field as set in `authFields.id`'
+      'loginHandler() must return an object with an `id` field as set in `authFields.id`',
     )
     this.name = 'NoUserIdError'
   }
@@ -117,7 +117,7 @@ export class NoUserIdError extends Error {
 export class FieldRequiredError extends Error {
   constructor(
     name: string,
-    message: string | undefined = '${field} is required'
+    message: string | undefined = '${field} is required',
   ) {
     super(message.replace(/\$\{field\}/g, name))
     this.name = 'FieldRequiredError'
@@ -127,7 +127,7 @@ export class FieldRequiredError extends Error {
 export class DuplicateUsernameError extends Error {
   constructor(
     username: string,
-    message: string | undefined = 'Username `${username}` already in use'
+    message: string | undefined = 'Username `${username}` already in use',
   ) {
     super(message.replace(/\$\{username\}/g, username))
     this.name = 'DuplicateUsernameError'
@@ -137,7 +137,7 @@ export class DuplicateUsernameError extends Error {
 export class IncorrectPasswordError extends Error {
   constructor(
     username: string,
-    message: string | undefined = 'Incorrect password for ${username}'
+    message: string | undefined = 'Incorrect password for ${username}',
   ) {
     super(message.replace(/\$\{username\}/g, username))
     this.name = 'IncorrectPasswordError'
@@ -237,7 +237,7 @@ export class WebAuthnError extends Error {
 
 export class NoWebAuthnSessionError extends WebAuthnError {
   constructor(
-    message = 'Log in with username and password to enable WebAuthn'
+    message = 'Log in with username and password to enable WebAuthn',
   ) {
     super(message)
     this.name = 'NoWebAuthnSessionError'

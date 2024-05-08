@@ -35,7 +35,7 @@ describe('matchPath', () => {
 
   it('matches valid paths and extracts params correctly', () => {
     expect(matchPath('/blog/{year}/{month}/{day}', '/blog/2019/12/07')).toEqual(
-      { match: true, params: { day: '07', month: '12', year: '2019' } }
+      { match: true, params: { day: '07', month: '12', year: '2019' } },
     )
   })
 
@@ -87,7 +87,7 @@ describe('matchPath', () => {
     })
 
     expect(
-      matchPath('/signedUp/x-{status:Boolean}', '/signedUp/x-false')
+      matchPath('/signedUp/x-{status:Boolean}', '/signedUp/x-false'),
     ).toEqual({
       match: true,
       params: {
@@ -96,7 +96,7 @@ describe('matchPath', () => {
     })
 
     expect(
-      matchPath('/signedUp/{status:Boolean}y', '/signedUp/falsey')
+      matchPath('/signedUp/{status:Boolean}y', '/signedUp/falsey'),
     ).toEqual({
       match: true,
       params: {
@@ -105,7 +105,7 @@ describe('matchPath', () => {
     })
 
     expect(
-      matchPath('/signedUp/e{status:Boolean}y', '/signedUp/efalsey')
+      matchPath('/signedUp/e{status:Boolean}y', '/signedUp/efalsey'),
     ).toEqual({
       match: true,
       params: {
@@ -114,7 +114,7 @@ describe('matchPath', () => {
     })
 
     expect(
-      matchPath('/signedUp/{status:Boolean}', '/signedUp/somethingElse')
+      matchPath('/signedUp/{status:Boolean}', '/signedUp/somethingElse'),
     ).toEqual({
       match: false,
     })
@@ -122,7 +122,7 @@ describe('matchPath', () => {
 
   it('transforms a param for Floats', () => {
     expect(
-      matchPath('/version/{floatyMcFloat:Float}', '/version/1.58')
+      matchPath('/version/{floatyMcFloat:Float}', '/version/1.58'),
     ).toEqual({
       match: true,
       params: {
@@ -136,11 +136,11 @@ describe('matchPath', () => {
         params: {
           floatyMcFloat: 626,
         },
-      }
+      },
     )
 
     expect(
-      matchPath('/version/{floatyMcFloat:Float}', '/version/+0.92')
+      matchPath('/version/{floatyMcFloat:Float}', '/version/+0.92'),
     ).toEqual({
       match: true,
       params: {
@@ -149,7 +149,7 @@ describe('matchPath', () => {
     })
 
     expect(
-      matchPath('/version/{floatyMcFloat:Float}', '/version/-5.5')
+      matchPath('/version/{floatyMcFloat:Float}', '/version/-5.5'),
     ).toEqual({
       match: true,
       params: {
@@ -163,11 +163,11 @@ describe('matchPath', () => {
         params: {
           floatyMcFloat: 4e8,
         },
-      }
+      },
     )
 
     expect(
-      matchPath('/version/{floatyMcFloat:Float}', '/version/noMatchMe')
+      matchPath('/version/{floatyMcFloat:Float}', '/version/noMatchMe'),
     ).toEqual({
       match: false,
     })
@@ -230,8 +230,8 @@ describe('matchPath', () => {
     expect(
       matchPath(
         '/dashboard/document/{id:Int}/{version:Float}/edit/{edit:Boolean}/{path...}/terminate',
-        '/dashboard/document/44/1.8/edit/false/path/to/file/terminate'
-      )
+        '/dashboard/document/44/1.8/edit/false/path/to/file/terminate',
+      ),
     ).toEqual({
       match: true,
       params: { id: 44, version: 1.8, edit: false, path: 'path/to/file' },
@@ -248,9 +248,9 @@ describe('validatePath', () => {
     'rejects "%s" path that does not begin with a slash',
     ({ path, routeName }) => {
       expect(() => validatePath(path, routeName)).toThrowError(
-        `Route path for ${routeName} does not begin with a slash: "${path}"`
+        `Route path for ${routeName} does not begin with a slash: "${path}"`,
       )
-    }
+    },
   )
 
   it.each([
@@ -266,7 +266,7 @@ describe('validatePath', () => {
     { path: '/path/to/users/{ id : Int }', routeName: 'hasSpaces' },
   ])('rejects paths with spaces: "%s"', ({ path, routeName }) => {
     expect(() => validatePath(path, routeName)).toThrowError(
-      `Route path for ${routeName} contains spaces: "${path}"`
+      `Route path for ${routeName} contains spaces: "${path}"`,
     )
   })
 
@@ -280,7 +280,7 @@ describe('validatePath', () => {
     },
   ])('rejects path "%s" with duplicate params', ({ path, routeName }) => {
     expect(() => validatePath(path, routeName)).toThrowError(
-      `Route path contains duplicate parameter: "${path}"`
+      `Route path contains duplicate parameter: "${path}"`,
     )
   })
 
@@ -319,9 +319,9 @@ describe('validatePath', () => {
           `Route for ${routeName} contains ref or key as a path parameter: "${path}"`,
           "`ref` and `key` shouldn't be used as path parameters because they're special React props.",
           'You can fix this by renaming the path parameter.',
-        ].join('\n')
+        ].join('\n'),
       )
-    }
+    },
   )
 
   it.each([
@@ -336,7 +336,7 @@ describe('validatePath', () => {
     `doesn't reject paths with variations on ref or key as path parameters: "%s"`,
     ({ path, routeName }) => {
       expect(() => validatePath(path, routeName)).not.toThrowError()
-    }
+    },
   )
 })
 
@@ -347,7 +347,7 @@ describe('parseSearch', () => {
 
   it('correctly parses a search string', () => {
     expect(
-      parseSearch('?search=all+dogs+go+to+heaven&category=movies')
+      parseSearch('?search=all+dogs+go+to+heaven&category=movies'),
     ).toEqual({ category: 'movies', search: 'all dogs go to heaven' })
   })
 })
@@ -355,7 +355,7 @@ describe('parseSearch', () => {
 describe('flattenSearchParams', () => {
   it('returns a flat array from query string', () => {
     expect(
-      flattenSearchParams('?search=all+dogs+go+to+heaven&category=movies')
+      flattenSearchParams('?search=all+dogs+go+to+heaven&category=movies'),
     ).toEqual([{ search: 'all dogs go to heaven' }, { category: 'movies' }])
   })
 
@@ -367,7 +367,7 @@ describe('flattenSearchParams', () => {
 describe('replaceParams', () => {
   it('throws an error on missing params', () => {
     expect(() => replaceParams('/tags/{tag}', {})).toThrowError(
-      "Missing parameter 'tag' for route '/tags/{tag}' when generating a navigation URL."
+      "Missing parameter 'tag' for route '/tags/{tag}' when generating a navigation URL.",
     )
   })
 
@@ -381,30 +381,30 @@ describe('replaceParams', () => {
         year: '2021',
         month: '09',
         day: '19',
-      })
+      }),
     ).toEqual('/posts/2021/09/19')
   })
 
   it('appends extra parameters as search parameters', () => {
     expect(replaceParams('/extra', { foo: 'foo' })).toEqual('/extra?foo=foo')
     expect(replaceParams('/tags/{tag}', { tag: 'code', foo: 'foo' })).toEqual(
-      '/tags/code?foo=foo'
+      '/tags/code?foo=foo',
     )
   })
 
   it('handles falsy parameter values', () => {
     expect(replaceParams('/category/{categoryId}', { categoryId: 0 })).toEqual(
-      '/category/0'
+      '/category/0',
     )
 
     expect(replaceParams('/boolean/{bool}', { bool: false })).toEqual(
-      '/boolean/false'
+      '/boolean/false',
     )
 
     expect(() =>
-      replaceParams('/undef/{undef}', { undef: undefined })
+      replaceParams('/undef/{undef}', { undef: undefined }),
     ).toThrowError(
-      "Missing parameter 'undef' for route '/undef/{undef}' when generating a navigation URL."
+      "Missing parameter 'undef' for route '/undef/{undef}' when generating a navigation URL.",
     )
   })
 
@@ -413,18 +413,18 @@ describe('replaceParams', () => {
     expect(replaceParams('/post/{id:Float}', { id: 7 })).toEqual('/post/7')
     expect(replaceParams('/post/{id:Bool}', { id: true })).toEqual('/post/true')
     expect(replaceParams('/post/{id:Bool}', { id: false })).toEqual(
-      '/post/false'
+      '/post/false',
     )
     expect(replaceParams('/post/{id:String}', { id: 7 })).toEqual('/post/7')
   })
 
   it('handles globs', () => {
     expect(replaceParams('/path/{path...}', { path: 'foo/bar' })).toEqual(
-      '/path/foo/bar'
+      '/path/foo/bar',
     )
 
     expect(replaceParams('/a/{b...}/c/{d...}/e', { b: 1, d: 2 })).toEqual(
-      '/a/1/c/2/e'
+      '/a/1/c/2/e',
     )
   })
 
@@ -432,19 +432,19 @@ describe('replaceParams', () => {
   // https://blog.lunatech.com/posts/2009-02-03-what-every-web-developer-must-know-about-url-encoding
   it('properly encodes search parameters', () => {
     expect(replaceParams('/search', { q: 'foo bar' })).toEqual(
-      '/search?q=foo+bar'
+      '/search?q=foo+bar',
     )
 
     expect(replaceParams('/index-value', { 's&p500': '2024-01-17' })).toEqual(
-      '/index-value?s%26p500=2024-01-17'
+      '/index-value?s%26p500=2024-01-17',
     )
 
     expect(replaceParams('/search', { q: 'home & garden' })).toEqual(
-      '/search?q=home+%26+garden'
+      '/search?q=home+%26+garden',
     )
 
     expect(replaceParams('/dir', { path: '/Users/rob/Photos' })).toEqual(
-      '/dir?path=%2FUsers%2Frob%2FPhotos'
+      '/dir?path=%2FUsers%2Frob%2FPhotos',
     )
 
     expect(replaceParams('/calc', { expr: '1+2' })).toEqual('/calc?expr=1%2B2')

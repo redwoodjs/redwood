@@ -13,7 +13,7 @@ type TelemetryAttributes = {
  */
 export function recordTelemetryAttributes(
   attributes: TelemetryAttributes,
-  span?: Span
+  span?: Span,
 ) {
   const spanToRecord = span ?? opentelemetry.trace.getActiveSpan()
   if (spanToRecord === undefined) {

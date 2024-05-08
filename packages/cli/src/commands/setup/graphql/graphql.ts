@@ -13,7 +13,7 @@ export function builder(yargs: Argv) {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#setup-graphql'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#setup-graphql',
+      )}`,
     )
 }

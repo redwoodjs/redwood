@@ -7,7 +7,7 @@ import { format } from 'prettier'
 import { fs, glob, path } from 'zx'
 
 const TS_TEMPLATE_PATH = fileURLToPath(
-  new URL('../templates/ts', import.meta.url)
+  new URL('../templates/ts', import.meta.url),
 )
 
 // Remove `node_modules`, `.yarn/install-state.gz`.
@@ -19,13 +19,13 @@ console.log("Removing yarn's `install-state.gz` in the TS template")
 const tsTemplateYarnInstallStatePath = path.join(
   TS_TEMPLATE_PATH,
   '.yarn',
-  'install-state.gz'
+  'install-state.gz',
 )
 await fs.rm(tsTemplateYarnInstallStatePath, { force: true })
 
 // Clean and copy the TS template to the JS template.
 const JS_TEMPLATE_PATH = fileURLToPath(
-  new URL('../templates/js', import.meta.url)
+  new URL('../templates/js', import.meta.url),
 )
 
 console.log('Removing the JS template')
@@ -67,7 +67,7 @@ for (const filePath of filePaths) {
     throw new Error(`Error: Couldn't transform ${filePath}`)
   }
 
-  const formattedCode = format(result.code, {
+  const formattedCode = await format(result.code, {
     ...prettierConfig,
     parser: 'babel',
   })
@@ -75,7 +75,7 @@ for (const filePath of filePaths) {
   await fs.writeFile(
     filePath.replace('.tsx', '.jsx').replace('.ts', '.js'),
     formattedCode,
-    'utf-8'
+    'utf-8',
   )
 
   await fs.rm(filePath)
@@ -84,7 +84,7 @@ for (const filePath of filePaths) {
 console.groupEnd()
 
 console.group(
-  'Transforming `tsconfig.json`s in the JS template to `jsconfig.json`s'
+  'Transforming `tsconfig.json`s in the JS template to `jsconfig.json`s',
 )
 
 const tsConfigFilePaths = await glob(['{api,web,scripts}/**/tsconfig.json'], {
@@ -97,7 +97,7 @@ for (const tsConfigFilePath of tsConfigFilePaths) {
 
   const jsConfigFilePath = path.join(
     path.dirname(tsConfigFilePath),
-    'jsconfig.json'
+    'jsconfig.json',
   )
 
   await fs.rename(tsConfigFilePath, jsConfigFilePath)

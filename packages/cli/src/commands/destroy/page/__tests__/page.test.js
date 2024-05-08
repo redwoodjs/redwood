@@ -18,9 +18,10 @@ import { getPaths } from '../../../../lib'
 import { files } from '../../../generate/page/page'
 import { tasks } from '../page'
 
-beforeEach(() => {
+beforeEach(async () => {
+  const f = await files({ name: 'About' })
   vol.fromJSON({
-    ...files({ name: 'About' }),
+    ...f,
     [getPaths().web.routes]: [
       '<Routes>',
       '  <Route path="/about" page={AboutPage} name="about" />',
@@ -50,8 +51,9 @@ test('destroys page files', async () => {
 
 test('destroys page files with stories and tests', async () => {
   const fileOptions = { name: 'About', stories: true, tests: true }
+  const f = await files(fileOptions)
   vol.fromJSON({
-    ...files(fileOptions),
+    ...f,
     [getPaths().web.routes]: [
       '<Routes>',
       '  <Route path="/about" page={AboutPage} name="about" />',
@@ -84,7 +86,7 @@ test('cleans up route from Routes.js', async () => {
         '  <Route path="/" page={HomePage} name="home" />',
         '  <Route notfound page={NotFoundPage} />',
         '</Routes>',
-      ].join('\n')
+      ].join('\n'),
     )
   })
 })
@@ -101,7 +103,7 @@ test('cleans up route with a custom path from Routes.js', async () => {
         '  <Route path="/" page={HomePage} name="home" />',
         '  <Route notfound page={NotFoundPage} />',
         '</Routes>',
-      ].join('\n')
+      ].join('\n'),
     )
   })
 })

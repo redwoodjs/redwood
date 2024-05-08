@@ -31,8 +31,8 @@ export const builder = (yargs) =>
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#generate-secret'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#generate-secret',
+      )}`,
     )
 
 export const handler = ({ length, raw }) => {
@@ -51,7 +51,7 @@ export const handler = ({ length, raw }) => {
   console.info(`  ${generateSecret(length)}`)
   console.info('')
   console.info(
-    "If you're using this with dbAuth, set a SESSION_SECRET environment variable to this value."
+    "If you're using this with dbAuth, set a SESSION_SECRET environment variable to this value.",
   )
   console.info('')
   console.info('Keep it secret, keep it safe!')

@@ -21,12 +21,12 @@ export function getOutline(project: RWProject): TreeItem2 {
         label: 'redwood.toml',
         iconPath: 'x-redwood',
         ...resourceUriAndCommandFor(
-          URL_file(project.pathHelper.base, 'redwood.toml')
+          URL_file(project.pathHelper.base, 'redwood.toml'),
         ),
         menu: {
           kind: 'withDoc',
           doc: Command_open(
-            'https://redwoodjs.com/docs/app-configuration-redwood-toml'
+            'https://redwoodjs.com/docs/app-configuration-redwood-toml',
           ),
         },
       } as TreeItem2,
@@ -37,7 +37,7 @@ export function getOutline(project: RWProject): TreeItem2 {
         menu: {
           kind: 'withDoc',
           doc: Command_open(
-            'https://www.apollographql.com/docs/apollo-server/testing/graphql-playground/'
+            'https://www.apollographql.com/docs/apollo-server/testing/graphql-playground/',
           ),
         },
       } as TreeItem2,
@@ -48,7 +48,7 @@ export function getOutline(project: RWProject): TreeItem2 {
         menu: {
           kind: 'withDoc',
           doc: Command_open(
-            'https://redwoodjs.com/how-to/mocking-graph-ql-in-storybook'
+            'https://redwoodjs.com/how-to/mocking-graph-ql-in-storybook',
           ),
         },
       } as TreeItem2,
@@ -60,7 +60,7 @@ export function getOutline(project: RWProject): TreeItem2 {
         {
           cmd: 'dev',
           tooltip: 'start development server and open browser',
-        }
+        },
       ),
     ],
   }
@@ -105,7 +105,7 @@ function _pages(project: RWProject): TreeItem2 {
       kind: 'group',
       add: Command_cli('rw generate page ...'),
       doc: Command_open(
-        'https://redwoodjs.com/docs/tutorial/chapter1/first-page'
+        'https://redwoodjs.com/docs/tutorial/chapter1/first-page',
       ),
     },
   }
@@ -135,7 +135,7 @@ function _components(project: RWProject): TreeItem2 {
       kind: 'group',
       add: Command_cli('rw generate component ...'),
       doc: Command_open(
-        'https://redwoodjs.com/docs/cli-commands.html#component'
+        'https://redwoodjs.com/docs/cli-commands.html#component',
       ),
     },
   }
@@ -202,7 +202,7 @@ function _schema(project: RWProject): TreeItem2 {
     menu: {
       kind: 'withDoc',
       doc: Command_open(
-        'https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema'
+        'https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema',
       ),
     },
     ...resourceUriAndCommandFor(project.pathHelper.api.dbSchema),
@@ -231,7 +231,7 @@ function _schema(project: RWProject): TreeItem2 {
                 cmd: `generate scaffold ${model.name}`,
                 tooltip:
                   'generate pages, SDL, and a services object for this model',
-              }
+              },
             )
             return [...fields, commands]
           },
@@ -245,7 +245,7 @@ function _schema(project: RWProject): TreeItem2 {
         {
           cmd: 'db up',
           tooltip: 'apply migrations',
-        }
+        },
       )
       return [...models, commands]
     },
@@ -295,7 +295,7 @@ function fromFile(fileNode: FileNode): TreeItem2 {
 }
 
 function resourceUriAndCommandFor(
-  uri: string
+  uri: string,
 ): Pick<TreeItem2, 'resourceUri' | 'command'> {
   uri = URL_file(uri)
   return {

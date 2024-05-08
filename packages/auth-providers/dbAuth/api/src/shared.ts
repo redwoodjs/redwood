@@ -2,6 +2,7 @@ import crypto from 'node:crypto'
 
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 
+import type { CorsHeaders } from '@redwoodjs/api'
 import { getEventHeader, isFetchApiRequest } from '@redwoodjs/api'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 
@@ -42,7 +43,7 @@ const eventGraphiQLHeadersCookie = (event: APIGatewayProxyEvent | Request) => {
   if (process.env.NODE_ENV === 'development') {
     const impersationationHeader = getEventHeader(
       event,
-      'rw-studio-impersonation-cookie'
+      'rw-studio-impersonation-cookie',
     )
 
     if (impersationationHeader) {
@@ -124,7 +125,7 @@ export const decryptSession = (text: string | null) => {
       const decipher = crypto.createDecipheriv(
         'aes-256-cbc',
         (process.env.SESSION_SECRET as string).substring(0, 32),
-        Buffer.from(iv, 'base64')
+        Buffer.from(iv, 'base64'),
       )
       decoded =
         decipher.update(encryptedText, 'base64', 'utf-8') +
@@ -147,7 +148,7 @@ export const encryptSession = (dataString: string) => {
   const cipher = crypto.createCipheriv(
     'aes-256-cbc',
     (process.env.SESSION_SECRET as string).substring(0, 32),
-    iv
+    iv,
   )
   let encryptedData = cipher.update(dataString, 'utf-8', 'base64')
   encryptedData += cipher.final('base64')
@@ -158,7 +159,7 @@ export const encryptSession = (dataString: string) => {
 // returns the actual value of the session cookie
 export const getSession = (
   text: string | undefined,
-  cookieNameOption: string | undefined
+  cookieNameOption: string | undefined,
 ) => {
   if (typeof text === 'undefined' || text === null) {
     return null
@@ -181,14 +182,14 @@ export const getSession = (
 // name of the dbAuth session cookie
 export const dbAuthSession = (
   event: APIGatewayProxyEvent | Request,
-  cookieNameOption: string | undefined
+  cookieNameOption: string | undefined,
 ) => {
   const sessionCookie = extractCookie(event)
 
   if (sessionCookie) {
     // i.e. Browser making a request
     const [session, _csrfToken] = decryptSession(
-      getSession(sessionCookie, cookieNameOption)
+      getSession(sessionCookie, cookieNameOption),
     )
     return session
   } else {
@@ -227,7 +228,7 @@ export const hashPassword = (
   {
     salt = crypto.randomBytes(32).toString('hex'),
     options = DEFAULT_SCRYPT_OPTIONS,
-  }: { salt?: string; options?: ScryptOptions } = {}
+  }: { salt?: string; options?: ScryptOptions } = {},
 ) => {
   const encryptedString = crypto
     .scryptSync(text.normalize('NFC'), salt, 32, options)
@@ -255,6 +256,37 @@ export const cookieName = (name: string | undefined) => {
   const cookieName = name?.replace('%port%', '' + port) ?? 'session'
 
   return cookieName
+}
+
+/**
+ * Returns a lambda response!
+ *
+ * This is used as the final call to return a response from the handler.
+ *
+ * Converts "Set-Cookie" headers to an array of strings.
+ */
+export const buildDbAuthResponse = (
+  response: {
+    body?: string
+    statusCode: number
+    headers?: Headers
+  },
+  corsHeaders: CorsHeaders,
+) => {
+  const setCookieHeaders = response.headers?.getSetCookie() || []
+
+  return {
+    ...response,
+    headers: {
+      ...Object.fromEntries(response.headers?.entries() || []),
+      ...(setCookieHeaders.length > 0
+        ? {
+            'set-cookie': setCookieHeaders,
+          }
+        : {}),
+      ...corsHeaders,
+    },
+  }
 }
 
 export const extractHashingOptions = (text: string): ScryptOptions => {

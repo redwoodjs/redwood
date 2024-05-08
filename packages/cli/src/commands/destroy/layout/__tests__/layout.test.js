@@ -56,7 +56,7 @@ test('destroys layout files with stories and tests', async () => {
 
   return t.run().then(() => {
     const generatedFiles = Object.keys(
-      files({ name: 'Blog', stories: true, tests: true })
+      files({ name: 'Blog', stories: true, tests: true }),
     )
     expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
     generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))

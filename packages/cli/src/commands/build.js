@@ -22,7 +22,7 @@ export const builder = (yargs) => {
       default: false,
       description: `Use ${terminalLink(
         'Webpack Bundle Analyzer',
-        'https://github.com/webpack-contrib/webpack-bundle-analyzer'
+        'https://github.com/webpack-contrib/webpack-bundle-analyzer',
       )}`,
       type: 'boolean',
     })
@@ -43,12 +43,6 @@ export const builder = (yargs) => {
       default: true,
       description: 'Generate the Prisma client',
     })
-    .option('performance', {
-      alias: 'perf',
-      type: 'boolean',
-      default: false,
-      description: 'Measure build performance',
-    })
     .middleware(() => {
       const check = checkNodeVersion()
 
@@ -64,8 +58,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#build'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#build',
+      )}`,
     )
 }
 

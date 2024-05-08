@@ -39,7 +39,7 @@ export default function transform(file: FileInfo, api: API) {
 
       // Add export default statement
       const exportDefaultStatement = j.exportDefaultDeclaration(
-        j.identifier(themeObjectName)
+        j.identifier(themeObjectName),
       )
 
       j(path.parentPath).insertAfter(exportDefaultStatement)

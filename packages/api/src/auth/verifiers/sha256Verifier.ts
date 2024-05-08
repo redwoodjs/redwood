@@ -37,7 +37,7 @@ const createSignature = ({
 
   const digest = Buffer.from(
     algorithm + '=' + hmac.update(payload).digest('hex'),
-    'utf8'
+    'utf8',
   )
 
   return digest.toString()
@@ -67,7 +67,7 @@ export const verifySignature = ({
 
     const digest = Buffer.from(
       algorithm + '=' + hmac.update(payload).digest('hex'),
-      'utf8'
+      'utf8',
     )
 
     // constant time comparison to prevent timing attacks
@@ -84,7 +84,7 @@ export const verifySignature = ({
     throw new WebhookVerificationError()
   } catch (error: any) {
     throw new WebhookVerificationError(
-      `${VERIFICATION_ERROR_MESSAGE}: ${error.message}`
+      `${VERIFICATION_ERROR_MESSAGE}: ${error.message}`,
     )
   }
 }

@@ -69,7 +69,7 @@ test('destroys cell files with stories and tests', async () => {
   await t.run()
 
   const generatedFiles = Object.keys(
-    await files({ name: 'User', stories: true, tests: true })
+    await files({ name: 'User', stories: true, tests: true }),
   )
   expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
   generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))

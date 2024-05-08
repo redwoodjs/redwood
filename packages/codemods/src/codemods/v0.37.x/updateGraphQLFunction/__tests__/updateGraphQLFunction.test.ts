@@ -1,3 +1,8 @@
+import { describe, it } from 'vitest'
+
+import { matchInlineTransformSnapshot } from '../../../../testUtils/matchInlineTransformSnapshot'
+import { matchTransformSnapshot } from '../../../../testUtils/matchTransformSnapshot'
+
 /**
  * ts and js are equivalent in this case
  */
@@ -13,7 +18,7 @@ describe('Update GraphQL Function', () => {
         createGraphQLHandler,
         makeMergedSchema,
       } from '@redwoodjs/api'`,
-      `import { createGraphQLHandler } from '@redwoodjs/graphql-server'`
+      `import { createGraphQLHandler } from '@redwoodjs/graphql-server'`,
     )
   })
 })

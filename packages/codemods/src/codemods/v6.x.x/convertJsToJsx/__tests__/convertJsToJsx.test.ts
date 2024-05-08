@@ -1,3 +1,7 @@
+import { describe, it } from 'vitest'
+
+import { matchFolderTransform } from '../../../../testUtils/matchFolderTransform'
+
 describe('convertJsToJsx', () => {
   it('Converts an example project correctly', async () => {
     await matchFolderTransform('convertJsToJsx', 'example', {

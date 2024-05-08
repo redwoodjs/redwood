@@ -19,8 +19,8 @@ export default function transform(file: FileInfo, api: API) {
       .insertAfter(
         j.importDeclaration(
           [j.importDefaultSpecifier(j.identifier('possibleTypes'))],
-          j.literal('src/graphql/possibleTypes')
-        )
+          j.literal('src/graphql/possibleTypes'),
+        ),
       )
   }
 

@@ -56,8 +56,8 @@ export const builder = (yargs) => {
   yargs.epilogue(
     `Also see the ${terminalLink(
       'Redwood CLI Reference',
-      'https://redwoodjs.com/docs/cli-commands#deploy'
-    )}\n`
+      'https://redwoodjs.com/docs/cli-commands#deploy',
+    )}\n`,
   )
 }
 
@@ -152,7 +152,7 @@ export const handler = async (yargs) => {
     {
       exitOnError: true,
       renderer: yargs.verbose && 'verbose',
-    }
+    },
   )
   try {
     await tasks.run()
@@ -168,7 +168,7 @@ export const handler = async (yargs) => {
         {
           shell: true,
           cwd: getPaths().api.base,
-        }
+        },
       )
 
       const deployedApiUrl = slsInfo.match(/HttpApiUrl: (https:\/\/.*)/)[1]
@@ -196,7 +196,7 @@ export const handler = async (yargs) => {
 
         console.log(
           SETUP_MARKER,
-          'First deploys can take a good few minutes...'
+          'First deploys can take a good few minutes...',
         )
         console.log()
 
@@ -204,7 +204,7 @@ export const handler = async (yargs) => {
           [
             // Rebuild web with the new API_URL
             ...buildCommands({ ...yargs, sides: ['web'], firstRun: false }).map(
-              mapCommandsToListr
+              mapCommandsToListr,
             ),
             ...deployCommands({
               ...yargs,
@@ -215,7 +215,7 @@ export const handler = async (yargs) => {
           {
             exitOnError: true,
             renderer: yargs.verbose && 'verbose',
-          }
+          },
         )
 
         // Deploy the web side now that the API_URL has been configured
@@ -226,7 +226,7 @@ export const handler = async (yargs) => {
           {
             shell: true,
             cwd: getPaths().web.base,
-          }
+          },
         )
 
         const deployedWebUrl = slsInfo.match(/url: (https:\/\/.*)/)[1]
@@ -248,7 +248,7 @@ export const handler = async (yargs) => {
             padding: { top: 0, bottom: 0, right: 1, left: 1 },
             margin: 1,
             borderColor: 'gray',
-          })
+          }),
         )
       }
     }

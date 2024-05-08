@@ -11,17 +11,17 @@ function generateWrappedHandler(t: typeof types, isAsync: boolean) {
       t.callExpression(
         t.memberExpression(
           t.callExpression(t.identifier('__rw_getAsyncStoreInstance'), []),
-          t.identifier('getStore')
+          t.identifier('getStore'),
         ),
-        []
-      )
+        [],
+      ),
     ),
   ])
   t.addComment(
     contextStoreVariableDeclaration,
     'leading',
     ' The store will be undefined if no context isolation has been performed yet',
-    true
+    true,
   )
   return t.arrowFunctionExpression(
     [t.identifier('__rw_event'), t.identifier('__rw__context')],
@@ -31,7 +31,7 @@ function generateWrappedHandler(t: typeof types, isAsync: boolean) {
         t.binaryExpression(
           '===',
           t.identifier('__rw_contextStore'),
-          t.identifier('undefined')
+          t.identifier('undefined'),
         ),
         t.blockStatement([
           t.returnStatement(
@@ -39,32 +39,35 @@ function generateWrappedHandler(t: typeof types, isAsync: boolean) {
               t.memberExpression(
                 t.callExpression(
                   t.identifier('__rw_getAsyncStoreInstance'),
-                  []
+                  [],
                 ),
-                t.identifier('run')
+                t.identifier('run'),
               ),
               [
                 t.newExpression(t.identifier('Map'), []),
                 t.identifier('__rw_handler'),
                 t.identifier('__rw_event'),
                 t.identifier('__rw__context'),
-              ]
-            )
+              ],
+            ),
           ),
-        ])
+        ]),
       ),
       t.returnStatement(
         t.callExpression(t.identifier('__rw_handler'), [
           t.identifier('__rw_event'),
           t.identifier('__rw__context'),
-        ])
+        ]),
       ),
     ]),
-    isAsync
+    isAsync,
   )
 }
 
-export default function ({ types: t }: { types: typeof types }): PluginObj {
+export default function (
+  { types: t }: { types: typeof types },
+  { projectIsEsm = false }: { projectIsEsm?: boolean } = {},
+): PluginObj {
   return {
     name: 'babel-plugin-redwood-context-wrapping',
     visitor: {
@@ -94,11 +97,15 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
             [
               t.importSpecifier(
                 t.identifier('__rw_getAsyncStoreInstance'),
-                t.identifier('getAsyncStoreInstance')
+                t.identifier('getAsyncStoreInstance'),
               ),
             ],
-            t.stringLiteral('@redwoodjs/context/dist/store')
-          )
+            t.stringLiteral(
+              projectIsEsm
+                ? '@redwoodjs/context/dist/store.js'
+                : '@redwoodjs/context/dist/store',
+            ),
+          ),
         )
 
         // Copy the original handler function to a new renamed function
@@ -106,9 +113,9 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           t.variableDeclaration('const', [
             t.variableDeclarator(
               t.identifier('__rw_handler'),
-              declaration.declarations[0].init
+              declaration.declarations[0].init,
             ),
-          ])
+          ]),
         )
 
         // Attempt to determine if we should mark the handler as async

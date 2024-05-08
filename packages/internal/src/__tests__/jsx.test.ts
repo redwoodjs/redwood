@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { test, expect } from 'vitest'
+
 import { fileToAst } from '../ast'
 import { getJsxElements } from '../jsx'
 

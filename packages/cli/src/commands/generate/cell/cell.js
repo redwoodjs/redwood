@@ -65,9 +65,8 @@ export const files = async ({ name, typescript, ...options }) => {
 
   let operationName = options.query
   if (operationName) {
-    const userSpecifiedOperationNameIsUnique = await operationNameIsUnique(
-      operationName
-    )
+    const userSpecifiedOperationNameIsUnique =
+      await operationNameIsUnique(operationName)
     if (!userSpecifiedOperationNameIsUnique) {
       throw new Error(`Specified query name: "${operationName}" is not unique!`)
     }
@@ -78,7 +77,7 @@ export const files = async ({ name, typescript, ...options }) => {
   }
 
   const extension = typescript ? '.tsx' : '.jsx'
-  const cellFile = templateForComponentFile({
+  const cellFile = await templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
     extension,
@@ -92,7 +91,7 @@ export const files = async ({ name, typescript, ...options }) => {
     },
   })
 
-  const testFile = templateForComponentFile({
+  const testFile = await templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
     extension: `.test${extension}`,
@@ -101,7 +100,7 @@ export const files = async ({ name, typescript, ...options }) => {
     templatePath: 'test.js.template',
   })
 
-  const storiesFile = templateForComponentFile({
+  const storiesFile = await templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
     extension: `.stories${extension}`,
@@ -110,7 +109,7 @@ export const files = async ({ name, typescript, ...options }) => {
     templatePath: 'stories.tsx.template',
   })
 
-  const mockFile = templateForComponentFile({
+  const mockFile = await templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
     extension: typescript ? '.mock.ts' : '.mock.js',
@@ -142,14 +141,18 @@ export const files = async ({ name, typescript, ...options }) => {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return files.reduce((acc, [outputPath, content]) => {
-    const template = typescript ? content : transformTSToJS(outputPath, content)
+  return files.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
+    const template = typescript
+      ? content
+      : await transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 export const { command, description, builder, handler } =
@@ -178,11 +181,10 @@ export const { command, description, builder, handler } =
           title: `Generating types ...`,
           task: async (_ctx, task) => {
             const queryFieldName = nameVariants(
-              removeGeneratorName(cellName, 'cell')
+              removeGeneratorName(cellName, 'cell'),
             ).camelName
-            const projectHasSdl = await checkProjectForQueryField(
-              queryFieldName
-            )
+            const projectHasSdl =
+              await checkProjectForQueryField(queryFieldName)
 
             if (projectHasSdl) {
               const { errors } = await generateTypes()
@@ -197,7 +199,7 @@ export const { command, description, builder, handler } =
               addFunctionToRollback(generateTypes, true)
             } else {
               task.skip(
-                `Skipping type generation: no SDL defined for "${queryFieldName}". To generate types, run 'yarn rw g sdl ${queryFieldName}'.`
+                `Skipping type generation: no SDL defined for "${queryFieldName}". To generate types, run 'yarn rw g sdl ${queryFieldName}'.`,
               )
             }
           },

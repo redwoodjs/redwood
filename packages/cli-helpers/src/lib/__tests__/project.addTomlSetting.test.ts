@@ -33,7 +33,7 @@ it('should add `fragments = true` to empty redwood.toml', () => {
   setTomlSetting('graphql', 'fragments', 'true')
 
   expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toMatch(
-    /fragments = true/
+    /fragments = true/,
   )
 })
 
@@ -78,7 +78,7 @@ it('should update redwood.toml even if `fragments = true` exists for other secti
   setTomlSetting('graphql', 'fragments', true)
 
   expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toEqual(
-    toml + '\n[graphql]\n  fragments = true'
+    toml + '\n[graphql]\n  fragments = true',
   )
 })
 
@@ -138,7 +138,7 @@ it('should handle when [graphql] is last section in redwood.toml', async () => {
   setTomlSetting('graphql', 'fragments', true)
 
   expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toEqual(
-    toml + '\n  fragments = true'
+    toml + '\n  fragments = true',
   )
 })
 
@@ -185,7 +185,7 @@ it("should add to end of existing section, also when it's the last section", asy
   setTomlSetting('graphql', 'fragments', true)
 
   expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toEqual(
-    toml + '  fragments = true\n'
+    toml + '  fragments = true\n',
   )
 })
 
@@ -255,7 +255,7 @@ it('should update existing setting if available, with no spaces', async () => {
   setTomlSetting('graphql', 'fragments', true)
 
   expect(vol.toJSON()[FIXTURE_PATH + '/redwood.toml']).toEqual(
-    '[graphql]\nfragments = true'
+    '[graphql]\nfragments = true',
   )
 })
 

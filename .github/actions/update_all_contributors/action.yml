@@ -1,5 +1,0 @@
-name: Update all contributors
-description: Updates all contributors
-runs:
-  using: node20
-  main: update_all_contributors.mjs

@@ -45,6 +45,6 @@ test('createYargsForComponentGeneration generates a yargs handler as expected', 
       expect.objectContaining({
         title: 'Cool beans, with rad sauce',
       }),
-    ])
+    ]),
   )
 })

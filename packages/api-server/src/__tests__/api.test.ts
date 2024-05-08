@@ -132,7 +132,7 @@ describe('redwoodFastifyAPI', () => {
 
       expect(res.statusCode).toEqual(404)
       expect(res.body).toEqual(
-        'Function &quot;deeplyNested&quot; was not found.'
+        'Function &quot;deeplyNested&quot; was not found.',
       )
     })
   })

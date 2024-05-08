@@ -11,12 +11,12 @@
     ]
   },
   "dependencies": {
-    "@apollo/experimental-nextjs-app-support": "0.0.0-commit-b8a73fe",
+    "@apollo/client-react-streaming": "0.10.0",
     "@redwoodjs/forms": "8.0.0-canary.144",
     "@redwoodjs/router": "8.0.0-canary.144",
     "@redwoodjs/web": "8.0.0-canary.144",
-    "react": "0.0.0-experimental-e5205658f-20230913",
-    "react-dom": "0.0.0-experimental-e5205658f-20230913"
+    "react": "19.0.0-canary-cb151849e1-20240424",
+    "react-dom": "19.0.0-canary-cb151849e1-20240424"
   },
   "devDependencies": {
     "@redwoodjs/vite": "8.0.0-canary.144",

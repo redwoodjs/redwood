@@ -62,7 +62,7 @@ export const bothServerFileHandler = async (argv) => {
         prefix: '{name} |',
         timestampFormat: 'HH:mm:ss',
         handleInput: true,
-      }
+      },
     )
 
     try {
@@ -71,7 +71,7 @@ export const bothServerFileHandler = async (argv) => {
       if (typeof error?.message !== 'undefined') {
         errorTelemetry(
           process.argv,
-          `Error concurrently starting sides: ${error.message}`
+          `Error concurrently starting sides: ${error.message}`,
         )
         exitWithError(error)
       }

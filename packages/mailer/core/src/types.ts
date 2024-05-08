@@ -38,7 +38,7 @@ export type DefaultSendOptions = {
 
 export type MailHandlersOptions<
   THandlers extends MailHandlers,
-  TDefaultHandler
+  TDefaultHandler,
 > = {
   handlers: THandlers
   default: TDefaultHandler | keyof THandlers
@@ -47,7 +47,7 @@ export type MailHandlersOptions<
 
 export type MailRenderersOptions<
   TRenderers extends MailRenderers,
-  TDefaultRenderer
+  TDefaultRenderer,
 > = {
   renderers: TRenderers
   default: TDefaultRenderer | keyof TRenderers
@@ -56,7 +56,7 @@ export type MailRenderersOptions<
 
 export interface ModeHandlerOptions<
   THandlers extends MailHandlers,
-  TModeHandler extends keyof THandlers
+  TModeHandler extends keyof THandlers,
 > {
   handler?: TModeHandler | null
   when?: boolean | ((...args: any[]) => boolean)
@@ -68,7 +68,7 @@ export interface MailerConfig<
   TRenderers extends MailRenderers,
   TDefaultRenderer extends keyof TRenderers,
   TTestHandler extends keyof THandlers,
-  TDevelopmentHandler extends keyof THandlers
+  TDevelopmentHandler extends keyof THandlers,
 > {
   handling: MailHandlersOptions<THandlers, TDefaultHandler>
 
@@ -103,7 +103,7 @@ export interface MailBasicSendOptions {
 
 export interface MailSendWithoutRenderingOptions<
   THandlers,
-  THandler extends keyof THandlers
+  THandler extends keyof THandlers,
 > extends MailBasicSendOptions {
   handler?: THandler | keyof THandlers
 }
@@ -112,7 +112,7 @@ export interface MailSendOptions<
   THandlers,
   THandler extends keyof THandlers,
   TRenderers,
-  TRenderer extends keyof TRenderers
+  TRenderer extends keyof TRenderers,
 > extends MailSendWithoutRenderingOptions<THandlers, THandler> {
   renderer?: TRenderer | keyof TRenderers
 }

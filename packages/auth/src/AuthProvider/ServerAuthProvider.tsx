@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import React from 'react'
 
-import type { AuthProviderState } from './AuthProviderState'
-import { defaultAuthProviderState } from './AuthProviderState'
+import type { AuthProviderState } from './AuthProviderState.js'
+import { middlewareDefaultAuthProviderState } from './AuthProviderState.js'
 
 export type ServerAuthState = AuthProviderState<never> & {
   cookieHeader?: string
@@ -11,7 +11,7 @@ export type ServerAuthState = AuthProviderState<never> & {
 const getAuthInitialStateFromServer = () => {
   if (globalThis?.__REDWOOD__SERVER__AUTH_STATE__) {
     const initialState = {
-      ...defaultAuthProviderState,
+      ...middlewareDefaultAuthProviderState,
       encryptedSession: null,
       ...(globalThis?.__REDWOOD__SERVER__AUTH_STATE__ || {}),
     }
@@ -25,12 +25,12 @@ const getAuthInitialStateFromServer = () => {
 }
 
 /**
- * On the server, it resolves to the defaultAuthProviderState first.
+ * On the server, it resolves to the middlewareDefaultAuthProviderState first.
  *
  * On the client it restores from the initial server state injected in the ServerAuthProvider
  */
 export const ServerAuthContext = React.createContext<ServerAuthState>(
-  getAuthInitialStateFromServer()
+  getAuthInitialStateFromServer(),
 )
 
 /**
@@ -49,7 +49,7 @@ export const ServerAuthProvider = ({
   // not totally necessary, but it's nice to not have them in the DOM
   // @MARK: needs discussion!
   const stringifiedAuthState = `__REDWOOD__SERVER__AUTH_STATE__ = ${JSON.stringify(
-    sanitizeServerAuthState(value)
+    sanitizeServerAuthState(value),
   )};`
 
   return (

@@ -10,7 +10,7 @@ import { Position_fromOffsetOrFail } from './vscode-languageserver-types'
  * @param prismaSchemaFilePath
  */
 export function* prisma_parseEnvExpressionsInFile(
-  prismaSchemaFilePath: string
+  prismaSchemaFilePath: string,
 ) {
   const uri = URL_file(prismaSchemaFilePath)
   const file = URL_toFile(uri) // convert back and forth in case someone passed a uri

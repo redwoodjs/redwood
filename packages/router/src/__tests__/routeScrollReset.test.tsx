@@ -4,7 +4,9 @@ import '@testing-library/jest-dom/jest-globals'
 import { act, cleanup, render, screen } from '@testing-library/react'
 
 import { navigate } from '../history'
-import { Route, Router, routes } from '../router'
+import { namedRoutes as routes } from '../namedRoutes'
+import { Route } from '../Route'
+import { Router } from '../router'
 
 describe('Router scroll reset', () => {
   const Page1 = () => <div>Page 1</div>
@@ -38,8 +40,8 @@ describe('Router scroll reset', () => {
     act(() =>
       navigate(
         // @ts-expect-error - AvailableRoutes built in project only
-        routes.page2()
-      )
+        routes.page2(),
+      ),
     )
 
     await screen.getByText('Page 2')
@@ -53,8 +55,8 @@ describe('Router scroll reset', () => {
         // @ts-expect-error - AvailableRoutes built in project only
         routes.page2({
           tab: 'three',
-        })
-      )
+        }),
+      ),
     )
 
     await screen.getByText('Page 2')
@@ -69,8 +71,8 @@ describe('Router scroll reset', () => {
         // @ts-expect-error - AvailableRoutes built in project only
         routes.page1({
           queryParam1: 'foo',
-        })
-      )
+        }),
+      ),
     )
 
     await screen.getByText('Page 1')
@@ -83,7 +85,7 @@ describe('Router scroll reset', () => {
 
     act(() =>
       // Stay on page 1, but change the hash
-      navigate(`#route=66`, { replace: true })
+      navigate(`#route=66`, { replace: true }),
     )
 
     await screen.getByText('Page 1')

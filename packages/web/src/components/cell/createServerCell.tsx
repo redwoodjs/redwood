@@ -5,9 +5,9 @@ import { Suspense } from 'react'
 // Class components are not supported on the server
 // https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#when-to-use-server-and-client-components
 // Consider https://github.com/bvaughn/react-error-boundary
-// import { CellErrorBoundary } from './CellErrorBoundary'
-import type { CreateCellProps } from './cellTypes'
-import { isDataEmpty } from './isCellEmpty'
+// import { CellErrorBoundary } from './CellErrorBoundary.js'
+import type { CreateCellProps } from './cellTypes.js'
+import { isDataEmpty } from './isCellEmpty.js'
 
 // TODO(RSC): Clean this type up and consider moving to cellTypes
 type CreateServerCellProps<CellProps, CellVariables> = Omit<
@@ -25,9 +25,9 @@ type AnyObj = Record<string, unknown>
 
 export function createServerCell<
   CellProps extends AnyObj,
-  CellVariables extends AnyObj
+  CellVariables extends AnyObj,
 >(
-  createCellProps: CreateServerCellProps<CellProps, CellVariables> // 👈 AnyObj, because using CellProps causes a TS error
+  createCellProps: CreateServerCellProps<CellProps, CellVariables>, // 👈 AnyObj, because using CellProps causes a TS error
 ): React.FC<CellProps> {
   const {
     data: dataFn,
@@ -77,7 +77,7 @@ export function createServerCell<
   return (props: CellProps) => {
     const wrapInSuspenseIfLoadingPresent = (
       suspendingSuccessElement: React.ReactNode,
-      LoadingComponent: typeof Loading
+      LoadingComponent: typeof Loading,
     ) => {
       if (!LoadingComponent) {
         return suspendingSuccessElement
@@ -97,7 +97,7 @@ export function createServerCell<
       <>
         {wrapInSuspenseIfLoadingPresent(
           <SuspendingSuccess {...props} />,
-          Loading
+          Loading,
         )}
       </>
       // </CellErrorBoundary>

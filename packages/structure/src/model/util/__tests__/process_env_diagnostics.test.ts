@@ -46,7 +46,7 @@ describe('process_env_findInFile', () => {
 })
 
 function getFixtureDir(
-  name: 'example-todo-main-with-errors' | 'example-todo-main'
+  name: 'example-todo-main-with-errors' | 'example-todo-main',
 ) {
   return resolve(__dirname, `../../../../../../__fixtures__/${name}`)
 }

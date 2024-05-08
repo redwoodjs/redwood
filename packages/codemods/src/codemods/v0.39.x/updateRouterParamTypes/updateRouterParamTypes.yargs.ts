@@ -27,6 +27,6 @@ export const handler = () => {
           targetPaths: [routesFilePath],
         })
       }
-    }
+    },
   )
 }

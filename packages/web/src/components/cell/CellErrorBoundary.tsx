@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-import type { CellFailureProps } from './cellTypes'
+import type { CellFailureProps } from './cellTypes.js'
 
 export type FallbackProps = {
   error: QueryOperationResult['error']
@@ -13,7 +13,7 @@ export type CellErrorBoundaryProps = {
   // Note that the fallback has to be an FC, not a Node
   // because the error comes from this component's state
   renderFallback: (
-    fbProps: FallbackProps
+    fbProps: FallbackProps,
   ) => React.ReactElement<CellFailureProps>
   children: React.ReactNode
 }

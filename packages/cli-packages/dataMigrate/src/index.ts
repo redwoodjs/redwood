@@ -26,8 +26,8 @@ function builder(yargs: Argv) {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#datamigrate'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#datamigrate',
+      )}`,
     )
 }
 

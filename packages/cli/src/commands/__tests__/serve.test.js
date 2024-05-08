@@ -17,6 +17,7 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
       return {
         api: {
           base: '/mocked/project/api',
+          src: '/mocked/project/api/src',
           dist: '/mocked/project/api/dist',
         },
         web: {
@@ -39,8 +40,8 @@ vi.mock('fs-extra', async (importOriginal) => {
     default: {
       ...originalFsExtra,
       existsSync: (p) => {
-        // Don't detect the experimental server file, can't use path.sep here so the replaceAll is used
-        if (p.replaceAll('\\', '/') === '/mocked/project/api/dist/server.js') {
+        // Don't detect the server file, can't use path.sep here so the replaceAll is used
+        if (p.replaceAll('\\', '/') === '/mocked/project/api/src/server.ts') {
           return false
         }
         return true
@@ -86,7 +87,7 @@ describe('yarn rw serve', () => {
       expect.objectContaining({
         port: 5555,
         apiRootPath: expect.stringMatching(/^\/?funkyFunctions\/?$/),
-      })
+      }),
     )
   })
 
@@ -94,14 +95,14 @@ describe('yarn rw serve', () => {
     const parser = yargs().command('serve [side]', false, builder)
 
     await parser.parse(
-      'serve api --port 5555 --rootPath funkyFunctions/nested/'
+      'serve api --port 5555 --rootPath funkyFunctions/nested/',
     )
 
     expect(apiServerCLIConfig.handler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 5555,
         rootPath: expect.stringMatching(/^\/?funkyFunctions\/nested\/$/),
-      })
+      }),
     )
   })
 
@@ -114,7 +115,7 @@ describe('yarn rw serve', () => {
       expect.objectContaining({
         port: 9898,
         socket: 'abc',
-      })
+      }),
     )
   })
 })

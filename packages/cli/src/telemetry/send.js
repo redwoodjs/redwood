@@ -11,17 +11,17 @@ import { getResources } from './resource'
 async function main() {
   // Log out the telemetry notice
   console.log(
-    "You can disable telemetry by:\n - setting the 'REDWOOD_DISABLE_TELEMETRY' environment variable\n - passing the '--no-telemetry' flag when using the CLI"
+    "You can disable telemetry by:\n - setting the 'REDWOOD_DISABLE_TELEMETRY' environment variable\n - passing the '--no-telemetry' flag when using the CLI",
   )
   console.log(
-    'Information about Redwood telemetry can be found at:\n - https://telemetry.redwoodjs.com\n'
+    'Information about Redwood telemetry can be found at:\n - https://telemetry.redwoodjs.com\n',
   )
 
   // Get all telemetry files
   const telemetryDir = path.join(getPaths().generated.base, 'telemetry')
   fs.ensureDirSync(telemetryDir)
   const telemetryFiles = fs.readdirSync(
-    path.join(getPaths().generated.base, 'telemetry')
+    path.join(getPaths().generated.base, 'telemetry'),
   )
 
   // Compute all the resource information
@@ -60,7 +60,7 @@ async function main() {
 
     if (!Array.isArray(spans)) {
       console.error(
-        `Telemetry file '${file}' does not contain an array of spans. Deleting this file to prevent further errors.`
+        `Telemetry file '${file}' does not contain an array of spans. Deleting this file to prevent further errors.`,
       )
       fs.unlinkSync(path.join(telemetryDir, file))
       continue
@@ -106,7 +106,7 @@ async function main() {
 
   // We keep the last 8 telemetry files for visibility/transparency
   console.log(
-    'Keeping the lastest 8 telemetry files for visibility/transparency.'
+    'Keeping the lastest 8 telemetry files for visibility/transparency.',
   )
   const sortedTelemetryFiles = telemetryFiles.sort((a, b) => {
     return (

@@ -18,10 +18,10 @@ export const updateDevFatalErrorPage = async () => {
     'https://raw.githubusercontent.com/redwoodjs/redwood/29138f59dc5abe7b3d3c2a11c6e6f5fee32580c5/packages/create-redwood-app/templates/ts/web/src/pages/FatalErrorPage/FatalErrorPage.tsx'
 
   const isTsxPage = fs.existsSync(
-    path.join(webFatalErrorPagesDir, 'FatalErrorPage.tsx')
+    path.join(webFatalErrorPagesDir, 'FatalErrorPage.tsx'),
   )
   const isJsxPage = fs.existsSync(
-    path.join(webFatalErrorPagesDir, 'FatalErrorPage.jsx')
+    path.join(webFatalErrorPagesDir, 'FatalErrorPage.jsx'),
   )
   const ext = isTsxPage ? 'tsx' : isJsxPage ? 'jsx' : 'js'
 

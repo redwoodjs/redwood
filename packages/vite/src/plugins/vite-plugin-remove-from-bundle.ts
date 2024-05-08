@@ -10,10 +10,10 @@ type ModulesToExclude = Array<{ id: RegExp }>
  *
  */
 export default function removeFromBundle(
-  modulesToExclude: ModulesToExclude
+  modulesToExclude: ModulesToExclude,
 ): PluginOption {
   const isMissingIdToExclude = modulesToExclude.some(
-    (module) => module.id === undefined
+    (module) => module.id === undefined,
   )
 
   if (isMissingIdToExclude) {

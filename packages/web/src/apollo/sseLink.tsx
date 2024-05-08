@@ -12,7 +12,7 @@ interface SSELinkOptions extends Partial<ClientOptions> {
 }
 
 const mapCredentialsHeader = (
-  httpLinkCredentials?: string
+  httpLinkCredentials?: string,
 ): 'omit' | 'same-origin' | 'include' | undefined => {
   if (!httpLinkCredentials) {
     return undefined
@@ -28,7 +28,7 @@ const mapCredentialsHeader = (
 }
 
 const mapReferrerPolicyHeader = (
-  referrerPolicy?: string
+  referrerPolicy?: string,
 ):
   | 'no-referrer'
   | 'no-referrer-when-downgrade'
@@ -99,7 +99,7 @@ export class SSELink extends ApolloLink {
           next: sink.next.bind(sink),
           complete: sink.complete.bind(sink),
           error: sink.error.bind(sink),
-        }
+        },
       )
     })
   }

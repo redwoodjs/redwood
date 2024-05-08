@@ -13,33 +13,30 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build": "tsx build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-telemetry.tgz",
-    "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "build:types": "tsc --build --verbose",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "vitest run src",
-    "test:watch": "vitest watch src"
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.9",
-    "@redwoodjs/project-config": "7.0.0",
-    "@redwoodjs/structure": "7.0.0",
-    "@whatwg-node/fetch": "0.9.16",
+    "@redwoodjs/project-config": "workspace:*",
+    "@redwoodjs/structure": "workspace:*",
+    "@whatwg-node/fetch": "0.9.17",
     "ci-info": "4.0.0",
-    "core-js": "3.35.1",
-    "envinfo": "7.11.0",
-    "systeminformation": "5.21.20",
+    "envinfo": "7.11.1",
+    "systeminformation": "5.22.6",
     "uuid": "9.0.1",
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.9",
-    "@babel/core": "^7.22.20",
     "@types/envinfo": "7.8.3",
-    "@types/uuid": "9.0.7",
+    "@types/uuid": "9.0.8",
     "@types/yargs": "17.0.32",
-    "vitest": "1.2.2"
+    "tsx": "4.7.1",
+    "typescript": "5.4.5",
+    "vitest": "1.4.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

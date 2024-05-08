@@ -14,7 +14,7 @@ async function upgradeYarn() {
     {
       shell: true,
       cwd: rwPaths.base,
-    }
+    },
   )
 
   if (corepackPreparePO.status !== 0) {
@@ -33,7 +33,7 @@ async function upgradeYarn() {
         'For more information, see:',
         '- https://yarnpkg.com/getting-started/install',
         '- https://nodejs.org/dist/latest/docs/api/corepack.html',
-      ].join('\n')
+      ].join('\n'),
     )
   }
 
@@ -71,7 +71,7 @@ async function upgradeYarn() {
       'nodeLinker: node-modules',
       '',
       `yarnPath: .yarn/releases/yarn-${yarnVersion}.cjs`,
-    ].join('\n')
+    ].join('\n'),
   )
 
   const gitignorePath = path.join(rwPaths.base, '.gitignore')
@@ -86,7 +86,7 @@ async function upgradeYarn() {
       '!.yarn/releases',
       '!.yarn/sdks',
       '!.yarn/versions',
-    ].join('\n')}`
+    ].join('\n')}`,
   )
 
   console.log('Installing...')

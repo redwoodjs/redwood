@@ -1,13 +1,11 @@
-/**
- * @jest-environment jsdom
- */
+import React from 'react'
 
 import { render, screen } from '@testing-library/react'
-import '@testing-library/jest-dom/jest-globals'
+import { vi, describe, beforeAll, test, expect } from 'vitest'
 
-import { GraphQLHooksProvider } from '../GraphQLHooksProvider'
+import { GraphQLHooksProvider } from '../GraphQLHooksProvider.js'
 
-import { createCell } from './createCell'
+import { createCell } from './createCell.js'
 
 describe('createCell', () => {
   beforeAll(() => {
@@ -28,7 +26,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     screen.getByText(/^Great success!$/)
   })
@@ -54,7 +52,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
 
     screen.getByText(/^What's the meaning of life\?$/)
@@ -106,7 +104,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
 
     screen.getByText(/bazinga/)
@@ -125,7 +123,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     screen.getByText(/^Loading...$/)
   })
@@ -143,7 +141,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     screen.getByText(/^Fetching answer...$/)
   })
@@ -161,7 +159,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     screen.getByText(/^Great success!$/)
   })
@@ -179,7 +177,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     screen.getByText(/^No one knows$/)
   })
@@ -197,7 +195,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     screen.getByText(/^No one knows$/)
   })
@@ -214,7 +212,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     screen.getByText(/^Empty success$/)
   })
@@ -233,7 +231,7 @@ describe('createCell', () => {
         <TestCell>
           <div>🦆</div>
         </TestCell>
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     screen.getByText(/^Look at my beautiful$/)
     screen.getByText(/^🦆$/)
@@ -257,7 +255,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell name="Bob" />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
 
     screen.getByText(/^Hello Bob!$/)
@@ -290,7 +288,7 @@ describe('createCell', () => {
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell character="BEAST" />
         <TestCell character="HERO" />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
 
     screen.getByText(/^Call me Boogeyman$/)
@@ -311,7 +309,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     screen.getByText(/^Sad face :\($/)
   })
@@ -330,7 +328,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     screen.getByText(/^{"msg":"System malfunction"}$/)
   })
@@ -356,7 +354,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     screen.getByText(/^{"msg":"System malfunction"},code:SIMON_SAYS_NO$/)
   })
@@ -375,7 +373,7 @@ describe('createCell', () => {
         <TestCell>
           <div>Child</div>
         </TestCell>
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
     screen.getByText(/^I'm a failure$/)
     screen.getByText(/^Child$/)
@@ -393,14 +391,14 @@ describe('createCell', () => {
 
     // Prevent writing to stderr during this render.
     const err = console.error
-    console.error = jest.fn()
+    console.error = vi.fn()
 
     let error
     try {
       render(
         <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
           <TestCell />
-        </GraphQLHooksProvider>
+        </GraphQLHooksProvider>,
       )
     } catch (e) {
       error = e
@@ -429,7 +427,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
 
     screen.getByText(/^Got nothing$/)
@@ -453,7 +451,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
 
     screen.getByText(/^Got nothing$/)
@@ -482,7 +480,7 @@ describe('createCell', () => {
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestCell />
-      </GraphQLHooksProvider>
+      </GraphQLHooksProvider>,
     )
 
     screen.getByText(/^Hello Bob!$/)

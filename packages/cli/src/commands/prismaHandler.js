@@ -30,7 +30,7 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
   if (!hasHelpOption) {
     if (
       ['generate', 'introspect', 'db', 'migrate', 'studio', 'format'].includes(
-        commands[0]
+        commands[0],
       )
     ) {
       if (!fs.existsSync(rwjsPaths.api.dbSchema)) {
@@ -74,7 +74,7 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
         cwd: rwjsPaths.base,
         stdio: 'inherit',
         cleanup: true,
-      }
+      },
     )
 
     if (hasHelpOption || commands.length === 0) {
@@ -102,6 +102,6 @@ const printWrapInfo = () => {
       padding: { top: 0, bottom: 0, right: 1, left: 1 },
       margin: 1,
       borderColor: 'gray',
-    })
+    }),
   )
 }

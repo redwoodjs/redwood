@@ -45,6 +45,6 @@ export const handler = () => {
       } catch (e: any) {
         setError('Failed to codemod your project \n' + e?.message)
       }
-    }
+    },
   )
 }

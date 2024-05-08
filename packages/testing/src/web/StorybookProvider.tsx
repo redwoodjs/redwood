@@ -8,7 +8,7 @@ export const MockingLoader = async () => {
   const reqs = require.context(
     '~__REDWOOD__USER_WEB_SRC',
     true,
-    /.+(mock).(js|ts)$/
+    /.+(mock).(js|ts)$/,
   )
   reqs.keys().forEach(reqs)
 

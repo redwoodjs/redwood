@@ -49,7 +49,7 @@ export async function handler(options: BothParsedOptions) {
 
   webFastify.log.trace(
     { custom: { ...webFastify.initialConfig } },
-    'Fastify server configuration'
+    'Fastify server configuration',
   )
   webFastify.log.trace(`Registered plugins\n${webFastify.printPlugins()}`)
 
@@ -61,7 +61,7 @@ export async function handler(options: BothParsedOptions) {
 
   apiFastify.log.trace(
     { custom: { ...apiFastify.initialConfig } },
-    'Fastify server configuration'
+    'Fastify server configuration',
   )
   apiFastify.log.trace(`Registered plugins\n${apiFastify.printPlugins()}`)
 
@@ -69,7 +69,7 @@ export async function handler(options: BothParsedOptions) {
 
   const webServer = chalk.green(webFastify.listeningOrigin)
   const apiServer = chalk.magenta(
-    `${apiFastify.listeningOrigin}${options.apiRootPath}`
+    `${apiFastify.listeningOrigin}${options.apiRootPath}`,
   )
   const graphqlEndpoint = chalk.magenta(`${apiServer}graphql`)
 

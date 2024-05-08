@@ -23,7 +23,7 @@ describe('paths', () => {
       '..',
       '..',
       '__fixtures__',
-      'empty-project'
+      'empty-project',
     )
 
     beforeAll(() => {
@@ -43,7 +43,7 @@ describe('paths', () => {
         'web',
         'src',
         'pages',
-        'AboutPage'
+        'AboutPage',
       )
       expect(getBaseDirFromFile(projectFilePath)).toBe(FIXTURE_BASEDIR)
     })
@@ -59,7 +59,7 @@ describe('paths', () => {
               FIXTURE_BASEDIR,
               '.redwood',
               'types',
-              'includes'
+              'includes',
             ),
             mirror: path.join(FIXTURE_BASEDIR, '.redwood', 'types', 'mirror'),
           },
@@ -72,7 +72,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'api',
             'db',
-            'dataMigrations'
+            'dataMigrations',
           ),
           db: path.join(FIXTURE_BASEDIR, 'api', 'db'),
           dbSchema: path.join(FIXTURE_BASEDIR, 'api', 'db', 'schema.prisma'),
@@ -87,7 +87,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'api',
             'src',
-            'subscriptions'
+            'subscriptions',
           ),
           src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
@@ -102,7 +102,7 @@ describe('paths', () => {
             'web',
             'dist',
             'server',
-            'route-manifest.json'
+            'route-manifest.json',
           ),
           base: path.join(FIXTURE_BASEDIR, 'web'),
           pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
@@ -119,26 +119,26 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'webpack.config.js'
+            'webpack.config.js',
           ),
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'postcss.config.js'
+            'postcss.config.js',
           ),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.config.js'
+            'storybook.config.js',
           ),
           storybookPreviewConfig: null,
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.manager.js'
+            'storybook.manager.js',
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           distEntryServer: path.join(
@@ -146,36 +146,44 @@ describe('paths', () => {
             'web',
             'dist',
             'server',
-            'entry.server.js'
+            'entry.server.mjs',
+          ),
+          distRscEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'rsc',
+            'entry.server.mjs',
           ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'server',
-            'routeHooks'
+            'routeHooks',
           ),
+          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
+          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
           distDocumentServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'server',
-            'Document.js'
+            'Document.mjs',
           ),
-          distServerEntries: path.join(
+          distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'server',
-            'entries.js'
+            'rsc',
+            'entries.mjs',
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
           // Vite paths ~ not configured in empty-project
           viteConfig: null,
           entryClient: null,
           entryServer: null,
-          entries: null,
           graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
         },
       }
@@ -209,21 +217,21 @@ describe('paths', () => {
         expect(pages.length).toEqual(2)
 
         const fatalErrorPage = pages.find(
-          (page) => page.importName === 'FatalErrorPage'
+          (page) => page.importName === 'FatalErrorPage',
         )
         expect(fatalErrorPage).not.toBeUndefined()
         expect(fatalErrorPage.importPath).toEqual(
           importStatementPath(
-            path.join(pagesDir, 'FatalErrorPage/FatalErrorPage')
-          )
+            path.join(pagesDir, 'FatalErrorPage/FatalErrorPage'),
+          ),
         )
 
         const notFoundPage = pages.find(
-          (page) => page.importName === 'NotFoundPage'
+          (page) => page.importName === 'NotFoundPage',
         )
         expect(notFoundPage).not.toBeUndefined()
         expect(notFoundPage.importPath).toEqual(
-          importStatementPath(path.join(pagesDir, 'NotFoundPage/NotFoundPage'))
+          importStatementPath(path.join(pagesDir, 'NotFoundPage/NotFoundPage')),
         )
       })
     })
@@ -233,7 +241,7 @@ describe('paths', () => {
       expect(path.extname(p)).toEqual('.tsx')
 
       const q = resolveFile(
-        path.join(FIXTURE_BASEDIR, 'web', 'public', 'favicon')
+        path.join(FIXTURE_BASEDIR, 'web', 'public', 'favicon'),
       )
       expect(q).toBe(null)
     })
@@ -297,7 +305,7 @@ describe('paths', () => {
       '..',
       '..',
       '__fixtures__',
-      'example-todo-main'
+      'example-todo-main',
     )
 
     beforeAll(() => {
@@ -317,7 +325,7 @@ describe('paths', () => {
         'web',
         'src',
         'pages',
-        'AboutPage'
+        'AboutPage',
       )
       expect(getBaseDirFromFile(projectFilePath)).toBe(FIXTURE_BASEDIR)
     })
@@ -333,7 +341,7 @@ describe('paths', () => {
               FIXTURE_BASEDIR,
               '.redwood',
               'types',
-              'includes'
+              'includes',
             ),
             mirror: path.join(FIXTURE_BASEDIR, '.redwood', 'types', 'mirror'),
           },
@@ -346,7 +354,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'api',
             'db',
-            'dataMigrations'
+            'dataMigrations',
           ),
           db: path.join(FIXTURE_BASEDIR, 'api', 'db'),
           dbSchema: path.join(FIXTURE_BASEDIR, 'api', 'db', 'schema.prisma'),
@@ -361,7 +369,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'api',
             'src',
-            'subscriptions'
+            'subscriptions',
           ),
           src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
@@ -376,7 +384,7 @@ describe('paths', () => {
             'web',
             'dist',
             'server',
-            'route-manifest.json'
+            'route-manifest.json',
           ),
           base: path.join(FIXTURE_BASEDIR, 'web'),
           pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
@@ -393,27 +401,27 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'webpack.config.js'
+            'webpack.config.js',
           ),
 
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'postcss.config.js'
+            'postcss.config.js',
           ),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.config.js'
+            'storybook.config.js',
           ),
           storybookPreviewConfig: null,
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.manager.js'
+            'storybook.manager.js',
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           distEntryServer: path.join(
@@ -421,29 +429,38 @@ describe('paths', () => {
             'web',
             'dist',
             'server',
-            'entry.server.js'
+            'entry.server.mjs',
+          ),
+          distRscEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'rsc',
+            'entry.server.mjs',
           ),
           distDocumentServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'server',
-            'Document.js'
+            'Document.mjs',
           ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'server',
-            'routeHooks'
+            'routeHooks',
           ),
+          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
+          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
-          distServerEntries: path.join(
+          distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'server',
-            'entries.js'
+            'rsc',
+            'entries.mjs',
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
           graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
@@ -451,7 +468,6 @@ describe('paths', () => {
           viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
           entryClient: null, // doesn't exist in example-todo-main
           entryServer: null, // doesn't exist in example-todo-main
-          entries: null, // doesn't exist in example-todo-main
         },
       }
 
@@ -484,67 +500,67 @@ describe('paths', () => {
         expect(pages.length).toEqual(8)
 
         const adminEditUserPage = pages.find(
-          (page) => page.importName === 'adminEditUserPage'
+          (page) => page.importName === 'adminEditUserPage',
         )
         expect(adminEditUserPage).not.toBeUndefined()
         expect(adminEditUserPage.importPath).toEqual(
           importStatementPath(
-            path.join(pagesDir, 'admin/EditUserPage/EditUserPage')
-          )
+            path.join(pagesDir, 'admin/EditUserPage/EditUserPage'),
+          ),
         )
 
         const barPage = pages.find((page) => page.importName === 'BarPage')
         expect(barPage).not.toBeUndefined()
         expect(barPage.importPath).toEqual(
-          importStatementPath(path.join(pagesDir, 'BarPage/BarPage'))
+          importStatementPath(path.join(pagesDir, 'BarPage/BarPage')),
         )
 
         const fatalErrorPage = pages.find(
-          (page) => page.importName === 'FatalErrorPage'
+          (page) => page.importName === 'FatalErrorPage',
         )
         expect(fatalErrorPage).not.toBeUndefined()
         expect(fatalErrorPage.importPath).toEqual(
           importStatementPath(
-            path.join(pagesDir, 'FatalErrorPage/FatalErrorPage')
-          )
+            path.join(pagesDir, 'FatalErrorPage/FatalErrorPage'),
+          ),
         )
 
         const fooPage = pages.find((page) => page.importName === 'FooPage')
         expect(fooPage).not.toBeUndefined()
         expect(fooPage.importPath).toEqual(
-          importStatementPath(path.join(pagesDir, 'FooPage/FooPage'))
+          importStatementPath(path.join(pagesDir, 'FooPage/FooPage')),
         )
 
         const homePage = pages.find((page) => page.importName === 'HomePage')
         expect(homePage).not.toBeUndefined()
         expect(homePage.importPath).toEqual(
-          importStatementPath(path.join(pagesDir, 'HomePage/HomePage'))
+          importStatementPath(path.join(pagesDir, 'HomePage/HomePage')),
         )
 
         const notFoundPage = pages.find(
-          (page) => page.importName === 'NotFoundPage'
+          (page) => page.importName === 'NotFoundPage',
         )
         expect(notFoundPage).not.toBeUndefined()
         expect(notFoundPage.importPath).toEqual(
-          importStatementPath(path.join(pagesDir, 'NotFoundPage/NotFoundPage'))
+          importStatementPath(path.join(pagesDir, 'NotFoundPage/NotFoundPage')),
         )
 
         const typeScriptPage = pages.find(
-          (page) => page.importName === 'TypeScriptPage'
+          (page) => page.importName === 'TypeScriptPage',
         )
         expect(typeScriptPage).not.toBeUndefined()
         expect(typeScriptPage.importPath).toEqual(
           importStatementPath(
-            path.join(pagesDir, 'TypeScriptPage/TypeScriptPage')
-          )
+            path.join(pagesDir, 'TypeScriptPage/TypeScriptPage'),
+          ),
         )
 
         const privatePage = pages.find(
-          (page) => page.importName === 'PrivatePage'
+          (page) => page.importName === 'PrivatePage',
         )
         expect(privatePage).not.toBeUndefined()
         expect(privatePage.importPath).toEqual(
-          importStatementPath(path.join(pagesDir, 'PrivatePage/PrivatePage'))
+          importStatementPath(path.join(pagesDir, 'PrivatePage/PrivatePage')),
         )
       })
     })
@@ -554,7 +570,7 @@ describe('paths', () => {
       expect(path.extname(p)).toEqual('.js')
 
       const q = resolveFile(
-        path.join(FIXTURE_BASEDIR, 'web', 'public', 'favicon')
+        path.join(FIXTURE_BASEDIR, 'web', 'public', 'favicon'),
       )
       expect(q).toBe(null)
     })
@@ -618,7 +634,7 @@ describe('paths', () => {
       '..',
       '..',
       '__fixtures__',
-      'example-todo-main-with-errors'
+      'example-todo-main-with-errors',
     )
 
     beforeAll(() => {
@@ -638,7 +654,7 @@ describe('paths', () => {
         'web',
         'src',
         'pages',
-        'AboutPage'
+        'AboutPage',
       )
       expect(getBaseDirFromFile(projectFilePath)).toBe(FIXTURE_BASEDIR)
     })
@@ -654,7 +670,7 @@ describe('paths', () => {
               FIXTURE_BASEDIR,
               '.redwood',
               'types',
-              'includes'
+              'includes',
             ),
             mirror: path.join(FIXTURE_BASEDIR, '.redwood', 'types', 'mirror'),
           },
@@ -667,7 +683,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'api',
             'db',
-            'dataMigrations'
+            'dataMigrations',
           ),
           db: path.join(FIXTURE_BASEDIR, 'api', 'db'),
           dbSchema: path.join(FIXTURE_BASEDIR, 'api', 'db', 'schema.prisma'),
@@ -682,7 +698,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'api',
             'src',
-            'subscriptions'
+            'subscriptions',
           ),
           src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
@@ -697,7 +713,7 @@ describe('paths', () => {
             'web',
             'dist',
             'server',
-            'route-manifest.json'
+            'route-manifest.json',
           ),
           base: path.join(FIXTURE_BASEDIR, 'web'),
           pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
@@ -714,60 +730,68 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'webpack.config.js'
+            'webpack.config.js',
           ),
           viteConfig: null, // no vite config in example-todo-main-with-errors
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'postcss.config.js'
+            'postcss.config.js',
           ),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.config.js'
+            'storybook.config.js',
           ),
           storybookPreviewConfig: null,
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.manager.js'
+            'storybook.manager.js',
           ),
           entryClient: null,
           entryServer: null,
-          entries: null,
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           distEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'server',
-            'entry.server.js'
+            'entry.server.mjs',
+          ),
+          distRscEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'rsc',
+            'entry.server.mjs',
           ),
           distDocumentServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'server',
-            'Document.js'
+            'Document.mjs',
           ), // this is constructed regardless of presence of src/Document
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'server',
-            'routeHooks'
+            'routeHooks',
           ),
+          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
+          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
-          distServerEntries: path.join(
+          distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'server',
-            'entries.js'
+            'rsc',
+            'entries.mjs',
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
           graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
@@ -803,27 +827,27 @@ describe('paths', () => {
         expect(pages.length).toEqual(3)
 
         const fatalErrorPage = pages.find(
-          (page) => page.importName === 'FatalErrorPage'
+          (page) => page.importName === 'FatalErrorPage',
         )
         expect(fatalErrorPage).not.toBeUndefined()
         expect(fatalErrorPage.importPath).toEqual(
           importStatementPath(
-            path.join(pagesDir, 'FatalErrorPage/FatalErrorPage')
-          )
+            path.join(pagesDir, 'FatalErrorPage/FatalErrorPage'),
+          ),
         )
 
         const homePage = pages.find((page) => page.importName === 'HomePage')
         expect(homePage).not.toBeUndefined()
         expect(homePage.importPath).toEqual(
-          importStatementPath(path.join(pagesDir, 'HomePage/HomePage'))
+          importStatementPath(path.join(pagesDir, 'HomePage/HomePage')),
         )
 
         const notFoundPage = pages.find(
-          (page) => page.importName === 'NotFoundPage'
+          (page) => page.importName === 'NotFoundPage',
         )
         expect(notFoundPage).not.toBeUndefined()
         expect(notFoundPage.importPath).toEqual(
-          importStatementPath(path.join(pagesDir, 'NotFoundPage/NotFoundPage'))
+          importStatementPath(path.join(pagesDir, 'NotFoundPage/NotFoundPage')),
         )
       })
     })
@@ -833,7 +857,7 @@ describe('paths', () => {
       expect(path.extname(p)).toEqual('.js')
 
       const q = resolveFile(
-        path.join(FIXTURE_BASEDIR, 'web', 'public', 'favicon')
+        path.join(FIXTURE_BASEDIR, 'web', 'public', 'favicon'),
       )
       expect(q).toBe(null)
     })
@@ -897,7 +921,7 @@ describe('paths', () => {
       '..',
       '..',
       '__fixtures__',
-      'test-project'
+      'test-project',
     )
 
     beforeAll(() => {
@@ -917,7 +941,7 @@ describe('paths', () => {
         'web',
         'src',
         'pages',
-        'AboutPage'
+        'AboutPage',
       )
       expect(getBaseDirFromFile(projectFilePath)).toBe(FIXTURE_BASEDIR)
     })
@@ -933,7 +957,7 @@ describe('paths', () => {
               FIXTURE_BASEDIR,
               '.redwood',
               'types',
-              'includes'
+              'includes',
             ),
             mirror: path.join(FIXTURE_BASEDIR, '.redwood', 'types', 'mirror'),
           },
@@ -946,7 +970,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'api',
             'db',
-            'dataMigrations'
+            'dataMigrations',
           ),
           db: path.join(FIXTURE_BASEDIR, 'api', 'db'),
           dbSchema: path.join(FIXTURE_BASEDIR, 'api', 'db', 'schema.prisma'),
@@ -961,7 +985,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'api',
             'src',
-            'subscriptions'
+            'subscriptions',
           ),
           src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
@@ -976,7 +1000,7 @@ describe('paths', () => {
             'web',
             'dist',
             'server',
-            'route-manifest.json'
+            'route-manifest.json',
           ),
           base: path.join(FIXTURE_BASEDIR, 'web'),
           pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
@@ -993,26 +1017,26 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'webpack.config.js'
+            'webpack.config.js',
           ),
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'postcss.config.js'
+            'postcss.config.js',
           ),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.config.js'
+            'storybook.config.js',
           ),
           storybookPreviewConfig: null,
           storybookManagerConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
             'config',
-            'storybook.manager.js'
+            'storybook.manager.js',
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           distEntryServer: path.join(
@@ -1020,29 +1044,38 @@ describe('paths', () => {
             'web',
             'dist',
             'server',
-            'entry.server.js'
+            'entry.server.mjs',
+          ),
+          distRscEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'rsc',
+            'entry.server.mjs',
           ),
           distDocumentServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'server',
-            'Document.js'
+            'Document.mjs',
           ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'server',
-            'routeHooks'
+            'routeHooks',
           ),
+          distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
+          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
-          distServerEntries: path.join(
+          distRscEntries: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'server',
-            'entries.js'
+            'rsc',
+            'entries.mjs',
           ),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
           graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
@@ -1050,7 +1083,6 @@ describe('paths', () => {
           viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
           entryClient: path.join(FIXTURE_BASEDIR, 'web/src/entry.client.tsx'),
           entryServer: null,
-          entries: null,
         },
       }
 
@@ -1101,7 +1133,7 @@ describe('paths', () => {
           const thisPage = pages.find((page) => page.importName === pageName)
           expect(thisPage).not.toBeUndefined()
           expect(thisPage.importPath).toEqual(
-            importStatementPath(path.join(pagesDir, `${pageName}/${pageName}`))
+            importStatementPath(path.join(pagesDir, `${pageName}/${pageName}`)),
           )
         })
 
@@ -1109,52 +1141,55 @@ describe('paths', () => {
 
         scaffoldPageNames.forEach((pageName) => {
           let page = pages.find(
-            (page) => page.importName === `${pageName}Edit${pageName}Page`
+            (page) => page.importName === `${pageName}Edit${pageName}Page`,
           )
           expect(page).not.toBeUndefined()
           expect(page.importPath).toEqual(
             importStatementPath(
               path.join(
                 pagesDir,
-                `${pageName}/Edit${pageName}Page/Edit${pageName}Page`
-              )
-            )
+                `${pageName}/Edit${pageName}Page/Edit${pageName}Page`,
+              ),
+            ),
           )
 
           page = pages.find(
-            (page) => page.importName === `${pageName}New${pageName}Page`
+            (page) => page.importName === `${pageName}New${pageName}Page`,
           )
           expect(page).not.toBeUndefined()
           expect(page.importPath).toEqual(
             importStatementPath(
               path.join(
                 pagesDir,
-                `${pageName}/New${pageName}Page/New${pageName}Page`
-              )
-            )
+                `${pageName}/New${pageName}Page/New${pageName}Page`,
+              ),
+            ),
           )
 
           page = pages.find(
-            (page) => page.importName === `${pageName}${pageName}Page`
-          )
-          expect(page).not.toBeUndefined()
-          expect(page.importPath).toEqual(
-            importStatementPath(
-              path.join(pagesDir, `${pageName}/${pageName}Page/${pageName}Page`)
-            )
-          )
-
-          page = pages.find(
-            (page) => page.importName === `${pageName}${pageName}sPage`
+            (page) => page.importName === `${pageName}${pageName}Page`,
           )
           expect(page).not.toBeUndefined()
           expect(page.importPath).toEqual(
             importStatementPath(
               path.join(
                 pagesDir,
-                `${pageName}/${pageName}sPage/${pageName}sPage`
-              )
-            )
+                `${pageName}/${pageName}Page/${pageName}Page`,
+              ),
+            ),
+          )
+
+          page = pages.find(
+            (page) => page.importName === `${pageName}${pageName}sPage`,
+          )
+          expect(page).not.toBeUndefined()
+          expect(page.importPath).toEqual(
+            importStatementPath(
+              path.join(
+                pagesDir,
+                `${pageName}/${pageName}sPage/${pageName}sPage`,
+              ),
+            ),
           )
         })
       })
@@ -1165,7 +1200,7 @@ describe('paths', () => {
       expect(path.extname(p)).toEqual('.tsx')
 
       const q = resolveFile(
-        path.join(FIXTURE_BASEDIR, 'web', 'public', 'favicon')
+        path.join(FIXTURE_BASEDIR, 'web', 'public', 'favicon'),
       )
       expect(q).toBe(null)
     })

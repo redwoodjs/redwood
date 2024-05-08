@@ -61,7 +61,7 @@ describe('MiddlewareResponse', () => {
     expect(tempRedirect.isRedirect()).toStrictEqual(true)
     expect(tempRedirect.toResponse().status).toStrictEqual(302)
     expect(tempRedirect.toResponse().headers.get('location')).toStrictEqual(
-      '/somewhere'
+      '/somewhere',
     )
   })
 
@@ -70,7 +70,7 @@ describe('MiddlewareResponse', () => {
     expect(permRedirect.isRedirect()).toStrictEqual(true)
     expect(permRedirect.toResponse().status).toStrictEqual(301)
     expect(permRedirect.toResponse().headers.get('location')).toStrictEqual(
-      '/bye'
+      '/bye',
     )
   })
 })

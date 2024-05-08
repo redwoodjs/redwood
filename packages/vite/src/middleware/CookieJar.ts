@@ -5,9 +5,7 @@ export type CookieParams = {
   options?: cookie.CookieSerializeOptions
 }
 
-/**
- * Specialised cookie map, that lets you set cookies with options
- */
+/** Specialized cookie map, that lets you set cookies with options */
 export class CookieJar {
   private map = new Map<string, CookieParams>()
 
@@ -20,7 +18,7 @@ export class CookieJar {
       this.map = new Map(
         Object.entries(parsedCookies).map(([key, value]) => {
           return [key, { value }]
-        })
+        }),
       )
     }
   }
@@ -28,7 +26,7 @@ export class CookieJar {
   public set(
     name: string,
     value: string,
-    options?: cookie.CookieSerializeOptions
+    options?: cookie.CookieSerializeOptions,
   ) {
     this.map.set(name, {
       value,
@@ -39,6 +37,10 @@ export class CookieJar {
   }
 
   public get(name: string) {
+    return this.map.get(name)?.value
+  }
+
+  public getWithOptions(name: string) {
     return this.map.get(name)
   }
 

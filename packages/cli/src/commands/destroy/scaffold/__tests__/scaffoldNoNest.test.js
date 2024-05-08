@@ -91,7 +91,7 @@ describe('rw destroy scaffold', () => {
             '</Routes>',
           ].join('\n'),
         },
-        '/'
+        '/',
       )
     })
 
@@ -116,7 +116,7 @@ describe('rw destroy scaffold', () => {
             model: 'Post',
             tests: false,
             nestScaffoldByModel: false,
-          })
+          }),
         )
         generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
         expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
@@ -166,11 +166,11 @@ describe('rw destroy scaffold', () => {
               model: 'Post',
               tests: false,
               nestScaffoldByModel: false,
-            })
+            }),
           )
           expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
           generatedFiles.forEach((f) =>
-            expect(unlinkSpy).toHaveBeenCalledWith(f)
+            expect(unlinkSpy).toHaveBeenCalledWith(f),
           )
         })
       })
@@ -192,7 +192,7 @@ describe('rw destroy scaffold', () => {
             '  <Route path="/" page={HomePage} name="home" />',
             '  <Route notfound page={NotFoundPage} />',
             '</Routes>',
-          ].join('\n')
+          ].join('\n'),
         )
       })
     })
@@ -245,7 +245,7 @@ describe('rw destroy scaffold', () => {
             path: 'admin',
             tests: false,
             nestScaffoldByModel: false,
-          })
+          }),
         )
         expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
         generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
@@ -293,11 +293,11 @@ describe('rw destroy scaffold', () => {
               path: 'admin',
               tests: false,
               nestScaffoldByModel: false,
-            })
+            }),
           )
           expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
           generatedFiles.forEach((f) =>
-            expect(unlinkSpy).toHaveBeenCalledWith(f)
+            expect(unlinkSpy).toHaveBeenCalledWith(f),
           )
         })
       })
@@ -320,7 +320,7 @@ describe('rw destroy scaffold', () => {
             '  <Route path="/" page={HomePage} name="home" />',
             '  <Route notfound page={NotFoundPage} />',
             '</Routes>',
-          ].join('\n')
+          ].join('\n'),
         )
       })
     })

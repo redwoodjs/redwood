@@ -1,28 +1,32 @@
 import path from 'path'
 
+import { vi, beforeEach, afterEach, describe, test, expect } from 'vitest'
+
+import type ProjectConfig from '@redwoodjs/project-config'
+
 import { generateClientPreset } from '../generate/clientPreset'
 import { generateGraphQLSchema } from '../generate/graphqlSchema'
 
-let shouldGenerateTrustedDocuments = false
-
-const mockTrustedDocumentsConfig = () => {
-  return shouldGenerateTrustedDocuments
-}
-
-jest.mock('@redwoodjs/project-config', () => {
-  const projectConfig = jest.requireActual('@redwoodjs/project-config')
-
+const { mockedGetConfig } = vi.hoisted(() => {
   return {
-    ...projectConfig,
-    getConfig: () => {
-      return { graphql: { trustedDocuments: mockTrustedDocumentsConfig() } }
-    },
+    mockedGetConfig: vi
+      .fn()
+      .mockReturnValue({ graphql: { trustedDocuments: false } }),
   }
 })
+
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const projectConfig = await importOriginal<typeof ProjectConfig>()
+  return {
+    ...projectConfig,
+    getConfig: mockedGetConfig,
+  }
+})
+
 beforeEach(() => {
   const FIXTURE_PATH = path.resolve(
     __dirname,
-    '../../../../__fixtures__/example-todo-main'
+    '../../../../__fixtures__/example-todo-main',
   )
 
   process.env.RWJS_CWD = FIXTURE_PATH
@@ -30,15 +34,16 @@ beforeEach(() => {
 
 afterEach(() => {
   delete process.env.RWJS_CWD
-  jest.restoreAllMocks()
+  mockedGetConfig.mockReturnValue({ graphql: { trustedDocuments: false } })
 })
 
 describe('Generate client preset', () => {
   test('for web side', async () => {
-    shouldGenerateTrustedDocuments = true
+    mockedGetConfig.mockReturnValue({ graphql: { trustedDocuments: true } })
     await generateGraphQLSchema()
 
-    const { clientPresetFiles } = await generateClientPreset()
+    const { clientPresetFiles, errors } = await generateClientPreset()
+    expect(errors).toHaveLength(0)
 
     expect(clientPresetFiles).toHaveLength(5)
     const expectedEndings = [
@@ -50,17 +55,18 @@ describe('Generate client preset', () => {
     ]
 
     const foundEndings = expectedEndings.filter((expectedEnding) =>
-      clientPresetFiles.some((filename) => filename.endsWith(expectedEnding))
+      clientPresetFiles.some((filename) => filename.endsWith(expectedEnding)),
     )
 
     expect(foundEndings).toHaveLength(expectedEndings.length)
   })
 
   test('for api side', async () => {
-    shouldGenerateTrustedDocuments = true
+    mockedGetConfig.mockReturnValue({ graphql: { trustedDocuments: true } })
     await generateGraphQLSchema()
 
-    const { trustedDocumentsStoreFile } = await generateClientPreset()
+    const { trustedDocumentsStoreFile, errors } = await generateClientPreset()
+    expect(errors).toHaveLength(0)
 
     expect(trustedDocumentsStoreFile).toContain('trustedDocumentsStore.ts')
   })

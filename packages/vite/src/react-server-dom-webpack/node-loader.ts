@@ -25,29 +25,8 @@ interface ResolveContext {
 export type ResolveFunction = (
   specifier: string,
   context: ResolveContext,
-  resolveFunction: ResolveFunction
+  resolveFunction: ResolveFunction,
 ) => { url: string } | Promise<{ url: string }>
-
-interface GetSourceContext {
-  format: string
-}
-
-type GetSourceFunction = (
-  url: string,
-  context: GetSourceContext,
-  getSourceFunction: GetSourceFunction
-) => Promise<{ source: Source }>
-
-interface TransformSourceContext {
-  format: string
-  url: string
-}
-
-type TransformSourceFunction = (
-  source: Source,
-  context: TransformSourceContext,
-  transformSourceFunction: TransformSourceFunction
-) => Promise<{ source: Source }>
 
 interface LoadContext {
   conditions: Array<string>
@@ -58,7 +37,7 @@ interface LoadContext {
 type LoadFunction = (
   url: string,
   loadContext: LoadContext | null,
-  loadFunction: LoadFunction
+  loadFunction: LoadFunction,
 ) => Promise<{ format: string; shortCircuit?: boolean; source: Source }>
 
 // This is the official type, but the code below throws if it isn't a string.
@@ -68,13 +47,12 @@ type Source = string
 
 let warnedAboutConditionsFlag = false
 
-let stashedGetSource: null | GetSourceFunction = null
 let stashedResolve: null | ResolveFunction = null
 
 export async function resolve(
   specifier: string,
   context: ResolveContext,
-  defaultResolve: ResolveFunction
+  defaultResolve: ResolveFunction,
 ): Promise<{ url: string }> {
   // We stash this in case we end up needing to resolve export * statements later.
   stashedResolve = defaultResolve
@@ -90,22 +68,12 @@ export async function resolve(
 
       console.warn(
         'You did not run Node.js with the `--conditions react-server` flag. ' +
-          'Any "react-server" override will only work with ESM imports.'
+          'Any "react-server" override will only work with ESM imports.',
       )
     }
   }
 
   return await defaultResolve(specifier, context, defaultResolve)
-}
-
-export async function getSource(
-  url: string,
-  context: GetSourceContext,
-  defaultGetSource: GetSourceFunction
-): Promise<{ source: Source }> {
-  // We stash this in case we end up needing to resolve export * statements later.
-  stashedGetSource = defaultGetSource
-  return defaultGetSource(url, context, defaultGetSource)
 }
 
 function addLocalExportedNames(names: Map<string, string>, node: any) {
@@ -153,7 +121,7 @@ function transformServerModule(
   source: string,
   body: any,
   url: string,
-  _loader?: LoadFunction
+  _loader?: LoadFunction,
 ): string {
   // If the same local name is exported more than once, we only need one of the names.
   const localNames = new Map()
@@ -270,7 +238,7 @@ function addExportNames(names: Array<string>, node: any) {
 
 function resolveClientImport(
   specifier: string,
-  parentURL: string
+  parentURL: string,
 ): { url: string } | Promise<{ url: string }> {
   // Resolve an import specifier as if it was loaded by the client. This doesn't use
   // the overrides that this loader does but instead reverts to the default.
@@ -280,7 +248,7 @@ function resolveClientImport(
 
   if (stashedResolve === null) {
     throw new Error(
-      'Expected resolve to have been called before transformSource'
+      'Expected resolve to have been called before transformSource',
     )
   }
 
@@ -290,7 +258,7 @@ function resolveClientImport(
       conditions: ['node', 'import'],
       parentURL,
     },
-    stashedResolve
+    stashedResolve,
   )
 }
 
@@ -301,7 +269,7 @@ async function parseExportNamesIntoNames(
   body: any,
   names: Array<string>,
   parentURL: string,
-  loader: LoadFunction
+  loader: LoadFunction,
 ): Promise<void> {
   for (let i = 0; i < body.length; i++) {
     const node = body[i]
@@ -314,7 +282,7 @@ async function parseExportNamesIntoNames(
         } else {
           const clientImport = await resolveClientImport(
             node.source.value,
-            parentURL
+            parentURL,
           )
           const url = clientImport.url
           const loadContext = {
@@ -332,7 +300,7 @@ async function parseExportNamesIntoNames(
 
           try {
             childBody = acorn.parse(mod.source, {
-              ecmaVersion: '2024',
+              ecmaVersion: 2024,
               sourceType: 'module',
             }).body
           } catch (x: any) {
@@ -379,23 +347,26 @@ async function transformClientModule(
   body: any,
   url: string,
   loader: LoadFunction,
-  clientEntryFiles?: Record<string, string>
+  clientEntryFiles: Record<string, string>,
 ): Promise<string> {
   const names: Array<string> = []
 
   // This will insert the names into the `names` array
   await parseExportNamesIntoNames(body, names, url, loader)
 
-  const entryRecord = Object.entries(clientEntryFiles || {}).find(
-    ([_key, value]) => value === url
+  const entryRecord = Object.entries(clientEntryFiles).find(
+    ([_key, value]) => value === url,
   )
 
-  // TODO (RSC): Check if we always find a record. If we do, we should
-  // throw an error if it's undefined
+  if (!entryRecord || !entryRecord[0]) {
+    throw new Error('Entry not found for ' + url)
+  }
 
-  const loadId = entryRecord
-    ? path.join(getPaths().web.distServer, 'assets', entryRecord[0] + '.js')
-    : url
+  const loadId = path.join(
+    getPaths().web.distRsc,
+    'assets',
+    `${entryRecord[0]}.js`,
+  )
 
   let newSrc =
     "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"
@@ -411,10 +382,9 @@ async function transformClientModule(
         JSON.stringify(
           'Attempted to call the default export of ' +
             url +
-            ' from the server' +
-            "but it's on the client. It's not possible to invoke a client function from " +
-            'the server, it can only be rendered as a Component or passed to props of a' +
-            'Client Component.'
+            " from the server but it's on the client. It's not possible to " +
+            'invoke a client function from the server, it can only be ' +
+            'rendered as a Component or passed to props of a Client Component.',
         ) +
         ');'
     } else {
@@ -429,7 +399,7 @@ async function transformClientModule(
             name +
             ' is on the client. ' +
             "It's not possible to invoke a client function from the server, it can " +
-            'only be rendered as a Component or passed to props of a Client Component.'
+            'only be rendered as a Component or passed to props of a Client Component.',
         ) +
         ');'
     }
@@ -443,42 +413,11 @@ async function transformClientModule(
   return newSrc
 }
 
-async function loadClientImport(
-  url: string,
-  defaultTransformSource: TransformSourceFunction
-): Promise<{ format: string; shortCircuit?: boolean; source: Source }> {
-  if (stashedGetSource === null) {
-    throw new Error(
-      'Expected getSource to have been called before transformSource'
-    )
-  }
-
-  // TODO: Validate that this is another module by calling getFormat.
-
-  const getSourceContext = { format: 'module' }
-  const { source } = await stashedGetSource(
-    url,
-    getSourceContext,
-    stashedGetSource
-  )
-  const transformContext = {
-    format: 'module',
-    url,
-  }
-  const { source: transformedSource } = await defaultTransformSource(
-    source,
-    transformContext,
-    defaultTransformSource
-  )
-
-  return { format: 'module', source: transformedSource }
-}
-
 async function transformModuleIfNeeded(
   source: string,
   url: string,
   loader: LoadFunction,
-  clientEntryFile?: Record<string, string>
+  clientEntryFiles: Record<string, string>,
 ): Promise<string> {
   // Do a quick check for the exact string. If it doesn't exist, don't
   // bother parsing.
@@ -486,11 +425,20 @@ async function transformModuleIfNeeded(
     return source
   }
 
+  // TODO (RSC): Bad bad hack. Don't do this.
+  // At least look for something that's guaranteed to be only present in
+  // transformed modules
+  // Ideally don't even try to transform twice
+  if (source.includes('$$id')) {
+    // Already transformed
+    return source
+  }
+
   let body
 
   try {
     body = acorn.parse(source, {
-      ecmaVersion: '2024',
+      ecmaVersion: 2024,
       sourceType: 'module',
     }).body
   } catch (x: any) {
@@ -523,54 +471,22 @@ async function transformModuleIfNeeded(
 
   if (useClient && useServer) {
     throw new Error(
-      'Cannot have both "use client" and "use server" directives in the same file.'
+      'Cannot have both "use client" and "use server" directives in the same file.',
     )
   }
 
   if (useClient) {
-    return transformClientModule(body, url, loader, clientEntryFile)
+    return transformClientModule(body, url, loader, clientEntryFiles)
   }
 
   return transformServerModule(source, body, url)
-}
-
-export async function transformSource(
-  source: Source,
-  context: TransformSourceContext,
-  defaultTransformSource: TransformSourceFunction
-): Promise<{ source: Source }> {
-  const transformed = await defaultTransformSource(
-    source,
-    context,
-    defaultTransformSource
-  )
-
-  if (context.format === 'module') {
-    const transformedSource = transformed.source
-
-    if (typeof transformedSource !== 'string') {
-      throw new Error('Expected source to have been transformed to a string.')
-    }
-
-    const newSrc = await transformModuleIfNeeded(
-      transformedSource,
-      context.url,
-      (url: string) => {
-        return loadClientImport(url, defaultTransformSource)
-      }
-    )
-
-    return { source: newSrc }
-  }
-
-  return transformed
 }
 
 export async function load(
   url: string,
   context: LoadContext | null,
   defaultLoad: LoadFunction,
-  clientEntryFiles?: Record<string, string>
+  clientEntryFiles: Record<string, string>,
 ): Promise<{ format: string; shortCircuit?: boolean; source: Source }> {
   const result = await defaultLoad(url, context, defaultLoad)
 
@@ -583,7 +499,7 @@ export async function load(
       result.source,
       url,
       defaultLoad,
-      clientEntryFiles
+      clientEntryFiles,
     )
 
     return {

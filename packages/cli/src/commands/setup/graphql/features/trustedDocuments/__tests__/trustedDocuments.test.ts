@@ -5,7 +5,9 @@ vi.mock('fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('node:fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('execa')
 // The jscodeshift parts are tested by another test
-vi.mock('../../fragments/runTransform', () => ({ runTransform: () => ({}) }))
+vi.mock('../../../../../../lib/runTransform', () => ({
+  runTransform: () => ({}),
+}))
 
 vi.mock('listr2', () => {
   return {
@@ -56,37 +58,37 @@ beforeAll(async () => {
 
   tomlFixtures.default = actualFs.readFileSync(
     path.join(tomlFixturesPath, 'default.toml'),
-    'utf-8'
+    'utf-8',
   )
 
   tomlFixtures.fragments = actualFs.readFileSync(
     path.join(tomlFixturesPath, 'fragments.toml'),
-    'utf-8'
+    'utf-8',
   )
 
   tomlFixtures.fragmentsNoSpaceEquals = actualFs.readFileSync(
     path.join(tomlFixturesPath, 'fragments_no_space_equals.toml'),
-    'utf-8'
+    'utf-8',
   )
 
   tomlFixtures.trustedDocsAlreadySetup = actualFs.readFileSync(
     path.join(tomlFixturesPath, 'trusted_docs_already_setup.toml'),
-    'utf-8'
+    'utf-8',
   )
 
   tomlFixtures.trustedDocsNoSpaceEquals = actualFs.readFileSync(
     path.join(tomlFixturesPath, 'trusted_docs_no_space_equals.toml'),
-    'utf-8'
+    'utf-8',
   )
 
   tomlFixtures.trustedDocsFragmentsAlreadySetup = actualFs.readFileSync(
     path.join(tomlFixturesPath, 'trusted_docs_fragments_already_setup.toml'),
-    'utf-8'
+    'utf-8',
   )
 
   tomlFixtures.trustedDocsCommentedGraphql = actualFs.readFileSync(
     path.join(tomlFixturesPath, 'trusted_docs_commented_graphql.toml'),
-    'utf-8'
+    'utf-8',
   )
 })
 
@@ -103,7 +105,7 @@ describe('Trusted documents setup', () => {
   it('runs all tasks', async () => {
     vol.fromJSON(
       { 'redwood.toml': '', 'api/src/functions/graphql.js': '' },
-      APP_PATH
+      APP_PATH,
     )
 
     await handler({ force: false })
@@ -125,7 +127,7 @@ describe('Trusted documents setup', () => {
             'redwood.toml': tomlFixtures.default,
             'api/src/functions/graphql.js': '',
           },
-          APP_PATH
+          APP_PATH,
         )
 
         await handler({ force: false })
@@ -140,7 +142,7 @@ describe('Trusted documents setup', () => {
             'redwood.toml': tomlFixtures.fragments,
             'api/src/functions/graphql.ts': '',
           },
-          APP_PATH
+          APP_PATH,
         )
 
         await handler({ force: false })
@@ -155,7 +157,7 @@ describe('Trusted documents setup', () => {
             'redwood.toml': tomlFixtures.fragmentsNoSpaceEquals,
             'api/src/functions/graphql.js': '',
           },
-          APP_PATH
+          APP_PATH,
         )
 
         await handler({ force: false })
@@ -170,13 +172,13 @@ describe('Trusted documents setup', () => {
             'redwood.toml': tomlFixtures.trustedDocsAlreadySetup,
             'api/src/functions/graphql.js': '',
           },
-          APP_PATH
+          APP_PATH,
         )
 
         await handler({ force: false })
 
         expect(vol.toJSON()[APP_PATH + '/redwood.toml']).toEqual(
-          tomlFixtures.trustedDocsAlreadySetup
+          tomlFixtures.trustedDocsAlreadySetup,
         )
       })
     })
@@ -187,13 +189,13 @@ describe('Trusted documents setup', () => {
             'redwood.toml': tomlFixtures.trustedDocsNoSpaceEquals,
             'api/src/functions/graphql.js': '',
           },
-          APP_PATH
+          APP_PATH,
         )
 
         await handler({ force: false })
 
         expect(vol.toJSON()[APP_PATH + '/redwood.toml']).toEqual(
-          tomlFixtures.trustedDocsNoSpaceEquals
+          tomlFixtures.trustedDocsNoSpaceEquals,
         )
       })
     })
@@ -204,13 +206,13 @@ describe('Trusted documents setup', () => {
             'redwood.toml': tomlFixtures.trustedDocsFragmentsAlreadySetup,
             'api/src/functions/graphql.js': '',
           },
-          APP_PATH
+          APP_PATH,
         )
 
         await handler({ force: false })
 
         expect(vol.toJSON()[APP_PATH + '/redwood.toml']).toEqual(
-          tomlFixtures.trustedDocsFragmentsAlreadySetup
+          tomlFixtures.trustedDocsFragmentsAlreadySetup,
         )
       })
     })
@@ -221,7 +223,7 @@ describe('Trusted documents setup', () => {
             'redwood.toml': tomlFixtures.trustedDocsCommentedGraphql,
             'api/src/functions/graphql.js': '',
           },
-          APP_PATH
+          APP_PATH,
         )
 
         await handler({ force: false })

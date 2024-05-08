@@ -40,6 +40,8 @@ echo 'n' \
   | awk -F. '{ $NF = $NF + 1 } 1' OFS=. \
   > canary_version
 
+# Update create-redwood-app templates to use canary packages
+
 sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
   packages/create-redwood-app/templates/js/package.json > tmpfile \
   && mv tmpfile packages/create-redwood-app/templates/js/package.json
@@ -60,6 +62,37 @@ sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version
   packages/create-redwood-app/templates/ts/web/package.json > tmpfile \
   && mv tmpfile packages/create-redwood-app/templates/ts/web/package.json
 
+# Update all packages to replace any "workspace:*" with this canary version
+
+framework_dir="$(cd "$(dirname "$0")" && pwd)/../.."
+ws="$(yarn workspaces list --json)"
+
+IFS=$'\n'
+for line in $ws; do
+  location=$(
+    echo "$line" |
+    jq -r '.location'
+  )
+
+  relative_pkg_json_path="$location/package.json"
+
+  if [[ $location == "." ]]; then
+    printf "Skipping:\t%s\n" "$relative_pkg_json_path"
+    continue
+  fi
+
+  pkg_json_path="$framework_dir/$relative_pkg_json_path"
+  if [ ! -f "$pkg_json_path" ]; then
+    printf "ERROR:\nNo package.json found at%s\n" "$relative_pkg_json_path"
+    exit 1
+  fi
+
+  printf "Processing:\t%s\n" "$relative_pkg_json_path"
+  sed "s/workspace:\*/$(cat canary_version)/g" "$pkg_json_path" > tmpfile \
+  && mv tmpfile "$pkg_json_path"
+done
+
+# Commit the changes
 git config user.name "GitHub Actions"
 git config user.email "<>"
 

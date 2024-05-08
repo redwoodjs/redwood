@@ -27,6 +27,7 @@ const superTokensSessionRecipe: SessionRecipe = {
     loggedInUser = undefined
   },
   doesSessionExist: async () => true,
+  getAccessToken: async () => 'mock_supertokens_access_token',
   getAccessTokenPayloadSecurely: async () => {
     return {
       _jwtPName: 'token',
@@ -80,12 +81,12 @@ beforeEach(() => {
 function getSuperTokensAuth(customProviderHooks?: {
   useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
-    currentUser: CurrentUser | null
+    currentUser: CurrentUser | null,
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
   const { useAuth, AuthProvider } = createAuth(
     superTokensMockClient as SuperTokensAuth,
-    customProviderHooks
+    customProviderHooks,
   )
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,

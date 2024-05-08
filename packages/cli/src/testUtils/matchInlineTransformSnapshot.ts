@@ -1,6 +1,6 @@
-import fs from 'fs'
+import fs from 'node:fs'
 import { createRequire } from 'node:module'
-import path from 'path'
+import path from 'node:path'
 
 import tempy from 'tempy'
 import { expect } from 'vitest'
@@ -15,7 +15,7 @@ export const matchInlineTransformSnapshot = async (
   transformName: string,
   fixtureCode: string,
   expectedCode: string,
-  parser: 'ts' | 'tsx' | 'babel' = 'tsx'
+  parser: 'ts' | 'tsx' | 'babel' = 'tsx',
 ) => {
   const tempFilePath = tempy.file()
 
@@ -27,7 +27,7 @@ export const matchInlineTransformSnapshot = async (
   }
 
   const transformPath = require.resolve(
-    path.join(testPath, '../../', transformName + '.ts')
+    path.join(testPath, '../../', transformName + '.ts'),
   )
 
   // Step 1: Write passed in code to a temp file
@@ -46,5 +46,7 @@ export const matchInlineTransformSnapshot = async (
   // Step 3: Read modified file and snapshot
   const transformedContent = fs.readFileSync(tempFilePath, 'utf-8')
 
-  expect(formatCode(transformedContent)).toEqual(formatCode(expectedCode))
+  expect(await formatCode(transformedContent)).toEqual(
+    await formatCode(expectedCode),
+  )
 }

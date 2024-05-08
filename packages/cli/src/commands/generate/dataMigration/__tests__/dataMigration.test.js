@@ -6,12 +6,6 @@ import { afterEach, test, expect } from 'vitest'
 
 import * as generator from '../dataMigration'
 
-const asyncForEach = async (array, callback) => {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array)
-  }
-}
-
 const RealDate = Date
 
 afterEach(() => {
@@ -42,17 +36,14 @@ test('generates a file with a timestame in its name', async () => {
 })
 
 test('generates a file with a paramcase version of the passed name', async () => {
-  asyncForEach(
-    ['MoveUser', 'moveUser', 'move-user', 'move_user'],
-    async (name) => {
-      const files = await generator.files({ name })
-      const filename = path.parse(path.basename(Object.keys(files)[0])).name
-      const parts = filename.split('-')
-      parts.shift()
+  for (const name of ['MoveUser', 'moveUser', 'move-user', 'move_user']) {
+    const files = await generator.files({ name })
+    const filename = path.parse(path.basename(Object.keys(files)[0])).name
+    const parts = filename.split('-')
+    parts.shift()
 
-      expect(parts.join('-')).toEqual('move-user')
-    }
-  )
+    expect(parts.join('-')).toEqual('move-user')
+  }
 })
 
 test('creates a JS file with expected contents', async () => {

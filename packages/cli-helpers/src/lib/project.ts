@@ -72,7 +72,7 @@ export const updateTomlConfig = (packageName: string) => {
     }
   } else if (cliSection.plugins) {
     const packageExists = cliSection.plugins.some(
-      (plugin) => plugin.package === packageName
+      (plugin) => plugin.package === packageName,
     )
 
     if (!packageExists) {
@@ -180,7 +180,7 @@ export const setRedwoodCWD = (cwd?: string) => {
     const redwoodTOMLPath = findUp('redwood.toml', process.cwd())
     if (!redwoodTOMLPath) {
       throw new Error(
-        `Couldn't find up a "redwood.toml" file from ${process.cwd()}`
+        `Couldn't find up a "redwood.toml" file from ${process.cwd()}`,
       )
     }
     if (redwoodTOMLPath) {
@@ -202,7 +202,7 @@ export const setRedwoodCWD = (cwd?: string) => {
 export function setTomlSetting(
   section: keyof Config,
   setting: string,
-  value: string | boolean | number
+  value: string | boolean | number,
 ) {
   const redwoodTomlPath = getConfigPath()
   const originalTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
@@ -260,7 +260,7 @@ export function setTomlSetting(
         if (inSection && !updateExistingValue) {
           for (const existingSectionSetting of existingSectionSettings) {
             const matches = line.match(
-              new RegExp(`^(\\s*)${existingSectionSetting}\\s*=`, 'i')
+              new RegExp(`^(\\s*)${existingSectionSetting}\\s*=`, 'i'),
             )
 
             if (!updateExistingValue && matches) {
@@ -291,7 +291,7 @@ export function setTomlSetting(
           // find a commented value instead
           if (!updateExistingValue) {
             const matchesComment = line.match(
-              new RegExp(`^(\\s*)#(\\s*)${setting}\\s*=`, 'i')
+              new RegExp(`^(\\s*)#(\\s*)${setting}\\s*=`, 'i'),
             )
 
             if (matchesComment) {
@@ -315,7 +315,7 @@ export function setTomlSetting(
     tomlLines.splice(
       insertionIndex,
       updateExistingValue || updateExistingCommentedValue ? 1 : 0,
-      `${indentation}${setting} = ${value}`
+      `${indentation}${setting} = ${value}`,
     )
 
     newTomlContent = tomlLines.join('\n')

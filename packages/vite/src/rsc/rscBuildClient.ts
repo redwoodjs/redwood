@@ -1,55 +1,53 @@
-import path from 'node:path'
-
-import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
-import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
-import { getEnvVarDefinitions } from '../envVarDefinitions'
-import { onWarn } from '../lib/onWarn'
-
-import { rscIndexPlugin } from './rscVitePlugins'
+import { onWarn } from '../lib/onWarn.js'
+import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
+import { ensureProcessDirWeb } from '../utils.js'
 
 /**
  * RSC build. Step 2.
  * buildFeServer -> buildRscFeServer -> rscBuildClient
  * Generate the client bundle
  */
-export async function rscBuildClient(
-  webHtml: string,
-  webDist: string,
-  clientEntryFiles: Record<string, string>
-) {
+export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
+  console.log('\n')
+  console.log('2. rscBuildClient')
+  console.log('=================\n')
+
   const rwPaths = getPaths()
 
+  // Safe-guard for the future, if someone tries to include this function in
+  // code that gets executed by running `vite build` or some other bin from the
+  // cli
+  // Running the web build in the wrong working directory can lead to
+  // unintended consequences on CSS processing
+  ensureProcessDirWeb()
+
+  if (!rwPaths.web.entryClient) {
+    throw new Error('Missing web/src/entry.client')
+  }
+
   const clientBuildOutput = await viteBuild({
-    // configFile: viteConfigPath,
-    root: rwPaths.web.src,
-    envPrefix: 'REDWOOD_ENV_',
-    publicDir: path.join(rwPaths.web.base, 'public'),
     envFile: false,
-    define: getEnvVarDefinitions(),
-    plugins: [
-      react({
-        babel: {
-          ...getWebSideDefaultBabelConfig({
-            forVite: true,
-          }),
-        },
-      }),
-      rscIndexPlugin(),
-    ],
     build: {
-      outDir: webDist,
+      // TODO (RSC): Remove `minify: false` when we don't need to debug as often
+      minify: false,
+      outDir: rwPaths.web.distClient,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
-      // TODO (RSC) Enable this when we switch to a server-first approach
-      // emptyOutDir: false, // Already done when building server
       rollupOptions: {
         onwarn: onWarn,
         input: {
-          main: webHtml,
+          // @MARK: temporary hack to find the entry client so we can get the
+          // index.css bundle but we don't actually want this on an rsc page!
+          'rwjs-client-entry': rwPaths.web.entryClient,
+          // we need this, so that the output contains rsc-specific bundles
+          // for the client-only components. They get loaded once the page is
+          // rendered
           ...clientEntryFiles,
+          'rd-server': 'react-dom/server.edge',
+          'rsdw-client': 'react-server-dom-webpack/client.edge',
         },
         preserveEntrySignatures: 'exports-only',
         output: {
@@ -60,6 +58,16 @@ export async function rscBuildClient(
           // TODO (RSC): Fix when https://github.com/rollup/rollup/issues/5235
           // is resolved
           hoistTransitiveImports: false,
+          entryFileNames: (chunkInfo) => {
+            if (
+              chunkInfo.name === 'rd-server' ||
+              chunkInfo.name === 'rsdw-client'
+            ) {
+              return '[name].mjs'
+            }
+            return 'assets/[name]-[hash].mjs'
+          },
+          chunkFileNames: `assets/[name]-[hash].mjs`,
         },
       },
       manifest: 'client-build-manifest.json',
@@ -67,6 +75,7 @@ export async function rscBuildClient(
     esbuild: {
       logLevel: 'debug',
     },
+    plugins: [rscRoutesAutoLoader()],
   })
 
   if (!('output' in clientBuildOutput)) {

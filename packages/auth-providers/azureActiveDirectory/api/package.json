@@ -19,23 +19,23 @@
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "vitest run src",
-    "test:watch": "vitest watch src"
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.23.9",
-    "core-js": "3.35.1",
+    "@babel/runtime-corejs3": "7.24.1",
+    "core-js": "3.36.1",
     "jsonwebtoken": "9.0.2",
     "jwks-rsa": "3.1.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.9",
+    "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
-    "@redwoodjs/api": "7.0.0",
-    "@types/aws-lambda": "8.10.126",
-    "@types/jsonwebtoken": "9.0.5",
-    "typescript": "5.3.3",
-    "vitest": "1.2.2"
+    "@redwoodjs/api": "workspace:*",
+    "@types/aws-lambda": "8.10.136",
+    "@types/jsonwebtoken": "9.0.6",
+    "typescript": "5.4.5",
+    "vitest": "1.4.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -19,7 +19,7 @@ export type VSCodeWindowMethods = Pick<
 } & { withProgress(opts: any, task: () => void): void }
 
 export function VSCodeWindowMethods_fromConnection(
-  connection
+  connection,
 ): VSCodeWindowMethods {
   return new VSCodeWindowMethodsWrapper(connection)
 }
@@ -102,7 +102,7 @@ export class TreeItem2Wrapper {
   constructor(
     public item: TreeItem2,
     public parent?: TreeItem2Wrapper,
-    public indexInParent: number = 0
+    public indexInParent = 0,
   ) {}
   @lazy() get keys(): string[] {
     if (!this.parent) {
@@ -203,7 +203,7 @@ type RemoteTreeDataProvider = ReplacePropTypes<
 export class RemoteTreeDataProviderImpl implements RemoteTreeDataProvider {
   constructor(
     private getRoot: () => TreeItem2,
-    private refreshInterval = 5000
+    private refreshInterval = 5000,
   ) {}
 
   private root!: TreeItem2Wrapper
@@ -268,12 +268,12 @@ export class RemoteTreeDataProviderImpl implements RemoteTreeDataProvider {
 export function RemoteTreeDataProvider_publishOverLSPConnection(
   tdp: RemoteTreeDataProvider,
   connection: LSPConnection,
-  methodPrefix: string
+  methodPrefix: string,
 ) {
   const lazyInit = memoize(() => {
     // we only setup this listener if we receive a call
     tdp.onDidChangeTreeData?.((id) =>
-      connection.sendRequest(`${methodPrefix}onDidChangeTreeData`, [id])
+      connection.sendRequest(`${methodPrefix}onDidChangeTreeData`, [id]),
     )
   })
   connection.onRequest(`${methodPrefix}getChildren`, async (id) => {
@@ -295,7 +295,7 @@ export function RemoteTreeDataProvider_publishOverLSPConnection(
 }
 
 export async function ProviderResult_normalize<T>(
-  x: vscode.ProviderResult<T>
+  x: vscode.ProviderResult<T>,
 ): Promise<T | undefined> {
   if (isThenable(x)) {
     return await ProviderResult_normalize(await x)

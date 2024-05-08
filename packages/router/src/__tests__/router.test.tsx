@@ -1,33 +1,7 @@
-let mockDelay = 0
-jest.mock('../util', () => {
-  const actualUtil = jest.requireActual('../util')
-  const { lazy } = jest.requireActual('react')
-
-  return {
-    ...actualUtil,
-    normalizePage: (specOrPage: Spec | React.ComponentType<unknown>) => ({
-      name: specOrPage.name,
-      prerenderLoader: () => ({ default: specOrPage }),
-      LazyComponent: lazy(
-        () =>
-          new Promise((resolve) =>
-            setTimeout(() => resolve({ default: specOrPage }), mockDelay)
-          )
-      ),
-    }),
-  }
-})
-
 import React, { useEffect, useState } from 'react'
 
 import '@testing-library/jest-dom/jest-globals'
-import {
-  act,
-  configure,
-  fireEvent,
-  render,
-  waitFor,
-} from '@testing-library/react'
+import { act, fireEvent, render, waitFor } from '@testing-library/react'
 
 import type { AuthContextInterface, UseAuth } from '@redwoodjs/auth'
 
@@ -41,16 +15,10 @@ import {
   Redirect,
   Route,
   Router,
-  usePageLoadingContext,
-} from '../'
-import { useLocation } from '../location'
+} from '../index'
 import { useParams } from '../params'
 import { Set } from '../Set'
-import type { GeneratedRoutesMap, Spec } from '../util'
-
-/** running into intermittent test timeout behavior in https://github.com/redwoodjs/redwood/pull/4992
- attempting to work around by bumping the default timeout of 5000 */
-const timeoutForFlakeyAsyncTests = 8000
+import type { GeneratedRoutesMap } from '../util'
 
 type UnknownAuthContextInterface = AuthContextInterface<
   unknown,
@@ -71,7 +39,7 @@ type UnknownAuthContextInterface = AuthContextInterface<
 const routes = generatedRoutes as GeneratedRoutesMap
 
 function createDummyAuthContextValues(
-  partial: Partial<UnknownAuthContextInterface>
+  partial: Partial<UnknownAuthContextInterface>,
 ) {
   const authContextValues: UnknownAuthContextInterface = {
     loading: true,
@@ -114,7 +82,7 @@ const mockUseAuth =
       isAuthenticated: false,
       loading: false,
       hasRole: false,
-    }
+    },
   ) =>
   () => {
     const [authLoading, setAuthLoading] = useState(loading)
@@ -164,391 +132,9 @@ const ParamPage = ({ value, q }: { value: string; q: string }) => {
   )
 }
 
-configure({
-  asyncUtilTimeout: 5_000,
-})
-
 beforeEach(() => {
   window.history.pushState({}, '', '/')
   Object.keys(routes).forEach((key) => delete routes[key])
-})
-
-describe('slow imports', () => {
-  const HomePagePlaceholder = () => <>HomePagePlaceholder</>
-  const AboutPagePlaceholder = () => <>AboutPagePlaceholder</>
-  const ParamPagePlaceholder = () => <>ParamPagePlaceholder</>
-  const RedirectPagePlaceholder = () => <>RedirectPagePlaceholder</>
-  const PrivatePagePlaceholder = () => <>PrivatePagePlaceholder</>
-  const LoginPagePlaceholder = () => <>LoginPagePlaceholder</>
-
-  const LocationPage = () => {
-    const location = useLocation()
-
-    return (
-      <>
-        <h1>Location Page</h1>
-        <p>{location.pathname}</p>
-      </>
-    )
-  }
-
-  const PageLoadingContextLayout = ({ children }: LayoutProps) => {
-    const { loading } = usePageLoadingContext()
-
-    return (
-      <>
-        <h1>Page Loading Context Layout</h1>
-        {loading && <p>loading in layout...</p>}
-        {!loading && <p>done loading in layout</p>}
-        {children}
-      </>
-    )
-  }
-
-  const PageLoadingContextPage = () => {
-    const { loading } = usePageLoadingContext()
-
-    return (
-      <>
-        <h1>Page Loading Context Page</h1>
-        {loading && <p>loading in page...</p>}
-        {!loading && <p>done loading in page</p>}
-      </>
-    )
-  }
-
-  const TestRouter = ({
-    authenticated,
-    hasRole,
-  }: {
-    authenticated?: boolean
-    hasRole?: boolean
-  }) => (
-    <Router
-      useAuth={mockUseAuth({ isAuthenticated: authenticated, hasRole })}
-      pageLoadingDelay={0}
-    >
-      <Route
-        path="/"
-        page={HomePage}
-        name="home"
-        whileLoadingPage={HomePagePlaceholder}
-      />
-      <Route
-        path="/about"
-        page={AboutPage}
-        name="about"
-        whileLoadingPage={AboutPagePlaceholder}
-      />
-      <Route
-        path="/redirect"
-        page={RedirectPage}
-        name="redirect"
-        whileLoadingPage={RedirectPagePlaceholder}
-      />
-      <Route path="/redirect2/{value}" redirect="/param-test/{value}" />
-      <Route
-        path="/login"
-        page={LoginPage}
-        name="login"
-        whileLoadingPage={LoginPagePlaceholder}
-      />
-      <PrivateSet unauthenticated="login">
-        <Route
-          path="/private"
-          page={PrivatePage}
-          name="private"
-          whileLoadingPage={PrivatePagePlaceholder}
-        />
-      </PrivateSet>
-      <PrivateSet unauthenticated="login" roles="admin">
-        <Route
-          path="/private_with_role"
-          page={PrivatePage}
-          name="private_with_role"
-          whileLoadingPage={PrivatePagePlaceholder}
-        />
-      </PrivateSet>
-      {/* Keeping this one around for now, so we don't accidentally break
-      Private until we're ready to remove it */}
-      <Private unauthenticated="login" roles={['admin', 'moderator']}>
-        <Route
-          path="/private_with_several_roles"
-          page={PrivatePage}
-          name="private_with_several_roles"
-          whileLoadingPage={PrivatePagePlaceholder}
-        />
-      </Private>
-      <Route
-        path="/param-test/{value}"
-        page={ParamPage}
-        name="params"
-        whileLoadingPage={ParamPagePlaceholder}
-      />
-      <Route path="/location" page={LocationPage} name="home" />
-      <Set wrap={PageLoadingContextLayout}>
-        <Route
-          path="/page-loading-context"
-          page={PageLoadingContextPage}
-          name="pageLoadingContext"
-        />
-      </Set>
-      <Route notfound page={NotFoundPage} />
-    </Router>
-  )
-
-  beforeEach(() => {
-    // One of the tests modifies this, so we need to reset it before each test
-    mockDelay = 400
-  })
-
-  afterEach(() => {
-    mockDelay = 0
-  })
-
-  test(
-    'Basic home page',
-    async () => {
-      const screen = render(<TestRouter />)
-
-      await waitFor(() => screen.getByText('HomePagePlaceholder'))
-      await waitFor(() => screen.getByText('Home Page'))
-    },
-    timeoutForFlakeyAsyncTests
-  )
-
-  test(
-    'Navigation',
-    async () => {
-      const screen = render(<TestRouter />)
-      // First we should render an empty page while waiting for pageLoadDelay to
-      // pass
-
-      //TODO: implement pageLoadDelay potentially don't need with preloading features
-      // expect(screen.container).toBeEmptyDOMElement()
-
-      // Then we should render whileLoadingPage
-      await waitFor(() => screen.getByText('HomePagePlaceholder'))
-
-      // Finally we should render the actual page
-      await waitFor(() => screen.getByText('Home Page'))
-
-      act(() => navigate('/about'))
-
-      // Now after navigating we should keep rendering the previous page until
-      // the new page has loaded, or until pageLoadDelay has passed. This
-      // ensures we don't show a "white flash", i.e. render an empty page, while
-      // navigating the page
-      expect(screen.container).not.toBeEmptyDOMElement()
-      await waitFor(() => screen.getByText('Home Page'))
-      expect(screen.container).not.toBeEmptyDOMElement()
-
-      // As for HomePage we first render the placeholder...
-      await waitFor(() => screen.getByText('AboutPagePlaceholder'))
-      // ...and then the actual page
-      await waitFor(() => screen.getByText('About Page'))
-    },
-    timeoutForFlakeyAsyncTests
-  )
-
-  test(
-    'Redirect page',
-    async () => {
-      act(() => navigate('/redirect'))
-      const screen = render(<TestRouter />)
-      await waitFor(() => screen.getByText('RedirectPagePlaceholder'))
-      await waitFor(() => screen.getByText('About Page'))
-    },
-    timeoutForFlakeyAsyncTests
-  )
-
-  test(
-    'Redirect route',
-    async () => {
-      const screen = render(<TestRouter />)
-      await waitFor(() => screen.getByText('HomePagePlaceholder'))
-      await waitFor(() => screen.getByText('Home Page'))
-      act(() => navigate('/redirect2/redirected?q=cue'))
-      await waitFor(() => screen.getByText('ParamPagePlaceholder'))
-      await waitFor(() => screen.getByText('param redirectedcue'))
-    },
-    timeoutForFlakeyAsyncTests
-  )
-
-  test(
-    'Private page when not authenticated',
-    async () => {
-      act(() => navigate('/private'))
-      const screen = render(<TestRouter />)
-      await waitFor(() => {
-        expect(
-          screen.queryByText('PrivatePagePlaceholder')
-        ).not.toBeInTheDocument()
-        expect(screen.queryByText('Private Page')).not.toBeInTheDocument()
-        expect(screen.queryByText('LoginPagePlaceholder')).toBeInTheDocument()
-      })
-      await waitFor(() => screen.getByText('Login Page'))
-    },
-    timeoutForFlakeyAsyncTests
-  )
-
-  test(
-    'Private page when authenticated',
-    async () => {
-      act(() => navigate('/private'))
-      const screen = render(<TestRouter authenticated={true} />)
-
-      await waitFor(() => screen.getByText('PrivatePagePlaceholder'))
-      await waitFor(() => screen.getByText('Private Page'))
-      await waitFor(() => {
-        expect(screen.queryByText('Login Page')).not.toBeInTheDocument()
-      })
-    },
-    timeoutForFlakeyAsyncTests
-  )
-
-  test(
-    'Private page when authenticated but does not have the role',
-    async () => {
-      act(() => navigate('/private_with_role'))
-      const screen = render(<TestRouter authenticated={true} hasRole={false} />)
-
-      await waitFor(() => {
-        expect(
-          screen.queryByText('PrivatePagePlaceholder')
-        ).not.toBeInTheDocument()
-        expect(screen.queryByText('Private Page')).not.toBeInTheDocument()
-        expect(screen.queryByText('LoginPagePlaceholder')).toBeInTheDocument()
-      })
-      await waitFor(() => screen.getByText('Login Page'))
-    },
-    timeoutForFlakeyAsyncTests
-  )
-
-  test(
-    'Private page when authenticated but does have the role',
-    async () => {
-      act(() => navigate('/private_with_role'))
-      const screen = render(<TestRouter authenticated={true} hasRole={true} />)
-
-      await waitFor(() => {
-        expect(
-          screen.queryByText('PrivatePagePlaceholder')
-        ).not.toBeInTheDocument()
-        expect(screen.queryByText('Private Page')).toBeInTheDocument()
-      })
-    },
-    timeoutForFlakeyAsyncTests
-  )
-
-  test(
-    'useLocation',
-    async () => {
-      act(() => navigate('/location'))
-      const screen = render(<TestRouter />)
-      await waitFor(() => screen.getByText('Location Page'))
-      await waitFor(() => screen.getByText('/location'))
-
-      act(() => navigate('/about'))
-      // After navigating we will keep rendering the previous page for 100 ms,
-      // (which is our configured delay) before rendering the "whileLoading"
-      // page.
-      // TODO: We don't currently implement page loading delay anymore
-      // await waitFor(() => screen.getByText('Location Page'))
-
-      // And then we'll render the placeholder...
-      await waitFor(() => screen.getByText('AboutPagePlaceholder'))
-      // ...followed by the actual page
-      await waitFor(() => screen.getByText('About Page'))
-    },
-    timeoutForFlakeyAsyncTests
-  )
-
-  test(
-    'path params should never be empty',
-    async () => {
-      const PathParamPage = ({ value }: { value: string }) => {
-        expect(value).not.toBeFalsy()
-        return <p>{value}</p>
-      }
-
-      const TestRouter = () => (
-        <Router pageLoadingDelay={100}>
-          <Route
-            path="/about"
-            page={AboutPage}
-            name="about"
-            whileLoadingPage={AboutPagePlaceholder}
-          />
-          <Route
-            path="/path-param-test/{value}"
-            page={PathParamPage}
-            name="params"
-            whileLoadingPage={ParamPagePlaceholder}
-          />
-        </Router>
-      )
-
-      act(() => navigate('/path-param-test/test_value'))
-      const screen = render(<TestRouter />)
-
-      // First we render the path parameter value "test_value"
-      await waitFor(() => screen.getByText('test_value'))
-
-      act(() => navigate('/about'))
-      // After navigating we should keep displaying the old path value...
-      await waitFor(() => screen.getByText('test_value'))
-      // ...until we switch over to render the about page loading component...
-      await waitFor(() => screen.getByText('AboutPagePlaceholder'))
-      // ...followed by the actual page
-      await waitFor(() => screen.getByText('About Page'))
-    },
-    timeoutForFlakeyAsyncTests
-  )
-
-  test(
-    'usePageLoadingContext',
-    async () => {
-      // We want to show a loading indicator if loading pages is taking a long
-      // time. But at the same time we don't want to show it right away, because
-      // then there'll be a flash of the loading indicator on every page load.
-      // So we have a `pageLoadingDelay` delay to control how long it waits
-      // before showing the loading state (default is 1000 ms).
-      //
-      // RW lazy loads pages by default, that's why it could potentially take a
-      // while to load a page. But during tests we don't do that. So we have to
-      // fake a delay. That's what `mockDelay` is for. `mockDelay` has to be
-      // longer than `pageLoadingDelay`, but not too long so the test takes
-      // longer than it has to, and also not too long so the entire test times
-      // out.
-
-      // Had to increase this to make the test pass on Windows
-      mockDelay = 700
-
-      // <TestRouter> sets pageLoadingDelay={200}. (Default is 1000.)
-      const screen = render(<TestRouter />)
-
-      act(() => navigate('/page-loading-context'))
-
-      // 'Page Loading Context Layout' should always be shown
-      await waitFor(() => screen.getByText('Page Loading Context Layout'))
-
-      // 'loading in layout...' should only be shown while the page is loading.
-      // So in this case, for the first 700ms
-      await waitFor(() => screen.getByText('loading in layout...'))
-
-      // After 700ms 'Page Loading Context Page' should be rendered
-      await waitFor(() => screen.getByText('Page Loading Context Page'))
-
-      // This shouldn't show up, because the page shouldn't render before it's
-      // fully loaded
-      expect(screen.queryByText('loading in page...')).not.toBeInTheDocument()
-
-      await waitFor(() => screen.getByText('done loading in page'))
-      await waitFor(() => screen.getByText('done loading in layout'))
-    },
-    timeoutForFlakeyAsyncTests
-  )
 })
 
 describe('inits routes and navigates as expected', () => {
@@ -651,14 +237,14 @@ describe('test params escaping', () => {
   test('Params with unreserved characters work in path and query', async () => {
     const screen = getScreen()
     act(() =>
-      navigate(routes.params({ value: 'example.com', q: 'example.com' }))
+      navigate(routes.params({ value: 'example.com', q: 'example.com' })),
     )
     await waitFor(() => {
       expect(
-        screen.queryByText('param example.comexample.com')
+        screen.queryByText('param example.comexample.com'),
       ).toBeInTheDocument()
       expect(
-        screen.queryByText('hookparams example.com?example.com')
+        screen.queryByText('hookparams example.com?example.com'),
       ).toBeInTheDocument()
     })
   })
@@ -666,15 +252,15 @@ describe('test params escaping', () => {
   test('Params with reserved characters work in path and query', async () => {
     const screen = getScreen()
     act(() =>
-      navigate(routes.params({ value: 'example!com', q: 'example!com' }))
+      navigate(routes.params({ value: 'example!com', q: 'example!com' })),
     )
 
     await waitFor(() => {
       expect(
-        screen.queryByText('param example!comexample!com')
+        screen.queryByText('param example!comexample!com'),
       ).toBeInTheDocument()
       expect(
-        screen.queryByText('hookparams example!com?example!com')
+        screen.queryByText('hookparams example!com?example!com'),
       ).toBeInTheDocument()
     })
   })
@@ -682,15 +268,15 @@ describe('test params escaping', () => {
   test('Params with unsafe characters work in query, are escaped in path', async () => {
     const screen = getScreen()
     act(() =>
-      navigate(routes.params({ value: 'example com', q: 'example com' }))
+      navigate(routes.params({ value: 'example com', q: 'example com' })),
     )
 
     await waitFor(() => {
       expect(
-        screen.queryByText('param example%20comexample com')
+        screen.queryByText('param example%20comexample com'),
       ).toBeInTheDocument()
       expect(
-        screen.queryByText('hookparams example%20com?example com')
+        screen.queryByText('hookparams example%20com?example com'),
       ).toBeInTheDocument()
     })
   })
@@ -702,7 +288,7 @@ describe('test params escaping', () => {
     await waitFor(() => {
       expect(screen.queryByText('param exampleexample/com')).toBeInTheDocument()
       expect(
-        screen.queryByText('hookparams example?example/com')
+        screen.queryByText('hookparams example?example/com'),
       ).toBeInTheDocument()
     })
   })
@@ -710,7 +296,7 @@ describe('test params escaping', () => {
   test('Character / is not captured as part of a param in path', async () => {
     const screen = getScreen()
     act(() =>
-      navigate(routes.params({ value: 'example/com', q: 'example/com' }))
+      navigate(routes.params({ value: 'example/com', q: 'example/com' })),
     )
 
     await waitFor(() => screen.getByText('404'))
@@ -814,7 +400,7 @@ test('unauthenticated user is redirected including search params', async () => {
     expect(screen.queryByText(/Private Page/i)).not.toBeInTheDocument()
     expect(window.location.pathname).toBe('/login')
     expect(window.location.search).toBe(
-      `?redirectTo=/private${encodeURIComponent('?bazinga=yeah')}`
+      `?redirectTo=/private${encodeURIComponent('?bazinga=yeah')}`,
     )
     screen.getByText(/Login Page/i)
   })
@@ -1590,7 +1176,7 @@ describe('Unauthorized redirect error messages', () => {
 
     act(() => navigate('/private'))
     expect(() => render(<TestRouter authenticated={false} />)).toThrow(
-      'We could not find a route named does-not-exist'
+      'We could not find a route named does-not-exist',
     )
   })
 
@@ -1608,7 +1194,7 @@ describe('Unauthorized redirect error messages', () => {
     act(() => navigate('/private'))
     expect(() => render(<TestRouter authenticated={false} />)).toThrow(
       'Redirecting to route "params" would require route parameters, which ' +
-        'currently is not supported. Please choose a different route'
+        'currently is not supported. Please choose a different route',
     )
   })
 })
@@ -1671,7 +1257,7 @@ describe('Multiple nested private sets', () => {
           isAuthenticated: true,
           hasRole: false,
         })}
-      />
+      />,
     )
 
     act(() => navigate('/employee'))
@@ -1689,7 +1275,7 @@ describe('Multiple nested private sets', () => {
           isAuthenticated: false,
           hasRole: false,
         })}
-      />
+      />,
     )
 
     act(() => navigate('/employee'))
@@ -1709,7 +1295,7 @@ describe('Multiple nested private sets', () => {
             return role.includes('ADMIN')
           },
         })}
-      />
+      />,
     )
 
     act(() => navigate('/admin'))
@@ -1727,7 +1313,7 @@ describe('Multiple nested private sets', () => {
             return role.includes('ADMIN')
           },
         })}
-      />
+      />,
     )
 
     act(() => navigate('/admin'))

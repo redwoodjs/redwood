@@ -1,5 +1,8 @@
-import type { CurrentUser } from '@redwoodjs/auth'
-import { createAuthentication } from '@redwoodjs/auth'
+import type { CurrentUser, CustomProviderHooks } from '@redwoodjs/auth'
+import {
+  createAuthentication,
+  getCurrentUserFromMiddleware,
+} from '@redwoodjs/auth'
 
 import type { WebAuthnClientType } from './webAuthn'
 
@@ -17,15 +20,34 @@ export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
 const TOKEN_CACHE_TIME = 5000
 
+// This is the middleware-edition auth function
+// Overrides the default getCurrentUser to fetch it from middleware instead
+function createMiddlewareAuth(
+  dbAuthClient: ReturnType<typeof createDbAuthClient>,
+  customProviderHooks?: CustomProviderHooks,
+) {
+  return createAuthentication(dbAuthClient, {
+    ...customProviderHooks,
+    // @MARK This is key! 👇
+    useCurrentUser:
+      customProviderHooks?.useCurrentUser ??
+      (() => getCurrentUserFromMiddleware(dbAuthClient.getAuthUrl())),
+  })
+}
+
 export function createAuth(
   dbAuthClient: ReturnType<typeof createDbAuthClient>,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null
+      currentUser: CurrentUser | null,
     ) => (rolesToCheck: string | string[]) => boolean
-  }
+  },
 ) {
+  if (dbAuthClient.middlewareAuthEnabled) {
+    return createMiddlewareAuth(dbAuthClient, customProviderHooks)
+  }
+
   return createAuthentication(dbAuthClient, customProviderHooks)
 }
 
@@ -35,12 +57,14 @@ export interface DbAuthClientArgs {
   fetchConfig?: {
     credentials?: 'include' | 'same-origin'
   }
+  middleware?: boolean
 }
 
 export function createDbAuthClient({
   webAuthn,
   dbAuthUrl,
   fetchConfig,
+  middleware = RWJS_ENV.RWJS_EXP_STREAMING_SSR,
 }: DbAuthClientArgs = {}) {
   const credentials = fetchConfig?.credentials || 'same-origin'
   webAuthn?.setAuthApiUrl(dbAuthUrl)
@@ -49,8 +73,12 @@ export function createDbAuthClient({
   let lastTokenCheckAt = new Date('1970-01-01T00:00:00')
   let cachedToken: string | null
 
-  const getApiDbAuthUrl = () => {
-    return dbAuthUrl || `${RWJS_API_URL}/auth`
+  const getDbAuthUrl = () => {
+    if (dbAuthUrl) {
+      return dbAuthUrl
+    }
+
+    return middleware ? `/middleware/dbauth` : `${RWJS_API_URL}/auth`
   }
 
   const resetAndFetch = async (...params: Parameters<typeof fetch>) => {
@@ -69,7 +97,7 @@ export function createDbAuthClient({
   }
 
   const forgotPassword = async (username: string) => {
-    const response = await resetAndFetch(getApiDbAuthUrl(), {
+    const response = await resetAndFetch(getDbAuthUrl(), {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -80,6 +108,10 @@ export function createDbAuthClient({
   }
 
   const getToken = async () => {
+    // Middleware auth providers doesn't need a token
+    if (middleware) {
+      return null
+    }
     // Return the existing fetch promise, so that parallel calls
     // to getToken only cause a single fetch
     if (getTokenPromise) {
@@ -87,7 +119,7 @@ export function createDbAuthClient({
     }
 
     if (isTokenCacheExpired()) {
-      getTokenPromise = fetch(`${getApiDbAuthUrl()}?method=getToken`, {
+      getTokenPromise = fetch(`${getDbAuthUrl()}?method=getToken`, {
         credentials,
       })
         .then((response) => response.text())
@@ -110,7 +142,7 @@ export function createDbAuthClient({
   }
 
   const login = async ({ username, password }: LoginAttributes) => {
-    const response = await resetAndFetch(getApiDbAuthUrl(), {
+    const response = await resetAndFetch(getDbAuthUrl(), {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -121,7 +153,7 @@ export function createDbAuthClient({
   }
 
   const logout = async () => {
-    await resetAndFetch(getApiDbAuthUrl(), {
+    await resetAndFetch(getDbAuthUrl(), {
       credentials,
       method: 'POST',
       body: JSON.stringify({ method: 'logout' }),
@@ -131,7 +163,7 @@ export function createDbAuthClient({
   }
 
   const resetPassword = async (attributes: ResetPasswordAttributes) => {
-    const response = await resetAndFetch(getApiDbAuthUrl(), {
+    const response = await resetAndFetch(getDbAuthUrl(), {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -142,7 +174,7 @@ export function createDbAuthClient({
   }
 
   const signup = async (attributes: SignupAttributes) => {
-    const response = await resetAndFetch(getApiDbAuthUrl(), {
+    const response = await resetAndFetch(getDbAuthUrl(), {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -153,7 +185,7 @@ export function createDbAuthClient({
   }
 
   const validateResetToken = async (resetToken: string | null) => {
-    const response = await resetAndFetch(getApiDbAuthUrl(), {
+    const response = await resetAndFetch(getDbAuthUrl(), {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -163,6 +195,13 @@ export function createDbAuthClient({
     return response.json()
   }
 
+  /*
+   * dbAuth doesn't implement the concept of userMetadata. We used to return the token (i.e. userId) as the userMetadata.
+   */
+  const getUserMetadata = async () => {
+    return middleware ? () => {} : getToken()
+  }
+
   return {
     type: 'dbAuth',
     client: webAuthn,
@@ -170,9 +209,14 @@ export function createDbAuthClient({
     logout,
     signup,
     getToken,
-    getUserMetadata: getToken,
+    getUserMetadata,
     forgotPassword,
     resetPassword,
     validateResetToken,
+    // 👇 New methods for middleware auth
+    // so we can get the dbAuthUrl in getCurrentUserFromMiddleware
+    getAuthUrl: getDbAuthUrl,
+    // This is so that we can skip fetching getCurrentUser in reauthenticate
+    middlewareAuthEnabled: middleware,
   }
 }

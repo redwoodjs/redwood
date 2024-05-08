@@ -58,7 +58,7 @@ type ResolvedOptions = Required<
 
 export function resolveOptions(
   options: CreateServerOptions = {},
-  args?: string[]
+  args?: string[],
 ) {
   options.parseArgs ??= true
 

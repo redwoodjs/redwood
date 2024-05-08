@@ -71,7 +71,7 @@ describe('User specified imports, with static imports', () => {
 
     const routesFile = getPaths().web.routes
     const prerenderResult = await vitePrebuildWebFile(routesFile, {
-      prerender: true,
+      forPrerender: true,
       forJest: true,
       forVite: true,
     })

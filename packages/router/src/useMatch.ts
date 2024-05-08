@@ -49,7 +49,7 @@ export const useMatch = (routePath: string, options?: UseMatchOptions) => {
         return !locationParams.has(param)
       } else {
         return Object.keys(param).some(
-          (key) => param[key] != locationParams.get(key)
+          (key) => param[key] != locationParams.get(key),
         )
       }
     })

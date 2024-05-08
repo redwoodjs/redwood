@@ -17,8 +17,8 @@ import '../../../../lib/test'
 import { files } from '../../../generate/component/component'
 import { tasks } from '../component'
 
-beforeEach(() => {
-  vol.fromJSON(files({ name: 'About' }))
+beforeEach(async () => {
+  vol.fromJSON(await files({ name: 'About' }))
   vi.spyOn(console, 'info').mockImplementation(() => {})
   vi.spyOn(console, 'log').mockImplementation(() => {})
 })
@@ -35,15 +35,15 @@ test('destroys component files', async () => {
   const t = tasks({ componentName: 'component', filesFn: files, name: 'About' })
   t.options.renderer = 'silent'
 
-  return t.run().then(() => {
-    const generatedFiles = Object.keys(files({ name: 'About' }))
+  return t.run().then(async () => {
+    const generatedFiles = Object.keys(await files({ name: 'About' }))
     expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
     generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
   })
 })
 
 test('destroys component files including stories and tests', async () => {
-  vol.fromJSON(files({ name: 'About', stories: true, tests: true }))
+  vol.fromJSON(await files({ name: 'About', stories: true, tests: true }))
   const unlinkSpy = vi.spyOn(fs, 'unlinkSync')
   const t = tasks({
     componentName: 'component',
@@ -54,9 +54,9 @@ test('destroys component files including stories and tests', async () => {
   })
   t.options.renderer = 'silent'
 
-  return t.run().then(() => {
+  return t.run().then(async () => {
     const generatedFiles = Object.keys(
-      files({ name: 'About', stories: true, tests: true })
+      await files({ name: 'About', stories: true, tests: true }),
     )
     expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
     generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))

@@ -34,11 +34,11 @@ export const builder = (yargs) => {
     })
     .epilogue(
       `For all available flags, run jest cli directly ${c.green(
-        'yarn jest --help'
+        'yarn jest --help',
       )}\n\nAlso see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#test'
-      )}\n`
+        'https://redwoodjs.com/docs/cli-commands#test',
+      )}\n`,
     )
 }
 

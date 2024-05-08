@@ -57,7 +57,7 @@ describe('rw destroy service', () => {
 
       return t.run().then(async () => {
         const generatedFiles = Object.keys(
-          await files({ ...getDefaultArgs(builder), name: 'User' })
+          await files({ ...getDefaultArgs(builder), name: 'User' }),
         )
         expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
         generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
@@ -72,7 +72,7 @@ describe('rw destroy service', () => {
           ...getDefaultArgs(builder),
           typescript: true,
           name: 'User',
-        })
+        }),
       )
     })
 
@@ -91,7 +91,7 @@ describe('rw destroy service', () => {
             ...getDefaultArgs(builder),
             typescript: true,
             name: 'User',
-          })
+          }),
         )
         expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
         generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))

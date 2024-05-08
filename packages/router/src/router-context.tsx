@@ -3,7 +3,8 @@ import React, { createContext, useContext, useMemo } from 'react'
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import { useNoAuth } from '@redwoodjs/auth'
 
-import type { ParamType, analyzeRoutes } from './util'
+import type { analyzeRoutes } from './analyzeRoutes'
+import type { ParamType } from './util'
 
 type UseAuth = () => AuthContextInterface<
   unknown,
@@ -51,7 +52,7 @@ export const RouterContextProvider: React.FC<RouterContextProviderProps> = ({
       routes,
       activeRouteName,
     }),
-    [useAuth, paramTypes, routes, activeRouteName]
+    [useAuth, paramTypes, routes, activeRouteName],
   )
 
   return (
@@ -66,7 +67,7 @@ export const useRouterState = () => {
 
   if (context === undefined) {
     throw new Error(
-      'useRouterState must be used within a RouterContextProvider'
+      'useRouterState must be used within a RouterContextProvider',
     )
   }
 

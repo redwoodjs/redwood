@@ -2,7 +2,7 @@
 import { createRequire } from 'module'
 
 const requireFromCli = createRequire(
-  require.resolve('@redwoodjs/cli/package.json')
+  require.resolve('@redwoodjs/cli/package.json'),
 )
 
 const bins = requireFromCli('./package.json')['bin']

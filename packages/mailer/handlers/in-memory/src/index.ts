@@ -27,7 +27,7 @@ export class InMemoryMailHandler extends AbstractMailHandler {
     content: MailRenderedContent,
     sendOptions: MailSendOptionsComplete,
     _handlerOptions?: never,
-    utilities?: MailUtilities
+    utilities?: MailUtilities,
   ): MailResult | Promise<MailResult> {
     this.inbox.push({
       ...sendOptions,

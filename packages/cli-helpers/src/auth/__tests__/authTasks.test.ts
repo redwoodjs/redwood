@@ -97,13 +97,13 @@ beforeEach(() => {
   vi.mocked(isTypeScriptProject).mockReturnValue(true)
   vi.mocked(getPaths).mockReturnValue(
     // @ts-expect-error - We are not returning a full set of mock paths here
-    mockedPathGenerator('App.tsx', 'Routes.tsx')
+    mockedPathGenerator('App.tsx', 'Routes.tsx'),
   )
 
   vol.fromJSON({
     [path.join(
       getPaths().base,
-      platformPath('/templates/web/auth.ts.template')
+      platformPath('/templates/web/auth.ts.template'),
     )]: '// web auth template',
     [getPaths().web.app]: webAppTsx,
     [getPaths().api.graphql]: graphqlTs,
@@ -115,7 +115,7 @@ describe('authTasks', () => {
   it('Should update App.{jsx,tsx}, Routes.{jsx,tsx} and add auth.ts (Auth0)', () => {
     const templatePath = path.join(
       getPaths().base,
-      platformPath('/templates/web/auth.ts.template')
+      platformPath('/templates/web/auth.ts.template'),
     )
 
     vol.fromJSON({
@@ -142,7 +142,7 @@ describe('authTasks', () => {
   it('Should update App.{jsx,tsx}, Routes.{jsx,tsx} and add auth.ts (Clerk)', () => {
     const templatePath = path.join(
       getPaths().base,
-      platformPath('/templates/web/auth.tsx.template')
+      platformPath('/templates/web/auth.tsx.template'),
     )
 
     // NOTE: We reset here because we had to remove the `auth.ts.template`
@@ -313,8 +313,8 @@ describe('authTasks', () => {
       expect(hasAuthProvider('<AuthProvider>')).toBeTruthy()
       expect(
         hasAuthProvider(
-          '<AuthProvider client={netlifyIdentity} type="netlify">'
-        )
+          '<AuthProvider client={netlifyIdentity} type="netlify">',
+        ),
       ).toBeTruthy()
       expect(hasAuthProvider('<AuthProviderFoo')).toBeFalsy()
       expect(hasAuthProvider('</AuthProvider>')).toBeFalsy()
@@ -456,7 +456,7 @@ describe('authTasks', () => {
             </RedwoodProvider>
           </FatalErrorBoundary>
         )
-      `.replace(/\n/g, '\r\n')
+      `.replace(/\n/g, '\r\n'),
       )
     })
 
@@ -538,7 +538,7 @@ describe('authTasks', () => {
             </RedwoodProvider>
           </FatalErrorBoundary>
         )
-      `.replace(/\n/g, '\r\n')
+      `.replace(/\n/g, '\r\n'),
       )
     })
 
@@ -596,7 +596,7 @@ describe('authTasks', () => {
             </RedwoodProvider>
           </FatalErrorBoundary>
         )
-      `.replace(/\n/g, '\r\n')
+      `.replace(/\n/g, '\r\n'),
       )
     })
 
@@ -640,11 +640,11 @@ describe('authTasks', () => {
     createWebAuth(getPaths().base, false).task(ctx)
 
     expect(
-      fs.readFileSync(path.join(getPaths().web.src, 'auth.ts'), 'utf-8')
+      fs.readFileSync(path.join(getPaths().web.src, 'auth.ts'), 'utf-8'),
     ).toMatchSnapshot()
   })
 
-  it('writes an auth.js file for JS projects', () => {
+  it('writes an auth.js file for JS projects', async () => {
     vi.mocked(isTypeScriptProject).mockReturnValue(false)
 
     vol.fromJSON({
@@ -656,10 +656,10 @@ describe('authTasks', () => {
       provider: 'auth0',
       setupMode: 'FORCE',
     }
-    createWebAuth(getPaths().base, false).task(ctx)
+    await createWebAuth(getPaths().base, false).task(ctx)
 
     expect(
-      fs.readFileSync(path.join(getPaths().web.src, 'auth.js'), 'utf-8')
+      fs.readFileSync(path.join(getPaths().web.src, 'auth.js'), 'utf-8'),
     ).toMatchSnapshot()
   })
 })

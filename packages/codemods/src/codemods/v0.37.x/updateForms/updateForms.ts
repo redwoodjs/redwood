@@ -6,7 +6,7 @@ export default function transform(file: FileInfo, api: API) {
   const j = api.jscodeshift
 
   const mapTransformValueToValidationProperty = (
-    transformValue: TransformValue
+    transformValue: TransformValue,
   ) => {
     const j = api.jscodeshift
 
@@ -14,27 +14,27 @@ export default function transform(file: FileInfo, api: API) {
       case 'Float':
         return j.objectProperty(
           j.identifier('valueAsNumber'),
-          j.booleanLiteral(true)
+          j.booleanLiteral(true),
         )
       case 'Json':
         return j.objectProperty(
           j.identifier('valueAsJSON'),
-          j.booleanLiteral(true)
+          j.booleanLiteral(true),
         )
       case 'Int':
         return j.objectProperty(
           j.identifier('valueAsNumber'),
-          j.booleanLiteral(true)
+          j.booleanLiteral(true),
         )
       case 'Boolean':
         return j.objectProperty(
           j.identifier('valueAsBoolean'),
-          j.booleanLiteral(true)
+          j.booleanLiteral(true),
         )
       case 'DateTime':
         return j.objectProperty(
           j.identifier('valueAsDate'),
-          j.booleanLiteral(true)
+          j.booleanLiteral(true),
         )
     }
   }
@@ -52,7 +52,7 @@ export default function transform(file: FileInfo, api: API) {
         j.JSXIdentifier,
         {
           name: 'validation',
-        }
+        },
       )
 
       // formValidationProp is an array so we have to iterate over it.
@@ -78,15 +78,15 @@ export default function transform(file: FileInfo, api: API) {
             const validationAttribute = field.node.attributes.filter(
               (attr: any) => {
                 return attr.name.name === 'validation'
-              }
+              },
             )
             const validationAttributeObjectProperties =
               validationAttribute[0].value.expression.properties
 
             validationAttributeObjectProperties.push(
               mapTransformValueToValidationProperty(
-                transformValue as TransformValue
-              )
+                transformValue as TransformValue,
+              ),
             )
           } else {
             // add the whole validation attribute
@@ -95,10 +95,10 @@ export default function transform(file: FileInfo, api: API) {
               j.jsxExpressionContainer(
                 j.objectExpression([
                   mapTransformValueToValidationProperty(
-                    transformValue as TransformValue
+                    transformValue as TransformValue,
                   ),
-                ])
-              )
+                ]),
+              ),
             )
 
             field.value.attributes.push(prop)

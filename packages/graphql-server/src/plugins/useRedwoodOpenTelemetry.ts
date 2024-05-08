@@ -29,7 +29,7 @@ type PluginContext = {
 }
 
 export const useRedwoodOpenTelemetry = (
-  options: RedwoodOpenTelemetryConfig
+  options: RedwoodOpenTelemetryConfig,
 ): Plugin<PluginContext> => {
   const spanKind: SpanKind = SpanKind.SERVER
   const spanAdditionalAttributes: Attributes = {}
@@ -48,7 +48,7 @@ export const useRedwoodOpenTelemetry = (
             ) {
               const ctx = opentelemetry.trace.setSpan(
                 opentelemetry.context.active(),
-                context[tracingSpanSymbol]
+                context[tracingSpanSymbol],
               )
               const { fieldName, returnType, parentType } = info
               return tracer.startActiveSpan(
@@ -74,11 +74,11 @@ export const useRedwoodOpenTelemetry = (
                     }
                     resolverSpan.end()
                   }
-                }
+                },
               )
             }
             return () => {}
-          })
+          }),
         )
       }
     },
@@ -95,7 +95,7 @@ export const useRedwoodOpenTelemetry = (
             ...(options.variables
               ? {
                   [AttributeName.EXECUTION_VARIABLES]: JSON.stringify(
-                    args.variableValues ?? {}
+                    args.variableValues ?? {},
                   ),
                 }
               : {}),
@@ -108,7 +108,7 @@ export const useRedwoodOpenTelemetry = (
                 executionSpan.end()
                 // eslint-disable-next-line no-console
                 console.warn(
-                  `Plugin "RedwoodOpenTelemetry" encountered an AsyncIterator which is not supported yet, so tracing data is not available for the operation.`
+                  `Plugin "RedwoodOpenTelemetry" encountered an AsyncIterator which is not supported yet, so tracing data is not available for the operation.`,
                 )
                 return
               }
@@ -116,7 +116,7 @@ export const useRedwoodOpenTelemetry = (
               if (result.data && options.result) {
                 executionSpan.setAttribute(
                   AttributeName.EXECUTION_RESULT,
-                  JSON.stringify(result)
+                  JSON.stringify(result),
                 )
               }
 
@@ -138,7 +138,7 @@ export const useRedwoodOpenTelemetry = (
           }
 
           return resultCbs
-        }
+        },
       )
     },
   }

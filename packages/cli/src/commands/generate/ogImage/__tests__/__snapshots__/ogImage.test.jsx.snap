@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ogImage generator > files > returns the template to be written 1`] = `
+"export const data = async () => {
+  return new Date()
+}
+
+export const output = ({ data }) => {
+  return (
+    <>
+      <h1>AboutPage og:image</h1>
+      <p>
+        Find me in <code>./web/src/pages/AboutPage/AboutPage.og.jsx</code>
+      </p>
+      <p>The time is now {data.toISOString()}</p>
+    </>
+  )
+}
+"
+`;

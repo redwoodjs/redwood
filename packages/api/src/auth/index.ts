@@ -1,20 +1,21 @@
 export * from './parseJWT'
 
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+import { parse as parseCookie } from 'cookie'
 
 import { getEventHeader } from '../event'
 
 import type { Decoded } from './parseJWT'
 export type { Decoded }
 
-// This is shared by `@redwoodjs/web`
-const AUTH_PROVIDER_HEADER = 'auth-provider'
+// This is shared by `@redwoodjs/web` as well as used on auth middleware
+export const AUTH_PROVIDER_HEADER = 'auth-provider'
 
 export const getAuthProviderHeader = (
-  event: APIGatewayProxyEvent | Request
+  event: APIGatewayProxyEvent | Request,
 ) => {
   const authProviderKey = Object.keys(event?.headers ?? {}).find(
-    (key) => key.toLowerCase() === AUTH_PROVIDER_HEADER
+    (key) => key.toLowerCase() === AUTH_PROVIDER_HEADER,
   )
   if (authProviderKey) {
     return getEventHeader(event, authProviderKey)
@@ -27,13 +28,40 @@ export interface AuthorizationHeader {
   token: string
 }
 
+export type AuthorizationCookies = {
+  parsedCookie: Record<string, string>
+  rawCookie: string
+  type: string
+} | null
+
+export const parseAuthorizationCookie = (
+  event: APIGatewayProxyEvent | Request,
+): AuthorizationCookies => {
+  const cookie = getEventHeader(event, 'Cookie')
+
+  // Unauthenticated request
+  if (!cookie) {
+    return null
+  }
+
+  const parsedCookie = parseCookie(cookie)
+
+  return {
+    parsedCookie,
+    rawCookie: cookie,
+    // When not unauthenticated, this will be null/undefined
+    // Remember that the cookie header could contain other (unrelated) values!
+    type: parsedCookie[AUTH_PROVIDER_HEADER],
+  }
+}
+
 /**
  * Split the `Authorization` header into a schema and token part.
  */
 export const parseAuthorizationHeader = (
-  event: APIGatewayProxyEvent | Request
+  event: APIGatewayProxyEvent | Request,
 ): AuthorizationHeader => {
-  const parts = getEventHeader(event, 'authorization')?.split(' ')
+  const parts = getEventHeader(event, 'Authorization')?.split(' ')
   if (parts?.length !== 2) {
     throw new Error('The `Authorization` header is not valid.')
   }
@@ -55,13 +83,20 @@ export const parseAuthorizationHeader = (
 export type AuthContextPayload = [
   Decoded,
   { type: string } & AuthorizationHeader,
-  { event: APIGatewayProxyEvent | Request; context: LambdaContext }
+  // @MARK: Context is not passed when using middleware auth
+  {
+    event: APIGatewayProxyEvent | Request
+    context?: LambdaContext
+  },
 ]
 
 export type Decoder = (
   token: string,
   type: string,
-  req: { event: APIGatewayProxyEvent | Request; context: LambdaContext }
+  req: {
+    event: APIGatewayProxyEvent | Request
+    context?: LambdaContext
+  },
 ) => Promise<Decoded>
 
 /**
@@ -77,16 +112,43 @@ export const getAuthenticationContext = async ({
   event: APIGatewayProxyEvent | Request
   context: LambdaContext
 }): Promise<undefined | AuthContextPayload> => {
-  const type = getAuthProviderHeader(event)
+  const cookieHeader = parseAuthorizationCookie(event)
+  const typeFromHeader = getAuthProviderHeader(event)
 
-  // No `auth-provider` header means that the user is logged out,
-  // and none of this auth malarky is required.
-  if (!type) {
+  // Short-circuit - if no auth-provider or cookie header, its
+  // an unauthenticated request
+  if (!typeFromHeader && !cookieHeader) {
     return undefined
   }
 
-  const { schema, token } = parseAuthorizationHeader(event)
+  // The actual session parsing is done by the auth decoder
 
+  let token: string | undefined
+  let type: string | undefined
+  let schema: string | undefined
+
+  // If there is a cookie header and the auth type is set in the cookie, use that
+  // There can be cases, such as with Supabase where its auth client sets the cookie and Bearer token
+  // but the project is not using cookie auth with an auth-provider cookie set
+  // So, cookie/ssr auth needs both the token and the auth-provider in cookies
+  if (cookieHeader && cookieHeader.type) {
+    token = cookieHeader.rawCookie
+    type = cookieHeader.type
+    schema = 'cookie'
+    // If type is set in the header, use Bearer token auth (priority 2)
+  } else if (typeFromHeader) {
+    const parsedAuthHeader = parseAuthorizationHeader(event as any)
+    token = parsedAuthHeader.token
+    type = typeFromHeader
+    schema = parsedAuthHeader.schema
+  }
+
+  // Unauthenticated request
+  if (!token || !type || !schema) {
+    return undefined
+  }
+
+  // Run through decoders until one returns a decoded payload
   let authDecoders: Array<Decoder> = []
 
   if (Array.isArray(authDecoder)) {
@@ -100,13 +162,14 @@ export const getAuthenticationContext = async ({
   let i = 0
   while (!decoded && i < authDecoders.length) {
     decoded = await authDecoders[i](token, type, {
-      // @TODO: We will need to make a breaking change to support `Request` objects.
-      // We can remove this typecast
-      event: event,
+      // @MARK: When called from middleware, the decoder will pass Request, not Lambda event
+      event,
       context,
     })
     i++
   }
 
+  // @TODO should we rename token? It's not actually the token - its the cookie header -because
+  // some auth providers will have a cookie where we don't know the key
   return [decoded, { type, schema, token }, { event, context }]
 }

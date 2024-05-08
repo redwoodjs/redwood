@@ -1,6 +1,6 @@
 import React from 'react'
 
-import type { AuthContextInterface } from './AuthContext'
+import type { AuthContextInterface } from './AuthContext.js'
 
 export function createUseAuth<
   TUser,
@@ -14,7 +14,7 @@ export function createUseAuth<
   TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
-  TClient
+  TClient,
 >(
   AuthContext: React.Context<
     | AuthContextInterface<
@@ -32,7 +32,7 @@ export function createUseAuth<
         TClient
       >
     | undefined
-  >
+  >,
 ) {
   const useAuth = (): AuthContextInterface<
     TUser,

@@ -7,7 +7,7 @@ import createFastifyInstance from './fastify'
 import { redwoodFastifyAPI } from './plugins/api'
 import type { APIParsedOptions } from './types'
 
-export async function handler(options: APIParsedOptions) {
+export async function handler(options: APIParsedOptions = {}) {
   const timeStart = Date.now()
   console.log(chalk.dim.italic('Starting API Server...'))
 
@@ -42,7 +42,7 @@ export async function handler(options: APIParsedOptions) {
 
   fastify.log.trace(
     { custom: { ...fastify.initialConfig } },
-    'Fastify server configuration'
+    'Fastify server configuration',
   )
   fastify.log.trace(`Registered plugins\n${fastify.printPlugins()}`)
 

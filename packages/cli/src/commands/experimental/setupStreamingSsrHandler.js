@@ -32,7 +32,7 @@ export const handler = async ({ force, verbose }) => {
         task: () => {
           if (!rwPaths.web.entryClient || !rwPaths.web.viteConfig) {
             throw new Error(
-              'Vite needs to be setup before you can enable Streaming SSR'
+              'Vite needs to be setup before you can enable Streaming SSR',
             )
           }
         },
@@ -44,11 +44,11 @@ export const handler = async ({ force, verbose }) => {
             writeFile(
               redwoodTomlPath,
               configContent.concat(
-                `\n[experimental.streamingSsr]\n  enabled = true\n`
+                `\n[experimental.streamingSsr]\n  enabled = true\n`,
               ),
               {
                 overwriteExisting: true, // redwood.toml always exists
-              }
+              },
             )
           } else {
             if (force) {
@@ -59,15 +59,15 @@ export const handler = async ({ force, verbose }) => {
                 configContent.replace(
                   // Enable if it's currently disabled
                   `\n[experimental.streamingSsr]\n  enabled = false\n`,
-                  `\n[experimental.streamingSsr]\n  enabled = true\n`
+                  `\n[experimental.streamingSsr]\n  enabled = true\n`,
                 ),
                 {
                   overwriteExisting: true, // redwood.toml always exists
-                }
+                },
               )
             } else {
               task.skip(
-                `The [experimental.streamingSsr] config block already exists in your 'redwood.toml' file.`
+                `The [experimental.streamingSsr] config block already exists in your 'redwood.toml' file.`,
               )
             }
           }
@@ -82,14 +82,14 @@ export const handler = async ({ force, verbose }) => {
               __dirname,
               'templates',
               'streamingSsr',
-              'entry.client.tsx.template'
+              'entry.client.tsx.template',
             ),
-            'utf-8'
+            'utf-8',
           )
           let entryClientPath = rwPaths.web.entryClient
           const entryClientContent = ts
             ? entryClientTemplate
-            : transformTSToJS(entryClientPath, entryClientTemplate)
+            : await transformTSToJS(entryClientPath, entryClientTemplate)
 
           let overwriteExisting = force
 
@@ -119,18 +119,18 @@ export const handler = async ({ force, verbose }) => {
               __dirname,
               'templates',
               'streamingSsr',
-              'entry.server.tsx.template'
+              'entry.server.tsx.template',
             ),
-            'utf-8'
+            'utf-8',
           )
           // Can't use rwPaths.web.entryServer because it might not be not created yet
           const entryServerPath = path.join(
             rwPaths.web.src,
-            `entry.server${ext}`
+            `entry.server${ext}`,
           )
           const entryServerContent = ts
             ? entryServerTemplate
-            : transformTSToJS(entryServerPath, entryServerTemplate)
+            : await transformTSToJS(entryServerPath, entryServerTemplate)
 
           writeFile(entryServerPath, entryServerContent, {
             overwriteExisting: force,
@@ -145,23 +145,36 @@ export const handler = async ({ force, verbose }) => {
               __dirname,
               'templates',
               'streamingSsr',
-              'Document.tsx.template'
+              'Document.tsx.template',
             ),
-            'utf-8'
+            'utf-8',
           )
           const documentPath = path.join(rwPaths.web.src, `Document${ext}`)
           const documentContent = ts
             ? documentTemplate
-            : transformTSToJS(documentPath, documentTemplate)
+            : await transformTSToJS(documentPath, documentTemplate)
 
           writeFile(documentPath, documentContent, {
             overwriteExisting: force,
           })
         },
       },
-      addWebPackages([
-        '@apollo/experimental-nextjs-app-support@0.0.0-commit-b8a73fe',
-      ]),
+      {
+        title:
+          'Adding resolution for "@apollo/client-react-streaming/superjson"',
+        task: () => {
+          // We need this to make sure we get a version of superjson that works
+          // with CommonJS.
+          // TODO: Remove this when Redwood switches to ESM
+          const pkgJsonPath = path.join(rwPaths.base, 'package.json')
+          const pkgJson = fs.readJsonSync(pkgJsonPath)
+          const resolutions = pkgJson.resolutions || {}
+          resolutions['@apollo/client-react-streaming/superjson'] = '^1.12.2'
+          pkgJson.resolutions = resolutions
+          fs.writeJsonSync(pkgJsonPath, pkgJson, { spaces: 2 })
+        },
+      },
+      addWebPackages(['@apollo/client-react-streaming@0.10.0']),
       {
         task: () => {
           printTaskEpilogue(command, description, EXPERIMENTAL_TOPIC_ID)
@@ -171,7 +184,7 @@ export const handler = async ({ force, verbose }) => {
     {
       rendererOptions: { collapseSubtasks: false, persistentOutput: true },
       renderer: verbose ? 'verbose' : 'default',
-    }
+    },
   )
 
   try {

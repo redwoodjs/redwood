@@ -79,7 +79,7 @@ describe('loadFunctionsFromDist', () => {
       'noHandler',
       'at',
       expect.any(String),
-      'does not have a function called handler defined.'
+      'does not have a function called handler defined.',
     )
   })
 })

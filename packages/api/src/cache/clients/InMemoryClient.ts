@@ -23,7 +23,7 @@ export default class InMemoryClient extends BaseClient {
    */
   get contents() {
     return Object.values(this.storage).map((cacheObj) =>
-      JSON.parse(cacheObj.value)
+      JSON.parse(cacheObj.value),
     )
   }
 

@@ -9,6 +9,6 @@ export const updateNodeEngine = () => {
 
   fs.writeFileSync(
     rootPackageJSONPath,
-    JSON.stringify(rootPackageJSON, null, 2) + '\n'
+    JSON.stringify(rootPackageJSON, null, 2) + '\n',
   )
 }

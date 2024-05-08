@@ -27,7 +27,7 @@ export function zipDirectory(source, out) {
 // returns a tuple of [filePath, fileContent]
 export function generateEntryFile(functionAbsolutePath, name) {
   const relativeImport = ensurePosixPath(
-    path.relative(getPaths().base, functionAbsolutePath)
+    path.relative(getPaths().base, functionAbsolutePath),
   )
   return [
     `${ZIPBALL_DIR}/${name}/${name}.js`,
@@ -46,8 +46,8 @@ export async function packageSingleFunction(functionFile) {
     copyPromises.push(
       fse.copy(
         './' + singleDependencyPath,
-        `${ZIPBALL_DIR}/${functionName}/${singleDependencyPath}`
-      )
+        `${ZIPBALL_DIR}/${functionName}/${singleDependencyPath}`,
+      ),
     )
   }
 
@@ -61,7 +61,7 @@ export async function packageSingleFunction(functionFile) {
   await Promise.all(copyPromises)
   await exports.zipDirectory(
     `${ZIPBALL_DIR}/${functionName}`,
-    `${ZIPBALL_DIR}/${functionName}.zip`
+    `${ZIPBALL_DIR}/${functionName}.zip`,
   )
   await fse.remove(`${ZIPBALL_DIR}/${functionName}`)
   return

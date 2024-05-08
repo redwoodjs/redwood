@@ -21,7 +21,7 @@ export interface RedwoodFastifyAPIOptions {
 
 export async function redwoodFastifyAPI(
   fastify: FastifyInstance,
-  opts: RedwoodFastifyAPIOptions
+  opts: RedwoodFastifyAPIOptions,
 ) {
   const redwoodOptions = opts.redwood ?? {}
   redwoodOptions.apiRootPath ??= '/'
@@ -41,7 +41,7 @@ export async function redwoodFastifyAPI(
   fastify.addContentTypeParser(
     ['application/x-www-form-urlencoded', 'multipart/form-data'],
     { parseAs: 'string' },
-    fastify.defaultTextParser
+    fastify.defaultTextParser,
   )
 
   if (redwoodOptions.loadUserConfig) {

@@ -22,8 +22,8 @@ export default function transform(file: FileInfo, api: API) {
     .insertAfter(
       j.objectProperty(
         j.identifier('authorizationParams'),
-        j.objectExpression(nodes)
-      )
+        j.objectExpression(nodes),
+      ),
     )
 
   ast.find(j.Identifier, { name: 'client_id' }).replaceWith('clientId')

@@ -49,32 +49,32 @@ test('Check packager detects all functions', () => {
 
 test('Creates entry file for nested functions correctly', () => {
   const nestedFunction = findApiDistFunctions().find((fPath) =>
-    fPath.includes('nested')
+    fPath.includes('nested'),
   )
 
   const [outputPath, content] = nftPacker.generateEntryFile(
     nestedFunction,
-    'nested'
+    'nested',
   )
 
   expect(outputPath).toBe('./api/dist/zipball/nested/nested.js')
   expect(content).toMatchInlineSnapshot(
-    `"module.exports = require('./api/dist/functions/nested/nested.js')"`
+    `"module.exports = require('./api/dist/functions/nested/nested.js')"`,
   )
 })
 
 test('Creates entry file for top level functions correctly', () => {
   const graphqlFunction = findApiDistFunctions().find((fPath) =>
-    fPath.includes('graphql')
+    fPath.includes('graphql'),
   )
 
   const [outputPath, content] = nftPacker.generateEntryFile(
     graphqlFunction,
-    'graphql'
+    'graphql',
   )
 
   expect(outputPath).toBe('./api/dist/zipball/graphql/graphql.js')
   expect(content).toMatchInlineSnapshot(
-    `"module.exports = require('./api/dist/functions/graphql.js')"`
+    `"module.exports = require('./api/dist/functions/graphql.js')"`,
   )
 })

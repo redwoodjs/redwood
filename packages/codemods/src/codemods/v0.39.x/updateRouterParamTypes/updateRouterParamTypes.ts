@@ -47,7 +47,7 @@ export default function transform(file: FileInfo, api: API) {
   }
 
   const mapToNewSyntax = (
-    allParamTypeProperties: ObjectExpression['properties']
+    allParamTypeProperties: ObjectExpression['properties'],
   ) => {
     // allParamTypeProperties here is array of following marked as 👉
     /*
@@ -74,7 +74,7 @@ export default function transform(file: FileInfo, api: API) {
         // As they're quite edgecase-ey
         // like paramTypes={{...myParams}} (spreadelement)
         console.warn(
-          'Unable to update your custom Route parameters. Please follow manual instructions'
+          'Unable to update your custom Route parameters. Please follow manual instructions',
         )
         return
       }
@@ -117,7 +117,7 @@ export default function transform(file: FileInfo, api: API) {
         j.JSXAttribute,
         {
           name: { name: 'paramTypes' },
-        }
+        },
       )
       paramTypeProp.forEach((prop) => {
         const paramTypeValue = (prop?.value?.value as JSXExpressionContainer)

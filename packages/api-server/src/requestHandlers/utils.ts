@@ -34,10 +34,10 @@ export const parseBody = (rawBody: string | Buffer): ParseBodyResult => {
  */
 export const mergeMultiValueHeaders = (
   headers: FastifyLambdaHeaders,
-  multiValueHeaders: FastifyLambdaMultiValueHeaders
+  multiValueHeaders: FastifyLambdaMultiValueHeaders,
 ) => {
   const mergedHeaders = Object.entries(
-    headers || {}
+    headers || {},
   ).reduce<FastifyMergedHeaders>((acc, [name, value]) => {
     acc[name.toLowerCase()] = [value]
 

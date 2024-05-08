@@ -13,6 +13,7 @@ import {
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { printSetupNotes } from '../../../../lib'
+import { serverFileExists } from '../../../../lib/project'
 import { addFilesTask } from '../helpers'
 
 const redwoodProjectPaths = getPaths()
@@ -34,7 +35,7 @@ export async function handler({ force }) {
           "Reach out to redwood@withcoherence.com with any questions! We're here to support you.",
         ]),
       ],
-      { rendererOptions: { collapse: false } }
+      { rendererOptions: { collapse: false } },
     )
 
     await tasks.run()
@@ -96,9 +97,9 @@ async function getCoherenceConfigFileContent() {
       [
         `Coherence doesn't support the "${db}" provider in your Prisma schema.`,
         `To proceed, switch to one of the following: ${SUPPORTED_DATABASES.join(
-          ', '
+          ', ',
         )}.`,
-      ].join('\n')
+      ].join('\n'),
     )
   }
 
@@ -106,7 +107,22 @@ async function getCoherenceConfigFileContent() {
     db = 'postgres'
   }
 
-  return coherenceFiles.yamlTemplate(db)
+  const apiProdCommand = ['yarn', 'rw', 'build', 'api', '&&']
+  if (serverFileExists()) {
+    apiProdCommand.push(
+      'yarn',
+      'node',
+      'api/dist/server.js',
+      '--apiRootPath=/api',
+    )
+  } else {
+    apiProdCommand.push('yarn', 'rw', 'serve', 'api', '--apiRootPath=/api')
+  }
+
+  return coherenceFiles.yamlTemplate({
+    db,
+    apiProdCommand: `[${apiProdCommand.map((cmd) => `"${cmd}"`).join(', ')}]`,
+  })
 }
 
 const SUPPORTED_DATABASES = ['mysql', 'postgresql']
@@ -122,7 +138,7 @@ function updateRedwoodTOMLTask() {
     task: () => {
       const redwoodTOMLPath = path.join(
         redwoodProjectPaths.base,
-        'redwood.toml'
+        'redwood.toml',
       )
       let redwoodTOMLContent = fs.readFileSync(redwoodTOMLPath, 'utf-8')
       const redwoodTOMLObject = toml.parse(redwoodTOMLContent)
@@ -151,8 +167,8 @@ function updateRedwoodTOMLTask() {
         HOST_REGEXP,
         (match, spaceBeforeAssign, spaceAfterAssign) =>
           ['host', spaceBeforeAssign, '=', spaceAfterAssign, '"0.0.0.0"'].join(
-            ''
-          )
+            '',
+          ),
       )
 
       // Replace the apiUrl
@@ -160,8 +176,8 @@ function updateRedwoodTOMLTask() {
         API_URL_REGEXP,
         (match, spaceBeforeAssign, spaceAfterAssign) =>
           ['apiUrl', spaceBeforeAssign, '=', spaceAfterAssign, '"/api"'].join(
-            ''
-          )
+            '',
+          ),
       )
 
       // Replace the web and api ports.
@@ -174,7 +190,7 @@ function updateRedwoodTOMLTask() {
             '=',
             spaceAfterAssign,
             `"\${PORT:${port}}"`,
-          ].join('')
+          ].join(''),
       )
 
       fs.writeFileSync(redwoodTOMLPath, redwoodTOMLContent)
@@ -191,13 +207,13 @@ const PORT_REGEXP = /port(\s*)=(\s*)(?<port>\d{4})/g
 // ------------------------
 
 const coherenceFiles = {
-  yamlTemplate(db) {
+  yamlTemplate({ db, apiProdCommand }) {
     return `\
 api:
   type: backend
   url_path: "/api"
   prod:
-    command: ["yarn", "rw", "build", "api", "&&", "yarn", "rw", "serve", "api", "--apiRootPath=/api"]
+    command: ${apiProdCommand}
   dev:
     command: ["yarn", "rw", "build", "api", "&&", "yarn", "rw", "dev", "api", "--apiRootPath=/api"]
   local_packages: ["node_modules"]

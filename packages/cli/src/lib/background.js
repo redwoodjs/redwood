@@ -32,13 +32,13 @@ export function spawnBackgroundProcess(name, cmd, args) {
 
   const stdout = fs.openSync(
     path.join(logDirectory, `${safeName}.out.log`),
-    'w'
+    'w',
   )
   fs.writeSync(stdout, logHeader)
 
   const stderr = fs.openSync(
     path.join(logDirectory, `${safeName}.err.log`),
-    'w'
+    'w',
   )
   fs.writeSync(stderr, logHeader)
 

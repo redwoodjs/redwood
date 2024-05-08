@@ -34,7 +34,7 @@ export function createCorsContext(cors: CorsConfig | undefined) {
       } else if (Array.isArray(cors.allowedHeaders)) {
         corsHeaders.set(
           'access-control-allow-headers',
-          cors.allowedHeaders.join(',')
+          cors.allowedHeaders.join(','),
         )
       }
     }
@@ -45,7 +45,7 @@ export function createCorsContext(cors: CorsConfig | undefined) {
       } else if (Array.isArray(cors.exposedHeaders)) {
         corsHeaders.set(
           'access-control-expose-headers',
-          cors.exposedHeaders.join(',')
+          cors.exposedHeaders.join(','),
         )
       }
     }
@@ -81,12 +81,12 @@ export function createCorsContext(cors: CorsConfig | undefined) {
         }
 
         const requestAccessControlRequestHeaders = eventHeaders.get(
-          'access-control-request-headers'
+          'access-control-request-headers',
         )
         if (!cors.allowedHeaders && requestAccessControlRequestHeaders) {
           requestCorsHeaders.set(
             'access-control-allow-headers',
-            requestAccessControlRequestHeaders
+            requestAccessControlRequestHeaders,
           )
         }
       }

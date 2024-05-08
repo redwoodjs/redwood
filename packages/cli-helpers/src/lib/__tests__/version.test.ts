@@ -212,9 +212,9 @@ describe('version compatibility detection', () => {
       throw new Error('Some fetch related error')
     })
     await expect(
-      getCompatibilityData('some-package', 'latest')
+      getCompatibilityData('some-package', 'latest'),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: Some fetch related error]`
+      `[Error: Some fetch related error]`,
     )
 
     // Mock the json parsing to throw an error
@@ -227,9 +227,9 @@ describe('version compatibility detection', () => {
     })
 
     await expect(
-      getCompatibilityData('some-package', 'latest')
+      getCompatibilityData('some-package', 'latest'),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: Some json parsing error]`
+      `[Error: Some json parsing error]`,
     )
   })
 
@@ -245,25 +245,25 @@ describe('version compatibility detection', () => {
     })
 
     await expect(
-      getCompatibilityData('some-package', 'latest')
+      getCompatibilityData('some-package', 'latest'),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: Some packument related error]`
+      `[Error: Some packument related error]`,
     )
   })
 
   test('throws if preferred version is not found', async () => {
     await expect(
-      getCompatibilityData('@scope/package-name', '0.0.4')
+      getCompatibilityData('@scope/package-name', '0.0.4'),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: The package '@scope/package-name' does not have a version '0.0.4']`
+      `[Error: The package '@scope/package-name' does not have a version '0.0.4']`,
     )
   })
 
   test('throws if preferred tag is not found', async () => {
     await expect(
-      getCompatibilityData('@scope/package-name', 'next')
+      getCompatibilityData('@scope/package-name', 'next'),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: The package '@scope/package-name' does not have a tag 'next']`
+      `[Error: The package '@scope/package-name' does not have a tag 'next']`,
     )
   })
 
@@ -280,9 +280,9 @@ describe('version compatibility detection', () => {
     })
 
     await expect(
-      getCompatibilityData('@scope/package-name', 'latest')
+      getCompatibilityData('@scope/package-name', 'latest'),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: The package '@scope/package-name' does not have a tag 'latest']`
+      `[Error: The package '@scope/package-name' does not have a tag 'latest']`,
     )
   })
 
@@ -323,7 +323,7 @@ describe('version compatibility detection', () => {
           tag: 'latest',
           version: '0.0.3',
         },
-      }
+      },
     )
 
     vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
@@ -344,7 +344,7 @@ describe('version compatibility detection', () => {
           tag: undefined,
           version: '0.0.2',
         },
-      }
+      },
     )
   })
 
@@ -358,9 +358,9 @@ describe('version compatibility detection', () => {
     })
 
     expect(
-      getCompatibilityData('@scope/package-name', 'latest')
+      getCompatibilityData('@scope/package-name', 'latest'),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: No compatible version of '@scope/package-name' was found]`
+      `[Error: No compatible version of '@scope/package-name' was found]`,
     )
   })
 })

@@ -4,19 +4,12 @@ import { createNamedContext } from './createNamedContext'
 import { gHistory } from './history'
 import type { TrailingSlashesTypes } from './util'
 
-export interface LocationContextType {
-  pathname: string
-  search?: string
-  hash?: string
-}
+export interface LocationContextType extends URL {}
 
 const LocationContext = createNamedContext<LocationContextType>('Location')
 
-interface Location {
-  pathname: string
-  search?: string
-  hash?: string
-}
+interface Location extends URL {}
+
 interface LocationProviderProps {
   location?: Location
   trailingSlashes?: TrailingSlashesTypes
@@ -24,7 +17,7 @@ interface LocationProviderProps {
 }
 
 interface LocationProviderState {
-  context: Location
+  context: Location | undefined
 }
 
 class LocationProvider extends React.Component<
@@ -60,7 +53,7 @@ class LocationProvider extends React.Component<
             window.history.replaceState(
               {},
               '',
-              pathname.substr(0, pathname.length - 1)
+              pathname.substr(0, pathname.length - 1),
             )
           }
           break
@@ -75,18 +68,10 @@ class LocationProvider extends React.Component<
           break
       }
 
-      windowLocation = window.location
-    } else {
-      windowLocation = {
-        pathname: this.context?.pathname || '',
-        search: this.context?.search || '',
-        hash: this.context?.hash || '',
-      }
+      windowLocation = new URL(window.location.href)
     }
 
-    const { pathname, search, hash } = this.props.location || windowLocation
-
-    return { pathname, search, hash }
+    return this.props.location || this.context || windowLocation
   }
 
   componentDidMount() {
@@ -94,8 +79,8 @@ class LocationProvider extends React.Component<
       const context = this.getContext()
       this.setState((lastState) => {
         if (
-          context.pathname !== lastState.context.pathname ||
-          context.search !== lastState.context.search
+          context?.pathname !== lastState?.context?.pathname ||
+          context?.search !== lastState?.context?.search
         ) {
           globalThis?.scrollTo(0, 0)
         }

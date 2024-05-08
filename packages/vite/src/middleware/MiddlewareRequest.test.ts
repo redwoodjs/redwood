@@ -18,7 +18,7 @@ describe('MiddlewareRequest', () => {
     })
     const mReq = createMiddlewareRequest(req)
 
-    expect(mReq.cookies.get('foo')).toStrictEqual({ value: 'bar' })
+    expect(mReq.cookies.get('foo')).toStrictEqual('bar')
     expect(mReq.method).toStrictEqual('POST')
     expect(mReq.headers.get('Content-Type')).toStrictEqual('application/json')
 
@@ -38,12 +38,12 @@ describe('MiddlewareRequest', () => {
           Cookie: 'errybody=lets-funk',
           'X-Custom-Header': 'beatdrop',
         },
-      }
+      },
     )
 
     const mReq = createMiddlewareRequest(whatWgRequest)
 
-    expect(mReq.cookies.get('errybody')).toStrictEqual({ value: 'lets-funk' })
+    expect(mReq.cookies.get('errybody')).toStrictEqual('lets-funk')
     expect(mReq.method).toStrictEqual('PUT')
 
     expect(mReq.headers.get('x-custom-header')).toStrictEqual('beatdrop')

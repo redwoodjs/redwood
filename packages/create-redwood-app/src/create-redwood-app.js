@@ -60,7 +60,7 @@ const USE_GITPOD_TEXT = [
     {
       fallback: () =>
         'Launch Redwood using GitPod https://gitpod.io/#https://github.com/redwoodjs/starter',
-    }
+    },
   )}`,
 ]
 
@@ -91,7 +91,7 @@ async function executeCompatibilityCheck(templateDir) {
   if (!checksPassed) {
     const foundNodeVersionIsLessThanRequired = semver.lt(
       checksData.node.version.version,
-      semver.minVersion(checksData.node.wanted.raw)
+      semver.minVersion(checksData.node.wanted.raw),
     )
 
     if (foundNodeVersionIsLessThanRequired) {
@@ -109,7 +109,7 @@ async function executeCompatibilityCheck(templateDir) {
             {
               fallback: () =>
                 'How to - Using nvm https://redwoodjs.com/docs/how-to/using-nvm',
-            }
+            },
           )}`,
           `  See: ${terminalLink(
             'Tutorial - Prerequisites',
@@ -117,11 +117,11 @@ async function executeCompatibilityCheck(templateDir) {
             {
               fallback: () =>
                 'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
-            }
+            },
           )}`,
           '',
           ...USE_GITPOD_TEXT,
-        ].join('\n')
+        ].join('\n'),
       )
 
       recordErrorViaTelemetry('Compatibility checks failed')
@@ -145,7 +145,7 @@ async function executeCompatibilityCheck(templateDir) {
           {
             fallback: () =>
               'How to - Use nvm https://redwoodjs.com/docs/how-to/using-nvm',
-          }
+          },
         )}`,
         `  See: ${terminalLink(
           'Tutorial - Prerequisites',
@@ -153,11 +153,11 @@ async function executeCompatibilityCheck(templateDir) {
           {
             fallback: () =>
               'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
-          }
+          },
         )}`,
         '',
         ...USE_GITPOD_TEXT,
-      ].join('\n')
+      ].join('\n'),
     )
 
     // Try catch for handling if the user cancels the prompt.
@@ -220,7 +220,7 @@ async function createProjectFiles(appDir, { templateDir, overwrite }) {
   // .gitignore is renamed here to force file inclusion during publishing
   fs.renameSync(
     path.join(newAppDir, 'gitignore.template'),
-    path.join(newAppDir, '.gitignore')
+    path.join(newAppDir, '.gitignore'),
   )
 
   // Write the uid
@@ -265,11 +265,11 @@ async function installNodeModules(newAppDir) {
       "Couldn't install node modules",
       [
         `We couldn't install node modules via ${RedwoodStyling.info(
-          "'yarn install'"
+          "'yarn install'",
         )}. Please see below for the full error message.`,
         '',
         error,
-      ].join('\n')
+      ].join('\n'),
     )
     recordErrorViaTelemetry(error)
     await shutdownTelemetry()
@@ -312,11 +312,11 @@ async function generateTypes(newAppDir) {
       "Couldn't generate types",
       [
         `We could not generate types using ${RedwoodStyling.info(
-          "'yarn rw-gen'"
+          "'yarn rw-gen'",
         )}. Please see below for the full error message.`,
         '',
         error,
-      ].join('\n')
+      ].join('\n'),
     )
     recordErrorViaTelemetry(error)
     await shutdownTelemetry()
@@ -347,7 +347,7 @@ async function initializeGit(newAppDir, commitMessage) {
     {
       shell: true,
       cwd: newAppDir,
-    }
+    },
   )
 
   try {
@@ -358,11 +358,11 @@ async function initializeGit(newAppDir, commitMessage) {
       "Couldn't initialize a git repo",
       [
         `We could not initialize a git repo using ${RedwoodStyling.info(
-          `git init && git add . && git commit -m "${commitMessage}"`
+          `git init && git add . && git commit -m "${commitMessage}"`,
         )}. Please see below for the full error message.`,
         '',
         error,
-      ].join('\n')
+      ].join('\n'),
     )
     recordErrorViaTelemetry(error)
     await shutdownTelemetry()
@@ -371,7 +371,7 @@ async function initializeGit(newAppDir, commitMessage) {
 
   tuiContent.update({
     content: `${RedwoodStyling.green(
-      '✔'
+      '✔',
     )} Initialized a git repo with commit message "${commitMessage}"`,
     spinner: {
       enabled: false,
@@ -384,8 +384,8 @@ async function handleTargetDirPreference(targetDir) {
   if (targetDir) {
     tui.drawText(
       `${RedwoodStyling.green(
-        '✔'
-      )} Creating your Redwood app in ${targetDir} based on command line argument`
+        '✔',
+      )} Creating your Redwood app in ${targetDir} based on command line argument`,
     )
 
     return targetDir
@@ -404,7 +404,7 @@ async function handleTargetDirPreference(targetDir) {
       tui.stopReactive(true)
       tui.displayError(
         'The `~username` syntax is not supported here',
-        'Please use the full path or specify the target directory on the command line.'
+        'Please use the full path or specify the target directory on the command line.',
       )
 
       recordErrorViaTelemetry('Target dir prompt path syntax not supported')
@@ -426,7 +426,7 @@ async function handleTypescriptPreference(typescriptFlag) {
     tui.drawText(
       `${RedwoodStyling.green('✔')} Using ${
         typescriptFlag ? 'TypeScript' : 'JavaScript'
-      } based on command line flag`
+      } based on command line flag`,
     )
     return typescriptFlag
   }
@@ -454,7 +454,7 @@ async function handleGitPreference(gitInitFlag) {
     tui.drawText(
       `${RedwoodStyling.green('✔')} ${
         gitInitFlag ? 'Will' : 'Will not'
-      } initialize a git repo based on command line flag`
+      } initialize a git repo based on command line flag`,
     )
     return gitInitFlag
   }
@@ -479,7 +479,7 @@ async function handleGitPreference(gitInitFlag) {
 
 async function doesDirectoryAlreadyExist(
   appDir,
-  { overwrite, suppressWarning }
+  { overwrite, suppressWarning },
 ) {
   let newAppDir = appDir
 
@@ -493,7 +493,7 @@ async function doesDirectoryAlreadyExist(
         tui.stopReactive(true)
         tui.displayWarning(
           'Project directory already contains files',
-          [`'${styledAppDir}' already exists and is not empty`].join('\n')
+          [`'${styledAppDir}' already exists and is not empty`].join('\n'),
         )
       }
 
@@ -528,7 +528,7 @@ async function doesDirectoryAlreadyExist(
             tui.stopReactive(true)
             tui.displayError(
               'The `~username` syntax is not supported here',
-              'Please use the full path or specify the target directory on the command line.'
+              'Please use the full path or specify the target directory on the command line.',
             )
 
             // Calling doesDirectoryAlreadyExist again with the same old
@@ -548,7 +548,7 @@ async function doesDirectoryAlreadyExist(
         else if (response.projectDirectoryAlreadyExists === 'Quit install') {
           // quit and throw an error
           recordErrorViaTelemetry(
-            'User quit after directory already exists error'
+            'User quit after directory already exists error',
           )
           await shutdownTelemetry()
           process.exit(1)
@@ -556,7 +556,7 @@ async function doesDirectoryAlreadyExist(
         // overwrite the existing files
       } catch (_error) {
         recordErrorViaTelemetry(
-          `User cancelled install after directory already exists error`
+          `User cancelled install after directory already exists error`,
         )
         await shutdownTelemetry()
         process.exit(1)
@@ -578,7 +578,7 @@ async function handleNewDirectoryNamePreference() {
     return response.targetDirectoryInput
   } catch (_error) {
     recordErrorViaTelemetry(
-      'User cancelled install at specify a different directory prompt'
+      'User cancelled install at specify a different directory prompt',
     )
     await shutdownTelemetry()
     process.exit(1)
@@ -619,7 +619,7 @@ async function handleYarnInstallPreference(yarnInstallFlag) {
     tui.drawText(
       `${RedwoodStyling.green('✔')} ${
         yarnInstallFlag ? 'Will' : 'Will not'
-      } run yarn install based on command line flag`
+      } run yarn install based on command line flag`,
     )
     return yarnInstallFlag
   }
@@ -707,10 +707,10 @@ async function createRedwoodApp() {
     [
       `${RedwoodStyling.redwood('-'.repeat(66))}`,
       `${' '.repeat(16)}🌲⚡️ ${RedwoodStyling.header(
-        'Welcome to RedwoodJS!'
+        'Welcome to RedwoodJS!',
       )} ⚡️🌲`,
       `${RedwoodStyling.redwood('-'.repeat(66))}`,
-    ].join('\n')
+    ].join('\n'),
   )
 
   // Extract the args as provided by the user in the command line
@@ -798,7 +798,7 @@ async function createRedwoodApp() {
       RedwoodStyling.success('Thanks for trying out Redwood!'),
       '',
       ` ⚡️ ${RedwoodStyling.redwood(
-        'Get up and running fast with this Quick Start guide'
+        'Get up and running fast with this Quick Start guide',
       )}: https://redwoodjs.com/quick-start`,
       '',
       `${RedwoodStyling.header(`Fire it up!`)} 🚀`,
@@ -806,19 +806,19 @@ async function createRedwoodApp() {
       ...[
         `${RedwoodStyling.redwood(
           ` > ${RedwoodStyling.green(
-            `cd ${path.relative(process.cwd(), newAppDir)}`
-          )}`
+            `cd ${path.relative(process.cwd(), newAppDir)}`,
+          )}`,
         )}`,
         !yarnInstall &&
           `${RedwoodStyling.redwood(
-            ` > ${RedwoodStyling.green(`yarn install`)}`
+            ` > ${RedwoodStyling.green(`yarn install`)}`,
           )}`,
         `${RedwoodStyling.redwood(
-          ` > ${RedwoodStyling.green(`yarn rw dev`)}`
+          ` > ${RedwoodStyling.green(`yarn rw dev`)}`,
         )}`,
       ].filter(Boolean),
       '',
-    ].join('\n')
+    ].join('\n'),
   )
 }
 

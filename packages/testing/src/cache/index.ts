@@ -13,7 +13,7 @@ expect.extend({
   toHaveCached(
     cacheClient: InMemoryClient,
     keyOrExpectedValue: ExpectedKey | ExpectedValue,
-    expectedValue?: ExpectedValue
+    expectedValue?: ExpectedValue,
   ) {
     let value: ExpectedValue
     let regexKey: RegExp | undefined
@@ -46,7 +46,7 @@ expect.extend({
     } else {
       // For RegEx expectedKey or just a value check, we need to iterate
       for (const [cachedKey, cachedValue] of Object.entries(
-        cacheClient.storage
+        cacheClient.storage,
       )) {
         if (found) {
           break
@@ -78,7 +78,7 @@ expect.extend({
         pass: false,
         message: () =>
           `Expected Cached Value: ${this.utils.printExpected(
-            JSON.stringify(value)
+            JSON.stringify(value),
           )}\n` +
           `Cache Contents: ${this.utils.printReceived(cacheClient.storage)}`,
       }
@@ -88,7 +88,7 @@ expect.extend({
 
 const _isKVPair = (
   keyOrCachedValue: ExpectedKey | ExpectedValue,
-  cachedValue?: ExpectedValue
+  cachedValue?: ExpectedValue,
 ): keyOrCachedValue is ExpectedKey => {
   return !!cachedValue && !!keyOrCachedValue
 }
@@ -96,7 +96,7 @@ const _isKVPair = (
 const _checkValueForKey = (
   cacheClient: InMemoryClient,
   cacheKey: string,
-  expectedValue: ExpectedValue
+  expectedValue: ExpectedValue,
 ) => {
   try {
     const cachedStringValue = cacheClient.storage[cacheKey]?.value
@@ -108,7 +108,7 @@ const _checkValueForKey = (
         : JSON.parse(JSON.stringify(expectedValue)) // Because e.g. dates get converted to string, when cached
 
     expect(
-      cachedStringValue ? JSON.parse(cachedStringValue) : undefined
+      cachedStringValue ? JSON.parse(cachedStringValue) : undefined,
     ).toEqual(expectedValueOrMatcher)
 
     return {
@@ -171,7 +171,7 @@ declare global {
  * @param value Object or Array of object to match
  */
 export const partialMatch = (
-  value: Record<any, any> | Array<Record<any, any>>
+  value: Record<any, any> | Array<Record<any, any>>,
 ) => {
   return Array.isArray(value)
     ? expect.arrayContaining(value.map((v) => expect.objectContaining(v)))

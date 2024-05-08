@@ -80,6 +80,6 @@ test('throws on expired token', async () => {
     authDecoder('expired-token', 'netlify', {
       ...req.event,
       context: { clientContext: { user: { sub: 'abc123' } } },
-    } as any)
+    } as any),
   ).rejects.toThrow('jwt expired')
 })

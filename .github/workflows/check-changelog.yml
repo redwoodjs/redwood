@@ -1,4 +1,4 @@
-name: 📝 Check CHANGELOG.md
+name: 📝 Check changesets
 
 on:
   pull_request:
@@ -11,23 +11,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check-changelog:
-    name: 📝 Check CHANGELOG.md
+  check-changesets:
+    name: 📝 Check changesets
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - uses: actions/setup-node@v4
+      - name: Set up job
+        uses: ./.github/actions/set-up-job
         with:
-          node-version: 20
+          set-up-yarn-cache: false
+          yarn-install-directory: ./.github/actions/check_changesets
+          build: false
 
-      - run: yarn install
-        working-directory: ./.github/actions/check_changelog
-
-      - name: Check CHANGELOG.md
-        uses: ./.github/actions/check_changelog
+      - name: Check changesets
+        uses: ./.github/actions/check_changesets
         with:
           labels: '{ "labels": ${{ toJSON(github.event.pull_request.labels) }} }'

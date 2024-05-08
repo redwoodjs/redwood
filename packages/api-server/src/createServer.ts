@@ -70,7 +70,7 @@ export async function createServer(options: CreateServerOptions = {}) {
   // Warn about `api/server.config.js`
   const serverConfigPath = path.join(
     getPaths().base,
-    getConfig().api.serverConfig
+    getConfig().api.serverConfig,
   )
 
   if (fs.existsSync(serverConfigPath)) {
@@ -91,8 +91,8 @@ export async function createServer(options: CreateServerOptions = {}) {
           'server.register(myFastifyPlugin)',
           '```',
           '',
-        ].join('\n')
-      )
+        ].join('\n'),
+      ),
     )
   }
 
@@ -147,8 +147,8 @@ export async function createServer(options: CreateServerOptions = {}) {
   server.addHook('onListen', (done) => {
     console.log(
       `Server listening at ${chalk.magenta(
-        `${server.listeningOrigin}${apiRootPath}`
-      )}`
+        `${server.listeningOrigin}${apiRootPath}`,
+      )}`,
     )
     done()
   })

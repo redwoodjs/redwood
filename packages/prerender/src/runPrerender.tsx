@@ -39,9 +39,10 @@ const prerenderApolloClient = new ApolloClient({ cache: new InMemoryCache() })
 
 async function recursivelyRender(
   App: React.ElementType,
+  Routes: React.ElementType,
   renderPath: string,
   gqlHandler: any,
-  queryCache: Record<string, QueryInfo>
+  queryCache: Record<string, QueryInfo>,
 ): Promise<string> {
   // Load this async, to prevent rwjs/web being loaded before shims
   const {
@@ -62,7 +63,7 @@ async function recursivelyRender(
         const resultString = await executeQuery(
           gqlHandler,
           value.query,
-          value.variables
+          value.variables,
         )
 
         let result
@@ -86,8 +87,8 @@ async function recursivelyRender(
           if (result.errors[0]?.extensions?.code === 'UNAUTHENTICATED') {
             console.error(
               `\n \n 🛑  Cannot prerender the query ${getOperationName(
-                value.query
-              )} as it requires auth. \n`
+                value.query,
+              )} as it requires auth. \n`,
             )
           }
 
@@ -121,25 +122,35 @@ async function recursivelyRender(
           throw e
         }
       }
-    })
+    }),
   )
 
+  // `renderPath` is *just* a path, but the LocationProvider needs a full URL
+  // object so if you need the domain to be something specific when
+  // pre-rendering (because you're showing it in HTML output or the og:image
+  // uses useLocation().host) you can set the RWJS_PRERENDER_ORIGIN env variable
+  // so that it doesn't just default to localhost
+  const prerenderUrl =
+    process.env.RWJS_PRERENDER_ORIGIN || 'http://localhost' + renderPath
+
   const componentAsHtml = ReactDOMServer.renderToString(
-    <LocationProvider location={{ pathname: renderPath }}>
+    <LocationProvider location={new URL(prerenderUrl)}>
       <CellCacheContextProvider queryCache={queryCache}>
-        <App />
+        <App>
+          <Routes />
+        </App>
       </CellCacheContextProvider>
-    </LocationProvider>
+    </LocationProvider>,
   )
 
   if (Object.values(queryCache).some((value) => !value.hasProcessed)) {
     // We found new queries that we haven't fetched yet. Execute all new
     // queries and render again
-    return recursivelyRender(App, renderPath, gqlHandler, queryCache)
+    return recursivelyRender(App, Routes, renderPath, gqlHandler, queryCache)
   } else {
     if (shouldShowGraphqlHandlerNotFoundWarn) {
       console.warn(
-        '\n  ⚠️  Could not load your GraphQL handler. \n Your Cells have been prerendered in the "Loading" state. \n'
+        '\n  ⚠️  Could not load your GraphQL handler. \n Your Cells have been prerendered in the "Loading" state. \n',
       )
     }
 
@@ -150,7 +161,7 @@ async function recursivelyRender(
 function insertChunkLoadingScript(
   indexHtmlTree: CheerioAPI,
   renderPath: string,
-  vite: boolean
+  forVite: boolean,
 ) {
   const prerenderRoutes = detectPrerenderRoutes()
 
@@ -169,13 +180,13 @@ function insertChunkLoadingScript(
   const buildManifest = JSON.parse(
     fs.readFileSync(
       path.join(getPaths().web.dist, 'client-build-manifest.json'),
-      'utf-8'
-    )
+      'utf-8',
+    ),
   )
 
   const chunkPaths: Array<string> = []
 
-  if (!vite) {
+  if (!forVite) {
     // Webpack
 
     const pageChunkPath = buildManifest[`${route?.pageIdentifier}.js`]
@@ -186,8 +197,8 @@ function insertChunkLoadingScript(
       const chunkReferencesJson: Array<ChunkReference> = JSON.parse(
         fs.readFileSync(
           path.join(getPaths().web.dist, 'chunk-references.json'),
-          'utf-8'
-        )
+          'utf-8',
+        ),
       )
 
       const chunkReferences = chunkReferencesJson.find((chunkRef) => {
@@ -219,7 +230,7 @@ function insertChunkLoadingScript(
         })
       }
     }
-  } else if (vite && route?.filePath) {
+  } else if (forVite && route?.filePath) {
     const pagesIndex =
       route.filePath.indexOf(path.join('web', 'src', 'pages')) + 8
     const pagePath = ensurePosixPath(route.filePath.slice(pagesIndex))
@@ -245,12 +256,12 @@ function insertChunkLoadingScript(
   chunkPaths.forEach((chunkPath) => {
     indexHtmlTree('head').prepend(
       `<script defer="defer" src="${chunkPath}" ${
-        vite ? 'type="module"' : ''
-      }></script>`
+        forVite ? 'type="module"' : ''
+      }></script>`,
     )
   })
 
-  if (!vite) {
+  if (!forVite) {
     return
   }
 
@@ -273,7 +284,7 @@ function insertChunkLoadingScript(
       fullChunkPath,
       jsChunk +
         'globalThis.__REDWOOD__PRERENDER_PAGES = globalThis.__REDWOOD__PRERENDER_PAGES || {};\n' +
-        `globalThis.__REDWOOD__PRERENDER_PAGES.${route?.pageIdentifier}=${varNameMatch?.[1]};\n`
+        `globalThis.__REDWOOD__PRERENDER_PAGES.${route?.pageIdentifier}=${varNameMatch?.[1]};\n`,
     )
   })
 }
@@ -323,12 +334,12 @@ export const runPrerender = async ({
   })
 
   const gqlHandler = await getGqlHandler()
-  const vite = getConfig().web.bundler !== 'webpack'
+  const forVite = getConfig().web.bundler !== 'webpack'
 
   // Prerender specific configuration
   // extends projects web/babelConfig
   registerWebSideBabelHook({
-    forVite: vite,
+    forVite,
     overrides: [
       {
         plugins: [
@@ -341,12 +352,14 @@ export const runPrerender = async ({
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
   const { default: App } = require(getPaths().web.app)
+  const { default: Routes } = require(getPaths().web.routes)
 
   const componentAsHtml = await recursivelyRender(
     App,
+    Routes,
     renderPath,
     gqlHandler,
-    queryCache
+    queryCache,
   )
 
   const { helmet } = globalThis.__REDWOOD__HELMET_CONTEXT
@@ -391,8 +404,8 @@ export const runPrerender = async ({
 
   indexHtmlTree('head').append(
     `<script> globalThis.__REDWOOD__APOLLO_STATE = ${JSON.stringify(
-      prerenderApolloClient.extract()
-    )}</script>`
+      prerenderApolloClient.extract(),
+    )}</script>`,
   )
 
   // Reset the cache after the apollo state is appended into the head
@@ -400,7 +413,7 @@ export const runPrerender = async ({
   // or possible cache merge conflicts
   prerenderApolloClient.resetStore()
 
-  insertChunkLoadingScript(indexHtmlTree, renderPath, vite)
+  insertChunkLoadingScript(indexHtmlTree, renderPath, forVite)
 
   indexHtmlTree('#redwood-app').append(componentAsHtml)
 
@@ -412,7 +425,7 @@ export const runPrerender = async ({
 // Used by cli at build time
 export const writePrerenderedHtmlFile = (
   outputHtmlPath: string,
-  content: string
+  content: string,
 ) => {
   const outputHtmlAbsPath = path.join(getPaths().base, outputHtmlPath)
   // Copy default (unprerendered) index.html to 200.html first
