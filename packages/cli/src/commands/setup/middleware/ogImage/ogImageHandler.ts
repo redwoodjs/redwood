@@ -103,12 +103,12 @@ export async function handler({ force }: { force: boolean }) {
           )
           notes.push('')
           notes.push('  yarn workspace api add playwright')
-          notes.push('  cd api')
-          notes.push('  yarn playwright install')
+          notes.push('  yarn workspace api playwright install')
           notes.push('')
           notes.push(
             'Depending on how your host is configured you may need to install additional dependencies first. If so, the `playwright install` step will error out and give you the command to run to install those deps.',
           )
+          notes.push('')
         },
       },
     ],
