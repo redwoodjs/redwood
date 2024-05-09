@@ -9,7 +9,7 @@ exports[`Single word default files > creates a single word function file > Scena
 `;
 
 exports[`Single word default files > creates a single word function file > Test snapshot 1`] = `
-"import { mockHttpEvent } from '@redwoodjs/testing/api'
+"import { mockHttpEvent, mockContext() } from '@redwoodjs/testing/api'
 
 import { handler } from './foo'
 
@@ -24,7 +24,7 @@ describe('foo function', () => {
       },
     })
 
-    const response = await handler(httpEvent, null)
+    const response = await handler(httpEvent, mockContext())
     const { data } = JSON.parse(response.body)
 
     expect(response.statusCode).toBe(200)

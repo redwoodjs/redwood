@@ -1,4 +1,4 @@
-import { mockHttpEvent } from '@redwoodjs/testing/api'
+import { mockHttpEvent, mockContext } from '@redwoodjs/testing/api'
 
 import { handler } from './${name}'
 
@@ -14,7 +14,7 @@ describe('${name} function', () => {
       },
     })
 
-    const response = await handler(httpEvent, null)
+    const response = await handler(httpEvent, mockContext())
     const { data } = JSON.parse(response.body)
 
     expect(response.statusCode).toBe(200)
