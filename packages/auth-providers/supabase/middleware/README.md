@@ -22,7 +22,8 @@ interface Props {
 
 export const registerMiddleware = () => {
   const supabaseAuthMiddleware = createSupabaseAuthMiddleware({
-    // optional. if not set, Supabase will use it's currentUser function vs app's
+    // Optional. If not set, Supabase will use its own `currentUser` function
+    // instead of your app's
     getCurrentUser,
   })
   return [supabaseAuthMiddleware]
