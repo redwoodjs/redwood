@@ -100,6 +100,8 @@ function registerFwGlobals() {
  * We have to call it early in the app's lifecycle, before code that depends on
  * it runs and do so at the server start in (src/devFeServer.ts and
  * src/runFeServer.ts).
+ *
+ * We generate the input to the shims in the `bundlerConfig` Proxies we have
  */
 function registerFwShims() {
   if (!getConfig().experimental?.rsc?.enabled) {

@@ -8,12 +8,20 @@
   },
   "license": "MIT",
   "exports": {
-    ".": {
-      "default": "./dist/index.js"
-    },
     "./plugin": {
       "import": "./dist/vite-plugin-ogimage-gen.js",
-      "default": "./cjsWrappers/plugin.js"
+      "default": "./cjsWrappers/plugin.js",
+      "types": "./dist/vite-plugin-ogimage-gen.d.ts"
+    },
+    "./middleware": {
+      "import": "./dist/OgImageMiddleware.js",
+      "default": "./cjsWrappers/middleware.js",
+      "types": "./dist/OgImageMiddleware.d.ts"
+    },
+    "./hooks": {
+      "import": "./dist/hooks.js",
+      "default": "./cjsWrappers/hooks.js",
+      "types": "./dist/hooks.d.ts"
     }
   },
   "files": [
@@ -34,14 +42,16 @@
     "@redwoodjs/router": "workspace:*",
     "@redwoodjs/vite": "workspace:*",
     "fast-glob": "3.3.2",
-    "react": "18.3.0-canary-a870b2d54-20240314",
-    "react-dom": "18.3.0-canary-a870b2d54-20240314"
+    "lodash": "4.17.21",
+    "react": "19.0.0-canary-cb151849e1-20240424",
+    "react-dom": "19.0.0-canary-cb151849e1-20240424"
   },
   "devDependencies": {
+    "@playwright/test": "1.42.1",
     "@redwoodjs/framework-tools": "workspace:*",
     "ts-toolbelt": "9.6.0",
     "tsx": "4.7.1",
-    "typescript": "5.4.3",
+    "typescript": "5.4.5",
     "vite": "5.2.8",
     "vitest": "1.4.0"
   },

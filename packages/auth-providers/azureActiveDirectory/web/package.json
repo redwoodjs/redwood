@@ -33,8 +33,8 @@
     "@babel/core": "^7.22.20",
     "@types/netlify-identity-widget": "1.9.6",
     "@types/react": "^18.2.55",
-    "react": "18.3.0-canary-a870b2d54-20240314",
-    "typescript": "5.4.3",
+    "react": "19.0.0-canary-cb151849e1-20240424",
+    "typescript": "5.4.5",
     "vitest": "1.4.0"
   },
   "peerDependencies": {

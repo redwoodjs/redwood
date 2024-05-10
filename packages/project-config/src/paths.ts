@@ -42,7 +42,6 @@ export interface WebPaths {
   viteConfig: string | null // because vite is opt-in only
   entryClient: string | null
   entryServer: string | null
-  entries: string | null
   postcss: string
   storybookConfig: string
   storybookPreviewConfig: string | null
@@ -52,6 +51,7 @@ export interface WebPaths {
   distRsc: string
   distServer: string
   distEntryServer: string
+  distRscEntryServer: string
   distDocumentServer: string
   distRouteHooks: string
   distRscEntries: string
@@ -116,7 +116,6 @@ const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_VITE = 'web/vite.config' // .js,.ts
 const PATH_WEB_DIR_ENTRY_CLIENT = 'web/src/entry.client' // .jsx,.tsx
 const PATH_WEB_DIR_ENTRY_SERVER = 'web/src/entry.server' // .jsx,.tsx
-const PATH_WEB_DIR_ENTRIES = 'web/src/entries' // .js,.ts
 const PATH_WEB_DIR_GRAPHQL = 'web/src/graphql' // .js,.ts
 
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
@@ -246,11 +245,11 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       distClient: path.join(BASE_DIR, PATH_WEB_DIR_DIST_CLIENT),
       distRsc: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC),
       distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
-      // Allow for the possibility of a .mjs file
       distEntryServer: path.join(
         BASE_DIR,
         PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER,
       ),
+      distRscEntryServer: path.join(BASE_DIR, 'web/dist/rsc/entry.server.mjs'),
       distDocumentServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT),
       distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
       distRscEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC_ENTRIES),
@@ -258,7 +257,6 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       types: path.join(BASE_DIR, 'web/types'),
       entryClient: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_CLIENT)), // new vite/stream entry point for client
       entryServer: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_SERVER)),
-      entries: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRIES)),
       graphql: path.join(BASE_DIR, PATH_WEB_DIR_GRAPHQL),
     },
   }

@@ -1,4 +1,5 @@
 import { vol, fs as memfs } from 'memfs'
+import type { ConfigEnv } from 'vite'
 import { describe, expect, test, vi, beforeAll, afterAll } from 'vitest'
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
@@ -10,9 +11,9 @@ vi.mock('fs', () => ({ ...memfs, default: { ...memfs } }))
 vi.mock('node:fs', () => ({ ...memfs, default: { ...memfs } }))
 
 /**
- *   +   "ogImage/pages\\About\\AboutPage.jpg": "/redwood-app/web/src/pages/About/AboutPage.jpg.jsx",
-  +   "ogImage/pages\\Contact\\ContactPage.png": "/redwood-app/web/src/pages/Contact/ContactPage.png.jsx",
-  +   "ogGen\\pages\\Posts\\PostsPage\\PostsPage.png": "/redwood-app/web/src/pages/Posts/PostsPage/PostsPage.png.tsx",
+  +   "ogImage/pages\\About\\AboutPage.og":           "/redwood-app/web/src/pages/About/AboutPage.og.jsx",
+  +   "ogImage/pages\\Contact\\ContactPage.og":       "/redwood-app/web/src/pages/Contact/ContactPage.og.jsx",
+  +   "ogGen\\pages\\Posts\\PostsPage\\PostsPage.og": "/redwood-app/web/src/pages/Posts/PostsPage/PostsPage.og.tsx",
  */
 
 describe('vitePluginOgGen', () => {
@@ -25,9 +26,9 @@ describe('vitePluginOgGen', () => {
     vol.fromJSON(
       {
         'redwood.toml': '',
-        'web/src/pages/Posts/PostsPage/PostsPage.png.tsx': 'PostsOG',
-        'web/src/pages/About/AboutPage.jpg.jsx': 'AboutOG',
-        'web/src/pages/Contact/ContactPage.png.jsx': 'ContactOG',
+        'web/src/pages/Posts/PostsPage/PostsPage.og.tsx': 'PostsOG',
+        'web/src/pages/About/AboutPage.og.jsx': 'AboutOG',
+        'web/src/pages/Contact/ContactPage.og.jsx': 'ContactOG',
       },
       '/redwood-app',
     )
@@ -41,35 +42,42 @@ describe('vitePluginOgGen', () => {
     // Type cast so TS doesn't complain calling config below
     // because config can be of many types!
     const plugin = (await vitePluginOgGen()) as {
-      config: (...args: any) => any
+      config: (config: any, env: ConfigEnv) => any
     }
 
-    const rollupInputs = plugin.config().build?.rollupOptions?.input
+    const rollupInputs = plugin.config(
+      {},
+      {
+        isSsrBuild: true,
+        command: 'build',
+        mode: 'production',
+      },
+    ).build?.rollupOptions?.input
 
     const inputKeys = Object.keys(rollupInputs)
 
     expect(inputKeys).toEqual(
       expect.arrayContaining([
-        'ogImage/pages/Posts/PostsPage/PostsPage.png',
-        'ogImage/pages/About/AboutPage.jpg',
-        'ogImage/pages/Contact/ContactPage.png',
+        'ogImage/pages/Posts/PostsPage/PostsPage.og',
+        'ogImage/pages/About/AboutPage.og',
+        'ogImage/pages/Contact/ContactPage.og',
       ]),
     )
 
     // For windows, we do the conversion before the test
     expect(
       ensurePosixPath(
-        rollupInputs['ogImage/pages/Posts/PostsPage/PostsPage.png'],
+        rollupInputs['ogImage/pages/Posts/PostsPage/PostsPage.og'],
       ),
-    ).toMatch('/redwood-app/web/src/pages/Posts/PostsPage/PostsPage.png.tsx')
+    ).toMatch('/redwood-app/web/src/pages/Posts/PostsPage/PostsPage.og.tsx')
 
     expect(
-      ensurePosixPath(rollupInputs['ogImage/pages/About/AboutPage.jpg']),
-    ).toMatch('/redwood-app/web/src/pages/About/AboutPage.jpg.jsx')
+      ensurePosixPath(rollupInputs['ogImage/pages/About/AboutPage.og']),
+    ).toMatch('/redwood-app/web/src/pages/About/AboutPage.og.jsx')
 
     expect(
-      ensurePosixPath(rollupInputs['ogImage/pages/Contact/ContactPage.png']),
-    ).toMatch('/redwood-app/web/src/pages/Contact/ContactPage.png.jsx')
+      ensurePosixPath(rollupInputs['ogImage/pages/Contact/ContactPage.og']),
+    ).toMatch('/redwood-app/web/src/pages/Contact/ContactPage.og.jsx')
   })
 
   test('returns the correct Vite plugin object', async () => {

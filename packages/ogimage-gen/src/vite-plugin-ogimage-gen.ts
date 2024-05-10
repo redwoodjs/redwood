@@ -17,7 +17,7 @@ type ConfigPlugin = O.Required<VitePlugin, 'config'>
 function vitePluginOgImageGen(): ConfigPlugin {
   const rwPaths = getPaths()
 
-  const allOgComponents = fg.sync('pages/**/*.{png,jpg}.{jsx,tsx}', {
+  const allOgComponents = fg.sync('pages/**/*.og.{jsx,tsx}', {
     cwd: rwPaths.web.src,
     absolute: true,
     // @MARK This allows us to mock the fs module in tests
@@ -41,13 +41,17 @@ function vitePluginOgImageGen(): ConfigPlugin {
   return {
     name: 'rw-vite-plugin-ogimage-gen',
     apply: 'build', // We only need to update rollup inputs for build
-    config: () => {
-      return {
-        build: {
-          rollupOptions: {
-            input: ogComponentInput,
+    config: (_config, env) => {
+      if (env.isSsrBuild) {
+        return {
+          build: {
+            rollupOptions: {
+              input: ogComponentInput,
+            },
           },
-        },
+        }
+      } else {
+        return
       }
     },
   }

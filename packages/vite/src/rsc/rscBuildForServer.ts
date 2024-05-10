@@ -2,8 +2,9 @@ import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import { getEntries } from '../lib/entries.js'
 import { onWarn } from '../lib/onWarn.js'
-import { rscCssPreinitPlugin } from '../plugins/vite-plugin-rsc-css-preinit.js'
+// import { rscCssPreinitPlugin } from '../plugins/vite-plugin-rsc-css-preinit.js'
 import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
@@ -17,7 +18,7 @@ export async function rscBuildForServer(
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>,
-  componentImportMap: Map<string, string[]>,
+  _componentImportMap: Map<string, string[]>,
 ) {
   console.log('\n')
   console.log('3. rscBuildForServer')
@@ -25,15 +26,11 @@ export async function rscBuildForServer(
 
   const rwPaths = getPaths()
 
-  if (!rwPaths.web.entries) {
-    throw new Error('RSC entries file not found')
-  }
+  const entryFiles = getEntries()
+  const entryFilesKeys = Object.keys(entryFiles)
 
-  const input = {
-    entries: rwPaths.web.entries,
-    ...clientEntryFiles,
-    ...serverEntryFiles,
-    ...customModules,
+  if (!rwPaths.web.entryServer) {
+    throw new Error('Server Entry file not found')
   }
 
   // TODO (RSC): No redwood-vite plugin, add it in here
@@ -60,7 +57,7 @@ export async function rscBuildForServer(
       },
     },
     plugins: [
-      // The rscTransformPlugin maps paths like
+      // The rscTransformUseClientPlugin maps paths like
       // /Users/tobbe/.../rw-app/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
       // to
       // /Users/tobbe/.../rw-app/web/dist/server/assets/rsc0.js
@@ -68,7 +65,8 @@ export async function rscBuildForServer(
       // (It does other things as well, but that's why it needs clientEntryFiles)
       rscTransformUseClientPlugin(clientEntryFiles),
       rscTransformUseServerPlugin(),
-      rscCssPreinitPlugin(clientEntryFiles, componentImportMap),
+      // Note: Temporary disabled while we fix the underlying css issue
+      // rscCssPreinitPlugin(clientEntryFiles, componentImportMap),
       rscRoutesAutoLoader(),
     ],
     build: {
@@ -81,30 +79,39 @@ export async function rscBuildForServer(
       manifest: 'server-build-manifest.json',
       rollupOptions: {
         onwarn: onWarn,
-        input,
+        input: {
+          ...entryFiles,
+          ...clientEntryFiles,
+          ...serverEntryFiles,
+          ...customModules,
+          'rsdw-server': 'react-server-dom-webpack/server.edge',
+          'entry.server': rwPaths.web.entryServer,
+        },
         output: {
           banner: (chunk) => {
             // HACK to bring directives to the front
             let code = ''
             const clientValues = Object.values(clientEntryFiles)
-            console.log('chunk.moduleIds', chunk.moduleIds)
-            console.log('clientValues', clientValues)
             if (chunk.moduleIds.some((id) => clientValues.includes(id))) {
-              console.log('adding "use client" to', chunk.fileName)
               code += '"use client";'
             }
 
             const serverValues = Object.values(serverEntryFiles)
-            console.log('serverValues', serverValues)
             if (chunk.moduleIds.some((id) => serverValues.includes(id))) {
-              console.log('adding "use server" to', chunk.fileName)
               code += '"use server";'
             }
             return code
           },
           entryFileNames: (chunkInfo) => {
-            // TODO (RSC) Probably don't want 'entries'. And definitely don't want it hardcoded
-            if (chunkInfo.name === 'entries' || customModules[chunkInfo.name]) {
+            // Entries such as pages should be named like the other assets
+            if (entryFilesKeys.includes(chunkInfo.name)) {
+              return 'assets/[name]-[hash].mjs'
+            }
+            if (
+              chunkInfo.name === 'entry.server' ||
+              chunkInfo.name === 'rsdw-server' ||
+              customModules[chunkInfo.name]
+            ) {
               return '[name].mjs'
             }
             return 'assets/[name].mjs'

@@ -82,7 +82,7 @@ export async function handler({ name, type, force, verbose }) {
       {
         title: `Adding ${name} example subscription ...`,
         enabled: () => functionType === 'subscription',
-        task: () => {
+        task: async () => {
           // sdl
 
           const exampleSdlTemplateContent = path.resolve(
@@ -100,7 +100,7 @@ export async function handler({ name, type, force, verbose }) {
 
           const sdlContent = ts
             ? exampleSdlTemplateContent
-            : transformTSToJS(sdlFile, exampleSdlTemplateContent)
+            : await transformTSToJS(sdlFile, exampleSdlTemplateContent)
 
           // service
 
@@ -119,7 +119,7 @@ export async function handler({ name, type, force, verbose }) {
 
           const serviceContent = ts
             ? exampleServiceTemplateContent
-            : transformTSToJS(serviceFile, exampleServiceTemplateContent)
+            : await transformTSToJS(serviceFile, exampleServiceTemplateContent)
 
           // subscription
 
@@ -139,27 +139,33 @@ export async function handler({ name, type, force, verbose }) {
 
           const setupScriptContent = ts
             ? exampleSubscriptionTemplateContent
-            : transformTSToJS(exampleFile, exampleSubscriptionTemplateContent)
+            : await transformTSToJS(
+                exampleFile,
+                exampleSubscriptionTemplateContent,
+              )
 
           // write all files
           return [
             writeFile(
               sdlFile,
-              generateTemplate(sdlContent, templateVariables(name)),
+              await generateTemplate(sdlContent, templateVariables(name)),
               {
                 overwriteExisting: force,
               },
             ),
             writeFile(
               serviceFile,
-              generateTemplate(serviceContent, templateVariables(name)),
+              await generateTemplate(serviceContent, templateVariables(name)),
               {
                 overwriteExisting: force,
               },
             ),
             writeFile(
               exampleFile,
-              generateTemplate(setupScriptContent, templateVariables(name)),
+              await generateTemplate(
+                setupScriptContent,
+                templateVariables(name),
+              ),
               {
                 overwriteExisting: force,
               },
@@ -170,7 +176,7 @@ export async function handler({ name, type, force, verbose }) {
       {
         title: `Adding ${name} example live query ...`,
         enabled: () => functionType === 'liveQuery',
-        task: () => {
+        task: async () => {
           // sdl
           const exampleSdlTemplateContent = path.resolve(
             __dirname,
@@ -185,7 +191,7 @@ export async function handler({ name, type, force, verbose }) {
           )
           const sdlContent = ts
             ? exampleSdlTemplateContent
-            : transformTSToJS(sdlFile, exampleSdlTemplateContent)
+            : await transformTSToJS(sdlFile, exampleSdlTemplateContent)
 
           // service
           const exampleServiceTemplateContent = path.resolve(
@@ -203,20 +209,20 @@ export async function handler({ name, type, force, verbose }) {
           )
           const serviceContent = ts
             ? exampleServiceTemplateContent
-            : transformTSToJS(serviceFile, exampleServiceTemplateContent)
+            : await transformTSToJS(serviceFile, exampleServiceTemplateContent)
 
           // write all files
           return [
             writeFile(
               sdlFile,
-              generateTemplate(sdlContent, templateVariables(name)),
+              await generateTemplate(sdlContent, templateVariables(name)),
               {
                 overwriteExisting: force,
               },
             ),
             writeFile(
               serviceFile,
-              generateTemplate(serviceContent, templateVariables(name)),
+              await generateTemplate(serviceContent, templateVariables(name)),
               {
                 overwriteExisting: force,
               },

@@ -11,7 +11,10 @@ declare global {
   // typed just by importing gql from `graphql-tag`. But for Trusted Documents
   // the type should be imported from `web/src/graphql/gql` in the user's
   // project. The type here is generic enough to cover both cases.
-  const gql: (source: string | TemplateStringsArray) => DocumentNode
+  const gql: (
+    source: string | TemplateStringsArray | readonly string[],
+    ...args: any[]
+  ) => DocumentNode
 
   // Having this as a type instead of a const allows us to augment/override it
   // in other packages
