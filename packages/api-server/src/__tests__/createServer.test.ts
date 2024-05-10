@@ -234,6 +234,7 @@ describe('resolveOptions', () => {
 
     expect(resolvedOptions).toEqual({
       apiRootPath: DEFAULT_CREATE_SERVER_OPTIONS.apiRootPath,
+      beforeApiConfig: DEFAULT_CREATE_SERVER_OPTIONS.beforeApiConfig,
       fastifyServerOptions: {
         requestTimeout:
           DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.requestTimeout,
