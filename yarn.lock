@@ -7574,7 +7574,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:19.0.0-canary-cb151849e1-20240424"
+    react: "npm:19.0.0-beta-04b058868c-20240508"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7627,7 +7627,7 @@ __metadata:
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:19.0.0-canary-cb151849e1-20240424"
+    react: "npm:19.0.0-beta-04b058868c-20240508"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7677,7 +7677,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:19.0.0-canary-cb151849e1-20240424"
+    react: "npm:19.0.0-beta-04b058868c-20240508"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7770,7 +7770,7 @@ __metadata:
     core-js: "npm:3.36.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:19.0.0-canary-cb151849e1-20240424"
+    react: "npm:19.0.0-beta-04b058868c-20240508"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -7819,7 +7819,7 @@ __metadata:
     firebase: "npm:10.11.0"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:19.0.0-canary-cb151849e1-20240424"
+    react: "npm:19.0.0-beta-04b058868c-20240508"
     typescript: "npm:5.4.5"
   peerDependencies:
     firebase: 10.11.0
@@ -7869,7 +7869,7 @@ __metadata:
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:19.0.0-canary-cb151849e1-20240424"
+    react: "npm:19.0.0-beta-04b058868c-20240508"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7939,7 +7939,7 @@ __metadata:
     "@supabase/supabase-js": "npm:2.40.0"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:19.0.0-canary-cb151849e1-20240424"
+    react: "npm:19.0.0-beta-04b058868c-20240508"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
@@ -7992,7 +7992,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
-    react: "npm:19.0.0-canary-cb151849e1-20240424"
+    react: "npm:19.0.0-beta-04b058868c-20240508"
     supertokens-auth-react: "npm:0.39.1"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
@@ -8010,7 +8010,7 @@ __metadata:
     "@testing-library/react": "npm:14.3.1"
     core-js: "npm:3.36.1"
     msw: "npm:1.3.3"
-    react: "npm:19.0.0-canary-cb151849e1-20240424"
+    react: "npm:19.0.0-beta-04b058868c-20240508"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
@@ -8390,13 +8390,13 @@ __metadata:
     graphql: "npm:16.8.1"
     nodemon: "npm:3.1.0"
     pascalcase: "npm:1.0.0"
-    react: "npm:19.0.0-canary-cb151849e1-20240424"
-    react-dom: "npm:19.0.0-canary-cb151849e1-20240424"
+    react: "npm:19.0.0-beta-04b058868c-20240508"
+    react-dom: "npm:19.0.0-beta-04b058868c-20240508"
     react-hook-form: "npm:7.51.2"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
-    react: 19.0.0-canary-cb151849e1-20240424
+    react: 19.0.0-beta-04b058868c-20240508
   languageName: unknown
   linkType: soft
 
@@ -8609,8 +8609,8 @@ __metadata:
     "@redwoodjs/vite": "workspace:*"
     fast-glob: "npm:3.3.2"
     lodash: "npm:4.17.21"
-    react: "npm:19.0.0-canary-cb151849e1-20240424"
-    react-dom: "npm:19.0.0-canary-cb151849e1-20240424"
+    react: "npm:19.0.0-beta-04b058868c-20240508"
+    react-dom: "npm:19.0.0-beta-04b058868c-20240508"
     ts-toolbelt: "npm:9.6.0"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.5"
@@ -8643,8 +8643,8 @@ __metadata:
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
-    react: 19.0.0-canary-cb151849e1-20240424
-    react-dom: 19.0.0-canary-cb151849e1-20240424
+    react: 19.0.0-beta-04b058868c-20240508
+    react-dom: 19.0.0-beta-04b058868c-20240508
   languageName: unknown
   linkType: soft
 
@@ -8724,13 +8724,13 @@ __metadata:
     core-js: "npm:3.36.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:19.0.0-canary-cb151849e1-20240424"
-    react-dom: "npm:19.0.0-canary-cb151849e1-20240424"
+    react: "npm:19.0.0-beta-04b058868c-20240508"
+    react-dom: "npm:19.0.0-beta-04b058868c-20240508"
     tstyche: "npm:1.1.0"
     typescript: "npm:5.4.5"
   peerDependencies:
-    react: 19.0.0-canary-cb151849e1-20240424
-    react-dom: 19.0.0-canary-cb151849e1-20240424
+    react: 19.0.0-beta-04b058868c-20240508
+    react-dom: 19.0.0-beta-04b058868c-20240508
   languageName: unknown
   linkType: soft
 
@@ -8877,8 +8877,8 @@ __metadata:
     glob: "npm:10.3.12"
     http-proxy-middleware: "npm:2.0.6"
     isbot: "npm:3.8.0"
-    react: "npm:19.0.0-canary-cb151849e1-20240424"
-    react-server-dom-webpack: "npm:19.0.0-canary-cb151849e1-20240424"
+    react: "npm:19.0.0-beta-04b058868c-20240508"
+    react-server-dom-webpack: "npm:19.0.0-beta-04b058868c-20240508"
     rollup: "npm:4.17.2"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.5"
@@ -8936,8 +8936,8 @@ __metadata:
     graphql-sse: "npm:2.5.2"
     graphql-tag: "npm:2.12.6"
     nodemon: "npm:3.1.0"
-    react: "npm:19.0.0-canary-cb151849e1-20240424"
-    react-dom: "npm:19.0.0-canary-cb151849e1-20240424"
+    react: "npm:19.0.0-beta-04b058868c-20240508"
+    react-dom: "npm:19.0.0-beta-04b058868c-20240508"
     react-helmet-async: "npm:2.0.4"
     react-hot-toast: "npm:2.4.1"
     stacktracey: "npm:2.1.8"
@@ -8946,8 +8946,8 @@ __metadata:
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
-    react: 19.0.0-canary-cb151849e1-20240424
-    react-dom: 19.0.0-canary-cb151849e1-20240424
+    react: 19.0.0-beta-04b058868c-20240508
+    react-dom: 19.0.0-beta-04b058868c-20240508
   bin:
     cross-env: ./dist/bins/cross-env.js
     msw: ./dist/bins/msw.js
@@ -27104,14 +27104,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:19.0.0-canary-cb151849e1-20240424":
-  version: 19.0.0-canary-cb151849e1-20240424
-  resolution: "react-dom@npm:19.0.0-canary-cb151849e1-20240424"
+"react-dom@npm:19.0.0-beta-04b058868c-20240508":
+  version: 19.0.0-beta-04b058868c-20240508
+  resolution: "react-dom@npm:19.0.0-beta-04b058868c-20240508"
   dependencies:
-    scheduler: "npm:0.25.0-canary-cb151849e1-20240424"
+    scheduler: "npm:0.25.0-beta-04b058868c-20240508"
   peerDependencies:
-    react: 19.0.0-canary-cb151849e1-20240424
-  checksum: 10c0/d42a6f0f587df43d889aac7fbfac26d5a1cc91bd7d93a8bfecf26a77196aba4fc0878dc75c3e5a13449cb531417876b6b0ea8483d414bba4e93008d3f8b52405
+    react: 19.0.0-beta-04b058868c-20240508
+  checksum: 10c0/136b5aa674740b4a33c8acffa0938d438d4368ed08ab123ed2cccb1f4b73423dec5c5e5d0c5691f97c3d1d31b4d210c4e663f5430e95813bd9b7a335a44e1eed
   languageName: node
   linkType: hard
 
@@ -27257,17 +27257,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-server-dom-webpack@npm:19.0.0-canary-cb151849e1-20240424":
-  version: 19.0.0-canary-cb151849e1-20240424
-  resolution: "react-server-dom-webpack@npm:19.0.0-canary-cb151849e1-20240424"
+"react-server-dom-webpack@npm:19.0.0-beta-04b058868c-20240508":
+  version: 19.0.0-beta-04b058868c-20240508
+  resolution: "react-server-dom-webpack@npm:19.0.0-beta-04b058868c-20240508"
   dependencies:
     acorn-loose: "npm:^8.3.0"
     neo-async: "npm:^2.6.1"
   peerDependencies:
-    react: 19.0.0-canary-cb151849e1-20240424
-    react-dom: 19.0.0-canary-cb151849e1-20240424
+    react: 19.0.0-beta-04b058868c-20240508
+    react-dom: 19.0.0-beta-04b058868c-20240508
     webpack: ^5.59.0
-  checksum: 10c0/910f07dca3f074b34159e14734adfd2d50b78c49e4a5ef55f407fd67ba9f6f6c56aa819263d3050966d84014271abc30ea6936246e244e0aa7fdd858b22a40c9
+  checksum: 10c0/0acc5fe49b26f2e175fd6b22120fa0db880498a24497917b442408c41ec50e4302afb6b3d42b3a55e10ecfec71e0552496de5171943c06c6bd7e41a7e6985746
   languageName: node
   linkType: hard
 
@@ -27297,10 +27297,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:19.0.0-canary-cb151849e1-20240424":
-  version: 19.0.0-canary-cb151849e1-20240424
-  resolution: "react@npm:19.0.0-canary-cb151849e1-20240424"
-  checksum: 10c0/dcf99a3fd550aee018c61c8b28aafacaf50fa8fbf2321c27bf56a0109ed78d01dd3ec38829f01cb6729cef3377c5401c09723738d3e95acce7a915f16328056b
+"react@npm:19.0.0-beta-04b058868c-20240508":
+  version: 19.0.0-beta-04b058868c-20240508
+  resolution: "react@npm:19.0.0-beta-04b058868c-20240508"
+  checksum: 10c0/073bf88725c89a2b4fdaed686d5c9eac619c34e31480bcbb3f9cd362a04463da9985ac4f870869e111d3e776c52fb95a8783793c99d9951541ead67742cbf952
   languageName: node
   linkType: hard
 
@@ -28355,10 +28355,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:0.25.0-canary-cb151849e1-20240424":
-  version: 0.25.0-canary-cb151849e1-20240424
-  resolution: "scheduler@npm:0.25.0-canary-cb151849e1-20240424"
-  checksum: 10c0/5530d5541e5c7292e51c10d9f1607d7605fbb5f18a1d5d798db7094e1563df45f1a42af39561c999a743eabe3320b1c44b739b437a21a3ca9e84c98e8a09c473
+"scheduler@npm:0.25.0-beta-04b058868c-20240508":
+  version: 0.25.0-beta-04b058868c-20240508
+  resolution: "scheduler@npm:0.25.0-beta-04b058868c-20240508"
+  checksum: 10c0/3700160f3ab8894d8c8c73442580c814e9a6f97028c7b595cd1a9ce8e5a30c6d43b261684956bb53cd2af382a3f795dc622857c412d2e60d491a75eb2eb9d5a0
   languageName: node
   linkType: hard
 
