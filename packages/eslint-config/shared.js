@@ -196,7 +196,10 @@ module.exports = {
       },
     },
     {
-      files: ['web/src/**/*.routeHooks.{js,ts}'],
+      files: [
+        'web/src/**/*.routeHooks.{js,ts}',
+        'web/src/entry.server.{jsx,tsx}',
+      ],
       rules: { 'no-restricted-imports': 'off' },
     },
   ],

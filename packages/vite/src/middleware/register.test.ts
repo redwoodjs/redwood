@@ -2,18 +2,19 @@ import { describe, expect, it, vitest } from 'vitest'
 
 import { MiddlewareRequest } from './MiddlewareRequest'
 import { MiddlewareResponse } from './MiddlewareResponse'
-import type { MiddlewareReg } from './register'
 import { addMiddlewareHandlers, chain, groupByRoutePatterns } from './register'
-import type { Middleware, MiddlewareClass } from './types'
+import type { Middleware, MiddlewareClass, MiddlewareReg } from './types'
 
 const fakeMiddleware: Middleware = vitest.fn()
 
 class FakeClassMw implements MiddlewareClass {
   value: number
+
   constructor(value: number) {
     this.value = value
   }
-  async invoke(req, res) {
+
+  async invoke(_req: MiddlewareRequest, res: MiddlewareResponse) {
     res.body = 'MW initialized with ' + this.value
     res.headers.set('class-mw-value', this.value.toString())
     return res
@@ -57,7 +58,7 @@ describe('groupByRoutePatterns', () => {
   })
 
   it('Throws if not a function, instance or tuple', () => {
-    const badInput: MiddlewareReg = ['/badinput'] as any
+    const badInput: MiddlewareReg = ['/bad-input'] as any
 
     expect(() => groupByRoutePatterns(badInput)).toThrow()
   })
@@ -78,23 +79,23 @@ describe('groupByRoutePatterns', () => {
       exampleRequest,
       new MiddlewareResponse(),
     )
-    expect(firstOutput?.body).toBe('MW initialized with 1')
+    expect((firstOutput || {}).body).toBe('MW initialized with 1')
 
     const secondOutput = await output['/second-path'][0]?.(
       exampleRequest,
       new MiddlewareResponse(),
     )
-    expect(secondOutput?.body).toBe('MW initialized with 2')
+    expect((secondOutput || {})?.body).toBe('MW initialized with 2')
   })
 })
 
 describe('chain', () => {
-  const addHeaderMw: Middleware = (req, res) => {
+  const addHeaderMw: Middleware = (_req, res) => {
     res.headers.append('add-header-mw', 'added')
     return res
   }
 
-  const addCookieMw: Middleware = (req, res) => {
+  const addCookieMw: Middleware = (_req, res) => {
     res.cookies.set('add-cookie-mw', 'added')
     return res
   }
@@ -126,7 +127,8 @@ describe('chain', () => {
   it('Routing with find-my-way', async () => {
     const mwRouter = addMiddlewareHandlers(registerList)
     const match = mwRouter.find('GET', '/bazinga')
-    // @ts-expect-error No way of customising find-my-way route type
+
+    // No way of customizing find-my-way route type
     const output = await match?.handler(
       exampleRequest,
       new MiddlewareResponse(),
@@ -137,7 +139,7 @@ describe('chain', () => {
     expect(output.headers.get('class-mw-value')).toBe('999')
 
     // The other one still gets chained
-    expect(output.cookies.get('add-cookie-mw').value).toBe('added')
+    expect(output.cookies.get('add-cookie-mw')).toBe('added')
 
     // Because /bazinga is more specific, the '*' handlers won't be executed
     expect(output.headers.get('add-header-mw')).toBeFalsy()

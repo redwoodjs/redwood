@@ -2,9 +2,10 @@ import fmw from 'find-my-way'
 import type Router from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { makeFilePath } from '../utils'
+import type { EntryServer } from '../types'
+import { makeFilePath, ssrLoadEntryServer } from '../utils'
 
 import type { MiddlewareRequest } from './MiddlewareRequest'
 import { MiddlewareResponse } from './MiddlewareResponse'
@@ -12,12 +13,8 @@ import type {
   Middleware,
   MiddlewareClass,
   MiddlewareInvokeOptions,
+  MiddlewareReg,
 } from './types'
-
-// Tuple of [mw, '*.{extension}']
-export type MiddlewareReg = Array<
-  [Middleware | MiddlewareClass, string] | Middleware | MiddlewareClass
->
 
 type GroupedMw = Record<string, Middleware[]>
 
@@ -82,7 +79,7 @@ export const chain = (mwList: Middleware[]) => {
   }
 }
 
-export const addMiddlewareHandlers = (mwRegList: MiddlewareReg) => {
+export const addMiddlewareHandlers = (mwRegList: MiddlewareReg = []) => {
   const groupedMw = groupByRoutePatterns(mwRegList)
   const mwRouter = fmw()
 
@@ -91,8 +88,8 @@ export const addMiddlewareHandlers = (mwRegList: MiddlewareReg) => {
     const chainedMw = chain(mwList)
 
     // @NOTE: as any, because we don't actually use the fmw router to invoke the mw
-    // we use it just for matching. FMW doesn't seem to have a way of customising the handler signature
-    mwRouter.on('GET', pattern, chainedMw as any)
+    // we use it just for matching. FMW doesn't seem to have a way of customizing the handler type
+    mwRouter.on(['GET', 'POST'], pattern, chainedMw as any)
   }
 
   return mwRouter
@@ -107,19 +104,25 @@ export const createMiddlewareRouter = async (
   vite?: ViteDevServer,
 ): Promise<Router.Instance<any>> => {
   const rwPaths = getPaths()
+  const rwConfig = getConfig()
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
-  const entryServerPath = rwPaths.web.entryServer
+  let entryServerImport: EntryServer
 
-  if (!entryServerPath) {
-    throw new Error('Entry server not found. Could not load middleware')
-  }
-
-  let entryServerImport: Record<'registerMiddleware', () => MiddlewareReg>
   if (vite) {
-    entryServerImport = await vite.ssrLoadModule(entryServerPath)
+    entryServerImport = await ssrLoadEntryServer(vite)
   } else {
     // This imports from dist!
-    entryServerImport = await import(makeFilePath(rwPaths.web.distEntryServer))
+
+    if (rscEnabled) {
+      entryServerImport = await import(
+        makeFilePath(rwPaths.web.distRscEntryServer)
+      )
+    } else {
+      entryServerImport = await import(
+        makeFilePath(rwPaths.web.distEntryServer)
+      )
+    }
   }
 
   const { registerMiddleware } = entryServerImport
@@ -128,5 +131,5 @@ export const createMiddlewareRouter = async (
     return fmw()
   }
 
-  return addMiddlewareHandlers(registerMiddleware())
+  return addMiddlewareHandlers(await registerMiddleware())
 }

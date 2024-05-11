@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 
-import type { AuthImplementation } from '../AuthImplementation'
+import type { AuthImplementation } from '../AuthImplementation.js'
 
-import type { AuthProviderState } from './AuthProviderState'
-import type { useCurrentUser } from './useCurrentUser'
-import { useReauthenticate } from './useReauthenticate'
+import type { AuthProviderState } from './AuthProviderState.js'
+import type { useCurrentUser } from './useCurrentUser.js'
+import { useReauthenticate } from './useReauthenticate.js'
 
 export const useSignUp = <
   TUser,
@@ -40,13 +40,11 @@ export const useSignUp = <
     React.SetStateAction<AuthProviderState<TUser>>
   >,
   getCurrentUser: ReturnType<typeof useCurrentUser>,
-  skipFetchCurrentUser: boolean | undefined,
 ) => {
   const reauthenticate = useReauthenticate(
     authImplementation,
     setAuthProviderState,
     getCurrentUser,
-    skipFetchCurrentUser,
   )
 
   return useCallback(

@@ -33,8 +33,8 @@
     "@clerk/clerk-react": "4.30.7",
     "@clerk/types": "3.62.1",
     "@types/react": "^18.2.55",
-    "react": "18.3.0-canary-a870b2d54-20240314",
-    "typescript": "5.4.3",
+    "react": "19.0.0-beta-04b058868c-20240508",
+    "typescript": "5.4.5",
     "vitest": "1.4.0"
   },
   "peerDependencies": {

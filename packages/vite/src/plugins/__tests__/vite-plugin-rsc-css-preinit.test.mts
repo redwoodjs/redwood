@@ -108,13 +108,16 @@ describe('rscCssPreinitPlugin', () => {
         name = "Anonymous"
       }) => {
         preinit("assets/Counter-BZpJq_HD.css", {
-          as: "style"
+          as: "style",
+          precedence: "medium"
         });
         preinit("assets/rsc-DeepSubCounter-DqMovEyK.css", {
-          as: "style"
+          as: "style",
+          precedence: "medium"
         });
         preinit("assets/rsc-SubCounter-Bc4odF6o.css", {
-          as: "style"
+          as: "style",
+          precedence: "medium"
         });
         return /* @__PURE__ */jsxs("div", {
           className: "home-page",

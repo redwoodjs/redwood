@@ -139,10 +139,18 @@ export function renderFromRscServer<TProps>(rscId: string) {
       }
     }
 
-    // TODO (RSC): Might be an issue here with startTransition according to the
-    // waku sources I copied this from. We need to figure out if this is the
-    // right way to do things
+    // `use()` will throw a `SuspenseException` as long as `dataToReturn` is
+    // unfulfilled. React internally tracks this promise and re-renders this
+    // component when the promise resolves. When the promise is resolved no
+    // exception will be thrown and the actual value of the promise will be
+    // returned instead
+    // The closest suspense boundary will render its fallback when the
+    // exception is thrown
     return use(dataToReturn)
+
+    // TODO (RSC): Might be an issue with `use` above with startTransition
+    // according to the waku sources I copied this from. We need to figure out
+    // if this is the right way to do things
   }
 
   return ServerComponent

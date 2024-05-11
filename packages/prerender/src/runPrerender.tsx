@@ -39,6 +39,7 @@ const prerenderApolloClient = new ApolloClient({ cache: new InMemoryCache() })
 
 async function recursivelyRender(
   App: React.ElementType,
+  Routes: React.ElementType,
   renderPath: string,
   gqlHandler: any,
   queryCache: Record<string, QueryInfo>,
@@ -124,10 +125,20 @@ async function recursivelyRender(
     }),
   )
 
+  // `renderPath` is *just* a path, but the LocationProvider needs a full URL
+  // object so if you need the domain to be something specific when
+  // pre-rendering (because you're showing it in HTML output or the og:image
+  // uses useLocation().host) you can set the RWJS_PRERENDER_ORIGIN env variable
+  // so that it doesn't just default to localhost
+  const prerenderUrl =
+    process.env.RWJS_PRERENDER_ORIGIN || 'http://localhost' + renderPath
+
   const componentAsHtml = ReactDOMServer.renderToString(
-    <LocationProvider location={{ pathname: renderPath }}>
+    <LocationProvider location={new URL(prerenderUrl)}>
       <CellCacheContextProvider queryCache={queryCache}>
-        <App />
+        <App>
+          <Routes />
+        </App>
       </CellCacheContextProvider>
     </LocationProvider>,
   )
@@ -135,7 +146,7 @@ async function recursivelyRender(
   if (Object.values(queryCache).some((value) => !value.hasProcessed)) {
     // We found new queries that we haven't fetched yet. Execute all new
     // queries and render again
-    return recursivelyRender(App, renderPath, gqlHandler, queryCache)
+    return recursivelyRender(App, Routes, renderPath, gqlHandler, queryCache)
   } else {
     if (shouldShowGraphqlHandlerNotFoundWarn) {
       console.warn(
@@ -341,9 +352,11 @@ export const runPrerender = async ({
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
   const { default: App } = require(getPaths().web.app)
+  const { default: Routes } = require(getPaths().web.routes)
 
   const componentAsHtml = await recursivelyRender(
     App,
+    Routes,
     renderPath,
     gqlHandler,
     queryCache,

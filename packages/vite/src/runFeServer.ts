@@ -77,12 +77,6 @@ export async function runFeServer() {
     await import(clientBuildManifestUrl, { with: { type: 'json' } })
   ).default
 
-  if (rwConfig.experimental?.rsc?.enabled) {
-    console.log('='.repeat(80))
-    console.log('buildManifest', clientBuildManifest)
-    console.log('='.repeat(80))
-  }
-
   // @MARK: Surely there's a better way than this!
   const clientEntry = Object.values(clientBuildManifest).find(
     (manifestItem) => {
@@ -98,14 +92,14 @@ export async function runFeServer() {
 
   const handleWithMiddleware = (route?: RWRouteManifestItem) => {
     return createServerAdapter(async (req: Request) => {
-      if (!middlewareRouter) {
-        return new Response('No middleware found', { status: 404 })
-      }
-
       const middleware = middlewareRouter.find(
         req.method as HTTPMethod,
         req.url,
       )?.handler as Middleware | undefined
+
+      if (!middleware) {
+        return new Response('No middleware found', { status: 404 })
+      }
 
       const [mwRes] = await invoke(req, middleware, route ? { route } : {})
 
@@ -146,6 +140,12 @@ export async function runFeServer() {
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
   app.use('/rw-rsc', createRscRequestHandler())
 
+  // Static asset handling MUST be defined before our catch all routing handler below
+  // otherwise it will catch all requests for static assets and return a 404.
+  // Placing this here defines our precedence for static asset handling - that we favor
+  // the static assets over any application routing.
+  app.use(express.static(rwPaths.web.distClient, { index: false }))
+
   const getStylesheetLinks = () => clientEntry.css || []
   const clientEntryPath = '/' + clientEntry.file
 
@@ -156,14 +156,12 @@ export async function runFeServer() {
     getMiddlewareRouter: async () => middlewareRouter,
   })
 
-  // Wrap with whatg/server adapter. Express handler -> Fetch API handler
+  // Wrap with whatwg/server adapter. Express handler -> Fetch API handler
   app.get('*', createServerAdapter(routeHandler))
 
   // @MARK: put this after rw-rsc to avoid confusion.
   // We will likely move it up when we implement RSC Auth
   app.post('*', handleWithMiddleware())
-
-  app.use(express.static(rwPaths.web.distClient, { index: false }))
 
   app.listen(rwConfig.web.port)
   console.log(

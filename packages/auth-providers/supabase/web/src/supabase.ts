@@ -1,3 +1,5 @@
+import { DEFAULT_COOKIE_OPTIONS as DEFAULT_SUPABASE_COOKIE_OPTIONS } from '@supabase/ssr'
+import { serialize } from '@supabase/ssr'
 import type {
   SupabaseClient,
   AuthResponse,
@@ -9,11 +11,16 @@ import type {
   SignInWithPasswordlessCredentials,
   SignInWithSSO,
   SignUpWithPasswordCredentials,
+  AuthTokenResponse,
+  AuthOtpResponse,
 } from '@supabase/supabase-js'
 import { AuthError } from '@supabase/supabase-js'
 
-import type { CurrentUser } from '@redwoodjs/auth'
-import { createAuthentication } from '@redwoodjs/auth'
+import type { CurrentUser, CustomProviderHooks } from '@redwoodjs/auth'
+import {
+  createAuthentication,
+  getCurrentUserFromMiddleware,
+} from '@redwoodjs/auth'
 
 export type SignInWithOAuthOptions = SignInWithOAuthCredentials & {
   authMethod: 'oauth'
@@ -36,6 +43,23 @@ export type SignInWithSSOOptions = SignInWithSSO & {
   authMethod: 'sso'
 }
 
+function createMiddlewareAuth(
+  supabaseClient: SupabaseClient,
+  customProviderHooks?: CustomProviderHooks,
+) {
+  const authImplementation = createAuthImplementation({
+    supabaseClient,
+    middleware: true,
+  })
+
+  return createAuthentication(authImplementation, {
+    ...customProviderHooks,
+    useCurrentUser:
+      customProviderHooks?.useCurrentUser ??
+      (() => getCurrentUserFromMiddleware('/middleware/supabase')),
+  })
+}
+
 export function createAuth(
   supabaseClient: SupabaseClient,
   customProviderHooks?: {
@@ -45,12 +69,42 @@ export function createAuth(
     ) => (rolesToCheck: string | string[]) => boolean
   },
 ) {
-  const authImplementation = createAuthImplementation(supabaseClient)
+  if (RWJS_ENV.RWJS_EXP_STREAMING_SSR) {
+    return createMiddlewareAuth(supabaseClient, customProviderHooks)
+  }
+
+  const authImplementation = createAuthImplementation({ supabaseClient })
 
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createAuthImplementation(supabaseClient: SupabaseClient) {
+// Used to set the auth-provider cookie
+const setAuthProviderCookie = () => {
+  const authProviderCookieString = serialize(
+    'auth-provider',
+    'supabase',
+    DEFAULT_SUPABASE_COOKIE_OPTIONS,
+  )
+
+  document.cookie = authProviderCookieString
+}
+
+const expireAuthProviderCookie = () => {
+  const authProviderCookieString = serialize('auth-provider', 'supabase', {
+    ...DEFAULT_SUPABASE_COOKIE_OPTIONS,
+    maxAge: -1,
+  })
+
+  document.cookie = authProviderCookieString
+}
+
+function createAuthImplementation({
+  supabaseClient,
+  middleware = false,
+}: {
+  supabaseClient: SupabaseClient
+  middleware?: boolean
+}) {
   return {
     type: 'supabase',
     client: supabaseClient,
@@ -65,78 +119,89 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
         | SignInWithPasswordlessOptions
         | SignInWithSSOOptions,
     ): Promise<AuthResponse | OAuthResponse | SSOResponse> => {
-      /**
-       * Log in an existing user with an email and password or phone and password.
-       *
-       * Be aware that you may get back an error message that will not distinguish
-       * between the cases where the account does not exist or that the
-       * email/phone and password combination is wrong or that the account can only
-       * be accessed via social login.
-       */
-      if (credentials.authMethod === 'password') {
-        return await supabaseClient.auth.signInWithPassword(credentials)
+      let result:
+        | AuthTokenResponse
+        | AuthOtpResponse
+        | OAuthResponse
+        | SSOResponse
+
+      switch (credentials.authMethod) {
+        /**
+         * Log in an existing user with an email and password or phone and password.
+         *
+         * Be aware that you may get back an error message that will not distinguish
+         * between the cases where the account does not exist or that the
+         * email/phone and password combination is wrong or that the account can only
+         * be accessed via social login.
+         */
+        case 'password':
+          result = await supabaseClient.auth.signInWithPassword(credentials)
+          break
+        /**
+         * Log in an existing user via a third-party provider.
+         */
+        case 'oauth':
+          result = await supabaseClient.auth.signInWithOAuth(credentials)
+          break
+        /**
+         * Log in a user using magiclink or a one-time password (OTP).
+         *
+         * If the `{{ .ConfirmationURL }}` variable is specified in the email template, a magiclink will be sent.
+         * If the `{{ .Token }}` variable is specified in the email template, an OTP will be sent.
+         * If you're using phone sign-ins, only an OTP will be sent. You won't be able to send a magiclink for phone sign-ins.
+         *
+         * Be aware that you may get back an error message that will not distinguish
+         * between the cases where the account does not exist or, that the account
+         * can only be accessed via social login.
+         */
+        case 'otp':
+          result = await supabaseClient.auth.signInWithOtp(credentials)
+          break
+
+        /**
+         * Attempts a single-sign on using an enterprise Identity Provider. A
+         * successful SSO attempt will redirect the current page to the identity
+         * provider authorization page. The redirect URL is implementation and SSO
+         * protocol specific.
+         *
+         * You can use it by providing a SSO domain. Typically you can extract this
+         * domain by asking users for their email address. If this domain is
+         * registered on the Auth instance the redirect will use that organization's
+         * currently active SSO Identity Provider for the login.
+         *
+         * If you have built an organization-specific login page, you can use the
+         * organization's SSO Identity Provider UUID directly instead.
+         *
+         * This API is experimental and availability is conditional on correct
+         * settings on the Auth service.
+         *
+         * @experimental
+         */
+        case 'sso':
+          result = await supabaseClient.auth.signInWithSSO(credentials)
+          break
+        /**
+         * Allows signing in with an ID token issued by certain supported providers.
+         * The ID token is verified for validity and a new session is established.
+         *
+         * @experimental
+         */
+        case 'id_token':
+          result = await supabaseClient.auth.signInWithIdToken(credentials)
+
+          break
+        default:
+          return {
+            data: { user: null, session: null },
+            error: new AuthError('Unsupported authentication method'),
+          }
       }
 
-      /**
-       * Log in an existing user via a third-party provider.
-       */
-      if (credentials.authMethod === 'oauth') {
-        return await supabaseClient.auth.signInWithOAuth(credentials)
+      if (middleware) {
+        setAuthProviderCookie()
       }
 
-      /**
-       * Log in a user using magiclink or a one-time password (OTP).
-       *
-       * If the `{{ .ConfirmationURL }}` variable is specified in the email template, a magiclink will be sent.
-       * If the `{{ .Token }}` variable is specified in the email template, an OTP will be sent.
-       * If you're using phone sign-ins, only an OTP will be sent. You won't be able to send a magiclink for phone sign-ins.
-       *
-       * Be aware that you may get back an error message that will not distinguish
-       * between the cases where the account does not exist or, that the account
-       * can only be accessed via social login.
-       */
-      if (credentials.authMethod === 'otp') {
-        return await supabaseClient.auth.signInWithOtp(credentials)
-      }
-
-      /**
-       * Attempts a single-sign on using an enterprise Identity Provider. A
-       * successful SSO attempt will redirect the current page to the identity
-       * provider authorization page. The redirect URL is implementation and SSO
-       * protocol specific.
-       *
-       * You can use it by providing a SSO domain. Typically you can extract this
-       * domain by asking users for their email address. If this domain is
-       * registered on the Auth instance the redirect will use that organization's
-       * currently active SSO Identity Provider for the login.
-       *
-       * If you have built an organization-specific login page, you can use the
-       * organization's SSO Identity Provider UUID directly instead.
-       *
-       * This API is experimental and availability is conditional on correct
-       * settings on the Auth service.
-       *
-       * @experimental
-       */
-      if (credentials.authMethod === 'sso') {
-        return await supabaseClient.auth.signInWithSSO(credentials)
-      }
-
-      /**
-       * Allows signing in with an ID token issued by certain supported providers.
-       * The ID token is verified for validity and a new session is established.
-       *
-       * @experimental
-       */
-      if (credentials.authMethod === 'id_token') {
-        return await supabaseClient.auth.signInWithIdToken(credentials)
-      }
-
-      /* Unsupported authentication method */
-      return {
-        data: { user: null, session: null },
-        error: new AuthError('Unsupported authentication method'),
-      }
+      return result
     },
     /**
      * Inside a browser context, `signOut()` will remove the logged in user from the browser session
@@ -149,6 +214,10 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
       const { error } = await supabaseClient.auth.signOut()
       if (error) {
         console.error(error)
+      }
+
+      if (middleware) {
+        expireAuthProviderCookie()
       }
 
       return
@@ -165,7 +234,11 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
     signup: async (
       credentials: SignUpWithPasswordCredentials,
     ): Promise<AuthResponse> => {
-      return await supabaseClient.auth.signUp(credentials)
+      const result = await supabaseClient.auth.signUp(credentials)
+      if (result.data?.session) {
+        setAuthProviderCookie()
+      }
+      return result
     },
     getToken: async (): Promise<string | null> => {
       const { data, error } = await supabaseClient.auth.getSession()
@@ -201,7 +274,15 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
      */
     restoreAuthState: async () => {
       try {
-        await supabaseClient.auth.refreshSession()
+        const { data } = await supabaseClient.auth.refreshSession()
+
+        if (middleware) {
+          if (data.session) {
+            setAuthProviderCookie()
+          } else {
+            expireAuthProviderCookie()
+          }
+        }
 
         // Modify URL state only if there is a session.
         // Prevents resetting URL state (like query params) for all other cases.
@@ -215,5 +296,7 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
       }
       return
     },
+    // This is important, so we can skip fetching getCurrentUser
+    useMiddlewareAuth: middleware,
   }
 }
