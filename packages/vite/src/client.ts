@@ -1,4 +1,4 @@
-import { cache, use, useEffect, useState } from 'react'
+import React, { cache, use, useEffect, useState } from 'react'
 import type { ReactElement } from 'react'
 
 import type { Options } from 'react-server-dom-webpack/client'
@@ -23,13 +23,27 @@ const BASE_PATH = '/rw-rsc/'
 export function renderFromRscServer<TProps>(rscId: string) {
   console.log('serve rscId (renderFromRscServer)', rscId)
 
-  console.log('window', typeof window)
-
   // TODO (RSC): Remove this when we have a babel plugin to call another
   // function during SSR
   if (typeof window === 'undefined') {
     // Temporarily skip rendering this component during SSR
     return null
+  }
+
+  if (rscId === 'NavigationLayout') {
+    console.log('renderFromRscServer - NavigationLayout')
+
+    // @ts-expect-error I don't care about types, this is just for debugging
+    return function HardcodedNavigationLayout(props) {
+      return React.createElement('div', {}, [
+        'Hardcoded NavigationLayout',
+        React.createElement(
+          'pre',
+          {},
+          React.createElement('code', {}, JSON.stringify(props, null, 2)),
+        ),
+      ])
+    }
   }
 
   type SetRerender = (

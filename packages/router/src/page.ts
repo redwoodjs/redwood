@@ -50,7 +50,7 @@ export function normalizePage(
     LazyComponent: specOrPage,
   }
 
-  console.log('normalizePage spec', specOrPage)
+  console.log('normalizePage spec', spec)
 
   return spec
 }

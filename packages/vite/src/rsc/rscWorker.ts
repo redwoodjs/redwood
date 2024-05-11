@@ -392,6 +392,18 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
     // continue for mutation mode
   }
 
+  if (input.rscId?.startsWith('__rwjs__router')) {
+    console.log('render Router rscId', input.rscId)
+    const router = await getFunctionComponent('__rwjs__Router')
+    console.log('render Router router', router)
+
+    return renderToPipeableStream(
+      createElement(router, { location: { pathname: '/about' } }),
+      // createElement('div', {}, 'AboutPage'),
+      bundlerConfig,
+    ).pipe(transformRsfId(config.root))
+  }
+
   if (input.rscId && input.props) {
     const component = await getFunctionComponent(input.rscId)
 
