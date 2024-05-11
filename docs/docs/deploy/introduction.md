@@ -65,11 +65,6 @@ yarn rw deploy serverless --side api
 ```
 
 ```shell
-# Build command for Edgio deploy target
-yarn rw deploy edgio
-```
-
-```shell
 # Build command for baremetal deploy target
 yarn rw deploy baremetal [--first-run]
 ```

@@ -128,7 +128,6 @@ module.exports = {
               label: 'AWS via Flightcontrol',
               id: 'deploy/flightcontrol',
             },
-            { type: 'doc', label: 'Edgio', id: 'deploy/edgio' },
             { type: 'doc', label: 'Netlify', id: 'deploy/netlify' },
             { type: 'doc', label: 'Render', id: 'deploy/render' },
             {
