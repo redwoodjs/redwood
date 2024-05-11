@@ -98,7 +98,7 @@ export function renderFromDist<TProps extends Record<string, any>>(
 ) {
   console.log('renderFromDist rscId', rscId)
 
-  const cssLinks = getRscStylesheetLinkGenerator([])()
+  const cssLinks = getRscStylesheetLinkGenerator()()
 
   // Create temporary client component that wraps the component (Page, most
   // likely) returned by the `createFromReadableStream` call.

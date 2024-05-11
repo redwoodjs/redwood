@@ -3,7 +3,7 @@ import path from 'node:path'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-export function getRscStylesheetLinkGenerator(existingLinks: string[]) {
+export function getRscStylesheetLinkGenerator(existingLinks?: string[]) {
   const clientBuildManifestPath = path.join(
     getPaths().web.distClient,
     'client-build-manifest.json',
@@ -35,7 +35,7 @@ export function getRscStylesheetLinkGenerator(existingLinks: string[]) {
   }
 
   const cssLinks = Array.from(allCss)
-  return () => [...existingLinks, ...cssLinks]
+  return () => [...(existingLinks || []), ...cssLinks]
 }
 
 function extractCssMappingFromManifest(manifest: Record<string, any>) {

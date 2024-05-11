@@ -150,7 +150,7 @@ export async function runFeServer() {
   const clientEntryPath = '/' + clientEntry.file
 
   const getStylesheetLinks = rscEnabled
-    ? getRscStylesheetLinkGenerator(clientEntry.css ?? [])
+    ? getRscStylesheetLinkGenerator(clientEntry.css)
     : () => clientEntry.css || []
 
   const routeHandler = await createReactStreamingHandler({
