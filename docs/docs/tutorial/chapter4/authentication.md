@@ -475,7 +475,7 @@ yarn rw g dbAuth
 ```
 :::warning
 
-In the dbAuth setup steps you will see the option for "Querying WebAuthn addition..." For now, either press enter to keep the default as 'false' or type 'no.' WebAuthn works, and is great, but we do not want to add it as part of the tutorial.  
+In the dbAuth setup steps you will see the option for "Querying WebAuthn addition..." For now, either press enter to keep the default as 'false' or type 'no'. WebAuthn works, and is great, but we do not want to add it as part of the tutorial.  
 
 :::
 
