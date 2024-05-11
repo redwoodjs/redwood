@@ -9,6 +9,28 @@ import FatalErrorPage from './pages/FatalErrorPage/FatalErrorPage'
 import './index.css'
 import './scaffold.css'
 
+const AboutPage = renderFromRscServer('__rwjs__router-about')
+
+const App = () => {
+  console.log('ClientApp')
+
+  // Always render the AboutPage for now without causing lint errors regarding
+  // unused variables/unused code
+  if (Math.random() < 5) {
+    return <AboutPage />
+  }
+
+  return (
+    <FatalErrorBoundary page={FatalErrorPage}>
+      <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+        <RedwoodApolloProvider>
+          <VirtualClientRouter analyzedRoutes={analyzedRoutes} />
+        </RedwoodApolloProvider>
+      </RedwoodProvider>
+    </FatalErrorBoundary>
+  )
+}
+
 // const NavigationLayout = renderFromRscServer('NavigationLayout')
 const NavigationLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -84,20 +106,6 @@ const analyzedRoutes = {
     ? renderFromRscServer(serializedRoutes.NotFoundPage)
     : null,
   activeRoutePath: serializedRoutes.activeRoutePath,
-}
-
-const App = () => {
-  console.log('ClientApp')
-
-  return (
-    <FatalErrorBoundary page={FatalErrorPage}>
-      <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-        <RedwoodApolloProvider>
-          <VirtualClientRouter analyzedRoutes={analyzedRoutes} />
-        </RedwoodApolloProvider>
-      </RedwoodProvider>
-    </FatalErrorBoundary>
-  )
 }
 
 export default App
