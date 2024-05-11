@@ -3,6 +3,14 @@ import path from 'node:path'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+// Note: The current implementation here simply aggregates all CSS but inspecting
+// the manifest files produced during build. In the future we may wish to move to
+// a technique that does not rely on build artifacts.
+// We may also wish to look at more sophisticated techniques for selecting specific
+// CSS files based on the component(s) being rendered rather than just aggregating
+// all CSS. Previously we attempted to inject `preinit` calls into the components
+// via a vite plugin but this was reverted due to issues with writing to closed
+// streams - which was too difficult to resolve at that time.
 export function getRscStylesheetLinkGenerator(existingLinks?: string[]) {
   const clientBuildManifestPath = path.join(
     getPaths().web.distClient,
