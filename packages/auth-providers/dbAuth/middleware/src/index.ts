@@ -111,3 +111,5 @@ export const createDbAuthMiddleware = ({
     return res
   }
 }
+
+export default createDbAuthMiddleware

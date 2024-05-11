@@ -34,6 +34,9 @@ export async function rscBuildForServer(
   // TODO (RSC): No redwood-vite plugin, add it in here
   const rscServerBuildOutput = await viteBuild({
     envFile: false,
+    define: {
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    },
     ssr: {
       // Inline every file apart from node built-ins. We want vite/rollup to
       // inline dependencies in the server bundle. This gets round runtime

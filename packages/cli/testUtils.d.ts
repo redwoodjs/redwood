@@ -34,6 +34,12 @@ declare module 'jscodeshift/dist/testUtils' {
 }
 
 // @NOTE: Redefining types, because they get lost when importing from the testUtils file
+type MatchTransformSnapshotFunction = (
+  transformName: string,
+  fixtureName?: string,
+  parser?: 'ts' | 'tsx',
+) => Promise<void>
+
 type MatchFolderTransformFunction = (
   transformFunctionOrName: (() => any) | string,
   fixtureName: string,
@@ -57,6 +63,7 @@ type MatchInlineTransformSnapshotFunction = (
 
 // These files gets loaded in vitest setup, so becomes available globally in tests
 declare global {
+  var matchTransformSnapshot: MatchTransformSnapshotFunction
   var matchInlineTransformSnapshot: MatchInlineTransformSnapshotFunction
   var matchFolderTransform: MatchFolderTransformFunction
 

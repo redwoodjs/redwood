@@ -35,6 +35,9 @@ export async function buildForStreamingServer({
       emptyOutDir: true,
     },
     envFile: false,
+    define: {
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    },
     logLevel: verbose ? 'info' : 'warn',
   })
 }
