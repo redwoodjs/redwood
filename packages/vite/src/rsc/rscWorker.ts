@@ -398,8 +398,8 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
     console.log('render Router router', router)
 
     return renderToPipeableStream(
-      createElement(router, { location: { pathname: '/about' } }),
-      // createElement('div', {}, 'AboutPage'),
+      // createElement(router, { location: { pathname: '/about' } }),
+      createElement('div', {}, 'AboutPage'),
       bundlerConfig,
     ).pipe(transformRsfId(config.root))
   }
