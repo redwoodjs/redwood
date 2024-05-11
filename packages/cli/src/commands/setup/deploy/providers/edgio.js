@@ -13,9 +13,15 @@ import {
 import { preRequisiteCheckTask } from '../helpers'
 
 export const command = 'edgio'
-export const description = 'Setup Edgio deploy'
+export const description = '[DEPRECATED]\nSetup Edgio deploy'
+export const deprecated = true
 
 const notes = [
+  c.error('DEPRECATED option not officially supported'),
+  '',
+  'For more information:',
+  'https://redwoodjs.com/docs/deploy/edgio',
+  '',
   'You are almost ready to deploy to Edgio!',
   '',
   'See https://redwoodjs.com/docs/deploy#edgio-deploy for the remaining',

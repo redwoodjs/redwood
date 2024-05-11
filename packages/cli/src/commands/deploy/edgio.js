@@ -14,6 +14,7 @@ import { deployBuilder, deployHandler } from './helpers/helpers'
 
 export const command = 'edgio [...commands]'
 export const description = 'Build command for Edgio deploy'
+export const deprecated = true
 
 export const builder = async (yargs) => {
   const { builder: edgioBuilder } = require('@edgio/cli/commands/deploy')
