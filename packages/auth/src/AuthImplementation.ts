@@ -52,4 +52,9 @@ export interface AuthImplementation<
    * Set "loading" to true while the auth provider is reauthenticating.
    */
   loadWhileReauthenticating?: boolean
+
+  // This property is either manually set by the user, or inferred from the experimental.streamingSsr setting in TOML
+  middlewareAuthEnabled?: boolean
+  // This is the endpoint on the middleware we are going to hit for POST requests
+  getAuthUrl?: () => string
 }

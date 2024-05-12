@@ -3,15 +3,11 @@ import path from 'node:path'
 import * as swc from '@swc/core'
 import type { Plugin } from 'vite'
 
-import { getPaths } from '@redwoodjs/project-config'
-
 export function rscAnalyzePlugin(
   clientEntryCallback: (id: string) => void,
   serverEntryCallback: (id: string) => void,
-  componentImportsCallback: (id: string, importId: readonly string[]) => void,
 ): Plugin {
   const clientEntryIdSet = new Set<string>()
-  const webSrcPath = getPaths().web.src
 
   return {
     name: 'redwood-rsc-analyze-plugin',
@@ -40,12 +36,6 @@ export function rscAnalyzePlugin(
       }
 
       return code
-    },
-    moduleParsed(moduleInfo) {
-      // TODO: Maybe this is not needed?
-      if (moduleInfo.id.startsWith(webSrcPath)) {
-        componentImportsCallback(moduleInfo.id, moduleInfo.importedIds)
-      }
     },
   }
 }

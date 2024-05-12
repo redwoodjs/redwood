@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-import type { CellFailureProps } from './cellTypes'
+import type { CellFailureProps } from './cellTypes.js'
 
 export type FallbackProps = {
   error: QueryOperationResult['error']

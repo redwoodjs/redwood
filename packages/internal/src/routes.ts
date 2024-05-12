@@ -71,8 +71,8 @@ export interface RWRouteManifestItem {
   routeHooks: string | null
   bundle: string | null
   hasParams: boolean
+  relativeFilePath: string
   redirect: { to: string; permanent: boolean } | null
-  renderMode: 'html' | 'stream'
   // Probably want isNotFound here, so we can attach a separate 404 handler
 }
 
@@ -80,7 +80,7 @@ export interface RouteSpec extends RWRouteManifestItem {
   id: string
   isNotFound: boolean
   filePath: string | undefined
-  relativeFilePath: string | undefined
+  relativeFilePath: string
 }
 
 export const getProjectRoutes = (): RouteSpec[] => {

@@ -20,12 +20,13 @@ const checkStatus = async (
 
 const BASE_PATH = '/rw-rsc/'
 
-export function renderFromRscServer<Props>(rscId: string) {
-  console.log('serve rscId', rscId)
+export function renderFromRscServer<TProps>(rscId: string) {
+  console.log('serve rscId (renderFromRscServer)', rscId)
 
-  // Temporarily skip rendering this component during SSR
-  // I don't know what we actually should do during SSR yet
+  // TODO (RSC): Remove this when we have a babel plugin to call another
+  // function during SSR
   if (typeof window === 'undefined') {
+    // Temporarily skip rendering this component during SSR
     return null
   }
 
@@ -58,6 +59,7 @@ export function renderFromRscServer<Props>(rscId: string) {
         // and that element will be FormData
         callServer: async function (rsfId: string, args: unknown[]) {
           console.log('client.ts :: callServer rsfId', rsfId, 'args', args)
+
           const isMutating = !!mutationMode
           const searchParams = new URLSearchParams()
           searchParams.set('action_id', rsfId)
@@ -70,7 +72,7 @@ export function renderFromRscServer<Props>(rscId: string) {
             id = '_'
           }
 
-          const response = fetch(BASE_PATH + id + '/' + searchParams, {
+          const response = fetch(BASE_PATH + id + '?' + searchParams, {
             method: 'POST',
             body: await encodeReply(args),
             headers: {
@@ -94,12 +96,12 @@ export function renderFromRscServer<Props>(rscId: string) {
 
       console.log(
         'fetchRSC before createFromFetch',
-        BASE_PATH + rscId + '/' + searchParams,
+        BASE_PATH + rscId + '?' + searchParams,
       )
 
       const response =
         prefetched ||
-        fetch(BASE_PATH + rscId + '/' + searchParams, {
+        fetch(BASE_PATH + rscId + '?' + searchParams, {
           headers: {
             'rw-rsc': '1',
           },
@@ -113,7 +115,7 @@ export function renderFromRscServer<Props>(rscId: string) {
 
   // Create temporary client component that wraps the ServerComponent returned
   // by the `createFromFetch` call.
-  const ServerComponent = (props: Props) => {
+  const ServerComponent = (props: TProps) => {
     console.log('ServerComponent', rscId, 'props', props)
 
     // FIXME we blindly expect JSON.stringify usage is deterministic
@@ -137,10 +139,18 @@ export function renderFromRscServer<Props>(rscId: string) {
       }
     }
 
-    // TODO (RSC): Might be an issue here with startTransition according to the
-    // waku sources I copied this from. We need to figure out if this is the
-    // right way to do things
+    // `use()` will throw a `SuspenseException` as long as `dataToReturn` is
+    // unfulfilled. React internally tracks this promise and re-renders this
+    // component when the promise resolves. When the promise is resolved no
+    // exception will be thrown and the actual value of the promise will be
+    // returned instead
+    // The closest suspense boundary will render its fallback when the
+    // exception is thrown
     return use(dataToReturn)
+
+    // TODO (RSC): Might be an issue with `use` above with startTransition
+    // according to the waku sources I copied this from. We need to figure out
+    // if this is the right way to do things
   }
 
   return ServerComponent

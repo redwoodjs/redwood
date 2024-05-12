@@ -1,4 +1,5 @@
-import { vol } from 'memfs'
+import { vol, fs as memfs } from 'memfs'
+import { vi } from 'vitest'
 
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
@@ -10,7 +11,7 @@ import {
   TARGETS_NODE,
 } from '../api'
 
-jest.mock('fs', () => require('memfs').fs)
+vi.mock('fs', async () => ({ ...memfs, default: { ...memfs } }))
 
 const redwoodProjectPath = '/redwood-app'
 process.env.RWJS_CWD = redwoodProjectPath
@@ -44,34 +45,34 @@ describe('api', () => {
     it('can include `@babel/preset-env`', () => {
       const apiSideBabelPresets = getApiSideBabelPresets({ presetEnv: true })
       expect(apiSideBabelPresets).toMatchInlineSnapshot(`
-        [
-          [
-            "@babel/preset-typescript",
-            {
-              "allExtensions": true,
-              "isTSX": true,
-            },
-            "rwjs-babel-preset-typescript",
-          ],
-          [
-            "@babel/preset-env",
-            {
-              "corejs": {
-                "proposals": true,
-                "version": "3.35",
-              },
-              "exclude": [
-                "@babel/plugin-transform-class-properties",
-                "@babel/plugin-transform-private-methods",
-              ],
-              "targets": {
-                "node": "20.10",
-              },
-              "useBuiltIns": "usage",
-            },
-          ],
-        ]
-      `)
+[
+  [
+    "@babel/preset-typescript",
+    {
+      "allExtensions": true,
+      "isTSX": true,
+    },
+    "rwjs-babel-preset-typescript",
+  ],
+  [
+    "@babel/preset-env",
+    {
+      "corejs": {
+        "proposals": true,
+        "version": "3.36",
+      },
+      "exclude": [
+        "@babel/plugin-transform-class-properties",
+        "@babel/plugin-transform-private-methods",
+      ],
+      "targets": {
+        "node": "20.10",
+      },
+      "useBuiltIns": "usage",
+    },
+  ],
+]
+`)
     })
   })
 
@@ -175,7 +176,7 @@ describe('api', () => {
             proposals: true,
             version: 3,
           },
-          version: '7.24.0',
+          version: '7.24.1',
         },
       ])
 

@@ -111,6 +111,8 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
         },
       },
       build: {
+        // TODO (RSC): Remove `minify: false` when we don't need to debug as often
+        minify: false,
         // NOTE this gets overridden when build gets called anyway!
         outDir:
           // @MARK: For RSC and Streaming, we build to dist/client directory
@@ -165,16 +167,40 @@ function getRollupInput(ssr: boolean): InputOption | undefined {
   const rwConfig = getConfig()
   const rwPaths = getPaths()
 
+  if (!rwPaths.web.entryClient) {
+    throw new Error('entryClient not defined')
+  }
+
+  const ssrEnabled = rwConfig.experimental?.streamingSsr?.enabled
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
+
   // @NOTE once streaming ssr is out of experimental, this will become the
   // default
-  if (rwConfig.experimental.streamingSsr.enabled) {
-    return ssr
-      ? {
-          'entry.server': rwPaths.web.entryServer as string,
-          // We need the document for React's fallback
+  if (ssrEnabled) {
+    if (ssr) {
+      if (rscEnabled) {
+        return {
           Document: rwPaths.web.document,
         }
-      : (rwPaths.web.entryClient as string)
+      }
+
+      if (!rwPaths.web.entryServer) {
+        throw new Error('entryServer not defined')
+      }
+
+      return {
+        // NOTE: We're building the server entry *without* the react-server
+        // condition when we include it here. This works when only SSR is
+        // enabled, but not when RSC + SSR are both enabled
+        // For RSC we have this configured in rscBuildForServer.ts to get a
+        // build with the proper resolution conditions set.
+        'entry.server': rwPaths.web.entryServer,
+        // We need the document for React's fallback
+        Document: rwPaths.web.document,
+      }
+    }
+
+    return rwPaths.web.entryClient
   }
 
   return rwPaths.web.html

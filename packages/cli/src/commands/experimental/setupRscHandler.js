@@ -7,7 +7,7 @@ import { prettify } from '@redwoodjs/cli-helpers'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFile } from '../../lib'
+import { getPaths, transformTSToJS, writeFile } from '../../lib'
 import c from '../../lib/colors'
 import { isTypeScriptProject } from '../../lib/project'
 
@@ -18,6 +18,7 @@ export const handler = async ({ force, verbose }) => {
   const rwPaths = getPaths()
   const redwoodTomlPath = getConfigPath()
   const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
+  const ext = path.extname(rwPaths.web.entryClient || '')
 
   const tasks = new Listr(
     [
@@ -77,16 +78,50 @@ export const handler = async ({ force, verbose }) => {
         options: { persistentOutput: true },
       },
       {
-        title: 'Adding entries.ts...',
+        title: `Overwriting entry.server${ext}...`,
         task: async () => {
-          const entriesTemplate = fs.readFileSync(
-            path.resolve(__dirname, 'templates', 'rsc', 'entries.ts.template'),
+          const entryServerTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'entry.server.tsx.template',
+            ),
             'utf-8',
           )
+          // Can't use rwPaths.web.entryServer because it might not be not created yet
+          const entryServerPath = path.join(
+            rwPaths.web.src,
+            `entry.server${ext}`,
+          )
+          const entryServerContent = isTypeScriptProject()
+            ? entryServerTemplate
+            : await transformTSToJS(entryServerPath, entryServerTemplate)
 
-          // Can't use rwPaths.web.entries because it's not created yet
-          writeFile(path.join(rwPaths.web.src, 'entries.ts'), entriesTemplate, {
-            overwriteExisting: force,
+          writeFile(entryServerPath, entryServerContent, {
+            overwriteExisting: true,
+          })
+        },
+      },
+      {
+        title: `Overwriting Document${ext}...`,
+        task: async () => {
+          const documentTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'Document.tsx.template',
+            ),
+            'utf-8',
+          )
+          const documentPath = path.join(rwPaths.web.src, `Document${ext}`)
+          const documentContent = isTypeScriptProject()
+            ? documentTemplate
+            : await transformTSToJS(documentPath, documentTemplate)
+
+          writeFile(documentPath, documentContent, {
+            overwriteExisting: true,
           })
         },
       },
@@ -248,31 +283,6 @@ export const handler = async ({ force, verbose }) => {
           )
 
           writeFile(cssPath, cssTemplate, { overwriteExisting: force })
-        },
-      },
-      {
-        title: 'Updating index.html...',
-        task: async () => {
-          let indexHtml = fs.readFileSync(rwPaths.web.html, 'utf-8')
-
-          if (
-            /\n\s*<script type="module" src="entry.client.tsx"><\/script>/.test(
-              indexHtml,
-            )
-          ) {
-            // index.html is already updated
-            return
-          }
-
-          indexHtml = indexHtml.replace(
-            'href="/favicon.png" />',
-            'href="/favicon.png" />\n' +
-              '  <script type="module" src="entry.client.tsx"></script>',
-          )
-
-          writeFile(rwPaths.web.html, indexHtml, {
-            overwriteExisting: true,
-          })
         },
       },
       {

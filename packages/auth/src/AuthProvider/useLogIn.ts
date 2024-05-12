@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 
-import type { AuthImplementation } from '../AuthImplementation'
+import type { AuthImplementation } from '../AuthImplementation.js'
 
-import type { AuthProviderState } from './AuthProviderState'
-import { defaultAuthProviderState } from './AuthProviderState'
-import type { useCurrentUser } from './useCurrentUser'
-import { useReauthenticate } from './useReauthenticate'
+import type { AuthProviderState } from './AuthProviderState.js'
+import { spaDefaultAuthProviderState } from './AuthProviderState.js'
+import type { useCurrentUser } from './useCurrentUser.js'
+import { useReauthenticate } from './useReauthenticate.js'
 
 export const useLogIn = <
   TUser,
@@ -41,18 +41,16 @@ export const useLogIn = <
     React.SetStateAction<AuthProviderState<TUser>>
   >,
   getCurrentUser: ReturnType<typeof useCurrentUser>,
-  skipFetchCurrentUser: boolean | undefined,
 ) => {
   const reauthenticate = useReauthenticate(
     authImplementation,
     setAuthProviderState,
     getCurrentUser,
-    skipFetchCurrentUser,
   )
 
   return useCallback(
     async (options?: TLogInOptions) => {
-      setAuthProviderState(defaultAuthProviderState)
+      setAuthProviderState(spaDefaultAuthProviderState)
       const loginResult = await authImplementation.login(options)
       await reauthenticate()
 

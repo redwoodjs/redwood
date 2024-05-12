@@ -16,16 +16,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - uses: actions/setup-node@v4
+      - name: Set up job
+        uses: ./.github/actions/set-up-job
         with:
-          node-version: 20
-
-      - run: yarn install
-        working-directory: ./.github/actions/check_changesets
+          set-up-yarn-cache: false
+          yarn-install-directory: ./.github/actions/check_changesets
+          build: false
 
       - name: Check changesets
         uses: ./.github/actions/check_changesets

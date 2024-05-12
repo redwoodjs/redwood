@@ -1,18 +1,4 @@
-import type {
-  SupabaseClient,
-  User,
-  AuthResponse,
-  OAuthResponse,
-  SSOResponse,
-  SignInWithOAuthCredentials,
-  SignInWithIdTokenCredentials,
-  SignInWithPasswordlessCredentials,
-  SignInWithSSO,
-  SignInWithPasswordCredentials,
-  SignUpWithPasswordCredentials,
-  Session,
-} from '@supabase/supabase-js'
-import { AuthError } from '@supabase/supabase-js'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
 import { renderHook, act } from '@testing-library/react'
 import { vi, it, describe, beforeAll, beforeEach, expect } from 'vitest'
 
@@ -20,235 +6,14 @@ import type { CurrentUser } from '@redwoodjs/auth'
 
 import { createAuth } from '../supabase'
 
-const user: User = {
-  id: 'unique_user_id',
-  aud: 'authenticated',
-  user_metadata: {
-    full_name: 'John Doe',
-  },
-  email: 'john.doe@example.com',
-  app_metadata: {
-    provider: 'supabase',
-    roles: ['user'],
-  },
-  created_at: new Date().toUTCString(),
-}
+import {
+  mockSupabaseAuthClient,
+  loggedInUser,
+  adminUser,
+} from './mockSupabaseAuthClient'
 
-const adminUser: User = {
-  id: 'unique_user_id_admin',
-  aud: 'authenticated',
-  user_metadata: {
-    full_name: 'Mr Smith',
-  },
-  email: 'admin@example.com',
-  app_metadata: {
-    provider: 'supabase',
-    roles: ['user', 'admin'],
-  },
-  created_at: new Date().toUTCString(),
-}
-
-const oAuthUser: User = {
-  id: 'unique_user_id',
-  aud: 'authenticated',
-  user_metadata: {
-    full_name: 'Octo Cat',
-  },
-  email: 'octo.cat@example.com',
-  app_metadata: {
-    provider: 'github',
-    roles: ['user'],
-  },
-  created_at: new Date().toUTCString(),
-}
-
-let loggedInUser: User | undefined
-
-const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
-  signInWithPassword: async (
-    credentials: SignInWithPasswordCredentials,
-  ): Promise<AuthResponse> => {
-    const { email } = credentials as { email: string }
-
-    loggedInUser = email === 'admin@example.com' ? adminUser : user
-
-    loggedInUser.email = email
-
-    return {
-      data: {
-        user: loggedInUser,
-        session: null,
-      },
-      error: null,
-    }
-  },
-  signInWithOAuth: async (
-    credentials: SignInWithOAuthCredentials,
-  ): Promise<OAuthResponse> => {
-    loggedInUser = oAuthUser
-
-    return {
-      data: {
-        provider: credentials.provider,
-        url: `https://${credentials.provider}.com`,
-      },
-      error: null,
-    }
-  },
-  signInWithOtp: async (
-    credentials: SignInWithPasswordlessCredentials,
-  ): Promise<AuthResponse> => {
-    loggedInUser = user
-    loggedInUser.email = credentials['email']
-
-    return {
-      data: {
-        user: loggedInUser,
-        session: null,
-      },
-      error: null,
-    }
-  },
-
-  signInWithIdToken: async (
-    credentials: SignInWithIdTokenCredentials,
-  ): Promise<AuthResponse> => {
-    loggedInUser = user
-
-    const session = {
-      access_token: `token ${credentials.token}`,
-      refresh_token: 'refresh_token_1234567890',
-      token_type: `Bearer ${credentials.provider}`,
-      expires_in: 999,
-    }
-    loggedInUser.app_metadata = session
-
-    return {
-      data: {
-        user: null,
-        session: {
-          user: loggedInUser,
-          ...session,
-        },
-      },
-      error: null,
-    }
-  },
-  signInWithSSO: async (credentials: SignInWithSSO): Promise<SSOResponse> => {
-    loggedInUser = user
-
-    const url = `https://${credentials['domain']}.${credentials['providerId']}.com`
-
-    loggedInUser.app_metadata = {
-      url,
-      domain: credentials['domain'],
-      providerId: credentials['providerId'],
-    }
-
-    return {
-      data: {
-        url,
-      },
-      error: null,
-    }
-  },
-  signOut: async () => {
-    loggedInUser = undefined
-
-    return { error: null }
-  },
-  signUp: async (
-    credentials: SignUpWithPasswordCredentials,
-  ): Promise<AuthResponse> => {
-    const { email } = credentials as {
-      email: string
-    }
-
-    loggedInUser = email === 'admin@example.com' ? adminUser : user
-
-    loggedInUser.email = email
-
-    if (credentials.options) {
-      loggedInUser.user_metadata = credentials.options
-    }
-
-    console.log('signUp', loggedInUser)
-    return {
-      data: {
-        user: loggedInUser,
-        session: null,
-      },
-      error: null,
-    }
-  },
-  getSession: async (): Promise<
-    | {
-        data: {
-          session: Session
-        }
-        error: null
-      }
-    | {
-        data: {
-          session: null
-        }
-        error: AuthError
-      }
-    | {
-        data: {
-          session: null
-        }
-        error: null
-      }
-  > => {
-    if (loggedInUser) {
-      return {
-        data: {
-          session: {
-            access_token: 'token',
-            refresh_token: 'token',
-            expires_in: 999,
-            token_type: 'Bearer',
-            user: loggedInUser,
-          },
-        },
-        error: null,
-      }
-    }
-
-    return {
-      data: { session: null },
-      error: new AuthError('Not logged in'),
-    }
-  },
-  refreshSession: async (currentSession?: {
-    refresh_token: string
-  }): Promise<AuthResponse> => {
-    if (loggedInUser) {
-      return {
-        data: {
-          user: loggedInUser,
-          session: {
-            access_token: 'jwt_1234567890',
-            refresh_token: `refresh_token_1234567890_${currentSession?.refresh_token}`,
-            expires_in: 999,
-            token_type: 'Bearer',
-            user: loggedInUser,
-          },
-        },
-        error: null,
-      }
-    }
-
-    return {
-      data: { user: null, session: null },
-      error: new AuthError('Not logged in'),
-    }
-  },
-}
-
-const supabaseMockClient: Partial<SupabaseClient> = {
-  auth: mockSupabaseAuthClient as SupabaseClient['auth'],
+const supabaseMockClient = {
+  auth: mockSupabaseAuthClient,
 }
 
 const fetchMock = vi.fn()
@@ -280,11 +45,12 @@ fetchMock.mockImplementation(async (_url, options) => {
 
 beforeAll(() => {
   globalThis.fetch = fetchMock
+  globalThis.RWJS_ENV = {}
 })
 
 beforeEach(() => {
   fetchMock.mockClear()
-  loggedInUser = undefined
+  mockSupabaseAuthClient.__testOnly__setMockUser(null)
 })
 
 function getSupabaseAuth(customProviderHooks?: {
@@ -294,6 +60,7 @@ function getSupabaseAuth(customProviderHooks?: {
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
   const { useAuth, AuthProvider } = createAuth(
+    // @ts-expect-error It's a partial mock!
     supabaseMockClient as SupabaseClient,
     customProviderHooks,
   )
@@ -435,7 +202,7 @@ describe('Supabase Authentication', () => {
       expect(authRef.current.hasRole('admin')).toBeFalsy()
 
       await act(async () => {
-        loggedInUser = adminUser
+        mockSupabaseAuthClient.__testOnly__setMockUser(adminUser)
         authRef.current.logIn({
           authMethod: 'password',
           email: 'admin@example.com',
@@ -486,7 +253,7 @@ describe('Supabase Authentication', () => {
       expect(authRef.current.hasRole('admin')).toBeFalsy()
 
       await act(async () => {
-        loggedInUser = adminUser
+        mockSupabaseAuthClient.__testOnly__setMockUser(adminUser)
         authRef.current.logIn({
           authMethod: 'password',
           email: 'admin@example.com',

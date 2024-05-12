@@ -1,0 +1,13 @@
+export const data = async () => {
+  return new Date()
+}
+
+export const output = ({ data }) => {
+  return (
+    <>
+      <h1>${pageName} og:image</h1>
+      <p>Find me in <code>${outputPath}</code></p>
+      <p>The time is now {data.toISOString()}</p>
+    </>
+  )
+}

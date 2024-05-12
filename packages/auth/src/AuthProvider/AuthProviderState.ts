@@ -1,4 +1,4 @@
-import type { CurrentUser } from '../AuthContext'
+import type { CurrentUser } from '../AuthContext.js'
 
 export type AuthProviderState<TUser, TClient = unknown> = {
   loading: boolean
@@ -10,8 +10,16 @@ export type AuthProviderState<TUser, TClient = unknown> = {
   client?: TClient
 }
 
-export const defaultAuthProviderState: AuthProviderState<never> = {
+export const spaDefaultAuthProviderState: AuthProviderState<never> = {
   loading: true,
+  isAuthenticated: false,
+  userMetadata: null,
+  currentUser: null,
+  hasError: false,
+}
+
+export const middlewareDefaultAuthProviderState: AuthProviderState<never> = {
+  loading: false,
   isAuthenticated: false,
   userMetadata: null,
   currentUser: null,
