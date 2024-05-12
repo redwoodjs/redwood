@@ -473,6 +473,11 @@ Yet another generator is here for you, this time one that will create pages for 
 ```bash
 yarn rw g dbAuth
 ```
+:::warning
+
+In the dbAuth setup steps you will see the option for "Querying WebAuthn addition..." For now, either press enter to keep the default as 'false' or type 'no'. WebAuthn works, and is great, but we do not want to add it as part of the tutorial.  
+
+:::
 
 Again several pages will be created and some post-install instructions will describe next steps. But for now, try going to [http://localhost:8910/login](http://localhost:8910/login):
 
