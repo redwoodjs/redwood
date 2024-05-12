@@ -2,7 +2,8 @@ import { cache, use, useEffect, useState } from 'react'
 import type { ReactElement } from 'react'
 
 import type { Options } from 'react-server-dom-webpack/client'
-import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
+// import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
+import { createFromFetch } from 'react-server-dom-webpack/client'
 
 import { StatusError } from './lib/StatusError.js'
 
@@ -19,6 +20,10 @@ const checkStatus = async (
 }
 
 const BASE_PATH = '/rw-rsc/'
+
+function setRerender() {
+  return () => {}
+}
 
 export function renderFromRscServer<TProps>(rscId: string) {
   console.log('serve rscId (renderFromRscServer)', rscId)
@@ -40,16 +45,16 @@ export function renderFromRscServer<TProps>(rscId: string) {
     ): readonly [Thenable<ReactElement>, SetRerender] => {
       console.log('fetchRSC serializedProps', serializedProps)
 
-      let rerender:
-        | ((next: [Thenable<ReactElement>, string]) => void)
-        | undefined
+      // let rerender:
+      //   | ((next: [Thenable<ReactElement>, string]) => void)
+      //   | undefined
 
-      const setRerender: SetRerender = (fn) => {
-        rerender = fn
-        return () => {
-          rerender = undefined
-        }
-      }
+      // const setRerender: SetRerender = (fn) => {
+      //   rerender = fn
+      //   return () => {
+      //     rerender = undefined
+      //   }
+      // }
 
       const searchParams = new URLSearchParams()
       searchParams.set('props', serializedProps)
@@ -57,37 +62,31 @@ export function renderFromRscServer<TProps>(rscId: string) {
       const options: Options<unknown[], ReactElement> = {
         // `args` is often going to be an array with just a single element,
         // and that element will be FormData
-        callServer: async function (rsfId: string, args: unknown[]) {
-          console.log('client.ts :: callServer rsfId', rsfId, 'args', args)
-
-          const isMutating = !!mutationMode
-          const searchParams = new URLSearchParams()
-          searchParams.set('action_id', rsfId)
-          let id: string
-
-          if (isMutating) {
-            id = rscId
-            searchParams.set('props', serializedProps)
-          } else {
-            id = '_'
-          }
-
-          const response = fetch(BASE_PATH + id + '?' + searchParams, {
-            method: 'POST',
-            body: await encodeReply(args),
-            headers: {
-              'rw-rsc': '1',
-            },
-          })
-
-          const data = createFromFetch(response, options)
-
-          if (isMutating) {
-            rerender?.([data, serializedProps])
-          }
-
-          return data
-        },
+        // callServer: async function (rsfId: string, args: unknown[]) {
+        //   console.log('client.ts :: callServer rsfId', rsfId, 'args', args)
+        //   const isMutating = !!mutationMode
+        //   const searchParams = new URLSearchParams()
+        //   searchParams.set('action_id', rsfId)
+        //   let id: string
+        //   if (isMutating) {
+        //     id = rscId
+        //     searchParams.set('props', serializedProps)
+        //   } else {
+        //     id = '_'
+        //   }
+        //   const response = fetch(BASE_PATH + id + '?' + searchParams, {
+        //     method: 'POST',
+        //     body: await encodeReply(args),
+        //     headers: {
+        //       'rw-rsc': '1',
+        //     },
+        //   })
+        //   const data = createFromFetch(response, options)
+        //   if (isMutating) {
+        //     rerender?.([data, serializedProps])
+        //   }
+        //   return data
+        // },
       }
 
       const prefetched = (globalThis as any).__WAKU_PREFETCHED__?.[rscId]?.[
@@ -159,7 +158,7 @@ export function renderFromRscServer<TProps>(rscId: string) {
 let mutationMode = 0
 
 export function mutate(fn: () => void) {
-  ++mutationMode
+  mutationMode = mutationMode + 1
   fn()
-  --mutationMode
+  mutationMode = mutationMode - 1
 }
