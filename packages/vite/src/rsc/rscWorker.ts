@@ -66,7 +66,9 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
   console.log('handleRender', id, input)
 
   try {
-    const pipeable = await renderRsc(input)
+    const pipeable = input.rscId
+      ? await renderRsc(input)
+      : await handleRsa(input)
 
     const writable = new Writable({
       write(chunk, encoding, callback) {
@@ -315,6 +317,16 @@ function isSerializedFormData(data?: unknown): data is SerializedFormData {
 }
 
 async function renderRsc(input: RenderInput): Promise<PipeableStream> {
+  if (input.rsfId || !input.args) {
+    throw new Error(
+      "Unexpected input. Can't request both RSCs and execute RSAs at the same time.",
+    )
+  }
+
+  if (!input.rscId || !input.props) {
+    throw new Error('Unexpected input. Missing rscId or props.')
+  }
+
   const rwPaths = getPaths()
 
   const config = await configPromise
@@ -363,35 +375,6 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
 
   console.log('renderRsc input', input)
 
-  if (input.rsfId && input.args) {
-    const [fileId, name] = input.rsfId.split('#')
-    const fname = path.join(config.root, fileId)
-    console.log('Server Action, fileId', fileId, 'name', name, 'fname', fname)
-    const module = await loadServerFile(fname)
-
-    if (isSerializedFormData(input.args[0])) {
-      const formData = new FormData()
-
-      Object.entries(input.args[0].state).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          value.forEach((v) => {
-            formData.append(key, v)
-          })
-        } else {
-          formData.append(key, value)
-        }
-      })
-
-      input.args[0] = formData
-    }
-
-    const data = await (module[name] || module)(...input.args)
-    if (!input.rscId) {
-      return renderToPipeableStream(data, bundlerConfig)
-    }
-    // continue for mutation mode
-  }
-
   if (input.rscId?.startsWith('__rwjs__router')) {
     console.log('render Router rscId', input.rscId)
     const router = await getFunctionComponent('__rwjs__Router')
@@ -404,16 +387,90 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
     ).pipe(transformRsfId(config.root))
   }
 
-  if (input.rscId && input.props) {
-    const component = await getFunctionComponent(input.rscId)
+  const component = await getFunctionComponent(input.rscId)
 
-    return renderToPipeableStream(
-      createElement(component, input.props),
-      bundlerConfig,
-    ).pipe(transformRsfId(config.root))
+  return renderToPipeableStream(
+    createElement(component, input.props),
+    bundlerConfig,
+  ).pipe(transformRsfId(config.root))
+}
+
+async function handleRsa(input: RenderInput): Promise<PipeableStream> {
+  const rwPaths = getPaths()
+
+  const config = await configPromise
+  // TODO (RSC): Should root be configurable by the user? We probably need it
+  // to be different values in different contexts. Should we introduce more
+  // config options?
+  // config.root currently comes from the user's project, where it in turn
+  // comes from our `redwood()` vite plugin defined in index.ts. By default
+  // (i.e. in the redwood() plugin) it points to <base>/web/src. But we need it
+  // to be just <base>/, so for now we override it here.
+  config.root =
+    process.platform === 'win32'
+      ? rwPaths.base.replaceAll('\\', '/')
+      : rwPaths.base
+  console.log('config.root', config.root)
+  console.log('rwPaths.base', rwPaths.base)
+
+  // TODO (RSC): Try removing the proxy here and see if it's really necessary.
+  // Looks like it'd work to just have a regular object with a getter.
+  // Remove the proxy and see what breaks.
+  const bundlerConfig = new Proxy(
+    {},
+    {
+      get(_target, encodedId: string) {
+        console.log('Proxy get encodedId', encodedId)
+        const [filePath, name] = encodedId.split('#') as [string, string]
+        // filePath /Users/tobbe/dev/waku/examples/01_counter/dist/assets/rsc0.js
+        // name Counter
+
+        // TODO (RSC): Get rid of this when we only use the worker in dev mode
+        const isDev = Object.keys(absoluteClientEntries).length === 0
+
+        let id: string
+        if (isDev) {
+          id = resolveClientEntryForDev(filePath, config)
+        } else {
+          id = resolveClientEntryForProd(filePath, config)
+        }
+
+        console.log('rscWorker proxy id', id)
+        // id /assets/rsc0-beb48afe.js
+        return { id, chunks: [id], name, async: true }
+      },
+    },
+  )
+
+  console.log('handleRsa input', input)
+
+  if (!input.rsfId || !input.args) {
+    throw new Error('Unexpected input')
   }
 
-  throw new Error('Unexpected input')
+  const [fileId, name] = input.rsfId.split('#')
+  const fname = path.join(config.root, fileId)
+  console.log('Server Action, fileId', fileId, 'name', name, 'fname', fname)
+  const module = await loadServerFile(fname)
+
+  if (isSerializedFormData(input.args[0])) {
+    const formData = new FormData()
+
+    Object.entries(input.args[0].state).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((v) => {
+          formData.append(key, v)
+        })
+      } else {
+        formData.append(key, value)
+      }
+    })
+
+    input.args[0] = formData
+  }
+
+  const data = await (module[name] || module)(...input.args)
+  return renderToPipeableStream(data, bundlerConfig)
 }
 
 // HACK Patching stream is very fragile.
