@@ -23,6 +23,7 @@ import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createMiddlewareRouter } from './middleware/register.js'
 import type { Middleware } from './middleware/types.js'
+import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { setClientEntries } from './rsc/rscWorkerCommunication.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
@@ -76,12 +77,6 @@ export async function runFeServer() {
   const clientBuildManifest: ViteBuildManifest = (
     await import(clientBuildManifestUrl, { with: { type: 'json' } })
   ).default
-
-  if (rwConfig.experimental?.rsc?.enabled) {
-    console.log('='.repeat(80))
-    console.log('buildManifest', clientBuildManifest)
-    console.log('='.repeat(80))
-  }
 
   // @MARK: Surely there's a better way than this!
   const clientEntry = Object.values(clientBuildManifest).find(
@@ -152,8 +147,11 @@ export async function runFeServer() {
   // the static assets over any application routing.
   app.use(express.static(rwPaths.web.distClient, { index: false }))
 
-  const getStylesheetLinks = () => clientEntry.css || []
   const clientEntryPath = '/' + clientEntry.file
+
+  const getStylesheetLinks = rscEnabled
+    ? getRscStylesheetLinkGenerator(clientEntry.css)
+    : () => clientEntry.css || []
 
   const routeHandler = await createReactStreamingHandler({
     routes: Object.values(routeManifest),
@@ -162,7 +160,7 @@ export async function runFeServer() {
     getMiddlewareRouter: async () => middlewareRouter,
   })
 
-  // Wrap with whatg/server adapter. Express handler -> Fetch API handler
+  // Wrap with whatwg/server adapter. Express handler -> Fetch API handler
   app.get('*', createServerAdapter(routeHandler))
 
   // @MARK: put this after rw-rsc to avoid confusion.

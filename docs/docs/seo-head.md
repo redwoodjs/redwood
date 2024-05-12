@@ -19,13 +19,13 @@ You certainly want to change the title of your Redwood app from the default of "
 ```
 
 This title (the app title) is used by default for all your pages if you don't define another one.
-It will also be use for the title template.
+It will also be used for the title template.
 
 ### Title Template
 
 Now that you have the app title set, you probably want some consistence with the page title, that's what the title template is for.
 
-Add `titleTemplate` as a prop for `RedwoodProvider` to have a title template for every pages
+Add `titleTemplate` as a prop for `RedwoodProvider` to have a title template for every page.
 
 ```diff title=web/src/App.(tsx|jsx)
 -  <RedwoodProvider>
@@ -48,7 +48,7 @@ You can use whatever formatting you'd like in here. Some examples:
 
 So you want to change the title of your page, or add elements to the `<head>` of the page? We've got you!
 
-Let's say you want to change the title of your About page, Redwood provides a built in `<Head>` component, which you can use like this:
+Let's say you want to change the title of your About page, Redwood provides a built-in `<Head>` component, which you can use like this:
 
 ```diff title=web/src/pages/AboutPage/AboutPage.(tsx|jsx)
 +import { Head } from '@redwoodjs/web'
@@ -78,13 +78,13 @@ For example, if you set title in your Layout, and a title in your Page, it'll re
 
 :::info Bots & `<meta>` Tags
 
-For these headers to appear to bots and scrapers e.g. for twitter to show your title, you have to make sure your page is prerendered. If your content is static you can use Redwood's built in [Prerender](prerender.md). For dynamic tags, check the [Dynamic head tags](#dynamic-tags)
+For these headers to appear to bots and scrapers e.g. for twitter to show your title, you have to make sure your page is prerendered. If your content is static you can use Redwood's built-in [Prerender](prerender.md). For dynamic tags, check the [Dynamic head tags](#dynamic-tags)
 
 :::
 
 ## Setting `<meta>` Tags and OpenGraph Directives with `<Metadata>`
 
-Often we want to set more than just the title and description of the page—most commonly [OpenGraph](https://ogp.me/) headers.
+Often we want to set more than just the title and description of the page – most commonly [OpenGraph](https://ogp.me/) headers.
 
 Redwood provides a convenience component `<Metadata>` to help you create most of these `<meta>` tags for you with a more concise syntax. But, you can also pass children and define any custom content that you want.
 

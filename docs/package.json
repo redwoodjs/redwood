@@ -24,10 +24,10 @@
     ]
   },
   "dependencies": {
-    "@docusaurus/core": "3.1.1",
-    "@docusaurus/plugin-content-docs": "3.1.1",
-    "@docusaurus/preset-classic": "3.1.1",
-    "@docusaurus/theme-common": "3.1.1",
+    "@docusaurus/core": "3.2.1",
+    "@docusaurus/plugin-content-docs": "3.2.1",
+    "@docusaurus/preset-classic": "3.2.1",
+    "@docusaurus/theme-common": "3.2.1",
     "@mdx-js/react": "3.0.1",
     "clsx": "2.1.0",
     "prism-react-renderer": "2.3.1",
@@ -36,8 +36,8 @@
     "react-player": "2.15.1"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.1.1",
-    "@docusaurus/tsconfig": "3.1.1",
+    "@docusaurus/module-type-aliases": "3.2.1",
+    "@docusaurus/tsconfig": "3.2.1",
     "typescript": "5.4.5"
   },
   "packageManager": "yarn@4.1.1"

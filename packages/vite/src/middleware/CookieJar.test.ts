@@ -11,7 +11,7 @@ describe('CookieJar', () => {
     'color_mode=%7B%22color_mode%22%3A%22light%22%2C%22light_theme%22%3A%7B%22name%22%3A%22light%22%2C%22color_mode%22%3A%22light%22%7D%2C%22dark_theme%22%3A%7B%22name%22%3A%22dark_dimmed%22%2C%22color_mode%22%3A%22dark%22%7D%7D; preferred_color_mode=dark; tz=Asia%2FBangkok',
   )
 
-  test('instatitates cookie jar from a cookie string', () => {
+  test('instantiates cookie jar from a cookie string', () => {
     expect(cookieJar.get('color_mode')).toStrictEqual(
       JSON.stringify({
         color_mode: 'light',
@@ -23,6 +23,18 @@ describe('CookieJar', () => {
     expect(cookieJar.get('preferred_color_mode')).toStrictEqual('dark')
 
     expect(cookieJar.get('tz')).toStrictEqual('Asia/Bangkok')
+  })
+
+  test('getWithOptions', () => {
+    const jar = new CookieJar()
+    jar.set('kittens', 'soft', { path: '/bazinga' })
+
+    expect(jar.getWithOptions('kittens')).toStrictEqual({
+      value: 'soft',
+      options: {
+        path: '/bazinga',
+      },
+    })
   })
 
   describe('Helper methods like JS Map', () => {

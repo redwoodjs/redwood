@@ -184,7 +184,6 @@ describe('paths', () => {
           viteConfig: null,
           entryClient: null,
           entryServer: null,
-          entries: null,
           graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
         },
       }
@@ -469,7 +468,6 @@ describe('paths', () => {
           viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
           entryClient: null, // doesn't exist in example-todo-main
           entryServer: null, // doesn't exist in example-todo-main
-          entries: null, // doesn't exist in example-todo-main
         },
       }
 
@@ -756,7 +754,6 @@ describe('paths', () => {
           ),
           entryClient: null,
           entryServer: null,
-          entries: null,
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           distEntryServer: path.join(
             FIXTURE_BASEDIR,
@@ -1086,7 +1083,6 @@ describe('paths', () => {
           viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
           entryClient: path.join(FIXTURE_BASEDIR, 'web/src/entry.client.tsx'),
           entryServer: null,
-          entries: null,
         },
       }
 

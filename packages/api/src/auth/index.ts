@@ -8,8 +8,8 @@ import { getEventHeader } from '../event'
 import type { Decoded } from './parseJWT'
 export type { Decoded }
 
-// This is shared by `@redwoodjs/web`
-const AUTH_PROVIDER_HEADER = 'auth-provider'
+// This is shared by `@redwoodjs/web` as well as used on auth middleware
+export const AUTH_PROVIDER_HEADER = 'auth-provider'
 
 export const getAuthProviderHeader = (
   event: APIGatewayProxyEvent | Request,
@@ -28,9 +28,15 @@ export interface AuthorizationHeader {
   token: string
 }
 
+export type AuthorizationCookies = {
+  parsedCookie: Record<string, string>
+  rawCookie: string
+  type: string
+} | null
+
 export const parseAuthorizationCookie = (
   event: APIGatewayProxyEvent | Request,
-) => {
+): AuthorizationCookies => {
   const cookie = getEventHeader(event, 'Cookie')
 
   // Unauthenticated request
@@ -45,7 +51,7 @@ export const parseAuthorizationCookie = (
     rawCookie: cookie,
     // When not unauthenticated, this will be null/undefined
     // Remember that the cookie header could contain other (unrelated) values!
-    type: parsedCookie['auth-provider'],
+    type: parsedCookie[AUTH_PROVIDER_HEADER],
   }
 }
 
@@ -78,13 +84,19 @@ export type AuthContextPayload = [
   Decoded,
   { type: string } & AuthorizationHeader,
   // @MARK: Context is not passed when using middleware auth
-  { event: APIGatewayProxyEvent | Request; context?: LambdaContext },
+  {
+    event: APIGatewayProxyEvent | Request
+    context?: LambdaContext
+  },
 ]
 
 export type Decoder = (
   token: string,
   type: string,
-  req: { event: APIGatewayProxyEvent | Request; context: LambdaContext },
+  req: {
+    event: APIGatewayProxyEvent | Request
+    context?: LambdaContext
+  },
 ) => Promise<Decoded>
 
 /**
@@ -109,12 +121,17 @@ export const getAuthenticationContext = async ({
     return undefined
   }
 
+  // The actual session parsing is done by the auth decoder
+
   let token: string | undefined
   let type: string | undefined
   let schema: string | undefined
 
-  // The actual session parsing is done by the auth decoder
-  if (cookieHeader) {
+  // If there is a cookie header and the auth type is set in the cookie, use that
+  // There can be cases, such as with Supabase where its auth client sets the cookie and Bearer token
+  // but the project is not using cookie auth with an auth-provider cookie set
+  // So, cookie/ssr auth needs both the token and the auth-provider in cookies
+  if (cookieHeader && cookieHeader.type) {
     token = cookieHeader.rawCookie
     type = cookieHeader.type
     schema = 'cookie'

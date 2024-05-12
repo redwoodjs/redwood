@@ -2,8 +2,8 @@ import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import { getEntries } from '../lib/entries.js'
 import { onWarn } from '../lib/onWarn.js'
-// import { rscCssPreinitPlugin } from '../plugins/vite-plugin-rsc-css-preinit.js'
 import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
@@ -17,7 +17,6 @@ export async function rscBuildForServer(
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>,
-  _componentImportMap: Map<string, string[]>,
 ) {
   console.log('\n')
   console.log('3. rscBuildForServer')
@@ -25,9 +24,8 @@ export async function rscBuildForServer(
 
   const rwPaths = getPaths()
 
-  if (!rwPaths.web.entries) {
-    throw new Error('RSC entries file not found')
-  }
+  const entryFiles = getEntries()
+  const entryFilesKeys = Object.keys(entryFiles)
 
   if (!rwPaths.web.entryServer) {
     throw new Error('Server Entry file not found')
@@ -36,6 +34,9 @@ export async function rscBuildForServer(
   // TODO (RSC): No redwood-vite plugin, add it in here
   const rscServerBuildOutput = await viteBuild({
     envFile: false,
+    define: {
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    },
     ssr: {
       // Inline every file apart from node built-ins. We want vite/rollup to
       // inline dependencies in the server bundle. This gets round runtime
@@ -65,8 +66,6 @@ export async function rscBuildForServer(
       // (It does other things as well, but that's why it needs clientEntryFiles)
       rscTransformUseClientPlugin(clientEntryFiles),
       rscTransformUseServerPlugin(),
-      // Note: Temporary disabled while we fix the underlying css issue
-      // rscCssPreinitPlugin(clientEntryFiles, componentImportMap),
       rscRoutesAutoLoader(),
     ],
     build: {
@@ -80,7 +79,7 @@ export async function rscBuildForServer(
       rollupOptions: {
         onwarn: onWarn,
         input: {
-          entries: rwPaths.web.entries,
+          ...entryFiles,
           ...clientEntryFiles,
           ...serverEntryFiles,
           ...customModules,
@@ -92,25 +91,22 @@ export async function rscBuildForServer(
             // HACK to bring directives to the front
             let code = ''
             const clientValues = Object.values(clientEntryFiles)
-            console.log('chunk.moduleIds', chunk.moduleIds)
-            console.log('clientValues', clientValues)
             if (chunk.moduleIds.some((id) => clientValues.includes(id))) {
-              console.log('adding "use client" to', chunk.fileName)
               code += '"use client";'
             }
 
             const serverValues = Object.values(serverEntryFiles)
-            console.log('serverValues', serverValues)
             if (chunk.moduleIds.some((id) => serverValues.includes(id))) {
-              console.log('adding "use server" to', chunk.fileName)
               code += '"use server";'
             }
             return code
           },
           entryFileNames: (chunkInfo) => {
-            // TODO (RSC) Probably don't want 'entries'. And definitely don't want it hardcoded
+            // Entries such as pages should be named like the other assets
+            if (entryFilesKeys.includes(chunkInfo.name)) {
+              return 'assets/[name]-[hash].mjs'
+            }
             if (
-              chunkInfo.name === 'entries' ||
               chunkInfo.name === 'entry.server' ||
               chunkInfo.name === 'rsdw-server' ||
               customModules[chunkInfo.name]

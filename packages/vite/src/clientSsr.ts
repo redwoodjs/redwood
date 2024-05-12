@@ -8,6 +8,7 @@ import type { default as RSDWServerModule } from 'react-server-dom-webpack/serve
 import { getPaths } from '@redwoodjs/project-config'
 
 import { StatusError } from './lib/StatusError.js'
+import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
 import { moduleMap } from './streaming/ssrModuleMap.js'
 import { importModule } from './streaming/streamHelpers.js'
 import { makeFilePath } from './utils.js'
@@ -24,8 +25,9 @@ async function getEntries() {
 async function getFunctionComponent<TProps>(
   rscId: string,
 ): Promise<React.FunctionComponent<TProps>> {
-  const { getEntry } = (await getEntries()).default
-  const mod = await getEntry(rscId)
+  const { serverEntries } = await getEntries()
+  const entryPath = path.join(getPaths().web.distRsc, serverEntries[rscId])
+  const mod = await import(makeFilePath(entryPath))
 
   if (typeof mod === 'function') {
     return mod
@@ -34,6 +36,11 @@ async function getFunctionComponent<TProps>(
   if (typeof mod?.default === 'function') {
     return mod?.default
   }
+
+  // We remove any potential "__rwjs__" prefix as these only exist in the mapping
+  // not in the built files. E.g. "__rwjs__ServerEntry" -> "ServerEntry" as we don't
+  // export "__rwjs__ServerEntry" in the built file we simply export "ServerEntry"
+  rscId = rscId.replace(/^__rwjs__/, '')
 
   if (typeof mod?.[rscId] === 'function') {
     return mod?.[rscId]
@@ -55,10 +62,11 @@ function resolveClientEntryForProd(
   const absoluteClientEntries = Object.fromEntries(
     Object.entries(clientEntries).map(([key, val]) => {
       let fullKey = path.join(baseDir, key)
+
       if (process.platform === 'win32') {
         fullKey = fullKey.replaceAll('\\', '/')
       }
-      console.log('fullKey', fullKey, 'value', basePath + path.sep + val)
+
       return [fullKey, basePath + path.sep + val]
     }),
   )
@@ -90,6 +98,8 @@ export function renderFromDist<TProps extends Record<string, any>>(
 ) {
   console.log('renderFromDist rscId', rscId)
 
+  const cssLinks = getRscStylesheetLinkGenerator()()
+
   // Create temporary client component that wraps the component (Page, most
   // likely) returned by the `createFromReadableStream` call.
   const SsrComponent = async (props: TProps) => {
@@ -98,7 +108,7 @@ export function renderFromDist<TProps extends Record<string, any>>(
     let ServerEntry: React.FunctionComponent<TProps>
 
     try {
-      ServerEntry = await getFunctionComponent<TProps>('ServerEntry')
+      ServerEntry = await getFunctionComponent<TProps>('__rwjs__ServerEntry')
     } catch (error) {
       console.log('SsrComponent error', error)
       // For now we'll just swallow this error because not all projects will
@@ -108,6 +118,7 @@ export function renderFromDist<TProps extends Record<string, any>>(
       ServerEntry = () => createElement('div', {}, 'Loading')
     }
 
+    console.log('clientSsr.ts getEntries()', await getEntries())
     const clientEntries = (await getEntries()).clientEntries
 
     // TODO (RSC): Try removing the proxy here and see if it's really necessary.
@@ -145,7 +156,10 @@ export function renderFromDist<TProps extends Record<string, any>>(
     const stream = renderToReadableStream(
       // createElement(layout, undefined, createElement(page, props)),
       // @ts-expect-error - WIP
-      createElement(ServerEntry, { location: { pathname: rscId } }),
+      createElement(ServerEntry, {
+        location: { pathname: rscId },
+        css: cssLinks,
+      }),
       bundlerConfig,
     )
 

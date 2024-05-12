@@ -1,14 +1,12 @@
 # DbAuth Middleware
 
-
 ```tsx filename='entry.server.tsx'
 import type { TagDescriptor } from '@redwoodjs/web'
 
 import App from './App'
-import { createDbAuthMiddleware } from '@redwoodjs/auth-dbauth-middleware'
+import createDbAuthMiddleware from '@redwoodjs/auth-dbauth-middleware'
 import { Document } from './Document'
 
-// eslint-disable-next-line no-restricted-imports
 import { handler as dbAuthHandler } from '$api/src/functions/auth'
 import { cookieName } from '$api/src/lib/auth'
 import { getCurrentUser } from '$api/src/lib/auth'
