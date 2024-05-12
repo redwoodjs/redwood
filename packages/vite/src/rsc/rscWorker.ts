@@ -196,7 +196,25 @@ parentPort.on('message', (message: MessageReq) => {
 
 // Let me re-assign root
 type ConfigType = Omit<ResolvedConfig, 'root'> & { root: string }
-const configPromise: Promise<ConfigType> = resolveConfig({}, 'serve')
+
+/**
+ * Gets the Vite config.
+ * Makes sure root is configured properly and then caches the result
+ */
+async function getViteConfig() {
+  let cachedConfig: ConfigType | null = null
+
+  return (async () => {
+    if (cachedConfig) {
+      return cachedConfig
+    }
+
+    cachedConfig = await resolveConfig({}, 'serve')
+    setRootInConfig(cachedConfig)
+
+    return cachedConfig
+  })()
+}
 
 const getFunctionComponent = async (rscId: string) => {
   // TODO (RSC): Get rid of this when we only use the worker in dev mode
@@ -276,8 +294,7 @@ function resolveClientEntryForDev(id: string, config: { base: string }) {
 }
 
 async function setClientEntries(): Promise<void> {
-  // This is the Vite config
-  const config = await configPromise
+  const config = await getViteConfig()
 
   const entriesFile = getPaths().web.distRscEntries
   console.log('setClientEntries :: entriesFile', entriesFile)
@@ -372,8 +389,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
 
   console.log('renderRsc input', input)
 
-  const config = await configPromise
-  setRootInConfig(config)
+  const config = await getViteConfig()
 
   const component = await getFunctionComponent(input.rscId)
 
@@ -393,14 +409,13 @@ function isSerializedFormData(data?: unknown): data is SerializedFormData {
 }
 
 async function handleRsa(input: RenderInput): Promise<PipeableStream> {
-  const config = await configPromise
-  setRootInConfig(config)
-
   console.log('handleRsa input', input)
 
   if (!input.rsfId || !input.args) {
     throw new Error('Unexpected input')
   }
+
+  const config = await getViteConfig()
 
   const [fileId, name] = input.rsfId.split('#')
   const fname = path.join(config.root, fileId)
