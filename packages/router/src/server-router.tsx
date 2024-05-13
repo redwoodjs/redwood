@@ -40,38 +40,6 @@ export const Router: React.FC<RouterProps> = ({
     activeRoutePath,
   } = analyzedRoutes
 
-  console.log('analyzeRoutesResult')
-  console.log('-------------------')
-  console.log('namedRoutesMap', namedRoutesMap)
-
-  const serializedPathRouteMap = Object.keys(pathRouteMap).reduce<
-    Record<string, any>
-  >((prev, curr) => {
-    const route = pathRouteMap[curr]
-
-    prev[curr] = {
-      ...route,
-      page: route.page?.name,
-      sets: route.sets.map((set) => {
-        return { ...set, wrappers: set.wrappers.map((w) => w.name) }
-      }),
-    }
-    return prev
-  }, {})
-
-  const serializedRoutes = {
-    pathRouteMap: serializedPathRouteMap,
-    // TODO: Implement namedRoutesMap serialization
-    // namedRoutesMap,
-    hasHomeRoute,
-    NotFoundPage: NotFoundPage ? NotFoundPage.name : undefined,
-    activeRoutePath,
-  }
-
-  console.log(JSON.stringify(serializedRoutes, null, 2))
-
-  console.log('-------------------')
-
   // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
   // Note that the value changes at runtime
   Object.assign(namedRoutes, namedRoutesMap)
