@@ -196,7 +196,25 @@ parentPort.on('message', (message: MessageReq) => {
 
 // Let me re-assign root
 type ConfigType = Omit<ResolvedConfig, 'root'> & { root: string }
-const configPromise: Promise<ConfigType> = resolveConfig({}, 'serve')
+
+/**
+ * Gets the Vite config.
+ * Makes sure root is configured properly and then caches the result
+ */
+async function getViteConfig() {
+  let cachedConfig: ConfigType | null = null
+
+  return (async () => {
+    if (cachedConfig) {
+      return cachedConfig
+    }
+
+    cachedConfig = await resolveConfig({}, 'serve')
+    setRootInConfig(cachedConfig)
+
+    return cachedConfig
+  })()
+}
 
 const getFunctionComponent = async (rscId: string) => {
   // TODO (RSC): Get rid of this when we only use the worker in dev mode
@@ -276,8 +294,7 @@ function resolveClientEntryForDev(id: string, config: { base: string }) {
 }
 
 async function setClientEntries(): Promise<void> {
-  // This is the Vite config
-  const config = await configPromise
+  const config = await getViteConfig()
 
   const entriesFile = getPaths().web.distRscEntries
   console.log('setClientEntries :: entriesFile', entriesFile)
@@ -307,13 +324,56 @@ async function setClientEntries(): Promise<void> {
   )
 }
 
-interface SerializedFormData {
-  __formData__: boolean
-  state: Record<string, string | string[]>
+function setRootInConfig(config: ConfigType) {
+  const rwPaths = getPaths()
+
+  // TODO (RSC): Should root be configurable by the user? We probably need it
+  // to be different values in different contexts. Should we introduce more
+  // config options?
+  // config.root currently comes from the user's project, where it in turn
+  // comes from our `redwood()` vite plugin defined in index.ts. By default
+  // (i.e. in the redwood() plugin) it points to <base>/web/src. But we need it
+  // to be just <base>/, so for now we override it here.
+  config.root =
+    process.platform === 'win32'
+      ? rwPaths.base.replaceAll('\\', '/')
+      : rwPaths.base
+  console.log('config.root', config.root)
+  console.log('rwPaths.base', rwPaths.base)
 }
 
-function isSerializedFormData(data?: unknown): data is SerializedFormData {
-  return !!data && (data as SerializedFormData)?.__formData__
+function getBundlerConfig(config: ConfigType) {
+  // TODO (RSC): Try removing the proxy here and see if it's really necessary.
+  // Looks like it'd work to just have a regular object with a getter.
+  // Remove the proxy and see what breaks.
+  const bundlerConfig = new Proxy(
+    {},
+    {
+      get(_target, encodedId: string) {
+        console.log('Proxy get encodedId', encodedId)
+        const [filePath, name] = encodedId.split('#') as [string, string]
+        // filePath /Users/tobbe/dev/waku/examples/01_counter/dist/assets/rsc0.js
+        // name Counter
+
+        // TODO (RSC): Get rid of this when we only use the worker in dev mode
+        const isDev = Object.keys(absoluteClientEntries).length === 0
+
+        let id: string
+        if (isDev) {
+          id = resolveClientEntryForDev(filePath, config)
+        } else {
+          // Needs config.root to be set properly
+          id = resolveClientEntryForProd(filePath, config)
+        }
+
+        console.log('rscWorker proxy id', id)
+        // id /assets/rsc0-beb48afe.js
+        return { id, chunks: [id], name, async: true }
+      },
+    },
+  )
+
+  return bundlerConfig
 }
 
 async function renderRsc(input: RenderInput): Promise<PipeableStream> {
@@ -327,126 +387,35 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
     throw new Error('Unexpected input. Missing rscId or props.')
   }
 
-  const rwPaths = getPaths()
-
-  const config = await configPromise
-  // TODO (RSC): Should root be configurable by the user? We probably need it
-  // to be different values in different contexts. Should we introduce more
-  // config options?
-  // config.root currently comes from the user's project, where it in turn
-  // comes from our `redwood()` vite plugin defined in index.ts. By default
-  // (i.e. in the redwood() plugin) it points to <base>/web/src. But we need it
-  // to be just <base>/, so for now we override it here.
-  config.root =
-    process.platform === 'win32'
-      ? rwPaths.base.replaceAll('\\', '/')
-      : rwPaths.base
-  console.log('config.root', config.root)
-  console.log('rwPaths.base', rwPaths.base)
-
-  // TODO (RSC): Try removing the proxy here and see if it's really necessary.
-  // Looks like it'd work to just have a regular object with a getter.
-  // Remove the proxy and see what breaks.
-  const bundlerConfig = new Proxy(
-    {},
-    {
-      get(_target, encodedId: string) {
-        console.log('Proxy get encodedId', encodedId)
-        const [filePath, name] = encodedId.split('#') as [string, string]
-        // filePath /Users/tobbe/dev/waku/examples/01_counter/dist/assets/rsc0.js
-        // name Counter
-
-        // TODO (RSC): Get rid of this when we only use the worker in dev mode
-        const isDev = Object.keys(absoluteClientEntries).length === 0
-
-        let id: string
-        if (isDev) {
-          id = resolveClientEntryForDev(filePath, config)
-        } else {
-          id = resolveClientEntryForProd(filePath, config)
-        }
-
-        console.log('rscWorker proxy id', id)
-        // id /assets/rsc0-beb48afe.js
-        return { id, chunks: [id], name, async: true }
-      },
-    },
-  )
-
   console.log('renderRsc input', input)
 
-  if (input.rscId?.startsWith('__rwjs__router')) {
-    console.log('render Router rscId', input.rscId)
-    const router = await getFunctionComponent('__rwjs__Router')
-    console.log('render Router router', router)
-
-    return renderToPipeableStream(
-      // createElement(router, { location: { pathname: '/about' } }),
-      createElement('div', {}, 'AboutPage'),
-      bundlerConfig,
-    ).pipe(transformRsfId(config.root))
-  }
+  const config = await getViteConfig()
 
   const component = await getFunctionComponent(input.rscId)
 
   return renderToPipeableStream(
     createElement(component, input.props),
-    bundlerConfig,
+    getBundlerConfig(config),
   ).pipe(transformRsfId(config.root))
 }
 
+interface SerializedFormData {
+  __formData__: boolean
+  state: Record<string, string | string[]>
+}
+
+function isSerializedFormData(data?: unknown): data is SerializedFormData {
+  return !!data && (data as SerializedFormData)?.__formData__
+}
+
 async function handleRsa(input: RenderInput): Promise<PipeableStream> {
-  const rwPaths = getPaths()
-
-  const config = await configPromise
-  // TODO (RSC): Should root be configurable by the user? We probably need it
-  // to be different values in different contexts. Should we introduce more
-  // config options?
-  // config.root currently comes from the user's project, where it in turn
-  // comes from our `redwood()` vite plugin defined in index.ts. By default
-  // (i.e. in the redwood() plugin) it points to <base>/web/src. But we need it
-  // to be just <base>/, so for now we override it here.
-  config.root =
-    process.platform === 'win32'
-      ? rwPaths.base.replaceAll('\\', '/')
-      : rwPaths.base
-  console.log('config.root', config.root)
-  console.log('rwPaths.base', rwPaths.base)
-
-  // TODO (RSC): Try removing the proxy here and see if it's really necessary.
-  // Looks like it'd work to just have a regular object with a getter.
-  // Remove the proxy and see what breaks.
-  const bundlerConfig = new Proxy(
-    {},
-    {
-      get(_target, encodedId: string) {
-        console.log('Proxy get encodedId', encodedId)
-        const [filePath, name] = encodedId.split('#') as [string, string]
-        // filePath /Users/tobbe/dev/waku/examples/01_counter/dist/assets/rsc0.js
-        // name Counter
-
-        // TODO (RSC): Get rid of this when we only use the worker in dev mode
-        const isDev = Object.keys(absoluteClientEntries).length === 0
-
-        let id: string
-        if (isDev) {
-          id = resolveClientEntryForDev(filePath, config)
-        } else {
-          id = resolveClientEntryForProd(filePath, config)
-        }
-
-        console.log('rscWorker proxy id', id)
-        // id /assets/rsc0-beb48afe.js
-        return { id, chunks: [id], name, async: true }
-      },
-    },
-  )
-
   console.log('handleRsa input', input)
 
   if (!input.rsfId || !input.args) {
     throw new Error('Unexpected input')
   }
+
+  const config = await getViteConfig()
 
   const [fileId, name] = input.rsfId.split('#')
   const fname = path.join(config.root, fileId)
@@ -470,7 +439,7 @@ async function handleRsa(input: RenderInput): Promise<PipeableStream> {
   }
 
   const data = await (module[name] || module)(...input.args)
-  return renderToPipeableStream(data, bundlerConfig)
+  return renderToPipeableStream(data, getBundlerConfig(config))
 }
 
 // HACK Patching stream is very fragile.
