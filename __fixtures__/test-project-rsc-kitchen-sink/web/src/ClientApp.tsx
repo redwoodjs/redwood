@@ -1,6 +1,6 @@
 import React from 'react'
 
-// import { VirtualClientRouter } from '@redwoodjs/router/dist/client-router'
+// import { VirtualClientRouter } from '@redwoodjs/router/dist/virtual-client-router'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
