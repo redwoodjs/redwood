@@ -225,6 +225,8 @@ const getFunctionComponent = async (rscId: string) => {
     entryModule = getEntries()[rscId]
   } else {
     const serverEntries = await getEntriesFromDist()
+    console.log('rscWorker.ts serverEntries', serverEntries)
+
     entryModule = path.join(getPaths().web.distRsc, serverEntries[rscId])
   }
 
@@ -390,6 +392,15 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
   console.log('renderRsc input', input)
 
   const config = await getViteConfig()
+
+  if (input.rscId === '__rwjs__ServerRoutes') {
+    const serverRoutes = await getFunctionComponent('__rwjs__ServerRoutes')
+
+    return renderToPipeableStream(
+      createElement(serverRoutes, input.props),
+      getBundlerConfig(config),
+    ).pipe(transformRsfId(config.root))
+  }
 
   const component = await getFunctionComponent(input.rscId)
 

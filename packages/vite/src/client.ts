@@ -1,4 +1,4 @@
-import React, { cache, use, useEffect, useState } from 'react'
+import { cache, use, useEffect, useState } from 'react'
 import type { ReactElement } from 'react'
 
 import type { Options } from 'react-server-dom-webpack/client'

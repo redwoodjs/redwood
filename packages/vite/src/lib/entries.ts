@@ -36,7 +36,7 @@ export function getEntries() {
 
   entries['NavigationLayout'] =
     getPaths().web.layouts + '/NavigationLayout/NavigationLayout.tsx'
-  entries['__rwjs__Router'] = getPaths().web.src + '/ServerRoutes.tsx'
+  entries['__rwjs__ServerRoutes'] = getPaths().web.src + '/ServerRoutes.tsx'
 
   // Add the ServerEntry entry, noting we use the "__rwjs__" prefix to avoid
   // any potential conflicts with user-defined entries
