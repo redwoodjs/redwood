@@ -199,7 +199,13 @@ To protect private routes for access by multiple roles:
 </Router>
 ```
 
+:::note Note about roles
+A route is permitted when authenticated and user has **any** of the provided roles such as `"admin"` or `["admin", "editor", "publisher"]`.
+:::
+
+
 Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated. Read more about authentication in Redwood [here](tutorial/chapter4/authentication.md).
+
 
 ## Link and named route functions
 
