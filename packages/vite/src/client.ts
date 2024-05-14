@@ -161,7 +161,6 @@ export function renderFromRscServer<TProps>(rscId: string) {
     // if this is the right way to do things
   }
 
-  console.log('return ServerComponent', ServerComponent)
   return ServerComponent
 }
 

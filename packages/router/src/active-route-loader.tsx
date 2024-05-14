@@ -56,10 +56,6 @@ export const ActiveRouteLoader = ({
     !globalThis.RWJS_EXP_STREAMING_SSR &&
     (globalThis.__REDWOOD__PRERENDERING || (isPrerendered && firstLoad))
 
-  console.log('activeRouteLoader.tsx spec', spec)
-  console.log('activeRouteLoader.tsx params', params)
-  console.log('activeRouteLoader.tsx usePrerenderLoader', usePrerenderLoader)
-
   const LazyRouteComponent = usePrerenderLoader
     ? spec.prerenderLoader(spec.name).default
     : spec.LazyComponent
@@ -92,9 +88,6 @@ export const ActiveRouteLoader = ({
     delete params['ref']
     delete params['key']
   }
-
-  console.log('ActiveRouteLoader.tsx Level 3/3 (ActiveRouteLoader)')
-  console.log('params', params)
 
   // Level 3/3 (ActiveRouteLoader)
   // This is where we actually render the page component. Either using a

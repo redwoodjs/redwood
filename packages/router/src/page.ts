@@ -9,8 +9,6 @@ export interface Spec {
 export function isSpec(
   specOrPage: Spec | React.ComponentType,
 ): specOrPage is Spec {
-  console.log('isSpec', specOrPage)
-  console.log('isSpec', (specOrPage as Spec).LazyComponent !== undefined)
   return (specOrPage as Spec).LazyComponent !== undefined
 }
 
@@ -34,25 +32,18 @@ export function isSpec(
 export function normalizePage(
   specOrPage: Spec | React.ComponentType<unknown>,
 ): Spec {
-  console.log('normalizePage', specOrPage)
   if (isSpec(specOrPage)) {
     // Already a spec, just return it.
     return specOrPage
   }
 
-  console.log('normalizePage specOrPage.name', specOrPage.name)
-
   // Wrap the Page in a fresh spec, and put it in a promise to emulate
   // an async module import.
-  const spec = {
+  return {
     name: specOrPage.name,
     prerenderLoader: () => ({ default: specOrPage }),
     LazyComponent: specOrPage,
   }
-
-  console.log('normalizePage spec', spec)
-
-  return spec
 }
 
 export type PageType =

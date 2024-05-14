@@ -11,11 +11,6 @@ interface Props {
 }
 
 export const ActiveRouteLoader = ({ spec, params }: Props) => {
-  console.log('•••••••••••••••••••••••••••••••••••••••••••••••••••')
-  console.log('•••••••••••••••••••••••••••••••••••••••••••••••••••')
-  console.log('•••••          server route loader             ••••')
-  console.log('•••••••••••••••••••••••••••••••••••••••••••••••••••')
-  console.log('•••••••••••••••••••••••••••••••••••••••••••••••••••')
   const LazyRouteComponent = spec.LazyComponent
 
   // Delete params ref & key so that they are not spread on to the component
