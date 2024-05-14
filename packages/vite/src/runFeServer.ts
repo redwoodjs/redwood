@@ -16,7 +16,6 @@ import type { HTTPMethod } from 'find-my-way'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
-import type { RWRouteManifestItem } from '@redwoodjs/internal/dist/routes'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
@@ -91,18 +90,19 @@ export async function runFeServer() {
   // @MARK: In prod, we create it once up front!
   const middlewareRouter = await createMiddlewareRouter()
 
-  const handleWithMiddleware = (route?: RWRouteManifestItem) => {
+  const handleWithMiddleware = () => {
     return createServerAdapter(async (req: Request) => {
-      const middleware = middlewareRouter.find(
-        req.method as HTTPMethod,
-        req.url,
-      )?.handler as Middleware | undefined
+      const matchedMw = middlewareRouter.find(req.method as HTTPMethod, req.url)
 
-      if (!middleware) {
+      const handler = matchedMw?.handler as Middleware | undefined
+
+      if (!matchedMw) {
         return new Response('No middleware found', { status: 404 })
       }
 
-      const [mwRes] = await invoke(req, middleware, route ? { route } : {})
+      const [mwRes] = await invoke(req, handler, {
+        params: matchedMw?.params,
+      })
 
       return mwRes.toResponse()
     })
