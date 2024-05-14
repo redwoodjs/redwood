@@ -169,6 +169,10 @@ const Routes = () => {
 }
 ```
 
+:::note Note about roles
+A route is permitted when authenticated and user has **any** of the provided roles such as `"admin"` or `["admin", "editor"]`.
+:::
+
 ### api-side currentUser
 
 We briefly mentioned that GraphQL requests include an `Authorization` header in every request when a user is authenticated.
