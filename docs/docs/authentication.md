@@ -139,7 +139,7 @@ const Routes = () => {
 }
 ```
 
-You can also restrict access by role by passing a role or an array of roles to the `PrivateSet` component's `hasRole` prop:
+You can also restrict access by role by passing a role or an array of roles to the `PrivateSet` component's `roles` prop:
 
 ```tsx title="web/src/Routes.tsx"
 import { Router, Route, PrivateSet } from '@redwoodjs/router'
@@ -156,18 +156,22 @@ const Routes = () => {
       </PrivateSet>
 
       // highlight-next-line
-      <PrivateSet unauthenticated="forbidden" hasRole="admin">
+      <PrivateSet unauthenticated="forbidden" roles="admin">
         <Route path="/admin" page={AdminPage} name="admin" />
       </PrivateSet>
 
       // highlight-next-line
-      <PrivateSet unauthenticated="forbidden" hasRole={['author', 'editor']}>
+      <PrivateSet unauthenticated="forbidden" roles={['author', 'editor']}>
         <Route path="/posts" page={PostsPage} name="posts" />
       </PrivateSet>
     </Router>
   )
 }
 ```
+
+:::note Note about roles
+A route is permitted when authenticated and user has **any** of the provided roles such as `"admin"` or `["admin", "editor"]`.
+:::
 
 ### api-side currentUser
 
