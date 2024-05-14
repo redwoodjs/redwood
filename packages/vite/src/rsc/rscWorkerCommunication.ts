@@ -1,6 +1,6 @@
 import path from 'node:path'
-import { PassThrough } from 'node:stream'
 import type { Readable } from 'node:stream'
+import { PassThrough } from 'node:stream'
 import { Worker } from 'node:worker_threads'
 
 const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
@@ -35,6 +35,15 @@ export type MessageReq =
       id: number
       type: 'render'
       input: RenderInput
+    }
+  | {
+      id: number
+      type: 'initWorkerServerStore'
+      input: {
+        // @NOTE: remember Headers will get serialized in the post message!
+        headersInit: HeadersInit
+        serverAuthContext: any
+      }
     }
   | {
       id: number
@@ -101,6 +110,35 @@ export function setClientEntries(): Promise<void> {
 
     const message: MessageReq = { id, type: 'setClientEntries' }
     worker.postMessage(message)
+  })
+}
+
+export function initWorkerServerStore_MSG(input: {
+  headersInit: HeadersInit
+  serverAuthContext: any
+}): Promise<void> {
+  console.log('rsccomm initWorkerServerStore ::', input)
+  // Just making this function async instead of callback based
+  return new Promise((resolve, reject) => {
+    const id = nextId++
+    messageCallbacks.set(id, (message) => {
+      if (message.type === 'end') {
+        resolve()
+        messageCallbacks.delete(id)
+      } else if (message.type === 'err') {
+        reject(message.err)
+        messageCallbacks.delete(id)
+      }
+    })
+
+    const message: MessageReq = {
+      id,
+      type: 'initWorkerServerStore',
+      input,
+    }
+    worker.postMessage(message)
+
+    console.log('rsccomm :: posted message')
   })
 }
 

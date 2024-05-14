@@ -3,6 +3,9 @@ import {
   type ServerAuthState,
 } from '@redwoodjs/auth'
 
+import { initWorkerServerStore_MSG } from '../rsc/rscWorkerCommunication.js'
+import { initServerStore, setServerAuthState } from '../serverStore.js'
+
 import { MiddlewareRequest } from './MiddlewareRequest.js'
 import { MiddlewareResponse } from './MiddlewareResponse.js'
 import type { Middleware, MiddlewareInvokeOptions } from './types.js'
@@ -21,6 +24,8 @@ export const invoke = async (
   options?: MiddlewareInvokeOptions,
 ): Promise<[MiddlewareResponse, ServerAuthState]> => {
   if (typeof middleware !== 'function') {
+    setupServerStore(req, middlewareDefaultAuthProviderState)
+
     return [MiddlewareResponse.next(), middlewareDefaultAuthProviderState]
   }
 
@@ -48,7 +53,25 @@ export const invoke = async (
     console.error('~'.repeat(80))
     console.error(e)
     console.error('~'.repeat(80))
+  } finally {
+    // This one is for the server. We may want to move this up as a app.use middleware
+    // if we use the `.run` method from AsyncLocalStorage.
+    setupServerStore(req, mwReq.serverAuthContext.get())
   }
 
   return [mwRes, mwReq.serverAuthContext.get()]
+}
+
+const setupServerStore = (req: Request, serverAuthState: ServerAuthState) => {
+  initServerStore(req)
+
+  // Set the auth state in serverStore + send message to worker to also update its state
+  setServerAuthState(serverAuthState)
+
+  // Send a message to the worker to init its server store
+  // REMEMBER: This will only be called in DEV (eventually!)
+  initWorkerServerStore_MSG({
+    headersInit: Object.fromEntries(req.headers.entries()),
+    serverAuthContext: serverAuthState,
+  })
 }

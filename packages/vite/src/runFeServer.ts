@@ -16,7 +16,6 @@ import type { HTTPMethod } from 'find-my-way'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
-import type { RWRouteManifestItem } from '@redwoodjs/internal/dist/routes'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
@@ -90,18 +89,20 @@ export async function runFeServer() {
   // @MARK: In prod, we create it once up front!
   const middlewareRouter = await createMiddlewareRouter()
 
-  const handleWithMiddleware = (route?: RWRouteManifestItem) => {
+  const handleWithMiddleware = () => {
     return createServerAdapter(async (req: Request) => {
-      const middleware = middlewareRouter.find(
-        req.method as HTTPMethod,
-        req.url,
-      )?.handler as Middleware | undefined
+      const matchedMw = middlewareRouter.find(req.method as HTTPMethod, req.url)
 
-      if (!middleware) {
+      const handler = matchedMw?.handler as Middleware | undefined
+
+      if (!matchedMw) {
         return new Response('No middleware found', { status: 404 })
       }
 
-      const [mwRes] = await invoke(req, middleware, route ? { route } : {})
+      const [mwRes] = await invoke(req, handler, {
+        params: matchedMw?.params,
+        viteDevServer: undefined,
+      })
 
       return mwRes.toResponse()
     })
@@ -117,7 +118,6 @@ export async function runFeServer() {
     '/assets',
     express.static(rwPaths.web.distClient + '/assets', { index: false }),
   )
-
   // 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
   // e.g. deploying to Netlify, we don't need to proxy but configure it in Netlify
@@ -138,7 +138,12 @@ export async function runFeServer() {
   )
 
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
-  app.use('/rw-rsc', createRscRequestHandler())
+  app.use(
+    '/rw-rsc',
+    createRscRequestHandler({
+      getMiddlewareRouter: async () => middlewareRouter,
+    }),
+  )
 
   // Static asset handling MUST be defined before our catch all routing handler below
   // otherwise it will catch all requests for static assets and return a 404.
@@ -159,8 +164,6 @@ export async function runFeServer() {
   // Wrap with whatwg/server adapter. Express handler -> Fetch API handler
   app.get('*', createServerAdapter(routeHandler))
 
-  // @MARK: put this after rw-rsc to avoid confusion.
-  // We will likely move it up when we implement RSC Auth
   app.post('*', handleWithMiddleware())
 
   app.listen(rwConfig.web.port)

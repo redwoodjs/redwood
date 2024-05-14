@@ -24,11 +24,12 @@ import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
 import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
+import { initStoreForWorker__ONLYCALLFROMWORKER } from '../serverStore.js'
 
 import type {
-  RenderInput,
-  MessageRes,
   MessageReq,
+  MessageRes,
+  RenderInput,
 } from './rscWorkerCommunication.js'
 
 // TODO (RSC): We should look into importing renderToReadableStream from
@@ -111,6 +112,25 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
   }
 }
 
+/**
+ *
+ * This runs off the back of a post message!
+ * So headers will serialized into an object
+ */
+export const handleInitWorkerServerStore = (
+  message: MessageReq & { type: 'initWorkerServerStore' },
+) => {
+  console.log('handleInitWorkerServerStore Called', message)
+
+  // Init the server store again, in the worker this time
+  const serverStoreInWorker = initStoreForWorker__ONLYCALLFROMWORKER(
+    message.input.headersInit,
+    message.input.serverAuthContext,
+  )
+
+  console.log(`👉 \n ~ serverStoreInWorker:`, serverStoreInWorker)
+}
+
 // This is a worker, so it doesn't share the same global variables as the main
 // server. So we have to register them here again.
 registerFwGlobalsAndShims()
@@ -189,6 +209,9 @@ parentPort.on('message', (message: MessageReq) => {
     //   handleGetCustomModules(message)
     // } else if (message.type === 'build') {
     //   handleBuild(message)
+  } else if (message.type === 'initWorkerServerStore') {
+    // console.log('Worker has received message, but aint gonna do nothing!')
+    handleInitWorkerServerStore(message)
   }
 })
 
