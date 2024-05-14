@@ -170,7 +170,8 @@ export function analyzeRoutes(
             sets: previousSets,
           }
 
-          // e.g. namedRoutesMap.homePage = () => '/home'
+          // Example: namedRoutesMap.home = () => '/home'
+          // Example: namedRoutesMap.userExample = (args) => `/user-examples/${args.id}`
           namedRoutesMap[name] = (args = {}) => replaceParams(path, args)
         }
       }
