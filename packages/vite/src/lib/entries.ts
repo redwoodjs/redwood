@@ -35,11 +35,6 @@ export function getEntries() {
     entries[page.importName] = page.path
   }
 
-  const serverRoutesPath = path.join(getPaths().web.src, 'ServerRoutes.tsx')
-  if (fs.existsSync(serverRoutesPath)) {
-    entries['__rwjs__ServerRoutes'] = serverRoutesPath
-  }
-
   // Add the ServerEntry entry, noting we use the "__rwjs__" prefix to avoid
   // any potential conflicts with user-defined entries
   const serverEntry = getPaths().web.entryServer
@@ -47,6 +42,11 @@ export function getEntries() {
     throw new Error('Server Entry file not found')
   }
   entries['__rwjs__ServerEntry'] = serverEntry
+
+  const serverRoutesPath = path.join(getPaths().web.src, 'ServerRoutes.tsx')
+  if (fs.existsSync(serverRoutesPath)) {
+    entries['__rwjs__ServerRoutes'] = serverRoutesPath
+  }
 
   return entries
 }

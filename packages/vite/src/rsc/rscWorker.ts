@@ -399,7 +399,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
     return renderToPipeableStream(
       createElement(serverRoutes, input.props),
       getBundlerConfig(config),
-    ).pipe(transformRsfId(config.root))
+    )
   }
 
   const component = await getFunctionComponent(input.rscId)
