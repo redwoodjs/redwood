@@ -22,6 +22,10 @@
       "types": "./dist/clientSsr.d.ts",
       "default": "./dist/clientSsr.js"
     },
+    "./ClientRouter": {
+      "types": "./dist/ClientRouter.d.ts",
+      "default": "./dist/ClientRouter.js"
+    },
     "./buildFeServer": {
       "types": "./dist/buildFeServer.d.ts",
       "default": "./dist/buildFeServer.js"

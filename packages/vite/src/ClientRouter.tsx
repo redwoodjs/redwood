@@ -1,3 +1,10 @@
+// TODO (RSC): This should live in @redwoodjs/router but I didn't want to add
+// `react-server-dom-webpack` as a dependency there. We should first figure out
+// what to do about rscFetch here vs renderFromRscServer and see if maybe that
+// one should live somewhere else where @redwoodjs/router can import from
+
+import React from 'react'
+
 import { createFromFetch } from 'react-server-dom-webpack/client'
 
 import { LocationProvider, useLocation } from '@redwoodjs/router/dist/location'
@@ -12,10 +19,10 @@ function rscFetch(rscId: string, props: Record<string, unknown> = {}) {
     },
   })
 
-  return createFromFetch(response)
+  return createFromFetch<never, React.ReactElement>(response)
 }
 
-let serverRoutes: React.ReactElement = null
+let serverRoutes: Thenable<React.ReactElement> | null = null
 
 export const ClientRouter = () => {
   return (

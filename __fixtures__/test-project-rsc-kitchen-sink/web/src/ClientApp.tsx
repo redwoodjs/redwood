@@ -1,10 +1,11 @@
 import React from 'react'
 
-// import { VirtualClientRouter } from '@redwoodjs/router/dist/virtual-client-router'
+// @ts-expect-error - ESM issue. RW projects need to be ESM to properly pick up
+// on the types here
+import { ClientRouter } from '@redwoodjs/vite/ClientRouter'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
-import { ClientRouter } from './ClientRouter'
 import FatalErrorPage from './pages/FatalErrorPage/FatalErrorPage'
 
 import './index.css'
