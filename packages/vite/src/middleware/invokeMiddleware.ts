@@ -3,8 +3,8 @@ import {
   type ServerAuthState,
 } from '@redwoodjs/auth'
 
-import { initWorkerServerStore_MSG } from '../rsc/rscWorkerCommunication.js'
-import { initServerStore, setServerAuthState } from '../serverStore.js'
+import { initWorkerServerStore } from '../rsc/rscWorkerCommunication.js'
+import { initServerStore } from '../serverStore.js'
 
 import { MiddlewareRequest } from './MiddlewareRequest.js'
 import { MiddlewareResponse } from './MiddlewareResponse.js'
@@ -64,15 +64,12 @@ export const invoke = async (
 }
 
 const setupServerStore = (req: Request, serverAuthState: ServerAuthState) => {
-  initServerStore(req)
-
-  // Set the auth state in serverStore + send message to worker to also update its state
-  setServerAuthState(serverAuthState)
+  initServerStore({ headers: req.headers, serverAuthState })
 
   // Send a message to the worker to init its server store
   // REMEMBER: This will only be called in DEV (eventually!)
-  initWorkerServerStore_MSG({
-    headersInit: Object.fromEntries(req.headers.entries()),
-    serverAuthContext: serverAuthState,
+  initWorkerServerStore({
+    headers: req.headers,
+    serverAuthState,
   })
 }

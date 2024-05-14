@@ -24,7 +24,7 @@ import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
 import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
-import { initStoreForWorker__ONLYCALLFROMWORKER } from '../serverStore.js'
+import { initServerStore } from '../serverStore.js'
 
 import type {
   MessageReq,
@@ -122,15 +122,10 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
 export const handleInitWorkerServerStore = (
   message: MessageReq & { type: 'initWorkerServerStore' },
 ) => {
-  console.log('handleInitWorkerServerStore Called', message)
-
-  // Init the server store again, in the worker this time
-  const serverStoreInWorker = initStoreForWorker__ONLYCALLFROMWORKER(
-    message.input.headersInit,
-    message.input.serverAuthContext,
-  )
-
-  console.log(`👉 \n ~ serverStoreInWorker:`, serverStoreInWorker)
+  initServerStore({
+    headers: message.input.headersInit,
+    serverAuthState: message.input.serverAuthState,
+  })
 }
 
 // This is a worker, so it doesn't share the same global variables as the main

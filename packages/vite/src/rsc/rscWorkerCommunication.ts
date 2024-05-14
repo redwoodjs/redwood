@@ -3,6 +3,8 @@ import type { Readable } from 'node:stream'
 import { PassThrough } from 'node:stream'
 import { Worker } from 'node:worker_threads'
 
+import type { ServerAuthState } from '@redwoodjs/auth'
+
 const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
   execArgv: [
     '--conditions',
@@ -40,9 +42,8 @@ export type MessageReq =
       id: number
       type: 'initWorkerServerStore'
       input: {
-        // @NOTE: remember Headers will get serialized in the post message!
-        headersInit: HeadersInit
-        serverAuthContext: any
+        headersInit: Record<string, string>
+        serverAuthState: ServerAuthState
       }
     }
   | {
@@ -113,11 +114,13 @@ export function setClientEntries(): Promise<void> {
   })
 }
 
-export function initWorkerServerStore_MSG(input: {
-  headersInit: HeadersInit
-  serverAuthContext: any
+export function initWorkerServerStore({
+  headers,
+  serverAuthState,
+}: {
+  headers: Headers
+  serverAuthState: ServerAuthState
 }): Promise<void> {
-  console.log('rsccomm initWorkerServerStore ::', input)
   // Just making this function async instead of callback based
   return new Promise((resolve, reject) => {
     const id = nextId++
@@ -131,14 +134,19 @@ export function initWorkerServerStore_MSG(input: {
       }
     })
 
+    // @NOTE: We convert headers to a plain object for sending across post message
+    const input = {
+      headersInit: Object.fromEntries(headers.entries()),
+      serverAuthState,
+    }
+
     const message: MessageReq = {
       id,
       type: 'initWorkerServerStore',
       input,
     }
-    worker.postMessage(message)
 
-    console.log('rsccomm :: posted message')
+    worker.postMessage(message)
   })
 }
 

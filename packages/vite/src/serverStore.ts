@@ -8,48 +8,30 @@ export interface ServerStore extends Map<string, any> {}
 
 let PER_REQ_STORAGE: AsyncLocalStorage<ServerStore>
 
-// Should be called on every server request, forces a creation of a new store
-export const initServerStore = (req: Request) => {
-  console.log('Initializing server store.....')
-  PER_REQ_STORAGE = new AsyncLocalStorage<ServerStore>()
-
-  // @TODO Unsure whether we should do .run or .enterWith
-  /**
-   * See description from node docs:
-   * This transition will continue for the entire synchronous execution.
-   * This means that if, for example, the context is entered within an event handler subsequent
-   * event handlers will also run within that context unless specifically bound
-   * to another context with an AsyncResource.
-   *
-   * That is why run() should be preferred over enterWith() unless there are strong reasons
-   * to use the latter method.
-   *
-   * It sounds like the behaviour they're warning about might be _desired_ behaviour
-   *
-   */
-
-  const reqStore = new Map()
-  reqStore.set('headers', req.headers)
-
-  PER_REQ_STORAGE.enterWith(reqStore)
-
-  return PER_REQ_STORAGE.getStore()
+type InitServerStoreParams = {
+  headers: Headers | Record<string, string>
+  serverAuthState: ServerAuthState
 }
 
-/***
- * This should only be called from the worker
- * Name this better. Eventually this will only be called in DEV.
+/**
+ *
+ * This function initializes the server store.
+ *
+ * Note that it can take either a instance of Headers, or a Record -
+ * as only plain objects can be passed via worker.postMessage.
+ *
  */
-export const initStoreForWorker__ONLYCALLFROMWORKER = (
-  headerInit: HeadersInit,
-  serverAuthState: any,
-) => {
-  console.log('Initializing WORKER store.....')
+export const initServerStore = ({
+  headers,
+  serverAuthState,
+}: InitServerStoreParams) => {
   PER_REQ_STORAGE = new AsyncLocalStorage<ServerStore>()
 
   const reqStore = new Map()
-  const headers = new Headers(headerInit)
-  reqStore.set('headers', headers)
+
+  // Re-init the headers object, because when called from a worker, it gets serialized
+  const headersObj = new Headers(headers)
+  reqStore.set('headers', headersObj)
   reqStore.set('serverAuthState', serverAuthState)
 
   PER_REQ_STORAGE.enterWith(reqStore)
