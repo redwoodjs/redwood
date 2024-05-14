@@ -35,8 +35,6 @@ export function getEntries() {
     entries[page.importName] = page.path
   }
 
-  // entries['NavigationLayout'] =
-  //   getPaths().web.layouts + '/NavigationLayout/NavigationLayout.tsx'
   const serverRoutesPath = path.join(getPaths().web.src, 'ServerRoutes.tsx')
   if (fs.existsSync(serverRoutesPath)) {
     entries['__rwjs__ServerRoutes'] = serverRoutesPath

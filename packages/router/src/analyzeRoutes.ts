@@ -40,7 +40,7 @@ type RoutePath = string
  * but it allows for page and redirect to be null or undefined
  * Keeping the shape consistent makes it easier to use
  */
-export interface AnalyzedRoute {
+interface AnalyzedRoute {
   path: RoutePath
   name: string | null
   whileLoadingPage?: WhileLoadingPage
