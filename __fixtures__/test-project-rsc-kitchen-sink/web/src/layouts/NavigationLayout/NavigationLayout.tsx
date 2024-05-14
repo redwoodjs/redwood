@@ -1,6 +1,6 @@
 import ReadFileServerCell from 'src/components/ReadFileServerCell'
 
-import { NavigationStyles } from './NavigationStyles'
+import './NavigationLayout.css'
 
 const routes = {
   home: () => '/',
@@ -21,7 +21,6 @@ interface NavigationLayoutProps {
 const NavigationLayout = ({ children }: NavigationLayoutProps) => {
   return (
     <div className="navigation-layout">
-      <NavigationStyles />
       <nav>
         <ul>
           <li>
