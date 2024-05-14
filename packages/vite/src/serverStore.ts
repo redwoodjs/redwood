@@ -66,8 +66,8 @@ export const setServerAuthState = (authState: ServerAuthState) => {
   store?.set('serverAuthState', authState)
 }
 
-// @TODO: can we set headers + cookies from RSC component? We'll have to get server store and do something with it in the RSC handler
+// @TODO: should we allow setting headers + cookies from RSC component? We'll have to get server store and do something with it in the RSC handler
 // and also in createStreamingHandler
 
-// @TODO add guard rails around headers and cookies object?
-// Because you can't modify
+// @TODO add guard rails around headers and cookies object? If you CANT set it form RSC
+// Because you can't modify request headers
