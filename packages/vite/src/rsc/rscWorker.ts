@@ -67,7 +67,9 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
   console.log('handleRender', id, input)
 
   try {
-    const pipeable = await renderRsc(input)
+    const pipeable = input.rscId
+      ? await renderRsc(input)
+      : await handleRsa(input)
 
     const writable = new Writable({
       write(chunk, encoding, callback) {
@@ -217,7 +219,25 @@ parentPort.on('message', (message: MessageReq) => {
 
 // Let me re-assign root
 type ConfigType = Omit<ResolvedConfig, 'root'> & { root: string }
-const configPromise: Promise<ConfigType> = resolveConfig({}, 'serve')
+
+/**
+ * Gets the Vite config.
+ * Makes sure root is configured properly and then caches the result
+ */
+async function getViteConfig() {
+  let cachedConfig: ConfigType | null = null
+
+  return (async () => {
+    if (cachedConfig) {
+      return cachedConfig
+    }
+
+    cachedConfig = await resolveConfig({}, 'serve')
+    setRootInConfig(cachedConfig)
+
+    return cachedConfig
+  })()
+}
 
 const getFunctionComponent = async (rscId: string) => {
   // TODO (RSC): Get rid of this when we only use the worker in dev mode
@@ -297,8 +317,7 @@ function resolveClientEntryForDev(id: string, config: { base: string }) {
 }
 
 async function setClientEntries(): Promise<void> {
-  // This is the Vite config
-  const config = await configPromise
+  const config = await getViteConfig()
 
   const entriesFile = getPaths().web.distRscEntries
   console.log('setClientEntries :: entriesFile', entriesFile)
@@ -328,19 +347,9 @@ async function setClientEntries(): Promise<void> {
   )
 }
 
-interface SerializedFormData {
-  __formData__: boolean
-  state: Record<string, string | string[]>
-}
-
-function isSerializedFormData(data?: unknown): data is SerializedFormData {
-  return !!data && (data as SerializedFormData)?.__formData__
-}
-
-async function renderRsc(input: RenderInput): Promise<PipeableStream> {
+function setRootInConfig(config: ConfigType) {
   const rwPaths = getPaths()
 
-  const config = await configPromise
   // TODO (RSC): Should root be configurable by the user? We probably need it
   // to be different values in different contexts. Should we introduce more
   // config options?
@@ -354,7 +363,9 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
       : rwPaths.base
   console.log('config.root', config.root)
   console.log('rwPaths.base', rwPaths.base)
+}
 
+function getBundlerConfig(config: ConfigType) {
   // TODO (RSC): Try removing the proxy here and see if it's really necessary.
   // Looks like it'd work to just have a regular object with a getter.
   // Remove the proxy and see what breaks.
@@ -374,6 +385,7 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
         if (isDev) {
           id = resolveClientEntryForDev(filePath, config)
         } else {
+          // Needs config.root to be set properly
           id = resolveClientEntryForProd(filePath, config)
         }
 
@@ -384,47 +396,73 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
     },
   )
 
+  return bundlerConfig
+}
+
+async function renderRsc(input: RenderInput): Promise<PipeableStream> {
+  if (input.rsfId || !input.args) {
+    throw new Error(
+      "Unexpected input. Can't request both RSCs and execute RSAs at the same time.",
+    )
+  }
+
+  if (!input.rscId || !input.props) {
+    throw new Error('Unexpected input. Missing rscId or props.')
+  }
+
   console.log('renderRsc input', input)
 
-  if (input.rsfId && input.args) {
-    const [fileId, name] = input.rsfId.split('#')
-    const fname = path.join(config.root, fileId)
-    console.log('Server Action, fileId', fileId, 'name', name, 'fname', fname)
-    const module = await loadServerFile(fname)
+  const config = await getViteConfig()
 
-    if (isSerializedFormData(input.args[0])) {
-      const formData = new FormData()
+  const component = await getFunctionComponent(input.rscId)
 
-      Object.entries(input.args[0].state).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          value.forEach((v) => {
-            formData.append(key, v)
-          })
-        } else {
-          formData.append(key, value)
-        }
-      })
+  return renderToPipeableStream(
+    createElement(component, input.props),
+    getBundlerConfig(config),
+  ).pipe(transformRsfId(config.root))
+}
 
-      input.args[0] = formData
-    }
+interface SerializedFormData {
+  __formData__: boolean
+  state: Record<string, string | string[]>
+}
 
-    const data = await (module[name] || module)(...input.args)
-    if (!input.rscId) {
-      return renderToPipeableStream(data, bundlerConfig)
-    }
-    // continue for mutation mode
+function isSerializedFormData(data?: unknown): data is SerializedFormData {
+  return !!data && (data as SerializedFormData)?.__formData__
+}
+
+async function handleRsa(input: RenderInput): Promise<PipeableStream> {
+  console.log('handleRsa input', input)
+
+  if (!input.rsfId || !input.args) {
+    throw new Error('Unexpected input')
   }
 
-  if (input.rscId && input.props) {
-    const component = await getFunctionComponent(input.rscId)
+  const config = await getViteConfig()
 
-    return renderToPipeableStream(
-      createElement(component, input.props),
-      bundlerConfig,
-    ).pipe(transformRsfId(config.root))
+  const [fileId, name] = input.rsfId.split('#')
+  const fname = path.join(config.root, fileId)
+  console.log('Server Action, fileId', fileId, 'name', name, 'fname', fname)
+  const module = await loadServerFile(fname)
+
+  if (isSerializedFormData(input.args[0])) {
+    const formData = new FormData()
+
+    Object.entries(input.args[0].state).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((v) => {
+          formData.append(key, v)
+        })
+      } else {
+        formData.append(key, value)
+      }
+    })
+
+    input.args[0] = formData
   }
 
-  throw new Error('Unexpected input')
+  const data = await (module[name] || module)(...input.args)
+  return renderToPipeableStream(data, getBundlerConfig(config))
 }
 
 // HACK Patching stream is very fragile.

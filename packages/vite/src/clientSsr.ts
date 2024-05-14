@@ -8,6 +8,7 @@ import type { default as RSDWServerModule } from 'react-server-dom-webpack/serve
 import { getPaths } from '@redwoodjs/project-config'
 
 import { StatusError } from './lib/StatusError.js'
+import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
 import { moduleMap } from './streaming/ssrModuleMap.js'
 import { importModule } from './streaming/streamHelpers.js'
 import { makeFilePath } from './utils.js'
@@ -97,6 +98,8 @@ export function renderFromDist<TProps extends Record<string, any>>(
 ) {
   console.log('renderFromDist rscId', rscId)
 
+  const cssLinks = getRscStylesheetLinkGenerator()()
+
   // Create temporary client component that wraps the component (Page, most
   // likely) returned by the `createFromReadableStream` call.
   const SsrComponent = async (props: TProps) => {
@@ -153,7 +156,10 @@ export function renderFromDist<TProps extends Record<string, any>>(
     const stream = renderToReadableStream(
       // createElement(layout, undefined, createElement(page, props)),
       // @ts-expect-error - WIP
-      createElement(ServerEntry, { location: { pathname: rscId } }),
+      createElement(ServerEntry, {
+        location: { pathname: rscId },
+        css: cssLinks,
+      }),
       bundlerConfig,
     )
 
