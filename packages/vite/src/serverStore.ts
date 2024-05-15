@@ -8,35 +8,36 @@ export interface ServerStore extends Map<string, any> {}
 
 let PER_REQ_STORAGE: AsyncLocalStorage<ServerStore>
 
-type InitServerStoreParams = {
+type InitPerReqMapParams = {
   headers: Headers | Record<string, string>
-  serverAuthState: ServerAuthState
+  serverAuthState?: ServerAuthState
+}
+
+export const createServerStorage = () => {
+  PER_REQ_STORAGE = new AsyncLocalStorage<ServerStore>()
+
+  return PER_REQ_STORAGE
 }
 
 /**
  *
- * This function initializes the server store.
- *
- * Note that it can take either a instance of Headers, or a Record -
- * as only plain objects can be passed via worker.postMessage.
- *
+ * This function just creates a Map, that you pass to
+ * serverStorage.run(MAP_HERE, () => { ... })
  */
-export const initServerStore = ({
+export const createPerRequestMap = ({
   headers,
   serverAuthState,
-}: InitServerStoreParams) => {
-  PER_REQ_STORAGE = new AsyncLocalStorage<ServerStore>()
-
+}: InitPerReqMapParams) => {
   const reqStore = new Map()
 
-  // Re-init the headers object, because when called from a worker, it gets serialized
   const headersObj = new Headers(headers)
   reqStore.set('headers', headersObj)
-  reqStore.set('serverAuthState', serverAuthState)
 
-  PER_REQ_STORAGE.enterWith(reqStore)
+  if (serverAuthState) {
+    reqStore.set('serverAuthState', serverAuthState)
+  }
 
-  return PER_REQ_STORAGE.getStore()
+  return reqStore
 }
 
 const getStore = () => {

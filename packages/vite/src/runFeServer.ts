@@ -8,7 +8,8 @@
 import path from 'node:path'
 import url from 'node:url'
 
-import { createServerAdapter } from '@whatwg-node/server'
+import * as DefaultFetchAPI from '@whatwg-node/fetch'
+import { createServerAdapter, normalizeNodeRequest } from '@whatwg-node/server'
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
@@ -25,6 +26,7 @@ import type { Middleware } from './middleware/types.js'
 import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { setClientEntries } from './rsc/rscWorkerCommunication.js'
+import { createServerStorage, createPerRequestMap } from './serverStore.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import type { RWRouteManifest } from './types.js'
 
@@ -89,6 +91,7 @@ export async function runFeServer() {
 
   // @MARK: In prod, we create it once up front!
   const middlewareRouter = await createMiddlewareRouter()
+  const serverStorage = createServerStorage()
 
   const handleWithMiddleware = () => {
     return createServerAdapter(async (req: Request) => {
@@ -119,6 +122,19 @@ export async function runFeServer() {
     '/assets',
     express.static(rwPaths.web.distClient + '/assets', { index: false }),
   )
+
+  app.use('*', (req, _res, next) => {
+    const webReq = normalizeNodeRequest(req, DefaultFetchAPI.Request)
+
+    const perReqStore = createPerRequestMap({
+      headers: webReq.headers,
+    })
+
+    // By wrapping next, we ensure that all of the other handlers will use this same perReqStore
+    // But note that the serverStorage is RE-initialised for the RSC worker
+    serverStorage.run(perReqStore, next)
+  })
+
   // 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
   // e.g. deploying to Netlify, we don't need to proxy but configure it in Netlify

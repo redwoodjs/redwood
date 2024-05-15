@@ -21,6 +21,10 @@ export type RenderInput<
   props?: Props | undefined
   rsfId?: string | undefined
   args?: unknown[] | undefined
+  serverState: {
+    headersInit: Record<string, string>
+    serverAuthState: ServerAuthState
+  }
 }
 
 type CustomModules = {
@@ -37,14 +41,6 @@ export type MessageReq =
       id: number
       type: 'render'
       input: RenderInput
-    }
-  | {
-      id: number
-      type: 'initWorkerServerStore'
-      input: {
-        headersInit: Record<string, string>
-        serverAuthState: ServerAuthState
-      }
     }
   | {
       id: number
@@ -110,42 +106,6 @@ export function setClientEntries(): Promise<void> {
     })
 
     const message: MessageReq = { id, type: 'setClientEntries' }
-    worker.postMessage(message)
-  })
-}
-
-export function initWorkerServerStore({
-  headers,
-  serverAuthState,
-}: {
-  headers: Headers
-  serverAuthState: ServerAuthState
-}): Promise<void> {
-  // Just making this function async instead of callback based
-  return new Promise((resolve, reject) => {
-    const id = nextId++
-    messageCallbacks.set(id, (message) => {
-      if (message.type === 'end') {
-        resolve()
-        messageCallbacks.delete(id)
-      } else if (message.type === 'err') {
-        reject(message.err)
-        messageCallbacks.delete(id)
-      }
-    })
-
-    // @NOTE: We convert headers to a plain object for sending across post message
-    const input = {
-      headersInit: Object.fromEntries(headers.entries()),
-      serverAuthState,
-    }
-
-    const message: MessageReq = {
-      id,
-      type: 'initWorkerServerStore',
-      input,
-    }
-
     worker.postMessage(message)
   })
 }

@@ -16,6 +16,7 @@ import {
 import { hasStatusCode } from '../lib/StatusError.js'
 import type { Middleware } from '../middleware'
 import { invoke } from '../middleware/invokeMiddleware'
+import { getAuthState, getRequestHeaders } from '../serverStore'
 
 import { sendRscFlightToStudio } from './rscStudioHandlers.js'
 import { renderRsc } from './rscWorkerCommunication.js'
@@ -184,7 +185,18 @@ export function createRscRequestHandler(
       }
 
       try {
-        const pipeable = await renderRsc({ rscId, props, rsfId, args })
+        const pipeable = await renderRsc({
+          rscId,
+          props,
+          rsfId,
+          args,
+          // Pass the serverState from server to the worker
+          // Inside the worker, we'll use this to re-initalize the server state (because workers are stateless)
+          serverState: {
+            headersInit: Object.fromEntries(getRequestHeaders().entries()),
+            serverAuthState: getAuthState(),
+          },
+        })
 
         await sendRscFlightToStudio({
           rscId,
