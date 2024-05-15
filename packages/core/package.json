@@ -59,7 +59,7 @@
     "null-loader": "4.0.1",
     "react-refresh": "0.14.0",
     "resolve-url-loader": "5.0.0",
-    "rimraf": "5.0.5",
+    "rimraf": "5.0.7",
     "style-loader": "3.3.4",
     "typescript": "5.4.5",
     "url-loader": "4.1.1",
