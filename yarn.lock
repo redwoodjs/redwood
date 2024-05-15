@@ -8680,7 +8680,7 @@ __metadata:
     line-column: "npm:1.0.2"
     lodash: "npm:4.17.21"
     lodash-decorators: "npm:6.0.1"
-    lru-cache: "npm:10.2.0"
+    lru-cache: "npm:10.2.2"
     proxyquire: "npm:2.1.3"
     ts-morph: "npm:15.1.0"
     typescript: "npm:5.4.5"
@@ -23993,10 +23993,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-cache@npm:10.2.0, lru-cache@npm:^10.0.0, lru-cache@npm:^10.0.1, lru-cache@npm:^10.2.0":
-  version: 10.2.0
-  resolution: "lru-cache@npm:10.2.0"
-  checksum: 10c0/c9847612aa2daaef102d30542a8d6d9b2c2bb36581c1bf0dc3ebf5e5f3352c772a749e604afae2e46873b930a9e9523743faac4e5b937c576ab29196774712ee
+"lru-cache@npm:10.2.2, lru-cache@npm:^10.0.0, lru-cache@npm:^10.0.1, lru-cache@npm:^10.2.0":
+  version: 10.2.2
+  resolution: "lru-cache@npm:10.2.2"
+  checksum: 10c0/402d31094335851220d0b00985084288136136992979d0e015f0f1697e15d1c86052d7d53ae86b614e5b058425606efffc6969a31a091085d7a2b80a8a1e26d6
   languageName: node
   linkType: hard
 
