@@ -132,3 +132,13 @@ test('Server Cell - Error component', async ({ page }) => {
 
   await expect(page.getByText('UserExample not found')).toBeVisible()
 })
+
+test('Server Cell in Layout', async ({ page }) => {
+  await page.goto('/')
+
+  const mainText = await page.locator('.navigation-layout').innerText()
+
+  // "The source of this server cell" should appear twice - once as a paragraph
+  // above the code block and then once more inside the codeblock itself
+  expect(mainText.match(/The source of this server cell/g)).toHaveLength(2)
+})
