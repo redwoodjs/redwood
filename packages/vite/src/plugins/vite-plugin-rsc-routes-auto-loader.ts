@@ -77,12 +77,8 @@ export function rscRoutesAutoLoader(): Plugin {
       // We have to handle the loading of routes in two different ways depending on if
       // we are doing SSR or not. During SSR we want to load files directly whereas on
       // the client we have to fetch things over the network.
+      // TODO (RSC): ↑ Update comment to reflect what's actually going on
       const isSsr = options?.ssr ?? false
-
-      const loadFunctionModule = isSsr
-        ? '@redwoodjs/vite/clientSsr'
-        : '@redwoodjs/vite/client'
-      const loadFunctionName = isSsr ? 'renderFromDist' : 'renderFromRscServer'
 
       // Parse the code as AST
       const ext = path.extname(id)
@@ -95,59 +91,168 @@ export function rscRoutesAutoLoader(): Plugin {
         plugins,
       })
 
-      // We have to filter out any pages which the user has already explicitly imported
-      // in the routes file otherwise there would be conflicts.
+      // We have to filter out any pages which the user has already explicitly
+      // imported in the routes file otherwise there would be conflicts.
       const importedNames = new Set<string>()
+
+      // Store a reference to all default imports so we can update Set wrapper
+      // imports later
+      // TODO (RSC): Make this all imports, not just default imports. But have to
+      // figure out how to handle something like
+      // `import { MyLayout, SomethingElse } from './myLayout'`
+      // and turning it into
+      // `import { SomethingElse } from './myLayout'`
+      // `import { MyLayout } from '@redwoodjs/router/dist/dummyComponent'`
+      // and also
+      // `import MyLayout, { SomethingElse } from './myLayout'`
+      const allImports = new Map<string, t.ImportDeclaration>()
+      // All components used as Set wrappers
+      const wrappers = new Set<string>()
+
       traverse(ast, {
-        ImportDeclaration(p) {
-          const importPath = p.node.source.value
+        ImportDeclaration(path) {
+          const importPath = path.node.source.value
+
           if (importPath === null) {
             return
           }
 
           const userImportRelativePath = getPathRelativeToSrc(
-            importStatementPath(p.node.source?.value),
+            importStatementPath(path.node.source?.value),
           )
 
-          const defaultSpecifier = p.node.specifiers.filter((specifiers) =>
-            t.isImportDefaultSpecifier(specifiers),
+          const defaultSpecifier = path.node.specifiers.filter((specifier) =>
+            t.isImportDefaultSpecifier(specifier),
           )[0]
 
           if (userImportRelativePath && defaultSpecifier) {
             importedNames.add(defaultSpecifier.local.name)
           }
+
+          path.node.specifiers.forEach((specifier) => {
+            allImports.set(specifier.local.name, path.node)
+          })
+        },
+        JSXElement(path) {
+          if (
+            t.isJSXOpeningElement(path.node.openingElement) &&
+            t.isJSXIdentifier(path.node.openingElement.name) &&
+            path.node.openingElement.name.name === 'Set'
+          ) {
+            const attributes = path.node.openingElement.attributes
+
+            for (const attribute of attributes) {
+              if (
+                t.isJSXAttribute(attribute) &&
+                attribute.name.name === 'wrap' &&
+                t.isJSXExpressionContainer(attribute.value)
+              ) {
+                const wrapExpression = attribute.value
+
+                if (t.isArrayExpression(wrapExpression.expression)) {
+                  const arrayExpression = wrapExpression.expression
+                  arrayExpression.elements.forEach((element) => {
+                    if (t.isIdentifier(element)) {
+                      console.log('wrapper component', element.name)
+                    }
+                  })
+                } else if (t.isIdentifier(wrapExpression.expression)) {
+                  console.log(
+                    'wrapper component',
+                    wrapExpression.expression.name,
+                  )
+                }
+              }
+            }
+          }
+        },
+        CallExpression(path) {
+          if (isSsr) {
+            return
+          }
+
+          if (
+            (t.isIdentifier(path.node.callee, { name: 'jsxs' }) ||
+              t.isIdentifier(path.node.callee, { name: 'jsx' })) &&
+            t.isIdentifier(path.node.arguments[0]) &&
+            path.node.arguments[0].name === 'Set'
+          ) {
+            const jsxArgs = path.node.arguments
+            if (t.isObjectExpression(jsxArgs[1])) {
+              const wrapProp = jsxArgs[1].properties.find(
+                (prop): prop is t.ObjectProperty =>
+                  t.isObjectProperty(prop) &&
+                  t.isIdentifier(prop.key, { name: 'wrap' }),
+              )
+
+              if (t.isArrayExpression(wrapProp?.value)) {
+                wrapProp.value.elements.forEach((element) => {
+                  if (t.isIdentifier(element)) {
+                    wrappers.add(element.name)
+                  }
+                })
+              } else if (t.isIdentifier(wrapProp?.value)) {
+                wrappers.add(wrapProp.value.name)
+              }
+            }
+          }
         },
       })
-      const nonImportedPages = pages.filter(
-        (page) => !importedNames.has(page.importName),
-      )
+
+      const nonImportedPages = pages.filter((page) => {
+        return !importedNames.has(page.importName)
+      })
+
+      console.log('set wrappers', Array.from(wrappers))
+      wrappers.forEach((wrapper) => {
+        const wrapperImport = allImports.get(wrapper)
+        console.log('wrapper import', wrapperImport)
+
+        if (wrapperImport) {
+          wrapperImport.source.value = '@redwoodjs/router/dist/dummyComponent'
+        }
+      })
 
       // Insert the page loading into the code
       for (const page of nonImportedPages) {
-        ast.program.body.unshift(
-          t.variableDeclaration('const', [
-            t.variableDeclarator(
-              t.identifier(page.const),
-              t.callExpression(t.identifier(loadFunctionName), [
-                t.stringLiteral(page.const),
-              ]),
-            ),
-          ]),
-        )
+        if (isSsr) {
+          ast.program.body.unshift(
+            t.variableDeclaration('const', [
+              t.variableDeclarator(
+                t.identifier(page.const),
+                t.callExpression(t.identifier('renderFromDist'), [
+                  t.stringLiteral(page.const),
+                ]),
+              ),
+            ]),
+          )
+        } else {
+          console.log('adding `const', page.const, '= () => null`')
+          ast.program.body.unshift(
+            t.variableDeclaration('const', [
+              t.variableDeclarator(
+                t.identifier(page.const),
+                t.arrowFunctionExpression([], t.nullLiteral()),
+              ),
+            ]),
+          )
+        }
       }
 
-      // Insert an import for the load function we need
-      ast.program.body.unshift(
-        t.importDeclaration(
-          [
-            t.importSpecifier(
-              t.identifier(loadFunctionName),
-              t.identifier(loadFunctionName),
-            ),
-          ],
-          t.stringLiteral(loadFunctionModule),
-        ),
-      )
+      if (isSsr) {
+        // Insert an import for the load function we need
+        ast.program.body.unshift(
+          t.importDeclaration(
+            [
+              t.importSpecifier(
+                t.identifier('renderFromDist'),
+                t.identifier('renderFromDist'),
+              ),
+            ],
+            t.stringLiteral('@redwoodjs/vite/clientSsr'),
+          ),
+        )
+      }
 
       return generate(ast).code
     },
