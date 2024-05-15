@@ -76,7 +76,7 @@
     "rimraf": "5.0.5",
     "semver": "7.6.0",
     "string-env-interpolation": "1.0.1",
-    "systeminformation": "5.22.6",
+    "systeminformation": "5.22.9",
     "terminal-link": "2.1.1",
     "title-case": "3.0.3",
     "uuid": "9.0.1",
