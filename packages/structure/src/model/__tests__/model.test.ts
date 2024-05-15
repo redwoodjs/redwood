@@ -1,3 +1,4 @@
+import exp from 'constants'
 import { basename, resolve } from 'path'
 
 import { describe, it, expect } from 'vitest'
@@ -139,6 +140,18 @@ describe('Redwood Route detection', () => {
       name: 'privatePage',
       path: '/private-page',
     })
+  })
+  it('detects authenticated routes', async () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const routes = project.getRouter().routes
+
+    const authenticatedRoutes = routes
+      .filter((r) => r.isPrivate)
+      .map(({ name, path }) => ({ name, path }))
+    expect(authenticatedRoutes.length).toBe(1)
+    expect(authenticatedRoutes[0].name).toBe('privatePage')
+    expect(authenticatedRoutes[0].path).toBe('/private-page')
   })
 })
 
