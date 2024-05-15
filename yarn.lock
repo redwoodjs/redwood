@@ -8182,7 +8182,7 @@ __metadata:
     prettier: "npm:3.2.5"
     prisma: "npm:5.11.0"
     prompts: "npm:2.4.2"
-    rimraf: "npm:5.0.5"
+    rimraf: "npm:5.0.7"
     semver: "npm:7.6.0"
     string-env-interpolation: "npm:1.0.1"
     systeminformation: "npm:5.22.6"
@@ -8279,7 +8279,7 @@ __metadata:
     null-loader: "npm:4.0.1"
     react-refresh: "npm:0.14.0"
     resolve-url-loader: "npm:5.0.0"
-    rimraf: "npm:5.0.5"
+    rimraf: "npm:5.0.7"
     style-loader: "npm:3.3.4"
     typescript: "npm:5.4.5"
     url-loader: "npm:4.1.1"
@@ -8495,7 +8495,7 @@ __metadata:
     graphql-tag: "npm:2.12.6"
     kill-port: "npm:1.6.1"
     prettier: "npm:3.2.5"
-    rimraf: "npm:5.0.5"
+    rimraf: "npm:5.0.7"
     source-map: "npm:0.7.4"
     string-env-interpolation: "npm:1.0.1"
     systeminformation: "npm:5.22.6"
@@ -8656,7 +8656,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     deepmerge: "npm:4.3.1"
     fast-glob: "npm:3.3.2"
-    rimraf: "npm:5.0.5"
+    rimraf: "npm:5.0.7"
     string-env-interpolation: "npm:1.0.1"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.5"
@@ -28037,14 +28037,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rimraf@npm:5.0.5":
-  version: 5.0.5
-  resolution: "rimraf@npm:5.0.5"
+"rimraf@npm:5.0.7":
+  version: 5.0.7
+  resolution: "rimraf@npm:5.0.7"
   dependencies:
     glob: "npm:^10.3.7"
   bin:
     rimraf: dist/esm/bin.mjs
-  checksum: 10c0/d50dbe724f33835decd88395b25ed35995077c60a50ae78ded06e0185418914e555817aad1b4243edbff2254548c2f6ad6f70cc850040bebb4da9e8cc016f586
+  checksum: 10c0/bd6dbfaa98ae34ce1e54d1e06045d2d63e8859d9a1979bb4a4628b652b459a2d17b17dc20ee072b034bd2d09bd691e801d24c4d9cfe94e16fdbcc8470a1d4807
   languageName: node
   linkType: hard
 
@@ -28219,7 +28219,7 @@ __metadata:
     octokit: "npm:3.1.2"
     ora: "npm:7.0.1"
     prompts: "npm:2.4.2"
-    rimraf: "npm:5.0.5"
+    rimraf: "npm:5.0.7"
     tstyche: "npm:1.1.0"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.5"
