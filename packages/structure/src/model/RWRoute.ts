@@ -49,7 +49,7 @@ export class RWRoute extends BaseNode {
       ?.getOpeningElement()
       ?.getTagNameNode()
       ?.getText()
-    return tagText === 'Private'
+    return tagText === 'Private' || tagText === 'PrivateSet'
   }
 
   @lazy() get hasParameters(): boolean {
