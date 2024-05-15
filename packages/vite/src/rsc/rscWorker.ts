@@ -3,10 +3,11 @@
 // `--condition react-server`. If we did try to do that the main process
 // couldn't do SSR because it would be missing client-side React functions
 // like `useState` and `createContext`.
-import { Buffer } from 'node:buffer'
+import type { Buffer } from 'node:buffer'
 import { Server } from 'node:http'
 import path from 'node:path'
-import { Transform, Writable } from 'node:stream'
+// import { Transform, Writable } from 'node:stream'
+import { Writable } from 'node:stream'
 import { parentPort } from 'node:worker_threads'
 
 import { createElement } from 'react'
@@ -407,7 +408,8 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
   return renderToPipeableStream(
     createElement(component, input.props),
     getBundlerConfig(config),
-  ).pipe(transformRsfId(config.root))
+  )
+  // ).pipe(transformRsfId(config.root))
 }
 
 interface SerializedFormData {
@@ -429,7 +431,7 @@ async function handleRsa(input: RenderInput): Promise<PipeableStream> {
   const config = await getViteConfig()
 
   const [fileId, name] = input.rsfId.split('#')
-  const fname = path.join(config.root, fileId)
+  const fname = fileId // path.join(config.root, fileId)
   console.log('Server Action, fileId', fileId, 'name', name, 'fname', fname)
   const module = await loadServerFile(fname)
 
@@ -456,29 +458,33 @@ async function handleRsa(input: RenderInput): Promise<PipeableStream> {
 // HACK Patching stream is very fragile.
 // TODO (RSC): Sanitize prefixToRemove to make sure it's safe to use in a
 // RegExp (CodeQL is complaining on GitHub)
-function transformRsfId(prefixToRemove: string) {
-  // Should be something like /home/runner/work/redwood/test-project-rsa
-  console.log('prefixToRemove', prefixToRemove)
+// TODO (RSC): Figure out if this is needed. Seems to remove config.root
+// but then we add it back again in handleRsa()
+// function transformRsfId(prefixToRemove: string) {
+//   // Should be something like /home/runner/work/redwood/test-project-rsa
+//   console.log('prefixToRemove', prefixToRemove)
 
-  return new Transform({
-    transform(chunk, encoding, callback) {
-      if (encoding !== ('buffer' as any)) {
-        throw new Error('Unknown encoding')
-      }
-      const data = chunk.toString()
-      const lines = data.split('\n')
-      console.log('lines', lines)
-      let changed = false
-      for (let i = 0; i < lines.length; ++i) {
-        const match = lines[i].match(
-          new RegExp(`^([0-9]+):{"id":"${prefixToRemove}(.*?)"(.*)$`),
-        )
-        if (match) {
-          lines[i] = `${match[1]}:{"id":"${match[2]}"${match[3]}`
-          changed = true
-        }
-      }
-      callback(null, changed ? Buffer.from(lines.join('\n')) : chunk)
-    },
-  })
-}
+//   return new Transform({
+//     transform(chunk, encoding, callback) {
+//       if (encoding !== ('buffer' as any)) {
+//         throw new Error('Unknown encoding')
+//       }
+
+//       const data = chunk.toString()
+//       const lines = data.split('\n')
+//       console.log('lines', lines)
+
+//       let changed = false
+//       for (let i = 0; i < lines.length; ++i) {
+//         const match = lines[i].match(
+//           new RegExp(`^([0-9]+):{"id":"${prefixToRemove}(.*?)"(.*)$`),
+//         )
+//         if (match) {
+//           lines[i] = `${match[1]}:{"id":"${match[2]}"${match[3]}`
+//           changed = true
+//         }
+//       }
+//       callback(null, changed ? Buffer.from(lines.join('\n')) : chunk)
+//     },
+//   })
+// }
