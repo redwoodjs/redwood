@@ -5,21 +5,18 @@ import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
 import fg from 'fast-glob'
 import fastify from 'fastify'
-import type { FastifyListenOptions, FastifyInstance } from 'fastify'
 
 import type { GlobalContext } from '@redwoodjs/context'
 import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { resolveOptions } from './createServerHelpers'
-import type { CreateServerOptions } from './createServerHelpers'
+import type {
+  CreateServerOptions,
+  Server,
+  StartOptions,
+} from './createServerHelpers'
 import { redwoodFastifyAPI } from './plugins/api'
-
-type StartOptions = Omit<FastifyListenOptions, 'port' | 'host'>
-
-interface Server extends FastifyInstance {
-  start: (options?: StartOptions) => Promise<string>
-}
 
 // Load .env files if they haven't already been loaded. This makes importing this file effectful:
 //
@@ -51,16 +48,8 @@ if (!process.env.REDWOOD_ENV_FILES_LOADED) {
  *   const server = await createServer({
  *     logger,
  *     apiRootPath: 'api'
- *     beforeApiConfig: (fastify) => {
- *       fastify.addContentTypeParser(
- *        'text/csv',
- *         { parseAs: 'string' },
- *         (request, body, done) => {
- *           // Custom parsing logic for text/csv content type for api plugin
- *           const csvData = body.split('\n').map((row) => row.split(','))
- *           done(null, csvData)
- *         },
- *       )
+ *     configureApiServer: (server) => {
+ *       // Configure the API server fastify instance, e.g. add content type parsers
  *     },
  *   })
  *
@@ -78,7 +67,7 @@ export async function createServer(options: CreateServerOptions = {}) {
   const {
     apiRootPath,
     fastifyServerOptions,
-    beforeApiConfig,
+    configureApiServer,
     apiPort,
     apiHost,
   } = resolveOptions(options)
@@ -120,8 +109,6 @@ export async function createServer(options: CreateServerOptions = {}) {
     },
   })
 
-  beforeApiConfig(server)
-
   server.addHook('onRequest', (_req, _reply, done) => {
     getAsyncStoreInstance().run(new Map<string, GlobalContext>(), done)
   })
@@ -132,6 +119,7 @@ export async function createServer(options: CreateServerOptions = {}) {
       fastGlobOptions: {
         ignore: ['**/dist/functions/graphql.js'],
       },
+      configureServer: configureApiServer,
     },
   })
 

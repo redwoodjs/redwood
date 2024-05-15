@@ -7,6 +7,7 @@ import type { GlobalContext } from '@redwoodjs/context'
 import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 import { coerceRootPath } from '@redwoodjs/fastify-web/dist/helpers'
 
+import type { Server } from '../createServerHelpers'
 import { loadFastifyConfig } from '../fastify'
 
 import { lambdaRequestHandler, loadFunctionsFromDist } from './lambdaLoader'
@@ -16,6 +17,7 @@ export interface RedwoodFastifyAPIOptions {
     apiRootPath?: string
     fastGlobOptions?: FastGlobOptions
     loadUserConfig?: boolean
+    configureServer?: (server: Server) => void | Promise<void>
   }
 }
 
@@ -59,4 +61,8 @@ export async function redwoodFastifyAPI(
   await loadFunctionsFromDist({
     fastGlobOptions: redwoodOptions.fastGlobOptions,
   })
+
+  if (redwoodOptions.configureServer) {
+    await redwoodOptions.configureServer(fastify as Server)
+  }
 }
