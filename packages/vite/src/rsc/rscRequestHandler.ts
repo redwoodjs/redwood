@@ -31,8 +31,6 @@ export function createRscRequestHandler() {
     let rsfId: string | undefined
     let args: unknown[] = []
 
-    console.log('url.pathname', url.pathname)
-
     if (url.pathname.startsWith(basePath)) {
       rscId = url.pathname.split('/').pop()
       rsfId = url.searchParams.get('action_id') || undefined
