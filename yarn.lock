@@ -2256,13 +2256,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/core@npm:5.0.0, @envelop/core@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "@envelop/core@npm:5.0.0"
+"@envelop/core@npm:5.0.1, @envelop/core@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "@envelop/core@npm:5.0.1"
   dependencies:
     "@envelop/types": "npm:5.0.0"
     tslib: "npm:^2.5.0"
-  checksum: 10c0/abc06585177a634d355fd7cec22a838086e6ccf20317f34b4b9eb92c4acb1aee7f09f621197f065619148a58de027a968ecb26d0bdee87bf0380769816ad4be2
+  checksum: 10c0/26bcad627d2959e5dadb7ad0f1d158ba8227e45e721c2112808633124228ed49ee4f8cbb498d57447c4730bfcb9734ebd0fa3e377d2f6dde6b4eb506fc96a568
   languageName: node
   linkType: hard
 
@@ -7558,15 +7558,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-email/render@npm:0.0.12":
-  version: 0.0.12
-  resolution: "@react-email/render@npm:0.0.12"
+"@react-email/render@npm:0.0.13":
+  version: 0.0.13
+  resolution: "@react-email/render@npm:0.0.13"
   dependencies:
     html-to-text: "npm:9.0.5"
     js-beautify: "npm:^1.14.11"
-    react: "npm:18.2.0"
-    react-dom: "npm:18.2.0"
-  checksum: 10c0/36b11c2d4009fa8c7faae39cb8353e24256f1c41225e17d3164f730ddb7b3bc537a22aaeb7f634e71228148267b8f8cd2afb74fbcac318588dc6e0aa73ee92f3
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
+  checksum: 10c0/de8ba236290ec058a8fb1d59e1229ecd333135a651b8e14bf2443e1caccc0754b860e3ae8b5aa24389027d448f307479b2d868196f15b9aae3cd3b3d53a70cc1
   languageName: node
   linkType: hard
 
@@ -7648,7 +7648,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/web-server": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.136"
+    "@types/aws-lambda": "npm:8.10.137"
     "@types/lodash": "npm:4.17.0"
     "@types/qs": "npm:6.9.14"
     "@types/split2": "npm:4.2.3"
@@ -7690,7 +7690,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.1"
     "@prisma/client": "npm:5.11.0"
-    "@types/aws-lambda": "npm:8.10.136"
+    "@types/aws-lambda": "npm:8.10.137"
     "@types/jsonwebtoken": "npm:9.0.6"
     "@types/memjs": "npm:1"
     "@types/pascalcase": "npm:1.0.3"
@@ -7784,7 +7784,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.1"
     "@redwoodjs/api": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.136"
+    "@types/aws-lambda": "npm:8.10.137"
     "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.36.1"
     jsonwebtoken: "npm:9.0.2"
@@ -7838,7 +7838,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.1"
     "@clerk/clerk-sdk-node": "npm:4.13.11"
     "@redwoodjs/api": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.136"
+    "@types/aws-lambda": "npm:8.10.137"
     core-js: "npm:3.36.1"
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
@@ -7924,7 +7924,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/graphql-server": "workspace:*"
     "@redwoodjs/vite": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.136"
+    "@types/aws-lambda": "npm:8.10.137"
     ts-toolbelt: "npm:9.6.0"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.5"
@@ -7977,7 +7977,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.1"
     "@redwoodjs/api": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.136"
+    "@types/aws-lambda": "npm:8.10.137"
     core-js: "npm:3.36.1"
     firebase-admin: "npm:11.11.1"
     typescript: "npm:5.4.5"
@@ -8028,7 +8028,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.1"
     "@redwoodjs/api": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.136"
+    "@types/aws-lambda": "npm:8.10.137"
     "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.36.1"
     jsonwebtoken: "npm:9.0.2"
@@ -8080,7 +8080,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.1"
     "@redwoodjs/api": "workspace:*"
     "@supabase/ssr": "npm:0.3.0"
-    "@types/aws-lambda": "npm:8.10.136"
+    "@types/aws-lambda": "npm:8.10.137"
     "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.36.1"
     jsonwebtoken: "npm:9.0.2"
@@ -8099,7 +8099,7 @@ __metadata:
     "@redwoodjs/graphql-server": "workspace:*"
     "@redwoodjs/vite": "workspace:*"
     "@supabase/ssr": "npm:0.3.0"
-    "@types/aws-lambda": "npm:8.10.136"
+    "@types/aws-lambda": "npm:8.10.137"
     ts-toolbelt: "npm:9.6.0"
     tsx: "npm:4.7.1"
     typescript: "npm:5.4.5"
@@ -8200,7 +8200,7 @@ __metadata:
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
     "@redwoodjs/framework-tools": "workspace:*"
-    "@testing-library/jest-dom": "npm:6.4.2"
+    "@testing-library/jest-dom": "npm:6.4.5"
     "@testing-library/react": "npm:14.3.1"
     core-js: "npm:3.36.1"
     msw: "npm:1.3.3"
@@ -8574,7 +8574,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.1"
     "@testing-library/dom": "npm:9.3.4"
-    "@testing-library/jest-dom": "npm:6.4.2"
+    "@testing-library/jest-dom": "npm:6.4.5"
     "@testing-library/react": "npm:14.3.1"
     "@testing-library/user-event": "npm:14.5.2"
     "@types/pascalcase": "npm:1.0.3"
@@ -8614,7 +8614,7 @@ __metadata:
     "@babel/cli": "npm:7.24.1"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.1"
-    "@envelop/core": "npm:5.0.0"
+    "@envelop/core": "npm:5.0.1"
     "@envelop/depth-limit": "npm:4.0.0"
     "@envelop/disable-introspection": "npm:6.0.0"
     "@envelop/filter-operation-type": "npm:6.0.0"
@@ -8631,7 +8631,7 @@ __metadata:
     "@redwoodjs/context": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/realtime": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.136"
+    "@types/aws-lambda": "npm:8.10.137"
     "@types/jsonwebtoken": "npm:9.0.6"
     "@types/lodash": "npm:4.17.0"
     "@types/uuid": "npm:9.0.8"
@@ -8783,7 +8783,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/mailer-renderer-react-email@workspace:packages/mailer/renderers/react-email"
   dependencies:
-    "@react-email/render": "npm:0.0.12"
+    "@react-email/render": "npm:0.0.13"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/mailer-core": "workspace:*"
     tsx: "npm:4.7.1"
@@ -8862,7 +8862,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/realtime@workspace:packages/realtime"
   dependencies:
-    "@envelop/core": "npm:5.0.0"
+    "@envelop/core": "npm:5.0.1"
     "@envelop/live-query": "npm:7.0.0"
     "@envelop/testing": "npm:7.0.0"
     "@envelop/types": "npm:5.0.0"
@@ -9002,10 +9002,10 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/router": "workspace:*"
     "@redwoodjs/web": "workspace:*"
-    "@testing-library/jest-dom": "npm:6.4.2"
+    "@testing-library/jest-dom": "npm:6.4.5"
     "@testing-library/react": "npm:14.3.1"
     "@testing-library/user-event": "npm:14.5.2"
-    "@types/aws-lambda": "npm:8.10.136"
+    "@types/aws-lambda": "npm:8.10.137"
     "@types/babel-core": "npm:6.25.10"
     "@types/jest": "npm:29.5.12"
     "@types/node": "npm:20.11.25"
@@ -9059,7 +9059,7 @@ __metadata:
     "@types/yargs-parser": "npm:21.0.3"
     "@vitejs/plugin-react": "npm:4.2.1"
     "@whatwg-node/fetch": "npm:0.9.17"
-    "@whatwg-node/server": "npm:0.9.32"
+    "@whatwg-node/server": "npm:0.9.34"
     acorn-loose: "npm:8.4.0"
     buffer: "npm:6.0.3"
     busboy: "npm:^1.6.0"
@@ -9121,7 +9121,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.1"
     "@redwoodjs/auth": "workspace:*"
     "@rollup/plugin-babel": "npm:6.0.4"
-    "@testing-library/jest-dom": "npm:6.4.2"
+    "@testing-library/jest-dom": "npm:6.4.5"
     "@testing-library/react": "npm:14.3.1"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
@@ -10678,9 +10678,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:6.4.2":
-  version: 6.4.2
-  resolution: "@testing-library/jest-dom@npm:6.4.2"
+"@testing-library/jest-dom@npm:6.4.5":
+  version: 6.4.5
+  resolution: "@testing-library/jest-dom@npm:6.4.5"
   dependencies:
     "@adobe/css-tools": "npm:^4.3.2"
     "@babel/runtime": "npm:^7.9.2"
@@ -10688,7 +10688,7 @@ __metadata:
     chalk: "npm:^3.0.0"
     css.escape: "npm:^1.5.1"
     dom-accessibility-api: "npm:^0.6.3"
-    lodash: "npm:^4.17.15"
+    lodash: "npm:^4.17.21"
     redent: "npm:^3.0.0"
   peerDependencies:
     "@jest/globals": ">= 28"
@@ -10707,7 +10707,7 @@ __metadata:
       optional: true
     vitest:
       optional: true
-  checksum: 10c0/e7eba527b34ce30cde94424d2ec685bdfed51daaafb7df9b68b51aec6052e99a50c8bfe654612dacdf857a1eb81d68cf294fc89de558ee3a992bf7a6019fffcc
+  checksum: 10c0/4cfdd44e2abab2b9d399c47cbfe686729bb65160d7df0f9e2329aaaea7702f6e852a9eefb29b468f00c1e5a5274b684f8cac76959d33299dfa909ba007ea191d
   languageName: node
   linkType: hard
 
@@ -10850,10 +10850,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.136, @types/aws-lambda@npm:^8.10.83":
-  version: 8.10.136
-  resolution: "@types/aws-lambda@npm:8.10.136"
-  checksum: 10c0/6618100b131d26ad2ae14dc70b8b958b1811dd26c80989ee02cb8ff21f495d858fd4cadf0f234659cb81097a4948ad6d34f14f9da4a97f73900c2cab5defa388
+"@types/aws-lambda@npm:8.10.137, @types/aws-lambda@npm:^8.10.83":
+  version: 8.10.137
+  resolution: "@types/aws-lambda@npm:8.10.137"
+  checksum: 10c0/32272f8e9dfa88987cbc68e999554225d07282c3a884d769cdec7116fcec1f7e716914a9ac0d8afd79cf6c955b09e7bcfa6258dda6daa3f532c7eb97bf47bff1
   languageName: node
   linkType: hard
 
@@ -11570,11 +11570,11 @@ __metadata:
   linkType: hard
 
 "@types/nodemailer@npm:^6":
-  version: 6.4.14
-  resolution: "@types/nodemailer@npm:6.4.14"
+  version: 6.4.15
+  resolution: "@types/nodemailer@npm:6.4.15"
   dependencies:
     "@types/node": "npm:*"
-  checksum: 10c0/b5958843576cde76dc532aa7b726182fef8b466fa9fcaf1aa03f89f02e896bec4e28b593ffa1a289a46bd0b7fdf34da0640ab7ef8f0811948016f58f77e16307
+  checksum: 10c0/553e613fe08fd663bff1fb3647a8ebbcc4ca297a6249296a43f3c92499158acad5955689be2096ff3fe72f145e80d749c1fc66d5549fe665d7ceb6d0946f2a26
   languageName: node
   linkType: hard
 
@@ -12374,13 +12374,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/server@npm:0.9.32, @whatwg-node/server@npm:^0.9.1":
-  version: 0.9.32
-  resolution: "@whatwg-node/server@npm:0.9.32"
+"@whatwg-node/server@npm:0.9.34, @whatwg-node/server@npm:^0.9.1":
+  version: 0.9.34
+  resolution: "@whatwg-node/server@npm:0.9.34"
   dependencies:
     "@whatwg-node/fetch": "npm:^0.9.17"
     tslib: "npm:^2.3.1"
-  checksum: 10c0/cdf37cc0f39ef02b109b910e77190c18ff08d18077791c3abff7cb5bb0153a115e82de1919b419f5caa0e6ac7838e2cb1a888d425cf49c5b15fbcab62abe0514
+  checksum: 10c0/6f2f651d8b1a95c81244b5b61d19f8eedccb66dcc50c7a9fc7c3ef8baa47ce756e07e3ca50f8c61e729f1dbde9e3282f7eedf3357aa75aa132f458138484cc4d
   languageName: node
   linkType: hard
 
@@ -27292,6 +27292,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-dom@npm:^18.2.0":
+  version: 18.3.1
+  resolution: "react-dom@npm:18.3.1"
+  dependencies:
+    loose-envify: "npm:^1.1.0"
+    scheduler: "npm:^0.23.2"
+  peerDependencies:
+    react: ^18.3.1
+  checksum: 10c0/a752496c1941f958f2e8ac56239172296fcddce1365ce45222d04a1947e0cc5547df3e8447f855a81d6d39f008d7c32eab43db3712077f09e3f67c4874973e85
+  languageName: node
+  linkType: hard
+
 "react-element-to-jsx-string@npm:^15.0.0":
   version: 15.0.0
   resolution: "react-element-to-jsx-string@npm:15.0.0"
@@ -27478,6 +27490,15 @@ __metadata:
   version: 19.0.0-beta-04b058868c-20240508
   resolution: "react@npm:19.0.0-beta-04b058868c-20240508"
   checksum: 10c0/073bf88725c89a2b4fdaed686d5c9eac619c34e31480bcbb3f9cd362a04463da9985ac4f870869e111d3e776c52fb95a8783793c99d9951541ead67742cbf952
+  languageName: node
+  linkType: hard
+
+"react@npm:^18.2.0":
+  version: 18.3.1
+  resolution: "react@npm:18.3.1"
+  dependencies:
+    loose-envify: "npm:^1.1.0"
+  checksum: 10c0/283e8c5efcf37802c9d1ce767f302dd569dd97a70d9bb8c7be79a789b9902451e0d16334b05d73299b20f048cbc3c7d288bbbde10b701fa194e2089c237dbea3
   languageName: node
   linkType: hard
 
@@ -28358,7 +28379,7 @@ __metadata:
     "@faker-js/faker": "npm:8.4.1"
     "@npmcli/arborist": "npm:7.4.0"
     "@playwright/test": "npm:1.42.1"
-    "@testing-library/jest-dom": "npm:6.4.2"
+    "@testing-library/jest-dom": "npm:6.4.5"
     "@testing-library/react": "npm:14.3.1"
     "@testing-library/user-event": "npm:14.5.2"
     "@types/babel__generator": "npm:7.6.8"
@@ -28539,12 +28560,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "scheduler@npm:0.23.0"
+"scheduler@npm:^0.23.0, scheduler@npm:^0.23.2":
+  version: 0.23.2
+  resolution: "scheduler@npm:0.23.2"
   dependencies:
     loose-envify: "npm:^1.1.0"
-  checksum: 10c0/b777f7ca0115e6d93e126ac490dbd82642d14983b3079f58f35519d992fa46260be7d6e6cede433a92db70306310c6f5f06e144f0e40c484199e09c1f7be53dd
+  checksum: 10c0/26383305e249651d4c58e6705d5f8425f153211aef95f15161c151f7b8de885f24751b377e4a0b3dd42cce09aad3f87a61dab7636859c0d89b7daf1a1e2a5c78
   languageName: node
   linkType: hard
 
