@@ -7550,7 +7550,7 @@ __metadata:
     fastify: "npm:4.26.2"
     fastify-raw-body: "npm:4.3.0"
     lodash: "npm:4.17.21"
-    pino-abstract-transport: "npm:1.1.0"
+    pino-abstract-transport: "npm:1.2.0"
     pretty-bytes: "npm:5.6.0"
     pretty-ms: "npm:7.0.1"
     qs: "npm:6.12.1"
@@ -25902,17 +25902,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino-abstract-transport@npm:1.1.0":
-  version: 1.1.0
-  resolution: "pino-abstract-transport@npm:1.1.0"
-  dependencies:
-    readable-stream: "npm:^4.0.0"
-    split2: "npm:^4.0.0"
-  checksum: 10c0/6e9b9d5a2c0a37f91ecaf224d335daae1ae682b1c79a05b06ef9e0f0a5d289f8e597992217efc857796dae6f1067e9b4882f95c6228ff433ddc153532cae8aca
-  languageName: node
-  linkType: hard
-
-"pino-abstract-transport@npm:^1.2.0":
+"pino-abstract-transport@npm:1.2.0, pino-abstract-transport@npm:^1.2.0":
   version: 1.2.0
   resolution: "pino-abstract-transport@npm:1.2.0"
   dependencies:
