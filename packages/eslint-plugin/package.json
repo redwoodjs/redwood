@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "7.5.1",
-    "@types/eslint": "8.56.6",
+    "@types/eslint": "8.56.10",
     "@types/estree": "1.0.5",
     "@typescript-eslint/parser": "5.62.0",
     "glob": "10.3.12",

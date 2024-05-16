@@ -8318,7 +8318,7 @@ __metadata:
   resolution: "@redwoodjs/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
     "@redwoodjs/framework-tools": "npm:7.5.1"
-    "@types/eslint": "npm:8.56.6"
+    "@types/eslint": "npm:8.56.10"
     "@types/estree": "npm:1.0.5"
     "@typescript-eslint/parser": "npm:5.62.0"
     "@typescript-eslint/utils": "npm:5.62.0"
@@ -10806,13 +10806,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:*, @types/eslint@npm:8.56.6":
+"@types/eslint@npm:*":
   version: 8.56.6
   resolution: "@types/eslint@npm:8.56.6"
   dependencies:
     "@types/estree": "npm:*"
     "@types/json-schema": "npm:*"
   checksum: 10c0/52124f0868b14f21b4c8c21cb3c6065e0671df3f64c0bb3d37efe12e41b3434f478461f5ba0dabf368cd927ddc9b36d5592e7f61b939463576ab69c3bf8f3b12
+  languageName: node
+  linkType: hard
+
+"@types/eslint@npm:8.56.10":
+  version: 8.56.10
+  resolution: "@types/eslint@npm:8.56.10"
+  dependencies:
+    "@types/estree": "npm:*"
+    "@types/json-schema": "npm:*"
+  checksum: 10c0/674349d6c342c3864d70f4d5a9965f96fb253801532752c8c500ad6a1c2e8b219e01ccff5dc8791dcb58b5483012c495708bb9f3ff929f5c9322b3da126c15d3
   languageName: node
   linkType: hard
 
