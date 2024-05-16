@@ -148,10 +148,15 @@ describe('Redwood Route detection', () => {
 
     const authenticatedRoutes = routes
       .filter((r) => r.isPrivate)
-      .map(({ name, path }) => ({ name, path }))
+      .map(({ name, path, unauthenticated }) => ({
+        name,
+        path,
+        unauthenticated,
+      }))
     expect(authenticatedRoutes.length).toBe(1)
     expect(authenticatedRoutes[0].name).toBe('privatePage')
     expect(authenticatedRoutes[0].path).toBe('/private-page')
+    expect(authenticatedRoutes[0].unauthenticated).toBe('/home')
   })
 })
 

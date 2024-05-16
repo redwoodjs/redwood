@@ -52,6 +52,28 @@ export class RWRoute extends BaseNode {
     return tagText === 'Private' || tagText === 'PrivateSet'
   }
 
+  @lazy() get unauthenticated() {
+    if (!this.isPrivate) {
+      return undefined
+    }
+
+    const a = this.jsxNode
+      .getParentIfKind(tsm.SyntaxKind.JsxElement)
+      ?.getOpeningElement()
+      .getAttribute('unauthenticated')
+
+    if (!a) {
+      return undefined
+    }
+    if (tsm.Node.isJsxAttribute(a)) {
+      const init = a.getInitializer()
+      if (tsm.Node.isStringLiteral(init!)) {
+        return init.getLiteralValue()
+      }
+    }
+    return undefined
+  }
+
   @lazy() get hasParameters(): boolean {
     if (!this.path) {
       return false
