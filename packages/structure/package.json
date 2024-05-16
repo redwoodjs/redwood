@@ -27,7 +27,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.1",
     "@iarna/toml": "2.2.5",
-    "@prisma/internals": "5.11.0",
+    "@prisma/internals": "5.14.0",
     "@redwoodjs/project-config": "7.5.1",
     "@types/line-column": "1.0.2",
     "camelcase": "6.3.0",
