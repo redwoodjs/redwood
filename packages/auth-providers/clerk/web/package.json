@@ -31,7 +31,7 @@
     "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
     "@clerk/clerk-react": "4.30.7",
-    "@clerk/types": "3.62.1",
+    "@clerk/types": "3.64.1",
     "@types/react": "^18.2.55",
     "react": "18.2.0",
     "typescript": "5.4.5",
