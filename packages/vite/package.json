@@ -79,7 +79,7 @@
     "isbot": "3.8.0",
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-server-dom-webpack": "19.0.0-beta-04b058868c-20240508",
-    "vite": "5.2.8",
+    "vite": "5.2.11",
     "vite-plugin-cjs-interop": "2.1.0",
     "yargs-parser": "21.1.1"
   },
