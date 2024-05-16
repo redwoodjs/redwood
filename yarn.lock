@@ -8876,7 +8876,7 @@ __metadata:
     "@types/jest": "npm:29.5.12"
     "@types/node": "npm:20.11.25"
     "@types/webpack": "npm:5.28.5"
-    "@types/webpack-env": "npm:1.18.4"
+    "@types/webpack-env": "npm:1.18.5"
     babel-jest: "npm:^29.7.0"
     core-js: "npm:3.36.1"
     fast-glob: "npm:3.3.2"
@@ -11708,10 +11708,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/webpack-env@npm:1.18.4":
-  version: 1.18.4
-  resolution: "@types/webpack-env@npm:1.18.4"
-  checksum: 10c0/3fa77dbff0ed71685404576b0a1cf74587567fe2ee1cfd11d56d6eefcab7a61e4c9ead0eced264e289d2cf0fc74296dbd55ed6c95774fe0fd6264d156c5a59f0
+"@types/webpack-env@npm:1.18.5":
+  version: 1.18.5
+  resolution: "@types/webpack-env@npm:1.18.5"
+  checksum: 10c0/b9e4876e8c7cae419896249f9ed795db283c008fe1d38efa679cbbf05194fc2eea2a5bfb4ff4393d109e3a9895416dadf5f3ddd5c22931b678062230f860454e
   languageName: node
   linkType: hard
 
