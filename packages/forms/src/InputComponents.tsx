@@ -56,7 +56,7 @@ export interface InputFieldProps
 /**
  * Renders an `<input>` field.
  *
- * @see {@link https://redwoodjs.com/docs/form#inputfields}
+ * @see {@link https://redwoodjs.com/docs/forms#input-fields}
  */
 export const InputField = forwardRef(
   (
