@@ -47,7 +47,7 @@
     "react-dom": "19.0.0-beta-04b058868c-20240508"
   },
   "devDependencies": {
-    "@playwright/test": "1.42.1",
+    "@playwright/test": "1.44.0",
     "@redwoodjs/framework-tools": "workspace:*",
     "ts-toolbelt": "9.6.0",
     "tsx": "4.10.3",
