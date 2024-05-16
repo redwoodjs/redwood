@@ -4908,7 +4908,7 @@ __metadata:
     prism-react-renderer: "npm:2.3.1"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
-    react-player: "npm:2.15.1"
+    react-player: "npm:2.16.0"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -9624,9 +9624,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-player@npm:2.15.1":
-  version: 2.15.1
-  resolution: "react-player@npm:2.15.1"
+"react-player@npm:2.16.0":
+  version: 2.16.0
+  resolution: "react-player@npm:2.16.0"
   dependencies:
     deepmerge: "npm:^4.0.0"
     load-script: "npm:^1.0.0"
@@ -9635,7 +9635,7 @@ __metadata:
     react-fast-compare: "npm:^3.0.1"
   peerDependencies:
     react: ">=16.6.0"
-  checksum: 10c0/0d17002c08b333cfc9844d762e6cb064c992f4b58088895af6a445a6850f48a318fb39c54a5e0e3bc5c5d7027c76a8d8ed796a0fa723c011450634ba2ff881ca
+  checksum: 10c0/ee0f4cd3bd468b28af38dbbb65cae1659218153956f43c0bdd15cd8b38aaaf151deec43b93b7dd887c0ac28242a4ba7e9d01823351e78ba60ae04d5fb51defb4
   languageName: node
   linkType: hard
 
