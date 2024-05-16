@@ -63,7 +63,7 @@
     "@redwoodjs/internal": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/web": "workspace:*",
-    "@swc/core": "1.4.11",
+    "@swc/core": "1.5.7",
     "@vitejs/plugin-react": "4.2.1",
     "@whatwg-node/fetch": "0.9.17",
     "@whatwg-node/server": "0.9.34",
