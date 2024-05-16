@@ -3,8 +3,6 @@ import { fileURLToPath } from 'node:url'
 import { humanId } from 'human-id'
 import { $, argv, path, fs, ProcessPromise } from 'zx'
 
-$.verbose = false
-
 const ROOT_DIR_PATH = fileURLToPath(new URL('../../', import.meta.url))
 const DIRNAME = path.dirname(fileURLToPath(new URL(import.meta.url)))
 const CHANGESETS_DIR = path.join(ROOT_DIR_PATH, '.changesets')
