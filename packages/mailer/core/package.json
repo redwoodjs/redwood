@@ -24,7 +24,7 @@
   "devDependencies": {
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
-    "tsx": "4.7.1",
+    "tsx": "4.10.3",
     "typescript": "5.4.5",
     "vitest": "1.4.0"
   },

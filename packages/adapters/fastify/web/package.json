@@ -30,7 +30,7 @@
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "fastify": "4.26.2",
-    "tsx": "4.7.1",
+    "tsx": "4.10.3",
     "typescript": "5.4.5",
     "vitest": "1.4.0"
   },

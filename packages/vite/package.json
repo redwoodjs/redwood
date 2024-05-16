@@ -91,7 +91,7 @@
     "@types/yargs-parser": "21.0.3",
     "glob": "10.3.12",
     "rollup": "4.17.2",
-    "tsx": "4.7.1",
+    "tsx": "4.10.3",
     "typescript": "5.4.5",
     "vitest": "1.4.0"
   },
