@@ -38,7 +38,7 @@
     "@redwoodjs/project-config": "7.5.1",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
-    "babel-plugin-module-resolver": "5.0.0",
+    "babel-plugin-module-resolver": "5.0.2",
     "core-js": "3.36.1",
     "fast-glob": "3.3.2",
     "graphql": "16.8.1",
