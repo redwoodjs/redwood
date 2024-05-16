@@ -20,7 +20,7 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@react-email/render": "0.0.12",
+    "@react-email/render": "0.0.13",
     "@redwoodjs/mailer-core": "workspace:*"
   },
   "devDependencies": {
