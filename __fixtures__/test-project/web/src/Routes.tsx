@@ -7,7 +7,7 @@
 // 'src/pages/HomePage/HomePage.js'         -> HomePage
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
-import { Router, Route, PrivateSet, Set } from '@redwoodjs/router'
+import { Router, Route, Private, Set } from '@redwoodjs/router'
 
 import BlogLayout from 'src/layouts/BlogLayout'
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
@@ -37,9 +37,9 @@ const Routes = () => {
       </Set>
       <Set wrap={BlogLayout}>
         <Route path="/waterfall/{id:Int}" page={WaterfallPage} prerender name="waterfall" />
-        <PrivateSet unauthenticated="login">
+        <Private unauthenticated="login">
           <Route path="/profile" page={ProfilePage} name="profile" />
-        </PrivateSet>
+        </Private>
         <Route path="/blog-post/{id:Int}" page={BlogPostPage} name="blogPost" prerender />
         <Route path="/contact" page={ContactUsPage} name="contactUs" />
         <Route path="/about" page={AboutPage} name="about" prerender />

@@ -48,6 +48,7 @@ export async function buildRouteManifest() {
         : null,
       relativeFilePath: route.relativeFilePath,
       isPrivate: route.isPrivate,
+      unauthenticated: route.unauthenticated,
     }
 
     return acc
