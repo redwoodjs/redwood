@@ -44,7 +44,7 @@
     "graphql": "16.8.1",
     "graphql-sse": "2.5.2",
     "graphql-tag": "2.12.6",
-    "react-helmet-async": "2.0.4",
+    "react-helmet-async": "2.0.5",
     "react-hot-toast": "2.4.1",
     "stacktracey": "2.1.8",
     "ts-toolbelt": "9.6.0"
