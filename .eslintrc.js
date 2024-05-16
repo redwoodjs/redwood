@@ -28,8 +28,8 @@ module.exports = {
     'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
     'packages/cli/**/__testfixtures__/**/*',
-    'packages/core/config/storybook/**/*',
     'packages/studio/dist-*/**/*',
+    'packages/core/config',
   ],
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
@@ -122,7 +122,7 @@ module.exports = {
         'packages/api/src/**',
         'packages/api-server/src/**',
         'packages/cli/src/**',
-        'packages/core/config/**',
+        'packages/core/src/config/**',
         'packages/create-redwood-app/src/*.js',
         'packages/internal/src/**',
         'packages/prerender/src/**',

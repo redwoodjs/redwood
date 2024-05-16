@@ -1,9 +1,8 @@
-// @NOTE
-// No babel in the package, so use standard node syntax
+import { vi, describe, it, expect } from 'vitest'
 
-const { getEnvVars } = require('../webpack.common')
+import { getEnvVars } from '../webpack.common'
 
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', () => {
   return {
     getConfigPath: () => '/path/to/project/redwood.toml',
     getConfig: () => ({
@@ -18,8 +17,6 @@ jest.mock('@redwoodjs/project-config', () => {
 })
 
 describe('getEnvVars', () => {
-  beforeEach(() => {})
-
   it('REDWOOD_ENV_ is filtered and transformed', () => {
     process.env.REDWOOD_ENV_TEST = 1234
     process.env.REDWOOD_X = false

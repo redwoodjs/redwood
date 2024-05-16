@@ -8466,7 +8466,6 @@ __metadata:
     dotenv-webpack: "npm:8.1.0"
     graphql-tag: "npm:2.12.6"
     html-webpack-plugin: "npm:5.6.0"
-    jest: "npm:29.7.0"
     lodash: "npm:4.17.21"
     mini-css-extract-plugin: "npm:2.8.1"
     nodemon: "npm:3.1.0"
@@ -8475,8 +8474,10 @@ __metadata:
     resolve-url-loader: "npm:5.0.0"
     rimraf: "npm:5.0.7"
     style-loader: "npm:3.3.4"
+    tsx: "npm:4.7.1"
     typescript: "npm:5.4.5"
     url-loader: "npm:4.1.1"
+    vitest: "npm:1.4.0"
     webpack: "npm:5.91.0"
     webpack-bundle-analyzer: "npm:4.10.1"
     webpack-cli: "npm:5.1.4"
@@ -16739,13 +16740,13 @@ __metadata:
   linkType: hard
 
 "ejs@npm:^3.1.7, ejs@npm:^3.1.8":
-  version: 3.1.10
-  resolution: "ejs@npm:3.1.10"
+  version: 3.1.9
+  resolution: "ejs@npm:3.1.9"
   dependencies:
     jake: "npm:^10.8.5"
   bin:
     ejs: bin/cli.js
-  checksum: 10c0/52eade9e68416ed04f7f92c492183340582a36482836b11eab97b159fcdcfdedc62233a1bf0bf5e5e1851c501f2dca0e2e9afd111db2599e4e7f53ee29429ae1
+  checksum: 10c0/f0e249c79128810f5f6d5cbf347fc906d86bb9384263db0b2a9004aea649f2bc2d112736de5716c509c80afb4721c47281bd5b57c757d3b63f1bf5ac5f885893
   languageName: node
   linkType: hard
 
