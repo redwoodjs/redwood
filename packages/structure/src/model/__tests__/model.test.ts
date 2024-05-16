@@ -1,4 +1,3 @@
-import exp from 'constants'
 import { basename, resolve } from 'path'
 
 import { describe, it, expect } from 'vitest'
