@@ -51,7 +51,7 @@
     "@redwoodjs/graphql-server": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/router": "workspace:*",
-    "@sdl-codegen/node": "0.0.13",
+    "@sdl-codegen/node": "0.0.15",
     "chalk": "4.1.2",
     "core-js": "3.36.1",
     "deepmerge": "4.3.1",

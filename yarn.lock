@@ -8583,7 +8583,7 @@ __metadata:
     "@redwoodjs/graphql-server": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/router": "workspace:*"
-    "@sdl-codegen/node": "npm:0.0.13"
+    "@sdl-codegen/node": "npm:0.0.15"
     "@types/fs-extra": "npm:11.0.4"
     chalk: "npm:4.1.2"
     core-js: "npm:3.36.1"
@@ -9214,9 +9214,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sdl-codegen/node@npm:0.0.13":
-  version: 0.0.13
-  resolution: "@sdl-codegen/node@npm:0.0.13"
+"@sdl-codegen/node@npm:0.0.15":
+  version: 0.0.15
+  resolution: "@sdl-codegen/node@npm:0.0.15"
   dependencies:
     "@mrleebo/prisma-ast": "npm:^0.5.2"
     ts-morph: "npm:^18.0.0"
@@ -9227,7 +9227,7 @@ __metadata:
   peerDependenciesMeta:
     prettier:
       optional: true
-  checksum: 10c0/c1ad06306a55a3b8ccaf1a5c7a88eb58b07bf7ec635b7c231efa2b385ab4ab930f43a84a59116c9a50acbafa20031d310ce3e6405f2869718095d913d3339bbb
+  checksum: 10c0/ce42d60340d2c572c244fd71468183c825f5549dd38d2ffa63e0a6196377125a7e672be1989f0d9b88a40190f8dd9a00b39396df7f05eb8ec5e610fca4c1a1c1
   languageName: node
   linkType: hard
 
