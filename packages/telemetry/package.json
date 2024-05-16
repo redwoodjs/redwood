@@ -25,7 +25,7 @@
     "@redwoodjs/structure": "workspace:*",
     "@whatwg-node/fetch": "0.9.17",
     "ci-info": "4.0.0",
-    "envinfo": "7.11.1",
+    "envinfo": "7.13.0",
     "systeminformation": "5.22.9",
     "uuid": "9.0.1",
     "yargs": "17.7.2"
