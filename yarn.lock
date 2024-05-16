@@ -8156,7 +8156,7 @@ __metadata:
     typescript: "npm:5.4.5"
     vitest: "npm:1.4.0"
   peerDependencies:
-    supertokens-node: 15.2.1
+    supertokens-node: 15.2.2
   languageName: unknown
   linkType: soft
 
