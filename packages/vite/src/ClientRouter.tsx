@@ -17,6 +17,7 @@ function rscFetch(rscId: string, props: Record<string, unknown> = {}) {
   const searchParams = new URLSearchParams()
   searchParams.set('props', JSON.stringify(props))
 
+  // TODO (RSC): During SSR we should not fetch
   const response = fetch(BASE_PATH + rscId + '?' + searchParams, {
     headers: {
       'rw-rsc': '1',
