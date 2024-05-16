@@ -100,7 +100,7 @@
     "ncp": "2.0.0",
     "nodemon": "3.1.0",
     "npm-packlist": "8.0.2",
-    "nx": "18.2.4",
+    "nx": "19.0.4",
     "octokit": "3.1.2",
     "ora": "7.0.1",
     "prompts": "2.4.2",
@@ -110,7 +110,7 @@
     "typescript": "5.4.5",
     "vitest": "1.4.0",
     "yargs": "17.7.2",
-    "zx": "7.2.3"
+    "zx": "8.1.0"
   },
   "packageManager": "yarn@4.1.1",
   "npmClient": "yarn"
