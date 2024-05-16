@@ -26,6 +26,13 @@ export class MiddlewareResponse {
     })
   }
 
+  /**
+   *
+   * Return a MiddlewareResponse that will skip React rendering.
+   * Note that other middleware in the chain will still be executed.
+   *
+   * @returns MiddlewareResponse
+   */
   static shortCircuit = ({
     body,
     status = 200,
@@ -36,10 +43,21 @@ export class MiddlewareResponse {
     return new MiddlewareResponse(body, { status: status })
   }
 
+  /**
+   * Skip the current middleware and move to the next one.
+   * Careful: It creates a new Response, so any middleware that modifies the response before the current one will be lost.
+   * @returns MiddlewareResponse
+   */
   static next = () => {
     return new MiddlewareResponse()
   }
 
+  /**
+   *
+   * Return a MiddlewareResponse object that will redirect the client to the specified location
+   *
+   * @returns MiddlewareResponse
+   */
   static redirect = (
     location: string,
     type: 'permanent' | 'temporary' = 'temporary',
