@@ -36,7 +36,7 @@ export default class RedisClient extends BaseClient {
       (err: Error) => this.logger?.error(err) || console.error(err)
     )
 
-    return this.client.connect()
+    await this.client.connect()
   }
 
   // @NOTE: disconnect intentionally not implemented for Redis
