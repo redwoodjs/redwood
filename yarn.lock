@@ -7489,7 +7489,7 @@ __metadata:
     "@redwoodjs/web-server": "workspace:*"
     "@types/aws-lambda": "npm:8.10.137"
     "@types/lodash": "npm:4.17.3"
-    "@types/qs": "npm:6.9.14"
+    "@types/qs": "npm:6.9.15"
     "@types/split2": "npm:4.2.3"
     "@types/yargs": "npm:17.0.32"
     chalk: "npm:4.1.2"
@@ -7503,7 +7503,7 @@ __metadata:
     pino-abstract-transport: "npm:1.1.0"
     pretty-bytes: "npm:5.6.0"
     pretty-ms: "npm:7.0.1"
-    qs: "npm:6.12.0"
+    qs: "npm:6.12.1"
     split2: "npm:4.2.0"
     tsx: "npm:4.10.3"
     typescript: "npm:5.4.5"
@@ -11476,10 +11476,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/qs@npm:*, @types/qs@npm:6.9.14, @types/qs@npm:^6.9.5":
-  version: 6.9.14
-  resolution: "@types/qs@npm:6.9.14"
-  checksum: 10c0/11ad1eb7f6d7c216002789959d88acc7c43f72854fa4335f01de0df41b4c4024668dace8a37ba12270314345ede0ec6b07f93053a45e7bd4cd7318a3dcf0b6b8
+"@types/qs@npm:*, @types/qs@npm:6.9.15, @types/qs@npm:^6.9.5":
+  version: 6.9.15
+  resolution: "@types/qs@npm:6.9.15"
+  checksum: 10c0/49c5ff75ca3adb18a1939310042d273c9fc55920861bd8e5100c8a923b3cda90d759e1a95e18334092da1c8f7b820084687770c83a1ccef04fb2c6908117c823
   languageName: node
   linkType: hard
 
@@ -26884,12 +26884,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:6.12.0, qs@npm:^6.10.0, qs@npm:^6.11.0":
-  version: 6.12.0
-  resolution: "qs@npm:6.12.0"
+"qs@npm:6.12.1, qs@npm:^6.10.0, qs@npm:^6.11.0":
+  version: 6.12.1
+  resolution: "qs@npm:6.12.1"
   dependencies:
     side-channel: "npm:^1.0.6"
-  checksum: 10c0/e165a77ac5f3ca60c15c5f3d51b321ddec7aa438804436b29d160117bc6fb7bf7dab94abd0c7d7c0785890d3a75ae41e1d6346e158aaf1540c6fe53a31f11675
+  checksum: 10c0/439e6d7c6583e7c69f2cab2c39c55b97db7ce576e4c7c469082b938b7fc8746e8d547baacb69b4cd2b6666484776c3f4840ad7163a4c5326300b0afa0acdd84b
   languageName: node
   linkType: hard
 
