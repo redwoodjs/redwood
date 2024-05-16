@@ -7640,15 +7640,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-email/render@npm:0.0.12":
-  version: 0.0.12
-  resolution: "@react-email/render@npm:0.0.12"
+"@react-email/render@npm:0.0.13":
+  version: 0.0.13
+  resolution: "@react-email/render@npm:0.0.13"
   dependencies:
     html-to-text: "npm:9.0.5"
     js-beautify: "npm:^1.14.11"
-    react: "npm:18.2.0"
-    react-dom: "npm:18.2.0"
-  checksum: 10c0/36b11c2d4009fa8c7faae39cb8353e24256f1c41225e17d3164f730ddb7b3bc537a22aaeb7f634e71228148267b8f8cd2afb74fbcac318588dc6e0aa73ee92f3
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
+  checksum: 10c0/de8ba236290ec058a8fb1d59e1229ecd333135a651b8e14bf2443e1caccc0754b860e3ae8b5aa24389027d448f307479b2d868196f15b9aae3cd3b3d53a70cc1
   languageName: node
   linkType: hard
 
@@ -8865,7 +8865,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/mailer-renderer-react-email@workspace:packages/mailer/renderers/react-email"
   dependencies:
-    "@react-email/render": "npm:0.0.12"
+    "@react-email/render": "npm:0.0.13"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/mailer-core": "workspace:*"
     tsx: "npm:4.7.1"
@@ -27565,6 +27565,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-dom@npm:^18.2.0":
+  version: 18.3.1
+  resolution: "react-dom@npm:18.3.1"
+  dependencies:
+    loose-envify: "npm:^1.1.0"
+    scheduler: "npm:^0.23.2"
+  peerDependencies:
+    react: ^18.3.1
+  checksum: 10c0/a752496c1941f958f2e8ac56239172296fcddce1365ce45222d04a1947e0cc5547df3e8447f855a81d6d39f008d7c32eab43db3712077f09e3f67c4874973e85
+  languageName: node
+  linkType: hard
+
 "react-element-to-jsx-string@npm:^15.0.0":
   version: 15.0.0
   resolution: "react-element-to-jsx-string@npm:15.0.0"
@@ -27751,6 +27763,15 @@ __metadata:
   version: 19.0.0-beta-04b058868c-20240508
   resolution: "react@npm:19.0.0-beta-04b058868c-20240508"
   checksum: 10c0/073bf88725c89a2b4fdaed686d5c9eac619c34e31480bcbb3f9cd362a04463da9985ac4f870869e111d3e776c52fb95a8783793c99d9951541ead67742cbf952
+  languageName: node
+  linkType: hard
+
+"react@npm:^18.2.0":
+  version: 18.3.1
+  resolution: "react@npm:18.3.1"
+  dependencies:
+    loose-envify: "npm:^1.1.0"
+  checksum: 10c0/283e8c5efcf37802c9d1ce767f302dd569dd97a70d9bb8c7be79a789b9902451e0d16334b05d73299b20f048cbc3c7d288bbbde10b701fa194e2089c237dbea3
   languageName: node
   linkType: hard
 
@@ -28812,12 +28833,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "scheduler@npm:0.23.0"
+"scheduler@npm:^0.23.0, scheduler@npm:^0.23.2":
+  version: 0.23.2
+  resolution: "scheduler@npm:0.23.2"
   dependencies:
     loose-envify: "npm:^1.1.0"
-  checksum: 10c0/b777f7ca0115e6d93e126ac490dbd82642d14983b3079f58f35519d992fa46260be7d6e6cede433a92db70306310c6f5f06e144f0e40c484199e09c1f7be53dd
+  checksum: 10c0/26383305e249651d4c58e6705d5f8425f153211aef95f15161c151f7b8de885f24751b377e4a0b3dd42cce09aad3f87a61dab7636859c0d89b7daf1a1e2a5c78
   languageName: node
   linkType: hard
 
