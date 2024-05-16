@@ -22,7 +22,7 @@ exports[`generates global page imports source maps 1`] = `
 exports[`generates source maps for the router routes 1`] = `
 {
   "file": "web-routerRoutes.d.ts",
-  "mappings": ";;;;;;IAiBM;IACA;IACA;IAEE;IACA;IAGA",
+  "mappings": ";;;;;;IAiBM;IACA;IACA;IAEE;IACA;IAGA;IAGA;IAGA",
   "names": [],
   "sources": [
     "../../../web/src/Routes.js",

@@ -123,7 +123,7 @@ describe('Redwood Route detection', () => {
       // interested in
       .map(({ name, path }) => ({ name, path }))
 
-    expect(prerenderRoutes.length).toBe(6)
+    expect(prerenderRoutes.length).toBe(8)
     expect(prerenderRoutes).toContainEqual({ name: 'home', path: '/' })
     expect(prerenderRoutes).toContainEqual({
       name: 'typescriptPage',
@@ -147,15 +147,79 @@ describe('Redwood Route detection', () => {
 
     const authenticatedRoutes = routes
       .filter((r) => r.isPrivate)
-      .map(({ name, path, unauthenticated }) => ({
+      .map(({ name, path, unauthenticated, roles }) => ({
         name,
         path,
         unauthenticated,
+        roles,
       }))
-    expect(authenticatedRoutes.length).toBe(1)
-    expect(authenticatedRoutes[0].name).toBe('privatePage')
-    expect(authenticatedRoutes[0].path).toBe('/private-page')
-    expect(authenticatedRoutes[0].unauthenticated).toBe('home')
+
+    expect(authenticatedRoutes.length).toBe(3)
+  })
+
+  it('detects name and path for an authenticated route', async () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const routes = project.getRouter().routes
+
+    const authenticatedRoutes = routes
+      .filter((r) => r.isPrivate)
+      .map(({ name, path, unauthenticated, roles }) => ({
+        name,
+        path,
+        unauthenticated,
+        roles,
+      }))
+
+    expect(authenticatedRoutes[1].name).toBe('privatePageAdmin')
+    expect(authenticatedRoutes[1].path).toBe('/private-page-admin')
+    expect(authenticatedRoutes[1].unauthenticated).toBe('home')
+    expect(authenticatedRoutes[1].roles).toBeTypeOf('string')
+    expect(authenticatedRoutes[1].roles).toContain('admin')
+  })
+
+  it('detects roles for an authenticated route when roles is a string of a single role', async () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const routes = project.getRouter().routes
+
+    const authenticatedRoutes = routes
+      .filter((r) => r.isPrivate)
+      .map(({ name, path, unauthenticated, roles }) => ({
+        name,
+        path,
+        unauthenticated,
+        roles,
+      }))
+
+    expect(authenticatedRoutes[1].name).toBe('privatePageAdmin')
+    expect(authenticatedRoutes[1].path).toBe('/private-page-admin')
+    expect(authenticatedRoutes[1].unauthenticated).toBe('home')
+    expect(authenticatedRoutes[1].roles).toBeTypeOf('string')
+    expect(authenticatedRoutes[1].roles).toContain('admin')
+  })
+
+  it('detects roles for an authenticated route when roles is an array of a roles', async () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const routes = project.getRouter().routes
+
+    const authenticatedRoutes = routes
+      .filter((r) => r.isPrivate)
+      .map(({ name, path, unauthenticated, roles }) => ({
+        name,
+        path,
+        unauthenticated,
+        roles,
+      }))
+
+    expect(authenticatedRoutes[2].name).toBe('privatePageAdminSuper')
+    expect(authenticatedRoutes[2].path).toBe('/private-page-admin-super')
+    expect(authenticatedRoutes[2].unauthenticated).toBe('home')
+    expect(authenticatedRoutes[2].roles).toBeInstanceOf(Array)
+    expect(authenticatedRoutes[2].roles).toContain('owner')
+    expect(authenticatedRoutes[2].roles).toContain('superuser')
+    expect(authenticatedRoutes[2].roles).not.toContain('member')
   })
 })
 

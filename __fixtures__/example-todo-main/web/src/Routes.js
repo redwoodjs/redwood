@@ -22,8 +22,14 @@ const Routes = () => {
         <Route path="/foo" page={FooPage} name="fooPage" />
         <Route path="/bar" page={BarPage} name="barPage" />
       </Set>
-      <PrivateSet unauthenticated="home"  prerender>
+      <PrivateSet unauthenticated="home" prerender>
         <Route path="/private-page" page={PrivatePage} name="privatePage" />
+      </PrivateSet>
+      <PrivateSet unauthenticated="home" roles="admin" prerender>
+        <Route path="/private-page-admin" page={PrivatePage} name="privatePageAdmin" />
+      </PrivateSet>
+      <PrivateSet unauthenticated="home" roles={['owner', 'superuser']} prerender>
+        <Route path="/private-page-admin-super" page={PrivatePage} name="privatePageAdminSuper" />
       </PrivateSet>
       <Route notfound page={NotFoundPage} />
     </Router>
