@@ -34,7 +34,7 @@
     "graphql": "16.8.1"
   },
   "devDependencies": {
-    "@envelop/core": "5.0.0",
+    "@envelop/core": "5.0.1",
     "@envelop/testing": "7.0.0",
     "@envelop/types": "5.0.0",
     "@redwoodjs/framework-tools": "workspace:*",
