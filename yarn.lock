@@ -8124,7 +8124,7 @@ __metadata:
     "@types/node": "npm:20.11.25"
     babel-plugin-auto-import: "npm:1.1.0"
     babel-plugin-graphql-tag: "npm:3.3.0"
-    babel-plugin-module-resolver: "npm:5.0.0"
+    babel-plugin-module-resolver: "npm:5.0.2"
     babel-plugin-tester: "npm:11.0.4"
     core-js: "npm:3.36.1"
     fast-glob: "npm:3.3.2"
@@ -13459,16 +13459,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-module-resolver@npm:5.0.0":
-  version: 5.0.0
-  resolution: "babel-plugin-module-resolver@npm:5.0.0"
+"babel-plugin-module-resolver@npm:5.0.2":
+  version: 5.0.2
+  resolution: "babel-plugin-module-resolver@npm:5.0.2"
   dependencies:
-    find-babel-config: "npm:^2.0.0"
-    glob: "npm:^8.0.3"
+    find-babel-config: "npm:^2.1.1"
+    glob: "npm:^9.3.3"
     pkg-up: "npm:^3.1.0"
     reselect: "npm:^4.1.7"
-    resolve: "npm:^1.22.1"
-  checksum: 10c0/bbddb437bf23ab2e12e25c855d71c906cf7a438d0d4821cf0786f23990718f86f76c49f7952ba2370a312c806d223e1efb7ca16698ff49d019396c8d81e4a870
+    resolve: "npm:^1.22.8"
+  checksum: 10c0/ccbb9e673c4219f68937349267521becb72be292cf30bf70b861c3e709d24fbfa589da0bf6c100a0def799d38199299171cb6eac3fb00b1ea740373e2c1fe54c
   languageName: node
   linkType: hard
 
@@ -18247,13 +18247,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-babel-config@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "find-babel-config@npm:2.0.0"
+"find-babel-config@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "find-babel-config@npm:2.1.1"
   dependencies:
-    json5: "npm:^2.1.1"
+    json5: "npm:^2.2.3"
     path-exists: "npm:^4.0.0"
-  checksum: 10c0/4d841cf74f0e17da20c4d52d520831e1ccf42eaa99570c07ea5948adabc14a0d1388dea690efdf66c007de8c4c61629458c11822c88ccc84d855d77668fa5247
+  checksum: 10c0/fb1f348027b83e9fe3b4163ec9c45719adab1205b2807708d660fe2a7beb5f812e0fabb6b21746cf0ef9c9fbf67bcc8e37f6cddb9d43229f0524767522d6110b
   languageName: node
   linkType: hard
 
@@ -19096,7 +19096,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^8.0.0, glob@npm:^8.0.1, glob@npm:^8.0.3":
+"glob@npm:^8.0.0, glob@npm:^8.0.1":
   version: 8.1.0
   resolution: "glob@npm:8.1.0"
   dependencies:
@@ -19109,7 +19109,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^9.2.0":
+"glob@npm:^9.2.0, glob@npm:^9.3.3":
   version: 9.3.5
   resolution: "glob@npm:9.3.5"
   dependencies:
@@ -22017,7 +22017,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json5@npm:2.2.3, json5@npm:^2.1.1, json5@npm:^2.1.2, json5@npm:^2.2.2, json5@npm:^2.2.3":
+"json5@npm:2.2.3, json5@npm:^2.1.2, json5@npm:^2.2.2, json5@npm:^2.2.3":
   version: 2.2.3
   resolution: "json5@npm:2.2.3"
   bin:
@@ -27921,7 +27921,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.10.0, resolve@npm:^1.11.1, resolve@npm:^1.14.2, resolve@npm:^1.20.0, resolve@npm:^1.22.1, resolve@npm:^1.22.4":
+"resolve@npm:^1.10.0, resolve@npm:^1.11.1, resolve@npm:^1.14.2, resolve@npm:^1.20.0, resolve@npm:^1.22.1, resolve@npm:^1.22.4, resolve@npm:^1.22.8":
   version: 1.22.8
   resolution: "resolve@npm:1.22.8"
   dependencies:
@@ -27947,7 +27947,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@npm%3A^1.10.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.11.1#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.14.2#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.20.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.1#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.4#optional!builtin<compat/resolve>":
+"resolve@patch:resolve@npm%3A^1.10.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.11.1#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.14.2#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.20.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.1#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.4#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.8#optional!builtin<compat/resolve>":
   version: 1.22.8
   resolution: "resolve@patch:resolve@npm%3A1.22.8#optional!builtin<compat/resolve>::version=1.22.8&hash=c3c19d"
   dependencies:
