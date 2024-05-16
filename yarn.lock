@@ -7756,7 +7756,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.1"
     "@clerk/clerk-react": "npm:4.30.7"
-    "@clerk/types": "npm:3.62.1"
+    "@clerk/types": "npm:3.64.1"
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.36.1"
