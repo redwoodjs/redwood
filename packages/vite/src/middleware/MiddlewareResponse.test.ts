@@ -73,4 +73,16 @@ describe('MiddlewareResponse', () => {
       '/bye',
     )
   })
+
+  test('Constructs short-circuits correctly', async () => {
+    const shortCircuit = MiddlewareResponse.shortCircuit({
+      body: JSON.stringify({ shortCircuit: true }),
+      status: 401,
+    })
+
+    expect(shortCircuit.toResponse().status).toStrictEqual(401)
+    expect(await shortCircuit.toResponse().json()).toStrictEqual({
+      shortCircuit: true,
+    })
+  })
 })

@@ -26,6 +26,16 @@ export class MiddlewareResponse {
     })
   }
 
+  static shortCircuit = ({
+    body,
+    status = 200,
+  }: {
+    body: BodyInit
+    status?: number
+  }) => {
+    return new MiddlewareResponse(body, { status: status })
+  }
+
   static next = () => {
     return new MiddlewareResponse()
   }
