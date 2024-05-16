@@ -9021,7 +9021,7 @@ __metadata:
     "@vitejs/plugin-react": "npm:4.2.1"
     buffer: "npm:6.0.3"
     core-js: "npm:3.36.1"
-    glob: "npm:10.3.12"
+    glob: "npm:10.3.15"
     tsx: "npm:4.10.3"
     typescript: "npm:5.4.5"
     vite: "npm:4.5.2"
@@ -12831,15 +12831,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:8.12.0, ajv@npm:^8.0.0, ajv@npm:^8.10.0, ajv@npm:^8.11.0, ajv@npm:^8.9.0":
-  version: 8.12.0
-  resolution: "ajv@npm:8.12.0"
+"ajv@npm:8.13.0, ajv@npm:^8.0.0, ajv@npm:^8.10.0, ajv@npm:^8.11.0, ajv@npm:^8.9.0":
+  version: 8.13.0
+  resolution: "ajv@npm:8.13.0"
   dependencies:
-    fast-deep-equal: "npm:^3.1.1"
+    fast-deep-equal: "npm:^3.1.3"
     json-schema-traverse: "npm:^1.0.0"
     require-from-string: "npm:^2.0.2"
-    uri-js: "npm:^4.2.2"
-  checksum: 10c0/ac4f72adf727ee425e049bc9d8b31d4a57e1c90da8d28bcd23d60781b12fcd6fc3d68db5df16994c57b78b94eed7988f5a6b482fd376dc5b084125e20a0a622e
+    uri-js: "npm:^4.4.1"
+  checksum: 10c0/14c6497b6f72843986d7344175a1aa0e2c35b1e7f7475e55bc582cddb765fca7e6bf950f465dc7846f817776d9541b706f4b5b3fbedd8dfdeb5fce6f22864264
   languageName: node
   linkType: hard
 
@@ -16374,9 +16374,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:13.7.3":
-  version: 13.7.3
-  resolution: "cypress@npm:13.7.3"
+"cypress@npm:13.9.0":
+  version: 13.9.0
+  resolution: "cypress@npm:13.9.0"
   dependencies:
     "@cypress/request": "npm:^3.0.0"
     "@cypress/xvfb": "npm:^1.2.4"
@@ -16422,7 +16422,7 @@ __metadata:
     yauzl: "npm:^2.10.0"
   bin:
     cypress: bin/cypress
-  checksum: 10c0/51643d6bcf647abb50e5f3a88fbffe5c41bb680394e8900162aded05547f473018070146df923ec8a7908356e3ff9e9c26629b51523f4361046e0c447f757d63
+  checksum: 10c0/1254609d8186c438f59c3f5bbef77fd22309260c1204228c39d07a9c9a555a823f24a69cbe9169d1e79af0d93f9cc9fee5e74b85cd0aa265e0add471cba86f32
   languageName: node
   linkType: hard
 
@@ -16865,19 +16865,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dependency-cruiser@npm:16.3.1":
-  version: 16.3.1
-  resolution: "dependency-cruiser@npm:16.3.1"
+"dependency-cruiser@npm:16.3.2":
+  version: 16.3.2
+  resolution: "dependency-cruiser@npm:16.3.2"
   dependencies:
     acorn: "npm:8.11.3"
     acorn-jsx: "npm:5.3.2"
     acorn-jsx-walk: "npm:2.0.0"
     acorn-loose: "npm:8.4.0"
     acorn-walk: "npm:8.3.2"
-    ajv: "npm:8.12.0"
+    ajv: "npm:8.13.0"
     chalk: "npm:5.3.0"
     commander: "npm:12.0.0"
-    enhanced-resolve: "npm:5.16.0"
+    enhanced-resolve: "npm:5.16.1"
     figures: "npm:6.1.0"
     ignore: "npm:5.3.1"
     indent-string: "npm:5.0.0"
@@ -16890,8 +16890,8 @@ __metadata:
     prompts: "npm:2.4.2"
     rechoir: "npm:^0.8.0"
     safe-regex: "npm:2.1.1"
-    semver: "npm:^7.6.0"
-    semver-try-require: "npm:6.2.3"
+    semver: "npm:^7.6.1"
+    semver-try-require: "npm:7.0.0"
     teamcity-service-messages: "npm:0.1.14"
     tsconfig-paths-webpack-plugin: "npm:4.1.0"
     watskeburt: "npm:4.0.2"
@@ -16903,7 +16903,7 @@ __metadata:
     depcruise-wrap-stream-in-html: bin/wrap-stream-in-html.mjs
     dependency-cruise: bin/dependency-cruise.mjs
     dependency-cruiser: bin/dependency-cruise.mjs
-  checksum: 10c0/e9d984481bb22ea314d323be197fd8efc5fd530a938c00deea044e3679119e8166fa53ecb8e825230ec4bebbae1a3ddb52b20e895daa52c5404ae341026c5192
+  checksum: 10c0/2d0e1b0b7ed05735a44234ed1fdd5fcdf5191f525637f5e9b143a8a8b3d69c0efc26987f7dfafa92c9f011a57494b0309d143685bd55c8b52101494a285520b9
   languageName: node
   linkType: hard
 
@@ -17491,13 +17491,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:5.16.0, enhanced-resolve@npm:^5.16.0, enhanced-resolve@npm:^5.7.0":
-  version: 5.16.0
-  resolution: "enhanced-resolve@npm:5.16.0"
+"enhanced-resolve@npm:5.16.1, enhanced-resolve@npm:^5.16.0, enhanced-resolve@npm:^5.7.0":
+  version: 5.16.1
+  resolution: "enhanced-resolve@npm:5.16.1"
   dependencies:
     graceful-fs: "npm:^4.2.4"
     tapable: "npm:^2.2.0"
-  checksum: 10c0/dd69669cbb638ccacefd03e04d5e195ee6a99b7f5f8012f86d2df7781834de357923e06064ea621137c4ce0b37cc12b872b4e6d1ac6ab15fe98e7f1dfbbb08c4
+  checksum: 10c0/57d52625b978f18b32351a03006699de1e3695ce27af936ab4f1f98d3a4c825b219b445910bb4eef398303bbb5f37d7e382f842513d0f3a32614b78f6fd07ab7
   languageName: node
   linkType: hard
 
@@ -20123,7 +20123,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:10.3.12, glob@npm:^10.0.0, glob@npm:^10.2.2, glob@npm:^10.3.10, glob@npm:^10.3.3, glob@npm:^10.3.7":
+"glob@npm:10.3.12":
   version: 10.3.12
   resolution: "glob@npm:10.3.12"
   dependencies:
@@ -20135,6 +20135,21 @@ __metadata:
   bin:
     glob: dist/esm/bin.mjs
   checksum: 10c0/f60cefdc1cf3f958b2bb5823e1b233727f04916d489dc4641d76914f016e6704421e06a83cbb68b0cb1cb9382298b7a88075b844ad2127fc9727ea22b18b0711
+  languageName: node
+  linkType: hard
+
+"glob@npm:10.3.15, glob@npm:^10.0.0, glob@npm:^10.2.2, glob@npm:^10.3.10, glob@npm:^10.3.3, glob@npm:^10.3.7":
+  version: 10.3.15
+  resolution: "glob@npm:10.3.15"
+  dependencies:
+    foreground-child: "npm:^3.1.0"
+    jackspeak: "npm:^2.3.6"
+    minimatch: "npm:^9.0.1"
+    minipass: "npm:^7.0.4"
+    path-scurry: "npm:^1.11.0"
+  bin:
+    glob: dist/esm/bin.mjs
+  checksum: 10c0/cda748ddc181b31b3df9548c0991800406d5cc3b3f8110e37a8751ec1e39f37cdae7d7782d5422d7df92775121cdf00599992dff22f7ff1260344843af227c2b
   languageName: node
   linkType: hard
 
@@ -27343,13 +27358,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-scurry@npm:^1.10.2, path-scurry@npm:^1.6.1":
+"path-scurry@npm:^1.10.2":
   version: 1.10.2
   resolution: "path-scurry@npm:1.10.2"
   dependencies:
     lru-cache: "npm:^10.2.0"
     minipass: "npm:^5.0.0 || ^6.0.2 || ^7.0.0"
   checksum: 10c0/d723777fbf9627f201e64656680f66ebd940957eebacf780e6cce1c2919c29c116678b2d7dbf8821b3a2caa758d125f4444005ccec886a25c8f324504e48e601
+  languageName: node
+  linkType: hard
+
+"path-scurry@npm:^1.11.0, path-scurry@npm:^1.6.1":
+  version: 1.11.1
+  resolution: "path-scurry@npm:1.11.1"
+  dependencies:
+    lru-cache: "npm:^10.2.0"
+    minipass: "npm:^5.0.0 || ^6.0.2 || ^7.0.0"
+  checksum: 10c0/32a13711a2a505616ae1cc1b5076801e453e7aae6ac40ab55b388bb91b9d0547a52f5aaceff710ea400205f18691120d4431e520afbe4266b836fadede15872d
   languageName: node
   linkType: hard
 
@@ -29879,10 +29904,10 @@ __metadata:
     babel-plugin-remove-code: "npm:0.0.6"
     boxen: "npm:5.1.2"
     core-js: "npm:3.36.1"
-    cypress: "npm:13.7.3"
+    cypress: "npm:13.9.0"
     cypress-fail-fast: "npm:7.1.0"
     cypress-wait-until: "npm:3.0.1"
-    dependency-cruiser: "npm:16.3.1"
+    dependency-cruiser: "npm:16.3.2"
     dotenv: "npm:16.4.5"
     eslint: "npm:8.57.0"
     execa: "npm:5.1.1"
@@ -30158,12 +30183,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver-try-require@npm:6.2.3":
-  version: 6.2.3
-  resolution: "semver-try-require@npm:6.2.3"
+"semver-try-require@npm:7.0.0":
+  version: 7.0.0
+  resolution: "semver-try-require@npm:7.0.0"
   dependencies:
-    semver: "npm:^7.5.3"
-  checksum: 10c0/a2ceb988a6a10e912b9677e3f6c21af5af0eefbd3e0512116a6d37a0f27d806b9610fabd51ced0e283d02154f18298b683575c166beedfd7db21579b9c4a32ad
+    semver: "npm:^7.6.0"
+  checksum: 10c0/b379d02ab4b8e331cf603221908129e2963af0e31210e9d6fcb2d6f168d0ccfba86cffd67a2f9bfff586a69981b61d20c19adf9af83413cd78920259fcc0a5d2
   languageName: node
   linkType: hard
 
@@ -30176,7 +30201,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.6.2, semver@npm:^7.0.0, semver@npm:^7.1.1, semver@npm:^7.1.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.3.8, semver@npm:^7.5.2, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.0":
+"semver@npm:7.6.2, semver@npm:^7.0.0, semver@npm:^7.1.1, semver@npm:^7.1.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.3.8, semver@npm:^7.5.2, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.0, semver@npm:^7.6.1":
   version: 7.6.2
   resolution: "semver@npm:7.6.2"
   bin:
@@ -32924,7 +32949,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uri-js@npm:^4.2.2":
+"uri-js@npm:^4.2.2, uri-js@npm:^4.4.1":
   version: 4.4.1
   resolution: "uri-js@npm:4.4.1"
   dependencies:
