@@ -35,7 +35,7 @@
     "@babel/runtime-corejs3": "7.24.1",
     "@prisma/client": "5.11.0",
     "@whatwg-node/fetch": "0.9.17",
-    "core-js": "3.36.1",
+    "core-js": "3.37.1",
     "humanize-string": "2.1.0",
     "jsonwebtoken": "9.0.2",
     "pascalcase": "1.0.0",

@@ -35,7 +35,7 @@
     "@whatwg-node/fetch": "0.9.17",
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.12",
-    "core-js": "3.36.1",
+    "core-js": "3.37.1",
     "graphql": "16.8.1",
     "mime-types": "2.1.35"
   },
