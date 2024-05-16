@@ -31,14 +31,14 @@
     "@graphql-yoga/subscription": "5.0.0",
     "@n1ru4l/graphql-live-query": "0.10.0",
     "@n1ru4l/in-memory-live-query-store": "0.10.0",
-    "graphql": "16.8.1",
-    "ioredis": "^5.3.2"
+    "graphql": "16.8.1"
   },
   "devDependencies": {
     "@envelop/core": "5.0.1",
     "@envelop/testing": "7.0.0",
     "@envelop/types": "5.0.0",
     "@redwoodjs/framework-tools": "7.5.1",
+    "ioredis": "^5.3.2",
     "nodemon": "3.1.0",
     "tsx": "4.7.1",
     "typescript": "5.4.5",
