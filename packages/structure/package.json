@@ -27,11 +27,11 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.1",
     "@iarna/toml": "2.2.5",
-    "@prisma/internals": "5.11.0",
+    "@prisma/internals": "5.14.0",
     "@redwoodjs/project-config": "workspace:*",
     "@types/line-column": "1.0.2",
     "camelcase": "6.3.0",
-    "core-js": "3.36.1",
+    "core-js": "3.37.1",
     "deepmerge": "4.3.1",
     "dotenv-defaults": "5.0.2",
     "enquirer": "2.4.1",
@@ -54,11 +54,11 @@
     "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
     "@types/fs-extra": "11.0.4",
-    "@types/lodash": "4.17.0",
+    "@types/lodash": "4.17.3",
     "@types/node": "20.11.25",
-    "@types/vscode": "1.87.0",
+    "@types/vscode": "1.89.0",
     "typescript": "5.4.5",
-    "vitest": "1.4.0"
+    "vitest": "1.6.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

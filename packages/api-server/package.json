@@ -39,26 +39,26 @@
     "dotenv-defaults": "5.0.2",
     "fast-glob": "3.3.2",
     "fast-json-parse": "1.0.3",
-    "fastify": "4.26.2",
+    "fastify": "4.27.0",
     "fastify-raw-body": "4.3.0",
     "lodash": "4.17.21",
     "pretty-bytes": "5.6.0",
     "pretty-ms": "7.0.1",
-    "qs": "6.12.0",
+    "qs": "6.12.1",
     "split2": "4.2.0",
     "yargs": "17.7.2"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/aws-lambda": "8.10.136",
-    "@types/lodash": "4.17.0",
-    "@types/qs": "6.9.14",
+    "@types/aws-lambda": "8.10.138",
+    "@types/lodash": "4.17.3",
+    "@types/qs": "6.9.15",
     "@types/split2": "4.2.3",
     "@types/yargs": "17.0.32",
-    "pino-abstract-transport": "1.1.0",
-    "tsx": "4.7.1",
+    "pino-abstract-transport": "1.2.0",
+    "tsx": "4.10.3",
     "typescript": "5.4.5",
-    "vitest": "1.4.0"
+    "vitest": "1.6.0"
   },
   "peerDependencies": {
     "@redwoodjs/graphql-server": "workspace:*"

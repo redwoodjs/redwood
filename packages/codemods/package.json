@@ -36,7 +36,7 @@
     "@vscode/ripgrep": "1.15.9",
     "@whatwg-node/fetch": "0.9.17",
     "cheerio": "1.0.0-rc.12",
-    "core-js": "3.36.1",
+    "core-js": "3.37.1",
     "deepmerge": "4.3.1",
     "execa": "5.1.1",
     "fast-glob": "3.3.2",
@@ -55,7 +55,7 @@
     "@types/yargs": "17.0.32",
     "fs-extra": "11.2.0",
     "tempy": "1.0.1",
-    "vitest": "1.4.0"
+    "vitest": "1.6.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
