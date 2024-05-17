@@ -1,4 +1,8 @@
-import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
+import {
+  ensurePosixPath,
+  getPaths,
+  importStatementPath,
+} from '@redwoodjs/project-config'
 import { getProject } from '@redwoodjs/structure/dist/index'
 import type { RWPage } from '@redwoodjs/structure/dist/model/RWPage'
 import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
@@ -18,7 +22,7 @@ export function getEntries() {
   const pages = routes.map((route: RWRoute) => route.page) as RWPage[]
 
   for (const page of pages) {
-    entries[page.const_] = ensurePosixPath(page.path)
+    entries[page.const_] = ensurePosixPath(importStatementPath(page.path))
   }
 
   // Add the ServerEntry entry, noting we use the "__rwjs__" prefix to avoid
