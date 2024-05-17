@@ -80,5 +80,36 @@ describe('Invoke middleware', () => {
       expect(mwRes.statusText).toEqual('Ouch')
       expect(authState).toEqual(middlewareDefaultAuthProviderState)
     })
+
+    test('can set extra properties in the shortcircuit response', async () => {
+      const testMw: Middleware = () => {
+        const shortCircuitRes = new MiddlewareResponse('Zap')
+
+        shortCircuitRes.cookies.set('monster', 'nomnomnom', {
+          expires: new Date('2022-01-01'),
+        })
+        shortCircuitRes.headers.set('redwood', 'is awesome')
+
+        shortCircuitRes.shortCircuit()
+      }
+
+      const [mwRes, authState] = await invoke(
+        new Request('https://example.com'),
+        testMw,
+      )
+
+      expect(mwRes).toBeInstanceOf(MiddlewareResponse)
+      expect(mwRes.body).toEqual('Zap')
+      expect(mwRes.status).toEqual(200)
+
+      expect(mwRes.toResponse().headers.getSetCookie()).toContainEqual(
+        'monster=nomnomnom; Expires=Sat, 01 Jan 2022 00:00:00 GMT',
+      )
+      expect(mwRes.toResponse().headers.get('redwood')).toStrictEqual(
+        'is awesome',
+      )
+
+      expect(authState).toEqual(middlewareDefaultAuthProviderState)
+    })
   })
 })

@@ -47,6 +47,13 @@ export class MiddlewareResponse {
    * @returns MiddlewareResponse
    */
   shortCircuit = (body?: BodyInit | null, init?: ResponseInit) => {
+    for (const [ckName, ckParams] of this.cookies) {
+      this.headers.append(
+        'Set-Cookie',
+        cookie.serialize(ckName, ckParams.value, ckParams.options),
+      )
+    }
+
     throw new MiddlewareShortCircuit(
       body || this.body,
       init || {
