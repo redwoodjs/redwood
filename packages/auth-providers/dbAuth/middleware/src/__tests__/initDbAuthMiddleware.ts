@@ -8,7 +8,7 @@ import {
 } from '@redwoodjs/vite/middleware'
 
 import type { DbAuthMiddlewareOptions } from '../index'
-import { createDbAuthMiddleware } from '../index'
+import { initDbAuthMiddleware } from '../index'
 const FIXTURE_PATH = path.resolve(
   __dirname,
   '../../../../../../__fixtures__/example-todo-main',
@@ -22,7 +22,7 @@ afterAll(() => {
   delete process.env.RWJS_CWD
 })
 
-describe('createDbAuthMiddleware()', () => {
+describe('initDbAuthMiddleware()', () => {
   it('When no cookie headers, pass through the response', async () => {
     const options: DbAuthMiddlewareOptions = {
       cookieName: '8911',
@@ -37,7 +37,7 @@ describe('createDbAuthMiddleware()', () => {
         }
       },
     }
-    const middleware = createDbAuthMiddleware(options)
+    const [middleware] = initDbAuthMiddleware(options)
     const req = {
       method: 'GET',
       headers: new Headers(),
@@ -61,7 +61,7 @@ describe('createDbAuthMiddleware()', () => {
       }),
       dbAuthHandler: vi.fn(),
     }
-    const middleware = createDbAuthMiddleware(options)
+    const [middleware] = initDbAuthMiddleware(options)
 
     const mwReq = new MiddlewareRequest(
       new Request('http://localhost:8911', {
@@ -140,7 +140,7 @@ describe('createDbAuthMiddleware()', () => {
           }
         }),
       }
-      const middleware = createDbAuthMiddleware(options)
+      const [middleware] = initDbAuthMiddleware(options)
 
       const res = await middleware(req)
 
@@ -178,7 +178,7 @@ describe('createDbAuthMiddleware()', () => {
           }
         },
       }
-      const middleware = createDbAuthMiddleware(options)
+      const [middleware] = initDbAuthMiddleware(options)
 
       const res = await middleware(req)
 
@@ -232,7 +232,7 @@ describe('createDbAuthMiddleware()', () => {
           }
         },
       }
-      const middleware = createDbAuthMiddleware(options)
+      const [middleware] = initDbAuthMiddleware(options)
 
       const res = await middleware(req)
 
@@ -275,7 +275,7 @@ describe('createDbAuthMiddleware()', () => {
           }
         },
       }
-      const middleware = createDbAuthMiddleware(options)
+      const [middleware] = initDbAuthMiddleware(options)
 
       const res = await middleware(req)
       expect(res.body).toEqual(resetToken)
@@ -309,7 +309,7 @@ describe('createDbAuthMiddleware()', () => {
           }
         },
       }
-      const middleware = createDbAuthMiddleware(options)
+      const [middleware] = initDbAuthMiddleware(options)
 
       const res = await middleware(req)
       expect(res).toBeDefined()
@@ -347,7 +347,7 @@ describe('createDbAuthMiddleware()', () => {
           }
         },
       }
-      const middleware = createDbAuthMiddleware(options)
+      const [middleware] = initDbAuthMiddleware(options)
 
       const res = await middleware(req)
       expect(res).toBeDefined()
@@ -390,7 +390,7 @@ describe('createDbAuthMiddleware()', () => {
           }
         },
       }
-      const middleware = createDbAuthMiddleware(options)
+      const [middleware] = initDbAuthMiddleware(options)
 
       const res = await middleware(req)
       expect(res).toBeDefined()
@@ -445,7 +445,7 @@ describe('createDbAuthMiddleware()', () => {
         }
       },
     }
-    const middleware = createDbAuthMiddleware(options)
+    const [middleware] = initDbAuthMiddleware(options)
 
     const res = await middleware(req)
 
@@ -482,7 +482,7 @@ describe('createDbAuthMiddleware()', () => {
           }
         },
       }
-      const middleware = createDbAuthMiddleware(options)
+      const [middleware] = initDbAuthMiddleware(options)
 
       const res = await middleware(req)
 
@@ -524,7 +524,7 @@ describe('createDbAuthMiddleware()', () => {
           }
         },
       }
-      const middleware = createDbAuthMiddleware(options)
+      const [middleware] = initDbAuthMiddleware(options)
 
       const res = await middleware(req)
       const serverAuthContext = req.serverAuthContext.get()
@@ -563,7 +563,7 @@ describe('createDbAuthMiddleware()', () => {
           }
         },
       }
-      const middleware = createDbAuthMiddleware(options)
+      const [middleware] = initDbAuthMiddleware(options)
 
       const res = await middleware(mwReq)
       expect(res).toBeDefined()
@@ -599,7 +599,7 @@ describe('createDbAuthMiddleware()', () => {
           }
         },
       }
-      const middleware = createDbAuthMiddleware(options)
+      const [middleware] = initDbAuthMiddleware(options)
 
       const res = await middleware(req)
       expect(res).toBeDefined()
