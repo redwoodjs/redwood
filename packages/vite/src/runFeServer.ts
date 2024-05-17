@@ -105,7 +105,6 @@ export async function runFeServer() {
 
       const [mwRes] = await invoke(req, handler, {
         params: matchedMw?.params,
-        viteDevServer: undefined,
       })
 
       return mwRes.toResponse()

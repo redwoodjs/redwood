@@ -25,17 +25,17 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.1",
     "@supabase/ssr": "0.3.0",
-    "core-js": "3.36.1",
+    "core-js": "3.37.1",
     "jsonwebtoken": "9.0.2"
   },
   "devDependencies": {
     "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
     "@redwoodjs/api": "workspace:*",
-    "@types/aws-lambda": "8.10.136",
+    "@types/aws-lambda": "8.10.138",
     "@types/jsonwebtoken": "9.0.6",
     "typescript": "5.4.5",
-    "vitest": "1.4.0"
+    "vitest": "1.6.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
