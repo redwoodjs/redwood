@@ -124,20 +124,6 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
   })
 }
 
-// /**
-//  *
-//  * This runs off the back of a post message!
-//  * So headers will serialized into an object
-//  */
-// export const handleInitWorkerServerStore = (
-//   message: MessageReq & { type: 'initWorkerServerStore' },
-// ) => {
-//   initAndEnterStoreWith({
-//     headers: message.input.headersInit,
-//     serverAuthState: message.input.serverAuthState,
-//   })
-// }
-
 // This is a worker, so it doesn't share the same global variables as the main
 // server. So we have to register them here again.
 registerFwGlobalsAndShims()
@@ -212,10 +198,6 @@ parentPort.on('message', (message: MessageReq) => {
     handleSetClientEntries(message)
   } else if (message.type === 'render') {
     handleRender(message)
-    // } else if (message.type === 'getCustomModules') {
-    //   handleGetCustomModules(message)
-    // } else if (message.type === 'build') {
-    //   handleBuild(message)
   }
 })
 
@@ -252,14 +234,6 @@ const getFunctionComponent = async (rscId: string) => {
     const serverEntries = await getEntriesFromDist()
     entryModule = path.join(getPaths().web.distRsc, serverEntries[rscId])
   }
-
-  // @TODO Can we map the rscId to the route?
-  // And how do you know which route if the same page on different routes?
-
-  // getAuthState()
-  // if (!authenticated) {
-  // throw new StatusError('Unauthorized', 401)
-  // }
 
   if (!entryModule) {
     throw new StatusError('No entry found for ' + rscId, 404)
