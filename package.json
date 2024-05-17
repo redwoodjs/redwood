@@ -80,7 +80,7 @@
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-remove-code": "0.0.6",
     "boxen": "5.1.2",
-    "core-js": "3.36.1",
+    "core-js": "3.37.1",
     "cypress": "13.9.0",
     "cypress-fail-fast": "7.1.0",
     "cypress-wait-until": "3.0.1",

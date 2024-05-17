@@ -26,7 +26,7 @@
     "@babel/runtime-corejs3": "7.24.1",
     "@redwoodjs/project-config": "7.5.1",
     "base64url": "3.0.1",
-    "core-js": "3.36.1",
+    "core-js": "3.37.1",
     "md5": "2.3.0",
     "uuid": "9.0.1"
   },

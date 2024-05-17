@@ -27,7 +27,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "core-js": "3.36.1",
+    "core-js": "3.37.1",
     "react": "18.2.0"
   },
   "devDependencies": {
