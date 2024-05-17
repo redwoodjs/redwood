@@ -1,3 +1,4 @@
+import url from 'node:url'
 import path from 'path'
 
 import generate from '@babel/generator'
@@ -7,14 +8,15 @@ import * as t from '@babel/types'
 import type { Plugin } from 'vite'
 import { normalizePath } from 'vite'
 
-import type { PagesDependency } from '@redwoodjs/project-config'
-import {
-  ensurePosixPath,
-  getPaths,
-  importStatementPath,
-  processPagesDir,
-} from '@redwoodjs/project-config'
-
+import type { RWRouteManifestItem } from '@redwoodjs/internal'
+// import {
+//   //ensurePosixPath,
+//   getPaths,
+// } from '@redwoodjs/project-config'
+import { getPaths } from '@redwoodjs/project-config'
+// import { RWProject } from '@redwoodjs/structure/dist/model'
+import type { RWPage } from '@redwoodjs/structure/dist/model/RWPage'
+import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
 const getPathRelativeToSrc = (maybeAbsolutePath: string) => {
   // If the path is already relative
   if (!path.isAbsolute(maybeAbsolutePath)) {
@@ -24,12 +26,30 @@ const getPathRelativeToSrc = (maybeAbsolutePath: string) => {
   return `./${path.relative(getPaths().web.src, maybeAbsolutePath)}`
 }
 
-const withRelativeImports = (page: PagesDependency) => {
-  return {
-    ...page,
-    relativeImport: ensurePosixPath(getPathRelativeToSrc(page.importPath)),
+export const getRoutesList = async () => {
+  const rwPaths = getPaths()
+
+  if (process.env.NODE_ENV === 'development') {
+    const { getProjectRoutes } = await import(
+      '@redwoodjs/internal/dist/routes.js'
+    )
+    return getProjectRoutes()
+  } else {
+    const routeManifestUrl = url.pathToFileURL(rwPaths.web.routeManifest).href
+    const routeManifest: Record<string, RWRouteManifestItem> = (
+      await import(routeManifestUrl, { with: { type: 'json' } })
+    ).default
+
+    return Object.values(routeManifest)
   }
 }
+
+// const withRelativeImports = (page: PagesDependency) => {
+//   return {
+//     ...page,
+//     relativeImport: ensurePosixPath(getPathRelativeToSrc(page.importPath)),
+//   }
+// }
 
 export function rscRoutesAutoLoader(): Plugin {
   // Vite IDs are always normalized and so we avoid windows path issues
@@ -38,13 +58,19 @@ export function rscRoutesAutoLoader(): Plugin {
 
   // Get the current pages
   // @NOTE: This var gets mutated inside the visitors
-  const pages = processPagesDir().map(withRelativeImports)
+  // const pages = processPagesDir().map(withRelativeImports)
+
+  const routes = await getRoutesList()
+  const pages = routes.map((route: RWRoute) => route.page) as RWPage[]
 
   // Currently processPagesDir() can return duplicate entries when there are multiple files
   // ending in Page in the individual page directories. This will cause an error upstream.
   // Here we check for duplicates and throw a more helpful error message.
   const duplicatePageImportNames = new Set<string>()
-  const sortedPageImportNames = pages.map((page) => page.importName).sort()
+  // importName
+  const sortedPageImportNames = routes
+    .map((route) => route.page_identifier_str || route.page?.basename || '')
+    .sort()
   for (let i = 0; i < sortedPageImportNames.length - 1; i++) {
     if (sortedPageImportNames[i + 1] === sortedPageImportNames[i]) {
       duplicatePageImportNames.add(sortedPageImportNames[i])
