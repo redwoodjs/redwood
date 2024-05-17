@@ -3,6 +3,16 @@ import cookie from 'cookie'
 
 import { CookieJar } from './CookieJar.js'
 
+export class MiddlewareShortCircuit extends Error {
+  mwResponse: MiddlewareResponse
+
+  constructor(body?: BodyInit | null, responseInit?: ResponseInit) {
+    super('Short cirtcuit. Skipping all middleware, and returning early')
+    this.name = 'MiddlewareShortCircuit'
+    this.mwResponse = new MiddlewareResponse(body, responseInit)
+  }
+}
+
 /**
  * This is actually a Response builder class
  * After setting all the required proeprties, we can call `build` to get a Web API Response object
@@ -12,35 +22,39 @@ export class MiddlewareResponse {
   headers = new Headers()
   body: BodyInit | null | undefined
   status = 200
+  statusText: string | undefined
 
   constructor(body?: BodyInit | null, init?: ResponseInit) {
     this.body = body
     this.headers = new Headers(init?.headers)
     this.status = init?.status || 200
+    this.statusText = init?.statusText
   }
 
   static fromResponse = (res: Response) => {
     return new MiddlewareResponse(res.body, {
       headers: res.headers,
       status: res.status,
+      statusText: res.statusText,
     })
   }
 
   /**
    *
-   * Return a MiddlewareResponse that will skip React rendering.
-   * Note that other middleware in the chain will still be executed.
+   * Short circuit the middleware chain and return early.
+   * This will skip all the remaining middleware and return the response immediately.
    *
    * @returns MiddlewareResponse
    */
-  static shortCircuit = ({
-    body,
-    status = 200,
-  }: {
-    body: BodyInit
-    status?: number
-  }) => {
-    return new MiddlewareResponse(body, { status: status })
+  shortCircuit = (body?: BodyInit | null, init?: ResponseInit) => {
+    throw new MiddlewareShortCircuit(
+      body || this.body,
+      init || {
+        headers: this.headers,
+        status: this.status,
+        statusText: this.statusText,
+      },
+    )
   }
 
   /**
@@ -84,6 +98,7 @@ export class MiddlewareResponse {
     return new PonyResponse(this.body, {
       headers: this.headers,
       status: this.status,
+      statusText: this.statusText,
     })
   }
 }

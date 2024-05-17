@@ -6,6 +6,7 @@ import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
 import { invoke } from './invokeMiddleware'
 import type { MiddlewareRequest } from './MiddlewareRequest'
 import { MiddlewareResponse } from './MiddlewareResponse'
+import type { Middleware } from './types'
 
 describe('Invoke middleware', () => {
   test('returns a MiddlewareResponse, even if no middleware defined', async () => {
@@ -44,6 +45,7 @@ describe('Invoke middleware', () => {
       consoleErrorSpy.mockRestore()
     })
 
+    // This means that will CONTINUE execution of the middleware chain, and react rendering
     test('returns a MiddlewareResponse, even if middleware throws', async () => {
       const throwingMiddleware = () => {
         throw new Error('I want to break free')
@@ -55,6 +57,27 @@ describe('Invoke middleware', () => {
       )
 
       expect(mwRes).toBeInstanceOf(MiddlewareResponse)
+      expect(authState).toEqual(middlewareDefaultAuthProviderState)
+    })
+
+    // A short-circuit is a way to stop the middleware chain immediately, and return a response
+    test('will return a MiddlewareResposne, if a short-circuit is thrown', async () => {
+      const shortCircuitMW: Middleware = (_req, res) => {
+        res.shortCircuit('Zap', {
+          status: 999,
+          statusText: 'Ouch',
+        })
+      }
+
+      const [mwRes, authState] = await invoke(
+        new Request('https://example.com'),
+        shortCircuitMW,
+      )
+
+      expect(mwRes).toBeInstanceOf(MiddlewareResponse)
+      expect(mwRes.body).toEqual('Zap')
+      expect(mwRes.status).toEqual(999)
+      expect(mwRes.statusText).toEqual('Ouch')
       expect(authState).toEqual(middlewareDefaultAuthProviderState)
     })
   })
