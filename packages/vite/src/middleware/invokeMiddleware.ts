@@ -54,8 +54,7 @@ export const invoke = async (
     console.error(e)
     console.error('~'.repeat(80))
   } finally {
-    // This one is for the server. We may want to move this up as a app.use middleware
-    // if we use the `.run` method from AsyncLocalStorage.
+    // This one is for the server. The worker serverStore is initialized in the worker itself!
     setupServerStore(req, mwReq.serverAuthContext.get())
   }
 
