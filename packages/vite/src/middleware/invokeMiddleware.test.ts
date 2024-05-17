@@ -17,7 +17,7 @@ describe('Invoke middleware', () => {
   test('extracts auth state correctly, and always returns a MWResponse', async () => {
     const BOB = { name: 'Bob', occupation: 'The builder' }
     const fakeMiddleware = (req: MiddlewareRequest) => {
-      req.serverAuthContext.set({
+      req.serverAuthState.set({
         user: BOB,
       })
     }

@@ -74,7 +74,7 @@ describe('createDbAuthMiddleware()', () => {
 
     const res = await middleware(mwReq)
 
-    expect(mwReq.serverAuthContext.get()).toEqual({
+    expect(mwReq.serverAuthState.get()).toEqual({
       cookieHeader:
         'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w==',
       currentUser: {
@@ -314,12 +314,12 @@ describe('createDbAuthMiddleware()', () => {
       const res = await middleware(req)
       expect(res).toBeDefined()
 
-      const serverAuthContext = req.serverAuthContext.get()
-      expect(serverAuthContext.isAuthenticated).toBe(true)
-      expect(serverAuthContext.currentUser).toEqual({
+      const serverAuthState = req.serverAuthState.get()
+      expect(serverAuthState.isAuthenticated).toBe(true)
+      expect(serverAuthState.currentUser).toEqual({
         user: { id: 100, email: 'tolkienUser@example.com' },
       })
-      expect(serverAuthContext.cookieHeader).toBe(cookieHeader)
+      expect(serverAuthState.cookieHeader).toBe(cookieHeader)
     })
     it('handles a validateResetToken request', async () => {
       const request = new Request(
@@ -355,8 +355,8 @@ describe('createDbAuthMiddleware()', () => {
         JSON.stringify({ user: { id: 100, email: 'reset@example.com' } }),
       )
 
-      const serverAuthContext = req.serverAuthContext.get()
-      expect(serverAuthContext.isAuthenticated).toBe(false)
+      const serverAuthState = req.serverAuthState.get()
+      expect(serverAuthState.isAuthenticated).toBe(false)
     })
     it('handles a webAuthnRegOptions request', async () => {
       const body = JSON.stringify({
@@ -490,8 +490,8 @@ describe('createDbAuthMiddleware()', () => {
       expect(res.headers.get('one')).toBe('header-one')
       expect(res.headers.get('two')).toBe('header-two')
 
-      const serverAuthContext = req.serverAuthContext.get()
-      expect(serverAuthContext).toHaveProperty('isAuthenticated', false)
+      const serverAuthState = req.serverAuthState.get()
+      expect(serverAuthState).toHaveProperty('isAuthenticated', false)
     })
     it('handles a GET request with correct cookies', async () => {
       // encrypted session taken fom dbAuth tests
@@ -527,11 +527,11 @@ describe('createDbAuthMiddleware()', () => {
       const middleware = createDbAuthMiddleware(options)
 
       const res = await middleware(req)
-      const serverAuthContext = req.serverAuthContext.get()
+      const serverAuthState = req.serverAuthState.get()
 
       expect(res).toBeDefined()
-      expect(serverAuthContext.isAuthenticated).toBe(true)
-      expect(serverAuthContext.currentUser).toEqual({
+      expect(serverAuthState.isAuthenticated).toBe(true)
+      expect(serverAuthState.currentUser).toEqual({
         user: { id: 100, email: 'hello@example.com' },
       })
     })
@@ -568,8 +568,8 @@ describe('createDbAuthMiddleware()', () => {
       const res = await middleware(mwReq)
       expect(res).toBeDefined()
 
-      const serverAuthContext = mwReq.serverAuthContext.get()
-      expect(serverAuthContext).toBeNull()
+      const serverAuthState = mwReq.serverAuthState.get()
+      expect(serverAuthState).toBeNull()
 
       expect(res.toResponse().headers.getSetCookie()).toEqual([
         // Expired cookies, will be removed by browser
@@ -604,8 +604,8 @@ describe('createDbAuthMiddleware()', () => {
       const res = await middleware(req)
       expect(res).toBeDefined()
 
-      const serverAuthContext = req.serverAuthContext.get()
-      expect(serverAuthContext).toHaveProperty('isAuthenticated', false)
+      const serverAuthState = req.serverAuthState.get()
+      expect(serverAuthState).toHaveProperty('isAuthenticated', false)
     })
   })
 })

@@ -51,5 +51,5 @@ export const invoke = async (
     console.error('~'.repeat(80))
   }
 
-  return [mwRes, mwReq.serverAuthContext.get()]
+  return [mwRes, mwReq.serverAuthState.get()]
 }
