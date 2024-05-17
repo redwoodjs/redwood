@@ -48,12 +48,16 @@ const getStore = () => {
   return PER_REQ_STORAGE.getStore()
 }
 
+// @TODO add guard rails around Cookies object?
+// Because you can't currently modify request headers from a RSC component
 export const getRequestCookies = (): CookieJar => {
   const headers = getRequestHeaders()
 
   return new CookieJar(headers.get('cookie'))
 }
 
+// @TODO add guard rails around headers object?
+// Because you can't currently modify request headers from a RSC component
 export const getRequestHeaders = (): Headers => {
   return getStore()?.get('headers')
 }
@@ -66,9 +70,3 @@ export const setServerAuthState = (authState: ServerAuthState) => {
   const store = getStore()
   store?.set('serverAuthState', authState)
 }
-
-// @TODO: should we allow setting headers + cookies from RSC component? We'll have to get server store and do something with it in the RSC handler
-// and also in createStreamingHandler
-
-// @TODO add guard rails around headers and cookies object? If you CANT set it form RSC
-// Because you can't modify request headers

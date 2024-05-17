@@ -8,8 +8,7 @@
 import path from 'node:path'
 import url from 'node:url'
 
-import * as DefaultFetchAPI from '@whatwg-node/fetch'
-import { createServerAdapter, normalizeNodeRequest } from '@whatwg-node/server'
+import { createServerAdapter } from '@whatwg-node/server'
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
@@ -26,9 +25,10 @@ import type { Middleware } from './middleware/types.js'
 import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { setClientEntries } from './rsc/rscWorkerCommunication.js'
-import { createServerStorage, createPerRequestMap } from './serverStore.js'
+import { createPerRequestMap, createServerStorage } from './serverStore.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import type { RWRouteManifest } from './types.js'
+import { convertExpressHeaders } from './utils.js'
 
 /**
  * TODO (STREAMING)
@@ -123,10 +123,9 @@ export async function runFeServer() {
   )
 
   app.use('*', (req, _res, next) => {
-    const webReq = normalizeNodeRequest(req, DefaultFetchAPI.Request)
-
+    // Convert express headers to fetch headers
     const perReqStore = createPerRequestMap({
-      headers: webReq.headers,
+      headers: convertExpressHeaders(req.headersDistinct),
     })
 
     // By wrapping next, we ensure that all of the other handlers will use this same perReqStore

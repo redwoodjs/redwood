@@ -16,9 +16,10 @@ import { createMiddlewareRouter } from './middleware/register.js'
 import type { Middleware } from './middleware/types.js'
 import { rscRoutesAutoLoader } from './plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
+import { createPerRequestMap, createServerStorage } from './serverStore.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
-import { ensureProcessDirWeb } from './utils.js'
+import { convertExpressHeaders, ensureProcessDirWeb } from './utils.js'
 
 // TODO (STREAMING) Just so it doesn't error out. Not sure how to handle this.
 globalThis.__REDWOOD__PRERENDER_PAGES = {}
@@ -69,6 +70,8 @@ async function createServer() {
     appType: 'custom',
   })
 
+  const serverStorage = createServerStorage()
+
   // create a handler that will invoke middleware with or without a route
   // The DEV one will create a new middleware router on each request
   const handleWithMiddleware = (route?: RouteSpec) => {
@@ -95,6 +98,17 @@ async function createServer() {
 
   // use vite's connect instance as middleware
   app.use(vite.middlewares)
+
+  app.use('*', (req, _res, next) => {
+    // Convert express headers to fetch headers
+    const perReqStore = createPerRequestMap({
+      headers: convertExpressHeaders(req.headersDistinct),
+    })
+
+    // By wrapping next, we ensure that all of the other handlers will use this same perReqStore
+    // But note that the serverStorage is RE-initialised for the RSC worker
+    serverStorage.run(perReqStore, next)
+  })
 
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
   app.use(

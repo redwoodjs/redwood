@@ -64,14 +64,6 @@ export const invoke = async (
 
 const setupServerStore = (_req: Request, serverAuthState: ServerAuthState) => {
   // Init happens in app.use('*')
-  // initAndEnterStoreWith({ headers: req.headers, serverAuthState })
 
   setServerAuthState(serverAuthState)
-
-  // Send a message to the worker to init its server store
-  // REMEMBER: This will only be called in DEV (eventually!)
-  // initWorkerServerStore({
-  //   headers: req.headers,
-  //   serverAuthState,
-  // })
 }
