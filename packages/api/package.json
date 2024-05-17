@@ -33,34 +33,34 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.1",
-    "@prisma/client": "5.11.0",
+    "@prisma/client": "5.14.0",
     "@whatwg-node/fetch": "0.9.17",
-    "core-js": "3.36.1",
+    "core-js": "3.37.1",
     "humanize-string": "2.1.0",
     "jsonwebtoken": "9.0.2",
     "pascalcase": "1.0.0",
-    "pino": "8.19.0",
+    "pino": "8.21.0",
     "title-case": "3.0.3"
   },
   "devDependencies": {
     "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
-    "@types/aws-lambda": "8.10.137",
+    "@types/aws-lambda": "8.10.138",
     "@types/jsonwebtoken": "9.0.6",
     "@types/memjs": "1",
     "@types/pascalcase": "1.0.3",
     "@types/split2": "4.2.3",
     "cookie": "0.6.0",
     "memjs": "1.3.2",
-    "redis": "4.6.7",
+    "redis": "4.6.14",
     "split2": "4.2.0",
     "ts-toolbelt": "9.6.0",
     "typescript": "5.4.5",
-    "vitest": "1.4.0"
+    "vitest": "1.6.0"
   },
   "peerDependencies": {
     "memjs": "1.3.2",
-    "redis": "4.6.7"
+    "redis": "4.6.14"
   },
   "peerDependenciesMeta": {
     "memjs": {

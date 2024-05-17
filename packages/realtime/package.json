@@ -24,9 +24,9 @@
   "dependencies": {
     "@envelop/live-query": "7.0.0",
     "@graphql-tools/schema": "10.0.3",
-    "@graphql-tools/utils": "10.1.2",
-    "@graphql-yoga/plugin-defer-stream": "3.2.0",
-    "@graphql-yoga/plugin-graphql-sse": "3.2.0",
+    "@graphql-tools/utils": "10.2.0",
+    "@graphql-yoga/plugin-defer-stream": "3.3.1",
+    "@graphql-yoga/plugin-graphql-sse": "3.3.1",
     "@graphql-yoga/redis-event-target": "3.0.0",
     "@graphql-yoga/subscription": "5.0.0",
     "@n1ru4l/graphql-live-query": "0.10.0",
@@ -40,9 +40,9 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "ioredis": "^5.3.2",
     "nodemon": "3.1.0",
-    "tsx": "4.7.1",
+    "tsx": "4.10.3",
     "typescript": "5.4.5",
-    "vitest": "1.4.0"
+    "vitest": "1.6.0"
   },
   "peerDependencies": {
     "ioredis": "^5.3.2"

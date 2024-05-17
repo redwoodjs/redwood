@@ -5,6 +5,8 @@ import type { Request } from 'express'
 
 import { getRawConfig, getConfig } from '@redwoodjs/project-config'
 
+import { getAuthState, getRequestHeaders } from '../serverStore.js'
+
 import { renderRsc } from './rscWorkerCommunication.js'
 import type { RenderInput } from './rscWorkerCommunication.js'
 
@@ -115,7 +117,7 @@ const createStudioFlightHandler = (
   }
 }
 
-interface StudioRenderInput extends RenderInput {
+interface StudioRenderInput extends Omit<RenderInput, 'serverState'> {
   basePath: string
   req: Request
   handleError: (e: Error) => void
@@ -132,7 +134,17 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
     // surround renderRsc with performance metrics
     const startedAt = Date.now()
     const start = performance.now()
-    const pipeable = await renderRsc({ rscId, props, rsfId, args })
+
+    const pipeable = await renderRsc({
+      rscId,
+      props,
+      rsfId,
+      args,
+      serverState: {
+        headersInit: Object.fromEntries(getRequestHeaders().entries()),
+        serverAuthState: getAuthState(),
+      },
+    })
     const endedAt = Date.now()
     const end = performance.now()
     const duration = end - start

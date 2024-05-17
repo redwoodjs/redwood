@@ -1,7 +1,9 @@
 import path from 'node:path'
-import { PassThrough } from 'node:stream'
 import type { Readable } from 'node:stream'
+import { PassThrough } from 'node:stream'
 import { Worker } from 'node:worker_threads'
+
+import type { ServerAuthState } from '@redwoodjs/auth'
 
 const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
   execArgv: [
@@ -19,6 +21,10 @@ export type RenderInput<
   props?: Props | undefined
   rsfId?: string | undefined
   args?: unknown[] | undefined
+  serverState: {
+    headersInit: Record<string, string>
+    serverAuthState: ServerAuthState
+  }
 }
 
 type CustomModules = {
