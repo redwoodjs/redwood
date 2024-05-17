@@ -3,6 +3,8 @@ import {
   type ServerAuthState,
 } from '@redwoodjs/auth'
 
+import { setServerAuthState } from '../serverStore.js'
+
 import { MiddlewareRequest } from './MiddlewareRequest.js'
 import { MiddlewareResponse } from './MiddlewareResponse.js'
 import type { Middleware, MiddlewareInvokeOptions } from './types.js'
@@ -21,6 +23,8 @@ export const invoke = async (
   options?: MiddlewareInvokeOptions,
 ): Promise<[MiddlewareResponse, ServerAuthState]> => {
   if (typeof middleware !== 'function') {
+    setupServerStore(req, middlewareDefaultAuthProviderState)
+
     return [MiddlewareResponse.next(), middlewareDefaultAuthProviderState]
   }
 
@@ -49,7 +53,16 @@ export const invoke = async (
     console.error('~'.repeat(80))
     console.error(e)
     console.error('~'.repeat(80))
+  } finally {
+    // This one is for the server. The worker serverStore is initialized in the worker itself!
+    setupServerStore(req, mwReq.serverAuthContext.get())
   }
 
   return [mwRes, mwReq.serverAuthContext.get()]
+}
+
+const setupServerStore = (_req: Request, serverAuthState: ServerAuthState) => {
+  // Init happens in app.use('*')
+
+  setServerAuthState(serverAuthState)
 }

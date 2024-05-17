@@ -25,8 +25,10 @@ import type { Middleware } from './middleware/types.js'
 import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { setClientEntries } from './rsc/rscWorkerCommunication.js'
+import { createPerRequestMap, createServerStorage } from './serverStore.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import type { RWRouteManifest } from './types.js'
+import { convertExpressHeaders } from './utils.js'
 
 /**
  * TODO (STREAMING)
@@ -89,6 +91,7 @@ export async function runFeServer() {
 
   // @MARK: In prod, we create it once up front!
   const middlewareRouter = await createMiddlewareRouter()
+  const serverStorage = createServerStorage()
 
   const handleWithMiddleware = () => {
     return createServerAdapter(async (req: Request) => {
@@ -119,6 +122,17 @@ export async function runFeServer() {
     express.static(rwPaths.web.distClient + '/assets', { index: false }),
   )
 
+  app.use('*', (req, _res, next) => {
+    // Convert express headers to fetch headers
+    const perReqStore = createPerRequestMap({
+      headers: convertExpressHeaders(req.headersDistinct),
+    })
+
+    // By wrapping next, we ensure that all of the other handlers will use this same perReqStore
+    // But note that the serverStorage is RE-initialised for the RSC worker
+    serverStorage.run(perReqStore, next)
+  })
+
   // 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
   // e.g. deploying to Netlify, we don't need to proxy but configure it in Netlify
@@ -139,7 +153,12 @@ export async function runFeServer() {
   )
 
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
-  app.use('/rw-rsc', createRscRequestHandler())
+  app.use(
+    '/rw-rsc',
+    createRscRequestHandler({
+      getMiddlewareRouter: async () => middlewareRouter,
+    }),
+  )
 
   // Static asset handling MUST be defined before our catch all routing handler below
   // otherwise it will catch all requests for static assets and return a 404.
@@ -163,8 +182,6 @@ export async function runFeServer() {
   // Wrap with whatwg/server adapter. Express handler -> Fetch API handler
   app.get('*', createServerAdapter(routeHandler))
 
-  // @MARK: put this after rw-rsc to avoid confusion.
-  // We will likely move it up when we implement RSC Auth
   app.post('*', handleWithMiddleware())
 
   app.listen(rwConfig.web.port)
