@@ -2,8 +2,10 @@ import { render, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/jest-globals'
 
 import { getFocus } from '../a11yUtils'
+import { namedRoutes as routes } from '../namedRoutes'
+import { Route } from '../Route'
 import RouteFocus from '../route-focus'
-import { Router, Route, routes } from '../router'
+import { Router } from '../router'
 
 // SETUP
 const RouteFocusPage = () => (

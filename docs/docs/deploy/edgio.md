@@ -1,5 +1,14 @@
 # Deploy to Edgio
 
+>⚠️ **Deprecated**
+>
+>As of Redwood v7, we are deprecating this deploy setup as an "officially" supported provider. This means:
+>- For projects already using this deploy provider, there will be NO change at this time
+>- Both the associated `setup` and `deploy` commands will remain in the framework as is; when setup is run, there will be a “deprecation” message
+>- We will no longer run CI/CD on the Edgio deployments, which means we are no longer guaranteeing this deploy works with each new version
+>
+>If you have concerns or questions about our decision to deprecate this deploy provider please reach out to us on our [community forum](https://community.redwoodjs.com).
+
 [Edgio](https://edg.io) extends the capabilities of a traditional CDN by not only hosting your static content, but also providing server-side rendering for progressive web applications as well as caching both your APIs and HTML at the network edge to provide your users with the fastest browsing experience.
 
 ## Edgio Deploy Setup

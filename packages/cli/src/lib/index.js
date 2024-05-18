@@ -58,7 +58,7 @@ export const nameVariants = (name) => {
   }
 }
 
-export const generateTemplate = (templateFilename, { name, ...rest }) => {
+export const generateTemplate = async (templateFilename, { name, ...rest }) => {
   try {
     const templateFn = template(readFile(templateFilename).toString())
 
@@ -259,7 +259,7 @@ export const getPrettierOptions = async () => {
 /*
  * Convert a generated TS template file into JS.
  */
-export const transformTSToJS = (filename, content) => {
+export const transformTSToJS = async (filename, content) => {
   const { code } = babel.transform(content, {
     filename,
     // If you ran `yarn rw generate` in `./web` transformSync would import the `.babelrc.js` file,
@@ -441,8 +441,8 @@ export const addScaffoldImport = () => {
   }
 
   appJsContents = appJsContents.replace(
-    "import Routes from 'src/Routes'\n",
-    "import Routes from 'src/Routes'\n\nimport './scaffold.css'",
+    "import './index.css'",
+    "import './index.css'\nimport './scaffold.css'\n",
   )
   writeFile(appJsPath, appJsContents, { overwriteExisting: true })
 

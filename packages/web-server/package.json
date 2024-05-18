@@ -29,14 +29,14 @@
     "@redwoodjs/project-config": "workspace:*",
     "chalk": "4.1.2",
     "dotenv-defaults": "5.0.2",
-    "fastify": "4.26.2",
+    "fastify": "4.27.0",
     "fs-extra": "11.2.0",
     "yargs": "17.7.2"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "tsx": "4.7.1",
-    "typescript": "5.4.3"
+    "tsx": "4.10.3",
+    "typescript": "5.4.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

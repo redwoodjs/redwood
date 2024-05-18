@@ -5,7 +5,9 @@ vi.mock('fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('node:fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('execa')
 // The jscodeshift parts are tested by another test
-vi.mock('../../fragments/runTransform', () => ({ runTransform: () => ({}) }))
+vi.mock('../../../../../../lib/runTransform', () => ({
+  runTransform: () => ({}),
+}))
 
 vi.mock('listr2', () => {
   return {

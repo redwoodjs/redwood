@@ -108,7 +108,7 @@ If you'd like to use our optional built-in GraphQL API support, here's our stack
 - [GraphQL](https://graphql.org/)
 - [GraphQL Yoga](https://www.graphql-yoga.com)
 - [Envelop](https://www.envelop.dev)
-- [Apollo Client](https://www.apollographql.com/docs/react))
+- [Apollo Client](https://www.apollographql.com/docs/react)
 
 ## Roadmap
 

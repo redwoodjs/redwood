@@ -9,9 +9,9 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    "types": "./dist/esm/index.d.ts",
-    "import": "./dist/esm/index.js",
-    "default": "./dist/index.cjs"
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js",
+    "default": "./dist/cjs/index.js"
   },
   "types": "./dist/index.d.ts",
   "files": [
@@ -20,24 +20,24 @@
   "scripts": {
     "build": "tsx ./build.ts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-auth.tgz",
-    "build:types": "tsc --build --verbose tsconfig.build.json && tsc --build --verbose tsconfig.build-esm.json",
+    "build:types": "tsc --build --verbose tsconfig.build.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "core-js": "3.36.1",
-    "react": "18.3.0-canary-a870b2d54-20240314"
+    "core-js": "3.37.1",
+    "react": "19.0.0-beta-04b058868c-20240508"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "@testing-library/jest-dom": "6.4.2",
-    "@testing-library/react": "14.2.2",
+    "@testing-library/jest-dom": "6.4.5",
+    "@testing-library/react": "14.3.1",
     "msw": "1.3.3",
-    "tsx": "4.7.1",
-    "typescript": "5.4.3",
-    "vitest": "1.4.0"
+    "tsx": "4.10.3",
+    "typescript": "5.4.5",
+    "vitest": "1.6.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -118,6 +118,9 @@ export interface Config {
     realtime: {
       enabled: boolean
     }
+    reactCompiler: {
+      enabled: boolean
+    }
   }
 }
 
@@ -200,6 +203,9 @@ const DEFAULT_CONFIG: Config = {
       enabled: false,
     },
     realtime: {
+      enabled: false,
+    },
+    reactCompiler: {
       enabled: false,
     },
   },

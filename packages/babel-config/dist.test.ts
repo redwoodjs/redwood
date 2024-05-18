@@ -15,7 +15,7 @@ describe('dist', () => {
           },
           "version": "7.24.1",
         },
-        "CORE_JS_VERSION": "3.36",
+        "CORE_JS_VERSION": "3.37",
         "RUNTIME_CORE_JS_VERSION": "7.24.1",
         "TARGETS_NODE": "20.10",
         "getApiSideBabelConfigPath": [Function],

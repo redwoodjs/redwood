@@ -4,6 +4,6 @@
     "rootDir": "src",
     "outDir": "dist"
   },
-  "include": ["./src/**/*", "ambient.d.ts"],
+  "include": ["./src/**/*", "ambient.d.ts", "testing-library.d.ts"],
   "references": [{ "path": "../auth" }]
 }

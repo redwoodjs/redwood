@@ -14,10 +14,6 @@
       "types": "./dist/index.d.ts",
       "default": "./cjsWrapper.js"
     },
-    "./entries": {
-      "types": "./dist/entries.d.ts",
-      "default": "./dist/entries.js"
-    },
     "./client": {
       "types": "./dist/client.d.ts",
       "default": "./dist/client.js"
@@ -38,6 +34,10 @@
     "./middleware": {
       "types": "./dist/middleware/index.d.ts",
       "default": "./dist/middleware/index.js"
+    },
+    "./serverStore": {
+      "types": "./dist/serverStore.d.ts",
+      "default": "./dist/serverStore.js"
     }
   },
   "bin": {
@@ -67,23 +67,23 @@
     "@redwoodjs/internal": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/web": "workspace:*",
-    "@swc/core": "1.4.11",
+    "@swc/core": "1.5.7",
     "@vitejs/plugin-react": "4.2.1",
     "@whatwg-node/fetch": "0.9.17",
-    "@whatwg-node/server": "0.9.32",
+    "@whatwg-node/server": "0.9.34",
     "acorn-loose": "8.4.0",
     "buffer": "6.0.3",
     "busboy": "^1.6.0",
     "cookie": "0.6.0",
-    "core-js": "3.36.1",
+    "core-js": "3.37.1",
     "dotenv-defaults": "5.0.2",
     "express": "4.19.2",
-    "find-my-way": "8.1.0",
+    "find-my-way": "8.2.0",
     "http-proxy-middleware": "2.0.6",
     "isbot": "3.8.0",
-    "react": "18.3.0-canary-a870b2d54-20240314",
-    "react-server-dom-webpack": "18.3.0-canary-a870b2d54-20240314",
-    "vite": "5.2.8",
+    "react": "19.0.0-beta-04b058868c-20240508",
+    "react-server-dom-webpack": "19.0.0-beta-04b058868c-20240508",
+    "vite": "5.2.11",
     "vite-plugin-cjs-interop": "2.1.0",
     "yargs-parser": "21.1.1"
   },
@@ -93,11 +93,11 @@
     "@types/express": "4",
     "@types/react": "^18.2.55",
     "@types/yargs-parser": "21.0.3",
-    "glob": "10.3.10",
-    "rollup": "4.13.0",
-    "tsx": "4.7.1",
-    "typescript": "5.4.3",
-    "vitest": "1.4.0"
+    "glob": "10.3.15",
+    "rollup": "4.17.2",
+    "tsx": "4.10.3",
+    "typescript": "5.4.5",
+    "vitest": "1.6.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

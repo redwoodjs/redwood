@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
-import type { DbAuthClientArgs } from '../dbAuth'
+import type { CustomProviderHooks, DbAuthClientArgs } from '../dbAuth'
 import { createDbAuthClient, createAuth } from '../dbAuth'
 
 globalThis.RWJS_API_URL = '/.redwood/functions'
@@ -20,7 +20,7 @@ interface User {
 
 let loggedInUser: User | undefined
 
-const fetchMock = jest.fn()
+export const fetchMock = jest.fn()
 fetchMock.mockImplementation(async (url, options) => {
   const body = options?.body ? JSON.parse(options.body) : {}
 
@@ -63,7 +63,26 @@ fetchMock.mockImplementation(async (url, options) => {
     return {
       ok: true,
       text: () => '',
-      json: () => ({ data: { redwood: { currentUser: loggedInUser } } }),
+      json: () => ({
+        data: {
+          redwood: {
+            currentUser: loggedInUser,
+          },
+        },
+      }),
+    }
+  }
+
+  if (url.includes('middleware/dbauth/currentUser')) {
+    return {
+      ok: true,
+      text: () => '',
+      json: () => ({
+        currentUser: {
+          id: 'middleware-user-555',
+          username: 'user@middleware.auth',
+        },
+      }),
     }
   }
 
@@ -72,6 +91,7 @@ fetchMock.mockImplementation(async (url, options) => {
 
 beforeAll(() => {
   globalThis.fetch = fetchMock
+  globalThis.RWJS_ENV = {}
 })
 
 beforeEach(() => {
@@ -79,16 +99,11 @@ beforeEach(() => {
   loggedInUser = undefined
 })
 
-const defaultArgs: DbAuthClientArgs & {
-  useCurrentUser?: () => Promise<CurrentUser>
-  useHasRole?: (
-    currentUser: CurrentUser | null,
-  ) => (rolesToCheck: string | string[]) => boolean
-} = {
+const defaultArgs: DbAuthClientArgs & CustomProviderHooks = {
   fetchConfig: { credentials: 'include' },
 }
 
-function getDbAuth(args = defaultArgs) {
+export function getDbAuth(args = defaultArgs) {
   const dbAuthClient = createDbAuthClient(args)
   const { useAuth, AuthProvider } = createAuth(dbAuthClient, {
     useHasRole: args.useHasRole,
@@ -101,7 +116,7 @@ function getDbAuth(args = defaultArgs) {
   return result
 }
 
-describe('dbAuth', () => {
+describe('dbAuth web client', () => {
   it('sets a default credentials value if not included', async () => {
     const authRef = getDbAuth({ fetchConfig: {} })
 
@@ -113,7 +128,7 @@ describe('dbAuth', () => {
       await authRef.current.getToken()
     })
 
-    expect(globalThis.fetch).toBeCalledWith(
+    expect(globalThis.fetch).toHaveBeenCalledWith(
       `${globalThis.RWJS_API_URL}/auth?method=getToken`,
       {
         credentials: 'same-origin',
@@ -126,7 +141,7 @@ describe('dbAuth', () => {
 
     await act(async () => await auth.forgotPassword('username'))
 
-    expect(fetchMock).toBeCalledWith(
+    expect(fetchMock).toHaveBeenCalledWith(
       `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
@@ -143,7 +158,7 @@ describe('dbAuth', () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(1)
 
-    expect(fetchMock).toBeCalledWith(
+    expect(fetchMock).toHaveBeenCalledWith(
       `${globalThis.RWJS_API_URL}/auth?method=getToken`,
       {
         credentials: 'include',
@@ -152,21 +167,21 @@ describe('dbAuth', () => {
   })
 
   it('passes through fetchOptions to login calls', async () => {
-    const auth = (await getDbAuth()).current
+    const auth = getDbAuth().current
 
     await act(
       async () =>
         await auth.logIn({ username: 'username', password: 'password' }),
     )
 
-    expect(globalThis.fetch).toBeCalledWith(
+    expect(globalThis.fetch).toHaveBeenCalledWith(
       `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       }),
     )
 
-    expect(globalThis.fetch).toBeCalledWith(
+    expect(globalThis.fetch).toHaveBeenCalledWith(
       `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
@@ -180,7 +195,7 @@ describe('dbAuth', () => {
       await auth.logOut()
     })
 
-    expect(globalThis.fetch).toBeCalledWith(
+    expect(globalThis.fetch).toHaveBeenCalledWith(
       `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
@@ -198,7 +213,7 @@ describe('dbAuth', () => {
         }),
     )
 
-    expect(globalThis.fetch).toBeCalledWith(
+    expect(globalThis.fetch).toHaveBeenCalledWith(
       `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
@@ -216,7 +231,7 @@ describe('dbAuth', () => {
         }),
     )
 
-    expect(globalThis.fetch).toBeCalledWith(
+    expect(globalThis.fetch).toHaveBeenCalledWith(
       `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
@@ -228,7 +243,7 @@ describe('dbAuth', () => {
     const auth = getDbAuth().current
     await act(async () => await auth.validateResetToken('token'))
 
-    expect(globalThis.fetch).toBeCalledWith(
+    expect(globalThis.fetch).toHaveBeenCalledWith(
       `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
@@ -241,7 +256,7 @@ describe('dbAuth', () => {
 
     await act(async () => await auth.forgotPassword('username'))
 
-    expect(fetchMock).toBeCalledWith(
+    expect(fetchMock).toHaveBeenCalledWith(
       '/.redwood/functions/dbauth',
       expect.objectContaining({
         credentials: 'same-origin',
@@ -326,7 +341,7 @@ describe('dbAuth', () => {
     expect(authRef.current.hasRole('user')).toBeFalsy()
 
     await act(async () => {
-      authRef.current.logIn({
+      await authRef.current.logIn({
         username: 'auth-test',
         password: 'ThereIsNoSpoon',
       })

@@ -1,3 +1,6 @@
+import { pathToFileURL } from 'node:url'
+
+import type { Request as ExpressRequest } from 'express'
 import type { ViteDevServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -24,9 +27,12 @@ export function ensureProcessDirWeb(webDir: string = getPaths().web.base) {
   }
 }
 
-export function makeFilePath(path: string): string {
-  // Without this, absolute paths can't be imported on Windows
-  return 'file:///' + path
+/**
+ * Converts a file path to a URL path (file://...)
+ * Without this, absolute paths can't be imported on Windows
+ */
+export function makeFilePath(path: string) {
+  return pathToFileURL(path).href
 }
 
 export async function ssrLoadEntryServer(viteDevServer: ViteDevServer) {
@@ -41,4 +47,21 @@ export async function ssrLoadEntryServer(viteDevServer: ViteDevServer) {
     // Have to type cast here because ssrLoadModule just returns a generic
     // Record<string, any> type
   ) as Promise<EntryServer>
+}
+
+export function convertExpressHeaders(
+  expressDistinctHeaders: ExpressRequest['headersDistinct'],
+) {
+  const headers = new Headers()
+  for (const name in expressDistinctHeaders) {
+    const values = expressDistinctHeaders[name]
+    if (Array.isArray(values)) {
+      // For multi-value headers, add each value separately
+      for (const value of values) {
+        headers.append(name, value)
+      }
+    }
+  }
+
+  return headers
 }

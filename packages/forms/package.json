@@ -24,29 +24,29 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.1",
-    "core-js": "3.36.1",
+    "core-js": "3.37.1",
     "graphql": "16.8.1",
     "pascalcase": "1.0.0",
-    "react-hook-form": "7.51.2"
+    "react-hook-form": "7.51.4"
   },
   "devDependencies": {
     "@babel/cli": "7.24.1",
     "@babel/core": "^7.22.20",
     "@testing-library/dom": "9.3.4",
-    "@testing-library/jest-dom": "6.4.2",
-    "@testing-library/react": "14.2.2",
+    "@testing-library/jest-dom": "6.4.5",
+    "@testing-library/react": "14.3.1",
     "@testing-library/user-event": "14.5.2",
     "@types/pascalcase": "1.0.3",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "nodemon": "3.1.0",
-    "react": "18.3.0-canary-a870b2d54-20240314",
-    "react-dom": "18.3.0-canary-a870b2d54-20240314",
-    "typescript": "5.4.3",
-    "vitest": "1.4.0"
+    "react": "19.0.0-beta-04b058868c-20240508",
+    "react-dom": "19.0.0-beta-04b058868c-20240508",
+    "typescript": "5.4.5",
+    "vitest": "1.6.0"
   },
   "peerDependencies": {
-    "react": "18.3.0-canary-a870b2d54-20240314"
+    "react": "19.0.0-beta-04b058868c-20240508"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

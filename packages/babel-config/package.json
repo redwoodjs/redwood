@@ -38,11 +38,11 @@
     "@redwoodjs/project-config": "workspace:*",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
-    "babel-plugin-module-resolver": "5.0.0",
-    "core-js": "3.36.1",
+    "babel-plugin-module-resolver": "5.0.2",
+    "core-js": "3.37.1",
     "fast-glob": "3.3.2",
     "graphql": "16.8.1",
-    "typescript": "5.4.3"
+    "typescript": "5.4.5"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
@@ -50,8 +50,8 @@
     "@types/babel__core": "7.20.5",
     "@types/node": "20.11.25",
     "babel-plugin-tester": "11.0.4",
-    "tsx": "4.7.1",
-    "vitest": "1.4.0"
+    "tsx": "4.10.3",
+    "vitest": "1.6.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -12,8 +12,9 @@ import {
 } from '@redwoodjs/cli-helpers'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { runTransform } from '../../../../../lib/runTransform'
+
 import type { Args } from './fragments'
-import { runTransform } from './runTransform'
 
 export const command = 'fragments'
 export const description = 'Set up Fragments for GraphQL'
@@ -73,7 +74,7 @@ export async function handler({ force }: Args) {
 
           const prettierOptions = await getPrettierOptions()
 
-          const prettifiedApp = format(source, {
+          const prettifiedApp = await format(source, {
             ...prettierOptions,
             parser: 'babel-ts',
           })

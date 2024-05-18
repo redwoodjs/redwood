@@ -1193,9 +1193,6 @@ yarn redwood generate sdl <model>
 
 The sdl will inspect your `schema.prisma` and will do its best with relations. Schema to generators isn't one-to-one yet (and might never be).
 
-<!-- See limited generator support for relations
-https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-support-for-relations-with-workarounds/361 -->
-
 | Arguments & Options  | Description                                                                                                                                                                                            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `model`              | Model to generate the sdl for                                                                                                                                                                          |
@@ -1627,16 +1624,6 @@ If you wanted to seed your database using a different method (like `psql` and an
 
 In addition, you can [code along with Ryan Chenkie](https://www.youtube.com/watch?v=2LwTUIqjbPo), and learn how libraries like [faker](https://www.npmjs.com/package/faker) can help you create a large, realistic database fast, especially in tandem with Prisma's [createMany](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany).
 
-<!-- ### generate -->
-
-<!-- Generate artifacts (e.g. Prisma Client). -->
-
-<!-- > 👉 Quick link to the [Prisma CLI Reference](https://www.prisma.io/docs/reference/api-reference/command-reference#generate). -->
-
-<!-- ``` -->
-<!-- yarn redwood prisma generate -->
-<!-- ``` -->
-
 **Log Formatting**
 
 If you use the Redwood Logger as part of your seed script, you can pipe the command to the LogFormatter to output prettified logs.
@@ -1713,16 +1700,6 @@ Create a migration from changes in Prisma schema, apply it to the database, trig
 ```
 yarn redwood prisma migrate dev
 ```
-
-<!-- #### reset -->
-
-<!-- Reset your database and apply all migrations, all data will be lost. -->
-
-<!-- > 👉 Quick link to the [Prisma CLI Reference](https://www.prisma.io/docs/reference/api-reference/command-reference#migrate-reset). -->
-
-<!-- ``` -->
-<!-- yarn redwood prisma migrate reset -->
-<!-- ``` -->
 
 #### prisma migrate deploy
 
