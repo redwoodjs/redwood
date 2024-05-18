@@ -96,8 +96,6 @@ function resolveClientEntryForProd(
 export function renderFromDist<TProps extends Record<string, any>>(
   rscId: string,
 ) {
-  console.log('renderFromDist rscId', rscId)
-
   const cssLinks = getRscStylesheetLinkGenerator()()
 
   // Create temporary client component that wraps the component (Page, most

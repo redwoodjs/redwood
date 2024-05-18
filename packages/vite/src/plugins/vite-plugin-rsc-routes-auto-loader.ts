@@ -1,4 +1,4 @@
-import url from 'node:url'
+// import url from 'node:url'
 import path from 'path'
 
 import generate from '@babel/generator'
@@ -8,15 +8,8 @@ import * as t from '@babel/types'
 import type { Plugin } from 'vite'
 import { normalizePath } from 'vite'
 
-import type { RWRouteManifestItem } from '@redwoodjs/internal'
-// import {
-//   //ensurePosixPath,
-//   getPaths,
-// } from '@redwoodjs/project-config'
-import { getPaths } from '@redwoodjs/project-config'
-// import { RWProject } from '@redwoodjs/structure/dist/model'
-import type { RWPage } from '@redwoodjs/structure/dist/model/RWPage'
-import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
+import { getPaths, importStatementPath } from '@redwoodjs/project-config'
+import { getProject } from '@redwoodjs/structure/dist/index'
 const getPathRelativeToSrc = (maybeAbsolutePath: string) => {
   // If the path is already relative
   if (!path.isAbsolute(maybeAbsolutePath)) {
@@ -26,66 +19,37 @@ const getPathRelativeToSrc = (maybeAbsolutePath: string) => {
   return `./${path.relative(getPaths().web.src, maybeAbsolutePath)}`
 }
 
-export const getRoutesList = async () => {
-  const rwPaths = getPaths()
-
-  if (process.env.NODE_ENV === 'development') {
-    const { getProjectRoutes } = await import(
-      '@redwoodjs/internal/dist/routes.js'
-    )
-    return getProjectRoutes()
-  } else {
-    const routeManifestUrl = url.pathToFileURL(rwPaths.web.routeManifest).href
-    const routeManifest: Record<string, RWRouteManifestItem> = (
-      await import(routeManifestUrl, { with: { type: 'json' } })
-    ).default
-
-    return Object.values(routeManifest)
-  }
-}
-
-// const withRelativeImports = (page: PagesDependency) => {
-//   return {
-//     ...page,
-//     relativeImport: ensurePosixPath(getPathRelativeToSrc(page.importPath)),
-//   }
-// }
-
 export function rscRoutesAutoLoader(): Plugin {
   // Vite IDs are always normalized and so we avoid windows path issues
   // by normalizing the path here.
   const routesFileId = normalizePath(getPaths().web.routes)
 
-  // Get the current pages
-  // @NOTE: This var gets mutated inside the visitors
-  // const pages = processPagesDir().map(withRelativeImports)
+  // Get the current pages in the project from routes
+  const rwProject = getProject(getPaths().base)
+  const routes = rwProject.getRouter().routes
 
-  const routes = await getRoutesList()
-  const pages = routes.map((route: RWRoute) => route.page) as RWPage[]
+  // Create a map of pages to routes.
+  // Note that a page can have multiple routes.
+  const routePages: {
+    [key: string]: { routes: { name: string; path: string }[] }
+  } = routes.reduce(
+    (
+      map: { [key: string]: { routes: { name: string; path: string }[] } },
+      route,
+    ) => {
+      const { name, path, page } = route
+      if (page && name && path) {
+        const key = page?.const_
+        if (key && !map[key]) {
+          map[key] = { routes: [] }
+        }
 
-  // Currently processPagesDir() can return duplicate entries when there are multiple files
-  // ending in Page in the individual page directories. This will cause an error upstream.
-  // Here we check for duplicates and throw a more helpful error message.
-  const duplicatePageImportNames = new Set<string>()
-  // importName
-  const sortedPageImportNames = routes
-    .map((route) => route.page_identifier_str || route.page?.basename || '')
-    .sort()
-  for (let i = 0; i < sortedPageImportNames.length - 1; i++) {
-    if (sortedPageImportNames[i + 1] === sortedPageImportNames[i]) {
-      duplicatePageImportNames.add(sortedPageImportNames[i])
-    }
-  }
-  if (duplicatePageImportNames.size > 0) {
-    const pageNames = Array.from(duplicatePageImportNames)
-      .map((name) => `'${name}'`)
-      .join(', ')
-
-    throw new Error(
-      "Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in " +
-        `the following page directories: ${pageNames}`,
-    )
-  }
+        map[key].routes.push({ name, path })
+      }
+      return map
+    },
+    {},
+  )
 
   return {
     name: 'rsc-routes-auto-loader-dev',
@@ -95,8 +59,8 @@ export function rscRoutesAutoLoader(): Plugin {
         return null
       }
 
-      // If we have no pages then we have no reason to do anything here
-      if (pages.length === 0) {
+      // If we have no routes with pages then we have no reason to do anything here
+      if (Object.entries(routePages).length === 0) {
         return null
       }
 
@@ -110,6 +74,7 @@ export function rscRoutesAutoLoader(): Plugin {
         : '@redwoodjs/vite/client'
       const loadFunctionName = isSsr ? 'renderFromDist' : 'renderFromRscServer'
 
+      console.error('loadFunctionName', loadFunctionName)
       // Parse the code as AST
       const ext = path.extname(id)
       const plugins: any[] = []
@@ -144,23 +109,63 @@ export function rscRoutesAutoLoader(): Plugin {
           }
         },
       })
-      const nonImportedPages = pages.filter(
-        (page) => !importedNames.has(page.importName),
+      const nonImportedPages = Object.keys(routePages).filter(
+        (rp) => !importedNames.has(rp),
       )
 
       // Insert the page loading into the code
-      for (const page of nonImportedPages) {
-        ast.program.body.unshift(
-          t.variableDeclaration('const', [
-            t.variableDeclarator(
-              t.identifier(page.const),
-              t.callExpression(t.identifier(loadFunctionName), [
-                t.stringLiteral(page.const),
+      // and pass the rscId and the routes to the load function
+      Object.entries(routePages).forEach((i) => {
+        const key = i[0]
+        const routes = i[1].routes
+        if (nonImportedPages.includes(key)) {
+          // when SSR and renderFromDist no need to pass routes
+          if (loadFunctionName === 'renderFromDist') {
+            ast.program.body.unshift(
+              t.variableDeclaration('const', [
+                t.variableDeclarator(
+                  t.identifier(key),
+                  t.callExpression(t.identifier(loadFunctionName), [
+                    t.stringLiteral(key),
+                  ]),
+                ),
               ]),
-            ),
-          ]),
-        )
-      }
+            )
+          }
+          // pass the rscId and routes to renderFromRscServer
+          // since routes are needed to enforce auth and permissions on the client side
+          if (loadFunctionName === 'renderFromRscServer') {
+            const routesArrayElements = routes.map((route) =>
+              t.objectExpression([
+                t.objectProperty(
+                  t.identifier('name'),
+                  t.stringLiteral(route.name),
+                ),
+                t.objectProperty(
+                  t.identifier('path'),
+                  t.stringLiteral(route.path),
+                ),
+              ]),
+            )
+            ast.program.body.unshift(
+              t.variableDeclaration('const', [
+                t.variableDeclarator(
+                  t.identifier(key),
+                  t.callExpression(t.identifier(loadFunctionName), [
+                    t.stringLiteral(key),
+                    t.objectExpression([
+                      t.objectProperty(
+                        t.identifier('routes'),
+                        t.arrayExpression(routesArrayElements),
+                      ),
+                    ]),
+                  ]),
+                ),
+              ]),
+            )
+          }
+        }
+      })
 
       // Insert an import for the load function we need
       ast.program.body.unshift(
@@ -175,7 +180,10 @@ export function rscRoutesAutoLoader(): Plugin {
         ),
       )
 
-      return generate(ast).code
+      const output = generate(ast).code
+      console.debug('output', output)
+      // throw new Error('test')
+      return output
     },
   }
 }

@@ -108,8 +108,11 @@ function fetchRSC(
   return [data, setRerender]
 }
 
-export function renderFromRscServer<TProps>(rscId: string) {
-  console.log('serve rscId (renderFromRscServer)', rscId)
+export function renderFromRscServer<TProps>(
+  rscId: string,
+  routes: { name: string; path: string }[],
+) {
+  console.log('serve rscId (renderFromRscServer)', rscId, 'routes', routes)
 
   if (typeof window === 'undefined') {
     throw new Error(
@@ -119,12 +122,19 @@ export function renderFromRscServer<TProps>(rscId: string) {
     )
   }
 
+  // @TODO: Enforce auth and permissions on the client side
+  // 1. Load the routes from the route manifest
+  // 2. look up by the route name, the isPrivate, roles and unauthenticated redirect
+  // 3. check if the user is authenticated
+  // 4. check if the user has the required roles
+  // 5. if the user is not authenticated, redirect to the unauthenticated redirect or error?
+
   const cachedFetchRSC = cache(fetchRSC)
 
   // Create temporary client component that wraps the ServerComponent returned
   // by the `createFromFetch` call.
   const ServerComponent = (props: TProps) => {
-    console.log('ServerComponent', rscId, 'props', props)
+    console.log('ServerComponent', rscId, 'props', props, 'routes', routes)
 
     // FIXME we blindly expect JSON.stringify usage is deterministic
     const serializedProps = JSON.stringify(props || {})
