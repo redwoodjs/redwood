@@ -56,7 +56,7 @@ export async function handler({
     cwd,
   }
 
-  // Create the `MockServiceWorker.js` file. See https://mswjs.io/docs/cli/init.
+  // Create the `MockServiceWorker.js` file. See https://v1.mswjs.io/docs/cli/init.
   await execa.command(
     `yarn msw init "${staticAssetsFolder}" --no-save`,
     execaOptions,
