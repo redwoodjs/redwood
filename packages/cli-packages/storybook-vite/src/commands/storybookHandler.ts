@@ -13,6 +13,29 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import c from '../lib/colors'
 import type { StorybookYargsOptions } from '../types'
 
+/*
+readFile and writeFile are somewhat duplicated from @redwoodjs/cli; I could not for the life of me get the package
+import to work.
+
+Additionally, I simplified writeFile for this use case.
+
+TODO: import from package
+*/
+const readFile = (target: fs.PathOrFileDescriptor) =>
+  fs.readFileSync(target, { encoding: 'utf8' })
+const writeFile = (target: string, contents: any) => {
+  const { base } = getPaths()
+  if (fs.existsSync(target)) {
+    throw new Error(`${target} already exists.`)
+  }
+
+  const filename = path.basename(target)
+  const targetDir = target.replace(filename, '')
+  fs.mkdirSync(targetDir, { recursive: true })
+  fs.writeFileSync(target, contents)
+  console.log(`Successfully wrote file \`./${path.relative(base, target)}\``)
+}
+
 export async function handler({
   build,
   buildDirectory,
@@ -29,13 +52,7 @@ export async function handler({
     { force: true },
   )
 
-  /*
-   * TODO: Check if the user has Storybook installed and if not, install it.
-   * This will mainly involve installing the 'storybook-framework-redwoodjs-vite' package
-   * and initializing the `web/.storybook` directory (along with, at minimum, the `main.ts` file).
-   */
-
-  // Check for conflicting options
+  /* Check for conflicting options */
   if (build && smokeTest) {
     throw new Error('Can not provide both "--build" and "--smoke-test"')
   }
@@ -56,7 +73,7 @@ export async function handler({
     cwd,
   }
 
-  // Create the `MockServiceWorker.js` file. See https://v1.mswjs.io/docs/cli/init.
+  /* Create the `MockServiceWorker.js` file. See https://v1.mswjs.io/docs/cli/init. */
   await execa.command(
     `yarn msw init "${staticAssetsFolder}" --no-save`,
     execaOptions,
@@ -66,6 +83,35 @@ export async function handler({
   const storybookConfigPath = path.dirname(
     `${redwoodProjectPaths.web.storybook}/main.ts`,
   )
+
+  const storybookMainFilePath = path.join(storybookConfigPath, 'main.ts')
+  const storybookPreviewBodyFilePath = path.join(
+    storybookConfigPath,
+    'preview-body.html',
+  )
+
+  /* Check if the config files exists yet. If they doesn't, create em! */
+  if (!fs.existsSync(storybookMainFilePath)) {
+    console.log("Storybook's main.ts not found. Creating it now...")
+    const mainConfigTemplatePath = path.join(
+      __dirname,
+      'templates/main.ts.template',
+    )
+    const mainConfigContent = readFile(mainConfigTemplatePath)
+    writeFile(storybookMainFilePath, mainConfigContent)
+    console.log('main.ts created!')
+  }
+
+  if (!fs.existsSync(storybookPreviewBodyFilePath)) {
+    console.log("Storybook's preview-body.html not found. Creating it now...")
+    const previewBodyTemplatePath = path.join(
+      __dirname,
+      'templates/preview-body.html.template',
+    )
+    const previewBodyConfigContent = readFile(previewBodyTemplatePath)
+    writeFile(storybookPreviewBodyFilePath, previewBodyConfigContent)
+    console.log('preview-body.html created!')
+  }
 
   let command = ''
   const flags = [`--config-dir "${storybookConfigPath}"`]
