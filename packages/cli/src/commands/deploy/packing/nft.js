@@ -59,7 +59,7 @@ export async function packageSingleFunction(functionFile) {
   copyPromises.push(functionEntryPromise)
 
   await Promise.all(copyPromises)
-  await exports.zipDirectory(
+  await zipDirectory(
     `${ZIPBALL_DIR}/${functionName}`,
     `${ZIPBALL_DIR}/${functionName}.zip`,
   )
@@ -69,5 +69,5 @@ export async function packageSingleFunction(functionFile) {
 
 export function nftPack() {
   const filesToBePacked = findApiDistFunctions()
-  return Promise.all(filesToBePacked.map(exports.packageSingleFunction))
+  return Promise.all(filesToBePacked.map(packageSingleFunction))
 }
