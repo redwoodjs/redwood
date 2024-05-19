@@ -22,10 +22,6 @@ import UserExampleNewUserExamplePage from './pages/UserExample/NewUserExamplePag
 import UserExampleUserExamplePage from './pages/UserExample/UserExamplePage/UserExamplePage'
 import UserExampleUserExamplesPage from './pages/UserExample/UserExamplesPage/UserExamplesPage'
 
-const NotFoundPage = () => {
-  return <div>Not Found</div>
-}
-
 const Routes = ({ location }) => {
   return (
     <Router location={location}>

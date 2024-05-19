@@ -74,7 +74,7 @@ function rscFetch(rscId: string, props: Record<string, unknown> = {}) {
 
 let serverRoutes: Thenable<React.ReactElement> | null = null
 
-export const ClientRouter = () => {
+export const Router = () => {
   Object.assign(namedRoutes, {
     newEmptyUser: () => 'new-empty-user',
     // TODO (RSC): dynamically add all route functions here
