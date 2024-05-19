@@ -8433,8 +8433,6 @@ __metadata:
     "@babel/cli": "npm:7.24.1"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.1"
-    "@redwoodjs/auth": "workspace:*"
-    "@redwoodjs/internal": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/router": "workspace:*"
     "@redwoodjs/structure": "workspace:*"
