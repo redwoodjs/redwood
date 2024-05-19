@@ -133,38 +133,9 @@ export function rscRoutesAutoLoader(): Plugin {
             allImports.set(specifier.local.name, path.node)
           })
         },
-        JSXElement(path) {
-          if (
-            t.isJSXOpeningElement(path.node.openingElement) &&
-            t.isJSXIdentifier(path.node.openingElement.name) &&
-            path.node.openingElement.name.name === 'Set'
-          ) {
-            const attributes = path.node.openingElement.attributes
-
-            for (const attribute of attributes) {
-              if (
-                t.isJSXAttribute(attribute) &&
-                attribute.name.name === 'wrap' &&
-                t.isJSXExpressionContainer(attribute.value)
-              ) {
-                const wrapExpression = attribute.value
-
-                if (t.isArrayExpression(wrapExpression.expression)) {
-                  const arrayExpression = wrapExpression.expression
-                  arrayExpression.elements.forEach((element) => {
-                    if (t.isIdentifier(element)) {
-                      console.log('wrapper component', element.name)
-                    }
-                  })
-                } else if (t.isIdentifier(wrapExpression.expression)) {
-                  console.log(
-                    'wrapper component',
-                    wrapExpression.expression.name,
-                  )
-                }
-              }
-            }
-          }
+        JSXElement() {
+          // The file is already transformed from JSX to `jsx()` and `jsxs()`
+          // calls when this plugin executes, so this will never get called
         },
         CallExpression(path) {
           if (isSsr) {
@@ -203,10 +174,8 @@ export function rscRoutesAutoLoader(): Plugin {
         return !importedNames.has(page.importName)
       })
 
-      console.log('set wrappers', Array.from(wrappers))
       wrappers.forEach((wrapper) => {
         const wrapperImport = allImports.get(wrapper)
-        console.log('wrapper import', wrapperImport)
 
         if (wrapperImport) {
           wrapperImport.source.value = '@redwoodjs/router/dist/dummyComponent'
@@ -227,7 +196,6 @@ export function rscRoutesAutoLoader(): Plugin {
             ]),
           )
         } else {
-          console.log('adding `const', page.const, '= () => null`')
           ast.program.body.unshift(
             t.variableDeclaration('const', [
               t.variableDeclarator(
