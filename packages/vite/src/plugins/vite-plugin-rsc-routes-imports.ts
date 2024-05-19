@@ -117,15 +117,9 @@ export function rscRoutesImports(): Plugin {
 
       // Insert the page import into the code
       for (const page of nonImportedPages) {
-        console.log('vite-plugin-rsc-routes-imports page', page)
         ast.program.body.unshift(
           t.importDeclaration(
-            [
-              t.importSpecifier(
-                t.identifier(page.importName),
-                t.identifier(page.importName),
-              ),
-            ],
+            [t.importDefaultSpecifier(t.identifier(page.importName))],
             t.stringLiteral(page.importPath),
           ),
         )

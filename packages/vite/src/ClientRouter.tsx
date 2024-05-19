@@ -72,7 +72,7 @@ function rscFetch(rscId: string, props: Record<string, unknown> = {}) {
   return createFromFetch<never, React.ReactElement>(response, options)
 }
 
-let serverRoutes: Thenable<React.ReactElement> | null = null
+let routes: Thenable<React.ReactElement> | null = null
 
 export const Router = () => {
   Object.assign(namedRoutes, {
@@ -94,8 +94,8 @@ const LocationAwareRouter = () => {
   // TODO (RSC): Refetch when the location changes
   // It currently works because we always do a full page refresh, but that's
   // not what we really want to do)
-  if (!serverRoutes) {
-    serverRoutes = rscFetch('__rwjs__ServerRoutes', {
+  if (!routes) {
+    routes = rscFetch('__rwjs__Routes', {
       // All we need right now is the pathname. Plus, `location` is a URL
       // object, and it doesn't JSON.stringify well. Basically all you end up
       // with is the href. That's why we manually construct the object here
@@ -104,5 +104,5 @@ const LocationAwareRouter = () => {
     })
   }
 
-  return serverRoutes
+  return routes
 }

@@ -394,8 +394,8 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
 
   const config = await getViteConfig()
 
-  if (input.rscId === '__rwjs__ServerRoutes') {
-    const serverRoutes = await getFunctionComponent('__rwjs__ServerRoutes')
+  if (input.rscId === '__rwjs__Routes') {
+    const serverRoutes = await getFunctionComponent('__rwjs__Routes')
 
     return renderToPipeableStream(
       createElement(serverRoutes, input.props),

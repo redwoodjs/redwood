@@ -43,9 +43,9 @@ export function getEntries() {
   }
   entries['__rwjs__ServerEntry'] = serverEntry
 
-  const serverRoutesPath = path.join(getPaths().web.src, 'ServerRoutes.tsx')
-  if (fs.existsSync(serverRoutesPath)) {
-    entries['__rwjs__ServerRoutes'] = serverRoutesPath
+  const routesPath = path.join(getPaths().web.src, 'Routes.tsx')
+  if (fs.existsSync(routesPath)) {
+    entries['__rwjs__Routes'] = routesPath
   }
 
   return entries
