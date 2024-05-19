@@ -4,9 +4,8 @@ import type React from 'react'
 // Bypass the `main` field in `package.json` because we alias `@redwoodjs/router`
 // for jest and Storybook. Not doing so would cause an infinite loop.
 // See: ./packages/testing/config/jest/web/jest-preset.js
-// @ts-ignore
+import { isValidRoute } from '@redwoodjs/router/dist/route-validators'
 import type { RouterProps } from '@redwoodjs/router/dist/router'
-import { isRoute } from '@redwoodjs/router/dist/router'
 import { flattenAll, replaceParams } from '@redwoodjs/router/dist/util'
 
 // the compiler didn't like the `import * from '...'` syntax so we have to import each thing individually
@@ -58,7 +57,7 @@ export const Router: React.FC<RouterProps> = ({ children }) => {
   const flatChildArray = flattenAll(children)
 
   flatChildArray.forEach((child) => {
-    if (isRoute(child)) {
+    if (isValidRoute(child)) {
       const { name, path } = child.props
 
       if (name && path) {
