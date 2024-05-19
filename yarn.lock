@@ -7706,6 +7706,7 @@ __metadata:
   resolution: "@redwoodjs/auth-supabase-middleware@workspace:packages/auth-providers/supabase/middleware"
   dependencies:
     "@redwoodjs/api": "workspace:*"
+    "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/auth-supabase-api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/graphql-server": "workspace:*"
@@ -8659,6 +8660,7 @@ __metadata:
     "@babel/generator": "npm:7.24.1"
     "@babel/parser": "npm:^7.22.16"
     "@babel/traverse": "npm:^7.22.20"
+    "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/babel-config": "workspace:*"
     "@redwoodjs/internal": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
