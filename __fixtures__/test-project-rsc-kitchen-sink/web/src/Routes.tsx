@@ -27,8 +27,8 @@ const Routes = ({ location }: { location?: any }) => {
 
         <Set wrap={ScaffoldLayout} title="EmptyUsers" titleTo="emptyUsers" buttonLabel="New EmptyUser" buttonTo="newEmptyUser">
           <Route path="/empty-users/new" page={EmptyUserNewEmptyUserPage} name="newEmptyUser" />
-            <Route path="/empty-users/{id:Int}/edit" page={EmptyUserEditEmptyUserPage} name="editEmptyUser" />
-            <Route path="/empty-users/{id:Int}" page={EmptyUserEmptyUserPage} name="emptyUser" />
+          <Route path="/empty-users/{id:Int}/edit" page={EmptyUserEditEmptyUserPage} name="editEmptyUser" />
+          <Route path="/empty-users/{id:Int}" page={EmptyUserEmptyUserPage} name="emptyUser" />
           <Route path="/empty-users" page={EmptyUserEmptyUsersPage} name="emptyUsers" />
         </Set>
 
