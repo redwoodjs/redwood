@@ -38,11 +38,11 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
     "@redwoodjs/vite": "workspace:*",
-    "@types/aws-lambda": "8.10.136",
+    "@types/aws-lambda": "8.10.138",
     "ts-toolbelt": "9.6.0",
-    "tsx": "4.7.1",
+    "tsx": "4.10.3",
     "typescript": "5.4.5",
-    "vitest": "1.4.0"
+    "vitest": "1.6.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

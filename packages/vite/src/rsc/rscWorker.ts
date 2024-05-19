@@ -25,11 +25,12 @@ import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
 import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
+import { createPerRequestMap, createServerStorage } from '../serverStore.js'
 
 import type {
-  RenderInput,
-  MessageRes,
   MessageReq,
+  MessageRes,
+  RenderInput,
 } from './rscWorkerCommunication.js'
 
 // TODO (RSC): We should look into importing renderToReadableStream from
@@ -38,6 +39,7 @@ import type {
 const { renderToPipeableStream } = RSDWServer
 
 let absoluteClientEntries: Record<string, string> = {}
+const serverStorage = createServerStorage()
 
 type PipeableStream = { pipe<T extends Writable>(destination: T): T }
 
@@ -66,52 +68,61 @@ const handleSetClientEntries = async ({
 const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
   console.log('handleRender', id, input)
 
-  try {
-    const pipeable = input.rscId
-      ? await renderRsc(input)
-      : await handleRsa(input)
+  // Assumes that handleRender is only called once per request!
+  const reqMap = createPerRequestMap({
+    headers: input.serverState.headersInit,
+    serverAuthState: input.serverState.serverAuthState,
+  })
 
-    const writable = new Writable({
-      write(chunk, encoding, callback) {
-        if (encoding !== ('buffer' as any)) {
-          throw new Error('Unknown encoding')
-        }
+  serverStorage.run(reqMap, async () => {
+    try {
+      // @MARK run render with map initialised
+      const pipeable = input.rscId
+        ? await renderRsc(input)
+        : await handleRsa(input)
 
-        if (!parentPort) {
-          throw new Error('parentPort is undefined')
-        }
+      const writable = new Writable({
+        write(chunk, encoding, callback) {
+          if (encoding !== ('buffer' as any)) {
+            throw new Error('Unknown encoding')
+          }
 
-        const buffer: Buffer = chunk
-        const message: MessageRes = {
-          id,
-          type: 'buf',
-          buf: buffer.buffer,
-          offset: buffer.byteOffset,
-          len: buffer.length,
-        }
-        parentPort.postMessage(message, [message.buf])
-        callback()
-      },
-      final(callback) {
-        if (!parentPort) {
-          throw new Error('parentPort is undefined')
-        }
+          if (!parentPort) {
+            throw new Error('parentPort is undefined')
+          }
 
-        const message: MessageRes = { id, type: 'end' }
-        parentPort.postMessage(message)
-        callback()
-      },
-    })
+          const buffer: Buffer = chunk
+          const message: MessageRes = {
+            id,
+            type: 'buf',
+            buf: buffer.buffer,
+            offset: buffer.byteOffset,
+            len: buffer.length,
+          }
+          parentPort.postMessage(message, [message.buf])
+          callback()
+        },
+        final(callback) {
+          if (!parentPort) {
+            throw new Error('parentPort is undefined')
+          }
 
-    pipeable.pipe(writable)
-  } catch (err) {
-    if (!parentPort) {
-      throw new Error('parentPort is undefined')
+          const message: MessageRes = { id, type: 'end' }
+          parentPort.postMessage(message)
+          callback()
+        },
+      })
+
+      pipeable.pipe(writable)
+    } catch (err) {
+      if (!parentPort) {
+        throw new Error('parentPort is undefined')
+      }
+
+      const message: MessageRes = { id, type: 'err', err }
+      parentPort.postMessage(message)
     }
-
-    const message: MessageRes = { id, type: 'err', err }
-    parentPort.postMessage(message)
-  }
+  })
 }
 
 // This is a worker, so it doesn't share the same global variables as the main
@@ -188,10 +199,6 @@ parentPort.on('message', (message: MessageReq) => {
     handleSetClientEntries(message)
   } else if (message.type === 'render') {
     handleRender(message)
-    // } else if (message.type === 'getCustomModules') {
-    //   handleGetCustomModules(message)
-    // } else if (message.type === 'build') {
-    //   handleBuild(message)
   }
 })
 

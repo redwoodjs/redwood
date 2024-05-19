@@ -59,6 +59,9 @@ describe('getConfig', () => {
             "enabled": false,
             "wrapApi": true,
           },
+          "reactCompiler": {
+            "enabled": false,
+          },
           "realtime": {
             "enabled": false,
           },
