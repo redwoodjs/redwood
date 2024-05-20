@@ -42,6 +42,8 @@ function fetchRSC(
   const searchParams = new URLSearchParams()
   searchParams.set('props', serializedProps)
 
+  const rscFetchPath = BASE_PATH + window.location.pathname
+
   const options: Options<unknown[], ReactElement> = {
     // React will hold on to `callServer` and use that when it detects a
     // server action is invoked (like `action={onSubmit}` in a <form>
@@ -51,7 +53,14 @@ function fetchRSC(
     callServer: async function (rsfId: string, args: unknown[]) {
       // `args` is often going to be an array with just a single element,
       // and that element will be FormData
-      console.log('client.ts :: callServer rsfId', rsfId, 'args', args)
+      console.log(
+        'client.ts :: callServer rsfId',
+        rsfId,
+        'args',
+        args,
+        'rscFetchPath',
+        rscFetchPath,
+      )
 
       const isMutating = !!mutationMode
       const searchParams = new URLSearchParams()
@@ -65,11 +74,12 @@ function fetchRSC(
         id = '_'
       }
 
-      const response = fetch(BASE_PATH + id + '?' + searchParams, {
+      const response = fetch(rscFetchPath + id + '?' + searchParams, {
         method: 'POST',
         body: await encodeReply(args),
         headers: {
           'rw-rsc': '1',
+          // maybe pass route name here? instead?
         },
       })
 
@@ -92,12 +102,12 @@ function fetchRSC(
 
   console.log(
     'fetchRSC before createFromFetch',
-    BASE_PATH + rscId + '?' + searchParams,
+    rscFetchPath + rscId + '?' + searchParams,
   )
 
   const response =
     prefetched ||
-    fetch(BASE_PATH + rscId + '?' + searchParams, {
+    fetch(rscFetchPath + rscId + '?' + searchParams, {
       headers: {
         'rw-rsc': '1',
       },
@@ -112,7 +122,14 @@ export function renderFromRscServer<TProps>(
   rscId: string,
   routes: { name: string; path: string }[],
 ) {
-  console.log('serve rscId (renderFromRscServer)', rscId, 'routes', routes)
+  console.log(
+    '>>>> serve rscId (renderFromRscServer)',
+    rscId,
+    'routes',
+    routes,
+    'url',
+    window.location.pathname,
+  )
 
   if (typeof window === 'undefined') {
     throw new Error(
