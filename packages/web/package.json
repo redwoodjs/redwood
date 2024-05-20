@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.9.9",
-    "@babel/runtime-corejs3": "7.24.1",
+    "@babel/runtime-corejs3": "7.24.5",
     "@redwoodjs/auth": "workspace:*",
     "core-js": "3.37.1",
     "graphql": "16.8.1",
@@ -51,10 +51,10 @@
   },
   "devDependencies": {
     "@apollo/client-react-streaming": "0.10.0",
-    "@babel/cli": "7.24.1",
+    "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
     "@babel/plugin-transform-runtime": "7.24.3",
-    "@babel/runtime": "7.24.1",
+    "@babel/runtime": "7.24.5",
     "@rollup/plugin-babel": "6.0.4",
     "@testing-library/jest-dom": "6.4.5",
     "@testing-library/react": "14.3.1",
