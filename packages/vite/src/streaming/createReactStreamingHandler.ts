@@ -3,7 +3,7 @@ import path from 'path'
 import { Response } from '@whatwg-node/fetch'
 import type Router from 'find-my-way'
 import type { HTTPMethod } from 'find-my-way'
-import isbot from 'isbot'
+import { createIsbotFromList, list as isbotList } from 'isbot'
 import type { ViteDevServer } from 'vite'
 
 import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
@@ -28,8 +28,10 @@ interface CreateReactStreamingHandlerOptions {
   getMiddlewareRouter: () => Promise<Router.Instance<any>>
 }
 
-const checkUaForSeoCrawler = isbot.spawn()
-checkUaForSeoCrawler.exclude(['chrome-lighthouse'])
+// Create an isbot instance that ignores the Chrome Lighthouse user agent
+const isbot = createIsbotFromList(
+  isbotList.filter((record) => record.includes('chrome-lighthouse')),
+)
 
 export const createReactStreamingHandler = async (
   {
@@ -167,9 +169,7 @@ export const createReactStreamingHandler = async (
       currentRoute.bundle && '/' + currentRoute.bundle,
     ].filter(Boolean) as string[]
 
-    const isSeoCrawler = checkUaForSeoCrawler(
-      req.headers.get('user-agent') || '',
-    )
+    const isSeoCrawler = isbot(req.headers.get('user-agent') || '')
 
     // Using a function to get the CSS links because we need to wait for the
     // vite dev server to analyze the module graph
