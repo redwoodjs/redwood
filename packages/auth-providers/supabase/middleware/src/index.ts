@@ -13,7 +13,7 @@ export interface SupabaseAuthMiddlewareOptions {
 }
 
 /**
- * Create Supabase Auth Middleware that sets the `serverAuthContext` based on the Supabase cookie.
+ * Create Supabase Auth Middleware that sets the `serverAuthState` based on the Supabase cookie.
  */
 const createSupabaseAuthMiddleware = ({
   getCurrentUser,
@@ -62,7 +62,7 @@ const createSupabaseAuthMiddleware = ({
       const userMetadata =
         typeof currentUser === 'string' ? null : currentUser?.['user_metadata']
 
-      req.serverAuthContext.set({
+      req.serverAuthState.set({
         currentUser,
         loading: false,
         isAuthenticated: !!currentUser,

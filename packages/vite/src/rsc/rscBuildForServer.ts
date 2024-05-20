@@ -4,7 +4,6 @@ import { getPaths } from '@redwoodjs/project-config'
 
 import { getEntries } from '../lib/entries.js'
 import { onWarn } from '../lib/onWarn.js'
-// import { rscCssPreinitPlugin } from '../plugins/vite-plugin-rsc-css-preinit.js'
 import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
@@ -18,7 +17,6 @@ export async function rscBuildForServer(
   clientEntryFiles: Record<string, string>,
   serverEntryFiles: Record<string, string>,
   customModules: Record<string, string>,
-  _componentImportMap: Map<string, string[]>,
 ) {
   console.log('\n')
   console.log('3. rscBuildForServer')
@@ -36,6 +34,9 @@ export async function rscBuildForServer(
   // TODO (RSC): No redwood-vite plugin, add it in here
   const rscServerBuildOutput = await viteBuild({
     envFile: false,
+    define: {
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    },
     ssr: {
       // Inline every file apart from node built-ins. We want vite/rollup to
       // inline dependencies in the server bundle. This gets round runtime
@@ -48,7 +49,8 @@ export async function rscBuildForServer(
       noExternal: true,
       // Can't inline prisma client (db calls fail at runtime) or react-dom
       // (css pre-init failure)
-      external: ['@prisma/client', 'react-dom'],
+      // Server store has to be externalized, because it's a singleton (shared between FW and App)
+      external: ['@prisma/client', 'react-dom', '@redwoodjs/vite/serverStore'],
       resolve: {
         // These conditions are used in the plugin pipeline, and only affect non-externalized
         // dependencies during the SSR build. Which because of `noExternal: true` means all
@@ -65,8 +67,6 @@ export async function rscBuildForServer(
       // (It does other things as well, but that's why it needs clientEntryFiles)
       rscTransformUseClientPlugin(clientEntryFiles),
       rscTransformUseServerPlugin(),
-      // Note: Temporary disabled while we fix the underlying css issue
-      // rscCssPreinitPlugin(clientEntryFiles, componentImportMap),
       rscRoutesAutoLoader(),
     ],
     build: {

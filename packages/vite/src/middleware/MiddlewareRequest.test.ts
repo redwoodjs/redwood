@@ -59,8 +59,8 @@ describe('MiddlewareRequest', () => {
     }
     const mReq = createMiddlewareRequest(req)
 
-    mReq.serverAuthContext.set(FAKE_AUTH_CONTEXT)
+    mReq.serverAuthState.set(FAKE_AUTH_CONTEXT)
 
-    expect(mReq.serverAuthContext.get()).toStrictEqual(FAKE_AUTH_CONTEXT)
+    expect(mReq.serverAuthState.get()).toStrictEqual(FAKE_AUTH_CONTEXT)
   })
 })

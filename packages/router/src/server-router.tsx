@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import React, { useMemo, memo } from 'react'
+import React from 'react'
 
 import { analyzeRoutes } from './analyzeRoutes'
 import type { Wrappers } from './analyzeRoutes'
@@ -25,16 +25,12 @@ export const Router: React.FC<RouterProps> = ({
   children,
   location,
 }) => {
-  const analyzeRoutesResult = useMemo(() => {
-    const analyzedRoutes = analyzeRoutes(children, {
-      currentPathName: location.pathname,
-      // @TODO We haven't handled this with SSR/Streaming yet.
-      // May need a babel plugin to extract userParamTypes from Routes.tsx
-      userParamTypes: paramTypes,
-    })
-
-    return analyzedRoutes
-  }, [location.pathname, children, paramTypes])
+  const analyzedRoutes = analyzeRoutes(children, {
+    currentPathName: location.pathname,
+    // @TODO We haven't handled this with SSR/Streaming yet.
+    // May need a babel plugin to extract userParamTypes from Routes.tsx
+    userParamTypes: paramTypes,
+  })
 
   const {
     pathRouteMap,
@@ -42,7 +38,7 @@ export const Router: React.FC<RouterProps> = ({
     namedRoutesMap,
     NotFoundPage,
     activeRoutePath,
-  } = analyzeRoutesResult
+  } = analyzedRoutes
 
   // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
   // Note that the value changes at runtime
@@ -172,7 +168,7 @@ interface WrappedPageProps {
  * This is so that we can have all the information up front in the routes-manifest
  * for SSR, but also so that we only do one loop of all the Routes.
  */
-const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
+const WrappedPage = ({ routeLoaderElement, sets }: WrappedPageProps) => {
   // @NOTE: don't mutate the wrappers array, it causes full page re-renders
   // Instead just create a new array with the AuthenticatedRoute wrapper
 
@@ -219,4 +215,4 @@ const WrappedPage = memo(({ routeLoaderElement, sets }: WrappedPageProps) => {
 
     return wrapped
   }, routeLoaderElement)
-})
+}

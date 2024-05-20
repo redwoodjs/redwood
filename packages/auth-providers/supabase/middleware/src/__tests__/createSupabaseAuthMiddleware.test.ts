@@ -89,8 +89,8 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(result).toHaveProperty('body', undefined)
     expect(result).toHaveProperty('status', 200)
 
-    const serverAuthContext = req.serverAuthContext.get()
-    expect(serverAuthContext).toEqual(middlewareDefaultAuthProviderState)
+    const serverAuthState = req.serverAuthState.get()
+    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
   })
 
   it('passes through non-authenticated requests', async () => {
@@ -106,8 +106,8 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(result).toEqual(res)
     expect(result.body).toEqual('original response body')
 
-    const serverAuthContext = req.serverAuthContext.get()
-    expect(serverAuthContext).toEqual(middlewareDefaultAuthProviderState)
+    const serverAuthState = req.serverAuthState.get()
+    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
   })
   it('passes through when no auth-provider cookie', async () => {
     const middleware = createSupabaseAuthMiddleware(options)
@@ -126,8 +126,8 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(result).toEqual(res)
     expect(result.body).toEqual('original response body when no auth provider')
 
-    const serverAuthContext = req.serverAuthContext.get()
-    expect(serverAuthContext).toEqual(middlewareDefaultAuthProviderState)
+    const serverAuthState = req.serverAuthState.get()
+    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
   })
 
   it('passes through when unsupported auth-provider', async () => {
@@ -146,8 +146,8 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(result.body).toEqual(
       'original response body for unsupported provider',
     )
-    const serverAuthContext = req.serverAuthContext.get()
-    expect(serverAuthContext).toEqual(middlewareDefaultAuthProviderState)
+    const serverAuthState = req.serverAuthState.get()
+    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
   })
 
   it('handles current user GETs', async () => {
@@ -170,8 +170,8 @@ describe('createSupabaseAuthMiddleware()', () => {
     )
 
     expect(req.url).toContain('/middleware/supabase/currentUser')
-    const serverAuthContext = req.serverAuthContext.get()
-    expect(serverAuthContext).toEqual(middlewareDefaultAuthProviderState)
+    const serverAuthState = req.serverAuthState.get()
+    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
   })
 
   it('authenticated request sets currentUser', async () => {
@@ -189,11 +189,11 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(result).toBeDefined()
     expect(req).toBeDefined()
 
-    const serverAuthContext = req.serverAuthContext.get()
-    expect(serverAuthContext).toBeDefined()
-    expect(serverAuthContext).toHaveProperty('currentUser')
-    expect(serverAuthContext.isAuthenticated).toEqual(true)
-    expect(serverAuthContext.currentUser).toEqual({
+    const serverAuthState = req.serverAuthState.get()
+    expect(serverAuthState).toBeDefined()
+    expect(serverAuthState).toHaveProperty('currentUser')
+    expect(serverAuthState.isAuthenticated).toEqual(true)
+    expect(serverAuthState.currentUser).toEqual({
       id: 1,
       email: 'user-1@example.com',
     })
@@ -230,16 +230,16 @@ describe('createSupabaseAuthMiddleware()', () => {
       expect.anything(),
     )
 
-    const serverAuthContext = req.serverAuthContext.get()
-    expect(serverAuthContext).toBeDefined()
-    expect(serverAuthContext).toHaveProperty('currentUser')
-    expect(serverAuthContext.isAuthenticated).toEqual(true)
-    expect(serverAuthContext.userMetadata).toEqual({
+    const serverAuthState = req.serverAuthState.get()
+    expect(serverAuthState).toBeDefined()
+    expect(serverAuthState).toHaveProperty('currentUser')
+    expect(serverAuthState.isAuthenticated).toEqual(true)
+    expect(serverAuthState.userMetadata).toEqual({
       favoriteColor: 'yellow',
     })
   })
 
-  it('an exception when getting the currentUser clears out serverAuthContext and cookies', async () => {
+  it('an exception when getting the currentUser clears out serverAuthState and cookies', async () => {
     const optionsWithUserMetadata: SupabaseAuthMiddlewareOptions = {
       getCurrentUser: async () => {
         // this simulates a decoding error or some other issue like tampering with the cookie so the Supabase session is invalid
@@ -266,9 +266,9 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(req).toBeDefined()
 
     // when an exception is thrown, such as when tampering with the cookie,
-    //the serverAuthContext should be cleared
-    const serverAuthContext = req.serverAuthContext.get()
-    expect(serverAuthContext).toBeNull()
+    //the serverAuthState should be cleared
+    const serverAuthState = req.serverAuthState.get()
+    expect(serverAuthState).toBeNull()
 
     // the auth-provider cookie should be cleared from the response
     const authProviderCookie = res.cookies.get('auth-provider')

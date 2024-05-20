@@ -7,8 +7,7 @@ import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars.js'
 
 export const buildRscClientAndServer = async () => {
   // Analyze all files and generate a list of RSCs and RSFs
-  const { clientEntryFiles, serverEntryFiles, componentImportMap } =
-    await rscBuildAnalyze()
+  const { clientEntryFiles, serverEntryFiles } = await rscBuildAnalyze()
 
   // Generate the client bundle
   const clientBuildOutput = await rscBuildClient(clientEntryFiles)
@@ -18,7 +17,6 @@ export const buildRscClientAndServer = async () => {
     clientEntryFiles,
     serverEntryFiles,
     {},
-    componentImportMap,
   )
 
   // Copy CSS assets from server to client

@@ -21,15 +21,15 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.1",
+    "@babel/runtime-corejs3": "7.24.5",
     "@redwoodjs/cli-helpers": "workspace:*",
     "@simplewebauthn/browser": "7.4.0",
-    "core-js": "3.36.1",
+    "core-js": "3.37.1",
     "prompts": "2.4.2",
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.1",
+    "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
     "@simplewebauthn/typescript-types": "7.4.0",
     "@types/yargs": "17.0.32",

@@ -21,7 +21,6 @@ export async function rscBuildAnalyze() {
   const rwPaths = getPaths()
   const clientEntryFileSet = new Set<string>()
   const serverEntryFileSet = new Set<string>()
-  const componentImportMap = new Map<string, string[]>()
 
   if (!rwPaths.web.viteConfig) {
     throw new Error('Vite config not found')
@@ -43,10 +42,6 @@ export async function rscBuildAnalyze() {
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
         (id) => serverEntryFileSet.add(id),
-        (id, imports) => {
-          const existingImports = componentImportMap.get(id) ?? []
-          componentImportMap.set(id, [...existingImports, ...imports])
-        },
       ),
     ],
     ssr: {
@@ -100,6 +95,5 @@ export async function rscBuildAnalyze() {
   return {
     clientEntryFiles,
     serverEntryFiles,
-    componentImportMap,
   }
 }

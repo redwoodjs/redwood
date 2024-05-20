@@ -36,6 +36,17 @@ const getProjectBabelOptions = () => {
   }
 }
 
+const plugins = []
+const rules = {}
+
+// Add react compiler plugin & rules if enabled
+const reactCompilerEnabled =
+  config.experimental?.reactCompiler?.enabled ?? false
+if (reactCompilerEnabled) {
+  plugins.push('react-compiler')
+  rules['react-compiler/react-compiler'] = 2
+}
+
 module.exports = {
   extends: [
     './shared.js',
@@ -45,6 +56,8 @@ module.exports = {
     requireConfigFile: false,
     babelOptions: getProjectBabelOptions(),
   },
+  plugins,
+  rules,
   overrides: [
     {
       files: ['web/src/Routes.js', 'web/src/Routes.jsx', 'web/src/Routes.tsx'],
