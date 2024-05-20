@@ -60,7 +60,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/generator": "7.24.1",
+    "@babel/generator": "7.24.5",
     "@babel/parser": "^7.22.16",
     "@babel/traverse": "^7.22.20",
     "@redwoodjs/auth": "workspace:*",

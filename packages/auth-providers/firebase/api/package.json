@@ -23,12 +23,12 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.1",
+    "@babel/runtime-corejs3": "7.24.5",
     "core-js": "3.37.1",
     "firebase-admin": "11.11.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.1",
+    "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
     "@redwoodjs/api": "workspace:*",
     "@types/aws-lambda": "8.10.138",
