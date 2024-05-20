@@ -8126,7 +8126,7 @@ __metadata:
     "@redwoodjs/project-config": "npm:7.5.1"
     "@types/babel-plugin-tester": "npm:9.0.10"
     "@types/babel__core": "npm:7.20.5"
-    "@types/node": "npm:20.11.25"
+    "@types/node": "npm:20.12.12"
     babel-plugin-auto-import: "npm:1.1.0"
     babel-plugin-graphql-tag: "npm:3.3.0"
     babel-plugin-module-resolver: "npm:5.0.2"
@@ -8810,7 +8810,7 @@ __metadata:
     "@types/fs-extra": "npm:11.0.4"
     "@types/line-column": "npm:1.0.2"
     "@types/lodash": "npm:4.17.3"
-    "@types/node": "npm:20.11.25"
+    "@types/node": "npm:20.12.12"
     "@types/vscode": "npm:1.89.0"
     camelcase: "npm:6.3.0"
     core-js: "npm:3.37.1"
@@ -8877,7 +8877,7 @@ __metadata:
     "@types/aws-lambda": "npm:8.10.138"
     "@types/babel-core": "npm:6.25.10"
     "@types/jest": "npm:29.5.12"
-    "@types/node": "npm:20.11.25"
+    "@types/node": "npm:20.12.12"
     "@types/webpack": "npm:5.28.5"
     "@types/webpack-env": "npm:1.18.5"
     babel-jest: "npm:^29.7.0"
@@ -11323,7 +11323,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0, @types/node@npm:>=20.12.11":
+"@types/node@npm:*, @types/node@npm:20.12.12, @types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0, @types/node@npm:>=20.12.11":
   version: 20.12.12
   resolution: "@types/node@npm:20.12.12"
   dependencies:
@@ -11336,15 +11336,6 @@ __metadata:
   version: 16.18.6
   resolution: "@types/node@npm:16.18.6"
   checksum: 10c0/88192f5cd3d21ca827898c903ce6fbb8a92a51d0f9d8f7e93ac3f2f3b46cdd9f29c969fe3af9ba004833bb265c6330042f37d11cd97b9e4f54dabf2b34399075
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:20.11.25":
-  version: 20.11.25
-  resolution: "@types/node@npm:20.11.25"
-  dependencies:
-    undici-types: "npm:~5.26.4"
-  checksum: 10c0/3a65a0469309d503e572a3198d81c9248876236b1bcc0c9943e995cfa536df7ce9a9302638258984877420d1613167a8a82dbfb3a92197319fb79ebebf9abc83
   languageName: node
   linkType: hard
 
