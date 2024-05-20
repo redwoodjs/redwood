@@ -3,12 +3,18 @@ import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
 
 import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
 
+import { createServerStorage } from '../serverStore'
+
 import { invoke } from './invokeMiddleware'
 import type { MiddlewareRequest } from './MiddlewareRequest'
 import { MiddlewareResponse } from './MiddlewareResponse'
 import type { Middleware } from './types'
 
 describe('Invoke middleware', () => {
+  beforeAll(() => {
+    createServerStorage()
+  })
+
   test('returns a MiddlewareResponse, even if no middleware defined', async () => {
     const [mwRes, authState] = await invoke(new Request('https://example.com'))
     expect(mwRes).toBeInstanceOf(MiddlewareResponse)
