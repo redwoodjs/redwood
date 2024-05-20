@@ -55,10 +55,10 @@ export const invoke = async (
     console.error('~'.repeat(80))
   } finally {
     // This one is for the server. The worker serverStore is initialized in the worker itself!
-    setupServerStore(req, mwReq.serverAuthContext.get())
+    setupServerStore(req, mwReq.serverAuthState.get())
   }
 
-  return [mwRes, mwReq.serverAuthContext.get()]
+  return [mwRes, mwReq.serverAuthState.get()]
 }
 
 const setupServerStore = (_req: Request, serverAuthState: ServerAuthState) => {
