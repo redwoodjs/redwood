@@ -42,7 +42,11 @@ function fetchRSC(
   const searchParams = new URLSearchParams()
   searchParams.set('props', serializedProps)
 
-  const rscFetchPath = BASE_PATH + window.location.pathname
+  // The path to the RSC endpoint is the current URL pathname which is the route path, with the
+  // `/rw-rsc` prefix added to it.
+  let path = window.location.pathname
+  path = path.replace(/^\/|\/$/g, '').trim()
+  const rscFetchPath = BASE_PATH + path + '/'
 
   const options: Options<unknown[], ReactElement> = {
     // React will hold on to `callServer` and use that when it detects a
@@ -118,18 +122,8 @@ function fetchRSC(
   return [data, setRerender]
 }
 
-export function renderFromRscServer<TProps>(
-  rscId: string,
-  routes: { name: string; path: string }[],
-) {
-  console.log(
-    '>>>> serve rscId (renderFromRscServer)',
-    rscId,
-    'routes',
-    routes,
-    'url',
-    window.location.pathname,
-  )
+export function renderFromRscServer<TProps>(rscId: string) {
+  console.log('>>>> serve rscId (renderFromRscServer)', rscId)
 
   if (typeof window === 'undefined') {
     throw new Error(
@@ -145,13 +139,14 @@ export function renderFromRscServer<TProps>(
   // 3. check if the user is authenticated
   // 4. check if the user has the required roles
   // 5. if the user is not authenticated, redirect to the unauthenticated redirect or error?
+  // 6. should authenticated requests be cached?
 
   const cachedFetchRSC = cache(fetchRSC)
 
   // Create temporary client component that wraps the ServerComponent returned
   // by the `createFromFetch` call.
   const ServerComponent = (props: TProps) => {
-    console.log('ServerComponent', rscId, 'props', props, 'routes', routes)
+    console.log('ServerComponent', rscId, 'props', props)
 
     // FIXME we blindly expect JSON.stringify usage is deterministic
     const serializedProps = JSON.stringify(props || {})

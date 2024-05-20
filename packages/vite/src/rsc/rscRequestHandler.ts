@@ -1,3 +1,5 @@
+import url from 'node:url'
+
 import * as DefaultFetchAPI from '@whatwg-node/fetch'
 import { normalizeNodeRequest } from '@whatwg-node/server'
 import busboy from 'busboy'
@@ -9,6 +11,8 @@ import type Router from 'find-my-way'
 import type { HTTPMethod } from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 
+import { getPaths } from '@redwoodjs/project-config'
+
 import {
   decodeReply,
   decodeReplyFromBusboy,
@@ -17,6 +21,7 @@ import { hasStatusCode } from '../lib/StatusError.js'
 import type { Middleware } from '../middleware'
 import { invoke } from '../middleware/invokeMiddleware'
 import { getAuthState, getRequestHeaders } from '../serverStore'
+import type { RWRouteManifest } from '../types'
 
 import { sendRscFlightToStudio } from './rscStudioHandlers.js'
 import { renderRsc } from './rscWorkerCommunication.js'
@@ -25,6 +30,8 @@ interface CreateRscRequestHandlerOptions {
   getMiddlewareRouter: () => Promise<Router.Instance<any>>
   viteDevServer?: ViteDevServer
 }
+
+const BASE_PATH = '/rw-rsc/'
 
 export function createRscRequestHandler(
   options: CreateRscRequestHandlerOptions,
@@ -38,13 +45,16 @@ export function createRscRequestHandler(
     res: ExpressResponse,
     next: () => void,
   ) => {
-    const basePath = '/rw-rsc/'
+    const requestUrl = getRSCRequestUrl(req)
 
-    console.log('basePath', basePath)
-    console.log('req.originalUrl', req.originalUrl, 'req.url', req.url)
-    console.log('req.headers.host', req.headers.host)
-    console.log("req.headers['rw-rsc']", req.headers['rw-rsc'])
+    // find the Route from the request based on the url
+    // can use the route to determine if the RSC request to render is private or not
+    if (!(await isRequestAllowed(req))) {
+      console.log('Request is not allowed')
+      // throw 401?
+    }
 
+    // if we are here then we can render the RSC
     const mwRouter = await options.getMiddlewareRouter()
 
     if (mwRouter) {
@@ -86,24 +96,22 @@ export function createRscRequestHandler(
       return next()
     }
 
-    const url = new URL(req.originalUrl || '', 'http://' + req.headers.host)
     let rscId: string | undefined
     let props = {}
     let rsfId: string | undefined
     let args: unknown[] = []
 
-    console.log('url.pathname', url.pathname)
-
-    if (url.pathname.startsWith(basePath)) {
-      rscId = url.pathname.split('/').pop()
-      rsfId = url.searchParams.get('action_id') || undefined
+    if (requestUrl.pathname.startsWith(BASE_PATH)) {
+      console.log('url.pathname', requestUrl.pathname)
+      rscId = requestUrl.pathname.split('/').pop()
+      rsfId = requestUrl.searchParams.get('action_id') || undefined
 
       console.log('rscId', rscId)
       console.log('rsfId', rsfId)
 
       if (rscId && rscId !== '_') {
         res.setHeader('Content-Type', 'text/x-component')
-        props = JSON.parse(url.searchParams.get('props') || '{}')
+        props = JSON.parse(requestUrl.searchParams.get('props') || '{}')
       } else {
         rscId = undefined
       }
@@ -203,7 +211,7 @@ export function createRscRequestHandler(
           props,
           rsfId,
           args,
-          basePath,
+          basePath: BASE_PATH,
           req,
           handleError,
         })
@@ -217,4 +225,74 @@ export function createRscRequestHandler(
       }
     }
   }
+}
+
+const isRequestAllowed = async (req: ExpressRequest) => {
+  const matchedRoute = await matchRouteFromRequest(req)
+
+  //@TODO
+  // if matchedRoute isPrivate, and user is not logged in then we should not render the RSC
+  console.log('>>>>>>>>>> matchedRoute', matchedRoute)
+  // if (matchedRoute.isPrivate) {
+  // @TODO
+  // if user is not logged in then we should not render the RSC
+  // we should return a 401
+  // check roles
+  // get roles from auth state anf check if user has the role
+  // }
+
+  const isAllowed = matchedRoute ? true : false
+  console.log('isRequestAllowed', isAllowed, matchedRoute)
+  // for now
+  return isAllowed
+}
+
+const matchRouteFromRequest = async (req: ExpressRequest) => {
+  // A RSC request looks like:
+  // http://localhost:8910/<routePath>/AboutPage?props=%7B%7D
+  // and headers['rw-rsc'] === '1'
+  // let's extract the routePath to use it to look up the route in the route manifest
+  const requestUrl = getRSCRequestUrl(req)
+  const routePath = getRoutePath(requestUrl)
+
+  // here we can look up the route in the route manifest by the route path
+  // given paths are unique (TODO need to enforce this)
+  // then the consider auth rules is isPrivate to determine if we should
+  // run the render the RSC or not
+  const routeManifest: RWRouteManifest = await getRouteManifest()
+
+  const matchedRoute = Object.values(routeManifest).find(
+    (r) =>
+      r.pathDefinition === routePath || r.pathDefinition === '/' + routePath,
+  )
+
+  if (!matchedRoute) {
+    console.warn('No route found for', routePath)
+
+    // throw 404?
+  }
+
+  return matchedRoute
+}
+
+const getRoutePath = (requestUrl: URL) => {
+  let routePath = requestUrl.pathname.split('/').reverse()[1]
+  if (routePath === BASE_PATH || routePath === '') {
+    console.warn('No routePath found, setting to /')
+    routePath = '/'
+  }
+  return routePath
+}
+
+const getRouteManifest = async (): Promise<RWRouteManifest> => {
+  const rwPaths = getPaths()
+  const routeManifestUrl = url.pathToFileURL(rwPaths.web.routeManifest).href
+  const routeManifest: RWRouteManifest = (
+    await import(routeManifestUrl, { with: { type: 'json' } })
+  ).default
+  return routeManifest
+}
+
+const getRSCRequestUrl = (req: ExpressRequest) => {
+  return new URL(req.originalUrl || '', 'http://' + req.headers.host)
 }
