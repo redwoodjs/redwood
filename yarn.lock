@@ -8512,8 +8512,6 @@ __metadata:
     "@babel/cli": "npm:7.24.1"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.1"
-    "@redwoodjs/auth": "npm:7.5.1"
-    "@redwoodjs/internal": "npm:7.5.1"
     "@redwoodjs/project-config": "npm:7.5.1"
     "@redwoodjs/router": "npm:7.5.1"
     "@redwoodjs/structure": "npm:7.5.1"
