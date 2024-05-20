@@ -89,7 +89,7 @@ export const createDbAuthMiddleware = ({
         return new MiddlewareResponse(JSON.stringify({ currentUser }))
       }
 
-      req.serverAuthContext.set({
+      req.serverAuthState.set({
         currentUser,
         loading: false,
         isAuthenticated: !!currentUser,
@@ -100,7 +100,7 @@ export const createDbAuthMiddleware = ({
     } catch (e) {
       // Clear server auth context
       console.error(e, 'Error decrypting dbAuth cookie')
-      req.serverAuthContext.set(null)
+      req.serverAuthState.set(null)
 
       // Note we have to use ".unset" and not ".clear"
       // because we want to remove these cookies from the browser

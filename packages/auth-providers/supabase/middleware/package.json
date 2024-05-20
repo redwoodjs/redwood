@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@redwoodjs/api": "workspace:*",
+    "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
     "@redwoodjs/vite": "workspace:*",
