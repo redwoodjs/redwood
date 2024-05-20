@@ -26,8 +26,6 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.1",
-    "@redwoodjs/auth": "workspace:*",
-    "@redwoodjs/internal": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/router": "workspace:*",
     "@redwoodjs/structure": "workspace:*",
