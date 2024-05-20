@@ -56,13 +56,14 @@ export async function redwoodFastifyAPI(
     }
   }
 
+  // Run users custom server configuration function
+  if (redwoodOptions.configureServer) {
+    await redwoodOptions.configureServer(fastify as Server)
+  }
+
   fastify.all(`${redwoodOptions.apiRootPath}:routeName`, lambdaRequestHandler)
   fastify.all(`${redwoodOptions.apiRootPath}:routeName/*`, lambdaRequestHandler)
   await loadFunctionsFromDist({
     fastGlobOptions: redwoodOptions.fastGlobOptions,
   })
-
-  if (redwoodOptions.configureServer) {
-    await redwoodOptions.configureServer(fastify as Server)
-  }
 }
