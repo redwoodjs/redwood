@@ -241,6 +241,10 @@ const isRequestAllowed = async (req: ExpressRequest) => {
   // get roles from auth state anf check if user has the role
   // }
 
+  // also, should probably check if rscId is in the route manifest
+  // so you cannot pick a route you can access nd RscId maybe you cannot access
+  // we'd add the route page_identifier_str or const to the manifest
+
   const isAllowed = matchedRoute ? true : false
   console.log('isRequestAllowed', isAllowed, matchedRoute)
   // for now
@@ -285,6 +289,7 @@ const getRoutePath = (requestUrl: URL) => {
 }
 
 const getRouteManifest = async (): Promise<RWRouteManifest> => {
+  // to do: this should be cached or preloaded to avoid reading the file every time
   const rwPaths = getPaths()
   const routeManifestUrl = url.pathToFileURL(rwPaths.web.routeManifest).href
   const routeManifest: RWRouteManifest = (
