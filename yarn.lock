@@ -8695,7 +8695,7 @@ __metadata:
     find-my-way: "npm:8.2.0"
     glob: "npm:10.3.15"
     http-proxy-middleware: "npm:2.0.6"
-    isbot: "npm:3.8.0"
+    isbot: "npm:5.1.6"
     react: "npm:19.0.0-beta-04b058868c-20240508"
     react-server-dom-webpack: "npm:19.0.0-beta-04b058868c-20240508"
     rollup: "npm:4.17.2"
@@ -20635,10 +20635,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isbot@npm:3.8.0":
-  version: 3.8.0
-  resolution: "isbot@npm:3.8.0"
-  checksum: 10c0/3e9daa907212db8e8e339fe0c7eacff7814de0db0aeef9ab379376b245f35058c6bdd2de0849442a791bc3d9587d749071e7d7e90aea00bf9f834f40c69ea16f
+"isbot@npm:5.1.6":
+  version: 5.1.6
+  resolution: "isbot@npm:5.1.6"
+  checksum: 10c0/c0883a4f91882abed46be2bedb0e36acf8db74ec9866d752991ebb2982c84faa04a774bd20d36b988701611e2fdf518a977edd640a9b28e668a91d3e2c48a3d7
   languageName: node
   linkType: hard
 
