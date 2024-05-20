@@ -36,6 +36,7 @@
     "opentelemetry",
     "pino",
     "Pistorius",
+    "prerendering",
     "redwoodjs",
     "rsdw",
     "RWJS",
