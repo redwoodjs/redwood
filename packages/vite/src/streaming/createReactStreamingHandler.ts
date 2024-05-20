@@ -30,7 +30,7 @@ interface CreateReactStreamingHandlerOptions {
 
 // Create an isbot instance that ignores the Chrome Lighthouse user agent
 const isbot = createIsbotFromList(
-  isbotList.filter((record) => record.includes('chrome-lighthouse')),
+  isbotList.filter((record) => !record.includes('chrome-lighthouse')),
 )
 
 export const createReactStreamingHandler = async (
