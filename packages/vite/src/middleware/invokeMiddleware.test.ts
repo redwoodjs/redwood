@@ -8,6 +8,7 @@ import { createServerStorage } from '../serverStore'
 import { invoke } from './invokeMiddleware'
 import type { MiddlewareRequest } from './MiddlewareRequest'
 import { MiddlewareResponse } from './MiddlewareResponse'
+import type { Middleware } from './types'
 
 describe('Invoke middleware', () => {
   beforeAll(() => {
@@ -50,6 +51,7 @@ describe('Invoke middleware', () => {
       consoleErrorSpy.mockRestore()
     })
 
+    // This means that will CONTINUE execution of the middleware chain, and react rendering
     test('returns a MiddlewareResponse, even if middleware throws', async () => {
       const throwingMiddleware = () => {
         throw new Error('I want to break free')
@@ -61,6 +63,58 @@ describe('Invoke middleware', () => {
       )
 
       expect(mwRes).toBeInstanceOf(MiddlewareResponse)
+      expect(authState).toEqual(middlewareDefaultAuthProviderState)
+    })
+
+    // A short-circuit is a way to stop the middleware chain immediately, and return a response
+    test('will return a MiddlewareResposne, if a short-circuit is thrown', async () => {
+      const shortCircuitMW: Middleware = (_req, res) => {
+        res.shortCircuit('Zap', {
+          status: 999,
+          statusText: 'Ouch',
+        })
+      }
+
+      const [mwRes, authState] = await invoke(
+        new Request('https://example.com'),
+        shortCircuitMW,
+      )
+
+      expect(mwRes).toBeInstanceOf(MiddlewareResponse)
+      expect(mwRes.body).toEqual('Zap')
+      expect(mwRes.status).toEqual(999)
+      expect(mwRes.statusText).toEqual('Ouch')
+      expect(authState).toEqual(middlewareDefaultAuthProviderState)
+    })
+
+    test('can set extra properties in the shortcircuit response', async () => {
+      const testMw: Middleware = () => {
+        const shortCircuitRes = new MiddlewareResponse('Zap')
+
+        shortCircuitRes.cookies.set('monster', 'nomnomnom', {
+          expires: new Date('2022-01-01'),
+        })
+        shortCircuitRes.headers.set('redwood', 'is awesome')
+
+        shortCircuitRes.shortCircuit()
+      }
+
+      const [mwRes, authState] = await invoke(
+        new Request('https://example.com'),
+        testMw,
+      )
+
+      expect(mwRes).toBeInstanceOf(MiddlewareResponse)
+      expect(mwRes.body).toEqual('Zap')
+      expect(mwRes.status).toEqual(200)
+
+      expect(mwRes.toResponse().headers.getSetCookie()).toContainEqual(
+        'monster=nomnomnom; Expires=Sat, 01 Jan 2022 00:00:00 GMT',
+      )
+      expect(mwRes.toResponse().headers.get('redwood')).toStrictEqual(
+        'is awesome',
+      )
+
       expect(authState).toEqual(middlewareDefaultAuthProviderState)
     })
   })
