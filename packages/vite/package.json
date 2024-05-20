@@ -34,6 +34,10 @@
     "./middleware": {
       "types": "./dist/middleware/index.d.ts",
       "default": "./dist/middleware/index.js"
+    },
+    "./serverStore": {
+      "types": "./dist/serverStore.d.ts",
+      "default": "./dist/serverStore.js"
     }
   },
   "bin": {
@@ -59,6 +63,7 @@
     "@babel/generator": "7.24.1",
     "@babel/parser": "^7.22.16",
     "@babel/traverse": "^7.22.20",
+    "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/babel-config": "workspace:*",
     "@redwoodjs/internal": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
