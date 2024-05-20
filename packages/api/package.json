@@ -32,7 +32,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.1",
+    "@babel/runtime-corejs3": "7.24.5",
     "@prisma/client": "5.14.0",
     "@whatwg-node/fetch": "0.9.17",
     "core-js": "3.37.1",
@@ -43,7 +43,7 @@
     "title-case": "3.0.3"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.1",
+    "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
     "@types/aws-lambda": "8.10.138",
     "@types/jsonwebtoken": "9.0.6",

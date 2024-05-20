@@ -27,7 +27,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.1",
+    "@babel/runtime-corejs3": "7.24.5",
     "@iarna/toml": "2.2.5",
     "@opentelemetry/api": "1.8.0",
     "@opentelemetry/core": "1.22.0",
@@ -83,7 +83,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.1",
+    "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
     "@types/archiver": "^6",
     "memfs": "4.9.2",

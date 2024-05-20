@@ -89,7 +89,6 @@ function wrapExportNamedDeclaration(
 
   const originalFunctionArgumentsWithoutDefaults: (
     | types.ArgumentPlaceholder
-    | types.JSXNamespacedName
     | types.SpreadElement
     | types.Expression
   )[] = []

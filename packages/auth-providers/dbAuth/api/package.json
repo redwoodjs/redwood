@@ -23,7 +23,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.1",
+    "@babel/runtime-corejs3": "7.24.5",
     "@redwoodjs/project-config": "7.5.1",
     "base64url": "3.0.1",
     "core-js": "3.37.1",
@@ -31,7 +31,7 @@
     "uuid": "9.0.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.1",
+    "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
     "@redwoodjs/api": "7.5.1",
     "@simplewebauthn/server": "7.4.0",
