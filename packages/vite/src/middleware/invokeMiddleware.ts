@@ -55,7 +55,7 @@ export const invoke = async (
     // @TODO catch the error here, and see if its a short-circuit
     // A shortcircuit will prevent execution of all other middleware down the chain, and prevent react rendering
     if (e instanceof MiddlewareShortCircuit) {
-      return [e.mwResponse, mwReq.serverAuthContext.get()]
+      return [e.mwResponse, mwReq.serverAuthState.get()]
     }
 
     console.error('Error executing middleware > \n')
