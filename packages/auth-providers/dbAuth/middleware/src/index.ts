@@ -6,7 +6,7 @@ import {
   dbAuthSession,
 } from '@redwoodjs/auth-dbauth-api'
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
-import type { MiddlewareRequest } from '@redwoodjs/vite/middleware'
+import type { Middleware } from '@redwoodjs/vite/middleware'
 import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
 
 export interface DbAuthMiddlewareOptions {
@@ -22,17 +22,14 @@ export interface DbAuthMiddlewareOptions {
   getCurrentUser: GetCurrentUser
 }
 
-export const createDbAuthMiddleware = ({
+export const initDbAuthMiddleware = ({
   cookieName,
   dbAuthHandler,
   getCurrentUser,
   extractRoles,
   dbAuthUrl = '/middleware/dbauth',
-}: DbAuthMiddlewareOptions) => {
-  return async (
-    req: MiddlewareRequest,
-    res: MiddlewareResponse = MiddlewareResponse.next(),
-  ) => {
+}: DbAuthMiddlewareOptions): [Middleware, '*'] => {
+  const mw: Middleware = async (req, res = MiddlewareResponse.next()) => {
     // Handoff POST requests to the dbAuthHandler. The url is configurable on the dbAuth client side.
     // This is where we handle login, logout, and signup, etc., but we don't want to intercept
     if (req.method === 'POST') {
@@ -113,6 +110,10 @@ export const createDbAuthMiddleware = ({
 
     return res
   }
+
+  // Return a tuple and wildcard route pattern
+  // Just to make it more difficult for user to accidentally misconfigure
+  return [mw, '*']
 }
 
-export default createDbAuthMiddleware
+export default initDbAuthMiddleware
