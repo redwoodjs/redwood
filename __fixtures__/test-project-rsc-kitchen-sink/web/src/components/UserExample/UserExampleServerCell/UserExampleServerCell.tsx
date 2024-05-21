@@ -1,5 +1,3 @@
-'use client'
-
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import { db } from 'api/src/lib/db'

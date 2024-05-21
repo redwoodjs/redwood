@@ -3,13 +3,15 @@
 // what to do about rscFetch here vs renderFromRscServer and see if maybe that
 // one should live somewhere else where @redwoodjs/router can import from
 
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import type { Options } from 'react-server-dom-webpack/client'
 import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
 
+import { analyzeRoutes } from '@redwoodjs/router/dist/analyzeRoutes'
 import { LocationProvider, useLocation } from '@redwoodjs/router/dist/location'
 import { namedRoutes } from '@redwoodjs/router/dist/namedRoutes'
+import type { RouterProps } from '@redwoodjs/router/dist/router'
 
 const BASE_PATH = '/rw-rsc/'
 
@@ -74,22 +76,32 @@ function rscFetch(rscId: string, props: Record<string, unknown> = {}) {
 
 let routes: Thenable<React.ReactElement> | null = null
 
-export const Router = () => {
-  Object.assign(namedRoutes, {
-    newEmptyUser: () => 'new-empty-user',
-    // TODO (RSC): dynamically add all route functions here
-  })
-
+export const Router = ({ paramTypes, children }: RouterProps) => {
   return (
     // Wrap it in the provider so that useLocation can be used
     <LocationProvider>
-      <LocationAwareRouter />
+      <LocationAwareRouter paramTypes={paramTypes}>
+        {children}
+      </LocationAwareRouter>
     </LocationProvider>
   )
 }
 
-const LocationAwareRouter = () => {
+const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   const location = useLocation()
+
+  const { namedRoutesMap } = useMemo(() => {
+    return analyzeRoutes(children, {
+      currentPathName: location.pathname,
+      // @TODO We haven't handled this with SSR/Streaming yet.
+      // May need a babel plugin to extract userParamTypes from Routes.tsx
+      userParamTypes: paramTypes,
+    })
+  }, [location.pathname, children, paramTypes])
+
+  // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
+  // Note that the value changes at runtime
+  Object.assign(namedRoutes, namedRoutesMap)
 
   // TODO (RSC): Refetch when the location changes
   // It currently works because we always do a full page refresh, but that's

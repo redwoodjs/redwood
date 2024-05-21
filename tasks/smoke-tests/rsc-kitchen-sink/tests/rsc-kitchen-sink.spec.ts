@@ -105,8 +105,8 @@ test("'use client' cell navigation", async ({ page }) => {
   page.waitForURL('/empty-users/new')
 
   await expect(page.getByText('New EmptyUser')).toBeVisible()
-  await expect(page.getByText('Email')).toBeVisible()
-  await expect(page.getByText('Name')).toBeVisible()
+  await expect(page.getByLabel('Email')).toBeVisible()
+  await expect(page.getByLabel('Name')).toBeVisible()
   await expect(page.getByText('Save')).toBeVisible()
 
   page.close()
