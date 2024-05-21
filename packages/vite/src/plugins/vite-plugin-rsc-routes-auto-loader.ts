@@ -98,19 +98,20 @@ export function rscRoutesAutoLoader(): Plugin {
       // We have to filter out any pages which the user has already explicitly imported
       // in the routes file otherwise there would be conflicts.
       const importedNames = new Set<string>()
+
       traverse(ast, {
-        ImportDeclaration(p) {
-          const importPath = p.node.source.value
+        ImportDeclaration(path) {
+          const importPath = path.node.source.value
           if (importPath === null) {
             return
           }
 
           const userImportRelativePath = getPathRelativeToSrc(
-            importStatementPath(p.node.source?.value),
+            importStatementPath(path.node.source?.value),
           )
 
-          const defaultSpecifier = p.node.specifiers.filter((specifiers) =>
-            t.isImportDefaultSpecifier(specifiers),
+          const defaultSpecifier = path.node.specifiers.filter((specifier) =>
+            t.isImportDefaultSpecifier(specifier),
           )[0]
 
           if (userImportRelativePath && defaultSpecifier) {
@@ -118,6 +119,7 @@ export function rscRoutesAutoLoader(): Plugin {
           }
         },
       })
+
       const nonImportedPages = pages.filter(
         (page) => !importedNames.has(page.importName),
       )
