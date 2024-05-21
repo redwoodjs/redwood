@@ -20,7 +20,7 @@ import ScaffoldLayout from './layouts/ScaffoldLayout/ScaffoldLayout'
 const Routes = ({ location }: { location?: any }) => {
   return (
     <Router location={location}>
-      <Set wrap={NavigationLayout} rnd={Math.random()}>
+      <Set wrap={NavigationLayout} rnd={0.7}>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />
         <Route path="/multi-cell" page={MultiCellPage} name="multiCell" />
