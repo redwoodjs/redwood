@@ -8,10 +8,12 @@ import {
 import { CookieJar } from './CookieJar.js'
 
 class AuthStateJar {
-  private _data: ServerAuthState | null
+  private _data: ServerAuthState
+  private _initialState: ServerAuthState
 
-  constructor(data?: ServerAuthState) {
-    this._data = data || null
+  constructor(initialState: ServerAuthState) {
+    this._data = initialState
+    this._initialState = initialState
   }
 
   get() {
@@ -23,7 +25,7 @@ class AuthStateJar {
   }
 
   clear() {
-    this._data = null
+    this._data = this._initialState
   }
 }
 
