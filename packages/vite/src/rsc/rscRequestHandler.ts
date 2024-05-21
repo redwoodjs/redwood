@@ -47,14 +47,11 @@ export function createRscRequestHandler(
   ) => {
     const requestUrl = getRSCRequestUrl(req)
 
-    // find the Route from the request based on the url
-    // can use the route to determine if the RSC request to render is private or not
-    if (!(await isRequestAllowed(req))) {
-      console.log('Request is not allowed')
-      // throw 401?
-    }
-
-    // if we are here then we can render the RSC
+    // before trying the render the RSC, we invoke Middleware
+    // as authenticate middleware could redirect the user
+    // and we should not render the RSC in that case
+    // or auth with set the auth state and we might not
+    // render the RSC for the user
     const mwRouter = await options.getMiddlewareRouter()
 
     if (mwRouter) {
@@ -96,18 +93,24 @@ export function createRscRequestHandler(
       return next()
     }
 
+    // now that middleware has run, we can check if the request is allowed
+    if (!(await isRequestAllowed(requestUrl))) {
+      console.log('Request is not allowed')
+      // throw 401?
+    }
+
+    // start rendering the RSC
+    // React Server Component
     let rscId: string | undefined
-    let props = {}
+    // React Server Action
     let rsfId: string | undefined
+    let props = {}
     let args: unknown[] = []
 
-    if (requestUrl.pathname.startsWith(BASE_PATH)) {
-      console.log('url.pathname', requestUrl.pathname)
-      rscId = requestUrl.pathname.split('/').pop()
-      rsfId = requestUrl.searchParams.get('action_id') || undefined
-
-      console.log('rscId', rscId)
-      console.log('rsfId', rsfId)
+    // determine the component or action to handle/render
+    if (shouldHandleRSCRequest(requestUrl)) {
+      rscId = getReactServerComponentId(requestUrl)
+      rsfId = getRectServerActionId(requestUrl)
 
       if (rscId && rscId !== '_') {
         res.setHeader('Content-Type', 'text/x-component')
@@ -116,6 +119,7 @@ export function createRscRequestHandler(
         rscId = undefined
       }
 
+      // React Server Actions
       if (rsfId) {
         // TODO (RSC): For React Server Actions we need to limit the request
         // size somehow
@@ -169,9 +173,10 @@ export function createRscRequestHandler(
       }
     }
 
-    console.log('rscRequestHandler: args', args)
-
+    // if we have a component or action to render
     if (rscId || rsfId) {
+      console.log('rscRequestHandler: args', args)
+
       const handleError = (err: unknown) => {
         if (hasStatusCode(err)) {
           res.statusCode = err.statusCode
@@ -199,7 +204,8 @@ export function createRscRequestHandler(
           rsfId,
           args,
           // Pass the serverState from server to the worker
-          // Inside the worker, we'll use this to re-initalize the server state (because workers are stateless)
+          // Inside the worker, we'll use this to re-initialize the server state
+          // (because workers are stateless)
           serverState: {
             headersInit: Object.fromEntries(getRequestHeaders().entries()),
             serverAuthState: getAuthState(),
@@ -227,8 +233,15 @@ export function createRscRequestHandler(
   }
 }
 
-const isRequestAllowed = async (req: ExpressRequest) => {
-  const matchedRoute = await matchRouteFromRequest(req)
+const shouldHandleRSCRequest = (requestUrl: URL) => {
+  console.log('url.pathname', requestUrl.pathname)
+  return requestUrl.pathname.startsWith(BASE_PATH)
+}
+
+// find the Route from the request based on the url
+// can use the route to determine if the RSC request to render is private or not
+const isRequestAllowed = async (requestUrl: URL) => {
+  const matchedRoute = await matchRouteFromRequestURL(requestUrl)
 
   //@TODO
   // if matchedRoute isPrivate, and user is not logged in then we should not render the RSC
@@ -251,18 +264,13 @@ const isRequestAllowed = async (req: ExpressRequest) => {
   return isAllowed
 }
 
-const matchRouteFromRequest = async (req: ExpressRequest) => {
-  // A RSC request looks like:
-  // http://localhost:8910/<routePath>/AboutPage?props=%7B%7D
-  // and headers['rw-rsc'] === '1'
-  // let's extract the routePath to use it to look up the route in the route manifest
-  const requestUrl = getRSCRequestUrl(req)
+// here we can look up the route in the route manifest by the request url
+// given paths are unique (TODO need to enforce this)
+// then the consider auth rules is isPrivate to determine if we should
+// run the render the RSC or not
+const matchRouteFromRequestURL = async (requestUrl: URL) => {
   const routePath = getRoutePath(requestUrl)
 
-  // here we can look up the route in the route manifest by the route path
-  // given paths are unique (TODO need to enforce this)
-  // then the consider auth rules is isPrivate to determine if we should
-  // run the render the RSC or not
   const routeManifest: RWRouteManifest = await getRouteManifest()
 
   const matchedRoute = Object.values(routeManifest).find(
@@ -279,6 +287,18 @@ const matchRouteFromRequest = async (req: ExpressRequest) => {
   return matchedRoute
 }
 
+const getReactServerComponentId = (requestUrl: URL) => {
+  const rscId = requestUrl.pathname.split('/').pop()
+  console.log('rscId', rscId)
+  return rscId
+}
+
+const getRectServerActionId = (requestUrl: URL) => {
+  const rsfId = requestUrl.searchParams.get('action_id') || undefined
+  return rsfId
+}
+
+// get the route path from the request url
 const getRoutePath = (requestUrl: URL) => {
   let routePath = requestUrl.pathname.split('/').reverse()[1]
   if (routePath === BASE_PATH || routePath === '') {
@@ -288,6 +308,7 @@ const getRoutePath = (requestUrl: URL) => {
   return routePath
 }
 
+// get the route manifest from the file system
 const getRouteManifest = async (): Promise<RWRouteManifest> => {
   // to do: this should be cached or preloaded to avoid reading the file every time
   const rwPaths = getPaths()
@@ -298,6 +319,10 @@ const getRouteManifest = async (): Promise<RWRouteManifest> => {
   return routeManifest
 }
 
+// A RSC request looks like:
+// http://localhost:8910/<routePath>/AboutPage?props=%7B%7D
+// and headers['rw-rsc'] === '1'
+// let's extract the routePath to use it to look up the route in the route manifest
 const getRSCRequestUrl = (req: ExpressRequest) => {
   return new URL(req.originalUrl || '', 'http://' + req.headers.host)
 }
