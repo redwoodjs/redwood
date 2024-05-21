@@ -7,6 +7,7 @@ import {
   MiddlewareRequest,
 } from '@redwoodjs/vite/middleware'
 
+import { middlewareDefaultAuthProviderState } from '../../../../../auth/dist/AuthProvider/AuthProviderState'
 import type { DbAuthMiddlewareOptions } from '../index'
 import { createDbAuthMiddleware } from '../index'
 const FIXTURE_PATH = path.resolve(
@@ -88,6 +89,7 @@ describe('createDbAuthMiddleware()', () => {
         email: 'user-1@example.com',
         id: 'mocked-current-user-1',
       },
+      roles: [],
     })
 
     // Allow react render, because body is not defined, and status code not redirect
@@ -454,6 +456,12 @@ describe('createDbAuthMiddleware()', () => {
   })
 
   describe('handle exception cases', async () => {
+    const unauthenticatedServerAuthState = {
+      ...middlewareDefaultAuthProviderState,
+      cookieHeader: null,
+      roles: [],
+    }
+
     it('handles a POST that is not one of the supported dbAuth verbs and still build headers when passing along the request', async () => {
       const request = new Request(
         'http://localhost:8911/middleware/dbauth/unsupportedVerb',
@@ -569,7 +577,11 @@ describe('createDbAuthMiddleware()', () => {
       expect(res).toBeDefined()
 
       const serverAuthState = mwReq.serverAuthState.get()
-      expect(serverAuthState).toBeNull()
+      expect(serverAuthState).toEqual({
+        ...unauthenticatedServerAuthState,
+        cookieHeader:
+          'session_8911=some-bad-encrypted-cookie;auth-provider=dbAuth',
+      })
 
       expect(res.toResponse().headers.getSetCookie()).toEqual([
         // Expired cookies, will be removed by browser
