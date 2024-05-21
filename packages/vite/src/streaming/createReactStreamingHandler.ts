@@ -185,7 +185,11 @@ export const createReactStreamingHandler = async (
         cssLinks,
         isProd,
         jsBundles,
-        authState: decodedAuthState,
+        authState: {
+          roles: [],
+          cookieHeader: req.headers.get('cookie'),
+          ...decodedAuthState,
+        },
       },
       {
         waitForAllReady: isSeoCrawler,

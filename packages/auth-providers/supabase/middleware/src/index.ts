@@ -10,6 +10,7 @@ import { clearAuthState } from './util'
 
 export interface SupabaseAuthMiddlewareOptions {
   getCurrentUser: GetCurrentUser
+  extractRoles?: (decoded: any) => string[]
 }
 
 /**
@@ -17,6 +18,7 @@ export interface SupabaseAuthMiddlewareOptions {
  */
 const createSupabaseAuthMiddleware = ({
   getCurrentUser,
+  extractRoles,
 }: SupabaseAuthMiddlewareOptions) => {
   return async (req: MiddlewareRequest, res: MiddlewareResponse) => {
     const type = 'supabase'
@@ -68,6 +70,8 @@ const createSupabaseAuthMiddleware = ({
         isAuthenticated: !!currentUser,
         hasError: false,
         userMetadata: userMetadata || currentUser,
+        cookieHeader,
+        roles: extractRoles ? extractRoles(decoded) : [],
       })
     } catch (e) {
       console.error(e, 'Error in Supabase Auth Middleware')

@@ -18,6 +18,7 @@ export interface DbAuthMiddlewareOptions {
     req: Request | APIGatewayProxyEvent,
     context?: Context,
   ) => DbAuthResponse
+  extractRoles?: (decoded: any) => string[]
   getCurrentUser: GetCurrentUser
 }
 
@@ -25,6 +26,7 @@ export const createDbAuthMiddleware = ({
   cookieName,
   dbAuthHandler,
   getCurrentUser,
+  extractRoles,
   dbAuthUrl = '/middleware/dbauth',
 }: DbAuthMiddlewareOptions) => {
   return async (
@@ -94,13 +96,14 @@ export const createDbAuthMiddleware = ({
         loading: false,
         isAuthenticated: !!currentUser,
         hasError: false,
-        userMetadata: currentUser, // Not sure!
+        userMetadata: currentUser, // dbAuth doesn't have userMetadata
         cookieHeader,
+        roles: extractRoles ? extractRoles(decryptedSession) : [],
       })
     } catch (e) {
       // Clear server auth context
       console.error(e, 'Error decrypting dbAuth cookie')
-      req.serverAuthState.set(null)
+      req.serverAuthState.clear()
 
       // Note we have to use ".unset" and not ".clear"
       // because we want to remove these cookies from the browser

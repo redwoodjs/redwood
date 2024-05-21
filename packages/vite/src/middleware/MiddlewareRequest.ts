@@ -7,30 +7,41 @@ import {
 
 import { CookieJar } from './CookieJar.js'
 
-class AuthStateJar<T> {
-  private _data: T
+class AuthStateJar {
+  private _data: ServerAuthState | null
 
-  constructor(data?: T) {
-    this._data = data as T
+  constructor(data?: ServerAuthState) {
+    this._data = data || null
   }
 
   get() {
     return this._data
   }
 
-  set(value: any) {
+  set(value: ServerAuthState) {
     this._data = value
+  }
+
+  clear() {
+    this._data = null
   }
 }
 
 export class MiddlewareRequest extends WhatWgRequest {
   cookies: CookieJar
-  serverAuthState: AuthStateJar<ServerAuthState>
+  serverAuthState: AuthStateJar
 
   constructor(input: Request) {
     super(input)
+
+    const defaultServerAuthState = {
+      ...middlewareDefaultAuthProviderState,
+      cookieHeader: input.headers.get('Cookie'),
+      roles: [],
+    }
+
     this.cookies = new CookieJar(input.headers.get('Cookie'))
-    this.serverAuthState = new AuthStateJar(middlewareDefaultAuthProviderState)
+    this.serverAuthState = new AuthStateJar(defaultServerAuthState)
   }
 }
 
