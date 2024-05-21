@@ -2,6 +2,7 @@ import { hydrateRoot, createRoot } from 'react-dom/client'
 
 import App from './App'
 import Routes from './Routes'
+
 /**
  * When `#redwood-app` isn't empty then it's very likely that you're using
  * prerendering. So React attaches event listeners to the existing markup
