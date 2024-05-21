@@ -31,7 +31,11 @@ interface CreateRscRequestHandlerOptions {
   viteDevServer?: ViteDevServer
 }
 
+// Determines if the request is a React Server Component request
 const BASE_PATH = '/rw-rsc/'
+
+// Cache the route manifest to avoid reading the file every request
+let ROUTE_MANIFEST_CACHE: RWRouteManifest | null = null
 
 export function createRscRequestHandler(
   options: CreateRscRequestHandlerOptions,
@@ -270,9 +274,7 @@ const isRequestAllowed = async (requestUrl: URL) => {
 // run the render the RSC or not
 const matchRouteFromRequestURL = async (requestUrl: URL) => {
   const routePath = getRoutePath(requestUrl)
-
-  const routeManifest: RWRouteManifest = await getRouteManifest()
-
+  const routeManifest = (await getRouteManifest()) || {}
   const matchedRoute = Object.values(routeManifest).find(
     (r) =>
       r.pathDefinition === routePath || r.pathDefinition === '/' + routePath,
@@ -309,14 +311,24 @@ const getRoutePath = (requestUrl: URL) => {
 }
 
 // get the route manifest from the file system
-const getRouteManifest = async (): Promise<RWRouteManifest> => {
-  // to do: this should be cached or preloaded to avoid reading the file every time
+// and cache it
+const getRouteManifest = async (): Promise<RWRouteManifest | null> => {
+  if (ROUTE_MANIFEST_CACHE) {
+    return ROUTE_MANIFEST_CACHE
+  }
+
   const rwPaths = getPaths()
   const routeManifestUrl = url.pathToFileURL(rwPaths.web.routeManifest).href
-  const routeManifest: RWRouteManifest = (
+
+  ROUTE_MANIFEST_CACHE = (
     await import(routeManifestUrl, { with: { type: 'json' } })
   ).default
-  return routeManifest
+
+  if (!ROUTE_MANIFEST_CACHE) {
+    throw new Error('No route manifest found')
+  }
+
+  return ROUTE_MANIFEST_CACHE
 }
 
 // A RSC request looks like:
