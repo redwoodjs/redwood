@@ -110,16 +110,17 @@ async function createServer() {
     serverStorage.run(perReqStore, next)
   })
 
+  const routes = getProjectRoutes()
+
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
   app.use(
     '/rw-rsc',
     createRscRequestHandler({
+      routes,
       getMiddlewareRouter: async () => createMiddlewareRouter(vite),
       viteDevServer: vite,
     }),
   )
-
-  const routes = getProjectRoutes()
 
   const routeHandler = await createReactStreamingHandler(
     {

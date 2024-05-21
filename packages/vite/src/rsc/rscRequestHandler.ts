@@ -1,5 +1,3 @@
-import url from 'node:url'
-
 import * as DefaultFetchAPI from '@whatwg-node/fetch'
 import { normalizeNodeRequest } from '@whatwg-node/server'
 import busboy from 'busboy'
@@ -11,7 +9,7 @@ import type Router from 'find-my-way'
 import type { HTTPMethod } from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 
-import { getPaths } from '@redwoodjs/project-config'
+import type { RWRouteManifestItem } from '@redwoodjs/internal'
 
 import {
   decodeReply,
@@ -21,21 +19,17 @@ import { hasStatusCode } from '../lib/StatusError.js'
 import type { Middleware } from '../middleware'
 import { invoke } from '../middleware/invokeMiddleware'
 import { getAuthState, getRequestHeaders } from '../serverStore'
-import type { RWRouteManifest } from '../types'
 
 import { sendRscFlightToStudio } from './rscStudioHandlers.js'
 import { renderRsc } from './rscWorkerCommunication.js'
 
 interface CreateRscRequestHandlerOptions {
+  routes: RWRouteManifestItem[]
   getMiddlewareRouter: () => Promise<Router.Instance<any>>
   viteDevServer?: ViteDevServer
 }
 
-// Determines if the request is a React Server Component request
-const BASE_PATH = '/rw-rsc/'
-
-// Cache the route manifest to avoid reading the file every request
-let ROUTE_MANIFEST_CACHE: RWRouteManifest | null = null
+const BASE_PATH = '/rw-rsc'
 
 export function createRscRequestHandler(
   options: CreateRscRequestHandlerOptions,
@@ -98,7 +92,7 @@ export function createRscRequestHandler(
     }
 
     // now that middleware has run, we can check if the request is allowed
-    if (!(await isRequestAllowed(requestUrl))) {
+    if (!(await isRequestAllowed(requestUrl, options.routes))) {
       console.log('Request is not allowed')
       // throw 401?
     }
@@ -244,8 +238,11 @@ const shouldHandleRSCRequest = (requestUrl: URL) => {
 
 // find the Route from the request based on the url
 // can use the route to determine if the RSC request to render is private or not
-const isRequestAllowed = async (requestUrl: URL) => {
-  const matchedRoute = await matchRouteFromRequestURL(requestUrl)
+const isRequestAllowed = async (
+  requestUrl: URL,
+  routes: RWRouteManifestItem[],
+) => {
+  const matchedRoute = await matchRouteFromRequestURL(requestUrl, routes)
 
   //@TODO
   // if matchedRoute isPrivate, and user is not logged in then we should not render the RSC
@@ -272,10 +269,12 @@ const isRequestAllowed = async (requestUrl: URL) => {
 // given paths are unique (TODO need to enforce this)
 // then the consider auth rules is isPrivate to determine if we should
 // run the render the RSC or not
-const matchRouteFromRequestURL = async (requestUrl: URL) => {
+const matchRouteFromRequestURL = async (
+  requestUrl: URL,
+  routes: RWRouteManifestItem[],
+) => {
   const routePath = getRoutePath(requestUrl)
-  const routeManifest = (await getRouteManifest()) || {}
-  const matchedRoute = Object.values(routeManifest).find(
+  const matchedRoute = Object.values(routes).find(
     (r) =>
       r.pathDefinition === routePath || r.pathDefinition === '/' + routePath,
   )
@@ -308,27 +307,6 @@ const getRoutePath = (requestUrl: URL) => {
     routePath = '/'
   }
   return routePath
-}
-
-// get the route manifest from the file system
-// and cache it
-const getRouteManifest = async (): Promise<RWRouteManifest | null> => {
-  if (ROUTE_MANIFEST_CACHE) {
-    return ROUTE_MANIFEST_CACHE
-  }
-
-  const rwPaths = getPaths()
-  const routeManifestUrl = url.pathToFileURL(rwPaths.web.routeManifest).href
-
-  ROUTE_MANIFEST_CACHE = (
-    await import(routeManifestUrl, { with: { type: 'json' } })
-  ).default
-
-  if (!ROUTE_MANIFEST_CACHE) {
-    throw new Error('No route manifest found')
-  }
-
-  return ROUTE_MANIFEST_CACHE
 }
 
 // A RSC request looks like:

@@ -156,6 +156,7 @@ export async function runFeServer() {
   app.use(
     '/rw-rsc',
     createRscRequestHandler({
+      routes: Object.values(routeManifest),
       getMiddlewareRouter: async () => middlewareRouter,
     }),
   )
