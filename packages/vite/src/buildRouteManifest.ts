@@ -50,6 +50,7 @@ export async function buildRouteManifest() {
       isPrivate: route.isPrivate,
       unauthenticated: route.unauthenticated,
       roles: route.roles,
+      pageIdentifier: route.pageIdentifier,
     }
 
     return acc
