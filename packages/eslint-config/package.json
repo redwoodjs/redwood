@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@babel/core": "^7.22.20",
-    "@babel/eslint-parser": "7.24.1",
-    "@babel/eslint-plugin": "7.23.5",
+    "@babel/eslint-parser": "7.24.5",
+    "@babel/eslint-plugin": "7.24.5",
     "@redwoodjs/eslint-plugin": "workspace:*",
     "@redwoodjs/internal": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
@@ -34,7 +34,7 @@
     "prettier": "3.2.5"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.1",
+    "@babel/cli": "7.24.5",
     "jest": "29.7.0",
     "typescript": "5.4.5"
   },

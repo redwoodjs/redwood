@@ -6,7 +6,10 @@ import {
 import { setServerAuthState } from '../serverStore.js'
 
 import { MiddlewareRequest } from './MiddlewareRequest.js'
-import { MiddlewareResponse } from './MiddlewareResponse.js'
+import {
+  MiddlewareResponse,
+  MiddlewareShortCircuit,
+} from './MiddlewareResponse.js'
 import type { Middleware, MiddlewareInvokeOptions } from './types.js'
 
 /**
@@ -49,16 +52,22 @@ export const invoke = async (
       )
     }
   } catch (e) {
+    // @TODO catch the error here, and see if its a short-circuit
+    // A shortcircuit will prevent execution of all other middleware down the chain, and prevent react rendering
+    if (e instanceof MiddlewareShortCircuit) {
+      return [e.mwResponse, mwReq.serverAuthState.get()]
+    }
+
     console.error('Error executing middleware > \n')
     console.error('~'.repeat(80))
     console.error(e)
     console.error('~'.repeat(80))
   } finally {
     // This one is for the server. The worker serverStore is initialized in the worker itself!
-    setupServerStore(req, mwReq.serverAuthContext.get())
+    setupServerStore(req, mwReq.serverAuthState.get())
   }
 
-  return [mwRes, mwReq.serverAuthContext.get()]
+  return [mwRes, mwReq.serverAuthState.get()]
 }
 
 const setupServerStore = (_req: Request, serverAuthState: ServerAuthState) => {

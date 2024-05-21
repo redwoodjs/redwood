@@ -1,7 +1,10 @@
 import { Response as PonyfillResponse } from '@whatwg-node/fetch'
 import { describe, expect, test } from 'vitest'
 
-import { MiddlewareResponse } from './MiddlewareResponse'
+import {
+  MiddlewareResponse,
+  MiddlewareShortCircuit,
+} from './MiddlewareResponse'
 
 describe('MiddlewareResponse', () => {
   test('constructor', () => {
@@ -72,5 +75,54 @@ describe('MiddlewareResponse', () => {
     expect(permRedirect.toResponse().headers.get('location')).toStrictEqual(
       '/bye',
     )
+  })
+
+  test('Constructs short-circuits correctly when parameters passed to it', async () => {
+    const myMwResponse = new MiddlewareResponse()
+
+    try {
+      myMwResponse.shortCircuit(JSON.stringify({ shortCircuit: true }), {
+        status: 401,
+      })
+    } catch (e) {
+      const shortCircuitError = e as MiddlewareShortCircuit
+      expect(shortCircuitError instanceof MiddlewareShortCircuit).toBe(true)
+      expect(shortCircuitError.mwResponse.toResponse().status).toStrictEqual(
+        401,
+      )
+      expect(
+        await shortCircuitError.mwResponse.toResponse().json(),
+      ).toStrictEqual({
+        shortCircuit: true,
+      })
+    }
+
+    expect.assertions(3)
+  })
+
+  test('Constructs short-circuits using existing response properties when parameters passed to it', async () => {
+    const myMwResponse = new MiddlewareResponse('Nope', {
+      status: 429,
+      statusText: 'Hold your horses!',
+    })
+
+    try {
+      myMwResponse.shortCircuit()
+    } catch (e) {
+      const shortCircuitError = e as MiddlewareShortCircuit
+      expect(shortCircuitError instanceof MiddlewareShortCircuit).toBe(true)
+      expect(shortCircuitError.mwResponse.toResponse().status).toStrictEqual(
+        429,
+      )
+      expect(
+        await shortCircuitError.mwResponse.toResponse().text(),
+      ).toStrictEqual('Nope')
+
+      expect(
+        await shortCircuitError.mwResponse.toResponse().statusText,
+      ).toStrictEqual('Hold your horses!')
+    }
+
+    expect.assertions(4)
   })
 })
