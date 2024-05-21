@@ -6,6 +6,7 @@ import type { HTTPMethod } from 'find-my-way'
 import { createIsbotFromList, list as isbotList } from 'isbot'
 import type { ViteDevServer } from 'vite'
 
+import type { ServerAuthState } from '@redwoodjs/auth'
 import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
 import type { RouteSpec, RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
@@ -71,7 +72,14 @@ export const createReactStreamingHandler = async (
   // @NOTE: we are returning a FetchAPI handler
   return async (req: Request) => {
     let mwResponse = MiddlewareResponse.next()
-    let decodedAuthState = middlewareDefaultAuthProviderState
+
+    // Default auth state
+    let decodedAuthState: ServerAuthState = {
+      ...middlewareDefaultAuthProviderState,
+      cookieHeader: req.headers.get('cookie'),
+      roles: [],
+    }
+
     // @TODO: Make the currentRoute 404?
     let currentRoute: RWRouteManifestItem | undefined
     let parsedParams: any = {}
@@ -188,11 +196,7 @@ export const createReactStreamingHandler = async (
         cssLinks,
         isProd,
         jsBundles,
-        authState: {
-          roles: [],
-          cookieHeader: req.headers.get('cookie'),
-          ...decodedAuthState,
-        },
+        authState: decodedAuthState,
       },
       {
         waitForAllReady: isSeoCrawler,
