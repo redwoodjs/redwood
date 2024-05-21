@@ -102,6 +102,7 @@ export function rscRoutesAutoLoader(): Plugin {
       traverse(ast, {
         ImportDeclaration(path) {
           const importPath = path.node.source.value
+
           if (importPath === null) {
             return
           }
