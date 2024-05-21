@@ -35,7 +35,7 @@ export const Empty = () => {
     <div className="rw-text-center">
       No emptyUsers yet.{' '}
       <Link to={routes.newEmptyUser()} className="rw-link">
-        Create one? ({routes.newEmptyUser()})
+        Create one?
       </Link>
     </div>
   )

@@ -118,7 +118,7 @@ export function rscRoutesAutoLoader(): Plugin {
           }
 
           const userImportRelativePath = getPathRelativeToSrc(
-            importStatementPath(path.node.source?.value),
+            importStatementPath(importPath),
           )
 
           const defaultSpecifier = path.node.specifiers.filter((specifier) =>
@@ -170,9 +170,9 @@ export function rscRoutesAutoLoader(): Plugin {
         },
       })
 
-      const nonImportedPages = pages.filter((page) => {
-        return !importedNames.has(page.importName)
-      })
+      const nonImportedPages = pages.filter(
+        (page) => !importedNames.has(page.importName),
+      )
 
       wrappers.forEach((wrapper) => {
         const wrapperImport = allImports.get(wrapper)
