@@ -12,7 +12,7 @@ import { Set } from '@redwoodjs/router/dist/Set'
 
 // @ts-expect-error - ESM issue. RW projects need to be ESM to properly pick up
 // on the types here
-import { Router } from '@redwoodjs/vite/ClientRouter'
+import { Router } from '@redwoodjs/vite/Router'
 
 import NavigationLayout from './layouts/NavigationLayout/NavigationLayout'
 import ScaffoldLayout from './layouts/ScaffoldLayout/ScaffoldLayout'
