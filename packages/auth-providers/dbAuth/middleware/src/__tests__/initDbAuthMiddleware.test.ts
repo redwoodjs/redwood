@@ -5,6 +5,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import {
   MiddlewareRequest as MWRequest,
   MiddlewareRequest,
+  MiddlewareResponse,
 } from '@redwoodjs/vite/middleware'
 
 import { middlewareDefaultAuthProviderState } from '../../../../../auth/dist/AuthProvider/AuthProviderState'
@@ -73,7 +74,7 @@ describe('initDbAuthMiddleware()', () => {
       }),
     )
 
-    const res = await middleware(mwReq)
+    const res = await middleware(mwReq, MiddlewareResponse.next())
 
     expect(mwReq.serverAuthState.get()).toEqual({
       cookieHeader:
@@ -144,7 +145,7 @@ describe('initDbAuthMiddleware()', () => {
       }
       const [middleware] = initDbAuthMiddleware(options)
 
-      const res = await middleware(req)
+      const res = await middleware(req, MiddlewareResponse.next())
 
       // Forwards the request on
       expect(options.dbAuthHandler).toHaveBeenCalledWith(req)
@@ -182,12 +183,12 @@ describe('initDbAuthMiddleware()', () => {
       }
       const [middleware] = initDbAuthMiddleware(options)
 
-      const res = await middleware(req)
+      const res = await middleware(req, MiddlewareResponse.next())
 
       expect(res).toBeDefined()
       expect(res).toHaveProperty('body', '')
       expect(res).toHaveProperty('status', 200)
-      expect(res.headers.getSetCookie()).toContain(
+      expect(res?.headers.getSetCookie()).toContain(
         'session=cookie-value; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; HttpOnly; SameSite=Lax; Secure',
       )
     })
@@ -236,7 +237,7 @@ describe('initDbAuthMiddleware()', () => {
       }
       const [middleware] = initDbAuthMiddleware(options)
 
-      const res = await middleware(req)
+      const res = await middleware(req, MiddlewareResponse.next())
 
       expect(res).toBeDefined()
       expect(res).toHaveProperty(
@@ -247,7 +248,7 @@ describe('initDbAuthMiddleware()', () => {
       )
 
       expect(res).toHaveProperty('status', 200)
-      expect(res.headers.getSetCookie()).toContain(
+      expect(res?.headers.getSetCookie()).toContain(
         'session_8911=some-encrypted-cookie',
       )
     })
@@ -279,8 +280,8 @@ describe('initDbAuthMiddleware()', () => {
       }
       const [middleware] = initDbAuthMiddleware(options)
 
-      const res = await middleware(req)
-      expect(res.body).toEqual(resetToken)
+      const res = await middleware(req, MiddlewareResponse.next())
+      expect(res?.body).toEqual(resetToken)
     })
     it('handles a getToken request', async () => {
       const cookieHeader =
@@ -313,7 +314,7 @@ describe('initDbAuthMiddleware()', () => {
       }
       const [middleware] = initDbAuthMiddleware(options)
 
-      const res = await middleware(req)
+      const res = await middleware(req, MiddlewareResponse.next())
       expect(res).toBeDefined()
 
       const serverAuthState = req.serverAuthState.get()
@@ -351,9 +352,9 @@ describe('initDbAuthMiddleware()', () => {
       }
       const [middleware] = initDbAuthMiddleware(options)
 
-      const res = await middleware(req)
+      const res = await middleware(req, MiddlewareResponse.next())
       expect(res).toBeDefined()
-      expect(res.body).toBe(
+      expect(res?.body).toBe(
         JSON.stringify({ user: { id: 100, email: 'reset@example.com' } }),
       )
 
@@ -394,11 +395,11 @@ describe('initDbAuthMiddleware()', () => {
       }
       const [middleware] = initDbAuthMiddleware(options)
 
-      const res = await middleware(req)
+      const res = await middleware(req, MiddlewareResponse.next())
       expect(res).toBeDefined()
       // should the body be the webAuth reg options?
       // but get requests need a cookie to be set?
-      // expect(res.body).toBeDefined()
+      // expect(res?.body).toBeDefined()
     })
     // @todo: implement the following tests when try out webAuth
     //   it('handles a webAuthnRegister', async () => {
@@ -449,10 +450,10 @@ describe('initDbAuthMiddleware()', () => {
     }
     const [middleware] = initDbAuthMiddleware(options)
 
-    const res = await middleware(req)
+    const res = await middleware(req, MiddlewareResponse.next())
 
     expect(res).toBeDefined()
-    expect(res.body).toBe(JSON.stringify({ currentUser }))
+    expect(res?.body).toBe(JSON.stringify({ currentUser }))
   })
 
   describe('handle exception cases', async () => {
@@ -492,11 +493,11 @@ describe('initDbAuthMiddleware()', () => {
       }
       const [middleware] = initDbAuthMiddleware(options)
 
-      const res = await middleware(req)
+      const res = await middleware(req, MiddlewareResponse.next())
 
       expect(res).toBeDefined()
-      expect(res.headers.get('one')).toBe('header-one')
-      expect(res.headers.get('two')).toBe('header-two')
+      expect(res?.headers.get('one')).toBe('header-one')
+      expect(res?.headers.get('two')).toBe('header-two')
 
       const serverAuthState = req.serverAuthState.get()
       expect(serverAuthState).toHaveProperty('isAuthenticated', false)
@@ -534,7 +535,7 @@ describe('initDbAuthMiddleware()', () => {
       }
       const [middleware] = initDbAuthMiddleware(options)
 
-      const res = await middleware(req)
+      const res = await middleware(req, MiddlewareResponse.next())
       const serverAuthState = req.serverAuthState.get()
 
       expect(res).toBeDefined()
@@ -573,7 +574,7 @@ describe('initDbAuthMiddleware()', () => {
       }
       const [middleware] = initDbAuthMiddleware(options)
 
-      const res = await middleware(mwReq)
+      const res = await middleware(mwReq, MiddlewareResponse.next())
       expect(res).toBeDefined()
 
       const serverAuthState = mwReq.serverAuthState.get()
@@ -583,7 +584,7 @@ describe('initDbAuthMiddleware()', () => {
           'session_8911=some-bad-encrypted-cookie;auth-provider=dbAuth',
       })
 
-      expect(res.toResponse().headers.getSetCookie()).toEqual([
+      expect(res?.toResponse().headers.getSetCookie()).toEqual([
         // Expired cookies, will be removed by browser
         'session_8911=; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
         'auth-provider=; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
@@ -613,7 +614,7 @@ describe('initDbAuthMiddleware()', () => {
       }
       const [middleware] = initDbAuthMiddleware(options)
 
-      const res = await middleware(req)
+      const res = await middleware(req, MiddlewareResponse.next())
       expect(res).toBeDefined()
 
       const serverAuthState = req.serverAuthState.get()
