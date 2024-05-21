@@ -19,6 +19,7 @@ import type { Middleware, MiddlewareInvokeOptions } from './types.js'
  *
  * Returns promise that will resolve to a tuple of
  * [MiddlewareResponse, ServerAuthState]
+ * and will always make sure there is a ServerAuthState set
  */
 export const invoke = async (
   req: Request,
@@ -32,7 +33,7 @@ export const invoke = async (
   }
 
   if (typeof middleware !== 'function') {
-    setupServerStore(req, defaultServerAuthState)
+    setServerAuthState(defaultServerAuthState)
 
     return [MiddlewareResponse.next(), defaultServerAuthState]
   }
@@ -73,14 +74,8 @@ export const invoke = async (
     console.error('~'.repeat(80))
   } finally {
     // This one is for the server. The worker serverStore is initialized in the worker itself!
-    setupServerStore(req, mwReq.serverAuthState.get() || defaultServerAuthState)
+    setServerAuthState(mwReq.serverAuthState.get() || defaultServerAuthState)
   }
 
   return [mwRes, mwReq.serverAuthState.get() || defaultServerAuthState]
-}
-
-const setupServerStore = (_req: Request, serverAuthState: ServerAuthState) => {
-  // Init happens in app.use('*')
-
-  setServerAuthState(serverAuthState)
 }
