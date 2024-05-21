@@ -4,7 +4,7 @@
 import type { TagDescriptor } from '@redwoodjs/web'
 
 import App from './App'
-import createDbAuthMiddleware from '@redwoodjs/auth-dbauth-middleware'
+import initDbAuthMiddleware from '@redwoodjs/auth-dbauth-middleware'
 import { Document } from './Document'
 
 import { handler as dbAuthHandler } from '$api/src/functions/auth'
@@ -16,13 +16,15 @@ interface Props {
 }
 
 export const registerMiddleware = () => {
-  const dbAuthMiddleware = createDbAuthMiddleware({
+  // This actually returns [dbAuthMiddleware, '*']
+  const authMw = initDbAuthMiddleware({
     cookieName,
     dbAuthHandler,
     getCurrentUser,
     // dbAuthUrl? optional
   })
-  return [dbAuthMiddleware]
+  
+  return [authMw]
 }
 
 export const ServerEntry: React.FC<Props> = ({ css, meta }) => {
