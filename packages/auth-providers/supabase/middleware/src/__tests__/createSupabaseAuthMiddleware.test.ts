@@ -5,6 +5,7 @@ import { vi } from 'vitest'
 
 import {
   middlewareDefaultAuthProviderState,
+  unauthenticatedServerAuthState,
   // type ServerAuthState,
 } from '@redwoodjs/auth'
 import { authDecoder } from '@redwoodjs/auth-supabase-api'
@@ -74,6 +75,12 @@ const options: SupabaseAuthMiddlewareOptions = {
 }
 
 describe('createSupabaseAuthMiddleware()', () => {
+  const unauthenticatedServerAuthState = {
+    ...middlewareDefaultAuthProviderState,
+    roles: [],
+    cookieHeader: null,
+  }
+
   it('creates middleware for Supabase SSR auth', async () => {
     const middleware = createSupabaseAuthMiddleware(options)
     const request = new Request('http://localhost:8911', {
@@ -90,7 +97,7 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(result).toHaveProperty('status', 200)
 
     const serverAuthState = req.serverAuthState.get()
-    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
+    expect(serverAuthState).toEqual(unauthenticatedServerAuthState)
   })
 
   it('passes through non-authenticated requests', async () => {
@@ -107,7 +114,7 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(result.body).toEqual('original response body')
 
     const serverAuthState = req.serverAuthState.get()
-    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
+    expect(serverAuthState).toEqual(unauthenticatedServerAuthState)
   })
   it('passes through when no auth-provider cookie', async () => {
     const middleware = createSupabaseAuthMiddleware(options)
@@ -127,7 +134,10 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(result.body).toEqual('original response body when no auth provider')
 
     const serverAuthState = req.serverAuthState.get()
-    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
+    expect(serverAuthState).toEqual({
+      ...unauthenticatedServerAuthState,
+      cookieHeader: 'missing-the-auth-provider-cookie-header-name=supabase',
+    })
   })
 
   it('passes through when unsupported auth-provider', async () => {
@@ -147,7 +157,10 @@ describe('createSupabaseAuthMiddleware()', () => {
       'original response body for unsupported provider',
     )
     const serverAuthState = req.serverAuthState.get()
-    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
+    expect(serverAuthState).toEqual({
+      ...unauthenticatedServerAuthState,
+      cookieHeader: 'auth-provider=unsupported',
+    })
   })
 
   it('handles current user GETs', async () => {
@@ -171,7 +184,10 @@ describe('createSupabaseAuthMiddleware()', () => {
 
     expect(req.url).toContain('/middleware/supabase/currentUser')
     const serverAuthState = req.serverAuthState.get()
-    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
+    expect(serverAuthState).toEqual({
+      ...unauthenticatedServerAuthState,
+      cookieHeader: 'auth-provider=supabase',
+    })
   })
 
   it('authenticated request sets currentUser', async () => {
@@ -268,7 +284,11 @@ describe('createSupabaseAuthMiddleware()', () => {
     // when an exception is thrown, such as when tampering with the cookie,
     //the serverAuthState should be cleared
     const serverAuthState = req.serverAuthState.get()
-    expect(serverAuthState).toBeNull()
+    expect(serverAuthState).toEqual({
+      ...unauthenticatedServerAuthState,
+      cookieHeader:
+        'auth-provider=supabase;sb-example-auth-token=dummy_access_token',
+    })
 
     // the auth-provider cookie should be cleared from the response
     const authProviderCookie = res.cookies.get('auth-provider')

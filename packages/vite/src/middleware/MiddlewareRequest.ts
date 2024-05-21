@@ -8,7 +8,7 @@ import {
 import { CookieJar } from './CookieJar.js'
 
 class AuthStateJar {
-  private _data: ServerAuthState
+  private _data: ServerAuthState | null
   private _initialState: ServerAuthState
 
   constructor(initialState: ServerAuthState) {
@@ -16,16 +16,20 @@ class AuthStateJar {
     this._initialState = initialState
   }
 
+  /**
+   * Always returns the server auth state, even if its set to null,
+   * it'll fall back to the initial state (created when mwReq is initialised)
+   */
   get() {
-    return this._data
+    return this._data || this._initialState
   }
 
-  set(value: ServerAuthState) {
+  set(value: ServerAuthState | null) {
     this._data = value
   }
 
   clear() {
-    this._data = this._initialState
+    this._data = null
   }
 }
 
