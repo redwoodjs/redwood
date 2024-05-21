@@ -34,8 +34,6 @@ vi.mock('jsonwebtoken', () => {
   }
 })
 
-// })
-
 vi.mock('@redwoodjs/auth-supabase-api', () => {
   return {
     authDecoder: vi.fn(() => {
@@ -212,6 +210,52 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(serverAuthState.currentUser).toEqual({
       id: 1,
       email: 'user-1@example.com',
+    })
+  })
+
+  it('authenticated request sets userMetadata', async () => {
+    const optionsWithExtractRole: SupabaseAuthMiddlewareOptions = {
+      getCurrentUser: async () => {
+        return {
+          id: 1,
+          email: 'user-1@example.com',
+          user_metadata: { favoriteColor: 'yellow' },
+        }
+      },
+      extractRoles: vi.fn().mockReturnValue(['admin', 'editor']),
+    }
+
+    const middleware = createSupabaseAuthMiddleware(optionsWithExtractRole)
+    const request = new Request('http://localhost:8911/authenticated-request', {
+      method: 'GET',
+      headers: new Headers({
+        cookie: 'auth-provider=supabase;sb_access_token=dummy_access_token',
+      }),
+    })
+    const req = new MiddlewareRequest(request)
+
+    const result = await middleware(req, MiddlewareResponse.next())
+    expect(result).toBeDefined()
+    expect(req).toBeDefined()
+
+    expect(authDecoder).toHaveBeenCalledWith(
+      'auth-provider=supabase;sb_access_token=dummy_access_token',
+      'supabase',
+      expect.anything(),
+    )
+
+    const serverAuthState = req.serverAuthState.get()
+    expect(serverAuthState).toBeDefined()
+    expect(serverAuthState).toHaveProperty('currentUser')
+    expect(serverAuthState.isAuthenticated).toEqual(true)
+    expect(serverAuthState.userMetadata).toEqual({
+      favoriteColor: 'yellow',
+    })
+    expect(serverAuthState.roles).toEqual(['admin', 'editor'])
+
+    // Called with result of decoding the token
+    expect(optionsWithExtractRole.extractRoles).toHaveBeenCalledWith({
+      sub: 'abc123',
     })
   })
 
