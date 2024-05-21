@@ -12,16 +12,14 @@ export class SshExecutor {
   async exec(path, command, args) {
     let sshCommand = command
 
-    const argsString = args?.join(' ')
+    const argsString = args?.join(' ') || ''
     if (args) {
       sshCommand += ` ${argsString}`
     }
 
     if (this.verbose) {
       console.log(
-        `SshExecutor::exec running command \`${command} ${
-          args ? argsString : ''
-        }\` in ${path}`
+        `SshExecutor::exec running command \`${command} ${argsString}\` in ${path}`
       )
     }
 
@@ -31,9 +29,8 @@ export class SshExecutor {
 
     if (result.code !== 0) {
       const error = new Error(
-        `Error while running command \`${command} ${
-          args ? argsString : ''
-        }\` in ${path}\n` + result.stderr
+        `Error while running command \`${command} ${argsString}\` in ${path}\n` +
+          result.stderr
       )
       error.exitCode = result.code
       throw error
