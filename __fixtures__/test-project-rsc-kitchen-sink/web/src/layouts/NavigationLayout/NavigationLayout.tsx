@@ -34,6 +34,8 @@ const NavigationLayout = ({ children, rnd }: NavigationLayoutProps) => {
         </ul>
       </nav>
       <div id="rnd">{Math.round(rnd * 100)}</div>
+      <p>Layout end</p>
+      <hr />
       <main>{children}</main>
     </div>
   )
