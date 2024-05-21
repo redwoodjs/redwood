@@ -10,16 +10,12 @@ export class SshExecutor {
    * the exit code with the same code returned from the SSH command.
    */
   async exec(path, command, args) {
-    let sshCommand = command
-
     const argsString = args?.join(' ') || ''
-    if (args) {
-      sshCommand += ` ${argsString}`
-    }
+    const sshCommand = command + argsString
 
     if (this.verbose) {
       console.log(
-        `SshExecutor::exec running command \`${command} ${argsString}\` in ${path}`
+        `SshExecutor::exec running command \`${sshCommand}\` in ${path}`,
       )
     }
 
@@ -29,8 +25,8 @@ export class SshExecutor {
 
     if (result.code !== 0) {
       const error = new Error(
-        `Error while running command \`${command} ${argsString}\` in ${path}\n` +
-          result.stderr
+        `Error while running command \`${sshCommand}\` in ${path}\n` +
+          result.stderr,
       )
       error.exitCode = result.code
       throw error
