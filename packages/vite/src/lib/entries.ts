@@ -1,4 +1,3 @@
-import fs from 'node:fs'
 import path from 'node:path'
 
 import {
@@ -35,11 +34,7 @@ export function getEntries() {
     throw new Error('Server Entry file not found')
   }
   entries['__rwjs__ServerEntry'] = serverEntry
-
-  const routesPath = path.join(getPaths().web.src, 'Routes.tsx')
-  if (fs.existsSync(routesPath)) {
-    entries['__rwjs__Routes'] = routesPath
-  }
+  entries['__rwjs__Routes'] = path.join(getPaths().web.src, 'Routes.tsx')
 
   return entries
 }

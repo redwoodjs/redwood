@@ -19,7 +19,8 @@ function rscFetch(rscId: string, props: Record<string, unknown> = {}) {
   const searchParams = new URLSearchParams()
   searchParams.set('props', JSON.stringify(props))
 
-  // TODO (RSC): During SSR we should not fetch
+  // TODO (RSC): During SSR we should not fetch (Is this function really
+  // called during SSR?)
   const response = fetch(BASE_PATH + rscId + '?' + searchParams, {
     headers: {
       'rw-rsc': '1',
@@ -37,18 +38,9 @@ function rscFetch(rscId: string, props: Record<string, unknown> = {}) {
       // and that element will be FormData
       console.log('ClientRouter.ts :: callServer rsfId', rsfId, 'args', args)
 
-      // const isMutating = !!mutationMode
       const searchParams = new URLSearchParams()
       searchParams.set('action_id', rsfId)
-      let id: string
-
-      // if (isMutating) {
-      if (Math.random() > 5) {
-        id = rscId
-        // searchParams.set('props', serializedProps)
-      } else {
-        id = '_'
-      }
+      const id = '_'
 
       const response = fetch(BASE_PATH + id + '?' + searchParams, {
         method: 'POST',
@@ -62,10 +54,6 @@ function rscFetch(rscId: string, props: Record<string, unknown> = {}) {
       // tried without it, and things seemed to work. But keeping it for
       // now, until we learn more.
       const data = createFromFetch(response, options)
-
-      // if (isMutating) {
-      //   rerender?.([data, serializedProps])
-      // }
 
       return data
     },
