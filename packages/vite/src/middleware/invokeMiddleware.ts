@@ -1,7 +1,4 @@
-import {
-  middlewareDefaultAuthProviderState,
-  type ServerAuthState,
-} from '@redwoodjs/auth'
+import { type ServerAuthState } from '@redwoodjs/auth'
 
 import { setServerAuthState } from '../serverStore.js'
 
@@ -26,19 +23,14 @@ export const invoke = async (
   middleware?: Middleware,
   options?: MiddlewareInvokeOptions,
 ): Promise<[MiddlewareResponse, ServerAuthState]> => {
-  const defaultServerAuthState = {
-    ...middlewareDefaultAuthProviderState,
-    cookieHeader: req.headers.get('Cookie'),
-    roles: [],
-  }
+  const mwReq = new MiddlewareRequest(req)
 
   if (typeof middleware !== 'function') {
-    setServerAuthState(defaultServerAuthState)
+    setServerAuthState(mwReq.serverAuthState.get())
 
-    return [MiddlewareResponse.next(), defaultServerAuthState]
+    return [MiddlewareResponse.next(), mwReq.serverAuthState.get()]
   }
 
-  const mwReq = new MiddlewareRequest(req)
   let mwRes: MiddlewareResponse = MiddlewareResponse.next()
 
   try {

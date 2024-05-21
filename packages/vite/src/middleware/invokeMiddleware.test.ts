@@ -1,6 +1,7 @@
 import type { MockInstance } from 'vitest'
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
 
+import type { ServerAuthState } from '@redwoodjs/auth'
 import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
 
 import { createServerStorage } from '../serverStore'
@@ -15,10 +16,16 @@ describe('Invoke middleware', () => {
     createServerStorage()
   })
 
+  const unauthenticatedServerAuthState = {
+    ...middlewareDefaultAuthProviderState,
+    roles: [],
+    cookieHeader: null,
+  }
+
   test('returns a MiddlewareResponse, even if no middleware defined', async () => {
     const [mwRes, authState] = await invoke(new Request('https://example.com'))
     expect(mwRes).toBeInstanceOf(MiddlewareResponse)
-    expect(authState).toEqual(middlewareDefaultAuthProviderState)
+    expect(authState).toEqual(unauthenticatedServerAuthState)
   })
 
   test('extracts auth state correctly, and always returns a MWResponse', async () => {
@@ -26,7 +33,7 @@ describe('Invoke middleware', () => {
     const fakeMiddleware = (req: MiddlewareRequest) => {
       req.serverAuthState.set({
         user: BOB,
-      })
+      } as unknown as ServerAuthState)
     }
 
     const [mwRes, authState] = await invoke(
@@ -63,7 +70,7 @@ describe('Invoke middleware', () => {
       )
 
       expect(mwRes).toBeInstanceOf(MiddlewareResponse)
-      expect(authState).toEqual(middlewareDefaultAuthProviderState)
+      expect(authState).toEqual(unauthenticatedServerAuthState)
     })
 
     // A short-circuit is a way to stop the middleware chain immediately, and return a response
@@ -84,7 +91,7 @@ describe('Invoke middleware', () => {
       expect(mwRes.body).toEqual('Zap')
       expect(mwRes.status).toEqual(999)
       expect(mwRes.statusText).toEqual('Ouch')
-      expect(authState).toEqual(middlewareDefaultAuthProviderState)
+      expect(authState).toEqual(unauthenticatedServerAuthState)
     })
 
     test('can set extra properties in the shortcircuit response', async () => {
@@ -115,7 +122,7 @@ describe('Invoke middleware', () => {
         'is awesome',
       )
 
-      expect(authState).toEqual(middlewareDefaultAuthProviderState)
+      expect(authState).toEqual(unauthenticatedServerAuthState)
     })
   })
 })
