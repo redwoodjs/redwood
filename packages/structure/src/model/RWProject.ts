@@ -112,7 +112,9 @@ export class RWProject extends BaseNode {
     }
   }
   @lazy() get pages(): RWPage[] {
-    return this.processPagesDir.map((p) => new RWPage(p.const, p.path, this))
+    return this.processPagesDir.map(
+      (p) => new RWPage(p.constName, p.path, this),
+    )
   }
   @lazy() get router() {
     return this.getRouter()

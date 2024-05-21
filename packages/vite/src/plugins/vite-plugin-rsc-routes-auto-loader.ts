@@ -188,9 +188,9 @@ export function rscRoutesAutoLoader(): Plugin {
           ast.program.body.unshift(
             t.variableDeclaration('const', [
               t.variableDeclarator(
-                t.identifier(page.const),
+                t.identifier(page.constName),
                 t.callExpression(t.identifier('renderFromDist'), [
-                  t.stringLiteral(page.const),
+                  t.stringLiteral(page.constName),
                 ]),
               ),
             ]),
@@ -199,7 +199,7 @@ export function rscRoutesAutoLoader(): Plugin {
           ast.program.body.unshift(
             t.variableDeclaration('const', [
               t.variableDeclarator(
-                t.identifier(page.const),
+                t.identifier(page.constName),
                 t.arrowFunctionExpression([], t.nullLiteral()),
               ),
             ]),

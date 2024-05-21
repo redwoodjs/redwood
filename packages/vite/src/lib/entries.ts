@@ -1,38 +1,31 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import type { PagesDependency } from '@redwoodjs/project-config'
 import {
   ensurePosixPath,
   getPaths,
-  processPagesDir,
+  importStatementPath,
 } from '@redwoodjs/project-config'
+import { getProject } from '@redwoodjs/structure/dist/index'
+import type { RWPage } from '@redwoodjs/structure/dist/model/RWPage'
+import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
 
 import { makeFilePath } from '../utils'
-
-const getPathRelativeToSrc = (maybeAbsolutePath: string) => {
-  // If the path is already relative
-  if (!path.isAbsolute(maybeAbsolutePath)) {
-    return maybeAbsolutePath
-  }
-
-  return `./${path.relative(getPaths().web.src, maybeAbsolutePath)}`
-}
-
-const withRelativeImports = (page: PagesDependency) => {
-  return {
-    ...page,
-    relativeImport: ensurePosixPath(getPathRelativeToSrc(page.importPath)),
-  }
-}
 
 export function getEntries() {
   const entries: Record<string, string> = {}
 
+  // Build the entries object based on routes and pages
+  // Given the page's route, we can determine whether or not
+  // the entry requires authentication checks
+  const rwProject = getProject(getPaths().base)
+  const routes = rwProject.getRouter().routes
+
   // Add the various pages
-  const pages = processPagesDir().map(withRelativeImports)
+  const pages = routes.map((route: RWRoute) => route.page) as RWPage[]
+
   for (const page of pages) {
-    entries[page.importName] = page.path
+    entries[page.constName] = ensurePosixPath(importStatementPath(page.path))
   }
 
   // Add the ServerEntry entry, noting we use the "__rwjs__" prefix to avoid
