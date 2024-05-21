@@ -108,7 +108,7 @@ export function rscRoutesAutoLoader(): Plugin {
           }
 
           const userImportRelativePath = getPathRelativeToSrc(
-            importStatementPath(path.node.source?.value),
+            importStatementPath(importPath),
           )
 
           const defaultSpecifier = path.node.specifiers.filter((specifier) =>
