@@ -22,7 +22,7 @@ export function getEntries() {
   const pages = routes.map((route: RWRoute) => route.page) as RWPage[]
 
   for (const page of pages) {
-    entries[page.const_] = ensurePosixPath(importStatementPath(page.path))
+    entries[page.constName] = ensurePosixPath(importStatementPath(page.path))
   }
 
   // Add the ServerEntry entry, noting we use the "__rwjs__" prefix to avoid

@@ -181,7 +181,7 @@ export class RWRoute extends BaseNode {
       return undefined
     }
     return this.parent.parent.pages.find(
-      (p) => p.const_ === this.page_identifier_str,
+      (p) => p.constName === this.page_identifier_str,
     )
   }
   /**

@@ -111,6 +111,28 @@ describe.skip('env vars', () => {
   })
 })
 
+describe('Redwood Page detection', () => {
+  it('detects pages', async () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const routes = project.getRouter().routes
+    const pages = routes.map((r) => r.page).sort()
+    const pageConstants = pages.map((p) => p?.constName)
+    // Note: Pages can be duplicated if used by multiple routes, we use a Set
+    expect(pageConstants).toEqual([
+      'HomePage',
+      'TypeScriptPage',
+      'FooPage',
+      'BarPage',
+      'PrivatePage',
+      'PrivatePage',
+      'PrivatePage',
+      'NotFoundPage',
+      undefined,
+    ])
+  })
+})
+
 describe('Redwood Route detection', () => {
   it('detects routes with the prerender prop', async () => {
     const projectRoot = getFixtureDir('example-todo-main')

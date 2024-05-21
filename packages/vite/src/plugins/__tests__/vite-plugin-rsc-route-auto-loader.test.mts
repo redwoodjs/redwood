@@ -385,56 +385,56 @@ describe('rscRoutesAutoLoader', () => {
 const pages = [
   {
     importName: 'AboutPage',
-    const: 'AboutPage',
+    constName: 'AboutPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/AboutPage/AboutPage',
     path: '/Users/mojombo/rw-app/web/src/pages/AboutPage/AboutPage.tsx',
     importStatement: "const AboutPage = { name: 'AboutPage', loader: import('/Users/mojombo/rw-app/web/src/pages/AboutPage/AboutPage') }"
   },
   {
     importName: 'FatalErrorPage',
-    const: 'FatalErrorPage',
+    constName: 'FatalErrorPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/FatalErrorPage/FatalErrorPage',
     path: '/Users/mojombo/rw-app/web/src/pages/FatalErrorPage/FatalErrorPage.tsx',
     importStatement: "const FatalErrorPage = { name: 'FatalErrorPage', loader: import('/Users/mojombo/rw-app/web/src/pages/FatalErrorPage/FatalErrorPage') }"
   },
   {
     importName: 'HomePage',
-    const: 'HomePage',
+    constName: 'HomePage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/HomePage/HomePage',
     path: '/Users/mojombo/rw-app/web/src/pages/HomePage/HomePage.tsx',
     importStatement: "const HomePage = { name: 'HomePage', loader: import('/Users/mojombo/rw-app/web/src/pages/HomePage/HomePage') }"
   },
   {
     importName: 'NotFoundPage',
-    const: 'NotFoundPage',
+    constName: 'NotFoundPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/NotFoundPage/NotFoundPage',
     path: '/Users/mojombo/rw-app/web/src/pages/NotFoundPage/NotFoundPage.tsx',
     importStatement: "const NotFoundPage = { name: 'NotFoundPage', loader: import('/Users/mojombo/rw-app/web/src/pages/NotFoundPage/NotFoundPage') }"
   },
   {
     importName: 'EmptyUserEditEmptyUserPage',
-    const: 'EmptyUserEditEmptyUserPage',
+    constName: 'EmptyUserEditEmptyUserPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EditEmptyUserPage/EditEmptyUserPage',
     path: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EditEmptyUserPage/EditEmptyUserPage.tsx',
     importStatement: "const EmptyUserEditEmptyUserPage = { name: 'EmptyUserEditEmptyUserPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/EditEmptyUserPage/EditEmptyUserPage') }"
   },
   {
     importName: 'EmptyUserEmptyUserPage',
-    const: 'EmptyUserEmptyUserPage',
+    constName: 'EmptyUserEmptyUserPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUserPage/EmptyUserPage',
     path: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUserPage/EmptyUserPage.tsx',
     importStatement: "const EmptyUserEmptyUserPage = { name: 'EmptyUserEmptyUserPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUserPage/EmptyUserPage') }"
   },
   {
     importName: 'EmptyUserEmptyUsersPage',
-    const: 'EmptyUserEmptyUsersPage',
+    constName: 'EmptyUserEmptyUsersPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUsersPage/EmptyUsersPage',
     path: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUsersPage/EmptyUsersPage.tsx',
     importStatement: "const EmptyUserEmptyUsersPage = { name: 'EmptyUserEmptyUsersPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUsersPage/EmptyUsersPage') }"
   },
   {
     importName: 'EmptyUserNewEmptyUserPage',
-    const: 'EmptyUserNewEmptyUserPage',
+    constName: 'EmptyUserNewEmptyUserPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/NewEmptyUserPage/NewEmptyUserPage',
     path: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/NewEmptyUserPage/NewEmptyUserPage.tsx',
     importStatement: "const EmptyUserNewEmptyUserPage = { name: 'EmptyUserNewEmptyUserPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/NewEmptyUserPage/NewEmptyUserPage') }"
