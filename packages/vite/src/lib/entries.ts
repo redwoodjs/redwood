@@ -32,6 +32,7 @@ export function getEntries() {
     throw new Error('Server Entry file not found')
   }
   entries['__rwjs__ServerEntry'] = serverEntry
+  entries['__rwjs__Routes'] = getPaths().web.routes
 
   return entries
 }

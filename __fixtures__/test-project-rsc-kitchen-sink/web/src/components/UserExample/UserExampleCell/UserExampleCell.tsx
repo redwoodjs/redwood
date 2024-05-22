@@ -1,3 +1,5 @@
+'use client'
+
 import type { FindUserExampleById } from 'types/graphql'
 
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'

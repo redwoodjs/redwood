@@ -7,7 +7,6 @@ import type { default as RSDWServerModule } from 'react-server-dom-webpack/serve
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { StatusError } from './lib/StatusError.js'
 import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
 import { moduleMap } from './streaming/ssrModuleMap.js'
 import { importModule } from './streaming/streamHelpers.js'
@@ -22,32 +21,17 @@ async function getEntries() {
   return entries
 }
 
-async function getFunctionComponent<TProps>(
-  rscId: string,
-): Promise<React.FunctionComponent<TProps>> {
+async function getServerEntryComponent<TProps>(): Promise<
+  React.FunctionComponent<TProps>
+> {
   const { serverEntries } = await getEntries()
-  const entryPath = path.join(getPaths().web.distRsc, serverEntries[rscId])
-  const mod = await import(makeFilePath(entryPath))
+  const entryPath = path.join(
+    getPaths().web.distRsc,
+    serverEntries['__rwjs__ServerEntry'],
+  )
+  const entryServerModule = await import(makeFilePath(entryPath))
 
-  if (typeof mod === 'function') {
-    return mod
-  }
-
-  if (typeof mod?.default === 'function') {
-    return mod?.default
-  }
-
-  // We remove any potential "__rwjs__" prefix as these only exist in the mapping
-  // not in the built files. E.g. "__rwjs__ServerEntry" -> "ServerEntry" as we don't
-  // export "__rwjs__ServerEntry" in the built file we simply export "ServerEntry"
-  rscId = rscId.replace(/^__rwjs__/, '')
-
-  if (typeof mod?.[rscId] === 'function') {
-    return mod?.[rscId]
-  }
-
-  // TODO (RSC): Making this a 404 error is marked as "HACK" in waku's source
-  throw new StatusError('No function component found for ' + rscId, 404)
+  return entryServerModule?.ServerEntry
 }
 
 // This gets executed in an RSC server "world" and should return the path to
@@ -103,18 +87,7 @@ export function renderFromDist<TProps extends Record<string, any>>(
   const SsrComponent = async (props: TProps) => {
     console.log('SsrComponent', rscId, 'props', props)
 
-    let ServerEntry: React.FunctionComponent<TProps>
-
-    try {
-      ServerEntry = await getFunctionComponent<TProps>('__rwjs__ServerEntry')
-    } catch (error) {
-      console.log('SsrComponent error', error)
-      // For now we'll just swallow this error because not all projects will
-      // have a ServerRoutes component
-      // TODO (RSC): Remove the try/catch and let the error bubble up when
-      // we've added server routers to our test projects
-      ServerEntry = () => createElement('div', {}, 'Loading')
-    }
+    const ServerEntry = await getServerEntryComponent<TProps>()
 
     console.log('clientSsr.ts getEntries()', await getEntries())
     const clientEntries = (await getEntries()).clientEntries

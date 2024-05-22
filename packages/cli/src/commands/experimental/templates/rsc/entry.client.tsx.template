@@ -5,7 +5,7 @@ import Routes from './Routes'
 
 /**
  * When `#redwood-app` isn't empty then it's very likely that you're using
- * prerendering. So React attaches event listeners to the existing markup
+ * pre-rendering. So React attaches event listeners to the existing markup
  * rather than replacing it.
  * https://react.dev/reference/react-dom/client/hydrateRoot
  */
