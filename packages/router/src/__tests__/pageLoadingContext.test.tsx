@@ -1,7 +1,7 @@
 let mockDelay = 0
-jest.mock('../page', () => {
-  const actualUtil = jest.requireActual('../util')
-  const { lazy } = jest.requireActual('react')
+vi.mock('../page', async (importOriginal) => {
+  const actualUtil = await importOriginal<Page>()
+  const { lazy } = await vi.importActual<typeof React>('react')
 
   return {
     ...actualUtil,
@@ -10,7 +10,7 @@ jest.mock('../page', () => {
       prerenderLoader: () => ({ default: specOrPage }),
       LazyComponent: lazy(
         () =>
-          new Promise((resolve) =>
+          new Promise<any>((resolve) =>
             setTimeout(() => resolve({ default: specOrPage }), mockDelay),
           ),
       ),
@@ -20,8 +20,8 @@ jest.mock('../page', () => {
 
 import React, { useEffect, useState } from 'react'
 
-import '@testing-library/jest-dom'
 import { act, configure, render, waitFor } from '@testing-library/react'
+import { vi, beforeEach, afterEach, test, expect } from 'vitest'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
 
@@ -36,6 +36,7 @@ import {
   useParams,
 } from '..'
 import { useLocation } from '../location'
+import type Page from '../page'
 import type { Spec } from '../page'
 import { usePageLoadingContext } from '../PageLoadingContext'
 
