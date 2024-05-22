@@ -276,7 +276,7 @@ export function RemoteTreeDataProvider_publishOverLSPConnection(
       connection.sendRequest(`${methodPrefix}onDidChangeTreeData`, [id]),
     )
   })
-  connection.onRequest(`${methodPrefix}getChildren`, async (id) => {
+  connection.onRequest(`${methodPrefix}getChildren`, async (id: string) => {
     lazyInit()
     try {
       return await ProviderResult_normalize(tdp.getChildren(id))
@@ -284,7 +284,7 @@ export function RemoteTreeDataProvider_publishOverLSPConnection(
       return []
     }
   })
-  connection.onRequest(`${methodPrefix}getTreeItem`, async (id) => {
+  connection.onRequest(`${methodPrefix}getTreeItem`, async (id: string) => {
     lazyInit()
     try {
       return await ProviderResult_normalize(tdp.getTreeItem(id))
