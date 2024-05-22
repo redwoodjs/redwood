@@ -5,8 +5,6 @@ import { normalizePath } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { getEntries } from '../lib/entries.js'
-
 import type { rscBuildClient } from './rscBuildClient.js'
 import type { rscBuildForServer } from './rscBuildForServer.js'
 
@@ -64,8 +62,11 @@ export async function rscBuildEntriesMappings(
   )
 
   // Server component names to RSC server asset mapping
-  const entries = getEntries()
   const serverEntries: Record<string, string> = {}
+  const entries = {
+    __rwjs__ServerEntry: getPaths().web.entryServer || '',
+    __rwjs__Routes: getPaths().web.routes,
+  }
   for (const [name, sourceFile] of Object.entries(entries)) {
     const buildOutputItem = serverBuildOutput.find((item) => {
       return (item as OutputChunk).facadeModuleId === normalizePath(sourceFile)

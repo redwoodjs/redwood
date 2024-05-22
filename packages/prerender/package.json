@@ -25,9 +25,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.1",
-    "@redwoodjs/auth": "workspace:*",
-    "@redwoodjs/internal": "workspace:*",
+    "@babel/runtime-corejs3": "7.24.5",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/router": "workspace:*",
     "@redwoodjs/structure": "workspace:*",
@@ -40,7 +38,7 @@
     "mime-types": "2.1.35"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.1",
+    "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
     "@types/mime-types": "2.1.4",
     "babel-plugin-tester": "11.0.4",

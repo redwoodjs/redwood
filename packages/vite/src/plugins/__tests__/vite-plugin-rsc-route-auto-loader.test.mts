@@ -95,18 +95,17 @@ describe('rscRoutesAutoLoader', () => {
     // - The import of `renderFromRscServer` from `@redwoodjs/vite/client`
     // - The call to `renderFromRscServer` for each page that wasn't already imported
     expect(output).toMatchInlineSnapshot(`
-      "import { renderFromRscServer } from "@redwoodjs/vite/client";
-      const EmptyUserNewEmptyUserPage = renderFromRscServer("EmptyUserNewEmptyUserPage");
-      const EmptyUserEmptyUsersPage = renderFromRscServer("EmptyUserEmptyUsersPage");
-      const EmptyUserEmptyUserPage = renderFromRscServer("EmptyUserEmptyUserPage");
-      const EmptyUserEditEmptyUserPage = renderFromRscServer("EmptyUserEditEmptyUserPage");
-      const HomePage = renderFromRscServer("HomePage");
-      const FatalErrorPage = renderFromRscServer("FatalErrorPage");
-      const AboutPage = renderFromRscServer("AboutPage");
+      "const EmptyUserNewEmptyUserPage = () => null;
+      const EmptyUserEmptyUsersPage = () => null;
+      const EmptyUserEmptyUserPage = () => null;
+      const EmptyUserEditEmptyUserPage = () => null;
+      const HomePage = () => null;
+      const FatalErrorPage = () => null;
+      const AboutPage = () => null;
       import { jsx, jsxs } from "react/jsx-runtime";
       import { Router, Route, Set } from "@redwoodjs/router";
-      import NavigationLayout from "./layouts/NavigationLayout/NavigationLayout";
-      import ScaffoldLayout from "./layouts/ScaffoldLayout/ScaffoldLayout";
+      import NavigationLayout from "@redwoodjs/router/dist/dummyComponent";
+      import ScaffoldLayout from "@redwoodjs/router/dist/dummyComponent";
       import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
       const Routes = () => {
         return /* @__PURE__ */jsxs(Router, {
@@ -212,18 +211,17 @@ describe('rscRoutesAutoLoader', () => {
     // - The import of `renderFromDist` from `@redwoodjs/vite/clientSsr`
     // - The call to `renderFromDist` for each page that wasn't already imported
     expect(output).toMatchInlineSnapshot(`
-      "import { renderFromDist } from "@redwoodjs/vite/clientSsr";
-      const EmptyUserNewEmptyUserPage = renderFromDist("EmptyUserNewEmptyUserPage");
-      const EmptyUserEmptyUsersPage = renderFromDist("EmptyUserEmptyUsersPage");
-      const EmptyUserEmptyUserPage = renderFromDist("EmptyUserEmptyUserPage");
-      const EmptyUserEditEmptyUserPage = renderFromDist("EmptyUserEditEmptyUserPage");
-      const HomePage = renderFromDist("HomePage");
-      const FatalErrorPage = renderFromDist("FatalErrorPage");
-      const AboutPage = renderFromDist("AboutPage");
+      "const EmptyUserNewEmptyUserPage = () => null;
+      const EmptyUserEmptyUsersPage = () => null;
+      const EmptyUserEmptyUserPage = () => null;
+      const EmptyUserEditEmptyUserPage = () => null;
+      const HomePage = () => null;
+      const FatalErrorPage = () => null;
+      const AboutPage = () => null;
       import { jsx, jsxs } from "react/jsx-runtime";
       import { Router, Route, Set } from "@redwoodjs/router";
-      import NavigationLayout from "./layouts/NavigationLayout/NavigationLayout";
-      import ScaffoldLayout from "./layouts/ScaffoldLayout/ScaffoldLayout";
+      import NavigationLayout from "@redwoodjs/router/dist/dummyComponent";
+      import ScaffoldLayout from "@redwoodjs/router/dist/dummyComponent";
       import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
       const Routes = () => {
         return /* @__PURE__ */jsxs(Router, {
@@ -385,56 +383,56 @@ describe('rscRoutesAutoLoader', () => {
 const pages = [
   {
     importName: 'AboutPage',
-    const: 'AboutPage',
+    constName: 'AboutPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/AboutPage/AboutPage',
     path: '/Users/mojombo/rw-app/web/src/pages/AboutPage/AboutPage.tsx',
     importStatement: "const AboutPage = { name: 'AboutPage', loader: import('/Users/mojombo/rw-app/web/src/pages/AboutPage/AboutPage') }"
   },
   {
     importName: 'FatalErrorPage',
-    const: 'FatalErrorPage',
+    constName: 'FatalErrorPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/FatalErrorPage/FatalErrorPage',
     path: '/Users/mojombo/rw-app/web/src/pages/FatalErrorPage/FatalErrorPage.tsx',
     importStatement: "const FatalErrorPage = { name: 'FatalErrorPage', loader: import('/Users/mojombo/rw-app/web/src/pages/FatalErrorPage/FatalErrorPage') }"
   },
   {
     importName: 'HomePage',
-    const: 'HomePage',
+    constName: 'HomePage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/HomePage/HomePage',
     path: '/Users/mojombo/rw-app/web/src/pages/HomePage/HomePage.tsx',
     importStatement: "const HomePage = { name: 'HomePage', loader: import('/Users/mojombo/rw-app/web/src/pages/HomePage/HomePage') }"
   },
   {
     importName: 'NotFoundPage',
-    const: 'NotFoundPage',
+    constName: 'NotFoundPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/NotFoundPage/NotFoundPage',
     path: '/Users/mojombo/rw-app/web/src/pages/NotFoundPage/NotFoundPage.tsx',
     importStatement: "const NotFoundPage = { name: 'NotFoundPage', loader: import('/Users/mojombo/rw-app/web/src/pages/NotFoundPage/NotFoundPage') }"
   },
   {
     importName: 'EmptyUserEditEmptyUserPage',
-    const: 'EmptyUserEditEmptyUserPage',
+    constName: 'EmptyUserEditEmptyUserPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EditEmptyUserPage/EditEmptyUserPage',
     path: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EditEmptyUserPage/EditEmptyUserPage.tsx',
     importStatement: "const EmptyUserEditEmptyUserPage = { name: 'EmptyUserEditEmptyUserPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/EditEmptyUserPage/EditEmptyUserPage') }"
   },
   {
     importName: 'EmptyUserEmptyUserPage',
-    const: 'EmptyUserEmptyUserPage',
+    constName: 'EmptyUserEmptyUserPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUserPage/EmptyUserPage',
     path: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUserPage/EmptyUserPage.tsx',
     importStatement: "const EmptyUserEmptyUserPage = { name: 'EmptyUserEmptyUserPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUserPage/EmptyUserPage') }"
   },
   {
     importName: 'EmptyUserEmptyUsersPage',
-    const: 'EmptyUserEmptyUsersPage',
+    constName: 'EmptyUserEmptyUsersPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUsersPage/EmptyUsersPage',
     path: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUsersPage/EmptyUsersPage.tsx',
     importStatement: "const EmptyUserEmptyUsersPage = { name: 'EmptyUserEmptyUsersPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUsersPage/EmptyUsersPage') }"
   },
   {
     importName: 'EmptyUserNewEmptyUserPage',
-    const: 'EmptyUserNewEmptyUserPage',
+    constName: 'EmptyUserNewEmptyUserPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/NewEmptyUserPage/NewEmptyUserPage',
     path: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/NewEmptyUserPage/NewEmptyUserPage.tsx',
     importStatement: "const EmptyUserNewEmptyUserPage = { name: 'EmptyUserNewEmptyUserPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/NewEmptyUserPage/NewEmptyUserPage') }"

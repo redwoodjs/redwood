@@ -9,7 +9,10 @@ test('Client components should work', async ({ page }) => {
 
   await page.locator('button').filter({ hasText: 'Increment' }).click()
 
-  const count = await page.locator('p').nth(2).innerText()
+  const count = await page
+    .locator('p')
+    .filter({ hasText: /Count: \d/ })
+    .innerText()
   expect(count).toMatch('Count: 1')
 
   page.close()
@@ -52,11 +55,13 @@ test('Submitting the form should return a response', async ({ page }) => {
   await expect(submittedPageText).toHaveText(/This form has been sent 1 times/)
 
   // Expect an echo of our message back from the server
-  const echo = await page.locator('p').nth(1).innerText()
-  expect(echo).toMatch('Hello World')
+  await expect(page.locator('p').getByText('Hello World')).toBeVisible()
 
   // Expect to get five (random) words back from the server
-  const words = await page.locator('p').nth(1).innerText()
+  const words = await page
+    .locator('p')
+    .filter({ hasText: /Hello World/ })
+    .innerText()
   expect(words.split('Hello World: ')[1].split(' ')).toHaveLength(5)
 
   page.close()
@@ -100,8 +105,8 @@ test("'use client' cell navigation", async ({ page }) => {
   page.waitForURL('/empty-users/new')
 
   await expect(page.getByText('New EmptyUser')).toBeVisible()
-  await expect(page.getByText('Email')).toBeVisible()
-  await expect(page.getByText('Name')).toBeVisible()
+  await expect(page.getByLabel('Email')).toBeVisible()
+  await expect(page.getByLabel('Name')).toBeVisible()
   await expect(page.getByText('Save')).toBeVisible()
 
   page.close()
@@ -126,4 +131,14 @@ test('Server Cell - Error component', async ({ page }) => {
   expect(h1).toMatch(/UserExamples - userExamples/)
 
   await expect(page.getByText('UserExample not found')).toBeVisible()
+})
+
+test('Server Cell in Layout', async ({ page }) => {
+  await page.goto('/')
+
+  const mainText = await page.locator('.navigation-layout').innerText()
+
+  // "The source of this server cell" should appear twice - once as a paragraph
+  // above the code block and then once more inside the codeblock itself
+  expect(mainText.match(/The source of this server cell/g)).toHaveLength(2)
 })

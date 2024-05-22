@@ -1,3 +1,5 @@
+'use client'
+
 import type { EditUserExampleById, UpdateUserExampleInput } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
