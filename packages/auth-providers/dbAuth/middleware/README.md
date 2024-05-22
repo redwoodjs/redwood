@@ -18,9 +18,10 @@ interface Props {
 export const registerMiddleware = () => {
   // This actually returns [dbAuthMiddleware, '*']
   const authMw = initDbAuthMiddleware({
-    cookieName,
     dbAuthHandler,
     getCurrentUser,
+    // cookieName optional
+    // extractRoles optional
     // dbAuthUrl? optional
   })
   
