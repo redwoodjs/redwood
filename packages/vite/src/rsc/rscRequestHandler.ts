@@ -1,3 +1,5 @@
+import type { IncomingHttpHeaders } from 'http'
+
 import * as DefaultFetchAPI from '@whatwg-node/fetch'
 import { normalizeNodeRequest } from '@whatwg-node/server'
 import busboy from 'busboy'
@@ -43,61 +45,6 @@ export function createRscRequestHandler(
     res: ExpressResponse,
     next: () => void,
   ) => {
-    const requestUrl = getRSCRequestUrl(req)
-
-    // before trying the render the RSC, we invoke Middleware
-    // as authenticate middleware could redirect the user
-    // and we should not render the RSC in that case
-    // or auth with set the auth state and we might not
-    // render the RSC for the user
-    const mwRouter = await options.getMiddlewareRouter()
-
-    if (mwRouter) {
-      // @MARK: Temporarily create Fetch Request here.
-      // Ideally we'll have converted this whole handler to be Fetch Req and Response
-      const webReq = normalizeNodeRequest(req, DefaultFetchAPI.Request)
-      const matchedMw = mwRouter.find(webReq.method as HTTPMethod, webReq.url)
-
-      const [mwResponse] = await invoke(
-        webReq,
-        matchedMw?.handler as Middleware | undefined,
-        {
-          params: matchedMw?.params,
-          viteDevServer: options.viteDevServer,
-        },
-      )
-
-      const webRes = mwResponse.toResponse()
-
-      // @MARK: Grab the headers from MWResponse and set them on the Express Response
-      // @TODO This is a temporary solution until we can convert this entire handler to use Fetch API
-      // This WILL not handle multiple Set-Cookie headers correctly. Proper Fetch-Response support will resolve this.
-      webRes.headers.forEach((value, key) => {
-        res.setHeader(key, value)
-      })
-
-      if (mwResponse.isRedirect() || mwResponse.body) {
-        // We also don't know what the Router will do if this RSC handler fails at any point
-        // Whatever that behavior is, this should match.
-        throw new Error(
-          'Not Implemented: What should happen if this RSC handler fails? And which part - Client side router?',
-        )
-      }
-    }
-
-    // https://www.rfc-editor.org/rfc/rfc6648
-    // "SHOULD NOT prefix their parameter names with "X-" or similar constructs."
-    if (req.headers['rw-rsc'] !== '1') {
-      return next()
-    }
-
-    // now that middleware has run, we can check if the request is allowed
-    if (!(await isRequestAllowed(requestUrl, options.routes))) {
-      console.log('Request is not allowed')
-      // throw 401?
-    }
-
-    // start rendering the RSC
     // React Server Component
     let rscId: string | undefined
     // React Server Action
@@ -105,97 +52,147 @@ export function createRscRequestHandler(
     let props = {}
     let args: unknown[] = []
 
-    // determine the component or action to handle/render
-    if (shouldHandleRSCRequest(requestUrl)) {
-      rscId = getReactServerComponentId(requestUrl)
-      rsfId = getRectServerActionId(requestUrl)
-
-      if (rscId && rscId !== '_') {
-        res.setHeader('Content-Type', 'text/x-component')
-        props = JSON.parse(requestUrl.searchParams.get('props') || '{}')
+    const handleError = (err: unknown) => {
+      if (hasStatusCode(err)) {
+        res.statusCode = err.statusCode
       } else {
-        rscId = undefined
+        console.error('Cannot render RSC', err)
+        res.statusCode = 500
       }
 
-      // React Server Actions
-      if (rsfId) {
-        // TODO (RSC): For React Server Actions we need to limit the request
-        // size somehow
-        // https://nextjs.org/docs/app/api-reference/functions/server-actions#size-limitation
-        if (req.headers['content-type']?.startsWith('multipart/form-data')) {
-          console.log('RSA: multipart/form-data')
-          const bb = busboy({ headers: req.headers })
-          // TODO (RSC): The generic here could be typed better
-          const reply = decodeReplyFromBusboy<unknown[]>(bb)
-
-          req.pipe(bb)
-          args = await reply
-
-          // TODO (RSC): Loop over args (to not only look at args[0])
-          // TODO (RSC): Verify that this works with node16 (MDN says FormData is
-          // only supported in node18 and up)
-          if (args[0] instanceof FormData) {
-            const serializedFormData: Record<string, any> = {}
-
-            for (const [key, value] of args[0]) {
-              // Several form fields can share the same name. This should be
-              // represented as an array of the values of all those fields
-              if (serializedFormData[key] !== undefined) {
-                if (!Array.isArray(serializedFormData[key])) {
-                  serializedFormData[key] = [serializedFormData[key]]
-                }
-
-                serializedFormData[key].push(value)
-              } else {
-                serializedFormData[key] = value
-              }
-            }
-
-            args[0] = {
-              __formData__: true,
-              state: serializedFormData,
-            }
-          }
-        } else {
-          console.log('RSA: regular body')
-          let body = ''
-
-          for await (const chunk of req) {
-            body += chunk
-          }
-
-          if (body) {
-            args = await decodeReply(body)
-          }
-        }
-      }
+      // Getting a warning on GitHub about this
+      // https://github.com/redwoodjs/redwood/security/code-scanning/211
+      // Handle according to TODO below
+      res.end(String(err))
+      // TODO (RSC): When we have `yarn rw dev` support we should do this:
+      // if (options.command === 'dev') {
+      //   res.end(String(err))
+      // } else {
+      //   res.end()
+      // }
     }
 
-    // if we have a component or action to render
-    if (rscId || rsfId) {
-      console.log('rscRequestHandler: args', args)
+    try {
+      const requestUrl = getRSCRequestUrl(req)
 
-      const handleError = (err: unknown) => {
-        if (hasStatusCode(err)) {
-          res.statusCode = err.statusCode
-        } else {
-          console.info('Cannot render RSC', err)
-          res.statusCode = 500
+      // before trying the render the RSC, we invoke Middleware
+      // as authenticate middleware could redirect the user
+      // and we should not render the RSC in that case
+      // or auth with set the auth state and we might not
+      // render the RSC for the user
+      const mwRouter = await options.getMiddlewareRouter()
+
+      if (mwRouter) {
+        // @MARK: Temporarily create Fetch Request here.
+        // Ideally we'll have converted this whole handler to be Fetch Req and Response
+        const webReq = normalizeNodeRequest(req, DefaultFetchAPI.Request)
+        const matchedMw = mwRouter.find(webReq.method as HTTPMethod, webReq.url)
+
+        const [mwResponse] = await invoke(
+          webReq,
+          matchedMw?.handler as Middleware | undefined,
+          {
+            params: matchedMw?.params,
+            viteDevServer: options.viteDevServer,
+          },
+        )
+
+        const webRes = mwResponse.toResponse()
+
+        // @MARK: Grab the headers from MWResponse and set them on the Express Response
+        // @TODO This is a temporary solution until we can convert this entire handler to use Fetch API
+        // This WILL not handle multiple Set-Cookie headers correctly. Proper Fetch-Response support will resolve this.
+        webRes.headers.forEach((value, key) => {
+          res.setHeader(key, value)
+        })
+
+        if (mwResponse.isRedirect() || mwResponse.body) {
+          // We also don't know what the Router will do if this RSC handler fails at any point
+          // Whatever that behavior is, this should match.
+          throw new Error(
+            'Not Implemented: What should happen if this RSC handler fails? And which part - Client side router?',
+          )
+        }
+      }
+      // start rendering the RSC
+      // determine the component or action to handle/render
+      if (shouldHandleRSCRequest(requestUrl, req.headers)) {
+        // now that middleware has run, we can check if the request is allowed
+        if (!isRequestAllowed(requestUrl, options.routes)) {
+          console.log('Request is not allowed')
+          throw Error('Request is not allowed')
         }
 
-        // Getting a warning on GitHub about this
-        // https://github.com/redwoodjs/redwood/security/code-scanning/211
-        // Handle according to TODO below
-        res.end(String(err))
-        // TODO (RSC): When we have `yarn rw dev` support we should do this:
-        // if (options.command === 'dev') {
-        //   res.end(String(err))
-        // } else {
-        //   res.end()
-        // }
+        rscId = getReactServerComponentId(requestUrl)
+        rsfId = getRectServerActionId(requestUrl)
+
+        if (rscId && rscId !== '_') {
+          res.setHeader('Content-Type', 'text/x-component')
+          props = JSON.parse(requestUrl.searchParams.get('props') || '{}')
+        } else {
+          rscId = undefined
+        }
+
+        // React Server Actions
+        if (rsfId) {
+          // TODO (RSC): For React Server Actions we need to limit the request
+          // size somehow
+          // https://nextjs.org/docs/app/api-reference/functions/server-actions#size-limitation
+          if (req.headers['content-type']?.startsWith('multipart/form-data')) {
+            console.log('RSA: multipart/form-data')
+            const bb = busboy({ headers: req.headers })
+            // TODO (RSC): The generic here could be typed better
+            const reply = decodeReplyFromBusboy<unknown[]>(bb)
+
+            req.pipe(bb)
+            args = await reply
+
+            // TODO (RSC): Loop over args (to not only look at args[0])
+            // TODO (RSC): Verify that this works with node16 (MDN says FormData is
+            // only supported in node18 and up)
+            if (args[0] instanceof FormData) {
+              const serializedFormData: Record<string, any> = {}
+
+              for (const [key, value] of args[0]) {
+                // Several form fields can share the same name. This should be
+                // represented as an array of the values of all those fields
+                if (serializedFormData[key] !== undefined) {
+                  if (!Array.isArray(serializedFormData[key])) {
+                    serializedFormData[key] = [serializedFormData[key]]
+                  }
+
+                  serializedFormData[key].push(value)
+                } else {
+                  serializedFormData[key] = value
+                }
+              }
+
+              args[0] = {
+                __formData__: true,
+                state: serializedFormData,
+              }
+            }
+          } else {
+            console.log('RSA: regular body')
+            let body = ''
+
+            for await (const chunk of req) {
+              body += chunk
+            }
+
+            if (body) {
+              args = await decodeReply(body)
+            }
+          }
+        }
+      } else {
+        next()
       }
 
-      try {
+      // if we have a component or action to render
+      if (rscId || rsfId) {
+        console.log('rscRequestHandler: args', args)
+
         const pipeable = await renderRsc({
           rscId,
           props,
@@ -224,44 +221,74 @@ export function createRscRequestHandler(
         // pipeable.on(handleError)
 
         pipeable.pipe(res)
-      } catch (e) {
-        handleError(e)
       }
+    } catch (e) {
+      handleError(e)
     }
   }
 }
 
-const shouldHandleRSCRequest = (requestUrl: URL) => {
+// checks if the request is a RSC request base on url path and headers
+const shouldHandleRSCRequest = (
+  requestUrl: URL,
+  headers: IncomingHttpHeaders,
+) => {
   console.log('url.pathname', requestUrl.pathname)
-  return requestUrl.pathname.startsWith(BASE_PATH)
+
+  // https://www.rfc-editor.org/rfc/rfc6648
+  // "SHOULD NOT prefix their parameter names with "X-" or similar constructs."
+  return requestUrl.pathname.startsWith(BASE_PATH) && headers['rw-rsc'] === '1'
+}
+
+// checks if the component in the request matches the route
+const isComponentMatchRoute = (
+  rscId: string,
+  matchedRoute: RWRouteManifestItem,
+) => {
+  return matchedRoute.pageIdentifier === rscId
 }
 
 // find the Route from the request based on the url
 // can use the route to determine if the RSC request to render is private or not
-const isRequestAllowed = async (
-  requestUrl: URL,
-  routes: RWRouteManifestItem[],
-) => {
-  const matchedRoute = await matchRouteFromRequestURL(requestUrl, routes)
+const isRequestAllowed = (requestUrl: URL, routes: RWRouteManifestItem[]) => {
+  let isAllowed = false
+  const matchedRoute = matchRouteFromRequestURL(requestUrl, routes)
+  const rscId = getReactServerComponentId(requestUrl)
 
-  //@TODO
-  // if matchedRoute isPrivate, and user is not logged in then we should not render the RSC
-  console.log('>>>>>>>>>> matchedRoute', matchedRoute)
-  // if (matchedRoute.isPrivate) {
-  // @TODO
-  // if user is not logged in then we should not render the RSC
-  // we should return a 401
-  // check roles
-  // get roles from auth state anf check if user has the role
-  // }
+  // if no route or rscId found, throw an error
+  if (!matchedRoute || !rscId) {
+    console.warn('No route found for', requestUrl.pathname)
+    throw new Error('No route found for ' + requestUrl.pathname)
+  }
 
-  // also, should probably check if rscId is in the route manifest
-  // so you cannot pick a route you can access nd RscId maybe you cannot access
-  // we'd add the route page_identifier_str or const to the manifest
+  // check if rscId is in the route manifest for the matched route
+  // so you cannot pick a route you can access and a component you cannot
+  const doesComponentMatchRoute = isComponentMatchRoute(rscId, matchedRoute)
 
-  const isAllowed = matchedRoute ? true : false
-  console.log('isRequestAllowed', isAllowed, matchedRoute)
-  // for now
+  if (!doesComponentMatchRoute) {
+    console.warn('No component found for', rscId, matchedRoute.name)
+    throw new Error(
+      `'No component found for ${rscId} and route ${matchedRoute.name}`,
+    )
+  }
+
+  if (!matchedRoute.isPrivate) {
+    isAllowed = true
+  } else {
+    const authState = getAuthState()
+
+    // @TODO
+    // if user is not logged in then we should not render the RSC
+    // we should return a 401?
+    // check roles?
+    // get roles from auth state anf check if user has the role
+    // }
+
+    if (authState.isAuthenticated) {
+      isAllowed = true
+    }
+  }
+
   return isAllowed
 }
 
@@ -269,7 +296,7 @@ const isRequestAllowed = async (
 // given paths are unique (TODO need to enforce this)
 // then the consider auth rules is isPrivate to determine if we should
 // run the render the RSC or not
-const matchRouteFromRequestURL = async (
+const matchRouteFromRequestURL = (
   requestUrl: URL,
   routes: RWRouteManifestItem[],
 ) => {
@@ -281,8 +308,7 @@ const matchRouteFromRequestURL = async (
 
   if (!matchedRoute) {
     console.warn('No route found for', routePath)
-
-    // throw 404?
+    throw new Error('No route found for ' + routePath)
   }
 
   return matchedRoute
