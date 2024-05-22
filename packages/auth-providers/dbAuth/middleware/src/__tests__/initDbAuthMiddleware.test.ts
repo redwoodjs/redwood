@@ -2,7 +2,6 @@ import path from 'node:path'
 
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
-import { dbAuthSession } from '@redwoodjs/auth-dbauth-api'
 import {
   MiddlewareRequest as MWRequest,
   MiddlewareRequest,

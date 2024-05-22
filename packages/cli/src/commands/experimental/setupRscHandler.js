@@ -78,6 +78,30 @@ export const handler = async ({ force, verbose }) => {
         options: { persistentOutput: true },
       },
       {
+        title: `Overwriting entry.client${ext}...`,
+        task: async () => {
+          const entryClientTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'entry.client.tsx.template',
+            ),
+            'utf-8',
+          )
+          const entryClientContent = isTypeScriptProject()
+            ? entryClientTemplate
+            : await transformTSToJS(
+                rwPaths.web.entryClient,
+                entryClientTemplate,
+              )
+
+          writeFile(rwPaths.web.entryClient, entryClientContent, {
+            overwriteExisting: true,
+          })
+        },
+      },
+      {
         title: `Overwriting entry.server${ext}...`,
         task: async () => {
           const entryServerTemplate = fs.readFileSync(

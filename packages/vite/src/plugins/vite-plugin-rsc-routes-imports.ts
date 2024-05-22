@@ -31,7 +31,7 @@ const withRelativeImports = (page: PagesDependency) => {
   }
 }
 
-export function rscRoutesAutoLoader(): Plugin {
+export function rscRoutesImports(): Plugin {
   // Vite IDs are always normalized and so we avoid windows path issues
   // by normalizing the path here.
   const routesFileId = normalizePath(getPaths().web.routes)
@@ -62,7 +62,7 @@ export function rscRoutesAutoLoader(): Plugin {
   }
 
   return {
-    name: 'rsc-routes-auto-loader-dev',
+    name: 'rsc-routes-imports',
     transform: async function (code, id) {
       // We only care about the routes file
       if (id !== routesFileId) {
@@ -89,20 +89,6 @@ export function rscRoutesAutoLoader(): Plugin {
       // imported in the routes file otherwise there would be conflicts.
       const importedNames = new Set<string>()
 
-      // Store a reference to all default imports so we can update Set wrapper
-      // imports later
-      // TODO (RSC): Make this all imports, not just default imports. But have to
-      // figure out how to handle something like
-      // `import { MyLayout, SomethingElse } from './myLayout'`
-      // and turning it into
-      // `import { SomethingElse } from './myLayout'`
-      // `import { MyLayout } from '@redwoodjs/router/dist/dummyComponent'`
-      // and also
-      // `import MyLayout, { SomethingElse } from './myLayout'`
-      const allImports = new Map<string, t.ImportDeclaration>()
-      // All components used as Set wrappers
-      const wrappers = new Set<string>()
-
       traverse(ast, {
         ImportDeclaration(path) {
           const importPath = path.node.source.value
@@ -112,7 +98,7 @@ export function rscRoutesAutoLoader(): Plugin {
           }
 
           const userImportRelativePath = getPathRelativeToSrc(
-            importStatementPath(importPath),
+            importStatementPath(path.node.source?.value),
           )
 
           const defaultSpecifier = path.node.specifiers.filter((specifier) =>
@@ -122,69 +108,20 @@ export function rscRoutesAutoLoader(): Plugin {
           if (userImportRelativePath && defaultSpecifier) {
             importedNames.add(defaultSpecifier.local.name)
           }
-
-          path.node.specifiers.forEach((specifier) => {
-            allImports.set(specifier.local.name, path.node)
-          })
-        },
-        JSXElement() {
-          // The file is already transformed from JSX to `jsx()` and `jsxs()`
-          // function calls when this plugin executes, so no JSXElement nodes
-          // will be present in the AST.
-        },
-        CallExpression(path) {
-          if (
-            (t.isIdentifier(path.node.callee, { name: 'jsxs' }) ||
-              t.isIdentifier(path.node.callee, { name: 'jsx' })) &&
-            t.isIdentifier(path.node.arguments[0]) &&
-            path.node.arguments[0].name === 'Set'
-          ) {
-            const jsxArgs = path.node.arguments
-            if (t.isObjectExpression(jsxArgs[1])) {
-              const wrapProp = jsxArgs[1].properties.find(
-                (prop): prop is t.ObjectProperty =>
-                  t.isObjectProperty(prop) &&
-                  t.isIdentifier(prop.key, { name: 'wrap' }),
-              )
-
-              if (t.isArrayExpression(wrapProp?.value)) {
-                wrapProp.value.elements.forEach((element) => {
-                  if (t.isIdentifier(element)) {
-                    wrappers.add(element.name)
-                  }
-                })
-              } else if (t.isIdentifier(wrapProp?.value)) {
-                wrappers.add(wrapProp.value.name)
-              }
-            }
-          }
         },
       })
 
-      const nonImportedPages = pages.filter(
-        (page) => !importedNames.has(page.importName),
-      )
-
-      wrappers.forEach((wrapper) => {
-        const wrapperImport = allImports.get(wrapper)
-
-        if (wrapperImport) {
-          // This will turn all wrapper imports into something like
-          // import NavigationLayout from "@redwoodjs/router/dist/dummyComponent";
-          // which is all we need for client side routing
-          wrapperImport.source.value = '@redwoodjs/router/dist/dummyComponent'
-        }
+      const nonImportedPages = pages.filter((page) => {
+        return !importedNames.has(page.importName)
       })
 
-      // All pages will just be `const NameOfPage = () => null`
+      // Insert the page import into the code
       for (const page of nonImportedPages) {
         ast.program.body.unshift(
-          t.variableDeclaration('const', [
-            t.variableDeclarator(
-              t.identifier(page.constName),
-              t.arrowFunctionExpression([], t.nullLiteral()),
-            ),
-          ]),
+          t.importDeclaration(
+            [t.importDefaultSpecifier(t.identifier(page.importName))],
+            t.stringLiteral(page.importPath),
+          ),
         )
       }
 
