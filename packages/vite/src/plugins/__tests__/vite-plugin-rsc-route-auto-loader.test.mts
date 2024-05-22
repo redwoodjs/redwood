@@ -211,18 +211,17 @@ describe('rscRoutesAutoLoader', () => {
     // - The import of `renderFromDist` from `@redwoodjs/vite/clientSsr`
     // - The call to `renderFromDist` for each page that wasn't already imported
     expect(output).toMatchInlineSnapshot(`
-      "import { renderFromDist } from "@redwoodjs/vite/clientSsr";
-      const EmptyUserNewEmptyUserPage = renderFromDist("EmptyUserNewEmptyUserPage");
-      const EmptyUserEmptyUsersPage = renderFromDist("EmptyUserEmptyUsersPage");
-      const EmptyUserEmptyUserPage = renderFromDist("EmptyUserEmptyUserPage");
-      const EmptyUserEditEmptyUserPage = renderFromDist("EmptyUserEditEmptyUserPage");
-      const HomePage = renderFromDist("HomePage");
-      const FatalErrorPage = renderFromDist("FatalErrorPage");
-      const AboutPage = renderFromDist("AboutPage");
+      "const EmptyUserNewEmptyUserPage = () => null;
+      const EmptyUserEmptyUsersPage = () => null;
+      const EmptyUserEmptyUserPage = () => null;
+      const EmptyUserEditEmptyUserPage = () => null;
+      const HomePage = () => null;
+      const FatalErrorPage = () => null;
+      const AboutPage = () => null;
       import { jsx, jsxs } from "react/jsx-runtime";
       import { Router, Route, Set } from "@redwoodjs/router";
-      import NavigationLayout from "./layouts/NavigationLayout/NavigationLayout";
-      import ScaffoldLayout from "./layouts/ScaffoldLayout/ScaffoldLayout";
+      import NavigationLayout from "@redwoodjs/router/dist/dummyComponent";
+      import ScaffoldLayout from "@redwoodjs/router/dist/dummyComponent";
       import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
       const Routes = () => {
         return /* @__PURE__ */jsxs(Router, {
