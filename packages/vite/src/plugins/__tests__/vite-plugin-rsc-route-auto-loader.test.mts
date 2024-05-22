@@ -208,8 +208,9 @@ describe('rscRoutesAutoLoader', () => {
     )
 
     // What we are interested in seeing here is:
-    // - The import of `renderFromDist` from `@redwoodjs/vite/clientSsr`
-    // - The call to `renderFromDist` for each page that wasn't already imported
+    // Dummy pages (`() => null`) for all the pages
+    // Dummy imports (`import SomeWrapper from "@redwoodjs/router/dist/dummyComponent"`)
+    // for all the wrapper components
     expect(output).toMatchInlineSnapshot(`
       "const EmptyUserNewEmptyUserPage = () => null;
       const EmptyUserEmptyUsersPage = () => null;
