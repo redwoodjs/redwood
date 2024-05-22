@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest'
 import { afterEach, vi } from 'vitest'
 import { cleanup } from '@testing-library/react'
 
-// @ts-expect-error TODO(jgmw): Fix this typing
+// @ts-expect-error
 globalThis.scrollTo = vi.fn()
 
 afterEach(() => {

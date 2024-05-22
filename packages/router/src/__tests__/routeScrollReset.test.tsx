@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { act, cleanup, render, screen } from '@testing-library/react'
-import { describe, beforeEach, afterEach, it, vi, expect } from 'vitest'
+import { describe, beforeEach, afterEach, it, expect } from 'vitest'
 import type { Mock } from 'vitest'
 
 import { navigate } from '../history'
@@ -18,11 +18,6 @@ describe('Router scroll reset', () => {
       <Route path="/two" page={Page2} name="page2" />
     </Router>
   )
-
-  // Redfine the mocks here again (already done in jest.setup)
-  // Otherwise the mock doesn't clear for some reason
-  // @ts-expect-error TODO(jgmw): Fix this typing
-  globalThis.scrollTo = vi.fn()
 
   beforeEach(async () => {
     ;(globalThis.scrollTo as Mock).mockClear()
