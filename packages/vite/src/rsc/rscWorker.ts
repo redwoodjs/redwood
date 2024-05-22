@@ -17,7 +17,7 @@ import { createServer, resolveConfig } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { getEntries, getEntriesFromDist } from '../lib/entries.js'
+import { getEntriesFromDist } from '../lib/entries.js'
 import { registerFwGlobalsAndShims } from '../lib/registerFwGlobalsAndShims.js'
 import { StatusError } from '../lib/StatusError.js'
 import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
@@ -223,36 +223,30 @@ async function getViteConfig() {
   })()
 }
 
-const getFunctionComponent = async (rscId: string) => {
+const getRoutesComponent: any = async () => {
   // TODO (RSC): Get rid of this when we only use the worker in dev mode
   const isDev = Object.keys(absoluteClientEntries).length === 0
 
-  let entryModule: string | undefined
+  let routesPath: string | undefined
   if (isDev) {
-    entryModule = getEntries()[rscId]
+    routesPath = getPaths().web.routes
   } else {
     const serverEntries = await getEntriesFromDist()
     console.log('rscWorker.ts serverEntries', serverEntries)
 
-    entryModule = path.join(getPaths().web.distRsc, serverEntries[rscId])
+    routesPath = path.join(
+      getPaths().web.distRsc,
+      serverEntries['__rwjs__Routes'],
+    )
   }
 
-  if (!entryModule) {
-    throw new StatusError('No entry found for ' + rscId, 404)
+  if (!routesPath) {
+    throw new StatusError('No entry found for __rwjs__Routes', 404)
   }
 
-  const mod = await loadServerFile(entryModule)
+  const routes = await loadServerFile(routesPath)
 
-  if (typeof mod === 'function') {
-    return mod
-  }
-
-  if (typeof mod?.default === 'function') {
-    return mod?.default
-  }
-
-  // TODO (RSC): Making this a 404 error is marked as "HACK" in waku's source
-  throw new StatusError('No function component found', 404)
+  return routes.default
 }
 
 function resolveClientEntryForProd(
@@ -400,27 +394,18 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
 
   const config = await getViteConfig()
 
-  if (input.rscId === '__rwjs__Routes') {
-    const serverRoutes = await getFunctionComponent('__rwjs__Routes')
-
-    return renderToPipeableStream(
-      createElement(serverRoutes, input.props),
-      getBundlerConfig(config),
-    )
-    // TODO (RSC): We used to transform() the stream here to remove
-    // "prefixToRemove", which was the common base path to all filenames. We
-    // then added it back in handleRsa with a simple
-    // `path.join(config.root, fileId)`. I removed all of that for now to
-    // simplify the code. But if we wanted to add it back in the future to save
-    // some bytes in all the Flight data we could.
-  }
-
-  const component = await getFunctionComponent(input.rscId)
+  const serverRoutes = await getRoutesComponent()
 
   return renderToPipeableStream(
-    createElement(component, input.props),
+    createElement(serverRoutes, input.props),
     getBundlerConfig(config),
   )
+  // TODO (RSC): We used to transform() the stream here to remove
+  // "prefixToRemove", which was the common base path to all filenames. We
+  // then added it back in handleRsa with a simple
+  // `path.join(config.root, fileId)`. I removed all of that for now to
+  // simplify the code. But if we wanted to add it back in the future to save
+  // some bytes in all the Flight data we could.
 }
 
 interface SerializedFormData {
