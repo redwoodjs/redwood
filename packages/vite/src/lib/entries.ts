@@ -1,5 +1,3 @@
-import path from 'node:path'
-
 import {
   ensurePosixPath,
   getPaths,
@@ -34,7 +32,7 @@ export function getEntries() {
     throw new Error('Server Entry file not found')
   }
   entries['__rwjs__ServerEntry'] = serverEntry
-  entries['__rwjs__Routes'] = path.join(getPaths().web.src, 'Routes.tsx')
+  entries['__rwjs__Routes'] = getPaths().web.routes
 
   return entries
 }
