@@ -3,8 +3,7 @@ import '@testing-library/jest-dom/vitest'
 import { afterEach, vi } from 'vitest'
 import { cleanup } from '@testing-library/react'
 
-// @ts-expect-error
-globalThis.scrollTo = vi.fn()
+vi.spyOn(globalThis, 'scrollTo').mockImplementation(() => {})
 
 afterEach(() => {
   // If vitest globals are enabled testing-library will clean up after each
