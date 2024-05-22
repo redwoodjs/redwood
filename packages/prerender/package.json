@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/prerender",
-  "version": "7.6.1",
+  "version": "7.6.2",
   "description": "RedwoodJS prerender",
   "repository": {
     "type": "git",
@@ -26,10 +26,10 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.5",
-    "@redwoodjs/project-config": "7.6.1",
-    "@redwoodjs/router": "7.6.1",
-    "@redwoodjs/structure": "7.6.1",
-    "@redwoodjs/web": "7.6.1",
+    "@redwoodjs/project-config": "7.6.2",
+    "@redwoodjs/router": "7.6.2",
+    "@redwoodjs/structure": "7.6.2",
+    "@redwoodjs/web": "7.6.2",
     "@whatwg-node/fetch": "0.9.17",
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.12",
