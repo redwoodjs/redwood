@@ -11,7 +11,7 @@ export class SshExecutor {
    */
   async exec(path, command, args) {
     const argsString = args?.join(' ') || ''
-    const sshCommand = command + argsString
+    const sshCommand = command + (argsString ? ` ${argsString}` : '')
 
     if (this.verbose) {
       console.log(
