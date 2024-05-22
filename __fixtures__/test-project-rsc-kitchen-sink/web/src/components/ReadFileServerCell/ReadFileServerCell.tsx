@@ -35,7 +35,13 @@ export const Success = ({ file }: SuccessProps) => {
     <div className="read-file-server-cell">
       <p>The source of this server cell:</p>
       <pre
-        style={{ border: '1px solid gray', margin: '1em', background: '#ddd' }}
+        style={{
+          border: '1px solid gray',
+          margin: '1em',
+          background: '#ddd',
+          height: '260xp',
+          overflowY: 'scroll',
+        }}
       >
         <code>{file}</code>
       </pre>
