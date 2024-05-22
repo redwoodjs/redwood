@@ -101,6 +101,48 @@ describe('useOgImage', () => {
     expect(url).toBe('http://localhost/about.png?foo=bar')
   })
 
+  test('can include additional query variables in the form of URLSearchParams', () => {
+    mockLocation.mockReturnValue({
+      origin: 'http://localhost',
+      pathname: '/about',
+      searchParams: new URLSearchParams('foo=bar'),
+    })
+
+    const { url } = useOgImage({
+      searchParams: new URLSearchParams({ baz: 'qux' }),
+    })
+
+    expect(url).toBe('http://localhost/about.png?foo=bar&baz=qux')
+  })
+
+  test('can include additional query variables in the form of an object', () => {
+    mockLocation.mockReturnValue({
+      origin: 'http://localhost',
+      pathname: '/about',
+      searchParams: new URLSearchParams('foo=bar'),
+    })
+
+    const { url } = useOgImage({
+      searchParams: { baz: 'qux' },
+    })
+
+    expect(url).toBe('http://localhost/about.png?foo=bar&baz=qux')
+  })
+
+  test('searchParams should override existing query variables', () => {
+    mockLocation.mockReturnValue({
+      origin: 'http://localhost',
+      pathname: '/about',
+      searchParams: new URLSearchParams('foo=bar'),
+    })
+
+    const { url } = useOgImage({
+      searchParams: { foo: 'baz' },
+    })
+
+    expect(url).toBe('http://localhost/about.png?foo=baz')
+  })
+
   test('allows setting a custom extension', () => {
     mockLocation.mockReturnValue({
       origin: 'http://localhost',
@@ -166,10 +208,11 @@ describe('useOgImage', () => {
       width: 1024,
       height: 768,
       quality: 75,
+      searchParams: new URLSearchParams({ baz: 'qux' }),
     })
 
     expect(url).toBe(
-      'http://localhost/user/1.png?foo=bar&width=1024&height=768&quality=75',
+      'http://localhost/user/1.png?foo=bar&baz=qux&width=1024&height=768&quality=75',
     )
     expect(width).toBe(1024)
     expect(height).toBe(768)
