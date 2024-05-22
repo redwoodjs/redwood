@@ -4,7 +4,7 @@ import { getPaths } from '@redwoodjs/project-config'
 
 import { getEntries } from '../lib/entries.js'
 import { onWarn } from '../lib/onWarn.js'
-import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
+import { rscRoutesImports } from '../plugins/vite-plugin-rsc-routes-imports.js'
 import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
 
@@ -67,7 +67,7 @@ export async function rscBuildForServer(
       // (It does other things as well, but that's why it needs clientEntryFiles)
       rscTransformUseClientPlugin(clientEntryFiles),
       rscTransformUseServerPlugin(),
-      rscRoutesAutoLoader(),
+      rscRoutesImports(),
     ],
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often

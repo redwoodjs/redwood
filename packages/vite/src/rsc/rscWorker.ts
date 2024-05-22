@@ -3,10 +3,10 @@
 // `--condition react-server`. If we did try to do that the main process
 // couldn't do SSR because it would be missing client-side React functions
 // like `useState` and `createContext`.
-import { Buffer } from 'node:buffer'
+import type { Buffer } from 'node:buffer'
 import { Server } from 'node:http'
 import path from 'node:path'
-import { Transform, Writable } from 'node:stream'
+import { Writable } from 'node:stream'
 import { parentPort } from 'node:worker_threads'
 
 import { createElement } from 'react'
@@ -232,6 +232,8 @@ const getFunctionComponent = async (rscId: string) => {
     entryModule = getEntries()[rscId]
   } else {
     const serverEntries = await getEntriesFromDist()
+    console.log('rscWorker.ts serverEntries', serverEntries)
+
     entryModule = path.join(getPaths().web.distRsc, serverEntries[rscId])
   }
 
@@ -398,12 +400,27 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
 
   const config = await getViteConfig()
 
+  if (input.rscId === '__rwjs__Routes') {
+    const serverRoutes = await getFunctionComponent('__rwjs__Routes')
+
+    return renderToPipeableStream(
+      createElement(serverRoutes, input.props),
+      getBundlerConfig(config),
+    )
+    // TODO (RSC): We used to transform() the stream here to remove
+    // "prefixToRemove", which was the common base path to all filenames. We
+    // then added it back in handleRsa with a simple
+    // `path.join(config.root, fileId)`. I removed all of that for now to
+    // simplify the code. But if we wanted to add it back in the future to save
+    // some bytes in all the Flight data we could.
+  }
+
   const component = await getFunctionComponent(input.rscId)
 
   return renderToPipeableStream(
     createElement(component, input.props),
     getBundlerConfig(config),
-  ).pipe(transformRsfId(config.root))
+  )
 }
 
 interface SerializedFormData {
@@ -424,10 +441,9 @@ async function handleRsa(input: RenderInput): Promise<PipeableStream> {
 
   const config = await getViteConfig()
 
-  const [fileId, name] = input.rsfId.split('#')
-  const fname = path.join(config.root, fileId)
-  console.log('Server Action, fileId', fileId, 'name', name, 'fname', fname)
-  const module = await loadServerFile(fname)
+  const [fileName, actionName] = input.rsfId.split('#')
+  console.log('Server Action fileName', fileName, 'actionName', actionName)
+  const module = await loadServerFile(fileName)
 
   if (isSerializedFormData(input.args[0])) {
     const formData = new FormData()
@@ -445,36 +461,6 @@ async function handleRsa(input: RenderInput): Promise<PipeableStream> {
     input.args[0] = formData
   }
 
-  const data = await (module[name] || module)(...input.args)
+  const data = await (module[actionName] || module)(...input.args)
   return renderToPipeableStream(data, getBundlerConfig(config))
-}
-
-// HACK Patching stream is very fragile.
-// TODO (RSC): Sanitize prefixToRemove to make sure it's safe to use in a
-// RegExp (CodeQL is complaining on GitHub)
-function transformRsfId(prefixToRemove: string) {
-  // Should be something like /home/runner/work/redwood/test-project-rsa
-  console.log('prefixToRemove', prefixToRemove)
-
-  return new Transform({
-    transform(chunk, encoding, callback) {
-      if (encoding !== ('buffer' as any)) {
-        throw new Error('Unknown encoding')
-      }
-      const data = chunk.toString()
-      const lines = data.split('\n')
-      console.log('lines', lines)
-      let changed = false
-      for (let i = 0; i < lines.length; ++i) {
-        const match = lines[i].match(
-          new RegExp(`^([0-9]+):{"id":"${prefixToRemove}(.*?)"(.*)$`),
-        )
-        if (match) {
-          lines[i] = `${match[1]}:{"id":"${match[2]}"${match[3]}`
-          changed = true
-        }
-      }
-      callback(null, changed ? Buffer.from(lines.join('\n')) : chunk)
-    },
-  })
 }

@@ -1,6 +1,10 @@
-import { Link, routes } from '@redwoodjs/router'
+import { namedRoutes as routes } from '@redwoodjs/router/dist/namedRoutes'
 
 import './NavigationLayout.css'
+
+const Link = (props: any) => {
+  return <a href={props.to}>{props.children}</a>
+}
 
 type NavigationLayoutProps = {
   children?: React.ReactNode
