@@ -1,5 +1,7 @@
+import React from 'react'
+
 import { render, waitFor } from '@testing-library/react'
-import '@testing-library/jest-dom/jest-globals'
+import { test, beforeEach, expect } from 'vitest'
 
 import { getFocus } from '../a11yUtils'
 import { namedRoutes as routes } from '../namedRoutes'
@@ -49,7 +51,6 @@ const RouteFocusNegativeTabIndexPage = () => (
 
 beforeEach(() => {
   window.history.pushState({}, '', '/')
-  // @ts-expect-error - No type gen here for routes like there is in a real app
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 

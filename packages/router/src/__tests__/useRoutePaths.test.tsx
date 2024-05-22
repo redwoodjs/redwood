@@ -1,7 +1,7 @@
-/** @jest-environment jsdom */
 import React from 'react'
 
 import { render, act } from '@testing-library/react'
+import { test } from 'vitest'
 
 import { navigate } from '../history'
 import { Route } from '../Route'
