@@ -63,7 +63,7 @@ export function rscRoutesAutoLoader(): Plugin {
 
   return {
     name: 'rsc-routes-auto-loader-dev',
-    transform: async function (code, id, options) {
+    transform: async function (code, id) {
       // We only care about the routes file
       if (id !== routesFileId) {
         return null
@@ -73,12 +73,6 @@ export function rscRoutesAutoLoader(): Plugin {
       if (pages.length === 0) {
         return null
       }
-
-      // We have to handle the loading of routes in two different ways depending on if
-      // we are doing SSR or not. During SSR we want to load files directly whereas on
-      // the client we have to fetch things over the network.
-      // TODO (RSC): ↑ Update comment to reflect what's actually going on
-      const isSsr = options?.ssr ?? false
 
       // Parse the code as AST
       const ext = path.extname(id)
@@ -135,13 +129,10 @@ export function rscRoutesAutoLoader(): Plugin {
         },
         JSXElement() {
           // The file is already transformed from JSX to `jsx()` and `jsxs()`
-          // calls when this plugin executes, so this will never get called
+          // function calls when this plugin executes, so no JSXElement nodes
+          // will be present in the AST.
         },
         CallExpression(path) {
-          if (isSsr) {
-            return
-          }
-
           if (
             (t.isIdentifier(path.node.callee, { name: 'jsxs' }) ||
               t.isIdentifier(path.node.callee, { name: 'jsx' })) &&
@@ -178,47 +169,22 @@ export function rscRoutesAutoLoader(): Plugin {
         const wrapperImport = allImports.get(wrapper)
 
         if (wrapperImport) {
+          // This will turn all wrapper imports into something like
+          // import NavigationLayout from "@redwoodjs/router/dist/dummyComponent";
+          // which is all we need for client side routing
           wrapperImport.source.value = '@redwoodjs/router/dist/dummyComponent'
         }
       })
 
-      // Insert the page loading into the code
+      // All pages will just be `const NameOfPage = () => null`
       for (const page of nonImportedPages) {
-        if (isSsr) {
-          ast.program.body.unshift(
-            t.variableDeclaration('const', [
-              t.variableDeclarator(
-                t.identifier(page.constName),
-                t.callExpression(t.identifier('renderFromDist'), [
-                  t.stringLiteral(page.constName),
-                ]),
-              ),
-            ]),
-          )
-        } else {
-          ast.program.body.unshift(
-            t.variableDeclaration('const', [
-              t.variableDeclarator(
-                t.identifier(page.constName),
-                t.arrowFunctionExpression([], t.nullLiteral()),
-              ),
-            ]),
-          )
-        }
-      }
-
-      if (isSsr) {
-        // Insert an import for the load function we need
         ast.program.body.unshift(
-          t.importDeclaration(
-            [
-              t.importSpecifier(
-                t.identifier('renderFromDist'),
-                t.identifier('renderFromDist'),
-              ),
-            ],
-            t.stringLiteral('@redwoodjs/vite/clientSsr'),
-          ),
+          t.variableDeclaration('const', [
+            t.variableDeclarator(
+              t.identifier(page.constName),
+              t.arrowFunctionExpression([], t.nullLiteral()),
+            ),
+          ]),
         )
       }
 
