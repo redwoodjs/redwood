@@ -7,6 +7,8 @@ import fse from 'fs-extra'
 import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
+import * as nftPacker from '../packing/nft'
+
 const ZIPBALL_DIR = './api/dist/zipball'
 
 export function zipDirectory(source, out) {
@@ -59,7 +61,7 @@ export async function packageSingleFunction(functionFile) {
   copyPromises.push(functionEntryPromise)
 
   await Promise.all(copyPromises)
-  await exports.zipDirectory(
+  await zipDirectory(
     `${ZIPBALL_DIR}/${functionName}`,
     `${ZIPBALL_DIR}/${functionName}.zip`
   )
@@ -69,5 +71,5 @@ export async function packageSingleFunction(functionFile) {
 
 export function nftPack() {
   const filesToBePacked = findApiDistFunctions()
-  return Promise.all(filesToBePacked.map(exports.packageSingleFunction))
+  return Promise.all(filesToBePacked.map(nftPacker.packageSingleFunction))
 }
