@@ -5,24 +5,14 @@ import type { ExecaError } from 'execa'
 import execa from 'execa'
 
 import { getPaths } from '@redwoodjs/project-config'
-// Allow import of untyped package
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
 import type { StorybookYargsOptions } from '../types'
 
-/*
-readFile and writeFile are somewhat duplicated from @redwoodjs/cli; I could not for the life of me get the package
-import to work.
-
-Additionally, I simplified writeFile for this use case.
-
-TODO: import from package
-*/
 const readFile = (target: fs.PathOrFileDescriptor) =>
   fs.readFileSync(target, { encoding: 'utf8' })
+
 const writeFile = (target: string, contents: any) => {
   const { base } = getPaths()
   if (fs.existsSync(target)) {
@@ -52,7 +42,7 @@ export async function handler({
     { force: true },
   )
 
-  /* Check for conflicting options */
+  // Check for conflicting options
   if (build && smokeTest) {
     throw new Error('Can not provide both "--build" and "--smoke-test"')
   }
@@ -73,7 +63,7 @@ export async function handler({
     cwd,
   }
 
-  /* Create the `MockServiceWorker.js` file. See https://v1.mswjs.io/docs/cli/init. */
+  // Create the `MockServiceWorker.js` file. See https://v1.mswjs.io/docs/cli/init
   await execa.command(
     `yarn msw init "${staticAssetsFolder}" --no-save`,
     execaOptions,
@@ -90,7 +80,7 @@ export async function handler({
     'preview-body.html',
   )
 
-  /* Check if the config files exists yet. If they doesn't, create em! */
+  // Check if the config files exists yet. If they don't, create 'em!
   if (!fs.existsSync(storybookMainFilePath)) {
     console.log("Storybook's main.ts not found. Creating it now...")
     const mainConfigTemplatePath = path.join(

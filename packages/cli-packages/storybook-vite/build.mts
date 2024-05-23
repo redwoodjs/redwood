@@ -12,7 +12,6 @@ await build()
  * We need template files, which esbuild won't copy over,
  * so we do it manually here.
  */
-
 async function copyAssets() {
   const cliRootDirPath = path.dirname(fileURLToPath(import.meta.url))
   const cliSrcDirPath = path.join(cliRootDirPath, 'src')

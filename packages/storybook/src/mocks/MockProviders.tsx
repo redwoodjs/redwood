@@ -14,7 +14,6 @@ import { MockParamsProvider } from './MockParamsProvider'
 // Import the user's Router from `./web/src/Router.{tsx,jsx}`,
 // we pass the `children` from the user's Router to `./MockRouter.Router`
 // so that we can populate the `routes object` in Storybook and tests.
-// // @ts-expect-error - this comes from a Vite alias in main.ts
 let UserRouterWithRoutes: React.FC
 
 try {
@@ -28,7 +27,6 @@ try {
 export const MockProviders: React.FunctionComponent<{
   children: React.ReactNode
 }> = ({ children }) => {
-  console.log('In MockProviders')
   return (
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <RedwoodApolloProvider useAuth={useAuth}>

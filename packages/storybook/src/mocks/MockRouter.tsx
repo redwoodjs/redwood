@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import type React from 'react'
 
 // Bypass the `main` field in `package.json` because we alias `@redwoodjs/router`

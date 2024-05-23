@@ -21,7 +21,6 @@ export const core: PresetProperty<'core'> = {
 
 export const previewAnnotations: StorybookConfig['previewAnnotations'] = (
   entry,
-  _options,
 ) => {
   return [...entry, require.resolve('./preview.js')]
 }
@@ -39,7 +38,8 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config) => {
   )
 
   return mergeConfig(config, {
-    /** This is necessary as it otherwise just points to the `web` directory, but it needs to point to `web/src` */
+    // This is necessary as it otherwise just points to the `web` directory,
+    // but it needs to point to `web/src`
     root: redwoodProjectPaths.web.src,
     plugins: [mockRouter(), mockAuth(), autoImports],
     resolve: {
