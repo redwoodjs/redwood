@@ -3,7 +3,7 @@
 // This needs to be a client component because it uses onClick, and the onClick
 // event handler can't be serialized when passed as an RSC Flight response
 
-import { forwardRef } from 'react'
+import React, { forwardRef } from 'react'
 
 import { navigate } from './history'
 

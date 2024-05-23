@@ -78,16 +78,16 @@ function resolveClientEntryForProd(
 // const moduleCache = (globalThis as any).__webpack_module_cache__
 
 export function renderFromDist<TProps extends Record<string, any>>(
-  rscId: string,
+  pathname: string,
 ) {
-  console.log('renderFromDist rscId', rscId)
+  console.log('renderFromDist pathname', pathname)
 
   const cssLinks = getRscStylesheetLinkGenerator()()
 
   // Create temporary client component that wraps the component (Page, most
   // likely) returned by the `createFromReadableStream` call.
   const SsrComponent = async (props: TProps) => {
-    console.log('SsrComponent', rscId, 'props', props)
+    console.log('SsrComponent', pathname, 'props', props)
 
     const ServerEntry = await getServerEntryComponent<TProps>()
 
@@ -130,7 +130,7 @@ export function renderFromDist<TProps extends Record<string, any>>(
       // createElement(layout, undefined, createElement(page, props)),
       // @ts-expect-error - WIP
       createElement(ServerEntry, {
-        location: { pathname: rscId },
+        location: { pathname },
         css: cssLinks,
       }),
       bundlerConfig,

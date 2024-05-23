@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { act, render, waitFor } from '@testing-library/react'
+import { test } from 'vitest'
 
 import { navigate } from '../history'
 import { Route } from '../Route'

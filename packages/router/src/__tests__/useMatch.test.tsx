@@ -1,8 +1,7 @@
 import React from 'react'
 
-import '@testing-library/jest-dom'
-
 import { render, renderHook as tlrRenderHook } from '@testing-library/react'
+import { describe, it, expect, afterEach } from 'vitest'
 
 import { Link } from '../link'
 import { LocationProvider } from '../location'
@@ -40,7 +39,7 @@ describe('useMatch', () => {
     return (
       <Link
         to={to}
-        style={{ color: matchInfo.match ? 'green' : 'red' }}
+        style={{ color: matchInfo.match ? '#0F0' : '#F00' }}
         {...rest}
       />
     )
@@ -55,7 +54,7 @@ describe('useMatch', () => {
       </LocationProvider>,
     )
 
-    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: green')
+    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: #0F0')
   })
 
   it('returns a match on the same pathname with search parameters', () => {
@@ -70,7 +69,7 @@ describe('useMatch', () => {
       </LocationProvider>,
     )
 
-    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: green')
+    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: #0F0')
   })
 
   it('does NOT receive active class on different path', () => {
@@ -82,7 +81,7 @@ describe('useMatch', () => {
       </LocationProvider>,
     )
 
-    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: red')
+    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: #F00')
   })
 
   it('does NOT receive active class on the same pathname with different parameters', () => {
@@ -97,7 +96,7 @@ describe('useMatch', () => {
       </LocationProvider>,
     )
 
-    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: red')
+    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: #F00')
   })
 
   describe('routeParams', () => {
