@@ -2,7 +2,7 @@ import path from 'node:path'
 
 import type { Statement, ModuleDeclaration, AssignmentExpression } from 'acorn'
 import * as acorn from 'acorn-loose'
-import type { Plugin } from 'vite'
+import { normalizePath, type Plugin } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -264,9 +264,11 @@ async function transformClientModule(
 
   console.log('entryRecord', entryRecord)
 
-  const loadId = entryRecord
-    ? path.join(getPaths().web.distRsc, 'assets', `${entryRecord[0]}.mjs`)
-    : url
+  const loadId = normalizePath(
+    entryRecord
+      ? path.join(getPaths().web.distRsc, 'assets', `${entryRecord[0]}.mjs`)
+      : url,
+  )
 
   console.log('loadId', loadId)
 
