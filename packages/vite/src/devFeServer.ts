@@ -10,6 +10,7 @@ import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { dependenciesPatterns } from './cjsInterop.js'
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createMiddlewareRouter } from './middleware/register.js'
@@ -60,7 +61,7 @@ async function createServer() {
     configFile: rwPaths.web.viteConfig,
     plugins: [
       cjsInterop({
-        dependencies: ['@redwoodjs/**'],
+        dependencies: dependenciesPatterns,
       }),
       rscEnabled && rscRoutesAutoLoader(),
     ],
