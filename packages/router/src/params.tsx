@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 
-import { createNamedContext } from './createNamedContext'
+import { createNamedContext } from './createNamedContext.js'
 
 export interface ParamsContextProps {
   params: Record<string, string>

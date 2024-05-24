@@ -1,7 +1,7 @@
-import { useRouterState } from './router-context'
+import { useRouterState } from './router-context.js'
 
-import { routes } from '.'
-import type { AvailableRoutes } from '.'
+import { routes } from './index.js'
+import type { AvailableRoutes } from './index.js'
 
 // This needs to be a function so that we can use codegen to provide better
 // types in a user's project (see web-routerRoutes.d.ts)

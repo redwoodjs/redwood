@@ -7,8 +7,16 @@
     "directory": "packages/router"
   },
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/cjs/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "skip-nav.css"
@@ -16,7 +24,7 @@
   "scripts": {
     "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-router.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose tsconfig.build.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
@@ -24,13 +32,9 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.5",
-    "@redwoodjs/auth": "workspace:*",
-    "core-js": "3.37.1"
+    "@redwoodjs/auth": "workspace:*"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.5",
-    "@babel/core": "^7.22.20",
     "@redwoodjs/framework-tools": "workspace:*",
     "@testing-library/jest-dom": "6.4.5",
     "@types/react": "^18.2.55",

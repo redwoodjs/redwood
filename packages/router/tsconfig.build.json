@@ -7,9 +7,8 @@
     "rootDir": "src",
     "outDir": "dist",
   },
-  "include": ["src", "./ambient.d.ts"],
+  "include": ["src", "ambient.d.ts"],
   "references": [
-    { "path": "../auth" },
-    { "path": "../framework-tools" },
+    { "path": "../framework-tools" }
   ]
 }
