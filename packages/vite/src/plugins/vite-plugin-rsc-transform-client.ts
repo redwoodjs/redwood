@@ -1,6 +1,6 @@
 import path from 'node:path'
 
-import type { Statement, ModuleDeclaration } from 'acorn'
+import type { Statement, ModuleDeclaration, AssignmentExpression } from 'acorn'
 import * as acorn from 'acorn-loose'
 import type { Plugin } from 'vite'
 
@@ -122,7 +122,7 @@ function addExportNames(names: Array<string>, node: any) {
 }
 
 /**
- * Parses `body` for exports and stores them in `names` (the second argument)
+ * Parses `body` for exports and stores them in `names`
  */
 async function parseExportNamesIntoNames(
   code: string,
@@ -181,6 +181,65 @@ async function parseExportNamesIntoNames(
         }
 
         continue
+
+      // For CJS support
+      case 'ExpressionStatement': {
+        let assignmentExpression: AssignmentExpression | null = null
+
+        if (node.expression.type === 'AssignmentExpression') {
+          assignmentExpression = node.expression
+        } else if (
+          node.expression.type === 'LogicalExpression' &&
+          node.expression.right.type === 'AssignmentExpression'
+        ) {
+          assignmentExpression = node.expression.right
+        }
+
+        if (!assignmentExpression) {
+          continue
+        }
+
+        if (assignmentExpression.left.type !== 'MemberExpression') {
+          continue
+        }
+
+        if (assignmentExpression.left.object.type !== 'Identifier') {
+          continue
+        }
+
+        if (
+          assignmentExpression.left.object.name === 'exports' &&
+          assignmentExpression.left.property.type === 'Identifier'
+        ) {
+          // This is for handling exports like
+          // exports.Link = ...
+
+          if (!names.includes(assignmentExpression.left.property.name)) {
+            names.push(assignmentExpression.left.property.name)
+          }
+        } else if (
+          assignmentExpression.left.object.name === 'module' &&
+          assignmentExpression.left.property.type === 'Identifier' &&
+          assignmentExpression.left.property.name === 'exports' &&
+          assignmentExpression.right.type === 'ObjectExpression'
+        ) {
+          // This is for handling exports like
+          // module.exports = { Link: ... }
+
+          assignmentExpression.right.properties.forEach((property) => {
+            if (
+              property.type === 'Property' &&
+              property.key.type === 'Identifier'
+            ) {
+              if (!names.includes(property.key.name)) {
+                names.push(property.key.name)
+              }
+            }
+          })
+        }
+
+        continue
+      }
     }
   }
 }
