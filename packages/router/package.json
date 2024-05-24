@@ -14,6 +14,66 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/cjs/index.js"
+    },
+    "./dist/namedRoutes": {
+      "types": "./dist/namedRoutes.d.ts",
+      "import": "./dist/namedRoutes.js",
+      "default": "./dist/cjs/namedRoutes.js"
+    },
+    "./dist/route-validators": {
+      "types": "./dist/route-validators.d.ts",
+      "import": "./dist/route-validators.js",
+      "default": "./dist/cjs/route-validators.js"
+    },
+    "./dist/util": {
+      "types": "./dist/util.d.ts",
+      "import": "./dist/util.js",
+      "default": "./dist/cjs/util.js"
+    },
+    "./dist/router": {
+      "types": "./dist/router.d.ts",
+      "import": "./dist/router.js",
+      "default": "./dist/cjs/router.js"
+    },
+    "./dist/index": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/cjs/index.js"
+    },
+    "./dist/dummyComponent": {
+      "types": "./dist/dummyComponent.d.ts",
+      "import": "./dist/dummyComponent.js",
+      "default": "./dist/cjs/dummyComponent.js"
+    },
+    "./dist/server-router": {
+      "types": "./dist/server-router.d.ts",
+      "import": "./dist/server-router.js",
+      "default": "./dist/cjs/server-router.js"
+    },
+    "./dist/location": {
+      "types": "./dist/location.d.ts",
+      "import": "./dist/location.js",
+      "default": "./dist/cjs/location.js"
+    },
+    "./dist/analyzeRoutes": {
+      "types": "./dist/analyzeRoutes.d.ts",
+      "import": "./dist/analyzeRoutes.js",
+      "default": "./dist/cjs/analyzeRoutes.js"
+    },
+    "./dist/splash-page": {
+      "types": "./dist/splash-page.d.ts",
+      "import": "./dist/splash-page.js",
+      "default": "./dist/cjs/splash-page.js"
+    },
+    "./dist/Route": {
+      "types": "./dist/Route.d.ts",
+      "import": "./dist/Route.js",
+      "default": "./dist/cjs/Route.js"
+    },
+    "./dist/Set": {
+      "types": "./dist/Set.d.ts",
+      "import": "./dist/Set.js",
+      "default": "./dist/cjs/Set.js"
     }
   },
   "types": "./dist/index.d.ts",
