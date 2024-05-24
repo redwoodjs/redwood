@@ -105,12 +105,24 @@ describe('rscRoutesAutoLoader', () => {
       id,
     )
 
+    const clientId = normalizePath(
+      path.join(
+        process.env.RWJS_CWD,
+        'web',
+        'dist',
+        'rsc',
+        'assets',
+        'rsc-link.js-13.mjs',
+      ),
+    )
+
     // What we are interested in seeing here is:
-    // - The import of `renderFromRscServer` from `@redwoodjs/vite/client`
-    // - The call to `renderFromRscServer` for each page that wasn't already imported
+    // - There's a CLIENT_REFERENCE
+    // - There's a Link export
+    // - There's a proper $$id
     expect(output)
       .toMatchInlineSnapshot(`"const CLIENT_REFERENCE = Symbol.for('react.client.reference');
-export const Link = Object.defineProperties(function() {throw new Error("Attempted to call Link() from the server but Link is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-link.js-13.mjs#Link"}});
+export const Link = Object.defineProperties(function() {throw new Error("Attempted to call Link() from the server but Link is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "${clientId}#Link"}});
 "`)
   })
 
@@ -144,21 +156,32 @@ export const Link = Object.defineProperties(function() {throw new Error("Attempt
       id,
     )
 
+    const clientId = normalizePath(
+      path.join(
+        process.env.RWJS_CWD,
+        'web',
+        'dist',
+        'rsc',
+        'assets',
+        'rsc-index.js-15.mjs',
+      ),
+    )
+
     // What we are interested in seeing here is:
     // - The import of `renderFromRscServer` from `@redwoodjs/vite/client`
     // - The call to `renderFromRscServer` for each page that wasn't already imported
     expect(output)
       .toMatchInlineSnapshot(`"const CLIENT_REFERENCE = Symbol.for('react.client.reference');
-export const CheckmarkIcon = Object.defineProperties(function() {throw new Error("Attempted to call CheckmarkIcon() from the server but CheckmarkIcon is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-index.js-15.mjs#CheckmarkIcon"}});
-export const ErrorIcon = Object.defineProperties(function() {throw new Error("Attempted to call ErrorIcon() from the server but ErrorIcon is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-index.js-15.mjs#ErrorIcon"}});
-export const LoaderIcon = Object.defineProperties(function() {throw new Error("Attempted to call LoaderIcon() from the server but LoaderIcon is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-index.js-15.mjs#LoaderIcon"}});
-export const ToastBar = Object.defineProperties(function() {throw new Error("Attempted to call ToastBar() from the server but ToastBar is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-index.js-15.mjs#ToastBar"}});
-export const ToastIcon = Object.defineProperties(function() {throw new Error("Attempted to call ToastIcon() from the server but ToastIcon is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-index.js-15.mjs#ToastIcon"}});
-export const Toaster = Object.defineProperties(function() {throw new Error("Attempted to call Toaster() from the server but Toaster is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-index.js-15.mjs#Toaster"}});
-export const resolveValue = Object.defineProperties(function() {throw new Error("Attempted to call resolveValue() from the server but resolveValue is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-index.js-15.mjs#resolveValue"}});
-export const toast = Object.defineProperties(function() {throw new Error("Attempted to call toast() from the server but toast is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-index.js-15.mjs#toast"}});
-export const useToaster = Object.defineProperties(function() {throw new Error("Attempted to call useToaster() from the server but useToaster is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-index.js-15.mjs#useToaster"}});
-export const useToasterStore = Object.defineProperties(function() {throw new Error("Attempted to call useToasterStore() from the server but useToasterStore is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-index.js-15.mjs#useToasterStore"}});
+export const CheckmarkIcon = Object.defineProperties(function() {throw new Error("Attempted to call CheckmarkIcon() from the server but CheckmarkIcon is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "${clientId}#CheckmarkIcon"}});
+export const ErrorIcon = Object.defineProperties(function() {throw new Error("Attempted to call ErrorIcon() from the server but ErrorIcon is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "${clientId}#ErrorIcon"}});
+export const LoaderIcon = Object.defineProperties(function() {throw new Error("Attempted to call LoaderIcon() from the server but LoaderIcon is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "${clientId}#LoaderIcon"}});
+export const ToastBar = Object.defineProperties(function() {throw new Error("Attempted to call ToastBar() from the server but ToastBar is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "${clientId}#ToastBar"}});
+export const ToastIcon = Object.defineProperties(function() {throw new Error("Attempted to call ToastIcon() from the server but ToastIcon is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "${clientId}#ToastIcon"}});
+export const Toaster = Object.defineProperties(function() {throw new Error("Attempted to call Toaster() from the server but Toaster is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "${clientId}#Toaster"}});
+export const resolveValue = Object.defineProperties(function() {throw new Error("Attempted to call resolveValue() from the server but resolveValue is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "${clientId}#resolveValue"}});
+export const toast = Object.defineProperties(function() {throw new Error("Attempted to call toast() from the server but toast is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "${clientId}#toast"}});
+export const useToaster = Object.defineProperties(function() {throw new Error("Attempted to call useToaster() from the server but useToaster is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "${clientId}#useToaster"}});
+export const useToasterStore = Object.defineProperties(function() {throw new Error("Attempted to call useToasterStore() from the server but useToasterStore is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},{$$typeof: {value: CLIENT_REFERENCE},$$id: {value: "${clientId}#useToasterStore"}});
 "`)
   })
 })
