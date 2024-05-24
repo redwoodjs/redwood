@@ -262,9 +262,13 @@ async function transformClientModule(
     ([_key, value]) => value === url,
   )
 
+  console.log('entryRecord', entryRecord)
+
   const loadId = entryRecord
     ? path.join(getPaths().web.distRsc, 'assets', `${entryRecord[0]}.mjs`)
     : url
+
+  console.log('loadId', loadId)
 
   let newSrc =
     "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"
