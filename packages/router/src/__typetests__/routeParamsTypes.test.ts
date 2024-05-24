@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'tstyche'
 
-import type { RouteParams, ParamType } from '../routeParamsTypes'
+import type { RouteParams, ParamType } from '../routeParamsTypes.js'
 
 /**
  * FAQ:
