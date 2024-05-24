@@ -8537,6 +8537,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.5"
     "@redwoodjs/auth": "workspace:*"
+    "@redwoodjs/framework-tools": "workspace:*"
     "@testing-library/jest-dom": "npm:6.4.5"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
@@ -8544,6 +8545,7 @@ __metadata:
     react: "npm:19.0.0-beta-04b058868c-20240508"
     react-dom: "npm:19.0.0-beta-04b058868c-20240508"
     tstyche: "npm:1.1.0"
+    tsx: "npm:4.10.3"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
