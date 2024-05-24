@@ -16,55 +16,20 @@
       "default": "./dist/cjs/index.js"
     },
     "./skip-nav.css": "./skip-nav.css",
-    "./dist/namedRoutes": {
-      "types": "./dist/namedRoutes.d.ts",
-      "import": "./dist/namedRoutes.js",
-      "default": "./dist/cjs/namedRoutes.js"
+    "./dist/ActivePageContext": {
+      "types": "./dist/ActivePageContext.d.ts",
+      "import": "./dist/ActivePageContext.js",
+      "default": "./dist/cjs/ActivePageContext.js"
     },
-    "./dist/route-validators": {
-      "types": "./dist/route-validators.d.ts",
-      "import": "./dist/route-validators.js",
-      "default": "./dist/cjs/route-validators.js"
+    "./dist/AuthenticatedRoute": {
+      "types": "./dist/AuthenticatedRoute.d.ts",
+      "import": "./dist/AuthenticatedRoute.js",
+      "default": "./dist/cjs/AuthenticatedRoute.js"
     },
-    "./dist/util": {
-      "types": "./dist/util.d.ts",
-      "import": "./dist/util.js",
-      "default": "./dist/cjs/util.js"
-    },
-    "./dist/router": {
-      "types": "./dist/router.d.ts",
-      "import": "./dist/router.js",
-      "default": "./dist/cjs/router.js"
-    },
-    "./dist/index": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/cjs/index.js"
-    },
-    "./dist/dummyComponent": {
-      "types": "./dist/dummyComponent.d.ts",
-      "import": "./dist/dummyComponent.js",
-      "default": "./dist/cjs/dummyComponent.js"
-    },
-    "./dist/server-router": {
-      "types": "./dist/server-router.d.ts",
-      "import": "./dist/server-router.js",
-      "default": "./dist/cjs/server-router.js"
-    },
-    "./dist/location": {
-      "types": "./dist/location.d.ts",
-      "import": "./dist/location.js",
-      "default": "./dist/cjs/location.js"
-    },
-    "./dist/analyzeRoutes": {
-      "types": "./dist/analyzeRoutes.d.ts",
-      "import": "./dist/analyzeRoutes.js",
-      "default": "./dist/cjs/analyzeRoutes.js"
-    },
-    "./dist/splash-page": {
-      "types": "./dist/splash-page.d.ts",
-      "import": "./dist/splash-page.js",
-      "default": "./dist/cjs/splash-page.js"
+    "./dist/PageLoadingContext": {
+      "types": "./dist/PageLoadingContext.d.ts",
+      "import": "./dist/PageLoadingContext.js",
+      "default": "./dist/cjs/PageLoadingContext.js"
     },
     "./dist/Route": {
       "types": "./dist/Route.d.ts",
@@ -75,6 +40,156 @@
       "types": "./dist/Set.d.ts",
       "import": "./dist/Set.js",
       "default": "./dist/cjs/Set.js"
+    },
+    "./dist/a11yUtils": {
+      "types": "./dist/a11yUtils.d.ts",
+      "import": "./dist/a11yUtils.js",
+      "default": "./dist/cjs/a11yUtils.js"
+    },
+    "./dist/active-route-loader": {
+      "types": "./dist/active-route-loader.d.ts",
+      "import": "./dist/active-route-loader.js",
+      "default": "./dist/cjs/active-route-loader.js"
+    },
+    "./dist/analyzeRoutes": {
+      "types": "./dist/analyzeRoutes.d.ts",
+      "import": "./dist/analyzeRoutes.js",
+      "default": "./dist/cjs/analyzeRoutes.js"
+    },
+    "./dist/createNamedContext": {
+      "types": "./dist/createNamedContext.d.ts",
+      "import": "./dist/createNamedContext.js",
+      "default": "./dist/cjs/createNamedContext.js"
+    },
+    "./dist/dummyComponent": {
+      "types": "./dist/dummyComponent.d.ts",
+      "import": "./dist/dummyComponent.js",
+      "default": "./dist/cjs/dummyComponent.js"
+    },
+    "./dist/history": {
+      "types": "./dist/history.d.ts",
+      "import": "./dist/history.js",
+      "default": "./dist/cjs/history.js"
+    },
+    "./dist/index": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/cjs/index.js"
+    },
+    "./dist/link": {
+      "types": "./dist/link.d.ts",
+      "import": "./dist/link.js",
+      "default": "./dist/cjs/link.js"
+    },
+    "./dist/location": {
+      "types": "./dist/location.d.ts",
+      "import": "./dist/location.js",
+      "default": "./dist/cjs/location.js"
+    },
+    "./dist/namedRoutes": {
+      "types": "./dist/namedRoutes.d.ts",
+      "import": "./dist/namedRoutes.js",
+      "default": "./dist/cjs/namedRoutes.js"
+    },
+    "./dist/navLink": {
+      "types": "./dist/navLink.d.ts",
+      "import": "./dist/navLink.js",
+      "default": "./dist/cjs/navLink.js"
+    },
+    "./dist/page": {
+      "types": "./dist/page.d.ts",
+      "import": "./dist/page.js",
+      "default": "./dist/cjs/page.js"
+    },
+    "./dist/params": {
+      "types": "./dist/params.d.ts",
+      "import": "./dist/params.js",
+      "default": "./dist/cjs/params.js"
+    },
+    "./dist/redirect": {
+      "types": "./dist/redirect.d.ts",
+      "import": "./dist/redirect.js",
+      "default": "./dist/cjs/redirect.js"
+    },
+    "./dist/route-announcement": {
+      "types": "./dist/route-announcement.d.ts",
+      "import": "./dist/route-announcement.js",
+      "default": "./dist/cjs/route-announcement.js"
+    },
+    "./dist/route-focus": {
+      "types": "./dist/route-focus.d.ts",
+      "import": "./dist/route-focus.js",
+      "default": "./dist/cjs/route-focus.js"
+    },
+    "./dist/route-validators": {
+      "types": "./dist/route-validators.d.ts",
+      "import": "./dist/route-validators.js",
+      "default": "./dist/cjs/route-validators.js"
+    },
+    "./dist/routeParamsTypes": {
+      "types": "./dist/routeParamsTypes.d.ts",
+      "import": "./dist/routeParamsTypes.js",
+      "default": "./dist/cjs/routeParamsTypes.js"
+    },
+    "./dist/router-context": {
+      "types": "./dist/router-context.d.ts",
+      "import": "./dist/router-context.js",
+      "default": "./dist/cjs/router-context.js"
+    },
+    "./dist/router": {
+      "types": "./dist/router.d.ts",
+      "import": "./dist/router.js",
+      "default": "./dist/cjs/router.js"
+    },
+    "./dist/rsc-link": {
+      "types": "./dist/rsc-link.d.ts",
+      "import": "./dist/rsc-link.js",
+      "default": "./dist/cjs/rsc-link.js"
+    },
+    "./dist/server-route-loader": {
+      "types": "./dist/server-route-loader.d.ts",
+      "import": "./dist/server-route-loader.js",
+      "default": "./dist/cjs/server-route-loader.js"
+    },
+    "./dist/server-router": {
+      "types": "./dist/server-router.d.ts",
+      "import": "./dist/server-router.js",
+      "default": "./dist/cjs/server-router.js"
+    },
+    "./dist/skipNav": {
+      "types": "./dist/skipNav.d.ts",
+      "import": "./dist/skipNav.js",
+      "default": "./dist/cjs/skipNav.js"
+    },
+    "./dist/splash-page": {
+      "types": "./dist/splash-page.d.ts",
+      "import": "./dist/splash-page.js",
+      "default": "./dist/cjs/splash-page.js"
+    },
+    "./dist/useIsMounted": {
+      "types": "./dist/useIsMounted.d.ts",
+      "import": "./dist/useIsMounted.js",
+      "default": "./dist/cjs/useIsMounted.js"
+    },
+    "./dist/useMatch": {
+      "types": "./dist/useMatch.d.ts",
+      "import": "./dist/useMatch.js",
+      "default": "./dist/cjs/useMatch.js"
+    },
+    "./dist/useRouteName": {
+      "types": "./dist/useRouteName.d.ts",
+      "import": "./dist/useRouteName.js",
+      "default": "./dist/cjs/useRouteName.js"
+    },
+    "./dist/useRoutePaths": {
+      "types": "./dist/useRoutePaths.d.ts",
+      "import": "./dist/useRoutePaths.js",
+      "default": "./dist/cjs/useRoutePaths.js"
+    },
+    "./dist/util": {
+      "types": "./dist/util.d.ts",
+      "import": "./dist/util.js",
+      "default": "./dist/cjs/util.js"
     }
   },
   "types": "./dist/index.d.ts",
