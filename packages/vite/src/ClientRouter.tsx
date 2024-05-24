@@ -3,7 +3,7 @@
 // what to do about rscFetch here vs renderFromRscServer and see if maybe that
 // one should live somewhere else where @redwoodjs/router can import from
 
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import type { Options } from 'react-server-dom-webpack/client'
 import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
@@ -76,7 +76,10 @@ export const Router = ({ paramTypes, children }: RouterProps) => {
 }
 
 const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
-  const location = useLocation()
+  const { pathname, search } = useLocation()
+  const location = { pathname, search }
+
+  const [renderCount, setRenderCount] = React.useState(0)
 
   const { namedRoutesMap } = useMemo(() => {
     return analyzeRoutes(children, {
@@ -91,18 +94,23 @@ const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   // Note that the value changes at runtime
   Object.assign(namedRoutes, namedRoutesMap)
 
+  useEffect(() => {
+    setRenderCount((rc) => rc + 1)
+
+    routes = rscFetch('__rwjs__Routes', { location })
+  }, [pathname, search])
+
   // TODO (RSC): Refetch when the location changes
   // It currently works because we always do a full page refresh, but that's
   // not what we really want to do)
   if (!routes) {
-    routes = rscFetch('__rwjs__Routes', {
-      // All we need right now is the pathname. Plus, `location` is a URL
-      // object, and it doesn't JSON.stringify well. Basically all you end up
-      // with is the href. That's why we manually construct the object here
-      // instead of just passing `location`.
-      location: { pathname: location.pathname },
-    })
+    routes = rscFetch('__rwjs__Routes', { location })
   }
 
-  return routes
+  return (
+    <>
+      {renderCount < -1 && renderCount}
+      {routes}
+    </>
+  )
 }
