@@ -101,5 +101,5 @@ const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
     routes = rscFetch('__rwjs__Routes', { location: { pathname, search } })
   }
 
-  return <>{routes}</>
+  return routes
 }
