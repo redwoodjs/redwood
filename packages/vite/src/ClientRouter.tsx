@@ -62,8 +62,6 @@ function rscFetch(rscId: string, props: Record<string, unknown> = {}) {
   return createFromFetch<never, React.ReactElement>(response, options)
 }
 
-let routes: Thenable<React.ReactElement> | null = null
-
 export const Router = ({ paramTypes, children }: RouterProps) => {
   return (
     // Wrap it in the provider so that useLocation can be used
@@ -75,42 +73,33 @@ export const Router = ({ paramTypes, children }: RouterProps) => {
   )
 }
 
+let routes: Thenable<React.ReactElement> | null = null
+
 const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   const { pathname, search } = useLocation()
-  const location = { pathname, search }
-
-  const [renderCount, setRenderCount] = React.useState(0)
+  const [, setRenderCount] = React.useState(0)
 
   const { namedRoutesMap } = useMemo(() => {
     return analyzeRoutes(children, {
-      currentPathName: location.pathname,
-      // @TODO We haven't handled this with SSR/Streaming yet.
-      // May need a babel plugin to extract userParamTypes from Routes.tsx
+      currentPathName: pathname,
       userParamTypes: paramTypes,
     })
-  }, [location.pathname, children, paramTypes])
+  }, [pathname, children, paramTypes])
 
   // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
   // Note that the value changes at runtime
   Object.assign(namedRoutes, namedRoutesMap)
 
   useEffect(() => {
+    // Force re-render
     setRenderCount((rc) => rc + 1)
 
-    routes = rscFetch('__rwjs__Routes', { location })
+    routes = rscFetch('__rwjs__Routes', { location: { pathname, search } })
   }, [pathname, search])
 
-  // TODO (RSC): Refetch when the location changes
-  // It currently works because we always do a full page refresh, but that's
-  // not what we really want to do)
   if (!routes) {
-    routes = rscFetch('__rwjs__Routes', { location })
+    routes = rscFetch('__rwjs__Routes', { location: { pathname, search } })
   }
 
-  return (
-    <>
-      {renderCount < -1 && renderCount}
-      {routes}
-    </>
-  )
+  return <>{routes}</>
 }
