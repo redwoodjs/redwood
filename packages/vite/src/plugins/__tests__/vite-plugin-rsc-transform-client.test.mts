@@ -173,13 +173,15 @@ export const Link = Object.defineProperties(function() {throw new Error("Attempt
       id,
     )
 
-    const clientId = path.join(
-      process.env.RWJS_CWD,
-      'web',
-      'dist',
-      'rsc',
-      'assets',
-      'rsc-index.js-15.mjs',
+    const clientId = normalizePath(
+      path.join(
+        process.env.RWJS_CWD,
+        'web',
+        'dist',
+        'rsc',
+        'assets',
+        'rsc-index.js-15.mjs',
+      ),
     )
 
     // What we are interested in seeing here is:
