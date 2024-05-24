@@ -15,6 +15,7 @@
       "import": "./dist/index.js",
       "default": "./dist/cjs/index.js"
     },
+    "./skip-nav.css": "./skip-nav.css",
     "./dist/namedRoutes": {
       "types": "./dist/namedRoutes.d.ts",
       "import": "./dist/namedRoutes.js",
