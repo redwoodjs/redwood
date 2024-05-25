@@ -21,7 +21,7 @@ export const registerMiddleware = () => {
     dbAuthHandler,
     getCurrentUser,
     // cookieName optional
-    // extractRoles optional
+    // getRoles optional
     // dbAuthUrl? optional
   })
   

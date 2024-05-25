@@ -18,14 +18,14 @@ export interface DbAuthMiddlewareOptions {
     req: Request | APIGatewayProxyEvent,
     context?: Context,
   ) => DbAuthResponse
-  extractRoles?: (decoded: any) => string[]
+  getRoles?: (decoded: any) => string[]
   getCurrentUser: GetCurrentUser
 }
 
 export const initDbAuthMiddleware = ({
   dbAuthHandler,
   getCurrentUser,
-  extractRoles,
+  getRoles,
   cookieName,
   dbAuthUrl = '/middleware/dbauth',
 }: DbAuthMiddlewareOptions): [Middleware, '*'] => {
@@ -86,7 +86,7 @@ export const initDbAuthMiddleware = ({
         hasError: false,
         userMetadata: currentUser, // dbAuth doesn't have userMetadata
         cookieHeader,
-        roles: extractRoles ? extractRoles(decryptedSession) : [],
+        roles: getRoles ? getRoles(decryptedSession) : [],
       })
     } catch (e) {
       // Clear server auth context

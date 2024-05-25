@@ -83,7 +83,7 @@ describe('dbAuthMiddleware', () => {
         return { id: 'mocked-current-user-1', email: 'user-1@example.com' }
       }),
       dbAuthHandler: vi.fn(),
-      extractRoles: vi.fn(() => ['f1driver']),
+      getRoles: vi.fn(() => ['f1driver']),
     }
     const [middleware] = initDbAuthMiddleware(options)
 
@@ -114,7 +114,7 @@ describe('dbAuthMiddleware', () => {
       roles: ['f1driver'],
     })
 
-    expect(options.extractRoles).toHaveBeenCalledWith({
+    expect(options.getRoles).toHaveBeenCalledWith({
       currentUser: {
         email: 'user-1@example.com',
         id: 'mocked-current-user-1',

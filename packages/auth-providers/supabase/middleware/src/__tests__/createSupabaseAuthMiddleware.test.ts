@@ -222,7 +222,7 @@ describe('createSupabaseAuthMiddleware()', () => {
           user_metadata: { favoriteColor: 'yellow' },
         }
       },
-      extractRoles: vi.fn().mockReturnValue(['admin', 'editor']),
+      getRoles: vi.fn().mockReturnValue(['admin', 'editor']),
     }
 
     const middleware = createSupabaseAuthMiddleware(optionsWithExtractRole)
@@ -254,7 +254,7 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(serverAuthState.roles).toEqual(['admin', 'editor'])
 
     // Called with result of decoding the token
-    expect(optionsWithExtractRole.extractRoles).toHaveBeenCalledWith({
+    expect(optionsWithExtractRole.getRoles).toHaveBeenCalledWith({
       sub: 'abc123',
     })
   })
