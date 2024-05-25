@@ -134,6 +134,16 @@ describe('Redwood Page detection', () => {
 })
 
 describe('Redwood Route detection', () => {
+  it('detects the page identifier for a route', async () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const routes = project.getRouter().routes
+
+    const pageIdentifiers = routes.map((r) => r.page_identifier_str)
+
+    expect(pageIdentifiers.length).toBe(9)
+    expect(pageIdentifiers).toMatchSnapshot()
+  })
   it('detects routes with the prerender prop', async () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })

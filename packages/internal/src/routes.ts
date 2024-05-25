@@ -76,6 +76,7 @@ export interface RWRouteManifestItem {
   isPrivate: boolean
   unauthenticated: string | null
   roles: string | string[] | null
+  pageIdentifier: string | null
   // Probably want isNotFound here, so we can attach a separate 404 handler
 }
 
@@ -119,6 +120,7 @@ export const getProjectRoutes = (): RouteSpec[] => {
       isPrivate: route.isPrivate,
       unauthenticated: route.unauthenticated,
       roles: route.roles,
+      pageIdentifier: route.page_identifier_str,
     }
   })
 }
