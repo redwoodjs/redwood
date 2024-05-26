@@ -79,7 +79,7 @@ function rscFetch(rscId: string, props: Record<string, unknown>) {
 
 export const Router = ({ paramTypes, children }: RouterProps) => {
   return (
-    // Wrap LocationAwareRouter in the provider so that useLocation can be used
+    // Wrap it in the provider so that useLocation can be used
     <LocationProvider>
       <LocationAwareRouter paramTypes={paramTypes}>
         {children}
