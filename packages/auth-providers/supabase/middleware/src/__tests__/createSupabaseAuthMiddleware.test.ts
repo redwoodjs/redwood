@@ -3,11 +3,7 @@ import path from 'node:path'
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { vi } from 'vitest'
 
-import {
-  middlewareDefaultAuthProviderState,
-  unauthenticatedServerAuthState,
-  // type ServerAuthState,
-} from '@redwoodjs/auth'
+import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
 import { authDecoder } from '@redwoodjs/auth-supabase-api'
 import {
   MiddlewareRequest,

@@ -2,6 +2,7 @@ import path from 'node:path'
 
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
+import { dbAuthSession } from '@redwoodjs/auth-dbauth-api'
 import {
   MiddlewareRequest as MWRequest,
   MiddlewareRequest,
@@ -51,17 +52,10 @@ describe('dbAuthMiddleware', () => {
   it('When no cookie headers, pass through the response', async () => {
     const options: DbAuthMiddlewareOptions = {
       cookieName: '8911',
-      getCurrentUser: async () => {
-        return { id: 1, email: 'user-1@example.com' }
-      },
-      dbAuthHandler: async () => {
-        return {
-          body: 'body',
-          headers: {},
-          statusCode: 200,
-        }
-      },
+      getCurrentUser: vi.fn(),
+      dbAuthHandler: vi.fn(),
     }
+
     const [middleware] = initDbAuthMiddleware(options)
     const req = {
       method: 'GET',
@@ -69,7 +63,6 @@ describe('dbAuthMiddleware', () => {
       url: 'http://localhost:8911',
     } as MiddlewareRequest
 
-    // Typecase for the test
     const res = await middleware(req, { passthrough: true } as any)
 
     expect(res).toEqual({ passthrough: true })
@@ -111,7 +104,7 @@ describe('dbAuthMiddleware', () => {
         email: 'user-1@example.com',
         id: 'mocked-current-user-1',
       },
-      roles: ['f1driver'],
+      roles: ['f1driver'], // Because we override the getRoles function
     })
 
     expect(options.getRoles).toHaveBeenCalledWith({
@@ -163,7 +156,7 @@ describe('dbAuthMiddleware', () => {
         email: 'user-1@example.com',
         id: 'mocked-current-user-1',
       },
-      // No extract roles function, so it should be empty
+      // No get roles function, so it should be empty
       roles: [],
     })
 

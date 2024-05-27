@@ -9,6 +9,8 @@ import type { GetCurrentUser } from '@redwoodjs/graphql-server'
 import type { Middleware, MiddlewareRequest } from '@redwoodjs/vite/middleware'
 import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
 
+import { defaultGetRoles } from './defaultGetRoles'
+
 export interface DbAuthMiddlewareOptions {
   cookieName?: string
   dbAuthUrl?: string
@@ -25,7 +27,7 @@ export interface DbAuthMiddlewareOptions {
 export const initDbAuthMiddleware = ({
   dbAuthHandler,
   getCurrentUser,
-  getRoles,
+  getRoles = defaultGetRoles,
   cookieName,
   dbAuthUrl = '/middleware/dbauth',
 }: DbAuthMiddlewareOptions): [Middleware, '*'] => {
@@ -86,7 +88,7 @@ export const initDbAuthMiddleware = ({
         hasError: false,
         userMetadata: currentUser, // dbAuth doesn't have userMetadata
         cookieHeader,
-        roles: getRoles ? getRoles(decryptedSession) : [],
+        roles: getRoles(decryptedSession),
       })
     } catch (e) {
       // Clear server auth context
