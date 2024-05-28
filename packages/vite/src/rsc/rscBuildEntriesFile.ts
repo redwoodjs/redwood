@@ -64,7 +64,6 @@ export async function rscBuildEntriesMappings(
   // Server component names to RSC server asset mapping
   const serverEntries: Record<string, string> = {}
   const entries = {
-    // TODO (RSC): This is a hack to get the server entry file name
     __rwjs__ServerEntry: getPaths().web.entryServer || '',
     __rwjs__Routes: getPaths().web.routes,
   }
