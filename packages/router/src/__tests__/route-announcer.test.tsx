@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { render, waitFor, act } from '@testing-library/react'
-import '@testing-library/jest-dom/jest-globals'
+import { beforeEach, test, expect } from 'vitest'
 
 import { getAnnouncement } from '../a11yUtils'
 import { navigate } from '../history'

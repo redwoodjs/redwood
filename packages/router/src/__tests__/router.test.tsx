@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react'
 
-import '@testing-library/jest-dom/jest-globals'
 import { act, fireEvent, render, waitFor } from '@testing-library/react'
+import {
+  beforeEach,
+  describe,
+  test,
+  beforeAll,
+  afterAll,
+  expect,
+  vi,
+} from 'vitest'
 
 import type { AuthContextInterface, UseAuth } from '@redwoodjs/auth'
 
@@ -1157,7 +1165,7 @@ describe('Unauthorized redirect error messages', () => {
 
   beforeAll(() => {
     err = console.error
-    console.error = jest.fn()
+    console.error = vi.fn()
   })
 
   afterAll(() => {

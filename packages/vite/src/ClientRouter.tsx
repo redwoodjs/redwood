@@ -15,9 +15,18 @@ import type { RouterProps } from '@redwoodjs/router/dist/router'
 
 const BASE_PATH = '/rw-rsc/'
 
-function rscFetch(rscId: string, props: Record<string, unknown> = {}) {
+const rscCache = new Map<string, Thenable<React.ReactElement>>()
+
+function rscFetch(rscId: string, props: Record<string, unknown>) {
+  const serializedProps = JSON.stringify(props)
+
+  const cached = rscCache.get(serializedProps)
+  if (cached) {
+    return cached
+  }
+
   const searchParams = new URLSearchParams()
-  searchParams.set('props', JSON.stringify(props))
+  searchParams.set('props', serializedProps)
 
   // TODO (RSC): During SSR we should not fetch (Is this function really
   // called during SSR?)
@@ -59,10 +68,14 @@ function rscFetch(rscId: string, props: Record<string, unknown> = {}) {
     },
   }
 
-  return createFromFetch<never, React.ReactElement>(response, options)
-}
+  const componentPromise = createFromFetch<never, React.ReactElement>(
+    response,
+    options,
+  )
+  rscCache.set(serializedProps, componentPromise)
 
-let routes: Thenable<React.ReactElement> | null = null
+  return componentPromise
+}
 
 export const Router = ({ paramTypes, children }: RouterProps) => {
   return (
@@ -76,33 +89,18 @@ export const Router = ({ paramTypes, children }: RouterProps) => {
 }
 
 const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
-  const location = useLocation()
+  const { pathname, search } = useLocation()
 
   const { namedRoutesMap } = useMemo(() => {
     return analyzeRoutes(children, {
-      currentPathName: location.pathname,
-      // @TODO We haven't handled this with SSR/Streaming yet.
-      // May need a babel plugin to extract userParamTypes from Routes.tsx
+      currentPathName: pathname,
       userParamTypes: paramTypes,
     })
-  }, [location.pathname, children, paramTypes])
+  }, [pathname, children, paramTypes])
 
   // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
   // Note that the value changes at runtime
   Object.assign(namedRoutes, namedRoutesMap)
 
-  // TODO (RSC): Refetch when the location changes
-  // It currently works because we always do a full page refresh, but that's
-  // not what we really want to do)
-  if (!routes) {
-    routes = rscFetch('__rwjs__Routes', {
-      // All we need right now is the pathname. Plus, `location` is a URL
-      // object, and it doesn't JSON.stringify well. Basically all you end up
-      // with is the href. That's why we manually construct the object here
-      // instead of just passing `location`.
-      location: { pathname: location.pathname },
-    })
-  }
-
-  return routes
+  return rscFetch('__rwjs__Routes', { location: { pathname, search } })
 }
