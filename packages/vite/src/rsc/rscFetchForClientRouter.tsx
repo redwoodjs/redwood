@@ -1,8 +1,3 @@
-// TODO (RSC): This should live in @redwoodjs/router but I didn't want to add
-// `react-server-dom-webpack` as a dependency there. We should first figure out
-// what to do about rscFetch here vs renderFromRscServer and see if maybe that
-// one should live somewhere else where @redwoodjs/router can import from
-
 import type { Options } from 'react-server-dom-webpack/client'
 import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
 
