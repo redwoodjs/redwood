@@ -10,7 +10,7 @@ NOTE: This README needs to be updated when the Supabase Web Auth will create a c
 import type { TagDescriptor } from '@redwoodjs/web'
 
 import App from './App'
-import  createSupabaseAuthMiddleware from '@redwoodjs/auth-supabase-middleware'
+import  initSupabaseMiddleware from '@redwoodjs/auth-supabase-middleware'
 import { Document } from './Document'
 
 import { getCurrentUser } from '$api/src/lib/auth'
@@ -21,7 +21,7 @@ interface Props {
 }
 
 export const registerMiddleware = () => {
-  const supabaseAuthMiddleware = createSupabaseAuthMiddleware({
+  const supabaseAuthMiddleware = initSupabaseMiddleware({
     // Optional. If not set, Supabase will use its own `currentUser` function
     // instead of your app's
     getCurrentUser,
