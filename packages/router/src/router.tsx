@@ -31,7 +31,6 @@ export const Router: React.FC<RouterProps> = ({
   trailingSlashes = 'never',
   children,
 }) => {
-  console.log('router.tsx: Normal Router')
   return (
     // Level 1/3 (outer-most)
     // Wrap it in the provider so that useLocation can be used

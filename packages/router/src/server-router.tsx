@@ -25,7 +25,6 @@ export const Router: React.FC<RouterProps> = ({
   children,
   location,
 }) => {
-  console.log('server-router.tsx: ServerRouter')
   const analyzedRoutes = analyzeRoutes(children, {
     currentPathName: location.pathname,
     // @TODO We haven't handled this with SSR/Streaming yet.

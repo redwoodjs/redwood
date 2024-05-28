@@ -11,7 +11,6 @@ import type { RouterProps } from '@redwoodjs/router/dist/router'
 import { rscFetch } from './rsc/rscFetchForClientRouter'
 
 export const Router = ({ paramTypes, children }: RouterProps) => {
-  console.log('ClientRouter.tsx ClientRouter')
   return (
     // Wrap it in the provider so that useLocation can be used
     <LocationProvider>
@@ -24,12 +23,6 @@ export const Router = ({ paramTypes, children }: RouterProps) => {
 
 const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   const { pathname, search } = useLocation()
-
-  console.log(
-    'ClientRouter.tsx LocationAwareRouter pathname: >%s< search: >%s<',
-    pathname,
-    search,
-  )
 
   const { namedRoutesMap } = useMemo(() => {
     return analyzeRoutes(children, {

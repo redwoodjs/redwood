@@ -17,7 +17,7 @@ const renderRoutesFromDist = async (pathname: string) => {
 }
 
 export const Router = ({ paramTypes, children }: RouterProps) => {
-  console.log('ClientRouter.tsx ClientRouter')
+  console.log('SsrRouter.tsx SsrRouter')
   return (
     // Wrap it in the provider so that useLocation can be used
     <LocationProvider>
