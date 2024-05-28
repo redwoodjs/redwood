@@ -16,7 +16,7 @@ import { invoke } from '../middleware/invokeMiddleware.js'
 import { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 import type { Middleware } from '../middleware/types.js'
 import type { EntryServer } from '../types.js'
-import { makeFilePath, ssrLoadEntrySsr } from '../utils.js'
+import { makeFilePath, ssrLoadEntryServer } from '../utils.js'
 
 import { reactRenderToStreamResponse } from './streamHelpers.js'
 import { loadAndRunRouteHooks } from './triggerRouteHooks.js'
@@ -46,7 +46,7 @@ export const createReactStreamingHandler = async (
   const rwConfig = getConfig()
   const isProd = !viteDevServer
   const middlewareRouter: Router.Instance<any> = await getMiddlewareRouter()
-  let entrySsrImport: EntryServer
+  let entryServerImport: EntryServer
   let fallbackDocumentImport: Record<string, any>
   const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
@@ -54,15 +54,17 @@ export const createReactStreamingHandler = async (
   // Dev is the opposite, we load it every time to pick up changes
   if (isProd) {
     if (rscEnabled) {
-      entrySsrImport = await import(
+      entryServerImport = await import(
         makeFilePath(path.join(rwPaths.web.distClient, '__rwjs__SsrEntry.mjs'))
       )
       console.log(
         'createReactStreamingHandler.ts entryServerImport',
-        entrySsrImport,
+        entryServerImport,
       )
     } else {
-      entrySsrImport = await import(makeFilePath(rwPaths.web.distEntryServer))
+      entryServerImport = await import(
+        makeFilePath(rwPaths.web.distEntryServer)
+      )
     }
 
     fallbackDocumentImport = await import(
@@ -129,13 +131,14 @@ export const createReactStreamingHandler = async (
     // Do this inside the handler for **dev-only**.
     // This makes sure that changes to entry-server are picked up on refresh
     if (!isProd) {
-      entrySsrImport = await ssrLoadEntrySsr(viteDevServer)
+      entryServerImport = await ssrLoadEntryServer(viteDevServer)
       fallbackDocumentImport = await viteDevServer.ssrLoadModule(
         rwPaths.web.document,
       )
     }
 
-    const SsrEntry = entrySsrImport.ServerEntry || entrySsrImport.default
+    const ServerEntry =
+      entryServerImport.ServerEntry || entryServerImport.default
 
     const FallbackDocument =
       fallbackDocumentImport.Document || fallbackDocumentImport.default
@@ -179,7 +182,7 @@ export const createReactStreamingHandler = async (
     const reactResponse = await reactRenderToStreamResponse(
       mwResponse,
       {
-        SsrEntry,
+        ServerEntry,
         FallbackDocument,
         currentUrl,
         metaTags,

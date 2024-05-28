@@ -18,20 +18,19 @@ export type RWRouteManifest = Record<PathDefinition, RWRouteManifestItem>
 
 type PathDefinition = string
 
-export type SsrEntryType = React.FunctionComponent<{
+export type ServerEntryType = React.FunctionComponent<{
   css: string[]
   meta: TagDescriptor[]
 }>
 
-// TODO (RSC): Rename this type
 export type EntryServer =
   | {
       registerMiddleware?: () => Promise<MiddlewareReg> | MiddlewareReg
-      ServerEntry: SsrEntryType
+      ServerEntry: ServerEntryType
       default: never
     }
   | {
       registerMiddleware?: () => Promise<MiddlewareReg> | MiddlewareReg
       ServerEntry: never
-      default: SsrEntryType
+      default: ServerEntryType
     }

@@ -38,7 +38,9 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   }
 
   if (rscEnabled) {
-    await buildRscClientAndServer()
+    await buildRscClientAndServer({ verbose })
+  } else {
+    await buildForStreamingServer({ verbose })
   }
 
   // We generate the RSC client bundle in the rscBuildClient function
@@ -46,10 +48,6 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   if (streamingSsrEnabled && !rscEnabled) {
     console.log('Building client for streaming SSR...\n')
     await buildWeb({ verbose })
-  }
-
-  if (!rscEnabled) {
-    await buildForStreamingServer({ verbose })
   }
 
   await buildRouteHooks(verbose, rwPaths)

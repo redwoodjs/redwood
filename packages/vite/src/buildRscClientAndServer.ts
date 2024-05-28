@@ -6,7 +6,11 @@ import { rscBuildForServer } from './rsc/rscBuildForServer.js'
 import { rscBuildForSsr } from './rsc/rscBuildForSsr.js'
 import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars.js'
 
-export const buildRscClientAndServer = async (verbose = false) => {
+export const buildRscClientAndServer = async ({
+  verbose = false,
+}: {
+  verbose?: boolean
+}) => {
   // Analyze all files and generate a list of RSCs and RSFs
   const { clientEntryFiles, serverEntryFiles } = await rscBuildAnalyze()
 

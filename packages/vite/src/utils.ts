@@ -36,7 +36,7 @@ export function makeFilePath(path: string) {
   return pathToFileURL(path).href
 }
 
-export async function ssrLoadEntrySsr(viteDevServer: ViteDevServer) {
+export async function ssrLoadEntryServer(viteDevServer: ViteDevServer) {
   const rwPaths = getPaths()
 
   if (!rwPaths.web.entryServer) {
@@ -44,7 +44,7 @@ export async function ssrLoadEntrySsr(viteDevServer: ViteDevServer) {
   }
 
   return viteDevServer.ssrLoadModule(
-    path.join(rwPaths.web.src, 'entry.ssr.tsx'),
+    rwPaths.web.entryServer,
     // Have to type cast here because ssrLoadModule just returns a generic
     // Record<string, any> type
   ) as Promise<EntryServer>

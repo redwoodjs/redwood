@@ -19,7 +19,7 @@ import {
 } from '@redwoodjs/web/dist/components/ServerInject'
 
 import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
-import type { SsrEntryType } from '../types.js'
+import type { ServerEntryType } from '../types.js'
 import { makeFilePath } from '../utils.js'
 
 import { createBufferedTransformStream } from './transforms/bufferedTransform.js'
@@ -29,7 +29,7 @@ import { createServerInjectionTransform } from './transforms/serverInjectionTran
 type RDServerType = typeof RDServerModule
 
 interface RenderToStreamArgs {
-  SsrEntry: SsrEntryType
+  ServerEntry: ServerEntryType
   FallbackDocument: FunctionComponent
   currentUrl: URL
   metaTags: TagDescriptor[]
@@ -76,7 +76,7 @@ export async function reactRenderToStreamResponse(
 ) {
   const { waitForAllReady = false } = streamOptions
   const {
-    SsrEntry,
+    ServerEntry,
     FallbackDocument,
     currentUrl,
     metaTags,
@@ -136,7 +136,7 @@ export async function reactRenderToStreamResponse(
           {
             value: injectToPage,
           },
-          createElement(SsrEntry, {
+          createElement(ServerEntry, {
             css: cssLinks,
             meta: metaTags,
           }),
