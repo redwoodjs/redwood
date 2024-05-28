@@ -13,7 +13,7 @@ import {
   MiddlewareResponse,
 } from '@redwoodjs/vite/middleware'
 
-import createSupabaseAuthMiddleware from '../index'
+import initSupabaseAuthMiddleware from '../index'
 import type { SupabaseAuthMiddlewareOptions } from '../index'
 const FIXTURE_PATH = path.resolve(
   __dirname,
@@ -32,8 +32,6 @@ vi.mock('jsonwebtoken', () => {
     },
   }
 })
-
-// })
 
 vi.mock('@redwoodjs/auth-supabase-api', () => {
   return {
@@ -75,7 +73,7 @@ const options: SupabaseAuthMiddlewareOptions = {
 
 describe('createSupabaseAuthMiddleware()', () => {
   it('creates middleware for Supabase SSR auth', async () => {
-    const middleware = createSupabaseAuthMiddleware(options)
+    const [middleware] = initSupabaseAuthMiddleware(options)
     const request = new Request('http://localhost:8911', {
       method: 'GET',
       headers: new Headers(),
@@ -94,7 +92,7 @@ describe('createSupabaseAuthMiddleware()', () => {
   })
 
   it('passes through non-authenticated requests', async () => {
-    const middleware = createSupabaseAuthMiddleware(options)
+    const [middleware] = initSupabaseAuthMiddleware(options)
     const request = new Request('http://localhost:8911', {
       method: 'GET',
       headers: new Headers(),
@@ -104,13 +102,13 @@ describe('createSupabaseAuthMiddleware()', () => {
 
     const result = await middleware(req, res)
     expect(result).toEqual(res)
-    expect(result.body).toEqual('original response body')
+    expect(result?.body).toEqual('original response body')
 
     const serverAuthState = req.serverAuthState.get()
     expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
   })
   it('passes through when no auth-provider cookie', async () => {
-    const middleware = createSupabaseAuthMiddleware(options)
+    const [middleware] = initSupabaseAuthMiddleware(options)
     const request = new Request('http://localhost:8911', {
       method: 'GET',
       headers: new Headers({
@@ -124,14 +122,14 @@ describe('createSupabaseAuthMiddleware()', () => {
 
     const result = await middleware(req, res)
     expect(result).toEqual(res)
-    expect(result.body).toEqual('original response body when no auth provider')
+    expect(result?.body).toEqual('original response body when no auth provider')
 
     const serverAuthState = req.serverAuthState.get()
     expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
   })
 
   it('passes through when unsupported auth-provider', async () => {
-    const middleware = createSupabaseAuthMiddleware(options)
+    const [middleware] = initSupabaseAuthMiddleware(options)
     const request = new Request('http://localhost:8911', {
       method: 'GET',
       headers: new Headers({ cookie: 'auth-provider=unsupported' }),
@@ -143,7 +141,7 @@ describe('createSupabaseAuthMiddleware()', () => {
 
     const result = await middleware(req, res)
     expect(result).toEqual(res)
-    expect(result.body).toEqual(
+    expect(result?.body).toEqual(
       'original response body for unsupported provider',
     )
     const serverAuthState = req.serverAuthState.get()
@@ -151,7 +149,7 @@ describe('createSupabaseAuthMiddleware()', () => {
   })
 
   it('handles current user GETs', async () => {
-    const middleware = createSupabaseAuthMiddleware(options)
+    const [middleware] = initSupabaseAuthMiddleware(options)
     const request = new Request(
       'http://localhost:8911/middleware/supabase/currentUser',
       {
@@ -163,7 +161,7 @@ describe('createSupabaseAuthMiddleware()', () => {
     const res = new MiddlewareResponse()
 
     const result = await middleware(req, res)
-    expect(result.body).toEqual(
+    expect(result?.body).toEqual(
       JSON.stringify({
         currentUser: { id: 1, email: 'user-1@example.com' },
       }),
@@ -175,7 +173,7 @@ describe('createSupabaseAuthMiddleware()', () => {
   })
 
   it('authenticated request sets currentUser', async () => {
-    const middleware = createSupabaseAuthMiddleware(options)
+    const [middleware] = initSupabaseAuthMiddleware(options)
     const request = new Request('http://localhost:8911/authenticated-request', {
       method: 'GET',
       headers: new Headers({
@@ -210,7 +208,7 @@ describe('createSupabaseAuthMiddleware()', () => {
       },
     }
 
-    const middleware = createSupabaseAuthMiddleware(optionsWithUserMetadata)
+    const [middleware] = initSupabaseAuthMiddleware(optionsWithUserMetadata)
     const request = new Request('http://localhost:8911/authenticated-request', {
       method: 'GET',
       headers: new Headers({
@@ -240,6 +238,7 @@ describe('createSupabaseAuthMiddleware()', () => {
   })
 
   it('an exception when getting the currentUser clears out serverAuthState and cookies', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {})
     const optionsWithUserMetadata: SupabaseAuthMiddlewareOptions = {
       getCurrentUser: async () => {
         // this simulates a decoding error or some other issue like tampering with the cookie so the Supabase session is invalid
@@ -248,7 +247,7 @@ describe('createSupabaseAuthMiddleware()', () => {
       },
     }
 
-    const middleware = createSupabaseAuthMiddleware(optionsWithUserMetadata)
+    const [middleware] = initSupabaseAuthMiddleware(optionsWithUserMetadata)
 
     // the default cookie name will always be sb-<project_ref>-auth-token (e.g. sb-example-auth-token )
     const request = new Request('http://localhost:8911/authenticated-request', {
@@ -292,5 +291,7 @@ describe('createSupabaseAuthMiddleware()', () => {
       'expires',
       new Date(0),
     )
+
+    vi.resetAllMocks()
   })
 })
