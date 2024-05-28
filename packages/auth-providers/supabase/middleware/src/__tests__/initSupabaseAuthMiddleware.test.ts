@@ -68,14 +68,14 @@ const options: SupabaseAuthMiddlewareOptions = {
   },
 }
 
-describe('createSupabaseAuthMiddleware()', () => {
+describe('initSupabaseAuthMiddleware()', () => {
   const unauthenticatedServerAuthState = {
     ...middlewareDefaultAuthProviderState,
     roles: [],
     cookieHeader: null,
   }
 
-  it('creates middleware for Supabase SSR auth', async () => {
+  it('initializes middleware for Supabase SSR auth', async () => {
     const [middleware] = initSupabaseAuthMiddleware(options)
     const request = new Request('http://localhost:8911', {
       method: 'GET',
@@ -221,7 +221,7 @@ describe('createSupabaseAuthMiddleware()', () => {
       getRoles: vi.fn().mockReturnValue(['admin', 'editor']),
     }
 
-    const middleware = createSupabaseAuthMiddleware(optionsWithExtractRole)
+    const [middleware] = initSupabaseAuthMiddleware(optionsWithExtractRole)
     const request = new Request('http://localhost:8911/authenticated-request', {
       method: 'GET',
       headers: new Headers({
@@ -229,8 +229,8 @@ describe('createSupabaseAuthMiddleware()', () => {
       }),
     })
     const req = new MiddlewareRequest(request)
-
-    const result = await middleware(req, MiddlewareResponse.next())
+    const res = new MiddlewareResponse()
+    const result = await middleware(req, res)
     expect(result).toBeDefined()
     expect(req).toBeDefined()
 
