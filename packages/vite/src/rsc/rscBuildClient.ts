@@ -1,5 +1,3 @@
-import path from 'node:path'
-
 import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -31,6 +29,10 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     throw new Error('Missing web/src/entry.client')
   }
 
+  if (!rwPaths.web.entryServer) {
+    throw new Error('Missing web/src/entry.server')
+  }
+
   const clientBuildOutput = await viteBuild({
     envFile: false,
     define: {
@@ -48,7 +50,7 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
           // @MARK: temporary hack to find the entry client so we can get the
           // index.css bundle but we don't actually want this on an rsc page!
           'rwjs-client-entry': rwPaths.web.entryClient,
-          __rwjs__SsrEntry: path.join(rwPaths.web.src, 'entry.ssr.tsx'),
+          __rwjs__ServerEntry: rwPaths.web.entryServer,
           // we need this, so that the output contains rsc-specific bundles
           // for the client-only components. They get loaded once the page is
           // rendered
@@ -74,7 +76,7 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
               chunkInfo.name === 'rsdw-client' ||
               chunkInfo.name === '__rwjs__location' ||
               chunkInfo.name === '__rwjs__react' ||
-              chunkInfo.name === '__rwjs__SsrEntry'
+              chunkInfo.name === '__rwjs__ServerEntry'
             ) {
               return '[name].mjs'
             }

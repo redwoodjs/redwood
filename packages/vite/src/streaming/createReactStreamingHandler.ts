@@ -1,4 +1,4 @@
-import path from 'node:path'
+import path from 'path'
 
 import { Response } from '@whatwg-node/fetch'
 import type Router from 'find-my-way'
@@ -55,11 +55,7 @@ export const createReactStreamingHandler = async (
   if (isProd) {
     if (rscEnabled) {
       entryServerImport = await import(
-        makeFilePath(path.join(rwPaths.web.distClient, '__rwjs__SsrEntry.mjs'))
-      )
-      console.log(
-        'createReactStreamingHandler.ts entryServerImport',
-        entryServerImport,
+        makeFilePath(rwPaths.web.distRscEntryServer)
       )
     } else {
       entryServerImport = await import(
