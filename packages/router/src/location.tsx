@@ -26,7 +26,9 @@ class LocationProvider extends React.Component<
 > {
   // When prerendering, there might be more than one level of location
   // providers. Use the values from the one above.
+  // (this is basically the class component version of `useLocation()`)
   static contextType = LocationContext
+
   declare context: React.ContextType<typeof LocationContext>
   HISTORY_LISTENER_ID: string | undefined = undefined
 
@@ -74,6 +76,8 @@ class LocationProvider extends React.Component<
     return this.props.location || this.context || windowLocation
   }
 
+  // componentDidMount() is not called during server rendering (aka SSR and
+  // prerendering)
   componentDidMount() {
     this.HISTORY_LISTENER_ID = gHistory.listen(() => {
       const context = this.getContext()
