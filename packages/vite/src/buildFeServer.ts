@@ -49,7 +49,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   }
 
   if (!rscEnabled) {
-    await buildForStreamingServer({ verbose, rscEnabled })
+    await buildForStreamingServer({ verbose })
   }
 
   await buildRouteHooks(verbose, rwPaths)
