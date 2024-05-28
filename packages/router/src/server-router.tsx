@@ -25,6 +25,7 @@ export const Router: React.FC<RouterProps> = ({
   children,
   location,
 }) => {
+  console.log('server-router.tsx: ServerRouter')
   const analyzedRoutes = analyzeRoutes(children, {
     currentPathName: location.pathname,
     // @TODO We haven't handled this with SSR/Streaming yet.
@@ -76,6 +77,14 @@ export const Router: React.FC<RouterProps> = ({
 
   const { path, page, name, redirect, whileLoadingPage, sets } =
     pathRouteMap[activeRoutePath]
+
+  console.log('server-router sets', sets)
+  console.log('search', location.search)
+
+  if (location.search === 'skip-set') {
+    sets[0] = sets[1]
+    sets.length = sets.length - 1
+  }
 
   if (!path) {
     throw new Error(`Route "${name}" needs to specify a path`)

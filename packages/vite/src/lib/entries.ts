@@ -1,3 +1,5 @@
+import path from 'node:path'
+
 import {
   ensurePosixPath,
   getPaths,
@@ -27,7 +29,7 @@ export function getEntries() {
 
   // Add the ServerEntry entry, noting we use the "__rwjs__" prefix to avoid
   // any potential conflicts with user-defined entries
-  const serverEntry = getPaths().web.entryServer
+  const serverEntry = path.join(getPaths().web.src, 'entry.ssr.tsx')
   if (!serverEntry) {
     throw new Error('Server Entry file not found')
   }

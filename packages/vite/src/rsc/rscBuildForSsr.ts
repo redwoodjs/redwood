@@ -1,52 +1,58 @@
 import path from 'node:path'
 
 import { build as viteBuild } from 'vite'
+import { cjsInterop } from 'vite-plugin-cjs-interop'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { onWarn } from '../lib/onWarn.js'
-import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
-import { ensureProcessDirWeb } from '../utils.js'
+import { onWarn } from '../lib/onWarn'
+import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader'
 
-/**
- * RSC build. Step 2.
- * buildFeServer -> buildRscFeServer -> rscBuildClient
- * Generate the client bundle
- */
-export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
+// SSR build for when RSC is enabled
+export async function rscBuildForSsr({
+  clientEntryFiles,
+  verbose = false,
+}: {
+  clientEntryFiles: Record<string, string>
+  verbose?: boolean
+}) {
   console.log('\n')
-  console.log('2. rscBuildClient')
+  console.log('#. rscBuildForSsr')
   console.log('=================\n')
 
   const rwPaths = getPaths()
 
-  // Safe-guard for the future, if someone tries to include this function in
-  // code that gets executed by running `vite build` or some other bin from the
-  // cli
-  // Running the web build in the wrong working directory can lead to
-  // unintended consequences on CSS processing
-  ensureProcessDirWeb()
-
-  if (!rwPaths.web.entryClient) {
-    throw new Error('Missing web/src/entry.client')
+  if (!rwPaths.web.viteConfig) {
+    throw new Error('Vite config not found')
   }
 
-  const clientBuildOutput = await viteBuild({
+  if (!rwPaths.web.entryClient) {
+    throw new Error('No client entry file found inside ' + rwPaths.web.src)
+  }
+
+  await viteBuild({
+    configFile: rwPaths.web.viteConfig,
     envFile: false,
     define: {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     },
-    plugins: [rscRoutesAutoLoader()],
+    plugins: [
+      cjsInterop({ dependencies: ['@redwoodjs/**'] }),
+      rscRoutesAutoLoader(),
+    ],
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often
       minify: false,
-      outDir: rwPaths.web.distClient,
-      emptyOutDir: true, // Needed because `outDir` is not inside `root`
+      outDir: rwPaths.web.distServer,
+      ssr: true,
+      emptyOutDir: true,
       rollupOptions: {
         onwarn: onWarn,
         input: {
           // @MARK: temporary hack to find the entry client so we can get the
           // index.css bundle but we don't actually want this on an rsc page!
+          // TODO (RSC): Look into if we can remove this (and perhaps instead
+          // use __rwjs__SsrEntry)
           'rwjs-client-entry': rwPaths.web.entryClient,
           __rwjs__SsrEntry: path.join(rwPaths.web.src, 'entry.ssr.tsx'),
           // we need this, so that the output contains rsc-specific bundles
@@ -83,17 +89,11 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
           chunkFileNames: `assets/[name]-[hash].mjs`,
         },
       },
-      manifest: 'client-build-manifest.json',
+      manifest: 'client-build-manifest-ssr.json',
     },
     esbuild: {
       logLevel: 'debug',
     },
-    logLevel: 'info',
+    logLevel: verbose ? 'info' : 'warn',
   })
-
-  if (!('output' in clientBuildOutput)) {
-    throw new Error('Unexpected vite client build output')
-  }
-
-  return clientBuildOutput.output
 }

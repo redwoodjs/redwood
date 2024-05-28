@@ -1,4 +1,5 @@
 import fs from 'fs/promises'
+import path from 'node:path'
 
 import type { OutputChunk } from 'rollup'
 import { normalizePath } from 'vite'
@@ -64,7 +65,8 @@ export async function rscBuildEntriesMappings(
   // Server component names to RSC server asset mapping
   const serverEntries: Record<string, string> = {}
   const entries = {
-    __rwjs__ServerEntry: getPaths().web.entryServer || '',
+    // TODO (RSC): This is a hack to get the server entry file name
+    __rwjs__ServerEntry: path.join(getPaths().web.src, 'entry.ssr.tsx'),
     __rwjs__Routes: getPaths().web.routes,
   }
   for (const [name, sourceFile] of Object.entries(entries)) {

@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 import type { Request as ExpressRequest } from 'express'
@@ -35,7 +36,7 @@ export function makeFilePath(path: string) {
   return pathToFileURL(path).href
 }
 
-export async function ssrLoadEntryServer(viteDevServer: ViteDevServer) {
+export async function ssrLoadEntrySsr(viteDevServer: ViteDevServer) {
   const rwPaths = getPaths()
 
   if (!rwPaths.web.entryServer) {
@@ -43,7 +44,7 @@ export async function ssrLoadEntryServer(viteDevServer: ViteDevServer) {
   }
 
   return viteDevServer.ssrLoadModule(
-    rwPaths.web.entryServer,
+    path.join(rwPaths.web.src, 'entry.ssr.tsx'),
     // Have to type cast here because ssrLoadModule just returns a generic
     // Record<string, any> type
   ) as Promise<EntryServer>

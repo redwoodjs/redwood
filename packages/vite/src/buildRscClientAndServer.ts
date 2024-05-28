@@ -3,9 +3,10 @@ import { rscBuildClient } from './rsc/rscBuildClient.js'
 import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets.js'
 import { rscBuildEntriesMappings } from './rsc/rscBuildEntriesFile.js'
 import { rscBuildForServer } from './rsc/rscBuildForServer.js'
+import { rscBuildForSsr } from './rsc/rscBuildForSsr.js'
 import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars.js'
 
-export const buildRscClientAndServer = async () => {
+export const buildRscClientAndServer = async (verbose = false) => {
   // Analyze all files and generate a list of RSCs and RSFs
   const { clientEntryFiles, serverEntryFiles } = await rscBuildAnalyze()
 
@@ -33,6 +34,8 @@ export const buildRscClientAndServer = async () => {
     serverBuildOutput,
     clientEntryFiles,
   )
+
+  await rscBuildForSsr({ clientEntryFiles, verbose })
 
   // Make RW specific env vars, like RWJS_ENV, available to server components
   await rscBuildRwEnvVars()

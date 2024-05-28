@@ -74,6 +74,7 @@ class LocationProvider extends React.Component<
     return this.props.location || this.context || windowLocation
   }
 
+  // componentDidMount() is not called during server rendering
   componentDidMount() {
     this.HISTORY_LISTENER_ID = gHistory.listen(() => {
       const context = this.getContext()

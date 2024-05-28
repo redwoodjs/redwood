@@ -10,7 +10,11 @@ import { LocationProvider, useLocation } from '@redwoodjs/router/dist/location'
 import { namedRoutes } from '@redwoodjs/router/dist/namedRoutes'
 import type { RouterProps } from '@redwoodjs/router/dist/router'
 
-import { rscFetch } from './clientRouterRscFetch'
+// import { renderRoutesFromDist } from './clientSsr'
+// Dummy implementation below just to make it compile
+const renderRoutesFromDist = async (pathname: string) => {
+  return Promise.resolve(pathname)
+}
 
 export const Router = ({ paramTypes, children }: RouterProps) => {
   console.log('ClientRouter.tsx ClientRouter')
@@ -25,13 +29,7 @@ export const Router = ({ paramTypes, children }: RouterProps) => {
 }
 
 const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
-  const { pathname, search } = useLocation()
-
-  console.log(
-    'ClientRouter.tsx LocationAwareRouter pathname: >%s< search: >%s<',
-    pathname,
-    search,
-  )
+  const { pathname } = useLocation()
 
   const { namedRoutesMap } = useMemo(() => {
     return analyzeRoutes(children, {
@@ -44,5 +42,5 @@ const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   // Note that the value changes at runtime
   Object.assign(namedRoutes, namedRoutesMap)
 
-  return rscFetch('__rwjs__Routes', { location: { pathname, search } })
+  return renderRoutesFromDist(pathname)
 }
