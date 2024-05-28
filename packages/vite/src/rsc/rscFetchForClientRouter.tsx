@@ -18,14 +18,11 @@ export function rscFetch(rscId: string, props: Record<string, unknown>) {
 
   // TODO (RSC): During SSR we should not fetch (Is this function really
   // called during SSR?)
-  const response = fetch(
-    (props.location as any).origin + BASE_PATH + rscId + '?' + searchParams,
-    {
-      headers: {
-        'rw-rsc': '1',
-      },
+  const response = fetch(BASE_PATH + rscId + '?' + searchParams, {
+    headers: {
+      'rw-rsc': '1',
     },
-  )
+  })
 
   const options: Options<unknown[], React.ReactElement> = {
     // React will hold on to `callServer` and use that when it detects a
