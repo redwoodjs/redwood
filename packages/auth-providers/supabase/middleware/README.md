@@ -14,12 +14,6 @@ interface Props {
   meta?: TagDescriptor[]
 }
 
-type SupabaseAppMetadata = {
-  provider: string
-  providers: string[]
-  roles: string[]
-}
-
 export const registerMiddleware = () => {
   const supabaseAuthMiddleware = initSupabaseMiddleware({
     // Optional. If not set, Supabase will use its own `currentUser` function
@@ -27,9 +21,7 @@ export const registerMiddleware = () => {
     getCurrentUser,
     // Optional. If you wish to enforce RBAC, define a function to return roles.
     // Typically, one will define roles in Supabase in the user's app_metadata.
-    getRoles: ({ app_metadata }: { app_metadata: SupabaseAppMetadata }) => {
-      return app_metadata.roles
-    },
+    getRoles
   })
 
   return [supabaseAuthMiddleware]
@@ -43,6 +35,8 @@ export const ServerEntry: React.FC<Props> = ({ css, meta }) => {
   )
 }
 ```
+
+## About Roles
 
 ### How To Set Roles in Supabase
 
@@ -83,3 +77,53 @@ const { data: user, error } = await supabase.auth.admin.updateUserById(
 
 Note: You may see a `role` attribute on the Supabase user. This is an internal claim used by Postgres to perform Row Level Security (RLS) checks.
 
+### What is the default implementation? 
+If you do not supply a `getRoles` function, we look in the `app_metadata.roles` property. 
+
+If you only had a string, e.g.
+```
+{
+  app_metadata: {
+    provider: 'email',
+    providers: ['email'],
+    roles: 'admin', // <-- ⭐ notice this is a string
+  },
+  user_metadata: {
+    ...
+}
+```
+
+it will convert the roles here to `['admin']`. 
+
+If you place your roles somewhere else, you will need to provide an implementation of the `getRoles` function. e.g.
+
+```
+{
+  app_metadata: {
+    provider: 'email',
+    providers: ['email'],
+    organization: {
+      name: 'acme',
+      userRoles: ['admin']
+    }
+  },
+  user_metadata: {
+    ...
+}
+```
+
+
+```js
+// In entry.server.jsx
+export const registerMiddleware = () => {
+  const supabaseAuthMiddleware = initSupabaseMiddleware({
+    // Customise where you get your roles from
+    getRoles: (decoded) => {
+      return decoded.app_metadata.organization?.userRoles
+    }
+  })
+
+  return [supabaseAuthMiddleware]
+}
+
+```
