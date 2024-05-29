@@ -291,6 +291,7 @@ export const writeFilesTask = (files, options) => {
   return new Listr(
     Object.keys(files).map((file) => {
       const contents = files[file]
+      console.log(`Writing THHHHEEE file: ${file}`)
       return {
         title: `...waiting to write file \`./${path.relative(base, file)}\`...`,
         task: (ctx, task) => writeFile(file, contents, options, task),
