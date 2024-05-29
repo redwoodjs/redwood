@@ -86,6 +86,7 @@ export async function rscBuildForServer(
           ...customModules,
           'rsdw-server': 'react-server-dom-webpack/server.edge',
           'entry.server': rwPaths.web.entryServer,
+          __rwjs__react: 'react',
         },
         output: {
           banner: (chunk) => {
@@ -110,6 +111,7 @@ export async function rscBuildForServer(
             if (
               chunkInfo.name === 'entry.server' ||
               chunkInfo.name === 'rsdw-server' ||
+              chunkInfo.name === '__rwjs__react' ||
               customModules[chunkInfo.name]
             ) {
               return '[name].mjs'

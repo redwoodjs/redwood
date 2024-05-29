@@ -10,11 +10,11 @@ import { LocationProvider, useLocation } from '@redwoodjs/router/dist/location'
 import { namedRoutes } from '@redwoodjs/router/dist/namedRoutes'
 import type { RouterProps } from '@redwoodjs/router/dist/router'
 
-// import { renderRoutesFromDist } from './clientSsr'
+import { renderRoutesFromDist } from './clientSsr'
 // Dummy implementation below just to make it compile
-const renderRoutesFromDist = async (pathname: string) => {
-  return Promise.resolve(pathname)
-}
+// const renderRoutesFromDist = async (pathname: string) => {
+//   return Promise.resolve(pathname)
+// }
 
 export const Router = ({ paramTypes, children }: RouterProps) => {
   console.log('SsrRouter.tsx SsrRouter')

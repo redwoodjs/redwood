@@ -1,5 +1,8 @@
 import type { Options } from 'react-server-dom-webpack/client'
-import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
+import {
+  createFromFetch,
+  encodeReply,
+} from 'react-server-dom-webpack/client.edge'
 
 const BASE_PATH = '/rw-rsc/'
 
@@ -56,10 +59,8 @@ export function rscFetch(rscId: string, props: Record<string, unknown>) {
     },
   }
 
-  const componentPromise = createFromFetch<never, React.ReactElement>(
-    response,
-    options,
-  )
+  // const componentPromise = createFromFetch<never, React.ReactElement>(
+  const componentPromise = createFromFetch(response, options)
   rscCache.set(serializedProps, componentPromise)
 
   return componentPromise

@@ -1,5 +1,6 @@
 import path from 'node:path'
 
+import { createElement } from 'react'
 import type { FunctionComponent } from 'react'
 
 import type {
@@ -11,6 +12,7 @@ import type { default as RDServerModule } from 'react-dom/server.edge'
 import type { ServerAuthState } from '@redwoodjs/auth'
 import { ServerAuthProvider } from '@redwoodjs/auth'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { LocationProvider } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
 import {
@@ -117,8 +119,8 @@ export async function reactRenderToStreamResponse(
 
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
-  const { createElement }: any = await importModule('__rwjs__react')
-  const { LocationProvider }: any = await importModule('__rwjs__location')
+  // const { createElement }: any = await importModule('__rwjs__react')
+  // const { LocationProvider }: any = await importModule('__rwjs__location')
 
   const renderRoot = (url: URL) => {
     return createElement(
@@ -170,7 +172,8 @@ export async function reactRenderToStreamResponse(
   // that same bundled version of react and react-dom.
   // TODO (RSC): Always import using importModule when RSC is on by default
   const { renderToReadableStream }: RDServerType = rscEnabled
-    ? await importModule('rd-server')
+    ? // ? await importModule('rd-server')
+      await import('react-dom/server.edge')
     : await import('react-dom/server.edge')
 
   try {
@@ -276,7 +279,8 @@ export async function importModule(
   const rsdwServerPath = makeFilePath(path.join(distRsc, 'rsdw-server.mjs'))
   const rsdwClientPath = makeFilePath(path.join(distClient, 'rsdw-client.mjs'))
   const rdServerPath = makeFilePath(path.join(distClient, 'rd-server.mjs'))
-  const reactPath = makeFilePath(path.join(distClient, '__rwjs__react.mjs'))
+  // const reactPath = makeFilePath(path.join(distClient, '__rwjs__react.mjs'))
+  const reactPath = makeFilePath(path.join(distRsc, '__rwjs__react.mjs'))
   const locationPath = makeFilePath(
     path.join(distClient, '__rwjs__location.mjs'),
   )

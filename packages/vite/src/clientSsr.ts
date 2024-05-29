@@ -1,6 +1,6 @@
 import path from 'node:path'
 
-import { createElement } from 'react'
+// import { createElement } from 'react'
 
 import type { default as RSDWClientModule } from 'react-server-dom-webpack/client.edge'
 import type { default as RSDWServerModule } from 'react-server-dom-webpack/server.edge'
@@ -25,7 +25,11 @@ async function getRoutesComponent<TProps>(): Promise<
   React.FunctionComponent<TProps>
 > {
   const { serverEntries } = await getEntries()
-  const entryPath = serverEntries['__rwjs__Routes']
+  const entryPath = path.join(
+    getPaths().web.distRsc,
+    serverEntries['__rwjs__Routes'],
+  )
+  console.log('getRoutesComponent entryPath', entryPath)
   const routesModule = await import(makeFilePath(entryPath))
 
   return routesModule.default
@@ -55,7 +59,7 @@ function resolveClientEntryForProd(
   const filePathSlash = filePath.replaceAll('\\', '/')
   const clientEntry = absoluteClientEntries[filePathSlash]
 
-  console.log('absoluteClientEntries', absoluteClientEntries)
+  // console.log('clientSsr.ts absoluteClientEntries', absoluteClientEntries)
   console.log('resolveClientEntryForProd during SSR - filePath', clientEntry)
 
   if (!clientEntry) {
@@ -113,20 +117,24 @@ export async function renderRoutesFromDist<TProps extends Record<string, any>>(
     },
   )
 
+  const { createElement }: any = await importModule('__rwjs__react')
+
   // We need to do this weird import dance because we need to import a version
   // of react-server-dom-webpack/server.edge that has been built with the
   // `react-server` condition. If we just did a regular import, we'd get the
   // generic version in node_modules, and it'd throw an error about not being
   // run in an environment with the `react-server` condition.
   const { renderToReadableStream }: RSDWServerType =
+    // await import('react-server-dom-webpack/server.edge')
     await importModule('rsdw-server')
 
+  console.log('clientSsr.ts right before renderToReadableStream')
   // We're in client.ts, but we're supposed to be pretending we're in the
   // RSC server "world" and that `stream` comes from `fetch`. So this is
   // us emulating the reply (stream) you'd get from a fetch call.
   const stream = renderToReadableStream(
     // createElement(layout, undefined, createElement(page, props)),
-    // @ts-expect-error - WIP
+    // _@ts-expect-error - WIP
     createElement(Routes, {
       // TODO (RSC): Include a more complete location object here. At least
       // search params as well
@@ -143,7 +151,8 @@ export async function renderRoutesFromDist<TProps extends Record<string, any>>(
   // of React as all the client components. Also see comment in
   // streamHelpers.ts about the rd-server import for some more context
   const { createFromReadableStream }: RSDWClientType =
-    await importModule('rsdw-client')
+    // await importModule('rsdw-client')
+    await import('react-server-dom-webpack/client.edge')
 
   // Here we use `createFromReadableStream`, which is equivalent to
   // `createFromFetch` as used in the browser
