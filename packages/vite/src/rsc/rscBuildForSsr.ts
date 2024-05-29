@@ -3,10 +3,13 @@ import { cjsInterop } from 'vite-plugin-cjs-interop'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { onWarn } from '../lib/onWarn'
-import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader'
+import { onWarn } from '../lib/onWarn.js'
+import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 
-// SSR build for when RSC is enabled
+/**
+ * RSC build. Step #?
+ * SSR build for when RSC is enabled
+ */
 export async function rscBuildForSsr({
   clientEntryFiles,
   verbose = false,
@@ -15,14 +18,10 @@ export async function rscBuildForSsr({
   verbose?: boolean
 }) {
   console.log('\n')
-  console.log('#. rscBuildForSsr')
-  console.log('=================\n')
+  console.log('#?. rscBuildForSsr')
+  console.log('==================\n')
 
   const rwPaths = getPaths()
-
-  if (!rwPaths.web.viteConfig) {
-    throw new Error('Vite config not found')
-  }
 
   if (!rwPaths.web.entryClient) {
     throw new Error('No client entry file found inside ' + rwPaths.web.src)
@@ -33,7 +32,6 @@ export async function rscBuildForSsr({
   }
 
   await viteBuild({
-    configFile: rwPaths.web.viteConfig,
     envFile: false,
     define: {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
@@ -46,8 +44,8 @@ export async function rscBuildForSsr({
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often
       minify: false,
       outDir: rwPaths.web.distServer,
-      ssr: true,
-      emptyOutDir: true,
+      // ssr: true,
+      emptyOutDir: true, // Needed because `outDir` is not inside `root`
       rollupOptions: {
         onwarn: onWarn,
         input: {
@@ -94,8 +92,8 @@ export async function rscBuildForSsr({
       manifest: 'client-build-manifest-ssr.json',
     },
     esbuild: {
-      logLevel: 'debug',
+      logLevel: verbose ? 'debug' : 'silent',
     },
-    logLevel: verbose ? 'info' : 'warn',
+    logLevel: verbose ? 'info' : 'silent',
   })
 }
