@@ -1,6 +1,6 @@
 import React from 'react'
 
-import type { AuthContextInterface } from './AuthContext'
+import type { AuthContextInterface } from './AuthContext.js'
 
 export function createUseAuth<
   TUser,

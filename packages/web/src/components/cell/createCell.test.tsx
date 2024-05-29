@@ -3,9 +3,9 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { vi, describe, beforeAll, test, expect } from 'vitest'
 
-import { GraphQLHooksProvider } from '../GraphQLHooksProvider'
+import { GraphQLHooksProvider } from '../GraphQLHooksProvider.js'
 
-import { createCell } from './createCell'
+import { createCell } from './createCell.js'
 
 describe('createCell', () => {
   beforeAll(() => {

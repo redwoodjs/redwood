@@ -1,10 +1,13 @@
 import React from 'react'
 
-import '@testing-library/jest-dom/jest-globals'
 import { act, cleanup, render, screen } from '@testing-library/react'
+import { describe, beforeEach, afterEach, it, expect } from 'vitest'
+import type { Mock } from 'vitest'
 
 import { navigate } from '../history'
-import { Route, Router, routes } from '../router'
+import { namedRoutes as routes } from '../namedRoutes'
+import { Route } from '../Route'
+import { Router } from '../router'
 
 describe('Router scroll reset', () => {
   const Page1 = () => <div>Page 1</div>
@@ -16,12 +19,8 @@ describe('Router scroll reset', () => {
     </Router>
   )
 
-  // Redfine the mocks here again (already done in jest.setup)
-  // Otherwise the mock doesn't clear for some reason
-  globalThis.scrollTo = jest.fn()
-
   beforeEach(async () => {
-    ;(globalThis.scrollTo as jest.Mock).mockClear()
+    ;(globalThis.scrollTo as Mock).mockClear()
     render(<TestRouter />)
 
     // Make sure we're starting on the home route

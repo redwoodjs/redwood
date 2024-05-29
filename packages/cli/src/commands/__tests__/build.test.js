@@ -6,6 +6,7 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
       return {
         api: {
           dist: '/mocked/project/api/dist',
+          dbSchema: '/mocked/project/api/db/schema.prisma',
         },
         web: {
           dist: '/mocked/project/web/dist',
@@ -19,6 +20,22 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
           bundler: 'webpack',
         },
       }
+    },
+  }
+})
+
+vi.mock('fs-extra', async () => {
+  const actualFs = await vi.importActual('fs-extra')
+  return {
+    default: {
+      ...actualFs,
+      // Mock the existence of the Prisma schema file
+      existsSync: (path) => {
+        if (path === '/mocked/project/api/db/schema.prisma') {
+          return true
+        }
+        return actualFs.existsSync(path)
+      },
     },
   }
 })

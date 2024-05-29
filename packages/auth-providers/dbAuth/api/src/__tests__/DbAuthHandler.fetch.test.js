@@ -122,11 +122,33 @@ const createDbUser = async (attributes = {}) => {
 }
 
 const expectLoggedOutResponse = (response) => {
-  expect(response[1]['set-cookie']).toEqual(LOGOUT_COOKIE)
+  const setCookie = response[1].getSetCookie()
+
+  const deleteSession = setCookie.some((cookie) => {
+    return cookie === LOGOUT_COOKIE
+  })
+
+  const authProviderPresent = setCookie.some((cookie) => {
+    return cookie.match('auth-provider=')
+  })
+
+  expect(deleteSession).toBe(true)
+  expect(authProviderPresent).toBe(true)
 }
 
 const expectLoggedInResponse = (response) => {
-  expect(response[1]['set-cookie']).toMatch(SET_SESSION_REGEX)
+  const setCookie = response[1].getSetCookie()
+
+  const sessionPresent = setCookie.some((cookie) => {
+    return cookie.match(SET_SESSION_REGEX)
+  })
+
+  const authProviderPresent = setCookie.some((cookie) => {
+    return cookie.match('auth-provider=')
+  })
+
+  expect(sessionPresent).toBe(true)
+  expect(authProviderPresent).toBe(true)
 }
 
 const encryptToCookie = (data) => {
@@ -303,10 +325,17 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
       const headers = dbAuth._deleteSessionHeader
+      const headersObj = Object.fromEntries(
+        dbAuth._deleteSessionHeader.entries(),
+      )
 
-      expect(Object.keys(headers).length).toEqual(1)
-      expect(Object.keys(headers)).toContain('set-cookie')
-      expect(headers['set-cookie']).toEqual(LOGOUT_COOKIE)
+      expect(Object.keys(headersObj).length).toEqual(1)
+
+      // Get setSetCookie returns an array of set-cookie headers
+      expect(headers.getSetCookie()).toContainEqual(LOGOUT_COOKIE)
+      expect(headers.getSetCookie()).toContainEqual(
+        'auth-provider=;Expires=Thu, 01 Jan 1970 00:00:00 GMT',
+      )
     })
   })
 
@@ -627,7 +656,10 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(myEvent, context, options)
       const response = await dbAuth.invoke()
 
-      expect(response.headers['set-cookie']).toEqual(LOGOUT_COOKIE)
+      expect(response.headers['set-cookie']).toContain(LOGOUT_COOKIE)
+      expect(response.headers['set-cookie']).toContain(
+        'auth-provider=;Expires=Thu, 01 Jan 1970 00:00:00 GMT',
+      )
     })
 
     it('returns a 404 if using the wrong HTTP verb', async () => {
@@ -722,14 +754,14 @@ describe('dbAuth', () => {
 
       const dbAuth = new DbAuthHandler(fetchEvent, context, options)
       await dbAuth.init()
-      dbAuth.logout = vi.fn(() => ['body', { foo: 'bar' }])
+      dbAuth.logout = vi.fn(() => ['body', new Headers([['foo', 'bar']])])
       const response = await dbAuth.invoke()
 
       expect(dbAuth.logout).toHaveBeenCalled()
       expect(response.statusCode).toEqual(200)
       expect(response.body).toEqual('body')
       expect(response.headers).toEqual({
-        'Content-Type': 'application/json',
+        'content-type': 'application/json',
         foo: 'bar',
       })
     })
@@ -1215,8 +1247,9 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
 
-      const response = await dbAuth.login()
-      expect(response[1]['csrf-token']).toMatch(UUID_REGEX)
+      const [_, headers] = await dbAuth.login()
+      const csrfHeader = headers.get('csrf-token')
+      expect(csrfHeader).toMatch(UUID_REGEX)
     })
 
     it('returns a set-cookie header to create session', async () => {
@@ -1232,9 +1265,9 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
 
-      const response = await dbAuth.login()
+      const [_, headers] = await dbAuth.login()
 
-      expect(response[1]['csrf-token']).toMatch(UUID_REGEX)
+      expect(headers.get('csrf-token')).toMatch(UUID_REGEX)
     })
 
     it('returns a CSRF token in the header', async () => {
@@ -1892,7 +1925,7 @@ describe('dbAuth', () => {
     })
 
     it('returns a message if a string is returned and does not log in', async () => {
-      const body = JSON.stringify({
+      const reqBody = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
         name: 'Rob',
@@ -1902,20 +1935,22 @@ describe('dbAuth', () => {
       }
       const req = new Request('http://localhost:8910/_rw_mw', {
         method: 'POST',
-        body,
+        body: reqBody,
       })
 
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
 
-      const response = await dbAuth.signup()
+      const [body, headers, other] = await dbAuth.signup()
 
       // returns message
-      expect(response[0]).toEqual('{"message":"Hello, world"}')
-      // does not log them in
-      expect(response[1]['set-cookie']).toBeUndefined()
+      expect(body).toEqual('{"message":"Hello, world"}')
+
+      const headersValues = Object.fromEntries(headers.values())
+      // no login headers
+      expect(headersValues).toEqual({})
       // 201 Created
-      expect(response[2].statusCode).toEqual(201)
+      expect(other.statusCode).toEqual(201)
     })
   })
 
@@ -1933,8 +1968,6 @@ describe('dbAuth', () => {
         method: 'POST',
         headers,
       })
-
-      req.headers.get('cookie')
 
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
@@ -1983,7 +2016,7 @@ describe('dbAuth', () => {
       const [userId, headers] = await dbAuth.getToken()
 
       expect(userId).toEqual(7)
-      expect(headers['set-cookie']).toMatch(SET_SESSION_REGEX)
+      expect(headers.get('set-cookie')).toMatch(SET_SESSION_REGEX)
 
       // set session back to default
       process.env.SESSION_SECRET = SESSION_SECRET
@@ -2223,7 +2256,8 @@ describe('dbAuth', () => {
       const [body, headers] = await dbAuth.webAuthnAuthenticate()
 
       expect(body).toEqual(false)
-      expect(headers['set-cookie'][0]).toMatch(
+
+      expect(headers.get('set-cookie')).toMatch(
         'webAuthn=CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA',
       )
     })
@@ -2604,22 +2638,23 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('_createSessionHeader()', () => {
+  describe('_createSessionCookieString()', () => {
     it('returns a Set-Cookie header', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
-      const headers = dbAuth._createSessionHeader({ foo: 'bar' }, 'abcd')
 
-      expect(Object.keys(headers).length).toEqual(1)
-      expect(headers['set-cookie']).toMatch(
-        `Expires=${dbAuth.sessionExpiresDate}`,
+      const cookieString = dbAuth._createSessionCookieString(
+        { foo: 'bar' },
+        'abcd',
       )
+
+      expect(cookieString).toMatch(`Expires=${dbAuth.sessionExpiresDate}`)
       // can't really match on the session value since it will change on every render,
       // due to CSRF token generation but we can check that it contains only the
       // characters that would be returned by the encrypt function
-      expect(headers['set-cookie']).toMatch(SET_SESSION_REGEX)
+      expect(cookieString).toMatch(SET_SESSION_REGEX)
       // and we can check that it's a certain number of characters
-      expect(headers['set-cookie'].split(';')[0].length).toEqual(77)
+      expect(cookieString.split(';')[0].length).toEqual(77)
     })
   })
 
@@ -3304,10 +3339,10 @@ describe('dbAuth', () => {
     it('returns the response array necessary to log user out', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
-      const [body, headers] = dbAuth._logoutResponse()
+      const response = dbAuth._logoutResponse()
 
-      expect(body).toEqual('')
-      expect(headers['set-cookie']).toMatch(/^session=;/)
+      expect(response[0]).toEqual('')
+      expectLoggedOutResponse(response)
     })
 
     it('can accept an object to return in the body', async () => {
@@ -3325,7 +3360,7 @@ describe('dbAuth', () => {
     it('returns a 200 response by default', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
-      const response = dbAuth._ok('', {})
+      const response = dbAuth._ok('')
 
       expect(response.statusCode).toEqual(200)
     })
@@ -3333,7 +3368,7 @@ describe('dbAuth', () => {
     it('can return other status codes', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
-      const response = dbAuth._ok('', {}, { statusCode: 201 })
+      const response = dbAuth._ok('', new Headers(), { statusCode: 201 })
 
       expect(response.statusCode).toEqual(201)
     })
@@ -3341,7 +3376,9 @@ describe('dbAuth', () => {
     it('stringifies a JSON body', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
-      const response = dbAuth._ok({ foo: 'bar' }, {}, { statusCode: 201 })
+      const response = dbAuth._ok({ foo: 'bar' }, new Headers(), {
+        statusCode: 201,
+      })
 
       expect(response.body).toEqual('{"foo":"bar"}')
     })
@@ -3349,7 +3386,9 @@ describe('dbAuth', () => {
     it('does not stringify a body that is a string already', async () => {
       const dbAuth = new DbAuthHandler(req, context, options)
       await dbAuth.init()
-      const response = dbAuth._ok('{"foo":"bar"}', {}, { statusCode: 201 })
+      const response = dbAuth._ok('{"foo":"bar"}', new Headers(), {
+        statusCode: 201,
+      })
 
       expect(response.body).toEqual('{"foo":"bar"}')
     })

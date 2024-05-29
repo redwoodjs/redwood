@@ -1,4 +1,4 @@
-import { CurrentUser, createAuthentication } from '../../index'
+import { CurrentUser, createAuthentication } from '../../index.js'
 
 interface User {
   sub: string
@@ -15,7 +15,7 @@ export interface CustomTestAuthClient {
   login: () => boolean
   logout: () => void
   signup: () => void
-  getToken: () => string
+  getToken: () => string | null
   getUserMetadata: () => User | null
   forgotPassword: (username: string) => void
   resetPassword: (password: string) => boolean

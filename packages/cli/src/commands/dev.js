@@ -1,5 +1,6 @@
 import terminalLink from 'terminal-link'
 
+import { getConfig } from '../lib'
 import c from '../lib/colors'
 import { checkNodeVersion } from '../middleware/checkNodeVersion'
 
@@ -7,6 +8,12 @@ export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'
 
 export const builder = (yargs) => {
+  // We hide some options based on the bundler being used.
+  // Note that `watchNodeModules` is webpack specific, but `forward` isn't.
+  // The reason it's also hidden is that it's been broken with Vite
+  // and it's not clear how to fix it.
+  const isUsingWebpack = getConfig().web.bundler === 'webpack'
+
   yargs
     .positional('side', {
       choices: ['api', 'web'],
@@ -19,6 +26,7 @@ export const builder = (yargs) => {
       description:
         'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --no-open"`',
       type: 'string',
+      hidden: !isUsingWebpack,
     })
     .option('generate', {
       type: 'boolean',
@@ -28,6 +36,7 @@ export const builder = (yargs) => {
     .option('watchNodeModules', {
       type: 'boolean',
       description: 'Reload on changes to node_modules',
+      hidden: !isUsingWebpack,
     })
     .option('apiDebugPort', {
       type: 'number',

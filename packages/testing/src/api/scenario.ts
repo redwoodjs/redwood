@@ -117,7 +117,7 @@ interface TestFunctionWithScenario<TData> {
 }
 
 interface DescribeBlockWithGetScenario<TData> {
-  (getScenario?: () => TData): void
+  (getScenario: () => TData): void
 }
 
 export interface Scenario {

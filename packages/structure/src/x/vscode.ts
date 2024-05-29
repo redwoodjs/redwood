@@ -102,7 +102,7 @@ export class TreeItem2Wrapper {
   constructor(
     public item: TreeItem2,
     public parent?: TreeItem2Wrapper,
-    public indexInParent: number = 0,
+    public indexInParent = 0,
   ) {}
   @lazy() get keys(): string[] {
     if (!this.parent) {
@@ -276,7 +276,7 @@ export function RemoteTreeDataProvider_publishOverLSPConnection(
       connection.sendRequest(`${methodPrefix}onDidChangeTreeData`, [id]),
     )
   })
-  connection.onRequest(`${methodPrefix}getChildren`, async (id) => {
+  connection.onRequest(`${methodPrefix}getChildren`, async (id: string) => {
     lazyInit()
     try {
       return await ProviderResult_normalize(tdp.getChildren(id))
@@ -284,7 +284,7 @@ export function RemoteTreeDataProvider_publishOverLSPConnection(
       return []
     }
   })
-  connection.onRequest(`${methodPrefix}getTreeItem`, async (id) => {
+  connection.onRequest(`${methodPrefix}getTreeItem`, async (id: string) => {
     lazyInit()
     try {
       return await ProviderResult_normalize(tdp.getTreeItem(id))

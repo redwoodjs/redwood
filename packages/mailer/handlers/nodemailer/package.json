@@ -21,13 +21,13 @@
   },
   "dependencies": {
     "@redwoodjs/mailer-core": "workspace:*",
-    "nodemailer": "6.9.9"
+    "nodemailer": "6.9.13"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/nodemailer": "^6",
-    "tsx": "4.6.2",
-    "typescript": "5.3.3"
+    "tsx": "4.10.3",
+    "typescript": "5.4.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

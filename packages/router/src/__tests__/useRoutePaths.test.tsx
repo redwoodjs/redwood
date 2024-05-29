@@ -1,11 +1,11 @@
-/** @jest-environment jsdom */
 import React from 'react'
 
-import { render } from '@testing-library/react'
-import { act } from 'react-dom/test-utils'
+import { render, act } from '@testing-library/react'
+import { test } from 'vitest'
 
 import { navigate } from '../history'
-import { Route, Router } from '../router'
+import { Route } from '../Route'
+import { Router } from '../router'
 import { Set } from '../Set'
 import { useRoutePaths, useRoutePath } from '../useRoutePaths'
 

@@ -1,13 +1,6 @@
-import { describe, it } from 'node:test'
-
-import { RuleTester } from 'eslint'
+import { RuleTester } from '@typescript-eslint/rule-tester'
 
 import { processEnvComputedRule } from '../process-env-computed.js'
-
-// @ts-expect-error - Types are wrong
-RuleTester.describe = describe
-// @ts-expect-error - Types are wrong
-RuleTester.it = it
 
 const ruleTester = new RuleTester()
 

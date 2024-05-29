@@ -46,10 +46,7 @@ describe('create-redwood-app', () => {
     const p = await $`yarn create-redwood-app --version`
 
     expect(p.exitCode).toEqual(0)
-    expect(p.stdout).toMatchInlineSnapshot(`
-      "7.0.0
-      [?25l[?25h"
-    `)
+    expect(p.stdout).toMatch(/\d+\.\d+\.\d+/)
     expect(p.stderr).toMatchInlineSnapshot(`"[?25l[?25h"`)
   })
 

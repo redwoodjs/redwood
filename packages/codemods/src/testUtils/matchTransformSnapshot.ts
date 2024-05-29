@@ -9,7 +9,11 @@ import runTransform from '../lib/runTransform'
 import { formatCode } from './index'
 
 export interface MatchTransformSnapshotFunction {
-  (transformName: string, fixtureName?: string, parser?: 'ts' | 'tsx'): void
+  (
+    transformName: string,
+    fixtureName?: string,
+    parser?: 'ts' | 'tsx',
+  ): Promise<void>
 }
 
 export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (

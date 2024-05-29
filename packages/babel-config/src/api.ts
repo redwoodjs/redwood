@@ -16,6 +16,11 @@ import {
   parseTypeScriptConfigFiles,
   registerBabel,
 } from './common'
+import pluginRedwoodContextWrapping from './plugins/babel-plugin-redwood-context-wrapping'
+import pluginRedwoodDirectoryNamedImport from './plugins/babel-plugin-redwood-directory-named-import'
+import pluginRedwoodGraphqlOptionsExtract from './plugins/babel-plugin-redwood-graphql-options-extract'
+import pluginRedwoodImportDir from './plugins/babel-plugin-redwood-import-dir'
+import pluginRedwoodOTelWrapping from './plugins/babel-plugin-redwood-otel-wrapping'
 
 export const TARGETS_NODE = '20.10'
 
@@ -101,7 +106,7 @@ export const getApiSideBabelPlugins = ({
       'rwjs-api-module-resolver',
     ],
     [
-      require('./plugins/babel-plugin-redwood-directory-named-import').default,
+      pluginRedwoodDirectoryNamedImport,
       undefined,
       'rwjs-babel-directory-named-modules',
     ],
@@ -126,14 +131,14 @@ export const getApiSideBabelPlugins = ({
     // FIXME: `graphql-tag` is not working: https://github.com/redwoodjs/redwood/pull/3193
     ['babel-plugin-graphql-tag', undefined, 'rwjs-babel-graphql-tag'],
     [
-      require('./plugins/babel-plugin-redwood-import-dir').default,
+      pluginRedwoodImportDir,
       {
         projectIsEsm,
       },
       'rwjs-babel-glob-import-dir',
     ],
     openTelemetry && [
-      require('./plugins/babel-plugin-redwood-otel-wrapping').default,
+      pluginRedwoodOTelWrapping,
       undefined,
       'rwjs-babel-otel-wrapping',
     ],
@@ -158,10 +163,7 @@ export const getApiSideBabelOverrides = ({ projectIsEsm = false } = {}) => {
     {
       // match */api/src/functions/graphql.js|ts
       test: /.+api(?:[\\|/])src(?:[\\|/])functions(?:[\\|/])graphql\.(?:js|ts)$/,
-      plugins: [
-        require('./plugins/babel-plugin-redwood-graphql-options-extract')
-          .default,
-      ],
+      plugins: [pluginRedwoodGraphqlOptionsExtract],
     },
     // Apply context wrapping to all functions
     {
@@ -169,7 +171,7 @@ export const getApiSideBabelOverrides = ({ projectIsEsm = false } = {}) => {
       test: /.+api(?:[\\|/])src(?:[\\|/])functions(?:[\\|/]).+.(?:js|ts)$/,
       plugins: [
         [
-          require('./plugins/babel-plugin-redwood-context-wrapping').default,
+          pluginRedwoodContextWrapping,
           {
             projectIsEsm,
           },

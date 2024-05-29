@@ -19,7 +19,6 @@ import { generatePrismaCommand } from '../lib/generatePrismaClient'
 export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
-  performance = false,
   stats = false,
   prisma = true,
   prerender,
@@ -28,7 +27,6 @@ export const handler = async ({
     command: 'build',
     side: JSON.stringify(side),
     verbose,
-    performance,
     stats,
     prisma,
     prerender,
@@ -38,18 +36,6 @@ export const handler = async ({
   const rwjsConfig = getConfig()
   const useFragments = rwjsConfig.graphql?.fragments
   const useTrustedDocuments = rwjsConfig.graphql?.trustedDocuments
-
-  if (performance) {
-    console.log('Measuring Web Build Performance...')
-    execa.sync(
-      `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-        '@redwoodjs/core/config/webpack.perf.js',
-      )}`,
-      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base },
-    )
-    // We do not want to continue building...
-    return
-  }
 
   if (stats) {
     console.log('Building Web Stats...')
@@ -63,10 +49,13 @@ export const handler = async ({
     return
   }
 
+  const prismaSchemaExists = fs.existsSync(rwjsPaths.api.dbSchema)
   const prerenderRoutes =
     prerender && side.includes('web') ? detectPrerenderRoutes() : []
   const shouldGeneratePrismaClient =
-    prisma && (side.includes('api') || prerenderRoutes.length > 0)
+    prisma &&
+    prismaSchemaExists &&
+    (side.includes('api') || prerenderRoutes.length > 0)
 
   const tasks = [
     shouldGeneratePrismaClient && {
@@ -208,7 +197,7 @@ export const handler = async ({
   await timedTelemetry(process.argv, { type: 'build' }, async () => {
     await jobs.run()
 
-    if (side.includes('web') && prerender) {
+    if (side.includes('web') && prerender && prismaSchemaExists) {
       // This step is outside Listr so that it prints clearer, complete messages
       await triggerPrerender()
     }

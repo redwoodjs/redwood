@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 
-import type { AuthImplementation } from '../AuthImplementation'
+import type { AuthImplementation } from '../AuthImplementation.js'
 
-import { useToken } from './useToken'
+import { useToken } from './useToken.js'
 
 export const useCurrentUser = (authImplementation: AuthImplementation) => {
   const getToken = useToken(authImplementation)

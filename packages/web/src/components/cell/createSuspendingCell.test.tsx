@@ -5,9 +5,9 @@ import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev'
 import { render, screen } from '@testing-library/react'
 import { vi, describe, beforeAll, test } from 'vitest'
 
-import { GraphQLHooksProvider } from '../GraphQLHooksProvider'
+import { GraphQLHooksProvider } from '../GraphQLHooksProvider.js'
 
-import { createSuspendingCell } from './createSuspendingCell'
+import { createSuspendingCell } from './createSuspendingCell.js'
 
 type ReadQueryHook = typeof useReadQuery
 type BgQueryHook = typeof useBackgroundQuery

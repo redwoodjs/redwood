@@ -1,10 +1,13 @@
 import { Request as WhatWgRequest } from '@whatwg-node/fetch'
 
-import { defaultAuthProviderState, type ServerAuthState } from '@redwoodjs/auth'
+import {
+  middlewareDefaultAuthProviderState,
+  type ServerAuthState,
+} from '@redwoodjs/auth'
 
 import { CookieJar } from './CookieJar.js'
 
-class ContextJar<T> {
+class AuthStateJar<T> {
   private _data: T
 
   constructor(data?: T) {
@@ -22,18 +25,18 @@ class ContextJar<T> {
 
 export class MiddlewareRequest extends WhatWgRequest {
   cookies: CookieJar
-  serverAuthContext: ContextJar<ServerAuthState>
+  serverAuthState: AuthStateJar<ServerAuthState>
 
   constructor(input: Request) {
     super(input)
     this.cookies = new CookieJar(input.headers.get('Cookie'))
-    this.serverAuthContext = new ContextJar(defaultAuthProviderState)
+    this.serverAuthState = new AuthStateJar(middlewareDefaultAuthProviderState)
   }
 }
 
 /**
  * Converts a Web API Request object to a MiddlewareRequest object.
- * Also ensures that serverAuthContext is fresh for each request
+ * Also ensures that serverAuthState is fresh for each request
  * (assuming that it is a new instance for each request)
  */
 export const createMiddlewareRequest = (req: Request) => {
