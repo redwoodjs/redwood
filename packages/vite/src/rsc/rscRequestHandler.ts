@@ -204,7 +204,7 @@ export function createRscRequestHandler(
           serverState: {
             headersInit: Object.fromEntries(getRequestHeaders().entries()),
             serverAuthState: getAuthState(),
-            urlHref: fullUrl,
+            fullUrl,
           },
         })
 

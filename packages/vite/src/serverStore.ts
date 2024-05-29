@@ -27,7 +27,7 @@ export const createServerStorage = () => {
  */
 export const createPerRequestMap = ({
   headers,
-  fullUrl: urlHref,
+  fullUrl,
   serverAuthState,
 }: InitPerReqMapParams) => {
   const reqStore = new Map()
@@ -35,10 +35,7 @@ export const createPerRequestMap = ({
   const headersObj = new Headers(headers)
   reqStore.set('headers', headersObj)
 
-  reqStore.set('fullUrl', urlHref)
-
-  // const location = new URL(headersObj.get('url') as string)
-  // reqStore.set('location', location)
+  reqStore.set('fullUrl', fullUrl)
 
   if (serverAuthState) {
     reqStore.set('serverAuthState', serverAuthState)

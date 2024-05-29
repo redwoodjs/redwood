@@ -70,7 +70,7 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
   // Assumes that handleRender is only called once per request!
   const reqMap = createPerRequestMap({
     headers: input.serverState.headersInit,
-    fullUrl: input.serverState.urlHref,
+    fullUrl: input.serverState.fullUrl,
     serverAuthState: input.serverState.serverAuthState,
   })
 

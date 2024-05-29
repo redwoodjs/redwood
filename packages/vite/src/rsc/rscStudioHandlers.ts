@@ -3,14 +3,14 @@ import type { PassThrough } from 'node:stream'
 
 import type { Request } from 'express'
 
-import { getRawConfig, getConfig } from '@redwoodjs/project-config'
+import { getConfig, getRawConfig } from '@redwoodjs/project-config'
 
 import { getAuthState, getRequestHeaders } from '../serverStore.js'
-import { getFullUrl, getFullUrlForFlightRequest } from '../utils.js'
+import { getFullUrlForFlightRequest } from '../utils.js'
 
 import type { RscFetchProps } from './rscFetchForClientRouter.jsx'
-import { renderRsc } from './rscWorkerCommunication.js'
 import type { RenderInput } from './rscWorkerCommunication.js'
+import { renderRsc } from './rscWorkerCommunication.js'
 
 const isTest = () => {
   return process.env.NODE_ENV === 'test'
@@ -150,7 +150,7 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
       serverState: {
         headersInit: Object.fromEntries(getRequestHeaders().entries()),
         serverAuthState: getAuthState(),
-        urlHref: fullUrl,
+        fullUrl,
       },
     })
     const endedAt = Date.now()
