@@ -2,9 +2,7 @@
 
 import type { FindEmptyUsers, FindEmptyUsersVariables } from 'types/graphql'
 
-// TODO (RSC): Use Link from '@redwoodjs/router'
-// import { Link, routes } from '@redwoodjs/router'
-import { routes } from '@redwoodjs/router'
+import { Link, routes } from '@redwoodjs/router'
 import type {
   CellSuccessProps,
   CellFailureProps,
@@ -12,10 +10,6 @@ import type {
 } from '@redwoodjs/web'
 
 import EmptyUsers from 'src/components/EmptyUser/EmptyUsers'
-
-const Link = (props: any) => {
-  return <a href={props.to}>{props.children}</a>
-}
 
 export const QUERY: TypedDocumentNode<FindEmptyUsers, FindEmptyUsersVariables> =
   gql`
