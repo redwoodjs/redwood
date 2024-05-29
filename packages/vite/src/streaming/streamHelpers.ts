@@ -11,7 +11,6 @@ import type { default as RDServerModule } from 'react-dom/server.edge'
 import type { ServerAuthState } from '@redwoodjs/auth'
 import { ServerAuthProvider } from '@redwoodjs/auth'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
-import { LocationProvider } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
 import {
@@ -76,6 +75,7 @@ export async function reactRenderToStreamResponse(
   renderOptions: RenderToStreamArgs,
   streamOptions: StreamOptions,
 ) {
+  const { LocationProvider } = await import('@redwoodjs/router')
   const { waitForAllReady = false } = streamOptions
   const {
     ServerEntry,

@@ -9,7 +9,6 @@ import type { ViteDevServer } from 'vite'
 import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
 import type { RouteSpec, RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
-import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
 import { invoke } from '../middleware/invokeMiddleware.js'
@@ -42,6 +41,7 @@ export const createReactStreamingHandler = async (
   }: CreateReactStreamingHandlerOptions,
   viteDevServer?: ViteDevServer,
 ) => {
+  const { matchPath } = await import('@redwoodjs/router')
   const rwPaths = getPaths()
   const rwConfig = getConfig()
   const isProd = !viteDevServer

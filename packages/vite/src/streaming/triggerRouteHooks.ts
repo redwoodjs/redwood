@@ -1,6 +1,5 @@
 import type { ViteDevServer } from 'vite'
 
-import { parseSearch } from '@redwoodjs/router'
 import type {
   MetaHook,
   RouteHookEvent,
@@ -25,6 +24,7 @@ export const triggerRouteHooks = async ({
   parsedParams = {},
   previousOutput,
 }: TriggerRouteHooksParam) => {
+  const { parseSearch } = await import('@redwoodjs/router')
   const event: RouteHookEvent = {
     params: parsedParams,
     headers: req.headers || {},
