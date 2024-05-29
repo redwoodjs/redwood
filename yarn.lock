@@ -8673,6 +8673,7 @@ __metadata:
     "@redwoodjs/babel-config": "workspace:*"
     "@redwoodjs/internal": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
+    "@redwoodjs/router": "workspace:*"
     "@redwoodjs/web": "workspace:*"
     "@swc/core": "npm:1.5.7"
     "@types/busboy": "npm:^1"

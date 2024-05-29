@@ -72,6 +72,7 @@
     "@redwoodjs/babel-config": "workspace:*",
     "@redwoodjs/internal": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
+    "@redwoodjs/router": "workspace:*",
     "@redwoodjs/web": "workspace:*",
     "@swc/core": "1.5.7",
     "@vitejs/plugin-react": "4.2.1",
