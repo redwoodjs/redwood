@@ -39,7 +39,7 @@ export const Success = ({ file }: SuccessProps) => {
           border: '1px solid gray',
           margin: '1em',
           background: '#ddd',
-          height: '260xp',
+          height: '260px',
           overflowY: 'scroll',
         }}
       >
