@@ -3,7 +3,7 @@
 // what to do about rscFetch here vs renderFromRscServer and see if maybe that
 // one should live somewhere else where @redwoodjs/router can import from
 
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 
 import type { Options } from 'react-server-dom-webpack/client'
 import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
@@ -15,9 +15,18 @@ import type { RouterProps } from '@redwoodjs/router/dist/router'
 
 const BASE_PATH = '/rw-rsc/'
 
-function rscFetch(rscId: string, props: Record<string, unknown> = {}) {
+const rscCache = new Map<string, Thenable<React.ReactElement>>()
+
+function rscFetch(rscId: string, props: Record<string, unknown>) {
+  const serializedProps = JSON.stringify(props)
+
+  const cached = rscCache.get(serializedProps)
+  if (cached) {
+    return cached
+  }
+
   const searchParams = new URLSearchParams()
-  searchParams.set('props', JSON.stringify(props))
+  searchParams.set('props', serializedProps)
 
   // TODO (RSC): During SSR we should not fetch (Is this function really
   // called during SSR?)
@@ -59,7 +68,13 @@ function rscFetch(rscId: string, props: Record<string, unknown> = {}) {
     },
   }
 
-  return createFromFetch<never, React.ReactElement>(response, options)
+  const componentPromise = createFromFetch<never, React.ReactElement>(
+    response,
+    options,
+  )
+  rscCache.set(serializedProps, componentPromise)
+
+  return componentPromise
 }
 
 export const Router = ({ paramTypes, children }: RouterProps) => {
@@ -73,11 +88,8 @@ export const Router = ({ paramTypes, children }: RouterProps) => {
   )
 }
 
-let routes: Thenable<React.ReactElement> | null = null
-
 const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   const { pathname, search } = useLocation()
-  const [, setRenderCount] = React.useState(0)
 
   const { namedRoutesMap } = useMemo(() => {
     return analyzeRoutes(children, {
@@ -90,16 +102,5 @@ const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   // Note that the value changes at runtime
   Object.assign(namedRoutes, namedRoutesMap)
 
-  useEffect(() => {
-    // Force re-render
-    setRenderCount((rc) => rc + 1)
-
-    routes = rscFetch('__rwjs__Routes', { location: { pathname, search } })
-  }, [pathname, search])
-
-  if (!routes) {
-    routes = rscFetch('__rwjs__Routes', { location: { pathname, search } })
-  }
-
-  return routes
+  return rscFetch('__rwjs__Routes', { location: { pathname, search } })
 }
