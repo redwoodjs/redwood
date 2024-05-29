@@ -1,8 +1,12 @@
+/*
+ * We use a Vite plugin to swap out imports from `@redwoodjs/router` to this
+ * file. See ../plugins/mock-router.ts
+ *
+ * It's therefore important to reexport everything that we *don't* want to mock.
+ */
+
 import type React from 'react'
 
-// Bypass the `main` field in `package.json` because we alias `@redwoodjs/router`
-// for jest and Storybook. Not doing so would cause an infinite loop.
-// See: ./packages/testing/config/jest/web/jest-preset.js
 import { isValidRoute } from '@redwoodjs/router/dist/route-validators'
 import type { RouterProps } from '@redwoodjs/router/dist/router'
 import { flattenAll, replaceParams } from '@redwoodjs/router/dist/util'
@@ -47,9 +51,6 @@ export {
 export const routes: { [routeName: string]: () => string } = {}
 
 /**
- * We overwrite the default `Router` export (see jest-preset). So every import
- * of @redwoodjs/router will import this Router instead
- *
  * This router populates the `routes.<pageName>()` utility object.
  */
 export const Router: React.FC<RouterProps> = ({ children }) => {
