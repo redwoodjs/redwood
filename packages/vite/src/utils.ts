@@ -5,6 +5,7 @@ import type { ViteDevServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import type { RscFetchProps } from './rsc/rscFetchForClientRouter'
 import type { EntryServer } from './types'
 
 export function stripQueryStringAndHashFromPath(url: string) {
@@ -68,4 +69,17 @@ export function convertExpressHeaders(
 
 export const getFullUrl = (req: ExpressRequest) => {
   return req.protocol + '://' + req.get('host') + req.originalUrl
+}
+
+export const getFullUrlForFlightRequest = (
+  req: ExpressRequest,
+  props: RscFetchProps,
+): string => {
+  return (
+    req.protocol +
+    '://' +
+    req.get('host') +
+    props.location.pathname +
+    props.location.search
+  )
 }

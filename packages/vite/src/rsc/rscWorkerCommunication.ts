@@ -5,6 +5,8 @@ import { Worker } from 'node:worker_threads'
 
 import type { ServerAuthState } from '@redwoodjs/auth'
 
+import type { RscFetchProps } from './rscFetchForClientRouter'
+
 const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
   execArgv: [
     '--conditions',
@@ -14,11 +16,9 @@ const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
   ],
 })
 
-export type RenderInput<
-  Props extends Record<string, unknown> = Record<string, unknown>,
-> = {
+export type RenderInput = {
   rscId?: string | undefined
-  props?: Props | undefined
+  props?: RscFetchProps | undefined
   rsfId?: string | undefined
   args?: unknown[] | undefined
   serverState: {
