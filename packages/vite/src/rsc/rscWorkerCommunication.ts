@@ -23,6 +23,7 @@ export type RenderInput<
   args?: unknown[] | undefined
   serverState: {
     headersInit: Record<string, string>
+    urlHref: string
     serverAuthState: ServerAuthState
   }
 }

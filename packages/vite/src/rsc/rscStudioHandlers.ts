@@ -6,6 +6,7 @@ import type { Request } from 'express'
 import { getRawConfig, getConfig } from '@redwoodjs/project-config'
 
 import { getAuthState, getRequestHeaders } from '../serverStore.js'
+import { getFullUrl } from '../utils.js'
 
 import { renderRsc } from './rscWorkerCommunication.js'
 import type { RenderInput } from './rscWorkerCommunication.js'
@@ -134,6 +135,7 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
     // surround renderRsc with performance metrics
     const startedAt = Date.now()
     const start = performance.now()
+    const fullUrl = getFullUrl(req)
 
     const pipeable = await renderRsc({
       rscId,
@@ -143,6 +145,7 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
       serverState: {
         headersInit: Object.fromEntries(getRequestHeaders().entries()),
         serverAuthState: getAuthState(),
+        urlHref: fullUrl,
       },
     })
     const endedAt = Date.now()

@@ -10,6 +10,7 @@ let PER_REQ_STORAGE: AsyncLocalStorage<ServerStore>
 
 type InitPerReqMapParams = {
   headers: Headers | Record<string, string>
+  fullUrl: string
   serverAuthState?: ServerAuthState
 }
 
@@ -26,12 +27,18 @@ export const createServerStorage = () => {
  */
 export const createPerRequestMap = ({
   headers,
+  fullUrl: urlHref,
   serverAuthState,
 }: InitPerReqMapParams) => {
   const reqStore = new Map()
 
   const headersObj = new Headers(headers)
   reqStore.set('headers', headersObj)
+
+  reqStore.set('fullUrl', urlHref)
+
+  // const location = new URL(headersObj.get('url') as string)
+  // reqStore.set('location', location)
 
   if (serverAuthState) {
     reqStore.set('serverAuthState', serverAuthState)
@@ -64,6 +71,10 @@ export const getRequestHeaders = (): Headers => {
 
 export const getAuthState = (): ServerAuthState => {
   return getStore()?.get('serverAuthState')
+}
+
+export const getLocation = (): URL => {
+  return new URL(getStore()?.get('fullUrl'))
 }
 
 export const setServerAuthState = (authState: ServerAuthState) => {

@@ -65,3 +65,7 @@ export function convertExpressHeaders(
 
   return headers
 }
+
+export const getFullUrl = (req: ExpressRequest) => {
+  return req.protocol + '://' + req.get('host') + req.originalUrl
+}

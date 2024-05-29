@@ -17,6 +17,7 @@ import { hasStatusCode } from '../lib/StatusError.js'
 import type { Middleware } from '../middleware'
 import { invoke } from '../middleware/invokeMiddleware'
 import { getAuthState, getRequestHeaders } from '../serverStore'
+import { getFullUrl } from '../utils'
 
 import { sendRscFlightToStudio } from './rscStudioHandlers.js'
 import { renderRsc } from './rscWorkerCommunication.js'
@@ -183,6 +184,8 @@ export function createRscRequestHandler(
       }
 
       try {
+        const fullUrl = getFullUrl(req)
+
         const pipeable = await renderRsc({
           rscId,
           props,
@@ -193,6 +196,7 @@ export function createRscRequestHandler(
           serverState: {
             headersInit: Object.fromEntries(getRequestHeaders().entries()),
             serverAuthState: getAuthState(),
+            urlHref: fullUrl,
           },
         })
 
