@@ -8,7 +8,6 @@ import { getConfig, getRawConfig } from '@redwoodjs/project-config'
 import { getAuthState, getRequestHeaders } from '../serverStore.js'
 import { getFullUrlForFlightRequest } from '../utils.js'
 
-import type { RscFetchProps } from './rscFetchForClientRouter.jsx'
 import type { RenderInput } from './rscWorkerCommunication.js'
 import { renderRsc } from './rscWorkerCommunication.js'
 
@@ -140,7 +139,7 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
     // We construct the URL for the flight request from props
     // e.g. http://localhost:8910/rw-rsc/__rwjs__Routes?props=location={pathname:"/about",search:"?foo=bar""}
     // becomes http://localhost:8910/about?foo=bar
-    const fullUrl = getFullUrlForFlightRequest(req, props as RscFetchProps)
+    const fullUrl = getFullUrlForFlightRequest(req, props)
 
     const pipeable = await renderRsc({
       rscId,
