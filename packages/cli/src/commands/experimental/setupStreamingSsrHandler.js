@@ -160,7 +160,7 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       {
-        title: `Update web/tsconfig.json...`,
+        title: `Update web/{ts,js}config.json...`,
         task: async () => {
           const tsconfigTemplate = fs.readFileSync(
             path.resolve(
@@ -172,7 +172,12 @@ export const handler = async ({ force, verbose }) => {
             'utf-8',
           )
 
-          writeFile(rwPaths.web.tsconfigPath, tsconfigTemplate, {
+          const tsconfigPath = path.join(
+            rwPaths.web.base,
+            ts ? 'tsconfig.json' : 'jsconfig.json',
+          )
+
+          writeFile(tsconfigPath, tsconfigTemplate, {
             overwriteExisting: force,
           })
         },
