@@ -162,8 +162,9 @@ export const handler = async (args) => {
     [
       {
         title: 'Generating directive file ...',
-        task: () => {
-          return writeFilesTask(files({ ...args, type: directiveType }), {
+        task: async () => {
+          const f = await files({ ...args, type: directiveType })
+          return writeFilesTask(f, {
             overwriteExisting: args.force,
           })
         },

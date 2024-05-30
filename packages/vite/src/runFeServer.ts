@@ -126,10 +126,7 @@ export async function runFeServer() {
     const fullUrl = getFullUrl(req)
     const headers = convertExpressHeaders(req.headersDistinct)
     // Convert express headers to fetch headers
-    const perReqStore = createPerRequestMap({
-      headers,
-      fullUrl: fullUrl,
-    })
+    const perReqStore = createPerRequestMap({ headers, fullUrl })
 
     // By wrapping next, we ensure that all of the other handlers will use this same perReqStore
     // But note that the serverStorage is RE-initialised for the RSC worker
