@@ -18,9 +18,9 @@ let UserRoutes: React.FC
 
 try {
   const userRoutesModule = require('~__REDWOOD__USER_ROUTES_FOR_MOCK')
-  UserRouterWithRoutes = userRoutesModule.default
+  UserRoutes = userRoutesModule.default
 } catch (error) {
-  UserRouterWithRoutes = () => <></>
+  UserRoutes = () => <></>
 }
 
 // TODO(pc): see if there are props we want to allow to be passed into our mock provider (e.g. AuthProviderProps)
@@ -30,7 +30,7 @@ export const MockProviders: React.FunctionComponent<{
   return (
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <RedwoodApolloProvider useAuth={useAuth}>
-        <UserRouterWithRoutes />
+        <UserRoutes />
         <LocationProvider>
           <MockParamsProvider>{children}</MockParamsProvider>
         </LocationProvider>
