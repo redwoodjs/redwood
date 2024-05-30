@@ -4,8 +4,8 @@
     "allowJs": true,
     "esModuleInterop": true,
     "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "skipLibCheck": false,
     "rootDirs": [
       "./src",

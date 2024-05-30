@@ -160,6 +160,24 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       {
+        title: `Update web/tsconfig.json...`,
+        task: async () => {
+          const tsconfigTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'streamingSsr',
+              'tsconfig.json.template',
+            ),
+            'utf-8',
+          )
+
+          writeFile(rwPaths.web.tsconfigPath, tsconfigTemplate, {
+            overwriteExisting: force,
+          })
+        },
+      },
+      {
         title:
           'Adding resolution for "@apollo/client-react-streaming/superjson"',
         task: () => {
