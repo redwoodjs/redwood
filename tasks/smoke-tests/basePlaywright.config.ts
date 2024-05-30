@@ -2,6 +2,7 @@ import * as fs from 'node:fs'
 
 import type { PlaywrightTestConfig } from '@playwright/test'
 import { devices } from '@playwright/test'
+import { devices as replayDevices, replayReporter } from '@replayio/playwright'
 
 // See https://playwright.dev/docs/test-configuration#global-configuration
 export const basePlaywrightConfig: PlaywrightTestConfig = {
@@ -22,6 +23,10 @@ export const basePlaywrightConfig: PlaywrightTestConfig = {
       use: { ...devices['Desktop Chrome'] },
       dependencies: fs.existsSync('./tests/setup.ts') ? ['setup'] : undefined,
     },
+    {
+      name: 'replay-chromium',
+      use: { ...replayDevices['Replay Chromium'] },
+    },
 
     // {
     //   name: 'firefox',
@@ -34,5 +39,11 @@ export const basePlaywrightConfig: PlaywrightTestConfig = {
     // },
   ],
 
-  reporter: 'list',
+  reporter: [
+    replayReporter({
+      apiKey: process.env.REPLAY_API_KEY,
+      upload: !!process.env.CI || !!process.env.DISABLE_REPLAY_UPLOAD,
+    }),
+    ['line'],
+  ],
 }
