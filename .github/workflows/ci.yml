@@ -256,6 +256,8 @@ jobs:
     env:
       REDWOOD_CI: 1
       REDWOOD_VERBOSE_TELEMETRY: 1
+      BROWSER_INSTALL_CMD: ${{ matrix.os == 'windows-latest' && 'npx playwright install --with-deps chromium' || 'npx replayio install' }}
+      PLAYWRIGHT_CMD: ${{ matrix.os == 'windows-latest' && 'npx playwright test --project chromium' || 'npx playwright test --project replay-chromium' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -291,22 +293,24 @@ jobs:
           REDWOOD_DISABLE_TELEMETRY: 1
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
-      - name: 🎭 Install playwright dependencies
-        run: npx playwright install --with-deps chromium
+      - name: 🎭 Install Playwright dependencies
+        run: ${{ env.BROWSER_INSTALL_CMD }}
 
       - name: 🧑‍💻 Run dev smoke tests
         working-directory: ./tasks/smoke-tests/dev
-        run: npx playwright test
+        run: ${{ env.PLAYWRIGHT_CMD }}
         env:
           REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
           REDWOOD_DISABLE_TELEMETRY: 1
+          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: 🔐 Run auth smoke tests
         working-directory: ./tasks/smoke-tests/auth
-        run: npx playwright test
+        run: ${{ env.PLAYWRIGHT_CMD }}
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
+          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: Run `rw build --no-prerender`
         run: |
@@ -320,24 +324,27 @@ jobs:
 
       - name: 🖥️ Run serve smoke tests
         working-directory: tasks/smoke-tests/serve
-        run: npx playwright test
+        run: ${{ env.PLAYWRIGHT_CMD }}
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
+          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: 📄 Run prerender smoke tests
         working-directory: tasks/smoke-tests/prerender
-        run: npx playwright test
+        run: ${{ env.PLAYWRIGHT_CMD }}
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
+          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: 📕 Run Storybook smoke tests
         working-directory: tasks/smoke-tests/storybook
-        run: npx playwright test
+        run: ${{ env.PLAYWRIGHT_CMD }}
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
+          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
   smoke-tests-skip:
     needs: detect-changes
@@ -556,6 +563,8 @@ jobs:
     env:
       REDWOOD_CI: 1
       REDWOOD_VERBOSE_TELEMETRY: 1
+      BROWSER_INSTALL_CMD: ${{ matrix.os == 'windows-latest' && 'npx playwright install --with-deps chromium' || 'npx replayio install' }}
+      PLAYWRIGHT_CMD: ${{ matrix.os == 'windows-latest' && 'npx playwright test --project chromium' || 'npx playwright test --project replay-chromium' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -596,15 +605,16 @@ jobs:
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
 
-      - name: 🎭 Install playwright dependencies
-        run: npx playwright install --with-deps chromium
+      - name: 🎭 Install Playwright dependencies
+        run: ${{ env.BROWSER_INSTALL_CMD }}
 
       - name: Run Fragments dev smoke tests
         working-directory: ./tasks/smoke-tests/fragments-dev
-        run: npx playwright test
+        run: ${{ env.PLAYWRIGHT_CMD }}
         env:
           REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
           REDWOOD_DISABLE_TELEMETRY: 1
+          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: Build for production
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
@@ -614,10 +624,11 @@ jobs:
 
       - name: Run Fragments serve smoke tests
         working-directory: ./tasks/smoke-tests/fragments-serve
-        run: npx playwright test
+        run: ${{ env.PLAYWRIGHT_CMD }}
         env:
           REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
           REDWOOD_DISABLE_TELEMETRY: 1
+          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: Enable trusted-documents in Fragments test project
         run: npx -y tsx ./tasks/test-project/set-up-trusted-documents ${{ steps.set-up-test-project.outputs.test-project-path }}
@@ -626,10 +637,11 @@ jobs:
 
       - name: 📄 Run prerender smoke tests against Fragments test project (with trusted-documents enabled)
         working-directory: tasks/smoke-tests/prerender
-        run: npx playwright test
+        run: ${{ env.PLAYWRIGHT_CMD }}
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
+          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
   fragments-smoke-tests-skip:
     needs: detect-changes

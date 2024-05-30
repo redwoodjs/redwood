@@ -94,7 +94,7 @@ async function parseArgs() {
     playwrightOptions: {
       description: `Options to forward to ${chalk.cyan('npx playwright test')}`,
       type: /** @type {const} */ ('string'),
-      default: '',
+      default: '--project=chromium',
     },
 
     help: {
