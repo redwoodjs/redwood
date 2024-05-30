@@ -73,13 +73,21 @@ export const getFullUrl = (req: ExpressRequest) => {
 
 export const getFullUrlForFlightRequest = (
   req: ExpressRequest,
-  props: RscFetchProps,
+  rscPropsMaybe: RscFetchProps | Record<string, unknown>,
 ): string => {
-  return (
-    req.protocol +
-    '://' +
-    req.get('host') +
-    props.location.pathname +
-    props.location.search
-  )
+  // If it's not an RscFetchProps, then it's
+  // then url can be returned as is (for RSA requests)
+  if (!rscPropsMaybe.location) {
+    return getFullUrl(req)
+  } else {
+    const rscProps = rscPropsMaybe as RscFetchProps
+
+    return (
+      req.protocol +
+      '://' +
+      req.get('host') +
+      rscProps.location.pathname +
+      rscProps.location.search
+    )
+  }
 }

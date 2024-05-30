@@ -18,7 +18,7 @@ const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
 
 export type RenderInput = {
   rscId?: string | undefined
-  props: RscFetchProps
+  props: RscFetchProps | Record<string, unknown>
   rsfId?: string | undefined
   args?: unknown[] | undefined
   serverState: {

@@ -5,7 +5,7 @@ const BASE_PATH = '/rw-rsc/'
 
 const rscCache = new Map<string, Thenable<React.ReactElement>>()
 
-export interface RscFetchProps {
+export interface RscFetchProps extends Record<string, unknown> {
   location: {
     pathname: string
     search: string
