@@ -39,11 +39,9 @@ export async function rscBuildForServer(
     },
     ssr: {
       // Inline every file apart from node built-ins. We want vite/rollup to
-      // inline dependencies in the server bundle. This gets round runtime
-      // importing of "server-only". We have to do all imports because we can't
-      // rely on "server-only" being the name of the package. This is also
-      // actually more efficient because less files. Although, at build time
-      // it's likely way less efficient because we have to do so many files.
+      // inline dependencies in the server build. This gets round runtime
+      // importing of "server-only" and other packages with poisoned imports.
+      //
       // Files included in `noExternal` are files we want Vite to analyze
       // As of vite 5.2 `true` here means "all except node built-ins"
       noExternal: true,
