@@ -1,7 +1,8 @@
 import path from 'node:path'
 
+import type { Statement, ModuleDeclaration, AssignmentExpression } from 'acorn'
 import * as acorn from 'acorn-loose'
-import type { Plugin } from 'vite'
+import { normalizePath, type Plugin } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -26,7 +27,7 @@ export function rscTransformUseClientPlugin(
         return code
       }
 
-      let body
+      let body: (Statement | ModuleDeclaration)[]
 
       try {
         body = acorn.parse(code, {
@@ -121,11 +122,11 @@ function addExportNames(names: Array<string>, node: any) {
 }
 
 /**
- * Parses `body` for exports and stores them in `names` (the second argument)
+ * Parses `body` for exports and stores them in `names`
  */
 async function parseExportNamesIntoNames(
   code: string,
-  body: any,
+  body: (Statement | ModuleDeclaration)[],
   names: Array<string>,
 ): Promise<void> {
   for (let i = 0; i < body.length; i++) {
@@ -180,13 +181,72 @@ async function parseExportNamesIntoNames(
         }
 
         continue
+
+      // For CJS support
+      case 'ExpressionStatement': {
+        let assignmentExpression: AssignmentExpression | null = null
+
+        if (node.expression.type === 'AssignmentExpression') {
+          assignmentExpression = node.expression
+        } else if (
+          node.expression.type === 'LogicalExpression' &&
+          node.expression.right.type === 'AssignmentExpression'
+        ) {
+          assignmentExpression = node.expression.right
+        }
+
+        if (!assignmentExpression) {
+          continue
+        }
+
+        if (assignmentExpression.left.type !== 'MemberExpression') {
+          continue
+        }
+
+        if (assignmentExpression.left.object.type !== 'Identifier') {
+          continue
+        }
+
+        if (
+          assignmentExpression.left.object.name === 'exports' &&
+          assignmentExpression.left.property.type === 'Identifier'
+        ) {
+          // This is for handling exports like
+          // exports.Link = ...
+
+          if (!names.includes(assignmentExpression.left.property.name)) {
+            names.push(assignmentExpression.left.property.name)
+          }
+        } else if (
+          assignmentExpression.left.object.name === 'module' &&
+          assignmentExpression.left.property.type === 'Identifier' &&
+          assignmentExpression.left.property.name === 'exports' &&
+          assignmentExpression.right.type === 'ObjectExpression'
+        ) {
+          // This is for handling exports like
+          // module.exports = { Link: ... }
+
+          assignmentExpression.right.properties.forEach((property) => {
+            if (
+              property.type === 'Property' &&
+              property.key.type === 'Identifier'
+            ) {
+              if (!names.includes(property.key.name)) {
+                names.push(property.key.name)
+              }
+            }
+          })
+        }
+
+        continue
+      }
     }
   }
 }
 
 async function transformClientModule(
   code: string,
-  body: any,
+  body: (Statement | ModuleDeclaration)[],
   url: string,
   clientEntryFiles: Record<string, string>,
 ): Promise<string> {
@@ -202,9 +262,11 @@ async function transformClientModule(
     ([_key, value]) => value === url,
   )
 
-  const loadId = entryRecord
-    ? path.join(getPaths().web.distRsc, 'assets', `${entryRecord[0]}.mjs`)
-    : url
+  const loadId = normalizePath(
+    entryRecord
+      ? path.join(getPaths().web.distRsc, 'assets', `${entryRecord[0]}.mjs`)
+      : url,
+  )
 
   let newSrc =
     "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"

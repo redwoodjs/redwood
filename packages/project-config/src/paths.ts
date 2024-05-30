@@ -81,7 +81,7 @@ export interface PagesDependency {
   /** the variable to which the import is assigned */
   importName: string
   /** @alias importName */
-  const: string
+  constName: string
   /** absolute path without extension */
   importPath: string
   /** absolute path with extension */
@@ -349,7 +349,7 @@ export const processPagesDir = (
     const importStatement = `const ${importName} = { name: '${importName}', loader: import('${importPath}') }`
     return {
       importName,
-      const: importName,
+      constName: importName,
       importPath,
       path: path.join(webPagesDir, pagePath),
       importStatement,

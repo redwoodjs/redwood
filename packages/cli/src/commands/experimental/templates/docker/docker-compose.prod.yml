@@ -6,6 +6,11 @@ services:
       context: .
       dockerfile: ./Dockerfile
       target: api_serve
+    # Without a command specified, the Dockerfile's api_serve CMD will be used.
+    # If you are using a custom server file, you should either use the following
+    # command to launch your server or update the Dockerfile to do so.
+    # This is important if you intend to configure GraphQL to use Realtime.
+    # command: "./api/dist/server.js"
     ports:
       - "8911:8911"
     depends_on:

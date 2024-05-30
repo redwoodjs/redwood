@@ -73,6 +73,10 @@ export interface RWRouteManifestItem {
   hasParams: boolean
   relativeFilePath: string
   redirect: { to: string; permanent: boolean } | null
+  isPrivate: boolean
+  unauthenticated: string | null
+  roles: string | string[] | null
+  pageIdentifier: string | null
   // Probably want isNotFound here, so we can attach a separate 404 handler
 }
 
@@ -80,6 +84,8 @@ export interface RouteSpec extends RWRouteManifestItem {
   id: string
   isNotFound: boolean
   filePath: string | undefined
+  isPrivate: boolean
+  unauthenticated: string | null
   relativeFilePath: string
 }
 
@@ -111,6 +117,10 @@ export const getProjectRoutes = (): RouteSpec[] => {
       redirect: route.redirect
         ? { to: route.redirect, permanent: false }
         : null,
+      isPrivate: route.isPrivate,
+      unauthenticated: route.unauthenticated,
+      roles: route.roles,
+      pageIdentifier: route.page_identifier_str,
     }
   })
 }

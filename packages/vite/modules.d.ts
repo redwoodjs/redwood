@@ -106,5 +106,4 @@ declare module 'react-server-dom-webpack/server' {
   ): PipeableStream
 }
 
-declare module 'acorn-loose'
 declare module 'vite-plugin-cjs-interop'
