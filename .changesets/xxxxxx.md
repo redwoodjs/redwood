@@ -1,1 +1,0 @@
-- docs(docker): Clarify how to setup Docker with custom Server File (#xxxx) by @dthyresson
