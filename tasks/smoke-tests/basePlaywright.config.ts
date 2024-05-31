@@ -39,11 +39,5 @@ export const basePlaywrightConfig: PlaywrightTestConfig = {
     // },
   ],
 
-  reporter: [
-    replayReporter({
-      apiKey: process.env.REPLAY_API_KEY,
-      upload: !!process.env.CI,
-    }),
-    ['line'],
-  ],
+  reporter: 'list',
 }
