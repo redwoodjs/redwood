@@ -6,7 +6,7 @@ import type { HTTPMethod } from 'find-my-way'
 import { createIsbotFromList, list as isbotList } from 'isbot'
 import type { ViteDevServer } from 'vite'
 
-import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
+import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth/dist/AuthProvider/AuthProviderState.js'
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 import type { RouteSpec, RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
