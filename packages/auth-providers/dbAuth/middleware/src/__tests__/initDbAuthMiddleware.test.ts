@@ -8,6 +8,7 @@ import {
   MiddlewareResponse,
 } from '@redwoodjs/vite/middleware'
 
+import { middlewareDefaultAuthProviderState } from '../../../../../auth/dist/AuthProvider/AuthProviderState'
 import type { DbAuthMiddlewareOptions } from '../index'
 import { initDbAuthMiddleware } from '../index'
 const FIXTURE_PATH = path.resolve(
@@ -50,17 +51,10 @@ describe('dbAuthMiddleware', () => {
   it('When no cookie headers, pass through the response', async () => {
     const options: DbAuthMiddlewareOptions = {
       cookieName: '8911',
-      getCurrentUser: async () => {
-        return { id: 1, email: 'user-1@example.com' }
-      },
-      dbAuthHandler: async () => {
-        return {
-          body: 'body',
-          headers: {},
-          statusCode: 200,
-        }
-      },
+      getCurrentUser: vi.fn(),
+      dbAuthHandler: vi.fn(),
     }
+
     const [middleware] = initDbAuthMiddleware(options)
     const req = {
       method: 'GET',
@@ -68,7 +62,6 @@ describe('dbAuthMiddleware', () => {
       url: 'http://localhost:8911',
     } as MiddlewareRequest
 
-    // Typecase for the test
     const res = await middleware(req, { passthrough: true } as any)
 
     expect(res).toEqual({ passthrough: true })
@@ -82,6 +75,7 @@ describe('dbAuthMiddleware', () => {
         return { id: 'mocked-current-user-1', email: 'user-1@example.com' }
       }),
       dbAuthHandler: vi.fn(),
+      getRoles: vi.fn(() => ['f1driver']),
     }
     const [middleware] = initDbAuthMiddleware(options)
 
@@ -109,6 +103,15 @@ describe('dbAuthMiddleware', () => {
         email: 'user-1@example.com',
         id: 'mocked-current-user-1',
       },
+      roles: ['f1driver'], // Because we override the getRoles function
+    })
+
+    expect(options.getRoles).toHaveBeenCalledWith({
+      currentUser: {
+        email: 'user-1@example.com',
+        id: 'mocked-current-user-1',
+      },
+      mockedSession: 'this_is_the_only_correct_session',
     })
 
     // Allow react render, because body is not defined, and status code not redirect
@@ -152,6 +155,8 @@ describe('dbAuthMiddleware', () => {
         email: 'user-1@example.com',
         id: 'mocked-current-user-1',
       },
+      // No get roles function, so it should be empty
+      roles: [],
     })
 
     // Allow react render, because body is not defined, and status code not redirect
@@ -500,6 +505,12 @@ describe('dbAuthMiddleware', () => {
   })
 
   describe('handle exception cases', async () => {
+    const unauthenticatedServerAuthState = {
+      ...middlewareDefaultAuthProviderState,
+      cookieHeader: null,
+      roles: [],
+    }
+
     beforeAll(() => {
       // So that we don't see errors in console when running negative cases
       vi.spyOn(console, 'error').mockImplementation(() => {})
@@ -578,7 +589,11 @@ describe('dbAuthMiddleware', () => {
       expect(res).toBeDefined()
 
       const serverAuthState = mwReq.serverAuthState.get()
-      expect(serverAuthState).toBeNull()
+      expect(serverAuthState).toEqual({
+        ...unauthenticatedServerAuthState,
+        cookieHeader:
+          'session_8911=some-bad-encrypted-cookie;auth-provider=dbAuth',
+      })
 
       expect(res?.toResponse().headers.getSetCookie()).toEqual([
         // Expired cookies, will be removed by browser

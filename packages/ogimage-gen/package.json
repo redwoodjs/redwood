@@ -16,6 +16,7 @@
     "./middleware": {
       "import": "./dist/OgImageMiddleware.js",
       "default": "./cjsWrappers/middleware.js",
+      "react-server": "./empty.js",
       "types": "./dist/OgImageMiddleware.d.ts"
     },
     "./hooks": {

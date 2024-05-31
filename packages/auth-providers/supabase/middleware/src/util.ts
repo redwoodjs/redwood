@@ -61,7 +61,7 @@ export const clearAuthState = (
   res: MiddlewareResponse,
 ) => {
   // Clear server auth context
-  req.serverAuthState.set(null)
+  req.serverAuthState.clear()
 
   // clear supabase cookies
   // We can't call .signOut() because that revokes all refresh tokens,
