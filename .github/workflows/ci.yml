@@ -14,6 +14,9 @@ concurrency:
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
   YARN_ENABLE_HARDENED_MODE: 0
+  BROWSER_INSTALL_CMD: ${{ matrix.os == 'windows-latest' && 'npx playwright install --with-deps chromium' || 'npx replayio install' }}
+  # PLAYWRIGHT_CMD: ${{ matrix.os == 'windows-latest' && 'npx playwright test --project chromium' || 'npx playwright test --project replay-chromium' }}
+  PLAYWRIGHT_CMD: 'npx playwright test --project chromium'
 
 jobs:
   detect-changes:
@@ -203,8 +206,6 @@ jobs:
     env:
       REDWOOD_CI: 1
       REDWOOD_VERBOSE_TELEMETRY: 1
-      BROWSER_INSTALL_CMD: ${{ matrix.os == 'windows-latest' && 'npx playwright install --with-deps chromium' || 'npx replayio install' }}
-      PLAYWRIGHT_CMD: ${{ matrix.os == 'windows-latest' && 'npx playwright test --project chromium' || 'npx playwright test --project replay-chromium' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -451,8 +452,6 @@ jobs:
     env:
       REDWOOD_CI: 1
       REDWOOD_VERBOSE_TELEMETRY: 1
-      BROWSER_INSTALL_CMD: ${{ matrix.os == 'windows-latest' && 'npx playwright install --with-deps chromium' || 'npx replayio install' }}
-      PLAYWRIGHT_CMD: ${{ matrix.os == 'windows-latest' && 'npx playwright test --project chromium' || 'npx playwright test --project replay-chromium' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -552,9 +551,6 @@ jobs:
     env:
       REDWOOD_CI: 1
       REDWOOD_VERBOSE_TELEMETRY: 1
-      # Temp workaround for Replay specific failing tests
-      BROWSER_INSTALL_CMD: 'npx playwright install --with-deps chromium && npx replayio install'
-      PLAYWRIGHT_CMD: npx playwright test --project chromium
 
     steps:
       - uses: actions/checkout@v4
@@ -629,8 +625,6 @@ jobs:
     env:
       REDWOOD_CI: 1
       REDWOOD_VERBOSE_TELEMETRY: 1
-      BROWSER_INSTALL_CMD: ${{ matrix.os == 'windows-latest' && 'npx playwright install --with-deps chromium' || 'npx replayio install' }}
-      PLAYWRIGHT_CMD: ${{ matrix.os == 'windows-latest' && 'npx playwright test --project chromium' || 'npx playwright test --project replay-chromium' }}
 
     steps:
       - uses: actions/checkout@v4
