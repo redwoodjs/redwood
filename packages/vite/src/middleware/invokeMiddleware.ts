@@ -1,4 +1,4 @@
-import { type ServerAuthState } from '@redwoodjs/auth'
+import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 
 import { setServerAuthState } from '../serverStore.js'
 
