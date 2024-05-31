@@ -12,7 +12,7 @@
     { "path": "../babel-config" },
     { "path": "../project-config" },
     { "path": "../web" },
-    { "path": "../auth" },
+    { "path": "../auth/tsconfig.build.json" },
     { "path": "../graphql-server" },
   ]
 }

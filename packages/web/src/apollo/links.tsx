@@ -6,7 +6,7 @@ import { print } from 'graphql/language/printer'
 export function createHttpLink(
   uri: string,
   httpLinkConfig: HttpOptions | undefined,
-  cookieHeader?: string,
+  cookieHeader?: string | null,
 ) {
   const headers: Record<string, string> = {}
 

@@ -1,7 +1,4 @@
-import {
-  middlewareDefaultAuthProviderState,
-  type ServerAuthState,
-} from '@redwoodjs/auth'
+import { type ServerAuthState } from '@redwoodjs/auth'
 
 import { setServerAuthState } from '../serverStore.js'
 
@@ -19,19 +16,21 @@ import type { Middleware, MiddlewareInvokeOptions } from './types.js'
  *
  * Returns promise that will resolve to a tuple of
  * [MiddlewareResponse, ServerAuthState]
+ * and will always make sure there is a ServerAuthState set
  */
 export const invoke = async (
   req: Request,
   middleware?: Middleware,
   options?: MiddlewareInvokeOptions,
 ): Promise<[MiddlewareResponse, ServerAuthState]> => {
-  if (typeof middleware !== 'function') {
-    setupServerStore(req, middlewareDefaultAuthProviderState)
+  const mwReq = new MiddlewareRequest(req)
 
-    return [MiddlewareResponse.next(), middlewareDefaultAuthProviderState]
+  if (typeof middleware !== 'function') {
+    setServerAuthState(mwReq.serverAuthState.get())
+
+    return [MiddlewareResponse.next(), mwReq.serverAuthState.get()]
   }
 
-  const mwReq = new MiddlewareRequest(req)
   let mwRes: MiddlewareResponse = MiddlewareResponse.next()
 
   try {
@@ -52,8 +51,8 @@ export const invoke = async (
       )
     }
   } catch (e) {
-    // @TODO catch the error here, and see if its a short-circuit
-    // A shortcircuit will prevent execution of all other middleware down the chain, and prevent react rendering
+    // A short-circuit will prevent execution of all other middleware down the chain,
+    // and prevent react rendering
     if (e instanceof MiddlewareShortCircuit) {
       return [e.mwResponse, mwReq.serverAuthState.get()]
     }
@@ -64,14 +63,8 @@ export const invoke = async (
     console.error('~'.repeat(80))
   } finally {
     // This one is for the server. The worker serverStore is initialized in the worker itself!
-    setupServerStore(req, mwReq.serverAuthState.get())
+    setServerAuthState(mwReq.serverAuthState.get())
   }
 
   return [mwRes, mwReq.serverAuthState.get()]
-}
-
-const setupServerStore = (_req: Request, serverAuthState: ServerAuthState) => {
-  // Init happens in app.use('*')
-
-  setServerAuthState(serverAuthState)
 }

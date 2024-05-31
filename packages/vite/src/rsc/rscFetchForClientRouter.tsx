@@ -8,7 +8,14 @@ const BASE_PATH = '/rw-rsc/'
 
 const rscCache = new Map<string, Thenable<React.ReactElement>>()
 
-export function rscFetch(rscId: string, props: Record<string, unknown>) {
+export interface RscFetchProps extends Record<string, unknown> {
+  location: {
+    pathname: string
+    search: string
+  }
+}
+
+export function rscFetch(rscId: string, props: RscFetchProps) {
   const serializedProps = JSON.stringify(props)
 
   const cached = rscCache.get(serializedProps)
