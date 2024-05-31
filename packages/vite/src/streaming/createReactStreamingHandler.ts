@@ -10,7 +10,7 @@ import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 import type { RouteSpec, RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
-import { matchPath } from '@redwoodjs/router'
+import { matchPath } from '@redwoodjs/router/dist/util.js'
 import type { TagDescriptor } from '@redwoodjs/web'
 
 import { invoke } from '../middleware/invokeMiddleware.js'
