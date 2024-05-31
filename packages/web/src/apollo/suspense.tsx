@@ -34,7 +34,8 @@ import {
 import { buildManualDataTransport } from '@apollo/client-react-streaming/manual-transport'
 
 import type { UseAuth } from '@redwoodjs/auth'
-import { ServerAuthContext, useNoAuth } from '@redwoodjs/auth'
+import { useNoAuth } from '@redwoodjs/auth'
+import { ServerAuthContext } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 import './typeOverride'
 
 import {

@@ -9,8 +9,8 @@ import type {
 } from 'react-dom/server'
 import type { default as RDServerModule } from 'react-dom/server.edge'
 
-import type { ServerAuthState } from '@redwoodjs/auth'
-import { ServerAuthProvider } from '@redwoodjs/auth'
+import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
+import type { ServerAuthProvider } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { LocationProvider } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
