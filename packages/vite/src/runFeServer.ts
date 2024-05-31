@@ -28,7 +28,7 @@ import { setClientEntries } from './rsc/rscWorkerCommunication.js'
 import { createPerRequestMap, createServerStorage } from './serverStore.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import type { RWRouteManifest } from './types.js'
-import { convertExpressHeaders } from './utils.js'
+import { convertExpressHeaders, getFullUrl } from './utils.js'
 
 /**
  * TODO (STREAMING)
@@ -123,10 +123,10 @@ export async function runFeServer() {
   )
 
   app.use('*', (req, _res, next) => {
+    const fullUrl = getFullUrl(req)
+    const headers = convertExpressHeaders(req.headersDistinct)
     // Convert express headers to fetch headers
-    const perReqStore = createPerRequestMap({
-      headers: convertExpressHeaders(req.headersDistinct),
-    })
+    const perReqStore = createPerRequestMap({ headers, fullUrl })
 
     // By wrapping next, we ensure that all of the other handlers will use this same perReqStore
     // But note that the serverStorage is RE-initialised for the RSC worker

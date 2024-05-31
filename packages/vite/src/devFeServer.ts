@@ -19,7 +19,11 @@ import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { createPerRequestMap, createServerStorage } from './serverStore.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
-import { convertExpressHeaders, ensureProcessDirWeb } from './utils.js'
+import {
+  convertExpressHeaders,
+  ensureProcessDirWeb,
+  getFullUrl,
+} from './utils.js'
 
 // TODO (STREAMING) Just so it doesn't error out. Not sure how to handle this.
 globalThis.__REDWOOD__PRERENDER_PAGES = {}
@@ -100,9 +104,12 @@ async function createServer() {
   app.use(vite.middlewares)
 
   app.use('*', (req, _res, next) => {
-    // Convert express headers to fetch headers
+    const fullUrl = getFullUrl(req)
+
     const perReqStore = createPerRequestMap({
+      // Convert express headers to fetch header
       headers: convertExpressHeaders(req.headersDistinct),
+      fullUrl,
     })
 
     // By wrapping next, we ensure that all of the other handlers will use this same perReqStore

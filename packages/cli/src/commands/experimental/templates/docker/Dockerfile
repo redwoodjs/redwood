@@ -94,7 +94,15 @@ COPY --chown=node:node --from=api_build /home/node/app/node_modules/.prisma /hom
 
 ENV NODE_ENV=production
 
+# default api serve command
+# ---------
+# If you are using a custom server file, you must use the following
+# command to launch your server instead of the default api-server below.
+# This is important if you intend to configure GraphQL to use Realtime.
+#
+# CMD [ "./api/dist/server.js" ]
 CMD [ "node_modules/.bin/rw-server", "api" ]
+
 
 # web serve
 # ---------
