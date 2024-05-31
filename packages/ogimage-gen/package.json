@@ -14,6 +14,7 @@
       "types": "./dist/vite-plugin-ogimage-gen.d.ts"
     },
     "./middleware": {
+      "react-server": "./empty.js",
       "import": "./dist/OgImageMiddleware.js",
       "default": "./cjsWrappers/middleware.js",
       "types": "./dist/OgImageMiddleware.d.ts"
@@ -26,6 +27,7 @@
   },
   "files": [
     "dist",
+    "empty.js",
     "cjsWrappers"
   ],
   "scripts": {
