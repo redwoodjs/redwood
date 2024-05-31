@@ -14,6 +14,7 @@ concurrency:
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
   YARN_ENABLE_HARDENED_MODE: 0
+  REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY || 'rwk_mRDHS8s5EA5SrID1k2Xqu5hKJumF8LzUTSItmLw9Cto' }}
 
 jobs:
   detect-changes:
@@ -229,7 +230,6 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
           REDWOOD_DISABLE_TELEMETRY: 1
-          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: 🔐 Run auth smoke tests
         working-directory: ./tasks/smoke-tests/auth
@@ -237,7 +237,6 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: Run `rw build --no-prerender`
         run: |
@@ -255,7 +254,6 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: 📄 Run prerender smoke tests
         working-directory: tasks/smoke-tests/prerender
@@ -263,7 +261,6 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: 📕 Run Storybook smoke tests
         working-directory: tasks/smoke-tests/storybook
@@ -271,7 +268,6 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
   smoke-tests-skip:
     needs: detect-changes
@@ -475,7 +471,6 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-project.outputs.rsc-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       # TODO (RSC): This workflow times out on Windows. It looks as if the dev
       # server starts up ok, but it doesn't seem like the browser is rendering
@@ -491,7 +486,6 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-project.outputs.rsc-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: 🌲 Set up RSA smoke test
         id: set-up-rsa-project
@@ -506,7 +500,6 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsa-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: 🌲 Set up RSC Kitchen Sink smoke test
         id: set-up-rsc-kitchen-sink-project
@@ -521,7 +514,6 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-rsc-kitchen-sink-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
   rsc-smoke-tests-skip:
     needs: detect-changes
@@ -587,7 +579,6 @@ jobs:
           REDWOOD_DISABLE_TELEMETRY: 1
           # Temp workaround for Replay specific failing tests
           DISABLE_REPLAY_UPLOAD: 1
-          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: Build for production
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
@@ -603,7 +594,6 @@ jobs:
           REDWOOD_DISABLE_TELEMETRY: 1
           # Temp workaround for Replay specific failing tests
           DISABLE_REPLAY_UPLOAD: 1
-          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
   ssr-smoke-tests-skip:
     needs: detect-changes
@@ -665,7 +655,6 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
           REDWOOD_DISABLE_TELEMETRY: 1
-          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: Build for production
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
@@ -679,7 +668,6 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
           REDWOOD_DISABLE_TELEMETRY: 1
-          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: Enable trusted-documents in Fragments test project
         run: npx -y tsx ./tasks/test-project/set-up-trusted-documents ${{ steps.set-up-test-project.outputs.test-project-path }}
@@ -692,7 +680,6 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
   fragments-smoke-tests-skip:
     needs: detect-changes
