@@ -3,7 +3,7 @@ import type { Readable } from 'node:stream'
 import { PassThrough } from 'node:stream'
 import { Worker } from 'node:worker_threads'
 
-import type { ServerAuthState } from '@redwoodjs/auth'
+import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 
 import type { RscFetchProps } from './rscFetchForClientRouter'
 
