@@ -14,7 +14,7 @@ concurrency:
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
   YARN_ENABLE_HARDENED_MODE: 0
-  BROWSER_INSTALL_CMD: npx playwright install --with-deps chromium
+  BROWSER_INSTALL_CMD: npx playwright install --with-deps chromium && npx replayio install
   PLAYWRIGHT_CMD: 'npx playwright test --project chromium'
 
 jobs:
