@@ -1,9 +1,7 @@
 import { Request as WhatWgRequest } from '@whatwg-node/fetch'
 
-import {
-  middlewareDefaultAuthProviderState,
-  type ServerAuthState,
-} from '@redwoodjs/auth'
+import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
+import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 
 import { CookieJar } from './CookieJar.js'
 

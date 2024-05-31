@@ -9,9 +9,21 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/index.js",
-    "default": "./dist/cjs/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/cjs/index.js"
+    },
+    "./ServerAuthProvider": {
+      "types": "./dist/AuthProvider/ServerAuthProvider.d.ts",
+      "import": "./dist/AuthProvider/ServerAuthProvider.js",
+      "default": "./dist/cjs/AuthProvider/ServerAuthProvider.js"
+    },
+    "./dist/AuthProvider/ServerAuthProvider": {
+      "types": "./dist/AuthProvider/ServerAuthProvider.d.ts",
+      "import": "./dist/AuthProvider/ServerAuthProvider.js",
+      "default": "./dist/cjs/AuthProvider/ServerAuthProvider.js"
+    }
   },
   "types": "./dist/index.d.ts",
   "files": [
