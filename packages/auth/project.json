@@ -1,0 +1,15 @@
+{
+  "namedInputs": {
+    "prod": [
+      "!{projectRoot}/**/*.test.{js,jsx,ts,tsx}",
+      "{workspaceRoot}/babel.config.js",
+      "{workspaceRoot}/tsconfig.build.json",
+      {
+        "runtime": "node -v"
+      },
+      {
+        "runtime": "node -e \"console.log(process.platform)\""
+      }
+    ]
+  }
+}

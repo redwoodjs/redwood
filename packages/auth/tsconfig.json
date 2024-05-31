@@ -4,6 +4,7 @@
     "isolatedModules": true,
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
+    "rootDir": ".",
     "outDir": "dist"
   },
   "include": [
