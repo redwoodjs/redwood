@@ -12,7 +12,7 @@ import { reactDocgen } from './plugins/react-docgen'
 import type { StorybookConfig } from './types'
 
 const getAbsolutePath = (input: string) =>
-  dirname(require.resolve(join(input, 'package.json'))) as any
+  dirname(require.resolve(join(input, 'package.json')))
 
 export const core: PresetProperty<'core'> = {
   builder: getAbsolutePath('@storybook/builder-vite'),
