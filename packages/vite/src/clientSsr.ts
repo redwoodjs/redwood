@@ -129,9 +129,9 @@ export async function renderRoutesFromDist<TProps extends Record<string, any>>(
     await importModule('rsdw-server')
 
   console.log('clientSsr.ts right before renderToReadableStream')
-  // We're in client.ts, but we're supposed to be pretending we're in the
-  // RSC server "world" and that `stream` comes from `fetch`. So this is
-  // us emulating the reply (stream) you'd get from a fetch call.
+  // We're in clientSsr.ts, but we're supposed to be pretending we're in the
+  // RSC server "world" and that `stream` comes from `fetch`. So this is us
+  // emulating the reply (stream) you'd get from a fetch call.
   const stream = renderToReadableStream(
     // createElement(layout, undefined, createElement(page, props)),
     // _@ts-expect-error - WIP

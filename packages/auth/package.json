@@ -23,6 +23,11 @@
       "types": "./dist/AuthProvider/ServerAuthProvider.d.ts",
       "import": "./dist/AuthProvider/ServerAuthProvider.js",
       "default": "./dist/cjs/AuthProvider/ServerAuthProvider.js"
+    },
+    "./dist/AuthProvider/ServerAuthProvider.js": {
+      "types": "./dist/AuthProvider/ServerAuthProvider.d.ts",
+      "import": "./dist/AuthProvider/ServerAuthProvider.js",
+      "default": "./dist/cjs/AuthProvider/ServerAuthProvider.js"
     }
   },
   "types": "./dist/index.d.ts",
