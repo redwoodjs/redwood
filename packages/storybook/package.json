@@ -60,16 +60,16 @@
     "unplugin-auto-import": "^0.17.5"
   },
   "devDependencies": {
-    "@types/node": "20.11.25",
-    "tsx": "4.7.1",
-    "typescript": "5.4.3",
-    "vite": "5.2.8"
+    "@types/node": "20.12.12",
+    "tsx": "4.10.3",
+    "typescript": "5.4.5",
+    "vite": "5.2.11"
   },
   "peerDependencies": {
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/router": "workspace:*",
-    "react": "18.3.0-canary-a870b2d54-20240314",
-    "react-dom": "18.3.0-canary-a870b2d54-20240314",
+    "react": "19.0.0-beta-04b058868c-20240508",
+    "react-dom": "19.0.0-beta-04b058868c-20240508",
     "storybook": "7.6.17"
   },
   "engines": {
