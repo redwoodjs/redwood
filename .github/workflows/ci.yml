@@ -585,8 +585,6 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
           REDWOOD_DISABLE_TELEMETRY: 1
-          # Temp workaround for Replay specific failing tests
-          DISABLE_REPLAY_UPLOAD: 1
           REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
       - name: Build for production
@@ -601,8 +599,6 @@ jobs:
         env:
           REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
           REDWOOD_DISABLE_TELEMETRY: 1
-          # Temp workaround for Replay specific failing tests
-          DISABLE_REPLAY_UPLOAD: 1
           REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
   ssr-smoke-tests-skip:
