@@ -9,6 +9,8 @@ import type { GetCurrentUser } from '@redwoodjs/graphql-server'
 import type { Middleware, MiddlewareRequest } from '@redwoodjs/vite/middleware'
 import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
 
+import { defaultGetRoles } from './defaultGetRoles'
+
 export interface DbAuthMiddlewareOptions {
   cookieName?: string
   dbAuthUrl?: string
@@ -18,12 +20,14 @@ export interface DbAuthMiddlewareOptions {
     req: Request | APIGatewayProxyEvent,
     context?: Context,
   ) => DbAuthResponse
+  getRoles?: (decoded: any) => string[]
   getCurrentUser: GetCurrentUser
 }
 
 export const initDbAuthMiddleware = ({
   dbAuthHandler,
   getCurrentUser,
+  getRoles = defaultGetRoles,
   cookieName,
   dbAuthUrl = '/middleware/dbauth',
 }: DbAuthMiddlewareOptions): [Middleware, '*'] => {
@@ -71,7 +75,7 @@ export const initDbAuthMiddleware = ({
     try {
       // Call the dbAuth auth decoder. For dbAuth we have direct access to the `dbAuthSession` function.
       // Other providers will be slightly different.
-      const { currentUser } = await validateSession({
+      const { currentUser, decryptedSession } = await validateSession({
         req,
         cookieName,
         getCurrentUser,
@@ -84,11 +88,12 @@ export const initDbAuthMiddleware = ({
         hasError: false,
         userMetadata: currentUser, // dbAuth doesn't have userMetadata
         cookieHeader,
+        roles: getRoles(decryptedSession),
       })
     } catch (e) {
       // Clear server auth context
       console.error('Error decrypting dbAuth cookie \n', e)
-      req.serverAuthState.set(null)
+      req.serverAuthState.clear()
 
       // Note we have to use ".unset" and not ".clear"
       // because we want to remove these cookies from the browser

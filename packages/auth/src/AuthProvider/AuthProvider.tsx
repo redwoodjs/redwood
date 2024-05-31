@@ -133,7 +133,7 @@ export function createAuthProvider<
 
         await authImplementation.restoreAuthState?.()
 
-        // If the inital state didn't come from the server (or was restored before)
+        // If the initial state didn't come from the server (or was restored before)
         // reauthenticate will make an API call to the middleware to receive the current user
         // (instead of called the graphql endpoint with currentUser)
         if (!serverAuthState) {

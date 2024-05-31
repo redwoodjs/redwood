@@ -7,30 +7,47 @@ import {
 
 import { CookieJar } from './CookieJar.js'
 
-class AuthStateJar<T> {
-  private _data: T
+class AuthStateJar {
+  private _data: ServerAuthState | null
+  private _initialState: ServerAuthState
 
-  constructor(data?: T) {
-    this._data = data as T
+  constructor(initialState: ServerAuthState) {
+    this._data = initialState
+    this._initialState = initialState
   }
 
+  /**
+   * Always returns the server auth state, even if its set to null,
+   * it'll fall back to the initial state (created when mwReq is initialised)
+   */
   get() {
-    return this._data
+    return this._data || this._initialState
   }
 
-  set(value: any) {
+  set(value: ServerAuthState | null) {
     this._data = value
+  }
+
+  clear() {
+    this._data = null
   }
 }
 
 export class MiddlewareRequest extends WhatWgRequest {
   cookies: CookieJar
-  serverAuthState: AuthStateJar<ServerAuthState>
+  serverAuthState: AuthStateJar
 
   constructor(input: Request) {
     super(input)
+
+    const defaultServerAuthState = {
+      ...middlewareDefaultAuthProviderState,
+      cookieHeader: input.headers.get('Cookie'),
+      roles: [],
+    }
+
     this.cookies = new CookieJar(input.headers.get('Cookie'))
-    this.serverAuthState = new AuthStateJar(middlewareDefaultAuthProviderState)
+    this.serverAuthState = new AuthStateJar(defaultServerAuthState)
   }
 }
 
