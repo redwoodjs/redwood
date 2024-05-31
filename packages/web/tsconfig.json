@@ -5,5 +5,5 @@
     "outDir": "dist"
   },
   "include": ["./src/**/*", "ambient.d.ts", "testing-library.d.ts"],
-  "references": [{ "path": "../auth" }]
+  "references": [{ "path": "../auth/tsconfig.build.json" }]
 }
