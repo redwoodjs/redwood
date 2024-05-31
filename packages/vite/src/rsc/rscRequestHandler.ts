@@ -17,7 +17,9 @@ import { hasStatusCode } from '../lib/StatusError.js'
 import type { Middleware } from '../middleware'
 import { invoke } from '../middleware/invokeMiddleware'
 import { getAuthState, getRequestHeaders } from '../serverStore'
+import { getFullUrlForFlightRequest } from '../utils'
 
+import type { RscFetchProps } from './rscFetchForClientRouter'
 import { sendRscFlightToStudio } from './rscStudioHandlers.js'
 import { renderRsc } from './rscWorkerCommunication.js'
 
@@ -88,7 +90,11 @@ export function createRscRequestHandler(
 
     const url = new URL(req.originalUrl || '', 'http://' + req.headers.host)
     let rscId: string | undefined
-    let props = {}
+    // "location":{"pathname":"/about","search":""}
+    // These values come from packages/vite/src/ClientRouter.tsx
+    const props: RscFetchProps = JSON.parse(
+      url.searchParams.get('props') || '{}',
+    )
     let rsfId: string | undefined
     let args: unknown[] = []
 
@@ -101,7 +107,6 @@ export function createRscRequestHandler(
 
       if (rscId && rscId !== '_') {
         res.setHeader('Content-Type', 'text/x-component')
-        props = JSON.parse(url.searchParams.get('props') || '{}')
       } else {
         rscId = undefined
       }
@@ -183,6 +188,12 @@ export function createRscRequestHandler(
       }
 
       try {
+        // We construct the URL for the flight request from props
+        // e.g. http://localhost:8910/rw-rsc/__rwjs__Routes?props=location={pathname:"/about",search:"?foo=bar""}
+        // becomes http://localhost:8910/about?foo=bar
+        // In the component, getting location would otherwise be at the rw-rsc URL
+        const fullUrl = getFullUrlForFlightRequest(req, props)
+
         const pipeable = await renderRsc({
           rscId,
           props,
@@ -193,6 +204,7 @@ export function createRscRequestHandler(
           serverState: {
             headersInit: Object.fromEntries(getRequestHeaders().entries()),
             serverAuthState: getAuthState(),
+            fullUrl,
           },
         })
 

@@ -55,7 +55,11 @@ docker compose -f ./docker-compose.dev.yml run --rm -it console /bin/bash
 root@...:/home/node/app# yarn rw prisma migrate dev
 ```
 
-## The Dockerfile in detail
+:::important 
+If you are using a [Server File](#using-the-server-file) then you should [change the command](#command) that runs the `api_serve` service.
+:::
+
+## Dockerfile
 
 The documentation here goes through and explains every line of Redwood's Dockerfile.
 If you'd like to see the whole Dockerfile for reference, you can find it [here](https://github.com/redwoodjs/redwood/tree/main/packages/cli/src/commands/experimental/templates/docker/Dockerfile) or by setting it up in your project: `yarn rw experimental setup-docker`.
@@ -256,20 +260,36 @@ Here's where we really take advantage of multi-stage builds by copying from the 
 At this point all the building has been done. Now we can just grab the artifacts without having to lug around the dev dependencies.
 
 There's one more thing that was built: the prisma client in `node_modules/.prisma`.
-We need to grab it too.
-
-```Dockerfile
-ENV NODE_ENV=production
-
-CMD [ "node_modules/.bin/rw-server", "api" ]
-```
+We need to grab it, too.
 
 Lastly, the default command is to start the api server using the bin from the `@redwoodjs/api-server` package.
 You can override this command if you have more specific needs.
 
+```Dockerfile
+ENV NODE_ENV=production
+
+# default api serve command
+# ---------
+# If you are using a custom server file, you must use the following
+# command to launch your server instead of the default api-server below.
+# This is important if you intend to configure GraphQL to use Realtime.
+#
+# CMD [ "./api/dist/server.js" ]
+CMD [ "node_modules/.bin/rw-server", "api" ]
+```
+
+:::important 
+If you are using a [Server File](#using-the-server-file) then you must change the command that runs the `api_serve` service to `./api/dist/server.js` as shown above.
+
+Not updating the command will not completely configure the GraphQL Server and not setup [Redwood Realtime](./realtime.md), if you are using that.
+:::
+
+
 Note that the Redwood CLI isn't available anymore. (It's a dev dependency.)
 To access the server bin, we have to find its path in `node_modules`.
 Though this is somewhat discouraged in modern yarn, since we're using the `node-modules` node linker, it's in `node_modules/.bin`.
+
+
 
 ### The `web_build` stage
 
@@ -508,9 +528,10 @@ With the server file, there's no indirection. Just use `node`:
 yarn node api/dist/server.js
 ```
 
-:::info You have to build first
+### Building
 
 You can't run the server file directly with Node.js; it has to be built first:
+
 
 ```
 yarn rw build api
@@ -518,16 +539,23 @@ yarn rw build api
 
 The api serve stage in the Dockerfile pulls from the api build stage, so things are already in the right order there. Similarly, for `yarn rw dev`, the dev server will build and reload the server file for you. 
 
-:::
 
-That means you can swap the `CMD` instruction in the api server stage:
+### Command
+
+That means you will swap the `CMD` instruction in the api server stage:
 
 ```diff
   ENV NODE_ENV=production
 
 - CMD [ "node_modules/.bin/rw-server", "api" ]
-+ CMD [ "yarn", "node", "api/dist/server.js" ]
++ CMD [ "api/dist/server.js" ]
 ```
+
+:::important 
+If you are using a [Server File](#using-the-server-file) then you must change the command that runs the `api_serve` service to `./api/dist/server.js` as shown above.
+
+Not updating the command will not completely configure the GraphQL Server and not setup [Redwood Realtime](./realtime.md), if you are using that.
+:::
 
 ### Configuring the server
 

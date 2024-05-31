@@ -50,6 +50,7 @@ const ignored = [
   /meta.(\w*\.?)json/,
 
   /tsconfig.tsbuildinfo/,
+  /tsconfig.build.tsbuildinfo/,
 
   (filePath) => IGNORE_EXTENSIONS.some((ext) => filePath.endsWith(ext)),
 ]

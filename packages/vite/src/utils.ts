@@ -5,6 +5,7 @@ import type { ViteDevServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import type { RscFetchProps } from './rsc/rscFetchForClientRouter'
 import type { EntryServer } from './types'
 
 export function stripQueryStringAndHashFromPath(url: string) {
@@ -64,4 +65,37 @@ export function convertExpressHeaders(
   }
 
   return headers
+}
+
+export const getFullUrl = (req: ExpressRequest) => {
+  return req.protocol + '://' + req.get('host') + req.originalUrl
+}
+
+function isRscFetchProps(
+  rscPropsMaybe: RscFetchProps | Record<string, unknown>,
+): rscPropsMaybe is RscFetchProps {
+  return (
+    !!rscPropsMaybe.location &&
+    typeof rscPropsMaybe.location === 'object' &&
+    'pathname' in rscPropsMaybe.location
+  )
+}
+
+export const getFullUrlForFlightRequest = (
+  req: ExpressRequest,
+  rscPropsMaybe: RscFetchProps | Record<string, unknown>,
+): string => {
+  if (isRscFetchProps(rscPropsMaybe)) {
+    return (
+      req.protocol +
+      '://' +
+      req.get('host') +
+      rscPropsMaybe.location.pathname +
+      rscPropsMaybe.location.search
+    )
+  } else {
+    // If it's not an RscFetchProps, then the url can be returned as is (for
+    // RSA requests)
+    return getFullUrl(req)
+  }
 }
