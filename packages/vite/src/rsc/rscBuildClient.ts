@@ -29,10 +29,6 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     throw new Error('Missing web/src/entry.client')
   }
 
-  if (!rwPaths.web.entryServer) {
-    throw new Error('Missing web/src/entry.server')
-  }
-
   const clientBuildOutput = await viteBuild({
     envFile: false,
     define: {
