@@ -38,7 +38,6 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     define: {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     },
-    plugins: [rscRoutesAutoLoader()],
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often
       minify: false,
@@ -77,6 +76,7 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
       logLevel: 'debug',
     },
     logLevel: 'info',
+    plugins: [rscRoutesAutoLoader()],
   })
 
   if (!('output' in clientBuildOutput)) {
