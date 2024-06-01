@@ -53,7 +53,10 @@ export async function rscBuildForServer(
         // These conditions are used in the plugin pipeline, and only affect non-externalized
         // dependencies during the SSR build. Which because of `noExternal: true` means all
         // dependencies apart from node built-ins.
+        // TODO (RSC): Might not need this one now when we have `noExternal: false`
         conditions: ['react-server'],
+        // TODO (RSC): Might not need this one now when we have `noExternal: false`
+        externalConditions: ['react-server'],
       },
     },
     plugins: [
@@ -82,9 +85,7 @@ export async function rscBuildForServer(
           ...clientEntryFiles,
           ...serverEntryFiles,
           ...customModules,
-          'rsdw-server': 'react-server-dom-webpack/server.edge',
           'entry.server': rwPaths.web.entryServer,
-          __rwjs__react: 'react',
         },
         output: {
           banner: (chunk) => {
@@ -108,8 +109,6 @@ export async function rscBuildForServer(
             }
             if (
               chunkInfo.name === 'entry.server' ||
-              chunkInfo.name === 'rsdw-server' ||
-              chunkInfo.name === '__rwjs__react' ||
               customModules[chunkInfo.name]
             ) {
               return '[name].mjs'

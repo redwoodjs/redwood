@@ -124,9 +124,9 @@ export async function renderRoutesFromDist<TProps extends Record<string, any>>(
   // `react-server` condition. If we just did a regular import, we'd get the
   // generic version in node_modules, and it'd throw an error about not being
   // run in an environment with the `react-server` condition.
-  const { renderToReadableStream }: RSDWServerType =
-    // await import('react-server-dom-webpack/server.edge')
-    await importModule('rsdw-server')
+  const { renderToReadableStream }: RSDWServerType = await import(
+    'react-server-dom-webpack/server.edge'
+  )
 
   console.log('clientSsr.ts right before renderToReadableStream')
   // We're in clientSsr.ts, but we're supposed to be pretending we're in the

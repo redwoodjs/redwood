@@ -36,6 +36,15 @@ export async function rscBuildForSsr({
     define: {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     },
+    ssr: {
+      // Inline every file apart from node built-ins. We want vite/rollup to
+      // inline dependencies in the server build. This gets round runtime
+      // importing of "server-only" and other packages with poisoned imports.
+      //
+      // Files included in `noExternal` are files we want Vite to analyze
+      // As of vite 5.2 `true` here means "all except node built-ins"
+      noExternal: true,
+    },
     plugins: [
       cjsInterop({ dependencies: ['@redwoodjs/**'] }),
       rscRoutesAutoLoader(),
@@ -54,17 +63,17 @@ export async function rscBuildForSsr({
           // TODO (RSC): Look into if we can remove this (and perhaps instead
           // use entry.server)
           'rwjs-client-entry': rwPaths.web.entryClient,
-          // __rwjs__ServerEntry: rwPaths.web.entryServer,
           'entry.server': rwPaths.web.entryServer,
           // we need this, so that the output contains rsc-specific bundles
           // for the client-only components. They get loaded once the page is
           // rendered
           ...clientEntryFiles,
-          // __rwjs__react: 'react',
-          // __rwjs__location: '@redwoodjs/router/dist/location',
-          // TODO (RSC): add __rwjs__ prefix to the two entries below
-          // 'rd-server': 'react-dom/server.edge',
-          // 'rsdw-client': 'react-server-dom-webpack/client.edge',
+          __rwjs__react: 'react',
+          __rwjs__location: '@redwoodjs/router/dist/location',
+          __rwjs__server_auth_provider: '@redwoodjs/auth/ServerAuthProvider',
+          __rwjs__server_inject: '@redwoodjs/web/dist/components/ServerInject',
+          // TODO (RSC): add __rwjs__ prefix to the entry below
+          'rd-server': 'react-dom/server.edge',
           // We need the document for React's fallback
           Document: rwPaths.web.document,
         },
@@ -79,11 +88,11 @@ export async function rscBuildForSsr({
           hoistTransitiveImports: false,
           entryFileNames: (chunkInfo) => {
             if (
-              // chunkInfo.name === 'rd-server' ||
-              // chunkInfo.name === 'rsdw-client' ||
-              // chunkInfo.name === '__rwjs__location' ||
-              // chunkInfo.name === '__rwjs__react' ||
-              // chunkInfo.name === '__rwjs__ServerEntry'
+              chunkInfo.name === 'rd-server' ||
+              chunkInfo.name === '__rwjs__react' ||
+              chunkInfo.name === '__rwjs__location' ||
+              chunkInfo.name === '__rwjs__server_auth_provider' ||
+              chunkInfo.name === '__rwjs__server_inject' ||
               chunkInfo.name === 'entry.server' ||
               chunkInfo.name === 'Document'
             ) {
