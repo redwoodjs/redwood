@@ -13,7 +13,6 @@ import type { RouterProps } from '@redwoodjs/router/dist/router'
 import { renderRoutesFromDist } from './clientSsr'
 
 export const Router = ({ paramTypes, children }: RouterProps) => {
-  console.log('SsrRouter.tsx SsrRouter')
   return (
     // Wrap it in the provider so that useLocation can be used
     <LocationProvider>
@@ -26,6 +25,8 @@ export const Router = ({ paramTypes, children }: RouterProps) => {
 
 const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   const { pathname } = useLocation()
+
+  console.log('SsrRouter.tsx LocationAwareRouter pathname', pathname)
 
   const { namedRoutesMap } = useMemo(() => {
     return analyzeRoutes(children, {

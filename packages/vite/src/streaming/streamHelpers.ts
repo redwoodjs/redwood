@@ -132,19 +132,6 @@ export async function reactRenderToStreamResponse(
 
   const renderRoot = (url: URL) => {
     console.log('streamHelpers.ts renderRoot url', url)
-    return createElement('div', null, 'Hello World')
-  }
-
-  const renderRoot2 = (url: URL) => {
-    console.log('streamHelpers.ts renderRoot url', url)
-    return createElement(ServerEntry, {
-      css: cssLinks,
-      meta: metaTags,
-    })
-  }
-
-  const renderRoot3 = (url: URL) => {
-    console.log('streamHelpers.ts renderRoot url', url)
     return createElement(
       ServerAuthProvider,
       {
@@ -169,11 +156,6 @@ export async function reactRenderToStreamResponse(
     )
   }
 
-  if (Math.random() > 5) {
-    console.log('renderRoot2', renderRoot2)
-    console.log('renderRoot3', renderRoot3)
-  }
-
   /**
    * These are the opts that inject the bundles, and Assets into html
    */
@@ -194,9 +176,10 @@ export async function reactRenderToStreamResponse(
   // modules (components) will later use when they render. Had we just imported
   // `react-dom/server.edge` normally we would have gotten an instance based on
   // react and react-dom in node_modules. All client components however uses a
-  // bundled version of React (so that it can be sent to the browser for normal
-  // browsing of the site). Importing it like this we make sure that SSR uses
-  // that same bundled version of react and react-dom.
+  // bundled version of React (so that we can have one version of react without
+  // the react-server condition and one without at the same time). Importing it
+  // like this we make sure that SSR uses that same bundled version of react
+  // and react-dom as the components.
   // TODO (RSC): Always import using importModule when RSC is on by default
   const { renderToReadableStream }: RDServerType = rscEnabled
     ? await importModule('rd-server')
@@ -295,7 +278,7 @@ function applyStreamTransforms(
 // initialized properly
 export async function importModule(
   mod:
-    | 'rsdw-client'
+    | '__rwjs__rsdw-client'
     | 'rd-server'
     | '__rwjs__react'
     | '__rwjs__location'
@@ -303,7 +286,9 @@ export async function importModule(
     | '__rwjs__server_inject',
 ) {
   const distServer = getPaths().web.distServer
-  const rsdwClientPath = makeFilePath(path.join(distServer, 'rsdw-client.mjs'))
+  const rsdwClientPath = makeFilePath(
+    path.join(distServer, '__rwjs__rsdw-client.mjs'),
+  )
   const rdServerPath = makeFilePath(path.join(distServer, 'rd-server.mjs'))
   const reactPath = makeFilePath(path.join(distServer, '__rwjs__react.mjs'))
   const locationPath = makeFilePath(
@@ -316,7 +301,7 @@ export async function importModule(
     path.join(distServer, '__rwjs__server_inject.mjs'),
   )
 
-  if (mod === 'rsdw-client') {
+  if (mod === '__rwjs__rsdw-client') {
     return (await import(rsdwClientPath)).default
   } else if (mod === 'rd-server') {
     return (await import(rdServerPath)).default

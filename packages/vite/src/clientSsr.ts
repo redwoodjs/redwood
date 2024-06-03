@@ -39,7 +39,7 @@ function resolveClientEntryForProd(
   filePath: string,
   clientEntries: Record<string, string>,
 ) {
-  const basePath = getPaths().web.distClient
+  const basePath = getPaths().web.distServer
   const entriesFile = getPaths().web.distRscEntries
   const baseDir = path.dirname(entriesFile)
   const absoluteClientEntries = Object.fromEntries(
@@ -92,7 +92,7 @@ export async function renderRoutesFromDist<TProps extends Record<string, any>>(
   const Routes = await getRoutesComponent<TProps>()
 
   console.log('clientSsr.ts getEntries()', await getEntries())
-  const clientEntries = (await getEntries()).clientEntries
+  const clientEntries = (await getEntries()).ssrEntries
 
   // TODO (RSC): Try removing the proxy here and see if it's really necessary.
   // Looks like it'd work to just have a regular object with a getter.
@@ -115,15 +115,17 @@ export async function renderRoutesFromDist<TProps extends Record<string, any>>(
     },
   )
 
-  const { createElement }: any = await importModule('__rwjs__react')
+  const { createElement }: React = await importModule('__rwjs__react')
 
   // We need to do this weird import dance because we need to import a version
   // of react-server-dom-webpack/server.edge that has been built with the
   // `react-server` condition. If we just did a regular import, we'd get the
   // generic version in node_modules, and it'd throw an error about not being
   // run in an environment with the `react-server` condition.
+  const dynamicImport = ''
   const { renderToReadableStream }: RSDWServerType = await import(
-    'react-server-dom-webpack/server.edge'
+    /* @vite-ignore */
+    dynamicImport + 'react-server-dom-webpack/server.edge'
   )
 
   console.log('clientSsr.ts right before renderToReadableStream')
@@ -132,7 +134,7 @@ export async function renderRoutesFromDist<TProps extends Record<string, any>>(
   // emulating the reply (stream) you'd get from a fetch call.
   const stream = renderToReadableStream(
     // createElement(layout, undefined, createElement(page, props)),
-    // _@ts-expect-error - WIP
+    // @ts-expect-error - WIP
     createElement(Routes, {
       // TODO (RSC): Include a more complete location object here. At least
       // search params as well
@@ -148,9 +150,9 @@ export async function renderRoutesFromDist<TProps extends Record<string, any>>(
   // react-server-dom-webpack/client.edge that uses the same bundled version
   // of React as all the client components. Also see comment in
   // streamHelpers.ts about the rd-server import for some more context
-  const { createFromReadableStream }: RSDWClientType =
-    // await importModule('rsdw-client')
-    await import('react-server-dom-webpack/client.edge')
+  const { createFromReadableStream }: RSDWClientType = await importModule(
+    '__rwjs__rsdw-client',
+  )
 
   // Here we use `createFromReadableStream`, which is equivalent to
   // `createFromFetch` as used in the browser
@@ -158,6 +160,7 @@ export async function renderRoutesFromDist<TProps extends Record<string, any>>(
     ssrManifest: { moduleMap, moduleLoading: null },
   })
 
+  // TODO (RSC): Since this is SSR, do we need caching?
   rscCache.set(pathname, data)
 
   return data

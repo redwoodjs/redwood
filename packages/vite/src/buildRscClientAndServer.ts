@@ -17,6 +17,8 @@ export const buildRscClientAndServer = async ({
   // Generate the client bundle
   const clientBuildOutput = await rscBuildClient(clientEntryFiles)
 
+  const ssrBuildOutput = await rscBuildForSsr({ clientEntryFiles, verbose })
+
   // Generate the server output
   const serverBuildOutput = await rscBuildForServer(
     clientEntryFiles,
@@ -35,11 +37,10 @@ export const buildRscClientAndServer = async ({
   // Used by the RSC worker
   await rscBuildEntriesMappings(
     clientBuildOutput,
+    ssrBuildOutput,
     serverBuildOutput,
     clientEntryFiles,
   )
-
-  await rscBuildForSsr({ clientEntryFiles, verbose })
 
   // Make RW specific env vars, like RWJS_ENV, available to server components
   await rscBuildRwEnvVars()

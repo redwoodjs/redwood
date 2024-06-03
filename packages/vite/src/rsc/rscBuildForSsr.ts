@@ -31,7 +31,7 @@ export async function rscBuildForSsr({
     throw new Error('No server entry file found inside ' + rwPaths.web.src)
   }
 
-  await viteBuild({
+  const ssrBuildOutput = await viteBuild({
     envFile: false,
     define: {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
@@ -72,6 +72,7 @@ export async function rscBuildForSsr({
           __rwjs__location: '@redwoodjs/router/dist/location',
           __rwjs__server_auth_provider: '@redwoodjs/auth/ServerAuthProvider',
           __rwjs__server_inject: '@redwoodjs/web/dist/components/ServerInject',
+          '__rwjs__rsdw-client': 'react-server-dom-webpack/client.edge',
           // TODO (RSC): add __rwjs__ prefix to the entry below
           'rd-server': 'react-dom/server.edge',
           // We need the document for React's fallback
@@ -93,6 +94,7 @@ export async function rscBuildForSsr({
               chunkInfo.name === '__rwjs__location' ||
               chunkInfo.name === '__rwjs__server_auth_provider' ||
               chunkInfo.name === '__rwjs__server_inject' ||
+              chunkInfo.name === '__rwjs__rsdw-client' ||
               chunkInfo.name === 'entry.server' ||
               chunkInfo.name === 'Document'
             ) {
@@ -110,4 +112,10 @@ export async function rscBuildForSsr({
     },
     logLevel: verbose ? 'info' : 'silent',
   })
+
+  if (!('output' in ssrBuildOutput)) {
+    throw new Error('Unexpected vite ssr build output')
+  }
+
+  return ssrBuildOutput.output
 }

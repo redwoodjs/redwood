@@ -45,6 +45,7 @@ export async function rscBuildForServer(
       // Files included in `noExternal` are files we want Vite to analyze
       // As of vite 5.2 `true` here means "all except node built-ins"
       noExternal: true,
+      // noExternal: ['@tobbe.dev/rsc-test'],
       // Can't inline prisma client (db calls fail at runtime) or react-dom
       // (css pre-init failure)
       // Server store has to be externalized, because it's a singleton (shared between FW and App)
