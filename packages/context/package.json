@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/context",
-  "version": "7.6.2",
+  "version": "7.6.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -20,7 +20,7 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "devDependencies": {
-    "@redwoodjs/framework-tools": "7.6.2",
+    "@redwoodjs/framework-tools": "7.6.3",
     "tsx": "4.10.3",
     "typescript": "5.4.5"
   },
