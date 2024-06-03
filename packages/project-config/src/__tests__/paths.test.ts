@@ -152,7 +152,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'rsc',
+            'server',
             'entry.server.mjs',
           ),
           distRouteHooks: path.join(
@@ -435,7 +435,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'rsc',
+            'server',
             'entry.server.mjs',
           ),
           distDocumentServer: path.join(
@@ -766,7 +766,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'rsc',
+            'server',
             'entry.server.mjs',
           ),
           distDocumentServer: path.join(
@@ -1050,7 +1050,7 @@ describe('paths', () => {
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'rsc',
+            'server',
             'entry.server.mjs',
           ),
           distDocumentServer: path.join(
