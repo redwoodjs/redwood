@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/router",
-  "version": "7.6.2",
+  "version": "7.6.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.5",
-    "@redwoodjs/auth": "7.6.2",
+    "@redwoodjs/auth": "7.6.3",
     "core-js": "3.37.1"
   },
   "devDependencies": {
