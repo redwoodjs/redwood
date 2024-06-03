@@ -25,6 +25,11 @@
     "./Router": {
       "types": "./dist/ClientRouter.d.ts",
       "react-server": "./dist/ServerRouter.js",
+      "default": "./dist/ClientRouter.js"
+    },
+    "./SsrRouter": {
+      "types": "./dist/SsrRouter.d.ts",
+      "react-server": "./dist/ServerRouter.js",
       "default": "./dist/SsrRouter.js"
     },
     "./buildFeServer": {

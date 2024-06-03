@@ -5,6 +5,7 @@ import { getPaths } from '@redwoodjs/project-config'
 
 import { onWarn } from '../lib/onWarn.js'
 import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
+import { rscSsrRouterImport } from '../plugins/vite-plugin-rsc-ssr-router-import.js'
 
 /**
  * RSC build. Step #?
@@ -48,6 +49,7 @@ export async function rscBuildForSsr({
     plugins: [
       cjsInterop({ dependencies: ['@redwoodjs/**'] }),
       rscRoutesAutoLoader(),
+      rscSsrRouterImport(),
     ],
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often

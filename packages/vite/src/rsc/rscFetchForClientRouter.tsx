@@ -1,8 +1,5 @@
 import type { Options } from 'react-server-dom-webpack/client'
-import {
-  createFromFetch,
-  encodeReply,
-} from 'react-server-dom-webpack/client.edge'
+import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
 
 const BASE_PATH = '/rw-rsc/'
 
