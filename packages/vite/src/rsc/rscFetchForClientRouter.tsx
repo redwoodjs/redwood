@@ -63,8 +63,10 @@ export function rscFetch(rscId: string, props: RscFetchProps) {
     },
   }
 
-  // const componentPromise = createFromFetch<never, React.ReactElement>(
-  const componentPromise = createFromFetch(response, options)
+  const componentPromise = createFromFetch<never, React.ReactElement>(
+    response,
+    options,
+  )
   rscCache.set(serializedProps, componentPromise)
 
   return componentPromise
