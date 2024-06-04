@@ -21441,9 +21441,9 @@ __metadata:
   linkType: hard
 
 "jose@npm:^4.11.4, jose@npm:^4.14.6":
-  version: 4.15.4
-  resolution: "jose@npm:4.15.4"
-  checksum: 10c0/ce8b29f84d6172a566b12b599dafa82f3bef0f16278bb76d562490ac1516fcc14017b05a39d20ffad25ed504f4996d4af4c9d3e0273d95b2d5559bf6d1112bc0
+  version: 4.15.5
+  resolution: "jose@npm:4.15.5"
+  checksum: 10c0/9f208492f55ae9c547fd407c36f67ec3385051b5ca390e24f5449740f17359640b3f96fabfd38bc132cc4292b964c31b921bf356253373b1bd3eb6df799b7433
   languageName: node
   linkType: hard
 
