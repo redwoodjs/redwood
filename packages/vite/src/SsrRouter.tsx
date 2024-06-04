@@ -1,7 +1,6 @@
-// TODO (RSC): This should live in @redwoodjs/router but I didn't want to add
-// `react-server-dom-webpack` as a dependency there. We should first figure out
-// what to do about rscFetch here vs renderFromRscServer and see if maybe that
-// one should live somewhere else where @redwoodjs/router can import from
+// TODO (RSC): This should live in @redwoodjs/router I think. But we should
+// figure out what to do with ClientRouter first, and then we can think about
+// this file.
 
 import React, { useMemo } from 'react'
 
@@ -14,7 +13,6 @@ import { renderRoutesFromDist } from './clientSsr'
 
 export const Router = ({ paramTypes, children }: RouterProps) => {
   return (
-    // Wrap it in the provider so that useLocation can be used
     <LocationProvider>
       <LocationAwareRouter paramTypes={paramTypes}>
         {children}
@@ -25,8 +23,6 @@ export const Router = ({ paramTypes, children }: RouterProps) => {
 
 const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   const { pathname } = useLocation()
-
-  console.log('SsrRouter.tsx LocationAwareRouter pathname', pathname)
 
   const { namedRoutesMap } = useMemo(() => {
     return analyzeRoutes(children, {
