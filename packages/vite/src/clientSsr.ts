@@ -57,7 +57,6 @@ function resolveClientEntryForProd(
   const filePathSlash = filePath.replaceAll('\\', '/')
   const clientEntry = absoluteClientEntries[filePathSlash]
 
-  // console.log('clientSsr.ts absoluteClientEntries', absoluteClientEntries)
   console.log('resolveClientEntryForProd during SSR - filePath', clientEntry)
 
   if (!clientEntry) {

@@ -45,6 +45,10 @@ export async function rscBuildForServer(
       // Files included in `noExternal` are files we want Vite to analyze
       // As of vite 5.2 `true` here means "all except node built-ins"
       noExternal: true,
+      // TODO (RSC): Other frameworks build for RSC without `noExternal: true`.
+      // What are we missing here? When/why is that a better choice? I know
+      // we would have to explicitly add a bunch of packages to noExternal, if
+      // we wanted to go that route.
       // noExternal: ['@tobbe.dev/rsc-test'],
       // Can't inline prisma client (db calls fail at runtime) or react-dom
       // (css pre-init failure)
@@ -54,9 +58,9 @@ export async function rscBuildForServer(
         // These conditions are used in the plugin pipeline, and only affect non-externalized
         // dependencies during the SSR build. Which because of `noExternal: true` means all
         // dependencies apart from node built-ins.
-        // TODO (RSC): Might not need this one now when we have `noExternal: false`
+        // TODO (RSC): What's the difference between `conditions` and
+        // `externalConditions`? When is one used over the other?
         conditions: ['react-server'],
-        // TODO (RSC): Might not need this one now when we have `noExternal: false`
         externalConditions: ['react-server'],
       },
     },
