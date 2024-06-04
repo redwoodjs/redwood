@@ -51,8 +51,7 @@ export interface WebPaths {
   distRsc: string
   distServer: string
   distEntryServer: string
-  // TODO: Rename to distServerEntryServer or even just distEntryServer
-  distRscEntryServer: string
+  distServerEntryServer: string
   distDocumentServer: string
   distRouteHooks: string
   distRscEntries: string
@@ -250,7 +249,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         BASE_DIR,
         PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER,
       ),
-      distRscEntryServer: path.join(
+      distServerEntryServer: path.join(
         BASE_DIR,
         'web/dist/server/entry.server.mjs',
       ),
