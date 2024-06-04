@@ -8,7 +8,7 @@ import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-load
 import { rscSsrRouterImport } from '../plugins/vite-plugin-rsc-ssr-router-import.js'
 
 /**
- * RSC build. Step #?
+ * RSC build. Step 3
  * SSR build for when RSC is enabled
  */
 export async function rscBuildForSsr({
@@ -19,8 +19,8 @@ export async function rscBuildForSsr({
   verbose?: boolean
 }) {
   console.log('\n')
-  console.log('#?. rscBuildForSsr')
-  console.log('==================\n')
+  console.log('3. rscBuildForSsr')
+  console.log('=================\n')
 
   const rwPaths = getPaths()
 

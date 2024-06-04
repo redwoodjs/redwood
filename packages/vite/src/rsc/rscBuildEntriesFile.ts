@@ -9,7 +9,7 @@ import type { rscBuildClient } from './rscBuildClient.js'
 import type { rscBuildForServer } from './rscBuildForServer.js'
 
 /**
- * RSC build. Step 5.
+ * RSC build. Step 6.
  * Append a mapping of server asset names to client asset names to the
  * `web/dist/rsc/entries.js` file.
  * Only used by the RSC worker.
@@ -24,7 +24,7 @@ export async function rscBuildEntriesMappings(
   clientEntryFiles: Record<string, string>,
 ) {
   console.log('\n')
-  console.log('5. rscBuildEntriesMapping')
+  console.log('6. rscBuildEntriesMapping')
   console.log('=========================\n')
 
   const rwPaths = getPaths()

@@ -9,7 +9,7 @@ import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transfor
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
 
 /**
- * RSC build. Step 3.
+ * RSC build. Step 4.
  * buildFeServer -> buildRscFeServer -> rscBuildForServer
  * Generate the output to be used by the rsc worker (not the actual server!)
  */
@@ -19,7 +19,7 @@ export async function rscBuildForServer(
   customModules: Record<string, string>,
 ) {
   console.log('\n')
-  console.log('3. rscBuildForServer')
+  console.log('4. rscBuildForServer')
   console.log('====================\n')
 
   const rwPaths = getPaths()
