@@ -9,7 +9,9 @@ import type {
 import type { default as RDServerModule } from 'react-dom/server.edge'
 
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
+import type * as ServerAuthProviderModule from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
+import type * as LocationModule from '@redwoodjs/router/dist/location.js'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
 import type * as ServerInjectModule from '@redwoodjs/web/dist/components/ServerInject'
@@ -24,6 +26,8 @@ import { createServerInjectionTransform } from './transforms/serverInjectionTran
 
 type RDServerType = typeof RDServerModule
 type ServerInjectType = typeof ServerInjectModule
+type LocationType = typeof LocationModule
+type ServerAuthProviderType = typeof ServerAuthProviderModule
 
 interface RenderToStreamArgs {
   ServerEntry: ServerEntryType
@@ -133,10 +137,10 @@ export async function reactRenderToStreamResponse(
 
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
-  const { LocationProvider }: any = rscEnabled
+  const { LocationProvider }: LocationType = rscEnabled
     ? await importModule('__rwjs__location')
     : await import('@redwoodjs/router')
-  const { ServerAuthProvider }: any = rscEnabled
+  const { ServerAuthProvider }: ServerAuthProviderType = rscEnabled
     ? await importModule('__rwjs__server_auth_provider')
     : await import('@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js')
 
