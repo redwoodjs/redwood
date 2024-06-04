@@ -145,7 +145,6 @@ export async function reactRenderToStreamResponse(
     : await import('@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js')
 
   const renderRoot = (url: URL) => {
-    console.log('streamHelpers.ts renderRoot url', url)
     return createElement(
       ServerAuthProvider,
       {
