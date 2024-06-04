@@ -93,13 +93,21 @@ export async function reactRenderToStreamResponse(
     meta: metaTags,
   })
 
-  const { createElement }: React = await importModule('__rwjs__react')
+  const rscEnabled = getConfig().experimental?.rsc?.enabled
+
+  const { createElement }: React = rscEnabled
+    ? await importModule('__rwjs__react')
+    : await import('react')
   const {
     createInjector,
     ServerHtmlProvider,
     ServerInjectedHtml,
-  }: ServerInjectType = await importModule('__rwjs__server_inject')
-  const { renderToString }: RDServerType = await importModule('rd-server')
+  }: ServerInjectType = rscEnabled
+    ? await importModule('__rwjs__server_inject')
+    : await import('@redwoodjs/web/dist/components/ServerInject.js')
+  const { renderToString }: RDServerType = rscEnabled
+    ? await importModule('rd-server')
+    : await import('react-dom/server')
 
   // This ensures an isolated state for each request
   const { injectionState, injectToPage } = createInjector()
@@ -125,10 +133,12 @@ export async function reactRenderToStreamResponse(
 
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
-  const { LocationProvider }: any = await importModule('__rwjs__location')
-  const { ServerAuthProvider }: any = await importModule(
-    '__rwjs__server_auth_provider',
-  )
+  const { LocationProvider }: any = rscEnabled
+    ? await importModule('__rwjs__location')
+    : await import('@redwoodjs/router')
+  const { ServerAuthProvider }: any = rscEnabled
+    ? await importModule('__rwjs__server_auth_provider')
+    : await import('@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js')
 
   const renderRoot = (url: URL) => {
     console.log('streamHelpers.ts renderRoot url', url)
@@ -167,8 +177,6 @@ export async function reactRenderToStreamResponse(
         : undefined,
     bootstrapModules: jsBundles,
   }
-
-  const rscEnabled = getConfig().experimental?.rsc?.enabled
 
   // We'll use `renderToReadableStream` to start the whole React rendering
   // process. This will internally initialize React and its hooks. It's
