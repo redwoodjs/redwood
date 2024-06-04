@@ -6,7 +6,5 @@
     "outDir": "dist"
   },
   "include": ["src"],
-  "references": [
-    { "path": "../../../auth/tsconfig.build.json" }
-  ]
+  "references": [{ "path": "../../../api" }]
 }
