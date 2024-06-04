@@ -1,6 +1,7 @@
 import path from 'node:path'
 
-import React from 'react'
+import { createElement } from 'react'
+import type React from 'react'
 
 import type {
   RenderToReadableStreamOptions,
@@ -120,22 +121,22 @@ export async function reactRenderToStreamResponse(
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
   const renderRoot = (url: URL) => {
-    return React.createElement(
+    return createElement(
       ServerAuthProvider,
       {
         value: authState,
       },
-      React.createElement(
+      createElement(
         LocationProvider,
         {
           location: url,
         },
-        React.createElement(
+        createElement(
           ServerHtmlProvider,
           {
             value: injectToPage,
           },
-          React.createElement(ServerEntry, {
+          createElement(ServerEntry, {
             css: cssLinks,
             meta: metaTags,
           }),
@@ -192,7 +193,7 @@ export async function reactRenderToStreamResponse(
     let root: React.ReactNode
 
     if (rscEnabled) {
-      root = React.createElement(renderFromDist(currentUrl.pathname))
+      root = createElement(renderFromDist(currentUrl.pathname))
     } else {
       root = renderRoot(currentUrl)
     }
