@@ -384,7 +384,7 @@ declare module '@storybook/react' {
   )
 
   const hasCliStorybookVite = Object.keys(
-    packageJson['devDependencies']
+    packageJson['devDependencies'],
   ).includes('@redwoodjs/cli-storybook-vite')
 
   if (hasCliStorybook || hasCliStorybookVite) {
