@@ -54,7 +54,7 @@ globalThis.__webpack_chunk_load__ ||= (id) => {
   return import(id).then((mod) => {
     console.log('rscWebpackShims chunk load mod', mod)
 
-    // checking m.default to better support CJS. If it's an object, it's
+    // checking mod.default to better support CJS. If it's an object, it's
     // likely a CJS module. Otherwise it's probably an ES module with a
     // default export
     if (mod.default && typeof mod.default === 'object') {
