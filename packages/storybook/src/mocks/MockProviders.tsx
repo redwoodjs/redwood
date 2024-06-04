@@ -4,9 +4,8 @@
  */
 import React from 'react'
 
-// @ts-expect-error - We inject useAuth when testing, so it will be available
-import { useAuth } from '@redwoodjs/auth'
 import { LocationProvider } from '@redwoodjs/router'
+import { useAuth } from '@redwoodjs/testing/web'
 import { RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -17,7 +16,6 @@ import { MockParamsProvider } from './MockParamsProvider'
 // so that we can populate the `routes object` in Storybook and tests.
 let UserRoutes: React.FC
 
-// we need to do this to avoid "Could not resolve "~__REDWOOD__USER_ROUTES_FOR_MOCK"" errors
 try {
   const userRoutesModule = require('~__REDWOOD__USER_ROUTES_FOR_MOCK')
   UserRoutes = userRoutesModule.default
