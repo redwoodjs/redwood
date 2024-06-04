@@ -182,6 +182,9 @@ const DEFAULT_CONFIG: Config = {
           package: '@redwoodjs/cli-storybook',
         },
         {
+          package: '@redwoodjs/cli-storybook-vite',
+        },
+        {
           package: '@redwoodjs/cli-data-migrate',
         },
       ],

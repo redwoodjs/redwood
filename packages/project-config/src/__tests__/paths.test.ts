@@ -119,6 +119,7 @@ describe('paths', () => {
             'config',
             'postcss.config.js'
           ),
+          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -355,6 +356,7 @@ describe('paths', () => {
             'config',
             'postcss.config.js'
           ),
+          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -637,6 +639,7 @@ describe('paths', () => {
             'config',
             'postcss.config.js'
           ),
+          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -876,6 +879,7 @@ describe('paths', () => {
             'config',
             'postcss.config.js'
           ),
+          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',

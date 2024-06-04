@@ -28,6 +28,7 @@ export interface NodeTargetPaths {
 export interface WebPaths {
   base: string
   src: string
+  storybook: string
   app: string
   generators: string
   index: string | null
@@ -94,6 +95,7 @@ const PATH_WEB_ROUTES = 'web/src/Routes' // .jsx|.tsx
 const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
+const PATH_WEB_DIR_STORYBOOK_CONFIG = 'web/.storybook'
 const PATH_WEB_DIR_SRC = 'web/src'
 const PATH_WEB_DIR_SRC_APP = 'web/src/App'
 const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .jsx|.tsx
@@ -194,6 +196,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
+      storybook: path.join(BASE_DIR, PATH_WEB_DIR_STORYBOOK_CONFIG),
       generators: path.join(BASE_DIR, PATH_WEB_DIR_GENERATORS),
       app: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_APP)) as string,
       index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)), // old webpack entry point

@@ -15,7 +15,7 @@ export const REDWOOD_FRAMEWORK_PATH = path.resolve(__dirname, '../../../')
 
 export const REDWOOD_PACKAGES_PATH = path.join(
   REDWOOD_FRAMEWORK_PATH,
-  'packages'
+  'packages',
 )
 
 const IGNORE_PACKAGES = ['@redwoodjs/codemods', 'create-redwood-app']
@@ -43,7 +43,7 @@ function getFrameworkPackagesData() {
     frameworkPackage.packageJsonPath = path.join(
       REDWOOD_FRAMEWORK_PATH,
       frameworkPackage.location,
-      'package.json'
+      'package.json',
     )
   }
 
@@ -55,7 +55,7 @@ function getFrameworkPackagesData() {
  */
 export function getFrameworkPackageJsonPaths() {
   return getFrameworkPackagesData().map(
-    ({ packageJsonPath }) => packageJsonPath
+    ({ packageJsonPath }) => packageJsonPath,
   )
 }
 
@@ -65,7 +65,7 @@ export function getFrameworkPackageJsonPaths() {
  * @returns {{ [key: string]: string }?} A map of package names to versions.
  */
 export function getFrameworkDependencies(
-  packageJsonPaths = getFrameworkPackageJsonPaths()
+  packageJsonPaths = getFrameworkPackageJsonPaths(),
 ) {
   const dependencies = {}
 
@@ -73,10 +73,15 @@ export function getFrameworkDependencies(
     const packageJson = fs.readJSONSync(packageJsonPath)
 
     for (const [name, version] of Object.entries(
-      packageJson?.dependencies ?? {}
+      packageJson?.dependencies ?? {},
     )) {
       // Skip `@redwoodjs` packages, since these are processed by the workspace.
       if (name.startsWith('@redwoodjs/')) {
+        continue
+      }
+
+      // Skip storybook packages because they're installed manually by the user.
+      if (name.startsWith('storybook-framework-redwoodjs-vite')) {
         continue
       }
 
@@ -85,7 +90,7 @@ export function getFrameworkDependencies(
       // Throw if there's duplicate dependencies that aren't same version.
       if (dependencies[name] && dependencies[name] !== version) {
         throw new Error(
-          `${name} dependency version mismatched, please make sure the versions are the same`
+          `${name} dependency version mismatched, please make sure the versions are the same`,
         )
       }
     }
@@ -101,7 +106,7 @@ export function getFrameworkDependencies(
  * @returns {Promise<{ [key: string]: string[] }>} A map of package names to files.
  */
 export async function getFrameworkPackagesFiles(
-  packageJsonPaths = getFrameworkPackageJsonPaths()
+  packageJsonPaths = getFrameworkPackageJsonPaths(),
 ) {
   const frameworkPackageFiles = {}
 
@@ -119,7 +124,7 @@ export async function getFrameworkPackagesFiles(
  * Returns execute files for `@redwoodjs` packages.
  **/
 export function getFrameworkPackagesBins(
-  packageJsonPaths = getFrameworkPackageJsonPaths()
+  packageJsonPaths = getFrameworkPackageJsonPaths(),
 ) {
   let bins = {}
 
