@@ -9,7 +9,7 @@ import type { rscBuildClient } from './rscBuildClient.js'
 import type { rscBuildForServer } from './rscBuildForServer.js'
 
 /**
- * RSC build. Step 5.
+ * RSC build. Step 6.
  * Append a mapping of server asset names to client asset names to the
  * `web/dist/rsc/entries.js` file.
  * Only used by the RSC worker.
@@ -19,11 +19,12 @@ import type { rscBuildForServer } from './rscBuildForServer.js'
 // so worth waiting till implementation to swap out and just include the plugin for the prod build
 export async function rscBuildEntriesMappings(
   clientBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
+  ssrBuildOutput: Awaited<ReturnType<typeof rscBuildClient>>,
   serverBuildOutput: Awaited<ReturnType<typeof rscBuildForServer>>,
   clientEntryFiles: Record<string, string>,
 ) {
   console.log('\n')
-  console.log('5. rscBuildEntriesMapping')
+  console.log('6. rscBuildEntriesMapping')
   console.log('=========================\n')
 
   const rwPaths = getPaths()
@@ -55,10 +56,44 @@ export async function rscBuildEntriesMappings(
   }
 
   console.log('clientEntries', clientEntries)
+
+  // RSC client component to ssr dist asset mapping
+  const ssrEntries: Record<string, string> = {}
+  for (const item of ssrBuildOutput) {
+    const { name, fileName } = item
+
+    const entryFile =
+      name &&
+      // TODO (RSC) Can't we just compare the names? `item.name === name`
+      serverBuildOutput.find(
+        (item) =>
+          'moduleIds' in item &&
+          item.moduleIds.includes(clientEntryFiles[name] as string),
+      )?.fileName
+
+    if (entryFile) {
+      if (process.platform === 'win32') {
+        // Prevent errors on Windows like
+        // Error: No client entry found for D:/a/redwood/rsc-project/web/dist/server/assets/rsc0.js
+        const entryFileSlash = entryFile.replaceAll('\\', '/')
+        ssrEntries[entryFileSlash] = fileName
+      } else {
+        ssrEntries[entryFile] = fileName
+      }
+    }
+  }
+
+  console.log('ssrEntries', ssrEntries)
+
   await fs.appendFile(
     rwPaths.web.distRscEntries,
     '// client component mapping (dist/rsc -> dist/client)\n' +
       `export const clientEntries = ${JSON.stringify(clientEntries, undefined, 2)};\n\n`,
+  )
+  await fs.appendFile(
+    rwPaths.web.distRscEntries,
+    '// client component mapping (dist/rsc -> dist/ssr)\n' +
+      `export const ssrEntries = ${JSON.stringify(ssrEntries, undefined, 2)};\n\n`,
   )
 
   // Server component names to RSC server asset mapping

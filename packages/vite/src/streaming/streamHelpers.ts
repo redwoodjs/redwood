@@ -1,6 +1,5 @@
 import path from 'node:path'
 
-import { createElement } from 'react'
 import type React from 'react'
 
 import type {
@@ -10,17 +9,13 @@ import type {
 import type { default as RDServerModule } from 'react-dom/server.edge'
 
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
-import { ServerAuthProvider } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
+import type * as ServerAuthProviderModule from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
-import { LocationProvider } from '@redwoodjs/router'
+import type * as LocationModule from '@redwoodjs/router/dist/location.js'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
-import {
-  ServerHtmlProvider,
-  createInjector,
-} from '@redwoodjs/web/dist/components/ServerInject'
+import type * as ServerInjectModule from '@redwoodjs/web/dist/components/ServerInject'
 
-import { renderFromDist } from '../clientSsr.js'
 import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 import type { ServerEntryType } from '../types.js'
 import { makeFilePath } from '../utils.js'
@@ -30,6 +25,9 @@ import { createTimeoutTransform } from './transforms/cancelTimeoutTransform.js'
 import { createServerInjectionTransform } from './transforms/serverInjectionTransform.js'
 
 type RDServerType = typeof RDServerModule
+type ServerInjectType = typeof ServerInjectModule
+type LocationType = typeof LocationModule
+type ServerAuthProviderType = typeof ServerAuthProviderModule
 
 interface RenderToStreamArgs {
   ServerEntry: ServerEntryType
@@ -99,6 +97,22 @@ export async function reactRenderToStreamResponse(
     meta: metaTags,
   })
 
+  const rscEnabled = getConfig().experimental?.rsc?.enabled
+
+  const { createElement }: React = rscEnabled
+    ? await importModule('__rwjs__react')
+    : await import('react')
+  const {
+    createInjector,
+    ServerHtmlProvider,
+    ServerInjectedHtml,
+  }: ServerInjectType = rscEnabled
+    ? await importModule('__rwjs__server_inject')
+    : await import('@redwoodjs/web/dist/components/ServerInject.js')
+  const { renderToString }: RDServerType = rscEnabled
+    ? await importModule('rd-server')
+    : await import('react-dom/server')
+
   // This ensures an isolated state for each request
   const { injectionState, injectToPage } = createInjector()
 
@@ -108,6 +122,9 @@ export async function reactRenderToStreamResponse(
   // This is a transformer stream, that will inject all things called with useServerInsertedHtml
   const serverInjectionTransform = createServerInjectionTransform({
     injectionState,
+    createElement,
+    ServerInjectedHtml,
+    renderToString,
     onlyOnFlush: waitForAllReady,
   })
 
@@ -119,6 +136,13 @@ export async function reactRenderToStreamResponse(
   }, 10000)
 
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
+
+  const { ServerAuthProvider }: ServerAuthProviderType = rscEnabled
+    ? await importModule('__rwjs__server_auth_provider')
+    : await import('@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js')
+  const { LocationProvider }: LocationType = rscEnabled
+    ? await importModule('__rwjs__location')
+    : await import('@redwoodjs/router/dist/location.js')
 
   const renderRoot = (url: URL) => {
     return createElement(
@@ -157,17 +181,16 @@ export async function reactRenderToStreamResponse(
     bootstrapModules: jsBundles,
   }
 
-  const rscEnabled = getConfig().experimental?.rsc?.enabled
-
   // We'll use `renderToReadableStream` to start the whole React rendering
   // process. This will internally initialize React and its hooks. It's
   // important that this initializes the same React instance that all client
   // modules (components) will later use when they render. Had we just imported
   // `react-dom/server.edge` normally we would have gotten an instance based on
   // react and react-dom in node_modules. All client components however uses a
-  // bundled version of React (so that it can be sent to the browser for normal
-  // browsing of the site). Importing it like this we make sure that SSR uses
-  // that same bundled version of react and react-dom.
+  // bundled version of React (so that we can have one version of react without
+  // the react-server condition and one without at the same time). Importing it
+  // like this we make sure that SSR uses that same bundled version of react
+  // and react-dom as the components.
   // TODO (RSC): Always import using importModule when RSC is on by default
   const { renderToReadableStream }: RDServerType = rscEnabled
     ? await importModule('rd-server')
@@ -188,15 +211,7 @@ export async function reactRenderToStreamResponse(
       },
     }
 
-    const rscEnabled = getConfig().experimental?.rsc?.enabled
-
-    let root: React.ReactNode
-
-    if (rscEnabled) {
-      root = createElement(renderFromDist(currentUrl.pathname))
-    } else {
-      root = renderRoot(currentUrl)
-    }
+    const root: React.ReactNode = renderRoot(currentUrl)
 
     const reactStream: ReactDOMServerReadableStream =
       await renderToReadableStream(root, renderToStreamOptions)
@@ -273,19 +288,42 @@ function applyStreamTransforms(
 // can't do that, because then we'd have to different Reacts where one isn't
 // initialized properly
 export async function importModule(
-  mod: 'rsdw-server' | 'rsdw-client' | 'rd-server',
+  mod:
+    | '__rwjs__rsdw-client'
+    | 'rd-server'
+    | '__rwjs__react'
+    | '__rwjs__location'
+    | '__rwjs__server_auth_provider'
+    | '__rwjs__server_inject',
 ) {
-  const { distRsc, distClient } = getPaths().web
-  const rsdwServerPath = makeFilePath(path.join(distRsc, 'rsdw-server.mjs'))
-  const rsdwClientPath = makeFilePath(path.join(distClient, 'rsdw-client.mjs'))
-  const rdServerPath = makeFilePath(path.join(distClient, 'rd-server.mjs'))
+  const distServer = getPaths().web.distServer
+  const rsdwClientPath = makeFilePath(
+    path.join(distServer, '__rwjs__rsdw-client.mjs'),
+  )
+  const rdServerPath = makeFilePath(path.join(distServer, 'rd-server.mjs'))
+  const reactPath = makeFilePath(path.join(distServer, '__rwjs__react.mjs'))
+  const locationPath = makeFilePath(
+    path.join(distServer, '__rwjs__location.mjs'),
+  )
+  const ServerAuthProviderPath = makeFilePath(
+    path.join(distServer, '__rwjs__server_auth_provider.mjs'),
+  )
+  const ServerInjectPath = makeFilePath(
+    path.join(distServer, '__rwjs__server_inject.mjs'),
+  )
 
-  if (mod === 'rsdw-server') {
-    return (await import(rsdwServerPath)).default
-  } else if (mod === 'rsdw-client') {
+  if (mod === '__rwjs__rsdw-client') {
     return (await import(rsdwClientPath)).default
   } else if (mod === 'rd-server') {
     return (await import(rdServerPath)).default
+  } else if (mod === '__rwjs__react') {
+    return (await import(reactPath)).default
+  } else if (mod === '__rwjs__location') {
+    return (await import(locationPath)).default
+  } else if (mod === '__rwjs__server_auth_provider') {
+    return await import(ServerAuthProviderPath)
+  } else if (mod === '__rwjs__server_inject') {
+    return (await import(ServerInjectPath)).default
   }
 
   throw new Error('Unknown module ' + mod)

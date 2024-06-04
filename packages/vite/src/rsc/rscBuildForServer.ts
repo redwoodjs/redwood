@@ -9,7 +9,7 @@ import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transfor
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
 
 /**
- * RSC build. Step 3.
+ * RSC build. Step 4.
  * buildFeServer -> buildRscFeServer -> rscBuildForServer
  * Generate the output to be used by the rsc worker (not the actual server!)
  */
@@ -19,7 +19,7 @@ export async function rscBuildForServer(
   customModules: Record<string, string>,
 ) {
   console.log('\n')
-  console.log('3. rscBuildForServer')
+  console.log('4. rscBuildForServer')
   console.log('====================\n')
 
   const rwPaths = getPaths()
@@ -39,14 +39,17 @@ export async function rscBuildForServer(
     },
     ssr: {
       // Inline every file apart from node built-ins. We want vite/rollup to
-      // inline dependencies in the server bundle. This gets round runtime
-      // importing of "server-only". We have to do all imports because we can't
-      // rely on "server-only" being the name of the package. This is also
-      // actually more efficient because less files. Although, at build time
-      // it's likely way less efficient because we have to do so many files.
+      // inline dependencies in the server build. This gets round runtime
+      // importing of "server-only" and other packages with poisoned imports.
+      //
       // Files included in `noExternal` are files we want Vite to analyze
       // As of vite 5.2 `true` here means "all except node built-ins"
       noExternal: true,
+      // TODO (RSC): Other frameworks build for RSC without `noExternal: true`.
+      // What are we missing here? When/why is that a better choice? I know
+      // we would have to explicitly add a bunch of packages to noExternal, if
+      // we wanted to go that route.
+      // noExternal: ['@tobbe.dev/rsc-test'],
       // Can't inline prisma client (db calls fail at runtime) or react-dom
       // (css pre-init failure)
       // Server store has to be externalized, because it's a singleton (shared between FW and App)
@@ -55,7 +58,10 @@ export async function rscBuildForServer(
         // These conditions are used in the plugin pipeline, and only affect non-externalized
         // dependencies during the SSR build. Which because of `noExternal: true` means all
         // dependencies apart from node built-ins.
+        // TODO (RSC): What's the difference between `conditions` and
+        // `externalConditions`? When is one used over the other?
         conditions: ['react-server'],
+        externalConditions: ['react-server'],
       },
     },
     plugins: [
@@ -84,7 +90,6 @@ export async function rscBuildForServer(
           ...clientEntryFiles,
           ...serverEntryFiles,
           ...customModules,
-          'rsdw-server': 'react-server-dom-webpack/server.edge',
           'entry.server': rwPaths.web.entryServer,
         },
         output: {
@@ -109,7 +114,6 @@ export async function rscBuildForServer(
             }
             if (
               chunkInfo.name === 'entry.server' ||
-              chunkInfo.name === 'rsdw-server' ||
               customModules[chunkInfo.name]
             ) {
               return '[name].mjs'

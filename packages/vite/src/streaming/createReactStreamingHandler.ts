@@ -56,7 +56,7 @@ export const createReactStreamingHandler = async (
   if (isProd) {
     if (rscEnabled) {
       entryServerImport = await import(
-        makeFilePath(rwPaths.web.distRscEntryServer)
+        makeFilePath(rwPaths.web.distServerEntryServer)
       )
     } else {
       entryServerImport = await import(
