@@ -30712,7 +30712,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook-framework-redwoodjs-vite@npm:7.6.3, storybook-framework-redwoodjs-vite@workspace:packages/storybook":
+"storybook-framework-redwoodjs-vite@npm:7.6.3":
+  version: 7.6.3
+  resolution: "storybook-framework-redwoodjs-vite@npm:7.6.3"
+  dependencies:
+    "@joshwooding/vite-plugin-react-docgen-typescript": "npm:0.3.1"
+    "@redwoodjs/testing": "npm:7.6.3"
+    "@rollup/pluginutils": "npm:^5.0.2"
+    "@storybook/addon-essentials": "npm:7.6.17"
+    "@storybook/builder-vite": "npm:7.6.17"
+    "@storybook/react": "npm:7.6.17"
+    magic-string: "npm:^0.30.0"
+    react-docgen: "npm:^7.0.0"
+    unplugin-auto-import: "npm:^0.17.5"
+  peerDependencies:
+    "@redwoodjs/project-config": 7.6.3
+    "@redwoodjs/router": 7.6.3
+    react: 18.2.0
+    react-dom: 18.2.0
+    storybook: 7.6.17
+  checksum: 10c0/1d3de2baf49163f264460fe15c7bbf42c6ae615a9c9b43817f7d3aa6dbd9ef4b5eb09f48abee122c49eb4a6d6593278d5825cbb00c3859be858b587171dad3cc
+  languageName: node
+  linkType: hard
+
+"storybook-framework-redwoodjs-vite@workspace:packages/storybook":
   version: 0.0.0-use.local
   resolution: "storybook-framework-redwoodjs-vite@workspace:packages/storybook"
   dependencies:
