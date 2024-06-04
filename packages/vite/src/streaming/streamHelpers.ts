@@ -137,12 +137,12 @@ export async function reactRenderToStreamResponse(
 
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
-  const { LocationProvider }: LocationType = rscEnabled
-    ? await importModule('__rwjs__location')
-    : await import('@redwoodjs/router')
   const { ServerAuthProvider }: ServerAuthProviderType = rscEnabled
     ? await importModule('__rwjs__server_auth_provider')
     : await import('@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js')
+  const { LocationProvider }: LocationType = rscEnabled
+    ? await importModule('__rwjs__location')
+    : await import('@redwoodjs/router/dist/location.js')
 
   const renderRoot = (url: URL) => {
     return createElement(
