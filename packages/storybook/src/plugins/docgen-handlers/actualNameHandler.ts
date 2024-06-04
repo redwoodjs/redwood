@@ -9,46 +9,53 @@
  * directly from displayNameHandler, using the same approach as babel-plugin-react-docgen.
  */
 
-import type { Handler, NodePath, babelTypes as t } from 'react-docgen';
-import { utils } from 'react-docgen';
+import type { Handler, NodePath, babelTypes as t } from 'react-docgen'
+import { utils } from 'react-docgen'
 
-const { getNameOrValue, isReactForwardRefCall } = utils;
+const { getNameOrValue, isReactForwardRefCall } = utils
 
-const actualNameHandler: Handler = function actualNameHandler(documentation, componentDefinition) {
+const actualNameHandler: Handler = function actualNameHandler(
+  documentation,
+  componentDefinition,
+) {
   if (
-    (componentDefinition.isClassDeclaration() || componentDefinition.isFunctionDeclaration()) &&
+    (componentDefinition.isClassDeclaration() ||
+      componentDefinition.isFunctionDeclaration()) &&
     componentDefinition.has('id')
   ) {
     documentation.set(
       'actualName',
-      getNameOrValue(componentDefinition.get('id') as NodePath<t.Identifier>)
-    );
+      getNameOrValue(componentDefinition.get('id') as NodePath<t.Identifier>),
+    )
   } else if (
     componentDefinition.isArrowFunctionExpression() ||
     componentDefinition.isFunctionExpression() ||
     isReactForwardRefCall(componentDefinition)
   ) {
-    let currentPath: NodePath = componentDefinition;
+    let currentPath: NodePath = componentDefinition
 
     while (currentPath.parentPath) {
       if (currentPath.parentPath.isVariableDeclarator()) {
-        documentation.set('actualName', getNameOrValue(currentPath.parentPath.get('id')));
-        return;
+        documentation.set(
+          'actualName',
+          getNameOrValue(currentPath.parentPath.get('id')),
+        )
+        return
       }
       if (currentPath.parentPath.isAssignmentExpression()) {
-        const leftPath = currentPath.parentPath.get('left');
+        const leftPath = currentPath.parentPath.get('left')
 
         if (leftPath.isIdentifier() || leftPath.isLiteral()) {
-          documentation.set('actualName', getNameOrValue(leftPath));
-          return;
+          documentation.set('actualName', getNameOrValue(leftPath))
+          return
         }
       }
 
-      currentPath = currentPath.parentPath;
+      currentPath = currentPath.parentPath
     }
     // Could not find an actual name
-    documentation.set('actualName', '');
+    documentation.set('actualName', '')
   }
-};
+}
 
-export default actualNameHandler;
+export default actualNameHandler
