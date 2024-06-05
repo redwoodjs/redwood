@@ -1,7 +1,7 @@
 name: Set up job
 description: >
   Everything you need to run a job in CI.
-  Checkout this repo (redwoodjs/redwood), set up Node.js, yarn install, and build.
+  Enable corepack, set up Node.js, yarn install, and build.
 
 inputs:
   set-up-yarn-cache:
