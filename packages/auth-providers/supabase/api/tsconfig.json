@@ -6,8 +6,5 @@
     "outDir": "dist"
   },
   "include": ["src"],
-  "references": [
-    { "path": "../../../auth/tsconfig.build.json" },
-    { "path": "../../../vite" }
-  ]
+  "references": [{ "path": "../../../api" }]
 }

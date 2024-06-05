@@ -3,7 +3,7 @@ import fs from 'fs/promises'
 import { getPaths } from '@redwoodjs/project-config'
 
 /**
- * RSC build. Step 6.
+ * RSC build. Step 7.
  * Make RW specific env vars available to server components.
  * For client components this is done as a side-effect of importing from
  * @redwoodjs/web (see packages/web/src/config.ts).
@@ -12,7 +12,7 @@ import { getPaths } from '@redwoodjs/project-config'
  */
 export async function rscBuildRwEnvVars() {
   console.log('\n')
-  console.log('6. rscBuildRwEnvVars')
+  console.log('7. rscBuildRwEnvVars')
   console.log('====================\n')
 
   const rwPaths = getPaths()

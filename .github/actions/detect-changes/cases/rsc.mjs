@@ -21,6 +21,7 @@ export function rscChanged(changedFiles){
       changedFile.startsWith('packages/project-config/') ||
       changedFile.startsWith('packages/web/') ||
       changedFile.startsWith('packages/vite/') ||
+      changedFile.startsWith('packages/router/') ||
       changedFile.startsWith('__fixtures__/test-project-rsa') ||
       changedFile.startsWith('__fixtures__/test-project-rsc-kitchen-sink')
     ) {

@@ -3,14 +3,21 @@ import { rscBuildClient } from './rsc/rscBuildClient.js'
 import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets.js'
 import { rscBuildEntriesMappings } from './rsc/rscBuildEntriesFile.js'
 import { rscBuildForServer } from './rsc/rscBuildForServer.js'
+import { rscBuildForSsr } from './rsc/rscBuildForSsr.js'
 import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars.js'
 
-export const buildRscClientAndServer = async () => {
+export const buildRscClientAndServer = async ({
+  verbose = false,
+}: {
+  verbose?: boolean
+}) => {
   // Analyze all files and generate a list of RSCs and RSFs
   const { clientEntryFiles, serverEntryFiles } = await rscBuildAnalyze()
 
   // Generate the client bundle
   const clientBuildOutput = await rscBuildClient(clientEntryFiles)
+
+  const ssrBuildOutput = await rscBuildForSsr({ clientEntryFiles, verbose })
 
   // Generate the server output
   const serverBuildOutput = await rscBuildForServer(
@@ -30,6 +37,7 @@ export const buildRscClientAndServer = async () => {
   // Used by the RSC worker
   await rscBuildEntriesMappings(
     clientBuildOutput,
+    ssrBuildOutput,
     serverBuildOutput,
     clientEntryFiles,
   )
