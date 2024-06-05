@@ -281,6 +281,105 @@ jobs:
     steps:
       - run: echo "Skipped"
 
+  smoke-tests-react-18:
+    needs: check
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        bundler: [vite, webpack]
+
+    name: 🔄 Smoke tests React 18 / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
+    runs-on: ${{ matrix.os }}
+
+    env:
+      REDWOOD_CI: 1
+      REDWOOD_VERBOSE_TELEMETRY: 1
+
+    steps:
+      - name: Checkout the framework code
+        uses: actions/checkout@v4
+        with:
+          path: __tmp__fw_copy
+
+      - name: Set up job
+        uses: ./.github/actions/set-up-job
+        with:
+          yarn-install-directory: ./__tmp__fw_copy
+
+      - name: 🌲 Set up test project for React 18
+        id: set-up-test-project-react-18
+        working-directory: __tmp__fw_copy
+        uses: ./.github/actions/set-up-test-project
+        with:
+          bundler: ${{ matrix.bundler }}
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+
+      - name: 🎭 Install playwright dependencies
+        run: npx playwright install --with-deps chromium
+
+      - name: 🧑‍💻 Run dev smoke tests
+        working-directory: ./tasks/smoke-tests/dev
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project-react-18.outputs.test-project-path }}'
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: 🔐 Run auth smoke tests
+        working-directory: ./tasks/smoke-tests/auth
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project-react-18.outputs.test-project-path }}
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: Run `rw build --no-prerender`
+        run: |
+          yarn rw build --no-prerender
+        working-directory: ${{ steps.set-up-test-project-react-18.outputs.test-project-path }}
+
+      - name: Run `rw prerender`
+        run: |
+          yarn rw prerender --verbose
+        working-directory: ${{ steps.set-up-test-project-react-18.outputs.test-project-path }}
+
+      - name: 🖥️ Run serve smoke tests
+        working-directory: tasks/smoke-tests/serve
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project-react-18.outputs.test-project-path }}
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: 📄 Run prerender smoke tests
+        working-directory: tasks/smoke-tests/prerender
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project-react-18.outputs.test-project-path }}
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: 📕 Run Storybook smoke tests
+        working-directory: tasks/smoke-tests/storybook
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project-react-18.outputs.test-project-path }}
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+  smoke-tests-react-18-skip:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.code == 'false'
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        bundler: [vite, webpack]
+
+    name: 🔄 Smoke tests React 18 / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - run: echo "Skipped"
+
   cli-smoke-tests:
     needs: check
 
