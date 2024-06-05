@@ -1,10 +1,20 @@
 import { parseArgs } from 'util'
 
-import type { FastifyServerOptions } from 'fastify'
+import type {
+  FastifyListenOptions,
+  FastifyServerOptions,
+  FastifyInstance,
+} from 'fastify'
 
 import { coerceRootPath } from '@redwoodjs/fastify-web/dist/helpers'
 
 import { getAPIHost, getAPIPort } from './cliHelpers'
+
+export type StartOptions = Omit<FastifyListenOptions, 'port' | 'host'>
+
+export interface Server extends FastifyInstance {
+  start: (options?: StartOptions) => Promise<string>
+}
 
 export interface CreateServerOptions {
   /**
@@ -22,6 +32,11 @@ export interface CreateServerOptions {
    * Omitting logger here because we move it up.
    */
   fastifyServerOptions?: Omit<FastifyServerOptions, 'logger'>
+
+  /**
+   * Customise the API server fastify plugin before it is registered
+   */
+  configureApiServer?: (server: Server) => void | Promise<void>
 
   /**
    * Whether to parse args or not. Defaults to `true`.
@@ -45,6 +60,7 @@ export const DEFAULT_CREATE_SERVER_OPTIONS: DefaultCreateServerOptions = {
   fastifyServerOptions: {
     requestTimeout: 15_000,
   },
+  configureApiServer: () => {},
   parseArgs: true,
 }
 
@@ -74,7 +90,9 @@ export function resolveOptions(
         DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.requestTimeout,
       logger: options.logger ?? DEFAULT_CREATE_SERVER_OPTIONS.logger,
     },
-
+    configureApiServer:
+      options.configureApiServer ??
+      DEFAULT_CREATE_SERVER_OPTIONS.configureApiServer,
     apiHost: getAPIHost(),
     apiPort: getAPIPort(),
   }
