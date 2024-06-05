@@ -12,9 +12,6 @@ inputs:
   canary:
     description: Upgrade the project to canary?
     default: "false"
-  sub-directory:
-    description: The sub directory to run the setup in
-    required: false
 
 outputs:
   test-project-path:

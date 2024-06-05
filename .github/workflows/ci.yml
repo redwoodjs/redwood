@@ -301,20 +301,15 @@ jobs:
     steps:
       - name: Checkout the framework code
         uses: actions/checkout@v4
-        with:
-          path: __tmp__fw_copy
 
       - name: Set up job
-        uses: ./__tmp__fw_copy/.github/actions/set-up-job
-        with:
-          yarn-install-directory: ./__tmp__fw_copy
+        uses: ./.github/actions/set-up-job
 
       - name: 🌲 Set up test project for React 18
         id: set-up-test-project-react-18
-        uses: ./__tmp__fw_copy/.github/actions/set-up-test-project
+        uses: ./.github/actions/set-up-test-project
         with:
           bundler: ${{ matrix.bundler }}
-          sub-directory: __tmp__fw_copy
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
