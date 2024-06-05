@@ -382,7 +382,7 @@ export const handler = async ({ force, install }) => {
 
           fs.writeFileSync(
             VS_CODE_SETTINGS_PATH,
-            JSON.stringify(newSettingsJson, null, 2),
+            JSON.stringify(newSettingsJson, null, 2) + '\n',
           )
         },
       },
