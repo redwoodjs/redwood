@@ -35,12 +35,10 @@ const jsFiles = fg.sync('**/*.js', {
 
 const distDirs = new Set()
 for (const jsFile of jsFiles) {
-  const distDir = path.relative(packageRoot, path.dirname(jsFile))
-  distDirs.add(distDir)
+  distDirs.add(path.relative(packageRoot, path.dirname(jsFile)))
 }
 
-// Build the export fields object that contains entries for every
-// built JS file.
+// Build the export fields object that contains entries for directories that contain JS files.
 const exportFields = {}
 for (const distDir of distDirs) {
   const esmDistDir = distDir.replace('dist/cjs', 'dist')
