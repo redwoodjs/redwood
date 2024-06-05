@@ -5,21 +5,18 @@ import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
 import fg from 'fast-glob'
 import fastify from 'fastify'
-import type { FastifyListenOptions, FastifyInstance } from 'fastify'
 
 import type { GlobalContext } from '@redwoodjs/context'
 import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { resolveOptions } from './createServerHelpers'
-import type { CreateServerOptions } from './createServerHelpers'
+import type {
+  CreateServerOptions,
+  Server,
+  StartOptions,
+} from './createServerHelpers'
 import { redwoodFastifyAPI } from './plugins/api'
-
-type StartOptions = Omit<FastifyListenOptions, 'port' | 'host'>
-
-interface Server extends FastifyInstance {
-  start: (options?: StartOptions) => Promise<string>
-}
 
 // Load .env files if they haven't already been loaded. This makes importing this file effectful:
 //
@@ -51,6 +48,9 @@ if (!process.env.REDWOOD_ENV_FILES_LOADED) {
  *   const server = await createServer({
  *     logger,
  *     apiRootPath: 'api'
+ *     configureApiServer: (server) => {
+ *       // Configure the API server fastify instance, e.g. add content type parsers
+ *     },
  *   })
  *
  *   // Configure the returned fastify instance:
@@ -64,8 +64,13 @@ if (!process.env.REDWOOD_ENV_FILES_LOADED) {
  * ```
  */
 export async function createServer(options: CreateServerOptions = {}) {
-  const { apiRootPath, fastifyServerOptions, apiPort, apiHost } =
-    resolveOptions(options)
+  const {
+    apiRootPath,
+    fastifyServerOptions,
+    configureApiServer,
+    apiPort,
+    apiHost,
+  } = resolveOptions(options)
 
   // Warn about `api/server.config.js`
   const serverConfigPath = path.join(
@@ -114,6 +119,7 @@ export async function createServer(options: CreateServerOptions = {}) {
       fastGlobOptions: {
         ignore: ['**/dist/functions/graphql.js'],
       },
+      configureServer: configureApiServer,
     },
   })
 
