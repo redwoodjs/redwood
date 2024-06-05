@@ -205,7 +205,9 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout the framework code
+        uses: actions/checkout@v4
+
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -309,10 +311,10 @@ jobs:
 
       - name: 🌲 Set up test project for React 18
         id: set-up-test-project-react-18
-        working-directory: __tmp__fw_copy
         uses: ./.github/actions/set-up-test-project
         with:
           bundler: ${{ matrix.bundler }}
+          sub-directory: __tmp__fw_copy
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
           YARN_ENABLE_IMMUTABLE_INSTALLS: false

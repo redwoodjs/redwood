@@ -15,6 +15,7 @@ import {
 
 const TEST_PROJECT_PATH = path.join(
   path.dirname(process.cwd()),
+  core.getInput('sub-directory') || '',
   'test-project'
 )
 
