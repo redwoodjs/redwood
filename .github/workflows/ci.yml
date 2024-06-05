@@ -304,6 +304,24 @@ jobs:
 
       - name: Set up job
         uses: ./.github/actions/set-up-job
+        with:
+          build: false
+
+      - name: Downgrade to React 18
+        run: |
+          yarn tsx ./tasks/downgradeToReact18.mts
+
+      # One of our dependencies is on GitHub instead of NPM and without authentication
+      # we'll get rate limited and this step becomes flaky.
+      - name: 🐈 Yarn install
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: yarn install --inline-builds
+
+      - name: 🏗️ Build
+        shell: bash
+        run: yarn build
 
       - name: 🌲 Set up test project for React 18
         id: set-up-test-project-react-18
