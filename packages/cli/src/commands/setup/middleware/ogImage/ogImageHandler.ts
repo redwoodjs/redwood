@@ -99,7 +99,7 @@ export async function handler({ force }: { force: boolean }) {
         task: () => {
           // Note: We avoid logging in the task because it can mess up the formatting of the text and we are often looking to maintain some basic indentation and such.
           notes.push(
-            "og:image generation is almost ready to go! You'll need to add playwright as a dependency to the api side and then install the headless browser packages:",
+            "og:image generation is almost ready to go! You'll need to add playwright as a dependency to the web side and then install the headless browser packages:",
           )
           notes.push('')
           notes.push('  yarn workspace web add playwright')
