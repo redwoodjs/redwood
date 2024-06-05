@@ -148,7 +148,7 @@ test('middleware', async ({ page }) => {
 
   const bodyText = await page.locator('body').innerText()
 
-  expect(bodyText).toMatch(/import { URL } from "node:url"/)
+  expect(bodyText).toMatch(/import { fileURLToPath } from "node:url"/)
   expect(bodyText).toMatch(/self\.mts Middleware/)
   expect(bodyText).toMatch(/\.readFileSync\(__filename/)
 })
