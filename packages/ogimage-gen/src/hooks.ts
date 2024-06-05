@@ -5,6 +5,7 @@ export type OgImageUrlOptions = {
   width?: number
   height?: number
   quality?: number
+  searchParams?: URLSearchParams | Record<string, string>
 }
 
 export const OGIMAGE_DEFAULTS = {
@@ -15,11 +16,20 @@ export const OGIMAGE_DEFAULTS = {
 }
 
 export const useOgImage = (options?: OgImageUrlOptions) => {
-  const { origin, pathname, searchParams } = useLocation()
+  const { origin, pathname, searchParams: locationSearchParams } = useLocation()
   const ext = options?.extension || OGIMAGE_DEFAULTS.extension
   const width = options?.width
   const height = options?.height
   const quality = options?.quality
+  const searchParams =
+    options?.searchParams instanceof URLSearchParams
+      ? options?.searchParams
+      : new URLSearchParams(options?.searchParams || {})
+  const outputSearchParams = new URLSearchParams({
+    ...Object.fromEntries(locationSearchParams),
+    ...Object.fromEntries(searchParams),
+  })
+
   const output = [origin]
 
   // special case if we're at the root, image is available at /index.ext
@@ -32,18 +42,18 @@ export const useOgImage = (options?: OgImageUrlOptions) => {
   output.push(`.${ext}`)
 
   if (width) {
-    searchParams.append('width', width.toString())
+    outputSearchParams.append('width', width.toString())
   }
   if (height) {
-    searchParams.append('height', height.toString())
+    outputSearchParams.append('height', height.toString())
   }
   if (quality) {
-    searchParams.append('quality', quality.toString())
+    outputSearchParams.append('quality', quality.toString())
   }
 
   // only append search params if there are any, so we don't up with a trailing `?`
-  if (searchParams.size) {
-    output.push(`?${searchParams}`)
+  if (outputSearchParams.size) {
+    output.push(`?${outputSearchParams}`)
   }
 
   return {

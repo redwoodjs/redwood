@@ -1,3 +1,7 @@
+import React from 'react'
+
+import { describe, it, expect } from 'vitest'
+
 import { Route } from '../Route'
 import { isValidRoute } from '../route-validators'
 

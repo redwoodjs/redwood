@@ -49,8 +49,6 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
           // for the client-only components. They get loaded once the page is
           // rendered
           ...clientEntryFiles,
-          'rd-server': 'react-dom/server.edge',
-          'rsdw-client': 'react-server-dom-webpack/client.edge',
         },
         preserveEntrySignatures: 'exports-only',
         output: {
@@ -61,13 +59,8 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
           // TODO (RSC): Fix when https://github.com/rollup/rollup/issues/5235
           // is resolved
           hoistTransitiveImports: false,
-          entryFileNames: (chunkInfo) => {
-            if (
-              chunkInfo.name === 'rd-server' ||
-              chunkInfo.name === 'rsdw-client'
-            ) {
-              return '[name].mjs'
-            }
+          entryFileNames: () => {
+            // TODO (RSC): Is this the default? If so we can get rid of it
             return 'assets/[name]-[hash].mjs'
           },
           chunkFileNames: `assets/[name]-[hash].mjs`,
@@ -78,6 +71,7 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     esbuild: {
       logLevel: 'debug',
     },
+    logLevel: 'info',
     plugins: [rscRoutesAutoLoader()],
   })
 

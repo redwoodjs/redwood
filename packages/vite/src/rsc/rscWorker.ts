@@ -3,10 +3,10 @@
 // `--condition react-server`. If we did try to do that the main process
 // couldn't do SSR because it would be missing client-side React functions
 // like `useState` and `createContext`.
-import { Buffer } from 'node:buffer'
+import type { Buffer } from 'node:buffer'
 import { Server } from 'node:http'
 import path from 'node:path'
-import { Transform, Writable } from 'node:stream'
+import { Writable } from 'node:stream'
 import { parentPort } from 'node:worker_threads'
 
 import { createElement } from 'react'
@@ -17,7 +17,7 @@ import { createServer, resolveConfig } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { getEntries, getEntriesFromDist } from '../lib/entries.js'
+import { getEntriesFromDist } from '../lib/entries.js'
 import { registerFwGlobalsAndShims } from '../lib/registerFwGlobalsAndShims.js'
 import { StatusError } from '../lib/StatusError.js'
 import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
@@ -70,6 +70,7 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
   // Assumes that handleRender is only called once per request!
   const reqMap = createPerRequestMap({
     headers: input.serverState.headersInit,
+    fullUrl: input.serverState.fullUrl,
     serverAuthState: input.serverState.serverAuthState,
   })
 
@@ -223,34 +224,30 @@ async function getViteConfig() {
   })()
 }
 
-const getFunctionComponent = async (rscId: string) => {
+const getRoutesComponent: any = async () => {
   // TODO (RSC): Get rid of this when we only use the worker in dev mode
   const isDev = Object.keys(absoluteClientEntries).length === 0
 
-  let entryModule: string | undefined
+  let routesPath: string | undefined
   if (isDev) {
-    entryModule = getEntries()[rscId]
+    routesPath = getPaths().web.routes
   } else {
     const serverEntries = await getEntriesFromDist()
-    entryModule = path.join(getPaths().web.distRsc, serverEntries[rscId])
+    console.log('rscWorker.ts serverEntries', serverEntries)
+
+    routesPath = path.join(
+      getPaths().web.distRsc,
+      serverEntries['__rwjs__Routes'],
+    )
   }
 
-  if (!entryModule) {
-    throw new StatusError('No entry found for ' + rscId, 404)
+  if (!routesPath) {
+    throw new StatusError('No entry found for __rwjs__Routes', 404)
   }
 
-  const mod = await loadServerFile(entryModule)
+  const routes = await loadServerFile(routesPath)
 
-  if (typeof mod === 'function') {
-    return mod
-  }
-
-  if (typeof mod?.default === 'function') {
-    return mod?.default
-  }
-
-  // TODO (RSC): Making this a 404 error is marked as "HACK" in waku's source
-  throw new StatusError('No function component found', 404)
+  return routes.default
 }
 
 function resolveClientEntryForProd(
@@ -398,12 +395,18 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
 
   const config = await getViteConfig()
 
-  const component = await getFunctionComponent(input.rscId)
+  const serverRoutes = await getRoutesComponent()
 
   return renderToPipeableStream(
-    createElement(component, input.props),
+    createElement(serverRoutes, input.props),
     getBundlerConfig(config),
-  ).pipe(transformRsfId(config.root))
+  )
+  // TODO (RSC): We used to transform() the stream here to remove
+  // "prefixToRemove", which was the common base path to all filenames. We
+  // then added it back in handleRsa with a simple
+  // `path.join(config.root, fileId)`. I removed all of that for now to
+  // simplify the code. But if we wanted to add it back in the future to save
+  // some bytes in all the Flight data we could.
 }
 
 interface SerializedFormData {
@@ -424,10 +427,9 @@ async function handleRsa(input: RenderInput): Promise<PipeableStream> {
 
   const config = await getViteConfig()
 
-  const [fileId, name] = input.rsfId.split('#')
-  const fname = path.join(config.root, fileId)
-  console.log('Server Action, fileId', fileId, 'name', name, 'fname', fname)
-  const module = await loadServerFile(fname)
+  const [fileName, actionName] = input.rsfId.split('#')
+  console.log('Server Action fileName', fileName, 'actionName', actionName)
+  const module = await loadServerFile(fileName)
 
   if (isSerializedFormData(input.args[0])) {
     const formData = new FormData()
@@ -445,36 +447,6 @@ async function handleRsa(input: RenderInput): Promise<PipeableStream> {
     input.args[0] = formData
   }
 
-  const data = await (module[name] || module)(...input.args)
+  const data = await (module[actionName] || module)(...input.args)
   return renderToPipeableStream(data, getBundlerConfig(config))
-}
-
-// HACK Patching stream is very fragile.
-// TODO (RSC): Sanitize prefixToRemove to make sure it's safe to use in a
-// RegExp (CodeQL is complaining on GitHub)
-function transformRsfId(prefixToRemove: string) {
-  // Should be something like /home/runner/work/redwood/test-project-rsa
-  console.log('prefixToRemove', prefixToRemove)
-
-  return new Transform({
-    transform(chunk, encoding, callback) {
-      if (encoding !== ('buffer' as any)) {
-        throw new Error('Unknown encoding')
-      }
-      const data = chunk.toString()
-      const lines = data.split('\n')
-      console.log('lines', lines)
-      let changed = false
-      for (let i = 0; i < lines.length; ++i) {
-        const match = lines[i].match(
-          new RegExp(`^([0-9]+):{"id":"${prefixToRemove}(.*?)"(.*)$`),
-        )
-        if (match) {
-          lines[i] = `${match[1]}:{"id":"${match[2]}"${match[3]}`
-          changed = true
-        }
-      }
-      callback(null, changed ? Buffer.from(lines.join('\n')) : chunk)
-    },
-  })
 }

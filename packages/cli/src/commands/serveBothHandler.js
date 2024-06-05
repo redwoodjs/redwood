@@ -79,19 +79,26 @@ export const bothServerFileHandler = async (argv) => {
   }
 }
 
-export const bothSsrRscServerHandler = async (argv) => {
+export const bothSsrRscServerHandler = async (argv, rscEnabled) => {
   const apiPromise = apiServerHandler({
     apiRootPath: argv.apiRootPath,
     host: argv.apiHost,
     port: argv.apiPort,
   })
 
-  // TODO More gracefully handle Ctrl-C
+  // TODO (RSC): More gracefully handle Ctrl-C
   // Right now you get a big red error box when you kill the process
   const fePromise = execa('yarn', ['rw-serve-fe'], {
     cwd: getPaths().web.base,
     stdio: 'inherit',
     shell: true,
+    env: rscEnabled
+      ? {
+          // TODO (RSC): Is this how we want to do it? If so, we need to find a way
+          // to merge this with users' NODE_OPTIONS
+          NODE_OPTIONS: '--conditions react-server',
+        }
+      : undefined,
   })
 
   await Promise.all([apiPromise, fePromise])

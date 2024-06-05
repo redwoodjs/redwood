@@ -22,6 +22,16 @@
       "types": "./dist/clientSsr.d.ts",
       "default": "./dist/clientSsr.js"
     },
+    "./Router": {
+      "types": "./dist/ClientRouter.d.ts",
+      "react-server": "./dist/ServerRouter.js",
+      "default": "./dist/ClientRouter.js"
+    },
+    "./SsrRouter": {
+      "types": "./dist/SsrRouter.d.ts",
+      "react-server": "./dist/ServerRouter.js",
+      "default": "./dist/SsrRouter.js"
+    },
     "./buildFeServer": {
       "types": "./dist/buildFeServer.d.ts",
       "default": "./dist/buildFeServer.js"
@@ -81,7 +91,7 @@
     "express": "4.19.2",
     "find-my-way": "8.2.0",
     "http-proxy-middleware": "2.0.6",
-    "isbot": "3.8.0",
+    "isbot": "5.1.6",
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-server-dom-webpack": "19.0.0-beta-04b058868c-20240508",
     "vite": "5.2.11",

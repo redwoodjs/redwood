@@ -1,14 +1,13 @@
+import { Link } from '@redwoodjs/router/dist/link'
 import { namedRoutes as routes } from '@redwoodjs/router/dist/namedRoutes'
+
+import ReadFileServerCell from 'src/components/ReadFileServerCell'
 
 import './NavigationLayout.css'
 
 type NavigationLayoutProps = {
   children?: React.ReactNode
   rnd?: number
-}
-
-const Link = (props: any) => {
-  return <a href={props.to}>{props.children}</a>
 }
 
 const NavigationLayout = ({ children, rnd }: NavigationLayoutProps) => {
@@ -34,6 +33,9 @@ const NavigationLayout = ({ children, rnd }: NavigationLayoutProps) => {
         </ul>
       </nav>
       <div id="rnd">{Math.round(rnd * 100)}</div>
+      <ReadFileServerCell />
+      <p>Layout end</p>
+      <hr />
       <main>{children}</main>
     </div>
   )

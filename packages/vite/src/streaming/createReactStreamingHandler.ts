@@ -3,13 +3,14 @@ import path from 'path'
 import { Response } from '@whatwg-node/fetch'
 import type Router from 'find-my-way'
 import type { HTTPMethod } from 'find-my-way'
-import isbot from 'isbot'
+import { createIsbotFromList, list as isbotList } from 'isbot'
 import type { ViteDevServer } from 'vite'
 
-import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
+import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth/dist/AuthProvider/AuthProviderState.js'
+import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 import type { RouteSpec, RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
-import { matchPath } from '@redwoodjs/router'
+import { matchPath } from '@redwoodjs/router/dist/util.js'
 import type { TagDescriptor } from '@redwoodjs/web'
 
 import { invoke } from '../middleware/invokeMiddleware.js'
@@ -28,8 +29,10 @@ interface CreateReactStreamingHandlerOptions {
   getMiddlewareRouter: () => Promise<Router.Instance<any>>
 }
 
-const checkUaForSeoCrawler = isbot.spawn()
-checkUaForSeoCrawler.exclude(['chrome-lighthouse'])
+// Create an isbot instance that ignores the Chrome Lighthouse user agent
+const isbot = createIsbotFromList(
+  isbotList.filter((record) => !record.includes('chrome-lighthouse')),
+)
 
 export const createReactStreamingHandler = async (
   {
@@ -53,7 +56,7 @@ export const createReactStreamingHandler = async (
   if (isProd) {
     if (rscEnabled) {
       entryServerImport = await import(
-        makeFilePath(rwPaths.web.distRscEntryServer)
+        makeFilePath(rwPaths.web.distServerEntryServer)
       )
     } else {
       entryServerImport = await import(
@@ -69,7 +72,14 @@ export const createReactStreamingHandler = async (
   // @NOTE: we are returning a FetchAPI handler
   return async (req: Request) => {
     let mwResponse = MiddlewareResponse.next()
-    let decodedAuthState = middlewareDefaultAuthProviderState
+
+    // Default auth state
+    let decodedAuthState: ServerAuthState = {
+      ...middlewareDefaultAuthProviderState,
+      cookieHeader: req.headers.get('cookie'),
+      roles: [],
+    }
+
     // @TODO: Make the currentRoute 404?
     let currentRoute: RWRouteManifestItem | undefined
     let parsedParams: any = {}
@@ -92,13 +102,16 @@ export const createReactStreamingHandler = async (
     // ~~~ Middleware Handling ~~~
     if (middlewareRouter) {
       const matchedMw = middlewareRouter.find(req.method as HTTPMethod, req.url)
-      ;[mwResponse, decodedAuthState = middlewareDefaultAuthProviderState] =
-        await invoke(req, matchedMw?.handler as Middleware | undefined, {
+      ;[mwResponse, decodedAuthState] = await invoke(
+        req,
+        matchedMw?.handler as Middleware | undefined,
+        {
           route: currentRoute,
           cssPaths: getStylesheetLinks(currentRoute),
           params: matchedMw?.params,
           viteDevServer,
-        })
+        },
+      )
 
       // If mwResponse is a redirect, short-circuit here, and skip React rendering
       // If the response has a body, no need to render react.
@@ -167,9 +180,7 @@ export const createReactStreamingHandler = async (
       currentRoute.bundle && '/' + currentRoute.bundle,
     ].filter(Boolean) as string[]
 
-    const isSeoCrawler = checkUaForSeoCrawler(
-      req.headers.get('user-agent') || '',
-    )
+    const isSeoCrawler = isbot(req.headers.get('user-agent') || '')
 
     // Using a function to get the CSS links because we need to wait for the
     // vite dev server to analyze the module graph

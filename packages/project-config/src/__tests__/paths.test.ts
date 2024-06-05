@@ -127,6 +127,7 @@ describe('paths', () => {
             'config',
             'postcss.config.js',
           ),
+          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -148,11 +149,11 @@ describe('paths', () => {
             'server',
             'entry.server.mjs',
           ),
-          distRscEntryServer: path.join(
+          distServerEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'rsc',
+            'server',
             'entry.server.mjs',
           ),
           distRouteHooks: path.join(
@@ -410,6 +411,7 @@ describe('paths', () => {
             'config',
             'postcss.config.js',
           ),
+          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -431,11 +433,11 @@ describe('paths', () => {
             'server',
             'entry.server.mjs',
           ),
-          distRscEntryServer: path.join(
+          distServerEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'rsc',
+            'server',
             'entry.server.mjs',
           ),
           distDocumentServer: path.join(
@@ -739,6 +741,7 @@ describe('paths', () => {
             'config',
             'postcss.config.js',
           ),
+          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -762,11 +765,11 @@ describe('paths', () => {
             'server',
             'entry.server.mjs',
           ),
-          distRscEntryServer: path.join(
+          distServerEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'rsc',
+            'server',
             'entry.server.mjs',
           ),
           distDocumentServer: path.join(
@@ -1025,6 +1028,7 @@ describe('paths', () => {
             'config',
             'postcss.config.js',
           ),
+          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -1046,11 +1050,11 @@ describe('paths', () => {
             'server',
             'entry.server.mjs',
           ),
-          distRscEntryServer: path.join(
+          distServerEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
-            'rsc',
+            'server',
             'entry.server.mjs',
           ),
           distDocumentServer: path.join(

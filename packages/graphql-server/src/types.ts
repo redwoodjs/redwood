@@ -58,7 +58,7 @@ export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
   raw: AuthContextPayload[1],
   req?: AuthContextPayload[2],
-) => Promise<null | Record<string, unknown> | string>
+) => Promise<null | Record<string, unknown>>
 
 export type GenerateGraphiQLHeader = () => string
 

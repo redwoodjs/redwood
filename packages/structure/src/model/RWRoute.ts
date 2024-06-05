@@ -49,7 +49,90 @@ export class RWRoute extends BaseNode {
       ?.getOpeningElement()
       ?.getTagNameNode()
       ?.getText()
-    return tagText === 'Private'
+    return tagText === 'Private' || tagText === 'PrivateSet'
+  }
+
+  @lazy() get unauthenticated() {
+    if (!this.isPrivate) {
+      return undefined
+    }
+
+    const a = this.jsxNode
+      .getParentIfKind(tsm.SyntaxKind.JsxElement)
+      ?.getOpeningElement()
+      .getAttribute('unauthenticated')
+
+    if (!a) {
+      return undefined
+    }
+    if (tsm.Node.isJsxAttribute(a)) {
+      const init = a.getInitializer()
+      if (tsm.Node.isStringLiteral(init!)) {
+        return init.getLiteralValue()
+      }
+    }
+    return undefined
+  }
+
+  @lazy()
+  get roles() {
+    if (!this.isPrivate) {
+      return undefined
+    }
+
+    const a = this.jsxNode
+      .getParentIfKind(tsm.SyntaxKind.JsxElement)
+      ?.getOpeningElement()
+      .getAttribute('roles')
+
+    if (!a) {
+      return undefined
+    }
+
+    if (tsm.Node.isJsxAttribute(a)) {
+      const init = a.getInitializer()
+
+      // Handle string literals
+      if (tsm.Node.isStringLiteral(init)) {
+        let literalValue = init.getLiteralValue()
+
+        // Check if the string looks like an array with single quotes
+        if (literalValue.startsWith('[') && literalValue.endsWith(']')) {
+          try {
+            // Unescape the string by replacing single quotes with double quotes
+            const correctedLiteralValue = literalValue.replace(/'/g, '"')
+            // Attempt to parse as JSON array
+            const parsedValue = JSON.parse(correctedLiteralValue)
+            if (Array.isArray(parsedValue)) {
+              return parsedValue
+            }
+          } catch (e) {
+            // If parsing fails, return undefined
+            return undefined
+          }
+        }
+
+        // If not an array, return the string value
+        return literalValue
+      }
+
+      // Handle JSX expressions with array literals
+      if (tsm.Node.isJsxExpression(init)) {
+        const expr = init.getExpression()
+        if (tsm.Node.isArrayLiteralExpression(expr)) {
+          return expr
+            .getElements()
+            .map((element) => {
+              if (tsm.Node.isStringLiteral(element)) {
+                return element.getLiteralValue()
+              }
+              return undefined
+            })
+            .filter((val) => val !== undefined)
+        }
+      }
+    }
+    return undefined
   }
 
   @lazy() get hasParameters(): boolean {
@@ -98,7 +181,7 @@ export class RWRoute extends BaseNode {
       return undefined
     }
     return this.parent.parent.pages.find(
-      (p) => p.const_ === this.page_identifier_str,
+      (p) => p.constName === this.page_identifier_str,
     )
   }
   /**

@@ -1,6 +1,6 @@
 import { AsyncLocalStorage } from 'async_hooks'
 
-import type { ServerAuthState } from '@redwoodjs/auth'
+import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 
 import { CookieJar } from './middleware/CookieJar.js'
 
@@ -10,6 +10,7 @@ let PER_REQ_STORAGE: AsyncLocalStorage<ServerStore>
 
 type InitPerReqMapParams = {
   headers: Headers | Record<string, string>
+  fullUrl: string
   serverAuthState?: ServerAuthState
 }
 
@@ -26,12 +27,15 @@ export const createServerStorage = () => {
  */
 export const createPerRequestMap = ({
   headers,
+  fullUrl,
   serverAuthState,
 }: InitPerReqMapParams) => {
   const reqStore = new Map()
 
   const headersObj = new Headers(headers)
   reqStore.set('headers', headersObj)
+
+  reqStore.set('fullUrl', fullUrl)
 
   if (serverAuthState) {
     reqStore.set('serverAuthState', serverAuthState)
@@ -64,6 +68,10 @@ export const getRequestHeaders = (): Headers => {
 
 export const getAuthState = (): ServerAuthState => {
   return getStore()?.get('serverAuthState')
+}
+
+export const getLocation = (): URL => {
+  return new URL(getStore()?.get('fullUrl'))
 }
 
 export const setServerAuthState = (authState: ServerAuthState) => {

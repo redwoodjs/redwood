@@ -171,21 +171,22 @@ function getRollupInput(ssr: boolean): InputOption | undefined {
     throw new Error('entryClient not defined')
   }
 
-  const ssrEnabled = rwConfig.experimental?.streamingSsr?.enabled
+  const streamingEnabled = rwConfig.experimental?.streamingSsr?.enabled
   const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
   // @NOTE once streaming ssr is out of experimental, this will become the
   // default
-  if (ssrEnabled) {
+  if (streamingEnabled) {
     if (ssr) {
+      if (!rwPaths.web.entryServer) {
+        throw new Error('entryServer not defined')
+      }
+
       if (rscEnabled) {
         return {
           Document: rwPaths.web.document,
+          'entry.server': rwPaths.web.entryServer,
         }
-      }
-
-      if (!rwPaths.web.entryServer) {
-        throw new Error('entryServer not defined')
       }
 
       return {

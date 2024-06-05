@@ -9,7 +9,7 @@
   },
   "include": ["src/**/*"],
   "references": [
-    { "path": "../../../auth" },
+    { "path": "../../../auth/tsconfig.build.json" },
     { "path": "../../../vite" }
   ]
 }

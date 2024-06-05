@@ -7,7 +7,7 @@
 // 'src/pages/HomePage/HomePage.js'         -> HomePage
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
-import { Private, Router, Route } from '@redwoodjs/router'
+import { PrivateSet, Router, Route } from '@redwoodjs/router'
 import SetLayout from 'src/layouts/SetLayout'
 
 import FooPage from 'src/pages/FooPage'
@@ -22,9 +22,15 @@ const Routes = () => {
         <Route path="/foo" page={FooPage} name="fooPage" />
         <Route path="/bar" page={BarPage} name="barPage" />
       </Set>
-      <Private prerender unauthenticated="home">
+      <PrivateSet unauthenticated="home" prerender>
         <Route path="/private-page" page={PrivatePage} name="privatePage" />
-      </Private>
+      </PrivateSet>
+      <PrivateSet unauthenticated="home" roles="admin" prerender>
+        <Route path="/private-page-admin" page={PrivatePage} name="privatePageAdmin" />
+      </PrivateSet>
+      <PrivateSet unauthenticated="home" roles={['owner', 'superuser']} prerender>
+        <Route path="/private-page-admin-super" page={PrivatePage} name="privatePageAdminSuper" />
+      </PrivateSet>
       <Route notfound page={NotFoundPage} />
     </Router>
   )

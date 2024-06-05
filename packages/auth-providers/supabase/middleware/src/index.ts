@@ -2,6 +2,7 @@ import { AUTH_PROVIDER_HEADER } from '@redwoodjs/api'
 import { authDecoder } from '@redwoodjs/auth-supabase-api'
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
 import type {
+  Middleware,
   MiddlewareRequest,
   MiddlewareResponse,
 } from '@redwoodjs/vite/middleware'
@@ -10,15 +11,20 @@ import { clearAuthState } from './util'
 
 export interface SupabaseAuthMiddlewareOptions {
   getCurrentUser: GetCurrentUser
+  getRoles?: (decoded: any) => string[]
 }
 
 /**
  * Create Supabase Auth Middleware that sets the `serverAuthState` based on the Supabase cookie.
  */
-const createSupabaseAuthMiddleware = ({
+const initSupabaseAuthMiddleware = ({
   getCurrentUser,
-}: SupabaseAuthMiddlewareOptions) => {
-  return async (req: MiddlewareRequest, res: MiddlewareResponse) => {
+  getRoles,
+}: SupabaseAuthMiddlewareOptions): [Middleware, '*'] => {
+  const middleware = async (
+    req: MiddlewareRequest,
+    res: MiddlewareResponse,
+  ) => {
     const type = 'supabase'
     const cookieHeader = req.headers.get('cookie')
 
@@ -68,6 +74,8 @@ const createSupabaseAuthMiddleware = ({
         isAuthenticated: !!currentUser,
         hasError: false,
         userMetadata: userMetadata || currentUser,
+        cookieHeader,
+        roles: getRoles ? getRoles(decoded) : [],
       })
     } catch (e) {
       console.error(e, 'Error in Supabase Auth Middleware')
@@ -77,5 +85,7 @@ const createSupabaseAuthMiddleware = ({
 
     return res
   }
+
+  return [middleware, '*']
 }
-export default createSupabaseAuthMiddleware
+export default initSupabaseAuthMiddleware
