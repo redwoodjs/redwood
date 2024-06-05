@@ -1360,6 +1360,15 @@ describe('dbAuth', () => {
     })
 
     it('throws no error if password valid', async () => {
+      const tokenExpires = new Date()
+      tokenExpires.setSeconds(
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
+      )
+      await createDbUser({
+        resetToken: hashToken('1234'),
+        resetTokenExpiresAt: tokenExpires,
+      })
+
       event.body = JSON.stringify({ resetToken: '1234', password: 'password' })
 
       options.signup.passwordValidation = (password) => {
@@ -1368,6 +1377,7 @@ describe('dbAuth', () => {
         }
       }
 
+      options.resetPassword.allowReusedPassword = true
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.init()
 
@@ -1375,9 +1385,20 @@ describe('dbAuth', () => {
     })
 
     it('throws no error if passwordValidation function is undefined', async () => {
+      const tokenExpires = new Date()
+      tokenExpires.setSeconds(
+        tokenExpires.getSeconds() - options.forgotPassword.expires + 1,
+      )
+      await createDbUser({
+        resetToken: hashToken('1234'),
+        resetTokenExpiresAt: tokenExpires,
+      })
+
       event.body = JSON.stringify({ resetToken: '1234', password: 'password' })
 
       delete options.signup.passwordValidation
+      options.resetPassword.allowReusedPassword = true
+
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.init()
 
