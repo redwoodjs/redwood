@@ -821,9 +821,9 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (params.error) {
-      toast.error(error)
+      toast.error(params.error)
     }
-  }, [params]
+  }, [params.error])
 
   return (
     <>
