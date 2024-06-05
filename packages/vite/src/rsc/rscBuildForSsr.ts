@@ -3,6 +3,7 @@ import { cjsInterop } from 'vite-plugin-cjs-interop'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import { dependenciesPatterns } from '../cjsInterop.js'
 import { onWarn } from '../lib/onWarn.js'
 import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscSsrRouterImport } from '../plugins/vite-plugin-rsc-ssr-router-import.js'
@@ -47,7 +48,7 @@ export async function rscBuildForSsr({
       noExternal: true,
     },
     plugins: [
-      cjsInterop({ dependencies: ['@redwoodjs/**'] }),
+      cjsInterop({ dependencies: dependenciesPatterns }),
       rscRoutesAutoLoader(),
       rscSsrRouterImport(),
     ],
