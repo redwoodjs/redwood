@@ -1340,7 +1340,7 @@ describe('dbAuth', () => {
     })
 
     it('throws password validation error if password invalid', async () => {
-      event.body = JSON.stringify({ resetToken: '1234', password: 'pass', })
+      event.body = JSON.stringify({ resetToken: '1234', password: 'pass' })
 
       options.signup.passwordValidation = (password) => {
         if (password.length < 8) {
@@ -1357,6 +1357,30 @@ describe('dbAuth', () => {
         expect(e.message).toEqual('Password too short')
       }
       expect.assertions(1)
+    })
+
+    it('throws no error if password valid', async () => {
+      event.body = JSON.stringify({ resetToken: '1234', password: 'password' })
+
+      options.signup.passwordValidation = (password) => {
+        if (password.length < 8) {
+          throw new dbAuthError.PasswordValidationError('Password too short')
+        }
+      }
+
+      const dbAuth = new DbAuthHandler(event, context, options)
+      await dbAuth.init()
+
+      expect(() => dbAuth.resetPassword()).not.toThrow()
+    })
+
+    it('throws no error if passwordValidation function is undefined', async () => {
+      event.body = JSON.stringify({ resetToken: '1234', password: 'password' })
+      delete options.signup.passwordValidation
+      const dbAuth = new DbAuthHandler(event, context, options)
+      await dbAuth.init()
+
+      expect(() => dbAuth.resetPassword()).not.toThrow()
     })
 
     it('throws an error if no user found with resetToken', async () => {
