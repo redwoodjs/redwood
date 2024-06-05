@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import type { CurrentUser } from '../AuthContext'
+import type { CurrentUser } from '../AuthContext.js'
 
 export const useHasRole = (currentUser: CurrentUser | null) => {
   /**

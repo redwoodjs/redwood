@@ -1,5 +1,5 @@
 import { createRequire } from 'node:module'
-import path from 'path'
+import path from 'node:path'
 
 import fg from 'fast-glob'
 import fse from 'fs-extra'
@@ -119,12 +119,14 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
   expect(transformedPaths).toEqual(expectedPaths)
 
   // Step 4: Check contents of each file
-  transformedPaths.forEach((transformedFile) => {
+  for (const transformedFile of transformedPaths) {
     const actualPath = path.join(tempDir, transformedFile)
     const expectedPath = path.join(fixtureOutputDir, transformedFile)
 
-    expect(actualPath).toMatchFileContents(expectedPath, { removeWhitespace })
-  })
+    await expect(actualPath).toMatchFileContents(expectedPath, {
+      removeWhitespace,
+    })
+  }
 
   if (original_RWJS_CWD) {
     process.env.RWJS_CWD = original_RWJS_CWD

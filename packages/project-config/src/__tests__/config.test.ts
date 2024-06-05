@@ -51,6 +51,9 @@ describe('getConfig', () => {
                 "package": "@redwoodjs/cli-storybook",
               },
               {
+                "package": "@redwoodjs/cli-storybook-vite",
+              },
+              {
                 "package": "@redwoodjs/cli-data-migrate",
               },
             ],
@@ -58,6 +61,9 @@ describe('getConfig', () => {
           "opentelemetry": {
             "enabled": false,
             "wrapApi": true,
+          },
+          "reactCompiler": {
+            "enabled": false,
           },
           "realtime": {
             "enabled": false,

@@ -11,7 +11,7 @@
     { "path": "../router" },
     { "path": "../internal" },
     { "path": "../project-config" },
-    { "path": "../auth" },
+    { "path": "../auth/tsconfig.build.json" },
     { "path": "../structure" }
   ]
 }

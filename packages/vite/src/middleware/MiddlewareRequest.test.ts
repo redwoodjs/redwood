@@ -1,7 +1,9 @@
 import { Request as ArdaRequest } from '@whatwg-node/fetch'
 import { describe, expect, test } from 'vitest'
 
-import { createMiddlewareRequest } from './MiddlewareRequest'
+import type { ServerAuthState } from '@redwoodjs/auth'
+
+import { MiddlewareRequest, createMiddlewareRequest } from './MiddlewareRequest'
 
 describe('MiddlewareRequest', () => {
   test('Converts a Web API Request object correctly', () => {
@@ -18,7 +20,7 @@ describe('MiddlewareRequest', () => {
     })
     const mReq = createMiddlewareRequest(req)
 
-    expect(mReq.cookies.get('foo')).toStrictEqual({ value: 'bar' })
+    expect(mReq.cookies.get('foo')).toStrictEqual('bar')
     expect(mReq.method).toStrictEqual('POST')
     expect(mReq.headers.get('Content-Type')).toStrictEqual('application/json')
 
@@ -43,24 +45,59 @@ describe('MiddlewareRequest', () => {
 
     const mReq = createMiddlewareRequest(whatWgRequest)
 
-    expect(mReq.cookies.get('errybody')).toStrictEqual({ value: 'lets-funk' })
+    expect(mReq.cookies.get('errybody')).toStrictEqual('lets-funk')
     expect(mReq.method).toStrictEqual('PUT')
 
     expect(mReq.headers.get('x-custom-header')).toStrictEqual('beatdrop')
   })
 
-  test('Can attach and retrieve server auth context', () => {
+  test('Has a default server auth state', () => {
+    const mwReq = new MiddlewareRequest(
+      new Request('http://redwoodjs.com', {
+        headers: {
+          Cookie: 'foo=bar',
+        },
+      }),
+    )
+
+    const authState = mwReq.serverAuthState.get()
+    expect(authState?.cookieHeader).toStrictEqual('foo=bar')
+    expect(authState?.isAuthenticated).toBe(false)
+  })
+
+  test('Can attach and retrieve server auth state', () => {
     const req = new Request('http://redwoodjs.com')
     const FAKE_AUTH_CONTEXT = {
       currentUser: {
         name: 'Danny',
       },
       isAuthenticated: true,
-    }
+    } as unknown as ServerAuthState
     const mReq = createMiddlewareRequest(req)
 
-    mReq.serverAuthContext.set(FAKE_AUTH_CONTEXT)
+    mReq.serverAuthState.set(FAKE_AUTH_CONTEXT)
 
-    expect(mReq.serverAuthContext.get()).toStrictEqual(FAKE_AUTH_CONTEXT)
+    expect(mReq.serverAuthState.get()).toStrictEqual(FAKE_AUTH_CONTEXT)
+  })
+
+  test('Can clear auth state', () => {
+    const mwReq = new MiddlewareRequest(
+      new Request('http://redwoodjs.com', {
+        headers: {
+          Cookie: 'foo=bar',
+        },
+      }),
+    )
+    const FAKE_AUTH_CONTEXT = {
+      isAuthenticated: true,
+    } as unknown as ServerAuthState
+
+    mwReq.serverAuthState.set(FAKE_AUTH_CONTEXT)
+
+    expect(mwReq.serverAuthState.get()?.isAuthenticated).toBe(true)
+
+    mwReq.serverAuthState.clear()
+
+    expect(mwReq.serverAuthState.get().isAuthenticated).toBe(false)
   })
 })

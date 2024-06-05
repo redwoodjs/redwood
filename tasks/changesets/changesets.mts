@@ -14,7 +14,7 @@ async function main() {
     return
   }
 
-  const { prNumber } = resolveArgv()
+  const { prNumber } = await resolveArgv()
 
   const changesetFilePath = getChangesetFilePath(prNumber)
   const placeholder = await getPlaceholder(prNumber)

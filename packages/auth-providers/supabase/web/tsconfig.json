@@ -5,6 +5,6 @@
     "rootDir": "src",
     "outDir": "dist"
   },
-  "include": ["src"],
-  "references": [{ "path": "../../../auth" }]
+  "include": ["src", "./ambient.d.ts"],
+  "references": [{ "path": "../../../auth/tsconfig.build.json" }]
 }

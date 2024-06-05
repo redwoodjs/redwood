@@ -13,13 +13,12 @@ declare global {
    **/
   var RWJS_API_URL: string
 
-  // Provided by Vite.config in the user's project
+  // Provided by redwood-plugin-vite
   var RWJS_ENV: {
     RWJS_API_GRAPHQL_URL: string
-    /** URL or absolute path to serverless functions */
     RWJS_API_URL: string
-
     __REDWOOD__APP_TITLE: string
+    RWJS_EXP_STREAMING_SSR: boolean
   }
 
   namespace NodeJS {

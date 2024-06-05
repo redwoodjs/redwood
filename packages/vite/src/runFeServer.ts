@@ -12,6 +12,7 @@ import { createServerAdapter } from '@whatwg-node/server'
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
+import type { HTTPMethod } from 'find-my-way'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
@@ -19,10 +20,15 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
+import { createMiddlewareRouter } from './middleware/register.js'
+import type { Middleware } from './middleware/types.js'
+import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { setClientEntries } from './rsc/rscWorkerCommunication.js'
+import { createPerRequestMap, createServerStorage } from './serverStore.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import type { RWRouteManifest } from './types.js'
+import { convertExpressHeaders, getFullUrl } from './utils.js'
 
 /**
  * TODO (STREAMING)
@@ -73,12 +79,6 @@ export async function runFeServer() {
     await import(clientBuildManifestUrl, { with: { type: 'json' } })
   ).default
 
-  if (rwConfig.experimental?.rsc?.enabled) {
-    console.log('='.repeat(80))
-    console.log('buildManifest', clientBuildManifest)
-    console.log('='.repeat(80))
-  }
-
   // @MARK: Surely there's a better way than this!
   const clientEntry = Object.values(clientBuildManifest).find(
     (manifestItem) => {
@@ -88,6 +88,28 @@ export async function runFeServer() {
         : manifestItem.isEntry
     },
   )
+
+  // @MARK: In prod, we create it once up front!
+  const middlewareRouter = await createMiddlewareRouter()
+  const serverStorage = createServerStorage()
+
+  const handleWithMiddleware = () => {
+    return createServerAdapter(async (req: Request) => {
+      const matchedMw = middlewareRouter.find(req.method as HTTPMethod, req.url)
+
+      const handler = matchedMw?.handler as Middleware | undefined
+
+      if (!matchedMw) {
+        return new Response('No middleware found', { status: 404 })
+      }
+
+      const [mwRes] = await invoke(req, handler, {
+        params: matchedMw?.params,
+      })
+
+      return mwRes.toResponse()
+    })
+  }
 
   if (!clientEntry) {
     throw new Error('Could not find client entry in build manifest')
@@ -99,6 +121,17 @@ export async function runFeServer() {
     '/assets',
     express.static(rwPaths.web.distClient + '/assets', { index: false }),
   )
+
+  app.use('*', (req, _res, next) => {
+    const fullUrl = getFullUrl(req)
+    const headers = convertExpressHeaders(req.headersDistinct)
+    // Convert express headers to fetch headers
+    const perReqStore = createPerRequestMap({ headers, fullUrl })
+
+    // By wrapping next, we ensure that all of the other handlers will use this same perReqStore
+    // But note that the serverStorage is RE-initialised for the RSC worker
+    serverStorage.run(perReqStore, next)
+  })
 
   // 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
@@ -119,52 +152,37 @@ export async function runFeServer() {
     }),
   )
 
-  const getStylesheetLinks = () => clientEntry.css || []
-  const clientEntryPath = '/' + clientEntry.file
-
-  for (const route of Object.values(routeManifest)) {
-    // if it is a 404, register it at the end somehow.
-    if (!route.matchRegexString) {
-      continue
-    }
-
-    // @TODO: we don't need regexes here
-    // Param matching, etc. all handled within the route handler now
-    const expressPathDef = route.hasParams
-      ? route.matchRegexString
-      : route.pathDefinition
-
-    // TODO(RSC_DC): RSC is rendering blank page, try using this function for initial render
-    const routeHandler = await createReactStreamingHandler({
-      route,
-      clientEntryPath,
-      getStylesheetLinks,
-    })
-
-    console.log('Attaching streaming handler for route', route.pathDefinition)
-
-    // Wrap with whatg/server adapter. Express handler -> Fetch API handler
-    app.get(expressPathDef, createServerAdapter(routeHandler))
-  }
-
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
-  app.use('/rw-rsc', createRscRequestHandler())
-
-  // @MARK: put this after rw-rsc!
-  app.post(
-    '*',
-    createServerAdapter(async (req: Request) => {
-      const entryServerImport = await import(rwPaths.web.distEntryServer)
-
-      const { middleware } = entryServerImport
-
-      const [mwRes] = await invoke(req, middleware)
-
-      return mwRes.toResponse()
+  app.use(
+    '/rw-rsc',
+    createRscRequestHandler({
+      getMiddlewareRouter: async () => middlewareRouter,
     }),
   )
 
+  // Static asset handling MUST be defined before our catch all routing handler below
+  // otherwise it will catch all requests for static assets and return a 404.
+  // Placing this here defines our precedence for static asset handling - that we favor
+  // the static assets over any application routing.
   app.use(express.static(rwPaths.web.distClient, { index: false }))
+
+  const clientEntryPath = '/' + clientEntry.file
+
+  const getStylesheetLinks = rscEnabled
+    ? getRscStylesheetLinkGenerator(clientEntry.css)
+    : () => clientEntry.css || []
+
+  const routeHandler = await createReactStreamingHandler({
+    routes: Object.values(routeManifest),
+    clientEntryPath,
+    getStylesheetLinks,
+    getMiddlewareRouter: async () => middlewareRouter,
+  })
+
+  // Wrap with whatwg/server adapter. Express handler -> Fetch API handler
+  app.get('*', createServerAdapter(routeHandler))
+
+  app.post('*', handleWithMiddleware())
 
   app.listen(rwConfig.web.port)
   console.log(

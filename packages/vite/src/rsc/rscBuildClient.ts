@@ -31,6 +31,9 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
 
   const clientBuildOutput = await viteBuild({
     envFile: false,
+    define: {
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    },
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often
       minify: false,
@@ -56,7 +59,10 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
           // TODO (RSC): Fix when https://github.com/rollup/rollup/issues/5235
           // is resolved
           hoistTransitiveImports: false,
-          entryFileNames: `assets/[name]-[hash].mjs`,
+          entryFileNames: () => {
+            // TODO (RSC): Is this the default? If so we can get rid of it
+            return 'assets/[name]-[hash].mjs'
+          },
           chunkFileNames: `assets/[name]-[hash].mjs`,
         },
       },
@@ -65,6 +71,7 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     esbuild: {
       logLevel: 'debug',
     },
+    logLevel: 'info',
     plugins: [rscRoutesAutoLoader()],
   })
 

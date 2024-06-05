@@ -1,6 +1,6 @@
-import fs from 'fs'
+import fs from 'node:fs'
 import { createRequire } from 'node:module'
-import path from 'path'
+import path from 'node:path'
 
 import tempy from 'tempy'
 import { expect } from 'vitest'
@@ -46,5 +46,7 @@ export const matchInlineTransformSnapshot = async (
   // Step 3: Read modified file and snapshot
   const transformedContent = fs.readFileSync(tempFilePath, 'utf-8')
 
-  expect(formatCode(transformedContent)).toEqual(formatCode(expectedCode))
+  expect(await formatCode(transformedContent)).toEqual(
+    await formatCode(expectedCode),
+  )
 }

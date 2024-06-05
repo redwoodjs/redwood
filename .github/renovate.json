@@ -62,15 +62,6 @@
         "sort-package-json",
         "zx"
       ]
-    },
-
-    {
-      "groupName": "experimental",
-      "enabled": false,
-
-      "matchPackageNames": [
-        "@apollo/experimental-nextjs-app-support"
-      ]
     }
   ]
 }

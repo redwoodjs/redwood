@@ -28,6 +28,7 @@ export interface NodeTargetPaths {
 export interface WebPaths {
   base: string
   src: string
+  storybook: string
   app: string
   document: string
   generators: string
@@ -42,7 +43,6 @@ export interface WebPaths {
   viteConfig: string | null // because vite is opt-in only
   entryClient: string | null
   entryServer: string | null
-  entries: string | null
   postcss: string
   storybookConfig: string
   storybookPreviewConfig: string | null
@@ -52,6 +52,7 @@ export interface WebPaths {
   distRsc: string
   distServer: string
   distEntryServer: string
+  distServerEntryServer: string
   distDocumentServer: string
   distRouteHooks: string
   distRscEntries: string
@@ -80,7 +81,7 @@ export interface PagesDependency {
   /** the variable to which the import is assigned */
   importName: string
   /** @alias importName */
-  const: string
+  constName: string
   /** absolute path without extension */
   importPath: string
   /** absolute path with extension */
@@ -105,6 +106,7 @@ const PATH_WEB_ROUTES = 'web/src/Routes' // .jsx|.tsx
 const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
+const PATH_WEB_DIR_STORYBOOK_CONFIG = 'web/.storybook'
 const PATH_WEB_DIR_SRC = 'web/src'
 const PATH_WEB_DIR_SRC_APP = 'web/src/App'
 const PATH_WEB_DIR_SRC_DOCUMENT = 'web/src/Document'
@@ -116,7 +118,6 @@ const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_VITE = 'web/vite.config' // .js,.ts
 const PATH_WEB_DIR_ENTRY_CLIENT = 'web/src/entry.client' // .jsx,.tsx
 const PATH_WEB_DIR_ENTRY_SERVER = 'web/src/entry.server' // .jsx,.tsx
-const PATH_WEB_DIR_ENTRIES = 'web/src/entries' // .js,.ts
 const PATH_WEB_DIR_GRAPHQL = 'web/src/graphql' // .js,.ts
 
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
@@ -220,6 +221,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
+      storybook: path.join(BASE_DIR, PATH_WEB_DIR_STORYBOOK_CONFIG),
       generators: path.join(BASE_DIR, PATH_WEB_DIR_GENERATORS),
       app: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_APP)) as string,
       document: resolveFile(
@@ -246,10 +248,13 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       distClient: path.join(BASE_DIR, PATH_WEB_DIR_DIST_CLIENT),
       distRsc: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC),
       distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
-      // Allow for the possibility of a .mjs file
       distEntryServer: path.join(
         BASE_DIR,
         PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER,
+      ),
+      distServerEntryServer: path.join(
+        BASE_DIR,
+        'web/dist/server/entry.server.mjs',
       ),
       distDocumentServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT),
       distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
@@ -258,7 +263,6 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       types: path.join(BASE_DIR, 'web/types'),
       entryClient: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_CLIENT)), // new vite/stream entry point for client
       entryServer: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_SERVER)),
-      entries: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRIES)),
       graphql: path.join(BASE_DIR, PATH_WEB_DIR_GRAPHQL),
     },
   }
@@ -348,7 +352,7 @@ export const processPagesDir = (
     const importStatement = `const ${importName} = { name: '${importName}', loader: import('${importPath}') }`
     return {
       importName,
-      const: importName,
+      constName: importName,
       importPath,
       path: path.join(webPagesDir, pagePath),
       importStatement,

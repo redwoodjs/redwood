@@ -46,7 +46,11 @@ export async function buildRouteManifest() {
             permanent: false,
           }
         : null,
-      renderMode: route.renderMode,
+      relativeFilePath: route.relativeFilePath,
+      isPrivate: route.isPrivate,
+      unauthenticated: route.unauthenticated,
+      roles: route.roles,
+      pageIdentifier: route.pageIdentifier,
     }
 
     return acc

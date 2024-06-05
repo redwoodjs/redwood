@@ -1,24 +1,29 @@
 import { rscBuildAnalyze } from './rsc/rscBuildAnalyze.js'
 import { rscBuildClient } from './rsc/rscBuildClient.js'
-import { rscBuildClientEntriesMappings } from './rsc/rscBuildClientEntriesFile.js'
 import { rscBuildCopyCssAssets } from './rsc/rscBuildCopyCssAssets.js'
+import { rscBuildEntriesMappings } from './rsc/rscBuildEntriesFile.js'
 import { rscBuildForServer } from './rsc/rscBuildForServer.js'
+import { rscBuildForSsr } from './rsc/rscBuildForSsr.js'
 import { rscBuildRwEnvVars } from './rsc/rscBuildRwEnvVars.js'
 
-export const buildRscClientAndServer = async () => {
+export const buildRscClientAndServer = async ({
+  verbose = false,
+}: {
+  verbose?: boolean
+}) => {
   // Analyze all files and generate a list of RSCs and RSFs
-  const { clientEntryFiles, serverEntryFiles, componentImportMap } =
-    await rscBuildAnalyze()
+  const { clientEntryFiles, serverEntryFiles } = await rscBuildAnalyze()
 
   // Generate the client bundle
   const clientBuildOutput = await rscBuildClient(clientEntryFiles)
+
+  const ssrBuildOutput = await rscBuildForSsr({ clientEntryFiles, verbose })
 
   // Generate the server output
   const serverBuildOutput = await rscBuildForServer(
     clientEntryFiles,
     serverEntryFiles,
     {},
-    componentImportMap,
   )
 
   // Copy CSS assets from server to client
@@ -28,10 +33,11 @@ export const buildRscClientAndServer = async () => {
   // Can we do this more similar to how it's done for streaming?
   await rscBuildCopyCssAssets(serverBuildOutput)
 
-  // Mappings from server to client asset file names
+  // Mappings from standard names to full asset names
   // Used by the RSC worker
-  await rscBuildClientEntriesMappings(
+  await rscBuildEntriesMappings(
     clientBuildOutput,
+    ssrBuildOutput,
     serverBuildOutput,
     clientEntryFiles,
   )

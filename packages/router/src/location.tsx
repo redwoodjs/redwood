@@ -1,22 +1,16 @@
+'use client'
 import React from 'react'
 
 import { createNamedContext } from './createNamedContext'
 import { gHistory } from './history'
 import type { TrailingSlashesTypes } from './util'
 
-export interface LocationContextType {
-  pathname: string
-  search?: string
-  hash?: string
-}
+export interface LocationContextType extends URL {}
 
 const LocationContext = createNamedContext<LocationContextType>('Location')
 
-interface Location {
-  pathname: string
-  search?: string
-  hash?: string
-}
+interface Location extends URL {}
+
 interface LocationProviderProps {
   location?: Location
   trailingSlashes?: TrailingSlashesTypes
@@ -24,7 +18,7 @@ interface LocationProviderProps {
 }
 
 interface LocationProviderState {
-  context: Location
+  context: Location | undefined
 }
 
 class LocationProvider extends React.Component<
@@ -33,7 +27,9 @@ class LocationProvider extends React.Component<
 > {
   // When prerendering, there might be more than one level of location
   // providers. Use the values from the one above.
+  // (this is basically the class component version of `useLocation()`)
   static contextType = LocationContext
+
   declare context: React.ContextType<typeof LocationContext>
   HISTORY_LISTENER_ID: string | undefined = undefined
 
@@ -75,27 +71,21 @@ class LocationProvider extends React.Component<
           break
       }
 
-      windowLocation = window.location
-    } else {
-      windowLocation = {
-        pathname: this.context?.pathname || '',
-        search: this.context?.search || '',
-        hash: this.context?.hash || '',
-      }
+      windowLocation = new URL(window.location.href)
     }
 
-    const { pathname, search, hash } = this.props.location || windowLocation
-
-    return { pathname, search, hash }
+    return this.props.location || this.context || windowLocation
   }
 
+  // componentDidMount() is not called during server rendering (aka SSR and
+  // prerendering)
   componentDidMount() {
     this.HISTORY_LISTENER_ID = gHistory.listen(() => {
       const context = this.getContext()
       this.setState((lastState) => {
         if (
-          context.pathname !== lastState.context.pathname ||
-          context.search !== lastState.context.search
+          context?.pathname !== lastState?.context?.pathname ||
+          context?.search !== lastState?.context?.search
         ) {
           globalThis?.scrollTo(0, 0)
         }

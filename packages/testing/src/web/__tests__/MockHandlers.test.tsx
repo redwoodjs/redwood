@@ -1,8 +1,8 @@
-import 'whatwg-fetch'
 import React, { useCallback, useState } from 'react'
 
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { vi, describe, it, expect } from 'vitest'
+import 'whatwg-fetch'
 
 import { mockGraphQLQuery } from '../mockRequests'
 

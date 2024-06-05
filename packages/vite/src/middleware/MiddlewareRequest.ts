@@ -1,39 +1,57 @@
 import { Request as WhatWgRequest } from '@whatwg-node/fetch'
 
-import { defaultAuthProviderState, type ServerAuthState } from '@redwoodjs/auth'
+import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth/dist/AuthProvider/AuthProviderState.js'
+import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 
 import { CookieJar } from './CookieJar.js'
 
-class ContextJar<T> {
-  private _data: T
+class AuthStateJar {
+  private _data: ServerAuthState | null
+  private _initialState: ServerAuthState
 
-  constructor(data?: T) {
-    this._data = data as T
+  constructor(initialState: ServerAuthState) {
+    this._data = initialState
+    this._initialState = initialState
   }
 
+  /**
+   * Always returns the server auth state, even if its set to null,
+   * it'll fall back to the initial state (created when mwReq is initialised)
+   */
   get() {
-    return this._data
+    return this._data || this._initialState
   }
 
-  set(value: any) {
+  set(value: ServerAuthState | null) {
     this._data = value
+  }
+
+  clear() {
+    this._data = null
   }
 }
 
 export class MiddlewareRequest extends WhatWgRequest {
   cookies: CookieJar
-  serverAuthContext: ContextJar<ServerAuthState>
+  serverAuthState: AuthStateJar
 
   constructor(input: Request) {
     super(input)
+
+    const defaultServerAuthState = {
+      ...middlewareDefaultAuthProviderState,
+      cookieHeader: input.headers.get('Cookie'),
+      roles: [],
+    }
+
     this.cookies = new CookieJar(input.headers.get('Cookie'))
-    this.serverAuthContext = new ContextJar(defaultAuthProviderState)
+    this.serverAuthState = new AuthStateJar(defaultServerAuthState)
   }
 }
 
 /**
  * Converts a Web API Request object to a MiddlewareRequest object.
- * Also ensures that serverAuthContext is fresh for each request
+ * Also ensures that serverAuthState is fresh for each request
  * (assuming that it is a new instance for each request)
  */
 export const createMiddlewareRequest = (req: Request) => {

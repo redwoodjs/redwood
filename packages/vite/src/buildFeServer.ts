@@ -38,11 +38,9 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   }
 
   if (rscEnabled) {
-    if (!rwPaths.web.entries) {
-      throw new Error('RSC entries file not found')
-    }
-
-    await buildRscClientAndServer()
+    await buildRscClientAndServer({ verbose })
+  } else {
+    await buildForStreamingServer({ verbose })
   }
 
   // We generate the RSC client bundle in the rscBuildClient function
@@ -51,8 +49,6 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     console.log('Building client for streaming SSR...\n')
     await buildWeb({ verbose })
   }
-
-  await buildForStreamingServer({ verbose, rscEnabled })
 
   await buildRouteHooks(verbose, rwPaths)
 

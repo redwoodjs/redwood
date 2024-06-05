@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Redwood Route detection > detects the page identifier for a route 1`] = `
+[
+  "HomePage",
+  "TypeScriptPage",
+  "EditUserPage",
+  "FooPage",
+  "BarPage",
+  "PrivatePage",
+  "PrivatePage",
+  "PrivatePage",
+  "NotFoundPage",
+]
+`;

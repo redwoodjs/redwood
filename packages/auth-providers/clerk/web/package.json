@@ -23,22 +23,22 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.1",
+    "@babel/runtime-corejs3": "7.24.5",
     "@redwoodjs/auth": "workspace:*",
-    "core-js": "3.36.1"
+    "core-js": "3.37.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.1",
+    "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
-    "@clerk/clerk-react": "4.30.7",
-    "@clerk/types": "3.62.1",
+    "@clerk/clerk-react": "4.31.1",
+    "@clerk/types": "3.64.1",
     "@types/react": "^18.2.55",
-    "react": "18.3.0-canary-a870b2d54-20240314",
-    "typescript": "5.4.3",
-    "vitest": "1.4.0"
+    "react": "19.0.0-beta-04b058868c-20240508",
+    "typescript": "5.4.5",
+    "vitest": "1.6.0"
   },
   "peerDependencies": {
-    "@clerk/clerk-react": "4.30.7"
+    "@clerk/clerk-react": "4.31.1"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

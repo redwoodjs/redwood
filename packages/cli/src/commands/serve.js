@@ -45,7 +45,7 @@ export const builder = async (yargs) => {
           const { bothSsrRscServerHandler } = await import(
             './serveBothHandler.js'
           )
-          await bothSsrRscServerHandler(argv)
+          await bothSsrRscServerHandler(argv, rscEnabled)
         } else {
           await bothServerCLIConfig.handler(argv)
         }
@@ -87,7 +87,7 @@ export const builder = async (yargs) => {
         })
 
         if (streamingEnabled) {
-          await webSsrServerHandler()
+          await webSsrServerHandler(rscEnabled)
         } else {
           await webServerCLIConfig.handler(argv)
         }

@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 
-import type { AuthImplementation } from '../AuthImplementation'
+import type { AuthImplementation } from '../AuthImplementation.js'
 
-import type { AuthProviderState } from './AuthProviderState'
+import type { AuthProviderState } from './AuthProviderState.js'
 
 export const useLogOut = <
   TUser,

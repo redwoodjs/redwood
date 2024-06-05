@@ -2,6 +2,7 @@ import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import { getEntries } from '../lib/entries.js'
 import { onWarn } from '../lib/onWarn.js'
 import { rscAnalyzePlugin } from '../plugins/vite-plugin-rsc-analyze.js'
 
@@ -20,11 +21,6 @@ export async function rscBuildAnalyze() {
   const rwPaths = getPaths()
   const clientEntryFileSet = new Set<string>()
   const serverEntryFileSet = new Set<string>()
-  const componentImportMap = new Map<string, string[]>()
-
-  if (!rwPaths.web.entries) {
-    throw new Error('RSC entries file not found')
-  }
 
   if (!rwPaths.web.viteConfig) {
     throw new Error('Vite config not found')
@@ -46,16 +42,13 @@ export async function rscBuildAnalyze() {
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
         (id) => serverEntryFileSet.add(id),
-        (id, imports) => {
-          const existingImports = componentImportMap.get(id) ?? []
-          componentImportMap.set(id, [...existingImports, ...imports])
-        },
       ),
     ],
     ssr: {
       // We can ignore everything that starts with `node:` because it's not
       // going to be RSCs
-      noExternal: /^(?!node:)/,
+      // As of vite 5.2 `true` here means "all except node built-ins"
+      noExternal: true,
       // TODO (RSC): Figure out what the `external` list should be. Right
       // now it's just copied from waku, plus we added prisma
       external: ['react', 'minimatch', '@prisma/client'],
@@ -68,16 +61,14 @@ export async function rscBuildAnalyze() {
       minify: false,
       manifest: 'rsc-build-manifest.json',
       write: false,
-      // TODO (RSC): In the future we want to generate the entries file
-      // automatically. Maybe by using `analyzeRoutes()`
-      // For the dev server we might need to generate these entries on the
-      // fly - so we will need something like a plugin or virtual module
-      // to generate these entries, rather than write to actual file.
-      // And so, we might as well use on-the-fly generation for regular
-      // builds too
-      ssr: rwPaths.web.entries,
+      // We generate the entries from the simple `getEntries` function that analyses
+      // the various pages plus the ServerEntry file. This may need revisiting when we
+      // spend time on improving dev support or expand the scope of the components
+      // that are looked up via the entries mappings.
+      ssr: true,
       rollupOptions: {
         onwarn: onWarn,
+        input: getEntries(),
       },
     },
   })
@@ -98,14 +89,11 @@ export async function rscBuildAnalyze() {
     }),
   )
 
-  console.log('clientEntryFileSet', Array.from(clientEntryFileSet))
-  console.log('serverEntryFileSet', Array.from(serverEntryFileSet))
   console.log('clientEntryFiles', clientEntryFiles)
   console.log('serverEntryFiles', serverEntryFiles)
 
   return {
     clientEntryFiles,
     serverEntryFiles,
-    componentImportMap,
   }
 }

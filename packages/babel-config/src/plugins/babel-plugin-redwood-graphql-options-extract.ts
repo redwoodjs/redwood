@@ -1,4 +1,3 @@
-// import type { NodePath, PluginObj, types } from '@babel/core'
 import type { PluginObj, PluginPass, types } from '@babel/core'
 
 // This extracts the options passed to the graphql function and stores them in a file so they can be imported elsewhere.

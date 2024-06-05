@@ -100,6 +100,8 @@ function registerFwGlobals() {
  * We have to call it early in the app's lifecycle, before code that depends on
  * it runs and do so at the server start in (src/devFeServer.ts and
  * src/runFeServer.ts).
+ *
+ * We generate the input to the shims in the `bundlerConfig` Proxies we have
  */
 function registerFwShims() {
   if (!getConfig().experimental?.rsc?.enabled) {
@@ -111,7 +113,18 @@ function registerFwShims() {
 
   globalThis.__webpack_chunk_load__ ||= async (id: string) => {
     console.log('registerFwShims chunk load id', id)
-    return import(id).then((m) => globalThis.__rw_module_cache__.set(id, m))
+    return import(id).then((mod) => {
+      console.log('registerFwShims chunk load mod', mod)
+
+      // checking m.default to better support CJS. If it's an object, it's
+      // likely a CJS module. Otherwise it's probably an ES module with a
+      // default export
+      if (mod.default && typeof mod.default === 'object') {
+        return globalThis.__rw_module_cache__.set(id, mod.default)
+      }
+
+      return globalThis.__rw_module_cache__.set(id, mod)
+    })
   }
 
   globalThis.__webpack_require__ ||= (id: string) => {

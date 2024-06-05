@@ -12,12 +12,12 @@ import { verifyModelName } from '../../../lib/schemaHelpers'
 import { validateName, yargsDefaults } from '../helpers'
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'model.js.template')
 
-export const files = ({ name, typescript = false }) => {
+const files = async ({ name, typescript = false }) => {
   const outputFilename = `${name}.${typescript ? 'ts' : 'js'}`
   const outputPath = path.join(getPaths().api.models, outputFilename)
 
   return {
-    [outputPath]: generateTemplate(TEMPLATE_PATH, { name }),
+    [outputPath]: await generateTemplate(TEMPLATE_PATH, { name }),
   }
 }
 
@@ -59,8 +59,8 @@ export const handler = async ({ force, ...args }) => {
     [
       {
         title: 'Generating model file...',
-        task: () => {
-          return writeFilesTask(files(args), { overwriteExisting: force })
+        task: async () => {
+          return writeFilesTask(await files(args), { overwriteExisting: force })
         },
       },
       {

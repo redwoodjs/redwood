@@ -3,10 +3,13 @@ import type { PassThrough } from 'node:stream'
 
 import type { Request } from 'express'
 
-import { getRawConfig, getConfig } from '@redwoodjs/project-config'
+import { getConfig, getRawConfig } from '@redwoodjs/project-config'
 
-import { renderRsc } from './rscWorkerCommunication.js'
+import { getAuthState, getRequestHeaders } from '../serverStore.js'
+import { getFullUrlForFlightRequest } from '../utils.js'
+
 import type { RenderInput } from './rscWorkerCommunication.js'
+import { renderRsc } from './rscWorkerCommunication.js'
 
 const isTest = () => {
   return process.env.NODE_ENV === 'test'
@@ -115,7 +118,7 @@ const createStudioFlightHandler = (
   }
 }
 
-interface StudioRenderInput extends RenderInput {
+interface StudioRenderInput extends Omit<RenderInput, 'serverState'> {
   basePath: string
   req: Request
   handleError: (e: Error) => void
@@ -132,7 +135,23 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
     // surround renderRsc with performance metrics
     const startedAt = Date.now()
     const start = performance.now()
-    const pipeable = await renderRsc({ rscId, props, rsfId, args })
+
+    // We construct the URL for the flight request from props
+    // e.g. http://localhost:8910/rw-rsc/__rwjs__Routes?props=location={pathname:"/about",search:"?foo=bar""}
+    // becomes http://localhost:8910/about?foo=bar
+    const fullUrl = getFullUrlForFlightRequest(req, props)
+
+    const pipeable = await renderRsc({
+      rscId,
+      props,
+      rsfId,
+      args,
+      serverState: {
+        headersInit: Object.fromEntries(getRequestHeaders().entries()),
+        serverAuthState: getAuthState(),
+        fullUrl,
+      },
+    })
     const endedAt = Date.now()
     const end = performance.now()
     const duration = end - start

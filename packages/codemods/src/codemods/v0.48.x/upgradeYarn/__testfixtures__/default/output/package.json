@@ -15,11 +15,11 @@
     "root": true
   },
   "engines": {
-    "node": ">=14.17 <=20.12",
+    "node": ">=14.17 <=20.13",
     "yarn": ">=1.15 <2"
   },
   "prisma": {
     "seed": "yarn rw exec seed"
   },
-  "packageManager": "yarn@3.8.1"
+  "packageManager": "yarn@3.8.2"
 }

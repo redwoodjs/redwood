@@ -89,7 +89,7 @@ export const handler = async ({ force, verbose }) => {
           let entryClientPath = rwPaths.web.entryClient
           const entryClientContent = ts
             ? entryClientTemplate
-            : transformTSToJS(entryClientPath, entryClientTemplate)
+            : await transformTSToJS(entryClientPath, entryClientTemplate)
 
           let overwriteExisting = force
 
@@ -130,7 +130,7 @@ export const handler = async ({ force, verbose }) => {
           )
           const entryServerContent = ts
             ? entryServerTemplate
-            : transformTSToJS(entryServerPath, entryServerTemplate)
+            : await transformTSToJS(entryServerPath, entryServerTemplate)
 
           writeFile(entryServerPath, entryServerContent, {
             overwriteExisting: force,
@@ -152,16 +152,52 @@ export const handler = async ({ force, verbose }) => {
           const documentPath = path.join(rwPaths.web.src, `Document${ext}`)
           const documentContent = ts
             ? documentTemplate
-            : transformTSToJS(documentPath, documentTemplate)
+            : await transformTSToJS(documentPath, documentTemplate)
 
           writeFile(documentPath, documentContent, {
             overwriteExisting: force,
           })
         },
       },
-      addWebPackages([
-        '@apollo/experimental-nextjs-app-support@0.0.0-commit-b8a73fe',
-      ]),
+      {
+        title: `Update web/{ts,js}config.json...`,
+        task: async () => {
+          const tsconfigTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'streamingSsr',
+              'tsconfig.json.template',
+            ),
+            'utf-8',
+          )
+
+          const tsconfigPath = path.join(
+            rwPaths.web.base,
+            ts ? 'tsconfig.json' : 'jsconfig.json',
+          )
+
+          writeFile(tsconfigPath, tsconfigTemplate, {
+            overwriteExisting: force,
+          })
+        },
+      },
+      {
+        title:
+          'Adding resolution for "@apollo/client-react-streaming/superjson"',
+        task: () => {
+          // We need this to make sure we get a version of superjson that works
+          // with CommonJS.
+          // TODO: Remove this when Redwood switches to ESM
+          const pkgJsonPath = path.join(rwPaths.base, 'package.json')
+          const pkgJson = fs.readJsonSync(pkgJsonPath)
+          const resolutions = pkgJson.resolutions || {}
+          resolutions['@apollo/client-react-streaming/superjson'] = '^1.12.2'
+          pkgJson.resolutions = resolutions
+          fs.writeJsonSync(pkgJsonPath, pkgJson, { spaces: 2 })
+        },
+      },
+      addWebPackages(['@apollo/client-react-streaming@0.10.0']),
       {
         task: () => {
           printTaskEpilogue(command, description, EXPERIMENTAL_TOPIC_ID)

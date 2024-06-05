@@ -127,6 +127,7 @@ describe('paths', () => {
             'config',
             'postcss.config.js',
           ),
+          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -142,6 +143,13 @@ describe('paths', () => {
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           distEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entry.server.mjs',
+          ),
+          distServerEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
@@ -177,7 +185,6 @@ describe('paths', () => {
           viteConfig: null,
           entryClient: null,
           entryServer: null,
-          entries: null,
           graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
         },
       }
@@ -404,6 +411,7 @@ describe('paths', () => {
             'config',
             'postcss.config.js',
           ),
+          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -419,6 +427,13 @@ describe('paths', () => {
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           distEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entry.server.mjs',
+          ),
+          distServerEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
@@ -455,7 +470,6 @@ describe('paths', () => {
           viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
           entryClient: null, // doesn't exist in example-todo-main
           entryServer: null, // doesn't exist in example-todo-main
-          entries: null, // doesn't exist in example-todo-main
         },
       }
 
@@ -727,6 +741,7 @@ describe('paths', () => {
             'config',
             'postcss.config.js',
           ),
+          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -742,9 +757,15 @@ describe('paths', () => {
           ),
           entryClient: null,
           entryServer: null,
-          entries: null,
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           distEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entry.server.mjs',
+          ),
+          distServerEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
@@ -1007,6 +1028,7 @@ describe('paths', () => {
             'config',
             'postcss.config.js',
           ),
+          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
           storybookConfig: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -1022,6 +1044,13 @@ describe('paths', () => {
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           distEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entry.server.mjs',
+          ),
+          distServerEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
@@ -1058,7 +1087,6 @@ describe('paths', () => {
           viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
           entryClient: path.join(FIXTURE_BASEDIR, 'web/src/entry.client.tsx'),
           entryServer: null,
-          entries: null,
         },
       }
 

@@ -21,6 +21,8 @@
   },
   "packageManager": "yarn@4.1.1",
   "resolutions": {
-    "vite@4.4.9": "patch:vite@npm%3A4.4.9#./.yarn/patches/vite-npm-4.4.9-e845c1bbf8.patch"
+    "@apollo/client-react-streaming/superjson": "^1.12.2",
+    "@apollo/client/rehackt": "0.1.0",
+    "react-is": "19.0.0-beta-04b058868c-20240508"
   }
 }
