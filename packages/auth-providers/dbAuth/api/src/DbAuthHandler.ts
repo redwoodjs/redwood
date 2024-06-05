@@ -689,7 +689,6 @@ export class DbAuthHandler<
     }
 
     // check if password is valid using signup criteria
-    const { password } = this.normalizedRequest.jsonBody || {}
     ;(this.options.signup as SignupFlowOptions).passwordValidation?.(
       password as string,
     )
