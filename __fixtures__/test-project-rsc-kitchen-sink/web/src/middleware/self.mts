@@ -1,12 +1,12 @@
 import fs from 'node:fs'
-import { URL } from 'node:url'
+import { fileURLToPath } from 'node:url'
 
 import type {
   MiddlewareRequest,
   MiddlewareResponse,
 } from '@redwoodjs/vite/middleware'
 
-const __filename = new URL('', import.meta.url).pathname
+const __filename = fileURLToPath(import.meta.url)
 
 export async function middleware(
   req: MiddlewareRequest,
