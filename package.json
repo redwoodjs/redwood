@@ -8,8 +8,7 @@
     "packages/cli-packages/*",
     "packages/mailer/core",
     "packages/mailer/handlers/*",
-    "packages/mailer/renderers/*",
-    "packages/studio/web"
+    "packages/mailer/renderers/*"
   ],
   "scripts": {
     "build": "nx run-many -t build",

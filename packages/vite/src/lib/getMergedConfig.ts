@@ -178,16 +178,15 @@ function getRollupInput(ssr: boolean): InputOption | undefined {
   // default
   if (streamingEnabled) {
     if (ssr) {
+      if (!rwPaths.web.entryServer) {
+        throw new Error('entryServer not defined')
+      }
+
       if (rscEnabled) {
         return {
           Document: rwPaths.web.document,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          'entry.server': rwPaths.web.entryServer!,
+          'entry.server': rwPaths.web.entryServer,
         }
-      }
-
-      if (!rwPaths.web.entryServer) {
-        throw new Error('entryServer not defined')
       }
 
       return {
