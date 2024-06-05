@@ -22,7 +22,7 @@ export const ServerEntry: React.FC<Props> = ({ css, meta, location }) => {
 }
 
 export async function registerMiddleware() {
-  const { middleware: selfTsMw } = await import('./middleware/self.mjs')
+  const { middleware: selfMtsMw } = await import('./middleware/self.mjs')
 
-  return [selfTsMw]
+  return [selfMtsMw]
 }
