@@ -570,14 +570,14 @@ Then register them with the appropriate config:
 ```ts title="api/src/server.ts"
 const server = await createServer({
   logger,
-  async configureApiServer(s) {
-    await s.register(import('@fastify/compress'), {
+  async configureApiServer(server) {
+    await server.register(import('@fastify/compress'), {
       global: true,
       threshold: 1024,
       encodings: ['deflate', 'gzip'],
     })
     
-    await s.register(import('@fastify/rate-limit'), {
+    await server.register(import('@fastify/rate-limit'), {
       max: 100,
       timeWindow: '5 minutes',
     })
@@ -608,8 +608,8 @@ For example, to support image file uploads you'd tell Fastify to allow `/^image\
 ```ts title="api/src/server.ts"
 const server = await createServer({
   logger,
-  configureApiServer(s){
-    s.addContentTypeParser(/^image\/.*/, (req, payload, done) => {
+  configureApiServer(server){
+    server.addContentTypeParser(/^image\/.*/, (_req, payload, done) => {
       payload.on('end', () => {
         done()
       })
