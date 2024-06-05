@@ -169,7 +169,7 @@ let event, context, options
 describe('dbAuth', () => {
   beforeEach(() => {
     // hide deprecation warnings during test
-    vi.spyOn(console, 'warn').mockImplementation(() => { })
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
     // encryption key so results are consistent regardless of settings in .env
     process.env.SESSION_SECRET = SESSION_SECRET
     delete process.env.DBAUTH_COOKIE_DOMAIN
@@ -346,17 +346,17 @@ describe('dbAuth', () => {
       options = {
         db: db,
         forgotPassword: {
-          handler: () => { },
+          handler: () => {},
         },
         login: {
-          handler: () => { },
+          handler: () => {},
           expires: 1,
         },
         resetPassword: {
-          handler: () => { },
+          handler: () => {},
         },
         signup: {
-          handler: () => { },
+          handler: () => {},
         },
       }
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -371,14 +371,14 @@ describe('dbAuth', () => {
         () =>
           new DbAuthHandler(event, context, {
             login: {
-              handler: () => { },
+              handler: () => {},
               expires: 1,
             },
             resetPassword: {
-              handler: () => { },
+              handler: () => {},
             },
             signup: {
-              handler: () => { },
+              handler: () => {},
             },
           }),
       ).toThrow(dbAuthError.NoForgotPasswordHandler)
@@ -388,14 +388,14 @@ describe('dbAuth', () => {
           new DbAuthHandler(event, context, {
             forgotPassword: {},
             login: {
-              handler: () => { },
+              handler: () => {},
               expires: 1,
             },
             resetPassword: {
-              handler: () => { },
+              handler: () => {},
             },
             signup: {
-              handler: () => { },
+              handler: () => {},
             },
           }),
       ).toThrow(dbAuthError.NoForgotPasswordHandler)
@@ -407,14 +407,14 @@ describe('dbAuth', () => {
           new DbAuthHandler(event, context, {
             db: db,
             login: {
-              handler: () => { },
+              handler: () => {},
               expires: 1,
             },
             resetPassword: {
-              handler: () => { },
+              handler: () => {},
             },
             signup: {
-              handler: () => { },
+              handler: () => {},
             },
             forgotPassword: {
               enabled: false,
@@ -429,13 +429,13 @@ describe('dbAuth', () => {
         () =>
           new DbAuthHandler(event, context, {
             forgotPassword: {
-              handler: () => { },
+              handler: () => {},
             },
             resetPassword: {
-              handler: () => { },
+              handler: () => {},
             },
             signup: {
-              handler: () => { },
+              handler: () => {},
             },
           }),
       ).toThrow(dbAuthError.NoSessionExpirationError)
@@ -444,16 +444,16 @@ describe('dbAuth', () => {
         () =>
           new DbAuthHandler(event, context, {
             forgotPassword: {
-              handler: () => { },
+              handler: () => {},
             },
             login: {
-              handler: () => { },
+              handler: () => {},
             },
             resetPassword: {
-              handler: () => { },
+              handler: () => {},
             },
             signup: {
-              handler: () => { },
+              handler: () => {},
             },
           }),
       ).toThrow(dbAuthError.NoSessionExpirationError)
@@ -464,16 +464,16 @@ describe('dbAuth', () => {
         () =>
           new DbAuthHandler(event, context, {
             forgotPassword: {
-              handler: () => { },
+              handler: () => {},
             },
             login: {
               expires: 1,
             },
             resetPassword: {
-              handler: () => { },
+              handler: () => {},
             },
             signup: {
-              handler: () => { },
+              handler: () => {},
             },
           }),
       ).toThrow(dbAuthError.NoLoginHandlerError)
@@ -487,13 +487,13 @@ describe('dbAuth', () => {
               enabled: false,
             },
             resetPassword: {
-              handler: () => { },
+              handler: () => {},
             },
             signup: {
-              handler: () => { },
+              handler: () => {},
             },
             forgotPassword: {
-              handler: () => { },
+              handler: () => {},
             },
           }),
       ).not.toThrow(dbAuthError.NoLoginHandlerError)
@@ -504,14 +504,14 @@ describe('dbAuth', () => {
         () =>
           new DbAuthHandler(event, context, {
             forgotPassword: {
-              handler: () => { },
+              handler: () => {},
             },
             login: {
-              handler: () => { },
+              handler: () => {},
               expires: 1,
             },
             resetPassword: {
-              handler: () => { },
+              handler: () => {},
             },
           }),
       ).toThrow(dbAuthError.NoSignupHandler)
@@ -520,14 +520,14 @@ describe('dbAuth', () => {
         () =>
           new DbAuthHandler(event, context, {
             forgotPassword: {
-              handler: () => { },
+              handler: () => {},
             },
             login: {
-              handler: () => { },
+              handler: () => {},
               expires: 1,
             },
             resetPassword: {
-              handler: () => { },
+              handler: () => {},
             },
             signup: {},
           }),
@@ -540,17 +540,17 @@ describe('dbAuth', () => {
           new DbAuthHandler(event, context, {
             db: db,
             login: {
-              handler: () => { },
+              handler: () => {},
               expires: 1,
             },
             resetPassword: {
-              handler: () => { },
+              handler: () => {},
             },
             signup: {
               enabled: false,
             },
             forgotPassword: {
-              handler: () => { },
+              handler: () => {},
             },
           }),
       ).not.toThrow(dbAuthError.NoSignupHandler)
@@ -2728,17 +2728,17 @@ describe('dbAuth', () => {
         authModelAccessor: 'user',
         db: db,
         forgotPassword: {
-          handler: () => { },
+          handler: () => {},
         },
         login: {
-          handler: () => { },
+          handler: () => {},
           expires: 1,
         },
         resetPassword: {
-          handler: () => { },
+          handler: () => {},
         },
         signup: {
-          handler: () => { },
+          handler: () => {},
         },
       }
       const dbAuth = new DbAuthHandler(event, context, options)
