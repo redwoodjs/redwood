@@ -318,6 +318,75 @@ export const handler = async ({ force, install }) => {
         },
       },
       {
+        title:
+          'Adding tailwind intellisense plugin configuration to VS Code settings...',
+        skip: () => !usingVSCode() && "Looks like you're not using VS Code",
+        task: () => {
+          // Adds support for Redwood specific className props to tailwind intellisense
+          //   "tailwindCSS": {
+          //     "classAttributes": ["class", "className", "activeClassName", "errorClassName"]
+          //   }
+          // The default value for this setting is:
+          //   ["class", "className", "ngClass", "class:list"]
+
+          const VS_CODE_SETTINGS_PATH = path.join(
+            rwPaths.base,
+            '.vscode/settings.json',
+          )
+
+          const newTwSettingsJson = {
+            classAttributes: [
+              'class',
+              'className',
+              'activeClassName',
+              'errorClassName',
+            ],
+          }
+
+          let newSettingsJson = { tailwindCSS: { ...newTwSettingsJson } }
+
+          if (fs.existsSync(VS_CODE_SETTINGS_PATH)) {
+            const originalSettingsFile = fs.readFileSync(
+              VS_CODE_SETTINGS_PATH,
+              'utf-8',
+            )
+            const originalSettingsJson = JSON.parse(
+              originalSettingsFile || '{}',
+            )
+            const originalTwSettingsJson = originalSettingsJson['tailwindCSS']
+
+            if (originalTwSettingsJson) {
+              const mergedClassAttributes = Array.from(
+                new Set([
+                  ...newTwSettingsJson.classAttributes,
+                  ...(originalTwSettingsJson.classAttributes || []),
+                ]),
+              )
+
+              newSettingsJson = {
+                ...originalSettingsJson,
+                tailwindCSS: {
+                  ...originalTwSettingsJson,
+                  classAttributes: mergedClassAttributes,
+                },
+              }
+            } else {
+              newSettingsJson = {
+                ...originalSettingsJson,
+                tailwindCSS: {
+                  ...newTwSettingsJson,
+                },
+              }
+            }
+          }
+
+          fs.writeFileSync(
+            VS_CODE_SETTINGS_PATH,
+            JSON.stringify(newSettingsJson, null, 2) + '\n',
+          )
+        },
+      },
+      {
         title: 'Adding tailwind config entry in prettier...',
         task: async (_ctx) => {
           const prettierConfigPath = path.join(
