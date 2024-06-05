@@ -317,6 +317,7 @@ jobs:
         shell: bash
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
         run: yarn install --inline-builds
 
       - name: 🏗️ Build
