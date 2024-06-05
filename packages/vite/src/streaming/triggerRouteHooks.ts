@@ -24,7 +24,7 @@ export const triggerRouteHooks = async ({
   parsedParams = {},
   previousOutput,
 }: TriggerRouteHooksParam) => {
-  const { parseSearch } = await import('@redwoodjs/router')
+  const { parseSearch } = await import('@redwoodjs/router/dist/util.js')
   const event: RouteHookEvent = {
     params: parsedParams,
     headers: req.headers || {},

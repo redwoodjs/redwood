@@ -16,8 +16,7 @@ await rimraf('packages/**/dist', {
 await rimraf('packages/**/tsconfig.tsbuildinfo', {
   glob: true,
 })
-// Our dual esm/cjs packages have a `tsconfig.build.tsbuildinfo` file instead of
-// `tsconfig.tsbuildinfo` so we need to remove those as well.
+
 await rimraf('packages/**/tsconfig.build.tsbuildinfo', {
   glob: true,
 })

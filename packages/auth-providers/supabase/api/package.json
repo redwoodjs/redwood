@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.5",
+    "@redwoodjs/api": "workspace:*",
     "@supabase/ssr": "0.3.0",
     "core-js": "3.37.1",
     "jsonwebtoken": "9.0.2"
@@ -31,7 +32,6 @@
   "devDependencies": {
     "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
-    "@redwoodjs/api": "workspace:*",
     "@types/aws-lambda": "8.10.138",
     "@types/jsonwebtoken": "9.0.6",
     "typescript": "5.4.5",

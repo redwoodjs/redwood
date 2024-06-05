@@ -3,7 +3,9 @@ import type { Readable } from 'node:stream'
 import { PassThrough } from 'node:stream'
 import { Worker } from 'node:worker_threads'
 
-import type { ServerAuthState } from '@redwoodjs/auth'
+import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
+
+import type { RscFetchProps } from './rscFetchForClientRouter'
 
 const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
   execArgv: [
@@ -14,15 +16,14 @@ const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
   ],
 })
 
-export type RenderInput<
-  Props extends Record<string, unknown> = Record<string, unknown>,
-> = {
+export type RenderInput = {
   rscId?: string | undefined
-  props?: Props | undefined
+  props: RscFetchProps | Record<string, unknown>
   rsfId?: string | undefined
   args?: unknown[] | undefined
   serverState: {
     headersInit: Record<string, string>
+    fullUrl: string
     serverAuthState: ServerAuthState
   }
 }

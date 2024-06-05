@@ -3,10 +3,7 @@ import path from 'node:path'
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { vi } from 'vitest'
 
-import {
-  middlewareDefaultAuthProviderState,
-  // type ServerAuthState,
-} from '@redwoodjs/auth'
+import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
 import { authDecoder } from '@redwoodjs/auth-supabase-api'
 import {
   MiddlewareRequest,
@@ -71,8 +68,14 @@ const options: SupabaseAuthMiddlewareOptions = {
   },
 }
 
-describe('createSupabaseAuthMiddleware()', () => {
-  it('creates middleware for Supabase SSR auth', async () => {
+describe('initSupabaseAuthMiddleware()', () => {
+  const unauthenticatedServerAuthState = {
+    ...middlewareDefaultAuthProviderState,
+    roles: [],
+    cookieHeader: null,
+  }
+
+  it('initializes middleware for Supabase SSR auth', async () => {
     const [middleware] = initSupabaseAuthMiddleware(options)
     const request = new Request('http://localhost:8911', {
       method: 'GET',
@@ -88,7 +91,7 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(result).toHaveProperty('status', 200)
 
     const serverAuthState = req.serverAuthState.get()
-    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
+    expect(serverAuthState).toEqual(unauthenticatedServerAuthState)
   })
 
   it('passes through non-authenticated requests', async () => {
@@ -105,7 +108,7 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(result?.body).toEqual('original response body')
 
     const serverAuthState = req.serverAuthState.get()
-    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
+    expect(serverAuthState).toEqual(unauthenticatedServerAuthState)
   })
   it('passes through when no auth-provider cookie', async () => {
     const [middleware] = initSupabaseAuthMiddleware(options)
@@ -125,7 +128,10 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(result?.body).toEqual('original response body when no auth provider')
 
     const serverAuthState = req.serverAuthState.get()
-    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
+    expect(serverAuthState).toEqual({
+      ...unauthenticatedServerAuthState,
+      cookieHeader: 'missing-the-auth-provider-cookie-header-name=supabase',
+    })
   })
 
   it('passes through when unsupported auth-provider', async () => {
@@ -145,7 +151,10 @@ describe('createSupabaseAuthMiddleware()', () => {
       'original response body for unsupported provider',
     )
     const serverAuthState = req.serverAuthState.get()
-    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
+    expect(serverAuthState).toEqual({
+      ...unauthenticatedServerAuthState,
+      cookieHeader: 'auth-provider=unsupported',
+    })
   })
 
   it('handles current user GETs', async () => {
@@ -169,7 +178,10 @@ describe('createSupabaseAuthMiddleware()', () => {
 
     expect(req.url).toContain('/middleware/supabase/currentUser')
     const serverAuthState = req.serverAuthState.get()
-    expect(serverAuthState).toEqual(middlewareDefaultAuthProviderState)
+    expect(serverAuthState).toEqual({
+      ...unauthenticatedServerAuthState,
+      cookieHeader: 'auth-provider=supabase',
+    })
   })
 
   it('authenticated request sets currentUser', async () => {
@@ -194,6 +206,52 @@ describe('createSupabaseAuthMiddleware()', () => {
     expect(serverAuthState.currentUser).toEqual({
       id: 1,
       email: 'user-1@example.com',
+    })
+  })
+
+  it('authenticated request sets userMetadata', async () => {
+    const optionsWithExtractRole: SupabaseAuthMiddlewareOptions = {
+      getCurrentUser: async () => {
+        return {
+          id: 1,
+          email: 'user-1@example.com',
+          user_metadata: { favoriteColor: 'yellow' },
+        }
+      },
+      getRoles: vi.fn().mockReturnValue(['admin', 'editor']),
+    }
+
+    const [middleware] = initSupabaseAuthMiddleware(optionsWithExtractRole)
+    const request = new Request('http://localhost:8911/authenticated-request', {
+      method: 'GET',
+      headers: new Headers({
+        cookie: 'auth-provider=supabase;sb_access_token=dummy_access_token',
+      }),
+    })
+    const req = new MiddlewareRequest(request)
+    const res = new MiddlewareResponse()
+    const result = await middleware(req, res)
+    expect(result).toBeDefined()
+    expect(req).toBeDefined()
+
+    expect(authDecoder).toHaveBeenCalledWith(
+      'auth-provider=supabase;sb_access_token=dummy_access_token',
+      'supabase',
+      expect.anything(),
+    )
+
+    const serverAuthState = req.serverAuthState.get()
+    expect(serverAuthState).toBeDefined()
+    expect(serverAuthState).toHaveProperty('currentUser')
+    expect(serverAuthState.isAuthenticated).toEqual(true)
+    expect(serverAuthState.userMetadata).toEqual({
+      favoriteColor: 'yellow',
+    })
+    expect(serverAuthState.roles).toEqual(['admin', 'editor'])
+
+    // Called with result of decoding the token
+    expect(optionsWithExtractRole.getRoles).toHaveBeenCalledWith({
+      sub: 'abc123',
     })
   })
 
@@ -267,7 +325,11 @@ describe('createSupabaseAuthMiddleware()', () => {
     // when an exception is thrown, such as when tampering with the cookie,
     //the serverAuthState should be cleared
     const serverAuthState = req.serverAuthState.get()
-    expect(serverAuthState).toBeNull()
+    expect(serverAuthState).toEqual({
+      ...unauthenticatedServerAuthState,
+      cookieHeader:
+        'auth-provider=supabase;sb-example-auth-token=dummy_access_token',
+    })
 
     // the auth-provider cookie should be cleared from the response
     const authProviderCookie = res.cookies.get('auth-provider')

@@ -4,14 +4,11 @@ import { cjsInterop } from 'vite-plugin-cjs-interop'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { dependenciesPatterns } from '../cjsInterop.js'
-import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader'
 
 export async function buildForStreamingServer({
   verbose = false,
-  rscEnabled = false,
 }: {
   verbose?: boolean
-  rscEnabled?: boolean
 }) {
   console.log('Starting streaming server build...\n')
   const rwPaths = getPaths()
@@ -26,7 +23,6 @@ export async function buildForStreamingServer({
       cjsInterop({
         dependencies: dependenciesPatterns,
       }),
-      rscEnabled && rscRoutesAutoLoader(),
     ],
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often
