@@ -33,24 +33,26 @@ const jsFiles = fg.sync('**/*.js', {
   absolute: true,
 })
 
+const distDirs = new Set()
+for (const jsFile of jsFiles) {
+  const distDir = path.relative(packageRoot, path.dirname(jsFile))
+  distDirs.add(distDir)
+}
+
 // Build the export fields object that contains entries for every
 // built JS file.
 const exportFields = {}
-for (const jsFile of jsFiles) {
-  const relativeCjsPath = path.relative(packageRoot, jsFile)
-  const relativeCjsPathWithoutExt = relativeCjsPath.substring(
-    0,
-    relativeCjsPath.length - 3,
-  )
-  const relativeEsmPath = relativeCjsPath.replace('dist/cjs', 'dist')
-  const relativeEsmPathWithoutExt = relativeEsmPath.substring(
-    0,
-    relativeEsmPath.length - 3,
-  )
-  exportFields[`./${relativeEsmPathWithoutExt}`] = {
-    types: `./${relativeEsmPathWithoutExt}.d.ts`,
-    import: `./${relativeEsmPathWithoutExt}.js`,
-    default: `./${relativeCjsPathWithoutExt}.js`,
+for (const distDir of distDirs) {
+  const esmDistDir = distDir.replace('dist/cjs', 'dist')
+  exportFields[`./${esmDistDir}/*`] = {
+    types: `./${esmDistDir}/*.d.ts`,
+    import: `./${esmDistDir}/*.js`,
+    default: `./${distDir}/*.js`,
+  }
+  exportFields[`./${esmDistDir}/*.js`] = {
+    types: `./${esmDistDir}/*.d.ts`,
+    import: `./${esmDistDir}/*.js`,
+    default: `./${distDir}/*.js`,
   }
 }
 
