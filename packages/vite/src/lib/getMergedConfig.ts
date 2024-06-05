@@ -181,6 +181,7 @@ function getRollupInput(ssr: boolean): InputOption | undefined {
       if (rscEnabled) {
         return {
           Document: rwPaths.web.document,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           'entry.server': rwPaths.web.entryServer!,
         }
       }
