@@ -171,6 +171,10 @@ function getRollupInput(ssr: boolean): InputOption | undefined {
     throw new Error('entryClient not defined')
   }
 
+  if (!rwPaths.web.entryServer) {
+    throw new Error('entryServer not defined')
+  }
+
   const streamingEnabled = rwConfig.experimental?.streamingSsr?.enabled
   const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
@@ -181,7 +185,7 @@ function getRollupInput(ssr: boolean): InputOption | undefined {
       if (rscEnabled) {
         return {
           Document: rwPaths.web.document,
-          'entry.server': rwPaths.web.entryServer!,
+          'entry.server': rwPaths.web.entryServer,
         }
       }
 
