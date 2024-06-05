@@ -1,8 +1,9 @@
 import { db } from 'api/src/lib/db'
 
 // Manually apply seeds via the `yarn rw prisma db seed` command.
-// Seeds automatically run with `yarn rw prisma migrate dev` and
-// `yarn rw prisma migrate reset` commands.
+//
+// Seeds automatically run the first time you run the `yarn rw prisma migrate dev`
+// command and every time you run the `yarn rw prisma migrate reset` command.
 //
 // See https://redwoodjs.com/docs/seeds for more info
 
