@@ -1376,6 +1376,7 @@ describe('dbAuth', () => {
 
     it('throws no error if passwordValidation function is undefined', async () => {
       event.body = JSON.stringify({ resetToken: '1234', password: 'password' })
+
       delete options.signup.passwordValidation
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.init()
