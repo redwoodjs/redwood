@@ -305,13 +305,13 @@ jobs:
           path: __tmp__fw_copy
 
       - name: Set up job
-        uses: ./.github/actions/set-up-job
+        uses: ./__tmp__fw_copy/.github/actions/set-up-job
         with:
           yarn-install-directory: ./__tmp__fw_copy
 
       - name: 🌲 Set up test project for React 18
         id: set-up-test-project-react-18
-        uses: ./.github/actions/set-up-test-project
+        uses: ./__tmp__fw_copy/.github/actions/set-up-test-project
         with:
           bundler: ${{ matrix.bundler }}
           sub-directory: __tmp__fw_copy
