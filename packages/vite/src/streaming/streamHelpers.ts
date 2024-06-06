@@ -262,6 +262,7 @@ export async function reactRenderToStreamResponse(
     clearTimeout(timeoutHandle)
   }
 }
+
 function applyStreamTransforms(
   reactStream: ReactDOMServerReadableStream,
   transformsToApply: (TransformStream | false)[],
@@ -296,20 +297,18 @@ export async function importModule(
     | '__rwjs__server_auth_provider'
     | '__rwjs__server_inject',
 ) {
-  const distServer = getPaths().web.distServer
+  const distSsr = getPaths().web.distSsr
   const rsdwClientPath = makeFilePath(
-    path.join(distServer, '__rwjs__rsdw-client.mjs'),
+    path.join(distSsr, '__rwjs__rsdw-client.mjs'),
   )
-  const rdServerPath = makeFilePath(path.join(distServer, 'rd-server.mjs'))
-  const reactPath = makeFilePath(path.join(distServer, '__rwjs__react.mjs'))
-  const locationPath = makeFilePath(
-    path.join(distServer, '__rwjs__location.mjs'),
-  )
+  const rdServerPath = makeFilePath(path.join(distSsr, 'rd-server.mjs'))
+  const reactPath = makeFilePath(path.join(distSsr, '__rwjs__react.mjs'))
+  const locationPath = makeFilePath(path.join(distSsr, '__rwjs__location.mjs'))
   const ServerAuthProviderPath = makeFilePath(
-    path.join(distServer, '__rwjs__server_auth_provider.mjs'),
+    path.join(distSsr, '__rwjs__server_auth_provider.mjs'),
   )
   const ServerInjectPath = makeFilePath(
-    path.join(distServer, '__rwjs__server_inject.mjs'),
+    path.join(distSsr, '__rwjs__server_inject.mjs'),
   )
 
   if (mod === '__rwjs__rsdw-client') {

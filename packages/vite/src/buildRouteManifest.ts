@@ -17,7 +17,7 @@ export async function buildRouteManifest() {
   const rwPaths = getPaths()
 
   const buildManifestUrl = url.pathToFileURL(
-    path.join(getPaths().web.distClient, 'client-build-manifest.json'),
+    path.join(getPaths().web.distBrowser, 'client-build-manifest.json'),
   ).href
   const clientBuildManifest: ViteBuildManifest = (
     await import(buildManifestUrl, { with: { type: 'json' } })
@@ -59,12 +59,12 @@ export async function buildRouteManifest() {
   console.log('routeManifest', JSON.stringify(routeManifest, null, 2))
 
   const webRouteManifest = rwPaths.web.routeManifest
-  await fs.mkdir(rwPaths.web.distServer, { recursive: true })
+  await fs.mkdir(rwPaths.web.distSsr, { recursive: true })
   return fs.writeFile(webRouteManifest, JSON.stringify(routeManifest, null, 2))
 }
 
 // TODO (STREAMING) Hacky work around because when you don't have a App.routeHook, esbuild doesn't create
-// the pages folder in the dist/server/routeHooks directory.
+// the pages folder in the dist/ssr/routeHooks directory.
 // @MARK need to change to .mjs here if we use esm
 const FIXME_constructRouteHookPath = (
   routeHookSrcPath: string | null | undefined,

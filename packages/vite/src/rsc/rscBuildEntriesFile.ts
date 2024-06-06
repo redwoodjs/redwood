@@ -46,7 +46,7 @@ export async function rscBuildEntriesMappings(
     if (entryFile) {
       if (process.platform === 'win32') {
         // Prevent errors on Windows like
-        // Error: No client entry found for D:/a/redwood/rsc-project/web/dist/server/assets/rsc0.js
+        // Error: No client entry found for D:/a/redwood/rsc-project/web/dist/ssr/assets/rsc0.js
         const entryFileSlash = entryFile.replaceAll('\\', '/')
         clientEntries[entryFileSlash] = fileName
       } else {
@@ -74,7 +74,7 @@ export async function rscBuildEntriesMappings(
     if (entryFile) {
       if (process.platform === 'win32') {
         // Prevent errors on Windows like
-        // Error: No client entry found for D:/a/redwood/rsc-project/web/dist/server/assets/rsc0.js
+        // Error: No client entry found for D:/a/redwood/rsc-project/web/dist/ssr/assets/rsc0.js
         const entryFileSlash = entryFile.replaceAll('\\', '/')
         ssrEntries[entryFileSlash] = fileName
       } else {
@@ -87,7 +87,7 @@ export async function rscBuildEntriesMappings(
 
   await fs.appendFile(
     rwPaths.web.distRscEntries,
-    '// client component mapping (dist/rsc -> dist/client)\n' +
+    '// client component mapping (dist/rsc -> dist/browser)\n' +
       `export const clientEntries = ${JSON.stringify(clientEntries, undefined, 2)};\n\n`,
   )
   await fs.appendFile(

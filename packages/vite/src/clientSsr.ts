@@ -39,7 +39,7 @@ function resolveClientEntryForProd(
   filePath: string,
   clientEntries: Record<string, string>,
 ) {
-  const basePath = getPaths().web.distServer
+  const basePath = getPaths().web.distSsr
   const entriesFile = getPaths().web.distRscEntries
   const baseDir = path.dirname(entriesFile)
   const absoluteClientEntries = Object.fromEntries(
@@ -108,7 +108,7 @@ export async function renderRoutesFromDist<TProps extends Record<string, any>>(
         const id = resolveClientEntryForProd(filePath, clientEntries)
 
         console.log('clientSsr.ts::Proxy id', id)
-        // id /Users/tobbe/tmp/test-project-rsc-kitchen-sink/web/dist/client/assets/rsc-AboutCounter.tsx-1-4kTKU8GC.mjs
+        // id /Users/tobbe/tmp/test-project-rsc-kitchen-sink/web/dist/browser/assets/rsc-AboutCounter.tsx-1-4kTKU8GC.mjs
         return { id, chunks: [id], name, async: true }
       },
     },

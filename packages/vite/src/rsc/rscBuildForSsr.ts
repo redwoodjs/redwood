@@ -54,7 +54,7 @@ export async function rscBuildForSsr({
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often
       minify: false,
-      outDir: rwPaths.web.distServer,
+      outDir: rwPaths.web.distSsr,
       ssr: true,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
       rollupOptions: {
@@ -64,7 +64,7 @@ export async function rscBuildForSsr({
           // index.css bundle but we don't actually want this on an rsc page!
           // TODO (RSC): Look into if we can remove this (and perhaps instead
           // use entry.server)
-          'rwjs-client-entry': rwPaths.web.entryClient,
+          __rwjs__client_entry: rwPaths.web.entryClient,
           'entry.server': rwPaths.web.entryServer,
           // we need this, so that the output contains rsc-specific bundles
           // for the client-only components. They get loaded once the page is

@@ -13,7 +13,7 @@ import { getPaths } from '@redwoodjs/project-config'
 // streams - which was too difficult to resolve at that time.
 export function getRscStylesheetLinkGenerator(existingLinks?: string[]) {
   const clientBuildManifestPath = path.join(
-    getPaths().web.distClient,
+    getPaths().web.distBrowser,
     'client-build-manifest.json',
   )
   const clientBuildManifest = JSON.parse(

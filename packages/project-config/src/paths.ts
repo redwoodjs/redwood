@@ -48,12 +48,11 @@ export interface WebPaths {
   storybookPreviewConfig: string | null
   storybookManagerConfig: string
   dist: string
-  distClient: string
+  distBrowser: string
   distRsc: string
-  distServer: string
-  distEntryServer: string
-  distServerEntryServer: string
-  distDocumentServer: string
+  distSsr: string
+  distSsrDocument: string
+  distSsrEntryServer: string
   distRouteHooks: string
   distRscEntries: string
   routeManifest: string
@@ -127,16 +126,15 @@ const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
 const PATH_WEB_DIR_DIST = 'web/dist'
 
 // Used by Streaming & RSC builds to output to their individual folders
-const PATH_WEB_DIR_DIST_CLIENT = 'web/dist/client'
+const PATH_WEB_DIR_DIST_BROWSER = 'web/dist/browser'
 const PATH_WEB_DIR_DIST_RSC = 'web/dist/rsc'
-const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
+const PATH_WEB_DIR_DIST_SSR = 'web/dist/ssr'
 
-const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server.mjs'
-const PATH_WEB_DIR_DIST_DOCUMENT = 'web/dist/server/Document.mjs'
-
-const PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS = 'web/dist/server/routeHooks'
+const PATH_WEB_DIR_DIST_SSR_ENTRY_SERVER = 'web/dist/ssr/entry.server.mjs'
+const PATH_WEB_DIR_DIST_SSR_DOCUMENT = 'web/dist/ssr/Document.mjs'
+const PATH_WEB_DIR_DIST_SSR_ROUTEHOOKS = 'web/dist/ssr/routeHooks'
 const PATH_WEB_DIR_DIST_RSC_ENTRIES = 'web/dist/rsc/entries.mjs'
-const PATH_WEB_DIR_ROUTE_MANIFEST = 'web/dist/server/route-manifest.json'
+const PATH_WEB_DIR_ROUTE_MANIFEST = 'web/dist/ssr/route-manifest.json'
 
 /**
  * The Redwood config file is used as an anchor for the base directory of a project.
@@ -245,19 +243,15 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER,
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
-      distClient: path.join(BASE_DIR, PATH_WEB_DIR_DIST_CLIENT),
+      distBrowser: path.join(BASE_DIR, PATH_WEB_DIR_DIST_BROWSER),
       distRsc: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC),
-      distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
-      distEntryServer: path.join(
+      distSsr: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SSR),
+      distSsrDocument: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SSR_DOCUMENT),
+      distSsrEntryServer: path.join(
         BASE_DIR,
-        PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER,
+        PATH_WEB_DIR_DIST_SSR_ENTRY_SERVER,
       ),
-      distServerEntryServer: path.join(
-        BASE_DIR,
-        'web/dist/server/entry.server.mjs',
-      ),
-      distDocumentServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT),
-      distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
+      distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SSR_ROUTEHOOKS),
       distRscEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC_ENTRIES),
       routeManifest: path.join(BASE_DIR, PATH_WEB_DIR_ROUTE_MANIFEST),
       types: path.join(BASE_DIR, 'web/types'),

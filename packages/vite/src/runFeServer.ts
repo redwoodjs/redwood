@@ -73,21 +73,35 @@ export async function runFeServer() {
   ).default
 
   const clientBuildManifestUrl = url.pathToFileURL(
-    path.join(rwPaths.web.distClient, 'client-build-manifest.json'),
+    path.join(rwPaths.web.distBrowser, 'client-build-manifest.json'),
   ).href
   const clientBuildManifest: ViteBuildManifest = (
     await import(clientBuildManifestUrl, { with: { type: 'json' } })
   ).default
 
-  // @MARK: Surely there's a better way than this!
-  const clientEntry = Object.values(clientBuildManifest).find(
-    (manifestItem) => {
-      // For RSC builds, we pass in many Vite entries, so we need to find it differently.
-      return rscEnabled
-        ? manifestItem.file.includes('rwjs-client-entry-')
-        : manifestItem.isEntry
-    },
-  )
+  // Even though `entry.server.tsx` is the main entry point for SSR, we still
+  // need to read the client build manifest and find `entry.client.tsx` to get
+  // the correct links to insert for the initial CSS files that will eventually
+  // be rendered when the finalized html output is being streamed to the
+  // browser. We also need it to tell React what JS bundle contains
+  // `hydrateRoot` when it'll eventually get to hydrating things in the browser
+  //
+  // So, `clientEntry` is used to find the initial JS bundle to load in the
+  // browser and also to discover CSS files that will be needed to render the
+  // initial page.
+  //
+  // In addition to all the above the discovered CSS files are also passed to
+  // all middleware that have been registered
+  const clientEntry = rscEnabled
+    ? clientBuildManifest['entry.client.tsx'] ||
+      clientBuildManifest['entry.client.jsx']
+    : Object.values(clientBuildManifest).find(
+        (manifestItem) => manifestItem.isEntry,
+      )
+
+  if (!clientEntry) {
+    throw new Error('Could not find client entry in build manifest')
+  }
 
   // @MARK: In prod, we create it once up front!
   const middlewareRouter = await createMiddlewareRouter()
@@ -111,15 +125,11 @@ export async function runFeServer() {
     })
   }
 
-  if (!clientEntry) {
-    throw new Error('Could not find client entry in build manifest')
-  }
-
   // 1. Use static handler for assets
   // For CF workers, we'd need an equivalent of this
   app.use(
     '/assets',
-    express.static(rwPaths.web.distClient + '/assets', { index: false }),
+    express.static(rwPaths.web.distBrowser + '/assets', { index: false }),
   )
 
   app.use('*', (req, _res, next) => {
@@ -164,9 +174,7 @@ export async function runFeServer() {
   // otherwise it will catch all requests for static assets and return a 404.
   // Placing this here defines our precedence for static asset handling - that we favor
   // the static assets over any application routing.
-  app.use(express.static(rwPaths.web.distClient, { index: false }))
-
-  const clientEntryPath = '/' + clientEntry.file
+  app.use(express.static(rwPaths.web.distBrowser, { index: false }))
 
   const getStylesheetLinks = rscEnabled
     ? getRscStylesheetLinkGenerator(clientEntry.css)
@@ -174,7 +182,7 @@ export async function runFeServer() {
 
   const routeHandler = await createReactStreamingHandler({
     routes: Object.values(routeManifest),
-    clientEntryPath,
+    clientEntryPath: clientEntry.file,
     getStylesheetLinks,
     getMiddlewareRouter: async () => middlewareRouter,
   })

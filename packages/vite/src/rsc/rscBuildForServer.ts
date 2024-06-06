@@ -68,7 +68,7 @@ export async function rscBuildForServer(
       // The rscTransformUseClientPlugin maps paths like
       // /Users/tobbe/.../rw-app/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
       // to
-      // /Users/tobbe/.../rw-app/web/dist/server/assets/rsc0.js
+      // /Users/tobbe/.../rw-app/web/dist/ssr/assets/rsc0.js
       // That's why it needs the `clientEntryFiles` data
       // (It does other things as well, but that's why it needs clientEntryFiles)
       rscTransformUseClientPlugin(clientEntryFiles),

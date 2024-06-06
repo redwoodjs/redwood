@@ -56,16 +56,16 @@ export const createReactStreamingHandler = async (
   if (isProd) {
     if (rscEnabled) {
       entryServerImport = await import(
-        makeFilePath(rwPaths.web.distServerEntryServer)
+        makeFilePath(rwPaths.web.distSsrEntryServer)
       )
     } else {
       entryServerImport = await import(
-        makeFilePath(rwPaths.web.distEntryServer)
+        makeFilePath(rwPaths.web.distSsrEntryServer)
       )
     }
 
     fallbackDocumentImport = await import(
-      makeFilePath(rwPaths.web.distDocumentServer)
+      makeFilePath(rwPaths.web.distSsrDocument)
     )
   }
 
@@ -92,12 +92,18 @@ export const createReactStreamingHandler = async (
         route.pathDefinition,
         currentUrl.pathname,
       )
+
       if (match) {
         currentRoute = route
         parsedParams = rest
+
         break
       }
     }
+
+    // Using a function to get the CSS links because we need to wait for the
+    // vite dev server to analyze the module graph
+    const cssLinks = getStylesheetLinks(currentRoute)
 
     // ~~~ Middleware Handling ~~~
     if (middlewareRouter) {
@@ -107,7 +113,7 @@ export const createReactStreamingHandler = async (
         matchedMw?.handler as Middleware | undefined,
         {
           route: currentRoute,
-          cssPaths: getStylesheetLinks(currentRoute),
+          cssPaths: cssLinks,
           params: matchedMw?.params,
           viteDevServer,
         },
@@ -172,19 +178,14 @@ export const createReactStreamingHandler = async (
 
     metaTags = routeHookOutput.meta
 
-    // @MARK @TODO(RSC_DC): the entry path for RSC will be different,
-    // because we don't want to inject a full bundle, just a slice of it
-    // I'm not sure what though....
-    const jsBundles = [
-      clientEntryPath, // @NOTE: must have slash in front
-      currentRoute.bundle && '/' + currentRoute.bundle,
-    ].filter(Boolean) as string[]
+    // TODO (RSC): Do we really want to inject the full bundle here, or is
+    // there a smaller slice of it we can inject?
+    const jsBundles = ['/' + clientEntryPath]
+    if (currentRoute.bundle) {
+      jsBundles.push('/' + currentRoute.bundle)
+    }
 
     const isSeoCrawler = isbot(req.headers.get('user-agent') || '')
-
-    // Using a function to get the CSS links because we need to wait for the
-    // vite dev server to analyze the module graph
-    const cssLinks = getStylesheetLinks(currentRoute)
 
     const reactResponse = await reactRenderToStreamResponse(
       mwResponse,
