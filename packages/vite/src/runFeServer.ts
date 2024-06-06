@@ -79,14 +79,14 @@ export async function runFeServer() {
     await import(clientBuildManifestUrl, { with: { type: 'json' } })
   ).default
 
-  // Even though entry.server.tsx is the main entry point for SSR, we still
-  // need to read the client build manifest and find entry.client.tsx to get
+  // Even though `entry.server.tsx` is the main entry point for SSR, we still
+  // need to read the client build manifest and find `entry.client.tsx` to get
   // the correct links to insert for the initial CSS files that will eventually
   // be rendered when the finalized html output is being streamed to the
-  // browser. We also need it to tell React what JS bundle contains hydrateRoot
-  // when it'll eventually get to hydrating things in the browser
+  // browser. We also need it to tell React what JS bundle contains
+  // `hydrateRoot` when it'll eventually get to hydrating things in the browser
   //
-  // So, clientEntry is used to find the initial JS bundle to load in the
+  // So, `clientEntry` is used to find the initial JS bundle to load in the
   // browser and also to discover CSS files that will be needed to render the
   // initial page.
   //
