@@ -87,7 +87,7 @@ export async function rscBuildEntriesMappings(
 
   await fs.appendFile(
     rwPaths.web.distRscEntries,
-    '// client component mapping (dist/rsc -> dist/client)\n' +
+    '// client component mapping (dist/rsc -> dist/browser)\n' +
       `export const clientEntries = ${JSON.stringify(clientEntries, undefined, 2)};\n\n`,
   )
   await fs.appendFile(

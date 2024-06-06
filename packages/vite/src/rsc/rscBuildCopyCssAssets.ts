@@ -30,7 +30,7 @@ export function rscBuildCopyCssAssets(
       .map((cssAsset) => {
         return fs.copyFile(
           path.join(rwPaths.web.distRsc, cssAsset.fileName),
-          path.join(rwPaths.web.distClient, cssAsset.fileName),
+          path.join(rwPaths.web.distBrowser, cssAsset.fileName),
         )
       }),
   )
