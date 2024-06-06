@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { db } from 'api/src/lib/db'
 
 // Manually apply seeds via the `yarn rw prisma db seed` command.
@@ -11,6 +12,7 @@ export default async () => {
   try {
     const data = []
 
+    // eslint-disable-next-line no-unused-vars
     for (const item of data) {
       // Create a database record for each item in `data`
       // Example: `await db.product.create({ data: item })`
