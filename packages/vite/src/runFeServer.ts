@@ -79,15 +79,19 @@ export async function runFeServer() {
     await import(clientBuildManifestUrl, { with: { type: 'json' } })
   ).default
 
-  // @MARK: Surely there's a better way than this!
-  const clientEntry = Object.values(clientBuildManifest).find(
-    (manifestItem) => {
-      // For RSC builds, we pass in many Vite entries, so we need to find it differently.
-      return rscEnabled
-        ? manifestItem.file.includes('rwjs-client-entry-')
-        : manifestItem.isEntry
-    },
-  )
+  // clientEntry is used to find the initial JS bundle to send to the client
+  // and also to discover CSS files that will be passed to all middleware and
+  // also used for the initial render of the current page
+  const clientEntry = rscEnabled
+    ? clientBuildManifest['entry.client.tsx'] ||
+      clientBuildManifest['entry.client.jsx']
+    : Object.values(clientBuildManifest).find(
+        (manifestItem) => manifestItem.isEntry,
+      )
+
+  if (!clientEntry) {
+    throw new Error('Could not find client entry in build manifest')
+  }
 
   // @MARK: In prod, we create it once up front!
   const middlewareRouter = await createMiddlewareRouter()
@@ -109,10 +113,6 @@ export async function runFeServer() {
 
       return mwRes.toResponse()
     })
-  }
-
-  if (!clientEntry) {
-    throw new Error('Could not find client entry in build manifest')
   }
 
   // 1. Use static handler for assets
@@ -166,15 +166,13 @@ export async function runFeServer() {
   // the static assets over any application routing.
   app.use(express.static(rwPaths.web.distClient, { index: false }))
 
-  const clientEntryPath = '/' + clientEntry.file
-
   const getStylesheetLinks = rscEnabled
     ? getRscStylesheetLinkGenerator(clientEntry.css)
     : () => clientEntry.css || []
 
   const routeHandler = await createReactStreamingHandler({
     routes: Object.values(routeManifest),
-    clientEntryPath,
+    clientEntryPath: clientEntry.file,
     getStylesheetLinks,
     getMiddlewareRouter: async () => middlewareRouter,
   })
