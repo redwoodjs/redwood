@@ -10,13 +10,14 @@ import { db } from 'api/src/lib/db'
 
 export default async () => {
   try {
-    const data = []
-
-    // eslint-disable-next-line no-unused-vars
-    for (const item of data) {
-      // Create a database record for each item in `data`
-      // Example: `await db.product.create({ data: item })`
-    }
+    // Create your database records here! For example, seed some users:
+    //
+    // const users = [
+    //   { name: 'Alice', email: 'alice@redwoodjs.com },
+    //   { name: 'Bob', email: 'bob@redwoodjs.com },
+    // ]
+    //
+    // await db.user.createMany({ data: users })
 
     console.info(
       '\n  No seed data, skipping. See scripts/seed.ts to start seeding your database!\n'
