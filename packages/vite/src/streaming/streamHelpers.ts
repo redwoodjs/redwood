@@ -262,6 +262,7 @@ export async function reactRenderToStreamResponse(
     clearTimeout(timeoutHandle)
   }
 }
+
 function applyStreamTransforms(
   reactStream: ReactDOMServerReadableStream,
   transformsToApply: (TransformStream | false)[],
