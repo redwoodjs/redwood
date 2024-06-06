@@ -51,7 +51,6 @@ export interface WebPaths {
   distClient: string
   distRsc: string
   distSsr: string
-  distEntryServer: string
   distSsrDocument: string
   distSsrEntryServer: string
   distRouteHooks: string
@@ -247,9 +246,11 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       distClient: path.join(BASE_DIR, PATH_WEB_DIR_DIST_CLIENT),
       distRsc: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC),
       distSsr: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SSR),
-      distEntryServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SSR_ENTRY_SERVER),
       distSsrDocument: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SSR_DOCUMENT),
-      distSsrEntryServer: path.join(BASE_DIR, 'web/dist/ssr/entry.server.mjs'),
+      distSsrEntryServer: path.join(
+        BASE_DIR,
+        PATH_WEB_DIR_DIST_SSR_ENTRY_SERVER,
+      ),
       distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SSR_ROUTEHOOKS),
       distRscEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC_ENTRIES),
       routeManifest: path.join(BASE_DIR, PATH_WEB_DIR_ROUTE_MANIFEST),

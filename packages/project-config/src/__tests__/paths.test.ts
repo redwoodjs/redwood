@@ -142,13 +142,6 @@ describe('paths', () => {
             'storybook.manager.js',
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distEntryServer: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'entry.server.mjs',
-          ),
           distSsrEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -426,12 +419,12 @@ describe('paths', () => {
             'storybook.manager.js',
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distEntryServer: path.join(
+          distSsrDocument: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'ssr',
-            'entry.server.mjs',
+            'Document.mjs',
           ),
           distSsrEntryServer: path.join(
             FIXTURE_BASEDIR,
@@ -439,13 +432,6 @@ describe('paths', () => {
             'dist',
             'ssr',
             'entry.server.mjs',
-          ),
-          distSsrDocument: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'Document.mjs',
           ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
@@ -758,20 +744,6 @@ describe('paths', () => {
           entryClient: null,
           entryServer: null,
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distEntryServer: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'entry.server.mjs',
-          ),
-          distSsrEntryServer: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'entry.server.mjs',
-          ),
           distSsrDocument: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -779,6 +751,13 @@ describe('paths', () => {
             'ssr',
             'Document.mjs',
           ), // this is constructed regardless of presence of src/Document
+          distSsrEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'ssr',
+            'entry.server.mjs',
+          ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -1043,13 +1022,6 @@ describe('paths', () => {
             'storybook.manager.js',
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distEntryServer: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'entry.server.mjs',
-          ),
           distSsrEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',

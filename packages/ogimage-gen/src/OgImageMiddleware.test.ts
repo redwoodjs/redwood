@@ -171,7 +171,7 @@ describe('OgImageMiddleware', () => {
     }
 
     const expectedFilePath =
-      '/redwood-app/web/dist/server/ogImage/pages/Contact/ContactPage/ContactPage.og.mjs'
+      '/redwood-app/web/dist/ssr/ogImage/pages/Contact/ContactPage/ContactPage.og.mjs'
 
     const tsxResult = middleware.getOgComponentPath(tsxRoute)
     const jsxResult = middleware.getOgComponentPath(jsxRoute)
@@ -227,7 +227,7 @@ describe('OgImageMiddleware', () => {
     // The memfs mocks don't seem to work for this file
 
     vi.mock(
-      '/redwood-app/web/dist/server/ogImage/pages/Contact/ContactPage/ContactPage.og.mjs',
+      '/redwood-app/web/dist/ssr/ogImage/pages/Contact/ContactPage/ContactPage.og.mjs',
       () => ({
         data: () => 'mocked data function',
         output: () => 'Mocked component render',
@@ -262,7 +262,7 @@ describe('OgImageMiddleware', () => {
 
     // The memfs mocks don't seem to work for this file
     vi.mock(
-      '/redwood-app/web/dist/server/ogImage/pages/HomePage/HomePage.og.mjs',
+      '/redwood-app/web/dist/ssr/ogImage/pages/HomePage/HomePage.og.mjs',
       () => ({
         data: () => 'mocked data function',
         output: () => 'Mocked component render',
@@ -289,7 +289,7 @@ describe('OgImageMiddleware', () => {
 
     // The memfs mocks don't seem to work for this file
     vi.mock(
-      '/redwood-app/web/dist/server/ogImage/pages/HomePage/HomePage.og.mjs',
+      '/redwood-app/web/dist/ssr/ogImage/pages/HomePage/HomePage.og.mjs',
       () => ({
         data: () => 'mocked data function',
         output: () => 'Mocked component render',
@@ -314,7 +314,7 @@ describe('OgImageMiddleware', () => {
     // The memfs mocks don't seem to work for this file
 
     vi.mock(
-      '/redwood-app/web/dist/server/ogImage/pages/Contact/ContactPage/ContactPage.og.mjs',
+      '/redwood-app/web/dist/ssr/ogImage/pages/Contact/ContactPage/ContactPage.og.mjs',
       () => ({
         data: () => 'mocked data function',
         output: () => 'Mocked component render',
