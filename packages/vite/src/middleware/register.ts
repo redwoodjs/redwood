@@ -2,7 +2,7 @@ import fmw from 'find-my-way'
 import type Router from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 
-import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { getPaths } from '@redwoodjs/project-config'
 
 import type { EntryServer } from '../types'
 import { makeFilePath, ssrLoadEntryServer } from '../utils'
@@ -21,13 +21,13 @@ type GroupedMw = Record<string, Middleware[]>
 const validateMw = (mw: MiddlewareClass | Middleware): Middleware => {
   if (typeof mw === 'function') {
     return mw
-  }
-  if (typeof mw === 'object' && typeof mw.invoke === 'function') {
+  } else if (typeof mw === 'object' && typeof mw.invoke === 'function') {
     return mw.invoke.bind(mw)
   } else {
     console.error('Received as middleware: ', mw)
     throw new Error(
-      'Please check the return on registerMiddleware. Must be a Middleware function, Class or tuple of [Middleware, string]',
+      'Please check the return on registerMiddleware. Must be a Middleware ' +
+        'function, Class or tuple of [Middleware, string]',
     )
   }
 }
@@ -104,28 +104,13 @@ export const createMiddlewareRouter = async (
   vite?: ViteDevServer,
 ): Promise<Router.Instance<any>> => {
   const rwPaths = getPaths()
-  const rwConfig = getConfig()
-  const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
-  let entryServerImport: EntryServer
-
-  if (vite) {
-    entryServerImport = await ssrLoadEntryServer(vite)
-  } else {
-    // This imports from dist!
-
-    if (rscEnabled) {
-      entryServerImport = await import(
-        makeFilePath(rwPaths.web.distSsrEntryServer)
-      )
-    } else {
-      entryServerImport = await import(
-        makeFilePath(rwPaths.web.distSsrEntryServer)
-      )
-    }
-  }
+  const entryServerImport: EntryServer = vite
+    ? await ssrLoadEntryServer(vite)
+    : await import(makeFilePath(rwPaths.web.distSsrEntryServer))
 
   const { registerMiddleware } = entryServerImport
+
   if (!registerMiddleware) {
     // Empty router
     return fmw()
