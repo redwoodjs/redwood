@@ -115,9 +115,8 @@ export function getMergedConfig(rwConfig: Config, rwPaths: Paths) {
         minify: false,
         // NOTE this gets overridden when build gets called anyway!
         outDir:
-          // @MARK: For RSC and Streaming, we build to dist/client directory
           streamingSsrEnabled || rscEnabled
-            ? rwPaths.web.distClient
+            ? rwPaths.web.distBrowser
             : rwPaths.web.dist,
         emptyOutDir: true,
         manifest: !env.isSsrBuild ? 'client-build-manifest.json' : undefined,

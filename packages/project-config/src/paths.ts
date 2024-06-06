@@ -48,7 +48,7 @@ export interface WebPaths {
   storybookPreviewConfig: string | null
   storybookManagerConfig: string
   dist: string
-  distClient: string
+  distBrowser: string
   distRsc: string
   distSsr: string
   distSsrDocument: string
@@ -126,7 +126,7 @@ const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
 const PATH_WEB_DIR_DIST = 'web/dist'
 
 // Used by Streaming & RSC builds to output to their individual folders
-const PATH_WEB_DIR_DIST_CLIENT = 'web/dist/client'
+const PATH_WEB_DIR_DIST_BROWSER = 'web/dist/browser'
 const PATH_WEB_DIR_DIST_RSC = 'web/dist/rsc'
 const PATH_WEB_DIR_DIST_SSR = 'web/dist/ssr'
 
@@ -243,7 +243,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER,
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
-      distClient: path.join(BASE_DIR, PATH_WEB_DIR_DIST_CLIENT),
+      distBrowser: path.join(BASE_DIR, PATH_WEB_DIR_DIST_BROWSER),
       distRsc: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC),
       distSsr: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SSR),
       distSsrDocument: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SSR_DOCUMENT),

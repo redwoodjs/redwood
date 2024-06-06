@@ -17,7 +17,7 @@ export async function buildRouteManifest() {
   const rwPaths = getPaths()
 
   const buildManifestUrl = url.pathToFileURL(
-    path.join(getPaths().web.distClient, 'client-build-manifest.json'),
+    path.join(getPaths().web.distBrowser, 'client-build-manifest.json'),
   ).href
   const clientBuildManifest: ViteBuildManifest = (
     await import(buildManifestUrl, { with: { type: 'json' } })

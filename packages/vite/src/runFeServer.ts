@@ -73,7 +73,7 @@ export async function runFeServer() {
   ).default
 
   const clientBuildManifestUrl = url.pathToFileURL(
-    path.join(rwPaths.web.distClient, 'client-build-manifest.json'),
+    path.join(rwPaths.web.distBrowser, 'client-build-manifest.json'),
   ).href
   const clientBuildManifest: ViteBuildManifest = (
     await import(clientBuildManifestUrl, { with: { type: 'json' } })
@@ -129,7 +129,7 @@ export async function runFeServer() {
   // For CF workers, we'd need an equivalent of this
   app.use(
     '/assets',
-    express.static(rwPaths.web.distClient + '/assets', { index: false }),
+    express.static(rwPaths.web.distBrowser + '/assets', { index: false }),
   )
 
   app.use('*', (req, _res, next) => {
@@ -174,7 +174,7 @@ export async function runFeServer() {
   // otherwise it will catch all requests for static assets and return a 404.
   // Placing this here defines our precedence for static asset handling - that we favor
   // the static assets over any application routing.
-  app.use(express.static(rwPaths.web.distClient, { index: false }))
+  app.use(express.static(rwPaths.web.distBrowser, { index: false }))
 
   const getStylesheetLinks = rscEnabled
     ? getRscStylesheetLinkGenerator(clientEntry.css)
