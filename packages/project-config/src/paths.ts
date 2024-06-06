@@ -50,7 +50,7 @@ export interface WebPaths {
   dist: string
   distClient: string
   distRsc: string
-  distServer: string
+  distSsr: string
   distEntryServer: string
   distServerEntryServer: string
   distDocumentServer: string
@@ -247,7 +247,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
       distClient: path.join(BASE_DIR, PATH_WEB_DIR_DIST_CLIENT),
       distRsc: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC),
-      distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
+      distSsr: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
       distEntryServer: path.join(
         BASE_DIR,
         PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER,

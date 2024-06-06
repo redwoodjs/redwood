@@ -39,7 +39,7 @@ function resolveClientEntryForProd(
   filePath: string,
   clientEntries: Record<string, string>,
 ) {
-  const basePath = getPaths().web.distServer
+  const basePath = getPaths().web.distSsr
   const entriesFile = getPaths().web.distRscEntries
   const baseDir = path.dirname(entriesFile)
   const absoluteClientEntries = Object.fromEntries(

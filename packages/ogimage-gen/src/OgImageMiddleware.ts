@@ -233,7 +233,7 @@ export default class OgImageMiddleware {
       )
     } else {
       return `${path.join(
-        getPaths().web.distServer,
+        getPaths().web.distSsr,
         'ogImage',
         currentRoute.relativeFilePath.replace(/\.([jt]sx)/, ''),
       )}.og.mjs` // @MARK: Hardcoded mjs!

@@ -54,7 +54,7 @@ export async function rscBuildForSsr({
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often
       minify: false,
-      outDir: rwPaths.web.distServer,
+      outDir: rwPaths.web.distSsr,
       ssr: true,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
       rollupOptions: {
