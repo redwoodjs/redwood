@@ -149,7 +149,7 @@ describe('paths', () => {
             'ssr',
             'entry.server.mjs',
           ),
-          distServerEntryServer: path.join(
+          distSsrEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
@@ -166,7 +166,7 @@ describe('paths', () => {
           distClient: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'client'),
           distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
           distSsr: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'ssr'),
-          distDocumentServer: path.join(
+          distSsrDocument: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
@@ -433,14 +433,14 @@ describe('paths', () => {
             'ssr',
             'entry.server.mjs',
           ),
-          distServerEntryServer: path.join(
+          distSsrEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'ssr',
             'entry.server.mjs',
           ),
-          distDocumentServer: path.join(
+          distSsrDocument: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
@@ -765,14 +765,14 @@ describe('paths', () => {
             'ssr',
             'entry.server.mjs',
           ),
-          distServerEntryServer: path.join(
+          distSsrEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'ssr',
             'entry.server.mjs',
           ),
-          distDocumentServer: path.join(
+          distSsrDocument: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
@@ -1050,14 +1050,14 @@ describe('paths', () => {
             'ssr',
             'entry.server.mjs',
           ),
-          distServerEntryServer: path.join(
+          distSsrEntryServer: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
             'ssr',
             'entry.server.mjs',
           ),
-          distDocumentServer: path.join(
+          distSsrDocument: path.join(
             FIXTURE_BASEDIR,
             'web',
             'dist',
