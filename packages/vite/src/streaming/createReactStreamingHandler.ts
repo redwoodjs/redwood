@@ -65,7 +65,7 @@ export const createReactStreamingHandler = async (
     }
 
     fallbackDocumentImport = await import(
-      makeFilePath(rwPaths.web.distDocumentServer)
+      makeFilePath(rwPaths.web.distSsrDocument)
     )
   }
 
