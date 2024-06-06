@@ -156,7 +156,7 @@ see whether those records already exist in the database. If they do, create two
 arrays: one for records that don't exist and run `createMany()` with them, and
 the second list for records that do exist, and run `updateMany()` on those.
 
-Unfortunately this relies a ton of select queries, which may negate the
+Unfortunately this relies on a ton of select queries, which may negate the
 performance benefits of `createMany()`.
 
 ## What if I don't need seeds?
