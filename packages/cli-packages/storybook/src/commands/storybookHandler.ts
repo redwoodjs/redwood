@@ -21,7 +21,7 @@ export async function handler({
   port,
   smokeTest,
 }: StorybookYargsOptions) {
-  // Notice to vite users to try `yarn rw storybook-vite` or `yarn rw sbv`. This will eventually be the default
+  // Notice to vite users to try `yarn rw storybook-vite`. This will eventually be the default
   // once we have removed webpack. Until then we give a small nudge to vite users to try it out.
   if (getConfig().web.bundler === BundlerEnum.VITE) {
     console.log(
