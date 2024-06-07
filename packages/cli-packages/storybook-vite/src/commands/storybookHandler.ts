@@ -34,6 +34,12 @@ export async function handler({
   port,
   smokeTest,
 }: StorybookYargsOptions) {
+  console.log(
+    c.bold(
+      `\nPlease find documentation and links to provide feedback for this new command at:\n -> https://community.redwoodjs.com/t/7212\n\n`,
+    ),
+  )
+
   // We add a stub file to type generation because users don't have Storybook
   // installed when they first start a project. We need to remove the file once
   // they install Storybook so that the real types come through.
