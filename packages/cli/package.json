@@ -74,7 +74,7 @@
     "prompts": "2.4.2",
     "rimraf": "5.0.7",
     "semver": "7.6.2",
-    "smol-toml": "^1.2.1",
+    "smol-toml": "1.2.1",
     "string-env-interpolation": "1.0.1",
     "systeminformation": "5.22.9",
     "terminal-link": "2.1.1",
