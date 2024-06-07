@@ -26,7 +26,7 @@ export async function handler({
   if (getConfig().web.bundler === BundlerEnum.VITE) {
     console.log(
       c.bold(
-        `\nIt looks like you'ure using vite, please try:\n\n  yarn rw storybook-vite\n\nThis will run storybook using vite which should be a much nicer experience for you.\nYou can find out more at: https://community.redwoodjs.com/t/7212\n\n`,
+        `\nIt looks like you're using vite, please try:\n\n  yarn rw storybook-vite\n\nThis will run storybook using vite which should be a much nicer experience for you.\nYou can find out more at: https://community.redwoodjs.com/t/7212\n\n`,
       ),
     )
   }
