@@ -44,29 +44,30 @@ async function parsePackageJsonFiles(packageJsonFilePaths: string[]) {
 }
 
 async function downgradeReactVersion(packageJsonArray: PackageJson[]) {
+  const targetReactVersion = "18.3.1"
   for (const packageJson of packageJsonArray) {
     if (packageJson.dependencies?.react?.startsWith('19.')) {
-      packageJson.dependencies.react = '18.2.0'
+      packageJson.dependencies.react = targetReactVersion
     }
 
     if (packageJson.devDependencies?.react?.startsWith('19.')) {
-      packageJson.devDependencies.react = '18.2.0'
+      packageJson.devDependencies.react = targetReactVersion
     }
 
     if (packageJson.peerDependencies?.react?.startsWith('19.')) {
-      packageJson.peerDependencies.react = '18.2.0'
+      packageJson.peerDependencies.react = targetReactVersion
     }
 
     if (packageJson.dependencies?.['react-dom']?.startsWith('19.')) {
-      packageJson.dependencies['react-dom'] = '18.2.0'
+      packageJson.dependencies['react-dom'] = targetReactVersion
     }
 
     if (packageJson.devDependencies?.['react-dom']?.startsWith('19.')) {
-      packageJson.devDependencies['react-dom'] = '18.2.0'
+      packageJson.devDependencies['react-dom'] = targetReactVersion
     }
 
     if (packageJson.peerDependencies?.['react-dom']?.startsWith('19.')) {
-      packageJson.peerDependencies['react-dom'] = '18.2.0'
+      packageJson.peerDependencies['react-dom'] = targetReactVersion
     }
   }
 }

@@ -111,6 +111,9 @@ export async function rscBuildForSsr({
     },
     esbuild: {
       logLevel: verbose ? 'debug' : 'silent',
+      logOverride: {
+        'unsupported-dynamic-import': 'silent',
+      },
     },
     logLevel: verbose ? 'info' : 'silent',
   })
