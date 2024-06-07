@@ -1,3 +1,5 @@
+import React from 'react'
+
 type PropsInfallibleErrorBoundary = Partial<{
   children: React.ReactNode
 }>

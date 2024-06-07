@@ -1,6 +1,6 @@
 /// <reference types="react/experimental" />
 
-import { Suspense } from 'react'
+import React, { Suspense } from 'react'
 
 // Class components are not supported on the server
 // https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#when-to-use-server-and-client-components
