@@ -50,6 +50,31 @@ database is created with the first `prisma migrate dev` execution.
 Unless you reset your database often, they'll never run again, which is why you
 may need to manually run them from time to time as you add data.
 
+## Types
+
+If you're using Typescript you'll probably want to type your seeds as well.
+Getting the right types for Prisma models is tricky, but here's the trick!
+
+```typescript title="scripts/seed.{jt}s
+import { db } from 'api/src/lib/db'
+// highlight-next-line
+import type { Prisma } from '@prisma/client'
+
+export default async () => {
+  try {
+    // highlight-next-line
+    const users: Prisma.UserExampleCreateArgs['data'][] = [
+      { name: 'Alice', email: 'alice@redwoodjs.com },
+      { name: 'Bob', email: 'bob@redwoodjs.com },
+    ]
+
+    await db.user.createMany({ data: users })
+  } catch (error) {
+    console.error(error)
+  }`
+}
+```
+
 ## Creating seed data
 
 Take a look at `scripts/seed.js` (or `.ts` depending on whether you're working
