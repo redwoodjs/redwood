@@ -20,7 +20,7 @@ export default async () => {
     // await db.user.createMany({ data: users })
 
     console.info(
-      '\n  No seed data, skipping. See scripts/seed.ts to start seeding your database!\n'
+      '\n  No seed data, skipping. See scripts/seed.js to start seeding your database!\n'
     )
   } catch (error) {
     console.error(error)
