@@ -27,9 +27,9 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@iarna/toml": "2.2.5",
     "deepmerge": "4.3.1",
     "fast-glob": "3.3.2",
+    "smol-toml": "^1.2.1",
     "string-env-interpolation": "1.0.1"
   },
   "devDependencies": {

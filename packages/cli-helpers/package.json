@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@babel/core": "^7.22.20",
-    "@iarna/toml": "2.2.5",
     "@opentelemetry/api": "1.8.0",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/telemetry": "workspace:*",
@@ -40,6 +39,7 @@
     "pascalcase": "1.0.0",
     "prettier": "3.2.5",
     "prompts": "2.4.2",
+    "smol-toml": "^1.2.1",
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
