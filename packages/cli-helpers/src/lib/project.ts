@@ -1,9 +1,8 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 
-import type { JsonMap } from '@iarna/toml'
-import toml from '@iarna/toml'
 import dotenv from 'dotenv'
+import toml from 'smol-toml'
 
 import type { Config } from '@redwoodjs/project-config'
 import {
@@ -55,7 +54,7 @@ export const updateTomlConfig = (packageName: string) => {
   const redwoodTomlPath = getConfigPath()
   const originalTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
 
-  let tomlToAppend = {} as JsonMap
+  let tomlToAppend: Record<string, toml.TomlPrimitive> = {}
 
   const config = getConfig(redwoodTomlPath)
 
@@ -94,7 +93,12 @@ export const updateTomlConfig = (packageName: string) => {
     }
   }
 
-  const newConfig = originalTomlContent + '\n' + toml.stringify(tomlToAppend)
+  const newConfig =
+    originalTomlContent +
+    '\n' +
+    (Object.keys(tomlToAppend).length > 0
+      ? toml.stringify(tomlToAppend) + '\n'
+      : '')
 
   return fs.writeFileSync(redwoodTomlPath, newConfig, 'utf-8')
 }
@@ -207,11 +211,13 @@ export function setTomlSetting(
   const redwoodTomlPath = getConfigPath()
   const originalTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
 
-  // Can't type toml.parse because this PR has not been included in a released yet
-  // https://github.com/iarna/iarna-toml/commit/5a89e6e65281e4544e23d3dbaf9e8428ed8140e9
-  const redwoodTomlObject = toml.parse(originalTomlContent) as any
+  const redwoodTomlObject = toml.parse(originalTomlContent)
+  const sectionValue = redwoodTomlObject[section]
 
-  const existingValue = redwoodTomlObject?.[section]?.[setting]
+  const existingValue =
+    // I don't like this type cast, but I couldn't come up with a much better
+    // solution
+    (sectionValue as Record<string, toml.TomlPrimitive> | undefined)?.[setting]
 
   // If the setting already exists in the given section, and has the given
   // value already, just return

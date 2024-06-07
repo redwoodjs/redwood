@@ -4894,13 +4894,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iarna/toml@npm:2.2.5":
-  version: 2.2.5
-  resolution: "@iarna/toml@npm:2.2.5"
-  checksum: 10c0/d095381ad4554aca233b7cf5a91f243ef619e5e15efd3157bc640feac320545450d14b394aebbf6f02a2047437ced778ae598d5879a995441ab7b6c0b2c2f201
-  languageName: node
-  linkType: hard
-
 "@ioredis/commands@npm:^1.1.1":
   version: 1.2.0
   resolution: "@ioredis/commands@npm:1.2.0"
@@ -7931,7 +7924,6 @@ __metadata:
   resolution: "@redwoodjs/cli-helpers@workspace:packages/cli-helpers"
   dependencies:
     "@babel/core": "npm:^7.22.20"
-    "@iarna/toml": "npm:2.2.5"
     "@opentelemetry/api": "npm:1.8.0"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/telemetry": "workspace:*"
@@ -7946,6 +7938,7 @@ __metadata:
     pascalcase: "npm:1.0.0"
     prettier: "npm:3.2.5"
     prompts: "npm:2.4.2"
+    smol-toml: "npm:1.2.1"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.10.3"
     typescript: "npm:5.4.5"
@@ -8003,7 +7996,6 @@ __metadata:
     "@babel/cli": "npm:7.24.5"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.5"
-    "@iarna/toml": "npm:2.2.5"
     "@opentelemetry/api": "npm:1.8.0"
     "@opentelemetry/core": "npm:1.22.0"
     "@opentelemetry/exporter-trace-otlp-http": "npm:0.49.1"
@@ -8052,6 +8044,7 @@ __metadata:
     prompts: "npm:2.4.2"
     rimraf: "npm:5.0.7"
     semver: "npm:7.6.2"
+    smol-toml: "npm:1.2.1"
     string-env-interpolation: "npm:1.0.1"
     systeminformation: "npm:5.22.9"
     terminal-link: "npm:2.1.1"
@@ -8078,7 +8071,6 @@ __metadata:
     "@babel/plugin-transform-typescript": "npm:^7.22.15"
     "@babel/runtime-corejs3": "npm:7.24.5"
     "@babel/traverse": "npm:^7.22.20"
-    "@iarna/toml": "npm:2.2.5"
     "@redwoodjs/project-config": "workspace:*"
     "@svgr/core": "npm:8.1.0"
     "@svgr/plugin-jsx": "npm:8.1.0"
@@ -8518,11 +8510,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/project-config@workspace:packages/project-config"
   dependencies:
-    "@iarna/toml": "npm:2.2.5"
     "@redwoodjs/framework-tools": "workspace:*"
     deepmerge: "npm:4.3.1"
     fast-glob: "npm:3.3.2"
     rimraf: "npm:5.0.7"
+    smol-toml: "npm:1.2.1"
     string-env-interpolation: "npm:1.0.1"
     tsx: "npm:4.10.3"
     typescript: "npm:5.4.5"
@@ -8607,7 +8599,6 @@ __metadata:
     "@babel/cli": "npm:7.24.5"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.5"
-    "@iarna/toml": "npm:2.2.5"
     "@prisma/internals": "npm:5.14.0"
     "@redwoodjs/project-config": "workspace:*"
     "@types/fs-extra": "npm:11.0.4"
@@ -8629,6 +8620,7 @@ __metadata:
     lodash-decorators: "npm:6.0.1"
     lru-cache: "npm:10.2.2"
     proxyquire: "npm:2.1.3"
+    smol-toml: "npm:1.2.1"
     ts-morph: "npm:15.1.0"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
@@ -28741,6 +28733,13 @@ __metadata:
   version: 4.2.0
   resolution: "smart-buffer@npm:4.2.0"
   checksum: 10c0/a16775323e1404dd43fabafe7460be13a471e021637bc7889468eb45ce6a6b207261f454e4e530a19500cc962c4cc5348583520843b363f4193cee5c00e1e539
+  languageName: node
+  linkType: hard
+
+"smol-toml@npm:1.2.1":
+  version: 1.2.1
+  resolution: "smol-toml@npm:1.2.1"
+  checksum: 10c0/ef713022d327493b6680ba51b9651abbb9c5abf2199e03faaa98ea49ad96ab9336bb4edafa6c70bdb2f1399f709f92a576b026e75cfd32066f3ec1c6fea797fb
   languageName: node
   linkType: hard
 
