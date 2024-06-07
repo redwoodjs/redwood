@@ -225,8 +225,6 @@ async function main() {
   // If there's no branch, we're not in a pull request.
   if (!branch) {
     core.setOutput('code', true)
-    core.setOutput('rsc', false)
-    core.setOutput('ssr', false)
     return
   }
 
@@ -270,22 +268,16 @@ async function main() {
         'to running all tests.',
     )
     core.setOutput('code', true)
-    core.setOutput('rsc', true)
-    core.setOutput('ssr', true)
     return
   }
 
   if (!codeChanges(changedFiles)) {
     console.log('Only docs and/or changesets changes detected')
     core.setOutput('code', false)
-    core.setOutput('rsc', false)
-    core.setOutput('ssr', false)
     return
   }
 
   core.setOutput('code', true)
-  core.setOutput('rsc', rscChanged(changedFiles))
-  core.setOutput('ssr', ssrChanged(changedFiles))
 }
 
 main()
