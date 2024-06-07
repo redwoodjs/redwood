@@ -7384,7 +7384,7 @@ __metadata:
     "@redwoodjs/auth": "npm:7.6.3"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.37.1"
-    react: "npm:18.2.0"
+    react: "npm:18.3.1"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
@@ -7437,7 +7437,7 @@ __metadata:
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.37.1"
-    react: "npm:18.2.0"
+    react: "npm:18.3.1"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
@@ -7487,7 +7487,7 @@ __metadata:
     "@redwoodjs/auth": "npm:7.6.3"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.37.1"
-    react: "npm:18.2.0"
+    react: "npm:18.3.1"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
@@ -7563,7 +7563,7 @@ __metadata:
     core-js: "npm:3.37.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:18.2.0"
+    react: "npm:18.3.1"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -7612,7 +7612,7 @@ __metadata:
     firebase: "npm:10.12.0"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:18.2.0"
+    react: "npm:18.3.1"
     typescript: "npm:5.4.5"
   peerDependencies:
     firebase: 10.12.0
@@ -7662,7 +7662,7 @@ __metadata:
     "@types/netlify-identity-widget": "npm:1.9.6"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.37.1"
-    react: "npm:18.2.0"
+    react: "npm:18.3.1"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
@@ -7712,7 +7712,7 @@ __metadata:
     "@supabase/supabase-js": "npm:2.43.2"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.37.1"
-    react: "npm:18.2.0"
+    react: "npm:18.3.1"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
@@ -7765,7 +7765,7 @@ __metadata:
     "@redwoodjs/auth": "npm:7.6.3"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.37.1"
-    react: "npm:18.2.0"
+    react: "npm:18.3.1"
     supertokens-auth-react: "npm:0.39.1"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
@@ -7783,7 +7783,7 @@ __metadata:
     "@testing-library/react": "npm:14.3.1"
     core-js: "npm:3.37.1"
     msw: "npm:1.3.3"
-    react: "npm:18.2.0"
+    react: "npm:18.3.1"
     tsx: "npm:4.10.3"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
@@ -8182,13 +8182,13 @@ __metadata:
     graphql: "npm:16.8.1"
     nodemon: "npm:3.1.0"
     pascalcase: "npm:1.0.0"
-    react: "npm:18.2.0"
-    react-dom: "npm:18.2.0"
+    react: "npm:18.3.1"
+    react-dom: "npm:18.3.1"
     react-hook-form: "npm:7.51.4"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
-    react: 18.2.0
+    react: 18.3.1
   languageName: unknown
   linkType: soft
 
@@ -8411,8 +8411,8 @@ __metadata:
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
-    react: 18.2.0
-    react-dom: 18.2.0
+    react: 18.3.1
+    react-dom: 18.3.1
   languageName: unknown
   linkType: soft
 
@@ -8492,13 +8492,13 @@ __metadata:
     core-js: "npm:3.37.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:18.2.0"
-    react-dom: "npm:18.2.0"
+    react: "npm:18.3.1"
+    react-dom: "npm:18.3.1"
     tstyche: "npm:1.1.0"
     typescript: "npm:5.4.5"
   peerDependencies:
-    react: 18.2.0
-    react-dom: 18.2.0
+    react: 18.3.1
+    react-dom: 18.3.1
   languageName: unknown
   linkType: soft
 
@@ -8679,8 +8679,8 @@ __metadata:
     graphql-sse: "npm:2.5.3"
     graphql-tag: "npm:2.12.6"
     nodemon: "npm:3.1.0"
-    react: "npm:18.2.0"
-    react-dom: "npm:18.2.0"
+    react: "npm:18.3.1"
+    react-dom: "npm:18.3.1"
     react-helmet-async: "npm:2.0.5"
     react-hot-toast: "npm:2.4.1"
     stacktracey: "npm:2.1.8"
@@ -8689,8 +8689,8 @@ __metadata:
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
-    react: 18.2.0
-    react-dom: 18.2.0
+    react: 18.3.1
+    react-dom: 18.3.1
   bin:
     cross-env: ./dist/bins/cross-env.js
     msw: ./dist/bins/msw.js
@@ -28358,7 +28358,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^18.2.0":
+"react-dom@npm:18.3.1, react-dom@npm:^18.2.0":
   version: 18.3.1
   resolution: "react-dom@npm:18.3.1"
   dependencies:
@@ -28537,7 +28537,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.2.0":
+"react@npm:18.3.1, react@npm:^18.2.0":
   version: 18.3.1
   resolution: "react@npm:18.3.1"
   dependencies:
@@ -30755,8 +30755,8 @@ __metadata:
   peerDependencies:
     "@redwoodjs/project-config": 7.6.3
     "@redwoodjs/router": 7.6.3
-    react: 18.2.0
-    react-dom: 18.2.0
+    react: 18.3.1
+    react-dom: 18.3.1
     storybook: 7.6.17
   languageName: unknown
   linkType: soft
