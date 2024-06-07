@@ -23,7 +23,7 @@ import {
 // CJS build
 await build({
   entryPointOptions: {
-    ignore: [...defaultIgnorePatterns, 'src/entry/**', 'src/bins/**'],
+    ignore: [...defaultIgnorePatterns, 'src/entry/**'],
   },
   buildOptions: {
     ...defaultBuildOptions,
