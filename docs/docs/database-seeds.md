@@ -17,11 +17,26 @@ Seed data is not meant for:
 * Data to run tests against
 * Randomized data
 
-If at all possible, seed data should be idempotent: you should be able to
-execute the seed script against your database at any time and end up with the
-seed data properly populated in the database. It should not result in wiping
-out existing records or creating duplicates of any seeded data that is already
-present.
+## Best Practices
+
+Ideally seed data should be idempotent: you can execute the seed
+script against your database at any time and end up with the seed data properly
+populated in the database. It should not result in wiping out existing records
+or creating duplicates of any seeded data that is already present.
+
+Making your seeds idempotent requires more code than just a straight
+`createMany()`. The code examples below use the safest idempotent strategy
+by having an `upsert` check if a record with the same unique identifier
+already exists, and if so just update it, if not then create it. But, this
+technique requires a separate SQL statement for each member of your data array
+and is less performant than `createMany()`.
+
+You could also do a check if *any* data exists in the database first, and if
+not, create the records with `createMany()`. However, this means that any
+existing seed data that may have been modified will remain, and would not be
+updated to match what you expect in your seed.
+
+When in doubt, `upsert`!
 
 ## When seeds run
 
@@ -45,17 +60,34 @@ yarn rw prisma db seed
 
 You generally don't need to keep invoking your seeds over and over again, so it
 makes sense that Prisma only does it on a complete database reset, or when the
-database is created with the first `prisma migrate dev` execution.
+database is created with the first `prisma migrate dev` execution. But as your
+schema evolves you may add a new model that requires some seeded data and so
+you can add it to your seed file and then manually run it to create those
+records.
 
-Unless you reset your database often, they'll never run again, which is why you
-may need to manually run them from time to time as you add data.
+### Performance
+
+Prisma is faster at execting a `createMany()` instead of many `create` or
+`upsert` functions. Unfortunately, you lose the ability to easily make your seed
+idempotent with a single function call.
+
+One solution to simulate an `upsert` will still using `createMany()` could be
+to start with the full array of data and first check to see whether each of
+those records already exist in the database. If they do, create two
+arrays: one for records that don't exist and run `createMany()` with them, and
+the second list for records that do exist, and run `updateMany()` on those.
+
+Unfortunately this relies on a select query for each record, which may negate
+the performance benefits of `createMany()`. Since you are running seeds
+realitively rarely, it's our recommendation that you focus less on absolute
+performance and worry more about making them easy to maintain.
 
 ## Types
 
 If you're using Typescript you'll probably want to type your seeds as well.
-Getting the right types for Prisma models is tricky, but here's the trick!
+Getting the right types for Prisma models can be tricky, but here's the formula:
 
-```typescript title="scripts/seed.{jt}s
+```javascript title="scripts/seed.ts"
 import { db } from 'api/src/lib/db'
 // highlight-next-line
 import type { Prisma } from '@prisma/client'
@@ -63,7 +95,7 @@ import type { Prisma } from '@prisma/client'
 export default async () => {
   try {
     // highlight-next-line
-    const users: Prisma.UserExampleCreateArgs['data'][] = [
+    const users: Prisma.UserCreateArgs['data'][] = [
       { name: 'Alice', email: 'alice@redwoodjs.com },
       { name: 'Bob', email: 'bob@redwoodjs.com },
     ]
@@ -71,22 +103,28 @@ export default async () => {
     await db.user.createMany({ data: users })
   } catch (error) {
     console.error(error)
-  }`
+  }
 }
 ```
 
 ## Creating seed data
 
-Take a look at `scripts/seed.js` (or `.ts` depending on whether you're working
-on a Typescript project):
+Take a look at `scripts/seed.js` (or `.ts` if you're working on a Typescript
+project):
 
-```javascript
+```javascript title="scripts/seed.js"
+import { db } from 'api/src/lib/db'
+
 export default async () => {
   try {
-    const data = []
-
-    for (const item of data) {
-    }
+    // Create your database records here! For example, seed some users:
+    //
+    // const users = [
+    //   { name: 'Alice', email: 'alice@redwoodjs.com },
+    //   { name: 'Bob', email: 'bob@redwoodjs.com },
+    // ]
+    //
+    // await db.user.createMany({ data: users })
 
     console.info(
       '\n  No seed data, skipping. See scripts/seed.ts to start seeding your database!\n'
@@ -97,29 +135,27 @@ export default async () => {
 }
 ```
 
-Comments have been removed for clarity. The seed file contains a barebones
-skeleton with an array of `data` and a loop which runs for every record present.
-
 Let's create some categories for a bookstore. For this example, assume the
-`Category` model has a unique constraint on the `name` field:
+`Category` model has a unique constraint on the `name` field. Remove the
+commented example and add your code:
 
-```javascript
+```javascript title="scripts/seed.js"
 export default async () => {
   try {
     const data = [
-      { name: 'Art' },
-      { name: 'Biography' },
-      { name: 'Fiction' },
-      { name: 'Non-fiction' },
-      { name: 'Travel' },
-      { name: 'World History' }
+      { name: 'Art', bisacCode: 'ART000000' },
+      { name: 'Biography', bisacCode: 'BIO000000' },
+      { name: 'Fiction', bisacCode: 'FIC000000' },
+      { name: 'Nature', bisacCode: 'NAT000000' },
+      { name: 'Travel', bisacCode: 'TRV000000' },
+      { name: 'World History', bisacCode: 'HIS037000' }
     ]
 
     for (const item of data) {
       await db.category.upsert({ 
         where: { name: item.name },
-        update: { name: item.name },
-        create: { name: item.name } 
+        update: { code: item.code },
+        create: { name: item.name, code: item.code } 
       })
     }
   } catch (error) {
@@ -129,16 +165,18 @@ export default async () => {
 ```
 
 You can now execute this seed as many times as you want and you'll end up with
-that exact list in the database each time (and any additional categories you've
-created in the meantime).
+that exact list in the database each time. And, any additional categories you've
+created in the meantime will remain. Remember: seeds are meant to be the
+*minimum* amount of data you need for your app to run, not necessarily *all* the
+data that will ever be present in those tables.
 
 # Seeding users for dbAuth
 
 If using dbAuth and seeding users, you'll need to add a `hashedPassword` and
-`salt` using the same algorithm that dbAuth uses internally so they can be
-verified. Here's one way to do that:
+`salt` using the same algorithm that dbAuth uses internally. Here's an easy way
+do that:
 
-```javascript
+```javascript title="scripts/seed.js"
 import { hashPassword } from '@redwoodjs/auth-dbauth-api'
 
 export default async () => {
@@ -169,20 +207,6 @@ export default async () => {
   }
 }
 ```
-
-## Performance
-
-Prisma is faster at execting a `createMany()` instead of many `create` or
-`upsert` functions. Unfortunately, you lose the ability to easily make your seed
-idempotent with a single function call.
-
-One solution would be to start with the full array of data and first check to
-see whether those records already exist in the database. If they do, create two
-arrays: one for records that don't exist and run `createMany()` with them, and
-the second list for records that do exist, and run `updateMany()` on those.
-
-Unfortunately this relies on a ton of select queries, which may negate the
-performance benefits of `createMany()`.
 
 ## What if I don't need seeds?
 
