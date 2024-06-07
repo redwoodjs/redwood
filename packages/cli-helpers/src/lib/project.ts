@@ -54,7 +54,7 @@ export const updateTomlConfig = (packageName: string) => {
   const redwoodTomlPath = getConfigPath()
   const originalTomlContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
 
-  let tomlToAppend: toml.TomlPrimitive = {}
+  let tomlToAppend: Record<string, toml.TomlPrimitive> = {}
 
   const config = getConfig(redwoodTomlPath)
 
