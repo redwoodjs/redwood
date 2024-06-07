@@ -18,17 +18,23 @@ jobs:
 
     outputs:
       code: ${{ steps.detect-changes.outputs.code }}
-      rsc: ${{ steps.detect-changes.outputs.rsc }}
-      ssr: ${{ steps.detect-changes.outputs.ssr }}
 
     steps:
       - uses: actions/checkout@v4
-      - name: Set up job
-        uses: ./.github/actions/set-up-job
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          set-up-yarn-cache: false
-          yarn-install-directory: ./.github/actions/detect-changes
-          build: false
+          node-version: 20
+
+      - name: 🐈 Yarn install
+        working-directory: ./.github/actions/detect-changes
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: 🔍 Detect changes
         id: detect-changes
