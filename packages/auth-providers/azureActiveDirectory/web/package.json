@@ -33,7 +33,7 @@
     "@babel/core": "^7.22.20",
     "@types/netlify-identity-widget": "1.9.6",
     "@types/react": "^18.2.55",
-    "react": "18.2.0",
+    "react": "18.3.1",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },
