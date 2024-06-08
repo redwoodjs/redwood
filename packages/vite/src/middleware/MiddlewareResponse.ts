@@ -7,7 +7,7 @@ export class MiddlewareShortCircuit extends Error {
   mwResponse: MiddlewareResponse
 
   constructor(body?: BodyInit | null, responseInit?: ResponseInit) {
-    super('Short cirtcuit. Skipping all middleware, and returning early')
+    super('Short circuit. Skipping all middleware, and returning early')
     this.name = 'MiddlewareShortCircuit'
     this.mwResponse = new MiddlewareResponse(body, responseInit)
   }
@@ -15,7 +15,8 @@ export class MiddlewareShortCircuit extends Error {
 
 /**
  * This is actually a Response builder class
- * After setting all the required proeprties, we can call `build` to get a Web API Response object
+ * After setting all the required properties, we can call `build` to get a Web
+ * API Response object
  */
 export class MiddlewareResponse {
   cookies = new CookieJar()
@@ -66,7 +67,8 @@ export class MiddlewareResponse {
 
   /**
    * Skip the current middleware and move to the next one.
-   * Careful: It creates a new Response, so any middleware that modifies the response before the current one will be lost.
+   * Careful: It creates a new Response, so any middleware that modifies the
+   * response before the current one will be lost.
    * @returns MiddlewareResponse
    */
   static next = () => {
@@ -74,8 +76,8 @@ export class MiddlewareResponse {
   }
 
   /**
-   *
-   * Return a MiddlewareResponse object that will redirect the client to the specified location
+   * Return a MiddlewareResponse object that will redirect the client to the
+   * specified location
    *
    * @returns MiddlewareResponse
    */
