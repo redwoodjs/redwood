@@ -16,7 +16,7 @@ class AuthStateJar {
 
   /**
    * Always returns the server auth state, even if its set to null,
-   * it'll fall back to the initial state (created when mwReq is initialised)
+   * it'll fall back to the initial state (created when mwReq is initialized)
    */
   get() {
     return this._data || this._initialState
