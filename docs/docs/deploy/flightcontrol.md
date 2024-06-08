@@ -4,7 +4,7 @@ description: How to deploy a Redwood app to AWS via Flightcontrol
 
 # Deploy to AWS with Flightcontrol
 
-[Flightcontrol](https://www.flightcontrol.dev) enables any developer to deploy to AWS without being a wizard. It's extremely easy to use but lets you pop the hood and leverage the raw power of AWS when needed. It supports servers, static sites, and databases which makes it a perfect fit for hosting scalable Redwood apps.
+[Flightcontrol](https://www.flightcontrol.dev?ref=redwood) enables any developer to deploy to AWS without being a wizard. It's extremely easy to use but lets you pop the hood and leverage the raw power of AWS when needed. It supports servers, static sites, and databases which makes it a perfect fit for hosting scalable Redwood apps.
 
 ## Flightcontrol Deploy Setup
 
