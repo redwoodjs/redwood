@@ -10,11 +10,11 @@
     "Vite"
   ],
   "bugs": {
-    "url": "https://github.com/redwoodjs/redwood/issues"
+    "url": "git+https://github.com/redwoodjs/redwood/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/storybook"
   },
   "license": "MIT",

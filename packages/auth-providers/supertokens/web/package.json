@@ -3,7 +3,7 @@
   "version": "7.6.3",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/auth-providers/supertokens/web"
   },
   "license": "MIT",
