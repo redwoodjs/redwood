@@ -1,5 +1,6 @@
 import type { TagDescriptor } from '@redwoodjs/web/dist/components/htmlTags'
 
+import App from './App'
 import { Document } from './Document'
 import Routes from './Routes'
 
@@ -16,7 +17,15 @@ interface Props {
 export const ServerEntry: React.FC<Props> = ({ css, meta, location }) => {
   return (
     <Document css={css} meta={meta}>
-      <Routes location={location} />
+      <App>
+        <Routes location={location} />
+      </App>
     </Document>
   )
+}
+
+export async function registerMiddleware() {
+  const { middleware: selfMtsMw } = await import('./middleware/self.mjs')
+
+  return [selfMtsMw]
 }

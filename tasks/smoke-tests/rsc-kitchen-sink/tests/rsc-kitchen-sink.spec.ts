@@ -142,3 +142,13 @@ test('Server Cell in Layout', async ({ page }) => {
   // above the code block and then once more inside the codeblock itself
   expect(mainText.match(/The source of this server cell/g)).toHaveLength(2)
 })
+
+test('middleware', async ({ page }) => {
+  await page.goto('/self.mts')
+
+  const bodyText = await page.locator('body').innerText()
+
+  expect(bodyText).toMatch(/import { fileURLToPath } from "node:url"/)
+  expect(bodyText).toMatch(/self\.mts Middleware/)
+  expect(bodyText).toMatch(/\.readFileSync\(__filename/)
+})

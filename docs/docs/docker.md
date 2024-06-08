@@ -559,8 +559,9 @@ Not updating the command will not completely configure the GraphQL Server and no
 
 ### Configuring the server
 
-There's two ways you can configure the server.
+There are three ways you may wish to configure the server.
 
+#### Underlying Fastify server
 First, you can configure how the underlying Fastify server is instantiated via the`fastifyServerOptions` passed to the `createServer` function:
 
 ```ts title="api/src/server.ts"
@@ -576,18 +577,10 @@ const server = await createServer({
 
 For the complete list of options, see [Fastify's documentation](https://fastify.dev/docs/latest/Reference/Server/#factory).
 
-Second, you can register Fastify plugins on the server instance:
+#### Configure the redwood API plugin
+Second, you may want to alter the behavior of redwood's API plugin itself. To do this we provide a `configureApiServer(server)` option where you can do anything you wish to the fastify instance before the API plugin is registered. Two examples are given below.
 
-```ts title="api/src/server.ts"
-const server = await createServer({
-  logger,
-})
-
-// highlight-next-line
-server.register(myFastifyPlugin)
-``` 
-
-#### Example: Compressing Payloads and Rate Limiting
+##### Example: Compressing Payloads and Rate Limiting
 
 Let's say that we want to compress payloads and add rate limiting.
 We want to compress payloads only if they're larger than 1KB, preferring deflate to gzip,
@@ -605,21 +598,23 @@ Then register them with the appropriate config:
 ```ts title="api/src/server.ts"
 const server = await createServer({
   logger,
+  async configureApiServer(server) {
+    await server.register(import('@fastify/compress'), {
+      global: true,
+      threshold: 1024,
+      encodings: ['deflate', 'gzip'],
+    })
+    
+    await server.register(import('@fastify/rate-limit'), {
+      max: 100,
+      timeWindow: '5 minutes',
+    })
+  }
 })
 
-await server.register(import('@fastify/compress'), {
-  global: true,
-  threshold: 1024,
-  encodings: ['deflate', 'gzip'],
-})
-
-await server.register(import('@fastify/rate-limit'), {
-  max: 100,
-  timeWindow: '5 minutes',
-})
 ```
 
-#### Example: File Uploads
+##### Example: File Uploads
 
 If you try to POST file content to the api server such as images or PDFs, you may see the following error from Fastify:
 
@@ -641,18 +636,37 @@ For example, to support image file uploads you'd tell Fastify to allow `/^image\
 ```ts title="api/src/server.ts"
 const server = await createServer({
   logger,
-})
-
-server.addContentTypeParser(/^image\/.*/, (req, payload, done) => {
-  payload.on('end', () => {
-    done()
-  })
+  configureApiServer(server){
+    server.addContentTypeParser(/^image\/.*/, (_req, payload, done) => {
+      payload.on('end', () => {
+        done()
+      })
+    })
+  }
 })
 ```
 
 The regular expression (`/^image\/.*/`) above allows all image content or MIME types because [they start with "image"](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types).
 
 Now, when you POST those content types to a function served by the api server, you can access the file content on `event.body`.
+
+#### Additional Fastify plugins
+Finally, you can register additional Fastify plugins on the server instance:
+
+```ts title="api/src/server.ts"
+const server = await createServer({
+  logger,
+})
+
+// highlight-next-line
+server.register(myFastifyPlugin)
+``` 
+
+:::note Fastify encapsulation
+
+Fastify is built around the concept of [encapsulation](https://fastify.dev/docs/latest/Reference/Encapsulation/). It is important to note that redwood's API plugin cannot be mutated after it is registered, see [here](https://fastify.dev/docs/latest/Reference/Plugins/#asyncawait). This is why you must use the `configureApiServer` option to do as shown above. 
+
+:::
 
 ### The `start` method
 

@@ -688,6 +688,11 @@ export class DbAuthHandler<
       throw new DbAuthError.PasswordRequiredError()
     }
 
+    // check if password is valid using signup criteria
+    ;(this.options.signup as SignupFlowOptions).passwordValidation?.(
+      password as string,
+    )
+
     let user = await this._findUserByToken(resetToken as string)
     const [hashedPassword] = hashPassword(password, {
       salt: user.salt,

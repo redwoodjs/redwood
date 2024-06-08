@@ -37,20 +37,18 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     build: {
       // TODO (RSC): Remove `minify: false` when we don't need to debug as often
       minify: false,
-      outDir: rwPaths.web.distClient,
+      outDir: rwPaths.web.distBrowser,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
       rollupOptions: {
         onwarn: onWarn,
         input: {
           // @MARK: temporary hack to find the entry client so we can get the
           // index.css bundle but we don't actually want this on an rsc page!
-          'rwjs-client-entry': rwPaths.web.entryClient,
+          __rwjs__client_entry: rwPaths.web.entryClient,
           // we need this, so that the output contains rsc-specific bundles
           // for the client-only components. They get loaded once the page is
           // rendered
           ...clientEntryFiles,
-          'rd-server': 'react-dom/server.edge',
-          'rsdw-client': 'react-server-dom-webpack/client.edge',
         },
         preserveEntrySignatures: 'exports-only',
         output: {
@@ -61,13 +59,8 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
           // TODO (RSC): Fix when https://github.com/rollup/rollup/issues/5235
           // is resolved
           hoistTransitiveImports: false,
-          entryFileNames: (chunkInfo) => {
-            if (
-              chunkInfo.name === 'rd-server' ||
-              chunkInfo.name === 'rsdw-client'
-            ) {
-              return '[name].mjs'
-            }
+          entryFileNames: () => {
+            // TODO (RSC): Is this the default? If so we can get rid of it
             return 'assets/[name]-[hash].mjs'
           },
           chunkFileNames: `assets/[name]-[hash].mjs`,
@@ -78,6 +71,7 @@ export async function rscBuildClient(clientEntryFiles: Record<string, string>) {
     esbuild: {
       logLevel: 'debug',
     },
+    logLevel: 'info',
     plugins: [rscRoutesAutoLoader()],
   })
 

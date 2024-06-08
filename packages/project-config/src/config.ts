@@ -1,7 +1,7 @@
 import fs from 'fs'
 
-import toml from '@iarna/toml'
 import merge from 'deepmerge'
+import toml from 'smol-toml'
 import { env as envInterpolation } from 'string-env-interpolation'
 
 import { getConfigPath } from './configPath.js'
@@ -186,6 +186,9 @@ const DEFAULT_CONFIG: Config = {
       plugins: [
         {
           package: '@redwoodjs/cli-storybook',
+        },
+        {
+          package: '@redwoodjs/cli-storybook-vite',
         },
         {
           package: '@redwoodjs/cli-data-migrate',

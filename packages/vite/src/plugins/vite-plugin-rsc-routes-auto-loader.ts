@@ -31,6 +31,8 @@ const withRelativeImports = (page: PagesDependency) => {
   }
 }
 
+// TODO (RSC): Rename this. It's not auto-loading anymore. It's replacing
+// imports with dummy components
 export function rscRoutesAutoLoader(): Plugin {
   // Vite IDs are always normalized and so we avoid windows path issues
   // by normalizing the path here.
