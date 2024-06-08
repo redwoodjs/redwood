@@ -45,6 +45,13 @@ export async function rscBuildForSsr({
       // Files included in `noExternal` are files we want Vite to analyze
       // As of vite 5.2 `true` here means "all except node built-ins"
       noExternal: true,
+      external: [
+        'minimatch',
+        '@prisma/client',
+        '@prisma/fetch-engine',
+        '@prisma/internals',
+        'playwright',
+      ],
     },
     plugins: [
       cjsInterop({ dependencies: ['@redwoodjs/**'] }),
