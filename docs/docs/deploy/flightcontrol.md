@@ -16,7 +16,7 @@ description: How to deploy a Redwood app to AWS via Flightcontrol
     1. Connect your Github account and select your repo.
     2. Click "Create Project" and complete any required steps like linking your AWS account.
     3. Configuration Type should autoselect as `flightcontrol.json`.
-    4. NOTE: `flightcontrol.json` is now the source of truth for your Project and it's Environments.
+    4. NOTE: `flightcontrol.json` is now the source of truth for your Project and its Environments.
 6. Add your env vars in Flightcontrol for your Environment.
 7. If using dbAuth, add the session secret key env variable in the Flightcontrol dashboard.
 
