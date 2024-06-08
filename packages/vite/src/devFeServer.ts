@@ -1,7 +1,7 @@
 import {
   createPerRequestMap,
   createServerStorage,
-} from '@redwoodjs/server-store/dist/serverStore.js'
+} from '@redwoodjs/server-store'
 import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
 import type { HTTPMethod } from 'find-my-way'

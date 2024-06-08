@@ -3,7 +3,7 @@ import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
 
 import type { ServerAuthState } from '@redwoodjs/auth'
 import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth'
-import { createServerStorage } from '@redwoodjs/server-store/serverStore'
+import { createServerStorage } from '@redwoodjs/server-store'
 
 import { invoke } from './invokeMiddleware'
 import type { MiddlewareRequest } from './MiddlewareRequest'

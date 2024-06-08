@@ -12,7 +12,7 @@ import type { ViteDevServer } from 'vite'
 import {
   getAuthState,
   getRequestHeaders,
-} from '@redwoodjs/server-store/dist/serverStore.js'
+} from '@redwoodjs/server-store'
 
 import {
   decodeReply,

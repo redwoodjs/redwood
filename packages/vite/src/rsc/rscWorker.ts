@@ -19,7 +19,7 @@ import { getPaths } from '@redwoodjs/project-config'
 import {
   createPerRequestMap,
   createServerStorage,
-} from '@redwoodjs/server-store/dist/serverStore.js'
+} from '@redwoodjs/server-store'
 
 import { getEntriesFromDist } from '../lib/entries.js'
 import { registerFwGlobalsAndShims } from '../lib/registerFwGlobalsAndShims.js'
