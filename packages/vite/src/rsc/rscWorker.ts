@@ -16,6 +16,10 @@ import type { ResolvedConfig } from 'vite'
 import { createServer, resolveConfig } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
+import {
+  createPerRequestMap,
+  createServerStorage,
+} from '@redwoodjs/server-store'
 
 import { getEntriesFromDist } from '../lib/entries.js'
 import { registerFwGlobalsAndShims } from '../lib/registerFwGlobalsAndShims.js'
@@ -24,7 +28,6 @@ import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
 import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
 import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
-import { createPerRequestMap, createServerStorage } from '../serverStore.js'
 
 import type {
   MessageReq,

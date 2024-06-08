@@ -44,10 +44,6 @@
     "./middleware": {
       "types": "./dist/middleware/index.d.ts",
       "default": "./dist/middleware/index.js"
-    },
-    "./serverStore": {
-      "types": "./dist/serverStore.d.ts",
-      "default": "./dist/serverStore.js"
     }
   },
   "bin": {
@@ -75,8 +71,10 @@
     "@babel/traverse": "^7.22.20",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/babel-config": "workspace:*",
+    "@redwoodjs/cookie-jar": "workspace:*",
     "@redwoodjs/internal": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
+    "@redwoodjs/server-store": "workspace:*",
     "@redwoodjs/web": "workspace:*",
     "@swc/core": "1.5.7",
     "@vitejs/plugin-react": "4.2.1",
