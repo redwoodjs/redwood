@@ -1,3 +1,7 @@
+import {
+  createPerRequestMap,
+  createServerStorage,
+} from '@redwoodjs/server-store/dist/serverStore.js'
 import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
 import type { HTTPMethod } from 'find-my-way'
@@ -16,7 +20,6 @@ import { createMiddlewareRouter } from './middleware/register.js'
 import type { Middleware } from './middleware/types.js'
 import { rscRoutesAutoLoader } from './plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
-import { createPerRequestMap, createServerStorage } from './serverStore.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import {

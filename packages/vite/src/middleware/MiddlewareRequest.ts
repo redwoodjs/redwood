@@ -2,8 +2,7 @@ import { Request as WhatWgRequest } from '@whatwg-node/fetch'
 
 import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth/dist/AuthProvider/AuthProviderState.js'
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
-
-import { CookieJar } from './CookieJar.js'
+import { CookieJar } from '@redwoodjs/server-store/dist/CookieJar.js'
 
 class AuthStateJar {
   private _data: ServerAuthState | null
@@ -16,7 +15,7 @@ class AuthStateJar {
 
   /**
    * Always returns the server auth state, even if its set to null,
-   * it'll fall back to the initial state (created when mwReq is initialised)
+   * it'll fall back to the initial state (created when mwReq is initialized)
    */
   get() {
     return this._data || this._initialState

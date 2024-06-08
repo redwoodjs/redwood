@@ -10,13 +10,17 @@ import type { HTTPMethod } from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 
 import {
+  getAuthState,
+  getRequestHeaders,
+} from '@redwoodjs/server-store/dist/serverStore.js'
+
+import {
   decodeReply,
   decodeReplyFromBusboy,
 } from '../bundled/react-server-dom-webpack.server'
 import { hasStatusCode } from '../lib/StatusError.js'
 import type { Middleware } from '../middleware'
 import { invoke } from '../middleware/invokeMiddleware'
-import { getAuthState, getRequestHeaders } from '../serverStore'
 import { getFullUrlForFlightRequest } from '../utils'
 
 import type { RscFetchProps } from './rscFetchForClientRouter'

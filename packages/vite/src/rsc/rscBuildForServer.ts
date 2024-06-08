@@ -53,7 +53,7 @@ export async function rscBuildForServer(
       // Can't inline prisma client (db calls fail at runtime) or react-dom
       // (css pre-init failure)
       // Server store has to be externalized, because it's a singleton (shared between FW and App)
-      external: ['@prisma/client', 'react-dom', '@redwoodjs/vite/serverStore'],
+      external: ['@prisma/client', 'react-dom', '@redwoodjs/server-store'],
       resolve: {
         // These conditions are used in the plugin pipeline, and only affect non-externalized
         // dependencies during the SSR build. Which because of `noExternal: true` means all
