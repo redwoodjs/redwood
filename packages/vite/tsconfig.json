@@ -9,6 +9,7 @@
     { "path": "../internal" },
     { "path": "../project-config" },
     { "path": "../router" },
+    { "path": "../server-store" },
     { "path": "../web" }
   ]
 }

@@ -1,13 +1,13 @@
 import { Response as PonyResponse } from '@whatwg-node/fetch'
 import cookie from 'cookie'
 
-import { CookieJar } from './CookieJar.js'
+import { CookieJar } from '@redwoodjs/server-store/dist/CookieJar.js'
 
 export class MiddlewareShortCircuit extends Error {
   mwResponse: MiddlewareResponse
 
   constructor(body?: BodyInit | null, responseInit?: ResponseInit) {
-    super('Short cirtcuit. Skipping all middleware, and returning early')
+    super('Short circuit. Skipping all middleware, and returning early')
     this.name = 'MiddlewareShortCircuit'
     this.mwResponse = new MiddlewareResponse(body, responseInit)
   }

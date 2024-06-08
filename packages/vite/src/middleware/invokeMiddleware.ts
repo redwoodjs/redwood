@@ -1,6 +1,5 @@
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
-
-import { setServerAuthState } from '../serverStore.js'
+import { setServerAuthState } from '@redwoodjs/server-store/dist/serverStore.js'
 
 import { MiddlewareRequest } from './MiddlewareRequest.js'
 import {

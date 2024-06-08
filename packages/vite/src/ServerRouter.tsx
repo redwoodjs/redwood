@@ -16,8 +16,7 @@ import {
   validatePath,
 } from '@redwoodjs/router/dist/util'
 import type { TrailingSlashesTypes } from '@redwoodjs/router/dist/util'
-
-import { getLocation } from './serverStore'
+import { getLocation } from '@redwoodjs/server-store/dist/serverStore.js'
 
 export interface RouterProps
   extends Omit<RouterContextProviderProps, 'routes' | 'activeRouteName'> {

@@ -4,8 +4,11 @@ import type { PassThrough } from 'node:stream'
 import type { Request } from 'express'
 
 import { getConfig, getRawConfig } from '@redwoodjs/project-config'
+import {
+  getAuthState,
+  getRequestHeaders,
+} from '@redwoodjs/server-store/dist/serverStore.js'
 
-import { getAuthState, getRequestHeaders } from '../serverStore.js'
 import { getFullUrlForFlightRequest } from '../utils.js'
 
 import type { RenderInput } from './rscWorkerCommunication.js'
