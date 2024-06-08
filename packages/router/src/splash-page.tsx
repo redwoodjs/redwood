@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+// import React, { useState, useEffect } from 'react'
 
 type PathDefinition = string
 interface SplashPageProps {
@@ -9,13 +10,13 @@ interface SplashPageProps {
   >
 }
 
-const SplashPage = ({
+export const SplashPage = ({
   hasGeneratedRoutes,
   allStandardRoutes: routesMap,
 }: SplashPageProps) => {
   const routes = Object.values(routesMap)
 
-  const version = useVersion()
+  const version = 11 //useVersion()
   return (
     <>
       <main>
@@ -559,38 +560,36 @@ const SplashPage = ({
   )
 }
 
-const useVersion = () => {
-  const [version, setVersion] = useState(null)
-  useEffect(() => {
-    async function fetchVersion() {
-      try {
-        const response = await globalThis.fetch(
-          globalThis.RWJS_API_GRAPHQL_URL,
-          {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',
-            },
-            body: JSON.stringify({
-              query: 'query RedwoodVersion { redwood { version } }',
-            }),
-          },
-        )
+// const useVersion = () => {
+//   const [version, setVersion] = useState(null)
+//   useEffect(() => {
+//     async function fetchVersion() {
+//       try {
+//         const response = await globalThis.fetch(
+//           globalThis.RWJS_API_GRAPHQL_URL,
+//           {
+//             method: 'POST',
+//             headers: {
+//               'content-type': 'application/json',
+//             },
+//             body: JSON.stringify({
+//               query: 'query RedwoodVersion { redwood { version } }',
+//             }),
+//           },
+//         )
 
-        const versionData = await response.json()
-        setVersion(versionData?.data?.redwood?.version || null)
-      } catch (err) {
-        console.error('Unable to get Redwood version: ', err)
-      }
-    }
+//         const versionData = await response.json()
+//         setVersion(versionData?.data?.redwood?.version || null)
+//       } catch (err) {
+//         console.error('Unable to get Redwood version: ', err)
+//       }
+//     }
 
-    if (!globalThis.fetch) {
-      return
-    }
+//     if (!globalThis.fetch) {
+//       return
+//     }
 
-    fetchVersion()
-  }, [])
-  return version
-}
-
-export { SplashPage }
+//     fetchVersion()
+//   }, [])
+//   return version
+// }
