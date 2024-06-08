@@ -8110,6 +8110,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/cookie-jar@workspace:packages/cookie-jar":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/cookie-jar@workspace:packages/cookie-jar"
+  dependencies:
+    "@redwoodjs/framework-tools": "workspace:*"
+    "@types/fs-extra": "npm:11.0.4"
+    cookie: "npm:0.6.0"
+    esbuild: "npm:0.21.3"
+    fast-glob: "npm:3.3.2"
+    fs-extra: "npm:11.2.0"
+    tsx: "npm:4.10.3"
+    typescript: "npm:5.4.5"
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/core@workspace:packages/core"
@@ -8599,7 +8614,6 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/fs-extra": "npm:11.0.4"
-    cookie: "npm:0.6.0"
     esbuild: "npm:0.21.3"
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"

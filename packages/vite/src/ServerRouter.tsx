@@ -3,7 +3,6 @@ import React from 'react'
 
 import { analyzeRoutes } from '@redwoodjs/router/dist/analyzeRoutes'
 import type { Wrappers } from '@redwoodjs/router/dist/analyzeRoutes'
-import type { LocationContextType } from '@redwoodjs/router/dist/location'
 import { namedRoutes } from '@redwoodjs/router/dist/namedRoutes'
 import { normalizePage } from '@redwoodjs/router/dist/page'
 import type { RouterContextProviderProps } from '@redwoodjs/router/dist/router-context'
@@ -16,27 +15,19 @@ import {
   validatePath,
 } from '@redwoodjs/router/dist/util'
 import type { TrailingSlashesTypes } from '@redwoodjs/router/dist/util'
-import { getLocation } from '@redwoodjs/server-store/dist/serverStore.js'
+import { getLocation } from '@redwoodjs/server-store'
 
 export interface RouterProps
   extends Omit<RouterContextProviderProps, 'routes' | 'activeRouteName'> {
   trailingSlashes?: TrailingSlashesTypes
   pageLoadingDelay?: number
   children: ReactNode
-  location: LocationContextType
 }
 
 const SplashPage: any = undefined
 
-export const Router: React.FC<RouterProps> = ({
-  paramTypes,
-  children,
-  location,
-}) => {
-  const serverLocation = getLocation()
-
-  console.log('serverLocation', serverLocation)
-  console.log('location', location)
+export const Router: React.FC<RouterProps> = ({ paramTypes, children }) => {
+  const location = getLocation()
 
   const analyzedRoutes = analyzeRoutes(children, {
     currentPathName: location.pathname,

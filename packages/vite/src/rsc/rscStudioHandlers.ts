@@ -7,7 +7,7 @@ import { getConfig, getRawConfig } from '@redwoodjs/project-config'
 import {
   getAuthState,
   getRequestHeaders,
-} from '@redwoodjs/server-store/dist/serverStore.js'
+} from '@redwoodjs/server-store'
 
 import { getFullUrlForFlightRequest } from '../utils.js'
 
