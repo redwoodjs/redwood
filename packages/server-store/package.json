@@ -1,10 +1,9 @@
 {
   "name": "@redwoodjs/server-store",
-  "version": "7.0.0",
-  "private": true,
+  "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/server-store"
   },
   "license": "MIT",
