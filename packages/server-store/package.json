@@ -25,6 +25,7 @@
   ],
   "scripts": {
     "build": "tsx ./build.mts && run build:types",
+    "build:pack": "yarn pack -o redwoodjs-server-store.tgz",
     "build:types": "tsc --build --verbose"
   },
   "dependencies": {
