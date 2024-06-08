@@ -3,7 +3,7 @@
   "version": "7.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/mailer/core"
   },
   "license": "MIT",
