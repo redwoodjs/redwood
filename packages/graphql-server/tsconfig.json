@@ -7,5 +7,6 @@
   "include": ["ambient.d.ts", "src/**/*"],
   "references": [
     { "path": "../api" },
+    { "path": "../context" },
   ]
 }
