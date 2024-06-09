@@ -3,7 +3,7 @@ import path from 'path'
 import { getSchema, getConfig } from '@prisma/internals'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
-import toml from 'smol-toml'
+import * as toml from 'smol-toml'
 
 import {
   colors as c,
