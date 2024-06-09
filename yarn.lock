@@ -8110,7 +8110,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/cookie-jar@workspace:packages/cookie-jar":
+"@redwoodjs/cookie-jar@workspace:*, @redwoodjs/cookie-jar@workspace:packages/cookie-jar":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cookie-jar@workspace:packages/cookie-jar"
   dependencies:
@@ -8607,15 +8607,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/server-store@workspace:packages/server-store":
+"@redwoodjs/server-store@workspace:*, @redwoodjs/server-store@workspace:packages/server-store":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/server-store@workspace:packages/server-store"
   dependencies:
     "@redwoodjs/auth": "workspace:*"
-    "@redwoodjs/framework-tools": "workspace:*"
-    "@types/fs-extra": "npm:11.0.4"
+    "@redwoodjs/cookie-jar": "workspace:*"
     esbuild: "npm:0.21.3"
-    fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
     tsx: "npm:4.10.3"
     typescript: "npm:5.4.5"
@@ -8743,8 +8741,10 @@ __metadata:
     "@babel/traverse": "npm:^7.22.20"
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/babel-config": "workspace:*"
+    "@redwoodjs/cookie-jar": "workspace:*"
     "@redwoodjs/internal": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
+    "@redwoodjs/server-store": "workspace:*"
     "@redwoodjs/web": "workspace:*"
     "@swc/core": "npm:1.5.7"
     "@types/busboy": "npm:^1"

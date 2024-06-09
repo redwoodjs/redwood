@@ -4,7 +4,7 @@
   "description": "Foundational packages and config required to build RedwoodJS.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/core"
   },
   "license": "MIT",

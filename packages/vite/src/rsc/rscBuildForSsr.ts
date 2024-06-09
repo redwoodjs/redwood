@@ -51,6 +51,7 @@ export async function rscBuildForSsr({
         '@prisma/fetch-engine',
         '@prisma/internals',
         'playwright',
+        '@redwoodjs/cookie-jar',
         '@redwoodjs/server-store',
       ],
     },

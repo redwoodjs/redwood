@@ -59,6 +59,8 @@ export async function rscBuildAnalyze() {
         '@prisma/fetch-engine',
         '@prisma/internals',
         'playwright',
+        '@redwoodjs/cookie-jar',
+        '@redwoodjs/server-store',
       ],
       resolve: {
         externalConditions: ['react-server'],

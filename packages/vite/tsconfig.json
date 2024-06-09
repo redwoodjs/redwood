@@ -6,6 +6,7 @@
   },
   "include": ["src/**/*", "./ambient.d.ts", "./modules.d.ts"],
   "references": [
+    { "path": "../cookie-jar" },
     { "path": "../internal" },
     { "path": "../project-config" },
     { "path": "../router" },
