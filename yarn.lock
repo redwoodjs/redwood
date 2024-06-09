@@ -8613,7 +8613,10 @@ __metadata:
   dependencies:
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/cookie-jar": "workspace:*"
+    "@redwoodjs/framework-tools": "workspace:*"
+    "@types/fs-extra": "npm:11.0.4"
     esbuild: "npm:0.21.3"
+    fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
     tsx: "npm:4.10.3"
     typescript: "npm:5.4.5"
