@@ -8592,6 +8592,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.5"
     "@redwoodjs/auth": "workspace:*"
+    "@redwoodjs/server-store": "workspace:*"
     "@testing-library/jest-dom": "npm:6.4.5"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
