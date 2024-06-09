@@ -1,11 +1,12 @@
 import path from 'node:path'
+
 import { vol } from 'memfs'
 import { normalizePath } from 'vite'
 
 import { afterAll, beforeAll, describe, it, expect, vi, Mock, beforeEach, afterEach } from 'vitest'
 
 import { processPagesDir } from '@redwoodjs/project-config'
-import type ProjectConfig from '@redwoodjs/project-config'
+import type * as ProjectConfig from '@redwoodjs/project-config'
 
 import { rscRoutesAutoLoader } from '../vite-plugin-rsc-routes-auto-loader'
 
@@ -14,14 +15,14 @@ vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 const RWJS_CWD = process.env.RWJS_CWD
 
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {
-  const originalGetPaths = await importOriginal<typeof ProjectConfig>()
+  const originalProjectConfig = await importOriginal<typeof ProjectConfig>()
   return {
-    ...originalGetPaths,
+    ...originalProjectConfig,
     getPaths: () => {
       return {
-        ...originalGetPaths.getPaths(),
+        ...originalProjectConfig.getPaths(),
         web: {
-          ...originalGetPaths.getPaths().web,
+          ...originalProjectConfig.getPaths().web,
           routes: '/Users/mojombo/rw-app/web/src/Routes.tsx',
         },
       }
