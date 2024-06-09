@@ -2,7 +2,7 @@ import * as fs from 'node:fs'
 import * as path from 'node:path'
 
 import dotenv from 'dotenv'
-import toml from 'smol-toml'
+import * as toml from 'smol-toml'
 
 import type { Config } from '@redwoodjs/project-config'
 import {

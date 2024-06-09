@@ -1,4 +1,4 @@
-import toml from 'smol-toml'
+import * as toml from 'smol-toml'
 import { Range } from 'vscode-languageserver-types'
 
 import { FileNode } from '../ide'
