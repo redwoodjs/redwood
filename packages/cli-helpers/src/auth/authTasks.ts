@@ -3,7 +3,7 @@ import path from 'path'
 
 import type { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
-import { resolveFile } from '@redwoodjs/project-config'
+import { getConfig, resolveFile } from '@redwoodjs/project-config'
 
 import { colors } from '../lib/colors.js'
 import type { ExistingFiles } from '../lib/index.js'
@@ -342,12 +342,20 @@ export const createWebAuth = (basedir: string, webAuthn: boolean) => {
   const templatesBaseDir = path.join(basedir, 'templates', 'web')
   const templates = fs.readdirSync(templatesBaseDir)
 
+  const rscEnabled = getConfig().experimental?.rsc?.enabled
+
+  const templateStart =
+    'auth' + (webAuthn ? '.webAuthn' : '') + (rscEnabled ? '.rsc' : '') + '.ts'
+
   const templateFileName = templates.find((template) => {
-    return template.startsWith('auth.' + (webAuthn ? 'webAuthn.ts' : 'ts'))
+    return template.startsWith(templateStart)
   })
 
   if (!templateFileName) {
-    throw new Error('Could not find the auth.ts template')
+    throw new Error(
+      'Could not find the auth.ts(x) template, looking for filename starting with ' +
+        templateStart,
+    )
   }
 
   const templateExtension = templateFileName.split('.').at(-2)
