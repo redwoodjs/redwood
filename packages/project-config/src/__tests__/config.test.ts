@@ -64,6 +64,7 @@ describe('getConfig', () => {
           },
           "reactCompiler": {
             "enabled": false,
+            "lintOnly": false,
           },
           "realtime": {
             "enabled": false,
