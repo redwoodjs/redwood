@@ -1,3 +1,5 @@
+'use client'
+
 import SuperTokens, { SuperTokensWrapper } from 'supertokens-auth-react'
 import Session from 'supertokens-auth-react/recipe/session'
 import ThirdPartyEmailPassword, {

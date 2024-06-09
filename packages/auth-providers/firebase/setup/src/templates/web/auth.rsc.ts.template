@@ -1,3 +1,5 @@
+'use client'
+
 import { initializeApp, getApp, getApps } from 'firebase/app'
 import * as firebaseAuth from 'firebase/auth'
 

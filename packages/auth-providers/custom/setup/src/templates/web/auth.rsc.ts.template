@@ -1,3 +1,5 @@
+'use client'
+
 import { createAuthentication } from '@redwoodjs/auth'
 
 // If you're integrating with an auth service provider you should delete this interface.
