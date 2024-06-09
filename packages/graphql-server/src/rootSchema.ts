@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {
   BigIntResolver,
   DateResolver,
@@ -10,11 +9,8 @@ import {
 } from 'graphql-scalars'
 import gql from 'graphql-tag'
 
+import { prismaVersion, redwoodVersion } from '@redwoodjs/api'
 import type { GlobalContext } from '@redwoodjs/context'
-
-// @TODO move prismaVersion & redwoodVersion to internal?
-// We don't want a circular dependency here..
-const { prismaVersion, redwoodVersion } = require('@redwoodjs/api')
 
 /**
  * This adds scalar types for dealing with Date, Time, DateTime, and JSON.
