@@ -36,7 +36,7 @@ export const getWebSideBabelPlugins = (
   // the user wants to do more than simply lint before enabling the plugin
   const useReactCompiler =
     config.experimental?.reactCompiler?.enabled &&
-    config.experimental.reactCompiler.lintOnly === false
+    config.experimental?.reactCompiler?.lintOnly === false
 
   const useTrustedDocumentsGqlTag = config.graphql.trustedDocuments
 
