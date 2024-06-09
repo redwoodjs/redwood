@@ -56,7 +56,7 @@ export const handler = async ({ force, verbose }) => {
             writeFile(
               redwoodTomlPath,
               configContent.concat(
-                '\n[experimental.reactCompiler]\n  enabled = true\n',
+                '\n[experimental.reactCompiler]\n  enabled = true\n  lintOnly = false\n',
               ),
               {
                 overwriteExisting: true, // redwood.toml always exists
