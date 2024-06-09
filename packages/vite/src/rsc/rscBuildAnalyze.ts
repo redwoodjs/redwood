@@ -53,14 +53,17 @@ export async function rscBuildAnalyze() {
       // safely be external. The more we can externalize the better, because
       // it means we can skip analyzing them, which means faster build times.
       external: [
-        'react',
-        'minimatch',
         '@prisma/client',
         '@prisma/fetch-engine',
         '@prisma/internals',
-        'playwright',
+        '@redwoodjs/auth-dbauth-api',
         '@redwoodjs/cookie-jar',
         '@redwoodjs/server-store',
+        '@simplewebauthn/server',
+        'graphql-scalars',
+        'minimatch',
+        'playwright',
+        'react',
       ],
       resolve: {
         externalConditions: ['react-server'],
