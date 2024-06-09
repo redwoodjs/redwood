@@ -55,9 +55,16 @@ export async function rscBuildForServer(
       // Server store has to be externalized, because it's a singleton (shared between FW and App)
       external: [
         '@prisma/client',
-        'react-dom',
+        '@prisma/fetch-engine',
+        '@prisma/internals',
+        '@redwoodjs/auth-dbauth-api',
         '@redwoodjs/cookie-jar',
         '@redwoodjs/server-store',
+        '@simplewebauthn/server',
+        'graphql-scalars',
+        'minimatch',
+        'playwright',
+        'react-dom',
       ],
       resolve: {
         // These conditions are used in the plugin pipeline, and only affect non-externalized

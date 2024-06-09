@@ -1,3 +1,5 @@
+import fs from 'node:fs'
+
 import { build as viteBuild } from 'vite'
 import { cjsInterop } from 'vite-plugin-cjs-interop'
 
@@ -46,13 +48,16 @@ export async function rscBuildForSsr({
       // As of vite 5.2 `true` here means "all except node built-ins"
       noExternal: true,
       external: [
-        'minimatch',
         '@prisma/client',
         '@prisma/fetch-engine',
         '@prisma/internals',
-        'playwright',
+        '@redwoodjs/auth-dbauth-api',
         '@redwoodjs/cookie-jar',
         '@redwoodjs/server-store',
+        '@simplewebauthn/server',
+        'graphql-scalars',
+        'minimatch',
+        'playwright',
       ],
     },
     plugins: [
@@ -130,6 +135,21 @@ export async function rscBuildForSsr({
   if (!('output' in ssrBuildOutput)) {
     throw new Error('Unexpected vite ssr build output')
   }
+
+  // TODO (RSC): This is horrible. Please help me find a better way to do this.
+  // Really should not be search/replacing in the built files like this.
+  const entryServerMjs = fs.readFileSync(
+    rwPaths.web.distSsrEntryServer,
+    'utf-8',
+  )
+
+  fs.writeFileSync(
+    rwPaths.web.distSsrEntryServer,
+    entryServerMjs.replace(
+      /import (require\S+) from "graphql-scalars";/,
+      'import * as $1 from "graphql-scalars";',
+    ),
+  )
 
   return ssrBuildOutput.output
 }
