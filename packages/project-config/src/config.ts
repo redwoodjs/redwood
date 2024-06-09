@@ -114,6 +114,7 @@ export interface Config {
     }
     reactCompiler: {
       enabled: boolean
+      lintOnly: boolean
     }
   }
 }
@@ -195,6 +196,7 @@ const DEFAULT_CONFIG: Config = {
     },
     reactCompiler: {
       enabled: false,
+      lintOnly: false,
     },
   },
 }
