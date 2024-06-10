@@ -8486,7 +8486,7 @@ __metadata:
     jest-environment-jsdom: "npm:29.7.0"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
-    tstyche: "npm:1.1.0"
+    tstyche: "npm:2.0.0"
     typescript: "npm:5.4.5"
   peerDependencies:
     react: 18.2.0
@@ -8677,7 +8677,7 @@ __metadata:
     react-hot-toast: "npm:2.4.1"
     stacktracey: "npm:2.1.8"
     ts-toolbelt: "npm:9.6.0"
-    tstyche: "npm:1.1.0"
+    tstyche: "npm:2.0.0"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
@@ -29526,7 +29526,7 @@ __metadata:
     ora: "npm:7.0.1"
     prompts: "npm:2.4.2"
     rimraf: "npm:5.0.7"
-    tstyche: "npm:1.1.0"
+    tstyche: "npm:2.0.0"
     tsx: "npm:4.10.3"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
@@ -32013,17 +32013,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tstyche@npm:1.1.0":
-  version: 1.1.0
-  resolution: "tstyche@npm:1.1.0"
+"tstyche@npm:2.0.0":
+  version: 2.0.0
+  resolution: "tstyche@npm:2.0.0"
   peerDependencies:
     typescript: 4.x || 5.x
   peerDependenciesMeta:
     typescript:
       optional: true
   bin:
-    tstyche: build/bin.js
-  checksum: 10c0/4a54afed4c8081baaa13a1b5eb7e2eff1a39dbede912986b5f32c7af723eb4580acaf9aacfb3fd034705126df3491d61dcf09f3c1344d15cd617c813ea9f0be6
+    tstyche: ./build/bin.js
+  checksum: 10c0/3688e63b0b5ba3b58417b8e515ce4bc3d2ca53357914028d954cda83d14d169d091cf8f28bb02371120d3363d183821d554c6c031cf74f28ff443d065c8e5695
   languageName: node
   linkType: hard
 

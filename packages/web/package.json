@@ -62,7 +62,7 @@
     "nodemon": "3.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "tstyche": "1.1.0",
+    "tstyche": "2.0.0",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },
