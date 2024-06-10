@@ -103,8 +103,7 @@ export default ForgotPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom password set via flag 2`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -364,8 +363,7 @@ export default ResetPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom password set via flag 4`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -591,8 +589,7 @@ export default ForgotPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom password set via prompt 2`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -852,8 +849,7 @@ export default ResetPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom password set via prompt 4`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -1079,8 +1075,7 @@ export default ForgotPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom username and password set via flag 2`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -1340,8 +1335,7 @@ export default ResetPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom username and password set via flag 4`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -1567,8 +1561,7 @@ export default ForgotPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt 2`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -1828,8 +1821,7 @@ export default ResetPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt 4`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -2055,8 +2047,7 @@ export default ForgotPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt and with webauthn enabled via flag 2`] = `
-"import { useRef, useState } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef, useState } from 'react'
 
 import {
   Form,
@@ -2448,8 +2439,7 @@ export default ResetPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt and with webauthn enabled via flag 4`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -2675,8 +2665,7 @@ export default ForgotPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt 2`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -2936,8 +2925,7 @@ export default ResetPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt 4`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -3167,8 +3155,7 @@ export default ForgotPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom username set via flag 2`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -3430,8 +3417,7 @@ export default ResetPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom username set via flag 4`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -3661,8 +3647,7 @@ export default ForgotPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom username set via prompt 2`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -3924,8 +3909,7 @@ export default ResetPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with custom username set via prompt 4`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -4155,8 +4139,7 @@ export default ForgotPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with default labels 2`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
@@ -4418,8 +4401,7 @@ export default ResetPasswordPage
 `;
 
 exports[`dbAuth > handler > produces the correct files with default labels 4`] = `
-"import { useRef } from 'react'
-import { useEffect } from 'react'
+"import { useEffect, useRef } from 'react'
 
 import {
   Form,
