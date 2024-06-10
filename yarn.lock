@@ -11224,11 +11224,11 @@ __metadata:
   linkType: hard
 
 "@types/mjml@npm:4":
-  version: 4.7.1
-  resolution: "@types/mjml@npm:4.7.1"
+  version: 4.7.4
+  resolution: "@types/mjml@npm:4.7.4"
   dependencies:
     "@types/mjml-core": "npm:*"
-  checksum: 10c0/52dc7cf2388f8def26ae3fae3a230650d4aa76de10a0ef832a4db0c9a8a20daed7520ceeecee037992a884e422a18735c096ca48e8bc2bbb6a3e76fa02ba3d74
+  checksum: 10c0/6f4bbdf709e1f6c9b26be67146b1e4c759142fb4ddfa4c079b600835701bb2039c60cd530d016f1d2f1aef4256580e30cdc942c3acd6935e2fe56b5a665795ae
   languageName: node
   linkType: hard
 
