@@ -53,7 +53,7 @@
     "@redwoodjs/realtime": "7.6.3",
     "@types/aws-lambda": "8.10.138",
     "@types/jsonwebtoken": "9.0.6",
-    "@types/lodash": "4.17.3",
+    "@types/lodash": "4.17.5",
     "@types/uuid": "9.0.8",
     "@whatwg-node/fetch": "0.9.17",
     "jest": "29.7.0",
