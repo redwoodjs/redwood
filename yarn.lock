@@ -7702,14 +7702,14 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.5"
     "@redwoodjs/auth": "npm:7.6.3"
-    "@supabase/supabase-js": "npm:2.43.2"
+    "@supabase/supabase-js": "npm:2.43.4"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.37.1"
     react: "npm:18.2.0"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
-    "@supabase/supabase-js": 2.43.2
+    "@supabase/supabase-js": 2.43.4
   languageName: unknown
   linkType: soft
 
@@ -9931,9 +9931,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:2.43.2":
-  version: 2.43.2
-  resolution: "@supabase/supabase-js@npm:2.43.2"
+"@supabase/supabase-js@npm:2.43.4":
+  version: 2.43.4
+  resolution: "@supabase/supabase-js@npm:2.43.4"
   dependencies:
     "@supabase/auth-js": "npm:2.64.2"
     "@supabase/functions-js": "npm:2.3.1"
@@ -9941,7 +9941,7 @@ __metadata:
     "@supabase/postgrest-js": "npm:1.15.2"
     "@supabase/realtime-js": "npm:2.9.5"
     "@supabase/storage-js": "npm:2.5.5"
-  checksum: 10c0/5bb5eddcc7e6ce47cb4137f415bd9882026186a30010758e82004924204a7fe96a46f106bac9008839604bf39b805dc5c5df4bc4f26792e88f8847f49537e2e4
+  checksum: 10c0/466efc6f9d9353c2d9d0881acb4aeaf441b06a97ee099d8eff6c8602ba6cbeef0b409808f36b39e0b843159f0ca2e9476d2b3c25547c103e51ce55c42dce84f8
   languageName: node
   linkType: hard
 
