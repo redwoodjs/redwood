@@ -9,13 +9,13 @@ describe('CellSuccessData', () => {
         foo: '',
       }
 
-      expect(value).type.toEqual<{ foo: string }>()
+      expect(value).type.toBe<{ foo: string }>()
     })
 
     it('removes null and undefined from properties', () => {
       const value: CellSuccessData<{ foo?: string | null }> = { foo: '' }
 
-      expect(value).type.toEqual<{ foo: string }>()
+      expect(value).type.toBe<{ foo: string }>()
     })
   })
 
@@ -30,7 +30,7 @@ describe('CellSuccessData', () => {
         bar: '',
       }
 
-      expect(value).type.toEqual<{ foo: string; bar: string }>()
+      expect(value).type.toBe<{ foo: string; bar: string }>()
     })
 
     it('does not remove null or undefined from properties', () => {
@@ -42,7 +42,7 @@ describe('CellSuccessData', () => {
         bar: '',
       }
 
-      expect(value).type.toEqual<{ foo?: string | null; bar?: string | null }>()
+      expect(value).type.toBe<{ foo?: string | null; bar?: string | null }>()
     })
   })
 })
