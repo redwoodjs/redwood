@@ -11175,11 +11175,11 @@ __metadata:
   linkType: hard
 
 "@types/memjs@npm:1":
-  version: 1.3.0
-  resolution: "@types/memjs@npm:1.3.0"
+  version: 1.3.3
+  resolution: "@types/memjs@npm:1.3.3"
   dependencies:
     "@types/node": "npm:*"
-  checksum: 10c0/71d8dda576405a8ca16b6b312a546e4703f102a24d39c64d486b9bf6cdb13498ebf1c14e3b5ce583baeae47f84f21576c64950ba094b14ccd72639106a17dfd5
+  checksum: 10c0/7179534b5f16e750fdc4e45242bf657b061ccbb876c721fc85c45b46cf9603503f286a9f2139cc86a95e1e2c6c7c8fce678fd8765ad5e1f9a888e5014d03a2b0
   languageName: node
   linkType: hard
 
