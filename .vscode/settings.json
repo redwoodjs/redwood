@@ -32,6 +32,7 @@
     "Flightcontrol",
     "graphiql",
     "memfs",
+    "mojombo",
     "OGIMAGE",
     "opentelemetry",
     "pino",

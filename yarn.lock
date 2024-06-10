@@ -8046,7 +8046,7 @@ __metadata:
     semver: "npm:7.6.2"
     smol-toml: "npm:1.2.1"
     string-env-interpolation: "npm:1.0.1"
-    systeminformation: "npm:5.22.9"
+    systeminformation: "npm:5.22.10"
     terminal-link: "npm:2.1.1"
     title-case: "npm:3.0.3"
     tsx: "npm:4.10.3"
@@ -8373,7 +8373,7 @@ __metadata:
     rimraf: "npm:5.0.7"
     source-map: "npm:0.7.4"
     string-env-interpolation: "npm:1.0.1"
-    systeminformation: "npm:5.22.9"
+    systeminformation: "npm:5.22.10"
     terminal-link: "npm:2.1.1"
     ts-node: "npm:10.9.2"
     tsx: "npm:4.10.3"
@@ -8599,7 +8599,7 @@ __metadata:
     core-js: "npm:3.37.1"
     react: "npm:19.0.0-beta-04b058868c-20240508"
     react-dom: "npm:19.0.0-beta-04b058868c-20240508"
-    tstyche: "npm:1.1.0"
+    tstyche: "npm:2.0.0"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
@@ -8669,13 +8669,13 @@ __metadata:
   dependencies:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/structure": "workspace:*"
-    "@types/envinfo": "npm:7.8.3"
+    "@types/envinfo": "npm:7.8.4"
     "@types/uuid": "npm:9.0.8"
     "@types/yargs": "npm:17.0.32"
     "@whatwg-node/fetch": "npm:0.9.17"
     ci-info: "npm:4.0.0"
     envinfo: "npm:7.13.0"
-    systeminformation: "npm:5.22.9"
+    systeminformation: "npm:5.22.10"
     tsx: "npm:4.10.3"
     typescript: "npm:5.4.5"
     uuid: "npm:9.0.1"
@@ -8835,7 +8835,7 @@ __metadata:
     react-hot-toast: "npm:2.4.1"
     stacktracey: "npm:2.1.8"
     ts-toolbelt: "npm:9.6.0"
-    tstyche: "npm:1.1.0"
+    tstyche: "npm:2.0.0"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
@@ -10828,10 +10828,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/envinfo@npm:7.8.3":
-  version: 7.8.3
-  resolution: "@types/envinfo@npm:7.8.3"
-  checksum: 10c0/31a504f317c8b2c93dda513d3c117f518f27cf3f36aba65e78bf908927f9ef304351fe49d6ba19515994b91d1d1c23a089bfd3c8b0f1e84737606f6791a05ff6
+"@types/envinfo@npm:7.8.4":
+  version: 7.8.4
+  resolution: "@types/envinfo@npm:7.8.4"
+  checksum: 10c0/843ccff3edf8c62f2e01a1bdc1712ca67032e6b84b54610cf973c31aed485a537a5e441875fd6974abd9dcc746086ffb21236c04f79b274045fb0868cab0df9d
   languageName: node
   linkType: hard
 
@@ -15172,7 +15172,7 @@ __metadata:
     fs-extra: "npm:11.2.0"
     klaw-sync: "npm:6.0.0"
     semver: "npm:7.6.2"
-    systeminformation: "npm:5.22.9"
+    systeminformation: "npm:5.22.10"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.10.3"
     untildify: "npm:4.0.0"
@@ -28162,7 +28162,7 @@ __metadata:
     ora: "npm:7.0.1"
     prompts: "npm:2.4.2"
     rimraf: "npm:5.0.7"
-    tstyche: "npm:1.1.0"
+    tstyche: "npm:2.0.0"
     tsx: "npm:4.10.3"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
@@ -29717,12 +29717,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.22.9":
-  version: 5.22.9
-  resolution: "systeminformation@npm:5.22.9"
+"systeminformation@npm:5.22.10":
+  version: 5.22.10
+  resolution: "systeminformation@npm:5.22.10"
   bin:
     systeminformation: lib/cli.js
-  checksum: 10c0/c8aa32c4e0729df3ee23c04be7532fbd259213c016010ae1e85b06cbf9e38adfaa2921162e291c2afca3a0ba444f233a1673510daf2abeddfd3877de827941b2
+  checksum: 10c0/ffe7774acdb04a21a10651c227f8d319b7798dbe4cbb21e473e183511b59e2c2ca14a33e3acb89030e74380e758e2c38d4289104fc5596e5970e19b6a6dab113
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
@@ -30378,17 +30378,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tstyche@npm:1.1.0":
-  version: 1.1.0
-  resolution: "tstyche@npm:1.1.0"
+"tstyche@npm:2.0.0":
+  version: 2.0.0
+  resolution: "tstyche@npm:2.0.0"
   peerDependencies:
     typescript: 4.x || 5.x
   peerDependenciesMeta:
     typescript:
       optional: true
   bin:
-    tstyche: build/bin.js
-  checksum: 10c0/4a54afed4c8081baaa13a1b5eb7e2eff1a39dbede912986b5f32c7af723eb4580acaf9aacfb3fd034705126df3491d61dcf09f3c1344d15cd617c813ea9f0be6
+    tstyche: ./build/bin.js
+  checksum: 10c0/3688e63b0b5ba3b58417b8e515ce4bc3d2ca53357914028d954cda83d14d169d091cf8f28bb02371120d3363d183821d554c6c031cf74f28ff443d065c8e5695
   languageName: node
   linkType: hard
 
