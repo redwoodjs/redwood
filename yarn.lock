@@ -8669,7 +8669,7 @@ __metadata:
   dependencies:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/structure": "workspace:*"
-    "@types/envinfo": "npm:7.8.3"
+    "@types/envinfo": "npm:7.8.4"
     "@types/uuid": "npm:9.0.8"
     "@types/yargs": "npm:17.0.32"
     "@whatwg-node/fetch": "npm:0.9.17"
@@ -10828,10 +10828,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/envinfo@npm:7.8.3":
-  version: 7.8.3
-  resolution: "@types/envinfo@npm:7.8.3"
-  checksum: 10c0/31a504f317c8b2c93dda513d3c117f518f27cf3f36aba65e78bf908927f9ef304351fe49d6ba19515994b91d1d1c23a089bfd3c8b0f1e84737606f6791a05ff6
+"@types/envinfo@npm:7.8.4":
+  version: 7.8.4
+  resolution: "@types/envinfo@npm:7.8.4"
+  checksum: 10c0/843ccff3edf8c62f2e01a1bdc1712ca67032e6b84b54610cf973c31aed485a537a5e441875fd6974abd9dcc746086ffb21236c04f79b274045fb0868cab0df9d
   languageName: node
   linkType: hard
 
