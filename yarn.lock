@@ -8785,7 +8785,7 @@ __metadata:
     tsx: "npm:4.10.3"
     typescript: "npm:5.4.5"
     vite: "npm:5.2.13"
-    vite-plugin-cjs-interop: "npm:2.1.0"
+    vite-plugin-cjs-interop: "npm:2.1.1"
     vitest: "npm:1.6.0"
     yargs-parser: "npm:21.1.1"
   bin:
@@ -22889,12 +22889,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-string@npm:^0.30.0, magic-string@npm:^0.30.5, magic-string@npm:^0.30.8":
-  version: 0.30.8
-  resolution: "magic-string@npm:0.30.8"
+"magic-string@npm:^0.30.0, magic-string@npm:^0.30.10, magic-string@npm:^0.30.5":
+  version: 0.30.10
+  resolution: "magic-string@npm:0.30.10"
   dependencies:
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
-  checksum: 10c0/51a1f06f678c082aceddfb5943de9b6bdb88f2ea1385a1c2adf116deb73dfcfa50df6c222901d691b529455222d4d68d0b28be5689ac6f69b3baa3462861f922
+  checksum: 10c0/aa9ca17eae571a19bce92c8221193b6f93ee8511abb10f085e55ffd398db8e4c089a208d9eac559deee96a08b7b24d636ea4ab92f09c6cf42a7d1af51f7fd62b
   languageName: node
   linkType: hard
 
@@ -31258,16 +31258,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-cjs-interop@npm:2.1.0":
-  version: 2.1.0
-  resolution: "vite-plugin-cjs-interop@npm:2.1.0"
+"vite-plugin-cjs-interop@npm:2.1.1":
+  version: 2.1.1
+  resolution: "vite-plugin-cjs-interop@npm:2.1.1"
   dependencies:
     acorn: "npm:^8.11.3"
     acorn-import-assertions: "npm:^1.9.0"
     estree-walker: "npm:^3.0.3"
-    magic-string: "npm:^0.30.8"
-    minimatch: "npm:^9.0.3"
-  checksum: 10c0/0481d21e4a95977ca899c076d0d03b7d2fe207d69303344d4c7a8e12cf7cb547e18c446d1b71fb2d1f0bf6fdad4bcd35129cace162814eade756fbf90c64d95f
+    magic-string: "npm:^0.30.10"
+    minimatch: "npm:^9.0.4"
+  checksum: 10c0/17ae116184c00269dae7498d82302362d42d2ec013998c8c9400116a53c7f96e06e12e08de2e85878fa560338d8715218381243240868ac334c4b03575b6dc69
   languageName: node
   linkType: hard
 
