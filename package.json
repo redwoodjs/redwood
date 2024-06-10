@@ -64,7 +64,7 @@
     "@babel/preset-typescript": "^7.22.15",
     "@babel/runtime-corejs3": "7.24.5",
     "@faker-js/faker": "8.4.1",
-    "@npmcli/arborist": "7.5.2",
+    "@npmcli/arborist": "7.5.3",
     "@playwright/test": "1.44.1",
     "@testing-library/jest-dom": "6.4.5",
     "@testing-library/react": "14.3.1",
