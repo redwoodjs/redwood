@@ -63,6 +63,11 @@ mockFiles[getPaths().web.app] = realfs
 
 describe('dbAuth', () => {
   beforeEach(() => {
+    delete mockFiles[path.join(getPaths().web.src, 'auth.ts')]
+    delete mockFiles[path.join(getPaths().web.src, 'auth.tsx')]
+    delete mockFiles[path.join(getPaths().web.src, 'auth.js')]
+    delete mockFiles[path.join(getPaths().web.src, 'auth.jsx')]
+
     vol.reset()
     vol.fromJSON(mockFiles)
   })
@@ -683,6 +688,104 @@ describe('dbAuth', () => {
         )
         .toString()
       expect(signupPage).toMatchSnapshot()
+    })
+  })
+
+  describe('isDbAuthSetup', () => {
+    it('works with js file', () => {
+      mockFiles[path.join(getPaths().web.src, 'auth.js')] = `
+import { createDbAuthClient, createAuth } from '@redwoodjs/auth-dbauth-web'
+
+const dbAuthClient = createDbAuthClient()
+
+export const { AuthProvider, useAuth } = createAuth(dbAuthClient)
+`
+      vol.reset()
+      vol.fromJSON(mockFiles)
+
+      expect(dbAuth.isDbAuthSetup()).toBeTruthy()
+    })
+
+    it('works with ts file', () => {
+      mockFiles[path.join(getPaths().web.src, 'auth.ts')] = `
+import { createDbAuthClient, createAuth } from '@redwoodjs/auth-dbauth-web'
+
+const dbAuthClient = createDbAuthClient()
+
+export const { AuthProvider, useAuth } = createAuth(dbAuthClient)
+`
+      vol.reset()
+      vol.fromJSON(mockFiles)
+
+      expect(dbAuth.isDbAuthSetup()).toBeTruthy()
+    })
+
+    it('works with jsx file and renamed import', () => {
+      mockFiles[path.join(getPaths().web.src, 'auth.jsx')] = `
+import { createDbAuthClient, createAuth: renamedCreateAuth } from '@redwoodjs/auth-dbauth-web'
+
+const dbAuthClient = createDbAuthClient()
+
+const { AuthProvider, useAuth } = renamedCreateAuth(dbAuthClient)
+
+const CustomAuthProvider = ({ children }) => {
+  return (
+    <div className="custom-auth-provider">
+      <AuthProvider>{children}</AuthProvider>
+    </div>
+  )
+}
+
+export const AuthProvider = CustomAuthProvider
+export { useAuth }
+`
+      vol.reset()
+      vol.fromJSON(mockFiles)
+
+      expect(dbAuth.isDbAuthSetup()).toBeTruthy()
+    })
+
+    it("Doesn't give false positives", () => {
+      mockFiles[path.join(getPaths().web.src, 'auth.jsx')] = `
+import React, { useEffect } from 'react'
+
+import { ClerkProvider, useUser } from '@clerk/clerk-react'
+
+import { createAuth } from '@redwoodjs/auth-clerk-web'
+import { navigate } from '@redwoodjs/router'
+
+export const { AuthProvider: ClerkRwAuthProvider, useAuth } = createAuth()
+
+const ClerkProviderWrapper = ({ children, clerkOptions }) => {
+  const { reauthenticate } = useAuth()
+
+  return (
+    <ClerkProvider
+      {...clerkOptions}
+      navigate={(to) => reauthenticate().then(() => navigate(to))}
+    >
+      {children}
+    </ClerkProvider>
+  )
+}
+
+export const AuthProvider = ({ children }: Props) => {
+  const publishableKey = process.env.CLERK_PUBLISHABLE_KEY
+
+  return (
+    <ClerkRwAuthProvider>
+      <ClerkProviderWrapper clerkOptions={{ publishableKey }}>
+        {children}
+      </ClerkProviderWrapper>
+    </ClerkRwAuthProvider>
+  )
+}
+
+`
+      vol.reset()
+      vol.fromJSON(mockFiles)
+
+      expect(dbAuth.isDbAuthSetup()).toBeFalsy()
     })
   })
 })
