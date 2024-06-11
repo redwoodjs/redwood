@@ -110,6 +110,6 @@
     "yargs": "17.7.2",
     "zx": "8.1.0"
   },
-  "packageManager": "yarn@4.2.2",
+  "packageManager": "yarn@4.3.0",
   "npmClient": "yarn"
 }
