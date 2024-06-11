@@ -14,11 +14,11 @@ import {
   apiPackages as webAuthnApiPackages,
 } from './webAuthn.setupData'
 
-const { version } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
-)
-
 export async function handler({ webauthn, force: forceArg }: Args) {
+  const { version } = JSON.parse(
+    fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
+  )
+
   const webAuthn = await shouldIncludeWebAuthn(webauthn)
 
   standardAuthHandler({
@@ -72,18 +72,29 @@ export const createAuthDecoderFunction = {
       throw new Error('Could not find your graphql file path')
     }
 
+    const authDecoderCreation =
+      'const authDecoder = createAuthDecoder(cookieName)'
+
     const content = fs.readFileSync(graphqlPath, 'utf-8')
 
-    const newContent = content
-      .replace(
-        'import { getCurrentUser } from',
-        'import { cookieName, getCurrentUser } from'
-      )
-      .replace(
+    let newContent = content.replace(
+      'import { getCurrentUser } from',
+      'import { cookieName, getCurrentUser } from'
+    )
+
+    const authDecoderCreationRegexp = new RegExp(
+      '^' + escapeRegExp(authDecoderCreation),
+      'm'
+    )
+
+    if (!authDecoderCreationRegexp.test(newContent)) {
+      newContent = newContent.replace(
         'export const handler = createGraphQLHandler({',
-        'const authDecoder = createAuthDecoder(cookieName)\n\n' +
+        authDecoderCreation +
+          '\n\n' +
           'export const handler = createGraphQLHandler({'
       )
+    }
 
     if (!newContent.includes('import { cookieName')) {
       throw new Error('Failed to import cookieName')
@@ -91,4 +102,9 @@ export const createAuthDecoderFunction = {
 
     fs.writeFileSync(graphqlPath, newContent)
   },
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#escaping
+function escapeRegExp(str: string) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
