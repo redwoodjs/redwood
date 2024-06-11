@@ -320,21 +320,21 @@ const tasks = ({
         task: async (ctx, task) => {
           if (webauthn != null) {
             task.skip(
-              `Querying WebAuthn addition: argument webauthn passed, WebAuthn ${
-                webauthn ? '' : 'not'
+              `Querying WebAuthn addition: argument webauthn passed, WebAuthn${
+                webauthn ? '' : ' not'
               } included`,
             )
             return
           }
           const response = await task.prompt({
             type: 'confirm',
-            name: 'answer',
+            name: 'webauthn',
             message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
             default: false,
           })
-          webauthn = response
-          task.title = `Querying WebAuthn addition: WebAuthn addition ${
-            webauthn ? '' : 'not'
+          ctx.webauthn = response
+          task.title = `Querying WebAuthn addition: WebAuthn addition${
+            ctx.webauthn ? '' : ' not'
           } included`
         },
       },
@@ -407,7 +407,7 @@ export const handler = async (yargs) => {
 
     console.log('')
     console.log(
-      yargs.webauthn
+      yargs.webauthn || t.ctx.webauthn
         ? getPostInstallWebauthnMessage(isDbAuthSetup())
         : getPostInstallMessage(isDbAuthSetup()),
     )
@@ -436,9 +436,3 @@ export function isDbAuthSetup() {
 
   return false
 }
-
-function ab() {
-  return 'ab '
-}
-
-export { ab }

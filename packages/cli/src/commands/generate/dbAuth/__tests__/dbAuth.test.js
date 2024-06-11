@@ -94,8 +94,10 @@ describe('dbAuth', () => {
 
   describe('handler', () => {
     it('exits when all files are skipped', async () => {
-      const mockExit = vi.spyOn(process, 'exit').mockImplementation()
-      const mockConsoleInfo = vi.spyOn(console, 'info').mockImplementation()
+      const mockExit = vi.spyOn(process, 'exit').mockImplementation(() => {})
+      const mockConsoleInfo = vi
+        .spyOn(console, 'info')
+        .mockImplementation(() => {})
 
       await dbAuth.handler({
         listr2: { silentRendererCondition: true },
@@ -191,6 +193,9 @@ describe('dbAuth', () => {
 
     it('prompt for webauthn', async () => {
       let correctPrompt = false
+      const mockConsoleLog = vi
+        .spyOn(console, 'log')
+        .mockImplementation(() => {})
 
       const customEnquirer = new Enquirer({ show: false })
       customEnquirer.on('prompt', (prompt) => {
@@ -205,6 +210,40 @@ describe('dbAuth', () => {
         listr2: { silentRendererCondition: true },
       })
       expect(correctPrompt).toBe(true)
+
+      // Verify that the final log message is not the webauthn one
+      expect(mockConsoleLog.mock.calls.at(-1)[0]).toMatch(
+        /Look in LoginPage, Sign/,
+      )
+      mockConsoleLog.mockRestore()
+    })
+
+    it('prints webauthn message when answering Yes', async () => {
+      const mockConsoleLog = vi
+        .spyOn(console, 'log')
+        .mockImplementation(() => {})
+
+      const customEnquirer = new Enquirer()
+      customEnquirer.on('prompt', (prompt) => {
+        if (prompt.state.message.includes('Enable WebAuthn')) {
+          prompt.on('run', () => {
+            return prompt.keypress('y')
+          })
+        } else {
+          prompt.submit()
+        }
+      })
+
+      await dbAuth.handler({
+        enquirer: customEnquirer,
+        listr2: { silentRendererCondition: true },
+      })
+
+      // Verify that the final log message is not the webauthn one
+      expect(mockConsoleLog.mock.calls.at(-1)[0]).toMatch(
+        /In LoginPage, look for the `REDIRECT`/,
+      )
+      mockConsoleLog.mockRestore()
     })
 
     it('does not prompt for webauthn when flag is given', async () => {
@@ -636,16 +675,19 @@ describe('dbAuth', () => {
     it('produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt', async () => {
       const customEnquirer = new Enquirer()
       customEnquirer.on('prompt', (prompt) => {
-        if (prompt.state.message.includes('username label')) {
-          prompt.value = 'Email'
-        }
-        if (prompt.state.message.includes('password label')) {
-          prompt.value = 'Secret'
-        }
         if (prompt.state.message.includes('Enable WebAuthn')) {
-          prompt.value = true
+          prompt.on('run', () => {
+            return prompt.keypress('y')
+          })
+        } else {
+          if (prompt.state.message.includes('username label')) {
+            prompt.value = 'Email'
+          } else if (prompt.state.message.includes('password label')) {
+            prompt.value = 'Secret'
+          }
+
+          prompt.submit()
         }
-        prompt.submit()
       })
 
       await dbAuth.handler({
