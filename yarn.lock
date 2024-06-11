@@ -8648,7 +8648,7 @@ __metadata:
     "@types/line-column": "npm:1.0.2"
     "@types/lodash": "npm:4.17.5"
     "@types/node": "npm:20.12.12"
-    "@types/vscode": "npm:1.89.0"
+    "@types/vscode": "npm:1.90.0"
     camelcase: "npm:6.3.0"
     core-js: "npm:3.37.1"
     deepmerge: "npm:4.3.1"
@@ -11577,10 +11577,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/vscode@npm:1.89.0":
-  version: 1.89.0
-  resolution: "@types/vscode@npm:1.89.0"
-  checksum: 10c0/b44a80fc3ef66223a5adcb790f1cca23d698b51b27bd934a38cc809c104d5028e1167cf5b91ed3375fb3c169e88d793952a855b991a6c22d15bc9bee0a846902
+"@types/vscode@npm:1.90.0":
+  version: 1.90.0
+  resolution: "@types/vscode@npm:1.90.0"
+  checksum: 10c0/6f18c57feca20b9ec12cb63a8c192bbf8b5138da078771af8f944fc193084565124626dde31f7ff16e7000ed2a12dde963542e2d2fe965bd24f94cdd4397e9a2
   languageName: node
   linkType: hard
 
