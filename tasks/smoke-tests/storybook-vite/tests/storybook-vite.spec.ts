@@ -11,13 +11,6 @@ test('Loads Cell stories', async ({ page }: PlaywrightTestArgs) => {
   await page.locator('text=/\\bBlogPostCell\\b/').click()
   await page.getByRole('link', { name: 'Loading' }).click()
 
-  // TODO There is currently an issue with the Storybook Vite CLI where it requires
-  // an initial hard reload of the page to load the stories correctly.
-  // Doing this after the initial clicks (which are just on the Storybook UI shell)
-  // to make sure that the page is actually loaded.
-  // This is a workaround until the issue is fixed.
-  await page.reload()
-
   await expect(page).toHaveURL(
     `http://localhost:7910/?path=/story/cells-blogpostcell--loading`,
   )
