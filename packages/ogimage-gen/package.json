@@ -51,7 +51,7 @@
     "@playwright/test": "1.44.1",
     "@redwoodjs/framework-tools": "workspace:*",
     "ts-toolbelt": "9.6.0",
-    "tsx": "4.10.3",
+    "tsx": "4.15.2",
     "typescript": "5.4.5",
     "vite": "5.2.13",
     "vitest": "1.6.0"
