@@ -76,7 +76,7 @@
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
     "@redwoodjs/web": "workspace:*",
-    "@swc/core": "1.5.7",
+    "@swc/core": "1.5.27",
     "@vitejs/plugin-react": "4.2.1",
     "@whatwg-node/fetch": "0.9.17",
     "@whatwg-node/server": "0.9.34",
@@ -89,11 +89,11 @@
     "express": "4.19.2",
     "find-my-way": "8.2.0",
     "http-proxy-middleware": "2.0.6",
-    "isbot": "5.1.6",
+    "isbot": "5.1.9",
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-server-dom-webpack": "19.0.0-beta-04b058868c-20240508",
-    "vite": "5.2.11",
-    "vite-plugin-cjs-interop": "2.1.0",
+    "vite": "5.2.13",
+    "vite-plugin-cjs-interop": "2.1.1",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
