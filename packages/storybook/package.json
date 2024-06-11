@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@types/node": "20.12.12",
-    "tsx": "4.10.3",
+    "tsx": "4.15.2",
     "typescript": "5.4.5",
     "vite": "4.5.2"
   },
