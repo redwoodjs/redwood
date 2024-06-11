@@ -58,7 +58,7 @@
   "devDependencies": {
     "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
-    "jsdom": "24.0.0",
+    "jsdom": "24.1.0",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },
