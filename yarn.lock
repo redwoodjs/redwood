@@ -7950,6 +7950,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli-storybook-vite@workspace:packages/cli-packages/storybook-vite"
   dependencies:
+    "@redwoodjs/babel-config": "workspace:*"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
@@ -7957,6 +7958,7 @@ __metadata:
     "@types/yargs": "npm:17.0.32"
     chalk: "npm:4.1.2"
     execa: "npm:5.1.1"
+    jest: "npm:29.7.0"
     storybook: "npm:7.6.17"
     storybook-framework-redwoodjs-vite: "workspace:*"
     terminal-link: "npm:2.1.1"

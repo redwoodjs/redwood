@@ -6,6 +6,7 @@
   },
   "include": ["src"],
   "references": [
+    { "path": "../../babel-config" },
     { "path": "../../cli-helpers" },
     { "path": "../../project-config" },
     { "path": "../../telemetry" },
