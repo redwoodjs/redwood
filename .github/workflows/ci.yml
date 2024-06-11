@@ -261,8 +261,15 @@ jobs:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
-      - name: 📕 Run Storybook smoke tests
+      - name: 📕 Run Storybook (Webpack) smoke tests
         working-directory: tasks/smoke-tests/storybook
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: 📕 Run Storybook (Vite) smoke tests
+        working-directory: tasks/smoke-tests/storybook-vite
         run: npx playwright test
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
@@ -374,11 +381,18 @@ jobs:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project-react-18.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
-      - name: 📕 Run Storybook smoke tests
+      - name: 📕 Run Storybook (Webpack) smoke tests
         working-directory: tasks/smoke-tests/storybook
         run: npx playwright test
         env:
           REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project-react-18.outputs.test-project-path }}
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: 📕 Run Storybook (Vite) smoke tests
+        working-directory: tasks/smoke-tests/storybook-vite
+        run: npx playwright test
+        env:
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
   smoke-tests-react-18-skip:
