@@ -787,5 +787,19 @@ export const AuthProvider = ({ children }: Props) => {
 
       expect(dbAuth.isDbAuthSetup()).toBeFalsy()
     })
+
+    it('Detects dbAuth in the test-project', () => {
+      mockFiles[path.join(getPaths().web.src, 'auth.js')] = realfs.readFileSync(
+        path.join(
+          __dirname,
+          `../../../../../../../__fixtures__/test-project/web/src/auth.ts`,
+        ),
+        'utf-8',
+      )
+      vol.reset()
+      vol.fromJSON(mockFiles)
+
+      expect(dbAuth.isDbAuthSetup()).toBeTruthy()
+    })
   })
 })
