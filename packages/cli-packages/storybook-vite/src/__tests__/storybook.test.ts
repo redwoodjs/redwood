@@ -1,6 +1,7 @@
 import type yargs from 'yargs'
 
 import * as storybookCommand from '../commands/storybook'
+import { handler as storybookViteHandler } from '../commands/storybookHandler.js'
 
 jest.mock(
   '../commands/storybookHandler.js',
@@ -52,10 +53,8 @@ describe('storybook', () => {
   it('`builder` has an epilogue', () => {
     // The typecasting here is to make TS happy when calling `builder(yargs)`
     // further down. We know that only `epilogue` will be called.
-    const yargs = { epilogue: jest.fn() } as yargs.Argv
-
+    const yargs = { epilogue: jest.fn() } as unknown as yargs.Argv
     storybookCommand.builder(yargs)
-
     // The epilogue is a string that contains a link to the docs. The string
     // contains special control characters when rendered in a terminal that
     // supports clickable links. We use regular expressions and wildcards here
@@ -69,5 +68,18 @@ describe('storybook', () => {
         /https:\/\/redwoodjs\.com\/docs\/cli-commands#datamigrate-install/,
       ),
     )
+  })
+
+  it('`handler` proxies to `./storybookHandler.js`', async () => {
+    const options = {
+      open: true,
+      build: false,
+      ci: false,
+      port: 7910,
+      buildDirectory: 'public/storybook',
+      smokeTest: false,
+    }
+    await storybookCommand.handler(options)
+    expect(storybookViteHandler).toHaveBeenCalledWith(options)
   })
 })
