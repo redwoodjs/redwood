@@ -19,7 +19,7 @@
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "yarn test:unit",
-    "test:unit": "yarn jest src"
+    "test:unit": "NODE_OPTIONS=--experimental-vm-modules yarn jest src"
   },
   "dependencies": {
     "@redwoodjs/babel-config": "workspace:*",
