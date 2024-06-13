@@ -94,10 +94,8 @@ describe('dbAuth', () => {
 
   describe('handler', () => {
     it('exits when all files are skipped', async () => {
-      const mockExit = vi.spyOn(process, 'exit').mockImplementation(() => {})
-      const mockConsoleInfo = vi
-        .spyOn(console, 'info')
-        .mockImplementation(() => {})
+      const mockExit = vi.spyOn(process, 'exit').mockImplementation()
+      const mockConsoleInfo = vi.spyOn(console, 'info').mockImplementation()
 
       await dbAuth.handler({
         listr2: { silentRendererCondition: true },

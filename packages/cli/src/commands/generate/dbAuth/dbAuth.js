@@ -328,13 +328,13 @@ const tasks = ({
           }
           const response = await task.prompt({
             type: 'confirm',
-            name: 'webauthn',
+            name: 'answer',
             message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
             default: false,
           })
           ctx.webauthn = webauthn = response
           task.title = `Querying WebAuthn addition: WebAuthn addition${
-            ctx.webauthn ? '' : ' not'
+            webauthn ? '' : ' not'
           } included`
         },
       },
