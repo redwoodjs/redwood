@@ -407,32 +407,9 @@ export const handler = async (yargs) => {
 
     console.log('')
     console.log(
-      yargs.webauthn || t.ctx.webauthn
-        ? getPostInstallWebauthnMessage(isDbAuthSetup())
-        : getPostInstallMessage(isDbAuthSetup()),
+      yargs.webauthn || t.ctx.webauthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL,
     )
   } catch (e) {
     console.log(c.error(e.message))
   }
-}
-
-// exported for testing
-export function isDbAuthSetup() {
-  const extensions = ['ts', 'js', 'tsx', 'jsx']
-  const webAuthExtension = extensions.find((ext) =>
-    fs.existsSync(path.join(getPaths().web.src, 'auth.' + ext)),
-  )
-
-  if (webAuthExtension) {
-    const webAuthPath = path.join(
-      getPaths().web.src,
-      'auth.' + webAuthExtension,
-    )
-
-    return /^import (.*) from ['"]@redwoodjs\/auth-dbauth-web['"]/m.test(
-      fs.readFileSync(webAuthPath),
-    )
-  }
-
-  return false
 }
