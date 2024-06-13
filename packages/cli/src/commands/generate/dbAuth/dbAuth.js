@@ -308,8 +308,8 @@ const tasks = ({
         task: async (ctx, task) => {
           if (webauthn != null) {
             task.skip(
-              `Querying WebAuthn addition: argument webauthn passed, WebAuthn ${
-                webauthn ? '' : 'not'
+              `Querying WebAuthn addition: argument webauthn passed, WebAuthn${
+                webauthn ? '' : ' not'
               } included`,
             )
             return
@@ -321,8 +321,8 @@ const tasks = ({
             default: false,
           })
           webauthn = response
-          task.title = `Querying WebAuthn addition: WebAuthn addition ${
-            webauthn ? '' : 'not'
+          task.title = `Querying WebAuthn addition: WebAuthn addition${
+            webauthn ? '' : ' not'
           } included`
         },
       },
