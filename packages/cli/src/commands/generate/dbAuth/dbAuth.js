@@ -416,8 +416,7 @@ export const handler = async (yargs) => {
   }
 }
 
-// exported for testing
-export function isDbAuthSetup() {
+function isDbAuthSetup() {
   const extensions = ['ts', 'js', 'tsx', 'jsx']
   const webAuthExtension = extensions.find((ext) =>
     fs.existsSync(path.join(getPaths().web.src, 'auth.' + ext)),
