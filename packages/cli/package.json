@@ -76,7 +76,7 @@
     "semver": "7.6.2",
     "smol-toml": "1.2.1",
     "string-env-interpolation": "1.0.1",
-    "systeminformation": "5.22.10",
+    "systeminformation": "5.22.11",
     "terminal-link": "2.1.1",
     "title-case": "3.0.3",
     "uuid": "9.0.1",
@@ -87,7 +87,7 @@
     "@babel/core": "^7.22.20",
     "@types/archiver": "^6",
     "memfs": "4.9.2",
-    "tsx": "4.10.3",
+    "tsx": "4.15.2",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },

@@ -64,7 +64,7 @@
     "rimraf": "5.0.7",
     "source-map": "0.7.4",
     "string-env-interpolation": "1.0.1",
-    "systeminformation": "5.22.10",
+    "systeminformation": "5.22.11",
     "terminal-link": "2.1.1",
     "ts-node": "10.9.2",
     "typescript": "5.4.5"
@@ -73,7 +73,7 @@
     "@babel/cli": "7.24.5",
     "@types/fs-extra": "11.0.4",
     "graphql-tag": "2.12.6",
-    "tsx": "4.10.3",
+    "tsx": "4.15.2",
     "vitest": "1.6.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
