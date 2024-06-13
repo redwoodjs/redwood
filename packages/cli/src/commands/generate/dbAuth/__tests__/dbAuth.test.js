@@ -668,19 +668,16 @@ describe('dbAuth', () => {
     it('produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt', async () => {
       const customEnquirer = new Enquirer()
       customEnquirer.on('prompt', (prompt) => {
-        if (prompt.state.message.includes('Enable WebAuthn')) {
-          prompt.on('run', () => {
-            return prompt.keypress('y')
-          })
-        } else {
-          if (prompt.state.message.includes('username label')) {
-            prompt.value = 'Email'
-          } else if (prompt.state.message.includes('password label')) {
-            prompt.value = 'Secret'
-          }
-
-          prompt.submit()
+        if (prompt.state.message.includes('username label')) {
+          prompt.value = 'Email'
         }
+        if (prompt.state.message.includes('password label')) {
+          prompt.value = 'Secret'
+        }
+        if (prompt.state.message.includes('Enable WebAuthn')) {
+          prompt.value = true
+        }
+        prompt.submit()
       })
 
       await dbAuth.handler({
