@@ -320,7 +320,7 @@ const tasks = ({
             message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
             default: false,
           })
-          webauthn = response
+          ctx.webauthn = webauthn = response
           task.title = `Querying WebAuthn addition: WebAuthn addition${
             webauthn ? '' : ' not'
           } included`
@@ -392,8 +392,11 @@ export const handler = async (yargs) => {
       prepareForRollback(t)
     }
     await t.run()
+
     console.log('')
-    console.log(yargs.webauthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL)
+    console.log(
+      yargs.webauthn || t.ctx.webauthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL,
+    )
   } catch (e) {
     console.log(c.error(e.message))
   }
