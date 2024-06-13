@@ -1,6 +1,3 @@
-let mockExecutedTaskTitles = []
-let mockSkippedTaskTitles = []
-
 global.__dirname = __dirname
 
 vi.mock('fs-extra')
