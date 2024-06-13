@@ -280,7 +280,7 @@ describe('dbAuth', () => {
         )
       })
 
-      it('is correct after providing cli flag value "true"', async () => {
+      it('is correct after providing cli flag value `true`', async () => {
         const customEnquirer = new Enquirer({ show: false })
         customEnquirer.on('prompt', (prompt) => {
           prompt.submit()
@@ -297,7 +297,7 @@ describe('dbAuth', () => {
         )
       })
 
-      it('is correct after providing cli flag value "false"', async () => {
+      it('is correct after providing cli flag value `false`', async () => {
         const customEnquirer = new Enquirer({ show: false })
         customEnquirer.on('prompt', (prompt) => {
           prompt.submit()
