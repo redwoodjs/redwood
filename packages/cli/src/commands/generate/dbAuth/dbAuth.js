@@ -332,7 +332,7 @@ const tasks = ({
             message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
             default: false,
           })
-          ctx.webauthn = response
+          ctx.webauthn = webauthn = response
           task.title = `Querying WebAuthn addition: WebAuthn addition${
             ctx.webauthn ? '' : ' not'
           } included`
