@@ -237,7 +237,7 @@ describe('dbAuth', () => {
         listr2: { silentRendererCondition: true },
       })
 
-      // Verify that the final log message is not the webauthn one
+      // Verify that the final log message is the webauthn one
       expect(mockConsoleLog.mock.calls.at(-1)[0]).toMatch(
         /In LoginPage, look for the `REDIRECT`/,
       )
