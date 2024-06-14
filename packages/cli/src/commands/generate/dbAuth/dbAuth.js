@@ -422,6 +422,7 @@ function isDbAuthSetup() {
     fs.existsSync(path.join(getPaths().web.src, 'auth.' + ext)),
   )
 
+  // If no `auth.ext` file was found auth is not set up
   if (webAuthExtension) {
     const webAuthPath = path.join(
       getPaths().web.src,
