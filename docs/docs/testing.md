@@ -951,6 +951,7 @@ If you used the Cell generator, you'll get a `mocks.js` file along with the cell
 ```jsx title="web/src/components/ArticleCell.mocks.js"
 export const standard = () => ({
   article: {
+    __typename: 'Article',
     id: 42,
   }
 })
@@ -967,6 +968,7 @@ Once you start testing more scenarios you can add custom mocks with different na
 ```jsx title="web/src/components/ArticleCell.mocks.js"
 export const standard = () => ({
   article: {
+    __typename: 'Article',
     id: 1,
     title: 'Foobar',
     body: 'Lorem ipsum...'
@@ -975,6 +977,7 @@ export const standard = () => ({
 
 export const missingBody = {
   article: {
+    __typename: 'Article',
     id: 2,
     title: 'Barbaz',
     body: null
@@ -1009,6 +1012,11 @@ describe('ArticleCell', () => {
 
 Note that this second mock simply returns an object instead of a function. In the simplest case all you need your mock to return is an object. But there are cases where you may want to include logic in your mock, and in these cases you'll appreciate the function container. Especially in the following scenario...
 
+:::tip important
+If using [fragments](../graphql/fragments.md) it is important to include the `__typename` otherwise Apollo client will not be able to map the mocked data to the fragment attributes.
+:::
+
+
 ### Testing Components That Include Cells
 
 Consider the case where you have a page which renders a cell inside of it. You write a test for the page (using regular component testing techniques mentioned above). But if the page includes a cell, and a cell wants to run a GraphQL query, what happens when the page is rendered?
@@ -1026,6 +1034,7 @@ export const standard = (variables) => {
   return {
     products: [
       {
+        __typename: 'Product',
         id: variables.id,
         name: 'T-shirt',
         inventory: variables.status === 'instock' ? 100 : 0
@@ -1090,6 +1099,7 @@ Or conditionally check that `variables` exists at all before basing any logic on
 export const standard = (variables) => {
   return {
     product: {
+      __typename: 'Product',
       id: variables?.id || 1,
       name: 'T-shirt',
       inventory: variables && variables.status === 'instock' ? 100 : 0

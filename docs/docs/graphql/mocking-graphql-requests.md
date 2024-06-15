@@ -13,6 +13,7 @@ mockGraphQLQuery('OperationName', (variables, { ctx, req }) => {
   ctx.delay(1500) // pause for 1.5 seconds
   return {
     userProfile: {
+      __typename: 'UserProfile',
       id: 42,
       name: 'peterp',
     }
@@ -45,6 +46,7 @@ mockGraphQLQuery('OperationName', (variables, { ctx }) => {
   ctx.delay(1500) // pause for 1.5 seconds
   return {
     userProfile: {
+      __typename: 'UserProfile',
       id: 42,
       name: 'peterp',
     }
@@ -83,6 +85,14 @@ mockGraphQLQuery('OperationName', (_variables, { ctx }) => {
 })
 ```
 
+### Typename
+
+By including the `__typename` and the GraphQL Type for the mocked data object, you ensure that Apollo Client will properly handle the information if using the cache or fragments.
+
+:::tip important
+If using [fragments](../graphql/fragments.md) it is important to include the `__typename` otherwise Apollo client will not be able to map the mocked data to the fragment attributes.
+:::
+
 ## TypeScript
 You can get stricter types by passing types when mocking the query, mutation and its variables:
 
@@ -96,6 +106,7 @@ or, you can manually pass your own types:
 ```tsx
 mockGraphQLQuery<{
   userProfile: {
+    __typename: 'UserProfile',
     id: number,
     name: string,
   }
@@ -130,6 +141,7 @@ export const QUERY = gql`
 // UserProfileCell/UserProfileCell.mock.js
 export const standard = {
   userProfile: {
+    __typename: 'UserProfile',
     id: 42
   }
 }
@@ -150,6 +162,7 @@ export const QUERY = gql`
 // UserProfileCell/UserProfileCell.mock.js
 export const standard = {
   userProfile: {
+    __typename: 'UserProfile',
     id: 42,
 +    name: 'peterp',
   }

@@ -176,7 +176,7 @@ fragment BookInfo on Book {
 the `typename` is `Book`.
 
 
-## getCacheKey
+### getCacheKey
 
 A helper function to create the cache key for the data associated with the fragment in Apollo cache.
 
@@ -310,3 +310,66 @@ To generate the `src/graphql/possibleTypes` file, enable fragments in `redwood.t
 [graphql]
   fragments = true
 ```
+
+## Testing, Storybook and Mock Data
+
+When using fragments with test or Storybook, it is important that you define your mock data correctly.
+
+By including the `__typename` and the GraphQL Type for the mocked data object, you ensure that Apollo Client will properly handle the information if using the cache or fragments.
+
+For example, consider the fragment `BookInfo` used by the query `GetBookDetails`.
+
+```ts
+import type { Book } from 'types/graphql'
+
+import { registerFragment } from '@redwoodjs/web/apollo'
+
+const { useRegisteredFragment } = registerFragment(
+  gql`
+    fragment BookInfo on Book {
+      id
+      title
+      author
+      publicationYear
+    }
+  `
+)
+```
+
+```ts
+import type { GetBookDetails } from 'types/graphql'
+
+import { useQuery } from '@redwoodjs/web'
+
+import BookInfo from 'src/components/BookInfo'
+
+const GET_BOOK_DETAILS = gql`
+  query GetBookDetails($bookId: ID!) {
+    book(id: $bookId) {
+      ...BookInfo
+      description
+      # Include other fields specific to this query
+    }
+  }
+```
+
+### Mock Data
+
+To satisfy the query as well as the fragment needs your mock data should include the `Book` typename:
+
+```ts
+export const standard = {
+  book: {
+    __typename: 'Book',
+    id: 42,
+    title: 'Ulysses',
+    author: 'James Joyce',
+    publicationYear: 1922,
+    description: 'The experiences of three Dubliners over the course of a single day, 16 June 1904.'
+  }
+}
+```
+
+:::tip important
+If using [fragments](../graphql/fragments.md) it is important to include the `__typename` otherwise Apollo client will not be able to map the mocked data to the fragment attributes.
+:::
