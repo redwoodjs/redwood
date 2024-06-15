@@ -27,8 +27,10 @@ import { getPaths } from '../../../../lib'
 import * as dbAuth from '../dbAuth'
 
 vi.mock('listr2', async () => {
-  const listrImpl = (tasks) => {
+  const ctx = {}
+  const listrImpl = (tasks, listrOptions) => {
     return {
+      ctx,
       run: async () => {
         mockExecutedTaskTitles = []
         mockSkippedTaskTitles = []
@@ -43,12 +45,28 @@ vi.mock('listr2', async () => {
             const augmentedTask = {
               ...task,
               newListr: listrImpl,
-              prompt: () => {},
+              prompt: async (options) => {
+                const enquirer = listrOptions?.injectWrapper?.enquirer
+
+                if (enquirer) {
+                  if (!Array.isArray(options)) {
+                    options = [{ ...options, name: 'default' }]
+                  } else if (options.length === 1) {
+                    options[0].name = 'default'
+                  }
+
+                  const response = await enquirer.prompt(options)
+
+                  if (options.length === 1) {
+                    return response.default
+                  }
+                }
+              },
               skip: (msg) => {
                 mockSkippedTaskTitles.push(msg || task.title)
               },
             }
-            await task.task({}, augmentedTask)
+            await task.task(ctx, augmentedTask)
 
             // storing the title after running the task in case the task
             // modifies its own title
@@ -124,10 +142,38 @@ beforeEach(() => {
 })
 
 describe('dbAuth handler WebAuthn task title', () => {
-  it('is correct after prompting', async () => {
+  it('is correct after prompt answer "Yes"', async () => {
     const customEnquirer = new Enquirer({ show: false })
     customEnquirer.on('prompt', (prompt) => {
-      prompt.submit()
+      if (prompt.state.message.includes('Enable WebAuthn')) {
+        prompt.on('run', () => {
+          return prompt.keypress('y')
+        })
+      } else {
+        prompt.submit()
+      }
+    })
+
+    await dbAuth.handler({
+      enquirer: customEnquirer,
+      listr2: { silentRendererCondition: true },
+    })
+
+    expect(mockExecutedTaskTitles[1]).toEqual(
+      'Querying WebAuthn addition: WebAuthn addition included',
+    )
+  })
+
+  it('is correct after prompt answer "No"', async () => {
+    const customEnquirer = new Enquirer({ show: false })
+    customEnquirer.on('prompt', (prompt) => {
+      if (prompt.state.message.includes('Enable WebAuthn')) {
+        prompt.on('run', () => {
+          return prompt.keypress('N')
+        })
+      } else {
+        prompt.submit()
+      }
     })
 
     await dbAuth.handler({
