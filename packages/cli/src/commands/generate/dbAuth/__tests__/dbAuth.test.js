@@ -63,11 +63,6 @@ mockFiles[getPaths().web.app] = actualFs
 
 describe('dbAuth', () => {
   beforeEach(() => {
-    delete mockFiles[path.join(getPaths().web.src, 'auth.ts')]
-    delete mockFiles[path.join(getPaths().web.src, 'auth.tsx')]
-    delete mockFiles[path.join(getPaths().web.src, 'auth.js')]
-    delete mockFiles[path.join(getPaths().web.src, 'auth.jsx')]
-
     vol.reset()
     vol.fromJSON(mockFiles)
   })
