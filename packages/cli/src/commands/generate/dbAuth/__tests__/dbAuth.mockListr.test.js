@@ -102,83 +102,59 @@ mockFiles[getPaths().web.app] = actualFs
   )
   .toString()
 
-describe('dbAuth', () => {
-  beforeEach(() => {
-    vol.reset()
-    vol.fromJSON(mockFiles)
-  })
+beforeEach(() => {
+  vol.reset()
+  vol.fromJSON(mockFiles)
+})
 
-  it('creates a login page', async () => {
-    expect(await dbAuth.files(true, false)).toHaveProperty([
-      path.normalize('/path/to/project/web/src/pages/LoginPage/LoginPage.jsx'),
-    ])
-  })
-
-  it('creates a signup page', async () => {
-    expect(await dbAuth.files(true, false)).toHaveProperty([
-      path.normalize(
-        '/path/to/project/web/src/pages/SignupPage/SignupPage.jsx',
-      ),
-    ])
-  })
-
-  it('creates a scaffold CSS file', async () => {
-    expect(await dbAuth.files(true, false)).toHaveProperty([
-      path.normalize('/path/to/project/web/src/scaffold.css'),
-    ])
-  })
-
-  describe('handler', () => {
-    describe('WebAuthn task title', () => {
-      it('is correct after prompting', async () => {
-        const customEnquirer = new Enquirer({ show: false })
-        customEnquirer.on('prompt', (prompt) => {
-          prompt.submit()
-        })
-
-        await dbAuth.handler({
-          enquirer: customEnquirer,
-          listr2: { silentRendererCondition: true },
-        })
-
-        expect(mockExecutedTaskTitles[1]).toEqual(
-          'Querying WebAuthn addition: WebAuthn addition not included',
-        )
-      })
-
-      it('is correct after providing cli flag value `true`', async () => {
-        const customEnquirer = new Enquirer({ show: false })
-        customEnquirer.on('prompt', (prompt) => {
-          prompt.submit()
-        })
-
-        await dbAuth.handler({
-          enquirer: customEnquirer,
-          listr2: { silentRendererCondition: true },
-          webauthn: true,
-        })
-
-        expect(mockSkippedTaskTitles[0]).toEqual(
-          'Querying WebAuthn addition: argument webauthn passed, WebAuthn included',
-        )
-      })
-
-      it('is correct after providing cli flag value `false`', async () => {
-        const customEnquirer = new Enquirer({ show: false })
-        customEnquirer.on('prompt', (prompt) => {
-          prompt.submit()
-        })
-
-        await dbAuth.handler({
-          enquirer: customEnquirer,
-          listr2: { silentRendererCondition: true },
-          webauthn: false,
-        })
-
-        expect(mockSkippedTaskTitles[0]).toEqual(
-          'Querying WebAuthn addition: argument webauthn passed, WebAuthn not included',
-        )
-      })
+describe('dbAuth handler WebAuthn task title', () => {
+  it('is correct after prompting', async () => {
+    const customEnquirer = new Enquirer({ show: false })
+    customEnquirer.on('prompt', (prompt) => {
+      prompt.submit()
     })
+
+    await dbAuth.handler({
+      enquirer: customEnquirer,
+      listr2: { silentRendererCondition: true },
+    })
+
+    expect(mockExecutedTaskTitles[1]).toEqual(
+      'Querying WebAuthn addition: WebAuthn addition not included',
+    )
+  })
+
+  it('is correct after providing cli flag value `true`', async () => {
+    const customEnquirer = new Enquirer({ show: false })
+    customEnquirer.on('prompt', (prompt) => {
+      prompt.submit()
+    })
+
+    await dbAuth.handler({
+      enquirer: customEnquirer,
+      listr2: { silentRendererCondition: true },
+      webauthn: true,
+    })
+
+    expect(mockSkippedTaskTitles[0]).toEqual(
+      'Querying WebAuthn addition: argument webauthn passed, WebAuthn included',
+    )
+  })
+
+  it('is correct after providing cli flag value `false`', async () => {
+    const customEnquirer = new Enquirer({ show: false })
+    customEnquirer.on('prompt', (prompt) => {
+      prompt.submit()
+    })
+
+    await dbAuth.handler({
+      enquirer: customEnquirer,
+      listr2: { silentRendererCondition: true },
+      webauthn: false,
+    })
+
+    expect(mockSkippedTaskTitles[0]).toEqual(
+      'Querying WebAuthn addition: argument webauthn passed, WebAuthn not included',
+    )
   })
 })
