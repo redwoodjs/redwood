@@ -3,7 +3,7 @@
   "version": "7.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/adapters/fastify/web"
   },
   "license": "MIT",
@@ -30,7 +30,7 @@
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "fastify": "4.27.0",
-    "tsx": "4.10.3",
+    "tsx": "4.15.2",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },

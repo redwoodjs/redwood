@@ -3,7 +3,7 @@
   "version": "7.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/project-config"
   },
   "license": "MIT",
@@ -27,15 +27,15 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@iarna/toml": "2.2.5",
     "deepmerge": "4.3.1",
     "fast-glob": "3.3.2",
+    "smol-toml": "1.2.1",
     "string-env-interpolation": "1.0.1"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "rimraf": "5.0.7",
-    "tsx": "4.10.3",
+    "tsx": "4.15.2",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },

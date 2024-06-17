@@ -4,7 +4,7 @@
   "description": "RedwoodJS prerender",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/prerender"
   },
   "license": "MIT",

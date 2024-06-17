@@ -1,6 +1,5 @@
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
-
-import { setServerAuthState } from '../serverStore.js'
+import { setServerAuthState } from '@redwoodjs/server-store'
 
 import { MiddlewareRequest } from './MiddlewareRequest.js'
 import {
@@ -40,16 +39,16 @@ export const invoke = async (
 
     // Error out early, incase user returns something else from the middleware
     // Returning nothing is still fine!
-    if (output instanceof MiddlewareResponse) {
-      mwRes = output
-    } else {
-      console.error('Return from middleware >> ', output)
-      console.error('\n----\n')
-      throw new Error(
-        'Invalid return type from middleware. You must return a ' +
-          'MiddlewareResponse or nothing at all',
-      )
-    }
+    // if (output instanceof MiddlewareResponse) {
+    mwRes = output
+    // } else {
+    //   console.error('Return from middleware >> ', output)
+    //   console.error('\n----\n')
+    //   throw new Error(
+    //     'Invalid return type from middleware. You must return a ' +
+    //       'MiddlewareResponse or nothing at all',
+    //   )
+    // }
   } catch (e) {
     // A short-circuit will prevent execution of all other middleware down the chain,
     // and prevent react rendering

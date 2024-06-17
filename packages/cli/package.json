@@ -4,7 +4,7 @@
   "description": "The Redwood Command Line",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/cli"
   },
   "license": "MIT",
@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.5",
-    "@iarna/toml": "2.2.5",
     "@opentelemetry/api": "1.8.0",
     "@opentelemetry/core": "1.22.0",
     "@opentelemetry/exporter-trace-otlp-http": "0.49.1",
@@ -75,8 +74,9 @@
     "prompts": "2.4.2",
     "rimraf": "5.0.7",
     "semver": "7.6.2",
+    "smol-toml": "1.2.1",
     "string-env-interpolation": "1.0.1",
-    "systeminformation": "5.22.9",
+    "systeminformation": "5.22.11",
     "terminal-link": "2.1.1",
     "title-case": "3.0.3",
     "uuid": "9.0.1",
@@ -87,7 +87,7 @@
     "@babel/core": "^7.22.20",
     "@types/archiver": "^6",
     "memfs": "4.9.2",
-    "tsx": "4.10.3",
+    "tsx": "4.15.2",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },

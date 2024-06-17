@@ -8,6 +8,14 @@ vi.mock('@redwoodjs/telemetry', () => {
   }
 })
 
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const originalProjectConfig = await importOriginal<typeof ProjectConfig>()
+  return {
+    ...originalProjectConfig,
+    getConfig: () => ({}),
+  }
+})
+
 vi.mock('../../lib/paths', () => {
   const path = require('path')
   const __dirname = path.resolve()
@@ -45,6 +53,8 @@ import { Listr } from 'listr2'
 import prompts from 'prompts'
 import { vi, describe, afterEach, it, expect } from 'vitest'
 import type { Mock, MockedFunction } from 'vitest'
+
+import type * as ProjectConfig from '@redwoodjs/project-config'
 
 import { standardAuthHandler } from '../setupHelpers.js'
 

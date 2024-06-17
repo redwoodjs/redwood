@@ -3,7 +3,7 @@
   "version": "7.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/router"
   },
   "license": "MIT",
@@ -27,6 +27,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.5",
     "@redwoodjs/auth": "workspace:*",
+    "@redwoodjs/server-store": "workspace:*",
     "core-js": "3.37.1"
   },
   "devDependencies": {
@@ -37,7 +38,7 @@
     "@types/react-dom": "^18.2.19",
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-dom": "19.0.0-beta-04b058868c-20240508",
-    "tstyche": "1.1.0",
+    "tstyche": "2.0.0",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },

@@ -49,9 +49,22 @@ export async function rscBuildAnalyze() {
       // going to be RSCs
       // As of vite 5.2 `true` here means "all except node built-ins"
       noExternal: true,
-      // TODO (RSC): Figure out what the `external` list should be. Right
-      // now it's just copied from waku, plus we added prisma
-      external: ['react', 'minimatch', '@prisma/client'],
+      // Anything we know won't have "use client" or "use server" in it can
+      // safely be external. The more we can externalize the better, because
+      // it means we can skip analyzing them, which means faster build times.
+      external: [
+        '@prisma/client',
+        '@prisma/fetch-engine',
+        '@prisma/internals',
+        '@redwoodjs/auth-dbauth-api',
+        '@redwoodjs/cookie-jar',
+        '@redwoodjs/server-store',
+        '@simplewebauthn/server',
+        'graphql-scalars',
+        'minimatch',
+        'playwright',
+        'react',
+      ],
       resolve: {
         externalConditions: ['react-server'],
       },

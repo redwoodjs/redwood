@@ -58,7 +58,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { vol } from 'memfs'
-import { vi, beforeEach, describe, it, expect, test } from 'vitest'
+import { vi, afterAll, beforeEach, describe, it, expect, test } from 'vitest'
 
 import { getPaths } from '../../lib/paths.js'
 import { isTypeScriptProject } from '../../lib/project.js'
@@ -92,6 +92,12 @@ function platformPath(filePath: string) {
   return filePath.split('/').join(path.sep)
 }
 
+const original_RWJS_CWD = process.env.RWJS_CWD
+
+afterAll(() => {
+  process.env.RWJS_CWD = original_RWJS_CWD
+})
+
 beforeEach(() => {
   vi.restoreAllMocks()
   vi.mocked(isTypeScriptProject).mockReturnValue(true)
@@ -100,7 +106,10 @@ beforeEach(() => {
     mockedPathGenerator('App.tsx', 'Routes.tsx'),
   )
 
+  process.env.RWJS_CWD = getPaths().base
+
   vol.fromJSON({
+    [path.join(getPaths().base, 'redwood.toml')]: '# redwood.toml',
     [path.join(
       getPaths().base,
       platformPath('/templates/web/auth.ts.template'),
@@ -152,6 +161,7 @@ describe('authTasks', () => {
     // though it was on the mock filesystem.
     vol.reset()
     vol.fromJSON({
+      [path.join(getPaths().base, 'redwood.toml')]: '# redwood.toml',
       [getPaths().web.app]: webAppTsx,
       [getPaths().api.graphql]: graphqlTs,
       [getPaths().web.routes]: routesTsx,

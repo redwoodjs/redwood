@@ -1,7 +1,7 @@
 import fs from 'fs'
 
-import toml from '@iarna/toml'
 import merge from 'deepmerge'
+import * as toml from 'smol-toml'
 import { env as envInterpolation } from 'string-env-interpolation'
 
 import { getConfigPath } from './configPath.js'
@@ -120,6 +120,7 @@ export interface Config {
     }
     reactCompiler: {
       enabled: boolean
+      lintOnly: boolean
     }
   }
 }
@@ -207,6 +208,7 @@ const DEFAULT_CONFIG: Config = {
     },
     reactCompiler: {
       enabled: false,
+      lintOnly: false,
     },
   },
 }
