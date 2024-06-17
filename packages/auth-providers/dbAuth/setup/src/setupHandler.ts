@@ -6,7 +6,7 @@ import prompts from 'prompts'
 import { getGraphqlPath, standardAuthHandler } from '@redwoodjs/cli-helpers'
 
 import type { Args } from './setup'
-import { notes, extraTask } from './setupData'
+import { notes, extraTask, createUserModelTask } from './setupData'
 import {
   notes as webAuthnNotes,
   extraTask as webAuthnExtraTask,
@@ -14,12 +14,17 @@ import {
   apiPackages as webAuthnApiPackages,
 } from './webAuthn.setupData'
 
-export async function handler({ webauthn, force: forceArg }: Args) {
+export async function handler({
+  webauthn,
+  createUserModel,
+  force: forceArg,
+}: Args) {
   const { version } = JSON.parse(
     fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'),
   )
 
   const webAuthn = await shouldIncludeWebAuthn(webauthn)
+  const createDbUserModel = await shouldCreateUserModel(createUserModel)
 
   standardAuthHandler({
     basedir: __dirname,
@@ -38,6 +43,7 @@ export async function handler({ webauthn, force: forceArg }: Args) {
     ],
     extraTasks: [
       webAuthn ? webAuthnExtraTask : extraTask,
+      createDbUserModel ? createUserModelTask : undefined,
       createAuthDecoderFunction,
     ],
     notes: webAuthn ? webAuthnNotes : notes,
@@ -48,7 +54,7 @@ export async function handler({ webauthn, force: forceArg }: Args) {
  * Prompt the user (unless already specified on the command line) if they want
  * to enable WebAuthn support
  */
-async function shouldIncludeWebAuthn(webauthn: boolean) {
+async function shouldIncludeWebAuthn(webauthn: boolean | null) {
   if (webauthn === null) {
     const webAuthnResponse = await prompts({
       type: 'confirm',
@@ -61,6 +67,25 @@ async function shouldIncludeWebAuthn(webauthn: boolean) {
   }
 
   return webauthn
+}
+
+/**
+ * Prompt the user (unless already specified on the command line) if they want
+ * to create a User model in their Prisma schema
+ */
+async function shouldCreateUserModel(createUserModel: boolean | null) {
+  if (createUserModel === null) {
+    const createModelResponse = await prompts({
+      type: 'confirm',
+      name: 'answer',
+      message: 'Create User model?',
+      initial: false,
+    })
+
+    return createModelResponse.answer
+  }
+
+  return createUserModel
 }
 
 export const createAuthDecoderFunction = {

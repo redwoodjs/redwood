@@ -1,5 +1,8 @@
 import crypto from 'node:crypto'
+import fs from 'node:fs'
 import path from 'path'
+
+import { getDMMF } from '@prisma/internals'
 
 import { getPaths, colors, addEnvVarTask } from '@redwoodjs/cli-helpers'
 
@@ -16,6 +19,55 @@ export const extraTask = addEnvVarTask(
   secret,
   'Used to encrypt/decrypt session cookies. Change this value and re-deploy to log out all users of your app at once.',
 )
+
+export const createUserModelTask = {
+  title: 'Creating model `User`...',
+  task: async () => {
+    if (await hasModel('user')) {
+      throw new Error('User model already exists')
+    }
+
+    addUserModel()
+  },
+}
+
+const hasModel = async (name: string) => {
+  if (!name) {
+    return false
+  }
+
+  // Support PascalCase, camelCase, kebab-case, UPPER_CASE, and lowercase model
+  // names
+  const modelName = name.replace(/[_-]/g, '').toLowerCase()
+
+  const schema = await getDMMF({ datamodelPath: getPaths().api.dbSchema })
+
+  for (const model of schema.datamodel.models) {
+    if (model.name.toLowerCase() === modelName) {
+      return true
+    }
+  }
+
+  return false
+}
+
+const addUserModel = () => {
+  const schema = fs.readFileSync(getPaths().api.dbSchema, 'utf-8')
+
+  const schemaWithUser =
+    schema +
+    `
+model User {
+  id                  Int       @id @default(autoincrement())
+  email               String    @unique
+  hashedPassword      String
+  salt                String
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+}
+`
+  fs.writeFileSync(getPaths().api.dbSchema, schemaWithUser)
+}
 
 // any notes to print out when the job is done
 export const notes = [
