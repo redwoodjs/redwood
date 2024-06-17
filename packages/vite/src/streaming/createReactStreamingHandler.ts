@@ -178,9 +178,8 @@ export const createReactStreamingHandler = async (
 
     metaTags = routeHookOutput.meta
 
-    // TODO (RSC): Do we really want to inject the full bundle here, or is
-    // there a smaller slice of it we can inject?
-    const jsBundles = ['/' + clientEntryPath]
+    // On dev, we don't need to add the slash (for windows support) any more
+    const jsBundles = [viteDevServer ? clientEntryPath : '/' + clientEntryPath]
     if (currentRoute.bundle) {
       jsBundles.push('/' + currentRoute.bundle)
     }
