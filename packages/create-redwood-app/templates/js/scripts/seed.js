@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-import { db } from 'api/src/lib/db'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 // Manually apply seeds via the `yarn rw prisma db seed` command.
 //
