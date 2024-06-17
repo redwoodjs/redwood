@@ -29,40 +29,52 @@ const ROUTES = [
   `<Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />`,
 ]
 
-const POST_INSTALL =
-  `   ${c.warning("Pages created! But you're not done yet:")}\n\n` +
-  `   You'll need to tell your pages where to redirect after a user has logged in,\n` +
-  `   signed up, or reset their password. Look in LoginPage, SignupPage,\n` +
-  `   ForgotPasswordPage and ResetPasswordPage for these lines: \n\n` +
-  `     if (isAuthenticated) {\n` +
-  `       navigate(routes.home())\n` +
-  `     }\n\n` +
-  `   and change the route to where you want them to go if the user is already\n` +
-  `   logged in. Also take a look in the onSubmit() functions in ForgotPasswordPage\n` +
-  `   and ResetPasswordPage to change where the user redirects to after submitting\n` +
-  `   those forms.\n\n` +
-  `   Oh, and if you haven't already, add the necessary dbAuth functions and\n` +
-  `   app setup by running:\n\n` +
-  `     yarn rw setup auth dbAuth\n\n` +
-  `   Happy authenticating!\n`
+function getPostInstallMessage(isDbAuthSetup) {
+  return [
+    `   ${c.warning("Pages created! But you're not done yet:")}\n`,
+    "   You'll need to tell your pages where to redirect after a user has logged in,",
+    '   signed up, or reset their password. Look in LoginPage, SignupPage,',
+    '   ForgotPasswordPage and ResetPasswordPage for these lines: \n',
+    '     if (isAuthenticated) {',
+    '       navigate(routes.home())',
+    '     }\n',
+    '   and change the route to where you want them to go if the user is already',
+    '   logged in. Also take a look in the onSubmit() functions in ForgotPasswordPage',
+    '   and ResetPasswordPage to change where the user redirects to after submitting',
+    '   those forms.\n',
+    !isDbAuthSetup &&
+      "   Oh, and if you haven't already, add the necessary dbAuth functions and\n" +
+        '   app setup by running:\n\n' +
+        '     yarn rw setup auth dbAuth\n',
+    '   Happy authenticating!',
+  ]
+    .filter(Boolean)
+    .join('\n')
+}
 
-const WEBAUTHN_POST_INSTALL =
-  `   ${c.warning("Pages created! But you're not done yet:")}\n\n` +
-  "   You'll need to tell your pages where to redirect after a user has logged in,\n" +
-  '   signed up, or reset their password. In LoginPage, look for the `REDIRECT`\n' +
-  `   constant and change the route if it's something other than home().\n` +
-  `   In SignupPage, ForgotPasswordPage and ResetPasswordPage look for these lines:\n\n` +
-  `     if (isAuthenticated) {\n` +
-  `       navigate(routes.home())\n` +
-  `     }\n\n` +
-  `   and change the route to where you want them to go if the user is already\n` +
-  `   logged in. Also take a look in the onSubmit() functions in ForgotPasswordPage\n` +
-  `   and ResetPasswordPage to change where the user redirects to after submitting\n` +
-  `   those forms.\n\n` +
-  `   Oh, and if you haven't already, add the necessary dbAuth functions and\n` +
-  `   app setup by running:\n\n` +
-  `     yarn rw setup auth dbAuth\n\n` +
-  `   Happy authenticating!\n`
+function getPostInstallWebauthnMessage(isDbAuthSetup) {
+  return [
+    `   ${c.warning("Pages created! But you're not done yet:")}\n`,
+    "   You'll need to tell your pages where to redirect after a user has logged in,",
+    '   signed up, or reset their password. In LoginPage, look for the `REDIRECT`',
+    "   constant and change the route if it's something other than home().",
+    '   In SignupPage, ForgotPasswordPage and ResetPasswordPage look for these lines:\n',
+    '     if (isAuthenticated) {',
+    '       navigate(routes.home())',
+    '     }\n',
+    '   and change the route to where you want them to go if the user is already',
+    '   logged in. Also take a look in the onSubmit() functions in ForgotPasswordPage',
+    '   and ResetPasswordPage to change where the user redirects to after submitting',
+    '   those forms.\n',
+    !isDbAuthSetup &&
+      "   Oh, and if you haven't already, add the necessary dbAuth functions and\n" +
+        '   app setup by running:\n\n' +
+        '     yarn rw setup auth dbAuth\n',
+    '   Happy authenticating!',
+  ]
+    .filter(Boolean)
+    .join('\n')
+}
 
 export const command = 'dbAuth'
 export const description =
@@ -395,9 +407,32 @@ export const handler = async (yargs) => {
 
     console.log('')
     console.log(
-      yargs.webauthn || t.ctx.webauthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL,
+      yargs.webauthn || t.ctx.webauthn
+        ? getPostInstallWebauthnMessage(isDbAuthSetup())
+        : getPostInstallMessage(isDbAuthSetup()),
     )
   } catch (e) {
     console.log(c.error(e.message))
   }
+}
+
+function isDbAuthSetup() {
+  const extensions = ['ts', 'js', 'tsx', 'jsx']
+  const webAuthExtension = extensions.find((ext) =>
+    fs.existsSync(path.join(getPaths().web.src, 'auth.' + ext)),
+  )
+
+  // If no `auth.ext` file was found auth is not set up
+  if (webAuthExtension) {
+    const webAuthPath = path.join(
+      getPaths().web.src,
+      'auth.' + webAuthExtension,
+    )
+
+    return /^import (.*) from ['"]@redwoodjs\/auth-dbauth-web['"]/m.test(
+      fs.readFileSync(webAuthPath),
+    )
+  }
+
+  return false
 }

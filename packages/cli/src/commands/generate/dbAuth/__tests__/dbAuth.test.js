@@ -7,11 +7,19 @@ import path from 'path'
 // Load mocks
 import '../../../../lib/test'
 
-const realfs = await vi.importActual('fs-extra')
+const actualFs = await vi.importActual('fs-extra')
 import Enquirer from 'enquirer'
 import fs from 'fs-extra'
 import { vol } from 'memfs'
-import { vi, describe, it, expect, beforeEach } from 'vitest'
+import {
+  vi,
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterAll,
+  beforeAll,
+} from 'vitest'
 
 import { getPaths } from '../../../../lib'
 import * as dbAuth from '../dbAuth'
@@ -27,14 +35,14 @@ const dbAuthTemplateFiles = [
   'signup.tsx.template',
 ]
 dbAuthTemplateFiles.forEach((templateFilename) => {
-  mockFiles[path.join(__dirname, `../templates/${templateFilename}`)] = realfs
+  mockFiles[path.join(__dirname, `../templates/${templateFilename}`)] = actualFs
     .readFileSync(path.join(__dirname, `../templates/${templateFilename}`))
     .toString()
 })
 
 mockFiles[
   path.join(__dirname, `../../scaffold/templates/assets/scaffold.css.template`)
-] = realfs
+] = actualFs
   .readFileSync(
     path.join(
       __dirname,
@@ -43,7 +51,7 @@ mockFiles[
   )
   .toString()
 
-mockFiles[getPaths().web.routes] = realfs
+mockFiles[getPaths().web.routes] = actualFs
   .readFileSync(
     path.join(
       __dirname,
@@ -52,7 +60,7 @@ mockFiles[getPaths().web.routes] = realfs
   )
   .toString()
 
-mockFiles[getPaths().web.app] = realfs
+mockFiles[getPaths().web.app] = actualFs
   .readFileSync(
     path.join(
       __dirname,
@@ -60,6 +68,14 @@ mockFiles[getPaths().web.app] = realfs
     ),
   )
   .toString()
+
+beforeAll(() => {
+  vi.spyOn(console, 'log').mockImplementation(() => {})
+})
+
+afterAll(() => {
+  vi.mocked(console).log.mockRestore?.()
+})
 
 describe('dbAuth', () => {
   beforeEach(() => {
@@ -89,8 +105,10 @@ describe('dbAuth', () => {
 
   describe('handler', () => {
     it('exits when all files are skipped', async () => {
-      const mockExit = vi.spyOn(process, 'exit').mockImplementation()
-      const mockConsoleInfo = vi.spyOn(console, 'info').mockImplementation()
+      const mockExit = vi.spyOn(process, 'exit').mockImplementation(() => {})
+      const mockConsoleInfo = vi
+        .spyOn(console, 'info')
+        .mockImplementation(() => {})
 
       await dbAuth.handler({
         listr2: { silentRendererCondition: true },
