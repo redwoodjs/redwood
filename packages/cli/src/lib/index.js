@@ -406,9 +406,12 @@ export const addRoutesToRouterTask = (routes, layout, setProps = {}) => {
       // newRoutes will be something like:
       // ['<Route path="/foo" page={FooPage} name="foo"/>']
       // and we need to replace `path="/foo"` with `path="/foo/"`
-      newRoutes = newRoutes.map((route) =>
-        route.replace(/ path="(.+?)" /, ' path="$1/" ')
-      )
+      newRoutes = newRoutes.map((route) => {
+        if (route.length > 2000) {
+          throw new Error(`Route is too long to process:\n${route}`)
+        }
+        return route.replace(/ path="(.+?)" /, ' path="$1/" ')
+      })
     }
 
     const routesBatch = layout
