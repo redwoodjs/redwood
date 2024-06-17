@@ -19,7 +19,7 @@ export async function handler({ force: forceArg }: Args) {
     webPackages: ['firebase@^10', `@redwoodjs/auth-firebase-web@${version}`],
     apiPackages: [
       // Note that the version of this package should be exactly the same as the version in `@redwoodjs/auth-firebase-api` .
-      'firebase-admin@11.11.1',
+      'firebase-admin@12.1.1',
       `@redwoodjs/auth-firebase-api@${version}`,
     ],
     notes: [
