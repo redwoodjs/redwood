@@ -9,9 +9,7 @@ import {
 // CJS build
 await build({
   entryPointOptions: {
-    // @NOTE: I'm not building src/entry, it's included in "files" in package.json
-    // this used to be for custom-web-index with webpack
-    ignore: [...defaultIgnorePatterns, 'src/entry/**'],
+    ignore: [...defaultIgnorePatterns],
   },
   buildOptions: {
     ...defaultBuildOptions,

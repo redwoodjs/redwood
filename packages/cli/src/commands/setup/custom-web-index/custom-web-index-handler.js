@@ -35,7 +35,7 @@ export const handler = async ({ force }) => {
                 path.join(
                   getPaths().base,
                   // NOTE we're copying over the index.js before babel transform
-                  'node_modules/@redwoodjs/web/src/entry/index.js',
+                  'node_modules/@redwoodjs/web/src/entry/index.jsx',
                 ),
               )
               .toString()
