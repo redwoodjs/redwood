@@ -9000,7 +9000,7 @@ __metadata:
     stacktracey: "npm:2.1.8"
     ts-toolbelt: "npm:9.6.0"
     tstyche: "npm:2.0.0"
-    tsx: "npm:4.10.3"
+    tsx: "npm:4.15.2"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
@@ -17174,7 +17174,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.20.1, esbuild@npm:~0.20.2":
+"esbuild@npm:^0.20.1":
   version: 0.20.2
   resolution: "esbuild@npm:0.20.2"
   dependencies:
@@ -30643,22 +30643,6 @@ __metadata:
   bin:
     tstyche: ./build/bin.js
   checksum: 10c0/3688e63b0b5ba3b58417b8e515ce4bc3d2ca53357914028d954cda83d14d169d091cf8f28bb02371120d3363d183821d554c6c031cf74f28ff443d065c8e5695
-  languageName: node
-  linkType: hard
-
-"tsx@npm:4.10.3":
-  version: 4.10.3
-  resolution: "tsx@npm:4.10.3"
-  dependencies:
-    esbuild: "npm:~0.20.2"
-    fsevents: "npm:~2.3.3"
-    get-tsconfig: "npm:^4.7.5"
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  bin:
-    tsx: dist/cli.mjs
-  checksum: 10c0/0036641dcc4d7970b5aa8e9db1a3365ec615d32e2b9b26e762e24c0588e79bc80c96639eb9b1c08b16befee75add0e527d8c24cfa4e519f1bf5805b95769eba5
   languageName: node
   linkType: hard
 
