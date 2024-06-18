@@ -44,7 +44,7 @@ model UserCredential {
   publicKey  Bytes
   transports String?
   counter    BigInt
-},
+}
 `)
   },
 }
