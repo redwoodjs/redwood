@@ -44,7 +44,7 @@
     "semver": "7.6.2",
     "systeminformation": "5.22.11",
     "terminal-link": "2.1.1",
-    "tsx": "4.15.2",
+    "tsx": "4.15.6",
     "untildify": "4.0.0",
     "uuid": "9.0.1",
     "vitest": "1.6.0",
