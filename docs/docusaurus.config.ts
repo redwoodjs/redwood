@@ -133,9 +133,9 @@ const config: Config = {
   // ?
   scripts: [
     {
-      src: 'https://plausible.io/js/plausible.js',
+      src: 'https://plausible.io/js/script.outbound-links.tagged-events.js',
       defer: true,
-      'data-domain': 'redwoodjs.com',
+      'data-domain': 'docs.redwoodjs.com',
     },
   ],
   stylesheets: [
