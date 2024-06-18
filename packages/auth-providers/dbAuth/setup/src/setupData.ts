@@ -26,13 +26,13 @@ export const createUserModelTask = {
     addModels(`
 model User {
   id                  Int       @id @default(autoincrement())
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
   email               String    @unique
   hashedPassword      String
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 `)
   },

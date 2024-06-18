@@ -26,8 +26,6 @@ export const createUserModelTask = {
     addModels(`
 model User {
   id                  Int       @id @default(autoincrement())
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
   email               String    @unique
   hashedPassword      String
   salt                String
@@ -35,6 +33,8 @@ model User {
   resetTokenExpiresAt DateTime?
   webAuthnChallenge   String? @unique
   credentials         UserCredential[]
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
 model UserCredential {
