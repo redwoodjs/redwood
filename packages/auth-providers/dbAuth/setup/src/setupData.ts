@@ -31,7 +31,7 @@ export const createUserModelTask = {
   },
 }
 
-const hasModel = async (name: string) => {
+export const hasModel = async (name: string) => {
   if (!name) {
     return false
   }

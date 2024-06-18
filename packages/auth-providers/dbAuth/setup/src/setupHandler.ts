@@ -6,7 +6,7 @@ import prompts from 'prompts'
 import { getGraphqlPath, standardAuthHandler } from '@redwoodjs/cli-helpers'
 
 import type { Args } from './setup'
-import { notes, extraTask, createUserModelTask } from './setupData'
+import { notes, extraTask, createUserModelTask, hasModel } from './setupData'
 import {
   notes as webAuthnNotes,
   extraTask as webAuthnExtraTask,
@@ -74,7 +74,7 @@ async function shouldIncludeWebAuthn(webauthn: boolean | null) {
  * to create a User model in their Prisma schema
  */
 async function shouldCreateUserModel(createUserModel: boolean | null) {
-  if (createUserModel === null) {
+  if (createUserModel === null && !hasModel('User')) {
     const createModelResponse = await prompts({
       type: 'confirm',
       name: 'answer',
