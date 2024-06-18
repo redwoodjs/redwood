@@ -6,9 +6,16 @@ import prompts from 'prompts'
 import { getGraphqlPath, standardAuthHandler } from '@redwoodjs/cli-helpers'
 
 import type { Args } from './setup'
-import { notes, extraTask, createUserModelTask, hasModel } from './setupData'
+import {
+  notes,
+  notesCreatedUserModel,
+  extraTask,
+  createUserModelTask,
+  hasModel,
+} from './setupData'
 import {
   notes as webAuthnNotes,
+  notesCreatedUserModel as webAuthnNotesCreatedUserModel,
   extraTask as webAuthnExtraTask,
   webPackages as webAuthnWebPackages,
   apiPackages as webAuthnApiPackages,
@@ -25,6 +32,22 @@ export async function handler({
 
   const webAuthn = await shouldIncludeWebAuthn(webauthn)
   const createDbUserModel = await shouldCreateUserModel(createUserModel)
+
+  let oneMoreThing: string[] = []
+
+  if (webAuthn) {
+    if (createDbUserModel) {
+      oneMoreThing = webAuthnNotesCreatedUserModel
+    } else {
+      oneMoreThing = webAuthnNotes
+    }
+  } else {
+    if (createDbUserModel) {
+      oneMoreThing = notesCreatedUserModel
+    } else {
+      oneMoreThing = notes
+    }
+  }
 
   standardAuthHandler({
     basedir: __dirname,
@@ -46,7 +69,7 @@ export async function handler({
       createDbUserModel ? createUserModelTask : undefined,
       createAuthDecoderFunction,
     ],
-    notes: webAuthn ? webAuthnNotes : notes,
+    notes: oneMoreThing,
   })
 }
 
