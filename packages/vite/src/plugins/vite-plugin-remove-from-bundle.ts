@@ -30,7 +30,7 @@ export default function removeFromBundle(
 }
 
 const EMPTY_MODULE = {
-  code: `module.exports = {}; export default {};`,
+  code: `export default {};`,
 }
 
 export function excludeOnMatch(modulesToExclude: ModulesToExclude, id: string) {
