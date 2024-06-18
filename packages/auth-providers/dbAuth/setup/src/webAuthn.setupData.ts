@@ -1,8 +1,9 @@
 import path from 'path'
 
 import { getPaths, colors } from '@redwoodjs/cli-helpers'
+import type { AuthGeneratorCtx } from '@redwoodjs/cli-helpers/src/auth/authTasks.js'
 
-import { functionsPath, libPath } from './setupData'
+import { addModels, functionsPath, hasModel, libPath } from './shared.js'
 
 // copy some identical values from dbAuth provider
 export { extraTask } from './setupData'
@@ -12,6 +13,41 @@ export const webPackages = ['@simplewebauthn/browser@^7']
 
 // required packages to install on the api side
 export const apiPackages = ['@simplewebauthn/server@^7']
+
+export const createUserModelTask = {
+  title: 'Creating model `User`...',
+  task: async (ctx: AuthGeneratorCtx) => {
+    const hasUserModel = await hasModel('User')
+
+    if (hasUserModel && !ctx.force) {
+      throw new Error('User model already exists')
+    }
+
+    addModels(`
+model User {
+  id                  Int       @id @default(autoincrement())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  email               String    @unique
+  hashedPassword      String
+  salt                String
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+  webAuthnChallenge   String? @unique
+  credentials         UserCredential[]
+}
+
+model UserCredential {
+  id         String  @id
+  userId     Int
+  user       User    @relation(fields: [userId], references: [id])
+  publicKey  Bytes
+  transports String?
+  counter    BigInt
+},
+`)
+  },
+}
 
 // any notes to print out when the job is done
 export const notes = [

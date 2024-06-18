@@ -1,17 +1,10 @@
 import crypto from 'node:crypto'
-import fs from 'node:fs'
 import path from 'path'
-
-import { getDMMF } from '@prisma/internals'
 
 import { getPaths, colors, addEnvVarTask } from '@redwoodjs/cli-helpers'
 import type { AuthGeneratorCtx } from '@redwoodjs/cli-helpers/src/auth/authTasks'
 
-export const libPath = getPaths().api.lib.replace(getPaths().base, '')
-export const functionsPath = getPaths().api.functions.replace(
-  getPaths().base,
-  '',
-)
+import { addModels, functionsPath, hasModel, libPath } from './shared.js'
 
 const secret = crypto.randomBytes(32).toString('base64')
 
@@ -30,46 +23,19 @@ export const createUserModelTask = {
       throw new Error('User model already exists')
     }
 
-    addUserModel()
-  },
-}
-
-export const hasModel = async (name: string) => {
-  if (!name) {
-    return false
-  }
-
-  // Support PascalCase, camelCase, kebab-case, UPPER_CASE, and lowercase model
-  // names
-  const modelName = name.replace(/[_-]/g, '').toLowerCase()
-
-  const schema = await getDMMF({ datamodelPath: getPaths().api.dbSchema })
-
-  for (const model of schema.datamodel.models) {
-    if (model.name.toLowerCase() === modelName) {
-      return true
-    }
-  }
-
-  return false
-}
-
-const addUserModel = () => {
-  const schema = fs.readFileSync(getPaths().api.dbSchema, 'utf-8')
-
-  const schemaWithUser =
-    schema +
-    `
+    addModels(`
 model User {
   id                  Int       @id @default(autoincrement())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
   email               String    @unique
   hashedPassword      String
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
 }
-`
-  fs.writeFileSync(getPaths().api.dbSchema, schemaWithUser)
+`)
+  },
 }
 
 // any notes to print out when the job is done
