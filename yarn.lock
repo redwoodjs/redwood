@@ -8087,6 +8087,7 @@ __metadata:
     boxen: "npm:5.1.2"
     camelcase: "npm:6.3.0"
     chalk: "npm:4.1.2"
+    change-case: "npm:4.1.2"
     ci-info: "npm:4.0.0"
     concurrently: "npm:8.2.2"
     configstore: "npm:3.1.5"
@@ -8105,7 +8106,6 @@ __metadata:
     listr2: "npm:6.6.1"
     lodash: "npm:4.17.21"
     memfs: "npm:4.9.2"
-    param-case: "npm:3.0.4"
     pascalcase: "npm:1.0.0"
     pluralize: "npm:8.0.0"
     portfinder: "npm:1.0.32"
@@ -14204,7 +14204,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"change-case@npm:^4.1.2":
+"change-case@npm:4.1.2, change-case@npm:^4.1.2":
   version: 4.1.2
   resolution: "change-case@npm:4.1.2"
   dependencies:
@@ -25412,22 +25412,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"param-case@npm:3.0.4, param-case@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "param-case@npm:3.0.4"
-  dependencies:
-    dot-case: "npm:^3.0.4"
-    tslib: "npm:^2.0.3"
-  checksum: 10c0/ccc053f3019f878eca10e70ec546d92f51a592f762917dafab11c8b532715dcff58356118a6f350976e4ab109e321756f05739643ed0ca94298e82291e6f9e76
-  languageName: node
-  linkType: hard
-
 "param-case@npm:^2.1.1":
   version: 2.1.1
   resolution: "param-case@npm:2.1.1"
   dependencies:
     no-case: "npm:^2.2.0"
   checksum: 10c0/8ea1b8472fd51d5f50b28d1d754899713805d05f2241e9b8c4acafa2c500b3f47457a3b4932ab75220f14d2c69180bb7338b78a45576e2b4d90da1e6f0285833
+  languageName: node
+  linkType: hard
+
+"param-case@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "param-case@npm:3.0.4"
+  dependencies:
+    dot-case: "npm:^3.0.4"
+    tslib: "npm:^2.0.3"
+  checksum: 10c0/ccc053f3019f878eca10e70ec546d92f51a592f762917dafab11c8b532715dcff58356118a6f350976e4ab109e321756f05739643ed0ca94298e82291e6f9e76
   languageName: node
   linkType: hard
 

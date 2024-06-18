@@ -1,11 +1,11 @@
 import path from 'path'
 
 import camelcase from 'camelcase'
+import { paramCase } from 'change-case'
 import execa from 'execa'
 import fs from 'fs-extra'
 import humanize from 'humanize-string'
 import { Listr } from 'listr2'
-import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
