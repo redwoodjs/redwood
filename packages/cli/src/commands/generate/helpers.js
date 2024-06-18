@@ -1,8 +1,8 @@
 import path from 'path'
 
+import { paramCase } from 'change-case'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
-import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
