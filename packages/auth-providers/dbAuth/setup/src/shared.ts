@@ -10,7 +10,7 @@ export const functionsPath = getPaths().api.functions.replace(
   '',
 )
 
-export const hasModel = async (name: string) => {
+export async function hasModel(name: string) {
   if (!name) {
     return false
   }
@@ -30,7 +30,7 @@ export const hasModel = async (name: string) => {
   return false
 }
 
-export const addModels = (models: string) => {
+export function addModels(models: string) {
   const schema = fs.readFileSync(getPaths().api.dbSchema, 'utf-8')
 
   const schemaWithUser = schema + models

@@ -3,6 +3,7 @@ import path from 'node:path'
 import { vol } from 'memfs'
 
 jest.mock('fs', () => require('memfs').fs)
+jest.mock('node:fs', () => require('memfs').fs)
 
 import { createAuthDecoderFunction } from '../setupHandler'
 
@@ -12,6 +13,10 @@ const redwoodProjectPath = '/redwood-app'
 jest.mock('../setupData', () => ({
   notes: '',
   extraTask: undefined,
+}))
+
+jest.mock('../shared', () => ({
+  hasModel: () => false,
 }))
 
 jest.mock('@redwoodjs/cli-helpers', () => {

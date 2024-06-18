@@ -11,14 +11,15 @@ import {
   notesCreatedUserModel,
   extraTask,
   createUserModelTask,
-  hasModel,
 } from './setupData'
+import { hasModel } from './shared'
 import {
   notes as webAuthnNotes,
   notesCreatedUserModel as webAuthnNotesCreatedUserModel,
   extraTask as webAuthnExtraTask,
   webPackages as webAuthnWebPackages,
   apiPackages as webAuthnApiPackages,
+  createUserModelTask as webAuthnCreateUserModelTask,
 } from './webAuthn.setupData'
 
 export async function handler({
@@ -49,6 +50,16 @@ export async function handler({
     }
   }
 
+  let createDbUserModelTask: typeof createUserModelTask | undefined = undefined
+
+  if (createDbUserModel) {
+    if (webAuthn) {
+      createDbUserModelTask = webAuthnCreateUserModelTask
+    } else {
+      createDbUserModelTask = createUserModelTask
+    }
+  }
+
   standardAuthHandler({
     basedir: __dirname,
     forceArg,
@@ -66,7 +77,7 @@ export async function handler({
     ],
     extraTasks: [
       webAuthn ? webAuthnExtraTask : extraTask,
-      createDbUserModel ? createUserModelTask : undefined,
+      createDbUserModelTask,
       createAuthDecoderFunction,
     ],
     notes: oneMoreThing,

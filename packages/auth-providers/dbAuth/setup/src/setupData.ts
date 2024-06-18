@@ -4,7 +4,7 @@ import path from 'path'
 import { getPaths, colors, addEnvVarTask } from '@redwoodjs/cli-helpers'
 import type { AuthGeneratorCtx } from '@redwoodjs/cli-helpers/src/auth/authTasks'
 
-import { addModels, functionsPath, hasModel, libPath } from './shared.js'
+import { addModels, functionsPath, hasModel, libPath } from './shared'
 
 const secret = crypto.randomBytes(32).toString('base64')
 
