@@ -3,7 +3,6 @@ import path from 'node:path'
 import { vol } from 'memfs'
 
 jest.mock('fs', () => require('memfs').fs)
-jest.mock('node:fs', () => require('memfs').fs)
 
 import { createAuthDecoderFunction } from '../setupHandler'
 

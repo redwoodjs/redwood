@@ -108,7 +108,9 @@ async function shouldIncludeWebAuthn(webauthn: boolean | null) {
  * to create a User model in their Prisma schema
  */
 async function shouldCreateUserModel(createUserModel: boolean | null) {
-  if (createUserModel === null && !hasModel('User')) {
+  const hasUserModel = await hasModel('User')
+
+  if (createUserModel === null && !hasUserModel) {
     const createModelResponse = await prompts({
       type: 'confirm',
       name: 'answer',
