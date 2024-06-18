@@ -7380,7 +7380,7 @@ __metadata:
     pretty-ms: "npm:7.0.1"
     qs: "npm:6.12.1"
     split2: "npm:4.2.0"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
     yargs: "npm:17.7.2"
@@ -7640,7 +7640,7 @@ __metadata:
     "@redwoodjs/vite": "workspace:*"
     "@types/aws-lambda": "npm:8.10.138"
     ts-toolbelt: "npm:9.6.0"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   languageName: unknown
@@ -7818,7 +7818,7 @@ __metadata:
     "@supabase/ssr": "npm:0.3.0"
     "@types/aws-lambda": "npm:8.10.138"
     ts-toolbelt: "npm:9.6.0"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   languageName: unknown
@@ -7922,7 +7922,7 @@ __metadata:
     core-js: "npm:3.37.1"
     msw: "npm:1.3.3"
     react: "npm:19.0.0-beta-04b058868c-20240508"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   languageName: unknown
@@ -7957,7 +7957,7 @@ __metadata:
     core-js: "npm:3.37.1"
     fast-glob: "npm:3.3.2"
     graphql: "npm:16.8.1"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   languageName: unknown
@@ -7981,7 +7981,7 @@ __metadata:
     listr2: "npm:6.6.1"
     memfs: "npm:4.9.3"
     terminal-link: "npm:2.1.1"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     yargs: "npm:17.7.2"
   bin:
@@ -8010,7 +8010,7 @@ __metadata:
     prompts: "npm:2.4.2"
     smol-toml: "npm:1.2.1"
     terminal-link: "npm:2.1.1"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   languageName: unknown
@@ -8030,7 +8030,7 @@ __metadata:
     storybook: "npm:7.6.17"
     storybook-framework-redwoodjs-vite: "workspace:*"
     terminal-link: "npm:2.1.1"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     yargs: "npm:17.7.2"
   languageName: unknown
@@ -8053,7 +8053,7 @@ __metadata:
     execa: "npm:5.1.1"
     storybook: "npm:7.6.17"
     terminal-link: "npm:2.1.1"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     yargs: "npm:17.7.2"
   languageName: unknown
@@ -8119,7 +8119,7 @@ __metadata:
     systeminformation: "npm:5.22.11"
     terminal-link: "npm:2.1.1"
     title-case: "npm:3.0.3"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     uuid: "npm:9.0.1"
     vitest: "npm:1.6.0"
@@ -8175,7 +8175,7 @@ __metadata:
   resolution: "@redwoodjs/context@workspace:packages/context"
   dependencies:
     "@redwoodjs/framework-tools": "workspace:*"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -8190,7 +8190,7 @@ __metadata:
     esbuild: "npm:0.21.3"
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -8294,7 +8294,7 @@ __metadata:
     "@typescript-eslint/rule-tester": "npm:7.3.1"
     "@typescript-eslint/utils": "npm:7.3.1"
     eslint: "npm:8.57.0"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   languageName: unknown
@@ -8311,7 +8311,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     fast-glob: "npm:3.3.2"
     fastify: "npm:4.27.0"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   languageName: unknown
@@ -8353,7 +8353,7 @@ __metadata:
     esbuild: "npm:0.21.3"
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -8395,7 +8395,7 @@ __metadata:
     jest: "npm:29.7.0"
     jsonwebtoken: "npm:9.0.2"
     lodash: "npm:4.17.21"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     uuid: "npm:9.0.1"
   languageName: unknown
@@ -8446,7 +8446,7 @@ __metadata:
     systeminformation: "npm:5.22.11"
     terminal-link: "npm:2.1.1"
     ts-node: "npm:10.9.2"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   bin:
@@ -8461,7 +8461,7 @@ __metadata:
   dependencies:
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   languageName: unknown
@@ -8473,7 +8473,7 @@ __metadata:
   dependencies:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/mailer-core": "workspace:*"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -8486,7 +8486,7 @@ __metadata:
     "@redwoodjs/mailer-core": "workspace:*"
     "@types/nodemailer": "npm:^6"
     nodemailer: "npm:6.9.13"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -8498,7 +8498,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/mailer-core": "workspace:*"
     resend: "npm:1.1.0"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -8511,7 +8511,7 @@ __metadata:
     "@redwoodjs/mailer-core": "workspace:*"
     "@redwoodjs/mailer-handler-nodemailer": "workspace:*"
     "@types/nodemailer": "npm:^6"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -8525,7 +8525,7 @@ __metadata:
     "@redwoodjs/mailer-core": "workspace:*"
     "@types/mjml": "npm:4"
     mjml: "npm:4.15.3"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -8537,7 +8537,7 @@ __metadata:
     "@react-email/render": "npm:0.0.13"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/mailer-core": "workspace:*"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -8557,7 +8557,7 @@ __metadata:
     react: "npm:19.0.0-beta-04b058868c-20240508"
     react-dom: "npm:19.0.0-beta-04b058868c-20240508"
     ts-toolbelt: "npm:9.6.0"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vite: "npm:5.2.13"
     vitest: "npm:1.6.0"
@@ -8601,7 +8601,7 @@ __metadata:
     rimraf: "npm:5.0.7"
     smol-toml: "npm:1.2.1"
     string-env-interpolation: "npm:1.0.1"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   languageName: unknown
@@ -8627,7 +8627,7 @@ __metadata:
     graphql: "npm:16.8.1"
     ioredis: "npm:^5.3.2"
     nodemon: "npm:3.1.3"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   peerDependencies:
@@ -8689,7 +8689,7 @@ __metadata:
     esbuild: "npm:0.21.3"
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -8746,7 +8746,7 @@ __metadata:
     ci-info: "npm:4.0.0"
     envinfo: "npm:7.13.0"
     systeminformation: "npm:5.22.11"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     uuid: "npm:9.0.1"
     vitest: "npm:1.6.0"
@@ -8801,7 +8801,7 @@ __metadata:
     chalk: "npm:4.1.2"
     enquirer: "npm:2.4.1"
     stdout-update: "npm:1.6.8"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
   languageName: unknown
   linkType: soft
@@ -8843,7 +8843,7 @@ __metadata:
     react: "npm:19.0.0-beta-04b058868c-20240508"
     react-server-dom-webpack: "npm:19.0.0-beta-04b058868c-20240508"
     rollup: "npm:4.18.0"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vite: "npm:5.2.13"
     vite-plugin-cjs-interop: "npm:2.1.1"
@@ -8869,7 +8869,7 @@ __metadata:
     dotenv-defaults: "npm:5.0.2"
     fastify: "npm:4.27.0"
     fs-extra: "npm:11.2.0"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     yargs: "npm:17.7.2"
   bin:
@@ -15220,7 +15220,7 @@ __metadata:
     semver: "npm:7.6.2"
     systeminformation: "npm:5.22.11"
     terminal-link: "npm:2.1.1"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     untildify: "npm:4.0.0"
     uuid: "npm:9.0.1"
     vitest: "npm:1.6.0"
@@ -28176,7 +28176,7 @@ __metadata:
     prompts: "npm:2.4.2"
     rimraf: "npm:5.0.7"
     tstyche: "npm:2.0.0"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
     yargs: "npm:17.7.2"
@@ -29230,7 +29230,7 @@ __metadata:
     "@types/node": "npm:20.12.12"
     magic-string: "npm:^0.30.0"
     react-docgen: "npm:^7.0.0"
-    tsx: "npm:4.15.2"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     unplugin-auto-import: "npm:^0.17.5"
     vite: "npm:5.2.13"
@@ -30419,9 +30419,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsx@npm:4.15.2":
-  version: 4.15.2
-  resolution: "tsx@npm:4.15.2"
+"tsx@npm:4.15.6":
+  version: 4.15.6
+  resolution: "tsx@npm:4.15.6"
   dependencies:
     esbuild: "npm:~0.21.4"
     fsevents: "npm:~2.3.3"
@@ -30431,7 +30431,7 @@ __metadata:
       optional: true
   bin:
     tsx: dist/cli.mjs
-  checksum: 10c0/6349ac29c13b567ece91d38e239606c0a8655ddbbdfab7250c04d7f9d5c447ff28f8dc7db62eaa16cafaff9cb5194c2a511d618cbfd4909e76cc54f07bc22424
+  checksum: 10c0/c44e489d35b8b4795d68164572eb9e322a707290aa0786c2aac0f5c7782a884dfec38d557d74471b981a8314b2c7f6612078451d0429db028a23cb54a37e83a0
   languageName: node
   linkType: hard
 
