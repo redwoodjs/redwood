@@ -1,5 +1,3 @@
-import * as fs from 'node:fs'
-
 import { createUserModelTask } from '../setupData'
 
 const RWJS_CWD = process.env.RWJS_CWD
