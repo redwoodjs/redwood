@@ -24,7 +24,9 @@ export const extraTask = addEnvVarTask(
 export const createUserModelTask = {
   title: 'Creating model `User`...',
   task: async (ctx: AuthGeneratorCtx) => {
-    if (await hasModel('user') && !ctx.force) {
+    const hasUserModel = await hasModel('User')
+
+    if (hasUserModel && !ctx.force) {
       throw new Error('User model already exists')
     }
 

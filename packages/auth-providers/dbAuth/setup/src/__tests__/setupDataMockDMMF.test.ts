@@ -85,7 +85,11 @@ generator client {
       redwoodProjectPath,
     )
 
-    await createUserModelTask.task()
+    await createUserModelTask.task({
+      force: false,
+      setupMode: 'UNKNOWN',
+      provider: 'dbAuth',
+    })
 
     const schema = fs.readFileSync(dbSchemaPath, 'utf-8')
     expect(schema).toMatch(/^model User {$/m)
@@ -117,7 +121,11 @@ model UserExample {
       redwoodProjectPath,
     )
 
-    await createUserModelTask.task()
+    await createUserModelTask.task({
+      force: false,
+      setupMode: 'UNKNOWN',
+      provider: 'dbAuth',
+    })
 
     const schema = fs.readFileSync(dbSchemaPath, 'utf-8')
     expect(schema).toMatch(/^model User {$/m)
@@ -156,9 +164,13 @@ model Post {
       redwoodProjectPath,
     )
 
-    await expect(createUserModelTask.task).rejects.toThrow(
-      'User model already exists',
-    )
+    await expect(() => {
+      return createUserModelTask.task({
+        force: false,
+        setupMode: 'UNKNOWN',
+        provider: 'dbAuth',
+      })
+    }).rejects.toThrow('User model already exists')
 
     const schema = fs.readFileSync(dbSchemaPath, 'utf-8')
 

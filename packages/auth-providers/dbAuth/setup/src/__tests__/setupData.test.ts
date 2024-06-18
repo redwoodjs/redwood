@@ -42,8 +42,12 @@ afterAll(() => {
 
 describe('setupData createUserModelTask (test-project)', () => {
   it('throws an error if a User model already exists', async () => {
-    await expect(createUserModelTask.task).rejects.toThrow(
-      'User model already exists',
-    )
+    await expect(() => {
+      return createUserModelTask.task({
+        force: false,
+        setupMode: 'UNKNOWN',
+        provider: 'dbAuth',
+      })
+    }).rejects.toThrow('User model already exists')
   })
 })
