@@ -5,6 +5,7 @@ import path from 'path'
 import { getDMMF } from '@prisma/internals'
 
 import { getPaths, colors, addEnvVarTask } from '@redwoodjs/cli-helpers'
+import type { AuthGeneratorCtx } from '@redwoodjs/cli-helpers/src/auth/authTasks'
 
 export const libPath = getPaths().api.lib.replace(getPaths().base, '')
 export const functionsPath = getPaths().api.functions.replace(
@@ -22,8 +23,8 @@ export const extraTask = addEnvVarTask(
 
 export const createUserModelTask = {
   title: 'Creating model `User`...',
-  task: async () => {
-    if (await hasModel('user')) {
+  task: async (ctx: AuthGeneratorCtx) => {
+    if (await hasModel('user') && !ctx.force) {
       throw new Error('User model already exists')
     }
 

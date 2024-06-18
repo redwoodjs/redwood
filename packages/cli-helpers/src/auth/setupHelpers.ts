@@ -138,6 +138,7 @@ export const standardAuthHandler = async ({
       ctx: {
         setupMode: 'UNKNOWN',
         provider, // provider name passed from CLI
+        force: forceArg,
       },
     },
   )
