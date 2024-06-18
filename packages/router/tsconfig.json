@@ -7,5 +7,6 @@
   "include": ["src", "./ambient.d.ts"],
   "references": [
     { "path": "../auth/tsconfig.build.json" },
+    { "path": "../server-store" },
   ]
 }

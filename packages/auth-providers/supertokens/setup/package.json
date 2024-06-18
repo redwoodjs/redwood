@@ -3,7 +3,7 @@
   "version": "7.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/auth-providers/supertokens/setup"
   },
   "license": "MIT",
@@ -31,7 +31,7 @@
     "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
     "@types/yargs": "17.0.32",
-    "memfs": "4.9.2",
+    "memfs": "4.9.3",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },

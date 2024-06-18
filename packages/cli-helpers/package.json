@@ -3,7 +3,7 @@
   "version": "7.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/cli-helpers"
   },
   "license": "MIT",
@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@babel/core": "^7.22.20",
-    "@iarna/toml": "2.2.5",
     "@opentelemetry/api": "1.8.0",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/telemetry": "workspace:*",
@@ -40,13 +39,14 @@
     "pascalcase": "1.0.0",
     "prettier": "3.2.5",
     "prompts": "2.4.2",
+    "smol-toml": "1.2.1",
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
-    "@types/lodash": "4.17.3",
+    "@types/lodash": "4.17.5",
     "@types/pascalcase": "1.0.3",
     "@types/yargs": "17.0.32",
-    "tsx": "4.10.3",
+    "tsx": "4.15.2",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },

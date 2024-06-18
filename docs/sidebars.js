@@ -139,6 +139,7 @@ module.exports = {
             { type: 'doc', label: 'Vercel', id: 'deploy/vercel' },
           ],
         },
+        'database-seeds',
         'directives',
         'docker',
         'environment-variables',

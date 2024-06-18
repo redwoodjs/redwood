@@ -4,7 +4,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/framework-tools"
   },
   "license": "MIT",
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "11.0.4",
-    "tsx": "4.10.3",
+    "tsx": "4.15.2",
     "typescript": "5.4.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

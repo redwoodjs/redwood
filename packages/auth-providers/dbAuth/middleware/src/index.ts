@@ -32,8 +32,13 @@ export const initDbAuthMiddleware = ({
   dbAuthUrl = '/middleware/dbauth',
 }: DbAuthMiddlewareOptions): [Middleware, '*'] => {
   const mw: Middleware = async (req, res = MiddlewareResponse.next()) => {
-    // Handoff POST and some GET requests to the dbAuthHandler. The url is configurable on the dbAuth client side.
-    // This is where we handle login, logout, and signup, etc., no need to enrich the context
+    console.log('dbAuthUrl', dbAuthUrl)
+    console.log('req.url', req.url)
+
+    // Handoff POST and some GET requests to the dbAuthHandler. The url is
+    // configurable on the dbAuth client side.
+    // This is where we handle login, logout, and signup, etc., no need to
+    // enrich the context
     if (req.url.includes(dbAuthUrl)) {
       // Short circuit here ...
       // if the call came from packages/auth-providers/dbAuth/web/src/getCurrentUserFromMiddleware.ts
@@ -47,6 +52,7 @@ export const initDbAuthMiddleware = ({
         return new MiddlewareResponse(JSON.stringify({ currentUser }))
       } else {
         const output = await dbAuthHandler(req)
+        console.log('output', output)
         const finalHeaders = new Headers()
 
         Object.entries(output.headers).forEach(([key, value]) => {
@@ -128,7 +134,8 @@ async function validateSession({
   // So that it goes into the catch block
   if (!decryptedSession) {
     throw new Error(
-      `No decrypted session found. Check passed in cookie name options to middleware, looking for "${cookieName}"`,
+      'No decrypted session found. Check passed in cookie name option to ' +
+        `middleware. Looking for "${cookieName}"`,
     )
   }
 

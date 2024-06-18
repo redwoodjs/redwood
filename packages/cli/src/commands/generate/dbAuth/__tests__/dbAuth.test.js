@@ -7,11 +7,19 @@ import path from 'path'
 // Load mocks
 import '../../../../lib/test'
 
-const realfs = await vi.importActual('fs-extra')
+const actualFs = await vi.importActual('fs-extra')
 import Enquirer from 'enquirer'
 import fs from 'fs-extra'
 import { vol } from 'memfs'
-import { vi, describe, it, expect, beforeEach } from 'vitest'
+import {
+  vi,
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterAll,
+  beforeAll,
+} from 'vitest'
 
 import { getPaths } from '../../../../lib'
 import * as dbAuth from '../dbAuth'
@@ -27,14 +35,14 @@ const dbAuthTemplateFiles = [
   'signup.tsx.template',
 ]
 dbAuthTemplateFiles.forEach((templateFilename) => {
-  mockFiles[path.join(__dirname, `../templates/${templateFilename}`)] = realfs
+  mockFiles[path.join(__dirname, `../templates/${templateFilename}`)] = actualFs
     .readFileSync(path.join(__dirname, `../templates/${templateFilename}`))
     .toString()
 })
 
 mockFiles[
   path.join(__dirname, `../../scaffold/templates/assets/scaffold.css.template`)
-] = realfs
+] = actualFs
   .readFileSync(
     path.join(
       __dirname,
@@ -43,7 +51,7 @@ mockFiles[
   )
   .toString()
 
-mockFiles[getPaths().web.routes] = realfs
+mockFiles[getPaths().web.routes] = actualFs
   .readFileSync(
     path.join(
       __dirname,
@@ -52,7 +60,7 @@ mockFiles[getPaths().web.routes] = realfs
   )
   .toString()
 
-mockFiles[getPaths().web.app] = realfs
+mockFiles[getPaths().web.app] = actualFs
   .readFileSync(
     path.join(
       __dirname,
@@ -60,6 +68,14 @@ mockFiles[getPaths().web.app] = realfs
     ),
   )
   .toString()
+
+beforeAll(() => {
+  vi.spyOn(console, 'log').mockImplementation(() => {})
+})
+
+afterAll(() => {
+  vi.mocked(console).log.mockRestore?.()
+})
 
 describe('dbAuth', () => {
   beforeEach(() => {
@@ -89,8 +105,10 @@ describe('dbAuth', () => {
 
   describe('handler', () => {
     it('exits when all files are skipped', async () => {
-      const mockExit = vi.spyOn(process, 'exit').mockImplementation()
-      const mockConsoleInfo = vi.spyOn(console, 'info').mockImplementation()
+      const mockExit = vi.spyOn(process, 'exit').mockImplementation(() => {})
+      const mockConsoleInfo = vi
+        .spyOn(console, 'info')
+        .mockImplementation(() => {})
 
       await dbAuth.handler({
         listr2: { silentRendererCondition: true },
@@ -186,6 +204,9 @@ describe('dbAuth', () => {
 
     it('prompt for webauthn', async () => {
       let correctPrompt = false
+      const mockConsoleLog = vi
+        .spyOn(console, 'log')
+        .mockImplementation(() => {})
 
       const customEnquirer = new Enquirer({ show: false })
       customEnquirer.on('prompt', (prompt) => {
@@ -200,6 +221,40 @@ describe('dbAuth', () => {
         listr2: { silentRendererCondition: true },
       })
       expect(correctPrompt).toBe(true)
+
+      // Verify that the final log message is not the webauthn one
+      expect(mockConsoleLog.mock.calls.at(-1)[0]).toMatch(
+        /Look in LoginPage, Sign/,
+      )
+      mockConsoleLog.mockRestore()
+    })
+
+    it('prints webauthn message when answering Yes', async () => {
+      const mockConsoleLog = vi
+        .spyOn(console, 'log')
+        .mockImplementation(() => {})
+
+      const customEnquirer = new Enquirer()
+      customEnquirer.on('prompt', (prompt) => {
+        if (prompt.state.message.includes('Enable WebAuthn')) {
+          prompt.on('run', () => {
+            return prompt.keypress('y')
+          })
+        } else {
+          prompt.submit()
+        }
+      })
+
+      await dbAuth.handler({
+        enquirer: customEnquirer,
+        listr2: { silentRendererCondition: true },
+      })
+
+      // Verify that the final log message is the webauthn one
+      expect(mockConsoleLog.mock.calls.at(-1)[0]).toMatch(
+        /In LoginPage, look for the `REDIRECT`/,
+      )
+      mockConsoleLog.mockRestore()
     })
 
     it('does not prompt for webauthn when flag is given', async () => {
@@ -631,16 +686,19 @@ describe('dbAuth', () => {
     it('produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt', async () => {
       const customEnquirer = new Enquirer()
       customEnquirer.on('prompt', (prompt) => {
-        if (prompt.state.message.includes('username label')) {
-          prompt.value = 'Email'
-        }
-        if (prompt.state.message.includes('password label')) {
-          prompt.value = 'Secret'
-        }
         if (prompt.state.message.includes('Enable WebAuthn')) {
-          prompt.value = true
+          prompt.on('run', () => {
+            return prompt.keypress('y')
+          })
+        } else {
+          if (prompt.state.message.includes('username label')) {
+            prompt.value = 'Email'
+          } else if (prompt.state.message.includes('password label')) {
+            prompt.value = 'Secret'
+          }
+
+          prompt.submit()
         }
-        prompt.submit()
       })
 
       await dbAuth.handler({

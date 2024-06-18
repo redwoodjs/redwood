@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react'
 import React from 'react'
 
+import { getLocation } from '@redwoodjs/server-store'
+
 import { analyzeRoutes } from './analyzeRoutes'
 import type { Wrappers } from './analyzeRoutes'
-import type { LocationContextType } from './location'
 import { namedRoutes } from './namedRoutes'
 import { normalizePage } from './page'
 import type { RouterContextProviderProps } from './router-context'
@@ -17,14 +18,11 @@ export interface RouterProps
   trailingSlashes?: TrailingSlashesTypes
   pageLoadingDelay?: number
   children: ReactNode
-  location: LocationContextType
 }
 
-export const Router: React.FC<RouterProps> = ({
-  paramTypes,
-  children,
-  location,
-}) => {
+export const Router: React.FC<RouterProps> = ({ paramTypes, children }) => {
+  const location = getLocation()
+
   const analyzedRoutes = analyzeRoutes(children, {
     currentPathName: location.pathname,
     // @TODO We haven't handled this with SSR/Streaming yet.

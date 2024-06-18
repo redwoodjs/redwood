@@ -9,7 +9,7 @@ vi.mock('node:fs', async () => {
 
 import * as fs from 'node:fs'
 
-import * as toml from '@iarna/toml'
+import * as toml from 'smol-toml'
 import { vi, describe, beforeEach, afterEach, it, expect } from 'vitest'
 
 import { updateTomlConfig, addEnvVar } from '../project.js'

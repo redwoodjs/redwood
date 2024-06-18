@@ -3,7 +3,7 @@
   "version": "7.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/auth-providers/supertokens/api"
   },
   "license": "MIT",
@@ -37,7 +37,7 @@
     "vitest": "1.6.0"
   },
   "peerDependencies": {
-    "supertokens-node": "15.2.2"
+    "supertokens-node": "15.2.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

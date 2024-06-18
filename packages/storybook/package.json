@@ -10,11 +10,11 @@
     "Vite"
   ],
   "bugs": {
-    "url": "https://github.com/redwoodjs/redwood/issues"
+    "url": "git+https://github.com/redwoodjs/redwood/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/storybook"
   },
   "license": "MIT",
@@ -61,9 +61,9 @@
   },
   "devDependencies": {
     "@types/node": "20.12.12",
-    "tsx": "4.10.3",
+    "tsx": "4.15.2",
     "typescript": "5.4.5",
-    "vite": "5.2.11"
+    "vite": "5.2.13"
   },
   "peerDependencies": {
     "@redwoodjs/project-config": "workspace:*",

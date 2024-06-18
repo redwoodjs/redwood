@@ -9,6 +9,10 @@ import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
+import {
+  createPerRequestMap,
+  createServerStorage,
+} from '@redwoodjs/server-store'
 
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
@@ -16,7 +20,6 @@ import { createMiddlewareRouter } from './middleware/register.js'
 import type { Middleware } from './middleware/types.js'
 import { rscRoutesAutoLoader } from './plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
-import { createPerRequestMap, createServerStorage } from './serverStore.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import {

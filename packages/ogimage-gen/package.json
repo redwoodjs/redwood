@@ -3,7 +3,7 @@
   "version": "7.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/ogimage-gen"
   },
   "license": "MIT",
@@ -48,12 +48,12 @@
     "react-dom": "19.0.0-beta-04b058868c-20240508"
   },
   "devDependencies": {
-    "@playwright/test": "1.44.0",
+    "@playwright/test": "1.44.1",
     "@redwoodjs/framework-tools": "workspace:*",
     "ts-toolbelt": "9.6.0",
-    "tsx": "4.10.3",
+    "tsx": "4.15.2",
     "typescript": "5.4.5",
-    "vite": "5.2.11",
+    "vite": "5.2.13",
     "vitest": "1.6.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
