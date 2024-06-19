@@ -5,12 +5,12 @@ import path from 'path'
 import * as babel from '@babel/core'
 import boxen from 'boxen'
 import camelcase from 'camelcase'
+import { paramCase } from 'change-case'
 import decamelize from 'decamelize'
 import execa from 'execa'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import { memoize, template } from 'lodash'
-import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import { format } from 'prettier'
 
@@ -406,9 +406,12 @@ export const addRoutesToRouterTask = (routes, layout, setProps = {}) => {
       // newRoutes will be something like:
       // ['<Route path="/foo" page={FooPage} name="foo"/>']
       // and we need to replace `path="/foo"` with `path="/foo/"`
-      newRoutes = newRoutes.map((route) =>
-        route.replace(/ path="(.+?)" /, ' path="$1/" '),
-      )
+      newRoutes = newRoutes.map((route) => {
+        if (route.length > 2000) {
+          throw new Error(`Route is too long to process:\n${route}`)
+        }
+        return route.replace(/ path="(.+?)" /, ' path="$1/" ')
+      })
     }
 
     const routesBatch = layout
