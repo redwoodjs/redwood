@@ -8,7 +8,7 @@ import {
   useQuery,
   useMutation,
   useSubscription,
-} from '../GraphQLHooksProvider'
+} from '../GraphQLHooksProvider.js'
 
 const TestUseQueryHook: React.FunctionComponent = () => {
   // @ts-expect-error - Purposefully not passing in a DocumentNode type here.

@@ -1,7 +1,7 @@
 import type { HttpOptions, Operation } from '@apollo/client'
 import { ApolloLink, HttpLink, Observable } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
-import { print } from 'graphql/language/printer'
+import { print } from 'graphql/language/printer.js'
 
 export function createHttpLink(
   uri: string,

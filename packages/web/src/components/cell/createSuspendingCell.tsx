@@ -15,7 +15,7 @@ import type {
   DataObject,
   SuspendingSuccessProps,
   SuspenseCellQueryResult,
-} from './cellTypes'
+} from './cellTypes.js'
 import { isDataEmpty } from './isCellEmpty.js'
 
 type AnyObj = Record<string, unknown>

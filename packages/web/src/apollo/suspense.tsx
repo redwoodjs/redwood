@@ -41,23 +41,23 @@ import './typeOverride'
 import {
   FetchConfigProvider,
   useFetchConfig,
-} from '../components/FetchConfigProvider'
+} from '../components/FetchConfigProvider.js'
 import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider.js'
-import { ServerHtmlContext } from '../components/ServerInject'
+import { ServerHtmlContext } from '../components/ServerInject.js'
 
 import type {
   RedwoodApolloLink,
   RedwoodApolloLinkFactory,
   RedwoodApolloLinkName,
   RedwoodApolloLinks,
-} from './links'
+} from './links.js'
 import {
   createAuthApolloLink,
   createFinalLink,
   createHttpLink,
   createTokenLink,
   createUpdateDataLink,
-} from './links'
+} from './links.js'
 
 export type ApolloClientCacheConfig = InMemoryCacheConfig
 
