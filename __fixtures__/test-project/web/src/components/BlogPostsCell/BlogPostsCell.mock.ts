@@ -2,6 +2,7 @@
 export const standard = (/* vars, { ctx, req } */) => ({
   blogPosts: [
     {
+      __typename: 'BlogPost',
       id: 42,
       title: 'Mocked title',
       body: 'Mocked body',
@@ -14,6 +15,7 @@ export const standard = (/* vars, { ctx, req } */) => ({
       },
     },
     {
+      __typename: 'BlogPost',
       id: 43,
       title: 'Mocked title',
       body: 'Mocked body',
@@ -26,6 +28,7 @@ export const standard = (/* vars, { ctx, req } */) => ({
       },
     },
     {
+      __typename: 'BlogPost',
       id: 44,
       title: 'Mocked title',
       body: 'Mocked body',
