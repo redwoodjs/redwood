@@ -11,6 +11,18 @@ async function main() {
     return
   }
 
+  // We only enforce changesets on PRs that are not marked as "chore" or "SSR" or "RSC"
+  const skipOnMilestone = ['chore', 'SSR', 'RSC']
+  const { milestone } = github.context.payload.pull_request
+  console.log({
+    milestone,
+    skipOnMilestone,
+  })
+  if (milestone && skipOnMilestone.includes(milestone.title)) {
+    console.log(`Skipping check because of the "${milestone.title}" milestone`)
+    return
+  }
+
   // Check if the PR adds a changeset.
   await exec('git fetch origin main', [], { silent: true })
   const { stdout } = await getExecOutput('git diff origin/main --name-only', [], { silent: true })
