@@ -14,6 +14,10 @@ jest.mock('../setupData', () => ({
   extraTask: undefined,
 }))
 
+jest.mock('../shared', () => ({
+  hasModel: () => false,
+}))
+
 jest.mock('@redwoodjs/cli-helpers', () => {
   return {
     getGraphqlPath: () => {
