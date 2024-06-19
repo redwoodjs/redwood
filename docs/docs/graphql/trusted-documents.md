@@ -4,7 +4,7 @@ RedwoodJS can be setup to enforce [persisted operations](https://the-guild.dev/g
 
 Use trusted documents if your GraphQL API is only for your own app (which is the case for most GraphQL APIs) for a massively decreased attack-surface, increased performance, and decreased bandwidth usage.
 
-At app build time, Redwood will extract the GraphQL documents (queries, etc) and make them available to the server. At run time, you can then send "document id" or "hash" instead of the whole document; only accept requests with a known document id.
+At app build time, Redwood will extract the GraphQL documents (queries, etc) and make them available to the server. At run time, you must then send "document id" or "hash" instead of the whole document as the server will only accept requests with a known document id.
 
 This prevents malicious attackers from executing arbitrary GraphQL thus helping with unwanted resolver traversal or information leaking.
 
@@ -84,9 +84,9 @@ See how the `76308e971322b1ece4cdff75185bb61d7139e343` hash ids match?
 
 Now, when the client requests to make a query for `76308e971322b1ece4cdff75185bb61d7139e343`, the GraphQL server knows to execute the corresponding query associated with that hash.
 
-This means that because queries are pre-generated and the hash ids ***must match**, there is no way for any un-trusted or ad-hock queries to get executed by the GraphQL server.
+This means that because queries are pre-generated and the hash ids **must match**, there is no way for any un-trusted or ad-hoc queries to get executed by the GraphQL server.
 
-Thus preventing unwanted queries or GraphQl traversal attacks,
+Thus preventing unwanted queries or GraphQL traversal attacks,
 
 * Configure RedwoodJS to use Trusted Documents via `redwood.toml`
 * Configure the GraphQL Server
