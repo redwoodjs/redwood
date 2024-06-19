@@ -524,6 +524,7 @@ export type AuthSetupMode =
 export interface AuthGeneratorCtx {
   setupMode: AuthSetupMode
   provider: string
+  force: boolean
 }
 
 export const setAuthSetupMode = <Renderer extends typeof ListrRenderer>(

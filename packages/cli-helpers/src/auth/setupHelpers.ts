@@ -52,7 +52,7 @@ interface Args {
   webAuthn?: boolean
   webPackages?: string[]
   apiPackages?: string[]
-  extraTasks?: ListrTask<AuthGeneratorCtx>[]
+  extraTasks?: Array<ListrTask<AuthGeneratorCtx> | undefined>
   notes?: string[]
   verbose?: boolean
 }
@@ -98,7 +98,7 @@ export const standardAuthHandler = async ({
       webPackages.length && addWebPackages(webPackages),
       apiPackages.length && addApiPackages(apiPackages),
       (webPackages.length || apiPackages.length) && installPackages,
-      ...(extraTasks || []),
+      ...(extraTasks || []).filter(truthy),
       notes && {
         title: 'One more thing...',
         task: (ctx: AuthGeneratorCtx) => {
@@ -138,6 +138,7 @@ export const standardAuthHandler = async ({
       ctx: {
         setupMode: 'UNKNOWN',
         provider, // provider name passed from CLI
+        force: forceArg,
       },
     }
   )
