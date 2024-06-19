@@ -14,10 +14,6 @@ async function main() {
   // We only enforce changesets on PRs that are not marked as "chore" or "SSR" or "RSC"
   const skipOnMilestone = ['chore', 'SSR', 'RSC']
   const { milestone } = github.context.payload.pull_request
-  console.log({
-    milestone,
-    skipOnMilestone,
-  })
   if (milestone && skipOnMilestone.includes(milestone.title)) {
     console.log(`Skipping check because of the "${milestone.title}" milestone`)
     return
