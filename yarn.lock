@@ -8936,14 +8936,14 @@ __metadata:
     react: 19.0.0-beta-04b058868c-20240508
     react-dom: 19.0.0-beta-04b058868c-20240508
   bin:
-    cross-env: ./dist/bins/cross-env.js
-    msw: ./dist/bins/msw.js
-    redwood: ./dist/bins/redwood.js
-    rw: ./dist/bins/redwood.js
-    rwfw: ./dist/bins/rwfw.js
-    storybook: ./dist/bins/storybook.js
-    tsc: ./dist/bins/tsc.js
-    webpack: ./dist/bins/webpack.js
+    cross-env: ./dist/cjs/bins/cross-env.js
+    msw: ./dist/cjs/bins/msw.js
+    redwood: ./dist/cjs/bins/redwood.js
+    rw: ./dist/cjs/bins/redwood.js
+    rwfw: ./dist/cjs/bins/rwfw.js
+    storybook: ./dist/cjs/bins/storybook.js
+    tsc: ./dist/cjs/bins/tsc.js
+    webpack: ./dist/cjs/bins/webpack.js
   languageName: unknown
   linkType: soft
 

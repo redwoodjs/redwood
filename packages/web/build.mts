@@ -5,6 +5,7 @@ import {
   defaultBuildOptions,
   defaultIgnorePatterns,
 } from '@redwoodjs/framework-tools'
+import { writeFileSync } from 'node:fs'
 
 // CJS build
 await build({
@@ -14,19 +15,21 @@ await build({
   buildOptions: {
     ...defaultBuildOptions,
     // ⭐ No special tsconfig here
-    // outdir: 'dist/cjs', DONT DO THIS JUST YET
-    outdir: 'dist',
+    outdir: 'dist/cjs',
+    // outdir: 'dist',
     packages: 'external',
   },
 })
 
 /**  THIS IS IN PART 2 ~ making this a dual module
-Will enable in follow up PR
+Will enable in follow up PR **/
 
-ESM build
+// ESM build
 await build({
   entryPointOptions: {
-    ignore: [...defaultIgnorePatterns, 'src/entry/**'],
+    // @NOTE: building the cjs bins only...
+    // I haven't tried esm bins yet...
+    ignore: [...defaultIgnorePatterns, 'src/bins/**'],
   },
   buildOptions: {
     ...defaultBuildOptions,
@@ -44,5 +47,3 @@ writeFileSync('dist/cjs/package.json', JSON.stringify({ type: 'commonjs' }))
 // Place a package.json file with `type: module` in the dist/esm folder so that
 // all .js files are treated as ES Module files.
 writeFileSync('dist/package.json', JSON.stringify({ type: 'module' }))
-
-*/

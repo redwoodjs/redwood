@@ -1,6 +1,7 @@
 {
   "name": "@redwoodjs/web",
   "version": "7.0.0",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -10,14 +11,59 @@
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "cross-env": "./dist/bins/cross-env.js",
-    "msw": "./dist/bins/msw.js",
-    "redwood": "./dist/bins/redwood.js",
-    "rw": "./dist/bins/redwood.js",
-    "rwfw": "./dist/bins/rwfw.js",
-    "storybook": "./dist/bins/storybook.js",
-    "tsc": "./dist/bins/tsc.js",
-    "webpack": "./dist/bins/webpack.js"
+    "cross-env": "./dist/cjs/bins/cross-env.js",
+    "msw": "./dist/cjs/bins/msw.js",
+    "redwood": "./dist/cjs/bins/redwood.js",
+    "rw": "./dist/cjs/bins/redwood.js",
+    "rwfw": "./dist/cjs/bins/rwfw.js",
+    "storybook": "./dist/cjs/bins/storybook.js",
+    "tsc": "./dist/cjs/bins/tsc.js",
+    "webpack": "./dist/cjs/bins/webpack.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./serverStore": {
+      "require": "./dist/cjs/server/serverStore.js",
+      "import": "./dist/server/serverStore.js",
+      "types": "./dist/server/serverStore.d.ts"
+    },
+    "./cookie": {
+      "require": "./dist/cjs/server/CookieJar.js",
+      "import": "./dist/server/CookieJar.js",
+      "types": "./dist/server/CookieJar.d.ts"
+    },
+    "./middleware": {
+      "require": "./dist/cjs/server/middleware.js",
+      "import": "./dist/server/middleware.js",
+      "types": "./dist/server/middleware.d.ts"
+    },
+    "./serverInject": {
+      "require": "./dist/cjs/components/ServerInject.js",
+      "import": "./dist/components/ServerInject.js",
+      "types": "./dist/components/ServerInject.d.ts"
+    },
+    "./dist/components/*": {
+      "require": "./dist/cjs/components/*.js",
+      "import": "./dist/components/*.js"
+    },
+    "./dist/apollo/suspense": {
+      "require": "./dist/cjs/apollo/suspense.js",
+      "import": "./dist/apollo/suspense.js"
+    },
+    "./toast": {
+      "require": "./dist/cjs/toast/index.js",
+      "import": "./dist/toast/index.js",
+      "types": "./dist/toast/index.d.ts"
+    },
+    "./apollo": {
+      "require": "./dist/cjs/apollo/index.js",
+      "import": "./dist/apollo/index.js",
+      "types": "./dist/apollo/index.d.ts"
+    }
   },
   "files": [
     "dist",
