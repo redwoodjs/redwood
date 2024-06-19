@@ -145,6 +145,9 @@ export const notesCreatedUserModel = [
   'change this secret to a new value and deploy. To create a new secret, run:',
   '',
   '  yarn rw generate secret',
+]
+
+export const noteGenerate = [
   '',
   'Need simple Login, Signup, Forgot Password pages and WebAuthn prompts?',
   "We've got a generator for those as well:",

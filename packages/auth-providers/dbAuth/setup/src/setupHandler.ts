@@ -8,13 +8,15 @@ import { getGraphqlPath, standardAuthHandler } from '@redwoodjs/cli-helpers'
 import type { Args } from './setup'
 import {
   notes,
+  noteGenerate,
   notesCreatedUserModel,
   extraTask,
   createUserModelTask,
 } from './setupData'
-import { hasModel } from './shared'
+import { generateAuthPagesTask, hasAuthPages, hasModel } from './shared'
 import {
   notes as webAuthnNotes,
+  noteGenerate as webAuthnNoteGenerate,
   notesCreatedUserModel as webAuthnNotesCreatedUserModel,
   extraTask as webAuthnExtraTask,
   webPackages as webAuthnWebPackages,
@@ -25,6 +27,7 @@ import {
 export async function handler({
   webauthn,
   createUserModel,
+  generateAuthPages,
   force: forceArg,
 }: Args) {
   const { version } = JSON.parse(
@@ -33,6 +36,7 @@ export async function handler({
 
   const webAuthn = await shouldIncludeWebAuthn(webauthn)
   const createDbUserModel = await shouldCreateUserModel(createUserModel)
+  const generateDbAuthPages = await shouldGenerateDbAuthPages(generateAuthPages)
 
   let oneMoreThing: string[] = []
 
@@ -42,11 +46,19 @@ export async function handler({
     } else {
       oneMoreThing = webAuthnNotes
     }
+
+    if (!generateDbAuthPages) {
+      oneMoreThing.push(...webAuthnNoteGenerate)
+    }
   } else {
     if (createDbUserModel) {
       oneMoreThing = notesCreatedUserModel
     } else {
       oneMoreThing = notes
+    }
+
+    if (!generateDbAuthPages) {
+      oneMoreThing.push(...noteGenerate)
     }
   }
 
@@ -79,6 +91,9 @@ export async function handler({
       webAuthn ? webAuthnExtraTask : extraTask,
       createDbUserModelTask,
       createAuthDecoderFunction,
+      generateDbAuthPages
+        ? generateAuthPagesTask(createDbUserModel)
+        : undefined,
     ],
     notes: oneMoreThing,
   })
@@ -122,6 +137,26 @@ async function shouldCreateUserModel(createUserModel: boolean | null) {
   }
 
   return createUserModel
+}
+
+/**
+ * Prompt the user (unless already specified on the command line) if they want
+ * to generate auth pages. Also checks to make sure auth pages don't already
+ * exist before prompting.
+ */
+async function shouldGenerateDbAuthPages(generateAuthPages: boolean | null) {
+  if (generateAuthPages === null && !hasAuthPages()) {
+    const generateAuthPagesResponse = await prompts({
+      type: 'confirm',
+      name: 'answer',
+      message: 'Generate auth pages (login, signup, forgotten password, etc)?',
+      initial: false,
+    })
+
+    return generateAuthPagesResponse.answer
+  }
+
+  return generateAuthPages
 }
 
 export const createAuthDecoderFunction = {
