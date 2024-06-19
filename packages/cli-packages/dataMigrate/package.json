@@ -36,7 +36,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@prisma/client": "5.14.0",
+    "@prisma/client": "5.15.1",
     "@redwoodjs/framework-tools": "7.7.1",
     "@types/fs-extra": "11.0.4",
     "@types/yargs": "17.0.32",

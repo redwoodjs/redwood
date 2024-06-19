@@ -34,7 +34,7 @@
     "@opentelemetry/resources": "1.22.0",
     "@opentelemetry/sdk-trace-node": "1.22.0",
     "@opentelemetry/semantic-conventions": "1.22.0",
-    "@prisma/internals": "5.14.0",
+    "@prisma/internals": "5.15.1",
     "@redwoodjs/api-server": "7.7.1",
     "@redwoodjs/cli-helpers": "7.7.1",
     "@redwoodjs/fastify-web": "7.7.1",
