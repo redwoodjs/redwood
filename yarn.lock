@@ -7646,7 +7646,7 @@ __metadata:
     "@babel/cli": "npm:7.24.5"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.5"
-    "@prisma/internals": "npm:5.14.0"
+    "@prisma/internals": "npm:5.15.1"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@simplewebauthn/browser": "npm:7.4.0"
     "@simplewebauthn/typescript-types": "npm:7.4.0"
