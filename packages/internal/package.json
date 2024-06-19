@@ -73,7 +73,7 @@
     "@babel/cli": "7.24.5",
     "@types/fs-extra": "11.0.4",
     "graphql-tag": "2.12.6",
-    "tsx": "4.15.2",
+    "tsx": "4.15.6",
     "vitest": "1.6.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
