@@ -135,6 +135,7 @@ describe('authTasks', () => {
     const ctx: AuthGeneratorCtx = {
       provider: 'auth0',
       setupMode: 'FORCE',
+      force: false,
     }
 
     addConfigToWebApp().task(ctx, {} as any)
@@ -171,6 +172,7 @@ describe('authTasks', () => {
     const ctx: AuthGeneratorCtx = {
       provider: 'clerk',
       setupMode: 'FORCE',
+      force: false,
     }
 
     addConfigToWebApp().task(ctx, {} as any)
@@ -193,6 +195,7 @@ describe('authTasks', () => {
     const ctx: AuthGeneratorCtx = {
       provider: 'clerk',
       setupMode: 'FORCE',
+      force: false,
     }
 
     addConfigToWebApp().task(ctx, {} as any)
@@ -211,6 +214,7 @@ describe('authTasks', () => {
       const ctx: AuthGeneratorCtx = {
         provider: 'clerk',
         setupMode: 'FORCE',
+        force: false,
       }
 
       addConfigToWebApp().task(ctx, {} as any)
@@ -230,6 +234,7 @@ describe('authTasks', () => {
       const ctx: AuthGeneratorCtx = {
         provider: 'clerk',
         setupMode: 'FORCE',
+        force: false,
       }
 
       addConfigToWebApp().task(ctx, {} as any)
@@ -250,6 +255,7 @@ describe('authTasks', () => {
       const ctx: AuthGeneratorCtx = {
         provider: 'clerk',
         setupMode: 'FORCE',
+        force: false,
       }
 
       addConfigToWebApp().task(ctx, {} as any)
@@ -268,6 +274,7 @@ describe('authTasks', () => {
       const ctx: AuthGeneratorCtx = {
         provider: 'clerk',
         setupMode: 'FORCE',
+        force: false,
       }
 
       const task = { output: '' } as any
@@ -641,6 +648,7 @@ describe('authTasks', () => {
     const ctx: AuthGeneratorCtx = {
       provider: 'auth0',
       setupMode: 'FORCE',
+      force: false,
     }
 
     // NOTE: The current fs related mocking leaves this file around from previous tests so we
@@ -665,6 +673,7 @@ describe('authTasks', () => {
     const ctx: AuthGeneratorCtx = {
       provider: 'auth0',
       setupMode: 'FORCE',
+      force: false,
     }
     await createWebAuth(getPaths().base, false).task(ctx)
 
