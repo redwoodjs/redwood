@@ -6,47 +6,13 @@
 // see: redwood/packages/core/config/webpack.common.js
 // These declarations are the most common types
 
-declare module '*.svg' {
-  const content: string
-  export default content
-}
+/// <reference types="vite/client" />
 
-declare module '*.png' {
-  const content: string
-  export default content
-}
-
-declare module '*.bmp' {
-  const content: string
-  export default content
-}
-
-declare module '*.jpg' {
-  const content: string
-  export default content
-}
-
-declare module '*.jpe?g' {
-  const content: string
-  export default content
-}
-
-declare module '*.gif' {
-  const content: string
-  export default content
-}
-
-declare module '*.webp' {
-  const content: string
-  export default content
-}
-
-declare module '*.ico' {
-  const content: string
-  export default content
-}
-
-declare module '*.pdf' {
-  const content: string
-  export default content
-}
+/**
+ * @NOTE
+ * Declare module syntax does not work in ESM projects.
+ *
+ * I'm just trying to import Vite's types here and 🤞 it works.
+ *
+ * REMEMBER TO VALIDATE THIS!
+ */
