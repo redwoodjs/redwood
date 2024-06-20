@@ -61,7 +61,15 @@ export async function rscBuildForSsr({
       ],
     },
     plugins: [
-      cjsInterop({ dependencies: ['@redwoodjs/**'] }),
+      cjsInterop({
+        dependencies: [
+          '@redwoodjs/forms',
+          '@redwoodjs/prerender/*',
+          '@redwoodjs/router',
+          '@redwoodjs/auth-*',
+          // '@redwoodjs/web',
+        ],
+      }),
       rscRoutesAutoLoader(),
       rscSsrRouterImport(),
     ],

@@ -67,7 +67,13 @@ async function createServer() {
     configFile: rwPaths.web.viteConfig,
     plugins: [
       cjsInterop({
-        dependencies: ['@redwoodjs/**'],
+        dependencies: [
+          '@redwoodjs/forms',
+          '@redwoodjs/prerender/*',
+          '@redwoodjs/router',
+          '@redwoodjs/auth-*',
+          // '@redwoodjs/web',
+        ],
       }),
       rscEnabled && rscRoutesAutoLoader(),
     ],

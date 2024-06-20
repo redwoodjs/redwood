@@ -19,7 +19,13 @@ export async function buildForStreamingServer({
     configFile: rwPaths.web.viteConfig,
     plugins: [
       cjsInterop({
-        dependencies: ['@redwoodjs/**'],
+        dependencies: [
+          '@redwoodjs/forms',
+          '@redwoodjs/prerender/*',
+          '@redwoodjs/router',
+          '@redwoodjs/auth-*',
+          // '@redwoodjs/web',
+        ],
       }),
     ],
     build: {
