@@ -73,13 +73,11 @@ describe('User specified imports, with static imports', () => {
     const prerenderResult = await vitePrebuildWebFile(routesFile, {
       forPrerender: true,
       forJest: true,
-      forVite: true,
     })
     outputWithStaticImports = prerenderResult?.code
 
     const buildResult = await vitePrebuildWebFile(routesFile, {
       forJest: true,
-      forVite: true,
     })
     outputNoStaticImports = buildResult?.code
   })

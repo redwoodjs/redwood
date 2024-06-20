@@ -198,7 +198,7 @@ export const getWebSideDefaultBabelConfig = (options: Flags = {}) => {
 export const registerWebSideBabelHook = ({
   plugins = [],
   overrides = [],
-}: RegisterHookOptions & { forVite?: boolean } = {}) => {
+}: RegisterHookOptions = {}) => {
   const defaultOptions = getWebSideDefaultBabelConfig()
   registerBabel({
     ...defaultOptions,
