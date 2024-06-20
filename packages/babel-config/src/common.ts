@@ -76,9 +76,7 @@ export const getCommonPlugins = (): Array<[string, PluginOptions]> => {
 // It's related to yarn workspaces to be or not to be
 export const getRouteHookBabelPlugins = () => {
   return [
-    ...getWebSideBabelPlugins({
-      forVite: true,
-    }),
+    ...getWebSideBabelPlugins(),
     [
       'babel-plugin-module-resolver',
       {
