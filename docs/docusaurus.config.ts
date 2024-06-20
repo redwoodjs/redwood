@@ -19,7 +19,7 @@ const config: Config = {
   tagline:
     'Built on React, GraphQL, and Prisma, Redwood works with the components and development workflow you love, but with simple conventions and helpers to make your experience even better.',
   // ?
-  url: 'https://redwoodjs.com',
+  url: 'https://docs.redwoodjs.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -41,7 +41,7 @@ const config: Config = {
       logo: {
         alt: 'RedwoodJS pinecone logo',
         src: 'https://d33wubrfki0l68.cloudfront.net/72b0d56596a981835c18946d6c4f8a968b08e694/82254/images/logo.svg',
-        href: 'https://redwoodjs.com/',
+        href: 'https://docs.redwoodjs.com/',
         target: '_self',
       },
       items: [
