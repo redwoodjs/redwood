@@ -1,8 +1,8 @@
 import * as apolloClient from '@apollo/client'
 import type { UseFragmentResult } from '@apollo/client'
-import type { FragmentRegistryAPI } from '@apollo/client/cache'
-import { createFragmentRegistry } from '@apollo/client/cache'
-import { getFragmentDefinitions } from '@apollo/client/utilities'
+import type { FragmentRegistryAPI } from '@apollo/client/cache/index.js'
+import { createFragmentRegistry } from '@apollo/client/cache/index.js'
+import { getFragmentDefinitions } from '@apollo/client/utilities/index.js'
 import type { DocumentNode } from 'graphql'
 
 export type FragmentIdentifier = string | number

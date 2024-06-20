@@ -17,15 +17,15 @@ import type {
   InMemoryCacheConfig,
   setLogVerbosity,
 } from '@apollo/client'
+import { setLogVerbosity as apolloSetLogVerbosity } from '@apollo/client/core/index.js'
 import {
-  setLogVerbosity as apolloSetLogVerbosity,
   useMutation,
   useSubscription,
   useBackgroundQuery,
   useQuery,
   useReadQuery,
   useSuspenseQuery,
-} from '@apollo/client'
+} from '@apollo/client/react/hooks/index.js'
 import {
   ApolloClient,
   InMemoryCache,

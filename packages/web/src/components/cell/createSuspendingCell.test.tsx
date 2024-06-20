@@ -12,7 +12,7 @@ import { createSuspendingCell } from './createSuspendingCell.js'
 type ReadQueryHook = typeof useReadQuery
 type BgQueryHook = typeof useBackgroundQuery
 
-vi.mock('@apollo/client', () => {
+vi.mock('@apollo/client/react/hooks/useApolloClient.js', () => {
   return {
     useApolloClient: vi.fn(),
   }
