@@ -6,17 +6,13 @@ import * as babel from '@babel/core'
 import { getPaths } from '@redwoodjs/project-config'
 
 import babelRoutesAutoLoader from '../babel-plugin-redwood-routes-auto-loader'
-import type { PluginOptions as RoutesAutoLoaderOptions } from '../babel-plugin-redwood-routes-auto-loader'
 
-const transform = (
-  filename: string,
-  pluginOptions?: RoutesAutoLoaderOptions,
-) => {
+const transform = (filename: string) => {
   const code = fs.readFileSync(filename, 'utf-8')
   return babel.transform(code, {
     filename,
     presets: ['@babel/preset-react'],
-    plugins: [[babelRoutesAutoLoader, pluginOptions]],
+    plugins: [[babelRoutesAutoLoader]],
   })
 }
 
@@ -64,7 +60,9 @@ describe('page auto loader correctly imports pages', () => {
   test('Pages get both a LazyComponent and a prerenderLoader', () => {
     expect(result?.code).toContain(`const HomePage = {
   name: "HomePage",
-  prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage")),
+  prerenderLoader: name => ({
+    default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
+  }),
   LazyComponent: lazy(() => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"))
 `)
   })
