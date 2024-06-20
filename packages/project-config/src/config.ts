@@ -13,11 +13,6 @@ export enum TargetEnum {
   ELECTRON = 'electron',
 }
 
-export enum BundlerEnum {
-  WEBPACK = 'webpack',
-  VITE = 'vite',
-}
-
 export interface NodeTargetConfig {
   title: string
   name?: string
@@ -37,7 +32,6 @@ interface BrowserTargetConfig {
   port: number
   path: string
   target: TargetEnum.BROWSER
-  bundler: BundlerEnum
   includeEnvironmentVariables: string[]
   /**
    * Specify the URL to your api-server.
@@ -138,7 +132,6 @@ const DEFAULT_CONFIG: Config = {
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
-    bundler: BundlerEnum.VITE,
     includeEnvironmentVariables: [],
     apiUrl: '/.redwood/functions',
     fastRefresh: true,
