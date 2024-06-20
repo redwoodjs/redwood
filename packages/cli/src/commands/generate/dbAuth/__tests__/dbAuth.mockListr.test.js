@@ -63,6 +63,7 @@ vi.mock('listr2', async () => {
                 }
               },
               skip: (msg) => {
+                console.log('skipping task', msg)
                 mockSkippedTaskTitles.push(msg || task.title)
               },
             }
@@ -161,6 +162,75 @@ describe('dbAuth handler WebAuthn task title', () => {
 
     expect(mockExecutedTaskTitles[1]).toEqual(
       'Querying WebAuthn addition: WebAuthn addition included',
+    )
+  })
+
+  it("does not prompt for WebAuthn if it's already set up", async () => {
+    const localMockFiles = { ...mockFiles }
+    localMockFiles[path.join(getPaths().web.src, 'auth.ts')] = `
+import { createDbAuthClient, createAuth } from '@redwoodjs/auth-dbauth-web'
+
+const dbAuthClient = createDbAuthClient()
+
+export const { AuthProvider, useAuth } = createAuth(dbAuthClient)
+`
+    localMockFiles[path.join(getPaths().web.base, 'package.json')] = `{
+  "name": "web",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@redwoodjs/auth-dbauth-web": "7.0.0",
+    "@simplewebauthn/browser": "7.4.0"
+  }
+}
+`
+
+    vol.reset()
+    vol.fromJSON(localMockFiles)
+
+    await dbAuth.handler({
+      listr2: { silentRendererCondition: true },
+      usernameLabel: 'email',
+      passwordLabel: 'password',
+    })
+
+    expect(mockSkippedTaskTitles[1]).toEqual(
+      'Querying WebAuthn addition: WebAuthn setup detected - ' +
+        'support will be included in pages',
+    )
+  })
+
+  it('does not prompt for WebAuthn if dbAuth is set up', async () => {
+    const localMockFiles = { ...mockFiles }
+    localMockFiles[path.join(getPaths().web.src, 'auth.ts')] = `
+import { createDbAuthClient, createAuth } from '@redwoodjs/auth-dbauth-web'
+
+const dbAuthClient = createDbAuthClient()
+
+export const { AuthProvider, useAuth } = createAuth(dbAuthClient)
+`
+    localMockFiles[path.join(getPaths().web.base, 'package.json')] = `{
+  "name": "web",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@redwoodjs/auth-dbauth-web": "7.0.0",
+  }
+}
+`
+
+    vol.reset()
+    vol.fromJSON(localMockFiles)
+
+    await dbAuth.handler({
+      listr2: { silentRendererCondition: true },
+      usernameLabel: 'email',
+      passwordLabel: 'password',
+    })
+
+    expect(mockSkippedTaskTitles[1]).toEqual(
+      'Querying WebAuthn addition: No WebAuthn setup detected - ' +
+        'support will not be included in pages',
     )
   })
 

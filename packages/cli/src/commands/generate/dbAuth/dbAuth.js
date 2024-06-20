@@ -317,10 +317,6 @@ const tasks = ({
       },
       {
         title: 'Querying WebAuthn addition...',
-        hide: (ctx) => {
-          ctx.webauthn = webauthn = isWebAuthnEnabled()
-          return webauthn
-        },
         task: async (ctx, task) => {
           if (webauthn != null) {
             // We enter here if the user passed the `--webauthn` flag. The flag
@@ -341,15 +337,15 @@ const tasks = ({
               ctx.webauthn = webauthn = true
 
               task.skip(
-                'Querying WebAuthn addition: webauthn setup detected, ' +
-                  'WebAuthn support will be included in pages',
+                'Querying WebAuthn addition: WebAuthn setup detected - ' +
+                  'support will be included in pages',
               )
             } else {
               ctx.webauthn = webauthn = false
 
               task.skip(
-                'Querying WebAuthn addition: webauthn is not setup for ' +
-                  'dbAuth, WebAuthn support will not be included in pages',
+                'Querying WebAuthn addition: No WebAuthn setup detected - ' +
+                  'support will not be included in pages',
               )
             }
 
