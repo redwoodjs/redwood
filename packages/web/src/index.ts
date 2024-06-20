@@ -18,7 +18,7 @@ export * from './components/cell/CellCacheContext.js'
 
 export { createCell } from './components/cell/createCell.js'
 
-export {
+export type {
   CellProps,
   CellFailureProps,
   CellLoadingProps,
