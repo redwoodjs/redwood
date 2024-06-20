@@ -108,7 +108,7 @@ export async function reactRenderToStreamResponse(
     ServerInjectedHtml,
   }: ServerInjectType = rscEnabled
     ? await importModule('__rwjs__server_inject')
-    : await import('@redwoodjs/web/dist/components/ServerInject.js')
+    : await import('@redwoodjs/web/dist/components/ServerInject')
   const { renderToString }: RDServerType = rscEnabled
     ? await importModule('rd-server')
     : await import('react-dom/server')
