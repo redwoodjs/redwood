@@ -48,6 +48,7 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
           functions: path.join(BASE_PATH, './api/src/functions'),
         },
         web: {
+          base: path.join(BASE_PATH, './web'),
           config: path.join(BASE_PATH, './web/config'),
           src: path.join(BASE_PATH, './web/src'),
           generators: path.join(BASE_PATH, './web/generators'),
