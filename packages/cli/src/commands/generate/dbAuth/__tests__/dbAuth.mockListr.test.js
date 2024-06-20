@@ -63,7 +63,6 @@ vi.mock('listr2', async () => {
                 }
               },
               skip: (msg) => {
-                console.log('skipping task', msg)
                 mockSkippedTaskTitles.push(msg || task.title)
               },
             }
