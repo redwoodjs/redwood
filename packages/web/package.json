@@ -54,14 +54,17 @@
       "require": "./dist/cjs/apollo/suspense.js",
       "import": "./dist/apollo/suspense.js"
     },
+    "./dist/graphql.js": {
+      "require": "./dist/cjs/graphql.js",
+      "import": "./dist/graphql.js"
+    },
     "./toast": {
       "require": "./dist/cjs/toast/index.js",
       "import": "./dist/toast/index.js",
       "types": "./dist/toast/index.d.ts"
     },
     "./apollo": {
-      "require": "./dist/cjs/apollo/index.js",
-      "import": "./dist/apollo/index.js",
+      "default": "./dist/cjs/apollo/index.js",
       "types": "./dist/apollo/index.d.ts"
     }
   },
