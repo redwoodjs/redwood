@@ -25,7 +25,8 @@ afterAll(() => {
   delete process.env.RWJS_CWD
 })
 
-test('web files are prebuilt (no prerender)', async () => {
+// TODO(jgmw): Replace this with a vite equivalent
+test.skip('web files are prebuilt (no prerender)', async () => {
   const webFiles = findWebFiles()
   const prebuiltFiles = prebuildWebFiles(webFiles)
 
@@ -62,7 +63,8 @@ test('web files are prebuilt (no prerender)', async () => {
   `)
 })
 
-test('Check routes are imported with require when staticImports flag is enabled', () => {
+// TODO(jgmw): Replace this with a vite equivalent
+test.skip('Check routes are imported with require when staticImports flag is enabled', () => {
   const routesFile = getPaths().web.routes
 
   const prerendered = prebuildWebFile(routesFile, {
@@ -90,7 +92,8 @@ test('Check routes are imported with require when staticImports flag is enabled'
   )
 })
 
-test('Check routes are imported with "import" when staticImports flag is NOT passed', () => {
+// TODO(jgmw): Replace this with a vite equivalent
+test.skip('Check routes are imported with "import" when staticImports flag is NOT passed', () => {
   const routesFile = getPaths().web.routes
 
   const withoutStaticImports = prebuildWebFile(routesFile, {

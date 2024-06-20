@@ -17,7 +17,8 @@ function normalizeStr(str: string) {
     .trim()
 }
 
-describe('User specified imports, with static imports', () => {
+// TODO(jgmw): Replace this with a vite equivalent
+describe.skip('User specified imports, with static imports', () => {
   let outputWithStaticImports: string | null | undefined
   let outputNoStaticImports: string | null | undefined
 
