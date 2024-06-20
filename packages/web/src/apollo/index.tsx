@@ -30,7 +30,7 @@ const {
 
 import type { UseAuth } from '@redwoodjs/auth'
 import { useNoAuth } from '@redwoodjs/auth'
-import './typeOverride'
+import './typeOverride.js'
 
 import {
   FetchConfigProvider,
