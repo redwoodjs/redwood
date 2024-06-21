@@ -43,8 +43,10 @@ import {
   registerFragment,
   registerFragments,
 } from './fragmentRegistry.js'
-import { SSELink } from './sseLink.js'
+import * as SSELinkExports from './sseLink.js'
 import { useCache } from './useCache.js'
+// Not sure why we need to import it this way for legacy builds to work
+const { SSELink } = SSELinkExports
 
 export type {
   CacheKey,

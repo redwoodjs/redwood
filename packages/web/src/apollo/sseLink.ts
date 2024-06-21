@@ -60,7 +60,7 @@ const mapReferrerPolicyHeader = (
 /**
  * GraphQL over Server-Sent Events (SSE) spec link for Apollo Client
  */
-export class SSELink extends ApolloLink {
+class SSELink extends ApolloLink {
   private client: Client
 
   constructor(options: SSELinkOptions) {
@@ -104,3 +104,5 @@ export class SSELink extends ApolloLink {
     })
   }
 }
+
+export { SSELink }
