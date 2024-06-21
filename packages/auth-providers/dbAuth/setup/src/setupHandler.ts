@@ -38,13 +38,13 @@ export async function handler({
   const createDbUserModel = await shouldCreateUserModel(createUserModel)
   const generateDbAuthPages = await shouldGenerateDbAuthPages(generateAuthPages)
 
-  let oneMoreThing: string[] = []
+  const oneMoreThing: string[] = []
 
   if (webAuthn) {
     if (createDbUserModel) {
-      oneMoreThing = webAuthnNotesCreatedUserModel
+      oneMoreThing.push(...webAuthnNotesCreatedUserModel)
     } else {
-      oneMoreThing = webAuthnNotes
+      oneMoreThing.push(...webAuthnNotes)
     }
 
     if (!generateDbAuthPages) {
@@ -52,9 +52,9 @@ export async function handler({
     }
   } else {
     if (createDbUserModel) {
-      oneMoreThing = notesCreatedUserModel
+      oneMoreThing.push(...notesCreatedUserModel)
     } else {
-      oneMoreThing = notes
+      oneMoreThing.push(...notes)
     }
 
     if (!generateDbAuthPages) {

@@ -1,6 +1,7 @@
 import path from 'node:path'
 
 import { vol } from 'memfs'
+import prompts from 'prompts'
 
 import { type AuthHandlerArgs } from '@redwoodjs/cli-helpers'
 
@@ -10,9 +11,27 @@ import { createAuthDecoderFunction, handler } from '../setupHandler'
 
 const RWJS_CWD = process.env.RWJS_CWD
 const redwoodProjectPath = '/redwood-app'
+const mockLoginPagePath = path.join(
+  redwoodProjectPath,
+  'web/src/pages/LoginPage/LoginPage.tsx',
+)
+
+jest.mock('prompts', () => {
+  return {
+    __esModule: true,
+    default: jest.fn(async (args: any) => {
+      return {
+        [args.name]: false,
+      }
+    }),
+  }
+})
 
 jest.mock('../shared', () => ({
   hasModel: () => false,
+  hasAuthPages: () => {
+    return require('fs').existsSync(mockLoginPagePath)
+  },
   generateAuthPagesTask: () => undefined,
 }))
 
@@ -56,6 +75,7 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.mocked(console).log.mockRestore?.()
+  jest.mocked(prompts).mockClear?.()
 })
 
 describe('dbAuth setup command', () => {
@@ -105,6 +125,49 @@ export const handler = createGraphQLHandler({
     const updatedGraphqlTs2 =
       vol.toJSON()[redwoodProjectPath + '/api/src/functions/graphql.ts']
     expect(updatedGraphqlTs).toEqual(updatedGraphqlTs2)
+  })
+
+  it('prompts to generate pages', async () => {
+    const packageJsonPath = path.resolve(__dirname, '../../package.json')
+
+    vol.fromJSON(
+      {
+        [packageJsonPath]: '{ "version": "0.0.0" }',
+      },
+      redwoodProjectPath,
+    )
+
+    await handler({
+      webauthn: false,
+      createUserModel: false,
+      generateAuthPages: null,
+      force: false,
+    })
+
+    expect(jest.mocked(prompts).mock.calls[0][0].message).toMatch(
+      /Generate auth pages/,
+    )
+  })
+
+  it('does not prompt to generate pages when pages already exist', async () => {
+    const packageJsonPath = path.resolve(__dirname, '../../package.json')
+
+    vol.fromJSON(
+      {
+        [packageJsonPath]: '{ "version": "0.0.0" }',
+        [mockLoginPagePath]: 'export default () => <div>Login</div>',
+      },
+      redwoodProjectPath,
+    )
+
+    await handler({
+      webauthn: false,
+      createUserModel: false,
+      generateAuthPages: null,
+      force: false,
+    })
+
+    expect(jest.mocked(prompts)).not.toHaveBeenCalled()
   })
 
   describe('One More Thing... message', () => {
@@ -214,12 +277,15 @@ export const handler = createGraphQLHandler({
           force: false,
         })
 
-        const firstLogMessage = jest.mocked(console).log.mock.calls[0][0]
+        const logs: string[][] = [...jest.mocked(console).log.mock.calls]
+        const oneMoreThingMessage = logs.find((log) => {
+          return log[0].includes('Done! But you have a little more work to do')
+        })?.[0]
 
         // Included exactly once
-        expect(firstLogMessage.match(/yarn rw generate dbAuth/g)).toHaveLength(
-          1,
-        )
+        expect(
+          oneMoreThingMessage?.match(/yarn rw generate dbAuth/g),
+        ).toHaveLength(1)
       })
 
       it('is included for WebAuthn if page generation was not done as part of the setup process', async () => {
