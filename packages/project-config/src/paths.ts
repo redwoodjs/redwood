@@ -32,7 +32,6 @@ export interface WebPaths {
   app: string
   document: string
   generators: string
-  index: string | null
   html: string
   routes: string
   pages: string
@@ -108,7 +107,6 @@ const PATH_WEB_DIR_STORYBOOK_CONFIG = 'web/.storybook'
 const PATH_WEB_DIR_SRC = 'web/src'
 const PATH_WEB_DIR_SRC_APP = 'web/src/App'
 const PATH_WEB_DIR_SRC_DOCUMENT = 'web/src/Document'
-const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .jsx|.tsx
 const PATH_WEB_INDEX_HTML = 'web/src/index.html'
 const PATH_WEB_DIR_GENERATORS = 'web/generators'
 const PATH_WEB_DIR_CONFIG = 'web/config'
@@ -226,8 +224,6 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       document: resolveFile(
         path.join(BASE_DIR, PATH_WEB_DIR_SRC_DOCUMENT),
       ) as string,
-      // TODO(jgmw): Ask for clarification on the following
-      index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)), // old webpack entry point
       html: path.join(BASE_DIR, PATH_WEB_INDEX_HTML),
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
       viteConfig,

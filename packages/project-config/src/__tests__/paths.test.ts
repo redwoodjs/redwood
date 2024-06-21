@@ -112,7 +112,6 @@ describe('paths', () => {
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           document: null, // this fixture doesnt have a document
           app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.tsx'),
-          index: null,
           html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
           postcss: path.join(
@@ -382,7 +381,6 @@ describe('paths', () => {
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.js'),
           document: null, // this fixture doesnt have a document
-          index: null,
           html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
           postcss: path.join(
@@ -698,7 +696,6 @@ describe('paths', () => {
           document: null, // this fixture doesnt have a document
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           app: null,
-          index: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.js'),
           html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
           viteConfig: null, // no vite config in example-todo-main-with-errors
@@ -973,7 +970,6 @@ describe('paths', () => {
           src: path.join(FIXTURE_BASEDIR, 'web', 'src'),
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.tsx'),
-          index: null,
           html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
           postcss: path.join(
