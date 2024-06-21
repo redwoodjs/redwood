@@ -1,5 +1,9 @@
-import { getConfig, getDMMF } from '@prisma/internals'
-import fs from 'fs-extra'
+import {
+  getConfig,
+  getDMMF,
+  getSchema as getSchemaPrisma,
+} from '@prisma/internals'
+// import fs from 'fs-extra'
 
 import { ensureUniquePlural } from './pluralHelpers'
 import { singularize, isPlural } from './rwPluralize'
@@ -109,18 +113,26 @@ export const getEnum = async (name) => {
 }
 
 /*
+ * Returns the data model defined in `schema.prisma` (models, enums, etc.)
+ */
+export const getDataModel = (path = getPaths().api.dbSchema) => {
+  return getSchemaPrisma(path)
+}
+
+/*
  * Returns the DMMF defined by `prisma` resolving the relevant `schema.prisma` path.
  */
 export const getSchemaDefinitions = () => {
-  return getDMMF({ datamodelPath: getPaths().api.dbSchema })
+  return getDMMF({ datamodel: getDataModel() })
 }
 
 /*
  * Returns the config info defined in `schema.prisma` (provider, datasource, etc.)
  */
 export const getSchemaConfig = () => {
+  console.log('getSchemaConfig', getPaths().api.dbSchema)
   return getConfig({
-    datamodel: fs.readFileSync(getPaths().api.dbSchema).toString(),
+    datamodel: getDataModel(),
   })
 }
 

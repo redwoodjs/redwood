@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { getDMMF } from '@prisma/internals'
+import { getDMMF, getSchema } from '@prisma/internals'
 import * as esbuild from 'esbuild'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -28,7 +28,8 @@ let datamodel
 
 // parse datamodel and write out cache
 export const parseDatamodel = () => {
-  getDMMF({ datamodelPath: getPaths().api.dbSchema }).then((schema) => {
+  const schema = getSchema(getPaths().api.dbSchema)
+  getDMMF({ datamodel: schema }).then((schema) => {
     datamodel = schema.datamodel
     fs.writeFileSync(
       DATAMODEL_PATH,

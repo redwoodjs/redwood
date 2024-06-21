@@ -40,6 +40,10 @@ jest.mock('@redwoodjs/cli-helpers', () => {
 })
 
 jest.mock('@prisma/internals', () => ({
+  getSchema: () => {
+    const fs = require('node:fs')
+    return fs.readFileSync(dbSchemaPath, 'utf-8')
+  },
   getDMMF: () => {
     const fs = require('node:fs')
     const schema: string = fs.readFileSync(dbSchemaPath, 'utf-8')
