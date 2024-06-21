@@ -44,6 +44,10 @@
     "./middleware": {
       "types": "./dist/middleware/index.d.ts",
       "default": "./dist/middleware/index.js"
+    },
+    "./build": {
+      "types": "./dist/build/build.d.ts",
+      "default": "./dist/build/build.js"
     }
   },
   "bin": {

@@ -2,41 +2,20 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'url'
 
-import { transformWithEsbuild } from 'vite'
-import { test, describe, beforeEach, afterAll, beforeAll, it, expect, vi } from 'vitest'
+import {
+  test,
+  describe,
+  beforeEach,
+  afterAll,
+  beforeAll,
+  it,
+  expect,
+  vi,
+} from 'vitest'
 
-import * as babel from '@babel/core'
 import { getPaths } from '@redwoodjs/project-config'
 
-import {
-  Flags,
-  getWebSideDefaultBabelConfig,
-} from '@redwoodjs/babel-config'
-
-async function vitePrebuildWebFile(
-  srcPath: string,
-  flags: Flags = {}
-) {
-  const code = await transform(srcPath)
-  const config = getWebSideDefaultBabelConfig(flags)
-  const result = babel.transform(code, {
-    ...config,
-    cwd: getPaths().web.base,
-    filename: srcPath,
-  })
-
-  return result
-}
-
-async function transform(srcPath: string) {
-  const code = fs.readFileSync(srcPath, 'utf-8')
-
-  const transformed = await transformWithEsbuild(code, srcPath, {
-    loader: 'jsx',
-  })
-
-  return transformed.code
-}
+import { transform, prebuildWebFile } from '../build.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -50,7 +29,7 @@ test('transform', async () => {
 
   const transformed = await transform('Router.jsx')
   expect(transformed).toEqual(
-    '/* @__PURE__ */ React.createElement(Router, null, /* @__PURE__ */ React.createElement(Route, { path: "/", page: HomePage, name: "home" }));\n'
+    '/* @__PURE__ */ React.createElement(Router, null, /* @__PURE__ */ React.createElement(Route, { path: "/", page: HomePage, name: "home" }));\n',
   )
 })
 
@@ -70,13 +49,13 @@ describe('User specified imports, with static imports', () => {
     process.env.RWJS_CWD = FIXTURE_PATH
 
     const routesFile = getPaths().web.routes
-    const prerenderResult = await vitePrebuildWebFile(routesFile, {
+    const prerenderResult = await prebuildWebFile(routesFile, {
       forPrerender: true,
       forJest: true,
     })
     outputWithStaticImports = prerenderResult?.code
 
-    const buildResult = await vitePrebuildWebFile(routesFile, {
+    const buildResult = await prebuildWebFile(routesFile, {
       forJest: true,
     })
     outputNoStaticImports = buildResult?.code
@@ -99,7 +78,7 @@ describe('User specified imports, with static imports', () => {
   name: "LoginPage",
   prerenderLoader: name => require("./pages/LoginPage/LoginPage"),
   LazyComponent: lazy(() => import( /* webpackChunkName: "LoginPage" */"./pages/LoginPage/LoginPage"))
-}`
+}`,
         )
 
         expect(outputWithStaticImports).toContain(
@@ -107,7 +86,7 @@ describe('User specified imports, with static imports', () => {
   name: "HomePage",
   prerenderLoader: name => require("./pages/HomePage/HomePage"),
   LazyComponent: lazy(() => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"))
-}`
+}`,
         )
       })
     })
@@ -121,7 +100,7 @@ describe('User specified imports, with static imports', () => {
     default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
   }),
   LazyComponent: lazy(() => import( /* webpackChunkName: "LoginPage" */"./pages/LoginPage/LoginPage"))
-}`
+}`,
         )
 
         expect(outputNoStaticImports).toContain(
@@ -131,7 +110,7 @@ describe('User specified imports, with static imports', () => {
     default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
   }),
   LazyComponent: lazy(() => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"))
-}`
+}`,
         )
       })
     })
@@ -146,7 +125,7 @@ describe('User specified imports, with static imports', () => {
   name: "NewJobPage",
   prerenderLoader: name => require("./pages/Jobs/NewJobPage/NewJobPage"),
   LazyComponent: lazy(() => import( /* webpackChunkName: "NewJobPage" */"./pages/Jobs/NewJobPage/NewJobPage"))
-}`
+}`,
         )
       })
 
@@ -157,17 +136,17 @@ describe('User specified imports, with static imports', () => {
   name: "BazingaJobProfilePageWithFunnyName",
   prerenderLoader: name => require("./pages/Jobs/JobProfilePage/JobProfilePage"),
   LazyComponent: lazy(() => import( /* webpackChunkName: "BazingaJobProfilePageWithFunnyName" */"./pages/Jobs/JobProfilePage/JobProfilePage"))
-}`
+}`,
         )
       })
 
       it('Removes explicit imports when prerendering', () => {
         expect(outputWithStaticImports).not.toContain(
-          `var _NewJobPage = _interopRequireDefault`
+          `var _NewJobPage = _interopRequireDefault`,
         )
 
         expect(outputWithStaticImports).not.toContain(
-          `var _JobProfilePage = _interopRequireDefault`
+          `var _JobProfilePage = _interopRequireDefault`,
         )
       })
 
@@ -229,7 +208,7 @@ describe('User specified imports, with static imports', () => {
     // Because we import import EditJobPage, 👉 { NonDefaultExport } from 'src/pages/Jobs/EditJobPage'
 
     expect(outputWithStaticImports).toContain(
-      'import { NonDefaultExport } from "'
+      'import { NonDefaultExport } from "',
     )
 
     expect(outputWithStaticImports).toContain(`const EditJobPage = {
@@ -239,7 +218,7 @@ describe('User specified imports, with static imports', () => {
 }`)
 
     expect(outputNoStaticImports).toContain(
-      'import EditJobPage, { NonDefaultExport } from "'
+      'import EditJobPage, { NonDefaultExport } from "',
     )
 
     expect(outputNoStaticImports).toContain(`React.createElement(Route, {
@@ -249,7 +228,7 @@ describe('User specified imports, with static imports', () => {
 
     // Should not generate a loader, because page was explicitly imported
     expect(outputNoStaticImports).not.toMatch(
-      /import\(.*"\.\/pages\/Jobs\/EditJobPage\/EditJobPage"\)/
+      /import\(.*"\.\/pages\/Jobs\/EditJobPage\/EditJobPage"\)/,
     )
   })
 })
