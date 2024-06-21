@@ -6,6 +6,8 @@
 // see: redwood/packages/core/config/webpack.common.js
 // These declarations are the most common types
 
+// TODO(jgmw): I doubt these comments above are still correct
+
 declare module '*.svg' {
   const content: string
   export default content

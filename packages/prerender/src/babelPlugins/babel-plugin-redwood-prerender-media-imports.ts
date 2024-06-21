@@ -8,6 +8,8 @@ import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 import { convertToDataUrl } from './utils'
 
 const defaultOptions = {
+  // TODO(jgmw): We don't use webpack anymore so this comment should be revised
+  // but right now I don't understand enough to do so.
   // This list of extensions matches config for file-loader in
   // packages/core/config/webpack.common.js
   extensions: [

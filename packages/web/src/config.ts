@@ -1,5 +1,5 @@
 // RWJS_ENV and RWJS_DEBUG_ENV
-// are defined in Webpack.common.js and Vite.config.js
+// are defined in Vite.config.js
 
 // Note: These lines are useful during RSC/SSR development but will execute for all projects, even those without RSC/SSR
 // console.log('config.ts')
