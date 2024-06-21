@@ -2,20 +2,18 @@ import path from 'node:path'
 
 import { vol } from 'memfs'
 
+import { type AuthHandlerArgs } from '@redwoodjs/cli-helpers'
+
 jest.mock('fs', () => require('memfs').fs)
 
-import { createAuthDecoderFunction } from '../setupHandler'
+import { createAuthDecoderFunction, handler } from '../setupHandler'
 
 const RWJS_CWD = process.env.RWJS_CWD
 const redwoodProjectPath = '/redwood-app'
 
-jest.mock('../setupData', () => ({
-  notes: '',
-  extraTask: undefined,
-}))
-
 jest.mock('../shared', () => ({
   hasModel: () => false,
+  generateAuthPagesTask: () => undefined,
 }))
 
 jest.mock('@redwoodjs/cli-helpers', () => {
@@ -23,6 +21,7 @@ jest.mock('@redwoodjs/cli-helpers', () => {
     getGraphqlPath: () => {
       return redwoodProjectPath + '/api/src/functions/graphql.ts'
     },
+    addEnvVarTask: () => undefined,
     getPaths: () => ({
       base: redwoodProjectPath,
     }),
@@ -33,6 +32,12 @@ jest.mock('@redwoodjs/cli-helpers', () => {
       info: (str: string) => str,
       bold: (str: string) => str,
       underline: (str: string) => str,
+    },
+    // I wish I could have used something like
+    // jest.requireActual(@redwoodjs/cli-helpers) here, but I couldn't because
+    // jest doesn't support ESM
+    standardAuthHandler: async (args: AuthHandlerArgs) => {
+      args.notes && console.log(`\n   ${args.notes.join('\n   ')}\n`)
     },
   }
 })
@@ -45,13 +50,23 @@ afterAll(() => {
   process.env.RWJS_CWD = RWJS_CWD
 })
 
+beforeEach(() => {
+  jest.spyOn(console, 'log').mockImplementation(() => {})
+})
+
+afterEach(() => {
+  jest.mocked(console).log.mockRestore?.()
+})
+
 describe('dbAuth setup command', () => {
   it('does not duplicate authDecoder creation', async () => {
+    const packageJsonPath = path.resolve(__dirname, '../../package.json')
+    const graphqlTsPath = 'api/src/functions/graphql.ts'
+
     vol.fromJSON(
       {
-        [path.resolve(__dirname, '../../package.json')]:
-          '{ "version": "0.0.0" }',
-        'api/src/functions/graphql.ts': `
+        [packageJsonPath]: '{ "version": "0.0.0" }',
+        [graphqlTsPath]: `
 import { createGraphQLHandler } from '@redwoodjs/graphql-server'
 
 import directives from 'src/directives/**/*.{js,ts}'
@@ -90,5 +105,148 @@ export const handler = createGraphQLHandler({
     const updatedGraphqlTs2 =
       vol.toJSON()[redwoodProjectPath + '/api/src/functions/graphql.ts']
     expect(updatedGraphqlTs).toEqual(updatedGraphqlTs2)
+  })
+
+  describe('One More Thing... message', () => {
+    describe('page generation hint', () => {
+      it('is not included if page generation was already done as part of the setup process', async () => {
+        const packageJsonPath = path.resolve(__dirname, '../../package.json')
+
+        vol.fromJSON(
+          {
+            [packageJsonPath]: '{ "version": "0.0.0" }',
+          },
+          redwoodProjectPath,
+        )
+
+        await handler({
+          webauthn: false,
+          createUserModel: false,
+          generateAuthPages: true,
+          force: false,
+        })
+
+        expect(jest.mocked(console).log.mock.calls[0][0]).not.toContain(
+          'yarn rw generate dbAuth',
+        )
+      })
+
+      it('is not included for WebAuthn if page generation was already done as part of the setup process', async () => {
+        const packageJsonPath = path.resolve(__dirname, '../../package.json')
+
+        vol.fromJSON(
+          {
+            [packageJsonPath]: '{ "version": "0.0.0" }',
+          },
+          redwoodProjectPath,
+        )
+
+        await handler({
+          webauthn: true,
+          createUserModel: false,
+          generateAuthPages: true,
+          force: false,
+        })
+
+        expect(jest.mocked(console).log.mock.calls[0][0]).not.toContain(
+          'yarn rw generate dbAuth',
+        )
+      })
+
+      it('is not included if page generation and model generation was already done as part of the setup process', async () => {
+        const packageJsonPath = path.resolve(__dirname, '../../package.json')
+
+        vol.fromJSON(
+          {
+            [packageJsonPath]: '{ "version": "0.0.0" }',
+          },
+          redwoodProjectPath,
+        )
+
+        await handler({
+          webauthn: false,
+          createUserModel: true,
+          generateAuthPages: true,
+          force: false,
+        })
+
+        expect(jest.mocked(console).log.mock.calls[0][0]).not.toContain(
+          'yarn rw generate dbAuth',
+        )
+      })
+
+      it('is not included for WebAuthn if page generation and model generation was already done as part of the setup process', async () => {
+        const packageJsonPath = path.resolve(__dirname, '../../package.json')
+
+        vol.fromJSON(
+          {
+            [packageJsonPath]: '{ "version": "0.0.0" }',
+          },
+          redwoodProjectPath,
+        )
+
+        await handler({
+          webauthn: true,
+          createUserModel: true,
+          generateAuthPages: true,
+          force: false,
+        })
+
+        expect(jest.mocked(console).log.mock.calls[0][0]).not.toContain(
+          'yarn rw generate dbAuth',
+        )
+      })
+
+      it('is included if page generation was not done as part of the setup process', async () => {
+        const packageJsonPath = path.resolve(__dirname, '../../package.json')
+
+        vol.fromJSON(
+          {
+            [packageJsonPath]: '{ "version": "0.0.0" }',
+          },
+          redwoodProjectPath,
+        )
+
+        await handler({
+          webauthn: false,
+          createUserModel: false,
+          generateAuthPages: false,
+          force: false,
+        })
+
+        const firstLogMessage = jest.mocked(console).log.mock.calls[0][0]
+
+        // Included exactly once
+        expect(firstLogMessage.match(/yarn rw generate dbAuth/g)).toHaveLength(
+          1,
+        )
+      })
+
+      it('is included for WebAuthn if page generation was not done as part of the setup process', async () => {
+        const packageJsonPath = path.resolve(__dirname, '../../package.json')
+
+        vol.fromJSON(
+          {
+            [packageJsonPath]: '{ "version": "0.0.0" }',
+          },
+          redwoodProjectPath,
+        )
+
+        await handler({
+          webauthn: true,
+          createUserModel: false,
+          generateAuthPages: false,
+          force: false,
+        })
+
+        const firstLogMessage = jest.mocked(console).log.mock.calls[0][0]
+
+        // Included exactly once
+        expect(firstLogMessage.match(/and WebAuthn prompts/g)).toHaveLength(1)
+        expect(firstLogMessage.match(/yarn rw generate dbAuth/g)).toHaveLength(
+          1,
+        )
+      })
+    })
   })
 })
