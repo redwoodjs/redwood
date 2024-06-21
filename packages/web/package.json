@@ -65,8 +65,10 @@
       "types": "./dist/toast/index.d.ts"
     },
     "./apollo": {
-      "default": "./dist/cjs/apollo/index.js",
-      "types": "./dist/apollo/index.d.ts"
+      "require": "./dist/cjs/apollo/index.js",
+      "import": "./dist/apollo/index.js",
+      "types": "./dist/apollo/index.d.ts",
+      "default": "./dist/cjs/apollo/index.js"
     }
   },
   "files": [
