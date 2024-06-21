@@ -1,6 +1,7 @@
 import React from 'react'
 
-import helmetPkg from 'react-helmet-async'
+import * as helmetPkg from 'react-helmet-async'
+
 const { Helmet, HelmetProvider } = helmetPkg
 
 interface RedwoodProviderProps {
