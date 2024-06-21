@@ -32,7 +32,9 @@ export * from './components/RedwoodProvider.js'
 
 export * from './components/MetaTags.js'
 export * from './components/Metadata.js'
-export { Helmet as Head, Helmet } from 'react-helmet-async'
+import helmetPkg from 'react-helmet-async'
+const { Helmet } = helmetPkg
+export { Helmet as Head, Helmet }
 
 export * from './components/htmlTags.js'
 export * from './routeHooks.types.js'
