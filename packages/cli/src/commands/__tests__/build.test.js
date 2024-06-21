@@ -16,9 +16,8 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
     },
     getConfig: () => {
       return {
-        web: {
-          bundler: 'webpack',
-        },
+        // The build command needs nothing in this config as all
+        // the values it currently reads are optional.
       }
     },
   }

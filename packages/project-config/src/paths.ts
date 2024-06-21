@@ -226,6 +226,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       document: resolveFile(
         path.join(BASE_DIR, PATH_WEB_DIR_SRC_DOCUMENT),
       ) as string,
+      // TODO(jgmw): Ask for clarification on the following
       index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)), // old webpack entry point
       html: path.join(BASE_DIR, PATH_WEB_INDEX_HTML),
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),

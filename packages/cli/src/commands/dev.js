@@ -19,8 +19,9 @@ export const builder = (yargs) => {
     })
     .option('forward', {
       alias: 'fwd',
+      // TODO(jgmw): Confirm that the example is valid here for the vite dev server
       description:
-        'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --no-open"`',
+        'String of one or more vite dev server config options, for example: `--fwd="--port=1234 --no-open"`',
       type: 'string',
       hidden: true,
     })

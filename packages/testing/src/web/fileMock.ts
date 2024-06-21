@@ -4,3 +4,4 @@
  * https://jestjs.io/docs/en/webpack#handling-static-assets
  */
 export default 'fileMock'
+// TODO(jgmw): Ask for clarification on the above

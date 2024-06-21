@@ -12,7 +12,7 @@ import { useState } from 'react'
 import type { GraphQLError } from 'graphql'
 import StackTracey from 'stacktracey'
 
-// RWJS_SRC_ROOT is defined and defaulted in webpack+vite to the base path
+// RWJS_SRC_ROOT is defined and defaulted in vite to the base path
 let srcRoot = ''
 if (typeof RWJS_DEBUG_ENV !== 'undefined') {
   srcRoot = RWJS_DEBUG_ENV?.RWJS_SRC_ROOT
@@ -217,7 +217,7 @@ function StackEntry({
 
 function toVSCodeURL(entry: StackTracey.Entry) {
   // To account for folks using vscode-insiders etc
-  // This is defined by webpack and vite from .env
+  // This is defined by vite from .env
   const scheme = RWJS_DEBUG_ENV.REDWOOD_ENV_EDITOR || 'vscode'
   return `${scheme}://file/${entry.fileShort}:${entry.line}:${entry.column}`
 }

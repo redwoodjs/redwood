@@ -3,7 +3,7 @@
 import type { HelmetServerState } from 'react-helmet-async'
 
 declare global {
-  // Provided by Vite.config, or Webpack in the user's project
+  // Provided by Vite.config
   // but "regsitered" in packages/vite/src/streaming/registerGlobals.ts
   // for it to be available to framework code
   var RWJS_ENV: {

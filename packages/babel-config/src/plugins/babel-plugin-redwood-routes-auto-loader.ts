@@ -148,6 +148,7 @@ export default function (
           for (const { importName, relativeImport } of pages) {
             const importArgument = t.stringLiteral(relativeImport)
 
+            // TODO(jgmw): Determine if we still need these `webpackChunkName` comments or not
             //  const <importName> = {
             //     name: <importName>,
             //     prerenderLoader: (name) => prerenderLoaderImpl

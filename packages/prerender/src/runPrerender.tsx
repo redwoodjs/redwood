@@ -194,8 +194,7 @@ function insertChunkLoadingScript(
   if (chunkPaths.length === 0) {
     // This happens when the page is manually imported in Routes.tsx
     // (as opposed to being auto-imported)
-    // It also happens for the page at '/' with Webpack
-    // It could also be that Webpack or Vite for some reason didn't create a
+    // It could also be that Vite for some reason didn't create a
     // chunk for this page. In that case it'd be nice to throw an error, but
     // there's no easy way to differentiate between the two cases.
     return
@@ -206,8 +205,6 @@ function insertChunkLoadingScript(
       `<script defer="defer" src="${chunkPath}" type="module"></script>`,
     )
   })
-
-  // This is not needed for WebPack
 
   chunkPaths.forEach((chunkPath) => {
     const fullChunkPath = path.join(getPaths().web.dist, chunkPath)

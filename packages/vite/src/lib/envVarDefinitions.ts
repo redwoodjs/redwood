@@ -8,6 +8,7 @@ export function getEnvVarDefinitions() {
 
   return {
     RWJS_ENV: {
+      // TODO(jgmw): Ask for clarification on the following
       // @NOTE we're avoiding process.env here, unlike webpack
       RWJS_API_GRAPHQL_URL:
         rwConfig.web.apiGraphQLUrl ?? rwConfig.web.apiUrl + '/graphql',

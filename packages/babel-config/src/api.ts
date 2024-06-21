@@ -36,6 +36,7 @@ export const getApiSideBabelPresets = (
       },
       'rwjs-babel-preset-typescript',
     ],
+    // TODO(jgmw): Search for presetEnv = true usage in all this babel preset stuff
     // Preset-env is required when we are not doing the transpilation with esbuild
     presetEnv && [
       '@babel/preset-env',

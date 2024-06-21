@@ -6,6 +6,7 @@
 // console.log('config.ts', RWJS_ENV)
 // console.log('config.ts')
 
+// TODO(jgmw): Ask for clarification on the following
 // @NOTE: do not use globalThis on the right side, because webpack cannot access these vars then
 globalThis.RWJS_API_GRAPHQL_URL = RWJS_ENV.RWJS_API_GRAPHQL_URL as string
 globalThis.RWJS_API_URL = RWJS_ENV.RWJS_API_URL as string
