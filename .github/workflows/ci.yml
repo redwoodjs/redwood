@@ -118,11 +118,7 @@ jobs:
   tutorial-e2e:
     needs: check
 
-    strategy:
-      matrix:
-        bundler: [vite, webpack]
-
-    name: 🌲 Tutorial E2E / ${{ matrix.bundler }} / node 20 latest
+    name: 🌲 Tutorial E2E / node 20 latest
     runs-on: ubuntu-latest
 
     steps:
@@ -145,7 +141,6 @@ jobs:
           git config --global user.name "Your Name"
 
           ./tasks/run-e2e "$project_path" \
-            --bundler ${{ matrix.bundler }} \
             --no-build-framework \
             --no-start
 
@@ -170,7 +165,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: ${{ matrix.bundler }}-logs
+          name: logs
           path: |
             ${{ steps.crwa.outputs.project-path }}/dev_server.log
             ${{ steps.crwa.outputs.project-path }}/e2e.log
@@ -179,11 +174,7 @@ jobs:
     needs: detect-changes
     if: needs.detect-changes.outputs.code == 'false'
 
-    strategy:
-      matrix:
-        bundler: [vite, webpack]
-
-    name: 🌲 Tutorial E2E / ${{ matrix.bundler }} / node 20 latest
+    name: 🌲 Tutorial E2E / node 20 latest
     runs-on: ubuntu-latest
 
     steps:
@@ -195,9 +186,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        bundler: [vite, webpack]
 
-    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
+    name: 🔄 Smoke tests / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     env:
@@ -214,8 +204,6 @@ jobs:
       - name: 🌲 Set up test project
         id: set-up-test-project
         uses: ./.github/actions/set-up-test-project
-        with:
-          bundler: ${{ matrix.bundler }}
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
@@ -275,9 +263,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        bundler: [vite, webpack]
 
-    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
+    name: 🔄 Smoke tests / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -289,9 +276,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        bundler: [vite, webpack]
 
-    name: 🔄 Smoke tests React 18 / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
+    name: 🔄 Smoke tests React 18 / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     env:
@@ -327,8 +313,6 @@ jobs:
       - name: 🌲 Set up test project for React 18
         id: set-up-test-project-react-18
         uses: ./.github/actions/set-up-test-project
-        with:
-          bundler: ${{ matrix.bundler }}
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
@@ -388,9 +372,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        bundler: [vite, webpack]
 
-    name: 🔄 Smoke tests React 18 / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
+    name: 🔄 Smoke tests React 18 / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -664,7 +647,6 @@ jobs:
         id: set-up-test-project
         uses: ./.github/actions/set-up-test-project
         with:
-          bundler: vite
           canary: true
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
@@ -736,7 +718,6 @@ jobs:
         id: set-up-test-project
         uses: ./.github/actions/set-up-test-project
         with:
-          bundler: vite
           canary: true
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
