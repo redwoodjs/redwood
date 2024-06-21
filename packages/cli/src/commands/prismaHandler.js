@@ -34,7 +34,6 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
       )
     ) {
       // if no schema file or directory exists
-
       const schemaDir = path.dirname(rwjsPaths.api.dbSchema)
       if (!fs.existsSync(rwjsPaths.api.dbSchema) && !fs.existsSync(schemaDir)) {
         console.error()
