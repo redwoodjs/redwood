@@ -66,6 +66,7 @@ export async function rscBuildForSsr({
           '@redwoodjs/forms',
           '@redwoodjs/prerender/*',
           '@redwoodjs/router',
+          '@redwoodjs/router/*',
           '@redwoodjs/auth-*',
           // '@redwoodjs/web',
         ],
@@ -92,10 +93,11 @@ export async function rscBuildForSsr({
           // for the client-only components. They get loaded once the page is
           // rendered
           ...clientEntryFiles,
+          // These import redirections are so that we don't bundle multiple versions of react
           __rwjs__react: 'react',
           __rwjs__location: '@redwoodjs/router/dist/location',
           __rwjs__server_auth_provider: '@redwoodjs/auth/ServerAuthProvider',
-          __rwjs__server_inject: '@redwoodjs/web/dist/components/ServerInject',
+          __rwjs__server_inject: '@redwoodjs/web/serverInject',
           '__rwjs__rsdw-client': 'react-server-dom-webpack/client.edge',
           // TODO (RSC): add __rwjs__ prefix to the entry below
           'rd-server': 'react-dom/server.edge',

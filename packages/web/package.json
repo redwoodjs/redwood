@@ -44,7 +44,8 @@
     "./serverInject": {
       "require": "./dist/cjs/components/ServerInject.js",
       "import": "./dist/components/ServerInject.js",
-      "types": "./dist/components/ServerInject.d.ts"
+      "types": "./dist/components/ServerInject.d.ts",
+      "default": "./dist/components/ServerInject.js"
     },
     "./dist/components/*": {
       "require": "./dist/cjs/components/*.js",
