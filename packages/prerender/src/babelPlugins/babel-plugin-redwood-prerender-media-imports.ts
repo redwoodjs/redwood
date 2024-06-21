@@ -8,10 +8,7 @@ import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 import { convertToDataUrl } from './utils'
 
 const defaultOptions = {
-  // TODO(jgmw): Ask for clarification on the following
-  // but right now I don't understand enough to do so.
   // This list of extensions matches config for file-loader in
-  // packages/core/config/webpack.common.js
   extensions: [
     '.ico',
     '.jpg',
@@ -72,9 +69,8 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
             viteManifestKey
           ]?.file
 
-          // TODO(jgmw): Ask for clarification on the following comment
-          // If webpack has copied it over, use the path from the asset manifest
-          // Otherwise convert it to a base64 encoded data uri
+          // If the bundler has copied it over, use the path from the asset
+          // manifest. Otherwise convert it to a base64 encoded data uri
           const assetSrc =
             copiedAssetPath ??
             convertToDataUrl(
