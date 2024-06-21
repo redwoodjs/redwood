@@ -592,16 +592,12 @@ describe('isSubscriber directive', () => {
 ```
 
 :::tip
-If your Validator Directive is asynchronous, you can use `mockAsyncRedwoodDirective` instead.
+If your Validator Directive is asynchronous, you can use `rejects` to handle the exception.
 
 ```ts
-import { mockAsyncRedwoodDirective } from '@redwoodjs/testing/api'
-
-// ...
-
 describe('isSubscriber directive', () => {
   it('has a isSubscriber throws an error if validation does not pass', async () => {
-    const mockExecution = mockAsyncRedwoodDirective(isSubscriber, {})
+    const mockExecution = mockRedwoodDirective(isSubscriber, {})
     await expect(mockExecution()).rejects.toThrowError(
       'Implementation missing for isSubscriber'
     )
@@ -676,18 +672,16 @@ describe('maskedEmail directive', () => {
 ```
 
 :::tip
-If your Transformer Directive is asynchronous, you can use `mockAsyncRedwoodDirective` instead.
+
+If your Transformer Directive is asynchronous, you can use `resolves` to handle the result.
+
 
 ```ts
-import { mockAsyncRedwoodDirective } from '@redwoodjs/testing/api'
-
-// ...
-
 import maskedEmail from './maskedEmail'
 
 describe('maskedEmail directive', () => {
   it('has a maskedEmail implementation transforms the value', async () => {
-    const mockExecution = mockAsyncRedwoodDirective(maskedEmail, {
+    const mockExecution = mockRedwoodDirective(maskedEmail, {
       mockedResolvedValue: 'foo',
     })
 
