@@ -33,8 +33,6 @@ test('transform', async () => {
   )
 })
 
-// TODO(jgmw): Discuss these tests and the expected output, I don't understand exactly what we should be
-//             expecting.
 describe.skip('User specified imports, with static imports', () => {
   let outputWithStaticImports: string | null | undefined
   let outputNoStaticImports: string | null | undefined
@@ -79,7 +77,7 @@ describe.skip('User specified imports, with static imports', () => {
           `const LoginPage = {
   name: "LoginPage",
   prerenderLoader: name => require("./pages/LoginPage/LoginPage"),
-  LazyComponent: lazy(() => import( /* webpackChunkName: "LoginPage" */"./pages/LoginPage/LoginPage"))
+  LazyComponent: lazy(() => import("./pages/LoginPage/LoginPage"))
 }`,
         )
 
@@ -87,7 +85,7 @@ describe.skip('User specified imports, with static imports', () => {
           `const HomePage = {
   name: "HomePage",
   prerenderLoader: name => require("./pages/HomePage/HomePage"),
-  LazyComponent: lazy(() => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"))
+  LazyComponent: lazy(() => import("./pages/HomePage/HomePage"))
 }`,
         )
       })
@@ -101,7 +99,7 @@ describe.skip('User specified imports, with static imports', () => {
   prerenderLoader: name => ({
     default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
   }),
-  LazyComponent: lazy(() => import( /* webpackChunkName: "LoginPage" */"./pages/LoginPage/LoginPage"))
+  LazyComponent: lazy(() => import("./pages/LoginPage/LoginPage"))
 }`,
         )
 
@@ -111,7 +109,7 @@ describe.skip('User specified imports, with static imports', () => {
   prerenderLoader: name => ({
     default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
   }),
-  LazyComponent: lazy(() => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"))
+  LazyComponent: lazy(() => import("./pages/HomePage/HomePage"))
 }`,
         )
       })
@@ -126,7 +124,7 @@ describe.skip('User specified imports, with static imports', () => {
           `const NewJobPage = {
   name: "NewJobPage",
   prerenderLoader: name => require("./pages/Jobs/NewJobPage/NewJobPage"),
-  LazyComponent: lazy(() => import( /* webpackChunkName: "NewJobPage" */"./pages/Jobs/NewJobPage/NewJobPage"))
+  LazyComponent: lazy(() => import("./pages/Jobs/NewJobPage/NewJobPage"))
 }`,
         )
       })
@@ -137,7 +135,7 @@ describe.skip('User specified imports, with static imports', () => {
           `const BazingaJobProfilePageWithFunnyName = {
   name: "BazingaJobProfilePageWithFunnyName",
   prerenderLoader: name => require("./pages/Jobs/JobProfilePage/JobProfilePage"),
-  LazyComponent: lazy(() => import( /* webpackChunkName: "BazingaJobProfilePageWithFunnyName" */"./pages/Jobs/JobProfilePage/JobProfilePage"))
+  LazyComponent: lazy(() => import("./pages/Jobs/JobProfilePage/JobProfilePage"))
 }`,
         )
       })
@@ -181,7 +179,7 @@ describe.skip('User specified imports, with static imports', () => {
   prerenderLoader: name => ({
     default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
   }),
-  LazyComponent: lazy(() => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"))
+  LazyComponent: lazy(() => import("./pages/HomePage/HomePage"))
 }`)
         expect(outputNoStaticImports).toContain(`React.createElement(Route, {
     path: "/",
@@ -216,7 +214,7 @@ describe.skip('User specified imports, with static imports', () => {
     expect(outputWithStaticImports).toContain(`const EditJobPage = {
   name: "EditJobPage",
   prerenderLoader: name => require("./pages/Jobs/EditJobPage/EditJobPage"),
-  LazyComponent: lazy(() => import( /* webpackChunkName: "EditJobPage" */"./pages/Jobs/EditJobPage/EditJobPage"))
+  LazyComponent: lazy(() => import("./pages/Jobs/EditJobPage/EditJobPage"))
 }`)
 
     expect(outputNoStaticImports).toContain(
