@@ -39,8 +39,7 @@ export interface WebPaths {
   components: string
   layouts: string
   config: string
-  webpack: string
-  viteConfig: string | null // because vite is opt-in only
+  viteConfig: string
   entryClient: string | null
   entryServer: string | null
   postcss: string
@@ -113,7 +112,6 @@ const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .jsx|.tsx
 const PATH_WEB_INDEX_HTML = 'web/src/index.html'
 const PATH_WEB_DIR_GENERATORS = 'web/generators'
 const PATH_WEB_DIR_CONFIG = 'web/config'
-const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_VITE = 'web/vite.config' // .js,.ts
 const PATH_WEB_DIR_ENTRY_CLIENT = 'web/src/entry.client' // .jsx,.tsx
 const PATH_WEB_DIR_ENTRY_SERVER = 'web/src/entry.server' // .jsx,.tsx
@@ -176,6 +174,9 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
   const { schemaPath } = getConfig(getConfigPath(BASE_DIR)).api
   const schemaDir = path.dirname(schemaPath)
+  const viteConfig = resolveFile(
+    path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_VITE),
+  ) as string
 
   const paths = {
     base: BASE_DIR,
@@ -228,8 +229,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)), // old webpack entry point
       html: path.join(BASE_DIR, PATH_WEB_INDEX_HTML),
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
-      webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_WEBPACK),
-      viteConfig: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_VITE)),
+      viteConfig,
       postcss: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_POSTCSS),
       storybookConfig: path.join(
         BASE_DIR,

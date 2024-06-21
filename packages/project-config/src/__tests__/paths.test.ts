@@ -115,12 +115,6 @@ describe('paths', () => {
           index: null,
           html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          webpack: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'webpack.config.js',
-          ),
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -391,13 +385,6 @@ describe('paths', () => {
           index: null,
           html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          webpack: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'webpack.config.js',
-          ),
-
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -714,12 +701,6 @@ describe('paths', () => {
           index: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.js'),
           html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          webpack: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'webpack.config.js',
-          ),
           viteConfig: null, // no vite config in example-todo-main-with-errors
           postcss: path.join(
             FIXTURE_BASEDIR,
@@ -995,12 +976,6 @@ describe('paths', () => {
           index: null,
           html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          webpack: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'webpack.config.js',
-          ),
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
