@@ -30,7 +30,7 @@ export async function prebuildWebFile(srcPath: string, flags: Flags = {}) {
 export async function transform(srcPath: string) {
   const code = fs.readFileSync(srcPath, 'utf-8')
 
-  const loader = path.extname(srcPath).startsWith('.ts') ? 'tsx' : 'jsx'
+  const loader = path.extname(srcPath).match(/^\.m?ts/) ? 'tsx' : 'jsx'
   const transformed = await transformWithEsbuild(code, srcPath, {
     loader,
   })
