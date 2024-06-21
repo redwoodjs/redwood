@@ -7,6 +7,7 @@ import { parseConfigFileTextToJson } from 'typescript'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { getWebSideBabelPlugins } from './web'
+import type { Flags as WebFlags } from './web'
 
 const pkgJson = require('../package.json')
 
@@ -17,6 +18,7 @@ export interface RegisterHookOptions {
    */
   plugins?: PluginItem[]
   overrides?: TransformOptions['overrides']
+  options?: WebFlags
 }
 
 interface BabelRegisterOptions extends TransformOptions {

@@ -9,6 +9,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import type { RegisterHookOptions } from './common'
 import {
+  CORE_JS_VERSION,
   registerBabel,
   parseTypeScriptConfigFiles,
   getPathsFromTypeScriptConfig,
@@ -162,10 +163,55 @@ export const getWebSideOverrides = (
   )
 }
 
-export const getWebSideBabelPresets = (_options: Flags) => {
-  // Note(jgmw): This was required when we supported both webpack and vite. I have removed the webpack
-  // specific code now. I will follow up by removing this function if it continues to serve no purpose
-  // given the static return value here.
+export const getWebSideBabelPresets = (options: Flags) => {
+  // When we perform prerendering we don't use vite, so we need to add the
+  // appropriate presets for react, env, and typescript, etc.
+  if (options.forPrerender) {
+    let reactPresetConfig: babel.PluginItem = { runtime: 'automatic' }
+
+    // This is a special case, where @babel/preset-react needs config
+    // And using extends doesn't work
+    if (getWebSideBabelConfigPath()) {
+      const userProjectConfig = require(getWebSideBabelConfigPath() as string)
+
+      userProjectConfig.presets?.forEach(
+        (preset: TransformOptions['presets']) => {
+          // If it isn't a preset with special config ignore it
+          if (!Array.isArray(preset)) {
+            return
+          }
+
+          const [presetName, presetConfig] = preset
+          if (presetName === '@babel/preset-react') {
+            reactPresetConfig = presetConfig
+          }
+        },
+      )
+    }
+    return [
+      ['@babel/preset-react', reactPresetConfig],
+      [
+        '@babel/preset-env',
+        {
+          // the targets are set in <userProject>/web/package.json
+          useBuiltIns: 'usage',
+          corejs: {
+            version: CORE_JS_VERSION,
+            proposals: true,
+          },
+          exclude: [
+            // Remove class-properties from preset-env, and include separately
+            // https://github.com/webpack/webpack/issues/9708
+            '@babel/plugin-transform-class-properties',
+            '@babel/plugin-transform-private-methods',
+          ],
+        },
+        'rwjs-babel-preset-env',
+      ],
+      ['@babel/preset-typescript', undefined, 'rwjs-babel-preset-typescript'],
+    ]
+  }
+
   return []
 }
 
@@ -197,8 +243,9 @@ export const getWebSideDefaultBabelConfig = (options: Flags = {}) => {
 export const registerWebSideBabelHook = ({
   plugins = [],
   overrides = [],
+  options = {},
 }: RegisterHookOptions = {}) => {
-  const defaultOptions = getWebSideDefaultBabelConfig()
+  const defaultOptions = getWebSideDefaultBabelConfig(options)
   registerBabel({
     ...defaultOptions,
     root: getPaths().base,

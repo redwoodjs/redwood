@@ -285,6 +285,9 @@ export const runPrerender = async ({
         ],
       },
     ],
+    options: {
+      forPrerender: true,
+    },
   })
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
