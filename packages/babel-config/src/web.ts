@@ -166,7 +166,7 @@ export const getWebSideOverrides = (
 export const getWebSideBabelPresets = (options: Flags) => {
   // When we perform prerendering we don't use vite, so we need to add the
   // appropriate presets for react, env, and typescript, etc.
-  if (options.forPrerender) {
+  if (options.forPrerender || options.forJest) {
     let reactPresetConfig: babel.PluginItem = { runtime: 'automatic' }
 
     // This is a special case, where @babel/preset-react needs config
