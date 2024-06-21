@@ -92,11 +92,6 @@ export const notes = [
   'change this secret to a new value and deploy. To create a new secret, run:',
   '',
   '  yarn rw generate secret',
-  '',
-  "Need simple Login, Signup and Forgot Password pages? We've got a generator",
-  'for those as well:',
-  '',
-  '  yarn rw generate dbAuth',
 ]
 
 export const notesCreatedUserModel = [
@@ -117,6 +112,9 @@ export const notesCreatedUserModel = [
   'change this secret to a new value and deploy. To create a new secret, run:',
   '',
   '  yarn rw generate secret',
+]
+
+export const noteGenerate = [
   '',
   "Need simple Login, Signup and Forgot Password pages? We've got a generator",
   'for those as well:',

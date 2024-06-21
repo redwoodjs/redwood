@@ -44,7 +44,7 @@ export const standardAuthBuilder = (yargs: Argv) => {
     )
 }
 
-interface Args {
+export interface AuthHandlerArgs {
   basedir: string
   forceArg: boolean
   provider: string
@@ -79,7 +79,7 @@ export const standardAuthHandler = async ({
   extraTasks,
   notes,
   verbose,
-}: Args) => {
+}: AuthHandlerArgs) => {
   // @TODO detect if auth already setup. If it is, ask how to proceed:
   // How would you like to proceed?
   // 1. Replace existing auth provider with <provider>
