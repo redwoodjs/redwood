@@ -16,7 +16,7 @@ export const cleanWebBuild = () => {
 }
 
 export async function prebuildWebFile(srcPath: string, flags: Flags = {}) {
-  const code = await transform(srcPath)
+  const code = fs.readFileSync(srcPath, 'utf-8')
   const config = getWebSideDefaultBabelConfig(flags)
   const result = babel.transform(code, {
     ...config,

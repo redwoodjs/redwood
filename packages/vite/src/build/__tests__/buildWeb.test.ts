@@ -26,7 +26,9 @@ afterAll(() => {
 
 test('web files are prebuilt (no prerender)', async () => {
   const webFiles = findWebFiles()
-  const prebuiltFiles = await prebuildWebFiles(webFiles)
+  const prebuiltFiles = await prebuildWebFiles(webFiles, {
+    forJest: true,
+  })
 
   const relativePaths = prebuiltFiles
     .filter((x) => typeof x !== 'undefined')

@@ -33,7 +33,7 @@ test('transform', async () => {
   )
 })
 
-describe.skip('User specified imports, with static imports', () => {
+describe('User specified imports, with static imports', () => {
   let outputWithStaticImports: string | null | undefined
   let outputNoStaticImports: string | null | undefined
 
