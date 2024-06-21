@@ -6,7 +6,7 @@
  * Done this way, to avoid making changes breaking on main, due to the experimental-nextjs import
  * Eventually we will have one ApolloProvider, not multiple.
  */
-
+'use client'
 import React, { useContext } from 'react'
 
 import type {
