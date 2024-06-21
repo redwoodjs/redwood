@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import * as babel from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 
 // This import is for types safety. Its just a type, no harm importing from src.
@@ -210,18 +209,4 @@ export const registerWebSideBabelHook = ({
     // Static importing pages makes sense
     overrides: [...getWebSideOverrides({ forPrerender: true }), ...overrides],
   })
-}
-
-// @MARK
-// Currently only used in testing
-export const prebuildWebFile = (srcPath: string, flags: Flags = {}) => {
-  const code = fs.readFileSync(srcPath, 'utf-8')
-  const defaultOptions = getWebSideDefaultBabelConfig(flags)
-
-  const result = babel.transform(code, {
-    ...defaultOptions,
-    cwd: getPaths().web.base,
-    filename: srcPath,
-  })
-  return result
 }
