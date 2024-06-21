@@ -27,6 +27,11 @@ declare global {
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
 
   var __rw_module_cache__: Map<string, unknown>
+
+  var __webpack_chunk_load__: (
+    id: string,
+  ) => Promise<typeof __rw_module_cache__>
+  var __webpack_require__: (id: string) => unknown
 }
 
 export {}
