@@ -426,7 +426,7 @@ jobs:
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw storybook"
-        run: yarn rw sb --smoke-test
+        run: yarn rw sbv --smoke-test
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw exec"
