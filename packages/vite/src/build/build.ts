@@ -1,5 +1,5 @@
 import fs from 'node:fs'
-import path from 'path'
+import path from 'node:path'
 
 import * as babel from '@babel/core'
 import { removeSync } from 'fs-extra'
@@ -30,8 +30,9 @@ export async function prebuildWebFile(srcPath: string, flags: Flags = {}) {
 export async function transform(srcPath: string) {
   const code = fs.readFileSync(srcPath, 'utf-8')
 
+  const loader = path.extname(srcPath).startsWith('.ts') ? 'tsx' : 'jsx'
   const transformed = await transformWithEsbuild(code, srcPath, {
-    loader: 'jsx',
+    loader,
   })
 
   return transformed.code
@@ -45,28 +46,33 @@ export async function transform(srcPath: string) {
 export const prebuildWebFiles = async (srcFiles: string[], flags?: Flags) => {
   const rwjsPaths = getPaths()
 
-  const distFilePaths: string[] = []
-  await Promise.allSettled(
-    srcFiles.map(async (srcPath) => {
-      const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)
-      const dstPath = path
-        .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
-        .replace(/\.(ts)$/, '.js')
+  const processFile = async (srcPath: string) => {
+    const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)
+    const dstPath = path
+      .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
+      .replace(/\.(ts)$/, '.js')
 
+    try {
       const result = await prebuildWebFile(srcPath, flags)
       if (!result?.code) {
-        console.warn('Error:', srcPath, 'could not prebuilt.')
-        return
+        throw new Error('No code returned from prebuildWebFile')
       }
 
       fs.mkdirSync(path.dirname(dstPath), { recursive: true })
       fs.writeFileSync(dstPath, result.code)
+    } catch (_error) {
+      console.warn('Error:', srcPath, 'could not prebuilt.')
+      return undefined
+    }
 
-      distFilePaths.push(dstPath)
-    }),
-  )
+    return dstPath
+  }
 
-  return distFilePaths
+  const promises = []
+  for (const srcPath of srcFiles) {
+    promises.push(processFile(srcPath))
+  }
+  return await Promise.all(promises)
 }
 
 interface BuildOptions {

@@ -9,7 +9,7 @@ import { prebuildWebFiles, prebuildWebFile, cleanWebBuild } from '../build.js'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../__fixtures__/example-todo-main',
+  '../../../../../__fixtures__/example-todo-main',
 )
 
 const cleanPaths = (p) => {
@@ -24,23 +24,20 @@ afterAll(() => {
   delete process.env.RWJS_CWD
 })
 
-// TODO(jgmw): Replace this with a vite equivalent
-test.skip('web files are prebuilt (no prerender)', async () => {
+test('web files are prebuilt (no prerender)', async () => {
   const webFiles = findWebFiles()
-  const prebuiltFiles = prebuildWebFiles(webFiles)
+  const prebuiltFiles = await prebuildWebFiles(webFiles)
 
   const relativePaths = prebuiltFiles
     .filter((x) => typeof x !== 'undefined')
     .map(cleanPaths)
+    .sort()
+
   // Builds non-nested functions
   expect(relativePaths).toMatchInlineSnapshot(`
     [
       ".redwood/prebuild/web/src/App.js",
       ".redwood/prebuild/web/src/Routes.js",
-      ".redwood/prebuild/web/src/graphql/fragment-masking.js",
-      ".redwood/prebuild/web/src/graphql/gql.js",
-      ".redwood/prebuild/web/src/graphql/graphql.js",
-      ".redwood/prebuild/web/src/graphql/index.js",
       ".redwood/prebuild/web/src/components/AddTodo/AddTodo.js",
       ".redwood/prebuild/web/src/components/AddTodoControl/AddTodoControl.js",
       ".redwood/prebuild/web/src/components/Check/Check.js",
@@ -49,6 +46,10 @@ test.skip('web files are prebuilt (no prerender)', async () => {
       ".redwood/prebuild/web/src/components/TableCell/TableCell.js",
       ".redwood/prebuild/web/src/components/TodoItem/TodoItem.js",
       ".redwood/prebuild/web/src/components/TodoListCell/TodoListCell.tsx",
+      ".redwood/prebuild/web/src/graphql/fragment-masking.js",
+      ".redwood/prebuild/web/src/graphql/gql.js",
+      ".redwood/prebuild/web/src/graphql/graphql.js",
+      ".redwood/prebuild/web/src/graphql/index.js",
       ".redwood/prebuild/web/src/layouts/SetLayout/SetLayout.js",
       ".redwood/prebuild/web/src/pages/BarPage/BarPage.tsx",
       ".redwood/prebuild/web/src/pages/FatalErrorPage/FatalErrorPage.js",
@@ -62,14 +63,14 @@ test.skip('web files are prebuilt (no prerender)', async () => {
   `)
 })
 
-// TODO(jgmw): Replace this with a vite equivalent
-test.skip('Check routes are imported with require when staticImports flag is enabled', () => {
+test('Check routes are imported with require when staticImports flag is enabled', async () => {
   const routesFile = getPaths().web.routes
 
-  const prerendered = prebuildWebFile(routesFile, {
+  const built = await prebuildWebFile(routesFile, {
     forPrerender: true,
     forJest: true,
-  })?.code
+  })
+  const prerendered = built?.code
 
   /* Check that imports have the form
    `const HomePage = {
@@ -91,13 +92,13 @@ test.skip('Check routes are imported with require when staticImports flag is ena
   )
 })
 
-// TODO(jgmw): Replace this with a vite equivalent
-test.skip('Check routes are imported with "import" when staticImports flag is NOT passed', () => {
+test('Check routes are imported with "import" when staticImports flag is NOT passed', async () => {
   const routesFile = getPaths().web.routes
 
-  const withoutStaticImports = prebuildWebFile(routesFile, {
+  const built = await prebuildWebFile(routesFile, {
     forJest: true,
-  })?.code
+  })
+  const withoutStaticImports = built?.code
 
   /* Check that imports have the form
    `const HomePage = {
@@ -110,15 +111,8 @@ test.skip('Check routes are imported with "import" when staticImports flag is NO
 
   /*
     👇 Foo page is an explicitly imported page, so it should
-    var _FooPage = _interopRequireDefault(require(\\"./pages/FooPage/FooPage\\"))
-    (inverse of the static imports one)
-    .
-    .
-    .
-    page: _FooPage[\\"default\\"],
+    import FooPage from "...";
   */
   expect(withoutStaticImports).not.toContain(`const FooPage = {`)
-  expect(withoutStaticImports).toContain(
-    `var _FooPage = _interopRequireDefault(require(`,
-  )
+  expect(withoutStaticImports).toContain(`import FooPage from "`)
 })
