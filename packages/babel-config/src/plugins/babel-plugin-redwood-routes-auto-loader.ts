@@ -148,11 +148,10 @@ export default function (
           for (const { importName, relativeImport } of pages) {
             const importArgument = t.stringLiteral(relativeImport)
 
-            // TODO(jgmw): Determine if we still need these `webpackChunkName` comments or not
             //  const <importName> = {
             //     name: <importName>,
             //     prerenderLoader: (name) => prerenderLoaderImpl
-            //     LazyComponent: lazy(() => import(/* webpackChunkName: "..." */ <relativeImportPath>)
+            //     LazyComponent: lazy(() => import(<relativeImportPath>)
             //   }
 
             //
@@ -160,15 +159,9 @@ export default function (
             // const LoginPage = {
             //   name: "LoginPage",
             //   prerenderLoader: () => __webpack_require__(require.resolveWeak("./pages/LoginPage/LoginPage")),
-            //   LazyComponent: lazy(() => import("/* webpackChunkName: "LoginPage" *//pages/LoginPage/LoginPage.tsx"))
+            //   LazyComponent: lazy(() => import("/pages/LoginPage/LoginPage.tsx"))
             // }
             //
-            importArgument.leadingComments = [
-              {
-                type: 'CommentBlock',
-                value: ` webpackChunkName: "${importName}" `,
-              },
-            ]
 
             nodes.push(
               t.variableDeclaration('const', [

@@ -33,7 +33,7 @@ describe('mulitiple files ending in Page.{js,jsx,ts,tsx}', () => {
   test('Fails with appropriate message', () => {
     expect(() => {
       transform(getPaths().web.routes)
-    }).toThrowError(
+    }).toThrow(
       "Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' " +
         "in the following page directories: 'HomePage'",
     )
@@ -63,7 +63,7 @@ describe('page auto loader correctly imports pages', () => {
   prerenderLoader: name => ({
     default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
   }),
-  LazyComponent: lazy(() => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"))
+  LazyComponent: lazy(() => import("./pages/HomePage/HomePage"))
 `)
   })
 
