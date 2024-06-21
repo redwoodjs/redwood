@@ -8216,7 +8216,6 @@ __metadata:
     dotenv-webpack: "npm:8.1.0"
     graphql-tag: "npm:2.12.6"
     html-webpack-plugin: "npm:5.6.0"
-    jest: "npm:29.7.0"
     lodash: "npm:4.17.21"
     mini-css-extract-plugin: "npm:2.9.0"
     nodemon: "npm:3.1.3"
