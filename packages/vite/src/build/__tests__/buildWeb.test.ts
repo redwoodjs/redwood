@@ -114,5 +114,7 @@ test('Check routes are imported with "import" when staticImports flag is NOT pas
     import FooPage from "...";
   */
   expect(withoutStaticImports).not.toContain(`const FooPage = {`)
-  expect(withoutStaticImports).toContain(`import FooPage from "`)
+  expect(withoutStaticImports).toContain(
+    `var _FooPage = _interopRequireDefault(require(`,
+  )
 })
