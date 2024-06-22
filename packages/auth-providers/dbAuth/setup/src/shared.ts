@@ -13,7 +13,14 @@ export const functionsPath = getPaths().api.functions.replace(
   '',
 )
 
-export async function hasModel(name: string) {
+export const getModelNames = async () => {
+  const datamodel = await getSchema(getPaths().api.dbSchema)
+  const schema = await getDMMF({ datamodel })
+
+  return schema.datamodel.models.map((model) => model.name)
+}
+
+export const hasModel = async (name: string) => {
   if (!name) {
     return false
   }
@@ -21,13 +28,12 @@ export async function hasModel(name: string) {
   // Support PascalCase, camelCase, kebab-case, UPPER_CASE, and lowercase model
   // names
   const modelName = name.replace(/[_-]/g, '').toLowerCase()
-  const datamodel = await getSchema(getPaths().api.dbSchema)
-  const schema = await getDMMF({ datamodel })
+  const modelNames = (await getModelNames()).map((name) => name.toLowerCase())
 
-  for (const model of schema.datamodel.models) {
-    if (model.name.toLowerCase() === modelName) {
-      return true
-    }
+  console.log('>>> modelNames', modelNames, modelName)
+
+  if (modelNames.includes(modelName)) {
+    return true
   }
 
   return false
