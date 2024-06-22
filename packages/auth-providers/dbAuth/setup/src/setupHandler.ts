@@ -8,13 +8,20 @@ import { getGraphqlPath, standardAuthHandler } from '@redwoodjs/cli-helpers'
 import type { Args } from './setup'
 import {
   notes,
+  noteGenerate,
   notesCreatedUserModel,
   extraTask,
   createUserModelTask,
 } from './setupData'
-import { hasModel } from './shared'
+import {
+  generateAuthPagesTask,
+  getModelNames,
+  hasAuthPages,
+  hasModel,
+} from './shared'
 import {
   notes as webAuthnNotes,
+  noteGenerate as webAuthnNoteGenerate,
   notesCreatedUserModel as webAuthnNotesCreatedUserModel,
   extraTask as webAuthnExtraTask,
   webPackages as webAuthnWebPackages,
@@ -25,6 +32,7 @@ import {
 export async function handler({
   webauthn,
   createUserModel,
+  generateAuthPages,
   force: forceArg,
 }: Args) {
   const { version } = JSON.parse(
@@ -33,20 +41,29 @@ export async function handler({
 
   const webAuthn = await shouldIncludeWebAuthn(webauthn)
   const createDbUserModel = await shouldCreateUserModel(createUserModel)
+  const generateDbAuthPages = await shouldGenerateDbAuthPages(generateAuthPages)
 
-  let oneMoreThing: string[] = []
+  const oneMoreThing: string[] = []
 
   if (webAuthn) {
     if (createDbUserModel) {
-      oneMoreThing = webAuthnNotesCreatedUserModel
+      oneMoreThing.push(...webAuthnNotesCreatedUserModel)
     } else {
-      oneMoreThing = webAuthnNotes
+      oneMoreThing.push(...webAuthnNotes)
+    }
+
+    if (!generateDbAuthPages) {
+      oneMoreThing.push(...webAuthnNoteGenerate)
     }
   } else {
     if (createDbUserModel) {
-      oneMoreThing = notesCreatedUserModel
+      oneMoreThing.push(...notesCreatedUserModel)
     } else {
-      oneMoreThing = notes
+      oneMoreThing.push(...notes)
+    }
+
+    if (!generateDbAuthPages) {
+      oneMoreThing.push(...noteGenerate)
     }
   }
 
@@ -60,7 +77,7 @@ export async function handler({
     }
   }
 
-  standardAuthHandler({
+  await standardAuthHandler({
     basedir: __dirname,
     forceArg,
     provider: 'dbAuth',
@@ -79,6 +96,9 @@ export async function handler({
       webAuthn ? webAuthnExtraTask : extraTask,
       createDbUserModelTask,
       createAuthDecoderFunction,
+      generateDbAuthPages
+        ? generateAuthPagesTask(createDbUserModel)
+        : undefined,
     ],
     notes: oneMoreThing,
   })
@@ -110,6 +130,14 @@ async function shouldIncludeWebAuthn(webauthn: boolean | null) {
 async function shouldCreateUserModel(createUserModel: boolean | null) {
   const hasUserModel = await hasModel('User')
 
+  const modelNames = await getModelNames()
+  const isNewProject =
+    modelNames.length === 1 && modelNames[0] === 'UserExample'
+
+  if (isNewProject) {
+    return true
+  }
+
   if (createUserModel === null && !hasUserModel) {
     const createModelResponse = await prompts({
       type: 'confirm',
@@ -122,6 +150,26 @@ async function shouldCreateUserModel(createUserModel: boolean | null) {
   }
 
   return createUserModel
+}
+
+/**
+ * Prompt the user (unless already specified on the command line) if they want
+ * to generate auth pages. Also checks to make sure auth pages don't already
+ * exist before prompting.
+ */
+async function shouldGenerateDbAuthPages(generateAuthPages: boolean | null) {
+  if (generateAuthPages === null && !hasAuthPages()) {
+    const generateAuthPagesResponse = await prompts({
+      type: 'confirm',
+      name: 'answer',
+      message: 'Generate auth pages (login, signup, forgotten password, etc)?',
+      initial: false,
+    })
+
+    return generateAuthPagesResponse.answer
+  }
+
+  return generateAuthPages
 }
 
 export const createAuthDecoderFunction = {
