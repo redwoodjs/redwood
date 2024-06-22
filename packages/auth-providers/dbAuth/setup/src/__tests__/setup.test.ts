@@ -33,6 +33,7 @@ jest.mock('../shared', () => ({
     return require('fs').existsSync(mockLoginPagePath)
   },
   generateAuthPagesTask: () => undefined,
+  getModelNames: () => ['ExampleUser'],
 }))
 
 jest.mock('@redwoodjs/cli-helpers', () => {
