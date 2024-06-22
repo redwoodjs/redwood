@@ -1,6 +1,3 @@
-const fs = require('fs')
-const path = require('path')
-
 const { getSchema } = require('@prisma/internals')
 
 const { getPaths } = require('@redwoodjs/project-config')
