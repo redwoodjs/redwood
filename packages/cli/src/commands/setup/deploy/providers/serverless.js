@@ -1,6 +1,7 @@
 // import terminalLink from 'terminal-link'
 import path from 'path'
 
+import { getSchema } from '@prisma/internals'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
@@ -65,8 +66,8 @@ const files = [
   },
 ]
 
-const prismaBinaryTargetAdditions = () => {
-  const content = fs.readFileSync(getPaths().api.dbSchema).toString()
+const prismaBinaryTargetAdditions = async () => {
+  const content = (await getSchema(getPaths().api.dbSchema)).toString()
 
   if (!content.includes('rhel-openssl-1.0.x')) {
     const result = content.replace(
@@ -134,7 +135,7 @@ export const handler = async ({ force }) => {
       }),
       {
         title: 'Adding necessary Prisma binaries...',
-        task: () => prismaBinaryTargetAdditions(),
+        task: async () => await prismaBinaryTargetAdditions(),
       },
       printSetupNotes(notes),
     ],
