@@ -49,7 +49,7 @@ async function applyCodemod(codemod, target) {
   const subprocess = exec(
     'yarn jscodeshift',
     args,
-    getExecaOptions(path.resolve(__dirname))
+    getExecaOptions(path.resolve(__dirname)),
   )
 
   return subprocess
@@ -69,7 +69,7 @@ const createBuilder = (cmd) => {
       Array.isArray(positionalArguments)
         ? positionalArguments
         : [positionalArguments],
-      execaOptions
+      execaOptions,
     )
 
     return subprocess
@@ -93,7 +93,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
 
           await applyCodemod(
             'homePage.js',
-            fullPath('web/src/pages/HomePage/HomePage')
+            fullPath('web/src/pages/HomePage/HomePage'),
           )
         },
       },
@@ -104,7 +104,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
 
           await applyCodemod(
             'aboutPage.js',
-            fullPath('web/src/pages/AboutPage/AboutPage')
+            fullPath('web/src/pages/AboutPage/AboutPage'),
           )
         },
       },
@@ -115,7 +115,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
 
           await applyCodemod(
             'contactUsPage.js',
-            fullPath('web/src/pages/ContactUsPage/ContactUsPage')
+            fullPath('web/src/pages/ContactUsPage/ContactUsPage'),
           )
         },
       },
@@ -126,12 +126,12 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
 
           await applyCodemod(
             'blogPostPage.js',
-            fullPath('web/src/pages/BlogPostPage/BlogPostPage')
+            fullPath('web/src/pages/BlogPostPage/BlogPostPage'),
           )
 
           return applyCodemod(
             'updateBlogPostPageStories.js',
-            fullPath('web/src/pages/BlogPostPage/BlogPostPage.stories')
+            fullPath('web/src/pages/BlogPostPage/BlogPostPage.stories'),
           )
         },
       },
@@ -166,12 +166,12 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
 
           fs.writeFileSync(
             fullPath('web/src/pages/ProfilePage/ProfilePage.test'),
-            testFileContent
+            testFileContent,
           )
 
           return applyCodemod(
             'profilePage.js',
-            fullPath('web/src/pages/ProfilePage/ProfilePage')
+            fullPath('web/src/pages/ProfilePage/ProfilePage'),
           )
         },
       },
@@ -179,12 +179,12 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
         title: 'Creating MDX Storybook stories',
         task: () => {
           const redwoodMdxStoryContent = fs.readFileSync(
-            `${path.resolve(__dirname, 'codemods', 'Redwood.stories.mdx')}`
+            `${path.resolve(__dirname, 'codemods', 'Redwood.stories.mdx')}`,
           )
 
           fs.writeFileSync(
             fullPath('web/src/Redwood.stories.mdx', { addExtension: false }),
-            redwoodMdxStoryContent
+            redwoodMdxStoryContent,
           )
 
           return
@@ -197,12 +197,12 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
 
           await applyCodemod(
             'waterfallPage.js',
-            fullPath('web/src/pages/WaterfallPage/WaterfallPage')
+            fullPath('web/src/pages/WaterfallPage/WaterfallPage'),
           )
 
           await applyCodemod(
             'updateWaterfallPageStories.js',
-            fullPath('web/src/pages/WaterfallPage/WaterfallPage.stories')
+            fullPath('web/src/pages/WaterfallPage/WaterfallPage.stories'),
           )
         },
       },
@@ -218,7 +218,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
 
     return applyCodemod(
       'blogLayout.js',
-      fullPath('web/src/layouts/BlogLayout/BlogLayout')
+      fullPath('web/src/layouts/BlogLayout/BlogLayout'),
     )
   }
 
@@ -229,24 +229,24 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
 
     await applyCodemod(
       'blogPost.js',
-      fullPath('web/src/components/BlogPost/BlogPost')
+      fullPath('web/src/components/BlogPost/BlogPost'),
     )
 
     await createComponent('author')
 
     await applyCodemod(
       'author.js',
-      fullPath('web/src/components/Author/Author')
+      fullPath('web/src/components/Author/Author'),
     )
 
     await applyCodemod(
       'updateAuthorStories.js',
-      fullPath('web/src/components/Author/Author.stories')
+      fullPath('web/src/components/Author/Author.stories'),
     )
 
     await applyCodemod(
       'updateAuthorTest.js',
-      fullPath('web/src/components/Author/Author.test')
+      fullPath('web/src/components/Author/Author.test'),
     )
   }
 
@@ -257,28 +257,30 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
 
     await applyCodemod(
       'blogPostsCell.js',
-      fullPath('web/src/components/BlogPostsCell/BlogPostsCell')
+      fullPath('web/src/components/BlogPostsCell/BlogPostsCell'),
     )
 
     await createCell('blogPost')
 
     await applyCodemod(
       'blogPostCell.js',
-      fullPath('web/src/components/BlogPostCell/BlogPostCell')
+      fullPath('web/src/components/BlogPostCell/BlogPostCell'),
     )
 
     await createCell('author')
 
     await applyCodemod(
       'authorCell.js',
-      fullPath('web/src/components/AuthorCell/AuthorCell')
+      fullPath('web/src/components/AuthorCell/AuthorCell'),
     )
 
     await createCell('waterfallBlogPost')
 
     return applyCodemod(
       'waterfallBlogPostCell.js',
-      fullPath('web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell')
+      fullPath(
+        'web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell',
+      ),
     )
   }
 
@@ -287,21 +289,21 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
       'updateBlogPostMocks.js',
       fullPath('web/src/components/BlogPostCell/BlogPostCell.mock.ts', {
         addExtension: false,
-      })
+      }),
     )
 
     await applyCodemod(
       'updateBlogPostMocks.js',
       fullPath('web/src/components/BlogPostsCell/BlogPostsCell.mock.ts', {
         addExtension: false,
-      })
+      }),
     )
 
     await applyCodemod(
       'updateAuthorCellMock.js',
       fullPath('web/src/components/AuthorCell/AuthorCell.mock.ts', {
         addExtension: false,
-      })
+      }),
     )
 
     return applyCodemod(
@@ -310,8 +312,8 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
         'web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.mock.ts',
         {
           addExtension: false,
-        }
-      )
+        },
+      ),
     )
   }
 
@@ -351,7 +353,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
         await exec(
           'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss@0.4.1',
           [],
-          getExecaOptions(outputPath)
+          getExecaOptions(outputPath),
         )
       },
       enabled: () => linkWithLatestFwBuild,
@@ -371,7 +373,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
         await exec(
           'yarn rw setup ui tailwindcss',
           ['--force', linkWithLatestFwBuild && '--no-install'].filter(Boolean),
-          execaOptions
+          execaOptions,
         )
       },
     },
@@ -417,21 +419,21 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
       'packages',
       'auth-providers',
       'dbAuth',
-      'setup'
+      'setup',
     )
     const apiPkg = path.join(
       RW_FRAMEWORK_PATH,
       'packages',
       'auth-providers',
       'dbAuth',
-      'api'
+      'api',
     )
     const webPkg = path.join(
       RW_FRAMEWORK_PATH,
       'packages',
       'auth-providers',
       'dbAuth',
-      'web'
+      'web',
     )
 
     await exec('yarn build:pack', [], getExecaOptions(setupPkg))
@@ -444,7 +446,7 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
 
     const setupTgzDest = path.join(
       outputPath,
-      'redwoodjs-auth-dbauth-setup.tgz'
+      'redwoodjs-auth-dbauth-setup.tgz',
     )
     const apiTgzDest = path.join(outputPath, 'redwoodjs-auth-dbauth-api.tgz')
     const webTgzDest = path.join(outputPath, 'redwoodjs-auth-dbauth-web.tgz')
@@ -455,7 +457,7 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
 
     const projectPackageJsonPath = path.join(outputPath, 'package.json')
     const projectPackageJson = JSON.parse(
-      fs.readFileSync(projectPackageJsonPath, 'utf-8')
+      fs.readFileSync(projectPackageJsonPath, 'utf-8'),
     )
 
     const existingResolutions = projectPackageJson.resolutions
@@ -472,7 +474,7 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
 
     fs.writeFileSync(
       projectPackageJsonPath,
-      JSON.stringify(projectPackageJson, null, 2)
+      JSON.stringify(projectPackageJson, null, 2),
     )
 
     // Run `yarn install` to have the resolutions take effect and install the
@@ -480,9 +482,9 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
     await exec('yarn install', [], execaOptions)
 
     await exec(
-      'yarn rw setup auth dbAuth --force --no-webauthn',
+      'yarn rw setup auth dbAuth --force --no-webauthn --no-createUserModel --no-generateAuthPages',
       [],
-      execaOptions
+      execaOptions,
     )
 
     // Restore old resolutions
@@ -492,7 +494,7 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
 
     fs.writeFileSync(
       projectPackageJsonPath,
-      JSON.stringify(projectPackageJson, null, 2)
+      JSON.stringify(projectPackageJson, null, 2),
     )
 
     // Remove tarballs
@@ -515,7 +517,7 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
     await exec(
       'yarn rw g dbAuth --no-webauthn --username-label=username --password-label=password',
       [],
-      execaOptions
+      execaOptions,
     )
 
     // update directive in contacts.sdl.ts
@@ -524,11 +526,11 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
     const resultsContactsSdl = contentContactsSdl
       .replace(
         'createContact(input: CreateContactInput!): Contact! @requireAuth',
-        `createContact(input: CreateContactInput!): Contact @skipAuth`
+        `createContact(input: CreateContactInput!): Contact @skipAuth`,
       )
       .replace(
         'deleteContact(id: Int!): Contact! @requireAuth',
-        'deleteContact(id: Int!): Contact! @requireAuth(roles:["ADMIN"])'
+        'deleteContact(id: Int!): Contact! @requireAuth(roles:["ADMIN"])',
       ) // make deleting contacts admin only
     fs.writeFileSync(pathContactsSdl, resultsContactsSdl)
 
@@ -538,7 +540,7 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
     const resultsPostsSdl = contentPostsSdl.replace(
       /posts: \[Post!\]! @requireAuth([^}]*)@requireAuth/,
       `posts: [Post!]! @skipAuth
-      post(id: Int!): Post @skipAuth`
+      post(id: Int!): Post @skipAuth`,
     ) // make posts accessible to all
 
     fs.writeFileSync(pathPostsSdl, resultsPostsSdl)
@@ -550,11 +552,11 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
     const newLibAuthContent = libAuthContent
       .replace(
         'select: { id: true }',
-        'select: { id: true, roles: true, email: true}'
+        'select: { id: true, roles: true, email: true}',
       )
       .replace(
         'const currentUserRoles = context.currentUser?.roles',
-        'const currentUserRoles = context.currentUser?.roles as string | string[]'
+        'const currentUserRoles = context.currentUser?.roles as string | string[]',
       )
     fs.writeFileSync(libAuthPath, newLibAuthContent)
 
@@ -565,7 +567,7 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
       /const mockExecution([^}]*){} }\)/,
       `const mockExecution = mockRedwoodDirective(requireAuth, {
         context: { currentUser: { id: 1, roles: 'ADMIN', email: 'b@zinga.com' } },
-      })`
+      })`,
     )
     fs.writeFileSync(pathRequireAuth, resultsRequireAuth)
 
@@ -573,7 +575,7 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
     const pathSignupPageTs = `${OUTPUT_PATH}/web/src/pages/SignupPage/SignupPage.tsx`
     const contentSignupPageTs = fs.readFileSync(pathSignupPageTs, 'utf-8')
     const usernameFields = contentSignupPageTs.match(
-      /\s*<Label[\s\S]*?name="username"[\s\S]*?"rw-field-error" \/>/
+      /\s*<Label[\s\S]*?name="username"[\s\S]*?"rw-field-error" \/>/,
     )?.[0]
     const fullNameFields = usernameFields
       ?.replace(/\s*ref=\{usernameRef}/, '')
@@ -584,12 +586,12 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
       .replace(
         '<FieldError name="password" className="rw-field-error" />',
         '<FieldError name="password" className="rw-field-error" />\n' +
-          fullNameFields
+          fullNameFields,
       )
       // include full-name in the data we pass to `signUp()`
       .replace(
         'password: data.password',
-        "password: data.password, 'full-name': data['full-name']"
+        "password: data.password, 'full-name': data['full-name']",
       )
 
     fs.writeFileSync(pathSignupPageTs, newContentSignupPageTs)
@@ -602,7 +604,7 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
       .replace('userAttributes: _userAttributes', 'userAttributes')
       .replace(
         '// name: userAttributes.name',
-        "fullName: userAttributes['full-name']"
+        "fullName: userAttributes['full-name']",
       )
 
     fs.writeFileSync(pathAuthTs, resultsAuthTs)
@@ -648,7 +650,7 @@ export default DoublePage`
 
           fs.writeFileSync(
             fullPath('web/src/pages/DoublePage/DoublePage'),
-            doublePageContent
+            doublePageContent,
           )
         },
       },
@@ -659,31 +661,31 @@ export default DoublePage`
           const contentRoutes = fs.readFileSync(pathRoutes).toString()
           const resultsRoutesAbout = contentRoutes.replace(
             /name="about"/,
-            `name="about" prerender`
+            `name="about" prerender`,
           )
           const resultsRoutesHome = resultsRoutesAbout.replace(
             /name="home"/,
-            `name="home" prerender`
+            `name="home" prerender`,
           )
           const resultsRoutesBlogPost = resultsRoutesHome.replace(
             /name="blogPost"/,
-            `name="blogPost" prerender`
+            `name="blogPost" prerender`,
           )
           const resultsRoutesNotFound = resultsRoutesBlogPost.replace(
             /page={NotFoundPage}/,
-            `page={NotFoundPage} prerender`
+            `page={NotFoundPage} prerender`,
           )
           const resultsRoutesWaterfall = resultsRoutesNotFound.replace(
             /page={WaterfallPage}/,
-            `page={WaterfallPage} prerender`
+            `page={WaterfallPage} prerender`,
           )
           const resultsRoutesDouble = resultsRoutesWaterfall.replace(
             'name="double"',
-            'name="double" prerender'
+            'name="double" prerender',
           )
           const resultsRoutesNewContact = resultsRoutesDouble.replace(
             'name="newContact"',
-            'name="newContact" prerender'
+            'name="newContact" prerender',
           )
           fs.writeFileSync(pathRoutes, resultsRoutesNewContact)
 
@@ -725,7 +727,7 @@ export default DoublePage`
         return exec(
           `yarn rw prisma migrate dev --name create_post_user`,
           [],
-          execaOptions
+          execaOptions,
         )
       },
     },
@@ -737,7 +739,7 @@ export default DoublePage`
         // Replace the random numbers in the scenario with consistent values
         await applyCodemod(
           'scenarioValueSuffix.js',
-          fullPath('api/src/services/posts/posts.scenarios')
+          fullPath('api/src/services/posts/posts.scenarios'),
         )
 
         await exec(`yarn rwfw project:copy`, [], execaOptions)
@@ -748,7 +750,7 @@ export default DoublePage`
       task: async () => {
         await applyCodemod(
           'seed.js',
-          fullPath('scripts/seed.ts', { addExtension: false })
+          fullPath('scripts/seed.ts', { addExtension: false }),
         )
       },
     },
@@ -762,7 +764,7 @@ export default DoublePage`
         await exec(
           `yarn rw prisma migrate dev --name create_contact`,
           [],
-          execaOptions
+          execaOptions,
         )
 
         await generateScaffold('contacts')
@@ -776,7 +778,7 @@ export default DoublePage`
           OUTPUT_PATH,
           'api',
           'db',
-          'migrations'
+          'migrations',
         )
         // Migration folders are folders which start with 14 digits because they have a yyyymmddhhmmss
         const migrationFolders = fs
@@ -799,8 +801,8 @@ export default DoublePage`
             path.join(migrationsFolderPath, name),
             path.join(
               migrationsFolderPath,
-              `${datetimeInCorrectFormat}${name.substring(14)}`
-            )
+              `${datetimeInCorrectFormat}${name.substring(14)}`,
+            ),
           )
           datetime.setDate(datetime.getDate() + 1)
         })
@@ -821,13 +823,13 @@ export default DoublePage`
 
         await applyCodemod(
           'usersService.js',
-          fullPath('api/src/services/users/users')
+          fullPath('api/src/services/users/users'),
         )
 
         // Replace the random numbers in the scenario with consistent values
         await applyCodemod(
           'scenarioValueSuffix.js',
-          fullPath('api/src/services/users/users.scenarios')
+          fullPath('api/src/services/users/users.scenarios'),
         )
 
         const test = `import { user } from './users'
@@ -852,7 +854,7 @@ export default DoublePage`
         // Copy contact.scenarios.ts, because scenario tests look for the same filename
         fs.copyFileSync(
           fullPath('api/src/services/contacts/contacts.scenarios'),
-          fullPath('api/src/services/contacts/describeContacts.scenarios')
+          fullPath('api/src/services/contacts/describeContacts.scenarios'),
         )
 
         // Create describeContacts.test.ts
@@ -860,12 +862,12 @@ export default DoublePage`
           __dirname,
           'templates',
           'api',
-          'contacts.describeScenario.test.ts.template'
+          'contacts.describeScenario.test.ts.template',
         )
 
         fs.copyFileSync(
           describeScenarioFixture,
-          fullPath('api/src/services/contacts/describeContacts.test')
+          fullPath('api/src/services/contacts/describeContacts.test'),
         )
       },
     },
@@ -884,14 +886,14 @@ export default DoublePage`
           __dirname,
           'templates',
           'api',
-          'context.test.ts.template'
+          'context.test.ts.template',
         )
         const projectPath = path.join(
           OUTPUT_PATH,
           'api',
           'src',
           '__tests__',
-          'context.test.ts'
+          'context.test.ts',
         )
 
         fs.mkdirSync(path.dirname(projectPath), { recursive: true })
@@ -940,7 +942,7 @@ async function fragmentsTasks(outputPath) {
         return exec(
           'yarn rw prisma migrate dev --name create_produce_stall',
           [],
-          getExecaOptions(outputPath)
+          getExecaOptions(outputPath),
         )
       },
     },
@@ -949,7 +951,7 @@ async function fragmentsTasks(outputPath) {
       task: async () => {
         await applyCodemod(
           'seedFragments.ts',
-          fullPath('scripts/seed.ts', { addExtension: false })
+          fullPath('scripts/seed.ts', { addExtension: false }),
         )
 
         await exec('yarn rw prisma db seed', [], getExecaOptions(outputPath))
@@ -965,7 +967,7 @@ async function fragmentsTasks(outputPath) {
 
         await applyCodemod(
           'producesSdl.ts',
-          fullPath('api/src/graphql/produces.sdl')
+          fullPath('api/src/graphql/produces.sdl'),
         )
       },
     },
@@ -977,7 +979,7 @@ async function fragmentsTasks(outputPath) {
           OUTPUT_PATH,
           'web',
           'src',
-          'components'
+          'components',
         )
 
         for (const fileName of [
@@ -1018,7 +1020,7 @@ async function fragmentsTasks(outputPath) {
 
         await applyCodemod(
           'groceriesPage.ts',
-          fullPath('web/src/pages/GroceriesPage/GroceriesPage')
+          fullPath('web/src/pages/GroceriesPage/GroceriesPage'),
         )
       },
     },
