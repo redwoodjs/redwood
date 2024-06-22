@@ -8,6 +8,7 @@ import { type AuthHandlerArgs } from '@redwoodjs/cli-helpers'
 jest.mock('fs', () => require('memfs').fs)
 
 import { createAuthDecoderFunction, handler } from '../setupHandler'
+import { getModelNames } from '../shared'
 
 const RWJS_CWD = process.env.RWJS_CWD
 const redwoodProjectPath = '/redwood-app'
@@ -33,6 +34,7 @@ jest.mock('../shared', () => ({
     return require('fs').existsSync(mockLoginPagePath)
   },
   generateAuthPagesTask: () => undefined,
+  getModelNames: () => ['ExampleUser'],
 }))
 
 jest.mock('@redwoodjs/cli-helpers', () => {
