@@ -13,7 +13,12 @@ import {
   extraTask,
   createUserModelTask,
 } from './setupData'
-import { generateAuthPagesTask, hasAuthPages, hasModel } from './shared'
+import {
+  generateAuthPagesTask,
+  getModelNames,
+  hasAuthPages,
+  hasModel,
+} from './shared'
 import {
   notes as webAuthnNotes,
   noteGenerate as webAuthnNoteGenerate,
@@ -72,7 +77,7 @@ export async function handler({
     }
   }
 
-  standardAuthHandler({
+  await standardAuthHandler({
     basedir: __dirname,
     forceArg,
     provider: 'dbAuth',
@@ -124,6 +129,14 @@ async function shouldIncludeWebAuthn(webauthn: boolean | null) {
  */
 async function shouldCreateUserModel(createUserModel: boolean | null) {
   const hasUserModel = await hasModel('User')
+
+  const modelNames = await getModelNames()
+  const isNewProject =
+    modelNames.length === 1 && modelNames[0] === 'UserExample'
+
+  if (isNewProject) {
+    return true
+  }
 
   if (createUserModel === null && !hasUserModel) {
     const createModelResponse = await prompts({

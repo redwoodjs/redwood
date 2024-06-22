@@ -32,6 +32,12 @@ export async function hasModel(name: string) {
   return false
 }
 
+export async function getModelNames() {
+  const schema = await getDMMF({ datamodelPath: getPaths().api.dbSchema })
+
+  return schema.datamodel.models.map((model) => model.name)
+}
+
 export function addModels(models: string) {
   const schema = fs.readFileSync(getPaths().api.dbSchema, 'utf-8')
 
