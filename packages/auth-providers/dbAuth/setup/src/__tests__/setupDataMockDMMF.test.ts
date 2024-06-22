@@ -276,6 +276,53 @@ model UserExample {
     )
   })
 
+  it('automatically adds a User model given the rwjs template schema.prisma', async () => {
+    const packageJsonPath = path.resolve(__dirname, '../../package.json')
+
+    vol.fromJSON(
+      {
+        [packageJsonPath]: '{ "version": "0.0.0" }',
+        'api/src/functions/graphql.ts': `
+import { createGraphQLHandler } from "@redwoodjs/graphql-server"
+
+import { getCurrentUser } from 'src/lib/auth'
+`,
+        'api/db/schema.prisma': jest
+          .requireActual('fs')
+          .readFileSync(
+            path.resolve(
+              __dirname +
+                '/../../../../../create-redwood-app/templates/ts/api/db/schema.prisma',
+            ),
+            'utf-8',
+          ),
+      },
+      redwoodProjectPath,
+    )
+
+    await handler({
+      webauthn: false,
+      createUserModel: null,
+      generateAuthPages: false,
+      force: false,
+    })
+
+    expect(jest.mocked(prompts)).not.toHaveBeenCalled()
+
+    const schema = fs.readFileSync(dbSchemaPath, 'utf-8')
+    // Check for UserExample just to make sure we're reading the actual
+    // template file and that it looks like we expect. So we're not just
+    // getting an empty file or something
+    expect(schema).toMatch(/^model UserExample {$/m)
+    expect(schema).toMatch(/^model User {$/m)
+    expect(jest.mocked(console).log).toHaveBeenCalledWith(
+      expect.stringContaining('Done! But you have a little more work to do:'),
+    )
+    expect(jest.mocked(console).log).not.toHaveBeenCalledWith(
+      expect.stringContaining('resetTokenExpiresAt DateTime? // <─'),
+    )
+  })
+
   it('does not automatically add a User model in projects with custom db models', async () => {
     const packageJsonPath = path.resolve(__dirname, '../../package.json')
 
