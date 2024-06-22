@@ -32,18 +32,11 @@ export async function hasModel(name: string) {
 }
 
 export async function addModels(models: string) {
-  const schema = await getSchema(getPaths().api.dbSchema)
-
-  const schemaWithUser = schema + models
-
   const isDirectory = fs.statSync(getPaths().api.dbSchema).isDirectory()
 
   if (isDirectory) {
-    fs.writeFileSync(
-      path.join(getPaths().api.dbSchema, 'user.prisma'),
-      schemaWithUser,
-    )
+    fs.writeFileSync(path.join(getPaths().api.dbSchema, 'user.prisma'), models)
   } else {
-    fs.writeFileSync(getPaths().api.dbSchema, schemaWithUser)
+    fs.appendFileSync(getPaths().api.dbSchema, models)
   }
 }
