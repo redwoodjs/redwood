@@ -7,7 +7,7 @@ if (typeof window !== 'undefined') {
   window.Buffer = window.Buffer || require('buffer').Buffer
 }
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 import type { GraphQLError } from 'graphql'
 import StackTracey from 'stacktracey'
