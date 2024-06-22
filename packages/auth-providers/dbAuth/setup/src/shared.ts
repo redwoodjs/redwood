@@ -2,8 +2,10 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import { getDMMF, getSchema } from '@prisma/internals'
+import execa from 'execa'
 
 import { getPaths } from '@redwoodjs/cli-helpers'
+import { processPagesDir } from '@redwoodjs/project-config'
 
 export const libPath = getPaths().api.lib.replace(getPaths().base, '')
 export const functionsPath = getPaths().api.functions.replace(
@@ -38,5 +40,56 @@ export async function addModels(models: string) {
     fs.writeFileSync(path.join(getPaths().api.dbSchema, 'user.prisma'), models)
   } else {
     fs.appendFileSync(getPaths().api.dbSchema, models)
+  }
+}
+
+export function hasAuthPages() {
+  const routes = fs.readFileSync(getPaths().web.routes, 'utf-8')
+
+  // If the user already has a route for /login, /signin, or /signup, we
+  // assume auth pages are already set up
+  if (/path={?['"]\/(login|signin|signup)['"]}? /i.test(routes)) {
+    return true
+  }
+
+  return processPagesDir().some((page) => {
+    if (
+      page.importName === 'LoginPage' ||
+      page.importName === 'LogInPage' ||
+      page.importName === 'SigninPage' ||
+      page.importName === 'SignInPage' ||
+      page.importName === 'SignupPage' ||
+      page.importName === 'SignUpPage'
+    ) {
+      return true
+    }
+
+    return false
+  })
+}
+
+export function generateAuthPagesTask(generatingUserModel: boolean) {
+  return {
+    title: 'Adding dbAuth pages...',
+    task: async () => {
+      const rwjsPaths = getPaths()
+
+      const args = ['rw', 'g', 'dbAuth']
+
+      if (generatingUserModel) {
+        args.push(
+          '--username-label',
+          'username',
+          '--password-label',
+          'password',
+        )
+      }
+
+      await execa('yarn', args, {
+        stdio: 'inherit',
+        shell: true,
+        cwd: rwjsPaths.base,
+      })
+    },
   }
 }

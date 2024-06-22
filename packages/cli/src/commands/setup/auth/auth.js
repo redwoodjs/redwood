@@ -110,6 +110,12 @@ export async function builder(yargs) {
             description: 'Create a User database model',
             type: 'boolean',
           })
+          .option('generateAuthPages', {
+            alias: 'g',
+            default: null,
+            description: 'Generate auth pages (login, signup, etc.)',
+            type: 'boolean',
+          })
       },
       async (args) => {
         recordTelemetryAttributes({
