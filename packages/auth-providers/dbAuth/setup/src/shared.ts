@@ -30,8 +30,6 @@ export const hasModel = async (name: string) => {
   const modelName = name.replace(/[_-]/g, '').toLowerCase()
   const modelNames = (await getModelNames()).map((name) => name.toLowerCase())
 
-  console.log('>>> modelNames', modelNames, modelName)
-
   if (modelNames.includes(modelName)) {
     return true
   }
