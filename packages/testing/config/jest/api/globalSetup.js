@@ -1,6 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 
+const { getSchema } = require('@prisma/internals')
+
 const { getPaths } = require('@redwoodjs/project-config')
 
 const {
@@ -20,10 +22,7 @@ module.exports = async function () {
 
     process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || defaultDb
 
-    const prismaSchema = fs.readFileSync(
-      path.join(rwjsPaths.api.dbSchema),
-      'utf-8',
-    )
+    const prismaSchema = (await getSchema(rwjsPaths.api.dbSchema)).toString()
 
     const directUrlEnvVar = checkAndReplaceDirectUrl(prismaSchema, defaultDb)
 
