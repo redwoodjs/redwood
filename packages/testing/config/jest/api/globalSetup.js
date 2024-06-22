@@ -19,6 +19,10 @@ module.exports = async function () {
 
     process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || defaultDb
 
+    // NOTE: This is a workaround to get the directUrl from the schema
+    // Instead of using the schema, we can use the config file
+    // const prismaConfig = await getConfig(rwjsPaths.api.dbSchema)
+    // and then check for the prismaConfig.datasources[0].directUrl
     const prismaSchema = (await getSchema(rwjsPaths.api.dbSchema)).toString()
 
     const directUrlEnvVar = checkAndReplaceDirectUrl(prismaSchema, defaultDb)
