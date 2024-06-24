@@ -109,8 +109,7 @@ export async function reactRenderToStreamResponse(
     ServerInjectedHtml,
   }: ServerInjectType = rscEnabled
     ? await importModule('__rwjs__server_inject')
-    : // @MARK: cannot use exports field because of moduleResolution in this package
-      await import('@redwoodjs/web/dist/components/ServerInject')
+    : await import('@redwoodjs/web/dist/components/ServerInject.js')
   const { renderToString }: RDServerType = rscEnabled
     ? await importModule('rd-server')
     : await import('react-dom/server')
