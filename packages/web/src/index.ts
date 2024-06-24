@@ -2,7 +2,8 @@ import './global.web-auto-imports.js'
 import './config.js'
 import './assetImports.js'
 
-export { default as FatalErrorBoundary } from './components/FatalErrorBoundary.js'
+export { FatalErrorBoundary } from './components/FatalErrorBoundary.js'
+
 export {
   FetchConfigProvider,
   useFetchConfig,
