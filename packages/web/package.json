@@ -26,21 +26,6 @@
       "import": "./dist/index.js",
       "require": "./dist/cjs/index.js"
     },
-    "./serverStore": {
-      "require": "./dist/cjs/server/serverStore.js",
-      "import": "./dist/server/serverStore.js",
-      "types": "./dist/server/serverStore.d.ts"
-    },
-    "./cookie": {
-      "require": "./dist/cjs/server/CookieJar.js",
-      "import": "./dist/server/CookieJar.js",
-      "types": "./dist/server/CookieJar.d.ts"
-    },
-    "./middleware": {
-      "require": "./dist/cjs/server/middleware.js",
-      "import": "./dist/server/middleware.js",
-      "types": "./dist/server/middleware.d.ts"
-    },
     "./serverInject": {
       "require": "./dist/cjs/components/ServerInject.js",
       "import": "./dist/components/ServerInject.js",
@@ -87,7 +72,7 @@
   "scripts": {
     "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-web.tgz",
-    "build:types": "tsc --build --verbose tsconfig.json",
+    "build:types": "tsc --build --verbose ./tsconfig.json ./tsconfig.types-cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
