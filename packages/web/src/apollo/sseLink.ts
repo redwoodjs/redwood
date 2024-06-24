@@ -1,8 +1,11 @@
 import type { HttpOptions } from '@apollo/client'
 import type { Operation, FetchResult } from '@apollo/client/core'
-import { ApolloLink, Observable } from '@apollo/client/core'
+// @ts-expect-error Force import cjs module
+import { ApolloLink } from '@apollo/client/link/core/core.cjs'
+// @ts-expect-error Force import cjs module
+import { Observable } from '@apollo/client/utilities/utilities.cjs'
 import { print } from 'graphql'
-import type { ClientOptions, Client } from 'graphql-sse'
+import type { ClientOptions, Client, Sink } from 'graphql-sse'
 import { createClient } from 'graphql-sse'
 interface SSELinkOptions extends Partial<ClientOptions> {
   url: string
@@ -92,7 +95,7 @@ class SSELink extends ApolloLink {
   }
 
   public request(operation: Operation): Observable<FetchResult> {
-    return new Observable((sink) => {
+    return new Observable((sink: Sink) => {
       return this.client.subscribe<FetchResult>(
         { ...operation, query: print(operation.query) },
         {

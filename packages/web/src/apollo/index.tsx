@@ -6,9 +6,12 @@ import type {
   ApolloCache,
 } from '@apollo/client'
 import * as apolloClient from '@apollo/client'
-import { setContext } from '@apollo/client/link/context'
-import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
-import { getMainDefinition } from '@apollo/client/utilities'
+// @ts-expect-error Force import cjs module
+import { setContext } from '@apollo/client/link/context/context.cjs'
+// @ts-expect-error Force import cjs module
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries/persisted-queries.cjs'
+// @ts-expect-error Force import cjs module
+import { getMainDefinition } from '@apollo/client/utilities/utilities.cjs'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer.js'
 
@@ -242,6 +245,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
               definition.operation === 'subscription'
             )
           },
+          // @ts-expect-error @TODO look into this
           new SSELink({
             url: uri,
             auth: { authProviderType, tokenFn: getToken },

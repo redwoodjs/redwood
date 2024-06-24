@@ -56,11 +56,15 @@
       "require": "./dist/cjs/apollo/suspense.js",
       "import": "./dist/apollo/suspense.js"
     },
+    "./dist/apollo/sseLink": {
+      "require": "./dist/cjs/apollo/sseLink.js",
+      "import": "./dist/apollo/sseLink.js"
+    },
     "./dist/graphql.js": {
       "require": "./dist/cjs/graphql.js",
       "import": "./dist/graphql.js"
     },
-    "./dist/entry/index.js": {
+    "./webpackEntry": {
       "require": "./dist/cjs/entry/index.js",
       "import": "./dist/entry/index.js"
     },

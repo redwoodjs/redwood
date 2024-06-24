@@ -228,7 +228,7 @@ module.exports = (webpackEnv) => {
        */
       app:
         redwoodPaths.web.index ||
-        require.resolve('@redwoodjs/web/dist/entry/index.js'),
+        require.resolve('@redwoodjs/web/webpackEntry').default,
     },
     resolve: {
       extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
