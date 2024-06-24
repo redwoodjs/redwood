@@ -10,7 +10,7 @@ import { writeFileSync } from 'node:fs'
 // CJS build
 await build({
   entryPointOptions: {
-    ignore: [...defaultIgnorePatterns],
+    ignore: [...defaultIgnorePatterns, 'src/__typetests__/**'],
   },
   buildOptions: {
     ...defaultBuildOptions,
@@ -29,7 +29,7 @@ await build({
   entryPointOptions: {
     // @NOTE: building the cjs bins only...
     // I haven't tried esm bins yet...
-    ignore: [...defaultIgnorePatterns, 'src/bins/**'],
+    ignore: [...defaultIgnorePatterns, 'src/bins/**', 'src/__typetests__/**'],
   },
   buildOptions: {
     ...defaultBuildOptions,
