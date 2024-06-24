@@ -45,10 +45,9 @@ async function recursivelyRender(
   queryCache: Record<string, QueryInfo>,
 ): Promise<string> {
   // Load this async, to prevent rwjs/web being loaded before shims
-  const {
-    CellCacheContextProvider,
-    getOperationName,
-  } = require('@redwoodjs/web')
+  const { CellCacheContextProvider, getOperationName } = await import(
+    '@redwoodjs/web'
+  )
 
   let shouldShowGraphqlHandlerNotFoundWarn = false
   // Execute all gql queries we haven't already fetched
