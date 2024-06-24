@@ -8,9 +8,16 @@ import {
 import { writeFileSync } from 'node:fs'
 
 // CJS build
+/**
+ * Notes:
+ * - we don't build the webpack entry point in CJS, because it produces a double wrapped module
+ * instead we use the ESM version (see ./webpackEntry in package.json)
+ * - we build bins in CJS, until projects fully switch to ESM (or we produce .mts files) this is probably
+ * the better option
+ */
 await build({
   entryPointOptions: {
-    ignore: [...defaultIgnorePatterns, 'src/__typetests__/**'],
+    ignore: [...defaultIgnorePatterns, 'src/__typetests__/**', 'src/entry/**'],
   },
   buildOptions: {
     ...defaultBuildOptions,

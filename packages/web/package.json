@@ -9,7 +9,6 @@
   },
   "license": "MIT",
   "main": "./dist/index.js",
-
   "types": "dist/index.d.ts",
   "bin": {
     "cross-env": "./dist/cjs/bins/cross-env.js",
@@ -65,8 +64,7 @@
       "import": "./dist/graphql.js"
     },
     "./webpackEntry": {
-      "require": "./dist/cjs/entry/index.js",
-      "import": "./dist/entry/index.js"
+      "default": "./dist/entry/index.js"
     },
     "./toast": {
       "require": "./dist/cjs/toast/index.js",
