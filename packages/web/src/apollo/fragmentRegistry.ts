@@ -1,8 +1,10 @@
 import * as apolloClient from '@apollo/client'
 import type { UseFragmentResult } from '@apollo/client'
+// @ts-expect-error Force import cjs module
+import { createFragmentRegistry } from '@apollo/client/cache/cache.cjs'
 import type { FragmentRegistryAPI } from '@apollo/client/cache/index.js'
-import { createFragmentRegistry } from '@apollo/client/cache/index.js'
-import { getFragmentDefinitions } from '@apollo/client/utilities/index.js'
+// @ts-expect-error Force import cjs module
+import { getFragmentDefinitions } from '@apollo/client/utilities/utilities.cjs'
 import type { DocumentNode } from 'graphql'
 
 export type FragmentIdentifier = string | number
