@@ -1,5 +1,3 @@
-// import { writeFileSync } from 'node:fs'
-
 import {
   build,
   defaultBuildOptions,
@@ -12,7 +10,7 @@ import { writeFileSync } from 'node:fs'
  * Notes:
  * - we don't build the webpack entry point in CJS, because it produces a double wrapped module
  * instead we use the ESM version (see ./webpackEntry in package.json). The double wrapping happens
- * when you set type: module in package.json.
+ * when you set type: module in package.json, and occurs on the App & Routes import from the project.
  * - we build bins in CJS, until projects fully switch to ESM (or we produce .mts files) this is probably
  * the better option
  */
@@ -22,15 +20,11 @@ await build({
   },
   buildOptions: {
     ...defaultBuildOptions,
-    // ⭐ No special tsconfig here
+    // ⭐ No special build tsconfig in this package
     outdir: 'dist/cjs',
-    // outdir: 'dist',
     packages: 'external',
   },
 })
-
-/**  THIS IS IN PART 2 ~ making this a dual module
-Will enable in follow up PR **/
 
 // ESM build
 await build({
@@ -41,8 +35,7 @@ await build({
   },
   buildOptions: {
     ...defaultBuildOptions,
-    // ⭐ No special tsconfig here
-    // tsconfig: 'tsconfig.build.json',
+    // ⭐ No special build tsconfig in this package
     format: 'esm',
     packages: 'external',
   },
