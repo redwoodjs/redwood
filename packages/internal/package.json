@@ -60,7 +60,7 @@
     "fs-extra": "11.2.0",
     "graphql": "16.8.1",
     "kill-port": "1.6.1",
-    "prettier": "3.2.5",
+    "prettier": "3.3.2",
     "rimraf": "5.0.7",
     "source-map": "0.7.4",
     "string-env-interpolation": "1.0.1",

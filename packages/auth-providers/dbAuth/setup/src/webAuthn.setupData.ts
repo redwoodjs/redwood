@@ -117,11 +117,6 @@ export const notes = [
   'change this secret to a new value and deploy. To create a new secret, run:',
   '',
   '  yarn rw generate secret',
-  '',
-  'Need simple Login, Signup, Forgot Password pages and WebAuthn prompts?',
-  "We've got a generator for those as well:",
-  '',
-  '  yarn rw generate dbAuth',
 ]
 
 // Only thing different here compared to the notes for when *not* setting up
@@ -145,6 +140,9 @@ export const notesCreatedUserModel = [
   'change this secret to a new value and deploy. To create a new secret, run:',
   '',
   '  yarn rw generate secret',
+]
+
+export const noteGenerate = [
   '',
   'Need simple Login, Signup, Forgot Password pages and WebAuthn prompts?',
   "We've got a generator for those as well:",
