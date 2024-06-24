@@ -9,6 +9,7 @@
   },
   "license": "MIT",
   "main": "./dist/index.js",
+
   "types": "dist/index.d.ts",
   "bin": {
     "cross-env": "./dist/cjs/bins/cross-env.js",
@@ -58,6 +59,10 @@
     "./dist/graphql.js": {
       "require": "./dist/cjs/graphql.js",
       "import": "./dist/graphql.js"
+    },
+    "./dist/entry/index.js": {
+      "require": "./dist/cjs/entry/index.js",
+      "import": "./dist/entry/index.js"
     },
     "./toast": {
       "require": "./dist/cjs/toast/index.js",
