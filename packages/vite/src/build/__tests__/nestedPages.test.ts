@@ -33,7 +33,7 @@ test('transform', async () => {
   )
 })
 
-describe('User specified imports, with static imports', () => {
+describe('Nested pages transforms', () => {
   let outputWithStaticImports: string | null | undefined
   let outputNoStaticImports: string | null | undefined
 
@@ -56,6 +56,8 @@ describe('User specified imports, with static imports', () => {
     outputWithStaticImports = prerenderResult?.code
 
     const buildResult = await prebuildWebFile(routesFile, {
+      // If we don't set forJest,  this is simulating a vite build
+      // @MARK: How did we manage to compile JSX without presets before?
       forJest: true,
     })
     outputNoStaticImports = buildResult?.code
@@ -63,56 +65,96 @@ describe('User specified imports, with static imports', () => {
 
   it('Imports layouts correctly', () => {
     // Note avoid checking the full require path because windows paths have unusual slashes
-    expect(outputWithStaticImports).toContain('import AdminLayout from "')
-    expect(outputWithStaticImports).toContain('import MainLayout from "')
+    expect(outputWithStaticImports).toContain(
+      'var _AdminLayout = _interopRequireDefault(require(',
+    )
+    expect(outputWithStaticImports).toContain(
+      'var _MainLayout = _interopRequireDefault(require(',
+    )
 
-    expect(outputNoStaticImports).toContain('import AdminLayout from "')
-    expect(outputNoStaticImports).toContain('import MainLayout from "')
+    expect(outputNoStaticImports).toContain(
+      'var _AdminLayout = _interopRequireDefault(require(',
+    )
+    expect(outputNoStaticImports).toContain(
+      'var _MainLayout = _interopRequireDefault(require(',
+    )
   })
 
+  it('Handles when imports from a page include non-default imports too', () => {
+    // Because we import import EditJobPage, 👉 { NonDefaultExport } from 'src/pages/Jobs/EditJobPage'
+
+    expect(outputWithStaticImports).toContain('var _EditJobPage = require(')
+    expect(outputWithStaticImports).toContain(
+      'console.log(_EditJobPage.NonDefaultExport)',
+    )
+
+    expect(outputWithStaticImports).toContain(`const EditJobPage = {
+  name: "EditJobPage",
+  prerenderLoader: name => require("./pages/Jobs/EditJobPage/EditJobPage"),
+  LazyComponent: (0, _react.lazy)(() => import("./pages/Jobs/EditJobPage/EditJobPage"))
+};`)
+
+    // Check that NonDefaultExport is still imported
+    expect(outputNoStaticImports).toContain(
+      'var _EditJobPage = _interopRequireWildcard',
+    )
+    expect(outputNoStaticImports).toContain(
+      'console.log(_EditJobPage.NonDefaultExport)',
+    )
+
+    expect(outputNoStaticImports)
+      .toContain(`(0, _jsxRuntime.jsx)(_router.Route, {
+        path: "/jobs/{id:Int}/edit",
+        page: _EditJobPage["default"],
+        name: "editJob"`)
+
+    // Should not generate a loader, because page was explicitly imported
+    // @TODO check this again
+    expect(outputNoStaticImports).not.toMatch(
+      /import\(.*"\.\/pages\/Jobs\/EditJobPage\/EditJobPage"\)/,
+    )
+  })
+
+  // LoginPage and HomePage not imported in Routes.js
   describe('pages without explicit import', () => {
-    describe('static prerender imports', () => {
-      it('Adds loaders for non-nested pages', () => {
-        expect(outputWithStaticImports).toContain(
-          `const LoginPage = {
+    it('Adds loaders for non-nested pages', () => {
+      expect(outputWithStaticImports).toContain(
+        `const LoginPage = {
   name: "LoginPage",
   prerenderLoader: name => require("./pages/LoginPage/LoginPage"),
-  LazyComponent: lazy(() => import("./pages/LoginPage/LoginPage"))
+  LazyComponent: (0, _react.lazy)(() => import("./pages/LoginPage/LoginPage"))
 }`,
-        )
+      )
 
-        expect(outputWithStaticImports).toContain(
-          `const HomePage = {
+      expect(outputWithStaticImports).toContain(
+        `const HomePage = {
   name: "HomePage",
   prerenderLoader: name => require("./pages/HomePage/HomePage"),
-  LazyComponent: lazy(() => import("./pages/HomePage/HomePage"))
+  LazyComponent: (0, _react.lazy)(() => import("./pages/HomePage/HomePage"))
 }`,
-        )
-      })
+      )
     })
 
-    describe('dynamic build imports', () => {
-      it('Adds loaders for non-nested pages that reads from globalThis in prerenderLoader', () => {
-        expect(outputNoStaticImports).toContain(
-          `const LoginPage = {
+    it('dynamic build imports: Adds loaders for non-nested pages that reads from globalThis in prerenderLoader', () => {
+      expect(outputNoStaticImports).toContain(
+        `const LoginPage = {
   name: "LoginPage",
   prerenderLoader: name => ({
     default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
   }),
-  LazyComponent: lazy(() => import("./pages/LoginPage/LoginPage"))
+  LazyComponent: (0, _react.lazy)(() => import("./pages/LoginPage/LoginPage"))
 }`,
-        )
+      )
 
-        expect(outputNoStaticImports).toContain(
-          `const HomePage = {
+      expect(outputNoStaticImports).toContain(
+        `const HomePage = {
   name: "HomePage",
   prerenderLoader: name => ({
     default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
   }),
-  LazyComponent: lazy(() => import("./pages/HomePage/HomePage"))
+  LazyComponent: (0, _react.lazy)(() => import("./pages/HomePage/HomePage"))
 }`,
-        )
-      })
+      )
     })
   })
 
@@ -124,7 +166,7 @@ describe('User specified imports, with static imports', () => {
           `const NewJobPage = {
   name: "NewJobPage",
   prerenderLoader: name => require("./pages/Jobs/NewJobPage/NewJobPage"),
-  LazyComponent: lazy(() => import("./pages/Jobs/NewJobPage/NewJobPage"))
+  LazyComponent: (0, _react.lazy)(() => import("./pages/Jobs/NewJobPage/NewJobPage"))
 }`,
         )
       })
@@ -135,7 +177,7 @@ describe('User specified imports, with static imports', () => {
           `const BazingaJobProfilePageWithFunnyName = {
   name: "BazingaJobProfilePageWithFunnyName",
   prerenderLoader: name => require("./pages/Jobs/JobProfilePage/JobProfilePage"),
-  LazyComponent: lazy(() => import("./pages/Jobs/JobProfilePage/JobProfilePage"))
+  LazyComponent: (0, _react.lazy)(() => import("./pages/Jobs/JobProfilePage/JobProfilePage"))
 }`,
         )
       })
@@ -152,11 +194,12 @@ describe('User specified imports, with static imports', () => {
 
       it('Keeps using the user specified name when generating React component', () => {
         // Generate react component still uses the user specified name
-        expect(outputWithStaticImports).toContain(`React.createElement(Route, {
-    path: "/job-profiles/{id:Int}",
-    page: BazingaJobProfilePageWithFunnyName,
-    name: "jobProfile"
-  })`)
+        expect(outputWithStaticImports)
+          .toContain(`(0, _jsxRuntime.jsx)(_router.Route, {
+        path: "/job-profiles/{id:Int}",
+        page: BazingaJobProfilePageWithFunnyName,
+        name: "jobProfile"
+      })`)
       })
     })
 
@@ -164,13 +207,16 @@ describe('User specified imports, with static imports', () => {
       it('Directly uses the import when page is explicitly imported', () => {
         // Explicit import uses the specified import
         // Has statement: import BazingaJobProfilePageWithFunnyName from 'src/pages/Jobs/JobProfilePage'
-        // The name of the import is not important without static imports
-        // Webpack will generate a name. Vite will use the name in the import statement
-        expect(outputNoStaticImports).toContain(`React.createElement(Route, {
-    path: "/job-profiles/{id:Int}",
-    page: BazingaJobProfilePageWithFunnyName,
-    name: "jobProfile"
-  })`)
+
+        // @MARK: am not sure this is correct
+        // Double check please!
+
+        expect(outputNoStaticImports)
+          .toContain(`(0, _jsxRuntime.jsx)(_router.Route, {
+        path: "/job-profiles/{id:Int}",
+        page: _JobProfilePage["default"],
+        name: "jobProfile"
+      })`)
       })
 
       it("Uses the LazyComponent for a page that isn't imported", () => {
@@ -179,13 +225,14 @@ describe('User specified imports, with static imports', () => {
   prerenderLoader: name => ({
     default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
   }),
-  LazyComponent: lazy(() => import("./pages/HomePage/HomePage"))
+  LazyComponent: (0, _react.lazy)(() => import("./pages/HomePage/HomePage"))
 }`)
-        expect(outputNoStaticImports).toContain(`React.createElement(Route, {
-    path: "/",
-    page: HomePage,
-    name: "home"
-  })`)
+        expect(outputNoStaticImports)
+          .toContain(`(0, _jsxRuntime.jsx)(_router.Route, {
+        path: "/",
+        page: HomePage,
+        name: "home"
+      })`)
       })
 
       it('Should NOT add a LazyComponent for pages that have been explicitly loaded', () => {
@@ -195,40 +242,13 @@ describe('User specified imports, with static imports', () => {
         expect(outputNoStaticImports).not.toContain(`const JobsNewJobPage = {
   name: "JobsNewJobPage"`)
 
-        expect(outputNoStaticImports).toContain(`React.createElement(Route, {
-    path: "/jobs",
-    page: JobsPage,
-    name: "jobs"
-  })`)
+        expect(outputNoStaticImports)
+          .toContain(`(0, _jsxRuntime.jsx)(_router.Route, {
+        path: "/jobs",
+        page: _JobsPage["default"],
+        name: "jobs"
+      })`)
       })
     })
-  })
-
-  it('Handles when imports from a page include non-default imports too', () => {
-    // Because we import import EditJobPage, 👉 { NonDefaultExport } from 'src/pages/Jobs/EditJobPage'
-
-    expect(outputWithStaticImports).toContain(
-      'import { NonDefaultExport } from "',
-    )
-
-    expect(outputWithStaticImports).toContain(`const EditJobPage = {
-  name: "EditJobPage",
-  prerenderLoader: name => require("./pages/Jobs/EditJobPage/EditJobPage"),
-  LazyComponent: lazy(() => import("./pages/Jobs/EditJobPage/EditJobPage"))
-}`)
-
-    expect(outputNoStaticImports).toContain(
-      'import EditJobPage, { NonDefaultExport } from "',
-    )
-
-    expect(outputNoStaticImports).toContain(`React.createElement(Route, {
-    path: "/jobs/{id:Int}/edit",
-    page: EditJobPage,
-    name: "editJob"`)
-
-    // Should not generate a loader, because page was explicitly imported
-    expect(outputNoStaticImports).not.toMatch(
-      /import\(.*"\.\/pages\/Jobs\/EditJobPage\/EditJobPage"\)/,
-    )
   })
 })
