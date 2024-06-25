@@ -97,6 +97,7 @@ module.exports = {
             { type: 'doc', id: 'auth/supertokens' },
           ],
         },
+        'builds',
         'cells',
         'cli-commands',
         'connection-pooling',
