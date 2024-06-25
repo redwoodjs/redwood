@@ -241,12 +241,18 @@ const writeTypeDefIncludeFile = (
 
 export const generateTypeDefRouterRoutes = () => {
   const ast = fileToAst(getPaths().web.routes)
+  let hasRootRoute = false
   const routes = getJsxElements(ast, 'Route').filter((x) => {
     // All generated "routes" should have a "name" and "path" prop-value
-    return (
+    const isValidRoute =
       typeof x.props?.path !== 'undefined' &&
       typeof x.props?.name !== 'undefined'
-    )
+
+    if (isValidRoute && x.props.path === '/') {
+      hasRootRoute = true
+    }
+
+    return isValidRoute
   })
 
   // Generate declaration mapping for improved go-to-definition behaviour
@@ -286,6 +292,17 @@ export const generateTypeDefRouterRoutes = () => {
       "Couldn't generate a definition map for web-routerRoutes.d.ts:",
     )
     console.error(error)
+  }
+
+  if (!hasRootRoute) {
+    routes.push({
+      name: 'splashPage route',
+      location: { line: -1, column: -1 },
+      props: {
+        path: '/',
+        name: 'home',
+      },
+    })
   }
 
   return writeTypeDefIncludeFile('web-routerRoutes.d.ts.template', { routes })
