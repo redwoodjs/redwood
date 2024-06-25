@@ -69,7 +69,6 @@ module.exports = {
         browser: true,
       },
       globals: {
-        React: 'readonly', // We auto-import React via Babel.
         window: 'off', // Developers should use `global` instead of window. Since window is undefined in NodeJS.
       },
     },

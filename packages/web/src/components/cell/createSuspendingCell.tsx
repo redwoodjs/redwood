@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import React, { Suspense } from 'react'
 
 import type { OperationVariables, QueryReference } from '@apollo/client'
 import { useApolloClient } from '@apollo/client'

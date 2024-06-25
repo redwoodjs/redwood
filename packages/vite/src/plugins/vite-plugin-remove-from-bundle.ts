@@ -29,9 +29,8 @@ export default function removeFromBundle(
   }
 }
 
-// Currently configured for CJS only.
 const EMPTY_MODULE = {
-  code: `module.exports = {}`,
+  code: `export default {};`,
 }
 
 export function excludeOnMatch(modulesToExclude: ModulesToExclude, id: string) {

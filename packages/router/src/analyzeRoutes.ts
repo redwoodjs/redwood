@@ -60,7 +60,7 @@ export function analyzeRoutes(
 ) {
   const pathRouteMap: Record<RoutePath, AnalyzedRoute> = {}
   const namedRoutesMap: GeneratedRoutesMap = {}
-  let hasHomeRoute = false
+  let hasRootRoute = false
   let NotFoundPage: PageType | undefined
   let activeRoutePath: string | undefined
 
@@ -112,7 +112,7 @@ export function analyzeRoutes(
 
         // Used to decide whether to display SplashPage
         if (route.props.path === '/') {
-          hasHomeRoute = true
+          hasRootRoute = true
         }
 
         if (isRedirectRoute(route)) {
@@ -225,7 +225,7 @@ export function analyzeRoutes(
   return {
     pathRouteMap,
     namedRoutesMap,
-    hasHomeRoute,
+    hasRootRoute,
     NotFoundPage,
     activeRoutePath,
   }

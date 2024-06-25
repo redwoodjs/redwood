@@ -25,10 +25,9 @@
     "src/entry"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-web.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose tsconfig.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
@@ -54,6 +53,7 @@
     "@babel/core": "^7.22.20",
     "@babel/plugin-transform-runtime": "7.24.3",
     "@babel/runtime": "7.24.5",
+    "@redwoodjs/framework-tools": "workspace:*",
     "@rollup/plugin-babel": "6.0.4",
     "@testing-library/jest-dom": "6.4.6",
     "@testing-library/react": "14.3.1",
@@ -63,6 +63,7 @@
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-dom": "19.0.0-beta-04b058868c-20240508",
     "tstyche": "2.0.0",
+    "tsx": "4.15.6",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },
