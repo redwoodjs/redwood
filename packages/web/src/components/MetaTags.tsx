@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { Helmet as HelmetHead } from 'react-helmet-async'
 
 // Ideally we wouldn't include this for non experiment builds

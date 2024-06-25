@@ -7,7 +7,7 @@
  * Eventually we will have one ApolloProvider, not multiple.
  */
 
-import { useContext } from 'react'
+import React, { useContext } from 'react'
 
 import type {
   ApolloCache,

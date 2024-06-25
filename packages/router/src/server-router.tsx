@@ -32,7 +32,7 @@ export const Router: React.FC<RouterProps> = ({ paramTypes, children }) => {
 
   const {
     pathRouteMap,
-    hasHomeRoute,
+    hasRootRoute,
     namedRoutesMap,
     NotFoundPage,
     activeRoutePath,
@@ -47,7 +47,7 @@ export const Router: React.FC<RouterProps> = ({ paramTypes, children }) => {
   const hasGeneratedRoutes = Object.keys(namedRoutes).length > 0
 
   const shouldShowSplash =
-    (!hasHomeRoute && location.pathname === '/') || !hasGeneratedRoutes
+    (!hasRootRoute && location.pathname === '/') || !hasGeneratedRoutes
 
   if (shouldShowSplash && typeof SplashPage !== 'undefined') {
     return (
