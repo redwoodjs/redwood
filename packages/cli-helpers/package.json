@@ -39,7 +39,7 @@
     "pascalcase": "1.0.0",
     "prettier": "3.3.2",
     "prompts": "2.4.2",
-    "smol-toml": "1.2.1",
+    "smol-toml": "1.2.2",
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
