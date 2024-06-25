@@ -315,5 +315,95 @@ export const handler = createGraphQLHandler({
         )
       })
     })
+
+    describe('db migration hint', () => {
+      it('is not included if no db model was created', async () => {
+        const packageJsonPath = path.resolve(__dirname, '../../package.json')
+
+        vol.fromJSON(
+          {
+            [packageJsonPath]: '{ "version": "0.0.0" }',
+          },
+          redwoodProjectPath,
+        )
+
+        await handler({
+          webauthn: false,
+          createUserModel: false,
+          generateAuthPages: true,
+          force: false,
+        })
+
+        expect(jest.mocked(console).log.mock.calls[0][0]).not.toContain(
+          'yarn rw prisma migrate dev',
+        )
+      })
+
+      it('is not included for WebAuthn if no db model was created', async () => {
+        const packageJsonPath = path.resolve(__dirname, '../../package.json')
+
+        vol.fromJSON(
+          {
+            [packageJsonPath]: '{ "version": "0.0.0" }',
+          },
+          redwoodProjectPath,
+        )
+
+        await handler({
+          webauthn: true,
+          createUserModel: false,
+          generateAuthPages: true,
+          force: false,
+        })
+
+        expect(jest.mocked(console).log.mock.calls[0][0]).not.toContain(
+          'yarn rw prisma migrate dev',
+        )
+      })
+
+      it('is included if db model was created', async () => {
+        const packageJsonPath = path.resolve(__dirname, '../../package.json')
+
+        vol.fromJSON(
+          {
+            [packageJsonPath]: '{ "version": "0.0.0" }',
+          },
+          redwoodProjectPath,
+        )
+
+        await handler({
+          webauthn: false,
+          createUserModel: true,
+          generateAuthPages: true,
+          force: false,
+        })
+
+        expect(jest.mocked(console).log.mock.calls[0][0]).toContain(
+          'yarn rw prisma migrate dev',
+        )
+      })
+
+      it('is included if db model was created', async () => {
+        const packageJsonPath = path.resolve(__dirname, '../../package.json')
+
+        vol.fromJSON(
+          {
+            [packageJsonPath]: '{ "version": "0.0.0" }',
+          },
+          redwoodProjectPath,
+        )
+
+        await handler({
+          webauthn: false,
+          createUserModel: true,
+          generateAuthPages: true,
+          force: false,
+        })
+
+        expect(jest.mocked(console).log.mock.calls[0][0]).toContain(
+          'yarn rw prisma migrate dev',
+        )
+      })
+    })
   })
 })

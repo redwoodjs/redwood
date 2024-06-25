@@ -92,13 +92,14 @@ export const notes = [
   'change this secret to a new value and deploy. To create a new secret, run:',
   '',
   '  yarn rw generate secret',
+  '',
 ]
 
 export const notesCreatedUserModel = [
   `${colors.warning('Done! But you have a little more work to do:')}\n`,
   'If you expose any of your user data via GraphQL be sure to exclude',
-  '`hashedPassword` and `salt` from the SDL file that defines the',
-  'fields for your user.',
+  '`hashedPassword` and `salt` (or whatever you named them) from the',
+  'SDL file that defines the fields for your user.',
   '',
   "To get the actual user that's logged in, take a look at `getCurrentUser()`",
   `in \`${libPath}/auth.js\`. We default it to something simple, but you may`,
@@ -112,6 +113,12 @@ export const notesCreatedUserModel = [
   'change this secret to a new value and deploy. To create a new secret, run:',
   '',
   '  yarn rw generate secret',
+  '',
+  "A new User model was added to your schema. Don't forget to migrate your db",
+  'before you try using dbAuth:',
+  '',
+  '  yarn rw prisma migrate dev',
+  '',
 ]
 
 export const noteGenerate = [
