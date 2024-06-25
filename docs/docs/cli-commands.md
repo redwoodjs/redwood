@@ -1788,25 +1788,6 @@ yarn redwood setup cache <client>
 | `client`            | Name of the client to configure, `memcached` or `redis` |
 | `--force, -f`       | Overwrite existing files                                |
 
-### setup custom-web-index
-
-:::warning This command only applies to projects using Webpack
-
-As of v6, all Redwood projects use Vite by default.
-When switching projects to Vite, we made the decision to add the the entry file, `web/src/entry.client.{jsx,tsx}`, back to projects.
-
-:::
-
-Redwood automatically mounts your `<App />` to the DOM, but if you want to customize how that happens, you can use this setup command to generate an `index.js` file in `web/src`.
-
-```
-yarn redwood setup custom-web-index
-```
-
-| Arguments & Options | Description              |
-| :------------------ | :----------------------- |
-| `--force, -f`       | Overwrite existing files |
-
 ### setup generator
 
 Copies a given generator's template files to your local app for customization. The next time you generate that type again, it will use your custom template instead of Redwood's default.
