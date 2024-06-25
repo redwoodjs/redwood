@@ -65,24 +65,28 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 
   const {
     pathRouteMap,
-    hasHomeRoute,
+    hasRootRoute,
     namedRoutesMap,
     NotFoundPage,
     activeRoutePath,
   } = analyzeRoutesResult
 
+  const hasGeneratedRoutes = hasCustomRoutes(namedRoutesMap)
+  const splashPageExists = typeof SplashPage !== 'undefined'
+  const isOnNonExistentRootRoute = !hasRootRoute && location.pathname === '/'
+
+  if (!hasRootRoute && splashPageExists) {
+    namedRoutesMap['home'] = () => '/'
+  }
+
   // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
   // Note that the value changes at runtime
   Object.assign(namedRoutes, namedRoutesMap)
 
-  // The user has not generated routes if the only route that exists is the
-  // not found page, and that page is not part of the namedRoutes object
-  const hasGeneratedRoutes = Object.keys(namedRoutes).length > 0
-
   const shouldShowSplash =
-    (!hasHomeRoute && location.pathname === '/') || !hasGeneratedRoutes
+    (isOnNonExistentRootRoute || !hasGeneratedRoutes) && splashPageExists
 
-  if (shouldShowSplash && typeof SplashPage !== 'undefined') {
+  if (shouldShowSplash) {
     return (
       <SplashPage
         hasGeneratedRoutes={hasGeneratedRoutes}
@@ -251,3 +255,13 @@ const WrappedPage = memo(({ sets, children }: WrappedPageProps) => {
     return wrapped
   }, children)
 })
+
+function hasCustomRoutes(obj: Record<string, unknown>) {
+  for (const prop in obj) {
+    if (Object.hasOwn(obj, prop)) {
+      return true
+    }
+  }
+
+  return false
+}

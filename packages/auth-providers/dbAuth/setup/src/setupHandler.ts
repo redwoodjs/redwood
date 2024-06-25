@@ -22,7 +22,6 @@ import {
 import {
   notes as webAuthnNotes,
   noteGenerate as webAuthnNoteGenerate,
-  notesCreatedUserModel as webAuthnNotesCreatedUserModel,
   extraTask as webAuthnExtraTask,
   webPackages as webAuthnWebPackages,
   apiPackages as webAuthnApiPackages,
@@ -47,7 +46,7 @@ export async function handler({
 
   if (webAuthn) {
     if (createDbUserModel) {
-      oneMoreThing.push(...webAuthnNotesCreatedUserModel)
+      oneMoreThing.push(...notesCreatedUserModel)
     } else {
       oneMoreThing.push(...webAuthnNotes)
     }

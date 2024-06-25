@@ -36,12 +36,12 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     </Router>
   )
 
-  const { pathRouteMap, namedRoutesMap, hasHomeRoute, NotFoundPage } =
+  const { pathRouteMap, namedRoutesMap, hasRootRoute, NotFoundPage } =
     analyzeRoutes(CheckRoutes.props.children, {
       currentPathName: '/',
     })
 
-  test('Should return namePathMap and hasHomeRoute correctly', () => {
+  test('Should return namePathMap and hasRootRoute correctly', () => {
     expect(Object.keys(pathRouteMap)).toEqual([
       '/hello',
       '/world',
@@ -74,7 +74,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       }),
     )
 
-    expect(hasHomeRoute).toBe(true)
+    expect(hasRootRoute).toBe(true)
   })
 
   test('Should return namedRoutesMap correctly', () => {
@@ -377,15 +377,15 @@ describe('setWrapper', () => {
   })
 })
 
-test('No home Route', () => {
+test('No root Route', () => {
   const CheckRoutes = (
     <Router>
-      <Route path="/iGots" name="iGots" page={FakePage} />
-      <Route path="/noHome" name="noHome" page={FakePage} />
+      <Route path="/home" name="home" page={FakePage} />
+      <Route path="/away" name="away" page={FakePage} />
     </Router>
   )
 
-  const { pathRouteMap, namedRoutesMap, hasHomeRoute } = analyzeRoutes(
+  const { pathRouteMap, namedRoutesMap, hasRootRoute } = analyzeRoutes(
     CheckRoutes.props.children,
     {
       currentPathName: '/',
@@ -394,7 +394,45 @@ test('No home Route', () => {
 
   expect(Object.keys(namedRoutesMap).length).toEqual(2)
   expect(Object.keys(pathRouteMap).length).toEqual(2)
-  expect(hasHomeRoute).toBe(false)
+  expect(hasRootRoute).toBe(false)
+})
+
+test('Root Route named "root"', () => {
+  const CheckRoutes = (
+    <Router>
+      <Route path="/" name="root" page={FakePage} />
+    </Router>
+  )
+
+  const { pathRouteMap, namedRoutesMap, hasRootRoute } = analyzeRoutes(
+    CheckRoutes.props.children,
+    {
+      currentPathName: '/',
+    },
+  )
+
+  expect(Object.keys(namedRoutesMap).length).toEqual(1)
+  expect(Object.keys(pathRouteMap).length).toEqual(1)
+  expect(hasRootRoute).toBe(true)
+})
+
+test('Root Route named "home"', () => {
+  const CheckRoutes = (
+    <Router>
+      <Route path="/" name="home" page={FakePage} />
+    </Router>
+  )
+
+  const { pathRouteMap, namedRoutesMap, hasRootRoute } = analyzeRoutes(
+    CheckRoutes.props.children,
+    {
+      currentPathName: '/',
+    },
+  )
+
+  expect(Object.keys(namedRoutesMap).length).toEqual(1)
+  expect(Object.keys(pathRouteMap).length).toEqual(1)
+  expect(hasRootRoute).toBe(true)
 })
 
 test('Handles Private', () => {
