@@ -288,7 +288,48 @@ export const generateTypeDefRouterRoutes = () => {
     console.error(error)
   }
 
-  return writeTypeDefIncludeFile('web-routerRoutes.d.ts.template', { routes })
+  // Generate declaration mapping for improved go-to-definition behaviour
+  try {
+    const typeDefPath = path.join(
+      getPaths().generated.types.includes,
+      'web-routerRoutes.d.ts'
+    )
+
+    const map = new SourceMapGenerator({
+      file: 'web-routerRoutes.d.ts',
+    })
+
+    // Start line is based on where in the template the `    ${name}: (params?: RouteParams<"${path}"> & QueryParams) => "${path}"` are defined
+    const startLine = 9
+
+    // Map the location of the default export for each page
+    for (let i = 0; i < routes.length; i++) {
+      map.addMapping({
+        generated: {
+          line: startLine + i,
+          column: 4,
+        },
+        source: path.relative(path.dirname(typeDefPath), getPaths().web.routes),
+        original: routes[i].location,
+      })
+    }
+
+    fs.writeFileSync(
+      `${typeDefPath}.map`,
+      JSON.stringify(map.toJSON(), undefined, 2)
+    )
+  } catch (error) {
+    console.error(
+      "Couldn't generate a definition map for web-routerRoutes.d.ts:"
+    )
+    console.error(error)
+  }
+
+  const params = routes.map(paramsFromRouteElement)
+  return writeTypeDefIncludeFile('web-routerRoutes.d.ts.template', {
+    routes,
+    params,
+  })
 }
 
 export const generateTypeDefRouterPages = () => {
@@ -398,4 +439,52 @@ declare module '@storybook/react' {
   fs.writeFileSync(stubStorybookTypesFilePath, stubStorybookTypesFileContent)
 
   return [stubStorybookTypesFilePath]
+}
+
+// <Route path="/jobs/{id:Int}" page={JobPage} name="job" />
+// -> { name: JobParams, params: ["id", "number"] }
+//
+const paramsFromRouteElement = (route: { props: Record<string, string> }) => {
+  const params = [] as [key: string, type: string][]
+  const path = route.props.path as string | undefined
+  if (!path) {
+    return params
+  }
+
+  const paramStrings = path
+    .split('{')
+    .slice(1)
+    .map((x) => x.split('}')[0])
+
+  paramStrings.sort().forEach((paramString) => {
+    const [key, type] = paramString.split(':')
+
+    let tsType = type
+
+    // https://redwoodjs.com/docs/router#core-route-parameter-types
+    if (!type) {
+      tsType = 'string'
+    } else if (type === 'Int') {
+      tsType = 'number'
+    } else if (type === 'Boolean') {
+      tsType = 'boolean'
+    } else if (type === 'Float') {
+      tsType = 'number'
+    } else {
+      // https://redwoodjs.com/docs/router#user-route-parameter-types
+      tsType = 'any[]'
+    }
+
+    // https://redwoodjs.com/docs/router#glob-type
+    let keyMod = key
+    if (key.endsWith('...')) {
+      keyMod = key.slice(0, -3)
+    }
+
+    params.push([keyMod, tsType])
+  })
+
+  const name = route.props.name ?? 'RouteWithoutName'
+  const pascalName = name.charAt(0).toUpperCase() + name.slice(1)
+  return { name: pascalName + 'Params', params }
 }
