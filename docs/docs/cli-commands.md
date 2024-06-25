@@ -69,7 +69,7 @@ Build for production.
 yarn redwood build [side..]
 ```
 
-We use Babel to transpile the api side into `./api/dist` and Webpack to package the web side into `./web/dist`.
+We use Babel to transpile the api side into `./api/dist` and Vite to package the web side into `./web/dist`.
 
 | Arguments & Options | Description                                                                                                                                                                 |
 | :------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -190,7 +190,7 @@ Start development servers for api and web.
 yarn redwood dev [side..]
 ```
 
-`yarn redwood dev api` starts the Redwood dev server and `yarn redwood dev web` starts the Webpack dev server with Redwood's config.
+`yarn redwood dev api` starts the Redwood dev server and `yarn redwood dev web` starts the Vite dev server with Redwood's config.
 
 | Argument           | Description                                                                                                                                                                                 |
 | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -214,7 +214,7 @@ $ /redwood-app/node_modules/.bin/dev-server
 15:04:51 api | ► http://localhost:8911/graphql/
 ```
 
-Using `--forward` (alias `--fwd`), you can pass one or more Webpack Dev Server [config options](https://webpack.js.org/configuration/dev-server/). The following will run the dev server, set the port to `1234`, and disable automatic browser opening.
+Using `--forward` (alias `--fwd`), you can pass one or more Vite Dev Server [config options](https://vitejs.dev/guide/cli#vite). The following will run the dev server, set the port to `1234`, and disable automatic browser opening.
 
 ```bash
 ~/redwood-app$ yarn redwood dev --fwd="--port=1234 --open=false"
@@ -226,7 +226,7 @@ You may need to access your dev application from a different host, like your mob
 ~/redwood-app$ yarn redwood dev --fwd="--allowed-hosts all"
 ```
 
-For the full list of Webpack Dev Server settings, see [this documentation](https://webpack.js.org/configuration/dev-server/).
+For the full list of Vite Dev Server settings, see [this documentation](https://vitejs.dev/guide/cli#vite).
 
 For the full list of Server Configuration settings, see [this documentation](app-configuration-redwood-toml.md#api).
 
@@ -1756,7 +1756,6 @@ yarn redwood setup <category>
 | `package`          | Peform setup actions by running a third-party npm package                                  |
 | `tsconfig`         | Add relevant tsconfig so you can start using TypeScript                                    |
 | `ui`               | Set up a UI design or style library                                                        |
-| `webpack`          | Set up a webpack config file in your project so you can add custom config                  |
 
 ### setup auth
 
