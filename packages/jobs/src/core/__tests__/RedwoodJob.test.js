@@ -135,12 +135,10 @@ describe('get runAt()', () => {
     expect(job.runAt).toEqual(new Date())
   })
 
-  test.only('returns a datetime `wait` seconds in the future if option set', async () => {
+  test('returns a datetime `wait` seconds in the future if option set', async () => {
     const job = RedwoodJob.set({ wait: 300 })
 
-    console.info(job.runAt)
-
-    expect(job.runAt).toEqual(new Date(new Date().getTime() + 300 * 1000))
+    expect(job.runAt).toEqual(new Date(Date.UTC(2024, 0, 1, 0, 5, 0)))
   })
 
   test('returns a datetime set to `waitUntil` if option set', async () => {
