@@ -1,7 +1,7 @@
 // Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   ${camelName}: {
-    __typename: "${singularPascalName}",
+    __typename: "${typeName}" as const,
     ${idName}: ${mockIdValues[0]}
     }
   })
