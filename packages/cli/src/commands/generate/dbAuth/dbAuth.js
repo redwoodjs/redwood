@@ -2,6 +2,7 @@ import path from 'path'
 
 import { camelCase } from 'camel-case'
 import Enquirer from 'enquirer'
+import execa from 'execa'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
@@ -395,6 +396,12 @@ const tasks = ({
       {
         title: 'Adding scaffold import...',
         task: () => addScaffoldImport(),
+      },
+      {
+        title: 'Generate types...',
+        task: () => {
+          execa.commandSync('yarn rw g types')
+        },
       },
       {
         title: 'One more thing...',

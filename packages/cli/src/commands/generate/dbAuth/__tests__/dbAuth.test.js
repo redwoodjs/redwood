@@ -1,6 +1,7 @@
 global.__dirname = __dirname
 
 vi.mock('fs-extra')
+vi.mock('execa')
 
 import path from 'path'
 
