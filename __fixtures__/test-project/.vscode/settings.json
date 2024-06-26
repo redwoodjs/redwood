@@ -8,12 +8,10 @@
   "[prisma]": {
     "editor.formatOnSave": true
   },
-  "tailwindCSS": {
-    "classAttributes": [
-      "class",
-      "className",
-      "activeClassName",
-      "errorClassName"
-    ]
-  }
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "activeClassName",
+    "errorClassName"
+  ]
 }
