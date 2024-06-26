@@ -8138,7 +8138,6 @@ __metadata:
     eslint-plugin-prettier: "npm:5.1.3"
     eslint-plugin-react: "npm:7.34.2"
     eslint-plugin-react-hooks: "npm:4.6.0"
-    jest: "npm:29.7.0"
     prettier: "npm:3.3.2"
     typescript: "npm:5.4.5"
   languageName: unknown
