@@ -90,7 +90,7 @@
     "find-my-way": "8.2.0",
     "http-proxy-middleware": "2.0.6",
     "isbot": "5.1.9",
-    "react": "19.0.0-beta-04b058868c-20240508",
+    "react": "18.3.1",
     "react-server-dom-webpack": "19.0.0-beta-04b058868c-20240508",
     "vite": "5.3.1",
     "vite-plugin-cjs-interop": "2.1.1",

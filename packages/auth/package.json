@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "core-js": "3.37.1",
-    "react": "19.0.0-beta-04b058868c-20240508"
+    "react": "18.3.1"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",

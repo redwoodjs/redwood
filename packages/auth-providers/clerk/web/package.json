@@ -33,7 +33,7 @@
     "@clerk/clerk-react": "4.32.2",
     "@clerk/types": "3.65.2",
     "@types/react": "^18.2.55",
-    "react": "19.0.0-beta-04b058868c-20240508",
+    "react": "18.3.1",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },
