@@ -67,7 +67,7 @@ export const notes = [
   "You'll need to let Redwood know what fields you're using for your",
   "users' `id` and `username` fields. In this case we're using `id` and",
   '`email`, so update those in the `authFields` config in',
-  `\`${functionsPath}/auth.js\` (this is also the place to tell Redwood if`,
+  `\`${functionsPath}/auth.js\`. This is also the place to tell Redwood if`,
   'you used a different name for the `hashedPassword`, `salt`,',
   '`resetToken` or `resetTokenExpiresAt`, fields:`',
   '',
@@ -93,17 +93,13 @@ export const notes = [
   '',
   '  yarn rw generate secret',
   '',
-  "Need simple Login, Signup and Forgot Password pages? We've got a generator",
-  'for those as well:',
-  '',
-  '  yarn rw generate dbAuth',
 ]
 
 export const notesCreatedUserModel = [
   `${colors.warning('Done! But you have a little more work to do:')}\n`,
   'If you expose any of your user data via GraphQL be sure to exclude',
-  '`hashedPassword` and `salt` from the SDL file that defines the',
-  'fields for your user.',
+  '`hashedPassword` and `salt` (or whatever you named them) from the',
+  'SDL file that defines the fields for your user.',
   '',
   "To get the actual user that's logged in, take a look at `getCurrentUser()`",
   `in \`${libPath}/auth.js\`. We default it to something simple, but you may`,
@@ -117,6 +113,15 @@ export const notesCreatedUserModel = [
   'change this secret to a new value and deploy. To create a new secret, run:',
   '',
   '  yarn rw generate secret',
+  '',
+  "A new User model was added to your schema. Don't forget to migrate your db",
+  'before you try using dbAuth:',
+  '',
+  '  yarn rw prisma migrate dev',
+  '',
+]
+
+export const noteGenerate = [
   '',
   "Need simple Login, Signup and Forgot Password pages? We've got a generator",
   'for those as well:',

@@ -2,6 +2,7 @@ import path from 'path'
 
 import { camelCase } from 'camel-case'
 import Enquirer from 'enquirer'
+import execa from 'execa'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
@@ -319,6 +320,11 @@ const tasks = ({
         title: 'Querying WebAuthn addition...',
         task: async (ctx, task) => {
           if (webauthn != null) {
+            // We enter here if the user passed the `--webauthn` flag. The flag
+            // always takes precedence.
+
+            ctx.webauthn = webauthn
+
             task.skip(
               `Querying WebAuthn addition: argument webauthn passed, WebAuthn${
                 webauthn ? '' : ' not'
@@ -326,13 +332,36 @@ const tasks = ({
             )
             return
           }
+
+          if (isDbAuthSetup()) {
+            if (isWebAuthnEnabled()) {
+              ctx.webauthn = webauthn = true
+
+              task.skip(
+                'Querying WebAuthn addition: WebAuthn setup detected - ' +
+                  'support will be included in pages',
+              )
+            } else {
+              ctx.webauthn = webauthn = false
+
+              task.skip(
+                'Querying WebAuthn addition: No WebAuthn setup detected - ' +
+                  'support will not be included in pages',
+              )
+            }
+
+            return
+          }
+
           const response = await task.prompt({
             type: 'confirm',
             name: 'answer',
             message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
             default: false,
           })
+
           ctx.webauthn = webauthn = response
+
           task.title = `Querying WebAuthn addition: WebAuthn addition${
             webauthn ? '' : ' not'
           } included`
@@ -367,6 +396,12 @@ const tasks = ({
       {
         title: 'Adding scaffold import...',
         task: () => addScaffoldImport(),
+      },
+      {
+        title: 'Generate types...',
+        task: () => {
+          execa.commandSync('yarn rw g types')
+        },
       },
       {
         title: 'One more thing...',
@@ -435,4 +470,13 @@ function isDbAuthSetup() {
   }
 
   return false
+}
+
+function isWebAuthnEnabled() {
+  const webPackageJson = fs.readFileSync(
+    path.join(getPaths().web.base, 'package.json'),
+    'utf-8',
+  )
+
+  return webPackageJson.includes('"@simplewebauthn/browser": ')
 }

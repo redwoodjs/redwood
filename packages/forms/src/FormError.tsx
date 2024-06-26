@@ -1,3 +1,5 @@
+import React from 'react'
+
 import type { GraphQLError } from 'graphql'
 
 export interface ServerParseError extends Error {
