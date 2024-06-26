@@ -890,7 +890,7 @@ exports[`TypeScript: generates list cells if list flag passed in 4`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   bazinga: {
-    __typename: 'Bazinga',
+    __typename: 'Bazinga' as const,
     id: 42,
   },
 })
