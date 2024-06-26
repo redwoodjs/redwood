@@ -56,7 +56,7 @@
     "@types/react": "^18.2.55",
     "concurrently": "8.2.2",
     "publint": "0.2.10",
-    "react": "19.0.0-rc-8269d55d-20240802",
+    "react": "18.3.1",
     "supertokens-auth-react": "0.39.1",
     "tsx": "4.17.0",
     "typescript": "5.5.4",

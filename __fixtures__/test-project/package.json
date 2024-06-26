@@ -23,7 +23,6 @@
   "packageManager": "yarn@4.4.0",
   "resolutions": {
     "@storybook/react-dom-shim@npm:7.6.17": "https://verdaccio.tobbe.dev/@storybook/react-dom-shim/-/react-dom-shim-8.0.8.tgz",
-    "@apollo/client/rehackt": "0.1.0",
-    "react-is": "19.0.0-rc-8269d55d-20240802"
+    "@apollo/client/rehackt": "0.1.0"
   }
 }
