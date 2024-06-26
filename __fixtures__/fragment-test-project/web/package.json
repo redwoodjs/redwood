@@ -16,8 +16,8 @@
     "@redwoodjs/router": "7.0.0",
     "@redwoodjs/web": "7.0.0",
     "humanize-string": "2.1.0",
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-dom": "19.0.0-beta-04b058868c-20240508"
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
     "@redwoodjs/vite": "7.0.0",
