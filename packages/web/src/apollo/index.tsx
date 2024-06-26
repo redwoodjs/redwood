@@ -4,32 +4,38 @@ import type {
   ApolloClientOptions,
   setLogVerbosity,
   ApolloCache,
+  InMemoryCacheConfig,
+  HttpOptions,
+  DocumentNode,
 } from '@apollo/client'
-import * as apolloClient from '@apollo/client'
-// @ts-expect-error Force import cjs module
-import { setContext } from '@apollo/client/link/context/context.cjs'
-// @ts-expect-error Force import cjs module
-import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries/persisted-queries.cjs'
-// @ts-expect-error Force import cjs module
-import { getMainDefinition } from '@apollo/client/utilities/utilities.cjs'
-import { fetch as crossFetch } from '@whatwg-node/fetch'
-import { print } from 'graphql/language/printer.js'
-
-// Note: Importing directly from `apollo/client` doesn't work properly in Storybook.
-const {
+import {
   ApolloProvider,
   ApolloClient,
   ApolloLink,
-  HttpLink,
   InMemoryCache,
+  split,
+} from '@apollo/client'
+// @ts-expect-error Force import cjs module
+import { setLogVerbosity as apolloSetLogVerbosity } from '@apollo/client/core/core.cjs'
+// @ts-expect-error Force import cjs module
+import { setContext } from '@apollo/client/link/context/context.cjs'
+// @ts-expect-error Force import cjs module
+import { HttpLink } from '@apollo/client/link/http/http.cjs'
+// @ts-expect-error Force import cjs module
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries/persisted-queries.cjs'
+import {
   useQuery,
   useMutation,
   useSubscription,
   useBackgroundQuery,
   useReadQuery,
   useSuspenseQuery,
-  setLogVerbosity: apolloSetLogVerbosity,
-} = apolloClient
+  // @ts-expect-error Force import cjs module
+} from '@apollo/client/react/hooks/hooks.cjs'
+// @ts-expect-error Force import cjs module
+import { getMainDefinition } from '@apollo/client/utilities/utilities.cjs'
+import { fetch as crossFetch } from '@whatwg-node/fetch'
+import { print } from 'graphql/language/printer.js'
 
 import type { UseAuth } from '@redwoodjs/auth'
 import { useNoAuth } from '@redwoodjs/auth'
@@ -61,7 +67,7 @@ export { useCache }
 
 export { fragmentRegistry, registerFragment, registerFragments }
 
-export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
+export type ApolloClientCacheConfig = InMemoryCacheConfig
 
 export type RedwoodApolloLinkName =
   | 'withToken'
@@ -71,7 +77,7 @@ export type RedwoodApolloLinkName =
 
 export type RedwoodApolloLink<
   Name extends RedwoodApolloLinkName,
-  Link extends apolloClient.ApolloLink = apolloClient.ApolloLink,
+  Link extends ApolloLink = ApolloLink,
 > = {
   name: Name
   link: Link
@@ -81,15 +87,10 @@ export type RedwoodApolloLinks = [
   RedwoodApolloLink<'withToken'>,
   RedwoodApolloLink<'authMiddleware'>,
   RedwoodApolloLink<'updateDataApolloLink'>,
-  RedwoodApolloLink<
-    'httpLink',
-    apolloClient.ApolloLink | apolloClient.HttpLink
-  >,
+  RedwoodApolloLink<'httpLink', ApolloLink | HttpLink>,
 ]
 
-export type RedwoodApolloLinkFactory = (
-  links: RedwoodApolloLinks,
-) => apolloClient.ApolloLink
+export type RedwoodApolloLinkFactory = (links: RedwoodApolloLinks) => ApolloLink
 
 export type GraphQLClientConfigProp = Omit<
   ApolloClientOptions<unknown>,
@@ -113,7 +114,7 @@ export type GraphQLClientConfigProp = Omit<
    * }}>
    * ```
    */
-  httpLinkConfig?: apolloClient.HttpOptions
+  httpLinkConfig?: HttpOptions
   /**
    * Extend or overwrite `RedwoodApolloProvider`'s Apollo Link.
    *
@@ -137,7 +138,7 @@ export type GraphQLClientConfigProp = Omit<
    * - your function should return a single link (e.g., using `ApolloLink.from`; see https://www.apollographql.com/docs/react/api/link/introduction/#additive-composition)
    * - the `HttpLink` should come last (https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link)
    */
-  link?: apolloClient.ApolloLink | RedwoodApolloLinkFactory
+  link?: ApolloLink | RedwoodApolloLinkFactory
 }
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
@@ -236,7 +237,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   // is subscription it needs to use the SSELink (server sent events link).
   const httpOrSSELink =
     typeof SSELink !== 'undefined'
-      ? apolloClient.split(
+      ? split(
           ({ query }) => {
             const definition = getMainDefinition(query)
 
@@ -245,7 +246,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
               definition.operation === 'subscription'
             )
           },
-          // @ts-expect-error @TODO look into this
+          // @ts-expect-error  Due to CJS imports
           new SSELink({
             url: uri,
             auth: { authProviderType, tokenFn: getToken },
@@ -265,14 +266,14 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
    *
    * See https://www.apollographql.com/docs/react/api/link/persisted-queries/
    */
-  interface DocumentNodeWithMeta extends apolloClient.DocumentNode {
+  interface DocumentNodeWithMeta extends DocumentNode {
     __meta__?: {
       hash: string
     }
   }
 
   // Check if the query made includes the hash, and if so then make the request with the persisted query link
-  const terminatingLink = apolloClient.split(
+  const terminatingLink = split(
     ({ query }) => {
       const documentQuery = query as DocumentNodeWithMeta
       return documentQuery?.['__meta__']?.['hash'] !== undefined
@@ -354,7 +355,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
   graphQLClientConfig?: GraphQLClientConfigProp
-  fragments?: apolloClient.DocumentNode[]
+  fragments?: DocumentNode[]
   useAuth?: UseAuth
   logLevel?: ReturnType<typeof setLogVerbosity>
   children: React.ReactNode
