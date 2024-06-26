@@ -1,0 +1,39 @@
+{
+  "name": "@redwoodjs/jobs",
+  "version": "7.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/jobs"
+  },
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "rw-jobs": "./dist/bins/runner.js"
+  },
+  "scripts": {
+    "build": "tsx ./build.mts && yarn build:types",
+    "build:pack": "yarn pack -o redwoodjs-jobs.tgz",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "jest src",
+    "test:watch": "yarn test --watch"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "7.24.5",
+    "core-js": "3.37.1",
+    "fast-glob": "3.3.2"
+  },
+  "devDependencies": {
+    "@redwoodjs/project-config": "workspace:*",
+    "jest": "29.7.0",
+    "tsx": "4.15.6",
+    "typescript": "5.4.5"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

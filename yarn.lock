@@ -8315,6 +8315,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/jobs@workspace:packages/jobs":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/jobs@workspace:packages/jobs"
+  dependencies:
+    "@babel/runtime-corejs3": "npm:7.24.5"
+    "@redwoodjs/project-config": "workspace:*"
+    core-js: "npm:3.37.1"
+    fast-glob: "npm:3.3.2"
+    jest: "npm:29.7.0"
+    tsx: "npm:4.15.6"
+    typescript: "npm:5.4.5"
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/mailer-core@workspace:*, @redwoodjs/mailer-core@workspace:packages/mailer/core":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/mailer-core@workspace:packages/mailer/core"
