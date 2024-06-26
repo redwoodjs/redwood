@@ -222,14 +222,14 @@ describe('tailwindcss intellisense settings', () => {
     await handler({})
 
     const settingsJson = JSON.parse(readVsCodeSettings())
-    const tailwindCSS = settingsJson['tailwindCSS']
+    const twClassAttributes = settingsJson['tailwindCSS.classAttributes']
 
-    expect(Array.isArray(tailwindCSS.classAttributes)).toBe(true)
-    expect(tailwindCSS.classAttributes).toContain('class')
-    expect(tailwindCSS.classAttributes).toContain('className')
-    expect(tailwindCSS.classAttributes).toContain('activeClassName')
-    expect(tailwindCSS.classAttributes).toContain('errorClassName')
-    expect(tailwindCSS.classAttributes.length).toBe(4)
+    expect(Array.isArray(twClassAttributes)).toBe(true)
+    expect(twClassAttributes).toContain('class')
+    expect(twClassAttributes).toContain('className')
+    expect(twClassAttributes).toContain('activeClassName')
+    expect(twClassAttributes).toContain('errorClassName')
+    expect(twClassAttributes.length).toBe(4)
   })
 
   it('adds to existing empty settings file', async () => {
@@ -240,16 +240,15 @@ describe('tailwindcss intellisense settings', () => {
     await handler({})
 
     const settingsJson = JSON.parse(readVsCodeSettings())
-    const tailwindCSS = settingsJson['tailwindCSS']
+    const twClassAttributes = settingsJson['tailwindCSS.classAttributes']
 
     expect(Object.keys(settingsJson).length).toBe(1)
-    expect(Object.keys(tailwindCSS).length).toBe(1)
-    expect(Array.isArray(tailwindCSS.classAttributes)).toBe(true)
-    expect(tailwindCSS.classAttributes).toContain('class')
-    expect(tailwindCSS.classAttributes).toContain('className')
-    expect(tailwindCSS.classAttributes).toContain('activeClassName')
-    expect(tailwindCSS.classAttributes).toContain('errorClassName')
-    expect(tailwindCSS.classAttributes.length).toBe(4)
+    expect(Array.isArray(twClassAttributes)).toBe(true)
+    expect(twClassAttributes).toContain('class')
+    expect(twClassAttributes).toContain('className')
+    expect(twClassAttributes).toContain('activeClassName')
+    expect(twClassAttributes).toContain('errorClassName')
+    expect(twClassAttributes.length).toBe(4)
   })
 
   it('adds to existing settings file without any tailwindCSS settings', async () => {
@@ -267,16 +266,15 @@ describe('tailwindcss intellisense settings', () => {
     await handler({})
 
     const settingsJson = JSON.parse(readVsCodeSettings())
-    const tailwindCSS = settingsJson['tailwindCSS']
+    const twClassAttributes = settingsJson['tailwindCSS.classAttributes']
 
     expect(Object.keys(settingsJson).length).toBe(3)
-    expect(Object.keys(tailwindCSS).length).toBe(1)
-    expect(Array.isArray(tailwindCSS.classAttributes)).toBe(true)
-    expect(tailwindCSS.classAttributes).toContain('class')
-    expect(tailwindCSS.classAttributes).toContain('className')
-    expect(tailwindCSS.classAttributes).toContain('activeClassName')
-    expect(tailwindCSS.classAttributes).toContain('errorClassName')
-    expect(tailwindCSS.classAttributes.length).toBe(4)
+    expect(Array.isArray(twClassAttributes)).toBe(true)
+    expect(twClassAttributes).toContain('class')
+    expect(twClassAttributes).toContain('className')
+    expect(twClassAttributes).toContain('activeClassName')
+    expect(twClassAttributes).toContain('errorClassName')
+    expect(twClassAttributes.length).toBe(4)
   })
 
   it('adds to existing settings file with existing tailwindCSS settings', async () => {
@@ -287,9 +285,7 @@ describe('tailwindcss intellisense settings', () => {
         '  "editor.codeActionsOnSave": {',
         '    "source.fixAll.eslint": "explicit"',
         '  },',
-        '  "tailwindCSS": {',
-        '    "emmetCompletions": true',
-        '  }',
+        '  "tailwindCSS.emmetCompletions": true',
         '}',
       ].join('\n'),
     })
@@ -297,17 +293,16 @@ describe('tailwindcss intellisense settings', () => {
     await handler({})
 
     const settingsJson = JSON.parse(readVsCodeSettings())
-    const tailwindCSS = settingsJson['tailwindCSS']
+    const twClassAttributes = settingsJson['tailwindCSS.classAttributes']
 
-    expect(Object.keys(settingsJson).length).toBe(3)
-    expect(Object.keys(tailwindCSS).length).toBe(2)
-    expect(tailwindCSS.emmetCompletions).toBeTruthy()
-    expect(Array.isArray(tailwindCSS.classAttributes)).toBe(true)
-    expect(tailwindCSS.classAttributes).toContain('class')
-    expect(tailwindCSS.classAttributes).toContain('className')
-    expect(tailwindCSS.classAttributes).toContain('activeClassName')
-    expect(tailwindCSS.classAttributes).toContain('errorClassName')
-    expect(tailwindCSS.classAttributes.length).toBe(4)
+    expect(Object.keys(settingsJson).length).toBe(4)
+    expect(settingsJson['tailwindCSS.emmetCompletions']).toBeTruthy()
+    expect(Array.isArray(twClassAttributes)).toBe(true)
+    expect(twClassAttributes).toContain('class')
+    expect(twClassAttributes).toContain('className')
+    expect(twClassAttributes).toContain('activeClassName')
+    expect(twClassAttributes).toContain('errorClassName')
+    expect(twClassAttributes.length).toBe(4)
   })
 
   // This is what I decided to do now. If good arguments are made to change
@@ -320,10 +315,12 @@ describe('tailwindcss intellisense settings', () => {
         '  "editor.codeActionsOnSave": {',
         '    "source.fixAll.eslint": "explicit"',
         '  },',
-        '  "tailwindCSS": {',
-        '    "emmetCompletions": true,',
-        '    "classAttributes": ["class", "className", "ngClass"]',
-        '  }',
+        '  "tailwindCSS.emmetCompletions": true,',
+        '  "tailwindCSS.classAttributes": [',
+        '    "class",',
+        '    "className",',
+        '    "ngClass"',
+        '  ]',
         '}',
       ].join('\n'),
     })
@@ -331,18 +328,17 @@ describe('tailwindcss intellisense settings', () => {
     await handler({})
 
     const settingsJson = JSON.parse(readVsCodeSettings())
-    const tailwindCSS = settingsJson['tailwindCSS']
+    const twClassAttributes = settingsJson['tailwindCSS.classAttributes']
 
-    expect(Object.keys(settingsJson).length).toBe(3)
-    expect(Object.keys(tailwindCSS).length).toBe(2)
-    expect(tailwindCSS.emmetCompletions).toBeTruthy()
-    expect(Array.isArray(tailwindCSS.classAttributes)).toBe(true)
-    expect(tailwindCSS.classAttributes).toContain('class')
-    expect(tailwindCSS.classAttributes).toContain('className')
-    expect(tailwindCSS.classAttributes).toContain('ngClass')
-    expect(tailwindCSS.classAttributes).toContain('activeClassName')
-    expect(tailwindCSS.classAttributes).toContain('errorClassName')
-    expect(tailwindCSS.classAttributes.length).toBe(5)
+    expect(Object.keys(settingsJson).length).toBe(4)
+    expect(settingsJson['tailwindCSS.emmetCompletions']).toBeTruthy()
+    expect(Array.isArray(twClassAttributes)).toBe(true)
+    expect(twClassAttributes).toContain('class')
+    expect(twClassAttributes).toContain('className')
+    expect(twClassAttributes).toContain('ngClass')
+    expect(twClassAttributes).toContain('activeClassName')
+    expect(twClassAttributes).toContain('errorClassName')
+    expect(twClassAttributes.length).toBe(5)
   })
 })
 
