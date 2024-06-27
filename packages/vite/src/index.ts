@@ -4,6 +4,7 @@ import path from 'path'
 import react from '@vitejs/plugin-react'
 import type { PluginOption } from 'vite'
 import { normalizePath } from 'vite'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
@@ -156,5 +157,15 @@ export default function redwoodPluginVite(): PluginOption[] {
         }),
       },
     }),
+    // Only include
+    {
+      ...nodePolyfills({
+        include: ['buffer'],
+        globals: {
+          Buffer: true,
+        },
+      }),
+      apply: 'serve',
+    },
   ]
 }
