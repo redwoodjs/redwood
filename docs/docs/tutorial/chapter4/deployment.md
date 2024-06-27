@@ -1,5 +1,7 @@
 # Deployment
 
+## TODO Add note about all the providers we support (but just use grove)
+
 Are you ready for the quickest, simplest deployment you've ever seen? There are plenty of hosting providers for apps like Redwood, but they all seem to have drawbacks in one way or another. So, we built our own.
 
 ## Grove
