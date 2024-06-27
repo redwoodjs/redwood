@@ -1,3 +1,5 @@
+import { describe, expect, vi, test, beforeEach, afterEach } from 'vitest'
+
 import { db } from 'src/lib/db'
 
 import * as errors from '../../core/errors'
@@ -7,11 +9,11 @@ import {
   DEFAULT_MAX_ATTEMPTS,
 } from '../PrismaAdapter'
 
-jest.useFakeTimers().setSystemTime(new Date('2024-01-01'))
+vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
 
 describe('constructor', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   test('defaults this.model name', () => {
@@ -21,7 +23,7 @@ describe('constructor', () => {
   })
 
   test('can manually set this.model', () => {
-    const dbMock = jest.fn(() => ({
+    const dbMock = vi.fn(() => ({
       _runtimeDataModel: {
         models: {
           Job: {
@@ -58,7 +60,7 @@ describe('constructor', () => {
   })
 
   test('set this.tableName from custom @@map() name in schema', () => {
-    const dbMock = jest.fn(() => ({
+    const dbMock = vi.fn(() => ({
       _runtimeDataModel: {
         models: {
           BackgroundJob: {

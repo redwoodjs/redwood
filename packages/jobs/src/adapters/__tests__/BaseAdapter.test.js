@@ -1,3 +1,5 @@
+import { describe, expect, vi, test } from 'vitest'
+
 import * as errors from '../../core/errors'
 import { BaseAdapter } from '../BaseAdapter'
 
@@ -9,7 +11,7 @@ describe('constructor', () => {
   })
 
   test('creates a separate instance var for any logger', () => {
-    const mockLogger = jest.fn()
+    const mockLogger = vi.fn()
     const adapter = new BaseAdapter({ foo: 'bar', logger: mockLogger })
 
     expect(adapter.logger).toEqual(mockLogger)

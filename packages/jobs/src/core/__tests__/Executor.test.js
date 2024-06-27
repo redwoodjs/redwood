@@ -1,3 +1,5 @@
+import { describe, expect, vi, test } from 'vitest'
+
 import * as errors from '../../core/errors'
 import { Executor } from '../Executor'
 
@@ -37,6 +39,7 @@ describe('constructor', () => {
 })
 
 describe('perform', () => {
+  // TODO once these dynamic imports are converted into loadJob in shared, just mock out the result of loadJob
   test.skip('invokes the `perform` method on the job class', async () => {
     const options = {
       adapter: 'adapter',
@@ -45,10 +48,10 @@ describe('perform', () => {
     const executor = new Executor(options)
     const job = { id: 1 }
 
-    const mockJob = jest.fn(() => {
-      return { perform: jest.fn() }
+    const mockJob = vi.fn(() => {
+      return { perform: vi.fn() }
     })
-    jest.mock(`../Foo`, () => ({ Foo: mockJob }), { virtual: true })
+    vi.mock(`../Foo`, () => ({ Foo: mockJob }), { virtual: true })
 
     await executor.perform(job)
 

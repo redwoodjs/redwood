@@ -1,10 +1,20 @@
+import {
+  describe,
+  expect,
+  vi,
+  test,
+  beforeAll,
+  afterAll,
+  afterEach,
+} from 'vitest'
+
 import * as errors from '../../core/errors'
 import { Executor } from '../Executor'
 import { Worker, DEFAULT_MAX_RUNTIME, DEFAULT_WAIT_TIME } from '../Worker'
 
-jest.mock('../Executor')
+vi.mock('../Executor')
 
-jest.useFakeTimers().setSystemTime(new Date('2024-01-01'))
+vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
 
 describe('constructor', () => {
   test('saves options', () => {
@@ -115,11 +125,11 @@ const originalConsoleDebug = console.debug
 describe('run', () => {
   beforeAll(() => {
     // hide console.debug output during test run
-    console.debug = jest.fn()
+    console.debug = vi.fn()
   })
 
   afterEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   afterAll(() => {
@@ -128,7 +138,7 @@ describe('run', () => {
   })
 
   test('tries to find a job', async () => {
-    const adapter = { find: jest.fn(() => null) }
+    const adapter = { find: vi.fn(() => null) }
     const worker = new Worker({ adapter, waitTime: 0, forever: false })
 
     await worker.run()
@@ -141,9 +151,9 @@ describe('run', () => {
   })
 
   test('does nothing if no job found and forever=false', async () => {
-    const adapter = { find: jest.fn(() => null) }
-    const mockExecutor = jest.fn()
-    jest.mock('../Executor', () => ({ Executor: mockExecutor }))
+    const adapter = { find: vi.fn(() => null) }
+    const mockExecutor = vi.fn()
+    vi.mock('../Executor', () => ({ Executor: mockExecutor }))
 
     const worker = new Worker({ adapter, waitTime: 0, forever: false })
     await worker.run()
@@ -152,9 +162,9 @@ describe('run', () => {
   })
 
   test('does nothing if no job found and workoff=true', async () => {
-    const adapter = { find: jest.fn(() => null) }
-    const mockExecutor = jest.fn()
-    jest.mock('../Executor', () => ({ Executor: mockExecutor }))
+    const adapter = { find: vi.fn(() => null) }
+    const mockExecutor = vi.fn()
+    vi.mock('../Executor', () => ({ Executor: mockExecutor }))
 
     const worker = new Worker({ adapter, waitTime: 0, workoff: true })
     await worker.run()
@@ -163,7 +173,7 @@ describe('run', () => {
   })
 
   test('initializes an Executor instance if the job is found', async () => {
-    const adapter = { find: jest.fn(() => ({ id: 1 })) }
+    const adapter = { find: vi.fn(() => ({ id: 1 })) }
     const worker = new Worker({ adapter, waitTime: 0, forever: false })
 
     await worker.run()
@@ -176,8 +186,8 @@ describe('run', () => {
   })
 
   test('calls `perform` on the Executor instance', async () => {
-    const adapter = { find: jest.fn(() => ({ id: 1 })) }
-    const spy = jest.spyOn(Executor.prototype, 'perform')
+    const adapter = { find: vi.fn(() => ({ id: 1 })) }
+    const spy = vi.spyOn(Executor.prototype, 'perform')
     const worker = new Worker({ adapter, waitTime: 0, forever: false })
 
     await worker.run()
@@ -186,8 +196,8 @@ describe('run', () => {
   })
 
   test('calls `perform` on the Executor instance', async () => {
-    const adapter = { find: jest.fn(() => ({ id: 1 })) }
-    const spy = jest.spyOn(Executor.prototype, 'perform')
+    const adapter = { find: vi.fn(() => ({ id: 1 })) }
+    const spy = vi.spyOn(Executor.prototype, 'perform')
     const worker = new Worker({ adapter, waitTime: 0, forever: false })
 
     await worker.run()

@@ -1,11 +1,13 @@
+import { describe, expect, vi, test, beforeEach } from 'vitest'
+
 import * as errors from '../../core/errors'
 import { RedwoodJob } from '../RedwoodJob'
 
-jest.useFakeTimers().setSystemTime(new Date('2024-01-01'))
+vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
 
 describe('static config', () => {
   test('can set the adapter', () => {
-    const adapter = { schedule: jest.fn() }
+    const adapter = { schedule: vi.fn() }
 
     RedwoodJob.config({ adapter })
 
@@ -13,7 +15,7 @@ describe('static config', () => {
   })
 
   test('can set the logger', () => {
-    const logger = { info: jest.fn() }
+    const logger = { info: vi.fn() }
 
     RedwoodJob.config({ logger })
 
@@ -248,7 +250,7 @@ describe('set priority()', () => {
 
 describe('static performLater()', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   test('invokes the instance performLater()', () => {
@@ -257,8 +259,8 @@ describe('static performLater()', () => {
         return 'done'
       }
     }
-    const spy = jest.spyOn(TestJob.prototype, 'performLater')
-    const mockAdapter = { schedule: jest.fn() }
+    const spy = vi.spyOn(TestJob.prototype, 'performLater')
+    const mockAdapter = { schedule: vi.fn() }
     RedwoodJob.config({ adapter: mockAdapter })
 
     TestJob.performLater('foo', 'bar')
@@ -269,7 +271,7 @@ describe('static performLater()', () => {
 
 describe('instance performLater()', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   test('throws an error if no adapter is configured', async () => {
@@ -288,10 +290,10 @@ describe('instance performLater()', () => {
         return 'done'
       }
     }
-    const mockAdapter = { schedule: jest.fn() }
-    const mockLogger = { info: jest.fn() }
+    const mockAdapter = { schedule: vi.fn() }
+    const mockLogger = { info: vi.fn() }
     RedwoodJob.config({ adapter: mockAdapter, logger: mockLogger })
-    const spy = jest.spyOn(mockLogger, 'info')
+    const spy = vi.spyOn(mockLogger, 'info')
 
     await new TestJob().performLater('foo', 'bar')
 
@@ -313,9 +315,9 @@ describe('instance performLater()', () => {
         return 'done'
       }
     }
-    const mockAdapter = { schedule: jest.fn() }
+    const mockAdapter = { schedule: vi.fn() }
     RedwoodJob.config({ adapter: mockAdapter })
-    const spy = jest.spyOn(mockAdapter, 'schedule')
+    const spy = vi.spyOn(mockAdapter, 'schedule')
 
     await new TestJob().performLater('foo', 'bar')
 
@@ -336,7 +338,7 @@ describe('instance performLater()', () => {
     }
     const scheduleReturn = { status: 'scheduled' }
     const mockAdapter = {
-      schedule: jest.fn(() => scheduleReturn),
+      schedule: vi.fn(() => scheduleReturn),
     }
     RedwoodJob.config({ adapter: mockAdapter })
 
@@ -352,7 +354,7 @@ describe('instance performLater()', () => {
       }
     }
     const mockAdapter = {
-      schedule: jest.fn(() => {
+      schedule: vi.fn(() => {
         throw new Error('Could not schedule')
       }),
     }
@@ -372,7 +374,7 @@ describe('instance performLater()', () => {
 
 describe('static performNow()', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   test('invokes the instance performNow()', () => {
@@ -381,8 +383,8 @@ describe('static performNow()', () => {
         return 'done'
       }
     }
-    const spy = jest.spyOn(TestJob.prototype, 'performNow')
-    const mockAdapter = { schedule: jest.fn() }
+    const spy = vi.spyOn(TestJob.prototype, 'performNow')
+    const mockAdapter = { schedule: vi.fn() }
     RedwoodJob.config({ adapter: mockAdapter })
 
     TestJob.performNow('foo', 'bar')
@@ -393,7 +395,7 @@ describe('static performNow()', () => {
 
 describe('instance performNow()', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   test('throws an error if perform() function is not implemented', async () => {
@@ -411,10 +413,10 @@ describe('instance performNow()', () => {
         return 'done'
       }
     }
-    const mockAdapter = { schedule: jest.fn() }
-    const mockLogger = { info: jest.fn() }
+    const mockAdapter = { schedule: vi.fn() }
+    const mockLogger = { info: vi.fn() }
     RedwoodJob.config({ adapter: mockAdapter, logger: mockLogger })
-    const spy = jest.spyOn(mockLogger, 'info')
+    const spy = vi.spyOn(mockLogger, 'info')
 
     await new TestJob().performNow('foo', 'bar')
 
@@ -437,7 +439,7 @@ describe('instance performNow()', () => {
       }
     }
 
-    const spy = jest.spyOn(TestJob.prototype, 'perform')
+    const spy = vi.spyOn(TestJob.prototype, 'perform')
 
     await new TestJob().performNow('foo', 'bar')
 
@@ -464,7 +466,7 @@ describe('instance performNow()', () => {
       }
     }
     const mockAdapter = {
-      schedule: jest.fn(() => {
+      schedule: vi.fn(() => {
         throw new Error('Could not schedule')
       }),
     }
