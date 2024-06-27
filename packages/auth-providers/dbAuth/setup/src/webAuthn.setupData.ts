@@ -91,7 +91,7 @@ export const notes = [
   "You'll need to let Redwood know what fields you're using for your",
   "users' `id` and `username` fields. In this case we're using `id` and",
   '`email`, so update those in the `authFields` config in',
-  `\`${functionsPath}/auth.js\` (this is also the place to tell Redwood if`,
+  `\`${functionsPath}/auth.js\`. This is also the place to tell Redwood if`,
   'you used a different name for the `hashedPassword`, `salt`,',
   '`resetToken` or `resetTokenExpiresAt`, fields:`',
   '',
@@ -117,29 +117,7 @@ export const notes = [
   'change this secret to a new value and deploy. To create a new secret, run:',
   '',
   '  yarn rw generate secret',
-]
-
-// Only thing different here compared to the notes for when *not* setting up
-// webauthn is the very end where we hint about adding pages for WebAuthn
-// prompts
-export const notesCreatedUserModel = [
-  `${colors.warning('Done! But you have a little more work to do:')}\n`,
-  'If you expose any of your user data via GraphQL be sure to exclude',
-  '`hashedPassword` and `salt` (or whatever you named them) from the',
-  'SDL file that defines the fields for your user.',
   '',
-  "To get the actual user that's logged in, take a look at `getCurrentUser()`",
-  `in \`${libPath}/auth.js\`. We default it to something simple, but you may`,
-  'use different names for your model or unique ID fields, in which case you',
-  'need to update those calls (instructions are in the comment above the code).',
-  '',
-  'Finally, we created a SESSION_SECRET environment variable for you in',
-  `${path.join(getPaths().base, '.env')}. This value should NOT be checked`,
-  'into version control and should be unique for each environment you',
-  'deploy to. If you ever need to log everyone out of your app at once',
-  'change this secret to a new value and deploy. To create a new secret, run:',
-  '',
-  '  yarn rw generate secret',
 ]
 
 export const noteGenerate = [
