@@ -4,13 +4,15 @@
 // detaching in [start] mode.
 
 import { fork, exec } from 'node:child_process'
+import path from 'node:path'
 
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
 import { loadEnvFiles } from '@redwoodjs/cli/dist/lib/loadEnvFiles'
 
-import { logger } from './lib/logger.js'
+import { loadLogger } from './shared'
+
 loadEnvFiles()
 
 process.title = 'rw-job-runner'
@@ -18,7 +20,7 @@ process.title = 'rw-job-runner'
 const parseArgs = (argv) => {
   const parsed = yargs(hideBin(argv))
     .usage(
-      'Starts the RedwoodJob runner to process background jobs\n\nUsage: $0 <command> [options]'
+      'Starts the RedwoodJob runner to process background jobs\n\nUsage: $0 <command> [options]',
     )
     .command('work', 'Start a worker and process jobs')
     .command('workoff', 'Start a worker and exit after all jobs processed')
@@ -32,11 +34,11 @@ const parseArgs = (argv) => {
         })
         .example(
           '$0 start -n 2',
-          'Start the job runner with 2 workers in daemon mode'
+          'Start the job runner with 2 workers in daemon mode',
         )
         .example(
           '$0 start -n default:2,email:1',
-          'Start the job runner in daemon mode with 2 workers for the "default" queue and 1 for the "email" queue'
+          'Start the job runner in daemon mode with 2 workers for the "default" queue and 1 for the "email" queue',
         )
     })
     .command('stop', 'Stop any daemonized job workers')
@@ -53,23 +55,23 @@ const parseArgs = (argv) => {
           })
           .example(
             '$0 restart -n 2',
-            'Restart the job runner with 2 workers in daemon mode'
+            'Restart the job runner with 2 workers in daemon mode',
           )
           .example(
             '$0 restart -n default:2,email:1',
-            'Restart the job runner in daemon mode with 2 workers for the `default` queue and 1 for the `email` queue'
+            'Restart the job runner in daemon mode with 2 workers for the `default` queue and 1 for the `email` queue',
           )
-      }
+      },
     )
     .command('clear', 'Clear the job queue')
     .demandCommand(1, 'You must specify a mode to start in')
     .example(
       '$0 start -n 2',
-      'Start the job runner with 2 workers in daemon mode'
+      'Start the job runner with 2 workers in daemon mode',
     )
     .example(
       '$0 start -n default:2,email:1',
-      'Start the job runner in daemon mode with 2 workers for the "default" queue and 1 for the "email" queue'
+      'Start the job runner in daemon mode with 2 workers for the "default" queue and 1 for the "email" queue',
     )
     .help().argv
 
@@ -104,7 +106,12 @@ const buildWorkerConfig = (numWorkers) => {
   return workers
 }
 
-const startWorkers = ({ workerConfig, detach = false, workoff = false }) => {
+const startWorkers = ({
+  workerConfig,
+  detach = false,
+  workoff = false,
+  logger,
+}) => {
   logger.warn(`Starting ${workerConfig.length} worker(s)...`)
 
   return workerConfig.map(([queue, id], i) => {
@@ -122,7 +129,7 @@ const startWorkers = ({ workerConfig, detach = false, workoff = false }) => {
     }
 
     // fork the worker process
-    const worker = fork('api/dist/worker.js', workerArgs, {
+    const worker = fork(path.join(__dirname, 'worker.js'), workerArgs, {
       detached: detach,
       stdio: detach ? 'ignore' : 'inherit',
     })
@@ -138,7 +145,7 @@ const startWorkers = ({ workerConfig, detach = false, workoff = false }) => {
   })
 }
 
-const signalSetup = (workers) => {
+const signalSetup = ({ workers, logger }) => {
   // if we get here then we're still monitoring workers and have to pass on signals
   let sigtermCount = 0
 
@@ -197,9 +204,9 @@ const findProcessId = async (proc) => {
 }
 
 // TODO add support for stopping with SIGTERM or SIGKILL?
-const stopWorkers = async ({ workerConfig, signal = 'SIGINT' }) => {
+const stopWorkers = async ({ workerConfig, signal = 'SIGINT', logger }) => {
   logger.warn(
-    `Stopping ${workerConfig.length} worker(s) gracefully (${signal})...`
+    `Stopping ${workerConfig.length} worker(s) gracefully (${signal})...`,
   )
 
   for (const [queue, id] of workerConfig) {
@@ -212,7 +219,7 @@ const stopWorkers = async ({ workerConfig, signal = 'SIGINT' }) => {
     }
 
     logger.info(
-      `Stopping worker ${workerTitle} with process id ${processId}...`
+      `Stopping worker ${workerTitle} with process id ${processId}...`,
     )
     process.kill(processId, signal)
 
@@ -223,31 +230,38 @@ const stopWorkers = async ({ workerConfig, signal = 'SIGINT' }) => {
   }
 }
 
-const clearQueue = () => {
+const clearQueue = ({ logger }) => {
   logger.warn(`Starting worker to clear job queue...`)
-  fork('api/dist/worker.js', ['--clear'])
+  fork(path.join(__dirname, 'worker.js'), ['--clear'])
 }
 
 const main = async () => {
   const { numWorkers, command } = parseArgs(process.argv)
   const workerConfig = buildWorkerConfig(numWorkers)
+  const logger = (await loadLogger()) || console
 
   logger.warn(`Starting RedwoodJob Runner at ${new Date().toISOString()}...`)
 
   switch (command) {
     case 'start':
-      startWorkers({ workerConfig, detach: true })
+      startWorkers({ workerConfig, detach: true, logger })
       return process.exit(0)
     case 'restart':
-      await stopWorkers({ workerConfig, signal: 2 })
-      startWorkers({ workerConfig, detach: true })
+      await stopWorkers({ workerConfig, signal: 2, logger })
+      startWorkers({ workerConfig, detach: true, logger })
       return process.exit(0)
     case 'work':
-      return signalSetup(startWorkers({ workerConfig }))
+      return signalSetup({
+        workers: startWorkers({ workerConfig, logger }),
+        logger,
+      })
     case 'workoff':
-      return signalSetup(startWorkers({ workerConfig, workoff: true }))
+      return signalSetup({
+        workers: startWorkers({ workerConfig, workoff: true, logger }),
+        logger,
+      })
     case 'stop':
-      return await stopWorkers({ workerConfig, signal: 'SIGINT' })
+      return await stopWorkers({ workerConfig, signal: 'SIGINT', logger })
     case 'clear':
       return clearQueue()
   }

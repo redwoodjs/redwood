@@ -6,13 +6,11 @@ import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
 import { loadEnvFiles } from '@redwoodjs/cli/dist/lib/loadEnvFiles'
-loadEnvFiles()
 
+loadEnvFiles()
 import { Worker } from '../core/Worker'
 
-// TODO import from app somehow?
-import { adapter } from './lib/jobs'
-import { logger } from './lib/logger.js'
+import { loadAdapter, loadLogger } from './shared'
 
 const TITLE_PREFIX = `rw-job-worker`
 
@@ -58,7 +56,7 @@ const setProcessTitle = ({ id, queue }) => {
   process.title = title
 }
 
-const setupSignals = (worker) => {
+const setupSignals = ({ worker, logger }) => {
   // if the parent itself receives a ctrl-c it'll pass that to the workers.
   // workers will exit gracefully by setting `forever` to `false` which will tell
   // it not to pick up a new job when done with the current one
@@ -86,6 +84,17 @@ const main = async () => {
   const { id, queue, clear, workoff } = parseArgs(process.argv)
   setProcessTitle({ id, queue })
 
+  const logger = await loadLogger()
+  let adapter
+
+  try {
+    adapter = await loadAdapter()
+  } catch (e) {
+    // TODO check for file not existing vs not exporting `adapter`
+    logger.error(e)
+    process.exit(1)
+  }
+
   logger.info(
     { worker: process.title },
     `Starting work at ${new Date().toISOString()}...`,
@@ -105,7 +114,7 @@ const main = async () => {
     process.exit(0)
   })
 
-  setupSignals(worker)
+  setupSignals({ worker, logger })
 }
 
 main()
