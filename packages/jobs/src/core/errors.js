@@ -80,20 +80,42 @@ export class PerformError extends RethrownJobError {
   }
 }
 
+// Thrown when the Executor is instantiated without an adapter
 export class AdapterRequiredError extends RedwoodJobError {
   constructor() {
     super('`adapter` is required to perform a job')
   }
 }
 
+// Thrown when the Executor is instantiated without a job
 export class JobRequiredError extends RedwoodJobError {
   constructor() {
     super('`job` is required to perform a job')
   }
 }
 
+// Throw when a job with the given handler is not found in the filesystem
 export class JobNotFoundError extends RedwoodJobError {
   constructor(name) {
     super(`Job \`${name}\` not found in the filesystem`)
+  }
+}
+
+// Thrown when the runner tries to import `adapter` from api/src/lib/jobs.js and
+// the file does not exist
+export class JobsLibNotFoundError extends RedwoodJobError {
+  constructor() {
+    super(
+      'api/src/lib/jobs.js not found. Create this file and export `adapter` for the job runner to use',
+    )
+  }
+}
+
+// Thrown when the runner tries to import `adapter` from api/src/lib/jobs.js
+export class AdapterNotFoundError extends RedwoodJobError {
+  constructor() {
+    super(
+      'api/src/lib/jobs.js does not export `adapter`. Create this file and export `adapter` for the job runner to use',
+    )
   }
 }
