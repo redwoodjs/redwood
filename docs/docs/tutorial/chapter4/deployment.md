@@ -11,7 +11,7 @@ Grove is a hosting platform specifically built by the Redwood core team to run R
 You'll only need to do this once, and then you'll have the `grove` CLI command and can deploy any Redwood app directly from your development machine:
 
 ```bash
-curl -L https://install.joshgmwalker.com | sh
+curl -L https://install.grove.dev | sh
 ```
 
 That will download a simple bash script and then run it, installing the Grove CLI tool, which is written in Go.
@@ -20,38 +20,29 @@ That will download a simple bash script and then run it, installing the Grove CL
 
 From the root of your app, just run:
 
-```terminal
+```bash
 grove deploy
 ```
 
 Yes, that's it. Once the command is complete, your site is live!
 
-```terminal
-$> grove deploy
+```bash
+$% grove deploy
+   ____ __________ _   _____  | ## Alpha Version ##
+  / __ `/ ___/ __ \ | / / _ \ |
+ / /_/ / /  / /_/ / |/ /  __/ | The world's greatest
+ \__, /_/   \____/|___/\___/  | hosting platform for
+/____/                        | RedwoodJS projects
 
-You enter a deep, dark forest. You look up in amazement at the
-towering trunks above you, reaching higher than you thought
-possible. What would you like to do?
+Deploying [beautiful fragrant tree]
+[✓] Pre-deploy checks
+[✓] Creating new application
+[✓] Syncing code
+[✓] Deploying
 
-> Deploy
-
-You reach in your pocket and retreive a seed, plant it in the
-ground, and stand back...
-
-* Detected RedwoodJS app, v6.2.0
-* Creating container
-* Notifying orchestrator
-* Deploying container
-* Starting app
-
-The Redwood seed you planted shoots forth, a thundering rumble
-of wood and rustling leaves echoes throughout the forest around
-you. It settles, almost indistinguishable from its nearby brothers
-and sisters, but still somehow unique. Yours.
-
-Your app is live! https://beautiful-fragrant-tree.grove.dev
-
-Claim your app to unlock its true potential: https://grove.dev/claim/a9ner8se3
+Deploy complete!
+- URL: https://beautiful-fragrant-tree.grove.run
+- Claim: https://grove.dev/claim/clm-flpp30l3berhj8uca95xpdaw
 ```
 
 Copy the URL from the output and open it in your browser:
@@ -60,11 +51,11 @@ Copy the URL from the output and open it in your browser:
 
 ## What just happened?
 
-Grove collected all the code for your app and put it in a Docker container. It created a database and replaced your `DATABASE_URL` connection string with ours. Then it started the container on our servers and let our web server know to make it available at that funny new domain name.
+Grove collected all the code for your app and sent it to a "builder" container to actually build the app. It created a database and replaced your `DATABASE_URL` connection string with an instance of SQLite running internally. It transfered the built to a "runner" container and connected to the internet at the funny URL above!
 
 ## Claiming Your App
 
-That gets our site online, but there's no way to check on the status of our containers, watch logs, set ENV vars, create a custom domain, etc. To do that, you'll need to claim your app by creating an account at [https://grove.dev](https://grove.dev) In addition to the URL you opened above, the CLI also returned a URL to claim your account. Follow that link and you'll be ready to go!
+That gets our site online, but there's no way to check on the status of our site, watch logs, set ENV vars, etc. To do that, you'll need to claim your app by creating an account—in addition to the URL you opened above, the CLI also returned a URL to claim your account. Follow that link and you'll be ready to go!
 
 ## Where are my blog posts?
 
@@ -78,6 +69,6 @@ dbAuth provides an API for signup and login that the client knows how to call, b
 
 To close this hole, check out `api/src/functions/auth.js`, this is where the configuration for dbAuth lives. Take a gander at the `signupOptions` object, specifically the `handler()` function. This defines what to do with the user data that's submitted on the signup form. If you simply have this function return `false`, instead of creating a user, we will have effectively shut the door on the API signup hack.
 
-Be sure to save your changes, then run `grove deploy` to push the changes live. Take that you hacking [snollygosters](https://www.merriam-webster.com/dictionary/snollygoster)!
+Be sure to save your changes, then run `grove deploy` to push the changes live. Take that, hackers!
 
 ![100% accurate portrayal of hacking](https://user-images.githubusercontent.com/300/152592915-609747f9-3d68-4d72-8cd8-e120ef83b640.gif)
