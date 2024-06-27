@@ -1,5 +1,7 @@
 // Used by the job runner to execute a job and track success or failure
 
+import console from 'node:console'
+
 import fg from 'fast-glob'
 
 import {

@@ -5,6 +5,7 @@
 
 import { fork, exec } from 'node:child_process'
 import path from 'node:path'
+import process from 'node:process'
 
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
@@ -238,7 +239,7 @@ const clearQueue = ({ logger }) => {
 const main = async () => {
   const { numWorkers, command } = parseArgs(process.argv)
   const workerConfig = buildWorkerConfig(numWorkers)
-  const logger = (await loadLogger()) || console
+  const logger = await loadLogger()
 
   logger.warn(`Starting RedwoodJob Runner at ${new Date().toISOString()}...`)
 

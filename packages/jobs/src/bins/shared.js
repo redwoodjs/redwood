@@ -1,3 +1,4 @@
+import console from 'node:console'
 import path from 'node:path'
 
 import fg from 'fast-glob'
@@ -20,8 +21,6 @@ export const loadAdapter = async (logger) => {
   } else {
     throw new JobsLibNotFoundError()
   }
-
-  return null
 }
 
 export const loadLogger = async () => {
@@ -36,5 +35,5 @@ export const loadLogger = async () => {
     // }
   }
 
-  return null
+  return console
 }

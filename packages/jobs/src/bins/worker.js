@@ -2,6 +2,8 @@
 
 // The process that actually starts an instance of Worker to process jobs.
 
+import process from 'node:process'
+
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
@@ -88,7 +90,7 @@ const main = async () => {
   let adapter
 
   try {
-    adapter = await loadAdapter()
+    adapter = await loadAdapter(logger)
   } catch (e) {
     // TODO check for file not existing vs not exporting `adapter`
     logger.error(e)

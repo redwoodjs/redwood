@@ -1,5 +1,8 @@
 // Used by the job runner to find the next job to run and invoke the Executor
 
+import console from 'node:console'
+import process from 'node:process'
+
 import { AdapterRequiredError } from './errors'
 import { Executor } from './Executor'
 
