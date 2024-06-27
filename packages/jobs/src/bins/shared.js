@@ -3,37 +3,33 @@ import path from 'node:path'
 
 import fg from 'fast-glob'
 
+import { registerApiSideBabelHook } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { AdapterNotFoundError, JobsLibNotFoundError } from '../core/errors'
 
-export const loadAdapter = async (logger) => {
-  const files = fg.sync('jobs.*', { cwd: getPaths().api.lib })
+// TODO Don't use this in production, import from dist directly
+registerApiSideBabelHook()
 
-  if (files.length) {
-    try {
-      const loggerModule = await import(path.join(getPaths().api.lib, files[0]))
-      return loggerModule.adapter
-    } catch (e) {
-      // api/src/lib/jobs.js doesn't exist or doesn't export `adapter`
-      throw new AdapterNotFoundError()
-    }
+export const loadAdapter = async () => {
+  if (getPaths().api.jobs) {
+    // try {
+    const { default: jobsModule } = await import(getPaths().api.jobs)
+    return jobsModule.adapter
+    // } catch (e) {
+    //   // api/src/lib/jobs.js doesn't exist or doesn't export `adapter`
+    //   throw new AdapterNotFoundError()
+    // }
   } else {
     throw new JobsLibNotFoundError()
   }
 }
 
 export const loadLogger = async () => {
-  const files = fg.sync('logger.*', { cwd: getPaths().api.lib })
-
-  if (files.length) {
-    // try {
-    const loggerModule = await import(path.join(getPaths().api.lib, files[0]))
-    return loggerModule.logger
-    // } catch (e) {
-    // import didn't work for whatever reason, fall back to console
-    // }
-  }
-
-  return console
+  // try {
+  const { default: loggerModule } = await import(getPaths().api.logger)
+  return loggerModule.logger
+  // } catch (e) {
+  //   // import didn't work for whatever reason, fall back to console
+  // }
 }

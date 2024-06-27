@@ -89,13 +89,13 @@ const main = async () => {
   const logger = await loadLogger()
   let adapter
 
-  try {
-    adapter = await loadAdapter(logger)
-  } catch (e) {
-    // TODO check for file not existing vs not exporting `adapter`
-    logger.error(e)
-    process.exit(1)
-  }
+  // try {
+  adapter = await loadAdapter(logger)
+  // } catch (e) {
+  //   // TODO check for file not existing vs not exporting `adapter`
+  //   logger.error(e)
+  //   process.exit(1)
+  // }
 
   logger.info(
     { worker: process.title },
