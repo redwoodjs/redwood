@@ -66,6 +66,10 @@
       "import": "./dist/apollo/index.js",
       "types": "./dist/apollo/index.d.ts",
       "default": "./dist/cjs/apollo/index.js"
+    },
+    "./forceEsmApollo": {
+      "require": "./dist/apollo/index.js",
+      "import": "./dist/apollo/index.js"
     }
   },
   "files": [
