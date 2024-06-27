@@ -1,3 +1,8 @@
-import { build } from '@redwoodjs/framework-tools'
+import { build, defaultBuildOptions } from '@redwoodjs/framework-tools'
 
-await build()
+await build({
+  buildOptions: {
+    ...defaultBuildOptions,
+    format: 'cjs',
+  },
+})
