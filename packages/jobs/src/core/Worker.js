@@ -75,7 +75,9 @@ export class Worker {
     do {
       this.lastCheckTime = new Date()
 
-      this.logger.debug(`[${this.processName}] Checking for jobs...`)
+      this.logger.debug(
+        `[${this.processName}] Checking for jobs in ${this.queue ? `${this.queue} queue` : 'all queues'}...`,
+      )
 
       const job = await this.adapter.find({
         processName: this.processName,
