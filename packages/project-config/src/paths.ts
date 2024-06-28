@@ -95,6 +95,7 @@ const PATH_RW_SCRIPTS = 'scripts'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
 const PATH_API_DIR_CONFIG = 'api/src/config'
 const PATH_API_DIR_MODELS = 'api/src/models'
+const PATH_API_DIR_JOBS = 'api/src/jobs'
 const PATH_API_DIR_LIB = 'api/src/lib'
 const PATH_API_DIR_GENERATORS = 'api/generators'
 const PATH_API_DIR_SERVICES = 'api/src/services'
@@ -199,7 +200,8 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       dbSchema: path.join(BASE_DIR, schemaPath),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
       graphql: path.join(BASE_DIR, PATH_API_DIR_GRAPHQL),
-      jobs: resolveFile(path.join(BASE_DIR, PATH_API_DIR_LIB, 'jobs')),
+      jobs: path.join(path.join(BASE_DIR, PATH_API_DIR_JOBS)),
+      jobsConfig: resolveFile(path.join(BASE_DIR, PATH_API_DIR_LIB, 'jobs')),
       lib: path.join(BASE_DIR, PATH_API_DIR_LIB),
       logger: resolveFile(path.join(BASE_DIR, PATH_API_DIR_LIB, 'logger')),
       generators: path.join(BASE_DIR, PATH_API_DIR_GENERATORS),
