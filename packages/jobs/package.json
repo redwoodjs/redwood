@@ -22,7 +22,7 @@
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
-    "test:watch": "yarn test --watch"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "fast-glob": "3.3.2"
